@@ -1,7 +1,7 @@
 # TCFModManagement
 
 A Windows desktop app for finding, installing and keeping track of [SPT](https://sp-tarkov.com)
-mods, built against [The Forge](https://sp-mod.com) catalog. Browse the full mod list, filter it
+mods, built against [sp-mod](https://sp-mod.com) catalog. Browse the full mod list, filter it
 down to what actually works on your SPT version, install with dependencies resolved for you, and
 see at a glance what's out of date.
 
@@ -39,7 +39,7 @@ dependencies. Clicking a card opens its details; "Refresh cache" re-pulls the ca
 (`BepInEx\plugins`) and server mods (`user\mods`), and matches them back to the catalog. Same
 search and filters as Browse, plus an update-status filter. Each card shows the installed version,
 the latest published one, and the folder it lives in when that differs from the mod name. Clicking
-a card opens a dialog with the full version history (changelogs rendered from the Forge's rich
+a card opens a dialog with the full version history (changelogs rendered from sp-mod's rich
 text), a link to the mod page, and an Update button when one applies. Mods can be removed from
 here too.
 
@@ -97,7 +97,7 @@ Debug-level output in the same log. Logs rotate daily as `tcfmm-<yyyyMMdd>.log`.
 
 ## Layout
 
-- `src/TCFModManagement.Core` — Forge API client, models, and all the non-UI services (install,
+- `src/TCFModManagement.Core` — sp-mod API client, models, and all the non-UI services (install,
   download, extraction, scanning, version matching, caching, logging). Plain `net9.0`, no UI
   dependencies, so it's reusable from tests, a console tool, or a future TCFModSync integration.
   One package reference: SharpCompress.
@@ -110,7 +110,7 @@ Debug-level output in the same log. Logs rotate daily as `tcfmm-<yyyyMMdd>.log`.
 
 Service wiring is a static `AppServices` holder rather than a DI container.
 
-## The Forge API
+## sp-mod API
 
 Base URL `https://sp-mod.com`, read-only and unauthenticated. Documented at
 https://sp-mod.com/docs/index.html, OpenAPI spec at https://sp-mod.com/docs/openapi.yaml.
