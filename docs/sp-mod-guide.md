@@ -115,7 +115,7 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 
 `Data\installed-mods.json` — not folder names, not DLL file versions — is the authority on what's installed and at what version.
 
-An older `%LocalAppData%\TCFModManager\` layout is migrated automatically on first run.
+An older `%LocalAppData%\TCFModManagement\` layout is migrated automatically on first run.
 
 #### Logging
 
