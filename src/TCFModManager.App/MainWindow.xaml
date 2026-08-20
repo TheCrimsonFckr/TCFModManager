@@ -5,7 +5,8 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:views="clr-namespace:TCFModManager.App.Views"
     xmlns:app="clr-namespace:TCFModManager.App"
-    Title="TCF Mod Manager"
+    Title="TCF Mod Manager - 1.0.0"
+    Icon="pack://application:,,,/Assets/AppIcon.ico"
     Height="900"
     Width="1500"
     MinHeight="480"
@@ -24,7 +25,11 @@
 
         <ui:TitleBar
             Grid.Row="0"
-            Title="TCF Mod Manager" />
+            Title="TCF Mod Manager - 1.0.0">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="pack://application:,,,/Assets/AppIcon.ico" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
 
         <!-- Warning banner shown when no SPT install path is set. -->
         <ui:InfoBar
