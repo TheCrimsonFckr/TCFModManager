@@ -1,10 +1,6 @@
-**TCF Mod Management** is a Windows desktop app for finding, installing and keeping track of your SPT mods, built directly against the sp-mod catalog you're reading this on. Browse the full mod list, filter it down to what actually works on your SPT version, install with dependencies resolved for you, and see at a glance what's out of date.
+**TCF Mod Manager** is a Windows desktop app for finding, installing and keeping track of your SPT mods, built directly against the sp-mod catalogue you're reading this on. Browse the full mod list, filter it down to what actually works on your SPT version, install with dependencies resolved for you, and see at a glance what's out of date.
 
-WPF with Fluent Design, .NET 9, no account or API key needed.
-
-::: information
-The released build is self-contained — you don't need to install .NET separately.
-:::
+WPF with Fluent Design, .NET 9, no account or API key needed. The released build is self-contained you don't need to install .NET separately.
 
 ## Guide {.tabset}
 
@@ -17,18 +13,18 @@ The released build is self-contained — you don't need to install .NET separate
 
 **Steps**
 
-1. Download `TCF-ModManagement-<version>.zip` from this page.
-2. Extract it into your SPT folder as `<SPT root>\TCFModManagement\` — a sibling of `BepInEx\` and `user\`.
-3. Run `TCFModManagement.exe`.
-4. Open **Options**, point it at your SPT install folder, and hit Save. The detected server version appears underneath — everything else keys off that.
+1. Download `TCF-ModManager-<version>.zip` from this page.
+2. Extract it into your SPT folder as `<SPT root>\TCFModManager\`.
+3. Run `TCFModManager.exe`.
+4. Open **Options**, point it at your SPT install folder, and hit Save. The detected server version appears underneath everything else keys off that.
 
 ::: warning
-This is **not** a mod. Don't extract it into `BepInEx\plugins` or `user\mods`. It's a standalone application that manages that folder for you. Anywhere on disk works, really — it just needs to be told where SPT lives.
+This is **not** a mod. Don't extract it into `BepInEx\plugins` or `user\mods`. It's a standalone application that manages that folder for you. Anywhere on disk works, really it just needs to be told where SPT lives.
 :::
 
 #### If the SPT version doesn't detect
 
-The version is read from the server executable — `SPT.Server.exe`, or the older `Aki.Server.exe` — at the install root or under `SPT\` / `SPT_Runtime\`. Point Options at the folder that contains one of those, not at a subfolder.
+The version is read from the server executable `SPT.Server.exe`, or the older `Aki.Server.exe` at the install root or under `SPT\` / `SPT_Runtime\`. Point Options at the folder that contains one of those, not at a subfolder.
 
 ### Browse
 
@@ -51,12 +47,12 @@ Each card carries a status dot and, where it applies, a badge for mods that pull
 Clicking a card opens its details, including version history and a link to its page here.
 
 ::: information
-SPT version constraints are resolved against the live SPT release list rather than parsed as version ranges, so what you see named is a release that actually exists — not the boundary version the mod author wrote the constraint against.
+SPT version constraints are resolved against the live SPT release list rather than parsed as version ranges, so what you see named is a release that actually exists not the boundary version the mod author wrote the constraint against.
 :::
 
 ### Installed
 
-Scans your SPT folder for what's actually there — client mods in `BepInEx\plugins` and server mods in `user\mods` — and matches them back to the catalog.
+Scans your SPT folder for what's actually there client mods in `BepInEx\plugins` and server mods in `user\mods` and matches them back to the catalog.
 
 Same search and filters as Browse, plus a filter on update status so you can pull up "everything with an update waiting" in one click. Each card shows the installed version, the latest published one, and the folder it lives in when that differs from the mod name.
 
@@ -76,7 +72,7 @@ Mods installed with this app have every file they placed recorded, which is what
 
 Resolves the dependency tree of every installed mod that declares one, and reports each dependency's state against what's actually on disk.
 
-That includes **version conflicts** — where two installed mods want incompatible versions of the same dependency — which is the failure mode that usually shows up as an unexplained crash on load rather than an error message.
+That includes **version conflicts** where two installed mods want incompatible versions of the same dependency which is the failure mode that usually shows up as an unexplained crash on load rather than an error message.
 
 Anything missing can be installed straight from the list.
 
@@ -85,7 +81,7 @@ Anything missing can be installed straight from the list.
 The install queue. Items process one at a time; each resolves its dependencies and queues those alongside it.
 
 - Live progress per item
-- **Cancel** on any individual item — cancelling a mod also cancels the dependencies it dragged in
+- **Cancel** on any individual item cancelling a mod also cancels the dependencies it dragged in
 - **Clear finished** to tidy up
 - Plain archive downloads, for when you'd rather install something by hand
 
@@ -93,10 +89,10 @@ The install queue. Items process one at a time; each resolves its dependencies a
 
 The archive is downloaded and extracted into a hidden scratch folder inside your SPT install (`.tcfmm-work\`, swept of stale runs each time), then moved into place.
 
-When you're updating, the previous version is only removed **after** the new one has downloaded and extracted successfully — a failed or cancelled download can't leave you with neither. Once files start being placed, the operation runs to completion rather than tearing out a half-installed mod.
+When you're updating, the previous version is only removed **after** the new one has downloaded and extracted successfully a failed or cancelled download can't leave you with neither. Once files start being placed, the operation runs to completion rather than tearing out a half-installed mod.
 
 ::: information
-Before anything is queued, the app asks you to open the mod's page here on sp-mod first — same as installing manually, and it keeps mod authors' page views and instructions in the loop.
+Before anything is queued, the app asks you to open the mod's page here on sp-mod first same as installing manually, and it keeps mod authors' page views and instructions in the loop.
 :::
 
 ### Files & logs
@@ -113,13 +109,13 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 | `Data\logs\tcfmm-<date>.log` | Daily log |
 | `Staging\` | Default destination for manually downloaded archives |
 
-`Data\installed-mods.json` — not folder names, not DLL file versions — is the authority on what's installed and at what version.
+`Data\installed-mods.json` not folder names, not DLL file versions is the authority on what's installed and at what version.
 
-An older `%LocalAppData%\TCFModManagement\` layout is migrated automatically on first run.
+An older `%LocalAppData%\TCFModManager\` layout is migrated automatically on first run.
 
 #### Logging
 
-Info level by default, rotated daily as `tcfmm-<yyyyMMdd>.log`. To get Debug-level output in the same log, drop an empty file named `verbose` — no extension — next to the exe.
+Info level by default, rotated daily as `tcfmm-<yyyyMMdd>.log`. To get Debug-level output in the same log, drop an empty file named `verbose` no extension next to the exe.
 
 ### Troubleshooting
 
@@ -129,7 +125,7 @@ Options needs the folder containing `SPT.Server.exe` (or `Aki.Server.exe`). It a
 
 #### A mod I know exists shows "nothing compatible"
 
-The mod has no version published for your SPT release line. That's a statement about the mod page, not about your install — check the mod's own versions list.
+The mod has no version published for your SPT release line. That's a statement about the mod page, not about your install check the mod's own versions list.
 
 #### Downloads suddenly stall or fail
 
@@ -145,6 +141,6 @@ Nothing needs cleaning up by hand. The scratch folder `.tcfmm-work\` inside your
 
 #### Reporting a bug
 
-Grab `Data\logs\tcfmm-<date>.log` — ideally after adding the `verbose` marker file and reproducing the problem — and open an issue at [github.com/TheCrimsonFckr/TCFModManagement](https://github.com/TheCrimsonFckr/TCFModManagement).
+Grab `Data\logs\tcfmm-<date>.log` ideally after adding the `verbose` marker file and reproducing the problem and open an issue at [github.com/TheCrimsonFckr/TCFModManager](https://github.com/TheCrimsonFckr/TCFModManager).
 
 {.endtabset}
