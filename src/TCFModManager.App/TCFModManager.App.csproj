@@ -6,6 +6,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>TCFModManager.App</RootNamespace>
     <AssemblyName>TCFModManager</AssemblyName>
+    <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
 
     <!--
       Trims size out of the self-contained single-file publish (package-release.ps1) by dropping
@@ -25,6 +26,10 @@
   <ItemGroup>
     <PackageReference Include="WPF-UI" Version="4.3.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\AppIcon.ico" />
   </ItemGroup>
 
   <ItemGroup>
