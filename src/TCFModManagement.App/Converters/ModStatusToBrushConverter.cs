@@ -1,9 +1,9 @@
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
-using TCFModManagement.Core.Services;
+using TCFModManager.Core.Services;
 
-namespace TCFModManagement.App.Converters;
+namespace TCFModManager.App.Converters;
 
 // Colors a status icon by ModStatus, shared by the Browse, Installed and
 // Dependencies pages so the same situation is always the same colour.

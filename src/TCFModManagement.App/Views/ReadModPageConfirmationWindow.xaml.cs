@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using Wpf.Ui.Controls;
 
-namespace TCFModManagement.App.Views;
+namespace TCFModManager.App.Views;
 
 // One row in ReadModPageConfirmationWindow - a mod name plus the button that opens its sp-mod.com page.
 public sealed class ModPageLink(string name, string? url) : INotifyPropertyChanged

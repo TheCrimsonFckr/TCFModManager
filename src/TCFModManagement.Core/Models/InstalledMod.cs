@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Models;
+namespace TCFModManager.Core.Models;
 
 // Which half of an SPT install a discovered mod lives in: BepInEx plugins/patchers (client) or user/mods (server).
 public enum InstalledModTarget

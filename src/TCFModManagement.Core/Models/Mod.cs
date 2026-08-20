@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Models;
+namespace TCFModManager.Core.Models;
 
 // A mod as returned by /mods and /mod/{modId}. Most fields are nullable since the API's "fields" parameter can request a subset; only "id" is guaranteed.
 public sealed class Mod

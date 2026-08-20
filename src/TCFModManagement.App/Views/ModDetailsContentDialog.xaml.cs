@@ -1,10 +1,10 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using TCFModManagement.Core.Models;
+using TCFModManager.Core.Models;
 using Wpf.Ui.Controls;
 
-namespace TCFModManagement.App.Views;
+namespace TCFModManager.App.Views;
 
 public partial class ModDetailsContentDialog : ContentDialog
 {

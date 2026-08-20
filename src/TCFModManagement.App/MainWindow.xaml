@@ -1,11 +1,11 @@
 <ui:FluentWindow
-    x:Class="TCFModManagement.App.MainWindow"
+    x:Class="TCFModManager.App.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    xmlns:views="clr-namespace:TCFModManagement.App.Views"
-    xmlns:app="clr-namespace:TCFModManagement.App"
-    Title="TCF Mod Management"
+    xmlns:views="clr-namespace:TCFModManager.App.Views"
+    xmlns:app="clr-namespace:TCFModManager.App"
+    Title="TCF Mod Manager"
     Height="900"
     Width="1500"
     MinHeight="480"
@@ -24,7 +24,7 @@
 
         <ui:TitleBar
             Grid.Row="0"
-            Title="TCF Mod Management" />
+            Title="TCF Mod Manager" />
 
         <!-- Warning banner shown when no SPT install path is set. -->
         <ui:InfoBar

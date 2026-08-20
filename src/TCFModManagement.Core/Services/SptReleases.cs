@@ -1,6 +1,6 @@
-using TCFModManagement.Core.Models;
+using TCFModManager.Core.Models;
 
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // One published SPT release. Label is the API's own string, used verbatim for display.
 public readonly record struct SptRelease(Version Value, string Label)

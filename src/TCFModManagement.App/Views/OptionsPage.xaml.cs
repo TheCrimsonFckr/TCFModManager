@@ -1,7 +1,7 @@
 using System.Windows.Controls;
-using TCFModManagement.App.ViewModels;
+using TCFModManager.App.ViewModels;
 
-namespace TCFModManagement.App.Views;
+namespace TCFModManager.App.Views;
 
 public partial class OptionsPage : Page
 {

@@ -1,4 +1,4 @@
-namespace TCFModManagement.App.ViewModels;
+namespace TCFModManager.App.ViewModels;
 
 // Shared, app-lifetime signal for showing the update dialog for an installed mod, awaitable so callers know when it closes.
 public sealed class ModUpdateOverlayViewModel

@@ -1,4 +1,4 @@
-namespace TCFModManagement.App.ViewModels;
+namespace TCFModManager.App.ViewModels;
 
 public enum ModSortOrder
 {

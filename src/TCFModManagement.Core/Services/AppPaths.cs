@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // 
 // Resolves this app's own Data and Staging folders, both located next to the running exe

@@ -1,8 +1,8 @@
 using System.Text.RegularExpressions;
-using TCFModManagement.Core.Models;
-using TCFModManagement.Core.Services;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
-namespace TCFModManagement.App.ViewModels;
+namespace TCFModManager.App.ViewModels;
 
 // Display wrapper for the Installed page's card grid, merging a mod's client and server entries and matching it against the sp-mod.com catalog.
 public sealed class InstalledModCardViewModel

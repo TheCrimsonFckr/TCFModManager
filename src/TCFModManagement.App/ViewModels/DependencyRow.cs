@@ -1,9 +1,9 @@
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
-using TCFModManagement.Core.Models;
-using TCFModManagement.Core.Services;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
-namespace TCFModManagement.App.ViewModels;
+namespace TCFModManager.App.ViewModels;
 
 // One dependency in a resolved tree, with its status against the current install and
 // whatever's needed to queue it. Rendered as an indented row inside its mod's expander.

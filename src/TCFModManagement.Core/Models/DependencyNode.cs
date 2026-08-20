@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Models;
+namespace TCFModManager.Core.Models;
 
 // One node in a resolved dependency tree, as returned by GET /mods/dependencies and GET /addons/dependencies.
 public sealed class DependencyNode

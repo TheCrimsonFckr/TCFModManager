@@ -1,6 +1,6 @@
-using TCFModManagement.Core.Models;
+using TCFModManager.Core.Models;
 
-namespace TCFModManagement.App.ViewModels;
+namespace TCFModManager.App.ViewModels;
 
 // Display wrapper for one row in ModUpdateDialogViewModel.Versions, representing one published mod version.
 public sealed class ModVersionRowViewModel

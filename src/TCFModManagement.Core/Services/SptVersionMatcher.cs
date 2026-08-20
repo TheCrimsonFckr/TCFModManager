@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // 
 // Answers whether an installed SPT version satisfies the constraint strings the sp-mod.com API

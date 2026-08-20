@@ -4,12 +4,12 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using TCFModManagement.App.Views;
-using TCFModManagement.Core.SpModApi;
-using TCFModManagement.Core.Models;
-using TCFModManagement.Core.Services;
+using TCFModManager.App.Views;
+using TCFModManager.Core.SpModApi;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
-namespace TCFModManagement.App.ViewModels;
+namespace TCFModManager.App.ViewModels;
 
 public partial class BrowseViewModel : ObservableObject
 {

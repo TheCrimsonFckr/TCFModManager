@@ -1,9 +1,9 @@
 <ui:ContentDialog
-    x:Class="TCFModManagement.App.Views.ModDetailsContentDialog"
+    x:Class="TCFModManager.App.Views.ModDetailsContentDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    xmlns:behaviors="clr-namespace:TCFModManagement.App.Behaviors"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     Style="{DynamicResource {x:Type ui:ContentDialog}}"
     IsFooterVisible="False">
     <!--

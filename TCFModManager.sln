@@ -2,11 +2,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCFModManagement.Core", "src\TCFModManagement.Core\TCFModManagement.Core.csproj", "{F019E57B-0E61-42D6-A140-7B3D4AC6FAFB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCFModManager.Core", "src\TCFModManager.Core\TCFModManager.Core.csproj", "{F019E57B-0E61-42D6-A140-7B3D4AC6FAFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCFModManagement.App", "src\TCFModManagement.App\TCFModManagement.App.csproj", "{6D09C263-6BD2-44B5-9A56-372395BFE795}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCFModManager.App", "src\TCFModManager.App\TCFModManager.App.csproj", "{6D09C263-6BD2-44B5-9A56-372395BFE795}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCFModManagement.Core.Tests", "Tests\TCFModManagement.Core.Tests\TCFModManagement.Core.Tests.csproj", "{7D9E4972-AE0B-4A45-82E0-E6E3D0CA602E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCFModManager.Core.Tests", "Tests\TCFModManager.Core.Tests\TCFModManager.Core.Tests.csproj", "{7D9E4972-AE0B-4A45-82E0-E6E3D0CA602E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

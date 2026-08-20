@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace TCFModManagement.App.Converters;
+namespace TCFModManager.App.Converters;
 
 // Visible when a bound int count is greater than zero, Collapsed when it's zero.
 // Pass ConverterParameter="Invert" to flip that (Visible only when the count is zero).

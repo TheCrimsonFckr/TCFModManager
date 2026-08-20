@@ -1,7 +1,7 @@
 using System.Text.Json;
-using TCFModManagement.Core.Models;
+using TCFModManager.Core.Models;
 
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // 
 // Persists the full mod catalog fetched by ModCacheService to disk, so it doesn't need to be

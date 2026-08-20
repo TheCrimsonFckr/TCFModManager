@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Models;
+namespace TCFModManager.Core.Models;
 
 public sealed class Owner
 {

@@ -4,8 +4,8 @@
     <TargetFramework>net9.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>TCFModManagement.App</RootNamespace>
-    <AssemblyName>TCFModManagement</AssemblyName>
+    <RootNamespace>TCFModManager.App</RootNamespace>
+    <AssemblyName>TCFModManager</AssemblyName>
 
     <!--
       Trims size out of the self-contained single-file publish (package-release.ps1) by dropping
@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TCFModManagement.Core\TCFModManagement.Core.csproj" />
+    <ProjectReference Include="..\TCFModManager.Core\TCFModManager.Core.csproj" />
   </ItemGroup>
 
 </Project>

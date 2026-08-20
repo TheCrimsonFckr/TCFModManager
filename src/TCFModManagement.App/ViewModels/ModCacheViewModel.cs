@@ -1,10 +1,10 @@
 using System.Net.Http;
 using CommunityToolkit.Mvvm.ComponentModel;
-using TCFModManagement.Core.SpModApi;
-using TCFModManagement.Core.Models;
-using TCFModManagement.Core.Services;
+using TCFModManager.Core.SpModApi;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
-namespace TCFModManagement.App.ViewModels;
+namespace TCFModManager.App.ViewModels;
 
 // Shared, app-lifetime cache of the sp-mod.com catalog, backed by ModCacheStore on disk with a background refresh. IsLoading/LoadedCount/TotalCount track live fetch progress.
 public partial class ModCacheViewModel : ObservableObject

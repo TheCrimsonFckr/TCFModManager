@@ -1,9 +1,9 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using TCFModManagement.Core.Models;
-using TCFModManagement.Core.Services;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
-namespace TCFModManagement.App.ViewModels;
+namespace TCFModManager.App.ViewModels;
 
 // One installed mod's resolved dependency tree - the header row of the Dependencies page's
 // expander, plus its flattened, indented dependency rows.

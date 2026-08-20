@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // 
 // How a mod stands against what's installed. Shared by Browse cards, the Installed page and the

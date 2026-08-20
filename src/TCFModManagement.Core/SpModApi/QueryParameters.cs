@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.SpModApi;
+namespace TCFModManager.Core.SpModApi;
 
 // Builds the shared "filter[x]", "fields", "include", "sort", "page" and "per_page" query parameters.
 public abstract class QueryParameters : IEnumerable<KeyValuePair<string, string?>>

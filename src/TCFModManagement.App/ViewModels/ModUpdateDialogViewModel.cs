@@ -4,12 +4,12 @@ using System.Net.Http;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using TCFModManagement.App.Views;
-using TCFModManagement.Core.Models;
-using TCFModManagement.Core.Services;
-using TCFModManagement.Core.SpModApi;
+using TCFModManager.App.Views;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
+using TCFModManager.Core.SpModApi;
 
-namespace TCFModManagement.App.ViewModels;
+namespace TCFModManager.App.ViewModels;
 
 // Backs ModUpdateContentDialog, showing mod details and letting the user pick a published version to install. Fetches the full version history for the installed mod.
 public partial class ModUpdateDialogViewModel : ObservableObject

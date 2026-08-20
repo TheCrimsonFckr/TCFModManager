@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Models;
+namespace TCFModManager.Core.Models;
 
 // Persisted application settings.
 public sealed class AppSettings

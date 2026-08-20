@@ -3,9 +3,9 @@ using System.IO.Compression;
 using SharpCompress.Archives;
 using SharpCompress.Common;
 using SharpCompress.Readers;
-using TCFModManagement.Core.Models;
+using TCFModManager.Core.Models;
 
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // Downloads, extracts, and installs a mod version's files into an SPT install, and records what it placed for later uninstall.
 public sealed class ModInstallService(ModDownloadService downloadService, ModInstallManifestService manifestService)
@@ -269,7 +269,7 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            var fallback = Path.Combine(Path.GetTempPath(), "TCFModManagement", id);
+            var fallback = Path.Combine(Path.GetTempPath(), "TCFModManager", id);
             Directory.CreateDirectory(fallback);
             canMove = string.Equals(
                 Path.GetPathRoot(Path.GetFullPath(fallback)),

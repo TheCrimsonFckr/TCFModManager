@@ -1,8 +1,8 @@
 using System.Windows;
 using System.Windows.Controls;
-using TCFModManagement.App.ViewModels;
+using TCFModManager.App.ViewModels;
 
-namespace TCFModManagement.App.Views;
+namespace TCFModManager.App.Views;
 
 // Shows the shared download queue, one card per queued item.
 public partial class DownloadsPage : Page

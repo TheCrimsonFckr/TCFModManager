@@ -1,9 +1,9 @@
 using System.Globalization;
 using System.Windows.Data;
-using TCFModManagement.App.ViewModels;
+using TCFModManager.App.ViewModels;
 using Wpf.Ui.Controls;
 
-namespace TCFModManagement.App.Converters;
+namespace TCFModManager.App.Converters;
 
 // Colors a DownloadsPage queue card's status ui:Badge by DownloadQueueItemViewModel.Status.
 public sealed class DownloadQueueStatusToAppearanceConverter : IValueConverter

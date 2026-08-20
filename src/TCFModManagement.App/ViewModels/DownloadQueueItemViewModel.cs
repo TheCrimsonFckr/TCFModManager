@@ -1,8 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using TCFModManagement.Core.Models;
+using TCFModManager.Core.Models;
 
-namespace TCFModManagement.App.ViewModels;
+namespace TCFModManager.App.ViewModels;
 
 // The stage a DownloadQueueItemViewModel is currently in. Drives its status badge and progress bar rendering.
 public enum DownloadQueueItemStatus

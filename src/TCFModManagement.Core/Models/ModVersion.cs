@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Models;
+namespace TCFModManager.Core.Models;
 
 // A full mod version as returned by /mod/{modId}/versions.
 public sealed class ModVersion

@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.SpModApi;
+namespace TCFModManager.Core.SpModApi;
 
 public sealed class SpModApiOptions
 {
@@ -6,5 +6,5 @@ public sealed class SpModApiOptions
     public TimeSpan Timeout { get; init; } = TimeSpan.FromSeconds(30);
 
     // Sent as the User-Agent header.
-    public string UserAgent { get; init; } = "TCFModManagement/0.1";
+    public string UserAgent { get; init; } = "TCFModManager/0.1";
 }

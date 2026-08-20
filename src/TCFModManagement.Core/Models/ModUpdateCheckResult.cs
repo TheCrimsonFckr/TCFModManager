@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Models;
+namespace TCFModManager.Core.Models;
 
 // Result of GET /mods/updates: a categorized comparison of installed mod versions against what's available for a target SPT version.
 public sealed class ModUpdateCheckResult

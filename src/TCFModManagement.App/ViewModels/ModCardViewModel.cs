@@ -1,7 +1,7 @@
-using TCFModManagement.Core.Models;
-using TCFModManagement.Core.Services;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
-namespace TCFModManagement.App.ViewModels;
+namespace TCFModManager.App.ViewModels;
 
 // Display wrapper around a Mod for the Browse results grid. Precomputes the fields of the version this card represents.
 public sealed class ModCardViewModel

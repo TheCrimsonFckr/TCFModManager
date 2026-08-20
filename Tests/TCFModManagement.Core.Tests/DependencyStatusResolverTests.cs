@@ -1,8 +1,8 @@
-using TCFModManagement.Core.Models;
-using TCFModManagement.Core.Services;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 using Xunit;
 
-namespace TCFModManagement.Core.Tests;
+namespace TCFModManager.Core.Tests;
 
 public class DependencyStatusResolverTests
 {

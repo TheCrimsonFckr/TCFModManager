@@ -1,6 +1,6 @@
-using TCFModManagement.Core.Models;
+using TCFModManager.Core.Models;
 
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // 
 // Works out which mod folders an install placed, from the file list it recorded. These are the

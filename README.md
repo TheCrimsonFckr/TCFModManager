@@ -1,4 +1,4 @@
-# TCFModManagement
+# TCFModManager
 
 A Windows desktop app for finding, installing and keeping track of [SPT](https://sp-tarkov.com)
 mods, built against [sp-mod](https://sp-mod.com) catalog. Browse the full mod list, filter it
@@ -20,10 +20,10 @@ The released build is self-contained, so no separate .NET runtime install is nee
 
 ## Install
 
-1. Grab the latest `TCF-ModManagement-<version>.zip` from Releases.
-2. Extract it into your SPT folder as `<SPT root>\TCFModManagement\` — a sibling of `BepInEx\` and
+1. Grab the latest `TCF-ModManager-<version>.zip` from Releases.
+2. Extract it into your SPT folder as `<SPT root>\TCFModManager\` — a sibling of `BepInEx\` and
    `user\`, **not** a mod folder. Anywhere else works too; it just needs to know where SPT is.
-3. Run `TCFModManagement.exe`.
+3. Run `TCFModManager.exe`.
 4. Go to **Options**, point it at your SPT install folder, and hit Save. The detected server
    version appears underneath — everything else keys off that.
 
@@ -84,7 +84,7 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 | `Data\logs\tcfmm-<date>.log` | Daily log |
 | `Staging\` | Default destination for manually downloaded archives |
 
-An older `%LocalAppData%\TCFModManagement\` layout is migrated automatically on first run.
+An older `%LocalAppData%\TCFModManager\` layout is migrated automatically on first run.
 
 ### Logging
 
@@ -97,14 +97,14 @@ Debug-level output in the same log. Logs rotate daily as `tcfmm-<yyyyMMdd>.log`.
 
 ## Layout
 
-- `src/TCFModManagement.Core` — sp-mod API client, models, and all the non-UI services (install,
+- `src/TCFModManager.Core` — sp-mod API client, models, and all the non-UI services (install,
   download, extraction, scanning, version matching, caching, logging). Plain `net9.0`, no UI
   dependencies, so it's reusable from tests, a console tool, or a future TCFModSync integration.
   One package reference: SharpCompress.
-- `src/TCFModManagement.App` — the WPF shell (`net9.0-windows`, [WPF-UI](https://www.nuget.org/packages/WPF-UI)
+- `src/TCFModManager.App` — the WPF shell (`net9.0-windows`, [WPF-UI](https://www.nuget.org/packages/WPF-UI)
   4.3.0 for Fluent Design, MVVM via CommunityToolkit.Mvvm). Five pages: Browse, Installed,
   Dependencies, Downloads, Options.
-- `Tests/TCFModManagement.Core.Tests` — xunit tests over the API client, version matching,
+- `Tests/TCFModManager.Core.Tests` — xunit tests over the API client, version matching,
   dependency status, and the installed-mod scanner, using JSON fixtures captured from live
   sp-mod.com responses.
 
@@ -115,7 +115,7 @@ Service wiring is a static `AppServices` holder rather than a DI container.
 Base URL `https://sp-mod.com`, read-only and unauthenticated. Documented at
 https://sp-mod.com/docs/index.html, OpenAPI spec at https://sp-mod.com/docs/openapi.yaml.
 
-`SpModApiClient` (namespace `TCFModManagement.Core.SpModApi`) covers the documented surface: mods,
+`SpModApiClient` (namespace `TCFModManager.Core.SpModApi`) covers the documented surface: mods,
 mod versions, update and dependency resolution, version file trees, addons and their
 versions/dependencies, categories, and SPT versions. Rate limiting is enforced at Cloudflare's edge
 (documented as 40 requests/10s burst, 200/60s sustained); a 429 surfaces as
@@ -143,12 +143,12 @@ constraints are written in terms of.
 
 ## Building
 
-Needs the .NET 9 SDK, and Windows for `TCFModManagement.App` (WPF doesn't build on Linux/macOS).
-Open `TCFModManagement.sln`, or:
+Needs the .NET 9 SDK, and Windows for `TCFModManager.App` (WPF doesn't build on Linux/macOS).
+Open `TCFModManager.sln`, or:
 
 ```
-dotnet build TCFModManagement.sln
-dotnet test Tests/TCFModManagement.Core.Tests
+dotnet build TCFModManager.sln
+dotnet test Tests/TCFModManager.Core.Tests
 ```
 
 `build/` holds the shared MSBuild config — `Directory.Build.props` (the root one is a stub that
@@ -158,7 +158,7 @@ that aren't tracked in git (`*.ps1` is gitignored, same convention as TCFModSync
 - `build\deploy.ps1` — forces a full rebuild and launches the exe, for a fast local test cycle.
 - `build\package-release.ps1 -Version 0.3.5` — publishes a self-contained single-file win-x64
   build, zips it (plus a source zip via `git archive`) into `dist\`, and deploys that build into
-  `<SptRoot>\TCFModManagement\`. The SPT path comes from `-SptPath`, otherwise from Options' saved
+  `<SptRoot>\TCFModManager\`. The SPT path comes from `-SptPath`, otherwise from Options' saved
   `settings.json`; if neither resolves, deploy is skipped and packaging still succeeds. Pass
   `-SkipDeploy` to always skip it.
 
@@ -175,7 +175,7 @@ service analyzes Debug by default — so `*.xaml.cs` files light up with "`Initi
 not exist" / "`x:Name` does not exist" until you build Debug once:
 
 ```
-dotnet build src\TCFModManagement.App\TCFModManagement.App.csproj -c Debug
+dotnet build src\TCFModManager.App\TCFModManager.App.csproj -c Debug
 ```
 
 May need a language-server restart to pick up. The Release build was never broken; it's purely
@@ -191,4 +191,4 @@ tooling looking at the wrong configuration's output.
   the page count grows.
 - No app icon.
 - `build\Directory.Build.props` still declares `<Version>0.1.0</Version>` while releases are cut at
-  0.3.x, and the API client's default User-Agent is still `TCFModManagement/0.1`.
+  0.3.x, and the API client's default User-Agent is still `TCFModManager/0.1`.

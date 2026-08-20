@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text;
 
-namespace TCFModManagement.Core.Tests;
+namespace TCFModManager.Core.Tests;
 
 // Records the last request it saw and returns a canned response, so SpModApiClient can
 // be tested without hitting the real network.

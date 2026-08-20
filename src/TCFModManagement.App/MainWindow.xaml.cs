@@ -1,7 +1,7 @@
-using TCFModManagement.App.Views;
+using TCFModManager.App.Views;
 using Wpf.Ui.Controls;
 
-namespace TCFModManagement.App;
+namespace TCFModManager.App;
 
 public partial class MainWindow : FluentWindow
 {

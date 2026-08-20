@@ -2,12 +2,12 @@ using System.Collections.ObjectModel;
 using System.Net.Http;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using TCFModManagement.App.Views;
-using TCFModManagement.Core.Models;
-using TCFModManagement.Core.Services;
-using TCFModManagement.Core.SpModApi;
+using TCFModManager.App.Views;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
+using TCFModManager.Core.SpModApi;
 
-namespace TCFModManagement.App.ViewModels;
+namespace TCFModManager.App.ViewModels;
 
 // 
 // Resolves the dependency tree of every installed mod that has one, and reports each dependency's

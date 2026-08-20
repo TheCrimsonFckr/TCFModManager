@@ -1,7 +1,7 @@
-using TCFModManagement.Core.Services;
+using TCFModManager.Core.Services;
 using Xunit;
 
-namespace TCFModManagement.Core.Tests;
+namespace TCFModManager.Core.Tests;
 
 public class ModVersionComparerTests
 {

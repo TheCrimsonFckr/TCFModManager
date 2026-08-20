@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Models;
+namespace TCFModManager.Core.Models;
 
 // A sub-mod attached to a parent Mod; versions are constrained against the parent mod's version, not an SPT version.
 public sealed class Addon

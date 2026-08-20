@@ -1,10 +1,10 @@
 <ui:ContentDialog
-    x:Class="TCFModManagement.App.Views.ModUpdateContentDialog"
+    x:Class="TCFModManager.App.Views.ModUpdateContentDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    xmlns:converters="clr-namespace:TCFModManagement.App.Converters"
-    xmlns:behaviors="clr-namespace:TCFModManagement.App.Behaviors"
+    xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     Style="{DynamicResource {x:Type ui:ContentDialog}}"
     IsFooterVisible="False">
     <!--

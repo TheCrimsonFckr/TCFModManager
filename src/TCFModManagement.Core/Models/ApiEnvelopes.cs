@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Models;
+namespace TCFModManager.Core.Models;
 
 // Envelope for single-resource endpoints: <c>{ "success": true, "data": {...} }</c>.
 public sealed class ApiResponse<T>

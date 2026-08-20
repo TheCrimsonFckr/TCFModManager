@@ -1,8 +1,8 @@
 using System.Text.Json;
-using TCFModManagement.Core.Models;
-using TCFModManagement.Core.SpModApi;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.SpModApi;
 
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // 
 // The published SPT release list from sp-mod.com, cached to disk. Mod version constraints are

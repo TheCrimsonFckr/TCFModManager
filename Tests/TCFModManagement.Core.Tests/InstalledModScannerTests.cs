@@ -1,8 +1,8 @@
-using TCFModManagement.Core.Models;
-using TCFModManagement.Core.Services;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 using Xunit;
 
-namespace TCFModManagement.Core.Tests;
+namespace TCFModManager.Core.Tests;
 
 public class InstalledModScannerTests : IDisposable
 {
@@ -10,7 +10,7 @@ public class InstalledModScannerTests : IDisposable
 
     public InstalledModScannerTests()
     {
-        _installRoot = Path.Combine(Path.GetTempPath(), "TCFModManagementTests_" + Guid.NewGuid());
+        _installRoot = Path.Combine(Path.GetTempPath(), "TCFModManagerTests_" + Guid.NewGuid());
         Directory.CreateDirectory(_installRoot);
     }
 

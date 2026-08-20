@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // 
 // An "identifier:version" pair, the format the sp-mod.com API uses to describe an installed mod or

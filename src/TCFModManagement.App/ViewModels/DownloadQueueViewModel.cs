@@ -1,12 +1,12 @@
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Threading.Channels;
-using TCFModManagement.App.Views;
-using TCFModManagement.Core.Models;
-using TCFModManagement.Core.Services;
-using TCFModManagement.Core.SpModApi;
+using TCFModManager.App.Views;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
+using TCFModManager.Core.SpModApi;
 
-namespace TCFModManagement.App.ViewModels;
+namespace TCFModManager.App.ViewModels;
 
 // App-lifetime download queue that processes one download/install at a time and resolves each item's dependencies before installing it.
 public sealed class DownloadQueueViewModel

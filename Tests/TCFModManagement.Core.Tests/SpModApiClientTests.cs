@@ -1,8 +1,8 @@
 using System.Net;
-using TCFModManagement.Core.SpModApi;
+using TCFModManager.Core.SpModApi;
 using Xunit;
 
-namespace TCFModManagement.Core.Tests;
+namespace TCFModManager.Core.Tests;
 
 // 
 // These tests use JSON fixtures captured from live calls against https://sp-mod.com on 2026-08-13,

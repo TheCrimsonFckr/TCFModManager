@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // 
 // Compares two loosely-formatted version strings (an installed mod's version vs. the latest one

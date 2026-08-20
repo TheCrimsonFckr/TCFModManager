@@ -1,9 +1,9 @@
 using System.Windows;
 using System.Windows.Threading;
-using TCFModManagement.App.Behaviors;
-using TCFModManagement.Core.Services;
+using TCFModManager.App.Behaviors;
+using TCFModManager.Core.Services;
 
-namespace TCFModManagement.App;
+namespace TCFModManager.App;
 
 public partial class App : Application
 {
@@ -41,7 +41,7 @@ public partial class App : Application
 
         MessageBox.Show(
             $"Something went wrong and wasn't handled:\n\n{e.Exception}\n\nThis was written to:\n{AppLog.CurrentFile}",
-            "TCF Mod Management - Unexpected Error",
+            "TCF Mod Manager - Unexpected Error",
             MessageBoxButton.OK,
             MessageBoxImage.Error);
 

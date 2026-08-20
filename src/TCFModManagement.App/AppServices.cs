@@ -1,8 +1,8 @@
-using TCFModManagement.App.ViewModels;
-using TCFModManagement.Core.SpModApi;
-using TCFModManagement.Core.Services;
+using TCFModManager.App.ViewModels;
+using TCFModManager.Core.SpModApi;
+using TCFModManager.Core.Services;
 
-namespace TCFModManagement.App;
+namespace TCFModManager.App;
 
 // 
 // Shared, app-lifetime instances of the Core services.

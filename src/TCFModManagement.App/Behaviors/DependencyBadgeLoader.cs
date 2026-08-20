@@ -1,10 +1,10 @@
 using System.Windows;
 using System.Windows.Threading;
-using TCFModManagement.Core.Models;
-using TCFModManagement.Core.Services;
-using TCFModManagement.Core.SpModApi;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
+using TCFModManager.Core.SpModApi;
 
-namespace TCFModManagement.App.Behaviors;
+namespace TCFModManager.App.Behaviors;
 
 // 
 // Attached behavior that shows/hides a badge based on whether a mod's latest version has any

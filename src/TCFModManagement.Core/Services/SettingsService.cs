@@ -1,7 +1,7 @@
 using System.Text.Json;
-using TCFModManagement.Core.Models;
+using TCFModManager.Core.Models;
 
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // 
 // Loads/saves AppSettings as JSON under &lt;app folder&gt;\Data\settings.json (see AppPaths).

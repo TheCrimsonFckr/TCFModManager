@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // 
 // Reads the installed SPT server version from the server executable's embedded file version

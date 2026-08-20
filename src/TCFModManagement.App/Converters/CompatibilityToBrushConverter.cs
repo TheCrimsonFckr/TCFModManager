@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace TCFModManagement.App.Converters;
+namespace TCFModManager.App.Converters;
 
 // Maps ModCardViewModel.IsCompatibleWithInstalledSpt (true/false/null) to a
 // green/red/neutral brush for the SPT version text on a Browse card.

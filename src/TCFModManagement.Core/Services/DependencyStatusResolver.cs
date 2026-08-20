@@ -1,6 +1,6 @@
-using TCFModManagement.Core.Models;
+using TCFModManager.Core.Models;
 
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // Decides a dependency's status, and how severe it is relative to others.
 public static class DependencyStatusResolver

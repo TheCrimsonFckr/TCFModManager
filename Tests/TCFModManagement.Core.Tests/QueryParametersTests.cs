@@ -1,7 +1,7 @@
-using TCFModManagement.Core.SpModApi;
+using TCFModManager.Core.SpModApi;
 using Xunit;
 
-namespace TCFModManagement.Core.Tests;
+namespace TCFModManager.Core.Tests;
 
 public class QueryParametersTests
 {

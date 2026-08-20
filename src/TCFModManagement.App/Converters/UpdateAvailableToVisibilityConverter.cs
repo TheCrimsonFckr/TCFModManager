@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace TCFModManagement.App.Converters;
+namespace TCFModManager.App.Converters;
 
 // Shows an element only when the bound value is true - false and null both collapse it.
 public sealed class UpdateAvailableToVisibilityConverter : IValueConverter

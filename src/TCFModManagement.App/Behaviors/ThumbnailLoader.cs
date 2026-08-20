@@ -3,9 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
-using TCFModManagement.Core.Services;
+using TCFModManager.Core.Services;
 
-namespace TCFModManagement.App.Behaviors;
+namespace TCFModManager.App.Behaviors;
 
 // 
 // Attached behavior for loading remote thumbnail images onto an &lt;Image&gt; with bounded

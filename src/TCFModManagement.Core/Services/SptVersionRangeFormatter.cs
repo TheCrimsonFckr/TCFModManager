@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // 
 // Turns the SemVer range strings sp-mod.com puts on mod versions (spt_version_constraint) into

@@ -1,11 +1,11 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using TCFModManagement.App.ViewModels;
+using TCFModManager.App.ViewModels;
 
-using TCFModManagement.Core.Services;
+using TCFModManager.Core.Services;
 
-namespace TCFModManagement.App.Views;
+namespace TCFModManager.App.Views;
 
 public partial class BrowsePage : Page
 {

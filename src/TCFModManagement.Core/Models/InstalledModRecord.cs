@@ -1,4 +1,4 @@
-namespace TCFModManagement.Core.Models;
+namespace TCFModManager.Core.Models;
 
 // A mod installed by this app, and exactly which files it placed. Only exists for app-managed installs, not mods installed by hand or otherwise placed outside the app.
 public sealed class InstalledModRecord

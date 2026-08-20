@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace TCFModManagement.Core.SpModApi;
+namespace TCFModManager.Core.SpModApi;
 
 // Thrown for any non-2xx response from the sp-mod.com API.
 public class SpModApiException : Exception

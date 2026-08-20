@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using System.Text;
 
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 public enum LogLevel
 {
@@ -75,7 +75,7 @@ public static class AppLog
         var header = new StringBuilder()
             .AppendLine()
             .AppendLine("========================================================")
-            .AppendLine($"TCF Mod Management {version} started {DateTime.Now:yyyy-MM-dd HH:mm:ss}")
+            .AppendLine($"TCF Mod Manager {version} started {DateTime.Now:yyyy-MM-dd HH:mm:ss}")
             .AppendLine($"OS {Environment.OSVersion} / .NET {Environment.Version} / {(Environment.Is64BitProcess ? "x64" : "x86")}")
             .AppendLine($"Data folder: {AppPaths.DataDirectory}")
             .AppendLine($"Log level: {MinimumLevel} (create a file named \"verbose\" here for Debug)");

@@ -2,10 +2,10 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using TCFModManagement.Core.Models;
-using TCFModManagement.Core.Serialization;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Serialization;
 
-namespace TCFModManagement.Core.SpModApi;
+namespace TCFModManager.Core.SpModApi;
 
 // Typed client for the sp-mod.com /api/v0 mod/addon catalog API.
 public sealed class SpModApiClient : IDisposable

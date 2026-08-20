@@ -1,7 +1,7 @@
-using TCFModManagement.Core.SpModApi;
-using TCFModManagement.Core.Models;
+using TCFModManager.Core.SpModApi;
+using TCFModManager.Core.Models;
 
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // 
 // Fetches the entire sp-mod.com catalog page by page. Caching/reuse of the result is the caller's

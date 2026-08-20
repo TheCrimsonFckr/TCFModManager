@@ -1,8 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using TCFModManagement.Core.Models;
-using TCFModManagement.Core.Services;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
-namespace TCFModManagement.App.ViewModels;
+namespace TCFModManager.App.ViewModels;
 
 // Shared, app-lifetime state for where SPT is installed and what version was detected there.
 public partial class SptEnvironmentViewModel : ObservableObject

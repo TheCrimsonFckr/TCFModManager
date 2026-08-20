@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // 
 // Persists "does this mod's latest version have dependencies" per mod id, so Browse's dependency

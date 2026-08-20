@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // The version window a constraint allows. MaxExclusive is the first version it rejects.
 public readonly record struct SptVersionBounds(Version? Min, bool MinExclusive, Version? MaxExclusive, Version? Exact)

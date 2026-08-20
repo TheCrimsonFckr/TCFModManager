@@ -1,9 +1,9 @@
 using System.Windows;
 using System.Windows.Controls;
-using TCFModManagement.App.ViewModels;
+using TCFModManager.App.ViewModels;
 using Wpf.Ui.Controls;
 
-namespace TCFModManagement.App.Views;
+namespace TCFModManager.App.Views;
 
 public partial class ModUpdateContentDialog : ContentDialog
 {

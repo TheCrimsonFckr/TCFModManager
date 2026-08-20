@@ -3,9 +3,9 @@ using System.IO;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using TCFModManagement.Core.Services;
+using TCFModManager.Core.Services;
 
-namespace TCFModManagement.App.ViewModels;
+namespace TCFModManager.App.ViewModels;
 
 /// <summary>
 /// Scans AppServices.SptEnvironment.InstallPath for what's actually installed (see InstalledModScanner),

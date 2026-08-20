@@ -2,9 +2,9 @@ using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
 using System.Text.Json;
-using TCFModManagement.Core.Models;
+using TCFModManager.Core.Models;
 
-namespace TCFModManagement.Core.Services;
+namespace TCFModManager.Core.Services;
 
 // Scans an SPT install folder for installed client (BepInEx/plugins) and server (user/mods) mods.
 public static class InstalledModScanner

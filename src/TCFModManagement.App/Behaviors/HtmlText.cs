@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 
-namespace TCFModManagement.App.Behaviors;
+namespace TCFModManager.App.Behaviors;
 
 // 
 // Attached property that renders an HTML fragment into a RichTextBox's FlowDocument.
