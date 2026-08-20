@@ -84,7 +84,7 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 | `Data\logs\tcfmm-<date>.log` | Daily log |
 | `Staging\` | Default destination for manually downloaded archives |
 
-An older `%LocalAppData%\TCFModManager\` layout is migrated automatically on first run.
+An older `%LocalAppData%\TCFModManagement\` layout is migrated automatically on first run.
 
 ### Logging
 
