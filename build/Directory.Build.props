@@ -1,0 +1,39 @@
+<Project>
+
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <Company>TheCrimsonFuckr</Company>
+    <Product>TCFModManagement</Product>
+    <Version>0.1.0</Version>
+
+    <!--
+      Stack traces embed the absolute path of every source file as it existed on the build machine,
+      which is how "C:\Users\<name>\OneDrive\Desktop\..." ends up in a log shipped to other people.
+      PathMap rewrites those to repo-relative paths at compile time, so a trace reads
+      "./src/TCFModManagement.Core/ForgeApi/ForgeApiClient.cs:43" instead of exposing the developer's
+      folder layout, account name, and cloud storage setup.
+
+      This file lives in build/, one level below the repo root, so the mapped prefix has to be the
+      *parent* of this file's own directory (the repo root), not MSBuildThisFileDirectory itself -
+      otherwise the prefix would never match a source path and this would silently do nothing.
+    -->
+    <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\'))=./</PathMap>
+
+    <!--
+      Makes builds reproducible: the same source produces the same binary regardless of machine or
+      directory. Also stops absolute paths sneaking back in through other compiler-embedded metadata.
+    -->
+    <Deterministic>true</Deterministic>
+
+    <!--
+      NuGet.config lives right next to this file in build/, not the repo root, so it's outside the
+      directory-walk-up NuGet normally uses to auto-discover it. This property is the supported way
+      to redirect that discovery - dotnet restore / dotnet build / VS's PackageReference restore all
+      honor it, so "just restore, it works" stays true without a config file at the root.
+    -->
+    <RestoreConfigFile>$(MSBuildThisFileDirectory)NuGet.config</RestoreConfigFile>
+  </PropertyGroup>
+
+</Project>

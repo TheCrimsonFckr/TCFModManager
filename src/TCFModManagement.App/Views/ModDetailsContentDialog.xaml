@@ -1,0 +1,89 @@
+<ui:ContentDialog
+    x:Class="TCFModManagement.App.Views.ModDetailsContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:behaviors="clr-namespace:TCFModManagement.App.Behaviors"
+    Style="{DynamicResource {x:Type ui:ContentDialog}}"
+    IsFooterVisible="False">
+    <!--
+        DataContext is the Mod itself, set in code-behind. Title is also set in code-behind from
+        Mod.Name; TitleTemplate below lays out the title text and close button.
+
+        Style is set explicitly by key so the ContentDialog style resolves for this subclass.
+        Fixed dialog size is enforced in code-behind via MeasureOverride.
+
+        IsFooterVisible="False": the footer's Close button is replaced by the icon-only close
+        button in TitleTemplate below.
+    -->
+    <ui:ContentDialog.TitleTemplate>
+        <DataTemplate>
+            <!-- DataContext here is the Title object (the mod name string). -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="{Binding}"
+                    TextWrapping="WrapWithOverflow" />
+
+                <!-- Behaves as the dialog's Close button via TemplateButtonCommand; IsCancel keeps Escape closing the dialog. -->
+                <ui:Button
+                    Grid.Column="1"
+                    Margin="12,0,0,0"
+                    Padding="6"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Appearance="Transparent"
+                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ui:ContentDialog}}, Path=TemplateButtonCommand}"
+                    CommandParameter="{x:Static ui:ContentDialogButton.Close}"
+                    Icon="{ui:SymbolIcon Dismiss24}"
+                    IsCancel="True"
+                    ToolTip="Close" />
+            </Grid>
+        </DataTemplate>
+    </ui:ContentDialog.TitleTemplate>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Image
+                    Grid.Column="0"
+                    Width="64"
+                    Height="64"
+                    Margin="0,0,12,0"
+                    Stretch="UniformToFill"
+                    behaviors:ThumbnailLoader.Source="{Binding Thumbnail}" />
+
+                <TextBlock
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Text="{Binding Owner.Name}"
+                    Opacity="0.7" />
+            </Grid>
+
+            <TextBlock
+                Margin="0,0,0,12"
+                TextWrapping="Wrap"
+                Text="{Binding Teaser}" />
+
+            <TextBlock Opacity="0.7" Text="{Binding Downloads, StringFormat='{}{0:N0} downloads'}" />
+            <TextBlock Opacity="0.7" Text="{Binding Category.Title, StringFormat='Category: {0}'}" />
+            <TextBlock Opacity="0.7" Text="{Binding License.Name, StringFormat='License: {0}'}" />
+
+            <ui:Button
+                Margin="0,12,0,0"
+                Content="View mod page"
+                Click="ViewModPageButton_Click" />
+        </StackPanel>
+    </ScrollViewer>
+</ui:ContentDialog>

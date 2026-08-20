@@ -1,0 +1,252 @@
+<Page
+    x:Class="TCFModManagement.App.Views.InstalledPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:converters="clr-namespace:TCFModManagement.App.Converters"
+    Title="Installed"
+    Loaded="InstalledPage_Loaded">
+    <Page.Resources>
+        <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
+        <converters:UpdateAvailableToVisibilityConverter x:Key="UpdateAvailableToVisible" />
+        <converters:ModStatusToBrushConverter x:Key="StatusBrush" />
+    </Page.Resources>
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="0,0,0,8">
+            <ui:Button
+                DockPanel.Dock="Right"
+                Content="Rescan"
+                Command="{Binding ScanCommand}" />
+            <TextBlock
+                VerticalAlignment="Center"
+                TextWrapping="Wrap"
+                Foreground="White"
+                Opacity="0.8"
+                Text="{Binding StatusMessage}" />
+        </DockPanel>
+
+        <!-- Search box and filter toggles. -->
+        <DockPanel Grid.Row="1" Margin="0,0,0,8">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                <ui:ToggleSwitch
+                    Foreground="White"
+                    IsChecked="{Binding FikaCompatibleOnly}"
+                    OnContent="Fika compatible only"
+                    OffContent="Fika compatible only" />
+                <ui:ToggleSwitch
+                    Margin="16,0,0,0"
+                    Foreground="White"
+                    IsChecked="{Binding HideContainsAds}"
+                    OnContent="Hide ads"
+                    OffContent="Hide ads" />
+                <ui:ToggleSwitch
+                    Margin="16,0,0,0"
+                    Foreground="White"
+                    IsChecked="{Binding HideContainsAiContent}"
+                    OnContent="Hide AI content"
+                    OffContent="Hide AI content" />
+            </StackPanel>
+
+            <ui:TextBox
+                Width="320"
+                HorizontalAlignment="Left"
+                PlaceholderText="Search mods... (@author for author)"
+                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+        </DockPanel>
+
+        <DockPanel Grid.Row="2" Margin="0,0,0,8">
+            <ui:Button
+                DockPanel.Dock="Right"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Content="Clear filters"
+                Command="{Binding ClearFiltersCommand}" />
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Update status:" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0" />
+                <ComboBox
+                    MinWidth="120"
+                    ItemsSource="{Binding UpdateFilterOptions}"
+                    SelectedItem="{Binding SelectedUpdateFilter}" />
+
+                <TextBlock Text="Per page:" Foreground="White" VerticalAlignment="Center" Margin="16,0,6,0" />
+                <ComboBox
+                    MinWidth="60"
+                    ItemsSource="{Binding PageSizeOptions}"
+                    SelectedItem="{Binding PageSize}" />
+            </StackPanel>
+        </DockPanel>
+
+        <!-- Installed mods grid; column count is set from code-behind based on width. -->
+        <ListBox
+            x:Name="ResultsListBox"
+            Grid.Row="3"
+            Padding="4"
+            BorderThickness="0"
+            Background="Transparent"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ItemsSource="{Binding Results}"
+            SelectionChanged="ResultsListBox_SelectionChanged"
+            SizeChanged="ResultsListBox_SizeChanged">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="{Binding Columns}" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Margin" Value="6" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="VerticalAlignment" Value="Stretch" />
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <!-- Stretches card content so the icon column can pin to top/bottom edges. -->
+                    <ui:Card
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch"
+                        ClipToBounds="True">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Mod title and details, one consistent text size throughout. -->
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <!-- Catalog title, falling back to the installed folder/package name. -->
+                                <TextBlock
+                                    Text="{Binding DisplayTitle}"
+                                    FontWeight="SemiBold"
+                                    TextTrimming="CharacterEllipsis" />
+
+                                <!-- On-disk folder/package name, shown only if different from the title. -->
+                                <TextBlock
+                                    Opacity="0.6"
+                                    TextTrimming="CharacterEllipsis"
+                                    Visibility="{Binding FolderNameIfDifferent, Converter={StaticResource NullToCollapsed}}">
+                                    <Run Text="Installed as: " />
+                                    <Run Text="{Binding FolderNameIfDifferent, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock
+                                    Text="{Binding Guid}"
+                                    Opacity="0.5"
+                                    TextTrimming="CharacterEllipsis"
+                                    Visibility="{Binding Guid, Converter={StaticResource NullToCollapsed}}" />
+
+                                <TextBlock TextTrimming="CharacterEllipsis" Opacity="0.6">
+                                    <Run Text="Installed: " />
+                                    <Run Text="{Binding InstalledVersion, TargetNullValue='unknown', Mode=OneWay}" />
+                                </TextBlock>
+
+                                <!-- Shown only when client and server versions disagree. -->
+                                <TextBlock
+                                    Text="{Binding InstalledVersionDetail}"
+                                    Opacity="0.6"
+                                    TextTrimming="CharacterEllipsis"
+                                    Visibility="{Binding InstalledVersionDetail, Converter={StaticResource NullToCollapsed}}" />
+
+                                <TextBlock Opacity="0.6">
+                                    <Run Text="Latest published: " />
+                                    <Run Text="{Binding LatestPublishedVersion, TargetNullValue='not found on sp-mod.com', Mode=OneWay}" />
+                                </TextBlock>
+
+                                <!-- Shown only when the mod matched a catalog listing. -->
+                                <TextBlock
+                                    Opacity="0.6"
+                                    Visibility="{Binding LatestUpdatedAt, Converter={StaticResource NullToCollapsed}}">
+                                    <Run Text="Last updated: " />
+                                    <Run Text="{Binding LatestUpdatedAt, StringFormat='{}{0:d}', Mode=OneWay}" />
+                                </TextBlock>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                        Text="{Binding TargetSummary}"
+                                        Opacity="0.6" />
+                                    <TextBlock
+                                        Text="{Binding InstalledAt, StringFormat=' • installed {0:d}'}"
+                                        Opacity="0.6"
+                                        Visibility="{Binding InstalledAt, Converter={StaticResource NullToCollapsed}}" />
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- Update icon and Remove button, pinned to the card's top/bottom edges. -->
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Status icon, same set Browse and Dependencies use; clicking the card
+                                     opens the update dialog. Always shown, so an up-to-date mod reads as
+                                     checked rather than as an absent icon. -->
+                                <ui:SymbolIcon
+                                    Grid.Row="0"
+                                    Margin="6"
+                                    HorizontalAlignment="Center"
+                                    FontSize="20"
+                                    Symbol="{Binding StatusGlyph}"
+                                    Foreground="{Binding Status, Converter={StaticResource StatusBrush}}"
+                                    ToolTip="{Binding StatusTooltip}" />
+
+                                <!-- Remove button, colored red as a destructive action. -->
+                                <ui:Button
+                                    Grid.Row="2"
+                                    Margin="6"
+                                    HorizontalAlignment="Center"
+                                    Padding="6"
+                                    Appearance="Transparent"
+                                    Foreground="Red"
+                                    Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                    CommandParameter="{Binding}"
+                                    Icon="{ui:SymbolIcon Delete24}"
+                                    ToolTip="Remove this mod" />
+                            </Grid>
+                        </Grid>
+                    </ui:Card>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel
+            Grid.Row="4"
+            Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            Margin="0,8,0,0">
+            <ui:Button
+                Content="Previous"
+                Command="{Binding PreviousPageCommand}" />
+            <TextBlock
+                Margin="12,0,12,0"
+                VerticalAlignment="Center"
+                Foreground="White"
+                Text="{Binding CurrentPage, StringFormat='Page {0}'}" />
+            <TextBlock
+                VerticalAlignment="Center"
+                Opacity="0.7"
+                Foreground="White"
+                Text="{Binding TotalPages, StringFormat='of {0}'}" />
+            <ui:Button
+                Margin="12,0,0,0"
+                Content="Next"
+                Command="{Binding NextPageCommand}" />
+        </StackPanel>
+    </Grid>
+</Page>

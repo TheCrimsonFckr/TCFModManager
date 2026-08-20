@@ -1,0 +1,41 @@
+# Build output
+bin/
+obj/
+dist/
+publish/
+*_wpftmp.csproj
+
+# IDE / editor
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.rsuser
+*.sln.docstates
+*.sln.DotSettings.user
+
+# Test output
+TestResults/
+*.coverage
+coverage*.json
+coverage*.xml
+
+# PowerShell tooling stays local
+*.ps1
+
+# Machine-specific build config only
+build/Directory.Build.local.props
+
+# App runtime data written next to the exe when running from source
+Data/
+downloads/
+*.log
+
+# Holding area for dead files
+_to_delete/
+
+# OS cruft
+Thumbs.db
+desktop.ini
+.DS_Store

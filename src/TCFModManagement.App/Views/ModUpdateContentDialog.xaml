@@ -1,0 +1,184 @@
+<ui:ContentDialog
+    x:Class="TCFModManagement.App.Views.ModUpdateContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:converters="clr-namespace:TCFModManagement.App.Converters"
+    xmlns:behaviors="clr-namespace:TCFModManagement.App.Behaviors"
+    Style="{DynamicResource {x:Type ui:ContentDialog}}"
+    IsFooterVisible="False">
+    <!--
+        Shows every published version of a mod with its own changelog, letting the user pick one
+        to install or update to. DataContext is a ModUpdateDialogViewModel set in code-behind.
+    -->
+    <ui:ContentDialog.Resources>
+        <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
+        <converters:UpdateAvailableToVisibilityConverter x:Key="TrueToVisible" />
+        <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
+    </ui:ContentDialog.Resources>
+
+    <ui:ContentDialog.TitleTemplate>
+        <DataTemplate>
+            <!-- DataContext here is the Title object (the mod's display title). -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Text="{Binding}"
+                    TextWrapping="WrapWithOverflow" />
+
+                <ui:Button
+                    Grid.Column="1"
+                    Margin="12,0,0,0"
+                    Padding="6"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Appearance="Transparent"
+                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ui:ContentDialog}}, Path=TemplateButtonCommand}"
+                    CommandParameter="{x:Static ui:ContentDialogButton.Close}"
+                    Icon="{ui:SymbolIcon Dismiss24}"
+                    IsCancel="True"
+                    ToolTip="Close" />
+            </Grid>
+        </DataTemplate>
+    </ui:ContentDialog.TitleTemplate>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,8">
+            <TextBlock
+                Opacity="0.7"
+                Text="{Binding InstalledVersionText, StringFormat='Currently installed: {0}', TargetNullValue='Currently installed: unknown'}" />
+            <TextBlock
+                Margin="0,4,0,0"
+                TextWrapping="Wrap"
+                Opacity="0.8"
+                Text="{Binding StatusMessage}"
+                Visibility="{Binding StatusMessage, Converter={StaticResource NullToCollapsed}}" />
+        </StackPanel>
+
+        <!-- "View mod page" shows when a catalog match exists; "Update" shows only when a newer compatible version is available. -->
+        <DockPanel Grid.Row="1" Margin="0,0,0,8">
+            <ui:Button
+                DockPanel.Dock="Right"
+                HorizontalAlignment="Right"
+                Content="Update"
+                Icon="{ui:SymbolIcon ArrowSync24}"
+                Command="{Binding UpdateCommand}"
+                Visibility="{Binding ShowUpdateButton, Converter={StaticResource TrueToVisible}}" />
+            <ui:Button
+                Content="View mod page"
+                Command="{Binding OpenModPageCommand}"
+                Visibility="{Binding ModPageUrl, Converter={StaticResource NullToCollapsed}}" />
+        </DockPanel>
+
+        <Grid Grid.Row="2">
+            <!-- Loading state shown while versions are being fetched. -->
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Visibility="{Binding IsLoading, Converter={StaticResource TrueToVisible}}">
+                <ProgressBar Width="220" Height="4" IsIndeterminate="True" />
+                <TextBlock Margin="0,8,0,0" HorizontalAlignment="Center" Opacity="0.7" Text="Loading versions..." />
+            </StackPanel>
+
+            <ScrollViewer
+                VerticalScrollBarVisibility="Auto"
+                Visibility="{Binding IsLoading, Converter={StaticResource FalseToVisible}}">
+                <ListBox
+                    BorderThickness="0"
+                    Background="Transparent"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    ItemsSource="{Binding Versions}"
+                    SelectedItem="{Binding SelectedVersion}">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Margin" Value="0,0,0,8" />
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <!-- Each version is its own collapsible CardExpander; only the latest starts expanded. -->
+                            <ui:CardExpander IsExpanded="{Binding IsLatest, Mode=OneWay}">
+                                <ui:CardExpander.Header>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock FontWeight="SemiBold" Text="{Binding VersionText}" />
+                                            <TextBlock Margin="0,2,0,0" Opacity="0.6">
+                                                <Run Text="Published: " />
+                                                <Run Text="{Binding PublishedAt, StringFormat='{}{0:d}', TargetNullValue='unknown', Mode=OneWay}" />
+                                            </TextBlock>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <ui:Badge
+                                                Margin="6,0,0,0"
+                                                Appearance="Info"
+                                                FontSize="11"
+                                                Foreground="White"
+                                                Content="Latest"
+                                                Visibility="{Binding IsLatest, Converter={StaticResource TrueToVisible}}" />
+                                            <ui:Badge
+                                                Margin="6,0,0,0"
+                                                Appearance="Caution"
+                                                FontSize="11"
+                                                Foreground="White"
+                                                Content="Installed"
+                                                Visibility="{Binding IsInstalled, Converter={StaticResource TrueToVisible}}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </ui:CardExpander.Header>
+
+                                <StackPanel Margin="0,8,0,0">
+                                    <TextBlock
+                                        Opacity="0.6"
+                                        Visibility="{Binding SptVersionConstraint, Converter={StaticResource NullToCollapsed}}">
+                                        <Run Text="Targets SPT: " />
+                                        <Run Text="{Binding SptVersionConstraint, Mode=OneWay}" />
+                                    </TextBlock>
+
+                                    <TextBlock
+                                        Opacity="0.6"
+                                        Text="{Binding CompatibilityLabel}"
+                                        Visibility="{Binding CompatibilityLabel, Converter={StaticResource NullToCollapsed}}" />
+
+                                    <!-- Renders the HTML changelog as formatted text. -->
+                                    <RichTextBox
+                                        Margin="0,6,0,0"
+                                        Padding="0"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        IsReadOnly="True"
+                                        IsDocumentEnabled="True"
+                                        Focusable="False"
+                                        VerticalScrollBarVisibility="Disabled"
+                                        HorizontalScrollBarVisibility="Disabled"
+                                        behaviors:HtmlText.Html="{Binding Changelog}"
+                                        Visibility="{Binding Changelog, Converter={StaticResource NullToCollapsed}}" />
+                                </StackPanel>
+                            </ui:CardExpander>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</ui:ContentDialog>

@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>TCFModManagement.App</RootNamespace>
+    <AssemblyName>TCFModManagement</AssemblyName>
+
+    <!--
+      Trims size out of the self-contained single-file publish (package-release.ps1) by dropping
+      non-English satellite resource assemblies WPF/WPF-UI/CommunityToolkit ship by default - the
+      app only ever talks to the Forge API in English, so there's nothing translated to lose.
+
+      InvariantGlobalization was tried alongside this and reverted: WPF's XAML binding pipeline
+      calls CultureInfo.GetCultureInfo("en-US") internally (XamlLanguage.GetSpecificCulture, hit on
+      startup via any binding with Visibility/etc.), and invariant mode throws
+      "Cannot find non-neutral culture related to 'en-us'" because it only supports the invariant
+      culture, not a real one - confirmed by the crash on first launch after adding it. WPF apps
+      can't use InvariantGlobalization; SatelliteResourceLanguages is unaffected by this and safe.
+    -->
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WPF-UI" Version="4.3.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TCFModManagement.Core\TCFModManagement.Core.csproj" />
+  </ItemGroup>
+
+</Project>

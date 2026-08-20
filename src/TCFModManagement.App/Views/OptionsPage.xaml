@@ -1,0 +1,41 @@
+<Page
+    x:Class="TCFModManagement.App.Views.OptionsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="Options">
+    <Grid Margin="16">
+        <ui:Card Padding="16" VerticalAlignment="Top">
+            <StackPanel>
+                <TextBlock
+                    Text="SPT Install Folder"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Opacity="0.7"
+                    Margin="0,0,0,8"
+                    Text="Point this at your SPT server install folder (the one containing SPT.Server.exe). Once set, the installed SPT version is used to default the Browse version filter and to flag mods that aren't built for it." />
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <ui:TextBox
+                        Width="440"
+                        Text="{Binding InstallPathInput, UpdateSourceTrigger=PropertyChanged}" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Content="Browse..."
+                        Command="{Binding BrowseCommand}" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Content="Save"
+                        Command="{Binding SaveCommand}" />
+                </StackPanel>
+
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Opacity="0.7"
+                    Text="{Binding SptEnvironment.StatusMessage}" />
+            </StackPanel>
+        </ui:Card>
+    </Grid>
+</Page>

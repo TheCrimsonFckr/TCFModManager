@@ -1,0 +1,40 @@
+using System.Text.Json;
+using TCFModManagement.Core.Models;
+
+namespace TCFModManagement.Core.Services;
+
+// 
+// Loads/saves AppSettings as JSON under &lt;app folder&gt;\Data\settings.json (see AppPaths).
+// 
+public sealed class SettingsService
+{
+    private readonly string _filePath;
+
+    public SettingsService()
+    {
+        AppPaths.MigrateLegacyFile("settings.json");
+        _filePath = Path.Combine(AppPaths.DataDirectory, "settings.json");
+    }
+
+    public AppSettings Load()
+    {
+        if (!File.Exists(_filePath)) return new AppSettings();
+
+        try
+        {
+            var json = File.ReadAllText(_filePath);
+            return JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
+        }
+        catch (JsonException)
+        {
+            // Corrupt or hand-edited settings file - fall back to defaults.
+            return new AppSettings();
+        }
+    }
+
+    public void Save(AppSettings settings)
+    {
+        var json = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(_filePath, json);
+    }
+}

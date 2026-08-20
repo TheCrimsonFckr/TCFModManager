@@ -1,0 +1,365 @@
+<Page
+    x:Class="TCFModManagement.App.Views.BrowsePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:converters="clr-namespace:TCFModManagement.App.Converters"
+    xmlns:behaviors="clr-namespace:TCFModManagement.App.Behaviors"
+    Title="Browse"
+    Loaded="BrowsePage_Loaded">
+    <Page.Resources>
+        <converters:CompatibilityToBrushConverter x:Key="CompatibilityBrush" />
+        <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
+        <converters:UpdateAvailableToVisibilityConverter x:Key="TrueToVisible" />
+        <converters:ModStatusToBrushConverter x:Key="StatusBrush" />
+        <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
+
+    </Page.Resources>
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,8">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                    <ui:ToggleSwitch
+                        Foreground="White"
+                        IsChecked="{Binding FikaCompatibleOnly}"
+                        OnContent="Fika compatible only"
+                        OffContent="Fika compatible only" />
+                    <ui:ToggleSwitch
+                        Margin="16,0,0,0"
+                        Foreground="White"
+                        IsChecked="{Binding HideContainsAds}"
+                        OnContent="Hide ads"
+                        OffContent="Hide ads" />
+                    <ui:ToggleSwitch
+                        Margin="16,0,0,0"
+                        Foreground="White"
+                        IsChecked="{Binding HideContainsAiContent}"
+                        OnContent="Hide AI content"
+                        OffContent="Hide AI content" />
+                </StackPanel>
+
+                <ui:TextBox
+                    Width="320"
+                    HorizontalAlignment="Left"
+                    PlaceholderText="Search mods... (@author for author)"
+                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+            </DockPanel>
+
+            <DockPanel Margin="0,8,0,0">
+                <ui:Button
+                    DockPanel.Dock="Right"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Content="Clear filters"
+                    Command="{Binding ClearFiltersCommand}" />
+                <ui:Button
+                    DockPanel.Dock="Right"
+                    Margin="0,0,8,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Content="Refresh cache"
+                    Command="{Binding RefreshCacheCommand}" />
+
+                <StackPanel Orientation="Horizontal">
+                <!-- SPT version multi-select filter, styled to match the ComboBoxes below. -->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="SPT:" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <ToggleButton
+                        x:Name="SptVersionToggle"
+                        MinWidth="150"
+                        Padding="{DynamicResource ComboBoxPadding}"
+                        Background="{DynamicResource ComboBoxBackground}"
+                        BorderBrush="{DynamicResource ControlElevationBorderBrush}"
+                        BorderThickness="1"
+                        HorizontalContentAlignment="Stretch">
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Border
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="{DynamicResource ControlCornerRadius}">
+                                    <ContentPresenter Margin="{TemplateBinding Padding}" />
+                                </Border>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                TextTrimming="CharacterEllipsis"
+                                Text="{Binding SptVersionFilterSummary}" />
+                            <ui:SymbolIcon
+                                Grid.Column="1"
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="11"
+                                Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
+                                Symbol="ChevronDown24" />
+                        </Grid>
+                    </ToggleButton>
+                </StackPanel>
+                <Popup
+                    IsOpen="{Binding IsChecked, ElementName=SptVersionToggle, Mode=TwoWay}"
+                    PlacementTarget="{Binding ElementName=SptVersionToggle}"
+                    Placement="Bottom"
+                    StaysOpen="False"
+                    AllowsTransparency="True">
+                    <Border
+                        MinWidth="{Binding ActualWidth, ElementName=SptVersionToggle}"
+                        Padding="0,4,0,6"
+                        Background="{DynamicResource ComboBoxDropDownBackground}"
+                        BorderBrush="{DynamicResource ComboBoxDropDownBorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="{DynamicResource PopupCornerRadius}">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="20" Direction="270" Opacity="0.135" ShadowDepth="10" Color="#202020" />
+                        </Border.Effect>
+                        <ScrollViewer MaxHeight="240" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl Margin="8,4" ItemsSource="{Binding SptVersionOptions}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox
+                                            Margin="2"
+                                            IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                            Content="{Binding Label, StringFormat='SPT {0}'}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+                </Popup>
+
+                <StackPanel Orientation="Horizontal" Margin="16,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="Sort:" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <ComboBox
+                        MinWidth="150"
+                        ItemsSource="{Binding SortOptions}"
+                        SelectedItem="{Binding SelectedSortOption}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="16,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="Per page:" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <ComboBox
+                        MinWidth="60"
+                        ItemsSource="{Binding PageSizeOptions}"
+                        SelectedItem="{Binding PageSize}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="16,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="Featured:" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <ComboBox
+                        MinWidth="90"
+                        ItemsSource="{Binding FeaturedFilterOptions}"
+                        SelectedItem="{Binding SelectedFeaturedFilter}" />
+                </StackPanel>
+                </StackPanel>
+            </DockPanel>
+        </StackPanel>
+
+        <TextBlock
+            Grid.Row="1"
+            Margin="0,0,0,8"
+            TextWrapping="Wrap"
+            Opacity="0.7"
+            Foreground="White"
+            Text="{Binding StatusMessage}" />
+
+        <!-- Results grid; column count is set from code-behind based on width. -->
+        <ListBox
+            x:Name="ResultsListBox"
+            Grid.Row="2"
+            Padding="4"
+            BorderThickness="0"
+            Background="Transparent"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ItemsSource="{Binding Results}"
+            SelectionChanged="ResultsListBox_SelectionChanged"
+            SizeChanged="ResultsListBox_SizeChanged">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="{Binding Columns}" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <!-- Clears default item chrome so only the Card's own styling shows. -->
+                    <Setter Property="Margin" Value="6" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    <!-- Ensures the item fills its UniformGrid cell. -->
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="VerticalAlignment" Value="Stretch" />
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <!-- Mod card, stretched to fill its grid cell and clipped to bounds. -->
+                    <ui:Card
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        ClipToBounds="True">
+                        <!-- Fills the card. The right-hand column is a gutter the status icon and
+                             install button live in, so neither can overlap the title or badges. -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.Column="0" VerticalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Throttled thumbnail loader. -->
+                                <Image
+                                    Grid.Column="0"
+                                    Width="48"
+                                    Height="48"
+                                    Margin="0,0,10,0"
+                                    Stretch="UniformToFill"
+                                    behaviors:ThumbnailLoader.Source="{Binding Thumbnail}" />
+
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock
+                                        Text="{Binding Name}"
+                                        FontWeight="SemiBold"
+                                        TextTrimming="CharacterEllipsis" />
+                                    <TextBlock
+                                        Text="{Binding Author, StringFormat='by {0}'}"
+                                        FontSize="11"
+                                        Opacity="0.6"
+                                        TextTrimming="CharacterEllipsis"
+                                        Visibility="{Binding Author, Converter={StaticResource NullToCollapsed}}" />
+                                    <TextBlock
+                                        Text="{Binding Guid}"
+                                        FontSize="11"
+                                        Opacity="0.5"
+                                        TextTrimming="CharacterEllipsis" />
+                                    <!-- One TextBlock rather than a horizontal StackPanel so the line
+                                         trims instead of clipping when the card is narrow. The SPT
+                                         segment is colored by compatibility with the installed
+                                         version; de-emphasis uses Foreground since Run has no Opacity. -->
+                                    <TextBlock
+                                        FontSize="11"
+                                        TextTrimming="CharacterEllipsis"
+                                        ToolTip="{Binding SptVersionTooltip}">
+                                        <Run Text="{Binding Downloads, Mode=OneWay, StringFormat='{}{0:N0} downloads'}" Foreground="#99FFFFFF" />
+                                        <Run Text=" • " Foreground="#99FFFFFF" />
+                                        <Run
+                                            Text="{Binding SptVersionDisplay, Mode=OneWay}"
+                                            Foreground="{Binding IsCompatibleWithInstalledSpt, Converter={StaticResource CompatibilityBrush}}" />
+                                        <Run Text=" • " Foreground="#99FFFFFF" />
+                                        <Run Text="{Binding DisplayReleaseVersion, Mode=OneWay, StringFormat='v{0}'}" Foreground="#99FFFFFF" />
+                                    </TextBlock>
+                                    <!-- Category and feature badges; only shown when applicable. -->
+                                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                        <ui:Badge
+                                            Appearance="Info"
+                                            FontSize="11"
+                                            Foreground="White"
+                                            Content="{Binding CategoryTag}"
+                                            Visibility="{Binding CategoryTag, Converter={StaticResource NullToCollapsed}}" />
+                                        <ui:Badge
+                                            Margin="6,0,0,0"
+                                            Appearance="Info"
+                                            FontSize="11"
+                                            Foreground="White"
+                                            Content="Fika compatible"
+                                            Visibility="{Binding IsFikaCompatible, Converter={StaticResource TrueToVisible}}" />
+                                        <ui:Badge
+                                            Margin="6,0,0,0"
+                                            Appearance="Info"
+                                            FontSize="11"
+                                            Foreground="White"
+                                            Content="Contains ads"
+                                            Visibility="{Binding ContainsAds, Converter={StaticResource TrueToVisible}}" />
+                                    </StackPanel>
+                                    <!-- Dependency badge on its own row; resolved asynchronously per
+                                         card, so its margin sits on the badge rather than the row to
+                                         keep the row zero-height while it stays collapsed. -->
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:Badge
+                                            Margin="0,4,0,0"
+                                            Appearance="Caution"
+                                            FontSize="11"
+                                            Foreground="White"
+                                            Content="Has dependencies"
+                                            Visibility="Hidden"
+                                            behaviors:DependencyBadgeLoader.Mod="{Binding Mod}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Install/update status icon, same set the Installed and Dependencies pages use. -->
+                            <ui:SymbolIcon
+                                Grid.Column="1"
+                                Margin="8,0,0,0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                FontSize="16"
+                                Symbol="{Binding StatusGlyph}"
+                                Foreground="{Binding Status, Converter={StaticResource StatusBrush}}"
+                                ToolTip="{Binding StatusTooltip}"
+                                Visibility="{Binding IsInstalled, Converter={StaticResource TrueToVisible}}" />
+
+                            <!-- Install button, shown only for mods not yet installed. -->
+                            <ui:Button
+                                Grid.Column="1"
+                                Margin="8,0,0,0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Padding="6"
+                                Appearance="Transparent"
+                                Command="{Binding DataContext.InstallCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                CommandParameter="{Binding}"
+                                Icon="{ui:SymbolIcon ArrowDownload24}"
+                                ToolTip="Install this mod"
+                                Visibility="{Binding IsInstalled, Converter={StaticResource FalseToVisible}}" />
+                        </Grid>
+                    </ui:Card>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel
+            Grid.Row="3"
+            Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            Margin="0,8,0,0">
+            <ui:Button
+                Content="Previous"
+                Command="{Binding PreviousPageCommand}" />
+            <TextBlock
+                Margin="12,0,12,0"
+                VerticalAlignment="Center"
+                Foreground="White"
+                Text="{Binding CurrentPage, StringFormat='Page {0}'}" />
+            <TextBlock
+                VerticalAlignment="Center"
+                Opacity="0.7"
+                Foreground="White"
+                Text="{Binding TotalPages, StringFormat='of {0}'}" />
+            <ui:Button
+                Margin="12,0,0,0"
+                Content="Next"
+                Command="{Binding NextPageCommand}" />
+        </StackPanel>
+    </Grid>
+</Page>
