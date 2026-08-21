@@ -66,6 +66,17 @@ the previous version is only removed **after** the new one has downloaded and ex
 successfully a failed or cancelled download can't leave you with neither. Once files start
 being placed, the operation runs to completion rather than tearing out a half-installed mod.
 
+Installing and removing both refuse to start while Tarkov or the SPT server is running, since
+those hold open the files being replaced; the check runs again once the download finishes, in case
+SPT was launched while it was in progress. If a file placement fails anyway, what was placed
+before the failure is still recorded and marked incomplete, so those files stay app-managed - a
+reinstall completes the mod, a removal clears it out.
+
+A server mod's own config files (`user\mods\<mod>\config\*.json`) aren't simply deleted with the
+rest of it. Removing a mod asks whether to keep them - moved into a timestamped folder under
+`LegacyConfigs\` with their install-relative paths intact, so the folder can be copied back over
+an SPT install to restore them - or delete them. Updates always keep them, without asking.
+
 Every install is recorded in `Data\installed-mods.json`, which is what makes a clean uninstall
 possible later. That file not folder names, not DLL file versions is the authority on what's
 installed and at what version.
@@ -83,6 +94,7 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 | `Data\dependency_flags.json` | Per-mod "has dependencies" answers, re-checked when a mod publishes |
 | `Data\logs\tcfmm-<date>.log` | Daily log |
 | `Staging\` | Default destination for manually downloaded archives |
+| `LegacyConfigs\` | Config files kept from removed mods, one timestamped folder per removal |
 
 An older `%LocalAppData%\TCFModManagement\` layout is migrated automatically on first run.
 
@@ -90,6 +102,48 @@ An older `%LocalAppData%\TCFModManagement\` layout is migrated automatically on 
 
 Info level by default. Drop an empty file named `verbose` (no extension) next to the exe to get
 Debug-level output in the same log. Logs rotate daily as `tcfmm-<yyyyMMdd>.log`.
+
+## Known limitations
+
+**What it can see**
+
+- `BepInEx\patchers` isn't scanned, so a patcher mod never appears on the Installed page - even one
+  this app installed.
+- Mods nested a level deeper than convention (`BepInEx\plugins\Author\ModName\`) are listed under
+  the outer folder's name, with an unknown version.
+- Mods installed by hand are matched to a catalog listing by folder name, since there's no record to
+  read. An ambiguous folder name is deliberately left unmatched rather than guessed at, so such a
+  mod can be listed and removed but not updated from here.
+
+**Installing**
+
+- Archives must be packaged conventionally - a `BepInEx\`, `user\`, `SPT\` or `SPT_Runtime\` folder
+  at the top, optionally inside one wrapper folder. Anything else is refused rather than scattered
+  into the install.
+- Everything inside the archive is installed, including readmes and optional-variant folders;
+  choose-your-variant mods are better installed by hand.
+- Files are overwritten with no backup, and uninstall deletes the files the record lists - a file
+  shared by two mods goes with whichever is removed first.
+- Installing needs roughly twice the archive's size free on the SPT drive, and downloads don't
+  resume, so a large mod on a slow connection can time out and need restarting.
+
+**Versions**
+
+- Compatibility is judged from the most recent versions the catalog returns per mod, not the full
+  history, so a mod with an older release that would work on this SPT still reads as incompatible.
+- Constraint forms the range parser can't read fall back to "SPT version unknown" and are left
+  unfiltered rather than hidden.
+- Pre-release/beta version numbers aren't compared precisely, so an update may not be flagged
+  against one.
+- The catalog is filtered to SPT 3.10 and newer.
+- Installed dates come from folder creation time, so a mod updated in place keeps its original date.
+
+**Scope**
+
+- The install manifest belongs to the app rather than to the SPT install it points at, so pointing
+  Options at a second install carries the first one's records across. Use a separate copy of the app
+  per install.
+- The catalog refreshes once per session in the background; Refresh cache forces it.
 
 ---
 

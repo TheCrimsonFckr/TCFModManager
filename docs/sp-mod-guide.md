@@ -69,8 +69,14 @@ Clicking any card opens a dialog with:
 Mods can be removed from here too.
 
 ::: warning
-Mods installed with this app have every file they placed recorded, which is what makes a clean uninstall possible. Anything you installed by hand beforehand has no such record.
+Mods installed with this app have every file they placed recorded, which is what makes a clean uninstall possible. Anything you installed by hand beforehand has no such record, so removing it deletes its whole folder rather than a known file list.
 :::
+
+#### Your configs aren't thrown away
+
+If a server mod has config files of its own (`user\mods\<mod>\config\*.json`), removing it asks what you want done with them: keep them — they're moved to a timestamped folder under `LegacyConfigs\` next to the exe, with their original paths intact so the folder can be copied back over your SPT install — or delete them with the rest of the mod. Updating a mod always keeps them, without asking.
+
+Client mod settings live in `BepInEx\config`, outside the mod's own folder, so removing a mod never touches them.
 
 ### Dependencies
 
@@ -95,6 +101,10 @@ The archive is downloaded and extracted into a hidden scratch folder inside your
 
 When you're updating, the previous version is only removed **after** the new one has downloaded and extracted successfully — a failed or cancelled download can't leave you with neither. Once files start being placed, the operation runs to completion rather than tearing out a half-installed mod.
 
+::: warning
+Installing and removing both refuse to start while **Tarkov or the SPT server is running** — those hold the very files being replaced. Close them first. The check runs again after the download finishes, in case SPT was launched while it was in progress.
+:::
+
 ::: information
 Before anything is queued, the app asks you to open the mod's page here on sp-mod first — same as installing manually, and it keeps mod authors' page views and instructions in the loop.
 :::
@@ -112,6 +122,7 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 | `Data\dependency_flags.json` | Per-mod "has dependencies" answers, re-checked when a mod publishes |
 | `Data\logs\tcfmm-<date>.log` | Daily log |
 | `Staging\` | Default destination for manually downloaded archives |
+| `LegacyConfigs\` | Config files kept from removed mods, one timestamped folder per removal |
 
 `Data\installed-mods.json` — not folder names, not DLL file versions — is the authority on what's installed and at what version.
 
@@ -120,6 +131,39 @@ An older `%LocalAppData%\TCFModManagement\` layout is migrated automatically on 
 #### Logging
 
 Info level by default, rotated daily as `tcfmm-<yyyyMMdd>.log`. To get Debug-level output in the same log, drop an empty file named `verbose` — no extension — next to the exe.
+
+### Limitations
+
+Worth knowing before you rely on it. None of these lose data quietly — they're places where the app either won't help or will tell you it can't.
+
+#### What it can and can't see
+
+- **`BepInEx\patchers` isn't scanned.** A patcher mod won't appear on the Installed page at all, even if this app installed it. Prepatcher-based mods are effectively invisible.
+- **Mods nested a folder deeper** — `BepInEx\plugins\Author\ModName\mod.dll` rather than `BepInEx\plugins\ModName\mod.dll` — are listed under the outer folder's name with an unknown version.
+- **Mods you installed by hand are matched by folder name**, since there's no install record to read. If the folder name doesn't clearly point at one listing, the mod shows as not found on sp-mod: you can still see and remove it, but not update it from here. A folder name that could plausibly be two different mods is deliberately left unmatched rather than guessed at.
+
+#### Installing
+
+- **Archives have to be packaged normally** — a `BepInEx\`, `user\`, `SPT\` or `SPT_Runtime\` folder at the top, optionally inside one wrapper folder. Anything else is refused with a message telling you to install it by hand, rather than being scattered into your install.
+- **Everything in the archive gets installed.** Mods that ship optional variants in separate folders, or a readme, get all of it copied in. Choose-your-variant mods are worth installing by hand.
+- **Files are overwritten without a backup.** If two mods ship the same file, the second one installed wins.
+- **Removing a mod deletes the files it recorded.** If another mod happens to share one of those files, removing the first takes it with it.
+- **You need roughly twice the archive's size free** on the SPT drive — the download and extraction are staged there before anything is placed.
+- **Very large mods on a slow connection can time out** and have to be started again; downloads don't resume.
+
+#### Versions and compatibility
+
+- **Compatibility is judged from a mod's most recent releases**, not its whole history. A mod whose newest releases target a later SPT than yours reads as incompatible even if an older release of it would work — check the mod's page in that case.
+- **Some version constraints can't be read.** Those mods show "SPT version unknown" and aren't filtered out, on the grounds that hiding something that might work is worse than showing it.
+- **Beta and pre-release version numbers** aren't compared precisely, so an update may not be flagged for a mod you're running a pre-release of.
+- **The catalog only covers SPT 3.10 and newer.** On older SPT, most of what you could install won't be listed.
+- **"Installed" dates** come from the folder's creation date, so a mod updated in place still shows when you first installed it.
+
+#### Scope
+
+- **One SPT install at a time.** The record of what's installed belongs to the app, not to the install it points at, so pointing Options at a second SPT folder will carry the first one's records across. Use a separate copy of the app per install.
+- **The catalog refreshes once per session** in the background. Mods published while the app is open won't appear until you press Refresh cache or restart.
+- **It won't run while SPT does.** Installing or removing anything with Tarkov or the server open is refused, because those lock the files being replaced.
 
 ### Troubleshooting
 
@@ -137,11 +181,15 @@ The sp-mod API is rate limited at the edge (roughly 40 requests per 10 seconds, 
 
 #### A mod I installed by hand isn't listed under Installed
 
-Two likely causes: it isn't in `BepInEx\plugins` or one of the `user\mods` layouts, or it can't be matched back to a catalog entry. Mods installed into `BepInEx\patchers` are **not** currently scanned.
+It isn't in `BepInEx\plugins` or one of the `user\mods` layouts — see Limitations for the folder shapes that aren't scanned. A mod that *is* listed but shows as not found on sp-mod is there, just unmatched.
+
+#### "Close Tarkov / SPT.Server before installing a mod"
+
+Exactly what it says: those hold open the files being replaced. Close the game and the server window, then try again.
 
 #### An install failed halfway
 
-Nothing needs cleaning up by hand. The scratch folder `.tcfmm-work\` inside your SPT install is swept on the next run, and if you were updating, your previous version is still in place.
+The files placed before it failed are recorded, so they stay under the app's control — install the mod again to complete it, or remove it to clear them out. The scratch folder `.tcfmm-work\` inside your SPT install is swept on the next run. The usual cause is SPT being started mid-install.
 
 #### Reporting a bug
 
