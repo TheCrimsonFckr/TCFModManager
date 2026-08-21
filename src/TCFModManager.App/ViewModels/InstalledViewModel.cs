@@ -214,25 +214,32 @@ public partial class InstalledViewModel : ObservableObject
 
         if (mod.IsAppManaged && mod.ModId is { } modId)
         {
-            if (!Confirm($"Remove {mod.Name}?", "This deletes exactly the files this app installed for it."))
+            var manifest = AppServices.InstallManifest.Load();
+            var record = manifest.Mods.FirstOrDefault(m => m.ModId == modId);
+            if (record is null)
+            {
+                StatusMessage = $"Couldn't find an install record for {mod.Name} - it may have already been removed.";
                 return;
+            }
+
+            var configs = ModConfigFiles.InRecord(record);
+            if (ConfirmRemoval(mod.Name, "This deletes exactly the files this app installed for it.", configs.Count)
+                is not { } configAction)
+            {
+                return;
+            }
 
             IsBusy = true;
             try
             {
-                var manifest = AppServices.InstallManifest.Load();
-                var record = manifest.Mods.FirstOrDefault(m => m.ModId == modId);
-                if (record is null)
-                {
-                    StatusMessage = $"Couldn't find an install record for {mod.Name} - it may have already been removed.";
-                    return;
-                }
-
-                var result = await AppServices.ModInstall.UninstallAsync(installPath, record);
-                StatusMessage = result.FailedFiles.Count == 0
-                    ? $"Removed {mod.Name}."
-                    : $"Removed {mod.Name}, but {result.FailedFiles.Count} file(s) couldn't be deleted (locked or already gone) - you may need to remove them by hand.";
+                var result = await AppServices.ModInstall.UninstallAsync(installPath, record, configAction);
+                StatusMessage = DescribeRemoval(mod.Name, result.FailedFiles.Count, result.ConfigsKept, result.ConfigsFolder);
                 ModRemoved?.Invoke(this, EventArgs.Empty);
+            }
+            catch (InvalidOperationException ex)
+            {
+                // SPT or its server is running - ModInstallService's message names what to close.
+                StatusMessage = ex.Message;
             }
             finally
             {
@@ -250,10 +257,12 @@ public partial class InstalledViewModel : ObservableObject
                 return;
             }
 
-            if (!Confirm(
-                    $"Remove {mod.Name}?",
+            var configs = ModInstallService.FindLegacyConfigs(installPath, paths!);
+            if (ConfirmRemoval(
+                    mod.Name,
                     "This mod wasn't installed through this app, so this permanently deletes its whole folder rather than " +
-                    $"just the files it placed:\n\n{string.Join("\n", paths)}"))
+                    $"just the files it placed:\n\n{string.Join("\n", paths)}",
+                    configs.Count) is not { } configAction)
             {
                 return;
             }
@@ -261,9 +270,17 @@ public partial class InstalledViewModel : ObservableObject
             IsBusy = true;
             try
             {
+                var kept = configAction == ConfigAction.Keep && configs.Count > 0
+                    ? ModInstallService.KeepLegacyConfigs(installPath, configs, mod.Name)
+                    : new KeptConfigs(0, null);
+
                 foreach (var path in paths) ModInstallService.RemoveLegacyPath(path!);
-                StatusMessage = $"Removed {mod.Name}.";
+                StatusMessage = DescribeRemoval(mod.Name, failedFiles: 0, kept.Count, kept.Folder);
                 ModRemoved?.Invoke(this, EventArgs.Empty);
+            }
+            catch (InvalidOperationException ex)
+            {
+                StatusMessage = ex.Message;
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
@@ -293,6 +310,42 @@ public partial class InstalledViewModel : ObservableObject
 
     private static bool Confirm(string title, string message) =>
         MessageBox.Show(message, title, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;
+
+    /// <summary>Confirms a removal and, when the mod has config files of its own, asks what should happen to
+    /// them in the same prompt. Returns null when the user backed out.</summary>
+    private static ConfigAction? ConfirmRemoval(string modName, string message, int configCount)
+    {
+        if (configCount == 0)
+            return Confirm($"Remove {modName}?", message) ? ConfigAction.Keep : null;
+
+        var answer = MessageBox.Show(
+            $"{message}\n\n" +
+            $"{modName} has {configCount} config file(s) of its own:\n\n" +
+            $"Yes  -  keep them, moved to {AppPaths.LegacyConfigsDirectory}\n" +
+            "No  -  delete them along with the rest of the mod\n" +
+            "Cancel  -  don't remove anything",
+            $"Remove {modName}?",
+            MessageBoxButton.YesNoCancel,
+            MessageBoxImage.Warning);
+
+        return answer switch
+        {
+            MessageBoxResult.Yes => ConfigAction.Keep,
+            MessageBoxResult.No => ConfigAction.Delete,
+            _ => null,
+        };
+    }
+
+    private static string DescribeRemoval(string modName, int failedFiles, int configsKept, string? configsFolder)
+    {
+        var message = failedFiles == 0
+            ? $"Removed {modName}."
+            : $"Removed {modName}, but {failedFiles} file(s) couldn't be deleted (locked or already gone) - you may need to remove them by hand.";
+
+        return configsKept > 0 && configsFolder is not null
+            ? $"{message} {configsKept} config file(s) kept in {configsFolder}."
+            : message;
+    }
 
     private bool CanGoToPreviousPage() => CurrentPage > 1;
 

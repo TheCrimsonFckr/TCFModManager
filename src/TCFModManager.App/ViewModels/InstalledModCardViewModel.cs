@@ -180,10 +180,32 @@ public sealed class InstalledModCardViewModel
         // exact identifier before falling back to the folder-name heuristics below.
         var installedGuid = entries.FirstOrDefault(m => m.Target == InstalledModTarget.Client)?.Guid;
 
+        // Name/slug inference is the only tier that can plausibly hit more than one listing, and
+        // being attributed to the wrong one is worse than not being matched at all: the update it
+        // then offers would install a different mod over this one. So both name/slug tiers require
+        // exactly one candidate, and an exact name/slug match is tried before the fuzzy one rather
+        // than letting a loose match on Name beat an exact match on Slug.
         return catalog.FirstOrDefault(m => GuidsMatch(installedGuid, m.Guid))
             ?? catalog.FirstOrDefault(m => GuidMatchesFolderName(m.Guid, folderName))
-            ?? catalog.FirstOrDefault(m => NameOrSlugMatches(m.Name, folderName))
-            ?? catalog.FirstOrDefault(m => NameOrSlugMatches(m.Slug, folderName));
+            ?? OnlyMatch(catalog, m => NamesMatch(m.Name, folderName) || NamesMatch(m.Slug, folderName))
+            ?? OnlyMatch(catalog, m => NameOrSlugMatches(m.Name, folderName) || NameOrSlugMatches(m.Slug, folderName));
+    }
+
+    // The single catalog mod satisfying <paramref name="predicate"/>, or null when none or more
+    // than one does.
+    private static Mod? OnlyMatch(IReadOnlyList<Mod> catalog, Func<Mod, bool> predicate)
+    {
+        Mod? only = null;
+
+        foreach (var mod in catalog)
+        {
+            if (!predicate(mod)) continue;
+            if (only is not null && only.Id != mod.Id) return null;
+
+            only ??= mod;
+        }
+
+        return only;
     }
 
     // Joins a client-only name-group to a server-only name-group when they're the only two that

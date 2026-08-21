@@ -16,6 +16,11 @@ public static class AppPaths
     // overridden per-download via the Downloads page's Browse... button.
     public static string StagingDirectory => StagingDir;
 
+    // Where a removed mod's config files are moved when the user chooses to keep them (see
+    // ModConfigFiles). Created on first use rather than at startup, so it only exists once
+    // something has actually been kept.
+    public static string LegacyConfigsDirectory => Path.Combine(AppContext.BaseDirectory, "LegacyConfigs");
+
     private static string ResolveDirectory(string name)
     {
         var dir = Path.Combine(AppContext.BaseDirectory, name);

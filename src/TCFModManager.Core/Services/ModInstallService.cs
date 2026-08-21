@@ -23,6 +23,41 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
     // archive doesn't post one UI update per file.
     private static readonly TimeSpan ProgressInterval = TimeSpan.FromMilliseconds(100);
 
+    // Processes that hold handles on files inside an SPT install. Placing or deleting a mod's
+    // files while one of these is running fails partway through, which on an update leaves the old
+    // version already removed - so both install and uninstall refuse to start until they're closed.
+    private static readonly string[] BlockingProcessNames = ["EscapeFromTarkov", "SPT.Server", "Aki.Server"];
+
+    // The blocking processes currently running, by display name, or an empty list when the install
+    // is safe to modify.
+    public static IReadOnlyList<string> RunningBlockers()
+    {
+        var running = new List<string>();
+
+        foreach (var name in BlockingProcessNames)
+        {
+            try
+            {
+                if (Process.GetProcessesByName(name).Length > 0) running.Add(name + ".exe");
+            }
+            catch (InvalidOperationException)
+            {
+                // Process list unavailable - treated as nothing running rather than blocking the user.
+            }
+        }
+
+        return running;
+    }
+
+    private static void EnsureInstallNotInUse(string action)
+    {
+        var running = RunningBlockers();
+        if (running.Count == 0) return;
+
+        throw new InvalidOperationException(
+            $"Close {string.Join(" and ", running)} before {action} - files inside the SPT install are locked while it's running.");
+    }
+
     // Downloads and installs <paramref name="version"/> of <paramref name="mod"/> into
     // <paramref name="installPath"/>. If a record already exists for this mod (an update), its old
     // files are removed once the new archive has downloaded and extracted successfully.
@@ -41,6 +76,8 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
 
         if (string.IsNullOrWhiteSpace(version.Link))
             throw new InvalidOperationException($"{mod.Name} {version.Version} has no download link.");
+
+        EnsureInstallNotInUse("installing a mod");
 
         AppLog.Info("Install", $"{mod.Name} {version.Version} (mod {mod.Id}) -> {installPath}");
 
@@ -91,60 +128,65 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
 
             ct.ThrowIfCancellationRequested();
 
+            // Re-checked now the download is finished: SPT may have been started while it ran, and
+            // everything past this point deletes or places files inside the install.
+            EnsureInstallNotInUse("installing a mod");
+
             var manifest = manifestService.Load();
             var existing = manifest.Mods.FirstOrDefault(m => m.ModId == mod.Id);
             if (existing is not null)
             {
                 status?.Report($"Removing the previously installed version ({existing.Version})...");
-                await UninstallAsync(installPath, existing, CancellationToken.None).ConfigureAwait(false);
+                await UninstallAsync(installPath, existing, ConfigAction.Keep, CancellationToken.None).ConfigureAwait(false);
             }
 
             status?.Report(FormatCount("Installing", 0, sourceFiles.Length));
             var placedFiles = new List<string>(sourceFiles.Length);
             var reportClock = Stopwatch.StartNew();
 
-            for (var i = 0; i < sourceFiles.Length; i++)
+            try
             {
-                var file = sourceFiles[i];
-                var archiveRelative = Path.GetRelativePath(contentRoot, file);
-                var installRelative = RemapForServerRoot(archiveRelative, serverRoot);
-                // Forward-slash regardless of OS, matching InstalledModRecord.Files's documented format.
-                var installRelativeForward = installRelative.Replace('\\', '/');
-
-                var destination = Path.Combine(installPath, installRelative);
-                var destinationDir = Path.GetDirectoryName(destination);
-                if (!string.IsNullOrEmpty(destinationDir)) Directory.CreateDirectory(destinationDir);
-
-                if (canMoveIntoInstall) File.Move(file, destination, overwrite: true);
-                else File.Copy(file, destination, overwrite: true);
-
-                placedFiles.Add(installRelativeForward);
-
-                if (reportClock.Elapsed >= ProgressInterval)
+                for (var i = 0; i < sourceFiles.Length; i++)
                 {
-                    status?.Report(FormatCount("Installing", i + 1, sourceFiles.Length));
-                    reportClock.Restart();
+                    var file = sourceFiles[i];
+                    var archiveRelative = Path.GetRelativePath(contentRoot, file);
+                    var installRelative = RemapForServerRoot(archiveRelative, serverRoot);
+                    // Forward-slash regardless of OS, matching InstalledModRecord.Files's documented format.
+                    var installRelativeForward = installRelative.Replace('\\', '/');
+
+                    var destination = Path.Combine(installPath, installRelative);
+                    var destinationDir = Path.GetDirectoryName(destination);
+                    if (!string.IsNullOrEmpty(destinationDir)) Directory.CreateDirectory(destinationDir);
+
+                    if (canMoveIntoInstall) File.Move(file, destination, overwrite: true);
+                    else File.Copy(file, destination, overwrite: true);
+
+                    placedFiles.Add(installRelativeForward);
+
+                    if (reportClock.Elapsed >= ProgressInterval)
+                    {
+                        status?.Report(FormatCount("Installing", i + 1, sourceFiles.Length));
+                        reportClock.Restart();
+                    }
                 }
             }
-
-            var record = new InstalledModRecord
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
-                ModId = mod.Id,
-                Guid = mod.Guid,
-                Name = mod.Name ?? $"Mod {mod.Id}",
-                VersionId = version.Id,
-                Version = version.Version ?? "unknown",
-                InstalledAt = DateTimeOffset.UtcNow,
-                Files = placedFiles,
-                Folders = InstalledModFolders.FromPlacedFiles(placedFiles),
-            };
+                // What was placed before the failure is recorded anyway, so those files stay
+                // app-managed: a retry overwrites them and a removal cleans them up. Without this an
+                // interrupted update leaves the old version deleted and the new one untracked.
+                SaveRecord(mod, version, placedFiles, incomplete: true);
 
-            // Reloaded rather than reusing the `manifest` local, since UninstallAsync above may
-            // have already saved a removal of the old record.
-            var current = manifestService.Load();
-            current.Mods.RemoveAll(m => m.ModId == mod.Id);
-            current.Mods.Add(record);
-            manifestService.Save(current);
+                AppLog.Error("Install",
+                    $"{mod.Name} {version.Version} incomplete after {placedFiles.Count}/{sourceFiles.Length} file(s)", ex);
+
+                throw new InvalidOperationException(
+                    $"{mod.Name} {version.Version} was only partly installed - {placedFiles.Count} of {sourceFiles.Length} " +
+                    $"files were placed before this failed: {ex.Message} Close SPT and its server, then install it again.",
+                    ex);
+            }
+
+            var record = SaveRecord(mod, version, placedFiles, incomplete: false);
 
             AppLog.Info("Install",
                 $"{mod.Name} {version.Version} placed {placedFiles.Count} file(s) in folders [{string.Join(", ", record.Folders)}]");
@@ -168,14 +210,53 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
         }
     }
 
+    // Writes the record for what an install placed, replacing any previous record for the same mod.
+    // The manifest is reloaded rather than reusing an earlier copy, since UninstallAsync may have
+    // saved a removal of the old record in between.
+    private InstalledModRecord SaveRecord(Mod mod, ModVersion version, List<string> placedFiles, bool incomplete)
+    {
+        var record = new InstalledModRecord
+        {
+            ModId = mod.Id,
+            Guid = mod.Guid,
+            Name = mod.Name ?? $"Mod {mod.Id}",
+            VersionId = version.Id,
+            Version = version.Version ?? "unknown",
+            InstalledAt = DateTimeOffset.UtcNow,
+            Files = placedFiles,
+            Folders = InstalledModFolders.FromPlacedFiles(placedFiles),
+            Incomplete = incomplete,
+        };
+
+        var current = manifestService.Load();
+        current.Mods.RemoveAll(m => m.ModId == mod.Id);
+        current.Mods.Add(record);
+        manifestService.Save(current);
+
+        return record;
+    }
+
     // Removes every file InstalledModRecord.Files lists, then deletes any directory left
     // empty (working bottom-up), then drops the record from the manifest. Files that can't be
     // deleted are collected into the result instead of aborting the rest of the removal.
-    public Task<UninstallResult> UninstallAsync(string installPath, InstalledModRecord record, CancellationToken ct = default)
+    // <paramref name="configs"/> decides what happens to the mod's own config JSON files first.
+    public Task<UninstallResult> UninstallAsync(
+        string installPath,
+        InstalledModRecord record,
+        ConfigAction configs = ConfigAction.Keep,
+        CancellationToken ct = default)
     {
+        EnsureInstallNotInUse("removing a mod");
+
         var failed = new List<string>();
         var deleted = 0;
         var touchedDirectories = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        // Moved out before the delete loop runs, so the loop simply finds them gone.
+        var kept = new KeptConfigs(0, null);
+        List<string> configFiles = configs == ConfigAction.Keep ? ModConfigFiles.InRecord(record) : [];
+        if (configFiles.Count > 0)
+            kept = ModConfigFiles.MoveOut(installPath, configFiles, record.Name, DateTimeOffset.UtcNow);
 
         foreach (var relative in record.Files)
         {
@@ -216,7 +297,7 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
         manifest.Mods.RemoveAll(m => m.ModId == record.ModId);
         manifestService.Save(manifest);
 
-        return Task.FromResult(new UninstallResult(deleted, failed));
+        return Task.FromResult(new UninstallResult(deleted, failed, kept.Count, kept.Folder));
     }
 
     // Deletes a mod's whole folder (or, for a loose top-level DLL, just that file) - the
@@ -224,9 +305,20 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
     // record to work from. Callers should confirm the exact path with the user before calling this.
     public static void RemoveLegacyPath(string path)
     {
+        EnsureInstallNotInUse("removing a mod");
+
         if (Directory.Exists(path)) Directory.Delete(path, recursive: true);
         else if (File.Exists(path)) File.Delete(path);
     }
+
+    // The config files a hand-installed mod keeps in its own folder, as install-relative paths.
+    // Read off disk rather than from a record, since this path has none.
+    public static List<string> FindLegacyConfigs(string installPath, IEnumerable<string> modFolderPaths) =>
+        modFolderPaths.SelectMany(folder => ModConfigFiles.InFolder(installPath, folder)).Distinct().ToList();
+
+    // Moves a hand-installed mod's config files out of the install before its folder is deleted.
+    public static KeptConfigs KeepLegacyConfigs(string installPath, IEnumerable<string> relativeFiles, string modName) =>
+        ModConfigFiles.MoveOut(installPath, relativeFiles, modName, DateTimeOffset.UtcNow);
 
     // Some mod archives wrap their real content ("BepInEx/...", "user/...") inside an
     // extra top-level folder (e.g. "HollywoodFX-1.8.4/"). Descends through single-directory wrapper
@@ -488,5 +580,16 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
 }
 
 // Result of ModInstallService.UninstallAsync. FailedFiles lists files that couldn't be
-// deleted; the mod is still removed from the manifest regardless.
-public sealed record UninstallResult(int FilesDeleted, List<string> FailedFiles);
+// deleted; the mod is still removed from the manifest regardless. ConfigsKept/ConfigsFolder
+// describe the mod's own config files when they were moved out rather than deleted.
+public sealed record UninstallResult(int FilesDeleted, List<string> FailedFiles, int ConfigsKept = 0, string? ConfigsFolder = null);
+
+// What to do with a mod's own config JSON files when removing it.
+public enum ConfigAction
+{
+    // Move them into AppPaths.LegacyConfigsDirectory instead of deleting them.
+    Keep,
+
+    // Delete them along with the rest of the mod's files.
+    Delete,
+}

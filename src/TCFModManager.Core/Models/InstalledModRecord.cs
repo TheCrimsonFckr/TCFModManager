@@ -26,6 +26,13 @@ public sealed class InstalledModRecord
     // Empty on records written before this was stored; InstalledModFolders.Resolve derives
     // them from Files in that case, so an existing manifest keeps working without reinstalling.
     public List<string> Folders { get; init; } = [];
+
+    //
+    // True when the install failed partway through and Files lists only what was placed before it
+    // stopped. The record is written anyway so those files stay app-managed - a reinstall replaces
+    // them, a removal cleans them up - rather than being left orphaned in the install.
+    //
+    public bool Incomplete { get; init; }
 }
 
 // The full set of installed-mod records for one SPT install.
