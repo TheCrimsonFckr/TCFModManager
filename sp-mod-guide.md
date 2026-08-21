@@ -18,9 +18,8 @@ WPF with Fluent Design, .NET 9, no account or API key needed. The released build
 3. Run `TCFModManager.exe`.
 4. Open **Options**, point it at your SPT install folder, and hit Save. The detected server version appears underneath everything else keys off that.
 
-::: warning
+#### Warning
 This is **not** a mod. Don't extract it into `BepInEx\plugins` or `user\mods`. It's a standalone application that manages that folder for you. Anywhere on disk works, really it just needs to be told where SPT lives.
-:::
 
 #### If the SPT version doesn't detect
 
@@ -46,9 +45,9 @@ Each card carries a status dot and, where it applies, a badge for mods that pull
 
 Clicking a card opens its details, including version history and a link to its page here.
 
-::: information
+#### Information
 SPT version constraints are resolved against the live SPT release list rather than parsed as version ranges, so what you see named is a release that actually exists not the boundary version the mod author wrote the constraint against.
-:::
+
 
 ### Installed
 
@@ -64,9 +63,9 @@ Clicking any card opens a dialog with:
 
 Mods can be removed from here too.
 
-::: warning
+#### Warning
 Mods installed with this app have every file they placed recorded, which is what makes a clean uninstall possible. Anything you installed by hand beforehand has no such record.
-:::
+
 
 ### Dependencies
 
@@ -91,13 +90,24 @@ The archive is downloaded and extracted into a hidden scratch folder inside your
 
 When you're updating, the previous version is only removed **after** the new one has downloaded and extracted successfully a failed or cancelled download can't leave you with neither. Once files start being placed, the operation runs to completion rather than tearing out a half-installed mod.
 
-::: information
-Before anything is queued, the app asks you to open the mod's page here on sp-mod first same as installing manually, and it keeps mod authors' page views and instructions in the loop.
-:::
+Installing and removing both refuse to start while Tarkov or the SPT server is running, since
+those hold open the files being replaced; the check runs again once the download finishes, in case
+SPT was launched while it was in progress. If a file placement fails anyway, what was placed
+before the failure is still recorded and marked incomplete, so those files stay app-managed - a
+reinstall completes the mod, a removal clears it out.
+
+A server mod's own config files (`user\mods\<mod>\config\*.json`) aren't deleted with the
+rest of it. Removing a mod asks whether to keep them - moved into a timestamped folder under
+`LegacyConfigs\` with their install-relative paths intact, so the folder can be copied back over
+an SPT install to restore them - or delete them. Updates always keep them, without asking.
+
+#### Information
+Before anything is queued, the app asks you to open the mod's page here on sp-mod first same as installing manually, so it keeps mod authors' page views and instructions in the loop as per best practice this does the same for dependacies as well.
+
 
 ### Files & logs
 
-Everything lives next to the exe, not in `%LocalAppData%`:
+Everything lives next to the exe to contain it reach:
 
 | Path | What |
 | --- | --- |
@@ -108,10 +118,10 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 | `Data\dependency_flags.json` | Per-mod "has dependencies" answers, re-checked when a mod publishes |
 | `Data\logs\tcfmm-<date>.log` | Daily log |
 | `Staging\` | Default destination for manually downloaded archives |
+| `LegacyConfigs\` | Config files kept from removed mods, one timestamped folder per removal |
 
 `Data\installed-mods.json` not folder names, not DLL file versions is the authority on what's installed and at what version.
 
-An older `%LocalAppData%\TCFModManager\` layout is migrated automatically on first run.
 
 #### Logging
 
@@ -121,7 +131,7 @@ Info level by default, rotated daily as `tcfmm-<yyyyMMdd>.log`. To get Debug-lev
 
 #### The SPT version shows as unknown
 
-Options needs the folder containing `SPT.Server.exe` (or `Aki.Server.exe`). It also looks under `SPT\` and `SPT_Runtime\`, but not deeper.
+Options needs the folder containing `SPT.Server.exe` (or `Aki.Server.exe`). It also looks under `SPT\` and `SPT_Runtime\` depending on the version, but not deeper.
 
 #### A mod I know exists shows "nothing compatible"
 
@@ -142,5 +152,48 @@ Nothing needs cleaning up by hand. The scratch folder `.tcfmm-work\` inside your
 #### Reporting a bug
 
 Grab `Data\logs\tcfmm-<date>.log` ideally after adding the `verbose` marker file and reproducing the problem and open an issue at [github.com/TheCrimsonFckr/TCFModManager](https://github.com/TheCrimsonFckr/TCFModManager).
+
+
+### Known limitations
+
+**What it can see**
+
+- `BepInEx\patchers` isn't scanned, so a patcher mod never appears on the Installed page - even one
+  this app installed.
+- Mods nested a level deeper than convention (`BepInEx\plugins\Author\ModName\`) are listed under
+  the outer folder's name, with an unknown version.
+- Mods installed by hand are matched to a catalog listing by folder name, since there's no record to
+  read. An ambiguous folder name is deliberately left unmatched rather than guessed at, so such a
+  mod can be listed and removed but not updated from here.
+
+**Installing**
+
+- Archives must be packaged conventionally - a `BepInEx\`, `user\`, `SPT\` or `SPT_Runtime\` folder
+  at the top, optionally inside one wrapper folder. Anything else is refused rather than scattered
+  into the install.
+- Everything inside the archive is installed, including readmes and optional-variant folders;
+  choose-your-variant mods are better installed by hand.
+- Files are overwritten with no backup, and uninstall deletes the files the record lists - a file
+  shared by two mods goes with whichever is removed first.
+- Installing needs roughly twice the archive's size free on the SPT drive, and downloads don't
+  resume, so a large mod on a slow connection can time out and need restarting.
+
+**Versions**
+
+- Compatibility is judged from the most recent versions the catalog returns per mod, not the full
+  history, so a mod with an older release that would work on this SPT still reads as incompatible.
+- Constraint forms the range parser can't read fall back to "SPT version unknown" and are left
+  unfiltered rather than hidden.
+- Pre-release/beta version numbers aren't compared precisely, so an update may not be flagged
+  against one.
+- The catalog is filtered to SPT 3.10 and newer.
+- Installed dates come from folder creation time, so a mod updated in place keeps its original date.
+
+**Scope**
+
+- The install manifest belongs to the app rather than to the SPT install it points at, so pointing
+  Options at a second install carries the first one's records across. Use a separate copy of the app
+  per install.
+- The catalog refreshes once per session in the background; Refresh cache forces it.
 
 {.endtabset}
