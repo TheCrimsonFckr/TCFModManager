@@ -8,6 +8,12 @@ public readonly record struct SptVersionBounds(Version? Min, bool MinExclusive, 
     // True when <paramref name="version"/> falls inside this window.
     public bool Contains(Version version)
     {
+        // A mod pinned to one exact SPT release (a bare "4.1.2", no operator) still runs on every
+        // other patch of that same line - SPT itself doesn't break mod compatibility between
+        // patches. Treating "4.1.2" as patch-exact made a mod on SPT 4.1.1 show as incompatible
+        // with a mod version pinned to 4.1.2/4.1.3/4.1.4. Same major.minor is enough.
+        if (Exact is { } exact && version.Major == exact.Major && version.Minor == exact.Minor) return true;
+
         if (Min is { } min && (MinExclusive ? version <= min : version < min)) return false;
         if (MaxExclusive is { } max && version >= max) return false;
         return true;

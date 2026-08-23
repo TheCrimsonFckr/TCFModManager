@@ -1,3 +1,8 @@
+<!-- ScrollViewer.CanContentScroll="False" - see the matching comment in InstalledPage.xaml for the
+     full explanation. Short version: WPF-UI's NavigationView auto-wraps every Page's content in
+     its own outer DynamicScrollViewer by default, which was interfering with TreesScrollViewer
+     below in a way that made only the outer wrapper's own scrollbar actually work. This opts this
+     page out of that wrapping. -->
 <Page
     x:Class="TCFModManager.App.Views.DependenciesPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -6,7 +11,8 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     Title="Dependencies"
-    Loaded="DependenciesPage_Loaded">
+    Loaded="DependenciesPage_Loaded"
+    ScrollViewer.CanContentScroll="False">
     <Page.Resources>
         <converters:ModStatusToBrushConverter x:Key="StatusBrush" />
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />

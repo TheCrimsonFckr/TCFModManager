@@ -1,3 +1,16 @@
+<!-- ScrollViewer.CanContentScroll="False" is the fix that actually made scroll-anywhere work (two
+     earlier attempts at this - a bubble MouseWheel handler, then a tunnel PreviewMouseWheel one -
+     both failed for a reason neither of them could have addressed): WPF-UI's NavigationView wraps
+     every hosted Page's content in its own outer Wpf.Ui.Controls.DynamicScrollViewer by default
+     (NavigationViewContentPresenter reads ScrollViewer.GetCanContentScroll(page) each navigation,
+     and WPF-UI overrides that property's default for every Page to true app-wide - confirmed by
+     decompiling Wpf.Ui.dll in the sandbox with ilspycmd). That outer wrapper sitting above our own
+     GroupsScrollViewer is what made the wheel behave so strangely - only the visible scrollbar
+     itself (the outer wrapper's) actually worked, not the wheel over our own content. Setting this
+     to False here opts this page out of that automatic outer wrapping, leaving GroupsScrollViewer
+     as the one and only scrolling container - after which the ordinary WPF wheel/scroll mechanics
+     (plus the PreviewMouseWheel handler below, still needed for the unrelated TextBox/ComboBox
+     wheel-swallowing issue) work as expected. -->
 <Page
     x:Class="TCFModManager.App.Views.InstalledPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -6,7 +19,8 @@
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:viewmodels="clr-namespace:TCFModManager.App.ViewModels"
     Title="Installed"
-    Loaded="InstalledPage_Loaded">
+    Loaded="InstalledPage_Loaded"
+    ScrollViewer.CanContentScroll="False">
     <Page.Resources>
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
         <converters:UpdateAvailableToVisibilityConverter x:Key="UpdateAvailableToVisible" />

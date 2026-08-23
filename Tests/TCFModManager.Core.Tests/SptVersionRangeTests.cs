@@ -114,6 +114,18 @@ public class SptVersionRangeTests
         Assert.False(SptVersionRange.TryParse(null, out _));
     }
 
+    [Theory]
+    // A bare exact constraint still runs on any patch of its own line - SPT doesn't break mod
+    // compatibility between patches, so a mod pinned to "4.1.2" must not show as incompatible with
+    // an installed SPT 4.1.1 (or 4.1.3, 4.1.4, ...). Only a different line actually disqualifies it.
+    [InlineData("4.1.2", "4.1.1", true)]
+    [InlineData("4.1.2", "4.1.2", true)]
+    [InlineData("4.1.2", "4.1.4", true)]
+    [InlineData("4.1.2", "4.0.13", false)]
+    [InlineData("4.1.2", "4.2.0", false)]
+    public void IsSatisfiedBy_BareExactMatchesAnyPatchOnItsOwnLine(string constraint, string version, bool expected) =>
+        Assert.Equal(expected, SptVersionMatcher.IsSatisfiedBy(constraint, version));
+
     [Fact]
     public void TryParse_IntersectsMultipleClauses()
     {
