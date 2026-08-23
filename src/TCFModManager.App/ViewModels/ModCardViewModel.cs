@@ -78,13 +78,23 @@ public sealed class ModCardViewModel
         var shown = PickDisplayVersion(mod, installedSptVersion) ?? newest;
         var constraints = (mod.Versions ?? []).Select(v => v.SptVersionConstraint).ToList();
 
-        // The glyph answers "can I install this", so it stays tied to the installed SPT even when
-        // the text is describing filtered lines the user isn't running.
-        var compatible = constraints.Count == 0
+        // The glyph answers "does what's shown here actually run on my SPT". When a filter is
+        // ticked, that has to look only at the constraints relevant to the ticked lines - not the
+        // mod's whole history - or filtering to 4.0 while running SPT 4.1.1 could show a green
+        // check next to "SPT 4.0.13" just because the mod separately publishes an unrelated
+        // 4.1-compatible version elsewhere. Chris: "if you're running 4.1 and you have 4.0 filter
+        // you should be seeing red because this are incompatible... this applies to them all".
+        // With no filter ticked the text describes every line the mod supports, so the glyph stays
+        // mod-wide too ("can I install ANY version of this on my SPT").
+        var relevantConstraints = selectedLines is { Count: > 0 }
+            ? constraints.Where(c => selectedLines.Any(line => SptVersionRange.IntersectsReleaseLine(c, line.Major, line.Minor))).ToList()
+            : constraints;
+
+        var compatible = relevantConstraints.Count == 0
             ? null
-            : constraints.Any(c => SptVersionMatcher.IsSatisfiedBy(c, installedSptVersion) == true)
+            : relevantConstraints.Any(c => SptVersionMatcher.IsSatisfiedBy(c, installedSptVersion) == true)
                 ? true
-                : constraints.Any(c => SptVersionMatcher.IsSatisfiedBy(c, installedSptVersion) == false)
+                : relevantConstraints.Any(c => SptVersionMatcher.IsSatisfiedBy(c, installedSptVersion) == false)
                     ? false
                     : (bool?)null;
 
