@@ -12,7 +12,16 @@
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <converters:CountToVisibilityConverter x:Key="HasItems" />
     </Page.Resources>
-    <Grid Margin="16">
+    <!-- Background="Transparent" plus the MouseWheel handler let the wheel scroll the dependency
+         tree from anywhere on the page (the Refresh/status rows included), the same fix applied to
+         InstalledPage's group view - see RootGrid_MouseWheel in code-behind for why the Background
+         is required (a Grid with no Background isn't hit-testable in its empty space, which would
+         otherwise swallow most wheel events before they ever reach this handler). -->
+    <Grid
+        x:Name="RootGrid"
+        Margin="16"
+        Background="Transparent"
+        MouseWheel="RootGrid_MouseWheel">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -56,6 +65,7 @@
             Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibility}}" />
 
         <ScrollViewer
+            x:Name="TreesScrollViewer"
             Grid.Row="2"
             VerticalScrollBarVisibility="Auto"
             Visibility="{Binding Trees.Count, Converter={StaticResource HasItems}}">

@@ -21,10 +21,17 @@
          toolbar/filter rows without double-scrolling when the pointer is already over the group
          ScrollViewer itself (that ScrollViewer handles its own wheel events and marks them
          handled, which stops this bubble handler from running for those). See
-         RootGrid_MouseWheel in code-behind. -->
+         RootGrid_MouseWheel in code-behind.
+         Background="Transparent" is load-bearing, not decorative: a Grid with no Background at
+         all only takes part in hit-testing where a child actually paints something, so most of
+         the "empty" space in the toolbar rows (and any blank area below a short group list) was
+         invisible to mouse input entirely - the wheel event's hit test fell through to whatever
+         was rendered behind this Grid instead of ever reaching it, which is why the very first
+         version of scroll-anywhere didn't actually work outside a handful of specific controls. -->
     <Grid
         x:Name="RootGrid"
         Margin="16"
+        Background="Transparent"
         MouseWheel="RootGrid_MouseWheel">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
