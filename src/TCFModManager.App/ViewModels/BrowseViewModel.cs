@@ -506,7 +506,15 @@ public partial class BrowseViewModel : ObservableObject
     /// Install never waits on a network call. Gated on ReadModPageConfirmationWindow first; declining
     /// leaves the card alone.</summary>
     [RelayCommand]
-    private void Install(ModCardViewModel? card)
+    private void Install(ModCardViewModel? card) => QueueForDownload(card, "Install");
+
+    /// <summary>Re-queues an already-installed mod's currently displayed version - the same pick
+    /// Install would make - for a fresh download and reinstall. Shown on the card in Install's place
+    /// once a mod is installed, e.g. to recover from corrupted or hand-edited files.</summary>
+    [RelayCommand]
+    private void Redownload(ModCardViewModel? card) => QueueForDownload(card, "Redownload");
+
+    private void QueueForDownload(ModCardViewModel? card, string verb)
     {
         if (card is null) return;
 
@@ -521,7 +529,7 @@ public partial class BrowseViewModel : ObservableObject
 
         if (!ReadModPageConfirmationWindow.Confirm(mod.Name ?? "this mod", mod.DetailUrl))
         {
-            StatusMessage = $"Install cancelled - {mod.Name}'s page wasn't confirmed as read.";
+            StatusMessage = $"{verb} cancelled - {mod.Name}'s page wasn't confirmed as read.";
             return;
         }
 

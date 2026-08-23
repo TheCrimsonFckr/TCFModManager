@@ -275,6 +275,12 @@ public partial class InstalledViewModel : ObservableObject
                     : new KeptConfigs(0, null);
 
                 foreach (var path in paths) ModInstallService.RemoveLegacyPath(path!);
+
+                // A manually-confirmed version record would otherwise dangle, pointing at a mod
+                // that's no longer on disk.
+                if (mod.IsManualOverride && mod.ModId is { } overriddenModId)
+                    AppServices.InstallManifest.ClearManualVersion(overriddenModId);
+
                 StatusMessage = DescribeRemoval(mod.Name, failedFiles: 0, kept.Count, kept.Folder);
                 ModRemoved?.Invoke(this, EventArgs.Empty);
             }

@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="Options">
-    <Grid Margin="16">
+    <StackPanel Margin="16">
         <ui:Card Padding="16" VerticalAlignment="Top">
             <StackPanel>
                 <TextBlock
@@ -37,5 +37,23 @@
                     Text="{Binding SptEnvironment.StatusMessage}" />
             </StackPanel>
         </ui:Card>
-    </Grid>
+
+        <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
+            <StackPanel>
+                <TextBlock
+                    Text="Data files"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Opacity="0.7"
+                    Margin="0,0,0,8"
+                    Text="View or hand-edit the JSON files this app keeps under Data\, including installed-mods.json - useful when the Installed page's own version controls aren't enough." />
+                <ui:Button
+                    HorizontalAlignment="Left"
+                    Content="Data files..."
+                    Click="DataFiles_Click" />
+            </StackPanel>
+        </ui:Card>
+    </StackPanel>
 </Page>

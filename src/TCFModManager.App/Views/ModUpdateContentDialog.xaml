@@ -52,6 +52,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -67,7 +68,10 @@
                 Visibility="{Binding StatusMessage, Converter={StaticResource NullToCollapsed}}" />
         </StackPanel>
 
-        <!-- "View mod page" shows when a catalog match exists; "Update" shows only when a newer compatible version is available. -->
+        <!-- "View mod page" shows when a catalog match exists. "Update" shows only when a newer
+             compatible version is available; "Redownload" takes its place otherwise, re-fetching
+             whatever version is selected below (the installed one, by default). "Mark up to date"
+             and "Confirm as installed" only record a version - they never touch any files. -->
         <DockPanel Grid.Row="1" Margin="0,0,0,8">
             <ui:Button
                 DockPanel.Dock="Right"
@@ -77,12 +81,52 @@
                 Command="{Binding UpdateCommand}"
                 Visibility="{Binding ShowUpdateButton, Converter={StaticResource TrueToVisible}}" />
             <ui:Button
+                DockPanel.Dock="Right"
+                HorizontalAlignment="Right"
+                Content="Redownload"
+                Icon="{ui:SymbolIcon ArrowDownload24}"
+                Command="{Binding RedownloadCommand}"
+                ToolTip="Re-fetch and reinstall the selected version"
+                Visibility="{Binding ShowUpdateButton, Converter={StaticResource FalseToVisible}}" />
+            <ui:Button
+                DockPanel.Dock="Right"
+                Margin="0,0,8,0"
+                Content="Mark up to date"
+                Command="{Binding MarkUpToDateCommand}"
+                ToolTip="Record the newest published version as installed, without downloading anything"
+                Visibility="{Binding CanManageVersion, Converter={StaticResource TrueToVisible}}" />
+            <ui:Button
+                DockPanel.Dock="Right"
+                Margin="0,0,8,0"
+                Content="Confirm as installed"
+                Command="{Binding ConfirmSelectedAsInstalledCommand}"
+                ToolTip="Record the version selected below as installed, without downloading anything"
+                Visibility="{Binding CanManageVersion, Converter={StaticResource TrueToVisible}}" />
+            <ui:Button
                 Content="View mod page"
                 Command="{Binding OpenModPageCommand}"
                 Visibility="{Binding ModPageUrl, Converter={StaticResource NullToCollapsed}}" />
         </DockPanel>
 
-        <Grid Grid.Row="2">
+        <!-- Free-typed version override, for a version that isn't in the cached list below. -->
+        <DockPanel Grid.Row="2" Margin="0,0,0,8" Visibility="{Binding CanManageVersion, Converter={StaticResource TrueToVisible}}">
+            <ui:Button
+                DockPanel.Dock="Right"
+                Content="Clear override"
+                Command="{Binding ClearOverrideCommand}"
+                ToolTip="Go back to auto-detecting this mod's version from the files on disk"
+                Visibility="{Binding IsManualOverride, Converter={StaticResource TrueToVisible}}" />
+            <ui:Button
+                DockPanel.Dock="Right"
+                Margin="8,0,0,0"
+                Content="Set"
+                Command="{Binding SetCustomVersionCommand}" />
+            <ui:TextBox
+                PlaceholderText="Manually set the installed version (e.g. 1.4.2)..."
+                Text="{Binding CustomVersionText, UpdateSourceTrigger=PropertyChanged}" />
+        </DockPanel>
+
+        <Grid Grid.Row="3">
             <!-- Loading state shown while versions are being fetched. -->
             <StackPanel
                 HorizontalAlignment="Center"

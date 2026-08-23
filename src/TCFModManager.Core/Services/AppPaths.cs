@@ -27,22 +27,4 @@ public static class AppPaths
         Directory.CreateDirectory(dir);
         return dir;
     }
-
-    // Copies <paramref name="fileName"/> from the legacy %LocalAppData%\TCFModManagement\
-    // location into the Data folder if it doesn't already exist there. No-op once migrated; safe
-    // to call on every startup.
-    public static void MigrateLegacyFile(string fileName)
-    {
-        var newPath = Path.Combine(DataDirectory, fileName);
-        if (File.Exists(newPath)) return;
-
-        var legacyPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "TCFModManagement",
-            fileName);
-        if (File.Exists(legacyPath))
-        {
-            File.Copy(legacyPath, newPath);
-        }
-    }
 }

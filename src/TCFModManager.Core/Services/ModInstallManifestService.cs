@@ -9,13 +9,7 @@ namespace TCFModManager.Core.Services;
 // 
 public sealed class ModInstallManifestService
 {
-    private readonly string _filePath;
-
-    public ModInstallManifestService()
-    {
-        AppPaths.MigrateLegacyFile("installed-mods.json");
-        _filePath = Path.Combine(AppPaths.DataDirectory, "installed-mods.json");
-    }
+    private readonly string _filePath = Path.Combine(AppPaths.DataDirectory, "installed-mods.json");
 
     public ModInstallManifest Load()
     {
@@ -36,5 +30,55 @@ public sealed class ModInstallManifestService
     {
         var json = JsonSerializer.Serialize(manifest, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(_filePath, json);
+    }
+
+    //
+    // Creates or updates a manually-confirmed installed version for a matched mod - the Installed
+    // page's "confirm/select/override version" and "mark up to date" actions all funnel through here.
+    // If an app-managed record already exists (this app installed the mod itself), only its Version/
+    // VersionId move - Files/Folders/IsAppManaged are carried over unchanged, since nothing about
+    // what's on disk changed. Otherwise a fresh IsAppManaged: false record is written with no Files,
+    // so it stays outside the app's own uninstall path.
+    //
+    public InstalledModRecord SetManualVersion(
+        int modId, string? guid, string name, string version, int? versionId, IReadOnlyList<string> folders)
+    {
+        var manifest = Load();
+        var existing = manifest.Mods.FirstOrDefault(m => m.ModId == modId);
+
+        var record = new InstalledModRecord
+        {
+            ModId = modId,
+            Guid = guid ?? existing?.Guid,
+            Name = existing?.Name ?? name,
+            VersionId = versionId ?? existing?.VersionId,
+            Version = version,
+            InstalledAt = existing?.InstalledAt ?? DateTimeOffset.UtcNow,
+            Files = existing?.Files ?? [],
+            Folders = existing is { Folders.Count: > 0 } ? existing.Folders : folders.ToList(),
+            Incomplete = existing?.Incomplete ?? false,
+            IsAppManaged = existing?.IsAppManaged ?? false,
+        };
+
+        manifest.Mods.RemoveAll(m => m.ModId == modId);
+        manifest.Mods.Add(record);
+        Save(manifest);
+
+        return record;
+    }
+
+    //
+    // Undoes SetManualVersion, dropping the record entirely so the mod goes back to auto-detecting
+    // its version from the files on disk. No-op for an app-managed record - that reflects a real
+    // install, and clearing it would misrepresent what this app actually placed.
+    //
+    public void ClearManualVersion(int modId)
+    {
+        var manifest = Load();
+        var existing = manifest.Mods.FirstOrDefault(m => m.ModId == modId);
+        if (existing is null || existing.IsAppManaged) return;
+
+        manifest.Mods.RemoveAll(m => m.ModId == modId);
+        Save(manifest);
     }
 }

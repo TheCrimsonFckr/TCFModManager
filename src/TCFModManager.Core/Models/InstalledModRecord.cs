@@ -1,6 +1,8 @@
 namespace TCFModManager.Core.Models;
 
-// A mod installed by this app, and exactly which files it placed. Only exists for app-managed installs, not mods installed by hand or otherwise placed outside the app.
+// A mod this app knows the installed version of - either because it installed it itself (IsAppManaged,
+// with the files it placed), or because the user manually confirmed/overrode the version of a mod
+// installed by hand (IsAppManaged: false, Files empty - there's nothing here for this app to clean up).
 public sealed class InstalledModRecord
 {
     public required int ModId { get; init; }
@@ -11,18 +13,20 @@ public sealed class InstalledModRecord
     // The catalog mod's display name at install time.
     public required string Name { get; init; }
 
-    public required int VersionId { get; init; }
+    // Null for a manually-confirmed version that isn't one of the mod's cached published versions.
+    public int? VersionId { get; init; }
     public required string Version { get; init; }
     public required DateTimeOffset InstalledAt { get; init; }
 
-    // Every file this install placed, relative to the SPT install root, forward-slash separated. The exact list Uninstall deletes.
-    public required List<string> Files { get; init; }
+    // Every file this install placed, relative to the SPT install root, forward-slash separated. The
+    // exact list Uninstall deletes. Empty for a manually-confirmed record (IsAppManaged: false).
+    public List<string> Files { get; init; } = [];
 
-    // 
+    //
     // The mod folder names this install placed (e.g. "EpicsAIO", "WTT-ClientCommonLib") - the same
     // names InstalledModScanner reports, so the Installed page can tie a folder on disk back to
     // this record rather than guessing the catalog listing from the folder name.
-    // 
+    //
     // Empty on records written before this was stored; InstalledModFolders.Resolve derives
     // them from Files in that case, so an existing manifest keeps working without reinstalling.
     public List<string> Folders { get; init; } = [];
@@ -33,6 +37,15 @@ public sealed class InstalledModRecord
     // them, a removal cleans them up - rather than being left orphaned in the install.
     //
     public bool Incomplete { get; init; }
+
+    //
+    // True when this app placed Files itself, so Remove/uninstall can delete exactly those files.
+    // False when the record only exists to hold a manually-confirmed/overridden version for a mod
+    // installed by hand - Files is empty, and Remove falls back to deleting the mod's whole folder.
+    // Defaults true so records written before this field existed - every one of them a real
+    // app-managed install - keep meaning what they always meant.
+    //
+    public bool IsAppManaged { get; init; } = true;
 }
 
 // The full set of installed-mod records for one SPT install.

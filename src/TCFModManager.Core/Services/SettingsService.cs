@@ -8,13 +8,7 @@ namespace TCFModManager.Core.Services;
 // 
 public sealed class SettingsService
 {
-    private readonly string _filePath;
-
-    public SettingsService()
-    {
-        AppPaths.MigrateLegacyFile("settings.json");
-        _filePath = Path.Combine(AppPaths.DataDirectory, "settings.json");
-    }
+    private readonly string _filePath = Path.Combine(AppPaths.DataDirectory, "settings.json");
 
     public AppSettings Load()
     {

@@ -36,8 +36,8 @@ public partial class ModUpdateContentDialog : ContentDialog
     {
         Size result = base.MeasureOverride(availableSize);
 
-        SetCurrentValue(DialogWidthProperty, 560.0);
-        SetCurrentValue(DialogHeightProperty, 620.0);
+        SetCurrentValue(DialogWidthProperty, 700.0);
+        SetCurrentValue(DialogHeightProperty, 660.0);
 
         return result;
     }

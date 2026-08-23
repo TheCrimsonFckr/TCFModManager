@@ -81,6 +81,12 @@ public sealed class InstalledModCardViewModel
     // Server half's folder. Null when there's no server half.
     public string? ServerFolderPath { get; init; }
 
+    // The client/server halves' folder (or loose-DLL) *names*, as InstalledModScanner reports them -
+    // what a manual version override records as this mod's Folders, so a later rescan still ties the
+    // override back to this card. Null when there's no corresponding half.
+    public string? ClientFolderName { get; init; }
+    public string? ServerFolderName { get; init; }
+
     // A single path for this card for existing callers/diagnostics; client wins when both exist.
     public required string FolderPath { get; init; }
 
@@ -88,8 +94,13 @@ public sealed class InstalledModCardViewModel
     public int? ModId { get; init; }
 
     // True when this mod has an install record this app itself wrote, meaning Remove can delete
-    // exactly those files. False for anything installed by hand or from outside the app.
+    // exactly those files. False for anything installed by hand or from outside the app, including a
+    // mod with only a manually-confirmed version (see IsManualOverride).
     public bool IsAppManaged { get; init; }
+
+    // True when InstalledVersion comes from the user manually confirming/overriding it (Installed
+    // page's "manage version" controls) rather than from an app install or the files on disk.
+    public bool IsManualOverride { get; init; }
 
     // This mod's status, using the same vocabulary and icons as the Browse and Dependencies
     // pages. Everything here is installed by definition, so it's only ever up-to-date or outdated.
@@ -133,8 +144,9 @@ public sealed class InstalledModCardViewModel
             .ToList();
     }
 
-    // Maps every folder an app-managed install placed to the record that placed it. A folder
-    // claimed by two different mods is dropped rather than resolved arbitrarily.
+    // Maps every folder a record identifies - whether an app-managed install placed it or a manual
+    // version override names it - to that record. A folder claimed by two different mods is dropped
+    // rather than resolved arbitrarily.
     private static Dictionary<string, InstalledModRecord> IndexByFolder(IReadOnlyList<InstalledModRecord>? records)
     {
         var index = new Dictionary<string, InstalledModRecord>(StringComparer.OrdinalIgnoreCase);
@@ -281,6 +293,11 @@ public sealed class InstalledModCardViewModel
             detail = $"Files report {fileVersion}";
         }
 
+        if (record is not null && !record.IsAppManaged)
+        {
+            detail = detail is null ? "Manually confirmed" : $"{detail} - manually confirmed";
+        }
+
         var installedAt = new[] { client?.InstalledAt, server?.InstalledAt }
             .Where(d => d is not null)
             .OrderBy(d => d)
@@ -289,8 +306,25 @@ public sealed class InstalledModCardViewModel
         var latestVersion = match is null ? null : ModCardViewModel.LatestVersion(match);
         var latestPublished = latestVersion?.Version;
 
-        // A newer version alone isn't enough - it also has to target the installed SPT version.
-        var isNewer = ModVersionComparer.IsUpdateAvailable(installedVersion, latestPublished);
+        // No installed version could be determined at all (no record, and nothing readable off the
+        // files themselves) - plenty of mods never expose a usable version this way. Rather than
+        // reading as an update forever, assume the latest published version is what's on disk.
+        var versionUndetermined = installedVersion is null && match is not null;
+
+        bool? isNewer;
+        if (versionUndetermined)
+        {
+            isNewer = false;
+            detail ??= latestPublished is not null
+                ? $"Version couldn't be determined - assuming the latest published version ({latestPublished}) is installed"
+                : "Version couldn't be determined - assuming it's up to date";
+        }
+        else
+        {
+            // A newer version alone isn't enough - it also has to target the installed SPT version.
+            isNewer = ModVersionComparer.IsUpdateAvailable(installedVersion, latestPublished);
+        }
+
         var updateAvailable = isNewer == true
             ? SptVersionMatcher.IsSatisfiedBy(latestVersion?.SptVersionConstraint, installedSptVersion)
             : isNewer;
@@ -315,9 +349,12 @@ public sealed class InstalledModCardViewModel
             UpdateAvailable = updateAvailable,
             ClientFolderPath = client?.FolderPath,
             ServerFolderPath = server?.FolderPath,
+            ClientFolderName = client?.Name,
+            ServerFolderName = server?.Name,
             FolderPath = client?.FolderPath ?? server!.FolderPath,
             ModId = match?.Id,
-            IsAppManaged = record is not null,
+            IsAppManaged = record?.IsAppManaged ?? false,
+            IsManualOverride = record is not null && !record.IsAppManaged,
         };
     }
 

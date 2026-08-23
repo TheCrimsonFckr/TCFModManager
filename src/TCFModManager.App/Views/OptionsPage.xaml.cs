@@ -1,3 +1,4 @@
+using System.Windows;
 using System.Windows.Controls;
 using TCFModManager.App.ViewModels;
 
@@ -12,4 +13,7 @@ public partial class OptionsPage : Page
         DataContext = ViewModel;
         InitializeComponent();
     }
+
+    private void DataFiles_Click(object sender, RoutedEventArgs e) =>
+        new DataFilesWindow { Owner = Window.GetWindow(this) }.Show();
 }
