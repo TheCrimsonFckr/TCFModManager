@@ -4,15 +4,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    xmlns:viewmodels="clr-namespace:TCFModManager.App.ViewModels"
     Title="Installed"
     Loaded="InstalledPage_Loaded">
     <Page.Resources>
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
         <converters:UpdateAvailableToVisibilityConverter x:Key="UpdateAvailableToVisible" />
         <converters:ModStatusToBrushConverter x:Key="StatusBrush" />
+        <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
+        <converters:CountToVisibilityConverter x:Key="HasItems" />
+        <converters:BoolToButtonAppearanceConverter x:Key="BoolToAppearance" />
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Page.Resources>
     <Grid Margin="16">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -25,12 +31,30 @@
                 DockPanel.Dock="Right"
                 Content="Rescan"
                 Command="{Binding ScanCommand}" />
-            <ui:Button
-                DockPanel.Dock="Right"
-                Margin="0,0,8,0"
-                Content="Mod groups..."
-                ToolTip="Sort your installed mods into your own groups for reference, MO2-separator style - opens in a separate window."
-                Click="ModGroups_Click" />
+
+            <!-- Cards/Groups view switcher - deliberately the first, most prominent thing on the
+                 page rather than a small toggle buried among the filter row's other switches.
+                 Whichever mode is active shows tinted with the theme accent (Appearance="Primary"
+                 via BoolToAppearance); the other stays Secondary. -->
+            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,20,0">
+                <ui:Button
+                    Padding="12,7"
+                    FontWeight="SemiBold"
+                    Content="Cards"
+                    Icon="{ui:SymbolIcon Apps24}"
+                    Appearance="{Binding ShowFlatList, Converter={StaticResource BoolToAppearance}}"
+                    Click="CardsView_Click" />
+                <ui:Button
+                    Margin="8,0,0,0"
+                    Padding="12,7"
+                    FontWeight="SemiBold"
+                    Content="Groups"
+                    Icon="{ui:SymbolIcon Folder24}"
+                    Appearance="{Binding GroupViewEnabled, Converter={StaticResource BoolToAppearance}}"
+                    ToolTip="Sort mods into your own groups, MO2-separator style."
+                    Click="GroupsView_Click" />
+            </StackPanel>
+
             <TextBlock
                 VerticalAlignment="Center"
                 TextWrapping="Wrap"
@@ -83,22 +107,59 @@
                     ItemsSource="{Binding UpdateFilterOptions}"
                     SelectedItem="{Binding SelectedUpdateFilter}" />
 
-                <TextBlock Text="Per page:" Foreground="White" VerticalAlignment="Center" Margin="16,0,6,0" />
+                <TextBlock Text="Sort by:" Foreground="White" VerticalAlignment="Center" Margin="16,0,6,0" />
                 <ComboBox
-                    MinWidth="60"
-                    ItemsSource="{Binding PageSizeOptions}"
-                    SelectedItem="{Binding PageSize}" />
+                    MinWidth="140"
+                    ItemsSource="{Binding SortOptions}"
+                    SelectedItem="{Binding SelectedSortOption}" />
+
+                <!-- Pagination is hidden in group view (see the pagination StackPanel's own
+                     Visibility below), so "Per page" would have nothing to affect there. -->
+                <StackPanel Orientation="Horizontal" Visibility="{Binding ShowFlatList, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="Per page:" Foreground="White" VerticalAlignment="Center" Margin="16,0,6,0" />
+                    <ComboBox
+                        MinWidth="60"
+                        ItemsSource="{Binding PageSizeOptions}"
+                        SelectedItem="{Binding PageSize}" />
+                </StackPanel>
             </StackPanel>
         </DockPanel>
 
-        <!-- Installed mods grid; column count is set from code-behind based on width. -->
+        <!-- Group management bar - only meaningful, so only shown, in group view. -->
+        <DockPanel
+            Grid.Row="3"
+            Margin="0,0,0,8"
+            Visibility="{Binding GroupViewEnabled, Converter={StaticResource BoolToVis}}">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Sort groups:" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0" />
+                <ComboBox
+                    MinWidth="150"
+                    ItemsSource="{Binding GroupSortOptions}"
+                    SelectedItem="{Binding SelectedGroupSortOption}" />
+            </StackPanel>
+            <ui:Button
+                DockPanel.Dock="Right"
+                Margin="0,0,16,0"
+                Content="Add group"
+                Icon="{ui:SymbolIcon Add24}"
+                Command="{Binding AddGroupCommand}" />
+            <ui:TextBox
+                Width="220"
+                HorizontalAlignment="Left"
+                PlaceholderText="New group name..."
+                Text="{Binding NewGroupName, UpdateSourceTrigger=PropertyChanged}" />
+        </DockPanel>
+
+        <!-- Installed mods grid; column count is set from code-behind based on width. Hidden in
+             group view (see Sections below, occupying the same cell). -->
         <ListBox
             x:Name="ResultsListBox"
-            Grid.Row="3"
+            Grid.Row="4"
             Padding="4"
             BorderThickness="0"
             Background="Transparent"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            Visibility="{Binding ShowFlatList, Converter={StaticResource BoolToVis}}"
             ItemsSource="{Binding Results}"
             SelectionChanged="ResultsListBox_SelectionChanged"
             SizeChanged="ResultsListBox_SizeChanged">
@@ -231,11 +292,179 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <StackPanel
+        <!-- Group view: one collapsible section per user-defined group, plus a fixed Ungrouped
+             bucket last. Occupies the same cell as ResultsListBox above; only one of the two is
+             visible at a time. Each section's whole card is a drop target so a drop lands
+             correctly even while collapsed. -->
+        <ScrollViewer
             Grid.Row="4"
+            VerticalScrollBarVisibility="Auto"
+            Visibility="{Binding GroupViewEnabled, Converter={StaticResource BoolToVis}}">
+            <ItemsControl ItemsSource="{Binding Sections}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:ModGroupSectionViewModel}">
+                        <ui:Card
+                            Margin="0,0,6,8"
+                            Padding="10"
+                            AllowDrop="True"
+                            DragOver="Section_DragOver"
+                            Drop="Section_Drop">
+                            <StackPanel>
+                                <!-- Section header: collapse toggle, name (or rename box), reorder/rename/delete. -->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ui:Button
+                                        Grid.Column="0"
+                                        Padding="4"
+                                        Margin="0,0,6,0"
+                                        Appearance="Transparent"
+                                        Visibility="{Binding IsRealGroup, Converter={StaticResource BoolToVis}}"
+                                        Command="{Binding DataContext.ToggleCollapsedCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip="Expand/collapse this group">
+                                        <ui:SymbolIcon Symbol="{Binding ChevronGlyph}" FontSize="16" />
+                                    </ui:Button>
+
+                                    <Grid Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            TextTrimming="CharacterEllipsis"
+                                            Visibility="{Binding IsEditing, Converter={StaticResource FalseToVisible}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}" FontWeight="SemiBold" />
+                                            <Run Text=" " />
+                                            <Run Text="{Binding CountLabel, Mode=OneWay}" Foreground="#99FFFFFF" />
+                                        </TextBlock>
+
+                                        <ui:TextBox
+                                            Visibility="{Binding IsEditing, Converter={StaticResource BoolToVis}}"
+                                            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                            KeyDown="RenameTextBox_KeyDown"
+                                            LostFocus="RenameTextBox_LostFocus" />
+                                    </Grid>
+
+                                    <StackPanel
+                                        Grid.Column="2"
+                                        Orientation="Horizontal"
+                                        Visibility="{Binding IsRealGroup, Converter={StaticResource BoolToVis}}">
+                                        <!-- Only meaningful (and only shown) while groups are in their manual
+                                             order - an alphabetical group sort would just fight these. -->
+                                        <StackPanel
+                                            Orientation="Horizontal"
+                                            Visibility="{Binding DataContext.CanReorderGroups, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}, Converter={StaticResource BoolToVis}}">
+                                            <ui:Button
+                                                Padding="4"
+                                                Appearance="Transparent"
+                                                ToolTip="Move up"
+                                                Command="{Binding DataContext.MoveGroupUpCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                CommandParameter="{Binding}"
+                                                Icon="{ui:SymbolIcon ChevronUp24}" />
+                                            <ui:Button
+                                                Padding="4"
+                                                Appearance="Transparent"
+                                                ToolTip="Move down"
+                                                Command="{Binding DataContext.MoveGroupDownCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                CommandParameter="{Binding}"
+                                                Icon="{ui:SymbolIcon ChevronDown24}" />
+                                        </StackPanel>
+                                        <ui:Button
+                                            Padding="4"
+                                            Margin="6,0,0,0"
+                                            Appearance="Transparent"
+                                            ToolTip="Rename"
+                                            Command="{Binding DataContext.BeginRenameCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                            CommandParameter="{Binding}"
+                                            Icon="{ui:SymbolIcon Edit24}" />
+                                        <ui:Button
+                                            Padding="4"
+                                            Appearance="Transparent"
+                                            Foreground="Red"
+                                            ToolTip="Delete this group"
+                                            Command="{Binding DataContext.DeleteGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                            CommandParameter="{Binding}"
+                                            Icon="{ui:SymbolIcon Delete24}" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- Mods in this group; hidden while collapsed. Each row is a drag source. -->
+                                <Grid
+                                    Margin="0,8,0,0"
+                                    Visibility="{Binding IsCollapsed, Converter={StaticResource FalseToVisible}}">
+                                    <TextBlock
+                                        Padding="4"
+                                        Opacity="0.5"
+                                        FontStyle="Italic"
+                                        Text="Drag mods here"
+                                        Visibility="{Binding Items.Count, Converter={StaticResource HasItems}, ConverterParameter=Invert}" />
+
+                                    <ItemsControl ItemsSource="{Binding Items}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+                                                <Border
+                                                    Margin="0,0,0,4"
+                                                    Padding="8,6"
+                                                    Background="#14FFFFFF"
+                                                    CornerRadius="4"
+                                                    Cursor="Hand"
+                                                    ToolTip="Click for details - drag onto another group to move it there"
+                                                    PreviewMouseLeftButtonDown="ModRow_PreviewMouseLeftButtonDown"
+                                                    PreviewMouseMove="ModRow_PreviewMouseMove"
+                                                    PreviewMouseLeftButtonUp="ModRow_PreviewMouseLeftButtonUp">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <ui:SymbolIcon
+                                                            Grid.Column="0"
+                                                            Margin="0,0,8,0"
+                                                            VerticalAlignment="Center"
+                                                            FontSize="16"
+                                                            Symbol="{Binding StatusGlyph}"
+                                                            Foreground="{Binding Status, Converter={StaticResource StatusBrush}}"
+                                                            ToolTip="{Binding StatusTooltip}" />
+
+                                                        <StackPanel Grid.Column="1">
+                                                            <TextBlock
+                                                                FontWeight="SemiBold"
+                                                                TextTrimming="CharacterEllipsis"
+                                                                Text="{Binding DisplayTitle}" />
+                                                            <TextBlock
+                                                                FontSize="11"
+                                                                Opacity="0.6"
+                                                                TextTrimming="CharacterEllipsis">
+                                                                <Run Text="{Binding InstalledVersion, TargetNullValue='unknown', Mode=OneWay}" />
+                                                                <Run Text=" • " />
+                                                                <Run Text="{Binding TargetSummary, Mode=OneWay}" />
+                                                                <Run Text=" • " />
+                                                                <Run Text="{Binding Author, TargetNullValue='unknown author', Mode=OneWay}" />
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+                            </StackPanel>
+                        </ui:Card>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- Hidden in group view - a manually-sorted, collapsible group list has no use for pages. -->
+        <StackPanel
+            Grid.Row="5"
             Orientation="Horizontal"
             HorizontalAlignment="Center"
-            Margin="0,8,0,0">
+            Margin="0,8,0,0"
+            Visibility="{Binding ShowFlatList, Converter={StaticResource BoolToVis}}">
             <ui:Button
                 Content="Previous"
                 Command="{Binding PreviousPageCommand}" />

@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
@@ -38,6 +39,18 @@ public partial class InstalledViewModel : ObservableObject
     [ObservableProperty]
     private UpdateFilterItem _selectedUpdateFilter;
 
+    public List<ModSortItem> SortOptions { get; } =
+    [
+        new("Name (A-Z)", ModSortOption.NameAscending),
+        new("Name (Z-A)", ModSortOption.NameDescending),
+        new("Author (A-Z)", ModSortOption.AuthorAscending),
+        new("Author (Z-A)", ModSortOption.AuthorDescending),
+        new("Recently installed", ModSortOption.RecentlyInstalled),
+    ];
+
+    [ObservableProperty]
+    private ModSortItem _selectedSortOption;
+
     // Set while ClearFilters is resetting several properties at once, so each individual
     // OnXxxChanged below doesn't run its own AutoApplyFilter.
     private bool _suppressAutoApplyFilter;
@@ -56,6 +69,35 @@ public partial class InstalledViewModel : ObservableObject
     /// <summary>ON hides mods with InstalledModCardViewModel.ContainsAiContent == true.</summary>
     [ObservableProperty]
     private bool _hideContainsAiContent;
+
+    // ON swaps the results area from the plain card grid to collapsible, drag-sortable groups (see
+    // Sections) - the user's own MO2-style separators for organizing installed mods. Purely
+    // organizational: persisted via AppServices.ModGroups, nothing else reads it.
+    [ObservableProperty]
+    private bool _groupViewEnabled;
+
+    /// <summary>Inverse of GroupViewEnabled - lets the flat grid/pagination controls bind their
+    /// Visibility directly without a second converter.</summary>
+    public bool ShowFlatList => !GroupViewEnabled;
+
+    public ObservableCollection<ModGroupSectionViewModel> Sections { get; } = [];
+
+    [ObservableProperty]
+    private string _newGroupName = string.Empty;
+
+    public List<GroupSortItem> GroupSortOptions { get; } =
+    [
+        new("Manual order", GroupSortOption.Manual),
+        new("Group name (A-Z)", GroupSortOption.NameAscending),
+        new("Group name (Z-A)", GroupSortOption.NameDescending),
+    ];
+
+    [ObservableProperty]
+    private GroupSortItem _selectedGroupSortOption;
+
+    /// <summary>Whether the group header's move-up/move-down buttons should show - only while
+    /// groups are in their manual order; an alphabetical group sort would just override them.</summary>
+    public bool CanReorderGroups => SelectedGroupSortOption.Value == GroupSortOption.Manual;
 
     [ObservableProperty]
     private bool _isBusy;
@@ -83,9 +125,13 @@ public partial class InstalledViewModel : ObservableObject
     public InstalledViewModel()
     {
         _selectedUpdateFilter = UpdateFilterOptions[0];
+        _selectedSortOption = SortOptions[0];
+        _selectedGroupSortOption = GroupSortOptions[0];
     }
 
     partial void OnSelectedUpdateFilterChanged(UpdateFilterItem value) => AutoApplyFilter();
+
+    partial void OnSelectedSortOptionChanged(ModSortItem value) => AutoApplyFilter();
 
     partial void OnPageSizeChanged(int value) => AutoApplyFilter();
 
@@ -97,13 +143,26 @@ public partial class InstalledViewModel : ObservableObject
 
     partial void OnHideContainsAiContentChanged(bool value) => AutoApplyFilter();
 
-    /// <summary>Re-filters and jumps back to page 1 whenever a filter/search control changes. Suppressed
-    /// while ClearFilters resets several properties at once.</summary>
+    partial void OnGroupViewEnabledChanged(bool value)
+    {
+        OnPropertyChanged(nameof(ShowFlatList));
+        AutoApplyFilter();
+    }
+
+    partial void OnSelectedGroupSortOptionChanged(GroupSortItem value)
+    {
+        OnPropertyChanged(nameof(CanReorderGroups));
+        RebuildSections();
+    }
+
+    /// <summary>Re-filters/re-sorts and refreshes whichever view is active (paginated grid or
+    /// groups) whenever a filter/search/sort control changes. Suppressed while ClearFilters resets
+    /// several properties at once.</summary>
     private void AutoApplyFilter()
     {
         if (_suppressAutoApplyFilter) return;
         ApplyFilter();
-        GoToPage(1);
+        if (GroupViewEnabled) RebuildSections(); else GoToPage(1);
     }
 
     /// <summary>Resets every Installed filter/search control back to its opening default, then re-applies once immediately.</summary>
@@ -115,6 +174,7 @@ public partial class InstalledViewModel : ObservableObject
         {
             SearchText = string.Empty;
             SelectedUpdateFilter = UpdateFilterOptions[0];
+            SelectedSortOption = SortOptions[0];
             FikaCompatibleOnly = false;
             HideContainsAds = false;
             HideContainsAiContent = false;
@@ -126,7 +186,7 @@ public partial class InstalledViewModel : ObservableObject
         }
 
         ApplyFilter();
-        GoToPage(1);
+        if (GroupViewEnabled) RebuildSections(); else GoToPage(1);
     }
 
     public void UpdateLayoutForWidth(double availableWidth)
@@ -152,7 +212,7 @@ public partial class InstalledViewModel : ObservableObject
         {
             _all = [];
             ApplyFilter();
-            GoToPage(1);
+            if (GroupViewEnabled) RebuildSections(); else GoToPage(1);
             StatusMessage = "No SPT install folder set - configure it on the Options page first.";
             return;
         }
@@ -183,7 +243,7 @@ public partial class InstalledViewModel : ObservableObject
             if (unmatched.Count > 0) AppLog.Debug("Installed", $"unmatched: {string.Join(", ", unmatched)}");
 
             ApplyFilter();
-            GoToPage(resetPage ? 1 : CurrentPage);
+            if (GroupViewEnabled) RebuildSections(); else GoToPage(resetPage ? 1 : CurrentPage);
 
             StatusMessage = _all.Count == 0
                 ? $"No mods found under \"{installPath}\"."
@@ -379,7 +439,7 @@ public partial class InstalledViewModel : ObservableObject
         // author instead of name - e.g. "@Acidphantasm".
         var authorQuery = query.StartsWith('@') ? query[1..].Trim() : null;
 
-        _filtered = _all
+        var matched = _all
             .Where(m => SelectedUpdateFilter.Value switch
             {
                 UpdateFilter.NeedsUpdate => m.UpdateAvailable == true,
@@ -392,8 +452,9 @@ public partial class InstalledViewModel : ObservableObject
                 : query.Length == 0 || Matches(m.DisplayTitle, query) || Matches(m.Name, query))
             .Where(m => !FikaCompatibleOnly || m.IsFikaCompatible)
             .Where(m => !HideContainsAds || !m.ContainsAds)
-            .Where(m => !HideContainsAiContent || !m.ContainsAiContent)
-            .ToList();
+            .Where(m => !HideContainsAiContent || !m.ContainsAiContent);
+
+        _filtered = SortMods(matched, SelectedSortOption.Value).ToList();
 
         TotalPages = Math.Max(1, (int)Math.Ceiling(_filtered.Count / (double)PageSize));
 
@@ -407,6 +468,27 @@ public partial class InstalledViewModel : ObservableObject
         }
     }
 
+    private static IEnumerable<InstalledModCardViewModel> SortMods(IEnumerable<InstalledModCardViewModel> mods, ModSortOption sort) =>
+        sort switch
+        {
+            ModSortOption.NameAscending => mods.OrderBy(m => m.DisplayTitle, StringComparer.OrdinalIgnoreCase),
+            ModSortOption.NameDescending => mods.OrderByDescending(m => m.DisplayTitle, StringComparer.OrdinalIgnoreCase),
+            // No-author mods sort last in both directions rather than clumping at whichever end an
+            // empty/null string would fall on.
+            ModSortOption.AuthorAscending => mods
+                .OrderBy(m => m.Author is null)
+                .ThenBy(m => m.Author, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(m => m.DisplayTitle, StringComparer.OrdinalIgnoreCase),
+            ModSortOption.AuthorDescending => mods
+                .OrderBy(m => m.Author is null)
+                .ThenByDescending(m => m.Author, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(m => m.DisplayTitle, StringComparer.OrdinalIgnoreCase),
+            ModSortOption.RecentlyInstalled => mods
+                .OrderByDescending(m => m.InstalledAt ?? DateTimeOffset.MinValue)
+                .ThenBy(m => m.DisplayTitle, StringComparer.OrdinalIgnoreCase),
+            _ => mods,
+        };
+
     private static bool Matches(string? haystack, string needle) =>
         haystack?.Contains(needle, StringComparison.OrdinalIgnoreCase) ?? false;
 
@@ -414,4 +496,133 @@ public partial class InstalledViewModel : ObservableObject
     /// everything, same as an empty plain-text query.</summary>
     private static bool MatchesAuthor(InstalledModCardViewModel mod, string authorQuery) =>
         authorQuery.Length == 0 || Matches(mod.Author, authorQuery);
+
+    // Rebuilds Sections from the current group store contents and _filtered (so group view honors
+    // the same search/update-status/Fika/ads/AI filters and sort as the flat grid) - called after
+    // every filter/sort change and every group mutation (add/rename/delete/move/assign) rather than
+    // patched incrementally; Installed's mod counts are small enough that a full rebuild is simpler
+    // and can't drift out of sync with the store.
+    private void RebuildSections()
+    {
+        var data = AppServices.ModGroups.Load();
+
+        Sections.Clear();
+
+        IEnumerable<ModGroup> ordered = SelectedGroupSortOption.Value switch
+        {
+            GroupSortOption.NameAscending => data.Groups.OrderBy(g => g.Name, StringComparer.OrdinalIgnoreCase),
+            GroupSortOption.NameDescending => data.Groups.OrderByDescending(g => g.Name, StringComparer.OrdinalIgnoreCase),
+            _ => data.Groups.OrderBy(g => g.SortOrder),
+        };
+
+        foreach (var group in ordered)
+            Sections.Add(ModGroupSectionViewModel.FromGroup(group));
+
+        var ungrouped = ModGroupSectionViewModel.Ungrouped();
+        Sections.Add(ungrouped);
+
+        var byId = Sections.Where(s => s.GroupId is not null).ToDictionary(s => s.GroupId!.Value);
+
+        foreach (var mod in _filtered)
+        {
+            var key = ModGroupStore.KeyFor(mod.Name);
+            var section = data.Assignments.TryGetValue(key, out var groupId) && byId.TryGetValue(groupId, out var found)
+                ? found
+                : ungrouped;
+
+            section.Items.Add(mod);
+        }
+    }
+
+    [RelayCommand]
+    private void AddGroup()
+    {
+        var name = NewGroupName.Trim();
+        if (name.Length == 0) return;
+
+        AppServices.ModGroups.AddGroup(name);
+        NewGroupName = string.Empty;
+        RebuildSections();
+    }
+
+    [RelayCommand]
+    private void BeginRename(ModGroupSectionViewModel? section)
+    {
+        if (section is not { IsRealGroup: true }) return;
+        section.IsEditing = true;
+    }
+
+    [RelayCommand]
+    private void CommitRename(ModGroupSectionViewModel? section)
+    {
+        if (section is not { IsRealGroup: true }) return;
+        section.IsEditing = false;
+
+        var name = section.Name.Trim();
+        if (name.Length == 0)
+        {
+            // Blank name isn't allowed - reload the real name from disk rather than saving it.
+            RebuildSections();
+            return;
+        }
+
+        AppServices.ModGroups.RenameGroup(section.GroupId!.Value, name);
+        RebuildSections();
+    }
+
+    // Discards an in-progress rename without saving - the edited Name only lives on the section VM
+    // in memory, so reloading fresh ones from the store (still holding the old name) undoes it.
+    [RelayCommand]
+    private void CancelRename(ModGroupSectionViewModel? section)
+    {
+        if (section is not { IsRealGroup: true }) return;
+        RebuildSections();
+    }
+
+    [RelayCommand]
+    private void DeleteGroup(ModGroupSectionViewModel? section)
+    {
+        if (section is not { IsRealGroup: true }) return;
+
+        var message = section.Items.Count == 0
+            ? $"Delete \"{section.Name}\"?"
+            : $"Delete \"{section.Name}\"? Its {section.CountLabel} move back to Ungrouped.";
+
+        if (MessageBox.Show(message, "Delete group?", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
+            return;
+
+        AppServices.ModGroups.DeleteGroup(section.GroupId!.Value);
+        RebuildSections();
+    }
+
+    [RelayCommand]
+    private void ToggleCollapsed(ModGroupSectionViewModel? section)
+    {
+        if (section is not { IsRealGroup: true }) return;
+
+        section.IsCollapsed = !section.IsCollapsed;
+        AppServices.ModGroups.SetCollapsed(section.GroupId!.Value, section.IsCollapsed);
+    }
+
+    [RelayCommand]
+    private void MoveGroupUp(ModGroupSectionViewModel? section) => MoveGroup(section, -1);
+
+    [RelayCommand]
+    private void MoveGroupDown(ModGroupSectionViewModel? section) => MoveGroup(section, 1);
+
+    private void MoveGroup(ModGroupSectionViewModel? section, int direction)
+    {
+        if (section is not { IsRealGroup: true }) return;
+
+        AppServices.ModGroups.Move(section.GroupId!.Value, direction);
+        RebuildSections();
+    }
+
+    // Called by InstalledPage's drag-drop code-behind when a mod card is dropped on a section
+    // (groupId null for the Ungrouped bucket).
+    public void MoveModToGroup(InstalledModCardViewModel mod, Guid? groupId)
+    {
+        AppServices.ModGroups.AssignMod(mod.Name, groupId);
+        RebuildSections();
+    }
 }
