@@ -23,6 +23,16 @@ public partial class InstalledPage : Page
     {
         DataContext = ViewModel;
         InitializeComponent();
+
+        // Registered directly on the Page (not via a XAML attribute on a specific element) so it's
+        // the very first thing to see every wheel event over this page - PreviewMouseWheel tunnels
+        // root-to-leaf, so this fires before any descendant's own bubble-phase handling, including
+        // the internal ScrollViewer part several controls (ui:TextBox, ComboBox, ...) use for their
+        // own content, which otherwise swallows the wheel event and marks it handled even when
+        // there's nothing for that control itself to scroll. handledEventsToo:true on top of that
+        // means it still runs even if something upstream in the tunnel already marked the event
+        // handled. See Page_PreviewMouseWheel below.
+        AddHandler(PreviewMouseWheelEvent, new MouseWheelEventHandler(Page_PreviewMouseWheel), true);
     }
 
     private async void InstalledPage_Loaded(object sender, RoutedEventArgs e)
@@ -53,11 +63,13 @@ public partial class InstalledPage : Page
     private void GroupsView_Click(object sender, RoutedEventArgs e) => ViewModel.GroupViewEnabled = true;
 
     // Lets the wheel scroll group view from anywhere on the page - search box, filter row,
-    // group-management bar, etc. - not just while the pointer is directly over the group list.
-    // MouseWheel bubbles from wherever the pointer actually is up through this root Grid; when
-    // the pointer is already over GroupsScrollViewer it handles the wheel event itself first and
-    // marks it handled, so this handler is simply skipped for those (no double-scrolling).
-    private void RootGrid_MouseWheel(object sender, MouseWheelEventArgs e)
+    // group-management bar, directly over the list, all of it - by driving GroupsScrollViewer
+    // ourselves unconditionally rather than only stepping in when some other handler didn't
+    // already consume the event. Since this runs in the tunnel phase before GroupsScrollViewer's
+    // own native wheel handling would otherwise fire, hovering directly over the list also comes
+    // through here (and gets marked handled before the native handling runs) - that's fine, we do
+    // the exact same scroll it would have, so there's no visible difference and no double-scroll.
+    private void Page_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         if (!ViewModel.GroupViewEnabled) return;
 

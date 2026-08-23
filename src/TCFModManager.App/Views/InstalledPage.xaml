@@ -16,23 +16,25 @@
         <converters:BoolToButtonAppearanceConverter x:Key="BoolToAppearance" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Page.Resources>
-    <!-- MouseWheel (bubble) rather than PreviewMouseWheel: this only fires when nothing closer to
-         the pointer already consumed the wheel event, so it steps in for scroll events over the
-         toolbar/filter rows without double-scrolling when the pointer is already over the group
-         ScrollViewer itself (that ScrollViewer handles its own wheel events and marks them
-         handled, which stops this bubble handler from running for those). See
-         RootGrid_MouseWheel in code-behind.
-         Background="Transparent" is load-bearing, not decorative: a Grid with no Background at
-         all only takes part in hit-testing where a child actually paints something, so most of
-         the "empty" space in the toolbar rows (and any blank area below a short group list) was
-         invisible to mouse input entirely - the wheel event's hit test fell through to whatever
-         was rendered behind this Grid instead of ever reaching it, which is why the very first
-         version of scroll-anywhere didn't actually work outside a handful of specific controls. -->
+    <!-- Scroll-anywhere for group view is wired up in code-behind (see the constructor and
+         Page_PreviewMouseWheel in InstalledPage.xaml.cs), not via a XAML MouseWheel attribute here
+         any more - a plain bubble MouseWheel handler on this Grid turned out not to be reliable:
+         several controls (ui:TextBox, ComboBox, ...) have an internal ScrollViewer part that
+         swallows the bubbling MouseWheel event and marks it handled even when there's nothing for
+         *them* to scroll, so hovering the search box or a combo silently ate the event before it
+         ever reached this Grid. Registering a PreviewMouseWheel (tunnel) handler directly on the
+         Page runs before any of that - it's first in line for every wheel event over this page,
+         full stop.
+         Background="Transparent" is still load-bearing here though: a Grid with no Background at
+         all only takes part in hit-testing where a child actually paints something, so without it
+         the "empty" space in the toolbar rows (and any blank area below a short group list) would
+         resolve the hit test to whatever's rendered behind this whole page instead of to anything
+         inside it - meaning the event's route would never even pass through the Page, so it
+         wouldn't matter where the handler was attached. -->
     <Grid
         x:Name="RootGrid"
         Margin="16"
-        Background="Transparent"
-        MouseWheel="RootGrid_MouseWheel">
+        Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />

@@ -12,16 +12,21 @@
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <converters:CountToVisibilityConverter x:Key="HasItems" />
     </Page.Resources>
-    <!-- Background="Transparent" plus the MouseWheel handler let the wheel scroll the dependency
-         tree from anywhere on the page (the Refresh/status rows included), the same fix applied to
-         InstalledPage's group view - see RootGrid_MouseWheel in code-behind for why the Background
-         is required (a Grid with no Background isn't hit-testable in its empty space, which would
-         otherwise swallow most wheel events before they ever reach this handler). -->
+    <!-- Scroll-anywhere is wired up in code-behind (see the constructor and
+         Page_PreviewMouseWheel in DependenciesPage.xaml.cs) as a PreviewMouseWheel handler
+         registered directly on the Page, not a XAML MouseWheel attribute on this Grid - a plain
+         bubble MouseWheel handler isn't reliable, since several controls (ui:TextBox, ComboBox,
+         ...) have an internal ScrollViewer part that swallows the bubbling event and marks it
+         handled even when there's nothing for *them* to scroll. Same fix as InstalledPage's group
+         view.
+         Background="Transparent" is still required: a Grid with no Background isn't hit-testable
+         in its empty space, so without it most of the "empty" space in the Refresh/status rows
+         would resolve the hit test to whatever's behind this whole page instead of to anything
+         inside it, meaning the event's route would never pass through the Page at all. -->
     <Grid
         x:Name="RootGrid"
         Margin="16"
-        Background="Transparent"
-        MouseWheel="RootGrid_MouseWheel">
+        Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
