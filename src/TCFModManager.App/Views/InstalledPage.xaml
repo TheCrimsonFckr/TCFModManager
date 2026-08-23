@@ -16,7 +16,16 @@
         <converters:BoolToButtonAppearanceConverter x:Key="BoolToAppearance" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Page.Resources>
-    <Grid Margin="16">
+    <!-- MouseWheel (bubble) rather than PreviewMouseWheel: this only fires when nothing closer to
+         the pointer already consumed the wheel event, so it steps in for scroll events over the
+         toolbar/filter rows without double-scrolling when the pointer is already over the group
+         ScrollViewer itself (that ScrollViewer handles its own wheel events and marks them
+         handled, which stops this bubble handler from running for those). See
+         RootGrid_MouseWheel in code-behind. -->
+    <Grid
+        x:Name="RootGrid"
+        Margin="16"
+        MouseWheel="RootGrid_MouseWheel">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -296,11 +305,20 @@
              bucket last. Occupies the same cell as ResultsListBox above; only one of the two is
              visible at a time. Each section's whole card is a drop target so a drop lands
              correctly even while collapsed. -->
+        <!-- Focusable="False" here and on both nested ItemsControls below: none of them offer any
+             keyboard interaction, and leaving them focusable meant a plain click on a mod row (a
+             non-focusable Border) bubbled focus up to the nearest focusable ancestor - normally
+             this ScrollViewer or one of the ItemsControls - which then re-centered/nudged itself
+             into view and produced a small unwanted scroll jump the instant you clicked. See also
+             ModRow_PreviewMouseLeftButtonDown's e.Handled = true in code-behind, which stops that
+             same default click-focus assignment before it starts. -->
         <ScrollViewer
+            x:Name="GroupsScrollViewer"
             Grid.Row="4"
+            Focusable="False"
             VerticalScrollBarVisibility="Auto"
             Visibility="{Binding GroupViewEnabled, Converter={StaticResource BoolToVis}}">
-            <ItemsControl ItemsSource="{Binding Sections}">
+            <ItemsControl Focusable="False" ItemsSource="{Binding Sections}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:ModGroupSectionViewModel}">
                         <ui:Card
@@ -401,7 +419,7 @@
                                         Text="Drag mods here"
                                         Visibility="{Binding Items.Count, Converter={StaticResource HasItems}, ConverterParameter=Invert}" />
 
-                                    <ItemsControl ItemsSource="{Binding Items}">
+                                    <ItemsControl Focusable="False" ItemsSource="{Binding Items}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate DataType="{x:Type viewmodels:InstalledModCardViewModel}">
                                                 <Border
