@@ -25,6 +25,12 @@
                 DockPanel.Dock="Right"
                 Content="Rescan"
                 Command="{Binding ScanCommand}" />
+            <ui:Button
+                DockPanel.Dock="Right"
+                Margin="0,0,8,0"
+                Content="Mod groups..."
+                ToolTip="Sort your installed mods into your own groups for reference, MO2-separator style - opens in a separate window."
+                Click="ModGroups_Click" />
             <TextBlock
                 VerticalAlignment="Center"
                 TextWrapping="Wrap"

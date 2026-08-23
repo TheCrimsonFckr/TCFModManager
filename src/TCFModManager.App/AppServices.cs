@@ -19,6 +19,10 @@ internal static class AppServices
 
     public static ModInstallManifestService InstallManifest { get; } = new();
 
+    // Backs the Mod Groups window - which installed mods the user has sorted into which
+    // self-defined group. Purely organizational; nothing else in the app reads it.
+    public static ModGroupStore ModGroups { get; } = new();
+
     // Places (and removes) a mod's files in the SPT install.
     public static ModInstallService ModInstall { get; } = new(Downloads, InstallManifest);
 

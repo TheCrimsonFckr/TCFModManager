@@ -34,4 +34,7 @@ public partial class InstalledPage : Page
     {
         ViewModel.UpdateLayoutForWidth(e.NewSize.Width);
     }
+
+    private void ModGroups_Click(object sender, RoutedEventArgs e) =>
+        new ModGroupsWindow { Owner = Window.GetWindow(this) }.Show();
 }
