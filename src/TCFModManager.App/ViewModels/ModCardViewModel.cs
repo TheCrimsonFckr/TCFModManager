@@ -41,6 +41,14 @@ public sealed class ModCardViewModel
     // True when the card is showing an older release because the newest one doesn't run on the installed SPT.
     public bool IsOlderCompatibleVersion { get; private init; }
 
+    //
+    // Set when the ticked filter line is hiding a version that WOULD run on the installed SPT -
+    // e.g. filtering to 4.1 while running SPT 4.0 makes a mod's 4.1 release show red, which is
+    // correct, but gives no hint that the same mod has an older 4.0 release that's actually usable.
+    // Null when there's nothing to point at (no filter active, or no other version helps either).
+    //
+    public string? AlternateCompatibleVersionNote { get; private init; }
+
     // True when this catalog mod matched an installed mod. Drives whether the card shows an install/update status dot.
     public bool IsInstalled { get; private init; }
 
@@ -100,18 +108,45 @@ public sealed class ModCardViewModel
 
         var isOlder = shown is not null && newest is not null && shown.Id != newest.Id;
 
+        // "shown" is already PickDisplayVersion's pick - the version that genuinely runs on the
+        // installed SPT, independent of whatever line is ticked. When the ticked filter's glyph is
+        // red/unknown but "shown" itself IS compatible with the real installed SPT, the mod isn't
+        // actually incompatible for this user - the filter is just describing a line they aren't
+        // running, and "shown"/DisplayReleaseVersion is already quietly pointing at the version
+        // that would really get installed. Say so, rather than leaving a red card with no
+        // explanation. Chris: "maybe it should be red but with a note saying 'older version
+        // available for your installed SPT version'".
+        var alternateNote = compatible != true && shown is not null
+            && SptVersionMatcher.IsSatisfiedBy(shown.SptVersionConstraint, installedSptVersion) == true
+            ? BuildAlternateCompatibleVersionNote(shown, newest)
+            : null;
+
         return new ModCardViewModel
         {
             Mod = mod,
             SptVersionConstraint = shown?.SptVersionConstraint,
             SptVersionDisplay = BuildDisplay(constraints, shown?.SptVersionConstraint, selectedLines, releases, compatible),
-            SptVersionTooltip = BuildTooltip(shown, newest, installedSptVersion, isOlder, constraints, releases),
+            SptVersionTooltip = BuildTooltip(shown, newest, installedSptVersion, isOlder, constraints, releases, alternateNote),
             DisplayReleaseVersion = shown?.Version,
             IsCompatibleWithInstalledSpt = compatible,
             IsOlderCompatibleVersion = isOlder,
+            AlternateCompatibleVersionNote = alternateNote,
             IsInstalled = installedMatch is not null,
             UpdateAvailable = installedMatch?.UpdateAvailable,
         };
+    }
+
+    // Phrases the note pointing at "shown" - "older" when it isn't the mod's newest release
+    // (the common case: filtering to a newer line than what's installed surfaces an older, still-
+    // compatible release), otherwise a neutral "compatible version" phrasing.
+    private static string BuildAlternateCompatibleVersionNote(ModVersionSummary shown, ModVersionSummary? newest)
+    {
+        var isOlder = newest is not null && shown.Id != newest.Id
+            && shown.PublishedAt is { } shownDate && newest.PublishedAt is { } newestDate && shownDate < newestDate;
+
+        return isOlder
+            ? $"Older version (v{shown.Version}) available for your installed SPT."
+            : $"Compatible version (v{shown.Version}) available for your installed SPT.";
     }
 
     // 
@@ -191,7 +226,8 @@ public sealed class ModCardViewModel
         string? installedSptVersion,
         bool isOlder,
         List<string?> constraints,
-        IReadOnlyList<SptRelease>? releases)
+        IReadOnlyList<SptRelease>? releases,
+        string? alternateNote)
     {
         if (shown is null) return "This mod has no published version in the catalog.";
 
@@ -224,6 +260,9 @@ public sealed class ModCardViewModel
 
         if (!string.IsNullOrWhiteSpace(shown.SptVersionConstraint))
             lines.Add($"Constraint: {shown.SptVersionConstraint}");
+
+        if (!string.IsNullOrWhiteSpace(alternateNote))
+            lines.Add(alternateNote);
 
         return string.Join(Environment.NewLine, lines);
     }
