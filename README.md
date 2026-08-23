@@ -96,8 +96,6 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 | `Staging\` | Default destination for manually downloaded archives |
 | `LegacyConfigs\` | Config files kept from removed mods, one timestamped folder per removal |
 
-An older `%LocalAppData%\TCFModManagement\` layout is migrated automatically on first run.
-
 ### Logging
 
 Info level by default. Drop an empty file named `verbose` (no extension) next to the exe to get
