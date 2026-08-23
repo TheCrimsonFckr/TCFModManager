@@ -52,11 +52,33 @@ public partial class InstalledPage : Page
 
     private void GroupsView_Click(object sender, RoutedEventArgs e) => ViewModel.GroupViewEnabled = true;
 
+    // Lets the wheel scroll group view from anywhere on the page - search box, filter row,
+    // group-management bar, etc. - not just while the pointer is directly over the group list.
+    // MouseWheel bubbles from wherever the pointer actually is up through this root Grid; when
+    // the pointer is already over GroupsScrollViewer it handles the wheel event itself first and
+    // marks it handled, so this handler is simply skipped for those (no double-scrolling).
+    private void RootGrid_MouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        if (!ViewModel.GroupViewEnabled) return;
+
+        GroupsScrollViewer.ScrollToVerticalOffset(GroupsScrollViewer.VerticalOffset - e.Delta);
+        e.Handled = true;
+    }
+
     private void ModRow_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         _dragStart = e.GetPosition(null);
         _dragCandidate = (sender as FrameworkElement)?.DataContext as InstalledModCardViewModel;
         _dragStarted = false;
+
+        // Without this, the event goes on to bubble as a plain MouseDown, and WPF's default
+        // click-to-focus behavior walks up from this (non-focusable) Border to the nearest
+        // focusable ancestor - normally the group ScrollViewer or one of its ItemsControls -
+        // and focuses it, which was producing a small scroll jump the instant a row was
+        // clicked. We're fully hand-rolling this row's click/drag gesture already (see
+        // ModRow_PreviewMouseMove/Up below), so nothing downstream needs that default focus
+        // assignment. Paired with Focusable="False" on the ScrollViewer/ItemsControls in XAML.
+        e.Handled = true;
     }
 
     private void ModRow_PreviewMouseMove(object sender, MouseEventArgs e)
