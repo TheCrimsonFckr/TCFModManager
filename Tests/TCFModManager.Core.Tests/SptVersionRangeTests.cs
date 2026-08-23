@@ -107,6 +107,39 @@ public class SptVersionRangeTests
         Assert.False(SptVersionRange.IntersectsReleaseLine("~4.1.1", 4, 0));
     }
 
+    [Theory]
+    // A soft lower-bound pin (no explicit narrower upper bound within that same line) is really
+    // just "the patch I built against" - SAIN 4.5.0 ships "~4.1.3" and must not show incompatible
+    // with SPT 4.1.1 or 4.1.2. Later patches in the line still pass too.
+    [InlineData("~4.1.3", "4.1.1", true)]
+    [InlineData("~4.1.3", "4.1.3", true)]
+    [InlineData("~4.1.3", "4.1.9", true)]
+    [InlineData("~4.1.3", "4.0.13", false)]
+    [InlineData("~4.1.3", "4.2.0", false)]
+    [InlineData("^4.0.13", "4.0.5", true)]
+    // But an EXPLICIT narrow range within one line is a real, deliberate exclusion several mods in
+    // Chris's catalog use on purpose (e.g. HandsAreNotBusy, LetMeRightClick "broken on 4.1.3+";
+    // "Temporary Fixes" "broken on 4.0.14+") and must keep failing outside that stated window.
+    [InlineData(">=4.1.0 <4.1.3", "4.1.1", true)]
+    [InlineData(">=4.1.0 <4.1.3", "4.1.3", false)]
+    [InlineData(">=4.1.0 <4.1.3", "4.1.4", false)]
+    [InlineData(">=4.0.0 <=4.0.13", "4.0.5", true)]
+    [InlineData(">=4.0.0 <=4.0.13", "4.0.20", false)]
+    // An open-ended lower bound with no upper clause at all ("&gt;=4.1.3", nothing else) is ALSO
+    // just a soft pin, not a real floor (confirmed against NoMenuFPSLimit, mod 2364 - its newest
+    // version ships bare "&gt;=4.1.3" with no other 4.1 version at all, and Chris confirmed his install
+    // is 4.1.1/4.1.2 and expects it green). Only an explicit upper bound is still respected.
+    [InlineData(">=4.1.3", "4.1.1", true)]
+    [InlineData(">=4.1.3", "4.1.3", true)]
+    [InlineData(">=4.1.3", "4.1.9", true)]
+    [InlineData(">=4.1.3", "4.0.13", false)]
+    // No upper bound at all means exactly that - 4.2.0 and beyond satisfy it too, same as plain
+    // ">=" always has (this half isn't the line-relaxation, it's ordinary ">=" semantics).
+    [InlineData(">=4.1.3", "4.2.0", true)]
+    public void IsSatisfiedBy_SoftLowerBoundPinsMatchTheWholeLineButExplicitNarrowRangesStayStrict(
+        string constraint, string version, bool expected) =>
+        Assert.Equal(expected, SptVersionMatcher.IsSatisfiedBy(constraint, version));
+
     [Fact]
     public void TryParse_ReturnsFalseForUnparsableInput()
     {

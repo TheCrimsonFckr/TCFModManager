@@ -6,15 +6,35 @@ namespace TCFModManager.Core.Services;
 public readonly record struct SptVersionBounds(Version? Min, bool MinExclusive, Version? MaxExclusive, Version? Exact)
 {
     // True when <paramref name="version"/> falls inside this window.
+    //
+    // SPT doesn't break mod compatibility between patches within one major.minor line (confirmed
+    // by Chris against real examples - SAIN "~4.1.3", NoMenuFPSLimit bare ">=4.1.3", both showing
+    // incompatible against an earlier-4.1 install that should count). So a constraint's LOWER bound
+    // only tells us which release line a mod targets, never which patch of that line - "4.1.2",
+    // "~4.1.3" and a bare ">=4.1.3" all have to run on SPT 4.1.1 too. An UPPER bound is still a real,
+    // deliberate signal though: several mods in Chris's catalog (HandsAreNotBusy/QuickSellFlea/
+    // LetMeRightClick capped "&gt;=4.1.0 &lt;4.1.3", "Temporary Fixes"/LoadBundleFaster capped
+    // "&gt;=4.0.0 &lt;=4.0.13") explicitly stop supporting a line partway through, and that has to keep
+    // failing on the later patches it names.
     public bool Contains(Version version)
     {
-        // A mod pinned to one exact SPT release (a bare "4.1.2", no operator) still runs on every
-        // other patch of that same line - SPT itself doesn't break mod compatibility between
-        // patches. Treating "4.1.2" as patch-exact made a mod on SPT 4.1.1 show as incompatible
-        // with a mod version pinned to 4.1.2/4.1.3/4.1.4. Same major.minor is enough.
-        if (Exact is { } exact && version.Major == exact.Major && version.Minor == exact.Minor) return true;
+        // A bare exact constraint ("4.1.2", no operator) matches any patch of its own line, in
+        // both directions - it's just the one release the author happened to test with.
+        if (Exact is { } exact)
+        {
+            return version.Major == exact.Major && version.Minor == exact.Minor;
+        }
 
-        if (Min is { } min && (MinExclusive ? version <= min : version < min)) return false;
+        // Every other operator: if this version is on the same line as the constraint's floor,
+        // the floor itself is ignored (that's the soft-pin relaxation) and only a real, explicit
+        // upper-bound cutoff can still exclude it. A version on a different line falls through to
+        // the ordinary min/max check below.
+        if (Min is { } min && !MinExclusive && version.Major == min.Major && version.Minor == min.Minor)
+        {
+            return MaxExclusive is null || version < MaxExclusive;
+        }
+
+        if (Min is { } min2 && (MinExclusive ? version <= min2 : version < min2)) return false;
         if (MaxExclusive is { } max && version >= max) return false;
         return true;
     }
