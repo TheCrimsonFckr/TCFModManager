@@ -35,6 +35,20 @@ public static class DisabledModPaths
         yield return Path.Combine(installPath, "BepInEx", "patchers");
     }
 
+    //
+    // True for BepInEx\patchers, or its ".disabled" sibling - the preloader's container, as opposed
+    // to BepInEx\plugins. Read from the path's own last segment so it holds for either state, and
+    // so the scanner can tell which of the two client containers it is walking without the caller
+    // having to thread that through from ClientContainers.
+    //
+    public static bool IsPatcherContainer(string containerPath)
+    {
+        var trimmed = containerPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        return string.Equals(Path.GetFileName(Enabled(trimmed)), PatchersFolder, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private const string PatchersFolder = "patchers";
+
     // Absolute paths of every server container layout in an install, existing or not.
     public static IEnumerable<string> ServerContainers(string installPath) =>
         ServerModsLayouts.Select(segments => Path.Combine([installPath, .. segments]));

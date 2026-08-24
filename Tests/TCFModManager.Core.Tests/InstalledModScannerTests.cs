@@ -206,6 +206,86 @@ public class InstalledModScannerTests : IDisposable
     }
 
     [Fact]
+    public void Scan_FlagsPatcherFoldersAndLeavesPluginsUnflagged()
+    {
+        Directory.CreateDirectory(Path.Combine(_installRoot, "BepInEx", "plugins", "PluginMod"));
+        Directory.CreateDirectory(Path.Combine(_installRoot, "BepInEx", "patchers", "PatcherMod"));
+
+        var result = InstalledModScanner.Scan(_installRoot);
+
+        Assert.False(Assert.Single(result, m => m.Name == "PluginMod").IsPatcher);
+        Assert.True(Assert.Single(result, m => m.Name == "PatcherMod").IsPatcher);
+    }
+
+    [Fact]
+    public void Scan_FlagsALoosePatcherDllDirectlyInTheContainer()
+    {
+        // Plenty of patchers ship as a single DLL rather than in a folder of their own.
+        var patchersDir = Path.Combine(_installRoot, "BepInEx", "patchers");
+        Directory.CreateDirectory(patchersDir);
+        File.WriteAllText(Path.Combine(patchersDir, "SomePatcher.dll"), "not a real PE file");
+
+        var mod = Assert.Single(InstalledModScanner.Scan(_installRoot));
+
+        Assert.Equal("SomePatcher", mod.Name);
+        Assert.True(mod.IsPatcher);
+        Assert.Equal(InstalledModTarget.Client, mod.Target);
+    }
+
+    [Fact]
+    public void Scan_FlagsPatchersInADisabledContainerToo()
+    {
+        Directory.CreateDirectory(Path.Combine(_installRoot, "BepInEx", "patchers.disabled", "ParkedPatcher"));
+
+        var mod = Assert.Single(InstalledModScanner.Scan(_installRoot));
+
+        Assert.True(mod.IsPatcher);
+        Assert.True(mod.IsDisabled);
+    }
+
+    [Fact]
+    public void Scan_SkipsPatcherFilesThatArentMods()
+    {
+        // SPT's own preloader patcher is part of the install rather than something the user added,
+        // and FixPluginTypesSerialization is a general BepInEx utility mods bundle alongside
+        // themselves. Neither is on sp-mod.com or the user's to manage, so listing them means
+        // entries nothing can ever match, update or remove.
+        var patchersDir = Path.Combine(_installRoot, "BepInEx", "patchers");
+        Directory.CreateDirectory(patchersDir);
+        File.WriteAllText(Path.Combine(patchersDir, "spt-prepatch.dll"), "not a real PE file");
+        File.WriteAllText(Path.Combine(patchersDir, "aki-prepatch.dll"), "not a real PE file");
+        File.WriteAllText(Path.Combine(patchersDir, "FixPluginTypesSerialization.dll"), "not a real PE file");
+        File.WriteAllText(Path.Combine(patchersDir, "RealPatcher.dll"), "not a real PE file");
+
+        var mod = Assert.Single(InstalledModScanner.Scan(_installRoot));
+
+        Assert.Equal("RealPatcher", mod.Name);
+    }
+
+    [Fact]
+    public void Scan_SkipsThoseFilesInADisabledPatchersContainerToo()
+    {
+        // Otherwise disabling the whole patchers folder makes them reappear as mods.
+        var disabledDir = Path.Combine(_installRoot, "BepInEx", "patchers.disabled");
+        Directory.CreateDirectory(disabledDir);
+        File.WriteAllText(Path.Combine(disabledDir, "FixPluginTypesSerialization.dll"), "not a real PE file");
+
+        Assert.Empty(InstalledModScanner.Scan(_installRoot));
+    }
+
+    [Fact]
+    public void Scan_DoesNotSkipASptNamedPluginInThePluginsFolder()
+    {
+        // The patcher exclusion is scoped to BepInEx\patchers - a plugin that happens to carry one
+        // of those names is still a mod.
+        var pluginsDir = Path.Combine(_installRoot, "BepInEx", "plugins");
+        Directory.CreateDirectory(pluginsDir);
+        File.WriteAllText(Path.Combine(pluginsDir, "spt-prepatch.dll"), "not a real PE file");
+
+        Assert.Single(InstalledModScanner.Scan(_installRoot));
+    }
+
+    [Fact]
     public void Scan_PopulatesInstalledAtFromFolderCreationTime()
     {
         var modDir = Path.Combine(_installRoot, "BepInEx", "plugins", "SomeClientMod");

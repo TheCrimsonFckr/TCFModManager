@@ -76,6 +76,23 @@ public class DisabledModPathsTests
     }
 
     [Fact]
+    public void IsPatcherContainer_TellsThePatcherContainerFromThePluginOne()
+    {
+        var plugins = Path.Combine("C:", "SPT", "BepInEx", "plugins");
+        var patchers = Path.Combine("C:", "SPT", "BepInEx", "patchers");
+
+        Assert.False(DisabledModPaths.IsPatcherContainer(plugins));
+        Assert.True(DisabledModPaths.IsPatcherContainer(patchers));
+
+        // Holds either side of a disable, since the scanner walks both.
+        Assert.False(DisabledModPaths.IsPatcherContainer(DisabledModPaths.Disabled(plugins)));
+        Assert.True(DisabledModPaths.IsPatcherContainer(DisabledModPaths.Disabled(patchers)));
+
+        // A mod folder inside the container is not the container.
+        Assert.False(DisabledModPaths.IsPatcherContainer(Path.Combine(patchers, "SomePatcher")));
+    }
+
+    [Fact]
     public void ServerContainers_CoversAllThreeKnownLayouts()
     {
         var containers = DisabledModPaths.ServerContainers(Path.Combine("C:", "SPT")).ToList();

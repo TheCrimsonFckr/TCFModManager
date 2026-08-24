@@ -2,7 +2,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Threading;
 using TCFModManager.App.ViewModels;
 
 namespace TCFModManager.App.Views;
@@ -21,6 +23,24 @@ public partial class InstalledPage : Page
     private InstalledModCardViewModel? _dragCandidate;
     private bool _dragStarted;
 
+    // Auto-scroll while a drag is in flight (see GroupsScrollViewer_DragOver and DragScroll_Tick):
+    // holding a mod near the top or bottom edge of the group list scrolls it, so a group that's
+    // off-screen can be reached without dropping the mod somewhere else first. The zone is how far
+    // in from either edge counts as "near"; the step range is per tick, ramping from slow at the
+    // inner boundary to fast right at the edge. The wheel does the same job under direct control -
+    // see DragWheelHook.
+    private const double DragScrollZone = 56;
+    private const double DragScrollMinStep = 4;
+    private const double DragScrollMaxStep = 26;
+    private DispatcherTimer? _dragScrollTimer;
+    private double _dragScrollStep;
+
+    // The HwndSource the wheel hook is attached to, held only for as long as a drag is in flight so
+    // the hook comes straight back off when it ends. See HookDragWheel.
+    private HwndSource? _dragWheelSource;
+
+    private const int WmMouseWheel = 0x020A;
+
     public InstalledPage()
     {
         DataContext = ViewModel;
@@ -35,6 +55,15 @@ public partial class InstalledPage : Page
         // means it still runs even if something upstream in the tunnel already marked the event
         // handled. See Page_PreviewMouseWheel below.
         AddHandler(PreviewMouseWheelEvent, new MouseWheelEventHandler(Page_PreviewMouseWheel), true);
+
+        // handledEventsToo:true is the point of registering these here rather than as XAML
+        // attributes: Section_DragOver/Section_Drop below mark their events handled on the group
+        // ui:Card, which sits between the dragged pointer and this ScrollViewer, so a normal
+        // bubble-phase handler on the ScrollViewer would never run while over a card - i.e. over
+        // exactly the part of the list where dragging actually happens.
+        GroupsScrollViewer.AddHandler(DragOverEvent, new DragEventHandler(GroupsScrollViewer_DragOver), true);
+        GroupsScrollViewer.AddHandler(DragLeaveEvent, new DragEventHandler(GroupsScrollViewer_DragLeave), true);
+        GroupsScrollViewer.AddHandler(DropEvent, new DragEventHandler(GroupsScrollViewer_Drop), true);
     }
 
     private async void InstalledPage_Loaded(object sender, RoutedEventArgs e)
@@ -149,7 +178,137 @@ public partial class InstalledPage : Page
         // ButtonUp handler below can tell "this mouse-down turned into a drag" (skip opening
         // details) apart from "this mouse-down never moved" (a plain click).
         _dragStarted = true;
-        if (sender is DependencyObject source) DragDrop.DoDragDrop(source, _dragCandidate, DragDropEffects.Move);
+        if (sender is DependencyObject source)
+        {
+            // Blocks for the whole drag (DoDragDrop runs its own modal message loop), so this is
+            // also the one place guaranteed to run once the gesture is over however it ended -
+            // dropped on a group, dropped in the gutter, dropped outside the window, or cancelled
+            // with Escape. Stopping the auto-scroll timer here means every other stop path below
+            // is just a courtesy, not load-bearing.
+            HookDragWheel();
+            try
+            {
+                DragDrop.DoDragDrop(source, _dragCandidate, DragDropEffects.Move);
+            }
+            finally
+            {
+                UnhookDragWheel();
+                StopDragScroll();
+            }
+        }
+    }
+
+    // Runs on every DragOver the group list sees, which is what keeps the scroll speed tracking the
+    // pointer. It only records a step; the actual scrolling is the timer's job, because OLE only
+    // raises DragOver while the pointer is moving - a pointer parked in the hot zone would scroll
+    // once and then stop dead if the scroll happened here.
+    private void GroupsScrollViewer_DragOver(object sender, DragEventArgs e)
+    {
+        // A drag over the gaps between cards reaches this handler unhandled (the ScrollViewer needs
+        // AllowDrop in XAML for that to happen at all). Nothing there is a drop target, so say so
+        // rather than leaving the Move cursor showing over dead space.
+        if (!e.Handled)
+        {
+            e.Effects = DragDropEffects.None;
+            e.Handled = true;
+        }
+
+        var y = e.GetPosition(GroupsScrollViewer).Y;
+        var height = GroupsScrollViewer.ViewportHeight;
+        if (height <= DragScrollZone * 2)
+        {
+            _dragScrollStep = 0;
+            return;
+        }
+
+        _dragScrollStep = y switch
+        {
+            _ when y < DragScrollZone => -StepFor(y),
+            _ when y > height - DragScrollZone => StepFor(height - y),
+            _ => 0,
+        };
+
+        if (_dragScrollStep != 0) StartDragScroll();
+
+        // Distance is how far the pointer is from the edge it's near, 0 at the edge itself and
+        // DragScrollZone at the inner boundary - so a smaller distance means a faster scroll.
+        // Clamped because the pointer can sit slightly past the edge (negative distance) while
+        // still inside a child element that extends beyond the viewport.
+        static double StepFor(double distance)
+        {
+            var nearness = Math.Clamp(1 - (distance / DragScrollZone), 0, 1);
+            return DragScrollMinStep + (nearness * (DragScrollMaxStep - DragScrollMinStep));
+        }
+    }
+
+    // Zeroes the step rather than stopping the timer outright: DragLeave also fires on every move
+    // from one card to the next (the event bubbles up from whichever child the pointer just left),
+    // and the DragOver that immediately follows restores the step well inside a single tick, so a
+    // brief zero is invisible. Leaving the list entirely produces a DragLeave with no DragOver
+    // after it, which parks the timer at zero until the pointer comes back or the drag ends.
+    private void GroupsScrollViewer_DragLeave(object sender, DragEventArgs e) => _dragScrollStep = 0;
+
+    private void GroupsScrollViewer_Drop(object sender, DragEventArgs e) => StopDragScroll();
+
+    private void StartDragScroll()
+    {
+        // DispatcherPriority.Normal, not Input or below: DoDragDrop's modal loop pumps messages
+        // itself, and lower-priority dispatcher work is the first thing to get starved while it
+        // does. The timer's own constructor starts it, so the Start() below is only doing anything
+        // on subsequent drags.
+        _dragScrollTimer ??= new DispatcherTimer(TimeSpan.FromMilliseconds(16), DispatcherPriority.Normal, DragScroll_Tick, Dispatcher);
+        _dragScrollTimer.Start();
+    }
+
+    private void StopDragScroll()
+    {
+        _dragScrollTimer?.Stop();
+        _dragScrollStep = 0;
+    }
+
+    private void DragScroll_Tick(object? sender, EventArgs e)
+    {
+        if (_dragScrollStep == 0) return;
+        GroupsScrollViewer.ScrollToVerticalOffset(GroupsScrollViewer.VerticalOffset + _dragScrollStep);
+    }
+
+    //
+    // Lets the wheel scroll the group list while a mod is being dragged, so reaching an off-screen
+    // group is a flick of the wheel rather than a wait on the edge auto-scroll above.
+    //
+    // This has to go in at the raw window-message level: DoDragDrop runs its own modal message loop
+    // for the whole drag, and WPF's input manager routes nothing through the element tree while it
+    // does - so neither Page_PreviewMouseWheel nor any other MouseWheel handler fires. The loop
+    // does still dispatch the messages it doesn't consume itself (it only takes mouse-move, the
+    // mouse buttons and the modifier keys), and WM_MOUSEWHEEL goes to the focused window, which is
+    // ours - so it arrives at the window procedure, where a plain HwndSource hook can see it. No
+    // P/Invoke needed, and nothing is left installed: the hook goes on immediately before
+    // DoDragDrop and comes off in its finally.
+    //
+    private void HookDragWheel()
+    {
+        _dragWheelSource = PresentationSource.FromVisual(this) as HwndSource;
+        _dragWheelSource?.AddHook(DragWheelHook);
+    }
+
+    private void UnhookDragWheel()
+    {
+        _dragWheelSource?.RemoveHook(DragWheelHook);
+        _dragWheelSource = null;
+    }
+
+    private IntPtr DragWheelHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        if (msg != WmMouseWheel) return IntPtr.Zero;
+
+        // wParam's high word is the wheel delta, signed, in multiples of WHEEL_DELTA (120) and
+        // positive away from the user - the same units and sign as MouseWheelEventArgs.Delta, so
+        // this scrolls by exactly what Page_PreviewMouseWheel would have outside a drag.
+        var delta = (short)((wParam.ToInt64() >> 16) & 0xFFFF);
+        GroupsScrollViewer.ScrollToVerticalOffset(GroupsScrollViewer.VerticalOffset - delta);
+
+        handled = true;
+        return IntPtr.Zero;
     }
 
     // Opens the update dialog for a group-view row that was clicked rather than dragged - the same

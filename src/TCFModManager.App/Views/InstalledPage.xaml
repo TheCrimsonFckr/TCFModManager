@@ -359,9 +359,9 @@
                                     TextTrimming="CharacterEllipsis"
                                     Visibility="{Binding InstalledVersionDetail, Converter={StaticResource NullToCollapsed}}" />
 
-                                <TextBlock Opacity="0.6">
+                                <TextBlock Opacity="0.6" TextTrimming="CharacterEllipsis">
                                     <Run Text="Latest published: " />
-                                    <Run Text="{Binding LatestPublishedVersion, TargetNullValue='not found on sp-mod.com', Mode=OneWay}" />
+                                    <Run Text="{Binding LatestPublishedText, Mode=OneWay}" />
                                 </TextBlock>
 
                                 <!-- Shown only when the mod matched a catalog listing. -->
@@ -462,9 +462,21 @@
              into view and produced a small unwanted scroll jump the instant you clicked. See also
              ModRow_PreviewMouseLeftButtonDown's e.Handled = true in code-behind, which stops that
              same default click-focus assignment before it starts. -->
+        <!-- AllowDrop here isn't about dropping onto the ScrollViewer - it never accepts a drop.
+             It's what makes WPF raise drag events at all over the parts of the list no card
+             covers (the gaps between cards, and the empty space below a short list), so the
+             edge auto-scroll in code-behind keeps tracking the pointer there too. The DragOver /
+             DragLeave / Drop handlers that drive it are registered in the constructor rather than
+             as attributes here, because they need handledEventsToo. Background="Transparent" is the
+             other half of that: a ScrollViewer with no Background isn't hit-tested where nothing
+             inside it paints, so without this the drag events would still stop short of those same
+             gaps. Same distinction as RootGrid's Background - Transparent participates in hit
+             testing, unset does not. -->
         <ScrollViewer
             x:Name="GroupsScrollViewer"
             Grid.Row="4"
+            AllowDrop="True"
+            Background="Transparent"
             Focusable="False"
             VerticalScrollBarVisibility="Auto"
             Visibility="{Binding ShowGroups, Converter={StaticResource BoolToVis}}">
@@ -799,7 +811,7 @@
 
                                 <TextBlock Opacity="0.6" TextWrapping="Wrap">
                                     <Run Text="Latest published: " />
-                                    <Run Text="{Binding LatestPublishedVersion, TargetNullValue='not found on sp-mod.com', Mode=OneWay}" />
+                                    <Run Text="{Binding LatestPublishedText, Mode=OneWay}" />
                                 </TextBlock>
 
                                 <TextBlock

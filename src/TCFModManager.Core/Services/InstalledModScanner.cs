@@ -19,6 +19,29 @@ public static class InstalledModScanner
         "spt",
     };
 
+    //
+    // The same idea for BepInEx\patchers specifically - names there that aren't mods, so listing
+    // them only produces entries nothing can ever match, update or remove. Two kinds:
+    //
+    // - SPT's own preloader patcher, part of the install rather than something the user added.
+    // - General BepInEx utilities that mods bundle alongside themselves. They're published on
+    //   GitHub rather than sp-mod.com (FixPluginTypesSerialization is
+    //   github.com/xiaoxiao921/FixPluginTypesSerialization), belong to whichever mod shipped them,
+    //   and aren't the user's to manage from here.
+    //
+    // Named exactly rather than by any prefix or keyword rule, so a mod that legitimately names its
+    // own patcher along similar lines still shows up. Add to this as more turn up.
+    //
+    private static readonly HashSet<string> NonModPatcherEntries = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "spt-prepatch",
+        "aki-prepatch",
+        "FixPluginTypesSerialization",
+    };
+
+    private static bool IsCoreEntry(string name, bool isPatcher) =>
+        CoreSptEntries.Contains(name) || (isPatcher && NonModPatcherEntries.Contains(name));
+
     public static List<InstalledMod> Scan(string? installPath)
     {
         var results = new List<InstalledMod>();
@@ -26,8 +49,9 @@ public static class InstalledModScanner
 
         foreach (var container in DisabledModPaths.ClientContainers(installPath))
         {
-            ScanClientFolder(container, results, disabled: false);
-            ScanClientFolder(DisabledModPaths.Disabled(container), results, disabled: true);
+            var isPatcher = DisabledModPaths.IsPatcherContainer(container);
+            ScanClientFolder(container, results, disabled: false, isPatcher);
+            ScanClientFolder(DisabledModPaths.Disabled(container), results, disabled: true, isPatcher);
         }
 
         // Checks all three known server-content layouts; whichever exists is scanned.
@@ -40,16 +64,21 @@ public static class InstalledModScanner
         return results;
     }
 
+    //
     // Client (BepInEx) mods are versioned via their DLL's embedded file version resource.
     // Handles both a subfolder containing DLLs and a single loose DLL directly in the container.
-    private static void ScanClientFolder(string root, List<InstalledMod> results, bool disabled)
+    // <paramref name="isPatcher"/> says which of the two client containers this is - patchers are
+    // read exactly the same way, they just get flagged so the card layer can fold one back into
+    // the mod it belongs to instead of showing it as a mod in its own right.
+    //
+    private static void ScanClientFolder(string root, List<InstalledMod> results, bool disabled, bool isPatcher)
     {
         if (!Directory.Exists(root)) return;
 
         foreach (var dir in Directory.EnumerateDirectories(root))
         {
             var name = Path.GetFileName(dir);
-            if (string.IsNullOrWhiteSpace(name) || CoreSptEntries.Contains(name)) continue;
+            if (string.IsNullOrWhiteSpace(name) || IsCoreEntry(name, isPatcher)) continue;
 
             // Prefer a DLL whose name matches the folder; otherwise take the first DLL found.
             var dlls = Directory.EnumerateFiles(dir, "*.dll", SearchOption.TopDirectoryOnly).ToList();
@@ -66,6 +95,7 @@ public static class InstalledModScanner
                 Version = dll is null ? null : TryGetFileVersion(dll),
                 Guid = metadata.Select(m => m.Guid).FirstOrDefault(g => g is not null),
                 Target = InstalledModTarget.Client,
+                IsPatcher = isPatcher,
                 FolderPath = dir,
                 InstalledAt = TryGetCreationTime(dir),
                 IsDisabled = disabled,
@@ -76,7 +106,7 @@ public static class InstalledModScanner
         foreach (var dll in Directory.EnumerateFiles(root, "*.dll", SearchOption.TopDirectoryOnly))
         {
             var name = Path.GetFileNameWithoutExtension(dll);
-            if (CoreSptEntries.Contains(name)) continue;
+            if (IsCoreEntry(name, isPatcher)) continue;
 
             var metadata = ReadPluginMetadata(dll);
 
@@ -86,6 +116,7 @@ public static class InstalledModScanner
                 Version = TryGetFileVersion(dll),
                 Guid = metadata.Guid,
                 Target = InstalledModTarget.Client,
+                IsPatcher = isPatcher,
                 FolderPath = dll,
                 InstalledAt = TryGetCreationTime(dll),
                 IsDisabled = disabled,

@@ -22,16 +22,42 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     // Earliest InstalledAt across the merged entries.
     public DateTimeOffset? InstalledAt { get; init; }
 
+    // True when any half of this mod is a client one - a BepInEx plugin, a patcher, or both.
     public bool HasClient { get; init; }
+
+    // True specifically for a BepInEx\plugins half, as opposed to a patcher one. HasClient without
+    // this is a patcher standing on its own.
+    public bool HasPlugin { get; init; }
+
+    // True when any half of this mod sits in BepInEx\patchers. Usually alongside a plugin; on its
+    // own for a patcher that couldn't be tied back to a mod.
+    public bool HasPatcher { get; init; }
+
     public bool HasServer { get; init; }
 
-    public string TargetSummary => (HasClient, HasServer) switch
+    //
+    // Which halves of the install this mod occupies. A patcher is called out rather than folded
+    // into "Client", since on its own it's the difference between a card that reads as a mod whose
+    // identity couldn't be worked out and one that reads as what it actually is.
+    //
+    public string TargetSummary
     {
-        (true, true) => "Client + Server",
-        (true, false) => "Client only",
-        (false, true) => "Server only",
-        _ => "Unknown",
-    };
+        get
+        {
+            var parts = new List<string>(3);
+            if (HasPlugin) parts.Add("Client");
+            if (HasPatcher) parts.Add("Patcher");
+            if (HasServer) parts.Add("Server");
+
+            return parts.Count switch
+            {
+                0 => "Unknown",
+                1 when HasPatcher => "Patcher only",
+                1 => $"{parts[0]} only",
+                _ => string.Join(" + ", parts),
+            };
+        }
+    }
 
     // The latest version published on sp-mod.com for whatever mod matched this one. Null when
     // the catalog hasn't loaded yet or nothing matched.
@@ -39,6 +65,21 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
 
     // The matched sp-mod.com listing's UpdatedAt. Null under the same conditions as LatestPublishedVersion.
     public DateTimeOffset? LatestUpdatedAt { get; init; }
+
+    //
+    // What the "Latest published" line shows. A patcher standing on its own gets its own wording:
+    // not every patcher in BepInEx\patchers is an sp-mod.com mod at all - some are general BepInEx
+    // utilities from elsewhere that a mod bundles alongside itself (FixPluginTypesSerialization is
+    // the common one) - so for those "not found on sp-mod.com" reads as a failed lookup when
+    // nothing actually went wrong. Everything else keeps the wording it had.
+    //
+    public string LatestPublishedText => (LatestPublishedVersion, ModId, HasPlugin || HasServer) switch
+    {
+        ({ } version, _, _) => version,
+        (null, not null, _) => "unknown",
+        (null, null, false) when HasPatcher => "not on sp-mod.com - patchers often ship inside another mod",
+        _ => "not found on sp-mod.com",
+    };
 
     // The matched sp-mod.com listing's actual display Name, often different from the installed
     // folder/package Name. Null when nothing matched.
@@ -232,7 +273,9 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
             .Select(g => (g.Entries, Match: ResolveCatalogMatch(g.Key, g.Entries, index, recordsByFolder)))
             .ToList();
 
-        return MergeSplitClientServerHalves(groups)
+        // Patchers first: folding one into the mod it belongs to can turn a client-only group into
+        // a client group that still needs its server half found, and never the other way round.
+        return MergeSplitClientServerHalves(MergePatcherFolders(groups))
             .Select(g => BuildCard(g.Entries, g.Match, installedSptVersion, recordsByModId))
             .ToList();
     }
@@ -357,12 +400,42 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
         }
 
         // The real GUID, read from a client DLL's [BepInPlugin] attribute, is tried first as an
-        // exact identifier before falling back to the folder-name heuristics below.
-        var installedGuid = entries.FirstOrDefault(m => m.Target == InstalledModTarget.Client)?.Guid;
+        // exact identifier before falling back to the folder-name heuristics below. Taken from
+        // whichever client entry actually carries one rather than the first client entry, since a
+        // patcher never has one and would otherwise skip the whole tier for a plugin sitting
+        // alongside it.
+        var installedGuid = entries
+            .Where(m => m.Target == InstalledModTarget.Client)
+            .Select(m => m.Guid)
+            .FirstOrDefault(g => !string.IsNullOrWhiteSpace(g));
 
         if (!string.IsNullOrWhiteSpace(installedGuid) && index.ByGuid.TryGetValue(installedGuid, out var byGuid))
             return byGuid;
 
+        var fromName = InferFromFolderName(index, folderName);
+        if (fromName is not null) return fromName;
+
+        //
+        // A patcher folder is conventionally the mod's name plus a packaging word - "MoreBotsAPI"
+        // ships "MoreBotsPrepatch", "WTT - Content Backport" ships "WTT-ContentBackportPatcher" -
+        // and that extra word is exactly what stops the tiers above from recognising it: the mod's
+        // listing is named after the mod, not after its patcher. Trying again without it is what
+        // ties a patcher to its own listing, and, once both halves resolve to the same one, is what
+        // lets MergePatcherFolders put them on one card.
+        //
+        // Only ever a fallback, and only for a folder that is nothing but a patcher: the unmodified
+        // name is tried first above, so a patcher that really is listed under a name ending in
+        // "Patcher" still matches itself rather than being talked into its stem.
+        //
+        if (!entries.All(m => m.IsPatcher)) return null;
+
+        var stem = PatcherNameSuffix.Replace(folderName, "");
+        return stem.Length > 0 && stem.Length != folderName.Length ? InferFromFolderName(index, stem) : null;
+    }
+
+    // The folder-name tiers of ResolveCatalogMatch, in order of how much they can be trusted.
+    private static Mod? InferFromFolderName(CatalogIndex index, string folderName)
+    {
         // Derived from the folder name once, rather than from every catalog entry in turn.
         var normalizedFolder = Normalize(TrailingTargetSuffix.Replace(folderName, ""));
 
@@ -436,6 +509,111 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
         return normalized.Length == 0 ? null : normalized;
     }
 
+    //
+    // Folds a patcher-only name-group into the mod it belongs to. A mod that ships a BepInEx
+    // preloader patcher puts it in its own folder under BepInEx\patchers, usually named differently
+    // from its plugin folder ("SomeMod" and "SomeMod.Preloader"), so the two arrive here as separate
+    // name-groups - and the patcher half, having no [BepInPlugin] GUID to identify it, would show as
+    // its own card with nothing filled in but a folder name. Two groups that resolved to the same
+    // catalog listing are the same mod by definition, so the patcher joins it and the mod is one
+    // card again, with the patcher's folder among its Entries where the disable/remove commands can
+    // see it.
+    //
+    // A patcher that neither tier below can place is left standing on its own rather than attached
+    // to a guess - it still reads as a patcher rather than an unidentified mod, since TargetSummary
+    // says so.
+    //
+    private static List<(List<InstalledMod> Entries, Mod? Match)> MergePatcherFolders(
+        List<(List<InstalledMod> Entries, Mod? Match)> groups)
+    {
+        // Keyed by the index of the group being joined, so a mod with more than one patcher folder
+        // collects all of them.
+        var absorbed = new Dictionary<int, List<InstalledMod>>();
+        var consumed = new HashSet<int>();
+
+        for (var i = 0; i < groups.Count; i++)
+        {
+            if (!groups[i].Entries.All(m => m.IsPatcher)) continue;
+
+            var host = FindPatcherHost(groups, i);
+            if (host is not { } index) continue;
+
+            if (!absorbed.TryGetValue(index, out var into)) absorbed[index] = into = [];
+            into.AddRange(groups[i].Entries);
+            consumed.Add(i);
+        }
+
+        if (consumed.Count == 0) return groups;
+
+        var results = new List<(List<InstalledMod> Entries, Mod? Match)>(groups.Count - consumed.Count);
+
+        for (var i = 0; i < groups.Count; i++)
+        {
+            if (consumed.Contains(i)) continue;
+
+            var (entries, match) = groups[i];
+            results.Add(absorbed.TryGetValue(i, out var extra)
+                ? (entries.Concat(extra).ToList(), match)
+                : (entries, match));
+        }
+
+        return results;
+    }
+
+    //
+    // The group a patcher-only group belongs to, or null when it can't be placed with confidence.
+    //
+    // Two tiers. The catalog listing comes first and is the exact one: two groups that resolved to
+    // the same listing are the same mod, whether that came from the install manifest or from a
+    // plugin's own GUID. Where a mod has both a plugin and a server half, the patcher goes with the
+    // plugin - it's a BepInEx file, and it's the plugin's version and name the card leads with.
+    //
+    // The second tier is the naming convention, for a mod installed by hand whose patcher folder
+    // resolves to nothing on its own (it has no GUID to match on, and "SomeMod.Preloader" isn't
+    // going to match a listing called "Some Mod"). Stripping the patcher word off the end has to
+    // leave exactly one other mod's folder name, matched in full - a substring or fuzzy rule here
+    // would start attaching patchers to whatever mod happened to share a prefix.
+    //
+    private static int? FindPatcherHost(List<(List<InstalledMod> Entries, Mod? Match)> groups, int patcherIndex)
+    {
+        var candidates = Enumerable.Range(0, groups.Count)
+            .Where(j => j != patcherIndex && groups[j].Entries.Any(m => !m.IsPatcher))
+            .ToList();
+
+        if (groups[patcherIndex].Match is { } match)
+        {
+            var byMatch = candidates.Where(j => groups[j].Match?.Id == match.Id).ToList();
+            var withPlugin = byMatch
+                .Where(j => groups[j].Entries.Any(m => m is { Target: InstalledModTarget.Client, IsPatcher: false }))
+                .ToList();
+
+            var preferred = withPlugin.Count > 0 ? withPlugin : byMatch;
+            if (preferred.Count == 1) return preferred[0];
+        }
+
+        var patcherName = groups[patcherIndex].Entries[0].Name;
+        var stem = PatcherNameSuffix.Replace(patcherName, "");
+        if (stem.Length == 0 || stem.Length == patcherName.Length) return null;
+
+        var byName = candidates
+            .Where(j => string.Equals(
+                groups[j].Entries.First(m => !m.IsPatcher).Name,
+                stem,
+                StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        return byName.Count == 1 ? byName[0] : null;
+    }
+
+    //
+    // The word a patcher folder is conventionally named after its mod plus - "SomeMod.Preloader",
+    // "SomeMod-Patcher", "SomeModPrepatch". Only stripped from the end, and only used to look for an
+    // exact match on what's left.
+    //
+    private static readonly Regex PatcherNameSuffix = new(
+        @"[\s._-]*(preloader|prepatcher|prepatch|patchers|patcher|patch)$",
+        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
     // Joins a client-only name-group to a server-only name-group when they're the only two that
     // independently resolved to the same catalog Mod. Groups that already have both targets, matched
     // nothing, or have an ambiguous match pass through unmerged.
@@ -485,7 +663,12 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
         string? installedSptVersion,
         IReadOnlyDictionary<int, InstalledModRecord> recordsByModId)
     {
-        var client = entries.FirstOrDefault(m => m.Target == InstalledModTarget.Client);
+        // The plugin half speaks for the client side wherever there's a choice - it's the one with
+        // the mod's real name, version and GUID on it, where a patcher is a support file whose
+        // assembly version often has nothing to do with the mod's own.
+        var plugin = entries.FirstOrDefault(m => m is { Target: InstalledModTarget.Client, IsPatcher: false });
+        var patcher = entries.FirstOrDefault(m => m is { Target: InstalledModTarget.Client, IsPatcher: true });
+        var client = plugin ?? patcher;
         var server = entries.FirstOrDefault(m => m.Target == InstalledModTarget.Server);
 
         var record = match is not null && recordsByModId.TryGetValue(match.Id, out var found) ? found : null;
@@ -553,6 +736,8 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
             InstalledVersionDetail = detail,
             InstalledAt = installedAt,
             HasClient = client is not null,
+            HasPlugin = plugin is not null,
+            HasPatcher = patcher is not null,
             HasServer = server is not null,
             LatestPublishedVersion = latestPublished,
             LatestUpdatedAt = match?.UpdatedAt,

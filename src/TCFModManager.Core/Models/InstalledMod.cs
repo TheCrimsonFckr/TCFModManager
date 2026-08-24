@@ -30,6 +30,15 @@ public sealed class InstalledMod
 
     public required InstalledModTarget Target { get; init; }
 
+    //
+    // True when this was found under BepInEx\patchers rather than BepInEx\plugins - always false for
+    // a server mod. A patcher is run by BepInEx's preloader before the game's own assemblies load,
+    // not as a plugin, so it carries no [BepInPlugin] attribute and has no GUID of its own to match
+    // against a catalog listing. A mod that ships one almost always ships a plugin alongside it,
+    // under a different folder name; InstalledModCardViewModel folds the two back together.
+    //
+    public bool IsPatcher { get; init; }
+
     // Full path to the mod's folder, or the DLL itself for a loose client DLL.
     public required string FolderPath { get; init; }
 

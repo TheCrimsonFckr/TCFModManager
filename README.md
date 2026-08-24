@@ -44,6 +44,18 @@ Clicking a mod opens a dialog with the full version history (changelogs rendered
 text), a link to the mod page, and an Update button when one applies. Mods can be removed from here
 too.
 
+A BepInEx patcher belongs to a mod rather than being one, so a patcher folder is shown as part of
+the mod that placed it (`Client + Patcher`) rather than as a second entry of its own. Since a patcher
+is conventionally named after its mod plus a word like `Patcher` or `Prepatch`, it's matched to a
+listing by that name with the extra word removed - `MoreBotsPrepatch` finds `MoreBotsAPI`. A patcher
+that can't be tied to a mod is still listed, labelled `Patcher only`.
+
+Two kinds of file in `BepInEx\patchers` aren't listed at all, the same way core SPT plugins aren't:
+SPT's own preloader patcher, and general BepInEx utilities that mods bundle alongside themselves -
+currently [FixPluginTypesSerialization](https://github.com/xiaoxiao921/FixPluginTypesSerialization).
+Neither is published on sp-mod.com or yours to manage from here; they belong to SPT and to whichever
+mod shipped them.
+
 There are three ways to look at the same filtered, sorted list, switched with the buttons at the top
 of the page:
 
