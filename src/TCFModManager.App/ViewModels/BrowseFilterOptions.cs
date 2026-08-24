@@ -6,6 +6,7 @@ public enum ModSortOrder
     LastUpdated,
     MostDownloaded,
     MostFavourited,
+    MostEndorsed,
 }
 
 // One entry in Browse's Sort by dropdown. Overrides ToString() so the label shows instead of the enum name.

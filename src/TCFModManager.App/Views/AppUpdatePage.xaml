@@ -28,7 +28,7 @@
                 IsClosable="False"
                 Severity="Informational"
                 Title="Updates come from sp-mod.com"
-                Message="This app has its own mod page on sp-mod.com, the same as everything else you install through this app. Updates are read from that listing through the public API, and the file downloaded is the one the page's own Download button serves. As with any other mod, the page is opened before anything is downloaded so that you can read the update - no processes are circumvented as required by sp-mod.com or its authors." />
+                Message="This app has its own mod page on sp-mod.com, the same as everything else you install through this app. Updates are read from that listing through the public API, and the file downloaded is the one the page's own Download button serves. As with any other mod, the page is opened before anything is downloaded so that you can read the update - no processes are circumvented as required by sp-mod.com and its authors." />
 
             <ui:Card Padding="16" Margin="0,16,0,0">
                 <StackPanel>

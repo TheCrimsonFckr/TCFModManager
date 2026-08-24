@@ -31,9 +31,11 @@ The released build is self-contained, so no separate .NET runtime install is nee
 
 **Browse** the whole sp-mod.com catalog, fetched once and cached to disk. Search by name or by
 author (`@author`), filter by SPT release line, category, Fika compatibility, featured status, and
-toggles for hiding ads and AI-generated content. Cards show a status dot (installed / update
-available / disabled / not installed / nothing compatible published) and a badge for mods that pull
-in dependencies. Clicking a card opens its details; "Refresh cache" re-pulls the catalog.
+toggles for hiding ads and AI-generated content. Sort by newest, last updated, most downloaded, most
+favourited or most endorsed. Cards show a status dot (installed / update available / disabled / not
+installed / nothing compatible published), a badge for mods that pull in dependencies, and an
+endorsement count when the mod has any. Clicking a card opens its details; "Refresh cache" re-pulls
+the catalog.
 
 **Installed** scans your SPT folder for what's actually there, both client mods
 (`BepInEx\plugins`, `BepInEx\patchers`) and server mods (`user\mods`), and matches them back to the

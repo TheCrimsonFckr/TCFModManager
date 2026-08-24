@@ -16,6 +16,12 @@ public sealed class Mod
     public string? Thumbnail { get; set; }
     public int? Downloads { get; set; }
     public int? FavouritesCount { get; set; }
+
+    // Endorsements are a separate, later sp-mod.com feature to favourites and count independently.
+    // Mods published before it existed report 0 rather than null, so a null here means the field
+    // wasn't returned (an old cache, or a "fields" subset), not that nobody has endorsed the mod.
+    public int? EndorsementsCount { get; set; }
+
     public Owner? Owner { get; set; }
     public List<Owner>? AdditionalAuthors { get; set; }
     public List<SourceCodeLink>? SourceCodeLinks { get; set; }

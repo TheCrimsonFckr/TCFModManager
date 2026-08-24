@@ -84,6 +84,7 @@ public partial class BrowseViewModel : ObservableObject
         new("Last updated", ModSortOrder.LastUpdated),
         new("Most downloaded", ModSortOrder.MostDownloaded),
         new("Most favourited", ModSortOrder.MostFavourited),
+        new("Most endorsed", ModSortOrder.MostEndorsed),
     ];
 
     [ObservableProperty]
@@ -381,6 +382,13 @@ public partial class BrowseViewModel : ObservableObject
             ModSortOrder.LastUpdated => matched.OrderByDescending(m => m.UpdatedAt ?? DateTimeOffset.MinValue).ToList(),
             ModSortOrder.MostDownloaded => matched.OrderByDescending(m => m.Downloads ?? 0).ToList(),
             ModSortOrder.MostFavourited => matched.OrderByDescending(m => m.FavouritesCount ?? 0).ToList(),
+            // Endorsements are new enough that only a few dozen mods have any at all and the counts
+            // are in the low tens, so the overwhelming majority tie on 0. Downloads break the tie to
+            // keep that long tail in a sensible order instead of an arbitrary one.
+            ModSortOrder.MostEndorsed => matched
+                .OrderByDescending(m => m.EndorsementsCount ?? 0)
+                .ThenByDescending(m => m.Downloads ?? 0)
+                .ToList(),
             // Newest - by the most recent release, so a mod that shipped an update today sorts
             // above an older mod that happened to be created more recently.
             _ => matched.OrderByDescending(NewestReleaseDate).ToList(),

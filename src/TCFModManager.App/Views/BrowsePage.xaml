@@ -267,6 +267,11 @@
                                             Foreground="{Binding IsCompatibleWithInstalledSpt, Converter={StaticResource CompatibilityBrush}}" />
                                         <Run Text=" • " Foreground="#99FFFFFF" />
                                         <Run Text="{Binding DisplayReleaseVersion, Mode=OneWay, StringFormat='v{0}'}" Foreground="#99FFFFFF" />
+                                        <!-- Last on the line so a narrow card trims this away before
+                                             the SPT and version segments, which matter more. Carries
+                                             its own leading separator and is empty when the mod has
+                                             no endorsements - see ModCardViewModel. -->
+                                        <Run Text="{Binding EndorsementsSegment, Mode=OneWay}" Foreground="#99FFFFFF" />
                                     </TextBlock>
                                     <!-- Shown only when the ticked SPT filter is hiding a version
                                          that actually runs on the installed SPT - explains a red

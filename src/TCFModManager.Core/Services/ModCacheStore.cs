@@ -11,7 +11,11 @@ public sealed class ModCacheStore
 {
     // Bump if Mod's shape changes in a way that makes an old cache file unsafe to trust.
     // A mismatched version is treated as "no cache".
-    private const int SchemaVersion = 1;
+    //
+    // 2: Mod.EndorsementsCount added. Nothing here expires a cache on age, so a v1 file would keep
+    //    being served indefinitely with the new field absent - every mod would read as 0
+    //    endorsements and the "Most endorsed" sort would look broken rather than empty.
+    private const int SchemaVersion = 2;
 
     private readonly string _filePath;
 
