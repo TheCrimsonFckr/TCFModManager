@@ -14,12 +14,11 @@ public sealed class ModCardViewModel
     public string? Thumbnail => Mod.Thumbnail;
     public int? Downloads => Mod.Downloads;
 
-    // The trailing " • 23 endorsements" segment of the card's stats line, or empty when the mod has
-    // none. Built as one string, separator included, because a Run can't be hidden by a converter
-    // the way an element can - and almost every mod is on 0, so a literal "0 endorsements" on every
-    // card would crowd out the SPT and version segments for no information.
-    public string EndorsementsSegment =>
-        Mod.EndorsementsCount is > 0 ? $" • {Mod.EndorsementsCount:N0} endorsements" : string.Empty;
+    // Null rather than 0 when the mod has no endorsements, so the card's endorsement line can be
+    // collapsed with the same NullToCollapsed converter the author line uses. Almost every mod is
+    // on zero while the feature is this new, and a "0 endorsements" row on every card would add
+    // height for no information.
+    public int? Endorsements => Mod.EndorsementsCount is > 0 ? Mod.EndorsementsCount : null;
 
     // The mod's primary owner/author.
     public string? Author => Mod.Owner?.Name;

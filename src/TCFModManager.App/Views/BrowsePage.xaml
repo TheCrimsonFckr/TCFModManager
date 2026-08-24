@@ -252,26 +252,35 @@
                                         FontSize="11"
                                         Opacity="0.5"
                                         TextTrimming="CharacterEllipsis" />
-                                    <!-- One TextBlock rather than a horizontal StackPanel so the line
-                                         trims instead of clipping when the card is narrow. The SPT
-                                         segment is colored by compatibility with the installed
-                                         version; de-emphasis uses Foreground since Run has no Opacity. -->
+                                    <TextBlock
+                                        Text="{Binding Downloads, Mode=OneWay, StringFormat='{}{0:N0} downloads'}"
+                                        FontSize="11"
+                                        Opacity="0.6"
+                                        TextTrimming="CharacterEllipsis" />
+                                    <!-- Collapsed rather than shown as "0 endorsements": the feature
+                                         is new enough that almost every mod is on zero, and an empty
+                                         row on every card would just add height. ModCardViewModel
+                                         nulls the count at zero so NullToCollapsed can do this. -->
+                                    <TextBlock
+                                        Text="{Binding Endorsements, Mode=OneWay, StringFormat='{}{0:N0} endorsements'}"
+                                        FontSize="11"
+                                        Opacity="0.6"
+                                        TextTrimming="CharacterEllipsis"
+                                        Visibility="{Binding Endorsements, Converter={StaticResource NullToCollapsed}}" />
+                                    <!-- Runs rather than separate TextBlocks because the SPT segment
+                                         is colored by compatibility with the installed version while
+                                         the rest isn't, and the whole line has to trim as one when
+                                         the card is narrow. De-emphasis here uses Foreground since
+                                         Run has no Opacity. -->
                                     <TextBlock
                                         FontSize="11"
                                         TextTrimming="CharacterEllipsis"
                                         ToolTip="{Binding SptVersionTooltip}">
-                                        <Run Text="{Binding Downloads, Mode=OneWay, StringFormat='{}{0:N0} downloads'}" Foreground="#99FFFFFF" />
-                                        <Run Text=" • " Foreground="#99FFFFFF" />
                                         <Run
                                             Text="{Binding SptVersionDisplay, Mode=OneWay}"
                                             Foreground="{Binding IsCompatibleWithInstalledSpt, Converter={StaticResource CompatibilityBrush}}" />
                                         <Run Text=" • " Foreground="#99FFFFFF" />
                                         <Run Text="{Binding DisplayReleaseVersion, Mode=OneWay, StringFormat='v{0}'}" Foreground="#99FFFFFF" />
-                                        <!-- Last on the line so a narrow card trims this away before
-                                             the SPT and version segments, which matter more. Carries
-                                             its own leading separator and is empty when the mod has
-                                             no endorsements - see ModCardViewModel. -->
-                                        <Run Text="{Binding EndorsementsSegment, Mode=OneWay}" Foreground="#99FFFFFF" />
                                     </TextBlock>
                                     <!-- Shown only when the ticked SPT filter is hiding a version
                                          that actually runs on the installed SPT - explains a red
