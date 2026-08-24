@@ -131,6 +131,46 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     [ObservableProperty]
     private bool _isSelected;
 
+    //
+    // The user-defined group this mod is assigned to, or null when it's in none. Filled in by
+    // InstalledViewModel from the group store after each scan and after every group change, rather
+    // than read here - the card knows nothing about where groups are stored.
+    //
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(GroupLabel))]
+    [NotifyPropertyChangedFor(nameof(IsGrouped))]
+    private string? _groupName;
+
+    // The same assignment as GroupName, by id - what the Group filter matches on, since two groups
+    // can be given the same name.
+    [ObservableProperty]
+    private Guid? _groupId;
+
+    public string GroupLabel => GroupName ?? "Ungrouped";
+
+    public bool IsGrouped => GroupName is not null;
+
+    // The catalog listing's content flags as one line, or null when it carries none of them.
+    public string? FlagsSummary
+    {
+        get
+        {
+            var flags = new List<string>();
+            if (IsFikaCompatible) flags.Add("Fika compatible");
+            if (ContainsAds) flags.Add("Contains ads");
+            if (ContainsAiContent) flags.Add("Contains AI content");
+
+            return flags.Count == 0 ? null : string.Join(" • ", flags);
+        }
+    }
+
+    // Where this mod's recorded version comes from, spelled out for the details view.
+    public string SourceLabel => IsAppManaged
+        ? "Installed by this app - Remove deletes exactly the files it placed"
+        : IsManualOverride
+            ? "Installed by hand, with its version manually confirmed here"
+            : "Installed by hand - Remove deletes its whole folder";
+
     public string DisableToggleGlyph => IsDisabled ? "PlugConnected24" : "PlugDisconnected24";
 
     public string DisableToggleTooltip => IsDisabled

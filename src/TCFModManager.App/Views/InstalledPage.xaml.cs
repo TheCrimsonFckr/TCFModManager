@@ -67,24 +67,34 @@ public partial class InstalledPage : Page
         ViewModel.UpdateLayoutForWidth(e.NewSize.Width);
     }
 
-    private void CardsView_Click(object sender, RoutedEventArgs e) => ViewModel.GroupViewEnabled = false;
+    private void CardsView_Click(object sender, RoutedEventArgs e) => ViewModel.ViewMode = InstalledViewMode.Cards;
 
-    private void GroupsView_Click(object sender, RoutedEventArgs e) => ViewModel.GroupViewEnabled = true;
+    private void GroupsView_Click(object sender, RoutedEventArgs e) => ViewModel.ViewMode = InstalledViewMode.Groups;
+
+    private void ListView_Click(object sender, RoutedEventArgs e) => ViewModel.ViewMode = InstalledViewMode.List;
 
     private void SelectMode_Click(object sender, RoutedEventArgs e) => ViewModel.SelectionMode = !ViewModel.SelectionMode;
 
-    // Lets the wheel scroll group view from anywhere on the page - search box, filter row,
-    // group-management bar, directly over the list, all of it - by driving GroupsScrollViewer
-    // ourselves unconditionally rather than only stepping in when some other handler didn't
-    // already consume the event. Since this runs in the tunnel phase before GroupsScrollViewer's
-    // own native wheel handling would otherwise fire, hovering directly over the list also comes
-    // through here (and gets marked handled before the native handling runs) - that's fine, we do
-    // the exact same scroll it would have, so there's no visible difference and no double-scroll.
+    // Lets the wheel scroll whichever of the two scrolling views is showing from anywhere on the
+    // page - search box, filter row, group-management bar, directly over the list, all of it - by
+    // driving that view's ScrollViewer ourselves unconditionally rather than only stepping in when
+    // some other handler didn't already consume the event. Since this runs in the tunnel phase
+    // before the ScrollViewer's own native wheel handling would otherwise fire, hovering directly
+    // over the list also comes through here (and gets marked handled before the native handling
+    // runs) - that's fine, we do the exact same scroll it would have, so there's no visible
+    // difference and no double-scroll. Cards view paginates and is left to its ListBox.
     private void Page_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
-        if (!ViewModel.GroupViewEnabled) return;
+        var scroller = ViewModel.ViewMode switch
+        {
+            InstalledViewMode.Groups => GroupsScrollViewer,
+            InstalledViewMode.List => ListScrollViewer,
+            _ => null,
+        };
 
-        GroupsScrollViewer.ScrollToVerticalOffset(GroupsScrollViewer.VerticalOffset - e.Delta);
+        if (scroller is null) return;
+
+        scroller.ScrollToVerticalOffset(scroller.VerticalOffset - e.Delta);
         e.Handled = true;
     }
 

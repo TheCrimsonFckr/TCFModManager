@@ -11,6 +11,10 @@ public enum ModSortOption
 
     // Newest InstalledAt first; a mod with no determinable install date sorts last.
     RecentlyInstalled,
+
+    // By the user-defined group a mod is in; ungrouped mods sort last in both directions.
+    GroupAscending,
+    GroupDescending,
 }
 
 // One entry in the "Sort by" dropdown. Overrides ToString() so the label shows instead of the enum name.

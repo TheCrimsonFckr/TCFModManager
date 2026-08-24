@@ -83,7 +83,7 @@
                 Icon="{ui:SymbolIcon SelectAllOn24}"
                 ToolTip="Tick several mods to enable or disable them together"
                 Appearance="{Binding SelectionMode, Converter={StaticResource BoolToAppearance}}"
-                Visibility="{Binding ShowFlatList, Converter={StaticResource BoolToVis}}"
+                Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}"
                 Click="SelectMode_Click" />
 
             <!-- Cards/Groups view switcher - deliberately the first, most prominent thing on the
@@ -96,7 +96,7 @@
                     FontWeight="SemiBold"
                     Content="Cards"
                     Icon="{ui:SymbolIcon Apps24}"
-                    Appearance="{Binding ShowFlatList, Converter={StaticResource BoolToAppearance}}"
+                    Appearance="{Binding ShowCards, Converter={StaticResource BoolToAppearance}}"
                     Click="CardsView_Click" />
                 <ui:Button
                     Margin="8,0,0,0"
@@ -104,9 +104,18 @@
                     FontWeight="SemiBold"
                     Content="Groups"
                     Icon="{ui:SymbolIcon Folder24}"
-                    Appearance="{Binding GroupViewEnabled, Converter={StaticResource BoolToAppearance}}"
+                    Appearance="{Binding ShowGroups, Converter={StaticResource BoolToAppearance}}"
                     ToolTip="Sort mods into your own groups, MO2-separator style."
                     Click="GroupsView_Click" />
+                <ui:Button
+                    Margin="8,0,0,0"
+                    Padding="12,7"
+                    FontWeight="SemiBold"
+                    Content="List"
+                    Icon="{ui:SymbolIcon TextBulletListSquare24}"
+                    Appearance="{Binding ShowList, Converter={StaticResource BoolToAppearance}}"
+                    ToolTip="One scrollable row per mod, each opening onto its full details."
+                    Click="ListView_Click" />
             </StackPanel>
 
             <TextBlock
@@ -167,6 +176,14 @@
                     ItemsSource="{Binding EnabledFilterOptions}"
                     SelectedItem="{Binding SelectedEnabledFilter}" />
 
+                <!-- Rebuilt from the group store whenever groups change, so it always lists exactly
+                     the groups that exist. Applies to all three views, like every other filter here. -->
+                <TextBlock Text="Group:" Foreground="White" VerticalAlignment="Center" Margin="16,0,6,0" />
+                <ComboBox
+                    MinWidth="130"
+                    ItemsSource="{Binding GroupFilterOptions}"
+                    SelectedItem="{Binding SelectedGroupFilter}" />
+
                 <TextBlock Text="Sort by:" Foreground="White" VerticalAlignment="Center" Margin="16,0,6,0" />
                 <ComboBox
                     MinWidth="140"
@@ -175,7 +192,7 @@
 
                 <!-- Pagination is hidden in group view (see the pagination StackPanel's own
                      Visibility below), so "Per page" would have nothing to affect there. -->
-                <StackPanel Orientation="Horizontal" Visibility="{Binding ShowFlatList, Converter={StaticResource BoolToVis}}">
+                <StackPanel Orientation="Horizontal" Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
                     <TextBlock Text="Per page:" Foreground="White" VerticalAlignment="Center" Margin="16,0,6,0" />
                     <ComboBox
                         MinWidth="60"
@@ -187,7 +204,7 @@
 
         <!-- Multi-select bar. Shares row 3 with the group management bar below, which is safe
              because switching to group view turns selection mode off (see
-             InstalledViewModel.OnGroupViewEnabledChanged) - the two can never show together. -->
+             InstalledViewModel.OnViewModeChanged) - the two can never show together. -->
         <DockPanel
             Grid.Row="3"
             Margin="0,0,0,8"
@@ -219,7 +236,7 @@
         <DockPanel
             Grid.Row="3"
             Margin="0,0,0,8"
-            Visibility="{Binding GroupViewEnabled, Converter={StaticResource BoolToVis}}">
+            Visibility="{Binding ShowGroups, Converter={StaticResource BoolToVis}}">
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock Text="Sort groups:" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0" />
                 <ComboBox
@@ -249,7 +266,7 @@
             BorderThickness="0"
             Background="Transparent"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-            Visibility="{Binding ShowFlatList, Converter={StaticResource BoolToVis}}"
+            Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}"
             ItemsSource="{Binding Results}"
             SelectionChanged="ResultsListBox_SelectionChanged"
             SizeChanged="ResultsListBox_SizeChanged">
@@ -450,7 +467,7 @@
             Grid.Row="4"
             Focusable="False"
             VerticalScrollBarVisibility="Auto"
-            Visibility="{Binding GroupViewEnabled, Converter={StaticResource BoolToVis}}">
+            Visibility="{Binding ShowGroups, Converter={StaticResource BoolToVis}}">
             <ItemsControl Focusable="False" ItemsSource="{Binding Sections}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:ModGroupSectionViewModel}">
@@ -659,13 +676,221 @@
             </ItemsControl>
         </ScrollViewer>
 
-        <!-- Hidden in group view - a manually-sorted, collapsible group list has no use for pages. -->
+        <!-- List view: the same filtered, sorted set as the other two, one expandable row per mod.
+             The header carries what you scan for; the body carries everything the app knows about
+             the mod. Occupies the same cell as the two views above; only one is ever visible.
+             Focusable="False" for the same reason it's set on the group list - a click inside a row
+             shouldn't bubble focus up and nudge the scroller. -->
+        <ScrollViewer
+            x:Name="ListScrollViewer"
+            Grid.Row="4"
+            Focusable="False"
+            VerticalScrollBarVisibility="Auto"
+            Visibility="{Binding ShowList, Converter={StaticResource BoolToVis}}">
+            <ItemsControl Focusable="False" ItemsSource="{Binding ListItems}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+                        <ui:CardExpander Margin="0,0,6,6" Opacity="{Binding CardOpacity}">
+                            <ui:CardExpander.Header>
+                                <Grid Margin="0,0,8,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ui:SymbolIcon
+                                        Grid.Column="0"
+                                        Margin="0,0,12,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="20"
+                                        Symbol="{Binding StatusGlyph}"
+                                        Foreground="{Binding Status, Converter={StaticResource StatusBrush}}"
+                                        ToolTip="{Binding StatusTooltip}" />
+
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock
+                                            FontWeight="SemiBold"
+                                            TextTrimming="CharacterEllipsis"
+                                            Text="{Binding DisplayTitle}" />
+                                        <TextBlock
+                                            FontSize="11"
+                                            Opacity="0.6"
+                                            TextTrimming="CharacterEllipsis">
+                                            <Run Text="{Binding InstalledVersion, TargetNullValue='unknown', Mode=OneWay}" />
+                                            <Run Text=" • " />
+                                            <Run Text="{Binding TargetSummary, Mode=OneWay}" />
+                                            <Run Text=" • " />
+                                            <Run Text="{Binding Author, TargetNullValue='unknown author', Mode=OneWay}" />
+                                        </TextBlock>
+                                    </StackPanel>
+
+                                    <!-- Group membership and disabled state, both readable without
+                                         opening the row. -->
+                                    <StackPanel
+                                        Grid.Column="2"
+                                        Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        Margin="12,0,12,0">
+                                        <Border
+                                            Padding="8,2"
+                                            CornerRadius="3"
+                                            Background="#22FFFFFF"
+                                            Visibility="{Binding IsGrouped, Converter={StaticResource BoolToVis}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <ui:SymbolIcon Symbol="Folder24" FontSize="12" Margin="0,0,5,0" VerticalAlignment="Center" />
+                                                <TextBlock FontSize="11" Text="{Binding GroupName}" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Border
+                                            Margin="6,0,0,0"
+                                            Padding="8,2"
+                                            CornerRadius="3"
+                                            Background="#33FFFFFF"
+                                            Visibility="{Binding IsDisabled, Converter={StaticResource BoolToVis}}">
+                                            <TextBlock Text="DISABLED" FontSize="10" FontWeight="SemiBold" />
+                                        </Border>
+                                    </StackPanel>
+
+                                    <!-- Only the non-destructive actions live in the header; Remove
+                                         and Sort out are inside the row, which has to be opened first. -->
+                                    <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <ui:Button
+                                            Padding="6"
+                                            Appearance="Transparent"
+                                            Command="{Binding DataContext.ToggleDisableCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                            CommandParameter="{Binding}"
+                                            ToolTip="{Binding DisableToggleTooltip}">
+                                            <ui:SymbolIcon Symbol="{Binding DisableToggleGlyph}" FontSize="16" />
+                                        </ui:Button>
+                                    </StackPanel>
+                                </Grid>
+                            </ui:CardExpander.Header>
+
+                            <StackPanel Margin="0,4,0,0">
+                                <TextBlock
+                                    Opacity="0.6"
+                                    TextWrapping="Wrap"
+                                    Visibility="{Binding FolderNameIfDifferent, Converter={StaticResource NullToCollapsed}}">
+                                    <Run Text="Installed as: " />
+                                    <Run Text="{Binding FolderNameIfDifferent, Mode=OneWay}" />
+                                </TextBlock>
+
+                                <TextBlock
+                                    Opacity="0.6"
+                                    TextWrapping="Wrap"
+                                    Visibility="{Binding Guid, Converter={StaticResource NullToCollapsed}}">
+                                    <Run Text="GUID: " />
+                                    <Run Text="{Binding Guid, Mode=OneWay}" />
+                                </TextBlock>
+
+                                <TextBlock Opacity="0.6" TextWrapping="Wrap">
+                                    <Run Text="Installed version: " />
+                                    <Run Text="{Binding InstalledVersion, TargetNullValue='unknown', Mode=OneWay}" />
+                                </TextBlock>
+
+                                <TextBlock
+                                    Opacity="0.6"
+                                    TextWrapping="Wrap"
+                                    Text="{Binding InstalledVersionDetail}"
+                                    Visibility="{Binding InstalledVersionDetail, Converter={StaticResource NullToCollapsed}}" />
+
+                                <TextBlock Opacity="0.6" TextWrapping="Wrap">
+                                    <Run Text="Latest published: " />
+                                    <Run Text="{Binding LatestPublishedVersion, TargetNullValue='not found on sp-mod.com', Mode=OneWay}" />
+                                </TextBlock>
+
+                                <TextBlock
+                                    Opacity="0.6"
+                                    Visibility="{Binding LatestUpdatedAt, Converter={StaticResource NullToCollapsed}}">
+                                    <Run Text="Last updated on sp-mod.com: " />
+                                    <Run Text="{Binding LatestUpdatedAt, StringFormat='{}{0:d}', Mode=OneWay}" />
+                                </TextBlock>
+
+                                <TextBlock
+                                    Opacity="0.6"
+                                    Visibility="{Binding InstalledAt, Converter={StaticResource NullToCollapsed}}">
+                                    <Run Text="Installed on: " />
+                                    <Run Text="{Binding InstalledAt, StringFormat='{}{0:d}', Mode=OneWay}" />
+                                </TextBlock>
+
+                                <TextBlock Opacity="0.6" TextWrapping="Wrap">
+                                    <Run Text="Group: " />
+                                    <Run Text="{Binding GroupLabel, Mode=OneWay}" />
+                                </TextBlock>
+
+                                <TextBlock
+                                    Opacity="0.6"
+                                    TextWrapping="Wrap"
+                                    Text="{Binding FlagsSummary}"
+                                    Visibility="{Binding FlagsSummary, Converter={StaticResource NullToCollapsed}}" />
+
+                                <TextBlock
+                                    Opacity="0.6"
+                                    TextWrapping="Wrap"
+                                    Margin="0,4,0,0"
+                                    Text="{Binding SourceLabel}" />
+
+                                <TextBlock
+                                    Opacity="0.5"
+                                    TextWrapping="Wrap"
+                                    Margin="0,4,0,0"
+                                    Visibility="{Binding ClientFolderPath, Converter={StaticResource NullToCollapsed}}">
+                                    <Run Text="Client: " />
+                                    <Run Text="{Binding ClientFolderPath, Mode=OneWay}" />
+                                </TextBlock>
+
+                                <TextBlock
+                                    Opacity="0.5"
+                                    TextWrapping="Wrap"
+                                    Visibility="{Binding ServerFolderPath, Converter={StaticResource NullToCollapsed}}">
+                                    <Run Text="Server: " />
+                                    <Run Text="{Binding ServerFolderPath, Mode=OneWay}" />
+                                </TextBlock>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                    <ui:Button
+                                        Content="Details and versions"
+                                        Icon="{ui:SymbolIcon Info24}"
+                                        Command="{Binding DataContext.ShowDetailsCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip="Open the full version history and update dialog" />
+
+                                    <ui:Button
+                                        Margin="8,0,0,0"
+                                        Foreground="Goldenrod"
+                                        Content="Sort out"
+                                        Icon="{ui:SymbolIcon Warning24}"
+                                        Visibility="{Binding HasDuplicateFolders, Converter={StaticResource BoolToVis}}"
+                                        Command="{Binding DataContext.ResolveDuplicateCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip="This mod is in both an enabled and a disabled folder - pick which copy to keep" />
+
+                                    <ui:Button
+                                        Margin="8,0,0,0"
+                                        Foreground="Red"
+                                        Content="Remove"
+                                        Icon="{ui:SymbolIcon Delete24}"
+                                        Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip="Remove this mod" />
+                                </StackPanel>
+                            </StackPanel>
+                        </ui:CardExpander>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- Only shown in Cards view - the two scrolling views have no use for pages. -->
         <StackPanel
             Grid.Row="5"
             Orientation="Horizontal"
             HorizontalAlignment="Center"
             Margin="0,8,0,0"
-            Visibility="{Binding ShowFlatList, Converter={StaticResource BoolToVis}}">
+            Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
             <ui:Button
                 Content="Previous"
                 Command="{Binding PreviousPageCommand}" />

@@ -37,11 +37,23 @@ in dependencies. Clicking a card opens its details; "Refresh cache" re-pulls the
 
 **Installed** scans your SPT folder for what's actually there, both client mods
 (`BepInEx\plugins`, `BepInEx\patchers`) and server mods (`user\mods`), and matches them back to the
-catalog. Same search and filters as Browse, plus update-status and enabled/disabled filters. Each
-card shows the installed version, the latest published one, and the folder it lives in when that
-differs from the mod name. Clicking a card opens a dialog with the full version history (changelogs
-rendered from sp-mod's rich text), a link to the mod page, and an Update button when one applies.
-Mods can be removed from here too. "Groups" sorts mods into your own MO2-style separators.
+catalog. Same search and filters as Browse, plus update-status, enabled/disabled and group filters.
+Clicking a mod opens a dialog with the full version history (changelogs rendered from sp-mod's rich
+text), a link to the mod page, and an Update button when one applies. Mods can be removed from here
+too.
+
+There are three ways to look at the same filtered, sorted list, switched with the buttons at the top
+of the page:
+
+- **Cards** - a paginated grid of summary cards, with a Select mode for acting on several at once.
+- **Groups** - your own MO2-style separators, drag a mod between them, collapse what you're not
+  working on, and enable/disable/invert a whole group at once.
+- **List** - one continuous scrollable row per mod, each opening onto everything the app knows about
+  it: GUID, installed and published versions, install date, group, content flags, whether it was
+  installed by this app or by hand, and the actual folders it occupies.
+
+Sort by name, author, group, or install date; filter to one group or to whatever isn't in one. Every
+filter applies to all three views.
 
 **Disabling mods.** A disabled mod is moved into a `.disabled` sibling of the folder SPT loads it
 from - `user\mods` to `user\mods.disabled`, `BepInEx\plugins` to `BepInEx\plugins.disabled` - so SPT
