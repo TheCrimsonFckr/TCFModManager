@@ -12,12 +12,7 @@ public static class InstalledModFolders
 {
     // Folders whose immediate child is a mod. Matched anywhere in the path, since server content is
     // remapped under the install's own server root (e.g. "SPT_Runtime/user/mods/...").
-    private static readonly string[] Containers =
-    [
-        "BepInEx/plugins",
-        "BepInEx/patchers",
-        "user/mods",
-    ];
+    private static string[] Containers => DisabledModPaths.Containers;
 
     // 
     // The distinct mod folder names in <paramref name="relativeFiles"/>, in the order first seen.

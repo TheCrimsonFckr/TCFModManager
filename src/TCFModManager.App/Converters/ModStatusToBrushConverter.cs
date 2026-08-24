@@ -17,6 +17,7 @@ public sealed class ModStatusToBrushConverter : IValueConverter
         ModStatus.NoCompatibleVersion => Brushes.Gray,
         ModStatus.Unknown => Brushes.Gray,
         ModStatus.Conflict => Brushes.OrangeRed,
+        ModStatus.Disabled => Brushes.Gray,
         _ => Brushes.Gray,
     };
 

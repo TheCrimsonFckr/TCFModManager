@@ -49,7 +49,8 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
         return running;
     }
 
-    private static void EnsureInstallNotInUse(string action)
+    // Throws when a blocking process is running, naming it and the action being attempted.
+    public static void EnsureInstallNotInUse(string action)
     {
         var running = RunningBlockers();
         if (running.Count == 0) return;

@@ -24,6 +24,9 @@ public enum ModStatus
     // On disk, but whether anything newer exists couldn't be determined - no catalog match,
     // or a version string neither side could parse.
     Unknown,
+
+    // On disk, but moved out of the folder SPT loads from, so nothing loads it.
+    Disabled,
 }
 
 // The icon and wording for a <see cref="ModStatus"/>, kept in one place so the pages
@@ -38,6 +41,7 @@ public static class ModStatusDisplay
         ModStatus.NotInstalled => "DismissCircle24",
         ModStatus.NoCompatibleVersion => "QuestionCircle24",
         ModStatus.Unknown => "QuestionCircle24",
+        ModStatus.Disabled => "PlugDisconnected24",
         _ => "ErrorCircle24",
     };
 
@@ -49,6 +53,7 @@ public static class ModStatusDisplay
         ModStatus.NotInstalled => "Not installed",
         ModStatus.NoCompatibleVersion => "No version compatible with your SPT",
         ModStatus.Unknown => "Installed - update status unknown",
+        ModStatus.Disabled => "Disabled - installed, but not loaded by SPT",
         _ => "Conflict - two mods need incompatible versions",
     };
 }

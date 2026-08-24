@@ -233,4 +233,94 @@ public class InstalledModScannerTests : IDisposable
         Assert.Contains(result, m => m.Name == "ClientOne" && m.Target == InstalledModTarget.Client);
         Assert.Contains(result, m => m.Name == "ServerOne" && m.Target == InstalledModTarget.Server);
     }
+
+    [Fact]
+    public void Scan_ListsClientModsInADisabledContainer()
+    {
+        Directory.CreateDirectory(Path.Combine(_installRoot, "BepInEx", "plugins", "Live"));
+        Directory.CreateDirectory(Path.Combine(_installRoot, "BepInEx", "plugins.disabled", "Parked"));
+
+        var result = InstalledModScanner.Scan(_installRoot);
+
+        Assert.Equal(2, result.Count);
+        Assert.False(Assert.Single(result, m => m.Name == "Live").IsDisabled);
+        Assert.True(Assert.Single(result, m => m.Name == "Parked").IsDisabled);
+    }
+
+    [Fact]
+    public void Scan_ListsPatcherModsInADisabledContainer()
+    {
+        Directory.CreateDirectory(Path.Combine(_installRoot, "BepInEx", "patchers.disabled", "ParkedPatcher"));
+
+        var result = InstalledModScanner.Scan(_installRoot);
+
+        var mod = Assert.Single(result);
+        Assert.Equal("ParkedPatcher", mod.Name);
+        Assert.True(mod.IsDisabled);
+        Assert.Equal(InstalledModTarget.Client, mod.Target);
+    }
+
+    [Fact]
+    public void Scan_ListsServerModsInADisabledContainer()
+    {
+        var dir = Path.Combine(_installRoot, "user", "mods.disabled", "ParkedServer");
+        Directory.CreateDirectory(dir);
+        File.WriteAllText(Path.Combine(dir, "package.json"), """{ "name": "ParkedServer", "version": "2.0.0" }""");
+
+        var mod = Assert.Single(InstalledModScanner.Scan(_installRoot));
+
+        Assert.Equal("ParkedServer", mod.Name);
+        Assert.Equal("2.0.0", mod.Version);
+        Assert.True(mod.IsDisabled);
+    }
+
+    [Fact]
+    public void Scan_ListsTheSameModTwiceWhenItIsPresentInBothStates()
+    {
+        Directory.CreateDirectory(Path.Combine(_installRoot, "BepInEx", "plugins", "Split"));
+        Directory.CreateDirectory(Path.Combine(_installRoot, "BepInEx", "plugins.disabled", "Split"));
+
+        var result = InstalledModScanner.Scan(_installRoot);
+
+        Assert.Equal(2, result.Count);
+        Assert.Equal("Split", Assert.Single(ModDisableService.DuplicatedNames(result)));
+    }
+
+    [Fact]
+    public void Scan_ReadsServerModDependenciesFromPackageJson()
+    {
+        var dir = Path.Combine(_installRoot, "user", "mods", "Consumer");
+        Directory.CreateDirectory(dir);
+        File.WriteAllText(Path.Combine(dir, "package.json"), """
+            { "name": "Consumer", "version": "1.0.0", "modDependencies": { "SharedTools": "1.0.0" } }
+            """);
+
+        var mod = Assert.Single(InstalledModScanner.Scan(_installRoot));
+
+        var dependency = Assert.Single(mod.Dependencies);
+        Assert.Equal("SharedTools", dependency.Identifier);
+        Assert.False(dependency.IsSoft);
+    }
+
+    [Fact]
+    public void Scan_ReadsServerModDependenciesWrittenAsAnArray()
+    {
+        var dir = Path.Combine(_installRoot, "user", "mods", "Consumer");
+        Directory.CreateDirectory(dir);
+        File.WriteAllText(Path.Combine(dir, "package.json"), """
+            { "name": "Consumer", "version": "1.0.0", "modDependencies": ["SharedTools"] }
+            """);
+
+        var mod = Assert.Single(InstalledModScanner.Scan(_installRoot));
+
+        Assert.Equal("SharedTools", Assert.Single(mod.Dependencies).Identifier);
+    }
+
+    [Fact]
+    public void Scan_ModWithNoDeclaredDependencies_ReportsNone()
+    {
+        Directory.CreateDirectory(Path.Combine(_installRoot, "BepInEx", "plugins", "Plain"));
+
+        Assert.Empty(Assert.Single(InstalledModScanner.Scan(_installRoot)).Dependencies);
+    }
 }

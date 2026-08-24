@@ -1,0 +1,148 @@
+using TCFModManager.Core.Models;
+
+namespace TCFModManager.Core.Services;
+
+// One mod needing another, as declared by the dependent itself.
+public sealed record ModDependencyLink(InstalledMod Dependent, InstalledMod Dependency, bool IsSoft);
+
+//
+// Who needs whom among the mods actually installed, built from what each mod declares in its own
+// files ([BepInDependency] for client mods, "modDependencies" for server mods) rather than from the
+// catalog. Built locally so it covers hand-installed mods that never match an sp-mod.com listing,
+// and needs no network.
+//
+public sealed class ModDependencyGraph
+{
+    private readonly Dictionary<InstalledMod, List<ModDependencyLink>> _dependents = [];
+    private readonly Dictionary<InstalledMod, List<ModDependencyLink>> _dependencies = [];
+    private readonly Dictionary<InstalledMod, List<string>> _unresolved = [];
+
+    private ModDependencyGraph() { }
+
+    public static ModDependencyGraph Build(IEnumerable<InstalledMod> mods)
+    {
+        var all = mods.ToList();
+        var graph = new ModDependencyGraph();
+
+        // A client mod is identified by its [BepInPlugin] GUID, a server mod by its package name.
+        // Both can resolve more than one installed mod - the same mod present in a container and in
+        // that container's ".disabled" sibling, or a mod shipping both halves.
+        var byIdentifier = new Dictionary<string, List<InstalledMod>>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var mod in all)
+        {
+            foreach (var identifier in Identifiers(mod))
+            {
+                if (!byIdentifier.TryGetValue(identifier, out var matches))
+                    byIdentifier[identifier] = matches = [];
+
+                matches.Add(mod);
+            }
+        }
+
+        foreach (var mod in all)
+        {
+            foreach (var declared in mod.Dependencies)
+            {
+                if (!byIdentifier.TryGetValue(declared.Identifier, out var matches))
+                {
+                    graph.AddUnresolved(mod, declared.Identifier);
+                    continue;
+                }
+
+                foreach (var dependency in matches)
+                {
+                    if (ReferenceEquals(dependency, mod)) continue;
+
+                    var link = new ModDependencyLink(mod, dependency, declared.IsSoft);
+                    List(graph._dependencies, mod).Add(link);
+                    List(graph._dependents, dependency).Add(link);
+                }
+            }
+        }
+
+        return graph;
+    }
+
+    // Mods that declare a dependency on <paramref name="mod"/>, whatever their own state.
+    public IReadOnlyList<ModDependencyLink> DependentsOf(InstalledMod mod) =>
+        _dependents.TryGetValue(mod, out var links) ? links : [];
+
+    // What <paramref name="mod"/> declares it needs, limited to what's actually installed.
+    public IReadOnlyList<ModDependencyLink> DependenciesOf(InstalledMod mod) =>
+        _dependencies.TryGetValue(mod, out var links) ? links : [];
+
+    // Identifiers a mod declares that nothing installed provides.
+    public IReadOnlyList<string> UnresolvedOf(InstalledMod mod) =>
+        _unresolved.TryGetValue(mod, out var identifiers) ? identifiers : [];
+
+    //
+    // Every currently-enabled mod that would lose a dependency if <paramref name="roots"/> were
+    // disabled, following the chain outward - a mod broken by a root, then whatever that mod
+    // breaks in turn. The roots themselves are never included.
+    //
+    public IReadOnlyList<ModDependencyLink> DisableImpact(IEnumerable<InstalledMod> roots) =>
+        Walk(roots, from => DependentsOf(from).Where(link => !link.Dependent.IsDisabled), link => link.Dependent);
+
+    //
+    // Every currently-disabled mod that <paramref name="roots"/> need in order to work once
+    // enabled, following the chain inward. The roots themselves are never included.
+    //
+    public IReadOnlyList<ModDependencyLink> EnableRequirements(IEnumerable<InstalledMod> roots) =>
+        Walk(roots, from => DependenciesOf(from).Where(link => link.Dependency.IsDisabled), link => link.Dependency);
+
+    //
+    // Breadth-first walk out from the roots, one link per mod reached - the first one that reached
+    // it, with a hard link always preferred over a soft one for the same mod so the caller can word
+    // the warning by the worst consequence.
+    //
+    private static List<ModDependencyLink> Walk(
+        IEnumerable<InstalledMod> roots,
+        Func<InstalledMod, IEnumerable<ModDependencyLink>> edges,
+        Func<ModDependencyLink, InstalledMod> other)
+    {
+        var seen = new HashSet<InstalledMod>(roots);
+        var queue = new Queue<InstalledMod>(seen);
+        var reached = new List<ModDependencyLink>();
+
+        while (queue.Count > 0)
+        {
+            var current = queue.Dequeue();
+
+            foreach (var link in edges(current))
+            {
+                var next = other(link);
+
+                if (!seen.Add(next))
+                {
+                    var existing = reached.FindIndex(r => ReferenceEquals(other(r), next));
+                    if (existing >= 0 && reached[existing].IsSoft && !link.IsSoft) reached[existing] = link;
+                    continue;
+                }
+
+                reached.Add(link);
+                queue.Enqueue(next);
+            }
+        }
+
+        return reached;
+    }
+
+    private static IEnumerable<string> Identifiers(InstalledMod mod)
+    {
+        if (!string.IsNullOrWhiteSpace(mod.Guid)) yield return mod.Guid;
+        if (mod.Target == InstalledModTarget.Server && !string.IsNullOrWhiteSpace(mod.Name)) yield return mod.Name;
+    }
+
+    private static List<ModDependencyLink> List(Dictionary<InstalledMod, List<ModDependencyLink>> map, InstalledMod key)
+    {
+        if (!map.TryGetValue(key, out var list)) map[key] = list = [];
+        return list;
+    }
+
+    private void AddUnresolved(InstalledMod mod, string identifier)
+    {
+        if (!_unresolved.TryGetValue(mod, out var list)) _unresolved[mod] = list = [];
+        if (!list.Contains(identifier, StringComparer.OrdinalIgnoreCase)) list.Add(identifier);
+    }
+}
