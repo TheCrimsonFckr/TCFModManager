@@ -32,10 +32,30 @@ public partial class ModGroupSectionViewModel : ObservableObject
 
     public string CountLabel => Items.Count == 1 ? "1 mod" : $"{Items.Count} mods";
 
+    public int DisabledCount => Items.Count(i => i.IsDisabled);
+
+    // Shown after CountLabel in the header, so a group's state reads without expanding it.
+    // Empty when nothing in the group is disabled, so an untouched group stays uncluttered.
+    public string StateLabel => DisabledCount switch
+    {
+        0 => string.Empty,
+        var n when n == Items.Count => "• all disabled",
+        var n => $"• {n} disabled",
+    };
+
+    // Whether the header's enable-all/disable-all/invert buttons have anything to act on.
+    public bool HasItems => Items.Count > 0;
+
     public ModGroupSectionViewModel()
     {
-        // CountLabel has no backing field for Items.CollectionChanged to invalidate on its own.
-        Items.CollectionChanged += (_, _) => OnPropertyChanged(nameof(CountLabel));
+        // These have no backing field for Items.CollectionChanged to invalidate on their own.
+        Items.CollectionChanged += (_, _) =>
+        {
+            OnPropertyChanged(nameof(CountLabel));
+            OnPropertyChanged(nameof(DisabledCount));
+            OnPropertyChanged(nameof(StateLabel));
+            OnPropertyChanged(nameof(HasItems));
+        };
     }
 
     public static ModGroupSectionViewModel FromGroup(ModGroup group) => new()

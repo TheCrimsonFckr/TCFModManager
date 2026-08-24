@@ -1,11 +1,12 @@
 using System.Text.RegularExpressions;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
 // Display wrapper for the Installed page's card grid, merging a mod's client and server entries and matching it against the sp-mod.com catalog.
-public sealed class InstalledModCardViewModel
+public sealed partial class InstalledModCardViewModel : ObservableObject
 {
     public required string Name { get; init; }
 
@@ -102,20 +103,54 @@ public sealed class InstalledModCardViewModel
     // page's "manage version" controls) rather than from an app install or the files on disk.
     public bool IsManualOverride { get; init; }
 
-    // This mod's status, using the same vocabulary and icons as the Browse and Dependencies
-    // pages. Everything here is installed by definition, so it's only ever up-to-date or outdated.
-    public ModStatus Status => UpdateAvailable switch
-    {
-        true => ModStatus.UpdateAvailable,
-        false => ModStatus.Installed,
-        _ => ModStatus.Unknown,
-    };
+    //
+    // Every scan entry merged into this card: both halves of a client+server mod, and both copies
+    // of a mod left in a container and in that container's ".disabled" sibling. What the disable
+    // commands actually move, and what ModDependencyGraph is keyed on.
+    //
+    public IReadOnlyList<InstalledMod> Entries { get; init; } = [];
 
-    public string StatusGlyph => ModStatusDisplay.Glyph(Status);
+    // True when every one of this mod's folders sits under a ".disabled" container, so SPT loads none of it.
+    public bool IsDisabled => Entries.Count > 0 && Entries.All(e => e.IsDisabled);
 
-    public string StatusTooltip => UpdateAvailable == true && LatestPublishedVersion is not null
-        ? $"Update available - {LatestPublishedVersion}"
-        : ModStatusDisplay.Tooltip(Status);
+    // True when some of this mod's folders are disabled and some aren't - one half of a
+    // client+server mod parked on its own, or a half-completed move leaving copies in both places.
+    public bool IsMixedState => Entries.Any(e => e.IsDisabled) && Entries.Any(e => !e.IsDisabled);
+
+    // Dims the whole card (and the group-view row) while disabled.
+    public double CardOpacity => IsDisabled ? 0.45 : 1.0;
+
+    // Ticked in the flat grid's multi-select mode. Cards are rebuilt on every scan, so a selection
+    // doesn't survive one.
+    [ObservableProperty]
+    private bool _isSelected;
+
+    public string DisableToggleGlyph => IsDisabled ? "PlugConnected24" : "PlugDisconnected24";
+
+    public string DisableToggleTooltip => IsDisabled
+        ? "Enable - move it back where SPT loads it from"
+        : "Disable - move it to a .disabled folder, deleting nothing";
+
+    // This mod's status, using the same vocabulary and icons as the Browse and Dependencies pages.
+    // Everything here is installed by definition, so it's only ever disabled, up-to-date or outdated.
+    public ModStatus Status => IsDisabled
+        ? ModStatus.Disabled
+        : UpdateAvailable switch
+        {
+            true => ModStatus.UpdateAvailable,
+            false => ModStatus.Installed,
+            _ => ModStatus.Unknown,
+        };
+
+    // A mixed state is neither cleanly enabled nor cleanly disabled, so it gets the conflict icon
+    // rather than either side's.
+    public string StatusGlyph => IsMixedState ? "ErrorCircle24" : ModStatusDisplay.Glyph(Status);
+
+    public string StatusTooltip => IsMixedState
+        ? "Partly disabled - some of this mod's folders are disabled and some aren't"
+        : UpdateAvailable == true && !IsDisabled && LatestPublishedVersion is not null
+            ? $"Update available - {LatestPublishedVersion}"
+            : ModStatusDisplay.Tooltip(Status);
 
     // Groups raw scan results into one card per distinct mod and looks up each against the cached
     // catalog for its latest published version.
@@ -355,6 +390,7 @@ public sealed class InstalledModCardViewModel
             ModId = match?.Id,
             IsAppManaged = record?.IsAppManaged ?? false,
             IsManualOverride = record is not null && !record.IsAppManaged,
+            Entries = entries,
         };
     }
 

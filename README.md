@@ -36,12 +36,29 @@ available / not installed / nothing compatible published) and a badge for mods t
 dependencies. Clicking a card opens its details; "Refresh cache" re-pulls the catalog.
 
 **Installed** scans your SPT folder for what's actually there, both client mods
-(`BepInEx\plugins`) and server mods (`user\mods`), and matches them back to the catalog. Same
-search and filters as Browse, plus an update-status filter. Each card shows the installed version,
-the latest published one, and the folder it lives in when that differs from the mod name. Clicking
-a card opens a dialog with the full version history (changelogs rendered from sp-mod's rich
-text), a link to the mod page, and an Update button when one applies. Mods can be removed from
-here too.
+(`BepInEx\plugins`, `BepInEx\patchers`) and server mods (`user\mods`), and matches them back to the
+catalog. Same search and filters as Browse, plus update-status and enabled/disabled filters. Each
+card shows the installed version, the latest published one, and the folder it lives in when that
+differs from the mod name. Clicking a card opens a dialog with the full version history (changelogs
+rendered from sp-mod's rich text), a link to the mod page, and an Update button when one applies.
+Mods can be removed from here too. "Groups" sorts mods into your own MO2-style separators.
+
+**Disabling mods.** A disabled mod is moved into a `.disabled` sibling of the folder SPT loads it
+from - `user\mods` to `user\mods.disabled`, `BepInEx\plugins` to `BepInEx\plugins.disabled` - so SPT
+ignores it while nothing is deleted. Its own files go with it, server configs included, and client
+mod settings in `BepInEx\config` are never touched, so a disable/enable round trip loses no
+settings. Disabled mods stay listed, dimmed and marked, and go back exactly where they came from.
+
+Disable one mod from its card, tick several in the card grid's Select mode, or use a group's
+enable-all / disable-all / invert buttons. Before a disable that would take something else's
+dependency away - or an enable whose own dependencies are still disabled - the app lists what's
+affected and offers to carry those along. Dependencies are read from the mods themselves
+(`[BepInDependency]` for client mods, `modDependencies` for server mods), so this works offline and
+covers hand-installed mods that never matched a catalog listing. Undo puts the last change back.
+
+Whether a mod is disabled is read purely from where it sits on disk, so moving folders by hand works
+too. Update, Redownload and Remove are unavailable while a mod is disabled - their install record
+points at folders it no longer occupies - so enable it first.
 
 **Dependencies** resolves the dependency tree of every installed mod that declares one, and
 reports each dependency's state against what's on disk, including version conflicts where two mods
@@ -105,8 +122,6 @@ Debug-level output in the same log. Logs rotate daily as `tcfmm-<yyyyMMdd>.log`.
 
 **What it can see**
 
-- `BepInEx\patchers` isn't scanned, so a patcher mod never appears on the Installed page - even one
-  this app installed.
 - Mods nested a level deeper than convention (`BepInEx\plugins\Author\ModName\`) are listed under
   the outer folder's name, with an unknown version.
 - Mods installed by hand are matched to a catalog listing by folder name, since there's no record to
@@ -135,6 +150,15 @@ Debug-level output in the same log. Logs rotate daily as `tcfmm-<yyyyMMdd>.log`.
   against one.
 - The catalog is filtered to SPT 3.10 and newer.
 - Installed dates come from folder creation time, so a mod updated in place keeps its original date.
+
+**Disabling**
+
+- Group membership is keyed on the mod's folder name, so renaming a folder drops it out of its
+  group - and out of anything you then disable by group.
+- A mod left in both a container and its `.disabled` sibling (a half-completed move, or a manual
+  one) is flagged on its card but has to be sorted out by hand.
+- Disabling doesn't reorder anything: a server mod's `loadBefore`/`loadAfter` ordering relative to
+  the mods still enabled is left to SPT.
 
 **Scope**
 
@@ -235,9 +259,6 @@ tooling looking at the wrong configuration's output.
 
 ## Known gaps
 
-- `InstalledModScannerTests.Scan_ChecksBothBepInExPluginsAndPatchers` fails. `InstalledModScanner`
- scans `BepInEx\plugins` and the `user\mods` layouts but has no `BepInEx\patchers` scan the test
- asserts behaviour that was never implemented, rather than a regression.
 - No DI container. `AppServices` is a static holder; worth swapping for
  `Microsoft.Extensions.DependencyInjection` plus WPF-UI's `INavigationService`/`IPageService` if
  the page count grows.

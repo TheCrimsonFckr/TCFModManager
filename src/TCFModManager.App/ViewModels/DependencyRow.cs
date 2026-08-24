@@ -43,6 +43,9 @@ public sealed partial class DependencyRow : ObservableObject
         ModStatus.UpdateAvailable => $"needs {RequiredVersion} - {InstalledVersion ?? "unknown"} installed",
         ModStatus.NotInstalled => RequiredVersion is null ? "not installed" : $"not installed - needs {RequiredVersion}",
         ModStatus.NoCompatibleVersion => "no version compatible with your SPT",
+        ModStatus.Disabled => InstalledVersion is null
+            ? "installed but disabled - SPT won't load it"
+            : $"installed {InstalledVersion} but disabled - SPT won't load it",
         _ => "conflict - two mods need incompatible versions",
     };
 

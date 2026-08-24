@@ -31,8 +31,21 @@ public partial class ModUpdateDialogViewModel : ObservableObject
     // The matched catalog listing's sp-mod.com page; null until LoadAsync resolves it, or if no match was found.
     public string? ModPageUrl => _catalogMod?.DetailUrl;
 
+    //
+    // A disabled mod's install record points at folders it no longer occupies, so updating or
+    // redownloading it would place files where nothing is loading them and leave the old copy
+    // behind in the ".disabled" folder. Both buttons are hidden until it's enabled again.
+    //
+    public bool IsModDisabled => _mod.IsDisabled;
+
+    public string DisabledNotice =>
+        $"{_mod.DisplayTitle} is disabled. Enable it on the Installed page to update or redownload it.";
+
     // Whether the dialog's Update button should be shown.
-    public bool ShowUpdateButton => _mod.UpdateAvailable == true;
+    public bool ShowUpdateButton => _mod.UpdateAvailable == true && !_mod.IsDisabled;
+
+    // Redownload takes Update's place when there's nothing newer to move to.
+    public bool ShowRedownloadButton => _mod.UpdateAvailable != true && !_mod.IsDisabled;
 
     // Whether the "manage installed version" controls should be shown - only meaningful once a
     // catalog mod is known, since confirming/overriding a version needs a mod to record it against.
@@ -126,7 +139,7 @@ public partial class ModUpdateDialogViewModel : ObservableObject
         }
     }
 
-    private bool CanUpdate() => SelectedVersion is not null;
+    private bool CanUpdate() => SelectedVersion is not null && !_mod.IsDisabled;
 
     // Queues the currently selected version for download and install.
     [RelayCommand(CanExecute = nameof(CanUpdate))]

@@ -1,6 +1,8 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using TCFModManager.App.ViewModels;
 
 namespace TCFModManager.App.Views;
@@ -41,16 +43,23 @@ public partial class InstalledPage : Page
         await ViewModel.ScanCommand.ExecuteAsync(null);
     }
 
-    // Opens the details/update dialog for the clicked card, then clears selection. Only wired to
-    // the flat grid's ListBox - group view's mod rows are plain ItemsControl items (organize-only,
-    // no click-to-open) so a drag gesture never has to fight a click-driven selection change.
+    // Opens the details/update dialog for the clicked card, then clears selection. In multi-select
+    // mode the same click ticks the card instead, so the whole card stays the hit target rather
+    // than only the small checkbox.
     private async void ResultsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (sender is not ListBox listBox) return;
         if (listBox.SelectedItem is not InstalledModCardViewModel mod) return;
 
-        await ViewModel.ShowDetailsCommand.ExecuteAsync(mod);
         listBox.SelectedItem = null;
+
+        if (ViewModel.SelectionMode)
+        {
+            mod.IsSelected = !mod.IsSelected;
+            return;
+        }
+
+        await ViewModel.ShowDetailsCommand.ExecuteAsync(mod);
     }
 
     private void ResultsListBox_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -61,6 +70,8 @@ public partial class InstalledPage : Page
     private void CardsView_Click(object sender, RoutedEventArgs e) => ViewModel.GroupViewEnabled = false;
 
     private void GroupsView_Click(object sender, RoutedEventArgs e) => ViewModel.GroupViewEnabled = true;
+
+    private void SelectMode_Click(object sender, RoutedEventArgs e) => ViewModel.SelectionMode = !ViewModel.SelectionMode;
 
     // Lets the wheel scroll group view from anywhere on the page - search box, filter row,
     // group-management bar, directly over the list, all of it - by driving GroupsScrollViewer
@@ -77,8 +88,28 @@ public partial class InstalledPage : Page
         e.Handled = true;
     }
 
+    // True when the click landed on (or inside) a button within the row - the row's own gesture
+    // steps aside for those, since PreviewMouseLeftButtonDown tunnels through the row Border before
+    // reaching the button and would otherwise mark the event handled before the button ever saw it.
+    private static bool IsInsideButton(object? originalSource)
+    {
+        for (var node = originalSource as DependencyObject; node is not null; node = VisualTreeHelper.GetParent(node))
+        {
+            if (node is ButtonBase) return true;
+        }
+
+        return false;
+    }
+
     private void ModRow_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+        if (IsInsideButton(e.OriginalSource))
+        {
+            _dragCandidate = null;
+            _dragStarted = false;
+            return;
+        }
+
         _dragStart = e.GetPosition(null);
         _dragCandidate = (sender as FrameworkElement)?.DataContext as InstalledModCardViewModel;
         _dragStarted = false;

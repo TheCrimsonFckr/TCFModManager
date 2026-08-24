@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -26,6 +28,18 @@ public partial class InstalledViewModel : ObservableObject
     private List<InstalledModCardViewModel> _all = [];
     private List<InstalledModCardViewModel> _filtered = [];
 
+    // Who needs whom among the mods currently on disk, rebuilt on every scan. Backs the warning
+    // shown before a disable takes something else's dependency away.
+    private ModDependencyGraph _dependencies = ModDependencyGraph.Build([]);
+
+    // Maps each raw scan entry back to the card it was merged into, so a dependency link (which is
+    // between InstalledMods) can be reported and acted on as whole mods.
+    private Dictionary<InstalledMod, InstalledModCardViewModel> _cardByEntry = [];
+
+    // The moves the last disable/enable made, and what to call it - the undo payload.
+    private List<ModMove> _lastMoves = [];
+    private string? _lastMoveLabel;
+
     public ObservableCollection<InstalledModCardViewModel> Results { get; } = [];
 
     public List<UpdateFilterItem> UpdateFilterOptions { get; } =
@@ -38,6 +52,16 @@ public partial class InstalledViewModel : ObservableObject
 
     [ObservableProperty]
     private UpdateFilterItem _selectedUpdateFilter;
+
+    public List<EnabledFilterItem> EnabledFilterOptions { get; } =
+    [
+        new("All", EnabledFilter.All),
+        new("Enabled only", EnabledFilter.EnabledOnly),
+        new("Disabled only", EnabledFilter.DisabledOnly),
+    ];
+
+    [ObservableProperty]
+    private EnabledFilterItem _selectedEnabledFilter;
 
     public List<ModSortItem> SortOptions { get; } =
     [
@@ -99,6 +123,24 @@ public partial class InstalledViewModel : ObservableObject
     /// groups are in their manual order; an alphabetical group sort would just override them.</summary>
     public bool CanReorderGroups => SelectedGroupSortOption.Value == GroupSortOption.Manual;
 
+    // ON turns the flat grid's cards into a tick-list so several can be disabled/enabled at once;
+    // a card click toggles its tick instead of opening the details dialog while this is on.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SelectionModeOff))]
+    private bool _selectionMode;
+
+    /// <summary>Inverse of SelectionMode, for controls that only show while it's off.</summary>
+    public bool SelectionModeOff => !SelectionMode;
+
+    public int SelectedCount => _all.Count(m => m.IsSelected);
+
+    public string SelectedCountLabel => SelectedCount == 1 ? "1 selected" : $"{SelectedCount} selected";
+
+    /// <summary>Whether the last disable/enable can still be put back.</summary>
+    public bool CanUndo => _lastMoves.Count > 0;
+
+    public string UndoLabel => _lastMoveLabel is null ? "Undo" : $"Undo {_lastMoveLabel}";
+
     [ObservableProperty]
     private bool _isBusy;
 
@@ -125,11 +167,20 @@ public partial class InstalledViewModel : ObservableObject
     public InstalledViewModel()
     {
         _selectedUpdateFilter = UpdateFilterOptions[0];
+        _selectedEnabledFilter = EnabledFilterOptions[0];
         _selectedSortOption = SortOptions[0];
         _selectedGroupSortOption = GroupSortOptions[0];
     }
 
     partial void OnSelectedUpdateFilterChanged(UpdateFilterItem value) => AutoApplyFilter();
+
+    partial void OnSelectedEnabledFilterChanged(EnabledFilterItem value) => AutoApplyFilter();
+
+    // Leaving selection mode drops the selection with it, so a stale tick can't be acted on later.
+    partial void OnSelectionModeChanged(bool value)
+    {
+        if (!value) ClearSelection();
+    }
 
     partial void OnSelectedSortOptionChanged(ModSortItem value) => AutoApplyFilter();
 
@@ -146,6 +197,11 @@ public partial class InstalledViewModel : ObservableObject
     partial void OnGroupViewEnabledChanged(bool value)
     {
         OnPropertyChanged(nameof(ShowFlatList));
+
+        // Group view has its own per-group enable/disable buttons and no card grid to tick, so the
+        // flat grid's selection mode is turned off rather than left running invisibly behind it.
+        if (value) SelectionMode = false;
+
         AutoApplyFilter();
     }
 
@@ -174,6 +230,7 @@ public partial class InstalledViewModel : ObservableObject
         {
             SearchText = string.Empty;
             SelectedUpdateFilter = UpdateFilterOptions[0];
+            SelectedEnabledFilter = EnabledFilterOptions[0];
             SelectedSortOption = SortOptions[0];
             FikaCompatibleOnly = false;
             HideContainsAds = false;
@@ -236,20 +293,39 @@ public partial class InstalledViewModel : ObservableObject
                 .OrderBy(m => m.Name, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
+            // Built off the same scan the cards came from, so every link points at an entry some
+            // card owns.
+            _dependencies = ModDependencyGraph.Build(scanned);
+            _cardByEntry = [];
+            foreach (var card in _all)
+            {
+                card.PropertyChanged += OnCardPropertyChanged;
+                foreach (var entry in card.Entries) _cardByEntry[entry] = card;
+            }
+
+            // A rescan replaces every card, so any previous selection is gone with them.
+            OnPropertyChanged(nameof(SelectedCount));
+            OnPropertyChanged(nameof(SelectedCountLabel));
+            DisableSelectedCommand.NotifyCanExecuteChanged();
+            EnableSelectedCommand.NotifyCanExecuteChanged();
+
             var unmatched = _all.Where(m => m.ModId is null).Select(m => m.Name).ToList();
             AppLog.Info("Installed",
                 $"scanned {scanned.Count} folder(s) -> {_all.Count} card(s); " +
-                $"{_all.Count(m => m.IsAppManaged)} app-managed, {unmatched.Count} unmatched");
+                $"{_all.Count(m => m.IsAppManaged)} app-managed, {_all.Count(m => m.IsDisabled)} disabled, " +
+                $"{unmatched.Count} unmatched");
             if (unmatched.Count > 0) AppLog.Debug("Installed", $"unmatched: {string.Join(", ", unmatched)}");
+
+            var mixed = _all.Where(m => m.IsMixedState).Select(m => m.Name).ToList();
+            if (mixed.Count > 0)
+                AppLog.Warn("Installed", $"present in both an enabled and a disabled folder: {string.Join(", ", mixed)}");
 
             ApplyFilter();
             if (GroupViewEnabled) RebuildSections(); else GoToPage(resetPage ? 1 : CurrentPage);
 
             StatusMessage = _all.Count == 0
                 ? $"No mods found under \"{installPath}\"."
-                : _filtered.Count == _all.Count
-                    ? $"{_all.Count} mod(s) found."
-                    : $"{_filtered.Count} of {_all.Count} mod(s) shown.";
+                : DescribeCounts();
         }
         finally
         {
@@ -269,6 +345,15 @@ public partial class InstalledViewModel : ObservableObject
         if (string.IsNullOrWhiteSpace(installPath))
         {
             StatusMessage = "No SPT install folder set - configure it on the Options page first.";
+            return;
+        }
+
+        // A disabled mod's install record still points at the folders it was installed into, which
+        // it no longer occupies - so removal would delete nothing and report success. Enabling it
+        // first puts those paths back where the record expects them.
+        if (mod.IsDisabled)
+        {
+            StatusMessage = $"{mod.DisplayTitle} is disabled - enable it before removing it.";
             return;
         }
 
@@ -374,6 +459,225 @@ public partial class InstalledViewModel : ObservableObject
         await ScanAsync(resetPage: false);
     }
 
+    /// <summary>Flips one mod between enabled and disabled.</summary>
+    [RelayCommand]
+    private Task ToggleDisableAsync(InstalledModCardViewModel? mod) =>
+        mod is null ? Task.CompletedTask : ApplyDisableAsync([mod], !mod.IsDisabled);
+
+    [RelayCommand]
+    private Task DisableGroupAsync(ModGroupSectionViewModel? section) =>
+        section is null ? Task.CompletedTask : ApplyDisableAsync(section.Items.ToList(), disable: true);
+
+    [RelayCommand]
+    private Task EnableGroupAsync(ModGroupSectionViewModel? section) =>
+        section is null ? Task.CompletedTask : ApplyDisableAsync(section.Items.ToList(), disable: false);
+
+    /// <summary>Disables everything currently enabled in a group and enables everything currently
+    /// disabled in it, as one undoable step.</summary>
+    [RelayCommand]
+    private async Task InvertGroupAsync(ModGroupSectionViewModel? section)
+    {
+        if (section is null) return;
+
+        var toDisable = section.Items.Where(m => !m.IsDisabled).ToList();
+        var toEnable = section.Items.Where(m => m.IsDisabled).ToList();
+
+        // The disable half is the one that can break other mods, so it asks first; the enable half
+        // then runs without a second prompt and its moves are merged into the same undo step.
+        var moves = await ApplyDisableAsync(toDisable, disable: true, label: $"inverting {section.Name}");
+        if (moves is null) return;
+
+        await ApplyDisableAsync(toEnable, disable: false, label: $"inverting {section.Name}", confirm: false, carryOver: moves);
+    }
+
+    private bool HasSelection() => SelectedCount > 0;
+
+    [RelayCommand(CanExecute = nameof(HasSelection))]
+    private Task DisableSelectedAsync() => ApplyDisableAsync(SelectedCards(), disable: true);
+
+    [RelayCommand(CanExecute = nameof(HasSelection))]
+    private Task EnableSelectedAsync() => ApplyDisableAsync(SelectedCards(), disable: false);
+
+    [RelayCommand]
+    private void ClearSelection()
+    {
+        foreach (var mod in _all) mod.IsSelected = false;
+    }
+
+    /// <summary>Puts the last disable/enable back. Fails softly per mod if anything moved on disk since.</summary>
+    [RelayCommand(CanExecute = nameof(CanUndo))]
+    private async Task UndoAsync()
+    {
+        if (_lastMoves.Count == 0) return;
+
+        IsBusy = true;
+        string message;
+        try
+        {
+            var outcome = ModDisableService.Revert(_lastMoves);
+            message = outcome.Failed.Count == 0
+                ? $"Put {outcome.Moved.Count} mod(s) back."
+                : $"Put {outcome.Moved.Count} mod(s) back; {DescribeFailures(outcome.Failed)}";
+        }
+        catch (InvalidOperationException ex)
+        {
+            StatusMessage = ex.Message;
+            return;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+
+        SetLastMoves([], null);
+        await ScanAsync(resetPage: false);
+        StatusMessage = message;
+    }
+
+    private List<InstalledModCardViewModel> SelectedCards() => _all.Where(m => m.IsSelected).ToList();
+
+    //
+    // The one path every disable/enable goes through: works out what else the change reaches, asks
+    // about it, moves the folders, then rescans. Returns the moves it made so a caller running two
+    // passes (InvertGroupAsync) can merge them into one undo step, or null when nothing happened.
+    //
+    private async Task<List<ModMove>?> ApplyDisableAsync(
+        IReadOnlyList<InstalledModCardViewModel> cards,
+        bool disable,
+        string? label = null,
+        bool confirm = true,
+        List<ModMove>? carryOver = null)
+    {
+        var verb = disable ? "disable" : "enable";
+
+        var targets = cards.Where(c => c.IsDisabled != disable).ToList();
+        if (targets.Count == 0)
+        {
+            if (carryOver is null) StatusMessage = $"Nothing to {verb}.";
+            return carryOver ?? [];
+        }
+
+        // Checked before anything is asked or moved, so a locked install is reported up front
+        // rather than after the user has answered a dialog. ModDisableService guards again itself.
+        if (ModInstallService.RunningBlockers() is { Count: > 0 } blockers)
+        {
+            StatusMessage =
+                $"Close {string.Join(" and ", blockers)} before {verb.TrimEnd('e')}ing a mod - " +
+                "files inside the SPT install are locked while it's running.";
+            return null;
+        }
+
+        var affected = AffectedCards(targets, disable);
+
+        if (confirm && affected.Count > 0)
+        {
+            var rows = affected
+                .Select(a => new ModDisableImpactRow(a.Card.DisplayTitle, a.Detail, a.IsSoft))
+                .ToList();
+
+            switch (ModDisableConfirmationWindow.Confirm(disable, targets.Select(t => t.DisplayTitle).ToList(), rows))
+            {
+                case ModDisableChoice.Cancel:
+                    return null;
+                case ModDisableChoice.ProceedWithCascade:
+                    targets = targets.Concat(affected.Select(a => a.Card)).Distinct().ToList();
+                    break;
+            }
+        }
+
+        var entries = targets.SelectMany(c => c.Entries).Where(e => e.IsDisabled != disable).ToList();
+
+        IsBusy = true;
+        ModDisableOutcome outcome;
+        try
+        {
+            outcome = ModDisableService.Apply(entries, disable);
+        }
+        catch (InvalidOperationException ex)
+        {
+            StatusMessage = ex.Message;
+            return null;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+
+        var moves = (carryOver ?? []).Concat(outcome.Moved).ToList();
+        SetLastMoves(moves, label ?? DescribeTargets(targets, disable));
+
+        var message = $"{(disable ? "Disabled" : "Enabled")} {targets.Count} mod(s).";
+        if (outcome.Failed.Count > 0) message = $"{message} {DescribeFailures(outcome.Failed)}";
+
+        await ScanAsync(resetPage: false);
+        StatusMessage = message;
+
+        return moves;
+    }
+
+    //
+    // What else this change reaches: the mods that would lose a dependency when disabling, or the
+    // disabled dependencies still needed when enabling. Reported as whole cards rather than
+    // individual scan entries, so a client+server mod is never half-moved.
+    //
+    private List<(InstalledModCardViewModel Card, string Detail, bool IsSoft)> AffectedCards(
+        IReadOnlyList<InstalledModCardViewModel> targets, bool disable)
+    {
+        var roots = targets.SelectMany(c => c.Entries).ToList();
+        var links = disable ? _dependencies.DisableImpact(roots) : _dependencies.EnableRequirements(roots);
+
+        var results = new List<(InstalledModCardViewModel, string, bool)>();
+        var seen = new HashSet<InstalledModCardViewModel>(targets);
+
+        foreach (var link in links)
+        {
+            var reached = disable ? link.Dependent : link.Dependency;
+            if (!_cardByEntry.TryGetValue(reached, out var card) || !seen.Add(card)) continue;
+
+            var otherName = _cardByEntry.TryGetValue(disable ? link.Dependency : link.Dependent, out var other)
+                ? other.DisplayTitle
+                : (disable ? link.Dependency : link.Dependent).Name;
+
+            var detail = disable
+                ? link.IsSoft ? $"optionally uses {otherName}" : $"needs {otherName}"
+                : link.IsSoft ? $"optionally used by {otherName}" : $"needed by {otherName}";
+
+            results.Add((card, detail, link.IsSoft));
+        }
+
+        return results;
+    }
+
+    private void SetLastMoves(List<ModMove> moves, string? label)
+    {
+        _lastMoves = moves;
+        _lastMoveLabel = label;
+        OnPropertyChanged(nameof(CanUndo));
+        OnPropertyChanged(nameof(UndoLabel));
+        UndoCommand.NotifyCanExecuteChanged();
+    }
+
+    private static string DescribeTargets(IReadOnlyList<InstalledModCardViewModel> targets, bool disable)
+    {
+        var what = targets.Count == 1 ? targets[0].DisplayTitle : $"{targets.Count} mods";
+        return $"{(disable ? "disabling" : "enabling")} {what}";
+    }
+
+    private static string DescribeFailures(IReadOnlyList<ModDisableFailure> failures) =>
+        failures.Count == 1
+            ? $"{failures[0].ModName} couldn't be moved: {failures[0].Reason}"
+            : $"{failures.Count} couldn't be moved: {string.Join("; ", failures.Select(f => $"{f.ModName} - {f.Reason}"))}";
+
+    private void OnCardPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(InstalledModCardViewModel.IsSelected)) return;
+
+        OnPropertyChanged(nameof(SelectedCount));
+        OnPropertyChanged(nameof(SelectedCountLabel));
+        DisableSelectedCommand.NotifyCanExecuteChanged();
+        EnableSelectedCommand.NotifyCanExecuteChanged();
+    }
+
     private static bool Confirm(string title, string message) =>
         MessageBox.Show(message, title, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;
 
@@ -381,6 +685,10 @@ public partial class InstalledViewModel : ObservableObject
     /// them in the same prompt. Returns null when the user backed out.</summary>
     private static ConfigAction? ConfirmRemoval(string modName, string message, int configCount)
     {
+        // Most people reaching for Remove are troubleshooting, where disabling does the job without
+        // deleting anything - worth saying at the point they're about to delete.
+        message += "\n\nTo take it out of the game without deleting it, use Disable instead.";
+
         if (configCount == 0)
             return Confirm($"Remove {modName}?", message) ? ConfigAction.Keep : null;
 
@@ -447,6 +755,12 @@ public partial class InstalledViewModel : ObservableObject
                 UpdateFilter.NotFound => m.MatchedModName is null,
                 _ => true, // All - no restriction
             })
+            .Where(m => SelectedEnabledFilter.Value switch
+            {
+                EnabledFilter.EnabledOnly => !m.IsDisabled,
+                EnabledFilter.DisabledOnly => m.IsDisabled,
+                _ => true,
+            })
             .Where(m => authorQuery is not null
                 ? MatchesAuthor(m, authorQuery)
                 : query.Length == 0 || Matches(m.DisplayTitle, query) || Matches(m.Name, query))
@@ -460,12 +774,18 @@ public partial class InstalledViewModel : ObservableObject
 
         // Keeps the status line up to date as soon as a filter/search control changes; skipped when
         // _all is empty since ScanAsync's own "No mods found under ..." message is more useful there.
-        if (_all.Count > 0)
-        {
-            StatusMessage = _filtered.Count == _all.Count
-                ? $"{_all.Count} mod(s) found."
-                : $"{_filtered.Count} of {_all.Count} mod(s) shown.";
-        }
+        if (_all.Count > 0) StatusMessage = DescribeCounts();
+    }
+
+    // How many mods are shown out of how many are installed, plus how many of them are disabled.
+    private string DescribeCounts()
+    {
+        var shown = _filtered.Count == _all.Count
+            ? $"{_all.Count} mod(s) found."
+            : $"{_filtered.Count} of {_all.Count} mod(s) shown.";
+
+        var disabled = _all.Count(m => m.IsDisabled);
+        return disabled == 0 ? shown : $"{shown} {disabled} disabled.";
     }
 
     private static IEnumerable<InstalledModCardViewModel> SortMods(IEnumerable<InstalledModCardViewModel> mods, ModSortOption sort) =>

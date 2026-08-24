@@ -20,3 +20,21 @@ public sealed record UpdateFilterItem(string Label, UpdateFilter Value)
 {
     public override string ToString() => Label;
 }
+
+public enum EnabledFilter
+{
+    // No restriction - enabled and disabled mods both show.
+    All,
+
+    // Only mods SPT actually loads.
+    EnabledOnly,
+
+    // Only mods moved out into a ".disabled" container.
+    DisabledOnly,
+}
+
+// One entry in Installed's Enabled/Disabled dropdown.
+public sealed record EnabledFilterItem(string Label, EnabledFilter Value)
+{
+    public override string ToString() => Label;
+}

@@ -253,7 +253,11 @@ public partial class DependenciesViewModel : ObservableObject
             installedByModId.TryGetValue(node.Id, out var installed);
 
             var required = node.LatestCompatibleVersion?.Version;
-            var status = DependencyStatusResolver.Resolve(node, installed?.InstalledVersion, required);
+
+            // A disabled dependency is on disk but isn't loaded, so anything needing it is as
+            // broken as if it were missing - shown as its own state rather than as "installed".
+            var status = DependencyStatusResolver.Resolve(
+                node, installed?.InstalledVersion, required, installed?.IsDisabled == true);
 
             yield return new DependencyRow
             {

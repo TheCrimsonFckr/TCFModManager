@@ -66,6 +66,14 @@
                 Opacity="0.8"
                 Text="{Binding StatusMessage}"
                 Visibility="{Binding StatusMessage, Converter={StaticResource NullToCollapsed}}" />
+
+            <!-- Explains why Update/Redownload aren't offered while the mod is disabled. -->
+            <TextBlock
+                Margin="0,4,0,0"
+                TextWrapping="Wrap"
+                Foreground="Goldenrod"
+                Text="{Binding DisabledNotice}"
+                Visibility="{Binding IsModDisabled, Converter={StaticResource TrueToVisible}}" />
         </StackPanel>
 
         <!-- "View mod page" shows when a catalog match exists. "Update" shows only when a newer
@@ -87,7 +95,7 @@
                 Icon="{ui:SymbolIcon ArrowDownload24}"
                 Command="{Binding RedownloadCommand}"
                 ToolTip="Re-fetch and reinstall the selected version"
-                Visibility="{Binding ShowUpdateButton, Converter={StaticResource FalseToVisible}}" />
+                Visibility="{Binding ShowRedownloadButton, Converter={StaticResource TrueToVisible}}" />
             <ui:Button
                 DockPanel.Dock="Right"
                 Margin="0,0,8,0"
