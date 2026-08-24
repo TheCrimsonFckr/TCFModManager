@@ -165,6 +165,106 @@ public class ModDisableServiceTests : IDisposable
     }
 
     [Fact]
+    public void DuplicatePairs_MatchesOnTheExactPathNotJustTheName()
+    {
+        var live = ServerMod("SomeMod");
+        var parked = ServerMod("SomeMod", disabled: true);
+
+        var pair = Assert.Single(ModDisableService.DuplicatePairs(
+            [Scanned(live, "SomeMod", false), Scanned(parked, "SomeMod", true)]));
+
+        Assert.Equal(live, pair.Enabled.FolderPath);
+        Assert.Equal(parked, pair.Disabled.FolderPath);
+    }
+
+    [Fact]
+    public void DuplicatePairs_IgnoresAClientServerModWithOneHalfDisabled()
+    {
+        var plugins = Path.Combine(_installRoot, "BepInEx", "plugins", "BigMod");
+        Directory.CreateDirectory(plugins);
+        var parkedServer = ServerMod("BigMod", disabled: true);
+
+        var mods = new[]
+        {
+            new InstalledMod { Name = "BigMod", Target = InstalledModTarget.Client, FolderPath = plugins, IsDisabled = false },
+            Scanned(parkedServer, "BigMod", true),
+        };
+
+        Assert.Empty(ModDisableService.DuplicatePairs(mods));
+    }
+
+    [Fact]
+    public void ResolveDuplicate_KeepingTheEnabledCopySetsTheOtherAside()
+    {
+        var live = ServerMod("SomeMod");
+        var parked = ServerMod("SomeMod", disabled: true);
+        var pair = new ModDuplicatePair(Scanned(live, "SomeMod", false), Scanned(parked, "SomeMod", true));
+
+        var outcome = ModDisableService.ResolveDuplicate(_installRoot, pair, keepEnabled: true, Stamp);
+
+        Assert.Empty(outcome.Failed);
+        Assert.True(Directory.Exists(live));
+        Assert.False(Directory.Exists(parked));
+        Assert.Single(SetAsideFolders());
+    }
+
+    [Fact]
+    public void ResolveDuplicate_KeepingTheDisabledCopyMovesItIntoPlace()
+    {
+        var live = ServerMod("SomeMod");
+        File.WriteAllText(Path.Combine(live, "marker.txt"), "live");
+        var parked = ServerMod("SomeMod", disabled: true);
+        File.WriteAllText(Path.Combine(parked, "marker.txt"), "parked");
+
+        var pair = new ModDuplicatePair(Scanned(live, "SomeMod", false), Scanned(parked, "SomeMod", true));
+
+        var outcome = ModDisableService.ResolveDuplicate(_installRoot, pair, keepEnabled: false, Stamp);
+
+        Assert.Empty(outcome.Failed);
+        Assert.True(Directory.Exists(live));
+        Assert.False(Directory.Exists(parked));
+        Assert.Equal("parked", File.ReadAllText(Path.Combine(live, "marker.txt")));
+        Assert.Single(SetAsideFolders());
+    }
+
+    [Fact]
+    public void ResolveDuplicate_SetsNothingAsideInsideAModContainer()
+    {
+        var live = ServerMod("SomeMod");
+        var parked = ServerMod("SomeMod", disabled: true);
+        var pair = new ModDuplicatePair(Scanned(live, "SomeMod", false), Scanned(parked, "SomeMod", true));
+
+        ModDisableService.ResolveDuplicate(_installRoot, pair, keepEnabled: true, Stamp);
+
+        // The set-aside copy must not be picked up as an installed mod again.
+        Assert.Single(InstalledModScanner.Scan(_installRoot));
+    }
+
+    [Fact]
+    public void ResolveDuplicate_IsUndoneByRevert()
+    {
+        var live = ServerMod("SomeMod");
+        var parked = ServerMod("SomeMod", disabled: true);
+        var pair = new ModDuplicatePair(Scanned(live, "SomeMod", false), Scanned(parked, "SomeMod", true));
+
+        var outcome = ModDisableService.ResolveDuplicate(_installRoot, pair, keepEnabled: false, Stamp);
+        var reverted = ModDisableService.Revert(outcome.Moved);
+
+        Assert.Empty(reverted.Failed);
+        Assert.True(Directory.Exists(live));
+        Assert.True(Directory.Exists(parked));
+        Assert.Empty(SetAsideFolders());
+    }
+
+    private static readonly DateTimeOffset Stamp = new(2026, 8, 24, 12, 15, 0, TimeSpan.Zero);
+
+    private string[] SetAsideFolders()
+    {
+        var root = Path.Combine(_installRoot, ".tcfmm-duplicates");
+        return Directory.Exists(root) ? Directory.GetDirectories(root) : [];
+    }
+
+    [Fact]
     public void DuplicatedNames_FindsModsPresentInBothStates()
     {
         var mods = new[]

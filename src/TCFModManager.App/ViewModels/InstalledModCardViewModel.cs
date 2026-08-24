@@ -117,6 +117,12 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     // client+server mod parked on its own, or a half-completed move leaving copies in both places.
     public bool IsMixedState => Entries.Any(e => e.IsDisabled) && Entries.Any(e => !e.IsDisabled);
 
+    // The same folder sitting in both a container and its ".disabled" sibling, which the disable
+    // toggle can't settle on its own - one of the two copies has to be set aside first.
+    public IReadOnlyList<ModDuplicatePair> DuplicateFolders => ModDisableService.DuplicatePairs(Entries);
+
+    public bool HasDuplicateFolders => DuplicateFolders.Count > 0;
+
     // Dims the whole card (and the group-view row) while disabled.
     public double CardOpacity => IsDisabled ? 0.45 : 1.0;
 
@@ -146,11 +152,13 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     // rather than either side's.
     public string StatusGlyph => IsMixedState ? "ErrorCircle24" : ModStatusDisplay.Glyph(Status);
 
-    public string StatusTooltip => IsMixedState
-        ? "Partly disabled - some of this mod's folders are disabled and some aren't"
-        : UpdateAvailable == true && !IsDisabled && LatestPublishedVersion is not null
-            ? $"Update available - {LatestPublishedVersion}"
-            : ModStatusDisplay.Tooltip(Status);
+    public string StatusTooltip => HasDuplicateFolders
+        ? "This mod is in both an enabled and a disabled folder - use Sort out to keep one copy"
+        : IsMixedState
+            ? "Partly disabled - some of this mod's folders are disabled and some aren't"
+            : UpdateAvailable == true && !IsDisabled && LatestPublishedVersion is not null
+                ? $"Update available - {LatestPublishedVersion}"
+                : ModStatusDisplay.Tooltip(Status);
 
     // Groups raw scan results into one card per distinct mod and looks up each against the cached
     // catalog for its latest published version.

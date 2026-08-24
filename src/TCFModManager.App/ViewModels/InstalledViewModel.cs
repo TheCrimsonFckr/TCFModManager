@@ -490,6 +490,80 @@ public partial class InstalledViewModel : ObservableObject
         await ApplyDisableAsync(toEnable, disable: false, label: $"inverting {section.Name}", confirm: false, carryOver: moves);
     }
 
+    //
+    // Settles a mod found in both a container and its ".disabled" sibling. The user picks which
+    // copy to keep; the other is moved into a hidden folder in the install rather than deleted, so
+    // a wrong answer costs nothing but a drag back.
+    //
+    [RelayCommand]
+    private async Task ResolveDuplicateAsync(InstalledModCardViewModel? mod)
+    {
+        if (mod is not { HasDuplicateFolders: true }) return;
+
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        if (string.IsNullOrWhiteSpace(installPath))
+        {
+            StatusMessage = "No SPT install folder set - configure it on the Options page first.";
+            return;
+        }
+
+        if (ModInstallService.RunningBlockers() is { Count: > 0 } blockers)
+        {
+            StatusMessage =
+                $"Close {string.Join(" and ", blockers)} first - files inside the SPT install are locked while it's running.";
+            return;
+        }
+
+        var pairs = mod.DuplicateFolders;
+        var folders = string.Join("\n", pairs.SelectMany(p => new[] { p.Enabled.FolderPath, p.Disabled.FolderPath }));
+
+        var answer = MessageBox.Show(
+            $"{mod.DisplayTitle} is in both an enabled and a disabled folder:\n\n{folders}\n\n" +
+            "Yes  -  keep the enabled copy\n" +
+            "No  -  keep the disabled copy, and enable it\n" +
+            "Cancel  -  leave it as it is\n\n" +
+            "The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your SPT install, not deleted.",
+            $"Sort out {mod.DisplayTitle}?",
+            MessageBoxButton.YesNoCancel,
+            MessageBoxImage.Warning);
+
+        if (answer is not (MessageBoxResult.Yes or MessageBoxResult.No)) return;
+
+        var keepEnabled = answer == MessageBoxResult.Yes;
+        var moves = new List<ModMove>();
+        var failed = new List<ModDisableFailure>();
+
+        IsBusy = true;
+        try
+        {
+            var timestamp = DateTimeOffset.UtcNow;
+            foreach (var pair in pairs)
+            {
+                var outcome = ModDisableService.ResolveDuplicate(installPath, pair, keepEnabled, timestamp);
+                moves.AddRange(outcome.Moved);
+                failed.AddRange(outcome.Failed);
+            }
+        }
+        catch (InvalidOperationException ex)
+        {
+            StatusMessage = ex.Message;
+            return;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+
+        SetLastMoves(moves, $"sorting out {mod.DisplayTitle}");
+
+        var message = $"Sorted out {mod.DisplayTitle} - kept the {(keepEnabled ? "enabled" : "disabled")} copy, " +
+            "the other is in .tcfmm-duplicates in your SPT install.";
+        if (failed.Count > 0) message = $"{message} {DescribeFailures(failed)}";
+
+        await ScanAsync(resetPage: false);
+        StatusMessage = message;
+    }
+
     private bool HasSelection() => SelectedCount > 0;
 
     [RelayCommand(CanExecute = nameof(HasSelection))]

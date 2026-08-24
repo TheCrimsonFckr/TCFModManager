@@ -5,6 +5,10 @@ namespace TCFModManager.Core.Services;
 // One mod folder (or loose DLL) moved between a container and its ".disabled" sibling.
 public sealed record ModMove(string From, string To);
 
+// The same mod folder present in both a container and its ".disabled" sibling - one copy loaded by
+// SPT, one not. Neither cleanly enabled nor cleanly disabled until one of them is set aside.
+public sealed record ModDuplicatePair(InstalledMod Enabled, InstalledMod Disabled);
+
 // A mod that couldn't be moved, and why - shown to the user rather than thrown.
 public sealed record ModDisableFailure(string ModName, string Reason);
 
@@ -22,6 +26,10 @@ public sealed record ModDisableOutcome(IReadOnlyList<ModMove> Moved, IReadOnlyLi
 //
 public static class ModDisableService
 {
+    // Hidden folder inside the SPT install holding copies set aside by ResolveDuplicate. Sits
+    // outside every mod container, so nothing here is loaded by SPT or listed by the scanner.
+    private const string DuplicatesFolderName = ".tcfmm-duplicates";
+
     //
     // Moves each mod into the requested state, skipping any already in it. Partial success is
     // normal: everything that could move is moved and reported, everything that couldn't is
@@ -66,7 +74,11 @@ public static class ModDisableService
         return new ModDisableOutcome(moved, failed);
     }
 
-    // Puts a previous run's moves back where they came from - the undo for Apply.
+    //
+    // Puts a previous run's moves back where they came from - the undo for Apply and
+    // ResolveDuplicate. Walked in reverse, since a run that moved two things through the same path
+    // (ResolveDuplicate keeping the disabled copy) only unwinds correctly last-move-first.
+    //
     public static ModDisableOutcome Revert(IEnumerable<ModMove> moves)
     {
         var pending = moves.ToList();
@@ -77,8 +89,9 @@ public static class ModDisableService
         var moved = new List<ModMove>();
         var failed = new List<ModDisableFailure>();
 
-        foreach (var move in pending)
+        for (var i = pending.Count - 1; i >= 0; i--)
         {
+            var move = pending[i];
             var name = Path.GetFileName(move.To);
 
             if (!Exists(move.To) || Exists(move.From))
@@ -97,9 +110,95 @@ public static class ModDisableService
     }
 
     //
+    // The mod folders sitting in both a container and its ".disabled" sibling, matched on the exact
+    // path rather than the name - so a client+server mod with only one half disabled, which is a
+    // normal thing to do, isn't reported as a duplicate.
+    //
+    public static List<ModDuplicatePair> DuplicatePairs(IEnumerable<InstalledMod> mods)
+    {
+        var all = mods.ToList();
+        var pairs = new List<ModDuplicatePair>();
+
+        foreach (var enabled in all.Where(m => !m.IsDisabled))
+        {
+            if (DisabledModPaths.Counterpart(enabled.FolderPath) is not { } counterpart) continue;
+
+            var disabled = all.FirstOrDefault(m =>
+                m.IsDisabled && string.Equals(m.FolderPath, counterpart, StringComparison.OrdinalIgnoreCase));
+
+            if (disabled is not null) pairs.Add(new ModDuplicatePair(enabled, disabled));
+        }
+
+        return pairs;
+    }
+
+    //
+    // Settles a duplicate by keeping one copy and moving the other into a hidden
+    // ".tcfmm-duplicates" folder in the install, stamped with the time and the container it came
+    // from. Nothing is deleted, and the set-aside copy sits outside every mod container so SPT
+    // ignores it and the scanner stops listing it. The returned moves undo through Revert.
+    //
+    public static ModDisableOutcome ResolveDuplicate(
+        string installPath, ModDuplicatePair pair, bool keepEnabled, DateTimeOffset timestamp)
+    {
+        ModInstallService.EnsureInstallNotInUse("sorting out a duplicated mod");
+
+        var moved = new List<ModMove>();
+        var failed = new List<ModDisableFailure>();
+
+        var keep = keepEnabled ? pair.Enabled : pair.Disabled;
+        var discard = keepEnabled ? pair.Disabled : pair.Enabled;
+
+        var setAside = SetAsidePath(installPath, discard.FolderPath, timestamp);
+
+        if (!TryMove(discard.FolderPath, setAside, discard.Name, failed))
+            return new ModDisableOutcome(moved, failed);
+
+        moved.Add(new ModMove(discard.FolderPath, setAside));
+        TryHide(Path.Combine(installPath, DuplicatesFolderName));
+
+        // Keeping the disabled copy means moving it into the container the discarded one just left.
+        if (!keepEnabled && DisabledModPaths.Counterpart(keep.FolderPath) is { } destination)
+        {
+            if (TryMove(keep.FolderPath, destination, keep.Name, failed))
+                moved.Add(new ModMove(keep.FolderPath, destination));
+        }
+
+        AppLog.Info("Disable", $"resolved duplicate {keep.Name}; set aside {setAside}");
+
+        return new ModDisableOutcome(moved, failed);
+    }
+
+    // "<install>\.tcfmm-duplicates\20260824-121500_plugins_SomeMod" - the timestamp and container
+    // keep two rounds of the same duplicate apart.
+    private static string SetAsidePath(string installPath, string modPath, DateTimeOffset timestamp)
+    {
+        var trimmed = modPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        var name = Path.GetFileName(trimmed);
+        var container = Path.GetFileName(Path.GetDirectoryName(trimmed) ?? string.Empty);
+        if (container.Length > 0) container = DisabledModPaths.Enabled(container);
+
+        var prefix = $"{timestamp.ToLocalTime():yyyyMMdd-HHmmss}";
+        var folder = container.Length > 0 ? $"{prefix}_{container}_{name}" : $"{prefix}_{name}";
+
+        return Path.Combine(installPath, DuplicatesFolderName, folder);
+    }
+
+    private static void TryHide(string directory)
+    {
+        try
+        {
+            if (Directory.Exists(directory)) File.SetAttributes(directory, FileAttributes.Hidden);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or PlatformNotSupportedException)
+        {
+            // A visible folder is only untidy, not broken.
+        }
+    }
+
+    //
     // Mod names present both in a live container and in its ".disabled" sibling - what a
-    // half-completed move or a hand-edited install leaves behind. Such a mod is neither cleanly
-    // enabled nor cleanly disabled and needs sorting out by hand.
+    // half-completed move or a hand-edited install leaves behind.
     //
     public static IReadOnlyList<string> DuplicatedNames(IEnumerable<InstalledMod> mods) =>
         mods.GroupBy(m => m.Name, StringComparer.OrdinalIgnoreCase)

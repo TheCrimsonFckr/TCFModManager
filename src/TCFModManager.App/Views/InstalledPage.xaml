@@ -389,6 +389,21 @@
                                 <!-- Disable/enable toggle above Remove: the non-destructive action
                                      sits next to the destructive one, deliberately not coloured red. -->
                                 <StackPanel Grid.Row="2" VerticalAlignment="Bottom">
+                                    <!-- Only for a mod found in both an enabled and a disabled
+                                         folder, which the toggle alone can't settle. -->
+                                    <ui:Button
+                                        Margin="6,6,6,0"
+                                        HorizontalAlignment="Center"
+                                        Padding="6"
+                                        Appearance="Transparent"
+                                        Foreground="Goldenrod"
+                                        Content="Sort out"
+                                        FontSize="11"
+                                        Visibility="{Binding HasDuplicateFolders, Converter={StaticResource BoolToVis}}"
+                                        Command="{Binding DataContext.ResolveDuplicateCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip="This mod is in both an enabled and a disabled folder - pick which copy to keep" />
+
                                     <ui:Button
                                         Margin="6,6,6,0"
                                         HorizontalAlignment="Center"

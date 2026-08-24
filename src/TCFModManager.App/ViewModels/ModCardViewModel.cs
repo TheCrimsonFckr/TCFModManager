@@ -52,13 +52,18 @@ public sealed class ModCardViewModel
     // True when this catalog mod matched an installed mod. Drives whether the card shows an install/update status dot.
     public bool IsInstalled { get; private init; }
 
+    // True when the installed match is sitting in a ".disabled" container, so it's on disk but not
+    // loaded. Outranks the update state - what's newer hardly matters while nothing loads it.
+    public bool IsDisabled { get; private init; }
+
     // The card's install status, using the same vocabulary and icons as the Installed and
     // Dependencies pages.
-    public ModStatus Status => (IsInstalled, UpdateAvailable) switch
+    public ModStatus Status => (IsInstalled, IsDisabled, UpdateAvailable) switch
     {
-        (false, _) => ModStatus.NotInstalled,
-        (true, true) => ModStatus.UpdateAvailable,
-        (true, false) => ModStatus.Installed,
+        (false, _, _) => ModStatus.NotInstalled,
+        (true, true, _) => ModStatus.Disabled,
+        (true, false, true) => ModStatus.UpdateAvailable,
+        (true, false, false) => ModStatus.Installed,
         _ => ModStatus.Unknown,
     };
 
@@ -132,6 +137,7 @@ public sealed class ModCardViewModel
             IsOlderCompatibleVersion = isOlder,
             AlternateCompatibleVersionNote = alternateNote,
             IsInstalled = installedMatch is not null,
+            IsDisabled = installedMatch?.IsDisabled == true,
             UpdateAvailable = installedMatch?.UpdateAvailable,
         };
     }

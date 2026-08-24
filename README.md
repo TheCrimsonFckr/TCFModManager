@@ -32,8 +32,8 @@ The released build is self-contained, so no separate .NET runtime install is nee
 **Browse** the whole sp-mod.com catalog, fetched once and cached to disk. Search by name or by
 author (`@author`), filter by SPT release line, category, Fika compatibility, featured status, and
 toggles for hiding ads and AI-generated content. Cards show a status dot (installed / update
-available / not installed / nothing compatible published) and a badge for mods that pull in
-dependencies. Clicking a card opens its details; "Refresh cache" re-pulls the catalog.
+available / disabled / not installed / nothing compatible published) and a badge for mods that pull
+in dependencies. Clicking a card opens its details; "Refresh cache" re-pulls the catalog.
 
 **Installed** scans your SPT folder for what's actually there, both client mods
 (`BepInEx\plugins`, `BepInEx\patchers`) and server mods (`user\mods`), and matches them back to the
@@ -58,7 +58,13 @@ covers hand-installed mods that never matched a catalog listing. Undo puts the l
 
 Whether a mod is disabled is read purely from where it sits on disk, so moving folders by hand works
 too. Update, Redownload and Remove are unavailable while a mod is disabled - their install record
-points at folders it no longer occupies - so enable it first.
+points at folders it no longer occupies - so enable it first. Browse shows the same state on its own
+cards and refuses a reinstall for the same reason.
+
+If a mod ends up in *both* an enabled and a disabled folder - a move interrupted partway, or one
+done by hand - its card says so and offers "Sort out": pick which copy to keep, and the other is
+moved into a hidden `.tcfmm-duplicates` folder in your SPT install rather than deleted. Undo puts
+that back too.
 
 **Dependencies** resolves the dependency tree of every installed mod that declares one, and
 reports each dependency's state against what's on disk, including version conflicts where two mods
@@ -155,8 +161,8 @@ Debug-level output in the same log. Logs rotate daily as `tcfmm-<yyyyMMdd>.log`.
 
 - Group membership is keyed on the mod's folder name, so renaming a folder drops it out of its
   group - and out of anything you then disable by group.
-- A mod left in both a container and its `.disabled` sibling (a half-completed move, or a manual
-  one) is flagged on its card but has to be sorted out by hand.
+- Copies set aside by "Sort out" stay in `.tcfmm-duplicates` in your SPT install until you delete
+  them; nothing prunes that folder.
 - Disabling doesn't reorder anything: a server mod's `loadBefore`/`loadAfter` ordering relative to
   the mods still enabled is left to SPT.
 

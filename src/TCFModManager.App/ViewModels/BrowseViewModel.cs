@@ -527,6 +527,15 @@ public partial class BrowseViewModel : ObservableObject
 
         var mod = card.Mod;
 
+        // Same rule as the Installed page: a disabled mod's install record points at folders it no
+        // longer occupies, so reinstalling over it would place files where nothing loads them and
+        // leave the disabled copy behind as a duplicate.
+        if (card.IsDisabled)
+        {
+            StatusMessage = $"{mod.Name} is disabled - enable it on the Installed page before reinstalling it.";
+            return;
+        }
+
         if (!ReadModPageConfirmationWindow.Confirm(mod.Name ?? "this mod", mod.DetailUrl))
         {
             StatusMessage = $"{verb} cancelled - {mod.Name}'s page wasn't confirmed as read.";
