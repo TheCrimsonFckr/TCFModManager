@@ -333,21 +333,33 @@ public partial class InstalledViewModel : ObservableObject
             // hasn't been visited yet this session.
             await AppServices.ModCache.EnsureLoadedAsync();
 
-            // Off the UI thread since the scan can take a noticeable amount of time for large collections.
-            var scanned = await Task.Run(() => InstalledModScanner.Scan(installPath));
-
             // What this app itself installed, and which folders it placed - identifies those mods
             // exactly instead of inferring them from folder names.
             var installRecords = AppServices.InstallManifest.Load().Mods;
 
-            _all = InstalledModCardViewModel.BuildFrom(
-                    scanned, AppServices.ModCache.AllMods, AppServices.SptEnvironment.InstalledVersion, installRecords)
-                .OrderBy(m => m.Name, StringComparer.OrdinalIgnoreCase)
-                .ToList();
+            // Read once here rather than inside the background work, so a catalog refresh landing
+            // mid-scan can't swap the list out from under it.
+            var catalog = AppServices.ModCache.AllMods;
+            var sptVersion = AppServices.SptEnvironment.InstalledVersion;
 
-            // Built off the same scan the cards came from, so every link points at an entry some
-            // card owns.
-            _dependencies = ModDependencyGraph.Build(scanned);
+            // The whole scan-and-match pass runs off the UI thread. Matching a large install
+            // against a full catalog is the slower half of the two, and doing it inline is what
+            // made navigating to this page hang.
+            var (scanned, cards, dependencies) = await Task.Run(() =>
+            {
+                var found = InstalledModScanner.Scan(installPath);
+
+                var built = InstalledModCardViewModel.BuildFrom(found, catalog, sptVersion, installRecords)
+                    .OrderBy(m => m.Name, StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                // Built off the same scan the cards came from, so every link points at an entry
+                // some card owns.
+                return (found, built, ModDependencyGraph.Build(found));
+            });
+
+            _all = cards;
+            _dependencies = dependencies;
             _cardByEntry = [];
             foreach (var card in _all)
             {

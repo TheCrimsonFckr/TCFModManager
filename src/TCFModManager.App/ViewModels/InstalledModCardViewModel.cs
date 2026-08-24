@@ -118,8 +118,13 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     public bool IsMixedState => Entries.Any(e => e.IsDisabled) && Entries.Any(e => !e.IsDisabled);
 
     // The same folder sitting in both a container and its ".disabled" sibling, which the disable
-    // toggle can't settle on its own - one of the two copies has to be set aside first.
-    public IReadOnlyList<ModDuplicatePair> DuplicateFolders => ModDisableService.DuplicatePairs(Entries);
+    // toggle can't settle on its own - one of the two copies has to be set aside first. Worked out
+    // once rather than per read: Entries never changes, and HasDuplicateFolders is bound on every
+    // card and every list row, so a computed property here is evaluated constantly.
+    private IReadOnlyList<ModDuplicatePair>? _duplicateFolders;
+
+    public IReadOnlyList<ModDuplicatePair> DuplicateFolders =>
+        _duplicateFolders ??= ModDisableService.DuplicatePairs(Entries);
 
     public bool HasDuplicateFolders => DuplicateFolders.Count > 0;
 
@@ -216,10 +221,15 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
             .GroupBy(r => r.ModId)
             .ToDictionary(g => g.Key, g => g.First());
 
+        // Every per-catalog-mod value the matching tiers below compare against is derived once here
+        // rather than recomputed for each installed mod. Without it, matching 120 installed mods
+        // against a 3000-entry catalog re-normalizes and re-tokenizes 360,000 catalog entries.
+        var index = CatalogIndex.Build(catalog);
+
         var groups = scanned
             .GroupBy(m => m.Name, StringComparer.OrdinalIgnoreCase)
             .Select(g => (Key: g.Key, Entries: g.ToList()))
-            .Select(g => (g.Entries, Match: ResolveCatalogMatch(g.Key, g.Entries, catalog, recordsByFolder)))
+            .Select(g => (g.Entries, Match: ResolveCatalogMatch(g.Key, g.Entries, index, recordsByFolder)))
             .ToList();
 
         return MergeSplitClientServerHalves(groups)
@@ -254,11 +264,86 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
         return index;
     }
 
+    //
+    // Everything about the catalog the matching tiers need, derived once per BuildFrom call. The
+    // tiers match exactly what they matched before - this only lifts the per-catalog-mod work out
+    // of the inner loop, and turns the three exact tiers into dictionary lookups.
+    //
+    private sealed class CatalogIndex
+    {
+        // Catalog order decides ties in the tiers that take the first match, so each of these keeps
+        // whichever mod was seen first.
+        public required Dictionary<int, Mod> ById { get; init; }
+        public required Dictionary<string, Mod> ByGuid { get; init; }
+        public required Dictionary<string, Mod> ByGuidDerivedFolderName { get; init; }
+
+        // The exact name/slug tier has to know when two different mods answer to the same
+        // normalized name, so it can decline rather than pick one.
+        public required Dictionary<string, List<Mod>> ByNormalizedNameOrSlug { get; init; }
+
+        // The fuzzy tier still walks the whole catalog, but compares against these rather than
+        // re-normalizing and re-tokenizing each candidate for every installed mod.
+        public required List<CatalogTokens> Tokens { get; init; }
+
+        public static CatalogIndex Build(IReadOnlyList<Mod> catalog)
+        {
+            var byId = new Dictionary<int, Mod>();
+            var byGuid = new Dictionary<string, Mod>(StringComparer.OrdinalIgnoreCase);
+            var byGuidFolder = new Dictionary<string, Mod>(StringComparer.Ordinal);
+            var byName = new Dictionary<string, List<Mod>>(StringComparer.Ordinal);
+            var tokens = new List<CatalogTokens>(catalog.Count);
+
+            foreach (var mod in catalog)
+            {
+                byId.TryAdd(mod.Id, mod);
+
+                if (!string.IsNullOrWhiteSpace(mod.Guid)) byGuid.TryAdd(mod.Guid, mod);
+
+                foreach (var candidate in GuidDerivedFolderNames(mod.Guid))
+                    byGuidFolder.TryAdd(candidate, mod);
+
+                var normalizedName = NormalizedOrNull(mod.Name);
+                var normalizedSlug = NormalizedOrNull(mod.Slug);
+
+                foreach (var normalized in new[] { normalizedName, normalizedSlug })
+                {
+                    if (normalized is null) continue;
+                    if (!byName.TryGetValue(normalized, out var list)) byName[normalized] = list = [];
+                    if (list.All(m => m.Id != mod.Id)) list.Add(mod);
+                }
+
+                tokens.Add(new CatalogTokens(
+                    mod,
+                    normalizedName,
+                    normalizedSlug,
+                    SignificantTokens(mod.Name ?? string.Empty),
+                    SignificantTokens(mod.Slug ?? string.Empty)));
+            }
+
+            return new CatalogIndex
+            {
+                ById = byId,
+                ByGuid = byGuid,
+                ByGuidDerivedFolderName = byGuidFolder,
+                ByNormalizedNameOrSlug = byName,
+                Tokens = tokens,
+            };
+        }
+    }
+
+    // One catalog mod's precomputed name and slug forms, for the fuzzy matching tier.
+    private sealed record CatalogTokens(
+        Mod Mod,
+        string? NormalizedName,
+        string? NormalizedSlug,
+        HashSet<string> NameTokens,
+        HashSet<string> SlugTokens);
+
     // The catalog lookup used by BuildFrom, run once per name-group.
     private static Mod? ResolveCatalogMatch(
         string folderName,
         List<InstalledMod> entries,
-        IReadOnlyList<Mod> catalog,
+        CatalogIndex index,
         Dictionary<string, InstalledModRecord> recordsByFolder)
     {
         // This app placed the folder, so the catalog listing is already known exactly. Everything
@@ -266,8 +351,8 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
         // can't be talked into matching a listing called "Epic's All in One".
         if (recordsByFolder.TryGetValue(folderName, out var record))
         {
-            var fromRecord = catalog.FirstOrDefault(m => m.Id == record.ModId)
-                ?? catalog.FirstOrDefault(m => GuidsMatch(record.Guid, m.Guid));
+            var fromRecord = index.ById.GetValueOrDefault(record.ModId)
+                ?? (string.IsNullOrWhiteSpace(record.Guid) ? null : index.ByGuid.GetValueOrDefault(record.Guid));
             if (fromRecord is not null) return fromRecord;
         }
 
@@ -275,32 +360,80 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
         // exact identifier before falling back to the folder-name heuristics below.
         var installedGuid = entries.FirstOrDefault(m => m.Target == InstalledModTarget.Client)?.Guid;
 
+        if (!string.IsNullOrWhiteSpace(installedGuid) && index.ByGuid.TryGetValue(installedGuid, out var byGuid))
+            return byGuid;
+
+        // Derived from the folder name once, rather than from every catalog entry in turn.
+        var normalizedFolder = Normalize(TrailingTargetSuffix.Replace(folderName, ""));
+
+        if (normalizedFolder.Length > 0
+            && index.ByGuidDerivedFolderName.TryGetValue(normalizedFolder, out var byGuidFolder))
+        {
+            return byGuidFolder;
+        }
+
         // Name/slug inference is the only tier that can plausibly hit more than one listing, and
         // being attributed to the wrong one is worse than not being matched at all: the update it
         // then offers would install a different mod over this one. So both name/slug tiers require
         // exactly one candidate, and an exact name/slug match is tried before the fuzzy one rather
         // than letting a loose match on Name beat an exact match on Slug.
-        return catalog.FirstOrDefault(m => GuidsMatch(installedGuid, m.Guid))
-            ?? catalog.FirstOrDefault(m => GuidMatchesFolderName(m.Guid, folderName))
-            ?? OnlyMatch(catalog, m => NamesMatch(m.Name, folderName) || NamesMatch(m.Slug, folderName))
-            ?? OnlyMatch(catalog, m => NameOrSlugMatches(m.Name, folderName) || NameOrSlugMatches(m.Slug, folderName));
+        if (normalizedFolder.Length > 0
+            && index.ByNormalizedNameOrSlug.TryGetValue(normalizedFolder, out var exact))
+        {
+            return exact.Count == 1 ? exact[0] : null;
+        }
+
+        return OnlyFuzzyMatch(index, folderName, normalizedFolder);
     }
 
-    // The single catalog mod satisfying <paramref name="predicate"/>, or null when none or more
-    // than one does.
-    private static Mod? OnlyMatch(IReadOnlyList<Mod> catalog, Func<Mod, bool> predicate)
+    //
+    // The single catalog mod whose name or slug covers the folder name's significant tokens, or
+    // null when none or more than one does - the same rule NameOrSlugMatches applied per candidate,
+    // with the folder's own forms built once instead of once per catalog entry.
+    //
+    private static Mod? OnlyFuzzyMatch(CatalogIndex index, string folderName, string normalizedFolder)
     {
+        var folderTokens = TokenSet.For(folderName);
+
+        var separator = FirstSeparator.Match(folderName);
+        var afterPrefix = separator.Success ? folderName[(separator.Index + separator.Length)..] : null;
+        var afterPrefixTokens = string.IsNullOrEmpty(afterPrefix) ? TokenSet.Empty : TokenSet.For(afterPrefix);
+
+        // Neither side can cover anything and there is no exact form to compare, so the whole
+        // catalog walk is skipped rather than run to reach the same answer.
+        if (!folderTokens.CanCover && !afterPrefixTokens.CanCover && normalizedFolder.Length == 0) return null;
+
         Mod? only = null;
 
-        foreach (var mod in catalog)
+        foreach (var candidate in index.Tokens)
         {
-            if (!predicate(mod)) continue;
-            if (only is not null && only.Id != mod.Id) return null;
+            if (!Covers(candidate.NormalizedName, candidate.NameTokens)
+                && !Covers(candidate.NormalizedSlug, candidate.SlugTokens))
+            {
+                continue;
+            }
 
-            only ??= mod;
+            if (only is not null && only.Id != candidate.Mod.Id) return null;
+
+            only ??= candidate.Mod;
         }
 
         return only;
+
+        bool Covers(string? normalizedCandidate, HashSet<string> candidateTokens) =>
+            (normalizedCandidate is not null && normalizedFolder.Length > 0 && normalizedCandidate == normalizedFolder)
+            || folderTokens.IsCoveredBy(candidateTokens)
+            || afterPrefixTokens.IsCoveredBy(candidateTokens);
+    }
+
+    // Normalize, or null when the source is blank or normalizes to nothing - an empty key would
+    // otherwise match every folder name that normalizes to nothing too.
+    private static string? NormalizedOrNull(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return null;
+
+        var normalized = Normalize(value);
+        return normalized.Length == 0 ? null : normalized;
     }
 
     // Joins a client-only name-group to a server-only name-group when they're the only two that
@@ -447,14 +580,8 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     private static bool VersionsAreEquivalent(string? a, string? b) =>
         ModVersionComparer.IsUpdateAvailable(a, b) == false && ModVersionComparer.IsUpdateAvailable(b, a) == false;
 
-    // Exact case-insensitive comparison between the real GUID read out of a client mod's DLL and a
-    // catalog mod's Guid.
-    private static bool GuidsMatch(string? installedGuid, string? catalogGuid) =>
-        !string.IsNullOrWhiteSpace(installedGuid) && !string.IsNullOrWhiteSpace(catalogGuid)
-        && string.Equals(installedGuid, catalogGuid, StringComparison.OrdinalIgnoreCase);
-
-    // Best-effort match against a catalog mod's GUID by guessing it from the folder name. Tries
-    // two folder-naming conventions:
+    // The folder names a catalog mod's GUID would plausibly have been installed under, normalized
+    // ready to compare. Two folder-naming conventions:
     //
     // 1. Drop the leading segment, dash-join the rest - e.g. GUID "com.acidphantasm.bosseshavegpcoins"
     //    -> folder "acidphantasm-bosseshavegpcoins".
@@ -462,36 +589,24 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     //    modname - e.g. GUID "wtf.archangel.lotsoflootredux" -> folder "archangelwtf-lotsoflootredux".
     //
     // Tried before the Name/Slug fallback.
-    private static bool GuidMatchesFolderName(string? guid, string folderName)
+    private static IEnumerable<string> GuidDerivedFolderNames(string? guid)
     {
-        if (string.IsNullOrWhiteSpace(guid)) return false;
+        if (string.IsNullOrWhiteSpace(guid)) yield break;
 
         var parts = guid.Split('.', StringSplitOptions.RemoveEmptyEntries);
-        if (parts.Length < 2) return false;
+        if (parts.Length < 2) yield break;
 
-        var dropFirst = string.Join('-', parts.Skip(1));
-        if (NamesMatch(dropFirst, folderName)) return true;
+        if (NormalizedOrNull(string.Join('-', parts.Skip(1))) is { } dropFirst) yield return dropFirst;
 
         var modName = parts[^1];
         var reversedDomain = string.Concat(parts[..^1].Reverse());
-        var reversedDomainCandidate = $"{reversedDomain}-{modName}";
-        return NamesMatch(reversedDomainCandidate, folderName);
+        if (NormalizedOrNull($"{reversedDomain}-{modName}") is { } reversed) yield return reversed;
     }
 
     // Matches a trailing "-client"/"-server"/"_client"/"_server" (or no separator) on a folder name,
     // stripped before matching since it isn't part of the mod's actual identity.
     private static readonly Regex TrailingTargetSuffix =
         new(@"[-_]?(client|server)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
-    // Strict identity comparison used only for GUID-derived candidates (see GuidMatchesFolderName).
-    // Strips the trailing target suffix, then punctuation and casing, before comparing exactly.
-    private static bool NamesMatch(string? candidate, string folderName)
-    {
-        if (string.IsNullOrWhiteSpace(candidate)) return false;
-
-        var trimmedFolder = TrailingTargetSuffix.Replace(folderName, "");
-        return Normalize(candidate) == Normalize(trimmedFolder);
-    }
 
     private static string Normalize(string s) =>
         new(s.Where(char.IsLetterOrDigit).Select(char.ToLowerInvariant).ToArray());
@@ -505,13 +620,13 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     private static readonly Regex NonAlphanumericRun = new(@"[^a-zA-Z0-9]+", RegexOptions.Compiled);
 
     // Words that describe how a mod is packaged, not what it actually is - stripped from both sides
-    // of NameOrSlugMatches's token comparison below.
+    // of OnlyFuzzyMatch's token comparison.
     private static readonly HashSet<string> GenericTokens = new(StringComparer.OrdinalIgnoreCase)
     {
         "mod", "mods", "patch", "addon", "plugin", "client", "server", "backend", "frontend",
     };
 
-    // Matches the first "-", "_", or "." in a folder name - used by NameOrSlugMatches to retry with a
+    // Matches the first "-", "_", or "." in a folder name - used by OnlyFuzzyMatch to retry with a
     // probable author-name prefix dropped off (the "Author-ModName" convention).
     private static readonly Regex FirstSeparator = new(@"[-_.]", RegexOptions.Compiled);
 
@@ -524,39 +639,55 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
             .ToHashSet();
     }
 
-    // Looser identity comparison used for the catalog's own Name/Slug (see BuildFrom). Three tiers:
     //
-    // 1. Exact match (same strict comparison GUID-derived guesses use).
-    // 2. Token coverage: every significant word in the folder name has to appear somewhere in the
-    //    candidate, in any order, ignoring generic packaging words (see GenericTokens).
-    // 3. Same token coverage as (2), retried against only the part of the folder name after its
-    //    first "-"/"_" - covers the common "Author-ModName" folder convention.
+    // A folder name's significant tokens, with the "is this worth comparing at all" test done once
+    // up front rather than repeated for every catalog entry it is compared against. The length-4
+    // floor guards against a near-empty token set matching everything by vacuous truth.
     //
-    // Known imprecision: a very short, single-token folder name can match any catalog entry containing
-    // that token.
-    private static bool NameOrSlugMatches(string? candidate, string folderName)
+    private readonly struct TokenSet
     {
-        if (string.IsNullOrWhiteSpace(candidate)) return false;
-        if (NamesMatch(candidate, folderName)) return true;
+        public static TokenSet Empty { get; } = new([]);
 
-        var candidateTokens = SignificantTokens(candidate);
-        if (TokensCoveredBy(SignificantTokens(folderName), candidateTokens)) return true;
+        private readonly HashSet<string> _tokens;
 
-        var separator = FirstSeparator.Match(folderName);
-        if (!separator.Success) return false;
+        private TokenSet(HashSet<string> tokens)
+        {
+            _tokens = tokens;
+            CanCover = tokens.Count > 0 && tokens.Sum(t => t.Length) >= 4;
+        }
 
-        var afterAuthorPrefix = folderName[(separator.Index + separator.Length)..];
-        return afterAuthorPrefix.Length > 0
-            && TokensCoveredBy(SignificantTokens(afterAuthorPrefix), candidateTokens);
-    }
+        public bool CanCover { get; }
 
-    // True when every one of folderTokens appears somewhere in candidateTokens. The length-4 floor
-    // guards against a near-empty token set matching everything by vacuous truth. A folder token also
-    // counts as covered if it's a short abbreviation of some candidate token (see IsAbbreviationOf).
-    private static bool TokensCoveredBy(HashSet<string> folderTokens, HashSet<string> candidateTokens)
-    {
-        if (folderTokens.Count == 0 || folderTokens.Sum(t => t.Length) < 4) return false;
-        return folderTokens.All(t => candidateTokens.Contains(t) || candidateTokens.Any(c => IsAbbreviationOf(t, c)));
+        public static TokenSet For(string source) => new(SignificantTokens(source));
+
+        //
+        // True when every one of these tokens appears somewhere in candidateTokens. A token also
+        // counts as covered if it is a short abbreviation of some candidate token (see
+        // IsAbbreviationOf). Plain loops rather than LINQ: this runs once per catalog entry per
+        // unmatched mod, which is where the matching pass spends nearly all of its time.
+        //
+        public bool IsCoveredBy(HashSet<string> candidateTokens)
+        {
+            if (!CanCover) return false;
+
+            foreach (var token in _tokens)
+            {
+                if (candidateTokens.Contains(token)) continue;
+
+                var abbreviated = false;
+                foreach (var candidate in candidateTokens)
+                {
+                    if (!IsAbbreviationOf(token, candidate)) continue;
+
+                    abbreviated = true;
+                    break;
+                }
+
+                if (!abbreviated) return false;
+            }
+
+            return true;
+        }
     }
 
     // True when folderToken reads as a plausible truncation of candidateToken: a prefix match with

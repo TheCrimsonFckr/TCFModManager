@@ -5,7 +5,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:views="clr-namespace:TCFModManager.App.Views"
     xmlns:app="clr-namespace:TCFModManager.App"
-    Title="TCF Mod Manager - 1.3.0-BETA"
+    Title="TCF Mod Manager - 1.2.1-BETA"
     Icon="pack://application:,,,/Assets/AppIcon.ico"
     Height="900"
     Width="1500"
@@ -25,7 +25,7 @@
 
         <ui:TitleBar
             Grid.Row="0"
-            Title="TCF Mod Manager - 1.3.0-BETA">
+            Title="TCF Mod Manager - 1.2.1-BETA">
             <ui:TitleBar.Icon>
                 <ui:ImageIcon Source="pack://application:,,,/Assets/AppIcon.ico" />
             </ui:TitleBar.Icon>
@@ -46,28 +46,39 @@
             x:Name="RootNavigationView"
             Grid.Row="2"
             IsPaneOpen="False">
+            <!-- NavigationCacheMode is Disabled by default in WPF-UI, which builds a brand new
+                 Page - fresh BAML load, fresh visual tree, fresh ViewModel - on every click of a
+                 nav item, including going back to one you were just on. Required keeps one instance
+                 of each page for the app's lifetime, so switching views is a content swap rather
+                 than a rebuild. Each page's Loaded handler still runs on every visit, so anything
+                 that has to refresh on return still does. -->
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem
                     Content="Browse"
                     Icon="{ui:SymbolIcon Apps24}"
+                    NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:BrowsePage}" />
                 <ui:NavigationViewItem
                     Content="Installed"
                     Icon="{ui:SymbolIcon CheckmarkCircle24}"
+                    NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:InstalledPage}" />
                 <ui:NavigationViewItem
                     Content="Dependencies"
                     Icon="{ui:SymbolIcon Branch24}"
+                    NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:DependenciesPage}" />
                 <ui:NavigationViewItem
                     Content="Downloads"
                     Icon="{ui:SymbolIcon ArrowDownload24}"
+                    NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:DownloadsPage}" />
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem
                     Content="Options"
                     Icon="{ui:SymbolIcon Settings24}"
+                    NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:OptionsPage}" />
             </ui:NavigationView.FooterMenuItems>
         </ui:NavigationView>
