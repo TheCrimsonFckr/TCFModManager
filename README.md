@@ -88,10 +88,55 @@ queues those alongside it. Progress, per-item cancel, and "Clear finished". Canc
 cancels the dependencies it dragged in. The page also handles plain archive downloads when you'd
 rather install something by hand.
 
+**App update** whether a newer version of this app has been published, what kind of change it is,
+the release notes, and the button that installs it. See "Updating the app itself" below.
+
 **Options** SPT install folder, and the detected SPT version.
 
 Before anything is queued, the app asks you to open each mod's page on sp-mod.com first same as
 installing manually, and it keeps mod authors' page views and instructions in the loop.
+
+### Updating the app itself
+
+This app has its own mod page on sp-mod.com, the same as everything else you install through it. On
+launch it asks that listing whether anything newer has been published, and if so raises a banner and
+puts a badge on the **App update** item in the sidebar.
+
+Everything about this goes through sp-mod.com: the check reads the public API, the download is the
+file the mod page's own Download button serves, and - exactly as with any other mod - **you're asked
+to open the mod page before anything is downloaded**. Nothing here works around sp-mod.com, its
+download counts, or anything a mod author has put on a page. It isn't hidden from the site either.
+The only thing it changes about Browse is that the app no longer lists *itself* among the mods it
+installs into an SPT folder, since it isn't one - installing it from there would drop a second copy
+of the manager into `BepInEx\plugins` for SPT to try to load.
+
+**What the version number tells you.** The update page names the change rather than leaving you to
+work it out from the numbers:
+
+| Change | Means |
+| --- | --- |
+| `x.x.`**`1`** | **Bug fix.** Fixes to how the current version already works. Nothing new to learn - safe to skip if nothing is broken for you. |
+| `x.`**`1`**`.x` | **Feature update.** Something new, or something works differently. Worth reading the notes. |
+| **`1`**`.x.x` | **Major update.** Significant changes. Read the notes and the mod page first. |
+
+Closing the banner skips that release - it won't come back for that version, though anything
+published after it will. The **App update** page is always there regardless, with a Check now button.
+
+**How the swap works.** A running program can't overwrite itself, so this is done from outside it.
+The release is downloaded and unpacked into a hidden `.tcfmm-update\` folder next to the exe and
+checked for a real `TCFModManager.exe` before anything else happens. The app then starts a small
+PowerShell script, closes, and the script waits for it to actually exit before copying the new build
+into place and starting it again.
+
+That copy is additive, never a mirror: `Data\`, `Staging\` and `LegacyConfigs\` sit in the same
+folder as the exe, so your SPT path, install history and kept mod configs are left exactly as they
+were. If anything fails - no write access to the folder, not enough disk, a copy that doesn't go
+through - **the version you already have is left untouched**, and the unpacked build stays in
+`.tcfmm-update\payload\` so you can copy it over by hand. What happened is written into the app's
+own log on the next launch.
+
+If the app lives somewhere it can't write to (inside Program Files, say), it says so up front
+instead of trying, and points you at the mod page.
 
 ### How installs work
 
@@ -130,6 +175,7 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 | `Data\logs\tcfmm-<date>.log` | Daily log |
 | `Staging\` | Default destination for manually downloaded archives |
 | `LegacyConfigs\` | Config files kept from removed mods, one timestamped folder per removal |
+| `.tcfmm-update\` | Hidden. Only exists while a self-update is downloading or has failed; swept on the next launch |
 
 ### Logging
 
@@ -196,8 +242,8 @@ Debug-level output in the same log. Logs rotate daily as `tcfmm-<yyyyMMdd>.log`.
  dependencies, so it's reusable from tests, a console tool, or a future TCFModSync integration.
  One package reference: SharpCompress.
 - `src/TCFModManager.App` the WPF shell (`net9.0-windows`, [WPF-UI](https://www.nuget.org/packages/WPF-UI)
- 4.3.0 for Fluent Design, MVVM via CommunityToolkit.Mvvm). Five pages: Browse, Installed,
- Dependencies, Downloads, Options.
+ 4.3.0 for Fluent Design, MVVM via CommunityToolkit.Mvvm). Six pages: Browse, Installed,
+ Dependencies, Downloads, App update, Options.
 - `Tests/TCFModManager.Core.Tests` xunit tests over the API client, version matching,
  dependency status, and the installed-mod scanner, using JSON fixtures captured from live
  sp-mod.com responses.
@@ -250,11 +296,39 @@ imports it, so MSBuild's directory walk-up still finds it) and `NuGet.config` pl
 that aren't tracked in git (`*.ps1` is gitignored, same convention as TCFModSync):
 
 - `build\deploy.ps1` forces a full rebuild and launches the exe, for a fast local test cycle.
-- `build\package-release.ps1 -Version 0.3.5` publishes a self-contained single-file win-x64
- build, zips it (plus a source zip via `git archive`) into `dist\`, and deploys that build into
- `<SptRoot>\TCFModManager\`. The SPT path comes from `-SptPath`, otherwise from Options' saved
- `settings.json`; if neither resolves, deploy is skipped and packaging still succeeds. Pass
- `-SkipDeploy` to always skip it.
+- `build\package-release.ps1 -Version 1.4.0-beta` sets the release version (see below), publishes a
+ self-contained single-file win-x64 build, zips it (plus a source zip via `git archive`) into
+ `dist\`, and deploys that build into `<SptRoot>\TCFModManager\`. The SPT path comes from
+ `-SptPath`, otherwise from Options' saved `settings.json`; if neither resolves, deploy is skipped
+ and packaging still succeeds. Pass `-SkipDeploy` to always skip it.
+
+### Versioning
+
+**`-Version` on `package-release.ps1` is how a release is versioned.** The script writes it into
+`<Version>` in `build\Directory.Build.props` before publishing, so the exe compiles that number in
+and the zip is labelled to match. Omit `-Version` and whatever the props file already says is used
+unchanged, which is how you repackage without bumping.
+
+```
+.\build\package-release.ps1 -Version 1.4.0-beta
+```
+
+It expects `major.minor.patch` with an optional pre-release suffix, and refuses anything else -
+`1.4`, `1.4.0.5` and `not-a-version` all fail with a message rather than producing a broken release.
+A leading `v` is dropped (MSBuild can't derive `AssemblyVersion` from `v1.4.0`). The rewrite is a
+targeted text edit, so the props file's comments and formatting survive.
+
+`build\Directory.Build.props` remains the single place the version *lives* - nothing else in the
+tree carries one. MSBuild copies `<Version>` into `AssemblyInformationalVersion`, the only one of
+the three generated version attributes that keeps a pre-release suffix, which is why `AppVersion`
+reads that one rather than `AssemblyVersion` (which drops `-beta` and reports `1.3.0.0`).
+`AppVersion.Current` is what the title bar shows, what `SpModApiOptions.UserAgent` is built from,
+and what the self-updater compares against sp-mod.com - so a stale value makes every user's copy
+either offer an update it already has or never offer one at all.
+
+The bump is left uncommitted for you to review. The script points it out when it warns about
+uncommitted changes, since until it's committed the source zip beside the release still carries the
+old version.
 
 The published exe is ~135MB, almost entirely the bundled .NET 9 runtime and WPF framework
 assemblies rather than app code. `SatelliteResourceLanguages` is already set to trim non-English

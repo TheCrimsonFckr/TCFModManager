@@ -11,7 +11,11 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
-        AppLog.Start($"SPT install: {AppServices.SptEnvironment.InstallPath ?? "(not set)"}");
+        AppLog.Start($"{AppVersion.Current}, SPT install: {AppServices.SptEnvironment.InstallPath ?? "(not set)"}");
+
+        // Reports how a self-update went (the script doing the swap runs after the previous process
+        // is gone, so its own log is the only record of it) and clears out the staged files.
+        AppUpdateInstaller.SweepAfterStartup();
 
         // Shows unhandled dispatcher exceptions instead of crashing/hanging silently.
         DispatcherUnhandledException += OnDispatcherUnhandledException;

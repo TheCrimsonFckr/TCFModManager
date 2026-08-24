@@ -31,7 +31,14 @@ public partial class SptEnvironmentViewModel : ObservableObject
     public void SetInstallPath(string? path)
     {
         InstallPath = path;
-        _settings.Save(new AppSettings { SptInstallPath = path });
+
+        // Load-mutate-save rather than saving a fresh AppSettings: settings.json holds more than
+        // the install path now (the skipped app-update version), and constructing a new object here
+        // would silently drop everything this view model doesn't know about.
+        var settings = _settings.Load();
+        settings.SptInstallPath = path;
+        _settings.Save(settings);
+
         Redetect();
     }
 

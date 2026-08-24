@@ -5,7 +5,8 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:views="clr-namespace:TCFModManager.App.Views"
     xmlns:app="clr-namespace:TCFModManager.App"
-    Title="TCF Mod Manager - 1.2.1-BETA"
+    xmlns:core="clr-namespace:TCFModManager.Core.Services;assembly=TCFModManager.Core"
+    Title="{x:Static core:AppVersion.DisplayTitle}"
     Icon="pack://application:,,,/Assets/AppIcon.ico"
     Height="900"
     Width="1500"
@@ -23,24 +24,60 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <!-- Both titles come from the assembly version (see AppVersion) rather than being typed
+             here. They used to be two hardcoded strings, which had already drifted a release
+             behind what dist\ was shipping - and a stale version number is exactly what would make
+             a self-updater either never fire or offer an update the user already has. -->
         <ui:TitleBar
             Grid.Row="0"
-            Title="TCF Mod Manager - 1.2.1-BETA">
+            Title="{x:Static core:AppVersion.DisplayTitle}">
             <ui:TitleBar.Icon>
                 <ui:ImageIcon Source="pack://application:,,,/Assets/AppIcon.ico" />
             </ui:TitleBar.Icon>
         </ui:TitleBar>
 
-        <!-- Warning banner shown when no SPT install path is set. -->
-        <ui:InfoBar
-            Grid.Row="1"
-            Margin="12,8,12,0"
-            IsClosable="True"
-            Severity="Warning"
-            Title="SPT install folder not set"
-            Message="You must set your SPT root in the settings first"
-            DataContext="{x:Static app:AppServices.SptEnvironment}"
-            IsOpen="{Binding IsInstallPathMissing}" />
+        <!-- Both banners live in the same row, stacked, so raising one never overlaps the other. -->
+        <StackPanel Grid.Row="1">
+
+            <!-- Warning banner shown when no SPT install path is set. -->
+            <ui:InfoBar
+                Margin="12,8,12,0"
+                IsClosable="True"
+                Severity="Warning"
+                Title="SPT install folder not set"
+                Message="You must set your SPT root in the settings first"
+                DataContext="{x:Static app:AppServices.SptEnvironment}"
+                IsOpen="{Binding IsInstallPathMissing}" />
+
+            <!-- New version of this app published on sp-mod.com. The action button sits beside the
+                 InfoBar rather than inside it: InfoBar's own template button is the close button. -->
+            <Grid
+                Margin="12,8,12,0"
+                DataContext="{x:Static app:AppServices.AppUpdate}"
+                Visibility="{Binding IsBannerOpen, Converter={StaticResource BoolToVis}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <ui:InfoBar
+                    Grid.Column="0"
+                    IsClosable="True"
+                    Severity="{Binding BannerSeverity}"
+                    Title="{Binding BannerTitle}"
+                    Message="{Binding ChangeSummary}"
+                    IsOpen="{Binding IsBannerOpen, Mode=TwoWay}" />
+
+                <ui:Button
+                    Grid.Column="1"
+                    Margin="8,0,0,0"
+                    VerticalAlignment="Center"
+                    Appearance="Primary"
+                    Content="See what's new"
+                    Icon="{ui:SymbolIcon ArrowCircleUp24}"
+                    Click="AppUpdateBanner_Click" />
+            </Grid>
+        </StackPanel>
 
         <ui:NavigationView
             x:Name="RootNavigationView"
@@ -75,6 +112,22 @@
                     TargetPageType="{x:Type views:DownloadsPage}" />
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>
+                <!-- The badge only appears when there's actually an update, and its colour matches
+                     the banner's: informational for a bug fix, success for a feature release,
+                     attention for a major one. DataContext is set explicitly because an InfoBadge
+                     assigned to this property doesn't inherit one from the nav item. -->
+                <ui:NavigationViewItem
+                    Content="App update"
+                    Icon="{ui:SymbolIcon ArrowCircleUp24}"
+                    NavigationCacheMode="Required"
+                    TargetPageType="{x:Type views:AppUpdatePage}">
+                    <ui:NavigationViewItem.InfoBadge>
+                        <ui:InfoBadge
+                            DataContext="{x:Static app:AppServices.AppUpdate}"
+                            Severity="{Binding BadgeSeverity}"
+                            Visibility="{Binding UpdateAvailable, Converter={StaticResource BoolToVis}}" />
+                    </ui:NavigationViewItem.InfoBadge>
+                </ui:NavigationViewItem>
                 <ui:NavigationViewItem
                     Content="Options"
                     Icon="{ui:SymbolIcon Settings24}"

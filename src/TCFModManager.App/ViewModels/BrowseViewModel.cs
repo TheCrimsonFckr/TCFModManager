@@ -356,6 +356,12 @@ public partial class BrowseViewModel : ObservableObject
         var featured = SelectedFeaturedFilter.Value;
 
         var matched = AppServices.ModCache.AllMods
+            // This app's own sp-mod.com listing is hidden here rather than dropped from the cached
+            // catalog, which the self-updater still needs to be able to read. It just has no
+            // business appearing among the mods this app installs into an SPT folder: it isn't a
+            // mod, and installing it from here would drop a second copy of the manager into
+            // BepInEx\plugins where SPT would try to load it.
+            .Where(m => !string.Equals(m.Id.ToString(), SelfMod.ModId, StringComparison.Ordinal))
             .Where(m => authorQuery is not null
                 ? MatchesAuthor(m, authorQuery)
                 : query.Length == 0 || Matches(m.Name, query) || Matches(m.Teaser, query) || Matches(m.Slug, query))
