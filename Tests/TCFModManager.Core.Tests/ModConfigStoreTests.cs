@@ -15,9 +15,16 @@ public class ModConfigStoreTests : IDisposable
         Directory.CreateDirectory(_installRoot);
     }
 
+    //
+    // Backups go to the app's own Data folder rather than anywhere under _installRoot, so for a test
+    // run that folder is next to the test assembly and has to be cleared too. xunit builds a fresh
+    // instance per test and runs a class's tests sequentially, so wiping the whole thing here gives
+    // each test a clean backup folder rather than one shared across the class.
+    //
     public void Dispose()
     {
         if (Directory.Exists(_installRoot)) Directory.Delete(_installRoot, recursive: true);
+        if (Directory.Exists(ModConfigStore.BackupDirectory)) Directory.Delete(ModConfigStore.BackupDirectory, recursive: true);
     }
 
     private string WriteFile(string relative, string text, bool byteOrderMark = false)
@@ -67,11 +74,15 @@ public class ModConfigStoreTests : IDisposable
         Assert.NotNull(result.BackupPath);
         Assert.Equal("[General]\nEnabled = true\n", File.ReadAllText(result.BackupPath!));
 
-        // Kept at the file's own path relative to the install, so a whole timestamped folder can be
-        // copied back over an SPT install to undo a round of edits.
+        // In the app's own Data folder, not the SPT install - but laid out at the file's own path
+        // relative to the install, so a whole timestamped folder can still be copied back over an
+        // SPT install to undo a round of edits.
         Assert.Equal(
-            Path.Combine(_installRoot, ModConfigStore.BackupFolderName, "20260825-121500", "BepInEx", "config", "some.cfg"),
+            Path.Combine(ModConfigStore.BackupDirectory, "20260825-121500", "BepInEx", "config", "some.cfg"),
             result.BackupPath);
+
+        Assert.StartsWith(AppPaths.DataDirectory, result.BackupPath!);
+        Assert.DoesNotContain(_installRoot, result.BackupPath!);
     }
 
     [Fact]
@@ -201,7 +212,7 @@ public class ModConfigStoreTests : IDisposable
 
             Assert.NotNull(backup);
             Assert.Equal(Path.GetFileName(outside), Path.GetFileName(backup!));
-            Assert.StartsWith(Path.Combine(_installRoot, ModConfigStore.BackupFolderName), backup);
+            Assert.StartsWith(ModConfigStore.BackupDirectory, backup);
         }
         finally
         {

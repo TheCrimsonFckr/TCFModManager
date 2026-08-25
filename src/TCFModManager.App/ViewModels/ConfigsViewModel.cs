@@ -286,7 +286,7 @@ public sealed partial class ConfigsViewModel : ObservableObject
                 IsDirty = false;
                 StatusMessage = result.BackupPath is null
                     ? $"Saved {entry.FileName}."
-                    : $"Saved {entry.FileName}. The previous version is in {ModConfigStore.BackupFolderName}.";
+                    : $"Saved {entry.FileName}. The previous version is in {ModConfigStore.BackupDisplayPath}.";
                 break;
 
             case ModConfigSaveOutcome.Invalid:
@@ -314,7 +314,7 @@ public sealed partial class ConfigsViewModel : ObservableObject
             "Yes  -  overwrite it with what's in the editor\n" +
             "No  -  reload it and lose your changes\n" +
             "Cancel  -  leave everything as it is\n\n" +
-            $"Whichever you pick, the version currently on disk is copied into {ModConfigStore.BackupFolderName} first.",
+            $"Whichever you pick, the version currently on disk is copied into {ModConfigStore.BackupDisplayPath} first.",
             "File changed on disk",
             MessageBoxButton.YesNoCancel,
             MessageBoxImage.Warning);

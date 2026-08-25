@@ -26,9 +26,9 @@ public sealed class AppUpdateException(string message, Exception? inner = null)
 //   3. The script waits for this process to exit, copies the new files over the app folder, and
 //      starts the app again.
 //
-// The copy is deliberately additive (robocopy /E, never /MIR): Data\, Staging\ and LegacyConfigs\
-// sit in the same folder as the exe, and a mirror copy would delete the user's saved SPT path,
-// install history and kept mod configs along with the old build.
+// The copy is deliberately additive (robocopy /E, never /MIR): Data\ and Staging\ sit in the same
+// folder as the exe, and a mirror copy would delete the user's saved SPT path, install history,
+// kept mod configs and config backups along with the old build.
 //
 public sealed class AppUpdateInstaller(ModDownloadService downloads)
 {
@@ -330,8 +330,8 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
 
         Write-Log "copying the new build into $appDir"
         # /E and never /MIR: this lays the new build over the old one and leaves the rest of the
-        # folder alone. /MIR would delete Data\, Staging\ and LegacyConfigs\ - the saved SPT path,
-        # install history and kept mod configs all live alongside the exe.
+        # folder alone. /MIR would delete Data\ and Staging\ - the saved SPT path, install history,
+        # kept mod configs and config backups all live alongside the exe.
         $output = & robocopy $payloadDir $appDir /E /R:5 /W:2 /NFL /NDL /NJH /NJS /NC /NS 2>&1
         $robocopyExit = $LASTEXITCODE
         foreach ($line in $output) { if ("$line".Trim()) { Write-Log "robocopy: $line" } }

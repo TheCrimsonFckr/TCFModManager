@@ -42,11 +42,21 @@ public sealed record ModConfigSaveResult(
 public static class ModConfigStore
 {
     //
-    // Hidden folder inside the SPT install holding a copy of every config file taken before it was
-    // overwritten, mirroring the ".tcfmm-duplicates" folder the disable feature sets copies aside in.
-    // Sits at the install root so it is outside every mod container and SPT ignores it.
+    // Folder holding a copy of every config file taken before it was overwritten.
     //
-    public const string BackupFolderName = ".tcfmm-config-backups";
+    // Kept in the app's own Data folder rather than in the SPT install: this is the app's working
+    // data, not the game's, and scattering folders through someone's install is how a mod manager
+    // makes a mess of it. Being outside the install is also why it is neither dot-prefixed nor
+    // hidden the way ".tcfmm-work" and ".tcfmm-duplicates" are - those exist to stay out of SPT's
+    // way, whereas the whole point of a backup is being able to find it.
+    //
+    public const string BackupFolderName = "config-backups";
+
+    // Where the backups actually go: "<app>\Data\config-backups".
+    public static string BackupDirectory => Path.Combine(AppPaths.DataDirectory, BackupFolderName);
+
+    // How that folder is named to the user - short enough for a status line.
+    public static string BackupDisplayPath => $"Data\\{BackupFolderName}";
 
     private static readonly UTF8Encoding Utf8NoBom = new(encoderShouldEmitUTF8Identifier: false);
     private static readonly UTF8Encoding Utf8WithBom = new(encoderShouldEmitUTF8Identifier: true);
@@ -130,14 +140,16 @@ public static class ModConfigStore
 
         try
         {
+            // The path inside the backup stays relative to the SPT install even though the backup
+            // itself lives with the app, so a timestamped folder can still be copied straight back
+            // over an install to undo a round of edits.
             var relative = RelativeForBackup(installPath, path);
-            var destination = Path.Combine(installPath, BackupFolderName, $"{timestamp.ToLocalTime():yyyyMMdd-HHmmss}", relative);
+            var destination = Path.Combine(BackupDirectory, $"{timestamp.ToLocalTime():yyyyMMdd-HHmmss}", relative);
 
             var directory = Path.GetDirectoryName(destination);
             if (!string.IsNullOrEmpty(directory)) Directory.CreateDirectory(directory);
 
             File.Copy(path, destination, overwrite: true);
-            TryHide(Path.Combine(installPath, BackupFolderName));
 
             return destination;
         }
@@ -199,15 +211,4 @@ public static class ModConfigStore
             : relative;
     }
 
-    private static void TryHide(string directory)
-    {
-        try
-        {
-            if (Directory.Exists(directory)) File.SetAttributes(directory, FileAttributes.Hidden);
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or PlatformNotSupportedException)
-        {
-            // A visible folder is only untidy, not broken.
-        }
-    }
 }
