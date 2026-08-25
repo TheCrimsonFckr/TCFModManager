@@ -27,10 +27,21 @@
         Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.Row="0" Margin="0,0,0,12">
+        <!-- Closable, but not remembered - see ShowDisclaimer on the view model. -->
+        <ui:InfoBar
+            Grid.Row="0"
+            Margin="0,0,0,12"
+            Severity="Warning"
+            IsClosable="True"
+            IsOpen="{Binding ShowDisclaimer, Mode=TwoWay}"
+            Title="Edit at your own discretion"
+            Message="Changing a mod's configuration can break the mod, or your game. That is not the mod author's responsibility to put right, so only change settings you understand - and say so when reporting a bug if you have edited a config. Every file is copied into .tcfmm-config-backups before it is saved." />
+
+        <DockPanel Grid.Row="1" Margin="0,0,0,12">
             <ui:Button
                 DockPanel.Dock="Right"
                 Content="Rescan"
@@ -53,7 +64,7 @@
                 Text="{Binding StatusMessage}" />
         </DockPanel>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="340" MinWidth="240" />
                 <ColumnDefinition Width="Auto" />

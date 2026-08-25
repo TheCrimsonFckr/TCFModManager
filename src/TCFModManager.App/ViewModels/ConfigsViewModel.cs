@@ -110,6 +110,15 @@ public sealed partial class ConfigsViewModel : ObservableObject
     [ObservableProperty]
     private bool _hasResults;
 
+    //
+    // The warning at the top of the page. Closable, and deliberately not remembered anywhere: the
+    // page is built once per launch (its nav item caches it), so dismissing it lasts for the session
+    // and it is back the next time the app opens. A disclaimer nobody ever sees again after the
+    // first click isn't one.
+    //
+    [ObservableProperty]
+    private bool _showDisclaimer = true;
+
     partial void OnSearchTextChanged(string value) => ApplyFilter();
 
     partial void OnSelectedSourceFilterChanged(ConfigSourceFilterItem value) => ApplyFilter();
