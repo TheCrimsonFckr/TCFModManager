@@ -23,10 +23,54 @@ public static class AppPaths
     //
     // Under Data\ rather than beside the exe, alongside the Configs page's own backups - both are
     // the app's copies of somebody's config files and there is no reason for them to live in
-    // different places. The folder keeps its name through the move, so a copy left behind by an
-    // older install can be dragged into Data\ and simply merge.
+    // different places. The folder keeps its name through the move, so an older install's copy is
+    // carried across by MigrateLegacyConfigsFolder below without anything being renamed.
     //
     public static string LegacyConfigsDirectory => Path.Combine(DataDir, "LegacyConfigs");
+
+    // Where LegacyConfigsDirectory pointed before v1.5.0 - beside the exe rather than under Data\.
+    private static string PreV150LegacyConfigsDirectory => Path.Combine(AppContext.BaseDirectory, "LegacyConfigs");
+
+    //
+    // TEMPORARY, ADDED IN v1.5.0 - DELETE IN v1.6.0, along with its call in App.OnStartup and
+    // PreV150LegacyConfigsDirectory above.
+    //
+    // LegacyConfigs moved from beside the exe into Data\ in v1.5.0. An install updating from v1.4.x
+    // can have config files kept from a removed mod sitting in the old folder, and nothing in the
+    // app ever reads that folder back, so they would quietly stop being where the app says they are.
+    // This moves them once; every launch after that finds nothing and does nothing, which is what
+    // makes it safe to delete a release later.
+    //
+    // Called explicitly at startup rather than done lazily inside the property, so it is one method
+    // and one call site to remove rather than something tangled into how a path resolves.
+    //
+    public static void MigrateLegacyConfigsFolder()
+    {
+        var old = PreV150LegacyConfigsDirectory;
+        if (!Directory.Exists(old)) return;
+
+        //
+        // Both present means the folder was moved by hand already, or an earlier attempt half
+        // finished. Merging two trees risks overwriting a kept config to save someone one drag, so
+        // the old one is left exactly where it is and the log says so.
+        //
+        if (Directory.Exists(LegacyConfigsDirectory))
+        {
+            AppLog.Info("Paths", $"left {old} alone - {LegacyConfigsDirectory} already exists");
+            return;
+        }
+
+        try
+        {
+            Directory.Move(old, LegacyConfigsDirectory);
+            AppLog.Info("Paths", $"moved {old} into {LegacyConfigsDirectory}");
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            // Nothing is lost - the old folder is still there, just not where new ones go.
+            AppLog.Warn("Paths", $"couldn't move {old} into Data: {ex.Message}");
+        }
+    }
 
     private static string ResolveDirectory(string name)
     {

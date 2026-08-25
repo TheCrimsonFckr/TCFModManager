@@ -13,6 +13,11 @@ public partial class App : Application
 
         AppLog.Start($"{AppVersion.Current}, SPT install: {AppServices.SptEnvironment.InstallPath ?? "(not set)"}");
 
+        // TEMPORARY, ADDED IN v1.5.0 - DELETE IN v1.6.0, along with the method itself. Carries a
+        // pre-v1.5.0 LegacyConfigs folder from beside the exe into Data\. A no-op on every launch
+        // after the first, and on any install that never had one.
+        AppPaths.MigrateLegacyConfigsFolder();
+
         // Reports how a self-update went (the script doing the swap runs after the previous process
         // is gone, so its own log is the only record of it) and clears out the staged files.
         AppUpdateInstaller.SweepAfterStartup();
