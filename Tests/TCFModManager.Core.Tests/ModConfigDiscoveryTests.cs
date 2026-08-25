@@ -55,6 +55,17 @@ public class ModConfigDiscoveryTests : IDisposable
         FolderPath = Path.Combine("BepInEx", "plugins", name),
     };
 
+    // A mod folder registering several plugin GUIDs, as one shipping an API or config-UI assembly
+    // alongside its own plugin does.
+    private static InstalledMod ClientWithGuids(string name, params string[] guids) => new()
+    {
+        Name = name,
+        Guid = guids.FirstOrDefault(),
+        Guids = guids,
+        Target = InstalledModTarget.Client,
+        FolderPath = Path.Combine("BepInEx", "plugins", name),
+    };
+
     private static InstalledMod Server(string name, string folderPath, bool disabled = false) => new()
     {
         Name = name,
@@ -75,6 +86,45 @@ public class ModConfigDiscoveryTests : IDisposable
         Assert.Equal("me.sol.sain", entry.ModGuid);
         Assert.Equal(ModConfigFormat.BepInExCfg, entry.Format);
         Assert.Equal("BepInEx/config/me.sol.sain.cfg", entry.DisplayPath);
+    }
+
+    //
+    // A mod folder holding several plugin DLLs registers a GUID per DLL and gets a config file per
+    // GUID. Taking only the folder's first GUID left every other file in it looking like it belonged
+    // to nothing - real case: kmyuhkyuk-KmyTarkovApi ships KmyTarkovApi, KmyTarkovConfiguration,
+    // KmyTarkovReflection and KmyTarkovUtils, and only the first was recognised.
+    //
+    [Fact]
+    public void Find_MatchesEveryGuidAModsFolderRegisters()
+    {
+        ClientConfig("com.kmyuhkyuk.KmyTarkovApi.cfg");
+        ClientConfig("com.kmyuhkyuk.KmyTarkovConfiguration.cfg");
+
+        var mod = ClientWithGuids(
+            "kmyuhkyuk-KmyTarkovApi",
+            "com.kmyuhkyuk.KmyTarkovApi",
+            "com.kmyuhkyuk.KmyTarkovConfiguration");
+
+        var entries = ModConfigDiscovery.Find(_installRoot, [mod]);
+
+        Assert.Equal(2, entries.Count);
+        Assert.All(entries, e => Assert.Equal(ModConfigSource.Client, e.Source));
+        Assert.All(entries, e => Assert.Equal("kmyuhkyuk-KmyTarkovApi", e.ModName));
+
+        // Each file reports the GUID that actually wrote it, not the folder's primary one.
+        Assert.Equal(
+            ["com.kmyuhkyuk.KmyTarkovApi", "com.kmyuhkyuk.KmyTarkovConfiguration"],
+            entries.Select(e => e.ModGuid).Order());
+    }
+
+    [Fact]
+    public void Find_StillMatchesAModThatOnlyCarriesASingleGuid()
+    {
+        ClientConfig("me.sol.sain.cfg");
+
+        var entry = Assert.Single(ModConfigDiscovery.Find(_installRoot, [Client("SAIN", "me.sol.sain")]));
+
+        Assert.Equal("SAIN", entry.ModName);
     }
 
     [Fact]

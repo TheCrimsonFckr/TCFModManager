@@ -22,8 +22,27 @@ public sealed class InstalledMod
     // Null when no version could be determined.
     public string? Version { get; init; }
 
-    // For a client mod, the plugin's [BepInPlugin] GUID read from the compiled DLL; null for server mods or if it couldn't be read.
+    //
+    // The GUID that stands for this mod's identity - the first [BepInPlugin] GUID found in its
+    // folder. Null for server mods, and for a client mod whose GUID couldn't be read. Catalog
+    // matching and the dependency graph key on this, so it stays one value per mod.
+    //
     public string? Guid { get; init; }
+
+    //
+    // Every [BepInPlugin] GUID found in this mod's folder, not just the one above.
+    //
+    // A single mod folder routinely holds several plugin DLLs - an API, a config UI, a utilities
+    // assembly - each registering its own GUID, and each keeping its own file in BepInEx\config
+    // named after it. Keeping only the first would leave all the others' configs looking like they
+    // belonged to no installed mod at all. Empty for a server mod.
+    //
+    public IReadOnlyList<string> Guids { get; init; } = [];
+
+    // Guids, falling back to the single Guid when the list wasn't populated - so a mod built by
+    // hand with only Guid set still answers correctly.
+    public IReadOnlyList<string> AllGuids =>
+        Guids.Count > 0 ? Guids : Guid is null ? [] : [Guid];
 
     // Populated only for server mods, from package.json's "author" field.
     public string? Author { get; init; }

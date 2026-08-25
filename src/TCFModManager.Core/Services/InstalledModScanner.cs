@@ -89,11 +89,22 @@ public static class InstalledModScanner
             // on the same DLL used for versioning. Dependencies are collected across all of them.
             var metadata = dlls.Select(ReadPluginMetadata).ToList();
 
+            // Every GUID the folder registers, kept alongside the first. A mod shipping an API or
+            // config-UI assembly next to its own plugin registers one per DLL, and each of those
+            // has its own config file named after it.
+            var guids = metadata
+                .Select(m => m.Guid)
+                .Where(g => !string.IsNullOrWhiteSpace(g))
+                .Select(g => g!)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
             results.Add(new InstalledMod
             {
                 Name = name,
                 Version = dll is null ? null : TryGetFileVersion(dll),
-                Guid = metadata.Select(m => m.Guid).FirstOrDefault(g => g is not null),
+                Guid = guids.FirstOrDefault(),
+                Guids = guids,
                 Target = InstalledModTarget.Client,
                 IsPatcher = isPatcher,
                 FolderPath = dir,
@@ -115,6 +126,7 @@ public static class InstalledModScanner
                 Name = name,
                 Version = TryGetFileVersion(dll),
                 Guid = metadata.Guid,
+                Guids = metadata.Guid is null ? [] : [metadata.Guid],
                 Target = InstalledModTarget.Client,
                 IsPatcher = isPatcher,
                 FolderPath = dll,

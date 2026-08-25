@@ -128,9 +128,16 @@ public sealed class ModDependencyGraph
         return reached;
     }
 
+    //
+    // Every name something else could declare a dependency on this mod by. All of a folder's plugin
+    // GUIDs count, not just its primary one: a mod shipping an API assembly alongside its own plugin
+    // is most often depended on by that API's GUID, and matching only the primary would report the
+    // dependency as unresolved and leave the dependant out of the disable cascade - while the mod
+    // providing it is sitting right there installed.
+    //
     private static IEnumerable<string> Identifiers(InstalledMod mod)
     {
-        if (!string.IsNullOrWhiteSpace(mod.Guid)) yield return mod.Guid;
+        foreach (var guid in mod.AllGuids) yield return guid;
         if (mod.Target == InstalledModTarget.Server && !string.IsNullOrWhiteSpace(mod.Name)) yield return mod.Name;
     }
 

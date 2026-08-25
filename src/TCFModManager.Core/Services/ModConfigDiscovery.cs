@@ -78,7 +78,9 @@ public static class ModConfigDiscovery
 
         foreach (var mod in scanned)
         {
-            if (!string.IsNullOrWhiteSpace(mod.Guid)) byGuid.TryAdd(mod.Guid, mod);
+            // Every GUID the mod's folder registers, not just its primary one - a folder holding an
+            // API or config-UI assembly alongside the plugin itself has a config file for each.
+            foreach (var guid in mod.AllGuids) byGuid.TryAdd(guid, mod);
 
             var normalized = Normalize(mod.Name);
             if (normalized.Length == 0) continue;
@@ -114,8 +116,8 @@ public static class ModConfigDiscovery
                 ? Entry(installPath, file, ModConfigFormat.BepInExCfg, ModConfigSource.Unmatched)
                 : Entry(installPath, file, ModConfigFormat.BepInExCfg, ModConfigSource.Client) with
                 {
-                    ModName = match.Name,
-                    ModGuid = match.Guid,
+                    ModName = match.Value.Mod.Name,
+                    ModGuid = match.Value.Guid,
                 });
         }
 
@@ -131,16 +133,18 @@ public static class ModConfigDiscovery
     // attributing a config to the wrong mod would have someone editing settings that belong to
     // something else entirely, which is worse than leaving the file unclaimed.
     //
-    private static InstalledMod? MatchClientConfig(
+    private static ClientMatch? MatchClientConfig(
         string configFolder,
         string file,
         string stem,
         Dictionary<string, InstalledMod> byGuid,
         Dictionary<string, List<InstalledMod>> byNormalizedName)
     {
-        if (byGuid.TryGetValue(stem, out var byGuidMatch)) return byGuidMatch;
+        // The file's own name is the GUID that wrote it, so that GUID is reported rather than the
+        // mod's primary one - in a folder registering several, they are not the same thing.
+        if (byGuid.TryGetValue(stem, out var byGuidMatch)) return new ClientMatch(byGuidMatch, stem);
 
-        if (OnlyMatch(byNormalizedName, stem) is { } byName) return byName;
+        if (OnlyMatch(byNormalizedName, stem) is { } byName) return new ClientMatch(byName, byName.Guid);
 
         // A plugin that keeps several .cfg files puts them in a subfolder of BepInEx\config named
         // after itself. Only the folder directly under BepInEx\config is considered - anything
@@ -153,10 +157,15 @@ public static class ModConfigDiscovery
 
         var folderName = Path.GetFileName(parent);
 
-        return byGuid.TryGetValue(folderName, out var folderGuidMatch)
-            ? folderGuidMatch
-            : OnlyMatch(byNormalizedName, folderName);
+        if (byGuid.TryGetValue(folderName, out var folderGuidMatch)) return new ClientMatch(folderGuidMatch, folderName);
+
+        return OnlyMatch(byNormalizedName, folderName) is { } byFolderName
+            ? new ClientMatch(byFolderName, byFolderName.Guid)
+            : null;
     }
+
+    // The mod a config file was attributed to, and the GUID it was attributed by.
+    private readonly record struct ClientMatch(InstalledMod Mod, string? Guid);
 
     private static InstalledMod? OnlyMatch(Dictionary<string, List<InstalledMod>> byNormalizedName, string candidate)
     {

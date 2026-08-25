@@ -40,6 +40,32 @@ public class ModDependencyGraphTests
         Assert.False(link.IsSoft);
     }
 
+    //
+    // A mod folder holding several plugin DLLs registers a GUID per DLL, and what other mods depend
+    // on is usually the API assembly's GUID rather than the folder's primary one. Matching only the
+    // primary reported the dependency as unresolved and left the dependant out of the disable
+    // cascade, with the mod providing it installed the whole time.
+    //
+    [Fact]
+    public void DependentsOf_MatchesAnyGuidTheModsFolderRegisters()
+    {
+        var library = new InstalledMod
+        {
+            Name = "author-Toolkit",
+            Guid = "com.author.toolkit",
+            Guids = ["com.author.toolkit", "com.author.toolkit.api"],
+            Target = InstalledModTarget.Client,
+            FolderPath = Path.Combine("C:", "SPT", "BepInEx", "plugins", "author-Toolkit"),
+        };
+
+        var consumer = Client("Consumer", "com.author.consumer", false, new ModDependencyRef("com.author.toolkit.api", IsSoft: false));
+
+        var graph = ModDependencyGraph.Build([library, consumer]);
+
+        Assert.Same(consumer, Assert.Single(graph.DependentsOf(library)).Dependent);
+        Assert.Empty(graph.UnresolvedOf(consumer));
+    }
+
     [Fact]
     public void DependentsOf_MatchesAServerModByItsPackageName()
     {
