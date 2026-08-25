@@ -1,0 +1,331 @@
+<!-- ScrollViewer.CanContentScroll="False" opts this page out of WPF-UI's automatic outer
+     DynamicScrollViewer: NavigationView wraps every hosted Page's content in one by default, which
+     sits above this page's own scrolling regions and makes the wheel behave strangely (see the
+     scroll-anywhere corrections on InstalledPage for the full story). This page scrolls its own
+     list and its own editor, so it wants that wrapper gone.
+     Background="Transparent" on the root Grid is the other half: a Grid with no Background only
+     takes part in hit-testing where a child actually paints, so without it the wheel handler below
+     would never see events over the empty parts of the page. -->
+<Page
+    x:Class="TCFModManager.App.Views.ConfigsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    Title="Configs"
+    Loaded="ConfigsPage_Loaded"
+    ScrollViewer.CanContentScroll="False">
+    <Page.Resources>
+        <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
+        <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Page.Resources>
+
+    <Grid
+        x:Name="RootGrid"
+        Margin="16"
+        Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="0,0,0,12">
+            <ui:Button
+                DockPanel.Dock="Right"
+                Content="Rescan"
+                Icon="{ui:SymbolIcon ArrowSync24}"
+                Command="{Binding ScanCommand}" />
+
+            <ui:ProgressRing
+                DockPanel.Dock="Right"
+                Width="20"
+                Height="20"
+                Margin="0,0,12,0"
+                IsIndeterminate="True"
+                Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}" />
+
+            <TextBlock
+                VerticalAlignment="Center"
+                TextWrapping="Wrap"
+                Foreground="White"
+                Opacity="0.8"
+                Text="{Binding StatusMessage}" />
+        </DockPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="340" MinWidth="240" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MinWidth="320" />
+            </Grid.ColumnDefinitions>
+
+            <!-- The list. Grouped by where each file lives, so the client/server split is the shape
+                 of the list rather than a chip on each row. One ListBox rather than nested
+                 ItemsControls, so it has a single selection and the arrow keys walk the whole
+                 thing - the grouping is added to the collection's default view in code-behind. -->
+            <Grid x:Name="RailPanel" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <ui:TextBox
+                    Grid.Row="0"
+                    Margin="0,0,0,8"
+                    PlaceholderText="Search mods and files..."
+                    Icon="{ui:SymbolIcon Search24}"
+                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+
+                <ComboBox
+                    Grid.Row="1"
+                    Margin="0,0,0,8"
+                    HorizontalAlignment="Stretch"
+                    ItemsSource="{Binding SourceFilterOptions}"
+                    SelectedItem="{Binding SelectedSourceFilter}" />
+
+                <TextBlock
+                    Grid.Row="2"
+                    Margin="4,12,0,0"
+                    VerticalAlignment="Top"
+                    TextWrapping="Wrap"
+                    Foreground="White"
+                    Opacity="0.6"
+                    Text="Nothing matches. Note that plenty of plugins only write a config the first time the game runs."
+                    Visibility="{Binding HasResults, Converter={StaticResource FalseToVisible}}" />
+
+                <ScrollViewer
+                    x:Name="ListScrollViewer"
+                    Grid.Row="2"
+                    Focusable="False"
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Disabled"
+                    Visibility="{Binding HasResults, Converter={StaticResource BoolToVis}}">
+                    <ListBox
+                        x:Name="ConfigList"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        ItemsSource="{Binding Results}"
+                        SelectedItem="{Binding SelectedEntry}"
+                        HorizontalContentAlignment="Stretch">
+                        <ListBox.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <!-- DataContext is the CollectionViewGroup: Name is the
+                                             ConfigSectionHeader, ItemCount the number of files. -->
+                                        <StackPanel Margin="0,12,0,6">
+                                            <StackPanel Orientation="Horizontal">
+                                                <ui:SymbolIcon
+                                                    VerticalAlignment="Center"
+                                                    FontSize="16"
+                                                    Symbol="{Binding Name.Glyph}" />
+                                                <TextBlock
+                                                    Margin="8,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    FontWeight="SemiBold"
+                                                    Foreground="White"
+                                                    Text="{Binding Name.Title}" />
+                                                <TextBlock
+                                                    Margin="8,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="11"
+                                                    Foreground="White"
+                                                    Opacity="0.55"
+                                                    Text="{Binding Name.Location}" />
+                                                <TextBlock
+                                                    Margin="8,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="11"
+                                                    Foreground="White"
+                                                    Opacity="0.55"
+                                                    Text="{Binding ItemCount, StringFormat='({0})'}" />
+                                            </StackPanel>
+                                            <Separator Margin="0,6,0,0" Opacity="0.25" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                            </GroupStyle>
+                        </ListBox.GroupStyle>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,3" Opacity="{Binding RowOpacity}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ui:SymbolIcon
+                                        Grid.Column="0"
+                                        Margin="0,0,10,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="16"
+                                        Opacity="0.75"
+                                        Symbol="{Binding Glyph}"
+                                        ToolTip="{Binding FormatLabel}" />
+
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock
+                                            FontWeight="SemiBold"
+                                            Foreground="White"
+                                            TextTrimming="CharacterEllipsis"
+                                            Text="{Binding Title}" />
+                                        <TextBlock
+                                            FontSize="11"
+                                            Foreground="White"
+                                            Opacity="0.6"
+                                            TextTrimming="CharacterEllipsis"
+                                            ToolTip="{Binding FullPath}"
+                                            Text="{Binding Subtitle}" />
+                                        <ui:Badge
+                                            Margin="0,3,0,0"
+                                            HorizontalAlignment="Left"
+                                            Appearance="Caution"
+                                            FontSize="10"
+                                            Foreground="White"
+                                            Content="{Binding Badge}"
+                                            Visibility="{Binding Badge, Converter={StaticResource NullToCollapsed}}" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+            </Grid>
+
+            <GridSplitter
+                Grid.Column="1"
+                Width="6"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Stretch"
+                Background="Transparent" />
+
+            <!-- The editor. Both formats are edited as text for now; the .cfg form goes here next,
+                 swapped in on Format, with this text box kept as the "Raw" view. -->
+            <Grid Grid.Column="2" Margin="8,0,0,0">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    TextWrapping="Wrap"
+                    TextAlignment="Center"
+                    Foreground="White"
+                    Opacity="0.5"
+                    MaxWidth="380"
+                    Text="Pick a config file on the left to edit it."
+                    Visibility="{Binding HasSelection, Converter={StaticResource FalseToVisible}}" />
+
+                <Grid Visibility="{Binding HasSelection, Converter={StaticResource BoolToVis}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Grid.Row="0" Margin="0,0,0,8">
+                        <ui:Button
+                            DockPanel.Dock="Right"
+                            Padding="8,6"
+                            ToolTip="Show this file in Explorer"
+                            Icon="{ui:SymbolIcon FolderOpen24}"
+                            Command="{Binding OpenFolderCommand}" />
+                        <ui:Button
+                            DockPanel.Dock="Right"
+                            Margin="0,0,8,0"
+                            Padding="8,6"
+                            ToolTip="Copy the full path"
+                            Icon="{ui:SymbolIcon Copy24}"
+                            Command="{Binding CopyPathCommand}" />
+
+                        <StackPanel>
+                            <TextBlock
+                                FontSize="16"
+                                FontWeight="SemiBold"
+                                Foreground="White"
+                                TextTrimming="CharacterEllipsis"
+                                Text="{Binding SelectedEntry.Title}" />
+                            <TextBlock
+                                FontSize="11"
+                                Foreground="White"
+                                Opacity="0.6"
+                                TextWrapping="Wrap"
+                                Text="{Binding SelectedEntry.Entry.DisplayPath}" />
+                        </StackPanel>
+                    </DockPanel>
+
+                    <StackPanel Grid.Row="1" Margin="0,0,0,8">
+                        <!-- The one line that says what editing this file actually means - which
+                             half of the install it belongs to, and what happens to it when the mod
+                             is disabled or removed. -->
+                        <TextBlock
+                            TextWrapping="Wrap"
+                            Foreground="White"
+                            Opacity="0.7"
+                            Text="{Binding SelectedEntry.LocationNote}" />
+
+                        <TextBlock
+                            Margin="0,6,0,0"
+                            TextWrapping="Wrap"
+                            Foreground="Goldenrod"
+                            Text="{Binding SelectedEntry.StateNote}"
+                            Visibility="{Binding SelectedEntry.HasStateNote, Converter={StaticResource BoolToVis}}" />
+
+                        <TextBlock
+                            Margin="0,6,0,0"
+                            TextWrapping="Wrap"
+                            Foreground="Goldenrod"
+                            Text="{Binding RunningWarning}"
+                            Visibility="{Binding RunningWarning, Converter={StaticResource NullToCollapsed}}" />
+
+                        <TextBlock
+                            Margin="0,6,0,0"
+                            TextWrapping="Wrap"
+                            Foreground="IndianRed"
+                            Text="{Binding EditorError}"
+                            Visibility="{Binding EditorError, Converter={StaticResource NullToCollapsed}}" />
+                    </StackPanel>
+
+                    <TextBox
+                        Grid.Row="2"
+                        AcceptsReturn="True"
+                        AcceptsTab="True"
+                        FontFamily="Consolas, Cascadia Mono, Courier New"
+                        FontSize="13"
+                        TextWrapping="NoWrap"
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Auto"
+                        VerticalContentAlignment="Top"
+                        SpellCheck.IsEnabled="False"
+                        Text="{Binding EditorText, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <DockPanel Grid.Row="3" Margin="0,8,0,0">
+                        <ui:Button
+                            DockPanel.Dock="Right"
+                            Appearance="Primary"
+                            Content="Save"
+                            Icon="{ui:SymbolIcon Save24}"
+                            Command="{Binding SaveCommand}" />
+                        <ui:Button
+                            DockPanel.Dock="Right"
+                            Margin="0,0,8,0"
+                            Content="Revert"
+                            Icon="{ui:SymbolIcon ArrowUndo24}"
+                            ToolTip="Put back what's on disk, discarding your changes"
+                            Command="{Binding RevertCommand}" />
+
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Foreground="White"
+                            Opacity="0.7"
+                            Text="Unsaved changes"
+                            Visibility="{Binding IsDirty, Converter={StaticResource BoolToVis}}" />
+                    </DockPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

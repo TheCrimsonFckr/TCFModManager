@@ -100,6 +100,13 @@
                     Icon="{ui:SymbolIcon CheckmarkCircle24}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:InstalledPage}" />
+                <!-- Sits next to Installed because it is about the mods already on disk, and before
+                     Dependencies because it is the more everyday of the two. -->
+                <ui:NavigationViewItem
+                    Content="Configs"
+                    Icon="{ui:SymbolIcon EditSettings24}"
+                    NavigationCacheMode="Required"
+                    TargetPageType="{x:Type views:ConfigsPage}" />
                 <ui:NavigationViewItem
                     Content="Dependencies"
                     Icon="{ui:SymbolIcon Branch24}"
