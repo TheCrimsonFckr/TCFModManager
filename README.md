@@ -142,9 +142,8 @@ checked for a real `TCFModManager.exe` before anything else happens. The app the
 PowerShell script, closes, and the script waits for it to actually exit before copying the new build
 into place and starting it again.
 
-That copy is additive, never a mirror: `Data\`, `Staging\` and `LegacyConfigs\` sit in the same
-folder as the exe, so your SPT path, install history and kept mod configs are left exactly as they
-were. If anything fails - no write access to the folder, not enough disk, a copy that doesn't go
+That copy is additive, never a mirror: `Data\` and `Staging\` sit in the same folder as the exe, so
+your SPT path, install history, kept mod configs and config backups are left exactly as they were. If anything fails - no write access to the folder, not enough disk, a copy that doesn't go
 through - **the version you already have is left untouched**, and the unpacked build stays in
 `.tcfmm-update\payload\` so you can copy it over by hand. What happened is written into the app's
 own log on the next launch.
@@ -166,9 +165,9 @@ SPT was launched while it was in progress. If a file placement fails anyway, wha
 before the failure is still recorded and marked incomplete, so those files stay app-managed - a
 reinstall completes the mod, a removal clears it out.
 
-A server mod's own config files (`user\mods\<mod>\config\*.json`) aren't simply deleted with the
-rest of it. Removing a mod asks whether to keep them - moved into a timestamped folder under
-`LegacyConfigs\` with their install-relative paths intact, so the folder can be copied back over
+A server mod's own config files aren't simply deleted with the rest of it. Removing a mod asks
+whether to keep them - moved into a timestamped folder under `Data\LegacyConfigs\` with their
+install-relative paths intact, so the folder can be copied back over
 an SPT install to restore them - or delete them. Updates always keep them, without asking.
 
 Every install is recorded in `Data\installed-mods.json`, which is what makes a clean uninstall
@@ -187,8 +186,9 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 | `Data\spt_versions.json` | Cached SPT release list (refetched daily) |
 | `Data\dependency_flags.json` | Per-mod "has dependencies" answers, re-checked when a mod publishes |
 | `Data\logs\tcfmm-<date>.log` | Daily log |
+| `Data\config-backups\` | A copy of each config file taken before the Configs page overwrote it, one timestamped folder per save |
+| `Data\LegacyConfigs\` | Config files kept from removed mods, one timestamped folder per removal |
 | `Staging\` | Default destination for manually downloaded archives |
-| `LegacyConfigs\` | Config files kept from removed mods, one timestamped folder per removal |
 | `.tcfmm-update\` | Hidden. Only exists while a self-update is downloading or has failed; swept on the next launch |
 
 ### Logging
