@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:app="clr-namespace:TCFModManager.App"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     Style="{DynamicResource {x:Type ui:ContentDialog}}"
@@ -86,6 +87,7 @@
                 HorizontalAlignment="Right"
                 Content="Update"
                 Icon="{ui:SymbolIcon ArrowSync24}"
+                ToolTip="{Binding UpdateToolTip, Source={x:Static app:AppServices.ModPageGate}}"
                 Command="{Binding UpdateCommand}"
                 Visibility="{Binding ShowUpdateButton, Converter={StaticResource TrueToVisible}}" />
             <ui:Button
@@ -94,7 +96,7 @@
                 Content="Redownload"
                 Icon="{ui:SymbolIcon ArrowDownload24}"
                 Command="{Binding RedownloadCommand}"
-                ToolTip="Re-fetch and reinstall the selected version"
+                ToolTip="{Binding RedownloadToolTip, Source={x:Static app:AppServices.ModPageGate}}"
                 Visibility="{Binding ShowRedownloadButton, Converter={StaticResource TrueToVisible}}" />
             <ui:Button
                 DockPanel.Dock="Right"

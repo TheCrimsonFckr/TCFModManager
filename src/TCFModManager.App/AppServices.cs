@@ -49,4 +49,8 @@ internal static class AppServices
     // banner in MainWindow, the nav item's badge and the App update page, so all three read one
     // check rather than each running their own.
     public static AppUpdateViewModel AppUpdate { get; } = new();
+
+    // Whether the mod-page gate is switched off, and the wording the install buttons use to say so.
+    // Shared so one setting change updates every button at once - see ModPageGateViewModel.
+    public static ModPageGateViewModel ModPageGate { get; } = new();
 }

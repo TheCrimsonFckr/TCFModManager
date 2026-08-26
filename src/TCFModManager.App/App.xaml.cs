@@ -22,6 +22,9 @@ public partial class App : Application
         // on every launch after the first, and on any install that never had one.
         AppPaths.MigrateLegacyConfigsFolder();
 
+        // So the install buttons know from the first frame whether they are skipping mod pages.
+        AppServices.ModPageGate.Refresh();
+
         // Reports how a self-update went (the script doing the swap runs after the previous process
         // is gone, so its own log is the only record of it) and clears out the staged files.
         AppUpdateInstaller.SweepAfterStartup();

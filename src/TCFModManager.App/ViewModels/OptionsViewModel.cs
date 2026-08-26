@@ -39,19 +39,11 @@ public partial class OptionsViewModel : ObservableObject
 
     // Turning this on is confirmed first - see the warning in OnSkipModPageConfirmationChanged.
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(ModPageToolTip))]
     private bool _skipModPageConfirmation;
 
-    //
-    // Says what the switch currently means, so the cost of having turned it off is visible on hover
-    // rather than only in the dialog that was agreed to once, possibly months ago.
-    //
-    public string ModPageToolTip => SkipModPageConfirmation
-        ? "You are skipping each mod's release notes. It is recommended you read them - they are "
-          + "where an author says what changed, what a version needs and what it breaks. "
-          + "This app's own updates always ask regardless."
-        : "Each mod's page opens before anything downloads, so its release notes and install "
-          + "instructions are in front of you first.";
+    // The switch's own tooltip, and the install buttons' - one description of what the setting
+    // currently means, shared rather than restated here.
+    public ModPageGateViewModel ModPageGate => AppServices.ModPageGate;
 
     public OptionsViewModel()
     {
@@ -91,6 +83,9 @@ public partial class OptionsViewModel : ObservableObject
         var settings = _settings.Load();
         settings.SkipModPageConfirmation = value;
         _settings.Save(settings);
+
+        // Every install button's tooltip reads from this, so they all change with the switch.
+        AppServices.ModPageGate.Refresh();
 
         AppLog.Info("ModPages", value ? "gate turned off" : "gate turned back on");
     }

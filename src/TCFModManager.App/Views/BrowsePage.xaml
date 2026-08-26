@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:app="clr-namespace:TCFModManager.App"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     Title="Browse"
@@ -359,7 +360,7 @@
                                 Command="{Binding DataContext.InstallCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                                 CommandParameter="{Binding}"
                                 Icon="{ui:SymbolIcon ArrowDownload24}"
-                                ToolTip="Install this mod"
+                                ToolTip="{Binding InstallToolTip, Source={x:Static app:AppServices.ModPageGate}}"
                                 Visibility="{Binding IsInstalled, Converter={StaticResource FalseToVisible}}" />
 
                             <!-- Redownload button, takes the install button's place once the mod is installed. -->
@@ -373,7 +374,7 @@
                                 Command="{Binding DataContext.RedownloadCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                                 CommandParameter="{Binding}"
                                 Icon="{ui:SymbolIcon ArrowDownload24}"
-                                ToolTip="Redownload this mod"
+                                ToolTip="{Binding RedownloadToolTip, Source={x:Static app:AppServices.ModPageGate}}"
                                 Visibility="{Binding IsInstalled, Converter={StaticResource TrueToVisible}}" />
                         </Grid>
                     </ui:Card>

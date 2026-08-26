@@ -70,7 +70,7 @@
                     Text="Before anything downloads, this app asks you to open the mod's page - where its author puts install steps, requirements, known conflicts and warnings. Turn that off if you would rather go straight to installing. This app's own updates always ask, since that page is where its release notes are." />
                 <ui:ToggleSwitch
                     HorizontalAlignment="Left"
-                    ToolTip="{Binding ModPageToolTip}"
+                    ToolTip="{Binding ModPageGate.SettingToolTip}"
                     ToolTipService.ShowDuration="20000"
                     IsChecked="{Binding SkipModPageConfirmation}"
                     OnContent="Off - install without opening mod pages"
