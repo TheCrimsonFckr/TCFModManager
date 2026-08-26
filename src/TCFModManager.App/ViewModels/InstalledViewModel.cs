@@ -28,6 +28,22 @@ public partial class InstalledViewModel : ObservableObject
     private List<InstalledModCardViewModel> _all = [];
     private List<InstalledModCardViewModel> _filtered = [];
 
+    //
+    // Whether each view's collection still reflects _filtered, i.e. whether it needs rebuilding
+    // before being shown. All three start dirty so the first fill always happens.
+    //
+    // Only the view on screen is ever rebuilt, so the other two go stale while they're hidden and
+    // have to catch up when switched to. Without these flags that catch-up ran on every switch,
+    // whether or not anything had changed: each rebuild clears the collection, which destroys every
+    // realized row, and the List and Groups views are unpaginated and don't virtualize - so
+    // switching to List regenerated a CardExpander per installed mod each time, for a result
+    // identical to what was already there. ApplyFilter is the one place _filtered changes, so it is
+    // the one place that marks all three dirty again.
+    //
+    private bool _cardsDirty = true;
+    private bool _listDirty = true;
+    private bool _sectionsDirty = true;
+
     // Who needs whom among the mods currently on disk, rebuilt on every scan. Backs the warning
     // shown before a disable takes something else's dependency away.
     private ModDependencyGraph _dependencies = ModDependencyGraph.Build([]);
@@ -229,7 +245,12 @@ public partial class InstalledViewModel : ObservableObject
         // it running invisibly behind another view.
         if (value != InstalledViewMode.Cards) SelectionMode = false;
 
-        AutoApplyFilter();
+        // Deliberately not AutoApplyFilter: no filter, search or sort has changed, so re-running
+        // ApplyFilter would produce the same _filtered it already holds. Refreshing the view being
+        // switched to is all that's needed, and that does nothing at all when it is already current.
+        // CurrentPage rather than the default 1 so switching away from Cards and back returns you to
+        // the page you were on.
+        RefreshActiveView(CurrentPage);
     }
 
     partial void OnSelectedGroupSortOptionChanged(GroupSortItem value)
@@ -248,17 +269,18 @@ public partial class InstalledViewModel : ObservableObject
         RefreshActiveView();
     }
 
-    /// <summary>Refills whichever results collection the current view reads from. Only the active
-    /// one is rebuilt; switching views rebuilds the one being switched to.</summary>
+    /// <summary>Refills whichever results collection the current view reads from, if it has fallen behind
+    /// _filtered. Only the active one is rebuilt; switching views rebuilds the one being switched to, and
+    /// only if something has actually changed since that view last drew.</summary>
     private void RefreshActiveView(int page = 1)
     {
         switch (ViewMode)
         {
             case InstalledViewMode.Groups:
-                RebuildSections();
+                if (_sectionsDirty) RebuildSections();
                 break;
             case InstalledViewMode.List:
-                RebuildList();
+                if (_listDirty) RebuildList();
                 break;
             default:
                 GoToPage(page);
@@ -270,6 +292,7 @@ public partial class InstalledViewModel : ObservableObject
     {
         ListItems.Clear();
         foreach (var mod in _filtered) ListItems.Add(mod);
+        _listDirty = false;
     }
 
     /// <summary>Resets every Installed filter/search control back to its opening default, then re-applies once immediately.</summary>
@@ -886,10 +909,20 @@ public partial class InstalledViewModel : ObservableObject
 
     private void GoToPage(int page)
     {
-        CurrentPage = Math.Clamp(page, 1, TotalPages);
+        var target = Math.Clamp(page, 1, TotalPages);
+
+        // Unlike the other two views this one also depends on which page is asked for, so being
+        // clean isn't enough on its own - paging forward and back has to rebuild even though
+        // _filtered hasn't moved. TotalPages only changes inside ApplyFilter, which marks this
+        // dirty, so a clamp landing somewhere new can't be missed here.
+        if (!_cardsDirty && target == CurrentPage) return;
+
+        CurrentPage = target;
         Results.Clear();
         foreach (var mod in _filtered.Skip((CurrentPage - 1) * PageSize).Take(PageSize))
             Results.Add(mod);
+
+        _cardsDirty = false;
     }
 
     private void ApplyFilter()
@@ -924,6 +957,10 @@ public partial class InstalledViewModel : ObservableObject
             .Where(m => !HideContainsAiContent || !m.ContainsAiContent);
 
         _filtered = SortMods(matched, SelectedSortOption.Value).ToList();
+
+        // Every view now disagrees with _filtered, including the two that aren't on screen - they
+        // catch up when switched to.
+        _cardsDirty = _listDirty = _sectionsDirty = true;
 
         TotalPages = Math.Max(1, (int)Math.Ceiling(_filtered.Count / (double)PageSize));
 
@@ -1069,6 +1106,8 @@ public partial class InstalledViewModel : ObservableObject
 
             section.Items.Add(mod);
         }
+
+        _sectionsDirty = false;
     }
 
     [RelayCommand]
