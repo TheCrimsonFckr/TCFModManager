@@ -35,6 +35,13 @@
                 Color="{DynamicResource SystemAccentColor}"
                 Opacity="0.10" />
 
+            <!-- The selected row in the Configs list. Stronger than the hover so the file you have
+                 open still reads as the current one while the pointer is somewhere else. -->
+            <SolidColorBrush
+                x:Key="RowSelectedBrush"
+                Color="{DynamicResource SystemAccentColor}"
+                Opacity="0.24" />
+
             <!-- A row that sits on a card-coloured surface: group-view mod rows. -->
             <Style x:Key="ClickableCardRow" TargetType="Border">
                 <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorSecondaryBrush}" />
@@ -64,12 +71,22 @@
             </Style>
 
             <!--
-                Collapsed cards on the Installed List view and the Dependencies trees. Note the
-                tint follows the whole control, so an expanded card stays tinted while the pointer is
-                anywhere over its body - scoping it to the header alone would mean replacing
-                CardExpander's template for very little gain.
+                Collapsed cards on the Installed List view and the Dependencies trees.
+
+                BasedOn is load-bearing: a Style with no BasedOn REPLACES the control's default style
+                rather than extending it, which strips CardExpander of its background, border, corner
+                radius and padding and leaves bare rows on the page background. Every style here that
+                targets a WPF-UI control needs it; the Border styles don't, because Border has no
+                themed default to lose.
+
+                Note the tint follows the whole control, so an expanded card stays tinted while the
+                pointer is anywhere over its body - scoping it to the header alone would mean
+                replacing CardExpander's template for very little gain.
             -->
-            <Style x:Key="HoverCardExpander" TargetType="ui:CardExpander">
+            <Style
+                x:Key="HoverCardExpander"
+                TargetType="ui:CardExpander"
+                BasedOn="{StaticResource {x:Type ui:CardExpander}}">
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
@@ -77,13 +94,20 @@
                 </Style.Triggers>
             </Style>
 
-            <!-- A row with no resting fill of its own: the Configs list. Selection still comes from
-                 the ListBoxItem underneath; this only adds the hover. -->
+            <!-- A row with no resting fill of its own: the Configs list. Draws both its hover and
+                 its selected state, since its container's chrome is turned off. -->
             <Style x:Key="ClickableRow" TargetType="Border">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="CornerRadius" Value="4" />
                 <Setter Property="Cursor" Value="Hand" />
                 <Style.Triggers>
+                    <!-- Selection is drawn here rather than by the ListBoxItem, because that
+                         container has had its own chrome turned off to stop a grey edge showing
+                         around this row. Order matters: the hover trigger comes second so pointing
+                         at a row still reads as pointing at it, even when it is the selected one. -->
+                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                        <Setter Property="Background" Value="{StaticResource RowSelectedBrush}" />
+                    </DataTrigger>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
                     </Trigger>
