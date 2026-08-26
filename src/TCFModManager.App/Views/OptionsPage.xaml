@@ -41,6 +41,25 @@
         <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
             <StackPanel>
                 <TextBlock
+                    Text="Appearance"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Opacity="0.7"
+                    Margin="0,0,0,8"
+                    Text="Follow system matches Windows and keeps matching it when you change it there. Light and Dark pin the app to one regardless." />
+                <ComboBox
+                    Width="200"
+                    HorizontalAlignment="Left"
+                    ItemsSource="{Binding ThemeOptions}"
+                    SelectedItem="{Binding SelectedTheme}" />
+            </StackPanel>
+        </ui:Card>
+
+        <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
+            <StackPanel>
+                <TextBlock
                     Text="Data files"
                     FontWeight="SemiBold"
                     Margin="0,0,0,4" />

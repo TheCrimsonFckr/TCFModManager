@@ -28,7 +28,9 @@ public sealed class ModDisableImpactRow(string name, string detail, bool isSoft)
     // than a break.
     public string Glyph => IsSoft ? "QuestionCircle24" : "ErrorCircle24";
 
-    public Brush Brush => IsSoft ? Brushes.Goldenrod : Brushes.OrangeRed;
+    public Brush Brush => IsSoft
+        ? Converters.ThemeBrush.Resolve(Converters.ThemeBrush.Caution, Brushes.Goldenrod)
+        : Converters.ThemeBrush.Resolve(Converters.ThemeBrush.Critical, Brushes.OrangeRed);
 }
 
 //

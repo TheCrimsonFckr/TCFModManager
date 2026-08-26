@@ -25,7 +25,7 @@
                 Click="ClearFinishedButton_Click" />
             <TextBlock
                 VerticalAlignment="Center"
-                Foreground="White"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 Opacity="0.8"
                 TextWrapping="Wrap"
                 Text="Downloads install strictly one at a time, in the order you queued them - queue as many as you like from Browse or an update dialog and check back here for progress." />
@@ -39,7 +39,7 @@
             VerticalAlignment="Center"
             TextAlignment="Center"
             TextWrapping="Wrap"
-            Foreground="White"
+            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
             Opacity="0.6"
             Text="Nothing queued yet - click Install on a Browse card, or Update in a mod's details dialog, to add something here."
             Visibility="{Binding Items.Count, Converter={StaticResource HasItems}, ConverterParameter=Invert}" />
@@ -74,7 +74,7 @@
                                         <Run Text="{Binding ModName, Mode=OneWay}" />
                                         <Run Text=" " />
                                         <!-- De-emphasized via Foreground since Run has no Opacity. -->
-                                        <Run Text="{Binding VersionLabel, Mode=OneWay}" Foreground="#99FFFFFF" />
+                                        <Run Text="{Binding VersionLabel, Mode=OneWay}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                     </TextBlock>
 
                                     <!-- Indeterminate while installing, otherwise tracks download progress. -->

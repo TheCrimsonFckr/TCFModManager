@@ -10,9 +10,9 @@ public sealed class CompatibilityToBrushConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => value switch
     {
-        true => Brushes.LimeGreen,
-        false => Brushes.OrangeRed,
-        _ => Brushes.Gray,
+        true => ThemeBrush.Resolve(ThemeBrush.Success, Brushes.LimeGreen),
+        false => ThemeBrush.Resolve(ThemeBrush.Critical, Brushes.OrangeRed),
+        _ => ThemeBrush.Resolve(ThemeBrush.Neutral, Brushes.Gray),
     };
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>

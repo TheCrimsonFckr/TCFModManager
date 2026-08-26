@@ -71,7 +71,7 @@
             <TextBlock
                 Margin="0,4,0,0"
                 TextWrapping="Wrap"
-                Foreground="Goldenrod"
+                Foreground="{DynamicResource SystemFillColorCautionBrush}"
                 Text="{Binding DisabledNotice}"
                 Visibility="{Binding IsModDisabled, Converter={StaticResource TrueToVisible}}" />
         </StackPanel>
@@ -185,14 +185,14 @@
                                                 Margin="6,0,0,0"
                                                 Appearance="Info"
                                                 FontSize="11"
-                                                Foreground="White"
+                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                 Content="Latest"
                                                 Visibility="{Binding IsLatest, Converter={StaticResource TrueToVisible}}" />
                                             <ui:Badge
                                                 Margin="6,0,0,0"
                                                 Appearance="Caution"
                                                 FontSize="11"
-                                                Foreground="White"
+                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                 Content="Installed"
                                                 Visibility="{Binding IsInstalled, Converter={StaticResource TrueToVisible}}" />
                                         </StackPanel>

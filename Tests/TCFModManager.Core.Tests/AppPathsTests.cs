@@ -4,7 +4,8 @@ using Xunit;
 namespace TCFModManager.Core.Tests;
 
 //
-// TEMPORARY, ADDED IN v1.5.0 - DELETE IN v1.6.0 along with AppPaths.MigrateLegacyConfigsFolder.
+// TEMPORARY, ADDED IN v1.5.0 - DELETE WHEN THE APP LEAVES BETA, along with
+// AppPaths.MigrateLegacyConfigsFolder.
 //
 // Covers the one-shot move of a pre-v1.5.0 LegacyConfigs folder into Data\. Worth a test despite
 // being throwaway: it runs once on somebody's machine, on a folder holding config files they chose

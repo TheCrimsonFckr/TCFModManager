@@ -59,7 +59,7 @@
             <TextBlock
                 VerticalAlignment="Center"
                 TextWrapping="Wrap"
-                Foreground="White"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 Opacity="0.8"
                 Text="{Binding StatusMessage}" />
         </DockPanel>
@@ -101,7 +101,7 @@
                     Margin="4,12,0,0"
                     VerticalAlignment="Top"
                     TextWrapping="Wrap"
-                    Foreground="White"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     Opacity="0.6"
                     Text="Nothing matches. Note that plenty of plugins only write a config the first time the game runs."
                     Visibility="{Binding HasResults, Converter={StaticResource FalseToVisible}}" />
@@ -138,20 +138,20 @@
                                                     Margin="8,0,0,0"
                                                     VerticalAlignment="Center"
                                                     FontWeight="SemiBold"
-                                                    Foreground="White"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                     Text="{Binding Name.Title}" />
                                                 <TextBlock
                                                     Margin="8,0,0,0"
                                                     VerticalAlignment="Center"
                                                     FontSize="11"
-                                                    Foreground="White"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                     Opacity="0.55"
                                                     Text="{Binding Name.Location}" />
                                                 <TextBlock
                                                     Margin="8,0,0,0"
                                                     VerticalAlignment="Center"
                                                     FontSize="11"
-                                                    Foreground="White"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                     Opacity="0.55"
                                                     Text="{Binding ItemCount, StringFormat='({0})'}" />
                                             </StackPanel>
@@ -182,12 +182,12 @@
                                     <StackPanel Grid.Column="1">
                                         <TextBlock
                                             FontWeight="SemiBold"
-                                            Foreground="White"
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             TextTrimming="CharacterEllipsis"
                                             Text="{Binding Title}" />
                                         <TextBlock
                                             FontSize="11"
-                                            Foreground="White"
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             Opacity="0.6"
                                             TextTrimming="CharacterEllipsis"
                                             ToolTip="{Binding FullPath}"
@@ -197,7 +197,7 @@
                                             HorizontalAlignment="Left"
                                             Appearance="Caution"
                                             FontSize="10"
-                                            Foreground="White"
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             Content="{Binding Badge}"
                                             Visibility="{Binding Badge, Converter={StaticResource NullToCollapsed}}" />
                                     </StackPanel>
@@ -223,7 +223,7 @@
                     VerticalAlignment="Center"
                     TextWrapping="Wrap"
                     TextAlignment="Center"
-                    Foreground="White"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     Opacity="0.5"
                     MaxWidth="380"
                     Text="Pick a config file on the left to edit it."
@@ -256,12 +256,12 @@
                             <TextBlock
                                 FontSize="16"
                                 FontWeight="SemiBold"
-                                Foreground="White"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                 TextTrimming="CharacterEllipsis"
                                 Text="{Binding SelectedEntry.Title}" />
                             <TextBlock
                                 FontSize="11"
-                                Foreground="White"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                 Opacity="0.6"
                                 TextWrapping="Wrap"
                                 Text="{Binding SelectedEntry.Entry.DisplayPath}" />
@@ -274,28 +274,28 @@
                              is disabled or removed. -->
                         <TextBlock
                             TextWrapping="Wrap"
-                            Foreground="White"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                             Opacity="0.7"
                             Text="{Binding SelectedEntry.LocationNote}" />
 
                         <TextBlock
                             Margin="0,6,0,0"
                             TextWrapping="Wrap"
-                            Foreground="Goldenrod"
+                            Foreground="{DynamicResource SystemFillColorCautionBrush}"
                             Text="{Binding SelectedEntry.StateNote}"
                             Visibility="{Binding SelectedEntry.HasStateNote, Converter={StaticResource BoolToVis}}" />
 
                         <TextBlock
                             Margin="0,6,0,0"
                             TextWrapping="Wrap"
-                            Foreground="Goldenrod"
+                            Foreground="{DynamicResource SystemFillColorCautionBrush}"
                             Text="{Binding RunningWarning}"
                             Visibility="{Binding RunningWarning, Converter={StaticResource NullToCollapsed}}" />
 
                         <TextBlock
                             Margin="0,6,0,0"
                             TextWrapping="Wrap"
-                            Foreground="IndianRed"
+                            Foreground="{DynamicResource SystemFillColorCriticalBrush}"
                             Text="{Binding EditorError}"
                             Visibility="{Binding EditorError, Converter={StaticResource NullToCollapsed}}" />
                     </StackPanel>
@@ -330,7 +330,7 @@
 
                         <TextBlock
                             VerticalAlignment="Center"
-                            Foreground="White"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                             Opacity="0.7"
                             Text="Unsaved changes"
                             Visibility="{Binding IsDirty, Converter={StaticResource BoolToVis}}" />

@@ -11,14 +11,14 @@ public sealed class ModStatusToBrushConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => value switch
     {
-        ModStatus.Installed => Brushes.LimeGreen,
-        ModStatus.UpdateAvailable => Brushes.Goldenrod,
-        ModStatus.NotInstalled => Brushes.OrangeRed,
-        ModStatus.NoCompatibleVersion => Brushes.Gray,
-        ModStatus.Unknown => Brushes.Gray,
-        ModStatus.Conflict => Brushes.OrangeRed,
-        ModStatus.Disabled => Brushes.Gray,
-        _ => Brushes.Gray,
+        ModStatus.Installed => ThemeBrush.Resolve(ThemeBrush.Success, Brushes.LimeGreen),
+        ModStatus.UpdateAvailable => ThemeBrush.Resolve(ThemeBrush.Caution, Brushes.Goldenrod),
+        ModStatus.NotInstalled => ThemeBrush.Resolve(ThemeBrush.Critical, Brushes.OrangeRed),
+        ModStatus.NoCompatibleVersion => ThemeBrush.Resolve(ThemeBrush.Neutral, Brushes.Gray),
+        ModStatus.Unknown => ThemeBrush.Resolve(ThemeBrush.Neutral, Brushes.Gray),
+        ModStatus.Conflict => ThemeBrush.Resolve(ThemeBrush.Critical, Brushes.OrangeRed),
+        ModStatus.Disabled => ThemeBrush.Resolve(ThemeBrush.Neutral, Brushes.Gray),
+        _ => ThemeBrush.Resolve(ThemeBrush.Neutral, Brushes.Gray),
     };
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>

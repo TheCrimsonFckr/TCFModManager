@@ -171,7 +171,12 @@ internal static class HtmlFragmentParser
                 case "a":
                     if (!isClose)
                     {
-                        var hyperlink = new Hyperlink { Foreground = System.Windows.Media.Brushes.DodgerBlue };
+                        var hyperlink = new Hyperlink
+                        {
+                            Foreground = Converters.ThemeBrush.Resolve(
+                                "AccentTextFillColorPrimaryBrush",
+                                System.Windows.Media.Brushes.DodgerBlue),
+                        };
                         var href = HrefAttribute.Match(match.Groups["attrs"].Value);
                         if (href.Success && Uri.TryCreate(href.Groups[1].Value, UriKind.Absolute, out var uri))
                         {

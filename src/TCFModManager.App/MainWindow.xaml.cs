@@ -12,6 +12,10 @@ public partial class MainWindow : FluentWindow
         InitializeComponent();
         Loaded += (_, _) =>
         {
+            // The theme itself was applied at startup; this only starts following Windows, which
+            // needs a window that actually exists.
+            AppTheme.FollowSystemIfPreferred(this);
+
             RootNavigationView.Navigate(typeof(BrowsePage));
 
             // Fire-and-forget: whether a newer build of this app exists on sp-mod.com has no

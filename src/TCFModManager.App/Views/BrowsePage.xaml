@@ -27,19 +27,19 @@
             <DockPanel>
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
                     <ui:ToggleSwitch
-                        Foreground="White"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                         IsChecked="{Binding FikaCompatibleOnly}"
                         OnContent="Fika compatible only"
                         OffContent="Fika compatible only" />
                     <ui:ToggleSwitch
                         Margin="16,0,0,0"
-                        Foreground="White"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                         IsChecked="{Binding HideContainsAds}"
                         OnContent="Hide ads"
                         OffContent="Hide ads" />
                     <ui:ToggleSwitch
                         Margin="16,0,0,0"
-                        Foreground="White"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                         IsChecked="{Binding HideContainsAiContent}"
                         OnContent="Hide AI content"
                         OffContent="Hide AI content" />
@@ -70,7 +70,7 @@
                 <StackPanel Orientation="Horizontal">
                 <!-- SPT version multi-select filter, styled to match the ComboBoxes below. -->
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="SPT:" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <TextBlock Text="SPT:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
                     <ToggleButton
                         x:Name="SptVersionToggle"
                         MinWidth="150"
@@ -142,7 +142,7 @@
                 </Popup>
 
                 <StackPanel Orientation="Horizontal" Margin="16,0,0,0" VerticalAlignment="Center">
-                    <TextBlock Text="Sort:" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <TextBlock Text="Sort:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
                     <ComboBox
                         MinWidth="150"
                         ItemsSource="{Binding SortOptions}"
@@ -150,7 +150,7 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="16,0,0,0" VerticalAlignment="Center">
-                    <TextBlock Text="Per page:" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <TextBlock Text="Per page:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
                     <ComboBox
                         MinWidth="60"
                         ItemsSource="{Binding PageSizeOptions}"
@@ -158,7 +158,7 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="16,0,0,0" VerticalAlignment="Center">
-                    <TextBlock Text="Featured:" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <TextBlock Text="Featured:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
                     <ComboBox
                         MinWidth="90"
                         ItemsSource="{Binding FeaturedFilterOptions}"
@@ -173,7 +173,7 @@
             Margin="0,0,0,8"
             TextWrapping="Wrap"
             Opacity="0.7"
-            Foreground="White"
+            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
             Text="{Binding StatusMessage}" />
 
         <!-- Results grid; column count is set from code-behind based on width. -->
@@ -279,8 +279,8 @@
                                         <Run
                                             Text="{Binding SptVersionDisplay, Mode=OneWay}"
                                             Foreground="{Binding IsCompatibleWithInstalledSpt, Converter={StaticResource CompatibilityBrush}}" />
-                                        <Run Text=" • " Foreground="#99FFFFFF" />
-                                        <Run Text="{Binding DisplayReleaseVersion, Mode=OneWay, StringFormat='v{0}'}" Foreground="#99FFFFFF" />
+                                        <Run Text=" • " Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        <Run Text="{Binding DisplayReleaseVersion, Mode=OneWay, StringFormat='v{0}'}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                     </TextBlock>
                                     <!-- Shown only when the ticked SPT filter is hiding a version
                                          that actually runs on the installed SPT - explains a red
@@ -289,7 +289,7 @@
                                         Text="{Binding AlternateCompatibleVersionNote}"
                                         FontSize="11"
                                         FontStyle="Italic"
-                                        Foreground="#FFE0A030"
+                                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
                                         TextTrimming="CharacterEllipsis"
                                         Visibility="{Binding AlternateCompatibleVersionNote, Converter={StaticResource NullToCollapsed}}" />
                                     <!-- Category and feature badges; only shown when applicable. -->
@@ -297,21 +297,21 @@
                                         <ui:Badge
                                             Appearance="Info"
                                             FontSize="11"
-                                            Foreground="White"
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             Content="{Binding CategoryTag}"
                                             Visibility="{Binding CategoryTag, Converter={StaticResource NullToCollapsed}}" />
                                         <ui:Badge
                                             Margin="6,0,0,0"
                                             Appearance="Info"
                                             FontSize="11"
-                                            Foreground="White"
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             Content="Fika compatible"
                                             Visibility="{Binding IsFikaCompatible, Converter={StaticResource TrueToVisible}}" />
                                         <ui:Badge
                                             Margin="6,0,0,0"
                                             Appearance="Info"
                                             FontSize="11"
-                                            Foreground="White"
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             Content="Contains ads"
                                             Visibility="{Binding ContainsAds, Converter={StaticResource TrueToVisible}}" />
                                     </StackPanel>
@@ -323,7 +323,7 @@
                                             Margin="0,4,0,0"
                                             Appearance="Caution"
                                             FontSize="11"
-                                            Foreground="White"
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             Content="Has dependencies"
                                             Visibility="Hidden"
                                             behaviors:DependencyBadgeLoader.Mod="{Binding Mod}" />
@@ -387,12 +387,12 @@
             <TextBlock
                 Margin="12,0,12,0"
                 VerticalAlignment="Center"
-                Foreground="White"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 Text="{Binding CurrentPage, StringFormat='Page {0}'}" />
             <TextBlock
                 VerticalAlignment="Center"
                 Opacity="0.7"
-                Foreground="White"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 Text="{Binding TotalPages, StringFormat='of {0}'}" />
             <ui:Button
                 Margin="12,0,0,0"

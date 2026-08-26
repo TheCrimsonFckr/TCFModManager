@@ -48,7 +48,7 @@
                 IsEnabled="{Binding IsNotBusy}" />
             <TextBlock
                 VerticalAlignment="Center"
-                Foreground="White"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 Opacity="0.8"
                 TextWrapping="Wrap"
                 Text="Every installed mod that declares dependencies, and whether each one is satisfied. Mods needing attention are listed first and start expanded." />
@@ -59,7 +59,7 @@
             Margin="0,0,0,12"
             TextWrapping="Wrap"
             Opacity="0.7"
-            Foreground="White"
+            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
             Text="{Binding StatusMessage}" />
 
         <!-- Shown once a scan has finished and found nothing to report. -->
@@ -70,7 +70,7 @@
             VerticalAlignment="Center"
             TextAlignment="Center"
             TextWrapping="Wrap"
-            Foreground="White"
+            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
             Opacity="0.6"
             Text="Nothing installed declares a dependency."
             Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibility}}" />
@@ -103,7 +103,7 @@
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                         <TextBlock FontWeight="SemiBold" TextTrimming="CharacterEllipsis">
                                             <Run Text="{Binding ModName, Mode=OneWay}" />
-                                            <Run Text="{Binding ModVersion, StringFormat=' {0}', Mode=OneWay}" Foreground="#99FFFFFF" />
+                                            <Run Text="{Binding ModVersion, StringFormat=' {0}', Mode=OneWay}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                         </TextBlock>
                                         <TextBlock
                                             Margin="0,2,0,0"
@@ -138,7 +138,7 @@
                                                 VerticalAlignment="Center"
                                                 TextTrimming="CharacterEllipsis">
                                                 <Run Text="{Binding Name, Mode=OneWay}" />
-                                                <Run Text="{Binding StatusText, StringFormat=' - {0}', Mode=OneWay}" Foreground="#99FFFFFF" />
+                                                <Run Text="{Binding StatusText, StringFormat=' - {0}', Mode=OneWay}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                             </TextBlock>
 
                                             <!-- Only rows that are actually missing or outdated get an action. -->

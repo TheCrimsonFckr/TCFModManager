@@ -121,7 +121,7 @@
             <TextBlock
                 VerticalAlignment="Center"
                 TextWrapping="Wrap"
-                Foreground="White"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 Opacity="0.8"
                 Text="{Binding StatusMessage}" />
         </DockPanel>
@@ -130,19 +130,19 @@
         <DockPanel Grid.Row="1" Margin="0,0,0,8">
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
                 <ui:ToggleSwitch
-                    Foreground="White"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     IsChecked="{Binding FikaCompatibleOnly}"
                     OnContent="Fika compatible only"
                     OffContent="Fika compatible only" />
                 <ui:ToggleSwitch
                     Margin="16,0,0,0"
-                    Foreground="White"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     IsChecked="{Binding HideContainsAds}"
                     OnContent="Hide ads"
                     OffContent="Hide ads" />
                 <ui:ToggleSwitch
                     Margin="16,0,0,0"
-                    Foreground="White"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     IsChecked="{Binding HideContainsAiContent}"
                     OnContent="Hide AI content"
                     OffContent="Hide AI content" />
@@ -164,13 +164,13 @@
                 Command="{Binding ClearFiltersCommand}" />
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="Update status:" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0" />
+                <TextBlock Text="Update status:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
                 <ComboBox
                     MinWidth="120"
                     ItemsSource="{Binding UpdateFilterOptions}"
                     SelectedItem="{Binding SelectedUpdateFilter}" />
 
-                <TextBlock Text="Enabled:" Foreground="White" VerticalAlignment="Center" Margin="16,0,6,0" />
+                <TextBlock Text="Enabled:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="16,0,6,0" />
                 <ComboBox
                     MinWidth="120"
                     ItemsSource="{Binding EnabledFilterOptions}"
@@ -178,13 +178,13 @@
 
                 <!-- Rebuilt from the group store whenever groups change, so it always lists exactly
                      the groups that exist. Applies to all three views, like every other filter here. -->
-                <TextBlock Text="Group:" Foreground="White" VerticalAlignment="Center" Margin="16,0,6,0" />
+                <TextBlock Text="Group:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="16,0,6,0" />
                 <ComboBox
                     MinWidth="130"
                     ItemsSource="{Binding GroupFilterOptions}"
                     SelectedItem="{Binding SelectedGroupFilter}" />
 
-                <TextBlock Text="Sort by:" Foreground="White" VerticalAlignment="Center" Margin="16,0,6,0" />
+                <TextBlock Text="Sort by:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="16,0,6,0" />
                 <ComboBox
                     MinWidth="140"
                     ItemsSource="{Binding SortOptions}"
@@ -193,7 +193,7 @@
                 <!-- Pagination is hidden in group view (see the pagination StackPanel's own
                      Visibility below), so "Per page" would have nothing to affect there. -->
                 <StackPanel Orientation="Horizontal" Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
-                    <TextBlock Text="Per page:" Foreground="White" VerticalAlignment="Center" Margin="16,0,6,0" />
+                    <TextBlock Text="Per page:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="16,0,6,0" />
                     <ComboBox
                         MinWidth="60"
                         ItemsSource="{Binding PageSizeOptions}"
@@ -227,7 +227,7 @@
                 Command="{Binding DisableSelectedCommand}" />
             <TextBlock
                 VerticalAlignment="Center"
-                Foreground="White"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 Opacity="0.8"
                 Text="{Binding SelectedCountLabel}" />
         </DockPanel>
@@ -238,7 +238,7 @@
             Margin="0,0,0,8"
             Visibility="{Binding ShowGroups, Converter={StaticResource BoolToVis}}">
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="Sort groups:" Foreground="White" VerticalAlignment="Center" Margin="0,0,6,0" />
+                <TextBlock Text="Sort groups:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
                 <ComboBox
                     MinWidth="150"
                     ItemsSource="{Binding GroupSortOptions}"
@@ -328,7 +328,7 @@
                                     Margin="0,2,0,2"
                                     Padding="6,1"
                                     CornerRadius="3"
-                                    Background="#33FFFFFF"
+                                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
                                     Visibility="{Binding IsDisabled, Converter={StaticResource BoolToVis}}">
                                     <TextBlock Text="DISABLED" FontSize="10" FontWeight="SemiBold" />
                                 </Border>
@@ -413,7 +413,7 @@
                                         HorizontalAlignment="Center"
                                         Padding="6"
                                         Appearance="Transparent"
-                                        Foreground="Goldenrod"
+                                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
                                         Content="Sort out"
                                         FontSize="11"
                                         Visibility="{Binding HasDuplicateFolders, Converter={StaticResource BoolToVis}}"
@@ -438,7 +438,7 @@
                                         HorizontalAlignment="Center"
                                         Padding="6"
                                         Appearance="Transparent"
-                                        Foreground="Red"
+                                        Foreground="{DynamicResource SystemFillColorCriticalBrush}"
                                         Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                                         CommandParameter="{Binding}"
                                         Icon="{ui:SymbolIcon Delete24}"
@@ -517,9 +517,9 @@
                                             Visibility="{Binding IsEditing, Converter={StaticResource FalseToVisible}}">
                                             <Run Text="{Binding Name, Mode=OneWay}" FontWeight="SemiBold" />
                                             <Run Text=" " />
-                                            <Run Text="{Binding CountLabel, Mode=OneWay}" Foreground="#99FFFFFF" />
+                                            <Run Text="{Binding CountLabel, Mode=OneWay}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                             <Run Text=" " />
-                                            <Run Text="{Binding StateLabel, Mode=OneWay}" Foreground="Goldenrod" />
+                                            <Run Text="{Binding StateLabel, Mode=OneWay}" Foreground="{DynamicResource SystemFillColorCautionBrush}" />
                                         </TextBlock>
 
                                         <ui:TextBox
@@ -596,7 +596,7 @@
                                         <ui:Button
                                             Padding="4"
                                             Appearance="Transparent"
-                                            Foreground="Red"
+                                            Foreground="{DynamicResource SystemFillColorCriticalBrush}"
                                             ToolTip="Delete this group"
                                             Command="{Binding DataContext.DeleteGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                             CommandParameter="{Binding}"
@@ -621,7 +621,7 @@
                                                 <Border
                                                     Margin="0,0,0,4"
                                                     Padding="8,6"
-                                                    Background="#14FFFFFF"
+                                                    Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
                                                     CornerRadius="4"
                                                     Cursor="Hand"
                                                     Opacity="{Binding CardOpacity}"
@@ -748,7 +748,7 @@
                                         <Border
                                             Padding="8,2"
                                             CornerRadius="3"
-                                            Background="#22FFFFFF"
+                                            Background="{DynamicResource ControlFillColorDefaultBrush}"
                                             Visibility="{Binding IsGrouped, Converter={StaticResource BoolToVis}}">
                                             <StackPanel Orientation="Horizontal">
                                                 <ui:SymbolIcon Symbol="Folder24" FontSize="12" Margin="0,0,5,0" VerticalAlignment="Center" />
@@ -760,7 +760,7 @@
                                             Margin="6,0,0,0"
                                             Padding="8,2"
                                             CornerRadius="3"
-                                            Background="#33FFFFFF"
+                                            Background="{DynamicResource ControlFillColorSecondaryBrush}"
                                             Visibility="{Binding IsDisabled, Converter={StaticResource BoolToVis}}">
                                             <TextBlock Text="DISABLED" FontSize="10" FontWeight="SemiBold" />
                                         </Border>
@@ -872,7 +872,7 @@
 
                                     <ui:Button
                                         Margin="8,0,0,0"
-                                        Foreground="Goldenrod"
+                                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
                                         Content="Sort out"
                                         Icon="{ui:SymbolIcon Warning24}"
                                         Visibility="{Binding HasDuplicateFolders, Converter={StaticResource BoolToVis}}"
@@ -882,7 +882,7 @@
 
                                     <ui:Button
                                         Margin="8,0,0,0"
-                                        Foreground="Red"
+                                        Foreground="{DynamicResource SystemFillColorCriticalBrush}"
                                         Content="Remove"
                                         Icon="{ui:SymbolIcon Delete24}"
                                         Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
@@ -909,12 +909,12 @@
             <TextBlock
                 Margin="12,0,12,0"
                 VerticalAlignment="Center"
-                Foreground="White"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 Text="{Binding CurrentPage, StringFormat='Page {0}'}" />
             <TextBlock
                 VerticalAlignment="Center"
                 Opacity="0.7"
-                Foreground="White"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 Text="{Binding TotalPages, StringFormat='of {0}'}" />
             <ui:Button
                 Margin="12,0,0,0"

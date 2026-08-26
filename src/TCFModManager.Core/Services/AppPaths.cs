@@ -32,14 +32,17 @@ public static class AppPaths
     private static string PreV150LegacyConfigsDirectory => Path.Combine(AppContext.BaseDirectory, "LegacyConfigs");
 
     //
-    // TEMPORARY, ADDED IN v1.5.0 - DELETE IN v1.6.0, along with its call in App.OnStartup and
-    // PreV150LegacyConfigsDirectory above.
+    // TEMPORARY, ADDED IN v1.5.0 - DELETE WHEN THE APP LEAVES BETA, along with its call in
+    // App.OnStartup and PreV150LegacyConfigsDirectory above.
     //
     // LegacyConfigs moved from beside the exe into Data\ in v1.5.0. An install updating from v1.4.x
     // can have config files kept from a removed mod sitting in the old folder, and nothing in the
     // app ever reads that folder back, so they would quietly stop being where the app says they are.
-    // This moves them once; every launch after that finds nothing and does nothing, which is what
-    // makes it safe to delete a release later.
+    // This moves them once; every launch after that finds nothing and does nothing.
+    //
+    // It stays for the rest of the beta rather than for one release: someone can sit on a v1.4.x
+    // build for months and update straight into whatever is current, and the whole cost of keeping
+    // it is one Directory.Exists that returns false.
     //
     // Called explicitly at startup rather than done lazily inside the property, so it is one method
     // and one call site to remove rather than something tangled into how a path resolves.

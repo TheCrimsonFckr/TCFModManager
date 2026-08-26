@@ -8,7 +8,9 @@ namespace TCFModManager.App.Converters;
 public sealed class ErrorToBrushConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) =>
-        value is true ? Brushes.OrangeRed : Brushes.White;
+        value is true
+            ? ThemeBrush.Resolve(ThemeBrush.Critical, Brushes.OrangeRed)
+            : ThemeBrush.Resolve(ThemeBrush.Primary, Brushes.White);
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
         throw new NotSupportedException();

@@ -13,9 +13,13 @@ public partial class App : Application
 
         AppLog.Start($"{AppVersion.Current}, SPT install: {AppServices.SptEnvironment.InstallPath ?? "(not set)"}");
 
-        // TEMPORARY, ADDED IN v1.5.0 - DELETE IN v1.6.0, along with the method itself. Carries a
-        // pre-v1.5.0 LegacyConfigs folder from beside the exe into Data\. A no-op on every launch
-        // after the first, and on any install that never had one.
+        // Before the main window exists, so it is painted in the right theme rather than repainted a
+        // moment after it opens. Following the OS needs a real window and is set up in MainWindow.
+        AppTheme.ApplyStored();
+
+        // TEMPORARY, ADDED IN v1.5.0 - DELETE WHEN THE APP LEAVES BETA, along with the method
+        // itself. Carries a pre-v1.5.0 LegacyConfigs folder from beside the exe into Data\. A no-op
+        // on every launch after the first, and on any install that never had one.
         AppPaths.MigrateLegacyConfigsFolder();
 
         // Reports how a self-update went (the script doing the swap runs after the previous process
