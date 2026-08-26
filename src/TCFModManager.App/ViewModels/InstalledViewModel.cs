@@ -300,6 +300,19 @@ public partial class InstalledViewModel : ObservableObject
 
     public void UpdateLayoutForWidth(double availableWidth)
     {
+        //
+        // Ignore a width of zero rather than treating it as "very narrow".
+        //
+        // Collapsing an element makes WPF raise SizeChanged with 0 x 0, so switching to Groups or
+        // List view - which collapses the card grid - reported no width and dropped Columns to 1.
+        // Coming back to Cards then showed every card full width, one per row, looking like a list,
+        // and it stayed that way until the window was resized and a real width arrived. The last
+        // real width is still the right answer for a grid nobody can currently see.
+        //
+        // Also covers the first Loaded call, which can run before the list has been arranged.
+        //
+        if (availableWidth <= 0) return;
+
         Columns = availableWidth switch
         {
             < 700 => 1,

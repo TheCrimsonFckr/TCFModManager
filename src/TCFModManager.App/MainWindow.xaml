@@ -129,7 +129,15 @@
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:AppUpdatePage}">
                     <ui:NavigationViewItem.InfoBadge>
+                        <!-- Width and Height are set, and equal, so the dot stays a circle: with
+                             neither given, the badge stretches to whatever slot the nav item hands
+                             it and comes out as an oval. Centred so the fixed size doesn't sit
+                             against one edge of that slot. -->
                         <ui:InfoBadge
+                            Width="10"
+                            Height="10"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
                             DataContext="{x:Static app:AppServices.AppUpdate}"
                             Severity="{Binding BadgeSeverity}"
                             Visibility="{Binding UpdateAvailable, Converter={StaticResource BoolToVis}}" />
