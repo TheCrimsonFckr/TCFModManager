@@ -33,13 +33,43 @@
             <SolidColorBrush
                 x:Key="RowHoverBrush"
                 Color="{DynamicResource SystemAccentColor}"
-                Opacity="0.20" />
+                Opacity="0.10" />
 
             <!-- A row that sits on a card-coloured surface: group-view mod rows. -->
             <Style x:Key="ClickableCardRow" TargetType="Border">
                 <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorSecondaryBrush}" />
                 <Setter Property="CornerRadius" Value="4" />
                 <Setter Property="Cursor" Value="Hand" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--
+                The same tint on a row you can't click. Dependencies rows are read-only - the only
+                thing you can press in one is a conditional Install button - so this deliberately
+                leaves the cursor alone: it tracks what you are looking at across a wide row without
+                claiming the row does something.
+            -->
+            <Style x:Key="HoverRow" TargetType="Border">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="CornerRadius" Value="4" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--
+                Collapsed cards on the Installed List view and the Dependencies trees. Note the
+                tint follows the whole control, so an expanded card stays tinted while the pointer is
+                anywhere over its body - scoping it to the header alone would mean replacing
+                CardExpander's template for very little gain.
+            -->
+            <Style x:Key="HoverCardExpander" TargetType="ui:CardExpander">
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />

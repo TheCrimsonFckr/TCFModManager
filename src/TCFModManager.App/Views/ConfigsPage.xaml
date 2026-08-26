@@ -122,6 +122,18 @@
                         ItemsSource="{Binding Results}"
                         SelectedItem="{Binding SelectedEntry}"
                         HorizontalContentAlignment="Stretch">
+                        <!-- The row Border below draws the hover, so the item itself contributes no
+                             padding, margin or fill of its own - otherwise the container's stock
+                             pointer-over shows as a grey edge around the tinted row. -->
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
                         <ListBox.GroupStyle>
                             <GroupStyle>
                                 <GroupStyle.HeaderTemplate>
@@ -164,7 +176,7 @@
 
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Border Style="{StaticResource ClickableRow}" Margin="0,1" Padding="6,3" Opacity="{Binding RowOpacity}">
+                                <Border Style="{StaticResource ClickableRow}" Padding="6,4" Opacity="{Binding RowOpacity}">
                                     <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />

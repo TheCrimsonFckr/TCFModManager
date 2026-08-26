@@ -705,7 +705,7 @@
             <ItemsControl Focusable="False" ItemsSource="{Binding ListItems}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:InstalledModCardViewModel}">
-                        <ui:CardExpander Margin="0,0,6,6" Opacity="{Binding CardOpacity}">
+                        <ui:CardExpander Style="{StaticResource HoverCardExpander}" Margin="0,0,6,6" Opacity="{Binding CardOpacity}">
                             <ui:CardExpander.Header>
                                 <Grid Margin="0,0,8,0">
                                     <Grid.ColumnDefinitions>

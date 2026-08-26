@@ -84,7 +84,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <!-- One expander per installed mod, holding its flattened dependency rows. -->
-                        <ui:CardExpander Margin="0,0,0,8" IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
+                        <ui:CardExpander Style="{StaticResource HoverCardExpander}" Margin="0,0,0,8" IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
                             <ui:CardExpander.Header>
                                 <Grid Margin="0,0,12,0">
                                     <Grid.ColumnDefinitions>
@@ -118,7 +118,8 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <!-- Indent reflects depth in the tree; a nested dependency sits under its parent. -->
-                                        <Grid Margin="{Binding Indent}" Height="34">
+                                        <Border Style="{StaticResource HoverRow}" Margin="{Binding Indent}">
+                                            <Grid Height="34">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="*" />
@@ -152,7 +153,8 @@
                                                 CommandParameter="{Binding}"
                                                 Visibility="{Binding CanInstall, Converter={StaticResource BoolToVisibility}}"
                                                 IsEnabled="{Binding IsNotQueued}" />
-                                        </Grid>
+                                            </Grid>
+                                        </Border>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
