@@ -35,5 +35,8 @@ public sealed class AppSettings
     // work. Someone who knows their setup can reasonably turn it off; someone who doesn't should be
     // told what they are giving up first.
     //
+    // Does not apply to this app's own update, which always asks - that page carries its release
+    // notes.
+    //
     public bool SkipModPageConfirmation { get; set; }
 }

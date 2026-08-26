@@ -84,9 +84,15 @@ public partial class ReadModPageConfirmationWindow : FluentWindow
         }
     }
 
+    //
     // Shows the gate for one mod and returns true only if Continue was clicked.
-    public static bool Confirm(string modName, string? modPageUrl) =>
-        Skipped || new ReadModPageConfirmationWindow(modName, modPageUrl).ShowDialog() == true;
+    //
+    // <param name="allowSkip">False for a call that must ask even when the user has turned the gate
+    // off in Options. Only this app's own update passes false: that page is where its release notes
+    // are, so it is the one page where skipping costs the reader the thing they most need.</param>
+    //
+    public static bool Confirm(string modName, string? modPageUrl, bool allowSkip = true) =>
+        (allowSkip && Skipped) || new ReadModPageConfirmationWindow(modName, modPageUrl).ShowDialog() == true;
 
     // Shows the gate for a batch of mods and returns true only if Continue was clicked.
     public static bool ConfirmAll(IReadOnlyList<ModPageLink> links) =>

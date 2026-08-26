@@ -67,7 +67,7 @@
                     TextWrapping="Wrap"
                     Opacity="0.7"
                     Margin="0,0,0,8"
-                    Text="Before anything downloads, this app asks you to open the mod's page - where its author puts install steps, requirements, known conflicts and warnings. Turn that off if you would rather go straight to installing." />
+                    Text="Before anything downloads, this app asks you to open the mod's page - where its author puts install steps, requirements, known conflicts and warnings. Turn that off if you would rather go straight to installing. This app's own updates always ask, since that page is where its release notes are." />
                 <ui:ToggleSwitch
                     HorizontalAlignment="Left"
                     IsChecked="{Binding SkipModPageConfirmation}"

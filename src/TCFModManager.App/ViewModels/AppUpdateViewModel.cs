@@ -246,7 +246,11 @@ public partial class AppUpdateViewModel : ObservableObject
         // The same gate every other install in this app goes through, for the same reason: the
         // mod page gets opened first, so nothing is downloaded without the author's page - and
         // whatever they've written on it - having been in front of the user.
-        if (!ReadModPageConfirmationWindow.Confirm(SelfMod.Name, update.ModPageUrl))
+        //
+        // allowSkip: false because this one ignores the "skip mod pages" option. Skipping a mod's
+        // page costs you its install notes; skipping this app's page costs you the release notes
+        // for the build about to replace the one you are running.
+        if (!ReadModPageConfirmationWindow.Confirm(SelfMod.Name, update.ModPageUrl, allowSkip: false))
         {
             AppLog.Info("AppUpdate", "update cancelled at the mod page gate");
             return;
