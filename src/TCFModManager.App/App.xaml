@@ -15,24 +15,47 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!--
-                How a clickable row reacts to the pointer, in one place so every list that hand-rolls
-                its rows out of a Border agrees. WPF-UI's ListBox and CardExpander already do this
-                themselves; this is for the ItemsControl-based lists, which get nothing for free.
+                How a clickable row reacts to the pointer, defined once so every list agrees -
+                whether it hand-rolls its rows out of a Border or lets a ListBox do it.
 
-                SubtleFillColorSecondaryBrush is the same pointer-over fill WinUI and WPF-UI's own
-                controls use, so a hand-rolled row and a stock one read as the same kind of thing.
+                The Windows accent colour at low alpha rather than a solid accent fill: laid over
+                whatever is behind it, it tints in both light and dark without either washing out or
+                swallowing the text on the row. A solid accent would need its own foreground colour
+                to stay readable, which is a much bigger change for no more clarity.
 
-                Note the resting Background is a Setter rather than being left to each row: a local
-                Background="..." on the Border would outrank the trigger below and the hover would
-                silently do nothing.
+                The Color is a DynamicResource so it re-resolves when the theme - or the user's
+                Windows accent - changes, rather than freezing at whatever it was at startup.
+
+                Note the resting Background in the styles below is a Setter rather than being left to
+                each row: a local Background="..." on a Border outranks a style trigger, and the
+                hover would silently do nothing.
             -->
+            <SolidColorBrush
+                x:Key="RowHoverBrush"
+                Color="{DynamicResource SystemAccentColor}"
+                Opacity="0.20" />
+
+            <!-- A row that sits on a card-coloured surface: group-view mod rows. -->
             <Style x:Key="ClickableCardRow" TargetType="Border">
                 <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorSecondaryBrush}" />
                 <Setter Property="CornerRadius" Value="4" />
                 <Setter Property="Cursor" Value="Hand" />
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+                        <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- A row with no resting fill of its own: the Configs list. Selection still comes from
+                 the ListBoxItem underneath; this only adds the hover. -->
+            <Style x:Key="ClickableRow" TargetType="Border">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="CornerRadius" Value="4" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
                     </Trigger>
                 </Style.Triggers>
             </Style>

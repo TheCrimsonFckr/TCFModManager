@@ -204,6 +204,11 @@
                     <!-- Ensures the item fills its UniformGrid cell. -->
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
                     <Setter Property="VerticalAlignment" Value="Stretch" />
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>

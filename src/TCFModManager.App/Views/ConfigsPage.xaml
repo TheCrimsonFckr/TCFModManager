@@ -164,7 +164,8 @@
 
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="0,3" Opacity="{Binding RowOpacity}">
+                                <Border Style="{StaticResource ClickableRow}" Margin="0,1" Padding="6,3" Opacity="{Binding RowOpacity}">
+                                    <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
@@ -201,7 +202,8 @@
                                             Content="{Binding Badge}"
                                             Visibility="{Binding Badge, Converter={StaticResource NullToCollapsed}}" />
                                     </StackPanel>
-                                </Grid>
+                                    </Grid>
+                                </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
