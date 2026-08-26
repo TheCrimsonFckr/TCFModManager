@@ -12,9 +12,9 @@ public partial class MainWindow : FluentWindow
         InitializeComponent();
         Loaded += (_, _) =>
         {
-            // The theme itself was applied at startup; this only starts following Windows, which
-            // needs a window that actually exists.
-            AppTheme.FollowSystemIfPreferred(this);
+            // The theme itself was applied at startup. This hooks up the two things that need a
+            // window: repainting the chrome when the theme changes, and following Windows.
+            AppTheme.Attach(this);
 
             RootNavigationView.Navigate(typeof(BrowsePage));
 

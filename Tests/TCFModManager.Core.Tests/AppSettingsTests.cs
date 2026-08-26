@@ -7,13 +7,24 @@ namespace TCFModManager.Core.Tests;
 public class AppSettingsTests
 {
     [Fact]
-    public void Theme_DefaultsToDarkWhenTheFileHasNeverHeardOfIt()
+    public void Theme_FollowsWindowsWhenTheFileHasNeverHeardOfIt()
     {
-        // Every build before the setting existed was Dark, so an upgrading install has to stay Dark
-        // rather than quietly switching to whatever Windows is set to.
+        // A settings file written before the setting existed has no Theme key, and those installs
+        // should start matching Windows like a fresh one - a theme feature nobody finds isn't one.
+        // The cost is that upgrading on a light Windows changes the app's appearance once.
         var settings = JsonSerializer.Deserialize<AppSettings>("""{ "SptInstallPath": "C:\\SPT" }""");
 
         Assert.NotNull(settings);
+        Assert.Equal(ThemePreference.FollowSystem, settings!.Theme);
+    }
+
+    [Fact]
+    public void Theme_KeepsAnExplicitChoiceRatherThanFollowingWindows()
+    {
+        // Anyone who has picked a theme has said what they want, so the default must not reach back
+        // over it on the next launch.
+        var settings = JsonSerializer.Deserialize<AppSettings>("""{ "Theme": "Dark" }""");
+
         Assert.Equal(ThemePreference.Dark, settings!.Theme);
     }
 

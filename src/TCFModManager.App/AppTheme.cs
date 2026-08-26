@@ -2,6 +2,7 @@ using System.Windows;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
 
 namespace TCFModManager.App;
 
@@ -12,9 +13,10 @@ namespace TCFModManager.App;
 // Options page: the three of them only say *when*, and the rules for what that means - including
 // remembering to stop following the OS when the user pins a theme - stay in one place.
 //
-// Note the whole app is still pinned to Dark by default. WPF-UI's own controls theme themselves, but
-// a good deal of this app's XAML still hardcodes white text, so Light is not yet worth choosing -
-// that sweep is the next piece of work.
+// The default preference is Follow system, so a fresh install matches the desktop. Every colour the
+// app draws itself now comes from a WPF-UI theme brush rather than a literal, which is what makes
+// Light a real option rather than an unreadable one - see Converters/ThemeBrush for the one case
+// that can lag a live theme change.
 //
 public static class AppTheme
 {
@@ -26,6 +28,9 @@ public static class AppTheme
     // the preference isn't Follow system.
     private static Window? _watching;
 
+    // Guards against hooking ApplicationThemeManager.Changed more than once.
+    private static bool _subscribed;
+
     public static ThemePreference Stored => Settings.Load().Theme;
 
     //
@@ -35,11 +40,21 @@ public static class AppTheme
     public static void ApplyStored() => ApplyOnly(Stored);
 
     //
-    // Starts following Windows if that's what the preference says. Separate from ApplyStored because
-    // SystemThemeWatcher needs a real window, which doesn't exist yet at startup.
+    // Hooks the main window up: repaints its chrome on every theme change, and starts following
+    // Windows if that's what the preference says. Separate from ApplyStored because both of those
+    // need a real window, which doesn't exist yet at startup.
     //
-    public static void FollowSystemIfPreferred(Window window)
+    public static void Attach(Window window)
     {
+        if (!_subscribed)
+        {
+            // Subscribed rather than only called from ApplyOnly, so a theme change that SystemThemeWatcher
+            // makes on its own - the user changing Windows' theme while Follow system is on - repaints
+            // the chrome too.
+            ApplicationThemeManager.Changed += (_, _) => RefreshWindowChrome();
+            _subscribed = true;
+        }
+
         if (Stored == ThemePreference.FollowSystem) StartFollowing(window);
     }
 
@@ -81,6 +96,40 @@ public static class AppTheme
             default:
                 ApplicationThemeManager.ApplySystemTheme();
                 break;
+        }
+
+        RefreshWindowChrome();
+    }
+
+    //
+    // Repaints the window's own chrome - the title bar, the backdrop behind the navigation rail and
+    // page area.
+    //
+    // Applying a theme swaps the brushes in the application's resource dictionaries, which is enough
+    // for everything drawn *inside* the window (cards, text, controls all re-resolve immediately).
+    // The window frame is not drawn from those brushes: FluentWindow sets its backdrop and the Win32
+    // dark-mode title bar attribute once when it is created, and nothing revisits them afterwards.
+    // Without this, switching theme with the app open left a light page sitting inside a dark frame -
+    // while launching with the same theme already stored looked perfectly correct, because the window
+    // was built after the theme was applied.
+    //
+    private static void RefreshWindowChrome()
+    {
+        // Absent at startup, when ApplyStored runs before any window exists. Nothing to do then:
+        // FluentWindow reads the current theme itself as it is created.
+        if (Application.Current?.MainWindow is not FluentWindow window) return;
+
+        try
+        {
+            WindowBackgroundManager.UpdateBackground(
+                window,
+                ApplicationThemeManager.GetAppTheme(),
+                window.WindowBackdropType);
+        }
+        catch (Exception ex)
+        {
+            // Chrome that didn't repaint is ugly, not broken, and is not worth taking the app down for.
+            AppLog.Warn("Theme", $"couldn't repaint the window chrome: {ex.Message}");
         }
     }
 

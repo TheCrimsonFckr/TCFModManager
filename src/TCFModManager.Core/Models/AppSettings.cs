@@ -16,9 +16,13 @@ public sealed class AppSettings
     // Which theme to use. Written as a name rather than a number, because settings.json is offered
     // for hand-editing on the Options page and "Theme": 2 would mean nothing to whoever opened it.
     //
-    // Defaults to Dark, which is what every build before this setting existed used - so an install
-    // that has never seen this option keeps exactly the appearance it already had.
+    // Defaults to following Windows, so the app matches the rest of the desktop without anyone
+    // having to find this setting - which is the point of supporting themes at all.
+    //
+    // This does mean an install upgrading from a build with no Theme key changes appearance on
+    // first launch if Windows is set to light. That is deliberate rather than overlooked: the
+    // alternative is a feature almost nobody discovers, and putting it back is one dropdown.
     //
     [JsonConverter(typeof(JsonStringEnumConverter<ThemePreference>))]
-    public ThemePreference Theme { get; set; } = ThemePreference.Dark;
+    public ThemePreference Theme { get; set; } = ThemePreference.FollowSystem;
 }

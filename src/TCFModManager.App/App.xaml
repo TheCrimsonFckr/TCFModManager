@@ -7,6 +7,9 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <!-- Only the seed the resource dictionary loads with. The theme actually used is
+                     applied by AppTheme in App.OnStartup, which runs before any window is created,
+                     so whichever value sits here is never the one on screen. -->
                 <ui:ThemesDictionary Theme="Dark" />
                 <ui:ControlsDictionary />
             </ResourceDictionary.MergedDictionaries>
