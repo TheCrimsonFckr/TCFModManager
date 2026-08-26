@@ -13,6 +13,29 @@
                 <ui:ThemesDictionary Theme="Dark" />
                 <ui:ControlsDictionary />
             </ResourceDictionary.MergedDictionaries>
+
+            <!--
+                How a clickable row reacts to the pointer, in one place so every list that hand-rolls
+                its rows out of a Border agrees. WPF-UI's ListBox and CardExpander already do this
+                themselves; this is for the ItemsControl-based lists, which get nothing for free.
+
+                SubtleFillColorSecondaryBrush is the same pointer-over fill WinUI and WPF-UI's own
+                controls use, so a hand-rolled row and a stock one read as the same kind of thing.
+
+                Note the resting Background is a Setter rather than being left to each row: a local
+                Background="..." on the Border would outrank the trigger below and the hover would
+                silently do nothing.
+            -->
+            <Style x:Key="ClickableCardRow" TargetType="Border">
+                <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorSecondaryBrush}" />
+                <Setter Property="CornerRadius" Value="4" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

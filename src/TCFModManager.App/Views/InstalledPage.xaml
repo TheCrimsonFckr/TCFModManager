@@ -619,11 +619,9 @@
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate DataType="{x:Type viewmodels:InstalledModCardViewModel}">
                                                 <Border
+                                                    Style="{StaticResource ClickableCardRow}"
                                                     Margin="0,0,0,4"
                                                     Padding="8,6"
-                                                    Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
-                                                    CornerRadius="4"
-                                                    Cursor="Hand"
                                                     Opacity="{Binding CardOpacity}"
                                                     ToolTip="Click for details - drag onto another group to move it there"
                                                     PreviewMouseLeftButtonDown="ModRow_PreviewMouseLeftButtonDown"
