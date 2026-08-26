@@ -25,4 +25,15 @@ public sealed class AppSettings
     //
     [JsonConverter(typeof(JsonStringEnumConverter<ThemePreference>))]
     public ThemePreference Theme { get; set; } = ThemePreference.FollowSystem;
+
+    //
+    // Skips the "read the mod's page first" gate before anything is downloaded.
+    //
+    // Off by default, and turning it on is confirmed on the Options page, because the gate is not
+    // busywork: a mod's page is where its author puts install steps, requirements, known conflicts
+    // and warnings, and this app has no way to tell you which mods need reading before they will
+    // work. Someone who knows their setup can reasonably turn it off; someone who doesn't should be
+    // told what they are giving up first.
+    //
+    public bool SkipModPageConfirmation { get; set; }
 }

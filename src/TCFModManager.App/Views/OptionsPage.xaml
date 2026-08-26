@@ -60,6 +60,25 @@
         <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
             <StackPanel>
                 <TextBlock
+                    Text="Mod pages"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Opacity="0.7"
+                    Margin="0,0,0,8"
+                    Text="Before anything downloads, this app asks you to open the mod's page - where its author puts install steps, requirements, known conflicts and warnings. Turn that off if you would rather go straight to installing." />
+                <ui:ToggleSwitch
+                    HorizontalAlignment="Left"
+                    IsChecked="{Binding SkipModPageConfirmation}"
+                    OnContent="Off - install without opening mod pages"
+                    OffContent="On - open each mod's page first" />
+            </StackPanel>
+        </ui:Card>
+
+        <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
+            <StackPanel>
+                <TextBlock
                     Text="Data files"
                     FontWeight="SemiBold"
                     Margin="0,0,0,4" />

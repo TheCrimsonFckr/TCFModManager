@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
+using TCFModManager.Core.Services;
 using Wpf.Ui.Controls;
 
 namespace TCFModManager.App.Views;
@@ -64,13 +65,32 @@ public partial class ReadModPageConfirmationWindow : FluentWindow
         UpdateContinueEnabled();
     }
 
+    //
+    // True when the user has turned the gate off on the Options page, in which case both entry
+    // points below wave everything through.
+    //
+    // Checked here rather than at the half-dozen call sites: every path that installs anything goes
+    // through Confirm or ConfirmAll, so this is the one place it cannot be forgotten - including by
+    // whatever calls it next.
+    //
+    private static bool Skipped
+    {
+        get
+        {
+            if (!new SettingsService().Load().SkipModPageConfirmation) return false;
+
+            AppLog.Info("ModPages", "gate skipped - turned off in Options");
+            return true;
+        }
+    }
+
     // Shows the gate for one mod and returns true only if Continue was clicked.
     public static bool Confirm(string modName, string? modPageUrl) =>
-        new ReadModPageConfirmationWindow(modName, modPageUrl).ShowDialog() == true;
+        Skipped || new ReadModPageConfirmationWindow(modName, modPageUrl).ShowDialog() == true;
 
     // Shows the gate for a batch of mods and returns true only if Continue was clicked.
     public static bool ConfirmAll(IReadOnlyList<ModPageLink> links) =>
-        new ReadModPageConfirmationWindow(links).ShowDialog() == true;
+        Skipped || new ReadModPageConfirmationWindow(links).ShowDialog() == true;
 
     private void UpdateContinueEnabled() => ContinueButton.IsEnabled = _links.All(l => l.IsOpened);
 
