@@ -25,6 +25,13 @@ public sealed record ModListCandidate
 
     // The mod folder names on disk this card covers - both halves of a client+server mod.
     public IReadOnlyList<string> Folders { get; init; } = [];
+
+    //
+    // Every scanned mod this card merged - what ModListApplier hands to ModDisableService when a
+    // list turns into moves. Left empty for capture and planning, which only read the fields above;
+    // an apply needs it, because a client+server mod has to move as one thing.
+    //
+    public IReadOnlyList<InstalledMod> Entries { get; init; } = [];
 }
 
 //

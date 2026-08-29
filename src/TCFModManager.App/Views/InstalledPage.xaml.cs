@@ -132,9 +132,16 @@ public partial class InstalledPage : Page
     // reaching the button and would otherwise mark the event handled before the button ever saw it.
     private static bool IsInsideButton(object? originalSource)
     {
-        for (var node = originalSource as DependencyObject; node is not null; node = VisualTreeHelper.GetParent(node))
+        for (var node = originalSource as DependencyObject; node is not null;)
         {
             if (node is ButtonBase) return true;
+
+            // The visual tree is what the templated parts of a button live in, but a click can
+            // report a ContentElement such as a Run as its OriginalSource, and VisualTreeHelper
+            // throws on those - the logical tree is the way up from there.
+            node = node is Visual or System.Windows.Media.Media3D.Visual3D
+                ? VisualTreeHelper.GetParent(node)
+                : LogicalTreeHelper.GetParent(node);
         }
 
         return false;
