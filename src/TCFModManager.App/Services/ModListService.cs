@@ -89,15 +89,21 @@ public sealed class ModListService
     // Applies a preview. Core decides the order and when to stop; everything here is the download
     // half plus storing what came back.
     //
+    // <param name="prompts">Who answers the two questions a fetch has to ask. Defaults to answering
+    // no to both, so an unwired caller downloads nothing rather than everything.</param>
+    //
     public async Task<ModListApplyResult> ApplyAsync(
         ModListPreview preview,
+        ModListPrompts? prompts = null,
         bool takeSnapshot = true,
         CancellationToken ct = default)
     {
+        prompts ??= ModListPrompts.Reject;
+
         var result = await ModListApplier.ApplyAsync(
             preview.Plan,
             preview.Install.Candidates,
-            (fetches, token) => FetchAsync(preview.Install.InstallPath, fetches, token),
+            (fetches, token) => FetchAsync(preview.Install.InstallPath, fetches, prompts, token),
             new ModListApplyOptions
             {
                 SnapshotName = takeSnapshot ? $"Before {preview.List.Name}" : null,
@@ -113,52 +119,87 @@ public sealed class ModListService
     }
 
     //
-    // Queues every fetch the plan asked for and waits for all of them.
+    // Resolves what each fetch would actually download, asks about anything the list can't have as
+    // written, then queues the lot.
+    //
+    // Every version is resolved before anything is enqueued, rather than lazily inside the queue
+    // worker the way a single Install does. A list is a batch: the user should be told up front
+    // that three of forty mods can't be had at the pinned version, not find out one at a time while
+    // downloads are already running.
+    //
+    private async Task<ModListFetchOutcome> FetchAsync(
+        string installPath,
+        IReadOnlyList<ModListAction> fetches,
+        ModListPrompts prompts,
+        CancellationToken ct)
+    {
+        var resolution = await ResolveAsync(fetches, ct);
+
+        var accepted = prompts.ApproveVersionChanges(resolution.Changes);
+        var acceptedActions = accepted.Select(c => c.Action).ToHashSet();
+
+        var failed = new List<ModListFetchFailure>(resolution.Unavailable);
+
+        foreach (var change in resolution.Changes.Where(c => !acceptedActions.Contains(c.Action)))
+        {
+            failed.Add(new ModListFetchFailure(
+                change.Action.Name,
+                $"version {change.Wanted} is no longer published and the newer one wasn't taken"));
+        }
+
+        var downloads = new List<ModListDownload>(resolution.Ready);
+        downloads.AddRange(accepted.Select(c => new ModListDownload(c.Action, c.Mod, c.Available, IsSubstitute: true)));
+
+        if (downloads.Count == 0) return new ModListFetchOutcome([], failed, false);
+
+        //
+        // The same gate a manual install goes through, asked once for the whole batch rather than
+        // once per mod - ConfirmAll is the existing path for exactly this, and it honours the
+        // Options switch that turns the gate off.
+        //
+        if (!prompts.ConfirmModPages(downloads))
+            return new ModListFetchOutcome([], failed, Cancelled: true);
+
+        return await QueueAsync(installPath, downloads, failed, ct);
+    }
+
     //
     // Everything is enqueued first and awaited afterwards, so the queue's own worker decides the
     // order and the user sees the whole batch on the Downloads page at once rather than one card
     // appearing at a time.
     //
-    private async Task<ModListFetchOutcome> FetchAsync(
+    private static async Task<ModListFetchOutcome> QueueAsync(
         string installPath,
-        IReadOnlyList<ModListAction> fetches,
+        IReadOnlyList<ModListDownload> downloads,
+        List<ModListFetchFailure> failed,
         CancellationToken ct)
     {
-        var catalog = AppServices.ModCache.AllMods
-            .GroupBy(m => m.Id)
-            .ToDictionary(g => g.Key, g => g.First());
+        var waiting = new List<(ModListDownload Download, DownloadQueueItemViewModel Item)>();
 
-        var fetched = new List<ModListAction>();
-        var failed = new List<ModListFetchFailure>();
-        var waiting = new List<(ModListAction Action, DownloadQueueItemViewModel Item)>();
-
-        foreach (var action in fetches)
+        foreach (var download in downloads)
         {
-            if (action.ModId is not { } modId || !catalog.TryGetValue(modId, out var mod))
-            {
-                failed.Add(new ModListFetchFailure(action.Name, "no sp-mod.com listing to download from"));
-                continue;
-            }
+            var version = download.Version;
 
             var item = await EnqueueAsync(
-                mod,
-                action.TargetVersion ?? "latest",
+                download.Mod,
+                version.Version ?? download.Action.TargetVersion ?? "latest",
                 installPath,
-                () => ResolveVersionAsync(modId, action));
+                () => Task.FromResult<ModVersion?>(version));
 
-            waiting.Add((action, item));
+            waiting.Add((download, item));
         }
 
         using var cancelling = ct.Register(() => CancelAll(waiting.Select(w => w.Item)));
 
+        var fetched = new List<ModListAction>();
         var cancelled = false;
 
-        foreach (var (action, item) in waiting)
+        foreach (var (download, item) in waiting)
         {
             switch (await WaitForAsync(item))
             {
                 case DownloadQueueItemStatus.Completed:
-                    fetched.Add(action);
+                    fetched.Add(download.Action);
                     break;
 
                 case DownloadQueueItemStatus.Cancelled:
@@ -166,7 +207,7 @@ public sealed class ModListService
                     break;
 
                 default:
-                    failed.Add(new ModListFetchFailure(action.Name, item.StatusMessage));
+                    failed.Add(new ModListFetchFailure(download.Action.Name, item.StatusMessage));
                     break;
             }
         }
@@ -175,31 +216,74 @@ public sealed class ModListService
     }
 
     //
-    // Resolves the version the list actually names, and only that one.
+    // Works out the exact version behind each fetch, and separates the ones the list can't have as
+    // written. A pinned version that is gone becomes a question, never a silent substitution - the
+    // list named a specific build, and quietly installing a different one is what desyncs a group.
     //
-    // A pinned version that is no longer published deliberately fails rather than quietly
-    // installing the newest instead - substituting a different build than the list asked for is a
-    // decision for the user, not for this. A list entry with no version string at all is the one
-    // case where newest is the only thing it can mean.
-    //
-    private static async Task<ModVersion?> ResolveVersionAsync(int modId, ModListAction action)
+    private static async Task<ModListResolution> ResolveAsync(
+        IReadOnlyList<ModListAction> fetches,
+        CancellationToken ct)
     {
-        var id = modId.ToString();
+        var catalog = AppServices.ModCache.AllMods
+            .GroupBy(m => m.Id)
+            .ToDictionary(g => g.Key, g => g.First());
 
-        if (string.IsNullOrWhiteSpace(action.TargetVersion))
+        var ready = new List<ModListDownload>();
+        var changes = new List<ModListVersionChange>();
+        var unavailable = new List<ModListFetchFailure>();
+
+        foreach (var action in fetches)
         {
-            var newest = await AppServices.SpModApi.GetModVersionsAsync(id, new ModVersionsQuery { PerPage = 5 });
-            return newest.Data.FirstOrDefault();
+            if (action.ModId is not { } modId || !catalog.TryGetValue(modId, out var mod))
+            {
+                unavailable.Add(new ModListFetchFailure(action.Name, "no sp-mod.com listing to download from"));
+                continue;
+            }
+
+            var id = modId.ToString();
+            var wanted = action.TargetVersion?.Trim();
+
+            // A list entry with no version string at all is the one case where newest is the only
+            // thing it can mean, so it needs no asking.
+            if (string.IsNullOrWhiteSpace(wanted))
+            {
+                var newest = await NewestAsync(id, ct);
+
+                if (newest is null) unavailable.Add(new ModListFetchFailure(action.Name, "it has no published versions"));
+                else ready.Add(new ModListDownload(action, mod, newest, IsSubstitute: false));
+
+                continue;
+            }
+
+            var page = await AppServices.SpModApi.GetModVersionsAsync(
+                id,
+                new ModVersionsQuery { FilterVersion = wanted, PerPage = 5 },
+                ct);
+
+            var exact = page.Data.FirstOrDefault(v => action.VersionId is not null && v.Id == action.VersionId)
+                ?? page.Data.FirstOrDefault(v => string.Equals(v.Version?.Trim(), wanted, StringComparison.OrdinalIgnoreCase));
+
+            if (exact is not null)
+            {
+                ready.Add(new ModListDownload(action, mod, exact, IsSubstitute: false));
+                continue;
+            }
+
+            var replacement = await NewestAsync(id, ct);
+
+            if (replacement is null)
+                unavailable.Add(new ModListFetchFailure(action.Name, $"version {wanted} is gone and nothing else is published"));
+            else
+                changes.Add(new ModListVersionChange(action, mod, wanted, replacement));
         }
 
-        var wanted = action.TargetVersion.Trim();
+        return new ModListResolution(ready, changes, unavailable);
+    }
 
-        var page = await AppServices.SpModApi.GetModVersionsAsync(
-            id,
-            new ModVersionsQuery { FilterVersion = wanted, PerPage = 5 });
-
-        return page.Data.FirstOrDefault(v => action.VersionId is not null && v.Id == action.VersionId)
-            ?? page.Data.FirstOrDefault(v => string.Equals(v.Version?.Trim(), wanted, StringComparison.OrdinalIgnoreCase));
+    private static async Task<ModVersion?> NewestAsync(string modId, CancellationToken ct)
+    {
+        var page = await AppServices.SpModApi.GetModVersionsAsync(modId, new ModVersionsQuery { PerPage = 5 }, ct);
+        return page.Data.FirstOrDefault();
     }
 
     //
