@@ -1,3 +1,4 @@
+using TCFModManager.App.Services;
 using TCFModManager.App.ViewModels;
 using TCFModManager.Core.SpModApi;
 using TCFModManager.Core.Services;
@@ -53,4 +54,11 @@ internal static class AppServices
     // Whether the mod-page gate is switched off, and the wording the install buttons use to say so.
     // Shared so one setting change updates every button at once - see ModPageGateViewModel.
     public static ModPageGateViewModel ModPageGate { get; } = new();
+
+    // Every mod list this install holds, and which one it is currently following.
+    public static ModListStore ModLists { get; } = new();
+
+    // Turns a mod list into an installed set and back - the scan and the downloads Core can't do
+    // for itself. Declared after DownloadQueue, which it enqueues onto.
+    public static ModListService ModListWorkflow { get; } = new();
 }
