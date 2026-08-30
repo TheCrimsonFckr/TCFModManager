@@ -21,6 +21,24 @@
       can't use InvariantGlobalization; SatelliteResourceLanguages is unaffected by this and safe.
     -->
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+
+    <!--
+      Opts the published host (apphost/singlefilehost) out of Intel CET / "Hardware-enforced Stack
+      Protection", which .NET 9 turns on by default (breaking change, .NET 9 Preview 6).
+
+      With it on, the process is killed the instant the host tries to set thread context anywhere
+      the shadow stack doesn't already allow - reported as exception 0xc0000602 in KERNELBASE.dll,
+      with no window, no dialog and no Data\logs entry, because it happens before any of our
+      managed code runs. Two things trigger it in the wild: older Windows 10 servicing levels with
+      the known shadow-stack bug (GitHub issue #1 - Windows 10 20H2, KERNELBASE 10.0.19041.1706,
+      i.e. May 2022), and anything that injects into every process and uses SetThreadContext -
+      overlays like RTSS/Afterburner/Discord, some AV. Both are common on the machines this app is
+      for, and neither is something a user can be expected to diagnose.
+
+      The protection only ever applied on CET-capable hardware, and this app is a mod browser with
+      no attack surface worth the trade. Remove this if the ecosystem catches up.
+    -->
+    <CetCompat>false</CetCompat>
   </PropertyGroup>
 
   <ItemGroup>
