@@ -29,8 +29,8 @@
             Margin="24,12,24,24">
             <TextBlock
                 TextWrapping="Wrap"
-                Opacity="0.8"
                 Margin="0,0,0,16"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Text="These mods aren't on sp-mod.com at the version this list names any more. Tick the ones you want installed at the newest version instead - anything left unticked is skipped." />
 
             <ItemsControl x:Name="ChangesList">
@@ -53,11 +53,12 @@
                                     <TextBlock
                                         TextWrapping="Wrap"
                                         FontWeight="SemiBold"
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                         Text="{Binding Name}" />
                                     <TextBlock
                                         TextWrapping="Wrap"
-                                        Opacity="0.75"
-                                        Margin="0,2,0,0"
+                                        Margin="0,3,0,0"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                         Text="{Binding Detail}" />
                                 </StackPanel>
                             </Grid>

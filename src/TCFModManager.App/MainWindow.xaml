@@ -100,6 +100,13 @@
                     Icon="{ui:SymbolIcon CheckmarkCircle24}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:InstalledPage}" />
+                <!-- Directly after Installed: a mod list is a named set of exactly what that page
+                     shows, and applying one is how that page's contents get changed wholesale. -->
+                <ui:NavigationViewItem
+                    Content="Mod lists"
+                    Icon="{ui:SymbolIcon AppsList24}"
+                    NavigationCacheMode="Required"
+                    TargetPageType="{x:Type views:ModListsPage}" />
                 <!-- Sits next to Installed because it is about the mods already on disk, and before
                      Dependencies because it is the more everyday of the two. -->
                 <ui:NavigationViewItem
