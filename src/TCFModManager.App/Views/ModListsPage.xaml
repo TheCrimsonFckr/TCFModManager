@@ -59,6 +59,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <ui:Card Grid.Row="0" Padding="16">
@@ -168,6 +169,20 @@
                     </ListBox>
                 </Grid>
             </ui:Card>
+
+            <!-- The single undo point, kept here rather than among the lists: it is about the
+                 install, not about whichever list happens to be selected. Hidden until there is
+                 something to undo, and gone again once used. -->
+            <ui:Button
+                Grid.Row="3"
+                Margin="0,12,0,0"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                Icon="{ui:SymbolIcon ArrowUndo24}"
+                Content="{Binding RevertLabel}"
+                ToolTip="Puts every mod back the way it was before that list was applied. Usually just moves mods - nothing to download."
+                Visibility="{Binding HasRevert, Converter={StaticResource BoolToVis}}"
+                Command="{Binding RevertCommand}" />
         </Grid>
 
         <!-- Right: the selected list, and what applying it would do. -->

@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -192,6 +193,14 @@ public partial class InstalledViewModel : ObservableObject
     [ObservableProperty]
     private int _columns = 1;
 
+    //
+    // Whether cards and rows show which mod lists a mod belongs to. Persisted rather than reset per
+    // session: it is a display preference, not a filter, which is also why ClearFilters leaves it
+    // alone.
+    //
+    [ObservableProperty]
+    private bool _showListBadges = true;
+
     public List<int> PageSizeOptions { get; } = [6, 9, DefaultPageSize, 15, 21, 30];
 
     [ObservableProperty]
@@ -208,6 +217,7 @@ public partial class InstalledViewModel : ObservableObject
 
     public InstalledViewModel()
     {
+        _showListBadges = new SettingsService().Load().ShowModListBadges;
         _selectedUpdateFilter = UpdateFilterOptions[0];
         _selectedEnabledFilter = EnabledFilterOptions[0];
         _selectedGroupFilter = GroupFilterItem.All;
@@ -230,6 +240,20 @@ public partial class InstalledViewModel : ObservableObject
     partial void OnSelectedSortOptionChanged(ModSortItem value) => AutoApplyFilter();
 
     partial void OnPageSizeChanged(int value) => AutoApplyFilter();
+
+    //
+    // Deliberately not AutoApplyFilter: nothing about what is shown changes, only whether each row
+    // draws its chips, so the three views don't need rebuilding.
+    //
+    partial void OnShowListBadgesChanged(bool value)
+    {
+        foreach (var card in _all) card.ShowBadges = value;
+
+        var settings = new SettingsService();
+        var current = settings.Load();
+        current.ShowModListBadges = value;
+        settings.Save(current);
+    }
 
     partial void OnSearchTextChanged(string value) => AutoApplyFilter();
 
@@ -321,6 +345,33 @@ public partial class InstalledViewModel : ObservableObject
         RefreshActiveView();
     }
 
+    //
+    // Tags each card with the mod lists that name it. Worked out through ModListMembership, which
+    // runs the real planner, so a badge can never disagree with what applying that list would do.
+    //
+    // Runs per scan rather than being watched: the Installed page rescans when it is navigated to,
+    // so editing a list on the Mod lists page and coming back here shows the change.
+    //
+    private void ApplyListMembership(IReadOnlyList<InstalledModCardViewModel> cards)
+    {
+        var lists = AppServices.ModLists.Load().Lists;
+        if (lists.Count == 0)
+        {
+            foreach (var card in cards) card.Lists = [];
+            return;
+        }
+
+        var names = ModListMembership.Names(lists, ModListCandidates.From(cards));
+
+        for (var i = 0; i < cards.Count; i++) cards[i].Lists = names[i];
+    }
+
+    // A fresh scan builds new cards, which default to showing badges - they have to be told.
+    private void ApplyBadgeVisibility()
+    {
+        foreach (var card in _all) card.ShowBadges = ShowListBadges;
+    }
+
     public void UpdateLayoutForWidth(double availableWidth)
     {
         //
@@ -395,6 +446,8 @@ public partial class InstalledViewModel : ObservableObject
             });
 
             _all = cards;
+            ApplyListMembership(cards);
+            ApplyBadgeVisibility();
             _dependencies = dependencies;
             _cardByEntry = [];
             foreach (var card in _all)

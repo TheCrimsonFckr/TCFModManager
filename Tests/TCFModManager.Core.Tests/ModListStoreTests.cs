@@ -23,15 +23,24 @@ public class ModListStoreTests : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    private static ModList NewList(string name, ModListOrigin origin = ModListOrigin.Local, params ModListEntry[] entries)
+    private static ModList NewList(string name, ModListOrigin origin = ModListOrigin.Local, params ModListEntry[] entries) =>
+        Snapshot(name, isSnapshot: false, updatedAt: Timestamp, origin: origin, entries: entries);
+
+    private static ModList Snapshot(
+        string name,
+        bool isSnapshot = true,
+        DateTimeOffset? updatedAt = null,
+        ModListOrigin origin = ModListOrigin.Local,
+        params ModListEntry[] entries)
     {
         var list = new ModList
         {
             Id = Guid.NewGuid(),
             Name = name,
             Origin = origin,
+            IsSnapshot = isSnapshot,
             CreatedAt = Timestamp,
-            UpdatedAt = Timestamp,
+            UpdatedAt = updatedAt ?? Timestamp,
         };
 
         list.Entries.AddRange(entries);
@@ -185,6 +194,82 @@ public class ModListStoreTests : IDisposable
         _store.Delete(other.Id);
 
         Assert.Equal(active.Id, _store.Load().ActiveListId);
+    }
+
+    [Fact]
+    public void ASnapshotGoesToItsOwnSlotRatherThanTheList()
+    {
+        var snapshot = _store.Add(Snapshot("basic test"));
+
+        var data = _store.Load();
+        Assert.Empty(data.Lists);
+        Assert.Equal(snapshot.Id, data.Snapshot!.Id);
+        Assert.Equal(snapshot.Id, _store.GetSnapshot()!.Id);
+    }
+
+    [Fact]
+    public void EachApplyOverwritesTheOneSnapshot()
+    {
+        _store.Add(Snapshot("basic test"));
+        var second = _store.Add(Snapshot("Fika night"));
+
+        Assert.Equal("Fika night", _store.GetSnapshot()!.Name);
+        Assert.Equal(second.Id, _store.GetSnapshot()!.Id);
+        Assert.Empty(_store.Load().Lists);
+    }
+
+    [Fact]
+    public void SetSnapshotNullClearsIt()
+    {
+        _store.Add(Snapshot("basic test"));
+
+        _store.SetSnapshot(null);
+
+        Assert.Null(_store.GetSnapshot());
+    }
+
+    //
+    // A file written before the single slot existed holds one snapshot per apply, each named after
+    // the last. The newest fills the slot and the rest go.
+    //
+    [Fact]
+    public void OldSnapshotListsAreLiftedOutOfTheListOnLoad()
+    {
+        var data = new ModListData();
+        data.Lists.Add(NewList("basic test"));
+        data.Lists.Add(Snapshot("Before basic test", updatedAt: Timestamp));
+        data.Lists.Add(Snapshot("Before Before basic test", updatedAt: Timestamp.AddMinutes(5)));
+        data.Lists.Add(Snapshot("Before Before Before basic test", updatedAt: Timestamp.AddMinutes(2)));
+        _store.Save(data);
+
+        var loaded = new ModListStore(_store.FilePath).Load();
+
+        Assert.Equal("basic test", Assert.Single(loaded.Lists).Name);
+        Assert.Equal("Before Before basic test", loaded.Snapshot!.Name);
+    }
+
+    [Fact]
+    public void AnOldSnapshotDoesNotDisplaceOneAlreadyInTheSlot()
+    {
+        var data = new ModListData { Snapshot = Snapshot("kept") };
+        data.Lists.Add(Snapshot("stale"));
+        _store.Save(data);
+
+        var loaded = new ModListStore(_store.FilePath).Load();
+
+        Assert.Equal("kept", loaded.Snapshot!.Name);
+        Assert.Empty(loaded.Lists);
+    }
+
+    [Fact]
+    public void AnActivePointerAtALiftedSnapshotIsCleared()
+    {
+        var snapshot = Snapshot("Before basic test");
+        var data = new ModListData { ActiveListId = snapshot.Id };
+        data.Lists.Add(snapshot);
+        _store.Save(data);
+
+        Assert.Null(new ModListStore(_store.FilePath).Load().ActiveListId);
     }
 
     [Fact]

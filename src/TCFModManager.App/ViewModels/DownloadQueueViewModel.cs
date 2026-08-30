@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Threading.Channels;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -9,11 +11,22 @@ using TCFModManager.Core.SpModApi;
 namespace TCFModManager.App.ViewModels;
 
 // App-lifetime download queue that processes one download/install at a time and resolves each item's dependencies before installing it.
-public sealed class DownloadQueueViewModel
+public sealed partial class DownloadQueueViewModel : ObservableObject
 {
     private readonly Channel<DownloadQueueItemViewModel> _channel = Channel.CreateUnbounded<DownloadQueueItemViewModel>();
 
     public ObservableCollection<DownloadQueueItemViewModel> Items { get; } = [];
+
+    //
+    // One line for the whole queue: how far through it is and how much is left. Worth having at all
+    // because a mod list can queue forty items at once - per-card progress answers "how is this one
+    // doing", not "how long until I can play".
+    //
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasSummary))]
+    private string? _summary;
+
+    public bool HasSummary => Summary is not null;
 
     // Raised after an item finishes installing successfully. BrowseViewModel subscribes to refresh its cards' install/update status dots.
     public event EventHandler? ItemInstalled;
@@ -32,13 +45,60 @@ public sealed class DownloadQueueViewModel
         string installPath,
         Func<Task<ModVersion?>> resolveVersion,
         bool checkDependencies = true,
-        DownloadQueueItemViewModel? dependencyOf = null)
+        DownloadQueueItemViewModel? dependencyOf = null,
+        long? totalBytes = null)
     {
-        var item = new DownloadQueueItemViewModel(mod, versionLabel, installPath, resolveVersion, checkDependencies);
+        var item = new DownloadQueueItemViewModel(mod, versionLabel, installPath, resolveVersion, checkDependencies, totalBytes);
         dependencyOf?.AddDependency(item);
+        item.PropertyChanged += OnItemChanged;
         Items.Add(item);
         _channel.Writer.TryWrite(item);
+        UpdateSummary();
         return item;
+    }
+
+    private void OnItemChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName is nameof(DownloadQueueItemViewModel.Status)
+            or nameof(DownloadQueueItemViewModel.Progress)
+            or nameof(DownloadQueueItemViewModel.TotalBytes))
+        {
+            UpdateSummary();
+        }
+    }
+
+    //
+    // Sizes come from the catalog's content_length, so they are known for a mod list apply (which
+    // resolves every version before queueing) and fill in one at a time for anything else. The
+    // estimate is deliberately built from what is known rather than extrapolated over what isn't -
+    // it says how much is left to fetch, and only adds a time once a real rate has been observed.
+    //
+    private void UpdateSummary()
+    {
+        var unfinished = Items.Where(i => !i.IsFinished).ToList();
+
+        if (unfinished.Count == 0)
+        {
+            Summary = null;
+            return;
+        }
+
+        var done = Items.Count - unfinished.Count;
+        var parts = new List<string> { $"{done} of {Items.Count} done" };
+
+        var remaining = unfinished.Sum(i => i.RemainingBytes ?? 0);
+        var unknown = unfinished.Count(i => i.RemainingBytes is null);
+
+        if (remaining > 0)
+        {
+            parts.Add(DownloadQueueItemViewModel.SizeLabel(remaining)
+                + (unknown > 0 ? $" left (+{unknown} not sized yet)" : " left"));
+
+            if (unfinished.FirstOrDefault(i => i.BytesPerSecond is > 0)?.BytesPerSecond is { } rate)
+                parts.Add($"about {DownloadQueueItemViewModel.RemainingLabel(TimeSpan.FromSeconds(remaining / rate))} to go");
+        }
+
+        Summary = string.Join(" · ", parts);
     }
 
     // Removes every Completed/Failed/Cancelled card from the list; queued/in-progress items are left alone.
@@ -46,8 +106,13 @@ public sealed class DownloadQueueViewModel
     {
         for (var i = Items.Count - 1; i >= 0; i--)
         {
-            if (Items[i].IsFinished) Items.RemoveAt(i);
+            if (!Items[i].IsFinished) continue;
+
+            Items[i].PropertyChanged -= OnItemChanged;
+            Items.RemoveAt(i);
         }
+
+        UpdateSummary();
     }
 
     // FIFO single-reader loop that processes one item at a time for the entire app session. A failed item doesn't stop the loop.
@@ -81,6 +146,8 @@ public sealed class DownloadQueueViewModel
                 item.StatusMessage = $"Couldn't find a download link for {item.ModName} {item.VersionLabel}.";
                 return;
             }
+
+            item.TotalBytes ??= version.ContentLength;
 
             item.Token.ThrowIfCancellationRequested();
 

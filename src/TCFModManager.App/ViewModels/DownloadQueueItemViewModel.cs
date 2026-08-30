@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.Core.Models;
@@ -41,7 +42,92 @@ public sealed partial class DownloadQueueItemViewModel : ObservableObject
     private DownloadQueueItemStatus _status = DownloadQueueItemStatus.Pending;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(TransferLabel))]
+    [NotifyPropertyChangedFor(nameof(HasTransferLabel))]
     private double _progress;
+
+    //
+    // The archive's size, when it is known: the catalog carries content_length on a version, and a
+    // mod list resolves every version before it queues anything, so a list apply knows the whole
+    // size up front. A single Install resolves lazily, so this fills in once the worker gets there.
+    //
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(TransferLabel))]
+    [NotifyPropertyChangedFor(nameof(HasTransferLabel))]
+    private long? _totalBytes;
+
+    // Runs for the download stage only, which is the only stage with a measurable rate.
+    private readonly Stopwatch _downloading = new();
+
+    //
+    // "8.2 of 45.1 MB - 2.1 MB/s - about 18s left", as much of it as is actually known.
+    //
+    // Deliberately says nothing until there is enough to be honest with: a rate computed off the
+    // first fraction of a percent is nonsense, and an estimate that swings between 8 seconds and
+    // four minutes is worse than no estimate.
+    //
+    public string? TransferLabel
+    {
+        get
+        {
+            if (Status != DownloadQueueItemStatus.Downloading) return null;
+
+            var elapsed = _downloading.Elapsed;
+            var parts = new List<string>();
+
+            if (TotalBytes is > 0 and var total)
+                parts.Add($"{Size(Progress * total)} of {Size(total)}");
+
+            if (Progress > 0.02 && elapsed > TimeSpan.FromSeconds(1.5))
+            {
+                if (BytesPerSecond is { } rate) parts.Add($"{Size(rate)}/s");
+
+                parts.Add($"about {Remaining(TimeSpan.FromSeconds(elapsed.TotalSeconds * (1 - Progress) / Progress))} left");
+            }
+            else if (parts.Count == 0)
+            {
+                return null;
+            }
+
+            return string.Join(" · ", parts);
+        }
+    }
+
+    public bool HasTransferLabel => TransferLabel is not null;
+
+    // What is left to fetch for this item, or null when its size isn't known yet. A pending item
+    // hasn't started, so its whole archive is still to come.
+    public long? RemainingBytes =>
+        IsFinished || TotalBytes is not > 0 ? null : (long)(TotalBytes.Value * (1 - Progress));
+
+    // The rate actually observed on this item so far, once there is enough of it to mean anything.
+    public double? BytesPerSecond =>
+        Status == DownloadQueueItemStatus.Downloading
+        && TotalBytes is > 0
+        && Progress > 0.02
+        && _downloading.Elapsed > TimeSpan.FromSeconds(1.5)
+            ? Progress * TotalBytes.Value / _downloading.Elapsed.TotalSeconds
+            : null;
+
+    public static string SizeLabel(double bytes) => Size(bytes);
+
+    public static string RemainingLabel(TimeSpan left) => Remaining(left);
+
+    private static string Size(double bytes) => bytes switch
+    {
+        >= 1024d * 1024 * 1024 => $"{bytes / (1024d * 1024 * 1024):0.#} GB",
+        >= 1024d * 1024 => $"{bytes / (1024d * 1024):0.#} MB",
+        >= 1024d => $"{bytes / 1024d:0.#} KB",
+        _ => $"{bytes:0} B",
+    };
+
+    private static string Remaining(TimeSpan left) => left switch
+    {
+        { TotalSeconds: < 10 } => "a few seconds",
+        { TotalMinutes: < 1 } => $"{left.TotalSeconds:0}s",
+        { TotalMinutes: < 60 } => $"{left.TotalMinutes:0}m",
+        _ => $"{left.TotalHours:0.#}h",
+    };
 
     [ObservableProperty]
     private string _statusMessage = "Waiting in queue...";
@@ -84,13 +170,20 @@ public sealed partial class DownloadQueueItemViewModel : ObservableObject
     // Resolves the full ModVersion (with its download Link) for this item.
     private readonly Func<Task<ModVersion?>> _resolveVersion;
 
-    internal DownloadQueueItemViewModel(Mod mod, string versionLabel, string installPath, Func<Task<ModVersion?>> resolveVersion, bool checkDependencies)
+    internal DownloadQueueItemViewModel(
+        Mod mod,
+        string versionLabel,
+        string installPath,
+        Func<Task<ModVersion?>> resolveVersion,
+        bool checkDependencies,
+        long? totalBytes = null)
     {
         Mod = mod;
         VersionLabel = versionLabel;
         InstallPath = installPath;
         _resolveVersion = resolveVersion;
         CheckDependencies = checkDependencies;
+        _totalBytes = totalBytes;
     }
 
     internal Task<ModVersion?> ResolveVersionAsync() => _resolveVersion();
@@ -125,6 +218,11 @@ public sealed partial class DownloadQueueItemViewModel : ObservableObject
 
     partial void OnStatusChanged(DownloadQueueItemStatus value)
     {
+        if (value == DownloadQueueItemStatus.Downloading) _downloading.Restart();
+        else _downloading.Stop();
+
+        OnPropertyChanged(nameof(TransferLabel));
+        OnPropertyChanged(nameof(HasTransferLabel));
         OnPropertyChanged(nameof(IsIndeterminateProgress));
         OnPropertyChanged(nameof(StatusLabel));
         OnPropertyChanged(nameof(CanCancel));

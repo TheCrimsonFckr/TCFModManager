@@ -39,4 +39,11 @@ public sealed class AppSettings
     // notes.
     //
     public bool SkipModPageConfirmation { get; set; }
+
+    //
+    // Whether the Installed page tags each mod with the mod lists it belongs to. On by default -
+    // the badges are the point of having lists visible at all - but an install with several lists
+    // puts a row of chips on every card, so it can be turned off to quieten the page down.
+    //
+    public bool ShowModListBadges { get; set; } = true;
 }

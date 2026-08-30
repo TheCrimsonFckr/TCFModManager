@@ -86,6 +86,16 @@ public partial class ModListsViewModel : ObservableObject
     [ObservableProperty]
     private string _statusMessage = "No mod list is being followed.";
 
+    //
+    // The one undo point: how the install stood before the last apply. Null when nothing has been
+    // applied, and cleared once used - a revert is the end of the chain, not another step in it.
+    //
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasRevert))]
+    [NotifyPropertyChangedFor(nameof(CanRevert))]
+    [NotifyCanExecuteChangedFor(nameof(RevertCommand))]
+    private string? _revertLabel;
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasPlan))]
     private string? _planSummary;
@@ -96,7 +106,9 @@ public partial class ModListsViewModel : ObservableObject
     private string? _versionWarning;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanRevert))]
     [NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RevertCommand))]
     private bool _isBusy;
 
     public bool HasSelection => Selected is not null;
@@ -112,6 +124,10 @@ public partial class ModListsViewModel : ObservableObject
     public string SelectionDetail => Selected?.Detail ?? string.Empty;
 
     public bool HasLists => Lists.Count > 0;
+
+    public bool HasRevert => RevertLabel is not null;
+
+    public bool CanRevert => HasRevert && !IsBusy;
 
     public bool HasPlan => PlanSummary is not null;
 
@@ -144,6 +160,10 @@ public partial class ModListsViewModel : ObservableObject
             Lists.Add(new ModListRowViewModel(list, data.ActiveListId == list.Id));
 
         OnPropertyChanged(nameof(HasLists));
+
+        RevertLabel = _service.PendingRevert() is { } snapshot
+            ? $"Undo \"{snapshot.Name}\""
+            : null;
 
         Selected = Lists.FirstOrDefault(l => l.Id == keep);
 
@@ -338,6 +358,41 @@ public partial class ModListsViewModel : ObservableObject
         result.Fetched.Failed.Count == 0
             ? string.Empty
             : " " + string.Join("; ", result.Fetched.Failed.Take(3).Select(f => $"{f.ModName}: {f.Reason}"));
+
+    //
+    // Puts the install back the way it was before the last list was applied, then clears the undo
+    // point. Normally moves mods without downloading anything, since the snapshot only names mods
+    // that were installed at the time.
+    //
+    [RelayCommand(CanExecute = nameof(CanRevert))]
+    private async Task RevertAsync()
+    {
+        await RunAsync(async () =>
+        {
+            var result = await _service.RevertAsync(ModListPrompts.Default);
+
+            if (result is null)
+            {
+                StatusMessage = "Nothing to undo.";
+                Refresh();
+                return;
+            }
+
+            if (result.Completed)
+            {
+                StatusMessage = "Put the install back the way it was before the last apply."
+                    + $" {result.Enabled.Moved.Count} enabled, {result.Disabled.Moved.Count} disabled.";
+            }
+            else
+            {
+                if (result.Moves.Count > 0) ModDisableService.Revert(result.Moves);
+                StatusMessage = $"Couldn't undo - {result.StoppedBecause}.";
+            }
+
+            ClearPlan();
+            Refresh();
+        });
+    }
 
     [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
     private void Rename()

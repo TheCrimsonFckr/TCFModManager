@@ -151,6 +151,26 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     //
     public IReadOnlyList<InstalledMod> Entries { get; init; } = [];
 
+    //
+    // The mod lists that name this mod, filled in after a scan by InstalledViewModel (the card
+    // itself knows nothing about lists). One badge each, so a glance at the card says which sets
+    // it belongs to - and therefore which list switches won't cost a download.
+    //
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsInAnyList))]
+    [NotifyPropertyChangedFor(nameof(ShowLists))]
+    private IReadOnlyList<string> _lists = [];
+
+    // The page-wide toggle, pushed down per card so one binding answers "draw the chips or not"
+    // rather than every template having to combine two conditions itself.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ShowLists))]
+    private bool _showBadges = true;
+
+    public bool IsInAnyList => Lists.Count > 0;
+
+    public bool ShowLists => ShowBadges && Lists.Count > 0;
+
     // True when every one of this mod's folders sits under a ".disabled" container, so SPT loads none of it.
     public bool IsDisabled => Entries.Count > 0 && Entries.All(e => e.IsDisabled);
 

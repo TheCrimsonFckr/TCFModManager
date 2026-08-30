@@ -36,12 +36,34 @@ public sealed class ModListStore
         try
         {
             var json = File.ReadAllText(_filePath);
-            return JsonSerializer.Deserialize<ModListData>(json, Options) ?? new ModListData();
+            return Normalise(JsonSerializer.Deserialize<ModListData>(json, Options) ?? new ModListData());
         }
         catch (JsonException)
         {
             return new ModListData();
         }
+    }
+
+    //
+    // Snapshots used to be ordinary lists, so a file written before the single slot existed can
+    // hold a pile of them - one per apply, each named after the last ("Before Before Before ...").
+    // They come out of Lists here: the newest fills the slot if it is empty, and the rest go, since
+    // an undo point from three applies ago describes an install that no longer exists.
+    //
+    // Costs one pass over a handful of entries and does nothing at all once a file has been written
+    // by this version, so it stays rather than being a migration to remember to delete.
+    //
+    private static ModListData Normalise(ModListData data)
+    {
+        var snapshots = data.Lists.Where(l => l.IsSnapshot).OrderByDescending(l => l.UpdatedAt).ToList();
+        if (snapshots.Count == 0) return data;
+
+        data.Lists.RemoveAll(l => l.IsSnapshot);
+        data.Snapshot ??= snapshots[0];
+
+        if (data.ActiveListId is { } active && data.Lists.All(l => l.Id != active)) data.ActiveListId = null;
+
+        return data;
     }
 
     public void Save(ModListData data)
@@ -52,16 +74,35 @@ public sealed class ModListStore
 
     public ModList? Find(Guid id) => Load().Lists.FirstOrDefault(l => l.Id == id);
 
+    //
     // Stores a list built elsewhere - a capture, an import, a fork. Replaces an existing list with
     // the same Id, so re-importing a newer revision of a list updates it rather than duplicating it.
+    //
+    // A snapshot is routed to its own slot rather than added, so there is one place that decides
+    // where snapshots live and no caller can put one back among the browsable lists.
+    //
     public ModList Add(ModList list)
     {
+        if (list.IsSnapshot) return SetSnapshot(list)!;
+
         var data = Load();
         data.Lists.RemoveAll(l => l.Id == list.Id);
         data.Lists.Add(list);
         Save(data);
         return list;
     }
+
+    // Replaces the one undo point. Null clears it - what reverting does, since you cannot revert
+    // a revert.
+    public ModList? SetSnapshot(ModList? snapshot)
+    {
+        var data = Load();
+        data.Snapshot = snapshot;
+        Save(data);
+        return snapshot;
+    }
+
+    public ModList? GetSnapshot() => Load().Snapshot;
 
     public void Rename(Guid id, string name)
     {

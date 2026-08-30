@@ -106,17 +106,56 @@ public sealed class ModListService
             (fetches, token) => FetchAsync(preview.Install.InstallPath, fetches, prompts, token),
             new ModListApplyOptions
             {
-                SnapshotName = takeSnapshot ? $"Before {preview.List.Name}" : null,
+                // Named after the list being applied, not "Before X" - the snapshot is only ever
+                // shown on the revert button, which words it, and a stored "Before ..." was what
+                // grew another "Before " every time one got applied.
+                SnapshotName = takeSnapshot ? preview.List.Name : null,
                 SnapshotVersions = CatalogVersions(),
                 SptVersion = preview.Install.SptVersion,
             },
             ct: ct);
 
-        if (result.Snapshot is not null) AppServices.ModLists.Add(result.Snapshot);
+        if (result.Snapshot is not null) AppServices.ModLists.SetSnapshot(result.Snapshot);
         if (result.Completed) AppServices.ModLists.SetActive(preview.List.Id);
 
         return result;
     }
+
+    //
+    // Puts the install back the way it was before the last list was applied.
+    //
+    // Takes no snapshot of its own and clears the one it used: there is a single undo point, so a
+    // revert is the end of the chain rather than something else to undo. Without that, applying a
+    // snapshot snapshotted the snapshot and every name grew another "Before ".
+    //
+    // Normally downloads nothing - the snapshot only ever names mods that were installed at the
+    // time, so the plan comes out as enables and disables.
+    //
+    public async Task<ModListApplyResult?> RevertAsync(ModListPrompts? prompts = null, CancellationToken ct = default)
+    {
+        if (AppServices.ModLists.GetSnapshot() is not { } snapshot) return null;
+
+        var preview = await PreviewAsync(snapshot);
+        if (preview is null) return null;
+
+        var result = await ModListApplier.ApplyAsync(
+            preview.Plan,
+            preview.Install.Candidates,
+            (fetches, token) => FetchAsync(preview.Install.InstallPath, fetches, prompts ?? ModListPrompts.Reject, token),
+            new ModListApplyOptions { SptVersion = preview.Install.SptVersion },
+            ct: ct);
+
+        if (result.Completed)
+        {
+            AppServices.ModLists.SetSnapshot(null);
+            AppServices.ModLists.SetActive(null);
+        }
+
+        return result;
+    }
+
+    // How the install stood before the last apply, or null when nothing has been applied yet.
+    public ModList? PendingRevert() => AppServices.ModLists.GetSnapshot();
 
     //
     // Resolves what each fetch would actually download, asks about anything the list can't have as
@@ -184,7 +223,8 @@ public sealed class ModListService
                 download.Mod,
                 version.Version ?? download.Action.TargetVersion ?? "latest",
                 installPath,
-                () => Task.FromResult<ModVersion?>(version));
+                () => Task.FromResult<ModVersion?>(version),
+                version.ContentLength);
 
             waiting.Add((download, item));
         }
@@ -323,10 +363,13 @@ public sealed class ModListService
         Mod mod,
         string versionLabel,
         string installPath,
-        Func<Task<ModVersion?>> resolveVersion)
+        Func<Task<ModVersion?>> resolveVersion,
+        long? totalBytes)
     {
+        // The size is passed in rather than left for the worker to discover: every version is
+        // already resolved by this point, so the whole apply can be sized before it starts.
         DownloadQueueItemViewModel Enqueue() =>
-            AppServices.DownloadQueue.Enqueue(mod, versionLabel, installPath, resolveVersion);
+            AppServices.DownloadQueue.Enqueue(mod, versionLabel, installPath, resolveVersion, totalBytes: totalBytes);
 
         var dispatcher = Application.Current?.Dispatcher;
 

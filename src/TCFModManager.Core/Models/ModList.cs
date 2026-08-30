@@ -89,8 +89,14 @@ public sealed class ModList
     // different version can be warned before anything is fetched.
     public string? SptVersion { get; init; }
 
+    //
     // True for a list written automatically to record the install as it stood before a list was
-    // applied - the "put me back" undo. Shown apart from lists the user made deliberately.
+    // applied - the "put me back" undo.
+    //
+    // A snapshot never lives in ModListData.Lists; there is one slot for it, overwritten by each
+    // apply (see ModListData.Snapshot). It was a normal list to begin with, which meant applying
+    // one produced a snapshot of a snapshot, and the names grew a "Before " every time.
+    //
     public bool IsSnapshot { get; init; }
 
     public required DateTimeOffset CreatedAt { get; init; }
@@ -112,4 +118,11 @@ public sealed class ModListData
 
     // One list is active at a time. Null when the install isn't following a list.
     public Guid? ActiveListId { get; set; }
+
+    //
+    // How the install stood before the last list was applied, and the only one kept - each apply
+    // overwrites it, and reverting consumes it. Deliberately outside Lists: it is an undo point,
+    // not something to browse, share or apply by hand.
+    //
+    public ModList? Snapshot { get; set; }
 }

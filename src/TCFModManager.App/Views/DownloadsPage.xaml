@@ -23,12 +23,24 @@
                 DockPanel.Dock="Right"
                 Content="Clear finished"
                 Click="ClearFinishedButton_Click" />
-            <TextBlock
-                VerticalAlignment="Center"
-                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                Opacity="0.8"
-                TextWrapping="Wrap"
-                Text="Downloads install strictly one at a time, in the order you queued them - queue as many as you like from Browse or an update dialog and check back here for progress." />
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Opacity="0.8"
+                    TextWrapping="Wrap"
+                    Text="Downloads install strictly one at a time, in the order you queued them - queue as many as you like from Browse or an update dialog and check back here for progress." />
+
+                <!-- How far through the whole queue we are. Matters most for a mod list, which can
+                     put forty items here at once; the per-card line answers how one of them is
+                     doing, not how long until you can play. -->
+                <TextBlock
+                    Margin="0,6,0,0"
+                    FontWeight="SemiBold"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Visibility="{Binding HasSummary, Converter={StaticResource BoolToVisibility}}"
+                    Text="{Binding Summary}" />
+            </StackPanel>
         </DockPanel>
 
         <!-- Empty-queue message, shown only when the queue has no items. -->
@@ -92,6 +104,14 @@
                                         Opacity="0.7"
                                         TextTrimming="CharacterEllipsis"
                                         Text="{Binding StatusMessage}" />
+
+                                    <TextBlock
+                                        Margin="0,2,0,0"
+                                        TextWrapping="Wrap"
+                                        FontSize="12"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                        Visibility="{Binding HasTransferLabel, Converter={StaticResource BoolToVisibility}}"
+                                        Text="{Binding TransferLabel}" />
                                 </StackPanel>
 
                                 <StackPanel

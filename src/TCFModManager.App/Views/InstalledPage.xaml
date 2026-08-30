@@ -29,6 +29,40 @@
         <converters:CountToVisibilityConverter x:Key="HasItems" />
         <converters:BoolToButtonAppearanceConverter x:Key="BoolToAppearance" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
+
+        <!-- One chip per mod list a mod belongs to, shared by all three views so they can't drift
+             apart. Membership comes from ModListMembership, which runs the real planner, so a chip
+             here and what applying that list would do can't disagree. ShowLists folds in the
+             page-wide toggle as well as "is it in any list at all". -->
+        <DataTemplate x:Key="ModListBadges">
+            <ItemsControl
+                ItemsSource="{Binding Lists}"
+                Visibility="{Binding ShowLists, Converter={StaticResource BoolToVis}}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Margin="0,2,4,0"
+                            Padding="6,1"
+                            CornerRadius="3"
+                            ToolTip="This mod is in this mod list"
+                            Background="{DynamicResource ControlFillColorSecondaryBrush}">
+                            <TextBlock
+                                Text="{Binding}"
+                                FontSize="10"
+                                FontWeight="SemiBold"
+                                TextTrimming="CharacterEllipsis"
+                                MaxWidth="140"
+                                Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DataTemplate>
     </Page.Resources>
     <!-- Scroll-anywhere for group view is wired up in code-behind (see the constructor and
          Page_PreviewMouseWheel in InstalledPage.xaml.cs), not via a XAML MouseWheel attribute here
@@ -146,6 +180,16 @@
                     IsChecked="{Binding HideContainsAiContent}"
                     OnContent="Hide AI content"
                     OffContent="Hide AI content" />
+                <!-- A display preference rather than a filter: it changes what each row draws, not
+                     which rows are shown, so Clear filters leaves it alone and it is remembered
+                     between sessions. -->
+                <ui:ToggleSwitch
+                    Margin="16,0,0,0"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    ToolTip="Show which mod lists each mod belongs to."
+                    IsChecked="{Binding ShowListBadges}"
+                    OnContent="List badges"
+                    OffContent="List badges" />
             </StackPanel>
 
             <ui:TextBox
@@ -337,6 +381,10 @@
                                     Visibility="{Binding IsDisabled, Converter={StaticResource BoolToVis}}">
                                     <TextBlock Text="DISABLED" FontSize="10" FontWeight="SemiBold" />
                                 </Border>
+
+                                <ContentPresenter
+                                    ContentTemplate="{StaticResource ModListBadges}"
+                                    Content="{Binding}" />
 
                                 <!-- On-disk folder/package name, shown only if different from the title. -->
                                 <TextBlock
@@ -663,6 +711,10 @@
                                                                 <Run Text=" • " />
                                                                 <Run Text="{Binding Author, TargetNullValue='unknown author', Mode=OneWay}" />
                                                             </TextBlock>
+
+                                                            <ContentPresenter
+                                                                ContentTemplate="{StaticResource ModListBadges}"
+                                                                Content="{Binding}" />
                                                         </StackPanel>
 
                                                         <!-- Per-row disable toggle. ModRow_PreviewMouseLeftButtonDown
@@ -739,6 +791,10 @@
                                             <Run Text=" • " />
                                             <Run Text="{Binding Author, TargetNullValue='unknown author', Mode=OneWay}" />
                                         </TextBlock>
+
+                                        <ContentPresenter
+                                            ContentTemplate="{StaticResource ModListBadges}"
+                                            Content="{Binding}" />
                                     </StackPanel>
 
                                     <!-- Group membership and disabled state, both readable without
