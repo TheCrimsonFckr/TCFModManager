@@ -169,9 +169,12 @@ public sealed class ModCardViewModel
         var isOlder = newest is not null && shown.Id != newest.Id
             && shown.PublishedAt is { } shownDate && newest.PublishedAt is { } newestDate && shownDate < newestDate;
 
+        // "version (vX)" rather than "vX" was eleven characters that said nothing the number
+        // doesn't - and at three or four Browse columns it was what pushed this note past the card
+        // and into an ellipsis. The card already writes its release as "v1.6.0" a line above.
         return isOlder
-            ? $"Older version (v{shown.Version}) available for your installed SPT."
-            : $"Compatible version (v{shown.Version}) available for your installed SPT.";
+            ? $"Older v{shown.Version} available for your installed SPT."
+            : $"Compatible v{shown.Version} available for your installed SPT.";
     }
 
     // 

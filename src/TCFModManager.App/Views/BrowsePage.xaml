@@ -290,13 +290,24 @@
                                     </TextBlock>
                                     <!-- Shown only when the ticked SPT filter is hiding a version
                                          that actually runs on the installed SPT - explains a red
-                                         card rather than leaving it looking simply incompatible. -->
+                                         card rather than leaving it looking simply incompatible.
+
+                                         Wraps rather than trims, unlike every line above it: those
+                                         are identity (name, GUID, counts) where the first half
+                                         still identifies the mod, but this one's whole point is the
+                                         version number and it sits at the end of the sentence. At
+                                         three or four columns it was being cut off at "...for your
+                                         inst", which says nothing at all. The UniformGrid sizes
+                                         every cell to the tallest, so the second line costs a row
+                                         of height across the page - worth it for the one note on
+                                         the card that exists purely to be read. -->
                                     <TextBlock
                                         Text="{Binding AlternateCompatibleVersionNote}"
                                         FontSize="11"
                                         FontStyle="Italic"
                                         Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                                        TextTrimming="CharacterEllipsis"
+                                        TextWrapping="Wrap"
+                                        ToolTip="{Binding AlternateCompatibleVersionNote}"
                                         Visibility="{Binding AlternateCompatibleVersionNote, Converter={StaticResource NullToCollapsed}}" />
                                     <!-- Category and feature badges; only shown when applicable. -->
                                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
