@@ -1,3 +1,17 @@
+<!--
+    ScrollViewer.CanContentScroll="False" opts this page out of the outer DynamicScrollViewer that
+    WPF-UI's NavigationView wraps every Page in by default (its NavigationViewContentPresenter
+    overrides the CanContentScroll metadata for the Page type itself). Inside that wrapper the page
+    is measured with unbounded height, so the "*" row below never got a real limit: the results grid
+    grew to fit whatever was on the page and the pager under it rode down with it, moving every time
+    you turned a page or the tallest card changed.
+
+    Opted out, the page is exactly the window's height, the "*" row takes what's left, the ListBox
+    scrolls inside itself and the pager stays where it is. Same fix InstalledPage and DependenciesPage
+    carry - see the comment at the top of InstalledPage.xaml for the full diagnosis. Note this page
+    deliberately does NOT take the other two parts of that fix (a Transparent root Background and a
+    PreviewMouseWheel handler), which are only needed for scroll-anywhere.
+-->
 <Page
     x:Class="TCFModManager.App.Views.BrowsePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -6,6 +20,7 @@
     xmlns:app="clr-namespace:TCFModManager.App"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
+    ScrollViewer.CanContentScroll="False"
     Title="Browse"
     Loaded="BrowsePage_Loaded">
     <Page.Resources>
@@ -309,81 +324,99 @@
                                         TextWrapping="Wrap"
                                         ToolTip="{Binding AlternateCompatibleVersionNote}"
                                         Visibility="{Binding AlternateCompatibleVersionNote, Converter={StaticResource NullToCollapsed}}" />
-                                    <!-- Category and feature badges; only shown when applicable.
+                                    <!--
+                                        The badge area, held at three badge rows whatever this
+                                        particular mod carries.
 
-                                         A WrapPanel, not a StackPanel: a badge is a fixed label
-                                         that can't shorten itself, so a horizontal stack just runs
-                                         one off the edge of the card - three of these on a mod with
-                                         a long category left "Contains ads" reading "Contains ad".
-                                         Gaps are trailing margins so whichever badge starts a line
-                                         sits flush left, and the 4 at the bottom is the gap between
-                                         wrapped lines. -->
-                                    <WrapPanel Margin="0,4,0,0">
-                                        <ui:Badge
-                                            Margin="0,0,6,4"
-                                            Appearance="Info"
-                                            FontSize="11"
-                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                            Content="{Binding CategoryTag}"
-                                            Visibility="{Binding CategoryTag, Converter={StaticResource NullToCollapsed}}" />
-                                        <ui:Badge
-                                            Margin="0,0,6,4"
-                                            Appearance="Info"
-                                            FontSize="11"
-                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                            Content="Fika compatible"
-                                            Visibility="{Binding IsFikaCompatible, Converter={StaticResource TrueToVisible}}" />
-                                        <ui:Badge
-                                            Margin="0,0,6,4"
-                                            Appearance="Info"
-                                            FontSize="11"
-                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                            Content="Contains ads"
-                                            Visibility="{Binding ContainsAds, Converter={StaticResource TrueToVisible}}" />
-                                    </WrapPanel>
-                                    <!-- Badges on their own row, both collapsing when they don't
-                                         apply so whichever one shows starts at the left edge.
+                                        The UniformGrid sizes every cell to the tallest card on the
+                                        page, so one card with three rows of badges made every card
+                                        on that page taller - and since each page has a different
+                                        tallest card, the pager underneath the grid moved every time
+                                        you turned a page. Reserving the space up front costs a
+                                        little height on sparse pages and buys a Browse page that
+                                        never resizes under the cursor.
 
-                                         The zero-width badge in front of them is what keeps the row
-                                         its full height regardless, so a card doesn't grow as the
-                                         dependency answer arrives. The dependency badge used to do
-                                         that itself by being Hidden rather than Collapsed, which
-                                         reserved its whole width too and left the addon badge
-                                         indented on every mod that has addons but no dependencies.
-                                         Taking the height from a real Badge rather than a fixed
-                                         MinHeight keeps it right if the badge style ever changes.
+                                        Three rows is what five badges take at the narrowest column
+                                        count: category, Fika, ads, dependencies and addons. The
+                                        keeper column is a minimum rather than a clamp - a card that
+                                        somehow needs a fourth row grows rather than clipping a
+                                        badge, which is the bug this whole run has been fixing.
 
-                                         A WrapPanel for the same reason as the row above - two
-                                         badges fit at two columns and not always at four. Its own
-                                         top margin rather than relying on the row above, which is
-                                         empty on a mod with no category and no flags. -->
-                                    <WrapPanel Margin="0,4,0,0">
-                                        <ui:Badge
-                                            Width="0"
-                                            FontSize="11"
-                                            Content=" "
-                                            Visibility="Hidden" />
+                                        Height comes from three real Badges at zero width rather
+                                        than a hard-coded number, so it stays right if the badge
+                                        style ever changes. IsHitTestVisible="False" keeps them out
+                                        of the way of the card's own click.
+                                    -->
+                                    <Grid Margin="0,4,0,0">
+                                        <StackPanel IsHitTestVisible="False">
+                                            <ui:Badge Width="0" Margin="0,0,0,4" FontSize="11" Content=" " Visibility="Hidden" />
+                                            <ui:Badge Width="0" Margin="0,0,0,4" FontSize="11" Content=" " Visibility="Hidden" />
+                                            <ui:Badge Width="0" FontSize="11" Content=" " Visibility="Hidden" />
+                                        </StackPanel>
 
-                                        <ui:Badge
-                                            Margin="0,0,6,4"
-                                            Appearance="Caution"
-                                            FontSize="11"
-                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                            Content="Has dependencies"
-                                            Visibility="Collapsed"
-                                            behaviors:DependencyBadgeLoader.Mod="{Binding Mod}" />
+                                        <StackPanel VerticalAlignment="Top">
+                                            <!--
+                                                WrapPanels, not StackPanels: a badge is a fixed label
+                                                that can't shorten itself, so a horizontal stack runs
+                                                the last one off the edge of the card - three of these
+                                                left "Contains ads" reading "Contains ad". Gaps are
+                                                trailing margins so whichever badge starts a line sits
+                                                flush left, and the 4 at the bottom is the gap between
+                                                wrapped lines.
 
-                                        <!-- Answered from the cached addon catalog, so unlike the
-                                             badge beside it this one is right on the first render. -->
-                                        <ui:Badge
-                                            Margin="0,0,6,4"
-                                            Appearance="Info"
-                                            FontSize="11"
-                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                            Content="{Binding AddonBadgeText}"
-                                            ToolTip="Open this mod to see and install its addons"
-                                            Visibility="{Binding HasAddons, Converter={StaticResource TrueToVisible}}" />
-                                    </WrapPanel>
+                                                Two panels rather than one so the mod's own tags stay
+                                                above what it needs from you, and so the dependency
+                                                badge arriving late can't reshuffle the tags around it.
+                                            -->
+                                            <WrapPanel>
+                                                <ui:Badge
+                                                    Margin="0,0,6,4"
+                                                    Appearance="Info"
+                                                    FontSize="11"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                    Content="{Binding CategoryTag}"
+                                                    Visibility="{Binding CategoryTag, Converter={StaticResource NullToCollapsed}}" />
+                                                <ui:Badge
+                                                    Margin="0,0,6,4"
+                                                    Appearance="Info"
+                                                    FontSize="11"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                    Content="Fika compatible"
+                                                    Visibility="{Binding IsFikaCompatible, Converter={StaticResource TrueToVisible}}" />
+                                                <ui:Badge
+                                                    Margin="0,0,6,4"
+                                                    Appearance="Info"
+                                                    FontSize="11"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                    Content="Contains ads"
+                                                    Visibility="{Binding ContainsAds, Converter={StaticResource TrueToVisible}}" />
+                                            </WrapPanel>
+
+                                            <!-- Both collapse when they don't apply, so whichever one
+                                                 shows starts at the left edge. The dependency badge is
+                                                 resolved asynchronously per card; the addon one is
+                                                 answered from the cached addon catalog, so unlike the
+                                                 badge beside it that one is right on the first render. -->
+                                            <WrapPanel>
+                                                <ui:Badge
+                                                    Margin="0,0,6,4"
+                                                    Appearance="Caution"
+                                                    FontSize="11"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                    Content="Has dependencies"
+                                                    Visibility="Collapsed"
+                                                    behaviors:DependencyBadgeLoader.Mod="{Binding Mod}" />
+                                                <ui:Badge
+                                                    Margin="0,0,6,4"
+                                                    Appearance="Info"
+                                                    FontSize="11"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                    Content="{Binding AddonBadgeText}"
+                                                    ToolTip="Open this mod to see and install its addons"
+                                                    Visibility="{Binding HasAddons, Converter={StaticResource TrueToVisible}}" />
+                                            </WrapPanel>
+                                        </StackPanel>
+                                    </Grid>
                                 </StackPanel>
                             </Grid>
 
