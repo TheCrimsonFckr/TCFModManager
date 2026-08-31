@@ -57,7 +57,7 @@ public partial class AddonCacheViewModel : ObservableObject
 
     private async Task<List<Addon>> LoadAsync(CancellationToken ct)
     {
-        var cached = _store.Load();
+        var cached = await Task.Run(_store.Load, ct);
         if (cached is not null)
         {
             AppLog.Debug("Addons", $"disk cache hit, {cached.Addons.Count} addons");

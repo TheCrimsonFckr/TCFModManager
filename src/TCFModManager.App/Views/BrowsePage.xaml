@@ -29,6 +29,7 @@
         <converters:UpdateAvailableToVisibilityConverter x:Key="TrueToVisible" />
         <converters:ModStatusToBrushConverter x:Key="StatusBrush" />
         <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
+        <converters:CountToVisibilityConverter x:Key="HasCount" />
 
     </Page.Resources>
     <Grid Margin="16">
@@ -464,6 +465,60 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        <!--
+            Startup panel, over the results area and only on the first load of a session.
+
+            Before this the window opened and then sat empty while the catalog loaded, with nothing
+            saying anything was happening - and on a first run, with no cache to read, that is a
+            long silence while ~3000 mods are fetched a page at a time. The progress counters it
+            reads have been on the catalog loader all along with nothing bound to them.
+
+            It sits in the same grid row as the ListBox and paints the window background, so the
+            empty list doesn't show through, and it takes no space once it collapses.
+        -->
+        <Border
+            Grid.Row="2"
+            Background="{DynamicResource ApplicationBackgroundBrush}"
+            Visibility="{Binding IsStartingUp, Converter={StaticResource TrueToVisible}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ui:ProgressRing
+                    Width="48"
+                    Height="48"
+                    HorizontalAlignment="Center"
+                    IsIndeterminate="True" />
+
+                <TextBlock
+                    Margin="0,16,0,0"
+                    HorizontalAlignment="Center"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Text="{Binding StartupStage}" />
+
+                <!-- Only a live fetch knows a total, so this stays collapsed on a launch that
+                     reads the cache and appears on the first run, which is the slow one. -->
+                <TextBlock
+                    Margin="0,4,0,0"
+                    HorizontalAlignment="Center"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Visibility="{Binding TotalCount, Source={x:Static app:AppServices.ModCache}, Converter={StaticResource HasCount}}">
+                    <Run Text="{Binding LoadedCount, Source={x:Static app:AppServices.ModCache}, Mode=OneWay, StringFormat={}{0:N0}}" />
+                    <Run Text="of" />
+                    <Run Text="{Binding TotalCount, Source={x:Static app:AppServices.ModCache}, Mode=OneWay, StringFormat={}{0:N0}}" />
+                    <Run Text="mods" />
+                </TextBlock>
+
+                <TextBlock
+                    Margin="0,16,0,0"
+                    HorizontalAlignment="Center"
+                    TextWrapping="Wrap"
+                    MaxWidth="380"
+                    TextAlignment="Center"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                    Text="The first launch downloads the mod catalog. After that it's read from disk and this is over in a moment."
+                    Visibility="{Binding TotalCount, Source={x:Static app:AppServices.ModCache}, Converter={StaticResource HasCount}}" />
+            </StackPanel>
+        </Border>
 
         <StackPanel
             Grid.Row="3"

@@ -130,6 +130,21 @@ public partial class BrowseViewModel : ObservableObject
     [ObservableProperty]
     private bool _isBusy;
 
+    //
+    // Drives the startup panel over the results area, and only on the first load of a session -
+    // a later search keeps the results that are already there rather than blanking them.
+    //
+    // The catalog is cached on disk, so most launches spend well under a second here; a first run
+    // with no cache fetches ~3000 mods a page at a time and can take considerably longer, which is
+    // the case this exists for. Everything it needed to say was already being tracked and simply
+    // had nothing bound to it.
+    //
+    [ObservableProperty]
+    private bool _isStartingUp;
+
+    [ObservableProperty]
+    private string _startupStage = "Starting up...";
+
     [ObservableProperty]
     private string? _statusMessage;
 
@@ -178,13 +193,23 @@ public partial class BrowseViewModel : ObservableObject
     {
         AppLog.Debug("Browse", "SearchAsync: start");
         IsBusy = true;
+        IsStartingUp = !HasLoadedResults;
         try
         {
+            StartupStage = "Checking SPT versions...";
             await AppServices.SptCatalog.EnsureLoadedAsync();
+
+            StartupStage = "Loading the mod catalog...";
             await AppServices.ModCache.EnsureLoadedAsync();
+
+            StartupStage = "Loading addons...";
             await AppServices.Addons.EnsureLoadedAsync();
+
+            StartupStage = "Checking what you have installed...";
             await RefreshInstalledIndexAsync();
+
             AppLog.Debug("Browse", "SearchAsync: ModCache ready, applying filter");
+            StartupStage = "Sorting results...";
             EnsureSptVersionOptionsBuilt();
             ApplyFilter();
             HasLoadedResults = true;
@@ -210,6 +235,7 @@ public partial class BrowseViewModel : ObservableObject
         finally
         {
             IsBusy = false;
+            IsStartingUp = false;
             AppLog.Debug("Browse", "SearchAsync: end");
         }
     }
@@ -316,17 +342,26 @@ public partial class BrowseViewModel : ObservableObject
             return;
         }
 
-        var scanned = await Task.Run(() => InstalledModScanner.Scan(installPath));
+        var catalog = AppServices.ModCache.AllMods;
+        var addons = AppServices.Addons.AllAddons;
+        var sptVersion = AppServices.SptEnvironment.InstalledVersion;
+        var records = AppServices.InstallManifest.Load().Mods;
 
-        // The manifest is passed even though Browse ignores IsAppManaged: it's what lets an
-        // app-installed mod resolve to its exact catalog listing rather than a folder-name guess.
-        var matched = InstalledModCardViewModel.BuildFrom(
-                scanned, AppServices.ModCache.AllMods, AppServices.SptEnvironment.InstalledVersion,
-                AppServices.InstallManifest.Load().Mods, AppServices.Addons.AllAddons)
-            // Browse's cards are mods, so addon cards are left out of both indexes below - an
-            // addon sharing a mod's name would otherwise mark that mod as installed.
-            .Where(m => !m.IsAddon)
-            .ToList();
+        // Scan and match together off the UI thread. The match is the slow half - InstalledViewModel
+        // has run it this way since the matching rewrite, and doing it inline here was the last
+        // thing left holding the window blank while Browse loaded.
+        var matched = await Task.Run(() =>
+        {
+            var scanned = InstalledModScanner.Scan(installPath);
+
+            // The manifest is passed even though Browse ignores IsAppManaged: it's what lets an
+            // app-installed mod resolve to its exact catalog listing rather than a folder-name guess.
+            return InstalledModCardViewModel.BuildFrom(scanned, catalog, sptVersion, records, addons)
+                // Browse's cards are mods, so addon cards are left out of both indexes below - an
+                // addon sharing a mod's name would otherwise mark that mod as installed.
+                .Where(m => !m.IsAddon)
+                .ToList();
+        });
 
         // Keyed by Guid when available, MatchedModName as a fallback. Only matched entries are indexed.
         _installedByGuid = matched

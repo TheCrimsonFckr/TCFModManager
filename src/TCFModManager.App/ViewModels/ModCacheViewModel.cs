@@ -66,7 +66,10 @@ public partial class ModCacheViewModel : ObservableObject
     private async Task<List<Mod>> LoadAsync(CancellationToken ct)
     {
         AppLog.Debug("Catalog", "LoadAsync: start");
-        var cached = _store.Load();
+
+        // Off the UI thread: the cache file is a couple of megabytes of JSON for ~3000 mods, and
+        // deserializing it inline was a visible stall on every launch with a warm cache.
+        var cached = await Task.Run(_store.Load, ct);
         if (cached is not null)
         {
             // Use the disk cache immediately, then refresh in the background.
