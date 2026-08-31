@@ -214,6 +214,12 @@ Debug-level output in the same log. Logs rotate daily as `tcfmm-<yyyyMMdd>.log`.
 - Mods installed by hand are matched to a catalog listing by folder name, since there's no record to
   read. An ambiguous folder name is deliberately left unmatched rather than guessed at, so such a
   mod can be listed and removed but not updated from here.
+- Most addons install *into their parent mod's folder* rather than one of their own - a SAIN preset
+  lands in `BepInEx\plugins\SAIN`. One of those has no card of its own on the Installed page,
+  because on disk there is only the parent's folder; it is listed, updated and redownloaded from the
+  Addons section of the parent mod's dialog instead. A mod list still records it, and can install or
+  update it - but nothing can disable one on its own, since there is no folder to move. Disabling
+  the parent takes it with it.
 - An addon installed by hand is not recognised as an addon. Addons carry no GUID on sp-mod.com and
   their ids belong to a different sequence from mods', so there is nothing to match one by; only an
   addon this app installed is tracked as one. A hand-installed addon shows as an ordinary unmatched

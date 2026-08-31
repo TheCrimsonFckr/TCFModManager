@@ -159,6 +159,7 @@ public static class ModListPlanner
             {
                 var candidate = candidates[index];
                 if (matched[index] || candidate.IsDisabled) continue;
+                if (!candidate.CanBeDisabled) continue;
                 if (IsPinnedAgainstDisable(candidate, neverAutoDisable)) continue;
 
                 actions.Add(new ModListAction

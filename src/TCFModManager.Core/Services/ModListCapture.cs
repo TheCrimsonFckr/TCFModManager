@@ -27,6 +27,14 @@ public sealed record ModListCandidate
 
     public bool IsDisabled { get; init; }
 
+    //
+    // False for something a list can install and update but must never disable on its own: an addon
+    // whose files live inside its parent mod's folder has no folder of its own to move, so a
+    // Disable would silently do nothing. Disabling the parent takes it with it, which is the only
+    // thing that was ever going to happen anyway.
+    //
+    public bool CanBeDisabled { get; init; } = true;
+
     // The mod folder names on disk this card covers - both halves of a client+server mod.
     public IReadOnlyList<string> Folders { get; init; } = [];
 

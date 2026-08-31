@@ -20,7 +20,8 @@ public class AddonModListTests
         string? version = null,
         bool disabled = false,
         string? guid = null,
-        string[]? folders = null) =>
+        string[]? folders = null,
+        bool canBeDisabled = true) =>
         new()
         {
             Name = name,
@@ -29,6 +30,7 @@ public class AddonModListTests
             Version = version,
             Guid = guid,
             IsDisabled = disabled,
+            CanBeDisabled = canBeDisabled,
             Folders = folders ?? [],
         };
 
@@ -168,6 +170,34 @@ public class AddonModListTests
         Assert.True(action.IsAddon);
         Assert.True(action.IsFetch);
         Assert.Equal(252, action.VersionId);
+    }
+
+    [Fact]
+    public void Planner_NeverDisablesAnAddonThatHasNoFolderOfItsOwn()
+    {
+        // The common shape: the addon's files sit inside its parent mod's folder, so there is
+        // nothing of its own to move. A Disable action here would report success and do nothing.
+        var plan = ModListPlanner.Build(
+            Exclusive(Entry("Some Mod", modId: 2441, version: "2.0.0")),
+            [
+                Candidate("Some Mod", modId: 2441, version: "2.0.0"),
+                Candidate("Black Div spawn notifier", modId: 34, isAddon: true, version: "1.1.0", canBeDisabled: false),
+            ]);
+
+        Assert.Empty(plan.Disable);
+        Assert.Single(plan.Actions);
+    }
+
+    [Fact]
+    public void Planner_StillInstallsAndUpdatesAnAddonThatHasNoFolderOfItsOwn()
+    {
+        var plan = ModListPlanner.Build(
+            Exclusive(Entry("Black Div spawn notifier", modId: 34, isAddon: true, versionId: 207, version: "1.1.0")),
+            [Candidate("Black Div spawn notifier", modId: 34, isAddon: true, version: "1.0.1", canBeDisabled: false)]);
+
+        var action = Assert.Single(plan.Actions);
+        Assert.Equal(ModListActionKind.Update, action.Kind);
+        Assert.True(action.IsFetch);
     }
 
     // ---- membership ----------------------------------------------------------------------------

@@ -74,7 +74,7 @@ So the app checks each addon version against the mod you actually have installed
 
 > Needs Raid Review ^1.5.0 - you have 1.4.2
 
-Installed addons get their own card on the Installed page, labelled with the mod they belong to, and update the same way anything else does. **Mod lists cover them too** - capturing a list records your addons, and applying one installs, updates or disables them alongside your mods.
+Where an addon installs its own folder, it gets its own card on the Installed page, labelled with the mod it belongs to. Most don't - a SAIN preset lands inside SAIN's own folder, so there is nothing separate on disk to show. Those stay in the parent mod's Addons section, which is where you update or redownload them. **Mod lists cover them too** - capturing a list records your addons, and applying one installs, updates or disables them alongside your mods.
 
 #### information
 Installing an addon won't drag its parent mod in behind it - install the mod first, then its addon. Anything else the addon needs is offered the usual way, on the Downloads page. Applying a list that names an addon whose parent mod isn't installed (and isn't on that list either) skips it and tells you why, rather than downloading something nothing would load.

@@ -324,14 +324,31 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
             .Select(g => (Key: g.Key, Entries: g.ToList()))
             .ToList();
 
-        // A folder an addon install placed is claimed here and never offered to the catalog matcher.
-        var addonFolders = scannedGroups
-            .Where(g => addonRecordsByFolder.ContainsKey(g.Key))
+        var resolved = scannedGroups
+            .Select(g => (g.Key, g.Entries, Match: ResolveCatalogMatch(g.Key, g.Entries, index, recordsByFolder)))
             .ToList();
 
-        var groups = scannedGroups
-            .Where(g => !addonRecordsByFolder.ContainsKey(g.Key))
-            .Select(g => (g.Entries, Match: ResolveCatalogMatch(g.Key, g.Entries, index, recordsByFolder)))
+        //
+        // An addon usually installs INTO its parent mod's folder rather than one of its own - a SAIN
+        // preset lands in BepInEx\plugins\SAIN, a spawn notifier in the mod's own plugin folder - so
+        // the folders its install record names are very often the parent's. A folder that resolves
+        // to a catalog mod therefore stays that mod's, always: claiming it for the addon would make
+        // the parent disappear from this page and come back wearing the addon's name.
+        //
+        // Only a folder nothing resolved to a mod, and that an addon install placed, is the addon's
+        // own. An addon with no folder of its own has no card here and is shown inside its parent's
+        // dialog instead, which is where it was installed from and where it updates.
+        //
+        var addonFolders = resolved
+            .Where(g => g.Match is null && addonRecordsByFolder.ContainsKey(g.Key))
+            .Select(g => (g.Key, g.Entries))
+            .ToList();
+
+        var claimed = addonFolders.Select(g => g.Key).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var groups = resolved
+            .Where(g => !claimed.Contains(g.Key))
+            .Select(g => (g.Entries, g.Match))
             .ToList();
 
         // Patchers first: folding one into the mod it belongs to can turn a client-only group into

@@ -121,6 +121,8 @@ public sealed partial class AddonRowViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(HasBlockedReason))]
     [NotifyPropertyChangedFor(nameof(CompatibilityNote))]
     [NotifyPropertyChangedFor(nameof(HasCompatibilityNote))]
+    [NotifyPropertyChangedFor(nameof(ActionLabel))]
+    [NotifyPropertyChangedFor(nameof(ActionIcon))]
     [NotifyCanExecuteChangedFor(nameof(InstallCommand))]
     private AddonVersionOption? _selectedVersion;
 
@@ -130,15 +132,17 @@ public sealed partial class AddonRowViewModel : ObservableObject
 
     public bool HasStatusMessage => StatusMessage is not null;
 
-    // Install / Update / Redownload, following the same wording the mod path uses.
+    // Install / Update / Redownload, following the same wording the mod path uses. An addon that
+    // lives inside its parent's folder has no card on the Installed page, so this row is where its
+    // update is offered - the label has to say so rather than reading as a fresh install.
     public string ActionLabel => (IsInstalled, SelectedVersion) switch
     {
         (false, _) => "Install",
         (true, { IsInstalled: true }) => "Redownload",
-        _ => "Install version",
+        _ => "Update",
     };
 
-    public string ActionIcon => ActionLabel == "Redownload" ? "ArrowSync24" : "ArrowDownload24";
+    public string ActionIcon => ActionLabel == "Install" ? "ArrowDownload24" : "ArrowSync24";
 
     // 
     // An addon is only useful next to its parent, so the parent has to be installed and has to

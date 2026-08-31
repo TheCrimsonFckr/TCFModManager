@@ -53,9 +53,10 @@ public sealed class ModListService
         {
             var found = InstalledModScanner.Scan(installPath);
 
-            return ModListCandidates.From(
-                InstalledModCardViewModel.BuildFrom(
-                    found, catalog, sptVersion, records, AppServices.Addons.AllAddons));
+            var cards = InstalledModCardViewModel.BuildFrom(
+                found, catalog, sptVersion, records, AppServices.Addons.AllAddons);
+
+            return ModListCandidates.From(cards, records);
         });
 
         return new ModListInstall(installPath, candidates, sptVersion);
