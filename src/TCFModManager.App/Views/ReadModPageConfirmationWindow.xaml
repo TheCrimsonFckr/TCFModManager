@@ -54,6 +54,7 @@
                                 VerticalAlignment="Center"
                                 IsEnabled="{Binding HasUrl}"
                                 Content="{Binding ButtonLabel}"
+                                Icon="{ui:SymbolIcon Open24}"
                                 Click="OpenLinkButton_Click" />
                         </Grid>
                     </DataTemplate>

@@ -12,8 +12,9 @@ namespace TCFModManager.App.Behaviors;
 // same shape as ThumbnailLoader, just toggling Visibility instead of setting an image Source.
 // 
 // 
-// The badge is set to Hidden rather than Collapsed when a mod has no dependencies, so its row
-// keeps its height and cards don't reflow as answers arrive.
+// The badge is Collapsed when a mod has no dependencies, so anything beside it on the row starts at
+// the left edge rather than after a badge-shaped gap. The row's height is held open by a
+// zero-width hidden badge in the markup instead, so cards still don't reflow as answers arrive.
 // 
 public static class DependencyBadgeLoader
 {
@@ -55,12 +56,12 @@ public static class DependencyBadgeLoader
     {
         if (d is not UIElement element) return;
 
-        element.Visibility = Visibility.Hidden;
+        element.Visibility = Visibility.Collapsed;
         if (e.NewValue is not Mod mod) return;
 
         if (TryGetFresh(mod, out var hasDependencies))
         {
-            element.Visibility = hasDependencies ? Visibility.Visible : Visibility.Hidden;
+            element.Visibility = hasDependencies ? Visibility.Visible : Visibility.Collapsed;
             return;
         }
 
@@ -87,7 +88,7 @@ public static class DependencyBadgeLoader
             // Re-check in case another card already resolved this mod id while waiting on the gate.
             if (TryGetFresh(mod, out var cached))
             {
-                if (GetMod(element)?.Id == mod.Id) element.Visibility = cached ? Visibility.Visible : Visibility.Hidden;
+                if (GetMod(element)?.Id == mod.Id) element.Visibility = cached ? Visibility.Visible : Visibility.Collapsed;
                 return;
             }
 
@@ -103,12 +104,12 @@ public static class DependencyBadgeLoader
             {
                 // Rate limited, network error, etc. - hide the badge rather than fail the card, and
                 // don't cache the answer so it's retried rather than remembered as "no".
-                if (GetMod(element)?.Id == mod.Id) element.Visibility = Visibility.Hidden;
+                if (GetMod(element)?.Id == mod.Id) element.Visibility = Visibility.Collapsed;
                 return;
             }
 
             Remember(mod.Id, hasDependencies);
-            if (GetMod(element)?.Id == mod.Id) element.Visibility = hasDependencies ? Visibility.Visible : Visibility.Hidden;
+            if (GetMod(element)?.Id == mod.Id) element.Visibility = hasDependencies ? Visibility.Visible : Visibility.Collapsed;
         }
         finally
         {

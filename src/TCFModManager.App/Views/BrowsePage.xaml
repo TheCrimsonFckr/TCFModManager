@@ -321,23 +321,38 @@
                                             Content="Contains ads"
                                             Visibility="{Binding ContainsAds, Converter={StaticResource TrueToVisible}}" />
                                     </StackPanel>
-                                    <!-- Dependency badge on its own row; resolved asynchronously per
-                                         card, so its margin sits on the badge rather than the row to
-                                         keep the row zero-height while it stays collapsed. -->
+                                    <!-- Badges on their own row, both collapsing when they don't
+                                         apply so whichever one shows starts at the left edge.
+
+                                         The zero-width badge in front of them is what keeps the row
+                                         its full height regardless, so a card doesn't grow as the
+                                         dependency answer arrives. The dependency badge used to do
+                                         that itself by being Hidden rather than Collapsed, which
+                                         reserved its whole width too and left the addon badge
+                                         indented on every mod that has addons but no dependencies.
+                                         Taking the height from a real Badge rather than a fixed
+                                         MinHeight keeps it right if the badge style ever changes. -->
                                     <StackPanel Orientation="Horizontal">
                                         <ui:Badge
+                                            Width="0"
                                             Margin="0,4,0,0"
+                                            FontSize="11"
+                                            Content=" "
+                                            Visibility="Hidden" />
+
+                                        <ui:Badge
+                                            Margin="0,4,6,0"
                                             Appearance="Caution"
                                             FontSize="11"
                                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             Content="Has dependencies"
-                                            Visibility="Hidden"
+                                            Visibility="Collapsed"
                                             behaviors:DependencyBadgeLoader.Mod="{Binding Mod}" />
 
                                         <!-- Answered from the cached addon catalog, so unlike the
                                              badge beside it this one is right on the first render. -->
                                         <ui:Badge
-                                            Margin="6,4,0,0"
+                                            Margin="0,4,0,0"
                                             Appearance="Info"
                                             FontSize="11"
                                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
