@@ -82,6 +82,14 @@
                 the chevron as its content.
             -->
             <Style x:Key="FilterDropDownToggle" TargetType="ToggleButton">
+                <!--
+                    Foreground is set here because this Style has no BasedOn and so REPLACES WPF-UI's
+                    ToggleButton style rather than extending it - including its themed foreground,
+                    leaving a stock WPF ToggleButton whose text defaults to black. Unreadable in dark
+                    mode, and invisible in light mode where black happens to be right. The summary
+                    TextBlock inside each dropdown sets its own as well, per this codebase's rule.
+                -->
+                <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                 <Setter Property="MinWidth" Value="150" />
                 <Setter Property="Padding" Value="{DynamicResource ComboBoxPadding}" />
                 <Setter Property="Background" Value="{DynamicResource ComboBoxBackground}" />

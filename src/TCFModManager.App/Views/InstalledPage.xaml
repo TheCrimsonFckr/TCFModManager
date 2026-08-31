@@ -225,6 +225,7 @@
                                 Grid.Column="0"
                                 VerticalAlignment="Center"
                                 TextTrimming="CharacterEllipsis"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                 Text="{Binding AttributeFilterSummary}" />
                             <ui:SymbolIcon
                                 Grid.Column="1"
@@ -248,6 +249,7 @@
                                 <DataTemplate>
                                     <CheckBox
                                         Margin="2"
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                         IsChecked="{Binding IsSelected, Mode=TwoWay}"
                                         Content="{Binding Label}"
                                         ToolTip="{Binding ToolTip}" />
