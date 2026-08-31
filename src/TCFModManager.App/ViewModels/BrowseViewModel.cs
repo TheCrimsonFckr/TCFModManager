@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Behaviors;
 using TCFModManager.App.Views;
 using TCFModManager.Core.SpModApi;
 using TCFModManager.Core.Models;
@@ -51,6 +52,19 @@ public partial class BrowseViewModel : ObservableObject
             GoToPage(CurrentPage);
         };
 
+        // Each tick box drives the same re-filter a dropdown selection does. Subscribed rather
+        // than bound through a property apiece, so adding an option is one line in the list above.
+        foreach (var option in AttributeOptions)
+        {
+            option.PropertyChanged += (_, _) =>
+            {
+                UpdateAttributeFilterSummary();
+                AutoApplyFilter();
+            };
+        }
+
+        UpdateAttributeFilterSummary();
+
         // The addon catalog usually settles after the first page has already rendered, so the
         // "N addons" badges are redrawn once it does rather than waiting for a page change.
         AppServices.Addons.AddonsChanged += (_, _) =>
@@ -71,11 +85,7 @@ public partial class BrowseViewModel : ObservableObject
 
     partial void OnSelectedFeaturedFilterChanged(FeaturedFilterItem value) => AutoApplyFilter();
 
-    partial void OnFikaCompatibleOnlyChanged(bool value) => AutoApplyFilter();
-
-    partial void OnHideContainsAdsChanged(bool value) => AutoApplyFilter();
-
-    partial void OnHideContainsAiContentChanged(bool value) => AutoApplyFilter();
+    partial void OnSelectedCategoryChanged(CategoryFilterItem value) => AutoApplyFilter();
 
     private void AutoApplyFilter()
     {
@@ -115,17 +125,32 @@ public partial class BrowseViewModel : ObservableObject
     [ObservableProperty]
     private FeaturedFilterItem _selectedFeaturedFilter;
 
-    /// <summary>ON restricts results to Mod.FikaCompatibility == true.</summary>
-    [ObservableProperty]
-    private bool _fikaCompatibleOnly;
+    //
+    // The tick-box filters that describe the mod itself, in one dropdown rather than three toggle
+    // switches strung across the top of the page. Every one of them narrows the result set.
+    //
+    public ObservableCollection<ModAttributeOption> AttributeOptions { get; } =
+    [
+        new(ModAttributeFilter.FikaCompatible, "Fika compatible only"),
+        new(ModAttributeFilter.HideAds, "Hide mods with ads"),
+        new(ModAttributeFilter.HideAiContent, "Hide mods with AI content"),
+        new(ModAttributeFilter.HasDependencies, "Has dependencies",
+            "Only mods that pull in other mods. Dependencies are looked up as you browse, so this "
+            + "covers what the app has checked so far rather than the whole catalogue."),
+        new(ModAttributeFilter.HasAddons, "Has addons", "Only mods with addons published for them."),
+    ];
 
-    /// <summary>ON hides mods with Mod.ContainsAds == true.</summary>
     [ObservableProperty]
-    private bool _hideContainsAds;
+    private string _attributeFilterSummary = "Any mod";
 
-    /// <summary>ON hides mods with Mod.ContainsAiContent == true.</summary>
+    /// <summary>The Category dropdown's entries, rebuilt from the cached catalog once it has loaded.</summary>
+    public ObservableCollection<CategoryFilterItem> CategoryOptions { get; } = [CategoryFilterItem.All];
+
     [ObservableProperty]
-    private bool _hideContainsAiContent;
+    private CategoryFilterItem _selectedCategory = CategoryFilterItem.All;
+
+    private bool IsOn(ModAttributeFilter filter) =>
+        AttributeOptions.Any(o => o.Value == filter && o.IsSelected);
 
     [ObservableProperty]
     private bool _isBusy;
@@ -211,6 +236,7 @@ public partial class BrowseViewModel : ObservableObject
             AppLog.Debug("Browse", "SearchAsync: ModCache ready, applying filter");
             StartupStage = "Sorting results...";
             EnsureSptVersionOptionsBuilt();
+            EnsureCategoryOptionsBuilt();
             ApplyFilter();
             HasLoadedResults = true;
         }
@@ -290,9 +316,9 @@ public partial class BrowseViewModel : ObservableObject
             SelectedSortOption = SortOptions[0];
             PageSize = DefaultPageSize;
             SelectedFeaturedFilter = FeaturedFilterOptions[0];
-            FikaCompatibleOnly = false;
-            HideContainsAds = false;
-            HideContainsAiContent = false;
+            SelectedCategory = CategoryOptions[0];
+            foreach (var option in AttributeOptions) option.IsSelected = false;
+            UpdateAttributeFilterSummary();
         }
         finally
         {
@@ -422,9 +448,16 @@ public partial class BrowseViewModel : ObservableObject
                 FeaturedFilter.Exclude => m.Featured != true,
                 _ => true, // Include - no restriction
             })
-            .Where(m => !FikaCompatibleOnly || m.FikaCompatibility == true)
-            .Where(m => !HideContainsAds || m.ContainsAds != true)
-            .Where(m => !HideContainsAiContent || m.ContainsAiContent != true);
+            .Where(m => SelectedCategory.Title is not { } category
+                || string.Equals(m.Category?.Title, category, StringComparison.OrdinalIgnoreCase))
+            .Where(m => !IsOn(ModAttributeFilter.FikaCompatible) || m.FikaCompatibility == true)
+            .Where(m => !IsOn(ModAttributeFilter.HideAds) || m.ContainsAds != true)
+            .Where(m => !IsOn(ModAttributeFilter.HideAiContent) || m.ContainsAiContent != true)
+            .Where(m => !IsOn(ModAttributeFilter.HasAddons) || AppServices.Addons.CountFor(m.Id) > 0)
+            // Only mods already known to have dependencies. A mod nobody has looked at yet is not
+            // claimed either way, so it drops out of this filter rather than being asserted clean.
+            .Where(m => !IsOn(ModAttributeFilter.HasDependencies)
+                || DependencyBadgeLoader.KnownHasDependencies(m) == true);
 
         _filtered = SelectedSortOption.Value switch
         {
@@ -449,6 +482,12 @@ public partial class BrowseViewModel : ObservableObject
         GoToPage(1);
 
         StatusMessage = _filtered.Count == 0 ? "No mods matched." : $"{_filtered.Count} mod(s) found.";
+
+        // Said plainly rather than left for someone to work out from a short list.
+        if (IsOn(ModAttributeFilter.HasDependencies))
+        {
+            StatusMessage += " Dependency answers are filled in as you browse, so this list grows as more mods are checked.";
+        }
     }
 
     /// <summary>True if any of the mod's cached versions actually runs on one of the selected SPT
@@ -524,6 +563,41 @@ public partial class BrowseViewModel : ObservableObject
 
         UpdateSptVersionFilterSummary();
     }
+
+    // "Any mod", the one option's own label, or a count. Same shape as the SPT version summary.
+    private void UpdateAttributeFilterSummary()
+    {
+        var selected = AttributeOptions.Where(o => o.IsSelected).ToList();
+
+        AttributeFilterSummary = selected.Count switch
+        {
+            0 => "Any mod",
+            1 => selected[0].Label,
+            _ => $"{selected.Count} selected",
+        };
+    }
+
+    //
+    // Rebuilt from the catalog rather than hardcoded, so the list is whatever The Forge is
+    // currently using. Called after the catalog loads; the current selection is kept if it's still
+    // a category that exists.
+    //
+    private void EnsureCategoryOptionsBuilt()
+    {
+        if (_categoryOptionsBuilt) return;
+        _categoryOptionsBuilt = true;
+
+        var categories = AppServices.ModCache.AllMods
+            .Select(m => m.Category?.Title)
+            .Where(t => !string.IsNullOrWhiteSpace(t))
+            .Select(t => t!.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(t => t, StringComparer.OrdinalIgnoreCase);
+
+        foreach (var category in categories) CategoryOptions.Add(new CategoryFilterItem(category, category));
+    }
+
+    private bool _categoryOptionsBuilt;
 
     private void UpdateSptVersionFilterSummary()
     {

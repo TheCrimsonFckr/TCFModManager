@@ -71,6 +71,52 @@
             </Style>
 
             <!--
+                The two halves of a multi-select filter dropdown - a ToggleButton that looks like a
+                ComboBox, and the popup body under it. Browse's SPT version filter was the first of
+                these and carried both inline; there are four now across Browse and Installed, which
+                is three copies too many of a control template to keep in step by hand.
+
+                The ToggleButton's template is replaced outright rather than extended, so it stops
+                looking like a button and starts looking like the ComboBoxes it sits between: same
+                background, border and corner radius, and the caller supplies the summary text and
+                the chevron as its content.
+            -->
+            <Style x:Key="FilterDropDownToggle" TargetType="ToggleButton">
+                <Setter Property="MinWidth" Value="150" />
+                <Setter Property="Padding" Value="{DynamicResource ComboBoxPadding}" />
+                <Setter Property="Background" Value="{DynamicResource ComboBoxBackground}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ControlElevationBorderBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Border
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{DynamicResource ControlCornerRadius}">
+                                <ContentPresenter Margin="{TemplateBinding Padding}" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="FilterDropDownPopup" TargetType="Border">
+                <Setter Property="Padding" Value="0,4,0,6" />
+                <Setter Property="Background" Value="{DynamicResource ComboBoxDropDownBackground}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ComboBoxDropDownBorderBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="{DynamicResource PopupCornerRadius}" />
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect BlurRadius="20" Direction="270" Opacity="0.135" ShadowDepth="10" Color="#202020" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!--
                 Collapsed cards on the Installed List view and the Dependencies trees.
 
                 BasedOn is load-bearing: a Style with no BasedOn REPLACES the control's default style

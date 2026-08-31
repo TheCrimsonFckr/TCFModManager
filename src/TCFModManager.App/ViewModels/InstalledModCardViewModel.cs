@@ -104,6 +104,26 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     // "@author" search syntax in InstalledViewModel's search box.
     public string? Author { get; init; }
 
+    // The matched sp-mod.com listing's category title, for the Installed page's Category filter.
+    // Null when nothing matched, or for an addon - addons carry no category of their own.
+    public string? CategoryTag { get; init; }
+
+    //
+    // How many addons this mod has published. Answered from the cached addon catalog during the
+    // same pass that builds the card, so the Installed page's "Has addons" filter needs no lookup.
+    //
+    public int AddonCount { get; init; }
+
+    public bool HasAddons => AddonCount > 0;
+
+    //
+    // True when this mod declares a dependency on another installed mod. Filled in after the cards
+    // are built, from the dependency graph InstalledViewModel builds off the same scan - the graph
+    // reads BepInEx's own metadata, so unlike Browse's badge this answer is complete and offline.
+    //
+    [ObservableProperty]
+    private bool _hasDependencies;
+
     // True when the matched catalog listing is flagged Fika compatible.
     public bool IsFikaCompatible { get; init; }
 
@@ -353,8 +373,14 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
 
         // Patchers first: folding one into the mod it belongs to can turn a client-only group into
         // a client group that still needs its server half found, and never the other way round.
+        // One count per parent mod, worked out once rather than per card.
+        var addonsByParent = (addonCatalog ?? [])
+            .Where(a => a.ModId is not null)
+            .GroupBy(a => a.ModId!.Value)
+            .ToDictionary(g => g.Key, g => g.Count());
+
         var cards = MergeSplitClientServerHalves(MergePatcherFolders(groups))
-            .Select(g => BuildCard(g.Entries, g.Match, installedSptVersion, recordsByModId))
+            .Select(g => BuildCard(g.Entries, g.Match, installedSptVersion, recordsByModId, addonsByParent))
             .ToList();
 
         if (addonFolders.Count == 0) return cards;
@@ -847,7 +873,8 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
         List<InstalledMod> entries,
         Mod? match,
         string? installedSptVersion,
-        IReadOnlyDictionary<int, InstalledModRecord> recordsByModId)
+        IReadOnlyDictionary<int, InstalledModRecord> recordsByModId,
+        IReadOnlyDictionary<int, int> addonsByParent)
     {
         // The plugin half speaks for the client side wherever there's a choice - it's the one with
         // the mod's real name, version and GUID on it, where a patcher is a support file whose
@@ -930,6 +957,8 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
             MatchedModName = match?.Name,
             Guid = match?.Guid,
             Author = match?.Owner?.Name,
+            CategoryTag = match?.Category?.Title,
+            AddonCount = match is null ? 0 : addonsByParent.GetValueOrDefault(match.Id),
             IsFikaCompatible = match?.FikaCompatibility == true,
             ContainsAds = match?.ContainsAds == true,
             ContainsAiContent = match?.ContainsAiContent == true,

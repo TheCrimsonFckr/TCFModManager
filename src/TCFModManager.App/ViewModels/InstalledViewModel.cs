@@ -113,17 +113,33 @@ public partial class InstalledViewModel : ObservableObject
     [ObservableProperty]
     private string _searchText = string.Empty;
 
-    /// <summary>ON restricts results to InstalledModCardViewModel.IsFikaCompatible == true.</summary>
-    [ObservableProperty]
-    private bool _fikaCompatibleOnly;
+    //
+    // The same five tick boxes Browse carries, in one dropdown rather than three toggle switches.
+    // "Has dependencies" is a stronger answer here than on Browse: it comes from the dependency
+    // graph built off the scan, which reads BepInEx's own metadata, so it covers everything
+    // installed rather than whatever has been looked up so far.
+    //
+    public ObservableCollection<ModAttributeOption> AttributeOptions { get; } =
+    [
+        new(ModAttributeFilter.FikaCompatible, "Fika compatible only"),
+        new(ModAttributeFilter.HideAds, "Hide mods with ads"),
+        new(ModAttributeFilter.HideAiContent, "Hide mods with AI content"),
+        new(ModAttributeFilter.HasDependencies, "Has dependencies",
+            "Only mods that require another mod you have installed."),
+        new(ModAttributeFilter.HasAddons, "Has addons", "Only mods with addons published for them."),
+    ];
 
-    /// <summary>ON hides mods with InstalledModCardViewModel.ContainsAds == true.</summary>
     [ObservableProperty]
-    private bool _hideContainsAds;
+    private string _attributeFilterSummary = "Any mod";
 
-    /// <summary>ON hides mods with InstalledModCardViewModel.ContainsAiContent == true.</summary>
+    /// <summary>The Category dropdown's entries, rebuilt after each scan from the categories actually present in the install.</summary>
+    public ObservableCollection<CategoryFilterItem> CategoryOptions { get; } = [CategoryFilterItem.All];
+
     [ObservableProperty]
-    private bool _hideContainsAiContent;
+    private CategoryFilterItem _selectedCategory = CategoryFilterItem.All;
+
+    private bool IsOn(ModAttributeFilter filter) =>
+        AttributeOptions.Any(o => o.Value == filter && o.IsSelected);
 
     //
     // Which of the three views the results area is showing. All three render the same filtered,
@@ -223,6 +239,56 @@ public partial class InstalledViewModel : ObservableObject
         _selectedGroupFilter = GroupFilterItem.All;
         _selectedSortOption = SortOptions[0];
         _selectedGroupSortOption = GroupSortOptions[0];
+
+        // Each tick box drives the same re-filter a dropdown selection does.
+        foreach (var option in AttributeOptions)
+        {
+            option.PropertyChanged += (_, _) =>
+            {
+                UpdateAttributeFilterSummary();
+                AutoApplyFilter();
+            };
+        }
+    }
+
+    partial void OnSelectedCategoryChanged(CategoryFilterItem value) => AutoApplyFilter();
+
+    // "Any mod", the one option's own label, or a count.
+    private void UpdateAttributeFilterSummary()
+    {
+        var selected = AttributeOptions.Where(o => o.IsSelected).ToList();
+
+        AttributeFilterSummary = selected.Count switch
+        {
+            0 => "Any mod",
+            1 => selected[0].Label,
+            _ => $"{selected.Count} selected",
+        };
+    }
+
+    //
+    // Rebuilt from what is actually installed rather than from the whole catalog: filtering your
+    // own mods by a category none of them are in would only ever produce an empty page.
+    //
+    private void RebuildCategoryOptions()
+    {
+        var previous = SelectedCategory;
+
+        CategoryOptions.Clear();
+        CategoryOptions.Add(CategoryFilterItem.All);
+
+        var categories = _all
+            .Select(c => c.CategoryTag)
+            .Where(t => !string.IsNullOrWhiteSpace(t))
+            .Select(t => t!.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(t => t, StringComparer.OrdinalIgnoreCase);
+
+        foreach (var category in categories) CategoryOptions.Add(new CategoryFilterItem(category, category));
+
+        // Keep the current choice if that category is still installed, rather than silently
+        // resetting the page's filter under someone every time they come back to it.
+        SelectedCategory = CategoryOptions.FirstOrDefault(c => c.SameAs(previous)) ?? CategoryOptions[0];
     }
 
     partial void OnSelectedUpdateFilterChanged(UpdateFilterItem value) => AutoApplyFilter();
@@ -257,11 +323,6 @@ public partial class InstalledViewModel : ObservableObject
 
     partial void OnSearchTextChanged(string value) => AutoApplyFilter();
 
-    partial void OnFikaCompatibleOnlyChanged(bool value) => AutoApplyFilter();
-
-    partial void OnHideContainsAdsChanged(bool value) => AutoApplyFilter();
-
-    partial void OnHideContainsAiContentChanged(bool value) => AutoApplyFilter();
 
     partial void OnViewModeChanged(InstalledViewMode value)
     {
@@ -331,9 +392,9 @@ public partial class InstalledViewModel : ObservableObject
             SelectedEnabledFilter = EnabledFilterOptions[0];
             SelectedGroupFilter = GroupFilterOptions[0];
             SelectedSortOption = SortOptions[0];
-            FikaCompatibleOnly = false;
-            HideContainsAds = false;
-            HideContainsAiContent = false;
+            SelectedCategory = CategoryOptions[0];
+            foreach (var option in AttributeOptions) option.IsSelected = false;
+            UpdateAttributeFilterSummary();
             PageSize = DefaultPageSize;
         }
         finally
@@ -451,6 +512,14 @@ public partial class InstalledViewModel : ObservableObject
             ApplyListMembership(cards);
             ApplyBadgeVisibility();
             _dependencies = dependencies;
+
+            // Set before the cards are subscribed to below, so filling it in doesn't read as a
+            // card changing under the page.
+            foreach (var card in _all)
+                card.HasDependencies = card.Entries.Any(e => dependencies.DependenciesOf(e).Count > 0);
+
+            RebuildCategoryOptions();
+
             _cardByEntry = [];
             foreach (var card in _all)
             {
@@ -1007,9 +1076,13 @@ public partial class InstalledViewModel : ObservableObject
             .Where(m => authorQuery is not null
                 ? MatchesAuthor(m, authorQuery)
                 : query.Length == 0 || Matches(m.DisplayTitle, query) || Matches(m.Name, query))
-            .Where(m => !FikaCompatibleOnly || m.IsFikaCompatible)
-            .Where(m => !HideContainsAds || !m.ContainsAds)
-            .Where(m => !HideContainsAiContent || !m.ContainsAiContent);
+            .Where(m => SelectedCategory.Title is not { } category
+                || string.Equals(m.CategoryTag, category, StringComparison.OrdinalIgnoreCase))
+            .Where(m => !IsOn(ModAttributeFilter.FikaCompatible) || m.IsFikaCompatible)
+            .Where(m => !IsOn(ModAttributeFilter.HideAds) || !m.ContainsAds)
+            .Where(m => !IsOn(ModAttributeFilter.HideAiContent) || !m.ContainsAiContent)
+            .Where(m => !IsOn(ModAttributeFilter.HasDependencies) || m.HasDependencies)
+            .Where(m => !IsOn(ModAttributeFilter.HasAddons) || m.HasAddons);
 
         _filtered = SortMods(matched, SelectedSortOption.Value).ToList();
 

@@ -163,28 +163,12 @@
         <!-- Search box and filter toggles. -->
         <DockPanel Grid.Row="1" Margin="0,0,0,8">
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                <!-- The Fika / ads / AI toggles that used to sit along this row are now three of
+                     the five tick boxes in the "Show" dropdown below, next to the other filters.
+                     This one stays here because it is a display preference rather than a filter:
+                     it changes what each row draws, not which rows are shown, so Clear filters
+                     leaves it alone and it is remembered between sessions. -->
                 <ui:ToggleSwitch
-                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    IsChecked="{Binding FikaCompatibleOnly}"
-                    OnContent="Fika compatible only"
-                    OffContent="Fika compatible only" />
-                <ui:ToggleSwitch
-                    Margin="16,0,0,0"
-                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    IsChecked="{Binding HideContainsAds}"
-                    OnContent="Hide ads"
-                    OffContent="Hide ads" />
-                <ui:ToggleSwitch
-                    Margin="16,0,0,0"
-                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    IsChecked="{Binding HideContainsAiContent}"
-                    OnContent="Hide AI content"
-                    OffContent="Hide AI content" />
-                <!-- A display preference rather than a filter: it changes what each row draws, not
-                     which rows are shown, so Clear filters leaves it alone and it is remembered
-                     between sessions. -->
-                <ui:ToggleSwitch
-                    Margin="16,0,0,0"
                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     ToolTip="Show which mod lists each mod belongs to."
                     IsChecked="{Binding ShowListBadges}"
@@ -207,43 +191,110 @@
                 Content="Clear filters"
                 Command="{Binding ClearFiltersCommand}" />
 
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="Update status:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                <ComboBox
-                    MinWidth="120"
-                    ItemsSource="{Binding UpdateFilterOptions}"
-                    SelectedItem="{Binding SelectedUpdateFilter}" />
+            <!-- A WrapPanel: seven filters don't fit on one line at every window width, and a
+                 filter that has run off the edge of the page may as well not exist. -->
+            <WrapPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
+                    <TextBlock Text="Update status:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <ComboBox
+                        MinWidth="120"
+                        ItemsSource="{Binding UpdateFilterOptions}"
+                        SelectedItem="{Binding SelectedUpdateFilter}" />
+                </StackPanel>
 
-                <TextBlock Text="Enabled:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="16,0,6,0" />
-                <ComboBox
-                    MinWidth="120"
-                    ItemsSource="{Binding EnabledFilterOptions}"
-                    SelectedItem="{Binding SelectedEnabledFilter}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
+                    <TextBlock Text="Enabled:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <ComboBox
+                        MinWidth="120"
+                        ItemsSource="{Binding EnabledFilterOptions}"
+                        SelectedItem="{Binding SelectedEnabledFilter}" />
+                </StackPanel>
+
+                <!-- The same five tick boxes Browse carries. "Has dependencies" is answered from
+                     the dependency graph built off the scan, so unlike Browse's it covers
+                     everything installed rather than what has been looked up so far. -->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
+                    <TextBlock Text="Show:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <ToggleButton x:Name="AttributeToggle" MinWidth="170" Style="{StaticResource FilterDropDownToggle}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                TextTrimming="CharacterEllipsis"
+                                Text="{Binding AttributeFilterSummary}" />
+                            <ui:SymbolIcon
+                                Grid.Column="1"
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="11"
+                                Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
+                                Symbol="ChevronDown24" />
+                        </Grid>
+                    </ToggleButton>
+                </StackPanel>
+                <Popup
+                    IsOpen="{Binding IsChecked, ElementName=AttributeToggle, Mode=TwoWay}"
+                    PlacementTarget="{Binding ElementName=AttributeToggle}"
+                    Placement="Bottom"
+                    StaysOpen="False"
+                    AllowsTransparency="True">
+                    <Border Style="{StaticResource FilterDropDownPopup}" MinWidth="{Binding ActualWidth, ElementName=AttributeToggle}">
+                        <ItemsControl Margin="8,4" ItemsSource="{Binding AttributeOptions}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        Margin="2"
+                                        IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                        Content="{Binding Label}"
+                                        ToolTip="{Binding ToolTip}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+                </Popup>
+
+                <!-- Built from the categories actually present in this install, not the whole
+                     catalog - a category none of your mods are in would only ever show nothing. -->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
+                    <TextBlock Text="Category:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <ComboBox
+                        MinWidth="150"
+                        ItemsSource="{Binding CategoryOptions}"
+                        SelectedItem="{Binding SelectedCategory}" />
+                </StackPanel>
 
                 <!-- Rebuilt from the group store whenever groups change, so it always lists exactly
                      the groups that exist. Applies to all three views, like every other filter here. -->
-                <TextBlock Text="Group:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="16,0,6,0" />
-                <ComboBox
-                    MinWidth="130"
-                    ItemsSource="{Binding GroupFilterOptions}"
-                    SelectedItem="{Binding SelectedGroupFilter}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
+                    <TextBlock Text="Group:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <ComboBox
+                        MinWidth="130"
+                        ItemsSource="{Binding GroupFilterOptions}"
+                        SelectedItem="{Binding SelectedGroupFilter}" />
+                </StackPanel>
 
-                <TextBlock Text="Sort by:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="16,0,6,0" />
-                <ComboBox
-                    MinWidth="140"
-                    ItemsSource="{Binding SortOptions}"
-                    SelectedItem="{Binding SelectedSortOption}" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
+                    <TextBlock Text="Sort by:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <ComboBox
+                        MinWidth="140"
+                        ItemsSource="{Binding SortOptions}"
+                        SelectedItem="{Binding SelectedSortOption}" />
+                </StackPanel>
 
                 <!-- Pagination is hidden in group view (see the pagination StackPanel's own
                      Visibility below), so "Per page" would have nothing to affect there. -->
-                <StackPanel Orientation="Horizontal" Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
-                    <TextBlock Text="Per page:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="16,0,6,0" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4" Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="Per page:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
                     <ComboBox
                         MinWidth="60"
                         ItemsSource="{Binding PageSizeOptions}"
                         SelectedItem="{Binding PageSize}" />
                 </StackPanel>
-            </StackPanel>
+            </WrapPanel>
         </DockPanel>
 
         <!-- Multi-select bar. Shares row 3 with the group management bar below, which is safe

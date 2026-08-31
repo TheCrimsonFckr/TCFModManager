@@ -68,6 +68,17 @@ public static class DependencyBadgeLoader
         _ = LoadAsync(element, mod);
     }
 
+    //
+    // What this app currently knows about a mod's dependencies, for the Browse filter: true or
+    // false when a fresh answer is cached, null when the mod hasn't been checked yet.
+    //
+    // Answers arrive per card as you browse, so this is deliberately partial. The filter says so
+    // rather than pretending a mod with no answer yet has no dependencies - resolving all ~3000 at
+    // once would mean thousands of rate-limited lookups for one tick box.
+    //
+    public static bool? KnownHasDependencies(Mod mod) =>
+        TryGetFresh(mod, out var hasDependencies) ? hasDependencies : null;
+
     // A cached answer counts only while it's at least as new as the mod itself - a mod
     // that has published a version since we last looked may have gained or dropped dependencies.
     private static bool TryGetFresh(Mod mod, out bool hasDependencies)

@@ -42,26 +42,8 @@
 
         <StackPanel Grid.Row="0" Margin="0,0,0,8">
             <DockPanel>
-                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
-                    <ui:ToggleSwitch
-                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                        IsChecked="{Binding FikaCompatibleOnly}"
-                        OnContent="Fika compatible only"
-                        OffContent="Fika compatible only" />
-                    <ui:ToggleSwitch
-                        Margin="16,0,0,0"
-                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                        IsChecked="{Binding HideContainsAds}"
-                        OnContent="Hide ads"
-                        OffContent="Hide ads" />
-                    <ui:ToggleSwitch
-                        Margin="16,0,0,0"
-                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                        IsChecked="{Binding HideContainsAiContent}"
-                        OnContent="Hide AI content"
-                        OffContent="Hide AI content" />
-                </StackPanel>
-
+                <!-- The Fika / ads / AI toggles that used to sit along this row are now three of
+                     the five tick boxes in the "Show" dropdown below, next to the other filters. -->
                 <ui:TextBox
                     Width="320"
                     HorizontalAlignment="Left"
@@ -84,29 +66,13 @@
                     Content="Refresh cache"
                     Command="{Binding RefreshCacheCommand}" />
 
-                <StackPanel Orientation="Horizontal">
+                <!-- A WrapPanel: six filters don't fit on one line at every window width, and a
+                     filter that has run off the edge of the page may as well not exist. -->
+                <WrapPanel>
                 <!-- SPT version multi-select filter, styled to match the ComboBoxes below. -->
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
                     <TextBlock Text="SPT:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <ToggleButton
-                        x:Name="SptVersionToggle"
-                        MinWidth="150"
-                        Padding="{DynamicResource ComboBoxPadding}"
-                        Background="{DynamicResource ComboBoxBackground}"
-                        BorderBrush="{DynamicResource ControlElevationBorderBrush}"
-                        BorderThickness="1"
-                        HorizontalContentAlignment="Stretch">
-                        <ToggleButton.Template>
-                            <ControlTemplate TargetType="ToggleButton">
-                                <Border
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="{DynamicResource ControlCornerRadius}">
-                                    <ContentPresenter Margin="{TemplateBinding Padding}" />
-                                </Border>
-                            </ControlTemplate>
-                        </ToggleButton.Template>
+                    <ToggleButton x:Name="SptVersionToggle" Style="{StaticResource FilterDropDownToggle}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -133,16 +99,7 @@
                     Placement="Bottom"
                     StaysOpen="False"
                     AllowsTransparency="True">
-                    <Border
-                        MinWidth="{Binding ActualWidth, ElementName=SptVersionToggle}"
-                        Padding="0,4,0,6"
-                        Background="{DynamicResource ComboBoxDropDownBackground}"
-                        BorderBrush="{DynamicResource ComboBoxDropDownBorderBrush}"
-                        BorderThickness="1"
-                        CornerRadius="{DynamicResource PopupCornerRadius}">
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="20" Direction="270" Opacity="0.135" ShadowDepth="10" Color="#202020" />
-                        </Border.Effect>
+                    <Border Style="{StaticResource FilterDropDownPopup}" MinWidth="{Binding ActualWidth, ElementName=SptVersionToggle}">
                         <ScrollViewer MaxHeight="240" VerticalScrollBarVisibility="Auto">
                             <ItemsControl Margin="8,4" ItemsSource="{Binding SptVersionOptions}">
                                 <ItemsControl.ItemTemplate>
@@ -158,7 +115,61 @@
                     </Border>
                 </Popup>
 
-                <StackPanel Orientation="Horizontal" Margin="16,0,0,0" VerticalAlignment="Center">
+                <!-- Everything that describes the mod itself, in one place: what used to be three
+                     toggle switches, plus dependencies and addons. -->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
+                    <TextBlock Text="Show:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <ToggleButton x:Name="AttributeToggle" MinWidth="170" Style="{StaticResource FilterDropDownToggle}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                TextTrimming="CharacterEllipsis"
+                                Text="{Binding AttributeFilterSummary}" />
+                            <ui:SymbolIcon
+                                Grid.Column="1"
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="11"
+                                Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
+                                Symbol="ChevronDown24" />
+                        </Grid>
+                    </ToggleButton>
+                </StackPanel>
+                <Popup
+                    IsOpen="{Binding IsChecked, ElementName=AttributeToggle, Mode=TwoWay}"
+                    PlacementTarget="{Binding ElementName=AttributeToggle}"
+                    Placement="Bottom"
+                    StaysOpen="False"
+                    AllowsTransparency="True">
+                    <Border Style="{StaticResource FilterDropDownPopup}" MinWidth="{Binding ActualWidth, ElementName=AttributeToggle}">
+                        <ItemsControl Margin="8,4" ItemsSource="{Binding AttributeOptions}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        Margin="2"
+                                        IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                        Content="{Binding Label}"
+                                        ToolTip="{Binding ToolTip}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+                </Popup>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,16,4" VerticalAlignment="Center">
+                    <TextBlock Text="Category:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
+                    <ComboBox
+                        MinWidth="150"
+                        ItemsSource="{Binding CategoryOptions}"
+                        SelectedItem="{Binding SelectedCategory}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,16,4" VerticalAlignment="Center">
                     <TextBlock Text="Sort:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
                     <ComboBox
                         MinWidth="150"
@@ -166,7 +177,7 @@
                         SelectedItem="{Binding SelectedSortOption}" />
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="16,0,0,0" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Margin="0,0,16,4" VerticalAlignment="Center">
                     <TextBlock Text="Per page:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
                     <ComboBox
                         MinWidth="60"
@@ -174,14 +185,14 @@
                         SelectedItem="{Binding PageSize}" />
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="16,0,0,0" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Margin="0,0,16,4" VerticalAlignment="Center">
                     <TextBlock Text="Featured:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
                     <ComboBox
                         MinWidth="90"
                         ItemsSource="{Binding FeaturedFilterOptions}"
                         SelectedItem="{Binding SelectedFeaturedFilter}" />
                 </StackPanel>
-                </StackPanel>
+                </WrapPanel>
             </DockPanel>
         </StackPanel>
 
