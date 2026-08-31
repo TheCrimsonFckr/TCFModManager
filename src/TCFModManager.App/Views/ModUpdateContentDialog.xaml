@@ -223,6 +223,7 @@
                                         Padding="0"
                                         BorderThickness="0"
                                         Background="Transparent"
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                         IsReadOnly="True"
                                         IsDocumentEnabled="True"
                                         Focusable="False"

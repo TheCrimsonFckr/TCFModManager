@@ -23,7 +23,27 @@ public static class HtmlText
     {
         if (d is not RichTextBox richTextBox) return;
 
-        richTextBox.Document = HtmlFragmentParser.Parse(e.NewValue as string);
+        var document = HtmlFragmentParser.Parse(e.NewValue as string);
+
+        //
+        // A FlowDocument does not take its text properties from the RichTextBox hosting it - it
+        // applies its own defaults, which are a serif face and justified text. Left alone, every
+        // changelog in the app rendered in Times New Roman with stretched word spacing, in the
+        // middle of a Segoe UI dialog.
+        //
+        // Font comes from the host so the changelog matches whatever it is sitting in, rather than
+        // being pinned to a font of its own here.
+        //
+        document.FontFamily = richTextBox.FontFamily;
+        document.FontSize = richTextBox.FontSize;
+        document.TextAlignment = TextAlignment.Left;
+
+        // SetResourceReference rather than copying the host's brush: this is the code equivalent of
+        // a DynamicResource, so the text re-colours on a live theme switch instead of freezing at
+        // whatever the theme was when the changelog was parsed.
+        document.SetResourceReference(TextElement.ForegroundProperty, "TextFillColorPrimaryBrush");
+
+        richTextBox.Document = document;
     }
 }
 
