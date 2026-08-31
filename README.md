@@ -43,7 +43,7 @@ their own - a mod's addons appear inside its details dialog, on Browse and on In
 with its own version picker and Install button. A version whose parent requirement your install
 doesn't meet is shown with the reason rather than hidden ("Needs Raid Review ^1.5.0 - you have
 1.4.2"). Installed addons appear on the Installed page as their own cards, labelled with the mod
-they attach to.
+they attach to, and are captured into and applied by mod lists like anything else.
 
 **Installed** scans your SPT folder for what's actually there, both client mods
 (`BepInEx\plugins`, `BepInEx\patchers`) and server mods (`user\mods`), and matches them back to the
@@ -221,7 +221,11 @@ Debug-level output in the same log. Logs rotate daily as `tcfmm-<yyyyMMdd>.log`.
 - An addon is only offered where its parent mod is installed and its version fits. Installing an
   addon does not pull its parent mod in - that would turn one click into a several-hundred-megabyte
   download without warning. Its own mod dependencies *are* resolved and offered, exactly as a mod's
-  are.
+  are. Applying a list refuses any addon whose parent mod is neither installed nor on that list,
+  rather than downloading files nothing would load.
+- A mod list containing an addon is exported at share-file format 2, which an app older than addon
+  support refuses to import. A list with no addons in it is still written at format 1 and stays
+  shareable with those versions.
 
 **Installing**
 

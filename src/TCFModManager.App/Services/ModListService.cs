@@ -43,6 +43,7 @@ public sealed class ModListService
         if (string.IsNullOrWhiteSpace(installPath)) return null;
 
         await AppServices.ModCache.EnsureLoadedAsync();
+        await AppServices.Addons.EnsureLoadedAsync();
 
         var records = AppServices.InstallManifest.Load().Mods;
         var catalog = AppServices.ModCache.AllMods;
@@ -72,7 +73,8 @@ public sealed class ModListService
             DateTimeOffset.UtcNow,
             CatalogVersions(),
             install.SptVersion,
-            includeDisabled: includeDisabled);
+            includeDisabled: includeDisabled,
+            addonVersions: CatalogAddonVersions());
 
         return AppServices.ModLists.Add(list);
     }
@@ -104,7 +106,7 @@ public sealed class ModListService
         var result = await ModListApplier.ApplyAsync(
             preview.Plan,
             preview.Install.Candidates,
-            (fetches, token) => FetchAsync(preview.Install.InstallPath, fetches, prompts, token),
+            (fetches, token) => FetchAsync(preview.Install, fetches, prompts, token),
             new ModListApplyOptions
             {
                 // Named after the list being applied, not "Before X" - the snapshot is only ever
@@ -112,6 +114,7 @@ public sealed class ModListService
                 // grew another "Before " every time one got applied.
                 SnapshotName = takeSnapshot ? preview.List.Name : null,
                 SnapshotVersions = CatalogVersions(),
+                SnapshotAddonVersions = CatalogAddonVersions(),
                 SptVersion = preview.Install.SptVersion,
             },
             ct: ct);
@@ -142,7 +145,7 @@ public sealed class ModListService
         var result = await ModListApplier.ApplyAsync(
             preview.Plan,
             preview.Install.Candidates,
-            (fetches, token) => FetchAsync(preview.Install.InstallPath, fetches, prompts ?? ModListPrompts.Reject, token),
+            (fetches, token) => FetchAsync(preview.Install, fetches, prompts ?? ModListPrompts.Reject, token),
             new ModListApplyOptions { SptVersion = preview.Install.SptVersion },
             ct: ct);
 
@@ -168,12 +171,12 @@ public sealed class ModListService
     // downloads are already running.
     //
     private async Task<ModListFetchOutcome> FetchAsync(
-        string installPath,
+        ModListInstall install,
         IReadOnlyList<ModListAction> fetches,
         ModListPrompts prompts,
         CancellationToken ct)
     {
-        var resolution = await ResolveAsync(fetches, ct);
+        var resolution = await ResolveAsync(fetches, install.Candidates, ct);
 
         var accepted = prompts.ApproveVersionChanges(resolution.Changes);
         var acceptedActions = accepted.Select(c => c.Action).ToHashSet();
@@ -188,7 +191,7 @@ public sealed class ModListService
         }
 
         var downloads = new List<ModListDownload>(resolution.Ready);
-        downloads.AddRange(accepted.Select(c => new ModListDownload(c.Action, c.Mod, c.Available, IsSubstitute: true)));
+        downloads.AddRange(accepted.Select(c => new ModListDownload(c.Action, c.Target, c.Available, IsSubstitute: true)));
 
         if (downloads.Count == 0) return new ModListFetchOutcome([], failed, false);
 
@@ -200,7 +203,7 @@ public sealed class ModListService
         if (!prompts.ConfirmModPages(downloads))
             return new ModListFetchOutcome([], failed, Cancelled: true);
 
-        return await QueueAsync(installPath, downloads, failed, ct);
+        return await QueueAsync(install.InstallPath, downloads, failed, ct);
     }
 
     //
@@ -221,7 +224,7 @@ public sealed class ModListService
             var version = download.Version;
 
             var item = await EnqueueAsync(
-                download.Mod,
+                download.Target,
                 version.Version ?? download.Action.TargetVersion ?? "latest",
                 installPath,
                 () => Task.FromResult<ModVersion?>(version),
@@ -263,11 +266,26 @@ public sealed class ModListService
     //
     private static async Task<ModListResolution> ResolveAsync(
         IReadOnlyList<ModListAction> fetches,
+        IReadOnlyList<ModListCandidate> installed,
         CancellationToken ct)
     {
         var catalog = AppServices.ModCache.AllMods
             .GroupBy(m => m.Id)
             .ToDictionary(g => g.Key, g => g.First());
+
+        //
+        // Which parent mods an addon in this batch can rely on: everything already installed, plus
+        // everything this same apply is about to install. An addon whose parent is in neither is
+        // refused here rather than downloaded - it would install files nothing loads, and the list
+        // would look applied when it wasn't.
+        //
+        var parents = installed
+            .Where(c => c is { IsAddon: false, ModId: not null })
+            .Select(c => c.ModId!.Value)
+            .ToHashSet();
+
+        foreach (var action in fetches.Where(a => a is { IsAddon: false, ModId: not null }))
+            parents.Add(action.ModId!.Value);
 
         var ready = new List<ModListDownload>();
         var changes = new List<ModListVersionChange>();
@@ -275,10 +293,41 @@ public sealed class ModListService
 
         foreach (var action in fetches)
         {
-            if (action.ModId is not { } modId || !catalog.TryGetValue(modId, out var mod))
+            if (action.ModId is not { } modId)
             {
                 unavailable.Add(new ModListFetchFailure(action.Name, "no sp-mod.com listing to download from"));
                 continue;
+            }
+
+            InstallTarget target;
+
+            if (action.IsAddon)
+            {
+                if (AppServices.Addons.ById(modId) is not { } addon)
+                {
+                    unavailable.Add(new ModListFetchFailure(action.Name, "no sp-mod.com addon listing to download from"));
+                    continue;
+                }
+
+                if (addon.ModId is { } parentId && !parents.Contains(parentId))
+                {
+                    var parentName = catalog.GetValueOrDefault(parentId)?.Name ?? $"mod {parentId}";
+                    unavailable.Add(new ModListFetchFailure(
+                        action.Name, $"it is an addon for {parentName}, which isn't installed and isn't on this list"));
+                    continue;
+                }
+
+                target = InstallTarget.For(addon);
+            }
+            else
+            {
+                if (!catalog.TryGetValue(modId, out var mod))
+                {
+                    unavailable.Add(new ModListFetchFailure(action.Name, "no sp-mod.com listing to download from"));
+                    continue;
+                }
+
+                target = InstallTarget.For(mod);
             }
 
             var id = modId.ToString();
@@ -288,44 +337,83 @@ public sealed class ModListService
             // thing it can mean, so it needs no asking.
             if (string.IsNullOrWhiteSpace(wanted))
             {
-                var newest = await NewestAsync(id, ct);
+                var newest = await NewestAsync(id, action.IsAddon, ct);
 
                 if (newest is null) unavailable.Add(new ModListFetchFailure(action.Name, "it has no published versions"));
-                else ready.Add(new ModListDownload(action, mod, newest, IsSubstitute: false));
+                else ready.Add(new ModListDownload(action, target, newest, IsSubstitute: false));
 
                 continue;
             }
 
-            var page = await AppServices.SpModApi.GetModVersionsAsync(
-                id,
-                new ModVersionsQuery { FilterVersion = wanted, PerPage = 5 },
-                ct);
+            var published = await VersionsAsync(id, action.IsAddon, wanted, ct);
 
-            var exact = page.Data.FirstOrDefault(v => action.VersionId is not null && v.Id == action.VersionId)
-                ?? page.Data.FirstOrDefault(v => string.Equals(v.Version?.Trim(), wanted, StringComparison.OrdinalIgnoreCase));
+            var exact = published.FirstOrDefault(v => action.VersionId is not null && v.Id == action.VersionId)
+                ?? published.FirstOrDefault(v => string.Equals(v.Version?.Trim(), wanted, StringComparison.OrdinalIgnoreCase));
 
             if (exact is not null)
             {
-                ready.Add(new ModListDownload(action, mod, exact, IsSubstitute: false));
+                ready.Add(new ModListDownload(action, target, exact, IsSubstitute: false));
                 continue;
             }
 
-            var replacement = await NewestAsync(id, ct);
+            var replacement = await NewestAsync(id, action.IsAddon, ct);
 
             if (replacement is null)
                 unavailable.Add(new ModListFetchFailure(action.Name, $"version {wanted} is gone and nothing else is published"));
             else
-                changes.Add(new ModListVersionChange(action, mod, wanted, replacement));
+                changes.Add(new ModListVersionChange(action, target, wanted, replacement));
         }
 
         return new ModListResolution(ready, changes, unavailable);
     }
 
-    private static async Task<ModVersion?> NewestAsync(string modId, CancellationToken ct)
+    //
+    // The published versions matching a wanted version string. Addons are asked live like mods
+    // rather than read from their cache: the cache only carries each addon's six most recent
+    // versions, and a list can pin one older than that.
+    //
+    private static async Task<IReadOnlyList<ModVersion>> VersionsAsync(
+        string id, bool isAddon, string wanted, CancellationToken ct)
     {
-        var page = await AppServices.SpModApi.GetModVersionsAsync(modId, new ModVersionsQuery { PerPage = 5 }, ct);
-        return page.Data.FirstOrDefault();
+        if (!isAddon)
+        {
+            var mods = await AppServices.SpModApi.GetModVersionsAsync(
+                id, new ModVersionsQuery { FilterVersion = wanted, PerPage = 5 }, ct);
+            return mods.Data;
+        }
+
+        var addons = await AppServices.SpModApi.GetAddonVersionsAsync(
+            id, new AddonVersionsQuery { FilterVersion = wanted, PerPage = 5 }, ct);
+        return [.. addons.Data.Select(AsModVersion)];
     }
+
+    private static async Task<ModVersion?> NewestAsync(string id, bool isAddon, CancellationToken ct)
+    {
+        if (!isAddon)
+        {
+            var mods = await AppServices.SpModApi.GetModVersionsAsync(id, new ModVersionsQuery { PerPage = 5 }, ct);
+            return mods.Data.FirstOrDefault();
+        }
+
+        var addons = await AppServices.SpModApi.GetAddonVersionsAsync(
+            id, new AddonVersionsQuery { Sort = "-published_at", PerPage = 5 }, ct);
+        return addons.Data.Select(AsModVersion).FirstOrDefault();
+    }
+
+    //
+    // An addon version carries everything the download pipeline reads. ModVersionConstraint is
+    // dropped deliberately: it decides which version to take, and by here that is already decided.
+    //
+    private static ModVersion AsModVersion(AddonVersion version) => new()
+    {
+        Id = version.Id,
+        Version = version.Version,
+        Description = version.Description,
+        Link = version.Link,
+        ContentLength = version.ContentLength,
+        Downloads = version.Downloads,
+        PublishedAt = version.PublishedAt,
+    };
 
     //
     // Completes once the queue has finished with this item, whatever the outcome.
@@ -361,7 +449,7 @@ public sealed class ModListService
 
     // The queue's list is bound to the Downloads page, so it is only ever touched on the UI thread.
     private static Task<DownloadQueueItemViewModel> EnqueueAsync(
-        Mod mod,
+        InstallTarget target,
         string versionLabel,
         string installPath,
         Func<Task<ModVersion?>> resolveVersion,
@@ -370,7 +458,7 @@ public sealed class ModListService
         // The size is passed in rather than left for the worker to discover: every version is
         // already resolved by this point, so the whole apply can be sized before it starts.
         DownloadQueueItemViewModel Enqueue() =>
-            AppServices.DownloadQueue.Enqueue(InstallTarget.For(mod), versionLabel, installPath, resolveVersion, totalBytes: totalBytes);
+            AppServices.DownloadQueue.Enqueue(target, versionLabel, installPath, resolveVersion, totalBytes: totalBytes);
 
         var dispatcher = Application.Current?.Dispatcher;
 
@@ -405,5 +493,17 @@ public sealed class ModListService
             .ToDictionary(g => g.Key, g => (IReadOnlyList<ModVersionSummary>?)g.First().Versions);
 
         return modId => byId.TryGetValue(modId, out var versions) ? versions : null;
+    }
+
+    // The same for addons, off the addon cache. Also offline - the cache carries each addon's
+    // versions, so a capture of an installed addon pins its version id without a lookup.
+    private static ModListCapture.AddonVersionLookup CatalogAddonVersions()
+    {
+        var byId = AppServices.Addons.AllAddons
+            .Where(a => a.Versions is { Count: > 0 })
+            .GroupBy(a => a.Id)
+            .ToDictionary(g => g.Key, g => (IReadOnlyList<AddonVersionSummary>?)g.First().Versions);
+
+        return addonId => byId.TryGetValue(addonId, out var versions) ? versions : null;
     }
 }

@@ -269,7 +269,20 @@ public partial class ModListsViewModel : ObservableObject
         _ => "Unchanged",
     };
 
-    private static string Detail(ModListAction action) => action.Kind switch
+    //
+    // Prefixed with "Addon - " where it applies: two rows can otherwise read identically while
+    // meaning different things, since an addon and a mod are numbered separately and an addon's
+    // name rarely says what it attaches to.
+    //
+    private static string Detail(ModListAction action)
+    {
+        var detail = DetailFor(action);
+        if (!action.IsAddon) return detail;
+
+        return detail.Length == 0 ? "Addon" : $"Addon - {detail}";
+    }
+
+    private static string DetailFor(ModListAction action) => action.Kind switch
     {
         ModListActionKind.Install => action.TargetVersion is null ? "newest published" : $"version {action.TargetVersion}",
         ModListActionKind.Update or ModListActionKind.Enable when action.TargetVersion is not null

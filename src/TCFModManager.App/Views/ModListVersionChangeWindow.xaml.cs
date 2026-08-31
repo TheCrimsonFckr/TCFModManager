@@ -9,7 +9,7 @@ public sealed class ModListVersionChangeRow(ModListVersionChange change)
 {
     public ModListVersionChange Change { get; } = change;
 
-    public string Name { get; } = change.Mod.Name ?? change.Action.Name;
+    public string Name { get; } = change.Target.Name;
 
     public string Detail { get; } =
         $"Wanted {change.Wanted} - newest published is {change.Available.Version ?? "unknown"}";

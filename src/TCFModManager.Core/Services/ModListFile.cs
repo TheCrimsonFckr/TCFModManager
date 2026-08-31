@@ -13,8 +13,9 @@ namespace TCFModManager.Core.Services;
 //
 public sealed class ModListDocument
 {
-    // Bumped only when an older app could no longer read a newer file correctly.
-    public int SchemaVersion { get; set; } = ModListFile.SchemaVersion;
+    // Bumped only when an older app could no longer read a newer file correctly. Written per file
+    // by ModListFile.SchemaVersionFor rather than fixed at the current maximum - see that method.
+    public int SchemaVersion { get; set; } = ModListFile.BaseSchemaVersion;
 
     // What wrote it. Informational - never used to decide whether to accept the file.
     public string? App { get; set; }
@@ -44,7 +45,31 @@ public sealed record ModListImport(ModList? List, string? Error)
 //
 public static class ModListFile
 {
-    public const int SchemaVersion = 1;
+    //
+    // The version every list has always been written at, and the only one an app that predates
+    // addon support can read.
+    //
+    public const int BaseSchemaVersion = 1;
+
+    //
+    // Added when addon entries did. An entry's ModId is an addon id when IsAddon is set, and an app
+    // that doesn't know the field reads that id as a mod id - so it would offer to install, update
+    // or disable whichever unrelated mod happens to carry the same number. That is exactly the
+    // "an older app could no longer read this correctly" case the version exists for.
+    //
+    public const int AddonSchemaVersion = 2;
+
+    // The highest version this app can read.
+    public const int SchemaVersion = AddonSchemaVersion;
+
+    //
+    // The version a given list has to be written at. Only a list that actually contains an addon is
+    // stamped 2, so every addon-free list stays readable by an older app - the alternative, pinning
+    // every export to the newest version, would break sharing between versions to describe a
+    // feature the file doesn't use.
+    //
+    public static int SchemaVersionFor(ModList list) =>
+        list.Entries.Any(e => e.IsAddon) ? AddonSchemaVersion : BaseSchemaVersion;
 
     // Deliberately its own extension rather than .json, so the app can be associated with it later
     // and so a double-click means something.
@@ -62,6 +87,7 @@ public static class ModListFile
         JsonSerializer.Serialize(
             new ModListDocument
             {
+                SchemaVersion = SchemaVersionFor(list),
                 App = "TCFModManager",
                 Author = string.IsNullOrWhiteSpace(author) ? null : author.Trim(),
                 ExportedAt = exportedAt ?? DateTimeOffset.UtcNow,

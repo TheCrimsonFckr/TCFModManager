@@ -41,13 +41,26 @@ public sealed class ModListEntry
     public required string Name { get; init; }
 
     public int? ModId { get; init; }
+
+    //
+    // True when ModId is an sp-mod.com addon id rather than a mod id. The two are separate
+    // sequences, so every comparison of ModId has to carry this with it - otherwise a list naming
+    // addon 116 would match, install or disable mod 116 on the receiving side.
+    //
+    // Defaults false, so a list written before addons were supported keeps meaning what it meant.
+    // A list that contains one is exported at share-file schema 2 (see ModListFile), which an
+    // older app refuses outright rather than misreading.
+    //
+    public bool IsAddon { get; init; }
+
     public int? VersionId { get; init; }
 
     // The version string as installed. Kept alongside VersionId so a pinned version that has since
     // been taken down can still be named ("pinned 1.4.2 is gone, latest is 1.5.0").
     public string? Version { get; init; }
 
-    // The mod's plugin GUID where it has one, as a second join key on the receiving side.
+    // The mod's plugin GUID where it has one, as a second join key on the receiving side. Always
+    // null for an addon - sp-mod.com doesn't give addons a GUID.
     public string? Guid { get; init; }
 
     // The mod folder names on disk this entry covers, lowercased - the same names

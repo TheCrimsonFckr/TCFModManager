@@ -4,11 +4,12 @@ using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.Services;
 
-// A fetch with its version already resolved, ready to be queued.
-public sealed record ModListDownload(ModListAction Action, Mod Mod, ModVersion Version, bool IsSubstitute);
+// A fetch with its version already resolved, ready to be queued. The target carries whether this
+// is a mod or an addon, which is what decides where it was resolved from and how it installs.
+public sealed record ModListDownload(ModListAction Action, InstallTarget Target, ModVersion Version, bool IsSubstitute);
 
 // A fetch whose list-named version is no longer published, and the newest one that is.
-public sealed record ModListVersionChange(ModListAction Action, Mod Mod, string Wanted, ModVersion Available);
+public sealed record ModListVersionChange(ModListAction Action, InstallTarget Target, string Wanted, ModVersion Available);
 
 //
 // Every fetch in a plan, sorted into what can be queued as-is, what would need a different version
@@ -41,5 +42,5 @@ public sealed record ModListPrompts(
     public static ModListPrompts Default { get; } = new(
         ModListVersionChangeWindow.Approve,
         downloads => ReadModPageConfirmationWindow.ConfirmAll(
-            [.. downloads.Select(d => new ModPageLink(d.Mod.Name ?? d.Action.Name, d.Mod.DetailUrl))]));
+            [.. downloads.Select(d => new ModPageLink(d.Target.Name, d.Target.DetailUrl))]));
 }

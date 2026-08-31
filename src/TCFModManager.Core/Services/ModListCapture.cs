@@ -16,6 +16,10 @@ public sealed record ModListCandidate
 
     public int? ModId { get; init; }
 
+    // True when ModId is an addon id. Carried through capture, planning and membership so an addon
+    // is never compared against a mod that happens to share its number.
+    public bool IsAddon { get; init; }
+
     // The installed version string, as InstalledModCardViewModel reports it.
     public string? Version { get; init; }
 
@@ -48,6 +52,9 @@ public static class ModListCapture
     // Looks up the known published versions of a mod, or null when there are none cached.
     public delegate IReadOnlyList<ModVersionSummary>? VersionLookup(int modId);
 
+    // The same for an addon, whose versions live in their own cache under their own ids.
+    public delegate IReadOnlyList<AddonVersionSummary>? AddonVersionLookup(int addonId);
+
     public static ModList Build(
         string name,
         IEnumerable<ModListCandidate> candidates,
@@ -56,7 +63,8 @@ public static class ModListCapture
         string? sptVersion = null,
         ModListPolicy policy = ModListPolicy.Exclusive,
         bool includeDisabled = false,
-        bool isSnapshot = false)
+        bool isSnapshot = false,
+        AddonVersionLookup? addonVersions = null)
     {
         var list = new ModList
         {
@@ -70,7 +78,7 @@ public static class ModListCapture
             UpdatedAt = timestamp,
         };
 
-        list.Entries.AddRange(BuildEntries(candidates, versions, includeDisabled));
+        list.Entries.AddRange(BuildEntries(candidates, versions, includeDisabled, addonVersions));
         return list;
     }
 
@@ -78,10 +86,14 @@ public static class ModListCapture
     public static List<ModListEntry> BuildEntries(
         IEnumerable<ModListCandidate> candidates,
         VersionLookup? versions = null,
-        bool includeDisabled = false)
+        bool includeDisabled = false,
+        AddonVersionLookup? addonVersions = null)
     {
         var entries = new List<ModListEntry>();
-        var seenModIds = new HashSet<int>();
+
+        // Keyed on the pair, not the id: an addon and a mod can share a number and are still two
+        // different things to record.
+        var seenModIds = new HashSet<(int Id, bool IsAddon)>();
         var seenNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var candidate in candidates)
@@ -90,7 +102,7 @@ public static class ModListCapture
 
             if (candidate.ModId is { } modId)
             {
-                if (!seenModIds.Add(modId)) continue;
+                if (!seenModIds.Add((modId, candidate.IsAddon))) continue;
             }
             else if (!seenNames.Add(candidate.Name.Trim()))
             {
@@ -101,7 +113,8 @@ public static class ModListCapture
             {
                 Name = candidate.Name.Trim(),
                 ModId = candidate.ModId,
-                VersionId = ResolveVersionId(candidate, versions),
+                IsAddon = candidate.IsAddon,
+                VersionId = ResolveVersionId(candidate, versions, addonVersions),
                 Version = string.IsNullOrWhiteSpace(candidate.Version) ? null : candidate.Version.Trim(),
                 Guid = string.IsNullOrWhiteSpace(candidate.Guid) ? null : candidate.Guid.Trim(),
                 Folders = [.. candidate.Folders
@@ -114,26 +127,35 @@ public static class ModListCapture
         return [.. entries.OrderBy(e => e.Name, StringComparer.OrdinalIgnoreCase)];
     }
 
-    private static int? ResolveVersionId(ModListCandidate candidate, VersionLookup? versions)
+    private static int? ResolveVersionId(
+        ModListCandidate candidate, VersionLookup? versions, AddonVersionLookup? addonVersions)
     {
-        if (candidate.ModId is not { } modId || versions is null) return null;
+        if (candidate.ModId is not { } modId) return null;
         if (string.IsNullOrWhiteSpace(candidate.Version)) return null;
 
-        var published = versions(modId);
-        if (published is null || published.Count == 0) return null;
+        var published = candidate.IsAddon
+            ? addonVersions?.Invoke(modId)?.Select(v => (v.Id, v.Version)).ToList()
+            : versions?.Invoke(modId)?.Select(v => (v.Id, v.Version)).ToList();
 
-        var installed = candidate.Version.Trim();
+        return published is null ? null : MatchVersionId(published, candidate.Version.Trim());
+    }
 
-        var exact = published.FirstOrDefault(v =>
-            string.Equals(v.Version?.Trim(), installed, StringComparison.OrdinalIgnoreCase));
-        if (exact is not null) return exact.Id;
+    // Exact string match first, then a semantic comparison, so "1.2.1.0" still pins "1.2.1".
+    private static int? MatchVersionId(IReadOnlyList<(int Id, string? Version)> published, string installed)
+    {
+        if (published.Count == 0) return null;
+
+        foreach (var (id, version) in published)
+            if (string.Equals(version?.Trim(), installed, StringComparison.OrdinalIgnoreCase))
+                return id;
 
         if (!SemanticVersion.TryParse(installed, out var parsed)) return null;
 
-        var semantic = published.FirstOrDefault(v =>
-            SemanticVersion.TryParse(v.Version, out var candidateVersion)
-            && candidateVersion.Value.CompareTo(parsed.Value) == 0);
+        foreach (var (id, version) in published)
+            if (SemanticVersion.TryParse(version, out var candidateVersion)
+                && candidateVersion.Value.CompareTo(parsed.Value) == 0)
+                return id;
 
-        return semantic?.Id;
+        return null;
     }
 }

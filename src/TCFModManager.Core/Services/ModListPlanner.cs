@@ -40,6 +40,10 @@ public sealed record ModListAction
 
     public int? ModId { get; init; }
 
+    // True when ModId is an addon id. What tells the fetch half which catalog and which endpoint
+    // this action belongs to.
+    public bool IsAddon { get; init; }
+
     // The version id to fetch. Null when the list couldn't pin one, which is what
     // NeedsVersionLookup reports.
     public int? VersionId { get; init; }
@@ -125,7 +129,9 @@ public static class ModListPlanner
         var actions = new List<ModListAction>();
         var matched = new bool[candidates.Count];
 
-        var byModId = new Dictionary<int, int>();
+        // Keyed on the (id, IsAddon) pair - addon ids and mod ids are separate sequences on
+        // sp-mod.com, so a bare id dictionary would let a list entry for addon 116 claim mod 116.
+        var byModId = new Dictionary<(int Id, bool IsAddon), int>();
         var byGuid = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         var byFolder = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         var byName = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -133,7 +139,7 @@ public static class ModListPlanner
         for (var index = 0; index < candidates.Count; index++)
         {
             var candidate = candidates[index];
-            if (candidate.ModId is { } id) byModId.TryAdd(id, index);
+            if (candidate.ModId is { } id) byModId.TryAdd((id, candidate.IsAddon), index);
             if (!string.IsNullOrWhiteSpace(candidate.Guid)) byGuid.TryAdd(candidate.Guid.Trim(), index);
             foreach (var folder in candidate.Folders.Where(f => !string.IsNullOrWhiteSpace(f)))
                 byFolder.TryAdd(folder.Trim(), index);
@@ -161,6 +167,7 @@ public static class ModListPlanner
                     Name = candidate.Name.Trim(),
                     Installed = candidate,
                     ModId = candidate.ModId,
+                    IsAddon = candidate.IsAddon,
                     InstalledVersion = candidate.Version,
                 });
             }
@@ -180,12 +187,12 @@ public static class ModListPlanner
     // to the loosest.
     private static int Match(
         ModListEntry entry,
-        Dictionary<int, int> byModId,
+        Dictionary<(int Id, bool IsAddon), int> byModId,
         Dictionary<string, int> byGuid,
         Dictionary<string, int> byFolder,
         Dictionary<string, int> byName)
     {
-        if (entry.ModId is { } id && byModId.TryGetValue(id, out var byId)) return byId;
+        if (entry.ModId is { } id && byModId.TryGetValue((id, entry.IsAddon), out var byId)) return byId;
 
         if (!string.IsNullOrWhiteSpace(entry.Guid) && byGuid.TryGetValue(entry.Guid.Trim(), out var guidMatch))
             return guidMatch;
@@ -207,6 +214,7 @@ public static class ModListPlanner
                 Name = entry.Name,
                 Entry = entry,
                 ModId = entry.ModId,
+                IsAddon = entry.IsAddon,
                 VersionId = entry.VersionId,
                 TargetVersion = entry.Version,
             };
@@ -234,6 +242,7 @@ public static class ModListPlanner
             Entry = entry,
             Installed = installed,
             ModId = entry.ModId ?? installed.ModId,
+            IsAddon = entry.ModId is not null ? entry.IsAddon : installed.IsAddon,
             VersionId = entry.VersionId,
             TargetVersion = entry.Version,
             InstalledVersion = installed.Version,

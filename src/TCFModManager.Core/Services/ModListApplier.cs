@@ -37,6 +37,10 @@ public sealed record ModListApplyOptions
 
     public ModListCapture.VersionLookup? SnapshotVersions { get; init; }
 
+    // The addon equivalent, so a snapshot pins an installed addon's version the same way it pins a
+    // mod's - without it, reverting would offer to reinstall every addon at whatever is newest.
+    public ModListCapture.AddonVersionLookup? SnapshotAddonVersions { get; init; }
+
     public string? SptVersion { get; init; }
 }
 
@@ -109,7 +113,8 @@ public static class ModListApplier
                 options.SnapshotVersions,
                 options.SptVersion,
                 plan.Policy,
-                isSnapshot: true);
+                isSnapshot: true,
+                addonVersions: options.SnapshotAddonVersions);
 
         var enabled = ModDisableOutcome.Empty;
 

@@ -20,6 +20,7 @@ public static class ModListCandidates
     {
         Name = card.Name,
         ModId = card.ModId,
+        IsAddon = card.IsAddon,
         Version = card.InstalledVersion,
         Guid = card.Guid,
         IsDisabled = card.IsDisabled,

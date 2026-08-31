@@ -74,10 +74,13 @@ So the app checks each addon version against the mod you actually have installed
 
 > Needs Raid Review ^1.5.0 - you have 1.4.2
 
-Installed addons get their own card on the Installed page, labelled with the mod they belong to, and update the same way anything else does.
+Installed addons get their own card on the Installed page, labelled with the mod they belong to, and update the same way anything else does. **Mod lists cover them too** - capturing a list records your addons, and applying one installs, updates or disables them alongside your mods.
 
 #### information
-Installing an addon won't drag its parent mod in behind it - install the mod first, then its addon. Anything else the addon needs is offered the usual way, on the Downloads page.
+Installing an addon won't drag its parent mod in behind it - install the mod first, then its addon. Anything else the addon needs is offered the usual way, on the Downloads page. Applying a list that names an addon whose parent mod isn't installed (and isn't on that list either) skips it and tells you why, rather than downloading something nothing would load.
+
+#### warning
+A mod list containing an addon needs this version of the app or newer to open. Sharing one with someone on an older build will tell them the file is too new - send them a list without addons, or ask them to update. Lists with no addons in them are unaffected.
 
 #### warning
 Only an addon installed **through this app** is tracked as one. Addons have no GUID on sp-mod, so an addon you unzipped by hand can't be told apart from an ordinary mod folder - it'll show up as a mod the app couldn't match.
