@@ -309,29 +309,38 @@
                                         TextWrapping="Wrap"
                                         ToolTip="{Binding AlternateCompatibleVersionNote}"
                                         Visibility="{Binding AlternateCompatibleVersionNote, Converter={StaticResource NullToCollapsed}}" />
-                                    <!-- Category and feature badges; only shown when applicable. -->
-                                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                    <!-- Category and feature badges; only shown when applicable.
+
+                                         A WrapPanel, not a StackPanel: a badge is a fixed label
+                                         that can't shorten itself, so a horizontal stack just runs
+                                         one off the edge of the card - three of these on a mod with
+                                         a long category left "Contains ads" reading "Contains ad".
+                                         Gaps are trailing margins so whichever badge starts a line
+                                         sits flush left, and the 4 at the bottom is the gap between
+                                         wrapped lines. -->
+                                    <WrapPanel Margin="0,4,0,0">
                                         <ui:Badge
+                                            Margin="0,0,6,4"
                                             Appearance="Info"
                                             FontSize="11"
                                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             Content="{Binding CategoryTag}"
                                             Visibility="{Binding CategoryTag, Converter={StaticResource NullToCollapsed}}" />
                                         <ui:Badge
-                                            Margin="6,0,0,0"
+                                            Margin="0,0,6,4"
                                             Appearance="Info"
                                             FontSize="11"
                                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             Content="Fika compatible"
                                             Visibility="{Binding IsFikaCompatible, Converter={StaticResource TrueToVisible}}" />
                                         <ui:Badge
-                                            Margin="6,0,0,0"
+                                            Margin="0,0,6,4"
                                             Appearance="Info"
                                             FontSize="11"
                                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             Content="Contains ads"
                                             Visibility="{Binding ContainsAds, Converter={StaticResource TrueToVisible}}" />
-                                    </StackPanel>
+                                    </WrapPanel>
                                     <!-- Badges on their own row, both collapsing when they don't
                                          apply so whichever one shows starts at the left edge.
 
@@ -342,17 +351,21 @@
                                          reserved its whole width too and left the addon badge
                                          indented on every mod that has addons but no dependencies.
                                          Taking the height from a real Badge rather than a fixed
-                                         MinHeight keeps it right if the badge style ever changes. -->
-                                    <StackPanel Orientation="Horizontal">
+                                         MinHeight keeps it right if the badge style ever changes.
+
+                                         A WrapPanel for the same reason as the row above - two
+                                         badges fit at two columns and not always at four. Its own
+                                         top margin rather than relying on the row above, which is
+                                         empty on a mod with no category and no flags. -->
+                                    <WrapPanel Margin="0,4,0,0">
                                         <ui:Badge
                                             Width="0"
-                                            Margin="0,4,0,0"
                                             FontSize="11"
                                             Content=" "
                                             Visibility="Hidden" />
 
                                         <ui:Badge
-                                            Margin="0,4,6,0"
+                                            Margin="0,0,6,4"
                                             Appearance="Caution"
                                             FontSize="11"
                                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
@@ -363,14 +376,14 @@
                                         <!-- Answered from the cached addon catalog, so unlike the
                                              badge beside it this one is right on the first render. -->
                                         <ui:Badge
-                                            Margin="0,4,0,0"
+                                            Margin="0,0,6,4"
                                             Appearance="Info"
                                             FontSize="11"
                                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             Content="{Binding AddonBadgeText}"
                                             ToolTip="Open this mod to see and install its addons"
                                             Visibility="{Binding HasAddons, Converter={StaticResource TrueToVisible}}" />
-                                    </StackPanel>
+                                    </WrapPanel>
                                 </StackPanel>
                             </Grid>
 
