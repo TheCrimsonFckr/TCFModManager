@@ -85,6 +85,7 @@
                 Margin="0,12,0,0"
                 HorizontalAlignment="Left"
                 Content="View mod page"
+                Icon="{ui:SymbolIcon Open24}"
                 Click="ViewModPageButton_Click" />
 
             <!-- DataContext is set in code-behind: the rest of this dialog binds against the Mod

@@ -145,6 +145,7 @@
 
                         <StackPanel Orientation="Horizontal">
                             <ui:Button
+                                HorizontalAlignment="Left"
                                 Content="Open the mod page"
                                 Icon="{ui:SymbolIcon Open24}"
                                 Command="{Binding OpenModPageCommand}" />

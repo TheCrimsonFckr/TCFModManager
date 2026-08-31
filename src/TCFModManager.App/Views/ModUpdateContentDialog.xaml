@@ -114,7 +114,9 @@
                 ToolTip="Record the version selected below as installed, without downloading anything"
                 Visibility="{Binding CanManageVersion, Converter={StaticResource TrueToVisible}}" />
             <ui:Button
+                HorizontalAlignment="Left"
                 Content="View mod page"
+                Icon="{ui:SymbolIcon Open24}"
                 Command="{Binding OpenModPageCommand}"
                 Visibility="{Binding ModPageUrl, Converter={StaticResource NullToCollapsed}}" />
         </DockPanel>
