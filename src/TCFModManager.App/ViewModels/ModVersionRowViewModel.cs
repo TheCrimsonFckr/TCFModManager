@@ -26,10 +26,17 @@ public sealed class ModVersionRowViewModel
     // Null when compatibility can't be determined.
     public required bool? IsCompatible { get; init; }
 
-    public string? CompatibilityLabel => IsCompatible switch
+    // Set for an addon version, whose requirement is its parent mod's version rather than an SPT
+    // one - e.g. "Raid Review ^1.5.0". Null for an ordinary mod version.
+    public string? ParentRequirement { get; init; }
+
+    public string? CompatibilityLabel => (ParentRequirement, IsCompatible) switch
     {
-        true => "Compatible with your installed SPT version",
-        false => "Not compatible with your installed SPT version",
-        null => null,
+        ({ } requirement, true) => $"Fits {requirement}",
+        ({ } requirement, false) => $"Needs {requirement}",
+        ({ } requirement, null) => $"Needs {requirement} - couldn't check it against what you have installed",
+        (null, true) => "Compatible with your installed SPT version",
+        (null, false) => "Not compatible with your installed SPT version",
+        _ => null,
     };
 }

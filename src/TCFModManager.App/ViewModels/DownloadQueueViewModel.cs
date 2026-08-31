@@ -40,7 +40,7 @@ public sealed partial class DownloadQueueViewModel : ObservableObject
     // happens later when the worker reaches it. When <paramref name="dependencyOf"/> is set, the
     // new item is registered against it so cancelling that item cancels this one too.
     public DownloadQueueItemViewModel Enqueue(
-        Mod mod,
+        InstallTarget target,
         string versionLabel,
         string installPath,
         Func<Task<ModVersion?>> resolveVersion,
@@ -48,7 +48,7 @@ public sealed partial class DownloadQueueViewModel : ObservableObject
         DownloadQueueItemViewModel? dependencyOf = null,
         long? totalBytes = null)
     {
-        var item = new DownloadQueueItemViewModel(mod, versionLabel, installPath, resolveVersion, checkDependencies, totalBytes);
+        var item = new DownloadQueueItemViewModel(target, versionLabel, installPath, resolveVersion, checkDependencies, totalBytes);
         dependencyOf?.AddDependency(item);
         item.PropertyChanged += OnItemChanged;
         Items.Add(item);
@@ -172,7 +172,7 @@ public sealed partial class DownloadQueueViewModel : ObservableObject
             });
             var downloadProgress = new Progress<double>(p => item.Progress = p);
 
-            await AppServices.ModInstall.InstallAsync(item.Mod, version, item.InstallPath, status, downloadProgress, item.Token);
+            await AppServices.ModInstall.InstallAsync(item.Target, version, item.InstallPath, status, downloadProgress, item.Token);
 
             item.Status = DownloadQueueItemStatus.Completed;
             item.Progress = 1.0;
@@ -220,7 +220,7 @@ public sealed partial class DownloadQueueViewModel : ObservableObject
     // failed lookup silently skips the check rather than failing the queued item.
     private async Task CheckDependenciesAsync(DownloadQueueItemViewModel item, ModVersion version)
     {
-        var mod = item.Mod;
+        var target = item.Target;
         var installPath = item.InstallPath;
 
         var sptVersion = AppServices.SptEnvironment.InstalledVersion;
@@ -229,8 +229,14 @@ public sealed partial class DownloadQueueViewModel : ObservableObject
         List<DependencyNode> nodes;
         try
         {
-            var identifier = string.IsNullOrWhiteSpace(mod.Guid) ? mod.Id.ToString() : mod.Guid;
-            var result = await AppServices.SpModApi.GetModDependenciesAsync($"{identifier}:{version.Version}", sptVersion);
+            // Both endpoints resolve to ordinary mods, so everything below this point is identical
+            // for an addon - what an addon requires is mods, not other addons. An addon's parent is
+            // deliberately not part of this: it isn't returned here, and it's handled where the
+            // addon is offered instead.
+            var identifier = string.IsNullOrWhiteSpace(target.Guid) ? target.Id.ToString() : target.Guid;
+            var result = target.IsAddon
+                ? await AppServices.SpModApi.GetAddonDependenciesAsync($"{identifier}:{version.Version}", sptVersion)
+                : await AppServices.SpModApi.GetModDependenciesAsync($"{identifier}:{version.Version}", sptVersion);
             nodes = result.Values.FirstOrDefault() ?? [];
         }
         catch (Exception)
@@ -247,16 +253,21 @@ public sealed partial class DownloadQueueViewModel : ObservableObject
         await AppServices.ModCache.EnsureLoadedAsync();
         var scanned = await Task.Run(() => InstalledModScanner.Scan(installPath));
         var installedMatches = InstalledModCardViewModel.BuildFrom(
-            scanned, AppServices.ModCache.AllMods, sptVersion, AppServices.InstallManifest.Load().Mods);
-        var installedIds = installedMatches.Where(m => m.ModId is not null).Select(m => m.ModId!.Value).ToHashSet();
+            scanned, AppServices.ModCache.AllMods, sptVersion, AppServices.InstallManifest.Load().Mods,
+            AppServices.Addons.AllAddons);
+
+        // Every dependency node is a mod, so addon cards - whose ModId is an addon id - are left
+        // out of both sets rather than being compared against mod ids.
+        var installedIds = installedMatches.Where(m => m is { IsAddon: false, ModId: not null })
+            .Select(m => m.ModId!.Value).ToHashSet();
         var installedGuids = installedMatches.Where(m => m.Guid is not null)
             .Select(m => m.Guid!).ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         // Guards against two mods sharing a dependency both queuing the same download twice. A
         // cancelled card doesn't count, so a dependency dropped earlier can be picked up again.
         var queuedIds = Items
-            .Where(i => i.Status != DownloadQueueItemStatus.Cancelled)
-            .Select(i => i.Mod.Id)
+            .Where(i => i.Status != DownloadQueueItemStatus.Cancelled && !i.Target.IsAddon)
+            .Select(i => i.Target.Id)
             .ToHashSet();
 
         var missing = Flatten(nodes)
@@ -303,7 +314,7 @@ public sealed partial class DownloadQueueViewModel : ObservableObject
             };
 
             Enqueue(
-                depMod,
+                InstallTarget.For(depMod),
                 depVersion.Version ?? "unknown",
                 installPath,
                 () => Task.FromResult<ModVersion?>(depVersion),

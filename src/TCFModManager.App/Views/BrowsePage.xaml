@@ -333,6 +333,17 @@
                                             Content="Has dependencies"
                                             Visibility="Hidden"
                                             behaviors:DependencyBadgeLoader.Mod="{Binding Mod}" />
+
+                                        <!-- Answered from the cached addon catalog, so unlike the
+                                             badge beside it this one is right on the first render. -->
+                                        <ui:Badge
+                                            Margin="6,4,0,0"
+                                            Appearance="Info"
+                                            FontSize="11"
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                            Content="{Binding AddonBadgeText}"
+                                            ToolTip="Open this mod to see and install its addons"
+                                            Visibility="{Binding HasAddons, Converter={StaticResource TrueToVisible}}" />
                                     </StackPanel>
                                 </StackPanel>
                             </Grid>

@@ -17,19 +17,25 @@ public partial class ModUpdateDialogViewModel : ObservableObject
     private readonly SpModApiClient _spModApi = AppServices.SpModApi;
     private readonly InstalledModCardViewModel _mod;
 
-    // Looked up once in LoadAsync from the cached catalog.
+    // Looked up once in LoadAsync from the cached catalog. Exactly one of these is ever set - an
+    // installed card is either a mod or an addon, never both.
     private Mod? _catalogMod;
+    private Addon? _catalogAddon;
 
     public ModUpdateDialogViewModel(InstalledModCardViewModel mod)
     {
         _mod = mod;
     }
 
+    // The addons published for this mod, shown under its version list. An addon has none of its
+    // own, and its id would otherwise be read as a mod id - so the section stays empty for one.
+    public AddonsSectionViewModel Addons { get; } = new();
+
     public string ModTitle => _mod.DisplayTitle;
     public string? InstalledVersionText => _mod.InstalledVersion;
 
     // The matched catalog listing's sp-mod.com page; null until LoadAsync resolves it, or if no match was found.
-    public string? ModPageUrl => _catalogMod?.DetailUrl;
+    public string? ModPageUrl => _mod.IsAddon ? _catalogAddon?.DetailUrl : _catalogMod?.DetailUrl;
 
     //
     // A disabled mod's install record points at folders it no longer occupies, so updating or
@@ -49,7 +55,7 @@ public partial class ModUpdateDialogViewModel : ObservableObject
 
     // Whether the "manage installed version" controls should be shown - only meaningful once a
     // catalog mod is known, since confirming/overriding a version needs a mod to record it against.
-    public bool CanManageVersion => _catalogMod is not null;
+    public bool CanManageVersion => _mod.IsAddon ? _catalogAddon is not null : _catalogMod is not null;
 
     // Whether this mod's current InstalledVersion came from a manual override, so "Clear override"
     // has something to undo.
@@ -80,6 +86,12 @@ public partial class ModUpdateDialogViewModel : ObservableObject
         {
             StatusMessage = $"{_mod.DisplayTitle} isn't matched to a sp-mod.com listing, so there's nothing to check for updates against.";
             IsLoading = false;
+            return;
+        }
+
+        if (_mod.IsAddon)
+        {
+            await LoadAddonAsync(modId);
             return;
         }
 
@@ -120,6 +132,8 @@ public partial class ModUpdateDialogViewModel : ObservableObject
 
             if (Versions.Count == 0)
                 StatusMessage = $"{_mod.DisplayTitle} has no published versions on sp-mod.com.";
+
+            await Addons.LoadAsync(modId, _catalogMod?.Name ?? _mod.DisplayTitle, _mod.InstalledVersion);
         }
         catch (SpModApiRateLimitedException ex)
         {
@@ -132,6 +146,77 @@ public partial class ModUpdateDialogViewModel : ObservableObject
         catch (HttpRequestException ex)
         {
             StatusMessage = $"Network error: {ex.Message}";
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    //
+    // An addon's version list comes from the cached addon catalog rather than a per-addon fetch:
+    // there are under a hundred addons in total, the cache already carries each one's versions with
+    // their download links, and every constraint here is measured against the parent mod's
+    // installed version rather than the installed SPT version.
+    //
+    private async Task LoadAddonAsync(int addonId)
+    {
+        IsLoading = true;
+        StatusMessage = null;
+        try
+        {
+            await AppServices.Addons.EnsureLoadedAsync();
+            _catalogAddon = AppServices.Addons.ById(addonId);
+
+            OnPropertyChanged(nameof(ModPageUrl));
+            OnPropertyChanged(nameof(CanManageVersion));
+            ConfirmSelectedAsInstalledCommand.NotifyCanExecuteChanged();
+            SetCustomVersionCommand.NotifyCanExecuteChanged();
+
+            if (_catalogAddon is null)
+            {
+                StatusMessage = $"{_mod.DisplayTitle} is no longer listed on sp-mod.com, so there's nothing to check for updates against.";
+                return;
+            }
+
+            var parentVersion = _mod.ParentInstalledVersion;
+            var parentName = _mod.ParentModName ?? "its parent mod";
+
+            var ordered = (_catalogAddon.Versions ?? [])
+                .OrderByDescending(v => v.PublishedAt ?? DateTimeOffset.MinValue)
+                .ToList();
+
+            Versions.Clear();
+            foreach (var v in ordered)
+            {
+                Versions.Add(new ModVersionRowViewModel
+                {
+                    Raw = new ModVersion
+                    {
+                        Id = v.Id,
+                        Version = v.Version,
+                        Description = v.Description,
+                        Link = v.Link,
+                        ContentLength = v.ContentLength,
+                        Downloads = v.Downloads,
+                        PublishedAt = v.PublishedAt,
+                    },
+                    IsInstalled = _mod.InstalledVersion is not null
+                        && string.Equals(v.Version, _mod.InstalledVersion, StringComparison.OrdinalIgnoreCase),
+                    IsCompatible = ModVersionMatcher.IsSatisfiedBy(v.ModVersionConstraint, parentVersion),
+                    ParentRequirement = $"{parentName} {v.ModVersionConstraint}",
+                });
+            }
+
+            if (Versions.Count > 0) Versions[0].IsLatest = true;
+
+            SelectedVersion = Versions.FirstOrDefault(v => v.IsCompatible == true) ?? Versions.FirstOrDefault();
+            MarkUpToDateCommand.NotifyCanExecuteChanged();
+
+            if (Versions.Count == 0)
+                StatusMessage = $"{_mod.DisplayTitle} has no published versions on sp-mod.com.";
+            else if (string.IsNullOrWhiteSpace(parentVersion))
+                StatusMessage = $"{_mod.ParentModName ?? "This addon's parent mod"} isn't installed, so none of these versions can be checked for fit.";
         }
         finally
         {
@@ -162,7 +247,11 @@ public partial class ModUpdateDialogViewModel : ObservableObject
             return;
         }
 
-        if (_catalogMod is not { } catalogMod)
+        var target = _mod.IsAddon
+            ? _catalogAddon is { } addon ? InstallTarget.For(addon) : null
+            : _catalogMod is { } catalogMod ? InstallTarget.For(catalogMod) : null;
+
+        if (target is null)
         {
             StatusMessage = $"Couldn't find {_mod.DisplayTitle} in the cached catalog - try Rescan.";
             return;
@@ -185,7 +274,9 @@ public partial class ModUpdateDialogViewModel : ObservableObject
         }
 
         var selectedVersion = SelectedVersion;
-        AppServices.DownloadQueue.Enqueue(catalogMod, selectedVersion.VersionText, installPath, () => Task.FromResult<ModVersion?>(selectedVersion.Raw));
+        AppServices.DownloadQueue.Enqueue(
+            target, selectedVersion.VersionText, installPath, () => Task.FromResult<ModVersion?>(selectedVersion.Raw),
+            totalBytes: selectedVersion.Raw.ContentLength);
         StatusMessage = $"Queued {_mod.DisplayTitle} {selectedVersion.VersionText} - see the Downloads page for progress.";
     }
 
@@ -243,13 +334,24 @@ public partial class ModUpdateDialogViewModel : ObservableObject
 
     private void ApplyManualVersion(string version, int? versionId)
     {
-        if (_catalogMod is not { } catalogMod) return;
+        if (!CanManageVersion) return;
 
         var folders = new[] { _mod.ClientFolderName, _mod.ServerFolderName }
             .Where(f => !string.IsNullOrWhiteSpace(f))
             .Select(f => f!)
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
+
+        if (_mod.IsAddon)
+        {
+            if (_catalogAddon is not { } addon) return;
+
+            AppServices.InstallManifest.SetManualVersion(
+                addon.Id, guid: null, addon.Name ?? _mod.DisplayTitle, version, versionId, folders, isAddon: true);
+            return;
+        }
+
+        if (_catalogMod is not { } catalogMod) return;
 
         AppServices.InstallManifest.SetManualVersion(
             catalogMod.Id, catalogMod.Guid, catalogMod.Name ?? _mod.DisplayTitle, version, versionId, folders);
@@ -264,7 +366,7 @@ public partial class ModUpdateDialogViewModel : ObservableObject
     {
         if (_mod.ModId is not { } modId) return;
 
-        AppServices.InstallManifest.ClearManualVersion(modId);
+        AppServices.InstallManifest.ClearManualVersion(modId, _mod.IsAddon);
         StatusMessage = $"Cleared the manual override for {_mod.DisplayTitle} - it'll go back to auto-detecting from the files on disk.";
     }
 }

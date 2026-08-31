@@ -419,6 +419,7 @@ public partial class InstalledViewModel : ObservableObject
             // Reuses whatever's already cached; triggers the one-time catalog fetch if Browse
             // hasn't been visited yet this session.
             await AppServices.ModCache.EnsureLoadedAsync();
+            await AppServices.Addons.EnsureLoadedAsync();
 
             // What this app itself installed, and which folders it placed - identifies those mods
             // exactly instead of inferring them from folder names.
@@ -427,6 +428,7 @@ public partial class InstalledViewModel : ObservableObject
             // Read once here rather than inside the background work, so a catalog refresh landing
             // mid-scan can't swap the list out from under it.
             var catalog = AppServices.ModCache.AllMods;
+            var addons = AppServices.Addons.AllAddons;
             var sptVersion = AppServices.SptEnvironment.InstalledVersion;
 
             // The whole scan-and-match pass runs off the UI thread. Matching a large install
@@ -436,7 +438,7 @@ public partial class InstalledViewModel : ObservableObject
             {
                 var found = InstalledModScanner.Scan(installPath);
 
-                var built = InstalledModCardViewModel.BuildFrom(found, catalog, sptVersion, installRecords)
+                var built = InstalledModCardViewModel.BuildFrom(found, catalog, sptVersion, installRecords, addons)
                     .OrderBy(m => m.Name, StringComparer.OrdinalIgnoreCase)
                     .ToList();
 

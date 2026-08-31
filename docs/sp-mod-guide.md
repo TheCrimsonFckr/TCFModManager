@@ -42,7 +42,7 @@ The whole sp-mod catalog, fetched once and cached to disk so it opens instantly 
 - **Toggles** for hiding ads and AI-generated content
 - **Refresh cache** re-pulls the catalog when you want the newest listings
 
-Each card shows the download count, the endorsement count when the mod has any, a status dot, and a badge for mods that pull in dependencies:
+Each card shows the download count, the endorsement count when the mod has any, a status dot, a badge for mods that pull in dependencies, and a badge counting the mod's addons:
 
 | Status | Meaning |
 | --- | --- |
@@ -56,6 +56,31 @@ Clicking a card opens its details, including version history and a link to its p
 
 #### information
 SPT version constraints are resolved against the live SPT release list rather than parsed as version ranges, so what you see named is a release that actually exists - not the boundary version the mod author wrote the constraint against.
+
+
+### Addons
+
+Some mods have **addons** - extra content published against the mod itself rather than against an SPT release. A voice-command pack for a companion mod, a Linux build of a GUI, an overlay for a web tool.
+
+Addons aren't listed separately, because an addon is no use without its parent. Open a mod - from Browse or from Installed - and its addons are listed at the bottom of the dialog, each with its own version picker and Install button.
+
+The thing that makes an addon different from a mod is what it's measured against:
+
+| A mod version says | An addon version says |
+| --- | --- |
+| which **SPT release** it needs | which version of its **parent mod** it needs |
+
+So the app checks each addon version against the mod you actually have installed. If none of them fit, the addon is still listed - with the reason, rather than quietly missing:
+
+> Needs Raid Review ^1.5.0 - you have 1.4.2
+
+Installed addons get their own card on the Installed page, labelled with the mod they belong to, and update the same way anything else does.
+
+#### information
+Installing an addon won't drag its parent mod in behind it - install the mod first, then its addon. Anything else the addon needs is offered the usual way, on the Downloads page.
+
+#### warning
+Only an addon installed **through this app** is tracked as one. Addons have no GUID on sp-mod, so an addon you unzipped by hand can't be told apart from an ordinary mod folder - it'll show up as a mod the app couldn't match.
 
 
 ### Installed

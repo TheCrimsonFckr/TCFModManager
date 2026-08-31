@@ -72,12 +72,13 @@ public partial class DependenciesViewModel : ObservableObject
 
             var scanned = await Task.Run(() => InstalledModScanner.Scan(installPath));
             var installed = InstalledModCardViewModel.BuildFrom(
-                scanned, AppServices.ModCache.AllMods, sptVersion, AppServices.InstallManifest.Load().Mods);
+                scanned, AppServices.ModCache.AllMods, sptVersion, AppServices.InstallManifest.Load().Mods,
+                AppServices.Addons.AllAddons);
 
             // Only mods that matched the catalog can be asked about; a hand-installed mod we
             // couldn't identify has no identifier to query with.
             var queryable = installed
-                .Where(m => m.ModId is not null)
+                .Where(m => m is { IsAddon: false, ModId: not null })
                 .Select(m => (Card: m, Mod: AppServices.ModCache.AllMods.FirstOrDefault(c => c.Id == m.ModId)))
                 .Where(x => x.Mod is not null)
                 .Select(x => (x.Card, Mod: x.Mod!, Version: ResolveQueryVersion(x.Card, x.Mod!)))
@@ -201,7 +202,7 @@ public partial class DependenciesViewModel : ObservableObject
         var version = row.RequiredVersion!;
 
         // checkDependencies stays on: a dependency can have dependencies of its own.
-        AppServices.DownloadQueue.Enqueue(mod, version, installPath, () => ResolveVersionLinkAsync(mod, version));
+        AppServices.DownloadQueue.Enqueue(InstallTarget.For(mod), version, installPath, () => ResolveVersionLinkAsync(mod, version));
 
         row.IsQueued = true;
         StatusMessage = $"Queued {row.Name} {version} - see the Downloads page for progress.";

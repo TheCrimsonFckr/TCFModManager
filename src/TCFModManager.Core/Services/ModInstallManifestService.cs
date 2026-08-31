@@ -41,14 +41,16 @@ public sealed class ModInstallManifestService
     // so it stays outside the app's own uninstall path.
     //
     public InstalledModRecord SetManualVersion(
-        int modId, string? guid, string name, string version, int? versionId, IReadOnlyList<string> folders)
+        int modId, string? guid, string name, string version, int? versionId, IReadOnlyList<string> folders,
+        bool isAddon = false)
     {
         var manifest = Load();
-        var existing = manifest.Mods.FirstOrDefault(m => m.ModId == modId);
+        var existing = manifest.Mods.FirstOrDefault(m => m.ModId == modId && m.IsAddon == isAddon);
 
         var record = new InstalledModRecord
         {
             ModId = modId,
+            IsAddon = isAddon,
             Guid = guid ?? existing?.Guid,
             Name = existing?.Name ?? name,
             VersionId = versionId ?? existing?.VersionId,
@@ -60,7 +62,7 @@ public sealed class ModInstallManifestService
             IsAppManaged = existing?.IsAppManaged ?? false,
         };
 
-        manifest.Mods.RemoveAll(m => m.ModId == modId);
+        manifest.Mods.RemoveAll(m => m.ModId == modId && m.IsAddon == isAddon);
         manifest.Mods.Add(record);
         Save(manifest);
 
@@ -72,13 +74,13 @@ public sealed class ModInstallManifestService
     // its version from the files on disk. No-op for an app-managed record - that reflects a real
     // install, and clearing it would misrepresent what this app actually placed.
     //
-    public void ClearManualVersion(int modId)
+    public void ClearManualVersion(int modId, bool isAddon = false)
     {
         var manifest = Load();
-        var existing = manifest.Mods.FirstOrDefault(m => m.ModId == modId);
+        var existing = manifest.Mods.FirstOrDefault(m => m.ModId == modId && m.IsAddon == isAddon);
         if (existing is null || existing.IsAppManaged) return;
 
-        manifest.Mods.RemoveAll(m => m.ModId == modId);
+        manifest.Mods.RemoveAll(m => m.ModId == modId && m.IsAddon == isAddon);
         Save(manifest);
     }
 }

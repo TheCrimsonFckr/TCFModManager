@@ -23,13 +23,18 @@ public enum DownloadQueueItemStatus
 // 
 public sealed partial class DownloadQueueItemViewModel : ObservableObject
 {
-    public Mod Mod { get; }
+    // What is being installed - a catalog mod or an addon attached to one.
+    public InstallTarget Target { get; }
 
     // The version being installed, shown as-is (e.g. "1.4.2"). Display label only; the full ModVersion is resolved lazily via ResolveVersionAsync.
     public string VersionLabel { get; }
 
-    public string ModName => Mod.Name ?? "Unknown mod";
-    public string? Thumbnail => Mod.Thumbnail;
+    public string ModName => Target.Name;
+    public string? Thumbnail => Target.Thumbnail;
+
+    // Distinguishes an addon card from a mod card in the queue, since an addon's name rarely says
+    // on its own that it needs a parent mod.
+    public bool IsAddon => Target.IsAddon;
 
     // The install folder, captured at enqueue time rather than re-read later.
     public string InstallPath { get; }
@@ -171,14 +176,14 @@ public sealed partial class DownloadQueueItemViewModel : ObservableObject
     private readonly Func<Task<ModVersion?>> _resolveVersion;
 
     internal DownloadQueueItemViewModel(
-        Mod mod,
+        InstallTarget target,
         string versionLabel,
         string installPath,
         Func<Task<ModVersion?>> resolveVersion,
         bool checkDependencies,
         long? totalBytes = null)
     {
-        Mod = mod;
+        Target = target;
         VersionLabel = versionLabel;
         InstallPath = installPath;
         _resolveVersion = resolveVersion;

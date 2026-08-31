@@ -386,6 +386,14 @@
                                     ContentTemplate="{StaticResource ModListBadges}"
                                     Content="{Binding}" />
 
+                                <!-- Says what an addon is attached to; an addon's own name rarely
+                                     does, and it decides which versions of it can be installed. -->
+                                <TextBlock
+                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                    TextTrimming="CharacterEllipsis"
+                                    Text="{Binding AddonSubtitle}"
+                                    Visibility="{Binding AddonSubtitle, Converter={StaticResource NullToCollapsed}}" />
+
                                 <!-- On-disk folder/package name, shown only if different from the title. -->
                                 <TextBlock
                                     Opacity="0.6"
@@ -841,6 +849,12 @@
                             </ui:CardExpander.Header>
 
                             <StackPanel Margin="0,4,0,0">
+                                <TextBlock
+                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                    TextWrapping="Wrap"
+                                    Text="{Binding AddonSubtitle}"
+                                    Visibility="{Binding AddonSubtitle, Converter={StaticResource NullToCollapsed}}" />
+
                                 <TextBlock
                                     Opacity="0.6"
                                     TextWrapping="Wrap"

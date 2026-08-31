@@ -53,7 +53,8 @@ public sealed class ModListService
             var found = InstalledModScanner.Scan(installPath);
 
             return ModListCandidates.From(
-                InstalledModCardViewModel.BuildFrom(found, catalog, sptVersion, records));
+                InstalledModCardViewModel.BuildFrom(
+                    found, catalog, sptVersion, records, AppServices.Addons.AllAddons));
         });
 
         return new ModListInstall(installPath, candidates, sptVersion);
@@ -369,7 +370,7 @@ public sealed class ModListService
         // The size is passed in rather than left for the worker to discover: every version is
         // already resolved by this point, so the whole apply can be sized before it starts.
         DownloadQueueItemViewModel Enqueue() =>
-            AppServices.DownloadQueue.Enqueue(mod, versionLabel, installPath, resolveVersion, totalBytes: totalBytes);
+            AppServices.DownloadQueue.Enqueue(InstallTarget.For(mod), versionLabel, installPath, resolveVersion, totalBytes: totalBytes);
 
         var dispatcher = Application.Current?.Dispatcher;
 

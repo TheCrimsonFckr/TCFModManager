@@ -1,0 +1,147 @@
+<UserControl
+    x:Class="TCFModManager.App.Views.AddonsSection"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:app="clr-namespace:TCFModManager.App"
+    xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors">
+    <!--
+        The Addons section of a mod's details dialog. DataContext is an AddonsSectionViewModel,
+        set by whichever dialog hosts this. The whole control collapses when the mod has no addons,
+        so hosting it costs nothing for the mods that don't.
+
+        Read-only rows (HoverRow, not ClickableRow): the row itself isn't the click target - its
+        version picker and its own button are.
+    -->
+    <UserControl.Resources>
+        <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
+        <converters:UpdateAvailableToVisibilityConverter x:Key="TrueToVisible" />
+    </UserControl.Resources>
+
+    <StackPanel Visibility="{Binding HasAddons, Converter={StaticResource TrueToVisible}}">
+        <Separator Margin="0,12,0,8" Background="{DynamicResource DividerStrokeColorDefaultBrush}" />
+
+        <TextBlock
+            FontWeight="SemiBold"
+            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+            Text="{Binding Heading}" />
+
+        <TextBlock
+            Margin="0,2,0,0"
+            TextWrapping="Wrap"
+            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+            Text="Extra content published for this mod. An addon's versions are matched against the mod's installed version, not your SPT version." />
+
+        <!-- One explanation for the whole list rather than the same sentence on every row. -->
+        <TextBlock
+            Margin="0,6,0,0"
+            TextWrapping="Wrap"
+            Foreground="{DynamicResource SystemFillColorCautionBrush}"
+            Text="{Binding ParentNotice}"
+            Visibility="{Binding HasParentNotice, Converter={StaticResource TrueToVisible}}" />
+
+        <ItemsControl Margin="0,8,0,0" ItemsSource="{Binding Addons}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource HoverRow}" Padding="8" Margin="0,0,0,4">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Image
+                                Grid.Column="0"
+                                Width="40"
+                                Height="40"
+                                Margin="0,0,10,0"
+                                VerticalAlignment="Top"
+                                Stretch="UniformToFill"
+                                behaviors:ThumbnailLoader.Source="{Binding Thumbnail}"
+                                Visibility="{Binding Thumbnail, Converter={StaticResource NullToCollapsed}}" />
+
+                            <StackPanel Grid.Column="1">
+                                <TextBlock
+                                    FontWeight="SemiBold"
+                                    TextWrapping="Wrap"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                    Text="{Binding Name}" />
+
+                                <TextBlock
+                                    Margin="0,2,0,0"
+                                    TextWrapping="Wrap"
+                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                    Text="{Binding Teaser}"
+                                    Visibility="{Binding Teaser, Converter={StaticResource NullToCollapsed}}" />
+
+                                <TextBlock
+                                    Margin="0,2,0,0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{Binding DownloadsText}" />
+
+                                <TextBlock
+                                    Margin="0,2,0,0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{Binding FlagsSummary}"
+                                    Visibility="{Binding FlagsSummary, Converter={StaticResource NullToCollapsed}}" />
+
+                                <TextBlock
+                                    Margin="0,2,0,0"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{Binding InstalledVersion, StringFormat='Installed: {0}'}"
+                                    Visibility="{Binding IsInstalled, Converter={StaticResource TrueToVisible}}" />
+
+                                <!-- The picker stays enabled even when nothing is installable, so the
+                                     row can explain which version would fit rather than going blank. -->
+                                <DockPanel Margin="0,6,0,0">
+                                    <ui:Button
+                                        DockPanel.Dock="Right"
+                                        Margin="8,0,0,0"
+                                        Content="{Binding ActionLabel}"
+                                        Command="{Binding InstallCommand}"
+                                        ToolTip="{Binding InstallToolTip, Source={x:Static app:AppServices.ModPageGate}}" />
+                                    <ui:Button
+                                        DockPanel.Dock="Right"
+                                        Margin="8,0,0,0"
+                                        Padding="8,6"
+                                        Icon="{ui:SymbolIcon Open24}"
+                                        Command="{Binding OpenAddonPageCommand}"
+                                        ToolTip="Open this addon's page on sp-mod.com"
+                                        Visibility="{Binding DetailUrl, Converter={StaticResource NullToCollapsed}}" />
+                                    <ComboBox
+                                        MinWidth="150"
+                                        HorizontalAlignment="Left"
+                                        DisplayMemberPath="Label"
+                                        ItemsSource="{Binding Versions}"
+                                        SelectedItem="{Binding SelectedVersion}" />
+                                </DockPanel>
+
+                                <TextBlock
+                                    Margin="0,6,0,0"
+                                    TextWrapping="Wrap"
+                                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                                    Text="{Binding BlockedReason}"
+                                    Visibility="{Binding HasBlockedReason, Converter={StaticResource TrueToVisible}}" />
+
+                                <TextBlock
+                                    Margin="0,6,0,0"
+                                    TextWrapping="Wrap"
+                                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                                    Text="{Binding CompatibilityNote}"
+                                    Visibility="{Binding HasCompatibilityNote, Converter={StaticResource TrueToVisible}}" />
+
+                                <TextBlock
+                                    Margin="0,6,0,0"
+                                    TextWrapping="Wrap"
+                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                    Text="{Binding StatusMessage}"
+                                    Visibility="{Binding HasStatusMessage, Converter={StaticResource TrueToVisible}}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+</UserControl>

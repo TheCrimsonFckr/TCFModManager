@@ -7,7 +7,16 @@ public sealed class InstalledModRecord
 {
     public required int ModId { get; init; }
 
-    // The catalog mod's GUID at install time.
+    //
+    // True when ModId is an sp-mod.com addon id rather than a mod id. The two are separate
+    // sequences, so a record's identity is the (ModId, IsAddon) pair - addon 116 and mod 116 would
+    // otherwise overwrite each other here. Defaults false, so every record written before addons
+    // were supported keeps meaning exactly what it always meant, with no migration.
+    //
+    public bool IsAddon { get; init; }
+
+    // The catalog mod's GUID at install time. Always null for an addon - sp-mod.com doesn't give
+    // addons a GUID.
     public string? Guid { get; init; }
 
     // The catalog mod's display name at install time.

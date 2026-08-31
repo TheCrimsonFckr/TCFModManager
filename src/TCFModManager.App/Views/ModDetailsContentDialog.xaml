@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
+    xmlns:views="clr-namespace:TCFModManager.App.Views"
     Style="{DynamicResource {x:Type ui:ContentDialog}}"
     IsFooterVisible="False">
     <!--
@@ -82,8 +83,13 @@
 
             <ui:Button
                 Margin="0,12,0,0"
+                HorizontalAlignment="Left"
                 Content="View mod page"
                 Click="ViewModPageButton_Click" />
+
+            <!-- DataContext is set in code-behind: the rest of this dialog binds against the Mod
+                 itself, and this section needs its own view model. Collapses when there are none. -->
+            <views:AddonsSection x:Name="AddonsHost" />
         </StackPanel>
     </ScrollViewer>
 </ui:ContentDialog>

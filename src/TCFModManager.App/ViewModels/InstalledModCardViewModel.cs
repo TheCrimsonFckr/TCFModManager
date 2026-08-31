@@ -76,6 +76,7 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     public string LatestPublishedText => (LatestPublishedVersion, ModId, HasPlugin || HasServer) switch
     {
         ({ } version, _, _) => version,
+        (null, _, _) when IsAddon => "unknown - this addon is no longer listed on sp-mod.com",
         (null, not null, _) => "unknown",
         (null, null, false) when HasPatcher => "not on sp-mod.com - patchers often ship inside another mod",
         _ => "not found on sp-mod.com",
@@ -132,8 +133,31 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     // A single path for this card for existing callers/diagnostics; client wins when both exist.
     public required string FolderPath { get; init; }
 
-    // The matched sp-mod.com listing's numeric id. Null when nothing matched.
+    // The matched sp-mod.com listing's numeric id. Null when nothing matched. Holds an ADDON id
+    // when IsAddon is true - the two are separate sequences, so never compare it to a mod id
+    // without checking IsAddon first.
     public int? ModId { get; init; }
+
+    //
+    // True when this card is an addon rather than a mod. Only ever set from an install record this
+    // app wrote: addons carry no GUID and their ids don't overlap mods', so there is nothing for
+    // the catalog matcher to recognise a hand-installed addon by - one of those shows up as an
+    // ordinary unmatched card, exactly as a hand-installed mod that matches nothing does.
+    //
+    public bool IsAddon { get; init; }
+
+    // The name of the mod this addon attaches to. Null for a mod, or when the parent isn't in the
+    // cached catalog.
+    public string? ParentModName { get; init; }
+
+    // The parent mod's installed version - what every one of this addon's version constraints is
+    // measured against. Null for a mod, or when the parent isn't installed.
+    public string? ParentInstalledVersion { get; init; }
+
+    // The card's "Addon for X" line, or null for an ordinary mod.
+    public string? AddonSubtitle => IsAddon
+        ? ParentModName is not null ? $"Addon for {ParentModName}" : "Addon"
+        : null;
 
     // True when this mod has an install record this app itself wrote, meaning Remove can delete
     // exactly those files. False for anything installed by hand or from outside the app, including a
@@ -275,10 +299,18 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
         IEnumerable<InstalledMod> scanned,
         IReadOnlyList<Mod> catalog,
         string? installedSptVersion,
-        IReadOnlyList<InstalledModRecord>? installRecords = null)
+        IReadOnlyList<InstalledModRecord>? installRecords = null,
+        IReadOnlyList<Addon>? addonCatalog = null)
     {
-        var recordsByFolder = IndexByFolder(installRecords);
-        var recordsByModId = (installRecords ?? [])
+        // Addon records are held apart from mod records the whole way down: their ids belong to a
+        // different sequence, so letting them into recordsByModId or the catalog index would have
+        // addon 116 answer to mod 116.
+        var addonRecords = (installRecords ?? []).Where(r => r.IsAddon).ToList();
+        var modRecords = (installRecords ?? []).Where(r => !r.IsAddon).ToList();
+        var addonRecordsByFolder = IndexByFolder(addonRecords);
+
+        var recordsByFolder = IndexByFolder(modRecords);
+        var recordsByModId = modRecords
             .GroupBy(r => r.ModId)
             .ToDictionary(g => g.Key, g => g.First());
 
@@ -287,17 +319,134 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
         // against a 3000-entry catalog re-normalizes and re-tokenizes 360,000 catalog entries.
         var index = CatalogIndex.Build(catalog);
 
-        var groups = scanned
+        var scannedGroups = scanned
             .GroupBy(m => m.Name, StringComparer.OrdinalIgnoreCase)
             .Select(g => (Key: g.Key, Entries: g.ToList()))
+            .ToList();
+
+        // A folder an addon install placed is claimed here and never offered to the catalog matcher.
+        var addonFolders = scannedGroups
+            .Where(g => addonRecordsByFolder.ContainsKey(g.Key))
+            .ToList();
+
+        var groups = scannedGroups
+            .Where(g => !addonRecordsByFolder.ContainsKey(g.Key))
             .Select(g => (g.Entries, Match: ResolveCatalogMatch(g.Key, g.Entries, index, recordsByFolder)))
             .ToList();
 
         // Patchers first: folding one into the mod it belongs to can turn a client-only group into
         // a client group that still needs its server half found, and never the other way round.
-        return MergeSplitClientServerHalves(MergePatcherFolders(groups))
+        var cards = MergeSplitClientServerHalves(MergePatcherFolders(groups))
             .Select(g => BuildCard(g.Entries, g.Match, installedSptVersion, recordsByModId))
             .ToList();
+
+        if (addonFolders.Count == 0) return cards;
+
+        // Addon cards come last because an addon's update state is measured against its parent
+        // mod's installed version, which the cards built above are what report.
+        var addonsById = (addonCatalog ?? []).ToDictionary(a => a.Id, a => a);
+        var parentVersionsById = cards
+            .Where(c => c is { IsAddon: false, ModId: not null })
+            .GroupBy(c => c.ModId!.Value)
+            .ToDictionary(g => g.Key, g => g.First());
+
+        cards.AddRange(addonFolders
+            .GroupBy(g => addonRecordsByFolder[g.Key].ModId)
+            .Select(g =>
+            {
+                var record = addonRecordsByFolder[g.First().Key];
+                var addon = addonsById.GetValueOrDefault(record.ModId);
+                var parent = addon?.ModId is { } parentId ? parentVersionsById.GetValueOrDefault(parentId) : null;
+                var parentName = addon?.ModId is { } id
+                    ? catalog.FirstOrDefault(m => m.Id == id)?.Name ?? parent?.DisplayTitle
+                    : parent?.DisplayTitle;
+
+                return BuildAddonCard(
+                    g.SelectMany(x => x.Entries).ToList(), addon, record, parent, parentName);
+            }));
+
+        return cards;
+    }
+
+    //
+    // One card for an addon this app installed. Everything it knows comes from the install record
+    // and the cached addon listing - there is no folder/name/GUID matching involved, because an
+    // addon has no GUID and its id shares no space with a mod's.
+    //
+    private static InstalledModCardViewModel BuildAddonCard(
+        List<InstalledMod> entries,
+        Addon? addon,
+        InstalledModRecord record,
+        InstalledModCardViewModel? parent,
+        string? parentName)
+    {
+        var plugin = entries.FirstOrDefault(m => m is { Target: InstalledModTarget.Client, IsPatcher: false });
+        var patcher = entries.FirstOrDefault(m => m is { Target: InstalledModTarget.Client, IsPatcher: true });
+        var client = plugin ?? patcher;
+        var server = entries.FirstOrDefault(m => m.Target == InstalledModTarget.Server);
+
+        var fileVersion = client?.Version ?? server?.Version;
+        var installedVersion = record.Version ?? fileVersion;
+
+        // Only versions the installed parent mod actually satisfies count as an update: an addon
+        // built for the next release of its parent isn't something this install can use yet.
+        var parentVersion = parent?.InstalledVersion;
+        var versions = (addon?.Versions ?? [])
+            .OrderByDescending(v => v.PublishedAt ?? DateTimeOffset.MinValue)
+            .ToList();
+
+        var latest = versions.FirstOrDefault(v =>
+            ModVersionMatcher.IsSatisfiedBy(v.ModVersionConstraint, parentVersion) == true);
+
+        string? detail = null;
+        if (latest is null && versions.Count > 0)
+        {
+            var newest = versions[0];
+            detail = parentVersion is null
+                ? $"{parentName ?? "Its parent mod"} isn't installed, so nothing here can be checked for updates"
+                : $"Newest published version ({newest.Version}) needs {parentName ?? "its parent mod"} {newest.ModVersionConstraint}, you have {parentVersion}";
+        }
+        else if (fileVersion is not null && !VersionsAreEquivalent(record.Version, fileVersion))
+        {
+            detail = $"Files report {fileVersion}";
+        }
+
+        if (!record.IsAppManaged)
+        {
+            detail = detail is null ? "Manually confirmed" : $"{detail} - manually confirmed";
+        }
+
+        return new InstalledModCardViewModel
+        {
+            Name = client?.Name ?? server!.Name,
+            InstalledVersion = installedVersion,
+            InstalledVersionDetail = detail,
+            InstalledAt = new[] { client?.InstalledAt, server?.InstalledAt }
+                .Where(d => d is not null).OrderBy(d => d).FirstOrDefault(),
+            HasClient = client is not null,
+            HasPlugin = plugin is not null,
+            HasPatcher = patcher is not null,
+            HasServer = server is not null,
+            LatestPublishedVersion = latest?.Version,
+            LatestUpdatedAt = addon?.UpdatedAt,
+            MatchedModName = addon?.Name ?? record.Name,
+            Author = addon?.Owner?.Name,
+            ContainsAds = addon?.ContainsAds == true,
+            ContainsAiContent = addon?.ContainsAiContent == true,
+            UpdateAvailable = ModVersionComparer.IsUpdateAvailable(installedVersion, latest?.Version),
+            ClientFolderPath = client?.FolderPath,
+            ServerFolderPath = server?.FolderPath,
+            ClientFolderName = client?.Name,
+            ServerFolderName = server?.Name,
+            FolderPath = client?.FolderPath ?? server!.FolderPath,
+            ModId = record.ModId,
+            IsAddon = true,
+            ParentModName = parentName,
+            ParentInstalledVersion = parentVersion,
+            IsAppManaged = record.IsAppManaged,
+            IsManualOverride = !record.IsAppManaged,
+            Entries = entries,
+        };
     }
 
     // Maps every folder a record identifies - whether an app-managed install placed it or a manual

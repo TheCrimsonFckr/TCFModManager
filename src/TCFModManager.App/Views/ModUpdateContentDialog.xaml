@@ -6,6 +6,7 @@
     xmlns:app="clr-namespace:TCFModManager.App"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
+    xmlns:views="clr-namespace:TCFModManager.App.Views"
     Style="{DynamicResource {x:Type ui:ContentDialog}}"
     IsFooterVisible="False">
     <!--
@@ -149,6 +150,7 @@
             <ScrollViewer
                 VerticalScrollBarVisibility="Auto"
                 Visibility="{Binding IsLoading, Converter={StaticResource FalseToVisible}}">
+              <StackPanel>
                 <ListBox
                     BorderThickness="0"
                     Background="Transparent"
@@ -232,6 +234,10 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+
+                <!-- Collapses itself when this mod has no addons, so it costs nothing here. -->
+                <views:AddonsSection DataContext="{Binding Addons}" />
+              </StackPanel>
             </ScrollViewer>
         </Grid>
     </Grid>

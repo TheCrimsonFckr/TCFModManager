@@ -33,9 +33,17 @@ The released build is self-contained, so no separate .NET runtime install is nee
 author (`@author`), filter by SPT release line, category, Fika compatibility, featured status, and
 toggles for hiding ads and AI-generated content. Sort by newest, last updated, most downloaded, most
 favourited or most endorsed. Cards show a status dot (installed / update available / disabled / not
-installed / nothing compatible published), a badge for mods that pull in dependencies, and an
-endorsement count when the mod has any. Clicking a card opens its details; "Refresh cache" re-pulls
-the catalog.
+installed / nothing compatible published), a badge for mods that pull in dependencies, a badge
+counting the mod's addons, and an endorsement count when the mod has any. Clicking a card opens its
+details; "Refresh cache" re-pulls the catalog.
+
+**Addons** are sp-mod.com's own concept: extra content published against a *parent mod* rather than
+against an SPT release, and versioned against that mod's version. They aren't listed as mods of
+their own - a mod's addons appear inside its details dialog, on Browse and on Installed alike, each
+with its own version picker and Install button. A version whose parent requirement your install
+doesn't meet is shown with the reason rather than hidden ("Needs Raid Review ^1.5.0 - you have
+1.4.2"). Installed addons appear on the Installed page as their own cards, labelled with the mod
+they attach to.
 
 **Installed** scans your SPT folder for what's actually there, both client mods
 (`BepInEx\plugins`, `BepInEx\patchers`) and server mods (`user\mods`), and matches them back to the
@@ -183,6 +191,7 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 | `Data\settings.json` | SPT install path and app settings |
 | `Data\installed-mods.json` | What this app installed, and every file it placed |
 | `Data\mod_cache.json` | Cached catalog |
+| `Data\addon_cache.json` | Cached addon catalog, with each addon's versions and download links |
 | `Data\spt_versions.json` | Cached SPT release list (refetched daily) |
 | `Data\dependency_flags.json` | Per-mod "has dependencies" answers, re-checked when a mod publishes |
 | `Data\logs\tcfmm-<date>.log` | Daily log |
@@ -205,6 +214,14 @@ Debug-level output in the same log. Logs rotate daily as `tcfmm-<yyyyMMdd>.log`.
 - Mods installed by hand are matched to a catalog listing by folder name, since there's no record to
   read. An ambiguous folder name is deliberately left unmatched rather than guessed at, so such a
   mod can be listed and removed but not updated from here.
+- An addon installed by hand is not recognised as an addon. Addons carry no GUID on sp-mod.com and
+  their ids belong to a different sequence from mods', so there is nothing to match one by; only an
+  addon this app installed is tracked as one. A hand-installed addon shows as an ordinary unmatched
+  card, the same as any hand-installed mod that matches nothing.
+- An addon is only offered where its parent mod is installed and its version fits. Installing an
+  addon does not pull its parent mod in - that would turn one click into a several-hundred-megabyte
+  download without warning. Its own mod dependencies *are* resolved and offered, exactly as a mod's
+  are.
 
 **Installing**
 
@@ -289,11 +306,22 @@ endpoints while building this the models and tests are built against the live sh
  `GET /mod/{id}/versions?include=dependencies`, which is why Browse's dependency badge needs its
  own lookup and disk cache.
 - The version objects embedded by `include=versions` on `/mods` are fuller than the docs suggest:
- they also carry `description`, `link`, `content_length` and `fika_compatibility`.
+ they also carry `description`, `link`, `content_length` and `fika_compatibility`. The same is true
+ of `/addons` - which is what lets an addon be installed straight from the cached catalog with no
+ per-addon lookup.
+- Addons are their own resource (`/addons`, `/addon/{id}`, `/addon/{id}/versions`,
+ `/addons/dependencies`) with their own id sequence, no GUID field, and
+ `mod_version_constraint` in place of `spt_version_constraint`. `/addons/dependencies` resolves an
+ addon's required **mods** and does not include its parent.
 
 Mod version constraints are resolved against the live SPT release list rather than parsed as
 semver ranges, so the UI names releases that actually exist instead of the boundary versions the
 constraints are written in terms of.
+
+An SPT constraint and an addon's `mod_version_constraint` share a parser (`SptVersionRange`) but not
+a policy. `SptVersionMatcher` deliberately ignores a constraint's patch-level floor, because SPT
+does not break mod compatibility within a release line; `ModVersionMatcher` reads the same syntax
+literally, because one mod's API against another absolutely does break between patches.
 
 ## Building
 

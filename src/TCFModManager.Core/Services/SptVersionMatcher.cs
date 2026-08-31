@@ -22,7 +22,8 @@ public static class SptVersionMatcher
         return SptVersionRange.TryParse(constraint, out var bounds) ? bounds.Contains(version) : null;
     }
 
-    private static Version? ParseVersion(string raw)
+    // Shared with ModVersionMatcher, which reads the same constraint syntax against a mod's version.
+    internal static Version? ParseVersion(string raw)
     {
         // Drop any pre-release/build suffix (e.g. "3.11.4-dev" -> "3.11.4").
         var core = raw.Split('-', 2)[0];

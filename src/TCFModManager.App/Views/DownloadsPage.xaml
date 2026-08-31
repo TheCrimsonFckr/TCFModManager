@@ -89,6 +89,14 @@
                                         <Run Text="{Binding VersionLabel, Mode=OneWay}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                     </TextBlock>
 
+                                    <!-- An addon's name rarely says it is one, and its version
+                                         number belongs to a different sequence from its parent's. -->
+                                    <TextBlock
+                                        Margin="0,2,0,0"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                        Text="Addon"
+                                        Visibility="{Binding IsAddon, Converter={StaticResource BoolToVisibility}}" />
+
                                     <!-- Indeterminate while installing, otherwise tracks download progress. -->
                                     <ProgressBar
                                         Height="6"

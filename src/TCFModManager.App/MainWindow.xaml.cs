@@ -24,8 +24,8 @@ public partial class MainWindow : FluentWindow
         };
 
         // Constructs and shows the mod details dialog when requested.
-        AppServices.ModDetailsOverlay.Requested += async (_, mod) =>
-            await new ModDetailsContentDialog(RootContentDialogPresenter, mod).ShowAsync();
+        AppServices.ModDetailsOverlay.Requested += async (_, request) =>
+            await new ModDetailsContentDialog(RootContentDialogPresenter, request).ShowAsync();
 
         // Constructs and shows the mod update dialog, awaitable so callers know when it closes.
         AppServices.ModUpdateOverlay.ShowAsync = async mod =>

@@ -59,13 +59,16 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
             $"Close {string.Join(" and ", running)} before {action} - files inside the SPT install are locked while it's running.");
     }
 
-    // Downloads and installs <paramref name="version"/> of <paramref name="mod"/> into
-    // <paramref name="installPath"/>. If a record already exists for this mod (an update), its old
-    // files are removed once the new archive has downloaded and extracted successfully.
+    // Downloads and installs <paramref name="version"/> of <paramref name="target"/> into
+    // <paramref name="installPath"/>. If a record already exists for this target (an update), its
+    // old files are removed once the new archive has downloaded and extracted successfully.
     // Cancellation is honoured up to the point the old version is removed; once files
     // start being placed into the install the operation runs to completion.
+    //
+    // A mod and an addon are installed by exactly the same path: an addon's archive is an ordinary
+    // SPT mod package, and its download link and size come from the same fields.
     public async Task<InstalledModRecord> InstallAsync(
-        Mod mod,
+        InstallTarget target,
         ModVersion version,
         string installPath,
         IProgress<string>? status = null,
@@ -76,11 +79,12 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
             throw new InvalidOperationException("No SPT install folder set - configure it on the Options page first.");
 
         if (string.IsNullOrWhiteSpace(version.Link))
-            throw new InvalidOperationException($"{mod.Name} {version.Version} has no download link.");
+            throw new InvalidOperationException($"{target.Name} {version.Version} has no download link.");
 
         EnsureInstallNotInUse("installing a mod");
 
-        AppLog.Info("Install", $"{mod.Name} {version.Version} (mod {mod.Id}) -> {installPath}");
+        AppLog.Info("Install",
+            $"{target.Name} {version.Version} ({(target.IsAddon ? "addon" : "mod")} {target.Id}) -> {installPath}");
 
         var workDir = CreateWorkDirectory(installPath, out var canMoveIntoInstall);
         AppLog.Debug("Install", $"work dir {workDir} (move into install: {canMoveIntoInstall})");
@@ -91,7 +95,7 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
         {
             ct.ThrowIfCancellationRequested();
 
-            status?.Report($"Downloading {mod.Name} {version.Version}...");
+            status?.Report($"Downloading {target.Name} {version.Version}...");
             await downloadService.DownloadAsync(version.Link, archivePath, downloadProgress, ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
@@ -112,11 +116,11 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
             if (!topLevelNames.Any(n => n is not null && KnownRootFolders.Contains(n)))
             {
                 AppLog.Warn("Install",
-                    $"{mod.Name} {version.Version} archive has no known root folder; top level: " +
+                    $"{target.Name} {version.Version} archive has no known root folder; top level: " +
                     string.Join(", ", Directory.GetFileSystemEntries(contentRoot).Select(Path.GetFileName)));
 
                 throw new InvalidOperationException(
-                    $"{mod.Name} {version.Version}'s archive doesn't look like a normal SPT mod package " +
+                    $"{target.Name} {version.Version}'s archive doesn't look like a normal SPT mod package " +
                     "(no BepInEx/user/SPT folder found in it) - install it manually instead.");
             }
 
@@ -134,7 +138,7 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
             EnsureInstallNotInUse("installing a mod");
 
             var manifest = manifestService.Load();
-            var existing = manifest.Mods.FirstOrDefault(m => m.ModId == mod.Id);
+            var existing = manifest.Mods.FirstOrDefault(target.Matches);
             if (existing is not null)
             {
                 status?.Report($"Removing the previously installed version ({existing.Version})...");
@@ -176,33 +180,33 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
                 // What was placed before the failure is recorded anyway, so those files stay
                 // app-managed: a retry overwrites them and a removal cleans them up. Without this an
                 // interrupted update leaves the old version deleted and the new one untracked.
-                SaveRecord(mod, version, placedFiles, incomplete: true);
+                SaveRecord(target, version, placedFiles, incomplete: true);
 
                 AppLog.Error("Install",
-                    $"{mod.Name} {version.Version} incomplete after {placedFiles.Count}/{sourceFiles.Length} file(s)", ex);
+                    $"{target.Name} {version.Version} incomplete after {placedFiles.Count}/{sourceFiles.Length} file(s)", ex);
 
                 throw new InvalidOperationException(
-                    $"{mod.Name} {version.Version} was only partly installed - {placedFiles.Count} of {sourceFiles.Length} " +
+                    $"{target.Name} {version.Version} was only partly installed - {placedFiles.Count} of {sourceFiles.Length} " +
                     $"files were placed before this failed: {ex.Message} Close SPT and its server, then install it again.",
                     ex);
             }
 
-            var record = SaveRecord(mod, version, placedFiles, incomplete: false);
+            var record = SaveRecord(target, version, placedFiles, incomplete: false);
 
             AppLog.Info("Install",
-                $"{mod.Name} {version.Version} placed {placedFiles.Count} file(s) in folders [{string.Join(", ", record.Folders)}]");
+                $"{target.Name} {version.Version} placed {placedFiles.Count} file(s) in folders [{string.Join(", ", record.Folders)}]");
 
             status?.Report("Done.");
             return record;
         }
         catch (OperationCanceledException)
         {
-            AppLog.Info("Install", $"{mod.Name} {version.Version} cancelled");
+            AppLog.Info("Install", $"{target.Name} {version.Version} cancelled");
             throw;
         }
         catch (Exception ex)
         {
-            AppLog.Error("Install", $"{mod.Name} {version.Version} failed", ex);
+            AppLog.Error("Install", $"{target.Name} {version.Version} failed", ex);
             throw;
         }
         finally
@@ -214,13 +218,14 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
     // Writes the record for what an install placed, replacing any previous record for the same mod.
     // The manifest is reloaded rather than reusing an earlier copy, since UninstallAsync may have
     // saved a removal of the old record in between.
-    private InstalledModRecord SaveRecord(Mod mod, ModVersion version, List<string> placedFiles, bool incomplete)
+    private InstalledModRecord SaveRecord(InstallTarget target, ModVersion version, List<string> placedFiles, bool incomplete)
     {
         var record = new InstalledModRecord
         {
-            ModId = mod.Id,
-            Guid = mod.Guid,
-            Name = mod.Name ?? $"Mod {mod.Id}",
+            ModId = target.Id,
+            IsAddon = target.IsAddon,
+            Guid = target.Guid,
+            Name = target.Name,
             VersionId = version.Id,
             Version = version.Version ?? "unknown",
             InstalledAt = DateTimeOffset.UtcNow,
@@ -230,7 +235,7 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
         };
 
         var current = manifestService.Load();
-        current.Mods.RemoveAll(m => m.ModId == mod.Id);
+        current.Mods.RemoveAll(target.Matches);
         current.Mods.Add(record);
         manifestService.Save(current);
 
@@ -295,7 +300,7 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
         }
 
         var manifest = manifestService.Load();
-        manifest.Mods.RemoveAll(m => m.ModId == record.ModId);
+        manifest.Mods.RemoveAll(m => m.ModId == record.ModId && m.IsAddon == record.IsAddon);
         manifestService.Save(manifest);
 
         return Task.FromResult(new UninstallResult(deleted, failed, kept.Count, kept.Folder));

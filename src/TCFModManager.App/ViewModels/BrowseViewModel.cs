@@ -50,6 +50,13 @@ public partial class BrowseViewModel : ObservableObject
             await RefreshInstalledIndexAsync();
             GoToPage(CurrentPage);
         };
+
+        // The addon catalog usually settles after the first page has already rendered, so the
+        // "N addons" badges are redrawn once it does rather than waiting for a page change.
+        AppServices.Addons.AddonsChanged += (_, _) =>
+        {
+            if (HasLoadedResults) GoToPage(CurrentPage);
+        };
     }
 
     // Set while ClearFilters is resetting several properties at once, so each individual
@@ -175,6 +182,7 @@ public partial class BrowseViewModel : ObservableObject
         {
             await AppServices.SptCatalog.EnsureLoadedAsync();
             await AppServices.ModCache.EnsureLoadedAsync();
+            await AppServices.Addons.EnsureLoadedAsync();
             await RefreshInstalledIndexAsync();
             AppLog.Debug("Browse", "SearchAsync: ModCache ready, applying filter");
             EnsureSptVersionOptionsBuilt();
@@ -215,6 +223,7 @@ public partial class BrowseViewModel : ObservableObject
         try
         {
             await AppServices.ModCache.RefreshAsync();
+            await AppServices.Addons.RefreshAsync();
             await RefreshInstalledIndexAsync();
             AppLog.Debug("Browse", "RefreshCacheAsync: ModCache refreshed, applying filter");
             ApplyFilter();
@@ -288,7 +297,8 @@ public partial class BrowseViewModel : ObservableObject
         Results.Clear();
         foreach (var mod in _filtered.Skip((CurrentPage - 1) * PageSize).Take(PageSize))
             Results.Add(ModCardViewModel.From(
-                mod, installedVersion, FindInstalledMatch(mod), _selectedLines, AppServices.SptCatalog.Releases));
+                mod, installedVersion, FindInstalledMatch(mod), _selectedLines, AppServices.SptCatalog.Releases,
+                AppServices.Addons.CountFor(mod.Id)));
 
         AppLog.Debug("Browse", $"GoToPage: page {CurrentPage}/{TotalPages} rendered in {sw.ElapsedMilliseconds}ms");
     }
@@ -311,8 +321,12 @@ public partial class BrowseViewModel : ObservableObject
         // The manifest is passed even though Browse ignores IsAppManaged: it's what lets an
         // app-installed mod resolve to its exact catalog listing rather than a folder-name guess.
         var matched = InstalledModCardViewModel.BuildFrom(
-            scanned, AppServices.ModCache.AllMods, AppServices.SptEnvironment.InstalledVersion,
-            AppServices.InstallManifest.Load().Mods);
+                scanned, AppServices.ModCache.AllMods, AppServices.SptEnvironment.InstalledVersion,
+                AppServices.InstallManifest.Load().Mods, AppServices.Addons.AllAddons)
+            // Browse's cards are mods, so addon cards are left out of both indexes below - an
+            // addon sharing a mod's name would otherwise mark that mod as installed.
+            .Where(m => !m.IsAddon)
+            .ToList();
 
         // Keyed by Guid when available, MatchedModName as a fallback. Only matched entries are indexed.
         _installedByGuid = matched
@@ -568,7 +582,7 @@ public partial class BrowseViewModel : ObservableObject
         }
 
         var chosenVersion = chosen.Version;
-        AppServices.DownloadQueue.Enqueue(mod, chosenVersion, installPath, () => ResolveVersionLinkAsync(mod, chosenVersion));
+        AppServices.DownloadQueue.Enqueue(InstallTarget.For(mod), chosenVersion, installPath, () => ResolveVersionLinkAsync(mod, chosenVersion));
         StatusMessage = $"Queued {mod.Name} {chosenVersion} - see the Downloads page for progress.";
     }
 
@@ -586,7 +600,9 @@ public partial class BrowseViewModel : ObservableObject
         try
         {
             var details = await _spModApi.GetModAsync(mod.Id.ToString(), include: "versions,license,category");
-            AppServices.ModDetailsOverlay.Show(details);
+
+            // The installed version is what this mod's addons check their own constraints against.
+            AppServices.ModDetailsOverlay.Show(details, FindInstalledMatch(mod)?.InstalledVersion);
         }
         catch (SpModApiException ex)
         {

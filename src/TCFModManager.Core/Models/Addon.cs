@@ -40,6 +40,14 @@ public sealed class AddonVersionSummary
     public string? Version { get; set; }
     public string? ModVersionConstraint { get; set; }
     public int? Downloads { get; set; }
+
+    // The embedded version objects are fuller than the name suggests: include=versions on /addons
+    // carries the changelog, download link and archive size too, so an addon can be installed
+    // straight from the cached catalog without a per-addon version lookup.
+    public string? Description { get; set; }
+    public string? Link { get; set; }
+    public long? ContentLength { get; set; }
+
     public DateTimeOffset? PublishedAt { get; set; }
 }
 

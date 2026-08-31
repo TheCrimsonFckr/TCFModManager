@@ -38,6 +38,19 @@ public readonly record struct SptVersionBounds(Version? Min, bool MinExclusive, 
         if (MaxExclusive is { } max && version >= max) return false;
         return true;
     }
+
+    //
+    // The same window read literally, with none of the SPT release-line relaxation Contains applies.
+    // For a constraint written against another MOD's version - an addon's mod_version_constraint -
+    // where a bare "1.7.0" means that release and ">=1.5.3" means 1.5.3 or newer, full stop. Mod
+    // authors do break things between patch releases; SPT is the special case, not the rule.
+    //
+    public bool Allows(Version version)
+    {
+        if (Min is { } min && (MinExclusive ? version <= min : version < min)) return false;
+        if (MaxExclusive is { } max && version >= max) return false;
+        return true;
+    }
 }
 
 // 

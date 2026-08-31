@@ -43,6 +43,10 @@ internal static class AppServices
     // The full sp-mod.com catalog, fetched once and reused across the app session.
     public static ModCacheViewModel ModCache { get; } = new();
 
+    // Every addon published on sp-mod.com, cached the same way the mod catalog is. Declared after
+    // ModCache because an addon is only ever surfaced under a parent mod from that catalog.
+    public static AddonCacheViewModel Addons { get; } = new();
+
     // Shared across every Browse page navigation, not re-created per visit.
     public static BrowseViewModel Browse { get; } = new();
 

@@ -80,6 +80,17 @@ public sealed class ModCardViewModel
     // Only meaningful when IsInstalled is true. True if a compatible newer version is published, false if up to date, null if unknown.
     public bool? UpdateAvailable { get; private init; }
 
+    //
+    // How many addons this mod has published. Unlike the dependency badge next to it, this needs no
+    // per-card lookup and no debounce: the whole addon catalog is under a hundred entries and is
+    // already in memory, so the answer is a dictionary hit.
+    //
+    public int AddonCount { get; private init; }
+
+    public bool HasAddons => AddonCount > 0;
+
+    public string AddonBadgeText => AddonCount == 1 ? "1 addon" : $"{AddonCount} addons";
+
     // 
     // Builds a card. <paramref name="selectedLines"/> is the SPT release lines currently ticked in
     // Browse's filter; the card's SPT text describes what the mod supports on exactly those lines,
@@ -91,7 +102,8 @@ public sealed class ModCardViewModel
         string? installedSptVersion,
         InstalledModCardViewModel? installedMatch = null,
         IReadOnlyList<(int Major, int Minor)>? selectedLines = null,
-        IReadOnlyList<SptRelease>? releases = null)
+        IReadOnlyList<SptRelease>? releases = null,
+        int addonCount = 0)
     {
         var newest = LatestVersion(mod);
         var shown = PickDisplayVersion(mod, installedSptVersion) ?? newest;
@@ -145,6 +157,7 @@ public sealed class ModCardViewModel
             IsInstalled = installedMatch is not null,
             IsDisabled = installedMatch?.IsDisabled == true,
             UpdateAvailable = installedMatch?.UpdateAvailable,
+            AddonCount = addonCount,
         };
     }
 
