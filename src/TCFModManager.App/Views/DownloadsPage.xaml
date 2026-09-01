@@ -12,16 +12,18 @@
         <converters:CountToVisibilityConverter x:Key="HasItems" />
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
 
-        <!-- One figure in its own fixed-width container. Run together on a single line, a transfer
-             readout shuffles sideways every time a number changes width; a box per figure keeps
-             each one anchored to its own left edge and its caption says which is which. -->
+        <!-- One figure in its own fixed-width slot. Run together on a single line, a transfer
+             readout shuffles sideways every time a number changes width; a slot per figure keeps
+             each one anchored to its own left edge and its caption says which is which.
+
+             No fill and no border on purpose: the fixed width is what stops the jumping, and drawn
+             boxes would put three more outlines on every card on a page that can be working through
+             a hundred mods. -->
         <Style x:Key="StatBox" TargetType="Border">
-            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorSecondaryBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="4" />
-            <Setter Property="Padding" Value="8,4" />
-            <Setter Property="Margin" Value="0,6,6,0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0,6,12,0" />
         </Style>
     </Page.Resources>
     <Grid Margin="16">
@@ -50,12 +52,11 @@
                     <Border Style="{StaticResource StatBox}" Width="130">
                         <StackPanel>
                             <TextBlock
-                                FontSize="11"
+                                FontSize="10"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 Text="Queue" />
                             <TextBlock
-                                FontSize="13"
-                                FontWeight="SemiBold"
+                                FontSize="11"
                                 TextTrimming="CharacterEllipsis"
                                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                 Text="{Binding SummaryProgress}" />
@@ -65,12 +66,11 @@
                     <Border Style="{StaticResource StatBox}" Width="130">
                         <StackPanel>
                             <TextBlock
-                                FontSize="11"
+                                FontSize="10"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 Text="Left to fetch" />
                             <TextBlock
-                                FontSize="13"
-                                FontWeight="SemiBold"
+                                FontSize="11"
                                 TextTrimming="CharacterEllipsis"
                                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                 Text="{Binding SummaryRemaining}" />
@@ -80,12 +80,11 @@
                     <Border Style="{StaticResource StatBox}" Width="130">
                         <StackPanel>
                             <TextBlock
-                                FontSize="11"
+                                FontSize="10"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 Text="Time to go" />
                             <TextBlock
-                                FontSize="13"
-                                FontWeight="SemiBold"
+                                FontSize="11"
                                 TextTrimming="CharacterEllipsis"
                                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                 Text="{Binding SummaryEta}" />
@@ -100,12 +99,11 @@
                         Visibility="{Binding HasUnsized, Converter={StaticResource BoolToVisibility}}">
                         <StackPanel>
                             <TextBlock
-                                FontSize="11"
+                                FontSize="10"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 Text="Not sized yet" />
                             <TextBlock
-                                FontSize="13"
-                                FontWeight="SemiBold"
+                                FontSize="11"
                                 TextTrimming="CharacterEllipsis"
                                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                 Text="{Binding SummaryUnsized}" />
@@ -192,12 +190,11 @@
                                         <Border Style="{StaticResource StatBox}" Width="150">
                                             <StackPanel>
                                                 <TextBlock
-                                                    FontSize="11"
+                                                    FontSize="10"
                                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                     Text="Downloaded" />
                                                 <TextBlock
-                                                    FontSize="13"
-                                                    FontWeight="SemiBold"
+                                                    FontSize="11"
                                                     TextTrimming="CharacterEllipsis"
                                                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                     Text="{Binding TransferredValue}" />
@@ -207,12 +204,11 @@
                                         <Border Style="{StaticResource StatBox}" Width="110">
                                             <StackPanel>
                                                 <TextBlock
-                                                    FontSize="11"
+                                                    FontSize="10"
                                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                     Text="Speed" />
                                                 <TextBlock
-                                                    FontSize="13"
-                                                    FontWeight="SemiBold"
+                                                    FontSize="11"
                                                     TextTrimming="CharacterEllipsis"
                                                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                     Text="{Binding RateValue}" />
@@ -222,12 +218,11 @@
                                         <Border Style="{StaticResource StatBox}" Width="110">
                                             <StackPanel>
                                                 <TextBlock
-                                                    FontSize="11"
+                                                    FontSize="10"
                                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                     Text="Time left" />
                                                 <TextBlock
-                                                    FontSize="13"
-                                                    FontWeight="SemiBold"
+                                                    FontSize="11"
                                                     TextTrimming="CharacterEllipsis"
                                                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                     Text="{Binding EtaValue}" />
