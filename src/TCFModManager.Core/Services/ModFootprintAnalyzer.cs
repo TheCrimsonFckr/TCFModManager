@@ -108,7 +108,11 @@ public static class ModFootprintAnalyzer
 
         foreach (var entry in entries)
         {
-            WalkPath(entry.FolderPath, totals);
+            // BepInEx loads the client half, the SPT server loads the other. Which one a file sits
+            // in is the only thing that decides where its cost can land, so it is decided here
+            // rather than assumed later.
+            var side = entry.Target == InstalledModTarget.Server ? totals.Server : totals.Client;
+            WalkPath(entry.FolderPath, totals, side);
         }
 
         return new ModFootprint
@@ -118,27 +122,30 @@ public static class ModFootprintAnalyzer
             FileCount = totals.FileCount,
             AssemblyCount = totals.AssemblyCount,
             UnreadableAssemblyCount = totals.UnreadableAssemblyCount,
-            BundleCount = totals.BundleCount,
-            BundleBytes = totals.BundleBytes,
             HasPatcher = entries.Any(e => e.IsPatcher),
             HasServerHalf = entries.Any(e => e.Target == InstalledModTarget.Server),
-            HarmonyPatchClassCount = totals.HarmonyPatchClasses,
-            ModulePatchClassCount = totals.ModulePatchClasses,
-            PerFrameMethods = totals.PerFrameMethods
-                .Distinct(StringComparer.Ordinal)
-                .Order(StringComparer.Ordinal)
-                .Take(MaxPerFrameMethodsReported)
-                .ToList(),
-            PerFrameTypeCount = totals.PerFrameTypes.Count,
-            FrameUpdateTypeCount = totals.FrameUpdateTypes.Count,
-            PhysicsTypeCount = totals.PhysicsTypes.Count,
-            GuiTypeCount = totals.GuiTypes.Count,
-            ImageEffectTypeCount = totals.ImageEffectTypes.Count,
-            CameraCallbackTypeCount = totals.CameraCallbackTypes.Count,
+            PatchClassCount = totals.Client.PatchClasses,
+            ServerPatchClassCount = totals.Server.PatchClasses,
+            BundleCount = totals.Client.BundleCount,
+            BundleBytes = totals.Client.BundleBytes,
+            ServerBundleCount = totals.Server.BundleCount,
+            ServerBundleBytes = totals.Server.BundleBytes,
+            PerFrameMethods = Reported(totals.Client.PerFrameMethods),
+            PerFrameMethodCount = totals.Client.PerFrameMethods.Distinct(StringComparer.Ordinal).Count(),
+            PerFrameTypeCount = totals.Client.PerFrameTypes.Count,
+            FrameUpdateTypeCount = totals.Client.FrameUpdateTypes.Count,
+            PhysicsTypeCount = totals.Client.PhysicsTypes.Count,
+            GuiTypeCount = totals.Client.GuiTypes.Count,
+            ImageEffectTypeCount = totals.Client.ImageEffectTypes.Count,
+            CameraCallbackTypeCount = totals.Client.CameraCallbackTypes.Count,
+            ServerPerFrameTypeCount = totals.Server.PerFrameTypes.Count,
             AnalysedAt = DateTimeOffset.UtcNow,
             Stamp = StampFor(entries),
         };
     }
+
+    private static List<string> Reported(List<string> methods) =>
+        [.. methods.Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).Take(MaxPerFrameMethodsReported)];
 
     // The cache key for a mod folder - see ModFootprint.FolderKey for why it is lowercased here.
     public static string KeyFor(string folderPath) => folderPath.ToLowerInvariant();
@@ -190,26 +197,39 @@ public static class ModFootprintAnalyzer
         return $"{files}:{bytes}:{newest}";
     }
 
-    private sealed class Totals
+    //
+    // Counted separately for the client and server halves of a mod, because the page says where a
+    // cost lands and pooling them would let a server assembly's patch class be labelled as client
+    // CPU work. No mod in the sample does that today - every server half read as zero - but nothing
+    // in the format stops one, and "no example yet" is not the same as "cannot happen".
+    //
+    private sealed class Side
     {
-        public long TotalBytes;
-        public int FileCount;
-        public int AssemblyCount;
-        public int UnreadableAssemblyCount;
+        public int PatchClasses;
         public int BundleCount;
         public long BundleBytes;
-        public int HarmonyPatchClasses;
-        public int ModulePatchClasses;
-        public readonly List<string> PerFrameMethods = [];
         public readonly HashSet<string> PerFrameTypes = new(StringComparer.Ordinal);
         public readonly HashSet<string> FrameUpdateTypes = new(StringComparer.Ordinal);
         public readonly HashSet<string> PhysicsTypes = new(StringComparer.Ordinal);
         public readonly HashSet<string> GuiTypes = new(StringComparer.Ordinal);
         public readonly HashSet<string> ImageEffectTypes = new(StringComparer.Ordinal);
         public readonly HashSet<string> CameraCallbackTypes = new(StringComparer.Ordinal);
+        public readonly List<string> PerFrameMethods = [];
     }
 
-    private static void WalkPath(string path, Totals totals)
+    private sealed class Totals
+    {
+        // Whole-mod facts, which the Disk line reports as a total across both halves.
+        public long TotalBytes;
+        public int FileCount;
+        public int AssemblyCount;
+        public int UnreadableAssemblyCount;
+
+        public readonly Side Client = new();
+        public readonly Side Server = new();
+    }
+
+    private static void WalkPath(string path, Totals totals, Side side)
     {
         foreach (var file in EnumerateFiles(path))
         {
@@ -230,14 +250,14 @@ public static class ModFootprintAnalyzer
 
             if (string.Equals(extension, BundleExtension, StringComparison.OrdinalIgnoreCase))
             {
-                totals.BundleCount++;
-                totals.BundleBytes += length;
+                side.BundleCount++;
+                side.BundleBytes += length;
                 continue;
             }
 
             if (string.Equals(extension, ".dll", StringComparison.OrdinalIgnoreCase))
             {
-                ReadAssembly(file, totals);
+                ReadAssembly(file, totals, side);
             }
         }
     }
@@ -257,7 +277,7 @@ public static class ModFootprintAnalyzer
         }
     }
 
-    private static void ReadAssembly(string dllPath, Totals totals)
+    private static void ReadAssembly(string dllPath, Totals totals, Side side)
     {
         try
         {
@@ -275,7 +295,7 @@ public static class ModFootprintAnalyzer
             foreach (var typeHandle in reader.TypeDefinitions)
             {
                 var typeDef = reader.GetTypeDefinition(typeHandle);
-                ReadType(reader, typeDef, totals);
+                ReadType(reader, typeDef, side);
             }
         }
         catch (BadImageFormatException)
@@ -289,19 +309,19 @@ public static class ModFootprintAnalyzer
         }
     }
 
-    private static void ReadType(MetadataReader reader, TypeDefinition typeDef, Totals totals)
+    private static void ReadType(MetadataReader reader, TypeDefinition typeDef, Side side)
     {
         var baseName = RootBaseTypeName(reader, typeDef);
 
         if (baseName == ModulePatchBaseName)
         {
-            totals.ModulePatchClasses++;
+            side.PatchClasses++;
         }
         else if (HasHarmonyPatchAttribute(reader, typeDef))
         {
             // Counted in the same unit as a ModulePatch subclass, and never twice for one type -
             // a ModulePatch that also carries the attribute is one patch class, not two.
-            totals.HarmonyPatchClasses++;
+            side.PatchClasses++;
         }
 
         if (!IsUnityComponentBase(baseName)) return;
@@ -320,21 +340,21 @@ public static class ModFootprintAnalyzer
             if (method.Attributes.HasFlag(MethodAttributes.Static)) continue;
             if (ParameterCount(reader, method) != expected.Parameters) continue;
 
-            totals.PerFrameMethods.Add($"{typeName}.{name}");
+            side.PerFrameMethods.Add($"{typeName}.{name}");
 
             // The union drives the level, so widening the vocabulary never lets a mod declaring
             // recurring work slip below one declaring less. The per-kind sets exist only so the
             // explanation can be specific: a physics method and a full-screen image effect are not
             // the same claim as an Update, and must not be described as one.
-            totals.PerFrameTypes.Add(typeName);
+            side.PerFrameTypes.Add(typeName);
 
             switch (expected.Kind)
             {
-                case PerFrameKind.FrameUpdate: totals.FrameUpdateTypes.Add(typeName); break;
-                case PerFrameKind.Physics: totals.PhysicsTypes.Add(typeName); break;
-                case PerFrameKind.Gui: totals.GuiTypes.Add(typeName); break;
-                case PerFrameKind.ImageEffect: totals.ImageEffectTypes.Add(typeName); break;
-                case PerFrameKind.CameraCallback: totals.CameraCallbackTypes.Add(typeName); break;
+                case PerFrameKind.FrameUpdate: side.FrameUpdateTypes.Add(typeName); break;
+                case PerFrameKind.Physics: side.PhysicsTypes.Add(typeName); break;
+                case PerFrameKind.Gui: side.GuiTypes.Add(typeName); break;
+                case PerFrameKind.ImageEffect: side.ImageEffectTypes.Add(typeName); break;
+                case PerFrameKind.CameraCallback: side.CameraCallbackTypes.Add(typeName); break;
             }
         }
     }

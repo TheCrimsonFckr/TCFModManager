@@ -35,8 +35,8 @@ public class ModFootprintStoreTests : IDisposable
         BundleBytes = 1024,
         HasPatcher = true,
         HasServerHalf = true,
-        HarmonyPatchClassCount = 3,
-        ModulePatchClassCount = 9,
+        PatchClassCount = 12,
+        ServerPatchClassCount = 2,
         PerFrameMethods = ["Ticker.Update"],
         AnalysedAt = new DateTimeOffset(2026, 9, 1, 12, 0, 0, TimeSpan.Zero),
         Stamp = "7:12345:1000",
@@ -62,8 +62,8 @@ public class ModFootprintStoreTests : IDisposable
         Assert.Equal(footprint.BundleBytes, loaded.BundleBytes);
         Assert.True(loaded.HasPatcher);
         Assert.True(loaded.HasServerHalf);
-        Assert.Equal(footprint.HarmonyPatchClassCount, loaded.HarmonyPatchClassCount);
-        Assert.Equal(footprint.ModulePatchClassCount, loaded.ModulePatchClassCount);
+        Assert.Equal(footprint.PatchClassCount, loaded.PatchClassCount);
+        Assert.Equal(footprint.ServerPatchClassCount, loaded.ServerPatchClassCount);
         Assert.Equal(footprint.Stamp, loaded.Stamp);
         Assert.Equal(footprint.AnalysedAt, loaded.AnalysedAt);
         Assert.Single(loaded.PerFrameMethods, m => m == "Ticker.Update");

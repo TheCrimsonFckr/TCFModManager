@@ -8,10 +8,11 @@ namespace TCFModManager.Core.Tests;
 public class ModFootprintTests
 {
     private static ModFootprint Footprint(
-        int harmonyPatches = 0,
-        int modulePatches = 0,
+        int patches = 0,
+        int serverPatches = 0,
         int perFrameTypes = 0,
         long bundleBytes = 0,
+        long serverBundleBytes = 0,
         bool patcher = false,
         bool serverHalf = false,
         int assemblies = 1,
@@ -19,12 +20,14 @@ public class ModFootprintTests
         new()
         {
             FolderKey = @"c:\spt\bepinex\plugins\example",
-            HarmonyPatchClassCount = harmonyPatches,
-            ModulePatchClassCount = modulePatches,
+            PatchClassCount = patches,
+            ServerPatchClassCount = serverPatches,
             PerFrameTypeCount = perFrameTypes,
             PerFrameMethods = Enumerable.Range(0, perFrameTypes).Select(i => $"Type{i}.Update").ToList(),
             BundleBytes = bundleBytes,
             BundleCount = bundleBytes > 0 ? 1 : 0,
+            ServerBundleBytes = serverBundleBytes,
+            ServerBundleCount = serverBundleBytes > 0 ? 1 : 0,
             HasPatcher = patcher,
             HasServerHalf = serverHalf,
             AssemblyCount = assemblies,
@@ -66,12 +69,25 @@ public class ModFootprintTests
     }
 
     [Fact]
-    public void PatchCountSpansBothPatchStyles()
+    public void ServerPatchesAreNeverCountedAsClientReach()
     {
-        var footprint = Footprint(harmonyPatches: 4, modulePatches: 7);
+        // The page says where a cost lands. A patch class found in a server assembly is not work
+        // happening in the game, and must not raise the level or appear in the client's count.
+        var footprint = Footprint(patches: 0, serverPatches: 40);
 
-        Assert.Equal(11, footprint.PatchClassCount);
-        Assert.True(footprint.Signals.HasFlag(ModFootprintSignal.SomePatches));
+        Assert.Equal(0, footprint.PatchClassCount);
+        Assert.Equal(40, footprint.ServerPatchClassCount);
+        Assert.Equal(0, footprint.Score);
+        Assert.Equal(ModFootprintLevel.Light, footprint.Level);
+    }
+
+    [Fact]
+    public void ServerBundlesDoNotScoreAsClientMemory()
+    {
+        var footprint = Footprint(serverBundleBytes: ModFootprint.LargeBundleBytes * 4);
+
+        Assert.False(footprint.Signals.HasFlag(ModFootprintSignal.LargeBundles));
+        Assert.Equal(0, footprint.Score);
     }
 
     [Theory]
@@ -80,7 +96,7 @@ public class ModFootprintTests
     [InlineData(ModFootprint.ExtensivePatchesThreshold, ModFootprintSignal.ExtensivePatches, 3)]
     public void EachPatchBandScoresOnceAndOnlyItsOwnSignal(int patches, ModFootprintSignal expected, int score)
     {
-        var footprint = Footprint(modulePatches: patches);
+        var footprint = Footprint(patches: patches);
         var patchSignals = footprint.Signals
             & (ModFootprintSignal.SomePatches | ModFootprintSignal.ManyPatches | ModFootprintSignal.ExtensivePatches);
 
@@ -91,7 +107,7 @@ public class ModFootprintTests
     [Fact]
     public void JustBelowSomePatchesScoresNothing()
     {
-        var footprint = Footprint(modulePatches: ModFootprint.SomePatchesThreshold - 1);
+        var footprint = Footprint(patches: ModFootprint.SomePatchesThreshold - 1);
 
         Assert.Equal(ModFootprintSignal.None, footprint.Signals);
     }
@@ -114,7 +130,7 @@ public class ModFootprintTests
     [InlineData("Disable Headshot Protect", 1, 0, ModFootprintLevel.Light)]
     public void RealModShapesLandWhereTheyShould(string mod, int patches, int perFrameTypes, ModFootprintLevel expected)
     {
-        var footprint = Footprint(modulePatches: patches, perFrameTypes: perFrameTypes);
+        var footprint = Footprint(patches: patches, perFrameTypes: perFrameTypes);
 
         Assert.True(
             footprint.Level == expected,
@@ -163,7 +179,7 @@ public class ModFootprintTests
     public void UnknownWinsOverWhateverWasCounted()
     {
         // Counts from a partial read must not be presented as an answer when nothing was readable.
-        var footprint = Footprint(modulePatches: 80, perFrameTypes: 9, assemblies: 1, unreadable: 1);
+        var footprint = Footprint(patches: 80, perFrameTypes: 9, assemblies: 1, unreadable: 1);
 
         Assert.Equal(ModFootprintLevel.Unknown, footprint.Level);
     }
@@ -171,7 +187,7 @@ public class ModFootprintTests
     [Fact]
     public void SomeAssembliesUnreadableStillProducesALevel()
     {
-        var footprint = Footprint(modulePatches: 30, perFrameTypes: 1, assemblies: 3, unreadable: 1);
+        var footprint = Footprint(patches: 30, perFrameTypes: 1, assemblies: 3, unreadable: 1);
 
         Assert.True(footprint.Signals.HasFlag(ModFootprintSignal.Unreadable));
         Assert.Equal(ModFootprintLevel.Moderate, footprint.Level);

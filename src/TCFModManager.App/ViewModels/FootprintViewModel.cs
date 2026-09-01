@@ -181,17 +181,18 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
                         ? "Ships 1 patch class"
                         : $"Ships {print.PatchClassCount} patch classes",
                     "A patch class alters one of the game's own methods - usually a single one, though "
-                    + "one class can target several. Where a patch sits is what decides its cost, and "
-                    + "that is exactly what reading the files cannot establish: a patch on a method the "
-                    + "game calls thousands of times a second is indistinguishable here from one on a "
-                    + "menu button. Read this as how far the mod reaches, not as what it costs."));
+                    + "one class can target several, so this is a floor rather than a total. Where a "
+                    + "patch sits is what decides its cost, and that is exactly what reading the files "
+                    + "cannot establish: a patch on a method the game calls thousands of times a second "
+                    + "is indistinguishable here from one on a menu button. Read this as how far the mod "
+                    + "reaches, not as what it costs."));
             }
 
             if (print.BundleCount > 0)
             {
                 findings.Add(new FootprintFinding(
                     "Client · Memory",
-                    $"{Size(print.BundleBytes)} in {(print.BundleCount == 1 ? "1 file" : $"{print.BundleCount} files")} with a .bundle extension",
+                    $"{Size(print.BundleBytes)} in {Files(print.BundleCount)} with a .bundle extension",
                     "Asset bundles hold textures, models, sounds and shaders, and take up memory once "
                     + "loaded - video memory too, for anything the graphics card needs. These are "
                     + "identified by their file extension and measured on disk; when and whether the mod "
@@ -217,15 +218,38 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
                     + "cannot cost you frame rate directly."));
             }
 
+            if (print.ServerPatchClassCount > 0)
+            {
+                findings.Add(new FootprintFinding(
+                    "Server · CPU",
+                    print.ServerPatchClassCount == 1
+                        ? "1 of those is a patch class"
+                        : $"{print.ServerPatchClassCount} of those are patch classes",
+                    "Found in the server half, so this alters the server rather than the game. It is "
+                    + "counted separately from the client figure above and does not affect this mod's "
+                    + "level, which describes the client only."));
+            }
+
+            if (print.ServerBundleCount > 0)
+            {
+                findings.Add(new FootprintFinding(
+                    "Server · Memory",
+                    $"{Size(print.ServerBundleBytes)} in {Files(print.ServerBundleCount)} with a .bundle extension",
+                    "These sit in the server half, so they are the server's memory rather than the "
+                    + "game's."));
+            }
+
             findings.Add(new FootprintFinding(
                 "Disk",
-                $"{Size(print.TotalBytes)} across {(print.FileCount == 1 ? "1 file" : $"{print.FileCount} files")}",
-                print.AssemblyCount switch
+                $"{Size(print.TotalBytes)} across {Files(print.FileCount)}",
+                (print.AssemblyCount switch
                 {
                     0 => "None of them are managed assemblies, so there was no compiled code here to read.",
                     1 => "1 of them is a managed assembly, which is what everything above was read from.",
                     _ => $"{print.AssemblyCount} of them are managed assemblies, which is what everything above was read from.",
-                }));
+                })
+                + " This is everything in the mod's own folders, so anything installed into them - an "
+                + "addon that has no folder of its own, for instance - is counted here too."));
 
             if (print.UnreadableAssemblyCount > 0)
             {
@@ -234,6 +258,26 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
                     $"{print.UnreadableAssemblyCount} of {print.AssemblyCount} assemblies could not be read",
                     "Every count above is a floor rather than a total. An assembly can be unreadable "
                     + "because it is obfuscated, packed, or built in a way this doesn't parse."));
+            }
+
+            if (print.PerFrameMethodCount > print.PerFrameMethods.Count)
+            {
+                findings.Add(new FootprintFinding(
+                    "Note",
+                    $"Showing {print.PerFrameMethods.Count} of {print.PerFrameMethodCount} callback names",
+                    "The counts above are complete; only the list of method names below is shortened."));
+            }
+
+            if (print.ServerPerFrameTypeCount > 0)
+            {
+                findings.Add(new FootprintFinding(
+                    "Note",
+                    print.ServerPerFrameTypeCount == 1
+                        ? "1 type in the server half looks like a game component"
+                        : $"{print.ServerPerFrameTypeCount} types in the server half look like game components",
+                    "Server code has no reason to use them, and the check matches on type name alone, so "
+                    + "this is more likely a coincidence of naming than real work. It is reported rather "
+                    + "than counted as client work either way."));
             }
 
             //
@@ -252,12 +296,28 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
                     + "code."));
             }
 
+            //
+            // First, above everything: a disabled mod's files are still on disk and still readable,
+            // and every line below describes what they would do if they were loaded. None of it is
+            // happening while the mod is set aside, and a reader who misses that draws exactly the
+            // wrong conclusion about their install.
+            //
+            if (IsDisabled)
+            {
+                findings.Insert(0, new FootprintFinding(
+                    "Not loaded",
+                    "This mod is currently disabled",
+                    "Its files are still on disk, which is why they can still be read, but SPT is not "
+                    + "loading any of them. Everything below describes what this mod would do once you "
+                    + "enable it again."));
+            }
+
             return findings;
         }
     }
 
-    // The per-kind lines are a breakdown of the total above them, so they read as "N of those",
-    // never as a fresh count - the sets overlap wherever a component declares several callbacks.
+    private static string Files(int count) => count == 1 ? "1 file" : $"{count} files";
+
     private static string Of(int count, string suffix) =>
         count == 1 ? $"1 of those {suffix}" : $"{count} of those {suffix}";
 
@@ -267,7 +327,8 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
     //
     public string PerFrameTooltip => Footprint.PerFrameMethods.Count == 0
         ? string.Empty
-        : "Engine callbacks found: " + string.Join(", ", Footprint.PerFrameMethods);
+        : "Engine callbacks found: " + string.Join(", ", Footprint.PerFrameMethods)
+          + (Footprint.PerFrameMethodCount > Footprint.PerFrameMethods.Count ? ", ..." : string.Empty);
 
     public bool HasPerFrameTooltip => Footprint.PerFrameMethods.Count > 0;
 

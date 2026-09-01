@@ -97,18 +97,31 @@ public sealed record ModFootprint
     public int AssemblyCount { get; init; }
     public int UnreadableAssemblyCount { get; init; }
 
+    // Bundles in the client half, and in the server half. Split for the same reason as the patch
+    // counts: only the client's are the game's memory.
     public int BundleCount { get; init; }
     public long BundleBytes { get; init; }
+    public int ServerBundleCount { get; init; }
+    public long ServerBundleBytes { get; init; }
 
     public bool HasPatcher { get; init; }
     public bool HasServerHalf { get; init; }
 
-    // Types carrying at least one [HarmonyPatch] attribute, and types deriving from SPT's
-    // ModulePatch. Counted per type rather than per attribute: a patch class routinely stacks
-    // several attributes to name one target, and counting those would say more about how the
-    // author writes attributes than about how much the mod patches.
-    public int HarmonyPatchClassCount { get; init; }
-    public int ModulePatchClassCount { get; init; }
+    //
+    // Patch classes in the mod's CLIENT half: types carrying at least one [HarmonyPatch] attribute,
+    // and types deriving from SPT's ModulePatch. Counted per type rather than per attribute - a
+    // patch class routinely stacks several attributes to name one target, and counting those would
+    // say more about how the author writes attributes than about how much the mod patches.
+    //
+    // This is a floor on patched methods, not a total: one class usually alters one method but can
+    // target several. Anything shown to the user has to be worded as reach, not as a count of
+    // methods.
+    //
+    public int PatchClassCount { get; init; }
+
+    // The same, found in the mod's server half. Kept apart so a server assembly's patches are never
+    // presented as work happening in the game client.
+    public int ServerPatchClassCount { get; init; }
 
     //
     // "Type.Method" for every per-frame method the mod declares on a type that reaches
@@ -116,6 +129,13 @@ public sealed record ModFootprint
     // "HudUpdater.Update" tells the user where to look, "3" does not.
     //
     public IReadOnlyList<string> PerFrameMethods { get; init; } = [];
+
+    //
+    // How many there were before the list above was truncated. The list is capped so the cache file
+    // stays small; showing it as the complete evidence when it is not would be exactly the kind of
+    // quiet overstatement this feature has to avoid, so the UI compares the two.
+    //
+    public int PerFrameMethodCount { get; init; }
 
     //
     // How many distinct types those methods came from. Stored rather than derived from the list
@@ -143,6 +163,14 @@ public sealed record ModFootprint
     public int ImageEffectTypeCount { get; init; }
     public int CameraCallbackTypeCount { get; init; }
 
+    //
+    // Components with an engine callback found in the SERVER half. Expected to be zero: a server
+    // assembly has no reason to derive from a Unity type, and the base-type check matches on name
+    // alone, so a non-zero value here is more likely a false positive than real client work. It is
+    // recorded rather than discarded so it can never be silently counted as client work.
+    //
+    public int ServerPerFrameTypeCount { get; init; }
+
     public DateTimeOffset AnalysedAt { get; init; }
 
     //
@@ -151,9 +179,6 @@ public sealed record ModFootprint
     // which costs a directory walk rather than a full re-read of every assembly.
     //
     public string Stamp { get; init; } = "";
-
-    [JsonIgnore]
-    public int PatchClassCount => HarmonyPatchClassCount + ModulePatchClassCount;
 
     [JsonIgnore]
     public bool HasPerFrameCode => PerFrameMethods.Count > 0;
