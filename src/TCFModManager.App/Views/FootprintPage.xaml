@@ -85,7 +85,7 @@
                     Margin="0,4,0,0"
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                    Text="Each mod is read from the files it installs - how much of the game it patches, what it runs every frame, and what it puts on disk. That says how much a mod is positioned to affect the game, and where any cost would land. Nothing here is timed or measured, and a heavy footprint is not the same as a mod that costs you frames. Open a mod to see what was found and what it does and does not tell you." />
+                    Text="Each mod is read from the files it installs - how much of the game it patches, what it declares that the engine would call on a timer, and what it puts on disk. That says how far a mod reaches and where any cost would land. It describes what a mod contains, not what happens when you play: nothing here is timed or measured, and the app cannot see whether a declared component is ever created or whether a patch sits on something the game calls often. A heavy footprint is not the same as a mod that costs you frames. Open a mod to see what was found and the limit of what each finding establishes." />
             </StackPanel>
         </ui:Card>
 

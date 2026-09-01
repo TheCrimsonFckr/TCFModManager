@@ -81,8 +81,8 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
             if (Footprint.PerFrameTypeCount > 0)
             {
                 parts.Add(Footprint.PerFrameTypeCount == 1
-                    ? "1 component runs every frame"
-                    : $"{Footprint.PerFrameTypeCount} components run every frame");
+                    ? "1 component with an engine callback"
+                    : $"{Footprint.PerFrameTypeCount} components with engine callbacks");
             }
 
             parts.Add(Size(Footprint.TotalBytes));
@@ -94,9 +94,13 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
     }
 
     //
-    // The expanded breakdown, in the order someone chasing a problem would want it: what runs every
-    // frame, then what it patches, then memory, then the things that cost time somewhere other than
-    // the frame loop.
+    // The expanded breakdown.
+    //
+    // EVERY LINE HERE HAS TO BE TRUE OF THE FILES, NOT OF A PLAYING SESSION. The analyzer reads
+    // declarations; it cannot see whether a component is ever instantiated, whether a patch sits on
+    // a hot method, or how much any of it does. So these say "declares" and "ships", never "runs",
+    // and each one names the limit of what it establishes. If a future edit makes one of these
+    // sound like a measurement, it is wrong however plausible it reads.
     //
     public IReadOnlyList<FootprintFinding> Findings
     {
@@ -108,37 +112,65 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
             if (print.PerFrameTypeCount > 0)
             {
                 findings.Add(new FootprintFinding(
-                    "Client · CPU",
+                    "Client",
                     print.PerFrameTypeCount == 1
-                        ? "1 component runs code every frame"
-                        : $"{print.PerFrameTypeCount} components run code every frame",
-                    "This runs on the main thread on every frame the component is alive, which is the "
-                    + "one kind of work that can affect frame rate whatever else the mod does. How much "
-                    + "it costs depends on what the code inside does, which reading the files can't tell you."));
+                        ? "Declares 1 component the engine would call on a timer"
+                        : $"Declares {print.PerFrameTypeCount} components the engine would call on a timer",
+                    "This is what the mod contains, not what happens when you play: a declared component "
+                    + "only runs if an instance of it is created, attached to an active object and "
+                    + "enabled, and none of that is visible in the files. The lines below say which kind "
+                    + "of callback each one uses - a component declaring more than one appears in more "
+                    + "than one line, so those can add up to more than this total."));
             }
 
-            if (print.RenderHookTypeCount > 0)
+            if (print.FrameUpdateTypeCount > 0)
             {
                 findings.Add(new FootprintFinding(
-                    "Client · GPU",
-                    print.RenderHookTypeCount == 1
-                        ? "1 of those hooks a camera render callback"
-                        : $"{print.RenderHookTypeCount} of those hook a camera render callback",
-                    "A camera callback such as OnRenderImage runs a pass over the rendered frame, once "
-                    + "per camera per frame. That is GPU work, so it tends to show up as a cost that "
-                    + "gets worse at higher resolutions rather than one that tracks your CPU."));
+                    "Client · CPU",
+                    Of(print.FrameUpdateTypeCount, "declare a per-frame update method"),
+                    "Unity calls Update or LateUpdate on a component once a frame while it is alive and "
+                    + "enabled. This is the kind of work that tracks frame rate most directly - though "
+                    + "how much it costs depends entirely on what the code inside does."));
+            }
+
+            if (print.PhysicsTypeCount > 0)
+            {
+                findings.Add(new FootprintFinding(
+                    "Client · CPU",
+                    Of(print.PhysicsTypeCount, "declare a physics-step method"),
+                    "FixedUpdate runs on the physics timestep - fifty times a second by default - and not "
+                    + "once a frame. It can run several times in one frame or not at all in another, so "
+                    + "its cost does not track your frame rate the way an Update does."));
             }
 
             if (print.GuiTypeCount > 0)
             {
                 findings.Add(new FootprintFinding(
                     "Client · CPU",
-                    print.GuiTypeCount == 1
-                        ? "1 of those draws with immediate-mode GUI"
-                        : $"{print.GuiTypeCount} of those draw with immediate-mode GUI",
-                    "OnGUI runs several times per frame - once for layout and again for each event - "
-                    + "and allocates on every pass, so it costs more than its component count suggests "
-                    + "and adds garbage collection pressure."));
+                    Of(print.GuiTypeCount, "draw with immediate-mode GUI"),
+                    "Unity calls OnGUI more than once a frame - a layout pass, then once per input event - "
+                    + "and immediate-mode code typically allocates on each call, which adds garbage "
+                    + "collection pressure. What it actually draws decides how much that matters."));
+            }
+
+            if (print.ImageEffectTypeCount > 0)
+            {
+                findings.Add(new FootprintFinding(
+                    "Client · GPU",
+                    Of(print.ImageEffectTypeCount, "are full-screen image effects"),
+                    "OnRenderImage takes the rendered frame and writes a new one, for each camera the "
+                    + "component is attached to. That work is done by the graphics card and scales with "
+                    + "resolution rather than with processor speed."));
+            }
+
+            if (print.CameraCallbackTypeCount > 0)
+            {
+                findings.Add(new FootprintFinding(
+                    "Client · CPU",
+                    Of(print.CameraCallbackTypeCount, "hook a camera's render"),
+                    "OnPreRender and OnPostRender run either side of a camera drawing, once per camera "
+                    + "per frame. They run on the processor rather than the graphics card, whatever the "
+                    + "code inside them may go on to set up."));
             }
 
             if (print.PatchClassCount > 0)
@@ -146,22 +178,24 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
                 findings.Add(new FootprintFinding(
                     "Client · CPU",
                     print.PatchClassCount == 1
-                        ? "Patches 1 place in the game"
-                        : $"Patches {print.PatchClassCount} places in the game",
-                    "Each patch inserts a call into the mod's code whenever the method it patches runs. "
-                    + "A patch on something the game calls thousands of times a second and a patch on a "
-                    + "menu button look identical from the outside, and this can't tell them apart - so "
-                    + "read this as how far the mod reaches, not as what it costs."));
+                        ? "Ships 1 patch class"
+                        : $"Ships {print.PatchClassCount} patch classes",
+                    "A patch class alters one of the game's own methods - usually a single one, though "
+                    + "one class can target several. Where a patch sits is what decides its cost, and "
+                    + "that is exactly what reading the files cannot establish: a patch on a method the "
+                    + "game calls thousands of times a second is indistinguishable here from one on a "
+                    + "menu button. Read this as how far the mod reaches, not as what it costs."));
             }
 
             if (print.BundleCount > 0)
             {
                 findings.Add(new FootprintFinding(
                     "Client · Memory",
-                    $"{Size(print.BundleBytes)} across {(print.BundleCount == 1 ? "1 asset bundle" : $"{print.BundleCount} asset bundles")}",
-                    "Asset bundles are loaded into RAM when the mod uses them, and any textures, meshes "
-                    + "or shaders inside them also take video memory. This is a memory and load-time "
-                    + "cost rather than a per-frame one."));
+                    $"{Size(print.BundleBytes)} in {(print.BundleCount == 1 ? "1 file" : $"{print.BundleCount} files")} with a .bundle extension",
+                    "Asset bundles hold textures, models, sounds and shaders, and take up memory once "
+                    + "loaded - video memory too, for anything the graphics card needs. These are "
+                    + "identified by their file extension and measured on disk; when and whether the mod "
+                    + "loads them is its own business."));
             }
 
             if (print.HasPatcher)
@@ -169,27 +203,29 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
                 findings.Add(new FootprintFinding(
                     "Client · Start-up",
                     "Ships a BepInEx patcher",
-                    "A patcher runs in the preloader, before the game's own assemblies are loaded. It "
-                    + "costs start-up time and can affect what other mods see, but it is not running "
-                    + "once you are in a raid."));
+                    "BepInEx runs patchers in its preloader, before the game's own assemblies are loaded. "
+                    + "That is a start-up cost, and it is not running once you are in a raid."));
             }
 
             if (print.HasServerHalf)
             {
                 findings.Add(new FootprintFinding(
                     "Server",
-                    "Has a server half under user\\mods",
-                    "This runs in the SPT server process, not the game. It affects how long the server "
-                    + "takes to start and how long a raid takes to load, and it is not in the client's "
-                    + "frame loop at all - so it cannot cost you frame rate directly."));
+                    "Installs files under user\\mods",
+                    "These load in the SPT server process rather than in the game. Their cost falls on "
+                    + "server start-up and raid loading; they are not in the client's frame loop, so they "
+                    + "cannot cost you frame rate directly."));
             }
 
             findings.Add(new FootprintFinding(
                 "Disk",
                 $"{Size(print.TotalBytes)} across {(print.FileCount == 1 ? "1 file" : $"{print.FileCount} files")}",
-                print.AssemblyCount == 1
-                    ? "1 of them is a managed assembly, which is what everything above was read from."
-                    : $"{print.AssemblyCount} of them are managed assemblies, which is what everything above was read from."));
+                print.AssemblyCount switch
+                {
+                    0 => "None of them are managed assemblies, so there was no compiled code here to read.",
+                    1 => "1 of them is a managed assembly, which is what everything above was read from.",
+                    _ => $"{print.AssemblyCount} of them are managed assemblies, which is what everything above was read from.",
+                }));
 
             if (print.UnreadableAssemblyCount > 0)
             {
@@ -197,25 +233,41 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
                     "Unknown",
                     $"{print.UnreadableAssemblyCount} of {print.AssemblyCount} assemblies could not be read",
                     "Every count above is a floor rather than a total. An assembly can be unreadable "
-                    + "because it is obfuscated, packed, or built in a way this can't parse."));
+                    + "because it is obfuscated, packed, or built in a way this doesn't parse."));
             }
 
-            if (print is { PerFrameTypeCount: 0, PatchClassCount: 0, HasServerHalf: false })
+            //
+            // Only when there was something readable to find nothing in. Without the unreadable
+            // check this would tell someone a fully obfuscated mod contains no code, in the same
+            // breath as the row above saying nothing could be read - a flat contradiction, and the
+            // half that sounds most confident is the one that is wrong.
+            //
+            if (print is { PerFrameTypeCount: 0, PatchClassCount: 0, HasServerHalf: false, UnreadableAssemblyCount: 0 })
             {
                 findings.Insert(0, new FootprintFinding(
                     "Client",
-                    "No code that runs on its own",
-                    "Nothing here patches the game or runs every frame. Whatever this mod does, it does "
-                    + "when something else calls it - or it is data and assets rather than code."));
+                    "Nothing that patches the game or runs on a timer",
+                    "No patch classes, and no components declaring an engine callback. Whatever this mod "
+                    + "does, it does when something else calls it - or it is data and assets rather than "
+                    + "code."));
             }
 
             return findings;
         }
     }
 
+    // The per-kind lines are a breakdown of the total above them, so they read as "N of those",
+    // never as a fresh count - the sets overlap wherever a component declares several callbacks.
+    private static string Of(int count, string suffix) =>
+        count == 1 ? $"1 of those {suffix}" : $"{count} of those {suffix}";
+
+    //
+    // The actual method names found, so nobody has to take the counts above on trust - this is the
+    // raw evidence they were derived from.
+    //
     public string PerFrameTooltip => Footprint.PerFrameMethods.Count == 0
         ? string.Empty
-        : string.Join("\n", Footprint.PerFrameMethods);
+        : "Engine callbacks found: " + string.Join(", ", Footprint.PerFrameMethods);
 
     public bool HasPerFrameTooltip => Footprint.PerFrameMethods.Count > 0;
 

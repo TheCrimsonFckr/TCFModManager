@@ -164,8 +164,11 @@ public class ModFootprintAnalyzerTests : IDisposable
         var footprint = ModFootprintAnalyzer.Analyze([Entry(folder)]);
 
         Assert.Equal(0, footprint.PerFrameTypeCount);
+        Assert.Equal(0, footprint.FrameUpdateTypeCount);
+        Assert.Equal(0, footprint.PhysicsTypeCount);
         Assert.Equal(0, footprint.GuiTypeCount);
-        Assert.Equal(0, footprint.RenderHookTypeCount);
+        Assert.Equal(0, footprint.ImageEffectTypeCount);
+        Assert.Equal(0, footprint.CameraCallbackTypeCount);
         Assert.False(footprint.HasPerFrameCode);
     }
 

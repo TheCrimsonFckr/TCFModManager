@@ -25,6 +25,10 @@ public partial class App : Application
         // So the install buttons know from the first frame whether they are skipping mod pages.
         AppServices.ModPageGate.Refresh();
 
+        // Before the window is built, so the sidebar is drawn with the right items rather than
+        // gaining one a moment after it opens.
+        AppServices.FootprintGate.Refresh();
+
         // Reports how a self-update went (the script doing the swap runs after the previous process
         // is gone, so its own log is the only record of it) and clears out the staged files.
         AppUpdateInstaller.SweepAfterStartup();

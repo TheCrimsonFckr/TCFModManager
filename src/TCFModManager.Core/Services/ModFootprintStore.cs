@@ -14,7 +14,7 @@ public sealed class ModFootprintStore
     // Bump when ModFootprint's stored shape changes in a way that makes an old file unsafe to
     // trust - in particular when a count changes meaning, since Level is derived from the counts
     // and an old file would silently produce a new answer.
-    private const int SchemaVersion = 2;
+    private const int SchemaVersion = 3;
 
     private readonly string _filePath;
 

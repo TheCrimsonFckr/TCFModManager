@@ -21,37 +21,48 @@ namespace TCFModManager.Core.Services;
 public static class ModFootprintAnalyzer
 {
     //
-    // Unity's per-frame entry points, and what each one costs when it runs.
+    // Unity's recurring entry points, what each one actually costs, and how many arguments it takes.
     //
-    // The parameter count is part of the key rather than a blanket "no parameters" rule: every one
-    // of these is nought-argument except OnRenderImage, which takes a source and a destination
-    // RenderTexture. Requiring nought would have made the one GPU signal here undetectable.
+    // The kinds are separated because they are not the same claim. Update and LateUpdate run once a
+    // frame; FixedUpdate runs on the physics timestep and is decoupled from frame rate entirely;
+    // OnGUI runs more than once a frame; OnRenderImage is GPU work and the other two camera
+    // callbacks are not. Collapsing them would mean the UI describing a physics method as per-frame
+    // work and a CPU callback as GPU work, which is the kind of confident wrongness this feature
+    // cannot afford.
+    //
+    // The parameter count is part of the key rather than a blanket "no arguments" rule: every one
+    // of these takes none except OnRenderImage, which takes a source and a destination
+    // RenderTexture. Requiring none made the only GPU signal here undetectable.
     //
     private static readonly Dictionary<string, (PerFrameKind Kind, int Parameters)> PerFrameMethods = new(StringComparer.Ordinal)
     {
-        // Plain CPU work on the main thread, every frame the component is alive.
         ["Update"] = (PerFrameKind.FrameUpdate, 0),
         ["LateUpdate"] = (PerFrameKind.FrameUpdate, 0),
-        ["FixedUpdate"] = (PerFrameKind.FrameUpdate, 0),
 
-        // Immediate-mode GUI. Worth separating from the above because it runs several times per
-        // frame - once per layout and repaint event - and allocates on every pass.
+        // NOT once a frame. The physics timestep is 50 times a second by default, so this can run
+        // several times in one frame or not at all in another.
+        ["FixedUpdate"] = (PerFrameKind.Physics, 0),
+
+        // Immediate-mode GUI: a layout pass plus one call per input event, each frame.
         ["OnGUI"] = (PerFrameKind.Gui, 0),
 
-        // Camera render callbacks. OnRenderImage is the expensive one: a full-screen pass over the
-        // rendered frame, per camera, which is GPU work rather than CPU work.
-        ["OnRenderImage"] = (PerFrameKind.Render, 2),
-        ["OnPreRender"] = (PerFrameKind.Render, 0),
-        ["OnPostRender"] = (PerFrameKind.Render, 0),
+        // Takes the rendered frame and writes a new one. The only entry point here that is GPU work.
+        ["OnRenderImage"] = (PerFrameKind.ImageEffect, 2),
+
+        // CPU callbacks around a camera's render. They are not themselves GPU work, whatever they
+        // may set up.
+        ["OnPreRender"] = (PerFrameKind.CameraCallback, 0),
+        ["OnPostRender"] = (PerFrameKind.CameraCallback, 0),
     };
 
-    // Which of the three a per-frame method belongs to - the distinction the UI needs to say
-    // whether a mod's per-frame work lands on the CPU or the GPU.
+    // What a recurring engine callback actually is, so the UI can describe it rather than guess.
     private enum PerFrameKind
     {
         FrameUpdate,
+        Physics,
         Gui,
-        Render,
+        ImageEffect,
+        CameraCallback,
     }
 
     //
@@ -119,8 +130,11 @@ public static class ModFootprintAnalyzer
                 .Take(MaxPerFrameMethodsReported)
                 .ToList(),
             PerFrameTypeCount = totals.PerFrameTypes.Count,
+            FrameUpdateTypeCount = totals.FrameUpdateTypes.Count,
+            PhysicsTypeCount = totals.PhysicsTypes.Count,
             GuiTypeCount = totals.GuiTypes.Count,
-            RenderHookTypeCount = totals.RenderTypes.Count,
+            ImageEffectTypeCount = totals.ImageEffectTypes.Count,
+            CameraCallbackTypeCount = totals.CameraCallbackTypes.Count,
             AnalysedAt = DateTimeOffset.UtcNow,
             Stamp = StampFor(entries),
         };
@@ -188,8 +202,11 @@ public static class ModFootprintAnalyzer
         public int ModulePatchClasses;
         public readonly List<string> PerFrameMethods = [];
         public readonly HashSet<string> PerFrameTypes = new(StringComparer.Ordinal);
+        public readonly HashSet<string> FrameUpdateTypes = new(StringComparer.Ordinal);
+        public readonly HashSet<string> PhysicsTypes = new(StringComparer.Ordinal);
         public readonly HashSet<string> GuiTypes = new(StringComparer.Ordinal);
-        public readonly HashSet<string> RenderTypes = new(StringComparer.Ordinal);
+        public readonly HashSet<string> ImageEffectTypes = new(StringComparer.Ordinal);
+        public readonly HashSet<string> CameraCallbackTypes = new(StringComparer.Ordinal);
     }
 
     private static void WalkPath(string path, Totals totals)
@@ -305,13 +322,20 @@ public static class ModFootprintAnalyzer
 
             totals.PerFrameMethods.Add($"{typeName}.{name}");
 
-            // The union drives the level, so widening the vocabulary never lets a mod that runs
-            // per-frame work slip below one that runs less. The two subsets only split the
-            // explanation - CPU work and GPU work read very differently to someone chasing a
-            // frame-rate problem.
+            // The union drives the level, so widening the vocabulary never lets a mod declaring
+            // recurring work slip below one declaring less. The per-kind sets exist only so the
+            // explanation can be specific: a physics method and a full-screen image effect are not
+            // the same claim as an Update, and must not be described as one.
             totals.PerFrameTypes.Add(typeName);
-            if (expected.Kind == PerFrameKind.Gui) totals.GuiTypes.Add(typeName);
-            if (expected.Kind == PerFrameKind.Render) totals.RenderTypes.Add(typeName);
+
+            switch (expected.Kind)
+            {
+                case PerFrameKind.FrameUpdate: totals.FrameUpdateTypes.Add(typeName); break;
+                case PerFrameKind.Physics: totals.PhysicsTypes.Add(typeName); break;
+                case PerFrameKind.Gui: totals.GuiTypes.Add(typeName); break;
+                case PerFrameKind.ImageEffect: totals.ImageEffectTypes.Add(typeName); break;
+                case PerFrameKind.CameraCallback: totals.CameraCallbackTypes.Add(typeName); break;
+            }
         }
     }
 

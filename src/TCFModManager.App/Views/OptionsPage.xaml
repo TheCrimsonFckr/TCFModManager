@@ -81,6 +81,27 @@
         <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
             <StackPanel>
                 <TextBlock
+                    Text="Mod footprint page"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Opacity="0.7"
+                    Margin="0,0,0,8"
+                    Text="Adds a page that reads the files each installed mod ships and describes how much of the game it is positioned to touch, and where any cost would land - client or server, CPU, GPU, memory or start-up. Nothing on it is timed or measured: what a mod actually costs you depends on your hardware, your settings and the other mods you run, none of which it can see. A heavy footprint means a mod reaches a long way into the game, which is usually why you installed it - it is a place to start looking, not a verdict. Off by default." />
+                <ui:ToggleSwitch
+                    HorizontalAlignment="Left"
+                    ToolTip="{Binding FootprintGate.SettingToolTip}"
+                    ToolTipService.ShowDuration="20000"
+                    IsChecked="{Binding ShowModFootprintPage}"
+                    OnContent="On - shown in the sidebar"
+                    OffContent="Off - hidden" />
+            </StackPanel>
+        </ui:Card>
+
+        <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
+            <StackPanel>
+                <TextBlock
                     Text="Data files"
                     FontWeight="SemiBold"
                     Margin="0,0,0,4" />

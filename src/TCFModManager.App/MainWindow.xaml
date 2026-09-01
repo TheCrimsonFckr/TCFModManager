@@ -124,12 +124,19 @@
 
                      NOT a gauge or a speedometer icon, and not called "Performance": nothing on
                      that page is timed or measured, and an icon that promises a metric is the
-                     same overclaim as the wording would be. -->
+                     same overclaim as the wording would be.
+
+                     Hidden unless it is switched on in Options, and off by default - the page
+                     needs its own explanation to be read correctly, and an unexplained "Heavy"
+                     badge in the sidebar is worse than no page at all. DataContext is set
+                     explicitly because a nav item does not inherit a useful one from here. -->
                 <ui:NavigationViewItem
                     Content="Mod footprint"
                     Icon="{ui:SymbolIcon Scales24}"
                     NavigationCacheMode="Required"
-                    TargetPageType="{x:Type views:FootprintPage}" />
+                    TargetPageType="{x:Type views:FootprintPage}"
+                    DataContext="{x:Static app:AppServices.FootprintGate}"
+                    Visibility="{Binding IsPageEnabled, Converter={StaticResource BoolToVis}}" />
                 <ui:NavigationViewItem
                     Content="Downloads"
                     Icon="{ui:SymbolIcon ArrowDownload24}"

@@ -121,16 +121,27 @@ public sealed record ModFootprint
     // How many distinct types those methods came from. Stored rather than derived from the list
     // above because the list is truncated for the benefit of the file, and the count must not be.
     //
+    // THIS COUNTS WHAT A MOD DECLARES, NOT WHAT RUNS. A type with an Update only runs one if an
+    // instance of it is created, attached to an active object and enabled - all runtime facts, none
+    // of them visible in the files. Any wording built on this has to say "declares".
+    //
     public int PerFrameTypeCount { get; init; }
 
     //
-    // The two subsets of the above worth naming separately, because they land on different
-    // hardware. GUI types draw with immediate-mode OnGUI, which runs several times a frame and
-    // allocates each pass; render types hook a camera callback, which is GPU work. Both are
-    // already inside PerFrameTypeCount - these do not add to it, they explain it.
+    // How that total breaks down by what the callback actually is. All of these are already inside
+    // PerFrameTypeCount - they do not add to it, they explain it - and a type can appear in more
+    // than one, because a component may declare both an Update and an OnGUI.
     //
+    // They exist because the kinds are different claims and must not be described alike:
+    // FrameUpdate really is once a frame; Physics runs on the physics timestep and is decoupled
+    // from frame rate; Gui runs more than once a frame; ImageEffect is GPU work; CameraCallback is
+    // CPU work around a camera's render.
+    //
+    public int FrameUpdateTypeCount { get; init; }
+    public int PhysicsTypeCount { get; init; }
     public int GuiTypeCount { get; init; }
-    public int RenderHookTypeCount { get; init; }
+    public int ImageEffectTypeCount { get; init; }
+    public int CameraCallbackTypeCount { get; init; }
 
     public DateTimeOffset AnalysedAt { get; init; }
 

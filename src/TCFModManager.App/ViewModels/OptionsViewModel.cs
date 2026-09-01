@@ -45,6 +45,13 @@ public partial class OptionsViewModel : ObservableObject
     // currently means, shared rather than restated here.
     public ModPageGateViewModel ModPageGate => AppServices.ModPageGate;
 
+    // Whether the Mod footprint page is in the sidebar. Off by default - see AppSettings.
+    [ObservableProperty]
+    private bool _showModFootprintPage;
+
+    // Same arrangement as ModPageGate: one description of the setting, shared with the nav item.
+    public FootprintGateViewModel FootprintGate => AppServices.FootprintGate;
+
     public OptionsViewModel()
     {
         InstallPathInput = SptEnvironment.InstallPath;
@@ -52,7 +59,9 @@ public partial class OptionsViewModel : ObservableObject
         var stored = AppTheme.Stored;
         _selectedTheme = ThemeOptions.FirstOrDefault(t => t.Value == stored) ?? ThemeOptions[^1];
 
-        _skipModPageConfirmation = _settings.Load().SkipModPageConfirmation;
+        var settings = _settings.Load();
+        _skipModPageConfirmation = settings.SkipModPageConfirmation;
+        _showModFootprintPage = settings.ShowModFootprintPage;
 
         _loaded = true;
     }
@@ -88,6 +97,24 @@ public partial class OptionsViewModel : ObservableObject
         AppServices.ModPageGate.Refresh();
 
         AppLog.Info("ModPages", value ? "gate turned off" : "gate turned back on");
+    }
+
+    //
+    // No confirmation either way. Nothing is at stake in showing or hiding a read-only page, and
+    // the switch's own tooltip carries the caveat that matters.
+    //
+    partial void OnShowModFootprintPageChanged(bool value)
+    {
+        if (!_loaded) return;
+
+        var settings = _settings.Load();
+        settings.ShowModFootprintPage = value;
+        _settings.Save(settings);
+
+        // Moves the nav item now rather than at the next launch.
+        AppServices.FootprintGate.Refresh();
+
+        AppLog.Info("Footprint", value ? "page shown" : "page hidden");
     }
 
     //

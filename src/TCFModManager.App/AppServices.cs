@@ -59,6 +59,10 @@ internal static class AppServices
     // Shared so one setting change updates every button at once - see ModPageGateViewModel.
     public static ModPageGateViewModel ModPageGate { get; } = new();
 
+    // Whether the Mod footprint page is switched on. Shared so the nav item and the Options switch
+    // read one answer - see FootprintGateViewModel.
+    public static FootprintGateViewModel FootprintGate { get; } = new();
+
     // Every mod list this install holds, and which one it is currently following.
     public static ModListStore ModLists { get; } = new();
 

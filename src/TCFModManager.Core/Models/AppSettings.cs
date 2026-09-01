@@ -41,6 +41,18 @@ public sealed class AppSettings
     public bool SkipModPageConfirmation { get; set; }
 
     //
+    // Whether the Mod footprint page appears in the sidebar at all.
+    //
+    // OFF by default, deliberately. The page reads what each mod ships and describes how much of
+    // the game it is positioned to touch - it times nothing and measures nothing, and what a mod
+    // actually costs depends on hardware, settings and mod interactions it cannot see. Someone who
+    // has read what it is can turn it on and take it for what it is; someone who meets a "Heavy"
+    // label with no context is being handed a conclusion the app never made. Opt-in until the
+    // measurement side of this exists to back it up.
+    //
+    public bool ShowModFootprintPage { get; set; }
+
+    //
     // Whether the Installed page tags each mod with the mod lists it belongs to. On by default -
     // the badges are the point of having lists visible at all - but an install with several lists
     // puts a row of chips on every card, so it can be turned off to quieten the page down.
