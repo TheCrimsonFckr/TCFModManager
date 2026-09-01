@@ -113,12 +113,15 @@ public class ModFootprintTests
     }
 
     //
-    // The shapes below are the real counts this analyzer produced for these mods, and they are the
+    // The shapes below are the real counts this analyzer produced for these mods - the first two
+    // from a live 139-entry install, the rest from mods pulled off The Forge - and they are the
     // whole justification for where the thresholds sit. Anyone retuning a threshold has to keep
     // this ordering intact: the two mods the community already calls heavy come out Heavy, the
     // capable-but-ordinary ones Moderate, and the single-purpose tweaks Light.
     //
     [Theory]
+    [InlineData("Tyfon.UIFixes", 379, 13, ModFootprintLevel.Heavy)]
+    [InlineData("ManimalIcebreaker", 96, 20, ModFootprintLevel.Heavy)]
     [InlineData("Project Fika", 129, 19, ModFootprintLevel.Heavy)]
     [InlineData("SAIN", 106, 3, ModFootprintLevel.Heavy)]
     [InlineData("Dynamic Maps", 14, 7, ModFootprintLevel.Moderate)]
