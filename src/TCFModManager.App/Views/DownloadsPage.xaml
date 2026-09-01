@@ -11,6 +11,18 @@
         <converters:DownloadQueueStatusToAppearanceConverter x:Key="StatusAppearance" />
         <converters:CountToVisibilityConverter x:Key="HasItems" />
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+
+        <!-- One figure in its own fixed-width container. Run together on a single line, a transfer
+             readout shuffles sideways every time a number changes width; a box per figure keeps
+             each one anchored to its own left edge and its caption says which is which. -->
+        <Style x:Key="StatBox" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorSecondaryBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="Margin" Value="0,6,6,0" />
+        </Style>
     </Page.Resources>
     <Grid Margin="16">
         <Grid.RowDefinitions>
@@ -31,15 +43,75 @@
                     Text="Downloads install strictly one at a time, in the order you queued them - queue as many as you like from Browse or an update dialog and check back here for progress." />
 
                 <!-- How far through the whole queue we are. Matters most for a mod list, which can
-                     put forty items here at once; the per-card line answers how one of them is
+                     put forty items here at once; the per-card boxes answer how one of them is
                      doing, not how long until you can play. -->
-                <TextBlock
-                    Margin="0,6,0,0"
-                    FontWeight="SemiBold"
-                    TextWrapping="Wrap"
-                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    Visibility="{Binding HasSummary, Converter={StaticResource BoolToVisibility}}"
-                    Text="{Binding Summary}" />
+                <WrapPanel
+                    Visibility="{Binding HasSummary, Converter={StaticResource BoolToVisibility}}">
+                    <Border Style="{StaticResource StatBox}" Width="130">
+                        <StackPanel>
+                            <TextBlock
+                                FontSize="11"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="Queue" />
+                            <TextBlock
+                                FontSize="13"
+                                FontWeight="SemiBold"
+                                TextTrimming="CharacterEllipsis"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{Binding SummaryProgress}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource StatBox}" Width="130">
+                        <StackPanel>
+                            <TextBlock
+                                FontSize="11"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="Left to fetch" />
+                            <TextBlock
+                                FontSize="13"
+                                FontWeight="SemiBold"
+                                TextTrimming="CharacterEllipsis"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{Binding SummaryRemaining}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource StatBox}" Width="130">
+                        <StackPanel>
+                            <TextBlock
+                                FontSize="11"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="Time to go" />
+                            <TextBlock
+                                FontSize="13"
+                                FontWeight="SemiBold"
+                                TextTrimming="CharacterEllipsis"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{Binding SummaryEta}" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Only when something in the queue has no size yet, so the figures above are
+                         read as covering less than the whole queue. -->
+                    <Border
+                        Style="{StaticResource StatBox}"
+                        Width="130"
+                        Visibility="{Binding HasUnsized, Converter={StaticResource BoolToVisibility}}">
+                        <StackPanel>
+                            <TextBlock
+                                FontSize="11"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="Not sized yet" />
+                            <TextBlock
+                                FontSize="13"
+                                FontWeight="SemiBold"
+                                TextTrimming="CharacterEllipsis"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{Binding SummaryUnsized}" />
+                        </StackPanel>
+                    </Border>
+                </WrapPanel>
             </StackPanel>
         </DockPanel>
 
@@ -113,13 +185,55 @@
                                         TextTrimming="CharacterEllipsis"
                                         Text="{Binding StatusMessage}" />
 
-                                    <TextBlock
-                                        Margin="0,2,0,0"
-                                        TextWrapping="Wrap"
-                                        FontSize="12"
-                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                        Visibility="{Binding HasTransferLabel, Converter={StaticResource BoolToVisibility}}"
-                                        Text="{Binding TransferLabel}" />
+                                    <!-- One box per figure - see StatBox above for why they aren't
+                                         a single line. Speed and time read as a dash until the
+                                         download has run long enough to measure honestly. -->
+                                    <WrapPanel Visibility="{Binding HasTransferDetails, Converter={StaticResource BoolToVisibility}}">
+                                        <Border Style="{StaticResource StatBox}" Width="150">
+                                            <StackPanel>
+                                                <TextBlock
+                                                    FontSize="11"
+                                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                    Text="Downloaded" />
+                                                <TextBlock
+                                                    FontSize="13"
+                                                    FontWeight="SemiBold"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                    Text="{Binding TransferredValue}" />
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Border Style="{StaticResource StatBox}" Width="110">
+                                            <StackPanel>
+                                                <TextBlock
+                                                    FontSize="11"
+                                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                    Text="Speed" />
+                                                <TextBlock
+                                                    FontSize="13"
+                                                    FontWeight="SemiBold"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                    Text="{Binding RateValue}" />
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Border Style="{StaticResource StatBox}" Width="110">
+                                            <StackPanel>
+                                                <TextBlock
+                                                    FontSize="11"
+                                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                    Text="Time left" />
+                                                <TextBlock
+                                                    FontSize="13"
+                                                    FontWeight="SemiBold"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                    Text="{Binding EtaValue}" />
+                                            </StackPanel>
+                                        </Border>
+                                    </WrapPanel>
                                 </StackPanel>
 
                                 <StackPanel

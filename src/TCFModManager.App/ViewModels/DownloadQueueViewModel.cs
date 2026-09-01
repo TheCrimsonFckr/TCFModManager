@@ -18,15 +18,38 @@ public sealed partial class DownloadQueueViewModel : ObservableObject
     public ObservableCollection<DownloadQueueItemViewModel> Items { get; } = [];
 
     //
-    // One line for the whole queue: how far through it is and how much is left. Worth having at all
-    // because a mod list can queue forty items at once - per-card progress answers "how is this one
-    // doing", not "how long until I can play".
+    // The whole queue's state, one value per box: how far through it is, how much is left to fetch
+    // and how long that should take. Worth having at all because a mod list can queue forty items
+    // at once - per-card progress answers "how is this one doing", not "how long until I can play".
+    //
+    // Split into separate values rather than one line so DownloadsPage can give each its own fixed
+    // container; run together they shuffle sideways every time a figure changes width.
     //
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(HasSummary))]
-    private string? _summary;
+    private bool _hasSummary;
 
-    public bool HasSummary => Summary is not null;
+    // "1 of 2 done"
+    [ObservableProperty]
+    private string _summaryProgress = NoValue;
+
+    // "85.3 MB"
+    [ObservableProperty]
+    private string _summaryRemaining = NoValue;
+
+    // How many queued items The Forge gave no size for, so the remaining figure never silently
+    // under-reports. Its own box rather than a note on the remaining one, which would make that box
+    // change width as items resolve.
+    [ObservableProperty]
+    private bool _hasUnsized;
+
+    [ObservableProperty]
+    private string _summaryUnsized = NoValue;
+
+    // "11s"
+    [ObservableProperty]
+    private string _summaryEta = NoValue;
+
+    private const string NoValue = "\u2014";
 
     // Raised after an item finishes installing successfully. BrowseViewModel subscribes to refresh its cards' install/update status dots.
     public event EventHandler? ItemInstalled;
@@ -79,26 +102,28 @@ public sealed partial class DownloadQueueViewModel : ObservableObject
 
         if (unfinished.Count == 0)
         {
-            Summary = null;
+            HasSummary = false;
+            HasUnsized = false;
+            SummaryProgress = SummaryRemaining = SummaryEta = SummaryUnsized = NoValue;
             return;
         }
 
         var done = Items.Count - unfinished.Count;
-        var parts = new List<string> { $"{done} of {Items.Count} done" };
-
         var remaining = unfinished.Sum(i => i.RemainingBytes ?? 0);
         var unknown = unfinished.Count(i => i.RemainingBytes is null);
 
-        if (remaining > 0)
-        {
-            parts.Add(DownloadQueueItemViewModel.SizeLabel(remaining)
-                + (unknown > 0 ? $" left (+{unknown} not sized yet)" : " left"));
+        HasSummary = true;
+        SummaryProgress = $"{done} of {Items.Count} done";
 
-            if (unfinished.FirstOrDefault(i => i.BytesPerSecond is > 0)?.BytesPerSecond is { } rate)
-                parts.Add($"about {DownloadQueueItemViewModel.RemainingLabel(TimeSpan.FromSeconds(remaining / rate))} to go");
-        }
+        SummaryRemaining = remaining > 0 ? DownloadQueueItemViewModel.SizeLabel(remaining) : NoValue;
 
-        Summary = string.Join(" · ", parts);
+        HasUnsized = unknown > 0;
+        SummaryUnsized = unknown == 1 ? "1 item" : $"{unknown} items";
+
+        SummaryEta = remaining > 0
+            && unfinished.FirstOrDefault(i => i.BytesPerSecond is > 0)?.BytesPerSecond is { } rate
+                ? DownloadQueueItemViewModel.RemainingLabel(TimeSpan.FromSeconds(remaining / rate))
+                : NoValue;
     }
 
     // Removes every Completed/Failed/Cancelled card from the list; queued/in-progress items are left alone.

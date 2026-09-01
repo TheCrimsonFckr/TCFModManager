@@ -47,8 +47,10 @@ public sealed partial class DownloadQueueItemViewModel : ObservableObject
     private DownloadQueueItemStatus _status = DownloadQueueItemStatus.Pending;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(TransferLabel))]
-    [NotifyPropertyChangedFor(nameof(HasTransferLabel))]
+    [NotifyPropertyChangedFor(nameof(TransferredValue))]
+    [NotifyPropertyChangedFor(nameof(RateValue))]
+    [NotifyPropertyChangedFor(nameof(EtaValue))]
+    [NotifyPropertyChangedFor(nameof(HasTransferDetails))]
     private double _progress;
 
     //
@@ -57,48 +59,44 @@ public sealed partial class DownloadQueueItemViewModel : ObservableObject
     // size up front. A single Install resolves lazily, so this fills in once the worker gets there.
     //
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(TransferLabel))]
-    [NotifyPropertyChangedFor(nameof(HasTransferLabel))]
+    [NotifyPropertyChangedFor(nameof(TransferredValue))]
+    [NotifyPropertyChangedFor(nameof(RateValue))]
+    [NotifyPropertyChangedFor(nameof(EtaValue))]
+    [NotifyPropertyChangedFor(nameof(HasTransferDetails))]
     private long? _totalBytes;
 
     // Runs for the download stage only, which is the only stage with a measurable rate.
     private readonly Stopwatch _downloading = new();
 
     //
-    // "8.2 of 45.1 MB - 2.1 MB/s - about 18s left", as much of it as is actually known.
+    // The transfer detail, split into one value per box - how much has arrived, how fast, and how
+    // long is left. DownloadsPage renders each in its own fixed container so a number changing
+    // width can't shift the ones beside it.
     //
-    // Deliberately says nothing until there is enough to be honest with: a rate computed off the
+    // Rate and time stay blank until there is enough to be honest with: a rate computed off the
     // first fraction of a percent is nonsense, and an estimate that swings between 8 seconds and
     // four minutes is worse than no estimate.
     //
-    public string? TransferLabel
-    {
-        get
-        {
-            if (Status != DownloadQueueItemStatus.Downloading) return null;
 
-            var elapsed = _downloading.Elapsed;
-            var parts = new List<string>();
+    // Placeholder that holds a box's shape before its number exists.
+    private const string NoValue = "\u2014";
 
-            if (TotalBytes is > 0 and var total)
-                parts.Add($"{Size(Progress * total)} of {Size(total)}");
+    // Only while downloading, and only once the size is known - there is nothing to put in the
+    // boxes otherwise.
+    public bool HasTransferDetails =>
+        Status == DownloadQueueItemStatus.Downloading && TotalBytes is > 0;
 
-            if (Progress > 0.02 && elapsed > TimeSpan.FromSeconds(1.5))
-            {
-                if (BytesPerSecond is { } rate) parts.Add($"{Size(rate)}/s");
+    // "173 of 258.3 MB" - both halves in the same unit, so the pair doesn't switch units partway
+    // through and jump.
+    public string TransferredValue =>
+        TotalBytes is > 0 and var total ? SizePair(Progress * total, total) : NoValue;
 
-                parts.Add($"about {Remaining(TimeSpan.FromSeconds(elapsed.TotalSeconds * (1 - Progress) / Progress))} left");
-            }
-            else if (parts.Count == 0)
-            {
-                return null;
-            }
+    public string RateValue => BytesPerSecond is { } rate ? $"{Size(rate)}/s" : NoValue;
 
-            return string.Join(" · ", parts);
-        }
-    }
+    public string EtaValue => BytesPerSecond is > 0
+        ? Remaining(TimeSpan.FromSeconds(_downloading.Elapsed.TotalSeconds * (1 - Progress) / Progress))
+        : NoValue;
 
-    public bool HasTransferLabel => TransferLabel is not null;
 
     // What is left to fetch for this item, or null when its size isn't known yet. A pending item
     // hasn't started, so its whole archive is still to come.
@@ -117,6 +115,20 @@ public sealed partial class DownloadQueueItemViewModel : ObservableObject
     public static string SizeLabel(double bytes) => Size(bytes);
 
     public static string RemainingLabel(TimeSpan left) => Remaining(left);
+
+    // Both halves of "x of y" scaled to the larger one's unit.
+    private static string SizePair(double done, double total)
+    {
+        var (scale, unit) = total switch
+        {
+            >= 1024d * 1024 * 1024 => (1024d * 1024 * 1024, "GB"),
+            >= 1024d * 1024 => (1024d * 1024, "MB"),
+            >= 1024d => (1024d, "KB"),
+            _ => (1d, "B"),
+        };
+
+        return $"{done / scale:0.#} of {total / scale:0.#} {unit}";
+    }
 
     private static string Size(double bytes) => bytes switch
     {
@@ -226,8 +238,10 @@ public sealed partial class DownloadQueueItemViewModel : ObservableObject
         if (value == DownloadQueueItemStatus.Downloading) _downloading.Restart();
         else _downloading.Stop();
 
-        OnPropertyChanged(nameof(TransferLabel));
-        OnPropertyChanged(nameof(HasTransferLabel));
+        OnPropertyChanged(nameof(TransferredValue));
+        OnPropertyChanged(nameof(RateValue));
+        OnPropertyChanged(nameof(EtaValue));
+        OnPropertyChanged(nameof(HasTransferDetails));
         OnPropertyChanged(nameof(IsIndeterminateProgress));
         OnPropertyChanged(nameof(StatusLabel));
         OnPropertyChanged(nameof(CanCancel));
