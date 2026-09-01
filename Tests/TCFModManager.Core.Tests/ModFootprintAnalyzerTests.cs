@@ -164,6 +164,8 @@ public class ModFootprintAnalyzerTests : IDisposable
         var footprint = ModFootprintAnalyzer.Analyze([Entry(folder)]);
 
         Assert.Equal(0, footprint.PerFrameTypeCount);
+        Assert.Equal(0, footprint.GuiTypeCount);
+        Assert.Equal(0, footprint.RenderHookTypeCount);
         Assert.False(footprint.HasPerFrameCode);
     }
 
@@ -246,6 +248,9 @@ public class ModFootprintAnalyzerTests : IDisposable
     [InlineData("LateUpdate")]
     [InlineData("FixedUpdate")]
     [InlineData("OnGUI")]
+    [InlineData("OnRenderImage")]
+    [InlineData("OnPreRender")]
+    [InlineData("OnPostRender")]
     public void PerFrameMethodNamesAreRecognised(string name)
     {
         Assert.True(ModFootprintAnalyzer.IsPerFrameMethodName(name));

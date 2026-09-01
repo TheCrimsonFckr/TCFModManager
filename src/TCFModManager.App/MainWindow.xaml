@@ -120,12 +120,16 @@
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:DependenciesPage}" />
                 <!-- After Dependencies: both answer questions about the mods already on disk,
-                     and this is the more occasional of the two. -->
+                     and this is the more occasional of the two.
+
+                     NOT a gauge or a speedometer icon, and not called "Performance": nothing on
+                     that page is timed or measured, and an icon that promises a metric is the
+                     same overclaim as the wording would be. -->
                 <ui:NavigationViewItem
-                    Content="Performance"
-                    Icon="{ui:SymbolIcon Gauge24}"
+                    Content="Mod footprint"
+                    Icon="{ui:SymbolIcon Scales24}"
                     NavigationCacheMode="Required"
-                    TargetPageType="{x:Type views:PerformancePage}" />
+                    TargetPageType="{x:Type views:FootprintPage}" />
                 <ui:NavigationViewItem
                     Content="Downloads"
                     Icon="{ui:SymbolIcon ArrowDownload24}"

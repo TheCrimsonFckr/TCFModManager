@@ -123,6 +123,15 @@ public sealed record ModFootprint
     //
     public int PerFrameTypeCount { get; init; }
 
+    //
+    // The two subsets of the above worth naming separately, because they land on different
+    // hardware. GUI types draw with immediate-mode OnGUI, which runs several times a frame and
+    // allocates each pass; render types hook a camera callback, which is GPU work. Both are
+    // already inside PerFrameTypeCount - these do not add to it, they explain it.
+    //
+    public int GuiTypeCount { get; init; }
+    public int RenderHookTypeCount { get; init; }
+
     public DateTimeOffset AnalysedAt { get; init; }
 
     //

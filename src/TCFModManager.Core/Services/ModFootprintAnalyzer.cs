@@ -20,15 +20,39 @@ namespace TCFModManager.Core.Services;
 //
 public static class ModFootprintAnalyzer
 {
-    // Unity's per-frame entry points. OnGUI is included because it runs at least once per frame and
-    // is the classic cause of a mod costing frame time without its author noticing.
-    private static readonly HashSet<string> PerFrameMethodNames = new(StringComparer.Ordinal)
+    //
+    // Unity's per-frame entry points, and what each one costs when it runs.
+    //
+    // The parameter count is part of the key rather than a blanket "no parameters" rule: every one
+    // of these is nought-argument except OnRenderImage, which takes a source and a destination
+    // RenderTexture. Requiring nought would have made the one GPU signal here undetectable.
+    //
+    private static readonly Dictionary<string, (PerFrameKind Kind, int Parameters)> PerFrameMethods = new(StringComparer.Ordinal)
     {
-        "Update",
-        "LateUpdate",
-        "FixedUpdate",
-        "OnGUI",
+        // Plain CPU work on the main thread, every frame the component is alive.
+        ["Update"] = (PerFrameKind.FrameUpdate, 0),
+        ["LateUpdate"] = (PerFrameKind.FrameUpdate, 0),
+        ["FixedUpdate"] = (PerFrameKind.FrameUpdate, 0),
+
+        // Immediate-mode GUI. Worth separating from the above because it runs several times per
+        // frame - once per layout and repaint event - and allocates on every pass.
+        ["OnGUI"] = (PerFrameKind.Gui, 0),
+
+        // Camera render callbacks. OnRenderImage is the expensive one: a full-screen pass over the
+        // rendered frame, per camera, which is GPU work rather than CPU work.
+        ["OnRenderImage"] = (PerFrameKind.Render, 2),
+        ["OnPreRender"] = (PerFrameKind.Render, 0),
+        ["OnPostRender"] = (PerFrameKind.Render, 0),
     };
+
+    // Which of the three a per-frame method belongs to - the distinction the UI needs to say
+    // whether a mod's per-frame work lands on the CPU or the GPU.
+    private enum PerFrameKind
+    {
+        FrameUpdate,
+        Gui,
+        Render,
+    }
 
     //
     // External base types that mean "this type is a Unity component", so a per-frame method on it
@@ -95,6 +119,8 @@ public static class ModFootprintAnalyzer
                 .Take(MaxPerFrameMethodsReported)
                 .ToList(),
             PerFrameTypeCount = totals.PerFrameTypes.Count,
+            GuiTypeCount = totals.GuiTypes.Count,
+            RenderHookTypeCount = totals.RenderTypes.Count,
             AnalysedAt = DateTimeOffset.UtcNow,
             Stamp = StampFor(entries),
         };
@@ -113,7 +139,7 @@ public static class ModFootprintAnalyzer
         baseTypeName is not null && UnityComponentBaseNames.Contains(baseTypeName);
 
     public static bool IsPerFrameMethodName(string methodName) =>
-        PerFrameMethodNames.Contains(methodName);
+        PerFrameMethods.ContainsKey(methodName);
 
     //
     // A cheap description of what is on disk right now, compared against a stored footprint's Stamp
@@ -162,6 +188,8 @@ public static class ModFootprintAnalyzer
         public int ModulePatchClasses;
         public readonly List<string> PerFrameMethods = [];
         public readonly HashSet<string> PerFrameTypes = new(StringComparer.Ordinal);
+        public readonly HashSet<string> GuiTypes = new(StringComparer.Ordinal);
+        public readonly HashSet<string> RenderTypes = new(StringComparer.Ordinal);
     }
 
     private static void WalkPath(string path, Totals totals)
@@ -268,12 +296,22 @@ public static class ModFootprintAnalyzer
             var method = reader.GetMethodDefinition(methodHandle);
             var name = reader.GetString(method.Name);
 
-            if (!IsPerFrameMethodName(name)) continue;
+            if (!PerFrameMethods.TryGetValue(name, out var expected)) continue;
+
+            // Unity's messages are all instance methods with a fixed shape. Anything else that
+            // happens to share the name is somebody's own method, not a per-frame callback.
             if (method.Attributes.HasFlag(MethodAttributes.Static)) continue;
-            if (ParameterCount(reader, method) != 0) continue;
+            if (ParameterCount(reader, method) != expected.Parameters) continue;
 
             totals.PerFrameMethods.Add($"{typeName}.{name}");
+
+            // The union drives the level, so widening the vocabulary never lets a mod that runs
+            // per-frame work slip below one that runs less. The two subsets only split the
+            // explanation - CPU work and GPU work read very differently to someone chasing a
+            // frame-rate problem.
             totals.PerFrameTypes.Add(typeName);
+            if (expected.Kind == PerFrameKind.Gui) totals.GuiTypes.Add(typeName);
+            if (expected.Kind == PerFrameKind.Render) totals.RenderTypes.Add(typeName);
         }
     }
 

@@ -4,11 +4,11 @@ using TCFModManager.App.ViewModels;
 
 namespace TCFModManager.App.Views;
 
-public partial class PerformancePage : Page
+public partial class FootprintPage : Page
 {
-    public PerformanceViewModel ViewModel { get; } = new();
+    public FootprintViewModel ViewModel { get; } = new();
 
-    public PerformancePage()
+    public FootprintPage()
     {
         InitializeComponent();
         DataContext = ViewModel;
@@ -18,6 +18,6 @@ public partial class PerformancePage : Page
     // Refreshes on every visit rather than once, so a mod installed since the last visit appears -
     // off the cache, so the usual cost is a directory walk rather than re-reading every assembly.
     //
-    private async void PerformancePage_Loaded(object sender, RoutedEventArgs e) =>
+    private async void FootprintPage_Loaded(object sender, RoutedEventArgs e) =>
         await ViewModel.RefreshAsync();
 }

@@ -103,7 +103,7 @@ public class ModFootprintTests
     // capable-but-ordinary ones Moderate, and the single-purpose tweaks Light.
     //
     [Theory]
-    [InlineData("Project Fika", 129, 21, ModFootprintLevel.Heavy)]
+    [InlineData("Project Fika", 129, 19, ModFootprintLevel.Heavy)]
     [InlineData("SAIN", 106, 3, ModFootprintLevel.Heavy)]
     [InlineData("Dynamic Maps", 14, 7, ModFootprintLevel.Moderate)]
     [InlineData("Weapon Customizer", 20, 1, ModFootprintLevel.Moderate)]
