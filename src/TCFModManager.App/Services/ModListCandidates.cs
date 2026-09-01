@@ -71,7 +71,12 @@ public static class ModListCandidates
 
     private static List<string> FoldersOf(InstalledModCardViewModel card)
     {
-        var folders = new[] { card.ClientFolderName, card.ServerFolderName }
+        // Every folder the card covers, not just the two it leads with: a mod that installed several
+        // plugin folders, or shipped a patcher, answers to all of them, and a list entry captured
+        // against any one of them has to find it again.
+        var folders = card.Entries
+            .Select(e => e.Name)
+            .Concat([card.ClientFolderName, card.ServerFolderName])
             .Where(f => !string.IsNullOrWhiteSpace(f))
             .Select(f => f!.Trim().ToLowerInvariant())
             .Distinct()
