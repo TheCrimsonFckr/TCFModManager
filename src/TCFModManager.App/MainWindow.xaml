@@ -119,6 +119,13 @@
                     Icon="{ui:SymbolIcon Branch24}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:DependenciesPage}" />
+                <!-- After Dependencies: both answer questions about the mods already on disk,
+                     and this is the more occasional of the two. -->
+                <ui:NavigationViewItem
+                    Content="Performance"
+                    Icon="{ui:SymbolIcon Gauge24}"
+                    NavigationCacheMode="Required"
+                    TargetPageType="{x:Type views:PerformancePage}" />
                 <ui:NavigationViewItem
                     Content="Downloads"
                     Icon="{ui:SymbolIcon ArrowDownload24}"

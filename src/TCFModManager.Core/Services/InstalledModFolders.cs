@@ -40,7 +40,32 @@ public static class InstalledModFolders
     public static IReadOnlyList<string> Resolve(InstalledModRecord record) =>
         record.Folders.Count > 0 ? record.Folders : FromPlacedFiles(record.Files);
 
-    private static string? FolderFor(string relativePath)
+    //
+    // The files a record placed inside one of its folders, each relative to that folder. Empty for a
+    // folder the record doesn't name, and for a manually-confirmed record, which places no files.
+    //
+    // What this is for: a folder still holding the files this app put in it is still that install's,
+    // whatever the DLLs inside it claim to be.
+    //
+    public static List<string> PlacedFilesUnder(InstalledModRecord record, string folderName)
+    {
+        var results = new List<string>();
+
+        foreach (var file in record.Files)
+        {
+            if (Split(file) is not { } split) continue;
+            if (!string.Equals(split.Folder, folderName, StringComparison.OrdinalIgnoreCase)) continue;
+
+            results.Add(split.Relative);
+        }
+
+        return results;
+    }
+
+    private static string? FolderFor(string relativePath) => Split(relativePath)?.Folder;
+
+    // The mod folder a placed file sits in, and the rest of its path below that folder.
+    private static (string Folder, string Relative)? Split(string relativePath)
     {
         var path = relativePath.Replace('\\', '/');
 
@@ -56,10 +81,11 @@ public static class InstalledModFolders
             var slash = remainder.IndexOf('/');
 
             // No further separator means the file sits directly in the container - a loose DLL,
-            // which the scanner names after the file itself.
+            // which the scanner names after the file itself, so it is both the folder and the only
+            // file in it.
             return slash < 0
-                ? Path.GetFileNameWithoutExtension(remainder)
-                : remainder[..slash];
+                ? (Path.GetFileNameWithoutExtension(remainder), remainder)
+                : (remainder[..slash], remainder[(slash + 1)..]);
         }
 
         return null;

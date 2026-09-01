@@ -83,6 +83,38 @@ public class InstalledModFoldersTests
         Assert.Equal(["EpicsAIO"], InstalledModFolders.Resolve(record));
     }
 
+    [Fact]
+    public void PlacedFilesUnder_ReturnsOnlyThatFolderSFilesRelativeToIt()
+    {
+        var record = NewRecord(
+            files:
+            [
+                "BepInEx/plugins/HollywoodFX/HollywoodFX.dll",
+                "BepInEx/plugins/HollywoodGraphics/HollywoodGraphics.dll",
+                "BepInEx/plugins/HollywoodGraphics/bloom/LensDust1.png",
+            ],
+            folders: ["HollywoodFX", "HollywoodGraphics"]);
+
+        Assert.Equal(["HollywoodGraphics.dll", "bloom/LensDust1.png"],
+            InstalledModFolders.PlacedFilesUnder(record, "HollywoodGraphics"));
+    }
+
+    [Fact]
+    public void PlacedFilesUnder_ReportsALooseDllAsTheOnlyFileInItsOwnFolder()
+    {
+        var record = NewRecord(files: ["BepInEx/plugins/SomeMod.dll"], folders: ["SomeMod"]);
+
+        Assert.Equal(["SomeMod.dll"], InstalledModFolders.PlacedFilesUnder(record, "SomeMod"));
+    }
+
+    [Fact]
+    public void PlacedFilesUnder_IsEmptyForAFolderTheRecordNeverPlacedFilesIn()
+    {
+        var record = NewRecord(files: ["user/mods/EpicsAIO/package.json"], folders: ["EpicsAIO"]);
+
+        Assert.Empty(InstalledModFolders.PlacedFilesUnder(record, "SomethingElse"));
+    }
+
     private static InstalledModRecord NewRecord(List<string> files, List<string> folders) => new()
     {
         ModId = 1263,

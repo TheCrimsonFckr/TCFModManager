@@ -1,0 +1,372 @@
+using System.Reflection;
+using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
+using TCFModManager.Core.Models;
+
+namespace TCFModManager.Core.Services;
+
+//
+// Reads what an installed mod ships and counts the things that decide how much of the game's
+// runtime it is positioned to touch: per-frame methods it declares itself, patch classes, asset
+// bundles, a preloader patcher, a server half.
+//
+// WHAT THIS DELIBERATELY DOES NOT DO. It never loads an assembly, runs anything, or decodes a
+// method body. Every count comes from metadata tables, which means it is fast, safe on a mod built
+// against a game version this app has never seen, and impossible to mislead into executing mod
+// code. It also means it cannot say what a patch targets: an SPT patch names its target inside
+// GetTargetMethod's IL, usually through an obfuscated GClass name, and guessing wrong there would
+// be worse than saying nothing. "How much does this mod reach into" is answerable from metadata;
+// "does this mod cost frame time" is not answerable without running the game.
+//
+public static class ModFootprintAnalyzer
+{
+    // Unity's per-frame entry points. OnGUI is included because it runs at least once per frame and
+    // is the classic cause of a mod costing frame time without its author noticing.
+    private static readonly HashSet<string> PerFrameMethodNames = new(StringComparer.Ordinal)
+    {
+        "Update",
+        "LateUpdate",
+        "FixedUpdate",
+        "OnGUI",
+    };
+
+    //
+    // External base types that mean "this type is a Unity component", so a per-frame method on it
+    // is really called every frame. BaseUnityPlugin is BepInEx's plugin base and UIElement is
+    // EFT's own - both derive from MonoBehaviour, and because they live in other assemblies the
+    // chain walk below stops at them rather than seeing MonoBehaviour itself. Add to this as more
+    // bases turn up; a missing name costs a missed flag, never a wrong one.
+    //
+    private static readonly HashSet<string> UnityComponentBaseNames = new(StringComparer.Ordinal)
+    {
+        "MonoBehaviour",
+        "BaseUnityPlugin",
+        "UIElement",
+    };
+
+    // SPT's own patch base. A type deriving from it is a patch whether or not it carries a
+    // [HarmonyPatch] attribute, and most SPT client mods use it in preference to the attributes.
+    private const string ModulePatchBaseName = "ModulePatch";
+
+    private const string HarmonyPatchAttributeName = "HarmonyPatch";
+
+    // Unity asset bundles - the extension SPT mods ship them under.
+    private const string BundleExtension = ".bundle";
+
+    //
+    // Names get long and repetitive on a mod that ships dozens of components; past this the list
+    // has already told the user what they needed and the rest is noise in a JSON file.
+    //
+    private const int MaxPerFrameMethodsReported = 50;
+
+    //
+    // One footprint for everything a single card covers. A card routinely folds several scanned
+    // entries together - a client plugin, its preloader patcher, its server half - and they are
+    // one mod to the user, so they are one row and one footprint here.
+    //
+    public static ModFootprint Analyze(IReadOnlyList<InstalledMod> entries)
+    {
+        ArgumentNullException.ThrowIfNull(entries);
+        if (entries.Count == 0) throw new ArgumentException("At least one entry is required.", nameof(entries));
+
+        var totals = new Totals();
+
+        foreach (var entry in entries)
+        {
+            WalkPath(entry.FolderPath, totals);
+        }
+
+        return new ModFootprint
+        {
+            FolderKey = KeyFor(entries[0].FolderPath),
+            TotalBytes = totals.TotalBytes,
+            FileCount = totals.FileCount,
+            AssemblyCount = totals.AssemblyCount,
+            UnreadableAssemblyCount = totals.UnreadableAssemblyCount,
+            BundleCount = totals.BundleCount,
+            BundleBytes = totals.BundleBytes,
+            HasPatcher = entries.Any(e => e.IsPatcher),
+            HasServerHalf = entries.Any(e => e.Target == InstalledModTarget.Server),
+            HarmonyPatchClassCount = totals.HarmonyPatchClasses,
+            ModulePatchClassCount = totals.ModulePatchClasses,
+            PerFrameMethods = totals.PerFrameMethods
+                .Distinct(StringComparer.Ordinal)
+                .Order(StringComparer.Ordinal)
+                .Take(MaxPerFrameMethodsReported)
+                .ToList(),
+            PerFrameTypeCount = totals.PerFrameTypes.Count,
+            AnalysedAt = DateTimeOffset.UtcNow,
+            Stamp = StampFor(entries),
+        };
+    }
+
+    // The cache key for a mod folder - see ModFootprint.FolderKey for why it is lowercased here.
+    public static string KeyFor(string folderPath) => folderPath.ToLowerInvariant();
+
+    //
+    // The two vocabularies this analyzer recognises, exposed so they can be asserted directly.
+    // Everything below reads assembly metadata, which a test can only exercise by shipping a real
+    // DLL built to have the shapes being looked for; these two are where the actual judgement
+    // lives, and they are decidable from a string.
+    //
+    public static bool IsUnityComponentBase(string? baseTypeName) =>
+        baseTypeName is not null && UnityComponentBaseNames.Contains(baseTypeName);
+
+    public static bool IsPerFrameMethodName(string methodName) =>
+        PerFrameMethodNames.Contains(methodName);
+
+    //
+    // A cheap description of what is on disk right now, compared against a stored footprint's Stamp
+    // to decide whether it still holds. File count, total size and newest write time between them
+    // catch every way a mod changes in practice - updated, partially replaced, files added or
+    // removed by hand - without opening a single assembly.
+    //
+    public static string StampFor(IReadOnlyList<InstalledMod> entries)
+    {
+        long bytes = 0;
+        var files = 0;
+        var newest = 0L;
+
+        foreach (var entry in entries)
+        {
+            foreach (var file in EnumerateFiles(entry.FolderPath))
+            {
+                try
+                {
+                    var info = new FileInfo(file);
+                    bytes += info.Length;
+                    files++;
+                    var written = info.LastWriteTimeUtc.Ticks;
+                    if (written > newest) newest = written;
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                {
+                    // A file that can't be stat'd still counts towards the shape of the folder.
+                    files++;
+                }
+            }
+        }
+
+        return $"{files}:{bytes}:{newest}";
+    }
+
+    private sealed class Totals
+    {
+        public long TotalBytes;
+        public int FileCount;
+        public int AssemblyCount;
+        public int UnreadableAssemblyCount;
+        public int BundleCount;
+        public long BundleBytes;
+        public int HarmonyPatchClasses;
+        public int ModulePatchClasses;
+        public readonly List<string> PerFrameMethods = [];
+        public readonly HashSet<string> PerFrameTypes = new(StringComparer.Ordinal);
+    }
+
+    private static void WalkPath(string path, Totals totals)
+    {
+        foreach (var file in EnumerateFiles(path))
+        {
+            long length;
+            try
+            {
+                length = new FileInfo(file).Length;
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                length = 0;
+            }
+
+            totals.FileCount++;
+            totals.TotalBytes += length;
+
+            var extension = Path.GetExtension(file);
+
+            if (string.Equals(extension, BundleExtension, StringComparison.OrdinalIgnoreCase))
+            {
+                totals.BundleCount++;
+                totals.BundleBytes += length;
+                continue;
+            }
+
+            if (string.Equals(extension, ".dll", StringComparison.OrdinalIgnoreCase))
+            {
+                ReadAssembly(file, totals);
+            }
+        }
+    }
+
+    // Files under a folder, or the single file itself when the scanner recorded a loose DLL.
+    private static IEnumerable<string> EnumerateFiles(string path)
+    {
+        try
+        {
+            if (File.Exists(path)) return [path];
+            if (!Directory.Exists(path)) return [];
+            return Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return [];
+        }
+    }
+
+    private static void ReadAssembly(string dllPath, Totals totals)
+    {
+        try
+        {
+            using var stream = File.OpenRead(dllPath);
+            using var peReader = new PEReader(stream);
+
+            // A native DLL shipped alongside a mod is not an assembly that failed to read - it is
+            // not an assembly at all, and counting it as unreadable would wrongly push the whole
+            // mod to Unknown.
+            if (!peReader.HasMetadata) return;
+
+            totals.AssemblyCount++;
+            var reader = peReader.GetMetadataReader();
+
+            foreach (var typeHandle in reader.TypeDefinitions)
+            {
+                var typeDef = reader.GetTypeDefinition(typeHandle);
+                ReadType(reader, typeDef, totals);
+            }
+        }
+        catch (BadImageFormatException)
+        {
+            // Same as the HasMetadata case above, just detected later.
+        }
+        catch (Exception)
+        {
+            totals.AssemblyCount++;
+            totals.UnreadableAssemblyCount++;
+        }
+    }
+
+    private static void ReadType(MetadataReader reader, TypeDefinition typeDef, Totals totals)
+    {
+        var baseName = RootBaseTypeName(reader, typeDef);
+
+        if (baseName == ModulePatchBaseName)
+        {
+            totals.ModulePatchClasses++;
+        }
+        else if (HasHarmonyPatchAttribute(reader, typeDef))
+        {
+            // Counted in the same unit as a ModulePatch subclass, and never twice for one type -
+            // a ModulePatch that also carries the attribute is one patch class, not two.
+            totals.HarmonyPatchClasses++;
+        }
+
+        if (!IsUnityComponentBase(baseName)) return;
+
+        var typeName = reader.GetString(typeDef.Name);
+
+        foreach (var methodHandle in typeDef.GetMethods())
+        {
+            var method = reader.GetMethodDefinition(methodHandle);
+            var name = reader.GetString(method.Name);
+
+            if (!IsPerFrameMethodName(name)) continue;
+            if (method.Attributes.HasFlag(MethodAttributes.Static)) continue;
+            if (ParameterCount(reader, method) != 0) continue;
+
+            totals.PerFrameMethods.Add($"{typeName}.{name}");
+            totals.PerFrameTypes.Add(typeName);
+        }
+    }
+
+    //
+    // Walks a type's base chain as far as this assembly can see, and returns the name it stops at.
+    //
+    // Definitions in the same assembly are followed through; a reference into another assembly is
+    // where the chain ends, because resolving it would mean finding and opening that assembly -
+    // which for an EFT type means the game's own, and this analyzer deliberately reads only what
+    // the mod ships. Stopping at the reference is enough: the names worth recognising are all
+    // external, and they are listed above.
+    //
+    private static string? RootBaseTypeName(MetadataReader reader, TypeDefinition typeDef)
+    {
+        var handle = typeDef.BaseType;
+
+        // Guards against a malformed or circular chain rather than any real inheritance depth.
+        for (var depth = 0; depth < 32; depth++)
+        {
+            if (handle.IsNil) return null;
+
+            switch (handle.Kind)
+            {
+                case HandleKind.TypeReference:
+                    return reader.GetString(reader.GetTypeReference((TypeReferenceHandle)handle).Name);
+
+                case HandleKind.TypeDefinition:
+                    handle = reader.GetTypeDefinition((TypeDefinitionHandle)handle).BaseType;
+                    break;
+
+                default:
+                    // A generic base (TypeSpecification) or anything unexpected - not one of the
+                    // names being looked for, and not worth decoding a signature to confirm.
+                    return null;
+            }
+        }
+
+        return null;
+    }
+
+    private static bool HasHarmonyPatchAttribute(MetadataReader reader, TypeDefinition typeDef)
+    {
+        foreach (var attributeHandle in typeDef.GetCustomAttributes())
+        {
+            var attribute = reader.GetCustomAttribute(attributeHandle);
+            if (AttributeTypeName(reader, attribute) == HarmonyPatchAttributeName) return true;
+        }
+
+        return false;
+    }
+
+    //
+    // The attribute's type name. Handles both shapes: a MemberReference when the attribute comes
+    // from another assembly (the normal case, HarmonyLib), and a MethodDefinition when it was
+    // merged into the mod's own DLL - which several SPT mods do, and which would otherwise read as
+    // no attribute at all.
+    //
+    private static string? AttributeTypeName(MetadataReader reader, CustomAttribute attribute)
+    {
+        switch (attribute.Constructor.Kind)
+        {
+            case HandleKind.MemberReference:
+                var memberRef = reader.GetMemberReference((MemberReferenceHandle)attribute.Constructor);
+                if (memberRef.Parent.Kind != HandleKind.TypeReference) return null;
+                return reader.GetString(reader.GetTypeReference((TypeReferenceHandle)memberRef.Parent).Name);
+
+            case HandleKind.MethodDefinition:
+                var methodDef = reader.GetMethodDefinition((MethodDefinitionHandle)attribute.Constructor);
+                return reader.GetString(reader.GetTypeDefinition(methodDef.GetDeclaringType()).Name);
+
+            default:
+                return null;
+        }
+    }
+
+    //
+    // Parameter count straight off the signature blob (ECMA-335 II.23.2.1): a calling-convention
+    // header, an optional generic parameter count, then the parameter count. Cheaper than decoding
+    // the whole signature, which would need a type provider to describe types nothing here reads.
+    //
+    private static int ParameterCount(MetadataReader reader, MethodDefinition method)
+    {
+        try
+        {
+            var blob = reader.GetBlobReader(method.Signature);
+            var header = blob.ReadSignatureHeader();
+            if (header.IsGeneric) blob.ReadCompressedInteger();
+            return blob.ReadCompressedInteger();
+        }
+        catch (BadImageFormatException)
+        {
+            // Treated as "not a per-frame method" - a malformed signature is not evidence of one.
+            return -1;
+        }
+    }
+}

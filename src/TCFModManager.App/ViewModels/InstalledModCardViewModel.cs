@@ -1,3 +1,4 @@
+using System.IO;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using TCFModManager.Core.Models;
@@ -785,8 +786,12 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     //
     // Whether what is in the folder now identifies itself as a different mod from the one whose
     // record names it - a folder this app installed into, emptied by hand, and refilled with
-    // something else. Either signal is enough to leave the group standing on its own, since a
-    // wrongly absorbed folder would take a real mod off the page.
+    // something else. Enough to leave the group standing on its own, since a wrongly absorbed
+    // folder would take a real mod off the page.
+    //
+    // A foreign GUID is deliberately NOT that signal for a folder whose files are still in place: a
+    // mod that repacks another one ships its plugin, GUID and all, in a second folder of its own,
+    // and disowning that folder is what put the mod on the page twice.
     //
     private static bool SpeaksForAnotherMod(
         (string Key, List<InstalledMod> Entries, Mod? Match) group,
@@ -795,6 +800,12 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     {
         if (group.Match is { } match && match.Id != record.ModId) return true;
 
+        // What the record placed there is the better evidence, when there is any: the files this
+        // app wrote are either still in the folder or they are not.
+        var placed = InstalledModFolders.PlacedFilesUnder(record, group.Key);
+        if (placed.Count > 0) return !PlacedFilesStillPresent(group.Entries, placed);
+
+        // A manually-confirmed record places no files, so the GUID is all there is to go on.
         var guid = group.Entries
             .Where(m => m.Target == InstalledModTarget.Client)
             .SelectMany(m => m.AllGuids)
@@ -803,6 +814,27 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
         return guid is not null
             && index.ByGuid.TryGetValue(guid, out var byGuid)
             && byGuid.Id != record.ModId;
+    }
+
+    // Whether any file the record placed in this folder is still there. One hit settles it, so this
+    // is a handful of File.Exists calls per app-installed folder, on the scan's background thread.
+    private static bool PlacedFilesStillPresent(List<InstalledMod> entries, IReadOnlyList<string> placed)
+    {
+        foreach (var entry in entries)
+        {
+            if (string.IsNullOrWhiteSpace(entry.FolderPath)) continue;
+
+            // A loose DLL's "folder" is the file itself.
+            if (File.Exists(entry.FolderPath)) return true;
+
+            foreach (var relative in placed)
+            {
+                var path = Path.Combine(entry.FolderPath, relative.Replace('/', Path.DirectorySeparatorChar));
+                if (File.Exists(path)) return true;
+            }
+        }
+
+        return false;
     }
 
     // The folder carrying the plugin the record was installed for, which is the one whose name and
