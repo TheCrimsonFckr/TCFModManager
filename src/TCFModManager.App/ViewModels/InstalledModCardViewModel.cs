@@ -366,8 +366,10 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
 
         var claimed = addonFolders.Select(g => g.Key).ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-        var groups = resolved
-            .Where(g => !claimed.Contains(g.Key))
+        var groups = MergeRecordFolders(
+                resolved.Where(g => !claimed.Contains(g.Key)).ToList(),
+                recordsByFolder,
+                index)
             .Select(g => (g.Entries, g.Match))
             .ToList();
 
@@ -719,6 +721,108 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
 
         var normalized = Normalize(value);
         return normalized.Length == 0 ? null : normalized;
+    }
+
+    //
+    // Folds together the name-groups of a mod that installed more than one folder of the same kind
+    // - a zip that drops two plugin folders arrives here as two groups, and both resolve to the one
+    // catalog listing the install record names, so both would build a full card for the same mod.
+    // The install manifest is what makes this exact rather than a guess: only folders one record
+    // placed are joined, never two folders that merely resolved alike.
+    //
+    // Runs before the patcher and client/server passes, which both look for exactly one partner
+    // group per mod and would otherwise be looking at two.
+    //
+    private static List<(string Key, List<InstalledMod> Entries, Mod? Match)> MergeRecordFolders(
+        List<(string Key, List<InstalledMod> Entries, Mod? Match)> groups,
+        Dictionary<string, InstalledModRecord> recordsByFolder,
+        CatalogIndex index)
+    {
+        var byRecord = new Dictionary<int, List<int>>();
+
+        for (var i = 0; i < groups.Count; i++)
+        {
+            if (!recordsByFolder.TryGetValue(groups[i].Key, out var record)) continue;
+            if (SpeaksForAnotherMod(groups[i], record, index)) continue;
+
+            if (!byRecord.TryGetValue(record.ModId, out var members)) byRecord[record.ModId] = members = [];
+            members.Add(i);
+        }
+
+        var joins = byRecord.Values.Where(m => m.Count > 1).ToList();
+        if (joins.Count == 0) return groups;
+
+        var absorbed = new Dictionary<int, List<int>>();
+        var consumed = new HashSet<int>();
+
+        foreach (var members in joins)
+        {
+            var record = recordsByFolder[groups[members[0]].Key];
+            var ordered = members
+                .OrderBy(i => CarriesRecordGuid(groups[i].Entries, record) ? 0 : 1)
+                .ThenBy(i => PlacementRank(groups[i].Key, record))
+                .ToList();
+
+            absorbed[ordered[0]] = ordered.Skip(1).ToList();
+            foreach (var member in ordered.Skip(1)) consumed.Add(member);
+        }
+
+        var results = new List<(string Key, List<InstalledMod> Entries, Mod? Match)>(groups.Count - consumed.Count);
+
+        for (var i = 0; i < groups.Count; i++)
+        {
+            if (consumed.Contains(i)) continue;
+
+            var (key, entries, match) = groups[i];
+            results.Add(absorbed.TryGetValue(i, out var extra)
+                ? (key, entries.Concat(extra.SelectMany(j => groups[j].Entries)).ToList(), match)
+                : (key, entries, match));
+        }
+
+        return results;
+    }
+
+    //
+    // Whether what is in the folder now identifies itself as a different mod from the one whose
+    // record names it - a folder this app installed into, emptied by hand, and refilled with
+    // something else. Either signal is enough to leave the group standing on its own, since a
+    // wrongly absorbed folder would take a real mod off the page.
+    //
+    private static bool SpeaksForAnotherMod(
+        (string Key, List<InstalledMod> Entries, Mod? Match) group,
+        InstalledModRecord record,
+        CatalogIndex index)
+    {
+        if (group.Match is { } match && match.Id != record.ModId) return true;
+
+        var guid = group.Entries
+            .Where(m => m.Target == InstalledModTarget.Client)
+            .SelectMany(m => m.AllGuids)
+            .FirstOrDefault(g => !string.IsNullOrWhiteSpace(g));
+
+        return guid is not null
+            && index.ByGuid.TryGetValue(guid, out var byGuid)
+            && byGuid.Id != record.ModId;
+    }
+
+    // The folder carrying the plugin the record was installed for, which is the one whose name and
+    // version the merged card leads with.
+    private static bool CarriesRecordGuid(List<InstalledMod> entries, InstalledModRecord record) =>
+        !string.IsNullOrWhiteSpace(record.Guid)
+        && entries.Any(m => m.AllGuids.Any(g => string.Equals(g, record.Guid, StringComparison.OrdinalIgnoreCase)));
+
+    // Where a folder sits in the order the install placed it, so the first folder written leads when
+    // no GUID settles it. Anything the record does not name sorts last.
+    private static int PlacementRank(string folderName, InstalledModRecord record)
+    {
+        var folders = InstalledModFolders.Resolve(record);
+
+        for (var i = 0; i < folders.Count; i++)
+        {
+            if (string.Equals(folders[i], folderName, StringComparison.OrdinalIgnoreCase)) return i;
+        }
+
+        return int.MaxValue;
     }
 
     //
