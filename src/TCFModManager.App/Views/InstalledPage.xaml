@@ -24,7 +24,6 @@
     <Page.Resources>
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
         <converters:UpdateAvailableToVisibilityConverter x:Key="UpdateAvailableToVisible" />
-        <converters:ModStatusToBrushConverter x:Key="StatusBrush" />
         <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
         <converters:CountToVisibilityConverter x:Key="HasItems" />
         <converters:BoolToButtonAppearanceConverter x:Key="BoolToAppearance" />
@@ -529,7 +528,7 @@
                                     HorizontalAlignment="Center"
                                     FontSize="20"
                                     Symbol="{Binding StatusGlyph}"
-                                    Foreground="{Binding Status, Converter={StaticResource StatusBrush}}"
+                                    Style="{StaticResource StatusIcon}"
                                     ToolTip="{Binding StatusTooltip}" />
 
                                 <!-- Disable/enable toggle above Remove: the non-destructive action
@@ -769,7 +768,7 @@
                                                             VerticalAlignment="Center"
                                                             FontSize="16"
                                                             Symbol="{Binding StatusGlyph}"
-                                                            Foreground="{Binding Status, Converter={StaticResource StatusBrush}}"
+                                                            Style="{StaticResource StatusIcon}"
                                                             ToolTip="{Binding StatusTooltip}" />
 
                                                         <StackPanel Grid.Column="1">
@@ -849,7 +848,7 @@
                                         VerticalAlignment="Center"
                                         FontSize="20"
                                         Symbol="{Binding StatusGlyph}"
-                                        Foreground="{Binding Status, Converter={StaticResource StatusBrush}}"
+                                        Style="{StaticResource StatusIcon}"
                                         ToolTip="{Binding StatusTooltip}" />
 
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
