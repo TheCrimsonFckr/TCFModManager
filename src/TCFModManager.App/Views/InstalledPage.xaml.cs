@@ -68,30 +68,33 @@ public partial class InstalledPage : Page
 
     private async void InstalledPage_Loaded(object sender, RoutedEventArgs e)
     {
-        ViewModel.UpdateLayoutForWidth(ResultsListBox.ActualWidth);
+        ViewModel.UpdateLayoutForWidth(ResultsItems.ActualWidth);
         await ViewModel.ScanCommand.ExecuteAsync(null);
     }
 
-    // Opens the details/update dialog for the clicked card, then clears selection. In multi-select
-    // mode the same click ticks the card instead, so the whole card stays the hit target rather
-    // than only the small checkbox.
-    private async void ResultsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    //
+    // In multi-select mode a click anywhere on a card ticks it, rather than only the small
+    // checkbox in its header - the same hit target the card grid had before it became expandable.
+    // Marked handled so the expander doesn't also open while you are picking mods.
+    //
+    // Outside select mode this does nothing and the click falls through to the expander, which is
+    // what opens the card. The versions dialog is reached from "Details and versions" inside the
+    // card, exactly as it already was in the List view.
+    //
+    private void Card_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        if (sender is not ListBox listBox) return;
-        if (listBox.SelectedItem is not InstalledModCardViewModel mod) return;
+        if (!ViewModel.SelectionMode) return;
+        if (sender is not FrameworkElement { DataContext: InstalledModCardViewModel mod }) return;
 
-        listBox.SelectedItem = null;
+        // A button or the checkbox itself still does its own job; this only claims the empty parts
+        // of the card. IsInsideButton is the same helper the group-view row gesture uses.
+        if (IsInsideButton(e.OriginalSource)) return;
 
-        if (ViewModel.SelectionMode)
-        {
-            mod.IsSelected = !mod.IsSelected;
-            return;
-        }
-
-        await ViewModel.ShowDetailsCommand.ExecuteAsync(mod);
+        mod.IsSelected = !mod.IsSelected;
+        e.Handled = true;
     }
 
-    private void ResultsListBox_SizeChanged(object sender, SizeChangedEventArgs e)
+    private void ResultsItems_SizeChanged(object sender, SizeChangedEventArgs e)
     {
         ViewModel.UpdateLayoutForWidth(e.NewSize.Width);
     }
@@ -111,13 +114,15 @@ public partial class InstalledPage : Page
     // before the ScrollViewer's own native wheel handling would otherwise fire, hovering directly
     // over the list also comes through here (and gets marked handled before the native handling
     // runs) - that's fine, we do the exact same scroll it would have, so there's no visible
-    // difference and no double-scroll. Cards view paginates and is left to its ListBox.
+    // difference and no double-scroll. Cards view scrolls the same way now that it is an
+    // ItemsControl in its own ScrollViewer rather than a ListBox.
     private void Page_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         var scroller = ViewModel.ViewMode switch
         {
             InstalledViewMode.Groups => GroupsScrollViewer,
             InstalledViewMode.List => ListScrollViewer,
+            InstalledViewMode.Cards => CardsScrollViewer,
             _ => null,
         };
 
@@ -319,7 +324,7 @@ public partial class InstalledPage : Page
     }
 
     // Opens the update dialog for a group-view row that was clicked rather than dragged - the same
-    // dialog ResultsListBox_SelectionChanged opens for a flat-grid card. DoDragDrop below runs its
+    // dialog the "Details and versions" button opens for a card. DoDragDrop below runs its
     // own modal loop and swallows the mouse-up that ends a real drag, so in practice this only ever
     // fires for a genuine click; the _dragStarted check is the belt-and-braces guard against it.
     private async void ModRow_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)

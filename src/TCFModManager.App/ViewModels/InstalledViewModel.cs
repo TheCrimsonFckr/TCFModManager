@@ -23,6 +23,10 @@ public partial class InstalledViewModel : ObservableObject
     // Fills the grid exactly at the 3- and 4-column width breakpoints (see UpdateLayoutForWidth).
     private const int DefaultPageSize = 12;
 
+    // Below this a card can't show its summary line without truncating it to uselessness. Only
+    // reachable on a very narrow window, where Columns is already 1.
+    private const double MinimumCardWidth = 240;
+
     /// <summary>Raised after RemoveAsync actually removes a mod from disk. Lets BrowseViewModel refresh its
     /// cards' install/update status dots. Static since InstalledViewModel is a fresh instance per navigation.</summary>
     public static event EventHandler? ModRemoved;
@@ -218,6 +222,11 @@ public partial class InstalledViewModel : ObservableObject
 
     [ObservableProperty]
     private int _columns = 1;
+
+    // Width of one card slot in the Cards WrapPanel - see UpdateLayoutForWidth for why the cards
+    // are no longer in a UniformGrid.
+    [ObservableProperty]
+    private double _cardWidth = MinimumCardWidth;
 
     //
     // Whether cards and rows show which mod lists a mod belongs to. Persisted rather than reset per
@@ -473,6 +482,18 @@ public partial class InstalledViewModel : ObservableObject
             < 1400 => 3,
             _ => 4,
         };
+
+        //
+        // The cards sit in a WrapPanel now rather than a UniformGrid, because a UniformGrid forces
+        // every cell to the same size - opening one card would have made every card on the page
+        // that tall. A WrapPanel lets each card keep its own height, which is the whole point of
+        // making them expandable, and ItemWidth is what keeps the columns lining up.
+        //
+        // Floored, and a pixel taken off first: ItemWidth * Columns landing even a fraction over
+        // the available width wraps a card onto the next row, so a four-column layout would
+        // silently become three.
+        //
+        CardWidth = Math.Max(MinimumCardWidth, Math.Floor((availableWidth - 1) / Columns));
     }
 
     //
