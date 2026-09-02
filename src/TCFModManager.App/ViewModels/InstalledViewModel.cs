@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -732,6 +733,35 @@ public partial class InstalledViewModel : ObservableObject
 
         await show(mod);
         await ScanAsync();
+    }
+
+    //
+    // Opens a mod's folder in Explorer. The path comes from the card rather than being rebuilt
+    // here, so it is the folder the scan actually found - including the disabled location, if the
+    // mod is currently disabled.
+    //
+    [RelayCommand]
+    private void OpenModFolder(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path)) return;
+
+        // Checked rather than assumed: a folder removed or renamed outside the app since the last
+        // scan would otherwise open an Explorer error the user has to dismiss.
+        if (!Directory.Exists(path))
+        {
+            StatusMessage = $"That folder is no longer there - {path}. Rescan to pick up the change.";
+            return;
+        }
+
+        try
+        {
+            Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("Installed", $"couldn't open {path}: {ex.Message}");
+            StatusMessage = "Couldn't open that folder.";
+        }
     }
 
     /// <summary>Flips one mod between enabled and disabled.</summary>
