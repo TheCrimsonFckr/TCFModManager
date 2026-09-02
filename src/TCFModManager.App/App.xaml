@@ -141,8 +141,11 @@
             <!--
                 Browse's "compatible with your SPT version" line. Three-state: true, false, and null
                 for a mod whose constraint could not be read - which stays the neutral brush.
+
+                TargetType is Run, not TextBlock: the coloured part is one inline of a sentence that
+                also carries the release version, so the colour has to sit on the Run itself.
             -->
-            <Style x:Key="CompatibilityText" TargetType="TextBlock">
+            <Style x:Key="CompatibilityText" TargetType="Run">
                 <Setter Property="Foreground" Value="{DynamicResource TextFillColorTertiaryBrush}" />
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsCompatibleWithInstalledSpt}" Value="True">

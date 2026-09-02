@@ -24,10 +24,8 @@
     Title="Browse"
     Loaded="BrowsePage_Loaded">
     <Page.Resources>
-        <converters:CompatibilityToBrushConverter x:Key="CompatibilityBrush" />
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
         <converters:UpdateAvailableToVisibilityConverter x:Key="TrueToVisible" />
-        <converters:ModStatusToBrushConverter x:Key="StatusBrush" />
         <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
         <converters:CountToVisibilityConverter x:Key="HasCount" />
 
@@ -315,7 +313,7 @@
                                         ToolTip="{Binding SptVersionTooltip}">
                                         <Run
                                             Text="{Binding SptVersionDisplay, Mode=OneWay}"
-                                            Foreground="{Binding IsCompatibleWithInstalledSpt, Converter={StaticResource CompatibilityBrush}}" />
+                                            Style="{StaticResource CompatibilityText}" />
                                         <Run Text=" • " Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                         <Run Text="{Binding DisplayReleaseVersion, Mode=OneWay, StringFormat='v{0}'}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                     </TextBlock>
@@ -444,7 +442,7 @@
                                 VerticalAlignment="Top"
                                 FontSize="16"
                                 Symbol="{Binding StatusGlyph}"
-                                Foreground="{Binding Status, Converter={StaticResource StatusBrush}}"
+                                Style="{StaticResource StatusIcon}"
                                 ToolTip="{Binding StatusTooltip}"
                                 Visibility="{Binding IsInstalled, Converter={StaticResource TrueToVisible}}" />
 
