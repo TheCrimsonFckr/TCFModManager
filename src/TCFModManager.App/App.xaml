@@ -81,6 +81,79 @@
                 background, border and corner radius, and the caller supplies the summary text and
                 the chevron as its content.
             -->
+            <!--
+                Status icon colour, and the compatibility text colour beside it.
+
+                These were converters returning a resolved Brush, which is why they lagged a live
+                theme switch: a Brush handed back from an IValueConverter is whatever the theme was
+                when the binding last ran, and nothing re-runs it when the theme changes. A Setter
+                carrying a DynamicResource re-resolves, so the colour follows the theme.
+
+                No BasedOn, and that is safe here rather than the usual trap: SymbolIcon derives
+                FontIcon -> IconElement -> FrameworkElement, and WPF-UI registers no default style
+                anywhere in that chain (checked against the decompiled assembly), so there is no
+                control style being replaced and no template to strip.
+
+                The unset case is the tertiary text brush, which is what the old converter fell back
+                to for NoCompatibleVersion, Unknown, Disabled and anything unrecognised - so only
+                the four coloured states need a trigger.
+            -->
+            <Style x:Key="StatusIcon" TargetType="ui:SymbolIcon">
+                <Setter Property="Foreground" Value="{DynamicResource TextFillColorTertiaryBrush}" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Status}" Value="Installed">
+                        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorSuccessBrush}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Status}" Value="UpdateAvailable">
+                        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Status}" Value="NotInstalled">
+                        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Status}" Value="Conflict">
+                        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--
+                The Dependencies page's tree header shows the worst status of everything under it,
+                which lives on a different property. Same vocabulary, same colours - see
+                DependencyTreeViewModel.Worst.
+            -->
+            <Style x:Key="WorstStatusIcon" TargetType="ui:SymbolIcon" BasedOn="{StaticResource StatusIcon}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Worst}" Value="Installed">
+                        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorSuccessBrush}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Worst}" Value="UpdateAvailable">
+                        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Worst}" Value="NotInstalled">
+                        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Worst}" Value="Conflict">
+                        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--
+                Browse's "compatible with your SPT version" line. Three-state: true, false, and null
+                for a mod whose constraint could not be read - which stays the neutral brush.
+            -->
+            <Style x:Key="CompatibilityText" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{DynamicResource TextFillColorTertiaryBrush}" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsCompatibleWithInstalledSpt}" Value="True">
+                        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorSuccessBrush}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsCompatibleWithInstalledSpt}" Value="False">
+                        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
             <Style x:Key="FilterDropDownToggle" TargetType="ToggleButton">
                 <!--
                     Foreground is set here because this Style has no BasedOn and so REPLACES WPF-UI's
