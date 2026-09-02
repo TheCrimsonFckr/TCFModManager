@@ -78,108 +78,117 @@
                  a duplicate-folder warning - still grows instead of being clipped or given its own
                  scrollbar. One number to tune if the standard card gains or loses a line.
             -->
-            <StackPanel Margin="0,4,0,0" MinHeight="300">
-                <TextBlock
-                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                    TextWrapping="Wrap"
-                    Text="{Binding AddonSubtitle}"
-                    Visibility="{Binding AddonSubtitle, Converter={StaticResource NullToCollapsed}}" />
+            <Grid Margin="0,4,0,0" MinHeight="300">
+                <Grid.RowDefinitions>
+                    <!-- The detail takes the slack, so the action row sits on the card's
+                         bottom edge whether the mod has ten lines to say or four. -->
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                <TextBlock
-                    Opacity="0.6"
-                    TextWrapping="Wrap"
-                    Visibility="{Binding FolderNameIfDifferent, Converter={StaticResource NullToCollapsed}}">
-                    <Run Text="Installed as: " />
-                    <Run Text="{Binding FolderNameIfDifferent, Mode=OneWay}" />
-                </TextBlock>
-
-                <TextBlock
-                    Opacity="0.6"
-                    TextWrapping="Wrap"
-                    Visibility="{Binding Guid, Converter={StaticResource NullToCollapsed}}">
-                    <Run Text="GUID: " />
-                    <Run Text="{Binding Guid, Mode=OneWay}" />
-                </TextBlock>
-
-                <TextBlock Opacity="0.6" TextWrapping="Wrap">
-                    <Run Text="Installed version: " />
-                    <Run Text="{Binding InstalledVersion, TargetNullValue='unknown', Mode=OneWay}" />
-                </TextBlock>
-
-                <TextBlock Opacity="0.6" TextWrapping="Wrap">
-                    <Run Text="Latest published: " />
-                    <Run Text="{Binding LatestPublishedText, Mode=OneWay}" />
-                </TextBlock>
-
-                <TextBlock
-                    Opacity="0.6"
-                    Visibility="{Binding LatestUpdatedAt, Converter={StaticResource NullToCollapsed}}">
-                    <Run Text="Last updated on sp-mod.com: " />
-                    <Run Text="{Binding LatestUpdatedAt, StringFormat='{}{0:d}', Mode=OneWay}" />
-                </TextBlock>
-
-                <TextBlock
-                    Opacity="0.6"
-                    Visibility="{Binding InstalledAt, Converter={StaticResource NullToCollapsed}}">
-                    <Run Text="Installed on: " />
-                    <Run Text="{Binding InstalledAt, StringFormat='{}{0:d}', Mode=OneWay}" />
-                </TextBlock>
-
-                <!-- What the files on disk claim, shown only when they disagree with each other or
-                     with the manifest. Sits under the dates because it qualifies the installed
-                     version rather than being a separate fact about the mod. -->
-                <TextBlock
-                    Opacity="0.6"
-                    TextWrapping="Wrap"
-                    Text="{Binding InstalledVersionDetail}"
-                    Visibility="{Binding InstalledVersionDetail, Converter={StaticResource NullToCollapsed}}" />
-
-                <TextBlock
-                    Opacity="0.6"
-                    TextWrapping="Wrap"
-                    Text="{Binding FlagsSummary}"
-                    Visibility="{Binding FlagsSummary, Converter={StaticResource NullToCollapsed}}" />
-
-                <TextBlock
-                    Opacity="0.6"
-                    TextWrapping="Wrap"
-                    Margin="0,4,0,0"
-                    Text="{Binding SourceLabel}" />
-
-                <!-- The folders themselves, one row, each opening in Explorer. The full path is
-                     the tooltip rather than the label: a mod path is far too long to sit inside a
-                     card, and what you want from it is to get there. -->
-                <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
-                    <ui:Button
-                        Padding="8,4"
-                        Appearance="Transparent"
+                <StackPanel Grid.Row="0">
+                    <TextBlock
                         Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                        Icon="{ui:SymbolIcon FolderOpen24}"
-                        Content="Client folder"
-                        Visibility="{Binding ClientFolderLink, Converter={StaticResource NullToCollapsed}}"
-                        Command="{Binding DataContext.OpenModFolderCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                        CommandParameter="{Binding ClientFolderLink}"
-                        ToolTip="{Binding ClientFolderLink}"
-                        ToolTipService.ShowDuration="20000" />
+                        TextWrapping="Wrap"
+                        Text="{Binding AddonSubtitle}"
+                        Visibility="{Binding AddonSubtitle, Converter={StaticResource NullToCollapsed}}" />
 
-                    <ui:Button
-                        Margin="8,0,0,0"
-                        Padding="8,4"
-                        Appearance="Transparent"
-                        Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                        Icon="{ui:SymbolIcon FolderOpen24}"
-                        Content="Server folder"
-                        Visibility="{Binding ServerFolderLink, Converter={StaticResource NullToCollapsed}}"
-                        Command="{Binding DataContext.OpenModFolderCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                        CommandParameter="{Binding ServerFolderLink}"
-                        ToolTip="{Binding ServerFolderLink}"
-                        ToolTipService.ShowDuration="20000" />
+                    <TextBlock
+                        Opacity="0.6"
+                        TextWrapping="Wrap"
+                        Visibility="{Binding FolderNameIfDifferent, Converter={StaticResource NullToCollapsed}}">
+                        <Run Text="Installed as: " />
+                        <Run Text="{Binding FolderNameIfDifferent, Mode=OneWay}" />
+                    </TextBlock>
+
+                    <TextBlock
+                        Opacity="0.6"
+                        TextWrapping="Wrap"
+                        Visibility="{Binding Guid, Converter={StaticResource NullToCollapsed}}">
+                        <Run Text="GUID: " />
+                        <Run Text="{Binding Guid, Mode=OneWay}" />
+                    </TextBlock>
+
+                    <TextBlock Opacity="0.6" TextWrapping="Wrap">
+                        <Run Text="Installed version: " />
+                        <Run Text="{Binding InstalledVersion, TargetNullValue='unknown', Mode=OneWay}" />
+                    </TextBlock>
+
+                    <TextBlock Opacity="0.6" TextWrapping="Wrap">
+                        <Run Text="Latest published: " />
+                        <Run Text="{Binding LatestPublishedText, Mode=OneWay}" />
+                    </TextBlock>
+
+                    <TextBlock
+                        Opacity="0.6"
+                        Visibility="{Binding LatestUpdatedAt, Converter={StaticResource NullToCollapsed}}">
+                        <Run Text="Last updated on sp-mod.com: " />
+                        <Run Text="{Binding LatestUpdatedAt, StringFormat='{}{0:d}', Mode=OneWay}" />
+                    </TextBlock>
+
+                    <TextBlock
+                        Opacity="0.6"
+                        Visibility="{Binding InstalledAt, Converter={StaticResource NullToCollapsed}}">
+                        <Run Text="Installed on: " />
+                        <Run Text="{Binding InstalledAt, StringFormat='{}{0:d}', Mode=OneWay}" />
+                    </TextBlock>
+
+                    <!-- What the files on disk claim, shown only when they disagree with each other or
+                         with the manifest. Sits under the dates because it qualifies the installed
+                         version rather than being a separate fact about the mod. -->
+                    <TextBlock
+                        Opacity="0.6"
+                        TextWrapping="Wrap"
+                        Text="{Binding InstalledVersionDetail}"
+                        Visibility="{Binding InstalledVersionDetail, Converter={StaticResource NullToCollapsed}}" />
+
+                    <TextBlock
+                        Opacity="0.6"
+                        TextWrapping="Wrap"
+                        Text="{Binding FlagsSummary}"
+                        Visibility="{Binding FlagsSummary, Converter={StaticResource NullToCollapsed}}" />
+
+                    <TextBlock
+                        Opacity="0.6"
+                        TextWrapping="Wrap"
+                        Margin="0,4,0,0"
+                        Text="{Binding SourceLabel}" />
+
+                    <!-- The folders themselves, one row, each opening in Explorer. The full path is
+                         the tooltip rather than the label: a mod path is far too long to sit inside a
+                         card, and what you want from it is to get there. -->
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                        <ui:Button
+                            Padding="8,4"
+                            Appearance="Transparent"
+                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                            Icon="{ui:SymbolIcon FolderOpen24}"
+                            Content="Client folder"
+                            Visibility="{Binding ClientFolderLink, Converter={StaticResource NullToCollapsed}}"
+                            Command="{Binding DataContext.OpenModFolderCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                            CommandParameter="{Binding ClientFolderLink}"
+                            ToolTip="{Binding ClientFolderLink}"
+                            ToolTipService.ShowDuration="20000" />
+
+                        <ui:Button
+                            Margin="8,0,0,0"
+                            Padding="8,4"
+                            Appearance="Transparent"
+                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                            Icon="{ui:SymbolIcon FolderOpen24}"
+                            Content="Server folder"
+                            Visibility="{Binding ServerFolderLink, Converter={StaticResource NullToCollapsed}}"
+                            Command="{Binding DataContext.OpenModFolderCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                            CommandParameter="{Binding ServerFolderLink}"
+                            ToolTip="{Binding ServerFolderLink}"
+                            ToolTipService.ShowDuration="20000" />
+                    </StackPanel>
                 </StackPanel>
 
                 <!-- Remove is docked right, away from the two safe actions, so the destructive one
                      is never where the mouse already is. LastChildFill is off: this row is two
                      docked groups, not a filled remainder. -->
-                <DockPanel LastChildFill="False" Margin="0,12,0,0">
+                <DockPanel Grid.Row="1" LastChildFill="False" Margin="0,12,0,0" VerticalAlignment="Bottom">
                     <ui:Button
                         DockPanel.Dock="Left"
                         Content="Details and versions"
@@ -209,7 +218,7 @@
                         CommandParameter="{Binding}"
                         ToolTip="Remove this mod" />
                 </DockPanel>
-            </StackPanel>
+            </Grid>
         </DataTemplate>
 
     </Page.Resources>
