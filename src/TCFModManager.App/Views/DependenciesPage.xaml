@@ -14,7 +14,6 @@
     Loaded="DependenciesPage_Loaded"
     ScrollViewer.CanContentScroll="False">
     <Page.Resources>
-        <converters:ModStatusToBrushConverter x:Key="StatusBrush" />
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <converters:CountToVisibilityConverter x:Key="HasItems" />
     </Page.Resources>
@@ -98,7 +97,7 @@
                                         VerticalAlignment="Center"
                                         FontSize="18"
                                         Symbol="{Binding Glyph}"
-                                        Foreground="{Binding Worst, Converter={StaticResource StatusBrush}}" />
+                                        Style="{StaticResource WorstStatusIcon}" />
 
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                         <TextBlock FontWeight="SemiBold" TextTrimming="CharacterEllipsis">
@@ -132,7 +131,7 @@
                                                 VerticalAlignment="Center"
                                                 FontSize="16"
                                                 Symbol="{Binding Glyph}"
-                                                Foreground="{Binding Status, Converter={StaticResource StatusBrush}}" />
+                                                Style="{StaticResource StatusIcon}" />
 
                                             <TextBlock
                                                 Grid.Column="1"
