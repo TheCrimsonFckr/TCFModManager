@@ -589,16 +589,36 @@
                                         IsChecked="{Binding IsSelected}"
                                         Visibility="{Binding DataContext.SelectionMode, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Converter={StaticResource BoolToVis}}" />
 
-                                    <ui:SymbolIcon
-                                        Grid.Column="1"
-                                        Margin="0,0,10,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="20"
-                                        Symbol="{Binding StatusGlyph}"
-                                        Style="{StaticResource StatusIcon}"
-                                        ToolTip="{Binding StatusTooltip}" />
+                                    <!-- Status above the enable/disable toggle, both top-aligned
+                                         with the title block beside them so the icon reads as
+                                         belonging to the title line rather than floating against
+                                         the middle of the whole header. -->
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Top">
+                                        <ui:SymbolIcon
+                                            Margin="0,1,10,0"
+                                            HorizontalAlignment="Center"
+                                            FontSize="20"
+                                            Symbol="{Binding StatusGlyph}"
+                                            Style="{StaticResource StatusIcon}"
+                                            ToolTip="{Binding StatusTooltip}" />
 
-                                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                        <!-- Same toggle the List view carries, and the only action
+                                             on the collapsed card: it is the one thing you reach
+                                             for without needing to read anything else first.
+                                             Remove stays inside the card, behind the expander. -->
+                                        <ui:Button
+                                            Margin="0,4,10,0"
+                                            Padding="6"
+                                            HorizontalAlignment="Center"
+                                            Appearance="Transparent"
+                                            Command="{Binding DataContext.ToggleDisableCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                            CommandParameter="{Binding}"
+                                            ToolTip="{Binding DisableToggleTooltip}">
+                                            <ui:SymbolIcon Symbol="{Binding DisableToggleGlyph}" FontSize="16" />
+                                        </ui:Button>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2" VerticalAlignment="Top">
                                         <TextBlock
                                             FontWeight="SemiBold"
                                             TextTrimming="CharacterEllipsis"
