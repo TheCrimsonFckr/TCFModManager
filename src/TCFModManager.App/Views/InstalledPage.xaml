@@ -313,6 +313,14 @@
             <ui:Button
                 DockPanel.Dock="Right"
                 Margin="0,0,8,0"
+                Appearance="Primary"
+                Content="Update selected"
+                Icon="{ui:SymbolIcon ArrowDownload24}"
+                ToolTip="Queue an update for every selected mod that has one. Mods with no update, disabled mods and addons are skipped."
+                Command="{Binding UpdateSelectedCommand}" />
+            <ui:Button
+                DockPanel.Dock="Right"
+                Margin="0,0,8,0"
                 Content="Enable selected"
                 Icon="{ui:SymbolIcon PlugConnected24}"
                 Command="{Binding EnableSelectedCommand}" />

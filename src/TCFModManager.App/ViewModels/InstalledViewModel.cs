@@ -8,6 +8,7 @@ using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
+using TCFModManager.Core.SpModApi;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -534,6 +535,7 @@ public partial class InstalledViewModel : ObservableObject
             OnPropertyChanged(nameof(SelectedCountLabel));
             DisableSelectedCommand.NotifyCanExecuteChanged();
             EnableSelectedCommand.NotifyCanExecuteChanged();
+            UpdateSelectedCommand.NotifyCanExecuteChanged();
 
             var unmatched = _all.Where(m => m.ModId is null).Select(m => m.Name).ToList();
             AppLog.Info("Installed",
@@ -798,6 +800,157 @@ public partial class InstalledViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(HasSelection))]
     private Task EnableSelectedAsync() => ApplyDisableAsync(SelectedCards(), disable: false);
 
+    //
+    // True when at least one selected mod could actually be updated. Deliberately stricter than
+    // HasSelection: offering an enabled Update button that then reports "nothing to update" is
+    // worse than a greyed-out one, and the reasons a mod is excluded are explained when it runs.
+    //
+    private bool HasUpdatableSelection() => SelectedCards().Any(IsUpdatable);
+
+    private static bool IsUpdatable(InstalledModCardViewModel card) =>
+        card is { UpdateAvailable: true, IsDisabled: false, IsAddon: false, ModId: not null }
+        && card.LatestPublishedVersion is not null;
+
+    //
+    // Updates every selected mod that has one waiting, in a single pass.
+    //
+    // The prompts are asked ONCE for the whole batch rather than once per mod - the same reasoning
+    // as applying a mod list: per-mod modals over a long selection train people into turning the
+    // gate off globally, which is strictly worse for them than one demanding prompt.
+    //
+    [RelayCommand(CanExecute = nameof(HasUpdatableSelection))]
+    private void UpdateSelected()
+    {
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        if (string.IsNullOrWhiteSpace(installPath))
+        {
+            StatusMessage = "No SPT install folder set - configure it on the Options page first.";
+            return;
+        }
+
+        var selected = SelectedCards();
+        var targets = selected.Where(IsUpdatable).ToList();
+
+        if (targets.Count == 0)
+        {
+            StatusMessage = DescribeNothingToUpdate(selected);
+            return;
+        }
+
+        // Resolved against the cached catalog before anything is asked, so a mod the catalog can no
+        // longer identify is reported now rather than failing halfway through the batch.
+        var resolved = new List<(InstalledModCardViewModel Card, Mod Mod, string Version)>();
+        var unmatched = new List<string>();
+
+        foreach (var card in targets)
+        {
+            var match = AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == card.ModId);
+            var version = match is null
+                ? null
+                : ModCardViewModel.PickDisplayVersion(match, AppServices.SptEnvironment.InstalledVersion)?.Version;
+
+            if (match is null || version is null) unmatched.Add(card.DisplayTitle);
+            else resolved.Add((card, match, version));
+        }
+
+        if (resolved.Count == 0)
+        {
+            StatusMessage = $"Couldn't find {Join(unmatched)} in the cached catalog - try Rescan.";
+            return;
+        }
+
+        //
+        // One warning covering every hand-installed mod in the batch, for the same reason the
+        // single-mod path warns at all: there is no record of which files the current version
+        // placed, so the new one goes on top of it.
+        //
+        var handInstalled = resolved.Where(r => !r.Card.IsAppManaged).Select(r => r.Card.DisplayTitle).ToList();
+        if (handInstalled.Count > 0 && !Confirm(
+                handInstalled.Count == 1 ? "Update a hand-installed mod?" : $"Update {handInstalled.Count} hand-installed mods?",
+                $"{Join(handInstalled)} wasn't installed through this app, so there's no record of exactly which "
+                + "files the current version placed. Updating installs the new version's files on top of what's "
+                + "already there rather than cleanly removing the old version first, so you may end up with "
+                + "leftover files from the old version."))
+        {
+            StatusMessage = "Update cancelled.";
+            return;
+        }
+
+        // The same gate a single install goes through, asked once for the batch. ConfirmAll honours
+        // the Options switch that turns the gate off.
+        var links = resolved.Select(r => new ModPageLink(r.Card.DisplayTitle, r.Mod.DetailUrl)).ToList();
+        if (!ReadModPageConfirmationWindow.ConfirmAll(links))
+        {
+            StatusMessage = "Update cancelled - the mod pages weren't confirmed as read.";
+            return;
+        }
+
+        foreach (var (_, mod, version) in resolved)
+        {
+            AppServices.DownloadQueue.Enqueue(
+                InstallTarget.For(mod), version, installPath, () => ResolveVersionLinkAsync(mod, version));
+        }
+
+        var queued = resolved.Count == 1
+            ? $"Queued 1 update"
+            : $"Queued {resolved.Count} updates";
+        var skipped = DescribeSkipped(selected, resolved.Count, unmatched);
+        StatusMessage = $"{queued} - see the Downloads page for progress.{skipped}";
+
+        AppLog.Info("Installed", $"queued {resolved.Count} update(s) from a selection of {selected.Count}");
+    }
+
+    //
+    // Why a selection that looked updatable produced nothing. Each reason is separate because they
+    // need different things done about them - enabling a mod, opening its parent, or a rescan.
+    //
+    private static string DescribeNothingToUpdate(IReadOnlyList<InstalledModCardViewModel> selected)
+    {
+        if (selected.Count == 0) return "Nothing selected.";
+
+        var disabled = selected.Count(c => c is { UpdateAvailable: true, IsDisabled: true });
+        var addons = selected.Count(c => c is { UpdateAvailable: true, IsAddon: true });
+
+        var reasons = new List<string>();
+        if (disabled > 0) reasons.Add($"{disabled} disabled (enable them first)");
+        if (addons > 0) reasons.Add($"{addons} addon(s), which update from their parent mod");
+
+        return reasons.Count == 0
+            ? "None of the selected mods have an update."
+            : $"None of the selected mods can be updated here: {string.Join(", ", reasons)}.";
+    }
+
+    private static string DescribeSkipped(
+        IReadOnlyList<InstalledModCardViewModel> selected,
+        int queued,
+        IReadOnlyList<string> unmatched)
+    {
+        var parts = new List<string>();
+
+        var disabled = selected.Count(c => c is { UpdateAvailable: true, IsDisabled: true });
+        var addons = selected.Count(c => c is { UpdateAvailable: true, IsAddon: true });
+        var noUpdate = selected.Count(c => c.UpdateAvailable != true);
+
+        if (noUpdate > 0) parts.Add($"{noUpdate} already up to date");
+        if (disabled > 0) parts.Add($"{disabled} disabled");
+        if (addons > 0) parts.Add($"{addons} addon(s) - update those from their parent mod");
+        if (unmatched.Count > 0) parts.Add($"{unmatched.Count} not found in the catalog");
+
+        return parts.Count == 0 ? string.Empty : $" Skipped {string.Join(", ", parts)}.";
+    }
+
+    private static string Join(IReadOnlyList<string> names) =>
+        names.Count == 1 ? names[0] : $"{string.Join(", ", names.Take(names.Count - 1))} and {names[^1]}";
+
+    // Twin of BrowseViewModel's resolver. Duplicated rather than shared: pulling it out would mean
+    // editing a file this change otherwise doesn't touch, for four lines.
+    private static async Task<ModVersion?> ResolveVersionLinkAsync(Mod mod, string version)
+    {
+        var versions = await AppServices.SpModApi.GetModVersionsAsync(
+            mod.Id.ToString(), new ModVersionsQuery { FilterVersion = version, PerPage = 5 });
+        return versions.Data.FirstOrDefault(v => v.Version == version) ?? versions.Data.FirstOrDefault();
+    }
+
     [RelayCommand]
     private void ClearSelection()
     {
@@ -976,6 +1129,7 @@ public partial class InstalledViewModel : ObservableObject
         OnPropertyChanged(nameof(SelectedCountLabel));
         DisableSelectedCommand.NotifyCanExecuteChanged();
         EnableSelectedCommand.NotifyCanExecuteChanged();
+        UpdateSelectedCommand.NotifyCanExecuteChanged();
     }
 
     private static bool Confirm(string title, string message) =>
