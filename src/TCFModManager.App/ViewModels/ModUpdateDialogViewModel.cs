@@ -47,11 +47,29 @@ public partial class ModUpdateDialogViewModel : ObservableObject
     public string DisabledNotice =>
         $"{_mod.DisplayTitle} is disabled. Enable it on the Installed page to update or redownload it.";
 
-    // Whether the dialog's Update button should be shown.
-    public bool ShowUpdateButton => _mod.UpdateAvailable == true && !_mod.IsDisabled;
+    //
+    // Which button is shown is decided by the SELECTED version against the installed one, not by
+    // the mod's own UpdateAvailable flag.
+    //
+    // It used to be the flag, which meant the label described the mod rather than the action: with
+    // a newer version published, picking an older one from the list and pressing the button still
+    // said "Update" while installing a downgrade. The list has always let you choose any version -
+    // only the wording was wrong.
+    //
+    private bool CanAct => SelectedVersion is not null && !_mod.IsDisabled;
 
-    // Redownload takes Update's place when there's nothing newer to move to.
-    public bool ShowRedownloadButton => _mod.UpdateAvailable != true && !_mod.IsDisabled;
+    public bool ShowUpdateButton =>
+        CanAct && ModVersionComparer.IsUpdateAvailable(InstalledVersionText, SelectedVersion?.VersionText) == true;
+
+    public bool ShowDowngradeButton =>
+        CanAct && ModVersionComparer.IsUpdateAvailable(SelectedVersion?.VersionText, InstalledVersionText) == true;
+
+    //
+    // The fallback: the selected version is the one installed, or the two can't be compared. Either
+    // way "Redownload" is the honest word - it re-fetches whatever is selected and claims no
+    // direction, which is what the app actually knows when a version string won't parse.
+    //
+    public bool ShowRedownloadButton => CanAct && !ShowUpdateButton && !ShowDowngradeButton;
 
     // Whether the "manage installed version" controls should be shown - only meaningful once a
     // catalog mod is known, since confirming/overriding a version needs a mod to record it against.
@@ -66,7 +84,11 @@ public partial class ModUpdateDialogViewModel : ObservableObject
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(UpdateCommand))]
     [NotifyCanExecuteChangedFor(nameof(RedownloadCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DowngradeCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConfirmSelectedAsInstalledCommand))]
+    [NotifyPropertyChangedFor(nameof(ShowUpdateButton))]
+    [NotifyPropertyChangedFor(nameof(ShowDowngradeButton))]
+    [NotifyPropertyChangedFor(nameof(ShowRedownloadButton))]
     private ModVersionRowViewModel? _selectedVersion;
 
     [ObservableProperty]
@@ -236,6 +258,44 @@ public partial class ModUpdateDialogViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanUpdate))]
     private void Redownload() => EnqueueSelectedVersion("Redownload");
 
+    //
+    // Installs an older version over a newer one. Confirmed first, and separately from the
+    // hand-installed warning inside EnqueueSelectedVersion, because the risk is a different one:
+    // that warning is about leftover FILES, this is about DATA the newer version has already
+    // written and the older one may not understand.
+    //
+    [RelayCommand(CanExecute = nameof(CanUpdate))]
+    private void Downgrade()
+    {
+        if (SelectedVersion is not { } selected) return;
+
+        if (!Confirm(
+                $"Downgrade {_mod.DisplayTitle} to {selected.VersionText}?",
+                $"You have {InstalledVersionText ?? "a newer version"} installed, and this will replace it with "
+                + $"{selected.VersionText}.\n\n"
+                + "Replacing the files is the easy half. What this app cannot undo is anything the newer version "
+                + "has already written - its own config files, and any changes it made to your SPT profile. An "
+                + "older build may not read those back, and some mods change their data format between versions, "
+                + "which can leave a profile the older version refuses to load.\n\n"
+                + "Back up your profile before continuing if it matters to you."))
+        {
+            StatusMessage = "Downgrade cancelled.";
+            return;
+        }
+
+        EnqueueSelectedVersion("Downgrade");
+    }
+
+    //
+    // "Update" -> "updating", not "updateing". The verb is reused in this sentence, and a silent
+    // trailing "e" made the old wording wrong for two of the three buttons.
+    //
+    private static string Gerund(string verb)
+    {
+        var lower = verb.ToLowerInvariant();
+        return lower.EndsWith('e') ? lower[..^1] + "ing" : lower + "ing";
+    }
+
     private void EnqueueSelectedVersion(string verb)
     {
         if (SelectedVersion is null) return;
@@ -260,7 +320,7 @@ public partial class ModUpdateDialogViewModel : ObservableObject
         if (!_mod.IsAppManaged && !Confirm(
                 $"{verb} {_mod.DisplayTitle}?",
                 "This mod wasn't installed through this app, so there's no record of exactly which files its current " +
-                $"version placed - {verb.ToLowerInvariant()}ing installs the new version's files on top of what's already there rather " +
+                $"version placed - {Gerund(verb)} installs the selected version's files on top of what's already there rather " +
                 "than cleanly removing the old version first. You may end up with leftover files from the old version."))
         {
             return;

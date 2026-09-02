@@ -78,10 +78,10 @@
                 Visibility="{Binding IsModDisabled, Converter={StaticResource TrueToVisible}}" />
         </StackPanel>
 
-        <!-- "View mod page" shows when a catalog match exists. "Update" shows only when a newer
-             compatible version is available; "Redownload" takes its place otherwise, re-fetching
-             whatever version is selected below (the installed one, by default). "Mark up to date"
-             and "Confirm as installed" only record a version - they never touch any files. -->
+        <!-- "View mod page" shows when a catalog match exists. Which of Update / Downgrade /
+             Redownload appears is decided by the version SELECTED below against the one installed,
+             so the button always names what pressing it would actually do. "Mark up to date" and
+             "Confirm as installed" only record a version - they never touch any files. -->
         <DockPanel Grid.Row="1" Margin="0,0,0,8">
             <ui:Button
                 DockPanel.Dock="Right"
@@ -91,6 +91,14 @@
                 ToolTip="{Binding UpdateToolTip, Source={x:Static app:AppServices.ModPageGate}}"
                 Command="{Binding UpdateCommand}"
                 Visibility="{Binding ShowUpdateButton, Converter={StaticResource TrueToVisible}}" />
+            <ui:Button
+                DockPanel.Dock="Right"
+                HorizontalAlignment="Right"
+                Content="Downgrade"
+                Icon="{ui:SymbolIcon ArrowDown24}"
+                Command="{Binding DowngradeCommand}"
+                ToolTip="Install this older version in place of the one you have. Asks first - an older build may not read config or profile data the newer one wrote."
+                Visibility="{Binding ShowDowngradeButton, Converter={StaticResource TrueToVisible}}" />
             <ui:Button
                 DockPanel.Dock="Right"
                 HorizontalAlignment="Right"
