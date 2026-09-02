@@ -4,6 +4,7 @@ using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -293,15 +294,17 @@ public partial class AppUpdateViewModel : ObservableObject
         {
             AppUpdateInstaller.ClearWorkingFiles();
             InstallStatus = null;
-            InstallError = ex.Message;
-            AppLog.Error("AppUpdate", "update could not be applied", ex);
+            InstallError = AppUpdateProblems.Describe(ex);
+
+            // The reason and the sentence both go in: the reason is what a log is searched for, the
+            // sentence carries the numbers behind it.
+            AppLog.Error("AppUpdate", $"update could not be applied ({ex.Reason}): {InstallError}", ex);
         }
         catch (Exception ex)
         {
             AppUpdateInstaller.ClearWorkingFiles();
             InstallStatus = null;
-            InstallError = $"The update failed: {ex.Message}. Nothing was changed - "
-                + "download it from the mod page and replace this folder by hand if it keeps happening.";
+            InstallError = AppUpdateProblems.Unexpected(ex);
             AppLog.Error("AppUpdate", "update failed", ex);
         }
         finally

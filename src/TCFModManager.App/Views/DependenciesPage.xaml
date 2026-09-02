@@ -151,7 +151,10 @@
                                                 Command="{Binding DataContext.InstallCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                                                 CommandParameter="{Binding}"
                                                 Visibility="{Binding CanInstall, Converter={StaticResource BoolToVisibility}}"
-                                                IsEnabled="{Binding IsNotQueued}" />
+                                                IsEnabled="{Binding IsNotQueued}"
+                                                ToolTip="{Binding InstallToolTip}"
+                                                ToolTipService.ShowOnDisabled="True"
+                                                ToolTipService.ShowDuration="20000" />
                                             </Grid>
                                         </Border>
                                     </DataTemplate>

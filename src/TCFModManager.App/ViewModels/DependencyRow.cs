@@ -31,6 +31,7 @@ public sealed partial class DependencyRow : ObservableObject
     // Set once this row has been queued, so the button doesn't invite a second click.
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsNotQueued))]
+    [NotifyPropertyChangedFor(nameof(InstallToolTip))]
     private bool _isQueued;
 
     public bool IsNotQueued => !IsQueued;
@@ -57,4 +58,22 @@ public sealed partial class DependencyRow : ObservableObject
         && !string.IsNullOrWhiteSpace(RequiredVersion);
 
     public string InstallButtonText => Status == ModStatus.UpdateAvailable ? "Update" : "Install";
+
+    //
+    // The button's tooltip. Its most useful job is explaining the DISABLED state: once a row is
+    // queued the button greys out, and a greyed button with no explanation reads as broken rather
+    // than as "already done". The page sets ToolTipService.ShowOnDisabled so this is actually
+    // reachable then.
+    //
+    // Otherwise it reuses the shared mod-page gate wording, so this button says the same thing as
+    // the install buttons on Browse and in the update dialog - including the warning when the gate
+    // has been switched off. Read at bind time rather than bound live to the gate view model: these
+    // rows are rebuilt on every refresh of the page, which is the only way to reach them after
+    // changing that setting.
+    //
+    public string InstallToolTip => IsQueued
+        ? $"{Name} is already in the download queue - see the Downloads page for progress."
+        : Status == ModStatus.UpdateAvailable
+            ? AppServices.ModPageGate.UpdateToolTip
+            : AppServices.ModPageGate.InstallToolTip;
 }

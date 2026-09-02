@@ -7,11 +7,68 @@ using TCFModManager.Core.Models;
 
 namespace TCFModManager.Core.Services;
 
+//
 // A problem the user can act on - out of disk, a read-only app folder, a release that isn't
 // packaged the way this app's own releases are. Distinct from network/API failures, which surface
 // as the exception types the rest of the app already handles.
-public sealed class AppUpdateException(string message, Exception? inner = null)
-    : Exception(message, inner);
+//
+// Each case names what went wrong and nothing more. The sentence the user reads - and the "do this
+// instead" half of it, which is the part that actually helps - is composed in the App layer, where
+// the rest of this app's wording lives.
+//
+public enum AppUpdateFailure
+{
+    // sp-mod.com lists the release but has no file attached to it. Carries Version.
+    NoDownloadFile,
+
+    // What came down isn't a readable zip. Carries nothing.
+    DownloadNotReadable,
+
+    // The extracted release has no exe where a release of this app has one. Carries Version, ExeName.
+    ReleaseMissingExe,
+
+    // The staged payload has no exe in it. Carries ExeName.
+    StagedBuildMissingExe,
+
+    // The staged exe is far too small to be a real build. Carries ExeName, StagedExeBytes.
+    StagedBuildTooSmall,
+
+    // powershell.exe wouldn't start. Carries Folder - the staged payload, which is still there and
+    // can still be copied over by hand.
+    UpdaterWouldNotStart,
+
+    // The app can't write to its own folder. Carries Folder - the app folder.
+    AppFolderNotWritable,
+
+    // Carries DriveName, RequiredBytes, AvailableBytes.
+    NotEnoughFreeSpace,
+}
+
+//
+// The values are init-only and nullable because which of them is filled depends on Reason - see
+// the comment on each case for what to expect. Message is the reason name, for the log and the
+// debugger; it is not shown to anyone.
+//
+public sealed class AppUpdateException(AppUpdateFailure reason, Exception? inner = null)
+    : Exception(reason.ToString(), inner)
+{
+    public AppUpdateFailure Reason { get; } = reason;
+
+    public string? Version { get; init; }
+
+    public string? ExeName { get; init; }
+
+    // Whichever folder the failure is about - the app folder, or the staged payload.
+    public string? Folder { get; init; }
+
+    public string? DriveName { get; init; }
+
+    public long? StagedExeBytes { get; init; }
+
+    public long? RequiredBytes { get; init; }
+
+    public long? AvailableBytes { get; init; }
+}
 
 //
 // Downloads a published release of this app from sp-mod.com and swaps it in over the running copy.
@@ -92,8 +149,7 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
         CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(update.DownloadUrl))
-            throw new AppUpdateException(
-                $"sp-mod.com lists {update.LatestVersion} but has no file attached to it. Open the mod page and download it manually.");
+            throw new AppUpdateException(AppUpdateFailure.NoDownloadFile) { Version = update.LatestVersion };
 
         EnsureAppFolderIsWritable();
         EnsureEnoughFreeSpace(update.DownloadSizeBytes);
@@ -123,16 +179,17 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
         }
         catch (InvalidDataException ex)
         {
-            throw new AppUpdateException(
-                "The downloaded file isn't a readable zip - the download may have been interrupted. Try again.", ex);
+            throw new AppUpdateException(AppUpdateFailure.DownloadNotReadable, ex);
         }
 
         progress?.Report(0.95);
 
         var payloadSource = FindPayloadRoot(extractDirectory)
-            ?? throw new AppUpdateException(
-                $"The {update.LatestVersion} release doesn't contain {ExeName} where this app expects it. "
-                + "Download it from the mod page and copy it over by hand instead.");
+            ?? throw new AppUpdateException(AppUpdateFailure.ReleaseMissingExe)
+            {
+                Version = update.LatestVersion,
+                ExeName = ExeName,
+            };
 
         Directory.Move(payloadSource, PayloadDirectory);
         if (Directory.Exists(extractDirectory)) Directory.Delete(extractDirectory, recursive: true);
@@ -186,10 +243,7 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
         }
         catch (Exception ex)
         {
-            throw new AppUpdateException(
-                "Couldn't start the updater script. The new version is downloaded and unpacked in "
-                + $"{PayloadDirectory} - close the app and copy what's in there over this folder to finish by hand.",
-                ex);
+            throw new AppUpdateException(AppUpdateFailure.UpdaterWouldNotStart, ex) { Folder = PayloadDirectory };
         }
     }
 
@@ -234,14 +288,17 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
     {
         var stagedExe = Path.Combine(PayloadDirectory, ExeName);
         if (!File.Exists(stagedExe))
-            throw new AppUpdateException($"The staged update is missing {ExeName} - nothing was changed.");
+            throw new AppUpdateException(AppUpdateFailure.StagedBuildMissingExe) { ExeName = ExeName };
 
         // A self-contained single-file build is upwards of 100MB. Anything in the low kilobytes is
         // a truncated download or a stub, and is not worth copying over a working install.
         var length = new FileInfo(stagedExe).Length;
         if (length < 1024 * 1024)
-            throw new AppUpdateException(
-                $"The staged {ExeName} is only {length / 1024}KB, which is far too small to be a real build - nothing was changed.");
+            throw new AppUpdateException(AppUpdateFailure.StagedBuildTooSmall)
+            {
+                ExeName = ExeName,
+                StagedExeBytes = length,
+            };
     }
 
     private static void EnsureAppFolderIsWritable()
@@ -254,10 +311,7 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            throw new AppUpdateException(
-                $"This app can't write to its own folder ({AppDirectory}), so it can't update itself in place. "
-                + "Move it somewhere outside Program Files, or download the new version from the mod page and replace it by hand.",
-                ex);
+            throw new AppUpdateException(AppUpdateFailure.AppFolderNotWritable, ex) { Folder = AppDirectory };
         }
     }
 
@@ -275,9 +329,12 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
             var required = downloadSizeBytes.Value * 4;
             if (drive.AvailableFreeSpace >= required) return;
 
-            throw new AppUpdateException(
-                $"Not enough free space on {drive.Name} to download and unpack the update - "
-                + $"about {required / (1024 * 1024)}MB is needed, {drive.AvailableFreeSpace / (1024 * 1024)}MB is free.");
+            throw new AppUpdateException(AppUpdateFailure.NotEnoughFreeSpace)
+            {
+                DriveName = drive.Name,
+                RequiredBytes = required,
+                AvailableBytes = drive.AvailableFreeSpace,
+            };
         }
         catch (Exception ex) when (ex is ArgumentException or IOException or UnauthorizedAccessException)
         {
