@@ -18,7 +18,6 @@
     -->
     <Window.Resources>
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
-        <converters:ErrorToBrushConverter x:Key="ErrorToBrush" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -87,7 +86,7 @@
                     Margin="0,8,0,0"
                     TextWrapping="Wrap"
                     Text="{Binding StatusMessage}"
-                    Foreground="{Binding HasError, Converter={StaticResource ErrorToBrush}}"
+                    Style="{StaticResource ErrorText}"
                     Visibility="{Binding StatusMessage, Converter={StaticResource NullToCollapsed}}" />
             </Grid>
         </Grid>

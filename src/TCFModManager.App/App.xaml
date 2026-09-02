@@ -157,6 +157,21 @@
                 </Style.Triggers>
             </Style>
 
+            <!--
+                The Data files window's status line. The one place this pattern matters for
+                legibility rather than tidiness: it swaps between the critical colour and ORDINARY
+                TEXT, so a value frozen from the previous theme could leave a normal message sitting
+                on the wrong side of a light/dark switch.
+            -->
+            <Style x:Key="ErrorText" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding HasError}" Value="True">
+                        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
             <Style x:Key="FilterDropDownToggle" TargetType="ToggleButton">
                 <!--
                     Foreground is set here because this Style has no BasedOn and so REPLACES WPF-UI's

@@ -10,12 +10,16 @@ namespace TCFModManager.App.Converters;
 // The literal fallbacks are what these colours were before theming, so a key that ever went missing
 // from a future WPF-UI release degrades to the old appearance instead of to nothing.
 //
-// **Known limitation:** a brush handed back from a converter is whatever the theme was when the
-// binding last ran, so switching theme while the app is open leaves these particular icons on the
-// previous theme's colour until their binding re-evaluates. They stay perfectly legible either way -
-// these are saturated status colours, not body text - so it is a cosmetic lag rather than the
-// white-on-white problem the XAML sweep was fixing. The proper fix is styles with DataTriggers on
-// ModStatus using DynamicResource at each usage site; worth doing if it ever grates.
+// **The converters that used this are gone.** Every status colour is now a Style with DataTriggers
+// carrying DynamicResource, which re-resolves on a theme change - see StatusIcon / WorstStatusIcon /
+// CompatibilityText / ErrorText in App.xaml. That was the fix this comment used to describe as
+// "worth doing if it ever grates".
+//
+// What remains here are the two places a brush genuinely has to be produced from code rather than
+// markup: HtmlText building a FlowDocument, and ModDisableConfirmationWindow's severity colour.
+// Both still freeze at the theme in force when they run. Neither has been a problem - the dialog is
+// built fresh each time it opens - but prefer SetResourceReference over this when the target is a
+// DependencyObject that outlives a theme switch.
 //
 internal static class ThemeBrush
 {
