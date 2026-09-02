@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using TCFModManager.App.ViewModels;
 using Wpf.Ui.Controls;
 
@@ -57,10 +58,35 @@ public partial class ModUpdateContentDialog : ContentDialog
         DataContext = ViewModel;
         Title = mod.DisplayTitle;
 
+        //
+        // Lets the wheel scroll the version list from anywhere in the dialog rather than only over
+        // the scrollbar. Several controls in here mark a bubbling MouseWheel handled whether or not
+        // they have anything to scroll - the ListBox's own template ScrollViewer, the manual-version
+        // ui:TextBox, and each release-note RichTextBox - so a plain MouseWheel handler never sees
+        // most of the dialog. A tunnelling PreviewMouseWheel registered with handledEventsToo:true
+        // runs before all of them and regardless of what they do. Same fix as InstalledPage's group
+        // view and DependenciesPage's tree.
+        //
+        AddHandler(PreviewMouseWheelEvent, new MouseWheelEventHandler(Dialog_PreviewMouseWheel), true);
+
         // Fire-and-forget load; the XAML's loading state covers it until it completes.
         _ = ViewModel.LoadAsync();
     }
 #pragma warning restore CS0618
+
+    //
+    // Drives VersionsScrollViewer directly. Safe to do unconditionally: it is the only scrollable
+    // region in the dialog - the release-note RichTextBoxes are explicitly
+    // VerticalScrollBarVisibility="Disabled", and the ListBox never scrolls itself (see the XAML).
+    // If a genuinely scrollable child is ever added here, this has to start checking for one first.
+    //
+    private void Dialog_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        if (VersionsScrollViewer.Visibility != Visibility.Visible) return;
+
+        VersionsScrollViewer.ScrollToVerticalOffset(VersionsScrollViewer.VerticalOffset - e.Delta);
+        e.Handled = true;
+    }
 
     // Forces a fixed dialog size after the base ContentDialog auto-sizing pass.
     protected override Size MeasureOverride(Size availableSize)

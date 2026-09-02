@@ -50,7 +50,10 @@
         </DataTemplate>
     </ui:ContentDialog.TitleTemplate>
 
-    <Grid>
+    <!-- Background is Transparent, not unset: a Panel with no Background only takes part in hit
+         testing where a child actually paints, so the gaps between rows would be invisible to the
+         wheel handler in the code-behind. -->
+    <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -156,7 +159,12 @@
                 <TextBlock Margin="0,8,0,0" HorizontalAlignment="Center" Opacity="0.7" Text="Loading versions..." />
             </StackPanel>
 
+            <!-- The only thing in this dialog that scrolls. The ListBox below has a ScrollViewer
+                 of its own from its template, but sitting in a StackPanel it is measured with
+                 infinite height and so never has anything to scroll - it just marks the wheel
+                 event handled on its way past. See Dialog_PreviewMouseWheel. -->
             <ScrollViewer
+                x:Name="VersionsScrollViewer"
                 VerticalScrollBarVisibility="Auto"
                 Visibility="{Binding IsLoading, Converter={StaticResource FalseToVisible}}">
               <StackPanel>

@@ -467,19 +467,26 @@ public partial class InstalledViewModel : ObservableObject
         };
     }
 
+    //
+    // Re-reads the install and rebuilds every card. Deliberately leaves you on the page you were
+    // on: a scan changes what the list holds, not which part of it you were looking at.
+    //
+    // This used to take a resetPage flag, true for the Rescan button and the page's Loaded handler
+    // and false for everything else. That is what sent you back to page 1 on closing the mod
+    // dialog - Loaded fires again every time the page is re-attached, not just the first time, and
+    // any scan that went through the flag-true path clobbered the page. Resetting to page 1
+    // belongs to a *filter* change, where the list you are paging through is genuinely different,
+    // and AutoApplyFilter already does exactly that.
+    //
     [RelayCommand]
-    private Task ScanAsync() => ScanAsync(resetPage: true);
-
-    /// <summary>The actual scan. <see cref="ScanAsync()"/> always resets to page 1; a rescan triggered by
-    /// something else closing (e.g. ShowDetailsAsync) can pass resetPage: false to stay on the current page.</summary>
-    private async Task ScanAsync(bool resetPage)
+    private async Task ScanAsync()
     {
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath))
         {
             _all = [];
             ApplyFilter();
-            RefreshActiveView();
+            RefreshActiveView(CurrentPage);
             StatusMessage = "No SPT install folder set - configure it on the Options page first.";
             return;
         }
@@ -552,7 +559,7 @@ public partial class InstalledViewModel : ObservableObject
             AppLog.Info("Installed",
                 $"scanned {scanned.Count} folder(s) -> {_all.Count} card(s); " +
                 $"{_all.Count(m => m.IsAppManaged)} app-managed, {_all.Count(m => m.IsDisabled)} disabled, " +
-                $"{unmatched.Count} unmatched");
+                $"{unmatched.Count} unmatched; on page {CurrentPage} of {TotalPages}");
             if (unmatched.Count > 0) AppLog.Debug("Installed", $"unmatched: {string.Join(", ", unmatched)}");
 
             var mixed = _all.Where(m => m.IsMixedState).Select(m => m.Name).ToList();
@@ -560,7 +567,7 @@ public partial class InstalledViewModel : ObservableObject
                 AppLog.Warn("Installed", $"present in both an enabled and a disabled folder: {string.Join(", ", mixed)}");
 
             ApplyFilter();
-            RefreshActiveView(resetPage ? 1 : CurrentPage);
+            RefreshActiveView(CurrentPage);
 
             StatusMessage = _all.Count == 0
                 ? $"No mods found under \"{installPath}\"."
@@ -695,7 +702,7 @@ public partial class InstalledViewModel : ObservableObject
         if (AppServices.ModUpdateOverlay.ShowAsync is not { } show) return;
 
         await show(mod);
-        await ScanAsync(resetPage: false);
+        await ScanAsync();
     }
 
     /// <summary>Flips one mod between enabled and disabled.</summary>
@@ -799,7 +806,7 @@ public partial class InstalledViewModel : ObservableObject
             "the other is in .tcfmm-duplicates in your SPT install.";
         if (failed.Count > 0) message = $"{message} {DescribeFailures(failed)}";
 
-        await ScanAsync(resetPage: false);
+        await ScanAsync();
         StatusMessage = message;
     }
 
@@ -1000,7 +1007,7 @@ public partial class InstalledViewModel : ObservableObject
         }
 
         SetLastMoves([], null);
-        await ScanAsync(resetPage: false);
+        await ScanAsync();
         StatusMessage = message;
     }
 
@@ -1079,7 +1086,7 @@ public partial class InstalledViewModel : ObservableObject
         var message = $"{(disable ? "Disabled" : "Enabled")} {targets.Count} mod(s).";
         if (outcome.Failed.Count > 0) message = $"{message} {DescribeFailures(outcome.Failed)}";
 
-        await ScanAsync(resetPage: false);
+        await ScanAsync();
         StatusMessage = message;
 
         return moves;
