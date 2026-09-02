@@ -347,6 +347,17 @@ public partial class ModUpdateDialogViewModel : ObservableObject
         return lower.EndsWith('e') ? lower[..^1] + "ing" : lower + "ing";
     }
 
+    //
+    // True once this dialog has actually changed something - a version queued for download, a
+    // version recorded as installed, an override set or cleared. Just looking through the version
+    // history leaves it false.
+    //
+    // The Installed page uses it to decide whether closing the dialog needs a rescan. It used to
+    // rescan unconditionally, which re-read the whole install and rebuilt every card just because
+    // someone opened a mod to read its changelog.
+    //
+    public bool MadeChanges { get; private set; }
+
     private void EnqueueSelectedVersion(string verb)
     {
         if (SelectedVersion is null) return;
@@ -389,6 +400,7 @@ public partial class ModUpdateDialogViewModel : ObservableObject
             target, selectedVersion.VersionText, installPath, () => Task.FromResult<ModVersion?>(selectedVersion.Raw),
             totalBytes: selectedVersion.Raw.ContentLength);
         StatusMessage = $"Queued {_mod.DisplayTitle} {selectedVersion.VersionText} - see the Downloads page for progress.";
+        MadeChanges = true;
     }
 
     private static bool Confirm(string title, string message) =>
@@ -459,6 +471,7 @@ public partial class ModUpdateDialogViewModel : ObservableObject
 
             AppServices.InstallManifest.SetManualVersion(
                 addon.Id, guid: null, addon.Name ?? _mod.DisplayTitle, version, versionId, folders, isAddon: true);
+            MadeChanges = true;
             return;
         }
 
@@ -466,6 +479,7 @@ public partial class ModUpdateDialogViewModel : ObservableObject
 
         AppServices.InstallManifest.SetManualVersion(
             catalogMod.Id, catalogMod.Guid, catalogMod.Name ?? _mod.DisplayTitle, version, versionId, folders);
+        MadeChanges = true;
     }
 
     private bool CanClearOverride() => _mod.IsManualOverride;
@@ -478,6 +492,7 @@ public partial class ModUpdateDialogViewModel : ObservableObject
         if (_mod.ModId is not { } modId) return;
 
         AppServices.InstallManifest.ClearManualVersion(modId, _mod.IsAddon);
+        MadeChanges = true;
         StatusMessage = $"Cleared the manual override for {_mod.DisplayTitle} - it'll go back to auto-detecting from the files on disk.";
     }
 }

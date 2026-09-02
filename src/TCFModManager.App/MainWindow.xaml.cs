@@ -29,7 +29,11 @@ public partial class MainWindow : FluentWindow
 
         // Constructs and shows the mod update dialog, awaitable so callers know when it closes.
         AppServices.ModUpdateOverlay.ShowAsync = async mod =>
-            await new ModUpdateContentDialog(RootContentDialogPresenter, mod).ShowAsync();
+        {
+            var dialog = new ModUpdateContentDialog(RootContentDialogPresenter, mod);
+            await dialog.ShowAsync();
+            return dialog.ViewModel.MadeChanges;
+        };
     }
 
     // The banner's action takes the user to the update page to read what changed and decide there,

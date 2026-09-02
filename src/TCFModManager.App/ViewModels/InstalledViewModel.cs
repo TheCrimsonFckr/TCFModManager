@@ -403,8 +403,8 @@ public partial class InstalledViewModel : ObservableObject
 
     private void RebuildList()
     {
-        ListItems.Clear();
-        foreach (var mod in _filtered) ListItems.Add(mod);
+        // Synced rather than cleared, for the same reason the card grid is - see Sync.
+        ItemsSync.Apply(ListItems, _filtered);
         _listDirty = false;
     }
 
@@ -743,8 +743,10 @@ public partial class InstalledViewModel : ObservableObject
         if (mod is null) return;
         if (AppServices.ModUpdateOverlay.ShowAsync is not { } show) return;
 
-        await show(mod);
-        await ScanAsync();
+        // Only when the dialog actually did something. A rescan re-reads the whole install and
+        // replaces every card, which visibly rebuilds the page - not something opening a mod to
+        // read its changelog should cause.
+        if (await show(mod)) await ScanAsync();
     }
 
     //
@@ -1292,9 +1294,7 @@ public partial class InstalledViewModel : ObservableObject
         if (!_cardsDirty && target == CurrentPage) return;
 
         CurrentPage = target;
-        Results.Clear();
-        foreach (var mod in _filtered.Skip((CurrentPage - 1) * PageSize).Take(PageSize))
-            Results.Add(mod);
+        ItemsSync.Apply(Results, _filtered.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList());
 
         _cardsDirty = false;
     }
