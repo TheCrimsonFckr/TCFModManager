@@ -5,8 +5,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:views="clr-namespace:TCFModManager.App.Views"
     xmlns:app="clr-namespace:TCFModManager.App"
-    xmlns:core="clr-namespace:TCFModManager.Core.Services;assembly=TCFModManager.Core"
-    Title="{x:Static core:AppVersion.DisplayTitle}"
+    Title="{Binding WindowTitle, Source={x:Static app:AppServices.SptEnvironment}}"
     Icon="pack://application:,,,/Assets/AppIcon.ico"
     Height="950"
     Width="1550"
@@ -24,13 +23,16 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Both titles come from the assembly version (see AppVersion) rather than being typed
-             here. They used to be two hardcoded strings, which had already drifted a release
-             behind what dist\ was shipping - and a stale version number is exactly what would make
-             a self-updater either never fire or offer an update the user already has. -->
+        <!-- Both titles come from SptEnvironmentViewModel.WindowTitle. The version half is read
+             from the assembly (see AppVersion) rather than typed here: they used to be two
+             hardcoded strings, which had already drifted a release behind what dist\ was shipping,
+             and a stale version number is exactly what would make a self-updater either never fire
+             or offer an update the user already has. The rest names the SPT install this window is
+             pointed at, so two windows open on two installs can be told apart without opening the
+             Options page in each. -->
         <ui:TitleBar
             Grid.Row="0"
-            Title="{x:Static core:AppVersion.DisplayTitle}">
+            Title="{Binding WindowTitle, Source={x:Static app:AppServices.SptEnvironment}}">
             <ui:TitleBar.Icon>
                 <ui:ImageIcon Source="pack://application:,,,/Assets/AppIcon.ico" />
             </ui:TitleBar.Icon>
