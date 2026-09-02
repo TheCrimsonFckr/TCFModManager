@@ -79,7 +79,58 @@ public partial class ModUpdateDialogViewModel : ObservableObject
     // has something to undo.
     public bool IsManualOverride => _mod.IsManualOverride;
 
+    // Every version fetched. Versions is the filtered view of this - see RepopulateVersions.
+    private readonly List<ModVersionRowViewModel> _allVersions = [];
+
     public ObservableCollection<ModVersionRowViewModel> Versions { get; } = [];
+
+    //
+    // Versions built for an SPT release you don't have are hidden by default: with 4.1 out, a 4.0
+    // install looking at a mod's history sees a run of newer versions it cannot use, and the
+    // obvious reading is "I'm out of date" rather than "these aren't for me".
+    //
+    // They are hidden rather than dropped. The count and the reason stay on screen and one click
+    // brings them back, because silently shortening the list would leave someone believing the
+    // newest version is the newest that exists.
+    //
+    [ObservableProperty]
+    private bool _showIncompatibleVersions;
+
+    public int HiddenVersionCount => _allVersions.Count - Versions.Count;
+
+    public bool ShowVersionFilterNotice => HiddenVersionCount > 0 || ShowIncompatibleVersions;
+
+    public string HiddenVersionsNotice => HiddenVersionCount switch
+    {
+        0 => "Showing every published version, including ones for other SPT releases.",
+        1 => "1 version is hidden - it targets a different SPT release to the one you have.",
+        _ => $"{HiddenVersionCount} versions are hidden - they target a different SPT release to the one you have.",
+    };
+
+    partial void OnShowIncompatibleVersionsChanged(bool value) => RepopulateVersions();
+
+    //
+    // An addon's rows are judged against its PARENT MOD's version, not against SPT, and the rule
+    // this app already settled for addons is to show everything with the reason attached rather
+    // than filter any of it out - so the hiding applies to mods only.
+    //
+    // The installed version is never hidden whatever it targets: you have to be able to see what
+    // you are running. An unknown constraint is not proof of anything, so it stays too.
+    //
+    private bool IsShown(ModVersionRowViewModel row) =>
+        ShowIncompatibleVersions || _mod.IsAddon || row.IsInstalled || row.IsCompatible != false;
+
+    private void RepopulateVersions()
+    {
+        Versions.Clear();
+        foreach (var row in _allVersions.Where(IsShown)) Versions.Add(row);
+
+        OnPropertyChanged(nameof(HiddenVersionCount));
+        OnPropertyChanged(nameof(ShowVersionFilterNotice));
+        OnPropertyChanged(nameof(HiddenVersionsNotice));
+
+        SelectedVersion = Versions.FirstOrDefault(v => v.IsCompatible == true) ?? Versions.FirstOrDefault();
+    }
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(UpdateCommand))]
@@ -133,10 +184,10 @@ public partial class ModUpdateDialogViewModel : ObservableObject
                 modId.ToString(),
                 new ModVersionsQuery { Sort = "-published_at", PerPage = 20 });
 
-            Versions.Clear();
+            _allVersions.Clear();
             foreach (var v in result.Data)
             {
-                Versions.Add(new ModVersionRowViewModel
+                _allVersions.Add(new ModVersionRowViewModel
                 {
                     Raw = v,
                     IsInstalled = _mod.InstalledVersion is not null
@@ -149,7 +200,7 @@ public partial class ModUpdateDialogViewModel : ObservableObject
             if (Versions.Count > 0) Versions[0].IsLatest = true;
 
             // Pre-select the newest compatible version, falling back to the newest overall.
-            SelectedVersion = Versions.FirstOrDefault(v => v.IsCompatible == true) ?? Versions.FirstOrDefault();
+            RepopulateVersions();
             MarkUpToDateCommand.NotifyCanExecuteChanged();
 
             if (Versions.Count == 0)
@@ -208,10 +259,10 @@ public partial class ModUpdateDialogViewModel : ObservableObject
                 .OrderByDescending(v => v.PublishedAt ?? DateTimeOffset.MinValue)
                 .ToList();
 
-            Versions.Clear();
+            _allVersions.Clear();
             foreach (var v in ordered)
             {
-                Versions.Add(new ModVersionRowViewModel
+                _allVersions.Add(new ModVersionRowViewModel
                 {
                     Raw = new ModVersion
                     {
@@ -232,7 +283,7 @@ public partial class ModUpdateDialogViewModel : ObservableObject
 
             if (Versions.Count > 0) Versions[0].IsLatest = true;
 
-            SelectedVersion = Versions.FirstOrDefault(v => v.IsCompatible == true) ?? Versions.FirstOrDefault();
+            RepopulateVersions();
             MarkUpToDateCommand.NotifyCanExecuteChanged();
 
             if (Versions.Count == 0)

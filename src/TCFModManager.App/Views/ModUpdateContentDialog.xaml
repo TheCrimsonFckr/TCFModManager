@@ -160,6 +160,25 @@
                 VerticalScrollBarVisibility="Auto"
                 Visibility="{Binding IsLoading, Converter={StaticResource FalseToVisible}}">
               <StackPanel>
+                <!-- Says how many versions are out of sight and why, so a shortened list is never
+                     mistaken for the whole history. -->
+                <DockPanel
+                    Margin="0,0,0,8"
+                    Visibility="{Binding ShowVersionFilterNotice, Converter={StaticResource TrueToVisible}}">
+                    <CheckBox
+                        DockPanel.Dock="Right"
+                        VerticalAlignment="Center"
+                        Content="Show all"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        ToolTip="Include versions built for other SPT releases. They are hidden by default because you cannot use them on the SPT version you have."
+                        IsChecked="{Binding ShowIncompatibleVersions}" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="{Binding HiddenVersionsNotice}" />
+                </DockPanel>
+
                 <ListBox
                     BorderThickness="0"
                     Background="Transparent"
@@ -179,7 +198,13 @@
                             <!-- Each version is its own collapsible CardExpander; only the latest starts expanded. -->
                             <ui:CardExpander IsExpanded="{Binding IsLatest, Mode=OneWay}">
                                 <ui:CardExpander.Header>
-                                    <Grid>
+                                    <!-- Clicking the header picks the version as well as expanding
+                                         it. Background="Transparent" so the empty space between
+                                         the title and the badges is hit-testable too, rather than
+                                         only the text itself. -->
+                                    <Grid
+                                        Background="Transparent"
+                                        PreviewMouseLeftButtonDown="VersionHeader_PreviewMouseLeftButtonDown">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
