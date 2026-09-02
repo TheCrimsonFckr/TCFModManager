@@ -313,6 +313,13 @@
             <ui:Button
                 DockPanel.Dock="Right"
                 Margin="0,0,8,0"
+                Content="{Binding SelectAllLabel}"
+                Icon="{ui:SymbolIcon SelectAllOn24}"
+                ToolTip="Select everything the current filters match, across every page - not just the page on screen."
+                Command="{Binding SelectAllCommand}" />
+            <ui:Button
+                DockPanel.Dock="Right"
+                Margin="0,0,8,0"
                 Appearance="Primary"
                 Content="Update selected"
                 Icon="{ui:SymbolIcon ArrowDownload24}"

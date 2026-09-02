@@ -196,6 +196,15 @@ public partial class InstalledViewModel : ObservableObject
 
     public string SelectedCountLabel => SelectedCount == 1 ? "1 selected" : $"{SelectedCount} selected";
 
+    //
+    // Everything the current filters match, not just the page on screen - which is why the count is
+    // in the label. "Select all" over a paginated list is ambiguous otherwise, and someone who has
+    // filtered to "Update available" means all of them, not the first twelve.
+    //
+    public string SelectAllLabel => $"Select all {_filtered.Count}";
+
+    public bool CanSelectAll => _filtered.Any(m => !m.IsSelected);
+
     /// <summary>Whether the last disable/enable can still be put back.</summary>
     public bool CanUndo => _lastMoves.Count > 0;
 
@@ -536,6 +545,8 @@ public partial class InstalledViewModel : ObservableObject
             DisableSelectedCommand.NotifyCanExecuteChanged();
             EnableSelectedCommand.NotifyCanExecuteChanged();
             UpdateSelectedCommand.NotifyCanExecuteChanged();
+            SelectAllCommand.NotifyCanExecuteChanged();
+            OnPropertyChanged(nameof(SelectAllLabel));
 
             var unmatched = _all.Where(m => m.ModId is null).Select(m => m.Name).ToList();
             AppLog.Info("Installed",
@@ -951,6 +962,12 @@ public partial class InstalledViewModel : ObservableObject
         return versions.Data.FirstOrDefault(v => v.Version == version) ?? versions.Data.FirstOrDefault();
     }
 
+    [RelayCommand(CanExecute = nameof(CanSelectAll))]
+    private void SelectAll()
+    {
+        foreach (var mod in _filtered) mod.IsSelected = true;
+    }
+
     [RelayCommand]
     private void ClearSelection()
     {
@@ -1130,6 +1147,7 @@ public partial class InstalledViewModel : ObservableObject
         DisableSelectedCommand.NotifyCanExecuteChanged();
         EnableSelectedCommand.NotifyCanExecuteChanged();
         UpdateSelectedCommand.NotifyCanExecuteChanged();
+        SelectAllCommand.NotifyCanExecuteChanged();
     }
 
     private static bool Confirm(string title, string message) =>
@@ -1245,6 +1263,10 @@ public partial class InstalledViewModel : ObservableObject
         _cardsDirty = _listDirty = _sectionsDirty = true;
 
         TotalPages = Math.Max(1, (int)Math.Ceiling(_filtered.Count / (double)PageSize));
+
+        // The button names the number it would select, so narrowing the filter has to re-label it.
+        OnPropertyChanged(nameof(SelectAllLabel));
+        SelectAllCommand.NotifyCanExecuteChanged();
 
         // Keeps the status line up to date as soon as a filter/search control changes; skipped when
         // _all is empty since ScanAsync's own "No mods found under ..." message is more useful there.
