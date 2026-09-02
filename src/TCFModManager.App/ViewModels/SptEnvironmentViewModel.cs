@@ -11,7 +11,6 @@ public partial class SptEnvironmentViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsInstallPathMissing))]
-    [NotifyPropertyChangedFor(nameof(WindowTitle))]
     private string? _installPath;
 
     [ObservableProperty]
@@ -25,56 +24,25 @@ public partial class SptEnvironmentViewModel : ObservableObject
     public bool IsInstallPathMissing => string.IsNullOrWhiteSpace(InstallPath);
 
     //
-    // What the window and its title bar show - the app and its version, plus which install this
-    // window is pointed at.
+    // What the window and its title bar show - the app and its version, plus which SPT release
+    // this window is pointed at.
     //
-    // Running two installs side by side (a 4.0 server and a 4.1 client, say) is normal, and every
-    // page, dialog and Data\ file belongs to one of them. Until this was here the only way to tell
-    // two windows apart was to open the Options page in each, which made a perfectly correct
-    // reading - the same mod at different versions in each install - look like the app contradicting
-    // its own manifest.
+    // Running two installs side by side is normal, and every page, dialog and Data\ file belongs
+    // to one of them. Until this was here the only way to tell two windows apart was to open the
+    // Options page in each, which made a perfectly correct reading - the same mod at different
+    // versions in each install - look like the app contradicting its own manifest.
     //
-    // Falls back to just the app title when no install is set, rather than showing an empty
-    // bracket: at that point there is nothing to disambiguate.
+    // Deliberately the SPT version and nothing else. The install folder's name was tried first and
+    // read as a client/server label, which is not what an install folder means. The cost is that
+    // two installs on the same SPT line look alike; the title saying one unambiguous thing is
+    // worth more than covering that case.
     //
-    public string WindowTitle =>
-        DescribeInstall() is { } install ? $"{AppVersion.DisplayTitle} [{install}]" : AppVersion.DisplayTitle;
-
-    // The folder tells two installs apart; the SPT version says which is which at a glance. Either
-    // half can be missing - a path that no longer exists still has a name worth showing.
-    private string? DescribeInstall()
-    {
-        var folder = FolderName(InstallPath);
-        var version = string.IsNullOrWhiteSpace(InstalledVersion) ? null : $"SPT {InstalledVersion}";
-
-        return (folder, version) switch
-        {
-            (null, null) => null,
-            (null, _) => version,
-            (_, null) => folder,
-            _ => $"{folder}, {version}",
-        };
-    }
-
+    // Falls back to the bare app title when no version has been detected - no install set, or a
+    // folder with no server exe in it - rather than showing an empty bracket.
     //
-    // The last segment of the install path. Splits on both separators by hand rather than going
-    // through Path, so a Windows path still resolves when this runs anywhere else - the App only
-    // ever runs on Windows, but its view models are exercised headless on Linux.
-    //
-    private static string? FolderName(string? path)
-    {
-        if (string.IsNullOrWhiteSpace(path)) return null;
-
-        var trimmed = path.Trim().TrimEnd('\\', '/');
-        if (trimmed.Length == 0) return null;
-
-        var cut = trimmed.LastIndexOfAny(['\\', '/']);
-        var name = cut >= 0 ? trimmed[(cut + 1)..] : trimmed;
-
-        // An install sitting at a drive root ("D:\") has no folder name of its own, and the root
-        // is then the only thing identifying it.
-        return name.Length == 0 ? trimmed : name;
-    }
+    public string WindowTitle => string.IsNullOrWhiteSpace(InstalledVersion)
+        ? AppVersion.DisplayTitle
+        : $"{AppVersion.DisplayTitle} [SPT {InstalledVersion}]";
 
     public SptEnvironmentViewModel()
     {
