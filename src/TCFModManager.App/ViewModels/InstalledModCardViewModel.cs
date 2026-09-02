@@ -142,8 +142,37 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     // Client half's folder (or, for a loose top-level DLL, the DLL itself). Null when there's no client half.
     public string? ClientFolderPath { get; init; }
 
+    // Where the "Client folder" button goes - see FolderToOpen.
+    public string? ClientFolderLink => FolderToOpen(ClientFolderPath);
+
     // Server half's folder. Null when there's no server half.
     public string? ServerFolderPath { get; init; }
+
+    // Where the "Server folder" button goes - see FolderToOpen.
+    public string? ServerFolderLink => FolderToOpen(ServerFolderPath);
+
+    //
+    // The folder a path should actually open. A mod that ships as a single loose DLL has no folder
+    // of its own, and the scanner names it after the file - so its recorded path is
+    // "...\BepInEx\plugins\AOReplacer.dll", and opening that would ask Windows to run the DLL
+    // rather than show where it lives. Anything ending in .dll opens its parent instead.
+    //
+    // Matched on the .dll suffix specifically, NOT on "does it have an extension": plenty of real
+    // mod folders are named with dots in them (Tyfon.AutoDeposit, IcyClawz.MunitionsExpert,
+    // RaiRai.ColorConverterAPI), and Path.HasExtension would send every one of those to its parent.
+    //
+    private static string? FolderToOpen(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path)) return null;
+        if (!path.EndsWith(".dll", StringComparison.OrdinalIgnoreCase)) return path;
+
+        // Cut at the last separator by hand rather than going through Path.GetDirectoryName, which
+        // does not treat "\" as a separator anywhere but Windows - the app only ever runs there,
+        // but these view models are exercised headless on Linux and the Path version silently
+        // returned an empty string for every Windows path it was given.
+        var cut = path.LastIndexOfAny(['\\', '/']);
+        return cut > 0 ? path[..cut] : null;
+    }
 
     // The client/server halves' folder (or loose-DLL) *names*, as InstalledModScanner reports them -
     // what a manual version override records as this mod's Folders, so a later rescan still ties the
@@ -241,6 +270,15 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     // doesn't survive one.
     [ObservableProperty]
     private bool _isSelected;
+
+    //
+    // Whether this mod's card/row is open. Held here rather than left to the CardExpander because
+    // every scan replaces every card: closing the versions dialog triggers a rescan, which would
+    // otherwise snap shut the card you opened it from. InstalledViewModel carries the set of open
+    // cards across a rebuild.
+    //
+    [ObservableProperty]
+    private bool _isExpanded;
 
     //
     // The user-defined group this mod is assigned to, or null when it's in none. Filled in by

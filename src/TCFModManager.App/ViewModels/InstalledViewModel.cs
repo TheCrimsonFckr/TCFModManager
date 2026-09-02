@@ -555,7 +555,19 @@ public partial class InstalledViewModel : ObservableObject
                 return (found, built, ModDependencyGraph.Build(found));
             });
 
+            // Which cards were open, keyed the same way group assignments are, so the set survives
+            // every card object being replaced. Captured before _all is reassigned.
+            var expanded = _all
+                .Where(m => m.IsExpanded)
+                .Select(m => ModGroupStore.KeyFor(m.Name))
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
             _all = cards;
+
+            if (expanded.Count > 0)
+                foreach (var card in cards)
+                    card.IsExpanded = expanded.Contains(ModGroupStore.KeyFor(card.Name));
+
             ApplyListMembership(cards);
             ApplyBadgeVisibility();
             _dependencies = dependencies;

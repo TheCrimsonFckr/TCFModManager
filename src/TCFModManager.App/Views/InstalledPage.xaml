@@ -71,7 +71,14 @@
              is dropped in as long as it stays on InstalledPage.
         -->
         <DataTemplate x:Key="ModDetailBody">
-            <StackPanel Margin="0,4,0,0">
+            <!--
+                 MinHeight rather than Height, so every opened card is the same size as the one
+                 Chris measured against ("Air Filter Only Drains In Raid": ten detail lines, the
+                 folder row and the action row) while anything genuinely longer - an addon subtitle,
+                 a duplicate-folder warning - still grows instead of being clipped or given its own
+                 scrollbar. One number to tune if the standard card gains or loses a line.
+            -->
+            <StackPanel Margin="0,4,0,0" MinHeight="300">
                 <TextBlock
                     Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
                     TextWrapping="Wrap"
@@ -149,10 +156,10 @@
                         Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
                         Icon="{ui:SymbolIcon FolderOpen24}"
                         Content="Client folder"
-                        Visibility="{Binding ClientFolderPath, Converter={StaticResource NullToCollapsed}}"
+                        Visibility="{Binding ClientFolderLink, Converter={StaticResource NullToCollapsed}}"
                         Command="{Binding DataContext.OpenModFolderCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                        CommandParameter="{Binding ClientFolderPath}"
-                        ToolTip="{Binding ClientFolderPath}"
+                        CommandParameter="{Binding ClientFolderLink}"
+                        ToolTip="{Binding ClientFolderLink}"
                         ToolTipService.ShowDuration="20000" />
 
                     <ui:Button
@@ -162,15 +169,19 @@
                         Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
                         Icon="{ui:SymbolIcon FolderOpen24}"
                         Content="Server folder"
-                        Visibility="{Binding ServerFolderPath, Converter={StaticResource NullToCollapsed}}"
+                        Visibility="{Binding ServerFolderLink, Converter={StaticResource NullToCollapsed}}"
                         Command="{Binding DataContext.OpenModFolderCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                        CommandParameter="{Binding ServerFolderPath}"
-                        ToolTip="{Binding ServerFolderPath}"
+                        CommandParameter="{Binding ServerFolderLink}"
+                        ToolTip="{Binding ServerFolderLink}"
                         ToolTipService.ShowDuration="20000" />
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                <!-- Remove is docked right, away from the two safe actions, so the destructive one
+                     is never where the mouse already is. LastChildFill is off: this row is two
+                     docked groups, not a filled remainder. -->
+                <DockPanel LastChildFill="False" Margin="0,12,0,0">
                     <ui:Button
+                        DockPanel.Dock="Left"
                         Content="Details and versions"
                         Icon="{ui:SymbolIcon Info24}"
                         Command="{Binding DataContext.ShowDetailsCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
@@ -178,6 +189,7 @@
                         ToolTip="Open the full version history and update dialog" />
 
                     <ui:Button
+                        DockPanel.Dock="Left"
                         Margin="8,0,0,0"
                         Foreground="{DynamicResource SystemFillColorCautionBrush}"
                         Content="Sort out"
@@ -188,6 +200,7 @@
                         ToolTip="This mod is in both an enabled and a disabled folder - pick which copy to keep" />
 
                     <ui:Button
+                        DockPanel.Dock="Right"
                         Margin="8,0,0,0"
                         Foreground="{DynamicResource SystemFillColorCriticalBrush}"
                         Content="Remove"
@@ -195,7 +208,7 @@
                         Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                         CommandParameter="{Binding}"
                         ToolTip="Remove this mod" />
-                </StackPanel>
+                </DockPanel>
             </StackPanel>
         </DataTemplate>
 
@@ -546,6 +559,7 @@
                             VerticalAlignment="Top"
                             Style="{StaticResource HoverCardExpander}"
                             Margin="0,0,6,6"
+                            IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
                             Opacity="{Binding CardOpacity}"
                             PreviewMouseLeftButtonDown="Card_PreviewMouseLeftButtonDown">
                             <ui:CardExpander.Header>
@@ -899,7 +913,11 @@
             <ItemsControl Focusable="False" ItemsSource="{Binding ListItems}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:InstalledModCardViewModel}">
-                        <ui:CardExpander Style="{StaticResource HoverCardExpander}" Margin="0,0,6,6" Opacity="{Binding CardOpacity}">
+                        <ui:CardExpander
+                            Style="{StaticResource HoverCardExpander}"
+                            Margin="0,0,6,6"
+                            IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
+                            Opacity="{Binding CardOpacity}">
                             <ui:CardExpander.Header>
                                 <Grid Margin="0,0,8,0">
                                     <Grid.ColumnDefinitions>
