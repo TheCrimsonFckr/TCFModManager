@@ -92,7 +92,8 @@ public static class SptVersionRange
             if (!match.Success) return false;
 
             var op = match.Groups[1].Success ? match.Groups[1].Value : "=";
-            if (!TryParseOperand(match.Groups[2].Value, out var value, out var wildcardCeiling)) return false;
+            if (!TryParseOperand(match.Groups[2].Value, out var value, out var wildcardCeiling, out var components))
+                return false;
 
             // A wildcard operand is a range in its own right ("4.0.*" is the whole 4.0 line), so it
             // overrides the operator's usual meaning when no explicit operator was given.
@@ -111,7 +112,13 @@ public static class SptVersionRange
                     break;
                 case "~":
                     RaiseMin(ref min, ref minExclusive, value, exclusive: false);
-                    LowerMax(ref maxExclusive, wildcardCeiling ?? NextMinor(value));
+
+                    // "~4.1.3" and "~4.1" both stop at the next minor, but "~4" - a major with no
+                    // minor written after it - means the whole major line and stops at the next
+                    // major. Same rule npm's semver uses, and the difference is not academic: TCF
+                    // Mod Manager's own sp-mod listing is published as "~4", so reading it as the
+                    // 4.0 line only made this app look incompatible with SPT 4.1 in its own Browse.
+                    LowerMax(ref maxExclusive, wildcardCeiling ?? (components <= 1 ? NextMajor(value) : NextMinor(value)));
                     break;
                 case ">=":
                     RaiseMin(ref min, ref minExclusive, value, exclusive: false);
@@ -123,9 +130,20 @@ public static class SptVersionRange
                     LowerMax(ref maxExclusive, value);
                     break;
                 case "<=":
-                    LowerMax(ref maxExclusive, wildcardCeiling ?? NextPatch(value));
+                    LowerMax(ref maxExclusive, wildcardCeiling ?? CeilingFor(value, components));
                     break;
                 default:
+                    // A bare major with nothing after it ("4") covers all of SPT 4, exactly as
+                    // "4.x" does - it is not the 4.0 line. Handled as a range rather than an exact
+                    // match, because SptVersionBounds.Contains reads an exact as "this major.minor
+                    // line", which is the right answer for "4.0.13" and the wrong one for "4".
+                    if (components <= 1)
+                    {
+                        RaiseMin(ref min, ref minExclusive, value, exclusive: false);
+                        LowerMax(ref maxExclusive, NextMajor(value));
+                        break;
+                    }
+
                     exact = value;
                     RaiseMin(ref min, ref minExclusive, value, exclusive: false);
                     LowerMax(ref maxExclusive, NextPatch(value));
@@ -200,6 +218,18 @@ public static class SptVersionRange
         if (maxExclusive is null || value < maxExclusive) maxExclusive = value;
     }
 
+    //
+    // The first version above what an operand of this precision names: "4" covers all of 4.x.x,
+    // "4.1" all of 4.1.x, and "4.1.3" only that release. `components` is how many numbers the
+    // author actually wrote, which the parsed Version can't tell you - it zero-fills.
+    //
+    private static Version CeilingFor(Version value, int components) => components switch
+    {
+        <= 1 => NextMajor(value),
+        2 => NextMinor(value),
+        _ => NextPatch(value),
+    };
+
     internal static Version NextMajor(Version v) => new(v.Major + 1, 0, 0, 0);
 
     internal static Version NextMinor(Version v) => new(v.Major, v.Minor + 1, 0, 0);
@@ -209,12 +239,15 @@ public static class SptVersionRange
     // 
     // Parses a clause's version operand. <paramref name="wildcardCeiling"/> is the first version
     // above the wildcard's range ("4.0.*" yields 4.0.0 with a ceiling of 4.1.0) and is null for a
-    // fully specified version.
+    // fully specified version. <paramref name="components"/> is how many numbers were actually
+    // written - the Version can't say, since it zero-fills "4" into 4.0.0.0 - and is what tells
+    // "~4" (all of SPT 4) apart from "~4.0" (the 4.0 line).
     // 
-    private static bool TryParseOperand(string raw, out Version value, out Version? wildcardCeiling)
+    private static bool TryParseOperand(string raw, out Version value, out Version? wildcardCeiling, out int components)
     {
         value = new Version(0, 0, 0, 0);
         wildcardCeiling = null;
+        components = 0;
 
         // Drop any pre-release/build suffix (e.g. "3.11.4-dev" -> "3.11.4").
         var core = raw.Split('-', 2)[0];
@@ -232,6 +265,7 @@ public static class SptVersionRange
             }
 
             if (!int.TryParse(parts[i], out numbers[i])) return false;
+            components = i + 1;
         }
 
         value = new Version(numbers[0], numbers[1], numbers[2], numbers[3]);

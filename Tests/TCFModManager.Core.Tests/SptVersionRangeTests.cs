@@ -168,4 +168,67 @@ public class SptVersionRangeTests
         Assert.Equal(new Version(4, 1, 0, 0), bounds.MaxExclusive);
         Assert.False(bounds.MinExclusive);
     }
+
+    [Theory]
+    // How precisely the operand is written decides how wide it reaches. Both of these are live in
+    // the catalog and both mean "any SPT 4": TCF Mod Manager's own listing publishes "~4", and
+    // SPT Mod Manager publishes a bare "4". Read as the 4.0 line, each looked incompatible with
+    // SPT 4.1 and was filtered out of the version list for anyone on it.
+    [InlineData("~4", "4.0.13", true)]
+    [InlineData("~4", "4.1.3", true)]
+    [InlineData("~4", "3.11.4", false)]
+    [InlineData("~4", "5.0.0", false)]
+    [InlineData("4", "4.0.13", true)]
+    [InlineData("4", "4.1.3", true)]
+    [InlineData("4", "3.11.4", false)]
+    [InlineData("4", "5.0.0", false)]
+    // A minor written out still confines it to that line, which is the whole point of the distinction.
+    [InlineData("~4.0", "4.0.13", true)]
+    [InlineData("~4.0", "4.1.3", false)]
+    [InlineData("4.0", "4.0.13", true)]
+    [InlineData("4.0", "4.1.3", false)]
+    // An explicit upper bound still wins over the wider tilde - this is the constraint on
+    // HollywoodFX and 200-odd other version records, and it really is 4.0-only.
+    [InlineData("~4 <4.1.0", "4.0.13", true)]
+    [InlineData("~4 <4.1.0", "4.1.3", false)]
+    public void IsSatisfiedBy_OperandPrecisionDecidesHowWideAClauseReaches(
+        string constraint, string version, bool expected) =>
+        Assert.Equal(expected, SptVersionMatcher.IsSatisfiedBy(constraint, version));
+
+    [Theory]
+    // "<=" reads the same precision: "<=4" allows all of 4.x.x, "<=4.0" all of 4.0.x, and
+    // "<=4.0.13" stops at that release - which is the form the capped mods in the catalog use.
+    [InlineData("<=4", "4.1.3", true)]
+    [InlineData("<=4", "5.0.0", false)]
+    [InlineData("<=4.0", "4.0.13", true)]
+    [InlineData("<=4.0", "4.1.0", false)]
+    [InlineData(">=4.0.0 <=4.0.13", "4.0.13", true)]
+    [InlineData(">=4.0.0 <=4.0.13", "4.0.14", false)]
+    public void IsSatisfiedBy_UpperBoundReadsOperandPrecisionToo(
+        string constraint, string version, bool expected) =>
+        Assert.Equal(expected, SptVersionMatcher.IsSatisfiedBy(constraint, version));
+
+    [Fact]
+    public void TryParse_BareMajorSpansTheWholeMajorLine()
+    {
+        Assert.True(SptVersionRange.TryParse("4", out var bounds));
+
+        Assert.Equal(new Version(4, 0, 0, 0), bounds.Min);
+        Assert.Equal(new Version(5, 0, 0, 0), bounds.MaxExclusive);
+
+        // Not recorded as an exact match: Contains reads an exact as "this major.minor line",
+        // which would put a bare "4" back on the 4.0 line only.
+        Assert.Null(bounds.Exact);
+    }
+
+    [Theory]
+    // The line checks the Browse SPT filter runs on have to agree with the compatibility answer above.
+    [InlineData("~4", 4, 0, true)]
+    [InlineData("~4", 4, 1, true)]
+    [InlineData("~4", 3, 11, false)]
+    [InlineData("4", 4, 1, true)]
+    [InlineData("4", 5, 0, false)]
+    public void IntersectsReleaseLine_AgreesWithBareAndTildeMajors(
+        string constraint, int major, int minor, bool expected) =>
+        Assert.Equal(expected, SptVersionRange.IntersectsReleaseLine(constraint, major, minor));
 }
