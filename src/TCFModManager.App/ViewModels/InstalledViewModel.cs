@@ -361,13 +361,21 @@ public partial class InstalledViewModel : ObservableObject
     {
         if (_suppressAutoApplyFilter) return;
         ApplyFilter();
-        RefreshActiveView();
+
+        // CurrentPage, not 1. Narrowing a filter shrinks TotalPages and GoToPage clamps to it, so a
+        // page that no longer exists still lands somewhere sensible - and nothing is left that can
+        // silently put you back on page 1. Dropping the resetPage flag was not enough on its own:
+        // this method runs whenever any filter/sort/search/page-size property changes, including
+        // when one is reassigned in code, and its RefreshActiveView() was taking the default of 1.
+        RefreshActiveView(CurrentPage);
     }
 
     /// <summary>Refills whichever results collection the current view reads from, if it has fallen behind
     /// _filtered. Only the active one is rebuilt; switching views rebuilds the one being switched to, and
     /// only if something has actually changed since that view last drew.</summary>
-    private void RefreshActiveView(int page = 1)
+    // No default for `page`: every caller has to say which page it means. A default of 1 sitting
+    // here is what let a caller reset the page without looking like it was doing anything.
+    private void RefreshActiveView(int page)
     {
         switch (ViewMode)
         {
@@ -413,7 +421,7 @@ public partial class InstalledViewModel : ObservableObject
         }
 
         ApplyFilter();
-        RefreshActiveView();
+        RefreshActiveView(CurrentPage);
     }
 
     //

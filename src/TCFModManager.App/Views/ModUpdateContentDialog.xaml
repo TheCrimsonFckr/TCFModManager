@@ -159,12 +159,12 @@
                 <TextBlock Margin="0,8,0,0" HorizontalAlignment="Center" Opacity="0.7" Text="Loading versions..." />
             </StackPanel>
 
-            <!-- The only thing in this dialog that scrolls. The ListBox below has a ScrollViewer
-                 of its own from its template, but sitting in a StackPanel it is measured with
-                 infinite height and so never has anything to scroll - it just marks the wheel
-                 event handled on its way past. See Dialog_PreviewMouseWheel. -->
+            <!-- Inert, and left alone only because it predates this: ContentDialog's own template
+                 wraps everything here in a PART_ContentScroll PassiveScrollViewer, which measures
+                 this with unbounded height, so this one never has anything to scroll. The dialog's
+                 visible scrollbar is that template part, and that is what the wheel has to drive -
+                 see Dialog_PreviewMouseWheel. -->
             <ScrollViewer
-                x:Name="VersionsScrollViewer"
                 VerticalScrollBarVisibility="Auto"
                 Visibility="{Binding IsLoading, Converter={StaticResource FalseToVisible}}">
               <StackPanel>

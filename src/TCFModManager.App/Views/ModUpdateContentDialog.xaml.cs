@@ -74,17 +74,37 @@ public partial class ModUpdateContentDialog : ContentDialog
     }
 #pragma warning restore CS0618
 
+    // The dialog template's own scroller - see OnApplyTemplate.
+    private ScrollViewer? _contentScroll;
+
     //
-    // Drives VersionsScrollViewer directly. Safe to do unconditionally: it is the only scrollable
-    // region in the dialog - the release-note RichTextBoxes are explicitly
-    // VerticalScrollBarVisibility="Disabled", and the ListBox never scrolls itself (see the XAML).
-    // If a genuinely scrollable child is ever added here, this has to start checking for one first.
+    // Resolves the scroller that actually moves. ContentDialog's template wraps the whole of this
+    // dialog's content in a PassiveScrollViewer named PART_ContentScroll and measures the content
+    // with unbounded height, so any ScrollViewer *inside* the content - including the one around
+    // the version list - is given all the room it asks for and has nothing left to scroll. The
+    // visible scrollbar down the dialog's right edge is this template part, and it is the only
+    // thing worth driving.
+    //
+    // Looked up by name rather than by walking the tree: it is a documented template part, and a
+    // null here means the template changed, which should stop the wheel doing anything rather than
+    // quietly scroll some other element.
+    //
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+        _contentScroll = GetTemplateChild("PART_ContentScroll") as ScrollViewer;
+    }
+
+    //
+    // Only takes the wheel when there is actually somewhere to scroll. Marking the event handled
+    // when there isn't would swallow it for whatever else might have wanted it, which is how the
+    // first attempt at this made the dialog worse rather than better.
     //
     private void Dialog_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
-        if (VersionsScrollViewer.Visibility != Visibility.Visible) return;
+        if (_contentScroll is not { } scroll || scroll.ScrollableHeight <= 0) return;
 
-        VersionsScrollViewer.ScrollToVerticalOffset(VersionsScrollViewer.VerticalOffset - e.Delta);
+        scroll.ScrollToVerticalOffset(scroll.VerticalOffset - e.Delta);
         e.Handled = true;
     }
 
