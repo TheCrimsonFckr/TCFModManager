@@ -15,7 +15,6 @@
     Loaded="FootprintPage_Loaded"
     ScrollViewer.CanContentScroll="False">
     <Page.Resources>
-        <converters:FootprintLevelToAppearanceConverter x:Key="LevelAppearance" />
         <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Page.Resources>
@@ -85,7 +84,7 @@
                     Margin="0,4,0,0"
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                    Text="Each mod is read from the files it installs - how much of the game it patches, what it declares that the engine would call on a timer, and what it puts on disk. That says how far a mod reaches and where any cost would land. It describes what a mod contains, not what happens when you play: nothing here is timed or measured, and the app cannot see whether a declared component is ever created or whether a patch sits on something the game calls often. A heavy footprint is not the same as a mod that costs you frames. Open a mod to see what was found and the limit of what each finding establishes." />
+                    Text="Each mod is read from the files it installs - how much of the game it patches, what it declares that the engine would call on a timer, and what it puts on disk. It describes what a mod contains, not what happens when you play: nothing here is timed or measured, and the app cannot see whether a declared component is ever created or whether a patch sits on something the game calls often. So these are counts, not a rating - this app has no way of knowing what any of it costs you, and deliberately does not grade anyone's work. Open a mod to see what was found and the limit of what each finding establishes." />
             </StackPanel>
         </ui:Card>
 
@@ -113,35 +112,23 @@
                                 Style="{StaticResource HoverCardExpander}"
                                 Margin="0,0,0,8"
                                 IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
+                                <!-- No summary badge, by design. The counts below are checkable
+                                     facts; a one-word grade on somebody else's mod is not, and it
+                                     is the part that would travel without its explanation. -->
                                 <ui:CardExpander.Header>
-                                    <Grid Margin="0,0,12,0">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <StackPanel Grid.Column="0" Margin="0,0,12,0">
-                                            <TextBlock
-                                                FontWeight="SemiBold"
-                                                TextTrimming="CharacterEllipsis"
-                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                Text="{Binding Title}" />
-
-                                            <TextBlock
-                                                Margin="0,3,0,0"
-                                                TextTrimming="CharacterEllipsis"
-                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                Text="{Binding Detail}" />
-                                        </StackPanel>
-
-                                        <ui:Badge
-                                            Grid.Column="1"
-                                            VerticalAlignment="Center"
-                                            FontSize="11"
-                                            Appearance="{Binding Level, Converter={StaticResource LevelAppearance}}"
+                                    <StackPanel Margin="0,0,12,0">
+                                        <TextBlock
+                                            FontWeight="SemiBold"
+                                            TextTrimming="CharacterEllipsis"
                                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                            Content="{Binding LevelText}" />
-                                    </Grid>
+                                            Text="{Binding Title}" />
+
+                                        <TextBlock
+                                            Margin="0,3,0,0"
+                                            TextTrimming="CharacterEllipsis"
+                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                            Text="{Binding Detail}" />
+                                    </StackPanel>
                                 </ui:CardExpander.Header>
 
                                 <StackPanel>

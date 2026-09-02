@@ -7,13 +7,17 @@ using TCFModManager.Core.Models;
 namespace TCFModManager.App.ViewModels;
 
 // Mod footprint page's "Sort by" dropdown.
+//
+// Every ordering here is by a counted fact. There is deliberately no "heaviest first" - that would
+// rank other people's mods by a verdict this app has no standing to make, and a list sorted that
+// way reads as a leaderboard however carefully the rest of the page is worded.
+//
 public enum FootprintSortOption
 {
-    // Heaviest first - the order the page exists to show.
-    Footprint,
     NameAscending,
     LargestOnDisk,
     MostPatches,
+    MostComponents,
 }
 
 public sealed record FootprintSortItem(string Label, FootprintSortOption Value)
@@ -49,15 +53,18 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
     [ObservableProperty]
     private bool _isExpanded;
 
-    public ModFootprintLevel Level => Footprint.Level;
-
-    public string LevelText => Level switch
-    {
-        ModFootprintLevel.Heavy => "Heavy",
-        ModFootprintLevel.Moderate => "Moderate",
-        ModFootprintLevel.Light => "Light",
-        _ => "Unreadable",
-    };
+    //
+    // ModFootprint still derives a Level, a Score and Signals, and they are still tested and
+    // calibrated - but NOTHING ON THIS PAGE SHOWS THEM, deliberately.
+    //
+    // The counts are facts about files that anyone can check. A level is a verdict on somebody
+    // else's work, and it is the one thing on the page that survives being screenshotted without
+    // its explanation - "this app says SAIN is Heavy" travels, the caveats do not. This app has no
+    // standing to grade other people's mods, so it reports what it found and leaves the reader to
+    // draw the conclusion. Chris's call, 2026-09-02.
+    //
+    // If it is ever surfaced again, the wording has to survive being read alone.
+    //
 
     public string Title => Version is null ? Name : $"{Name}  {Version}";
 
@@ -350,12 +357,14 @@ public sealed partial class FootprintViewModel : ObservableObject
 
     public ObservableCollection<ModFootprintRowViewModel> Rows { get; } = [];
 
+    // Name first, and the default: the page opens as a list of what is installed rather than as an
+    // ordering of it. The count-based sorts are there for someone who went looking for them.
     public IReadOnlyList<FootprintSortItem> SortOptions { get; } =
     [
-        new("Footprint (heaviest first)", FootprintSortOption.Footprint),
-        new("Most patch classes", FootprintSortOption.MostPatches),
-        new("Largest on disk", FootprintSortOption.LargestOnDisk),
         new("Name (A-Z)", FootprintSortOption.NameAscending),
+        new("Most patch classes", FootprintSortOption.MostPatches),
+        new("Most components", FootprintSortOption.MostComponents),
+        new("Largest on disk", FootprintSortOption.LargestOnDisk),
     ];
 
     [ObservableProperty]
@@ -416,24 +425,23 @@ public sealed partial class FootprintViewModel : ObservableObject
 
     private void ApplySort()
     {
-        var option = SelectedSort?.Value ?? FootprintSortOption.Footprint;
+        var option = SelectedSort?.Value ?? FootprintSortOption.NameAscending;
 
-        // Name is the tie-break on every ordering, so a page of mods that score the same doesn't
+        // Name is the tie-break on every ordering, so a page of mods with equal counts doesn't
         // shuffle between visits.
         IEnumerable<ModFootprintRowViewModel> sorted = option switch
         {
-            FootprintSortOption.NameAscending =>
-                _all.OrderBy(r => r.Name, StringComparer.CurrentCultureIgnoreCase),
             FootprintSortOption.LargestOnDisk =>
                 _all.OrderByDescending(r => r.Footprint.TotalBytes)
                     .ThenBy(r => r.Name, StringComparer.CurrentCultureIgnoreCase),
             FootprintSortOption.MostPatches =>
                 _all.OrderByDescending(r => r.Footprint.PatchClassCount)
                     .ThenBy(r => r.Name, StringComparer.CurrentCultureIgnoreCase),
-            _ =>
-                _all.OrderByDescending(r => r.Footprint.Score)
-                    .ThenByDescending(r => r.Footprint.PatchClassCount)
+            FootprintSortOption.MostComponents =>
+                _all.OrderByDescending(r => r.Footprint.PerFrameTypeCount)
                     .ThenBy(r => r.Name, StringComparer.CurrentCultureIgnoreCase),
+            _ =>
+                _all.OrderBy(r => r.Name, StringComparer.CurrentCultureIgnoreCase),
         };
 
         Rows.Clear();
