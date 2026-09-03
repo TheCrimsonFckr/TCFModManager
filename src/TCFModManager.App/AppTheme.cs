@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Media;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 using Wpf.Ui.Appearance;
@@ -51,7 +52,11 @@ public static class AppTheme
             // Subscribed rather than only called from ApplyOnly, so a theme change that SystemThemeWatcher
             // makes on its own - the user changing Windows' theme while Follow system is on - repaints
             // the chrome too.
-            ApplicationThemeManager.Changed += (_, _) => RefreshWindowChrome();
+            ApplicationThemeManager.Changed += (_, _) =>
+            {
+                RefreshWindowChrome();
+                PinPressedButtonForeground();
+            };
             _subscribed = true;
         }
 
@@ -99,6 +104,41 @@ public static class AppTheme
         }
 
         RefreshWindowChrome();
+        PinPressedButtonForeground();
+    }
+
+    //
+    // Makes a pressed button read as the button changing colour, not the label changing.
+    //
+    // WPF-UI's Button template sets Foreground from the button's PressedForeground for as long as
+    // it is held down, and PressedForeground defaults to the ButtonForegroundPressed brush - which
+    // in dark mode is far darker than the resting one, so the label flips light-to-dark mid-click.
+    // The background and border already carry the feedback perfectly well on their own.
+    //
+    // Pointing that one brush at the resting ButtonForeground neutralises it. Deliberately a brush
+    // override rather than a Style: an implicit Style TargetType="ui:Button" in App.xaml was tried
+    // first and stripped every button in the app of its chrome. WPF-UI declares the real style in a
+    // theme dictionary that ApplicationThemeManager merges at RUNTIME, so a
+    // BasedOn="{StaticResource {x:Type ui:Button}}" resolved when App.xaml is parsed never reaches
+    // it - and the implicit style then shadows the real one with no template behind it. Overriding
+    // a brush can at worst give a wrong colour; it cannot take a template away.
+    //
+    // Has to run after every Apply, not once at startup: each theme swaps in a fresh
+    // ButtonForeground, and this needs to track it. An entry set directly on Application.Resources
+    // is found ahead of any merged dictionary, which is what makes the override win.
+    //
+    // Buttons that set their own Foreground in XAML - Remove, Sort out, the folder links - were
+    // never affected either way: a local value already outranks a template trigger.
+    //
+    private static void PinPressedButtonForeground()
+    {
+        if (Application.Current is not { } app) return;
+
+        // Guarded rather than assumed. If WPF-UI ever renames the key, doing nothing leaves the
+        // momentary colour flip; writing null would make every button label disappear.
+        if (app.TryFindResource("ButtonForeground") is not Brush resting) return;
+
+        app.Resources["ButtonForegroundPressed"] = resting;
     }
 
     //
