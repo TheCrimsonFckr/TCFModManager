@@ -228,31 +228,6 @@
                 pointer is anywhere over its body - scoping it to the header alone would mean
                 replacing CardExpander's template for very little gain.
             -->
-            <!--
-                 Pressing a button should read as the button changing, not the label changing.
-
-                 WPF-UI's Button template fires a MultiTrigger on IsMouseOver+IsPressed that sets
-                 three things: the border's Background and BorderBrush (which is the feedback we
-                 want) and the button's own Foreground, bound to its PressedForeground property.
-                 In dark mode that last one flips the label from light to dark mid-click, which
-                 reads as a glitch rather than as feedback.
-
-                 Binding PressedForeground back to the button's own Foreground neutralises it: the
-                 trigger still fires and still sets Foreground, but to the value it already had.
-                 Deliberately a binding rather than a fixed brush - eighteen buttons in this app
-                 carry their own colour (critical red on Remove, caution amber on Sort out, accent
-                 on the folder links), and a fixed value would drop every one of them back to the
-                 default text colour for the length of a click.
-
-                 Implicit, so it reaches every ui:Button without each one opting in. BasedOn the
-                 themed default for the usual reason - without it this would replace the whole
-                 template rather than add to it; the same lookup HoverCardExpander below already
-                 relies on, so the theme dictionary is known to resolve at this point.
-            -->
-            <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
-                <Setter Property="PressedForeground" Value="{Binding Foreground, RelativeSource={RelativeSource Self}}" />
-            </Style>
-
             <Style
                 x:Key="HoverCardExpander"
                 TargetType="ui:CardExpander"
