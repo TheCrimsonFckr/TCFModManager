@@ -188,7 +188,7 @@ public partial class ModListsViewModel : ObservableObject
 
             if (captured is null)
             {
-                StatusMessage = "No SPT install folder set - configure it on the Options page first.";
+                StatusMessage = AppMessages.NoSptInstallFolder;
                 return;
             }
 
@@ -210,7 +210,7 @@ public partial class ModListsViewModel : ObservableObject
 
             if (preview is null)
             {
-                StatusMessage = "No SPT install folder set - configure it on the Options page first.";
+                StatusMessage = AppMessages.NoSptInstallFolder;
                 return;
             }
 

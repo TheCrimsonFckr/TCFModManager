@@ -539,7 +539,7 @@ public partial class InstalledViewModel : ObservableObject
             _all = [];
             ApplyFilter();
             RefreshActiveView(CurrentPage);
-            StatusMessage = "No SPT install folder set - configure it on the Options page first.";
+            StatusMessage = AppMessages.NoSptInstallFolder;
             return;
         }
 
@@ -657,7 +657,7 @@ public partial class InstalledViewModel : ObservableObject
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath))
         {
-            StatusMessage = "No SPT install folder set - configure it on the Options page first.";
+            StatusMessage = AppMessages.NoSptInstallFolder;
             return;
         }
 
@@ -847,7 +847,7 @@ public partial class InstalledViewModel : ObservableObject
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath))
         {
-            StatusMessage = "No SPT install folder set - configure it on the Options page first.";
+            StatusMessage = AppMessages.NoSptInstallFolder;
             return;
         }
 
@@ -993,7 +993,7 @@ public partial class InstalledViewModel : ObservableObject
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath))
         {
-            StatusMessage = "No SPT install folder set - configure it on the Options page first.";
+            StatusMessage = AppMessages.NoSptInstallFolder;
             return;
         }
 

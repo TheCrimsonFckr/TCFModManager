@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -162,7 +163,7 @@ public sealed partial class ConfigsViewModel : ObservableObject
         {
             _all = [];
             ApplyFilter();
-            StatusMessage = "No SPT install folder set - configure it on the Options page first.";
+            StatusMessage = AppMessages.NoSptInstallFolder;
             return;
         }
 

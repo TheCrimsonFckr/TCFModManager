@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -365,7 +366,7 @@ public partial class ModUpdateDialogViewModel : ObservableObject
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath))
         {
-            StatusMessage = "No SPT install folder set - configure it on the Options page first.";
+            StatusMessage = AppMessages.NoSptInstallFolder;
             return;
         }
 
