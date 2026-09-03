@@ -297,10 +297,12 @@ public static class AppTheme
 
     //
     // rgba() rather than the #AARRGGBB that Color.ToString gives, because the alpha is the whole
-    // point in this file and reading it out of the leading two hex digits is a chore. The brush's
-    // own Opacity folds into the same number - a theme brush carries its alpha in the colour, but
-    // the ones this app declares (the row tints) set Opacity instead, and either way what matters
-    // is what lands on screen.
+    // point in this file and reading it out of the leading two hex digits is a chore. The wrapper
+    // earns its keep: four bare numbers in a log line are just four numbers.
+    //
+    // The brush's own Opacity folds into the alpha - a theme brush carries its alpha in the colour,
+    // but the ones this app declares (the row tints) set Opacity instead, and either way what
+    // matters is what lands on screen.
     //
     private static string Describe(Brush? brush) => brush switch
     {
