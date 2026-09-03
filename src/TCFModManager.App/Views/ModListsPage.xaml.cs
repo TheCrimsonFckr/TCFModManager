@@ -25,14 +25,22 @@ public partial class ModListsPage : Page
     private void ModListsPage_Loaded(object sender, RoutedEventArgs e) => ViewModel.Refresh();
 
     //
-    // Sends the wheel to whichever of the two lists the pointer is nearest, so scrolling works
-    // anywhere on the page rather than only directly over a list.
+    // Sends the wheel to whichever list the pointer is nearest, so scrolling works anywhere on the
+    // page rather than only directly over a list.
+    //
+    // The right-hand column holds two lists in one cell - the selected list's contents and, after a
+    // preview, the plan - so which one is on screen decides where the wheel goes.
     //
     private void Page_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         if (e.Handled) return;
 
-        var target = PlanBox.IsMouseOver || !ListsBox.IsMouseOver ? Scroller(PlanBox) : Scroller(ListsBox);
+        ListBox? right = PlanBox.IsVisible ? PlanBox : EntriesBox.IsVisible ? EntriesBox : null;
+
+        var target = right is not null && (right.IsMouseOver || !ListsBox.IsMouseOver)
+            ? Scroller(right)
+            : Scroller(ListsBox);
+
         if (target is null) return;
 
         target.ScrollToVerticalOffset(target.VerticalOffset - e.Delta);

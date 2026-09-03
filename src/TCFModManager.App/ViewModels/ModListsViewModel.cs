@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using TCFModManager.App.Services;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -47,6 +48,9 @@ public sealed partial class ModListRowViewModel(ModList list, bool isActive) : O
 // One line of a plan, as the diff shows it.
 public sealed record ModListActionRowViewModel(string Kind, string Name, string Detail, int Order);
 
+// One mod on the selected list, as the contents panel shows it.
+public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, string Detail);
+
 //
 // The Mod lists page: what lists this install holds, what applying one would do, and applying it.
 //
@@ -62,6 +66,9 @@ public partial class ModListsViewModel : ObservableObject
 
     public ObservableCollection<ModListRowViewModel> Lists { get; } = [];
 
+    // What the selected list names, in the order it stores them.
+    public ObservableCollection<ModListEntryRowViewModel> Entries { get; } = [];
+
     public ObservableCollection<ModListActionRowViewModel> PlanRows { get; } = [];
 
     [ObservableProperty]
@@ -70,7 +77,10 @@ public partial class ModListsViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(SelectionIsImported))]
     [NotifyPropertyChangedFor(nameof(SelectionIsActive))]
     [NotifyPropertyChangedFor(nameof(SelectionDetail))]
+    [NotifyPropertyChangedFor(nameof(ShowContents))]
     [NotifyCanExecuteChangedFor(nameof(PreviewCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddModsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RemoveEntryCommand))]
     [NotifyCanExecuteChangedFor(nameof(ExportCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
     [NotifyCanExecuteChangedFor(nameof(ForkCommand))]
@@ -98,6 +108,7 @@ public partial class ModListsViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasPlan))]
+    [NotifyPropertyChangedFor(nameof(ShowContents))]
     private string? _planSummary;
 
     // Shown when the selected list was captured on a different SPT version than this install.
@@ -133,10 +144,60 @@ public partial class ModListsViewModel : ObservableObject
 
     public bool HasVersionWarning => VersionWarning is not null;
 
+    //
+    // The contents panel and the plan share one cell and swap. Previewing answers a different
+    // question - what applying this would do, rather than what it says - and two long lists at
+    // once is the congestion this page was corrected for once already.
+    //
+    public bool ShowContents => HasSelection && !HasPlan;
+
+    public bool HasEntries => Entries.Count > 0;
+
+    public string EntriesHeader => Entries.Count == 1 ? "1 mod on this list" : $"{Entries.Count} mods on this list";
+
     partial void OnSelectedChanged(ModListRowViewModel? value)
     {
         EditName = value?.Name ?? string.Empty;
+        ShowEntries();
         ClearPlan();
+    }
+
+    //
+    // Fills the contents panel from the selected list.
+    //
+    // Read off the row's own ModList rather than the store: Refresh has just loaded it, and going
+    // back for a second read would let the panel and the row disagree about the same list.
+    //
+    private void ShowEntries()
+    {
+        Entries.Clear();
+
+        if (Selected is { } row)
+        {
+            foreach (var entry in row.List.Entries.OrderBy(e => e.Name, StringComparer.OrdinalIgnoreCase))
+                Entries.Add(new ModListEntryRowViewModel(entry, entry.Name, EntryDetail(entry)));
+        }
+
+        OnPropertyChanged(nameof(HasEntries));
+        OnPropertyChanged(nameof(EntriesHeader));
+    }
+
+    //
+    // What one entry says about itself. The three states a list entry can be in are the whole
+    // point of the line: a pinned version is fetched exactly, an unpinned one comes down at the
+    // newest published, and one with no mod id at all is somebody's manual job.
+    //
+    private static string EntryDetail(ModListEntry entry)
+    {
+        var parts = new List<string>();
+
+        if (entry.IsAddon) parts.Add("addon");
+
+        if (!entry.IsResolved) parts.Add("not on sp-mod.com - installed by hand");
+        else if (entry.Version is { } version) parts.Add(entry.IsPinned ? $"version {version}" : $"version {version}, not pinned");
+        else parts.Add("newest published version");
+
+        return string.Join(" · ", parts);
     }
 
     private void ClearPlan()
@@ -166,6 +227,10 @@ public partial class ModListsViewModel : ObservableObject
             : null;
 
         Selected = Lists.FirstOrDefault(l => l.Id == keep);
+
+        // Setting Selected only rebuilds the panel when it actually changed, and a refresh after an
+        // edit hands back a row for the same list - same id, new contents.
+        ShowEntries();
 
         var active = Lists.FirstOrDefault(l => l.IsActive);
         if (active is not null) StatusMessage = $"Following \"{active.Name}\".";
@@ -405,6 +470,66 @@ public partial class ModListsViewModel : ObservableObject
             ClearPlan();
             Refresh();
         });
+    }
+
+    //
+    // Adds mods to the selected list by hand, from what is installed and from the catalog.
+    //
+    // Nothing is downloaded or moved: a list is a description, and this changes the description.
+    // What is on disk only follows once the list is applied.
+    //
+    [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
+    private async Task AddModsAsync()
+    {
+        if (Selected is not { } row) return;
+
+        await RunAsync(async () =>
+        {
+            var options = await _service.AddOptionsAsync();
+
+            if (options.Installed.Count == 0 && options.Catalog.Count == 0)
+            {
+                StatusMessage = "Nothing to add from - no SPT install folder is set and the sp-mod.com catalog hasn't loaded yet.";
+                return;
+            }
+
+            var chosen = ModListAddModWindow.Pick(row.List, options);
+            if (chosen.Count == 0) return;
+
+            var added = AppServices.ModLists.AddEntries(row.Id, chosen);
+
+            Refresh(row.Id);
+
+            StatusMessage = added == 0
+                ? "Nothing added - the list already names those mods."
+                : $"Added {added} mod(s) to \"{row.Name}\". Preview it to see what applying it would do now.";
+        });
+    }
+
+    //
+    // Takes one mod off the selected list. Nothing on disk changes - the mod stays installed and
+    // enabled exactly as it is, and only the next apply of an Exclusive list would set it aside.
+    //
+    [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
+    private void RemoveEntry(ModListEntryRowViewModel? entry)
+    {
+        if (Selected is not { } row || entry is null) return;
+
+        var removed = AppServices.ModLists.RemoveEntry(row.Id, entry.Entry) is not null;
+
+        Refresh(row.Id);
+
+        StatusMessage = removed
+            ? $"Took \"{entry.Name}\" off \"{row.Name}\". Nothing on disk changed."
+            : $"\"{entry.Name}\" isn't on this list any more.";
+    }
+
+    // Puts the list's contents back in view after a preview. Changes nothing either way.
+    [RelayCommand]
+    private void ClosePlan()
+    {
+        ClearPlan();
+        StatusMessage = Selected is { } row ? $"Showing what \"{row.Name}\" names." : StatusMessage;
     }
 
     [RelayCommand(CanExecute = nameof(SelectionIsEditable))]

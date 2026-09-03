@@ -22,6 +22,29 @@ public sealed record ModListInstall(
 public sealed record ModListPreview(ModList List, ModListPlan Plan, ModListInstall Install);
 
 //
+// One mod the add-a-mod picker can put on a list: the entry a list would store for it, plus the
+// couple of facts the picker labels it with that the entry itself doesn't carry.
+//
+public sealed record ModListAddOption
+{
+    public required ModListEntry Entry { get; init; }
+
+    // Installed here, but currently sitting in the disabled folder.
+    public bool IsDisabled { get; init; }
+
+    // For a catalog listing, whether this install already has it. Always true for an installed one.
+    public bool IsInstalled { get; init; }
+
+    // The catalog listing's author, for telling two mods with similar names apart.
+    public string? Author { get; init; }
+}
+
+// What the picker can offer, split by where it came from.
+public sealed record ModListAddOptions(
+    IReadOnlyList<ModListAddOption> Installed,
+    IReadOnlyList<ModListAddOption> Catalog);
+
+//
 // The App half of mod lists - everything Core deliberately cannot reach.
 //
 // Core owns the model, the capture, the diff and the ordering of an apply; it can't own the scan
@@ -479,6 +502,89 @@ public sealed class ModListService
 
         if (dispatcher is null || dispatcher.CheckAccess()) Cancel();
         else dispatcher.InvokeAsync(Cancel);
+    }
+
+    //
+    // Everything a list could have added to it by hand: the mods this install has, and the ones
+    // sp-mod.com publishes.
+    //
+    // Both halves are answered from data already here - the scan and the catalog cache - so opening
+    // the picker never waits on the network. The catalog half is offered even with no SPT folder
+    // set: naming mods for a list you are building for someone else doesn't need an install.
+    //
+    public async Task<ModListAddOptions> AddOptionsAsync()
+    {
+        var install = await ReadInstallAsync();
+        var installed = install is null ? new List<ModListAddOption>() : InstalledOptions(install);
+
+        return new ModListAddOptions(installed, CatalogOptions(installed));
+    }
+
+    //
+    // One option per installed mod, pinned to the version that is here - the same entry capturing
+    // the whole install would have written for it, produced by the same code, so a mod added by
+    // hand and a mod captured are indistinguishable in the list afterwards.
+    //
+    // Disabled mods are included. Capture leaves them out because it records what is running; this
+    // is someone naming a mod deliberately, and a mod they have but have set aside is a perfectly
+    // reasonable thing to name.
+    //
+    private static List<ModListAddOption> InstalledOptions(ModListInstall install)
+    {
+        var versions = CatalogVersions();
+        var addonVersions = CatalogAddonVersions();
+        var options = new List<ModListAddOption>();
+
+        foreach (var candidate in install.Candidates)
+        {
+            var entry = ModListCapture
+                .BuildEntries([candidate], versions, includeDisabled: true, addonVersions)
+                .FirstOrDefault();
+
+            if (entry is null) continue;
+            if (options.Any(o => ModListEntries.SameMod(o.Entry, entry))) continue;
+
+            options.Add(new ModListAddOption
+            {
+                Entry = entry,
+                IsDisabled = candidate.IsDisabled,
+                IsInstalled = true,
+            });
+        }
+
+        return [.. options.OrderBy(o => o.Entry.Name, StringComparer.OrdinalIgnoreCase)];
+    }
+
+    //
+    // One option per catalog listing, unpinned - see ModListEntries.ForCatalogMod for why a mod
+    // this install has never had is named without a version.
+    //
+    // Left in the order the cache holds them, which is most downloaded first, so the picker has
+    // something worth showing before anything is typed.
+    //
+    // This app's own listing is left out for the same reason Browse hides it: it isn't a mod, and a
+    // list naming it would try to drop a second copy of the manager into BepInEx\plugins.
+    //
+    private static List<ModListAddOption> CatalogOptions(IReadOnlyList<ModListAddOption> installed)
+    {
+        var options = new List<ModListAddOption>();
+
+        foreach (var mod in AppServices.ModCache.AllMods)
+        {
+            if (string.IsNullOrWhiteSpace(mod.Name)) continue;
+            if (string.Equals(mod.Id.ToString(), SelfMod.ModId, StringComparison.Ordinal)) continue;
+
+            var entry = ModListEntries.ForCatalogMod(mod.Id, mod.Name!, mod.Guid);
+
+            options.Add(new ModListAddOption
+            {
+                Entry = entry,
+                IsInstalled = installed.Any(o => ModListEntries.SameMod(o.Entry, entry)),
+                Author = mod.Owner?.Name,
+            });
+        }
+
+        return options;
     }
 
     //

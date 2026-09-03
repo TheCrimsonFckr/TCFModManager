@@ -250,6 +250,17 @@
                         Content="Apply"
                         ToolTip="Download what's missing, enable what the list names, and set aside what it doesn't."
                         Command="{Binding ApplyCommand}" />
+
+                    <!-- Only while a plan is showing: the plan sits in the same cell as the list's
+                         own contents, so this is how you get back to them. -->
+                    <ui:Button
+                        Margin="10,0,0,0"
+                        Appearance="Transparent"
+                        Icon="{ui:SymbolIcon ArrowLeft24}"
+                        Content="Back to the mods"
+                        ToolTip="Stop showing the plan and go back to what this list names. Changes nothing."
+                        Visibility="{Binding HasPlan, Converter={StaticResource BoolToVis}}"
+                        Command="{Binding ClosePlanCommand}" />
                 </StackPanel>
 
                 <Separator
@@ -307,6 +318,117 @@
                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 Visibility="{Binding HasPlan, Converter={StaticResource BoolToVis}}"
                 Text="{Binding PlanSummary}" />
+
+            <!--
+                What the list names, and where mods are added to it or taken off it.
+
+                Shares its cell with the plan below and swaps with it: previewing answers a
+                different question, and stacking two long lists is the congestion this page was
+                corrected for once already.
+
+                Taking a mod off a list changes the list and nothing else. The mod stays installed
+                and enabled; only applying an Exclusive list afterwards sets it aside.
+            -->
+            <ui:Card
+                Grid.Row="3"
+                Padding="4"
+                Visibility="{Binding ShowContents, Converter={StaticResource BoolToVis}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="10,8,6,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            TextWrapping="Wrap"
+                            FontWeight="SemiBold"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                            Text="{Binding EntriesHeader}" />
+
+                        <ui:Button
+                            Grid.Column="1"
+                            Icon="{ui:SymbolIcon Add24}"
+                            Content="Add mods"
+                            ToolTip="Put mods on this list - ones you have installed, or ones from sp-mod.com you haven't. Nothing is downloaded."
+                            Visibility="{Binding SelectionIsEditable, Converter={StaticResource BoolToVis}}"
+                            Command="{Binding AddModsCommand}" />
+                    </Grid>
+
+                    <TextBlock
+                        Grid.Row="1"
+                        TextWrapping="Wrap"
+                        Margin="10,0,10,8"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                        Visibility="{Binding SelectionIsImported, Converter={StaticResource BoolToVis}}"
+                        Text="This list came from someone else, so it stays exactly as they wrote it. Make a copy to change what's on it." />
+
+                    <Grid Grid.Row="2">
+                        <TextBlock
+                            Margin="10,4,10,10"
+                            TextWrapping="Wrap"
+                            VerticalAlignment="Top"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Visibility="{Binding HasEntries, Converter={StaticResource FalseToVisible}}"
+                            Text="This list names no mods yet. Add some, or capture what you have installed as a new list." />
+
+                        <ListBox
+                            x:Name="EntriesBox"
+                            BorderThickness="0"
+                            Background="Transparent"
+                            ItemContainerStyle="{StaticResource ReadOnlyContainer}"
+                            ItemsSource="{Binding Entries}"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource HoverRow}" Padding="10,6">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock
+                                                Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                TextWrapping="Wrap"
+                                                Margin="0,0,16,0"
+                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                Text="{Binding Name}" />
+
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Text="{Binding Detail}" />
+
+                                            <ui:Button
+                                                Grid.Column="2"
+                                                Margin="12,0,0,0"
+                                                Padding="8,4"
+                                                Appearance="Transparent"
+                                                Icon="{ui:SymbolIcon Dismiss24}"
+                                                ToolTip="Take this mod off the list. It stays installed - nothing on disk changes."
+                                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"
+                                                Command="{Binding DataContext.RemoveEntryCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                CommandParameter="{Binding}" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Grid>
+            </ui:Card>
 
             <ui:Card
                 Grid.Row="3"
