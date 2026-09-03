@@ -38,7 +38,7 @@ public sealed partial class ModListRowViewModel(ModList list, bool isActive) : O
                 _ => "made here",
             });
 
-            if (List.Revision > 1) parts.Add($"rev {List.Revision}");
+            if (List.Revision > 1) parts.Add($"revision {List.Revision}");
 
             return string.Join(" · ", parts);
         }
