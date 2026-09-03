@@ -606,9 +606,21 @@
                                              on the collapsed card: it is the one thing you reach
                                              for without needing to read anything else first.
                                              Remove stays inside the card, behind the expander. -->
+                                        <!--
+                                             Sized explicitly, and MinWidth/MinHeight zeroed with
+                                             it: the theme's Button style floors the control at 32,
+                                             so trimming Padding alone would have changed nothing.
+                                             Measured against a card screenshot - the button's box
+                                             was 32px beside an 18px status icon, which is what made
+                                             it read as oversized.
+                                        -->
                                         <ui:Button
                                             Margin="0,4,10,0"
-                                            Padding="6"
+                                            Padding="0"
+                                            MinWidth="0"
+                                            MinHeight="0"
+                                            Width="30"
+                                            Height="30"
                                             HorizontalAlignment="Center"
                                             Appearance="Transparent"
                                             Command="{Binding DataContext.ToggleDisableCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
