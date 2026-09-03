@@ -160,9 +160,17 @@ public static class AppTheme
 
         // Logged because this is invisible when it silently does nothing - a missing key, or an
         // override that doesn't win the lookup, both look exactly like "no effect" from outside.
-        AppLog.Info("Theme",
-            $"pressed button foreground: resting={Describe(resting)}, was={Describe(before)}, "
-            + $"now={Describe(app.TryFindResource("ButtonForegroundPressed") as Brush)}");
+        //
+        // Only when it moves, which also swallows the duplicate: a theme the user picks comes
+        // through ApplyOnly and again through ApplicationThemeManager.Changed, and the second pass
+        // has nothing left to change.
+        var after = app.TryFindResource("ButtonForegroundPressed") as Brush;
+        if (!ReferenceEquals(before, after))
+        {
+            AppLog.Debug("Theme",
+                $"pressed button foreground: resting={Describe(resting)}, was={Describe(before)}, "
+                + $"now={Describe(after)}");
+        }
     }
 
     //
@@ -271,7 +279,7 @@ public static class AppTheme
         // Once per distinct colour, not once per press.
         if (ReportedRestingForegrounds.Add(Describe(resting)))
         {
-            AppLog.Info("Theme", $"holding {Describe(resting)} through the press");
+            AppLog.Debug("Theme", $"holding {Describe(resting)} through the press");
         }
     }
 
@@ -287,10 +295,19 @@ public static class AppTheme
         button.ClearValue(Wpf.Ui.Controls.Button.ForegroundProperty);
     }
 
+    //
+    // rgba() rather than the #AARRGGBB that Color.ToString gives, because the alpha is the whole
+    // point in this file and reading it out of the leading two hex digits is a chore. The brush's
+    // own Opacity folds into the same number - a theme brush carries its alpha in the colour, but
+    // the ones this app declares (the row tints) set Opacity instead, and either way what matters
+    // is what lands on screen.
+    //
     private static string Describe(Brush? brush) => brush switch
     {
         null => "missing",
-        SolidColorBrush solid => solid.Color.ToString(),
+        SolidColorBrush solid =>
+            $"rgba({solid.Color.R}, {solid.Color.G}, {solid.Color.B}, "
+            + $"{solid.Color.A / 255d * solid.Opacity:0.##})",
         _ => brush.GetType().Name,
     };
 
