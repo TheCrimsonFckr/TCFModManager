@@ -218,7 +218,15 @@ public partial class InstalledViewModel : ObservableObject
     //
     public string SelectAllLabel => $"Select all {_filtered.Count}";
 
-    public bool CanSelectAll => _filtered.Any(m => !m.IsSelected);
+    //
+    // Whether every mod the filters match is already ticked. Tints Select all, the same way
+    // SelectionMode tints Multi select and ViewMode tints the view switcher: a Primary button on
+    // this page means "this is already the case".
+    //
+    // It reads over _filtered rather than _all deliberately, because that is what Select all acts
+    // on - with a filter narrowing the list, ticking everything it matches is "all of them".
+    //
+    public bool AllSelected => _filtered.Count > 0 && _filtered.All(m => m.IsSelected);
 
     /// <summary>Whether the last disable/enable can still be put back.</summary>
     public bool CanUndo => _lastMoves.Count > 0;
@@ -366,6 +374,10 @@ public partial class InstalledViewModel : ObservableObject
         // CurrentPage rather than the default 1 so switching away from Cards and back returns you to
         // the page you were on.
         RefreshActiveView(CurrentPage);
+
+        // Cards and List hold their own expansion, so the same mods can be all-open in one and
+        // all-closed in the other - the two buttons have to re-read whichever is now on screen.
+        NotifyExpandedState();
     }
 
     partial void OnSelectedGroupSortOptionChanged(GroupSortItem value)
@@ -607,7 +619,7 @@ public partial class InstalledViewModel : ObservableObject
             DisableSelectedCommand.NotifyCanExecuteChanged();
             EnableSelectedCommand.NotifyCanExecuteChanged();
             UpdateSelectedCommand.NotifyCanExecuteChanged();
-            SelectAllCommand.NotifyCanExecuteChanged();
+            OnPropertyChanged(nameof(AllSelected));
             OnPropertyChanged(nameof(SelectAllLabel));
 
             var unmatched = _all.Where(m => m.ModId is null).Select(m => m.Name).ToList();
@@ -914,6 +926,27 @@ public partial class InstalledViewModel : ObservableObject
     // The keys of whichever mods a view currently has open.
     private bool CanToggleAllExpanded => ShowExpanders && _filtered.Count > 0;
 
+    //
+    // Whether the two buttons' work is already done, which is what tints them. Same rule as the
+    // view switcher and Multi select: Primary means the page is already in that state.
+    //
+    // Neither is simply the other's negation - a half-open list is neither, and both sit Secondary.
+    //
+    public bool AllExpanded => _filtered.Count > 0 && _filtered.All(IsOpen);
+
+    public bool AllCollapsed => _filtered.Count > 0 && !_filtered.Any(IsOpen);
+
+    // Cards and List keep separate expansion state, so "open" means whichever one is on screen -
+    // the same choice SetAllExpanded makes when it writes them.
+    private bool IsOpen(InstalledModCardViewModel card) =>
+        ShowCards ? card.IsCardExpanded : card.IsRowExpanded;
+
+    private void NotifyExpandedState()
+    {
+        OnPropertyChanged(nameof(AllExpanded));
+        OnPropertyChanged(nameof(AllCollapsed));
+    }
+
     [RelayCommand(CanExecute = nameof(CanToggleAllExpanded))]
     private void ExpandAll() => SetAllExpanded(true);
 
@@ -1087,7 +1120,14 @@ public partial class InstalledViewModel : ObservableObject
         return versions.Data.FirstOrDefault(v => v.Version == version) ?? versions.Data.FirstOrDefault();
     }
 
-    [RelayCommand(CanExecute = nameof(CanSelectAll))]
+    //
+    // No CanExecute, deliberately. Gating this on "something is still unticked" turned the button
+    // off at exactly the moment AllSelected turns it Primary, and a disabled button takes the
+    // theme's disabled fill rather than the accent - so the tint would never once have been seen.
+    // Pressing it again when everything is already ticked is a no-op, which is a smaller cost than
+    // a state the UI cannot show.
+    //
+    [RelayCommand]
     private void SelectAll()
     {
         foreach (var mod in _filtered) mod.IsSelected = true;
@@ -1265,14 +1305,23 @@ public partial class InstalledViewModel : ObservableObject
 
     private void OnCardPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+        // Expansion is driven from the cards themselves as well as from the two buttons - clicking
+        // one open has to re-tint them just as pressing Expand all does.
+        if (e.PropertyName is nameof(InstalledModCardViewModel.IsCardExpanded)
+            or nameof(InstalledModCardViewModel.IsRowExpanded))
+        {
+            NotifyExpandedState();
+            return;
+        }
+
         if (e.PropertyName != nameof(InstalledModCardViewModel.IsSelected)) return;
 
         OnPropertyChanged(nameof(SelectedCount));
         OnPropertyChanged(nameof(SelectedCountLabel));
+        OnPropertyChanged(nameof(AllSelected));
         DisableSelectedCommand.NotifyCanExecuteChanged();
         EnableSelectedCommand.NotifyCanExecuteChanged();
         UpdateSelectedCommand.NotifyCanExecuteChanged();
-        SelectAllCommand.NotifyCanExecuteChanged();
     }
 
     private static bool Confirm(string title, string message) =>
@@ -1387,13 +1436,16 @@ public partial class InstalledViewModel : ObservableObject
 
         TotalPages = Math.Max(1, (int)Math.Ceiling(_filtered.Count / (double)PageSize));
 
-        // The button names the number it would select, so narrowing the filter has to re-label it.
+        // The button names the number it would select, so narrowing the filter has to re-label it -
+        // and re-decide whether everything it now matches is already ticked.
         OnPropertyChanged(nameof(SelectAllLabel));
-        SelectAllCommand.NotifyCanExecuteChanged();
+        OnPropertyChanged(nameof(AllSelected));
 
-        // Expand/collapse all are disabled when the filters match nothing.
+        // Expand/collapse all are disabled when the filters match nothing, and a different set of
+        // mods can be all-open or all-closed when the previous one was neither.
         ExpandAllCommand.NotifyCanExecuteChanged();
         CollapseAllCommand.NotifyCanExecuteChanged();
+        NotifyExpandedState();
 
         // Keeps the status line up to date as soon as a filter/search control changes; skipped when
         // _all is empty since ScanAsync's own "No mods found under ..." message is more useful there.

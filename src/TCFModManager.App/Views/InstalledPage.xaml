@@ -295,12 +295,14 @@
                     Padding="10,7"
                     Icon="{ui:SymbolIcon ChevronDoubleDown20}"
                     ToolTip="Open every mod the filters match"
+                    Appearance="{Binding AllExpanded, Converter={StaticResource BoolToAppearance}}"
                     Command="{Binding ExpandAllCommand}" />
                 <ui:Button
                     Margin="8,0,0,0"
                     Padding="10,7"
                     Icon="{ui:SymbolIcon ChevronDoubleUp20}"
                     ToolTip="Close every mod the filters match"
+                    Appearance="{Binding AllCollapsed, Converter={StaticResource BoolToAppearance}}"
                     Command="{Binding CollapseAllCommand}" />
             </StackPanel>
 
@@ -529,6 +531,7 @@
                 Content="{Binding SelectAllLabel}"
                 Icon="{ui:SymbolIcon SelectAllOn24}"
                 ToolTip="Select everything the current filters match, across every page - not just the page on screen."
+                Appearance="{Binding AllSelected, Converter={StaticResource BoolToAppearance}}"
                 Command="{Binding SelectAllCommand}" />
             <ui:Button
                 DockPanel.Dock="Right"
