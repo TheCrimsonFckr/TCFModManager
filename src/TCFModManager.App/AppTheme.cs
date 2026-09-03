@@ -134,12 +134,26 @@ public static class AppTheme
     {
         if (Application.Current is not { } app) return;
 
+        var resting = app.TryFindResource("ButtonForeground") as Brush;
+        var before = app.TryFindResource("ButtonForegroundPressed") as Brush;
+
         // Guarded rather than assumed. If WPF-UI ever renames the key, doing nothing leaves the
         // momentary colour flip; writing null would make every button label disappear.
-        if (app.TryFindResource("ButtonForeground") is not Brush resting) return;
+        if (resting is not null) app.Resources["ButtonForegroundPressed"] = resting;
 
-        app.Resources["ButtonForegroundPressed"] = resting;
+        // Logged because this is invisible when it silently does nothing - a missing key, or an
+        // override that doesn't win the lookup, both look exactly like "no effect" from outside.
+        AppLog.Info("Theme",
+            $"pressed button foreground: resting={Describe(resting)}, was={Describe(before)}, "
+            + $"now={Describe(app.TryFindResource("ButtonForegroundPressed") as Brush)}");
     }
+
+    private static string Describe(Brush? brush) => brush switch
+    {
+        null => "missing",
+        SolidColorBrush solid => solid.Color.ToString(),
+        _ => brush.GetType().Name,
+    };
 
     //
     // Repaints the window's own chrome - the title bar, the backdrop behind the navigation rail and
