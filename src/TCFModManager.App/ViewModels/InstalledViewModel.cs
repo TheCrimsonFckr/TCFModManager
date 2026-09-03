@@ -71,7 +71,7 @@ public partial class InstalledViewModel : ObservableObject
 
     public List<UpdateFilterItem> UpdateFilterOptions { get; } =
     [
-        new("All", UpdateFilter.All),
+        new("Any update status", UpdateFilter.All),
         new("Needs update", UpdateFilter.NeedsUpdate),
         new("Up to date", UpdateFilter.UpToDate),
         new("Not found on sp-mod.com", UpdateFilter.NotFound),
@@ -82,7 +82,7 @@ public partial class InstalledViewModel : ObservableObject
 
     public List<EnabledFilterItem> EnabledFilterOptions { get; } =
     [
-        new("All", EnabledFilter.All),
+        new("Enabled & disabled", EnabledFilter.All),
         new("Enabled only", EnabledFilter.EnabledOnly),
         new("Disabled only", EnabledFilter.DisabledOnly),
     ];

@@ -46,7 +46,7 @@ public sealed record EnabledFilterItem(string Label, EnabledFilter Value)
 //
 public sealed record GroupFilterItem(string Label, Guid? GroupId, bool AllGroups)
 {
-    public static GroupFilterItem All { get; } = new("All", null, true);
+    public static GroupFilterItem All { get; } = new("All groups", null, true);
 
     public static GroupFilterItem Ungrouped { get; } = new("Ungrouped", null, false);
 

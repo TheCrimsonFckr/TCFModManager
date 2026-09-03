@@ -352,28 +352,43 @@
             <!-- A WrapPanel: seven filters don't fit on one line at every window width, and a
                  filter that has run off the edge of the page may as well not exist. -->
             <WrapPanel>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
-                    <TextBlock Text="Update status:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <ComboBox
-                        MinWidth="120"
-                        ItemsSource="{Binding UpdateFilterOptions}"
-                        SelectedItem="{Binding SelectedUpdateFilter}" />
-                </StackPanel>
+                <!--
+                     No inline labels on the five filters: each one's neutral option names what it
+                     filters ("Any update status" rather than a bare "All"), which is the only
+                     reason the labels could go - three of these used to read plain "All" and would
+                     have been indistinguishable side by side.
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
-                    <TextBlock Text="Enabled:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <ComboBox
-                        MinWidth="120"
-                        ItemsSource="{Binding EnabledFilterOptions}"
-                        SelectedItem="{Binding SelectedEnabledFilter}" />
-                </StackPanel>
+                     Fixed Width, not MinWidth, on every one: a ComboBox sizes itself to its widest
+                     item, so the Category and Group boxes changed width whenever their lists were
+                     rebuilt and the whole row shuffled sideways. Each width here fits that
+                     dropdown's longest option - "Not found on sp-mod.com" is what sets this one.
+                -->
+                <ComboBox
+                    Width="205"
+                    Margin="0,0,16,4"
+                    VerticalAlignment="Center"
+                    ToolTip="Filter by whether an update is available"
+                    ItemsSource="{Binding UpdateFilterOptions}"
+                    SelectedItem="{Binding SelectedUpdateFilter}" />
+
+                <ComboBox
+                    Width="170"
+                    Margin="0,0,16,4"
+                    VerticalAlignment="Center"
+                    ToolTip="Filter by whether a mod is enabled or disabled"
+                    ItemsSource="{Binding EnabledFilterOptions}"
+                    SelectedItem="{Binding SelectedEnabledFilter}" />
 
                 <!-- The same five tick boxes Browse carries. "Has dependencies" is answered from
                      the dependency graph built off the scan, so unlike Browse's it covers
                      everything installed rather than what has been looked up so far. -->
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
-                    <TextBlock Text="Show:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <ToggleButton x:Name="AttributeToggle" MinWidth="170" Style="{StaticResource FilterDropDownToggle}">
+                <ToggleButton
+                    x:Name="AttributeToggle"
+                    Width="220"
+                    Margin="0,0,16,4"
+                    VerticalAlignment="Center"
+                    ToolTip="Filter by Fika support, ads, AI content, dependencies and addons"
+                    Style="{StaticResource FilterDropDownToggle}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -393,8 +408,7 @@
                                 Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
                                 Symbol="ChevronDown24" />
                         </Grid>
-                    </ToggleButton>
-                </StackPanel>
+                </ToggleButton>
                 <Popup
                     IsOpen="{Binding IsChecked, ElementName=AttributeToggle, Mode=TwoWay}"
                     PlacementTarget="{Binding ElementName=AttributeToggle}"
@@ -419,28 +433,33 @@
 
                 <!-- Built from the categories actually present in this install, not the whole
                      catalog - a category none of your mods are in would only ever show nothing. -->
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
-                    <TextBlock Text="Category:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <ComboBox
-                        MinWidth="150"
-                        ItemsSource="{Binding CategoryOptions}"
-                        SelectedItem="{Binding SelectedCategory}" />
-                </StackPanel>
+                <!-- Wider than any category currently installed: this list is rebuilt from the
+                     catalog after every scan, so a longer name arriving must not move the row. -->
+                <ComboBox
+                    Width="165"
+                    Margin="0,0,16,4"
+                    VerticalAlignment="Center"
+                    ToolTip="Filter by the category a mod is listed under on sp-mod.com"
+                    ItemsSource="{Binding CategoryOptions}"
+                    SelectedItem="{Binding SelectedCategory}" />
 
                 <!-- Rebuilt from the group store whenever groups change, so it always lists exactly
                      the groups that exist. Applies to all three views, like every other filter here. -->
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
-                    <TextBlock Text="Group:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <ComboBox
-                        MinWidth="130"
-                        ItemsSource="{Binding GroupFilterOptions}"
-                        SelectedItem="{Binding SelectedGroupFilter}" />
-                </StackPanel>
+                <!-- Group names are typed by the user, so this one has no bounded longest option -
+                     sized for a comfortably long name and left to trim beyond that, rather than
+                     resizing itself every time a group is renamed. -->
+                <ComboBox
+                    Width="180"
+                    Margin="0,0,16,4"
+                    VerticalAlignment="Center"
+                    ToolTip="Filter by one of your own mod groups"
+                    ItemsSource="{Binding GroupFilterOptions}"
+                    SelectedItem="{Binding SelectedGroupFilter}" />
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
                     <TextBlock Text="Sort by:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
                     <ComboBox
-                        MinWidth="140"
+                        Width="170"
                         ItemsSource="{Binding SortOptions}"
                         SelectedItem="{Binding SelectedSortOption}" />
                 </StackPanel>
@@ -450,7 +469,7 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4" Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
                     <TextBlock Text="Per page:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
                     <ComboBox
-                        MinWidth="60"
+                        Width="70"
                         ItemsSource="{Binding PageSizeOptions}"
                         SelectedItem="{Binding PageSize}" />
                 </StackPanel>
