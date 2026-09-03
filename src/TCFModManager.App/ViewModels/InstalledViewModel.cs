@@ -555,18 +555,21 @@ public partial class InstalledViewModel : ObservableObject
                 return (found, built, ModDependencyGraph.Build(found));
             });
 
-            // Which cards were open, keyed the same way group assignments are, so the set survives
-            // every card object being replaced. Captured before _all is reassigned.
-            var expanded = _all
-                .Where(m => m.IsExpanded)
-                .Select(m => ModGroupStore.KeyFor(m.Name))
-                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            // What was open in each view, keyed the same way group assignments are, so the sets
+            // survive every card object being replaced. Captured before _all is reassigned, and
+            // kept apart because the two views expand independently.
+            var openCards = OpenKeys(_all, m => m.IsCardExpanded);
+            var openRows = OpenKeys(_all, m => m.IsRowExpanded);
 
             _all = cards;
 
-            if (expanded.Count > 0)
+            if (openCards.Count > 0 || openRows.Count > 0)
                 foreach (var card in cards)
-                    card.IsExpanded = expanded.Contains(ModGroupStore.KeyFor(card.Name));
+                {
+                    var key = ModGroupStore.KeyFor(card.Name);
+                    card.IsCardExpanded = openCards.Contains(key);
+                    card.IsRowExpanded = openRows.Contains(key);
+                }
 
             ApplyListMembership(cards);
             ApplyBadgeVisibility();
@@ -897,6 +900,14 @@ public partial class InstalledViewModel : ObservableObject
     // worse than a greyed-out one, and the reasons a mod is excluded are explained when it runs.
     //
     private bool HasUpdatableSelection() => SelectedCards().Any(IsUpdatable);
+
+    // The keys of whichever mods a view currently has open.
+    private static HashSet<string> OpenKeys(
+        IEnumerable<InstalledModCardViewModel> cards,
+        Func<InstalledModCardViewModel, bool> isOpen) =>
+        cards.Where(isOpen)
+            .Select(m => ModGroupStore.KeyFor(m.Name))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
     private static bool IsUpdatable(InstalledModCardViewModel card) =>
         card is { UpdateAvailable: true, IsDisabled: false, IsAddon: false, ModId: not null }

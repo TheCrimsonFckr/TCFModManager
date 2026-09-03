@@ -568,7 +568,7 @@
                             VerticalAlignment="Top"
                             Style="{StaticResource HoverCardExpander}"
                             Margin="0,0,6,6"
-                            IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
+                            IsExpanded="{Binding IsCardExpanded, Mode=TwoWay}"
                             Opacity="{Binding CardOpacity}"
                             PreviewMouseLeftButtonDown="Card_PreviewMouseLeftButtonDown">
                             <ui:CardExpander.Header>
@@ -957,7 +957,7 @@
                         <ui:CardExpander
                             Style="{StaticResource HoverCardExpander}"
                             Margin="0,0,6,6"
-                            IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
+                            IsExpanded="{Binding IsRowExpanded, Mode=TwoWay}"
                             Opacity="{Binding CardOpacity}">
                             <ui:CardExpander.Header>
                                 <Grid Margin="0,0,8,0">

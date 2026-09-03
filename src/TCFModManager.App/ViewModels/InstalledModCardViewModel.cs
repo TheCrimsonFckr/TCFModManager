@@ -272,13 +272,21 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     private bool _isSelected;
 
     //
-    // Whether this mod's card/row is open. Held here rather than left to the CardExpander because
-    // every scan replaces every card: closing the versions dialog triggers a rescan, which would
-    // otherwise snap shut the card you opened it from. InstalledViewModel carries the set of open
-    // cards across a rebuild.
+    // Whether this mod is open in Cards view, and separately in List view.
+    //
+    // Held here rather than left to the CardExpander because every scan replaces every card:
+    // closing the versions dialog triggers a rescan, which would otherwise snap shut the card you
+    // opened it from. InstalledViewModel carries the open sets across a rebuild.
+    //
+    // Two flags rather than one because both views render the SAME card objects - Results and
+    // ListItems are both built from _filtered - so a single shared flag meant opening a card in one
+    // view silently opened the same mod in the other.
     //
     [ObservableProperty]
-    private bool _isExpanded;
+    private bool _isCardExpanded;
+
+    [ObservableProperty]
+    private bool _isRowExpanded;
 
     //
     // The user-defined group this mod is assigned to, or null when it's in none. Filled in by
