@@ -53,30 +53,6 @@ public sealed class AppSettings
     public bool ShowModFootprintPage { get; set; }
 
     //
-    // How the Installed and Browse pages were left: how many cards to a page, and what they were
-    // ordered by. Both pages went back to 12 per page and their first sort option on every visit,
-    // which is a poor default for anyone who had settled on something else.
-    //
-    // Null means "whatever the page's own default is", so an upgrade with no keys yet behaves
-    // exactly as before, and deleting a key by hand puts a page back to its default rather than
-    // breaking it. A size outside the page's dropdown is ignored for the same reason.
-    //
-    // The sorts are stored as names rather than numbers, for the reason the Theme comment gives -
-    // settings.json is offered for hand-editing, and "InstalledSort": 4 would mean nothing. They
-    // are plain strings rather than enums because the orderings are declared in the App project,
-    // next to the dropdowns they fill; this project cannot see them, and moving UI ordering into
-    // it to satisfy a settings file would be the tail wagging the dog. An unrecognised name falls
-    // back to the page's default.
-    //
-    public int? InstalledPageSize { get; set; }
-
-    public string? InstalledSort { get; set; }
-
-    public int? BrowsePageSize { get; set; }
-
-    public string? BrowseSort { get; set; }
-
-    //
     // Whether the Installed page tags each mod with the mod lists it belongs to. On by default -
     // the badges are the point of having lists visible at all - but an install with several lists
     // puts a row of chips on every card, so it can be turned off to quieten the page down.

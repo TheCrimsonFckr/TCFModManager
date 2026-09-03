@@ -35,17 +35,9 @@ public partial class BrowseViewModel : ObservableObject
     {
         _spModApi = spModApi;
 
-        // No Featured restriction; sort and page size come back from the last visit if they were
-        // changed. Backing fields rather than properties, so the changed handlers - which re-filter
-        // and save - don't run before this page has loaded anything.
+        // Defaults: Newest sort, no Featured restriction.
+        _selectedSortOption = SortOptions[0];
         _selectedFeaturedFilter = FeaturedFilterOptions[0];
-
-        var settings = Settings.Load();
-        _selectedSortOption = SortOptions.FirstOrDefault(o => o.Value.ToString() == settings.BrowseSort)
-            ?? SortOptions[0];
-        _pageSize = settings.BrowsePageSize is { } size && PageSizeOptions.Contains(size)
-            ? size
-            : DefaultPageSize;
 
         // Refreshes each card's install/update status dot once a queued install completes.
         AppServices.DownloadQueue.ItemInstalled += async (_, _) =>
@@ -88,17 +80,9 @@ public partial class BrowseViewModel : ObservableObject
 
     partial void OnSearchTextChanged(string value) => AutoApplyFilter();
 
-    partial void OnSelectedSortOptionChanged(SortOptionItem value)
-    {
-        RememberView();
-        AutoApplyFilter();
-    }
+    partial void OnSelectedSortOptionChanged(SortOptionItem value) => AutoApplyFilter();
 
-    partial void OnPageSizeChanged(int value)
-    {
-        RememberView();
-        AutoApplyFilter();
-    }
+    partial void OnPageSizeChanged(int value) => AutoApplyFilter();
 
     partial void OnSelectedFeaturedFilterChanged(FeaturedFilterItem value) => AutoApplyFilter();
 
@@ -127,27 +111,6 @@ public partial class BrowseViewModel : ObservableObject
 
     // How many matching cards make up one page.
     private const int DefaultPageSize = 12;
-
-    private static readonly SettingsService Settings = new();
-
-    //
-    // Keeps how this page was left - page size and ordering. Filters and the search box are not
-    // kept, for the reason InstalledViewModel.RememberView gives.
-    //
-    private void RememberView()
-    {
-        try
-        {
-            var settings = Settings.Load();
-            settings.BrowsePageSize = PageSize;
-            settings.BrowseSort = SelectedSortOption.Value.ToString();
-            Settings.Save(settings);
-        }
-        catch (Exception ex)
-        {
-            AppLog.Warn("Browse", $"couldn't save the view preferences: {ex.Message}");
-        }
-    }
 
     public List<int> PageSizeOptions { get; } = [6, 9, DefaultPageSize, 15, 21, 30];
 
