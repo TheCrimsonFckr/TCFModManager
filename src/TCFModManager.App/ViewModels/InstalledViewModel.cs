@@ -24,6 +24,10 @@ public partial class InstalledViewModel : ObservableObject
     // Fills the grid exactly at the 3- and 4-column width breakpoints (see UpdateLayoutForWidth).
     private const int DefaultPageSize = 12;
 
+    // Stateless - it only holds a path - so constructing one costs nothing and every write does its
+    // own Load first, which is the load-mutate-save the rest of the app uses on this file.
+    private static readonly SettingsService Settings = new();
+
     // Below this a card can't show its summary line without truncating it to uselessness. Only
     // reachable on a very narrow window, where Columns is already 1.
     private const double MinimumCardWidth = 240;
@@ -271,12 +275,23 @@ public partial class InstalledViewModel : ObservableObject
 
     public InstalledViewModel()
     {
-        _showListBadges = new SettingsService().Load().ShowModListBadges;
+        var settings = Settings.Load();
+
+        _showListBadges = settings.ShowModListBadges;
         _selectedUpdateFilter = UpdateFilterOptions[0];
         _selectedEnabledFilter = EnabledFilterOptions[0];
         _selectedGroupFilter = GroupFilterItem.All;
-        _selectedSortOption = SortOptions[0];
         _selectedGroupSortOption = GroupSortOptions[0];
+
+        // Assigned to the backing fields rather than the properties: setting the properties here
+        // would run OnPageSizeChanged/OnSelectedSortOptionChanged, which re-filter and save - both
+        // pointless before the page has loaded anything, and the save would write back what was
+        // just read.
+        _selectedSortOption = SortOptions.FirstOrDefault(o => o.Value.ToString() == settings.InstalledSort)
+            ?? SortOptions[0];
+        _pageSize = settings.InstalledPageSize is { } size && PageSizeOptions.Contains(size)
+            ? size
+            : DefaultPageSize;
 
         // Each tick box drives the same re-filter a dropdown selection does.
         foreach (var option in AttributeOptions)
@@ -341,9 +356,17 @@ public partial class InstalledViewModel : ObservableObject
         if (!value) ClearSelection();
     }
 
-    partial void OnSelectedSortOptionChanged(ModSortItem value) => AutoApplyFilter();
+    partial void OnSelectedSortOptionChanged(ModSortItem value)
+    {
+        RememberView();
+        AutoApplyFilter();
+    }
 
-    partial void OnPageSizeChanged(int value) => AutoApplyFilter();
+    partial void OnPageSizeChanged(int value)
+    {
+        RememberView();
+        AutoApplyFilter();
+    }
 
     //
     // Deliberately not AutoApplyFilter: nothing about what is shown changes, only whether each row
@@ -428,6 +451,31 @@ public partial class InstalledViewModel : ObservableObject
         // Synced rather than cleared, for the same reason the card grid is - see Sync.
         ItemsSync.Apply(ListItems, _filtered);
         _listDirty = false;
+    }
+
+    //
+    // Keeps how this page was left - page size and ordering - so coming back to it does not undo
+    // the choice. Filters and the search box are deliberately NOT kept: those narrow what you can
+    // see, and a filter silently still applied on a later launch is how a mod goes missing.
+    //
+    // Clearing filters resets both and saves that too, which is what makes Clear filters a way back
+    // to the defaults rather than something that only lasts until the next visit.
+    //
+    private void RememberView()
+    {
+        try
+        {
+            var settings = Settings.Load();
+            settings.InstalledPageSize = PageSize;
+            settings.InstalledSort = SelectedSortOption.Value.ToString();
+            Settings.Save(settings);
+        }
+        catch (Exception ex)
+        {
+            // A dropdown that cannot write to settings.json is not a reason to interrupt anyone -
+            // the choice still applies for this session, it just will not be there next time.
+            AppLog.Warn("Installed", $"couldn't save the view preferences: {ex.Message}");
+        }
     }
 
     /// <summary>Resets every Installed filter/search control back to its opening default, then re-applies once immediately.</summary>
