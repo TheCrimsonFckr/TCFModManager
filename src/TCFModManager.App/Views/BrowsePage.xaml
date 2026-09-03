@@ -440,7 +440,7 @@
                                 Margin="8,0,0,0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top"
-                                FontSize="16"
+                                FontSize="20"
                                 Symbol="{Binding StatusGlyph}"
                                 Style="{StaticResource StatusIcon}"
                                 ToolTip="{Binding StatusTooltip}"

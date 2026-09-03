@@ -888,7 +888,7 @@
                                                             Grid.Column="0"
                                                             Margin="0,0,8,0"
                                                             VerticalAlignment="Center"
-                                                            FontSize="16"
+                                                            FontSize="20"
                                                             Symbol="{Binding StatusGlyph}"
                                                             Style="{StaticResource StatusIcon}"
                                                             ToolTip="{Binding StatusTooltip}" />
