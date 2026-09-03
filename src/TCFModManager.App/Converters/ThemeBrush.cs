@@ -23,11 +23,11 @@ namespace TCFModManager.App.Converters;
 //
 internal static class ThemeBrush
 {
-    public const string Success = "SystemFillColorSuccessBrush";
+    // Only the two the confirmation window resolves. Success, Neutral and Primary went with the
+    // converters this class used to serve - status colours come from styles now (see App.xaml),
+    // which re-resolve on a theme change where these cannot.
     public const string Caution = "SystemFillColorCautionBrush";
     public const string Critical = "SystemFillColorCriticalBrush";
-    public const string Neutral = "TextFillColorTertiaryBrush";
-    public const string Primary = "TextFillColorPrimaryBrush";
 
     public static Brush Resolve(string key, Brush fallback) =>
         Application.Current?.TryFindResource(key) as Brush ?? fallback;

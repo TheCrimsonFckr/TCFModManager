@@ -1,5 +1,4 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;

@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using TCFModManager.Core.Models;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -12,11 +11,6 @@ namespace TCFModManager.App.ViewModels;
 public sealed partial class AddonsSectionViewModel : ObservableObject
 {
     public ObservableCollection<AddonRowViewModel> Addons { get; } = [];
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(HasAddons))]
-    [NotifyPropertyChangedFor(nameof(Heading))]
-    private bool _isLoaded;
 
     public bool HasAddons => Addons.Count > 0;
 
@@ -52,7 +46,6 @@ public sealed partial class AddonsSectionViewModel : ObservableObject
             ? $"Install {parentModName ?? "this mod"} first - an addon needs its parent mod's version to know which of its own versions fit."
             : null;
 
-        IsLoaded = true;
         OnPropertyChanged(nameof(HasAddons));
         OnPropertyChanged(nameof(Heading));
     }

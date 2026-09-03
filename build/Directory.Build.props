@@ -27,7 +27,7 @@
       Stack traces embed the absolute path of every source file as it existed on the build machine,
       which is how "C:\Users\<name>\OneDrive\Desktop\..." ends up in a log shipped to other people.
       PathMap rewrites those to repo-relative paths at compile time, so a trace reads
-      "./src/TCFModManager.Core/ForgeApi/ForgeApiClient.cs:43" instead of exposing the developer's
+      "./src/TCFModManager.Core/SpModApi/SpModApiClient.cs:43" instead of exposing the developer's
       folder layout, account name, and cloud storage setup.
 
       This file lives in build/, one level below the repo root, so the mapped prefix has to be the
