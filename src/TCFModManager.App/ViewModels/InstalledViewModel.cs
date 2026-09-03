@@ -159,6 +159,9 @@ public partial class InstalledViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(ShowCards))]
     [NotifyPropertyChangedFor(nameof(ShowGroups))]
     [NotifyPropertyChangedFor(nameof(ShowList))]
+    [NotifyPropertyChangedFor(nameof(ShowExpanders))]
+    [NotifyCanExecuteChangedFor(nameof(ExpandAllCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CollapseAllCommand))]
     [NotifyPropertyChangedFor(nameof(ScrollsItself))]
     private InstalledViewMode _viewMode = InstalledViewMode.Cards;
 
@@ -167,6 +170,10 @@ public partial class InstalledViewModel : ObservableObject
     public bool ShowGroups => ViewMode == InstalledViewMode.Groups;
 
     public bool ShowList => ViewMode == InstalledViewMode.List;
+
+    // Cards and List are the two views made of expandable rows; group view's sections collapse on
+    // their own terms and have their own controls, so expand/collapse all hides there.
+    public bool ShowExpanders => ViewMode is InstalledViewMode.Cards or InstalledViewMode.List;
 
     /// <summary>True for the two views that scroll rather than paginate - what hides the pagination
     /// controls and the per-page picker.</summary>
@@ -905,6 +912,30 @@ public partial class InstalledViewModel : ObservableObject
     private bool HasUpdatableSelection() => SelectedCards().Any(IsUpdatable);
 
     // The keys of whichever mods a view currently has open.
+    private bool CanToggleAllExpanded => ShowExpanders && _filtered.Count > 0;
+
+    [RelayCommand(CanExecute = nameof(CanToggleAllExpanded))]
+    private void ExpandAll() => SetAllExpanded(true);
+
+    [RelayCommand(CanExecute = nameof(CanToggleAllExpanded))]
+    private void CollapseAll() => SetAllExpanded(false);
+
+    //
+    // Opens or closes every mod the filters currently match - not just the page on screen. Paging
+    // forward to find half of them shut again would make "expand all" a lie.
+    //
+    // Only the view being looked at: the two keep their own expansion state, so opening every card
+    // shouldn't quietly open every row in List as well.
+    //
+    private void SetAllExpanded(bool expanded)
+    {
+        foreach (var card in _filtered)
+        {
+            if (ShowCards) card.IsCardExpanded = expanded;
+            else card.IsRowExpanded = expanded;
+        }
+    }
+
     private static HashSet<string> OpenKeys(
         IEnumerable<InstalledModCardViewModel> cards,
         Func<InstalledModCardViewModel, bool> isOpen) =>
@@ -1359,6 +1390,10 @@ public partial class InstalledViewModel : ObservableObject
         // The button names the number it would select, so narrowing the filter has to re-label it.
         OnPropertyChanged(nameof(SelectAllLabel));
         SelectAllCommand.NotifyCanExecuteChanged();
+
+        // Expand/collapse all are disabled when the filters match nothing.
+        ExpandAllCommand.NotifyCanExecuteChanged();
+        CollapseAllCommand.NotifyCanExecuteChanged();
 
         // Keeps the status line up to date as soon as a filter/search control changes; skipped when
         // _all is empty since ScanAsync's own "No mods found under ..." message is more useful there.

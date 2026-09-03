@@ -271,7 +271,7 @@
             <ui:Button
                 DockPanel.Dock="Right"
                 Margin="0,0,8,0"
-                Content="Select"
+                Content="Multi select"
                 Icon="{ui:SymbolIcon SelectAllOn24}"
                 ToolTip="Tick several mods to enable or disable them together"
                 Appearance="{Binding SelectionMode, Converter={StaticResource BoolToAppearance}}"
@@ -308,6 +308,25 @@
                     Appearance="{Binding ShowList, Converter={StaticResource BoolToAppearance}}"
                     ToolTip="One scrollable row per mod, each opening onto its full details."
                     Click="ListView_Click" />
+
+                <!-- Open/close everything the filters match, in whichever of the two expandable
+                     views is on screen. Icon-only and sat with the view switcher because that is
+                     what they act on - group view has its own per-section collapse, so these hide
+                     there rather than sitting dead. -->
+                <ui:Button
+                    Margin="20,0,0,0"
+                    Padding="10,7"
+                    Icon="{ui:SymbolIcon ChevronDoubleDown20}"
+                    ToolTip="Open every mod the filters match"
+                    Visibility="{Binding ShowExpanders, Converter={StaticResource BoolToVis}}"
+                    Command="{Binding ExpandAllCommand}" />
+                <ui:Button
+                    Margin="8,0,0,0"
+                    Padding="10,7"
+                    Icon="{ui:SymbolIcon ChevronDoubleUp20}"
+                    ToolTip="Close every mod the filters match"
+                    Visibility="{Binding ShowExpanders, Converter={StaticResource BoolToVis}}"
+                    Command="{Binding CollapseAllCommand}" />
             </StackPanel>
 
             <TextBlock
