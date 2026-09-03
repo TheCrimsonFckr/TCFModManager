@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Net.Http;
 using System.Threading.Channels;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -225,9 +226,15 @@ public sealed partial class DownloadQueueViewModel : ObservableObject
             item.Status = DownloadQueueItemStatus.Failed;
             item.StatusMessage = $"Network error: {ex.Message}";
         }
+        catch (ModInstallException ex)
+        {
+            // ModInstallService refused or gave up part way; ModInstallProblems words it.
+            item.Status = DownloadQueueItemStatus.Failed;
+            item.StatusMessage = ModInstallProblems.Describe(ex);
+        }
         catch (InvalidOperationException ex)
         {
-            // ModInstallService's own validation error message, already user-facing.
+            // Anything else that reached here already carries a readable message of its own.
             item.Status = DownloadQueueItemStatus.Failed;
             item.StatusMessage = ex.Message;
         }

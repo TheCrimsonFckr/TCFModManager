@@ -40,7 +40,7 @@ public static class ModDisableService
         var targets = mods.Where(mod => mod.IsDisabled != disable).ToList();
         if (targets.Count == 0) return ModDisableOutcome.Empty;
 
-        ModInstallService.EnsureInstallNotInUse(disable ? "disabling a mod" : "enabling a mod");
+        ModInstallService.EnsureInstallNotInUse(disable ? ModInstallAction.Disable : ModInstallAction.Enable);
 
         var moved = new List<ModMove>();
         var failed = new List<ModDisableFailure>();
@@ -84,7 +84,7 @@ public static class ModDisableService
         var pending = moves.ToList();
         if (pending.Count == 0) return ModDisableOutcome.Empty;
 
-        ModInstallService.EnsureInstallNotInUse("undoing a change");
+        ModInstallService.EnsureInstallNotInUse(ModInstallAction.Undo);
 
         var moved = new List<ModMove>();
         var failed = new List<ModDisableFailure>();
@@ -141,7 +141,7 @@ public static class ModDisableService
     public static ModDisableOutcome ResolveDuplicate(
         string installPath, ModDuplicatePair pair, bool keepEnabled, DateTimeOffset timestamp)
     {
-        ModInstallService.EnsureInstallNotInUse("sorting out a duplicated mod");
+        ModInstallService.EnsureInstallNotInUse(ModInstallAction.SortOutDuplicate);
 
         var moved = new List<ModMove>();
         var failed = new List<ModDisableFailure>();

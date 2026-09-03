@@ -694,10 +694,10 @@ public partial class InstalledViewModel : ObservableObject
                 StatusMessage = DescribeRemoval(mod.Name, result.FailedFiles.Count, result.ConfigsKept, result.ConfigsFolder);
                 ModRemoved?.Invoke(this, EventArgs.Empty);
             }
-            catch (InvalidOperationException ex)
+            catch (ModInstallException ex)
             {
-                // SPT or its server is running - ModInstallService's message names what to close.
-                StatusMessage = ex.Message;
+                // SPT or its server is running - the message names what to close.
+                StatusMessage = ModInstallProblems.Describe(ex);
             }
             finally
             {
@@ -742,9 +742,9 @@ public partial class InstalledViewModel : ObservableObject
                 StatusMessage = DescribeRemoval(mod.Name, failedFiles: 0, kept.Count, kept.Folder);
                 ModRemoved?.Invoke(this, EventArgs.Empty);
             }
-            catch (InvalidOperationException ex)
+            catch (ModInstallException ex)
             {
-                StatusMessage = ex.Message;
+                StatusMessage = ModInstallProblems.Describe(ex);
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
@@ -853,8 +853,7 @@ public partial class InstalledViewModel : ObservableObject
 
         if (ModInstallService.RunningBlockers() is { Count: > 0 } blockers)
         {
-            StatusMessage =
-                $"Close {string.Join(" and ", blockers)} first - files inside the SPT install are locked while it's running.";
+            StatusMessage = ModInstallProblems.InstallInUse(blockers, ModInstallAction.SortOutDuplicate);
             return;
         }
 
@@ -888,9 +887,9 @@ public partial class InstalledViewModel : ObservableObject
                 failed.AddRange(outcome.Failed);
             }
         }
-        catch (InvalidOperationException ex)
+        catch (ModInstallException ex)
         {
-            StatusMessage = ex.Message;
+            StatusMessage = ModInstallProblems.Describe(ex);
             return;
         }
         finally
@@ -1154,9 +1153,9 @@ public partial class InstalledViewModel : ObservableObject
                 ? $"Put {outcome.Moved.Count} mod(s) back."
                 : $"Put {outcome.Moved.Count} mod(s) back; {DescribeFailures(outcome.Failed)}";
         }
-        catch (InvalidOperationException ex)
+        catch (ModInstallException ex)
         {
-            StatusMessage = ex.Message;
+            StatusMessage = ModInstallProblems.Describe(ex);
             return;
         }
         finally
@@ -1196,9 +1195,9 @@ public partial class InstalledViewModel : ObservableObject
         // rather than after the user has answered a dialog. ModDisableService guards again itself.
         if (ModInstallService.RunningBlockers() is { Count: > 0 } blockers)
         {
-            StatusMessage =
-                $"Close {string.Join(" and ", blockers)} before {verb.TrimEnd('e')}ing a mod - " +
-                "files inside the SPT install are locked while it's running.";
+            StatusMessage = ModInstallProblems.InstallInUse(
+                blockers,
+                disable ? ModInstallAction.Disable : ModInstallAction.Enable);
             return null;
         }
 
@@ -1228,9 +1227,9 @@ public partial class InstalledViewModel : ObservableObject
         {
             outcome = ModDisableService.Apply(entries, disable);
         }
-        catch (InvalidOperationException ex)
+        catch (ModInstallException ex)
         {
-            StatusMessage = ex.Message;
+            StatusMessage = ModInstallProblems.Describe(ex);
             return null;
         }
         finally

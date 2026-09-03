@@ -518,6 +518,13 @@ public partial class ModListsViewModel : ObservableObject
         {
             await work();
         }
+        catch (ModInstallException ex)
+        {
+            // Reverting an apply touches the install, so it can be refused like any other move -
+            // and ModInstallException's Message is the reason name, not a sentence.
+            AppLog.Error("ModLists", ex.ToString());
+            StatusMessage = ModInstallProblems.Describe(ex);
+        }
         catch (Exception ex)
         {
             AppLog.Error("ModLists", ex.ToString());

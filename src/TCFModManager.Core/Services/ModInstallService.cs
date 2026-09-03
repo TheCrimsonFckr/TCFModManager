@@ -49,14 +49,21 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
         return running;
     }
 
-    // Throws when a blocking process is running, naming it and the action being attempted.
-    public static void EnsureInstallNotInUse(string action)
+    //
+    // Throws when a blocking process is running, carrying what to close and which operation was
+    // refused. It takes the operation rather than a verb phrase: the caller says what it was doing,
+    // App/Services/ModInstallProblems says it in English.
+    //
+    public static void EnsureInstallNotInUse(ModInstallAction action)
     {
         var running = RunningBlockers();
         if (running.Count == 0) return;
 
-        throw new InvalidOperationException(
-            $"Close {string.Join(" and ", running)} before {action} - files inside the SPT install are locked while it's running.");
+        throw new ModInstallException(ModInstallFailure.InstallInUse)
+        {
+            Running = running,
+            Action = action,
+        };
     }
 
     // Downloads and installs <paramref name="version"/> of <paramref name="target"/> into
@@ -76,12 +83,16 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
         CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(installPath) || !Directory.Exists(installPath))
-            throw new InvalidOperationException("No SPT install folder set - configure it on the Options page first.");
+            throw new ModInstallException(ModInstallFailure.NoInstallFolder);
 
         if (string.IsNullOrWhiteSpace(version.Link))
-            throw new InvalidOperationException($"{target.Name} {version.Version} has no download link.");
+            throw new ModInstallException(ModInstallFailure.NoDownloadLink)
+            {
+                ModName = target.Name,
+                Version = version.Version,
+            };
 
-        EnsureInstallNotInUse("installing a mod");
+        EnsureInstallNotInUse(ModInstallAction.Install);
 
         AppLog.Info("Install",
             $"{target.Name} {version.Version} ({(target.IsAddon ? "addon" : "mod")} {target.Id}) -> {installPath}");
@@ -119,9 +130,11 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
                     $"{target.Name} {version.Version} archive has no known root folder; top level: " +
                     string.Join(", ", Directory.GetFileSystemEntries(contentRoot).Select(Path.GetFileName)));
 
-                throw new InvalidOperationException(
-                    $"{target.Name} {version.Version}'s archive doesn't look like a normal SPT mod package " +
-                    "(no BepInEx/user/SPT folder found in it) - install it manually instead.");
+                throw new ModInstallException(ModInstallFailure.UnrecognisedArchive)
+                {
+                    ModName = target.Name,
+                    Version = version.Version,
+                };
             }
 
             // Archives package server-side content as "user/..."; remap it to wherever this install
@@ -135,7 +148,7 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
 
             // Re-checked now the download is finished: SPT may have been started while it ran, and
             // everything past this point deletes or places files inside the install.
-            EnsureInstallNotInUse("installing a mod");
+            EnsureInstallNotInUse(ModInstallAction.Install);
 
             var manifest = manifestService.Load();
             var existing = manifest.Mods.FirstOrDefault(target.Matches);
@@ -185,10 +198,13 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
                 AppLog.Error("Install",
                     $"{target.Name} {version.Version} incomplete after {placedFiles.Count}/{sourceFiles.Length} file(s)", ex);
 
-                throw new InvalidOperationException(
-                    $"{target.Name} {version.Version} was only partly installed - {placedFiles.Count} of {sourceFiles.Length} " +
-                    $"files were placed before this failed: {ex.Message} Close SPT and its server, then install it again.",
-                    ex);
+                throw new ModInstallException(ModInstallFailure.PartlyInstalled, ex)
+                {
+                    ModName = target.Name,
+                    Version = version.Version,
+                    PlacedFiles = placedFiles.Count,
+                    TotalFiles = sourceFiles.Length,
+                };
             }
 
             var record = SaveRecord(target, version, placedFiles, incomplete: false);
@@ -252,7 +268,7 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
         ConfigAction configs = ConfigAction.Keep,
         CancellationToken ct = default)
     {
-        EnsureInstallNotInUse("removing a mod");
+        EnsureInstallNotInUse(ModInstallAction.Remove);
 
         var failed = new List<string>();
         var deleted = 0;
@@ -311,7 +327,7 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
     // record to work from. Callers should confirm the exact path with the user before calling this.
     public static void RemoveLegacyPath(string path)
     {
-        EnsureInstallNotInUse("removing a mod");
+        EnsureInstallNotInUse(ModInstallAction.Remove);
 
         if (Directory.Exists(path)) Directory.Delete(path, recursive: true);
         else if (File.Exists(path)) File.Delete(path);
@@ -552,8 +568,7 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
         var destination = Path.GetFullPath(Path.Combine(extractDir, entryKey));
         if (!destination.StartsWith(extractRoot, StringComparison.OrdinalIgnoreCase))
         {
-            throw new InvalidOperationException(
-                $"Archive entry \"{entryKey}\" would extract outside the target folder - refusing to extract it.");
+            throw new ModInstallException(ModInstallFailure.UnsafeArchiveEntry) { ArchiveEntry = entryKey };
         }
 
         var destinationDir = Path.GetDirectoryName(destination);
