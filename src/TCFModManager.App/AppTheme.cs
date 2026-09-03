@@ -1,5 +1,5 @@
 using System.Windows;
-using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -163,72 +163,79 @@ public static class AppTheme
     //
     // ui:Button carries a PressedForeground property and its template paints the label from that
     // for as long as the button is held. Pointing the ButtonForegroundPressed brush somewhere else
-    // does not necessarily reach it: the per-Appearance triggers in WPF-UI's template assign
-    // PressedForeground themselves for Primary, Dark and Light, and the property's own registered
-    // default is the Win32 system button-text colour - opaque black, in either theme, and nothing
-    // to do with the palette. Measuring a pressed button in dark mode gave exactly #000000, which
-    // is that default rather than any theme brush.
+    // never reaches it: the property's own registered default is SystemColors.ControlTextBrush -
+    // the Win32 button-text colour, opaque black in either theme and nothing to do with the
+    // palette - and that default is what every button in this app was falling back to. Confirmed
+    // rather than assumed: a pressed button measured off a dark-mode screenshot gave exactly
+    // #000000, and the first run of this code logged "was #FF000000".
     //
-    // So this binds PressedForeground to the button's own Foreground instead: the label keeps the
-    // colour it already had, and the background and border are left to carry the press on their
-    // own - which is what they were doing all along.
+    // So the resting foreground is copied onto PressedForeground as the press begins, leaving the
+    // label the colour it already was. The background and border carry the press on their own,
+    // which is what they were doing all along.
     //
-    // Bound rather than assigned, because Foreground is a moving target. It re-resolves on a theme
-    // change, and several buttons here drive Appearance from a binding - the Cards/Group/List
-    // selector and Multi select - which swaps the resting foreground between the accent one and the
-    // ordinary one as they toggle. Following Foreground tracks both for nothing; a captured brush
-    // would go stale on either.
+    // Captured at mouse-down rather than bound, and that distinction is the whole fix. Binding
+    // PressedForeground to the button's own Foreground reads as the obvious answer, and it was
+    // tried: it produces a cycle, because the template's pressed trigger sets Foreground FROM
+    // PressedForeground. The value would settle on the resting colour if it were ever evaluated,
+    // but WPF does not get that far - it sees the loop when the trigger activates and yields
+    // UnsetValue, and TextElement.Foreground falls back to Brushes.Black. Identical symptom to the
+    // bug, by a second route. PreviewMouseLeftButtonDown tunnels before ButtonBase sets IsPressed,
+    // so Foreground read there is still the resting one, and nothing reads anything being written.
     //
-    // Not a loop, despite the template's pressed trigger setting Foreground FROM PressedForeground.
-    // The fixed point is the resting colour, so the effective value never actually changes and
-    // nothing re-fires.
+    // Re-read on every press rather than once, which is what keeps it right for free: a theme
+    // change swaps the resting brush, and several buttons here drive Appearance from a binding -
+    // the Cards/Group/List selector, Multi select - which swaps it between the accent foreground
+    // and the ordinary one as they toggle. Whatever the button looks like at the moment it is
+    // pressed is what it keeps.
     //
-    // Per instance from a class handler rather than through a Style, and that is the whole point: a
-    // local value sits at the top of WPF's precedence order, so it beats both the theme's style
-    // setter and the per-Appearance template triggers - which is what the earlier attempts at this
-    // ran aground on. It also avoids declaring an implicit Style for ui:Button, which stripped every
-    // button in the app of its chrome when that was tried, for the reason in the note above.
+    // Class handlers rather than per-instance subscriptions: registered once for the type, so
+    // there is nothing holding a reference to individual buttons - which matters here, where the
+    // card and list views build and discard them constantly.
     //
     private static void HookButtonPressFeedback()
     {
         if (_buttonsHooked) return;
         _buttonsHooked = true;
 
+        // handledEventsToo, because a button sitting on something that handles the press itself -
+        // a clickable card row - would otherwise never be seen.
         EventManager.RegisterClassHandler(
             typeof(Wpf.Ui.Controls.Button),
-            FrameworkElement.LoadedEvent,
-            new RoutedEventHandler(OnButtonLoaded));
+            UIElement.PreviewMouseLeftButtonDownEvent,
+            new MouseButtonEventHandler((sender, _) => MatchPressedForegroundToResting(sender)),
+            true);
+
+        // Space and Enter press a focused button too, and go through the same template trigger.
+        EventManager.RegisterClassHandler(
+            typeof(Wpf.Ui.Controls.Button),
+            UIElement.PreviewKeyDownEvent,
+            new KeyEventHandler(OnButtonKeyDown),
+            true);
     }
 
-    private static void OnButtonLoaded(object sender, RoutedEventArgs e)
+    private static void OnButtonKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key is Key.Space or Key.Enter) MatchPressedForegroundToResting(sender);
+    }
+
+    private static void MatchPressedForegroundToResting(object sender)
     {
         if (sender is not Wpf.Ui.Controls.Button button) return;
 
-        // Already carries one - either a button set it in XAML and means it, or this one has been
-        // through here before. Loaded fires again every time an element is re-attached, which the
-        // card and list views do constantly.
-        if (button.ReadLocalValue(Wpf.Ui.Controls.Button.PressedForegroundProperty)
-            != DependencyProperty.UnsetValue)
-        {
-            return;
-        }
+        // A button with no foreground of its own has nothing to preserve; leaving PressedForeground
+        // alone is better than writing null onto it and making the label vanish.
+        if (button.Foreground is not { } resting) return;
+        if (ReferenceEquals(button.PressedForeground, resting)) return;
 
-        // Once per distinct colour, not once per button: hundreds pass through here, and the only
-        // thing worth knowing is which value they were falling back to - the theme's pressed brush,
-        // or the property default that has nothing to do with the theme.
         var before = Describe(button.PressedForeground);
+        button.PressedForeground = resting;
+
+        // Once per distinct value, not once per press: the only thing worth knowing is which colour
+        // buttons were falling back to, and after the first press of each kind it stops repeating.
         if (ReportedPressedForegrounds.Add(before))
         {
-            AppLog.Info("Theme", $"button press foreground was {before}; now follows the resting foreground");
+            AppLog.Info("Theme", $"button press foreground was {before}; now matches the resting foreground");
         }
-
-        button.SetBinding(
-            Wpf.Ui.Controls.Button.PressedForegroundProperty,
-            new Binding(nameof(Wpf.Ui.Controls.Button.Foreground))
-            {
-                RelativeSource = new RelativeSource(RelativeSourceMode.Self),
-                Mode = BindingMode.OneWay,
-            });
     }
 
     private static string Describe(Brush? brush) => brush switch
