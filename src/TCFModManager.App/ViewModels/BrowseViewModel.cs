@@ -97,8 +97,9 @@ public partial class BrowseViewModel : ObservableObject
 
     public List<SortOptionItem> SortOptions { get; } =
     [
-        new("Newest", ModSortOrder.Newest),
-        new("Last updated", ModSortOrder.LastUpdated),
+        // Read as orderings without the "Sort:" label that used to sit beside them.
+        new("Newest first", ModSortOrder.Newest),
+        new("Recently updated", ModSortOrder.LastUpdated),
         new("Most downloaded", ModSortOrder.MostDownloaded),
         new("Most favourited", ModSortOrder.MostFavourited),
         new("Most endorsed", ModSortOrder.MostEndorsed),
@@ -117,9 +118,11 @@ public partial class BrowseViewModel : ObservableObject
 
     public List<FeaturedFilterItem> FeaturedFilterOptions { get; } =
     [
-        new("Include", FeaturedFilter.Include),
-        new("Exclude", FeaturedFilter.Exclude),
-        new("Only", FeaturedFilter.Only),
+        // The worst case for dropping a label: "Include" / "Exclude" / "Only" say nothing at all
+        // on their own about what is being included.
+        new("Featured included", FeaturedFilter.Include),
+        new("Featured excluded", FeaturedFilter.Exclude),
+        new("Featured only", FeaturedFilter.Only),
     ];
 
     [ObservableProperty]
@@ -601,13 +604,14 @@ public partial class BrowseViewModel : ObservableObject
 
     private void UpdateSptVersionFilterSummary()
     {
-        // No "SPT:" prefix here - the dropdown's own leading label (see BrowsePage.xaml) supplies it.
+        // Carries its own "SPT" now: the leading label that used to supply it is gone, and
+        // "All versions" on its own doesn't say versions of what.
         var selected = SptVersionOptions.Where(o => o.IsSelected).Select(o => o.Label).ToList();
         SptVersionFilterSummary = selected.Count switch
         {
-            0 => "All versions",
-            <= 3 => string.Join(", ", selected),
-            _ => $"{selected.Count} versions",
+            0 => "All SPT versions",
+            <= 3 => $"SPT {string.Join(", ", selected)}",
+            _ => $"{selected.Count} SPT versions",
         };
     }
 

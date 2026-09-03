@@ -67,10 +67,22 @@
                 <!-- A WrapPanel: six filters don't fit on one line at every window width, and a
                      filter that has run off the edge of the page may as well not exist. -->
                 <WrapPanel>
-                <!-- SPT version multi-select filter, styled to match the ComboBoxes below. -->
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
-                    <TextBlock Text="SPT:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <ToggleButton x:Name="SptVersionToggle" Style="{StaticResource FilterDropDownToggle}">
+                <!--
+                     SPT version multi-select filter, styled to match the ComboBoxes beside it.
+
+                     No inline labels on this row: each filter's neutral value names what it filters
+                     ("All SPT versions", "Featured included") rather than leaning on a word to its
+                     left. Fixed Width, not MinWidth, on all of them - a ComboBox sizes itself to
+                     its widest item, so a rebuilt Category list used to shift the whole row
+                     sideways. Same treatment as Installed's row.
+                -->
+                <ToggleButton
+                    x:Name="SptVersionToggle"
+                    Width="200"
+                    Margin="0,0,16,4"
+                    VerticalAlignment="Center"
+                    ToolTip="Filter by the SPT releases a mod supports"
+                    Style="{StaticResource FilterDropDownToggle}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -90,8 +102,7 @@
                                 Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
                                 Symbol="ChevronDown24" />
                         </Grid>
-                    </ToggleButton>
-                </StackPanel>
+                </ToggleButton>
                 <Popup
                     IsOpen="{Binding IsChecked, ElementName=SptVersionToggle, Mode=TwoWay}"
                     PlacementTarget="{Binding ElementName=SptVersionToggle}"
@@ -117,9 +128,13 @@
 
                 <!-- Everything that describes the mod itself, in one place: what used to be three
                      toggle switches, plus dependencies and addons. -->
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
-                    <TextBlock Text="Show:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <ToggleButton x:Name="AttributeToggle" MinWidth="170" Style="{StaticResource FilterDropDownToggle}">
+                <ToggleButton
+                    x:Name="AttributeToggle"
+                    Width="220"
+                    Margin="0,0,16,4"
+                    VerticalAlignment="Center"
+                    ToolTip="Filter by Fika support, ads, AI content, dependencies and addons"
+                    Style="{StaticResource FilterDropDownToggle}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -139,8 +154,7 @@
                                 Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
                                 Symbol="ChevronDown24" />
                         </Grid>
-                    </ToggleButton>
-                </StackPanel>
+                </ToggleButton>
                 <Popup
                     IsOpen="{Binding IsChecked, ElementName=AttributeToggle, Mode=TwoWay}"
                     PlacementTarget="{Binding ElementName=AttributeToggle}"
@@ -163,37 +177,45 @@
                     </Border>
                 </Popup>
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,16,4" VerticalAlignment="Center">
-                    <TextBlock Text="Category:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <ComboBox
-                        MinWidth="150"
-                        ItemsSource="{Binding CategoryOptions}"
-                        SelectedItem="{Binding SelectedCategory}" />
-                </StackPanel>
+                <ComboBox
+                    Width="165"
+                    Margin="0,0,16,4"
+                    VerticalAlignment="Center"
+                    ToolTip="Filter by the category a mod is listed under"
+                    ItemsSource="{Binding CategoryOptions}"
+                    SelectedItem="{Binding SelectedCategory}" />
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,16,4" VerticalAlignment="Center">
-                    <TextBlock Text="Sort:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <ComboBox
-                        MinWidth="150"
-                        ItemsSource="{Binding SortOptions}"
-                        SelectedItem="{Binding SelectedSortOption}" />
-                </StackPanel>
+                <ComboBox
+                    Width="175"
+                    Margin="0,0,16,4"
+                    VerticalAlignment="Center"
+                    ToolTip="Sort order"
+                    ItemsSource="{Binding SortOptions}"
+                    SelectedItem="{Binding SelectedSortOption}" />
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,16,4" VerticalAlignment="Center">
-                    <TextBlock Text="Per page:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <ComboBox
-                        MinWidth="60"
-                        ItemsSource="{Binding PageSizeOptions}"
-                        SelectedItem="{Binding PageSize}" />
-                </StackPanel>
+                <!-- Item template, because the options are plain ints and "12" says nothing on its
+                     own. SelectedItem stays an int, so the paging arithmetic is untouched. -->
+                <ComboBox
+                    Width="130"
+                    Margin="0,0,16,4"
+                    VerticalAlignment="Center"
+                    ToolTip="How many cards make up one page"
+                    ItemsSource="{Binding PageSizeOptions}"
+                    SelectedItem="{Binding PageSize}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding StringFormat='{}{0} per page'}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,16,4" VerticalAlignment="Center">
-                    <TextBlock Text="Featured:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <ComboBox
-                        MinWidth="90"
-                        ItemsSource="{Binding FeaturedFilterOptions}"
-                        SelectedItem="{Binding SelectedFeaturedFilter}" />
-                </StackPanel>
+                <ComboBox
+                    Width="170"
+                    Margin="0,0,16,4"
+                    VerticalAlignment="Center"
+                    ToolTip="Whether mods featured on sp-mod.com are included"
+                    ItemsSource="{Binding FeaturedFilterOptions}"
+                    SelectedItem="{Binding SelectedFeaturedFilter}" />
                 </WrapPanel>
             </DockPanel>
         </StackPanel>

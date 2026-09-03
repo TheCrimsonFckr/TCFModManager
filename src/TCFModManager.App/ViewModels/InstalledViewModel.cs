@@ -100,12 +100,15 @@ public partial class InstalledViewModel : ObservableObject
 
     public List<ModSortItem> SortOptions { get; } =
     [
-        new("Name (A-Z)", ModSortOption.NameAscending),
-        new("Name (Z-A)", ModSortOption.NameDescending),
-        new("Author (A-Z)", ModSortOption.AuthorAscending),
-        new("Author (Z-A)", ModSortOption.AuthorDescending),
-        new("Group (A-Z)", ModSortOption.GroupAscending),
-        new("Group (Z-A)", ModSortOption.GroupDescending),
+        // "By ..." rather than a bare "Name (A-Z)": with the inline "Sort by:" label gone, a
+        // dropdown reading "Group (A-Z)" sitting next to the Group *filter* would be read as
+        // another filter. The prefix is what makes these read as orderings on their own.
+        new("By name (A-Z)", ModSortOption.NameAscending),
+        new("By name (Z-A)", ModSortOption.NameDescending),
+        new("By author (A-Z)", ModSortOption.AuthorAscending),
+        new("By author (Z-A)", ModSortOption.AuthorDescending),
+        new("By group (A-Z)", ModSortOption.GroupAscending),
+        new("By group (Z-A)", ModSortOption.GroupDescending),
         new("Recently installed", ModSortOption.RecentlyInstalled),
     ];
 

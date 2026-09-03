@@ -456,23 +456,33 @@
                     ItemsSource="{Binding GroupFilterOptions}"
                     SelectedItem="{Binding SelectedGroupFilter}" />
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4">
-                    <TextBlock Text="Sort by:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <ComboBox
-                        Width="170"
-                        ItemsSource="{Binding SortOptions}"
-                        SelectedItem="{Binding SelectedSortOption}" />
-                </StackPanel>
+                <ComboBox
+                    Width="175"
+                    Margin="0,0,16,4"
+                    VerticalAlignment="Center"
+                    ToolTip="Sort order"
+                    ItemsSource="{Binding SortOptions}"
+                    SelectedItem="{Binding SelectedSortOption}" />
 
                 <!-- Pagination is hidden in group view (see the pagination StackPanel's own
                      Visibility below), so "Per page" would have nothing to affect there. -->
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,4" Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
-                    <TextBlock Text="Per page:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                    <ComboBox
-                        Width="70"
-                        ItemsSource="{Binding PageSizeOptions}"
-                        SelectedItem="{Binding PageSize}" />
-                </StackPanel>
+                <!-- The item template is what lets this one lose its label: the options are plain
+                     ints, and "12" on its own says nothing. SelectedItem stays an int, so none of
+                     the paging arithmetic changes. -->
+                <ComboBox
+                    Width="130"
+                    Margin="0,0,16,4"
+                    VerticalAlignment="Center"
+                    ToolTip="How many cards make up one page"
+                    ItemsSource="{Binding PageSizeOptions}"
+                    SelectedItem="{Binding PageSize}"
+                    Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding StringFormat='{}{0} per page'}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </WrapPanel>
         </DockPanel>
 
