@@ -40,6 +40,19 @@ public static class AppTheme
     // the brush so two equal colours from different themes only say it once.
     private static readonly HashSet<string> ReportedRestingForegrounds = [];
 
+    //
+    // How far the label dims while a button is held, as a multiplier on the resting brush's opacity.
+    // The one number to turn if the press wants more or less weight; 1.0 holds the resting colour
+    // exactly, which is where this started before the dim was asked for.
+    //
+    // Opacity rather than a darker colour, so it reads correctly in both themes without a second
+    // value: a white label on a dark button dims towards the dark fill behind it, a near-black one
+    // on a light button dims towards the light fill. Same gesture, opposite directions, which is
+    // what WPF-UI's own pressed brushes were reaching for before the template bug below swallowed
+    // them.
+    //
+    private const double PressedForegroundDim = 0.8;
+
     // Marks a button whose Foreground this class is holding for the duration of a press, so the
     // release only clears what it set. An attached property rather than a collection of buttons:
     // it lives and dies with the button, where a set would keep every button ever pressed alive.
@@ -195,10 +208,11 @@ public static class AppTheme
     // rendering black, because that trigger never successfully reads the property it names.
     //
     // What does work is outranking the trigger. A local value sits above template triggers in WPF's
-    // precedence order, so the button's own resting brush is written onto Foreground as the press
-    // begins and cleared again when it ends: the trigger still fires, still loses, and the label
-    // simply does not change. The background and border carry the press on their own, which is what
-    // they were doing all along.
+    // precedence order, so the button's own resting brush - dimmed by PressedForegroundDim - is
+    // written onto Foreground as the press begins and cleared again when it ends: the trigger still
+    // fires, still loses, and the label dims by the amount this file chooses instead of dropping to
+    // black. The background and border carry most of the press, as they always did; the label just
+    // goes along with them.
     //
     // Read at mouse-down rather than resolved from a key, which is what keeps it right for free.
     // PreviewMouseLeftButtonDown tunnels before ButtonBase sets IsPressed, so Foreground still
@@ -273,13 +287,24 @@ public static class AppTheme
         // Nothing to preserve, and writing null would make the label vanish rather than hold.
         if (button.Foreground is not { } resting) return;
 
-        button.SetValue(HoldingForegroundProperty, true);
-        button.Foreground = resting;
+        // Clone rather than rebuild from the colour: Opacity is a Brush property, so this dims a
+        // gradient or an image brush exactly as well as the SolidColorBrush every button actually
+        // has, and needs no special case for either. Frozen because it is written once and only
+        // read after that - and because an unfrozen brush assigned to a control keeps a change
+        // subscription alive that this has no use for.
+        var held = resting.Clone();
+        held.Opacity = resting.Opacity * PressedForegroundDim;
+        held.Freeze();
 
-        // Once per distinct colour, not once per press.
-        if (ReportedRestingForegrounds.Add(Describe(resting)))
+        button.SetValue(HoldingForegroundProperty, true);
+        button.Foreground = held;
+
+        // Once per distinct colour, not once per press. Describes what was held rather than what
+        // was read, so the line shows the dim actually applied - Describe folds Opacity into the
+        // alpha it prints.
+        if (ReportedRestingForegrounds.Add(Describe(held)))
         {
-            AppLog.Debug("Theme", $"holding {Describe(resting)} through the press");
+            AppLog.Debug("Theme", $"holding {Describe(held)} through the press");
         }
     }
 
