@@ -17,6 +17,66 @@
     <Page.Resources>
         <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
+
+        <!--
+            One tint per resource an area can name, so a column of findings is scannable instead of
+            a stack of identical grey chips.
+
+            Fixed colours rather than theme brushes, at a low opacity, so each one blends into
+            whatever surface is behind it - the same reason RowHoverBrush works in both themes. The
+            text on top stays a theme brush, so contrast is never this palette's problem.
+
+            THESE ARE CATEGORIES, NOT A SCALE. There is no red, nothing is ordered, and green sits
+            on Start-up while amber sits on Disk precisely so the set cannot be read as a traffic
+            light. A severity palette here would be the grade this page deliberately does not give
+            - see the footprint notes on why the levels exist in code and are never shown.
+        -->
+        <SolidColorBrush x:Key="FootprintCpuTint" Color="#3B82F6" Opacity="0.22" />
+        <SolidColorBrush x:Key="FootprintGpuTint" Color="#8B5CF6" Opacity="0.22" />
+        <SolidColorBrush x:Key="FootprintMemoryTint" Color="#14B8A6" Opacity="0.22" />
+        <SolidColorBrush x:Key="FootprintStartupTint" Color="#16A34A" Opacity="0.22" />
+        <SolidColorBrush x:Key="FootprintDiskTint" Color="#D97706" Opacity="0.22" />
+
+        <!--
+            Appearance flips to Primary on a coloured chip on purpose. Badge's own template sets the
+            Border's background from a trigger for every appearance EXCEPT Primary, and a template
+            trigger outranks anything set from out here - so Secondary would quietly win and the
+            tint would never show. Primary has no such trigger, so Background flows through.
+
+            Foreground is a Setter rather than an attribute on the element for the same class of
+            reason: a local value on the Badge would outrank these triggers.
+        -->
+        <Style x:Key="FootprintAreaBadge" TargetType="ui:Badge" BasedOn="{StaticResource {x:Type ui:Badge}}">
+            <Setter Property="Appearance" Value="Secondary" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Resource}" Value="CPU">
+                    <Setter Property="Appearance" Value="Primary" />
+                    <Setter Property="Background" Value="{StaticResource FootprintCpuTint}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Resource}" Value="GPU">
+                    <Setter Property="Appearance" Value="Primary" />
+                    <Setter Property="Background" Value="{StaticResource FootprintGpuTint}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Resource}" Value="Memory">
+                    <Setter Property="Appearance" Value="Primary" />
+                    <Setter Property="Background" Value="{StaticResource FootprintMemoryTint}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Resource}" Value="Start-up">
+                    <Setter Property="Appearance" Value="Primary" />
+                    <Setter Property="Background" Value="{StaticResource FootprintStartupTint}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Resource}" Value="Disk">
+                    <Setter Property="Appearance" Value="Primary" />
+                    <Setter Property="Background" Value="{StaticResource FootprintDiskTint}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
 
     <Grid
@@ -153,8 +213,7 @@
                                                             VerticalAlignment="Top"
                                                             HorizontalContentAlignment="Center"
                                                             FontSize="11"
-                                                            Appearance="Secondary"
-                                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                            Style="{StaticResource FootprintAreaBadge}"
                                                             Content="{Binding Area}" />
 
                                                         <StackPanel Grid.Column="1">

@@ -131,9 +131,13 @@ public partial class ModListAddModWindow : FluentWindow
         }
         else
         {
-            // The same "installed as" the contents panel shows: the title above is the sp-mod.com
-            // listing name wherever one matched, and it is often nothing like the folder.
-            if (option.Entry.Folders.Count > 0) parts.Add($"installed as {string.Join(", ", option.Entry.Folders)}");
+            // The same "installed as" the contents panel shows, left out on the same rule: the
+            // title above is the sp-mod.com listing name wherever one matched, and where nothing
+            // matched it already is the folder, so printing it again would only repeat it.
+            var folders = string.Join(", ", option.Entry.Folders);
+
+            if (folders.Length > 0 && !string.Equals(folders, option.Entry.Name.Trim(), StringComparison.OrdinalIgnoreCase))
+                parts.Add($"installed as {folders}");
 
             parts.Add(option.Entry.Version is { } version ? $"version {version}" : "version not known");
             if (option.IsDisabled) parts.Add("disabled");

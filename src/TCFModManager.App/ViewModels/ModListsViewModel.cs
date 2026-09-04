@@ -208,6 +208,8 @@ public partial class ModListsViewModel : ObservableObject
     {
         Entries.Clear();
 
+        _titles = CatalogTitles();
+
         if (Selected is { } row)
         {
             foreach (var entry in ModListEntries.Sorted(row.List.Entries)) Entries.Add(Row(entry));
@@ -218,8 +220,42 @@ public partial class ModListsViewModel : ObservableObject
         Notify();
     }
 
-    private static ModListEntryRowViewModel Row(ModListEntry entry) =>
-        new(entry, entry.Name, EntryDetail(entry));
+    //
+    // Listing titles by mod id, rebuilt whenever the panel is.
+    //
+    // A list captured before entries carried a listing title stores the folder name, so without
+    // this the row reads "acidphantasm-itemvaluewatermark" for a mod published as "Item Value
+    // Watermark" - and then prints the folder underneath as well, saying the same thing twice.
+    // Looking the title up here fixes the lists already on disk rather than only the next capture.
+    //
+    private Dictionary<(int Id, bool IsAddon), string> _titles = [];
+
+    private static Dictionary<(int Id, bool IsAddon), string> CatalogTitles()
+    {
+        var titles = new Dictionary<(int, bool), string>();
+
+        foreach (var mod in AppServices.ModCache.AllMods)
+            if (!string.IsNullOrWhiteSpace(mod.Name)) titles.TryAdd((mod.Id, false), mod.Name!.Trim());
+
+        // Addons are numbered in their own sequence, so the addon flag is part of the key.
+        foreach (var addon in AppServices.Addons.AllAddons)
+            if (!string.IsNullOrWhiteSpace(addon.Name)) titles.TryAdd((addon.Id, true), addon.Name!.Trim());
+
+        return titles;
+    }
+
+    //
+    // What the entry stores, unless the catalog knows the mod under a better name. An unresolved
+    // entry, an addon the cache hasn't loaded and an empty catalog all fall back to the stored name.
+    //
+    private ModListEntryRowViewModel Row(ModListEntry entry)
+    {
+        var name = entry.ModId is { } id && _titles.TryGetValue((id, entry.IsAddon), out var title)
+            ? title
+            : entry.Name;
+
+        return new ModListEntryRowViewModel(entry, name, EntryDetail(entry, name));
+    }
 
     private void Notify()
     {
@@ -232,7 +268,7 @@ public partial class ModListsViewModel : ObservableObject
     // point of the line: a pinned version is fetched exactly, an unpinned one comes down at the
     // newest published, and one with no mod id at all is somebody's manual job.
     //
-    private static string EntryDetail(ModListEntry entry)
+    private static string EntryDetail(ModListEntry entry, string name)
     {
         var parts = new List<string>();
 
@@ -246,13 +282,31 @@ public partial class ModListsViewModel : ObservableObject
         // when something has to be sorted out by hand. Absent for a mod added from the catalog that
         // nobody here has installed, which is the honest answer for one.
         //
-        if (entry.Folders.Count > 0) parts.Add($"installed as {string.Join(", ", entry.Folders)}");
+        if (InstalledAs(entry, name) is { } folders) parts.Add($"installed as {folders}");
 
         if (!entry.IsResolved) parts.Add("not on sp-mod.com - installed by hand");
         else if (entry.Version is { } version) parts.Add(entry.IsPinned ? $"version {version}" : $"version {version}, not pinned");
         else parts.Add("newest published version");
 
         return string.Join(" · ", parts);
+    }
+
+    //
+    // The folders to print under the name, or null when saying so would only repeat it.
+    //
+    // A list captured before entries carried the listing title stores the folder as the name, and a
+    // mod the catalog never matched still does - printing "installed as" under either says the same
+    // thing twice, which is what Chris saw.
+    //
+    private static string? InstalledAs(ModListEntry entry, string name)
+    {
+        if (entry.Folders.Count == 0) return null;
+
+        var folders = string.Join(", ", entry.Folders);
+
+        // Compared against the name actually shown above it, not the stored one: a mod the catalog
+        // never matched is already named after its folder, and repeating it says nothing.
+        return string.Equals(folders, name.Trim(), StringComparison.OrdinalIgnoreCase) ? null : folders;
     }
 
     private void ClearPlan()

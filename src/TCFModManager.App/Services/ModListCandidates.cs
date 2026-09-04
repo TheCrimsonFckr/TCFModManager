@@ -59,7 +59,19 @@ public static class ModListCandidates
 
     public static ModListCandidate From(InstalledModCardViewModel card) => new()
     {
-        Name = card.Name,
+        //
+        // The card's DisplayTitle, not its Name: Name is the raw folder the scanner found, and this
+        // is what a list entry stores and shows. A list read "acidphantasm-itemvaluewatermark"
+        // where it could have read "Item Value Watermark", and once the row started printing the
+        // folder underneath as well it said the same thing twice.
+        //
+        // DisplayTitle falls back to the folder name when nothing in the catalog matched, so a
+        // hand-installed mod is named exactly as it was before.
+        //
+        // Safe for matching: the planner walks mod id -> GUID -> folder -> name, and Folders is
+        // untouched, so a list captured before this still finds its mods on the folder tier.
+        //
+        Name = card.DisplayTitle,
         ModId = card.ModId,
         IsAddon = card.IsAddon,
         Version = card.InstalledVersion,

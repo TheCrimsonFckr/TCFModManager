@@ -33,7 +33,33 @@ public sealed record FootprintSortItem(string Label, FootprintSortOption Value)
 // actionable rather than a number. Effect always includes the limit of what was read, because
 // every one of these is an opportunity to cost something rather than a measurement of it.
 //
-public sealed record FootprintFinding(string Area, string What, string Effect);
+public sealed record FootprintFinding(string Area, string What, string Effect)
+{
+    //
+    // The resource half of Area - "CPU", "GPU", "Memory", "Start-up", "Disk", or empty for the
+    // whole-side areas ("Client", "Server") that name no resource.
+    //
+    // The page colours each badge by this rather than by side. Client or Server is the first word
+    // of every label and reads for free; the resource is the half you have to look for, so it is
+    // the half worth colouring - and it puts a mod's disk and start-up findings where the eye
+    // lands rather than in the middle of a column of identical grey chips.
+    //
+    // Derived here rather than passed in, so the thirteen places that build a finding are
+    // untouched and an Area and its colour cannot drift apart.
+    //
+    public string Resource
+    {
+        get
+        {
+            var separator = Area.IndexOf('·');
+
+            if (separator >= 0) return Area[(separator + 1)..].Trim();
+
+            // "Disk" is a resource on its own; "Client" and "Server" name a side and no resource.
+            return Area.Trim() == "Disk" ? "Disk" : string.Empty;
+        }
+    }
+}
 
 //
 // One mod's row. This is where counts become sentences - Core deliberately emits flags and numbers
