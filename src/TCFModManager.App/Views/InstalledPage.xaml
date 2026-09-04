@@ -622,9 +622,15 @@
                         <!-- Top, not the default stretch: a WrapPanel arranges each line at the
                              height of its tallest item, so without this every card beside an
                              expanded one would stretch to match it. -->
+                        <!-- TickableCardExpander rather than HoverCardExpander: in Multi select
+                             mode a ticked card carries the accent edge and tint every other picked
+                             thing in the app does, so what a bulk enable, disable or remove is
+                             about to act on is readable from across the grid rather than from a
+                             checkbox at the corner of each card. Outside that mode nothing is
+                             ticked, and it behaves exactly as it did. -->
                         <ui:CardExpander
                             VerticalAlignment="Top"
-                            Style="{StaticResource HoverCardExpander}"
+                            Style="{StaticResource TickableCardExpander}"
                             Margin="0,0,6,6"
                             IsExpanded="{Binding IsCardExpanded, Mode=TwoWay}"
                             Opacity="{Binding CardOpacity}"

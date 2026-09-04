@@ -274,6 +274,34 @@
             </Style>
 
             <!--
+                The same selected state again, for a card that carries its own IsSelected rather
+                than sitting in a ListBox: Installed's Cards view in Multi select mode, where the
+                tick is what a bulk enable, disable or remove will act on.
+
+                A separate style from SelectableCardExpander because the binding is different - this
+                one reads the card view model's own property, that one the container's - and giving
+                either style both triggers would leave the other list raising binding errors for a
+                property its rows do not have.
+
+                Leaving Multi select clears every tick (InstalledViewModel.OnSelectionModeChanged),
+                so this can never linger on a card outside that mode.
+            -->
+            <Style
+                x:Key="TickableCardExpander"
+                TargetType="ui:CardExpander"
+                BasedOn="{StaticResource {x:Type ui:CardExpander}}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                        <Setter Property="Background" Value="{StaticResource RowSelectedBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource SelectedRowStroke}" />
+                    </DataTrigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--
                 The same selected state on a ui:CardExpander: the version list in the mod update
                 dialog, where the picked row is the version Update or Redownload will fetch.
                 Deliberately not folded into HoverCardExpander - that one is also used by rows in a
