@@ -38,6 +38,15 @@
         <SolidColorBrush x:Key="FootprintDiskTint" Color="#D97706" Opacity="0.22" />
 
         <!--
+            Client and Server on their own name a side and no resource, so they get no hue - but
+            they still get a fill. Left on Secondary they came out as a white box with a grey
+            outline in light mode, reading as an empty text field beside five filled pills rather
+            than as a deliberate neutral. Grey at the same strength as the colours says "a chip,
+            naming no particular resource", which is what they mean.
+        -->
+        <SolidColorBrush x:Key="FootprintNeutralTint" Color="#6B7280" Opacity="0.22" />
+
+        <!--
             Appearance flips to Primary on a coloured chip on purpose. Badge's own template sets the
             Border's background from a trigger for every appearance EXCEPT Primary, and a template
             trigger outranks anything set from out here - so Secondary would quietly win and the
@@ -47,33 +56,26 @@
             reason: a local value on the Badge would outrank these triggers.
         -->
         <Style x:Key="FootprintAreaBadge" TargetType="ui:Badge" BasedOn="{StaticResource {x:Type ui:Badge}}">
-            <Setter Property="Appearance" Value="Secondary" />
-            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+            <!-- Primary for every chip, coloured or not, for the template-trigger reason above:
+                 any other appearance and the Border's own trigger would overwrite the fill. -->
+            <Setter Property="Appearance" Value="Primary" />
+            <Setter Property="Background" Value="{StaticResource FootprintNeutralTint}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Resource}" Value="CPU">
-                    <Setter Property="Appearance" Value="Primary" />
                     <Setter Property="Background" Value="{StaticResource FootprintCpuTint}" />
-                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Resource}" Value="GPU">
-                    <Setter Property="Appearance" Value="Primary" />
                     <Setter Property="Background" Value="{StaticResource FootprintGpuTint}" />
-                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Resource}" Value="Memory">
-                    <Setter Property="Appearance" Value="Primary" />
                     <Setter Property="Background" Value="{StaticResource FootprintMemoryTint}" />
-                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Resource}" Value="Start-up">
-                    <Setter Property="Appearance" Value="Primary" />
                     <Setter Property="Background" Value="{StaticResource FootprintStartupTint}" />
-                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Resource}" Value="Disk">
-                    <Setter Property="Appearance" Value="Primary" />
                     <Setter Property="Background" Value="{StaticResource FootprintDiskTint}" />
-                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
