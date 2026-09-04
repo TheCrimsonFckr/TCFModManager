@@ -199,12 +199,30 @@
                             <Setter Property="Padding" Value="0" />
                             <Setter Property="Background" Value="Transparent" />
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+
+                            <!-- Replaced outright, not just zeroed: the stock template paints its
+                                 own accent fill for a selected row whatever Background says, and
+                                 the card below now draws that state itself. See trap 8 in the
+                                 theme notes. -->
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <ContentPresenter />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
                         </Style>
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <!-- Each version is its own collapsible CardExpander; only the latest starts expanded. -->
-                            <ui:CardExpander IsExpanded="{Binding IsLatest, Mode=OneWay}">
+                            <!-- Each version is its own collapsible CardExpander; only the latest
+                                 starts expanded. The selected one carries an accent edge and tint:
+                                 which version is picked decides what Update or Redownload fetches,
+                                 and the only thing saying so used to be the container's own
+                                 highlight behind the card. -->
+                            <ui:CardExpander
+                                Style="{StaticResource SelectableCardExpander}"
+                                IsExpanded="{Binding IsLatest, Mode=OneWay}">
                                 <ui:CardExpander.Header>
                                     <!-- Clicking the header picks the version as well as expanding
                                          it. Background="Transparent" so the empty space between

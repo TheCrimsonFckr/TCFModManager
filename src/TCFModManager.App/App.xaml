@@ -42,6 +42,13 @@
                 Color="{DynamicResource SystemAccentColor}"
                 Opacity="0.24" />
 
+            <!--
+                The accent at full strength, for the edge of a selected row. Paired with
+                RowSelectedBrush - the same accent at a quarter - so a picked row reads as a card
+                that has been chosen rather than a block of colour, and keeps its own text colours.
+            -->
+            <SolidColorBrush x:Key="SelectedRowStroke" Color="{DynamicResource SystemAccentColor}" />
+
             <!-- A row that sits on a card-coloured surface: group-view mod rows. -->
             <Style x:Key="ClickableCardRow" TargetType="Border">
                 <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorSecondaryBrush}" />
@@ -245,6 +252,12 @@
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="CornerRadius" Value="4" />
                 <Setter Property="Cursor" Value="Hand" />
+
+                <!-- The border is always there and transparent until the row is selected, so
+                     picking one changes its colour and never its size. Giving it a thickness only
+                     in the trigger would shift every row's content by a pixel as you clicked. -->
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush" Value="Transparent" />
                 <Style.Triggers>
                     <!-- Selection is drawn here rather than by the ListBoxItem, because that
                          container has had its own chrome turned off to stop a grey edge showing
@@ -252,6 +265,32 @@
                          at a row still reads as pointing at it, even when it is the selected one. -->
                     <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
                         <Setter Property="Background" Value="{StaticResource RowSelectedBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource SelectedRowStroke}" />
+                    </DataTrigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--
+                The same selected state on a ui:CardExpander: the version list in the mod update
+                dialog, where the picked row is the version Update or Redownload will fetch.
+                Deliberately not folded into HoverCardExpander - that one is also used by rows in a
+                plain ItemsControl, which have no ListBoxItem for the trigger to bind against.
+
+                Only BorderBrush and Background are set. CardExpander's template hard-codes its
+                border thickness, so the edge is always drawn and only its colour changes; hover
+                comes second so pointing at a row still reads as pointing at it, selected or not.
+            -->
+            <Style
+                x:Key="SelectableCardExpander"
+                TargetType="ui:CardExpander"
+                BasedOn="{StaticResource {x:Type ui:CardExpander}}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                        <Setter Property="Background" Value="{StaticResource RowSelectedBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource SelectedRowStroke}" />
                     </DataTrigger>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />

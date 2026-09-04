@@ -123,9 +123,8 @@
                         ItemsSource="{Binding Results}"
                         SelectedItem="{Binding SelectedEntry}"
                         HorizontalContentAlignment="Stretch">
-                        <!-- The row Border below draws the hover, so the item itself contributes no
-                             padding, margin or fill of its own - otherwise the container's stock
-                             pointer-over shows as a grey edge around the tinted row. -->
+                        <!-- The row Border below draws the hover and the selection, so the item
+                             itself contributes no padding, margin, fill or chrome of its own. -->
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="Margin" Value="0" />
@@ -133,6 +132,18 @@
                                 <Setter Property="Background" Value="Transparent" />
                                 <Setter Property="BorderThickness" Value="0" />
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+
+                                <!-- Replaced outright, not just zeroed: the stock template paints
+                                     its own accent fill for a selected row whatever Background
+                                     says, which stacks with the one the row draws. See trap 8 in
+                                     the theme notes. -->
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <ContentPresenter />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
                             </Style>
                         </ListBox.ItemContainerStyle>
                         <ListBox.GroupStyle>

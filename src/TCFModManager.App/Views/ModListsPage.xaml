@@ -62,13 +62,6 @@
             does. Margin and Padding live in the style, not on the Border, so the two triggers still
             win over the resting fill - a local value on the element would outrank them.
         -->
-        <!--
-            The accent at full strength, for the edge of the selected row. The tint inside it is
-            RowSelectedBrush from App.xaml - the same accent at a quarter strength - so the two
-            read as one thing: a card that has been picked, rather than a block of colour.
-        -->
-        <SolidColorBrush x:Key="SelectedRowStroke" Color="{DynamicResource SystemAccentColor}" />
-
         <Style x:Key="ListCardRow" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorSecondaryBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefaultBrush}" />
