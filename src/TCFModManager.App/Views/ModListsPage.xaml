@@ -21,10 +21,8 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
 
         <!--
-            The container contributes nothing - no padding, margin or fill - so the row Border
-            inside the template draws the whole thing, the same arrangement ConfigsPage uses. Left
-            to itself the stock container shows a grey edge around the row, and hands its content
-            the system control foreground, which is black whatever the theme is.
+            The container contributes nothing - no padding, margin, fill or chrome - so the row
+            Border inside the template draws the whole thing.
         -->
         <Style x:Key="BareContainer" TargetType="ListBoxItem">
             <Setter Property="Margin" Value="0" />
@@ -32,6 +30,26 @@
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+
+            <!--
+                The template is replaced outright rather than just having its Background zeroed.
+                Setting Background="Transparent" does not stop a selected row being painted: the
+                stock template draws selection with its own accent fill and left indicator, which
+                the property never touches. With the row below drawing its own selected state too,
+                a picked list came out as a solid accent slab with a second edge around it - two
+                selection visuals stacked, one of them nobody chose.
+
+                A bare ContentPresenter leaves selection entirely to the row style, which is the
+                only place it is described. Selection behaviour is unaffected - IsSelected is
+                ListBox input handling, not something the template provides.
+            -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <ContentPresenter />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style x:Key="ReadOnlyContainer" TargetType="ListBoxItem" BasedOn="{StaticResource BareContainer}">
@@ -44,6 +62,13 @@
             does. Margin and Padding live in the style, not on the Border, so the two triggers still
             win over the resting fill - a local value on the element would outrank them.
         -->
+        <!--
+            The accent at full strength, for the edge of the selected row. The tint inside it is
+            RowSelectedBrush from App.xaml - the same accent at a quarter strength - so the two
+            read as one thing: a card that has been picked, rather than a block of colour.
+        -->
+        <SolidColorBrush x:Key="SelectedRowStroke" Color="{DynamicResource SystemAccentColor}" />
+
         <Style x:Key="ListCardRow" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorSecondaryBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefaultBrush}" />
@@ -54,9 +79,14 @@
             <Setter Property="Padding" Value="12,11" />
             <Style.Triggers>
                 <!-- Selected first, hover second, so pointing at the current list still reads as
-                     pointing at it. Same ordering as ClickableRow in App.xaml. -->
+                     pointing at it. Same ordering as ClickableRow in App.xaml.
+
+                     The selected row keeps its own text colours: the fill is a tint over the card
+                     rather than a solid accent, so primary/tertiary stay readable on it and the
+                     row does not change shape or weight when it is picked. -->
                 <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
                     <Setter Property="Background" Value="{StaticResource RowSelectedBrush}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource SelectedRowStroke}" />
                 </DataTrigger>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
@@ -454,7 +484,7 @@
                             Foreground="{DynamicResource SystemFillColorCautionBrush}"
                             Visibility="{Binding HasUnsavedChanges, Converter={StaticResource BoolToVis}}">
                             <Run Text="{Binding UnsavedLabel, Mode=OneWay}" />
-                            <Run Text=" - save the list to keep them. Preview and Apply use the saved version." />
+                            <Run Text=" - save the list to keep them. Then Preview and Apply to use the saved version." />
                         </TextBlock>
                     </StackPanel>
 

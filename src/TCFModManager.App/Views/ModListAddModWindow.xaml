@@ -36,6 +36,18 @@
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
             <Setter Property="IsEnabled" Value="{Binding CanChoose}" />
+
+            <!-- Replaced outright, for the reason written up on ModListsPage's BareContainer: the
+                 stock template paints its own accent fill for a selected row whatever Background
+                 says, which stacks with the row's own selected state. Here the tick and the row
+                 tint are the answer to "is this one picked", and one answer is enough. -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <ContentPresenter />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
     </ui:FluentWindow.Resources>
