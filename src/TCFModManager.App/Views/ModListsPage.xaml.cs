@@ -41,10 +41,28 @@ public partial class ModListsPage : Page
             ? Scroller(right)
             : Scroller(ListsBox);
 
-        if (target is null) return;
+        if (target is null || target.ScrollableHeight <= 0) return;
 
-        target.ScrollToVerticalOffset(target.VerticalOffset - e.Delta);
+        Scroll(target, e.Delta);
         e.Handled = true;
+    }
+
+    //
+    // One wheel notch, in whatever unit the scroller counts in.
+    //
+    // Every list on this page is a ListBox, and a ListBox's own style turns CanContentScroll on, so
+    // its VerticalOffset counts rows rather than pixels. Handing that a raw wheel delta - 120 a
+    // notch - asks it to move 120 rows, which lands at the bottom from anywhere: the list looked
+    // like it was snapping rather than scrolling.
+    //
+    // Three rows a notch is what Windows scrolls elsewhere. A pixel scroller keeps the delta it was
+    // given, so the named ScrollViewers on the other pages still feel exactly as they did.
+    //
+    private static void Scroll(ScrollViewer target, int delta)
+    {
+        var amount = target.CanContentScroll ? Math.Sign(delta) * 3.0 : delta;
+
+        target.ScrollToVerticalOffset(target.VerticalOffset - amount);
     }
 
     private static ScrollViewer? Scroller(DependencyObject root)

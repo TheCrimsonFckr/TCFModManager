@@ -126,8 +126,8 @@ public sealed class ModListStore
         Save(data);
     }
 
-    // Replaces a local list's contents and bumps its revision. Refused for an imported or served
-    // list - Fork is the way to edit one of those.
+    // Replaces a local list's contents. Refused for an imported or served list - Fork is the way to
+    // edit one of those. Does not touch Revision; see BumpRevision for what moves it.
     public ModList? ReplaceEntries(Guid id, IEnumerable<ModListEntry> entries)
     {
         var data = Load();
@@ -136,7 +136,6 @@ public sealed class ModListStore
 
         list.Entries.Clear();
         list.Entries.AddRange(entries);
-        list.Revision++;
         list.UpdatedAt = DateTimeOffset.UtcNow;
         Save(data);
         return list;
@@ -148,9 +147,10 @@ public sealed class ModListStore
     // Nothing on disk changes - a list is a description of a set of mods, and naming one here does
     // not install it; applying the list is what does that.
     //
-    // Plural where RemoveEntry is singular, because that is how they are used: mods are picked in
-    // a batch and taken off one row at a time. It also means a batch is one edit rather than one
-    // per mod - one file write, and one revision the other side of a share sees.
+    // Plural where RemoveEntry is singular, because that is how they are used: mods are picked in a
+    // batch and taken off one row at a time - so a batch is one file write rather than one per mod.
+    //
+    // Leaves Revision alone. Editing a list is thinking about it; see BumpRevision.
     //
     // Zero means nothing changed: no such list, a read-only one, or every mod already named.
     //
@@ -175,7 +175,6 @@ public sealed class ModListStore
         var sorted = ModListEntries.Sorted(list.Entries);
         list.Entries.Clear();
         list.Entries.AddRange(sorted);
-        list.Revision++;
         list.UpdatedAt = DateTimeOffset.UtcNow;
         Save(data);
         return added;
@@ -193,6 +192,28 @@ public sealed class ModListStore
         var list = data.Lists.FirstOrDefault(l => l.Id == id);
         if (list is null || !list.IsEditable) return null;
         if (list.Entries.RemoveAll(e => ModListEntries.SameMod(e, entry)) == 0) return null;
+
+        list.UpdatedAt = DateTimeOffset.UtcNow;
+        Save(data);
+        return list;
+    }
+
+    //
+    // Counts one more time this list has been put into effect.
+    //
+    // The revision moves here and nowhere else. Editing a list is thinking about it; applying one
+    // is the arrangement of mods that actually existed on disk, and that is the thing worth
+    // numbering - both for the person reading "rev 4" and for a receiver deciding whether the copy
+    // they were sent is newer than the one they have.
+    //
+    // Local lists only. The revision of a list somebody else wrote is theirs to number: bumping it
+    // here would leave their next revision looking older than this copy of it.
+    //
+    public ModList? BumpRevision(Guid id)
+    {
+        var data = Load();
+        var list = data.Lists.FirstOrDefault(l => l.Id == id);
+        if (list is null || !list.IsEditable) return null;
 
         list.Revision++;
         list.UpdatedAt = DateTimeOffset.UtcNow;

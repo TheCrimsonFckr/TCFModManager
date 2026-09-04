@@ -416,6 +416,7 @@
                                                 Margin="12,0,0,0"
                                                 Padding="8,4"
                                                 Appearance="Transparent"
+                                                Foreground="{DynamicResource SystemFillColorCriticalBrush}"
                                                 Icon="{ui:SymbolIcon Dismiss24}"
                                                 ToolTip="Take this mod off the list. It stays installed - nothing on disk changes."
                                                 Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"

@@ -105,15 +105,17 @@ public class ModListStoreTests : IDisposable
     }
 
     [Fact]
-    public void ReplaceEntries_BumpsTheRevision()
+    public void ReplaceEntries_SwapsTheContentsAndLeavesTheRevisionAlone()
     {
         var list = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("Realism", 1263)));
 
         var updated = _store.ReplaceEntries(list.Id, [Entry("Realism", 1263), Entry("SAIN", 2426)]);
 
         Assert.NotNull(updated);
-        Assert.Equal(2, updated!.Revision);
         Assert.Equal(2, _store.Find(list.Id)!.Entries.Count);
+
+        // One rule for all three ways of editing a list: the revision counts applies, not edits.
+        Assert.Equal(1, updated!.Revision);
     }
 
     [Fact]
@@ -285,15 +287,17 @@ public class ModListStoreTests : IDisposable
     }
 
     [Fact]
-    public void AddEntries_AddsTheModAndBumpsTheRevision()
+    public void AddEntries_AddsTheModAndLeavesTheRevisionAlone()
     {
         var list = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("Realism", 1)));
 
         var added = _store.AddEntries(list.Id, [Entry("SAIN", 2, 9)]);
 
         Assert.Equal(1, added);
-        Assert.Equal(2, _store.Find(list.Id)!.Revision);
         Assert.Equal(["Realism", "SAIN"], _store.Find(list.Id)!.Entries.Select(e => e.Name));
+
+        // Editing a list is thinking about it. Only applying one counts as a revision.
+        Assert.Equal(1, _store.Find(list.Id)!.Revision);
     }
 
     [Fact]
@@ -349,29 +353,48 @@ public class ModListStoreTests : IDisposable
     }
 
     [Fact]
-    public void AddEntries_CountsOneRevisionForTheWholeBatch()
+    public void AddEntries_TakesTheNewOnesAndSkipsWhatIsAlreadyThere()
     {
-        // A batch is one edit. Bumping per mod would hand the other side of a share eight
-        // revisions for one sitting, and say nothing more than one would have.
         var list = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("Realism", 1)));
 
         var added = _store.AddEntries(list.Id, [Entry("SAIN", 2), Entry("Realism", 1), Entry("Looting Bots", 3)]);
 
         Assert.Equal(2, added);
-        Assert.Equal(2, _store.Find(list.Id)!.Revision);
         Assert.Equal(["Looting Bots", "Realism", "SAIN"], _store.Find(list.Id)!.Entries.Select(e => e.Name));
     }
 
     [Fact]
-    public void RemoveEntry_TakesTheModOffAndBumpsTheRevision()
+    public void RemoveEntry_TakesTheModOffAndLeavesTheRevisionAlone()
     {
         var list = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("Realism", 1), Entry("SAIN", 2)));
 
         var updated = _store.RemoveEntry(list.Id, Entry("SAIN", 2));
 
         Assert.NotNull(updated);
-        Assert.Equal(2, updated!.Revision);
+        Assert.Equal(1, updated!.Revision);
         Assert.Equal(["Realism"], _store.Find(list.Id)!.Entries.Select(e => e.Name));
+    }
+
+    [Fact]
+    public void BumpRevision_CountsAnApplyOfALocalList()
+    {
+        var list = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("Realism", 1)));
+
+        _store.AddEntries(list.Id, [Entry("SAIN", 2)]);
+        var applied = _store.BumpRevision(list.Id);
+
+        Assert.NotNull(applied);
+        Assert.Equal(2, _store.Find(list.Id)!.Revision);
+    }
+
+    [Fact]
+    public void BumpRevision_LeavesSomeoneElsesNumberingAlone()
+    {
+        // Their next revision has to still look newer than this copy of it.
+        var list = _store.Add(NewList("Their list", ModListOrigin.Imported, Entry("Realism", 1)));
+
+        Assert.Null(_store.BumpRevision(list.Id));
+        Assert.Equal(1, _store.Find(list.Id)!.Revision);
     }
 
     [Fact]

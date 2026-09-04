@@ -502,7 +502,8 @@ public partial class ModListsViewModel : ObservableObject
 
             StatusMessage = added == 0
                 ? "Nothing added - the list already names those mods."
-                : $"Added {added} mod(s) to \"{row.Name}\". Preview it to see what applying it would do now.";
+                : $"Added {added} mod(s) to \"{row.Name}\". Nothing has been downloaded and nothing on disk has changed"
+                    + " - press Preview to see what applying the list would do.";
         });
     }
 
@@ -520,7 +521,8 @@ public partial class ModListsViewModel : ObservableObject
         Refresh(row.Id);
 
         StatusMessage = removed
-            ? $"Took \"{entry.Name}\" off \"{row.Name}\". Nothing on disk changed."
+            ? $"Took \"{entry.Name}\" off \"{row.Name}\". It is still installed and enabled"
+                + " - only applying this list would set it aside."
             : $"\"{entry.Name}\" isn't on this list any more.";
     }
 

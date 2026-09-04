@@ -144,7 +144,15 @@ public sealed class ModListService
             ct: ct);
 
         if (result.Snapshot is not null) AppServices.ModLists.SetSnapshot(result.Snapshot);
-        if (result.Completed) AppServices.ModLists.SetActive(preview.List.Id);
+
+        if (result.Completed)
+        {
+            AppServices.ModLists.SetActive(preview.List.Id);
+
+            // The revision counts applies, not edits - see ModListStore.BumpRevision. An apply that
+            // stopped part way is not one: it is unwound, and the install ends up where it started.
+            AppServices.ModLists.BumpRevision(preview.List.Id);
+        }
 
         return result;
     }
