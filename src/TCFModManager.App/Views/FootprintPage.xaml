@@ -47,20 +47,23 @@
         <SolidColorBrush x:Key="FootprintNeutralTint" Color="#6B7280" Opacity="0.22" />
 
         <!--
-            Appearance flips to Primary on a coloured chip on purpose. Badge's own template sets the
-            Border's background from a trigger for every appearance EXCEPT Primary, and a template
-            trigger outranks anything set from out here - so Secondary would quietly win and the
-            tint would never show. Primary has no such trigger, so Background flows through.
+            Appearance is Primary on every chip on purpose. Badge's own template sets the Border's
+            background from a trigger for every appearance EXCEPT Primary, and a template trigger
+            outranks anything set from out here - so Secondary would quietly win and the tint would
+            never show. Primary has no such trigger, so Background flows through.
 
-            Foreground is a Setter rather than an attribute on the element for the same class of
-            reason: a local value on the Badge would outrank these triggers.
+            THE TEXT COLOUR CANNOT BE SET FROM HERE. Badge's default style has its own trigger for
+            Primary that sets Foreground to BadgeForeground, and a trigger in the base style beats a
+            setter in a derived one whatever this file says - which pinned the label to the badge's
+            colour instead of the theme's, leaving it dark on a dark card. The chip's content is
+            therefore a TextBlock carrying its own Foreground, which nothing in the template can
+            reach. Same rule as everywhere else in this app: a TextBlock states its own colour.
         -->
         <Style x:Key="FootprintAreaBadge" TargetType="ui:Badge" BasedOn="{StaticResource {x:Type ui:Badge}}">
             <!-- Primary for every chip, coloured or not, for the template-trigger reason above:
                  any other appearance and the Border's own trigger would overwrite the fill. -->
             <Setter Property="Appearance" Value="Primary" />
             <Setter Property="Background" Value="{StaticResource FootprintNeutralTint}" />
-            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Resource}" Value="CPU">
                     <Setter Property="Background" Value="{StaticResource FootprintCpuTint}" />
@@ -214,9 +217,16 @@
                                                             Margin="0,0,12,0"
                                                             VerticalAlignment="Top"
                                                             HorizontalContentAlignment="Center"
-                                                            FontSize="11"
-                                                            Style="{StaticResource FootprintAreaBadge}"
-                                                            Content="{Binding Area}" />
+                                                            Style="{StaticResource FootprintAreaBadge}">
+                                                            <!-- The label states its own colour, so
+                                                                 it follows the theme rather than
+                                                                 the badge - see the style above. -->
+                                                            <TextBlock
+                                                                FontSize="11"
+                                                                TextAlignment="Center"
+                                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                                Text="{Binding Area}" />
+                                                        </ui:Badge>
 
                                                         <StackPanel Grid.Column="1">
                                                             <TextBlock
