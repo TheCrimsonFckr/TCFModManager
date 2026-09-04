@@ -12,7 +12,21 @@
     MinHeight="480"
     MinWidth="720"
     WindowStartupLocation="CenterScreen"
-    ExtendsContentIntoTitleBar="True">
+    ExtendsContentIntoTitleBar="True"
+    TextOptions.TextFormattingMode="Display"
+    TextOptions.TextRenderingMode="ClearType">
+    <!-- Small UI text, drawn on whole pixels. WPF's default TextFormattingMode is Ideal, which
+         positions glyphs at fractional pixel offsets - correct for print-like scaling and slightly
+         soft for 11-14px chrome on a scaled display. Display snaps them to the pixel grid, and
+         ClearType asks for subpixel antialiasing rather than the greyscale fallback.
+
+         Set on every window because these are inherited properties and a separate window is a
+         separate tree - MainWindow cannot hand them to a dialog.
+
+         The other half of this was element Opacity: any value below 1 renders the subtree into an
+         intermediate surface and DISABLES ClearType outright, which is what made de-emphasised
+         lines read as blurry on a light background. Every one of those is now a Secondary or
+         Tertiary brush instead - see the theme notes, where that was already the rule. -->
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Window.Resources>
@@ -202,7 +216,7 @@
                     <TextBlock
                         TextWrapping="Wrap"
                         TextAlignment="Center"
-                        Opacity="0.7"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                         Margin="0,0,0,12"
                         Text="Fetching the full sp-mod.com catalog - this only happens once, future launches load instantly from cache." />
                     <ProgressBar
@@ -214,7 +228,7 @@
                         Margin="0,8,0,0"
                         HorizontalAlignment="Center"
                         FontSize="11"
-                        Opacity="0.6"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         Text="{Binding LoadedCount, StringFormat='{}{0:N0} mods loaded'}" />
                 </StackPanel>
             </ui:Card>

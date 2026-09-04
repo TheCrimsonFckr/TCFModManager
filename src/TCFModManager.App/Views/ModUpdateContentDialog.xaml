@@ -63,12 +63,12 @@
 
         <StackPanel Grid.Row="0" Margin="0,0,0,8">
             <TextBlock
-                Opacity="0.7"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Text="{Binding InstalledVersionText, StringFormat='Currently installed: {0}', TargetNullValue='Currently installed: unknown'}" />
             <TextBlock
                 Margin="0,4,0,0"
                 TextWrapping="Wrap"
-                Opacity="0.8"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Text="{Binding StatusMessage}"
                 Visibility="{Binding StatusMessage, Converter={StaticResource NullToCollapsed}}" />
 
@@ -156,7 +156,7 @@
                 VerticalAlignment="Center"
                 Visibility="{Binding IsLoading, Converter={StaticResource TrueToVisible}}">
                 <ProgressBar Width="220" Height="4" IsIndeterminate="True" />
-                <TextBlock Margin="0,8,0,0" HorizontalAlignment="Center" Opacity="0.7" Text="Loading versions..." />
+                <TextBlock Margin="0,8,0,0" HorizontalAlignment="Center" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="Loading versions..." />
             </StackPanel>
 
             <!-- Inert, and left alone only because it predates this: ContentDialog's own template
@@ -238,7 +238,7 @@
 
                                         <StackPanel Grid.Column="0">
                                             <TextBlock FontWeight="SemiBold" Text="{Binding VersionText}" />
-                                            <TextBlock Margin="0,2,0,0" Opacity="0.6">
+                                            <TextBlock Margin="0,2,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}">
                                                 <Run Text="Published: " />
                                                 <Run Text="{Binding PublishedAt, StringFormat='{}{0:d}', TargetNullValue='unknown', Mode=OneWay}" />
                                             </TextBlock>
@@ -265,14 +265,14 @@
 
                                 <StackPanel Margin="0,8,0,0">
                                     <TextBlock
-                                        Opacity="0.6"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                         Visibility="{Binding SptVersionConstraint, Converter={StaticResource NullToCollapsed}}">
                                         <Run Text="Targets SPT: " />
                                         <Run Text="{Binding SptVersionConstraint, Mode=OneWay}" />
                                     </TextBlock>
 
                                     <TextBlock
-                                        Opacity="0.6"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                         Text="{Binding CompatibilityLabel}"
                                         Visibility="{Binding CompatibilityLabel, Converter={StaticResource NullToCollapsed}}" />
 

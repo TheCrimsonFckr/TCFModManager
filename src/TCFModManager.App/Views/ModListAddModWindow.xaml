@@ -8,7 +8,9 @@
     MinWidth="520"
     MinHeight="440"
     ShowInTaskbar="False"
-    ExtendsContentIntoTitleBar="True">
+    ExtendsContentIntoTitleBar="True"
+    TextOptions.TextFormattingMode="Display"
+    TextOptions.TextRenderingMode="ClearType">
     <!--
         Picks mods to add to a list, from what this install has and from the cached sp-mod.com
         catalog. Nothing here downloads or installs anything - it names mods, and applying the list

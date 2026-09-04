@@ -69,7 +69,7 @@
                     Grid.Column="1"
                     VerticalAlignment="Center"
                     Text="{Binding Owner.Name}"
-                    Opacity="0.7" />
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
             </Grid>
 
             <TextBlock
@@ -77,9 +77,9 @@
                 TextWrapping="Wrap"
                 Text="{Binding Teaser}" />
 
-            <TextBlock Opacity="0.7" Text="{Binding Downloads, StringFormat='{}{0:N0} downloads'}" />
-            <TextBlock Opacity="0.7" Text="{Binding Category.Title, StringFormat='Category: {0}'}" />
-            <TextBlock Opacity="0.7" Text="{Binding License.Name, StringFormat='License: {0}'}" />
+            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Downloads, StringFormat='{}{0:N0} downloads'}" />
+            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Category.Title, StringFormat='Category: {0}'}" />
+            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding License.Name, StringFormat='License: {0}'}" />
 
             <ui:Button
                 Margin="0,12,0,0"

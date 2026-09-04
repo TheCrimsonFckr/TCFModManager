@@ -59,8 +59,7 @@
             <TextBlock
                 VerticalAlignment="Center"
                 TextWrapping="Wrap"
-                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                Opacity="0.8"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Text="{Binding StatusMessage}" />
         </DockPanel>
 
@@ -101,8 +100,7 @@
                     Margin="4,12,0,0"
                     VerticalAlignment="Top"
                     TextWrapping="Wrap"
-                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    Opacity="0.6"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                     Text="Nothing matches. Note that plenty of plugins only write a config the first time the game runs."
                     Visibility="{Binding HasResults, Converter={StaticResource FalseToVisible}}" />
 
@@ -168,15 +166,13 @@
                                                     Margin="8,0,0,0"
                                                     VerticalAlignment="Center"
                                                     FontSize="11"
-                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                    Opacity="0.55"
+                                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                     Text="{Binding Name.Location}" />
                                                 <TextBlock
                                                     Margin="8,0,0,0"
                                                     VerticalAlignment="Center"
                                                     FontSize="11"
-                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                    Opacity="0.55"
+                                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                     Text="{Binding ItemCount, StringFormat='({0})'}" />
                                             </StackPanel>
                                             <Separator Margin="0,6,0,0" Opacity="0.25" />
@@ -212,8 +208,7 @@
                                             Text="{Binding Title}" />
                                         <TextBlock
                                             FontSize="11"
-                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                            Opacity="0.6"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                             TextTrimming="CharacterEllipsis"
                                             ToolTip="{Binding FullPath}"
                                             Text="{Binding Subtitle}" />
@@ -249,8 +244,7 @@
                     VerticalAlignment="Center"
                     TextWrapping="Wrap"
                     TextAlignment="Center"
-                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    Opacity="0.5"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                     MaxWidth="380"
                     Text="Pick a config file on the left to edit it."
                     Visibility="{Binding HasSelection, Converter={StaticResource FalseToVisible}}" />
@@ -287,8 +281,7 @@
                                 Text="{Binding SelectedEntry.Title}" />
                             <TextBlock
                                 FontSize="11"
-                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                Opacity="0.6"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 TextWrapping="Wrap"
                                 Text="{Binding SelectedEntry.Entry.DisplayPath}" />
                         </StackPanel>
@@ -300,8 +293,7 @@
                              is disabled or removed. -->
                         <TextBlock
                             TextWrapping="Wrap"
-                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Opacity="0.7"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                             Text="{Binding SelectedEntry.LocationNote}" />
 
                         <TextBlock
@@ -356,8 +348,7 @@
 
                         <TextBlock
                             VerticalAlignment="Center"
-                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Opacity="0.7"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                             Text="Unsaved changes"
                             Visibility="{Binding IsDirty, Converter={StaticResource BoolToVis}}" />
                     </DockPanel>

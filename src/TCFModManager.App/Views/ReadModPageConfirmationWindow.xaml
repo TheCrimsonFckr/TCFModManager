@@ -7,7 +7,9 @@
     SizeToContent="Height"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
-    ExtendsContentIntoTitleBar="True">
+    ExtendsContentIntoTitleBar="True"
+    TextOptions.TextFormattingMode="Display"
+    TextOptions.TextRenderingMode="ClearType">
     <!--
         A plain modal FluentWindow, shown via ShowDialog() from any call site.
         SizeToContent="Height" with a fixed Width keeps a consistent size regardless of content length.
@@ -29,7 +31,7 @@
             Margin="24,12,24,24">
             <TextBlock
                 TextWrapping="Wrap"
-                Opacity="0.8"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Margin="0,0,0,16"
                 Text="Same as installing manually from sp-mod.com - open each mod's page below before this gets queued." />
 

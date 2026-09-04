@@ -39,8 +39,7 @@
                 Click="ClearFinishedButton_Click" />
             <StackPanel VerticalAlignment="Center">
                 <TextBlock
-                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    Opacity="0.8"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     TextWrapping="Wrap"
                     Text="Downloads install strictly one at a time, in the order you queued them - queue as many as you like from Browse or an update dialog and check back here for progress." />
 
@@ -121,8 +120,7 @@
             VerticalAlignment="Center"
             TextAlignment="Center"
             TextWrapping="Wrap"
-            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-            Opacity="0.6"
+            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
             Text="Nothing queued yet - click Install on a Browse card, or Update in a mod's details dialog, to add something here."
             Visibility="{Binding Items.Count, Converter={StaticResource HasItems}, ConverterParameter=Invert}" />
 
@@ -179,7 +177,7 @@
                                     <TextBlock
                                         Margin="0,6,0,0"
                                         FontSize="11"
-                                        Opacity="0.7"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                         TextTrimming="CharacterEllipsis"
                                         Text="{Binding StatusMessage}" />
 

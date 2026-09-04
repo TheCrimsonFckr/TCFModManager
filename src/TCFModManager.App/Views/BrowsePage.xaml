@@ -224,8 +224,7 @@
             Grid.Row="1"
             Margin="0,0,0,8"
             TextWrapping="Wrap"
-            Opacity="0.7"
-            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
             Text="{Binding StatusMessage}" />
 
         <!-- Results grid; column count is set from code-behind based on width. -->
@@ -301,18 +300,18 @@
                                     <TextBlock
                                         Text="{Binding Author, StringFormat='by {0}'}"
                                         FontSize="11"
-                                        Opacity="0.6"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                         TextTrimming="CharacterEllipsis"
                                         Visibility="{Binding Author, Converter={StaticResource NullToCollapsed}}" />
                                     <TextBlock
                                         Text="{Binding Guid}"
                                         FontSize="11"
-                                        Opacity="0.5"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                         TextTrimming="CharacterEllipsis" />
                                     <TextBlock
                                         Text="{Binding Downloads, Mode=OneWay, StringFormat='{}{0:N0} downloads'}"
                                         FontSize="11"
-                                        Opacity="0.6"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                         TextTrimming="CharacterEllipsis" />
                                     <!-- Collapsed rather than shown as "0 endorsements": the feature
                                          is new enough that almost every mod is on zero, and an empty
@@ -321,7 +320,7 @@
                                     <TextBlock
                                         Text="{Binding Endorsements, Mode=OneWay, StringFormat='{}{0:N0} endorsements'}"
                                         FontSize="11"
-                                        Opacity="0.6"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                         TextTrimming="CharacterEllipsis"
                                         Visibility="{Binding Endorsements, Converter={StaticResource NullToCollapsed}}" />
                                     <!-- Runs rather than separate TextBlocks because the SPT segment
@@ -570,8 +569,7 @@
                 Text="{Binding CurrentPage, StringFormat='Page {0}'}" />
             <TextBlock
                 VerticalAlignment="Center"
-                Opacity="0.7"
-                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Text="{Binding TotalPages, StringFormat='of {0}'}" />
             <ui:Button
                 Margin="12,0,0,0"

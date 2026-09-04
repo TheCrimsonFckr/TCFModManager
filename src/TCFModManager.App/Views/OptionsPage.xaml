@@ -13,7 +13,7 @@
                     Margin="0,0,0,4" />
                 <TextBlock
                     TextWrapping="Wrap"
-                    Opacity="0.7"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
                     Text="Point this at your SPT server install folder (the one containing SPT.Server.exe). Once set, the installed SPT version is used to default the Browse version filter and to flag mods that aren't built for it." />
 
@@ -33,7 +33,7 @@
 
                 <TextBlock
                     TextWrapping="Wrap"
-                    Opacity="0.7"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Text="{Binding SptEnvironment.StatusMessage}" />
             </StackPanel>
         </ui:Card>
@@ -46,7 +46,7 @@
                     Margin="0,0,0,4" />
                 <TextBlock
                     TextWrapping="Wrap"
-                    Opacity="0.7"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
                     Text="Follow system matches Windows and keeps matching it when you change it there. Light and Dark pin the app to one regardless." />
                 <ComboBox
@@ -65,7 +65,7 @@
                     Margin="0,0,0,4" />
                 <TextBlock
                     TextWrapping="Wrap"
-                    Opacity="0.7"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
                     Text="Before anything downloads, this app asks you to open the mod's page - where its author puts install steps, requirements, known conflicts and warnings. Turn that off if you would rather go straight to installing. This app's own updates always ask, since that page is where its release notes are." />
                 <ui:ToggleSwitch
@@ -86,7 +86,7 @@
                     Margin="0,0,0,4" />
                 <TextBlock
                     TextWrapping="Wrap"
-                    Opacity="0.7"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
                     Text="Adds a page that reads the files each installed mod ships and describes how much of the game it is positioned to touch, and where any cost would land - client or server, CPU, GPU, memory or start-up. Nothing on it is timed or measured: what a mod actually costs you depends on your hardware, your settings and the other mods you run, none of which it can see. A heavy footprint means a mod reaches a long way into the game, which is usually why you installed it - it is a place to start looking, not a verdict. Off by default." />
                 <ui:ToggleSwitch
@@ -107,7 +107,7 @@
                     Margin="0,0,0,4" />
                 <TextBlock
                     TextWrapping="Wrap"
-                    Opacity="0.7"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
                     Text="View or hand-edit the JSON files this app keeps under Data\, including installed-mods.json - useful when the Installed page's own version controls aren't enough." />
                 <ui:Button

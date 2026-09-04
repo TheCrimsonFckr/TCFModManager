@@ -94,7 +94,7 @@
                         Visibility="{Binding AddonSubtitle, Converter={StaticResource NullToCollapsed}}" />
 
                     <TextBlock
-                        Opacity="0.6"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         TextWrapping="Wrap"
                         Visibility="{Binding FolderNameIfDifferent, Converter={StaticResource NullToCollapsed}}">
                         <Run Text="Installed as: " />
@@ -102,32 +102,32 @@
                     </TextBlock>
 
                     <TextBlock
-                        Opacity="0.6"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         TextWrapping="Wrap"
                         Visibility="{Binding Guid, Converter={StaticResource NullToCollapsed}}">
                         <Run Text="GUID: " />
                         <Run Text="{Binding Guid, Mode=OneWay}" />
                     </TextBlock>
 
-                    <TextBlock Opacity="0.6" TextWrapping="Wrap">
+                    <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap">
                         <Run Text="Installed version: " />
                         <Run Text="{Binding InstalledVersion, TargetNullValue='unknown', Mode=OneWay}" />
                     </TextBlock>
 
-                    <TextBlock Opacity="0.6" TextWrapping="Wrap">
+                    <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap">
                         <Run Text="Latest published: " />
                         <Run Text="{Binding LatestPublishedText, Mode=OneWay}" />
                     </TextBlock>
 
                     <TextBlock
-                        Opacity="0.6"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         Visibility="{Binding LatestUpdatedAt, Converter={StaticResource NullToCollapsed}}">
                         <Run Text="Last updated on sp-mod.com: " />
                         <Run Text="{Binding LatestUpdatedAt, StringFormat='{}{0:d}', Mode=OneWay}" />
                     </TextBlock>
 
                     <TextBlock
-                        Opacity="0.6"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         Visibility="{Binding InstalledAt, Converter={StaticResource NullToCollapsed}}">
                         <Run Text="Installed on: " />
                         <Run Text="{Binding InstalledAt, StringFormat='{}{0:d}', Mode=OneWay}" />
@@ -137,19 +137,19 @@
                          with the manifest. Sits under the dates because it qualifies the installed
                          version rather than being a separate fact about the mod. -->
                     <TextBlock
-                        Opacity="0.6"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         TextWrapping="Wrap"
                         Text="{Binding InstalledVersionDetail}"
                         Visibility="{Binding InstalledVersionDetail, Converter={StaticResource NullToCollapsed}}" />
 
                     <TextBlock
-                        Opacity="0.6"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         TextWrapping="Wrap"
                         Text="{Binding FlagsSummary}"
                         Visibility="{Binding FlagsSummary, Converter={StaticResource NullToCollapsed}}" />
 
                     <TextBlock
-                        Opacity="0.6"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         TextWrapping="Wrap"
                         Margin="0,4,0,0"
                         Text="{Binding SourceLabel}" />
@@ -341,8 +341,7 @@
             <TextBlock
                 VerticalAlignment="Center"
                 TextWrapping="Wrap"
-                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                Opacity="0.8"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Text="{Binding StatusMessage}" />
         </DockPanel>
 
@@ -555,8 +554,7 @@
                 Command="{Binding DisableSelectedCommand}" />
             <TextBlock
                 VerticalAlignment="Center"
-                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                Opacity="0.8"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Text="{Binding SelectedCountLabel}" />
         </DockPanel>
 
@@ -705,7 +703,7 @@
                                              halves it installs, and who wrote it. -->
                                         <TextBlock
                                             FontSize="11"
-                                            Opacity="0.6"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                             TextTrimming="CharacterEllipsis">
                                             <Run Text="{Binding InstalledVersion, TargetNullValue='unknown', Mode=OneWay}" />
                                             <Run Text=" • " />
@@ -924,7 +922,7 @@
                                     Visibility="{Binding IsCollapsed, Converter={StaticResource FalseToVisible}}">
                                     <TextBlock
                                         Padding="4"
-                                        Opacity="0.5"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                         FontStyle="Italic"
                                         Text="Drag mods here"
                                         Visibility="{Binding Items.Count, Converter={StaticResource HasItems}, ConverterParameter=Invert}" />
@@ -964,7 +962,7 @@
                                                                 Text="{Binding DisplayTitle}" />
                                                             <TextBlock
                                                                 FontSize="11"
-                                                                Opacity="0.6"
+                                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                                 TextTrimming="CharacterEllipsis">
                                                                 <Run Text="{Binding InstalledVersion, TargetNullValue='unknown', Mode=OneWay}" />
                                                                 <Run Text=" • " />
@@ -1048,7 +1046,7 @@
                                             Text="{Binding DisplayTitle}" />
                                         <TextBlock
                                             FontSize="11"
-                                            Opacity="0.6"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                             TextTrimming="CharacterEllipsis">
                                             <Run Text="{Binding InstalledVersion, TargetNullValue='unknown', Mode=OneWay}" />
                                             <Run Text=" • " />
@@ -1131,8 +1129,7 @@
                 Text="{Binding CurrentPage, StringFormat='Page {0}'}" />
             <TextBlock
                 VerticalAlignment="Center"
-                Opacity="0.7"
-                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Text="{Binding TotalPages, StringFormat='of {0}'}" />
             <ui:Button
                 Margin="12,0,0,0"

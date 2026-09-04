@@ -10,7 +10,9 @@
     MinHeight="400"
     MinWidth="600"
     WindowStartupLocation="CenterOwner"
-    ExtendsContentIntoTitleBar="True">
+    ExtendsContentIntoTitleBar="True"
+    TextOptions.TextFormattingMode="Display"
+    TextOptions.TextRenderingMode="ClearType">
     <!--
         Raw view/edit window over the JSON files this app keeps under Data\ (installed-mods.json,
         settings.json, etc.) - for hand-fixing something the built-in pages don't cover. Every save

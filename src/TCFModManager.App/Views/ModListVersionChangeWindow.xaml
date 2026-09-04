@@ -7,7 +7,9 @@
     SizeToContent="Height"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
-    ExtendsContentIntoTitleBar="True">
+    ExtendsContentIntoTitleBar="True"
+    TextOptions.TextFormattingMode="Display"
+    TextOptions.TextRenderingMode="ClearType">
     <!--
         Shown when a mod list names a version that is no longer published on sp-mod.com. One row per
         mod, ticked by default, so the substitution is visible and reversible rather than silent.
