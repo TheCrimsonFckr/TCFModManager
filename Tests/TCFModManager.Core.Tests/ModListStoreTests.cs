@@ -287,100 +287,11 @@ public class ModListStoreTests : IDisposable
     }
 
     [Fact]
-    public void AddEntries_AddsTheModAndLeavesTheRevisionAlone()
-    {
-        var list = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("Realism", 1)));
-
-        var added = _store.AddEntries(list.Id, [Entry("SAIN", 2, 9)]);
-
-        Assert.Equal(1, added);
-        Assert.Equal(["Realism", "SAIN"], _store.Find(list.Id)!.Entries.Select(e => e.Name));
-
-        // Editing a list is thinking about it. Only applying one counts as a revision.
-        Assert.Equal(1, _store.Find(list.Id)!.Revision);
-    }
-
-    [Fact]
-    public void AddEntries_KeepsEntriesInNameOrder()
-    {
-        var list = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("Realism", 1), Entry("SAIN", 2)));
-
-        _store.AddEntries(list.Id, [Entry("Amanda's Graphics", 3)]);
-
-        Assert.Equal(["Amanda's Graphics", "Realism", "SAIN"], _store.Find(list.Id)!.Entries.Select(e => e.Name));
-    }
-
-    [Fact]
-    public void AddEntries_IgnoresAModTheListAlreadyNames()
-    {
-        var list = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("Realism", 1, 4)));
-
-        // Same mod id, different name and version - still the same mod, so nothing changes and the
-        // revision does not move.
-        var added = _store.AddEntries(list.Id, [Entry("SPT Realism Mod", 1, 9)]);
-
-        Assert.Equal(0, added);
-        Assert.Single(_store.Find(list.Id)!.Entries);
-        Assert.Equal(1, _store.Find(list.Id)!.Revision);
-    }
-
-    [Fact]
-    public void AddEntries_TreatsAnAddonAndAModWithTheSameIdAsDifferentThings()
-    {
-        var list = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("Realism", 116)));
-
-        var added = _store.AddEntries(list.Id, [new ModListEntry { Name = "Realism preset", ModId = 116, IsAddon = true }]);
-
-        Assert.Equal(1, added);
-        Assert.Equal(2, _store.Find(list.Id)!.Entries.Count);
-    }
-
-    [Fact]
-    public void AddEntries_RefusesAListThatCameFromSomeoneElse()
-    {
-        var list = _store.Add(NewList("Their list", ModListOrigin.Imported, Entry("Realism", 1)));
-
-        var added = _store.AddEntries(list.Id, [Entry("SAIN", 2)]);
-
-        Assert.Equal(0, added);
-        Assert.Single(_store.Find(list.Id)!.Entries);
-    }
-
-    [Fact]
-    public void AddEntries_AddsNothingToAListThatIsNotThere()
-    {
-        Assert.Equal(0, _store.AddEntries(Guid.NewGuid(), [Entry("SAIN", 2)]));
-    }
-
-    [Fact]
-    public void AddEntries_TakesTheNewOnesAndSkipsWhatIsAlreadyThere()
-    {
-        var list = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("Realism", 1)));
-
-        var added = _store.AddEntries(list.Id, [Entry("SAIN", 2), Entry("Realism", 1), Entry("Looting Bots", 3)]);
-
-        Assert.Equal(2, added);
-        Assert.Equal(["Looting Bots", "Realism", "SAIN"], _store.Find(list.Id)!.Entries.Select(e => e.Name));
-    }
-
-    [Fact]
-    public void RemoveEntry_TakesTheModOffAndLeavesTheRevisionAlone()
-    {
-        var list = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("Realism", 1), Entry("SAIN", 2)));
-
-        var updated = _store.RemoveEntry(list.Id, Entry("SAIN", 2));
-
-        Assert.NotNull(updated);
-        Assert.Equal(1, updated!.Revision);
-        Assert.Equal(["Realism"], _store.Find(list.Id)!.Entries.Select(e => e.Name));
-    }
-
-    [Fact]
     public void BumpRevision_CountsAnApplyOfALocalList()
     {
         var list = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("Realism", 1)));
 
-        _store.AddEntries(list.Id, [Entry("SAIN", 2)]);
+        _store.ReplaceEntries(list.Id, [Entry("Realism", 1), Entry("SAIN", 2)]);
         var applied = _store.BumpRevision(list.Id);
 
         Assert.NotNull(applied);
@@ -395,48 +306,5 @@ public class ModListStoreTests : IDisposable
 
         Assert.Null(_store.BumpRevision(list.Id));
         Assert.Equal(1, _store.Find(list.Id)!.Revision);
-    }
-
-    [Fact]
-    public void RemoveEntry_MatchesOnModIdRatherThanName()
-    {
-        var list = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("SPT Realism Mod", 1)));
-
-        var updated = _store.RemoveEntry(list.Id, Entry("Realism", 1));
-
-        Assert.NotNull(updated);
-        Assert.Empty(_store.Find(list.Id)!.Entries);
-    }
-
-    [Fact]
-    public void RemoveEntry_MatchesOnNameWhenTheEntryHasNoModId()
-    {
-        var list = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("Hand-built thing")));
-
-        var updated = _store.RemoveEntry(list.Id, Entry("hand-built THING"));
-
-        Assert.NotNull(updated);
-        Assert.Empty(_store.Find(list.Id)!.Entries);
-    }
-
-    [Fact]
-    public void RemoveEntry_ChangesNothingWhenTheListDoesNotNameIt()
-    {
-        var list = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("Realism", 1)));
-
-        var updated = _store.RemoveEntry(list.Id, Entry("SAIN", 2));
-
-        Assert.Null(updated);
-        Assert.Single(_store.Find(list.Id)!.Entries);
-        Assert.Equal(1, _store.Find(list.Id)!.Revision);
-    }
-
-    [Fact]
-    public void RemoveEntry_RefusesAListThatCameFromSomeoneElse()
-    {
-        var list = _store.Add(NewList("Their list", ModListOrigin.Imported, Entry("Realism", 1)));
-
-        Assert.Null(_store.RemoveEntry(list.Id, Entry("Realism", 1)));
-        Assert.Single(_store.Find(list.Id)!.Entries);
     }
 }

@@ -37,6 +37,32 @@
         <Style x:Key="ReadOnlyContainer" TargetType="ListBoxItem" BasedOn="{StaticResource BareContainer}">
             <Setter Property="Focusable" Value="False" />
         </Style>
+
+        <!--
+            One saved list. A card-coloured row with space around it rather than a bare strip pressed
+            against its neighbours, so the left column reads the way the Installed page's List view
+            does. Margin and Padding live in the style, not on the Border, so the two triggers still
+            win over the resting fill - a local value on the element would outrank them.
+        -->
+        <Style x:Key="ListCardRow" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorSecondaryBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Margin" Value="2,0,6,8" />
+            <Setter Property="Padding" Value="12,11" />
+            <Style.Triggers>
+                <!-- Selected first, hover second, so pointing at the current list still reads as
+                     pointing at it. Same ordering as ClickableRow in App.xaml. -->
+                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                    <Setter Property="Background" Value="{StaticResource RowSelectedBrush}" />
+                </DataTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
 
     <Grid
@@ -45,7 +71,6 @@
         Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="340" />
@@ -112,7 +137,7 @@
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Text="Saved lists" />
 
-            <ui:Card Grid.Row="2" Padding="4">
+            <ui:Card Grid.Row="2" Padding="4,8,4,2">
                 <Grid>
                     <TextBlock
                         Margin="12"
@@ -132,7 +157,7 @@
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Border Style="{StaticResource ClickableRow}" Padding="10,9">
+                                <Border Style="{StaticResource ListCardRow}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
@@ -188,6 +213,7 @@
         <!-- Right: the selected list, and what applying it would do. -->
         <Grid Grid.Row="0" Grid.Column="2">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -302,8 +328,30 @@
                 </StackPanel>
             </StackPanel>
 
-            <ui:InfoBar
+            <!-- What just happened, directly under the buttons that cause it rather than in a
+                 footer at the far end of the page. It answers "did that touch my install?", so it
+                 belongs where the eye already is. -->
+            <StackPanel
                 Grid.Row="1"
+                Orientation="Horizontal"
+                Margin="2,14,0,0">
+                <ui:ProgressRing
+                    Width="16"
+                    Height="16"
+                    Margin="0,0,10,0"
+                    VerticalAlignment="Center"
+                    IsIndeterminate="True"
+                    Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}" />
+
+                <TextBlock
+                    VerticalAlignment="Center"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="{Binding StatusMessage}" />
+            </StackPanel>
+
+            <ui:InfoBar
+                Grid.Row="2"
                 Margin="0,16,0,0"
                 Severity="Warning"
                 IsClosable="False"
@@ -311,7 +359,7 @@
                 Message="{Binding VersionWarning}" />
 
             <TextBlock
-                Grid.Row="2"
+                Grid.Row="3"
                 TextWrapping="Wrap"
                 FontWeight="SemiBold"
                 Margin="2,20,0,10"
@@ -330,8 +378,9 @@
                 and enabled; only applying an Exclusive list afterwards sets it aside.
             -->
             <ui:Card
-                Grid.Row="3"
+                Grid.Row="4"
                 Padding="4"
+                Margin="0,16,0,0"
                 Visibility="{Binding ShowContents, Converter={StaticResource BoolToVis}}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -354,22 +403,60 @@
                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                             Text="{Binding EntriesHeader}" />
 
-                        <ui:Button
+                        <!-- Add and remove change what is on screen; Save writes it to the list;
+                             Apply is the only thing on this page that touches the game folder. Save
+                             and Discard appear only when there is something to save. -->
+                        <StackPanel
                             Grid.Column="1"
-                            Icon="{ui:SymbolIcon Add24}"
-                            Content="Add mods"
-                            ToolTip="Put mods on this list - ones you have installed, or ones from sp-mod.com you haven't. Nothing is downloaded."
-                            Visibility="{Binding SelectionIsEditable, Converter={StaticResource BoolToVis}}"
-                            Command="{Binding AddModsCommand}" />
+                            Orientation="Horizontal"
+                            Visibility="{Binding SelectionIsEditable, Converter={StaticResource BoolToVis}}">
+                            <ui:Button
+                                Icon="{ui:SymbolIcon Add24}"
+                                Content="Add mods"
+                                ToolTip="Put mods on this list - ones you have installed, or ones from sp-mod.com you haven't. Nothing is downloaded."
+                                Command="{Binding AddModsCommand}" />
+
+                            <ui:Button
+                                Margin="8,0,0,0"
+                                Appearance="Primary"
+                                Icon="{ui:SymbolIcon Save24}"
+                                Content="Save"
+                                ToolTip="Write these changes to the list. Nothing is installed, enabled or disabled - Apply does that."
+                                Visibility="{Binding HasUnsavedChanges, Converter={StaticResource BoolToVis}}"
+                                Command="{Binding SaveCommand}" />
+
+                            <ui:Button
+                                Margin="8,0,0,0"
+                                Appearance="Transparent"
+                                Icon="{ui:SymbolIcon ArrowUndo24}"
+                                Content="Discard"
+                                ToolTip="Throw these changes away and show the list as it is saved."
+                                Visibility="{Binding HasUnsavedChanges, Converter={StaticResource BoolToVis}}"
+                                Command="{Binding DiscardCommand}" />
+                        </StackPanel>
                     </Grid>
 
-                    <TextBlock
-                        Grid.Row="1"
-                        TextWrapping="Wrap"
-                        Margin="10,0,10,8"
-                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        Visibility="{Binding SelectionIsImported, Converter={StaticResource BoolToVis}}"
-                        Text="This list came from someone else, so it stays exactly as they wrote it. Make a copy to change what's on it." />
+                    <StackPanel Grid.Row="1">
+                        <TextBlock
+                            TextWrapping="Wrap"
+                            Margin="10,0,10,8"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Visibility="{Binding SelectionIsImported, Converter={StaticResource BoolToVis}}"
+                            Text="This list came from someone else, so it stays exactly as they wrote it. Make a copy to change what's on it." />
+
+                        <!-- Preview and Apply are disabled until this is gone: they work off the
+                             saved list, and running them against something the panel no longer
+                             agrees with is the one confusing state this page can get into. -->
+                        <TextBlock
+                            TextWrapping="Wrap"
+                            Margin="10,0,10,8"
+                            FontWeight="SemiBold"
+                            Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                            Visibility="{Binding HasUnsavedChanges, Converter={StaticResource BoolToVis}}">
+                            <Run Text="{Binding UnsavedLabel, Mode=OneWay}" />
+                            <Run Text=" - save the list to keep them. Preview and Apply use the saved version." />
+                        </TextBlock>
+                    </StackPanel>
 
                     <Grid Grid.Row="2">
                         <TextBlock
@@ -389,31 +476,38 @@
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Style="{StaticResource HoverRow}" Padding="10,6">
+                                    <Border Style="{StaticResource HoverRow}" Padding="10,8">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
 
-                                            <TextBlock
+                                            <!-- The listing title, then the folder it occupies and
+                                                 the version the list names. Two lines because the
+                                                 title and the folder name are often nothing like
+                                                 each other, and both are worth reading. -->
+                                            <StackPanel
                                                 Grid.Column="0"
                                                 VerticalAlignment="Center"
-                                                TextWrapping="Wrap"
-                                                Margin="0,0,16,0"
-                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                Text="{Binding Name}" />
+                                                Margin="0,0,12,0">
+                                                <TextBlock
+                                                    TextWrapping="Wrap"
+                                                    FontWeight="SemiBold"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                    Text="{Binding Name}" />
 
-                                            <TextBlock
-                                                Grid.Column="1"
-                                                VerticalAlignment="Center"
-                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                                Text="{Binding Detail}" />
+                                                <TextBlock
+                                                    TextWrapping="Wrap"
+                                                    FontSize="12"
+                                                    Margin="0,3,0,0"
+                                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                    Text="{Binding Detail}" />
+                                            </StackPanel>
 
                                             <ui:Button
-                                                Grid.Column="2"
-                                                Margin="12,0,0,0"
+                                                Grid.Column="1"
+                                                VerticalAlignment="Center"
                                                 Padding="8,4"
                                                 Appearance="Transparent"
                                                 Foreground="{DynamicResource SystemFillColorCriticalBrush}"
@@ -432,8 +526,9 @@
             </ui:Card>
 
             <ui:Card
-                Grid.Row="3"
+                Grid.Row="4"
                 Padding="4"
+                Margin="0,4,0,0"
                 Visibility="{Binding HasPlan, Converter={StaticResource BoolToVis}}">
                 <ListBox
                     x:Name="PlanBox"
@@ -476,26 +571,5 @@
                 </ListBox>
             </ui:Card>
         </Grid>
-
-        <StackPanel
-            Grid.Row="1"
-            Grid.Column="0"
-            Grid.ColumnSpan="3"
-            Orientation="Horizontal"
-            Margin="2,20,0,0">
-            <ui:ProgressRing
-                Width="16"
-                Height="16"
-                Margin="0,0,10,0"
-                VerticalAlignment="Center"
-                IsIndeterminate="True"
-                Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}" />
-
-            <TextBlock
-                VerticalAlignment="Center"
-                TextWrapping="Wrap"
-                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                Text="{Binding StatusMessage}" />
-        </StackPanel>
     </Grid>
 </Page>

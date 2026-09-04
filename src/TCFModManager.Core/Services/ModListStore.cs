@@ -126,8 +126,14 @@ public sealed class ModListStore
         Save(data);
     }
 
-    // Replaces a local list's contents. Refused for an imported or served list - Fork is the way to
-    // edit one of those. Does not touch Revision; see BumpRevision for what moves it.
+    //
+    // Replaces a local list's contents - the one write path for an edit, called when the user saves.
+    // Refused for an imported or served list; Fork is the way to edit one of those.
+    //
+    // Entries are stored in the order given, so the caller decides it (ModListEntries.Sorted is what
+    // capture and the page both use). Does not touch Revision - see BumpRevision for what moves it -
+    // and does not touch a single file in the game folder. Applying the list is what does that.
+    //
     public ModList? ReplaceEntries(Guid id, IEnumerable<ModListEntry> entries)
     {
         var data = Load();
@@ -136,63 +142,6 @@ public sealed class ModListStore
 
         list.Entries.Clear();
         list.Entries.AddRange(entries);
-        list.UpdatedAt = DateTimeOffset.UtcNow;
-        Save(data);
-        return list;
-    }
-
-    //
-    // Adds mods to a local list, skipping any it already names, and returns how many went on.
-    //
-    // Nothing on disk changes - a list is a description of a set of mods, and naming one here does
-    // not install it; applying the list is what does that.
-    //
-    // Plural where RemoveEntry is singular, because that is how they are used: mods are picked in a
-    // batch and taken off one row at a time - so a batch is one file write rather than one per mod.
-    //
-    // Leaves Revision alone. Editing a list is thinking about it; see BumpRevision.
-    //
-    // Zero means nothing changed: no such list, a read-only one, or every mod already named.
-    //
-    public int AddEntries(Guid id, IEnumerable<ModListEntry> entries)
-    {
-        var data = Load();
-        var list = data.Lists.FirstOrDefault(l => l.Id == id);
-        if (list is null || !list.IsEditable) return 0;
-
-        var added = 0;
-
-        foreach (var entry in entries)
-        {
-            if (ModListEntries.Contains(list.Entries, entry)) continue;
-
-            list.Entries.Add(entry);
-            added++;
-        }
-
-        if (added == 0) return 0;
-
-        var sorted = ModListEntries.Sorted(list.Entries);
-        list.Entries.Clear();
-        list.Entries.AddRange(sorted);
-        list.UpdatedAt = DateTimeOffset.UtcNow;
-        Save(data);
-        return added;
-    }
-
-    //
-    // Removes one mod from a local list, matched the same way adding one dedupes.
-    //
-    // Nothing on disk changes here either. Taking a mod off a list does not uninstall or disable
-    // it - the next apply of that list is what sets it aside, and only if the list is Exclusive.
-    //
-    public ModList? RemoveEntry(Guid id, ModListEntry entry)
-    {
-        var data = Load();
-        var list = data.Lists.FirstOrDefault(l => l.Id == id);
-        if (list is null || !list.IsEditable) return null;
-        if (list.Entries.RemoveAll(e => ModListEntries.SameMod(e, entry)) == 0) return null;
-
         list.UpdatedAt = DateTimeOffset.UtcNow;
         Save(data);
         return list;

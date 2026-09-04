@@ -78,6 +78,8 @@ public partial class ModListsViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(SelectionIsActive))]
     [NotifyPropertyChangedFor(nameof(SelectionDetail))]
     [NotifyPropertyChangedFor(nameof(ShowContents))]
+    [NotifyPropertyChangedFor(nameof(CanEditList))]
+    [NotifyPropertyChangedFor(nameof(CanUseStoredList))]
     [NotifyCanExecuteChangedFor(nameof(PreviewCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddModsCommand))]
     [NotifyCanExecuteChangedFor(nameof(RemoveEntryCommand))]
@@ -110,6 +112,17 @@ public partial class ModListsViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(HasPlan))]
     [NotifyPropertyChangedFor(nameof(ShowContents))]
     private string? _planSummary;
+
+    // How many adds and removes are waiting to be saved. Zero means what is on screen is what is
+    // in the file.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasUnsavedChanges))]
+    [NotifyPropertyChangedFor(nameof(CanUseStoredList))]
+    [NotifyPropertyChangedFor(nameof(UnsavedLabel))]
+    [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DiscardCommand))]
+    [NotifyCanExecuteChangedFor(nameof(PreviewCommand))]
+    private int _unsavedCount;
 
     // Shown when the selected list was captured on a different SPT version than this install.
     [ObservableProperty]
@@ -151,15 +164,38 @@ public partial class ModListsViewModel : ObservableObject
     //
     public bool ShowContents => HasSelection && !HasPlan;
 
+    //
+    // Edits are held here until Save, and Save writes the list and nothing else.
+    //
+    // The split is the point: saving changes what the list *says*, applying changes what is on
+    // disk. Nothing on this page installs, enables or disables a mod except Apply.
+    //
+    public bool HasUnsavedChanges => UnsavedCount > 0;
+
+    // Preview and Apply work off the stored list, so they wait for the edits to be stored. Letting
+    // them run against a list that no longer matches what is on screen is the one confusing state
+    // an editable list can get into.
+    public bool CanEditList => SelectionIsEditable;
+
+    public bool CanUseStoredList => HasSelection && !HasUnsavedChanges;
+
     public bool HasEntries => Entries.Count > 0;
 
     public string EntriesHeader => Entries.Count == 1 ? "1 mod on this list" : $"{Entries.Count} mods on this list";
 
+    public string UnsavedLabel => UnsavedCount == 1 ? "1 unsaved change" : $"{UnsavedCount} unsaved changes";
+
     partial void OnSelectedChanged(ModListRowViewModel? value)
     {
+        var dropped = UnsavedCount;
+
         EditName = value?.Name ?? string.Empty;
         ShowEntries();
         ClearPlan();
+
+        // Switching lists drops whatever was not saved. Said out loud rather than silently - nothing
+        // here is destructive, but work disappearing without a word is its own kind of bug.
+        if (dropped > 0) StatusMessage = $"Dropped {dropped} unsaved change(s) - they were never written to the list.";
     }
 
     //
@@ -174,10 +210,19 @@ public partial class ModListsViewModel : ObservableObject
 
         if (Selected is { } row)
         {
-            foreach (var entry in row.List.Entries.OrderBy(e => e.Name, StringComparer.OrdinalIgnoreCase))
-                Entries.Add(new ModListEntryRowViewModel(entry, entry.Name, EntryDetail(entry)));
+            foreach (var entry in ModListEntries.Sorted(row.List.Entries)) Entries.Add(Row(entry));
         }
 
+        // Whatever was in the buffer is gone; the panel now shows the file again.
+        UnsavedCount = 0;
+        Notify();
+    }
+
+    private static ModListEntryRowViewModel Row(ModListEntry entry) =>
+        new(entry, entry.Name, EntryDetail(entry));
+
+    private void Notify()
+    {
         OnPropertyChanged(nameof(HasEntries));
         OnPropertyChanged(nameof(EntriesHeader));
     }
@@ -192,6 +237,16 @@ public partial class ModListsViewModel : ObservableObject
         var parts = new List<string>();
 
         if (entry.IsAddon) parts.Add("addon");
+
+        //
+        // The folders on disk this entry covers.
+        //
+        // The name above it is the sp-mod.com listing title wherever one matched, which is often
+        // nothing like what the mod calls its own folder - and the folder is what you go looking for
+        // when something has to be sorted out by hand. Absent for a mod added from the catalog that
+        // nobody here has installed, which is the honest answer for one.
+        //
+        if (entry.Folders.Count > 0) parts.Add($"installed as {string.Join(", ", entry.Folders)}");
 
         if (!entry.IsResolved) parts.Add("not on sp-mod.com - installed by hand");
         else if (entry.Version is { } version) parts.Add(entry.IsPinned ? $"version {version}" : $"version {version}, not pinned");
@@ -264,7 +319,7 @@ public partial class ModListsViewModel : ObservableObject
     }
 
     // Works out what applying the selected list would do. Nothing moves and nothing downloads.
-    [RelayCommand(CanExecute = nameof(HasSelection))]
+    [RelayCommand(CanExecute = nameof(CanUseStoredList))]
     private async Task PreviewAsync()
     {
         if (Selected is not { } row) return;
@@ -368,7 +423,7 @@ public partial class ModListsViewModel : ObservableObject
         _ => 5,
     };
 
-    private bool CanApply => !IsBusy && _preview is not null;
+    private bool CanApply => !IsBusy && _preview is not null && !HasUnsavedChanges;
 
     //
     // Applies the previewed plan. The preview is reused rather than rebuilt, so what runs is what
@@ -475,8 +530,8 @@ public partial class ModListsViewModel : ObservableObject
     //
     // Adds mods to the selected list by hand, from what is installed and from the catalog.
     //
-    // Nothing is downloaded or moved: a list is a description, and this changes the description.
-    // What is on disk only follows once the list is applied.
+    // Edits the panel, not the file: nothing is written until Save, and nothing on disk moves until
+    // Apply. Those are three separate steps on purpose.
     //
     [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
     private async Task AddModsAsync()
@@ -493,37 +548,90 @@ public partial class ModListsViewModel : ObservableObject
                 return;
             }
 
-            var chosen = ModListAddModWindow.Pick(row.List, options);
+            // The picker is handed what the panel holds, unsaved edits included, so a mod added a
+            // minute ago and not yet saved still shows there as already on the list.
+            var chosen = ModListAddModWindow.Pick(row.Name, [.. Entries.Select(e => e.Entry)], options);
             if (chosen.Count == 0) return;
 
-            var added = AppServices.ModLists.AddEntries(row.Id, chosen);
+            var added = 0;
 
-            Refresh(row.Id);
+            foreach (var entry in chosen)
+            {
+                if (Entries.Any(e => ModListEntries.SameMod(e.Entry, entry))) continue;
 
-            StatusMessage = added == 0
-                ? "Nothing added - the list already names those mods."
-                : $"Added {added} mod(s) to \"{row.Name}\". Nothing has been downloaded and nothing on disk has changed"
-                    + " - press Preview to see what applying the list would do.";
+                Entries.Add(Row(entry));
+                added++;
+            }
+
+            if (added == 0)
+            {
+                StatusMessage = "Nothing added - the list already names those mods.";
+                return;
+            }
+
+            SortEntries();
+            UnsavedCount += added;
+
+            StatusMessage = $"Added {added} mod(s) to \"{row.Name}\". Save to write it to the list"
+                + " - nothing is installed or enabled until you Apply.";
         });
     }
 
     //
-    // Takes one mod off the selected list. Nothing on disk changes - the mod stays installed and
-    // enabled exactly as it is, and only the next apply of an Exclusive list would set it aside.
+    // Takes one mod off the panel. The mod stays installed and enabled whatever happens next: saving
+    // changes what the list says, and only applying an Exclusive list afterwards sets it aside.
     //
     [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
     private void RemoveEntry(ModListEntryRowViewModel? entry)
     {
         if (Selected is not { } row || entry is null) return;
+        if (!Entries.Remove(entry)) return;
 
-        var removed = AppServices.ModLists.RemoveEntry(row.Id, entry.Entry) is not null;
+        UnsavedCount++;
+        Notify();
 
+        StatusMessage = $"Took \"{entry.Name}\" off \"{row.Name}\". Save to write it to the list"
+            + " - the mod stays installed and enabled either way.";
+    }
+
+    //
+    // Writes the panel to the list. This is the only thing on this page that changes a saved list's
+    // contents, and it changes nothing else: no downloads, no folders moved, no revision.
+    //
+    [RelayCommand(CanExecute = nameof(HasUnsavedChanges))]
+    private void Save()
+    {
+        if (Selected is not { } row) return;
+
+        var count = Entries.Count;
+
+        AppServices.ModLists.ReplaceEntries(row.Id, ModListEntries.Sorted(Entries.Select(e => e.Entry)));
+        UnsavedCount = 0;
         Refresh(row.Id);
 
-        StatusMessage = removed
-            ? $"Took \"{entry.Name}\" off \"{row.Name}\". It is still installed and enabled"
-                + " - only applying this list would set it aside."
-            : $"\"{entry.Name}\" isn't on this list any more.";
+        StatusMessage = $"Saved \"{row.Name}\" - {count} mod(s). Nothing on disk changed;"
+            + " Apply is what installs, enables and sets mods aside.";
+    }
+
+    // Throws the unsaved edits away and shows the list as it is stored.
+    [RelayCommand(CanExecute = nameof(HasUnsavedChanges))]
+    private void Discard()
+    {
+        if (Selected is not { } row) return;
+
+        ShowEntries();
+        StatusMessage = $"Put \"{row.Name}\" back the way it was saved.";
+    }
+
+    // Keeps the panel in the order a stored list holds - by name, the order capture writes.
+    private void SortEntries()
+    {
+        var sorted = ModListEntries.Sorted(Entries.Select(e => e.Entry));
+
+        Entries.Clear();
+        foreach (var entry in sorted) Entries.Add(Row(entry));
+
+        Notify();
     }
 
     // Puts the list's contents back in view after a preview. Changes nothing either way.

@@ -59,14 +59,14 @@ public partial class ModListAddModWindow : FluentWindow
     // that records a tick doesn't treat that restore as the user ticking things.
     private bool _syncing;
 
-    private ModListAddModWindow(ModList list, ModListAddOptions options)
+    private ModListAddModWindow(string listName, IReadOnlyList<ModListEntry> current, ModListAddOptions options)
     {
-        _installed = [.. options.Installed.Select(o => Row(o, list, fromCatalog: false))];
-        _catalog = [.. options.Catalog.Select(o => Row(o, list, fromCatalog: true))];
+        _installed = [.. options.Installed.Select(o => Row(o, current, fromCatalog: false))];
+        _catalog = [.. options.Catalog.Select(o => Row(o, current, fromCatalog: true))];
 
         InitializeComponent();
 
-        WindowTitleBar.Title = Title = $"Add mods to \"{list.Name}\"";
+        WindowTitleBar.Title = Title = $"Add mods to \"{listName}\"";
         InstalledSourceButton.Content = $"Installed ({_installed.Count})";
         CatalogSourceButton.Content = $"sp-mod.com ({_catalog.Count})";
 
@@ -84,9 +84,12 @@ public partial class ModListAddModWindow : FluentWindow
     // Deduped on the way out, and the installed row wins where a mod appears in both sources: it
     // carries the version that is actually here, where the catalog row is deliberately unpinned.
     //
-    public static IReadOnlyList<ModListEntry> Pick(ModList list, ModListAddOptions options)
+    // <param name="current">What the list holds right now, unsaved edits included - those rows are
+    // shown as already on it rather than offered again.</param>
+    public static IReadOnlyList<ModListEntry> Pick(
+        string listName, IReadOnlyList<ModListEntry> current, ModListAddOptions options)
     {
-        var window = new ModListAddModWindow(list, options);
+        var window = new ModListAddModWindow(listName, current, options);
         if (window.ShowDialog() != true) return [];
 
         var chosen = new List<ModListEntry>();
@@ -99,9 +102,9 @@ public partial class ModListAddModWindow : FluentWindow
         return chosen;
     }
 
-    private static ModListAddRow Row(ModListAddOption option, ModList list, bool fromCatalog)
+    private static ModListAddRow Row(ModListAddOption option, IReadOnlyList<ModListEntry> current, bool fromCatalog)
     {
-        var alreadyOn = ModListEntries.Contains(list.Entries, option.Entry);
+        var alreadyOn = ModListEntries.Contains(current, option.Entry);
 
         return new ModListAddRow
         {
@@ -128,6 +131,10 @@ public partial class ModListAddModWindow : FluentWindow
         }
         else
         {
+            // The same "installed as" the contents panel shows: the title above is the sp-mod.com
+            // listing name wherever one matched, and it is often nothing like the folder.
+            if (option.Entry.Folders.Count > 0) parts.Add($"installed as {string.Join(", ", option.Entry.Folders)}");
+
             parts.Add(option.Entry.Version is { } version ? $"version {version}" : "version not known");
             if (option.IsDisabled) parts.Add("disabled");
         }
