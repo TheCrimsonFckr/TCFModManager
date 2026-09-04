@@ -20,8 +20,7 @@ public static class ModInstallProblems
 
         ModInstallFailure.NoInstallFolder => AppMessages.NoSptInstallFolder,
 
-        ModInstallFailure.NoDownloadLink =>
-            $"{problem.ModName} {problem.Version} has no download link.",
+        ModInstallFailure.NoDownloadLink => NoDownloadLink(problem.ModName, problem.Version),
 
         ModInstallFailure.UnrecognisedArchive =>
             $"{problem.ModName} {problem.Version}'s archive doesn't look like a normal SPT mod package "
@@ -42,6 +41,14 @@ public static class ModInstallProblems
     };
 
     //
+    // Public for the same reason InstallInUse is: the addon rows say this before anything is
+    // attempted, where the switch above says it as a refusal at install time. One situation, and it
+    // used to be two sentences - one of them not naming where the link was missing from.
+    //
+    public static string NoDownloadLink(string? modName, string? version) =>
+        $"{modName} {version} has no download link on sp-mod.com.";
+
+    //
     // Public because the pages check for a running install BEFORE asking the user anything, so a
     // locked install is reported up front rather than after they have answered a confirmation.
     // Those checks used to build their own version of this sentence, which is how the app ended up
@@ -58,6 +65,7 @@ public static class ModInstallProblems
         ModInstallAction.Disable => "disabling a mod",
         ModInstallAction.Enable => "enabling a mod",
         ModInstallAction.Undo => "undoing a change",
+        ModInstallAction.ApplyList => "applying a mod list",
         ModInstallAction.SortOutDuplicate => "sorting out a duplicated mod",
         _ => "changing your mods",
     };

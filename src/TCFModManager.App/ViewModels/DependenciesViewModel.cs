@@ -159,15 +159,15 @@ public partial class DependenciesViewModel : ObservableObject
         }
         catch (SpModApiRateLimitedException ex)
         {
-            StatusMessage = $"Rate limited by sp-mod.com - try again in {ex.RetryAfter?.TotalSeconds ?? 30:N0}s.";
+            StatusMessage = ApiProblems.Describe(ex);
         }
         catch (SpModApiException ex)
         {
-            StatusMessage = $"sp-mod.com error: {ex.Message}";
+            StatusMessage = ApiProblems.Describe(ex);
         }
         catch (HttpRequestException ex)
         {
-            StatusMessage = $"Network error: {ex.Message}";
+            StatusMessage = ApiProblems.Describe(ex);
         }
         catch (Exception ex)
         {

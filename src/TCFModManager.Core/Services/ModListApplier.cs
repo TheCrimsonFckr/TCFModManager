@@ -43,6 +43,30 @@ public sealed record ModListApplyOptions
 
     public string? SptVersion { get; init; }
 }
+//
+// Why an apply stopped before it finished.
+//
+// A reason and its values, never a sentence: Core has no UI, and this one used to build the only
+// piece of user-facing English left on this path. App/Services/ModListProblems does the wording -
+// see [[feedback-core-no-user-prose]] for the convention and AppUpdateFailure for the first of these.
+//
+public enum ModListStop
+{
+    // SPT or its server was already running when the apply started, so nothing was moved at all.
+    // Carries Running.
+    InstallInUse,
+
+    // A download was cancelled. Nothing had been disabled yet, by the applier's own ordering.
+    FetchCancelled,
+
+    // At least one download failed, so nothing was disabled. Carries FailedFetches.
+    FetchFailed,
+
+    // A move was refused part way through - the install was locked between the pre-flight check and
+    // the move itself. Carries Refusal.
+    MovesRefused,
+}
+
 
 public sealed record ModListApplyResult
 {
@@ -58,11 +82,22 @@ public sealed record ModListApplyResult
     // Mods the list names that nobody can fetch - reported so the UI can list them, never acted on.
     public required IReadOnlyList<ModListAction> Manual { get; init; }
 
-    // False when the apply stopped early; StoppedBecause says why, and everything that did happen
-    // is still reported in the fields above.
-    public required bool Completed { get; init; }
+    // Null when the apply ran to the end. Otherwise why it stopped - everything that did happen is
+    // still reported in the fields above, and Moves is what has to be put back.
+    public ModListStop? Stopped { get; init; }
 
-    public string? StoppedBecause { get; init; }
+    // What has to be closed, for InstallInUse.
+    public IReadOnlyList<string> Running { get; init; } = [];
+
+    // How many downloads failed, for FetchFailed.
+    public int FailedFetches { get; init; }
+
+    // The refusal itself, for MovesRefused - it already carries which operation and what is holding
+    // the install, so the App words it exactly as it words every other refusal.
+    public ModInstallException? Refusal { get; init; }
+
+    // Derived rather than stored: the two cannot disagree, and a construction site cannot forget it.
+    public bool Completed => Stopped is null;
 
     // Every move made, in the order it was made - hand straight to ModDisableService.Revert to undo.
     public IReadOnlyList<ModMove> Moves => [.. Enabled.Moved, .. Disabled.Moved];
@@ -101,7 +136,7 @@ public static class ModListApplier
 
         if ((enables.Count > 0 || disables.Count > 0) && ModInstallService.RunningBlockers() is { Count: > 0 } blockers)
         {
-            return Stopped(plan, manual, null, Running(blockers));
+            return Stopped(plan, manual, null, ModListStop.InstallInUse, running: blockers);
         }
 
         var snapshot = options.SnapshotName is null
@@ -124,9 +159,15 @@ public static class ModListApplier
             {
                 enabled = ModDisableService.Apply(Entries(enables), disable: false);
             }
-            catch (InvalidOperationException ex)
+            //
+            // ModInstallException, not InvalidOperationException: EnsureInstallNotInUse threw the
+            // latter until 1.10.0 gave it a type of its own, and this catch quietly stopped
+            // matching - which let a refusal escape ApplyAsync altogether and skipped the unwind
+            // that puts already-enabled mods back.
+            //
+            catch (ModInstallException ex)
             {
-                return Stopped(plan, manual, snapshot, ex.Message);
+                return Stopped(plan, manual, snapshot, ModListStop.MovesRefused, refusal: ex);
             }
         }
 
@@ -146,10 +187,8 @@ public static class ModListApplier
                 Disabled = ModDisableOutcome.Empty,
                 Fetched = fetched,
                 Manual = manual,
-                Completed = false,
-                StoppedBecause = fetched.Cancelled
-                    ? "cancelled before anything was disabled"
-                    : $"{fetched.Failed.Count} mod(s) couldn't be fetched, so nothing was disabled",
+                Stopped = fetched.Cancelled ? ModListStop.FetchCancelled : ModListStop.FetchFailed,
+                FailedFetches = fetched.Failed.Count,
             };
         }
 
@@ -161,7 +200,7 @@ public static class ModListApplier
             {
                 disabled = ModDisableService.Apply(Entries(disables), disable: true);
             }
-            catch (InvalidOperationException ex)
+            catch (ModInstallException ex)
             {
                 return new ModListApplyResult
                 {
@@ -171,8 +210,8 @@ public static class ModListApplier
                     Disabled = ModDisableOutcome.Empty,
                     Fetched = fetched,
                     Manual = manual,
-                    Completed = false,
-                    StoppedBecause = ex.Message,
+                    Stopped = ModListStop.MovesRefused,
+                    Refusal = ex,
                 };
             }
         }
@@ -185,7 +224,6 @@ public static class ModListApplier
             Disabled = disabled,
             Fetched = fetched,
             Manual = manual,
-            Completed = true,
         };
     }
 
@@ -212,14 +250,13 @@ public static class ModListApplier
     private static IEnumerable<InstalledMod> Entries(IEnumerable<ModListAction> actions) =>
         actions.SelectMany(a => a.Installed?.Entries ?? []);
 
-    private static string Running(IReadOnlyList<string> blockers) =>
-        $"SPT is running ({string.Join(", ", blockers)}) - close it and apply again";
-
     private static ModListApplyResult Stopped(
         ModListPlan plan,
         IReadOnlyList<ModListAction> manual,
         ModList? snapshot,
-        string reason) =>
+        ModListStop reason,
+        IReadOnlyList<string>? running = null,
+        ModInstallException? refusal = null) =>
         new()
         {
             ListId = plan.ListId,
@@ -228,7 +265,8 @@ public static class ModListApplier
             Disabled = ModDisableOutcome.Empty,
             Fetched = ModListFetchOutcome.Empty,
             Manual = manual,
-            Completed = false,
-            StoppedBecause = reason,
+            Stopped = reason,
+            Running = running ?? [],
+            Refusal = refusal,
         };
 }

@@ -166,7 +166,7 @@ public sealed partial class AddonRowViewModel : ObservableObject
                 return $"Needs {_parentName ?? "the parent mod"} {SelectedVersion.Raw.ModVersionConstraint} - you have {_parentVersion}.";
 
             if (SelectedVersion.Raw.Link is null)
-                return $"{Name} {SelectedVersion.VersionText} has no download link on sp-mod.com.";
+                return ModInstallProblems.NoDownloadLink(Name, SelectedVersion.VersionText);
 
             return null;
         }

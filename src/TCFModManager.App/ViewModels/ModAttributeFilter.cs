@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace TCFModManager.App.ViewModels;
@@ -42,6 +43,26 @@ public partial class ModAttributeOption(ModAttributeFilter value, string label, 
 
     [ObservableProperty]
     private bool _isSelected;
+
+    //
+    // The five options both pages carry, in the order both pages show them. Declared here rather
+    // than twice, so adding a sixth is one edit and the two dropdowns cannot drift apart.
+    //
+    // A NEW collection every call, never a shared instance: each page ticks its own.
+    //
+    // The dependency tooltip is the one thing the two pages disagree about, and the disagreement is
+    // real - Installed answers from the dependency graph built off the scan, which covers
+    // everything installed, while Browse answers from whatever has been looked up so far. So the
+    // caller states that one rather than this list pretending they are the same.
+    //
+    public static ObservableCollection<ModAttributeOption> Standard(string dependenciesToolTip) =>
+    [
+        new(ModAttributeFilter.FikaCompatible, "Fika compatible only"),
+        new(ModAttributeFilter.HideAds, "Hide mods with ads"),
+        new(ModAttributeFilter.HideAiContent, "Hide mods with AI content"),
+        new(ModAttributeFilter.HasDependencies, "Has dependencies", dependenciesToolTip),
+        new(ModAttributeFilter.HasAddons, "Has addons", "Only mods with addons published for them."),
+    ];
 }
 
 //

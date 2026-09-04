@@ -512,7 +512,7 @@ public partial class ModListsViewModel : ObservableObject
                 undone = ModDisableService.Revert(result.Moves).Moved.Count;
             }
 
-            StatusMessage = $"Stopped - {result.StoppedBecause}."
+            StatusMessage = ModListProblems.Describe(result)
                 + (undone > 0 ? $" Put {undone} mod(s) back the way they were." : string.Empty)
                 + FailureDetail(result);
 
@@ -573,7 +573,7 @@ public partial class ModListsViewModel : ObservableObject
             else
             {
                 if (result.Moves.Count > 0) ModDisableService.Revert(result.Moves);
-                StatusMessage = $"Couldn't undo - {result.StoppedBecause}.";
+                StatusMessage = $"Couldn't undo. {ModListProblems.Describe(result)}";
             }
 
             ClearPlan();

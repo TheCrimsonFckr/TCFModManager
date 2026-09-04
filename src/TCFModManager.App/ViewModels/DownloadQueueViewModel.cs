@@ -214,17 +214,17 @@ public sealed partial class DownloadQueueViewModel : ObservableObject
         catch (SpModApiRateLimitedException ex)
         {
             item.Status = DownloadQueueItemStatus.Failed;
-            item.StatusMessage = $"Rate limited by sp-mod.com - try again in {ex.RetryAfter?.TotalSeconds ?? 30:N0}s.";
+            item.StatusMessage = ApiProblems.Describe(ex);
         }
         catch (SpModApiException ex)
         {
             item.Status = DownloadQueueItemStatus.Failed;
-            item.StatusMessage = $"sp-mod.com error: {ex.Message}";
+            item.StatusMessage = ApiProblems.Describe(ex);
         }
         catch (HttpRequestException ex)
         {
             item.Status = DownloadQueueItemStatus.Failed;
-            item.StatusMessage = $"Network error: {ex.Message}";
+            item.StatusMessage = ApiProblems.Describe(ex);
         }
         catch (ModInstallException ex)
         {

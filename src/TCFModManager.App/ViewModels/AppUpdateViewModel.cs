@@ -202,7 +202,7 @@ public partial class AppUpdateViewModel : ObservableObject
         }
         catch (SpModApiException ex)
         {
-            CheckError = $"sp-mod.com error: {ex.Message}";
+            CheckError = ApiProblems.Describe(ex);
         }
         catch (HttpRequestException ex)
         {

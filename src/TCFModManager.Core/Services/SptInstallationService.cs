@@ -1,6 +1,43 @@
 using System.Diagnostics;
 
 namespace TCFModManager.Core.Services;
+//
+// Why the SPT version could not be read.
+//
+public enum SptVersionProblem
+{
+    // No folder is configured, or it is not there any more. Carries nothing.
+    NoInstallFolder,
+
+    // The folder holds no SPT server exe in any of the layouts this app knows. Carries InstallPath.
+    NoServerExe,
+
+    // The exe is there but its file version is not two or more numbers. Carries ExeName.
+    NoVersionInExe,
+
+    // Reading the file version threw. Carries ExeName and Error.
+    CouldNotReadExe,
+}
+
+//
+// The version, or why there isn't one. Version and Problem are mutually exclusive; which of the
+// other values is filled depends on Problem - see the comment on each case.
+//
+public sealed record SptVersionReading
+{
+    public string? Version { get; init; }
+
+    public SptVersionProblem? Problem { get; init; }
+
+    public string? InstallPath { get; init; }
+
+    public string? ExeName { get; init; }
+
+    public Exception? Error { get; init; }
+
+    public bool Found => Version is not null;
+}
+
 
 // 
 // Reads the installed SPT server version from the server executable's embedded file version
@@ -21,42 +58,54 @@ public static class SptInstallationService
         Path.Combine("SPT", "Server.exe"),
     ];
 
-    public static bool TryGetInstalledVersion(string? installPath, out string? version, out string? error)
+    //
+    // Reads the SPT version out of the server exe's file version.
+    //
+    // Returns what happened rather than a sentence about it - the four wordings this used to build
+    // were the last user-facing English in Core on this path. SptEnvironmentViewModel words them.
+    //
+    public static SptVersionReading GetInstalledVersion(string? installPath)
     {
-        version = null;
-        error = null;
-
         if (string.IsNullOrWhiteSpace(installPath) || !Directory.Exists(installPath))
-        {
-            error = "No SPT install folder set.";
-            return false;
-        }
+            return new SptVersionReading { Problem = SptVersionProblem.NoInstallFolder };
 
         if (!TryFindServerExe(installPath, out var exePath))
         {
-            error = $"Couldn't find an SPT server executable under \"{installPath}\" - make sure this is the SPT server install folder (the one containing SPT.Server.exe).";
-            return false;
+            return new SptVersionReading
+            {
+                Problem = SptVersionProblem.NoServerExe,
+                InstallPath = installPath,
+            };
         }
+
+        var exeName = Path.GetFileName(exePath);
 
         try
         {
             var info = FileVersionInfo.GetVersionInfo(exePath);
             var raw = (info.FileVersion ?? "").Trim();
             var parts = raw.Split('.', StringSplitOptions.RemoveEmptyEntries);
+
             if (parts.Length < 2)
             {
-                error = $"\"{Path.GetFileName(exePath)}\" didn't have a recognizable file version.";
-                return false;
+                return new SptVersionReading
+                {
+                    Problem = SptVersionProblem.NoVersionInExe,
+                    ExeName = exeName,
+                };
             }
 
             // Normalized to major.minor.patch; any non-integer part falls back to "0".
-            version = $"{Part(parts, 0)}.{Part(parts, 1)}.{Part(parts, 2)}";
-            return true;
+            return new SptVersionReading { Version = $"{Part(parts, 0)}.{Part(parts, 1)}.{Part(parts, 2)}" };
         }
         catch (Exception ex)
         {
-            error = $"Couldn't read the file version from \"{Path.GetFileName(exePath)}\": {ex.Message}";
-            return false;
+            return new SptVersionReading
+            {
+                Problem = SptVersionProblem.CouldNotReadExe,
+                ExeName = exeName,
+                Error = ex,
+            };
         }
 
         static string Part(string[] p, int i) => i < p.Length && int.TryParse(p[i], out var n) ? n.ToString() : "0";

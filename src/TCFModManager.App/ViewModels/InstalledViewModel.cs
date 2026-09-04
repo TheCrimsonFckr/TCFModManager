@@ -129,14 +129,7 @@ public partial class InstalledViewModel : ObservableObject
     // installed rather than whatever has been looked up so far.
     //
     public ObservableCollection<ModAttributeOption> AttributeOptions { get; } =
-    [
-        new(ModAttributeFilter.FikaCompatible, "Fika compatible only"),
-        new(ModAttributeFilter.HideAds, "Hide mods with ads"),
-        new(ModAttributeFilter.HideAiContent, "Hide mods with AI content"),
-        new(ModAttributeFilter.HasDependencies, "Has dependencies",
-            "Only mods that require another mod you have installed."),
-        new(ModAttributeFilter.HasAddons, "Has addons", "Only mods with addons published for them."),
-    ];
+        ModAttributeOption.Standard("Only mods that require another mod you have installed.");
 
     [ObservableProperty]
     private string _attributeFilterSummary = "Any mod";

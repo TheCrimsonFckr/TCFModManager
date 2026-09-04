@@ -3,6 +3,7 @@ using System.Net.Http;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.Core.SpModApi;
+using TCFModManager.App.Services;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
@@ -76,11 +77,11 @@ public partial class DownloadsViewModel : ObservableObject
         }
         catch (SpModApiRateLimitedException ex)
         {
-            StatusMessage = $"Rate limited by sp-mod.com - try again in {ex.RetryAfter?.TotalSeconds ?? 30:N0}s.";
+            StatusMessage = ApiProblems.Describe(ex);
         }
         catch (SpModApiException ex)
         {
-            StatusMessage = $"sp-mod.com error: {ex.Message}";
+            StatusMessage = ApiProblems.Describe(ex);
         }
         catch (HttpRequestException ex)
         {

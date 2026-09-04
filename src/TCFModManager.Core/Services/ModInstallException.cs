@@ -17,6 +17,9 @@ public enum ModInstallAction
     Enable,
     Undo,
     SortOutDuplicate,
+
+    // Applying a mod list, which enables and disables mods in one pass.
+    ApplyList,
 }
 
 //

@@ -65,15 +65,37 @@ public partial class SptEnvironmentViewModel : ObservableObject
 
     private void Redetect()
     {
-        if (SptInstallationService.TryGetInstalledVersion(InstallPath, out var version, out var error))
-        {
-            InstalledVersion = version;
-            StatusMessage = $"Detected SPT {version}.";
-        }
-        else
-        {
-            InstalledVersion = null;
-            StatusMessage = error;
-        }
+        var reading = SptInstallationService.GetInstalledVersion(InstallPath);
+
+        InstalledVersion = reading.Version;
+
+        StatusMessage = reading.Found
+            ? $"Detected SPT {reading.Version}."
+            : Describe(reading);
     }
+
+    //
+    // Why the version could not be read. Core reports the reason and the values; the sentence is
+    // here, which is the only place that shows it.
+    //
+    // NOT AppMessages.NoSptInstallFolder for the first case, deliberately: that one ends "configure
+    // it on the Options page first", and this line is *on* the Options page, beside the button that
+    // does it. The two saying different things is the point rather than an oversight.
+    //
+    private static string Describe(SptVersionReading reading) => reading.Problem switch
+    {
+        SptVersionProblem.NoInstallFolder => "No SPT install folder set.",
+
+        SptVersionProblem.NoServerExe =>
+            $"Couldn't find an SPT server executable under \"{reading.InstallPath}\" - make sure this "
+            + "is the SPT server install folder (the one containing SPT.Server.exe).",
+
+        SptVersionProblem.NoVersionInExe =>
+            $"\"{reading.ExeName}\" didn't have a recognizable file version.",
+
+        SptVersionProblem.CouldNotReadExe =>
+            $"Couldn't read the file version from \"{reading.ExeName}\": {reading.Error?.Message}",
+
+        _ => "Couldn't work out which version of SPT this is.",
+    };
 }

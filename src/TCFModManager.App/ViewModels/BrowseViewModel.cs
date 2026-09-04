@@ -134,15 +134,9 @@ public partial class BrowseViewModel : ObservableObject
     // switches strung across the top of the page. Every one of them narrows the result set.
     //
     public ObservableCollection<ModAttributeOption> AttributeOptions { get; } =
-    [
-        new(ModAttributeFilter.FikaCompatible, "Fika compatible only"),
-        new(ModAttributeFilter.HideAds, "Hide mods with ads"),
-        new(ModAttributeFilter.HideAiContent, "Hide mods with AI content"),
-        new(ModAttributeFilter.HasDependencies, "Has dependencies",
+        ModAttributeOption.Standard(
             "Only mods that pull in other mods. Dependencies are looked up as you browse, so this "
-            + "covers what the app has checked so far rather than the whole catalogue."),
-        new(ModAttributeFilter.HasAddons, "Has addons", "Only mods with addons published for them."),
-    ];
+            + "covers what the app has checked so far rather than the whole catalogue.");
 
     [ObservableProperty]
     private string _attributeFilterSummary = "Any mod";
@@ -246,11 +240,11 @@ public partial class BrowseViewModel : ObservableObject
         }
         catch (SpModApiException ex)
         {
-            StatusMessage = $"sp-mod.com error: {ex.Message}";
+            StatusMessage = ApiProblems.Describe(ex);
         }
         catch (HttpRequestException ex)
         {
-            StatusMessage = $"Network error: {ex.Message}";
+            StatusMessage = ApiProblems.Describe(ex);
         }
         catch (OperationCanceledException)
         {
@@ -287,11 +281,11 @@ public partial class BrowseViewModel : ObservableObject
         }
         catch (SpModApiException ex)
         {
-            StatusMessage = $"sp-mod.com error: {ex.Message}";
+            StatusMessage = ApiProblems.Describe(ex);
         }
         catch (HttpRequestException ex)
         {
-            StatusMessage = $"Network error: {ex.Message}";
+            StatusMessage = ApiProblems.Describe(ex);
         }
         catch (OperationCanceledException)
         {

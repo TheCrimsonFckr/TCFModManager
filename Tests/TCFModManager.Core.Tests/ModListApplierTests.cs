@@ -163,7 +163,8 @@ public class ModListApplierTests : IDisposable
         Assert.False(result.Completed);
         Assert.Empty(result.Disabled.Moved);
         Assert.True(Directory.Exists(FolderFor("Realism", disabled: false)));
-        Assert.Contains("couldn't be fetched", result.StoppedBecause);
+        Assert.Equal(ModListStop.FetchFailed, result.Stopped);
+        Assert.Equal(1, result.FailedFetches);
     }
 
     [Fact]
@@ -182,7 +183,7 @@ public class ModListApplierTests : IDisposable
         Assert.False(result.Completed);
         Assert.Empty(result.Disabled.Moved);
         Assert.True(Directory.Exists(FolderFor("Realism", disabled: false)));
-        Assert.Contains("cancelled", result.StoppedBecause);
+        Assert.Equal(ModListStop.FetchCancelled, result.Stopped);
     }
 
     [Fact]
