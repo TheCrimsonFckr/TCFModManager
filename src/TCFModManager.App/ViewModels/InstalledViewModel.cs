@@ -255,7 +255,12 @@ public partial class InstalledViewModel : ObservableObject
     [ObservableProperty]
     private bool _showListBadges = true;
 
-    public List<int> PageSizeOptions { get; } = [6, 9, DefaultPageSize, 15, 21, 30];
+    //
+    // No "show everything" option, on purpose: Cards view builds every card up front rather than
+    // virtualising, so a hundred-odd of them in one page is work the app does not need to be doing.
+    // List view is the cheap way to see the lot.
+    //
+    public List<int> PageSizeOptions { get; } = [8, DefaultPageSize, 16, 24, 32];
 
     [ObservableProperty]
     private int _pageSize = DefaultPageSize;

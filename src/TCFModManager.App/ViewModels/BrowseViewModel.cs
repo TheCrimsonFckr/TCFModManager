@@ -112,7 +112,7 @@ public partial class BrowseViewModel : ObservableObject
     // How many matching cards make up one page.
     private const int DefaultPageSize = 12;
 
-    public List<int> PageSizeOptions { get; } = [6, 9, DefaultPageSize, 15, 21, 30];
+    public List<int> PageSizeOptions { get; } = [8, DefaultPageSize, 16, 24, 32];
 
     [ObservableProperty]
     private int _pageSize = DefaultPageSize;
