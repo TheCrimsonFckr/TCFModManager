@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The payload. Everything the feature actually does lives here, in
+    <SPT root>\TCFModManager\ServerMap\payload\ - outside the folders SPT and BepInEx insist on, so
+    the whole feature is one deletable folder.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>TCFModManager.ServerMap</RootNamespace>
+    <AssemblyName>TCFMM.ServerMap.Payload</AssemblyName>
+    <Version>0.1.0</Version>
+    <OutputPath>bin\$(Configuration)\payload\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <!--
+    The payload references the stub for the contract interface, never the other way round. At
+    runtime the stub is already loaded by SPT, so this resolves to that same instance rather than a
+    second copy - which is the thing spike S6 is checking. Private=false keeps the stub's dll out of
+    the payload folder, where a duplicate would break type identity outright.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\ServerMap.Server.Stub\ServerMap.Server.Stub.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>
