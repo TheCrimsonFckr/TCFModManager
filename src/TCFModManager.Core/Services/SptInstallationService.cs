@@ -129,7 +129,16 @@ public static class SptInstallationService
         return true;
     }
 
-    public static bool TryFindServerExe(string installPath, out string exePath)
+    public static bool TryFindServerExe(string installPath, out string exePath) =>
+        TryFindNamedServerExe(installPath, out exePath) || TryFindServerExeByWildcard(installPath, out exePath);
+
+    //
+    // The two halves are separately callable because SptRootResolver walks a chain of directories
+    // and has to exhaust every named candidate across all of them before trying a wildcard
+    // anywhere - otherwise a stray *Server*.exe near the top of the tree beats the real
+    // SPT.Server.exe further down.
+    //
+    public static bool TryFindNamedServerExe(string installPath, out string exePath)
     {
         exePath = "";
 
@@ -143,12 +152,30 @@ public static class SptInstallationService
             }
         }
 
-        // Wildcard fallback for layouts that don't match any named candidate above.
+        return false;
+    }
+
+    // Fallback for layouts that don't match any named candidate.
+    public static bool TryFindServerExeByWildcard(string installPath, out string exePath)
+    {
+        exePath = "";
+
         foreach (var dir in new[] { installPath, Path.Combine(installPath, "SPT_Runtime"), Path.Combine(installPath, "SPT") })
         {
             if (!Directory.Exists(dir)) continue;
 
-            var hit = Directory.EnumerateFiles(dir, "*Server*.exe", SearchOption.TopDirectoryOnly).FirstOrDefault();
+            string? hit;
+            try
+            {
+                hit = Directory.EnumerateFiles(dir, "*Server*.exe", SearchOption.TopDirectoryOnly)
+                    .OrderBy(p => p, StringComparer.OrdinalIgnoreCase)
+                    .FirstOrDefault();
+            }
+            catch
+            {
+                continue;
+            }
+
             if (hit is not null)
             {
                 exePath = hit;
