@@ -3,7 +3,11 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     Title="Options">
+    <Page.Resources>
+        <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    </Page.Resources>
     <StackPanel Margin="16">
         <ui:Card Padding="16" VerticalAlignment="Top">
             <StackPanel>
@@ -96,6 +100,87 @@
                     IsChecked="{Binding ShowModFootprintPage}"
                     OnContent="On - shown in the sidebar"
                     OffContent="Off - hidden" />
+            </StackPanel>
+        </ui:Card>
+
+        <!--
+            Server Map. Not a switch: the sidebar item appears when a server answers, so this
+            section is the connection itself rather than a setting that describes one.
+
+            The address is asked for rather than derived from the install folder. On any Fika setup
+            the install's own http.json is stale - Fika overrides the binding at runtime from
+            fika.jsonc, and writes 0.0.0.0 there, which is a bind address and not one a client can
+            dial. The address the user already types into the SPT launcher is the honest source.
+        -->
+        <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
+            <StackPanel DataContext="{Binding ServerMap}">
+                <TextBlock
+                    Text="Server map"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,0,0,8"
+                    Text="Connects to an SPT server running the Server Map mod, so you can see what it runs and compare it against what you have installed. Use the same address and port you put in the SPT launcher. Nothing is sent to the server by connecting - this only asks it who it is." />
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <ui:TextBox
+                        Width="300"
+                        PlaceholderText="Server address"
+                        Text="{Binding HostInput, UpdateSourceTrigger=PropertyChanged}" />
+                    <ui:TextBox
+                        Width="90"
+                        Margin="8,0,0,0"
+                        PlaceholderText="Port"
+                        Text="{Binding PortInput, UpdateSourceTrigger=PropertyChanged}" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Content="Connect"
+                        Icon="{ui:SymbolIcon ServerLink24}"
+                        Command="{Binding ConnectCommand}" />
+                    <ProgressBar
+                        Width="80"
+                        Height="4"
+                        Margin="12,0,0,0"
+                        VerticalAlignment="Center"
+                        IsIndeterminate="True"
+                        Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" />
+                </StackPanel>
+
+                <!-- Named to match the shared ErrorText style, which turns this red only when the
+                     last attempt actually failed. -->
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Style="{StaticResource ErrorText}"
+                    Text="{Binding StatusMessage}" />
+
+                <!-- The one failure the user has to judge rather than just read. Both fingerprints
+                     are in the message above; this is the answer to it, and it is not offered for
+                     any other kind of failure. -->
+                <ui:Button
+                    Margin="0,8,0,0"
+                    HorizontalAlignment="Left"
+                    Appearance="Caution"
+                    Content="Trust the new certificate"
+                    Icon="{ui:SymbolIcon Certificate24}"
+                    Command="{Binding TrustNewCertificateCommand}"
+                    Visibility="{Binding HasCertificateChanged, Converter={StaticResource BoolToVisibility}}" />
+
+                <TextBlock
+                    Margin="0,12,0,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                    Text="{Binding PinDescription}" />
+
+                <ui:Button
+                    Margin="0,8,0,0"
+                    HorizontalAlignment="Left"
+                    Content="Forget this certificate"
+                    Icon="{ui:SymbolIcon Delete24}"
+                    ToolTip="Clears the recorded fingerprint. The next connection records whatever the server presents, the same as the first one did."
+                    Command="{Binding ForgetPinCommand}" />
             </StackPanel>
         </ui:Card>
 

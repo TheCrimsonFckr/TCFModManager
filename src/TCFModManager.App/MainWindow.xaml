@@ -160,6 +160,21 @@
                     TargetPageType="{x:Type views:FootprintPage}"
                     DataContext="{x:Static app:AppServices.FootprintGate}"
                     Visibility="{Binding IsPageEnabled, Converter={StaticResource BoolToVis}}" />
+                <!-- Last of the install-facing items, and the only one whose visibility depends
+                     on something outside this machine: it appears once a server with the Server Map
+                     mod has answered, and there is no setting to switch it on independently of
+                     that. Latched for the session once shown - see ServerMapGateViewModel, which
+                     explains why a server going down does not take the page away mid-read.
+
+                     DataContext is set explicitly because a nav item does not inherit a useful one
+                     from here, the same as Mod footprint above. -->
+                <ui:NavigationViewItem
+                    Content="Server map"
+                    Icon="{ui:SymbolIcon ServerLink24}"
+                    NavigationCacheMode="Required"
+                    TargetPageType="{x:Type views:ServerMapPage}"
+                    DataContext="{x:Static app:AppServices.ServerMap}"
+                    Visibility="{Binding IsPageEnabled, Converter={StaticResource BoolToVis}}" />
                 <ui:NavigationViewItem
                     Content="Downloads"
                     Icon="{ui:SymbolIcon ArrowDownload24}"

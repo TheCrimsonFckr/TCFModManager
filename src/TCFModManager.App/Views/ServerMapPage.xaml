@@ -1,0 +1,99 @@
+<Page
+    x:Class="TCFModManager.App.Views.ServerMapPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+    xmlns:app="clr-namespace:TCFModManager.App"
+    Title="Server map">
+    <Page.Resources>
+        <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    </Page.Resources>
+    <StackPanel Margin="16" DataContext="{x:Static app:AppServices.ServerMap}">
+
+        <!-- The server's own card, pinned at the top. Client cards will sit under it once the
+             registry routes exist; until then this page is honest about being one card, which is
+             better than an empty list implying nobody is connected. -->
+        <ui:Card Padding="16" VerticalAlignment="Top">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                    <ui:SymbolIcon
+                        Symbol="ServerLink24"
+                        VerticalAlignment="Center"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                    <TextBlock
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="SemiBold"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        Text="{Binding ServerName}" />
+                </StackPanel>
+
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,0,0,8"
+                    Text="{Binding ServerDetail}" />
+
+                <!-- Named to match the shared ErrorText style, which turns this red only when the
+                     last attempt actually failed - a server that is simply off is not an error the
+                     user did anything to cause. -->
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Style="{StaticResource ErrorText}"
+                    Text="{Binding StatusMessage}" />
+
+                <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                    <ui:Button
+                        Content="Reconnect"
+                        Icon="{ui:SymbolIcon ArrowSync24}"
+                        Command="{Binding ConnectCommand}" />
+                    <ProgressBar
+                        Width="80"
+                        Height="4"
+                        Margin="12,0,0,0"
+                        VerticalAlignment="Center"
+                        IsIndeterminate="True"
+                        Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" />
+                </StackPanel>
+            </StackPanel>
+        </ui:Card>
+
+        <!-- Raised only when the certificate changed, because it is the only state on this page the
+             user has to make a decision about. The two fingerprints are in the message itself -
+             naming them is the whole point of showing this rather than a generic failure. -->
+        <ui:InfoBar
+            Margin="0,16,0,0"
+            IsClosable="False"
+            Severity="Warning"
+            Title="This server's certificate has changed"
+            Message="{Binding StatusMessage}"
+            IsOpen="{Binding HasCertificateChanged, Mode=OneWay}" />
+
+        <!--
+            What this page cannot do yet, said outright.
+
+            The handshake is the only route the server serves at the moment, so there is nothing to
+            list. An empty client list here would read as "nobody else is connected", which is a
+            different and wrong statement.
+        -->
+        <ui:Card
+            Padding="16"
+            VerticalAlignment="Top"
+            Margin="0,16,0,0"
+            Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibility}}">
+            <StackPanel>
+                <TextBlock
+                    Text="What's on this map"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="The server has answered and told this app who it is. It is not yet publishing a mod list or a list of connected players, so there is nothing here to compare your install against. Both arrive with the next version of the server mod - this app will pick them up without needing an update of its own." />
+            </StackPanel>
+        </ui:Card>
+
+    </StackPanel>
+</Page>

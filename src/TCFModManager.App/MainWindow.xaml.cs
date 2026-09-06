@@ -21,6 +21,11 @@ public partial class MainWindow : FluentWindow
             // Fire-and-forget: whether a newer build of this app exists on sp-mod.com has no
             // bearing on the window opening, and a failed check just leaves the banner down.
             _ = AppServices.AppUpdate.CheckOnStartupAsync();
+
+            // Same arrangement, same reason: a server that is off, unreachable or simply not
+            // configured just leaves the Server Map item out of the sidebar, so nothing here is
+            // worth holding the window open for.
+            _ = AppServices.ServerMap.ConnectOnStartupAsync();
         };
 
         // Constructs and shows the mod details dialog when requested.

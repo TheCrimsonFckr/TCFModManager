@@ -52,6 +52,13 @@ public partial class OptionsViewModel : ObservableObject
     // Same arrangement as ModPageGate: one description of the setting, shared with the nav item.
     public FootprintGateViewModel FootprintGate => AppServices.FootprintGate;
 
+    //
+    // The Server Map section binds straight to the shared connection rather than mirroring it into
+    // properties here. It is not a stored setting the way the two switches above are: connecting is
+    // an action with a result, and that result is the same object the sidebar and the page read.
+    //
+    public ServerMapGateViewModel ServerMap => AppServices.ServerMap;
+
     public OptionsViewModel()
     {
         InstallPathInput = SptEnvironment.InstallPath;
