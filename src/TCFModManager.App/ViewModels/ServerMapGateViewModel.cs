@@ -10,12 +10,13 @@ namespace TCFModManager.App.ViewModels;
 // Where the Server Map server is, whether it answered, and what it said.
 //
 // A shared singleton for the same reason FootprintGateViewModel is one: the sidebar item, the
-// Options section and the page itself are three views of a single connection, and connecting from
-// Options has to move the nav item at that moment rather than at the next launch.
+// Options section and the page itself are three views of one thing, and flicking the switch has to
+// move the nav item at that moment rather than at the next launch.
 //
-// Unlike the other gates, this one is not a stored on/off switch. There is no "enable Server Map"
-// toggle to get out of step with whether it works - the feature appears when a server answers and
-// stays out of the way when none does.
+// It carries two separate things, and keeping them apart is the point: whether the page is SHOWN
+// (a stored switch the user owns, exactly like Mod footprint) and whether the server ANSWERED (the
+// last handshake). Tying the sidebar to the handshake instead was the first cut, and it was wrong -
+// a page that comes and goes with a server being up is a page nobody can find on purpose.
 //
 public sealed partial class ServerMapGateViewModel : ObservableObject
 {
@@ -54,24 +55,58 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
     private string? _pinnedThumbprint;
 
     //
-    // Whether the Server Map item is in the sidebar.
+    // Whether the Server map item is in the sidebar. Off by default and stored - see
+    // ServerMapSettings.
     //
-    // Latched on the first successful handshake and held for the rest of the session rather than
-    // tracking the connection: a server that restarts mid-session would otherwise pull the page out
-    // from under whoever was reading it, and "the server went away" is something the page can say
-    // far better than an empty gap in the sidebar can. Cleared only when the address is, which is
-    // the one case where the user has actually said they are done with it.
+    // Deliberately NOT tied to whether the server is up. The page is worth reaching when the server
+    // is down too, because that is exactly when someone wants to look at it, and a sidebar item that
+    // appears and disappears on its own is one nobody can rely on finding.
     //
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SettingToolTip))]
     private bool _isPageEnabled;
+
+    // Suppresses the save while the constructor is putting the switch where the stored value already
+    // is, so starting the app doesn't count as flicking it.
+    private readonly bool _loaded;
 
     public ServerMapGateViewModel()
     {
         var stored = _settings.Load().ServerMap;
 
+        _isPageEnabled = stored.ShowPage;
         _hostInput = stored.Host;
         _portInput = stored.Port.ToString();
         _pinnedThumbprint = stored.PinnedThumbprint;
+
+        _loaded = true;
+    }
+
+    //
+    // The switch's tooltip. Says what the page needs to be useful, because that is the part someone
+    // deciding whether to switch it on cannot tell from the name: the mod goes on the SERVER, and
+    // without it this page has nothing to show.
+    //
+    public string SettingToolTip => IsPageEnabled
+        ? "The Server map page is in the sidebar. It only has anything to show once you point it at "
+          + "an SPT server whose operator has installed the Server Map mod."
+        : "Adds a page that connects to an SPT server running the Server Map mod and shows what it "
+          + "runs, so you can compare it against your own install. Needs the mod on the server - "
+          + "installing this app is not enough on its own.";
+
+    //
+    // No confirmation either way. Nothing is at stake in showing or hiding a page, and turning it
+    // off does not throw away the address or the recorded certificate.
+    //
+    partial void OnIsPageEnabledChanged(bool value)
+    {
+        if (!_loaded) return;
+
+        var settings = _settings.Load();
+        settings.ServerMap.ShowPage = value;
+        _settings.Save(settings);
+
+        AppLog.Info("ServerMap", value ? "page shown" : "page hidden");
     }
 
     public bool IsConfigured => !string.IsNullOrWhiteSpace(HostInput);
@@ -126,11 +161,12 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
 
     //
     // Called from MainWindow once the window is up. Fire-and-forget: whether a server answers has no
-    // bearing on the app opening, and a server that is off just leaves the item out of the sidebar.
+    // bearing on the app opening, and a server that is off just leaves the page saying so.
     //
     public async Task ConnectOnStartupAsync()
     {
-        if (!IsConfigured) return;
+        // Switched off means switched off: no page, and no request to somebody's server either.
+        if (!IsPageEnabled || !IsConfigured) return;
 
         await ConnectAsync();
     }
@@ -146,8 +182,6 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
 
             if (string.IsNullOrWhiteSpace(endpoint.Host))
             {
-                // Clearing the address is the one thing that takes the page back out of the sidebar.
-                IsPageEnabled = false;
                 Probe = new ServerHelloProbe { Endpoint = endpoint, Problem = ServerMapProblem.NoAddress };
                 return;
             }
@@ -173,8 +207,6 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
             }
 
             Probe = probe;
-
-            if (probe.Found) IsPageEnabled = true;
 
             AppLog.Info("ServerMap", probe.Found
                 ? $"connected to {endpoint.Host}:{endpoint.Port}"

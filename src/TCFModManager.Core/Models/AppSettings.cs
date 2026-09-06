@@ -62,8 +62,7 @@ public sealed class AppSettings
 
     //
     // Server Map. Always present in settings.json so the shape is obvious to anyone hand-editing
-    // it, but the feature stays invisible until an address is entered and a handshake succeeds -
-    // there is no separate "enable" toggle to get out of step with whether it works.
+    // it, even on an install that never turns the page on.
     //
     // Never null, including when a hand-edited file says "ServerMap": null - this file is offered
     // for editing, so a null written into it is a thing that happens rather than a thing to assume
@@ -87,6 +86,19 @@ public sealed class AppSettings
 //
 public sealed class ServerMapSettings
 {
+    //
+    // Whether the Server map page appears in the sidebar at all.
+    //
+    // OFF by default and switched on deliberately, the same as the Mod footprint page: the map only
+    // does anything if someone you play with runs an SPT server with the Server Map mod installed,
+    // which most installs will not. A page that is empty for everyone except the people who set one
+    // up is worth opting into rather than shipping to everyone.
+    //
+    // Kept in here rather than beside ShowModFootprintPage on AppSettings so the whole feature is
+    // one object in settings.json - it is switched off and forgotten far more often than it is used.
+    //
+    public bool ShowPage { get; set; }
+
     // Host or IP as the user typed it. Empty means the feature is unconfigured, not off.
     public string? Host { get; set; }
 

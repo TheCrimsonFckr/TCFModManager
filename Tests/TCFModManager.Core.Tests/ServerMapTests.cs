@@ -305,12 +305,18 @@ public class ServerMapClientTests
 
 public class ServerMapSettingsTests
 {
+    //
+    // Off by default, like the Mod footprint page. The map needs an SPT server running the Server
+    // Map mod at the other end, which most installs will not have - so nobody gets a page that is
+    // empty for them without asking for it.
+    //
     [Fact]
-    public void AFreshSettingsFileHasTheServerMapUnconfiguredOnTheDefaultPort()
+    public void AFreshSettingsFileHasTheServerMapOffAndUnconfiguredOnTheDefaultPort()
     {
         var settings = new AppSettings();
 
         Assert.NotNull(settings.ServerMap);
+        Assert.False(settings.ServerMap.ShowPage);
         Assert.False(settings.ServerMap.IsConfigured);
         Assert.Equal(ServerMapEndpoint.DefaultPort, settings.ServerMap.Port);
         Assert.Null(settings.ServerMap.PinnedThumbprint);
@@ -336,11 +342,18 @@ public class ServerMapSettingsTests
     {
         var settings = new AppSettings
         {
-            ServerMap = new ServerMapSettings { Host = "spt.example.com", Port = 7000, PinnedThumbprint = "AABB" },
+            ServerMap = new ServerMapSettings
+            {
+                ShowPage = true,
+                Host = "spt.example.com",
+                Port = 7000,
+                PinnedThumbprint = "AABB",
+            },
         };
 
         var restored = JsonSerializer.Deserialize<AppSettings>(JsonSerializer.Serialize(settings))!;
 
+        Assert.True(restored.ServerMap.ShowPage);
         Assert.Equal("spt.example.com", restored.ServerMap.Host);
         Assert.Equal(7000, restored.ServerMap.Port);
         Assert.Equal("AABB", restored.ServerMap.PinnedThumbprint);
@@ -359,7 +372,39 @@ public class ServerMapSettingsTests
         var restored = JsonSerializer.Deserialize<AppSettings>(json)!;
 
         Assert.NotNull(restored.ServerMap);
+        Assert.False(restored.ServerMap.ShowPage);
         Assert.False(restored.ServerMap.IsConfigured);
         Assert.Equal(ServerMapEndpoint.DefaultPort, restored.ServerMap.Port);
+    }
+
+    //
+    // Turning the page off must not throw away the address or the recorded certificate: switching it
+    // back on has to land where it was, not re-arm trust-on-first-use as though the server had never
+    // been seen.
+    //
+    [Fact]
+    public void SwitchingThePageOffKeepsTheAddressAndThePin()
+    {
+        var settings = new ServerMapSettings
+        {
+            ShowPage = true,
+            Host = "127.0.0.1",
+            PinnedThumbprint = "AABB",
+        };
+
+        settings.ShowPage = false;
+
+        Assert.True(settings.IsConfigured);
+        Assert.Equal("AABB", settings.ToEndpoint().PinnedThumbprint);
+    }
+
+    // The address Fika defaults to, and the one this was first tested against.
+    [Fact]
+    public void LoopbackIsADialableAddress()
+    {
+        var endpoint = new ServerMapSettings { Host = "127.0.0.1" }.ToEndpoint();
+
+        Assert.True(endpoint.TryGetBaseUri(out var uri));
+        Assert.Equal("https://127.0.0.1:6969/", uri.ToString());
     }
 }

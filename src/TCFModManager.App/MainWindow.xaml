@@ -160,14 +160,15 @@
                     TargetPageType="{x:Type views:FootprintPage}"
                     DataContext="{x:Static app:AppServices.FootprintGate}"
                     Visibility="{Binding IsPageEnabled, Converter={StaticResource BoolToVis}}" />
-                <!-- Last of the install-facing items, and the only one whose visibility depends
-                     on something outside this machine: it appears once a server with the Server Map
-                     mod has answered, and there is no setting to switch it on independently of
-                     that. Latched for the session once shown - see ServerMapGateViewModel, which
-                     explains why a server going down does not take the page away mid-read.
+                <!-- Hidden unless it is switched on in Options, and off by default, the same as
+                     Mod footprint above: the map needs an SPT server running the Server Map mod at
+                     the other end, which most installs will not have.
 
-                     DataContext is set explicitly because a nav item does not inherit a useful one
-                     from here, the same as Mod footprint above. -->
+                     Deliberately NOT tied to whether that server is currently up - see
+                     ServerMapGateViewModel. A sidebar item that comes and goes on its own is one
+                     nobody can rely on finding, and the page says "it did not answer" far better
+                     than a gap here can. DataContext is set explicitly because a nav item does not
+                     inherit a useful one from here. -->
                 <ui:NavigationViewItem
                     Content="Server map"
                     Icon="{ui:SymbolIcon ServerLink24}"

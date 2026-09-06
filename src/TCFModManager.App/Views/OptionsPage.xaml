@@ -104,8 +104,9 @@
         </ui:Card>
 
         <!--
-            Server Map. Not a switch: the sidebar item appears when a server answers, so this
-            section is the connection itself rather than a setting that describes one.
+            Server Map. The switch shows or hides the page, the same as Mod footprint above; the
+            rest of the section is the connection the page uses, kept here because setting the
+            address up is a one-off and the page itself is for reading.
 
             The address is asked for rather than derived from the install folder. On any Fika setup
             the install's own http.json is stale - Fika overrides the binding at runtime from
@@ -123,12 +124,24 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="Connects to an SPT server running the Server Map mod, so you can see what it runs and compare it against what you have installed. Use the same address and port you put in the SPT launcher. Nothing is sent to the server by connecting - this only asks it who it is." />
+                    Text="Adds a page that connects to an SPT server running the Server Map mod, so you can see what it runs and compare it against what you have installed. The mod goes on the server, not here - without it this page has nothing to show, which is why it is off by default. Use the same address and port you put in the SPT launcher; connecting sends nothing about your install, it only asks the server who it is." />
+
+                <ui:ToggleSwitch
+                    HorizontalAlignment="Left"
+                    Margin="0,0,0,12"
+                    ToolTip="{Binding SettingToolTip}"
+                    ToolTipService.ShowDuration="20000"
+                    IsChecked="{Binding IsPageEnabled}"
+                    OnContent="On - shown in the sidebar"
+                    OffContent="Off - hidden" />
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <!-- The placeholder is a hint, not a default. Fika's own default is 127.0.0.1,
+                         which is right for a server on this machine and quietly wrong for anyone
+                         connecting to someone else's - so it is shown rather than filled in. -->
                     <ui:TextBox
                         Width="300"
-                        PlaceholderText="Server address"
+                        PlaceholderText="Server address (e.g. 127.0.0.1)"
                         Text="{Binding HostInput, UpdateSourceTrigger=PropertyChanged}" />
                     <ui:TextBox
                         Width="90"
