@@ -1,0 +1,103 @@
+<Page
+    x:Class="TCFModManager.App.Views.PlayPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+    Title="Play">
+    <Page.Resources>
+        <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    </Page.Resources>
+    <StackPanel Margin="16">
+
+        <ui:Card Padding="16" VerticalAlignment="Top">
+            <StackPanel>
+                <TextBlock
+                    Text="SPT server"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,0,0,8"
+                    Text="Starts this install's server and leaves it running in its own console window. It keeps running if you close this app, and nothing here will stop it - close its window when you're done." />
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <ui:Button
+                        Appearance="Primary"
+                        Content="Start server"
+                        Icon="{ui:SymbolIcon Play24}"
+                        IsEnabled="{Binding CanStartServer}"
+                        Command="{Binding StartServerCommand}" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Margin="12,0,0,0"
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="{Binding ServerState}" />
+                </StackPanel>
+
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                    Text="{Binding ServerPath}" />
+            </StackPanel>
+        </ui:Card>
+
+        <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
+            <StackPanel>
+                <TextBlock
+                    Text="Game launcher"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,0,0,8"
+                    Text="Opens the launcher you pick a profile in and start the game from. Start the server first - the launcher has nothing to log in to without it." />
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <ui:Button
+                        Appearance="Primary"
+                        Content="Open launcher"
+                        Icon="{ui:SymbolIcon Play24}"
+                        IsEnabled="{Binding CanStartClient}"
+                        Command="{Binding StartClientCommand}" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Margin="12,0,0,0"
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="{Binding ClientState}" />
+                </StackPanel>
+
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                    Text="{Binding ClientPath}" />
+
+                <!-- Only says so when it found one: on a stock install this line would be noise. -->
+                <TextBlock
+                    Margin="0,8,0,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Visibility="{Binding IsFikaLauncher, Converter={StaticResource BoolToVisibility}}"
+                    Text="This install has a Fika launcher, so that is the one opened - it is what joins a Fika server. The stock SPT launcher is still there if you would rather use it." />
+            </StackPanel>
+        </ui:Card>
+
+        <ui:Card
+            Padding="16"
+            VerticalAlignment="Top"
+            Margin="0,16,0,0"
+            Visibility="{Binding HasMessage, Converter={StaticResource BoolToVisibility}}">
+            <TextBlock
+                TextWrapping="Wrap"
+                Style="{StaticResource ErrorText}"
+                Text="{Binding Message}" />
+        </ui:Card>
+
+    </StackPanel>
+</Page>

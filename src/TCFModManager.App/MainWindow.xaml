@@ -106,6 +106,13 @@
                  than a rebuild. Each page's Loaded handler still runs on every visit, so anything
                  that has to refresh on return still does. -->
             <ui:NavigationView.MenuItems>
+                <!-- First: the last thing you do before playing, and the one item on the list that
+                     is an action rather than a view of the install. -->
+                <ui:NavigationViewItem
+                    Content="Play"
+                    Icon="{ui:SymbolIcon Play24}"
+                    NavigationCacheMode="Required"
+                    TargetPageType="{x:Type views:PlayPage}" />
                 <ui:NavigationViewItem
                     Content="Browse"
                     Icon="{ui:SymbolIcon Apps24}"

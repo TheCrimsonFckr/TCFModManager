@@ -129,7 +129,7 @@ public static class SptInstallationService
         return true;
     }
 
-    private static bool TryFindServerExe(string installPath, out string exePath)
+    public static bool TryFindServerExe(string installPath, out string exePath)
     {
         exePath = "";
 
