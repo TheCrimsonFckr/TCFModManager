@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using TCFModManager.Core.ServerMap;
 
 namespace TCFModManager.Core.Models;
 
@@ -58,4 +59,49 @@ public sealed class AppSettings
     // puts a row of chips on every card, so it can be turned off to quieten the page down.
     //
     public bool ShowModListBadges { get; set; } = true;
+
+    //
+    // Server Map. Always present in settings.json so the shape is obvious to anyone hand-editing
+    // it, but the feature stays invisible until an address is entered and a handshake succeeds -
+    // there is no separate "enable" toggle to get out of step with whether it works.
+    //
+    // Never null, including when a hand-edited file says "ServerMap": null - this file is offered
+    // for editing, so a null written into it is a thing that happens rather than a thing to assume
+    // away.
+    //
+    public ServerMapSettings ServerMap
+    {
+        get => _serverMap;
+        set => _serverMap = value ?? new ServerMapSettings();
+    }
+
+    private ServerMapSettings _serverMap = new();
+}
+
+//
+// Where the Server Map server is and what it is trusted to be.
+//
+// Deliberately not derived from SptInstallPath: the address is the one the user already types into
+// the SPT launcher, and the install's own http.json is stale on any Fika setup. See
+// ServerMapEndpoint for why.
+//
+public sealed class ServerMapSettings
+{
+    // Host or IP as the user typed it. Empty means the feature is unconfigured, not off.
+    public string? Host { get; set; }
+
+    public int Port { get; set; } = ServerMapEndpoint.DefaultPort;
+
+    //
+    // SHA-256 thumbprint of the certificate this host presented the first time it was reached.
+    //
+    // Recorded on first connect and compared on every later one. SPT's certificate is self-signed
+    // for localhost, so it fails the chain and hostname checks at any remote address - this is the
+    // only check that means anything, and clearing it re-arms trust-on-first-use.
+    //
+    public string? PinnedThumbprint { get; set; }
+
+    public bool IsConfigured => !string.IsNullOrWhiteSpace(Host);
+
+    public ServerMapEndpoint ToEndpoint() => new(Host ?? string.Empty, Port, PinnedThumbprint);
 }

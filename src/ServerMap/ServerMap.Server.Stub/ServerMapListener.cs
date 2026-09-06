@@ -39,8 +39,25 @@ public class ServerMapListener(ISptLogger<ServerMapListener> logger) : IHttpList
 
         try
         {
-            var response = await Payload.HandleAsync(path, context.Request.Method, cancellationToken)
-                .ConfigureAwait(false);
+            //
+            // Read the body as it arrived, without interpreting it. SPT's own SptHttpListener
+            // zlib-decompresses request bodies, but that is *its* listener - ours handles the
+            // request outright, so nothing in that path runs. The /echo route proves it.
+            //
+            using var buffer = new MemoryStream();
+            await context.Request.Body.CopyToAsync(buffer, cancellationToken).ConfigureAwait(false);
+
+            var headers = context.Request.Headers.ToDictionary(
+                h => h.Key, h => h.Value.ToString(), StringComparer.OrdinalIgnoreCase);
+
+            var request = new PayloadRequest(
+                context.Request.Method,
+                path,
+                context.Request.QueryString.HasValue ? context.Request.QueryString.Value : null,
+                headers,
+                buffer.ToArray());
+
+            var response = await Payload.HandleAsync(request, cancellationToken).ConfigureAwait(false);
 
             context.Response.StatusCode = response.StatusCode;
             context.Response.ContentType = response.ContentType;

@@ -9,4 +9,12 @@
     <PackageReference Include="SharpCompress" Version="0.50.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!--
+      So ServerMapClient can expose a handler-injecting factory to tests without making it part of
+      the public surface, where it would be a way to turn certificate pinning off.
+    -->
+    <InternalsVisibleTo Include="TCFModManager.Core.Tests" />
+  </ItemGroup>
+
 </Project>
