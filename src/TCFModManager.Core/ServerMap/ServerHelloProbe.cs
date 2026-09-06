@@ -29,6 +29,16 @@ public enum ServerMapProblem
     // A Server Map, speaking a protocol this build does not know. Carries ServerProtocol.
     ProtocolMismatch,
 
+    //
+    // /list only: the server runs the mod and deliberately publishes nothing. Distinct from
+    // NotServerMap even though both arrive as a 404, because they mean opposite things - one is
+    // "wrong address", the other is "right address, nothing on offer".
+    //
+    NoList,
+
+    // /list only: a list came back and could not be read. Carries ParseError, which names why.
+    ListUnreadable,
+
     // Anything else. Carries Error.
     Failed,
 }
@@ -58,4 +68,29 @@ public sealed record ServerHelloProbe
     public Exception? Error { get; init; }
 
     public bool Found => Hello is not null;
+}
+
+//
+// The outcome of asking a server for its published list. Separate from ServerHelloProbe because the
+// two questions fail differently: a handshake can be "not a server map", a list can be "no list
+// published" or "a list that will not parse", and flattening those into one type would mean every
+// caller checking which half of it is meaningful.
+//
+public sealed record ServerMapListResult
+{
+    public required ServerMapEndpoint Endpoint { get; init; }
+
+    // Origin is already Server and Source is already the address it came from - see ModListFile.Read.
+    public Models.ModList? List { get; init; }
+
+    public ServerMapProblem Problem { get; init; }
+
+    // Why the list would not parse, in ModListFile's own words. Set only for ListUnreadable.
+    public string? ParseError { get; init; }
+
+    public int? StatusCode { get; init; }
+
+    public Exception? Error { get; init; }
+
+    public bool Found => List is not null;
 }

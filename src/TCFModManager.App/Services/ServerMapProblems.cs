@@ -1,3 +1,4 @@
+using TCFModManager.Core.Models;
 using TCFModManager.Core.ServerMap;
 
 namespace TCFModManager.App.Services;
@@ -80,6 +81,52 @@ public static class ServerMapProblems
         null => "Not connected yet.",
         _ => Describe(probe),
     };
+
+    //
+    // What happened when the published list was fetched. Separate from Describe because a list
+    // failing is not the connection failing - the server answered, which is most of what the user
+    // cares about, and the list is the part that went wrong.
+    //
+    public static string DescribeList(ServerMapListResult result, ModList? held) => result.Problem switch
+    {
+        ServerMapProblem.None when result.List is not null =>
+            $"\"{result.List.Name}\" (revision {result.List.Revision}, {Mods(result.List.Entries.Count)}) "
+            + "is saved in your mod lists. Applying it is done from the Mod lists page, which shows "
+            + "what would change first.",
+
+        // Not a failure. A server can run the mod and deliberately publish nothing.
+        ServerMapProblem.NoList when held is not null =>
+            $"This server has stopped publishing a list. \"{held.Name}\" is still in your mod lists "
+            + "as it was when you last fetched it.",
+
+        ServerMapProblem.NoList =>
+            "This server doesn't publish a mod list. Its operator can publish one by exporting a "
+            + "list from this app and dropping it into the mod's config folder.",
+
+        ServerMapProblem.ListUnreadable =>
+            $"The server sent a list this app couldn't read - {result.ParseError}.",
+
+        ServerMapProblem.Unreachable =>
+            "The server answered the first time and then stopped, so the list wasn't fetched.",
+
+        ServerMapProblem.CertificateRejected =>
+            "The list wasn't fetched - the server's certificate is not the one this app recorded.",
+
+        _ => $"The list couldn't be fetched{(result.Error is null ? "" : $": {result.Error.Message}")}.",
+    };
+
+    // What a server says it publishes, before anything is fetched.
+    public static string DescribePublished(ServerHello hello)
+    {
+        if (!hello.HasList) return "This server doesn't publish a mod list.";
+
+        var name = string.IsNullOrWhiteSpace(hello.ListName) ? "A mod list" : $"\"{hello.ListName}\"";
+        var size = hello.ListEntryCount is { } count ? $", {Mods(count)}" : "";
+
+        return $"{name} (revision {hello.ListRevision?.ToString() ?? "unknown"}{size})";
+    }
+
+    private static string Mods(int count) => count == 1 ? "1 mod" : $"{count} mods";
 
     //
     // How the pin is described in Options. Deliberately says what it is FOR: on its own, a hex

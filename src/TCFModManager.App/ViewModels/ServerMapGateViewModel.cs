@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Services;
+using TCFModManager.Core.Models;
 using TCFModManager.Core.ServerMap;
 using TCFModManager.Core.Services;
 
@@ -53,6 +54,18 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(PinDescription))]
     [NotifyCanExecuteChangedFor(nameof(ForgetPinCommand))]
     private string? _pinnedThumbprint;
+
+    // The list this server publishes, as last fetched. Also in the user's mod lists - this is the
+    // page's own handle on it, not a second copy of the truth.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasList))]
+    [NotifyPropertyChangedFor(nameof(ListSummary))]
+    [NotifyCanExecuteChangedFor(nameof(FetchListCommand))]
+    private ModList? _list;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasListStatus))]
+    private string _listStatus = "";
 
     //
     // Whether the Server map item is in the sidebar. Off by default and stored - see
@@ -127,6 +140,20 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
     public bool HasError => Probe is not null && !Probe.Found;
 
     public string PinDescription => ServerMapProblems.DescribePin(PinnedThumbprint);
+
+    public bool HasList => List is not null;
+
+    public bool HasListStatus => !string.IsNullOrEmpty(ListStatus);
+
+    //
+    // What the held list is, in one line. Reads from the stored list rather than the handshake, so
+    // it keeps saying something true after the server goes down.
+    //
+    public string ListSummary => List is null
+        ? ""
+        : $"{List.Name} - revision {List.Revision}, {List.Entries.Count} "
+          + (List.Entries.Count == 1 ? "mod" : "mods")
+          + (List.Unresolved.Any() ? $", {List.Unresolved.Count()} not on The Forge" : "");
 
     // The one failure the user is asked to make a judgement about, rather than just told about.
     public bool HasCertificateChanged => Probe?.Problem == ServerMapProblem.CertificateRejected;
@@ -211,6 +238,8 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
             AppLog.Info("ServerMap", probe.Found
                 ? $"connected to {endpoint.Host}:{endpoint.Port}"
                 : $"{endpoint.Host}:{endpoint.Port} - {probe.Problem}");
+
+            if (probe.Hello is { } hello) await SyncListAsync(client, endpoint, hello, cancellationToken: default);
         }
         finally
         {
@@ -219,6 +248,108 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
     }
 
     private bool CanConnect() => !IsBusy;
+
+    //
+    // Fetches the published list when it is worth fetching, and stores it.
+    //
+    // The handshake carries the revision precisely so this can be skipped: a list that has not moved
+    // since the last fetch is not asked for again. Which revision is held comes from the stored
+    // lists themselves, matched on the server address they carry as their Source - there is no
+    // separate record to get out of step with what is actually in the store.
+    //
+    // Storing is not applying. A served list lands in the user's mod lists read-only and does
+    // nothing until they apply it from that page, which shows what would change first. That
+    // separation is the whole reason this feature serves a list rather than files.
+    //
+    private async Task SyncListAsync(ServerMapClient client, ServerMapEndpoint endpoint, ServerHello hello,
+        CancellationToken cancellationToken)
+    {
+        var held = HeldListFor(endpoint);
+
+        if (!hello.HasList)
+        {
+            List = held;
+            ListStatus = ServerMapProblems.DescribeList(
+                new ServerMapListResult { Endpoint = endpoint, Problem = ServerMapProblem.NoList }, held);
+            return;
+        }
+
+        if (held is not null && hello.ListRevision is { } revision && revision <= held.Revision)
+        {
+            List = held;
+            ListStatus = ServerMapProblems.DescribeList(
+                new ServerMapListResult { Endpoint = endpoint, List = held }, held);
+            return;
+        }
+
+        var result = await client.ListAsync(cancellationToken);
+
+        if (result.List is { } fetched)
+        {
+            // Upserts by Id, so a newer revision of a list already held replaces it rather than
+            // leaving two - see ModListStore.Add.
+            AppServices.ModLists.Add(fetched);
+            List = fetched;
+
+            AppLog.Info("ServerMap",
+                $"fetched list \"{fetched.Name}\" revision {fetched.Revision} ({fetched.Entries.Count} entries)");
+        }
+        else
+        {
+            // A list that would not come back does not throw away the one already held.
+            List = held;
+            AppLog.Info("ServerMap", $"list not fetched - {result.Problem}");
+        }
+
+        ListStatus = ServerMapProblems.DescribeList(result, held);
+    }
+
+    //
+    // The newest list this install already holds from this server. Matched on Source, which a served
+    // list carries as "host:port" - see ModListFile.Read.
+    //
+    private static ModList? HeldListFor(ServerMapEndpoint endpoint)
+    {
+        var source = $"{endpoint.Host}:{endpoint.Port}";
+
+        return AppServices.ModLists.Load().Lists
+            .Where(l => l.Origin == ModListOrigin.Server
+                        && string.Equals(l.Source, source, StringComparison.OrdinalIgnoreCase))
+            .OrderByDescending(l => l.Revision)
+            .FirstOrDefault();
+    }
+
+    //
+    // Fetches the list again whether or not the revision moved. For the case the automatic path
+    // deliberately does not cover: the held copy was edited, deleted, or is simply doubted.
+    //
+    [RelayCommand(CanExecute = nameof(CanConnect))]
+    private async Task FetchListAsync()
+    {
+        IsBusy = true;
+
+        try
+        {
+            var endpoint = SaveAndBuildEndpoint();
+
+            using var client = ServerMapClient.TryCreate(endpoint);
+            if (client is null) return;
+
+            var result = await client.ListAsync();
+
+            if (result.List is { } fetched)
+            {
+                AppServices.ModLists.Add(fetched);
+                List = fetched;
+            }
+
+            ListStatus = ServerMapProblems.DescribeList(result, HeldListFor(endpoint));
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
 
     //
     // Records the certificate the server is presenting now, replacing the one that was pinned, and

@@ -108,11 +108,16 @@ public static class ModListFile
     //
     // The imported list keeps its Id and Revision, so receiving a newer revision of a list you
     // already have updates it in place rather than leaving two. Everything that describes how a
-    // list relates to *this* install is reset: Origin becomes Imported (which makes it read-only -
-    // editing forks it), and a snapshot flag never survives the trip, since somebody else's undo
-    // point is not one of yours.
+    // list relates to *this* install is reset: Origin becomes whatever the caller says it is (and
+    // neither Imported nor Server is editable - editing forks it), and a snapshot flag never
+    // survives the trip, since somebody else's undo point is not one of yours.
     //
-    public static ModListImport Read(string json, string? fallbackSource = null)
+    // origin is a parameter because the same bytes arrive two ways: as a file someone sent, and as
+    // the body of a server's /list. Nothing in the file itself can tell those apart, and the
+    // difference decides what the app is allowed to say about where it came from.
+    //
+    public static ModListImport Read(string json, string? fallbackSource = null,
+        ModListOrigin origin = ModListOrigin.Imported)
     {
         if (string.IsNullOrWhiteSpace(json)) return ModListImport.Failed("the file is empty");
 
@@ -144,10 +149,19 @@ public static class ModListFile
             Name = list.Name.Trim(),
             Description = list.Description,
             Revision = Math.Max(1, list.Revision),
-            Origin = ModListOrigin.Imported,
+            Origin = origin,
             Policy = list.Policy,
             DerivedFrom = list.DerivedFrom,
-            Source = document.Author ?? list.Source ?? fallbackSource,
+            //
+            // Who wrote it versus where you got it. For a file someone sent you the author is the
+            // useful attribution, so it wins. For a served list it is the opposite: the server
+            // address is the thing the user has to recognise and the thing they can go back to, and
+            // an author name baked in by whoever exported it would be a stranger's name against a
+            // list your own server is handing you.
+            //
+            Source = origin == ModListOrigin.Server
+                ? fallbackSource ?? document.Author ?? list.Source
+                : document.Author ?? list.Source ?? fallbackSource,
             SptVersion = list.SptVersion,
             IsSnapshot = false,
             CreatedAt = list.CreatedAt,

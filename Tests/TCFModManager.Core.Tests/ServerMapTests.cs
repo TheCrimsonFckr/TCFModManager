@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.ServerMap;
+using TCFModManager.Core.Services;
 using Xunit;
 
 namespace TCFModManager.Core.Tests;
@@ -406,5 +407,182 @@ public class ServerMapSettingsTests
 
         Assert.True(endpoint.TryGetBaseUri(out var uri));
         Assert.Equal("https://127.0.0.1:6969/", uri.ToString());
+    }
+}
+
+//
+// Fetching the list a server publishes. The server serves the operator's own .tcfmodlist file
+// verbatim, so what arrives here is byte-for-byte the format a list emailed between two people is -
+// which is the whole point, and what these tests hold it to.
+//
+public class ServerMapListTests
+{
+    private static readonly ServerMapEndpoint Endpoint = new("192.168.1.111", 6969);
+
+    // A real export, as ModListFile.Write produces it.
+    private static string Published(string name = "Fika night", int revision = 7) =>
+        ModListFile.Write(
+            new ModList
+            {
+                Id = Guid.Parse("0f8fad5b-d9cb-469f-a165-70867728950e"),
+                Name = name,
+                Revision = revision,
+                Policy = ModListPolicy.Exclusive,
+                SptVersion = "4.1.5",
+                CreatedAt = DateTimeOffset.UnixEpoch,
+                UpdatedAt = DateTimeOffset.UnixEpoch,
+                Entries =
+                {
+                    new ModListEntry { Name = "SAIN", ModId = 2426, VersionId = 5, Version = "3.2.1" },
+                    new ModListEntry { Name = "A GitHub-only mod" },
+                },
+            },
+            author: "Somebody Else");
+
+    private static async Task<ServerMapListResult> Fetch(HttpStatusCode status, string body)
+    {
+        using var client = ServerMapClient.TryCreate(Endpoint, new ListStubHandler(status, body))!;
+        return await client.ListAsync();
+    }
+
+    [Fact]
+    public async Task AServedListIsReadByTheSameParserAFileIs()
+    {
+        var result = await Fetch(HttpStatusCode.OK, Published());
+
+        Assert.True(result.Found);
+        Assert.Equal(ServerMapProblem.None, result.Problem);
+        Assert.Equal("Fika night", result.List!.Name);
+        Assert.Equal(7, result.List.Revision);
+        Assert.Equal(2, result.List.Entries.Count);
+        Assert.Single(result.List.Unresolved);
+    }
+
+    //
+    // Origin decides what the app is allowed to do with it: a served list is read-only and editing
+    // it forks, exactly like an imported one, and nothing else in the app has to special-case it.
+    //
+    [Fact]
+    public async Task AServedListIsMarkedAsComingFromAServerAndIsNotEditable()
+    {
+        var result = await Fetch(HttpStatusCode.OK, Published());
+
+        Assert.Equal(ModListOrigin.Server, result.List!.Origin);
+        Assert.False(result.List.IsEditable);
+    }
+
+    //
+    // Where you got it beats who wrote it. The export above names an author; for a served list the
+    // address is what the user recognises and can go back to, and a stranger's name against a list
+    // your own server hands you is worse than useless.
+    //
+    [Fact]
+    public async Task TheSourceIsTheServerAddressNotTheAuthorWhoExportedIt()
+    {
+        var result = await Fetch(HttpStatusCode.OK, Published());
+
+        Assert.Equal("192.168.1.111:6969", result.List!.Source);
+    }
+
+    //
+    // A 404 here means the server runs the mod and publishes nothing - a normal thing for a server
+    // to say. It only means "wrong address" on /hello, which is why the two have separate problems.
+    //
+    [Fact]
+    public async Task NoListPublishedIsItsOwnAnswerNotAFailure()
+    {
+        var result = await Fetch(HttpStatusCode.NotFound, """{ "error": "no list" }""");
+
+        Assert.False(result.Found);
+        Assert.Equal(ServerMapProblem.NoList, result.Problem);
+        Assert.Equal(404, result.StatusCode);
+    }
+
+    // A list this build cannot read is named as such, in the parser's own words, rather than coming
+    // back as a bare failure the user cannot act on.
+    [Theory]
+    [InlineData("")]
+    [InlineData("not json")]
+    [InlineData("""{ "schemaVersion": 1, "app": "x" }""")]
+    [InlineData("""{ "schemaVersion": 99, "list": { "id": "0f8fad5b-d9cb-469f-a165-70867728950e", "name": "x" } }""")]
+    public async Task AListThatWillNotParseSaysWhy(string body)
+    {
+        var result = await Fetch(HttpStatusCode.OK, body);
+
+        Assert.False(result.Found);
+        Assert.Equal(ServerMapProblem.ListUnreadable, result.Problem);
+        Assert.False(string.IsNullOrWhiteSpace(result.ParseError));
+    }
+
+    [Fact]
+    public async Task AServerErrorIsNotMistakenForNoList()
+    {
+        var result = await Fetch(HttpStatusCode.InternalServerError, "");
+
+        Assert.Equal(ServerMapProblem.Failed, result.Problem);
+        Assert.Equal(500, result.StatusCode);
+    }
+
+    [Fact]
+    public async Task AnUnreachableServerIsReportedNotThrown()
+    {
+        using var client = ServerMapClient.TryCreate(Endpoint, new ListThrowingHandler())!;
+
+        var result = await client.ListAsync();
+
+        Assert.False(result.Found);
+        Assert.Equal(ServerMapProblem.Unreachable, result.Problem);
+        Assert.NotNull(result.Error);
+    }
+
+    [Fact]
+    public async Task AsksForTheListRoute()
+    {
+        var handler = new ListStubHandler(HttpStatusCode.OK, Published());
+        using var client = ServerMapClient.TryCreate(Endpoint, handler)!;
+
+        await client.ListAsync();
+
+        Assert.Equal("https://192.168.1.111:6969/tcfservermap/list", handler.LastRequestUri?.ToString());
+    }
+
+    //
+    // The handshake carries the revision so the list is only fetched when it moves. This is the
+    // round trip that has to hold for that to be safe: the number on /hello is the number on the
+    // list /list returns.
+    //
+    [Fact]
+    public async Task TheRevisionOnTheHandshakeIsTheRevisionOnTheList()
+    {
+        using var helloClient = ServerMapClient.TryCreate(
+            Endpoint, new ListStubHandler(HttpStatusCode.OK,
+                """{ "protocol": 1, "hasList": true, "listRevision": 7, "listName": "Fika night" }"""))!;
+
+        var hello = await helloClient.HelloAsync();
+        var list = await Fetch(HttpStatusCode.OK, Published());
+
+        Assert.Equal(hello.Hello!.ListRevision, list.List!.Revision);
+        Assert.Equal(hello.Hello.ListName, list.List.Name);
+    }
+
+    private sealed class ListStubHandler(HttpStatusCode status, string body) : HttpMessageHandler
+    {
+        public Uri? LastRequestUri { get; private set; }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
+        {
+            LastRequestUri = request.RequestUri;
+
+            return Task.FromResult(new HttpResponseMessage(status)
+            {
+                Content = new StringContent(body, Encoding.UTF8, "application/json"),
+            });
+        }
+    }
+
+    private sealed class ListThrowingHandler : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct) =>
+            throw new HttpRequestException("no route to host");
     }
 }

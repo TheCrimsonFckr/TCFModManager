@@ -38,6 +38,14 @@ public sealed class ServerHello
     //
     public int? ListRevision { get; set; }
 
+    //
+    // The list's name and size, carried on the handshake so the page can say what is published
+    // before anyone decides whether to fetch it. Null on a server that publishes nothing.
+    //
+    public string? ListName { get; set; }
+
+    public int? ListEntryCount { get; set; }
+
     public List<string> Capabilities { get; set; } = [];
 
     public bool Supports(string capability) =>

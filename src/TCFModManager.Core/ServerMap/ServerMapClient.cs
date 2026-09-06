@@ -1,4 +1,6 @@
 using System.Text.Json;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
 namespace TCFModManager.Core.ServerMap;
 
@@ -19,6 +21,8 @@ public sealed class ServerMapClient : IDisposable
     public const int SupportedProtocol = 1;
 
     public const string HelloPath = "/tcfservermap/hello";
+
+    public const string ListPath = "/tcfservermap/list";
 
     private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(6);
 
@@ -147,6 +151,86 @@ public sealed class ServerMapClient : IDisposable
         catch (Exception ex)
         {
             return Fail(ServerMapProblem.Failed, error: ex);
+        }
+    }
+
+    //
+    // The mod list this server publishes, as the `.tcfmodlist` file its operator dropped into the
+    // mod's config folder - served verbatim, so what arrives here is the same format a list mailed
+    // between two people is, and it is read by the same parser.
+    //
+    // Worth calling only when a handshake said HasList, and worth re-calling only when ListRevision
+    // moves. Nothing here enforces that; it is the caller's to decide, because the caller is the one
+    // that knows what revision it already holds.
+    //
+    public async Task<ServerMapListResult> ListAsync(CancellationToken cancellationToken = default)
+    {
+        _pin.Reset();
+
+        try
+        {
+            using var response = await _http
+                .GetAsync(ListPath, HttpCompletionOption.ResponseContentRead, cancellationToken)
+                .ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                //
+                // A 404 here is the server saying it publishes nothing, which is a normal thing for
+                // a server to say. It is only "wrong address" on /hello, where nothing has yet
+                // established that the mod is there at all.
+                //
+                return new ServerMapListResult
+                {
+                    Endpoint = _endpoint,
+                    Problem = response.StatusCode == System.Net.HttpStatusCode.NotFound
+                        ? ServerMapProblem.NoList
+                        : ServerMapProblem.Failed,
+                    StatusCode = (int)response.StatusCode,
+                };
+            }
+
+            var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+
+            //
+            // Parsed by ModListFile, the same code that reads a list someone sends you. A served
+            // list is not a second format and must never become one - and the address is what the
+            // list records as its source, not whoever exported it. See ModListFile.Read.
+            //
+            var import = ModListFile.Read(body, $"{_endpoint.Host}:{_endpoint.Port}", ModListOrigin.Server);
+
+            if (!import.Succeeded)
+            {
+                return new ServerMapListResult
+                {
+                    Endpoint = _endpoint,
+                    Problem = ServerMapProblem.ListUnreadable,
+                    ParseError = import.Error,
+                    StatusCode = (int)response.StatusCode,
+                };
+            }
+
+            return new ServerMapListResult
+            {
+                Endpoint = _endpoint,
+                List = import.List,
+                StatusCode = (int)response.StatusCode,
+            };
+        }
+        catch (Exception ex) when (ex is HttpRequestException or IOException or OperationCanceledException)
+        {
+            return new ServerMapListResult
+            {
+                Endpoint = _endpoint,
+                Problem = _pin.Verdict == PinVerdict.Mismatch
+                    ? ServerMapProblem.CertificateRejected
+                    : ServerMapProblem.Unreachable,
+                Error = ex,
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ServerMapListResult { Endpoint = _endpoint, Problem = ServerMapProblem.Failed, Error = ex };
         }
     }
 
