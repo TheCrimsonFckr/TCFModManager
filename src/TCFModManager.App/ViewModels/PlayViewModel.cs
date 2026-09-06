@@ -8,13 +8,14 @@ using TCFModManager.Core.Services;
 namespace TCFModManager.App.ViewModels;
 
 //
-// The Play page: start this install's server, start its launcher, and say which of them is already
-// up. Nothing here stops anything - see SptLaunchService.
+// The Play page: start this install's server, its launcher, and - on a headless setup - its Fika
+// headless launcher, and say which of them is already up. Nothing here stops anything - see
+// SptLaunchService.
 //
 public partial class PlayViewModel : ObservableObject
 {
     //
-    // Both targets are started outside this app, so there is nothing to await and no event to
+    // All three targets are started outside this app, so there is nothing to await and no event to
     // subscribe to - a poll is the only way the buttons can tell that the server came up, or that
     // the game was closed from somewhere else. Runs only while the page is on screen.
     //
@@ -30,8 +31,14 @@ public partial class PlayViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(ClientState))]
     [NotifyPropertyChangedFor(nameof(ClientPath))]
     [NotifyPropertyChangedFor(nameof(CanStartClient))]
-    [NotifyPropertyChangedFor(nameof(IsFikaLauncher))]
     private SptLaunchTargetInfo? _client;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HeadlessState))]
+    [NotifyPropertyChangedFor(nameof(HeadlessPath))]
+    [NotifyPropertyChangedFor(nameof(CanStartHeadless))]
+    [NotifyPropertyChangedFor(nameof(HasHeadless))]
+    private SptLaunchTargetInfo? _headless;
 
     // The result of the last button press, cleared the next time one is pressed.
     [ObservableProperty]
@@ -59,15 +66,26 @@ public partial class PlayViewModel : ObservableObject
 
     public string ClientState => Client is null ? "" : SptLaunchProblems.DescribeState(Client);
 
+    public string HeadlessState => Headless is null ? "" : SptLaunchProblems.DescribeState(Headless);
+
     public string ServerPath => Server?.ExePath ?? "";
 
     public string ClientPath => Client?.ExePath ?? "";
+
+    public string HeadlessPath => Headless?.ExePath ?? "";
 
     public bool CanStartServer => Server?.CanLaunch == true;
 
     public bool CanStartClient => Client?.CanLaunch == true;
 
-    public bool IsFikaLauncher => Client?.IsFikaLauncher == true;
+    public bool CanStartHeadless => Headless?.CanLaunch == true;
+
+    //
+    // Whether this install has a headless launcher at all. Only a setup running a headless client
+    // has one, so on every other install the whole card stays off the page rather than showing a
+    // dead button for something that was never installed.
+    //
+    public bool HasHeadless => Headless?.Exists == true;
 
     // Called by the page, so the poll only runs while it is the visible page.
     public void StartPolling()
@@ -85,6 +103,7 @@ public partial class PlayViewModel : ObservableObject
 
         Server = SptLaunchService.Describe(installPath, SptLaunchTarget.Server);
         Client = SptLaunchService.Describe(installPath, SptLaunchTarget.Client);
+        Headless = SptLaunchService.Describe(installPath, SptLaunchTarget.Headless);
     }
 
     [RelayCommand]
@@ -92,6 +111,9 @@ public partial class PlayViewModel : ObservableObject
 
     [RelayCommand]
     private void StartClient() => Start(SptLaunchTarget.Client);
+
+    [RelayCommand]
+    private void StartHeadless() => Start(SptLaunchTarget.Headless);
 
     private void Start(SptLaunchTarget target)
     {

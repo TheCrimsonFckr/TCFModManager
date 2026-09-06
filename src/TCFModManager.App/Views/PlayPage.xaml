@@ -56,7 +56,7 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="Opens the launcher you pick a profile in and start the game from. Start the server first - the launcher has nothing to log in to without it." />
+                    Text="Opens SPT.Launcher.exe, where you pick a profile and start the game. Start the server first - the launcher has nothing to log in to without it." />
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                     <ui:Button
@@ -77,14 +77,46 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                     Text="{Binding ClientPath}" />
+            </StackPanel>
+        </ui:Card>
 
-                <!-- Only says so when it found one: on a stock install this line would be noise. -->
+        <!-- Only an install running a headless client has this launcher, so the card is off the
+             page entirely on every other one rather than showing a dead button. -->
+        <ui:Card
+            Padding="16"
+            VerticalAlignment="Top"
+            Margin="0,16,0,0"
+            Visibility="{Binding HasHeadless, Converter={StaticResource BoolToVisibility}}">
+            <StackPanel>
                 <TextBlock
-                    Margin="0,8,0,0"
+                    Text="Fika headless client"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Margin="0,0,0,4" />
+                <TextBlock
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                    Visibility="{Binding IsFikaLauncher, Converter={StaticResource BoolToVisibility}}"
-                    Text="This install has a Fika launcher, so that is the one opened - it is what joins a Fika server. The stock SPT launcher is still there if you would rather use it." />
+                    Margin="0,0,0,8"
+                    Text="This install has a Fika headless launcher, which only appears on a setup running a headless client. It hosts raids for other players rather than being the one you play on - start the server first, same as the game launcher." />
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <ui:Button
+                        Content="Open headless launcher"
+                        Icon="{ui:SymbolIcon Play24}"
+                        IsEnabled="{Binding CanStartHeadless}"
+                        Command="{Binding StartHeadlessCommand}" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Margin="12,0,0,0"
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="{Binding HeadlessState}" />
+                </StackPanel>
+
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                    Text="{Binding HeadlessPath}" />
             </StackPanel>
         </ui:Card>
 

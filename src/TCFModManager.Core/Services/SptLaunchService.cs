@@ -7,8 +7,11 @@ public enum SptLaunchTarget
     // SPT.Server.exe, wherever this install's layout keeps it.
     Server,
 
-    // The launcher the player starts the game from - the Fika one where an install has it.
+    // SPT.Launcher.exe - the launcher a player picks a profile in and starts the game from.
     Client,
+
+    // A Fika install's own launcher, which is only present on a setup running a headless client.
+    Headless,
 }
 
 //
@@ -48,10 +51,9 @@ public sealed record SptLaunchTargetInfo
 
     public bool IsRunning { get; init; }
 
-    // True when ExePath is a Fika install's own launcher rather than the stock SPT one.
-    public bool IsFikaLauncher { get; init; }
-
     public SptLaunchProblem Problem { get; init; }
+
+    public bool Exists => ExePath is not null;
 
     public bool CanLaunch => ExePath is not null && !IsRunning;
 }
@@ -68,22 +70,26 @@ public sealed record SptLaunchResult
 }
 
 //
-// Starts the SPT server and the game launcher for an install, and reports which of them is already
-// up. Nothing here ever stops a process: the server holds a live profile, and this app is not the
-// thing that should decide to kill it.
+// Starts an install's server, its game launcher, and - where one exists - its Fika headless
+// launcher, and reports which of them is already up. Nothing here ever stops a process: the server
+// holds a live profile, and this app is not the thing that should decide to kill it.
 //
 public static class SptLaunchService
 {
     // Beside the server exe, in whichever folder that turned out to be.
-    private static readonly string[] LauncherCandidates =
+    private static readonly string[] ClientLauncherCandidates =
     [
         "SPT.Launcher.exe",
         "Aki.Launcher.exe",
     ];
 
-    // A Fika install ships its own launcher at the install root. Matched by pattern rather than by
-    // name because only one spelling of it has actually been seen.
-    private const string FikaLauncherWildcard = "*Fika*Launcher*.exe";
+    //
+    // A Fika install's own launcher, at the install root. Present only on a setup running a
+    // headless client - a normal Fika player install has Fika-Installer.exe and no launcher of its
+    // own, and starts the game through SPT.Launcher.exe like any other. Matched by pattern rather
+    // than by name because only one spelling of it has actually been seen.
+    //
+    private const string HeadlessLauncherWildcard = "*Fika*Launcher*.exe";
 
     // Other processes that mean this target is already up, whatever the exe on disk is called.
     private static readonly string[] ServerProcessNames = ["SPT.Server", "Aki.Server"];
@@ -97,17 +103,7 @@ public static class SptLaunchService
             return new SptLaunchTargetInfo { Target = target, Problem = SptLaunchProblem.NoInstallFolder };
         }
 
-        string? exePath = null;
-        var isFika = false;
-
-        if (target == SptLaunchTarget.Server)
-        {
-            if (SptInstallationService.TryFindServerExe(installPath!, out var server)) exePath = server;
-        }
-        else
-        {
-            if (TryFindLauncherExe(installPath!, out var launcher, out isFika)) exePath = launcher;
-        }
+        var exePath = FindExe(installPath!, target);
 
         if (exePath is null)
         {
@@ -127,7 +123,6 @@ public static class SptLaunchService
             InstallPath = installPath,
             ExePath = exePath,
             ProcessName = processName,
-            IsFikaLauncher = isFika,
             IsRunning = IsRunning(target, processName),
         };
     }
@@ -170,22 +165,28 @@ public static class SptLaunchService
         }
     }
 
-    //
-    // The launcher this install starts the game from. A Fika install's own launcher wins: it is the
-    // one that joins a Fika server, and an install that has it does not want the stock one.
-    //
-    public static bool TryFindLauncherExe(string installPath, out string exePath, out bool isFika)
+    private static string? FindExe(string installPath, SptLaunchTarget target)
+    {
+        switch (target)
+        {
+            case SptLaunchTarget.Server:
+                return SptInstallationService.TryFindServerExe(installPath, out var server) ? server : null;
+
+            case SptLaunchTarget.Client:
+                return TryFindClientLauncherExe(installPath, out var client) ? client : null;
+
+            case SptLaunchTarget.Headless:
+                return FindFirstFile(installPath, HeadlessLauncherWildcard);
+
+            default:
+                return null;
+        }
+    }
+
+    // The launcher a player starts the game from. It sits beside the server exe in every layout.
+    public static bool TryFindClientLauncherExe(string installPath, out string exePath)
     {
         exePath = "";
-        isFika = false;
-
-        var fika = FindFirstFile(installPath, FikaLauncherWildcard);
-        if (fika is not null)
-        {
-            exePath = fika;
-            isFika = true;
-            return true;
-        }
 
         if (!SptInstallationService.TryGetServerRoot(installPath, out var serverRoot)) return false;
 
@@ -193,7 +194,7 @@ public static class SptLaunchService
             ? installPath
             : Path.Combine(installPath, serverRoot);
 
-        foreach (var name in LauncherCandidates)
+        foreach (var name in ClientLauncherCandidates)
         {
             var candidate = Path.Combine(searchDirectory, name);
             if (File.Exists(candidate))
@@ -204,6 +205,13 @@ public static class SptLaunchService
         }
 
         return false;
+    }
+
+    // True when this install has a Fika headless launcher, which is what makes it a headless setup.
+    public static bool TryFindHeadlessLauncherExe(string installPath, out string exePath)
+    {
+        exePath = FindFirstFile(installPath, HeadlessLauncherWildcard) ?? "";
+        return exePath.Length > 0;
     }
 
     private static string? FindFirstFile(string directory, string pattern)
@@ -222,7 +230,17 @@ public static class SptLaunchService
 
     private static bool IsRunning(SptLaunchTarget target, string processName)
     {
-        var known = target == SptLaunchTarget.Server ? ServerProcessNames : ClientProcessNames;
+        //
+        // The headless launcher is checked by its own name only. A headless client runs
+        // EscapeFromTarkov like any other, so folding that in would make this read as running
+        // whenever the player's own game was open on the same machine.
+        //
+        var known = target switch
+        {
+            SptLaunchTarget.Server => ServerProcessNames,
+            SptLaunchTarget.Client => ClientProcessNames,
+            _ => [],
+        };
 
         foreach (var name in known.Append(processName).Distinct(StringComparer.OrdinalIgnoreCase))
         {

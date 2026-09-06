@@ -3,9 +3,10 @@ using TCFModManager.Core.Services;
 namespace TCFModManager.App.Services;
 
 //
-// What the user is told when the server or the game can't be started. SptLaunchService reports a
-// SptLaunchProblem plus the values behind it and stops there; the wording lives here, beside the
-// rest of this app's prose, for the same reason ModInstallProblems and AppUpdateProblems do.
+// What the user is told when the server, the game or a headless client can't be started.
+// SptLaunchService reports a SptLaunchProblem plus the values behind it and stops there; the
+// wording lives here, beside the rest of this app's prose, for the same reason ModInstallProblems
+// and AppUpdateProblems do.
 //
 public static class SptLaunchProblems
 {
@@ -13,15 +14,17 @@ public static class SptLaunchProblems
     {
         SptLaunchProblem.NoInstallFolder => AppMessages.NoSptInstallFolder,
 
-        SptLaunchProblem.ExeNotFound => result.Info.Target == SptLaunchTarget.Server
-            ? $"No SPT server executable in {result.Info.InstallPath} - check the install folder on "
-              + "the Options page."
-            : $"No launcher in {result.Info.InstallPath} - check the install folder on the Options page.",
+        SptLaunchProblem.ExeNotFound =>
+            $"No {What(result.Info.Target)} in {result.Info.InstallPath} - check the install folder "
+            + "on the Options page.",
 
         // Not really a failure: the thing the button offers to start is already up.
-        SptLaunchProblem.AlreadyRunning => result.Info.Target == SptLaunchTarget.Server
-            ? "The SPT server is already running."
-            : "The game is already running.",
+        SptLaunchProblem.AlreadyRunning => result.Info.Target switch
+        {
+            SptLaunchTarget.Server => "The SPT server is already running.",
+            SptLaunchTarget.Client => "The game is already running.",
+            _ => "The headless launcher is already running.",
+        },
 
         // The inner exception is the only thing that says why, so it is quoted rather than summarised.
         SptLaunchProblem.StartFailed =>
@@ -39,14 +42,22 @@ public static class SptLaunchProblems
     {
         SptLaunchProblem.NoInstallFolder => AppMessages.NoSptInstallFolder,
 
-        SptLaunchProblem.ExeNotFound => info.Target == SptLaunchTarget.Server
-            ? "No SPT server executable found in this install."
-            : "No launcher found in this install.",
+        SptLaunchProblem.ExeNotFound => $"No {What(info.Target)} found in this install.",
 
-        _ when info.IsRunning => info.Target == SptLaunchTarget.Server
-            ? "Running."
-            : "Running - the game or its launcher is already open.",
+        _ when info.IsRunning => info.Target switch
+        {
+            SptLaunchTarget.Server => "Running.",
+            SptLaunchTarget.Client => "Running - the game or its launcher is already open.",
+            _ => "Running.",
+        },
 
         _ => "Not running.",
+    };
+
+    private static string What(SptLaunchTarget target) => target switch
+    {
+        SptLaunchTarget.Server => "SPT server executable",
+        SptLaunchTarget.Client => "SPT launcher",
+        _ => "Fika headless launcher",
     };
 }
