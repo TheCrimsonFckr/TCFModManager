@@ -57,8 +57,26 @@ public static class ModListCandidates
         return candidates;
     }
 
+    //
+    // Which halves of the install a card occupies, as a list entry's scope. The scanner already
+    // knows - HasPlugin/HasPatcher/HasServer come straight off the folders it found - so an
+    // operator publishing their install does not tag twenty mods by hand.
+    //
+    // A card that occupies neither half is Both rather than a guess: it is the honest answer for
+    // something the scanner could not place, and Both is the value that changes nothing.
+    //
+    public static ModListEntryScope ScopeOf(InstalledModCardViewModel card) =>
+        (card.HasPlugin || card.HasPatcher, card.HasServer) switch
+        {
+            (true, false) => ModListEntryScope.Client,
+            (false, true) => ModListEntryScope.Server,
+            _ => ModListEntryScope.Both,
+        };
+
     public static ModListCandidate From(InstalledModCardViewModel card) => new()
     {
+        Scope = ScopeOf(card),
+
         //
         // The card's DisplayTitle, not its Name: Name is the raw folder the scanner found, and this
         // is what a list entry stores and shows. A list read "acidphantasm-itemvaluewatermark"

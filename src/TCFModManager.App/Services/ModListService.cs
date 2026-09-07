@@ -109,7 +109,17 @@ public sealed class ModListService
         var install = await ReadInstallAsync();
         if (install is null) return null;
 
-        return new ModListPreview(list, ModListPlanner.Build(list, install.Candidates, neverAutoDisable), install);
+        //
+        // A personal list is planned knowing what the followed server also requires, so its
+        // Exclusive sweep spares those mods. Passed as null when planning the server list itself -
+        // it does not need protecting from its own plan, and a served list never disables anyway.
+        //
+        var serverList = list.Origin == ModListOrigin.Server ? null : AppServices.ModLists.GetActiveServer();
+
+        return new ModListPreview(
+            list,
+            ModListPlanner.Build(list, install.Candidates, neverAutoDisable, serverList),
+            install);
     }
 
     //
@@ -147,7 +157,14 @@ public sealed class ModListService
 
         if (result.Completed)
         {
-            AppServices.ModLists.SetActive(preview.List.Id);
+            //
+            // Into whichever slot it belongs to. Following a server must not cost the user the
+            // personal list they were already following, and vice versa - see ModListData.
+            //
+            if (preview.List.Origin == ModListOrigin.Server)
+                AppServices.ModLists.SetActiveServer(preview.List.Id);
+            else
+                AppServices.ModLists.SetActive(preview.List.Id);
 
             // The revision counts applies, not edits - see ModListStore.BumpRevision. An apply that
             // stopped part way is not one: it is unwound, and the install ends up where it started.

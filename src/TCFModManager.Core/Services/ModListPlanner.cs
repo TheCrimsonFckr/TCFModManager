@@ -120,11 +120,22 @@ public sealed class ModListPlan
 //
 public static class ModListPlanner
 {
+    //
+    // alsoRequiredBy is the server list this install is following, when it is following one.
+    //
+    // Its mods are spared by the Exclusive sweep below, which is what lets a player follow their
+    // own list AND a server's at the same time: without it, applying a personal list would set
+    // aside every mod the server requires and the next raid would be a version mismatch. Only the
+    // entries that apply here are spared - a server-scoped entry was never installed to begin with.
+    //
     public static ModListPlan Build(
         ModList list,
         IEnumerable<ModListCandidate> installed,
-        IReadOnlySet<string>? neverAutoDisable = null)
+        IReadOnlySet<string>? neverAutoDisable = null,
+        ModList? alsoRequiredBy = null)
     {
+        neverAutoDisable = Protecting(neverAutoDisable, alsoRequiredBy);
+
         var candidates = installed.ToList();
         var actions = new List<ModListAction>();
         var matched = new bool[candidates.Count];
@@ -146,14 +157,35 @@ public static class ModListPlanner
             byName.TryAdd(candidate.Name.Trim(), index);
         }
 
-        foreach (var entry in list.Entries)
+        //
+        // EntriesApplyingHere, not Entries: a served list's server-only entries are not this
+        // machine's to install. They are still matched against what is installed, so a server mod
+        // you happen to have is not then disabled as "not on the list" - see the sweep below.
+        //
+        foreach (var entry in list.EntriesApplyingHere)
         {
             var found = Match(entry, byModId, byGuid, byFolder, byName);
             if (found >= 0) matched[found] = true;
             actions.Add(ActionFor(entry, found >= 0 ? candidates[found] : null));
         }
 
-        if (list.Policy == ModListPolicy.Exclusive)
+        // Skipped entries still claim their installed mod, so the Exclusive sweep does not offer to
+        // disable something purely because this machine was not the one meant to install it.
+        foreach (var entry in list.Entries.Except(list.EntriesApplyingHere))
+        {
+            var found = Match(entry, byModId, byGuid, byFolder, byName);
+            if (found >= 0) matched[found] = true;
+        }
+
+        //
+        // A list a server handed you never disables anything, whatever policy its author chose.
+        //
+        // An operator writing an Exclusive list is describing THEIR install; applying that verbatim
+        // on someone else's machine would disable mods the server has never heard of and has no
+        // opinion about - a HUD tweak, a sound pack. The server says what you need, not what you may
+        // not have. Your own lists keep working exactly as before.
+        //
+        if (list.Policy == ModListPolicy.Exclusive && list.Origin != ModListOrigin.Server)
         {
             for (var index = 0; index < candidates.Count; index++)
             {
@@ -250,6 +282,28 @@ public static class ModListPlanner
             IsDowngrade = kind != ModListActionKind.Keep && IsOlder(entry.Version, installed.Version),
             NeedsUpdateAfterEnable = kind == ModListActionKind.Enable && !sameVersion,
         };
+    }
+
+    //
+    // The user's own pins, plus everything the followed server list names, as one set of folder and
+    // mod names. Built here rather than by the caller so every call site protects the server's mods
+    // the same way - forgetting it at one of them is a mod disabled behind the user's back.
+    //
+    private static IReadOnlySet<string>? Protecting(IReadOnlySet<string>? pinned, ModList? serverList)
+    {
+        if (serverList is null) return pinned;
+
+        var protectedNames = new HashSet<string>(pinned ?? new HashSet<string>(), StringComparer.OrdinalIgnoreCase);
+
+        foreach (var entry in serverList.EntriesApplyingHere)
+        {
+            protectedNames.Add(entry.Name.Trim().ToLowerInvariant());
+
+            foreach (var folder in entry.Folders.Where(f => !string.IsNullOrWhiteSpace(f)))
+                protectedNames.Add(folder.Trim().ToLowerInvariant());
+        }
+
+        return protectedNames;
     }
 
     private static bool IsPinnedAgainstDisable(ModListCandidate candidate, IReadOnlySet<string>? pinned)

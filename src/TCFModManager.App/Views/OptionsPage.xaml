@@ -179,6 +179,25 @@
                     Margin="0,0,0,8"
                     Text="{Binding KeyDescription}" />
 
+                <!-- Only on the machine actually running a server. Shown in full rather than
+                     shortened: the whole purpose is to be copied out and sent to somebody, and
+                     anyone who can see this window can already open the file it came from. -->
+                <StackPanel
+                    Margin="0,0,0,8"
+                    Visibility="{Binding IsServerOwner, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        IsHitTestVisible="True"
+                        Text="{Binding LocalKeyDescription}" />
+                    <ui:Button
+                        Margin="0,8,0,0"
+                        HorizontalAlignment="Left"
+                        Content="Use this machine's key"
+                        Icon="{ui:SymbolIcon Key24}"
+                        Command="{Binding UseLocalKeyCommand}" />
+                </StackPanel>
+
                 <!-- Named to match the shared ErrorText style, which turns this red only when the
                      last attempt actually failed. -->
                 <TextBlock

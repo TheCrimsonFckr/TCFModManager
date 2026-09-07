@@ -123,8 +123,15 @@ public sealed class ServerMapSettings
     //
     public string? SharedKey { get; set; }
 
+    //
+    // JsonIgnore because System.Text.Json serialises get-only properties by default, so these were
+    // being written into settings.json - a file the Options page invites people to hand-edit, where
+    // "IsConfigured": true reads as a switch you can flip and is in fact ignored on load.
+    //
+    [JsonIgnore]
     public bool IsConfigured => !string.IsNullOrWhiteSpace(Host);
 
+    [JsonIgnore]
     public bool HasKey => !string.IsNullOrWhiteSpace(SharedKey);
 
     public ServerMapEndpoint ToEndpoint() => new(Host ?? string.Empty, Port, PinnedThumbprint, SharedKey);

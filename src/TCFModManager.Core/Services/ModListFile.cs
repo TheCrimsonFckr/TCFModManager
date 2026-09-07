@@ -59,8 +59,15 @@ public static class ModListFile
     //
     public const int AddonSchemaVersion = 2;
 
+    //
+    // Added when entry scope did. An app that does not know Scope reads a server-only entry as one
+    // it should install - which is exactly the errand scope exists to prevent, and exactly the
+    // "an older app could no longer read this correctly" case the version is for.
+    //
+    public const int ScopeSchemaVersion = 3;
+
     // The highest version this app can read.
-    public const int SchemaVersion = AddonSchemaVersion;
+    public const int SchemaVersion = ScopeSchemaVersion;
 
     //
     // The version a given list has to be written at. Only a list that actually contains an addon is
@@ -68,8 +75,12 @@ public static class ModListFile
     // every export to the newest version, would break sharing between versions to describe a
     // feature the file doesn't use.
     //
-    public static int SchemaVersionFor(ModList list) =>
-        list.Entries.Any(e => e.IsAddon) ? AddonSchemaVersion : BaseSchemaVersion;
+    public static int SchemaVersionFor(ModList list)
+    {
+        if (list.Entries.Any(e => e.Scope != ModListEntryScope.Both)) return ScopeSchemaVersion;
+
+        return list.Entries.Any(e => e.IsAddon) ? AddonSchemaVersion : BaseSchemaVersion;
+    }
 
     // Deliberately its own extension rather than .json, so the app can be associated with it later
     // and so a double-click means something.
@@ -169,7 +180,7 @@ public static class ModListFile
         };
 
         // Entries with no name at all can't be shown or matched on, so they are dropped rather than
-        // carried through as blanks.
+        // carried through as blanks. Scope travels with them - it is the file's, not the reader's.
         imported.Entries.AddRange(list.Entries.Where(e => !string.IsNullOrWhiteSpace(e.Name)));
 
         return new ModListImport(imported, null);

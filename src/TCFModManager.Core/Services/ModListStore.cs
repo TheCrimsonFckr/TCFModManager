@@ -92,6 +92,27 @@ public sealed class ModListStore
         return list;
     }
 
+    //
+    // Marks one list as the one this machine publishes, and clears the mark from every other.
+    //
+    // Exactly one, because the server serves exactly one file. Two lists both claiming to be
+    // published would be a claim the folder cannot honour, and the second publish would silently
+    // overwrite the first.
+    //
+    public ModList? SetPublished(Guid id)
+    {
+        var data = Load();
+
+        foreach (var list in data.Lists) list.Purpose = ModListPurpose.Personal;
+
+        var published = data.Lists.FirstOrDefault(l => l.Id == id);
+        if (published is null) return null;
+
+        published.Purpose = ModListPurpose.Published;
+        Save(data);
+        return published;
+    }
+
     // Replaces the one undo point. Null clears it - what reverting does, since you cannot revert
     // a revert.
     public ModList? SetSnapshot(ModList? snapshot)
@@ -207,6 +228,7 @@ public sealed class ModListStore
         if (data.Lists.RemoveAll(l => l.Id == id) == 0) return;
 
         if (data.ActiveListId == id) data.ActiveListId = null;
+        if (data.ActiveServerListId == id) data.ActiveServerListId = null;
         Save(data);
     }
 
@@ -225,5 +247,28 @@ public sealed class ModListStore
     {
         var data = Load();
         return data.ActiveListId is null ? null : data.Lists.FirstOrDefault(l => l.Id == data.ActiveListId);
+    }
+
+    //
+    // Marks which SERVER list the install is following. Its own slot, so following a server does not
+    // cost the user the personal list they were already following - see ModListData.
+    //
+    public void SetActiveServer(Guid? id)
+    {
+        var data = Load();
+        if (id is not null && data.Lists.All(l => l.Id != id)) return;
+        if (data.ActiveServerListId == id) return;
+
+        data.ActiveServerListId = id;
+        Save(data);
+    }
+
+    public ModList? GetActiveServer()
+    {
+        var data = Load();
+
+        return data.ActiveServerListId is null
+            ? null
+            : data.Lists.FirstOrDefault(l => l.Id == data.ActiveServerListId);
     }
 }

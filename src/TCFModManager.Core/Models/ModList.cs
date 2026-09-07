@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace TCFModManager.Core.Models;
 
 // Where a mod list came from. Only Local lists can be edited in place; the other two are records of
@@ -12,6 +14,47 @@ public enum ModListOrigin
 
     // Served by a server this install connected to.
     Server,
+}
+
+//
+// Who an entry is for.
+//
+// A server's published list describes the whole server, and not all of it is a client's business:
+// the Server Map mod itself and fika-server live in user\mods, are often not on The Forge at all,
+// and a client told to install them is being sent on an errand. Leaving them off the list instead
+// is worse - the operator applying their own published list would then disable the very mod that
+// serves it. Scope is what breaks that: one list, and the entries say who they concern.
+//
+// Inferred at capture from where a mod's files land (InstalledModTarget), so it costs the operator
+// nothing in the common case and can be overridden for the odd one.
+//
+public enum ModListEntryScope
+{
+    // Everyone. The default, so a list written before scope existed means exactly what it meant.
+    Both,
+
+    // A playing client - a BepInEx plugin. Nothing for a headless box to do with it.
+    Client,
+
+    // The machine running the server. A client applying a SERVED list skips these entirely: not
+    // installed, not disabled, not reported missing.
+    Server,
+}
+
+//
+// What a list is for.
+//
+// Housekeeping, not behaviour: it marks the one list this machine publishes to its own server, so
+// the Mod lists page can show which it is and offer to re-export on save. Nothing in the planner
+// reads it - what an apply does is decided by Origin and Scope.
+//
+public enum ModListPurpose
+{
+    // An ordinary list, made and applied here.
+    Personal,
+
+    // The list this machine serves through the Server Map mod.
+    Published,
 }
 
 // What applying a list does to installed mods the list doesn't mention.
@@ -67,8 +110,27 @@ public sealed class ModListEntry
     // InstalledModScanner reports. What an unresolved entry is matched on locally.
     public List<string> Folders { get; init; } = [];
 
+    //
+    // Who this entry is for. Omitted from the file when it is Both, which is almost always, so
+    // scope costs nothing in a list that does not use it.
+    //
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public ModListEntryScope Scope { get; init; }
+
+    //
+    // JsonIgnore on all four computed members here and on ModList below. System.Text.Json writes
+    // get-only properties by default, so every .tcfmodlist ever exported carried IsPinned and
+    // IsResolved on each entry, and IsEditable plus a SECOND FULL COPY of every unresolved entry
+    // under "Unresolved" on the list. Nothing has ever read them back - there are no setters - so
+    // this only makes the file smaller and honest.
+    //
+    // Not a schema change: an older app never set these either, so a file without them means
+    // exactly what a file with them meant.
+    //
+    [JsonIgnore]
     public bool IsPinned => ModId is not null && VersionId is not null;
 
+    [JsonIgnore]
     public bool IsResolved => ModId is not null;
 }
 
@@ -88,6 +150,17 @@ public sealed class ModList
     public int Revision { get; set; } = 1;
 
     public ModListOrigin Origin { get; init; } = ModListOrigin.Local;
+
+    //
+    // Whether this is the list this machine publishes.
+    //
+    // Never written to a share file: it is local bookkeeping, and a list you RECEIVE is not your
+    // published one no matter what the sender had it marked as. Plain JsonIgnore rather than
+    // WhenWritingDefault, which would have let the interesting value through and only suppressed
+    // the boring one - a test caught exactly that.
+    //
+    [JsonIgnore]
+    public ModListPurpose Purpose { get; set; }
 
     public ModListPolicy Policy { get; set; } = ModListPolicy.Exclusive;
 
@@ -118,10 +191,30 @@ public sealed class ModList
 
     public List<ModListEntry> Entries { get; init; } = [];
 
+    //
+    // IsEditable was the actively misleading one: a served list is written by an app where it was
+    // Local, so the file said "IsEditable": true while the receiving app - which sets Origin to
+    // Server on the way in - correctly treats it as read-only. A document that contradicts the
+    // program reading it is worse than one that says nothing.
+    //
+    [JsonIgnore]
     public bool IsEditable => Origin == ModListOrigin.Local;
 
     // Entries that can't be fetched from The Forge, so the receiver has to install them by hand.
+    [JsonIgnore]
     public IEnumerable<ModListEntry> Unresolved => Entries.Where(e => !e.IsResolved);
+
+    //
+    // The entries that concern the machine reading this list.
+    //
+    // A list of your own describes your install, both halves of it, so all of it applies. A list a
+    // SERVER handed you describes that server, and its server-only entries are not yours to install
+    // - you are not that machine.
+    //
+    [JsonIgnore]
+    public IEnumerable<ModListEntry> EntriesApplyingHere => Origin == ModListOrigin.Server
+        ? Entries.Where(e => e.Scope != ModListEntryScope.Server)
+        : Entries;
 }
 
 // Every list this install holds, plus which one is currently applied.
@@ -129,8 +222,28 @@ public sealed class ModListData
 {
     public List<ModList> Lists { get; init; } = [];
 
-    // One list is active at a time. Null when the install isn't following a list.
+    //
+    // The install's OWN list - the one it chose to follow. Null when it isn't following one.
+    //
+    // One at a time, because two personal lists both claiming to describe this install would be two
+    // answers to one question.
+    //
     public Guid? ActiveListId { get; set; }
+
+    //
+    // The list a SERVER hands this install, followed alongside the one above rather than instead of
+    // it.
+    //
+    // Two slots because they answer different questions and both can be true at once: the server
+    // says what its players need, and the player's own list says what else they like running. A
+    // single slot forced a choice nobody should have to make - follow the server and lose your own
+    // client-side mods from the list that protects them, or keep your list and have an Exclusive
+    // apply set aside every mod the server requires.
+    //
+    // What makes them coexist is in ModListPlanner: a served list never disables, and a personal
+    // list's Exclusive sweep spares everything the followed server list names.
+    //
+    public Guid? ActiveServerListId { get; set; }
 
     //
     // How the install stood before the last list was applied, and the only one kept - each apply

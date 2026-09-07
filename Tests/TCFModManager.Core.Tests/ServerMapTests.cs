@@ -721,3 +721,190 @@ public class ServerMapKeyTests
         }
     }
 }
+
+//
+// Reading the key of a server running on this machine. The operator generated it by starting their
+// own server and already owns the file; making them go and find it to paste back into the window in
+// front of them is busywork, and this is what avoids it.
+//
+public class ServerMapKeyFileTests : IDisposable
+{
+    private readonly string _root = Path.Combine(Path.GetTempPath(), "smkey-" + Guid.NewGuid().ToString("N"));
+
+    private const string Key = "D7SM-YSW3-PQJV-KM5W-CQQF-VHD5";
+
+    public void Dispose()
+    {
+        try
+        {
+            if (Directory.Exists(_root)) Directory.Delete(_root, recursive: true);
+        }
+        catch
+        {
+            // A temp folder left behind is not worth failing a test run over.
+        }
+    }
+
+    private string WriteKey(string contents, params string[] under)
+    {
+        var directory = Path.Combine([_root, .. under, "TCFModManager", "ServerMap", "config"]);
+        Directory.CreateDirectory(directory);
+
+        var path = Path.Combine(directory, ServerMapKeyFile.FileName);
+        File.WriteAllText(path, contents);
+        return path;
+    }
+
+    private string Dir(params string[] segments)
+    {
+        var path = Path.Combine([_root, .. segments]);
+        Directory.CreateDirectory(path);
+        return path;
+    }
+
+    [Fact]
+    public void FindsTheKeyBesideTheInstallRoot()
+    {
+        var expected = WriteKey(Key);
+
+        Assert.True(ServerMapKeyFile.TryFind(_root, out var found, appDirectory: Dir("nothing-here")));
+        Assert.Equal(expected, found);
+    }
+
+    //
+    // The app is normally at <SPT root>\TCFModManager\, so the search has to climb: from the app's
+    // own folder the config folder is a sibling, not a child.
+    //
+    [Fact]
+    public void ClimbsFromAFolderInsideTheInstall()
+    {
+        WriteKey(Key);
+        var deep = Dir("SPT_Runtime", "user", "mods");
+
+        Assert.True(ServerMapKeyFile.TryFind(deep, out _, appDirectory: Dir("nothing-here")));
+    }
+
+    [Fact]
+    public void FindsNothingOnAMachineThatIsNotTheServer()
+    {
+        var nowhere = Dir("nothing-here");
+
+        Assert.False(ServerMapKeyFile.TryFind(Dir("elsewhere"), out _, appDirectory: nowhere));
+        Assert.False(ServerMapKeyFile.TryFind(null, out _, appDirectory: nowhere));
+        Assert.False(ServerMapKeyFile.TryFind("   ", out _, appDirectory: nowhere));
+    }
+
+    //
+    // Read exactly as written. The server normalises dashes and case away when comparing, so
+    // reformatting here would only make what the app shows differ from what the operator sees in
+    // the file and pastes to a friend.
+    //
+    [Theory]
+    [InlineData("D7SM-YSW3-PQJV-KM5W-CQQF-VHD5\r\n")]
+    [InlineData("  D7SM-YSW3-PQJV-KM5W-CQQF-VHD5  ")]
+    public void ReadsTheKeyVerbatimApartFromSurroundingWhitespace(string contents)
+    {
+        var path = WriteKey(contents);
+
+        Assert.True(ServerMapKeyFile.TryRead(path, out var key));
+        Assert.Equal(Key, key);
+    }
+
+    // An empty file is not a key of "" - that is the value that would match nothing and confuse
+    // everything downstream.
+    [Theory]
+    [InlineData("")]
+    [InlineData("   \n")]
+    public void AnEmptyKeyFileIsNotAKey(string contents)
+    {
+        var path = WriteKey(contents);
+
+        Assert.False(ServerMapKeyFile.TryRead(path, out _));
+    }
+
+    [Fact]
+    public void TryReadLocalPrefersTheAppsOwnFolderThenTheConfiguredInstall()
+    {
+        WriteKey(Key);
+
+        // From a folder that knows nothing, the configured install path is what finds it.
+        Assert.Equal(Key, ServerMapKeyFile.TryReadLocal(_root, appDirectory: Dir("unrelated")));
+
+        // And from the app's own folder, without any install path configured at all.
+        Assert.Equal(Key, ServerMapKeyFile.TryReadLocal(null, appDirectory: Path.Combine(_root, "TCFModManager")));
+    }
+
+    [Fact]
+    public void TryReadLocalIsNullWhenThisMachineRunsNoServer() =>
+        Assert.Null(ServerMapKeyFile.TryReadLocal(Dir("no-server"), appDirectory: Dir("no-server")));
+}
+
+//
+// Computed properties were being written into every file this app produces, because
+// System.Text.Json serialises get-only properties by default. Nothing ever read them back.
+//
+public class SerializedShapeTests
+{
+    [Fact]
+    public void SettingsDoNotCarryComputedProperties()
+    {
+        var json = JsonSerializer.Serialize(new AppSettings
+        {
+            ServerMap = new ServerMapSettings { Host = "127.0.0.1", SharedKey = "AABB" },
+        });
+
+        Assert.DoesNotContain("IsConfigured", json);
+        Assert.DoesNotContain("HasKey", json);
+        Assert.Contains("SharedKey", json);
+    }
+
+    //
+    // "Unresolved" was the expensive one: an IEnumerable of entries, so every exported list carried
+    // a second full copy of each unresolved entry. "IsEditable" was the misleading one - a served
+    // list said true while the app reading it correctly treats it as read-only.
+    //
+    [Fact]
+    public void AnExportedListDoesNotCarryComputedProperties()
+    {
+        var json = ModListFile.Write(new ModList
+        {
+            Id = Guid.NewGuid(),
+            Name = "Fika night",
+            CreatedAt = DateTimeOffset.UnixEpoch,
+            UpdatedAt = DateTimeOffset.UnixEpoch,
+            Entries =
+            {
+                new ModListEntry { Name = "SAIN", ModId = 2426, VersionId = 5 },
+                new ModListEntry { Name = "A GitHub-only mod" },
+            },
+        });
+
+        Assert.DoesNotContain("IsEditable", json);
+        Assert.DoesNotContain("Unresolved", json);
+        Assert.DoesNotContain("IsPinned", json);
+        Assert.DoesNotContain("IsResolved", json);
+    }
+
+    // Dropping them is not a schema change: an older app never set them either, so a file without
+    // them means exactly what a file with them meant.
+    [Fact]
+    public void AListStillRoundTripsWithoutThem()
+    {
+        var original = new ModList
+        {
+            Id = Guid.NewGuid(),
+            Name = "Fika night",
+            Revision = 4,
+            CreatedAt = DateTimeOffset.UnixEpoch,
+            UpdatedAt = DateTimeOffset.UnixEpoch,
+            Entries = { new ModListEntry { Name = "SAIN", ModId = 2426, VersionId = 5 } },
+        };
+
+        var restored = ModListFile.Read(ModListFile.Write(original)).List!;
+
+        Assert.Equal(original.Id, restored.Id);
+        Assert.Equal(4, restored.Revision);
+        Assert.True(restored.Entries[0].IsPinned);
+        Assert.False(restored.IsEditable);
+    }
+}

@@ -6,12 +6,14 @@ using Microsoft.Win32;
 using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
+using TCFModManager.Core.ServerMap;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
 // One saved list in the left-hand list.
-public sealed partial class ModListRowViewModel(ModList list, bool isActive) : ObservableObject
+public sealed partial class ModListRowViewModel(ModList list, bool isActive, bool isActiveServer = false)
+    : ObservableObject
 {
     public ModList List { get; } = list;
 
@@ -21,7 +23,20 @@ public sealed partial class ModListRowViewModel(ModList list, bool isActive) : O
 
     public bool IsEditable => List.IsEditable;
 
+    // The install's own list, the one it chose to follow.
     public bool IsActive { get; } = isActive;
+
+    //
+    // The server's list, followed alongside the one above rather than instead of it. Its own badge
+    // because "following" means something different here: the server decides what is on it.
+    //
+    public bool IsActiveServer { get; } = isActiveServer;
+
+    //
+    // The list THIS machine serves to its own clients. Badged because among a dozen personal lists
+    // the one that other people are being handed is the one you must not edit carelessly.
+    //
+    public bool IsPublished => List.Purpose == ModListPurpose.Published;
 
     public string Detail
     {
@@ -30,6 +45,8 @@ public sealed partial class ModListRowViewModel(ModList list, bool isActive) : O
             var parts = new List<string> { List.Entries.Count == 1 ? "1 mod" : $"{List.Entries.Count} mods" };
 
             if (List.IsSnapshot) parts.Add("snapshot");
+
+            if (List.Purpose == ModListPurpose.Published) parts.Add("published to this server");
 
             parts.Add(List.Origin switch
             {
@@ -49,7 +66,22 @@ public sealed partial class ModListRowViewModel(ModList list, bool isActive) : O
 public sealed record ModListActionRowViewModel(string Kind, string Name, string Detail, int Order);
 
 // One mod on the selected list, as the contents panel shows it.
-public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, string Detail);
+public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, string Detail)
+{
+    //
+    // Shown on every row, including Both.
+    //
+    // Hiding the default was the first cut and it was wrong: this is a value you cycle, so an
+    // unlabelled row reads as "not set" rather than "set to everyone", and the button that changes
+    // it has no visible starting point. Three states, three labels, always visible.
+    //
+    public string ScopeLabel => Entry.Scope switch
+    {
+        ModListEntryScope.Client => "Client only",
+        ModListEntryScope.Server => "Server only",
+        _ => "Everyone",
+    };
+}
 
 //
 // The Mod lists page: what lists this install holds, what applying one would do, and applying it.
@@ -87,6 +119,13 @@ public partial class ModListsViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
     [NotifyCanExecuteChangedFor(nameof(ForkCommand))]
     [NotifyCanExecuteChangedFor(nameof(RenameCommand))]
+    //
+    // Both of these were missing, and a command whose CanExecute is never re-raised is evaluated
+    // once - at construction, with nothing selected - and stays disabled for the life of the page.
+    // That is exactly how Publish came out permanently greyed.
+    //
+    [NotifyCanExecuteChangedFor(nameof(PublishCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CycleScopeCommand))]
     private ModListRowViewModel? _selected;
 
     [ObservableProperty]
@@ -275,6 +314,13 @@ public partial class ModListsViewModel : ObservableObject
         if (entry.IsAddon) parts.Add("addon");
 
         //
+        // Said in the line rather than only as a chip, because this is the field that decides
+        // whether somebody else's machine acts on the entry at all.
+        //
+        if (entry.Scope == ModListEntryScope.Server) parts.Add("server only - clients skip it");
+        else if (entry.Scope == ModListEntryScope.Client) parts.Add("client only");
+
+        //
         // The folders on disk this entry covers.
         //
         // The name above it is the sp-mod.com listing title wherever one matched, which is often
@@ -327,7 +373,8 @@ public partial class ModListsViewModel : ObservableObject
         Lists.Clear();
 
         foreach (var list in data.Lists.OrderByDescending(l => l.UpdatedAt))
-            Lists.Add(new ModListRowViewModel(list, data.ActiveListId == list.Id));
+            Lists.Add(new ModListRowViewModel(
+                list, data.ActiveListId == list.Id, data.ActiveServerListId == list.Id));
 
         OnPropertyChanged(nameof(HasLists));
 
@@ -649,6 +696,113 @@ public partial class ModListsViewModel : ObservableObject
     }
 
     //
+    // Moves one entry between Both, Client only and Server only.
+    //
+    // Capture infers this from where a mod's files land, which is right nearly always - this is for
+    // the exception. The two that forced it: the Server Map mod and fika-server sit in user\mods on
+    // the server, and a client told to install them is being sent on an errand it cannot complete.
+    //
+    [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
+    private void CycleScope(ModListEntryRowViewModel? entry)
+    {
+        if (Selected is null || entry is null) return;
+
+        var index = Entries.IndexOf(entry);
+        if (index < 0) return;
+
+        var next = entry.Entry.Scope switch
+        {
+            ModListEntryScope.Both => ModListEntryScope.Client,
+            ModListEntryScope.Client => ModListEntryScope.Server,
+            _ => ModListEntryScope.Both,
+        };
+
+        // ModListEntry is a class with init-only properties, not a record, so this is a rebuild
+        // rather than a `with`. Every field is carried across deliberately - a missed one here
+        // would silently drop a version pin.
+        var source = entry.Entry;
+
+        Entries[index] = Row(new ModListEntry
+        {
+            Name = source.Name,
+            ModId = source.ModId,
+            IsAddon = source.IsAddon,
+            VersionId = source.VersionId,
+            Version = source.Version,
+            Guid = source.Guid,
+            Folders = [.. source.Folders],
+            Scope = next,
+        });
+        UnsavedCount++;
+
+        StatusMessage = next switch
+        {
+            ModListEntryScope.Server =>
+                $"\"{entry.Name}\" is now server only - a client applying this list will skip it entirely.",
+            ModListEntryScope.Client =>
+                $"\"{entry.Name}\" is now client only.",
+            _ => $"\"{entry.Name}\" now applies to everyone.",
+        };
+    }
+
+    //
+    // Marks this list as the one this machine serves, and writes it into the Server Map mod's config
+    // folder so the server picks it up.
+    //
+    // One step rather than export-then-copy: the app already knows where that folder is, and a file
+    // the operator has to move by hand is a file that ends up in the wrong place - which is exactly
+    // what happened the first time. The server re-reads on the file's timestamp, so there is nothing
+    // to restart.
+    //
+    [RelayCommand(CanExecute = nameof(CanPublish))]
+    private void Publish()
+    {
+        if (Selected is not { } row) return;
+
+        var installPath = new SettingsService().Load().SptInstallPath;
+
+        if (!ServerMapConfigFolder.TryFind(installPath, out var directory))
+        {
+            StatusMessage = "This machine isn't running a server with the Server Map mod - there's"
+                + " nowhere to publish to. The mod goes on the server, not here.";
+            return;
+        }
+
+        try
+        {
+            //
+            // Always the preferred name, never the list's own. A folder holding one arbitrarily
+            // named list works, but two of them is ambiguous and the server then serves neither -
+            // writing the name it prefers means republishing under a new list name replaces the old
+            // file instead of sitting beside it.
+            //
+            var path = Path.Combine(directory, PublishedFileName);
+
+            ModListFile.Save(row.List, path);
+            AppServices.ModLists.SetPublished(row.Id);
+            Refresh(row.Id);
+
+            AppLog.Info("ServerMap", $"published \"{row.Name}\" revision {row.List.Revision} to {path}");
+
+            StatusMessage = $"Published \"{row.Name}\" - the server serves it from now on."
+                + " Bump the revision by editing and saving it, so connected clients know to re-fetch.";
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            StatusMessage = $"Couldn't write the list to the server's config folder: {ex.Message}";
+        }
+    }
+
+    //
+    // A served list is not republishable: it came from somewhere else, and serving it back would
+    // make this machine claim authorship of somebody else's list.
+    //
+    private bool CanPublish() => Selected is { List.Origin: not ModListOrigin.Server, List.IsSnapshot: false };
+
+    // Matches PublishedModList.PreferredFileName on the server side.
+    private const string PublishedFileName = "published.tcfmodlist";
+
+    //
     // Writes the panel to the list. This is the only thing on this page that changes a saved list's
     // contents, and it changes nothing else: no downloads, no folders moved, no revision.
     //
@@ -733,7 +887,8 @@ public partial class ModListsViewModel : ObservableObject
     [RelayCommand]
     private void StopFollowing()
     {
-        AppServices.ModLists.SetActive(null);
+        if (Selected?.IsActiveServer == true) AppServices.ModLists.SetActiveServer(null);
+        else AppServices.ModLists.SetActive(null);
         Refresh();
         StatusMessage = "No mod list is being followed. Nothing on disk changed.";
     }

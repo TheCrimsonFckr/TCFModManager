@@ -33,6 +33,19 @@ public sealed class ServerMapPayload : IServerMapPayload
     private readonly string _configDirectory =
         PublishedModList.ConfigDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? ".");
 
+    public ServerMapPayload()
+    {
+        //
+        // Generated when the server starts, not when someone first fails to authenticate.
+        //
+        // The operator needs the key BEFORE anyone connects - it is the thing they send out with the
+        // address. Generating it lazily meant the file did not exist until a stranger had already
+        // been refused, which is exactly backwards: the person who needs it first is the one running
+        // the server, and they should find it waiting for them.
+        //
+        ServerMapKey.Current(_configDirectory);
+    }
+
     public string RoutePrefix => "/tcfservermap";
 
     public Task<PayloadResponse> HandleAsync(PayloadRequest request, CancellationToken cancellationToken)

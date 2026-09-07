@@ -62,7 +62,19 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
     //
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(KeyDescription))]
+    [NotifyPropertyChangedFor(nameof(CanUseLocalKey))]
     private string? _keyInput;
+
+    //
+    // The key belonging to a Server Map server running on THIS machine, when there is one. Null on
+    // any machine that is not the server, which is most of them.
+    //
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsServerOwner))]
+    [NotifyPropertyChangedFor(nameof(LocalKeyDescription))]
+    [NotifyPropertyChangedFor(nameof(CanUseLocalKey))]
+    [NotifyCanExecuteChangedFor(nameof(UseLocalKeyCommand))]
+    private string? _localKey;
 
     // The list this server publishes, as last fetched. Also in the user's mod lists - this is the
     // page's own handle on it, not a second copy of the truth.
@@ -94,7 +106,8 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
 
     public ServerMapGateViewModel()
     {
-        var stored = _settings.Load().ServerMap;
+        var settings = _settings.Load();
+        var stored = settings.ServerMap;
 
         _isPageEnabled = stored.ShowPage;
         _hostInput = stored.Host;
@@ -102,7 +115,47 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
         _pinnedThumbprint = stored.PinnedThumbprint;
         _keyInput = stored.SharedKey;
 
+        RefreshLocalKey(settings.SptInstallPath);
+
+        //
+        // Filled in only when the box is empty. Someone running the app on their own server should
+        // not have to go and find a file to paste back into the window in front of them - but a key
+        // they typed themselves is never overwritten, because it may be for a different server.
+        //
+        if (string.IsNullOrWhiteSpace(_keyInput) && _localKey is not null) _keyInput = _localKey;
+
         _loaded = true;
+    }
+
+    //
+    // Whether this machine is running a Server Map server. Not inferred from the address: 127.0.0.1,
+    // a LAN address, a hostname and an external IP can all reach the same box, and the app cannot
+    // tell. The presence of the key file is the honest test, and it is also the only one that
+    // matters - it means the person at this keyboard already owns that file.
+    //
+    public bool IsServerOwner => LocalKey is not null;
+
+    public bool CanUseLocalKey =>
+        LocalKey is not null && !string.Equals(LocalKey, KeyInput?.Trim(), StringComparison.Ordinal);
+
+    public string LocalKeyDescription => LocalKey is null
+        ? ""
+        : $"This machine runs a Server Map server. Its key is {LocalKey} - send it to whoever "
+          + "should be able to see what this server publishes, along with the address and port.";
+
+    // Re-read on demand: the file appears the first time the server mod starts, which is usually
+    // after this app was opened.
+    public void RefreshLocalKey(string? sptInstallPath = null) =>
+        LocalKey = ServerMapKeyFile.TryReadLocal(sptInstallPath ?? _settings.Load().SptInstallPath);
+
+    //
+    // Puts this machine's own key in the box. Offered rather than forced, because the address might
+    // legitimately point at somebody else's server from a machine that also runs one.
+    //
+    [RelayCommand(CanExecute = nameof(CanUseLocalKey))]
+    private void UseLocalKey()
+    {
+        if (LocalKey is not null) KeyInput = LocalKey;
     }
 
     //

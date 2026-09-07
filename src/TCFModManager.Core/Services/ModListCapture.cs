@@ -39,6 +39,14 @@ public sealed record ModListCandidate
     public IReadOnlyList<string> Folders { get; init; } = [];
 
     //
+    // Who a list entry built from this card is for, from where the mod's files actually land:
+    // BepInEx\plugins is a client mod, user\mods is a server one, and a card covering both halves
+    // is Both. Inferred rather than asked, because the scanner already knows and nobody wants to
+    // tag twenty mods by hand.
+    //
+    public ModListEntryScope Scope { get; init; }
+
+    //
     // Every scanned mod this card merged - what ModListApplier hands to ModDisableService when a
     // list turns into moves. Left empty for capture and planning, which only read the fields above;
     // an apply needs it, because a client+server mod has to move as one thing.
@@ -125,6 +133,7 @@ public static class ModListCapture
                 VersionId = ResolveVersionId(candidate, versions, addonVersions),
                 Version = string.IsNullOrWhiteSpace(candidate.Version) ? null : candidate.Version.Trim(),
                 Guid = string.IsNullOrWhiteSpace(candidate.Guid) ? null : candidate.Guid.Trim(),
+                Scope = candidate.Scope,
                 Folders = [.. candidate.Folders
                     .Where(f => !string.IsNullOrWhiteSpace(f))
                     .Select(f => f.Trim().ToLowerInvariant())

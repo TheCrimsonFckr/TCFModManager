@@ -202,14 +202,52 @@
                                             Text="{Binding Detail}" />
                                     </StackPanel>
 
-                                    <ui:SymbolIcon
+                                    <!-- Three separate things, deliberately not one badge: the list
+                                         you follow, the list a server hands you (followed at the
+                                         same time), and the list THIS machine serves to others. -->
+                                    <StackPanel
                                         Grid.Column="1"
+                                        Orientation="Horizontal"
                                         VerticalAlignment="Center"
-                                        Margin="10,0,0,0"
-                                        ToolTip="This install is following this list"
-                                        Foreground="{DynamicResource SystemFillColorSuccessBrush}"
-                                        Symbol="CheckmarkCircle24"
-                                        Visibility="{Binding IsActive, Converter={StaticResource BoolToVis}}" />
+                                        Margin="10,0,0,0">
+
+                                        <Border
+                                            Padding="8,3"
+                                            Margin="0,0,6,0"
+                                            CornerRadius="4"
+                                            ToolTip="This machine serves this list to clients that connect to it. Editing and saving it republishes what they see."
+                                            Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                            Visibility="{Binding IsPublished, Converter={StaticResource BoolToVis}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <ui:SymbolIcon
+                                                    Symbol="ServerLink24"
+                                                    FontSize="14"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+                                                <TextBlock
+                                                    Margin="5,0,0,0"
+                                                    FontSize="11"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                                    Text="Serving" />
+                                            </StackPanel>
+                                        </Border>
+
+                                        <ui:SymbolIcon
+                                            Margin="0,0,6,0"
+                                            VerticalAlignment="Center"
+                                            ToolTip="A server's list, which this install is following alongside its own"
+                                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                            Symbol="CloudArrowDown24"
+                                            Visibility="{Binding IsActiveServer, Converter={StaticResource BoolToVis}}" />
+
+                                        <ui:SymbolIcon
+                                            VerticalAlignment="Center"
+                                            ToolTip="This install is following this list"
+                                            Foreground="{DynamicResource SystemFillColorSuccessBrush}"
+                                            Symbol="CheckmarkCircle24"
+                                            Visibility="{Binding IsActive, Converter={StaticResource BoolToVis}}" />
+                                    </StackPanel>
                                 </Grid>
                                 </Border>
                             </DataTemplate>
@@ -456,6 +494,16 @@
                                 ToolTip="Throw these changes away and show the list as it is saved."
                                 Visibility="{Binding HasUnsavedChanges, Converter={StaticResource BoolToVis}}"
                                 Command="{Binding DiscardCommand}" />
+
+                            <!-- One step rather than export-then-copy: the app knows where the
+                                 server's config folder is, and a file the operator has to move by
+                                 hand is one that ends up in the wrong place. -->
+                            <ui:Button
+                                Margin="8,0,0,0"
+                                Icon="{ui:SymbolIcon ServerLink24}"
+                                Content="Publish to this server"
+                                ToolTip="Writes this list into the Server Map mod's config folder on this machine, so the server serves it to connected clients. Nothing is installed or changed on disk."
+                                Command="{Binding PublishCommand}" />
                         </StackPanel>
                     </Grid>
 
@@ -504,6 +552,8 @@
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
 
                                             <!-- The listing title, then the folder it occupies and
@@ -528,9 +578,38 @@
                                                     Text="{Binding Detail}" />
                                             </StackPanel>
 
-                                            <ui:Button
+                                            <!-- On every row, all three states. This is a value you
+                                                 cycle, so an unlabelled row would read as "not set"
+                                                 rather than "everyone". -->
+                                            <Border
                                                 Grid.Column="1"
                                                 VerticalAlignment="Center"
+                                                Margin="0,0,8,0"
+                                                Padding="8,3"
+                                                CornerRadius="4"
+                                                Background="{DynamicResource ControlFillColorSecondaryBrush}">
+                                                <TextBlock
+                                                    FontSize="11"
+                                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                    Text="{Binding ScopeLabel}" />
+                                            </Border>
+
+                                            <ui:Button
+                                                Grid.Column="2"
+                                                VerticalAlignment="Center"
+                                                Margin="0,0,8,0"
+                                                Padding="8,4"
+                                                Appearance="Transparent"
+                                                Icon="{ui:SymbolIcon PeopleSwap24}"
+                                                ToolTip="Who this entry is for: everyone, client only, or server only. Capture works this out from where the mod's files live - change it for the exceptions, like a server mod nobody playing needs to install."
+                                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"
+                                                Command="{Binding DataContext.CycleScopeCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                CommandParameter="{Binding}" />
+
+                                            <ui:Button
+                                                Grid.Column="3"
+                                                VerticalAlignment="Center"
+                                                Margin="0,0,4,0"
                                                 Padding="8,4"
                                                 Appearance="Transparent"
                                                 Foreground="{DynamicResource SystemFillColorCriticalBrush}"
