@@ -216,19 +216,19 @@
                                             Margin="0,0,6,0"
                                             CornerRadius="4"
                                             ToolTip="This machine serves this list to clients that connect to it. Editing and saving it republishes what they see."
-                                            Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                            Background="{DynamicResource SystemFillColorCriticalBackgroundBrush}"
                                             Visibility="{Binding IsPublished, Converter={StaticResource BoolToVis}}">
                                             <StackPanel Orientation="Horizontal">
                                                 <ui:SymbolIcon
                                                     Symbol="ServerLink24"
                                                     FontSize="14"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+                                                    Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
                                                 <TextBlock
                                                     Margin="5,0,0,0"
                                                     FontSize="11"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                                    Foreground="{DynamicResource SystemFillColorCriticalBrush}"
                                                     Text="Serving" />
                                             </StackPanel>
                                         </Border>
@@ -241,19 +241,19 @@
                                             Margin="0,0,6,0"
                                             CornerRadius="4"
                                             ToolTip="A server handed this list to you. It stays exactly as that server wrote it - make a copy to change what's on it."
-                                            Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                            Background="{DynamicResource SystemFillColorCriticalBackgroundBrush}"
                                             Visibility="{Binding IsFromServer, Converter={StaticResource BoolToVis}}">
                                             <StackPanel Orientation="Horizontal">
                                                 <ui:SymbolIcon
                                                     Symbol="CloudArrowDown24"
                                                     FontSize="14"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+                                                    Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
                                                 <TextBlock
                                                     Margin="5,0,0,0"
                                                     FontSize="11"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                                    Foreground="{DynamicResource SystemFillColorCriticalBrush}"
                                                     Text="From server" />
                                             </StackPanel>
                                         </Border>
@@ -472,6 +472,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
@@ -554,7 +555,45 @@
                         </TextBlock>
                     </StackPanel>
 
-                    <Grid Grid.Row="2">
+                    <!-- Only once there is something to filter. A search box over an empty list
+                         is furniture. -->
+                    <Grid
+                        Grid.Row="2"
+                        Margin="10,0,10,8"
+                        Visibility="{Binding HasEntries, Converter={StaticResource BoolToVis}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ui:TextBox
+                            Grid.Column="0"
+                            PlaceholderText="Search this list..."
+                            Icon="{ui:SymbolIcon Search24}"
+                            ToolTip="Matches the mod's name, the name the list stored, and the folders it installs into."
+                            Text="{Binding EntrySearch, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <ComboBox
+                            Grid.Column="1"
+                            Width="150"
+                            Margin="8,0,0,0"
+                            DisplayMemberPath="Label"
+                            ToolTip="Show only the entries meant for one side - the server-only ones are the mods a client is never asked to install."
+                            ItemsSource="{Binding ScopeFilters}"
+                            SelectedItem="{Binding ScopeFilter}" />
+
+                        <ComboBox
+                            Grid.Column="2"
+                            Width="130"
+                            Margin="8,0,0,0"
+                            DisplayMemberPath="Label"
+                            ToolTip="Ordered by the name shown on the row."
+                            ItemsSource="{Binding EntrySorts}"
+                            SelectedItem="{Binding EntrySort}" />
+                    </Grid>
+
+                    <Grid Grid.Row="3">
                         <TextBlock
                             Margin="10,4,10,10"
                             TextWrapping="Wrap"
@@ -563,12 +602,22 @@
                             Visibility="{Binding HasEntries, Converter={StaticResource FalseToVisible}}"
                             Text="This list names no mods yet. Add some, or capture what you have installed as a new list." />
 
+                        <!-- A filter matching nothing is not an empty list, and saying so would be
+                             alarming on a list of 76. -->
+                        <TextBlock
+                            Margin="10,4,10,10"
+                            TextWrapping="Wrap"
+                            VerticalAlignment="Top"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Visibility="{Binding HasNoMatches, Converter={StaticResource BoolToVis}}"
+                            Text="Nothing on this list matches. Everything is still here - widen the search or the scope filter to see it." />
+
                         <ListBox
                             x:Name="EntriesBox"
                             BorderThickness="0"
                             Background="Transparent"
                             ItemContainerStyle="{StaticResource ReadOnlyContainer}"
-                            ItemsSource="{Binding Entries}"
+                            ItemsSource="{Binding EntriesView}"
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>

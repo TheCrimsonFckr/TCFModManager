@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
+using System.Windows.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
@@ -94,6 +96,12 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
     };
 }
 
+// One choice in the contents panel's scope filter. A null Scope means "don't filter on it".
+public sealed record ModListScopeFilter(string Label, ModListEntryScope? Scope);
+
+// One choice in the contents panel's sort.
+public sealed record ModListEntrySort(string Label, ListSortDirection Direction);
+
 //
 // The Mod lists page: what lists this install holds, what applying one would do, and applying it.
 //
@@ -109,8 +117,103 @@ public partial class ModListsViewModel : ObservableObject
 
     public ObservableCollection<ModListRowViewModel> Lists { get; } = [];
 
-    // What the selected list names, in the order it stores them.
+    //
+    // What the selected list names - and the edit buffer Save writes back, which is why NOTHING
+    // filters or reorders this collection. The panel below shows EntriesView instead.
+    //
+    // Filtering this directly would mean Save wrote out only the rows that happened to be visible,
+    // silently dropping every entry the search box was hiding. That is a data-loss bug wearing the
+    // costume of a UI feature, and the two-collection split is what makes it impossible.
+    //
     public ObservableCollection<ModListEntryRowViewModel> Entries { get; } = [];
+
+    //
+    // What the contents panel actually renders: the same rows, searched, filtered by scope and
+    // sorted, without the underlying buffer ever moving.
+    //
+    public ICollectionView EntriesView { get; }
+
+    public ModListsViewModel()
+    {
+        EntriesView = new CollectionViewSource { Source = Entries }.View;
+        EntriesView.Filter = Matches;
+
+        _scopeFilter = ScopeFilters[0];
+        _entrySort = EntrySorts[0];
+
+        ApplySort();
+    }
+
+    public IReadOnlyList<ModListScopeFilter> ScopeFilters { get; } =
+    [
+        new("All scopes", null),
+        new("Everyone", ModListEntryScope.Both),
+        new("Client only", ModListEntryScope.Client),
+        new("Server only", ModListEntryScope.Server),
+    ];
+
+    public IReadOnlyList<ModListEntrySort> EntrySorts { get; } =
+    [
+        new("Name A-Z", ListSortDirection.Ascending),
+        new("Name Z-A", ListSortDirection.Descending),
+    ];
+
+    [ObservableProperty]
+    private ModListScopeFilter _scopeFilter;
+
+    [ObservableProperty]
+    private ModListEntrySort _entrySort;
+
+    [ObservableProperty]
+    private string _entrySearch = "";
+
+    partial void OnScopeFilterChanged(ModListScopeFilter value) => RefreshView();
+
+    partial void OnEntrySearchChanged(string value) => RefreshView();
+
+    partial void OnEntrySortChanged(ModListEntrySort value)
+    {
+        ApplySort();
+        Notify();
+    }
+
+    //
+    // Sorted on the name the row DISPLAYS, not the one the entry stores.
+    //
+    // Those differ often enough to matter: an entry captured before listing titles were resolved
+    // stores the folder name, so a list sorted on stored names shows "Item Value Watermark" filed
+    // under A for "acidphantasm-itemvaluewatermark". Across 76 rows that reads as no order at all.
+    //
+    private void ApplySort()
+    {
+        EntriesView.SortDescriptions.Clear();
+        EntriesView.SortDescriptions.Add(new SortDescription(nameof(ModListEntryRowViewModel.Name), EntrySort.Direction));
+    }
+
+    private void RefreshView()
+    {
+        EntriesView.Refresh();
+        Notify();
+    }
+
+    //
+    // Matched against the displayed name, the stored name and the folders on disk - the three things
+    // a row can be recognised by, and all three are visible on it. Searching only the title would
+    // miss the case the folder line exists for: knowing a mod by the folder it drops into.
+    //
+    private bool Matches(object item)
+    {
+        if (item is not ModListEntryRowViewModel row) return false;
+
+        if (ScopeFilter?.Scope is { } scope && row.Entry.Scope != scope) return false;
+
+        var search = EntrySearch?.Trim();
+        if (string.IsNullOrEmpty(search)) return true;
+
+        return row.Name.Contains(search, StringComparison.OrdinalIgnoreCase)
+            || row.Entry.Name.Contains(search, StringComparison.OrdinalIgnoreCase)
+            || row.Entry.Folders.Any(f => f.Contains(search, StringComparison.OrdinalIgnoreCase));
+    }
 
     public ObservableCollection<ModListActionRowViewModel> PlanRows { get; } = [];
 
@@ -229,9 +332,36 @@ public partial class ModListsViewModel : ObservableObject
 
     public bool CanUseStoredList => HasSelection && !HasUnsavedChanges;
 
+    // Whether the LIST has anything on it, which is a different question from whether anything is
+    // showing - a filter that matches nothing must not read as an empty list.
     public bool HasEntries => Entries.Count > 0;
 
-    public string EntriesHeader => Entries.Count == 1 ? "1 mod on this list" : $"{Entries.Count} mods on this list";
+    public int VisibleEntryCount => EntriesView.Cast<object>().Count();
+
+    public bool IsFiltered =>
+        ScopeFilter?.Scope is not null || !string.IsNullOrWhiteSpace(EntrySearch);
+
+    // A list with entries, a filter on, and nothing matching it. Its own state because the advice
+    // is different: nothing is wrong, and the fix is to widen the filter rather than add mods.
+    public bool HasNoMatches => HasEntries && VisibleEntryCount == 0;
+
+    //
+    // Says both numbers while a filter is on. "12 mods on this list" over a list of 76 is not a
+    // smaller list, it is a hidden one, and the count is exactly where that gets misread.
+    //
+    public string EntriesHeader
+    {
+        get
+        {
+            var total = Entries.Count;
+
+            if (IsFiltered) return $"{VisibleEntryCount} of {Mods(total)} on this list";
+
+            return $"{Mods(total)} on this list";
+        }
+    }
+
+    private static string Mods(int count) => count == 1 ? "1 mod" : $"{count} mods";
 
     public string UnsavedLabel => UnsavedCount == 1 ? "1 unsaved change" : $"{UnsavedCount} unsaved changes";
 
@@ -240,6 +370,15 @@ public partial class ModListsViewModel : ObservableObject
         var dropped = UnsavedCount;
 
         EditName = value?.Name ?? string.Empty;
+
+        //
+        // The search is about one list's contents, so it does not follow you to the next one -
+        // landing on a list showing "0 of 23 mods" because of a search typed three lists ago reads
+        // as a broken page. The scope filter and the sort DO carry over: those are how you want to
+        // look at lists in general, not at this one.
+        //
+        EntrySearch = "";
+
         ShowEntries();
         ClearPlan();
 
@@ -311,6 +450,9 @@ public partial class ModListsViewModel : ObservableObject
     {
         OnPropertyChanged(nameof(HasEntries));
         OnPropertyChanged(nameof(EntriesHeader));
+        OnPropertyChanged(nameof(VisibleEntryCount));
+        OnPropertyChanged(nameof(IsFiltered));
+        OnPropertyChanged(nameof(HasNoMatches));
     }
 
     //
@@ -681,7 +823,7 @@ public partial class ModListsViewModel : ObservableObject
                 return;
             }
 
-            SortEntries();
+            Notify();
             UnsavedCount += added;
 
             StatusMessage = $"Added {added} mod(s) to \"{row.Name}\". Save to write it to the list"
@@ -745,6 +887,10 @@ public partial class ModListsViewModel : ObservableObject
             Scope = next,
         });
         UnsavedCount++;
+
+        // The scope filter may no longer match this row, so the counts move even though the list
+        // did not.
+        Notify();
 
         StatusMessage = next switch
         {
@@ -843,16 +989,6 @@ public partial class ModListsViewModel : ObservableObject
     }
 
     // Keeps the panel in the order a stored list holds - by name, the order capture writes.
-    private void SortEntries()
-    {
-        var sorted = ModListEntries.Sorted(Entries.Select(e => e.Entry));
-
-        Entries.Clear();
-        foreach (var entry in sorted) Entries.Add(Row(entry));
-
-        Notify();
-    }
-
     // Puts the list's contents back in view after a preview. Changes nothing either way.
     [RelayCommand]
     private void ClosePlan()
