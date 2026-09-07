@@ -4,11 +4,72 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+    xmlns:app="clr-namespace:TCFModManager.App"
     Title="Play">
     <Page.Resources>
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     </Page.Resources>
     <StackPanel Margin="16">
+
+        <!--
+            The pre-launch check, above the buttons because that is the order it matters in.
+            Hidden entirely unless a server is set up, so an install that plays alone never sees it.
+
+            It never blocks a launch. It replaces a BepInEx plugin that spoke at the splash screen -
+            the honest moment, seconds before joining - and the reason that plugin was dropped was
+            containment, not that warning people was wrong. What it must not become is a gate: the
+            mods it compares may not matter, the server may be wrong, and a raid held up by a
+            warning nobody can override is worse than a version mismatch.
+        -->
+        <ui:Card
+            Padding="16"
+            VerticalAlignment="Top"
+            Margin="0,0,0,16"
+            DataContext="{x:Static app:AppServices.PreLaunchCheck}"
+            Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibility}}">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                    <ui:SymbolIcon
+                        Symbol="ServerLink24"
+                        VerticalAlignment="Center"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                    <TextBlock
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="SemiBold"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        Text="{Binding Title}" />
+                    <ProgressBar
+                        Width="60"
+                        Height="4"
+                        Margin="12,0,0,0"
+                        VerticalAlignment="Center"
+                        IsIndeterminate="True"
+                        Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" />
+                </StackPanel>
+
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="{Binding Message}" />
+
+                <!-- Named, not counted. "Three mods behind" is not something anyone can act on;
+                     the names are, and they are what you check against what the server runs. -->
+                <TextBlock
+                    Margin="0,8,0,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                    Text="{Binding Outstanding}"
+                    Visibility="{Binding HasOutstanding, Converter={StaticResource BoolToVisibility}}" />
+
+                <ui:Button
+                    Margin="0,12,0,0"
+                    HorizontalAlignment="Left"
+                    Content="Check again"
+                    Icon="{ui:SymbolIcon ArrowSync24}"
+                    Command="{Binding CheckCommand}" />
+            </StackPanel>
+        </ui:Card>
 
         <ui:Card Padding="16" VerticalAlignment="Top">
             <StackPanel>

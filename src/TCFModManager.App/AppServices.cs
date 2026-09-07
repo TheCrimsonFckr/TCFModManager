@@ -70,6 +70,12 @@ internal static class AppServices
     //
     public static ServerMapGateViewModel ServerMap { get; } = new();
 
+    //
+    // Whether this install matches the server it is about to join. Shared rather than owned by the
+    // Play page, because the answer is about the install and other places will want to ask it.
+    //
+    public static PreLaunchCheckViewModel PreLaunchCheck { get; } = new();
+
     // Every mod list this install holds, and which one it is currently following.
     public static ModListStore ModLists { get; } = new();
 

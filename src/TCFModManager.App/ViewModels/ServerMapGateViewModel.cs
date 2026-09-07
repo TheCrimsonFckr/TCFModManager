@@ -264,8 +264,12 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
         await ConnectAsync();
     }
 
+    //
+    // Public so the pre-launch check can ask for a fresh handshake rather than reading whatever the
+    // last one said - the point of that check is that it is current at the moment of launching.
+    //
     [RelayCommand(CanExecute = nameof(CanConnect))]
-    private async Task ConnectAsync()
+    public async Task ConnectAsync()
     {
         IsBusy = true;
 

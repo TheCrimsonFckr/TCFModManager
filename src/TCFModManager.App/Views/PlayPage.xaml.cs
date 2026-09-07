@@ -14,7 +14,19 @@ public partial class PlayPage : Page
 
         // NavigationCacheMode keeps this page alive for the app's lifetime, so the poll has to be
         // stopped when it goes off screen rather than left running behind every other page.
-        Loaded += (_, _) => ViewModel.StartPolling();
+        Loaded += (_, _) =>
+        {
+            ViewModel.StartPolling();
+
+            //
+            // Fire-and-forget, and deliberately not part of the poll: the check reads the whole
+            // install to compare it against the server's list, which is far too much to do every two
+            // seconds beside a launch button. Opening the page is the moment it needs to be current,
+            // and "Check again" covers the rest.
+            //
+            _ = AppServices.PreLaunchCheck.CheckAsync();
+        };
+
         Unloaded += (_, _) => ViewModel.StopPolling();
     }
 }
