@@ -27,11 +27,25 @@ public sealed class PageLinks
 public sealed class PageMeta
 {
     public int CurrentPage { get; set; }
-    public int From { get; set; }
+
+    //
+    // NULLABLE, and that is not defensive tidiness - the API really sends null.
+    //
+    // These are the 1-based index of the first and last row ON THIS PAGE, and Laravel's paginator
+    // has nothing to put in them when the page is empty, so it emits `"from": null, "to": null`
+    // rather than 0. Declared as plain int, System.Text.Json does not shrug at that: it throws
+    // "The JSON value could not be converted to System.Int32. Path: $.meta.from", which surfaces as
+    // a failure of whatever asked - a mod list apply dying whole because ONE of its entries pinned a
+    // version that is no longer published and the version filter matched nothing.
+    //
+    // Nothing reads either value; they are here to describe the envelope faithfully.
+    //
+    public int? From { get; set; }
+    public int? To { get; set; }
+
     public int LastPage { get; set; }
     public string? Path { get; set; }
     public int PerPage { get; set; }
-    public int To { get; set; }
     public int Total { get; set; }
 }
 

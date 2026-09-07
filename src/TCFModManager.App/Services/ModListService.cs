@@ -1,4 +1,6 @@
 using System.ComponentModel;
+using System.Net;
+using System.Net.Http;
 using System.Windows;
 using TCFModManager.App.ViewModels;
 using TCFModManager.Core.Models;
@@ -382,35 +384,55 @@ public sealed class ModListService
             var id = modId.ToString();
             var wanted = action.TargetVersion?.Trim();
 
-            // A list entry with no version string at all is the one case where newest is the only
-            // thing it can mean, so it needs no asking.
-            if (string.IsNullOrWhiteSpace(wanted))
+            //
+            // Per entry, not per apply.
+            //
+            // Every call below asks sp-mod.com about ONE mod, and a list is as long as the operator
+            // made it - 76 entries in the case that found this. Letting one refused or unanswered
+            // question escape the loop throws away the other 75 and reports the whole apply as
+            // broken, which is both wrong and unactionable: the user cannot tell which entry did it.
+            // `unavailable` is the channel that already exists for "this one can't be had, and here
+            // is why", so that is where these go.
+            //
+            // Cancellation is not caught - a user who cancelled meant the whole thing.
+            //
+            try
             {
-                var newest = await NewestAsync(id, action.IsAddon, ct);
+                // A list entry with no version string at all is the one case where newest is the
+                // only thing it can mean, so it needs no asking.
+                if (string.IsNullOrWhiteSpace(wanted))
+                {
+                    var newest = await NewestAsync(id, action.IsAddon, ct);
 
-                if (newest is null) unavailable.Add(new ModListFetchFailure(action.Name, "it has no published versions"));
-                else ready.Add(new ModListDownload(action, target, newest, IsSubstitute: false));
+                    if (newest is null) unavailable.Add(new ModListFetchFailure(action.Name, "it has no published versions"));
+                    else ready.Add(new ModListDownload(action, target, newest, IsSubstitute: false));
 
-                continue;
+                    continue;
+                }
+
+                var published = await VersionsAsync(id, action.IsAddon, wanted, ct);
+
+                var exact = published.FirstOrDefault(v => action.VersionId is not null && v.Id == action.VersionId)
+                    ?? published.FirstOrDefault(v => string.Equals(v.Version?.Trim(), wanted, StringComparison.OrdinalIgnoreCase));
+
+                if (exact is not null)
+                {
+                    ready.Add(new ModListDownload(action, target, exact, IsSubstitute: false));
+                    continue;
+                }
+
+                var replacement = await NewestAsync(id, action.IsAddon, ct);
+
+                if (replacement is null)
+                    unavailable.Add(new ModListFetchFailure(action.Name, $"version {wanted} is gone and nothing else is published"));
+                else
+                    changes.Add(new ModListVersionChange(action, target, wanted, replacement));
             }
-
-            var published = await VersionsAsync(id, action.IsAddon, wanted, ct);
-
-            var exact = published.FirstOrDefault(v => action.VersionId is not null && v.Id == action.VersionId)
-                ?? published.FirstOrDefault(v => string.Equals(v.Version?.Trim(), wanted, StringComparison.OrdinalIgnoreCase));
-
-            if (exact is not null)
+            catch (Exception ex) when (ex is SpModApiException or HttpRequestException or TaskCanceledException
+                                       && !ct.IsCancellationRequested)
             {
-                ready.Add(new ModListDownload(action, target, exact, IsSubstitute: false));
-                continue;
+                unavailable.Add(new ModListFetchFailure(action.Name, $"sp-mod.com couldn't be asked about it ({ex.Message})"));
             }
-
-            var replacement = await NewestAsync(id, action.IsAddon, ct);
-
-            if (replacement is null)
-                unavailable.Add(new ModListFetchFailure(action.Name, $"version {wanted} is gone and nothing else is published"));
-            else
-                changes.Add(new ModListVersionChange(action, target, wanted, replacement));
         }
 
         return new ModListResolution(ready, changes, unavailable);
@@ -421,7 +443,31 @@ public sealed class ModListService
     // rather than read from their cache: the cache only carries each addon's six most recent
     // versions, and a list can pin one older than that.
     //
+    // A version string the API's own semver parser refuses. Not an error to report: the question
+    // "which published versions match this?" has an answer, and the answer is none.
+    //
+    // sp-mod.com parses filter[version] as a semver constraint and returns 400 for anything it does
+    // not recognise - "2.0.0-BE" and "1.0.0-nope" are refused where "1.0.0-beta" is not. Mod authors
+    // do not consult that parser before naming a build, so a list captured from a real install can
+    // carry one, and treating it as a failure would strand the entry with a message about the API
+    // instead of offering the substitution that is actually available.
+    private static bool IsUnmatchableFilter(SpModApiException ex) =>
+        ex.StatusCode == HttpStatusCode.BadRequest;
+
     private static async Task<IReadOnlyList<ModVersion>> VersionsAsync(
+        string id, bool isAddon, string wanted, CancellationToken ct)
+    {
+        try
+        {
+            return await PublishedAsync(id, isAddon, wanted, ct);
+        }
+        catch (SpModApiException ex) when (IsUnmatchableFilter(ex))
+        {
+            return [];
+        }
+    }
+
+    private static async Task<IReadOnlyList<ModVersion>> PublishedAsync(
         string id, bool isAddon, string wanted, CancellationToken ct)
     {
         if (!isAddon)

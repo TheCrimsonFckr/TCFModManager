@@ -1,13 +1,16 @@
 using System.Reflection;
-using SPTarkov.Common.Models.Logging;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.DI;
+using SPTarkov.Server.Core.Models.Utils;
 using TCFModManager.ServerMap.Contract;
 
 namespace TCFModManager.ServerMap.Stub;
 
 //
-// SPT 4.1's IOnLoad is OnLoadAsync(CancellationToken), not OnLoad().
+// SPT 4.0.13's IOnLoad is OnLoad() with no cancellation token, and ISptLogger<T> lives in
+// Core.Models.Utils rather than Common.Models.Logging. Two differences, both in the signature line;
+// the body below is identical to the 4.1 stub's on purpose, because any drift between them is a bug
+// that only shows up on one SPT version.
 //
 // Everything this does is find the payload and hand it to the listener. If it cannot, the mod stays
 // loaded and inert: SPT is not told the mod failed, because the mod has not failed - its payload
@@ -16,7 +19,7 @@ namespace TCFModManager.ServerMap.Stub;
 [Injectable]
 public class ModEntry(ISptLogger<ModEntry> logger) : IOnLoad
 {
-    public Task OnLoadAsync(CancellationToken cancellationToken)
+    public Task OnLoad()
     {
         var stubDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 

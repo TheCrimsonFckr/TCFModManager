@@ -32,6 +32,15 @@
   </ItemGroup>
 
   <!--
+    The contract, and the loader that uses it. Copied into the mod folder (Private is left on) so
+    SPT loads it as this stub's dependency - which is also how the payload resolves the SAME
+    instance, exactly as it used to resolve the stub itself.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\ServerMap.Shared\ServerMap.Shared.csproj" />
+  </ItemGroup>
+
+  <!--
     Referenced out of the SPT install rather than from NuGet: SPT 4.1.5 is not published there
     (newest package is 4.1.2), and these are the exact assemblies the server will load this mod
     beside. Private=false so none of them are copied into the mod folder - the server already has

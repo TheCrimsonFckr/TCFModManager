@@ -38,9 +38,6 @@ public static class PublishedModList
 
     public const string Extension = ".tcfmodlist";
 
-    // The highest share-file schema this build knows how to read the header of.
-    private const int MaxSchemaVersion = 2;
-
     private static readonly object Gate = new();
 
     private static string? _cachedPath;
@@ -169,13 +166,30 @@ public static class PublishedModList
 
             if (root.ValueKind != JsonValueKind.Object) return null;
 
-            // A file from a newer app than this one is not served: the client would read it, but the
-            // revision this build claims on the handshake could mean something it does not.
-            if (Number(root, "schemaVersion") > MaxSchemaVersion) return null;
-
+            //
+            // NO SCHEMA CEILING HERE, deliberately.
+            //
+            // An earlier version refused any file newer than the schema this build knew, and it was
+            // wrong twice over. Once in practice: entry scope stamped every published list schema 3,
+            // this ceiling was still 2, and a server silently stopped serving its own list - reported
+            // as "the server does not have a published list", which is about as far from the cause as
+            // a message can get.
+            //
+            // And once in principle. This class does not INTERPRET the list; it serves the bytes
+            // verbatim and reads four header fields off the front. The app that fetches it already
+            // refuses a schema it cannot read, and says so properly. Putting a second, cruder version
+            // check on the server means two numbers in two codebases that must be bumped together -
+            // and a mismatch fails closed, quietly, on the half nobody is looking at.
+            //
+            // The bar is "can this be read as a mod list document", nothing more.
+            //
             if (Property(root, "list") is not { ValueKind: JsonValueKind.Object } list) return null;
 
             var entries = Property(list, "entries");
+
+            // Name and revision are what the handshake reports and what a client compares against.
+            // A document that carries neither is not one this server can describe, whatever it is.
+            if (String(list, "name") is null && Number(list, "revision") is null) return null;
 
             return new PublishedList
             {

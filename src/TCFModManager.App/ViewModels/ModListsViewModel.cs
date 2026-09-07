@@ -33,6 +33,17 @@ public sealed partial class ModListRowViewModel(ModList list, bool isActive, boo
     public bool IsActiveServer { get; } = isActiveServer;
 
     //
+    // Came from a server, whether or not it is being followed.
+    //
+    // Badged on ORIGIN rather than on being active, because that is the question being asked when
+    // you look down the list: which of these did I write and which did a server hand me. Gating it
+    // on "active" meant a list you had fetched but not applied was indistinguishable from your own,
+    // which is exactly backwards - the one you have not applied yet is the one you most need to
+    // recognise.
+    //
+    public bool IsFromServer => List.Origin == ModListOrigin.Server;
+
+    //
     // The list THIS machine serves to its own clients. Badged because among a dozen personal lists
     // the one that other people are being handed is the one you must not edit carelessly.
     //

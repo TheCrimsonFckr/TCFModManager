@@ -1,4 +1,4 @@
-namespace TCFModManager.ServerMap.Stub;
+namespace TCFModManager.ServerMap.Contract;
 
 //
 // One request, flattened. The stub is the only thing that touches ASP.NET types; the payload gets
@@ -21,6 +21,12 @@ public sealed record PayloadResponse(int StatusCode, string ContentType, string 
 // The entire contract between the stub in user\mods and the payload in TCFModManager\ServerMap\.
 // Deliberately this small: every route, every piece of state and every decision lives on the far
 // side of it.
+//
+// It lives in its own net9.0, SPT-free, ASP.NET-free assembly so that ONE payload build serves both
+// SPT 4.0.13 (.NET 9) and SPT 4.1.x (.NET 10). The two SPT versions disagree about five things -
+// the runtime, IOnLoad, the mod metadata type, and both IHttpListener methods - and every one of
+// those disagreements is confined to the stub. Nothing on this side of the contract knows which
+// server it is running under, which is the whole reason the split exists.
 //
 public interface IServerMapPayload
 {

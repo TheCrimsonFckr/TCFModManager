@@ -109,6 +109,35 @@ public class SpModApiClientTests
         Assert.Equal("newer_version_available", update.UpdateReason);
     }
 
+    //
+    // Captured from https://sp-mod.com/api/v0/addon/123/versions?filter[version]=9.9.9 - a real
+    // addon, a version nothing matches. Laravel's paginator has no first or last row to number on an
+    // empty page and sends null for both, which a non-nullable int refuses outright:
+    //
+    //   The JSON value could not be converted to System.Int32. Path: $.meta.from
+    //
+    // That took down a 76-entry mod list apply whole, because ONE entry pinned a version that is no
+    // longer published. The empty page is not an error - it is the answer.
+    //
+    [Fact]
+    public async Task EmptyPage_HasNullFromAndTo_AndStillDeserializes()
+    {
+        const string emptyPage = """
+            {"success":true,"data":[],"links":{"first":"https://sp-mod.com/api/v0/addon/123/versions?page=1","last":"https://sp-mod.com/api/v0/addon/123/versions?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":null,"last_page":1,"path":"https://sp-mod.com/api/v0/addon/123/versions","per_page":5,"to":null,"total":0}}
+            """;
+
+        var handler = new FakeHttpMessageHandler(HttpStatusCode.OK, emptyPage);
+        using var client = CreateClient(handler);
+
+        var result = await client.GetAddonVersionsAsync("123", new AddonVersionsQuery { FilterVersion = "9.9.9" });
+
+        Assert.True(result.Success);
+        Assert.Empty(result.Data);
+        Assert.Null(result.Meta?.From);
+        Assert.Null(result.Meta?.To);
+        Assert.Equal(0, result.Meta?.Total);
+    }
+
     [Fact]
     public async Task GetModDependenciesAsync_KeyedByExactQueriedPair()
     {

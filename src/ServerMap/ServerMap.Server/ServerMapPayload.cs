@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
-using TCFModManager.ServerMap.Stub;
+using TCFModManager.ServerMap.Contract;
 
 namespace TCFModManager.ServerMap;
 

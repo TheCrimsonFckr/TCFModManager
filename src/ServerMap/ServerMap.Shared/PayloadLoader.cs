@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace TCFModManager.ServerMap.Stub;
+namespace TCFModManager.ServerMap.Contract;
 
 // What the loader found, or everything it looked at and why it gave up.
 public sealed record PayloadLoadResult

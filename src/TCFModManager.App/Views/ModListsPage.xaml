@@ -233,12 +233,37 @@
                                             </StackPanel>
                                         </Border>
 
+                                        <!-- On origin, not on being followed: the list you fetched
+                                             and have not applied yet is the one you most need to
+                                             tell apart from your own. -->
+                                        <Border
+                                            Padding="8,3"
+                                            Margin="0,0,6,0"
+                                            CornerRadius="4"
+                                            ToolTip="A server handed this list to you. It stays exactly as that server wrote it - make a copy to change what's on it."
+                                            Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                            Visibility="{Binding IsFromServer, Converter={StaticResource BoolToVis}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <ui:SymbolIcon
+                                                    Symbol="CloudArrowDown24"
+                                                    FontSize="14"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+                                                <TextBlock
+                                                    Margin="5,0,0,0"
+                                                    FontSize="11"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                                    Text="From server" />
+                                            </StackPanel>
+                                        </Border>
+
                                         <ui:SymbolIcon
                                             Margin="0,0,6,0"
                                             VerticalAlignment="Center"
-                                            ToolTip="A server's list, which this install is following alongside its own"
-                                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                                            Symbol="CloudArrowDown24"
+                                            ToolTip="This install is following this server's list, alongside its own"
+                                            Foreground="{DynamicResource SystemFillColorSuccessBrush}"
+                                            Symbol="CheckmarkCircle24"
                                             Visibility="{Binding IsActiveServer, Converter={StaticResource BoolToVis}}" />
 
                                         <ui:SymbolIcon

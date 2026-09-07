@@ -1,16 +1,20 @@
 using Microsoft.AspNetCore.Http;
-using SPTarkov.Common.Models.Logging;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Models.Common;
+using SPTarkov.Server.Core.Models.Utils;
 using SPTarkov.Server.Core.Servers.Http;
 using TCFModManager.ServerMap.Contract;
 
 namespace TCFModManager.ServerMap.Stub;
 
 //
-// SPT 4.1's IHttpListener: CanHandle takes only the HttpContext (the session is resolved after
-// listener selection, and is no longer part of it), and Handle became HandleAsync with a
-// CancellationToken. A listener written against 4.0.13 does not compile here.
+// SPT 4.0.13's IHttpListener: CanHandle takes the session id as well as the context, and the handler
+// is Handle rather than HandleAsync and takes no cancellation token. 4.1 dropped the session from
+// CanHandle (it is resolved after listener selection there) and renamed the handler.
+//
+// The session id is ignored in both. This mod serves a published list and a handshake; neither is
+// per-player, and a route that answered differently depending on who asked would be a surprise the
+// client has no way to see.
 //
 [Injectable(InjectionType.Singleton)]
 public class ServerMapListener(ISptLogger<ServerMapListener> logger) : IHttpListener
@@ -22,11 +26,10 @@ public class ServerMapListener(ISptLogger<ServerMapListener> logger) : IHttpList
     // why it isn't serving them, rather than falling through to a 404 from somewhere else.
     public static string RoutePrefix { get; set; } = "/tcfservermap";
 
-    public bool CanHandle(HttpContext context) =>
+    public bool CanHandle(MongoId sessionId, HttpContext context) =>
         context.Request.Path.StartsWithSegments(RoutePrefix, StringComparison.OrdinalIgnoreCase);
 
-    public async Task HandleAsync(MongoId sessionId, HttpContext context,
-        CancellationToken cancellationToken = default)
+    public async Task Handle(MongoId sessionId, HttpContext context)
     {
         var path = context.Request.Path.Value ?? string.Empty;
 
@@ -46,7 +49,7 @@ public class ServerMapListener(ISptLogger<ServerMapListener> logger) : IHttpList
             // request outright, so nothing in that path runs. The /echo route proves it.
             //
             using var buffer = new MemoryStream();
-            await context.Request.Body.CopyToAsync(buffer, cancellationToken).ConfigureAwait(false);
+            await context.Request.Body.CopyToAsync(buffer, context.RequestAborted).ConfigureAwait(false);
 
             var headers = context.Request.Headers.ToDictionary(
                 h => h.Key, h => h.Value.ToString(), StringComparer.OrdinalIgnoreCase);
@@ -58,11 +61,15 @@ public class ServerMapListener(ISptLogger<ServerMapListener> logger) : IHttpList
                 headers,
                 buffer.ToArray());
 
-            var response = await Payload.HandleAsync(request, cancellationToken).ConfigureAwait(false);
+            //
+            // 4.0 hands the listener no cancellation token, so the one the request itself carries is
+            // used instead. Same meaning, and the payload's contract is unchanged either way.
+            //
+            var response = await Payload.HandleAsync(request, context.RequestAborted).ConfigureAwait(false);
 
             context.Response.StatusCode = response.StatusCode;
             context.Response.ContentType = response.ContentType;
-            await context.Response.WriteAsync(response.Body, cancellationToken).ConfigureAwait(false);
+            await context.Response.WriteAsync(response.Body, context.RequestAborted).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
