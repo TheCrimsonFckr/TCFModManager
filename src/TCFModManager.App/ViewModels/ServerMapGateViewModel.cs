@@ -47,6 +47,7 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(ServerName))]
     [NotifyPropertyChangedFor(nameof(ServerDetail))]
     [NotifyPropertyChangedFor(nameof(HasCertificateChanged))]
+    [NotifyPropertyChangedFor(nameof(KeyDescription))]
     [NotifyCanExecuteChangedFor(nameof(TrustNewCertificateCommand))]
     private ServerHelloProbe? _probe;
 
@@ -54,6 +55,14 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(PinDescription))]
     [NotifyCanExecuteChangedFor(nameof(ForgetPinCommand))]
     private string? _pinnedThumbprint;
+
+    //
+    // The server's shared key. Saved on connect alongside the address, because the two are one
+    // thing an operator hands out together and there is nothing to gain from making them two steps.
+    //
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(KeyDescription))]
+    private string? _keyInput;
 
     // The list this server publishes, as last fetched. Also in the user's mod lists - this is the
     // page's own handle on it, not a second copy of the truth.
@@ -91,6 +100,7 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
         _hostInput = stored.Host;
         _portInput = stored.Port.ToString();
         _pinnedThumbprint = stored.PinnedThumbprint;
+        _keyInput = stored.SharedKey;
 
         _loaded = true;
     }
@@ -140,6 +150,9 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
     public bool HasError => Probe is not null && !Probe.Found;
 
     public string PinDescription => ServerMapProblems.DescribePin(PinnedThumbprint);
+
+    public string KeyDescription =>
+        ServerMapProblems.DescribeKey(!string.IsNullOrWhiteSpace(KeyInput), Probe?.Hello?.RequiresKey ?? false);
 
     public bool HasList => List is not null;
 
@@ -390,14 +403,17 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
         var host = HostInput?.Trim();
         var port = int.TryParse(PortInput?.Trim(), out var parsed) ? parsed : 0;
 
+        var key = KeyInput?.Trim();
+
         var settings = _settings.Load();
         settings.ServerMap.Host = string.IsNullOrWhiteSpace(host) ? null : host;
         settings.ServerMap.Port = port;
+        settings.ServerMap.SharedKey = string.IsNullOrWhiteSpace(key) ? null : key;
         _settings.Save(settings);
 
         OnPropertyChanged(nameof(IsConfigured));
 
-        return new ServerMapEndpoint(host ?? string.Empty, port, PinnedThumbprint);
+        return new ServerMapEndpoint(host ?? string.Empty, port, PinnedThumbprint, key);
     }
 
     private void SavePin(string? thumbprint)

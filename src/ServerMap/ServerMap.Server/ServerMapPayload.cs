@@ -9,13 +9,16 @@ namespace TCFModManager.ServerMap;
 // Everything this server mod does. Three routes:
 //
 //   GET /tcfservermap/hello - the handshake TCFModManager probes to decide whether it can talk to
-//                             this server. Unauthenticated on purpose: it is asked before the user
-//                             has entered anything, and it discloses nothing a port scan would not.
+//                             this server. THE ONLY UNAUTHENTICATED ROUTE, on purpose: it is asked
+//                             before the user has been given a key, it discloses nothing a port scan
+//                             would not, and gating it would leave a client unable to tell "wrong
+//                             address" from "right address, no key".
 //   GET /tcfservermap/list  - the mod list this server publishes, served verbatim from the file the
-//                             operator dropped into config\. See PublishedModList.
+//                             operator dropped into config\. See PublishedModList. Needs the key.
 //   POST /tcfservermap/echo - diagnostic. Reports the request body exactly as it arrived. Kept from
 //                             the transport spike because "the body arrived mangled" is the one
-//                             class of bug that is impossible to reason about without it.
+//                             class of bug that is impossible to reason about without it. Needs the
+//                             key - a diagnostic that reflects input is still a route.
 //
 // This mod serves a LIST, never mod files. That is the whole design: TCFModManager installs from
 // The Forge and nowhere else, so a server that could push bytes would break the one rule the app is
@@ -36,7 +39,15 @@ public sealed class ServerMapPayload : IServerMapPayload
     {
         var route = request.Path.Length > RoutePrefix.Length ? request.Path[RoutePrefix.Length..] : "";
 
-        return Task.FromResult(route.ToLowerInvariant() switch
+        var path = route.ToLowerInvariant();
+
+        //
+        // Everything but the handshake is gated, checked here rather than per route so adding a
+        // route cannot accidentally add an open one.
+        //
+        if (path != "/hello" && !Authorized(request)) return Task.FromResult(Unauthorized());
+
+        return Task.FromResult(path switch
         {
             "/hello" => Hello(),
             "/list" => List(),
@@ -59,7 +70,7 @@ public sealed class ServerMapPayload : IServerMapPayload
             protocol = Protocol,
             modVersion = ModVersion(),
             serverName = Environment.MachineName,
-            requiresKey = false,
+            requiresKey = true,
             hasList = published is not null,
             listRevision = published?.Revision,
             listName = published?.Name,
@@ -85,12 +96,16 @@ public sealed class ServerMapPayload : IServerMapPayload
 
         if (published is null)
         {
+            //
+            // Deliberately does NOT name the config folder. An earlier version returned the full
+            // path so an operator reading their own server's reply would know where to put a list -
+            // helpful, and also a directory layout handed to anyone who can reach the port. The
+            // operator has the app and the README; a stranger gets nothing.
+            //
             var body = new
             {
                 protocol = Protocol,
                 error = "This server does not publish a mod list.",
-                // Named so an operator reading their own server's reply knows where to put one.
-                expected = Path.Combine(_configDirectory, PublishedModList.PreferredFileName),
             };
 
             return new PayloadResponse(404, "application/json", JsonSerializer.Serialize(body, Json));
@@ -140,6 +155,25 @@ public sealed class ServerMapPayload : IServerMapPayload
         };
 
         return new PayloadResponse(200, "application/json", JsonSerializer.Serialize(report, Json));
+    }
+
+    private bool Authorized(PayloadRequest request) =>
+        ServerMapKey.Verify(ServerMapKey.Current(_configDirectory), Header(request, ServerMapKey.HeaderName));
+
+    //
+    // 401 and nothing else. It does not say whether a key was sent, whether it was close, or what
+    // the server expects - the client already knows from the handshake that a key is needed, and
+    // anyone who does not is not owed the detail.
+    //
+    private static PayloadResponse Unauthorized()
+    {
+        var body = new
+        {
+            protocol = Protocol,
+            error = "This route needs the server's shared key. Ask whoever runs the server for it.",
+        };
+
+        return new PayloadResponse(401, "application/json", JsonSerializer.Serialize(body, Json));
     }
 
     private static string? Header(PayloadRequest request, string name) =>

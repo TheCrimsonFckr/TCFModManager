@@ -9,11 +9,20 @@ namespace TCFModManager.Core.ServerMap;
 // client can dial. The same address the user already types into the SPT launcher is the honest
 // source, so that is what the Options page asks for.
 //
-public sealed record ServerMapEndpoint(string Host, int Port, string? PinnedThumbprint = null)
+public sealed record ServerMapEndpoint(
+    string Host,
+    int Port,
+    string? PinnedThumbprint = null,
+    string? SharedKey = null)
 {
     public const int DefaultPort = 6969;
 
+    // The header every route except the handshake is gated on. See ServerMapKey on the server side.
+    public const string KeyHeaderName = "X-ServerMap-Key";
+
     public bool HasPin => !string.IsNullOrWhiteSpace(PinnedThumbprint);
+
+    public bool HasKey => !string.IsNullOrWhiteSpace(SharedKey);
 
     //
     // https://host:port, with an IPv6 literal bracketed. UriBuilder does not do that for you:

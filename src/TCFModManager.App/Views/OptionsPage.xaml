@@ -162,6 +162,23 @@
                         Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" />
                 </StackPanel>
 
+                <!-- The key the operator hands out with the address. A plain TextBox, not a
+                     PasswordBox: it is not a secret about the person holding it, it gets copied
+                     between machines and pasted into chat, and hiding it would only make it harder
+                     to check against what you were sent. -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <ui:TextBox
+                        Width="300"
+                        PlaceholderText="Shared key (if the server needs one)"
+                        Text="{Binding KeyInput, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                    Margin="0,0,0,8"
+                    Text="{Binding KeyDescription}" />
+
                 <!-- Named to match the shared ErrorText style, which turns this red only when the
                      last attempt actually failed. -->
                 <TextBlock

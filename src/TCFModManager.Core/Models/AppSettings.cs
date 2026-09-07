@@ -113,7 +113,19 @@ public sealed class ServerMapSettings
     //
     public string? PinnedThumbprint { get; set; }
 
+    //
+    // The server's shared key, as the operator sent it. Everything except the handshake needs it.
+    //
+    // Stored in the clear, which is honest about what it is: not a password and not tied to an
+    // identity, just the string that says you were told about this server. It reaches settings.json,
+    // which the Options page already invites people to open - anyone who can read that file can
+    // already read the address it goes with.
+    //
+    public string? SharedKey { get; set; }
+
     public bool IsConfigured => !string.IsNullOrWhiteSpace(Host);
 
-    public ServerMapEndpoint ToEndpoint() => new(Host ?? string.Empty, Port, PinnedThumbprint);
+    public bool HasKey => !string.IsNullOrWhiteSpace(SharedKey);
+
+    public ServerMapEndpoint ToEndpoint() => new(Host ?? string.Empty, Port, PinnedThumbprint, SharedKey);
 }

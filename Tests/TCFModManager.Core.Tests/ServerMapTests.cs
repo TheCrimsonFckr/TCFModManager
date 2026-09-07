@@ -586,3 +586,138 @@ public class ServerMapListTests
             throw new HttpRequestException("no route to host");
     }
 }
+
+//
+// The shared key, from the client's side. The server's own generation and comparison live in the
+// payload (ServerMapKey) and are exercised by a harness; what matters here is that the key travels,
+// and that a refusal is turned into the right thing to tell the user.
+//
+public class ServerMapKeyTests
+{
+    private const string Key = "K7Q2-9FJM-3XBA-TW4N-P6HD-R2VC";
+
+    private static ServerMapEndpoint Endpoint(string? key = null) =>
+        new("192.168.1.111", 6969, PinnedThumbprint: null, SharedKey: key);
+
+    [Fact]
+    public void AnEndpointKnowsWhetherItHasAKey()
+    {
+        Assert.False(Endpoint().HasKey);
+        Assert.False(Endpoint("   ").HasKey);
+        Assert.True(Endpoint(Key).HasKey);
+    }
+
+    // Every route except the handshake is gated on it, so it is set once as a default header rather
+    // than attached per call - a route added later cannot forget it.
+    [Fact]
+    public async Task TheKeyIsSentOnEveryRequest()
+    {
+        var handler = new CapturingHandler(HttpStatusCode.OK, """{ "protocol": 1 }""");
+        using var client = ServerMapClient.TryCreate(Endpoint(Key), handler)!;
+
+        await client.HelloAsync();
+        await client.ListAsync();
+
+        Assert.Equal(2, handler.SeenKeys.Count);
+        Assert.All(handler.SeenKeys, k => Assert.Equal(Key, k));
+    }
+
+    [Fact]
+    public async Task NoHeaderIsSentWhenNoKeyIsSet()
+    {
+        var handler = new CapturingHandler(HttpStatusCode.OK, """{ "protocol": 1 }""");
+        using var client = ServerMapClient.TryCreate(Endpoint(), handler)!;
+
+        await client.HelloAsync();
+
+        Assert.Single(handler.SeenKeys);
+        Assert.Null(handler.SeenKeys[0]);
+    }
+
+    // Whitespace around a pasted key is the most likely way one arrives, and it must not be the
+    // reason a connection fails.
+    [Fact]
+    public async Task APastedKeyIsTrimmed()
+    {
+        var handler = new CapturingHandler(HttpStatusCode.OK, """{ "protocol": 1 }""");
+        using var client = ServerMapClient.TryCreate(Endpoint($"  {Key}\t"), handler)!;
+
+        await client.HelloAsync();
+
+        Assert.Equal(Key, handler.SeenKeys[0]);
+    }
+
+    //
+    // One status code, two situations, two different next actions: ask someone for a key, versus the
+    // key you were given is wrong. Collapsing them would leave the user with nothing to do.
+    //
+    [Theory]
+    [InlineData(HttpStatusCode.Unauthorized)]
+    [InlineData(HttpStatusCode.Forbidden)]
+    public async Task ARefusalWithNoKeySetMeansOneIsNeeded(HttpStatusCode status)
+    {
+        using var client = ServerMapClient.TryCreate(Endpoint(), new CapturingHandler(status, ""))!;
+
+        var result = await client.ListAsync();
+
+        Assert.False(result.Found);
+        Assert.Equal(ServerMapProblem.KeyRequired, result.Problem);
+    }
+
+    [Theory]
+    [InlineData(HttpStatusCode.Unauthorized)]
+    [InlineData(HttpStatusCode.Forbidden)]
+    public async Task ARefusalWithAKeySetMeansTheKeyIsWrong(HttpStatusCode status)
+    {
+        using var client = ServerMapClient.TryCreate(Endpoint(Key), new CapturingHandler(status, ""))!;
+
+        var result = await client.ListAsync();
+
+        Assert.False(result.Found);
+        Assert.Equal(ServerMapProblem.KeyRejected, result.Problem);
+    }
+
+    // The handshake stays open, so it must never come back as a key problem - that is what lets a
+    // client tell "wrong address" from "right address, no key".
+    [Fact]
+    public async Task TheHandshakeIsNeverAKeyProblem()
+    {
+        using var client = ServerMapClient.TryCreate(
+            Endpoint(), new CapturingHandler(HttpStatusCode.Unauthorized, ""))!;
+
+        var probe = await client.HelloAsync();
+
+        Assert.Equal(ServerMapProblem.NotServerMap, probe.Problem);
+    }
+
+    [Fact]
+    public void SettingsCarryTheKeyOntoTheEndpointAndBack()
+    {
+        var settings = new ServerMapSettings { Host = "192.168.1.111", SharedKey = Key };
+
+        Assert.True(settings.HasKey);
+        Assert.Equal(Key, settings.ToEndpoint().SharedKey);
+
+        var restored = JsonSerializer.Deserialize<AppSettings>(
+            JsonSerializer.Serialize(new AppSettings { ServerMap = settings }))!;
+
+        Assert.Equal(Key, restored.ServerMap.SharedKey);
+    }
+
+    private sealed class CapturingHandler(HttpStatusCode status, string body) : HttpMessageHandler
+    {
+        public List<string?> SeenKeys { get; } = [];
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
+        {
+            SeenKeys.Add(request.Headers.TryGetValues(ServerMapEndpoint.KeyHeaderName, out var values)
+                ? values.FirstOrDefault()
+                : null);
+
+            return Task.FromResult(new HttpResponseMessage(status)
+            {
+                Content = new StringContent(body, Encoding.UTF8, "application/json"),
+            });
+        }
+    }
+}

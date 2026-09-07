@@ -39,6 +39,14 @@ public enum ServerMapProblem
     // /list only: a list came back and could not be read. Carries ParseError, which names why.
     ListUnreadable,
 
+    //
+    // The server refused the request for want of a key. Split in two because the two need different
+    // sentences: one asks the operator for a key, the other says the one you have is wrong.
+    //
+    KeyRequired,
+
+    KeyRejected,
+
     // Anything else. Carries Error.
     Failed,
 }

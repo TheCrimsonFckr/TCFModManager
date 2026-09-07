@@ -38,6 +38,17 @@ public sealed class ServerMapClient : IDisposable
         _endpoint = endpoint;
         _pin = pin;
         _http = new HttpClient(handler) { BaseAddress = baseUri, Timeout = timeout };
+
+        //
+        // Set once, as a default header, rather than per request: every route except the handshake
+        // needs it, and a route added later that forgot to attach it would fail in a way that looks
+        // like a server problem. Harmless on /hello, which ignores it.
+        //
+        if (endpoint.HasKey)
+        {
+            _http.DefaultRequestHeaders.TryAddWithoutValidation(
+                ServerMapEndpoint.KeyHeaderName, endpoint.SharedKey!.Trim());
+        }
     }
 
     //
@@ -180,12 +191,19 @@ public sealed class ServerMapClient : IDisposable
                 // a server to say. It is only "wrong address" on /hello, where nothing has yet
                 // established that the mod is there at all.
                 //
+                // A 401 splits on whether we sent a key at all: "you need one" and "yours is wrong"
+                // are different messages to the user and different next actions.
+                //
                 return new ServerMapListResult
                 {
                     Endpoint = _endpoint,
-                    Problem = response.StatusCode == System.Net.HttpStatusCode.NotFound
-                        ? ServerMapProblem.NoList
-                        : ServerMapProblem.Failed,
+                    Problem = response.StatusCode switch
+                    {
+                        System.Net.HttpStatusCode.NotFound => ServerMapProblem.NoList,
+                        System.Net.HttpStatusCode.Unauthorized or System.Net.HttpStatusCode.Forbidden =>
+                            _endpoint.HasKey ? ServerMapProblem.KeyRejected : ServerMapProblem.KeyRequired,
+                        _ => ServerMapProblem.Failed,
+                    },
                     StatusCode = (int)response.StatusCode,
                 };
             }
