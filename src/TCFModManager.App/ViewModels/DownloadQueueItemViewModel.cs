@@ -69,6 +69,29 @@ public sealed partial class DownloadQueueItemViewModel : ObservableObject
     private readonly Stopwatch _downloading = new();
 
     //
+    // Recent progress, as (when, how many bytes had arrived) - the rate and the estimate are both
+    // measured across this window rather than from the start of the download.
+    //
+    // A since-the-start average is anchored to whatever the first seconds looked like and takes as
+    // long as the download itself to forget them: a transfer that begins slowly and then comes up to
+    // speed reads low for an hour, and a stall halfway through never fully washes out. Over the
+    // couple of minutes a mod archive takes that hardly shows; over the 5.5 GB one that prompted
+    // this, it is the difference between a useful estimate and a decorative one.
+    //
+    private readonly Queue<(TimeSpan At, double Bytes)> _samples = new();
+
+    // Long enough to ride out a stalled second, short enough to notice the line actually changing.
+    private const double RateWindowSeconds = 8;
+
+    // Below this there is not enough elapsed time for a rate to mean anything, whatever the numbers
+    // say.
+    private const double MinimumSampleSeconds = 1.5;
+
+    // One sample per quarter second at most. Progress arrives far faster than that, and an unbounded
+    // queue would hold thousands of entries to answer a question two of them can.
+    private const double SampleIntervalSeconds = 0.25;
+
+    //
     // The transfer detail, split into one value per box - how much has arrived, how fast, and how
     // long is left. DownloadsPage renders each in its own fixed container so a number changing
     // width can't shift the ones beside it.
@@ -93,8 +116,8 @@ public sealed partial class DownloadQueueItemViewModel : ObservableObject
 
     public string RateValue => BytesPerSecond is { } rate ? $"{Size(rate)}/s" : NoValue;
 
-    public string EtaValue => BytesPerSecond is > 0
-        ? Remaining(TimeSpan.FromSeconds(_downloading.Elapsed.TotalSeconds * (1 - Progress) / Progress))
+    public string EtaValue => BytesPerSecond is > 0 and var rate && RemainingBytes is { } left
+        ? Remaining(TimeSpan.FromSeconds(left / rate))
         : NoValue;
 
 
@@ -103,14 +126,58 @@ public sealed partial class DownloadQueueItemViewModel : ObservableObject
     public long? RemainingBytes =>
         IsFinished || TotalBytes is not > 0 ? null : (long)(TotalBytes.Value * (1 - Progress));
 
-    // The rate actually observed on this item so far, once there is enough of it to mean anything.
-    public double? BytesPerSecond =>
-        Status == DownloadQueueItemStatus.Downloading
-        && TotalBytes is > 0
-        && Progress > 0.02
-        && _downloading.Elapsed > TimeSpan.FromSeconds(1.5)
-            ? Progress * TotalBytes.Value / _downloading.Elapsed.TotalSeconds
-            : null;
+    //
+    // The rate observed across the recent window, or null while there is not yet enough of one.
+    //
+    // The gate is elapsed TIME and nothing else. It used to be `Progress > 0.02`, which sounds
+    // equivalent and is not: two percent is a fraction of the file, so the wait for a first reading
+    // grows with the download. On a 6 MB mod that is 120 KB and instant; on the 5.5 GB archive that
+    // prompted this it is 113 MB, which on a domestic line is minutes of Speed and Time left sitting
+    // at a dash on the one download where they matter most. What makes a rate honest is having
+    // watched for long enough, not having watched a set share of the file.
+    //
+    public double? BytesPerSecond
+    {
+        get
+        {
+            if (Status != DownloadQueueItemStatus.Downloading || TotalBytes is not > 0) return null;
+            if (_samples.Count < 2) return null;
+
+            var oldest = _samples.Peek();
+            var newest = _samples.Last();
+
+            var seconds = (newest.At - oldest.At).TotalSeconds;
+            var bytes = newest.Bytes - oldest.Bytes;
+
+            return seconds >= MinimumSampleSeconds && bytes > 0 ? bytes / seconds : null;
+        }
+    }
+
+    //
+    // Samples are taken here rather than on a timer: progress is the only thing that knows a byte
+    // arrived, and a timer would happily record a flat window as a real measurement.
+    //
+    partial void OnProgressChanged(double value)
+    {
+        if (Status != DownloadQueueItemStatus.Downloading || TotalBytes is not > 0) return;
+
+        var at = _downloading.Elapsed;
+
+        if (_samples.Count > 0
+            && (at - _samples.Last().At).TotalSeconds < SampleIntervalSeconds)
+        {
+            return;
+        }
+
+        _samples.Enqueue((at, value * TotalBytes.Value));
+
+        // Two are kept whatever their age, so a download that slows to a crawl still reports the
+        // crawl instead of dropping back to a dash.
+        while (_samples.Count > 2 && (at - _samples.Peek().At).TotalSeconds > RateWindowSeconds)
+        {
+            _samples.Dequeue();
+        }
+    }
 
     public static string SizeLabel(double bytes) => Size(bytes);
 
@@ -237,6 +304,10 @@ public sealed partial class DownloadQueueItemViewModel : ObservableObject
     {
         if (value == DownloadQueueItemStatus.Downloading) _downloading.Restart();
         else _downloading.Stop();
+
+        // Measurements belong to one run of one stage. A retry that kept them would read its first
+        // seconds against a clock that had already been restarted underneath them.
+        _samples.Clear();
 
         OnPropertyChanged(nameof(TransferredValue));
         OnPropertyChanged(nameof(RateValue));
