@@ -42,6 +42,14 @@ public sealed record ModListApplyOptions
     public ModListCapture.AddonVersionLookup? SnapshotAddonVersions { get; init; }
 
     public string? SptVersion { get; init; }
+
+    //
+    // The install being changed, so the "is SPT running" check below can tell a process that holds
+    // handles in THIS install from one belonging to a different SPT on the same machine. Left null,
+    // any running SPT anywhere stops the apply - the old behaviour, and the wrong answer for anyone
+    // who keeps a dedicated server on one drive and the install they play on another.
+    //
+    public string? InstallPath { get; init; }
 }
 //
 // Why an apply stopped before it finished.
@@ -134,7 +142,8 @@ public static class ModListApplier
         var enables = plan.Enable.ToList();
         var disables = plan.Disable.ToList();
 
-        if ((enables.Count > 0 || disables.Count > 0) && ModInstallService.RunningBlockers() is { Count: > 0 } blockers)
+        if ((enables.Count > 0 || disables.Count > 0)
+            && ModInstallService.RunningBlockers(options.InstallPath) is { Count: > 0 } blockers)
         {
             return Stopped(plan, manual, null, ModListStop.InstallInUse, running: blockers);
         }
@@ -157,7 +166,7 @@ public static class ModListApplier
         {
             try
             {
-                enabled = ModDisableService.Apply(Entries(enables), disable: false);
+                enabled = ModDisableService.Apply(Entries(enables), disable: false, options.InstallPath);
             }
             //
             // ModInstallException, not InvalidOperationException: EnsureInstallNotInUse threw the
@@ -198,7 +207,7 @@ public static class ModListApplier
         {
             try
             {
-                disabled = ModDisableService.Apply(Entries(disables), disable: true);
+                disabled = ModDisableService.Apply(Entries(disables), disable: true, options.InstallPath);
             }
             catch (ModInstallException ex)
             {

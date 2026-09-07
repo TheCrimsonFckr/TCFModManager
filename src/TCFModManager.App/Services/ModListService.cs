@@ -152,6 +152,7 @@ public sealed class ModListService
                 SnapshotVersions = CatalogVersions(),
                 SnapshotAddonVersions = CatalogAddonVersions(),
                 SptVersion = preview.Install.SptVersion,
+                InstallPath = preview.Install.InstallPath,
             },
             ct: ct);
 
@@ -197,7 +198,11 @@ public sealed class ModListService
             preview.Plan,
             preview.Install.Candidates,
             (fetches, token) => FetchAsync(preview.Install, fetches, prompts ?? ModListPrompts.Reject, token),
-            new ModListApplyOptions { SptVersion = preview.Install.SptVersion },
+            new ModListApplyOptions
+            {
+                SptVersion = preview.Install.SptVersion,
+                InstallPath = preview.Install.InstallPath,
+            },
             ct: ct);
 
         if (result.Completed)

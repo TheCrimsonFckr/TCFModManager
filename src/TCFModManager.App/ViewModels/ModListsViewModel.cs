@@ -567,7 +567,7 @@ public partial class ModListsViewModel : ObservableObject
 
             if (result.Moves.Count > 0)
             {
-                undone = ModDisableService.Revert(result.Moves).Moved.Count;
+                undone = ModDisableService.Revert(result.Moves, AppServices.SptEnvironment.InstallPath).Moved.Count;
             }
 
             StatusMessage = ModListProblems.Describe(result)
@@ -630,7 +630,7 @@ public partial class ModListsViewModel : ObservableObject
             }
             else
             {
-                if (result.Moves.Count > 0) ModDisableService.Revert(result.Moves);
+                if (result.Moves.Count > 0) ModDisableService.Revert(result.Moves, AppServices.SptEnvironment.InstallPath);
                 StatusMessage = $"Couldn't undo. {ModListProblems.Describe(result)}";
             }
 

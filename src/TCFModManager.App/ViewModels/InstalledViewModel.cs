@@ -730,7 +730,7 @@ public partial class InstalledViewModel : ObservableObject
                     ? ModInstallService.KeepLegacyConfigs(installPath, configs, mod.Name)
                     : new KeptConfigs(0, null);
 
-                foreach (var path in paths) ModInstallService.RemoveLegacyPath(path!);
+                foreach (var path in paths) ModInstallService.RemoveLegacyPath(path!, AppServices.SptEnvironment.InstallPath);
 
                 // A manually-confirmed version record would otherwise dangle, pointing at a mod
                 // that's no longer on disk.
@@ -849,7 +849,7 @@ public partial class InstalledViewModel : ObservableObject
             return;
         }
 
-        if (ModInstallService.RunningBlockers() is { Count: > 0 } blockers)
+        if (ModInstallService.RunningBlockers(installPath) is { Count: > 0 } blockers)
         {
             StatusMessage = ModInstallProblems.InstallInUse(blockers, ModInstallAction.SortOutDuplicate);
             return;
@@ -1146,7 +1146,7 @@ public partial class InstalledViewModel : ObservableObject
         string message;
         try
         {
-            var outcome = ModDisableService.Revert(_lastMoves);
+            var outcome = ModDisableService.Revert(_lastMoves, AppServices.SptEnvironment.InstallPath);
             message = outcome.Failed.Count == 0
                 ? $"Put {outcome.Moved.Count} mod(s) back."
                 : $"Put {outcome.Moved.Count} mod(s) back; {DescribeFailures(outcome.Failed)}";
@@ -1191,7 +1191,7 @@ public partial class InstalledViewModel : ObservableObject
 
         // Checked before anything is asked or moved, so a locked install is reported up front
         // rather than after the user has answered a dialog. ModDisableService guards again itself.
-        if (ModInstallService.RunningBlockers() is { Count: > 0 } blockers)
+        if (ModInstallService.RunningBlockers(AppServices.SptEnvironment.InstallPath) is { Count: > 0 } blockers)
         {
             StatusMessage = ModInstallProblems.InstallInUse(
                 blockers,
@@ -1223,7 +1223,7 @@ public partial class InstalledViewModel : ObservableObject
         ModDisableOutcome outcome;
         try
         {
-            outcome = ModDisableService.Apply(entries, disable);
+            outcome = ModDisableService.Apply(entries, disable, AppServices.SptEnvironment.InstallPath);
         }
         catch (ModInstallException ex)
         {

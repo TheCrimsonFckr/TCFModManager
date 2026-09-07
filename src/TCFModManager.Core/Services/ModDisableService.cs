@@ -35,12 +35,17 @@ public static class ModDisableService
     // normal: everything that could move is moved and reported, everything that couldn't is
     // returned as a failure rather than aborting the rest.
     //
-    public static ModDisableOutcome Apply(IEnumerable<InstalledMod> mods, bool disable)
+    // <paramref name="installPath"/> scopes the in-use check to the install being changed, so a
+    // second SPT running elsewhere on the machine isn't a reason to refuse. Optional only because
+    // not every caller has the root in hand; passing it is always better.
+    public static ModDisableOutcome Apply(
+        IEnumerable<InstalledMod> mods, bool disable, string? installPath = null)
     {
         var targets = mods.Where(mod => mod.IsDisabled != disable).ToList();
         if (targets.Count == 0) return ModDisableOutcome.Empty;
 
-        ModInstallService.EnsureInstallNotInUse(disable ? ModInstallAction.Disable : ModInstallAction.Enable);
+        ModInstallService.EnsureInstallNotInUse(
+            disable ? ModInstallAction.Disable : ModInstallAction.Enable, installPath);
 
         var moved = new List<ModMove>();
         var failed = new List<ModDisableFailure>();
@@ -79,12 +84,12 @@ public static class ModDisableService
     // ResolveDuplicate. Walked in reverse, since a run that moved two things through the same path
     // (ResolveDuplicate keeping the disabled copy) only unwinds correctly last-move-first.
     //
-    public static ModDisableOutcome Revert(IEnumerable<ModMove> moves)
+    public static ModDisableOutcome Revert(IEnumerable<ModMove> moves, string? installPath = null)
     {
         var pending = moves.ToList();
         if (pending.Count == 0) return ModDisableOutcome.Empty;
 
-        ModInstallService.EnsureInstallNotInUse(ModInstallAction.Undo);
+        ModInstallService.EnsureInstallNotInUse(ModInstallAction.Undo, installPath);
 
         var moved = new List<ModMove>();
         var failed = new List<ModDisableFailure>();
@@ -141,7 +146,7 @@ public static class ModDisableService
     public static ModDisableOutcome ResolveDuplicate(
         string installPath, ModDuplicatePair pair, bool keepEnabled, DateTimeOffset timestamp)
     {
-        ModInstallService.EnsureInstallNotInUse(ModInstallAction.SortOutDuplicate);
+        ModInstallService.EnsureInstallNotInUse(ModInstallAction.SortOutDuplicate, installPath);
 
         var moved = new List<ModMove>();
         var failed = new List<ModDisableFailure>();

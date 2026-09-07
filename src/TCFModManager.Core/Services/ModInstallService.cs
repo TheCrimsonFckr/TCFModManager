@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO.Compression;
 using SharpCompress.Archives;
@@ -28,21 +29,44 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
     // version already removed - so both install and uninstall refuse to start until they're closed.
     private static readonly string[] BlockingProcessNames = ["EscapeFromTarkov", "SPT.Server", "Aki.Server"];
 
-    // The blocking processes currently running, by display name, or an empty list when the install
-    // is safe to modify.
-    public static IReadOnlyList<string> RunningBlockers()
+    //
+    // The blocking processes running OUT OF THIS INSTALL, or an empty list when it is safe to modify.
+    //
+    // Scoped to the install on purpose. More than one SPT lives on a machine as soon as anyone runs
+    // a second version or keeps a dedicated server apart from the copy they play - and the two share
+    // nothing but the name of an executable. A server running from D:\ holds no handle anywhere in
+    // an install on E:\, so refusing to touch E:\ because of it blocks work that was never at risk,
+    // with a message telling the user to close the one thing they cannot close: the server they are
+    // modding the other install FOR.
+    //
+    // Passing no path keeps the old machine-wide behaviour, for callers that genuinely have no
+    // install in hand.
+    //
+    public static IReadOnlyList<string> RunningBlockers(string? installPath = null)
     {
         var running = new List<string>();
 
         foreach (var name in BlockingProcessNames)
         {
+            Process[] found;
+
             try
             {
-                if (Process.GetProcessesByName(name).Length > 0) running.Add(name + ".exe");
+                found = Process.GetProcessesByName(name);
             }
             catch (InvalidOperationException)
             {
                 // Process list unavailable - treated as nothing running rather than blocking the user.
+                continue;
+            }
+
+            try
+            {
+                if (found.Any(p => BlocksInstall(p, installPath))) running.Add(name + ".exe");
+            }
+            finally
+            {
+                foreach (var process in found) process.Dispose();
             }
         }
 
@@ -50,13 +74,65 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
     }
 
     //
+    // Whether one running process is a reason not to touch this install.
+    //
+    // An unreadable path counts as blocking. Windows refuses MainModule for a process this one has
+    // no right to inspect - another user's, or an elevated one - and "I could not tell" is not
+    // "it is fine": guessing wrong the other way corrupts an install mid-update, which is the exact
+    // thing this guard exists to prevent. The old behaviour was to block on every match, so this
+    // costs nothing that was ever available.
+    //
+    private static bool BlocksInstall(Process process, string? installPath)
+    {
+        if (string.IsNullOrWhiteSpace(installPath)) return true;
+
+        string? executable;
+
+        try
+        {
+            executable = process.MainModule?.FileName;
+        }
+        catch (Exception ex) when (ex is Win32Exception or InvalidOperationException or NotSupportedException)
+        {
+            AppLog.Debug("Install",
+                $"could not read the path of {process.ProcessName}; treating it as in use");
+            return true;
+        }
+
+        return executable is null || IsInside(executable, installPath);
+    }
+
+    //
+    // Whether a file sits inside a folder.
+    //
+    // Compared as full paths with a trailing separator, so "E:\SPT Server" is not read as containing
+    // "E:\SPT Server 4.1\...". Case-insensitively, which is right on Windows and near enough
+    // everywhere this runs.
+    //
+    internal static bool IsInside(string filePath, string folder)
+    {
+        try
+        {
+            var root = Path.TrimEndingDirectorySeparator(Path.GetFullPath(folder)) + Path.DirectorySeparatorChar;
+
+            return Path.GetFullPath(filePath).StartsWith(root, StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
+        {
+            // A path neither side can resolve is not one this can reason about; the caller treats
+            // that as still blocking.
+            return true;
+        }
+    }
+
+    //
     // Throws when a blocking process is running, carrying what to close and which operation was
     // refused. It takes the operation rather than a verb phrase: the caller says what it was doing,
     // App/Services/ModInstallProblems says it in English.
     //
-    public static void EnsureInstallNotInUse(ModInstallAction action)
+    public static void EnsureInstallNotInUse(ModInstallAction action, string? installPath = null)
     {
-        var running = RunningBlockers();
+        var running = RunningBlockers(installPath);
         if (running.Count == 0) return;
 
         throw new ModInstallException(ModInstallFailure.InstallInUse)
@@ -92,7 +168,7 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
                 Version = version.Version,
             };
 
-        EnsureInstallNotInUse(ModInstallAction.Install);
+        EnsureInstallNotInUse(ModInstallAction.Install, installPath);
 
         AppLog.Info("Install",
             $"{target.Name} {version.Version} ({(target.IsAddon ? "addon" : "mod")} {target.Id}) -> {installPath}");
@@ -148,7 +224,7 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
 
             // Re-checked now the download is finished: SPT may have been started while it ran, and
             // everything past this point deletes or places files inside the install.
-            EnsureInstallNotInUse(ModInstallAction.Install);
+            EnsureInstallNotInUse(ModInstallAction.Install, installPath);
 
             var manifest = manifestService.Load();
             var existing = manifest.Mods.FirstOrDefault(target.Matches);
@@ -268,7 +344,7 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
         ConfigAction configs = ConfigAction.Keep,
         CancellationToken ct = default)
     {
-        EnsureInstallNotInUse(ModInstallAction.Remove);
+        EnsureInstallNotInUse(ModInstallAction.Remove, installPath);
 
         var failed = new List<string>();
         var deleted = 0;
@@ -325,9 +401,11 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
     // Deletes a mod's whole folder (or, for a loose top-level DLL, just that file) - the
     // removal path for a mod this app didn't install itself, since there's no per-file manifest
     // record to work from. Callers should confirm the exact path with the user before calling this.
-    public static void RemoveLegacyPath(string path)
+    // <paramref name="installPath"/> is the install <paramref name="path"/> lives in, and only
+    // scopes the in-use check - the deletion itself is driven by path alone.
+    public static void RemoveLegacyPath(string path, string? installPath = null)
     {
-        EnsureInstallNotInUse(ModInstallAction.Remove);
+        EnsureInstallNotInUse(ModInstallAction.Remove, installPath);
 
         if (Directory.Exists(path)) Directory.Delete(path, recursive: true);
         else if (File.Exists(path)) File.Delete(path);
