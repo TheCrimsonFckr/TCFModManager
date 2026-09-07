@@ -44,6 +44,7 @@ public sealed partial class DownloadQueueItemViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(CancelCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RetryCommand))]
     private DownloadQueueItemStatus _status = DownloadQueueItemStatus.Pending;
 
     [ObservableProperty]
@@ -241,11 +242,55 @@ public sealed partial class DownloadQueueItemViewModel : ObservableObject
         or DownloadQueueItemStatus.Failed
         or DownloadQueueItemStatus.Cancelled;
 
-    private readonly CancellationTokenSource _cancellation = new();
+    //
+    // Replaced on retry, not reused: a CancellationTokenSource that has been cancelled stays
+    // cancelled forever, so a retried item would be refused by the worker's first check before it
+    // ever started. One attempt, one source.
+    //
+    private CancellationTokenSource _cancellation = new();
 
     // Cancels the download/install this item is running. The install's file-copy stage
     // runs to completion regardless, so a mod is never left half-placed.
     internal CancellationToken Token => _cancellation.Token;
+
+    //
+    // Puts this item back on the queue. Set by DownloadQueueViewModel.Enqueue, because the queue is
+    // the only thing that owns the channel - the card just asks to go round again.
+    //
+    internal Action<DownloadQueueItemViewModel>? Requeue { get; set; }
+
+    // Only what has stopped, one way or the other, and only while the queue can still take it back.
+    public bool CanRetry =>
+        Requeue is not null && Status is DownloadQueueItemStatus.Failed or DownloadQueueItemStatus.Cancelled;
+
+    //
+    // Runs this item again from the top.
+    //
+    // The same card rather than a new one: the failure is what you are looking at, and answering it
+    // by appending a second card for the same mod leaves the first sitting there implying two of
+    // them are outstanding. Everything the first attempt needed is still on this object - the
+    // target, the install path, and the closure that resolves the version - so a retry is a reset
+    // rather than a rebuild.
+    //
+    // A mod that failed HALF INSTALLED is not a problem here: ModInstallService removes a previous
+    // version before placing files, and a retry goes through the same path, so the second attempt
+    // tidies up after the first.
+    //
+    [RelayCommand(CanExecute = nameof(CanRetry))]
+    private void Retry()
+    {
+        if (!CanRetry) return;
+
+        var previous = _cancellation;
+        _cancellation = new CancellationTokenSource();
+        previous.Dispose();
+
+        Progress = 0;
+        Status = DownloadQueueItemStatus.Pending;
+        StatusMessage = "Waiting in queue...";
+
+        Requeue!(this);
+    }
 
     // Items queued because this one declared them as missing dependencies. Cancelling this
     // item cancels them too.
@@ -316,6 +361,7 @@ public sealed partial class DownloadQueueItemViewModel : ObservableObject
         OnPropertyChanged(nameof(IsIndeterminateProgress));
         OnPropertyChanged(nameof(StatusLabel));
         OnPropertyChanged(nameof(CanCancel));
+        OnPropertyChanged(nameof(CanRetry));
         OnPropertyChanged(nameof(IsFinished));
     }
 }

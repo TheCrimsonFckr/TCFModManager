@@ -75,6 +75,12 @@ public sealed partial class DownloadQueueViewModel : ObservableObject
         var item = new DownloadQueueItemViewModel(target, versionLabel, installPath, resolveVersion, checkDependencies, totalBytes);
         dependencyOf?.AddDependency(item);
         item.PropertyChanged += OnItemChanged;
+
+        // How a failed card gets to go round again. The channel is the queue's, so the card asks
+        // rather than writing to it - and an item that was never enqueued has no retry, which is
+        // what CanRetry checks.
+        item.Requeue = queued => _channel.Writer.TryWrite(queued);
+
         Items.Add(item);
         _channel.Writer.TryWrite(item);
         UpdateSummary();
@@ -106,6 +112,10 @@ public sealed partial class DownloadQueueViewModel : ObservableObject
             HasSummary = false;
             HasUnsized = false;
             SummaryProgress = SummaryRemaining = SummaryEta = SummaryUnsized = NoValue;
+
+            // Still notified on the way out: a queue that has just finished with failures in it is
+            // exactly when the retry button has to appear.
+            OnPropertyChanged(nameof(HasRetryable));
             return;
         }
 
@@ -125,7 +135,26 @@ public sealed partial class DownloadQueueViewModel : ObservableObject
             && unfinished.FirstOrDefault(i => i.BytesPerSecond is > 0)?.BytesPerSecond is { } rate
                 ? DownloadQueueItemViewModel.RemainingLabel(TimeSpan.FromSeconds(remaining / rate))
                 : NoValue;
+
+        OnPropertyChanged(nameof(HasRetryable));
     }
+
+    //
+    // Every failed or cancelled item back on the queue, oldest first.
+    //
+    // Worth having as well as the per-card button because of how these actually fail: a mod list
+    // apply queues dozens at once, and one flaky spell on The Forge takes out a run of them
+    // together. Clicking Retry fourteen times is the same work with more chances to miss one.
+    //
+    public void RetryFailed()
+    {
+        foreach (var item in Items.Where(i => i.CanRetry).ToList()) item.RetryCommand.Execute(null);
+
+        UpdateSummary();
+    }
+
+    // Whether anything is sitting there retryable, so the button can stay out of the way otherwise.
+    public bool HasRetryable => Items.Any(i => i.CanRetry);
 
     // Removes every Completed/Failed/Cancelled card from the list; queued/in-progress items are left alone.
     public void ClearFinished()
