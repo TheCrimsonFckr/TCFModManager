@@ -120,6 +120,19 @@ public sealed class ModListService
         return AppServices.ModLists.Add(list);
     }
 
+    //
+    // What this machine is, as the scopes a served list gets filtered to.
+    //
+    // Read here rather than passed in, because every caller would read the same setting and one that
+    // forgot would plan a headless box as an ordinary player - stripping it of the bot and item mods
+    // it is hosting the raid with, which is a failure everyone in that raid feels and nobody can see
+    // the cause of.
+    //
+    // Only ever narrows a list a SERVER served. Your own lists describe your own install.
+    //
+    public static ModListEntryScope MachineScope =>
+        InstallRole.ScopeFor(new SettingsService().Load().Roles);
+
     // Works out what applying this list would do. Nothing moves and nothing downloads.
     public async Task<ModListPreview?> PreviewAsync(ModList list, IReadOnlySet<string>? neverAutoDisable = null)
     {
@@ -135,7 +148,7 @@ public sealed class ModListService
 
         return new ModListPreview(
             list,
-            ModListPlanner.Build(list, install.Candidates, neverAutoDisable, serverList),
+            ModListPlanner.Build(list, install.Candidates, neverAutoDisable, serverList, MachineScope),
             install);
     }
 

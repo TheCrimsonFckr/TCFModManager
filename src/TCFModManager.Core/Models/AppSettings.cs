@@ -8,6 +8,45 @@ public sealed class AppSettings
 {
     public string? SptInstallPath { get; set; }
 
+    //
+    // What this machine does with that install: whether anyone plays on it, and whether it runs a
+    // Fika headless client. Together they decide which entries of a SERVED mod list are this
+    // machine's to install - see InstallRole.ScopeFor.
+    //
+    // Two questions rather than one mode, because "dedicated headless" is just the second without
+    // the first, and the machine that does both needs no value of its own.
+    //
+    // NULL MEANS NOT YET ANSWERED, which is why these are nullable and not plain bools. The app has
+    // to tell "nobody has been asked" from "asked, and the answer was no" - the first is what makes
+    // the setup prompt appear exactly once, and a plain false would make it either appear forever or
+    // never. Absent from the file until answered, so an install that never meets the question keeps
+    // a settings.json that says nothing about it.
+    //
+    // Nothing on disk can answer the first: a headless install has SPT.Server.exe like any other.
+    // The headless launcher answers the second, and only the person setting the app up knows the
+    // first, which is why it is asked at all rather than detected.
+    //
+    public bool? PlaysHere { get; set; }
+
+    public bool? RunsHeadlessClient { get; set; }
+
+    //
+    // The two answers as the roles the rest of the app reasons about.
+    //
+    // An unanswered PlaysHere reads as yes. An install nobody has been asked about is overwhelmingly
+    // somebody's own game, and the wrong guess in the other direction would filter a served list
+    // down to the headless share on a machine with a player sitting at it.
+    //
+    [JsonIgnore]
+    public InstallRoles Roles =>
+        (PlaysHere is not false ? InstallRoles.Player : InstallRoles.None)
+        | (RunsHeadlessClient is true ? InstallRoles.Headless : InstallRoles.None);
+
+    // Whether the setup question has been put to anyone yet. Both halves, because a file written by
+    // a build that only knew one of them is still a file that has not been answered.
+    [JsonIgnore]
+    public bool InstallRolesAnswered => PlaysHere is not null && RunsHeadlessClient is not null;
+
     // The app version whose update banner the user dismissed, so a release they've decided to skip
     // (a bug-fix one, most likely) stops raising the banner on every launch. It's compared as an
     // exact string, so anything published after it raises a fresh one.

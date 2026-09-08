@@ -17,7 +17,7 @@ public class ModListScopeTests
 {
     private static readonly DateTimeOffset Timestamp = new(2026, 9, 7, 10, 0, 0, TimeSpan.Zero);
 
-    private static ModListEntry Entry(string name, ModListEntryScope scope = ModListEntryScope.Both,
+    private static ModListEntry Entry(string name, ModListEntryScope scope = ModListEntryScope.Everyone,
         int? modId = null, int? versionId = null, string? version = null) =>
         new()
         {
@@ -155,8 +155,8 @@ public class ModListScopeTests
     }
 
     //
-    // Scope defaults to Both, so a list written before scope existed - which is every list anyone
-    // currently holds - means exactly what it meant.
+    // An entry that says nothing about scope means every machine, so a list written before scope
+    // existed - and before the headless did - means exactly what it always meant.
     //
     [Fact]
     public void AListWithNoScopesBehavesAsItAlwaysDid()
@@ -164,7 +164,7 @@ public class ModListScopeTests
         var list = List(ModListOrigin.Server, Entry("SAIN"), Entry("Fika.Core"));
 
         Assert.Equal(2, ModListPlanner.Build(list, []).Actions.Count);
-        Assert.All(list.Entries, e => Assert.Equal(ModListEntryScope.Both, e.Scope));
+        Assert.All(list.Entries, e => Assert.Equal(ModListEntryScope.Everyone, e.EffectiveScope));
     }
 
     // Client-scoped entries apply to a client, obviously - but also to the operator's own install,
@@ -193,8 +193,17 @@ public class ModListScopeTests
 
         var restored = ModListFile.Read(json, "127.0.0.1:6969", ModListOrigin.Server).List!;
 
-        Assert.Equal(ModListEntryScope.Server, restored.Entries.Single(e => e.Name == "fika-server").Scope);
-        Assert.Equal(ModListEntryScope.Client, restored.Entries.Single(e => e.Name == "SAIN").Scope);
+        Assert.Equal(ModListEntryScope.Server, restored.Entries.Single(e => e.Name == "fika-server").EffectiveScope);
+
+        //
+        // Client, WIDENED to Client|Headless on the way in. The document is a schema 3, written when
+        // "Client" was the only way to say "not the server" - so read literally it would now mean
+        // "players and not the headless", a distinction its author had no way to make. See
+        // ModListFile.WidenForHeadless.
+        //
+        Assert.Equal(
+            ModListEntryScope.Client | ModListEntryScope.Headless,
+            restored.Entries.Single(e => e.Name == "SAIN").EffectiveScope);
     }
 
     //
@@ -236,12 +245,17 @@ public class ModListScopeTests
         [
             new ModListCandidate { Name = "SAIN", Scope = ModListEntryScope.Client },
             new ModListCandidate { Name = "fika-server", Scope = ModListEntryScope.Server },
-            new ModListCandidate { Name = "Fika", Scope = ModListEntryScope.Both },
+            new ModListCandidate { Name = "Fika", Scope = ModListEntryScope.Everyone },
         ]);
 
-        Assert.Equal(ModListEntryScope.Client, entries.Single(e => e.Name == "SAIN").Scope);
-        Assert.Equal(ModListEntryScope.Server, entries.Single(e => e.Name == "fika-server").Scope);
-        Assert.Equal(ModListEntryScope.Both, entries.Single(e => e.Name == "Fika").Scope);
+        Assert.Equal(ModListEntryScope.Client, entries.Single(e => e.Name == "SAIN").EffectiveScope);
+        Assert.Equal(ModListEntryScope.Server, entries.Single(e => e.Name == "fika-server").EffectiveScope);
+        Assert.Equal(ModListEntryScope.Everyone, entries.Single(e => e.Name == "Fika").EffectiveScope);
+
+        // Everyone is stored as nothing at all, so an entry that concerns every machine leaves no
+        // trace in the file and a list that does not use scope is byte-identical to one from before
+        // scope existed.
+        Assert.Null(entries.Single(e => e.Name == "Fika").Scope);
     }
 }
 
@@ -257,7 +271,7 @@ public class ModListCoexistenceTests
 {
     private static readonly DateTimeOffset Timestamp = new(2026, 9, 7, 10, 0, 0, TimeSpan.Zero);
 
-    private static ModListEntry Entry(string name, ModListEntryScope scope = ModListEntryScope.Both) =>
+    private static ModListEntry Entry(string name, ModListEntryScope scope = ModListEntryScope.Everyone) =>
         new() { Name = name, Scope = scope, Folders = [name.ToLowerInvariant()] };
 
     private static ModList List(ModListOrigin origin, params ModListEntry[] entries)

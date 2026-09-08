@@ -193,9 +193,15 @@ public sealed partial class PreLaunchCheckViewModel : ObservableObject
             if (!keepMessage)
             {
                 State = PreLaunchState.Ready;
+                //
+                // Counted against what the server expects of THIS machine, not of everyone. A
+                // headless box legitimately does not carry the player-only mods, and reporting the
+                // whole list here would have it saying "18 mods, all present" while planning
+                // against 12 - two numbers for one question, with the wrong one on screen.
+                //
                 Message = $"Your install matches \"{held.Name}\" (revision {held.Revision}) -"
-                    + $" {Mods(held.EntriesApplyingHere.Count())} the server expects, all present and at the"
-                    + " right versions.";
+                    + $" {Mods(held.EntriesApplyingTo(ModListService.MachineScope).Count())} the server expects,"
+                    + " all present and at the right versions.";
             }
 
             return;

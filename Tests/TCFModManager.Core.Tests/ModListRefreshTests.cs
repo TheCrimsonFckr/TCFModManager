@@ -19,7 +19,7 @@ public class ModListRefreshTests
         int? modId = null,
         string? version = null,
         int? versionId = null,
-        ModListEntryScope scope = ModListEntryScope.Both,
+        ModListEntryScope scope = ModListEntryScope.Everyone,
         string? guid = null,
         params string[] folders) =>
         new()
@@ -38,7 +38,7 @@ public class ModListRefreshTests
         int? modId = null,
         string? version = null,
         string? guid = null,
-        ModListEntryScope scope = ModListEntryScope.Both,
+        ModListEntryScope scope = ModListEntryScope.Everyone,
         params string[] folders) =>
         new()
         {
@@ -85,9 +85,9 @@ public class ModListRefreshTests
     {
         var result = ModListRefresh.Build(
             [Entry("Server Thing", modId: 31, version: "1.0.0", scope: ModListEntryScope.Server)],
-            [Installed("Server Thing", modId: 31, version: "2.0.0", scope: ModListEntryScope.Both)]);
+            [Installed("Server Thing", modId: 31, version: "2.0.0", scope: ModListEntryScope.Everyone)]);
 
-        Assert.Equal(ModListEntryScope.Server, result.Entries[0].Scope);
+        Assert.Equal(ModListEntryScope.Server, result.Entries[0].EffectiveScope);
         Assert.Equal("2.0.0", result.Entries[0].Version);
     }
 

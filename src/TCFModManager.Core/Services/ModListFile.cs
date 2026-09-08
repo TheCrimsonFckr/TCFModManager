@@ -66,8 +66,20 @@ public static class ModListFile
     //
     public const int ScopeSchemaVersion = 3;
 
+    //
+    // Added when the headless became a machine an entry could name. At 3, Scope was one of Both,
+    // Client or Server; at 4 it is a set that can also contain Headless, and the two are written
+    // differently - "Everyone" where a 3 wrote "Both", and "Client, Headless" where a 3 had no way
+    // to say it at all.
+    //
+    // An app reading 3 would take "Client, Headless" as an unknown value. That is the
+    // "an older app could no longer read this correctly" case, so it gets its own number - stamped,
+    // as ever, only on a list that actually says something a 3 could not.
+    //
+    public const int HeadlessSchemaVersion = 4;
+
     // The highest version this app can read.
-    public const int SchemaVersion = ScopeSchemaVersion;
+    public const int SchemaVersion = HeadlessSchemaVersion;
 
     //
     // The version a given list has to be written at. Only a list that actually contains an addon is
@@ -77,10 +89,26 @@ public static class ModListFile
     //
     public static int SchemaVersionFor(ModList list)
     {
-        if (list.Entries.Any(e => e.Scope != ModListEntryScope.Both)) return ScopeSchemaVersion;
+        //
+        // Ordered newest first: a list that says something only a 4 can express is a 4 even if it
+        // also contains the things 3 and 2 were added for.
+        //
+        // Asked of what each entry MEANS, not of how it happens to be stored. The first cut tested
+        // "does the entry carry a Scope value at all", which made the answer depend on whether
+        // Everyone had been written as Everyone or left out - two spellings of one meaning, and a
+        // plain list came out stamped 4. Everyone, Client and Server are all sayable at schema 3;
+        // only a set naming Headless without being the whole set is new.
+        //
+        if (list.Entries.Any(e => !IsSayableAtScopeSchema(e.EffectiveScope))) return HeadlessSchemaVersion;
+
+        if (list.Entries.Any(e => e.EffectiveScope != ModListEntryScope.Everyone)) return ScopeSchemaVersion;
 
         return list.Entries.Any(e => e.IsAddon) ? AddonSchemaVersion : BaseSchemaVersion;
     }
+
+    // The three values schema 3 had: Both, Client and Server. Everything else needs a 4.
+    private static bool IsSayableAtScopeSchema(ModListEntryScope scope) =>
+        scope is ModListEntryScope.Everyone or ModListEntryScope.Client or ModListEntryScope.Server;
 
     // Deliberately its own extension rather than .json, so the app can be associated with it later
     // and so a double-click means something.
@@ -181,9 +209,41 @@ public static class ModListFile
 
         // Entries with no name at all can't be shown or matched on, so they are dropped rather than
         // carried through as blanks. Scope travels with them - it is the file's, not the reader's.
-        imported.Entries.AddRange(list.Entries.Where(e => !string.IsNullOrWhiteSpace(e.Name)));
+        imported.Entries.AddRange(list.Entries
+            .Where(e => !string.IsNullOrWhiteSpace(e.Name))
+            .Select(e => WidenForHeadless(e, document.SchemaVersion)));
 
         return new ModListImport(imported, null);
+    }
+
+    //
+    // A client-scoped entry from before the headless existed becomes Client|Headless.
+    //
+    // At schema 3 and below "Client" meant "not the server" - the only two machines the format could
+    // describe. Read literally now, it would mean "players and not the headless", and a list an
+    // operator published last week would quietly stop delivering SAIN and the bot mods to the very
+    // machine hosting the raid. The author never said that; the format could not say it.
+    //
+    // Keyed off the DOCUMENT's version rather than the entry's shape, which is what makes it safe:
+    // a schema 4 list saying Client means it, and is left alone. Server-scoped entries are untouched
+    // - they meant one machine then and mean the same one now.
+    //
+    private static ModListEntry WidenForHeadless(ModListEntry entry, int schemaVersion)
+    {
+        if (schemaVersion >= HeadlessSchemaVersion) return entry;
+        if (entry.Scope != ModListEntryScope.Client) return entry;
+
+        return new ModListEntry
+        {
+            Name = entry.Name,
+            ModId = entry.ModId,
+            IsAddon = entry.IsAddon,
+            VersionId = entry.VersionId,
+            Version = entry.Version,
+            Guid = entry.Guid,
+            Folders = entry.Folders,
+            Scope = ModListEntryScope.Client | ModListEntryScope.Headless,
+        };
     }
 
     public static ModListImport Load(string path)

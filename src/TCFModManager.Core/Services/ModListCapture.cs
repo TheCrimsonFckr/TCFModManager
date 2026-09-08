@@ -39,12 +39,17 @@ public sealed record ModListCandidate
     public IReadOnlyList<string> Folders { get; init; } = [];
 
     //
-    // Who a list entry built from this card is for, from where the mod's files actually land:
-    // BepInEx\plugins is a client mod, user\mods is a server one, and a card covering both halves
-    // is Both. Inferred rather than asked, because the scanner already knows and nobody wants to
-    // tag twenty mods by hand.
+    // Which machines a list entry built from this card is for, from where the mod's files actually
+    // land: BepInEx\plugins is a client mod, user\mods is a server one, and a card covering both
+    // halves is for everyone. Inferred rather than asked, because the scanner already knows and
+    // nobody wants to tag twenty mods by hand.
     //
-    public ModListEntryScope Scope { get; init; }
+    // A client mod comes out as Client|Headless, not Client. Nothing on disk distinguishes a bot
+    // overhaul from a HUD widget, and of the two ways to be wrong, giving a headless a mod it did
+    // not need is invisible while withholding one it did is felt by everyone in the raid. The
+    // operator prunes from there.
+    //
+    public ModListEntryScope Scope { get; init; } = ModListEntryScope.Everyone;
 
     //
     // Every scanned mod this card merged - what ModListApplier hands to ModDisableService when a
@@ -133,6 +138,9 @@ public static class ModListCapture
                 VersionId = ResolveVersionId(candidate, versions, addonVersions),
                 Version = string.IsNullOrWhiteSpace(candidate.Version) ? null : candidate.Version.Trim(),
                 Guid = string.IsNullOrWhiteSpace(candidate.Guid) ? null : candidate.Guid.Trim(),
+                // Everyone stores as null - see ModListEntry.Scope - so an entry that concerns
+                // every machine says nothing about scope at all, and a list that does not use the
+                // feature is byte-identical to one written before it existed.
                 Scope = candidate.Scope,
                 Folders = [.. candidate.Folders
                     .Where(f => !string.IsNullOrWhiteSpace(f))

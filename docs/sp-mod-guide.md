@@ -295,9 +295,11 @@ Grab `Data\logs\tcfmm-<date>.log` - ideally after adding the `verbose` marker fi
 
 
 ### Planning
-- Mod lists/profiles
-- Server mapping
-- Mod list sharing and handling (if you have played arma modded or Total war modded, think like that)
-- Mod syncing get on the same level as the server you are joining 
+- Mod lists/profiles - Completed
+- Server mapping - Intitial Release
+- Mod list sharing and handling (if you have played arma modded or Total war modded, think like that) - Completed
+- Mod syncing get on the same level as the server you are joining  - Initial release
+- Window default sizes - Completed
+- Defualt filtering - Completed
 
 {.endtabset}

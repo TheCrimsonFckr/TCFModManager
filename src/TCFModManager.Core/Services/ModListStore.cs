@@ -22,6 +22,13 @@ public sealed class ModListStore
         Converters = { new JsonStringEnumConverter() },
     };
 
+    //
+    // The shape this store writes. Bumped when a load has to change what is already on disk, which
+    // so far has happened once: entries scoped Client were written before a headless was a machine
+    // a list could name, and have to be widened to reach one. See Normalise.
+    //
+    public const int SchemaVersion = 1;
+
     public ModListStore(string? filePath = null)
     {
         _filePath = filePath ?? Path.Combine(AppPaths.DataDirectory, "mod_lists.json");
@@ -31,16 +38,43 @@ public sealed class ModListStore
 
     public ModListData Load()
     {
-        if (!File.Exists(_filePath)) return new ModListData();
+        if (!File.Exists(_filePath)) return new ModListData { SchemaVersion = SchemaVersion };
 
         try
         {
             var json = File.ReadAllText(_filePath);
-            return Normalise(JsonSerializer.Deserialize<ModListData>(json, Options) ?? new ModListData());
+            var data = JsonSerializer.Deserialize<ModListData>(json, Options) ?? new ModListData();
+
+            var storedVersion = data.SchemaVersion;
+
+            data = Normalise(data);
+
+            //
+            // Written back on the spot, unlike the snapshot tidy-up above it, because the headless
+            // widening is NOT idempotent: it turns Client into Client|Headless, and Client is also
+            // exactly what an operator picks when they mean "players only, not the headless".
+            // Re-running it on every load would undo that choice every time the app started. The
+            // version stamp is what makes it run once and never again.
+            //
+            // A failed write is not a failed load - the data in hand is right either way, and the
+            // migration simply gets another go next time.
+            //
+            if (storedVersion < SchemaVersion)
+            {
+                try
+                {
+                    Save(data);
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                {
+                }
+            }
+
+            return data;
         }
         catch (JsonException)
         {
-            return new ModListData();
+            return new ModListData { SchemaVersion = SchemaVersion };
         }
     }
 
@@ -55,6 +89,8 @@ public sealed class ModListStore
     //
     private static ModListData Normalise(ModListData data)
     {
+        WidenForHeadless(data);
+
         var snapshots = data.Lists.Where(l => l.IsSnapshot).OrderByDescending(l => l.UpdatedAt).ToList();
         if (snapshots.Count == 0) return data;
 
@@ -66,8 +102,50 @@ public sealed class ModListStore
         return data;
     }
 
+    //
+    // Every entry scoped Client in a file written before the headless existed becomes
+    // Client|Headless.
+    //
+    // Back then Client meant "not the server", because those were the only two machines the format
+    // could describe. Read literally now it means "players, and not the headless" - so an operator's
+    // own published list would stop delivering SAIN and the bot mods to the machine actually hosting
+    // the raid, on the strength of a distinction its author never made.
+    //
+    // Runs once, gated on the file's stored SchemaVersion, because Client is a value the operator
+    // can now choose deliberately and this would keep overwriting it.
+    //
+    private static void WidenForHeadless(ModListData data)
+    {
+        if (data.SchemaVersion >= SchemaVersion) return;
+
+        foreach (var list in data.Lists.Append(data.Snapshot).OfType<ModList>())
+        {
+            for (var i = 0; i < list.Entries.Count; i++)
+            {
+                var entry = list.Entries[i];
+                if (entry.Scope != ModListEntryScope.Client) continue;
+
+                list.Entries[i] = new ModListEntry
+                {
+                    Name = entry.Name,
+                    ModId = entry.ModId,
+                    IsAddon = entry.IsAddon,
+                    VersionId = entry.VersionId,
+                    Version = entry.Version,
+                    Guid = entry.Guid,
+                    Folders = entry.Folders,
+                    Scope = ModListEntryScope.Client | ModListEntryScope.Headless,
+                };
+            }
+        }
+
+        data.SchemaVersion = SchemaVersion;
+    }
+
     public void Save(ModListData data)
     {
+        data.SchemaVersion = SchemaVersion;
+
         Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
         File.WriteAllText(_filePath, JsonSerializer.Serialize(data, Options));
     }

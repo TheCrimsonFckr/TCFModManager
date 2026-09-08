@@ -128,13 +128,25 @@ public static class ModListPlanner
     // aside every mod the server requires and the next raid would be a version mismatch. Only the
     // entries that apply here are spared - a server-scoped entry was never installed to begin with.
     //
+    //
+    // machine is what this install actually is, from InstallRole.ScopeFor - Client for an ordinary
+    // player, Server|Headless for a box running a Fika headless client, both for one that does each.
+    // It only ever narrows a SERVED list; your own lists describe your own install and apply whole.
+    //
+    // Defaulted to Client so every existing caller and test keeps the behaviour it had, and so the
+    // one value that is wrong in the dangerous direction - a headless quietly planned as a player,
+    // stripped of the bot mods it hosts with - has to be asked for rather than fallen into.
+    //
     public static ModListPlan Build(
         ModList list,
         IEnumerable<ModListCandidate> installed,
         IReadOnlySet<string>? neverAutoDisable = null,
-        ModList? alsoRequiredBy = null)
+        ModList? alsoRequiredBy = null,
+        ModListEntryScope machine = ModListEntryScope.Client)
     {
-        neverAutoDisable = Protecting(neverAutoDisable, alsoRequiredBy);
+        neverAutoDisable = Protecting(neverAutoDisable, alsoRequiredBy, machine);
+
+        var applying = list.EntriesApplyingTo(machine).ToList();
 
         var candidates = installed.ToList();
         var actions = new List<ModListAction>();
@@ -145,11 +157,12 @@ public static class ModListPlanner
         var match = new ModListMatch(candidates);
 
         //
-        // EntriesApplyingHere, not Entries: a served list's server-only entries are not this
-        // machine's to install. They are still matched against what is installed, so a server mod
-        // you happen to have is not then disabled as "not on the list" - see the sweep below.
+        // The entries applying to THIS machine, not every entry: a served list's server-only entries
+        // are not a player's to install, and its player-only ones are not a headless box's. They are
+        // still matched against what is installed, so a mod you happen to have is not then disabled
+        // as "not on the list" - see the sweep below.
         //
-        foreach (var entry in list.EntriesApplyingHere)
+        foreach (var entry in applying)
         {
             var found = match.IndexOf(entry);
             if (found >= 0) matched[found] = true;
@@ -158,7 +171,7 @@ public static class ModListPlanner
 
         // Skipped entries still claim their installed mod, so the Exclusive sweep does not offer to
         // disable something purely because this machine was not the one meant to install it.
-        foreach (var entry in list.Entries.Except(list.EntriesApplyingHere))
+        foreach (var entry in list.Entries.Except(applying))
         {
             var found = match.IndexOf(entry);
             if (found >= 0) matched[found] = true;
@@ -254,13 +267,19 @@ public static class ModListPlanner
     // mod names. Built here rather than by the caller so every call site protects the server's mods
     // the same way - forgetting it at one of them is a mod disabled behind the user's back.
     //
-    private static IReadOnlySet<string>? Protecting(IReadOnlySet<string>? pinned, ModList? serverList)
+    private static IReadOnlySet<string>? Protecting(IReadOnlySet<string>? pinned, ModList? serverList,
+        ModListEntryScope machine)
     {
         if (serverList is null) return pinned;
 
         var protectedNames = new HashSet<string>(pinned ?? new HashSet<string>(), StringComparer.OrdinalIgnoreCase);
 
-        foreach (var entry in serverList.EntriesApplyingHere)
+        //
+        // Only the entries the server expects of THIS machine. Protection is for mods the server
+        // needs you to be running - on a headless box, a player-only entry is not one of those, and
+        // spreading the protection wider would pin a HUD mod on a machine nobody looks at.
+        //
+        foreach (var entry in serverList.EntriesApplyingTo(machine))
         {
             protectedNames.Add(entry.Name.Trim().ToLowerInvariant());
 

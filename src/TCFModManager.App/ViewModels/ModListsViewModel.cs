@@ -82,17 +82,54 @@ public sealed record ModListActionRowViewModel(string Kind, string Name, string 
 public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, string Detail)
 {
     //
-    // Shown on every row, including Both.
+    // Shown on every row, including Everyone.
     //
     // Hiding the default was the first cut and it was wrong: this is a value you cycle, so an
     // unlabelled row reads as "not set" rather than "set to everyone", and the button that changes
-    // it has no visible starting point. Three states, three labels, always visible.
+    // it has no visible starting point. Every state gets a label, always visible.
     //
-    public string ScopeLabel => Entry.Scope switch
+    public string ScopeLabel => ModListScopes.Label(Entry.EffectiveScope);
+}
+
+//
+// The names the page puts on a scope, and the order the row button cycles them in.
+//
+// Kept in one place because the chip, the filter dropdown, the row's detail line and the message
+// after a change all have to agree - four spellings of "Clients + headless" is how a user ends up
+// unsure whether they are looking at the same setting.
+//
+public static class ModListScopes
+{
+    public const ModListEntryScope ClientsAndHeadless = ModListEntryScope.Client | ModListEntryScope.Headless;
+
+    public static string Label(ModListEntryScope scope) => scope switch
     {
-        ModListEntryScope.Client => "Client only",
+        ModListEntryScope.Everyone => "Everyone",
+        ClientsAndHeadless => "Clients + headless",
+        ModListEntryScope.Client => "Clients only",
+        ModListEntryScope.Headless => "Headless only",
         ModListEntryScope.Server => "Server only",
-        _ => "Everyone",
+
+        // Not reachable from the button, but a hand-edited file can hold any combination and a row
+        // that refuses to describe itself is worse than one that spells the flags out.
+        _ => ModListEntryScopeConverter.Name(scope),
+    };
+
+    //
+    // Where the button goes next.
+    //
+    // Ordered so the ONE change anybody makes often is one click: capture tags a plugin
+    // Clients + headless, and the whole point of the feature is saying "actually, players only" for
+    // the HUD mods. That step comes first. Everyone leads into it for the same reason - a mod with
+    // both halves starts there and is pruned the same way.
+    //
+    public static ModListEntryScope Next(ModListEntryScope scope) => scope switch
+    {
+        ModListEntryScope.Everyone => ClientsAndHeadless,
+        ClientsAndHeadless => ModListEntryScope.Client,
+        ModListEntryScope.Client => ModListEntryScope.Headless,
+        ModListEntryScope.Headless => ModListEntryScope.Server,
+        _ => ModListEntryScope.Everyone,
     };
 }
 
@@ -144,11 +181,19 @@ public partial class ModListsViewModel : ObservableObject
         ApplySort();
     }
 
+    //
+    // The filter matches the scope EXACTLY rather than "contains this flag", which is what makes it
+    // useful for the job it exists for: finding the entries you have already pruned, or the ones
+    // still carrying the capture default. "Everything a headless takes" is a different question and
+    // the pre-launch check is what answers it.
+    //
     public IReadOnlyList<ModListScopeFilter> ScopeFilters { get; } =
     [
         new("All scopes", null),
-        new("Everyone", ModListEntryScope.Both),
-        new("Client only", ModListEntryScope.Client),
+        new("Everyone", ModListEntryScope.Everyone),
+        new("Clients + headless", ModListScopes.ClientsAndHeadless),
+        new("Clients only", ModListEntryScope.Client),
+        new("Headless only", ModListEntryScope.Headless),
         new("Server only", ModListEntryScope.Server),
     ];
 
@@ -205,7 +250,7 @@ public partial class ModListsViewModel : ObservableObject
     {
         if (item is not ModListEntryRowViewModel row) return false;
 
-        if (ScopeFilter?.Scope is { } scope && row.Entry.Scope != scope) return false;
+        if (ScopeFilter?.Scope is { } scope && row.Entry.EffectiveScope != scope) return false;
 
         var search = EntrySearch?.Trim();
         if (string.IsNullOrEmpty(search)) return true;
@@ -471,8 +516,17 @@ public partial class ModListsViewModel : ObservableObject
         // Said in the line rather than only as a chip, because this is the field that decides
         // whether somebody else's machine acts on the entry at all.
         //
-        if (entry.Scope == ModListEntryScope.Server) parts.Add("server only - clients skip it");
-        else if (entry.Scope == ModListEntryScope.Client) parts.Add("client only");
+        //
+        // Only the scopes that mean somebody skips the entry are spelled out here. Everyone and
+        // Clients + headless are the two the chip already says and nobody has to think about; the
+        // other three change what a machine does, so they get a sentence.
+        //
+        if (entry.EffectiveScope == ModListEntryScope.Server)
+            parts.Add("server only - players skip it");
+        else if (entry.EffectiveScope == ModListEntryScope.Client)
+            parts.Add("players only - a headless skips it");
+        else if (entry.EffectiveScope == ModListEntryScope.Headless)
+            parts.Add("headless only - players skip it");
 
         //
         // The folders on disk this entry covers.
@@ -850,11 +904,14 @@ public partial class ModListsViewModel : ObservableObject
     }
 
     //
-    // Moves one entry between Both, Client only and Server only.
+    // Moves one entry around the machines it is for.
     //
     // Capture infers this from where a mod's files land, which is right nearly always - this is for
-    // the exception. The two that forced it: the Server Map mod and fika-server sit in user\mods on
-    // the server, and a client told to install them is being sent on an errand it cannot complete.
+    // the exception, and there are now two kinds. The originals: the Server Map mod and fika-server
+    // sit in user\mods on the server, and a client told to install them is being sent on an errand
+    // it cannot complete. The new one: nothing on disk separates a bot overhaul from a HUD widget,
+    // so capture gives the headless every plugin and this is where the ones it does not need come
+    // back off.
     //
     [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
     private void CycleScope(ModListEntryRowViewModel? entry)
@@ -864,12 +921,7 @@ public partial class ModListsViewModel : ObservableObject
         var index = Entries.IndexOf(entry);
         if (index < 0) return;
 
-        var next = entry.Entry.Scope switch
-        {
-            ModListEntryScope.Both => ModListEntryScope.Client,
-            ModListEntryScope.Client => ModListEntryScope.Server,
-            _ => ModListEntryScope.Both,
-        };
+        var next = ModListScopes.Next(entry.Entry.EffectiveScope);
 
         // ModListEntry is a class with init-only properties, not a record, so this is a rebuild
         // rather than a `with`. Every field is carried across deliberately - a missed one here
@@ -885,6 +937,10 @@ public partial class ModListsViewModel : ObservableObject
             Version = source.Version,
             Guid = source.Guid,
             Folders = [.. source.Folders],
+
+            // Cycling back round to Everyone stores null - see ModListEntry.Scope - so the entry
+            // ends up exactly as it was before anyone touched it, rather than carrying a value that
+            // means what silence already meant.
             Scope = next,
         });
         UnsavedCount++;
@@ -896,10 +952,14 @@ public partial class ModListsViewModel : ObservableObject
         StatusMessage = next switch
         {
             ModListEntryScope.Server =>
-                $"\"{entry.Name}\" is now server only - a client applying this list will skip it entirely.",
+                $"\"{entry.Name}\" is now server only - a player applying this list will skip it entirely.",
+            ModListScopes.ClientsAndHeadless =>
+                $"\"{entry.Name}\" now goes to players and to a headless client.",
             ModListEntryScope.Client =>
-                $"\"{entry.Name}\" is now client only.",
-            _ => $"\"{entry.Name}\" now applies to everyone.",
+                $"\"{entry.Name}\" is now players only - a headless client will skip it.",
+            ModListEntryScope.Headless =>
+                $"\"{entry.Name}\" is now headless only - players will skip it.",
+            _ => $"\"{entry.Name}\" now applies to every machine.",
         };
     }
 

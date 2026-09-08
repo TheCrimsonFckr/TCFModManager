@@ -84,12 +84,30 @@ public static class SptLaunchService
     ];
 
     //
-    // A Fika install's own launcher, at the install root. Present only on a setup running a
-    // headless client - a normal Fika player install has Fika-Installer.exe and no launcher of its
-    // own, and starts the game through SPT.Launcher.exe like any other. Matched by pattern rather
-    // than by name because only one spelling of it has actually been seen.
+    // What starts a Fika headless client, at the install root.
     //
-    private const string HeadlessLauncherWildcard = "*Fika*Launcher*.exe";
+    // Present only on a setup running a headless client - a normal Fika player install has
+    // Fika-Installer.exe and no launcher of its own, and starts the game through SPT.Launcher.exe
+    // like any other. A headless install still has SPT.Server.exe, so nothing else about the folder
+    // tells the two apart; this exe is the whole signal.
+    //
+    // Named first, wildcards behind it. The name is the one confirmed on a real headless install;
+    // the patterns are kept because this has shipped under more than one spelling, and an earlier
+    // version of this file matched ONLY "*Fika*Launcher*.exe" - which does not match
+    // FikaHeadlessManager.exe, so the Play page's headless card never appeared on the machine it
+    // exists for. A headless box is also the one least likely to have someone sitting at it to
+    // notice.
+    //
+    private static readonly string[] HeadlessLauncherCandidates =
+    [
+        "FikaHeadlessManager.exe",
+    ];
+
+    private static readonly string[] HeadlessLauncherWildcards =
+    [
+        "*Fika*Headless*.exe",
+        "*Fika*Launcher*.exe",
+    ];
 
     // Other processes that mean this target is already up, whatever the exe on disk is called.
     private static readonly string[] ServerProcessNames = ["SPT.Server", "Aki.Server"];
@@ -176,7 +194,7 @@ public static class SptLaunchService
                 return TryFindClientLauncherExe(installPath, out var client) ? client : null;
 
             case SptLaunchTarget.Headless:
-                return FindFirstFile(installPath, HeadlessLauncherWildcard);
+                return FindHeadlessLauncher(installPath);
 
             default:
                 return null;
@@ -210,8 +228,24 @@ public static class SptLaunchService
     // True when this install has a Fika headless launcher, which is what makes it a headless setup.
     public static bool TryFindHeadlessLauncherExe(string installPath, out string exePath)
     {
-        exePath = FindFirstFile(installPath, HeadlessLauncherWildcard) ?? "";
+        exePath = FindHeadlessLauncher(installPath) ?? "";
         return exePath.Length > 0;
+    }
+
+    private static string? FindHeadlessLauncher(string installPath)
+    {
+        foreach (var name in HeadlessLauncherCandidates)
+        {
+            var candidate = Path.Combine(installPath, name);
+            if (File.Exists(candidate)) return candidate;
+        }
+
+        foreach (var pattern in HeadlessLauncherWildcards)
+        {
+            if (FindFirstFile(installPath, pattern) is { } found) return found;
+        }
+
+        return null;
     }
 
     private static string? FindFirstFile(string directory, string pattern)

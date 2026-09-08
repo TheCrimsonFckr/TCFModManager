@@ -58,19 +58,29 @@ public static class ModListCandidates
     }
 
     //
-    // Which halves of the install a card occupies, as a list entry's scope. The scanner already
-    // knows - HasPlugin/HasPatcher/HasServer come straight off the folders it found - so an
-    // operator publishing their install does not tag twenty mods by hand.
+    // Which machines a card's mod is for, as a list entry's scope. The scanner already knows which
+    // halves of the install it occupies - HasPlugin/HasPatcher/HasServer come straight off the
+    // folders it found - so an operator publishing their install does not tag twenty mods by hand.
     //
-    // A card that occupies neither half is Both rather than a guess: it is the honest answer for
-    // something the scanner could not place, and Both is the value that changes nothing.
+    // A client mod is Client|Headless: a Fika headless client runs the game, so a plugin is at least
+    // potentially its business, and NOTHING ON DISK separates a bot overhaul from a HUD widget. Both
+    // are a DLL in BepInEx\plugins. The scanner cannot make that call and neither should this, so
+    // the headless is included and the operator prunes the ones it does not need - the direction
+    // where being wrong is merely wasteful rather than something everyone in the raid feels.
+    //
+    // A server-only mod stays Server alone. It still reaches a headless box, because that machine
+    // is a full SPT install and asks for server-scoped entries too; it just is not a headless
+    // concern in its own right.
+    //
+    // A card that occupies neither half is Everyone rather than a guess: the honest answer for
+    // something the scanner could not place, and the value that changes nothing.
     //
     public static ModListEntryScope ScopeOf(InstalledModCardViewModel card) =>
         (card.HasPlugin || card.HasPatcher, card.HasServer) switch
         {
-            (true, false) => ModListEntryScope.Client,
+            (true, false) => ModListEntryScope.Client | ModListEntryScope.Headless,
             (false, true) => ModListEntryScope.Server,
-            _ => ModListEntryScope.Both,
+            _ => ModListEntryScope.Everyone,
         };
 
     public static ModListCandidate From(InstalledModCardViewModel card) => new()

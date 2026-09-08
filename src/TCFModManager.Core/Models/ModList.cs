@@ -17,7 +17,7 @@ public enum ModListOrigin
 }
 
 //
-// Who an entry is for.
+// Which machines an entry is for.
 //
 // A server's published list describes the whole server, and not all of it is a client's business:
 // the Server Map mod itself and fika-server live in user\mods, are often not on The Forge at all,
@@ -25,20 +25,44 @@ public enum ModListOrigin
 // is worse - the operator applying their own published list would then disable the very mod that
 // serves it. Scope is what breaks that: one list, and the entries say who they concern.
 //
-// Inferred at capture from where a mod's files land (InstalledModTarget), so it costs the operator
-// nothing in the common case and can be overridden for the odd one.
+// A SET rather than one value, because a Fika headless client is a third kind of machine and not a
+// point on a line between the other two. It runs the game, so it needs the plugins that decide how
+// a raid plays - bots, items, locations - and it has no use for the ones that draw things at a
+// player. "Everyone", "clients and the headless" and "clients only" are all real answers, and none
+// of them is expressible by picking one of three.
 //
+// Inferred at capture from where a mod's files land, so it costs the operator nothing in the common
+// case and can be overridden per entry. The inference deliberately INCLUDES the headless in
+// everything it is unsure about: a headless carrying a mod it did not need costs nothing anyone can
+// see, while a missing bot or item mod on the machine hosting the raid is felt by everybody in it.
+//
+[Flags]
 public enum ModListEntryScope
 {
-    // Everyone. The default, so a list written before scope existed means exactly what it meant.
-    Both,
+    // A playing client - a BepInEx plugin at a human being.
+    Client = 1,
 
-    // A playing client - a BepInEx plugin. Nothing for a headless box to do with it.
-    Client,
-
-    // The machine running the server. A client applying a SERVED list skips these entirely: not
+    //
+    // The machine running the SPT server. A player applying a SERVED list skips these entirely: not
     // installed, not disabled, not reported missing.
-    Server,
+    //
+    // A headless box does NOT skip them, because it is a full SPT install and a server-scoped entry
+    // is a whole mod rather than half of one - taking it is an ordinary install, while leaving out
+    // the server half of a mod that has both would mean splitting an archive after it was staged.
+    //
+    Server = 2,
+
+    //
+    // A Fika headless client - the machine that hosts the raid without anyone playing on it.
+    //
+    // Set on its own, the entry is for the headless and nobody else. Cleared while Client is set,
+    // it is the tag that does the pruning: "players need this, the headless does not".
+    //
+    Headless = 4,
+
+    // Every machine. What an entry means when it says nothing, so a list written before scope
+    // existed - and one written before the headless did - means exactly what it meant.
+    Everyone = Client | Server | Headless,
 }
 
 //
@@ -111,11 +135,38 @@ public sealed class ModListEntry
     public List<string> Folders { get; init; } = [];
 
     //
-    // Who this entry is for. Omitted from the file when it is Both, which is almost always, so
-    // scope costs nothing in a list that does not use it.
+    // Which machines this entry is for, or null for "every machine" - which is almost always, so
+    // scope still costs nothing in a list that does not use it.
     //
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public ModListEntryScope Scope { get; init; }
+    // Nullable rather than defaulting to Everyone because the default of a [Flags] enum is zero,
+    // and zero here reads as "no machine at all". An omitted value has to mean everyone, and the
+    // only way to say that without letting a stray default silently exclude every machine is for
+    // absent to be its own state. Read it through EffectiveScope, never directly.
+    //
+    // SETTING Everyone STORES NULL. The two say the same thing, and letting both exist meant the
+    // file could carry "Scope": "Everyone" - which stamps the list at a schema an older app refuses,
+    // to record a value that means exactly what saying nothing means. Normalised here rather than at
+    // each caller because there are four of them and a fifth will be written by someone who has not
+    // read this comment.
+    //
+    // The converter is named on the PROPERTY, not on the enum. Both ModListFile and ModListStore
+    // put a plain JsonStringEnumConverter in their options, and an options-level converter beats a
+    // type-level attribute - so a type attribute was silently ignored and every legacy "Both" failed
+    // to parse. A property attribute outranks both.
+    //
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonConverter(typeof(ModListEntryScopeConverter))]
+    public ModListEntryScope? Scope
+    {
+        get => _scope;
+        init => _scope = value == ModListEntryScope.Everyone ? null : value;
+    }
+
+    private readonly ModListEntryScope? _scope;
+
+    // What Scope means, with absent resolved. The only thing that should be compared against.
+    [JsonIgnore]
+    public ModListEntryScope EffectiveScope => Scope ?? ModListEntryScope.Everyone;
 
     //
     // JsonIgnore on all four computed members here and on ModList below. System.Text.Json writes
@@ -205,21 +256,35 @@ public sealed class ModList
     public IEnumerable<ModListEntry> Unresolved => Entries.Where(e => !e.IsResolved);
 
     //
-    // The entries that concern the machine reading this list.
+    // The entries that concern a machine of the given kind.
     //
-    // A list of your own describes your install, both halves of it, so all of it applies. A list a
-    // SERVER handed you describes that server, and its server-only entries are not yours to install
-    // - you are not that machine.
+    // A list of your own describes your install, all of it, so all of it applies whatever this
+    // machine is - you are the one who wrote it. A list a SERVER handed you describes that server's
+    // whole setup, and only the part matching what this machine actually is, is yours to install.
     //
-    [JsonIgnore]
-    public IEnumerable<ModListEntry> EntriesApplyingHere => Origin == ModListOrigin.Server
-        ? Entries.Where(e => e.Scope != ModListEntryScope.Server)
-        : Entries;
+    // Pass what InstallRoles.ScopeFor gives for this install: Client for an ordinary player,
+    // Server|Headless for a headless box, both together for a machine that plays and hosts.
+    //
+    public IEnumerable<ModListEntry> EntriesApplyingTo(ModListEntryScope machine) =>
+        Origin == ModListOrigin.Server
+            ? Entries.Where(e => (e.EffectiveScope & machine) != 0)
+            : Entries;
 }
 
 // Every list this install holds, plus which one is currently applied.
 public sealed class ModListData
 {
+    //
+    // The shape this file was last written in, so a one-time migration can run once and then stop.
+    // Absent - and so zero - on any file written before the headless existed, which is exactly the
+    // set of files whose client-scoped entries have to be widened to reach a headless. See
+    // ModListStore.Normalise.
+    //
+    // This is the STORE's version and has nothing to do with ModListFile's share-file schema; the
+    // two files are read by different code and move for different reasons.
+    //
+    public int SchemaVersion { get; set; }
+
     public List<ModList> Lists { get; init; } = [];
 
     //
