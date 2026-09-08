@@ -164,7 +164,7 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
     // so it wants filling in before release.
     // ===================================================================================
     //
-    public const string AddonPageUrl = "";
+    public const string AddonPageUrl = "https://sp-mod.com/addon/126/tfc-server-mapper";
 
     public bool HasAddonPage => !string.IsNullOrWhiteSpace(AddonPageUrl);
 
