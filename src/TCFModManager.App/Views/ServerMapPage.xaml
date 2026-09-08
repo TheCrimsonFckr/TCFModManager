@@ -1,5 +1,6 @@
 <Page
     x:Class="TCFModManager.App.Views.ServerMapPage"
+    Loaded="Page_Loaded"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
@@ -46,7 +47,7 @@
                 <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
                     <ui:Button
                         Content="Reconnect"
-                        Icon="{ui:SymbolIcon ArrowSync24}"
+                        Icon="{ui:SymbolIcon Connected20}"
                         Command="{Binding ConnectCommand}" />
                     <ProgressBar
                         Width="80"

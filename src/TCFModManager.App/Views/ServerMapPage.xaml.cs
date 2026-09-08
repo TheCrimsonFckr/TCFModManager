@@ -1,3 +1,4 @@
+using System.Windows;
 using System.Windows.Controls;
 
 namespace TCFModManager.App.Views;
@@ -12,4 +13,13 @@ namespace TCFModManager.App.Views;
 public partial class ServerMapPage : Page
 {
     public ServerMapPage() => InitializeComponent();
+
+    //
+    // Picks up this machine's own server key every time the page is shown.
+    //
+    // Reading it once at startup was not enough: the key file appears the first time the server mod
+    // runs, which is usually after this app was opened, and it changes again whenever the key is
+    // rotated. Checking on show means an operator never restarts the app to see their own key.
+    //
+    private void Page_Loaded(object sender, RoutedEventArgs e) => AppServices.ServerMap.RefreshLocalKey();
 }

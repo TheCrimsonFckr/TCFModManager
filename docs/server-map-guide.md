@@ -116,8 +116,8 @@ The key is generated **once**, the first time the server starts without one. Aft
 alone — restarting the server does not change it, and neither does updating the mod. The file is the
 key: whatever is in it is what the server expects.
 
-**If TCF Mod Manager is on the same machine as the server**, you do not need to open the file at
-all — see "How do I fill in my own server's details".
+**If TCF Mod Manager is on the same machine as the server**, you never need to open this file: the
+app reads it and fills the key in on its own. See "How do I fill in my own server's details".
 
 ## How do I change my server's key?
 
@@ -222,9 +222,16 @@ publishes a list.
 
 ## How do I fill in my own server's details, when the app is on the server machine?
 
-Press **Use this machine's key**. If a Server Map server is installed on this machine, the app reads
-its key file for you. On any other machine the button finds nothing and the box stays empty, which
-is correct — a key belongs to one server.
+You do not. If a Server Map server is installed on this machine, the app finds its key file and
+fills the box in for you — every time you open Options or the Server map page, so it appears the
+first time you start the server without restarting the app, and it follows the key if you rotate it.
+
+**Use this machine's key** is still there for the one case that needs it: if you have typed a
+different server's key into the box, the app leaves it alone rather than overwriting it, and that
+button puts your own back.
+
+On any machine that is not running a server, no file is found and the box stays empty — which is
+correct. A key belongs to one server.
 
 ## How do I get the server's mod list?
 

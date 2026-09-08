@@ -129,11 +129,19 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
         RefreshLocalKey(settings.SptInstallPath);
 
         //
-        // Filled in only when the box is empty. Someone running the app on their own server should
-        // not have to go and find a file to paste back into the window in front of them - but a key
-        // they typed themselves is never overwritten, because it may be for a different server.
+        // Filled in from this machine's own server, when there is one. Someone running the app on
+        // their own server should not have to go and find a file to paste back into the window in
+        // front of them - but a key they typed THEMSELVES is never overwritten, because it may
+        // belong to a different server they are connecting to from this machine.
         //
         if (string.IsNullOrWhiteSpace(_keyInput) && _localKey is not null) _keyInput = _localKey;
+
+        // Whatever is in the box now, if it matches this machine's file, is ours to keep in step -
+        // including across a restart, where nothing else would remember that we put it there.
+        if (_localKey is not null && string.Equals(_keyInput?.Trim(), _localKey, StringComparison.Ordinal))
+        {
+            _autoFilledKey = _localKey;
+        }
 
         _loaded = true;
     }
@@ -183,10 +191,42 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
         : $"This machine runs a Server Map server. Its key is {LocalKey} - send it to whoever "
           + "should be able to see what this server publishes, along with the address and port.";
 
-    // Re-read on demand: the file appears the first time the server mod starts, which is usually
-    // after this app was opened.
-    public void RefreshLocalKey(string? sptInstallPath = null) =>
+    //
+    // The key this app last put in the box on its own. Null when the box holds something the user
+    // typed, which is the whole distinction this field exists to keep.
+    //
+    private string? _autoFilledKey;
+
+    //
+    // Re-reads this machine's key file and follows it.
+    //
+    // On demand rather than once at startup, because the file appears the first time the server mod
+    // runs - which is usually after this app was opened - and changes again whenever the key is
+    // rotated. Called when the Server map page and the Options page are shown, so an operator never
+    // has to restart the app to see their own server's key, or press a button to collect it.
+    //
+    // The box is filled when it is empty, or when it still holds the key we put there. It is left
+    // alone when it holds anything else: a machine that runs a server can perfectly well be
+    // connecting to somebody else's, and silently replacing their key with the local one would be a
+    // 401 they had no reason to expect.
+    //
+    public void RefreshLocalKey(string? sptInstallPath = null)
+    {
         LocalKey = ServerMapKeyFile.TryReadLocal(sptInstallPath ?? _settings.Load().SptInstallPath);
+
+        if (LocalKey is null) return;
+
+        var current = KeyInput?.Trim();
+
+        if (!string.IsNullOrWhiteSpace(current)
+            && !string.Equals(current, _autoFilledKey, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        KeyInput = LocalKey;
+        _autoFilledKey = LocalKey;
+    }
 
     //
     // Puts this machine's own key in the box. Offered rather than forced, because the address might
@@ -227,8 +267,9 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
 
         // Into the box as well: on the server's own machine the connection this app uses is that
         // same server, so leaving it on the old key would fail the next connect for no visible
-        // reason.
+        // reason. Marked as ours, so the next refresh keeps following the file.
         KeyInput = rotated;
+        _autoFilledKey = rotated;
 
         KeyNotice = "New key generated. Send it to anyone who connects to this server - the old one"
             + " stopped working just now. The server picks it up on its own; it does not need"
