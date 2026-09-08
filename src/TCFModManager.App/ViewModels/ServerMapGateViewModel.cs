@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Services;
@@ -74,7 +75,17 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(LocalKeyDescription))]
     [NotifyPropertyChangedFor(nameof(CanUseLocalKey))]
     [NotifyCanExecuteChangedFor(nameof(UseLocalKeyCommand))]
+    [NotifyCanExecuteChangedFor(nameof(NewLocalKeyCommand))]
     private string? _localKey;
+
+    //
+    // What just happened to this machine's key, when something did. Its own line rather than
+    // StatusMessage, which describes the last handshake and is derived from the probe - rotating a
+    // key is not a connection result and would be wiped by the next connect.
+    //
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasKeyNotice))]
+    private string _keyNotice = "";
 
     // The list this server publishes, as last fetched. Also in the user's mod lists - this is the
     // page's own handle on it, not a second copy of the truth.
@@ -135,6 +146,35 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
     //
     public bool IsServerOwner => LocalKey is not null;
 
+    public bool HasKeyNotice => !string.IsNullOrWhiteSpace(KeyNotice);
+
+    //
+    // ===================================================================================
+    // SET THIS: the Server Map server mod's page on sp-mod.com, published as an addon of
+    // TCF Mod Manager. Blank hides the button entirely, so a build that ships without it
+    // never shows a dead link - but the guide tells operators to get the mod from there,
+    // so it wants filling in before release.
+    // ===================================================================================
+    //
+    public const string AddonPageUrl = "";
+
+    public bool HasAddonPage => !string.IsNullOrWhiteSpace(AddonPageUrl);
+
+    //
+    // Opens the mod's page in the default browser.
+    //
+    // The server half is distributed as an addon rather than bundled with the app, because it is
+    // installed on a different machine from this one by a different person - an operator sets up a
+    // server once, and every player joining it needs nothing but this page switched on.
+    //
+    [RelayCommand(CanExecute = nameof(HasAddonPage))]
+    private static void OpenAddonPage()
+    {
+        if (string.IsNullOrWhiteSpace(AddonPageUrl)) return;
+
+        Process.Start(new ProcessStartInfo(AddonPageUrl) { UseShellExecute = true });
+    }
+
     public bool CanUseLocalKey =>
         LocalKey is not null && !string.Equals(LocalKey, KeyInput?.Trim(), StringComparison.Ordinal);
 
@@ -156,6 +196,43 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
     private void UseLocalKey()
     {
         if (LocalKey is not null) KeyInput = LocalKey;
+    }
+
+    //
+    // Replaces this machine's server key with a new one.
+    //
+    // Deliberate and destructive, which is why it is a button and not something that happens on its
+    // own: every copy of the old key stops working the moment this is pressed, and everybody who has
+    // one has to be sent the new one. That is the entire purpose - it is what you press when a key
+    // has gone somewhere it should not have.
+    //
+    // The server watches the file rather than caching the key for the life of its process, so this
+    // takes effect on its next request. It does not need stopping.
+    //
+    [RelayCommand(CanExecute = nameof(IsServerOwner))]
+    private void NewLocalKey()
+    {
+        var installPath = _settings.Load().SptInstallPath;
+
+        if (!ServerMapKeyFile.TryRotateLocal(installPath, out var rotated))
+        {
+            KeyNotice = "Couldn't write a new key. Check that this machine's Server Map config"
+                + " folder isn't read-only.";
+            return;
+        }
+
+        AppLog.Info("ServerMap", "shared key rotated by the operator");
+
+        LocalKey = rotated;
+
+        // Into the box as well: on the server's own machine the connection this app uses is that
+        // same server, so leaving it on the old key would fail the next connect for no visible
+        // reason.
+        KeyInput = rotated;
+
+        KeyNotice = "New key generated. Send it to anyone who connects to this server - the old one"
+            + " stopped working just now. The server picks it up on its own; it does not need"
+            + " restarting.";
     }
 
     //

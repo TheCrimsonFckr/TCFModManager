@@ -135,6 +135,25 @@
                     OnContent="On - shown in the sidebar"
                     OffContent="Off - hidden" />
 
+                <!-- The server half is an addon rather than something bundled here: it is installed
+                     on a different machine, by whoever runs the server. Hidden until the page URL
+                     is set, so a build without one never shows a dead link. -->
+                <StackPanel
+                    Margin="0,0,0,12"
+                    Visibility="{Binding HasAddonPage, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock
+                        TextWrapping="Wrap"
+                        Margin="0,0,0,8"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="Running a server? The Server Map mod is a separate download - get it from the mod's page and install it on the machine running SPT. Players joining that server need nothing but this switch." />
+                    <ui:Button
+                        HorizontalAlignment="Left"
+                        Content="Get the Server Map mod"
+                        Icon="{ui:SymbolIcon Open24}"
+                        ToolTip="Opens the Server Map mod's page on sp-mod.com in your browser."
+                        Command="{Binding OpenAddonPageCommand}" />
+                </StackPanel>
+
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                     <!-- The placeholder is a hint, not a default. Fika's own default is 127.0.0.1,
                          which is right for a server on this machine and quietly wrong for anyone
@@ -190,12 +209,30 @@
                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                         IsHitTestVisible="True"
                         Text="{Binding LocalKeyDescription}" />
-                    <ui:Button
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <ui:Button
+                            HorizontalAlignment="Left"
+                            Content="Use this machine's key"
+                            Icon="{ui:SymbolIcon Key24}"
+                            Command="{Binding UseLocalKeyCommand}" />
+
+                        <!-- Deliberate and destructive, so it is a button and never automatic:
+                             every copy of the old key stops working the moment this is pressed. -->
+                        <ui:Button
+                            Margin="8,0,0,0"
+                            HorizontalAlignment="Left"
+                            Content="Generate a new key"
+                            Icon="{ui:SymbolIcon ArrowSync24}"
+                            ToolTip="Replaces this server's key with a new one. Everyone using the old key stops being able to see what this server publishes until you send them the new one. The server picks it up without being restarted."
+                            Command="{Binding NewLocalKeyCommand}" />
+                    </StackPanel>
+
+                    <TextBlock
+                        TextWrapping="Wrap"
                         Margin="0,8,0,0"
-                        HorizontalAlignment="Left"
-                        Content="Use this machine's key"
-                        Icon="{ui:SymbolIcon Key24}"
-                        Command="{Binding UseLocalKeyCommand}" />
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Visibility="{Binding HasKeyNotice, Converter={StaticResource BoolToVisibility}}"
+                        Text="{Binding KeyNotice}" />
                 </StackPanel>
 
                 <!-- Named to match the shared ErrorText style, which turns this red only when the

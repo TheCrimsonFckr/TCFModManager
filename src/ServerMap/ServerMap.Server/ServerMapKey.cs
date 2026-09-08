@@ -40,43 +40,115 @@ public static class ServerMapKey
     private static readonly object Gate = new();
 
     private static string? _key;
+    private static string? _cachedPath;
+    private static long _cachedLength;
+    private static DateTime _cachedWrittenUtc;
 
     //
-    // The key this server expects, generating and writing one on first use.
+    // The key this server expects.
     //
-    // The file is the only record. There is deliberately no way to turn the key off from here: an
-    // operator who wants an open server can say so in a config decision made on purpose, not by
-    // deleting a file and not noticing.
+    // THE FILE IS THE KEY. This reads it, and generates one only when there is no file to read -
+    // which, on a server that has been started once, is never. An operator who has handed a key out
+    // must be able to rely on it still being the key tomorrow; a key that rotated on its own would
+    // lock out everyone they gave it to, silently, with no message that says why.
+    //
+    // Re-read whenever the file's size or timestamp moves, the same way PublishedModList watches the
+    // list. That is what lets the operator rotate the key deliberately - from TCF Mod Manager's
+    // Options, or by editing the file - and have it take effect without restarting the server. The
+    // common path is one stat.
+    //
+    // There is deliberately no way to turn the key off from here: an operator who wants an open
+    // server can say so in a decision made on purpose, not by deleting a file and not noticing.
     //
     public static string Current(string configDirectory)
     {
+        var path = Path.Combine(configDirectory, FileName);
+
+        FileInfo? info = null;
+        try
+        {
+            var candidate = new FileInfo(path);
+            if (candidate.Exists) info = candidate;
+        }
+        catch (IOException)
+        {
+            // Unreadable right now; the cached key below is still the right answer if we have one.
+        }
+
         lock (Gate)
         {
+            //
+            // Cached only while the file it came from is unchanged. Holding it for the life of the
+            // process regardless was the bug this replaced: the file and the running server could
+            // disagree, and nothing said so.
+            //
+            if (_key is not null
+                && info is not null
+                && _cachedPath == path
+                && _cachedLength == info.Length
+                && _cachedWrittenUtc == info.LastWriteTimeUtc)
+            {
+                return _key;
+            }
+
+            if (info is not null && TryRead(path) is { } existing)
+            {
+                _cachedPath = path;
+                _cachedLength = info.Length;
+                _cachedWrittenUtc = info.LastWriteTimeUtc;
+                return _key = existing;
+            }
+
+            //
+            // No file, or one that has been emptied. If we already hold a key, keep it rather than
+            // minting another: a file that vanished under a running server is a problem to notice,
+            // not a reason to invalidate every key already handed out.
+            //
             if (_key is not null) return _key;
 
-            var path = Path.Combine(configDirectory, FileName);
-
-            var existing = TryRead(path);
-            if (existing is not null) return _key = existing;
-
-            var generated = Generate();
-
-            try
-            {
-                Directory.CreateDirectory(configDirectory);
-                File.WriteAllText(path, generated + Environment.NewLine, new UTF8Encoding(false));
-            }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-            {
-                //
-                // Held in memory for this run rather than dropped. A server whose config folder is
-                // read-only still refuses unauthenticated requests; it just forgets the key on
-                // restart, which is visibly broken rather than quietly open.
-                //
-            }
-
-            return _key = generated;
+            return Write(configDirectory, Generate());
         }
+    }
+
+    //
+    // Replaces the key with a new one, deliberately. Nothing calls this on its own - it is what the
+    // operator presses when a key has been shared too widely, and it invalidates every copy of the
+    // old one, which is the entire point of pressing it.
+    //
+    public static string Rotate(string configDirectory)
+    {
+        lock (Gate)
+        {
+            return Write(configDirectory, Generate());
+        }
+    }
+
+    // Caller holds Gate.
+    private static string Write(string configDirectory, string key)
+    {
+        var path = Path.Combine(configDirectory, FileName);
+
+        try
+        {
+            Directory.CreateDirectory(configDirectory);
+            File.WriteAllText(path, key + Environment.NewLine, new UTF8Encoding(false));
+
+            var written = new FileInfo(path);
+            _cachedPath = path;
+            _cachedLength = written.Length;
+            _cachedWrittenUtc = written.LastWriteTimeUtc;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            //
+            // Held in memory for this run rather than dropped. A server whose config folder is
+            // read-only still refuses unauthenticated requests; it just forgets the key on restart,
+            // which is visibly broken rather than quietly open.
+            //
+            _cachedPath = null;
+        }
+
+        return _key = key;
     }
 
     //

@@ -1,3 +1,6 @@
+using System.Security.Cryptography;
+using System.Text;
+
 namespace TCFModManager.Core.ServerMap;
 
 //
@@ -43,6 +46,66 @@ public static class ServerMapKeyFile
 
         path = candidate;
         return true;
+    }
+
+    //
+    // Replaces this machine's key with a new one.
+    //
+    // The app writes the file and the server picks it up on its next request - it watches the file's
+    // timestamp rather than caching for the life of the process - so rotating a key does not need
+    // the server stopped. Everyone holding the old key stops working immediately, which is what
+    // rotating a key is for.
+    //
+    // The alphabet and length are the server's, restated here rather than shared: this project does
+    // not reference the server mod, and a key is 24 characters of a fixed alphabet in both places
+    // because a person has to read it off one screen and type it into another.
+    //
+    public static bool TryRotateLocal(string? sptInstallPath, out string key, string? appDirectory = null)
+    {
+        key = "";
+
+        //
+        // Only where a key file already exists. Writing one into a folder that has none would create
+        // a key for a server that is not installed, and the operator would hand out something no
+        // server has ever heard of.
+        //
+        if (!TryFind(sptInstallPath, out var path, appDirectory)) return false;
+
+        var generated = Generate();
+
+        try
+        {
+            File.WriteAllText(path, generated + Environment.NewLine, new UTF8Encoding(false));
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return false;
+        }
+
+        key = generated;
+        return true;
+    }
+
+    // No I, L, O, U, 0 or 1 - every one of those is a transcription error waiting to happen when a
+    // key is read off one screen and typed into another.
+    private const string Alphabet = "23456789ABCDEFGHJKMNPQRSTVWXYZ";
+
+    private const int KeyLength = 24;
+
+    private const int GroupSize = 4;
+
+    public static string Generate()
+    {
+        var builder = new StringBuilder(KeyLength + KeyLength / GroupSize);
+
+        for (var i = 0; i < KeyLength; i++)
+        {
+            if (i > 0 && i % GroupSize == 0) builder.Append('-');
+
+            builder.Append(Alphabet[RandomNumberGenerator.GetInt32(Alphabet.Length)]);
+        }
+
+        return builder.ToString();
     }
 
     //
