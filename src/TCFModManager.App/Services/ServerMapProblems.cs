@@ -94,14 +94,25 @@ public static class ServerMapProblems
             + "is saved in your mod lists. Applying it is done from the Mod lists page, which shows "
             + "what would change first.",
 
+        //
         // Not a failure. A server can run the mod and deliberately publish nothing.
+        //
+        // Deliberately NOT worded as "has stopped publishing". The held list says only that some
+        // server published one once, and the app cannot tell one server from another behind a
+        // changed address - so the likeliest reading of this state is that the list came from a
+        // DIFFERENT server, which is exactly what it looks like when someone runs two installs and
+        // points the app at the second. Announcing a change nobody made sends them looking for an
+        // unpublish that never happened.
+        //
         ServerMapProblem.NoList when held is not null =>
-            $"This server has stopped publishing a list. \"{held.Name}\" is still in your mod lists "
-            + "as it was when you last fetched it.",
+            $"This server isn't publishing a mod list. \"{held.Name}\" is still in your mod lists as "
+            + "you last fetched it - though if you were expecting to see it here, check the address "
+            + "is the server you published it to, and that the file reached that server's config "
+            + "folder.",
 
         ServerMapProblem.NoList =>
-            "This server doesn't publish a mod list. Its operator can publish one by exporting a "
-            + "list from this app and dropping it into the mod's config folder.",
+            "This server doesn't publish a mod list. Its operator publishes one with \"Publish to "
+            + "this server\" on the Mod lists page, from the app on the machine running the server.",
 
         //
         // Two sentences for one status code, because the next action is different. One is "go ask

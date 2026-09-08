@@ -160,7 +160,19 @@
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Text="Saved lists" />
 
-            <ui:Card Grid.Row="2" Padding="4,8,4,2">
+            <!--
+                Top, not the default.
+
+                A ui:Card in a "*" row is laid out centred, so a card whose content is shorter than
+                its cell floats in the middle of it with empty space above and below - which is what
+                the contents filter exposed: narrowing a 107-mod list to seven rows detached this
+                card from the top of the page and left it hanging halfway down.
+
+                It is only the ALIGNMENT that changes. The card is still measured against the cell's
+                height, so a list too long for it is still constrained and still scrolls inside its
+                own ListBox rather than running off the bottom of the window.
+            -->
+            <ui:Card Grid.Row="2" Padding="4,8,4,2" VerticalAlignment="Top">
                 <Grid>
                     <TextBlock
                         Margin="12"
@@ -220,7 +232,7 @@
                                             Visibility="{Binding IsPublished, Converter={StaticResource BoolToVis}}">
                                             <StackPanel Orientation="Horizontal">
                                                 <ui:SymbolIcon
-                                                    Symbol="Connected20"
+                                                    Symbol="ServerLink24"
                                                     FontSize="14"
                                                     VerticalAlignment="Center"
                                                     Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
@@ -467,6 +479,7 @@
                 Grid.Row="4"
                 Padding="4"
                 Margin="0,16,0,0"
+                VerticalAlignment="Top"
                 Visibility="{Binding ShowContents, Converter={StaticResource BoolToVis}}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -526,7 +539,7 @@
                                  hand is one that ends up in the wrong place. -->
                             <ui:Button
                                 Margin="8,0,0,0"
-                                Icon="{ui:SymbolIcon Connected20}"
+                                Icon="{ui:SymbolIcon ServerLink24}"
                                 Content="Publish to this server"
                                 ToolTip="Writes this list into the Server Map mod's config folder on this machine, so the server serves it to connected clients. Nothing is installed or changed on disk."
                                 Command="{Binding PublishCommand}" />
@@ -705,6 +718,7 @@
                 Grid.Row="4"
                 Padding="4"
                 Margin="0,4,0,0"
+                VerticalAlignment="Top"
                 Visibility="{Binding HasPlan, Converter={StaticResource BoolToVis}}">
                 <ListBox
                     x:Name="PlanBox"

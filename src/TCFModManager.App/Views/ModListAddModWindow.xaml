@@ -106,7 +106,13 @@
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
         </StackPanel>
 
-        <ui:Card Grid.Row="2" Margin="24,0,24,0" Padding="4">
+        <!--
+            Top, not the default. A ui:Card in a "*" row is laid out centred, so once the search
+            narrows this picker to a handful of mods the card detaches from the panel above it and
+            hangs in the middle of the window. Alignment only - the card is still measured against
+            the cell, so a long result set stays constrained and still scrolls inside its own list.
+        -->
+        <ui:Card Grid.Row="2" Margin="24,0,24,0" Padding="4" VerticalAlignment="Top">
             <Grid>
                 <TextBlock
                     x:Name="EmptyNote"
