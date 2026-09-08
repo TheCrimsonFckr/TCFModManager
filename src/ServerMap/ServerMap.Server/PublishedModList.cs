@@ -46,12 +46,45 @@ public static class PublishedModList
     private static PublishedList? _cached;
 
     //
-    // The config folder, beside the payload folder rather than inside it: a payload folder is
-    // something an update replaces wholesale, and the operator's list must not be collateral.
+    // Where the operator's list and this server's key live: <SPT root>\TCFModManager\Data\ServerMap\.
     //
-    public static string ConfigDirectory(string payloadDirectory) =>
-        Path.Combine(Path.GetDirectoryName(payloadDirectory.TrimEnd(Path.DirectorySeparatorChar)) ?? payloadDirectory,
-            "config");
+    // Derived rather than searched for, because the shape is fixed by the loader: the payload is
+    // always found at TCFModManager\ServerMap\payload\, so two levels up from it IS the
+    // TCFModManager folder, whatever the SPT layout around it.
+    //
+    // It used to be ServerMap\config\, beside the payload. That protected it from a payload update
+    // and from nothing else - the folder people actually replace is TCFModManager\, and ServerMap\
+    // sat inside it looking like part of the mod rather than like data. Under Data\ it is in the one
+    // folder every deploy already knows to keep, next to the app's settings, install manifest and
+    // config backups.
+    //
+    // The legacy folder is still read when it is the only one there, so a server whose app has not
+    // yet migrated it keeps serving the same list and expecting the same key.
+    //
+    public static string ConfigDirectory(string payloadDirectory)
+    {
+        var serverMapDirectory =
+            Path.GetDirectoryName(payloadDirectory.TrimEnd(Path.DirectorySeparatorChar)) ?? payloadDirectory;
+
+        var current = Path.GetDirectoryName(serverMapDirectory) is { } appDirectory
+            ? Path.Combine(appDirectory, "Data", "ServerMap")
+            : null;
+
+        var legacy = Path.Combine(serverMapDirectory, "config");
+
+        if (current is null) return legacy;
+
+        try
+        {
+            if (!Directory.Exists(current) && Directory.Exists(legacy)) return legacy;
+        }
+        catch (IOException)
+        {
+            // Unreadable either way; the current location is still where new files belong.
+        }
+
+        return current;
+    }
 
     //
     // Null when nothing is published, which is a normal state and not an error - a server can run

@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Threading;
 using TCFModManager.App.Behaviors;
+using TCFModManager.Core.ServerMap;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App;
@@ -21,6 +22,12 @@ public partial class App : Application
         // itself. Carries a pre-v1.5.0 LegacyConfigs folder from beside the exe into Data\. A no-op
         // on every launch after the first, and on any install that never had one.
         AppPaths.MigrateLegacyConfigsFolder();
+
+        // TEMPORARY, ADDED IN v1.12.0 - DELETE WHEN THE APP LEAVES BETA, along with the method
+        // itself. Carries a Server Map key and published list out of TCFModManager\ServerMap\config\
+        // and into Data\ServerMap\, so a hand-deploy that replaces TCFModManager\ stops taking the
+        // operator's key with it. A no-op unless this machine runs the server mod.
+        ServerMapConfigFolder.MigrateLegacyFolder(new SettingsService().Load().SptInstallPath);
 
         // So the install buttons know from the first frame whether they are skipping mod pages.
         AppServices.ModPageGate.Refresh();

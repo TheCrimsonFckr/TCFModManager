@@ -908,3 +908,150 @@ public class SerializedShapeTests
         Assert.False(restored.IsEditable);
     }
 }
+
+//
+// Where the operator's key and published list live.
+//
+// They moved in v1.12.0 from TCFModManager\ServerMap\config\ to TCFModManager\Data\ServerMap\. The
+// old folder looked like part of the mod, so a hand-deploy that replaced TCFModManager\ took the
+// key with it and every player holding that key was locked out with nothing to say why. Data\ is
+// the folder every deploy already knows to keep.
+//
+// The server mod derives the same path independently (PublishedModList.ConfigDirectory, two levels
+// up from its payload folder) because it cannot reference this project. PreferredIsUnderData below
+// pins the shape both sides have to agree on - if one moves, that test is the tripwire.
+//
+public class ServerMapConfigFolderTests : IDisposable
+{
+    private readonly string _root = Path.Combine(Path.GetTempPath(), "smcfg-" + Guid.NewGuid().ToString("N"));
+
+    private const string Key = "D7SM-YSW3-PQJV-KM5W-CQQF-VHD5";
+
+    public void Dispose()
+    {
+        try
+        {
+            if (Directory.Exists(_root)) Directory.Delete(_root, recursive: true);
+        }
+        catch
+        {
+            // A temp folder left behind is not worth failing a test run over.
+        }
+    }
+
+    private string Current() => Make("TCFModManager", "Data", "ServerMap");
+
+    private string Legacy() => Make("TCFModManager", "ServerMap", "config");
+
+    private string Make(params string[] segments)
+    {
+        var path = Path.Combine([_root, .. segments]);
+        Directory.CreateDirectory(path);
+        return path;
+    }
+
+    private string Elsewhere() => Make("not-a-server");
+
+    [Fact]
+    public void PreferredIsUnderData()
+    {
+        Assert.Equal(
+            Path.Combine(_root, "TCFModManager", "Data", "ServerMap"),
+            ServerMapConfigFolder.Preferred(_root));
+    }
+
+    [Fact]
+    public void FindsTheDataFolder()
+    {
+        var expected = Current();
+
+        Assert.True(ServerMapConfigFolder.TryFind(_root, out var found, appDirectory: Elsewhere()));
+        Assert.Equal(expected, found);
+    }
+
+    //
+    // An install that has not been migrated yet keeps working. Without this the server would find no
+    // key, mint a second one, and lock out everybody already holding the first.
+    //
+    [Fact]
+    public void FallsBackToTheLegacyFolder()
+    {
+        var expected = Legacy();
+
+        Assert.True(ServerMapConfigFolder.TryFind(_root, out var found, appDirectory: Elsewhere()));
+        Assert.Equal(expected, found);
+    }
+
+    //
+    // A half-migrated install has both. The answer has to be the one the app writes to, or the two
+    // halves read different files and the server serves a list nobody is editing.
+    //
+    [Fact]
+    public void PrefersTheDataFolderWhenBothExist()
+    {
+        var expected = Current();
+        Legacy();
+
+        Assert.True(ServerMapConfigFolder.TryFind(_root, out var found, appDirectory: Elsewhere()));
+        Assert.Equal(expected, found);
+    }
+
+    [Fact]
+    public void MigrationMovesTheKeyAndTheList()
+    {
+        var legacy = Legacy();
+        File.WriteAllText(Path.Combine(legacy, "servermap-key.txt"), Key);
+        File.WriteAllText(Path.Combine(legacy, "published.tcfmodlist"), "{}");
+
+        ServerMapConfigFolder.MigrateLegacyFolder(_root, appDirectory: Elsewhere());
+
+        var moved = Path.Combine(_root, "TCFModManager", "Data", "ServerMap");
+        Assert.Equal(Key, File.ReadAllText(Path.Combine(moved, "servermap-key.txt")));
+        Assert.True(File.Exists(Path.Combine(moved, "published.tcfmodlist")));
+
+        Assert.False(File.Exists(Path.Combine(legacy, "servermap-key.txt")));
+    }
+
+    //
+    // Never over the top of one already there. Two of these means somebody moved files by hand, and
+    // the one in the new place is the one both halves read - overwriting it would swap the running
+    // server's key for an older one nobody is using.
+    //
+    [Fact]
+    public void MigrationKeepsTheFileAlreadyInTheNewPlace()
+    {
+        var legacy = Legacy();
+        File.WriteAllText(Path.Combine(legacy, "servermap-key.txt"), "OLD1-OLD1-OLD1-OLD1-OLD1-OLD1");
+
+        var current = Current();
+        File.WriteAllText(Path.Combine(current, "servermap-key.txt"), Key);
+
+        ServerMapConfigFolder.MigrateLegacyFolder(_root, appDirectory: Elsewhere());
+
+        Assert.Equal(Key, File.ReadAllText(Path.Combine(current, "servermap-key.txt")));
+    }
+
+    //
+    // Only the two files this app knows the meaning of. The legacy folder sits beside the payload
+    // and may hold anything; carrying the tree wholesale would take things that are not ours.
+    //
+    [Fact]
+    public void MigrationLeavesAnythingElseBehind()
+    {
+        var legacy = Legacy();
+        File.WriteAllText(Path.Combine(legacy, "servermap-key.txt"), Key);
+        File.WriteAllText(Path.Combine(legacy, "notes.txt"), "someone else's");
+
+        ServerMapConfigFolder.MigrateLegacyFolder(_root, appDirectory: Elsewhere());
+
+        Assert.True(File.Exists(Path.Combine(legacy, "notes.txt")));
+    }
+
+    [Fact]
+    public void MigrationDoesNothingOnAMachineThatIsNotTheServer()
+    {
+        ServerMapConfigFolder.MigrateLegacyFolder(_root, appDirectory: Elsewhere());
+
+        Assert.False(Directory.Exists(Path.Combine(_root, "TCFModManager", "Data", "ServerMap")));
+    }
+}

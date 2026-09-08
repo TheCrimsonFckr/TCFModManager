@@ -70,14 +70,20 @@ examples:
 SPT 4.0.13
   D:\Single Player Tarkov Server\SPT\user\mods\TCFMM.ServerMap\   <- stub
   D:\Single Player Tarkov Server\TCFModManager\ServerMap\payload\ <- payload
+  D:\Single Player Tarkov Server\TCFModManager\Data\ServerMap\    <- key and published list
 
 SPT 4.1.x
   G:\Single Player Tarkov 4.1\SPT_Runtime\user\mods\TCFMM.ServerMap\ <- stub
   G:\Single Player Tarkov 4.1\TCFModManager\ServerMap\payload\       <- payload
+  G:\Single Player Tarkov 4.1\TCFModManager\Data\ServerMap\          <- key and published list
 ```
 
 If TCF Mod Manager is already installed on that machine, it lives in that same `TCFModManager`
 folder — so `ServerMap\payload\` goes right next to the app.
+
+**`Data\` is the folder to keep.** Your key and your published list live there, with the app's
+settings and install history. Replacing `TCFModManager\` wholesale when you deploy takes all of it
+with you — lay a new build over the old one instead, the way the app's own updater does.
 
 ## How do I know it loaded?
 
@@ -103,10 +109,10 @@ Every route except the handshake needs a shared key, so a stranger who finds you
 your list. The server generates one **on startup** — before anyone connects, because it is the
 thing you send out with the address.
 
-It is in a text file next to the payload folder:
+It is in a text file in the app's data folder:
 
 ```
-<...>\TCFModManager\ServerMap\config\servermap-key.txt
+<...>\TCFModManager\Data\ServerMap\servermap-key.txt
 ```
 
 24 characters in six groups of four. Send it to your players along with the address and port. It is
@@ -137,7 +143,7 @@ The server picks the change up on its own. **It does not need restarting.**
 2. Check the scopes — see the next question. This is the step people skip and regret.
 3. With the list selected, press **Publish to this server**.
 
-That writes the list into the Server Map mod's config folder on this machine. Nothing is installed,
+That writes the list into `TCFModManager\Data\ServerMap\` on this machine. Nothing is installed,
 enabled or disabled; no files on the game folder change.
 
 The list is re-read whenever its file changes, so **publishing again takes effect without
