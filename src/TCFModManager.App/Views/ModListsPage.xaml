@@ -516,6 +516,15 @@
                                 ToolTip="Put mods on this list - ones you have installed, or ones from sp-mod.com you haven't. Nothing is downloaded."
                                 Command="{Binding AddModsCommand}" />
 
+                            <!-- The one-button replacement for taking a mod off the list and adding
+                                 it back to pick up its new version. -->
+                            <ui:Button
+                                Margin="8,0,0,0"
+                                Icon="{ui:SymbolIcon ArrowSync24}"
+                                Content="Refresh versions"
+                                ToolTip="Reads the version of every mod on this list that is installed here, and updates the list to match. Scope is left alone, and mods you don't have are left as written. Nothing is downloaded or installed - Save keeps the changes."
+                                Command="{Binding RefreshVersionsCommand}" />
+
                             <ui:Button
                                 Margin="8,0,0,0"
                                 Appearance="Primary"

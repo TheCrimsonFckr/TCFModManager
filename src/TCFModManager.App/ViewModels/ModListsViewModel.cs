@@ -240,6 +240,7 @@ public partial class ModListsViewModel : ObservableObject
     //
     [NotifyCanExecuteChangedFor(nameof(PublishCommand))]
     [NotifyCanExecuteChangedFor(nameof(CycleScopeCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RefreshVersionsCommand))]
     private ModListRowViewModel? _selected;
 
     [ObservableProperty]
@@ -958,6 +959,65 @@ public partial class ModListsViewModel : ObservableObject
 
     // Matches PublishedModList.PreferredFileName on the server side.
     private const string PublishedFileName = "published.tcfmodlist";
+
+    //
+    // Re-reads the installed version of every mod on this list.
+    //
+    // The alternative was taking a mod off the list and putting it back, which is what re-captures
+    // the version it has now - correct, and ridiculous once a list runs to seventy entries and an
+    // update round has moved a dozen of them.
+    //
+    // It only changes versions. Scope stays exactly as set, entries for mods this machine does not
+    // have are left alone, and nothing is written to the list - the changes land in the panel as
+    // unsaved, so Save is still the thing that commits them and Discard still throws them away.
+    //
+    [RelayCommand(CanExecute = nameof(CanEditList))]
+    private async Task RefreshVersionsAsync()
+    {
+        if (Selected is not { } row) return;
+
+        IsBusy = true;
+
+        try
+        {
+            var result = await _service.RefreshVersionsAsync(Entries.Select(e => e.Entry));
+
+            if (result is null)
+            {
+                StatusMessage = AppMessages.NoSptInstallFolder;
+                return;
+            }
+
+            if (result.Changed.Count == 0)
+            {
+                StatusMessage = result.NotInstalled == Entries.Count
+                    ? "None of the mods on this list are installed here, so there are no versions to read."
+                    : $"Every mod on \"{row.Name}\" that is installed here already names the version you have.";
+                return;
+            }
+
+            var index = 0;
+            foreach (var entry in result.Entries) Entries[index++] = Row(entry);
+
+            UnsavedCount += result.Changed.Count;
+            Notify();
+
+            // Named rather than counted: "12 versions updated" is not something anybody can check,
+            // and the whole point of the button is to be able to see what it decided.
+            var named = string.Join(", ", result.Changed
+                .Take(5)
+                .Select(c => $"{c.Name} {c.From ?? "unpinned"} -> {c.To ?? "unpinned"}"));
+
+            var rest = result.Changed.Count > 5 ? $", and {result.Changed.Count - 5} more" : "";
+
+            StatusMessage = $"Updated {Mods(result.Changed.Count)} to the version installed here:"
+                + $" {named}{rest}. Save to keep it.";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
 
     //
     // Writes the panel to the list. This is the only thing on this page that changes a saved list's

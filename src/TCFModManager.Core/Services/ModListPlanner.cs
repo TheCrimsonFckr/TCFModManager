@@ -140,22 +140,9 @@ public static class ModListPlanner
         var actions = new List<ModListAction>();
         var matched = new bool[candidates.Count];
 
-        // Keyed on the (id, IsAddon) pair - addon ids and mod ids are separate sequences on
-        // sp-mod.com, so a bare id dictionary would let a list entry for addon 116 claim mod 116.
-        var byModId = new Dictionary<(int Id, bool IsAddon), int>();
-        var byGuid = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-        var byFolder = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-        var byName = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-
-        for (var index = 0; index < candidates.Count; index++)
-        {
-            var candidate = candidates[index];
-            if (candidate.ModId is { } id) byModId.TryAdd((id, candidate.IsAddon), index);
-            if (!string.IsNullOrWhiteSpace(candidate.Guid)) byGuid.TryAdd(candidate.Guid.Trim(), index);
-            foreach (var folder in candidate.Folders.Where(f => !string.IsNullOrWhiteSpace(f)))
-                byFolder.TryAdd(folder.Trim(), index);
-            byName.TryAdd(candidate.Name.Trim(), index);
-        }
+        // Shared with the refresh that re-reads installed versions into a list - see ModListMatch
+        // for why the join keys live in one place.
+        var match = new ModListMatch(candidates);
 
         //
         // EntriesApplyingHere, not Entries: a served list's server-only entries are not this
@@ -164,7 +151,7 @@ public static class ModListPlanner
         //
         foreach (var entry in list.EntriesApplyingHere)
         {
-            var found = Match(entry, byModId, byGuid, byFolder, byName);
+            var found = match.IndexOf(entry);
             if (found >= 0) matched[found] = true;
             actions.Add(ActionFor(entry, found >= 0 ? candidates[found] : null));
         }
@@ -173,7 +160,7 @@ public static class ModListPlanner
         // disable something purely because this machine was not the one meant to install it.
         foreach (var entry in list.Entries.Except(list.EntriesApplyingHere))
         {
-            var found = Match(entry, byModId, byGuid, byFolder, byName);
+            var found = match.IndexOf(entry);
             if (found >= 0) matched[found] = true;
         }
 
@@ -213,28 +200,6 @@ public static class ModListPlanner
             Policy = list.Policy,
             Actions = actions,
         };
-    }
-
-    // The index of the installed mod this entry refers to, or -1 when it isn't installed. Mod id
-    // first, then plugin GUID, then folder name, then display name - most reliable join key down
-    // to the loosest.
-    private static int Match(
-        ModListEntry entry,
-        Dictionary<(int Id, bool IsAddon), int> byModId,
-        Dictionary<string, int> byGuid,
-        Dictionary<string, int> byFolder,
-        Dictionary<string, int> byName)
-    {
-        if (entry.ModId is { } id && byModId.TryGetValue((id, entry.IsAddon), out var byId)) return byId;
-
-        if (!string.IsNullOrWhiteSpace(entry.Guid) && byGuid.TryGetValue(entry.Guid.Trim(), out var guidMatch))
-            return guidMatch;
-
-        foreach (var folder in entry.Folders.Where(f => !string.IsNullOrWhiteSpace(f)))
-            if (byFolder.TryGetValue(folder.Trim(), out var folderMatch))
-                return folderMatch;
-
-        return byName.TryGetValue(entry.Name.Trim(), out var nameMatch) ? nameMatch : -1;
     }
 
     private static ModListAction ActionFor(ModListEntry entry, ModListCandidate? installed)

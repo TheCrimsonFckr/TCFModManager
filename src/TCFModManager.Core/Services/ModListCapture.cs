@@ -144,7 +144,9 @@ public static class ModListCapture
         return [.. entries.OrderBy(e => e.Name, StringComparer.OrdinalIgnoreCase)];
     }
 
-    private static int? ResolveVersionId(
+    // Internal rather than private: ModListRefresh pins the same version the same way, and two
+    // implementations of "which published build is this" would drift.
+    internal static int? ResolveVersionId(
         ModListCandidate candidate, VersionLookup? versions, AddonVersionLookup? addonVersions)
     {
         if (candidate.ModId is not { } modId) return null;

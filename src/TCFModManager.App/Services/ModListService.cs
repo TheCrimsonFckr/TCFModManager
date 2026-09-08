@@ -87,6 +87,21 @@ public sealed class ModListService
         return new ModListInstall(installPath, candidates, sptVersion);
     }
 
+    //
+    // Re-reads the installed version of every mod on a list.
+    //
+    // Returns null when there is no SPT install folder to read. The entries come back changed but
+    // NOT stored - the caller puts them in the edit buffer, so a refresh is reviewed and saved like
+    // any other edit rather than rewriting a list behind the user's back.
+    //
+    public async Task<ModListRefreshResult?> RefreshVersionsAsync(IEnumerable<ModListEntry> entries)
+    {
+        var install = await ReadInstallAsync();
+        if (install is null) return null;
+
+        return ModListRefresh.Build(entries, install.Candidates, CatalogVersions(), CatalogAddonVersions());
+    }
+
     // Captures what's installed now as a new list and stores it.
     public async Task<ModList?> CaptureAsync(string name, bool includeDisabled = false)
     {
