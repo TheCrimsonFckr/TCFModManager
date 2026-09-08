@@ -10,6 +10,12 @@ public partial class MainWindow : FluentWindow
     public MainWindow()
     {
         InitializeComponent();
+
+        // Before the window is shown, not on Loaded: WindowStartupLocation reads Width/Height while
+        // it decides where to put the window, and by Loaded it has already decided. This also wires
+        // F11/Escape and records the window's position on close - see WindowLayout.
+        WindowLayout.Attach(this, RootTitleBar);
+
         Loaded += (_, _) =>
         {
             // The theme itself was applied at startup. This hooks up the two things that need a

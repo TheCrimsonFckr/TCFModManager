@@ -55,7 +55,19 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Content="Clear filters"
+                    ToolTip="Puts every filter back to what this page opens with."
                     Command="{Binding ClearFiltersCommand}" />
+
+                <!-- Same as Installed's: the defaults are saved from the page, not restated in
+                     Options. Declared after Clear filters so it lands to its left. -->
+                <ui:Button
+                    DockPanel.Dock="Right"
+                    Margin="0,0,8,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Content="Save as default"
+                    ToolTip="Opens this page with the filters, sort and per-page it is set to right now, including the SPT version ticks. The search box is not included. Options can clear it again."
+                    Command="{Binding SaveAsDefaultCommand}" />
                 <ui:Button
                     DockPanel.Dock="Right"
                     Margin="0,0,8,0"

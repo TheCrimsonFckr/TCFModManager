@@ -61,6 +61,29 @@ public sealed class AppSettings
     public bool ShowModListBadges { get; set; } = true;
 
     //
+    // Where the main window opens and how big. Always present, the same as ServerMap below, and
+    // never null for the same reason: this file is offered for hand-editing, so a "Window": null
+    // written into it is a thing that happens rather than a thing to assume away.
+    //
+    public WindowSettings Window
+    {
+        get => _window;
+        set => _window = value ?? new WindowSettings();
+    }
+
+    //
+    // What the Installed and Browse pages open filtered and sorted to, saved from those pages
+    // rather than set here - see PageDefaults.
+    //
+    // Null means the page has never had a default saved and uses the app's own, which is why these
+    // two are nullable when everything else on this class has a value. Clearing a saved default
+    // sets it back to null rather than writing out an object full of nothing.
+    //
+    public InstalledPageDefaults? InstalledDefaults { get; set; }
+
+    public BrowsePageDefaults? BrowseDefaults { get; set; }
+
+    //
     // Server Map. Always present in settings.json so the shape is obvious to anyone hand-editing
     // it, even on an install that never turns the page on.
     //
@@ -75,6 +98,8 @@ public sealed class AppSettings
     }
 
     private ServerMapSettings _serverMap = new();
+
+    private WindowSettings _window = new();
 }
 
 //

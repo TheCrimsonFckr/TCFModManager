@@ -22,7 +22,8 @@ namespace TCFModManager.App.ViewModels;
 public partial class InstalledViewModel : ObservableObject
 {
     // Fills the grid exactly at the 3- and 4-column width breakpoints (see UpdateLayoutForWidth).
-    private const int DefaultPageSize = 12;
+    // Only used when nothing has been saved as this page's default - see DefaultPageSize().
+    private const int DefaultPageSizeValue = 12;
 
     // Below this a card can't show its summary line without truncating it to uselessness. Only
     // reachable on a very narrow window, where Columns is already 1.
@@ -253,10 +254,10 @@ public partial class InstalledViewModel : ObservableObject
     // virtualising, so a hundred-odd of them in one page is work the app does not need to be doing.
     // List view is the cheap way to see the lot.
     //
-    public List<int> PageSizeOptions { get; } = [8, DefaultPageSize, 16, 24, 32];
+    public List<int> PageSizeOptions { get; } = [8, DefaultPageSizeValue, 16, 24, 32];
 
     [ObservableProperty]
-    private int _pageSize = DefaultPageSize;
+    private int _pageSize = DefaultPageSizeValue;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(PreviousPageCommand))]
@@ -267,14 +268,101 @@ public partial class InstalledViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(NextPageCommand))]
     private int _totalPages = 1;
 
+    //
+    // What this page opens filtered and sorted to, saved from the page itself by SaveAsDefault
+    // rather than set from Options - see Core's PageDefaults. Null on an install that has never
+    // saved one, in which case every Default* helper below answers with the app's own default.
+    //
+    private readonly InstalledPageDefaults? _defaults;
+
+    //
+    // Whether the saved category/group defaults have been handed to their dropdowns yet. Both lists
+    // are rebuilt from what is installed, so the first rebuild is the earliest moment either
+    // default can be resolved to a real entry - and every rebuild after that has to preserve
+    // whatever is currently selected instead, or coming back to the page would silently reset it.
+    //
+    private bool _categoryDefaultApplied;
+    private bool _groupDefaultApplied;
+
+    private UpdateFilterItem DefaultUpdateFilter() =>
+        SavedFilterDefaults.Parse<UpdateFilter>(_defaults?.UpdateStatus) is { } value
+            ? UpdateFilterOptions.FirstOrDefault(o => o.Value == value) ?? UpdateFilterOptions[0]
+            : UpdateFilterOptions[0];
+
+    private EnabledFilterItem DefaultEnabledFilter() =>
+        SavedFilterDefaults.Parse<EnabledFilter>(_defaults?.Enabled) is { } value
+            ? EnabledFilterOptions.FirstOrDefault(o => o.Value == value) ?? EnabledFilterOptions[0]
+            : EnabledFilterOptions[0];
+
+    private ModSortItem DefaultSortOption() =>
+        SavedFilterDefaults.Parse<ModSortOption>(_defaults?.Sort) is { } value
+            ? SortOptions.FirstOrDefault(o => o.Value == value) ?? SortOptions[0]
+            : SortOptions[0];
+
+    private GroupSortItem DefaultGroupSortOption() =>
+        SavedFilterDefaults.Parse<GroupSortOption>(_defaults?.GroupSort) is { } value
+            ? GroupSortOptions.FirstOrDefault(o => o.Value == value) ?? GroupSortOptions[0]
+            : GroupSortOptions[0];
+
+    private InstalledViewMode DefaultViewMode() =>
+        SavedFilterDefaults.Parse<InstalledViewMode>(_defaults?.ViewMode) ?? InstalledViewMode.Cards;
+
+    private int DefaultPageSize() =>
+        SavedFilterDefaults.PageSize(_defaults?.PageSize, PageSizeOptions, InstalledViewModel.DefaultPageSizeValue);
+
+    //
+    // Described rather than looked up, because the entry it describes may not exist: the category
+    // list is built from what is installed, so a saved category can be one nothing currently
+    // matches. CategoryFilterItem.SameAs compares titles, so this finds its entry when there is one
+    // and falls back to "All categories" when there isn't.
+    //
+    private CategoryFilterItem DefaultCategory() =>
+        string.IsNullOrWhiteSpace(_defaults?.Category)
+            ? CategoryFilterItem.All
+            : new CategoryFilterItem(_defaults.Category!, _defaults.Category);
+
+    //
+    // Same again for groups. A saved group that has since been deleted reads as "All groups" -
+    // the same thing RebuildSections already does with an assignment pointing at a deleted group.
+    //
+    private GroupFilterItem DefaultGroupFilter()
+    {
+        var saved = _defaults?.Group;
+
+        if (string.IsNullOrWhiteSpace(saved)) return GroupFilterItem.All;
+        if (saved.Equals("ungrouped", StringComparison.OrdinalIgnoreCase)) return GroupFilterItem.Ungrouped;
+
+        // Label is irrelevant here - SameAs matches on the id and the all-groups flag only.
+        return Guid.TryParse(saved, out var id)
+            ? new GroupFilterItem(string.Empty, id, AllGroups: false)
+            : GroupFilterItem.All;
+    }
+
     public InstalledViewModel()
     {
-        _showListBadges = new SettingsService().Load().ShowModListBadges;
-        _selectedUpdateFilter = UpdateFilterOptions[0];
-        _selectedEnabledFilter = EnabledFilterOptions[0];
+        var settings = new SettingsService().Load();
+        _showListBadges = settings.ShowModListBadges;
+        _defaults = settings.InstalledDefaults;
+
+        //
+        // Backing fields rather than the properties: this is the page opening at its default, not
+        // someone changing a filter, so none of the OnXxxChanged handlers should run a filter pass
+        // over a page that has not scanned anything yet.
+        //
+        _selectedUpdateFilter = DefaultUpdateFilter();
+        _selectedEnabledFilter = DefaultEnabledFilter();
+        _selectedSortOption = DefaultSortOption();
+        _selectedGroupSortOption = DefaultGroupSortOption();
+        _viewMode = DefaultViewMode();
+        _pageSize = DefaultPageSize();
+
+        // Category and group are resolved later instead: both dropdowns are rebuilt from what is
+        // actually installed, and neither list exists yet - see RebuildCategoryOptions/RefreshGroups.
         _selectedGroupFilter = GroupFilterItem.All;
-        _selectedSortOption = SortOptions[0];
-        _selectedGroupSortOption = GroupSortOptions[0];
+
+        // Before the subscription below, so applying a saved default doesn't count as a change.
+        SavedFilterDefaults.ApplyAttributes(AttributeOptions, _defaults?.Attributes);
+        UpdateAttributeFilterSummary();
 
         // Each tick box drives the same re-filter a dropdown selection does.
         foreach (var option in AttributeOptions)
@@ -308,7 +396,10 @@ public partial class InstalledViewModel : ObservableObject
     //
     private void RebuildCategoryOptions()
     {
-        var previous = SelectedCategory;
+        // The saved default on the first build, and whatever is currently chosen on every rebuild
+        // after it - a rescan must not quietly reset a filter the user has since changed.
+        var previous = _categoryDefaultApplied ? SelectedCategory : DefaultCategory();
+        _categoryDefaultApplied = true;
 
         CategoryOptions.Clear();
         CategoryOptions.Add(CategoryFilterItem.All);
@@ -428,7 +519,17 @@ public partial class InstalledViewModel : ObservableObject
         _listDirty = false;
     }
 
-    /// <summary>Resets every Installed filter/search control back to its opening default, then re-applies once immediately.</summary>
+    //
+    // Resets every filter/search control back to this page's opening default, then re-applies once
+    // immediately.
+    //
+    // "Default" means whatever SaveAsDefault last captured, not the app's own - once you have told
+    // the page how you want it to open, that is what clearing the filters should give you back.
+    // With nothing saved the two are the same thing, which is what every Default* helper answers.
+    //
+    // The view mode is deliberately left alone: which of Cards/Groups/List you are looking at is
+    // not a filter, and a button in the filter row that also switched view would be a surprise.
+    //
     [RelayCommand]
     private void ClearFilters()
     {
@@ -436,14 +537,17 @@ public partial class InstalledViewModel : ObservableObject
         try
         {
             SearchText = string.Empty;
-            SelectedUpdateFilter = UpdateFilterOptions[0];
-            SelectedEnabledFilter = EnabledFilterOptions[0];
-            SelectedGroupFilter = GroupFilterOptions[0];
-            SelectedSortOption = SortOptions[0];
-            SelectedCategory = CategoryOptions[0];
-            foreach (var option in AttributeOptions) option.IsSelected = false;
+            SelectedUpdateFilter = DefaultUpdateFilter();
+            SelectedEnabledFilter = DefaultEnabledFilter();
+            SelectedGroupFilter = GroupFilterOptions.FirstOrDefault(o => o.SameAs(DefaultGroupFilter()))
+                ?? GroupFilterOptions[0];
+            SelectedSortOption = DefaultSortOption();
+            SelectedGroupSortOption = DefaultGroupSortOption();
+            SelectedCategory = CategoryOptions.FirstOrDefault(c => c.SameAs(DefaultCategory()))
+                ?? CategoryOptions[0];
+            SavedFilterDefaults.ApplyAttributes(AttributeOptions, _defaults?.Attributes ?? []);
             UpdateAttributeFilterSummary();
-            PageSize = DefaultPageSize;
+            PageSize = DefaultPageSize();
         }
         finally
         {
@@ -452,6 +556,43 @@ public partial class InstalledViewModel : ObservableObject
 
         ApplyFilter();
         RefreshActiveView(CurrentPage);
+    }
+
+    //
+    // Captures the page exactly as it currently stands as what it opens at next time.
+    //
+    // Taken from the page rather than restated as a second set of dropdowns in Options: these
+    // controls already exist, you can see what they do as you set them, and a filter added to this
+    // page later is covered without anything in Options needing to know about it.
+    //
+    // The search box is not included. A page that opens already filtered to a phrase you typed
+    // weeks ago looks broken rather than configured.
+    //
+    [RelayCommand]
+    private void SaveAsDefault()
+    {
+        var service = new SettingsService();
+        var settings = service.Load();
+
+        settings.InstalledDefaults = new InstalledPageDefaults
+        {
+            ViewMode = ViewMode.ToString(),
+            UpdateStatus = SelectedUpdateFilter.Value.ToString(),
+            Enabled = SelectedEnabledFilter.Value.ToString(),
+            Category = SelectedCategory.Title,
+            Group = SelectedGroupFilter.AllGroups
+                ? "all"
+                : SelectedGroupFilter.GroupId?.ToString() ?? "ungrouped",
+            Sort = SelectedSortOption.Value.ToString(),
+            GroupSort = SelectedGroupSortOption.Value.ToString(),
+            PageSize = PageSize,
+            Attributes = SavedFilterDefaults.CapturedAttributes(AttributeOptions),
+        };
+
+        service.Save(settings);
+
+        StatusMessage = "Saved. The Installed page will open like this from now on - Options can put it back.";
+        AppLog.Info("Installed", "saved the current filters as this page's default");
     }
 
     //
@@ -1514,7 +1655,10 @@ public partial class InstalledViewModel : ObservableObject
             card.GroupName = assigned is { } value ? namesById[value] : null;
         }
 
-        var previous = SelectedGroupFilter;
+        // Same as the category list above: the saved default the first time, the current selection
+        // every time after.
+        var previous = _groupDefaultApplied ? SelectedGroupFilter : DefaultGroupFilter();
+        _groupDefaultApplied = true;
 
         _suppressAutoApplyFilter = true;
         try

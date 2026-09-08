@@ -374,7 +374,22 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 Content="Clear filters"
+                ToolTip="Puts every filter back to what this page opens with."
                 Command="{Binding ClearFiltersCommand}" />
+
+            <!-- Saving the defaults from the page itself, rather than as a second set of dropdowns
+                 in Options: these controls already exist, you can see what they do as you set them,
+                 and a filter added to this page later is covered without Options knowing about it.
+                 Declared after Clear filters because in a DockPanel the first-declared Right
+                 element lands furthest right. -->
+            <ui:Button
+                DockPanel.Dock="Right"
+                Margin="0,0,8,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Content="Save as default"
+                ToolTip="Opens this page with the filters, sort, view and per-page it is set to right now. The search box is not included. Options can clear it again."
+                Command="{Binding SaveAsDefaultCommand}" />
 
             <!-- A WrapPanel: seven filters don't fit on one line at every window width, and a
                  filter that has run off the edge of the page may as well not exist. -->

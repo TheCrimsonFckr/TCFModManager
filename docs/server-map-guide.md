@@ -1,4 +1,4 @@
-# Server Map — how do I…?
+# Server Map how do I…?
 
 Server Map lets an SPT server publish the mod list it expects players to be running, so TCF Mod
 Manager can tell someone what they are missing **before** they launch instead of after a raid fails

@@ -35,9 +35,22 @@ public partial class BrowseViewModel : ObservableObject
     {
         _spModApi = spModApi;
 
-        // Defaults: Newest sort, no Featured restriction.
-        _selectedSortOption = SortOptions[0];
-        _selectedFeaturedFilter = FeaturedFilterOptions[0];
+        _defaults = new SettingsService().Load().BrowseDefaults;
+
+        //
+        // Backing fields rather than the properties: this is the page opening at its default, not
+        // someone changing a filter, so nothing here should run a filter pass over a catalog that
+        // has not loaded yet.
+        //
+        // With nothing saved these are the app's own defaults - Newest sort, no Featured
+        // restriction, twelve per page.
+        //
+        _selectedSortOption = DefaultSortOption();
+        _selectedFeaturedFilter = DefaultFeaturedFilter();
+        _pageSize = DefaultPageSize();
+
+        // Category and SPT version are resolved later: both lists are built from the catalog, and
+        // neither exists yet - see EnsureCategoryOptionsBuilt/EnsureSptVersionOptionsBuilt.
 
         // Refreshes each card's install/update status dot once a queued install completes.
         AppServices.DownloadQueue.ItemInstalled += async (_, _) =>
@@ -52,6 +65,9 @@ public partial class BrowseViewModel : ObservableObject
             await RefreshInstalledIndexAsync();
             GoToPage(CurrentPage);
         };
+
+        // Before the subscription below, so applying a saved default doesn't count as a change.
+        SavedFilterDefaults.ApplyAttributes(AttributeOptions, _defaults?.Attributes);
 
         // Each tick box drives the same re-filter a dropdown selection does. Subscribed rather
         // than bound through a property apiece, so adding an option is one line in the list above.
@@ -73,6 +89,37 @@ public partial class BrowseViewModel : ObservableObject
             if (HasLoadedResults) GoToPage(CurrentPage);
         };
     }
+
+    //
+    // What this page opens filtered and sorted to, saved from the page itself by SaveAsDefault
+    // rather than set from Options - see Core's PageDefaults. Null on an install that has never
+    // saved one, in which case every Default* helper below answers with the app's own default.
+    //
+    private readonly BrowsePageDefaults? _defaults;
+
+    // Whether the saved category default has reached its dropdown yet. The list is built from the
+    // catalog, so the first build is the earliest moment it can be resolved to a real entry.
+    private bool _categoryDefaultApplied;
+
+    private SortOptionItem DefaultSortOption() =>
+        SavedFilterDefaults.Parse<ModSortOrder>(_defaults?.Sort) is { } value
+            ? SortOptions.FirstOrDefault(o => o.Value == value) ?? SortOptions[0]
+            : SortOptions[0];
+
+    private FeaturedFilterItem DefaultFeaturedFilter() =>
+        SavedFilterDefaults.Parse<FeaturedFilter>(_defaults?.Featured) is { } value
+            ? FeaturedFilterOptions.FirstOrDefault(o => o.Value == value) ?? FeaturedFilterOptions[0]
+            : FeaturedFilterOptions[0];
+
+    private int DefaultPageSize() =>
+        SavedFilterDefaults.PageSize(_defaults?.PageSize, PageSizeOptions, DefaultPageSizeValue);
+
+    // Described rather than looked up: the entry may not be in the list yet, or at all if The Forge
+    // has stopped using that category. CategoryFilterItem.SameAs matches on the title.
+    private CategoryFilterItem DefaultCategory() =>
+        string.IsNullOrWhiteSpace(_defaults?.Category)
+            ? CategoryFilterItem.All
+            : new CategoryFilterItem(_defaults.Category!, _defaults.Category);
 
     // Set while ClearFilters is resetting several properties at once, so each individual
     // OnXxxChanged below doesn't run its own ApplyFilter.
@@ -109,13 +156,14 @@ public partial class BrowseViewModel : ObservableObject
     [ObservableProperty]
     private SortOptionItem _selectedSortOption;
 
-    // How many matching cards make up one page.
-    private const int DefaultPageSize = 12;
+    // How many matching cards make up one page, when nothing has been saved as this page's
+    // default - see DefaultPageSize().
+    private const int DefaultPageSizeValue = 12;
 
-    public List<int> PageSizeOptions { get; } = [8, DefaultPageSize, 16, 24, 32];
+    public List<int> PageSizeOptions { get; } = [8, DefaultPageSizeValue, 16, 24, 32];
 
     [ObservableProperty]
-    private int _pageSize = DefaultPageSize;
+    private int _pageSize = DefaultPageSizeValue;
 
     public List<FeaturedFilterItem> FeaturedFilterOptions { get; } =
     [
@@ -302,7 +350,15 @@ public partial class BrowseViewModel : ObservableObject
         }
     }
 
-    /// <summary>Resets every Browse filter/sort control back to its opening default, then re-applies once immediately.</summary>
+    //
+    // Resets every filter/sort control back to this page's opening default, then re-applies once
+    // immediately.
+    //
+    // "Default" means whatever SaveAsDefault last captured, not the app's own - once you have told
+    // the page how you want it to open, that is what clearing the filters should give you back.
+    // The SPT version boxes already worked this way, through SptVersionOption.IsDefault; the saved
+    // defaults are folded into that same flag as the options are built, so this line is unchanged.
+    //
     [RelayCommand]
     private void ClearFilters()
     {
@@ -311,11 +367,13 @@ public partial class BrowseViewModel : ObservableObject
         {
             SearchText = string.Empty;
             foreach (var option in SptVersionOptions) option.IsSelected = option.IsDefault;
-            SelectedSortOption = SortOptions[0];
-            PageSize = DefaultPageSize;
-            SelectedFeaturedFilter = FeaturedFilterOptions[0];
-            SelectedCategory = CategoryOptions[0];
-            foreach (var option in AttributeOptions) option.IsSelected = false;
+            UpdateSptVersionFilterSummary();
+            SelectedSortOption = DefaultSortOption();
+            PageSize = DefaultPageSize();
+            SelectedFeaturedFilter = DefaultFeaturedFilter();
+            SelectedCategory = CategoryOptions.FirstOrDefault(c => c.SameAs(DefaultCategory()))
+                ?? CategoryOptions[0];
+            SavedFilterDefaults.ApplyAttributes(AttributeOptions, _defaults?.Attributes ?? []);
             UpdateAttributeFilterSummary();
         }
         finally
@@ -325,6 +383,43 @@ public partial class BrowseViewModel : ObservableObject
 
         // Only re-run the filter if there's actually a catalog to filter against yet.
         if (HasLoadedResults) ApplyFilter();
+    }
+
+    //
+    // Captures the page exactly as it currently stands as what it opens at next time. Same
+    // arrangement as Installed's - see InstalledViewModel.SaveAsDefault for why this lives on the
+    // page rather than as a second set of dropdowns in Options.
+    //
+    // The search box is left out on purpose. The SPT version ticks are included, and saving them
+    // replaces the app's own behaviour of pre-ticking whichever line your install is on - which is
+    // the point for anyone who browses for a version they are not currently running.
+    //
+    [RelayCommand]
+    private void SaveAsDefault()
+    {
+        var service = new SettingsService();
+        var settings = service.Load();
+
+        settings.BrowseDefaults = new BrowsePageDefaults
+        {
+            Sort = SelectedSortOption.Value.ToString(),
+            Featured = SelectedFeaturedFilter.Value.ToString(),
+            Category = SelectedCategory.Title,
+            PageSize = PageSize,
+            Attributes = SavedFilterDefaults.CapturedAttributes(AttributeOptions),
+
+            // Only once the options exist. Saving an empty list from a page whose version filter
+            // has not been built yet would read back as "show every SPT version", which is a real
+            // setting and not what was on screen.
+            SptVersions = _sptVersionOptionsBuilt
+                ? SptVersionOptions.Where(o => o.IsSelected).Select(o => o.Label).ToList()
+                : _defaults?.SptVersions,
+        };
+
+        service.Save(settings);
+
+        StatusMessage = "Saved. The Browse page will open like this from now on - Options can put it back.";
+        AppLog.Info("Browse", "saved the current filters as this page's default");
     }
 
     private bool CanGoToPreviousPage() => CurrentPage > 1;
@@ -544,13 +639,24 @@ public partial class BrowseViewModel : ObservableObject
         if (installedMajorMinor is not null && !majorMinors.Contains(installedMajorMinor.Value.Label))
             majorMinors.Insert(0, installedMajorMinor.Value.Label);
 
+        //
+        // A saved default replaces the pre-ticking entirely rather than adding to it, which is what
+        // lets an empty saved list mean "browse every version". Null means nothing was saved, and
+        // the app's own behaviour - pre-tick whichever line this install is on - stands.
+        //
+        var saved = _defaults?.SptVersions;
+
         foreach (var label in majorMinors)
         {
             var isInstalled = label == installedMajorMinor?.Label;
+
+            // Also becomes the option's IsDefault, which is what Clear filters puts back.
+            var isSelected = saved is null ? isInstalled : saved.Contains(label);
+
             // The installed option uses the exact detected version; every other option uses ".0"
             // as that release line's representative version.
             var value = isInstalled && !string.IsNullOrWhiteSpace(installedVersion) ? installedVersion! : $"{label}.0";
-            var option = new SptVersionOption(label, value, isSelected: isInstalled);
+            var option = new SptVersionOption(label, value, isSelected);
             option.PropertyChanged += (_, _) =>
             {
                 UpdateSptVersionFilterSummary();
@@ -593,6 +699,15 @@ public partial class BrowseViewModel : ObservableObject
             .OrderBy(t => t, StringComparer.OrdinalIgnoreCase);
 
         foreach (var category in categories) CategoryOptions.Add(new CategoryFilterItem(category, category));
+
+        // Now that the list exists, the saved default can be resolved against it. Only on the first
+        // build, which is the only one there is - a category chosen since must not be overridden.
+        if (!_categoryDefaultApplied)
+        {
+            _categoryDefaultApplied = true;
+            SelectedCategory = CategoryOptions.FirstOrDefault(c => c.SameAs(DefaultCategory()))
+                ?? CategoryOptions[0];
+        }
     }
 
     private bool _categoryOptionsBuilt;

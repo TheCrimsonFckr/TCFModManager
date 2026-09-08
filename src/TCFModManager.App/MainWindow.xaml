@@ -45,6 +45,7 @@
              pointed at, so two windows open on two installs can be told apart without opening the
              Options page in each. -->
         <ui:TitleBar
+            x:Name="RootTitleBar"
             Grid.Row="0"
             Title="{Binding WindowTitle, Source={x:Static app:AppServices.SptEnvironment}}">
             <ui:TitleBar.Icon>

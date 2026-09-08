@@ -65,6 +65,100 @@
         <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
             <StackPanel>
                 <TextBlock
+                    Text="Window"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,0,0,8"
+                    Text="How the window opens. Remembering the last size and position is the default, since dragging the window to a size and leaving it there is already an answer. Full screen fills the whole monitor with no title bar and covers the taskbar, which maximised does not - F11 switches into and out of it at any time, whichever of these is chosen." />
+                <ComboBox
+                    Width="320"
+                    HorizontalAlignment="Left"
+                    ItemsSource="{Binding WindowStartupOptions}"
+                    SelectedItem="{Binding SelectedWindowStartup}" />
+
+                <!-- Only shown for the one mode that reads them - two size boxes sitting under
+                     "Always start maximised" would look like they still did something. -->
+                <StackPanel
+                    Margin="0,12,0,0"
+                    Visibility="{Binding ShowCustomSize, Converter={StaticResource BoolToVisibility}}">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:TextBox
+                            Width="110"
+                            PlaceholderText="Width"
+                            Text="{Binding CustomWidthInput, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock
+                            Margin="8,0,8,0"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                            Text="x" />
+                        <ui:TextBox
+                            Width="110"
+                            PlaceholderText="Height"
+                            Text="{Binding CustomHeightInput, UpdateSourceTrigger=PropertyChanged}" />
+                        <ui:Button
+                            Margin="8,0,0,0"
+                            Content="Apply"
+                            Command="{Binding ApplyWindowSizeCommand}" />
+
+                        <!-- Dragging the window to the size you want and pressing one button beats
+                             guessing two numbers. -->
+                        <ui:Button
+                            Margin="8,0,0,0"
+                            Content="Use the current size"
+                            ToolTip="Fills these boxes from the window as it is right now. Restore it down from maximised first - a maximised window has no chosen size to read."
+                            Command="{Binding UseCurrentWindowSizeCommand}" />
+                    </StackPanel>
+                </StackPanel>
+
+                <TextBlock
+                    Margin="0,8,0,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                    Text="{Binding WindowSizeMessage}" />
+            </StackPanel>
+        </ui:Card>
+
+        <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
+            <StackPanel>
+                <TextBlock
+                    Text="Page defaults"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,0,0,8"
+                    Text="The Installed and Browse pages each have a Save as default button beside Clear filters. It opens that page with the filters, sort, per-page - and on Installed, the view - it is set to at the time, so a page you always narrow the same way arrives narrowed. What you have typed in the search box is never part of it. Clearing a default here puts the page back to the app's own." />
+
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Margin="0,0,0,4"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                    Text="{Binding InstalledDefaultsDescription}" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Margin="0,0,0,8"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                    Text="{Binding BrowseDefaultsDescription}" />
+
+                <StackPanel Orientation="Horizontal">
+                    <ui:Button
+                        Content="Clear the Installed default"
+                        Command="{Binding ResetInstalledDefaultsCommand}" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Content="Clear the Browse default"
+                        Command="{Binding ResetBrowseDefaultsCommand}" />
+                </StackPanel>
+            </StackPanel>
+        </ui:Card>
+
+        <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
+            <StackPanel>
+                <TextBlock
                     Text="Mod pages"
                     FontWeight="SemiBold"
                     Margin="0,0,0,4" />
