@@ -232,7 +232,7 @@
                                             Visibility="{Binding IsPublished, Converter={StaticResource BoolToVis}}">
                                             <StackPanel Orientation="Horizontal">
                                                 <ui:SymbolIcon
-                                                    Symbol="ServerLink24"
+                                                    Symbol="ArrowUpload24"
                                                     FontSize="14"
                                                     VerticalAlignment="Center"
                                                     Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
@@ -548,7 +548,7 @@
                                  hand is one that ends up in the wrong place. -->
                             <ui:Button
                                 Margin="8,0,0,0"
-                                Icon="{ui:SymbolIcon ServerLink24}"
+                                Icon="{ui:SymbolIcon ArrowUpload24}"
                                 Content="Publish to this server"
                                 ToolTip="Writes this list into the Server Map mod's config folder on this machine, so the server serves it to connected clients. Nothing is installed or changed on disk."
                                 Command="{Binding PublishCommand}" />
