@@ -30,6 +30,25 @@ public static class SptLaunchProblems
         SptLaunchProblem.StartFailed =>
             $"Couldn't start {result.Info.ProcessName}: {result.Error?.Message}",
 
+        // A restart of something that is not up. Said as what to do instead, since the button that
+        // does it is the one right beside the one that was pressed.
+        SptLaunchProblem.NotRunning => result.Info.Target switch
+        {
+            SptLaunchTarget.Server => "The server isn't running, so there's nothing to restart - start it instead.",
+            _ => "The headless launcher isn't running, so there's nothing to restart - start it instead.",
+        },
+
+        //
+        // Windows refuses a process this app has no right to touch - one started elevated, or under
+        // another account - and that is far and away the likeliest reason, so it is said outright
+        // rather than left as "something went wrong".
+        //
+        SptLaunchProblem.StopFailed =>
+            $"Couldn't stop {result.Info.ProcessName}"
+            + (result.Error is null ? "" : $": {result.Error.Message}")
+            + ". It may be running as another user or as administrator - closing its window by hand"
+            + " and then starting it again does the same job.",
+
         _ => "",
     };
 

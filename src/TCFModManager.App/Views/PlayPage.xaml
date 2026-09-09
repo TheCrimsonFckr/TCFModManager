@@ -82,7 +82,7 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="Starts this install's server and leaves it running in its own console window. It keeps running if you close this app, and nothing here will stop it - close its window when you're done." />
+                    Text="Starts this install's server and leaves it running in its own console window. It keeps running if you close this app. Restart stops it and starts it again - for a config edited or a server mod dropped in - and nothing here will stop it for good; close its window when you're done." />
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                     <ui:Button
@@ -91,12 +91,43 @@
                         Icon="{ui:SymbolIcon Play24}"
                         IsEnabled="{Binding CanStartServer}"
                         Command="{Binding StartServerCommand}" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Content="Restart"
+                        Icon="{ui:SymbolIcon ArrowSync24}"
+                        ToolTip="Stops this install's server and starts it again. Only this install's - a second SPT server on another folder is left alone."
+                        IsEnabled="{Binding CanRestartServer}"
+                        Command="{Binding AskRestartServerCommand}" />
                     <TextBlock
                         VerticalAlignment="Center"
                         Margin="12,0,0,0"
                         TextWrapping="Wrap"
                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                         Text="{Binding ServerState}" />
+                </StackPanel>
+
+                <!-- Asked on the card, not in a dialog: the warning is about the thing the card is
+                     describing. Asked at all because a raid in progress does not survive it. -->
+                <StackPanel
+                    Margin="0,0,0,8"
+                    Visibility="{Binding ConfirmingServerRestart, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock
+                        TextWrapping="Wrap"
+                        Margin="0,0,0,8"
+                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                        Text="Restarting the server ends any raid running on it. Anyone in one is dropped." />
+                    <StackPanel Orientation="Horizontal">
+                        <ui:Button
+                            Appearance="Danger"
+                            Content="Restart the server"
+                            Icon="{ui:SymbolIcon ArrowSync24}"
+                            Command="{Binding ConfirmRestartCommand}" />
+                        <ui:Button
+                            Margin="8,0,0,0"
+                            Appearance="Transparent"
+                            Content="Cancel"
+                            Command="{Binding CancelRestartCommand}" />
+                    </StackPanel>
                 </StackPanel>
 
                 <TextBlock
@@ -167,12 +198,41 @@
                         Icon="{ui:SymbolIcon Play24}"
                         IsEnabled="{Binding CanStartHeadless}"
                         Command="{Binding StartHeadlessCommand}" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Content="Restart"
+                        Icon="{ui:SymbolIcon ArrowSync24}"
+                        ToolTip="Stops the headless launcher and starts it again. It does not touch the server, and it does not close a game the launcher had already started."
+                        IsEnabled="{Binding CanRestartHeadless}"
+                        Command="{Binding AskRestartHeadlessCommand}" />
                     <TextBlock
                         VerticalAlignment="Center"
                         Margin="12,0,0,0"
                         TextWrapping="Wrap"
                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                         Text="{Binding HeadlessState}" />
+                </StackPanel>
+
+                <StackPanel
+                    Margin="0,0,0,8"
+                    Visibility="{Binding ConfirmingHeadlessRestart, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock
+                        TextWrapping="Wrap"
+                        Margin="0,0,0,8"
+                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                        Text="Restarting the headless ends any raid it is hosting. The server is left running, and a game this launcher already started is left alone - close that yourself if it needs to go too." />
+                    <StackPanel Orientation="Horizontal">
+                        <ui:Button
+                            Appearance="Danger"
+                            Content="Restart the headless"
+                            Icon="{ui:SymbolIcon ArrowSync24}"
+                            Command="{Binding ConfirmRestartCommand}" />
+                        <ui:Button
+                            Margin="8,0,0,0"
+                            Appearance="Transparent"
+                            Content="Cancel"
+                            Command="{Binding CancelRestartCommand}" />
+                    </StackPanel>
                 </StackPanel>
 
                 <TextBlock

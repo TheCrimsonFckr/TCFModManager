@@ -31,6 +31,20 @@ public sealed class AppSettings
     public bool? RunsHeadlessClient { get; set; }
 
     //
+    // The Fika headless launcher, named outright, for a setup where it is not in the install folder.
+    //
+    // Detection looks at the top of the install folder and nowhere else, deliberately: the exe is
+    // the whole signal that a machine is a headless, and every widening of that search so far has
+    // either missed the real launcher or matched a player's one - see SptLaunchService. A path
+    // somebody typed is not a guess, so it is the answer for any layout the search cannot reach,
+    // including a manager sitting beside the SPT folder rather than inside it.
+    //
+    // Wins over detection when it points at a file that exists, and is ignored when it does not -
+    // a moved or renamed exe falls back to the search rather than leaving the card dead.
+    //
+    public string? HeadlessLauncherPath { get; set; }
+
+    //
     // The two answers as the roles the rest of the app reasons about.
     //
     // An unanswered PlaysHere reads as yes. An install nobody has been asked about is overwhelmingly

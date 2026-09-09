@@ -28,6 +28,67 @@ public sealed class HeadlessLauncherDetectionTests : IDisposable
 
     private bool IsHeadless() => SptLaunchService.TryFindHeadlessLauncherExe(_root, out _);
 
+    private string? Found(string? named = null) =>
+        SptLaunchService.TryFindHeadlessLauncherExe(_root, out var exe, named) ? exe : null;
+
+    //
+    // The way out of detection, and the reason detection itself stays as narrow as it is.
+    //
+    // Chris's ask: *"it should be looked for in the root not in \spt\, or it should be allowed to be
+    // manually added"*. Widening the search is what has gone wrong twice, in opposite directions -
+    // so the search stays where it is and a named path stands beside it. A path somebody typed is
+    // not a guess about what a folder means.
+    //
+    [Fact]
+    public void ANamedLauncherIsUsedEvenFromOutsideTheInstall()
+    {
+        // Deliberately not under _root: the case this exists for is a manager kept beside the SPT
+        // folder rather than inside it.
+        var outside = Path.Combine(Path.GetTempPath(), "tcfmm-headless-named-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(outside);
+
+        var named = Path.Combine(outside, "FikaHeadlessManager.exe");
+        File.WriteAllText(named, "");
+
+        try
+        {
+            Assert.False(IsHeadless());
+            Assert.Equal(named, Found(named), StringComparer.OrdinalIgnoreCase);
+        }
+        finally
+        {
+            try { Directory.Delete(outside, recursive: true); } catch (IOException) { }
+        }
+    }
+
+    // A named path that has been moved, renamed or typed wrong falls back to the search rather than
+    // leaving the card dead on a machine that does have a launcher where the app can see it.
+    [Fact]
+    public void ANamedLauncherThatIsNotThereFallsBackToTheSearch()
+    {
+        Add("FikaHeadlessManager.exe");
+
+        var expected = Path.Combine(_root, "FikaHeadlessManager.exe");
+
+        Assert.Equal(expected, Found(Path.Combine(_root, "gone", "FikaHeadlessManager.exe")),
+            StringComparer.OrdinalIgnoreCase);
+
+        // Nonsense as a path at all, rather than merely absent.
+        Assert.Equal(expected, Found("|:not a path"), StringComparer.OrdinalIgnoreCase);
+    }
+
+    // It wins over one sitting in the install folder: naming it is the more deliberate answer.
+    [Fact]
+    public void ANamedLauncherWinsOverTheOneInTheFolder()
+    {
+        Add("FikaHeadlessManager.exe");
+        Add("SomethingHeadless.exe");
+
+        var named = Path.Combine(_root, "SomethingHeadless.exe");
+
+        Assert.Equal(named, Found(named), StringComparer.OrdinalIgnoreCase);
+    }
+
     //
     // The name Chris confirmed on a real headless install. An earlier version matched only
     // "*Fika*Launcher*.exe", which does not match this at all - so the Play page's headless card

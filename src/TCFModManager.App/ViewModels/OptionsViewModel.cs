@@ -1,3 +1,4 @@
+using System.IO;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -119,6 +120,18 @@ public partial class OptionsViewModel : ObservableObject
     // machine with no launcher that claims to run a headless is worth mentioning, not preventing.
     [ObservableProperty]
     private bool _hasHeadlessLauncher;
+
+    //
+    // The headless launcher, named by hand, for a setup that keeps it somewhere the search will
+    // never look.
+    //
+    // Detection looks at the top of the install folder and nowhere else, on purpose - see
+    // SptLaunchService, where widening it has now gone wrong twice in opposite directions. A path
+    // somebody typed is not a guess, so it is the way out for any layout, including a manager
+    // sitting beside the SPT folder rather than in it.
+    //
+    [ObservableProperty]
+    private string _headlessLauncherPath = string.Empty;
 
     [ObservableProperty]
     private string _installRoleDescription = string.Empty;
@@ -341,6 +354,56 @@ public partial class OptionsViewModel : ObservableObject
     //
     partial void OnPlaysHereChanged(bool value) => SaveInstallRole();
 
+    //
+    // Saved as it is typed, like the switches beside it. Blank clears it back to detection rather
+    // than storing an empty string, so a cleared box and a machine that never had one look the same
+    // in settings.json.
+    //
+    partial void OnHeadlessLauncherPathChanged(string value)
+    {
+        if (!_loaded || _settingInstallRole) return;
+
+        var settings = _settings.Load();
+        settings.HeadlessLauncherPath = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+        _settings.Save(settings);
+
+        RefreshInstallRole(settings);
+
+        AppLog.Info("InstallRole", $"headless launcher path set to \"{settings.HeadlessLauncherPath}\"");
+    }
+
+    //
+    // Points at the exe itself rather than a folder: the whole reason this box exists is that the
+    // folder is not one the app can work the name out from.
+    //
+    [RelayCommand]
+    private void BrowseHeadlessLauncher()
+    {
+        var dialog = new OpenFileDialog
+        {
+            Title = "Select the Fika headless launcher",
+            Filter = "Programs (*.exe)|*.exe|All files (*.*)|*.*",
+            CheckFileExists = true,
+        };
+
+        if (!string.IsNullOrWhiteSpace(HeadlessLauncherPath))
+        {
+            try
+            {
+                dialog.InitialDirectory = Path.GetDirectoryName(HeadlessLauncherPath);
+            }
+            catch (Exception ex) when (ex is ArgumentException or PathTooLongException)
+            {
+                // A stored path that is not a path any more. The dialog opens wherever it likes.
+            }
+        }
+
+        if (dialog.ShowDialog() == true) HeadlessLauncherPath = dialog.FileName;
+    }
+
+    [RelayCommand]
+    private void ClearHeadlessLauncher() => HeadlessLauncherPath = string.Empty;
+
     partial void OnRunsHeadlessClientChanged(bool value) => SaveInstallRole();
 
     private void SaveInstallRole()
@@ -371,9 +434,15 @@ public partial class OptionsViewModel : ObservableObject
         var roles = settings.Roles;
         PlaysHere = roles.HasFlag(InstallRoles.Player);
         RunsHeadlessClient = roles.HasFlag(InstallRoles.Headless);
+        HeadlessLauncherPath = settings.HeadlessLauncherPath ?? string.Empty;
 
+        //
+        // The named path counts as having one, and it stands on its own: a machine can name a
+        // launcher outside the install folder, which is exactly the case the box was added for.
+        //
         HasHeadlessLauncher = !string.IsNullOrWhiteSpace(SptEnvironment.InstallPath)
-            && SptLaunchService.TryFindHeadlessLauncherExe(SptEnvironment.InstallPath!, out _);
+            && SptLaunchService.TryFindHeadlessLauncherExe(
+                SptEnvironment.InstallPath!, out _, settings.HeadlessLauncherPath);
 
         _settingInstallRole = false;
 
@@ -416,7 +485,11 @@ public partial class OptionsViewModel : ObservableObject
         var settings = _settings.Load();
         if (settings.InstallRolesAnswered) return;
 
-        if (!SptLaunchService.TryFindHeadlessLauncherExe(installPath!, out var launcher)) return;
+        if (!SptLaunchService.TryFindHeadlessLauncherExe(
+                installPath!, out var launcher, settings.HeadlessLauncherPath))
+        {
+            return;
+        }
 
         var choice = InstallRoleWindow.Ask(launcher);
         if (choice == InstallRoleChoice.AskLater) return;

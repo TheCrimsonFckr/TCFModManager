@@ -101,8 +101,52 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,8,0,0"
-                    Text="No Fika headless launcher was found in the install folder, so nothing here starts one - the switch above still decides which mods a served list brings."
+                    Text="No Fika headless launcher was found in the install folder, so nothing here starts one - name it below, or leave it and the switch above still decides which mods a served list brings."
                     Visibility="{Binding HasHeadlessLauncher, Converter={StaticResource FalseToVisible}}" />
+
+                <!--
+                    The way out of detection. It only ever looks at the top of the install folder,
+                    and deliberately so - see SptLaunchService - so a manager kept beside the SPT
+                    folder rather than in it has to be named rather than found.
+                -->
+                <TextBlock
+                    Text="Fika headless launcher"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Margin="0,16,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,0,0,8"
+                    Text="Leave this empty and the app looks for FikaHeadlessManager.exe at the top of the install folder. Point it at the exe yourself if it lives anywhere else - it does not have to be inside the install folder at all. It is used as-is, and ignored if the file isn't there." />
+
+                <Grid Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <ui:TextBox
+                        Grid.Column="0"
+                        PlaceholderText="Found automatically"
+                        Text="{Binding HeadlessLauncherPath, UpdateSourceTrigger=LostFocus}" />
+
+                    <ui:Button
+                        Grid.Column="1"
+                        Margin="8,0,0,0"
+                        Content="Browse"
+                        Icon="{ui:SymbolIcon FolderOpen24}"
+                        Command="{Binding BrowseHeadlessLauncherCommand}" />
+
+                    <ui:Button
+                        Grid.Column="2"
+                        Margin="8,0,0,0"
+                        Appearance="Transparent"
+                        Content="Clear"
+                        ToolTip="Back to looking in the install folder."
+                        Command="{Binding ClearHeadlessLauncherCommand}" />
+                </Grid>
             </StackPanel>
         </ui:Card>
 

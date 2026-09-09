@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace TCFModManager.Core.Services;
@@ -34,6 +35,14 @@ public enum SptLaunchProblem
 
     // Starting the process threw. Carries ExePath and Error.
     StartFailed,
+
+    // Asked to restart something that is not up. Restart is not a second Start - a target that is
+    // not running has nothing to put back the way it was.
+    NotRunning,
+
+    // It would not stop: refused, or still there after being asked and then killed. Carries
+    // ProcessName and Error.
+    StopFailed,
 }
 
 // What this install can currently do for one target.
@@ -64,6 +73,9 @@ public sealed record SptLaunchResult
 
     public bool Started { get; init; }
 
+    // How many processes a restart stopped on the way. Zero for an ordinary start.
+    public int Stopped { get; init; }
+
     public SptLaunchProblem Problem { get; init; }
 
     public Exception? Error { get; init; }
@@ -71,8 +83,13 @@ public sealed record SptLaunchResult
 
 //
 // Starts an install's server, its game launcher, and - where one exists - its Fika headless
-// launcher, and reports which of them is already up. Nothing here ever stops a process: the server
-// holds a live profile, and this app is not the thing that should decide to kill it.
+// launcher, and reports which of them is already up.
+//
+// It also RESTARTS one, which is the single exception to a rule this file used to state absolutely:
+// nothing here stops a process. Stopping still is not offered on its own - a server left down is a
+// state somebody has to notice - but a restart is a thing an operator does constantly (a config
+// edited, a server mod dropped in) and the alternative was hunting a console window. Every stop is
+// scoped to ONE target of THIS install and is asked for explicitly.
 //
 public static class SptLaunchService
 {
@@ -120,14 +137,21 @@ public static class SptLaunchService
 
     private static readonly string[] ClientProcessNames = ["EscapeFromTarkov"];
 
-    public static SptLaunchTargetInfo Describe(string? installPath, SptLaunchTarget target)
+    //
+    // headlessExePath is the launcher named by hand in settings, used for the Headless target only
+    // and ignored when it is not a file that exists. Threaded through rather than read here: Core
+    // does not read settings, and a service that quietly consulted them would be one the tests
+    // could not put in a known state.
+    //
+    public static SptLaunchTargetInfo Describe(
+        string? installPath, SptLaunchTarget target, string? headlessExePath = null)
     {
         if (string.IsNullOrWhiteSpace(installPath) || !Directory.Exists(installPath))
         {
             return new SptLaunchTargetInfo { Target = target, Problem = SptLaunchProblem.NoInstallFolder };
         }
 
-        var exePath = FindExe(installPath!, target);
+        var exePath = FindExe(installPath!, target, headlessExePath);
 
         if (exePath is null)
         {
@@ -151,9 +175,10 @@ public static class SptLaunchService
         };
     }
 
-    public static SptLaunchResult Launch(string? installPath, SptLaunchTarget target)
+    public static SptLaunchResult Launch(
+        string? installPath, SptLaunchTarget target, string? headlessExePath = null)
     {
-        var info = Describe(installPath, target);
+        var info = Describe(installPath, target, headlessExePath);
 
         if (info.Problem != SptLaunchProblem.None)
         {
@@ -189,7 +214,195 @@ public static class SptLaunchService
         }
     }
 
-    private static string? FindExe(string installPath, SptLaunchTarget target)
+    //
+    // Stops this target and starts it again.
+    //
+    // ONE target of ONE install: the processes it will stop are matched on where their exe lives, so
+    // a second install on another drive - which this app is expected to be managing at the same time
+    // - is never touched, and neither is the headless manager when the server is what was asked for.
+    // The game a headless manager may have launched is left alone too: restarting the manager is
+    // what was asked for, and killing a raid nobody mentioned is not a thing to do as a side effect.
+    //
+    // Refused when the target is not running. A restart that quietly becomes a start is how somebody
+    // ends up with a second server they did not know they had.
+    //
+    public static SptLaunchResult Restart(
+        string? installPath, SptLaunchTarget target, string? headlessExePath = null)
+    {
+        var info = Describe(installPath, target, headlessExePath);
+
+        if (info.Problem != SptLaunchProblem.None)
+        {
+            return new SptLaunchResult { Info = info, Problem = info.Problem };
+        }
+
+        if (!info.IsRunning)
+        {
+            return new SptLaunchResult { Info = info, Problem = SptLaunchProblem.NotRunning };
+        }
+
+        int stopped;
+
+        try
+        {
+            stopped = Stop(info);
+        }
+        catch (Exception ex)
+        {
+            return new SptLaunchResult { Info = info, Problem = SptLaunchProblem.StopFailed, Error = ex };
+        }
+
+        if (stopped == 0)
+        {
+            return new SptLaunchResult { Info = info, Problem = SptLaunchProblem.StopFailed };
+        }
+
+        //
+        // A moment between the two. The server binds its port on startup and the one going down has
+        // only just let go of it; starting into that window fails in a way that reads as the restart
+        // itself being broken.
+        //
+        Thread.Sleep(StopSettleDelay);
+
+        var result = Launch(installPath, target, headlessExePath);
+
+        return result with { Stopped = stopped };
+    }
+
+    private static readonly TimeSpan StopSettleDelay = TimeSpan.FromMilliseconds(750);
+
+    // How long a process gets to close on its own after being asked, before it is killed.
+    private static readonly TimeSpan CloseGrace = TimeSpan.FromSeconds(5);
+
+    //
+    // Closes every process this target owns on this install, and returns how many went.
+    //
+    // Asked first, killed second: SPT.Server draws a console window, and a WM_CLOSE lets it finish
+    // whatever it was writing to a profile rather than losing it. Five seconds is generous for a
+    // process that has nothing to flush and short enough that nobody thinks the button did nothing.
+    //
+    // NOT the process tree. Killing the tree would take a headless manager's game client with it,
+    // which is a decision this method has not been asked to make.
+    //
+    private static int Stop(SptLaunchTargetInfo info)
+    {
+        var stopped = 0;
+
+        foreach (var process in ProcessesFor(info))
+        {
+            try
+            {
+                if (process.HasExited) continue;
+
+                if (!process.CloseMainWindow() || !process.WaitForExit((int)CloseGrace.TotalMilliseconds))
+                {
+                    process.Kill();
+                    process.WaitForExit((int)CloseGrace.TotalMilliseconds);
+                }
+
+                if (!process.HasExited) continue;
+
+                stopped++;
+            }
+            catch (Exception ex) when (ex is Win32Exception or InvalidOperationException or NotSupportedException)
+            {
+                // A process this app may not touch, or one that exited while being asked. Neither is
+                // a reason to abandon the others; a stop that took nothing down is reported by the
+                // count, and the caller turns that into StopFailed.
+                AppLog.Debug("Launch", $"could not stop {process.ProcessName}: {ex.Message}");
+            }
+            finally
+            {
+                process.Dispose();
+            }
+        }
+
+        return stopped;
+    }
+
+    //
+    // The running processes that ARE this target here: the exe named in the info, plus the names a
+    // target is known by, and only where the running exe is this install's or the very file that
+    // would be started.
+    //
+    // The path test is what keeps a second install out of it. The named-exe test is what keeps a
+    // headless launcher named outside the install folder in it.
+    //
+    private static IEnumerable<Process> ProcessesFor(SptLaunchTargetInfo info)
+    {
+        var names = KnownProcessNames(info.Target)
+            .Append(info.ProcessName ?? "")
+            .Where(n => !string.IsNullOrWhiteSpace(n))
+            .Distinct(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var name in names)
+        {
+            Process[] found;
+
+            try
+            {
+                found = Process.GetProcessesByName(name);
+            }
+            catch (InvalidOperationException)
+            {
+                continue;
+            }
+
+            foreach (var process in found)
+            {
+                if (IsThisInstall(process, info))
+                {
+                    yield return process;
+                }
+                else
+                {
+                    process.Dispose();
+                }
+            }
+        }
+    }
+
+    //
+    // Unlike the in-use check in ModInstallService, an unreadable path here reads as NOT ours.
+    //
+    // The two are asked opposite questions. That one asks "is anything using this install", where
+    // not knowing has to block, because guessing wrong writes over a running install. This one asks
+    // "may I kill this process", where not knowing has to refuse - guessing wrong kills something
+    // that was never this app's business.
+    //
+    private static bool IsThisInstall(Process process, SptLaunchTargetInfo info)
+    {
+        string? executable;
+
+        try
+        {
+            executable = process.MainModule?.FileName;
+        }
+        catch (Exception ex) when (ex is Win32Exception or InvalidOperationException or NotSupportedException)
+        {
+            AppLog.Debug("Launch", $"could not read the path of {process.ProcessName}; leaving it alone");
+            return false;
+        }
+
+        if (executable is null) return false;
+
+        if (info.ExePath is { } exe
+            && string.Equals(Path.GetFullPath(executable), Path.GetFullPath(exe), StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return info.InstallPath is { } root && ModInstallService.IsInside(executable, root);
+    }
+
+    private static string[] KnownProcessNames(SptLaunchTarget target) => target switch
+    {
+        SptLaunchTarget.Server => ServerProcessNames,
+        SptLaunchTarget.Client => ClientProcessNames,
+        _ => [],
+    };
+
+    private static string? FindExe(string installPath, SptLaunchTarget target, string? headlessExePath = null)
     {
         switch (target)
         {
@@ -200,7 +413,7 @@ public static class SptLaunchService
                 return TryFindClientLauncherExe(installPath, out var client) ? client : null;
 
             case SptLaunchTarget.Headless:
-                return FindHeadlessLauncher(installPath);
+                return FindHeadlessLauncher(installPath, headlessExePath);
 
             default:
                 return null;
@@ -232,14 +445,32 @@ public static class SptLaunchService
     }
 
     // True when this install has a Fika headless launcher, which is what makes it a headless setup.
-    public static bool TryFindHeadlessLauncherExe(string installPath, out string exePath)
+    public static bool TryFindHeadlessLauncherExe(
+        string installPath, out string exePath, string? headlessExePath = null)
     {
-        exePath = FindHeadlessLauncher(installPath) ?? "";
+        exePath = FindHeadlessLauncher(installPath, headlessExePath) ?? "";
         return exePath.Length > 0;
     }
 
-    private static string? FindHeadlessLauncher(string installPath)
+    //
+    // The named path first, and it is not required to be anywhere near the install folder: the
+    // point of naming it is a layout the search cannot reach.
+    //
+    private static string? FindHeadlessLauncher(string installPath, string? headlessExePath = null)
     {
+        if (!string.IsNullOrWhiteSpace(headlessExePath))
+        {
+            try
+            {
+                if (File.Exists(headlessExePath)) return Path.GetFullPath(headlessExePath);
+            }
+            catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
+            {
+                // Unusable as a path at all - fall through to the search rather than throwing at a
+                // page that is only asking what this machine has.
+            }
+        }
+
         foreach (var name in HeadlessLauncherCandidates)
         {
             var candidate = Path.Combine(installPath, name);
@@ -275,12 +506,7 @@ public static class SptLaunchService
         // EscapeFromTarkov like any other, so folding that in would make this read as running
         // whenever the player's own game was open on the same machine.
         //
-        var known = target switch
-        {
-            SptLaunchTarget.Server => ServerProcessNames,
-            SptLaunchTarget.Client => ClientProcessNames,
-            _ => [],
-        };
+        var known = KnownProcessNames(target);
 
         foreach (var name in known.Append(processName).Distinct(StringComparer.OrdinalIgnoreCase))
         {
