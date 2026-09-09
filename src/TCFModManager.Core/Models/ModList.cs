@@ -66,22 +66,6 @@ public enum ModListEntryScope
     Everyone = Client | Server | Headless,
 }
 
-//
-// What a list is for.
-//
-// Housekeeping, not behaviour: it marks the one list this machine publishes to its own server, so
-// the Mod lists page can show which it is and offer to re-export on save. Nothing in the planner
-// reads it - what an apply does is decided by Origin and Scope.
-//
-public enum ModListPurpose
-{
-    // An ordinary list, made and applied here.
-    Personal,
-
-    // The list this machine serves through the Server Map mod.
-    Published,
-}
-
 // What applying a list does to installed mods the list doesn't mention.
 public enum ModListPolicy
 {
@@ -203,17 +187,6 @@ public sealed class ModList
 
     public ModListOrigin Origin { get; init; } = ModListOrigin.Local;
 
-    //
-    // Whether this is the list this machine publishes.
-    //
-    // Never written to a share file: it is local bookkeeping, and a list you RECEIVE is not your
-    // published one no matter what the sender had it marked as. Plain JsonIgnore rather than
-    // WhenWritingDefault, which would have let the interesting value through and only suppressed
-    // the boring one - a test caught exactly that.
-    //
-    [JsonIgnore]
-    public ModListPurpose Purpose { get; set; }
-
     public ModListPolicy Policy { get; set; } = ModListPolicy.Exclusive;
 
     // The list this one was forked from, when it was made by editing an imported or served list.
@@ -327,6 +300,22 @@ public sealed class ModListData
     // list's Exclusive sweep spares everything the followed server list names.
     //
     public Guid? ActiveServerListId { get; set; }
+
+    //
+    // The list this machine PUBLISHES to its own server. Housekeeping, not behaviour: nothing in the
+    // planner reads it, and what an apply does is decided by Origin and Scope.
+    //
+    // A pointer here rather than a flag on ModList, which is where it started and where it did not
+    // work. A share file and this store are serialised by different code but from the SAME objects,
+    // so the [JsonIgnore] that correctly kept the mark out of an exported list ALSO kept it out of
+    // mod_lists.json - the mark was set, saved into nothing, and gone by the next read. The badge
+    // never appeared and the app forgot which list it served the instant it was told.
+    //
+    // As a pointer it cannot repeat that: it is not on ModList at all, so no share file can carry
+    // it and no reader can mistake somebody else's list for the one this machine serves. It also
+    // matches the two pointers above, which answer the same shape of question.
+    //
+    public Guid? PublishedListId { get; set; }
 
     //
     // How the install stood before the last list was applied, and the only one kept - each apply

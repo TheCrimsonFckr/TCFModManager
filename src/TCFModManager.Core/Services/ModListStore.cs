@@ -188,24 +188,35 @@ public sealed class ModListStore
     }
 
     //
-    // Marks one list as the one this machine publishes, and clears the mark from every other.
+    // Marks one list as the one this machine publishes, replacing whatever was marked before.
     //
     // Exactly one, because the server serves exactly one file. Two lists both claiming to be
     // published would be a claim the folder cannot honour, and the second publish would silently
-    // overwrite the first.
+    // overwrite the first - which is why this is one pointer rather than a flag per list.
+    //
+    // Refuses an id this store does not hold, like SetActive: a pointer at a list nobody can open
+    // is a badge that never appears and a state nothing can clear.
     //
     public ModList? SetPublished(Guid id)
     {
         var data = Load();
 
-        foreach (var list in data.Lists) list.Purpose = ModListPurpose.Personal;
-
         var published = data.Lists.FirstOrDefault(l => l.Id == id);
         if (published is null) return null;
 
-        published.Purpose = ModListPurpose.Published;
+        data.PublishedListId = id;
         Save(data);
         return published;
+    }
+
+    // The list this machine publishes, or null when it has never published one - or when the list
+    // it published has since been deleted.
+    public ModList? GetPublished()
+    {
+        var data = Load();
+        return data.PublishedListId is null
+            ? null
+            : data.Lists.FirstOrDefault(l => l.Id == data.PublishedListId);
     }
 
     // Replaces the one undo point. Null clears it - what reverting does, since you cannot revert
@@ -324,6 +335,12 @@ public sealed class ModListStore
 
         if (data.ActiveListId == id) data.ActiveListId = null;
         if (data.ActiveServerListId == id) data.ActiveServerListId = null;
+
+        // The file in the server's config folder is left exactly where it is. Deleting the list here
+        // is not a decision to stop serving, and a server quietly unpublishing because somebody
+        // tidied their mod lists page would be a raid nobody could explain.
+        if (data.PublishedListId == id) data.PublishedListId = null;
+
         Save(data);
     }
 

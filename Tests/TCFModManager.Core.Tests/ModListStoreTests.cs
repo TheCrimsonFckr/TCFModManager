@@ -164,6 +164,67 @@ public class ModListStoreTests : IDisposable
         Assert.Equal(4, _store.Find(served.Id)!.Revision);
     }
 
+    //
+    // THE BUG THIS EXISTS FOR: the published mark was a [JsonIgnore]'d flag on ModList, and the
+    // share file and this store serialise the SAME objects - so the attribute that correctly kept
+    // the mark out of an exported list also kept it out of mod_lists.json. Publish set it, saved
+    // nothing, and the page reloaded a moment later with no mark: the "Serving" badge never
+    // appeared and the app forgot which list it served the instant it was told.
+    //
+    // A round trip through disk is the only thing that catches it. The old test asserted the mark
+    // did not travel in a share file, which passed, and was the half that already worked.
+    //
+    [Fact]
+    public void SetPublished_SurvivesAReload()
+    {
+        var list = _store.Add(NewList("Fika night"));
+
+        // A fresh instance off disk, not the one passed in - the store never hands back its caller's.
+        Assert.Equal(list.Id, _store.SetPublished(list.Id)!.Id);
+        Assert.Equal(list.Id, _store.Load().PublishedListId);
+
+        // A second store over the same file - what the next Refresh, and the next launch, both see.
+        var reopened = new ModListStore(_store.FilePath);
+
+        Assert.Equal(list.Id, reopened.Load().PublishedListId);
+        Assert.Equal(list.Id, reopened.GetPublished()!.Id);
+    }
+
+    // Exactly one, because the server serves exactly one file.
+    [Fact]
+    public void SetPublished_MovesTheMarkRatherThanAddingASecond()
+    {
+        var first = _store.Add(NewList("Fika night"));
+        var second = _store.Add(NewList("Zero to hero"));
+
+        _store.SetPublished(first.Id);
+        _store.SetPublished(second.Id);
+
+        Assert.Equal(second.Id, _store.Load().PublishedListId);
+        Assert.Equal(second.Id, _store.GetPublished()!.Id);
+    }
+
+    [Fact]
+    public void SetPublished_RefusesAListThisStoreDoesNotHold()
+    {
+        Assert.Null(_store.SetPublished(Guid.NewGuid()));
+        Assert.Null(_store.Load().PublishedListId);
+    }
+
+    // The pointer goes; the file already in the server's config folder is not this store's to
+    // withdraw.
+    [Fact]
+    public void Delete_ClearsThePublishedPointer()
+    {
+        var list = _store.Add(NewList("Fika night"));
+        _store.SetPublished(list.Id);
+
+        _store.Delete(list.Id);
+
+        Assert.Null(_store.Load().PublishedListId);
+        Assert.Null(_store.GetPublished());
+    }
+
     [Fact]
     public void ReplaceEntries_SwapsTheContentsAndLeavesTheRevisionAlone()
     {

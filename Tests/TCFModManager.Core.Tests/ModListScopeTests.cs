@@ -219,19 +219,22 @@ public class ModListScopeTests
         Assert.DoesNotContain("Scope", json);
     }
 
-    // Purpose marks the one list this machine serves. It is local bookkeeping and has no business
-    // travelling - a list you receive is never your published one.
+    //
+    // Which list this machine publishes is local bookkeeping and has no business travelling - a list
+    // you receive is never your published one, whatever the sender had marked.
+    //
+    // It lives on ModListData as a pointer rather than on the list, so this is now structural: there
+    // is no field for a share file to carry. Asserted anyway, because the first version DID put it
+    // on the list and the [JsonIgnore] that kept it out of this file is exactly what kept it out of
+    // mod_lists.json too - see ModListStoreTests.SetPublished_SurvivesAReload.
+    //
     [Fact]
-    public void PurposeIsLocalAndDoesNotTravel()
+    public void WhichListIsPublishedDoesNotTravel()
     {
-        var list = Published(ModListOrigin.Local);
-        list.Purpose = ModListPurpose.Published;
+        var json = ModListFile.Write(Published(ModListOrigin.Local));
 
-        var json = ModListFile.Write(list);
         Assert.DoesNotContain("Purpose", json);
-
-        var restored = ModListFile.Read(json, "127.0.0.1:6969", ModListOrigin.Server).List!;
-        Assert.Equal(ModListPurpose.Personal, restored.Purpose);
+        Assert.DoesNotContain("Published", json);
     }
 
     //

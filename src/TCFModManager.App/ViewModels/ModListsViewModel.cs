@@ -14,7 +14,8 @@ using TCFModManager.Core.Services;
 namespace TCFModManager.App.ViewModels;
 
 // One saved list in the left-hand list.
-public sealed partial class ModListRowViewModel(ModList list, bool isActive, bool isActiveServer = false)
+public sealed partial class ModListRowViewModel(
+    ModList list, bool isActive, bool isActiveServer = false, bool isPublished = false)
     : ObservableObject
 {
     public ModList List { get; } = list;
@@ -49,7 +50,10 @@ public sealed partial class ModListRowViewModel(ModList list, bool isActive, boo
     // The list THIS machine serves to its own clients. Badged because among a dozen personal lists
     // the one that other people are being handed is the one you must not edit carelessly.
     //
-    public bool IsPublished => List.Purpose == ModListPurpose.Published;
+    // Passed in from ModListData.PublishedListId, like the two above. It was a flag on the list
+    // itself and the flag never survived a save - see ModListData.PublishedListId.
+    //
+    public bool IsPublished { get; } = isPublished;
 
     public string Detail
     {
@@ -59,7 +63,7 @@ public sealed partial class ModListRowViewModel(ModList list, bool isActive, boo
 
             if (List.IsSnapshot) parts.Add("snapshot");
 
-            if (List.Purpose == ModListPurpose.Published) parts.Add("published to this server");
+            if (IsPublished) parts.Add("published to this server");
 
             parts.Add(List.Origin switch
             {
@@ -597,7 +601,10 @@ public partial class ModListsViewModel : ObservableObject
 
         foreach (var list in data.Lists.OrderByDescending(l => l.UpdatedAt))
             Lists.Add(new ModListRowViewModel(
-                list, data.ActiveListId == list.Id, data.ActiveServerListId == list.Id));
+                list,
+                data.ActiveListId == list.Id,
+                data.ActiveServerListId == list.Id,
+                data.PublishedListId == list.Id));
 
         OnPropertyChanged(nameof(HasLists));
 
