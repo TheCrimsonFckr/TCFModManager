@@ -283,6 +283,7 @@ public partial class ModListsViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(HasSelection))]
     [NotifyPropertyChangedFor(nameof(SelectionIsEditable))]
     [NotifyPropertyChangedFor(nameof(SelectionIsImported))]
+    [NotifyPropertyChangedFor(nameof(SelectionIsFromServer))]
     [NotifyPropertyChangedFor(nameof(SelectionIsActive))]
     [NotifyPropertyChangedFor(nameof(SelectionDetail))]
     [NotifyPropertyChangedFor(nameof(ShowContents))]
@@ -294,6 +295,7 @@ public partial class ModListsViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(ExportCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
     [NotifyCanExecuteChangedFor(nameof(ForkCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RefreshFromServerCommand))]
     [NotifyCanExecuteChangedFor(nameof(RenameCommand))]
     //
     // Both of these were missing, and a command whose CanExecute is never re-raised is evaluated
@@ -349,6 +351,7 @@ public partial class ModListsViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(CanRevert))]
     [NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
     [NotifyCanExecuteChangedFor(nameof(RevertCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RefreshFromServerCommand))]
     private bool _isBusy;
 
     public bool HasSelection => Selected is not null;
@@ -356,6 +359,9 @@ public partial class ModListsViewModel : ObservableObject
     public bool SelectionIsEditable => Selected?.IsEditable == true;
 
     public bool SelectionIsImported => Selected is not null && !Selected.IsEditable;
+
+    // A list a SERVER handed this install - the only kind there is anywhere to refresh it FROM.
+    public bool SelectionIsFromServer => Selected?.IsFromServer == true;
 
     public bool SelectionIsActive => Selected?.IsActive == true;
 
@@ -1020,14 +1026,32 @@ public partial class ModListsViewModel : ObservableObject
             //
             var path = Path.Combine(directory, PublishedFileName);
 
-            ModListFile.Save(row.List, path);
+            //
+            // The revision moves HERE when the contents differ from what is already published, and
+            // nowhere else on this path - see ModListPublication. Without it an edited list goes out
+            // under the number its receivers already hold, and they never ask for it again.
+            //
+            var list = row.List;
+            var bumped = false;
+
+            if (ModListPublication.NeedsNewRevision(list, File.Exists(path) ? ModListFile.Load(path).List : null))
+            {
+                // Refused for a list somebody else wrote, whose numbering is theirs - the same guard
+                // an apply is under. Publishing still writes the file.
+                list = AppServices.ModLists.BumpRevision(row.Id) ?? list;
+                bumped = list.Revision != row.List.Revision;
+            }
+
+            ModListFile.Save(list, path);
             AppServices.ModLists.SetPublished(row.Id);
             Refresh(row.Id);
 
-            AppLog.Info("ServerMap", $"published \"{row.Name}\" revision {row.List.Revision} to {path}");
+            AppLog.Info("ServerMap", $"published \"{row.Name}\" revision {list.Revision} to {path}");
 
-            StatusMessage = $"Published \"{row.Name}\" - the server serves it from now on."
-                + " Bump the revision by editing and saving it, so connected clients know to re-fetch.";
+            StatusMessage = bumped
+                ? $"Published \"{row.Name}\" as revision {list.Revision} - it had changed since the last"
+                  + " publish, so connected clients will fetch it on their own."
+                : $"Published \"{row.Name}\" (revision {list.Revision}) - the server serves it from now on.";
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
@@ -1174,6 +1198,121 @@ public partial class ModListsViewModel : ObservableObject
         Refresh(fork.Id);
         StatusMessage = $"Made \"{fork.Name}\" - the original is untouched.";
     }
+
+    //
+    // Asks the server for its list again, whether or not the revision has moved.
+    //
+    // The revision cannot carry this on its own: it counts APPLIES, so an operator who edits the
+    // list they publish and republishes it hands out different contents under the same number, and
+    // the automatic path - which fetches only when the number moves - correctly declines to ask.
+    // Deleting the held copy to make it re-download was the only way through, and deleting the list
+    // to get the list is not a workflow.
+    //
+    // Here rather than only on the Server map page because this is where the list lives and where
+    // somebody looking at a stale copy is standing. The fetch itself is the map page's, so both
+    // routes store identically.
+    //
+    [RelayCommand(CanExecute = nameof(CanRefreshFromServer))]
+    private async Task RefreshFromServerAsync()
+    {
+        if (Selected is not { IsFromServer: true } row) return;
+
+        var gate = AppServices.ServerMap;
+
+        if (!gate.IsConfigured)
+        {
+            StatusMessage = "This install has no server address set, so there is nowhere to ask."
+                + " The Server map page is where it goes.";
+            return;
+        }
+
+        IsBusy = true;
+
+        try
+        {
+            var before = row.List.Entries.ToList();
+            var fetched = await gate.FetchAndStoreAsync();
+
+            if (fetched is null)
+            {
+                // The gate has already worded why, and its wording is the one the map page shows.
+                StatusMessage = $"The list wasn't fetched. {gate.ListStatus}";
+                return;
+            }
+
+            Refresh(fetched.Id);
+
+            //
+            // A different list entirely, which is what publishing a NEW list looks like from here.
+            // The old one is left alone rather than quietly replaced - it is still a true record of
+            // what that server was serving, and only the user can say whether they still want it.
+            //
+            if (fetched.Id != row.Id)
+            {
+                StatusMessage = $"{gate.ServerName} is now publishing a different list -"
+                    + $" \"{fetched.Name}\" is saved here. \"{row.Name}\" is untouched.";
+                return;
+            }
+
+            StatusMessage = DescribeRefresh(before, fetched);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private bool CanRefreshFromServer() => SelectionIsFromServer && !IsBusy;
+
+    //
+    // What the refresh actually brought back, named rather than counted - the whole reason for
+    // pressing it is not being sure the copy in hand is the one being served, and "3 changes" does
+    // not answer that.
+    //
+    private static string DescribeRefresh(List<ModListEntry> before, ModList after)
+    {
+        var added = after.Entries
+            .Where(e => !ModListEntries.Contains(before, e))
+            .Select(e => e.Name)
+            .ToList();
+
+        var removed = before
+            .Where(b => !ModListEntries.Contains(after.Entries, b))
+            .Select(b => b.Name)
+            .ToList();
+
+        // Version and scope, because those are the two things an operator changes without the list
+        // getting longer or shorter, and the two a client is wrong about silently.
+        var changed = after.Entries
+            .Select(e => (Now: e, Was: before.FirstOrDefault(b => ModListEntries.SameMod(b, e))))
+            .Where(p => p.Was is not null
+                        && (p.Was.VersionId != p.Now.VersionId
+                            || !string.Equals(p.Was.Version, p.Now.Version, StringComparison.OrdinalIgnoreCase)
+                            || p.Was.EffectiveScope != p.Now.EffectiveScope))
+            .Select(p => p.Now.Name)
+            .ToList();
+
+        if (added.Count == 0 && removed.Count == 0 && changed.Count == 0)
+        {
+            return $"\"{after.Name}\" is already what the server is publishing - nothing changed"
+                + $" (revision {after.Revision}, {Mods(after.Entries.Count)}).";
+        }
+
+        var parts = new List<string>();
+        if (added.Count > 0) parts.Add($"added {Named(added)}");
+        if (removed.Count > 0) parts.Add($"removed {Named(removed)}");
+        if (changed.Count > 0) parts.Add($"changed {Named(changed)}");
+
+        return $"Refreshed \"{after.Name}\" from the server: {string.Join("; ", parts)}."
+            + " Applying it is still a separate step.";
+    }
+
+    // Five names and then a count, so a wholesale change does not become a paragraph.
+    private static string Named(List<string> names) =>
+        names.Count <= 5
+            ? string.Join(", ", names.Order(StringComparer.OrdinalIgnoreCase))
+            : string.Join(", ", names.Order(StringComparer.OrdinalIgnoreCase).Take(5))
+              + $" and {names.Count - 5} more";
 
     [RelayCommand]
     private void StopFollowing()

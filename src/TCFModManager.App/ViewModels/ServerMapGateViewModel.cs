@@ -462,7 +462,10 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
             return;
         }
 
-        if (held is not null && hello.ListRevision is { } revision && revision <= held.Revision)
+        if (held is not null
+            && hello.ListRevision is { } revision
+            && revision <= held.Revision
+            && IsTheHeldList(hello.ListName, held.Name))
         {
             List = held;
             ListStatus = ServerMapProblems.DescribeList(
@@ -501,6 +504,20 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
     }
 
     //
+    // Whether the list the handshake describes is the one already held, as far as it can be told.
+    //
+    // The handshake carries no list id, so the NAME is the only thing that separates "a different
+    // list" from "a newer revision of this one" - and the revision test alone gets the first case
+    // exactly backwards: a server that switches from one list at revision 5 to another at revision 1
+    // leaves every client sitting on the old one, because 1 is not greater than 5. A server that
+    // does not send a name at all is taken at its word on the revision, which is the behaviour that
+    // shipped.
+    //
+    private static bool IsTheHeldList(string? published, string held) =>
+        string.IsNullOrWhiteSpace(published)
+        || string.Equals(published.Trim(), held.Trim(), StringComparison.OrdinalIgnoreCase);
+
+    //
     // The newest list this install already holds from this server. Matched on Source, which a served
     // list carries as "host:port" - see ModListFile.Read.
     //
@@ -520,7 +537,16 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
     // deliberately does not cover: the held copy was edited, deleted, or is simply doubted.
     //
     [RelayCommand(CanExecute = nameof(CanConnect))]
-    private async Task FetchListAsync()
+    private async Task FetchListAsync() => await FetchAndStoreAsync();
+
+    //
+    // The same fetch, callable from elsewhere, returning what ended up in the store.
+    //
+    // The Mod lists page needs it: a served list is refreshed from the page the list lives on, not
+    // only from the map page. Both routes have to go through one implementation - two fetches that
+    // store differently is how a page ends up showing a list nobody else has.
+    //
+    public async Task<ModList?> FetchAndStoreAsync(CancellationToken cancellationToken = default)
     {
         IsBusy = true;
 
@@ -529,20 +555,23 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
             var endpoint = SaveAndBuildEndpoint();
 
             using var client = ServerMapClient.TryCreate(endpoint);
-            if (client is null) return;
+            if (client is null) return null;
 
-            var result = await client.ListAsync();
+            var result = await client.ListAsync(cancellationToken);
 
             var own = false;
+            ModList? stored = null;
 
             if (result.List is { } fetched)
             {
-                var stored = AppServices.ModLists.Add(fetched);
+                stored = AppServices.ModLists.Add(fetched);
                 own = stored.IsEditable;
                 List = stored;
             }
 
             ListStatus = ServerMapProblems.DescribeList(result, HeldListFor(endpoint), own);
+
+            return stored;
         }
         finally
         {

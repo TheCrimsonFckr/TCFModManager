@@ -399,6 +399,17 @@
                         ToolTip="Save this list to a file you can send to someone. It carries which mods and versions - never the mod files themselves."
                         Command="{Binding ExportCommand}" />
 
+                    <!-- Only a served list has anywhere to be refreshed FROM, so it is the only
+                         one that shows this. -->
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Appearance="Transparent"
+                        Icon="{ui:SymbolIcon ArrowSync24}"
+                        Content="Refresh from server"
+                        ToolTip="Asks the server for this list again, even if its revision hasn't moved - which is what an operator editing and republishing the list they serve looks like from here. Nothing is installed or enabled; applying it is still a separate step."
+                        Visibility="{Binding SelectionIsFromServer, Converter={StaticResource BoolToVis}}"
+                        Command="{Binding RefreshFromServerCommand}" />
+
                     <ui:Button
                         Margin="8,0,0,0"
                         Appearance="Transparent"
