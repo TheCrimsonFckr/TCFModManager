@@ -155,19 +155,86 @@ public class ModListHeadlessTests
         Assert.Contains(plan.Actions, a => a.Name == "Tyfon.UIFixes" && a.Kind == ModListActionKind.Disable);
     }
 
-    // Dedicated is Headless without Player, rather than a value of its own.
+    //
+    // Dedicated is Headless without Player, rather than a value of its own - and it is Headless
+    // ALONE. The server flag used to be set here too, which reached the server-only entries the box
+    // does want but also every other entry that happened to name the server: an author could not say
+    // "the server and the players, not the headless". That rule moved to ModList.ScopeApplies, where
+    // it is about the entry rather than the machine.
+    //
     [Fact]
     public void RolesMapToScopes()
     {
         Assert.Equal(ModListEntryScope.Client, Player);
-        Assert.Equal(ModListEntryScope.Headless | ModListEntryScope.Server, Dedicated);
-        Assert.Equal(ModListEntryScope.Everyone, PlaysAndHosts);
+        Assert.Equal(ModListEntryScope.Headless, Dedicated);
+        Assert.Equal(ClientsAndHeadless, PlaysAndHosts);
 
         Assert.True(InstallRole.IsDedicatedHeadless(InstallRoles.Headless));
         Assert.False(InstallRole.IsDedicatedHeadless(InstallRoles.Player | InstallRoles.Headless));
 
         // An install nobody has been asked about is somebody's own game, not a headless box.
         Assert.Equal(ModListEntryScope.Client, InstallRole.ScopeFor(InstallRoles.None));
+    }
+
+    //
+    // Server + Client: the mod the server and the players both need and the headless does not.
+    //
+    // It only means that because naming the server does not by itself reach a headless box - see
+    // ModList.ScopeApplies. Get that wrong and the option is decoration: the headless takes it
+    // anyway and the author is never heard.
+    //
+    [Fact]
+    public void ServerAndClientSkipsAHeadless()
+    {
+        var served = List(
+            ModListOrigin.Server,
+            Entry("SPT-Realism", ModListEntryScope.Server | ModListEntryScope.Client));
+
+        Assert.Contains(ModListPlanner.Build(served, [], machine: Player).Actions,
+            a => a.Name == "SPT-Realism");
+
+        Assert.DoesNotContain(ModListPlanner.Build(served, [], machine: Dedicated).Actions,
+            a => a.Name == "SPT-Realism");
+
+        // Somebody plays on this one, so it takes it as a player - hosting as well changes nothing.
+        Assert.Contains(ModListPlanner.Build(served, [], machine: PlaysAndHosts).Actions,
+            a => a.Name == "SPT-Realism");
+    }
+
+    //
+    // The exception is exactly one shape: the server ALONE. Stated as its own assertion because it
+    // is the whole hinge - widen it by a flag and Server + Client stops meaning anything.
+    //
+    [Fact]
+    public void OnlyServerAloneReachesAHeadlessThroughTheServerFlag()
+    {
+        Assert.True(ModList.ScopeApplies(ModListEntryScope.Server, Dedicated));
+        Assert.False(ModList.ScopeApplies(ModListEntryScope.Server | ModListEntryScope.Client, Dedicated));
+
+        // And a player is untouched by the rule in both directions.
+        Assert.False(ModList.ScopeApplies(ModListEntryScope.Server, Player));
+        Assert.True(ModList.ScopeApplies(ModListEntryScope.Server | ModListEntryScope.Client, Player));
+    }
+
+    //
+    // Server + Client is a set schema 3 had no way to write, so a list using it is stamped 4 - the
+    // same rule the headless itself moved the version for, and the reason it gets its own assertion
+    // is that the payload and the app are separate codebases reading one file.
+    //
+    [Fact]
+    public void ServerAndClientNeedsTheHeadlessSchema()
+    {
+        var list = List(
+            ModListOrigin.Local,
+            Entry("SPT-Realism", ModListEntryScope.Server | ModListEntryScope.Client));
+
+        Assert.Equal(ModListFile.HeadlessSchemaVersion, ModListFile.SchemaVersionFor(list));
+
+        var restored = ModListFile.Read(Document(ModListFile.HeadlessSchemaVersion, "Client, Server"),
+            "127.0.0.1:6969", ModListOrigin.Server).List!;
+
+        Assert.Equal(ModListEntryScope.Server | ModListEntryScope.Client,
+            restored.Entries.Single().EffectiveScope);
     }
 
     //

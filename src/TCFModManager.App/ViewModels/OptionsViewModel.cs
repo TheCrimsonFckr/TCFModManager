@@ -2,6 +2,7 @@ using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -19,6 +20,10 @@ public partial class OptionsViewModel : ObservableObject
     // Guards the toggle being put back after the user declines the warning, so restoring it doesn't
     // run the warning a second time.
     private bool _revertingSkip;
+
+    // Same job for the two install-role switches, which are written back after the setup prompt
+    // answers them - without this, filling them in would count as the user flipping them.
+    private bool _settingInstallRole;
 
     public SptEnvironmentViewModel SptEnvironment => AppServices.SptEnvironment;
 
@@ -99,6 +104,26 @@ public partial class OptionsViewModel : ObservableObject
     private string _browseDefaultsDescription = string.Empty;
 
     //
+    // What this machine does with the install - see AppSettings.PlaysHere / RunsHeadlessClient.
+    //
+    // Two switches rather than one dropdown, because "dedicated headless" is just the second without
+    // the first, and a machine that does both needs no value of its own.
+    //
+    [ObservableProperty]
+    private bool _playsHere = true;
+
+    [ObservableProperty]
+    private bool _runsHeadlessClient;
+
+    // Whether a Fika headless launcher is actually there. Drives the hint under the switches - a
+    // machine with no launcher that claims to run a headless is worth mentioning, not preventing.
+    [ObservableProperty]
+    private bool _hasHeadlessLauncher;
+
+    [ObservableProperty]
+    private string _installRoleDescription = string.Empty;
+
+    //
     // The Server Map section binds straight to the shared connection rather than mirroring it into
     // properties here. It is not a stored setting the way the two switches above are: connecting is
     // an action with a result, and that result is the same object the sidebar and the page read.
@@ -122,6 +147,7 @@ public partial class OptionsViewModel : ObservableObject
         _customHeightInput = FormatSize(settings.Window.CustomHeight);
 
         RefreshPageDefaultDescriptions(settings);
+        RefreshInstallRole(settings);
 
         _loaded = true;
     }
@@ -308,6 +334,106 @@ public partial class OptionsViewModel : ObservableObject
             : "Browse: a default is saved. Clearing it takes effect the next time the app starts.";
     }
 
+    //
+    // Neither switch is confirmed. Nothing on disk moves either way - the roles only decide which
+    // entries of a list a SERVER hands you are this machine's to install, and the next preview shows
+    // exactly what that came to before anything is applied.
+    //
+    partial void OnPlaysHereChanged(bool value) => SaveInstallRole();
+
+    partial void OnRunsHeadlessClientChanged(bool value) => SaveInstallRole();
+
+    private void SaveInstallRole()
+    {
+        if (!_loaded || _settingInstallRole) return;
+
+        var settings = _settings.Load();
+        settings.PlaysHere = PlaysHere;
+        settings.RunsHeadlessClient = RunsHeadlessClient;
+        _settings.Save(settings);
+
+        RefreshInstallRoleDescription();
+
+        AppLog.Info("InstallRole", $"playsHere={PlaysHere} headless={RunsHeadlessClient}");
+    }
+
+    //
+    // Reads the two switches back out of settings, and re-checks whether the folder actually has a
+    // headless launcher in it.
+    //
+    // Written through the guard rather than to the backing fields, so the page updates without the
+    // assignment being mistaken for the user answering.
+    //
+    private void RefreshInstallRole(AppSettings settings)
+    {
+        _settingInstallRole = true;
+
+        var roles = settings.Roles;
+        PlaysHere = roles.HasFlag(InstallRoles.Player);
+        RunsHeadlessClient = roles.HasFlag(InstallRoles.Headless);
+
+        HasHeadlessLauncher = !string.IsNullOrWhiteSpace(SptEnvironment.InstallPath)
+            && SptLaunchService.TryFindHeadlessLauncherExe(SptEnvironment.InstallPath!, out _);
+
+        _settingInstallRole = false;
+
+        RefreshInstallRoleDescription();
+    }
+
+    private void RefreshInstallRoleDescription()
+    {
+        InstallRoleDescription = (PlaysHere, RunsHeadlessClient) switch
+        {
+            (false, true) =>
+                "Dedicated headless. A mod list a server hands this machine arrives without the mods"
+                + " only a player would need - it still gets everything that decides how a raid goes.",
+
+            (true, true) =>
+                "Plays and hosts. A served list arrives whole, because both kinds of mod have"
+                + " somewhere to be useful here.",
+
+            (false, false) =>
+                "Neither switch is on, so this reads as an ordinary player install - the same as"
+                + " leaving both alone. Turn one on rather than relying on that.",
+
+            _ => "An ordinary player install. A served list arrives as it always has.",
+        };
+    }
+
+    //
+    // Puts the question once, when an install folder turns out to hold a headless launcher.
+    //
+    // Only when it has one and only when nobody has answered yet, so an ordinary install never meets
+    // this and answering it once is the end of it. "Ask me later" stores nothing, which leaves the
+    // machine reading as a player - the answer that installs everything - and brings the question
+    // back next time the folder is set.
+    //
+    private void PromptForInstallRoleIfNeeded()
+    {
+        var installPath = SptEnvironment.InstallPath;
+        if (string.IsNullOrWhiteSpace(installPath)) return;
+
+        var settings = _settings.Load();
+        if (settings.InstallRolesAnswered) return;
+
+        if (!SptLaunchService.TryFindHeadlessLauncherExe(installPath!, out var launcher)) return;
+
+        var choice = InstallRoleWindow.Ask(launcher);
+        if (choice == InstallRoleChoice.AskLater) return;
+
+        settings.PlaysHere = choice == InstallRoleChoice.PlaysHereToo;
+
+        // Yes either way: the launcher on disk is what asked the question, and it is the half of it
+        // that does not need a person.
+        settings.RunsHeadlessClient = true;
+
+        _settings.Save(settings);
+
+        RefreshInstallRole(settings);
+
+        AppLog.Info("InstallRole", $"answered at setup: {choice}");
+    }
+
     [RelayCommand]
     private void Browse()
     {
@@ -325,5 +451,14 @@ public partial class OptionsViewModel : ObservableObject
     private void Save()
     {
         SptEnvironment.SetInstallPath(string.IsNullOrWhiteSpace(InstallPathInput) ? null : InstallPathInput.Trim());
+
+        //
+        // Setting the folder is this app's setup step - there is no first-run wizard - so it is
+        // where the machine gets asked what it is. After SetInstallPath, because the question is
+        // about the folder that was just chosen.
+        //
+        PromptForInstallRoleIfNeeded();
+
+        RefreshInstallRole(_settings.Load());
     }
 }

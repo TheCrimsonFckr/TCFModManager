@@ -86,17 +86,24 @@ public static class SptLaunchService
     //
     // What starts a Fika headless client, at the install root.
     //
-    // Present only on a setup running a headless client - a normal Fika player install has
-    // Fika-Installer.exe and no launcher of its own, and starts the game through SPT.Launcher.exe
-    // like any other. A headless install still has SPT.Server.exe, so nothing else about the folder
-    // tells the two apart; this exe is the whole signal.
+    // A headless install still has SPT.Server.exe, BepInEx and a game client exactly like a player's,
+    // so nothing else about the folder tells the two apart. This exe is the whole signal, which is
+    // why it has to be the RIGHT exe.
     //
-    // Named first, wildcards behind it. The name is the one confirmed on a real headless install;
-    // the patterns are kept because this has shipped under more than one spelling, and an earlier
-    // version of this file matched ONLY "*Fika*Launcher*.exe" - which does not match
-    // FikaHeadlessManager.exe, so the Play page's headless card never appeared on the machine it
-    // exists for. A headless box is also the one least likely to have someone sitting at it to
-    // notice.
+    // "HEADLESS" IN THE NAME IS THE DISCRIMINATOR, and the only one. Two wrong versions of this have
+    // now shipped, in opposite directions:
+    //
+    //   - "*Fika*Launcher*.exe" alone, which does NOT match FikaHeadlessManager.exe - so the Play
+    //     page's headless card never once appeared on the machine it exists for.
+    //   - the same pattern kept on as a fallback, which matches "SPT-Fika Launcher.exe" - the
+    //     ordinary Fika PLAYER launcher, present on every Fika player install. That is the far worse
+    //     of the two: it makes a player's machine look like a headless, and answering the setup
+    //     prompt on the back of it would have a server's mod list arrive stripped of the mods only a
+    //     player needs.
+    //
+    // So: the confirmed name first, and one pattern behind it that still requires the word Headless.
+    // A player-facing launcher will never carry it. Do not widen this to match "Fika" and "Launcher"
+    // again - that is the bug, not the safety net.
     //
     private static readonly string[] HeadlessLauncherCandidates =
     [
@@ -105,8 +112,7 @@ public static class SptLaunchService
 
     private static readonly string[] HeadlessLauncherWildcards =
     [
-        "*Fika*Headless*.exe",
-        "*Fika*Launcher*.exe",
+        "*Headless*.exe",
     ];
 
     // Other processes that mean this target is already up, whatever the exe on disk is called.

@@ -3,6 +3,7 @@ using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Services;
+using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
@@ -81,11 +82,49 @@ public partial class PlayViewModel : ObservableObject
     public bool CanStartHeadless => Headless?.CanLaunch == true;
 
     //
-    // Whether this install has a headless launcher at all. Only a setup running a headless client
-    // has one, so on every other install the whole card stays off the page rather than showing a
-    // dead button for something that was never installed.
+    // Whether the headless card belongs on this page.
     //
-    public bool HasHeadless => Headless?.Exists == true;
+    // The launcher on disk is the usual answer - only a setup running a headless client has one, so
+    // on every other install the card stays off the page rather than showing a dead button for
+    // something that was never installed. The setting is the second way in, for a machine that
+    // starts its headless some other way: it has told the app what it is, and hiding the card would
+    // contradict that.
+    //
+    public bool HasHeadless => Headless?.Exists == true || RunsHeadlessClient;
+
+    // What Options has been told this machine is - see AppSettings.PlaysHere / RunsHeadlessClient.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasHeadless))]
+    [NotifyPropertyChangedFor(nameof(RoleSummary))]
+    [NotifyPropertyChangedFor(nameof(NeedsRoleAnswer))]
+    private bool _runsHeadlessClient;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(RoleSummary))]
+    private bool _playsHere = true;
+
+    //
+    // Shown on the card because it is the thing that decides what a served mod list brings to this
+    // machine, and the Play page is where somebody stands when that matters.
+    //
+    public string RoleSummary => (PlaysHere, RunsHeadlessClient) switch
+    {
+        (false, true) => "Set up as a dedicated headless: a mod list from a server arrives without"
+            + " the mods only a player would need.",
+        (true, true) => "Set up as a machine that both plays and hosts, so a served mod list arrives"
+            + " whole.",
+        _ => "",
+    };
+
+    //
+    // A launcher is here but nobody has said what the machine is, so a served list is being filtered
+    // as though this were an ordinary player - which is the safe reading, and probably not the right
+    // one on a box with a headless launcher in it.
+    //
+    // The prompt for this fires when the install folder is set, which someone who set theirs months
+    // ago will never do again. This is how they find out there is a question to answer.
+    //
+    public bool NeedsRoleAnswer => Headless?.Exists == true && !RunsHeadlessClient;
 
     // Called by the page, so the poll only runs while it is the visible page.
     public void StartPolling()
@@ -104,6 +143,12 @@ public partial class PlayViewModel : ObservableObject
         Server = SptLaunchService.Describe(installPath, SptLaunchTarget.Server);
         Client = SptLaunchService.Describe(installPath, SptLaunchTarget.Client);
         Headless = SptLaunchService.Describe(installPath, SptLaunchTarget.Headless);
+
+        // Re-read rather than cached, because Options can change it while this page is open and the
+        // poll is already running.
+        var roles = new SettingsService().Load().Roles;
+        PlaysHere = roles.HasFlag(InstallRoles.Player);
+        RunsHeadlessClient = roles.HasFlag(InstallRoles.Headless);
     }
 
     [RelayCommand]

@@ -104,6 +104,66 @@ public class ModListStoreTests : IDisposable
         Assert.Equal(2, _store.Find(list.Id)!.Revision);
     }
 
+    //
+    // The operator pointing the app at their own server, which is the ordinary case for anyone who
+    // hosts and plays on one machine.
+    //
+    // What comes back off /list is their own published list, same id, marked Server on the way in
+    // because that is where it arrived from. Storing it replaced the local original with a read-only
+    // copy of itself, and "Make a copy" became the only way back into a list they wrote. The local
+    // one is the master; the served copy is dropped and the caller is handed what is stored.
+    //
+    [Fact]
+    public void Add_NeverLetsAServedListReplaceTheLocalOneItCameFrom()
+    {
+        var mine = _store.Add(NewList("Fika night", ModListOrigin.Local, Entry("Realism", 1263)));
+
+        var served = new ModList
+        {
+            Id = mine.Id,
+            Name = "Fika night",
+            Revision = 9,
+            Origin = ModListOrigin.Server,
+            Source = "127.0.0.1:6969",
+            CreatedAt = Timestamp,
+            UpdatedAt = Timestamp,
+        };
+
+        var stored = _store.Add(served);
+
+        Assert.Equal(ModListOrigin.Local, stored.Origin);
+        Assert.True(stored.IsEditable);
+        Assert.Single(_store.Load().Lists);
+
+        var held = _store.Find(mine.Id)!;
+        Assert.Equal(ModListOrigin.Local, held.Origin);
+        Assert.Equal(1, held.Revision);
+        Assert.Single(held.Entries);
+    }
+
+    // The other direction is untouched: a served list this install does not already own is stored,
+    // and a newer revision of it still replaces the older one.
+    [Fact]
+    public void Add_StillUpsertsAServedListThisMachineDoesNotOwn()
+    {
+        var served = _store.Add(NewList("The server", ModListOrigin.Server));
+
+        var newer = new ModList
+        {
+            Id = served.Id,
+            Name = "The server",
+            Revision = 4,
+            Origin = ModListOrigin.Server,
+            CreatedAt = Timestamp,
+            UpdatedAt = Timestamp,
+        };
+
+        _store.Add(newer);
+
+        Assert.Single(_store.Load().Lists);
+        Assert.Equal(4, _store.Find(served.Id)!.Revision);
+    }
+
     [Fact]
     public void ReplaceEntries_SwapsTheContentsAndLeavesTheRevisionAlone()
     {

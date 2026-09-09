@@ -5,9 +5,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+    xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     Title="Options">
     <Page.Resources>
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+        <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
     </Page.Resources>
     <StackPanel Margin="16">
         <ui:Card Padding="16" VerticalAlignment="Top">
@@ -40,6 +42,67 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Text="{Binding SptEnvironment.StatusMessage}" />
+            </StackPanel>
+        </ui:Card>
+
+        <!--
+            Sits directly under the install folder because it is a fact about that folder's machine,
+            and because setting the folder is what puts the question in the first place - this app
+            has no first-run wizard, so that is its setup step.
+
+            Always shown, not gated on finding a launcher. Someone who answered "ask me later", or
+            whose headless is started some other way, needs somewhere to say so, and a card that
+            appears and disappears is one nobody can rely on finding.
+        -->
+        <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
+            <StackPanel>
+                <TextBlock
+                    Text="What this machine is"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,0,0,8"
+                    Text="A Fika headless client hosts raids without anybody playing on it, so it needs the mods that decide how a raid goes - bots, items, locations - and none of the ones that draw things at a player. Saying which this machine is lets a mod list a server hands you arrive trimmed to what this machine actually needs. It never changes a list of your own, and it never affects what you can install by hand." />
+
+                <ui:ToggleSwitch
+                    HorizontalAlignment="Left"
+                    Margin="0,0,0,8"
+                    ToolTip="Turn this off for a dedicated headless box - one that hosts raids and that nobody sits at."
+                    ToolTipService.ShowDuration="20000"
+                    IsChecked="{Binding PlaysHere}"
+                    OnContent="Somebody plays on this machine"
+                    OffContent="Nobody plays on this machine" />
+
+                <ui:ToggleSwitch
+                    HorizontalAlignment="Left"
+                    Margin="0,0,0,8"
+                    ToolTip="Detected from the Fika headless launcher in the install folder, and overridable here for a setup that starts its headless some other way."
+                    ToolTipService.ShowDuration="20000"
+                    IsChecked="{Binding RunsHeadlessClient}"
+                    OnContent="This machine runs a Fika headless client"
+                    OffContent="This machine does not run a headless client" />
+
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,4,0,0"
+                    Text="{Binding InstallRoleDescription}" />
+
+                <!--
+                    Only worth saying when the two disagree with the folder. A machine claiming to
+                    run a headless with no launcher in sight is worth mentioning, never preventing -
+                    plenty of ways exist to start one.
+                -->
+                <TextBlock
+                    FontSize="11"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,8,0,0"
+                    Text="No Fika headless launcher was found in the install folder, so nothing here starts one - the switch above still decides which mods a served list brings."
+                    Visibility="{Binding HasHeadlessLauncher, Converter={StaticResource FalseToVisible}}" />
             </StackPanel>
         </ui:Card>
 

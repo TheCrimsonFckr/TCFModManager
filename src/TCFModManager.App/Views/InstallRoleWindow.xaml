@@ -1,0 +1,95 @@
+<ui:FluentWindow
+    x:Class="TCFModManager.App.Views.InstallRoleWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Width="560"
+    SizeToContent="Height"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    ExtendsContentIntoTitleBar="True"
+    TextOptions.TextFormattingMode="Display"
+    TextOptions.TextRenderingMode="ClearType">
+    <!--
+        Asked once, when an install folder turns out to have a Fika headless launcher in it. Same
+        plain modal FluentWindow pattern as ModDisableConfirmationWindow - ShowDialog() from the
+        call site, the answer read back through a static Ask helper.
+
+        Only ONE question is put, because only one of the two is unknowable. The launcher on disk
+        already says this machine can host; nothing on disk can say whether anybody sits at it, and
+        a headless install has SPT.Server.exe like any other.
+    -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar
+            x:Name="WindowTitleBar"
+            Grid.Row="0"
+            Title="This looks like a headless machine" />
+
+        <StackPanel
+            Grid.Row="1"
+            Margin="24,12,24,24">
+            <TextBlock
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                Margin="0,0,0,8"
+                Text="This install has a Fika headless launcher, which only appears on a setup that runs a headless client." />
+
+            <TextBlock
+                x:Name="LauncherText"
+                FontSize="11"
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                Margin="0,0,0,16" />
+
+            <TextBlock
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                Margin="0,0,0,16"
+                Text="A headless client hosts raids without anybody playing on it, so it needs the mods that decide how a raid goes - bots, items, locations - and none of the ones that draw things at a player. Knowing which this machine is lets a server's mod list arrive trimmed to what it actually needs." />
+
+            <TextBlock
+                FontWeight="SemiBold"
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                Margin="0,0,0,16"
+                Text="Does anyone play the game on this machine?" />
+
+            <TextBlock
+                FontSize="11"
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                Margin="0,0,0,16"
+                Text="You can change this later under Options, and it never affects a mod list of your own - only the ones a server hands you." />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <ui:Button
+                    Margin="0,0,8,0"
+                    Content="Ask me later"
+                    Click="LaterButton_Click" />
+
+                <ui:Button
+                    Margin="0,0,8,0"
+                    Content="No, it only hosts"
+                    ToolTip="A dedicated headless box. A served list arrives without the mods only a player needs."
+                    Click="HostsOnlyButton_Click" />
+
+                <!--
+                    Primary on the answer that keeps everything, not on the one the launcher hints
+                    at. Emphasis is also what Enter picks, and of the two ways to be wrong here, a
+                    machine that quietly stops installing player mods is the one somebody has to
+                    debug.
+                -->
+                <ui:Button
+                    Appearance="Primary"
+                    Content="Yes, I play here too"
+                    ToolTip="This machine both hosts and gets played on, so it takes everything a served list names."
+                    Click="PlaysHereButton_Click" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</ui:FluentWindow>

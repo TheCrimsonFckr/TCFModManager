@@ -159,11 +159,28 @@ public sealed class ModListStore
     // A snapshot is routed to its own slot rather than added, so there is one place that decides
     // where snapshots live and no caller can put one back among the browsable lists.
     //
+    // WITH ONE EXCEPTION: a SERVED list never replaces a local one carrying the same Id. Ids are
+    // guids, so that is not a coincidence - it is this machine's own list coming back off the server
+    // it was published to, which is what happens the moment an operator points the app at their own
+    // server. Replacing it turned the author's list read-only on the machine that wrote it, and
+    // "Make a copy" became the only way back into a list they own. The local one is the master here;
+    // the served copy is a copy of it, and it is dropped.
+    //
+    // Returns what is stored rather than what was passed, so a caller that goes on to show or follow
+    // the list shows the one that is actually in the store.
+    //
     public ModList Add(ModList list)
     {
         if (list.IsSnapshot) return SetSnapshot(list)!;
 
         var data = Load();
+
+        if (list.Origin == ModListOrigin.Server
+            && data.Lists.FirstOrDefault(l => l.Id == list.Id) is { IsEditable: true } mine)
+        {
+            return mine;
+        }
+
         data.Lists.RemoveAll(l => l.Id == list.Id);
         data.Lists.Add(list);
         Save(data);

@@ -141,8 +141,9 @@
             </StackPanel>
         </ui:Card>
 
-        <!-- Only an install running a headless client has this launcher, so the card is off the
-             page entirely on every other one rather than showing a dead button. -->
+        <!-- Only an install running a headless client has this launcher - or has been told in
+             Options that it is one - so the card is off the page entirely on every other one
+             rather than showing a dead button. -->
         <ui:Card
             Padding="16"
             VerticalAlignment="Top"
@@ -178,6 +179,31 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                     Text="{Binding HeadlessPath}" />
+
+                <!-- What Options has been told this machine is, since that is what decides which
+                     mods a served list brings here. Blank, and so zero height, on an install that
+                     has not said. -->
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,8,0,0"
+                    Text="{Binding RoleSummary}" />
+
+                <!--
+                    The launcher is here but nobody has answered the question, so a served list is
+                    being filtered as though this were an ordinary player.
+                    The setup prompt fires when the install folder is set, which somebody who set
+                    theirs months ago will never do again - this is how they find out there is
+                    something to answer.
+                -->
+                <ui:InfoBar
+                    Margin="0,12,0,0"
+                    IsOpen="True"
+                    IsClosable="False"
+                    Severity="Informational"
+                    Title="Tell the app what this machine is"
+                    Message="Options has a &quot;What this machine is&quot; card. Saying whether anybody plays here lets a mod list from a server arrive trimmed to what a headless actually needs - until then it arrives as it would for a player, which installs more than this machine has any use for."
+                    Visibility="{Binding NeedsRoleAnswer, Converter={StaticResource BoolToVisibility}}" />
             </StackPanel>
         </ui:Card>
 

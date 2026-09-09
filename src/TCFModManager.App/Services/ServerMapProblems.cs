@@ -87,8 +87,18 @@ public static class ServerMapProblems
     // failing is not the connection failing - the server answered, which is most of what the user
     // cares about, and the list is the part that went wrong.
     //
-    public static string DescribeList(ServerMapListResult result, ModList? held) => result.Problem switch
+    // servingOwnList is the operator looking at their own server: what came back is the list this
+    // machine published, so it is already in their mod lists and still theirs to edit. Saying
+    // "saved in your mod lists" there would read as a second copy having appeared.
+    //
+    public static string DescribeList(ServerMapListResult result, ModList? held, bool servingOwnList = false)
+        => result.Problem switch
     {
+        ServerMapProblem.None when result.List is not null && servingOwnList =>
+            $"This server is serving your own list \"{result.List.Name}\" (revision "
+            + $"{result.List.Revision}, {Mods(result.List.Entries.Count)}). It stays yours to edit on "
+            + "the Mod lists page - publish it again after a change to update what the server hands out.",
+
         ServerMapProblem.None when result.List is not null =>
             $"\"{result.List.Name}\" (revision {result.List.Revision}, {Mods(result.List.Entries.Count)}) "
             + "is saved in your mod lists. Applying it is done from the Mod lists page, which shows "

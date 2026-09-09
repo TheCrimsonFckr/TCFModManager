@@ -601,7 +601,7 @@
                             Width="176"
                             Margin="8,0,0,0"
                             DisplayMemberPath="Label"
-                            ToolTip="Show only the entries meant for one kind of machine. Server only are the mods a player is never asked to install; Clients only are the ones a Fika headless client skips."
+                            ToolTip="Show only the entries meant for one kind of machine. Server only are the mods a player is never asked to install; Client only are the ones a Fika headless client skips."
                             ItemsSource="{Binding ScopeFilters}"
                             SelectedItem="{Binding ScopeFilter}" />
 
@@ -697,7 +697,7 @@
                                                 Padding="8,4"
                                                 Appearance="Transparent"
                                                 Icon="{ui:SymbolIcon PeopleSwap24}"
-                                                ToolTip="Which machines this entry is for: everyone, clients and a headless, clients only, headless only, or server only. Capture works this out from where the mod's files live - change it for the exceptions, like a server mod nobody playing needs to install, or a HUD mod a headless client has no use for."
+                                                ToolTip="Which machines this entry is for - the server, playing clients, a Fika headless client, or any combination of them. Capture works this out from where the mod's files live; change it for the exceptions, like a server mod nobody playing needs to install, or a HUD mod a headless client has no use for."
                                                 Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"
                                                 Command="{Binding DataContext.CycleScopeCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                                 CommandParameter="{Binding}" />

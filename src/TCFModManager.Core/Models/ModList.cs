@@ -46,9 +46,10 @@ public enum ModListEntryScope
     // The machine running the SPT server. A player applying a SERVED list skips these entirely: not
     // installed, not disabled, not reported missing.
     //
-    // A headless box does NOT skip them, because it is a full SPT install and a server-scoped entry
-    // is a whole mod rather than half of one - taking it is an ordinary install, while leaving out
-    // the server half of a mod that has both would mean splitting an archive after it was staged.
+    // A headless box does NOT skip an entry scoped to the server ALONE: it is a full SPT install
+    // and such an entry is a whole mod rather than half of one, so taking it is an ordinary install.
+    // Set alongside Client, the server flag says nothing about the headless - Client + Server is how
+    // an author says the players and the server need this and the headless does not.
     //
     Server = 2,
 
@@ -263,12 +264,29 @@ public sealed class ModList
     // whole setup, and only the part matching what this machine actually is, is yours to install.
     //
     // Pass what InstallRoles.ScopeFor gives for this install: Client for an ordinary player,
-    // Server|Headless for a headless box, both together for a machine that plays and hosts.
+    // Headless for a headless box, both together for a machine that plays and hosts.
     //
     public IEnumerable<ModListEntry> EntriesApplyingTo(ModListEntryScope machine) =>
         Origin == ModListOrigin.Server
-            ? Entries.Where(e => (e.EffectiveScope & machine) != 0)
+            ? Entries.Where(e => ScopeApplies(e.EffectiveScope, machine))
             : Entries;
+
+    //
+    // Whether an entry with this scope is a machine of this kind's to install.
+    //
+    // An overlap is the whole of it, bar one case: an entry scoped to the SERVER ALONE also goes to
+    // a headless box. A mod that only ever had a server half is a whole mod, and the headless is a
+    // full SPT install running one - so taking it is an ordinary install rather than half of one,
+    // and nothing here ever installs half a mod.
+    //
+    // Server ALONE, and that is the point of the rule living here rather than in the machine's own
+    // scope. "Server + Client" is an author saying the server and the players need this and the
+    // headless does not, and it can only mean that if naming the server does not by itself reach
+    // the headless.
+    //
+    public static bool ScopeApplies(ModListEntryScope entry, ModListEntryScope machine) =>
+        (entry & machine) != 0
+        || (entry == ModListEntryScope.Server && machine.HasFlag(ModListEntryScope.Headless));
 }
 
 // Every list this install holds, plus which one is currently applied.

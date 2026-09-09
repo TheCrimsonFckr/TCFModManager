@@ -95,18 +95,26 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
 // The names the page puts on a scope, and the order the row button cycles them in.
 //
 // Kept in one place because the chip, the filter dropdown, the row's detail line and the message
-// after a change all have to agree - four spellings of "Clients + headless" is how a user ends up
+// after a change all have to agree - four spellings of "Client + Headless" is how a user ends up
 // unsure whether they are looking at the same setting.
 //
 public static class ModListScopes
 {
     public const ModListEntryScope ClientsAndHeadless = ModListEntryScope.Client | ModListEntryScope.Headless;
 
+    public const ModListEntryScope ServerAndClients = ModListEntryScope.Server | ModListEntryScope.Client;
+
+    //
+    // Named as the machines they reach, in one order - server, client, headless - rather than as
+    // "everyone" and a set of exceptions to it. Every label is then read the same way: what is in
+    // the name gets the mod and what is not, does not.
+    //
     public static string Label(ModListEntryScope scope) => scope switch
     {
-        ModListEntryScope.Everyone => "Everyone",
-        ClientsAndHeadless => "Clients + headless",
-        ModListEntryScope.Client => "Clients only",
+        ModListEntryScope.Everyone => "Server + Client + Headless",
+        ServerAndClients => "Server + Client",
+        ClientsAndHeadless => "Client + Headless",
+        ModListEntryScope.Client => "Client only",
         ModListEntryScope.Headless => "Headless only",
         ModListEntryScope.Server => "Server only",
 
@@ -119,9 +127,12 @@ public static class ModListScopes
     // Where the button goes next.
     //
     // Ordered so the ONE change anybody makes often is one click: capture tags a plugin
-    // Clients + headless, and the whole point of the feature is saying "actually, players only" for
-    // the HUD mods. That step comes first. Everyone leads into it for the same reason - a mod with
-    // both halves starts there and is pruned the same way.
+    // Client + Headless, and the whole point of the feature is saying "actually, players only" for
+    // the HUD mods. That step comes first. The full set leads into it for the same reason - a mod
+    // with both halves starts there and is pruned the same way.
+    //
+    // Server + Client sits at the far end for the opposite reason: it is the answer to a question
+    // most lists never ask - a mod both halves of the game need and the headless does not.
     //
     public static ModListEntryScope Next(ModListEntryScope scope) => scope switch
     {
@@ -129,6 +140,7 @@ public static class ModListScopes
         ClientsAndHeadless => ModListEntryScope.Client,
         ModListEntryScope.Client => ModListEntryScope.Headless,
         ModListEntryScope.Headless => ModListEntryScope.Server,
+        ModListEntryScope.Server => ServerAndClients,
         _ => ModListEntryScope.Everyone,
     };
 }
@@ -190,11 +202,12 @@ public partial class ModListsViewModel : ObservableObject
     public IReadOnlyList<ModListScopeFilter> ScopeFilters { get; } =
     [
         new("All scopes", null),
-        new("Everyone", ModListEntryScope.Everyone),
-        new("Clients + headless", ModListScopes.ClientsAndHeadless),
-        new("Clients only", ModListEntryScope.Client),
-        new("Headless only", ModListEntryScope.Headless),
-        new("Server only", ModListEntryScope.Server),
+        new(ModListScopes.Label(ModListEntryScope.Everyone), ModListEntryScope.Everyone),
+        new(ModListScopes.Label(ModListScopes.ServerAndClients), ModListScopes.ServerAndClients),
+        new(ModListScopes.Label(ModListScopes.ClientsAndHeadless), ModListScopes.ClientsAndHeadless),
+        new(ModListScopes.Label(ModListEntryScope.Client), ModListEntryScope.Client),
+        new(ModListScopes.Label(ModListEntryScope.Headless), ModListEntryScope.Headless),
+        new(ModListScopes.Label(ModListEntryScope.Server), ModListEntryScope.Server),
     ];
 
     public IReadOnlyList<ModListEntrySort> EntrySorts { get; } =
@@ -518,8 +531,8 @@ public partial class ModListsViewModel : ObservableObject
         //
         //
         // Only the scopes that mean somebody skips the entry are spelled out here. Everyone and
-        // Clients + headless are the two the chip already says and nobody has to think about; the
-        // other three change what a machine does, so they get a sentence.
+        // Client + Headless are the two the chip already says and nobody has to think about; the
+        // rest change what a machine does, so they get a sentence.
         //
         if (entry.EffectiveScope == ModListEntryScope.Server)
             parts.Add("server only - players skip it");
@@ -527,6 +540,8 @@ public partial class ModListsViewModel : ObservableObject
             parts.Add("players only - a headless skips it");
         else if (entry.EffectiveScope == ModListEntryScope.Headless)
             parts.Add("headless only - players skip it");
+        else if (entry.EffectiveScope == ModListScopes.ServerAndClients)
+            parts.Add("server and players - a headless skips it");
 
         //
         // The folders on disk this entry covers.
@@ -959,6 +974,8 @@ public partial class ModListsViewModel : ObservableObject
                 $"\"{entry.Name}\" is now players only - a headless client will skip it.",
             ModListEntryScope.Headless =>
                 $"\"{entry.Name}\" is now headless only - players will skip it.",
+            ModListScopes.ServerAndClients =>
+                $"\"{entry.Name}\" now goes to the server and to players - a headless client will skip it.",
             _ => $"\"{entry.Name}\" now applies to every machine.",
         };
     }

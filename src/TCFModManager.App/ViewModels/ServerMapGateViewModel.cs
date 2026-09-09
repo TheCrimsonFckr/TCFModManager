@@ -472,15 +472,23 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
 
         var result = await client.ListAsync(cancellationToken);
 
+        var own = false;
+
         if (result.List is { } fetched)
         {
+            //
             // Upserts by Id, so a newer revision of a list already held replaces it rather than
-            // leaving two - see ModListStore.Add.
-            AppServices.ModLists.Add(fetched);
-            List = fetched;
+            // leaving two - and hands back the local list untouched when this machine is the one
+            // that published it, which is why what goes on screen is the return value rather than
+            // what came off the wire. See ModListStore.Add.
+            //
+            var stored = AppServices.ModLists.Add(fetched);
+            own = stored.IsEditable;
+            List = stored;
 
-            AppLog.Info("ServerMap",
-                $"fetched list \"{fetched.Name}\" revision {fetched.Revision} ({fetched.Entries.Count} entries)");
+            AppLog.Info("ServerMap", own
+                ? $"server is serving this machine's own list \"{stored.Name}\" revision {stored.Revision}"
+                : $"fetched list \"{fetched.Name}\" revision {fetched.Revision} ({fetched.Entries.Count} entries)");
         }
         else
         {
@@ -489,7 +497,7 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
             AppLog.Info("ServerMap", $"list not fetched - {result.Problem}");
         }
 
-        ListStatus = ServerMapProblems.DescribeList(result, held);
+        ListStatus = ServerMapProblems.DescribeList(result, held, own);
     }
 
     //
@@ -525,13 +533,16 @@ public sealed partial class ServerMapGateViewModel : ObservableObject
 
             var result = await client.ListAsync();
 
+            var own = false;
+
             if (result.List is { } fetched)
             {
-                AppServices.ModLists.Add(fetched);
-                List = fetched;
+                var stored = AppServices.ModLists.Add(fetched);
+                own = stored.IsEditable;
+                List = stored;
             }
 
-            ListStatus = ServerMapProblems.DescribeList(result, HeldListFor(endpoint));
+            ListStatus = ServerMapProblems.DescribeList(result, HeldListFor(endpoint), own);
         }
         finally
         {

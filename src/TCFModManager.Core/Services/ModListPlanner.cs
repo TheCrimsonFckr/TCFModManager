@@ -130,7 +130,7 @@ public static class ModListPlanner
     //
     //
     // machine is what this install actually is, from InstallRole.ScopeFor - Client for an ordinary
-    // player, Server|Headless for a box running a Fika headless client, both for one that does each.
+    // player, Headless for a box running a Fika headless client, both for one that does each.
     // It only ever narrows a SERVED list; your own lists describe your own install and apply whole.
     //
     // Defaulted to Client so every existing caller and test keeps the behaviour it had, and so the

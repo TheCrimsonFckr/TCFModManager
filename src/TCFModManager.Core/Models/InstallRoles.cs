@@ -30,10 +30,14 @@ public static class InstallRole
     //
     // The entry scopes a served list should be filtered to for a machine in these roles.
     //
-    // A player takes client entries. A headless box takes the entries meant for a headless AND the
-    // server-scoped ones: it is a full SPT install, and a server-scoped entry is a mod that only
-    // ever had a server half, so taking it is an ordinary whole install. Nothing here ever installs
-    // part of a mod - the archive that gets staged is always the whole thing.
+    // A player takes client entries and a headless box takes headless ones. A headless ALSO takes
+    // an entry scoped to the server ALONE - it is a full SPT install and a server-only entry is a
+    // whole mod rather than half of one - but that is a rule about the entry, not a flag this
+    // machine carries: see ModList.ScopeApplies.
+    //
+    // It used to be a flag here, and that is what made "Server + Client" impossible to say. An
+    // entry naming the server for any reason reached the headless, so an author who deliberately
+    // left the headless out of a mod the server and the players both need had no way to be heard.
     //
     // None reads as Player. An install that has never been asked is overwhelmingly someone's own
     // game, and guessing headless would strip the client mods off a machine that wanted them.
@@ -45,11 +49,7 @@ public static class InstallRole
         ModListEntryScope scope = 0;
 
         if (roles.HasFlag(InstallRoles.Player)) scope |= ModListEntryScope.Client;
-
-        if (roles.HasFlag(InstallRoles.Headless))
-        {
-            scope |= ModListEntryScope.Headless | ModListEntryScope.Server;
-        }
+        if (roles.HasFlag(InstallRoles.Headless)) scope |= ModListEntryScope.Headless;
 
         return scope;
     }
