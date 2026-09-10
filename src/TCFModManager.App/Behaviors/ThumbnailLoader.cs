@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.IO;
+using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -21,6 +23,20 @@ public static class ThumbnailLoader
 
     // In-memory cache of decoded thumbnails, keyed by URL. Only touched from the UI thread.
     private static readonly Dictionary<string, BitmapImage> Cache = new();
+
+    // files.sp-mod.com serves images only to requests carrying a Referer from sp-mod.com itself;
+    // anything else gets a 403.
+    private static readonly Uri Referrer = new("https://sp-mod.com/");
+
+    private static readonly HttpClient Http = CreateClient();
+
+    private static HttpClient CreateClient()
+    {
+        var http = new HttpClient { Timeout = TimeSpan.FromSeconds(30) };
+        http.DefaultRequestHeaders.UserAgent.ParseAdd($"TCFModManager/{AppVersion.Current}");
+        http.DefaultRequestHeaders.Referrer = Referrer;
+        return http;
+    }
 
     public static readonly DependencyProperty SourceProperty = DependencyProperty.RegisterAttached(
         "Source", typeof(string), typeof(ThumbnailLoader), new PropertyMetadata(null, OnSourceChanged));
@@ -57,33 +73,44 @@ public static class ThumbnailLoader
             // Re-check the cache in case another card loaded this URL while waiting on the gate.
             if (Cache.TryGetValue(url, out var cached))
             {
-                image.Source = cached;
+                if (GetSource(image) as string == url) image.Source = cached;
                 return;
             }
 
-            var bitmap = new BitmapImage();
-            var downloadFinished = new TaskCompletionSource();
-            bitmap.DownloadCompleted += (_, _) => downloadFinished.TrySetResult();
-            bitmap.DownloadFailed += (_, _) => downloadFinished.TrySetResult();
+            byte[] bytes;
+            try
+            {
+                bytes = await Http.GetByteArrayAsync(url);
+            }
+            catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or UriFormatException or InvalidOperationException)
+            {
+                AppLog.Debug("Thumbnails", $"ThumbnailLoader: {url} failed after {sw.ElapsedMilliseconds}ms - {ex.Message}");
+                return;
+            }
 
-            bitmap.BeginInit();
-            bitmap.DecodePixelWidth = DecodePixelWidth;
-            bitmap.UriSource = new Uri(url, UriKind.Absolute);
-            bitmap.EndInit();
+            BitmapImage bitmap;
+            try
+            {
+                bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.DecodePixelWidth = DecodePixelWidth;
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.StreamSource = new MemoryStream(bytes);
+                bitmap.EndInit();
 
-            // Assign right away so it renders as it downloads.
-            if (GetSource(image) as string == url) image.Source = bitmap;
+                // Freeze so the same instance can be shared with other Images.
+                bitmap.Freeze();
+            }
+            catch (Exception ex) when (ex is NotSupportedException or ArgumentException or IOException or OverflowException)
+            {
+                AppLog.Debug("Thumbnails", $"ThumbnailLoader: {url} could not be decoded - {ex.Message}");
+                return;
+            }
 
-            await downloadFinished.Task;
-            AppLog.Debug("Thumbnails", $"ThumbnailLoader: download finished after {sw.ElapsedMilliseconds}ms total for {url}");
+            AppLog.Debug("Thumbnails", $"ThumbnailLoader: loaded {bytes.Length} bytes after {sw.ElapsedMilliseconds}ms total for {url}");
 
-            // Freeze so the same instance can be shared with other Images.
-            bitmap.Freeze();
             Cache[url] = bitmap;
-        }
-        catch (UriFormatException)
-        {
-            // Malformed/missing thumbnail URL - leave the Image blank.
+            if (GetSource(image) as string == url) image.Source = bitmap;
         }
         finally
         {
