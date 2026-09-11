@@ -318,6 +318,13 @@ public sealed class ModListData
     public Guid? PublishedListId { get; set; }
 
     //
+    // Mods this install never lets a list's Exclusive sweep set aside, as lowercased folder names.
+    // Kept here rather than on ModListEntry so a pin describes this install and never travels with a
+    // shared list.
+    //
+    public List<string> NeverAutoDisable { get; init; } = [];
+
+    //
     // How the install stood before the last list was applied, and the only one kept - each apply
     // overwrites it, and reverting consumes it. Deliberately outside Lists: it is an undo point,
     // not something to browse, share or apply by hand.

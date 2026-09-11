@@ -299,6 +299,26 @@ public class ModListStoreTests : IDisposable
     }
 
     [Fact]
+    public void SetPinned_StoresLowercasedKeysOnce()
+    {
+        _store.SetPinned(["SVM-Client", "svm-server"], pinned: true);
+        _store.SetPinned(["svm-client"], pinned: true);
+
+        Assert.Equal(["svm-client", "svm-server"], _store.Load().NeverAutoDisable);
+        Assert.True(_store.GetPins().Contains("SVM-SERVER"));
+    }
+
+    [Fact]
+    public void SetPinned_FalseRemovesTheKeys()
+    {
+        _store.SetPinned(["svm-client", "svm-server", "sain"], pinned: true);
+
+        _store.SetPinned(["SVM-Client", "svm-server"], pinned: false);
+
+        Assert.Equal(["sain"], _store.Load().NeverAutoDisable);
+    }
+
+    [Fact]
     public void SetActive_IgnoresAnUnknownList()
     {
         _store.SetActive(Guid.NewGuid());

@@ -22,6 +22,9 @@ public enum ModListActionKind
 
     // On the list, installed, enabled, at the version the list names. Nothing to do.
     Keep,
+
+    // Not on the list and would have been disabled, but the user pinned it against that.
+    Pinned,
 }
 
 // One mod's line in a plan.
@@ -91,13 +94,15 @@ public sealed class ModListPlan
     public IEnumerable<ModListAction> Disable => Of(ModListActionKind.Disable);
     public IEnumerable<ModListAction> Manual => Of(ModListActionKind.Manual);
     public IEnumerable<ModListAction> Keep => Of(ModListActionKind.Keep);
+    public IEnumerable<ModListAction> Pinned => Of(ModListActionKind.Pinned);
 
     // Fetches that couldn't be pinned to a version id and need a live lookup first.
     public IEnumerable<ModListAction> NeedingVersionLookup => Actions.Where(a => a.NeedsVersionLookup);
 
     // Nothing to fetch and nothing to move - the install already matches the list, give or take
     // whatever the user has to fetch by hand.
-    public bool IsNoOp => Actions.All(a => a.Kind is ModListActionKind.Keep or ModListActionKind.Manual);
+    public bool IsNoOp =>
+        Actions.All(a => a.Kind is ModListActionKind.Keep or ModListActionKind.Pinned or ModListActionKind.Manual);
 
     public bool RequiresDownloads => Actions.Any(a => a.IsFetch);
 
@@ -144,7 +149,7 @@ public static class ModListPlanner
         ModList? alsoRequiredBy = null,
         ModListEntryScope machine = ModListEntryScope.Client)
     {
-        neverAutoDisable = Protecting(neverAutoDisable, alsoRequiredBy, machine);
+        var serverProtected = Protecting(alsoRequiredBy, machine);
 
         var applying = list.EntriesApplyingTo(machine).ToList();
 
@@ -192,11 +197,13 @@ public static class ModListPlanner
                 var candidate = candidates[index];
                 if (matched[index] || candidate.IsDisabled) continue;
                 if (!candidate.CanBeDisabled) continue;
-                if (IsPinnedAgainstDisable(candidate, neverAutoDisable)) continue;
+                if (IsPinned(candidate, serverProtected)) continue;
 
                 actions.Add(new ModListAction
                 {
-                    Kind = ModListActionKind.Disable,
+                    Kind = IsPinned(candidate, neverAutoDisable)
+                        ? ModListActionKind.Pinned
+                        : ModListActionKind.Disable,
                     Name = candidate.Name.Trim(),
                     Installed = candidate,
                     ModId = candidate.ModId,
@@ -263,16 +270,18 @@ public static class ModListPlanner
     }
 
     //
-    // The user's own pins, plus everything the followed server list names, as one set of folder and
-    // mod names. Built here rather than by the caller so every call site protects the server's mods
-    // the same way - forgetting it at one of them is a mod disabled behind the user's back.
+    // Everything the followed server list names, as one set of folder and mod names. Built here
+    // rather than by the caller so every call site protects the server's mods the same way -
+    // forgetting it at one of them is a mod disabled behind the user's back.
     //
-    private static IReadOnlySet<string>? Protecting(IReadOnlySet<string>? pinned, ModList? serverList,
-        ModListEntryScope machine)
+    // Kept apart from the user's own pins: a server-protected mod is spared silently, a pinned one
+    // shows in the plan as Pinned so it can be unpinned from there.
+    //
+    private static IReadOnlySet<string>? Protecting(ModList? serverList, ModListEntryScope machine)
     {
-        if (serverList is null) return pinned;
+        if (serverList is null) return null;
 
-        var protectedNames = new HashSet<string>(pinned ?? new HashSet<string>(), StringComparer.OrdinalIgnoreCase);
+        var protectedNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         //
         // Only the entries the server expects of THIS machine. Protection is for mods the server
@@ -290,13 +299,19 @@ public static class ModListPlanner
         return protectedNames;
     }
 
-    private static bool IsPinnedAgainstDisable(ModListCandidate candidate, IReadOnlySet<string>? pinned)
+    public static bool IsPinned(ModListCandidate candidate, IReadOnlySet<string>? pinned)
     {
         if (pinned is null || pinned.Count == 0) return false;
 
         return candidate.Folders.Any(f => pinned.Contains(f.Trim().ToLowerInvariant()))
             || pinned.Contains(candidate.Name.Trim().ToLowerInvariant());
     }
+
+    // What pinning a candidate stores: every folder it covers, or its name when it has none.
+    public static IReadOnlyList<string> PinKeys(ModListCandidate candidate) =>
+        candidate.Folders.Count > 0
+            ? [.. candidate.Folders.Select(f => f.Trim().ToLowerInvariant())]
+            : [candidate.Name.Trim().ToLowerInvariant()];
 
     //
     // An unknown version on either side counts as "the same", so a mod whose version couldn't be

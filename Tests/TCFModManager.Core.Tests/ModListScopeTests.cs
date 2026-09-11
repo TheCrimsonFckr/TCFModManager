@@ -379,6 +379,7 @@ public class ModListCoexistenceTests
             alsoRequiredBy: ServerList());
 
         Assert.Empty(plan.Disable);
+        Assert.Equal("Something I pinned", Assert.Single(plan.Pinned).Name);
     }
 
     //

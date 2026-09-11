@@ -231,6 +231,31 @@ public sealed class ModListStore
 
     public ModList? GetSnapshot() => Load().Snapshot;
 
+    public IReadOnlySet<string> GetPins() =>
+        new HashSet<string>(Load().NeverAutoDisable, StringComparer.OrdinalIgnoreCase);
+
+    public void SetPinned(IEnumerable<string> keys, bool pinned)
+    {
+        var normalised = keys
+            .Where(k => !string.IsNullOrWhiteSpace(k))
+            .Select(k => k.Trim().ToLowerInvariant())
+            .Distinct()
+            .ToList();
+
+        if (normalised.Count == 0) return;
+
+        var data = Load();
+
+        var existing = new HashSet<string>(data.NeverAutoDisable, StringComparer.OrdinalIgnoreCase);
+
+        if (pinned)
+            data.NeverAutoDisable.AddRange(normalised.Where(k => !existing.Contains(k)));
+        else
+            data.NeverAutoDisable.RemoveAll(k => normalised.Contains(k, StringComparer.OrdinalIgnoreCase));
+
+        Save(data);
+    }
+
     public void Rename(Guid id, string name)
     {
         var data = Load();

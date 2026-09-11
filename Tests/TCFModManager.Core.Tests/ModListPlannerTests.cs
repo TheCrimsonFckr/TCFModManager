@@ -284,6 +284,37 @@ public class ModListPlannerTests
     }
 
     [Fact]
+    public void APinnedModShowsInThePlanAsPinned()
+    {
+        var plan = ModListPlanner.Build(
+            Exclusive(Entry("SAIN", 2426, 55, "3.2.0")),
+            [Installed("SAIN", 2426, "3.2.0"), Installed("SVM", folders: ["ServerValueModifier"])],
+            new HashSet<string> { "servervaluemodifier" });
+
+        Assert.Equal("SVM", Only(plan, ModListActionKind.Pinned).Name);
+        Assert.True(plan.IsNoOp);
+        Assert.False(plan.RequiresGameClosed);
+    }
+
+    [Fact]
+    public void APinOnAnAdditiveListChangesNothing()
+    {
+        var plan = ModListPlanner.Build(
+            List(ModListPolicy.Additive),
+            [Installed("SVM", folders: ["ServerValueModifier"])],
+            new HashSet<string> { "servervaluemodifier" });
+
+        Assert.Empty(plan.Actions);
+    }
+
+    [Fact]
+    public void PinKeysAreEveryFolderOrTheName()
+    {
+        Assert.Equal(["svm-client", "svm-server"], ModListPlanner.PinKeys(Installed("SVM", folders: ["SVM-Client", "svm-server"])));
+        Assert.Equal(["svm"], ModListPlanner.PinKeys(Installed("SVM")));
+    }
+
+    [Fact]
     public void APinnedModIsMatchedByDisplayNameToo()
     {
         var plan = ModListPlanner.Build(

@@ -38,7 +38,7 @@ public static class ModListMembership
             foreach (var action in ModListPlanner.Build(list, installed).Actions)
             {
                 // A Disable names a mod the list deliberately leaves out, so it is not membership.
-                if (action.Kind == ModListActionKind.Disable) continue;
+                if (action.Kind is ModListActionKind.Disable or ModListActionKind.Pinned) continue;
                 if (action.Installed is not { } candidate) continue;
                 if (!indexOf.TryGetValue(candidate, out var index)) continue;
 
