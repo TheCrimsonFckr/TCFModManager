@@ -602,7 +602,7 @@ public partial class ModListsViewModel : ObservableObject
         if (InstalledAs(entry, name) is { } folders) parts.Add($"installed as {folders}");
 
         if (!entry.IsResolved) parts.Add("not on sp-mod.com - installed by hand");
-        else if (entry.Version is { } version) parts.Add(entry.IsPinned ? $"version {version}" : $"version {version}, not pinned");
+        else if (entry.Version is { } version) parts.Add(entry.IsPinned ? $"version {version}" : $"version {version}, not locked");
         else parts.Add("newest published version");
 
         return string.Join(" · ", parts);
@@ -740,7 +740,7 @@ public partial class ModListsViewModel : ObservableObject
         VersionWarning = preview.List.SptVersion is { } captured
             && preview.Install.SptVersion is { } current
             && !string.Equals(captured, current, StringComparison.OrdinalIgnoreCase)
-                ? $"This list was made on SPT {captured} and you're running {current}. Mods pinned for one won't always work on the other."
+                ? $"This list was made on SPT {captured} and you're running {current}. Versions locked for one won't always work on the other."
                 : null;
 
         ApplyCommand.NotifyCanExecuteChanged();
@@ -1191,7 +1191,7 @@ public partial class ModListsViewModel : ObservableObject
             // and the whole point of the button is to be able to see what it decided.
             var named = string.Join(", ", result.Changed
                 .Take(5)
-                .Select(c => $"{c.Name} {c.From ?? "unpinned"} -> {c.To ?? "unpinned"}"));
+                .Select(c => $"{c.Name} {c.From ?? "unlocked"} -> {c.To ?? "unlocked"}"));
 
             var rest = result.Changed.Count > 5 ? $", and {result.Changed.Count - 5} more" : "";
 

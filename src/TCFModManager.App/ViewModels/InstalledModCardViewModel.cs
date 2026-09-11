@@ -239,7 +239,6 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     // rather than every template having to combine two conditions itself.
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ShowLists))]
-    [NotifyPropertyChangedFor(nameof(ShowPin))]
     private bool _showBadges = true;
 
     public bool IsInAnyList => Lists.Count > 0;
@@ -249,13 +248,10 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     // Pinned against a list's Exclusive sweep - see ModListStore.SetPinned. Filled in after a scan
     // by InstalledViewModel, like Lists.
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(ShowPin))]
     [NotifyPropertyChangedFor(nameof(PinLabel))]
     [NotifyPropertyChangedFor(nameof(PinGlyph))]
     [NotifyPropertyChangedFor(nameof(PinTooltip))]
     private bool _isPinned;
-
-    public bool ShowPin => ShowBadges && IsPinned;
 
     public string PinLabel => IsPinned ? "Unpin" : "Pin";
 

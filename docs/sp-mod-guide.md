@@ -172,7 +172,7 @@ A **mod list** is a named set of mods and the versions of them you run. Capture 
 
 **Apply** downloads what the list names and you do not have, enables what you have but had switched off, and moves anything the list does not name into the disabled folder. **Nothing is ever deleted.** Setting a mod aside is the same move the Installed page's disable button makes, and it is near-instant however large the mod is.
 
-**Pin** the mods you want kept whatever list you apply - a HUD, a sound pack, the quality-of-life mods that don't belong on any one list. A pinned mod is never set aside: Preview lists it as **Pinned** instead, with a button to unpin it. Pin from that Preview row, or with **Pin** on the mod's opened card on the Installed page, which then carries a **Pinned** chip. A pin also shows beside the mod in any list's contents and on its Browse card. Pins belong to your install and never travel with a list you share.
+**Pin** the mods you want kept whatever list you apply - a HUD, a sound pack, the quality-of-life mods that don't belong on any one list. A pinned mod is never set aside: Preview lists it as **Pinned** instead, with a button to unpin it. Pin from that Preview row, or with **Pin** on the mod's opened card on the Installed page. A pinned mod shows a pin under its disable button on Installed, beside its name in any list's contents, and on its Browse card. Pins belong to your install and never travel with a list you share.
 
 **Undo** puts the install back the way it was before the last apply. There is one undo point, kept up to date for you: applying a list replaces it, and using it clears it.
 
@@ -186,7 +186,7 @@ Three steps, and they are separate on purpose:
 2. **Save** writes the list. No downloads, nothing moved - the only thing it changes is what the list says.
 3. **Apply** is the only thing on this page that touches your game folder.
 
-**Add mods** offers what is installed here *and* the whole sp-mod catalog, so a list can name a mod this machine has never had. A mod added from the catalog is left unpinned - it means "the newest published version", because a version nobody here has run is not a version anybody has tested. **Refresh versions** re-reads the versions of every mod on the list that is installed here, for after an update round has moved a dozen of them.
+**Add mods** offers what is installed here *and* the whole sp-mod catalog, so a list can name a mod this machine has never had. A mod added from the catalog is left unlocked - it means "the newest published version", because a version nobody here has run is not a version anybody has tested. **Refresh versions** re-reads the versions of every mod on the list that is installed here, for after an update round has moved a dozen of them.
 
 Preview and Apply are switched off while there are unsaved changes, and the page says why: they work off the stored list, and running them against something the panel no longer agrees with is the one genuinely confusing state this page can reach.
 
@@ -197,7 +197,7 @@ What travels is a manifest - "install mod 2426 at version 5" - and never mod fil
 
 - **A list you imported is read-only**, and so is one a server served you. **Make a copy** turns it into one of your own, pointing back at where it came from.
 - **Mods the catalog cannot resolve** - GitHub-only mods, hand-built things - are listed by name rather than quietly dropped, so you know what to go and fetch yourself.
-- **A pinned version that has since been withdrawn** asks rather than failing: it offers the nearest version and lets you untick anything you would rather skip.
+- **A locked version that has since been withdrawn** asks rather than failing: it offers the nearest version and lets you untick anything you would rather skip.
 
 #### Who each mod is for
 Every entry names the machines it is for. It is worked out for you at capture time from where the mod's files actually live, and shown on every row. The **scope button** cycles a row through the six, and the filter above the list matches one exactly - which answers the question you have when tidying a list: what have I already pruned, and what is still carrying the capture default?

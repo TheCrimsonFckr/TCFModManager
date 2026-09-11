@@ -32,60 +32,35 @@
         <!-- One chip per mod list a mod belongs to, shared by all three views so they can't drift
              apart. Membership comes from ModListMembership, which runs the real planner, so a chip
              here and what applying that list would do can't disagree. ShowLists folds in the
-             page-wide toggle as well as "is it in any list at all". The Pinned chip leads the row
-             and follows the same toggle. -->
+             page-wide toggle as well as "is it in any list at all". -->
         <DataTemplate x:Key="ModListBadges">
-            <WrapPanel>
-                <Border
-                    Margin="0,2,4,0"
-                    Padding="5,1,6,1"
-                    CornerRadius="3"
-                    ToolTip="Pinned - no mod list you apply will set this mod aside"
-                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                    Visibility="{Binding ShowPin, Converter={StaticResource BoolToVis}}">
-                    <StackPanel Orientation="Horizontal">
-                        <ui:SymbolIcon
-                            Symbol="Pin24"
-                            FontSize="10"
-                            Margin="0,0,3,0"
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
-                        <TextBlock
-                            Text="Pinned"
-                            FontSize="10"
-                            FontWeight="SemiBold"
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
-                    </StackPanel>
-                </Border>
-                <ItemsControl
-                    ItemsSource="{Binding Lists}"
-                    Visibility="{Binding ShowLists, Converter={StaticResource BoolToVis}}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border
-                                Margin="0,2,4,0"
-                                Padding="6,1"
-                                CornerRadius="3"
-                                ToolTip="This mod is in this mod list"
-                                Background="{DynamicResource ControlFillColorSecondaryBrush}">
-                                <TextBlock
-                                    Text="{Binding}"
-                                    FontSize="10"
-                                    FontWeight="SemiBold"
-                                    TextTrimming="CharacterEllipsis"
-                                    MaxWidth="140"
-                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </WrapPanel>
+            <ItemsControl
+                ItemsSource="{Binding Lists}"
+                Visibility="{Binding ShowLists, Converter={StaticResource BoolToVis}}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Margin="0,2,4,0"
+                            Padding="6,1"
+                            CornerRadius="3"
+                            ToolTip="This mod is in this mod list"
+                            Background="{DynamicResource ControlFillColorSecondaryBrush}">
+                            <TextBlock
+                                Text="{Binding}"
+                                FontSize="10"
+                                FontWeight="SemiBold"
+                                TextTrimming="CharacterEllipsis"
+                                MaxWidth="140"
+                                Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </DataTemplate>
         <!--
              Everything the app knows about one installed mod, shown when a row or a card is
@@ -742,6 +717,15 @@
                                             ToolTip="{Binding DisableToggleTooltip}">
                                             <ui:SymbolIcon Symbol="{Binding DisableToggleGlyph}" FontSize="16" />
                                         </ui:Button>
+
+                                        <ui:SymbolIcon
+                                            Symbol="Pin24"
+                                            FontSize="14"
+                                            Margin="0,2,10,0"
+                                            HorizontalAlignment="Center"
+                                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                            ToolTip="Pinned - no mod list you apply will set this mod aside"
+                                            Visibility="{Binding IsPinned, Converter={StaticResource BoolToVis}}" />
                                     </StackPanel>
 
                                     <StackPanel Grid.Column="2" VerticalAlignment="Top">
@@ -1031,16 +1015,25 @@
                                                         <!-- Per-row disable toggle. ModRow_PreviewMouseLeftButtonDown
                                                              steps aside for anything inside a button, so this click
                                                              isn't swallowed by the row's own click/drag gesture. -->
-                                                        <ui:Button
-                                                            Grid.Column="2"
-                                                            Padding="4"
-                                                            VerticalAlignment="Center"
-                                                            Appearance="Transparent"
-                                                            Command="{Binding DataContext.ToggleDisableCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                                                            CommandParameter="{Binding}"
-                                                            ToolTip="{Binding DisableToggleTooltip}">
-                                                            <ui:SymbolIcon Symbol="{Binding DisableToggleGlyph}" FontSize="16" />
-                                                        </ui:Button>
+                                                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                                            <ui:Button
+                                                                Padding="4"
+                                                                Appearance="Transparent"
+                                                                Command="{Binding DataContext.ToggleDisableCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                                                CommandParameter="{Binding}"
+                                                                ToolTip="{Binding DisableToggleTooltip}">
+                                                                <ui:SymbolIcon Symbol="{Binding DisableToggleGlyph}" FontSize="16" />
+                                                            </ui:Button>
+
+                                                            <ui:SymbolIcon
+                                                                Symbol="Pin24"
+                                                                FontSize="12"
+                                                                Margin="0,1,0,0"
+                                                                HorizontalAlignment="Center"
+                                                                Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                                                ToolTip="Pinned - no mod list you apply will set this mod aside"
+                                                                Visibility="{Binding IsPinned, Converter={StaticResource BoolToVis}}" />
+                                                        </StackPanel>
                                                     </Grid>
                                                 </Border>
                                             </DataTemplate>
@@ -1142,7 +1135,7 @@
 
                                     <!-- Only the non-destructive actions live in the header; Remove
                                          and Sort out are inside the row, which has to be opened first. -->
-                                    <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <StackPanel Grid.Column="3" VerticalAlignment="Center">
                                         <ui:Button
                                             Padding="6"
                                             Appearance="Transparent"
@@ -1151,6 +1144,15 @@
                                             ToolTip="{Binding DisableToggleTooltip}">
                                             <ui:SymbolIcon Symbol="{Binding DisableToggleGlyph}" FontSize="16" />
                                         </ui:Button>
+
+                                        <ui:SymbolIcon
+                                            Symbol="Pin24"
+                                            FontSize="12"
+                                            Margin="0,1,0,0"
+                                            HorizontalAlignment="Center"
+                                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                            ToolTip="Pinned - no mod list you apply will set this mod aside"
+                                            Visibility="{Binding IsPinned, Converter={StaticResource BoolToVis}}" />
                                     </StackPanel>
                                 </Grid>
                             </ui:CardExpander.Header>
