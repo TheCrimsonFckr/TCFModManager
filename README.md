@@ -24,8 +24,10 @@ The released build is self-contained, so no separate .NET runtime install is nee
 2. Extract it into your SPT folder as `<SPT root>\TCFModManager\` a sibling of `BepInEx\` and
   `user\`, **not** a mod folder. Anywhere else works too; it just needs to know where SPT is.
 3. Run `TCFModManager.exe`.
-4. Go to **Options**, point it at your SPT install folder, and hit Save. The detected server
-  version appears underneath everything else keys off that.
+4. Go to **Options**, point it at your SPT install folder - the top one, with `EscapeFromTarkov.exe`
+  and `BepInEx\` in it, not `SPT\` or `SPT_Runtime\` - and hit Save. The detected server
+  version appears underneath everything else keys off that. Picking the server folder by mistake
+  is corrected to the folder above it.
 
 ## What it does
 

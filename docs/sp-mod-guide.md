@@ -1,5 +1,7 @@
 **TCF Mod Manager** is a Windows desktop app for finding, installing and keeping track of your SPT mods, built directly against the sp-mod catalog you're reading this on. Browse the full mod list, filter it down to what actually works on your SPT version, install with dependencies resolved for you, turn mods on and off without deleting anything, and see at a glance what's out of date.
 
+It also keeps **mod lists** - save the set you run, switch between sets, send one to a friend, or follow the list a server publishes and know what you are missing before you launch. Plus a config editor, a start button for the server and the launcher, and an optional page that reads what each installed mod actually ships.
+
 WPF with Fluent Design, .NET 9, no account or API key needed.
 
 #### information
@@ -19,7 +21,7 @@ The released build is self-contained - you don't need to install .NET separately
 1. Download `TCF-ModManager-<version>.zip` from this page.
 2. Extract it into your SPT folder as `<SPT root>\TCFModManager\` - a sibling of `BepInEx\` and `user\`.
 3. Run `TCFModManager.exe`.
-4. Open **Options**, point it at your SPT install folder, and hit Save. The detected server version appears underneath - everything else keys off that.
+4. Open **Options**, point it at your SPT install folder - the top one, with `EscapeFromTarkov.exe` and `BepInEx\` in it - and hit Save. The detected server version appears underneath - everything else keys off that.
 
 #### warning
 This is **not** a mod. Don't extract it into `BepInEx\plugins` or `user\mods`. It's a standalone application that manages that folder for you. Anywhere on disk works, really - it just needs to be told where SPT lives.
@@ -27,8 +29,24 @@ This is **not** a mod. Don't extract it into `BepInEx\plugins` or `user\mods`. I
 Once it's set up, the app keeps itself up to date from its own page here on sp-mod - see the **App updates** tab.
 
 #### If the SPT version doesn't detect
-The version is read from the server executable - `SPT.Server.exe`, or the older `Aki.Server.exe` - at the install root or under `SPT\` / `SPT_Runtime\`. Point Options at the folder that contains one of those, not at a subfolder.
+The version is read from the server executable - `SPT.Server.exe`, or the older `Aki.Server.exe` - at the install root or under `SPT\` / `SPT_Runtime\`. Point Options at the install root, the folder with `EscapeFromTarkov.exe` in it, not at the server folder or any other subfolder. If you do pick `SPT\` or `SPT_Runtime\` itself, the app moves the setting up to the folder above it.
 
+
+### Play
+Starts the install rather than making you go and find it. It is the first page in the sidebar, and on a machine that only plays it is the only one you need before a session.
+
+- **Start server** runs this install's server in its own console window. It keeps running if you close the app, and nothing on this page stops it - close its window when you are done.
+- **Open launcher** opens `SPT.Launcher.exe`, where you pick a profile and start the game. Start the server first; the launcher has nothing to log in to without one.
+- **Restart the server** sits beside it, enabled only while the server is actually running. It asks first, on the card, because a raid in progress does not survive one and there is no undo.
+- **Fika headless client** gets its own card, and only on a setup that has a headless launcher. A headless hosts raids for other people rather than being the one you play on, so it never shares a button with the game.
+
+#### Before you join
+The page checks your install against the mod list you are following - your own, or one a server published - and says what is outstanding. **Check again** re-runs it.
+
+It never blocks a launch. The mods it names may not matter for the raid you are about to play, the server may be wrong, and a launch held up by a warning nobody can override is worse than a mismatch.
+
+#### information
+Stopping on its own is deliberately not offered. A restart puts back what it took; a server left down is a state somebody has to notice, and this app is not the thing that should decide to leave it that way.
 
 ### Browse
 The whole sp-mod catalog, fetched once and cached to disk so it opens instantly next time.
@@ -147,6 +165,106 @@ A mod list containing an addon needs this version of the app or newer to open. S
 A move interrupted partway - or one done by hand - can leave the same mod in both the normal folder and the `.disabled` one. When that happens the card says so and offers **Sort out**: pick which copy to keep, and the other is moved into a hidden `.tcfmm-duplicates` folder inside your SPT install rather than deleted. Undo puts that back too.
 
 
+### Mod lists
+A **mod list** is a named set of mods and the versions of them you run. Capture what you have now, switch between sets, send one to a friend, or follow the one a server publishes. It records mods and versions, never files, so capturing is instant however big your install is.
+
+**Capture** saves whatever is enabled right now. **Preview** works out what applying it would do and shows you one row per mod - install, update, enable, set aside - and nothing moves until you press **Apply**.
+
+**Apply** downloads what the list names and you do not have, enables what you have but had switched off, and moves anything the list does not name into the disabled folder. **Nothing is ever deleted.** Setting a mod aside is the same move the Installed page's disable button makes, and it is near-instant however large the mod is.
+
+**Undo** puts the install back the way it was before the last apply. There is one undo point, kept up to date for you: applying a list replaces it, and using it clears it.
+
+#### warning
+The disable half needs the game and the server closed - BepInEx holds the files it has loaded open. Preview says so before you apply.
+
+#### Editing a list
+Three steps, and they are separate on purpose:
+
+1. **Add mods** and the **X** on a row change the list on screen only.
+2. **Save** writes the list. No downloads, nothing moved - the only thing it changes is what the list says.
+3. **Apply** is the only thing on this page that touches your game folder.
+
+**Add mods** offers what is installed here *and* the whole sp-mod catalog, so a list can name a mod this machine has never had. A mod added from the catalog is left unpinned - it means "the newest published version", because a version nobody here has run is not a version anybody has tested. **Refresh versions** re-reads the versions of every mod on the list that is installed here, for after an update round has moved a dozen of them.
+
+Preview and Apply are switched off while there are unsaved changes, and the page says why: they work off the stored list, and running them against something the panel no longer agrees with is the one genuinely confusing state this page can reach.
+
+#### Sharing a list
+**Export** writes a `.tcfmodlist` file. Send it to whoever you like; **Import** reads it back.
+
+What travels is a manifest - "install mod 2426 at version 5" - and never mod files. The receiving app downloads from sp-mod.com exactly as it would for any other install, which is faster than anything a person could serve you, costs the sender no bandwidth, raises no redistribution question, and keeps the mod author's download count honest.
+
+- **A list you imported is read-only**, and so is one a server served you. **Make a copy** turns it into one of your own, pointing back at where it came from.
+- **Mods the catalog cannot resolve** - GitHub-only mods, hand-built things - are listed by name rather than quietly dropped, so you know what to go and fetch yourself.
+- **A pinned version that has since been withdrawn** asks rather than failing: it offers the nearest version and lets you untick anything you would rather skip.
+
+#### Who each mod is for
+Every entry names the machines it is for. It is worked out for you at capture time from where the mod's files actually live, and shown on every row. The **scope button** cycles a row through the six, and the filter above the list matches one exactly - which answers the question you have when tidying a list: what have I already pruned, and what is still carrying the capture default?
+
+| Scope | Who gets it |
+| --- | --- |
+| Server + Client + Headless | Everything. A mod with both halves, by default |
+| Server + Client | The server and the players; not the headless |
+| Client + Headless | Every machine running the game. A plugin, by default |
+| Client only | Players only - HUD tweaks, sound packs, anything drawn at a person |
+| Headless only | The headless box alone |
+| Server only | The server's own mods - `fika-server` and friends |
+
+What is in the name gets it; what is not, does not. Nothing on disk separates a bot overhaul from a HUD widget - both are a DLL in `BepInEx\plugins` - so a capture gives every plugin to the headless and you take away what it does not need. That direction is deliberate: a headless carrying a spare mod costs nothing anyone can see, while one missing an item or bot mod is felt by everybody in the raid it is hosting.
+
+A **headless still takes Server only entries**. It is a full SPT install, and a server-only entry is a whole mod rather than half of one. **Server + Client** is how you say the server and the players need this and the headless does not.
+
+#### information
+Scope only ever narrows a list a server served you. **Your own lists describe your own install and apply whole** - which matters if you host and play on the same machine, see below.
+
+#### If you run the server
+Publishing needs the Server Map mod on the server - see the Server map tab. The steps here are the mod list half.
+
+1. **Capture the list on the machine the server runs on**, so the server's own mods are in it and scoped `Server only` for you.
+2. **Prune it for the people receiving it.** Take the headless off anything it does not need; leave the players everything they do.
+3. **Publish to this server** writes it where the server serves it from. The list gets a red **Serving** badge so you can see which of a dozen personal lists is the one going out.
+4. **Edit, Save, and publish again** to hand out a new version. The revision moves only when what you published actually changed, so republishing an unchanged list is a no-op and the number still means something.
+
+On the joining side, a served list is stored read-only and marked as coming from that server. **Refresh from server** asks for it again whether or not the revision has moved - for a copy you doubt - and names what came back. It installs nothing; applying is still a separate step.
+
+#### warning
+**Do not apply your published client list on the machine that hosts.** A list of your own applies whole - every entry, whatever its scope - so one pruned down to what players need names none of your server's mods, and applying it there sets aside `fika-server`, SVM and the Server Map mod itself, which is the thing publishing the list. Nothing is deleted and **Undo** puts it straight back, but your server stops serving until you do.
+
+The shape that works is **two lists on the server box**: the full one you apply there, and the pruned one you publish. They are cheap - a list is a manifest, not a copy of anything.
+
+#### Following a server and your own list at once
+Both can be active. Following a server does not cost you the personal list you were already following, and applying a list of your own will not sweep away what the server requires - the mods it asks for are spared.
+
+A list a server hands you **never disables anything**, whatever its author chose. An operator writing a list is describing their install; applying that verbatim on your machine would set aside mods the server has never heard of and has no opinion about.
+
+
+### Configs
+Edit your mods' settings without leaving the app. The page finds every config file your installed mods actually have and groups them by where they live, because that turns out to be the thing that matters:
+
+- **Client** - the files in `BepInEx\config`, one per plugin.
+- **Server** - the files inside a server mod's own folder under `user\mods`.
+- **BepInEx** - BepInEx's own settings, which are not a mod's.
+- **Unclaimed** - a `BepInEx\config` file no installed plugin answers to. Almost always a mod you removed at some point, leaving its settings behind.
+
+Each row shows the mod and the file's path inside its folder, so the twenty mods that all ship a `config.json` are never mixed up. There is a search box and a filter to narrow it to one kind.
+
+The two halves behave differently, and the page says so above the editor: **a client mod's settings live outside its folder**, so they survive disabling and removing it; **a server mod's settings live inside its folder** and travel with it.
+
+#### Editing is careful with your files
+- **Nothing is ever reformatted.** For a lot of mods the comments in the config file are the only documentation those settings have. Saving changes the lines you changed and leaves everything else exactly as it was.
+- **Broken JSON is refused, not written**, with the line that stopped making sense. Comments and trailing commas are fine - plenty of server mods ship both.
+- **Every save keeps a copy of what was there first**, in `Data\config-backups\` inside the app's own folder, one timestamped folder per save. Copying one back over your install undoes a round of edits.
+- **If the file changed underneath you** - the game wrote it, or you edited it in Notepad - the save stops and asks whether to overwrite, reload or leave it. Whichever you pick, what is on disk is copied aside first.
+- **Shipped defaults** (`config.default.json` and the like) are listed but dimmed: they are the pristine copy, so editing one does nothing. They are shown rather than hidden because they are what you look at when you want the original value back.
+
+#### warning
+Changing a mod's settings is your call. If a change breaks the mod or your game that is not the author's problem to put right - only change settings you understand, and say so if you report a bug after editing a config.
+
+#### information
+BepInEx writes its config files back out when the game closes, so a client config edited mid-session is likely to be undone. A server config takes effect on the next server restart.
+
+#### Updating a mod still replaces its config
+Installing a newer version of a mod places that version's files, defaults included. The config you had is set aside into `Data\LegacyConfigs\` rather than deleted - but nothing puts it back for you, and nothing on the Configs page reads that folder. If a mod's settings matter to you, copy them out before updating it, or take them from `Data\LegacyConfigs\` afterwards. Carrying them across for you is designed and not yet built.
+
 ### Dependencies
 Resolves the dependency tree of every installed mod that declares one, and reports each dependency's state against what's actually on disk.
 
@@ -154,6 +272,46 @@ That includes **version conflicts** - where two installed mods want incompatible
 
 Anything missing can be installed straight from the list.
 
+
+### Mod footprint
+An optional page - **off by default**, turned on under **Options - Mod footprint page** - with one row per installed mod, showing what each mod's files contain. Open a row for the full breakdown; rows sort by patch classes, components or size.
+
+**Nothing is measured.** The app does not launch the game, load a mod or run any mod's code. Nothing is timed or profiled, no frame rates are reported, and there are no scores, ratings or rankings. Everything is read from the files on disk:
+
+- **Patch classes shipped**, and components the engine would call on a timer - per-frame updates, physics steps, on-screen interface drawing, camera hooks - broken down by which.
+- **Asset bundles** and their size, held in memory once loaded.
+- **Whether it ships a preloader patcher**, which runs before the game loads.
+- **Whether it has a server half** under `user\mods`, counted separately and never folded into the client figures.
+- **Disk usage**, in files and megabytes.
+
+#### What the figures do not cover
+- It counts patch classes, not patched methods. One class can target several methods, so the real number can be higher.
+- It cannot see what a patch touches. A patch on a per-frame method and a patch on a menu button are counted the same way.
+- A declared component only runs if the mod creates and enables one, which the files do not show. Every line says *declares* or *ships*.
+- Some mods are packed or obfuscated in ways it cannot parse. The breakdown says so rather than guessing.
+
+#### information
+Readings are cached in `Data\mod_footprints.json` and a mod is re-read only when its files change; **Rescan** forces a fresh read. Disabled mods are included and marked as not loaded. Nothing is uploaded - the page makes no network requests at all.
+
+
+### Server map
+An optional page - **off by default**, turned on in Options - that connects to an SPT server running the **Server Map mod** and shows what that server runs, so you can be ready before you launch rather than after a raid fails to load.
+
+- **The mod goes on the server**, not on your machine. It is a separate download, published as an addon of this mod - **Options - Server map - Get the Server Map mod** opens its page - and a player joining a server needs none of it.
+- **Connecting sends nothing about your install.** It asks the server who it is; the server never asks anything about you.
+- **The server serves a list, never files.** Mods are still only ever downloaded from sp-mod.com. A server that could push files at you would break the one rule this app is built on, so there is no route for it to do so.
+- **Certificates are pinned on first use.** SPT serves a self-signed certificate, so the app remembers the exact one your server presented and tells you if it ever changes - which is what a machine-in-the-middle would look like. Trust the new one or refuse it.
+- **A shared key** guards everything but the handshake. The operator gives it to you; on the server's own machine the app finds it by itself.
+
+**Connecting fetches the list for you** and saves it as a read-only mod list, marked as coming from that server; it is fetched again on its own whenever the server's revision moves. **Fetch again** asks for it even when the revision hasn't moved, for a copy you have edited or deleted.
+
+Saving is not applying. From there it is an ordinary list - preview it on the Mod lists page, apply it, keep your own alongside it - and the Play page's check compares against it before you launch.
+
+#### If you run the server
+The Server Map mod's own page carries the operator guide - installing the payload and the stub for your SPT line, where the key and the published list live (`TCFModManager\Data\ServerMap\`), rotating the key, and opening a port. The mod list half - capturing, pruning, publishing, and the one thing not to apply on the machine that hosts - is on the Mod lists tab.
+
+#### warning
+Client and server must be on the same SPT line: a 4.1 client cannot join a 4.0.13 server, and that is SPT's rule rather than this app's. A published list only ever reaches people already on your version.
 
 ### Downloads
 The install queue. Items process one at a time; each resolves its dependencies and queues those alongside it.
@@ -214,9 +372,14 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 | `Data\spt_versions.json` | Cached SPT release list, refetched daily |
 | `Data\dependency_flags.json` | Per-mod "has dependencies" answers, re-checked when a mod publishes |
 | `Data\mod_groups.json` | Your groups, and which mod is in which |
+| `Data\mod_lists.json` | Your mod lists, which ones you follow, and the single undo point |
+| `Data\addon_cache.json` | Cached addon catalog |
+| `Data\mod_footprints.json` | Cached footprint readings, only if that page is on |
+| `Data\config-backups\` | One timestamped folder per config save, laid out like your install |
 | `Data\logs\tcfmm-<date>.log` | Daily log |
 | `Staging\` | Default destination for manually downloaded archives |
-| `LegacyConfigs\` | Config files kept from removed mods, one timestamped folder per removal |
+| `Data\LegacyConfigs\` | Config files kept from removed and updated mods, one timestamped folder each |
+| `Data\ServerMap\` | On a server: the shared key (`servermap-key.txt`) and the list it publishes |
 | `.tcfmm-update\` | Hidden. Only exists while an app update is downloading, or if one failed; cleaned up on the next launch |
 
 Two more folders are created inside your **SPT install**, both hidden: `.tcfmm-work\` (scratch space while a mod installs, swept each run) and `.tcfmm-duplicates\` (copies set aside by **Sort out**, kept until you delete them).
@@ -255,6 +418,22 @@ Worth knowing before you rely on it. None of these lose data quietly - they're p
 - **The catalog only covers SPT 3.10 and newer.** On older SPT, most of what you could install won't be listed.
 - **"Installed" dates** come from the folder's creation date, so a mod updated in place still shows when you first installed it.
 
+#### Mod lists
+- **A list records mods and versions, never files.** Anything it names has to be gettable from sp-mod for the receiver to install it; mods that aren't are listed by name so they can be fetched by hand.
+- **Scope only narrows a list a server served you.** Your own lists apply whole on the machine that owns them - which is why a server box wants its own list as well as the one it publishes.
+- **There is one undo point**, replaced by each apply and cleared by using it. It puts mods back where they were; it is not a history.
+- **An addon that ships inside its parent's folder can be installed and updated by a list, but not set aside by one** - there is no folder of its own to move. Disabling the parent takes it along.
+- **A list you edited but never applied exports under its old revision number**, since a revision counts an apply. Apply before sharing if you want the receiver's copy to read as newer.
+
+#### Configs
+- **Updating a mod places that version's config defaults.** Your previous file is set aside in `Data\LegacyConfigs\` rather than deleted, but nothing puts it back for you.
+- **Settings kept somewhere unusual aren't recognised as configs** - a `Presets\` folder rather than `config\`, for instance. Those are edited by hand.
+
+#### Server map
+- **Client and server must be on the same SPT line**, which is SPT's rule rather than this app's.
+- **The server publishes a list, not files**, and the page reports nothing about your install back to it.
+- **A server's certificate is pinned on first connect.** If it changes you are asked before anything else happens, because that is also what an interception would look like.
+
 #### Scope
 - **One SPT install at a time.** The record of what's installed belongs to the app, not to the install it points at, so pointing Options at a second SPT folder will carry the first one's records across. Use a separate copy of the app per install.
 - **The catalog refreshes once per session** in the background. Mods published while the app is open won't appear until you press Refresh cache or restart.
@@ -264,7 +443,10 @@ Worth knowing before you rely on it. None of these lose data quietly - they're p
 ### Troubleshooting
 
 #### The SPT version shows as unknown
-Options needs the folder containing `SPT.Server.exe` (or `Aki.Server.exe`). It also looks under `SPT\` and `SPT_Runtime\`, but not deeper.
+Options needs your SPT install root - the folder with `EscapeFromTarkov.exe` and `BepInEx\` in it. The server exe (`SPT.Server.exe`, or `Aki.Server.exe`) is found from there, at the top or under `SPT\` / `SPT_Runtime\`, but not deeper.
+
+#### Mods went into `SPT\SPT\...` or `SPT\BepInEx\...`
+The install folder was set to the server folder - `SPT\` on 4.0, `SPT_Runtime\` on 4.1 - instead of the install root, so everything installed went one level too deep. Before v1.13.2 Options accepted that without complaint; from v1.13.2 the setting is moved up to the install root by itself the next time the app starts. Mods that already went into the wrong place stay there: look inside the server folder for a stray `BepInEx\` or a second `SPT\` / `SPT_Runtime\` / `user\` folder, and move what is in them into the real `BepInEx\plugins` at the install root and your server's `user\mods` - or delete them and install those mods again.
 
 #### A mod I know exists shows "nothing compatible"
 The mod has no version published for your SPT release line. That's a statement about the mod page, not about your install - check the mod's own versions list.
@@ -290,16 +472,28 @@ The files placed before it failed are recorded, so they stay under the app's con
 #### An app update didn't go through
 Your existing version is untouched and still works - that's by design. The new build is sitting in `.tcfmm-update\payload\` next to the exe if you want to copy it over by hand, and `Data\logs\tcfmm-<date>.log` says what stopped it. The usual causes are no write access to the folder (move the app out of `Program Files`) and not enough free disk space.
 
+#### I applied a list and my server's mods switched off
+You applied a list that names none of them - usually the pruned one meant for players - on the machine that hosts. Nothing was deleted: press **Undo** on the Mod lists page and everything comes straight back. Keep two lists on that machine, one to apply there and one to publish.
+
+#### The list from my server never updates
+Press **Refresh from server** on the list, on the Mod lists page. It asks again whether or not the revision has moved. If you are the operator and clients aren't seeing a change, publish again after saving - publishing is what hands the new version out.
+
+#### My headless installed a pile of mods it doesn't need
+It is reading as an ordinary player. **Options - What this machine is** says whether anybody plays there and whether it runs a headless client; a served list is only trimmed once that is answered. If the app never asked, it didn't find `FikaHeadlessManager.exe` at the top of the install folder - point **Options - Fika headless launcher** at it.
+
 #### Reporting a bug
 Grab `Data\logs\tcfmm-<date>.log` - ideally after adding the `verbose` marker file and reproducing the problem - and open an issue at [github.com/TheCrimsonFckr/TCFModManager](https://github.com/TheCrimsonFckr/TCFModManager).
 
 
 ### Planning
-- Mod lists/profiles - Completed
-- Server mapping - Intitial Release
-- Mod list sharing and handling (if you have played arma modded or Total war modded, think like that) - Completed
-- Mod syncing get on the same level as the server you are joining  - Initial release
+- Mod lists / profiles - Completed
+- Mod list sharing and handling (if you have played Arma modded or Total War modded, think like that) - Completed
+- Mod syncing, getting on the same level as the server you are joining - Completed
+- Server mapping - Released, and being built on
+- Fika headless support, so a headless is served only what it needs - Completed
 - Window default sizes - Completed
-- Defualt filtering - Completed
+- Default filtering and page defaults - Completed
+- Config protection, so updating a mod stops replacing your settings - Next
+- Per-mod pins, so a mod you always want on survives any list you apply - Next
 
 {.endtabset}

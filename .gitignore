@@ -19,7 +19,7 @@ publish/
 # docs
 release-notes*.md
 *design.md
-*followups.md
+*followups*.md
 
 # Test output
 TestResults/

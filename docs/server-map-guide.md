@@ -149,6 +149,17 @@ restarting the server**.
 The published list gets a red **Serving** badge on the Mod lists page, so among a dozen personal
 lists you can see which one other people are being handed.
 
+#### warning
+**Do not apply your published list on the machine that hosts.** Scope decides what a machine takes
+from a list a *server* served it; a list of your own applies whole, every entry whatever its scope.
+So a list pruned down to what players need names none of your server's mods, and applying it on the
+server box sets aside `fika-server`, SVM and the Server Map mod itself which is the thing serving the
+list. Nothing is deleted and **Undo** puts it straight back, but your server stops publishing until
+you do.
+
+Keep **two lists on the server box**: the full one you apply there, and the pruned one you publish.
+A list is a manifest rather than a copy of anything, so a second one costs nothing.
+
 ## Stop a server mod being sent to my players?
 
 Mark it **Server only**.
@@ -157,30 +168,68 @@ The problem: your server needs `fika-server`, the Server Map mod itself, and any
 in `user\mods`. None of those are on The Forge, and none of them belong on a player's machine. But
 if you leave them off your list entirely, applying your own list on the server switches them off.
 
-So every entry on a list has a **scope**:
+So every entry on a list has a **scope**, named after the machines that get the mod. What is in the
+name gets it; what is not, does not.
 
-| Scope | Means |
+| Scope | Who installs it |
 |---|---|
-| **Everyone** | both sides install it the normal case |
-| **Client only** | only the player installs it |
-| **Server only** | only the server has it; clients skip it completely |
+| **Server + Client + Headless** | everything. A mod with both halves, by default |
+| **Server + Client** | the server and the players, but not the headless |
+| **Client + Headless** | every machine running the game. A plugin, by default |
+| **Client only** | players only. HUD tweaks, sound packs, anything drawn at a person |
+| **Headless only** | the headless box alone |
+| **Server only** | the server's own mods. `fika-server`, the Server Map mod, SVM |
 
-A **Server only** entry is not fetched by a client, not counted as missing, and never appears in
+A **Server only** entry is not fetched by a player, not counted as missing, and never appears in
 their "you are behind" list.
 
 Scope is worked out for you when you capture a list, from where the mod's files actually live. To
-change one: select the list, find the row, and press the **scope button** (the two-people icon) to
-cycle it Everyone → Client only → Server only → Everyone. Then **Save**, then **Publish to this
-server** again.
+change one: select the list, find the row, and press the **scope button** to cycle it. The full set
+leads into **Client + Headless** first, because taking a HUD mod off the headless is the edit
+anybody actually makes. Then **Save**, then **Publish to this server** again.
+
+The **scope filter** above the list matches one exactly, which is the question you have while tidying
+one: what have I already pruned, and what is still carrying the capture default?
+
+## Serve a Fika headless only what it needs?
+
+A headless runs the game but nobody sits at it. It needs the mods that decide how a raid goes - bots,
+items, weapons, locations - and has no use for the ones that draw things at a player. Served a
+player's list it installs a pile of HUD tweaks and sound packs it will never show anyone.
+
+One list still covers everybody. The machine reading it takes the entries scoped to it.
+
+- **Capture gives every plugin to the headless** (`Client + Headless`) and you take away what it does
+  not need. Nothing on disk separates a bot overhaul from a HUD widget, so the guess goes the safe
+  way: a headless carrying a spare mod costs nothing anyone can see, while one missing an item or bot
+  mod is felt by everybody in the raid it is hosting.
+- **A headless still takes Server only entries.** It is a full SPT install, and a server-only entry
+  is a whole mod rather than half of one. **Server + Client** is how you say the server and the
+  players need this and the headless does not.
+- **The headless machine has to know what it is.** On that machine: **Options** → **What this
+  machine is**. The app asks by itself when you set the install folder and it finds
+  `FikaHeadlessManager.exe`; until somebody answers, the machine is treated as an ordinary player,
+  which installs more rather than less.
+
+Lists written before this keep meaning what they meant: **Client** used to mean "not the server",
+because the server and a player were the only two machines a list could describe, so an entry written
+then is read as **Client + Headless** now.
 
 ## Update the list my server is serving?
 
 Edit the list, **Save** it, then **Publish to this server** again. That is all the server picks
 up the new file on its own.
 
-Every apply bumps the list's **revision** number, and that number is what tells connected players
-their copy is stale. They will see "the server is publishing revision 4; you have revision 3" on
-their Play page.
+**The list you publish stays yours to edit.** A copy of it coming back off your own server never
+replaces the original, so hosting and playing on one machine does not turn your own list read-only.
+
+**Publishing moves the revision when what you published has changed.** That number is what tells
+connected players their copy is stale: they see "the server is publishing revision 4; you have
+revision 3" on their Play page. Republishing an unchanged list changes nothing, so the number still
+means something when it does move.
+
+If somebody's copy looks stale anyway, they can press **Refresh from server** on the list itself,
+which asks again whether or not the revision has moved.
 
 ## Let people connect from outside my network?
 
@@ -239,13 +288,34 @@ button puts your own back.
 On any machine that is not running a server, no file is found and the box stays empty which is
 correct. A key belongs to one server.
 
+## Tell the app this machine is a headless?
+
+**Options** → **What this machine is**, directly under the install folder. Two switches: whether
+anybody plays here, and whether this machine runs a Fika headless client. A dedicated headless box is
+the second without the first.
+
+The app asks the question by itself when you set the install folder and find `FikaHeadlessManager.exe`
+at the top of it. **Ask me later** stores nothing and brings it back; until it is answered the
+machine is treated as an ordinary player.
+
+Nothing on disk tells a headless install from a player's one, so this cannot be worked out for you: a
+headless has `SPT.Server.exe`, BepInEx and a game client exactly like a player's. If your headless
+manager lives somewhere else, or is named something else, point **Options** → **Fika headless
+launcher** at it - it does not have to be inside the install folder.
+
+This only ever narrows a list a server served you. Your own lists apply whole, and nothing here
+changes what you can install by hand.
+
 ## Get the server's mod list?
 
-On the **Server map** page, press **Fetch again**.
+You do not have to ask for it. Connecting fetches it, and it is fetched again on its own whenever the
+server's revision moves. **Fetch again** on the **Server map** page asks for it even when the
+revision has not moved, for a copy you have edited or deleted.
 
 The list is saved here as a new mod list, badged red as **From server** on the Mod lists page. It
 stays exactly as the server wrote it you cannot edit it. If you want a version of your own, use
-**Make a copy**.
+**Make a copy**. **Refresh from server**, on the list itself, is the same re-ask from the page where
+the list actually lives.
 
 ## Install what the server expects?
 
@@ -255,17 +325,22 @@ Treat it like any other list:
 2. **Preview** to see exactly what would change.
 3. **Apply** to queue the downloads.
 
-Everything comes from sp-mod.com as usual, and anything the server marked **Server only** is
-skipped you will not be asked to install `fika-server`.
+Everything comes from sp-mod.com as usual, and you only get the entries meant for this machine: a
+player is never asked to install `fika-server`, and a headless is not sent the mods that only draw
+things at a person. Whether this machine is a player, a headless, or both is answered under
+**Options** → **What this machine is**.
 
 ## Keep my own mods as well as the server's?
 
 You do not have to choose. A server's list and one of your own can be **active at the same time**,
 which is what the two separate tick marks on the Mod lists page mean.
 
-Following a server does not drop the personal list you were already following, and applying an
-Exclusive list of your own will not sweep away the mods the server requires they are protected
-from your own list's tidy-up.
+Following a server does not drop the personal list you were already following, and applying a list
+of your own will not sweep away the mods the server requires they are protected from your own list's
+tidy-up.
+
+It works the other way too: a list a server hands you never disables anything of yours, whatever its
+author chose. The server says what you need, not what you may not have.
 
 ## Check I am ready before I play?
 
@@ -284,7 +359,7 @@ buttons still work.
 ## Find one mod on a long list?
 
 A served list can run to eighty mods. Above the list contents there is a **search box**, a **scope
-filter** (All scopes / Everyone / Client only / Server only) and a **sort** (A-Z / Z-A).
+filter** (All scopes, then each of the six scopes) and a **sort** (A-Z / Z-A).
 
 Search matches the mod's name, the name the list stored, and the folder it installs into so you
 can find something by the folder name if that is what you know it by.
@@ -307,7 +382,7 @@ Troubleshooting...
 ## The server does not have a published playlist
 
 The server is running the mod but is not publishing anything. Either the operator has not published
-one yet, or the file did not land in `TCFModManager\ServerMap\config\`. Operators: check the file is
+one yet, or the file did not land in `TCFModManager\Data\ServerMap\`. Operators: check the file is
 there, and that there is either exactly one `.tcfmodlist` in the folder or one named
 `published.tcfmodlist` several files with no preferred name is ambiguous, so the server serves
 nothing rather than guessing.
@@ -331,6 +406,16 @@ expected it. If yes, **Trust the new certificate**. If you are not sure, do not.
 Keys are compared ignoring dashes, spaces and case, so a formatting difference is not the cause. Ask
 the operator to re-read `servermap-key.txt` it is regenerated only if the file is deleted, so a
 mismatch usually means you have an old one.
+
+## My headless installed a pile of player mods
+
+It is reading as an ordinary player, which is what an unanswered machine is treated as. On that
+machine: **Options** → **What this machine is**. If the app never asked, it did not find
+`FikaHeadlessManager.exe` at the top of the install folder point **Options** → **Fika headless
+launcher** at the one you have.
+
+Operators: check the list too. A row still scoped **Client + Headless** goes to the headless by
+design that is the capture default, and pruning it is the operator's job.
 
 ## Nothing answers at all
 
