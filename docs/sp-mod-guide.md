@@ -172,6 +172,8 @@ A **mod list** is a named set of mods and the versions of them you run. Capture 
 
 **Apply** downloads what the list names and you do not have, enables what you have but had switched off, and moves anything the list does not name into the disabled folder. **Nothing is ever deleted.** Setting a mod aside is the same move the Installed page's disable button makes, and it is near-instant however large the mod is.
 
+**Pin** the mods you want kept whatever list you apply - a HUD, a sound pack, the quality-of-life mods that don't belong on any one list. A pinned mod is never set aside: Preview lists it as **Pinned** instead, with a button to unpin it. Pin from that Preview row, or with **Pin** on the mod's opened card on the Installed page, which then carries a **Pinned** chip. Pins belong to your install and never travel with a list you share.
+
 **Undo** puts the install back the way it was before the last apply. There is one undo point, kept up to date for you: applying a list replaces it, and using it clears it.
 
 #### warning
@@ -372,7 +374,7 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 | `Data\spt_versions.json` | Cached SPT release list, refetched daily |
 | `Data\dependency_flags.json` | Per-mod "has dependencies" answers, re-checked when a mod publishes |
 | `Data\mod_groups.json` | Your groups, and which mod is in which |
-| `Data\mod_lists.json` | Your mod lists, which ones you follow, and the single undo point |
+| `Data\mod_lists.json` | Your mod lists, which ones you follow, your pinned mods, and the single undo point |
 | `Data\addon_cache.json` | Cached addon catalog |
 | `Data\mod_footprints.json` | Cached footprint readings, only if that page is on |
 | `Data\config-backups\` | One timestamped folder per config save, laid out like your install |
@@ -494,6 +496,6 @@ Grab `Data\logs\tcfmm-<date>.log` - ideally after adding the `verbose` marker fi
 - Window default sizes - Completed
 - Default filtering and page defaults - Completed
 - Config protection, so updating a mod stops replacing your settings - Next
-- Per-mod pins, so a mod you always want on survives any list you apply - Next
+- Per-mod pins, so a mod you always want on survives any list you apply - Completed
 
 {.endtabset}

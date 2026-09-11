@@ -239,11 +239,31 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     // rather than every template having to combine two conditions itself.
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ShowLists))]
+    [NotifyPropertyChangedFor(nameof(ShowPin))]
     private bool _showBadges = true;
 
     public bool IsInAnyList => Lists.Count > 0;
 
     public bool ShowLists => ShowBadges && Lists.Count > 0;
+
+    // Pinned against a list's Exclusive sweep - see ModListStore.SetPinned. Filled in after a scan
+    // by InstalledViewModel, like Lists.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ShowPin))]
+    [NotifyPropertyChangedFor(nameof(PinLabel))]
+    [NotifyPropertyChangedFor(nameof(PinGlyph))]
+    [NotifyPropertyChangedFor(nameof(PinTooltip))]
+    private bool _isPinned;
+
+    public bool ShowPin => ShowBadges && IsPinned;
+
+    public string PinLabel => IsPinned ? "Unpin" : "Pin";
+
+    public string PinGlyph => IsPinned ? "PinOff24" : "Pin24";
+
+    public string PinTooltip => IsPinned
+        ? "Unpin this mod, so a mod list you apply can set it aside again when the list leaves it out."
+        : "Pin this mod so no mod list you apply ever sets it aside. For the HUD and quality-of-life mods you want kept whatever list you switch to.";
 
     // True when every one of this mod's folders sits under a ".disabled" container, so SPT loads none of it.
     public bool IsDisabled => Entries.Count > 0 && Entries.All(e => e.IsDisabled);

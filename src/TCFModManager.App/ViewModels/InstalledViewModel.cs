@@ -616,6 +616,29 @@ public partial class InstalledViewModel : ObservableObject
         for (var i = 0; i < cards.Count; i++) cards[i].Lists = names[i];
     }
 
+    private static void ApplyPins(IReadOnlyList<InstalledModCardViewModel> cards)
+    {
+        var pins = AppServices.ModLists.GetPins();
+
+        foreach (var card in cards)
+            card.IsPinned = pins.Count > 0 && ModListPlanner.IsPinned(ModListCandidates.From(card), pins);
+    }
+
+    [RelayCommand]
+    private void TogglePin(InstalledModCardViewModel? mod)
+    {
+        if (mod is null) return;
+
+        var pin = !mod.IsPinned;
+        AppServices.ModLists.SetPinned(ModListPlanner.PinKeys(ModListCandidates.From(mod)), pin);
+        mod.IsPinned = pin;
+
+        StatusMessage = pin
+            ? $"Pinned {mod.DisplayTitle} - no mod list will set it aside."
+            : $"Unpinned {mod.DisplayTitle}.";
+        AppLog.Info("Installed", $"{(pin ? "pinned" : "unpinned")} {mod.Name} against mod list disables");
+    }
+
     // A fresh scan builds new cards, which default to showing badges - they have to be told.
     private void ApplyBadgeVisibility()
     {
@@ -733,6 +756,7 @@ public partial class InstalledViewModel : ObservableObject
                 }
 
             ApplyListMembership(cards);
+            ApplyPins(cards);
             ApplyBadgeVisibility();
             _dependencies = dependencies;
 

@@ -134,7 +134,7 @@ public sealed class ModListService
         InstallRole.ScopeFor(new SettingsService().Load().Roles);
 
     // Works out what applying this list would do. Nothing moves and nothing downloads.
-    public async Task<ModListPreview?> PreviewAsync(ModList list, IReadOnlySet<string>? neverAutoDisable = null)
+    public async Task<ModListPreview?> PreviewAsync(ModList list)
     {
         var install = await ReadInstallAsync();
         if (install is null) return null;
@@ -148,7 +148,7 @@ public sealed class ModListService
 
         return new ModListPreview(
             list,
-            ModListPlanner.Build(list, install.Candidates, neverAutoDisable, serverList, MachineScope),
+            ModListPlanner.Build(list, install.Candidates, AppServices.ModLists.GetPins(), serverList, MachineScope),
             install);
     }
 

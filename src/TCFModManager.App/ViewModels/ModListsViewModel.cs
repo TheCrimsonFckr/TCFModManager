@@ -80,7 +80,12 @@ public sealed partial class ModListRowViewModel(
 }
 
 // One line of a plan, as the diff shows it.
-public sealed record ModListActionRowViewModel(string Kind, string Name, string Detail, int Order);
+public sealed record ModListActionRowViewModel(string Kind, string Name, string Detail, int Order, ModListAction Action)
+{
+    public bool CanPin => Action is { Kind: ModListActionKind.Disable, Installed: not null };
+
+    public bool CanUnpin => Action is { Kind: ModListActionKind.Pinned, Installed: not null };
+}
 
 // One mod on the selected list, as the contents panel shows it.
 public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, string Detail)
@@ -691,6 +696,7 @@ public partial class ModListsViewModel : ObservableObject
         Count(plan.Update.Count(), "to update");
         Count(plan.Enable.Count(), "to enable");
         Count(plan.Disable.Count(), "to disable");
+        Count(plan.Pinned.Count(), "pinned");
         Count(plan.Keep.Count(), "already right");
         Count(plan.Manual.Count(), "to fetch yourself");
 
@@ -712,7 +718,7 @@ public partial class ModListsViewModel : ObservableObject
 
     private static IEnumerable<ModListActionRowViewModel> Rows(ModListPlan plan) =>
         plan.Actions
-            .Select(a => new ModListActionRowViewModel(Label(a), a.Name, Detail(a), Order(a.Kind)))
+            .Select(a => new ModListActionRowViewModel(Label(a), a.Name, Detail(a), Order(a.Kind), a))
             .OrderBy(r => r.Order)
             .ThenBy(r => r.Name, StringComparer.OrdinalIgnoreCase);
 
@@ -722,6 +728,7 @@ public partial class ModListsViewModel : ObservableObject
         ModListActionKind.Update => action.IsDowngrade ? "Downgrade" : "Update",
         ModListActionKind.Enable => action.NeedsUpdateAfterEnable ? "Enable + update" : "Enable",
         ModListActionKind.Disable => "Disable",
+        ModListActionKind.Pinned => "Pinned",
         ModListActionKind.Manual => "Fetch yourself",
         _ => "Unchanged",
     };
@@ -746,6 +753,7 @@ public partial class ModListsViewModel : ObservableObject
             && action.InstalledVersion is not null && action.TargetVersion != action.InstalledVersion =>
             $"{action.InstalledVersion} to {action.TargetVersion}",
         ModListActionKind.Disable => "not on this list",
+        ModListActionKind.Pinned => "not on this list - kept, you pinned it",
         ModListActionKind.Manual => "not on sp-mod.com - install it by hand",
         _ => action.InstalledVersion is null ? string.Empty : $"version {action.InstalledVersion}",
     };
@@ -756,9 +764,42 @@ public partial class ModListsViewModel : ObservableObject
         ModListActionKind.Update => 1,
         ModListActionKind.Enable => 2,
         ModListActionKind.Disable => 3,
-        ModListActionKind.Manual => 4,
-        _ => 5,
+        ModListActionKind.Pinned => 4,
+        ModListActionKind.Manual => 5,
+        _ => 6,
     };
+
+    //
+    // Pins or unpins the mod on a Disable or Pinned row, then plans the same list again so the row
+    // and the summary say what an apply would now do.
+    //
+    [RelayCommand]
+    private async Task TogglePinAsync(ModListActionRowViewModel? row)
+    {
+        if (row is not { Action.Installed: { } installed } || _preview is not { } preview) return;
+        if (!row.CanPin && !row.CanUnpin) return;
+
+        await RunAsync(async () =>
+        {
+            AppServices.ModLists.SetPinned(ModListPlanner.PinKeys(installed), pinned: row.CanPin);
+
+            var replanned = await _service.PreviewAsync(preview.List);
+
+            if (replanned is null)
+            {
+                ClearPlan();
+                StatusMessage = AppMessages.NoSptInstallFolder;
+                return;
+            }
+
+            ShowPlan(replanned);
+            if (replanned.Plan.RequiresGameClosed) return;
+
+            StatusMessage = row.CanPin
+                ? $"Pinned \"{row.Name}\" - no list will set it aside."
+                : $"Unpinned \"{row.Name}\".";
+        });
+    }
 
     private bool CanApply => !IsBusy && _preview is not null && !HasUnsavedChanges;
 

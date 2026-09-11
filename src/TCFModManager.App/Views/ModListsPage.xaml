@@ -755,6 +755,7 @@
                                     <ColumnDefinition Width="140" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock
@@ -772,8 +773,33 @@
 
                                 <TextBlock
                                     Grid.Column="2"
+                                    VerticalAlignment="Center"
                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                     Text="{Binding Detail}" />
+
+                                <ui:Button
+                                    Grid.Column="3"
+                                    VerticalAlignment="Center"
+                                    Margin="8,-4,0,-4"
+                                    Padding="8,4"
+                                    Appearance="Transparent"
+                                    Icon="{ui:SymbolIcon Pin24}"
+                                    ToolTip="Pin this mod so no list you apply ever sets it aside. For the HUD and quality-of-life mods you want kept whatever list you switch to. Unpin it here or from the mod on the Installed page."
+                                    Visibility="{Binding CanPin, Converter={StaticResource BoolToVis}}"
+                                    Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                    CommandParameter="{Binding}" />
+
+                                <ui:Button
+                                    Grid.Column="3"
+                                    VerticalAlignment="Center"
+                                    Margin="8,-4,0,-4"
+                                    Padding="8,4"
+                                    Appearance="Transparent"
+                                    Icon="{ui:SymbolIcon PinOff24}"
+                                    ToolTip="Unpin this mod. Lists will be able to set it aside again, and this one would."
+                                    Visibility="{Binding CanUnpin, Converter={StaticResource BoolToVis}}"
+                                    Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                    CommandParameter="{Binding}" />
                             </Grid>
                             </Border>
                         </DataTemplate>
