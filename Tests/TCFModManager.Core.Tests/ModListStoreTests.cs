@@ -277,6 +277,28 @@ public class ModListStoreTests : IDisposable
     }
 
     [Fact]
+    public void Fork_DoesNotCarryTheServerAddressAcross()
+    {
+        var served = new ModList
+        {
+            Id = Guid.NewGuid(),
+            Name = "Dave's server",
+            Origin = ModListOrigin.Server,
+            Source = "86.140.28.231:6969",
+            CreatedAt = Timestamp,
+            UpdatedAt = Timestamp,
+        };
+        served.Entries.Add(Entry("Realism", 1263, 55));
+        _store.Add(served);
+
+        var fork = _store.Fork(served.Id, "Dave's server (mine)", Timestamp);
+
+        Assert.Null(fork.Source);
+        Assert.Null(_store.Find(fork.Id)!.Source);
+        Assert.Equal("86.140.28.231:6969", _store.Find(served.Id)!.Source);
+    }
+
+    [Fact]
     public void SetActive_IgnoresAnUnknownList()
     {
         _store.SetActive(Guid.NewGuid());

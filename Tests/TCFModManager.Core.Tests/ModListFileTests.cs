@@ -77,6 +77,41 @@ public class ModListFileTests
     }
 
     [Fact]
+    public void ALocalListNeverExportsASource()
+    {
+        var list = new ModList
+        {
+            Id = Guid.NewGuid(),
+            Name = "Forked before the fix",
+            Origin = ModListOrigin.Local,
+            Source = "86.140.28.231:6969",
+            CreatedAt = Timestamp,
+            UpdatedAt = Timestamp,
+        };
+
+        var json = ModListFile.Write(list);
+
+        Assert.DoesNotContain("86.140.28.231", json);
+        Assert.Null(ModListFile.Read(json).List!.Source);
+    }
+
+    [Fact]
+    public void AnImportedListKeepsItsSourceOnExport()
+    {
+        var list = new ModList
+        {
+            Id = Guid.NewGuid(),
+            Name = "From Dave",
+            Origin = ModListOrigin.Imported,
+            Source = "Dave",
+            CreatedAt = Timestamp,
+            UpdatedAt = Timestamp,
+        };
+
+        Assert.Equal("Dave", ModListFile.Read(ModListFile.Write(list)).List!.Source);
+    }
+
+    [Fact]
     public void TheFileNameIsTheSourceWhenNobodySignedIt()
     {
         var read = ModListFile.Read(ModListFile.Write(List()), fallbackSource: "daves-server");

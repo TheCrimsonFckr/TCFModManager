@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using TCFModManager.Core.Models;
 
@@ -122,8 +123,9 @@ public static class ModListFile
         Converters = { new JsonStringEnumConverter() },
     };
 
-    public static string Write(ModList list, string? author = null, DateTimeOffset? exportedAt = null) =>
-        JsonSerializer.Serialize(
+    public static string Write(ModList list, string? author = null, DateTimeOffset? exportedAt = null)
+    {
+        var document = JsonSerializer.SerializeToNode(
             new ModListDocument
             {
                 SchemaVersion = SchemaVersionFor(list),
@@ -132,7 +134,15 @@ public static class ModListFile
                 ExportedAt = exportedAt ?? DateTimeOffset.UtcNow,
                 List = list,
             },
-            Options);
+            Options)!;
+
+        if (list.Origin == ModListOrigin.Local)
+        {
+            document[nameof(ModListDocument.List)]?.AsObject().Remove(nameof(ModList.Source));
+        }
+
+        return document.ToJsonString(Options);
+    }
 
     public static void Save(ModList list, string path, string? author = null)
     {

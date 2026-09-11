@@ -314,7 +314,6 @@ public sealed class ModListStore
             Origin = ModListOrigin.Local,
             Policy = source.Policy,
             DerivedFrom = source.Id,
-            Source = source.Source,
             SptVersion = source.SptVersion,
             CreatedAt = timestamp,
             UpdatedAt = timestamp,
