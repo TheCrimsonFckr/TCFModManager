@@ -96,7 +96,6 @@
                         Content="Restart"
                         Icon="{ui:SymbolIcon ArrowSync24}"
                         ToolTip="Stops this install's server and starts it again. Only this install's - a second SPT server on another folder is left alone."
-                        IsEnabled="{Binding CanRestartServer}"
                         Command="{Binding AskRestartServerCommand}" />
                     <TextBlock
                         VerticalAlignment="Center"
@@ -203,7 +202,6 @@
                         Content="Restart"
                         Icon="{ui:SymbolIcon ArrowSync24}"
                         ToolTip="Stops the headless launcher and starts it again. It does not touch the server, and it does not close a game the launcher had already started."
-                        IsEnabled="{Binding CanRestartHeadless}"
                         Command="{Binding AskRestartHeadlessCommand}" />
                     <TextBlock
                         VerticalAlignment="Center"

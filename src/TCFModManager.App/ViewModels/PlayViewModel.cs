@@ -30,6 +30,7 @@ public partial class PlayViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(ServerPath))]
     [NotifyPropertyChangedFor(nameof(CanStartServer))]
     [NotifyPropertyChangedFor(nameof(CanRestartServer))]
+    [NotifyCanExecuteChangedFor(nameof(AskRestartServerCommand))]
     private SptLaunchTargetInfo? _server;
 
     [ObservableProperty]
@@ -44,6 +45,7 @@ public partial class PlayViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(CanStartHeadless))]
     [NotifyPropertyChangedFor(nameof(CanRestartHeadless))]
     [NotifyPropertyChangedFor(nameof(HasHeadless))]
+    [NotifyCanExecuteChangedFor(nameof(AskRestartHeadlessCommand))]
     private SptLaunchTargetInfo? _headless;
 
     // The result of the last button press, cleared the next time one is pressed.
@@ -110,6 +112,8 @@ public partial class PlayViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanRestartServer))]
     [NotifyPropertyChangedFor(nameof(CanRestartHeadless))]
+    [NotifyCanExecuteChangedFor(nameof(AskRestartServerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AskRestartHeadlessCommand))]
     private bool _isRestarting;
 
     public bool ConfirmingServerRestart => ConfirmingRestart == SptLaunchTarget.Server;
