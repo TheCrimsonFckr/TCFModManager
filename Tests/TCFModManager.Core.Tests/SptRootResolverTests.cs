@@ -219,4 +219,71 @@ public class SptRootResolverTests : IDisposable
         Assert.False(result.Found);
         Assert.Equal(SptRootProblem.ConfiguredDirectoryMissing, result.Problem);
     }
+
+    [Fact]
+    public void ToGameRoot_FourZeroServerFolderStepsUpToTheGameRoot()
+    {
+        Build40();
+
+        Assert.Equal(_root, SptInstallationService.ToGameRoot(At("SPT")));
+    }
+
+    [Fact]
+    public void ToGameRoot_FourOneRuntimeFolderStepsUpToTheGameRoot()
+    {
+        Build41();
+
+        Assert.Equal(_root, SptInstallationService.ToGameRoot(At("SPT_Runtime")));
+    }
+
+    [Fact]
+    public void ToGameRoot_TrailingSeparatorStillStepsUp()
+    {
+        Build40();
+
+        Assert.Equal(_root, SptInstallationService.ToGameRoot(At("SPT") + Path.DirectorySeparatorChar));
+    }
+
+    [Fact]
+    public void ToGameRoot_GameRootIsUnchanged()
+    {
+        Build40();
+
+        Assert.Equal(_root, SptInstallationService.ToGameRoot(_root));
+    }
+
+    [Fact]
+    public void ToGameRoot_ServerFolderWithStrayBepInExStillStepsUp()
+    {
+        Build40();
+        Dir("SPT", "BepInEx", "plugins");
+
+        Assert.Equal(_root, SptInstallationService.ToGameRoot(At("SPT")));
+    }
+
+    [Fact]
+    public void ToGameRoot_StandaloneServerIsUnchanged()
+    {
+        var server = At("server");
+        File_("server", "SPT.Server.exe");
+
+        Assert.Equal(server, SptInstallationService.ToGameRoot(server));
+    }
+
+    [Fact]
+    public void ToGameRoot_OtherFolderUnderTheGameIsUnchanged()
+    {
+        Build40();
+        var plugins = At("BepInEx", "plugins");
+
+        Assert.Equal(plugins, SptInstallationService.ToGameRoot(plugins));
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    public void ToGameRoot_UnsetPathIsUnchanged(string? path)
+    {
+        Assert.Equal(path, SptInstallationService.ToGameRoot(path));
+    }
 }

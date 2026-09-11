@@ -45,12 +45,23 @@ public partial class SptEnvironmentViewModel : ObservableObject
 
     public SptEnvironmentViewModel()
     {
-        InstallPath = _settings.Load().SptInstallPath;
+        var stored = _settings.Load().SptInstallPath;
+        if (SptInstallationService.ToGameRoot(stored) != stored)
+        {
+            SetInstallPath(stored);
+            return;
+        }
+
+        InstallPath = stored;
         Redetect();
     }
 
     public void SetInstallPath(string? path)
     {
+        var gameRoot = SptInstallationService.ToGameRoot(path);
+        if (gameRoot != path) AppLog.Info("InstallPath", $"{path} is the server folder; using the game root {gameRoot}");
+        path = gameRoot;
+
         InstallPath = path;
 
         // Load-mutate-save rather than saving a fresh AppSettings: settings.json holds more than

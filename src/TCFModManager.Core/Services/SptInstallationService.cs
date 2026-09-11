@@ -45,6 +45,8 @@ public sealed record SptVersionReading
 // 
 public static class SptInstallationService
 {
+    private const string GameExeName = "EscapeFromTarkov.exe";
+
     // Candidate server exe paths/names across known install layouts: both the older Aki.Server.exe
     // and newer SPT.Server.exe naming, at the install root and inside nested SPT/ or SPT_Runtime/ folders.
     private static readonly string[] ServerExeCandidates =
@@ -127,6 +129,24 @@ public static class SptInstallationService
         var relative = Path.GetRelativePath(installPath, exeDir);
         serverRoot = relative == "." ? "" : relative;
         return true;
+    }
+
+    // Steps up from a bundled install's server folder (SPT\ or SPT_Runtime\) to the game root above it.
+    // Anything else, a standalone server folder included, comes back unchanged.
+    public static string? ToGameRoot(string? installPath)
+    {
+        if (string.IsNullOrWhiteSpace(installPath) || !Directory.Exists(installPath)) return installPath;
+        if (File.Exists(Path.Combine(installPath, GameExeName))) return installPath;
+
+        var full = Path.TrimEndingDirectorySeparator(Path.GetFullPath(installPath));
+        var parent = Path.GetDirectoryName(full);
+        if (string.IsNullOrEmpty(parent) || !File.Exists(Path.Combine(parent, GameExeName))) return installPath;
+
+        if (!TryFindNamedServerExe(full, out var exePath)) return installPath;
+
+        return string.Equals(Path.GetDirectoryName(exePath), full, StringComparison.OrdinalIgnoreCase)
+            ? parent
+            : installPath;
     }
 
     public static bool TryFindServerExe(string installPath, out string exePath) =>

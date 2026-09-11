@@ -510,7 +510,7 @@ public partial class OptionsViewModel : ObservableObject
     [RelayCommand]
     private void Browse()
     {
-        var dialog = new OpenFolderDialog { Title = "Select your SPT server install folder" };
+        var dialog = new OpenFolderDialog { Title = "Select your SPT install folder (the one with EscapeFromTarkov.exe)" };
         if (!string.IsNullOrWhiteSpace(InstallPathInput)) dialog.InitialDirectory = InstallPathInput;
 
         if (dialog.ShowDialog() == true)
@@ -524,6 +524,7 @@ public partial class OptionsViewModel : ObservableObject
     private void Save()
     {
         SptEnvironment.SetInstallPath(string.IsNullOrWhiteSpace(InstallPathInput) ? null : InstallPathInput.Trim());
+        InstallPathInput = SptEnvironment.InstallPath;
 
         //
         // Setting the folder is this app's setup step - there is no first-run wizard - so it is
