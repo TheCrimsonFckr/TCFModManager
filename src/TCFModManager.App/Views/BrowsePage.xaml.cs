@@ -29,6 +29,10 @@ public partial class BrowsePage : Page
             await ViewModel.SearchCommand.ExecuteAsync(null);
             AppLog.Debug("Browse", "Loaded: SearchCommand.ExecuteAsync await resumed");
         }
+        else
+        {
+            ViewModel.RefreshPins();
+        }
 
         // Re-sync the column count against the current width.
         ViewModel.UpdateLayoutForWidth(ResultsListBox.ActualWidth);

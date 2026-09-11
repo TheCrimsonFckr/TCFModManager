@@ -56,14 +56,14 @@ public partial class BrowseViewModel : ObservableObject
         AppServices.DownloadQueue.ItemInstalled += async (_, _) =>
         {
             await RefreshInstalledIndexAsync();
-            GoToPage(CurrentPage);
+            ShowInstalledChange();
         };
 
         // Refreshes the status dots when a mod is removed from the Installed page.
         InstalledViewModel.ModRemoved += async (_, _) =>
         {
             await RefreshInstalledIndexAsync();
-            GoToPage(CurrentPage);
+            ShowInstalledChange();
         };
 
         // Before the subscription below, so applying a saved default doesn't count as a change.
@@ -182,9 +182,13 @@ public partial class BrowseViewModel : ObservableObject
     // switches strung across the top of the page. Every one of them narrows the result set.
     //
     public ObservableCollection<ModAttributeOption> AttributeOptions { get; } =
-        ModAttributeOption.Standard(
+    [
+        .. ModAttributeOption.Standard(
             "Only mods that pull in other mods. Dependencies are looked up as you browse, so this "
-            + "covers what the app has checked so far rather than the whole catalogue.");
+            + "covers what the app has checked so far rather than the whole catalogue."),
+        new(ModAttributeFilter.HideInstalled, "Hide installed mods",
+            "Only mods you don't have yet. A disabled mod counts as installed."),
+    ];
 
     [ObservableProperty]
     private string _attributeFilterSummary = "Any mod";
@@ -439,11 +443,21 @@ public partial class BrowseViewModel : ObservableObject
         CurrentPage = Math.Clamp(page, 1, TotalPages);
         var installedVersion = AppServices.SptEnvironment.InstalledVersion;
 
+        var pins = AppServices.ModLists.GetPins();
+
         Results.Clear();
         foreach (var mod in _filtered.Skip((CurrentPage - 1) * PageSize).Take(PageSize))
-            Results.Add(ModCardViewModel.From(
-                mod, installedVersion, FindInstalledMatch(mod), _selectedLines, AppServices.SptCatalog.Releases,
-                AppServices.Addons.CountFor(mod.Id)));
+        {
+            var installed = FindInstalledMatch(mod);
+
+            var card = ModCardViewModel.From(
+                mod, installedVersion, installed, _selectedLines, AppServices.SptCatalog.Releases,
+                AppServices.Addons.CountFor(mod.Id),
+                installed is null ? null : ModListPlanner.PinKeys(ModListCandidates.From(installed)));
+
+            card.RefreshPin(pins);
+            Results.Add(card);
+        }
 
         AppLog.Debug("Browse", $"GoToPage: page {CurrentPage}/{TotalPages} rendered in {sw.ElapsedMilliseconds}ms");
     }
@@ -492,6 +506,31 @@ public partial class BrowseViewModel : ObservableObject
             .Where(m => !string.IsNullOrWhiteSpace(m.MatchedModName))
             .GroupBy(m => m.MatchedModName!, StringComparer.OrdinalIgnoreCase)
             .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+    }
+
+    //
+    // After the installed index changes. With Hide installed ticked the result set itself has
+    // changed - a mod just installed has to leave it - so the filter runs again, on the same page
+    // where there still is one.
+    //
+    private void ShowInstalledChange()
+    {
+        if (!IsOn(ModAttributeFilter.HideInstalled) || !HasLoadedResults)
+        {
+            GoToPage(CurrentPage);
+            return;
+        }
+
+        var page = CurrentPage;
+        ApplyFilter();
+        if (page > 1) GoToPage(page);
+    }
+
+    // Re-reads the pins for the cards on screen, for a pin made on another page since.
+    public void RefreshPins()
+    {
+        var pins = AppServices.ModLists.GetPins();
+        foreach (var card in Results) card.RefreshPin(pins);
     }
 
     private InstalledModCardViewModel? FindInstalledMatch(Mod mod)
@@ -547,6 +586,7 @@ public partial class BrowseViewModel : ObservableObject
             .Where(m => !IsOn(ModAttributeFilter.HideAds) || m.ContainsAds != true)
             .Where(m => !IsOn(ModAttributeFilter.HideAiContent) || m.ContainsAiContent != true)
             .Where(m => !IsOn(ModAttributeFilter.HasAddons) || AppServices.Addons.CountFor(m.Id) > 0)
+            .Where(m => !IsOn(ModAttributeFilter.HideInstalled) || FindInstalledMatch(m) is null)
             // Only mods already known to have dependencies. A mod nobody has looked at yet is not
             // claimed either way, so it drops out of this filter rather than being asserted clean.
             .Where(m => !IsOn(ModAttributeFilter.HasDependencies)

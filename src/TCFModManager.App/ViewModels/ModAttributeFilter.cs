@@ -23,6 +23,9 @@ public enum ModAttributeFilter
 
     // Only mods that have addons published for them.
     HasAddons,
+
+    // Mods already installed are hidden. Browse only - on Installed it would empty the page.
+    HideInstalled,
 }
 
 //

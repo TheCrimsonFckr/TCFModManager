@@ -88,7 +88,7 @@ public sealed record ModListActionRowViewModel(string Kind, string Name, string 
 }
 
 // One mod on the selected list, as the contents panel shows it.
-public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, string Detail)
+public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, string Detail, bool IsPinnedHere = false)
 {
     //
     // Shown on every row, including Everyone.
@@ -472,6 +472,7 @@ public partial class ModListsViewModel : ObservableObject
         Entries.Clear();
 
         _titles = CatalogTitles();
+        RefreshPinLookup();
 
         if (Selected is { } row)
         {
@@ -517,7 +518,39 @@ public partial class ModListsViewModel : ObservableObject
             ? title
             : entry.Name;
 
-        return new ModListEntryRowViewModel(entry, name, EntryDetail(entry, name));
+        return new ModListEntryRowViewModel(entry, name, EntryDetail(entry, name), IsPinnedHere(entry));
+    }
+
+    //
+    // Whether this install has the entry's mod pinned against a list's disable sweep. Asked of the
+    // entry's own folders and name, plus the folders the install record gives its mod id - an entry
+    // added from the catalog carries no folders of its own.
+    //
+    private IReadOnlySet<string> _pins = new HashSet<string>();
+
+    private Dictionary<(int Id, bool IsAddon), List<string>> _recordFolders = [];
+
+    private void RefreshPinLookup()
+    {
+        _pins = AppServices.ModLists.GetPins();
+
+        _recordFolders = _pins.Count == 0
+            ? []
+            : AppServices.InstallManifest.Load().Mods
+                .GroupBy(r => (r.ModId, r.IsAddon))
+                .ToDictionary(g => g.Key, g => g.SelectMany(r => r.Folders).ToList());
+    }
+
+    private bool IsPinnedHere(ModListEntry entry)
+    {
+        if (_pins.Count == 0) return false;
+
+        var keys = entry.Folders.Append(entry.Name);
+
+        if (entry.ModId is { } id && _recordFolders.TryGetValue((id, entry.IsAddon), out var folders))
+            keys = keys.Concat(folders);
+
+        return keys.Any(k => !string.IsNullOrWhiteSpace(k) && _pins.Contains(k.Trim().ToLowerInvariant()));
     }
 
     private void Notify()
@@ -782,6 +815,9 @@ public partial class ModListsViewModel : ObservableObject
         await RunAsync(async () =>
         {
             AppServices.ModLists.SetPinned(ModListPlanner.PinKeys(installed), pinned: row.CanPin);
+
+            RefreshPinLookup();
+            for (var i = 0; i < Entries.Count; i++) Entries[i] = Row(Entries[i].Entry);
 
             var replanned = await _service.PreviewAsync(preview.List);
 

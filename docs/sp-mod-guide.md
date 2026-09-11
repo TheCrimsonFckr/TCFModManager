@@ -54,10 +54,10 @@ The whole sp-mod catalog, fetched once and cached to disk so it opens instantly 
 - **Search** by name, or by author with `@author`
 - **Filter** by SPT release line, category, Fika compatibility and featured status
 - **Sort** by newest, last updated, most downloaded, most favourited or most endorsed
-- **Toggles** for hiding ads and AI-generated content
+- **Show** options for hiding ads, AI-generated content and **mods you already have installed**
 - **Refresh cache** re-pulls the catalog when you want the newest listings
 
-Each card shows the download count, the endorsement count when the mod has any, a status dot, and a badge for mods that pull in dependencies:
+Each card shows the download count, the endorsement count when the mod has any, a status dot, and a badge for mods that pull in dependencies. A **pin** under the status dot means you have pinned that mod, so no mod list you apply will set it aside - see the Mod lists tab:
 
 | Status | Meaning |
 | --- | --- |
@@ -172,7 +172,7 @@ A **mod list** is a named set of mods and the versions of them you run. Capture 
 
 **Apply** downloads what the list names and you do not have, enables what you have but had switched off, and moves anything the list does not name into the disabled folder. **Nothing is ever deleted.** Setting a mod aside is the same move the Installed page's disable button makes, and it is near-instant however large the mod is.
 
-**Pin** the mods you want kept whatever list you apply - a HUD, a sound pack, the quality-of-life mods that don't belong on any one list. A pinned mod is never set aside: Preview lists it as **Pinned** instead, with a button to unpin it. Pin from that Preview row, or with **Pin** on the mod's opened card on the Installed page, which then carries a **Pinned** chip. Pins belong to your install and never travel with a list you share.
+**Pin** the mods you want kept whatever list you apply - a HUD, a sound pack, the quality-of-life mods that don't belong on any one list. A pinned mod is never set aside: Preview lists it as **Pinned** instead, with a button to unpin it. Pin from that Preview row, or with **Pin** on the mod's opened card on the Installed page, which then carries a **Pinned** chip. A pin also shows beside the mod in any list's contents and on its Browse card. Pins belong to your install and never travel with a list you share.
 
 **Undo** puts the install back the way it was before the last apply. There is one undo point, kept up to date for you: applying a list replaces it, and using it clears it.
 

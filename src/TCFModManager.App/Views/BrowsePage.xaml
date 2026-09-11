@@ -467,17 +467,29 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!-- Install/update status icon, same set the Installed and Dependencies pages use. -->
-                            <ui:SymbolIcon
+                            <!-- Install/update status icon, same set the Installed and Dependencies pages use,
+                                 with the pin under it when this install has the mod pinned. -->
+                            <StackPanel
                                 Grid.Column="1"
                                 Margin="8,0,0,0"
                                 HorizontalAlignment="Right"
-                                VerticalAlignment="Top"
-                                FontSize="20"
-                                Symbol="{Binding StatusGlyph}"
-                                Style="{StaticResource StatusIcon}"
-                                ToolTip="{Binding StatusTooltip}"
-                                Visibility="{Binding IsInstalled, Converter={StaticResource TrueToVisible}}" />
+                                VerticalAlignment="Top">
+                                <ui:SymbolIcon
+                                    FontSize="20"
+                                    Symbol="{Binding StatusGlyph}"
+                                    Style="{StaticResource StatusIcon}"
+                                    ToolTip="{Binding StatusTooltip}"
+                                    Visibility="{Binding IsInstalled, Converter={StaticResource TrueToVisible}}" />
+
+                                <ui:SymbolIcon
+                                    FontSize="16"
+                                    Margin="0,4,0,0"
+                                    HorizontalAlignment="Center"
+                                    Symbol="Pin24"
+                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                    ToolTip="Pinned - no mod list you apply will set this mod aside"
+                                    Visibility="{Binding IsPinned, Converter={StaticResource TrueToVisible}}" />
+                            </StackPanel>
 
                             <!-- Install button, shown only for mods not yet installed. -->
                             <ui:Button

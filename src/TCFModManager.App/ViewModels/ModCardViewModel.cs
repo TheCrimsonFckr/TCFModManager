@@ -1,12 +1,25 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
 // Display wrapper around a Mod for the Browse results grid. Precomputes the fields of the version this card represents.
-public sealed class ModCardViewModel
+public sealed partial class ModCardViewModel : ObservableObject
 {
     public required Mod Mod { get; init; }
+
+    // The installed match's pin keys (ModListPlanner.PinKeys), empty when it isn't installed, so
+    // IsPinned can be re-read without matching the card again.
+    public IReadOnlyList<string> PinKeys { get; private init; } = [];
+
+    // Pinned against a mod list's disable sweep on this install. Settable so returning to Browse
+    // can pick up a pin made on Installed or Mod lists without rebuilding the page.
+    [ObservableProperty]
+    private bool _isPinned;
+
+    public void RefreshPin(IReadOnlySet<string> pins) =>
+        IsPinned = PinKeys.Count > 0 && PinKeys.Any(pins.Contains);
 
     public string? Name => Mod.Name;
     public string? Guid => Mod.Guid;
@@ -103,7 +116,8 @@ public sealed class ModCardViewModel
         InstalledModCardViewModel? installedMatch = null,
         IReadOnlyList<(int Major, int Minor)>? selectedLines = null,
         IReadOnlyList<SptRelease>? releases = null,
-        int addonCount = 0)
+        int addonCount = 0,
+        IReadOnlyList<string>? pinKeys = null)
     {
         var newest = LatestVersion(mod);
         var shown = PickDisplayVersion(mod, installedSptVersion) ?? newest;
@@ -158,6 +172,7 @@ public sealed class ModCardViewModel
             IsDisabled = installedMatch?.IsDisabled == true,
             UpdateAvailable = installedMatch?.UpdateAvailable,
             AddonCount = addonCount,
+            PinKeys = pinKeys ?? [],
         };
     }
 
