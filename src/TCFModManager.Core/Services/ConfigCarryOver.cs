@@ -44,9 +44,22 @@ public sealed class ConfigCarryOver(
         string modName,
         DateTimeOffset timestamp)
     {
+        var options = _options.Effective();
+        var incoming = incomingRelativePaths.ToList();
+
         var candidates = new List<string>();
-        if (existing is not null) candidates.AddRange(ModConfigFiles.InRecord(existing));
-        candidates.AddRange(incomingRelativePaths.Where(ModConfigFiles.IsServerModConfig));
+        if (existing is not null) candidates.AddRange(ModConfigFiles.InRecord(existing, options));
+        candidates.AddRange(incoming.Where(p => ModConfigFiles.IsServerModConfig(p, ModConfigFiles.OptionsFor(p, options))));
+
+        //
+        // Files the archive is about to place over that are the user's own documents rather than
+        // settings - SVM's presets. The install path skips placing these, so what is there stays
+        // exactly as it is: a preset is not something to reconcile, it either exists or it doesn't.
+        //
+        var preserved = incoming
+            .Where(p => ModConfigFiles.IsUserData(p, ModConfigFiles.OptionsFor(p, options)))
+            .Where(p => File.Exists(Path.Combine(installPath, ToNative(p))))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         var archived = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         var untouchable = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -80,7 +93,7 @@ public sealed class ConfigCarryOver(
         if (archived.Count > 0)
             AppLog.Info("Configs", $"copied {archived.Count} config file(s) from {modName} into {archiveFolder}");
 
-        return new PendingConfigs(archived.Count > 0 ? archiveFolder : null, archived, untouchable);
+        return new PendingConfigs(archived.Count > 0 ? archiveFolder : null, archived, untouchable, preserved);
     }
 
     //
@@ -95,7 +108,12 @@ public sealed class ConfigCarryOver(
         InstalledModRecord installed,
         DateTimeOffset timestamp)
     {
-        var placed = installed.Files.Where(ModConfigFiles.IsServerModConfig).ToList();
+        var options = _options.Effective();
+
+        var placed = installed.Files
+            .Where(p => ModConfigFiles.IsServerModConfig(p, ModConfigFiles.OptionsFor(p, options)))
+            .ToList();
+
         var outcomes = new List<ConfigFileOutcome>();
 
         //
@@ -126,6 +144,10 @@ public sealed class ConfigCarryOver(
 
             outcomes.Add(new ConfigFileOutcome { Path = relative, Kind = ConfigOutcomeKind.Removed });
         }
+
+        // The user's own documents, left exactly where they were.
+        foreach (var relative in pending.Preserved)
+            outcomes.Add(new ConfigFileOutcome { Path = relative, Kind = ConfigOutcomeKind.Preserved });
 
         // One the new version does not ship AND could not be copied: left in the install untouched,
         // which is worth saying since nothing now tracks it.
@@ -286,16 +308,22 @@ public sealed class ConfigCarryOver(
 //
 // The config files copied aside before an update, by install-relative path.
 //
-// Untouchable holds the ones that could not be copied: the install path must not delete or overwrite
-// those, which is the one thing an install has to read back out of here.
+// Two sets the install path has to read back out of here, for opposite reasons. Untouchable holds the
+// ones that could NOT be copied, so replacing them would risk losing them. Preserved holds the user's
+// own documents, which an update is not meant to touch in the first place.
 //
 public sealed record PendingConfigs(
     string? ArchiveFolder,
     IReadOnlyDictionary<string, string> Archived,
-    IReadOnlySet<string> Untouchable)
+    IReadOnlySet<string> Untouchable,
+    IReadOnlySet<string> Preserved)
 {
     public static PendingConfigs None { get; } = new(
         null,
         new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase),
+        new HashSet<string>(StringComparer.OrdinalIgnoreCase),
         new HashSet<string>(StringComparer.OrdinalIgnoreCase));
+
+    // Everything the install path must not place over or delete.
+    public IEnumerable<string> Protected => Untouchable.Concat(Preserved);
 }

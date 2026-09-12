@@ -13,9 +13,11 @@ public sealed class ModInstallService(
     ModDownloadService downloadService,
     ModInstallManifestService manifestService,
     ConfigCarryOver? configCarryOver = null,
-    ConfigUpdateLog? configUpdateLog = null)
+    ConfigUpdateLog? configUpdateLog = null,
+    ModConfigOptionsStore? configOptions = null)
 {
     private readonly ConfigCarryOver _configs = configCarryOver ?? new ConfigCarryOver();
+    private readonly ModConfigOptionsStore _options = configOptions ?? new ModConfigOptionsStore();
     private readonly ConfigUpdateLog _configLog = configUpdateLog ?? new ConfigUpdateLog();
 
     private static readonly HashSet<string> KnownRootFolders =
@@ -261,10 +263,20 @@ public sealed class ModInstallService(
             {
                 status?.Report($"Removing the previously installed version ({existing.Version})...");
 
-                // Delete rather than keep: Prepare has already copied every config aside, and moving
-                // them again from here would leave the archive holding two copies of the same file.
-                // The ones it could not copy are named, and those are left where they are.
-                RemoveRecordedFiles(installPath, existing, ConfigAction.Delete, pending.Untouchable, CancellationToken.None);
+                //
+                // Preserve, not Keep: Prepare has already copied every config aside, and moving them
+                // again from here would leave the archive holding two copies of the same file. What
+                // Preserve adds over Delete is the user's own documents - a mod's presets are not
+                // reinstalled, so the removal half of an update must not take them out either.
+                //
+                // The files Prepare could not copy are named separately and left exactly as they are.
+                //
+                RemoveRecordedFiles(
+                    installPath,
+                    existing,
+                    ConfigAction.Preserve,
+                    pending.Protected.ToHashSet(StringComparer.OrdinalIgnoreCase),
+                    CancellationToken.None);
             }
 
             status?.Report(FormatCount("Installing", 0, sourceFiles.Length));
@@ -278,10 +290,13 @@ public sealed class ModInstallService(
                     var (file, installRelative, installRelativeForward) = placements[i];
 
                     //
-                    // A config that could not be copied aside keeps the user's version. It is still
-                    // recorded as one of this install's files, so a later removal cleans it up.
+                    // Two kinds of file the archive does not get to place: a config that could not be
+                    // copied aside, and one of the user's own documents that is already there. Both
+                    // keep the version on disk, and both are still recorded as this install's files so
+                    // a later removal knows about them.
                     //
-                    if (pending.Untouchable.Contains(installRelativeForward))
+                    if (pending.Untouchable.Contains(installRelativeForward)
+                        || pending.Preserved.Contains(installRelativeForward))
                     {
                         placedFiles.Add(installRelativeForward);
                         continue;
@@ -422,16 +437,38 @@ public sealed class ModInstallService(
         var touchedDirectories = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         // Moved out before the delete loop runs, so the loop simply finds them gone.
+        var options = _options.Effective();
+
+        //
+        // A real removal rescues both a mod's settings and the documents the user wrote in it, and the
+        // user-data half is read off disk rather than from the record: SVM's presets are written by its
+        // own generator and appear in no file list, which is exactly the case worth rescuing.
+        //
         var kept = new KeptConfigs(0, null);
-        List<string> configFiles = configs == ConfigAction.Keep ? ModConfigFiles.InRecord(record) : [];
+
+        List<string> configFiles = configs == ConfigAction.Keep
+            ?
+            [
+                .. ModConfigFiles.InRecord(record, options),
+                .. ModConfigFiles.UserDataOnDisk(installPath, record, options),
+            ]
+            : [];
+
         if (configFiles.Count > 0)
             kept = ModConfigFiles.MoveOut(installPath, configFiles, record.Name, DateTimeOffset.UtcNow);
+
+        // An update: the settings are already copied aside and about to be replaced, but the user's own
+        // documents stay where they are.
+        HashSet<string> preserve = configs == ConfigAction.Preserve
+            ? ModConfigFiles.UserDataInRecord(record, options).ToHashSet(StringComparer.OrdinalIgnoreCase)
+            : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var relative in record.Files)
         {
             ct.ThrowIfCancellationRequested();
 
             if (keep is not null && keep.Contains(relative)) continue;
+            if (preserve.Contains(relative)) continue;
 
             var fullPath = Path.Combine(installPath, relative.Replace('/', Path.DirectorySeparatorChar));
             try
@@ -764,12 +801,21 @@ public sealed record ModInstallResult(InstalledModRecord Record, ConfigUpdateRep
 // describe the mod's own config files when they were moved out rather than deleted.
 public sealed record UninstallResult(int FilesDeleted, List<string> FailedFiles, int ConfigsKept = 0, string? ConfigsFolder = null);
 
-// What to do with a mod's own config JSON files when removing it.
+// What to do with a mod's own config and user-data files when its files are being removed.
 public enum ConfigAction
 {
-    // Move them into AppPaths.LegacyConfigsDirectory instead of deleting them.
+    // Move them into AppPaths.LegacyConfigsDirectory instead of deleting them. A real removal.
     Keep,
 
     // Delete them along with the rest of the mod's files.
     Delete,
+
+    //
+    // Delete the configs but leave the user's own documents where they are - the update path, which
+    // has already copied the configs aside and is about to place new ones over them.
+    //
+    // Update and removal want opposite things here, which is why this is its own member rather than a
+    // flag: on an update a preset folder stays exactly as it is, and on a removal it is rescued.
+    //
+    Preserve,
 }

@@ -54,7 +54,14 @@ public static class ModConfigFiles
     //   <mod>/config/settings.json  - anything JSON inside a folder the mod calls "config"
     //   <mod>/config.json           - a conventionally-named file sitting at the mod's root
     //
-    public static bool IsServerModConfig(string relativePath)
+    // Plus whatever the mod's own entry in mod_configs.json says, which is the only way a mod that
+    // matches no convention is ever recognised - and the only way something that only looks like a
+    // config is ever ruled out. Passing no options answers on the conventions alone.
+    //
+    // ONE rule, read by everything: the Configs page lists exactly what an update carries and what a
+    // removal rescues, so the three can never end up disagreeing.
+    //
+    public static bool IsServerModConfig(string relativePath, ModConfigOptions? options = null)
     {
         if (string.IsNullOrWhiteSpace(relativePath)) return false;
 
@@ -62,6 +69,20 @@ public static class ModConfigFiles
         if (!HasConfigExtension(path)) return false;
 
         if (SegmentsBelowServerMods(path) is not { } segments) return false;
+
+        if (options is not null && segments.Length > 1)
+        {
+            var inMod = string.Join('/', segments[1..]);
+
+            // Data pretending to be settings loses before anything else is asked.
+            if (ModConfigPaths.Covers(options.Exclude, inMod)) return false;
+
+            // A user-data folder holds documents, not settings. It is preserved and rescued, never
+            // merged, so it is not one of these.
+            if (ModConfigPaths.Covers(options.UserData, inMod)) return false;
+
+            if (ModConfigPaths.Covers(options.Settings, inMod)) return true;
+        }
 
         // <mod folder>/<file> - judged by the file's own name, since a mod's root is full of JSON
         // that isn't settings.
@@ -105,15 +126,157 @@ public static class ModConfigFiles
     // the one being edited.
     private static string StemOf(string fileName) => Path.GetFileNameWithoutExtension(fileName);
 
+    //
+    // True for a path inside a folder the mod's entry names as user data - whole documents the user
+    // wrote. Never merged and never replaced by an update; rescued by a removal like a config.
+    //
+    public static bool IsUserData(string relativePath, ModConfigOptions? options)
+    {
+        if (options is null || options.UserData.Count == 0) return false;
+        if (string.IsNullOrWhiteSpace(relativePath)) return false;
+
+        var path = relativePath.Replace('\\', '/');
+        if (SegmentsBelowServerMods(path) is not { } segments || segments.Length < 2) return false;
+
+        return ModConfigPaths.Covers(options.UserData, string.Join('/', segments[1..]));
+    }
+
+    // The mod folder an install-relative path sits in, or null when it isn't under user/mods at all.
+    public static string? ServerModFolderOf(string relativePath)
+    {
+        if (string.IsNullOrWhiteSpace(relativePath)) return null;
+
+        var segments = SegmentsBelowServerMods(relativePath.Replace('\\', '/'));
+        return segments is { Length: > 0 } ? segments[0] : null;
+    }
+
+    // The entry for whichever mod a path belongs to, out of a whole set read once.
+    public static ModConfigOptions? OptionsFor(
+        string relativePath,
+        IReadOnlyDictionary<string, ModConfigOptions>? options) =>
+        ServerModFolderOf(relativePath) is { } folder ? EntryForFolder(folder, options) : null;
+
+    // The entry for a mod folder name.
+    public static ModConfigOptions? EntryForFolder(
+        string? folderName,
+        IReadOnlyDictionary<string, ModConfigOptions>? options)
+    {
+        if (options is null || options.Count == 0 || string.IsNullOrWhiteSpace(folderName)) return null;
+
+        return options.TryGetValue(ModConfigOptionsStore.KeyFor(folderName), out var found) ? found : null;
+    }
+
     // The install-relative config paths in a record's file list.
-    public static List<string> InRecord(InstalledModRecord record) =>
-        record.Files.Where(IsServerModConfig).ToList();
+    public static List<string> InRecord(
+        InstalledModRecord record,
+        IReadOnlyDictionary<string, ModConfigOptions>? options = null) =>
+        [.. record.Files.Where(f => IsServerModConfig(f, OptionsFor(f, options)))];
+
+    // The user-data paths in a record's file list - the ones an update leaves alone.
+    public static List<string> UserDataInRecord(
+        InstalledModRecord record,
+        IReadOnlyDictionary<string, ModConfigOptions>? options) =>
+        [.. record.Files.Where(f => IsUserData(f, OptionsFor(f, options)))];
+
+    //
+    // Every file on disk inside the user-data folders of the mod's own folders, whether or not the
+    // record lists it - SVM's presets are written by its own generator and are in no record, and they
+    // are exactly what a removal has to rescue.
+    //
+    // Bounded: a folder holding more files than a person would ever have authored is data that got
+    // opted in by mistake, and walking it is the cost this refuses to pay.
+    //
+    public static List<string> UserDataOnDisk(
+        string installPath,
+        InstalledModRecord record,
+        IReadOnlyDictionary<string, ModConfigOptions>? options)
+    {
+        var results = new List<string>();
+        if (options is null || options.Count == 0) return results;
+
+        foreach (var prefix in ServerModPrefixes(record))
+        {
+            if (EntryForFolder(Path.GetFileName(prefix), options) is not { } entry) continue;
+
+            foreach (var relative in entry.UserData)
+            {
+                if (ModConfigPaths.Normalise(relative) is not { } clean) continue;
+
+                var folder = Path.Combine(installPath, ToNative($"{prefix}/{clean}"));
+                if (!Directory.Exists(folder)) continue;
+
+                try
+                {
+                    var found = Directory
+                        .EnumerateFiles(folder, "*", SearchOption.AllDirectories)
+                        .Take(MaxUserDataFiles + 1)
+                        .ToList();
+
+                    if (found.Count > MaxUserDataFiles)
+                    {
+                        AppLog.Warn("Configs",
+                            $"{prefix}/{clean} holds more than {MaxUserDataFiles} files; not treating it as user data");
+                        continue;
+                    }
+
+                    var relatives = found
+                        .Select(f => Path.GetRelativePath(installPath, f).Replace('\\', '/'))
+                        .ToList();
+
+                    results.AddRange(relatives.Where(r => !results.Contains(r, StringComparer.OrdinalIgnoreCase)).ToList());
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                {
+                    AppLog.Warn("Configs", $"couldn't read {folder}: {ex.Message}");
+                }
+            }
+        }
+
+        return results;
+    }
+
+    // Past this a folder is a database rather than somebody's presets. Also what the UI refuses to
+    // opt in, so nobody arrives here by accident.
+    public const int MaxUserDataFiles = 500;
+
+    //
+    // The install-relative path of each server mod folder a record placed files in, e.g.
+    // "SPT/user/mods/[SVM] Server Value Modifier".
+    //
+    private static IEnumerable<string> ServerModPrefixes(InstalledModRecord record)
+    {
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var file in record.Files)
+        {
+            var path = file.Replace('\\', '/');
+
+            foreach (var container in ServerModsContainers)
+            {
+                var index = path.IndexOf(container, StringComparison.OrdinalIgnoreCase);
+                if (index < 0) continue;
+
+                var after = path[(index + container.Length)..].Split('/', StringSplitOptions.RemoveEmptyEntries);
+                if (after.Length < 2) break;
+
+                var prefix = path[..(index + container.Length)] + after[0];
+                if (seen.Add(prefix)) yield return prefix;
+
+                break;
+            }
+        }
+    }
+
+    private static string ToNative(string relative) => relative.Replace('/', Path.DirectorySeparatorChar);
 
     //
     // Config files inside a mod folder on disk, as install-relative paths. Used by the
     // hand-installed removal path, where there's no record to read a file list from.
     //
-    public static List<string> InFolder(string installPath, string modFolderPath)
+    public static List<string> InFolder(
+        string installPath,
+        string modFolderPath,
+        IReadOnlyDictionary<string, ModConfigOptions>? options = null)
     {
         var results = new List<string>();
         if (!Directory.Exists(modFolderPath)) return results;
@@ -125,7 +288,7 @@ public static class ModConfigFiles
             foreach (var file in Directory.EnumerateFiles(modFolderPath, "*.json*", SearchOption.AllDirectories))
             {
                 var relative = Path.GetRelativePath(installPath, file).Replace('\\', '/');
-                if (IsServerModConfig(relative)) results.Add(relative);
+                if (IsServerModConfig(relative, OptionsFor(relative, options))) results.Add(relative);
             }
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)

@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -83,6 +84,183 @@ public sealed partial class ConfigsViewModel : ObservableObject
 
     public bool ShowPolicy => SelectedEntry?.CanSetPolicy == true;
 
+    //
+    // The places this mod keeps things that no convention would find, and the ones that only look like
+    // config. Shown as chips under the policy, because they are per mod exactly as the policy is.
+    //
+    public ObservableCollection<ConfigLocationChip> Locations { get; } = [];
+
+    public bool HasLocations => Locations.Count > 0;
+
+    //
+    // A folder inside the mod holding documents the user wrote - SVM's Presets. An update leaves it
+    // alone; a removal rescues it.
+    //
+    [RelayCommand]
+    private async Task AddUserDataFolderAsync()
+    {
+        if (ModFolder() is not ({ } modName, { } modFolder)) return;
+
+        var dialog = new OpenFolderDialog
+        {
+            Title = $"A folder inside {modName} holding files you authored",
+            InitialDirectory = modFolder,
+        };
+
+        if (dialog.ShowDialog() != true) return;
+
+        if (Inside(modFolder, dialog.FolderName) is not { } relative)
+        {
+            StatusMessage = "That folder isn't inside the mod, so it can't belong to it.";
+            return;
+        }
+
+        // The guard rail D7 exists for: an opted-in folder is somebody's presets, not a database.
+        var count = CountFiles(dialog.FolderName);
+        if (count > ModConfigFiles.MaxUserDataFiles)
+        {
+            StatusMessage =
+                $"{relative} holds {count} files. That is data rather than settings, so it hasn't been added.";
+            return;
+        }
+
+        var stored = _options.For(modName);
+        _options.SetUserData(modName, [.. stored.UserData, relative]);
+        await AfterLocationsChangedAsync(modName, $"{relative} will be left alone by updates and rescued if you remove {modName}.");
+    }
+
+    // A settings file the mod keeps somewhere nothing would look - SVM's Loader\loader.json.
+    [RelayCommand]
+    private async Task AddSettingsFileAsync()
+    {
+        if (ModFolder() is not ({ } modName, { } modFolder)) return;
+
+        var dialog = new OpenFileDialog
+        {
+            Title = $"A settings file inside {modName}",
+            InitialDirectory = modFolder,
+            Filter = "Config files (*.json;*.jsonc;*.json5)|*.json;*.jsonc;*.json5|All files (*.*)|*.*",
+        };
+
+        if (dialog.ShowDialog() != true) return;
+
+        if (Inside(modFolder, dialog.FileName) is not { } relative)
+        {
+            StatusMessage = "That file isn't inside the mod, so it can't belong to it.";
+            return;
+        }
+
+        var stored = _options.For(modName);
+        _options.SetSettings(modName, [.. stored.Settings, relative]);
+        await AfterLocationsChangedAsync(modName, $"{relative} will be treated as settings and carried across updates.");
+    }
+
+    // The opposite case: a file that sits in a folder called "config" and is really data.
+    [RelayCommand(CanExecute = nameof(ShowPolicy))]
+    private async Task IgnoreSelectedFileAsync()
+    {
+        if (SelectedEntry is not { Entry.ModName: { } modName } entry) return;
+        if (ModFolder() is not (_, { } modFolder)) return;
+        if (Inside(modFolder, entry.FullPath) is not { } relative) return;
+
+        var stored = _options.For(modName);
+        _options.SetExclude(modName, [.. stored.Exclude, relative]);
+        await AfterLocationsChangedAsync(modName, $"{relative} is no longer treated as one of {modName}'s configs.");
+    }
+
+    [RelayCommand]
+    private async Task RemoveLocationAsync(ConfigLocationChip? chip)
+    {
+        if (chip is null || SelectedEntry?.Entry.ModName is not { } modName) return;
+
+        var stored = _options.For(modName);
+
+        switch (chip.Kind)
+        {
+            case ConfigLocationKind.UserData:
+                _options.SetUserData(modName, stored.UserData.Where(p => p != chip.Path));
+                break;
+            case ConfigLocationKind.Settings:
+                _options.SetSettings(modName, stored.Settings.Where(p => p != chip.Path));
+                break;
+            default:
+                _options.SetExclude(modName, stored.Exclude.Where(p => p != chip.Path));
+                break;
+        }
+
+        await AfterLocationsChangedAsync(modName, $"{chip.Path} is back to being judged by the usual rules.");
+    }
+
+    //
+    // Every one of these changes what counts as a config, so the list is rebuilt from disk rather than
+    // patched - which is also the only honest way to show a file that has just started counting.
+    //
+    private async Task AfterLocationsChangedAsync(string modName, string message)
+    {
+        ShowLocations(SelectedEntry);
+        AppLog.Info("Configs", $"{modName} config locations changed");
+
+        await ScanAsync();
+        StatusMessage = message;
+    }
+
+    private void ShowLocations(ConfigEntryViewModel? entry)
+    {
+        Locations.Clear();
+
+        if (entry is { CanSetPolicy: true, Entry.ModName: { } modName })
+        {
+            var stored = _options.For(modName);
+
+            foreach (var path in stored.UserData) Locations.Add(new ConfigLocationChip(ConfigLocationKind.UserData, path));
+            foreach (var path in stored.Settings) Locations.Add(new ConfigLocationChip(ConfigLocationKind.Settings, path));
+            foreach (var path in stored.Exclude) Locations.Add(new ConfigLocationChip(ConfigLocationKind.Exclude, path));
+        }
+
+        OnPropertyChanged(nameof(HasLocations));
+    }
+
+    //
+    // The selected file's mod: its folder name, and the full path of the folder itself, found by
+    // climbing out of the file rather than rebuilt from the install path - the server root is nested
+    // differently on different installs and the file already knows where it is.
+    //
+    private (string ModName, string Folder)? ModFolder()
+    {
+        if (SelectedEntry is not { CanSetPolicy: true, Entry.ModName: { } modName }) return null;
+
+        for (var dir = Path.GetDirectoryName(SelectedEntry.FullPath); dir is not null; dir = Path.GetDirectoryName(dir))
+            if (string.Equals(Path.GetFileName(dir), modName, StringComparison.OrdinalIgnoreCase))
+                return (modName, dir);
+
+        return null;
+    }
+
+    // The path of something inside the mod, relative to the mod's folder - or null when it isn't.
+    private static string? Inside(string modFolder, string path)
+    {
+        var relative = Path.GetRelativePath(modFolder, path).Replace('\\', '/');
+
+        return relative.StartsWith("../", StringComparison.Ordinal) || Path.IsPathRooted(relative)
+            ? null
+            : ModConfigPaths.Normalise(relative);
+    }
+
+    private static int CountFiles(string folder)
+    {
+        try
+        {
+            return Directory
+                .EnumerateFiles(folder, "*", SearchOption.AllDirectories)
+                .Take(ModConfigFiles.MaxUserDataFiles + 1)
+                .Count();
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return 0;
+        }
+    }
+
     partial void OnSelectedPolicyOptionChanged(ConfigPolicyOption value)
     {
         if (_showingPolicy) return;
@@ -121,6 +299,7 @@ public sealed partial class ConfigsViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(CopyPathCommand))]
     [NotifyPropertyChangedFor(nameof(HasSelection))]
     [NotifyPropertyChangedFor(nameof(ShowPolicy))]
+    [NotifyCanExecuteChangedFor(nameof(IgnoreSelectedFileCommand))]
     private ConfigEntryViewModel? _selectedEntry;
 
     public bool HasSelection => SelectedEntry is not null;
@@ -196,6 +375,7 @@ public sealed partial class ConfigsViewModel : ObservableObject
 
         Load(value);
         ShowStoredPolicy(value);
+        ShowLocations(value);
     }
 
     // Puts the dropdown on this mod's stored choice without that counting as a change.
@@ -230,7 +410,7 @@ public sealed partial class ConfigsViewModel : ObservableObject
             var entries = await Task.Run(() =>
             {
                 var installed = InstalledModScanner.Scan(installPath);
-                return ModConfigDiscovery.Find(installPath, installed);
+                return ModConfigDiscovery.Find(installPath, installed, _options.Effective());
             });
 
             // Read once for the whole list rather than per row - it is one small file.

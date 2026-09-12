@@ -277,6 +277,15 @@ The file is the new version's text, edited in place: the author's comments, key 
 
 After an update, the Configs page says what happened to the file you are looking at, and the Downloads list says it as it happens.
 
+#### Mods that keep things somewhere unusual
+Some mods don't follow any convention, so three buttons sit under that dropdown - all per mod, all remembered in `Data\mod_configs.json`:
+
+- **Files I authored...** - a folder inside the mod holding files *you* wrote rather than settings the mod shipped. SVM's `Presets\` is the example. An update leaves the folder exactly as it is, and removing the mod keeps it like a config instead of deleting it. A folder holding hundreds of files is refused - that is a database, not your work.
+- **Settings kept elsewhere...** - a settings file the mod keeps where nothing would look for one, so updates carry your changes into it. **SVM's `Loader\loader.json` is set up for you**: it holds which preset the server runs, and before this it was replaced on every update, quietly putting the server back on the default preset.
+- **This isn't a config** - for the opposite case: a locale table or a barter list sitting in a folder literally called `config`. It stops being listed here, stops being merged, and is no longer kept when the mod is removed.
+
+SVM's entry is filled in for you as a starting point, not a rule - clear either half and it stays cleared.
+
 #### information
 Three things a merge deliberately does not do. **A setting you added yourself** that neither version ships is reported rather than put back - there is no honest place to insert it. **A setting the new version has dropped** goes with it. And **a value list (a JSON array) is carried whole** rather than element by element, because there is no correct way to combine two lists.
 
@@ -398,7 +407,7 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 | `Staging\` | Default destination for manually downloaded archives |
 | `Data\LegacyConfigs\` | Config files kept from removed and updated mods, one timestamped folder each |
 | `Data\ConfigBaselines\` | A copy of the config files each mod version shipped, which is what lets an update tell your changes from the author's |
-| `Data\mod_configs.json` | Your per-mod choice of what an update does with that mod's configs |
+| `Data\mod_configs.json` | Your per-mod choice of what an update does with that mod's configs, and any unusual places it keeps them |
 | `Data\ServerMap\` | On a server: the shared key (`servermap-key.txt`) and the list it publishes |
 | `.tcfmm-update\` | Hidden. Only exists while an app update is downloading, or if one failed; cleaned up on the next launch |
 
@@ -449,7 +458,8 @@ Worth knowing before you rely on it. None of these lose data quietly - they're p
 - **The first update of a mod after this app version can't merge.** Nothing recorded what its previous version shipped, so the update takes the new file and says so; from its next update on it merges. A copy of your file is always kept in `Data\LegacyConfigs\`.
 - **A JSON5 config, or one large enough to be data rather than settings, is not merged** - it is replaced and reported. Set that mod to **Keep mine** if you edit its config.
 - **A setting you added yourself is reported, not carried.** So is one the new version has dropped.
-- **Settings kept somewhere unusual aren't recognised as configs** - a `Presets\` folder rather than `config\`, for instance. Those are edited by hand, and an update leaves them alone only because nothing recognises them.
+- **Settings kept somewhere unusual are only recognised once you say so** - a `Presets\` folder rather than `config\`, for instance. The three buttons on the Configs page are how you say so, and SVM comes set up already.
+- **A folder of your own files is matched by name.** Renaming the mod's folder loses its entry, the same way a mod group does.
 
 #### Server map
 - **Client and server must be on the same SPT line**, which is SPT's rule rather than this app's.

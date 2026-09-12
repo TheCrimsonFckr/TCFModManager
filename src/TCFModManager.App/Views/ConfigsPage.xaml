@@ -336,6 +336,73 @@
                                 TextWrapping="Wrap"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 Text="{Binding PolicyNote}" />
+
+                            <!-- The places a mod keeps things no convention would find, and the ones
+                                 that only look like config. A chip each, with the kind spelled out,
+                                 because the three do opposite things. -->
+                            <ItemsControl
+                                Margin="0,8,0,0"
+                                ItemsSource="{Binding Locations}"
+                                Visibility="{Binding HasLocations, Converter={StaticResource BoolToVis}}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border
+                                            Margin="0,0,6,4"
+                                            Padding="8,2"
+                                            CornerRadius="3"
+                                            ToolTip="{Binding ToolTip}"
+                                            Background="{DynamicResource ControlFillColorSecondaryBrush}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock
+                                                    FontSize="11"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                    Text="{Binding Label}" />
+
+                                                <ui:Button
+                                                    Margin="6,0,-4,0"
+                                                    Padding="2"
+                                                    MinWidth="0"
+                                                    MinHeight="0"
+                                                    Appearance="Transparent"
+                                                    ToolTip="Stop treating it this way"
+                                                    Command="{Binding DataContext.RemoveLocationCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                                    CommandParameter="{Binding}">
+                                                    <ui:SymbolIcon Symbol="Dismiss24" FontSize="11" />
+                                                </ui:Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <WrapPanel Margin="0,4,0,0">
+                                <ui:Button
+                                    Margin="0,0,8,4"
+                                    Content="Files I authored..."
+                                    Icon="{ui:SymbolIcon FolderAdd24}"
+                                    ToolTip="A folder inside this mod holding files you wrote - presets, for instance. An update leaves it exactly as it is, and removing the mod keeps it."
+                                    Command="{Binding AddUserDataFolderCommand}" />
+
+                                <ui:Button
+                                    Margin="0,0,8,4"
+                                    Content="Settings kept elsewhere..."
+                                    Icon="{ui:SymbolIcon DocumentAdd24}"
+                                    ToolTip="A settings file this mod keeps somewhere nothing would look for one, so updates carry your changes into it."
+                                    Command="{Binding AddSettingsFileCommand}" />
+
+                                <ui:Button
+                                    Margin="0,0,0,4"
+                                    Content="This isn't a config"
+                                    Icon="{ui:SymbolIcon EyeOff24}"
+                                    ToolTip="Stop treating the open file as one of this mod's configs - for data that happens to sit in a folder called config."
+                                    Command="{Binding IgnoreSelectedFileCommand}" />
+                            </WrapPanel>
                         </StackPanel>
 
                         <TextBlock

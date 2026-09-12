@@ -42,3 +42,35 @@ public sealed record ConfigPolicyOption(string Label, ModConfigPolicy Value)
 {
     public override string ToString() => Label;
 }
+
+// Which of a mod's three per-mod lists a chip belongs to.
+public enum ConfigLocationKind
+{
+    UserData,
+    Settings,
+    Exclude,
+}
+
+//
+// One of the extra places a mod keeps things, as a chip under the update policy. Label says which kind
+// it is, because the three read very differently: one is preserved, one is carried, one is ignored.
+//
+public sealed record ConfigLocationChip(ConfigLocationKind Kind, string Path)
+{
+    public string Label => Kind switch
+    {
+        ConfigLocationKind.UserData => $"Yours: {Path}",
+        ConfigLocationKind.Settings => $"Settings: {Path}",
+        _ => $"Ignored: {Path}",
+    };
+
+    public string ToolTip => Kind switch
+    {
+        ConfigLocationKind.UserData =>
+            "Files you authored. An update leaves this folder exactly as it is, and removing the mod keeps it.",
+        ConfigLocationKind.Settings =>
+            "Treated as one of the mod's settings files, so an update carries your changes into the new version.",
+        _ =>
+            "Not treated as config at all - it isn't listed here, isn't merged, and isn't kept when the mod is removed.",
+    };
+}

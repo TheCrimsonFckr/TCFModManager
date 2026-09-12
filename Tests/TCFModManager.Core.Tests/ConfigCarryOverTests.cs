@@ -70,8 +70,10 @@ public class ConfigCarryOverTests : IDisposable
     {
         var pending = _carry.Prepare(_install, existing, shipped.Select(s => s.Path), "Test Mod", Timestamp);
 
+        // Exactly what the install path does: it places nothing over a file it could not copy aside,
+        // and nothing over one of the user's own documents.
         foreach (var (path, text) in shipped)
-            if (!pending.Untouchable.Contains(path)) Write(path, text);
+            if (!pending.Untouchable.Contains(path) && !pending.Preserved.Contains(path)) Write(path, text);
 
         var installed = Record(newVersion, [.. shipped.Select(s => s.Path)]);
 
@@ -364,5 +366,58 @@ public class ConfigCarryOverTests : IDisposable
 
         Assert.Equal(ModConfigPolicy.TakeNew, _options.PolicyFor(["Something", "testmod"]));
         Assert.Equal(ModConfigPolicy.Merge, _options.PolicyFor(["Something"]));
+    }
+    //
+    // Stage 3: the places a mod keeps things that no convention would find.
+    //
+
+    // SVM's presets: the archive would place them, and an update must not.
+    [Fact]
+    public void AUserDataFileAlreadyThereIsPreservedNotReplaced()
+    {
+        const string preset = "user/mods/TestMod/Presets/custom_V2.json";
+
+        Write(preset, "{ \"mine\": true }");
+        _options.SetUserData("TestMod", ["Presets"]);
+
+        var report = Update(Record("1.0.0", preset), "1.1.0", (preset, "{ \"mine\": false }"));
+
+        Assert.Equal(ConfigOutcomeKind.Preserved, Only(report, preset).Kind);
+        Assert.Equal("{ \"mine\": true }", Read(preset));
+
+        // Not archived either: it was never at risk, so there is nothing to keep a copy of.
+        Assert.Null(report.ArchiveFolder);
+    }
+
+    // SVM's loader.json: a settings file in a folder called nothing in particular.
+    [Fact]
+    public void ASettingsFileTheModKeepsElsewhereIsMerged()
+    {
+        const string loader = "user/mods/TestMod/Loader/loader.json";
+
+        _options.SetSettings("TestMod", ["Loader/loader.json"]);
+
+        Write(loader, "{ \"CurrentlySelectedPreset\": \"default\" }");
+        _baselines.Capture(_install, 42, false, "1.0.0", [loader]);
+        Write(loader, "{ \"CurrentlySelectedPreset\": \"custom_V2\" }");
+
+        var report = Update(Record("1.0.0", loader), "1.1.0", (loader, "{ \"CurrentlySelectedPreset\": \"default\" }"));
+
+        Assert.Equal(ConfigOutcomeKind.Merged, Only(report, loader).Kind);
+        Assert.Contains("custom_V2", Read(loader));
+    }
+
+    // The other direction: data that only looks like config is left out of all of it.
+    [Fact]
+    public void AnExcludedFileIsNotReportedOnAtAll()
+    {
+        const string locale = "user/mods/TestMod/config/locales/en.json";
+
+        Write(locale, "{ \"a\": 1 }");
+        _options.SetExclude("TestMod", ["config/locales"]);
+
+        var report = Update(Record("1.0.0", locale), "1.1.0", (locale, "{ \"a\": 2 }"));
+
+        Assert.Empty(report.Files);
     }
 }

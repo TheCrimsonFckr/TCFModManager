@@ -94,6 +94,7 @@ public static class ConfigUpdateWording
                                 : string.Empty),
             ConfigOutcomeKind.KeptMine => $"Updating to {move} left this file exactly as it was, as you asked.",
             ConfigOutcomeKind.DefaultsUpdated => $"Updating to {move} brought this file's defaults with it. Nothing of yours was in it.",
+            ConfigOutcomeKind.Preserved => $"Updating to {move} left this file exactly as it is - it is one of yours, not the mod's.",
             ConfigOutcomeKind.NotUpdated => $"Updating to {move} could not copy this file aside, so it was left alone.",
             ConfigOutcomeKind.Added => $"This file arrived with {report.ToVersion}.",
             _ => $"Updating to {move} left this file unchanged.",

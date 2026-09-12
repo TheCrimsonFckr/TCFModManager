@@ -36,14 +36,21 @@ public static class ModConfigDiscovery
     // ones - a disabled server mod's FolderPath already points into user\mods.disabled, so its
     // config is found there with no special casing.</param>
     //
-    public static List<ModConfigEntry> Find(string installPath, IReadOnlyList<InstalledMod> scanned)
+    // <param name="options">Per-mod entries from mod_configs.json - the extra settings files a mod
+    // keeps somewhere unconventional, and the data sitting in a folder called "config" that is not a
+    // config at all. Read once by the caller; omitted, the conventions answer alone.</param>
+    //
+    public static List<ModConfigEntry> Find(
+        string installPath,
+        IReadOnlyList<InstalledMod> scanned,
+        IReadOnlyDictionary<string, ModConfigOptions>? options = null)
     {
         var entries = new List<ModConfigEntry>();
 
         entries.AddRange(FindClientConfigs(installPath, scanned));
 
         foreach (var mod in scanned.Where(m => m.Target == InstalledModTarget.Server))
-            entries.AddRange(FindServerConfigs(installPath, mod));
+            entries.AddRange(FindServerConfigs(installPath, mod, ModConfigFiles.EntryForFolder(mod.Name, options)));
 
         return entries
             .OrderBy(e => SourceRank(e.Source))
@@ -186,12 +193,12 @@ public static class ModConfigDiscovery
         || stem.StartsWith("com.bepis.", StringComparison.OrdinalIgnoreCase)
         || stem.StartsWith("com.bepinex.", StringComparison.OrdinalIgnoreCase);
 
-    private static List<ModConfigEntry> FindServerConfigs(string installPath, InstalledMod mod)
+    private static List<ModConfigEntry> FindServerConfigs(string installPath, InstalledMod mod, ModConfigOptions? options)
     {
         var results = new List<ModConfigEntry>();
         if (!Directory.Exists(mod.FolderPath)) return results;
 
-        foreach (var file in ServerConfigFiles(installPath, mod.FolderPath))
+        foreach (var file in ServerConfigFiles(installPath, mod.FolderPath, options))
         {
             results.Add(Entry(installPath, file, ModConfigFormat.Json, ModConfigSource.Server) with
             {
@@ -212,18 +219,42 @@ public static class ModConfigDiscovery
     // decides which files are worth asking about - it is a way of not enumerating a mod's whole data
     // folder, not a second opinion on what a config is.
     //
-    private static IEnumerable<string> ServerConfigFiles(string installPath, string modFolder)
+    private static IEnumerable<string> ServerConfigFiles(string installPath, string modFolder, ModConfigOptions? options)
     {
+        // A file can be reached twice - once by a walk and once by being named in the mod's entry - and
+        // the page must not list it twice.
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
         foreach (var file in SafeEnumerateFiles(modFolder))
         {
-            if (ModConfigFiles.IsServerModConfig(Relative(installPath, file))) yield return file;
+            if (ModConfigFiles.IsServerModConfig(Relative(installPath, file), options) && seen.Add(file))
+                yield return file;
         }
 
         foreach (var folder in ConfigFoldersIn(modFolder))
         {
             foreach (var file in SafeEnumerateFiles(folder, SearchOption.AllDirectories))
             {
-                if (ModConfigFiles.IsServerModConfig(Relative(installPath, file))) yield return file;
+                if (ModConfigFiles.IsServerModConfig(Relative(installPath, file), options) && seen.Add(file))
+                    yield return file;
+            }
+        }
+
+        //
+        // Files the mod's own entry names, which no walk above would have reached: SVM keeps the preset
+        // it is running in Loader\loader.json, in a folder called nothing in particular.
+        //
+        foreach (var named in options?.Settings ?? [])
+        {
+            if (ModConfigPaths.Normalise(named) is not { } clean) continue;
+
+            var path = Path.Combine(modFolder, clean.Replace('/', Path.DirectorySeparatorChar));
+
+            if (File.Exists(path)
+                && ModConfigFiles.IsServerModConfig(Relative(installPath, path), options)
+                && seen.Add(path))
+            {
+                yield return path;
             }
         }
     }

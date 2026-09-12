@@ -843,7 +843,18 @@ public partial class InstalledViewModel : ObservableObject
                 return;
             }
 
-            var configs = ModConfigFiles.InRecord(record);
+            //
+            // Counted with the mod's own entry in hand, so a mod that keeps settings somewhere
+            // unconventional - or whose presets this app never installed - is counted the same way the
+            // removal itself will treat them.
+            //
+            var options = new ModConfigOptionsStore().Effective();
+
+            var configs = ModConfigFiles.InRecord(record, options)
+                .Concat(ModConfigFiles.UserDataOnDisk(installPath, record, options))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
             if (ConfirmRemoval(mod.Name, "This deletes exactly the files this app installed for it.", configs.Count)
                 is not { } configAction)
             {
@@ -1502,7 +1513,7 @@ public partial class InstalledViewModel : ObservableObject
 
         var answer = MessageBox.Show(
             $"{message}\n\n" +
-            $"{modName} has {configCount} config file(s) of its own:\n\n" +
+            $"{modName} has {configCount} config or settings file(s) of its own:\n\n" +
             $"Yes  -  keep them, moved to {AppPaths.LegacyConfigsDirectory}\n" +
             "No  -  delete them along with the rest of the mod\n" +
             "Cancel  -  don't remove anything",
