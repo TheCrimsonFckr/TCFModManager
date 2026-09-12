@@ -69,7 +69,7 @@ public static class JsonConfigMerge
             // Compared as bytes rather than with ==: Text is a byte[], and == on one of those asks
             // whether it is the same array, which it never is.
             //
-            if (knownBefore && SameText(shipped, value)) continue;
+            if (SameText(shipped, value)) continue;
 
             if (!newValues.TryGetValue(path, out var replacing))
             {
@@ -89,8 +89,10 @@ public static class JsonConfigMerge
         return new JsonConfigMergeResult(merged, carried, dropped, added, null);
     }
 
-    private static bool SameText(JsonValueSpan left, JsonValueSpan right) =>
-        left.Text.AsSpan().SequenceEqual(right.Text);
+    // left is what TryGetValue handed back, so it is null exactly when the baseline never had the
+    // path - which is not the same text as anything.
+    private static bool SameText(JsonValueSpan? left, JsonValueSpan right) =>
+        left is not null && left.Text.AsSpan().SequenceEqual(right.Text);
 
     //
     // Every scalar and array value in the document, by dotted path, with the byte span of the value
