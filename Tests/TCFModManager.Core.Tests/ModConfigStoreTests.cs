@@ -77,8 +77,17 @@ public class ModConfigStoreTests : IDisposable
         // In the app's own Data folder, not the SPT install - but laid out at the file's own path
         // relative to the install, so a whole timestamped folder can still be copied back over an
         // SPT install to undo a round of edits.
+        //
+        // The folder is named in LOCAL time - it is something the user goes looking for by the clock
+        // on their own wall - so the name is derived here rather than written out. Pinned to
+        // "20260825-121500" this passed only where the machine running it was on UTC.
         Assert.Equal(
-            Path.Combine(ModConfigStore.BackupDirectory, "20260825-121500", "BepInEx", "config", "some.cfg"),
+            Path.Combine(
+                ModConfigStore.BackupDirectory,
+                Timestamp.ToLocalTime().ToString("yyyyMMdd-HHmmss"),
+                "BepInEx",
+                "config",
+                "some.cfg"),
             result.BackupPath);
 
         Assert.StartsWith(AppPaths.DataDirectory, result.BackupPath!);

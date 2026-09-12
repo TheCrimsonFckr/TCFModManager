@@ -122,8 +122,13 @@ public class ConfigCarryOverTests : IDisposable
         Assert.Equal(ConfigOutcomeKind.DefaultsUpdated, Only(report, ConfigPath).Kind);
     }
 
+    //
+    // This asserted Replaced-with-no-reason, which is what an edited file with a baseline got before
+    // the three-way merge below existed. Kept as the simplest case of what it does now: one value
+    // the user changed, carried over the new version's default.
+    //
     [Fact]
-    public void AnEditedFileWithABaselineIsReplacedWithNoReason()
+    public void AnEditedFileWithABaselineIsMerged()
     {
         Write(ConfigPath, "{ \"a\": 1 }");
         _baselines.Capture(_install, 42, false, "1.0.0", [ConfigPath]);
@@ -132,8 +137,10 @@ public class ConfigCarryOverTests : IDisposable
         var report = Update(Record("1.0.0", ConfigPath), "1.1.0", (ConfigPath, "{ \"a\": 2 }"));
 
         var outcome = Only(report, ConfigPath);
-        Assert.Equal(ConfigOutcomeKind.Replaced, outcome.Kind);
+        Assert.Equal(ConfigOutcomeKind.Merged, outcome.Kind);
         Assert.Null(outcome.Reason);
+        Assert.Equal(["a"], outcome.Carried);
+        Assert.Contains("\"a\": 99", Read(ConfigPath));
     }
 
     [Fact]
