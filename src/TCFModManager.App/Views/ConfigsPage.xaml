@@ -155,6 +155,7 @@
                                                 <ui:SymbolIcon
                                                     VerticalAlignment="Center"
                                                     FontSize="16"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                     Symbol="{Binding Name.Glyph}" />
                                                 <TextBlock
                                                     Margin="8,0,0,0"
@@ -196,7 +197,7 @@
                                         Margin="0,0,10,0"
                                         VerticalAlignment="Center"
                                         FontSize="16"
-                                        Opacity="0.75"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                         Symbol="{Binding Glyph}"
                                         ToolTip="{Binding FormatLabel}" />
 
