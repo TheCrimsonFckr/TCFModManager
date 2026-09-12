@@ -327,8 +327,7 @@ public sealed class ModInstallService(
             AppLog.Info("Install",
                 $"{target.Name} {version.Version} placed {placedFiles.Count} file(s) in folders [{string.Join(", ", record.Folders)}]");
 
-            var report = _configs.Settle(
-                pending, installPath, target, existing, record.Version, placedFiles, timestamp);
+            var report = _configs.Settle(pending, installPath, target, existing, record, timestamp);
 
             if (report.Files.Count > 0)
             {

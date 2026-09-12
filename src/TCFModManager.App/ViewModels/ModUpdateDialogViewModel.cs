@@ -33,6 +33,29 @@ public partial class ModUpdateDialogViewModel : ObservableObject
     public AddonsSectionViewModel Addons { get; } = new();
 
     public string ModTitle => _mod.DisplayTitle;
+
+    //
+    // What an update would do with this mod's own config files, read-only - the moment it matters is
+    // the moment somebody is about to press Update. Only for a mod with a server half: a client mod's
+    // settings live in BepInEx\config, which no update touches. Set on the Configs page.
+    //
+    public string? ConfigPolicyNote
+    {
+        get
+        {
+            if (!_mod.HasServer) return null;
+
+            // The same folder names the pin and the planner use, so one mod is one answer everywhere.
+            var policy = new ModConfigOptionsStore().PolicyFor(ModListCandidates.From(_mod).Folders);
+
+            return policy switch
+            {
+                ModConfigPolicy.KeepMine => "Your config files for this mod will be left exactly as they are.",
+                ModConfigPolicy.TakeNew => "This mod's config files will be replaced by the new version's - your copies are kept in Data\\LegacyConfigs.",
+                _ => "Settings you changed will be carried into the new version's config files, and your current copies kept in Data\\LegacyConfigs.",
+            };
+        }
+    }
     public string? InstalledVersionText => _mod.InstalledVersion;
 
     // The matched catalog listing's sp-mod.com page; null until LoadAsync resolves it, or if no match was found.

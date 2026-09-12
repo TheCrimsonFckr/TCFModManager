@@ -1,4 +1,5 @@
 using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -31,4 +32,13 @@ public sealed record ConfigSourceFilterItem(string Label, ConfigSourceFilter Val
         ConfigSourceFilter.Server => source == ModConfigSource.Server,
         _ => source is ModConfigSource.Framework or ModConfigSource.Unmatched,
     };
+}
+
+//
+// One choice in the update-policy dropdown on the Configs page. ToString is what the closed ComboBox
+// shows, the same shape the source filter above uses.
+//
+public sealed record ConfigPolicyOption(string Label, ModConfigPolicy Value)
+{
+    public override string ToString() => Label;
 }

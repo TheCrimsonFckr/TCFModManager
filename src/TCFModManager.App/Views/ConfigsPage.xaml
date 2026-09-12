@@ -303,6 +303,41 @@
                             Text="{Binding SelectedEntry.StateNote}"
                             Visibility="{Binding SelectedEntry.HasStateNote, Converter={StaticResource BoolToVis}}" />
 
+                        <!-- What the last recorded update did to this exact file. The Downloads queue
+                             says it once, as it happens; this is where it can still be read later. -->
+                        <TextBlock
+                            Margin="0,6,0,0"
+                            TextWrapping="Wrap"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                            Text="{Binding SelectedEntry.UpdateNote}"
+                            Visibility="{Binding SelectedEntry.HasUpdateNote, Converter={StaticResource BoolToVis}}" />
+
+                        <!-- Per-mod, and only for a server mod's own config: nothing an update does
+                             can reach a client mod's settings in BepInEx\config. -->
+                        <StackPanel
+                            Margin="0,10,0,0"
+                            Visibility="{Binding ShowPolicy, Converter={StaticResource BoolToVis}}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,8,0"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                    Text="When this mod updates:" />
+
+                                <ComboBox
+                                    MinWidth="190"
+                                    ItemsSource="{Binding PolicyOptions}"
+                                    SelectedItem="{Binding SelectedPolicyOption}"
+                                    ToolTip="Applies to every config file of this mod, and is remembered in Data\mod_configs.json." />
+                            </StackPanel>
+
+                            <TextBlock
+                                Margin="0,6,0,0"
+                                TextWrapping="Wrap"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="{Binding PolicyNote}" />
+                        </StackPanel>
+
                         <TextBlock
                             Margin="0,6,0,0"
                             TextWrapping="Wrap"

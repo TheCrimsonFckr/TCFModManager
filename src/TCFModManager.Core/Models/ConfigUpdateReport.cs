@@ -1,3 +1,5 @@
+using TCFModManager.Core.Services;
+
 namespace TCFModManager.Core.Models;
 
 //
@@ -18,6 +20,9 @@ public sealed record ConfigUpdateReport
     public required string ToVersion { get; init; }
 
     public required DateTimeOffset At { get; init; }
+
+    // The policy the update ran under - see ModConfigPolicy. Merge unless the user set otherwise.
+    public ModConfigPolicy Policy { get; init; } = ModConfigPolicy.Merge;
 
     // Where the files as they stood before the update were copied. Null when nothing was there.
     public string? ArchiveFolder { get; init; }

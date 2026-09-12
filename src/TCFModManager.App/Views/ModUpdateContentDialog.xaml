@@ -58,6 +58,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -131,8 +132,19 @@
                 Visibility="{Binding ModPageUrl, Converter={StaticResource NullToCollapsed}}" />
         </DockPanel>
 
+        <!-- What an update would do with this mod's own configs. Read-only here - it is set on the
+             Configs page - and shown next to Update because that is the moment it matters. -->
+        <TextBlock
+            Grid.Row="2"
+            Margin="0,0,0,8"
+            TextWrapping="Wrap"
+            FontSize="12"
+            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+            Text="{Binding ConfigPolicyNote}"
+            Visibility="{Binding ConfigPolicyNote, Converter={StaticResource NullToCollapsed}}" />
+
         <!-- Free-typed version override, for a version that isn't in the cached list below. -->
-        <DockPanel Grid.Row="2" Margin="0,0,0,8" Visibility="{Binding CanManageVersion, Converter={StaticResource TrueToVisible}}">
+        <DockPanel Grid.Row="3" Margin="0,0,0,8" Visibility="{Binding CanManageVersion, Converter={StaticResource TrueToVisible}}">
             <ui:Button
                 DockPanel.Dock="Right"
                 Content="Clear override"
@@ -149,7 +161,7 @@
                 Text="{Binding CustomVersionText, UpdateSourceTrigger=PropertyChanged}" />
         </DockPanel>
 
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="4">
             <!-- Loading state shown while versions are being fetched. -->
             <StackPanel
                 HorizontalAlignment="Center"

@@ -1,5 +1,7 @@
 using System.IO;
+using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -92,6 +94,24 @@ public sealed class ConfigEntryViewModel
             : null;
 
     public bool HasStateNote => StateNote is not null;
+
+    //
+    // Only a server mod's own config has an update policy to set: a client mod's settings live in
+    // BepInEx\config, which no update ever touches, and a shipped default is not the file being read.
+    //
+    public bool CanSetPolicy => Source == ModConfigSource.Server && Entry.ModName is not null && !IsShippedDefault;
+
+    // What the last recorded update did to this file, filled in by ConfigsViewModel from
+    // ConfigUpdateLog. Null when no update in the log mentions it.
+    public ConfigUpdateReport? LastUpdate { get; init; }
+
+    public ConfigFileOutcome? LastUpdateOutcome { get; init; }
+
+    public string? UpdateNote => LastUpdate is { } report && LastUpdateOutcome is { } outcome
+        ? ConfigUpdateWording.LastUpdateNote(report, outcome)
+        : null;
+
+    public bool HasUpdateNote => UpdateNote is not null;
 
     // Everything after the first occurrence of marker, or null when the path doesn't contain it.
     private static string? After(string path, string marker)

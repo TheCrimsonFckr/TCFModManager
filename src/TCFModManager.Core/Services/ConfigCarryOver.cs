@@ -20,10 +20,14 @@ namespace TCFModManager.Core.Services;
 // Nothing here fails an install. A file that cannot be copied aside is left exactly as it was and
 // reported, which is the one case where the update deliberately does less than it was asked to.
 //
-public sealed class ConfigCarryOver(ConfigBaselineStore? baselines = null, string? archiveRoot = null)
+public sealed class ConfigCarryOver(
+    ConfigBaselineStore? baselines = null,
+    string? archiveRoot = null,
+    ModConfigOptionsStore? options = null)
 {
     private readonly ConfigBaselineStore _baselines = baselines ?? new ConfigBaselineStore();
     private readonly string _archiveRoot = archiveRoot ?? AppPaths.LegacyConfigsDirectory;
+    private readonly ModConfigOptionsStore _options = options ?? new ModConfigOptionsStore();
 
     public ConfigBaselineStore Baselines => _baselines;
 
@@ -88,17 +92,21 @@ public sealed class ConfigCarryOver(ConfigBaselineStore? baselines = null, strin
         string installPath,
         InstallTarget target,
         InstalledModRecord? existing,
-        string newVersion,
-        IEnumerable<string> placedRelativePaths,
+        InstalledModRecord installed,
         DateTimeOffset timestamp)
     {
-        var placed = placedRelativePaths.Where(ModConfigFiles.IsServerModConfig).ToList();
+        var placed = installed.Files.Where(ModConfigFiles.IsServerModConfig).ToList();
         var outcomes = new List<ConfigFileOutcome>();
 
+        //
         // The new version's shipped copies, taken from what was just placed rather than out of the
-        // extract folder - these are the exact bytes the install now holds.
-        _baselines.Capture(installPath, target.Id, target.IsAddon, newVersion,
+        // extract folder - these are the exact bytes the install now holds, and they are captured
+        // BEFORE a merge writes over any of them.
+        //
+        _baselines.Capture(installPath, target.Id, target.IsAddon, installed.Version,
             placed.Where(p => !pending.Untouchable.Contains(p)));
+
+        var policy = _options.PolicyFor(InstalledModFolders.Resolve(installed));
 
         foreach (var relative in placed)
         {
@@ -108,7 +116,7 @@ public sealed class ConfigCarryOver(ConfigBaselineStore? baselines = null, strin
                 continue;
             }
 
-            outcomes.Add(Decide(pending, installPath, target, existing, relative));
+            outcomes.Add(Decide(pending, installPath, target, existing, relative, policy));
         }
 
         // Archived files the new version no longer ships. Their copy is the only one left.
@@ -128,7 +136,7 @@ public sealed class ConfigCarryOver(ConfigBaselineStore? baselines = null, strin
             outcomes.Add(new ConfigFileOutcome { Path = relative, Kind = ConfigOutcomeKind.NotUpdated });
         }
 
-        _baselines.Prune(target.Id, target.IsAddon, existing?.Version, newVersion);
+        _baselines.Prune(target.Id, target.IsAddon, existing?.Version, installed.Version);
 
         return new ConfigUpdateReport
         {
@@ -136,7 +144,8 @@ public sealed class ConfigCarryOver(ConfigBaselineStore? baselines = null, strin
             IsAddon = target.IsAddon,
             ModName = target.Name,
             FromVersion = existing?.Version,
-            ToVersion = newVersion,
+            ToVersion = installed.Version,
+            Policy = policy,
             At = timestamp,
             ArchiveFolder = pending.ArchiveFolder,
             Files = [.. outcomes.OrderBy(o => o.Path, StringComparer.OrdinalIgnoreCase)],
@@ -156,35 +165,104 @@ public sealed class ConfigCarryOver(ConfigBaselineStore? baselines = null, strin
         string installPath,
         InstallTarget target,
         InstalledModRecord? existing,
-        string relative)
+        string relative,
+        ModConfigPolicy policy)
     {
         if (!pending.Archived.TryGetValue(relative, out var userCopy))
             return new ConfigFileOutcome { Path = relative, Kind = ConfigOutcomeKind.Added };
 
-        var installed = Path.Combine(installPath, ToNative(relative));
+        var placed = Path.Combine(installPath, ToNative(relative));
 
-        if (SameBytes(userCopy, installed))
+        if (SameBytes(userCopy, placed))
             return new ConfigFileOutcome { Path = relative, Kind = ConfigOutcomeKind.Unchanged };
+
+        //
+        // Keep mine answers before anything else is asked, including before a baseline is looked for:
+        // it means "this file is mine", which is the one honest option for a mod whose config the app
+        // cannot reason about.
+        //
+        if (policy == ModConfigPolicy.KeepMine)
+        {
+            return Restore(userCopy, placed, relative)
+                ? new ConfigFileOutcome { Path = relative, Kind = ConfigOutcomeKind.KeptMine }
+                : Replaced(relative, ConfigReplaceReason.MergeFailed);
+        }
 
         var baseline = _baselines.Find(target.Id, target.IsAddon, existing?.Version, relative);
 
-        if (baseline is null)
-        {
-            return new ConfigFileOutcome
-            {
-                Path = relative,
-                Kind = ConfigOutcomeKind.Replaced,
-                Reason = ConfigReplaceReason.NoBaseline,
-            };
-        }
+        // Nothing recorded what the old version shipped, so a user edit cannot be told from a changed
+        // default and there is nothing safe to carry.
+        if (baseline is null) return Replaced(relative, ConfigReplaceReason.NoBaseline);
 
         // The user never touched it, so the new defaults are simply the newer answer and nothing of
         // theirs is lost.
         if (SameBytes(userCopy, baseline))
             return new ConfigFileOutcome { Path = relative, Kind = ConfigOutcomeKind.DefaultsUpdated };
 
-        return new ConfigFileOutcome { Path = relative, Kind = ConfigOutcomeKind.Replaced };
+        if (policy == ModConfigPolicy.TakeNew) return Replaced(relative, ConfigReplaceReason.TakeNewPolicy);
+
+        return Merge(baseline, userCopy, placed, relative);
     }
+
+    //
+    // The three-way merge, written back over the file the install just placed. A merge never fails an
+    // install: anything it cannot do falls back to the new version's file, which is on disk already,
+    // and says why.
+    //
+    private static ConfigFileOutcome Merge(string baseline, string userCopy, string placed, string relative)
+    {
+        try
+        {
+            var result = JsonConfigMerge.Merge(
+                File.ReadAllBytes(baseline), File.ReadAllBytes(userCopy), File.ReadAllBytes(placed));
+
+            if (result.Stop is { } stop)
+            {
+                return Replaced(relative, stop == JsonConfigMergeStop.TooLarge
+                    ? ConfigReplaceReason.TooLarge
+                    : ConfigReplaceReason.NotMergeable);
+            }
+
+            // Nothing of the user's differed from what the old version shipped, so the new file stands
+            // as it is - no write, and nothing lost.
+            if (result.Carried.Count == 0 && result.Dropped.Count == 0 && result.UserAdded.Count == 0)
+                return new ConfigFileOutcome { Path = relative, Kind = ConfigOutcomeKind.DefaultsUpdated };
+
+            if (result.Content is { } merged) File.WriteAllBytes(placed, merged);
+
+            return new ConfigFileOutcome
+            {
+                Path = relative,
+                Kind = ConfigOutcomeKind.Merged,
+                Carried = result.Carried,
+                Dropped = result.Dropped,
+                UserAdded = result.UserAdded,
+            };
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or OutOfMemoryException)
+        {
+            AppLog.Warn("Configs", $"couldn't merge {relative}: {ex.Message}");
+            return Replaced(relative, ConfigReplaceReason.MergeFailed);
+        }
+    }
+
+    // Puts the user's own file back over the one just placed.
+    private static bool Restore(string userCopy, string placed, string relative)
+    {
+        try
+        {
+            File.Copy(userCopy, placed, overwrite: true);
+            return true;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.Warn("Configs", $"couldn't put {relative} back: {ex.Message}");
+            return false;
+        }
+    }
+
+    private static ConfigFileOutcome Replaced(string relative, ConfigReplaceReason reason) =>
+        new() { Path = relative, Kind = ConfigOutcomeKind.Replaced, Reason = reason };
 
     private static bool SameBytes(string left, string right)
     {

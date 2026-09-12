@@ -39,6 +39,14 @@ public sealed partial class ConfigsViewModel : ObservableObject
     // change that restores it doesn't run the prompt a second time.
     private bool _restoringSelection;
 
+    // Per-mod update policy, and what recent updates did to each file.
+    private readonly ModConfigOptionsStore _options = new();
+    private readonly ConfigUpdateLog _updates = new();
+
+    // Guards the policy dropdown being set to match the newly selected file, so showing a stored
+    // choice doesn't read as making one.
+    private bool _showingPolicy;
+
     public ConfigsViewModel()
     {
         SourceFilterOptions =
@@ -50,6 +58,39 @@ public sealed partial class ConfigsViewModel : ObservableObject
         ];
 
         _selectedSourceFilter = SourceFilterOptions[0];
+
+        PolicyOptions =
+        [
+            new ConfigPolicyOption("Merge my changes", ModConfigPolicy.Merge),
+            new ConfigPolicyOption("Keep mine", ModConfigPolicy.KeepMine),
+            new ConfigPolicyOption("Take the new file", ModConfigPolicy.TakeNew),
+        ];
+
+        _selectedPolicyOption = PolicyOptions[0];
+    }
+
+    //
+    // What an update does with this mod's config when the user has changed it. Per mod rather than per
+    // file: a mod's configs are one decision, and the store is keyed by its folder.
+    //
+    public IReadOnlyList<ConfigPolicyOption> PolicyOptions { get; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PolicyNote))]
+    private ConfigPolicyOption _selectedPolicyOption;
+
+    public string PolicyNote => ConfigUpdateWording.PolicyNote(SelectedPolicyOption.Value);
+
+    public bool ShowPolicy => SelectedEntry?.CanSetPolicy == true;
+
+    partial void OnSelectedPolicyOptionChanged(ConfigPolicyOption value)
+    {
+        if (_showingPolicy) return;
+        if (SelectedEntry is not { CanSetPolicy: true, Entry.ModName: { } modName }) return;
+
+        _options.SetPolicy(modName, value.Value);
+        StatusMessage = $"{modName}: updates will {value.Label.ToLowerInvariant()}.";
+        AppLog.Info("Configs", $"{modName} update policy set to {value.Value}");
     }
 
     //
@@ -79,6 +120,7 @@ public sealed partial class ConfigsViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(OpenFolderCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyPathCommand))]
     [NotifyPropertyChangedFor(nameof(HasSelection))]
+    [NotifyPropertyChangedFor(nameof(ShowPolicy))]
     private ConfigEntryViewModel? _selectedEntry;
 
     public bool HasSelection => SelectedEntry is not null;
@@ -153,6 +195,19 @@ public sealed partial class ConfigsViewModel : ObservableObject
         }
 
         Load(value);
+        ShowStoredPolicy(value);
+    }
+
+    // Puts the dropdown on this mod's stored choice without that counting as a change.
+    private void ShowStoredPolicy(ConfigEntryViewModel? entry)
+    {
+        if (entry is not { CanSetPolicy: true, Entry.ModName: { } modName }) return;
+
+        var stored = _options.For(modName).Policy;
+
+        _showingPolicy = true;
+        SelectedPolicyOption = PolicyOptions.FirstOrDefault(o => o.Value == stored) ?? PolicyOptions[0];
+        _showingPolicy = false;
     }
 
     [RelayCommand]
@@ -178,7 +233,10 @@ public sealed partial class ConfigsViewModel : ObservableObject
                 return ModConfigDiscovery.Find(installPath, installed);
             });
 
-            _all = entries.Select(e => new ConfigEntryViewModel { Entry = e }).ToList();
+            // Read once for the whole list rather than per row - it is one small file.
+            var history = _updates.Load().Reports;
+
+            _all = entries.Select(e => Row(e, history)).ToList();
 
             ApplyFilter();
             RefreshRunningWarning();
@@ -201,6 +259,24 @@ public sealed partial class ConfigsViewModel : ObservableObject
         {
             IsBusy = false;
         }
+    }
+
+    //
+    // One row, carrying what the most recent recorded update did to that exact file so the page can
+    // say it days later - which is the other half of the report the Downloads queue shows once.
+    //
+    private static ConfigEntryViewModel Row(ModConfigEntry entry, List<ConfigUpdateReport> history)
+    {
+        foreach (var report in history)
+        {
+            var outcome = report.Files.FirstOrDefault(f =>
+                string.Equals(f.Path, entry.DisplayPath, StringComparison.OrdinalIgnoreCase));
+
+            if (outcome is not null)
+                return new ConfigEntryViewModel { Entry = entry, LastUpdate = report, LastUpdateOutcome = outcome };
+        }
+
+        return new ConfigEntryViewModel { Entry = entry };
     }
 
     // Rebuilds the grouped list from the search box and the source dropdown.

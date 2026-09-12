@@ -108,7 +108,7 @@ Mods installed with this app have every file they placed recorded, which is what
 
 
 #### Your configs aren't thrown away
-If a server mod has config files of its own (`user\mods\<mod>\config\*.json`), removing it asks what you want done with them: keep them - they're moved to a timestamped folder under `LegacyConfigs\` next to the exe, with their original paths intact so the folder can be copied back over your SPT install - or delete them with the rest of the mod. Updating a mod always keeps them, without asking.
+If a server mod has config files of its own (`user\mods\<mod>\config\*.json`), removing it asks what you want done with them: keep them - they're moved to a timestamped folder under `Data\LegacyConfigs\`, with their original paths intact so the folder can be copied back over your SPT install - or delete them with the rest of the mod. Updating a mod always keeps a copy, without asking, and carries your settings into the new version - see the Configs tab.
 
 Client mod settings live in `BepInEx\config`, outside the mod's own folder, so removing a mod never touches them.
 
@@ -264,8 +264,24 @@ Changing a mod's settings is your call. If a change breaks the mod or your game 
 #### information
 BepInEx writes its config files back out when the game closes, so a client config edited mid-session is likely to be undone. A server config takes effect on the next server restart.
 
-#### Updating a mod still replaces its config
-Installing a newer version of a mod places that version's files, defaults included. The config you had is set aside into `Data\LegacyConfigs\` rather than deleted - but nothing puts it back for you, and nothing on the Configs page reads that folder. If a mod's settings matter to you, copy them out before updating it, or take them from `Data\LegacyConfigs\` afterwards. Carrying them across for you is designed and not yet built.
+#### Your settings are carried across an update
+Updating a server mod used to leave you with its defaults. Now the new version's config file is used **with the settings you changed carried into it** - so a setting the update adds arrives at its new default, a default the author changed reaches you, and the values you picked stay yours. Your file as it stood is still copied into `Data\LegacyConfigs\` first, every time, so nothing rests on the merge being right.
+
+The file is the new version's text, edited in place: the author's comments, key order and layout are theirs, and only the values you had changed are swapped in.
+
+**What an update does with a mod's configs is a per-mod choice**, set on this page while one of that mod's config files is selected, and shown read-only next to **Update** in the mod's details dialog:
+
+- **Merge my changes** - the default, described above.
+- **Keep mine** - your file is left exactly as it is. Right for a mod whose config the app can't read (see below); the cost is that a setting the new version adds will be missing, which some mods mind and some don't.
+- **Take the new file** - the new defaults win. Your copy is still in `Data\LegacyConfigs\`.
+
+After an update, the Configs page says what happened to the file you are looking at, and the Downloads list says it as it happens.
+
+#### information
+Three things a merge deliberately does not do. **A setting you added yourself** that neither version ships is reported rather than put back - there is no honest place to insert it. **A setting the new version has dropped** goes with it. And **a value list (a JSON array) is carried whole** rather than element by element, because there is no correct way to combine two lists.
+
+#### warning
+The first update of any mod after this feature arrived has nothing to compare against - the app has to have recorded what the previous version shipped, which it now does at every install - so that one update replaces the file and says so. From its next update on, that mod merges normally. A config the merge can't read (JSON5, or one big enough to be data rather than settings) is replaced too, and says which it was; set that mod to **Keep mine** if you edit it.
 
 ### Dependencies
 Resolves the dependency tree of every installed mod that declares one, and reports each dependency's state against what's actually on disk.
@@ -381,6 +397,8 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 | `Data\logs\tcfmm-<date>.log` | Daily log |
 | `Staging\` | Default destination for manually downloaded archives |
 | `Data\LegacyConfigs\` | Config files kept from removed and updated mods, one timestamped folder each |
+| `Data\ConfigBaselines\` | A copy of the config files each mod version shipped, which is what lets an update tell your changes from the author's |
+| `Data\mod_configs.json` | Your per-mod choice of what an update does with that mod's configs |
 | `Data\ServerMap\` | On a server: the shared key (`servermap-key.txt`) and the list it publishes |
 | `.tcfmm-update\` | Hidden. Only exists while an app update is downloading, or if one failed; cleaned up on the next launch |
 
@@ -428,8 +446,10 @@ Worth knowing before you rely on it. None of these lose data quietly - they're p
 - **A list you edited but never applied exports under its old revision number**, since a revision counts an apply. Apply before sharing if you want the receiver's copy to read as newer.
 
 #### Configs
-- **Updating a mod places that version's config defaults.** Your previous file is set aside in `Data\LegacyConfigs\` rather than deleted, but nothing puts it back for you.
-- **Settings kept somewhere unusual aren't recognised as configs** - a `Presets\` folder rather than `config\`, for instance. Those are edited by hand.
+- **The first update of a mod after this app version can't merge.** Nothing recorded what its previous version shipped, so the update takes the new file and says so; from its next update on it merges. A copy of your file is always kept in `Data\LegacyConfigs\`.
+- **A JSON5 config, or one large enough to be data rather than settings, is not merged** - it is replaced and reported. Set that mod to **Keep mine** if you edit its config.
+- **A setting you added yourself is reported, not carried.** So is one the new version has dropped.
+- **Settings kept somewhere unusual aren't recognised as configs** - a `Presets\` folder rather than `config\`, for instance. Those are edited by hand, and an update leaves them alone only because nothing recognises them.
 
 #### Server map
 - **Client and server must be on the same SPT line**, which is SPT's rule rather than this app's.
@@ -495,7 +515,7 @@ Grab `Data\logs\tcfmm-<date>.log` - ideally after adding the `verbose` marker fi
 - Fika headless support, so a headless is served only what it needs - Completed
 - Window default sizes - Completed
 - Default filtering and page defaults - Completed
-- Config protection, so updating a mod stops replacing your settings - Next
+- Config protection, so updating a mod stops replacing your settings - Completed
 - Per-mod pins, so a mod you always want on survives any list you apply - Completed
 
 {.endtabset}
