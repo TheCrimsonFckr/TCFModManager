@@ -105,6 +105,10 @@ public static class ModListCandidates
         Version = card.InstalledVersion,
         Guid = card.Guid,
         IsDisabled = card.IsDisabled,
+
+        // A half-installed mod reports the version it was installed as, so without this the planner
+        // reads it as satisfied and the missing half never comes back.
+        IsIncomplete = card.IsIncompleteInstall,
         Folders = FoldersOf(card),
         Entries = card.Entries,
     };

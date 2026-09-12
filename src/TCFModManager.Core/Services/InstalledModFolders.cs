@@ -41,6 +41,37 @@ public static class InstalledModFolders
         record.Folders.Count > 0 ? record.Folders : FromPlacedFiles(record.Files);
 
     //
+    // The folders a record placed that the scan can no longer find.
+    //
+    // A record naming three folders where only one is on disk is a HALF-INSTALLED mod: the scanner
+    // still sees that one folder, the card still reports the recorded version, and nothing else in
+    // the app ever notices the other two are gone. That is how a mod installed under the wrong root
+    // survived a mod list being re-applied - see ModListCandidate.IsIncomplete.
+    //
+    // Only for app-managed records. A manually-confirmed one names whatever folders happened to be
+    // on disk when the version was confirmed, which is not a claim about what belongs there.
+    //
+    // Folders the scanner never reports are not missing either - a record that placed
+    // FixPluginTypesSerialization would otherwise be permanently half-installed, and a mod list
+    // would re-fetch it on every single apply.
+    //
+    public static List<string> MissingFrom(InstalledModRecord record, IEnumerable<string> presentFolders)
+    {
+        if (!record.IsAppManaged) return [];
+
+        var present = presentFolders
+            .Where(f => !string.IsNullOrWhiteSpace(f))
+            .Select(f => f.Trim())
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        return
+        [
+            .. Resolve(record)
+                .Where(folder => !present.Contains(folder) && !InstalledModScanner.IsNeverReported(folder))
+        ];
+    }
+
+    //
     // The files a record placed inside one of its folders, each relative to that folder. Empty for a
     // folder the record doesn't name, and for a manually-confirmed record, which places no files.
     //

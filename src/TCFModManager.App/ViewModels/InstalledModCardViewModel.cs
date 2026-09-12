@@ -219,6 +219,28 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
     public bool IsManualOverride { get; init; }
 
     //
+    // Folders this app's install record placed that the scan can no longer find, and whether the
+    // install itself gave up part way through (InstalledModRecord.Incomplete, recorded since
+    // partial installs were tracked and never shown anywhere until now).
+    //
+    // Either one means the mod on disk is not the mod that was installed - and the version it
+    // reports is still the recorded one, so nothing else gives it away. Reinstalling is the fix,
+    // which is what a mod list now does for it too - see ModListCandidate.IsIncomplete.
+    //
+    public IReadOnlyList<string> MissingFolders { get; init; } = [];
+
+    public bool WasPartlyInstalled { get; init; }
+
+    public bool IsIncompleteInstall => MissingFolders.Count > 0 || WasPartlyInstalled;
+
+    public string? IncompleteSummary => !IsIncompleteInstall
+        ? null
+        : MissingFolders.Count > 0
+            ? $"Files missing - {string.Join(", ", MissingFolders)} {(MissingFolders.Count == 1 ? "isn't" : "aren't")} "
+              + "on disk. Reinstall it from Details and versions."
+            : "Only partly installed - the install didn't finish. Reinstall it from Details and versions.";
+
+    //
     // Every scan entry merged into this card: both halves of a client+server mod, and both copies
     // of a mod left in a container and in that container's ".disabled" sibling. What the disable
     // commands actually move, and what ModDependencyGraph is keyed on.
@@ -363,15 +385,20 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
 
     // A mixed state is neither cleanly enabled nor cleanly disabled, so it gets the conflict icon
     // rather than either side's.
-    public string StatusGlyph => IsMixedState ? "ErrorCircle24" : ModStatusDisplay.Glyph(Status);
+    public string StatusGlyph => IsMixedState || IsIncompleteInstall
+        ? "ErrorCircle24"
+        : ModStatusDisplay.Glyph(Status);
 
-    public string StatusTooltip => HasDuplicateFolders
-        ? "This mod is in both an enabled and a disabled folder - use Sort out to keep one copy"
-        : IsMixedState
-            ? "Partly disabled - some of this mod's folders are disabled and some aren't"
-            : UpdateAvailable == true && !IsDisabled && LatestPublishedVersion is not null
-                ? $"Update available - {LatestPublishedVersion}"
-                : ModStatusDisplay.Tooltip(Status);
+    // Missing files first: it is the only one of these the card gives no other sign of.
+    public string StatusTooltip =>
+        IncompleteSummary
+        ?? (HasDuplicateFolders
+            ? "This mod is in both an enabled and a disabled folder - use Sort out to keep one copy"
+            : IsMixedState
+                ? "Partly disabled - some of this mod's folders are disabled and some aren't"
+                : UpdateAvailable == true && !IsDisabled && LatestPublishedVersion is not null
+                    ? $"Update available - {LatestPublishedVersion}"
+                    : ModStatusDisplay.Tooltip(Status));
 
     // Groups raw scan results into one card per distinct mod and looks up each against the cached
     // catalog for its latest published version.
@@ -1084,6 +1111,12 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
 
         var record = match is not null && recordsByModId.TryGetValue(match.Id, out var found) ? found : null;
 
+        // Not done for addon cards: an addon's record names its PARENT's folders, so comparing them
+        // against the addon's own scan entries would report every one of them as missing.
+        IReadOnlyList<string> missingFolders = record is null
+            ? []
+            : InstalledModFolders.MissingFrom(record, entries.SelectMany(FolderNamesOf));
+
         // The version recorded at install time beats anything read off disk: plenty of authors never
         // bump the assembly version, so a mod installed as 1.2.1 can still report 1.0.0.0 from its
         // DLL - which then reads as an update being available forever.
@@ -1169,8 +1202,31 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
             ModId = match?.Id,
             IsAppManaged = record?.IsAppManaged ?? false,
             IsManualOverride = record is not null && !record.IsAppManaged,
+            MissingFolders = missingFolders,
+            WasPartlyInstalled = record?.Incomplete ?? false,
             Entries = entries,
         };
+    }
+
+    //
+    // Every name a scan entry could be known by on disk, for comparing against what an install
+    // record says it placed.
+    //
+    // Name alone is not enough: a server mod takes its name from its package.json when it has one,
+    // which is often not what the folder is called, while a record always names the folder. The
+    // path gives both spellings - the folder itself, and a loose DLL's file name with the extension
+    // dropped, which is how the scanner and the record both name that case.
+    //
+    private static IEnumerable<string> FolderNamesOf(InstalledMod entry)
+    {
+        yield return entry.Name;
+
+        if (string.IsNullOrWhiteSpace(entry.FolderPath)) yield break;
+
+        var path = entry.FolderPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+        yield return Path.GetFileName(path);
+        yield return Path.GetFileNameWithoutExtension(path);
     }
 
     // True when two loosely-formatted version strings mean the same release, so a trailing

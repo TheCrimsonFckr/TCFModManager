@@ -52,7 +52,8 @@ public class ModListPlannerTests
         string? version = null,
         bool disabled = false,
         string? guid = null,
-        string[]? folders = null) =>
+        string[]? folders = null,
+        bool incomplete = false) =>
         new()
         {
             Name = name,
@@ -60,6 +61,7 @@ public class ModListPlannerTests
             Version = version,
             Guid = guid,
             IsDisabled = disabled,
+            IsIncomplete = incomplete,
             Folders = folders ?? [],
         };
 
@@ -113,6 +115,47 @@ public class ModListPlannerTests
         Assert.Equal("SAIN", Only(plan, ModListActionKind.Keep).Name);
         Assert.True(plan.IsNoOp);
         Assert.False(plan.RequiresGameClosed);
+    }
+
+    [Fact]
+    public void AHalfInstalledModAtTheRightVersionIsReinstalled()
+    {
+        // The case this exists for: the mod reports the version the list names, but only part of
+        // what was installed is still on disk. Keeping it would leave it broken forever.
+        var plan = ModListPlanner.Build(
+            Exclusive(Entry("MoreBotsAPI", 2426, 55, "2.0.1")),
+            [Installed("MoreBotsAPI", 2426, "2.0.1", incomplete: true)]);
+
+        var action = Only(plan, ModListActionKind.Update);
+        Assert.True(action.IsRepair);
+        Assert.False(action.IsDowngrade);
+        Assert.Equal("2.0.1", action.TargetVersion);
+        Assert.Empty(plan.Keep);
+        Assert.True(plan.RequiresDownloads);
+        Assert.False(plan.IsNoOp);
+    }
+
+    [Fact]
+    public void AHalfInstalledDisabledModIsEnabledAndReinstalled()
+    {
+        var plan = ModListPlanner.Build(
+            Exclusive(Entry("MoreBotsAPI", 2426, 55, "2.0.1")),
+            [Installed("MoreBotsAPI", 2426, "2.0.1", disabled: true, incomplete: true)]);
+
+        var action = Only(plan, ModListActionKind.Enable);
+        Assert.True(action.NeedsUpdateAfterEnable);
+        Assert.True(action.IsRepair);
+        Assert.True(action.IsFetch);
+    }
+
+    [Fact]
+    public void ACompleteModAtTheRightVersionIsStillKept()
+    {
+        var plan = ModListPlanner.Build(
+            Exclusive(Entry("SAIN", 2426, 55, "3.2.0")),
+            [Installed("SAIN", 2426, "3.2.0")]);
+
+        Assert.False(Only(plan, ModListActionKind.Keep).IsRepair);
     }
 
     [Fact]

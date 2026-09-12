@@ -142,6 +142,15 @@
                         Text="{Binding InstalledVersionDetail}"
                         Visibility="{Binding InstalledVersionDetail, Converter={StaticResource NullToCollapsed}}" />
 
+                    <!-- Part of what this app installed is no longer on disk. Spelled out rather
+                         than left to the status icon's tooltip: the rest of the card reads as a
+                         healthy install at the right version, which is exactly the problem. -->
+                    <TextBlock
+                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                        TextWrapping="Wrap"
+                        Text="{Binding IncompleteSummary}"
+                        Visibility="{Binding IncompleteSummary, Converter={StaticResource NullToCollapsed}}" />
+
                     <TextBlock
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         TextWrapping="Wrap"

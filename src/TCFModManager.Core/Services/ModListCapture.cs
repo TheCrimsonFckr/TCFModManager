@@ -52,6 +52,16 @@ public sealed record ModListCandidate
     public ModListEntryScope Scope { get; init; } = ModListEntryScope.Everyone;
 
     //
+    // True when this mod's install record names folders that are no longer on disk - half of it is
+    // there and half is not.
+    //
+    // The planner needs it because the version alone says the install is fine: a mod whose client
+    // half went missing still reports the version it was installed as, so an apply would call it
+    // Keep and leave it broken. See InstalledModFolders.MissingFrom.
+    //
+    public bool IsIncomplete { get; init; }
+
+    //
     // Every scanned mod this card merged - what ModListApplier hands to ModDisableService when a
     // list turns into moves. Left empty for capture and planning, which only read the fields above;
     // an apply needs it, because a client+server mod has to move as one thing.

@@ -126,4 +126,76 @@ public class InstalledModFoldersTests
         Files = files,
         Folders = folders,
     };
+
+    [Fact]
+    public void MissingFrom_ReportsTheFoldersTheScanDidNotFind()
+    {
+        // Half-installed: the server folder is where this install looks, the client one never
+        // arrived - what an install under the wrong root leaves behind.
+        var record = new InstalledModRecord
+        {
+            ModId = 2426,
+            Name = "MoreBotsAPI",
+            Version = "2.0.1",
+            InstalledAt = DateTimeOffset.UtcNow,
+            Folders = ["MoreBotsPrepatch", "MoreBotsAPI", "MoreBotsServer"],
+        };
+
+        var missing = InstalledModFolders.MissingFrom(record, ["MoreBotsServer"]);
+
+        Assert.Equal(["MoreBotsPrepatch", "MoreBotsAPI"], missing);
+    }
+
+    [Fact]
+    public void MissingFrom_IsEmptyWhenEveryFolderIsThere()
+    {
+        var record = new InstalledModRecord
+        {
+            ModId = 2426,
+            Name = "MoreBotsAPI",
+            Version = "2.0.1",
+            InstalledAt = DateTimeOffset.UtcNow,
+            Folders = ["MoreBotsAPI", "MoreBotsServer"],
+        };
+
+        // Case-insensitively, and an extra folder on disk is not this record's business.
+        Assert.Empty(InstalledModFolders.MissingFrom(record, ["morebotsserver", "MOREBOTSAPI", "SAIN"]));
+    }
+
+    [Fact]
+    public void MissingFrom_FallsBackToTheFileListForARecordWithNoFolders()
+    {
+        var record = new InstalledModRecord
+        {
+            ModId = 1,
+            Name = "WTT - CommonLib",
+            Version = "2.0.24",
+            InstalledAt = DateTimeOffset.UtcNow,
+            Files =
+            [
+                "BepInEx/plugins/WTT-ClientCommonLib/WTT-ClientCommonLib.dll",
+                "user/mods/WTT-ServerCommonLib/package.json",
+            ],
+        };
+
+        Assert.Equal(["WTT-ClientCommonLib"], InstalledModFolders.MissingFrom(record, ["WTT-ServerCommonLib"]));
+    }
+
+    [Fact]
+    public void MissingFrom_SaysNothingAboutAManuallyConfirmedRecord()
+    {
+        // Its folders are whatever was on disk when the version was confirmed, not a record of what
+        // this app placed - so their absence is not evidence of a broken install.
+        var record = new InstalledModRecord
+        {
+            ModId = 2512,
+            Name = "WTT - Content Backport",
+            Version = "1.1.5",
+            InstalledAt = DateTimeOffset.UtcNow,
+            IsAppManaged = false,
+            Folders = ["WTT-ContentBackportClient", "WTT-ContentBackport"],
+        };
+
+        Assert.Empty(InstalledModFolders.MissingFrom(record, []));
+    }
 }

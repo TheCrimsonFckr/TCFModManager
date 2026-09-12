@@ -68,6 +68,12 @@ public sealed record ModListAction
     //
     public bool NeedsUpdateAfterEnable { get; init; }
 
+    //
+    // Set on an Update that is fetching the version already installed, because part of that install
+    // is missing from disk. Not a version change - a reinstall - and the diff says so.
+    //
+    public bool IsRepair { get; init; }
+
     // True for anything this action will fetch from The Forge.
     public bool IsFetch =>
         Kind is ModListActionKind.Install or ModListActionKind.Update || NeedsUpdateAfterEnable;
@@ -247,9 +253,15 @@ public static class ModListPlanner
         // version the action carries NeedsUpdateAfterEnable, so one pass enables it and then
         // updates it rather than leaving it enabled at a stale version.
         //
+        // An incomplete install is never Keep, whatever version it reports: half a mod on disk is
+        // the one case where the version matching the list proves nothing. It comes out as an
+        // Update fetching the same version - a reinstall, which is what puts the missing half back.
+        //
+        var repair = sameVersion && installed.IsIncomplete;
+
         var kind = installed.IsDisabled
             ? ModListActionKind.Enable
-            : sameVersion
+            : sameVersion && !installed.IsIncomplete
                 ? ModListActionKind.Keep
                 : ModListActionKind.Update;
 
@@ -265,7 +277,8 @@ public static class ModListPlanner
             TargetVersion = entry.Version,
             InstalledVersion = installed.Version,
             IsDowngrade = kind != ModListActionKind.Keep && IsOlder(entry.Version, installed.Version),
-            NeedsUpdateAfterEnable = kind == ModListActionKind.Enable && !sameVersion,
+            IsRepair = repair,
+            NeedsUpdateAfterEnable = kind == ModListActionKind.Enable && (!sameVersion || installed.IsIncomplete),
         };
     }
 

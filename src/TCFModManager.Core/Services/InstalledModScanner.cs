@@ -42,6 +42,17 @@ public static class InstalledModScanner
     private static bool IsCoreEntry(string name, bool isPatcher) =>
         CoreSptEntries.Contains(name) || (isPatcher && NonModPatcherEntries.Contains(name));
 
+    //
+    // Whether this scanner would skip a folder of that name wherever it found it.
+    //
+    // For the one caller that has a name but not the container it came from: an install record
+    // naming FixPluginTypesSerialization is not missing a folder when the scan comes back without
+    // it - the scan was never going to report it. See InstalledModFolders.MissingFrom.
+    //
+    public static bool IsNeverReported(string? name) =>
+        !string.IsNullOrWhiteSpace(name)
+        && (CoreSptEntries.Contains(name) || NonModPatcherEntries.Contains(name));
+
     public static List<InstalledMod> Scan(string? installPath)
     {
         var results = new List<InstalledMod>();

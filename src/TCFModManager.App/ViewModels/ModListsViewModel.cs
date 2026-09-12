@@ -758,8 +758,10 @@ public partial class ModListsViewModel : ObservableObject
     private static string Label(ModListAction action) => action.Kind switch
     {
         ModListActionKind.Install => "Install",
-        ModListActionKind.Update => action.IsDowngrade ? "Downgrade" : "Update",
-        ModListActionKind.Enable => action.NeedsUpdateAfterEnable ? "Enable + update" : "Enable",
+        ModListActionKind.Update => action.IsRepair ? "Reinstall" : action.IsDowngrade ? "Downgrade" : "Update",
+        ModListActionKind.Enable => action.NeedsUpdateAfterEnable
+            ? action.IsRepair ? "Enable + reinstall" : "Enable + update"
+            : "Enable",
         ModListActionKind.Disable => "Disable",
         ModListActionKind.Pinned => "Pinned",
         ModListActionKind.Manual => "Fetch yourself",
@@ -782,6 +784,9 @@ public partial class ModListsViewModel : ObservableObject
     private static string DetailFor(ModListAction action) => action.Kind switch
     {
         ModListActionKind.Install => action.TargetVersion is null ? "newest published" : $"version {action.TargetVersion}",
+        ModListActionKind.Update or ModListActionKind.Enable when action.IsRepair =>
+            $"version {action.TargetVersion ?? action.InstalledVersion} is installed but files are missing",
+
         ModListActionKind.Update or ModListActionKind.Enable when action.TargetVersion is not null
             && action.InstalledVersion is not null && action.TargetVersion != action.InstalledVersion =>
             $"{action.InstalledVersion} to {action.TargetVersion}",
