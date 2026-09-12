@@ -40,6 +40,19 @@ public partial class ReadModPageConfirmationWindow : FluentWindow
 {
     private readonly List<ModPageLink> _links;
 
+    //
+    // Above this many pages the window stops expecting one click per mod and offers to open them a
+    // batch at a time, or not at all. A multi-select update or a mod list can list forty mods, and
+    // forty browser tabs opened back to back is enough to leave the machine unusable for a while -
+    // long enough to read as the app having hung.
+    //
+    private const int BatchThreshold = 5;
+    private const int BatchSize = 5;
+
+    // Set by the Skip button, which only exists in batch mode. Unlocks Continue without every page
+    // having been opened.
+    private bool _openingSkipped;
+
     // Single-mod gate - used by a direct Install/Update click.
     public ReadModPageConfirmationWindow(string modName, string? modPageUrl)
         : this([new ModPageLink(modName, modPageUrl)])
@@ -61,6 +74,15 @@ public partial class ReadModPageConfirmationWindow : FluentWindow
 
         Owner = Application.Current?.MainWindow;
         WindowStartupLocation = Owner is not null ? WindowStartupLocation.CenterOwner : WindowStartupLocation.CenterScreen;
+
+        if (_links.Count(l => l.HasUrl) > BatchThreshold)
+        {
+            BatchBar.Visibility = Visibility.Visible;
+            IntroText.Text =
+                "Same as installing manually from sp-mod.com - these mods' pages are where their authors "
+                + "put install steps, requirements and warnings. Open them a few at a time, or skip them "
+                + "and queue the lot.";
+        }
 
         UpdateContinueEnabled();
     }
@@ -98,14 +120,61 @@ public partial class ReadModPageConfirmationWindow : FluentWindow
     public static bool ConfirmAll(IReadOnlyList<ModPageLink> links) =>
         Skipped || new ReadModPageConfirmationWindow(links).ShowDialog() == true;
 
-    private void UpdateContinueEnabled() => ContinueButton.IsEnabled = _links.All(l => l.IsOpened);
+    private void UpdateContinueEnabled()
+    {
+        ContinueButton.IsEnabled = _openingSkipped || _links.All(l => l.IsOpened);
+
+        if (BatchBar.Visibility != Visibility.Visible) return;
+
+        var remaining = Unopened().Count;
+
+        OpenBatchButton.IsEnabled = remaining > 0;
+        SkipOpeningButton.IsEnabled = remaining > 0;
+
+        if (remaining > 0)
+        {
+            OpenBatchButton.Content = remaining > BatchSize
+                ? $"Open next {BatchSize} pages"
+                : remaining == 1 ? "Open the last page" : $"Open the last {remaining}";
+        }
+
+        BatchProgress.Text = _openingSkipped
+            ? $"Skipping {remaining} unopened page(s)."
+            : remaining == 0
+                ? $"All {_links.Count} pages opened."
+                : $"{_links.Count - remaining} of {_links.Count} opened - {remaining} to go.";
+    }
+
+    // Every link with a page that has not been opened yet, in list order.
+    private List<ModPageLink> Unopened() => [.. _links.Where(l => l is { HasUrl: true, IsOpened: false })];
+
+    private void OpenBatchButton_Click(object sender, RoutedEventArgs e)
+    {
+        foreach (var link in Unopened().Take(BatchSize)) Open(link);
+    }
+
+    //
+    // Waves the rest through. Deliberately not the same thing as the Options switch: it applies to
+    // this batch only, and the pages already opened stay opened.
+    //
+    private void SkipOpeningButton_Click(object sender, RoutedEventArgs e)
+    {
+        _openingSkipped = true;
+        AppLog.Info("ModPages", $"opening skipped for {Unopened().Count} of {_links.Count} page(s) in this batch");
+        UpdateContinueEnabled();
+    }
+
+    private static void Open(ModPageLink link)
+    {
+        Process.Start(new ProcessStartInfo(link.Url!) { UseShellExecute = true });
+        link.IsOpened = true;
+    }
 
     private void OpenLinkButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not FrameworkElement { DataContext: ModPageLink link } || !link.HasUrl) return;
 
-        Process.Start(new ProcessStartInfo(link.Url!) { UseShellExecute = true });
-        link.IsOpened = true;
+        Open(link);
     }
 
     private void ContinueButton_Click(object sender, RoutedEventArgs e) => DialogResult = true;

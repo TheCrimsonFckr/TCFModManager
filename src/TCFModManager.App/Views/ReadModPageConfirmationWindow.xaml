@@ -30,38 +30,66 @@
             Grid.Row="1"
             Margin="24,12,24,24">
             <TextBlock
+                x:Name="IntroText"
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Margin="0,0,0,16"
                 Text="Same as installing manually from sp-mod.com - open each mod's page below before this gets queued." />
 
-            <ItemsControl x:Name="LinksList">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="0,0,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
+            <!-- Shown only for a batch too long to open a page at a time. -->
+            <StackPanel x:Name="BatchBar" Margin="0,0,0,16" Visibility="Collapsed">
+                <TextBlock
+                    x:Name="BatchProgress"
+                    TextWrapping="Wrap"
+                    Margin="0,0,0,8"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
 
-                            <TextBlock
-                                Grid.Column="0"
-                                VerticalAlignment="Center"
-                                TextWrapping="Wrap"
-                                Margin="0,0,12,0"
-                                Text="{Binding Name}" />
+                <WrapPanel>
+                    <ui:Button
+                        x:Name="OpenBatchButton"
+                        Margin="0,0,8,0"
+                        Icon="{ui:SymbolIcon Open24}"
+                        Click="OpenBatchButton_Click" />
 
-                            <ui:Button
-                                Grid.Column="1"
-                                VerticalAlignment="Center"
-                                IsEnabled="{Binding HasUrl}"
-                                Content="{Binding ButtonLabel}"
-                                Icon="{ui:SymbolIcon Open24}"
-                                Click="OpenLinkButton_Click" />
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                    <ui:Button
+                        x:Name="SkipOpeningButton"
+                        Content="Skip opening them"
+                        Click="SkipOpeningButton_Click" />
+                </WrapPanel>
+            </StackPanel>
+
+            <ScrollViewer
+                MaxHeight="320"
+                Margin="0,0,0,4"
+                VerticalScrollBarVisibility="Auto">
+                <ItemsControl x:Name="LinksList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    TextWrapping="Wrap"
+                                    Margin="0,0,12,0"
+                                    Text="{Binding Name}" />
+
+                                <ui:Button
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    IsEnabled="{Binding HasUrl}"
+                                    Content="{Binding ButtonLabel}"
+                                    Icon="{ui:SymbolIcon Open24}"
+                                    Click="OpenLinkButton_Click" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
 
             <Grid Margin="0,8,0,0">
                 <Grid.ColumnDefinitions>
