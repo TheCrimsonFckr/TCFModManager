@@ -64,6 +64,26 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
             }
         }
 
+        //
+        // A short read loop is not an error to HttpClient: a connection closed cleanly part way
+        // through leaves a truncated file behind and returns normally. That file then extracts as
+        // far as it goes - a zip throws on its missing central directory, but a tar or a solid
+        // archive can stop quietly, having written some of the mod's files and none of the rest.
+        //
+        // So the promised length is checked here, where both numbers are in hand, rather than
+        // trusting whatever landed on disk. Short only, never long: a handler configured to
+        // decompress transparently would read more bytes than the header promised, and that is a
+        // complete download, not a failure.
+        //
+        if (totalBytes is { } expected && totalRead < expected)
+        {
+            throw new ModInstallException(ModInstallFailure.DownloadIncomplete)
+            {
+                ExpectedBytes = expected,
+                ReceivedBytes = totalRead,
+            };
+        }
+
         // Unconditional, so the throttle above can never swallow the last fraction and leave a bar
         // stopped short of the end.
         progress?.Report(1.0);

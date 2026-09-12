@@ -87,6 +87,10 @@ public partial class DownloadsViewModel : ObservableObject
         {
             StatusMessage = $"Download failed: {ex.Message}";
         }
+        catch (ModInstallException ex)
+        {
+            StatusMessage = ModInstallProblems.Describe(ex);
+        }
         catch (IOException ex)
         {
             StatusMessage = $"Couldn't write the file: {ex.Message}";

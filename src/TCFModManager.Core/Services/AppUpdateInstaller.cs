@@ -164,7 +164,17 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
 
         AppLog.Info("AppUpdate", $"downloading {update.LatestVersion} from {update.DownloadUrl}");
         var downloadProgress = new Progress<double>(p => progress?.Report(p * 0.85));
-        await downloads.DownloadAsync(update.DownloadUrl!, zipPath, downloadProgress, ct).ConfigureAwait(false);
+
+        try
+        {
+            await downloads.DownloadAsync(update.DownloadUrl!, zipPath, downloadProgress, ct).ConfigureAwait(false);
+        }
+        catch (ModInstallException ex) when (ex.Reason == ModInstallFailure.DownloadIncomplete)
+        {
+            // Same thing from where the user stands as a zip that won't open, and this page has no
+            // vocabulary of its own for a short transfer.
+            throw new AppUpdateException(AppUpdateFailure.DownloadNotReadable, ex);
+        }
 
         ct.ThrowIfCancellationRequested();
         progress?.Report(0.85);

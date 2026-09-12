@@ -1,3 +1,4 @@
+using TCFModManager.App.ViewModels;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.Services;
@@ -33,12 +34,21 @@ public static class ModInstallProblems
             + $"{problem.TotalFiles} files were placed before this failed: {problem.InnerException?.Message} "
             + "Close SPT and its server, then install it again.",
 
+        ModInstallFailure.DownloadIncomplete =>
+            $"The download stopped early - {Size(problem.ReceivedBytes)} of {Size(problem.ExpectedBytes)} "
+            + "arrived, so the archive was incomplete and nothing was installed. Retry it; if it keeps "
+            + "stopping, sp-mod.com's file server is cutting the transfer short.",
+
         ModInstallFailure.UnsafeArchiveEntry =>
             $"Archive entry \"{problem.ArchiveEntry}\" would extract outside the target folder - "
             + "refusing to extract it.",
 
         _ => $"Couldn't finish that: {problem.Reason}.",
     };
+
+    // Bytes as the Downloads page writes them, so one failure doesn't spell sizes its own way.
+    private static string Size(long? bytes) =>
+        bytes is null ? "an unknown amount" : DownloadQueueItemViewModel.SizeLabel(bytes.Value);
 
     //
     // Public for the same reason InstallInUse is: the addon rows say this before anything is

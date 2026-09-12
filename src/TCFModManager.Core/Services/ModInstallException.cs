@@ -47,6 +47,10 @@ public enum ModInstallFailure
     // An archive entry's path would land outside the folder being extracted into - the classic zip
     // traversal. Carries ArchiveEntry.
     UnsafeArchiveEntry,
+
+    // The download ended before all of the bytes the server promised had arrived. Carries
+    // ExpectedBytes and ReceivedBytes.
+    DownloadIncomplete,
 }
 
 //
@@ -75,4 +79,9 @@ public sealed class ModInstallException(ModInstallFailure reason, Exception? inn
     public int? TotalFiles { get; init; }
 
     public string? ArchiveEntry { get; init; }
+
+    // Content-Length, and how much of it actually arrived.
+    public long? ExpectedBytes { get; init; }
+
+    public long? ReceivedBytes { get; init; }
 }
