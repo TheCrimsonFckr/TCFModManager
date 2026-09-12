@@ -9,8 +9,15 @@ using TCFModManager.Core.Models;
 namespace TCFModManager.Core.Services;
 
 // Downloads, extracts, and installs a mod version's files into an SPT install, and records what it placed for later uninstall.
-public sealed class ModInstallService(ModDownloadService downloadService, ModInstallManifestService manifestService)
+public sealed class ModInstallService(
+    ModDownloadService downloadService,
+    ModInstallManifestService manifestService,
+    ConfigCarryOver? configCarryOver = null,
+    ConfigUpdateLog? configUpdateLog = null)
 {
+    private readonly ConfigCarryOver _configs = configCarryOver ?? new ConfigCarryOver();
+    private readonly ConfigUpdateLog _configLog = configUpdateLog ?? new ConfigUpdateLog();
+
     private static readonly HashSet<string> KnownRootFolders =
         new(StringComparer.OrdinalIgnoreCase) { "BepInEx", "user", "SPT", "SPT_Runtime" };
 
@@ -150,7 +157,10 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
     //
     // A mod and an addon are installed by exactly the same path: an addon's archive is an ordinary
     // SPT mod package, and its download link and size come from the same fields.
-    public async Task<InstalledModRecord> InstallAsync(
+    //
+    // The result carries the record plus what the update did to the mod's own config files - see
+    // ConfigCarryOver. Null configs means there were none to have an opinion about.
+    public async Task<ModInstallResult> InstallAsync(
         InstallTarget target,
         ModVersion version,
         string installPath,
@@ -228,10 +238,33 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
 
             var manifest = manifestService.Load();
             var existing = manifest.Mods.FirstOrDefault(target.Matches);
+
+            //
+            // Where each source file is going, worked out before anything is removed: the config
+            // files the archive is about to place over have to be known while they are still there.
+            //
+            var placements = sourceFiles
+                .Select(file =>
+                {
+                    var installRelative = RemapForServerRoot(Path.GetRelativePath(contentRoot, file), serverRoot);
+                    // Forward-slash regardless of OS, matching InstalledModRecord.Files's documented format.
+                    return (File: file, Relative: installRelative, Forward: installRelative.Replace('\\', '/'));
+                })
+                .ToList();
+
+            var timestamp = DateTimeOffset.UtcNow;
+
+            var pending = _configs.Prepare(
+                installPath, existing, placements.Select(p => p.Forward), target.Name, timestamp);
+
             if (existing is not null)
             {
                 status?.Report($"Removing the previously installed version ({existing.Version})...");
-                await UninstallAsync(installPath, existing, ConfigAction.Keep, CancellationToken.None).ConfigureAwait(false);
+
+                // Delete rather than keep: Prepare has already copied every config aside, and moving
+                // them again from here would leave the archive holding two copies of the same file.
+                // The ones it could not copy are named, and those are left where they are.
+                RemoveRecordedFiles(installPath, existing, ConfigAction.Delete, pending.Untouchable, CancellationToken.None);
             }
 
             status?.Report(FormatCount("Installing", 0, sourceFiles.Length));
@@ -242,11 +275,17 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
             {
                 for (var i = 0; i < sourceFiles.Length; i++)
                 {
-                    var file = sourceFiles[i];
-                    var archiveRelative = Path.GetRelativePath(contentRoot, file);
-                    var installRelative = RemapForServerRoot(archiveRelative, serverRoot);
-                    // Forward-slash regardless of OS, matching InstalledModRecord.Files's documented format.
-                    var installRelativeForward = installRelative.Replace('\\', '/');
+                    var (file, installRelative, installRelativeForward) = placements[i];
+
+                    //
+                    // A config that could not be copied aside keeps the user's version. It is still
+                    // recorded as one of this install's files, so a later removal cleans it up.
+                    //
+                    if (pending.Untouchable.Contains(installRelativeForward))
+                    {
+                        placedFiles.Add(installRelativeForward);
+                        continue;
+                    }
 
                     var destination = Path.Combine(installPath, installRelative);
                     var destinationDir = Path.GetDirectoryName(destination);
@@ -288,8 +327,19 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
             AppLog.Info("Install",
                 $"{target.Name} {version.Version} placed {placedFiles.Count} file(s) in folders [{string.Join(", ", record.Folders)}]");
 
+            var report = _configs.Settle(
+                pending, installPath, target, existing, record.Version, placedFiles, timestamp);
+
+            if (report.Files.Count > 0)
+            {
+                _configLog.Add(report);
+                AppLog.Info("Configs",
+                    $"{target.Name} {record.Version}: " +
+                    string.Join(", ", report.Files.Select(f => $"{f.Path} {f.Kind}{(f.Reason is { } r ? $" ({r})" : "")}")));
+            }
+
             status?.Report("Done.");
-            return record;
+            return new ModInstallResult(record, report.Files.Count > 0 ? report : null);
         }
         catch (OperationCanceledException)
         {
@@ -346,6 +396,28 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
     {
         EnsureInstallNotInUse(ModInstallAction.Remove, installPath);
 
+        var result = RemoveRecordedFiles(installPath, record, configs, null, ct);
+
+        // A mod that is gone has no shipped copies worth keeping. An update does not come through
+        // here, which is why this is safe to do unconditionally - see InstallAsync.
+        _configs.Baselines.Remove(record.ModId, record.IsAddon);
+
+        return Task.FromResult(result);
+    }
+
+    //
+    // The removal itself, shared by a real uninstall and the update path.
+    //
+    // <paramref name="keep"/> names files this must not touch whatever else it is told - the configs
+    // ConfigCarryOver could not copy aside. Null on the removal path, which has nothing to protect.
+    //
+    private UninstallResult RemoveRecordedFiles(
+        string installPath,
+        InstalledModRecord record,
+        ConfigAction configs,
+        IReadOnlySet<string>? keep,
+        CancellationToken ct)
+    {
         var failed = new List<string>();
         var deleted = 0;
         var touchedDirectories = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -359,6 +431,8 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
         foreach (var relative in record.Files)
         {
             ct.ThrowIfCancellationRequested();
+
+            if (keep is not null && keep.Contains(relative)) continue;
 
             var fullPath = Path.Combine(installPath, relative.Replace('/', Path.DirectorySeparatorChar));
             try
@@ -395,7 +469,7 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
         manifest.Mods.RemoveAll(m => m.ModId == record.ModId && m.IsAddon == record.IsAddon);
         manifestService.Save(manifest);
 
-        return Task.FromResult(new UninstallResult(deleted, failed, kept.Count, kept.Folder));
+        return new UninstallResult(deleted, failed, kept.Count, kept.Folder);
     }
 
     // Deletes a mod's whole folder (or, for a loose top-level DLL, just that file) - the
@@ -677,6 +751,14 @@ public sealed class ModInstallService(ModDownloadService downloadService, ModIns
             && fullDir.StartsWith(fullInstall, StringComparison.OrdinalIgnoreCase);
     }
 }
+
+//
+// What an install placed, and what it did to the mod's own config files.
+//
+// Configs is null when the mod has none - most client-only mods, and anything whose settings live in
+// BepInEx\config rather than inside its own folder.
+//
+public sealed record ModInstallResult(InstalledModRecord Record, ConfigUpdateReport? Configs);
 
 // Result of ModInstallService.UninstallAsync. FailedFiles lists files that couldn't be
 // deleted; the mod is still removed from the manifest regardless. ConfigsKept/ConfigsFolder

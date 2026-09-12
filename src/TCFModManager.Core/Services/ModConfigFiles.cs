@@ -144,9 +144,7 @@ public static class ModConfigFiles
     //
     public static KeptConfigs MoveOut(string installPath, IEnumerable<string> relativeFiles, string modName, DateTimeOffset timestamp)
     {
-        var destinationRoot = Path.Combine(
-            AppPaths.LegacyConfigsDirectory,
-            $"{timestamp.ToLocalTime():yyyyMMdd-HHmmss}_{SafeFolderName(modName)}");
+        var destinationRoot = ArchiveFolder(AppPaths.LegacyConfigsDirectory, modName, timestamp);
 
         var moved = 0;
 
@@ -176,6 +174,10 @@ public static class ModConfigFiles
         AppLog.Info("Configs", $"kept {moved} config file(s) from {modName} in {destinationRoot}");
         return new KeptConfigs(moved, destinationRoot);
     }
+
+    // <root>\<yyyyMMdd-HHmmss>_<mod> - one folder per removal or update.
+    internal static string ArchiveFolder(string root, string modName, DateTimeOffset timestamp) =>
+        Path.Combine(root, $"{timestamp.ToLocalTime():yyyyMMdd-HHmmss}_{SafeFolderName(modName)}");
 
     private static string SafeFolderName(string name)
     {

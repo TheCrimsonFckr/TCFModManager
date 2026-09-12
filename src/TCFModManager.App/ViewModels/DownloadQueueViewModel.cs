@@ -227,11 +227,19 @@ public sealed partial class DownloadQueueViewModel : ObservableObject
             });
             var downloadProgress = new Progress<double>(p => item.Progress = p);
 
-            await AppServices.ModInstall.InstallAsync(item.Target, version, item.InstallPath, status, downloadProgress, item.Token);
+            var result = await AppServices.ModInstall.InstallAsync(
+                item.Target, version, item.InstallPath, status, downloadProgress, item.Token);
 
             item.Status = DownloadQueueItemStatus.Completed;
             item.Progress = 1.0;
-            item.StatusMessage = $"Installed {item.ModName} {item.VersionLabel}.";
+
+            // An update that changed one of the mod's own config files says so here rather than
+            // leaving the user to find out in game - see ConfigUpdateWording.
+            var configs = result.Configs is { } report ? ConfigUpdateWording.Summary(report) : null;
+
+            item.StatusMessage = configs is null
+                ? $"Installed {item.ModName} {item.VersionLabel}."
+                : $"Installed {item.ModName} {item.VersionLabel}. {configs}";
             ItemInstalled?.Invoke(this, EventArgs.Empty);
         }
         catch (OperationCanceledException) when (item.Token.IsCancellationRequested)
