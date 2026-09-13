@@ -4,11 +4,11 @@ It also keeps **mod lists** - save the set you run, switch between sets, send on
 
 WPF with Fluent Design, .NET 9, no account or API key needed.
 
-#### information
 The released build is self-contained - you don't need to install .NET separately.
 
+#### Guide and Information
 
-## Guide {.tabset}
+##  {.tabset}
 
 ### Install
 **You need**
@@ -240,7 +240,7 @@ A list a server hands you **never disables anything**, whatever its author chose
 
 
 ### Configs
-Edit your mods' settings without leaving the app. The page finds every config file your installed mods actually have and groups them by where they live, because that turns out to be the thing that matters:
+Edit your mods' settings without leaving the app. The page finds every config file your installed mods create:
 
 - **Client** - the files in `BepInEx\config`, one per plugin.
 - **Server** - the files inside a server mod's own folder under `user\mods`.
