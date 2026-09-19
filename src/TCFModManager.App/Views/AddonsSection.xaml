@@ -5,7 +5,8 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:app="clr-namespace:TCFModManager.App"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
-    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors">
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization">
     <!--
         The Addons section of a mod's details dialog. DataContext is an AddonsSectionViewModel,
         set by whichever dialog hosts this. The whole control collapses when the mod has no addons,
@@ -31,7 +32,7 @@
             Margin="0,2,0,0"
             TextWrapping="Wrap"
             Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-            Text="Extra content published for this mod. An addon's versions are matched against the mod's installed version, not your SPT version." />
+            Text="{loc:Str Addons_Description}" />
 
         <!-- One explanation for the whole list rather than the same sentence on every row. -->
         <TextBlock
@@ -89,7 +90,7 @@
                                 <TextBlock
                                     Margin="0,2,0,0"
                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                    Text="{Binding InstalledVersion, StringFormat='Installed: {0}'}"
+                                    Text="{Binding InstalledVersion, StringFormat={loc:Str Addons_InstalledFormat}}"
                                     Visibility="{Binding IsInstalled, Converter={StaticResource TrueToVisible}}" />
 
                                 <!-- The picker stays enabled even when nothing is installable, so the
@@ -108,7 +109,7 @@
                                         HorizontalAlignment="Left"
                                         Icon="{ui:SymbolIcon Open24}"
                                         Command="{Binding OpenAddonPageCommand}"
-                                        ToolTip="Open this addon's page on sp-mod.com"
+                                        ToolTip="{loc:Str Addons_OpenPage}"
                                         Visibility="{Binding DetailUrl, Converter={StaticResource NullToCollapsed}}" />
                                     <ComboBox
                                         MinWidth="150"

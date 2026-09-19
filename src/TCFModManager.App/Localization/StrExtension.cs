@@ -1,3 +1,4 @@
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 
@@ -34,8 +35,24 @@ public sealed class StrExtension : MarkupExtension
             Mode = BindingMode.OneWay,
         };
 
+        //
+        // A dependency property can hold the binding, which is what makes the text follow a
+        // language change. A plain CLR property cannot - Binding.StringFormat is the one that
+        // matters, and every one of those in this app sits in a dialog or a row rebuilt each time
+        // it is shown - so it gets the string as it reads right now instead.
+        //
+        // Handing a Binding to a string property would not fail here; it would fail at the far end,
+        // as a format string reading "System.Windows.Data.Binding".
+        //
+        if (serviceProvider?.GetService(typeof(IProvideValueTarget)) is IProvideValueTarget target
+            && target.TargetProperty is not null
+            && target.TargetProperty is not DependencyProperty)
+        {
+            return LocalizationService.Get(Key);
+        }
+
         // ProvideValue rather than the binding itself, so this works in the places a binding has to
-        // be resolved differently - a Style setter, a template - as well as on a plain property.
+        // be resolved differently - a template - as well as on a plain property.
         return binding.ProvideValue(serviceProvider);
     }
 }

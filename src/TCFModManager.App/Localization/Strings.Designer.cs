@@ -12,4 +12,15 @@ internal static class Strings
     internal static string Options_Language_Header => LocalizationService.Get("Options_Language_Header");
     internal static string Options_Language_Description => LocalizationService.Get("Options_Language_Description");
     internal static string Options_Language_SystemDefaultFormat => LocalizationService.Get("Options_Language_SystemDefaultFormat");
+    internal static string Common_Refresh => LocalizationService.Get("Common_Refresh");
+    internal static string ModDetails_Close => LocalizationService.Get("ModDetails_Close");
+    internal static string ModDetails_ViewModPage => LocalizationService.Get("ModDetails_ViewModPage");
+    internal static string ModDetails_DownloadsFormat => LocalizationService.Get("ModDetails_DownloadsFormat");
+    internal static string ModDetails_CategoryFormat => LocalizationService.Get("ModDetails_CategoryFormat");
+    internal static string ModDetails_LicenseFormat => LocalizationService.Get("ModDetails_LicenseFormat");
+    internal static string Addons_Description => LocalizationService.Get("Addons_Description");
+    internal static string Addons_OpenPage => LocalizationService.Get("Addons_OpenPage");
+    internal static string Addons_InstalledFormat => LocalizationService.Get("Addons_InstalledFormat");
+    internal static string Dependencies_Description => LocalizationService.Get("Dependencies_Description");
+    internal static string Dependencies_Empty => LocalizationService.Get("Dependencies_Empty");
 }

@@ -88,4 +88,44 @@
     <value>System default ({0})</value>
     <comment>{0} is the language following Windows currently lands on, named in itself - "System default (English)".</comment>
   </data>
+  <data name="Common_Refresh" xml:space="preserve">
+    <value>Refresh</value>
+    <comment>Button label - re-runs the scan the page is showing. Shared by every page with one.</comment>
+  </data>
+  <data name="ModDetails_Close" xml:space="preserve">
+    <value>Close</value>
+    <comment>Tooltip on the mod details dialog's close button.</comment>
+  </data>
+  <data name="ModDetails_ViewModPage" xml:space="preserve">
+    <value>View mod page</value>
+  </data>
+  <data name="ModDetails_DownloadsFormat" xml:space="preserve">
+    <value>{0:N0} downloads</value>
+    <comment>{0} is a download count. Keep the :N0 - it is what groups the thousands the way the user's Windows regional setting does.</comment>
+  </data>
+  <data name="ModDetails_CategoryFormat" xml:space="preserve">
+    <value>Category: {0}</value>
+    <comment>{0} is a category name from the Forge, which arrives in its author's language and is not translated here.</comment>
+  </data>
+  <data name="ModDetails_LicenseFormat" xml:space="preserve">
+    <value>License: {0}</value>
+    <comment>{0} is a licence name, e.g. "MIT".</comment>
+  </data>
+  <data name="Addons_Description" xml:space="preserve">
+    <value>Extra content published for this mod. An addon's versions are matched against the mod's installed version, not your SPT version.</value>
+  </data>
+  <data name="Addons_OpenPage" xml:space="preserve">
+    <value>Open this addon's page on sp-mod.com</value>
+    <comment>sp-mod.com is a domain and stays as it is.</comment>
+  </data>
+  <data name="Addons_InstalledFormat" xml:space="preserve">
+    <value>Installed: {0}</value>
+    <comment>{0} is a version number.</comment>
+  </data>
+  <data name="Dependencies_Description" xml:space="preserve">
+    <value>Every installed mod that declares dependencies, and whether each one is satisfied. Mods needing attention are listed first and start expanded.</value>
+  </data>
+  <data name="Dependencies_Empty" xml:space="preserve">
+    <value>Nothing installed declares a dependency.</value>
+  </data>
 </root>
