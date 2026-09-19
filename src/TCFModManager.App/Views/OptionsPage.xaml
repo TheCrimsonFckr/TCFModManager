@@ -16,26 +16,26 @@
         <ui:Card Padding="16" VerticalAlignment="Top">
             <StackPanel>
                 <TextBlock
-                    Text="SPT Install Folder"
+                    Text="{loc:Str Options_InstallFolderHeader}"
                     FontWeight="SemiBold"
                     Margin="0,0,0,4" />
                 <TextBlock
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="Point this at your SPT server install folder (the one containing SPT.Server.exe). Once set, the installed SPT version is used to default the Browse version filter and to flag mods that aren't built for it." />
+                    Text="{loc:Str Options_InstallFolderDescription}" />
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                     <ui:TextBox
-                        Width="440"
+                        MinWidth="440"
                         Text="{Binding InstallPathInput, UpdateSourceTrigger=PropertyChanged}" />
                     <ui:Button
                         Margin="8,0,0,0"
-                        Content="Browse..."
+                        Content="{loc:Str Options_BrowseEllipsis}"
                         Command="{Binding BrowseCommand}" />
                     <ui:Button
                         Margin="8,0,0,0"
-                        Content="Save"
+                        Content="{loc:Str Options_SaveInstallPath}"
                         Command="{Binding SaveCommand}" />
                 </StackPanel>
 
@@ -58,7 +58,7 @@
         <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
             <StackPanel>
                 <TextBlock
-                    Text="What this machine is"
+                    Text="{loc:Str Options_MachineRoleHeader}"
                     FontWeight="SemiBold"
                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     Margin="0,0,0,4" />
@@ -66,25 +66,25 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="A Fika headless client hosts raids without anybody playing on it, so it needs the mods that decide how a raid goes - bots, items, locations - and none of the ones that draw things at a player. Saying which this machine is lets a mod list a server hands you arrive trimmed to what this machine actually needs. It never changes a list of your own, and it never affects what you can install by hand." />
+                    Text="{loc:Str Options_MachineRoleDescription}" />
 
                 <ui:ToggleSwitch
                     HorizontalAlignment="Left"
                     Margin="0,0,0,8"
-                    ToolTip="Turn this off for a dedicated headless box - one that hosts raids and that nobody sits at."
+                    ToolTip="{loc:Str Options_PlaysHereToolTip}"
                     ToolTipService.ShowDuration="20000"
                     IsChecked="{Binding PlaysHere}"
-                    OnContent="Somebody plays on this machine"
-                    OffContent="Nobody plays on this machine" />
+                    OnContent="{loc:Str Options_PlaysHereOn}"
+                    OffContent="{loc:Str Options_PlaysHereOff}" />
 
                 <ui:ToggleSwitch
                     HorizontalAlignment="Left"
                     Margin="0,0,0,8"
-                    ToolTip="Detected from the Fika headless launcher in the install folder, and overridable here for a setup that starts its headless some other way."
+                    ToolTip="{loc:Str Options_HeadlessToolTip}"
                     ToolTipService.ShowDuration="20000"
                     IsChecked="{Binding RunsHeadlessClient}"
-                    OnContent="This machine runs a Fika headless client"
-                    OffContent="This machine does not run a headless client" />
+                    OnContent="{loc:Str Options_HeadlessOn}"
+                    OffContent="{loc:Str Options_HeadlessOff}" />
 
                 <TextBlock
                     TextWrapping="Wrap"
@@ -102,7 +102,7 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,8,0,0"
-                    Text="No Fika headless launcher was found in the install folder, so nothing here starts one - name it below, or leave it and the switch above still decides which mods a served list brings."
+                    Text="{loc:Str Options_NoHeadlessLauncherNotice}"
                     Visibility="{Binding HasHeadlessLauncher, Converter={StaticResource FalseToVisible}}" />
 
                 <!--
@@ -111,7 +111,7 @@
                     folder rather than in it has to be named rather than found.
                 -->
                 <TextBlock
-                    Text="Fika headless launcher"
+                    Text="{loc:Str Options_HeadlessLauncherHeader}"
                     FontWeight="SemiBold"
                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     Margin="0,16,0,4" />
@@ -119,7 +119,7 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="Leave this empty and the app looks for FikaHeadlessManager.exe at the top of the install folder. Point it at the exe yourself if it lives anywhere else - it does not have to be inside the install folder at all. It is used as-is, and ignored if the file isn't there." />
+                    Text="{loc:Str Options_HeadlessLauncherDescription}" />
 
                 <Grid Margin="0,0,0,4">
                     <Grid.ColumnDefinitions>
@@ -130,13 +130,13 @@
 
                     <ui:TextBox
                         Grid.Column="0"
-                        PlaceholderText="Found automatically"
+                        PlaceholderText="{loc:Str Options_HeadlessLauncherPlaceholder}"
                         Text="{Binding HeadlessLauncherPath, UpdateSourceTrigger=LostFocus}" />
 
                     <ui:Button
                         Grid.Column="1"
                         Margin="8,0,0,0"
-                        Content="Browse"
+                        Content="{loc:Str Options_Browse}"
                         Icon="{ui:SymbolIcon FolderOpen24}"
                         Command="{Binding BrowseHeadlessLauncherCommand}" />
 
@@ -144,8 +144,8 @@
                         Grid.Column="2"
                         Margin="8,0,0,0"
                         Appearance="Transparent"
-                        Content="Clear"
-                        ToolTip="Back to looking in the install folder."
+                        Content="{loc:Str Options_ClearHeadlessLauncher}"
+                        ToolTip="{loc:Str Options_ClearHeadlessLauncherToolTip}"
                         Command="{Binding ClearHeadlessLauncherCommand}" />
                 </Grid>
             </StackPanel>
@@ -154,16 +154,16 @@
         <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
             <StackPanel>
                 <TextBlock
-                    Text="Appearance"
+                    Text="{loc:Str Options_AppearanceHeader}"
                     FontWeight="SemiBold"
                     Margin="0,0,0,4" />
                 <TextBlock
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="Follow system matches Windows and keeps matching it when you change it there. Light and Dark pin the app to one regardless." />
+                    Text="{loc:Str Options_AppearanceDescription}" />
                 <ComboBox
-                    Width="200"
+                    MinWidth="200"
                     HorizontalAlignment="Left"
                     ItemsSource="{Binding ThemeOptions}"
                     SelectedItem="{Binding SelectedTheme}" />
@@ -196,16 +196,16 @@
         <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
             <StackPanel>
                 <TextBlock
-                    Text="Window"
+                    Text="{loc:Str Options_WindowHeader}"
                     FontWeight="SemiBold"
                     Margin="0,0,0,4" />
                 <TextBlock
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="How the window opens. Remembering the last size and position is the default, since dragging the window to a size and leaving it there is already an answer. Full screen fills the whole monitor with no title bar and covers the taskbar, which maximised does not - F11 switches into and out of it at any time, whichever of these is chosen." />
+                    Text="{loc:Str Options_WindowDescription}" />
                 <ComboBox
-                    Width="320"
+                    MinWidth="320"
                     HorizontalAlignment="Left"
                     ItemsSource="{Binding WindowStartupOptions}"
                     SelectedItem="{Binding SelectedWindowStartup}" />
@@ -217,8 +217,8 @@
                     Visibility="{Binding ShowCustomSize, Converter={StaticResource BoolToVisibility}}">
                     <StackPanel Orientation="Horizontal">
                         <ui:TextBox
-                            Width="110"
-                            PlaceholderText="Width"
+                            MinWidth="110"
+                            PlaceholderText="{loc:Str Options_WidthPlaceholder}"
                             Text="{Binding CustomWidthInput, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock
                             Margin="8,0,8,0"
@@ -226,20 +226,20 @@
                             Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                             Text="x" />
                         <ui:TextBox
-                            Width="110"
-                            PlaceholderText="Height"
+                            MinWidth="110"
+                            PlaceholderText="{loc:Str Options_HeightPlaceholder}"
                             Text="{Binding CustomHeightInput, UpdateSourceTrigger=PropertyChanged}" />
                         <ui:Button
                             Margin="8,0,0,0"
-                            Content="Apply"
+                            Content="{loc:Str Options_ApplySize}"
                             Command="{Binding ApplyWindowSizeCommand}" />
 
                         <!-- Dragging the window to the size you want and pressing one button beats
                              guessing two numbers. -->
                         <ui:Button
                             Margin="8,0,0,0"
-                            Content="Use the current size"
-                            ToolTip="Fills these boxes from the window as it is right now. Restore it down from maximised first - a maximised window has no chosen size to read."
+                            Content="{loc:Str Options_UseCurrentSize}"
+                            ToolTip="{loc:Str Options_UseCurrentSizeToolTip}"
                             Command="{Binding UseCurrentWindowSizeCommand}" />
                     </StackPanel>
                 </StackPanel>
@@ -255,14 +255,14 @@
         <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
             <StackPanel>
                 <TextBlock
-                    Text="Page defaults"
+                    Text="{loc:Str Options_PageDefaultsHeader}"
                     FontWeight="SemiBold"
                     Margin="0,0,0,4" />
                 <TextBlock
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="The Installed and Browse pages each have a Save as default button beside Clear filters. It opens that page with the filters, sort, per-page - and on Installed, the view - it is set to at the time, so a page you always narrow the same way arrives narrowed. What you have typed in the search box is never part of it. Clearing a default here puts the page back to the app's own." />
+                    Text="{loc:Str Options_PageDefaultsDescription}" />
 
                 <TextBlock
                     TextWrapping="Wrap"
@@ -277,11 +277,11 @@
 
                 <StackPanel Orientation="Horizontal">
                     <ui:Button
-                        Content="Clear the Installed default"
+                        Content="{loc:Str Options_ClearInstalledDefault}"
                         Command="{Binding ResetInstalledDefaultsCommand}" />
                     <ui:Button
                         Margin="8,0,0,0"
-                        Content="Clear the Browse default"
+                        Content="{loc:Str Options_ClearBrowseDefault}"
                         Command="{Binding ResetBrowseDefaultsCommand}" />
                 </StackPanel>
             </StackPanel>
@@ -290,42 +290,42 @@
         <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
             <StackPanel>
                 <TextBlock
-                    Text="Mod pages"
+                    Text="{loc:Str Options_ModPagesHeader}"
                     FontWeight="SemiBold"
                     Margin="0,0,0,4" />
                 <TextBlock
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="Before anything downloads, this app asks you to open the mod's page - where its author puts install steps, requirements, known conflicts and warnings. Turn that off if you would rather go straight to installing. This app's own updates always ask, since that page is where its release notes are." />
+                    Text="{loc:Str Options_ModPagesDescription}" />
                 <ui:ToggleSwitch
                     HorizontalAlignment="Left"
                     ToolTip="{Binding ModPageGate.SettingToolTip}"
                     ToolTipService.ShowDuration="20000"
                     IsChecked="{Binding SkipModPageConfirmation}"
-                    OnContent="Off - install without opening mod pages"
-                    OffContent="On - open each mod's page first" />
+                    OnContent="{loc:Str Options_ModPagesSwitchOn}"
+                    OffContent="{loc:Str Options_ModPagesSwitchOff}" />
             </StackPanel>
         </ui:Card>
 
         <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
             <StackPanel>
                 <TextBlock
-                    Text="Mod footprint page"
+                    Text="{loc:Str Options_FootprintHeader}"
                     FontWeight="SemiBold"
                     Margin="0,0,0,4" />
                 <TextBlock
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="Adds a page that reads the files each installed mod ships and describes how much of the game it is positioned to touch, and where any cost would land - client or server, CPU, GPU, memory or start-up. Nothing on it is timed or measured: what a mod actually costs you depends on your hardware, your settings and the other mods you run, none of which it can see. A heavy footprint means a mod reaches a long way into the game, which is usually why you installed it - it is a place to start looking, not a verdict. Off by default." />
+                    Text="{loc:Str Options_FootprintDescription}" />
                 <ui:ToggleSwitch
                     HorizontalAlignment="Left"
                     ToolTip="{Binding FootprintGate.SettingToolTip}"
                     ToolTipService.ShowDuration="20000"
                     IsChecked="{Binding ShowModFootprintPage}"
-                    OnContent="On - shown in the sidebar"
-                    OffContent="Off - hidden" />
+                    OnContent="{loc:Str Options_SidebarOn}"
+                    OffContent="{loc:Str Options_SidebarOff}" />
             </StackPanel>
         </ui:Card>
 
@@ -342,7 +342,7 @@
         <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
             <StackPanel DataContext="{Binding ServerMap}">
                 <TextBlock
-                    Text="Server map"
+                    Text="{loc:Str Options_ServerMapHeader}"
                     FontWeight="SemiBold"
                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     Margin="0,0,0,4" />
@@ -350,7 +350,7 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="Adds a page that connects to an SPT server running the Server Map mod, so you can see what it runs and compare it against what you have installed. The mod goes on the server, not here - without it this page has nothing to show, which is why it is off by default. Use the same address and port you put in the SPT launcher; connecting sends nothing about your install, it only asks the server who it is." />
+                    Text="{loc:Str Options_ServerMapDescription}" />
 
                 <ui:ToggleSwitch
                     HorizontalAlignment="Left"
@@ -358,8 +358,8 @@
                     ToolTip="{Binding SettingToolTip}"
                     ToolTipService.ShowDuration="20000"
                     IsChecked="{Binding IsPageEnabled}"
-                    OnContent="On - shown in the sidebar"
-                    OffContent="Off - hidden" />
+                    OnContent="{loc:Str Options_SidebarOn}"
+                    OffContent="{loc:Str Options_SidebarOff}" />
 
                 <!-- The server half is an addon rather than something bundled here: it is installed
                      on a different machine, by whoever runs the server. Hidden until the page URL
@@ -371,12 +371,12 @@
                         TextWrapping="Wrap"
                         Margin="0,0,0,8"
                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                        Text="Running a server? The Server Map mod is a separate download - get it from the mod's page and install it on the machine running SPT. Players joining that server need nothing but this switch." />
+                        Text="{loc:Str Options_ServerMapModNotice}" />
                     <ui:Button
                         HorizontalAlignment="Left"
-                        Content="Get the Server Map mod"
+                        Content="{loc:Str Options_GetServerMapMod}"
                         Icon="{ui:SymbolIcon Open24}"
-                        ToolTip="Opens the Server Map mod's page on sp-mod.com in your browser."
+                        ToolTip="{loc:Str Options_GetServerMapModToolTip}"
                         Command="{Binding OpenAddonPageCommand}" />
                 </StackPanel>
 
@@ -385,17 +385,17 @@
                          which is right for a server on this machine and quietly wrong for anyone
                          connecting to someone else's - so it is shown rather than filled in. -->
                     <ui:TextBox
-                        Width="300"
-                        PlaceholderText="Server address (e.g. 127.0.0.1)"
+                        MinWidth="300"
+                        PlaceholderText="{loc:Str Options_ServerAddressPlaceholder}"
                         Text="{Binding HostInput, UpdateSourceTrigger=PropertyChanged}" />
                     <ui:TextBox
-                        Width="90"
+                        MinWidth="90"
                         Margin="8,0,0,0"
-                        PlaceholderText="Port"
+                        PlaceholderText="{loc:Str Options_PortPlaceholder}"
                         Text="{Binding PortInput, UpdateSourceTrigger=PropertyChanged}" />
                     <ui:Button
                         Margin="8,0,0,0"
-                        Content="Connect"
+                        Content="{loc:Str Options_Connect}"
                         Icon="{ui:SymbolIcon Connected20}"
                         Command="{Binding ConnectCommand}" />
                     <ProgressBar
@@ -413,8 +413,8 @@
                      to check against what you were sent. -->
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                     <ui:TextBox
-                        Width="300"
-                        PlaceholderText="Shared key (if the server needs one)"
+                        MinWidth="300"
+                        PlaceholderText="{loc:Str Options_SharedKeyPlaceholder}"
                         Text="{Binding KeyInput, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
@@ -438,7 +438,7 @@
                     <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                         <ui:Button
                             HorizontalAlignment="Left"
-                            Content="Use this machine's key"
+                            Content="{loc:Str Options_UseMachineKey}"
                             Icon="{ui:SymbolIcon Key24}"
                             Command="{Binding UseLocalKeyCommand}" />
 
@@ -447,9 +447,9 @@
                         <ui:Button
                             Margin="8,0,0,0"
                             HorizontalAlignment="Left"
-                            Content="Generate a new key"
+                            Content="{loc:Str Options_GenerateKey}"
                             Icon="{ui:SymbolIcon ArrowSync24}"
-                            ToolTip="Replaces this server's key with a new one. Everyone using the old key stops being able to see what this server publishes until you send them the new one. The server picks it up without being restarted."
+                            ToolTip="{loc:Str Options_GenerateKeyToolTip}"
                             Command="{Binding NewLocalKeyCommand}" />
                     </StackPanel>
 
@@ -475,7 +475,7 @@
                     Margin="0,8,0,0"
                     HorizontalAlignment="Left"
                     Appearance="Caution"
-                    Content="Trust the new certificate"
+                    Content="{loc:Str Options_TrustCertificate}"
                     Icon="{ui:SymbolIcon Certificate24}"
                     Command="{Binding TrustNewCertificateCommand}"
                     Visibility="{Binding HasCertificateChanged, Converter={StaticResource BoolToVisibility}}" />
@@ -489,9 +489,9 @@
                 <ui:Button
                     Margin="0,8,0,0"
                     HorizontalAlignment="Left"
-                    Content="Forget this certificate"
+                    Content="{loc:Str Options_ForgetCertificate}"
                     Icon="{ui:SymbolIcon Delete24}"
-                    ToolTip="Clears the recorded fingerprint. The next connection records whatever the server presents, the same as the first one did."
+                    ToolTip="{loc:Str Options_ForgetCertificateToolTip}"
                     Command="{Binding ForgetPinCommand}" />
             </StackPanel>
         </ui:Card>
@@ -499,17 +499,17 @@
         <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
             <StackPanel>
                 <TextBlock
-                    Text="Data files"
+                    Text="{loc:Str Options_DataFilesHeader}"
                     FontWeight="SemiBold"
                     Margin="0,0,0,4" />
                 <TextBlock
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="View or hand-edit the JSON files this app keeps under Data\, including installed-mods.json - useful when the Installed page's own version controls aren't enough." />
+                    Text="{loc:Str Options_DataFilesDescription}" />
                 <ui:Button
                     HorizontalAlignment="Left"
-                    Content="Data files..."
+                    Content="{loc:Str Options_DataFiles}"
                     Click="DataFiles_Click" />
             </StackPanel>
         </ui:Card>

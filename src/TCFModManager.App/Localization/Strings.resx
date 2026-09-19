@@ -584,4 +584,199 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="ModLists_UnpinToolTip" xml:space="preserve">
     <value>Unpin this mod. Lists will be able to set it aside again, and this one would.</value>
   </data>
+  <data name="Options_InstallFolderHeader" xml:space="preserve">
+    <value>SPT Install Folder</value>
+  </data>
+  <data name="Options_InstallFolderDescription" xml:space="preserve">
+    <value>Point this at your SPT server install folder (the one containing SPT.Server.exe). Once set, the installed SPT version is used to default the Browse version filter and to flag mods that aren't built for it.</value>
+    <comment>SPT.Server.exe is a file name and stays as it is.</comment>
+  </data>
+  <data name="Options_BrowseEllipsis" xml:space="preserve">
+    <value>Browse...</value>
+    <comment>Button that opens a folder picker.</comment>
+  </data>
+  <data name="Options_SaveInstallPath" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Options_MachineRoleHeader" xml:space="preserve">
+    <value>What this machine is</value>
+  </data>
+  <data name="Options_MachineRoleDescription" xml:space="preserve">
+    <value>A Fika headless client hosts raids without anybody playing on it, so it needs the mods that decide how a raid goes - bots, items, locations - and none of the ones that draw things at a player. Saying which this machine is lets a mod list a server hands you arrive trimmed to what this machine actually needs. It never changes a list of your own, and it never affects what you can install by hand.</value>
+    <comment>Fika is a mod's name and stays as it is.</comment>
+  </data>
+  <data name="Options_PlaysHereToolTip" xml:space="preserve">
+    <value>Turn this off for a dedicated headless box - one that hosts raids and that nobody sits at.</value>
+  </data>
+  <data name="Options_PlaysHereOn" xml:space="preserve">
+    <value>Somebody plays on this machine</value>
+    <comment>Label on a switch, shown when it is on.</comment>
+  </data>
+  <data name="Options_PlaysHereOff" xml:space="preserve">
+    <value>Nobody plays on this machine</value>
+    <comment>Label on the same switch, shown when it is off.</comment>
+  </data>
+  <data name="Options_HeadlessToolTip" xml:space="preserve">
+    <value>Detected from the Fika headless launcher in the install folder, and overridable here for a setup that starts its headless some other way.</value>
+  </data>
+  <data name="Options_HeadlessOn" xml:space="preserve">
+    <value>This machine runs a Fika headless client</value>
+  </data>
+  <data name="Options_HeadlessOff" xml:space="preserve">
+    <value>This machine does not run a headless client</value>
+  </data>
+  <data name="Options_NoHeadlessLauncherNotice" xml:space="preserve">
+    <value>No Fika headless launcher was found in the install folder, so nothing here starts one - name it below, or leave it and the switch above still decides which mods a served list brings.</value>
+  </data>
+  <data name="Options_HeadlessLauncherHeader" xml:space="preserve">
+    <value>Fika headless launcher</value>
+  </data>
+  <data name="Options_HeadlessLauncherDescription" xml:space="preserve">
+    <value>Leave this empty and the app looks for FikaHeadlessManager.exe at the top of the install folder. Point it at the exe yourself if it lives anywhere else - it does not have to be inside the install folder at all. It is used as-is, and ignored if the file isn't there.</value>
+    <comment>FikaHeadlessManager.exe is a file name and stays as it is.</comment>
+  </data>
+  <data name="Options_HeadlessLauncherPlaceholder" xml:space="preserve">
+    <value>Found automatically</value>
+    <comment>Placeholder in the launcher path box - it means the app will look for it.</comment>
+  </data>
+  <data name="Options_Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="Options_ClearHeadlessLauncher" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Options_ClearHeadlessLauncherToolTip" xml:space="preserve">
+    <value>Back to looking in the install folder.</value>
+  </data>
+  <data name="Options_AppearanceHeader" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="Options_AppearanceDescription" xml:space="preserve">
+    <value>Follow system matches Windows and keeps matching it when you change it there. Light and Dark pin the app to one regardless.</value>
+    <comment>Follow system, Light and Dark are the three entries of the dropdown below - translate them the same way there.</comment>
+  </data>
+  <data name="Options_WindowHeader" xml:space="preserve">
+    <value>Window</value>
+  </data>
+  <data name="Options_WindowDescription" xml:space="preserve">
+    <value>How the window opens. Remembering the last size and position is the default, since dragging the window to a size and leaving it there is already an answer. Full screen fills the whole monitor with no title bar and covers the taskbar, which maximised does not - F11 switches into and out of it at any time, whichever of these is chosen.</value>
+    <comment>F11 is a keyboard key and stays as it is.</comment>
+  </data>
+  <data name="Options_WidthPlaceholder" xml:space="preserve">
+    <value>Width</value>
+    <comment>Placeholder in the window width box.</comment>
+  </data>
+  <data name="Options_HeightPlaceholder" xml:space="preserve">
+    <value>Height</value>
+    <comment>Placeholder in the window height box.</comment>
+  </data>
+  <data name="Options_ApplySize" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Options_UseCurrentSize" xml:space="preserve">
+    <value>Use the current size</value>
+  </data>
+  <data name="Options_UseCurrentSizeToolTip" xml:space="preserve">
+    <value>Fills these boxes from the window as it is right now. Restore it down from maximised first - a maximised window has no chosen size to read.</value>
+  </data>
+  <data name="Options_PageDefaultsHeader" xml:space="preserve">
+    <value>Page defaults</value>
+  </data>
+  <data name="Options_PageDefaultsDescription" xml:space="preserve">
+    <value>The Installed and Browse pages each have a Save as default button beside Clear filters. It opens that page with the filters, sort, per-page - and on Installed, the view - it is set to at the time, so a page you always narrow the same way arrives narrowed. What you have typed in the search box is never part of it. Clearing a default here puts the page back to the app's own.</value>
+    <comment>Save as default and Clear filters are the two buttons named in Common_SaveAsDefault and Common_ClearFilters - translate them the same way here.</comment>
+  </data>
+  <data name="Options_ClearInstalledDefault" xml:space="preserve">
+    <value>Clear the Installed default</value>
+    <comment>Installed is the page name, as in the sidebar.</comment>
+  </data>
+  <data name="Options_ClearBrowseDefault" xml:space="preserve">
+    <value>Clear the Browse default</value>
+    <comment>Browse is the page name, as in the sidebar.</comment>
+  </data>
+  <data name="Options_ModPagesHeader" xml:space="preserve">
+    <value>Mod pages</value>
+  </data>
+  <data name="Options_ModPagesDescription" xml:space="preserve">
+    <value>Before anything downloads, this app asks you to open the mod's page - where its author puts install steps, requirements, known conflicts and warnings. Turn that off if you would rather go straight to installing. This app's own updates always ask, since that page is where its release notes are.</value>
+  </data>
+  <data name="Options_ModPagesSwitchOn" xml:space="preserve">
+    <value>Off - install without opening mod pages</value>
+    <comment>Label on the switch when it is ON. The switch turns the asking OFF, which is why the label reads the other way round.</comment>
+  </data>
+  <data name="Options_ModPagesSwitchOff" xml:space="preserve">
+    <value>On - open each mod's page first</value>
+    <comment>Label on the same switch when it is OFF, meaning the app still asks.</comment>
+  </data>
+  <data name="Options_FootprintHeader" xml:space="preserve">
+    <value>Mod footprint page</value>
+  </data>
+  <data name="Options_FootprintDescription" xml:space="preserve">
+    <value>Adds a page that reads the files each installed mod ships and describes how much of the game it is positioned to touch, and where any cost would land - client or server, CPU, GPU, memory or start-up. Nothing on it is timed or measured: what a mod actually costs you depends on your hardware, your settings and the other mods you run, none of which it can see. A heavy footprint means a mod reaches a long way into the game, which is usually why you installed it - it is a place to start looking, not a verdict. Off by default.</value>
+  </data>
+  <data name="Options_SidebarOn" xml:space="preserve">
+    <value>On - shown in the sidebar</value>
+    <comment>Label on a switch that adds a page to the sidebar. Used by both the Mod footprint and Server map switches.</comment>
+  </data>
+  <data name="Options_SidebarOff" xml:space="preserve">
+    <value>Off - hidden</value>
+    <comment>The same switch, off.</comment>
+  </data>
+  <data name="Options_ServerMapHeader" xml:space="preserve">
+    <value>Server map</value>
+  </data>
+  <data name="Options_ServerMapDescription" xml:space="preserve">
+    <value>Adds a page that connects to an SPT server running the Server Map mod, so you can see what it runs and compare it against what you have installed. The mod goes on the server, not here - without it this page has nothing to show, which is why it is off by default. Use the same address and port you put in the SPT launcher; connecting sends nothing about your install, it only asks the server who it is.</value>
+    <comment>Server Map is the mod's name and stays as it is.</comment>
+  </data>
+  <data name="Options_ServerMapModNotice" xml:space="preserve">
+    <value>Running a server? The Server Map mod is a separate download - get it from the mod's page and install it on the machine running SPT. Players joining that server need nothing but this switch.</value>
+  </data>
+  <data name="Options_GetServerMapMod" xml:space="preserve">
+    <value>Get the Server Map mod</value>
+  </data>
+  <data name="Options_GetServerMapModToolTip" xml:space="preserve">
+    <value>Opens the Server Map mod's page on sp-mod.com in your browser.</value>
+  </data>
+  <data name="Options_ServerAddressPlaceholder" xml:space="preserve">
+    <value>Server address (e.g. 127.0.0.1)</value>
+    <comment>127.0.0.1 is an address and stays as it is.</comment>
+  </data>
+  <data name="Options_PortPlaceholder" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="Options_Connect" xml:space="preserve">
+    <value>Connect</value>
+  </data>
+  <data name="Options_SharedKeyPlaceholder" xml:space="preserve">
+    <value>Shared key (if the server needs one)</value>
+  </data>
+  <data name="Options_UseMachineKey" xml:space="preserve">
+    <value>Use this machine's key</value>
+  </data>
+  <data name="Options_GenerateKey" xml:space="preserve">
+    <value>Generate a new key</value>
+  </data>
+  <data name="Options_GenerateKeyToolTip" xml:space="preserve">
+    <value>Replaces this server's key with a new one. Everyone using the old key stops being able to see what this server publishes until you send them the new one. The server picks it up without being restarted.</value>
+  </data>
+  <data name="Options_TrustCertificate" xml:space="preserve">
+    <value>Trust the new certificate</value>
+  </data>
+  <data name="Options_ForgetCertificate" xml:space="preserve">
+    <value>Forget this certificate</value>
+  </data>
+  <data name="Options_ForgetCertificateToolTip" xml:space="preserve">
+    <value>Clears the recorded fingerprint. The next connection records whatever the server presents, the same as the first one did.</value>
+  </data>
+  <data name="Options_DataFilesHeader" xml:space="preserve">
+    <value>Data files</value>
+  </data>
+  <data name="Options_DataFilesDescription" xml:space="preserve">
+    <value>View or hand-edit the JSON files this app keeps under Data\, including installed-mods.json - useful when the Installed page's own version controls aren't enough.</value>
+    <comment>Data\ and installed-mods.json are a folder and a file name - leave both exactly as they are.</comment>
+  </data>
+  <data name="Options_DataFiles" xml:space="preserve">
+    <value>Data files...</value>
+  </data>
 </root>
