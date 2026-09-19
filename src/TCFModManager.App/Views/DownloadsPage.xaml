@@ -6,6 +6,7 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     Title="Downloads">
     <Page.Resources>
         <converters:DownloadQueueStatusToAppearanceConverter x:Key="StatusAppearance" />
@@ -35,7 +36,7 @@
         <DockPanel Grid.Row="0" Margin="0,0,0,8">
             <ui:Button
                 DockPanel.Dock="Right"
-                Content="Clear finished"
+                Content="{loc:Str Downloads_ClearFinished}"
                 Click="ClearFinishedButton_Click" />
 
             <!-- Only there when something failed. A mod list apply queues dozens at once, so one
@@ -45,15 +46,15 @@
                 Margin="0,0,8,0"
                 Appearance="Primary"
                 Icon="{ui:SymbolIcon ArrowClockwise24}"
-                Content="Retry failed"
-                ToolTip="Put every failed or cancelled download back on the queue."
+                Content="{loc:Str Downloads_RetryFailed}"
+                ToolTip="{loc:Str Downloads_RetryFailedToolTip}"
                 Visibility="{Binding HasRetryable, Converter={StaticResource BoolToVisibility}}"
                 Click="RetryFailedButton_Click" />
             <StackPanel VerticalAlignment="Center">
                 <TextBlock
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     TextWrapping="Wrap"
-                    Text="Downloads install strictly one at a time, in the order you queued them - queue as many as you like from Browse or an update dialog and check back here for progress." />
+                    Text="{loc:Str Downloads_Description}" />
 
                 <!-- How far through the whole queue we are. Matters most for a mod list, which can
                      put forty items here at once; the per-card boxes answer how one of them is
@@ -65,7 +66,7 @@
                             <TextBlock
                                 FontSize="10"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                Text="Queue" />
+                                Text="{loc:Str Downloads_StatQueue}" />
                             <TextBlock
                                 FontSize="11"
                                 TextTrimming="CharacterEllipsis"
@@ -79,7 +80,7 @@
                             <TextBlock
                                 FontSize="10"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                Text="Left to fetch" />
+                                Text="{loc:Str Downloads_StatLeftToFetch}" />
                             <TextBlock
                                 FontSize="11"
                                 TextTrimming="CharacterEllipsis"
@@ -93,7 +94,7 @@
                             <TextBlock
                                 FontSize="10"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                Text="Time to go" />
+                                Text="{loc:Str Downloads_StatTimeToGo}" />
                             <TextBlock
                                 FontSize="11"
                                 TextTrimming="CharacterEllipsis"
@@ -112,7 +113,7 @@
                             <TextBlock
                                 FontSize="10"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                Text="Not sized yet" />
+                                Text="{loc:Str Downloads_NotSizedYet}" />
                             <TextBlock
                                 FontSize="11"
                                 TextTrimming="CharacterEllipsis"
@@ -133,7 +134,7 @@
             TextAlignment="Center"
             TextWrapping="Wrap"
             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-            Text="Nothing queued yet - click Install on a Browse card, or Update in a mod's details dialog, to add something here."
+            Text="{loc:Str Downloads_Empty}"
             Visibility="{Binding Items.Count, Converter={StaticResource HasItems}, ConverterParameter=Invert}" />
 
         <ScrollViewer
@@ -174,7 +175,7 @@
                                     <TextBlock
                                         Margin="0,2,0,0"
                                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                        Text="Addon"
+                                        Text="{loc:Str Downloads_AddonTag}"
                                         Visibility="{Binding IsAddon, Converter={StaticResource BoolToVisibility}}" />
 
                                     <!-- Indeterminate while installing, otherwise tracks download progress. -->
@@ -202,7 +203,7 @@
                                                 <TextBlock
                                                     FontSize="10"
                                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                                    Text="Downloaded" />
+                                                    Text="{loc:Str Downloads_StatDownloaded}" />
                                                 <TextBlock
                                                     FontSize="11"
                                                     TextTrimming="CharacterEllipsis"
@@ -216,7 +217,7 @@
                                                 <TextBlock
                                                     FontSize="10"
                                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                                    Text="Speed" />
+                                                    Text="{loc:Str Downloads_StatSpeed}" />
                                                 <TextBlock
                                                     FontSize="11"
                                                     TextTrimming="CharacterEllipsis"
@@ -230,7 +231,7 @@
                                                 <TextBlock
                                                     FontSize="10"
                                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                                    Text="Time left" />
+                                                    Text="{loc:Str Downloads_StatTimeLeft}" />
                                                 <TextBlock
                                                     FontSize="11"
                                                     TextTrimming="CharacterEllipsis"
@@ -257,8 +258,8 @@
                                         Padding="10,4"
                                         HorizontalAlignment="Right"
                                         Appearance="Secondary"
-                                        Content="Cancel"
-                                        ToolTip="Cancel this download and any dependencies it queued."
+                                        Content="{loc:Str Common_Cancel}"
+                                        ToolTip="{loc:Str Downloads_CancelToolTip}"
                                         Command="{Binding CancelCommand}"
                                         Visibility="{Binding CanCancel, Converter={StaticResource BoolToVisibility}}" />
 
@@ -272,8 +273,8 @@
                                         HorizontalAlignment="Right"
                                         Appearance="Primary"
                                         Icon="{ui:SymbolIcon ArrowClockwise24}"
-                                        Content="Retry"
-                                        ToolTip="Put this back on the end of the queue and try again. Nothing else is re-downloaded."
+                                        Content="{loc:Str Downloads_Retry}"
+                                        ToolTip="{loc:Str Downloads_RetryToolTip}"
                                         Command="{Binding RetryCommand}"
                                         Visibility="{Binding CanRetry, Converter={StaticResource BoolToVisibility}}" />
                                 </StackPanel>

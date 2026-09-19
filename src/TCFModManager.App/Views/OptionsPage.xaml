@@ -35,7 +35,7 @@
                         Command="{Binding BrowseCommand}" />
                     <ui:Button
                         Margin="8,0,0,0"
-                        Content="{loc:Str Options_SaveInstallPath}"
+                        Content="{loc:Str Common_Save}"
                         Command="{Binding SaveCommand}" />
                 </StackPanel>
 

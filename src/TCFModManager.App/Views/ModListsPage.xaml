@@ -541,7 +541,7 @@
                                 Margin="8,0,0,0"
                                 Appearance="Primary"
                                 Icon="{ui:SymbolIcon Save24}"
-                                Content="{loc:Str ModLists_Save}"
+                                Content="{loc:Str Common_Save}"
                                 ToolTip="{loc:Str ModLists_SaveToolTip}"
                                 Visibility="{Binding HasUnsavedChanges, Converter={StaticResource BoolToVis}}"
                                 Command="{Binding SaveCommand}" />

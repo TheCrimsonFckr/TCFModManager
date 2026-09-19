@@ -12,6 +12,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     Title="Configs"
     Loaded="ConfigsPage_Loaded"
     ScrollViewer.CanContentScroll="False">
@@ -44,7 +45,7 @@
         <DockPanel Grid.Row="1" Margin="0,0,0,12">
             <ui:Button
                 DockPanel.Dock="Right"
-                Content="Rescan"
+                Content="{loc:Str Common_Rescan}"
                 Icon="{ui:SymbolIcon ArrowSync24}"
                 Command="{Binding ScanCommand}" />
 
@@ -84,7 +85,7 @@
                 <ui:TextBox
                     Grid.Row="0"
                     Margin="0,0,0,8"
-                    PlaceholderText="Search mods and files..."
+                    PlaceholderText="{loc:Str Configs_SearchPlaceholder}"
                     Icon="{ui:SymbolIcon Search24}"
                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -101,7 +102,7 @@
                     VerticalAlignment="Top"
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                    Text="Nothing matches. Note that plenty of plugins only write a config the first time the game runs."
+                    Text="{loc:Str Configs_NoMatches}"
                     Visibility="{Binding HasResults, Converter={StaticResource FalseToVisible}}" />
 
                 <ScrollViewer
@@ -247,7 +248,7 @@
                     TextAlignment="Center"
                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                     MaxWidth="380"
-                    Text="Pick a config file on the left to edit it."
+                    Text="{loc:Str Configs_EmptyState}"
                     Visibility="{Binding HasSelection, Converter={StaticResource FalseToVisible}}" />
 
                 <Grid Visibility="{Binding HasSelection, Converter={StaticResource BoolToVis}}">
@@ -262,14 +263,14 @@
                         <ui:Button
                             DockPanel.Dock="Right"
                             Padding="8,6"
-                            ToolTip="Show this file in Explorer"
+                            ToolTip="{loc:Str Configs_ShowInExplorerToolTip}"
                             Icon="{ui:SymbolIcon FolderOpen24}"
                             Command="{Binding OpenFolderCommand}" />
                         <ui:Button
                             DockPanel.Dock="Right"
                             Margin="0,0,8,0"
                             Padding="8,6"
-                            ToolTip="Copy the full path"
+                            ToolTip="{loc:Str Configs_CopyPathToolTip}"
                             Icon="{ui:SymbolIcon Copy24}"
                             Command="{Binding CopyPathCommand}" />
 
@@ -323,13 +324,13 @@
                                     VerticalAlignment="Center"
                                     Margin="0,0,8,0"
                                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                    Text="When this mod updates:" />
+                                    Text="{loc:Str Configs_UpdatePolicyLabel}" />
 
                                 <ComboBox
                                     MinWidth="190"
                                     ItemsSource="{Binding PolicyOptions}"
                                     SelectedItem="{Binding SelectedPolicyOption}"
-                                    ToolTip="Applies to every config file of this mod, and is remembered in Data\mod_configs.json." />
+                                    ToolTip="{loc:Str Configs_UpdatePolicyToolTip}" />
                             </StackPanel>
 
                             <TextBlock
@@ -371,7 +372,7 @@
                                                     MinWidth="0"
                                                     MinHeight="0"
                                                     Appearance="Transparent"
-                                                    ToolTip="Stop treating it this way"
+                                                    ToolTip="{loc:Str Configs_StopTreatingToolTip}"
                                                     Command="{Binding DataContext.RemoveLocationCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                                                     CommandParameter="{Binding}">
                                                     <ui:SymbolIcon Symbol="Dismiss24" FontSize="11" />
@@ -385,23 +386,23 @@
                             <WrapPanel Margin="0,4,0,0">
                                 <ui:Button
                                     Margin="0,0,8,4"
-                                    Content="Files I authored..."
+                                    Content="{loc:Str Configs_AuthoredFiles}"
                                     Icon="{ui:SymbolIcon FolderAdd24}"
-                                    ToolTip="A folder inside this mod holding files you wrote - presets, for instance. An update leaves it exactly as it is, and removing the mod keeps it."
+                                    ToolTip="{loc:Str Configs_AuthoredFilesToolTip}"
                                     Command="{Binding AddUserDataFolderCommand}" />
 
                                 <ui:Button
                                     Margin="0,0,8,4"
-                                    Content="Settings kept elsewhere..."
+                                    Content="{loc:Str Configs_SettingsElsewhere}"
                                     Icon="{ui:SymbolIcon DocumentAdd24}"
-                                    ToolTip="A settings file this mod keeps somewhere nothing would look for one, so updates carry your changes into it."
+                                    ToolTip="{loc:Str Configs_SettingsElsewhereToolTip}"
                                     Command="{Binding AddSettingsFileCommand}" />
 
                                 <ui:Button
                                     Margin="0,0,0,4"
-                                    Content="This isn't a config"
+                                    Content="{loc:Str Configs_NotAConfig}"
                                     Icon="{ui:SymbolIcon EyeOff24}"
-                                    ToolTip="Stop treating the open file as one of this mod's configs - for data that happens to sit in a folder called config."
+                                    ToolTip="{loc:Str Configs_NotAConfigToolTip}"
                                     Command="{Binding IgnoreSelectedFileCommand}" />
                             </WrapPanel>
                         </StackPanel>
@@ -438,21 +439,21 @@
                         <ui:Button
                             DockPanel.Dock="Right"
                             Appearance="Primary"
-                            Content="Save"
+                            Content="{loc:Str Common_Save}"
                             Icon="{ui:SymbolIcon Save24}"
                             Command="{Binding SaveCommand}" />
                         <ui:Button
                             DockPanel.Dock="Right"
                             Margin="0,0,8,0"
-                            Content="Revert"
+                            Content="{loc:Str Configs_Revert}"
                             Icon="{ui:SymbolIcon ArrowUndo24}"
-                            ToolTip="Put back what's on disk, discarding your changes"
+                            ToolTip="{loc:Str Configs_RevertToolTip}"
                             Command="{Binding RevertCommand}" />
 
                         <TextBlock
                             VerticalAlignment="Center"
                             Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                            Text="Unsaved changes"
+                            Text="{loc:Str Configs_UnsavedChanges}"
                             Visibility="{Binding IsDirty, Converter={StaticResource BoolToVis}}" />
                     </DockPanel>
                 </Grid>

@@ -109,7 +109,7 @@
                     <TextBlock
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         TextWrapping="Wrap"
-                        Text="{Binding InstalledVersion, Mode=OneWay, TargetNullValue={loc:Str Installed_VersionUnknown}, StringFormat={loc:Str Installed_DetailInstalledVersionFormat}}" />
+                        Text="{Binding InstalledVersion, Mode=OneWay, TargetNullValue={loc:Str Common_Unknown}, StringFormat={loc:Str Installed_DetailInstalledVersionFormat}}" />
 
                     <TextBlock
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
@@ -267,7 +267,7 @@
         <DockPanel Grid.Row="0" Margin="0,0,0,8">
             <ui:Button
                 DockPanel.Dock="Right"
-                Content="{loc:Str Installed_Rescan}"
+                Content="{loc:Str Common_Rescan}"
                 Command="{Binding ScanCommand}" />
 
             <!-- Puts the last disable/enable back. A disable only moves folders, so undoing one is

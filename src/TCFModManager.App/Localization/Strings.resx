@@ -6,7 +6,7 @@
     out-of-date translation is a partly-English app rather than a blank one.
 
     Keys are Page_Thing, underscored, one flat file: the key name is what a C# call site
-    (Strings.Installed_Rescan) and a XAML binding ({loc:Str Installed_Rescan}) both spell, and the
+    (Strings.Common_Rescan) and a XAML binding ({loc:Str Common_Rescan}) both spell, and the
     generated accessor turns a dot into an underscore anyway.
 
     Edit translations with ResXResourceManager's standalone build rather than by hand - it shows
@@ -112,6 +112,24 @@
     <value>{0:N0} downloads</value>
     <comment>{0} is a download count. Keep the :N0 - it is what groups the thousands the way the user's Windows regional setting does.</comment>
   </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>Close</value>
+    <comment>Tooltip on the mod details dialog's close button.</comment>
+  </data>
+  <data name="Common_ViewModPage" xml:space="preserve">
+    <value>View mod page</value>
+  </data>
+  <data name="Common_Unknown" xml:space="preserve">
+    <value>unknown</value>
+    <comment>Stands in for a version that could not be determined. Appears mid-sentence in Installed_DetailInstalledVersionFormat, so it is lower case in English.</comment>
+  </data>
+  <data name="Common_Rescan" xml:space="preserve">
+    <value>Rescan</value>
+    <comment>Button label - reads the install folder again.</comment>
+  </data>
+  <data name="Common_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
   <data name="Common_SearchPlaceholder" xml:space="preserve">
     <value>Search mods... (@author for author)</value>
     <comment>Placeholder in the search box. "@author" is typed syntax, not a word - leave it as it is and translate only the sentence around it.</comment>
@@ -140,13 +158,6 @@
   <data name="Dependencies_Refresh" xml:space="preserve">
     <value>Refresh</value>
     <comment>Button label - re-runs the dependency scan.</comment>
-  </data>
-  <data name="ModDetails_Close" xml:space="preserve">
-    <value>Close</value>
-    <comment>Tooltip on the mod details dialog's close button.</comment>
-  </data>
-  <data name="ModDetails_ViewModPage" xml:space="preserve">
-    <value>View mod page</value>
   </data>
   <data name="ModDetails_CategoryFormat" xml:space="preserve">
     <value>Category: {0}</value>
@@ -222,10 +233,6 @@
   </data>
   <data name="Browse_FirstLaunchNote" xml:space="preserve">
     <value>The first launch downloads the mod catalog. After that it's read from disk and this is over in a moment.</value>
-  </data>
-  <data name="Installed_Rescan" xml:space="preserve">
-    <value>Rescan</value>
-    <comment>Button label - reads the install folder again.</comment>
   </data>
   <data name="Installed_MultiSelect" xml:space="preserve">
     <value>Multi select</value>
@@ -325,11 +332,7 @@
   </data>
   <data name="Installed_DetailInstalledVersionFormat" xml:space="preserve">
     <value>Installed version: {0}</value>
-    <comment>{0} is a version number, or the Installed_VersionUnknown word when there is none.</comment>
-  </data>
-  <data name="Installed_VersionUnknown" xml:space="preserve">
-    <value>unknown</value>
-    <comment>Stands in for a version that could not be determined. Appears mid-sentence in Installed_DetailInstalledVersionFormat, so it is lower case in English.</comment>
+    <comment>{0} is a version number, or the Common_Unknown word when there is none.</comment>
   </data>
   <data name="Installed_DetailLatestPublishedFormat" xml:space="preserve">
     <value>Latest published: {0}</value>
@@ -526,9 +529,6 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="ModLists_RefreshVersionsToolTip" xml:space="preserve">
     <value>Reads the version of every mod on this list that is installed here, and updates the list to match. Scope is left alone, and mods you don't have are left as written. Nothing is downloaded or installed - Save keeps the changes.</value>
   </data>
-  <data name="ModLists_Save" xml:space="preserve">
-    <value>Save</value>
-  </data>
   <data name="ModLists_SaveToolTip" xml:space="preserve">
     <value>Write these changes to the list. Nothing is installed, enabled or disabled - Apply does that.</value>
   </data>
@@ -594,9 +594,6 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="Options_BrowseEllipsis" xml:space="preserve">
     <value>Browse...</value>
     <comment>Button that opens a folder picker.</comment>
-  </data>
-  <data name="Options_SaveInstallPath" xml:space="preserve">
-    <value>Save</value>
   </data>
   <data name="Options_MachineRoleHeader" xml:space="preserve">
     <value>What this machine is</value>
@@ -778,5 +775,246 @@ A mod list records which mods to install and enable. Applying one downloads what
   </data>
   <data name="Options_DataFiles" xml:space="preserve">
     <value>Data files...</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>Dismisses a confirmation on the Play page, and cancels a download on the Downloads page.</comment>
+  </data>
+  <data name="ModUpdate_CurrentlyInstalledFormat" xml:space="preserve">
+    <value>Currently installed: {0}</value>
+    <comment>{0} is a version number, or the Common_Unknown word when the app cannot tell.</comment>
+  </data>
+  <data name="ModUpdate_Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="ModUpdate_Downgrade" xml:space="preserve">
+    <value>Downgrade</value>
+  </data>
+  <data name="ModUpdate_DowngradeToolTip" xml:space="preserve">
+    <value>Install this older version in place of the one you have. Asks first - an older build may not read config or profile data the newer one wrote.</value>
+  </data>
+  <data name="ModUpdate_Redownload" xml:space="preserve">
+    <value>Redownload</value>
+  </data>
+  <data name="ModUpdate_MarkUpToDate" xml:space="preserve">
+    <value>Mark up to date</value>
+  </data>
+  <data name="ModUpdate_MarkUpToDateToolTip" xml:space="preserve">
+    <value>Record the newest published version as installed, without downloading anything</value>
+  </data>
+  <data name="ModUpdate_ConfirmAsInstalled" xml:space="preserve">
+    <value>Confirm as installed</value>
+  </data>
+  <data name="ModUpdate_ConfirmAsInstalledToolTip" xml:space="preserve">
+    <value>Record the version selected below as installed, without downloading anything</value>
+  </data>
+  <data name="ModUpdate_ClearOverride" xml:space="preserve">
+    <value>Clear override</value>
+  </data>
+  <data name="ModUpdate_ClearOverrideToolTip" xml:space="preserve">
+    <value>Go back to auto-detecting this mod's version from the files on disk</value>
+  </data>
+  <data name="ModUpdate_Set" xml:space="preserve">
+    <value>Set</value>
+    <comment>Button beside the manual version box - records what was typed.</comment>
+  </data>
+  <data name="ModUpdate_ManualVersionPlaceholder" xml:space="preserve">
+    <value>Manually set the installed version (e.g. 1.4.2)...</value>
+    <comment>1.4.2 is an example version number.</comment>
+  </data>
+  <data name="ModUpdate_LoadingVersions" xml:space="preserve">
+    <value>Loading versions...</value>
+  </data>
+  <data name="ModUpdate_ShowAll" xml:space="preserve">
+    <value>Show all</value>
+  </data>
+  <data name="ModUpdate_ShowAllToolTip" xml:space="preserve">
+    <value>Include versions built for other SPT releases. They are hidden by default because you cannot use them on the SPT version you have.</value>
+  </data>
+  <data name="ModUpdate_PublishedFormat" xml:space="preserve">
+    <value>Published: {0:d}</value>
+    <comment>{0} is a date, or the Common_Unknown word. Keep the :d - it prints the date the way the user's regional setting does.</comment>
+  </data>
+  <data name="ModUpdate_BadgeLatest" xml:space="preserve">
+    <value>Latest</value>
+    <comment>Badge on the newest published version. Short: it sits in a small chip.</comment>
+  </data>
+  <data name="ModUpdate_BadgeInstalled" xml:space="preserve">
+    <value>Installed</value>
+    <comment>Badge on the version currently on disk.</comment>
+  </data>
+  <data name="ModUpdate_TargetsSptFormat" xml:space="preserve">
+    <value>Targets SPT: {0}</value>
+    <comment>{0} is an SPT version or range, e.g. "3.10.x".</comment>
+  </data>
+  <data name="Play_CheckAgain" xml:space="preserve">
+    <value>Check again</value>
+  </data>
+  <data name="Play_ServerHeader" xml:space="preserve">
+    <value>SPT server</value>
+  </data>
+  <data name="Play_ServerDescription" xml:space="preserve">
+    <value>Starts this install's server and leaves it running in its own console window. It keeps running if you close this app. Restart stops it and starts it again - for a config edited or a server mod dropped in - and nothing here will stop it for good; close its window when you're done.</value>
+    <comment>Restart is the button named in Play_Restart - translate it the same way.</comment>
+  </data>
+  <data name="Play_StartServer" xml:space="preserve">
+    <value>Start server</value>
+  </data>
+  <data name="Play_Restart" xml:space="preserve">
+    <value>Restart</value>
+    <comment>One button label used twice on this page: restarting the server, and restarting the headless launcher.</comment>
+  </data>
+  <data name="Play_RestartServerToolTip" xml:space="preserve">
+    <value>Stops this install's server and starts it again. Only this install's - a second SPT server on another folder is left alone.</value>
+  </data>
+  <data name="Play_RestartServerWarning" xml:space="preserve">
+    <value>Restarting the server ends any raid running on it. Anyone in one is dropped.</value>
+  </data>
+  <data name="Play_RestartServerConfirm" xml:space="preserve">
+    <value>Restart the server</value>
+    <comment>Confirms the warning above it.</comment>
+  </data>
+  <data name="Play_LauncherHeader" xml:space="preserve">
+    <value>Game launcher</value>
+  </data>
+  <data name="Play_LauncherDescription" xml:space="preserve">
+    <value>Opens SPT.Launcher.exe, where you pick a profile and start the game. Start the server first - the launcher has nothing to log in to without it.</value>
+    <comment>SPT.Launcher.exe is a file name and stays as it is.</comment>
+  </data>
+  <data name="Play_OpenLauncher" xml:space="preserve">
+    <value>Open launcher</value>
+  </data>
+  <data name="Play_HeadlessHeader" xml:space="preserve">
+    <value>Fika headless client</value>
+    <comment>Fika is a mod's name and stays as it is.</comment>
+  </data>
+  <data name="Play_HeadlessDescription" xml:space="preserve">
+    <value>This install has a Fika headless launcher, which only appears on a setup running a headless client. It hosts raids for other players rather than being the one you play on - start the server first, same as the game launcher.</value>
+  </data>
+  <data name="Play_OpenHeadless" xml:space="preserve">
+    <value>Open headless launcher</value>
+  </data>
+  <data name="Play_RestartHeadlessToolTip" xml:space="preserve">
+    <value>Stops the headless launcher and starts it again. It does not touch the server, and it does not close a game the launcher had already started.</value>
+  </data>
+  <data name="Play_RestartHeadlessWarning" xml:space="preserve">
+    <value>Restarting the headless ends any raid it is hosting. The server is left running, and a game this launcher already started is left alone - close that yourself if it needs to go too.</value>
+  </data>
+  <data name="Play_RestartHeadlessConfirm" xml:space="preserve">
+    <value>Restart the headless</value>
+  </data>
+  <data name="Configs_SearchPlaceholder" xml:space="preserve">
+    <value>Search mods and files...</value>
+  </data>
+  <data name="Configs_NoMatches" xml:space="preserve">
+    <value>Nothing matches. Note that plenty of plugins only write a config the first time the game runs.</value>
+  </data>
+  <data name="Configs_EmptyState" xml:space="preserve">
+    <value>Pick a config file on the left to edit it.</value>
+  </data>
+  <data name="Configs_ShowInExplorerToolTip" xml:space="preserve">
+    <value>Show this file in Explorer</value>
+    <comment>Explorer is the Windows file manager - use whatever Windows calls it in your language.</comment>
+  </data>
+  <data name="Configs_CopyPathToolTip" xml:space="preserve">
+    <value>Copy the full path</value>
+  </data>
+  <data name="Configs_UpdatePolicyLabel" xml:space="preserve">
+    <value>When this mod updates:</value>
+    <comment>Label to the left of a dropdown.</comment>
+  </data>
+  <data name="Configs_UpdatePolicyToolTip" xml:space="preserve">
+    <value>Applies to every config file of this mod, and is remembered in Data\mod_configs.json.</value>
+    <comment>Data\mod_configs.json is a file name - leave it exactly as it is.</comment>
+  </data>
+  <data name="Configs_StopTreatingToolTip" xml:space="preserve">
+    <value>Stop treating it this way</value>
+  </data>
+  <data name="Configs_AuthoredFiles" xml:space="preserve">
+    <value>Files I authored...</value>
+  </data>
+  <data name="Configs_AuthoredFilesToolTip" xml:space="preserve">
+    <value>A folder inside this mod holding files you wrote - presets, for instance. An update leaves it exactly as it is, and removing the mod keeps it.</value>
+  </data>
+  <data name="Configs_SettingsElsewhere" xml:space="preserve">
+    <value>Settings kept elsewhere...</value>
+  </data>
+  <data name="Configs_SettingsElsewhereToolTip" xml:space="preserve">
+    <value>A settings file this mod keeps somewhere nothing would look for one, so updates carry your changes into it.</value>
+  </data>
+  <data name="Configs_NotAConfig" xml:space="preserve">
+    <value>This isn't a config</value>
+  </data>
+  <data name="Configs_NotAConfigToolTip" xml:space="preserve">
+    <value>Stop treating the open file as one of this mod's configs - for data that happens to sit in a folder called config.</value>
+    <comment>The folder is literally named "config" on disk - that word is a folder name here, not a description.</comment>
+  </data>
+  <data name="Configs_Revert" xml:space="preserve">
+    <value>Revert</value>
+  </data>
+  <data name="Configs_RevertToolTip" xml:space="preserve">
+    <value>Put back what's on disk, discarding your changes</value>
+  </data>
+  <data name="Configs_UnsavedChanges" xml:space="preserve">
+    <value>Unsaved changes</value>
+  </data>
+  <data name="Downloads_ClearFinished" xml:space="preserve">
+    <value>Clear finished</value>
+  </data>
+  <data name="Downloads_RetryFailed" xml:space="preserve">
+    <value>Retry failed</value>
+    <comment>Button label - puts every failed download back on the queue.</comment>
+  </data>
+  <data name="Downloads_RetryFailedToolTip" xml:space="preserve">
+    <value>Put every failed or cancelled download back on the queue.</value>
+  </data>
+  <data name="Downloads_Description" xml:space="preserve">
+    <value>Downloads install strictly one at a time, in the order you queued them - queue as many as you like from Browse or an update dialog and check back here for progress.</value>
+    <comment>Browse is the page name, as in the sidebar.</comment>
+  </data>
+  <data name="Downloads_StatQueue" xml:space="preserve">
+    <value>Queue</value>
+    <comment>Heading on a small statistics box. Keep it short - the box is a fixed width.</comment>
+  </data>
+  <data name="Downloads_StatLeftToFetch" xml:space="preserve">
+    <value>Left to fetch</value>
+    <comment>Heading on a small statistics box: how many bytes are still to come. Keep it short.</comment>
+  </data>
+  <data name="Downloads_StatTimeToGo" xml:space="preserve">
+    <value>Time to go</value>
+    <comment>Heading on a small statistics box: the estimate for the whole queue. Keep it short.</comment>
+  </data>
+  <data name="Downloads_NotSizedYet" xml:space="preserve">
+    <value>Not sized yet</value>
+    <comment>Shown in place of an estimate before any size is known.</comment>
+  </data>
+  <data name="Downloads_Empty" xml:space="preserve">
+    <value>Nothing queued yet - click Install on a Browse card, or Update in a mod's details dialog, to add something here.</value>
+    <comment>Install and Update are buttons elsewhere in the app - translate them as they are translated there.</comment>
+  </data>
+  <data name="Downloads_AddonTag" xml:space="preserve">
+    <value>Addon</value>
+    <comment>Marks a queued item as an addon rather than a mod.</comment>
+  </data>
+  <data name="Downloads_StatDownloaded" xml:space="preserve">
+    <value>Downloaded</value>
+    <comment>Heading on a small statistics box on one download's row. Keep it short.</comment>
+  </data>
+  <data name="Downloads_StatSpeed" xml:space="preserve">
+    <value>Speed</value>
+    <comment>Heading on a small statistics box. Keep it short.</comment>
+  </data>
+  <data name="Downloads_StatTimeLeft" xml:space="preserve">
+    <value>Time left</value>
+    <comment>Heading on a small statistics box. Keep it short.</comment>
+  </data>
+  <data name="Downloads_CancelToolTip" xml:space="preserve">
+    <value>Cancel this download and any dependencies it queued.</value>
+  </data>
+  <data name="Downloads_Retry" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="Downloads_RetryToolTip" xml:space="preserve">
+    <value>Put this back on the end of the queue and try again. Nothing else is re-downloaded.</value>
   </data>
 </root>

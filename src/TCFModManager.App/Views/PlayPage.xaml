@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:app="clr-namespace:TCFModManager.App"
     Title="Play">
@@ -65,7 +66,7 @@
                 <ui:Button
                     Margin="0,12,0,0"
                     HorizontalAlignment="Left"
-                    Content="Check again"
+                    Content="{loc:Str Play_CheckAgain}"
                     Icon="{ui:SymbolIcon ArrowSync24}"
                     Command="{Binding CheckCommand}" />
             </StackPanel>
@@ -74,7 +75,7 @@
         <ui:Card Padding="16" VerticalAlignment="Top">
             <StackPanel>
                 <TextBlock
-                    Text="SPT server"
+                    Text="{loc:Str Play_ServerHeader}"
                     FontWeight="SemiBold"
                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     Margin="0,0,0,4" />
@@ -82,20 +83,20 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="Starts this install's server and leaves it running in its own console window. It keeps running if you close this app. Restart stops it and starts it again - for a config edited or a server mod dropped in - and nothing here will stop it for good; close its window when you're done." />
+                    Text="{loc:Str Play_ServerDescription}" />
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                     <ui:Button
                         Appearance="Primary"
-                        Content="Start server"
+                        Content="{loc:Str Play_StartServer}"
                         Icon="{ui:SymbolIcon Play24}"
                         IsEnabled="{Binding CanStartServer}"
                         Command="{Binding StartServerCommand}" />
                     <ui:Button
                         Margin="8,0,0,0"
-                        Content="Restart"
+                        Content="{loc:Str Play_Restart}"
                         Icon="{ui:SymbolIcon ArrowSync24}"
-                        ToolTip="Stops this install's server and starts it again. Only this install's - a second SPT server on another folder is left alone."
+                        ToolTip="{loc:Str Play_RestartServerToolTip}"
                         Command="{Binding AskRestartServerCommand}" />
                     <TextBlock
                         VerticalAlignment="Center"
@@ -114,17 +115,17 @@
                         TextWrapping="Wrap"
                         Margin="0,0,0,8"
                         Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                        Text="Restarting the server ends any raid running on it. Anyone in one is dropped." />
+                        Text="{loc:Str Play_RestartServerWarning}" />
                     <StackPanel Orientation="Horizontal">
                         <ui:Button
                             Appearance="Danger"
-                            Content="Restart the server"
+                            Content="{loc:Str Play_RestartServerConfirm}"
                             Icon="{ui:SymbolIcon ArrowSync24}"
                             Command="{Binding ConfirmRestartCommand}" />
                         <ui:Button
                             Margin="8,0,0,0"
                             Appearance="Transparent"
-                            Content="Cancel"
+                            Content="{loc:Str Common_Cancel}"
                             Command="{Binding CancelRestartCommand}" />
                     </StackPanel>
                 </StackPanel>
@@ -139,7 +140,7 @@
         <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
             <StackPanel>
                 <TextBlock
-                    Text="Game launcher"
+                    Text="{loc:Str Play_LauncherHeader}"
                     FontWeight="SemiBold"
                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     Margin="0,0,0,4" />
@@ -147,12 +148,12 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="Opens SPT.Launcher.exe, where you pick a profile and start the game. Start the server first - the launcher has nothing to log in to without it." />
+                    Text="{loc:Str Play_LauncherDescription}" />
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                     <ui:Button
                         Appearance="Primary"
-                        Content="Open launcher"
+                        Content="{loc:Str Play_OpenLauncher}"
                         Icon="{ui:SymbolIcon Play24}"
                         IsEnabled="{Binding CanStartClient}"
                         Command="{Binding StartClientCommand}" />
@@ -181,7 +182,7 @@
             Visibility="{Binding HasHeadless, Converter={StaticResource BoolToVisibility}}">
             <StackPanel>
                 <TextBlock
-                    Text="Fika headless client"
+                    Text="{loc:Str Play_HeadlessHeader}"
                     FontWeight="SemiBold"
                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     Margin="0,0,0,4" />
@@ -189,19 +190,19 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="This install has a Fika headless launcher, which only appears on a setup running a headless client. It hosts raids for other players rather than being the one you play on - start the server first, same as the game launcher." />
+                    Text="{loc:Str Play_HeadlessDescription}" />
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                     <ui:Button
-                        Content="Open headless launcher"
+                        Content="{loc:Str Play_OpenHeadless}"
                         Icon="{ui:SymbolIcon Play24}"
                         IsEnabled="{Binding CanStartHeadless}"
                         Command="{Binding StartHeadlessCommand}" />
                     <ui:Button
                         Margin="8,0,0,0"
-                        Content="Restart"
+                        Content="{loc:Str Play_Restart}"
                         Icon="{ui:SymbolIcon ArrowSync24}"
-                        ToolTip="Stops the headless launcher and starts it again. It does not touch the server, and it does not close a game the launcher had already started."
+                        ToolTip="{loc:Str Play_RestartHeadlessToolTip}"
                         Command="{Binding AskRestartHeadlessCommand}" />
                     <TextBlock
                         VerticalAlignment="Center"
@@ -218,17 +219,17 @@
                         TextWrapping="Wrap"
                         Margin="0,0,0,8"
                         Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                        Text="Restarting the headless ends any raid it is hosting. The server is left running, and a game this launcher already started is left alone - close that yourself if it needs to go too." />
+                        Text="{loc:Str Play_RestartHeadlessWarning}" />
                     <StackPanel Orientation="Horizontal">
                         <ui:Button
                             Appearance="Danger"
-                            Content="Restart the headless"
+                            Content="{loc:Str Play_RestartHeadlessConfirm}"
                             Icon="{ui:SymbolIcon ArrowSync24}"
                             Command="{Binding ConfirmRestartCommand}" />
                         <ui:Button
                             Margin="8,0,0,0"
                             Appearance="Transparent"
-                            Content="Cancel"
+                            Content="{loc:Str Common_Cancel}"
                             Command="{Binding CancelRestartCommand}" />
                     </StackPanel>
                 </StackPanel>

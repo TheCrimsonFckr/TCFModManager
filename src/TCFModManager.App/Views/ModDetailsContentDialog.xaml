@@ -45,7 +45,7 @@
                     CommandParameter="{x:Static ui:ContentDialogButton.Close}"
                     Icon="{ui:SymbolIcon Dismiss24}"
                     IsCancel="True"
-                    ToolTip="{loc:Str ModDetails_Close}" />
+                    ToolTip="{loc:Str Common_Close}" />
             </Grid>
         </DataTemplate>
     </ui:ContentDialog.TitleTemplate>
@@ -85,7 +85,7 @@
             <ui:Button
                 Margin="0,12,0,0"
                 HorizontalAlignment="Left"
-                Content="{loc:Str ModDetails_ViewModPage}"
+                Content="{loc:Str Common_ViewModPage}"
                 Icon="{ui:SymbolIcon Open24}"
                 Click="ViewModPageButton_Click" />
 
