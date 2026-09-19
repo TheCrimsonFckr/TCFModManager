@@ -1414,7 +1414,7 @@ public partial class ModListsViewModel : ObservableObject
         var dialog = new SaveFileDialog
         {
             Title = "Share this mod list",
-            Filter = ModListFile.FileFilter,
+            Filter = ModListFileDialog.Filter,
             FileName = ModListFile.SuggestedFileName(row.List),
             AddExtension = true,
             DefaultExt = ModListFile.Extension,
@@ -1439,7 +1439,7 @@ public partial class ModListsViewModel : ObservableObject
         var dialog = new OpenFileDialog
         {
             Title = "Open a shared mod list",
-            Filter = ModListFile.FileFilter,
+            Filter = ModListFileDialog.Filter,
             CheckFileExists = true,
         };
 

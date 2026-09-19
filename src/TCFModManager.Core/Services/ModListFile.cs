@@ -115,7 +115,13 @@ public static class ModListFile
     // and so a double-click means something.
     public const string Extension = ".tcfmodlist";
 
-    public const string FileFilter = "TCF mod list (*.tcfmodlist)|*.tcfmodlist|All files (*.*)|*.*";
+    //
+    // What a file dialog matches on. The names shown beside these are the App's - see
+    // ModListFileDialog - because half of a filter string is a pattern and half is prose.
+    //
+    public const string FilePattern = "*" + Extension;
+
+    public const string AllFilesPattern = "*.*";
 
     private static readonly JsonSerializerOptions Options = new()
     {

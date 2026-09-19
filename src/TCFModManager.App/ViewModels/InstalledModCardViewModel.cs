@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -398,7 +399,7 @@ public sealed partial class InstalledModCardViewModel : ObservableObject
                 ? "Partly disabled - some of this mod's folders are disabled and some aren't"
                 : UpdateAvailable == true && !IsDisabled && LatestPublishedVersion is not null
                     ? $"Update available - {LatestPublishedVersion}"
-                    : ModStatusDisplay.Tooltip(Status));
+                    : ModStatusWording.Tooltip(Status));
 
     // Groups raw scan results into one card per distinct mod and looks up each against the cached
     // catalog for its latest published version.

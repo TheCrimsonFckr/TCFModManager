@@ -29,8 +29,8 @@ public enum ModStatus
     Disabled,
 }
 
-// The icon and wording for a <see cref="ModStatus"/>, kept in one place so the pages
-// can't drift apart.
+// The icon for a <see cref="ModStatus"/>, kept in one place so the pages can't drift apart.
+// The sentence that goes with it is the App's - see ModStatusWording.
 public static class ModStatusDisplay
 {
     // Fluent icon name, matching a SymbolRegular member in the WPF-UI build in use.
@@ -43,17 +43,5 @@ public static class ModStatusDisplay
         ModStatus.Unknown => "QuestionCircle24",
         ModStatus.Disabled => "PlugDisconnected24",
         _ => "ErrorCircle24",
-    };
-
-    // Short tooltip describing the status on its own.
-    public static string Tooltip(ModStatus status) => status switch
-    {
-        ModStatus.Installed => "Installed - up to date",
-        ModStatus.UpdateAvailable => "Installed - update available",
-        ModStatus.NotInstalled => "Not installed",
-        ModStatus.NoCompatibleVersion => "No version compatible with your SPT",
-        ModStatus.Unknown => "Installed - update status unknown",
-        ModStatus.Disabled => "Disabled - installed, but not loaded by SPT",
-        _ => "Conflict - two mods need incompatible versions",
     };
 }

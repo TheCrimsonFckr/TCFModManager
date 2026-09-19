@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -88,7 +89,7 @@ public sealed partial class ModCardViewModel : ObservableObject
 
     public string StatusGlyph => ModStatusDisplay.Glyph(Status);
 
-    public string StatusTooltip => ModStatusDisplay.Tooltip(Status);
+    public string StatusTooltip => ModStatusWording.Tooltip(Status);
 
     // Only meaningful when IsInstalled is true. True if a compatible newer version is published, false if up to date, null if unknown.
     public bool? UpdateAvailable { get; private init; }
