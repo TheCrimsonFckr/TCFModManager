@@ -56,26 +56,51 @@
   </ItemGroup>
 
   <!--
-    Generates the Strings accessor from Localization\Strings.resx on every build, so a C# call site
-    reads Strings.Installed_Rescan and the compiler catches a key that no longer exists.
+    Generates the Strings accessor from Localization\Strings.resx before anything is compiled, so a
+    C# call site reads Strings.Installed_Rescan and the compiler catches a key that no longer exists.
 
-    MSBuild does the generating, not Visual Studio's ResXFileCodeGenerator: this repo is built from
-    the command line and edited in VS Code, and a designer file only a VS custom tool regenerates
-    goes stale the moment someone adds a key without opening the IDE. The generated file lands in
-    obj\ and is compiled in from there - nothing to commit and nothing to keep in step.
+    Hand-rolled rather than the SDK's own StronglyTypedFileName metadata, which cannot work in a WPF
+    project: the SDK generates during PrepareResources, and PrepareResources depends on
+    MarkupCompilePass1 - which builds a temporary project out of every C# file in this one. The
+    accessor therefore does not exist yet the first time the code using it is compiled. Verified on
+    9.0.318: the SDK route fails with "The name 'Strings' does not exist in the current context" in
+    the _wpftmp project, whichever folder it is told to generate into.
 
-    A translation needs no entry here. Strings.<tag>.resx is picked up by the SDK's own glob and
+    Strings.Designer.cs is committed for a related reason. MSBuild settles which files it is
+    compiling before any target runs, so a clone with nothing on disk fails its first build even
+    though this target would have written the file a moment later. It is rewritten only when the
+    resx changes, which means it appears in git status exactly when a key is added or removed.
+
+    A translation needs nothing here: Strings.<tag>.resx is picked up by the SDK's own glob and
     compiled into a satellite assembly, which is what keeps adding a language a data change.
   -->
-  <ItemGroup>
-    <EmbeddedResource Update="Localization\Strings.resx">
-      <Generator>MSBuild:Compile</Generator>
-      <StronglyTypedFileName>$(IntermediateOutputPath)Strings.Designer.cs</StronglyTypedFileName>
-      <StronglyTypedLanguage>CSharp</StronglyTypedLanguage>
-      <StronglyTypedNamespace>TCFModManager.App.Localization</StronglyTypedNamespace>
-      <StronglyTypedClassName>Strings</StronglyTypedClassName>
-    </EmbeddedResource>
-  </ItemGroup>
+  <PropertyGroup>
+    <StringsResx>$(MSBuildProjectDirectory)\Localization\Strings.resx</StringsResx>
+    <StringsAccessor>$(MSBuildProjectDirectory)\Localization\Strings.Designer.cs</StringsAccessor>
+  </PropertyGroup>
+
+  <Target Name="GenerateStringsAccessor"
+          BeforeTargets="MarkupCompilePass1;BeforeCompile"
+          Inputs="$(StringsResx)"
+          Outputs="$(StringsAccessor)">
+    <XmlPeek XmlInputPath="$(StringsResx)" Query="/root/data/@name">
+      <Output TaskParameter="Result" ItemName="_StringsKey" />
+    </XmlPeek>
+    <ItemGroup>
+      <_StringsLine Include="// &lt;auto-generated&gt;" />
+      <_StringsLine Include="//     Generated from Localization\Strings.resx by GenerateStringsAccessor in" />
+      <_StringsLine Include="//     TCFModManager.App.csproj. Edits are overwritten by the next build." />
+      <_StringsLine Include="// &lt;/auto-generated&gt;" />
+      <_StringsLine Include="%0Anamespace TCFModManager.App.Localization%3B" />
+      <_StringsLine Include="%0Ainternal static class Strings" />
+      <_StringsLine Include="{" />
+      <_StringsLine Include="%20%20%20%20internal static System.Resources.ResourceManager ResourceManager { get%3B } = new(" />
+      <_StringsLine Include="%20%20%20%20%20%20%20%20&quot;TCFModManager.App.Localization.Strings&quot;, typeof(Strings).Assembly)%3B" />
+      <_StringsLine Include="@(_StringsKey->'%0A%20%20%20%20internal static string %(Identity) =&gt; LocalizationService.Get(&quot;%(Identity)&quot;)%3B', '')" />
+      <_StringsLine Include="}" />
+    </ItemGroup>
+    <WriteLinesToFile File="$(StringsAccessor)" Lines="@(_StringsLine)" Overwrite="true" WriteOnlyWhenDifferent="true" />
+  </Target>
 
   <ItemGroup>
     <ProjectReference Include="..\TCFModManager.Core\TCFModManager.Core.csproj" />
