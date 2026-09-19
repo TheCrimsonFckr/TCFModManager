@@ -49,7 +49,7 @@
                             Margin="0,2,4,0"
                             Padding="6,1"
                             CornerRadius="3"
-                            ToolTip="This mod is in this mod list"
+                            ToolTip="{loc:Str Installed_ListChipToolTip}"
                             Background="{DynamicResource ControlFillColorSecondaryBrush}">
                             <TextBlock
                                 Text="{Binding}"
@@ -97,42 +97,34 @@
                     <TextBlock
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         TextWrapping="Wrap"
-                        Visibility="{Binding FolderNameIfDifferent, Converter={StaticResource NullToCollapsed}}">
-                        <Run Text="Installed as: " />
-                        <Run Text="{Binding FolderNameIfDifferent, Mode=OneWay}" />
-                    </TextBlock>
+                        Text="{Binding FolderNameIfDifferent, Mode=OneWay, StringFormat={loc:Str Installed_DetailInstalledAsFormat}}"
+                        Visibility="{Binding FolderNameIfDifferent, Converter={StaticResource NullToCollapsed}}" />
 
                     <TextBlock
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         TextWrapping="Wrap"
-                        Visibility="{Binding Guid, Converter={StaticResource NullToCollapsed}}">
-                        <Run Text="GUID: " />
-                        <Run Text="{Binding Guid, Mode=OneWay}" />
-                    </TextBlock>
-
-                    <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap">
-                        <Run Text="Installed version: " />
-                        <Run Text="{Binding InstalledVersion, TargetNullValue='unknown', Mode=OneWay}" />
-                    </TextBlock>
-
-                    <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap">
-                        <Run Text="Latest published: " />
-                        <Run Text="{Binding LatestPublishedText, Mode=OneWay}" />
-                    </TextBlock>
+                        Text="{Binding Guid, Mode=OneWay, StringFormat={loc:Str Installed_DetailGuidFormat}}"
+                        Visibility="{Binding Guid, Converter={StaticResource NullToCollapsed}}" />
 
                     <TextBlock
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        Visibility="{Binding LatestUpdatedAt, Converter={StaticResource NullToCollapsed}}">
-                        <Run Text="Last updated on sp-mod.com: " />
-                        <Run Text="{Binding LatestUpdatedAt, StringFormat='{}{0:d}', Mode=OneWay}" />
-                    </TextBlock>
+                        TextWrapping="Wrap"
+                        Text="{Binding InstalledVersion, Mode=OneWay, TargetNullValue={loc:Str Installed_VersionUnknown}, StringFormat={loc:Str Installed_DetailInstalledVersionFormat}}" />
 
                     <TextBlock
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        Visibility="{Binding InstalledAt, Converter={StaticResource NullToCollapsed}}">
-                        <Run Text="Installed on: " />
-                        <Run Text="{Binding InstalledAt, StringFormat='{}{0:d}', Mode=OneWay}" />
-                    </TextBlock>
+                        TextWrapping="Wrap"
+                        Text="{Binding LatestPublishedText, Mode=OneWay, StringFormat={loc:Str Installed_DetailLatestPublishedFormat}}" />
+
+                    <TextBlock
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                        Text="{Binding LatestUpdatedAt, Mode=OneWay, StringFormat={loc:Str Installed_DetailLastUpdatedFormat}}"
+                        Visibility="{Binding LatestUpdatedAt, Converter={StaticResource NullToCollapsed}}" />
+
+                    <TextBlock
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                        Text="{Binding InstalledAt, Mode=OneWay, StringFormat={loc:Str Installed_DetailInstalledOnFormat}}"
+                        Visibility="{Binding InstalledAt, Converter={StaticResource NullToCollapsed}}" />
 
                     <!-- What the files on disk claim, shown only when they disagree with each other or
                          with the manifest. Sits under the dates because it qualifies the installed
@@ -173,7 +165,7 @@
                             Appearance="Transparent"
                             Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
                             Icon="{ui:SymbolIcon FolderOpen24}"
-                            Content="Client folder"
+                            Content="{loc:Str Installed_ClientFolder}"
                             Visibility="{Binding ClientFolderLink, Converter={StaticResource NullToCollapsed}}"
                             Command="{Binding DataContext.OpenModFolderCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                             CommandParameter="{Binding ClientFolderLink}"
@@ -186,7 +178,7 @@
                             Appearance="Transparent"
                             Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
                             Icon="{ui:SymbolIcon FolderOpen24}"
-                            Content="Server folder"
+                            Content="{loc:Str Installed_ServerFolder}"
                             Visibility="{Binding ServerFolderLink, Converter={StaticResource NullToCollapsed}}"
                             Command="{Binding DataContext.OpenModFolderCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                             CommandParameter="{Binding ServerFolderLink}"
@@ -201,22 +193,22 @@
                 <DockPanel Grid.Row="1" LastChildFill="False" Margin="0,12,0,0" VerticalAlignment="Bottom">
                     <ui:Button
                         DockPanel.Dock="Left"
-                        Content="Details and versions"
+                        Content="{loc:Str Installed_DetailsAndVersions}"
                         Icon="{ui:SymbolIcon Info24}"
                         Command="{Binding DataContext.ShowDetailsCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                         CommandParameter="{Binding}"
-                        ToolTip="Open the full version history and update dialog" />
+                        ToolTip="{loc:Str Installed_DetailsAndVersionsToolTip}" />
 
                     <ui:Button
                         DockPanel.Dock="Left"
                         Margin="8,0,0,0"
                         Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                        Content="Sort out"
+                        Content="{loc:Str Installed_SortOut}"
                         Icon="{ui:SymbolIcon Warning24}"
                         Visibility="{Binding HasDuplicateFolders, Converter={StaticResource BoolToVis}}"
                         Command="{Binding DataContext.ResolveDuplicateCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                         CommandParameter="{Binding}"
-                        ToolTip="This mod is in both an enabled and a disabled folder - pick which copy to keep" />
+                        ToolTip="{loc:Str Installed_SortOutToolTip}" />
 
                     <ui:Button
                         DockPanel.Dock="Left"
@@ -234,11 +226,11 @@
                         DockPanel.Dock="Right"
                         Margin="8,0,0,0"
                         Foreground="{DynamicResource SystemFillColorCriticalBrush}"
-                        Content="Remove"
+                        Content="{loc:Str Installed_Remove}"
                         Icon="{ui:SymbolIcon Delete24}"
                         Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                         CommandParameter="{Binding}"
-                        ToolTip="Remove this mod" />
+                        ToolTip="{loc:Str Installed_RemoveToolTip}" />
                 </DockPanel>
             </Grid>
         </DataTemplate>
@@ -738,7 +730,7 @@
                                             Margin="0,2,10,0"
                                             HorizontalAlignment="Center"
                                             Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                                            ToolTip="Pinned - no mod list you apply will set this mod aside"
+                                            ToolTip="{loc:Str Common_PinnedToolTip}"
                                             Visibility="{Binding IsPinned, Converter={StaticResource BoolToVis}}" />
                                     </StackPanel>
 
@@ -797,7 +789,7 @@
                                                 CornerRadius="3"
                                                 Background="{DynamicResource ControlFillColorSecondaryBrush}"
                                                 Visibility="{Binding IsDisabled, Converter={StaticResource BoolToVis}}">
-                                                <TextBlock Text="DISABLED" FontSize="10" FontWeight="SemiBold" />
+                                                <TextBlock Text="{loc:Str Installed_DisabledTag}" FontSize="10" FontWeight="SemiBold" />
                                             </Border>
                                         </StackPanel>
                                     </StackPanel>
@@ -868,7 +860,7 @@
                                         Visibility="{Binding IsRealGroup, Converter={StaticResource BoolToVis}}"
                                         Command="{Binding DataContext.ToggleCollapsedCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                         CommandParameter="{Binding}"
-                                        ToolTip="Expand/collapse this group">
+                                        ToolTip="{loc:Str Installed_GroupExpandToolTip}">
                                         <ui:SymbolIcon Symbol="{Binding ChevronGlyph}" FontSize="16" />
                                     </ui:Button>
 
@@ -907,21 +899,21 @@
                                             <ui:Button
                                                 Padding="4"
                                                 Appearance="Transparent"
-                                                ToolTip="Enable every mod in this group"
+                                                ToolTip="{loc:Str Installed_GroupEnableToolTip}"
                                                 Command="{Binding DataContext.EnableGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                 CommandParameter="{Binding}"
                                                 Icon="{ui:SymbolIcon PlugConnected24}" />
                                             <ui:Button
                                                 Padding="4"
                                                 Appearance="Transparent"
-                                                ToolTip="Disable every mod in this group"
+                                                ToolTip="{loc:Str Installed_GroupDisableToolTip}"
                                                 Command="{Binding DataContext.DisableGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                 CommandParameter="{Binding}"
                                                 Icon="{ui:SymbolIcon PlugDisconnected24}" />
                                             <ui:Button
                                                 Padding="4"
                                                 Appearance="Transparent"
-                                                ToolTip="Swap this group over - disable what's on, enable what's off"
+                                                ToolTip="{loc:Str Installed_GroupInvertToolTip}"
                                                 Command="{Binding DataContext.InvertGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                 CommandParameter="{Binding}"
                                                 Icon="{ui:SymbolIcon ArrowSwap24}" />
@@ -935,14 +927,14 @@
                                             <ui:Button
                                                 Padding="4"
                                                 Appearance="Transparent"
-                                                ToolTip="Move up"
+                                                ToolTip="{loc:Str Installed_GroupMoveUpToolTip}"
                                                 Command="{Binding DataContext.MoveGroupUpCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                 CommandParameter="{Binding}"
                                                 Icon="{ui:SymbolIcon ChevronUp24}" />
                                             <ui:Button
                                                 Padding="4"
                                                 Appearance="Transparent"
-                                                ToolTip="Move down"
+                                                ToolTip="{loc:Str Installed_GroupMoveDownToolTip}"
                                                 Command="{Binding DataContext.MoveGroupDownCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                 CommandParameter="{Binding}"
                                                 Icon="{ui:SymbolIcon ChevronDown24}" />
@@ -951,7 +943,7 @@
                                             Padding="4"
                                             Margin="6,0,0,0"
                                             Appearance="Transparent"
-                                            ToolTip="Rename"
+                                            ToolTip="{loc:Str Installed_GroupRenameToolTip}"
                                             Command="{Binding DataContext.BeginRenameCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                             CommandParameter="{Binding}"
                                             Icon="{ui:SymbolIcon Edit24}" />
@@ -959,7 +951,7 @@
                                             Padding="4"
                                             Appearance="Transparent"
                                             Foreground="{DynamicResource SystemFillColorCriticalBrush}"
-                                            ToolTip="Delete this group"
+                                            ToolTip="{loc:Str Installed_GroupDeleteToolTip}"
                                             Command="{Binding DataContext.DeleteGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                             CommandParameter="{Binding}"
                                             Icon="{ui:SymbolIcon Delete24}" />
@@ -974,7 +966,7 @@
                                         Padding="4"
                                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                         FontStyle="Italic"
-                                        Text="Drag mods here"
+                                        Text="{loc:Str Installed_GroupDropHint}"
                                         Visibility="{Binding Items.Count, Converter={StaticResource HasItems}, ConverterParameter=Invert}" />
 
                                     <ItemsControl Focusable="False" ItemsSource="{Binding Items}">
@@ -985,7 +977,7 @@
                                                     Margin="0,0,0,4"
                                                     Padding="8,6"
                                                     Opacity="{Binding CardOpacity}"
-                                                    ToolTip="Click for details - drag onto another group to move it there"
+                                                    ToolTip="{loc:Str Installed_GroupRowToolTip}"
                                                     PreviewMouseLeftButtonDown="ModRow_PreviewMouseLeftButtonDown"
                                                     PreviewMouseMove="ModRow_PreviewMouseMove"
                                                     PreviewMouseLeftButtonUp="ModRow_PreviewMouseLeftButtonUp">
@@ -1045,7 +1037,7 @@
                                                                 Margin="0,1,0,0"
                                                                 HorizontalAlignment="Center"
                                                                 Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                                                                ToolTip="Pinned - no mod list you apply will set this mod aside"
+                                                                ToolTip="{loc:Str Common_PinnedToolTip}"
                                                                 Visibility="{Binding IsPinned, Converter={StaticResource BoolToVis}}" />
                                                         </StackPanel>
                                                     </Grid>
@@ -1143,7 +1135,7 @@
                                             CornerRadius="3"
                                             Background="{DynamicResource ControlFillColorSecondaryBrush}"
                                             Visibility="{Binding IsDisabled, Converter={StaticResource BoolToVis}}">
-                                            <TextBlock Text="DISABLED" FontSize="10" FontWeight="SemiBold" />
+                                            <TextBlock Text="{loc:Str Installed_DisabledTag}" FontSize="10" FontWeight="SemiBold" />
                                         </Border>
                                     </StackPanel>
 
@@ -1165,7 +1157,7 @@
                                             Margin="0,1,0,0"
                                             HorizontalAlignment="Center"
                                             Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                                            ToolTip="Pinned - no mod list you apply will set this mod aside"
+                                            ToolTip="{loc:Str Common_PinnedToolTip}"
                                             Visibility="{Binding IsPinned, Converter={StaticResource BoolToVis}}" />
                                     </StackPanel>
                                 </Grid>

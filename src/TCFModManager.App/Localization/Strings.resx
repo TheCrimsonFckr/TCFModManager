@@ -311,4 +311,98 @@
     <value>New group name...</value>
     <comment>Placeholder in the box beside Add group.</comment>
   </data>
+  <data name="Installed_ListChipToolTip" xml:space="preserve">
+    <value>This mod is in this mod list</value>
+    <comment>On each mod-list chip. The chip itself carries a list name the user typed, which is not translated.</comment>
+  </data>
+  <data name="Installed_DetailInstalledAsFormat" xml:space="preserve">
+    <value>Installed as: {0}</value>
+    <comment>{0} is the folder name on disk, shown when it differs from the mod's name.</comment>
+  </data>
+  <data name="Installed_DetailGuidFormat" xml:space="preserve">
+    <value>GUID: {0}</value>
+    <comment>{0} is a BepInEx plugin GUID. GUID is a technical term and may well stay as it is.</comment>
+  </data>
+  <data name="Installed_DetailInstalledVersionFormat" xml:space="preserve">
+    <value>Installed version: {0}</value>
+    <comment>{0} is a version number, or the Installed_VersionUnknown word when there is none.</comment>
+  </data>
+  <data name="Installed_VersionUnknown" xml:space="preserve">
+    <value>unknown</value>
+    <comment>Stands in for a version that could not be determined. Appears mid-sentence in Installed_DetailInstalledVersionFormat, so it is lower case in English.</comment>
+  </data>
+  <data name="Installed_DetailLatestPublishedFormat" xml:space="preserve">
+    <value>Latest published: {0}</value>
+    <comment>{0} is the newest version on sp-mod.com, or a short phrase the app supplies.</comment>
+  </data>
+  <data name="Installed_DetailLastUpdatedFormat" xml:space="preserve">
+    <value>Last updated on sp-mod.com: {0:d}</value>
+    <comment>{0} is a date. Keep the :d - it is what prints the date the way the user's Windows regional setting does rather than in US order.</comment>
+  </data>
+  <data name="Installed_DetailInstalledOnFormat" xml:space="preserve">
+    <value>Installed on: {0:d}</value>
+    <comment>{0} is a date. Keep the :d.</comment>
+  </data>
+  <data name="Installed_ClientFolder" xml:space="preserve">
+    <value>Client folder</value>
+    <comment>Button that opens the mod's BepInEx folder in Explorer.</comment>
+  </data>
+  <data name="Installed_ServerFolder" xml:space="preserve">
+    <value>Server folder</value>
+    <comment>Button that opens the mod's user\mods folder in Explorer.</comment>
+  </data>
+  <data name="Installed_DetailsAndVersions" xml:space="preserve">
+    <value>Details and versions</value>
+  </data>
+  <data name="Installed_DetailsAndVersionsToolTip" xml:space="preserve">
+    <value>Open the full version history and update dialog</value>
+  </data>
+  <data name="Installed_SortOut" xml:space="preserve">
+    <value>Sort out</value>
+    <comment>Button shown when a mod is in both an enabled and a disabled folder. Short: it sits in a row of buttons on a card.</comment>
+  </data>
+  <data name="Installed_SortOutToolTip" xml:space="preserve">
+    <value>This mod is in both an enabled and a disabled folder - pick which copy to keep</value>
+  </data>
+  <data name="Installed_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Installed_RemoveToolTip" xml:space="preserve">
+    <value>Remove this mod</value>
+  </data>
+  <data name="Installed_DisabledTag" xml:space="preserve">
+    <value>DISABLED</value>
+    <comment>A tag drawn over a disabled mod's card. Upper case in English for emphasis - use whatever reads as emphatic in yours, and keep it short: it sits in a small badge.</comment>
+  </data>
+  <data name="Installed_GroupExpandToolTip" xml:space="preserve">
+    <value>Expand/collapse this group</value>
+  </data>
+  <data name="Installed_GroupEnableToolTip" xml:space="preserve">
+    <value>Enable every mod in this group</value>
+  </data>
+  <data name="Installed_GroupDisableToolTip" xml:space="preserve">
+    <value>Disable every mod in this group</value>
+  </data>
+  <data name="Installed_GroupInvertToolTip" xml:space="preserve">
+    <value>Swap this group over - disable what's on, enable what's off</value>
+  </data>
+  <data name="Installed_GroupMoveUpToolTip" xml:space="preserve">
+    <value>Move up</value>
+  </data>
+  <data name="Installed_GroupMoveDownToolTip" xml:space="preserve">
+    <value>Move down</value>
+  </data>
+  <data name="Installed_GroupRenameToolTip" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Installed_GroupDeleteToolTip" xml:space="preserve">
+    <value>Delete this group</value>
+  </data>
+  <data name="Installed_GroupDropHint" xml:space="preserve">
+    <value>Drag mods here</value>
+    <comment>Shown inside an empty group.</comment>
+  </data>
+  <data name="Installed_GroupRowToolTip" xml:space="preserve">
+    <value>Click for details - drag onto another group to move it there</value>
+  </data>
 </root>
