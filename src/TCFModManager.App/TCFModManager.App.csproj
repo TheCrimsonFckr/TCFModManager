@@ -10,8 +10,13 @@
 
     <!--
       Trims size out of the self-contained single-file publish (package-release.ps1) by dropping
-      non-English satellite resource assemblies WPF/WPF-UI/CommunityToolkit ship by default - the
-      app only ever talks to the Forge API in English, so there's nothing translated to lose.
+      non-English satellite resource assemblies WPF/WPF-UI/CommunityToolkit ship by default.
+
+      It does NOT touch this app's own translations. The property filters satellites arriving from
+      package references; the ones a project generates from its own EmbeddedResource items are
+      built and published regardless - verified on 9.0.318, including a single-file publish, which
+      is byte-for-byte the same size with and without it and carries the satellites inside the
+      bundle either way. Leave it as it is.
 
       InvariantGlobalization was tried alongside this and reverted: WPF's XAML binding pipeline
       calls CultureInfo.GetCultureInfo("en-US") internally (XamlLanguage.GetSpecificCulture, hit on
@@ -48,6 +53,28 @@
 
   <ItemGroup>
     <Resource Include="Assets\AppIcon.ico" />
+  </ItemGroup>
+
+  <!--
+    Generates the Strings accessor from Localization\Strings.resx on every build, so a C# call site
+    reads Strings.Installed_Rescan and the compiler catches a key that no longer exists.
+
+    MSBuild does the generating, not Visual Studio's ResXFileCodeGenerator: this repo is built from
+    the command line and edited in VS Code, and a designer file only a VS custom tool regenerates
+    goes stale the moment someone adds a key without opening the IDE. The generated file lands in
+    obj\ and is compiled in from there - nothing to commit and nothing to keep in step.
+
+    A translation needs no entry here. Strings.<tag>.resx is picked up by the SDK's own glob and
+    compiled into a satellite assembly, which is what keeps adding a language a data change.
+  -->
+  <ItemGroup>
+    <EmbeddedResource Update="Localization\Strings.resx">
+      <Generator>MSBuild:Compile</Generator>
+      <StronglyTypedFileName>$(IntermediateOutputPath)Strings.Designer.cs</StronglyTypedFileName>
+      <StronglyTypedLanguage>CSharp</StronglyTypedLanguage>
+      <StronglyTypedNamespace>TCFModManager.App.Localization</StronglyTypedNamespace>
+      <StronglyTypedClassName>Strings</StronglyTypedClassName>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

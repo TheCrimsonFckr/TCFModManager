@@ -81,6 +81,24 @@ public sealed class AppSettings
     public ThemePreference Theme { get; set; } = ThemePreference.FollowSystem;
 
     //
+    // Which language the app's own text is read in, as a BCP-47 tag - "ru", "de", "pt-BR".
+    //
+    // NULL OR ABSENT MEANS FOLLOW WINDOWS, the same way Theme's default follows it: the app takes
+    // the user's Windows display languages in their own order and uses the first one it has
+    // resources for, and English when it has none of them. A tag is stored only once someone picks
+    // a language on the Options page.
+    //
+    // A tag rather than an enum because languages are not a closed set - a translation arriving as
+    // one more resource file should need no code. A tag with nothing behind it (a language dropped
+    // from a later build, or a typo in a hand-edited file) is ignored and the default is used,
+    // which is the rule this file already follows for a page default that no longer parses.
+    //
+    // Only the text follows this. Dates and numbers keep following the Windows regional setting,
+    // which is a separate choice the user already made.
+    //
+    public string? Language { get; set; }
+
+    //
     // Skips the "read the mod's page first" gate before anything is downloaded.
     //
     // Off by default, and turning it on is confirmed on the Options page, because the gate is not
