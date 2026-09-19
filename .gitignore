@@ -45,3 +45,6 @@ _to_delete/
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# The pseudo-locale is generated on demand (-p:PseudoLocale=true), never committed
+Strings.qps-ploc.resx

@@ -13,6 +13,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     Title="Mod lists"
     Loaded="ModListsPage_Loaded"
     ScrollViewer.CanContentScroll="False">
@@ -115,16 +116,16 @@
                     <TextBlock
                         FontWeight="SemiBold"
                         Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                        Text="Save what's installed now" />
+                        Text="{loc:Str ModLists_CaptureHeader}" />
 
                     <TextBlock
                         TextWrapping="Wrap"
                         Margin="0,4,0,12"
                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                        Text="Records the mods that are currently enabled, at the versions you have." />
+                        Text="{loc:Str ModLists_CaptureDescription}" />
 
                     <ui:TextBox
-                        PlaceholderText="List name"
+                        PlaceholderText="{loc:Str ModLists_NamePlaceholder}"
                         Text="{Binding NewListName, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Grid Margin="0,12,0,0">
@@ -139,15 +140,15 @@
                             HorizontalContentAlignment="Center"
                             Appearance="Primary"
                             Icon="{ui:SymbolIcon AppsList24}"
-                            Content="Capture"
+                            Content="{loc:Str ModLists_Capture}"
                             Command="{Binding CaptureCommand}" />
 
                         <ui:Button
                             Grid.Column="1"
                             Margin="10,0,0,0"
-                            ToolTip="Open a mod list someone shared with you"
+                            ToolTip="{loc:Str ModLists_ImportToolTip}"
                             Icon="{ui:SymbolIcon ArrowImport24}"
-                            Content="Import"
+                            Content="{loc:Str ModLists_Import}"
                             Command="{Binding ImportCommand}" />
                     </Grid>
                 </StackPanel>
@@ -158,7 +159,7 @@
                 Margin="4,20,0,8"
                 FontWeight="SemiBold"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                Text="Saved lists" />
+                Text="{loc:Str ModLists_SavedHeader}" />
 
             <!--
                 Top, not the default.
@@ -180,7 +181,7 @@
                         VerticalAlignment="Top"
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         Visibility="{Binding HasLists, Converter={StaticResource FalseToVisible}}"
-                        Text="Nothing saved yet. Capture what you have installed, or import a list someone sent you." />
+                        Text="{loc:Str ModLists_SavedEmpty}" />
 
                     <ListBox
                         x:Name="ListsBox"
@@ -227,7 +228,7 @@
                                             Padding="8,3"
                                             Margin="0,0,6,0"
                                             CornerRadius="4"
-                                            ToolTip="This machine serves this list to clients that connect to it. Editing and saving it republishes what they see."
+                                            ToolTip="{loc:Str ModLists_ServingToolTip}"
                                             Background="{DynamicResource SystemFillColorCriticalBackgroundBrush}"
                                             Visibility="{Binding IsPublished, Converter={StaticResource BoolToVis}}">
                                             <StackPanel Orientation="Horizontal">
@@ -241,7 +242,7 @@
                                                     FontSize="11"
                                                     VerticalAlignment="Center"
                                                     Foreground="{DynamicResource SystemFillColorCriticalBrush}"
-                                                    Text="Serving" />
+                                                    Text="{loc:Str ModLists_ServingBadge}" />
                                             </StackPanel>
                                         </Border>
 
@@ -252,7 +253,7 @@
                                             Padding="8,3"
                                             Margin="0,0,6,0"
                                             CornerRadius="4"
-                                            ToolTip="A server handed this list to you. It stays exactly as that server wrote it - make a copy to change what's on it."
+                                            ToolTip="{loc:Str ModLists_FromServerToolTip}"
                                             Background="{DynamicResource SystemFillColorCriticalBackgroundBrush}"
                                             Visibility="{Binding IsFromServer, Converter={StaticResource BoolToVis}}">
                                             <StackPanel Orientation="Horizontal">
@@ -266,21 +267,21 @@
                                                     FontSize="11"
                                                     VerticalAlignment="Center"
                                                     Foreground="{DynamicResource SystemFillColorCriticalBrush}"
-                                                    Text="From server" />
+                                                    Text="{loc:Str ModLists_FromServerBadge}" />
                                             </StackPanel>
                                         </Border>
 
                                         <ui:SymbolIcon
                                             Margin="0,0,6,0"
                                             VerticalAlignment="Center"
-                                            ToolTip="This install is following this server's list, alongside its own"
+                                            ToolTip="{loc:Str ModLists_FollowingServerToolTip}"
                                             Foreground="{DynamicResource SystemFillColorSuccessBrush}"
                                             Symbol="CheckmarkCircle24"
                                             Visibility="{Binding IsActiveServer, Converter={StaticResource BoolToVis}}" />
 
                                         <ui:SymbolIcon
                                             VerticalAlignment="Center"
-                                            ToolTip="This install is following this list"
+                                            ToolTip="{loc:Str ModLists_FollowingToolTip}"
                                             Foreground="{DynamicResource SystemFillColorSuccessBrush}"
                                             Symbol="CheckmarkCircle24"
                                             Visibility="{Binding IsActive, Converter={StaticResource BoolToVis}}" />
@@ -303,7 +304,7 @@
                 HorizontalContentAlignment="Center"
                 Icon="{ui:SymbolIcon ArrowUndo24}"
                 Content="{Binding RevertLabel}"
-                ToolTip="Puts every mod back the way it was before that list was applied. Usually just moves mods - nothing to download."
+                ToolTip="{loc:Str ModLists_UndoToolTip}"
                 Visibility="{Binding HasRevert, Converter={StaticResource BoolToVis}}"
                 Command="{Binding RevertCommand}" />
         </Grid>
@@ -325,7 +326,7 @@
                 HorizontalAlignment="Left"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Visibility="{Binding HasSelection, Converter={StaticResource FalseToVisible}}"
-                Text="Pick a list on the left, or capture what you have installed now.&#10;&#10;A mod list records which mods to install and enable. Applying one downloads whatever is missing from sp-mod.com and sets aside anything the list doesn't name - it never deletes a mod." />
+                Text="{loc:Str ModLists_EmptyState}" />
 
             <!-- Header: the name, then the two things you actually do, then the quieter rest. -->
             <StackPanel
@@ -346,9 +347,9 @@
                     <ui:Button
                         Grid.Column="1"
                         Margin="10,0,0,0"
-                        ToolTip="Rename this list"
+                        ToolTip="{loc:Str ModLists_RenameToolTip}"
                         Icon="{ui:SymbolIcon Rename24}"
-                        Content="Rename"
+                        Content="{loc:Str ModLists_Rename}"
                         Command="{Binding RenameCommand}" />
                 </Grid>
 
@@ -362,8 +363,8 @@
                     <ui:Button
                         MinWidth="110"
                         HorizontalContentAlignment="Center"
-                        Content="Preview"
-                        ToolTip="Work out what applying this list would do. Nothing moves and nothing downloads."
+                        Content="{loc:Str ModLists_Preview}"
+                        ToolTip="{loc:Str ModLists_PreviewToolTip}"
                         Command="{Binding PreviewCommand}" />
 
                     <ui:Button
@@ -371,8 +372,8 @@
                         Margin="10,0,0,0"
                         HorizontalContentAlignment="Center"
                         Appearance="Primary"
-                        Content="Apply"
-                        ToolTip="Download what's missing, enable what the list names, and set aside what it doesn't."
+                        Content="{loc:Str ModLists_Apply}"
+                        ToolTip="{loc:Str ModLists_ApplyToolTip}"
                         Command="{Binding ApplyCommand}" />
 
                     <!-- Only while a plan is showing: the plan sits in the same cell as the list's
@@ -381,8 +382,8 @@
                         Margin="10,0,0,0"
                         Appearance="Transparent"
                         Icon="{ui:SymbolIcon ArrowLeft24}"
-                        Content="Back to the mods"
-                        ToolTip="Stop showing the plan and go back to what this list names. Changes nothing."
+                        Content="{loc:Str ModLists_BackToMods}"
+                        ToolTip="{loc:Str ModLists_BackToModsToolTip}"
                         Visibility="{Binding HasPlan, Converter={StaticResource BoolToVis}}"
                         Command="{Binding ClosePlanCommand}" />
                 </StackPanel>
@@ -395,8 +396,8 @@
                     <ui:Button
                         Appearance="Transparent"
                         Icon="{ui:SymbolIcon ArrowExportLtr24}"
-                        Content="Export"
-                        ToolTip="Save this list to a file you can send to someone. It carries which mods and versions - never the mod files themselves."
+                        Content="{loc:Str ModLists_Export}"
+                        ToolTip="{loc:Str ModLists_ExportToolTip}"
                         Command="{Binding ExportCommand}" />
 
                     <!-- Only a served list has anywhere to be refreshed FROM, so it is the only
@@ -405,8 +406,8 @@
                         Margin="8,0,0,0"
                         Appearance="Transparent"
                         Icon="{ui:SymbolIcon ArrowSync24}"
-                        Content="Refresh from server"
-                        ToolTip="Asks the server for this list again, even if its revision hasn't moved - which is what an operator editing and republishing the list they serve looks like from here. Nothing is installed or enabled; applying it is still a separate step."
+                        Content="{loc:Str ModLists_RefreshFromServer}"
+                        ToolTip="{loc:Str ModLists_RefreshFromServerToolTip}"
                         Visibility="{Binding SelectionIsFromServer, Converter={StaticResource BoolToVis}}"
                         Command="{Binding RefreshFromServerCommand}" />
 
@@ -414,8 +415,8 @@
                         Margin="8,0,0,0"
                         Appearance="Transparent"
                         Icon="{ui:SymbolIcon Branch24}"
-                        Content="Make a copy"
-                        ToolTip="Imported lists are read-only. This starts your own copy of it."
+                        Content="{loc:Str ModLists_MakeCopy}"
+                        ToolTip="{loc:Str ModLists_MakeCopyToolTip}"
                         Visibility="{Binding SelectionIsImported, Converter={StaticResource BoolToVis}}"
                         Command="{Binding ForkCommand}" />
 
@@ -423,16 +424,16 @@
                         Margin="8,0,0,0"
                         Appearance="Transparent"
                         Icon="{ui:SymbolIcon ArrowUndo24}"
-                        Content="Stop following"
-                        ToolTip="Clears which list this install is following. Nothing on disk changes."
+                        Content="{loc:Str ModLists_StopFollowing}"
+                        ToolTip="{loc:Str ModLists_StopFollowingToolTip}"
                         Visibility="{Binding SelectionIsActive, Converter={StaticResource BoolToVis}}"
                         Command="{Binding StopFollowingCommand}" />
 
                     <ui:Button
                         Margin="8,0,0,0"
                         Appearance="Transparent"
-                        Content="Delete"
-                        ToolTip="Removes the list. Nothing on disk changes."
+                        Content="{loc:Str ModLists_Delete}"
+                        ToolTip="{loc:Str ModLists_DeleteToolTip}"
                         Command="{Binding DeleteCommand}" />
                 </StackPanel>
             </StackPanel>
@@ -523,8 +524,8 @@
                             Visibility="{Binding SelectionIsEditable, Converter={StaticResource BoolToVis}}">
                             <ui:Button
                                 Icon="{ui:SymbolIcon Add24}"
-                                Content="Add mods"
-                                ToolTip="Put mods on this list - ones you have installed, or ones from sp-mod.com you haven't. Nothing is downloaded."
+                                Content="{loc:Str ModLists_AddMods}"
+                                ToolTip="{loc:Str ModLists_AddModsToolTip}"
                                 Command="{Binding AddModsCommand}" />
 
                             <!-- The one-button replacement for taking a mod off the list and adding
@@ -532,16 +533,16 @@
                             <ui:Button
                                 Margin="8,0,0,0"
                                 Icon="{ui:SymbolIcon ArrowSync24}"
-                                Content="Refresh versions"
-                                ToolTip="Reads the version of every mod on this list that is installed here, and updates the list to match. Scope is left alone, and mods you don't have are left as written. Nothing is downloaded or installed - Save keeps the changes."
+                                Content="{loc:Str ModLists_RefreshVersions}"
+                                ToolTip="{loc:Str ModLists_RefreshVersionsToolTip}"
                                 Command="{Binding RefreshVersionsCommand}" />
 
                             <ui:Button
                                 Margin="8,0,0,0"
                                 Appearance="Primary"
                                 Icon="{ui:SymbolIcon Save24}"
-                                Content="Save"
-                                ToolTip="Write these changes to the list. Nothing is installed, enabled or disabled - Apply does that."
+                                Content="{loc:Str ModLists_Save}"
+                                ToolTip="{loc:Str ModLists_SaveToolTip}"
                                 Visibility="{Binding HasUnsavedChanges, Converter={StaticResource BoolToVis}}"
                                 Command="{Binding SaveCommand}" />
 
@@ -549,8 +550,8 @@
                                 Margin="8,0,0,0"
                                 Appearance="Transparent"
                                 Icon="{ui:SymbolIcon ArrowUndo24}"
-                                Content="Discard"
-                                ToolTip="Throw these changes away and show the list as it is saved."
+                                Content="{loc:Str ModLists_Discard}"
+                                ToolTip="{loc:Str ModLists_DiscardToolTip}"
                                 Visibility="{Binding HasUnsavedChanges, Converter={StaticResource BoolToVis}}"
                                 Command="{Binding DiscardCommand}" />
 
@@ -560,8 +561,8 @@
                             <ui:Button
                                 Margin="8,0,0,0"
                                 Icon="{ui:SymbolIcon ArrowUpload24}"
-                                Content="Publish to this server"
-                                ToolTip="Writes this list into the Server Map mod's config folder on this machine, so the server serves it to connected clients. Nothing is installed or changed on disk."
+                                Content="{loc:Str ModLists_Publish}"
+                                ToolTip="{loc:Str ModLists_PublishToolTip}"
                                 Command="{Binding PublishCommand}" />
                         </StackPanel>
                     </Grid>
@@ -572,7 +573,7 @@
                             Margin="10,0,10,8"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             Visibility="{Binding SelectionIsImported, Converter={StaticResource BoolToVis}}"
-                            Text="This list came from someone else, so it stays exactly as they wrote it. Make a copy to change what's on it." />
+                            Text="{loc:Str ModLists_ImportedNotice}" />
 
                         <!-- Preview and Apply are disabled until this is gone: they work off the
                              saved list, and running them against something the panel no longer
@@ -582,10 +583,8 @@
                             Margin="10,0,10,8"
                             FontWeight="SemiBold"
                             Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                            Visibility="{Binding HasUnsavedChanges, Converter={StaticResource BoolToVis}}">
-                            <Run Text="{Binding UnsavedLabel, Mode=OneWay}" />
-                            <Run Text=" - save the list to keep them. Then Preview and Apply to use the saved version." />
-                        </TextBlock>
+                            Visibility="{Binding HasUnsavedChanges, Converter={StaticResource BoolToVis}}"
+                            Text="{Binding UnsavedLabel, Mode=OneWay, StringFormat={loc:Str ModLists_UnsavedFormat}}" />
                     </StackPanel>
 
                     <!-- Only once there is something to filter. A search box over an empty list
@@ -602,26 +601,26 @@
 
                         <ui:TextBox
                             Grid.Column="0"
-                            PlaceholderText="Search this list..."
+                            PlaceholderText="{loc:Str ModLists_EntrySearchPlaceholder}"
                             Icon="{ui:SymbolIcon Search24}"
-                            ToolTip="Matches the mod's name, the name the list stored, and the folders it installs into."
+                            ToolTip="{loc:Str ModLists_EntrySearchToolTip}"
                             Text="{Binding EntrySearch, UpdateSourceTrigger=PropertyChanged}" />
 
                         <ComboBox
                             Grid.Column="1"
-                            Width="176"
+                            MinWidth="176"
                             Margin="8,0,0,0"
                             DisplayMemberPath="Label"
-                            ToolTip="Show only the entries meant for one kind of machine. Server only are the mods a player is never asked to install; Client only are the ones a Fika headless client skips."
+                            ToolTip="{loc:Str ModLists_ScopeFilterToolTip}"
                             ItemsSource="{Binding ScopeFilters}"
                             SelectedItem="{Binding ScopeFilter}" />
 
                         <ComboBox
                             Grid.Column="2"
-                            Width="130"
+                            MinWidth="130"
                             Margin="8,0,0,0"
                             DisplayMemberPath="Label"
-                            ToolTip="Ordered by the name shown on the row."
+                            ToolTip="{loc:Str ModLists_EntrySortToolTip}"
                             ItemsSource="{Binding EntrySorts}"
                             SelectedItem="{Binding EntrySort}" />
                     </Grid>
@@ -633,7 +632,7 @@
                             VerticalAlignment="Top"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             Visibility="{Binding HasEntries, Converter={StaticResource FalseToVisible}}"
-                            Text="This list names no mods yet. Add some, or capture what you have installed as a new list." />
+                            Text="{loc:Str ModLists_NoEntries}" />
 
                         <!-- A filter matching nothing is not an empty list, and saying so would be
                              alarming on a list of 76. -->
@@ -643,7 +642,7 @@
                             VerticalAlignment="Top"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             Visibility="{Binding HasNoMatches, Converter={StaticResource BoolToVis}}"
-                            Text="Nothing on this list matches. Everything is still here - widen the search or the scope filter to see it." />
+                            Text="{loc:Str ModLists_NoMatches}" />
 
                         <ListBox
                             x:Name="EntriesBox"
@@ -679,7 +678,7 @@
                                                         Margin="0,1,6,0"
                                                         VerticalAlignment="Top"
                                                         Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                                                        ToolTip="Pinned on this install - no list you apply will set it aside"
+                                                        ToolTip="{loc:Str ModLists_EntryPinnedToolTip}"
                                                         Visibility="{Binding IsPinnedHere, Converter={StaticResource BoolToVis}}" />
 
                                                     <TextBlock
@@ -720,7 +719,7 @@
                                                 Padding="8,4"
                                                 Appearance="Transparent"
                                                 Icon="{ui:SymbolIcon PeopleSwap24}"
-                                                ToolTip="Which machines this entry is for - the server, playing clients, a Fika headless client, or any combination of them. Capture works this out from where the mod's files live; change it for the exceptions, like a server mod nobody playing needs to install, or a HUD mod a headless client has no use for."
+                                                ToolTip="{loc:Str ModLists_ScopeToolTip}"
                                                 Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"
                                                 Command="{Binding DataContext.CycleScopeCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                                 CommandParameter="{Binding}" />
@@ -733,7 +732,7 @@
                                                 Appearance="Transparent"
                                                 Foreground="{DynamicResource SystemFillColorCriticalBrush}"
                                                 Icon="{ui:SymbolIcon Dismiss24}"
-                                                ToolTip="Take this mod off the list. It stays installed - nothing on disk changes."
+                                                ToolTip="{loc:Str ModLists_RemoveEntryToolTip}"
                                                 Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"
                                                 Command="{Binding DataContext.RemoveEntryCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                                 CommandParameter="{Binding}" />
@@ -796,7 +795,7 @@
                                     Padding="8,4"
                                     Appearance="Transparent"
                                     Icon="{ui:SymbolIcon Pin24}"
-                                    ToolTip="Pin this mod so no list you apply ever sets it aside. For the HUD and quality-of-life mods you want kept whatever list you switch to. Unpin it here or from the mod on the Installed page."
+                                    ToolTip="{loc:Str ModLists_PinToolTip}"
                                     Visibility="{Binding CanPin, Converter={StaticResource BoolToVis}}"
                                     Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                     CommandParameter="{Binding}" />
@@ -808,7 +807,7 @@
                                     Padding="8,4"
                                     Appearance="Transparent"
                                     Icon="{ui:SymbolIcon PinOff24}"
-                                    ToolTip="Unpin this mod. Lists will be able to set it aside again, and this one would."
+                                    ToolTip="{loc:Str ModLists_UnpinToolTip}"
                                     Visibility="{Binding CanUnpin, Converter={StaticResource BoolToVis}}"
                                     Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                                     CommandParameter="{Binding}" />

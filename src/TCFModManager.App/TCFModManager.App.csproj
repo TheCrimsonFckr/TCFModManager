@@ -109,4 +109,96 @@
     <ProjectReference Include="..\TCFModManager.Core\TCFModManager.Core.csproj" />
   </ItemGroup>
 
+  <!--
+    The pseudo-locale. Generated on demand, never on an ordinary build:
+
+        dotnet build src\TCFModManager.App -p:PseudoLocale=true
+
+    Every English value comes back accented, padded and wrapped in brackets, so running the app in
+    it answers three questions at once with nobody translating anything: a string still in plain
+    English was missed by the sweep, a missing closing bracket is a control too narrow for a longer
+    language, and a date or a number that does not move is a culture assumption.
+
+    Strings.qps-ploc.resx is removed from the default glob and added back only under that property,
+    so a copy left lying around from a test run cannot reach a release build - verified: a normal
+    build after a pseudo one deletes the satellite again, and a self-contained single-file publish
+    carries none of it. It is gitignored as well.
+
+    The target has to run before AssignTargetPaths. Resources are split by culture before
+    PrepareResources, so an item added any later is written but never becomes a satellite.
+  -->
+  <ItemGroup>
+    <EmbeddedResource Remove="Localization\Strings.qps-ploc.resx" />
+  </ItemGroup>
+
+  <UsingTask TaskName="WritePseudoLocale" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Source ParameterType="System.String" Required="true" />
+      <Destination ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.Linq" />
+      <Using Namespace="System.Text" />
+      <Using Namespace="System.Xml.Linq" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        const string Plain = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const string Fancy = "\u00e0\u0180\u00e7\u00f0\u00e9\u0192\u011d\u0125\u0129\u0135\u0137\u0142\u0271\u00f1\u0151\u01a5\u024b\u0155\u0161\u0163\u0169\u1e7d\u0175\u1e8b\u00fd\u017e"
+                           + "\u00c0\u0181\u00c7\u00d0\u00c9\u0191\u011c\u0124\u0128\u0134\u0136\u0141\u1e42\u00d1\u0150\u01a4\u024a\u0154\u0160\u0162\u0168\u1e7c\u0174\u1e8a\u00dd\u017d";
+
+        var doc = XDocument.Load(Source);
+
+        foreach (var data in doc.Root.Elements("data").ToList())
+        {
+            var name = (string)data.Attribute("name");
+            var valueElement = data.Element("value");
+            if (name == null || valueElement == null) continue;
+
+            // Translator notes are for translators. Nobody translates this file.
+            foreach (var comment in data.Elements("comment").ToList()) comment.Remove();
+
+            if (name == "Meta_LanguageName") { valueElement.Value = "Pseudo (qps-ploc)"; continue; }
+
+            // Which languages ship is read from the neutral file by design, so a copy here would
+            // only be a second answer to the same question.
+            if (name.StartsWith("Meta_", StringComparison.Ordinal)) { data.Remove(); continue; }
+
+            var source = valueElement.Value;
+            var builder = new StringBuilder(source.Length * 2);
+            builder.Append('[');
+
+            var inPlaceholder = false;
+            foreach (var c in source)
+            {
+                if (c == '{') inPlaceholder = true;
+                if (c == '}') { inPlaceholder = false; builder.Append(c); continue; }
+
+                // A placeholder is machinery, not words - accenting {0:N0} would break the format
+                // and take the thousands separator with it.
+                if (inPlaceholder) { builder.Append(c); continue; }
+
+                var index = Plain.IndexOf(c);
+                builder.Append(index < 0 ? c : Fancy[index]);
+            }
+
+            // Roughly what German and Russian add. A control sized to fit English and nothing more
+            // loses its closing bracket here rather than in somebody's bug report.
+            builder.Append(' ').Append(new string('\u2014', Math.Max(3, source.Length * 2 / 5))).Append(']');
+
+            valueElement.Value = builder.ToString();
+        }
+
+        doc.Save(Destination);
+        Log.LogMessage(MessageImportance.High, "Pseudo-locale written to " + Destination);
+      ]]></Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="GeneratePseudoLocale" BeforeTargets="AssignTargetPaths" Condition="'$(PseudoLocale)' == 'true'">
+    <WritePseudoLocale Source="$(StringsResx)" Destination="$(MSBuildProjectDirectory)\Localization\Strings.qps-ploc.resx" />
+    <ItemGroup>
+      <EmbeddedResource Include="$(MSBuildProjectDirectory)\Localization\Strings.qps-ploc.resx" />
+    </ItemGroup>
+  </Target>
+
 </Project>

@@ -75,8 +75,8 @@
     <comment>This language's name in itself, shown in the Options dropdown. A language picker names each language the way its own speakers write it, so this is the one key a translator writes in their own language rather than translating: Deutsch, not German.</comment>
   </data>
   <data name="Meta_ShippedLanguages" xml:space="preserve">
-    <value>en</value>
-    <comment>Every language tag this build ships, comma separated, English first. Adding a language means dropping in Strings.&lt;tag&gt;.resx and adding its tag here - the whole of it. Read from this file only, never from a translation, so translating this key cannot change what the app offers.</comment>
+    <value>en, qps-ploc</value>
+    <comment>Every language tag this build ships, comma separated, English first. Adding a language means dropping in Strings.&lt;tag&gt;.resx and adding its tag here - the whole of it. Read from this file only, never from a translation, so translating this key cannot change what the app offers. A tag with no resources behind it is dropped at startup, which is how qps-ploc can sit here permanently and still only appear in a build made with -p:PseudoLocale=true.</comment>
   </data>
   <data name="Options_Language_Header" xml:space="preserve">
     <value>Language</value>
@@ -404,5 +404,184 @@
   </data>
   <data name="Installed_GroupRowToolTip" xml:space="preserve">
     <value>Click for details - drag onto another group to move it there</value>
+  </data>
+  <data name="ModLists_CaptureHeader" xml:space="preserve">
+    <value>Save what's installed now</value>
+  </data>
+  <data name="ModLists_CaptureDescription" xml:space="preserve">
+    <value>Records the mods that are currently enabled, at the versions you have.</value>
+  </data>
+  <data name="ModLists_NamePlaceholder" xml:space="preserve">
+    <value>List name</value>
+    <comment>Placeholder in the box for naming a new list.</comment>
+  </data>
+  <data name="ModLists_Capture" xml:space="preserve">
+    <value>Capture</value>
+    <comment>Button label - makes a list out of what is installed now.</comment>
+  </data>
+  <data name="ModLists_Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="ModLists_ImportToolTip" xml:space="preserve">
+    <value>Open a mod list someone shared with you</value>
+  </data>
+  <data name="ModLists_SavedHeader" xml:space="preserve">
+    <value>Saved lists</value>
+  </data>
+  <data name="ModLists_SavedEmpty" xml:space="preserve">
+    <value>Nothing saved yet. Capture what you have installed, or import a list someone sent you.</value>
+  </data>
+  <data name="ModLists_ServingBadge" xml:space="preserve">
+    <value>Serving</value>
+    <comment>Badge on the list this machine serves to clients. Short: it sits in a small chip.</comment>
+  </data>
+  <data name="ModLists_ServingToolTip" xml:space="preserve">
+    <value>This machine serves this list to clients that connect to it. Editing and saving it republishes what they see.</value>
+  </data>
+  <data name="ModLists_FromServerBadge" xml:space="preserve">
+    <value>From server</value>
+    <comment>Badge on a list a server handed to this install.</comment>
+  </data>
+  <data name="ModLists_FromServerToolTip" xml:space="preserve">
+    <value>A server handed this list to you. It stays exactly as that server wrote it - make a copy to change what's on it.</value>
+  </data>
+  <data name="ModLists_FollowingServerToolTip" xml:space="preserve">
+    <value>This install is following this server's list, alongside its own</value>
+  </data>
+  <data name="ModLists_FollowingToolTip" xml:space="preserve">
+    <value>This install is following this list</value>
+  </data>
+  <data name="ModLists_UndoToolTip" xml:space="preserve">
+    <value>Puts every mod back the way it was before that list was applied. Usually just moves mods - nothing to download.</value>
+  </data>
+  <data name="ModLists_EmptyState" xml:space="preserve">
+    <value>Pick a list on the left, or capture what you have installed now.
+
+A mod list records which mods to install and enable. Applying one downloads whatever is missing from sp-mod.com and sets aside anything the list doesn't name - it never deletes a mod.</value>
+    <comment>Shown in the right pane when no list is selected. The blank line between the two paragraphs is deliberate.</comment>
+  </data>
+  <data name="ModLists_Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="ModLists_RenameToolTip" xml:space="preserve">
+    <value>Rename this list</value>
+  </data>
+  <data name="ModLists_Preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="ModLists_PreviewToolTip" xml:space="preserve">
+    <value>Work out what applying this list would do. Nothing moves and nothing downloads.</value>
+  </data>
+  <data name="ModLists_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="ModLists_ApplyToolTip" xml:space="preserve">
+    <value>Download what's missing, enable what the list names, and set aside what it doesn't.</value>
+  </data>
+  <data name="ModLists_BackToMods" xml:space="preserve">
+    <value>Back to the mods</value>
+  </data>
+  <data name="ModLists_BackToModsToolTip" xml:space="preserve">
+    <value>Stop showing the plan and go back to what this list names. Changes nothing.</value>
+  </data>
+  <data name="ModLists_Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="ModLists_ExportToolTip" xml:space="preserve">
+    <value>Save this list to a file you can send to someone. It carries which mods and versions - never the mod files themselves.</value>
+  </data>
+  <data name="ModLists_RefreshFromServer" xml:space="preserve">
+    <value>Refresh from server</value>
+  </data>
+  <data name="ModLists_RefreshFromServerToolTip" xml:space="preserve">
+    <value>Asks the server for this list again, even if its revision hasn't moved - which is what an operator editing and republishing the list they serve looks like from here. Nothing is installed or enabled; applying it is still a separate step.</value>
+  </data>
+  <data name="ModLists_MakeCopy" xml:space="preserve">
+    <value>Make a copy</value>
+  </data>
+  <data name="ModLists_MakeCopyToolTip" xml:space="preserve">
+    <value>Imported lists are read-only. This starts your own copy of it.</value>
+  </data>
+  <data name="ModLists_StopFollowing" xml:space="preserve">
+    <value>Stop following</value>
+  </data>
+  <data name="ModLists_StopFollowingToolTip" xml:space="preserve">
+    <value>Clears which list this install is following. Nothing on disk changes.</value>
+  </data>
+  <data name="ModLists_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="ModLists_DeleteToolTip" xml:space="preserve">
+    <value>Removes the list. Nothing on disk changes.</value>
+  </data>
+  <data name="ModLists_AddMods" xml:space="preserve">
+    <value>Add mods</value>
+  </data>
+  <data name="ModLists_AddModsToolTip" xml:space="preserve">
+    <value>Put mods on this list - ones you have installed, or ones from sp-mod.com you haven't. Nothing is downloaded.</value>
+  </data>
+  <data name="ModLists_RefreshVersions" xml:space="preserve">
+    <value>Refresh versions</value>
+  </data>
+  <data name="ModLists_RefreshVersionsToolTip" xml:space="preserve">
+    <value>Reads the version of every mod on this list that is installed here, and updates the list to match. Scope is left alone, and mods you don't have are left as written. Nothing is downloaded or installed - Save keeps the changes.</value>
+  </data>
+  <data name="ModLists_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="ModLists_SaveToolTip" xml:space="preserve">
+    <value>Write these changes to the list. Nothing is installed, enabled or disabled - Apply does that.</value>
+  </data>
+  <data name="ModLists_Discard" xml:space="preserve">
+    <value>Discard</value>
+  </data>
+  <data name="ModLists_DiscardToolTip" xml:space="preserve">
+    <value>Throw these changes away and show the list as it is saved.</value>
+  </data>
+  <data name="ModLists_Publish" xml:space="preserve">
+    <value>Publish to this server</value>
+  </data>
+  <data name="ModLists_PublishToolTip" xml:space="preserve">
+    <value>Writes this list into the Server Map mod's config folder on this machine, so the server serves it to connected clients. Nothing is installed or changed on disk.</value>
+  </data>
+  <data name="ModLists_ImportedNotice" xml:space="preserve">
+    <value>This list came from someone else, so it stays exactly as they wrote it. Make a copy to change what's on it.</value>
+  </data>
+  <data name="ModLists_UnsavedFormat" xml:space="preserve">
+    <value>{0} - save the list to keep them. Then Preview and Apply to use the saved version.</value>
+    <comment>{0} is a count of unsaved changes, composed in the view model. One key rather than a label beside a sentence: the two halves are one sentence and cannot be reordered separately.</comment>
+  </data>
+  <data name="ModLists_EntrySearchPlaceholder" xml:space="preserve">
+    <value>Search this list...</value>
+  </data>
+  <data name="ModLists_EntrySearchToolTip" xml:space="preserve">
+    <value>Matches the mod's name, the name the list stored, and the folders it installs into.</value>
+  </data>
+  <data name="ModLists_ScopeFilterToolTip" xml:space="preserve">
+    <value>Show only the entries meant for one kind of machine. Server only are the mods a player is never asked to install; Client only are the ones a Fika headless client skips.</value>
+  </data>
+  <data name="ModLists_EntrySortToolTip" xml:space="preserve">
+    <value>Ordered by the name shown on the row.</value>
+  </data>
+  <data name="ModLists_NoEntries" xml:space="preserve">
+    <value>This list names no mods yet. Add some, or capture what you have installed as a new list.</value>
+  </data>
+  <data name="ModLists_NoMatches" xml:space="preserve">
+    <value>Nothing on this list matches. Everything is still here - widen the search or the scope filter to see it.</value>
+  </data>
+  <data name="ModLists_EntryPinnedToolTip" xml:space="preserve">
+    <value>Pinned on this install - no list you apply will set it aside</value>
+  </data>
+  <data name="ModLists_ScopeToolTip" xml:space="preserve">
+    <value>Which machines this entry is for - the server, playing clients, a Fika headless client, or any combination of them. Capture works this out from where the mod's files live; change it for the exceptions, like a server mod nobody playing needs to install, or a HUD mod a headless client has no use for.</value>
+  </data>
+  <data name="ModLists_RemoveEntryToolTip" xml:space="preserve">
+    <value>Take this mod off the list. It stays installed - nothing on disk changes.</value>
+  </data>
+  <data name="ModLists_PinToolTip" xml:space="preserve">
+    <value>Pin this mod so no list you apply ever sets it aside. For the HUD and quality-of-life mods you want kept whatever list you switch to. Unpin it here or from the mod on the Installed page.</value>
+  </data>
+  <data name="ModLists_UnpinToolTip" xml:space="preserve">
+    <value>Unpin this mod. Lists will be able to set it aside again, and this one would.</value>
   </data>
 </root>

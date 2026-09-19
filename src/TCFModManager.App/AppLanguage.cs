@@ -227,6 +227,12 @@ public static class AppLanguage
                 {
                     var culture = CultureInfo.GetCultureInfo(tag.Trim());
 
+                    if (!HasResources(culture))
+                    {
+                        AppLog.Debug("Language", $"{tag} is listed as shipped but has no resources in this build");
+                        continue;
+                    }
+
                     if (!shipped.Any(c => string.Equals(c.Name, culture.Name, StringComparison.OrdinalIgnoreCase)))
                     {
                         shipped.Add(culture);
@@ -244,6 +250,35 @@ public static class AppLanguage
         }
 
         return shipped;
+    }
+
+    //
+    // Whether this build actually carries that language, rather than only naming it.
+    //
+    // Two things make this worth a lookup rather than trusting the list. A well-formed tag that is
+    // nobody's language does not throw - GetCultureInfo("not-a-real-tag") hands back a culture
+    // cheerfully named "not" - so a typo would otherwise put a dead entry in the dropdown. And the
+    // pseudo-locale is listed permanently but built only under -p:PseudoLocale=true, so this is
+    // what keeps it out of the dropdown in every other build.
+    //
+    // English is not probed: it is the neutral resource, compiled into the app itself rather than
+    // into a satellite, so asking for its resource set answers no.
+    //
+    private static bool HasResources(CultureInfo culture)
+    {
+        if (string.Equals(culture.Name, DefaultTag, StringComparison.OrdinalIgnoreCase)) return true;
+
+        try
+        {
+            // tryParents: false - falling back to English would make every tag look present.
+            return Strings.ResourceManager.GetResourceSet(culture, createIfNotExists: true, tryParents: false)
+                is not null;
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("Language", $"couldn't check the resources for {culture.Name}: {ex.Message}");
+            return false;
+        }
     }
 
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
