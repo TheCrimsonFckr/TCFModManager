@@ -6,6 +6,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     Title="Options">
     <Page.Resources>
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
@@ -166,6 +167,29 @@
                     HorizontalAlignment="Left"
                     ItemsSource="{Binding ThemeOptions}"
                     SelectedItem="{Binding SelectedTheme}" />
+            </StackPanel>
+        </ui:Card>
+
+        <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
+            <StackPanel>
+                <TextBlock
+                    Text="{loc:Str Options_Language_Header}"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,0,0,8"
+                    Text="{loc:Str Options_Language_Description}" />
+
+                <!-- MinWidth rather than Width: a language name is as long as it is, and a box
+                     sized to English is the clipping this whole feature has to stop causing. -->
+                <ComboBox
+                    MinWidth="200"
+                    HorizontalAlignment="Left"
+                    DisplayMemberPath="Label"
+                    ItemsSource="{Binding LanguageOptions}"
+                    SelectedItem="{Binding SelectedLanguage}" />
             </StackPanel>
         </ui:Card>
 

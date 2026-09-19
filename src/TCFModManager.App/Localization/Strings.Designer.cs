@@ -2,14 +2,14 @@
 //     Generated from Localization\Strings.resx by GenerateStringsAccessor in
 //     TCFModManager.App.csproj. Edits are overwritten by the next build.
 // </auto-generated>
-
 namespace TCFModManager.App.Localization;
-
 internal static class Strings
 {
     internal static System.Resources.ResourceManager ResourceManager { get; } = new(
         "TCFModManager.App.Localization.Strings", typeof(Strings).Assembly);
-
     internal static string Meta_LanguageName => LocalizationService.Get("Meta_LanguageName");
     internal static string Meta_ShippedLanguages => LocalizationService.Get("Meta_ShippedLanguages");
+    internal static string Options_Language_Header => LocalizationService.Get("Options_Language_Header");
+    internal static string Options_Language_Description => LocalizationService.Get("Options_Language_Description");
+    internal static string Options_Language_SystemDefaultFormat => LocalizationService.Get("Options_Language_SystemDefaultFormat");
 }

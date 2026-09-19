@@ -49,6 +49,16 @@ public static class AppLanguage
     //
     public static IReadOnlyList<CultureInfo> Available { get; } = ReadShipped();
 
+    //
+    // What following Windows would land on, whatever is stored. The dropdown's first entry says so
+    // out loud - "System default (English)" - and it has to keep saying English after somebody pins
+    // a different language, which Current would not.
+    //
+    // Declared after Available because it resolves against it, and static initialisers run in
+    // declaration order.
+    //
+    public static CultureInfo SystemDefault { get; } = Resolve(null);
+
     // The stored preference as written. Null or absent means follow Windows.
     public static string? Stored => Settings.Load().Language;
 

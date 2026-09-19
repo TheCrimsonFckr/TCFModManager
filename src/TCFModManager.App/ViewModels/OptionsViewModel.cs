@@ -43,6 +43,18 @@ public partial class OptionsViewModel : ObservableObject
     [ObservableProperty]
     private ThemeOptionItem _selectedTheme;
 
+    //
+    // Every language this build has resources for, behind a System default entry that follows
+    // Windows. One entry per language rather than a list of every language that exists: a name in
+    // the list the app cannot actually read in is an offer it cannot keep.
+    //
+    public IReadOnlyList<LanguageOptionItem> LanguageOptions { get; } =
+        [new(null), .. AppLanguage.Available.Select(c => new LanguageOptionItem(c))];
+
+    // Applied and saved the moment it changes, the same as the theme dropdown.
+    [ObservableProperty]
+    private LanguageOptionItem _selectedLanguage;
+
     // Turning this on is confirmed first - see the warning in OnSkipModPageConfirmationChanged.
     [ObservableProperty]
     private bool _skipModPageConfirmation;
@@ -150,6 +162,12 @@ public partial class OptionsViewModel : ObservableObject
         var stored = AppTheme.Stored;
         _selectedTheme = ThemeOptions.FirstOrDefault(t => t.Value == stored) ?? ThemeOptions[^1];
 
+        // A stored tag this build has no resources for selects System default, which is what the
+        // app is doing anyway - AppLanguage falls back to the same place.
+        _selectedLanguage = LanguageOptions.FirstOrDefault(
+                l => string.Equals(l.Tag, AppLanguage.Stored, StringComparison.OrdinalIgnoreCase))
+            ?? LanguageOptions[0];
+
         var settings = _settings.Load();
         _skipModPageConfirmation = settings.SkipModPageConfirmation;
         _showModFootprintPage = settings.ShowModFootprintPage;
@@ -170,6 +188,20 @@ public partial class OptionsViewModel : ObservableObject
         if (!_loaded) return;
 
         AppTheme.Set(value.Value);
+    }
+
+    //
+    // The open page follows immediately: every {loc:Str} binding re-reads on its own, and the
+    // dropdown's own entries are relabelled here because they are the one set of strings that
+    // describes the list rather than living in it.
+    //
+    partial void OnSelectedLanguageChanged(LanguageOptionItem value)
+    {
+        if (!_loaded) return;
+
+        AppLanguage.Set(value.Tag);
+
+        foreach (var option in LanguageOptions) option.Refresh();
     }
 
     //

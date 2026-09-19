@@ -66,6 +66,9 @@
     9.0.318: the SDK route fails with "The name 'Strings' does not exist in the current context" in
     the _wpftmp project, whichever folder it is told to generate into.
 
+    Every line is its own item deliberately: a newline written inside one would stay LF in a file
+    whose other lines are CRLF, and the committed file would then differ from itself.
+
     Strings.Designer.cs is committed for a related reason. MSBuild settles which files it is
     compiling before any target runs, so a clone with nothing on disk fails its first build even
     though this target would have written the file a moment later. It is rewritten only when the
@@ -91,12 +94,12 @@
       <_StringsLine Include="//     Generated from Localization\Strings.resx by GenerateStringsAccessor in" />
       <_StringsLine Include="//     TCFModManager.App.csproj. Edits are overwritten by the next build." />
       <_StringsLine Include="// &lt;/auto-generated&gt;" />
-      <_StringsLine Include="%0Anamespace TCFModManager.App.Localization%3B" />
-      <_StringsLine Include="%0Ainternal static class Strings" />
+      <_StringsLine Include="namespace TCFModManager.App.Localization%3B" />
+      <_StringsLine Include="internal static class Strings" />
       <_StringsLine Include="{" />
       <_StringsLine Include="%20%20%20%20internal static System.Resources.ResourceManager ResourceManager { get%3B } = new(" />
       <_StringsLine Include="%20%20%20%20%20%20%20%20&quot;TCFModManager.App.Localization.Strings&quot;, typeof(Strings).Assembly)%3B" />
-      <_StringsLine Include="@(_StringsKey->'%0A%20%20%20%20internal static string %(Identity) =&gt; LocalizationService.Get(&quot;%(Identity)&quot;)%3B', '')" />
+      <_StringsLine Include="@(_StringsKey->'%20%20%20%20internal static string %(Identity) =&gt; LocalizationService.Get(&quot;%(Identity)&quot;)%3B')" />
       <_StringsLine Include="}" />
     </ItemGroup>
     <WriteLinesToFile File="$(StringsAccessor)" Lines="@(_StringsLine)" Overwrite="true" WriteOnlyWhenDifferent="true" />

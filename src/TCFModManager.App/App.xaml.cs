@@ -1,6 +1,9 @@
+using System.Globalization;
 using System.Windows;
+using System.Windows.Markup;
 using System.Windows.Threading;
 using TCFModManager.App.Behaviors;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.ServerMap;
 using TCFModManager.Core.Services;
 
@@ -13,6 +16,16 @@ public partial class App : Application
         base.OnStartup(e);
 
         AppLog.Start($"{AppVersion.Current}, SPT install: {AppServices.SptEnvironment.InstallPath ?? "(not set)"}");
+
+        // Before the theme and before any string is read, so the first frame is drawn in the right
+        // language rather than re-read a moment later.
+        AppLanguage.ApplyStored();
+
+        // Subscribes the source every {loc:Str} binding reads from, so a language chosen before any
+        // page has been opened still reaches the bindings made afterwards.
+        _ = LocalizationService.Instance;
+
+        ApplyElementLanguage();
 
         // Before the main window exists, so it is painted in the right theme rather than repainted a
         // moment after it opens. Following the OS needs a real window and is set up in MainWindow.
@@ -52,6 +65,34 @@ public partial class App : Application
             AppLog.Error("App", "Unobserved task exception", args.Exception);
             args.SetObserved();
         };
+    }
+
+    //
+    // WPF gives every element a Language of en-US regardless of what Windows is set to, and that is
+    // what a StringFormat binding reads for its dates and numbers. Without this, a machine set to
+    // en-GB or de-DE still renders every bound date in the US order - and the app's own rule that
+    // dates and numbers follow the regional setting would be silently untrue everywhere in XAML.
+    //
+    // Reads CurrentCulture, the regional setting, not CurrentUICulture: the chosen language moves
+    // the text and nothing else.
+    //
+    private static void ApplyElementLanguage()
+    {
+        try
+        {
+            var tag = CultureInfo.CurrentCulture.IetfLanguageTag;
+            if (string.IsNullOrWhiteSpace(tag)) return;
+
+            FrameworkElement.LanguageProperty.OverrideMetadata(
+                typeof(FrameworkElement),
+                new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(tag)));
+        }
+        catch (Exception ex)
+        {
+            // Dates in the wrong order are worth a line in the log. They are not worth refusing to
+            // start over.
+            AppLog.Warn("Language", $"couldn't set the element language: {ex.Message}");
+        }
     }
 
     protected override void OnExit(ExitEventArgs e)

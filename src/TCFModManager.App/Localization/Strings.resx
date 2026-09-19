@@ -78,4 +78,14 @@
     <value>en</value>
     <comment>Every language tag this build ships, comma separated, English first. Adding a language means dropping in Strings.&lt;tag&gt;.resx and adding its tag here - the whole of it. Read from this file only, never from a translation, so translating this key cannot change what the app offers.</comment>
   </data>
+  <data name="Options_Language_Header" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Options_Language_Description" xml:space="preserve">
+    <value>The language this app's own text is read in. System default follows the display language Windows is set to. Mod names, descriptions and changelogs come from the Forge and stay in whatever language their author wrote them in.</value>
+  </data>
+  <data name="Options_Language_SystemDefaultFormat" xml:space="preserve">
+    <value>System default ({0})</value>
+    <comment>{0} is the language following Windows currently lands on, named in itself - "System default (English)".</comment>
+  </data>
 </root>
