@@ -18,6 +18,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:viewmodels="clr-namespace:TCFModManager.App.ViewModels"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     Title="Installed"
     Loaded="InstalledPage_Loaded"
     ScrollViewer.CanContentScroll="False">
@@ -274,7 +275,7 @@
         <DockPanel Grid.Row="0" Margin="0,0,0,8">
             <ui:Button
                 DockPanel.Dock="Right"
-                Content="Rescan"
+                Content="{loc:Str Installed_Rescan}"
                 Command="{Binding ScanCommand}" />
 
             <!-- Puts the last disable/enable back. A disable only moves folders, so undoing one is
@@ -292,9 +293,9 @@
             <ui:Button
                 DockPanel.Dock="Right"
                 Margin="0,0,8,0"
-                Content="Multi select"
+                Content="{loc:Str Installed_MultiSelect}"
                 Icon="{ui:SymbolIcon SelectAllOn24}"
-                ToolTip="Tick several mods to enable or disable them together"
+                ToolTip="{loc:Str Installed_MultiSelectToolTip}"
                 Appearance="{Binding SelectionMode, Converter={StaticResource BoolToAppearance}}"
                 Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}"
                 Click="SelectMode_Click" />
@@ -315,14 +316,14 @@
                 <ui:Button
                     Padding="10,7"
                     Icon="{ui:SymbolIcon ChevronDoubleDown20}"
-                    ToolTip="Open every mod the filters match"
+                    ToolTip="{loc:Str Installed_ExpandAllToolTip}"
                     Appearance="{Binding AllExpanded, Converter={StaticResource BoolToAppearance}}"
                     Command="{Binding ExpandAllCommand}" />
                 <ui:Button
                     Margin="8,0,0,0"
                     Padding="10,7"
                     Icon="{ui:SymbolIcon ChevronDoubleUp20}"
-                    ToolTip="Close every mod the filters match"
+                    ToolTip="{loc:Str Installed_CollapseAllToolTip}"
                     Appearance="{Binding AllCollapsed, Converter={StaticResource BoolToAppearance}}"
                     Command="{Binding CollapseAllCommand}" />
             </StackPanel>
@@ -335,7 +336,7 @@
                 <ui:Button
                     Padding="12,7"
                     FontWeight="SemiBold"
-                    Content="Cards"
+                    Content="{loc:Str Installed_ViewCards}"
                     Icon="{ui:SymbolIcon Apps24}"
                     Appearance="{Binding ShowCards, Converter={StaticResource BoolToAppearance}}"
                     Click="CardsView_Click" />
@@ -343,19 +344,19 @@
                     Margin="8,0,0,0"
                     Padding="12,7"
                     FontWeight="SemiBold"
-                    Content="Groups"
+                    Content="{loc:Str Installed_ViewGroups}"
                     Icon="{ui:SymbolIcon Folder24}"
                     Appearance="{Binding ShowGroups, Converter={StaticResource BoolToAppearance}}"
-                    ToolTip="Sort mods into your own groups, MO2-separator style."
+                    ToolTip="{loc:Str Installed_ViewGroupsToolTip}"
                     Click="GroupsView_Click" />
                 <ui:Button
                     Margin="8,0,0,0"
                     Padding="12,7"
                     FontWeight="SemiBold"
-                    Content="List"
+                    Content="{loc:Str Installed_ViewList}"
                     Icon="{ui:SymbolIcon TextBulletListSquare24}"
                     Appearance="{Binding ShowList, Converter={StaticResource BoolToAppearance}}"
-                    ToolTip="One scrollable row per mod, each opening onto its full details."
+                    ToolTip="{loc:Str Installed_ViewListToolTip}"
                     Click="ListView_Click" />
             </StackPanel>
 
@@ -376,16 +377,16 @@
                      leaves it alone and it is remembered between sessions. -->
                 <ui:ToggleSwitch
                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    ToolTip="Show which mod lists each mod belongs to."
+                    ToolTip="{loc:Str Installed_ListBadgesToolTip}"
                     IsChecked="{Binding ShowListBadges}"
-                    OnContent="List badges"
-                    OffContent="List badges" />
+                    OnContent="{loc:Str Installed_ListBadges}"
+                    OffContent="{loc:Str Installed_ListBadges}" />
             </StackPanel>
 
             <ui:TextBox
-                Width="320"
+                MinWidth="320"
                 HorizontalAlignment="Left"
-                PlaceholderText="Search mods... (@author for author)"
+                PlaceholderText="{loc:Str Common_SearchPlaceholder}"
                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
         </DockPanel>
 
@@ -394,8 +395,8 @@
                 DockPanel.Dock="Right"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Content="Clear filters"
-                ToolTip="Puts every filter back to what this page opens with."
+                Content="{loc:Str Common_ClearFilters}"
+                ToolTip="{loc:Str Common_ClearFiltersToolTip}"
                 Command="{Binding ClearFiltersCommand}" />
 
             <!-- Saving the defaults from the page itself, rather than as a second set of dropdowns
@@ -408,8 +409,8 @@
                 Margin="0,0,8,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Content="Save as default"
-                ToolTip="Opens this page with the filters, sort, view and per-page it is set to right now. The search box is not included. Options can clear it again."
+                Content="{loc:Str Common_SaveAsDefault}"
+                ToolTip="{loc:Str Installed_SaveAsDefaultToolTip}"
                 Command="{Binding SaveAsDefaultCommand}" />
 
             <!-- A WrapPanel: seven filters don't fit on one line at every window width, and a
@@ -421,24 +422,28 @@
                      reason the labels could go - three of these used to read plain "All" and would
                      have been indistinguishable side by side.
 
-                     Fixed Width, not MinWidth, on every one: a ComboBox sizes itself to its widest
-                     item, so the Category and Group boxes changed width whenever their lists were
-                     rebuilt and the whole row shuffled sideways. Each width here fits that
-                     dropdown's longest option - "Not found on sp-mod.com" is what sets this one.
+                     Width is fixed on the three whose contents change - Category and Group,
+                     whose lists are rebuilt after a scan or a rename, and the attribute dropdown,
+                     whose summary is rewritten as you tick. Sizing those to their contents is what
+                     used to shuffle the whole row sideways mid-use. The rest have fixed item sets,
+                     so they size to a constant widest item and MinWidth cannot move anything; they
+                     carry MinWidth instead, which is the headroom a longer language needs. The
+                     numbers are what each dropdown's longest English option needs - "Not found on
+                     sp-mod.com" sets this one.
                 -->
                 <ComboBox
-                    Width="205"
+                    MinWidth="205"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="Filter by whether an update is available"
+                    ToolTip="{loc:Str Installed_UpdateFilterToolTip}"
                     ItemsSource="{Binding UpdateFilterOptions}"
                     SelectedItem="{Binding SelectedUpdateFilter}" />
 
                 <ComboBox
-                    Width="170"
+                    MinWidth="170"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="Filter by whether a mod is enabled or disabled"
+                    ToolTip="{loc:Str Installed_EnabledFilterToolTip}"
                     ItemsSource="{Binding EnabledFilterOptions}"
                     SelectedItem="{Binding SelectedEnabledFilter}" />
 
@@ -450,7 +455,7 @@
                     Width="220"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="Filter by Fika support, ads, AI content, dependencies and addons"
+                    ToolTip="{loc:Str Common_AttributeFilterToolTip}"
                     Style="{StaticResource FilterDropDownToggle}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -502,7 +507,7 @@
                     Width="165"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="Filter by the category a mod is listed under on sp-mod.com"
+                    ToolTip="{loc:Str Installed_CategoryFilterToolTip}"
                     ItemsSource="{Binding CategoryOptions}"
                     SelectedItem="{Binding SelectedCategory}" />
 
@@ -515,15 +520,15 @@
                     Width="180"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="Filter by one of your own mod groups"
+                    ToolTip="{loc:Str Installed_GroupFilterToolTip}"
                     ItemsSource="{Binding GroupFilterOptions}"
                     SelectedItem="{Binding SelectedGroupFilter}" />
 
                 <ComboBox
-                    Width="175"
+                    MinWidth="175"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="Sort order"
+                    ToolTip="{loc:Str Common_SortToolTip}"
                     ItemsSource="{Binding SortOptions}"
                     SelectedItem="{Binding SelectedSortOption}" />
 
@@ -533,16 +538,16 @@
                      ints, and "12" on its own says nothing. SelectedItem stays an int, so none of
                      the paging arithmetic changes. -->
                 <ComboBox
-                    Width="130"
+                    MinWidth="130"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="How many cards make up one page"
+                    ToolTip="{loc:Str Common_PageSizeToolTip}"
                     ItemsSource="{Binding PageSizeOptions}"
                     SelectedItem="{Binding PageSize}"
                     Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding StringFormat='{}{0} per page'}" />
+                            <TextBlock Text="{Binding StringFormat={loc:Str Common_PageSizeFormat}}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -558,34 +563,34 @@
             Visibility="{Binding SelectionMode, Converter={StaticResource BoolToVis}}">
             <ui:Button
                 DockPanel.Dock="Right"
-                Content="Clear"
+                Content="{loc:Str Installed_SelectionClear}"
                 Command="{Binding ClearSelectionCommand}" />
             <ui:Button
                 DockPanel.Dock="Right"
                 Margin="0,0,8,0"
                 Content="{Binding SelectAllLabel}"
                 Icon="{ui:SymbolIcon SelectAllOn24}"
-                ToolTip="Select everything the current filters match, across every page - not just the page on screen."
+                ToolTip="{loc:Str Installed_SelectAllToolTip}"
                 Appearance="{Binding AllSelected, Converter={StaticResource BoolToAppearance}}"
                 Command="{Binding SelectAllCommand}" />
             <ui:Button
                 DockPanel.Dock="Right"
                 Margin="0,0,8,0"
                 Appearance="Primary"
-                Content="Update selected"
+                Content="{loc:Str Installed_UpdateSelected}"
                 Icon="{ui:SymbolIcon ArrowDownload24}"
-                ToolTip="Queue an update for every selected mod that has one. Mods with no update, disabled mods and addons are skipped."
+                ToolTip="{loc:Str Installed_UpdateSelectedToolTip}"
                 Command="{Binding UpdateSelectedCommand}" />
             <ui:Button
                 DockPanel.Dock="Right"
                 Margin="0,0,8,0"
-                Content="Enable selected"
+                Content="{loc:Str Installed_EnableSelected}"
                 Icon="{ui:SymbolIcon PlugConnected24}"
                 Command="{Binding EnableSelectedCommand}" />
             <ui:Button
                 DockPanel.Dock="Right"
                 Margin="0,0,8,0"
-                Content="Disable selected"
+                Content="{loc:Str Installed_DisableSelected}"
                 Icon="{ui:SymbolIcon PlugDisconnected24}"
                 Command="{Binding DisableSelectedCommand}" />
             <TextBlock
@@ -600,7 +605,7 @@
             Margin="0,0,0,8"
             Visibility="{Binding ShowGroups, Converter={StaticResource BoolToVis}}">
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="Sort groups:" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
+                <TextBlock Text="{loc:Str Installed_SortGroupsLabel}" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
                 <ComboBox
                     MinWidth="150"
                     ItemsSource="{Binding GroupSortOptions}"
@@ -609,13 +614,13 @@
             <ui:Button
                 DockPanel.Dock="Right"
                 Margin="0,0,16,0"
-                Content="Add group"
+                Content="{loc:Str Installed_AddGroup}"
                 Icon="{ui:SymbolIcon Add24}"
                 Command="{Binding AddGroupCommand}" />
             <ui:TextBox
-                Width="220"
+                MinWidth="220"
                 HorizontalAlignment="Left"
-                PlaceholderText="New group name..."
+                PlaceholderText="{loc:Str Installed_NewGroupPlaceholder}"
                 Text="{Binding NewGroupName, UpdateSourceTrigger=PropertyChanged}" />
         </DockPanel>
 
@@ -1183,20 +1188,24 @@
             Margin="0,8,0,0"
             Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
             <ui:Button
-                Content="Previous"
+                Content="{loc:Str Common_Previous}"
                 Command="{Binding PreviousPageCommand}" />
+
+            <!-- One TextBlock rather than "Page 3" beside "of 10" - see BrowsePage's pager. -->
             <TextBlock
                 Margin="12,0,12,0"
                 VerticalAlignment="Center"
-                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                Text="{Binding CurrentPage, StringFormat='Page {0}'}" />
-            <TextBlock
-                VerticalAlignment="Center"
-                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                Text="{Binding TotalPages, StringFormat='of {0}'}" />
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{loc:Str Common_PagerFormat}">
+                        <Binding Path="CurrentPage" Mode="OneWay" />
+                        <Binding Path="TotalPages" Mode="OneWay" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
             <ui:Button
                 Margin="12,0,0,0"
-                Content="Next"
+                Content="{loc:Str Common_Next}"
                 Command="{Binding NextPageCommand}" />
         </StackPanel>
     </Grid>

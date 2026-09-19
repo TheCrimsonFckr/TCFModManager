@@ -46,7 +46,7 @@
                 <ui:TextBox
                     MinWidth="320"
                     HorizontalAlignment="Left"
-                    PlaceholderText="{loc:Str Browse_SearchPlaceholder}"
+                    PlaceholderText="{loc:Str Common_SearchPlaceholder}"
                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
             </DockPanel>
 
@@ -56,7 +56,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Content="{loc:Str Common_ClearFilters}"
-                    ToolTip="{loc:Str Browse_ClearFiltersToolTip}"
+                    ToolTip="{loc:Str Common_ClearFiltersToolTip}"
                     Command="{Binding ClearFiltersCommand}" />
 
                 <!-- Same as Installed's: the defaults are saved from the page, not restated in
@@ -152,7 +152,7 @@
                     Width="220"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="{loc:Str Browse_AttributeFilterToolTip}"
+                    ToolTip="{loc:Str Common_AttributeFilterToolTip}"
                     Style="{StaticResource FilterDropDownToggle}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -208,7 +208,7 @@
                     MinWidth="175"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="{loc:Str Browse_SortToolTip}"
+                    ToolTip="{loc:Str Common_SortToolTip}"
                     ItemsSource="{Binding SortOptions}"
                     SelectedItem="{Binding SelectedSortOption}" />
 
@@ -218,12 +218,12 @@
                     MinWidth="130"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="{loc:Str Browse_PageSizeToolTip}"
+                    ToolTip="{loc:Str Common_PageSizeToolTip}"
                     ItemsSource="{Binding PageSizeOptions}"
                     SelectedItem="{Binding PageSize}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding StringFormat={loc:Str Browse_PageSizeFormat}}" />
+                            <TextBlock Text="{Binding StringFormat={loc:Str Common_PageSizeFormat}}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -606,7 +606,7 @@
                 VerticalAlignment="Center"
                 Foreground="{DynamicResource TextFillColorPrimaryBrush}">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="{loc:Str Browse_PagerFormat}">
+                    <MultiBinding StringFormat="{loc:Str Common_PagerFormat}">
                         <Binding Path="CurrentPage" Mode="OneWay" />
                         <Binding Path="TotalPages" Mode="OneWay" />
                     </MultiBinding>

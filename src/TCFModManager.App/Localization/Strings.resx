@@ -112,6 +112,31 @@
     <value>{0:N0} downloads</value>
     <comment>{0} is a download count. Keep the :N0 - it is what groups the thousands the way the user's Windows regional setting does.</comment>
   </data>
+  <data name="Common_SearchPlaceholder" xml:space="preserve">
+    <value>Search mods... (@author for author)</value>
+    <comment>Placeholder in the search box. "@author" is typed syntax, not a word - leave it as it is and translate only the sentence around it.</comment>
+  </data>
+  <data name="Common_ClearFiltersToolTip" xml:space="preserve">
+    <value>Puts every filter back to what this page opens with.</value>
+  </data>
+  <data name="Common_AttributeFilterToolTip" xml:space="preserve">
+    <value>Filter by Fika support, ads, AI content, dependencies and addons</value>
+    <comment>Fika is a mod's name and stays as it is.</comment>
+  </data>
+  <data name="Common_SortToolTip" xml:space="preserve">
+    <value>Sort order</value>
+  </data>
+  <data name="Common_PageSizeToolTip" xml:space="preserve">
+    <value>How many cards make up one page</value>
+  </data>
+  <data name="Common_PageSizeFormat" xml:space="preserve">
+    <value>{0} per page</value>
+    <comment>One entry in the page-size dropdown. {0} is a number of cards.</comment>
+  </data>
+  <data name="Common_PagerFormat" xml:space="preserve">
+    <value>Page {0} of {1}</value>
+    <comment>The pager under the results. {0} is the page being shown, {1} the number of pages.</comment>
+  </data>
   <data name="Dependencies_Refresh" xml:space="preserve">
     <value>Refresh</value>
     <comment>Button label - re-runs the dependency scan.</comment>
@@ -148,13 +173,6 @@
   <data name="Dependencies_Empty" xml:space="preserve">
     <value>Nothing installed declares a dependency.</value>
   </data>
-  <data name="Browse_SearchPlaceholder" xml:space="preserve">
-    <value>Search mods... (@author for author)</value>
-    <comment>Placeholder in the search box. "@author" is typed syntax, not a word - leave it as it is and translate only the sentence around it.</comment>
-  </data>
-  <data name="Browse_ClearFiltersToolTip" xml:space="preserve">
-    <value>Puts every filter back to what this page opens with.</value>
-  </data>
   <data name="Browse_SaveAsDefaultToolTip" xml:space="preserve">
     <value>Opens this page with the filters, sort and per-page it is set to right now, including the SPT version ticks. The search box is not included. Options can clear it again.</value>
   </data>
@@ -169,22 +187,8 @@
     <value>SPT {0}</value>
     <comment>One tick box in the SPT version filter. {0} is a version number; SPT is a product name.</comment>
   </data>
-  <data name="Browse_AttributeFilterToolTip" xml:space="preserve">
-    <value>Filter by Fika support, ads, AI content, dependencies and addons</value>
-    <comment>Fika is a mod's name and stays as it is.</comment>
-  </data>
   <data name="Browse_CategoryFilterToolTip" xml:space="preserve">
     <value>Filter by the category a mod is listed under</value>
-  </data>
-  <data name="Browse_SortToolTip" xml:space="preserve">
-    <value>Sort order</value>
-  </data>
-  <data name="Browse_PageSizeToolTip" xml:space="preserve">
-    <value>How many cards make up one page</value>
-  </data>
-  <data name="Browse_PageSizeFormat" xml:space="preserve">
-    <value>{0} per page</value>
-    <comment>One entry in the page-size dropdown. {0} is a number of cards.</comment>
   </data>
   <data name="Browse_FeaturedFilterToolTip" xml:space="preserve">
     <value>Whether mods featured on sp-mod.com are included</value>
@@ -219,8 +223,92 @@
   <data name="Browse_FirstLaunchNote" xml:space="preserve">
     <value>The first launch downloads the mod catalog. After that it's read from disk and this is over in a moment.</value>
   </data>
-  <data name="Browse_PagerFormat" xml:space="preserve">
-    <value>Page {0} of {1}</value>
-    <comment>The pager under the results. {0} is the page being shown, {1} the number of pages.</comment>
+  <data name="Installed_Rescan" xml:space="preserve">
+    <value>Rescan</value>
+    <comment>Button label - reads the install folder again.</comment>
+  </data>
+  <data name="Installed_MultiSelect" xml:space="preserve">
+    <value>Multi select</value>
+    <comment>Button label - turns the card grid into a tick list.</comment>
+  </data>
+  <data name="Installed_MultiSelectToolTip" xml:space="preserve">
+    <value>Tick several mods to enable or disable them together</value>
+  </data>
+  <data name="Installed_ExpandAllToolTip" xml:space="preserve">
+    <value>Open every mod the filters match</value>
+  </data>
+  <data name="Installed_CollapseAllToolTip" xml:space="preserve">
+    <value>Close every mod the filters match</value>
+  </data>
+  <data name="Installed_ViewCards" xml:space="preserve">
+    <value>Cards</value>
+    <comment>One of the three view buttons. A grid of cards.</comment>
+  </data>
+  <data name="Installed_ViewGroups" xml:space="preserve">
+    <value>Groups</value>
+    <comment>One of the three view buttons. Mods sorted into the user's own groups.</comment>
+  </data>
+  <data name="Installed_ViewGroupsToolTip" xml:space="preserve">
+    <value>Sort mods into your own groups, MO2-separator style.</value>
+    <comment>MO2 is Mod Organizer 2, another modding tool - a name, not a word.</comment>
+  </data>
+  <data name="Installed_ViewList" xml:space="preserve">
+    <value>List</value>
+    <comment>One of the three view buttons. One row per mod.</comment>
+  </data>
+  <data name="Installed_ViewListToolTip" xml:space="preserve">
+    <value>One scrollable row per mod, each opening onto its full details.</value>
+  </data>
+  <data name="Installed_ListBadges" xml:space="preserve">
+    <value>List badges</value>
+    <comment>Label on the switch that shows mod-list chips on each mod. "List" here means a mod list, not the List view.</comment>
+  </data>
+  <data name="Installed_ListBadgesToolTip" xml:space="preserve">
+    <value>Show which mod lists each mod belongs to.</value>
+  </data>
+  <data name="Installed_SaveAsDefaultToolTip" xml:space="preserve">
+    <value>Opens this page with the filters, sort, view and per-page it is set to right now. The search box is not included. Options can clear it again.</value>
+  </data>
+  <data name="Installed_UpdateFilterToolTip" xml:space="preserve">
+    <value>Filter by whether an update is available</value>
+  </data>
+  <data name="Installed_EnabledFilterToolTip" xml:space="preserve">
+    <value>Filter by whether a mod is enabled or disabled</value>
+  </data>
+  <data name="Installed_CategoryFilterToolTip" xml:space="preserve">
+    <value>Filter by the category a mod is listed under on sp-mod.com</value>
+  </data>
+  <data name="Installed_GroupFilterToolTip" xml:space="preserve">
+    <value>Filter by one of your own mod groups</value>
+  </data>
+  <data name="Installed_SelectionClear" xml:space="preserve">
+    <value>Clear</value>
+    <comment>Button label - unticks everything currently selected.</comment>
+  </data>
+  <data name="Installed_SelectAllToolTip" xml:space="preserve">
+    <value>Select everything the current filters match, across every page - not just the page on screen.</value>
+  </data>
+  <data name="Installed_UpdateSelected" xml:space="preserve">
+    <value>Update selected</value>
+  </data>
+  <data name="Installed_UpdateSelectedToolTip" xml:space="preserve">
+    <value>Queue an update for every selected mod that has one. Mods with no update, disabled mods and addons are skipped.</value>
+  </data>
+  <data name="Installed_EnableSelected" xml:space="preserve">
+    <value>Enable selected</value>
+  </data>
+  <data name="Installed_DisableSelected" xml:space="preserve">
+    <value>Disable selected</value>
+  </data>
+  <data name="Installed_SortGroupsLabel" xml:space="preserve">
+    <value>Sort groups:</value>
+    <comment>Label to the left of the group sort dropdown.</comment>
+  </data>
+  <data name="Installed_AddGroup" xml:space="preserve">
+    <value>Add group</value>
+  </data>
+  <data name="Installed_NewGroupPlaceholder" xml:space="preserve">
+    <value>New group name...</value>
+    <comment>Placeholder in the box beside Add group.</comment>
   </data>
 </root>
