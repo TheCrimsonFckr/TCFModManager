@@ -42,7 +42,7 @@
         <DockPanel Grid.Row="0" Margin="0,0,0,8">
             <ui:Button
                 DockPanel.Dock="Right"
-                Content="{loc:Str Common_Refresh}"
+                Content="{loc:Str Dependencies_Refresh}"
                 Icon="{ui:SymbolIcon ArrowSync24}"
                 Command="{Binding RefreshCommand}"
                 IsEnabled="{Binding IsNotBusy}" />

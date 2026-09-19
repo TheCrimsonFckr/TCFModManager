@@ -88,9 +88,33 @@
     <value>System default ({0})</value>
     <comment>{0} is the language following Windows currently lands on, named in itself - "System default (English)".</comment>
   </data>
-  <data name="Common_Refresh" xml:space="preserve">
+  <data name="Common_ClearFilters" xml:space="preserve">
+    <value>Clear filters</value>
+    <comment>Button label, on both Browse and Installed. Each page explains its own in a tooltip.</comment>
+  </data>
+  <data name="Common_SaveAsDefault" xml:space="preserve">
+    <value>Save as default</value>
+    <comment>Button label, on both Browse and Installed.</comment>
+  </data>
+  <data name="Common_Previous" xml:space="preserve">
+    <value>Previous</value>
+    <comment>Pager button, on both Browse and Installed. The previous page of results.</comment>
+  </data>
+  <data name="Common_Next" xml:space="preserve">
+    <value>Next</value>
+    <comment>Pager button, on both Browse and Installed.</comment>
+  </data>
+  <data name="Common_PinnedToolTip" xml:space="preserve">
+    <value>Pinned - no mod list you apply will set this mod aside</value>
+    <comment>On the pin icon. Four copies of this sentence across Browse and Installed's three views.</comment>
+  </data>
+  <data name="Common_DownloadsFormat" xml:space="preserve">
+    <value>{0:N0} downloads</value>
+    <comment>{0} is a download count. Keep the :N0 - it is what groups the thousands the way the user's Windows regional setting does.</comment>
+  </data>
+  <data name="Dependencies_Refresh" xml:space="preserve">
     <value>Refresh</value>
-    <comment>Button label - re-runs the scan the page is showing. Shared by every page with one.</comment>
+    <comment>Button label - re-runs the dependency scan.</comment>
   </data>
   <data name="ModDetails_Close" xml:space="preserve">
     <value>Close</value>
@@ -98,10 +122,6 @@
   </data>
   <data name="ModDetails_ViewModPage" xml:space="preserve">
     <value>View mod page</value>
-  </data>
-  <data name="ModDetails_DownloadsFormat" xml:space="preserve">
-    <value>{0:N0} downloads</value>
-    <comment>{0} is a download count. Keep the :N0 - it is what groups the thousands the way the user's Windows regional setting does.</comment>
   </data>
   <data name="ModDetails_CategoryFormat" xml:space="preserve">
     <value>Category: {0}</value>
@@ -127,5 +147,80 @@
   </data>
   <data name="Dependencies_Empty" xml:space="preserve">
     <value>Nothing installed declares a dependency.</value>
+  </data>
+  <data name="Browse_SearchPlaceholder" xml:space="preserve">
+    <value>Search mods... (@author for author)</value>
+    <comment>Placeholder in the search box. "@author" is typed syntax, not a word - leave it as it is and translate only the sentence around it.</comment>
+  </data>
+  <data name="Browse_ClearFiltersToolTip" xml:space="preserve">
+    <value>Puts every filter back to what this page opens with.</value>
+  </data>
+  <data name="Browse_SaveAsDefaultToolTip" xml:space="preserve">
+    <value>Opens this page with the filters, sort and per-page it is set to right now, including the SPT version ticks. The search box is not included. Options can clear it again.</value>
+  </data>
+  <data name="Browse_RefreshCache" xml:space="preserve">
+    <value>Refresh cache</value>
+    <comment>Button label - re-fetches the mod catalog from sp-mod.com.</comment>
+  </data>
+  <data name="Browse_SptVersionFilterToolTip" xml:space="preserve">
+    <value>Filter by the SPT releases a mod supports</value>
+  </data>
+  <data name="Browse_SptVersionItemFormat" xml:space="preserve">
+    <value>SPT {0}</value>
+    <comment>One tick box in the SPT version filter. {0} is a version number; SPT is a product name.</comment>
+  </data>
+  <data name="Browse_AttributeFilterToolTip" xml:space="preserve">
+    <value>Filter by Fika support, ads, AI content, dependencies and addons</value>
+    <comment>Fika is a mod's name and stays as it is.</comment>
+  </data>
+  <data name="Browse_CategoryFilterToolTip" xml:space="preserve">
+    <value>Filter by the category a mod is listed under</value>
+  </data>
+  <data name="Browse_SortToolTip" xml:space="preserve">
+    <value>Sort order</value>
+  </data>
+  <data name="Browse_PageSizeToolTip" xml:space="preserve">
+    <value>How many cards make up one page</value>
+  </data>
+  <data name="Browse_PageSizeFormat" xml:space="preserve">
+    <value>{0} per page</value>
+    <comment>One entry in the page-size dropdown. {0} is a number of cards.</comment>
+  </data>
+  <data name="Browse_FeaturedFilterToolTip" xml:space="preserve">
+    <value>Whether mods featured on sp-mod.com are included</value>
+  </data>
+  <data name="Browse_ByAuthorFormat" xml:space="preserve">
+    <value>by {0}</value>
+    <comment>{0} is an author's name, shown under a mod's title on its card.</comment>
+  </data>
+  <data name="Browse_EndorsementsFormat" xml:space="preserve">
+    <value>{0:N0} endorsements</value>
+    <comment>{0} is a count, never zero - a card with none hides this line. Keep the :N0.</comment>
+  </data>
+  <data name="Browse_BadgeFikaCompatible" xml:space="preserve">
+    <value>Fika compatible</value>
+    <comment>Badge on a mod card. Fika is a mod's name and stays as it is.</comment>
+  </data>
+  <data name="Browse_BadgeContainsAds" xml:space="preserve">
+    <value>Contains ads</value>
+    <comment>Badge on a mod card.</comment>
+  </data>
+  <data name="Browse_BadgeHasDependencies" xml:space="preserve">
+    <value>Has dependencies</value>
+    <comment>Badge on a mod card.</comment>
+  </data>
+  <data name="Browse_AddonBadgeToolTip" xml:space="preserve">
+    <value>Open this mod to see and install its addons</value>
+  </data>
+  <data name="Browse_StartupProgressFormat" xml:space="preserve">
+    <value>{0:N0} of {1:N0} mods</value>
+    <comment>First-run progress while the catalog downloads. {0} is how many have arrived, {1} the total.</comment>
+  </data>
+  <data name="Browse_FirstLaunchNote" xml:space="preserve">
+    <value>The first launch downloads the mod catalog. After that it's read from disk and this is over in a moment.</value>
+  </data>
+  <data name="Browse_PagerFormat" xml:space="preserve">
+    <value>Page {0} of {1}</value>
+    <comment>The pager under the results. {0} is the page being shown, {1} the number of pages.</comment>
   </data>
 </root>

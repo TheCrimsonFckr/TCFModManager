@@ -20,6 +20,7 @@
     xmlns:app="clr-namespace:TCFModManager.App"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     ScrollViewer.CanContentScroll="False"
     Title="Browse"
     Loaded="BrowsePage_Loaded">
@@ -43,9 +44,9 @@
                 <!-- The Fika / ads / AI toggles that used to sit along this row are now three of
                      the five tick boxes in the "Show" dropdown below, next to the other filters. -->
                 <ui:TextBox
-                    Width="320"
+                    MinWidth="320"
                     HorizontalAlignment="Left"
-                    PlaceholderText="Search mods... (@author for author)"
+                    PlaceholderText="{loc:Str Browse_SearchPlaceholder}"
                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
             </DockPanel>
 
@@ -54,8 +55,8 @@
                     DockPanel.Dock="Right"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Content="Clear filters"
-                    ToolTip="Puts every filter back to what this page opens with."
+                    Content="{loc:Str Common_ClearFilters}"
+                    ToolTip="{loc:Str Browse_ClearFiltersToolTip}"
                     Command="{Binding ClearFiltersCommand}" />
 
                 <!-- Same as Installed's: the defaults are saved from the page, not restated in
@@ -65,15 +66,15 @@
                     Margin="0,0,8,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Content="Save as default"
-                    ToolTip="Opens this page with the filters, sort and per-page it is set to right now, including the SPT version ticks. The search box is not included. Options can clear it again."
+                    Content="{loc:Str Common_SaveAsDefault}"
+                    ToolTip="{loc:Str Browse_SaveAsDefaultToolTip}"
                     Command="{Binding SaveAsDefaultCommand}" />
                 <ui:Button
                     DockPanel.Dock="Right"
                     Margin="0,0,8,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    Content="Refresh cache"
+                    Content="{loc:Str Browse_RefreshCache}"
                     Command="{Binding RefreshCacheCommand}" />
 
                 <!-- A WrapPanel: six filters don't fit on one line at every window width, and a
@@ -84,16 +85,22 @@
 
                      No inline labels on this row: each filter's neutral value names what it filters
                      ("All SPT versions", "Featured included") rather than leaning on a word to its
-                     left. Fixed Width, not MinWidth, on all of them - a ComboBox sizes itself to
-                     its widest item, so a rebuilt Category list used to shift the whole row
-                     sideways. Same treatment as Installed's row.
+                     left.
+
+                     Width is fixed on the three controls whose contents change - these two
+                     dropdowns, whose summary is rewritten as you tick, and Category, whose list is
+                     rebuilt when the catalog loads. Sizing those to their contents is what used to
+                     shift the whole row sideways mid-use. The remaining three have fixed item sets,
+                     so they size to a constant widest item and MinWidth cannot move anything; they
+                     carry MinWidth instead, which is the headroom a longer language needs. Same
+                     treatment as Installed's row.
                 -->
                 <ToggleButton
                     x:Name="SptVersionToggle"
                     Width="200"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="Filter by the SPT releases a mod supports"
+                    ToolTip="{loc:Str Browse_SptVersionFilterToolTip}"
                     Style="{StaticResource FilterDropDownToggle}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -130,7 +137,7 @@
                                             Margin="2"
                                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                            Content="{Binding Label, StringFormat='SPT {0}'}" />
+                                            Content="{Binding Label, StringFormat={loc:Str Browse_SptVersionItemFormat}}" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -145,7 +152,7 @@
                     Width="220"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="Filter by Fika support, ads, AI content, dependencies and addons"
+                    ToolTip="{loc:Str Browse_AttributeFilterToolTip}"
                     Style="{StaticResource FilterDropDownToggle}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -193,39 +200,39 @@
                     Width="165"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="Filter by the category a mod is listed under"
+                    ToolTip="{loc:Str Browse_CategoryFilterToolTip}"
                     ItemsSource="{Binding CategoryOptions}"
                     SelectedItem="{Binding SelectedCategory}" />
 
                 <ComboBox
-                    Width="175"
+                    MinWidth="175"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="Sort order"
+                    ToolTip="{loc:Str Browse_SortToolTip}"
                     ItemsSource="{Binding SortOptions}"
                     SelectedItem="{Binding SelectedSortOption}" />
 
                 <!-- Item template, because the options are plain ints and "12" says nothing on its
                      own. SelectedItem stays an int, so the paging arithmetic is untouched. -->
                 <ComboBox
-                    Width="130"
+                    MinWidth="130"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="How many cards make up one page"
+                    ToolTip="{loc:Str Browse_PageSizeToolTip}"
                     ItemsSource="{Binding PageSizeOptions}"
                     SelectedItem="{Binding PageSize}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding StringFormat='{}{0} per page'}" />
+                            <TextBlock Text="{Binding StringFormat={loc:Str Browse_PageSizeFormat}}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
                 <ComboBox
-                    Width="170"
+                    MinWidth="170"
                     Margin="0,0,16,4"
                     VerticalAlignment="Center"
-                    ToolTip="Whether mods featured on sp-mod.com are included"
+                    ToolTip="{loc:Str Browse_FeaturedFilterToolTip}"
                     ItemsSource="{Binding FeaturedFilterOptions}"
                     SelectedItem="{Binding SelectedFeaturedFilter}" />
                 </WrapPanel>
@@ -310,7 +317,7 @@
                                         FontWeight="SemiBold"
                                         TextTrimming="CharacterEllipsis" />
                                     <TextBlock
-                                        Text="{Binding Author, StringFormat='by {0}'}"
+                                        Text="{Binding Author, StringFormat={loc:Str Browse_ByAuthorFormat}}"
                                         FontSize="11"
                                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                         TextTrimming="CharacterEllipsis"
@@ -321,7 +328,7 @@
                                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                         TextTrimming="CharacterEllipsis" />
                                     <TextBlock
-                                        Text="{Binding Downloads, Mode=OneWay, StringFormat='{}{0:N0} downloads'}"
+                                        Text="{Binding Downloads, Mode=OneWay, StringFormat={loc:Str Common_DownloadsFormat}}"
                                         FontSize="11"
                                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                         TextTrimming="CharacterEllipsis" />
@@ -330,7 +337,7 @@
                                          row on every card would just add height. ModCardViewModel
                                          nulls the count at zero so NullToCollapsed can do this. -->
                                     <TextBlock
-                                        Text="{Binding Endorsements, Mode=OneWay, StringFormat='{}{0:N0} endorsements'}"
+                                        Text="{Binding Endorsements, Mode=OneWay, StringFormat={loc:Str Browse_EndorsementsFormat}}"
                                         FontSize="11"
                                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                         TextTrimming="CharacterEllipsis"
@@ -428,14 +435,14 @@
                                                     Appearance="Info"
                                                     FontSize="11"
                                                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                    Content="Fika compatible"
+                                                    Content="{loc:Str Browse_BadgeFikaCompatible}"
                                                     Visibility="{Binding IsFikaCompatible, Converter={StaticResource TrueToVisible}}" />
                                                 <ui:Badge
                                                     Margin="0,0,6,4"
                                                     Appearance="Info"
                                                     FontSize="11"
                                                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                    Content="Contains ads"
+                                                    Content="{loc:Str Browse_BadgeContainsAds}"
                                                     Visibility="{Binding ContainsAds, Converter={StaticResource TrueToVisible}}" />
                                             </WrapPanel>
 
@@ -450,7 +457,7 @@
                                                     Appearance="Caution"
                                                     FontSize="11"
                                                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                    Content="Has dependencies"
+                                                    Content="{loc:Str Browse_BadgeHasDependencies}"
                                                     Visibility="Collapsed"
                                                     behaviors:DependencyBadgeLoader.Mod="{Binding Mod}" />
                                                 <ui:Badge
@@ -459,7 +466,7 @@
                                                     FontSize="11"
                                                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                     Content="{Binding AddonBadgeText}"
-                                                    ToolTip="Open this mod to see and install its addons"
+                                                    ToolTip="{loc:Str Browse_AddonBadgeToolTip}"
                                                     Visibility="{Binding HasAddons, Converter={StaticResource TrueToVisible}}" />
                                             </WrapPanel>
                                         </StackPanel>
@@ -487,7 +494,7 @@
                                     HorizontalAlignment="Center"
                                     Symbol="Pin24"
                                     Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                                    ToolTip="Pinned - no mod list you apply will set this mod aside"
+                                    ToolTip="{loc:Str Common_PinnedToolTip}"
                                     Visibility="{Binding IsPinned, Converter={StaticResource TrueToVisible}}" />
                             </StackPanel>
 
@@ -555,15 +562,19 @@
 
                 <!-- Only a live fetch knows a total, so this stays collapsed on a launch that
                      reads the cache and appears on the first run, which is the slow one. -->
+                <!-- One sentence, not four Runs: "of" and "mods" were fragments no translator
+                     could place, and several languages would not put them in that order. -->
                 <TextBlock
                     Margin="0,4,0,0"
                     HorizontalAlignment="Center"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Visibility="{Binding TotalCount, Source={x:Static app:AppServices.ModCache}, Converter={StaticResource HasCount}}">
-                    <Run Text="{Binding LoadedCount, Source={x:Static app:AppServices.ModCache}, Mode=OneWay, StringFormat={}{0:N0}}" />
-                    <Run Text="of" />
-                    <Run Text="{Binding TotalCount, Source={x:Static app:AppServices.ModCache}, Mode=OneWay, StringFormat={}{0:N0}}" />
-                    <Run Text="mods" />
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{loc:Str Browse_StartupProgressFormat}">
+                            <Binding Path="LoadedCount" Source="{x:Static app:AppServices.ModCache}" Mode="OneWay" />
+                            <Binding Path="TotalCount" Source="{x:Static app:AppServices.ModCache}" Mode="OneWay" />
+                        </MultiBinding>
+                    </TextBlock.Text>
                 </TextBlock>
 
                 <TextBlock
@@ -573,7 +584,7 @@
                     MaxWidth="380"
                     TextAlignment="Center"
                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                    Text="The first launch downloads the mod catalog. After that it's read from disk and this is over in a moment."
+                    Text="{loc:Str Browse_FirstLaunchNote}"
                     Visibility="{Binding TotalCount, Source={x:Static app:AppServices.ModCache}, Converter={StaticResource HasCount}}" />
             </StackPanel>
         </Border>
@@ -584,20 +595,26 @@
             HorizontalAlignment="Center"
             Margin="0,8,0,0">
             <ui:Button
-                Content="Previous"
+                Content="{loc:Str Common_Previous}"
                 Command="{Binding PreviousPageCommand}" />
+
+            <!-- One TextBlock rather than "Page 3" beside "of 10": a page count is one sentence,
+                 and the two halves cannot be reordered independently. The second half loses its
+                 dimmer foreground in the merge. -->
             <TextBlock
                 Margin="12,0,12,0"
                 VerticalAlignment="Center"
-                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                Text="{Binding CurrentPage, StringFormat='Page {0}'}" />
-            <TextBlock
-                VerticalAlignment="Center"
-                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                Text="{Binding TotalPages, StringFormat='of {0}'}" />
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{loc:Str Browse_PagerFormat}">
+                        <Binding Path="CurrentPage" Mode="OneWay" />
+                        <Binding Path="TotalPages" Mode="OneWay" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
             <ui:Button
                 Margin="12,0,0,0"
-                Content="Next"
+                Content="{loc:Str Common_Next}"
                 Command="{Binding NextPageCommand}" />
         </StackPanel>
     </Grid>

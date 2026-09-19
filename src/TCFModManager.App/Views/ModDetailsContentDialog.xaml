@@ -78,7 +78,7 @@
                 TextWrapping="Wrap"
                 Text="{Binding Teaser}" />
 
-            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Downloads, StringFormat={loc:Str ModDetails_DownloadsFormat}}" />
+            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Downloads, StringFormat={loc:Str Common_DownloadsFormat}}" />
             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Category.Title, StringFormat={loc:Str ModDetails_CategoryFormat}}" />
             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding License.Name, StringFormat={loc:Str ModDetails_LicenseFormat}}" />
 
