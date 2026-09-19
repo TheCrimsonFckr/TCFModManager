@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:app="clr-namespace:TCFModManager.App"
     Title="Server map">
@@ -46,7 +47,7 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
                     <ui:Button
-                        Content="Reconnect"
+                        Content="{loc:Str ServerMap_Reconnect}"
                         Icon="{ui:SymbolIcon Connected20}"
                         Command="{Binding ConnectCommand}" />
                     <ProgressBar
@@ -67,7 +68,7 @@
             Margin="0,16,0,0"
             IsClosable="False"
             Severity="Warning"
-            Title="This server's certificate has changed"
+            Title="{loc:Str ServerMap_CertificateChangedTitle}"
             Message="{Binding StatusMessage}"
             IsOpen="{Binding HasCertificateChanged, Mode=OneWay}" />
 
@@ -95,7 +96,7 @@
                         VerticalAlignment="Center"
                         FontWeight="SemiBold"
                         Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                        Text="Published mod list" />
+                        Text="{loc:Str ServerMap_PublishedListHeader}" />
                 </StackPanel>
 
                 <TextBlock
@@ -112,9 +113,9 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
                     <ui:Button
-                        Content="Fetch again"
+                        Content="{loc:Str ServerMap_FetchAgain}"
                         Icon="{ui:SymbolIcon ArrowSync24}"
-                        ToolTip="Asks for the list again even if its revision hasn't moved - for when the copy you hold has been edited or deleted."
+                        ToolTip="{loc:Str ServerMap_FetchAgainToolTip}"
                         Command="{Binding FetchListCommand}" />
                 </StackPanel>
             </StackPanel>
@@ -133,14 +134,14 @@
             Visibility="{Binding IsConnected, Converter={StaticResource BoolToVisibility}}">
             <StackPanel>
                 <TextBlock
-                    Text="Who else is on this map"
+                    Text="{loc:Str ServerMap_WhoElseHeader}"
                     FontWeight="SemiBold"
                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     Margin="0,0,0,4" />
                 <TextBlock
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                    Text="Nothing yet. The server does not report the other machines connected to it, so this page can only show the server itself for now. Nobody's install is being sent anywhere, including yours. That arrives with a later version of the server mod, and asks before it reports anything about this machine." />
+                    Text="{loc:Str ServerMap_WhoElseEmpty}" />
             </StackPanel>
         </ui:Card>
 

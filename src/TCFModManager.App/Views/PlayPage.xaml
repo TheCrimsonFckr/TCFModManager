@@ -260,8 +260,8 @@
                     IsOpen="True"
                     IsClosable="False"
                     Severity="Informational"
-                    Title="Tell the app what this machine is"
-                    Message="Options has a &quot;What this machine is&quot; card. Saying whether anybody plays here lets a mod list from a server arrive trimmed to what a headless actually needs - until then it arrives as it would for a player, which installs more than this machine has any use for."
+                    Title="{loc:Str Play_RoleNoticeTitle}"
+                    Message="{loc:Str Play_RoleNoticeMessage}"
                     Visibility="{Binding NeedsRoleAnswer, Converter={StaticResource BoolToVisibility}}" />
             </StackPanel>
         </ui:Card>

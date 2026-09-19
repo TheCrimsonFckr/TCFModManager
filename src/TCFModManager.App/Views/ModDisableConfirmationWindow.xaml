@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     Width="520"
     MaxHeight="640"
     SizeToContent="Height"
@@ -25,7 +26,7 @@
         <ui:TitleBar
             x:Name="WindowTitleBar"
             Grid.Row="0"
-            Title="Check dependencies" />
+            Title="{loc:Str ModDisable_Title}" />
 
         <StackPanel
             Grid.Row="1"
@@ -86,12 +87,12 @@
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Margin="0,12,0,0"
-                Text="Nothing is deleted either way - disabled mods keep their own files and configs, and move back untouched when re-enabled." />
+                Text="{loc:Str ModDisable_Note}" />
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
                 <ui:Button
                     Margin="0,0,8,0"
-                    Content="Cancel"
+                    Content="{loc:Str Common_Cancel}"
                     Click="CancelButton_Click" />
 
                 <ui:Button

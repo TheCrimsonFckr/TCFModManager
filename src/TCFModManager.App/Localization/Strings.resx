@@ -1017,4 +1017,266 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="Downloads_RetryToolTip" xml:space="preserve">
     <value>Put this back on the end of the queue and try again. Nothing else is re-downloaded.</value>
   </data>
+  <data name="Common_Continue" xml:space="preserve">
+    <value>Continue</value>
+    <comment>Confirms a dialog and carries on. Used by the mod-page and version-change windows.</comment>
+  </data>
+  <data name="AppUpdate_InfoTitle" xml:space="preserve">
+    <value>Updates come from sp-mod.com</value>
+  </data>
+  <data name="AppUpdate_VersionHeader" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="AppUpdate_InstalledLabel" xml:space="preserve">
+    <value>Installed:</value>
+    <comment>Label to the left of the running version number.</comment>
+  </data>
+  <data name="AppUpdate_LatestLabel" xml:space="preserve">
+    <value>Latest on sp-mod.com:</value>
+    <comment>Label to the left of the newest published version number.</comment>
+  </data>
+  <data name="AppUpdate_CheckNow" xml:space="preserve">
+    <value>Check now</value>
+  </data>
+  <data name="AppUpdate_CheckFailedTitle" xml:space="preserve">
+    <value>Couldn't check for updates</value>
+  </data>
+  <data name="AppUpdate_UpToDate" xml:space="preserve">
+    <value>You're on the newest version published on sp-mod.com.</value>
+  </data>
+  <data name="AppUpdate_VersionGuideHeader" xml:space="preserve">
+    <value>HOW TO READ THE VERSION NUMBER</value>
+    <comment>Upper case in English for emphasis - use whatever reads as a quiet heading in yours.</comment>
+  </data>
+  <data name="AppUpdate_PatternPatch" xml:space="preserve">
+    <value>x.x.CHANGE</value>
+    <comment>A version number with the changing part spelled out. The x's stand for digits; CHANGE marks which part moves. Translate CHANGE if that reads better, and keep the three parts separated by dots.</comment>
+  </data>
+  <data name="AppUpdate_PatchNote" xml:space="preserve">
+    <value>bug fix. Fixes to what's already there. Safe to skip.</value>
+    <comment>Follows the pattern above and a dash, as "x.x.CHANGE - bug fix. ...".</comment>
+  </data>
+  <data name="AppUpdate_PatternMinor" xml:space="preserve">
+    <value>x.CHANGE.x</value>
+  </data>
+  <data name="AppUpdate_MinorNote" xml:space="preserve">
+    <value>feature update. Something new, or something works differently.</value>
+  </data>
+  <data name="AppUpdate_PatternMajor" xml:space="preserve">
+    <value>CHANGE.x.x</value>
+  </data>
+  <data name="AppUpdate_MajorNote" xml:space="preserve">
+    <value>major update. Significant changes; read the notes first.</value>
+  </data>
+  <data name="AppUpdate_OpenModPage" xml:space="preserve">
+    <value>Open the mod page</value>
+  </data>
+  <data name="AppUpdate_DownloadAndInstall" xml:space="preserve">
+    <value>Download and install</value>
+  </data>
+  <data name="AppUpdate_InstallNote" xml:space="preserve">
+    <value>You'll be asked to open the mod page first. The app then downloads the release, closes itself, swaps in the new version and reopens. Your settings, install history and staged downloads are left alone.</value>
+  </data>
+  <data name="AppUpdate_NotAppliedTitle" xml:space="preserve">
+    <value>Update not applied</value>
+  </data>
+  <data name="AppUpdate_WhatsNew" xml:space="preserve">
+    <value>What's new</value>
+  </data>
+  <data name="MainWindow_NoInstallTitle" xml:space="preserve">
+    <value>SPT install folder not set</value>
+  </data>
+  <data name="MainWindow_SeeWhatsNew" xml:space="preserve">
+    <value>See what's new</value>
+  </data>
+  <data name="Nav_Play" xml:space="preserve">
+    <value>Play</value>
+    <comment>Sidebar item.</comment>
+  </data>
+  <data name="Nav_Browse" xml:space="preserve">
+    <value>Browse</value>
+    <comment>Sidebar item. Browsing mods on sp-mod.com.</comment>
+  </data>
+  <data name="Nav_Installed" xml:space="preserve">
+    <value>Installed</value>
+    <comment>Sidebar item. The mods on this machine.</comment>
+  </data>
+  <data name="Nav_ModLists" xml:space="preserve">
+    <value>Mod lists</value>
+    <comment>Sidebar item.</comment>
+  </data>
+  <data name="Nav_Configs" xml:space="preserve">
+    <value>Configs</value>
+    <comment>Sidebar item. Mod configuration files.</comment>
+  </data>
+  <data name="Nav_Dependencies" xml:space="preserve">
+    <value>Dependencies</value>
+    <comment>Sidebar item.</comment>
+  </data>
+  <data name="Nav_Footprint" xml:space="preserve">
+    <value>Mod footprint</value>
+    <comment>Sidebar item.</comment>
+  </data>
+  <data name="Nav_ServerMap" xml:space="preserve">
+    <value>Server map</value>
+    <comment>Sidebar item.</comment>
+  </data>
+  <data name="Nav_Downloads" xml:space="preserve">
+    <value>Downloads</value>
+    <comment>Sidebar item.</comment>
+  </data>
+  <data name="Nav_AppUpdate" xml:space="preserve">
+    <value>App update</value>
+    <comment>Sidebar item. This app's own update.</comment>
+  </data>
+  <data name="Nav_Options" xml:space="preserve">
+    <value>Options</value>
+    <comment>Sidebar item.</comment>
+  </data>
+  <data name="MainWindow_LoadingCatalog" xml:space="preserve">
+    <value>Loading mod catalog...</value>
+  </data>
+  <data name="MainWindow_LoadingCatalogNote" xml:space="preserve">
+    <value>Fetching the full sp-mod.com catalog - this only happens once, future launches load instantly from cache.</value>
+  </data>
+  <data name="MainWindow_ModsLoadedFormat" xml:space="preserve">
+    <value>{0:N0} mods loaded</value>
+    <comment>{0} is a count. Keep the :N0.</comment>
+  </data>
+  <data name="InstallRole_Title" xml:space="preserve">
+    <value>This looks like a headless machine</value>
+  </data>
+  <data name="InstallRole_Intro" xml:space="preserve">
+    <value>This install has a Fika headless launcher, which only appears on a setup that runs a headless client.</value>
+  </data>
+  <data name="InstallRole_Explanation" xml:space="preserve">
+    <value>A headless client hosts raids without anybody playing on it, so it needs the mods that decide how a raid goes - bots, items, locations - and none of the ones that draw things at a player. Knowing which this machine is lets a server's mod list arrive trimmed to what it actually needs.</value>
+  </data>
+  <data name="InstallRole_Question" xml:space="preserve">
+    <value>Does anyone play the game on this machine?</value>
+  </data>
+  <data name="InstallRole_Note" xml:space="preserve">
+    <value>You can change this later under Options, and it never affects a mod list of your own - only the ones a server hands you.</value>
+    <comment>Options is the page name, as in the sidebar.</comment>
+  </data>
+  <data name="InstallRole_AskLater" xml:space="preserve">
+    <value>Ask me later</value>
+  </data>
+  <data name="InstallRole_OnlyHosts" xml:space="preserve">
+    <value>No, it only hosts</value>
+    <comment>Answer to InstallRole_Question.</comment>
+  </data>
+  <data name="InstallRole_OnlyHostsToolTip" xml:space="preserve">
+    <value>A dedicated headless box. A served list arrives without the mods only a player needs.</value>
+  </data>
+  <data name="InstallRole_PlaysToo" xml:space="preserve">
+    <value>Yes, I play here too</value>
+    <comment>Answer to InstallRole_Question.</comment>
+  </data>
+  <data name="InstallRole_PlaysTooToolTip" xml:space="preserve">
+    <value>This machine both hosts and gets played on, so it takes everything a served list names.</value>
+  </data>
+  <data name="ServerMap_Reconnect" xml:space="preserve">
+    <value>Reconnect</value>
+  </data>
+  <data name="ServerMap_CertificateChangedTitle" xml:space="preserve">
+    <value>This server's certificate has changed</value>
+  </data>
+  <data name="ServerMap_PublishedListHeader" xml:space="preserve">
+    <value>Published mod list</value>
+  </data>
+  <data name="ServerMap_FetchAgain" xml:space="preserve">
+    <value>Fetch again</value>
+  </data>
+  <data name="ServerMap_FetchAgainToolTip" xml:space="preserve">
+    <value>Asks for the list again even if its revision hasn't moved - for when the copy you hold has been edited or deleted.</value>
+  </data>
+  <data name="ServerMap_WhoElseHeader" xml:space="preserve">
+    <value>Who else is on this map</value>
+  </data>
+  <data name="ServerMap_WhoElseEmpty" xml:space="preserve">
+    <value>Nothing yet. The server does not report the other machines connected to it, so this page can only show the server itself for now. Nobody's install is being sent anywhere, including yours. That arrives with a later version of the server mod, and asks before it reports anything about this machine.</value>
+  </data>
+  <data name="ReadModPage_Title" xml:space="preserve">
+    <value>Read the mod page first</value>
+  </data>
+  <data name="ReadModPage_Intro" xml:space="preserve">
+    <value>Same as installing manually from sp-mod.com - open each mod's page below before this gets queued.</value>
+  </data>
+  <data name="ReadModPage_SkipOpening" xml:space="preserve">
+    <value>Skip opening them</value>
+  </data>
+  <data name="ModListAdd_SearchPlaceholder" xml:space="preserve">
+    <value>Search by name</value>
+  </data>
+  <data name="ModListAdd_NoMatches" xml:space="preserve">
+    <value>Nothing matches that.</value>
+  </data>
+  <data name="ModListAdd_NothingPicked" xml:space="preserve">
+    <value>Nothing picked yet.</value>
+  </data>
+  <data name="ModListAdd_Add" xml:space="preserve">
+    <value>Add</value>
+    <comment>Button that puts the picked mods on the list.</comment>
+  </data>
+  <data name="Footprint_SortByLabel" xml:space="preserve">
+    <value>Sort by</value>
+    <comment>Label to the left of a dropdown.</comment>
+  </data>
+  <data name="Footprint_WhatThisReadsHeader" xml:space="preserve">
+    <value>What this reads</value>
+  </data>
+  <data name="Footprint_WhatThisReadsBody" xml:space="preserve">
+    <value>Each mod is read from the files it installs - how much of the game it patches, what it declares that the engine would call on a timer, and what it puts on disk. It describes what a mod contains, not what happens when you play: nothing here is timed or measured, and the app cannot see whether a declared component is ever created or whether a patch sits on something the game calls often. So these are counts, not a rating - this app has no way of knowing what any of it costs you, and deliberately does not grade anyone's work. Open a mod to see what was found and the limit of what each finding establishes.</value>
+  </data>
+  <data name="Footprint_Empty" xml:space="preserve">
+    <value>Nothing to show yet.</value>
+  </data>
+  <data name="ModListVersionChange_Title" xml:space="preserve">
+    <value>Some versions are no longer published</value>
+  </data>
+  <data name="ModListVersionChange_Intro" xml:space="preserve">
+    <value>These mods aren't on sp-mod.com at the version this list names any more. Tick the ones you want installed at the newest version instead - anything left unticked is skipped.</value>
+  </data>
+  <data name="DataFiles_Title" xml:space="preserve">
+    <value>Data files</value>
+    <comment>Window title and the title bar of the data files window.</comment>
+  </data>
+  <data name="DataFiles_ListHeader" xml:space="preserve">
+    <value>Data\ files</value>
+    <comment>The files inside the app's Data\ folder. Data\ is a folder name and stays exactly as it is.</comment>
+  </data>
+  <data name="DataFiles_Reload" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="DataFiles_ReloadToolTip" xml:space="preserve">
+    <value>Discard unsaved edits and reread this file from disk</value>
+  </data>
+  <data name="ModDisable_Title" xml:space="preserve">
+    <value>Check dependencies</value>
+  </data>
+  <data name="ModDisable_Note" xml:space="preserve">
+    <value>Nothing is deleted either way - disabled mods keep their own files and configs, and move back untouched when re-enabled.</value>
+  </data>
+  <data name="Configs_DisclaimerTitle" xml:space="preserve">
+    <value>Edit at your own discretion</value>
+    <comment>Title of a warning banner on the Configs page.</comment>
+  </data>
+  <data name="Configs_DisclaimerMessage" xml:space="preserve">
+    <value>Changing a mod's configuration can break the mod, or your game. That is not the mod author's responsibility to put right, so only change settings you understand - and say so when reporting a bug if you have edited a config. Every file is copied into Data\config-backups before it is saved.</value>
+    <comment>Data\config-backups is a folder name and stays exactly as it is.</comment>
+  </data>
+  <data name="Play_RoleNoticeTitle" xml:space="preserve">
+    <value>Tell the app what this machine is</value>
+  </data>
+  <data name="Play_RoleNoticeMessage" xml:space="preserve">
+    <value>Options has a "What this machine is" card. Saying whether anybody plays here lets a mod list from a server arrive trimmed to what a headless actually needs - until then it arrives as it would for a player, which installs more than this machine has any use for.</value>
+    <comment>Options is the page name and "What this machine is" is the card heading there - translate both as they are translated in Nav_Options and Options_MachineRoleHeader.</comment>
+  </data>
+  <data name="AppUpdate_InfoMessage" xml:space="preserve">
+    <value>This app has its own mod page on sp-mod.com, the same as everything else you install through this app. Updates are read from that listing through the public API, and the file downloaded is the one the page's own Download button serves. As with any other mod, the page is opened before anything is downloaded so that you can read the update - no processes are circumvented as required by sp-mod.com and its authors.</value>
+  </data>
+  <data name="MainWindow_NoInstallMessage" xml:space="preserve">
+    <value>You must set your SPT root in the settings first</value>
+  </data>
 </root>

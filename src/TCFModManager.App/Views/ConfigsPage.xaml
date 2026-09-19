@@ -39,8 +39,8 @@
             Severity="Warning"
             IsClosable="True"
             IsOpen="{Binding ShowDisclaimer, Mode=TwoWay}"
-            Title="Edit at your own discretion"
-            Message="Changing a mod's configuration can break the mod, or your game. That is not the mod author's responsibility to put right, so only change settings you understand - and say so when reporting a bug if you have edited a config. Every file is copied into Data\config-backups before it is saved." />
+            Title="{loc:Str Configs_DisclaimerTitle}"
+            Message="{loc:Str Configs_DisclaimerMessage}" />
 
         <DockPanel Grid.Row="1" Margin="0,0,0,12">
             <ui:Button

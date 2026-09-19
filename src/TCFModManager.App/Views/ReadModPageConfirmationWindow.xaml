@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     Width="440"
     SizeToContent="Height"
     ResizeMode="NoResize"
@@ -24,7 +25,7 @@
         <ui:TitleBar
             x:Name="WindowTitleBar"
             Grid.Row="0"
-            Title="Read the mod page first" />
+            Title="{loc:Str ReadModPage_Title}" />
 
         <StackPanel
             Grid.Row="1"
@@ -34,7 +35,7 @@
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Margin="0,0,0,16"
-                Text="Same as installing manually from sp-mod.com - open each mod's page below before this gets queued." />
+                Text="{loc:Str ReadModPage_Intro}" />
 
             <!-- Shown only for a batch too long to open a page at a time. -->
             <StackPanel x:Name="BatchBar" Margin="0,0,0,16" Visibility="Collapsed">
@@ -53,7 +54,7 @@
 
                     <ui:Button
                         x:Name="SkipOpeningButton"
-                        Content="Skip opening them"
+                        Content="{loc:Str ReadModPage_SkipOpening}"
                         Click="SkipOpeningButton_Click" />
                 </WrapPanel>
             </StackPanel>
@@ -102,7 +103,7 @@
                     Margin="0,0,6,0"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center"
-                    Content="Cancel"
+                    Content="{loc:Str Common_Cancel}"
                     Click="CancelButton_Click" />
 
                 <ui:Button
@@ -113,7 +114,7 @@
                     HorizontalContentAlignment="Center"
                     Appearance="Primary"
                     IsEnabled="False"
-                    Content="Continue"
+                    Content="{loc:Str Common_Continue}"
                     Click="ContinueButton_Click" />
             </Grid>
         </StackPanel>

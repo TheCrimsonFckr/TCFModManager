@@ -10,6 +10,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     Title="Mod footprint"
     Loaded="FootprintPage_Loaded"
@@ -99,7 +100,7 @@
                 DockPanel.Dock="Left"
                 Appearance="Primary"
                 Icon="{ui:SymbolIcon ArrowSync24}"
-                Content="Rescan"
+                Content="{loc:Str Common_Rescan}"
                 IsEnabled="{Binding IsIdle}"
                 Command="{Binding RescanCommand}" />
 
@@ -131,7 +132,7 @@
                 Margin="0,0,8,0"
                 VerticalAlignment="Center"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                Text="Sort by" />
+                Text="{loc:Str Footprint_SortByLabel}" />
         </DockPanel>
 
         <!--
@@ -144,12 +145,12 @@
                 <TextBlock
                     FontWeight="SemiBold"
                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    Text="What this reads" />
+                    Text="{loc:Str Footprint_WhatThisReadsHeader}" />
                 <TextBlock
                     Margin="0,4,0,0"
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                    Text="Each mod is read from the files it installs - how much of the game it patches, what it declares that the engine would call on a timer, and what it puts on disk. It describes what a mod contains, not what happens when you play: nothing here is timed or measured, and the app cannot see whether a declared component is ever created or whether a patch sits on something the game calls often. So these are counts, not a rating - this app has no way of knowing what any of it costs you, and deliberately does not grade anyone's work. Open a mod to see what was found and the limit of what each finding establishes." />
+                    Text="{loc:Str Footprint_WhatThisReadsBody}" />
             </StackPanel>
         </ui:Card>
 
@@ -159,7 +160,7 @@
                 TextWrapping="Wrap"
                 VerticalAlignment="Top"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                Text="Nothing to show yet."
+                Text="{loc:Str Footprint_Empty}"
                 Visibility="{Binding HasRows, Converter={StaticResource FalseToVisible}}" />
 
             <ScrollViewer

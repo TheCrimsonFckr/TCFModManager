@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:views="clr-namespace:TCFModManager.App.Views"
     xmlns:app="clr-namespace:TCFModManager.App"
     Title="{Binding WindowTitle, Source={x:Static app:AppServices.SptEnvironment}}"
@@ -61,8 +62,8 @@
                 Margin="12,8,12,0"
                 IsClosable="True"
                 Severity="Warning"
-                Title="SPT install folder not set"
-                Message="You must set your SPT root in the settings first"
+                Title="{loc:Str MainWindow_NoInstallTitle}"
+                Message="{loc:Str MainWindow_NoInstallMessage}"
                 DataContext="{x:Static app:AppServices.SptEnvironment}"
                 IsOpen="{Binding IsInstallPathMissing}" />
 
@@ -90,7 +91,7 @@
                     Margin="8,0,0,0"
                     VerticalAlignment="Center"
                     Appearance="Primary"
-                    Content="See what's new"
+                    Content="{loc:Str MainWindow_SeeWhatsNew}"
                     Icon="{ui:SymbolIcon ArrowCircleUp24}"
                     Click="AppUpdateBanner_Click" />
             </Grid>
@@ -110,36 +111,36 @@
                 <!-- First: the last thing you do before playing, and the one item on the list that
                      is an action rather than a view of the install. -->
                 <ui:NavigationViewItem
-                    Content="Play"
+                    Content="{loc:Str Nav_Play}"
                     Icon="{ui:SymbolIcon Play24}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:PlayPage}" />
                 <ui:NavigationViewItem
-                    Content="Browse"
+                    Content="{loc:Str Nav_Browse}"
                     Icon="{ui:SymbolIcon Apps24}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:BrowsePage}" />
                 <ui:NavigationViewItem
-                    Content="Installed"
+                    Content="{loc:Str Nav_Installed}"
                     Icon="{ui:SymbolIcon CheckmarkCircle24}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:InstalledPage}" />
                 <!-- Directly after Installed: a mod list is a named set of exactly what that page
                      shows, and applying one is how that page's contents get changed wholesale. -->
                 <ui:NavigationViewItem
-                    Content="Mod lists"
+                    Content="{loc:Str Nav_ModLists}"
                     Icon="{ui:SymbolIcon AppsList24}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:ModListsPage}" />
                 <!-- Sits next to Installed because it is about the mods already on disk, and before
                      Dependencies because it is the more everyday of the two. -->
                 <ui:NavigationViewItem
-                    Content="Configs"
+                    Content="{loc:Str Nav_Configs}"
                     Icon="{ui:SymbolIcon EditSettings24}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:ConfigsPage}" />
                 <ui:NavigationViewItem
-                    Content="Dependencies"
+                    Content="{loc:Str Nav_Dependencies}"
                     Icon="{ui:SymbolIcon Branch24}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:DependenciesPage}" />
@@ -155,7 +156,7 @@
                      badge in the sidebar is worse than no page at all. DataContext is set
                      explicitly because a nav item does not inherit a useful one from here. -->
                 <ui:NavigationViewItem
-                    Content="Mod footprint"
+                    Content="{loc:Str Nav_Footprint}"
                     Icon="{ui:SymbolIcon Scales24}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:FootprintPage}"
@@ -171,14 +172,14 @@
                      than a gap here can. DataContext is set explicitly because a nav item does not
                      inherit a useful one from here. -->
                 <ui:NavigationViewItem
-                    Content="Server map"
+                    Content="{loc:Str Nav_ServerMap}"
                     Icon="{ui:SymbolIcon ServerSurfaceMultiple16}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:ServerMapPage}"
                     DataContext="{x:Static app:AppServices.ServerMap}"
                     Visibility="{Binding IsPageEnabled, Converter={StaticResource BoolToVis}}" />
                 <ui:NavigationViewItem
-                    Content="Downloads"
+                    Content="{loc:Str Nav_Downloads}"
                     Icon="{ui:SymbolIcon ArrowDownload24}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:DownloadsPage}" />
@@ -189,7 +190,7 @@
                      attention for a major one. DataContext is set explicitly because an InfoBadge
                      assigned to this property doesn't inherit one from the nav item. -->
                 <ui:NavigationViewItem
-                    Content="App update"
+                    Content="{loc:Str Nav_AppUpdate}"
                     Icon="{ui:SymbolIcon ArrowCircleUp24}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:AppUpdatePage}">
@@ -209,7 +210,7 @@
                     </ui:NavigationViewItem.InfoBadge>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem
-                    Content="Options"
+                    Content="{loc:Str Nav_Options}"
                     Icon="{ui:SymbolIcon Settings24}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:OptionsPage}" />
@@ -226,14 +227,14 @@
             DataContext="{x:Static app:AppServices.ModCache}"
             Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}}">
             <ui:Card
-                Width="360"
+                MinWidth="360"
                 Padding="24"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Background="{DynamicResource ApplicationBackgroundBrush}">
                 <StackPanel>
                     <TextBlock
-                        Text="Loading mod catalog..."
+                        Text="{loc:Str MainWindow_LoadingCatalog}"
                         FontWeight="SemiBold"
                         HorizontalAlignment="Center"
                         Margin="0,0,0,4" />
@@ -242,7 +243,7 @@
                         TextAlignment="Center"
                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                         Margin="0,0,0,12"
-                        Text="Fetching the full sp-mod.com catalog - this only happens once, future launches load instantly from cache." />
+                        Text="{loc:Str MainWindow_LoadingCatalogNote}" />
                     <ProgressBar
                         Height="6"
                         Minimum="0"
@@ -253,7 +254,7 @@
                         HorizontalAlignment="Center"
                         FontSize="11"
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        Text="{Binding LoadedCount, StringFormat='{}{0:N0} mods loaded'}" />
+                        Text="{Binding LoadedCount, StringFormat={loc:Str MainWindow_ModsLoadedFormat}}" />
                 </StackPanel>
             </ui:Card>
         </Border>
