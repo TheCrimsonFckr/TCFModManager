@@ -1984,4 +1984,264 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>This list was made on SPT {0} and you're running {1}. Versions locked for one won't always work on the other.</value>
     <comment>{0} and {1} are SPT version numbers.</comment>
   </data>
+  <data name="Common_ClauseSeparator" xml:space="preserve">
+    <value>; </value>
+    <comment>Between the failures listed after a message - a stronger break than Common_ListSeparator. Keep the trailing space if your language uses one.</comment>
+  </data>
+  <data name="ModLists_NoneFollowed" xml:space="preserve">
+    <value>No mod list is being followed.</value>
+  </data>
+  <data name="ModLists_UndoLabelFormat" xml:space="preserve">
+    <value>Undo "{0}"</value>
+    <comment>Button label. {0} is a list name the user typed.</comment>
+  </data>
+  <data name="ModLists_FollowingFormat" xml:space="preserve">
+    <value>Following "{0}".</value>
+  </data>
+  <data name="ModLists_NameFirst" xml:space="preserve">
+    <value>Give the list a name first.</value>
+  </data>
+  <data name="ModLists_CapturedOneFormat" xml:space="preserve">
+    <value>Captured 1 enabled mod as "{0}".</value>
+    <comment>{0} is the new list's name. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="ModLists_CapturedManyFormat" xml:space="preserve">
+    <value>Captured {0} enabled mods as "{1}".</value>
+  </data>
+  <data name="ModLists_CloseSptBeforeApply" xml:space="preserve">
+    <value>Close SPT before applying - disabling a mod can't happen while it's running.</value>
+  </data>
+  <data name="ModLists_PreviewedFormat" xml:space="preserve">
+    <value>Previewed "{0}".</value>
+  </data>
+  <data name="ModLists_PinnedFormat" xml:space="preserve">
+    <value>Pinned "{0}" - no list will set it aside.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="ModLists_UnpinnedFormat" xml:space="preserve">
+    <value>Unpinned "{0}".</value>
+  </data>
+  <data name="ModLists_CountDownloadedFormat" xml:space="preserve">
+    <value>{0} downloaded</value>
+    <comment>One count in the applied summary, joined to the others by Common_ListSeparator.</comment>
+  </data>
+  <data name="ModLists_CountEnabledFormat" xml:space="preserve">
+    <value>{0} enabled</value>
+  </data>
+  <data name="ModLists_CountDisabledFormat" xml:space="preserve">
+    <value>{0} disabled</value>
+  </data>
+  <data name="ModLists_AppliedNothing" xml:space="preserve">
+    <value>Applied - nothing needed changing.</value>
+  </data>
+  <data name="ModLists_AppliedFormat" xml:space="preserve">
+    <value>Applied: {0}.</value>
+    <comment>{0} is the counts above, joined together.</comment>
+  </data>
+  <data name="ModLists_AppliedManualOne" xml:space="preserve">
+    <value>1 mod still needs installing by hand.</value>
+    <comment>A second sentence after the applied summary.</comment>
+  </data>
+  <data name="ModLists_AppliedManualManyFormat" xml:space="preserve">
+    <value>{0} mods still need installing by hand.</value>
+  </data>
+  <data name="ModLists_AppliedMovesFailedOne" xml:space="preserve">
+    <value>1 mod couldn't be moved.</value>
+  </data>
+  <data name="ModLists_AppliedMovesFailedManyFormat" xml:space="preserve">
+    <value>{0} mods couldn't be moved.</value>
+  </data>
+  <data name="ModLists_PutBackOne" xml:space="preserve">
+    <value>Put 1 mod back the way it was.</value>
+    <comment>A second sentence after a stopped apply.</comment>
+  </data>
+  <data name="ModLists_PutBackManyFormat" xml:space="preserve">
+    <value>Put {0} mods back the way they were.</value>
+  </data>
+  <data name="ModLists_FetchFailureFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+    <comment>{0} is a mod name, {1} the reason it could not be downloaded. Several of these are joined by Common_ClauseSeparator.</comment>
+  </data>
+  <data name="ModLists_NothingToUndo" xml:space="preserve">
+    <value>Nothing to undo.</value>
+  </data>
+  <data name="ModLists_UndoneFormat" xml:space="preserve">
+    <value>Put the install back the way it was before the last apply. {0} enabled, {1} disabled.</value>
+    <comment>{0} and {1} are counts of mods.</comment>
+  </data>
+  <data name="ModLists_UndoFailedFormat" xml:space="preserve">
+    <value>Couldn't undo. {0}</value>
+    <comment>{0} is a sentence from ModListProblems.</comment>
+  </data>
+  <data name="ModLists_NothingToAddFrom" xml:space="preserve">
+    <value>Nothing to add from - no SPT install folder is set and the sp-mod.com catalog hasn't loaded yet.</value>
+  </data>
+  <data name="ModLists_NothingAdded" xml:space="preserve">
+    <value>Nothing added - the list already names those mods.</value>
+  </data>
+  <data name="ModLists_AddedOneFormat" xml:space="preserve">
+    <value>Added 1 mod to "{0}". Save to write it to the list - nothing is installed or enabled until you Apply.</value>
+    <comment>Save and Apply are the buttons named in ModLists_Save and ModLists_Apply - translate them the same way.</comment>
+  </data>
+  <data name="ModLists_AddedManyFormat" xml:space="preserve">
+    <value>Added {0} mods to "{1}". Save to write it to the list - nothing is installed or enabled until you Apply.</value>
+  </data>
+  <data name="ModLists_RemovedEntryFormat" xml:space="preserve">
+    <value>Took "{0}" off "{1}". Save to write it to the list - the mod stays installed and enabled either way.</value>
+    <comment>{0} is a mod name, {1} a list name.</comment>
+  </data>
+  <data name="ModLists_ScopeServerOnlyFormat" xml:space="preserve">
+    <value>"{0}" is now server only - a player applying this list will skip it entirely.</value>
+  </data>
+  <data name="ModLists_ScopeClientsAndHeadlessFormat" xml:space="preserve">
+    <value>"{0}" now goes to players and to a headless client.</value>
+  </data>
+  <data name="ModLists_ScopeClientOnlyFormat" xml:space="preserve">
+    <value>"{0}" is now players only - a headless client will skip it.</value>
+  </data>
+  <data name="ModLists_ScopeHeadlessOnlyFormat" xml:space="preserve">
+    <value>"{0}" is now headless only - players will skip it.</value>
+  </data>
+  <data name="ModLists_ScopeServerAndClientsFormat" xml:space="preserve">
+    <value>"{0}" now goes to the server and to players - a headless client will skip it.</value>
+  </data>
+  <data name="ModLists_ScopeEveryoneFormat" xml:space="preserve">
+    <value>"{0}" now applies to every machine.</value>
+  </data>
+  <data name="ModLists_NoServerHere" xml:space="preserve">
+    <value>This machine isn't running a server with the Server Map mod - there's nowhere to publish to. The mod goes on the server, not here.</value>
+  </data>
+  <data name="ModLists_RepublishedFormat" xml:space="preserve">
+    <value>Published "{0}" as revision {1} - it had changed since the last publish, so connected clients will fetch it on their own.</value>
+  </data>
+  <data name="ModLists_PublishedFormat" xml:space="preserve">
+    <value>Published "{0}" (revision {1}) - the server serves it from now on.</value>
+  </data>
+  <data name="ModLists_PublishFailedFormat" xml:space="preserve">
+    <value>Couldn't write the list to the server's config folder: {0}</value>
+    <comment>{0} is the reason, which arrives in the system's language.</comment>
+  </data>
+  <data name="ModLists_NoneInstalledHere" xml:space="preserve">
+    <value>None of the mods on this list are installed here, so there are no versions to read.</value>
+  </data>
+  <data name="ModLists_VersionsAlreadyMatchFormat" xml:space="preserve">
+    <value>Every mod on "{0}" that is installed here already names the version you have.</value>
+  </data>
+  <data name="ModLists_VersionChangeEntryFormat" xml:space="preserve">
+    <value>{0} {1} -&gt; {2}</value>
+    <comment>One change: {0} a mod name, {1} the version the list named, {2} the version now. The arrow is punctuation.</comment>
+  </data>
+  <data name="ModLists_VersionUnlocked" xml:space="preserve">
+    <value>unlocked</value>
+    <comment>Stands in for a version in ModLists_VersionChangeEntryFormat when the entry names none.</comment>
+  </data>
+  <data name="ModLists_AndMoreFormat" xml:space="preserve">
+    <value>, and {0} more</value>
+    <comment>Added after the first five changes listed.</comment>
+  </data>
+  <data name="ModLists_VersionsUpdatedOneFormat" xml:space="preserve">
+    <value>Updated 1 mod to the version installed here: {0}{1}. Save to keep it.</value>
+    <comment>{0} is the change, {1} the "and N more" tail when there is one.</comment>
+  </data>
+  <data name="ModLists_VersionsUpdatedManyFormat" xml:space="preserve">
+    <value>Updated {0} mods to the version installed here: {1}{2}. Save to keep it.</value>
+  </data>
+  <data name="ModLists_SavedOneFormat" xml:space="preserve">
+    <value>Saved "{0}" - 1 mod. Nothing on disk changed; Apply is what installs, enables and sets mods aside.</value>
+  </data>
+  <data name="ModLists_SavedManyFormat" xml:space="preserve">
+    <value>Saved "{0}" - {1} mods. Nothing on disk changed; Apply is what installs, enables and sets mods aside.</value>
+  </data>
+  <data name="ModLists_RevertedFormat" xml:space="preserve">
+    <value>Put "{0}" back the way it was saved.</value>
+  </data>
+  <data name="ModLists_ShowingFormat" xml:space="preserve">
+    <value>Showing what "{0}" names.</value>
+  </data>
+  <data name="ModLists_RenamedFormat" xml:space="preserve">
+    <value>Renamed to "{0}".</value>
+  </data>
+  <data name="ModLists_DeletedFormat" xml:space="preserve">
+    <value>Deleted "{0}". Nothing on disk changed.</value>
+  </data>
+  <data name="ModLists_ForkNameFormat" xml:space="preserve">
+    <value>{0} (mine)</value>
+    <comment>The name given to a copy of somebody else's list. {0} is the original's name.</comment>
+  </data>
+  <data name="ModLists_ForkedFormat" xml:space="preserve">
+    <value>Made "{0}" - the original is untouched.</value>
+  </data>
+  <data name="ModLists_NoServerAddress" xml:space="preserve">
+    <value>This install has no server address set, so there is nowhere to ask. The Server map page is where it goes.</value>
+    <comment>Server map is the page name, as in the sidebar.</comment>
+  </data>
+  <data name="ModLists_ListNotFetchedFormat" xml:space="preserve">
+    <value>The list wasn't fetched. {0}</value>
+    <comment>{0} is a sentence from the Server Map wording.</comment>
+  </data>
+  <data name="ModLists_ServerPublishingDifferentFormat" xml:space="preserve">
+    <value>{0} is now publishing a different list - "{1}" is saved here. "{2}" is untouched.</value>
+    <comment>{0} is the server's name, {1} the list it now publishes, {2} the one you were looking at.</comment>
+  </data>
+  <data name="ModLists_AlreadyPublishingOneFormat" xml:space="preserve">
+    <value>"{0}" is already what the server is publishing - nothing changed (revision {1}, 1 mod).</value>
+  </data>
+  <data name="ModLists_AlreadyPublishingManyFormat" xml:space="preserve">
+    <value>"{0}" is already what the server is publishing - nothing changed (revision {1}, {2} mods).</value>
+  </data>
+  <data name="ModLists_DiffAddedFormat" xml:space="preserve">
+    <value>added {0}</value>
+    <comment>One part of what a server refresh changed. {0} is a list of mod names.</comment>
+  </data>
+  <data name="ModLists_DiffRemovedFormat" xml:space="preserve">
+    <value>removed {0}</value>
+  </data>
+  <data name="ModLists_DiffChangedFormat" xml:space="preserve">
+    <value>changed {0}</value>
+  </data>
+  <data name="ModLists_RefreshedFromServerFormat" xml:space="preserve">
+    <value>Refreshed "{0}" from the server: {1}. Applying it is still a separate step.</value>
+    <comment>{1} is the added/removed/changed parts, joined by Common_ClauseSeparator.</comment>
+  </data>
+  <data name="ModLists_AndMoreNamesFormat" xml:space="preserve">
+    <value> and {0} more</value>
+    <comment>Added after the first five names. Keep the leading space if your language uses one.</comment>
+  </data>
+  <data name="ModLists_StoppedFollowing" xml:space="preserve">
+    <value>No mod list is being followed. Nothing on disk changed.</value>
+  </data>
+  <data name="ModLists_ExportDialogTitle" xml:space="preserve">
+    <value>Share this mod list</value>
+    <comment>Title of the Windows save dialog.</comment>
+  </data>
+  <data name="ModLists_ImportDialogTitle" xml:space="preserve">
+    <value>Open a shared mod list</value>
+    <comment>Title of the Windows open dialog.</comment>
+  </data>
+  <data name="ModLists_ExportedFormat" xml:space="preserve">
+    <value>Saved "{0}" - send that file to anyone running this app.</value>
+  </data>
+  <data name="ModLists_ExportFailedFormat" xml:space="preserve">
+    <value>Couldn't write the file - {0}</value>
+  </data>
+  <data name="ModLists_ImportReadFailedFormat" xml:space="preserve">
+    <value>Couldn't read that file - {0}</value>
+  </data>
+  <data name="ModLists_ImportedFormat" xml:space="preserve">
+    <value>Imported "{0}" - preview it to see what applying it would do.</value>
+  </data>
+  <data name="ModLists_ImportUpdatedFormat" xml:space="preserve">
+    <value>Updated "{0}" from revision {1} to {2}.</value>
+  </data>
+  <data name="ModLists_SomethingWentWrongFormat" xml:space="preserve">
+    <value>Something went wrong - {0}</value>
+    <comment>{0} is the reason, which arrives in the system's language.</comment>
+  </data>
+  <data name="ModLists_DroppedOne" xml:space="preserve">
+    <value>Dropped 1 unsaved change - it was never written to the list.</value>
+    <comment>Said when switching lists throws away an edit. See the Many form.</comment>
+  </data>
+  <data name="ModLists_DroppedManyFormat" xml:space="preserve">
+    <value>Dropped {0} unsaved changes - they were never written to the list.</value>
+  </data>
 </root>

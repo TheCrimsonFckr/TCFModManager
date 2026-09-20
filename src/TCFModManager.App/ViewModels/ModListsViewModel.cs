@@ -365,7 +365,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     private string _editName = string.Empty;
 
     [ObservableProperty]
-    private string _statusMessage = "No mod list is being followed.";
+    private string _statusMessage = Strings.ModLists_NoneFollowed;
 
     //
     // The one undo point: how the install stood before the last apply. Null when nothing has been
@@ -515,7 +515,12 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         // Switching lists drops whatever was not saved. Said out loud rather than silently - nothing
         // here is destructive, but work disappearing without a word is its own kind of bug.
-        if (dropped > 0) StatusMessage = $"Dropped {dropped} unsaved change(s) - they were never written to the list.";
+        if (dropped > 0)
+        {
+            StatusMessage = dropped == 1
+                ? Strings.ModLists_DroppedOne
+                : Text(Strings.ModLists_DroppedManyFormat, dropped);
+        }
     }
 
     //
@@ -732,7 +737,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         OnPropertyChanged(nameof(HasLists));
 
         RevertLabel = _service.PendingRevert() is { } snapshot
-            ? $"Undo \"{snapshot.Name}\""
+            ? Text(Strings.ModLists_UndoLabelFormat, snapshot.Name)
             : null;
 
         Selected = Lists.FirstOrDefault(l => l.Id == keep);
@@ -742,7 +747,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         ShowEntries();
 
         var active = Lists.FirstOrDefault(l => l.IsActive);
-        if (active is not null) StatusMessage = $"Following \"{active.Name}\".";
+        if (active is not null) StatusMessage = Text(Strings.ModLists_FollowingFormat, active.Name);
     }
 
     // Saves what's installed right now as a new list.
@@ -752,7 +757,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         var name = NewListName.Trim();
         if (name.Length == 0)
         {
-            StatusMessage = "Give the list a name first.";
+            StatusMessage = Strings.ModLists_NameFirst;
             return;
         }
 
@@ -768,7 +773,9 @@ public partial class ModListsViewModel : LocalizedViewModel
 
             NewListName = string.Empty;
             Refresh(captured.Id);
-            StatusMessage = $"Captured {captured.Entries.Count} enabled mod(s) as \"{captured.Name}\".";
+            StatusMessage = captured.Entries.Count == 1
+                ? Text(Strings.ModLists_CapturedOneFormat, captured.Name)
+                : Text(Strings.ModLists_CapturedManyFormat, captured.Entries.Count, captured.Name);
         });
     }
 
@@ -824,8 +831,8 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         ApplyCommand.NotifyCanExecuteChanged();
         StatusMessage = plan.RequiresGameClosed
-            ? "Close SPT before applying - disabling a mod can't happen while it's running."
-            : $"Previewed \"{preview.List.Name}\".";
+            ? Strings.ModLists_CloseSptBeforeApply
+            : Text(Strings.ModLists_PreviewedFormat, preview.List.Name);
     }
 
     private static IEnumerable<ModListActionRowViewModel> Rows(ModListPlan plan) =>
@@ -926,8 +933,8 @@ public partial class ModListsViewModel : LocalizedViewModel
             if (replanned.Plan.RequiresGameClosed) return;
 
             StatusMessage = row.CanPin
-                ? $"Pinned \"{row.Name}\" - no list will set it aside."
-                : $"Unpinned \"{row.Name}\".";
+                ? Text(Strings.ModLists_PinnedFormat, row.Name)
+                : Text(Strings.ModLists_UnpinnedFormat, row.Name);
         });
     }
 
@@ -966,9 +973,14 @@ public partial class ModListsViewModel : LocalizedViewModel
                 undone = ModDisableService.Revert(result.Moves, AppServices.SptEnvironment.InstallPath).Moved.Count;
             }
 
-            StatusMessage = ModListProblems.Describe(result)
-                + (undone > 0 ? $" Put {undone} mod(s) back the way they were." : string.Empty)
-                + FailureDetail(result);
+            var putBack = undone switch
+            {
+                0 => string.Empty,
+                1 => " " + Strings.ModLists_PutBackOne,
+                _ => " " + Text(Strings.ModLists_PutBackManyFormat, undone),
+            };
+
+            StatusMessage = ModListProblems.Describe(result) + putBack + FailureDetail(result);
 
             ClearPlan();
             Refresh(preview.List.Id);
@@ -978,19 +990,32 @@ public partial class ModListsViewModel : LocalizedViewModel
     private static string Completed(ModListApplyResult result)
     {
         var parts = new List<string>();
-        void Count(int n, string label) { if (n > 0) parts.Add($"{n} {label}"); }
+        void Count(int n, string format) { if (n > 0) parts.Add(Text(format, n)); }
 
-        Count(result.Fetched.Fetched.Count, "downloaded");
-        Count(result.Enabled.Moved.Count, "enabled");
-        Count(result.Disabled.Moved.Count, "disabled");
+        Count(result.Fetched.Fetched.Count, Strings.ModLists_CountDownloadedFormat);
+        Count(result.Enabled.Moved.Count, Strings.ModLists_CountEnabledFormat);
+        Count(result.Disabled.Moved.Count, Strings.ModLists_CountDisabledFormat);
 
-        var message = parts.Count == 0 ? "Applied - nothing needed changing." : "Applied: " + string.Join(", ", parts) + ".";
+        var message = parts.Count == 0
+            ? Strings.ModLists_AppliedNothing
+            : Text(Strings.ModLists_AppliedFormat, string.Join(Strings.Common_ListSeparator, parts));
 
+        // Whole sentences appended to a whole sentence, rather than clauses glued to one.
         var manual = result.Manual.Count;
-        if (manual > 0) message += $" {manual} mod(s) still need installing by hand.";
+        if (manual > 0)
+        {
+            message += " " + (manual == 1
+                ? Strings.ModLists_AppliedManualOne
+                : Text(Strings.ModLists_AppliedManualManyFormat, manual));
+        }
 
         var failedMoves = result.Enabled.Failed.Count + result.Disabled.Failed.Count;
-        if (failedMoves > 0) message += $" {failedMoves} couldn't be moved.";
+        if (failedMoves > 0)
+        {
+            message += " " + (failedMoves == 1
+                ? Strings.ModLists_AppliedMovesFailedOne
+                : Text(Strings.ModLists_AppliedMovesFailedManyFormat, failedMoves));
+        }
 
         return message;
     }
@@ -998,7 +1023,9 @@ public partial class ModListsViewModel : LocalizedViewModel
     private static string FailureDetail(ModListApplyResult result) =>
         result.Fetched.Failed.Count == 0
             ? string.Empty
-            : " " + string.Join("; ", result.Fetched.Failed.Take(3).Select(f => $"{f.ModName}: {f.Reason}"));
+            : " " + string.Join(
+                Strings.Common_ClauseSeparator,
+                result.Fetched.Failed.Take(3).Select(f => Text(Strings.ModLists_FetchFailureFormat, f.ModName, f.Reason)));
 
     //
     // Puts the install back the way it was before the last list was applied, then clears the undo
@@ -1014,20 +1041,22 @@ public partial class ModListsViewModel : LocalizedViewModel
 
             if (result is null)
             {
-                StatusMessage = "Nothing to undo.";
+                StatusMessage = Strings.ModLists_NothingToUndo;
                 Refresh();
                 return;
             }
 
             if (result.Completed)
             {
-                StatusMessage = "Put the install back the way it was before the last apply."
-                    + $" {result.Enabled.Moved.Count} enabled, {result.Disabled.Moved.Count} disabled.";
+                StatusMessage = Text(
+                    Strings.ModLists_UndoneFormat,
+                    result.Enabled.Moved.Count,
+                    result.Disabled.Moved.Count);
             }
             else
             {
                 if (result.Moves.Count > 0) ModDisableService.Revert(result.Moves, AppServices.SptEnvironment.InstallPath);
-                StatusMessage = $"Couldn't undo. {ModListProblems.Describe(result)}";
+                StatusMessage = Text(Strings.ModLists_UndoFailedFormat, ModListProblems.Describe(result));
             }
 
             ClearPlan();
@@ -1052,7 +1081,7 @@ public partial class ModListsViewModel : LocalizedViewModel
 
             if (options.Installed.Count == 0 && options.Catalog.Count == 0)
             {
-                StatusMessage = "Nothing to add from - no SPT install folder is set and the sp-mod.com catalog hasn't loaded yet.";
+                StatusMessage = Strings.ModLists_NothingToAddFrom;
                 return;
             }
 
@@ -1073,15 +1102,16 @@ public partial class ModListsViewModel : LocalizedViewModel
 
             if (added == 0)
             {
-                StatusMessage = "Nothing added - the list already names those mods.";
+                StatusMessage = Strings.ModLists_NothingAdded;
                 return;
             }
 
             Notify();
             UnsavedCount += added;
 
-            StatusMessage = $"Added {added} mod(s) to \"{row.Name}\". Save to write it to the list"
-                + " - nothing is installed or enabled until you Apply.";
+            StatusMessage = added == 1
+                ? Text(Strings.ModLists_AddedOneFormat, row.Name)
+                : Text(Strings.ModLists_AddedManyFormat, added, row.Name);
         });
     }
 
@@ -1098,8 +1128,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         UnsavedCount++;
         Notify();
 
-        StatusMessage = $"Took \"{entry.Name}\" off \"{row.Name}\". Save to write it to the list"
-            + " - the mod stays installed and enabled either way.";
+        StatusMessage = Text(Strings.ModLists_RemovedEntryFormat, entry.Name, row.Name);
     }
 
     //
@@ -1151,16 +1180,16 @@ public partial class ModListsViewModel : LocalizedViewModel
         StatusMessage = next switch
         {
             ModListEntryScope.Server =>
-                $"\"{entry.Name}\" is now server only - a player applying this list will skip it entirely.",
+                Text(Strings.ModLists_ScopeServerOnlyFormat, entry.Name),
             ModListScopes.ClientsAndHeadless =>
-                $"\"{entry.Name}\" now goes to players and to a headless client.",
+                Text(Strings.ModLists_ScopeClientsAndHeadlessFormat, entry.Name),
             ModListEntryScope.Client =>
-                $"\"{entry.Name}\" is now players only - a headless client will skip it.",
+                Text(Strings.ModLists_ScopeClientOnlyFormat, entry.Name),
             ModListEntryScope.Headless =>
-                $"\"{entry.Name}\" is now headless only - players will skip it.",
+                Text(Strings.ModLists_ScopeHeadlessOnlyFormat, entry.Name),
             ModListScopes.ServerAndClients =>
-                $"\"{entry.Name}\" now goes to the server and to players - a headless client will skip it.",
-            _ => $"\"{entry.Name}\" now applies to every machine.",
+                Text(Strings.ModLists_ScopeServerAndClientsFormat, entry.Name),
+            _ => Text(Strings.ModLists_ScopeEveryoneFormat, entry.Name),
         };
     }
 
@@ -1182,8 +1211,7 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         if (!ServerMapConfigFolder.TryFind(installPath, out var directory))
         {
-            StatusMessage = "This machine isn't running a server with the Server Map mod - there's"
-                + " nowhere to publish to. The mod goes on the server, not here.";
+            StatusMessage = Strings.ModLists_NoServerHere;
             return;
         }
 
@@ -1220,13 +1248,12 @@ public partial class ModListsViewModel : LocalizedViewModel
             AppLog.Info("ServerMap", $"published \"{row.Name}\" revision {list.Revision} to {path}");
 
             StatusMessage = bumped
-                ? $"Published \"{row.Name}\" as revision {list.Revision} - it had changed since the last"
-                  + " publish, so connected clients will fetch it on their own."
-                : $"Published \"{row.Name}\" (revision {list.Revision}) - the server serves it from now on.";
+                ? Text(Strings.ModLists_RepublishedFormat, row.Name, list.Revision)
+                : Text(Strings.ModLists_PublishedFormat, row.Name, list.Revision);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            StatusMessage = $"Couldn't write the list to the server's config folder: {ex.Message}";
+            StatusMessage = Text(Strings.ModLists_PublishFailedFormat, ex.Message);
         }
     }
 
@@ -1270,8 +1297,8 @@ public partial class ModListsViewModel : LocalizedViewModel
             if (result.Changed.Count == 0)
             {
                 StatusMessage = result.NotInstalled == Entries.Count
-                    ? "None of the mods on this list are installed here, so there are no versions to read."
-                    : $"Every mod on \"{row.Name}\" that is installed here already names the version you have.";
+                    ? Strings.ModLists_NoneInstalledHere
+                    : Text(Strings.ModLists_VersionsAlreadyMatchFormat, row.Name);
                 return;
             }
 
@@ -1285,12 +1312,19 @@ public partial class ModListsViewModel : LocalizedViewModel
             // and the whole point of the button is to be able to see what it decided.
             var named = string.Join(", ", result.Changed
                 .Take(5)
-                .Select(c => $"{c.Name} {c.From ?? "unlocked"} -> {c.To ?? "unlocked"}"));
+                .Select(c => Text(
+                    Strings.ModLists_VersionChangeEntryFormat,
+                    c.Name,
+                    c.From ?? Strings.ModLists_VersionUnlocked,
+                    c.To ?? Strings.ModLists_VersionUnlocked)));
 
-            var rest = result.Changed.Count > 5 ? $", and {result.Changed.Count - 5} more" : "";
+            var rest = result.Changed.Count > 5
+                ? Text(Strings.ModLists_AndMoreFormat, result.Changed.Count - 5)
+                : string.Empty;
 
-            StatusMessage = $"Updated {Mods(result.Changed.Count)} to the version installed here:"
-                + $" {named}{rest}. Save to keep it.";
+            StatusMessage = result.Changed.Count == 1
+                ? Text(Strings.ModLists_VersionsUpdatedOneFormat, named, rest)
+                : Text(Strings.ModLists_VersionsUpdatedManyFormat, result.Changed.Count, named, rest);
         }
         finally
         {
@@ -1313,8 +1347,9 @@ public partial class ModListsViewModel : LocalizedViewModel
         UnsavedCount = 0;
         Refresh(row.Id);
 
-        StatusMessage = $"Saved \"{row.Name}\" - {count} mod(s). Nothing on disk changed;"
-            + " Apply is what installs, enables and sets mods aside.";
+        StatusMessage = count == 1
+            ? Text(Strings.ModLists_SavedOneFormat, row.Name)
+            : Text(Strings.ModLists_SavedManyFormat, row.Name, count);
     }
 
     // Throws the unsaved edits away and shows the list as it is stored.
@@ -1324,7 +1359,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         if (Selected is not { } row) return;
 
         ShowEntries();
-        StatusMessage = $"Put \"{row.Name}\" back the way it was saved.";
+        StatusMessage = Text(Strings.ModLists_RevertedFormat, row.Name);
     }
 
     // Keeps the panel in the order a stored list holds - by name, the order capture writes.
@@ -1333,7 +1368,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     private void ClosePlan()
     {
         ClearPlan();
-        StatusMessage = Selected is { } row ? $"Showing what \"{row.Name}\" names." : StatusMessage;
+        StatusMessage = Selected is { } row ? Text(Strings.ModLists_ShowingFormat, row.Name) : StatusMessage;
     }
 
     [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
@@ -1346,7 +1381,7 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         AppServices.ModLists.Rename(row.Id, name);
         Refresh(row.Id);
-        StatusMessage = $"Renamed to \"{name}\".";
+        StatusMessage = Text(Strings.ModLists_RenamedFormat, name);
     }
 
     [RelayCommand(CanExecute = nameof(HasSelection))]
@@ -1356,7 +1391,7 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         AppServices.ModLists.Delete(row.Id);
         Refresh();
-        StatusMessage = $"Deleted \"{row.Name}\". Nothing on disk changed.";
+        StatusMessage = Text(Strings.ModLists_DeletedFormat, row.Name);
     }
 
     // Imported and server lists are read-only; editing one starts a local copy that points back.
@@ -1365,9 +1400,10 @@ public partial class ModListsViewModel : LocalizedViewModel
     {
         if (Selected is not { } row) return;
 
-        var fork = AppServices.ModLists.Fork(row.Id, $"{row.Name} (mine)", DateTimeOffset.UtcNow);
+        var fork = AppServices.ModLists.Fork(
+            row.Id, Text(Strings.ModLists_ForkNameFormat, row.Name), DateTimeOffset.UtcNow);
         Refresh(fork.Id);
-        StatusMessage = $"Made \"{fork.Name}\" - the original is untouched.";
+        StatusMessage = Text(Strings.ModLists_ForkedFormat, fork.Name);
     }
 
     //
@@ -1392,8 +1428,7 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         if (!gate.IsConfigured)
         {
-            StatusMessage = "This install has no server address set, so there is nowhere to ask."
-                + " The Server map page is where it goes.";
+            StatusMessage = Strings.ModLists_NoServerAddress;
             return;
         }
 
@@ -1407,7 +1442,7 @@ public partial class ModListsViewModel : LocalizedViewModel
             if (fetched is null)
             {
                 // The gate has already worded why, and its wording is the one the map page shows.
-                StatusMessage = $"The list wasn't fetched. {gate.ListStatus}";
+                StatusMessage = Text(Strings.ModLists_ListNotFetchedFormat, gate.ListStatus);
                 return;
             }
 
@@ -1420,8 +1455,8 @@ public partial class ModListsViewModel : LocalizedViewModel
             //
             if (fetched.Id != row.Id)
             {
-                StatusMessage = $"{gate.ServerName} is now publishing a different list -"
-                    + $" \"{fetched.Name}\" is saved here. \"{row.Name}\" is untouched.";
+                StatusMessage = Text(
+                    Strings.ModLists_ServerPublishingDifferentFormat, gate.ServerName, fetched.Name, row.Name);
                 return;
             }
 
@@ -1465,25 +1500,32 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         if (added.Count == 0 && removed.Count == 0 && changed.Count == 0)
         {
-            return $"\"{after.Name}\" is already what the server is publishing - nothing changed"
-                + $" (revision {after.Revision}, {Mods(after.Entries.Count)}).";
+            return after.Entries.Count == 1
+                ? Text(Strings.ModLists_AlreadyPublishingOneFormat, after.Name, after.Revision)
+                : Text(
+                    Strings.ModLists_AlreadyPublishingManyFormat,
+                    after.Name,
+                    after.Revision,
+                    after.Entries.Count);
         }
 
         var parts = new List<string>();
-        if (added.Count > 0) parts.Add($"added {Named(added)}");
-        if (removed.Count > 0) parts.Add($"removed {Named(removed)}");
-        if (changed.Count > 0) parts.Add($"changed {Named(changed)}");
+        if (added.Count > 0) parts.Add(Text(Strings.ModLists_DiffAddedFormat, Named(added)));
+        if (removed.Count > 0) parts.Add(Text(Strings.ModLists_DiffRemovedFormat, Named(removed)));
+        if (changed.Count > 0) parts.Add(Text(Strings.ModLists_DiffChangedFormat, Named(changed)));
 
-        return $"Refreshed \"{after.Name}\" from the server: {string.Join("; ", parts)}."
-            + " Applying it is still a separate step.";
+        return Text(
+            Strings.ModLists_RefreshedFromServerFormat,
+            after.Name,
+            string.Join(Strings.Common_ClauseSeparator, parts));
     }
 
     // Five names and then a count, so a wholesale change does not become a paragraph.
     private static string Named(List<string> names) =>
         names.Count <= 5
-            ? string.Join(", ", names.Order(StringComparer.OrdinalIgnoreCase))
-            : string.Join(", ", names.Order(StringComparer.OrdinalIgnoreCase).Take(5))
-              + $" and {names.Count - 5} more";
+            ? string.Join(Strings.Common_ListSeparator, names.Order(StringComparer.OrdinalIgnoreCase))
+            : string.Join(Strings.Common_ListSeparator, names.Order(StringComparer.OrdinalIgnoreCase).Take(5))
+              + Text(Strings.ModLists_AndMoreNamesFormat, names.Count - 5);
 
     [RelayCommand]
     private void StopFollowing()
@@ -1491,7 +1533,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         if (Selected?.IsActiveServer == true) AppServices.ModLists.SetActiveServer(null);
         else AppServices.ModLists.SetActive(null);
         Refresh();
-        StatusMessage = "No mod list is being followed. Nothing on disk changed.";
+        StatusMessage = Strings.ModLists_StoppedFollowing;
     }
 
     // Writes a manifest, never mod files - "install mod 2426 at version 5", not somebody's archive.
@@ -1502,7 +1544,7 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         var dialog = new SaveFileDialog
         {
-            Title = "Share this mod list",
+            Title = Strings.ModLists_ExportDialogTitle,
             Filter = ModListFileDialog.Filter,
             FileName = ModListFile.SuggestedFileName(row.List),
             AddExtension = true,
@@ -1514,11 +1556,11 @@ public partial class ModListsViewModel : LocalizedViewModel
         try
         {
             ModListFile.Save(row.List, dialog.FileName);
-            StatusMessage = $"Saved \"{row.Name}\" - send that file to anyone running this app.";
+            StatusMessage = Text(Strings.ModLists_ExportedFormat, row.Name);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            StatusMessage = $"Couldn't write the file - {ex.Message}";
+            StatusMessage = Text(Strings.ModLists_ExportFailedFormat, ex.Message);
         }
     }
 
@@ -1527,7 +1569,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     {
         var dialog = new OpenFileDialog
         {
-            Title = "Open a shared mod list",
+            Title = Strings.ModLists_ImportDialogTitle,
             Filter = ModListFileDialog.Filter,
             CheckFileExists = true,
         };
@@ -1538,7 +1580,7 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         if (!read.Succeeded)
         {
-            StatusMessage = $"Couldn't read that file - {read.Error}";
+            StatusMessage = Text(Strings.ModLists_ImportReadFailedFormat, read.Error);
             return;
         }
 
@@ -1549,8 +1591,8 @@ public partial class ModListsViewModel : LocalizedViewModel
         Refresh(list.Id);
 
         StatusMessage = existing is null
-            ? $"Imported \"{list.Name}\" - preview it to see what applying it would do."
-            : $"Updated \"{list.Name}\" from revision {existing.Revision} to {list.Revision}.";
+            ? Text(Strings.ModLists_ImportedFormat, list.Name)
+            : Text(Strings.ModLists_ImportUpdatedFormat, list.Name, existing.Revision, list.Revision);
     }
 
     private async Task RunAsync(Func<Task> work)
@@ -1573,7 +1615,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         catch (Exception ex)
         {
             AppLog.Error("ModLists", ex.ToString());
-            StatusMessage = $"Something went wrong - {ex.Message}";
+            StatusMessage = Text(Strings.ModLists_SomethingWentWrongFormat, ex.Message);
         }
         finally
         {
