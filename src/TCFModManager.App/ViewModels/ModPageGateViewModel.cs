@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
@@ -11,7 +12,7 @@ namespace TCFModManager.App.ViewModels;
 // choice, so a hundred Browse cards shouldn't each be reading settings.json to answer the same
 // question - and when it changes, every button needs to re-read it at once.
 //
-public sealed partial class ModPageGateViewModel : ObservableObject
+public sealed partial class ModPageGateViewModel : LocalizedViewModel
 {
     private const string SkipNotice =
         "\n\nYou are skipping this mod's page, and its release notes with it - it is recommended you "

@@ -1,6 +1,7 @@
 using System.Net.Http;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 using TCFModManager.Core.SpModApi;
@@ -13,7 +14,7 @@ namespace TCFModManager.App.ViewModels;
 // mods, so the whole set is held in memory and every lookup below is served from it - no addon
 // screen ever waits on the network.
 // 
-public partial class AddonCacheViewModel : ObservableObject
+public partial class AddonCacheViewModel : LocalizedViewModel
 {
     private readonly AddonCacheService _cacheService = new(AppServices.SpModApi);
     private readonly AddonCacheStore _store = new();

@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.ServerMap;
@@ -20,7 +21,7 @@ namespace TCFModManager.App.ViewModels;
 // last handshake). Tying the sidebar to the handshake instead was the first cut, and it was wrong -
 // a page that comes and goes with a server being up is a page nobody can find on purpose.
 //
-public sealed partial class ServerMapGateViewModel : ObservableObject
+public sealed partial class ServerMapGateViewModel : LocalizedViewModel
 {
     // Every write does its own Load first, so this never fights the other things that save settings.
     private readonly SettingsService _settings = new();

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Net.Http;
 using System.Threading.Channels;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
@@ -12,7 +13,7 @@ using TCFModManager.Core.SpModApi;
 namespace TCFModManager.App.ViewModels;
 
 // App-lifetime download queue that processes one download/install at a time and resolves each item's dependencies before installing it.
-public sealed partial class DownloadQueueViewModel : ObservableObject
+public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 {
     private readonly Channel<DownloadQueueItemViewModel> _channel = Channel.CreateUnbounded<DownloadQueueItemViewModel>();
 

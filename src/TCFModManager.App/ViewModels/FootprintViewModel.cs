@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 
@@ -65,7 +66,7 @@ public sealed record FootprintFinding(string Area, string What, string Effect)
 // One mod's row. This is where counts become sentences - Core deliberately emits flags and numbers
 // and no prose, so every word the user reads about a footprint is written here.
 //
-public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) : ObservableObject
+public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) : LocalizedViewModel
 {
     public ModFootprint Footprint { get; } = result.Footprint;
 
@@ -376,7 +377,7 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
     };
 }
 
-public sealed partial class FootprintViewModel : ObservableObject
+public sealed partial class FootprintViewModel : LocalizedViewModel
 {
     private readonly ModFootprintService _footprints = new();
     private List<ModFootprintRowViewModel> _all = [];

@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
@@ -13,7 +14,7 @@ using TCFModManager.Core.SpModApi;
 namespace TCFModManager.App.ViewModels;
 
 // Backs ModUpdateContentDialog, showing mod details and letting the user pick a published version to install. Fetches the full version history for the installed mod.
-public partial class ModUpdateDialogViewModel : ObservableObject
+public partial class ModUpdateDialogViewModel : LocalizedViewModel
 {
     private readonly SpModApiClient _spModApi = AppServices.SpModApi;
     private readonly InstalledModCardViewModel _mod;

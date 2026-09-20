@@ -1,9 +1,10 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Localization;
 
 namespace TCFModManager.App.ViewModels;
 
 // One checkable entry in Browse's SPT version filter dropdown. Label is the major.minor shown to the user (e.g. "3.11"); Value is what's passed to SptVersionMatcher when filtering.
-public partial class SptVersionOption(string label, string value, bool isSelected) : ObservableObject
+public partial class SptVersionOption(string label, string value, bool isSelected) : LocalizedViewModel
 {
     public string Label { get; } = label;
 

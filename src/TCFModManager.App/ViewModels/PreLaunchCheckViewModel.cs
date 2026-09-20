@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.ServerMap;
@@ -44,7 +45,7 @@ public enum PreLaunchState
 // override is worse than a version mismatch. It says what it found, offers to take you to the page
 // that fixes it, and leaves the button working.
 //
-public sealed partial class PreLaunchCheckViewModel : ObservableObject
+public sealed partial class PreLaunchCheckViewModel : LocalizedViewModel
 {
     private readonly ModListService _lists = new();
 

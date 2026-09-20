@@ -1,5 +1,6 @@
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -7,7 +8,7 @@ namespace TCFModManager.App.ViewModels;
 
 // One dependency in a resolved tree, with its status against the current install and
 // whatever's needed to queue it. Rendered as an indented row inside its mod's expander.
-public sealed partial class DependencyRow : ObservableObject
+public sealed partial class DependencyRow : LocalizedViewModel
 {
     public required string Name { get; init; }
 

@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Models;
 
 namespace TCFModManager.App.ViewModels;
@@ -21,7 +22,7 @@ public enum DownloadQueueItemStatus
 // version being installed. Created and owned by DownloadQueueViewModel.Enqueue; holds the data
 // and notification surface the queue's worker loop writes into as it processes the item.
 // 
-public sealed partial class DownloadQueueItemViewModel : ObservableObject
+public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
 {
     // What is being installed - a catalog mod or an addon attached to one.
     public InstallTarget Target { get; }

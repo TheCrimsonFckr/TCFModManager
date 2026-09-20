@@ -5,6 +5,7 @@ using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -24,7 +25,7 @@ namespace TCFModManager.App.ViewModels;
 // written. The generated form for .cfg files comes next, on top of BepInExConfigFile, which already
 // parses everything it needs.
 //
-public sealed partial class ConfigsViewModel : ObservableObject
+public sealed partial class ConfigsViewModel : LocalizedViewModel
 {
     private List<ConfigEntryViewModel> _all = [];
 

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -8,7 +9,7 @@ using TCFModManager.Core.Services;
 namespace TCFModManager.App.ViewModels;
 
 // Display wrapper for the Installed page's card grid, merging a mod's client and server entries and matching it against the sp-mod.com catalog.
-public sealed partial class InstalledModCardViewModel : ObservableObject
+public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 {
     public required string Name { get; init; }
 

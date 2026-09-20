@@ -2,6 +2,7 @@ using System.IO;
 using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -14,7 +15,7 @@ namespace TCFModManager.App.ViewModels;
 // JSON first and backed up to "<file>.bak", so a bad edit can't silently corrupt what the app reads
 // on next launch.
 //
-public partial class DataFilesViewModel : ObservableObject
+public partial class DataFilesViewModel : LocalizedViewModel
 {
     // Known files this app writes, shown first and in this order even when some don't exist yet.
     // Anything else found under Data\*.json (e.g. from a future file, or a hand-added one) is listed

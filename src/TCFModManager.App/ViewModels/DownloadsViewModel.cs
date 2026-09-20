@@ -2,13 +2,14 @@ using System.IO;
 using System.Net.Http;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.SpModApi;
 using TCFModManager.App.Services;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
-public partial class DownloadsViewModel : ObservableObject
+public partial class DownloadsViewModel : LocalizedViewModel
 {
     private readonly SpModApiClient _spModApi;
     private readonly ModDownloadService _downloadService;

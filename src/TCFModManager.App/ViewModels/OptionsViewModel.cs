@@ -3,13 +3,14 @@ using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
-public partial class OptionsViewModel : ObservableObject
+public partial class OptionsViewModel : LocalizedViewModel
 {
     // Suppresses the save while the dropdown is being set to what is already stored, so opening the
     // page doesn't count as choosing a theme.
@@ -191,17 +192,15 @@ public partial class OptionsViewModel : ObservableObject
     }
 
     //
-    // The open page follows immediately: every {loc:Str} binding re-reads on its own, and the
-    // dropdown's own entries are relabelled here because they are the one set of strings that
-    // describes the list rather than living in it.
+    // The open page follows immediately and nothing here has to ask it to: {loc:Str} bindings
+    // re-read on their own, and every view model - including each entry in this dropdown - is told
+    // to re-read its computed text by LocalizedViewModel.
     //
     partial void OnSelectedLanguageChanged(LanguageOptionItem value)
     {
         if (!_loaded) return;
 
         AppLanguage.Set(value.Tag);
-
-        foreach (var option in LanguageOptions) option.Refresh();
     }
 
     //

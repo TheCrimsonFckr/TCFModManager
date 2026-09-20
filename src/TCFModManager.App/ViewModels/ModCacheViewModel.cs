@@ -1,5 +1,6 @@
 using System.Net.Http;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.SpModApi;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -7,7 +8,7 @@ using TCFModManager.Core.Services;
 namespace TCFModManager.App.ViewModels;
 
 // Shared, app-lifetime cache of the sp-mod.com catalog, backed by ModCacheStore on disk with a background refresh. IsLoading/LoadedCount/TotalCount track live fetch progress.
-public partial class ModCacheViewModel : ObservableObject
+public partial class ModCacheViewModel : LocalizedViewModel
 {
     private readonly ModCacheService _cacheService = new(AppServices.SpModApi);
     private readonly ModCacheStore _store = new();

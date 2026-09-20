@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
@@ -46,7 +47,7 @@ public sealed class AddonVersionOption
 // One addon in the Addons section of a mod's details dialog: what it is, which of its versions the
 // installed parent mod can actually take, and the button that queues it.
 // 
-public sealed partial class AddonRowViewModel : ObservableObject
+public sealed partial class AddonRowViewModel : LocalizedViewModel
 {
     private readonly Addon _addon;
     private readonly string? _parentName;

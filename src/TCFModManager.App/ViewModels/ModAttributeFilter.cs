@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Localization;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -35,7 +36,7 @@ public enum ModAttributeFilter
 // notice every one of them narrows what you see - that is the whole contract of the dropdown, and
 // why "Hide ads" sits happily beside "Has addons".
 //
-public partial class ModAttributeOption(ModAttributeFilter value, string label, string? toolTip = null) : ObservableObject
+public partial class ModAttributeOption(ModAttributeFilter value, string label, string? toolTip = null) : LocalizedViewModel
 {
     public ModAttributeFilter Value { get; } = value;
 

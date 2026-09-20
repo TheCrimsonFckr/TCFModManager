@@ -5,6 +5,7 @@ using System.Windows.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
@@ -16,7 +17,7 @@ namespace TCFModManager.App.ViewModels;
 // One saved list in the left-hand list.
 public sealed partial class ModListRowViewModel(
     ModList list, bool isActive, bool isActiveServer = false, bool isPublished = false)
-    : ObservableObject
+    : LocalizedViewModel
 {
     public ModList List { get; } = list;
 
@@ -167,7 +168,7 @@ public sealed record ModListEntrySort(string Label, ListSortDirection Direction)
 // ModListService and renders what comes back. See [ModListApplier] for the order an apply runs in
 // and why nothing is disabled until every download has worked.
 //
-public partial class ModListsViewModel : ObservableObject
+public partial class ModListsViewModel : LocalizedViewModel
 {
     private readonly ModListService _service = AppServices.ModListWorkflow;
 

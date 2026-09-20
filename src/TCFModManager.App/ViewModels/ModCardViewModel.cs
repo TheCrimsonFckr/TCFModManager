@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -6,7 +7,7 @@ using TCFModManager.Core.Services;
 namespace TCFModManager.App.ViewModels;
 
 // Display wrapper around a Mod for the Browse results grid. Precomputes the fields of the version this card represents.
-public sealed partial class ModCardViewModel : ObservableObject
+public sealed partial class ModCardViewModel : LocalizedViewModel
 {
     public required Mod Mod { get; init; }
 

@@ -10,12 +10,13 @@ namespace TCFModManager.App.ViewModels;
 //
 // A class with a live Label rather than the labelled record the Theme dropdown uses, because these
 // labels are themselves translated: choosing a language has to relabel the entries in that language,
-// and a string captured when the list was built would stay in whichever language built it.
+// and a string captured when the list was built would stay in whichever language built it. Being a
+// LocalizedViewModel is what makes the relabelling happen - Label is computed, so it is re-read.
 //
 // A language is named in itself - Deutsch, not German - which is what a language picker has to do:
 // somebody looking for their own language cannot be expected to recognise its English name.
 //
-public sealed partial class LanguageOptionItem(CultureInfo? culture) : ObservableObject
+public sealed partial class LanguageOptionItem(CultureInfo? culture) : LocalizedViewModel
 {
     public CultureInfo? Culture { get; } = culture;
 
@@ -29,6 +30,4 @@ public sealed partial class LanguageOptionItem(CultureInfo? culture) : Observabl
             Strings.Options_Language_SystemDefaultFormat,
             AppLanguage.DisplayName(AppLanguage.SystemDefault))
         : AppLanguage.DisplayName(Culture);
-
-    public void Refresh() => OnPropertyChanged(nameof(Label));
 }

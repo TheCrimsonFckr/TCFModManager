@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Localization;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -8,7 +9,7 @@ namespace TCFModManager.App.ViewModels;
 // catalog - there are under a hundred addons in total, so opening a dialog never waits on a lookup
 // after the first load of the session.
 // 
-public sealed partial class AddonsSectionViewModel : ObservableObject
+public sealed partial class AddonsSectionViewModel : LocalizedViewModel
 {
     public ObservableCollection<AddonRowViewModel> Addons { get; } = [];
 

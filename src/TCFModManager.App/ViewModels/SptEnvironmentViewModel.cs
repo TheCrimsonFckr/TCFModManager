@@ -1,10 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
 // Shared, app-lifetime state for where SPT is installed and what version was detected there.
-public partial class SptEnvironmentViewModel : ObservableObject
+public partial class SptEnvironmentViewModel : LocalizedViewModel
 {
     private readonly SettingsService _settings = new();
 

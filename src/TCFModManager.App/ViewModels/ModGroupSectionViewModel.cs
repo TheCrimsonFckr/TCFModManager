@@ -1,12 +1,13 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Models;
 
 namespace TCFModManager.App.ViewModels;
 
 // One collapsible section in the Mod Groups window: either a real, user-created ModGroup, or the
 // fixed "Ungrouped" bucket (GroupId null) holding every installed mod nothing was assigned to.
-public partial class ModGroupSectionViewModel : ObservableObject
+public partial class ModGroupSectionViewModel : LocalizedViewModel
 {
     // Null for the Ungrouped bucket, which can't be renamed, deleted, reordered, or collapsed.
     public Guid? GroupId { get; init; }

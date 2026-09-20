@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Net.Http;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
@@ -14,7 +15,7 @@ namespace TCFModManager.App.ViewModels;
 // Resolves the dependency tree of every installed mod that has one, and reports each dependency's
 // status against what's actually on disk.
 // 
-public partial class DependenciesViewModel : ObservableObject
+public partial class DependenciesViewModel : LocalizedViewModel
 {
     private readonly SpModApiClient _spModApi;
 

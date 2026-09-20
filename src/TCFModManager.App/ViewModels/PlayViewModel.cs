@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -16,7 +17,7 @@ namespace TCFModManager.App.ViewModels;
 // each other. Stopping on its own is still not offered: a server left down is a state somebody has
 // to notice, while a restart puts back what it took.
 //
-public partial class PlayViewModel : ObservableObject
+public partial class PlayViewModel : LocalizedViewModel
 {
     //
     // All three targets are started outside this app, so there is nothing to await and no event to

@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -14,7 +15,7 @@ namespace TCFModManager.App.Views;
 // IsChosen lives on the row rather than on the ListBox because the visible collection is replaced
 // whenever the source or the search changes: a tick has to outlive the container that drew it.
 //
-public sealed partial class ModListAddRow : ObservableObject
+public sealed partial class ModListAddRow : LocalizedViewModel
 {
     [ObservableProperty]
     private bool _isChosen;

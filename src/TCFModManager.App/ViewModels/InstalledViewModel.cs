@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
@@ -19,7 +20,7 @@ namespace TCFModManager.App.ViewModels;
 ///
 /// A fresh instance is created every time InstalledPage is navigated to, so it re-scans disk on every visit.
 /// </summary>
-public partial class InstalledViewModel : ObservableObject
+public partial class InstalledViewModel : LocalizedViewModel
 {
     // Fills the grid exactly at the 3- and 4-column width breakpoints (see UpdateLayoutForWidth).
     // Only used when nothing has been saved as this page's default - see DefaultPageSize().

@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
@@ -11,7 +12,7 @@ namespace TCFModManager.App.ViewModels;
 // Options switch are two views of a single stored choice, and flicking the switch has to move the
 // nav item at that moment rather than at the next launch.
 //
-public sealed partial class FootprintGateViewModel : ObservableObject
+public sealed partial class FootprintGateViewModel : LocalizedViewModel
 {
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SettingToolTip))]

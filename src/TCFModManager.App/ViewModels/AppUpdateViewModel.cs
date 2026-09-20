@@ -4,6 +4,7 @@ using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
@@ -23,7 +24,7 @@ namespace TCFModManager.App.ViewModels;
 // It doesn't bypass the mod page either: the existing ReadModPageConfirmationWindow gate applies
 // here exactly as it does to installing any other mod, so the page is always opened first.
 //
-public partial class AppUpdateViewModel : ObservableObject
+public partial class AppUpdateViewModel : LocalizedViewModel
 {
     private readonly AppUpdateService _updates = new(AppServices.SpModApi);
     private readonly AppUpdateInstaller _installer = new(AppServices.Downloads);

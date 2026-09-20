@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Behaviors;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.SpModApi;
@@ -13,7 +14,7 @@ using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
-public partial class BrowseViewModel : ObservableObject
+public partial class BrowseViewModel : LocalizedViewModel
 {
     private readonly SpModApiClient _spModApi;
     private List<Mod> _filtered = [];

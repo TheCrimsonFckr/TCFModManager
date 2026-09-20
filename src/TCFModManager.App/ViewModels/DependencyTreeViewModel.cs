@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -7,7 +8,7 @@ namespace TCFModManager.App.ViewModels;
 
 // One installed mod's resolved dependency tree - the header row of the Dependencies page's
 // expander, plus its flattened, indented dependency rows.
-public sealed partial class DependencyTreeViewModel : ObservableObject
+public sealed partial class DependencyTreeViewModel : LocalizedViewModel
 {
     public required string ModName { get; init; }
 
