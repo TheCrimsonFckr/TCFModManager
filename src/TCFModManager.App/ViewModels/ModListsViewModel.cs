@@ -56,26 +56,43 @@ public sealed partial class ModListRowViewModel(
     //
     public bool IsPublished { get; } = isPublished;
 
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     public string Detail
     {
         get
         {
-            var parts = new List<string> { List.Entries.Count == 1 ? "1 mod" : $"{List.Entries.Count} mods" };
+            //
+            // A row of separate facts, not a sentence - which is why these stay as pieces where the
+            // rest of S4 turns pieces into whole sentences. Each one stands on its own, the
+            // separator is a key, and writing it as sentences would mean one per combination.
+            //
+            var parts = new List<string>
+            {
+                List.Entries.Count == 1
+                    ? Strings.ModLists_DetailOneMod
+                    : Text(Strings.ModLists_DetailModsFormat, List.Entries.Count),
+            };
 
-            if (List.IsSnapshot) parts.Add("snapshot");
+            if (List.IsSnapshot) parts.Add(Strings.ModLists_DetailSnapshot);
 
-            if (IsPublished) parts.Add("published to this server");
+            if (IsPublished) parts.Add(Strings.ModLists_DetailPublished);
 
             parts.Add(List.Origin switch
             {
-                ModListOrigin.Imported => List.Source is null ? "imported" : $"from {List.Source}",
-                ModListOrigin.Server => List.Source is null ? "from a server" : $"from {List.Source}",
-                _ => "made here",
+                ModListOrigin.Imported => List.Source is null
+                    ? Strings.ModLists_DetailImported
+                    : Text(Strings.ModLists_DetailFromFormat, List.Source),
+                ModListOrigin.Server => List.Source is null
+                    ? Strings.ModLists_DetailFromServer
+                    : Text(Strings.ModLists_DetailFromFormat, List.Source),
+                _ => Strings.ModLists_DetailMadeHere,
             });
 
-            if (List.Revision > 1) parts.Add($"revision {List.Revision}");
+            if (List.Revision > 1) parts.Add(Text(Strings.ModLists_DetailRevisionFormat, List.Revision));
 
-            return string.Join(" · ", parts);
+            return string.Join(Strings.Common_FactSeparator, parts);
         }
     }
 }
@@ -119,18 +136,27 @@ public static class ModListScopes
     // "everyone" and a set of exceptions to it. Every label is then read the same way: what is in
     // the name gets the mod and what is not, does not.
     //
-    public static string Label(ModListEntryScope scope) => scope switch
-    {
-        ModListEntryScope.Everyone => "Server + Client + Headless",
-        ServerAndClients => "Server + Client",
-        ClientsAndHeadless => "Client + Headless",
-        ModListEntryScope.Client => "Client only",
-        ModListEntryScope.Headless => "Headless only",
-        ModListEntryScope.Server => "Server only",
+    public static string Label(ModListEntryScope scope) =>
+        Key(scope) is { } key ? LocalizationService.Get(key) : ModListEntryScopeConverter.Name(scope);
 
-        // Not reachable from the button, but a hand-edited file can hold any combination and a row
-        // that refuses to describe itself is worse than one that spells the flags out.
-        _ => ModListEntryScopeConverter.Name(scope),
+    //
+    // The key rather than the text, for the filter entries: those hold a key and read the text back
+    // on every get, so they follow a language change instead of keeping whichever language built
+    // the list.
+    //
+    // Null for a combination the button cannot produce. A hand-edited file can hold any of them,
+    // and a row that refuses to describe itself is worse than one that spells the flags out - so
+    // those fall through to the converter's own name, which is data rather than prose.
+    //
+    public static string? Key(ModListEntryScope scope) => scope switch
+    {
+        ModListEntryScope.Everyone => nameof(Strings.ModLists_ScopeEveryone),
+        ServerAndClients => nameof(Strings.ModLists_ScopeServerAndClients),
+        ClientsAndHeadless => nameof(Strings.ModLists_ScopeClientsAndHeadless),
+        ModListEntryScope.Client => nameof(Strings.ModLists_ScopeClientOnly),
+        ModListEntryScope.Headless => nameof(Strings.ModLists_ScopeHeadlessOnly),
+        ModListEntryScope.Server => nameof(Strings.ModLists_ScopeServerOnly),
+        _ => null,
     };
 
     //
@@ -156,10 +182,26 @@ public static class ModListScopes
 }
 
 // One choice in the contents panel's scope filter. A null Scope means "don't filter on it".
-public sealed record ModListScopeFilter(string Label, ModListEntryScope? Scope);
+public sealed class ModListScopeFilter(string key, ModListEntryScope? scope) : LocalizedViewModel
+{
+    public ModListEntryScope? Scope { get; } = scope;
+
+    // Read on every get rather than captured, so choosing a language relabels the dropdown without
+    // rebuilding it - which would drop the selection and reset the filter.
+    public string Label => LocalizationService.Get(key);
+
+    public override string ToString() => Label;
+}
 
 // One choice in the contents panel's sort.
-public sealed record ModListEntrySort(string Label, ListSortDirection Direction);
+public sealed class ModListEntrySort(string key, ListSortDirection direction) : LocalizedViewModel
+{
+    public ListSortDirection Direction { get; } = direction;
+
+    public string Label => LocalizationService.Get(key);
+
+    public override string ToString() => Label;
+}
 
 //
 // The Mod lists page: what lists this install holds, what applying one would do, and applying it.
@@ -171,6 +213,9 @@ public sealed record ModListEntrySort(string Label, ListSortDirection Direction)
 public partial class ModListsViewModel : LocalizedViewModel
 {
     private readonly ModListService _service = AppServices.ModListWorkflow;
+
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
 
     private ModListPreview? _preview;
 
@@ -211,19 +256,19 @@ public partial class ModListsViewModel : LocalizedViewModel
     //
     public IReadOnlyList<ModListScopeFilter> ScopeFilters { get; } =
     [
-        new("All scopes", null),
-        new(ModListScopes.Label(ModListEntryScope.Everyone), ModListEntryScope.Everyone),
-        new(ModListScopes.Label(ModListScopes.ServerAndClients), ModListScopes.ServerAndClients),
-        new(ModListScopes.Label(ModListScopes.ClientsAndHeadless), ModListScopes.ClientsAndHeadless),
-        new(ModListScopes.Label(ModListEntryScope.Client), ModListEntryScope.Client),
-        new(ModListScopes.Label(ModListEntryScope.Headless), ModListEntryScope.Headless),
-        new(ModListScopes.Label(ModListEntryScope.Server), ModListEntryScope.Server),
+        new(nameof(Strings.ModLists_ScopeFilterAll), null),
+        new(ModListScopes.Key(ModListEntryScope.Everyone)!, ModListEntryScope.Everyone),
+        new(ModListScopes.Key(ModListScopes.ServerAndClients)!, ModListScopes.ServerAndClients),
+        new(ModListScopes.Key(ModListScopes.ClientsAndHeadless)!, ModListScopes.ClientsAndHeadless),
+        new(ModListScopes.Key(ModListEntryScope.Client)!, ModListEntryScope.Client),
+        new(ModListScopes.Key(ModListEntryScope.Headless)!, ModListEntryScope.Headless),
+        new(ModListScopes.Key(ModListEntryScope.Server)!, ModListEntryScope.Server),
     ];
 
     public IReadOnlyList<ModListEntrySort> EntrySorts { get; } =
     [
-        new("Name A-Z", ListSortDirection.Ascending),
-        new("Name Z-A", ListSortDirection.Descending),
+        new(nameof(Strings.ModLists_SortNameAscending), ListSortDirection.Ascending),
+        new(nameof(Strings.ModLists_SortNameDescending), ListSortDirection.Descending),
     ];
 
     [ObservableProperty]
@@ -430,15 +475,26 @@ public partial class ModListsViewModel : LocalizedViewModel
         {
             var total = Entries.Count;
 
-            if (IsFiltered) return $"{VisibleEntryCount} of {Mods(total)} on this list";
+            if (IsFiltered)
+            {
+                return total == 1
+                    ? Text(Strings.ModLists_EntriesHeaderFilteredOneFormat, VisibleEntryCount)
+                    : Text(Strings.ModLists_EntriesHeaderFilteredManyFormat, VisibleEntryCount, total);
+            }
 
-            return $"{Mods(total)} on this list";
+            return total == 1
+                ? Strings.ModLists_EntriesHeaderOne
+                : Text(Strings.ModLists_EntriesHeaderManyFormat, total);
         }
     }
 
-    private static string Mods(int count) => count == 1 ? "1 mod" : $"{count} mods";
+    private static string Mods(int count) => count == 1
+        ? Strings.ModLists_DetailOneMod
+        : Text(Strings.ModLists_DetailModsFormat, count);
 
-    public string UnsavedLabel => UnsavedCount == 1 ? "1 unsaved change" : $"{UnsavedCount} unsaved changes";
+    public string UnsavedLabel => UnsavedCount == 1
+        ? Strings.ModLists_UnsavedOne
+        : Text(Strings.ModLists_UnsavedManyFormat, UnsavedCount);
 
     partial void OnSelectedChanged(ModListRowViewModel? value)
     {
@@ -468,6 +524,23 @@ public partial class ModListsViewModel : LocalizedViewModel
     // Read off the row's own ModList rather than the store: Refresh has just loaded it, and going
     // back for a second read would let the panel and the row disagree about the same list.
     //
+    //
+    // The entry rows and the plan rows are records carrying text that was composed when they were
+    // built, so a language change cannot reach them the way it reaches a computed property. They
+    // are rebuilt instead - both from what is already in memory, no disk and no network.
+    //
+    // The list rows on the left need nothing here: their Detail is computed, and each row is a
+    // LocalizedViewModel in its own right.
+    //
+    protected internal override void RefreshText()
+    {
+        base.RefreshText();
+
+        ShowEntries();
+
+        if (_preview is { } preview) ShowPlan(preview);
+    }
+
     private void ShowEntries()
     {
         Entries.Clear();
@@ -572,7 +645,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     {
         var parts = new List<string>();
 
-        if (entry.IsAddon) parts.Add("addon");
+        if (entry.IsAddon) parts.Add(Strings.ModLists_EntryAddon);
 
         //
         // Said in the line rather than only as a chip, because this is the field that decides
@@ -584,13 +657,13 @@ public partial class ModListsViewModel : LocalizedViewModel
         // rest change what a machine does, so they get a sentence.
         //
         if (entry.EffectiveScope == ModListEntryScope.Server)
-            parts.Add("server only - players skip it");
+            parts.Add(Strings.ModLists_EntryServerOnly);
         else if (entry.EffectiveScope == ModListEntryScope.Client)
-            parts.Add("players only - a headless skips it");
+            parts.Add(Strings.ModLists_EntryClientOnly);
         else if (entry.EffectiveScope == ModListEntryScope.Headless)
-            parts.Add("headless only - players skip it");
+            parts.Add(Strings.ModLists_EntryHeadlessOnly);
         else if (entry.EffectiveScope == ModListScopes.ServerAndClients)
-            parts.Add("server and players - a headless skips it");
+            parts.Add(Strings.ModLists_EntryServerAndClients);
 
         //
         // The folders on disk this entry covers.
@@ -600,13 +673,18 @@ public partial class ModListsViewModel : LocalizedViewModel
         // when something has to be sorted out by hand. Absent for a mod added from the catalog that
         // nobody here has installed, which is the honest answer for one.
         //
-        if (InstalledAs(entry, name) is { } folders) parts.Add($"installed as {folders}");
+        if (InstalledAs(entry, name) is { } folders) parts.Add(Text(Strings.ModLists_EntryInstalledAsFormat, folders));
 
-        if (!entry.IsResolved) parts.Add("not on sp-mod.com - installed by hand");
-        else if (entry.Version is { } version) parts.Add(entry.IsPinned ? $"version {version}" : $"version {version}, not locked");
-        else parts.Add("newest published version");
+        if (!entry.IsResolved) parts.Add(Strings.ModLists_EntryNotOnForge);
+        else if (entry.Version is { } version)
+        {
+            parts.Add(entry.IsPinned
+                ? Text(Strings.ModLists_EntryVersionFormat, version)
+                : Text(Strings.ModLists_EntryVersionUnlockedFormat, version));
+        }
+        else parts.Add(Strings.ModLists_EntryNewestPublished);
 
-        return string.Join(" · ", parts);
+        return string.Join(Strings.Common_FactSeparator, parts);
     }
 
     //
@@ -724,24 +802,24 @@ public partial class ModListsViewModel : LocalizedViewModel
         var plan = preview.Plan;
 
         var counts = new List<string>();
-        void Count(int n, string label) { if (n > 0) counts.Add($"{n} {label}"); }
+        void Count(int n, string format) { if (n > 0) counts.Add(Text(format, n)); }
 
-        Count(plan.Install.Count(), "to install");
-        Count(plan.Update.Count(), "to update");
-        Count(plan.Enable.Count(), "to enable");
-        Count(plan.Disable.Count(), "to disable");
-        Count(plan.Pinned.Count(), "pinned");
-        Count(plan.Keep.Count(), "already right");
-        Count(plan.Manual.Count(), "to fetch yourself");
+        Count(plan.Install.Count(), Strings.ModLists_CountToInstallFormat);
+        Count(plan.Update.Count(), Strings.ModLists_CountToUpdateFormat);
+        Count(plan.Enable.Count(), Strings.ModLists_CountToEnableFormat);
+        Count(plan.Disable.Count(), Strings.ModLists_CountToDisableFormat);
+        Count(plan.Pinned.Count(), Strings.ModLists_CountPinnedFormat);
+        Count(plan.Keep.Count(), Strings.ModLists_CountAlreadyRightFormat);
+        Count(plan.Manual.Count(), Strings.ModLists_CountToFetchFormat);
 
         PlanSummary = plan.IsNoOp && plan.Manual.Count() == 0
-            ? "This install already matches the list - nothing to do."
-            : string.Join(", ", counts) + ".";
+            ? Strings.ModLists_PlanNoOp
+            : string.Join(Strings.Common_ListSeparator, counts) + ".";
 
         VersionWarning = preview.List.SptVersion is { } captured
             && preview.Install.SptVersion is { } current
             && !string.Equals(captured, current, StringComparison.OrdinalIgnoreCase)
-                ? $"This list was made on SPT {captured} and you're running {current}. Versions locked for one won't always work on the other."
+                ? Text(Strings.ModLists_VersionWarningFormat, captured, current)
                 : null;
 
         ApplyCommand.NotifyCanExecuteChanged();
@@ -758,15 +836,17 @@ public partial class ModListsViewModel : LocalizedViewModel
 
     private static string Label(ModListAction action) => action.Kind switch
     {
-        ModListActionKind.Install => "Install",
-        ModListActionKind.Update => action.IsRepair ? "Reinstall" : action.IsDowngrade ? "Downgrade" : "Update",
+        ModListActionKind.Install => Strings.ModLists_ActionInstall,
+        ModListActionKind.Update => action.IsRepair
+            ? Strings.ModLists_ActionReinstall
+            : action.IsDowngrade ? Strings.ModLists_ActionDowngrade : Strings.ModLists_ActionUpdate,
         ModListActionKind.Enable => action.NeedsUpdateAfterEnable
-            ? action.IsRepair ? "Enable + reinstall" : "Enable + update"
-            : "Enable",
-        ModListActionKind.Disable => "Disable",
-        ModListActionKind.Pinned => "Pinned",
-        ModListActionKind.Manual => "Fetch yourself",
-        _ => "Unchanged",
+            ? action.IsRepair ? Strings.ModLists_ActionEnableReinstall : Strings.ModLists_ActionEnableUpdate
+            : Strings.ModLists_ActionEnable,
+        ModListActionKind.Disable => Strings.ModLists_ActionDisable,
+        ModListActionKind.Pinned => Strings.ModLists_ActionPinned,
+        ModListActionKind.Manual => Strings.ModLists_ActionManual,
+        _ => Strings.ModLists_ActionUnchanged,
     };
 
     //
@@ -779,22 +859,30 @@ public partial class ModListsViewModel : LocalizedViewModel
         var detail = DetailFor(action);
         if (!action.IsAddon) return detail;
 
-        return detail.Length == 0 ? "Addon" : $"Addon - {detail}";
+        return detail.Length == 0
+            ? Strings.ModLists_ActionAddon
+            : Text(Strings.ModLists_ActionAddonDetailFormat, detail);
     }
 
     private static string DetailFor(ModListAction action) => action.Kind switch
     {
-        ModListActionKind.Install => action.TargetVersion is null ? "newest published" : $"version {action.TargetVersion}",
+        ModListActionKind.Install => action.TargetVersion is null
+            ? Strings.ModLists_ActionNewestPublished
+            : Text(Strings.ModLists_ActionVersionFormat, action.TargetVersion),
+
         ModListActionKind.Update or ModListActionKind.Enable when action.IsRepair =>
-            $"version {action.TargetVersion ?? action.InstalledVersion} is installed but files are missing",
+            Text(Strings.ModLists_ActionRepairFormat, action.TargetVersion ?? action.InstalledVersion),
 
         ModListActionKind.Update or ModListActionKind.Enable when action.TargetVersion is not null
             && action.InstalledVersion is not null && action.TargetVersion != action.InstalledVersion =>
-            $"{action.InstalledVersion} to {action.TargetVersion}",
-        ModListActionKind.Disable => "not on this list",
-        ModListActionKind.Pinned => "not on this list - kept, you pinned it",
-        ModListActionKind.Manual => "not on sp-mod.com - install it by hand",
-        _ => action.InstalledVersion is null ? string.Empty : $"version {action.InstalledVersion}",
+            Text(Strings.ModLists_ActionVersionChangeFormat, action.InstalledVersion, action.TargetVersion),
+
+        ModListActionKind.Disable => Strings.ModLists_ActionNotOnList,
+        ModListActionKind.Pinned => Strings.ModLists_ActionPinnedDetail,
+        ModListActionKind.Manual => Strings.ModLists_ActionManualDetail,
+        _ => action.InstalledVersion is null
+            ? string.Empty
+            : Text(Strings.ModLists_ActionVersionFormat, action.InstalledVersion),
     };
 
     private static int Order(ModListActionKind kind) => kind switch

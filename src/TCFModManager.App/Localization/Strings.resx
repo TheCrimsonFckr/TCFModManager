@@ -1773,4 +1773,215 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>Trusting certificate {0}. SPT's certificate is self-signed for localhost, so this fingerprint - not the name on it - is what identifies the server.</value>
     <comment>{0} is a shortened fingerprint. localhost stays as it is.</comment>
   </data>
+  <data name="Common_FactSeparator" xml:space="preserve">
+    <value> · </value>
+    <comment>Between the facts on a one-line summary - "3 mods · made here · revision 2". They are separate facts, not a sentence; change the character if another reads better in your language.</comment>
+  </data>
+  <data name="ModLists_DetailOneMod" xml:space="preserve">
+    <value>1 mod</value>
+    <comment>One fact in a list's one-line summary. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="ModLists_DetailModsFormat" xml:space="preserve">
+    <value>{0} mods</value>
+  </data>
+  <data name="ModLists_DetailSnapshot" xml:space="preserve">
+    <value>snapshot</value>
+    <comment>One fact: this list is the automatic before-apply snapshot.</comment>
+  </data>
+  <data name="ModLists_DetailPublished" xml:space="preserve">
+    <value>published to this server</value>
+  </data>
+  <data name="ModLists_DetailImported" xml:space="preserve">
+    <value>imported</value>
+    <comment>One fact: the list came from a file.</comment>
+  </data>
+  <data name="ModLists_DetailFromFormat" xml:space="preserve">
+    <value>from {0}</value>
+    <comment>{0} is a server address, as the list recorded it.</comment>
+  </data>
+  <data name="ModLists_DetailFromServer" xml:space="preserve">
+    <value>from a server</value>
+  </data>
+  <data name="ModLists_DetailMadeHere" xml:space="preserve">
+    <value>made here</value>
+  </data>
+  <data name="ModLists_DetailRevisionFormat" xml:space="preserve">
+    <value>revision {0}</value>
+  </data>
+  <data name="ModLists_ScopeEveryone" xml:space="preserve">
+    <value>Server + Client + Headless</value>
+    <comment>The machines an entry reaches. Server, Client and Headless are the three roles, named the same way everywhere on this page.</comment>
+  </data>
+  <data name="ModLists_ScopeServerAndClients" xml:space="preserve">
+    <value>Server + Client</value>
+  </data>
+  <data name="ModLists_ScopeClientsAndHeadless" xml:space="preserve">
+    <value>Client + Headless</value>
+  </data>
+  <data name="ModLists_ScopeClientOnly" xml:space="preserve">
+    <value>Client only</value>
+  </data>
+  <data name="ModLists_ScopeHeadlessOnly" xml:space="preserve">
+    <value>Headless only</value>
+  </data>
+  <data name="ModLists_ScopeServerOnly" xml:space="preserve">
+    <value>Server only</value>
+  </data>
+  <data name="ModLists_ScopeFilterAll" xml:space="preserve">
+    <value>All scopes</value>
+    <comment>The neutral entry in the scope filter - no filtering.</comment>
+  </data>
+  <data name="ModLists_SortNameAscending" xml:space="preserve">
+    <value>Name A-Z</value>
+    <comment>Sort order. A-Z means alphabetical - use the letters your alphabet starts and ends with.</comment>
+  </data>
+  <data name="ModLists_SortNameDescending" xml:space="preserve">
+    <value>Name Z-A</value>
+  </data>
+  <data name="ModLists_EntriesHeaderOne" xml:space="preserve">
+    <value>1 mod on this list</value>
+  </data>
+  <data name="ModLists_EntriesHeaderManyFormat" xml:space="preserve">
+    <value>{0} mods on this list</value>
+  </data>
+  <data name="ModLists_EntriesHeaderFilteredOneFormat" xml:space="preserve">
+    <value>{0} of 1 mod on this list</value>
+    <comment>{0} is how many the filter leaves showing.</comment>
+  </data>
+  <data name="ModLists_EntriesHeaderFilteredManyFormat" xml:space="preserve">
+    <value>{0} of {1} mods on this list</value>
+    <comment>{0} showing, {1} on the list.</comment>
+  </data>
+  <data name="ModLists_UnsavedOne" xml:space="preserve">
+    <value>1 unsaved change</value>
+  </data>
+  <data name="ModLists_UnsavedManyFormat" xml:space="preserve">
+    <value>{0} unsaved changes</value>
+  </data>
+  <data name="ModLists_EntryAddon" xml:space="preserve">
+    <value>addon</value>
+    <comment>One fact on a list entry's line.</comment>
+  </data>
+  <data name="ModLists_EntryServerOnly" xml:space="preserve">
+    <value>server only - players skip it</value>
+  </data>
+  <data name="ModLists_EntryClientOnly" xml:space="preserve">
+    <value>players only - a headless skips it</value>
+  </data>
+  <data name="ModLists_EntryHeadlessOnly" xml:space="preserve">
+    <value>headless only - players skip it</value>
+  </data>
+  <data name="ModLists_EntryServerAndClients" xml:space="preserve">
+    <value>server and players - a headless skips it</value>
+  </data>
+  <data name="ModLists_EntryInstalledAsFormat" xml:space="preserve">
+    <value>installed as {0}</value>
+    <comment>{0} is one or more folder names, which are not translated.</comment>
+  </data>
+  <data name="ModLists_EntryNotOnForge" xml:space="preserve">
+    <value>not on sp-mod.com - installed by hand</value>
+  </data>
+  <data name="ModLists_EntryVersionFormat" xml:space="preserve">
+    <value>version {0}</value>
+  </data>
+  <data name="ModLists_EntryVersionUnlockedFormat" xml:space="preserve">
+    <value>version {0}, not locked</value>
+    <comment>"not locked" means the list does not hold this entry to that version.</comment>
+  </data>
+  <data name="ModLists_EntryNewestPublished" xml:space="preserve">
+    <value>newest published version</value>
+  </data>
+  <data name="ModLists_ActionInstall" xml:space="preserve">
+    <value>Install</value>
+    <comment>The kind of change a plan row describes. Shown in a fixed-width column - keep these short.</comment>
+  </data>
+  <data name="ModLists_ActionReinstall" xml:space="preserve">
+    <value>Reinstall</value>
+  </data>
+  <data name="ModLists_ActionDowngrade" xml:space="preserve">
+    <value>Downgrade</value>
+  </data>
+  <data name="ModLists_ActionUpdate" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="ModLists_ActionEnable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="ModLists_ActionEnableReinstall" xml:space="preserve">
+    <value>Enable + reinstall</value>
+  </data>
+  <data name="ModLists_ActionEnableUpdate" xml:space="preserve">
+    <value>Enable + update</value>
+  </data>
+  <data name="ModLists_ActionDisable" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="ModLists_ActionPinned" xml:space="preserve">
+    <value>Pinned</value>
+  </data>
+  <data name="ModLists_ActionManual" xml:space="preserve">
+    <value>Fetch yourself</value>
+  </data>
+  <data name="ModLists_ActionUnchanged" xml:space="preserve">
+    <value>Unchanged</value>
+  </data>
+  <data name="ModLists_ActionAddon" xml:space="preserve">
+    <value>Addon</value>
+    <comment>Marks a plan row as an addon rather than a mod, when there is nothing else to say about it.</comment>
+  </data>
+  <data name="ModLists_ActionAddonDetailFormat" xml:space="preserve">
+    <value>Addon - {0}</value>
+    <comment>{0} is what the row would otherwise have said.</comment>
+  </data>
+  <data name="ModLists_ActionNewestPublished" xml:space="preserve">
+    <value>newest published</value>
+  </data>
+  <data name="ModLists_ActionVersionFormat" xml:space="preserve">
+    <value>version {0}</value>
+  </data>
+  <data name="ModLists_ActionRepairFormat" xml:space="preserve">
+    <value>version {0} is installed but files are missing</value>
+  </data>
+  <data name="ModLists_ActionVersionChangeFormat" xml:space="preserve">
+    <value>{0} to {1}</value>
+    <comment>Two version numbers - the one installed and the one the list names.</comment>
+  </data>
+  <data name="ModLists_ActionNotOnList" xml:space="preserve">
+    <value>not on this list</value>
+  </data>
+  <data name="ModLists_ActionPinnedDetail" xml:space="preserve">
+    <value>not on this list - kept, you pinned it</value>
+  </data>
+  <data name="ModLists_ActionManualDetail" xml:space="preserve">
+    <value>not on sp-mod.com - install it by hand</value>
+  </data>
+  <data name="ModLists_CountToInstallFormat" xml:space="preserve">
+    <value>{0} to install</value>
+    <comment>One count in the plan summary, joined to the others by Common_ListSeparator.</comment>
+  </data>
+  <data name="ModLists_CountToUpdateFormat" xml:space="preserve">
+    <value>{0} to update</value>
+  </data>
+  <data name="ModLists_CountToEnableFormat" xml:space="preserve">
+    <value>{0} to enable</value>
+  </data>
+  <data name="ModLists_CountToDisableFormat" xml:space="preserve">
+    <value>{0} to disable</value>
+  </data>
+  <data name="ModLists_CountPinnedFormat" xml:space="preserve">
+    <value>{0} pinned</value>
+  </data>
+  <data name="ModLists_CountAlreadyRightFormat" xml:space="preserve">
+    <value>{0} already right</value>
+  </data>
+  <data name="ModLists_CountToFetchFormat" xml:space="preserve">
+    <value>{0} to fetch yourself</value>
+  </data>
+  <data name="ModLists_PlanNoOp" xml:space="preserve">
+    <value>This install already matches the list - nothing to do.</value>
+  </data>
+  <data name="ModLists_VersionWarningFormat" xml:space="preserve">
+    <value>This list was made on SPT {0} and you're running {1}. Versions locked for one won't always work on the other.</value>
+    <comment>{0} and {1} are SPT version numbers.</comment>
+  </data>
 </root>

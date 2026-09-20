@@ -34,6 +34,14 @@ public sealed class LocalizationService : INotifyPropertyChanged
     public string this[string key] => Get(key);
 
     //
+    // string.Format against the CURRENT CULTURE rather than the current language: a count, a size
+    // or a date inside a sentence follows the regional setting, which is the same split D2 draws
+    // everywhere else.
+    //
+    public static string Text(string format, params object?[] values) =>
+        string.Format(CultureInfo.CurrentCulture, format, values);
+
+    //
     // A key with nothing behind it renders as the key itself - visible, searchable, and obviously
     // wrong, rather than a blank label nobody notices. A key missing only from a translation never
     // reaches this: resource fallback hands back the English value.
