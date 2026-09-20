@@ -198,23 +198,31 @@
                                 </ui:CardExpander.Header>
 
                                 <StackPanel>
-                                    <ItemsControl Focusable="False" ItemsSource="{Binding Findings}">
+                                    <ItemsControl
+                                        Focusable="False"
+                                        Grid.IsSharedSizeScope="True"
+                                        ItemsSource="{Binding Findings}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <Border Style="{StaticResource HoverRow}" Padding="10,8">
                                                     <Grid>
                                                         <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="Auto" />
+                                                            <!-- Shared so every finding's wording
+                                                                 starts on the same line down the
+                                                                 card, rather than stepping in and
+                                                                 out with the length of each area
+                                                                 label - and so a translation
+                                                                 longer than 120px widens the whole
+                                                                 column instead of one badge. -->
+                                                            <ColumnDefinition
+                                                                Width="Auto"
+                                                                SharedSizeGroup="FootprintArea" />
                                                             <ColumnDefinition Width="*" />
                                                         </Grid.ColumnDefinitions>
 
-                                                        <!-- Fixed width so every finding's wording
-                                                             starts on the same line down the card,
-                                                             rather than stepping in and out with
-                                                             the length of each area label. -->
                                                         <ui:Badge
                                                             Grid.Column="0"
-                                                            Width="120"
+                                                            MinWidth="120"
                                                             Margin="0,0,12,0"
                                                             VerticalAlignment="Top"
                                                             HorizontalContentAlignment="Center"

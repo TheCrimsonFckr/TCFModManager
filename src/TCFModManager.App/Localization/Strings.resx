@@ -2789,4 +2789,275 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
     <value>Delete group?</value>
     <comment>Dialog title.</comment>
   </data>
+  <data name="Footprint_AreaClient" xml:space="preserve">
+    <value>Client</value>
+    <comment>Badge on a finding: it affects the game client, with no one resource named. Client and Server are the two halves of an SPT install.</comment>
+  </data>
+  <data name="Footprint_AreaClientCpu" xml:space="preserve">
+    <value>Client · CPU</value>
+    <comment>Badge on a finding. CPU, GPU and Memory are hardware, not prose - keep the symbols your readers use.</comment>
+  </data>
+  <data name="Footprint_AreaClientGpu" xml:space="preserve">
+    <value>Client · GPU</value>
+    <comment>Badge on a finding.</comment>
+  </data>
+  <data name="Footprint_AreaClientMemory" xml:space="preserve">
+    <value>Client · Memory</value>
+    <comment>Badge on a finding.</comment>
+  </data>
+  <data name="Footprint_AreaClientStartup" xml:space="preserve">
+    <value>Client · Start-up</value>
+    <comment>Badge on a finding: the cost falls when the game starts, not while playing.</comment>
+  </data>
+  <data name="Footprint_AreaServer" xml:space="preserve">
+    <value>Server</value>
+    <comment>Badge on a finding: it affects the SPT server rather than the game.</comment>
+  </data>
+  <data name="Footprint_AreaServerCpu" xml:space="preserve">
+    <value>Server · CPU</value>
+    <comment>Badge on a finding.</comment>
+  </data>
+  <data name="Footprint_AreaServerMemory" xml:space="preserve">
+    <value>Server · Memory</value>
+    <comment>Badge on a finding.</comment>
+  </data>
+  <data name="Footprint_AreaDisk" xml:space="preserve">
+    <value>Disk</value>
+    <comment>Badge on a finding: space taken on disk.</comment>
+  </data>
+  <data name="Footprint_AreaUnknown" xml:space="preserve">
+    <value>Unknown</value>
+    <comment>Badge on a finding the app could not read, so it can say nothing about where the cost falls.</comment>
+  </data>
+  <data name="Footprint_AreaNote" xml:space="preserve">
+    <value>Note</value>
+    <comment>Badge on a finding that reports a limit of the reading rather than something the mod does.</comment>
+  </data>
+  <data name="Footprint_AreaNotLoaded" xml:space="preserve">
+    <value>Not loaded</value>
+    <comment>Badge on the first finding of a disabled mod: its files are read but SPT is not loading them.</comment>
+  </data>
+  <data name="Footprint_TitleFormat" xml:space="preserve">
+    <value>{0}  {1}</value>
+    <comment>{0} is a mod name, {1} its version. Both are data and are not translated; only the spacing between them is yours.</comment>
+  </data>
+  <data name="Footprint_FactSeparator" xml:space="preserve">
+    <value>  ·  </value>
+    <comment>Between the facts on a mod's collapsed line - "3 patch classes  ·  4.1 MB  ·  disabled". Change the character if another reads better in your language.</comment>
+  </data>
+  <data name="Footprint_DetailPatchOne" xml:space="preserve">
+    <value>1 patch class</value>
+    <comment>One fact on the collapsed line. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Footprint_DetailPatchManyFormat" xml:space="preserve">
+    <value>{0} patch classes</value>
+    <comment>One fact on the collapsed line.</comment>
+  </data>
+  <data name="Footprint_DetailComponentOne" xml:space="preserve">
+    <value>1 component with an engine callback</value>
+    <comment>One fact on the collapsed line.</comment>
+  </data>
+  <data name="Footprint_DetailComponentManyFormat" xml:space="preserve">
+    <value>{0} components with engine callbacks</value>
+    <comment>One fact on the collapsed line.</comment>
+  </data>
+  <data name="Footprint_DetailDisabled" xml:space="preserve">
+    <value>disabled</value>
+    <comment>One fact on the collapsed line, lower case because it sits among the others.</comment>
+  </data>
+  <data name="Footprint_ComponentsOne" xml:space="preserve">
+    <value>Declares 1 component the engine would call on a timer</value>
+    <comment>What the files contain, never what happens while playing - keep "declares" rather than "runs".</comment>
+  </data>
+  <data name="Footprint_ComponentsManyFormat" xml:space="preserve">
+    <value>Declares {0} components the engine would call on a timer</value>
+    <comment>Keep "declares" rather than "runs" - see the One form.</comment>
+  </data>
+  <data name="Footprint_ComponentsEffect" xml:space="preserve">
+    <value>This is what the mod contains, not what happens when you play: a declared component only runs if an instance of it is created, attached to an active object and enabled, and none of that is visible in the files. The lines below say which kind of callback each one uses - a component declaring more than one appears in more than one line, so those can add up to more than this total.</value>
+  </data>
+  <data name="Footprint_FrameUpdateOne" xml:space="preserve">
+    <value>1 of those declares a per-frame update method</value>
+  </data>
+  <data name="Footprint_FrameUpdateManyFormat" xml:space="preserve">
+    <value>{0} of those declare a per-frame update method</value>
+  </data>
+  <data name="Footprint_FrameUpdateEffect" xml:space="preserve">
+    <value>Unity calls Update or LateUpdate on a component once a frame while it is alive and enabled. This is the kind of work that tracks frame rate most directly - though how much it costs depends entirely on what the code inside does.</value>
+    <comment>Update, LateUpdate and Unity are names from the game engine and stay as they are.</comment>
+  </data>
+  <data name="Footprint_PhysicsOne" xml:space="preserve">
+    <value>1 of those declares a physics-step method</value>
+  </data>
+  <data name="Footprint_PhysicsManyFormat" xml:space="preserve">
+    <value>{0} of those declare a physics-step method</value>
+  </data>
+  <data name="Footprint_PhysicsEffect" xml:space="preserve">
+    <value>FixedUpdate runs on the physics timestep - fifty times a second by default - and not once a frame. It can run several times in one frame or not at all in another, so its cost does not track your frame rate the way an Update does.</value>
+    <comment>FixedUpdate and Update are names from the game engine and stay as they are.</comment>
+  </data>
+  <data name="Footprint_GuiOne" xml:space="preserve">
+    <value>1 of those draws with immediate-mode GUI</value>
+  </data>
+  <data name="Footprint_GuiManyFormat" xml:space="preserve">
+    <value>{0} of those draw with immediate-mode GUI</value>
+  </data>
+  <data name="Footprint_GuiEffect" xml:space="preserve">
+    <value>Unity calls OnGUI more than once a frame - a layout pass, then once per input event - and immediate-mode code typically allocates on each call, which adds garbage collection pressure. What it actually draws decides how much that matters.</value>
+    <comment>OnGUI and Unity are names from the game engine and stay as they are.</comment>
+  </data>
+  <data name="Footprint_ImageEffectOne" xml:space="preserve">
+    <value>1 of those is a full-screen image effect</value>
+  </data>
+  <data name="Footprint_ImageEffectManyFormat" xml:space="preserve">
+    <value>{0} of those are full-screen image effects</value>
+  </data>
+  <data name="Footprint_ImageEffectEffect" xml:space="preserve">
+    <value>OnRenderImage takes the rendered frame and writes a new one, for each camera the component is attached to. That work is done by the graphics card and scales with resolution rather than with processor speed.</value>
+    <comment>OnRenderImage is a name from the game engine and stays as it is.</comment>
+  </data>
+  <data name="Footprint_CameraOne" xml:space="preserve">
+    <value>1 of those hooks a camera's render</value>
+  </data>
+  <data name="Footprint_CameraManyFormat" xml:space="preserve">
+    <value>{0} of those hook a camera's render</value>
+  </data>
+  <data name="Footprint_CameraEffect" xml:space="preserve">
+    <value>OnPreRender and OnPostRender run either side of a camera drawing, once per camera per frame. They run on the processor rather than the graphics card, whatever the code inside them may go on to set up.</value>
+    <comment>OnPreRender and OnPostRender are names from the game engine and stay as they are.</comment>
+  </data>
+  <data name="Footprint_PatchesOne" xml:space="preserve">
+    <value>Ships 1 patch class</value>
+    <comment>Keep "ships" rather than "runs" - this is what the files contain.</comment>
+  </data>
+  <data name="Footprint_PatchesManyFormat" xml:space="preserve">
+    <value>Ships {0} patch classes</value>
+    <comment>Keep "ships" rather than "runs".</comment>
+  </data>
+  <data name="Footprint_PatchesEffect" xml:space="preserve">
+    <value>A patch class alters one of the game's own methods - usually a single one, though one class can target several, so this is a floor rather than a total. Where a patch sits is what decides its cost, and that is exactly what reading the files cannot establish: a patch on a method the game calls thousands of times a second is indistinguishable here from one on a menu button. Read this as how far the mod reaches, not as what it costs.</value>
+  </data>
+  <data name="Footprint_BundlesFormat" xml:space="preserve">
+    <value>{0} in {1} with a .bundle extension</value>
+    <comment>{0} is a size, {1} a file count. .bundle is a file extension and stays as it is. Used for both the client and the server half.</comment>
+  </data>
+  <data name="Footprint_BundlesEffect" xml:space="preserve">
+    <value>Asset bundles hold textures, models, sounds and shaders, and take up memory once loaded - video memory too, for anything the graphics card needs. These are identified by their file extension and measured on disk; when and whether the mod loads them is its own business.</value>
+  </data>
+  <data name="Footprint_Patcher" xml:space="preserve">
+    <value>Ships a BepInEx patcher</value>
+    <comment>BepInEx is the mod loader's name and stays as it is.</comment>
+  </data>
+  <data name="Footprint_PatcherEffect" xml:space="preserve">
+    <value>BepInEx runs patchers in its preloader, before the game's own assemblies are loaded. That is a start-up cost, and it is not running once you are in a raid.</value>
+    <comment>BepInEx is the mod loader's name and stays as it is. A raid is a match in Escape from Tarkov.</comment>
+  </data>
+  <data name="Footprint_ServerHalf" xml:space="preserve">
+    <value>Installs files under user\mods</value>
+    <comment>user\mods is a folder path and stays as it is.</comment>
+  </data>
+  <data name="Footprint_ServerHalfEffect" xml:space="preserve">
+    <value>These load in the SPT server process rather than in the game. Their cost falls on server start-up and raid loading; they are not in the client's frame loop, so they cannot cost you frame rate directly.</value>
+  </data>
+  <data name="Footprint_ServerPatchesOne" xml:space="preserve">
+    <value>1 of those is a patch class</value>
+  </data>
+  <data name="Footprint_ServerPatchesManyFormat" xml:space="preserve">
+    <value>{0} of those are patch classes</value>
+  </data>
+  <data name="Footprint_ServerPatchesEffect" xml:space="preserve">
+    <value>Found in the server half, so this alters the server rather than the game. It is counted separately from the client figure above and does not affect this mod's level, which describes the client only.</value>
+  </data>
+  <data name="Footprint_ServerBundlesEffect" xml:space="preserve">
+    <value>These sit in the server half, so they are the server's memory rather than the game's.</value>
+  </data>
+  <data name="Footprint_DiskFormat" xml:space="preserve">
+    <value>{0} across {1}</value>
+    <comment>{0} is a size, {1} a file count.</comment>
+  </data>
+  <data name="Footprint_DiskAssembliesNone" xml:space="preserve">
+    <value>None of them are managed assemblies, so there was no compiled code here to read.</value>
+    <comment>Followed by Footprint_DiskEffectTail, joined by Common_SentenceSeparator.</comment>
+  </data>
+  <data name="Footprint_DiskAssembliesOne" xml:space="preserve">
+    <value>1 of them is a managed assembly, which is what everything above was read from.</value>
+    <comment>Followed by Footprint_DiskEffectTail, joined by Common_SentenceSeparator.</comment>
+  </data>
+  <data name="Footprint_DiskAssembliesManyFormat" xml:space="preserve">
+    <value>{0} of them are managed assemblies, which is what everything above was read from.</value>
+    <comment>Followed by Footprint_DiskEffectTail, joined by Common_SentenceSeparator.</comment>
+  </data>
+  <data name="Footprint_DiskEffectTail" xml:space="preserve">
+    <value>This is everything in the mod's own folders, so anything installed into them - an addon that has no folder of its own, for instance - is counted here too.</value>
+    <comment>Ends the Disk finding, after whichever assembly sentence applies.</comment>
+  </data>
+  <data name="Footprint_UnreadableFormat" xml:space="preserve">
+    <value>{0} of {1} assemblies could not be read</value>
+    <comment>{0} is how many could not be read, {1} how many there are.</comment>
+  </data>
+  <data name="Footprint_UnreadableEffect" xml:space="preserve">
+    <value>Every count above is a floor rather than a total. An assembly can be unreadable because it is obfuscated, packed, or built in a way this doesn't parse.</value>
+  </data>
+  <data name="Footprint_ShowingNamesFormat" xml:space="preserve">
+    <value>Showing {0} of {1} callback names</value>
+    <comment>{0} is how many names are listed, {1} how many were found.</comment>
+  </data>
+  <data name="Footprint_ShowingNamesEffect" xml:space="preserve">
+    <value>The counts above are complete; only the list of method names below is shortened.</value>
+  </data>
+  <data name="Footprint_ServerComponentsOne" xml:space="preserve">
+    <value>1 type in the server half looks like a game component</value>
+  </data>
+  <data name="Footprint_ServerComponentsManyFormat" xml:space="preserve">
+    <value>{0} types in the server half look like game components</value>
+  </data>
+  <data name="Footprint_ServerComponentsEffect" xml:space="preserve">
+    <value>Server code has no reason to use them, and the check matches on type name alone, so this is more likely a coincidence of naming than real work. It is reported rather than counted as client work either way.</value>
+  </data>
+  <data name="Footprint_NothingFound" xml:space="preserve">
+    <value>Nothing that patches the game or runs on a timer</value>
+  </data>
+  <data name="Footprint_NothingFoundEffect" xml:space="preserve">
+    <value>No patch classes, and no components declaring an engine callback. Whatever this mod does, it does when something else calls it - or it is data and assets rather than code.</value>
+  </data>
+  <data name="Footprint_NotLoadedWhat" xml:space="preserve">
+    <value>This mod is currently disabled</value>
+  </data>
+  <data name="Footprint_NotLoadedEffect" xml:space="preserve">
+    <value>Its files are still on disk, which is why they can still be read, but SPT is not loading any of them. Everything below describes what this mod would do once you enable it again.</value>
+  </data>
+  <data name="Footprint_FilesOne" xml:space="preserve">
+    <value>1 file</value>
+    <comment>Used inside Footprint_BundlesFormat and Footprint_DiskFormat. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Footprint_FilesManyFormat" xml:space="preserve">
+    <value>{0} files</value>
+    <comment>Used inside Footprint_BundlesFormat and Footprint_DiskFormat.</comment>
+  </data>
+  <data name="Footprint_CallbacksFormat" xml:space="preserve">
+    <value>Engine callbacks found: {0}</value>
+    <comment>Tooltip listing the method names found. {0} is those names, joined by Common_ListSeparator; they are code identifiers and are not translated.</comment>
+  </data>
+  <data name="Footprint_CallbacksTruncatedFormat" xml:space="preserve">
+    <value>Engine callbacks found: {0}, ...</value>
+    <comment>Same as Footprint_CallbacksFormat, for when more were found than are listed.</comment>
+  </data>
+  <data name="Footprint_StatusRereading" xml:space="preserve">
+    <value>Re-reading every mod...</value>
+    <comment>Shown while Rescan re-reads every mod instead of using the cache.</comment>
+  </data>
+  <data name="Footprint_StatusReading" xml:space="preserve">
+    <value>Reading installed mods...</value>
+  </data>
+  <data name="Footprint_StatusNone" xml:space="preserve">
+    <value>No installed mods found. Set your SPT install folder on the Options page.</value>
+    <comment>The Options page is named by Nav_Options - translate both the same way.</comment>
+  </data>
+  <data name="Footprint_StatusOne" xml:space="preserve">
+    <value>1 mod read from what it ships on disk.</value>
+    <comment>See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Footprint_StatusManyFormat" xml:space="preserve">
+    <value>{0} mods read from what they ship on disk.</value>
+  </data>
 </root>
