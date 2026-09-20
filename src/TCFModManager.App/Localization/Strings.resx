@@ -2439,4 +2439,354 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>Always start full screen</value>
     <comment>Named in Options_WindowDescription - translate both the same way.</comment>
   </data>
+  <data name="Common_SentenceSeparator" xml:space="preserve">
+    <value> </value>
+    <comment>Between two complete sentences run together on one status line. Keep the space, or use whatever your language puts between sentences.</comment>
+  </data>
+  <data name="Installed_SelectedOne" xml:space="preserve">
+    <value>1 selected</value>
+    <comment>The tick count beside Multi select. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Installed_SelectedManyFormat" xml:space="preserve">
+    <value>{0} selected</value>
+    <comment>{0} is how many cards are ticked.</comment>
+  </data>
+  <data name="Installed_SelectAllFormat" xml:space="preserve">
+    <value>Select all {0}</value>
+    <comment>{0} is how many mods the current filters match, not how many are on the page.</comment>
+  </data>
+  <data name="Installed_Undo" xml:space="preserve">
+    <value>Undo</value>
+    <comment>The undo button before anything has been done.</comment>
+  </data>
+  <data name="Installed_UndoDisableOneFormat" xml:space="preserve">
+    <value>Undo disabling {0}</value>
+    <comment>{0} is a mod name. One whole caption per action rather than "Undo" plus a gerund dropped into it - a verb phrase spliced into a caption cannot be translated.</comment>
+  </data>
+  <data name="Installed_UndoDisableManyFormat" xml:space="preserve">
+    <value>Undo disabling {0} mods</value>
+    <comment>{0} is how many mods were disabled.</comment>
+  </data>
+  <data name="Installed_UndoEnableOneFormat" xml:space="preserve">
+    <value>Undo enabling {0}</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Installed_UndoEnableManyFormat" xml:space="preserve">
+    <value>Undo enabling {0} mods</value>
+    <comment>{0} is how many mods were enabled.</comment>
+  </data>
+  <data name="Installed_UndoInvertFormat" xml:space="preserve">
+    <value>Undo inverting {0}</value>
+    <comment>{0} is a group name the user typed.</comment>
+  </data>
+  <data name="Installed_UndoSortOutFormat" xml:space="preserve">
+    <value>Undo sorting out {0}</value>
+    <comment>{0} is a mod name that was in both an enabled and a disabled folder.</comment>
+  </data>
+  <data name="Installed_SavedAsDefault" xml:space="preserve">
+    <value>Saved. The Installed page will open like this from now on - Options can put it back.</value>
+  </data>
+  <data name="Installed_PinnedFormat" xml:space="preserve">
+    <value>Pinned {0} - no mod list will set it aside.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Installed_UnpinnedFormat" xml:space="preserve">
+    <value>Unpinned {0}.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Installed_NoModsFoundFormat" xml:space="preserve">
+    <value>No mods found under "{0}".</value>
+    <comment>{0} is the SPT install folder path.</comment>
+  </data>
+  <data name="Installed_CountFoundOne" xml:space="preserve">
+    <value>1 mod found.</value>
+    <comment>See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Installed_CountFoundManyFormat" xml:space="preserve">
+    <value>{0} mods found.</value>
+    <comment>{0} is how many mods are installed.</comment>
+  </data>
+  <data name="Installed_CountShownOneFormat" xml:space="preserve">
+    <value>1 of {0} mods shown.</value>
+    <comment>{0} is how many mods are installed. Shown when the filters match exactly one.</comment>
+  </data>
+  <data name="Installed_CountShownManyFormat" xml:space="preserve">
+    <value>{0} of {1} mods shown.</value>
+    <comment>{0} is how many the filters match, {1} how many are installed.</comment>
+  </data>
+  <data name="Installed_CountDisabledOne" xml:space="preserve">
+    <value>1 disabled.</value>
+    <comment>Follows the count sentence, joined by Common_SentenceSeparator.</comment>
+  </data>
+  <data name="Installed_CountDisabledManyFormat" xml:space="preserve">
+    <value>{0} disabled.</value>
+    <comment>{0} is how many of the installed mods are disabled.</comment>
+  </data>
+  <data name="Installed_RemoveDisabledFirstFormat" xml:space="preserve">
+    <value>{0} is disabled - enable it before removing it.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Installed_RemoveNoRecordFormat" xml:space="preserve">
+    <value>Couldn't find an install record for {0} - it may have already been removed.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Installed_RemoveAppManagedBody" xml:space="preserve">
+    <value>This deletes exactly the files this app installed for it.</value>
+    <comment>First paragraph of the Remove prompt for a mod this app installed.</comment>
+  </data>
+  <data name="Installed_RemoveNoFolderFormat" xml:space="preserve">
+    <value>Couldn't find {0}'s folder to remove.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Installed_RemoveLegacyBodyFormat" xml:space="preserve">
+    <value>This mod wasn't installed through this app, so this permanently deletes its whole folder rather than just the files it placed:
+
+{0}</value>
+    <comment>{0} is one or more folder paths, one per line.</comment>
+  </data>
+  <data name="Installed_RemoveFailedFormat" xml:space="preserve">
+    <value>Couldn't remove {0}: {1}</value>
+    <comment>{0} is a mod name, {1} the operating system's reason.</comment>
+  </data>
+  <data name="Installed_RemoveDisableHint" xml:space="preserve">
+    <value>To take it out of the game without deleting it, use Disable instead.</value>
+    <comment>Last paragraph of every Remove prompt.</comment>
+  </data>
+  <data name="Installed_RemoveTitleFormat" xml:space="preserve">
+    <value>Remove {0}?</value>
+    <comment>{0} is a mod name. Dialog title.</comment>
+  </data>
+  <data name="Installed_RemoveConfigsOneFormat" xml:space="preserve">
+    <value>{0} has 1 config or settings file of its own:</value>
+    <comment>{0} is a mod name. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Installed_RemoveConfigsManyFormat" xml:space="preserve">
+    <value>{0} has {1} config or settings files of its own:</value>
+    <comment>{0} is a mod name, {1} how many files.</comment>
+  </data>
+  <data name="Installed_RemoveConfigsChoicesFormat" xml:space="preserve">
+    <value>Yes  -  keep them, moved to {0}
+No  -  delete them along with the rest of the mod
+Cancel  -  don't remove anything</value>
+    <comment>What the three dialog buttons do. {0} is a folder path. Yes/No/Cancel are the Windows button captions and follow the operating system's language, so keep them as they appear there.</comment>
+  </data>
+  <data name="Installed_RemovedFormat" xml:space="preserve">
+    <value>Removed {0}.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Installed_RemovedFailedOneFormat" xml:space="preserve">
+    <value>Removed {0}, but 1 file couldn't be deleted (locked or already gone) - you may need to remove it by hand.</value>
+    <comment>{0} is a mod name. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Installed_RemovedFailedManyFormat" xml:space="preserve">
+    <value>Removed {0}, but {1} files couldn't be deleted (locked or already gone) - you may need to remove them by hand.</value>
+    <comment>{0} is a mod name, {1} how many files.</comment>
+  </data>
+  <data name="Installed_RemovedConfigsKeptOneFormat" xml:space="preserve">
+    <value>1 config file kept in {0}.</value>
+    <comment>{0} is a folder path. Follows the removal sentence, joined by Common_SentenceSeparator.</comment>
+  </data>
+  <data name="Installed_RemovedConfigsKeptManyFormat" xml:space="preserve">
+    <value>{0} config files kept in {1}.</value>
+    <comment>{0} is how many files, {1} a folder path.</comment>
+  </data>
+  <data name="Installed_FolderGoneFormat" xml:space="preserve">
+    <value>That folder is no longer there - {0}. Rescan to pick up the change.</value>
+    <comment>{0} is a folder path.</comment>
+  </data>
+  <data name="Installed_FolderOpenFailed" xml:space="preserve">
+    <value>Couldn't open that folder.</value>
+  </data>
+  <data name="Installed_DuplicateBodyFormat" xml:space="preserve">
+    <value>{0} is in both an enabled and a disabled folder:
+
+{1}
+
+Yes  -  keep the enabled copy
+No  -  keep the disabled copy, and enable it
+Cancel  -  leave it as it is
+
+The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your SPT install, not deleted.</value>
+    <comment>{0} is a mod name, {1} the folder paths one per line. Yes/No/Cancel are the Windows button captions and follow the operating system's language, so keep them as they appear there. .tcfmm-duplicates is a folder name and stays as it is.</comment>
+  </data>
+  <data name="Installed_DuplicateTitleFormat" xml:space="preserve">
+    <value>Sort out {0}?</value>
+    <comment>{0} is a mod name. Dialog title.</comment>
+  </data>
+  <data name="Installed_DuplicateKeptEnabledFormat" xml:space="preserve">
+    <value>Sorted out {0} - kept the enabled copy, the other is in .tcfmm-duplicates in your SPT install.</value>
+    <comment>{0} is a mod name. One whole sentence per outcome rather than "enabled"/"disabled" dropped into one.</comment>
+  </data>
+  <data name="Installed_DuplicateKeptDisabledFormat" xml:space="preserve">
+    <value>Sorted out {0} - kept the disabled copy, the other is in .tcfmm-duplicates in your SPT install.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Installed_UpdateNotInCatalogFormat" xml:space="preserve">
+    <value>Couldn't find {0} in the cached catalog - try Rescan.</value>
+    <comment>{0} is one or more mod names, joined by Common_ListSeparator and Common_ListPairFormat.</comment>
+  </data>
+  <data name="Installed_UpdateHandInstalledTitleOne" xml:space="preserve">
+    <value>Update a hand-installed mod?</value>
+    <comment>Dialog title. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Installed_UpdateHandInstalledTitleManyFormat" xml:space="preserve">
+    <value>Update {0} hand-installed mods?</value>
+    <comment>{0} is how many mods in the selection were not installed through this app.</comment>
+  </data>
+  <data name="Installed_UpdateHandInstalledBodyFormat" xml:space="preserve">
+    <value>{0} wasn't installed through this app, so there's no record of exactly which files the current version placed. Updating installs the new version's files on top of what's already there rather than cleanly removing the old version first, so you may end up with leftover files from the old version.</value>
+    <comment>{0} is one or more mod names, joined by Common_ListSeparator and Common_ListPairFormat.</comment>
+  </data>
+  <data name="Installed_UpdateCancelled" xml:space="preserve">
+    <value>Update cancelled.</value>
+  </data>
+  <data name="Installed_UpdateCancelledUnread" xml:space="preserve">
+    <value>Update cancelled - the mod pages weren't confirmed as read.</value>
+  </data>
+  <data name="Installed_UpdateQueuedOne" xml:space="preserve">
+    <value>Queued 1 update - see the Downloads page for progress.</value>
+    <comment>See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Installed_UpdateQueuedManyFormat" xml:space="preserve">
+    <value>Queued {0} updates - see the Downloads page for progress.</value>
+    <comment>{0} is how many updates were queued.</comment>
+  </data>
+  <data name="Installed_NothingSelected" xml:space="preserve">
+    <value>Nothing selected.</value>
+  </data>
+  <data name="Installed_NoUpdatesAvailable" xml:space="preserve">
+    <value>None of the selected mods have an update.</value>
+  </data>
+  <data name="Installed_NoUpdatesReasonsFormat" xml:space="preserve">
+    <value>None of the selected mods can be updated here: {0}.</value>
+    <comment>{0} is one or more reasons, joined by Common_ListSeparator.</comment>
+  </data>
+  <data name="Installed_ReasonDisabledOne" xml:space="preserve">
+    <value>1 disabled (enable it first)</value>
+    <comment>One reason in Installed_NoUpdatesReasonsFormat. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Installed_ReasonDisabledManyFormat" xml:space="preserve">
+    <value>{0} disabled (enable them first)</value>
+    <comment>One reason in Installed_NoUpdatesReasonsFormat. {0} is how many.</comment>
+  </data>
+  <data name="Installed_ReasonAddonOne" xml:space="preserve">
+    <value>1 addon, which updates from its parent mod</value>
+    <comment>One reason in Installed_NoUpdatesReasonsFormat.</comment>
+  </data>
+  <data name="Installed_ReasonAddonManyFormat" xml:space="preserve">
+    <value>{0} addons, which update from their parent mod</value>
+    <comment>One reason in Installed_NoUpdatesReasonsFormat. {0} is how many.</comment>
+  </data>
+  <data name="Installed_SkippedFormat" xml:space="preserve">
+    <value> Skipped {0}.</value>
+    <comment>Follows the queued sentence on the same line, which is why it starts with a space. {0} is one or more counts, joined by Common_ListSeparator.</comment>
+  </data>
+  <data name="Installed_SkippedUpToDateOne" xml:space="preserve">
+    <value>1 already up to date</value>
+    <comment>One count in Installed_SkippedFormat. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Installed_SkippedUpToDateManyFormat" xml:space="preserve">
+    <value>{0} already up to date</value>
+    <comment>One count in Installed_SkippedFormat.</comment>
+  </data>
+  <data name="Installed_SkippedDisabledOne" xml:space="preserve">
+    <value>1 disabled</value>
+    <comment>One count in Installed_SkippedFormat.</comment>
+  </data>
+  <data name="Installed_SkippedDisabledManyFormat" xml:space="preserve">
+    <value>{0} disabled</value>
+    <comment>One count in Installed_SkippedFormat.</comment>
+  </data>
+  <data name="Installed_SkippedAddonOne" xml:space="preserve">
+    <value>1 addon - update that from its parent mod</value>
+    <comment>One count in Installed_SkippedFormat.</comment>
+  </data>
+  <data name="Installed_SkippedAddonManyFormat" xml:space="preserve">
+    <value>{0} addons - update those from their parent mod</value>
+    <comment>One count in Installed_SkippedFormat.</comment>
+  </data>
+  <data name="Installed_SkippedNotFoundOne" xml:space="preserve">
+    <value>1 not found in the catalog</value>
+    <comment>One count in Installed_SkippedFormat.</comment>
+  </data>
+  <data name="Installed_SkippedNotFoundManyFormat" xml:space="preserve">
+    <value>{0} not found in the catalog</value>
+    <comment>One count in Installed_SkippedFormat.</comment>
+  </data>
+  <data name="Installed_UndoneOne" xml:space="preserve">
+    <value>Put 1 mod back.</value>
+    <comment>See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Installed_UndoneManyFormat" xml:space="preserve">
+    <value>Put {0} mods back.</value>
+    <comment>{0} is how many mods were moved back.</comment>
+  </data>
+  <data name="Installed_NothingToDisable" xml:space="preserve">
+    <value>Nothing to disable.</value>
+    <comment>One whole sentence per action rather than the verb dropped into one.</comment>
+  </data>
+  <data name="Installed_NothingToEnable" xml:space="preserve">
+    <value>Nothing to enable.</value>
+    <comment>One whole sentence per action rather than the verb dropped into one.</comment>
+  </data>
+  <data name="Installed_DisabledCountOne" xml:space="preserve">
+    <value>Disabled 1 mod.</value>
+    <comment>See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Installed_DisabledCountManyFormat" xml:space="preserve">
+    <value>Disabled {0} mods.</value>
+    <comment>{0} is how many mods were disabled.</comment>
+  </data>
+  <data name="Installed_EnabledCountOne" xml:space="preserve">
+    <value>Enabled 1 mod.</value>
+    <comment>See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Installed_EnabledCountManyFormat" xml:space="preserve">
+    <value>Enabled {0} mods.</value>
+    <comment>{0} is how many mods were enabled.</comment>
+  </data>
+  <data name="Installed_ImpactNeedsFormat" xml:space="preserve">
+    <value>needs {0}</value>
+    <comment>Why disabling one mod reaches another. {0} is a mod name. Shown as a line in the confirmation list, not a full sentence.</comment>
+  </data>
+  <data name="Installed_ImpactOptionallyUsesFormat" xml:space="preserve">
+    <value>optionally uses {0}</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Installed_ImpactNeededByFormat" xml:space="preserve">
+    <value>needed by {0}</value>
+    <comment>Why enabling one mod reaches another. {0} is a mod name.</comment>
+  </data>
+  <data name="Installed_ImpactOptionallyUsedByFormat" xml:space="preserve">
+    <value>optionally used by {0}</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Installed_MoveFailedOneFormat" xml:space="preserve">
+    <value>{0} couldn't be moved: {1}</value>
+    <comment>{0} is a mod name, {1} the reason.</comment>
+  </data>
+  <data name="Installed_MoveFailedManyFormat" xml:space="preserve">
+    <value>{0} couldn't be moved: {1}</value>
+    <comment>{0} is how many mods, {1} the per-mod reasons joined by Common_ClauseSeparator.</comment>
+  </data>
+  <data name="Installed_MoveFailedItemFormat" xml:space="preserve">
+    <value>{0} - {1}</value>
+    <comment>One failure in Installed_MoveFailedManyFormat. {0} is a mod name, {1} the reason.</comment>
+  </data>
+  <data name="Installed_DeleteGroupEmptyFormat" xml:space="preserve">
+    <value>Delete "{0}"?</value>
+    <comment>{0} is a group name the user typed. The group is empty.</comment>
+  </data>
+  <data name="Installed_DeleteGroupOneFormat" xml:space="preserve">
+    <value>Delete "{0}"? Its 1 mod moves back to Ungrouped.</value>
+    <comment>{0} is a group name the user typed. Ungrouped is the fixed bucket named by Filter_Ungrouped - translate both the same way.</comment>
+  </data>
+  <data name="Installed_DeleteGroupManyFormat" xml:space="preserve">
+    <value>Delete "{0}"? Its {1} mods move back to Ungrouped.</value>
+    <comment>{0} is a group name the user typed, {1} how many mods it holds.</comment>
+  </data>
+  <data name="Installed_DeleteGroupTitle" xml:space="preserve">
+    <value>Delete group?</value>
+    <comment>Dialog title.</comment>
+  </data>
 </root>

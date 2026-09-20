@@ -66,7 +66,8 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     // The moves the last disable/enable made, and what to call it - the undo payload.
     private List<ModMove> _lastMoves = [];
-    private string? _lastMoveLabel;
+    private string? _lastMoveLabelKey;
+    private object? _lastMoveLabelArg;
 
     // The current page of the Cards grid.
     public ObservableCollection<InstalledModCardViewModel> Results { get; } = [];
@@ -207,14 +208,16 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     public int SelectedCount => _all.Count(m => m.IsSelected);
 
-    public string SelectedCountLabel => SelectedCount == 1 ? "1 selected" : $"{SelectedCount} selected";
+    public string SelectedCountLabel => SelectedCount == 1
+        ? Strings.Installed_SelectedOne
+        : Text(Strings.Installed_SelectedManyFormat, SelectedCount);
 
     //
     // Everything the current filters match, not just the page on screen - which is why the count is
     // in the label. "Select all" over a paginated list is ambiguous otherwise, and someone who has
     // filtered to "Update available" means all of them, not the first twelve.
     //
-    public string SelectAllLabel => $"Select all {_filtered.Count}";
+    public string SelectAllLabel => Text(Strings.Installed_SelectAllFormat, _filtered.Count);
 
     //
     // Whether every mod the filters match is already ticked. Tints Select all, the same way
@@ -229,7 +232,9 @@ public partial class InstalledViewModel : LocalizedViewModel
     /// <summary>Whether the last disable/enable can still be put back.</summary>
     public bool CanUndo => _lastMoves.Count > 0;
 
-    public string UndoLabel => _lastMoveLabel is null ? "Undo" : $"Undo {_lastMoveLabel}";
+    public string UndoLabel => _lastMoveLabelKey is null
+        ? Strings.Installed_Undo
+        : Text(LocalizationService.Get(_lastMoveLabelKey), _lastMoveLabelArg);
 
     [ObservableProperty]
     private bool _isBusy;
@@ -595,7 +600,7 @@ public partial class InstalledViewModel : LocalizedViewModel
 
         service.Save(settings);
 
-        StatusMessage = "Saved. The Installed page will open like this from now on - Options can put it back.";
+        StatusMessage = Strings.Installed_SavedAsDefault;
         AppLog.Info("Installed", "saved the current filters as this page's default");
     }
 
@@ -637,9 +642,9 @@ public partial class InstalledViewModel : LocalizedViewModel
         AppServices.ModLists.SetPinned(ModListPlanner.PinKeys(ModListCandidates.From(mod)), pin);
         mod.IsPinned = pin;
 
-        StatusMessage = pin
-            ? $"Pinned {mod.DisplayTitle} - no mod list will set it aside."
-            : $"Unpinned {mod.DisplayTitle}.";
+        StatusMessage = Text(
+            pin ? Strings.Installed_PinnedFormat : Strings.Installed_UnpinnedFormat,
+            mod.DisplayTitle);
         AppLog.Info("Installed", $"{(pin ? "pinned" : "unpinned")} {mod.Name} against mod list disables");
     }
 
@@ -804,7 +809,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             RefreshActiveView(CurrentPage);
 
             StatusMessage = _all.Count == 0
-                ? $"No mods found under \"{installPath}\"."
+                ? Text(Strings.Installed_NoModsFoundFormat, installPath)
                 : DescribeCounts();
         }
         finally
@@ -833,7 +838,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         // first puts those paths back where the record expects them.
         if (mod.IsDisabled)
         {
-            StatusMessage = $"{mod.DisplayTitle} is disabled - enable it before removing it.";
+            StatusMessage = Text(Strings.Installed_RemoveDisabledFirstFormat, mod.DisplayTitle);
             return;
         }
 
@@ -843,7 +848,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             var record = manifest.Mods.FirstOrDefault(m => m.ModId == modId);
             if (record is null)
             {
-                StatusMessage = $"Couldn't find an install record for {mod.Name} - it may have already been removed.";
+                StatusMessage = Text(Strings.Installed_RemoveNoRecordFormat, mod.Name);
                 return;
             }
 
@@ -859,7 +864,7 @@ public partial class InstalledViewModel : LocalizedViewModel
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-            if (ConfirmRemoval(mod.Name, "This deletes exactly the files this app installed for it.", configs.Count)
+            if (ConfirmRemoval(mod.Name, Strings.Installed_RemoveAppManagedBody, configs.Count)
                 is not { } configAction)
             {
                 return;
@@ -889,15 +894,14 @@ public partial class InstalledViewModel : LocalizedViewModel
                 .ToList();
             if (paths.Count == 0)
             {
-                StatusMessage = $"Couldn't find {mod.Name}'s folder to remove.";
+                StatusMessage = Text(Strings.Installed_RemoveNoFolderFormat, mod.Name);
                 return;
             }
 
             var configs = ModInstallService.FindLegacyConfigs(installPath, paths!);
             if (ConfirmRemoval(
                     mod.Name,
-                    "This mod wasn't installed through this app, so this permanently deletes its whole folder rather than " +
-                    $"just the files it placed:\n\n{string.Join("\n", paths)}",
+                    Text(Strings.Installed_RemoveLegacyBodyFormat, string.Join("\n", paths)),
                     configs.Count) is not { } configAction)
             {
                 return;
@@ -926,7 +930,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
-                StatusMessage = $"Couldn't remove {mod.Name}: {ex.Message}";
+                StatusMessage = Text(Strings.Installed_RemoveFailedFormat, mod.Name, ex.Message);
             }
             finally
             {
@@ -966,7 +970,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         // scan would otherwise open an Explorer error the user has to dismiss.
         if (!Directory.Exists(path))
         {
-            StatusMessage = $"That folder is no longer there - {path}. Rescan to pick up the change.";
+            StatusMessage = Text(Strings.Installed_FolderGoneFormat, path);
             return;
         }
 
@@ -977,7 +981,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         catch (Exception ex)
         {
             AppLog.Warn("Installed", $"couldn't open {path}: {ex.Message}");
-            StatusMessage = "Couldn't open that folder.";
+            StatusMessage = Strings.Installed_FolderOpenFailed;
         }
     }
 
@@ -1006,10 +1010,12 @@ public partial class InstalledViewModel : LocalizedViewModel
 
         // The disable half is the one that can break other mods, so it asks first; the enable half
         // then runs without a second prompt and its moves are merged into the same undo step.
-        var moves = await ApplyDisableAsync(toDisable, disable: true, label: $"inverting {section.Name}");
+        var label = (nameof(Strings.Installed_UndoInvertFormat), (object?)section.Name);
+
+        var moves = await ApplyDisableAsync(toDisable, disable: true, label: label);
         if (moves is null) return;
 
-        await ApplyDisableAsync(toEnable, disable: false, label: $"inverting {section.Name}", confirm: false, carryOver: moves);
+        await ApplyDisableAsync(toEnable, disable: false, label: label, confirm: false, carryOver: moves);
     }
 
     //
@@ -1039,12 +1045,8 @@ public partial class InstalledViewModel : LocalizedViewModel
         var folders = string.Join("\n", pairs.SelectMany(p => new[] { p.Enabled.FolderPath, p.Disabled.FolderPath }));
 
         var answer = MessageBox.Show(
-            $"{mod.DisplayTitle} is in both an enabled and a disabled folder:\n\n{folders}\n\n" +
-            "Yes  -  keep the enabled copy\n" +
-            "No  -  keep the disabled copy, and enable it\n" +
-            "Cancel  -  leave it as it is\n\n" +
-            "The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your SPT install, not deleted.",
-            $"Sort out {mod.DisplayTitle}?",
+            Text(Strings.Installed_DuplicateBodyFormat, mod.DisplayTitle, folders),
+            Text(Strings.Installed_DuplicateTitleFormat, mod.DisplayTitle),
             MessageBoxButton.YesNoCancel,
             MessageBoxImage.Warning);
 
@@ -1075,11 +1077,14 @@ public partial class InstalledViewModel : LocalizedViewModel
             IsBusy = false;
         }
 
-        SetLastMoves(moves, $"sorting out {mod.DisplayTitle}");
+        SetLastMoves(moves, (nameof(Strings.Installed_UndoSortOutFormat), mod.DisplayTitle));
 
-        var message = $"Sorted out {mod.DisplayTitle} - kept the {(keepEnabled ? "enabled" : "disabled")} copy, " +
-            "the other is in .tcfmm-duplicates in your SPT install.";
-        if (failed.Count > 0) message = $"{message} {DescribeFailures(failed)}";
+        var message = Text(
+            keepEnabled
+                ? Strings.Installed_DuplicateKeptEnabledFormat
+                : Strings.Installed_DuplicateKeptDisabledFormat,
+            mod.DisplayTitle);
+        if (failed.Count > 0) message = Sentences(message, DescribeFailures(failed));
 
         await ScanAsync();
         StatusMessage = message;
@@ -1201,7 +1206,7 @@ public partial class InstalledViewModel : LocalizedViewModel
 
         if (resolved.Count == 0)
         {
-            StatusMessage = $"Couldn't find {Join(unmatched)} in the cached catalog - try Rescan.";
+            StatusMessage = Text(Strings.Installed_UpdateNotInCatalogFormat, TextLists.Join(unmatched));
             return;
         }
 
@@ -1212,13 +1217,12 @@ public partial class InstalledViewModel : LocalizedViewModel
         //
         var handInstalled = resolved.Where(r => !r.Card.IsAppManaged).Select(r => r.Card.DisplayTitle).ToList();
         if (handInstalled.Count > 0 && !Confirm(
-                handInstalled.Count == 1 ? "Update a hand-installed mod?" : $"Update {handInstalled.Count} hand-installed mods?",
-                $"{Join(handInstalled)} wasn't installed through this app, so there's no record of exactly which "
-                + "files the current version placed. Updating installs the new version's files on top of what's "
-                + "already there rather than cleanly removing the old version first, so you may end up with "
-                + "leftover files from the old version."))
+                handInstalled.Count == 1
+                    ? Strings.Installed_UpdateHandInstalledTitleOne
+                    : Text(Strings.Installed_UpdateHandInstalledTitleManyFormat, handInstalled.Count),
+                Text(Strings.Installed_UpdateHandInstalledBodyFormat, TextLists.Join(handInstalled))))
         {
-            StatusMessage = "Update cancelled.";
+            StatusMessage = Strings.Installed_UpdateCancelled;
             return;
         }
 
@@ -1227,7 +1231,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         var links = resolved.Select(r => new ModPageLink(r.Card.DisplayTitle, r.Mod.DetailUrl)).ToList();
         if (!ReadModPageConfirmationWindow.ConfirmAll(links))
         {
-            StatusMessage = "Update cancelled - the mod pages weren't confirmed as read.";
+            StatusMessage = Strings.Installed_UpdateCancelledUnread;
             return;
         }
 
@@ -1238,10 +1242,9 @@ public partial class InstalledViewModel : LocalizedViewModel
         }
 
         var queued = resolved.Count == 1
-            ? $"Queued 1 update"
-            : $"Queued {resolved.Count} updates";
-        var skipped = DescribeSkipped(selected, resolved.Count, unmatched);
-        StatusMessage = $"{queued} - see the Downloads page for progress.{skipped}";
+            ? Strings.Installed_UpdateQueuedOne
+            : Text(Strings.Installed_UpdateQueuedManyFormat, resolved.Count);
+        StatusMessage = queued + DescribeSkipped(selected, resolved.Count, unmatched);
 
         AppLog.Info("Installed", $"queued {resolved.Count} update(s) from a selection of {selected.Count}");
     }
@@ -1252,18 +1255,24 @@ public partial class InstalledViewModel : LocalizedViewModel
     //
     private static string DescribeNothingToUpdate(IReadOnlyList<InstalledModCardViewModel> selected)
     {
-        if (selected.Count == 0) return "Nothing selected.";
+        if (selected.Count == 0) return Strings.Installed_NothingSelected;
 
         var disabled = selected.Count(c => c is { UpdateAvailable: true, IsDisabled: true });
         var addons = selected.Count(c => c is { UpdateAvailable: true, IsAddon: true });
 
         var reasons = new List<string>();
-        if (disabled > 0) reasons.Add($"{disabled} disabled (enable them first)");
-        if (addons > 0) reasons.Add($"{addons} addon(s), which update from their parent mod");
+
+        if (disabled == 1) reasons.Add(Strings.Installed_ReasonDisabledOne);
+        else if (disabled > 1) reasons.Add(Text(Strings.Installed_ReasonDisabledManyFormat, disabled));
+
+        if (addons == 1) reasons.Add(Strings.Installed_ReasonAddonOne);
+        else if (addons > 1) reasons.Add(Text(Strings.Installed_ReasonAddonManyFormat, addons));
 
         return reasons.Count == 0
-            ? "None of the selected mods have an update."
-            : $"None of the selected mods can be updated here: {string.Join(", ", reasons)}.";
+            ? Strings.Installed_NoUpdatesAvailable
+            : Text(
+                Strings.Installed_NoUpdatesReasonsFormat,
+                string.Join(Strings.Common_ListSeparator, reasons));
     }
 
     private static string DescribeSkipped(
@@ -1277,16 +1286,22 @@ public partial class InstalledViewModel : LocalizedViewModel
         var addons = selected.Count(c => c is { UpdateAvailable: true, IsAddon: true });
         var noUpdate = selected.Count(c => c.UpdateAvailable != true);
 
-        if (noUpdate > 0) parts.Add($"{noUpdate} already up to date");
-        if (disabled > 0) parts.Add($"{disabled} disabled");
-        if (addons > 0) parts.Add($"{addons} addon(s) - update those from their parent mod");
-        if (unmatched.Count > 0) parts.Add($"{unmatched.Count} not found in the catalog");
+        if (noUpdate == 1) parts.Add(Strings.Installed_SkippedUpToDateOne);
+        else if (noUpdate > 1) parts.Add(Text(Strings.Installed_SkippedUpToDateManyFormat, noUpdate));
 
-        return parts.Count == 0 ? string.Empty : $" Skipped {string.Join(", ", parts)}.";
+        if (disabled == 1) parts.Add(Strings.Installed_SkippedDisabledOne);
+        else if (disabled > 1) parts.Add(Text(Strings.Installed_SkippedDisabledManyFormat, disabled));
+
+        if (addons == 1) parts.Add(Strings.Installed_SkippedAddonOne);
+        else if (addons > 1) parts.Add(Text(Strings.Installed_SkippedAddonManyFormat, addons));
+
+        if (unmatched.Count == 1) parts.Add(Strings.Installed_SkippedNotFoundOne);
+        else if (unmatched.Count > 1) parts.Add(Text(Strings.Installed_SkippedNotFoundManyFormat, unmatched.Count));
+
+        return parts.Count == 0
+            ? string.Empty
+            : Text(Strings.Installed_SkippedFormat, string.Join(Strings.Common_ListSeparator, parts));
     }
-
-    private static string Join(IReadOnlyList<string> names) =>
-        names.Count == 1 ? names[0] : $"{string.Join(", ", names.Take(names.Count - 1))} and {names[^1]}";
 
     // Twin of BrowseViewModel's resolver. Duplicated rather than shared: pulling it out would mean
     // editing a file this change otherwise doesn't touch, for four lines.
@@ -1327,9 +1342,10 @@ public partial class InstalledViewModel : LocalizedViewModel
         try
         {
             var outcome = ModDisableService.Revert(_lastMoves, AppServices.SptEnvironment.InstallPath);
-            message = outcome.Failed.Count == 0
-                ? $"Put {outcome.Moved.Count} mod(s) back."
-                : $"Put {outcome.Moved.Count} mod(s) back; {DescribeFailures(outcome.Failed)}";
+            var put = outcome.Moved.Count == 1
+                ? Strings.Installed_UndoneOne
+                : Text(Strings.Installed_UndoneManyFormat, outcome.Moved.Count);
+            message = outcome.Failed.Count == 0 ? put : Sentences(put, DescribeFailures(outcome.Failed));
         }
         catch (ModInstallException ex)
         {
@@ -1356,16 +1372,16 @@ public partial class InstalledViewModel : LocalizedViewModel
     private async Task<List<ModMove>?> ApplyDisableAsync(
         IReadOnlyList<InstalledModCardViewModel> cards,
         bool disable,
-        string? label = null,
+        (string Key, object? Arg)? label = null,
         bool confirm = true,
         List<ModMove>? carryOver = null)
     {
-        var verb = disable ? "disable" : "enable";
-
         var targets = cards.Where(c => c.IsDisabled != disable).ToList();
         if (targets.Count == 0)
         {
-            if (carryOver is null) StatusMessage = $"Nothing to {verb}.";
+            if (carryOver is null)
+                StatusMessage = disable ? Strings.Installed_NothingToDisable : Strings.Installed_NothingToEnable;
+
             return carryOver ?? [];
         }
 
@@ -1418,8 +1434,12 @@ public partial class InstalledViewModel : LocalizedViewModel
         var moves = (carryOver ?? []).Concat(outcome.Moved).ToList();
         SetLastMoves(moves, label ?? DescribeTargets(targets, disable));
 
-        var message = $"{(disable ? "Disabled" : "Enabled")} {targets.Count} mod(s).";
-        if (outcome.Failed.Count > 0) message = $"{message} {DescribeFailures(outcome.Failed)}";
+        var message = targets.Count == 1
+            ? disable ? Strings.Installed_DisabledCountOne : Strings.Installed_EnabledCountOne
+            : Text(
+                disable ? Strings.Installed_DisabledCountManyFormat : Strings.Installed_EnabledCountManyFormat,
+                targets.Count);
+        if (outcome.Failed.Count > 0) message = Sentences(message, DescribeFailures(outcome.Failed));
 
         await ScanAsync();
         StatusMessage = message;
@@ -1450,9 +1470,15 @@ public partial class InstalledViewModel : LocalizedViewModel
                 ? other.DisplayTitle
                 : (disable ? link.Dependency : link.Dependent).Name;
 
-            var detail = disable
-                ? link.IsSoft ? $"optionally uses {otherName}" : $"needs {otherName}"
-                : link.IsSoft ? $"optionally used by {otherName}" : $"needed by {otherName}";
+            var detail = Text(
+                disable
+                    ? link.IsSoft
+                        ? Strings.Installed_ImpactOptionallyUsesFormat
+                        : Strings.Installed_ImpactNeedsFormat
+                    : link.IsSoft
+                        ? Strings.Installed_ImpactOptionallyUsedByFormat
+                        : Strings.Installed_ImpactNeededByFormat,
+                otherName);
 
             results.Add((card, detail, link.IsSoft));
         }
@@ -1460,25 +1486,45 @@ public partial class InstalledViewModel : LocalizedViewModel
         return results;
     }
 
-    private void SetLastMoves(List<ModMove> moves, string? label)
+    private void SetLastMoves(List<ModMove> moves, (string Key, object? Arg)? label)
     {
         _lastMoves = moves;
-        _lastMoveLabel = label;
+        _lastMoveLabelKey = label?.Key;
+        _lastMoveLabelArg = label?.Arg;
         OnPropertyChanged(nameof(CanUndo));
         OnPropertyChanged(nameof(UndoLabel));
         UndoCommand.NotifyCanExecuteChanged();
     }
 
-    private static string DescribeTargets(IReadOnlyList<InstalledModCardViewModel> targets, bool disable)
+    private static (string Key, object? Arg) DescribeTargets(
+        IReadOnlyList<InstalledModCardViewModel> targets, bool disable)
     {
-        var what = targets.Count == 1 ? targets[0].DisplayTitle : $"{targets.Count} mods";
-        return $"{(disable ? "disabling" : "enabling")} {what}";
+        if (targets.Count == 1)
+        {
+            return (disable
+                ? nameof(Strings.Installed_UndoDisableOneFormat)
+                : nameof(Strings.Installed_UndoEnableOneFormat), targets[0].DisplayTitle);
+        }
+
+        return (disable
+            ? nameof(Strings.Installed_UndoDisableManyFormat)
+            : nameof(Strings.Installed_UndoEnableManyFormat), targets.Count);
     }
 
     private static string DescribeFailures(IReadOnlyList<ModDisableFailure> failures) =>
         failures.Count == 1
-            ? $"{failures[0].ModName} couldn't be moved: {failures[0].Reason}"
-            : $"{failures.Count} couldn't be moved: {string.Join("; ", failures.Select(f => $"{f.ModName} - {f.Reason}"))}";
+            ? Text(Strings.Installed_MoveFailedOneFormat, failures[0].ModName, failures[0].Reason)
+            : Text(
+                Strings.Installed_MoveFailedManyFormat,
+                failures.Count,
+                string.Join(
+                    Strings.Common_ClauseSeparator,
+                    failures.Select(f => Text(Strings.Installed_MoveFailedItemFormat, f.ModName, f.Reason))));
+
+    // Two complete sentences on one status line, rather than one sentence with the other dropped
+    // into it - where the break goes is the translator's to decide.
+    private static string Sentences(string first, string second) =>
+        string.Join(Strings.Common_SentenceSeparator, first, second);
 
     private void OnCardPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -1510,18 +1556,21 @@ public partial class InstalledViewModel : LocalizedViewModel
     {
         // Most people reaching for Remove are troubleshooting, where disabling does the job without
         // deleting anything - worth saying at the point they're about to delete.
-        message += "\n\nTo take it out of the game without deleting it, use Disable instead.";
+        message = $"{message}\n\n{Strings.Installed_RemoveDisableHint}";
 
-        if (configCount == 0)
-            return Confirm($"Remove {modName}?", message) ? ConfigAction.Keep : null;
+        var title = Text(Strings.Installed_RemoveTitleFormat, modName);
+
+        if (configCount == 0) return Confirm(title, message) ? ConfigAction.Keep : null;
+
+        var configs = configCount == 1
+            ? Text(Strings.Installed_RemoveConfigsOneFormat, modName)
+            : Text(Strings.Installed_RemoveConfigsManyFormat, modName, configCount);
+
+        var choices = Text(Strings.Installed_RemoveConfigsChoicesFormat, AppPaths.LegacyConfigsDirectory);
 
         var answer = MessageBox.Show(
-            $"{message}\n\n" +
-            $"{modName} has {configCount} config or settings file(s) of its own:\n\n" +
-            $"Yes  -  keep them, moved to {AppPaths.LegacyConfigsDirectory}\n" +
-            "No  -  delete them along with the rest of the mod\n" +
-            "Cancel  -  don't remove anything",
-            $"Remove {modName}?",
+            $"{message}\n\n{configs}\n\n{choices}",
+            title,
             MessageBoxButton.YesNoCancel,
             MessageBoxImage.Warning);
 
@@ -1535,13 +1584,20 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     private static string DescribeRemoval(string modName, int failedFiles, int configsKept, string? configsFolder)
     {
-        var message = failedFiles == 0
-            ? $"Removed {modName}."
-            : $"Removed {modName}, but {failedFiles} file(s) couldn't be deleted (locked or already gone) - you may need to remove them by hand.";
+        var message = failedFiles switch
+        {
+            0 => Text(Strings.Installed_RemovedFormat, modName),
+            1 => Text(Strings.Installed_RemovedFailedOneFormat, modName),
+            _ => Text(Strings.Installed_RemovedFailedManyFormat, modName, failedFiles),
+        };
 
-        return configsKept > 0 && configsFolder is not null
-            ? $"{message} {configsKept} config file(s) kept in {configsFolder}."
-            : message;
+        if (configsKept == 0 || configsFolder is null) return message;
+
+        return Sentences(
+            message,
+            configsKept == 1
+                ? Text(Strings.Installed_RemovedConfigsKeptOneFormat, configsFolder)
+                : Text(Strings.Installed_RemovedConfigsKeptManyFormat, configsKept, configsFolder));
     }
 
     private bool CanGoToPreviousPage() => CurrentPage > 1;
@@ -1633,11 +1689,21 @@ public partial class InstalledViewModel : LocalizedViewModel
     private string DescribeCounts()
     {
         var shown = _filtered.Count == _all.Count
-            ? $"{_all.Count} mod(s) found."
-            : $"{_filtered.Count} of {_all.Count} mod(s) shown.";
+            ? _all.Count == 1
+                ? Strings.Installed_CountFoundOne
+                : Text(Strings.Installed_CountFoundManyFormat, _all.Count)
+            : _filtered.Count == 1
+                ? Text(Strings.Installed_CountShownOneFormat, _all.Count)
+                : Text(Strings.Installed_CountShownManyFormat, _filtered.Count, _all.Count);
 
         var disabled = _all.Count(m => m.IsDisabled);
-        return disabled == 0 ? shown : $"{shown} {disabled} disabled.";
+        if (disabled == 0) return shown;
+
+        return Sentences(
+            shown,
+            disabled == 1
+                ? Strings.Installed_CountDisabledOne
+                : Text(Strings.Installed_CountDisabledManyFormat, disabled));
     }
 
     private static IEnumerable<InstalledModCardViewModel> SortMods(IEnumerable<InstalledModCardViewModel> mods, ModSortOption sort) =>
@@ -1823,12 +1889,21 @@ public partial class InstalledViewModel : LocalizedViewModel
     {
         if (section is not { IsRealGroup: true }) return;
 
-        var message = section.Items.Count == 0
-            ? $"Delete \"{section.Name}\"?"
-            : $"Delete \"{section.Name}\"? Its {section.CountLabel} move back to Ungrouped.";
+        var message = section.Items.Count switch
+        {
+            0 => Text(Strings.Installed_DeleteGroupEmptyFormat, section.Name),
+            1 => Text(Strings.Installed_DeleteGroupOneFormat, section.Name),
+            _ => Text(Strings.Installed_DeleteGroupManyFormat, section.Name, section.Items.Count),
+        };
 
-        if (MessageBox.Show(message, "Delete group?", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
+        if (MessageBox.Show(
+                message,
+                Strings.Installed_DeleteGroupTitle,
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning) != MessageBoxResult.Yes)
+        {
             return;
+        }
 
         AppServices.ModGroups.DeleteGroup(section.GroupId!.Value);
         GroupsChanged();
