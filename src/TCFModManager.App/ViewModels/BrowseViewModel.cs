@@ -16,6 +16,9 @@ namespace TCFModManager.App.ViewModels;
 
 public partial class BrowseViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     private readonly SpModApiClient _spModApi;
     private List<Mod> _filtered = [];
 
@@ -218,7 +221,7 @@ public partial class BrowseViewModel : LocalizedViewModel
     private bool _isStartingUp;
 
     [ObservableProperty]
-    private string _startupStage = "Starting up...";
+    private string _startupStage = Strings.Browse_StageStarting;
 
     [ObservableProperty]
     private string? _statusMessage;
@@ -242,7 +245,7 @@ public partial class BrowseViewModel : LocalizedViewModel
     public ObservableCollection<SptVersionOption> SptVersionOptions { get; } = [];
 
     [ObservableProperty]
-    private string _sptVersionFilterSummary = "All versions";
+    private string _sptVersionFilterSummary = Strings.Browse_AllSptVersions;
 
     private bool _sptVersionOptionsBuilt;
 
@@ -271,20 +274,20 @@ public partial class BrowseViewModel : LocalizedViewModel
         IsStartingUp = !HasLoadedResults;
         try
         {
-            StartupStage = "Checking SPT versions...";
+            StartupStage = Strings.Browse_StageSptVersions;
             await AppServices.SptCatalog.EnsureLoadedAsync();
 
-            StartupStage = "Loading the mod catalog...";
+            StartupStage = Strings.Browse_StageCatalog;
             await AppServices.ModCache.EnsureLoadedAsync();
 
-            StartupStage = "Loading addons...";
+            StartupStage = Strings.Browse_StageAddons;
             await AppServices.Addons.EnsureLoadedAsync();
 
-            StartupStage = "Checking what you have installed...";
+            StartupStage = Strings.Browse_StageInstalled;
             await RefreshInstalledIndexAsync();
 
             AppLog.Debug("Browse", "SearchAsync: ModCache ready, applying filter");
-            StartupStage = "Sorting results...";
+            StartupStage = Strings.Browse_StageSorting;
             EnsureSptVersionOptionsBuilt();
             EnsureCategoryOptionsBuilt();
             ApplyFilter();
@@ -301,12 +304,12 @@ public partial class BrowseViewModel : LocalizedViewModel
         catch (OperationCanceledException)
         {
             // HttpClient throws this (not HttpRequestException) on a request timeout.
-            StatusMessage = "Timed out reaching sp-mod.com - check your connection and revisit Browse to retry.";
+            StatusMessage = Strings.Browse_TimedOutLoading;
         }
         catch (Exception ex)
         {
             // Last-resort catch-all so the command never gets stuck without an error message.
-            StatusMessage = $"Unexpected error loading the mod catalog: {ex.Message}";
+            StatusMessage = Text(Strings.Browse_UnexpectedLoadFormat, ex.Message);
         }
         finally
         {
@@ -341,11 +344,11 @@ public partial class BrowseViewModel : LocalizedViewModel
         }
         catch (OperationCanceledException)
         {
-            StatusMessage = "Timed out reaching sp-mod.com - check your connection and try Refresh cache again.";
+            StatusMessage = Strings.Browse_TimedOutRefreshing;
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Unexpected error refreshing the mod catalog: {ex.Message}";
+            StatusMessage = Text(Strings.Browse_UnexpectedRefreshFormat, ex.Message);
         }
         finally
         {
@@ -422,7 +425,7 @@ public partial class BrowseViewModel : LocalizedViewModel
 
         service.Save(settings);
 
-        StatusMessage = "Saved. The Browse page will open like this from now on - Options can put it back.";
+        StatusMessage = Strings.Browse_SavedAsDefault;
         AppLog.Info("Browse", "saved the current filters as this page's default");
     }
 
@@ -614,12 +617,20 @@ public partial class BrowseViewModel : LocalizedViewModel
         TotalPages = Math.Max(1, (int)Math.Ceiling(_filtered.Count / (double)PageSize));
         GoToPage(1);
 
-        StatusMessage = _filtered.Count == 0 ? "No mods matched." : $"{_filtered.Count} mod(s) found.";
+        StatusMessage = _filtered.Count switch
+        {
+            0 => Strings.Browse_NoMatches,
+            1 => Strings.Browse_CountFoundOne,
+            _ => Text(Strings.Browse_CountFoundManyFormat, _filtered.Count),
+        };
 
         // Said plainly rather than left for someone to work out from a short list.
         if (IsOn(ModAttributeFilter.HasDependencies))
         {
-            StatusMessage += " Dependency answers are filled in as you browse, so this list grows as more mods are checked.";
+            StatusMessage = string.Join(
+                Strings.Common_SentenceSeparator,
+                StatusMessage,
+                Strings.Browse_DependencyNote);
         }
     }
 
@@ -715,9 +726,9 @@ public partial class BrowseViewModel : LocalizedViewModel
 
         AttributeFilterSummary = selected.Count switch
         {
-            0 => "Any mod",
+            0 => Strings.Filter_AnyMod,
             1 => selected[0].Label,
-            _ => $"{selected.Count} selected",
+            _ => Text(Strings.Filter_SelectedCountFormat, selected.Count),
         };
     }
 
@@ -759,9 +770,11 @@ public partial class BrowseViewModel : LocalizedViewModel
         var selected = SptVersionOptions.Where(o => o.IsSelected).Select(o => o.Label).ToList();
         SptVersionFilterSummary = selected.Count switch
         {
-            0 => "All SPT versions",
-            <= 3 => $"SPT {string.Join(", ", selected)}",
-            _ => $"{selected.Count} SPT versions",
+            0 => Strings.Browse_AllSptVersions,
+            <= 3 => Text(
+                Strings.Browse_SptVersionsFormat,
+                string.Join(Strings.Common_ListSeparator, selected)),
+            _ => Text(Strings.Browse_SptVersionCountFormat, selected.Count),
         };
     }
 
@@ -797,15 +810,23 @@ public partial class BrowseViewModel : LocalizedViewModel
     /// Install never waits on a network call. Gated on ReadModPageConfirmationWindow first; declining
     /// leaves the card alone.</summary>
     [RelayCommand]
-    private void Install(ModCardViewModel? card) => QueueForDownload(card, "Install");
+    private void Install(ModCardViewModel? card) => QueueForDownload(card, DownloadAction.Install);
 
     /// <summary>Re-queues an already-installed mod's currently displayed version - the same pick
     /// Install would make - for a fresh download and reinstall. Shown on the card in Install's place
     /// once a mod is installed, e.g. to recover from corrupted or hand-edited files.</summary>
     [RelayCommand]
-    private void Redownload(ModCardViewModel? card) => QueueForDownload(card, "Redownload");
+    private void Redownload(ModCardViewModel? card) => QueueForDownload(card, DownloadAction.Redownload);
 
-    private void QueueForDownload(ModCardViewModel? card, string verb)
+    // Which of the two buttons asked, rather than the word one of them is labelled with: the
+    // cancellation message is a whole sentence per action, not a verb dropped into a shared one.
+    private enum DownloadAction
+    {
+        Install,
+        Redownload,
+    }
+
+    private void QueueForDownload(ModCardViewModel? card, DownloadAction action)
     {
         if (card is null) return;
 
@@ -823,13 +844,17 @@ public partial class BrowseViewModel : LocalizedViewModel
         // leave the disabled copy behind as a duplicate.
         if (card.IsDisabled)
         {
-            StatusMessage = $"{mod.Name} is disabled - enable it on the Installed page before reinstalling it.";
+            StatusMessage = Text(Strings.Browse_DisabledFormat, mod.Name);
             return;
         }
 
-        if (!ReadModPageConfirmationWindow.Confirm(mod.Name ?? "this mod", mod.DetailUrl))
+        if (!ReadModPageConfirmationWindow.Confirm(mod.Name ?? Strings.Browse_ThisMod, mod.DetailUrl))
         {
-            StatusMessage = $"{verb} cancelled - {mod.Name}'s page wasn't confirmed as read.";
+            StatusMessage = Text(
+                action == DownloadAction.Install
+                    ? Strings.Browse_InstallCancelledFormat
+                    : Strings.Browse_RedownloadCancelledFormat,
+                mod.Name);
             return;
         }
 
@@ -840,13 +865,13 @@ public partial class BrowseViewModel : LocalizedViewModel
 
         if (chosen?.Version is null)
         {
-            StatusMessage = $"{mod.Name} has no published version to install.";
+            StatusMessage = Text(Strings.Browse_NoVersionFormat, mod.Name);
             return;
         }
 
         var chosenVersion = chosen.Version;
         AppServices.DownloadQueue.Enqueue(InstallTarget.For(mod), chosenVersion, installPath, () => ResolveVersionLinkAsync(mod, chosenVersion));
-        StatusMessage = $"Queued {mod.Name} {chosenVersion} - see the Downloads page for progress.";
+        StatusMessage = Text(Strings.Browse_QueuedFormat, mod.Name, chosenVersion);
     }
 
     /// <summary>Resolves the full ModVersion (with its download Link) for exactly one version string.
@@ -869,20 +894,20 @@ public partial class BrowseViewModel : LocalizedViewModel
         }
         catch (SpModApiException ex)
         {
-            StatusMessage = $"Couldn't load details for {mod.Name}: {ex.Message}";
+            StatusMessage = Text(Strings.Browse_DetailsFailedFormat, mod.Name, ex.Message);
         }
         catch (HttpRequestException ex)
         {
-            StatusMessage = $"Network error loading details for {mod.Name}: {ex.Message}";
+            StatusMessage = Text(Strings.Browse_DetailsNetworkFormat, mod.Name, ex.Message);
         }
         catch (OperationCanceledException)
         {
-            StatusMessage = $"Timed out loading details for {mod.Name} - check your connection and try again.";
+            StatusMessage = Text(Strings.Browse_DetailsTimedOutFormat, mod.Name);
         }
         catch (Exception ex)
         {
             // Last-resort catch-all so a failure here doesn't silently look like a no-op click.
-            StatusMessage = $"Unexpected error loading details for {mod.Name}: {ex.Message}";
+            StatusMessage = Text(Strings.Browse_DetailsUnexpectedFormat, mod.Name, ex.Message);
         }
     }
 }

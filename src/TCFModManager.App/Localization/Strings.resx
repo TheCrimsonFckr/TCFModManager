@@ -3060,4 +3060,110 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
   <data name="Footprint_StatusManyFormat" xml:space="preserve">
     <value>{0} mods read from what they ship on disk.</value>
   </data>
+  <data name="Browse_StageStarting" xml:space="preserve">
+    <value>Starting up...</value>
+    <comment>Shown while the page loads, before the first stage is known.</comment>
+  </data>
+  <data name="Browse_StageSptVersions" xml:space="preserve">
+    <value>Checking SPT versions...</value>
+  </data>
+  <data name="Browse_StageCatalog" xml:space="preserve">
+    <value>Loading the mod catalog...</value>
+  </data>
+  <data name="Browse_StageAddons" xml:space="preserve">
+    <value>Loading addons...</value>
+  </data>
+  <data name="Browse_StageInstalled" xml:space="preserve">
+    <value>Checking what you have installed...</value>
+  </data>
+  <data name="Browse_StageSorting" xml:space="preserve">
+    <value>Sorting results...</value>
+  </data>
+  <data name="Browse_TimedOutLoading" xml:space="preserve">
+    <value>Timed out reaching sp-mod.com - check your connection and revisit Browse to retry.</value>
+    <comment>sp-mod.com is a web address and stays as it is. Browse is the page name - translate it as in Nav_Browse.</comment>
+  </data>
+  <data name="Browse_UnexpectedLoadFormat" xml:space="preserve">
+    <value>Unexpected error loading the mod catalog: {0}</value>
+    <comment>{0} is the underlying error, which arrives in English from the operating system or the network stack.</comment>
+  </data>
+  <data name="Browse_TimedOutRefreshing" xml:space="preserve">
+    <value>Timed out reaching sp-mod.com - check your connection and try Refresh cache again.</value>
+    <comment>Refresh cache is the button named by Browse_RefreshCache - translate both the same way.</comment>
+  </data>
+  <data name="Browse_UnexpectedRefreshFormat" xml:space="preserve">
+    <value>Unexpected error refreshing the mod catalog: {0}</value>
+    <comment>{0} is the underlying error, which arrives in English.</comment>
+  </data>
+  <data name="Browse_SavedAsDefault" xml:space="preserve">
+    <value>Saved. The Browse page will open like this from now on - Options can put it back.</value>
+    <comment>Browse and Options are page names - translate them as in Nav_Browse and Nav_Options.</comment>
+  </data>
+  <data name="Browse_NoMatches" xml:space="preserve">
+    <value>No mods matched.</value>
+  </data>
+  <data name="Browse_CountFoundOne" xml:space="preserve">
+    <value>1 mod found.</value>
+    <comment>See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Browse_CountFoundManyFormat" xml:space="preserve">
+    <value>{0} mods found.</value>
+    <comment>{0} is how many mods the filters match.</comment>
+  </data>
+  <data name="Browse_DependencyNote" xml:space="preserve">
+    <value>Dependency answers are filled in as you browse, so this list grows as more mods are checked.</value>
+    <comment>Follows the count sentence, joined by Common_SentenceSeparator. Only shown while the "Has dependencies" filter is on.</comment>
+  </data>
+  <data name="Browse_AllSptVersions" xml:space="preserve">
+    <value>All SPT versions</value>
+    <comment>The SPT version filter's summary when nothing is ticked. It carries its own "SPT" because no label beside it supplies one.</comment>
+  </data>
+  <data name="Browse_SptVersionsFormat" xml:space="preserve">
+    <value>SPT {0}</value>
+    <comment>Up to three ticked version lines - "SPT 4.0, 4.1". {0} is those numbers, joined by Common_ListSeparator; they are version numbers and are not translated.</comment>
+  </data>
+  <data name="Browse_SptVersionCountFormat" xml:space="preserve">
+    <value>{0} SPT versions</value>
+    <comment>Four or more ticked version lines, where listing them would not fit.</comment>
+  </data>
+  <data name="Browse_ThisMod" xml:space="preserve">
+    <value>this mod</value>
+    <comment>Stands in for a mod whose name the catalog did not give. It appears where a mod name would, in the read-the-mod-page prompt.</comment>
+  </data>
+  <data name="Browse_DisabledFormat" xml:space="preserve">
+    <value>{0} is disabled - enable it on the Installed page before reinstalling it.</value>
+    <comment>{0} is a mod name. Installed is the page name - translate it as in Nav_Installed.</comment>
+  </data>
+  <data name="Browse_InstallCancelledFormat" xml:space="preserve">
+    <value>Install cancelled - {0}'s page wasn't confirmed as read.</value>
+    <comment>{0} is a mod name. One whole sentence per action rather than the verb dropped into one - see Browse_RedownloadCancelledFormat.</comment>
+  </data>
+  <data name="Browse_RedownloadCancelledFormat" xml:space="preserve">
+    <value>Redownload cancelled - {0}'s page wasn't confirmed as read.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Browse_NoVersionFormat" xml:space="preserve">
+    <value>{0} has no published version to install.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Browse_QueuedFormat" xml:space="preserve">
+    <value>Queued {0} {1} - see the Downloads page for progress.</value>
+    <comment>{0} is a mod name, {1} its version. Downloads is the page name - translate it as in Nav_Downloads.</comment>
+  </data>
+  <data name="Browse_DetailsFailedFormat" xml:space="preserve">
+    <value>Couldn't load details for {0}: {1}</value>
+    <comment>{0} is a mod name, {1} the reason from sp-mod.com.</comment>
+  </data>
+  <data name="Browse_DetailsNetworkFormat" xml:space="preserve">
+    <value>Network error loading details for {0}: {1}</value>
+    <comment>{0} is a mod name, {1} the underlying error, which arrives in English.</comment>
+  </data>
+  <data name="Browse_DetailsTimedOutFormat" xml:space="preserve">
+    <value>Timed out loading details for {0} - check your connection and try again.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Browse_DetailsUnexpectedFormat" xml:space="preserve">
+    <value>Unexpected error loading details for {0}: {1}</value>
+    <comment>{0} is a mod name, {1} the underlying error, which arrives in English.</comment>
+  </data>
 </root>
