@@ -1,3 +1,5 @@
+using TCFModManager.App.Localization;
+
 namespace TCFModManager.App.ViewModels;
 
 public enum UpdateFilter
@@ -15,9 +17,19 @@ public enum UpdateFilter
     NotFound,
 }
 
-// One entry in Installed's Update status dropdown. Overrides ToString() so the label shows instead of the enum name.
-public sealed record UpdateFilterItem(string Label, UpdateFilter Value)
+// One entry in Installed's Update status dropdown. Overrides ToString() so the label shows instead
+// of the enum name.
+//
+// Holds a KEY, not a label: the text is read on every get, so choosing a language relabels the
+// dropdown in place. Rebuilding the list instead would replace the item instances and drop the
+// SelectedItem binding, which resets the dropdown to its first entry every time - see D9.
+//
+public sealed class UpdateFilterItem(string key, UpdateFilter value) : LocalizedViewModel
 {
+    public UpdateFilter Value { get; } = value;
+
+    public string Label => LocalizationService.Get(key);
+
     public override string ToString() => Label;
 }
 
@@ -34,8 +46,12 @@ public enum EnabledFilter
 }
 
 // One entry in Installed's Enabled/Disabled dropdown.
-public sealed record EnabledFilterItem(string Label, EnabledFilter Value)
+public sealed class EnabledFilterItem(string key, EnabledFilter value) : LocalizedViewModel
 {
+    public EnabledFilter Value { get; } = value;
+
+    public string Label => LocalizationService.Get(key);
+
     public override string ToString() => Label;
 }
 
@@ -44,11 +60,24 @@ public sealed record EnabledFilterItem(string Label, EnabledFilter Value)
 // "All" places no restriction; "Ungrouped" (AllGroups false, GroupId null) matches mods assigned to
 // nothing; anything else matches one group by id.
 //
-public sealed record GroupFilterItem(string Label, Guid? GroupId, bool AllGroups)
+// The two fixed entries hold a key; every other entry holds a group NAME the user typed, which is
+// data and is never translated - the trap §10 describes, and the reason this one type has both.
+//
+public sealed class GroupFilterItem(string label, Guid? groupId, bool allGroups) : LocalizedViewModel
 {
-    public static GroupFilterItem All { get; } = new("All groups", null, true);
+    private readonly string? _key;
 
-    public static GroupFilterItem Ungrouped { get; } = new("Ungrouped", null, false);
+    private GroupFilterItem(string key, bool allGroups) : this(string.Empty, null, allGroups) => _key = key;
+
+    public Guid? GroupId { get; } = groupId;
+
+    public bool AllGroups { get; } = allGroups;
+
+    public string Label => _key is null ? label : LocalizationService.Get(_key);
+
+    public static GroupFilterItem All { get; } = new(nameof(Strings.Filter_AllGroups), true);
+
+    public static GroupFilterItem Ungrouped { get; } = new(nameof(Strings.Filter_Ungrouped), false);
 
     // Two entries describe the same filter when they match on both fields - used to keep the
     // current selection across a rebuild of the list.

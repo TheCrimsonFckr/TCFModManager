@@ -147,11 +147,11 @@ public partial class BrowseViewModel : LocalizedViewModel
     public List<SortOptionItem> SortOptions { get; } =
     [
         // Read as orderings without the "Sort:" label that used to sit beside them.
-        new("Newest first", ModSortOrder.Newest),
-        new("Recently updated", ModSortOrder.LastUpdated),
-        new("Most downloaded", ModSortOrder.MostDownloaded),
-        new("Most favourited", ModSortOrder.MostFavourited),
-        new("Most endorsed", ModSortOrder.MostEndorsed),
+        new(nameof(Strings.Sort_BrowseNewest), ModSortOrder.Newest),
+        new(nameof(Strings.Sort_BrowseLastUpdated), ModSortOrder.LastUpdated),
+        new(nameof(Strings.Sort_BrowseMostDownloaded), ModSortOrder.MostDownloaded),
+        new(nameof(Strings.Sort_BrowseMostFavourited), ModSortOrder.MostFavourited),
+        new(nameof(Strings.Sort_BrowseMostEndorsed), ModSortOrder.MostEndorsed),
     ];
 
     [ObservableProperty]
@@ -170,9 +170,9 @@ public partial class BrowseViewModel : LocalizedViewModel
     [
         // The worst case for dropping a label: "Include" / "Exclude" / "Only" say nothing at all
         // on their own about what is being included.
-        new("Featured included", FeaturedFilter.Include),
-        new("Featured excluded", FeaturedFilter.Exclude),
-        new("Featured only", FeaturedFilter.Only),
+        new(nameof(Strings.Filter_FeaturedIncluded), FeaturedFilter.Include),
+        new(nameof(Strings.Filter_FeaturedExcluded), FeaturedFilter.Exclude),
+        new(nameof(Strings.Filter_FeaturedOnly), FeaturedFilter.Only),
     ];
 
     [ObservableProperty]
@@ -184,15 +184,14 @@ public partial class BrowseViewModel : LocalizedViewModel
     //
     public ObservableCollection<ModAttributeOption> AttributeOptions { get; } =
     [
-        .. ModAttributeOption.Standard(
-            "Only mods that pull in other mods. Dependencies are looked up as you browse, so this "
-            + "covers what the app has checked so far rather than the whole catalogue."),
-        new(ModAttributeFilter.HideInstalled, "Hide installed mods",
-            "Only mods you don't have yet. A disabled mod counts as installed."),
+        .. ModAttributeOption.Standard(nameof(Strings.Filter_HasDependenciesBrowseToolTip)),
+        new(ModAttributeFilter.HideInstalled,
+            nameof(Strings.Filter_HideInstalled),
+            nameof(Strings.Filter_HideInstalledToolTip)),
     ];
 
     [ObservableProperty]
-    private string _attributeFilterSummary = "Any mod";
+    private string _attributeFilterSummary = Strings.Filter_AnyMod;
 
     /// <summary>The Category dropdown's entries, rebuilt from the cached catalog once it has loaded.</summary>
     public ObservableCollection<CategoryFilterItem> CategoryOptions { get; } = [CategoryFilterItem.All];

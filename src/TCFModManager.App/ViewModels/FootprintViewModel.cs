@@ -21,8 +21,13 @@ public enum FootprintSortOption
     MostComponents,
 }
 
-public sealed record FootprintSortItem(string Label, FootprintSortOption Value)
+public sealed class FootprintSortItem(string key, FootprintSortOption value) : LocalizedViewModel
 {
+    public FootprintSortOption Value { get; } = value;
+
+    // Read on every get, so a language change relabels the dropdown rather than rebuilding it.
+    public string Label => LocalizationService.Get(key);
+
     public override string ToString() => Label;
 }
 
@@ -388,10 +393,10 @@ public sealed partial class FootprintViewModel : LocalizedViewModel
     // ordering of it. The count-based sorts are there for someone who went looking for them.
     public IReadOnlyList<FootprintSortItem> SortOptions { get; } =
     [
-        new("Name (A-Z)", FootprintSortOption.NameAscending),
-        new("Most patch classes", FootprintSortOption.MostPatches),
-        new("Most components", FootprintSortOption.MostComponents),
-        new("Largest on disk", FootprintSortOption.LargestOnDisk),
+        new(nameof(Strings.Sort_FootprintName), FootprintSortOption.NameAscending),
+        new(nameof(Strings.Sort_FootprintMostPatches), FootprintSortOption.MostPatches),
+        new(nameof(Strings.Sort_FootprintMostComponents), FootprintSortOption.MostComponents),
+        new(nameof(Strings.Sort_FootprintLargestOnDisk), FootprintSortOption.LargestOnDisk),
     ];
 
     [ObservableProperty]

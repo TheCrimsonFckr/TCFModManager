@@ -36,14 +36,16 @@ public enum ModAttributeFilter
 // notice every one of them narrows what you see - that is the whole contract of the dropdown, and
 // why "Hide ads" sits happily beside "Has addons".
 //
-public partial class ModAttributeOption(ModAttributeFilter value, string label, string? toolTip = null) : LocalizedViewModel
+public partial class ModAttributeOption(ModAttributeFilter value, string key, string? toolTipKey = null)
+    : LocalizedViewModel
 {
     public ModAttributeFilter Value { get; } = value;
 
-    public string Label { get; } = label;
+    // Both read on every get, so a language change relabels the tick boxes where they stand.
+    public string Label => LocalizationService.Get(key);
 
     // Null for the options that need no explaining.
-    public string? ToolTip { get; } = toolTip;
+    public string? ToolTip => toolTipKey is null ? null : LocalizationService.Get(toolTipKey);
 
     [ObservableProperty]
     private bool _isSelected;
@@ -59,13 +61,13 @@ public partial class ModAttributeOption(ModAttributeFilter value, string label, 
     // everything installed, while Browse answers from whatever has been looked up so far. So the
     // caller states that one rather than this list pretending they are the same.
     //
-    public static ObservableCollection<ModAttributeOption> Standard(string dependenciesToolTip) =>
+    public static ObservableCollection<ModAttributeOption> Standard(string dependenciesToolTipKey) =>
     [
-        new(ModAttributeFilter.FikaCompatible, "Fika compatible only"),
-        new(ModAttributeFilter.HideAds, "Hide mods with ads"),
-        new(ModAttributeFilter.HideAiContent, "Hide mods with AI content"),
-        new(ModAttributeFilter.HasDependencies, "Has dependencies", dependenciesToolTip),
-        new(ModAttributeFilter.HasAddons, "Has addons", "Only mods with addons published for them."),
+        new(ModAttributeFilter.FikaCompatible, nameof(Strings.Filter_FikaOnly)),
+        new(ModAttributeFilter.HideAds, nameof(Strings.Filter_HideAds)),
+        new(ModAttributeFilter.HideAiContent, nameof(Strings.Filter_HideAiContent)),
+        new(ModAttributeFilter.HasDependencies, nameof(Strings.Filter_HasDependencies), dependenciesToolTipKey),
+        new(ModAttributeFilter.HasAddons, nameof(Strings.Filter_HasAddons), nameof(Strings.Filter_HasAddonsToolTip)),
     ];
 }
 
@@ -73,10 +75,21 @@ public partial class ModAttributeOption(ModAttributeFilter value, string label, 
 // One entry in a Category dropdown. Categories come from the cached catalog rather than a fixed
 // list, so the app never shows a category The Forge has stopped using or misses one it has added.
 //
-public sealed record CategoryFilterItem(string Label, string? Title)
+// The "All categories" entry holds a key; every other entry holds a category title from the Forge,
+// which arrives in whatever language its author wrote and is never translated here.
+//
+public sealed class CategoryFilterItem(string label, string? title) : LocalizedViewModel
 {
+    private readonly string? _key;
+
+    private CategoryFilterItem(string key) : this(string.Empty, null) => _key = key;
+
+    public string? Title { get; } = title;
+
+    public string Label => _key is null ? label : LocalizationService.Get(_key);
+
     // No restriction.
-    public static CategoryFilterItem All { get; } = new("All categories", null);
+    public static CategoryFilterItem All { get; } = new(nameof(Strings.Filter_AllCategories));
 
     public bool SameAs(CategoryFilterItem? other) =>
         other is not null && string.Equals(other.Title, Title, StringComparison.OrdinalIgnoreCase);

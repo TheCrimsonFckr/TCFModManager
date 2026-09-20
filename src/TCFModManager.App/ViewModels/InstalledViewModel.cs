@@ -22,6 +22,9 @@ namespace TCFModManager.App.ViewModels;
 /// </summary>
 public partial class InstalledViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     // Fills the grid exactly at the 3- and 4-column width breakpoints (see UpdateLayoutForWidth).
     // Only used when nothing has been saved as this page's default - see DefaultPageSize().
     private const int DefaultPageSizeValue = 12;
@@ -73,10 +76,10 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     public List<UpdateFilterItem> UpdateFilterOptions { get; } =
     [
-        new("Any update status", UpdateFilter.All),
-        new("Needs update", UpdateFilter.NeedsUpdate),
-        new("Up to date", UpdateFilter.UpToDate),
-        new("Not found on sp-mod.com", UpdateFilter.NotFound),
+        new(nameof(Strings.Filter_UpdateAny), UpdateFilter.All),
+        new(nameof(Strings.Filter_UpdateNeeded), UpdateFilter.NeedsUpdate),
+        new(nameof(Strings.Filter_UpdateUpToDate), UpdateFilter.UpToDate),
+        new(nameof(Strings.Filter_UpdateNotFound), UpdateFilter.NotFound),
     ];
 
     [ObservableProperty]
@@ -84,9 +87,9 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     public List<EnabledFilterItem> EnabledFilterOptions { get; } =
     [
-        new("Enabled & disabled", EnabledFilter.All),
-        new("Enabled only", EnabledFilter.EnabledOnly),
-        new("Disabled only", EnabledFilter.DisabledOnly),
+        new(nameof(Strings.Filter_EnabledAll), EnabledFilter.All),
+        new(nameof(Strings.Filter_EnabledOnly), EnabledFilter.EnabledOnly),
+        new(nameof(Strings.Filter_DisabledOnly), EnabledFilter.DisabledOnly),
     ];
 
     [ObservableProperty]
@@ -105,13 +108,13 @@ public partial class InstalledViewModel : LocalizedViewModel
         // "By ..." rather than a bare "Name (A-Z)": with the inline "Sort by:" label gone, a
         // dropdown reading "Group (A-Z)" sitting next to the Group *filter* would be read as
         // another filter. The prefix is what makes these read as orderings on their own.
-        new("By name (A-Z)", ModSortOption.NameAscending),
-        new("By name (Z-A)", ModSortOption.NameDescending),
-        new("By author (A-Z)", ModSortOption.AuthorAscending),
-        new("By author (Z-A)", ModSortOption.AuthorDescending),
-        new("By group (A-Z)", ModSortOption.GroupAscending),
-        new("By group (Z-A)", ModSortOption.GroupDescending),
-        new("Recently installed", ModSortOption.RecentlyInstalled),
+        new(nameof(Strings.Sort_NameAscending), ModSortOption.NameAscending),
+        new(nameof(Strings.Sort_NameDescending), ModSortOption.NameDescending),
+        new(nameof(Strings.Sort_AuthorAscending), ModSortOption.AuthorAscending),
+        new(nameof(Strings.Sort_AuthorDescending), ModSortOption.AuthorDescending),
+        new(nameof(Strings.Sort_GroupAscending), ModSortOption.GroupAscending),
+        new(nameof(Strings.Sort_GroupDescending), ModSortOption.GroupDescending),
+        new(nameof(Strings.Sort_RecentlyInstalled), ModSortOption.RecentlyInstalled),
     ];
 
     [ObservableProperty]
@@ -131,10 +134,10 @@ public partial class InstalledViewModel : LocalizedViewModel
     // installed rather than whatever has been looked up so far.
     //
     public ObservableCollection<ModAttributeOption> AttributeOptions { get; } =
-        ModAttributeOption.Standard("Only mods that require another mod you have installed.");
+        ModAttributeOption.Standard(nameof(Strings.Filter_HasDependenciesInstalledToolTip));
 
     [ObservableProperty]
-    private string _attributeFilterSummary = "Any mod";
+    private string _attributeFilterSummary = Strings.Filter_AnyMod;
 
     /// <summary>The Category dropdown's entries, rebuilt after each scan from the categories actually present in the install.</summary>
     public ObservableCollection<CategoryFilterItem> CategoryOptions { get; } = [CategoryFilterItem.All];
@@ -181,9 +184,9 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     public List<GroupSortItem> GroupSortOptions { get; } =
     [
-        new("Manual order", GroupSortOption.Manual),
-        new("Group name (A-Z)", GroupSortOption.NameAscending),
-        new("Group name (Z-A)", GroupSortOption.NameDescending),
+        new(nameof(Strings.Sort_GroupsManual), GroupSortOption.Manual),
+        new(nameof(Strings.Sort_GroupNameAscending), GroupSortOption.NameAscending),
+        new(nameof(Strings.Sort_GroupNameDescending), GroupSortOption.NameDescending),
     ];
 
     [ObservableProperty]
@@ -335,7 +338,7 @@ public partial class InstalledViewModel : LocalizedViewModel
 
         // Label is irrelevant here - SameAs matches on the id and the all-groups flag only.
         return Guid.TryParse(saved, out var id)
-            ? new GroupFilterItem(string.Empty, id, AllGroups: false)
+            ? new GroupFilterItem(string.Empty, id, allGroups: false)
             : GroupFilterItem.All;
     }
 
@@ -385,9 +388,9 @@ public partial class InstalledViewModel : LocalizedViewModel
 
         AttributeFilterSummary = selected.Count switch
         {
-            0 => "Any mod",
+            0 => Strings.Filter_AnyMod,
             1 => selected[0].Label,
-            _ => $"{selected.Count} selected",
+            _ => Text(Strings.Filter_SelectedCountFormat, selected.Count),
         };
     }
 
@@ -1704,7 +1707,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             GroupFilterOptions.Add(GroupFilterItem.Ungrouped);
 
             foreach (var group in data.Groups.OrderBy(g => g.Name, StringComparer.OrdinalIgnoreCase))
-                GroupFilterOptions.Add(new GroupFilterItem(group.Name, group.Id, AllGroups: false));
+                GroupFilterOptions.Add(new GroupFilterItem(group.Name, group.Id, allGroups: false));
 
             SelectedGroupFilter = GroupFilterOptions.FirstOrDefault(o => o.SameAs(previous)) ?? GroupFilterItem.All;
         }

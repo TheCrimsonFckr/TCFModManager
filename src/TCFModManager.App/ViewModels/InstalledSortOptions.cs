@@ -1,3 +1,5 @@
+using TCFModManager.App.Localization;
+
 namespace TCFModManager.App.ViewModels;
 
 // Installed page's "Sort by" dropdown - orders both the flat grid and each group's mod list in
@@ -18,8 +20,17 @@ public enum ModSortOption
 }
 
 // One entry in the "Sort by" dropdown. Overrides ToString() so the label shows instead of the enum name.
-public sealed record ModSortItem(string Label, ModSortOption Value)
+//
+// Holds a KEY, not a label: the text is read on every get, so choosing a language relabels the
+// dropdown in place. Rebuilding the list instead would replace the item instances and drop the
+// SelectedItem binding, which resets the dropdown to its first entry every time - see D9.
+//
+public sealed class ModSortItem(string key, ModSortOption value) : LocalizedViewModel
 {
+    public ModSortOption Value { get; } = value;
+
+    public string Label => LocalizationService.Get(key);
+
     public override string ToString() => Label;
 }
 
@@ -34,7 +45,11 @@ public enum GroupSortOption
     NameDescending,
 }
 
-public sealed record GroupSortItem(string Label, GroupSortOption Value)
+public sealed class GroupSortItem(string key, GroupSortOption value) : LocalizedViewModel
 {
+    public GroupSortOption Value { get; } = value;
+
+    public string Label => LocalizationService.Get(key);
+
     public override string ToString() => Label;
 }

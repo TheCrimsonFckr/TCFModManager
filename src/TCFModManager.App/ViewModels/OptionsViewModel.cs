@@ -34,9 +34,9 @@ public partial class OptionsViewModel : LocalizedViewModel
 
     public IReadOnlyList<ThemeOptionItem> ThemeOptions { get; } =
     [
-        new("Follow system", ThemePreference.FollowSystem),
-        new("Light", ThemePreference.Light),
-        new("Dark", ThemePreference.Dark),
+        new(nameof(Strings.Options_ThemeFollowSystem), ThemePreference.FollowSystem),
+        new(nameof(Strings.Options_ThemeLight), ThemePreference.Light),
+        new(nameof(Strings.Options_ThemeDark), ThemePreference.Dark),
     ];
 
     // Applied and saved the moment it changes - there is nothing here to confirm, and watching the
@@ -78,10 +78,10 @@ public partial class OptionsViewModel : LocalizedViewModel
     //
     public IReadOnlyList<WindowStartupItem> WindowStartupOptions { get; } =
     [
-        new("Remember the last size and position", WindowStartupMode.Remember),
-        new("Always start maximised", WindowStartupMode.Maximized),
-        new("Always start at a size I choose", WindowStartupMode.Custom),
-        new("Always start full screen", WindowStartupMode.FullScreen),
+        new(nameof(Strings.Options_WindowRemember), WindowStartupMode.Remember),
+        new(nameof(Strings.Options_WindowMaximised), WindowStartupMode.Maximized),
+        new(nameof(Strings.Options_WindowCustom), WindowStartupMode.Custom),
+        new(nameof(Strings.Options_WindowFullScreen), WindowStartupMode.FullScreen),
     ];
 
     [ObservableProperty]

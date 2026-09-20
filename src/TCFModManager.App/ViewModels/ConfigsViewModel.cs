@@ -53,19 +53,19 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
     {
         SourceFilterOptions =
         [
-            new ConfigSourceFilterItem("All", ConfigSourceFilter.All),
-            new ConfigSourceFilterItem("Client only", ConfigSourceFilter.Client),
-            new ConfigSourceFilterItem("Server only", ConfigSourceFilter.Server),
-            new ConfigSourceFilterItem("Not a mod's", ConfigSourceFilter.Other),
+            new ConfigSourceFilterItem(nameof(Strings.Filter_ConfigAll), ConfigSourceFilter.All),
+            new ConfigSourceFilterItem(nameof(Strings.Filter_ConfigClient), ConfigSourceFilter.Client),
+            new ConfigSourceFilterItem(nameof(Strings.Filter_ConfigServer), ConfigSourceFilter.Server),
+            new ConfigSourceFilterItem(nameof(Strings.Filter_ConfigOther), ConfigSourceFilter.Other),
         ];
 
         _selectedSourceFilter = SourceFilterOptions[0];
 
         PolicyOptions =
         [
-            new ConfigPolicyOption("Merge my changes", ModConfigPolicy.Merge),
-            new ConfigPolicyOption("Keep mine", ModConfigPolicy.KeepMine),
-            new ConfigPolicyOption("Take the new file", ModConfigPolicy.TakeNew),
+            new ConfigPolicyOption(nameof(Strings.ConfigPolicy_Merge), ModConfigPolicy.Merge),
+            new ConfigPolicyOption(nameof(Strings.ConfigPolicy_KeepMine), ModConfigPolicy.KeepMine),
+            new ConfigPolicyOption(nameof(Strings.ConfigPolicy_TakeNew), ModConfigPolicy.TakeNew),
         ];
 
         _selectedPolicyOption = PolicyOptions[0];

@@ -2244,4 +2244,199 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="ModLists_DroppedManyFormat" xml:space="preserve">
     <value>Dropped {0} unsaved changes - they were never written to the list.</value>
   </data>
+  <data name="Filter_UpdateAny" xml:space="preserve">
+    <value>Any update status</value>
+    <comment>Neutral entry in Installed's update filter - no filtering. Each filter's neutral entry names what it filters rather than saying "All", because several sit side by side.</comment>
+  </data>
+  <data name="Filter_UpdateNeeded" xml:space="preserve">
+    <value>Needs update</value>
+  </data>
+  <data name="Filter_UpdateUpToDate" xml:space="preserve">
+    <value>Up to date</value>
+  </data>
+  <data name="Filter_UpdateNotFound" xml:space="preserve">
+    <value>Not found on sp-mod.com</value>
+  </data>
+  <data name="Filter_EnabledAll" xml:space="preserve">
+    <value>Enabled &amp; disabled</value>
+    <comment>Neutral entry in Installed's enabled filter.</comment>
+  </data>
+  <data name="Filter_EnabledOnly" xml:space="preserve">
+    <value>Enabled only</value>
+  </data>
+  <data name="Filter_DisabledOnly" xml:space="preserve">
+    <value>Disabled only</value>
+  </data>
+  <data name="Filter_AllGroups" xml:space="preserve">
+    <value>All groups</value>
+    <comment>Neutral entry in the group filter. The other entries are group names the user typed.</comment>
+  </data>
+  <data name="Filter_Ungrouped" xml:space="preserve">
+    <value>Ungrouped</value>
+    <comment>Mods in no group at all.</comment>
+  </data>
+  <data name="Filter_AllCategories" xml:space="preserve">
+    <value>All categories</value>
+    <comment>Neutral entry in the category filter. The other entries are category names from the Forge, which arrive in their own language.</comment>
+  </data>
+  <data name="Filter_FeaturedIncluded" xml:space="preserve">
+    <value>Featured included</value>
+    <comment>Neutral entry in Browse's featured filter.</comment>
+  </data>
+  <data name="Filter_FeaturedExcluded" xml:space="preserve">
+    <value>Featured excluded</value>
+  </data>
+  <data name="Filter_FeaturedOnly" xml:space="preserve">
+    <value>Featured only</value>
+  </data>
+  <data name="Filter_AnyMod" xml:space="preserve">
+    <value>Any mod</value>
+    <comment>The attribute dropdown's summary when nothing is ticked.</comment>
+  </data>
+  <data name="Filter_SelectedCountFormat" xml:space="preserve">
+    <value>{0} selected</value>
+    <comment>The attribute dropdown's summary when more than one box is ticked. {0} is how many boxes.</comment>
+  </data>
+  <data name="Filter_FikaOnly" xml:space="preserve">
+    <value>Fika compatible only</value>
+    <comment>Fika is a mod's name and stays as it is.</comment>
+  </data>
+  <data name="Filter_HideAds" xml:space="preserve">
+    <value>Hide mods with ads</value>
+  </data>
+  <data name="Filter_HideAiContent" xml:space="preserve">
+    <value>Hide mods with AI content</value>
+  </data>
+  <data name="Filter_HasDependencies" xml:space="preserve">
+    <value>Has dependencies</value>
+  </data>
+  <data name="Filter_HasDependenciesInstalledToolTip" xml:space="preserve">
+    <value>Only mods that require another mod you have installed.</value>
+    <comment>On Installed, where the answer comes from the scan.</comment>
+  </data>
+  <data name="Filter_HasDependenciesBrowseToolTip" xml:space="preserve">
+    <value>Only mods that pull in other mods. Dependencies are looked up as you browse, so this covers what the app has checked so far rather than the whole catalogue.</value>
+    <comment>On Browse, where the answer is only as complete as what has been looked up.</comment>
+  </data>
+  <data name="Filter_HasAddons" xml:space="preserve">
+    <value>Has addons</value>
+  </data>
+  <data name="Filter_HasAddonsToolTip" xml:space="preserve">
+    <value>Only mods with addons published for them.</value>
+  </data>
+  <data name="Filter_HideInstalled" xml:space="preserve">
+    <value>Hide installed mods</value>
+    <comment>Browse only.</comment>
+  </data>
+  <data name="Filter_HideInstalledToolTip" xml:space="preserve">
+    <value>Only mods you don't have yet. A disabled mod counts as installed.</value>
+  </data>
+  <data name="Filter_ConfigAll" xml:space="preserve">
+    <value>All</value>
+    <comment>Neutral entry in the Configs source filter.</comment>
+  </data>
+  <data name="Filter_ConfigClient" xml:space="preserve">
+    <value>Client only</value>
+  </data>
+  <data name="Filter_ConfigServer" xml:space="preserve">
+    <value>Server only</value>
+  </data>
+  <data name="Filter_ConfigOther" xml:space="preserve">
+    <value>Not a mod's</value>
+    <comment>Config files that belong to no mod.</comment>
+  </data>
+  <data name="Sort_NameAscending" xml:space="preserve">
+    <value>By name (A-Z)</value>
+    <comment>Installed's sort dropdown. "By ..." rather than a bare name, so these read as orderings beside the filters rather than as more filters. A-Z means alphabetical - use the letters your alphabet starts and ends with.</comment>
+  </data>
+  <data name="Sort_NameDescending" xml:space="preserve">
+    <value>By name (Z-A)</value>
+  </data>
+  <data name="Sort_AuthorAscending" xml:space="preserve">
+    <value>By author (A-Z)</value>
+  </data>
+  <data name="Sort_AuthorDescending" xml:space="preserve">
+    <value>By author (Z-A)</value>
+  </data>
+  <data name="Sort_GroupAscending" xml:space="preserve">
+    <value>By group (A-Z)</value>
+  </data>
+  <data name="Sort_GroupDescending" xml:space="preserve">
+    <value>By group (Z-A)</value>
+  </data>
+  <data name="Sort_RecentlyInstalled" xml:space="preserve">
+    <value>Recently installed</value>
+  </data>
+  <data name="Sort_GroupsManual" xml:space="preserve">
+    <value>Manual order</value>
+    <comment>Group order: whatever the user dragged them into.</comment>
+  </data>
+  <data name="Sort_GroupNameAscending" xml:space="preserve">
+    <value>Group name (A-Z)</value>
+  </data>
+  <data name="Sort_GroupNameDescending" xml:space="preserve">
+    <value>Group name (Z-A)</value>
+  </data>
+  <data name="Sort_BrowseNewest" xml:space="preserve">
+    <value>Newest first</value>
+    <comment>Browse's sort dropdown.</comment>
+  </data>
+  <data name="Sort_BrowseLastUpdated" xml:space="preserve">
+    <value>Recently updated</value>
+  </data>
+  <data name="Sort_BrowseMostDownloaded" xml:space="preserve">
+    <value>Most downloaded</value>
+  </data>
+  <data name="Sort_BrowseMostFavourited" xml:space="preserve">
+    <value>Most favourited</value>
+  </data>
+  <data name="Sort_BrowseMostEndorsed" xml:space="preserve">
+    <value>Most endorsed</value>
+  </data>
+  <data name="Sort_FootprintName" xml:space="preserve">
+    <value>Name (A-Z)</value>
+    <comment>The Mod footprint page's sort dropdown.</comment>
+  </data>
+  <data name="Sort_FootprintMostPatches" xml:space="preserve">
+    <value>Most patch classes</value>
+  </data>
+  <data name="Sort_FootprintMostComponents" xml:space="preserve">
+    <value>Most components</value>
+  </data>
+  <data name="Sort_FootprintLargestOnDisk" xml:space="preserve">
+    <value>Largest on disk</value>
+  </data>
+  <data name="ConfigPolicy_Merge" xml:space="preserve">
+    <value>Merge my changes</value>
+    <comment>What to do with this mod's config when it updates.</comment>
+  </data>
+  <data name="ConfigPolicy_KeepMine" xml:space="preserve">
+    <value>Keep mine</value>
+  </data>
+  <data name="ConfigPolicy_TakeNew" xml:space="preserve">
+    <value>Take the new file</value>
+  </data>
+  <data name="Options_ThemeFollowSystem" xml:space="preserve">
+    <value>Follow system</value>
+    <comment>Named in Options_AppearanceDescription - translate both the same way.</comment>
+  </data>
+  <data name="Options_ThemeLight" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Options_ThemeDark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Options_WindowRemember" xml:space="preserve">
+    <value>Remember the last size and position</value>
+  </data>
+  <data name="Options_WindowMaximised" xml:space="preserve">
+    <value>Always start maximised</value>
+  </data>
+  <data name="Options_WindowCustom" xml:space="preserve">
+    <value>Always start at a size I choose</value>
+  </data>
+  <data name="Options_WindowFullScreen" xml:space="preserve">
+    <value>Always start full screen</value>
+    <comment>Named in Options_WindowDescription - translate both the same way.</comment>
+  </data>
 </root>

@@ -1,5 +1,6 @@
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
+using TCFModManager.App.Localization;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -21,8 +22,13 @@ public enum ConfigSourceFilter
 
 // One entry in the Configs page's source dropdown. Overrides ToString() so the label shows instead
 // of the enum name, same as the Installed page's filter items.
-public sealed record ConfigSourceFilterItem(string Label, ConfigSourceFilter Value)
+public sealed class ConfigSourceFilterItem(string key, ConfigSourceFilter value) : LocalizedViewModel
 {
+    public ConfigSourceFilter Value { get; } = value;
+
+    // Read on every get, so a language change relabels the dropdown rather than rebuilding it.
+    public string Label => LocalizationService.Get(key);
+
     public override string ToString() => Label;
 
     public bool Matches(ModConfigSource source) => Value switch
@@ -38,8 +44,12 @@ public sealed record ConfigSourceFilterItem(string Label, ConfigSourceFilter Val
 // One choice in the update-policy dropdown on the Configs page. ToString is what the closed ComboBox
 // shows, the same shape the source filter above uses.
 //
-public sealed record ConfigPolicyOption(string Label, ModConfigPolicy Value)
+public sealed class ConfigPolicyOption(string key, ModConfigPolicy value) : LocalizedViewModel
 {
+    public ModConfigPolicy Value { get; } = value;
+
+    public string Label => LocalizationService.Get(key);
+
     public override string ToString() => Label;
 }
 
