@@ -1400,4 +1400,377 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="SptLaunch_NotRunning" xml:space="preserve">
     <value>Not running.</value>
   </data>
+  <data name="Common_ListPairFormat" xml:space="preserve">
+    <value>{0} and {1}</value>
+    <comment>Joins the last two names in a list of things - "SPT.Server.exe and EscapeFromTarkov.exe". The names are process or file names and are not translated.</comment>
+  </data>
+  <data name="Common_ListSeparator" xml:space="preserve">
+    <value>, </value>
+    <comment>Between every pair of names before the last two, which Common_ListPairFormat joins. Keep the trailing space if your language uses one.</comment>
+  </data>
+  <data name="Common_UnknownAmount" xml:space="preserve">
+    <value>an unknown amount</value>
+    <comment>Stands in for a byte size the app could not determine. It appears mid-sentence where a size like "4.2 MB" would otherwise be.</comment>
+  </data>
+  <data name="ModInstall_UnrecognisedArchiveFormat" xml:space="preserve">
+    <value>{0} {1}'s archive doesn't look like a normal SPT mod package (no BepInEx/user/SPT folder found in it) - install it manually instead.</value>
+    <comment>{0} is a mod name, {1} a version. BepInEx, user and SPT are folder names and stay as they are.</comment>
+  </data>
+  <data name="ModInstall_PartlyInstalledFormat" xml:space="preserve">
+    <value>{0} {1} was only partly installed - {2} of {3} files were placed before this failed: {4} Close SPT and its server, then install it again.</value>
+    <comment>{0} mod name, {1} version, {2} and {3} file counts, {4} the reason Windows gave (arrives in the system's language).</comment>
+  </data>
+  <data name="ModInstall_DownloadIncompleteFormat" xml:space="preserve">
+    <value>The download stopped early - {0} of {1} arrived, so the archive was incomplete and nothing was installed. Retry it; if it keeps stopping, sp-mod.com's file server is cutting the transfer short.</value>
+    <comment>{0} and {1} are byte sizes, or the Common_UnknownAmount phrase.</comment>
+  </data>
+  <data name="ModInstall_UnsafeArchiveEntryFormat" xml:space="preserve">
+    <value>Archive entry "{0}" would extract outside the target folder - refusing to extract it.</value>
+    <comment>{0} is a path inside the archive.</comment>
+  </data>
+  <data name="ModInstall_UnexpectedFormat" xml:space="preserve">
+    <value>Couldn't finish that: {0}.</value>
+    <comment>{0} is the name of the failure, which is not translated.</comment>
+  </data>
+  <data name="ModInstall_NoDownloadLinkFormat" xml:space="preserve">
+    <value>{0} {1} has no download link on sp-mod.com.</value>
+    <comment>{0} is a mod name, {1} a version.</comment>
+  </data>
+  <data name="ModInstall_InUseInstallFormat" xml:space="preserve">
+    <value>Close {0} before installing a mod - files inside the SPT install are locked while it's running.</value>
+    <comment>{0} is one or more process names, joined by Common_ListSeparator and Common_ListPairFormat. One whole sentence per action rather than one sentence with the action dropped into it - a verb phrase spliced into a sentence cannot be translated.</comment>
+  </data>
+  <data name="ModInstall_InUseRemoveFormat" xml:space="preserve">
+    <value>Close {0} before removing a mod - files inside the SPT install are locked while it's running.</value>
+  </data>
+  <data name="ModInstall_InUseDisableFormat" xml:space="preserve">
+    <value>Close {0} before disabling a mod - files inside the SPT install are locked while it's running.</value>
+  </data>
+  <data name="ModInstall_InUseEnableFormat" xml:space="preserve">
+    <value>Close {0} before enabling a mod - files inside the SPT install are locked while it's running.</value>
+  </data>
+  <data name="ModInstall_InUseUndoFormat" xml:space="preserve">
+    <value>Close {0} before undoing a change - files inside the SPT install are locked while it's running.</value>
+  </data>
+  <data name="ModInstall_InUseApplyListFormat" xml:space="preserve">
+    <value>Close {0} before applying a mod list - files inside the SPT install are locked while it's running.</value>
+  </data>
+  <data name="ModInstall_InUseSortOutFormat" xml:space="preserve">
+    <value>Close {0} before sorting out a duplicated mod - files inside the SPT install are locked while it's running.</value>
+  </data>
+  <data name="ModInstall_InUseGenericFormat" xml:space="preserve">
+    <value>Close {0} before changing your mods - files inside the SPT install are locked while it's running.</value>
+  </data>
+  <data name="AppUpdate_TheNewVersion" xml:space="preserve">
+    <value>the new version</value>
+    <comment>Stands in for a version number the app could not read. It appears mid-sentence where "1.15.0-beta" would otherwise be.</comment>
+  </data>
+  <data name="AppUpdate_TheAppExecutable" xml:space="preserve">
+    <value>the app executable</value>
+    <comment>Stands in for a file name the app could not read. It appears mid-sentence where "TCFModManager.exe" would otherwise be.</comment>
+  </data>
+  <data name="AppUpdate_NoDownloadFileFormat" xml:space="preserve">
+    <value>sp-mod.com lists {0} but has no file attached to it. Open the mod page and download it manually.</value>
+    <comment>{0} is a version number, or the AppUpdate_TheNewVersion phrase.</comment>
+  </data>
+  <data name="AppUpdate_DownloadNotReadable" xml:space="preserve">
+    <value>The downloaded file isn't a readable zip - the download may have been interrupted. Try again.</value>
+  </data>
+  <data name="AppUpdate_ReleaseMissingExeFormat" xml:space="preserve">
+    <value>The {0} release doesn't contain {1} where this app expects it. Download it from the mod page and copy it over by hand instead.</value>
+    <comment>{0} is a version, {1} a file name.</comment>
+  </data>
+  <data name="AppUpdate_StagedMissingExeFormat" xml:space="preserve">
+    <value>The staged update is missing {0} - nothing was changed.</value>
+    <comment>{0} is a file name.</comment>
+  </data>
+  <data name="AppUpdate_StagedTooSmallSizedFormat" xml:space="preserve">
+    <value>The staged {0} is only {1}KB, which is far too small to be a real build - nothing was changed.</value>
+    <comment>{0} is a file name, {1} a size in kilobytes. KB is the unit - write it as your language does.</comment>
+  </data>
+  <data name="AppUpdate_StagedTooSmallFormat" xml:space="preserve">
+    <value>The staged {0} is far too small to be a real build - nothing was changed.</value>
+    <comment>Used when the size itself could not be read.</comment>
+  </data>
+  <data name="AppUpdate_UpdaterWouldNotStartFormat" xml:space="preserve">
+    <value>Couldn't start the updater script. The new version is downloaded and unpacked in {0} - close the app and copy what's in there over this folder to finish by hand.</value>
+    <comment>{0} is a folder path.</comment>
+  </data>
+  <data name="AppUpdate_FolderNotWritableFormat" xml:space="preserve">
+    <value>This app can't write to its own folder ({0}), so it can't update itself in place. Move it somewhere outside Program Files, or download the new version from the mod page and replace it by hand.</value>
+    <comment>{0} is a folder path. Program Files is a Windows folder - use whatever Windows calls it in your language.</comment>
+  </data>
+  <data name="AppUpdate_NoSpaceSizedFormat" xml:space="preserve">
+    <value>Not enough free space on {0} to download and unpack the update - about {1}MB is needed, {2}MB is free.</value>
+    <comment>{0} is a drive name, {1} and {2} are sizes in megabytes. MB is the unit.</comment>
+  </data>
+  <data name="AppUpdate_NoSpaceFormat" xml:space="preserve">
+    <value>Not enough free space on {0} to download and unpack the update.</value>
+    <comment>Used when the sizes could not be read.</comment>
+  </data>
+  <data name="AppUpdate_UnexpectedFormat" xml:space="preserve">
+    <value>The update failed: {0}. Nothing was changed - download it from the mod page and replace this folder by hand if it keeps happening.</value>
+    <comment>{0} is the reason, which arrives in the system's language.</comment>
+  </data>
+  <data name="ConfigUpdate_NotUpdatedOneFormat" xml:space="preserve">
+    <value>Your {0} couldn't be copied aside, so your version was left in place and the new one wasn't installed.</value>
+    <comment>{0} is a file name.</comment>
+  </data>
+  <data name="ConfigUpdate_NotUpdatedManyFormat" xml:space="preserve">
+    <value>{0} of your config files couldn't be copied aside, so your version was left in place and the new one wasn't installed.</value>
+    <comment>{0} is two or more.</comment>
+  </data>
+  <data name="ConfigUpdate_MergedFormat" xml:space="preserve">
+    <value>Your settings were carried into the new defaults ({0} of them).</value>
+    <comment>{0} is how many settings were carried.</comment>
+  </data>
+  <data name="ConfigUpdate_MergedWithLostFormat" xml:space="preserve">
+    <value>Your settings were carried into the new defaults ({0} of them); {1} could not be and are listed on the Configs page.</value>
+    <comment>{0} carried, {1} lost. Configs is the page name, as in the sidebar.</comment>
+  </data>
+  <data name="ConfigUpdate_ReplacedOneFormat" xml:space="preserve">
+    <value>Your {0} was replaced by this version's defaults.</value>
+    <comment>{0} is a file name.</comment>
+  </data>
+  <data name="ConfigUpdate_ReplacedOneWhereFormat" xml:space="preserve">
+    <value>Your {0} was replaced by this version's defaults - your copy is in Data\LegacyConfigs\{1}.</value>
+    <comment>{0} is a file name, {1} a folder name. Data\LegacyConfigs\ is a path and stays as it is.</comment>
+  </data>
+  <data name="ConfigUpdate_ReplacedManyFormat" xml:space="preserve">
+    <value>{0} of your config files were replaced by this version's defaults.</value>
+  </data>
+  <data name="ConfigUpdate_ReplacedManyWhereFormat" xml:space="preserve">
+    <value>{0} of your config files were replaced by this version's defaults - your copy is in Data\LegacyConfigs\{1}.</value>
+  </data>
+  <data name="ConfigUpdate_ReplacedFirstTime" xml:space="preserve">
+    <value>The app hadn't recorded what the last version shipped, so it couldn't tell your changes from the mod's.</value>
+    <comment>A second sentence, added after one of the ConfigUpdate_Replaced* ones.</comment>
+  </data>
+  <data name="ConfigUpdate_RemovedOneFormat" xml:space="preserve">
+    <value>Your {0} is no longer part of the mod.</value>
+    <comment>{0} is a file name.</comment>
+  </data>
+  <data name="ConfigUpdate_RemovedOneWhereFormat" xml:space="preserve">
+    <value>Your {0} is no longer part of the mod - your copy is in Data\LegacyConfigs\{1}.</value>
+  </data>
+  <data name="ConfigUpdate_RemovedManyFormat" xml:space="preserve">
+    <value>{0} of your config files are no longer part of the mod.</value>
+  </data>
+  <data name="ConfigUpdate_RemovedManyWhereFormat" xml:space="preserve">
+    <value>{0} of your config files are no longer part of the mod - your copy is in Data\LegacyConfigs\{1}.</value>
+  </data>
+  <data name="ConfigUpdate_VersionRangeFormat" xml:space="preserve">
+    <value>{0} to {1}</value>
+    <comment>Two version numbers, as in "Updating to 1.2 to 1.3". Used where one version number would otherwise be.</comment>
+  </data>
+  <data name="ConfigUpdate_NoteMergedOneFormat" xml:space="preserve">
+    <value>Updating to {0} kept 1 setting of yours in this file.</value>
+    <comment>{0} is a version, or a version range from ConfigUpdate_VersionRangeFormat. The one-setting case; see the Many form.</comment>
+  </data>
+  <data name="ConfigUpdate_NoteMergedManyFormat" xml:space="preserve">
+    <value>Updating to {0} kept {1} settings of yours in this file.</value>
+    <comment>{1} is two or more. These two become one plural key in S5.</comment>
+  </data>
+  <data name="ConfigUpdate_AlsoDroppedFormat" xml:space="preserve">
+    <value>It also reported {0} the update no longer has.</value>
+    <comment>{0} is a count of settings.</comment>
+  </data>
+  <data name="ConfigUpdate_AlsoAddedFormat" xml:space="preserve">
+    <value>It also reported {0} you added yourself, which it could not place.</value>
+  </data>
+  <data name="ConfigUpdate_AlsoBothFormat" xml:space="preserve">
+    <value>It also reported {0} the update no longer has, and {1} you added yourself, which it could not place.</value>
+    <comment>Both counts in one sentence rather than two clauses joined by a conjunction.</comment>
+  </data>
+  <data name="ConfigUpdate_NoteReplacedFormat" xml:space="preserve">
+    <value>Updating to {0} replaced this file with the version's defaults.</value>
+  </data>
+  <data name="ConfigUpdate_NoteReplacedWhereFormat" xml:space="preserve">
+    <value>Updating to {0} replaced this file with the version's defaults - your copy is in Data\LegacyConfigs\{1}.</value>
+  </data>
+  <data name="ConfigUpdate_ReasonNoBaseline" xml:space="preserve">
+    <value>The app had nothing to compare it against yet; the next update can carry your changes.</value>
+    <comment>A second sentence, added after one of the ConfigUpdate_NoteReplaced* ones.</comment>
+  </data>
+  <data name="ConfigUpdate_ReasonTakeNew" xml:space="preserve">
+    <value>This mod is set to take the new file.</value>
+  </data>
+  <data name="ConfigUpdate_ReasonNotMergeable" xml:space="preserve">
+    <value>Its format is not one the merge can read - set this mod to keep yours if you edit it.</value>
+  </data>
+  <data name="ConfigUpdate_ReasonTooLarge" xml:space="preserve">
+    <value>It holds too much to be settings, so it was left as the mod shipped it.</value>
+  </data>
+  <data name="ConfigUpdate_NoteKeptMineFormat" xml:space="preserve">
+    <value>Updating to {0} left this file exactly as it was, as you asked.</value>
+  </data>
+  <data name="ConfigUpdate_NoteDefaultsUpdatedFormat" xml:space="preserve">
+    <value>Updating to {0} brought this file's defaults with it. Nothing of yours was in it.</value>
+  </data>
+  <data name="ConfigUpdate_NotePreservedFormat" xml:space="preserve">
+    <value>Updating to {0} left this file exactly as it is - it is one of yours, not the mod's.</value>
+  </data>
+  <data name="ConfigUpdate_NoteNotUpdatedFormat" xml:space="preserve">
+    <value>Updating to {0} could not copy this file aside, so it was left alone.</value>
+  </data>
+  <data name="ConfigUpdate_NoteAddedFormat" xml:space="preserve">
+    <value>This file arrived with {0}.</value>
+    <comment>{0} is a version number.</comment>
+  </data>
+  <data name="ConfigUpdate_NoteUnchangedFormat" xml:space="preserve">
+    <value>Updating to {0} left this file unchanged.</value>
+  </data>
+  <data name="ConfigUpdate_PolicyKeepMine" xml:space="preserve">
+    <value>Your file is left exactly as it is. A setting the new version adds will be missing from it, which some mods handle and some don't.</value>
+  </data>
+  <data name="ConfigUpdate_PolicyTakeNew" xml:space="preserve">
+    <value>The new version's file wins. Your copy is kept in Data\LegacyConfigs so you can put values back by hand.</value>
+    <comment>Data\LegacyConfigs is a folder name and stays as it is.</comment>
+  </data>
+  <data name="ConfigUpdate_PolicyMerge" xml:space="preserve">
+    <value>The new version's file is used, with the settings you changed carried into it. A setting the update adds arrives at its default; one it removes is reported and dropped.</value>
+  </data>
+  <data name="ServerMap_ConnectedFormat" xml:space="preserve">
+    <value>Connected to {0}.</value>
+    <comment>{0} is the server's name, or its address when it has no name.</comment>
+  </data>
+  <data name="ServerMap_ConnectedWithVersionFormat" xml:space="preserve">
+    <value>Connected to {0}, running SPT {1}.</value>
+    <comment>{1} is an SPT version number.</comment>
+  </data>
+  <data name="ServerMap_FirstConnectionFormat" xml:space="preserve">
+    <value>Recorded its certificate ({0}) - you'll be warned if it changes.</value>
+    <comment>A second sentence, added after one of the ServerMap_Connected* ones. {0} is a shortened fingerprint.</comment>
+  </data>
+  <data name="ServerMap_NoAddress" xml:space="preserve">
+    <value>No server address set - enter the same address you put in the SPT launcher.</value>
+  </data>
+  <data name="ServerMap_InvalidAddressFormat" xml:space="preserve">
+    <value>"{0}" and port {1} don't make an address this app can dial. The port has to be a number between 1 and 65535.</value>
+    <comment>{0} is what was typed as the host, {1} as the port.</comment>
+  </data>
+  <data name="ServerMap_UnreachableFormat" xml:space="preserve">
+    <value>Nothing answered at {0}:{1}. The server may not be running, or the address or port may be wrong - it's the same one you use in the SPT launcher.</value>
+    <comment>{0} is a host, {1} a port.</comment>
+  </data>
+  <data name="ServerMap_CertificateChangedFormat" xml:space="preserve">
+    <value>{0} presented a different certificate than the one this app recorded the first time it connected.
+
+Expected:  {1}
+Presented: {2}
+
+That happens legitimately if the server was rebuilt or you're reaching it through a tunnel that handles the encryption itself. It also happens if something is sitting between you and the server. Trust the new one only if you know which it is.</value>
+    <comment>{0} is a host, {1} and {2} are shortened fingerprints. The line breaks and the two labels are laid out to be compared by eye - keep them on their own lines.</comment>
+  </data>
+  <data name="ServerMap_NotServerMapFormat" xml:space="preserve">
+    <value>Something is running at {0}:{1}, but it isn't a server with the Server Map mod installed. Ask whoever runs it to add it - the map needs the mod on the server, not just this app.</value>
+    <comment>Server Map is the mod's name and stays as it is.</comment>
+  </data>
+  <data name="ServerMap_ProtocolNewerFormat" xml:space="preserve">
+    <value>That server's Server Map is newer than this app understands (it speaks version {0}, this app speaks {1}). Update TCF Mod Manager.</value>
+    <comment>TCF Mod Manager is this app's name and stays as it is.</comment>
+  </data>
+  <data name="ServerMap_ProtocolOlderFormat" xml:space="preserve">
+    <value>That server's Server Map is older than this app understands (it speaks version {0}, this app speaks {1}). Ask whoever runs it to update the mod.</value>
+  </data>
+  <data name="ServerMap_ReachFailedFormat" xml:space="preserve">
+    <value>Couldn't reach {0}:{1}: {2}</value>
+    <comment>{2} is the reason, which arrives in the system's language.</comment>
+  </data>
+  <data name="ServerMap_NotSetUp" xml:space="preserve">
+    <value>Not set up. Enter a server address to connect.</value>
+  </data>
+  <data name="ServerMap_NotConnected" xml:space="preserve">
+    <value>Not connected yet.</value>
+  </data>
+  <data name="ServerMap_ServingOwnListOneFormat" xml:space="preserve">
+    <value>This server is serving your own list "{0}" (revision {1}, 1 mod). It stays yours to edit on the Mod lists page - publish it again after a change to update what the server hands out.</value>
+    <comment>{0} is a list name the user typed. Mod lists is the page name, as in the sidebar. The one-mod case; see the Many form.</comment>
+  </data>
+  <data name="ServerMap_ServingOwnListManyFormat" xml:space="preserve">
+    <value>This server is serving your own list "{0}" (revision {1}, {2} mods). It stays yours to edit on the Mod lists page - publish it again after a change to update what the server hands out.</value>
+    <comment>{2} is two or more. These two become one plural key in S5.</comment>
+  </data>
+  <data name="ServerMap_ListSavedOneFormat" xml:space="preserve">
+    <value>"{0}" (revision {1}, 1 mod) is saved in your mod lists. Applying it is done from the Mod lists page, which shows what would change first.</value>
+  </data>
+  <data name="ServerMap_ListSavedManyFormat" xml:space="preserve">
+    <value>"{0}" (revision {1}, {2} mods) is saved in your mod lists. Applying it is done from the Mod lists page, which shows what would change first.</value>
+  </data>
+  <data name="ServerMap_NoListHeldFormat" xml:space="preserve">
+    <value>This server isn't publishing a mod list. "{0}" is still in your mod lists as you last fetched it - though if you were expecting to see it here, check the address is the server you published it to, and that the file reached that server's config folder.</value>
+    <comment>{0} is a list name.</comment>
+  </data>
+  <data name="ServerMap_NoList" xml:space="preserve">
+    <value>This server doesn't publish a mod list. Its operator publishes one with "Publish to this server" on the Mod lists page, from the app on the machine running the server.</value>
+    <comment>"Publish to this server" is the button named in ModLists_Publish - translate it the same way.</comment>
+  </data>
+  <data name="ServerMap_KeyRequired" xml:space="preserve">
+    <value>This server needs a shared key before it will send its list. Ask whoever runs it for the key and put it in the box above - they'll find it in the mod's config folder, in servermap-key.txt.</value>
+    <comment>servermap-key.txt is a file name and stays as it is.</comment>
+  </data>
+  <data name="ServerMap_KeyRejected" xml:space="preserve">
+    <value>The server didn't accept the key. Check it against the one whoever runs the server has - it may have been re-generated since they sent it to you. Dashes and capitals don't matter.</value>
+  </data>
+  <data name="ServerMap_ListUnreadableFormat" xml:space="preserve">
+    <value>The server sent a list this app couldn't read - {0}.</value>
+    <comment>{0} is a parse error, which is not translated.</comment>
+  </data>
+  <data name="ServerMap_ListFetchDropped" xml:space="preserve">
+    <value>The server answered the first time and then stopped, so the list wasn't fetched.</value>
+  </data>
+  <data name="ServerMap_ListCertificateRejected" xml:space="preserve">
+    <value>The list wasn't fetched - the server's certificate is not the one this app recorded.</value>
+  </data>
+  <data name="ServerMap_ListFailed" xml:space="preserve">
+    <value>The list couldn't be fetched.</value>
+  </data>
+  <data name="ServerMap_ListFailedReasonFormat" xml:space="preserve">
+    <value>The list couldn't be fetched: {0}.</value>
+    <comment>{0} is the reason, which arrives in the system's language.</comment>
+  </data>
+  <data name="ServerMap_KeyNeeded" xml:space="preserve">
+    <value>This server needs a key. Whoever runs it will find it in the Server Map mod's config folder, in servermap-key.txt.</value>
+  </data>
+  <data name="ServerMap_KeyOptional" xml:space="preserve">
+    <value>Only needed if the server asks for one. It's generated by the server, not chosen - it says you were told about that server, and nothing more.</value>
+  </data>
+  <data name="ServerMap_KeyHeld" xml:space="preserve">
+    <value>Sent with every request except the first handshake. It identifies nobody and protects nothing on its own, so it isn't a password - don't reuse one anywhere else.</value>
+  </data>
+  <data name="ServerMap_PublishesNothing" xml:space="preserve">
+    <value>This server doesn't publish a mod list.</value>
+  </data>
+  <data name="ServerMap_PublishedNamedFormat" xml:space="preserve">
+    <value>"{0}" (revision {1})</value>
+    <comment>{0} is a list name, {1} a revision number or the Common_Unknown word.</comment>
+  </data>
+  <data name="ServerMap_PublishedNamedOneFormat" xml:space="preserve">
+    <value>"{0}" (revision {1}, 1 mod)</value>
+  </data>
+  <data name="ServerMap_PublishedNamedManyFormat" xml:space="preserve">
+    <value>"{0}" (revision {1}, {2} mods)</value>
+    <comment>{2} is two or more. Becomes one plural key in S5.</comment>
+  </data>
+  <data name="ServerMap_PublishedUnnamedFormat" xml:space="preserve">
+    <value>A mod list (revision {0})</value>
+    <comment>Used when the server publishes a list with no name.</comment>
+  </data>
+  <data name="ServerMap_PublishedUnnamedOneFormat" xml:space="preserve">
+    <value>A mod list (revision {0}, 1 mod)</value>
+  </data>
+  <data name="ServerMap_PublishedUnnamedManyFormat" xml:space="preserve">
+    <value>A mod list (revision {0}, {1} mods)</value>
+  </data>
+  <data name="ServerMap_NoThumbprint" xml:space="preserve">
+    <value>(none)</value>
+    <comment>Stands in for a certificate fingerprint that has not been recorded.</comment>
+  </data>
+  <data name="ServerMap_NoPinRecorded" xml:space="preserve">
+    <value>No certificate recorded yet. The first time this app connects it records the one the server presents, and warns you if it ever changes.</value>
+  </data>
+  <data name="ServerMap_PinRecordedFormat" xml:space="preserve">
+    <value>Trusting certificate {0}. SPT's certificate is self-signed for localhost, so this fingerprint - not the name on it - is what identifies the server.</value>
+    <comment>{0} is a shortened fingerprint. localhost stays as it is.</comment>
+  </data>
 </root>

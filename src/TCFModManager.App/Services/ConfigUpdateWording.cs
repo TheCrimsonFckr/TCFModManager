@@ -1,4 +1,6 @@
+using System.Globalization;
 using System.IO;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -7,6 +9,13 @@ namespace TCFModManager.App.Services;
 //
 // The sentence a user reads after an update touched a mod's own config files. Core reports what
 // happened (ConfigUpdateReport); the words live here - see feedback-core-no-user-prose.
+//
+// Every sentence here is one key, start to finish. This file used to assemble them from pieces -
+// a clause carrying its own verb agreement ("Your config.jsonc was" / "3 of your config files
+// were"), a trailing "- your copy is in ..." glued on where the archive folder existed, a list
+// joined with " and " - which is the shape D8 rules out: the halves cannot be reordered, the verb
+// cannot agree, and a translator is handed sentence fragments with nothing to attach them to.
+// One key per whole sentence costs more keys and is the only thing that can be translated.
 //
 public static class ConfigUpdateWording
 {
@@ -25,8 +34,9 @@ public static class ConfigUpdateWording
 
         if (notUpdated.Count > 0)
         {
-            return $"{Describe(notUpdated)} couldn't be copied aside, so your version was left in place "
-                + "and the new one wasn't installed.";
+            return notUpdated.Count == 1
+                ? Format(Strings.ConfigUpdate_NotUpdatedOneFormat, FileName(notUpdated))
+                : Format(Strings.ConfigUpdate_NotUpdatedManyFormat, notUpdated.Count);
         }
 
         var merged = Of(report, ConfigOutcomeKind.Merged);
@@ -36,37 +46,41 @@ public static class ConfigUpdateWording
             var carried = merged.Sum(f => f.Carried.Count);
             var lost = merged.Sum(f => f.Dropped.Count + f.UserAdded.Count);
 
-            return $"Your settings were carried into the new defaults ({carried} of them)"
-                + (lost > 0 ? $"; {lost} could not be and are listed on the Configs page." : ".");
+            return lost > 0
+                ? Format(Strings.ConfigUpdate_MergedWithLostFormat, carried, lost)
+                : Format(Strings.ConfigUpdate_MergedFormat, carried);
         }
 
         if (replaced.Count > 0)
         {
-            var firstTime = replaced.All(f => f.Reason == ConfigReplaceReason.NoBaseline);
+            var sentence = Archive(report) is { } folder
+                ? replaced.Count == 1
+                    ? Format(Strings.ConfigUpdate_ReplacedOneWhereFormat, FileName(replaced), folder)
+                    : Format(Strings.ConfigUpdate_ReplacedManyWhereFormat, replaced.Count, folder)
+                : replaced.Count == 1
+                    ? Format(Strings.ConfigUpdate_ReplacedOneFormat, FileName(replaced))
+                    : Format(Strings.ConfigUpdate_ReplacedManyFormat, replaced.Count);
 
-            return $"{Describe(replaced)} replaced by this version's defaults{Where(report)}."
-                + (firstTime
-                    ? " The app hadn't recorded what the last version shipped, so it couldn't tell your changes from the mod's."
-                    : string.Empty);
+            // A second sentence rather than a clause: appending one finished sentence to another is
+            // the one kind of assembly that survives translation.
+            return replaced.All(f => f.Reason == ConfigReplaceReason.NoBaseline)
+                ? Then(sentence, Strings.ConfigUpdate_ReplacedFirstTime)
+                : sentence;
         }
 
         if (removed.Count > 0)
-            return $"{Describe(removed)} no longer part of the mod{Where(report)}.";
+        {
+            return Archive(report) is { } folder
+                ? removed.Count == 1
+                    ? Format(Strings.ConfigUpdate_RemovedOneWhereFormat, FileName(removed), folder)
+                    : Format(Strings.ConfigUpdate_RemovedManyWhereFormat, removed.Count, folder)
+                : removed.Count == 1
+                    ? Format(Strings.ConfigUpdate_RemovedOneFormat, FileName(removed))
+                    : Format(Strings.ConfigUpdate_RemovedManyFormat, removed.Count);
+        }
 
         return null;
     }
-
-    // "config.jsonc was" / "3 config files were" - so the sentence above reads either way.
-    private static string Describe(List<ConfigFileOutcome> files) =>
-        files.Count == 1
-            ? $"Your {Path.GetFileName(files[0].Path)} was"
-            : $"{files.Count} of your config files were";
-
-    // Where the copies went, when there are any.
-    private static string Where(ConfigUpdateReport report) =>
-        report.ArchiveFolder is { } folder
-            ? $" - your copy is in Data\\LegacyConfigs\\{Path.GetFileName(folder)}"
-            : string.Empty;
 
     //
     // What the last update did to one file, for the Configs page - read days later, so it names the
@@ -74,57 +88,78 @@ public static class ConfigUpdateWording
     //
     public static string LastUpdateNote(ConfigUpdateReport report, ConfigFileOutcome outcome)
     {
-        var move = report.FromVersion is { } from ? $"{from} to {report.ToVersion}" : report.ToVersion;
+        var move = report.FromVersion is { } from
+            ? Format(Strings.ConfigUpdate_VersionRangeFormat, from, report.ToVersion)
+            : report.ToVersion;
 
         return outcome.Kind switch
         {
-            ConfigOutcomeKind.Merged =>
-                $"Updating to {move} kept {Settings(outcome.Carried.Count)} of yours in this file"
-                + Also(outcome) + ".",
-            ConfigOutcomeKind.Replaced =>
-                $"Updating to {move} replaced this file with the version's defaults{Where(report)}."
-                + (outcome.Reason == ConfigReplaceReason.NoBaseline
-                    ? " The app had nothing to compare it against yet; the next update can carry your changes."
-                    : outcome.Reason == ConfigReplaceReason.TakeNewPolicy
-                        ? " This mod is set to take the new file."
-                        : outcome.Reason == ConfigReplaceReason.NotMergeable
-                            ? " Its format is not one the merge can read - set this mod to keep yours if you edit it."
-                            : outcome.Reason == ConfigReplaceReason.TooLarge
-                                ? " It holds too much to be settings, so it was left as the mod shipped it."
-                                : string.Empty),
-            ConfigOutcomeKind.KeptMine => $"Updating to {move} left this file exactly as it was, as you asked.",
-            ConfigOutcomeKind.DefaultsUpdated => $"Updating to {move} brought this file's defaults with it. Nothing of yours was in it.",
-            ConfigOutcomeKind.Preserved => $"Updating to {move} left this file exactly as it is - it is one of yours, not the mod's.",
-            ConfigOutcomeKind.NotUpdated => $"Updating to {move} could not copy this file aside, so it was left alone.",
-            ConfigOutcomeKind.Added => $"This file arrived with {report.ToVersion}.",
-            _ => $"Updating to {move} left this file unchanged.",
+            ConfigOutcomeKind.Merged => Then(
+                outcome.Carried.Count == 1
+                    ? Format(Strings.ConfigUpdate_NoteMergedOneFormat, move)
+                    : Format(Strings.ConfigUpdate_NoteMergedManyFormat, move, outcome.Carried.Count),
+                Also(outcome)),
+
+            ConfigOutcomeKind.Replaced => Then(
+                Archive(report) is { } folder
+                    ? Format(Strings.ConfigUpdate_NoteReplacedWhereFormat, move, folder)
+                    : Format(Strings.ConfigUpdate_NoteReplacedFormat, move),
+                Reason(outcome.Reason)),
+
+            ConfigOutcomeKind.KeptMine => Format(Strings.ConfigUpdate_NoteKeptMineFormat, move),
+            ConfigOutcomeKind.DefaultsUpdated => Format(Strings.ConfigUpdate_NoteDefaultsUpdatedFormat, move),
+            ConfigOutcomeKind.Preserved => Format(Strings.ConfigUpdate_NotePreservedFormat, move),
+            ConfigOutcomeKind.NotUpdated => Format(Strings.ConfigUpdate_NoteNotUpdatedFormat, move),
+            ConfigOutcomeKind.Added => Format(Strings.ConfigUpdate_NoteAddedFormat, report.ToVersion),
+            _ => Format(Strings.ConfigUpdate_NoteUnchangedFormat, move),
         };
     }
 
     // What each policy means, in the one line under the dropdown.
     public static string PolicyNote(ModConfigPolicy policy) => policy switch
     {
-        ModConfigPolicy.KeepMine =>
-            "Your file is left exactly as it is. A setting the new version adds will be missing from it, "
-            + "which some mods handle and some don't.",
-        ModConfigPolicy.TakeNew =>
-            "The new version's file wins. Your copy is kept in Data\\LegacyConfigs so you can put values back by hand.",
-        _ =>
-            "The new version's file is used, with the settings you changed carried into it. A setting the update "
-            + "adds arrives at its default; one it removes is reported and dropped.",
+        ModConfigPolicy.KeepMine => Strings.ConfigUpdate_PolicyKeepMine,
+        ModConfigPolicy.TakeNew => Strings.ConfigUpdate_PolicyTakeNew,
+        _ => Strings.ConfigUpdate_PolicyMerge,
     };
 
-    private static string Settings(int count) => count == 1 ? "1 setting" : $"{count} settings";
+    //
+    // The rest of a merge's story, only when there is one. Three whole sentences rather than a
+    // clause built by joining parts with " and ": which conjunction, where it goes and what
+    // punctuation surrounds it are all per-language.
+    //
+    private static string? Also(ConfigFileOutcome outcome) =>
+        (outcome.Dropped.Count, outcome.UserAdded.Count) switch
+        {
+            ( > 0, > 0) => Format(
+                Strings.ConfigUpdate_AlsoBothFormat, outcome.Dropped.Count, outcome.UserAdded.Count),
+            ( > 0, _) => Format(Strings.ConfigUpdate_AlsoDroppedFormat, outcome.Dropped.Count),
+            (_, > 0) => Format(Strings.ConfigUpdate_AlsoAddedFormat, outcome.UserAdded.Count),
+            _ => null,
+        };
 
-    // The rest of a merge's story, only when there is one.
-    private static string Also(ConfigFileOutcome outcome)
+    // Nullable: a replacement that recorded no reason falls through to no second sentence.
+    private static string? Reason(ConfigReplaceReason? reason) => reason switch
     {
-        var parts = new List<string>();
-        if (outcome.Dropped.Count > 0) parts.Add($"{outcome.Dropped.Count} the update no longer has");
-        if (outcome.UserAdded.Count > 0) parts.Add($"{outcome.UserAdded.Count} you added yourself, which it could not place");
+        ConfigReplaceReason.NoBaseline => Strings.ConfigUpdate_ReasonNoBaseline,
+        ConfigReplaceReason.TakeNewPolicy => Strings.ConfigUpdate_ReasonTakeNew,
+        ConfigReplaceReason.NotMergeable => Strings.ConfigUpdate_ReasonNotMergeable,
+        ConfigReplaceReason.TooLarge => Strings.ConfigUpdate_ReasonTooLarge,
+        _ => null,
+    };
 
-        return parts.Count == 0 ? string.Empty : $", and reported {string.Join(" and ", parts)}";
-    }
+    // Sentence, space, sentence - and nothing at all when there is no second one.
+    private static string Then(string sentence, string? next) =>
+        string.IsNullOrEmpty(next) ? sentence : sentence + " " + next;
+
+    private static string Format(string format, params object?[] values) =>
+        string.Format(CultureInfo.CurrentCulture, format, values);
+
+    private static string FileName(List<ConfigFileOutcome> files) => Path.GetFileName(files[0].Path);
+
+    // Only the leaf name: the rest of the path is already in the sentence.
+    private static string? Archive(ConfigUpdateReport report) =>
+        report.ArchiveFolder is { } folder ? Path.GetFileName(folder) : null;
 
     private static List<ConfigFileOutcome> Of(ConfigUpdateReport report, ConfigOutcomeKind kind) =>
         [.. report.Files.Where(f => f.Kind == kind)];

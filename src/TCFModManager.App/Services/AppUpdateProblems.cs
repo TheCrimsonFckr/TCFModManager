@@ -1,3 +1,5 @@
+using System.Globalization;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.Services;
@@ -17,38 +19,56 @@ public static class AppUpdateProblems
 {
     public static string Describe(AppUpdateException problem) => problem.Reason switch
     {
-        AppUpdateFailure.NoDownloadFile =>
-            $"sp-mod.com lists {Version(problem)} but has no file attached to it. "
-            + "Open the mod page and download it manually.",
+        AppUpdateFailure.NoDownloadFile => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.AppUpdate_NoDownloadFileFormat,
+            Version(problem)),
 
-        AppUpdateFailure.DownloadNotReadable =>
-            "The downloaded file isn't a readable zip - the download may have been interrupted. Try again.",
+        AppUpdateFailure.DownloadNotReadable => Strings.AppUpdate_DownloadNotReadable,
 
-        AppUpdateFailure.ReleaseMissingExe =>
-            $"The {Version(problem)} release doesn't contain {Exe(problem)} where this app expects it. "
-            + "Download it from the mod page and copy it over by hand instead.",
+        AppUpdateFailure.ReleaseMissingExe => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.AppUpdate_ReleaseMissingExeFormat,
+            Version(problem),
+            Exe(problem)),
 
-        AppUpdateFailure.StagedBuildMissingExe =>
-            $"The staged update is missing {Exe(problem)} - nothing was changed.",
+        AppUpdateFailure.StagedBuildMissingExe => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.AppUpdate_StagedMissingExeFormat,
+            Exe(problem)),
 
         AppUpdateFailure.StagedBuildTooSmall => problem.StagedExeBytes is { } bytes
-            ? $"The staged {Exe(problem)} is only {bytes / 1024}KB, which is far too small to be a real build "
-                + "- nothing was changed."
-            : $"The staged {Exe(problem)} is far too small to be a real build - nothing was changed.",
+            ? string.Format(
+                CultureInfo.CurrentCulture,
+                Strings.AppUpdate_StagedTooSmallSizedFormat,
+                Exe(problem),
+                bytes / 1024)
+            : string.Format(
+                CultureInfo.CurrentCulture,
+                Strings.AppUpdate_StagedTooSmallFormat,
+                Exe(problem)),
 
-        AppUpdateFailure.UpdaterWouldNotStart =>
-            "Couldn't start the updater script. The new version is downloaded and unpacked in "
-            + $"{problem.Folder} - close the app and copy what's in there over this folder to finish by hand.",
+        AppUpdateFailure.UpdaterWouldNotStart => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.AppUpdate_UpdaterWouldNotStartFormat,
+            problem.Folder),
 
-        AppUpdateFailure.AppFolderNotWritable =>
-            $"This app can't write to its own folder ({problem.Folder}), so it can't update itself in place. "
-            + "Move it somewhere outside Program Files, or download the new version from the mod page and "
-            + "replace it by hand.",
+        AppUpdateFailure.AppFolderNotWritable => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.AppUpdate_FolderNotWritableFormat,
+            problem.Folder),
 
         AppUpdateFailure.NotEnoughFreeSpace => problem is { RequiredBytes: { } required, AvailableBytes: { } free }
-            ? $"Not enough free space on {problem.DriveName} to download and unpack the update - "
-                + $"about {required / (1024 * 1024)}MB is needed, {free / (1024 * 1024)}MB is free."
-            : $"Not enough free space on {problem.DriveName} to download and unpack the update.",
+            ? string.Format(
+                CultureInfo.CurrentCulture,
+                Strings.AppUpdate_NoSpaceSizedFormat,
+                problem.DriveName,
+                required / (1024 * 1024),
+                free / (1024 * 1024))
+            : string.Format(
+                CultureInfo.CurrentCulture,
+                Strings.AppUpdate_NoSpaceFormat,
+                problem.DriveName),
 
         // Only reachable if a case is added to AppUpdateFailure without one being added here. The
         // fallback is the same advice as an unexpected failure, because that is what it is.
@@ -60,13 +80,19 @@ public static class AppUpdateProblems
     // nobody anticipated, a permissions oddity. There is nothing specific to say, so this says the
     // one thing that is always true and always useful.
     //
-    public static string Unexpected(Exception problem) =>
-        $"The update failed: {problem.Message}. Nothing was changed - download it from the mod page "
-        + "and replace this folder by hand if it keeps happening.";
+    public static string Unexpected(Exception problem) => string.Format(
+        CultureInfo.CurrentCulture,
+        Strings.AppUpdate_UnexpectedFormat,
+        problem.Message);
 
     // The installer always fills these in for the cases that use them; the fallbacks exist so a
     // future case that forgets to still reads as a sentence.
-    private static string Version(AppUpdateException problem) => problem.Version ?? "the new version";
+    //
+    // Both fallbacks are keyed rather than left in English, and both sit in the slot a version
+    // number or a file name would occupy - a noun phrase standing in for a value, not a fragment of
+    // the sentence around it, which is why these are spliced where a verb phrase would not be.
+    //
+    private static string Version(AppUpdateException problem) => problem.Version ?? Strings.AppUpdate_TheNewVersion;
 
-    private static string Exe(AppUpdateException problem) => problem.ExeName ?? "the app executable";
+    private static string Exe(AppUpdateException problem) => problem.ExeName ?? Strings.AppUpdate_TheAppExecutable;
 }

@@ -1,3 +1,5 @@
+using System.Globalization;
+using TCFModManager.App.Localization;
 using TCFModManager.App.ViewModels;
 using TCFModManager.Core.Services;
 
@@ -23,40 +25,51 @@ public static class ModInstallProblems
 
         ModInstallFailure.NoDownloadLink => NoDownloadLink(problem.ModName, problem.Version),
 
-        ModInstallFailure.UnrecognisedArchive =>
-            $"{problem.ModName} {problem.Version}'s archive doesn't look like a normal SPT mod package "
-            + "(no BepInEx/user/SPT folder found in it) - install it manually instead.",
+        ModInstallFailure.UnrecognisedArchive => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.ModInstall_UnrecognisedArchiveFormat,
+            problem.ModName,
+            problem.Version),
 
         // The inner exception is what actually went wrong part way through, and it is the only
         // thing here that says why - so it is quoted rather than summarised.
-        ModInstallFailure.PartlyInstalled =>
-            $"{problem.ModName} {problem.Version} was only partly installed - {problem.PlacedFiles} of "
-            + $"{problem.TotalFiles} files were placed before this failed: {problem.InnerException?.Message} "
-            + "Close SPT and its server, then install it again.",
+        ModInstallFailure.PartlyInstalled => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.ModInstall_PartlyInstalledFormat,
+            problem.ModName,
+            problem.Version,
+            problem.PlacedFiles,
+            problem.TotalFiles,
+            problem.InnerException?.Message),
 
-        ModInstallFailure.DownloadIncomplete =>
-            $"The download stopped early - {Size(problem.ReceivedBytes)} of {Size(problem.ExpectedBytes)} "
-            + "arrived, so the archive was incomplete and nothing was installed. Retry it; if it keeps "
-            + "stopping, sp-mod.com's file server is cutting the transfer short.",
+        ModInstallFailure.DownloadIncomplete => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.ModInstall_DownloadIncompleteFormat,
+            Size(problem.ReceivedBytes),
+            Size(problem.ExpectedBytes)),
 
-        ModInstallFailure.UnsafeArchiveEntry =>
-            $"Archive entry \"{problem.ArchiveEntry}\" would extract outside the target folder - "
-            + "refusing to extract it.",
+        ModInstallFailure.UnsafeArchiveEntry => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.ModInstall_UnsafeArchiveEntryFormat,
+            problem.ArchiveEntry),
 
-        _ => $"Couldn't finish that: {problem.Reason}.",
+        _ => string.Format(CultureInfo.CurrentCulture, Strings.ModInstall_UnexpectedFormat, problem.Reason),
     };
 
     // Bytes as the Downloads page writes them, so one failure doesn't spell sizes its own way.
     private static string Size(long? bytes) =>
-        bytes is null ? "an unknown amount" : DownloadQueueItemViewModel.SizeLabel(bytes.Value);
+        bytes is null ? Strings.Common_UnknownAmount : DownloadQueueItemViewModel.SizeLabel(bytes.Value);
 
     //
     // Public for the same reason InstallInUse is: the addon rows say this before anything is
     // attempted, where the switch above says it as a refusal at install time. One situation, and it
     // used to be two sentences - one of them not naming where the link was missing from.
     //
-    public static string NoDownloadLink(string? modName, string? version) =>
-        $"{modName} {version} has no download link on sp-mod.com.";
+    public static string NoDownloadLink(string? modName, string? version) => string.Format(
+        CultureInfo.CurrentCulture,
+        Strings.ModInstall_NoDownloadLinkFormat,
+        modName,
+        version);
 
     //
     // Public because the pages check for a running install BEFORE asking the user anything, so a
@@ -64,19 +77,27 @@ public static class ModInstallProblems
     // Those checks used to build their own version of this sentence, which is how the app ended up
     // with three wordings of it that did not agree.
     //
+    //
+    // One whole sentence per action rather than one sentence with the action dropped into it. The
+    // old shape spliced a verb phrase - "installing a mod" - into the middle of a sentence, which
+    // is the fragment problem D8 describes: a translator handed "installing a mod" on its own has
+    // no way to make it agree with the sentence around it, and several languages would not put it
+    // in that position at all.
+    //
+    // The process names are joined by TextLists rather than " and " for the same reason.
+    //
     public static string InstallInUse(IReadOnlyList<string> running, ModInstallAction action) =>
-        $"Close {string.Join(" and ", running)} before {Doing(action)} - "
-        + "files inside the SPT install are locked while it's running.";
+        string.Format(CultureInfo.CurrentCulture, Sentence(action), TextLists.Join(running));
 
-    private static string Doing(ModInstallAction action) => action switch
+    private static string Sentence(ModInstallAction action) => action switch
     {
-        ModInstallAction.Install => "installing a mod",
-        ModInstallAction.Remove => "removing a mod",
-        ModInstallAction.Disable => "disabling a mod",
-        ModInstallAction.Enable => "enabling a mod",
-        ModInstallAction.Undo => "undoing a change",
-        ModInstallAction.ApplyList => "applying a mod list",
-        ModInstallAction.SortOutDuplicate => "sorting out a duplicated mod",
-        _ => "changing your mods",
+        ModInstallAction.Install => Strings.ModInstall_InUseInstallFormat,
+        ModInstallAction.Remove => Strings.ModInstall_InUseRemoveFormat,
+        ModInstallAction.Disable => Strings.ModInstall_InUseDisableFormat,
+        ModInstallAction.Enable => Strings.ModInstall_InUseEnableFormat,
+        ModInstallAction.Undo => Strings.ModInstall_InUseUndoFormat,
+        ModInstallAction.ApplyList => Strings.ModInstall_InUseApplyListFormat,
+        ModInstallAction.SortOutDuplicate => Strings.ModInstall_InUseSortOutFormat,
+        _ => Strings.ModInstall_InUseGenericFormat,
     };
 }

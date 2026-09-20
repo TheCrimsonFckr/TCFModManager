@@ -1,3 +1,5 @@
+using System.Globalization;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.ServerMap;
 
@@ -12,25 +14,23 @@ namespace TCFModManager.App.Services;
 // install without the mod. Only the certificate case is worth a warning, and it says what actually
 // changed rather than the word "insecure".
 //
+// Every sentence is one key. What this file used to do - append ", running SPT 3.10" to one
+// sentence, splice "3 mods" into another, glue ": reason" onto the end of a third - is the shape
+// D8 rules out, because none of those pieces can be placed by somebody translating them alone.
+//
 public static class ServerMapProblems
 {
     public static string Describe(ServerHelloProbe probe) => probe.Problem switch
     {
-        ServerMapProblem.None => probe.Hello is null
-            ? ""
-            : $"Connected to {Name(probe)}{SptVersion(probe)}.{FirstConnection(probe)}",
+        ServerMapProblem.None => probe.Hello is null ? string.Empty : Connected(probe),
 
-        ServerMapProblem.NoAddress =>
-            "No server address set - enter the same address you put in the SPT launcher.",
+        ServerMapProblem.NoAddress => Strings.ServerMap_NoAddress,
 
-        ServerMapProblem.InvalidAddress =>
-            $"\"{probe.Endpoint.Host}\" and port {probe.Endpoint.Port} don't make an address this "
-            + "app can dial. The port has to be a number between 1 and 65535.",
+        ServerMapProblem.InvalidAddress => Format(
+            Strings.ServerMap_InvalidAddressFormat, probe.Endpoint.Host, probe.Endpoint.Port),
 
-        ServerMapProblem.Unreachable =>
-            $"Nothing answered at {probe.Endpoint.Host}:{probe.Endpoint.Port}. The server may not be "
-            + "running, or the address or port may be wrong - it's the same one you use in the SPT "
-            + "launcher.",
+        ServerMapProblem.Unreachable => Format(
+            Strings.ServerMap_UnreachableFormat, probe.Endpoint.Host, probe.Endpoint.Port),
 
         //
         // Both fingerprints are named because this is the one case where the user has to make a
@@ -38,36 +38,28 @@ public static class ServerMapProblems
         // necessarily an attack: a server rebuilt from scratch, or reached through a tunnel that
         // terminates TLS itself, presents a different certificate for entirely ordinary reasons.
         //
-        ServerMapProblem.CertificateRejected =>
-            $"{probe.Endpoint.Host} presented a different certificate than the one this app "
-            + "recorded the first time it connected.\n\n"
-            + $"Expected:  {Short(probe.ExpectedThumbprint)}\n"
-            + $"Presented: {Short(probe.ActualThumbprint)}\n\n"
-            + "That happens legitimately if the server was rebuilt or you're reaching it through a "
-            + "tunnel that handles the encryption itself. It also happens if something is sitting "
-            + "between you and the server. Trust the new one only if you know which it is.",
+        ServerMapProblem.CertificateRejected => Format(
+            Strings.ServerMap_CertificateChangedFormat,
+            probe.Endpoint.Host,
+            Short(probe.ExpectedThumbprint),
+            Short(probe.ActualThumbprint)),
 
         //
         // A plain SPT server 404s the route and a stub whose payload is missing 503s it - the same
         // answer either way, so the wording covers both without guessing which.
         //
-        ServerMapProblem.NotServerMap =>
-            $"Something is running at {probe.Endpoint.Host}:{probe.Endpoint.Port}, but it isn't a "
-            + "server with the Server Map mod installed. Ask whoever runs it to add it - the map "
-            + "needs the mod on the server, not just this app.",
+        ServerMapProblem.NotServerMap => Format(
+            Strings.ServerMap_NotServerMapFormat, probe.Endpoint.Host, probe.Endpoint.Port),
 
         ServerMapProblem.ProtocolMismatch when probe.ServerProtocol > ServerMapClient.SupportedProtocol =>
-            $"That server's Server Map is newer than this app understands (it speaks version "
-            + $"{probe.ServerProtocol}, this app speaks {ServerMapClient.SupportedProtocol}). Update "
-            + "TCF Mod Manager.",
+            Format(Strings.ServerMap_ProtocolNewerFormat, probe.ServerProtocol, ServerMapClient.SupportedProtocol),
 
         ServerMapProblem.ProtocolMismatch =>
-            $"That server's Server Map is older than this app understands (it speaks version "
-            + $"{probe.ServerProtocol}, this app speaks {ServerMapClient.SupportedProtocol}). Ask "
-            + "whoever runs it to update the mod.",
+            Format(Strings.ServerMap_ProtocolOlderFormat, probe.ServerProtocol, ServerMapClient.SupportedProtocol),
 
         // The inner exception is the only thing that says why, so it is quoted rather than summarised.
-        _ => $"Couldn't reach {probe.Endpoint.Host}:{probe.Endpoint.Port}: {probe.Error?.Message}",
+        _ => Format(
+            Strings.ServerMap_ReachFailedFormat, probe.Endpoint.Host, probe.Endpoint.Port, probe.Error?.Message),
     };
 
     //
@@ -77,8 +69,8 @@ public static class ServerMapProblems
     //
     public static string DescribeState(ServerHelloProbe? probe, bool configured) => probe switch
     {
-        null when !configured => "Not set up. Enter a server address to connect.",
-        null => "Not connected yet.",
+        null when !configured => Strings.ServerMap_NotSetUp,
+        null => Strings.ServerMap_NotConnected,
         _ => Describe(probe),
     };
 
@@ -94,15 +86,24 @@ public static class ServerMapProblems
     public static string DescribeList(ServerMapListResult result, ModList? held, bool servingOwnList = false)
         => result.Problem switch
     {
+        // Two keys per case until S5 gives the count a plural rule.
         ServerMapProblem.None when result.List is not null && servingOwnList =>
-            $"This server is serving your own list \"{result.List.Name}\" (revision "
-            + $"{result.List.Revision}, {Mods(result.List.Entries.Count)}). It stays yours to edit on "
-            + "the Mod lists page - publish it again after a change to update what the server hands out.",
+            result.List.Entries.Count == 1
+                ? Format(Strings.ServerMap_ServingOwnListOneFormat, result.List.Name, result.List.Revision)
+                : Format(
+                    Strings.ServerMap_ServingOwnListManyFormat,
+                    result.List.Name,
+                    result.List.Revision,
+                    result.List.Entries.Count),
 
         ServerMapProblem.None when result.List is not null =>
-            $"\"{result.List.Name}\" (revision {result.List.Revision}, {Mods(result.List.Entries.Count)}) "
-            + "is saved in your mod lists. Applying it is done from the Mod lists page, which shows "
-            + "what would change first.",
+            result.List.Entries.Count == 1
+                ? Format(Strings.ServerMap_ListSavedOneFormat, result.List.Name, result.List.Revision)
+                : Format(
+                    Strings.ServerMap_ListSavedManyFormat,
+                    result.List.Name,
+                    result.List.Revision,
+                    result.List.Entries.Count),
 
         //
         // Not a failure. A server can run the mod and deliberately publish nothing.
@@ -115,39 +116,27 @@ public static class ServerMapProblems
         // unpublish that never happened.
         //
         ServerMapProblem.NoList when held is not null =>
-            $"This server isn't publishing a mod list. \"{held.Name}\" is still in your mod lists as "
-            + "you last fetched it - though if you were expecting to see it here, check the address "
-            + "is the server you published it to, and that the file reached that server's config "
-            + "folder.",
+            Format(Strings.ServerMap_NoListHeldFormat, held.Name),
 
-        ServerMapProblem.NoList =>
-            "This server doesn't publish a mod list. Its operator publishes one with \"Publish to "
-            + "this server\" on the Mod lists page, from the app on the machine running the server.",
+        ServerMapProblem.NoList => Strings.ServerMap_NoList,
 
         //
         // Two sentences for one status code, because the next action is different. One is "go ask
         // someone", the other is "what you were given is wrong or has been changed".
         //
-        ServerMapProblem.KeyRequired =>
-            "This server needs a shared key before it will send its list. Ask whoever runs it for "
-            + "the key and put it in the box above - they'll find it in the mod's config folder, in "
-            + "servermap-key.txt.",
+        ServerMapProblem.KeyRequired => Strings.ServerMap_KeyRequired,
 
-        ServerMapProblem.KeyRejected =>
-            "The server didn't accept the key. Check it against the one whoever runs the server has "
-            + "- it may have been re-generated since they sent it to you. Dashes and capitals don't "
-            + "matter.",
+        ServerMapProblem.KeyRejected => Strings.ServerMap_KeyRejected,
 
-        ServerMapProblem.ListUnreadable =>
-            $"The server sent a list this app couldn't read - {result.ParseError}.",
+        ServerMapProblem.ListUnreadable => Format(Strings.ServerMap_ListUnreadableFormat, result.ParseError),
 
-        ServerMapProblem.Unreachable =>
-            "The server answered the first time and then stopped, so the list wasn't fetched.",
+        ServerMapProblem.Unreachable => Strings.ServerMap_ListFetchDropped,
 
-        ServerMapProblem.CertificateRejected =>
-            "The list wasn't fetched - the server's certificate is not the one this app recorded.",
+        ServerMapProblem.CertificateRejected => Strings.ServerMap_ListCertificateRejected,
 
-        _ => $"The list couldn't be fetched{(result.Error is null ? "" : $": {result.Error.Message}")}.",
+        _ => result.Error is null
+            ? Strings.ServerMap_ListFailed
+            : Format(Strings.ServerMap_ListFailedReasonFormat, result.Error.Message),
     };
 
     //
@@ -156,41 +145,43 @@ public static class ServerMapProblems
     //
     public static string DescribeKey(bool hasKey, bool serverRequiresKey) => (hasKey, serverRequiresKey) switch
     {
-        (false, true) =>
-            "This server needs a key. Whoever runs it will find it in the Server Map mod's config "
-            + "folder, in servermap-key.txt.",
-
-        (false, false) =>
-            "Only needed if the server asks for one. It's generated by the server, not chosen - it "
-            + "says you were told about that server, and nothing more.",
-
-        (true, _) =>
-            "Sent with every request except the first handshake. It identifies nobody and protects "
-            + "nothing on its own, so it isn't a password - don't reuse one anywhere else.",
+        (false, true) => Strings.ServerMap_KeyNeeded,
+        (false, false) => Strings.ServerMap_KeyOptional,
+        (true, _) => Strings.ServerMap_KeyHeld,
     };
 
+    //
     // What a server says it publishes, before anything is fetched.
+    //
+    // Four whole phrases rather than one built from a name, a revision and an optional size: the
+    // brackets, the order and the commas inside them are not the same in every language, and a
+    // piece like ", 3 mods" cannot be placed by anybody translating it on its own.
+    //
     public static string DescribePublished(ServerHello hello)
     {
-        if (!hello.HasList) return "This server doesn't publish a mod list.";
+        if (!hello.HasList) return Strings.ServerMap_PublishesNothing;
 
-        var name = string.IsNullOrWhiteSpace(hello.ListName) ? "A mod list" : $"\"{hello.ListName}\"";
-        var size = hello.ListEntryCount is { } count ? $", {Mods(count)}" : "";
+        var revision = hello.ListRevision?.ToString(CultureInfo.CurrentCulture) ?? Strings.Common_Unknown;
+        var named = !string.IsNullOrWhiteSpace(hello.ListName);
 
-        return $"{name} (revision {hello.ListRevision?.ToString() ?? "unknown"}{size})";
+        return (named, hello.ListEntryCount) switch
+        {
+            (true, 1) => Format(Strings.ServerMap_PublishedNamedOneFormat, hello.ListName, revision),
+            (true, { } count) => Format(Strings.ServerMap_PublishedNamedManyFormat, hello.ListName, revision, count),
+            (true, null) => Format(Strings.ServerMap_PublishedNamedFormat, hello.ListName, revision),
+            (false, 1) => Format(Strings.ServerMap_PublishedUnnamedOneFormat, revision),
+            (false, { } count) => Format(Strings.ServerMap_PublishedUnnamedManyFormat, revision, count),
+            _ => Format(Strings.ServerMap_PublishedUnnamedFormat, revision),
+        };
     }
-
-    private static string Mods(int count) => count == 1 ? "1 mod" : $"{count} mods";
 
     //
     // How the pin is described in Options. Deliberately says what it is FOR: on its own, a hex
     // string in a settings page means nothing to anyone.
     //
     public static string DescribePin(string? thumbprint) => string.IsNullOrWhiteSpace(thumbprint)
-        ? "No certificate recorded yet. The first time this app connects it records the one the "
-          + "server presents, and warns you if it ever changes."
-        : $"Trusting certificate {Short(thumbprint)}. SPT's certificate is self-signed for "
-          + "localhost, so this fingerprint - not the name on it - is what identifies the server.";
+        ? Strings.ServerMap_NoPinRecorded
+        : Format(Strings.ServerMap_PinRecordedFormat, Short(thumbprint));
 
     //
     // A 64-character hex string is unreadable and unusable for comparison. The ends are what people
@@ -198,22 +189,33 @@ public static class ServerMapProblems
     //
     public static string Short(string? thumbprint)
     {
-        if (string.IsNullOrWhiteSpace(thumbprint)) return "(none)";
+        if (string.IsNullOrWhiteSpace(thumbprint)) return Strings.ServerMap_NoThumbprint;
 
         var value = thumbprint.Trim();
 
         return value.Length <= 20 ? value : $"{value[..8]}...{value[^8..]}";
     }
 
-    private static string Name(ServerHelloProbe probe) =>
-        string.IsNullOrWhiteSpace(probe.Hello!.ServerName) ? probe.Endpoint.Host : probe.Hello.ServerName!;
+    //
+    // One sentence, plus the pin sentence when this is the connection that recorded it. Said once,
+    // on that connection, so recording the certificate is something the user saw happen rather than
+    // something that happened to them.
+    //
+    private static string Connected(ServerHelloProbe probe)
+    {
+        var name = string.IsNullOrWhiteSpace(probe.Hello!.ServerName)
+            ? probe.Endpoint.Host
+            : probe.Hello.ServerName!;
 
-    private static string SptVersion(ServerHelloProbe probe) =>
-        string.IsNullOrWhiteSpace(probe.Hello!.SptVersion) ? "" : $", running SPT {probe.Hello.SptVersion}";
+        var sentence = string.IsNullOrWhiteSpace(probe.Hello.SptVersion)
+            ? Format(Strings.ServerMap_ConnectedFormat, name)
+            : Format(Strings.ServerMap_ConnectedWithVersionFormat, name, probe.Hello.SptVersion);
 
-    // Said once, on the connection that establishes the pin, so recording it is something the user
-    // saw happen rather than something that happened to them.
-    private static string FirstConnection(ServerHelloProbe probe) => probe.PinnedOnThisConnection
-        ? $" Recorded its certificate ({Short(probe.ActualThumbprint)}) - you'll be warned if it changes."
-        : "";
+        return probe.PinnedOnThisConnection
+            ? sentence + " " + Format(Strings.ServerMap_FirstConnectionFormat, Short(probe.ActualThumbprint))
+            : sentence;
+    }
+
+    private static string Format(string format, params object?[] values) =>
+        string.Format(CultureInfo.CurrentCulture, format, values);
 }
