@@ -5,7 +5,7 @@ using System.Windows.Markup;
 namespace TCFModManager.App.Localization;
 
 //
-// {loc:Str Installed_Rescan} - a string from Strings.resx, in the language currently chosen.
+// {loc:Str Common_Rescan} - a string from Strings.resx, in the language currently chosen.
 //
 // Hands back a binding rather than the string itself, which is the whole point: a plain string
 // would be read once when the page is parsed and stay in whichever language that was. Bound to
@@ -13,7 +13,7 @@ namespace TCFModManager.App.Localization;
 // the dropdown without being rebuilt - and the pages that cache themselves (NavigationCacheMode)
 // keep their filters and scroll position through it.
 //
-// XAML only. In C#, read Strings.Installed_Rescan, where the key is checked by the compiler.
+// XAML only. In C#, read Strings.Common_Rescan, where the key is checked by the compiler.
 //
 [MarkupExtensionReturnType(typeof(string))]
 public sealed class StrExtension : MarkupExtension

@@ -57,7 +57,7 @@
 
   <!--
     Generates the Strings accessor from Localization\Strings.resx before anything is compiled, so a
-    C# call site reads Strings.Installed_Rescan and the compiler catches a key that no longer exists.
+    C# call site reads Strings.Common_Rescan and the compiler catches a key that no longer exists.
 
     Hand-rolled rather than the SDK's own StronglyTypedFileName metadata, which cannot work in a WPF
     project: the SDK generates during PrepareResources, and PrepareResources depends on

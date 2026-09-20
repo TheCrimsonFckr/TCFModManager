@@ -13,7 +13,7 @@ namespace TCFModManager.App.Localization;
 // an indexer, and one notification saying every index changed, which is what makes a language
 // switch repaint the open page instead of needing every page rebuilt.
 //
-// C# call sites do not come here. They read Strings.Installed_Rescan directly, which the compiler
+// C# call sites do not come here. They read Strings.Common_Rescan directly, which the compiler
 // checks; this exists for XAML, where the key is a string and nothing would catch a typo (the test
 // in TCFModManager.Core.Tests is what catches it).
 //

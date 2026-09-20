@@ -1279,4 +1279,125 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="MainWindow_NoInstallMessage" xml:space="preserve">
     <value>You must set your SPT root in the settings first</value>
   </data>
+  <data name="Common_NoSptInstallFolder" xml:space="preserve">
+    <value>No SPT install folder set - configure it on the Options page first.</value>
+    <comment>Said by every page that needs the install folder. Options is the page name, as in the sidebar.</comment>
+  </data>
+  <data name="ModStatus_Installed" xml:space="preserve">
+    <value>Installed - up to date</value>
+    <comment>Tooltip on a mod's status icon.</comment>
+  </data>
+  <data name="ModStatus_UpdateAvailable" xml:space="preserve">
+    <value>Installed - update available</value>
+  </data>
+  <data name="ModStatus_NotInstalled" xml:space="preserve">
+    <value>Not installed</value>
+  </data>
+  <data name="ModStatus_NoCompatibleVersion" xml:space="preserve">
+    <value>No version compatible with your SPT</value>
+  </data>
+  <data name="ModStatus_Unknown" xml:space="preserve">
+    <value>Installed - update status unknown</value>
+  </data>
+  <data name="ModStatus_Disabled" xml:space="preserve">
+    <value>Disabled - installed, but not loaded by SPT</value>
+  </data>
+  <data name="ModStatus_Conflict" xml:space="preserve">
+    <value>Conflict - two mods need incompatible versions</value>
+  </data>
+  <data name="ModListFile_TypeName" xml:space="preserve">
+    <value>TCF mod list</value>
+    <comment>The name beside the .tcfmodlist pattern in a file dialog's type list.</comment>
+  </data>
+  <data name="ModListFile_AllFiles" xml:space="preserve">
+    <value>All files</value>
+    <comment>The name beside the *.* pattern in a file dialog's type list. Windows has its own wording for this - use it.</comment>
+  </data>
+  <data name="Api_RateLimitedFormat" xml:space="preserve">
+    <value>Rate limited by sp-mod.com - try again in {0:N0}s.</value>
+    <comment>{0} is a number of seconds. The s is the unit - shorten or expand it as your language does.</comment>
+  </data>
+  <data name="Api_ErrorFormat" xml:space="preserve">
+    <value>sp-mod.com error: {0}</value>
+    <comment>{0} is the message the site returned, which arrives in English and is not translated.</comment>
+  </data>
+  <data name="Api_NetworkErrorFormat" xml:space="preserve">
+    <value>Network error: {0}</value>
+    <comment>{0} is the message from Windows or .NET, which arrives in the system's language.</comment>
+  </data>
+  <data name="Api_UnreachableFormat" xml:space="preserve">
+    <value>Couldn't reach sp-mod.com: {0}</value>
+  </data>
+  <data name="ModListApply_Cancelled" xml:space="preserve">
+    <value>Cancelled before anything was disabled.</value>
+  </data>
+  <data name="ModListApply_FetchFailedOne" xml:space="preserve">
+    <value>One mod couldn't be downloaded, so nothing was disabled.</value>
+    <comment>Said when exactly one download failed. See ModListApply_FetchFailedManyFormat for the other case - these two become one plural key in S5.</comment>
+  </data>
+  <data name="ModListApply_FetchFailedManyFormat" xml:space="preserve">
+    <value>{0} mods couldn't be downloaded, so nothing was disabled.</value>
+    <comment>{0} is two or more.</comment>
+  </data>
+  <data name="ModListApply_Stopped" xml:space="preserve">
+    <value>Stopped before it finished.</value>
+  </data>
+  <data name="SptLaunch_ServerExeNotFoundFormat" xml:space="preserve">
+    <value>No SPT server executable in {0} - check the install folder on the Options page.</value>
+    <comment>{0} is a folder path. One key per target rather than a shared sentence with the name of the thing dropped into it - a noun spliced into a sentence cannot be translated.</comment>
+  </data>
+  <data name="SptLaunch_ClientExeNotFoundFormat" xml:space="preserve">
+    <value>No SPT launcher in {0} - check the install folder on the Options page.</value>
+    <comment>{0} is a folder path.</comment>
+  </data>
+  <data name="SptLaunch_HeadlessExeNotFoundFormat" xml:space="preserve">
+    <value>No Fika headless launcher in {0} - check the install folder on the Options page.</value>
+    <comment>{0} is a folder path. Fika is a mod's name and stays as it is.</comment>
+  </data>
+  <data name="SptLaunch_ServerAlreadyRunning" xml:space="preserve">
+    <value>The SPT server is already running.</value>
+  </data>
+  <data name="SptLaunch_ClientAlreadyRunning" xml:space="preserve">
+    <value>The game is already running.</value>
+  </data>
+  <data name="SptLaunch_HeadlessAlreadyRunning" xml:space="preserve">
+    <value>The headless launcher is already running.</value>
+  </data>
+  <data name="SptLaunch_StartFailedFormat" xml:space="preserve">
+    <value>Couldn't start {0}: {1}</value>
+    <comment>{0} is a process name, {1} the reason Windows gave, which arrives in the system's language.</comment>
+  </data>
+  <data name="SptLaunch_ServerNotRunning" xml:space="preserve">
+    <value>The server isn't running, so there's nothing to restart - start it instead.</value>
+  </data>
+  <data name="SptLaunch_HeadlessNotRunning" xml:space="preserve">
+    <value>The headless launcher isn't running, so there's nothing to restart - start it instead.</value>
+  </data>
+  <data name="SptLaunch_StopFailedFormat" xml:space="preserve">
+    <value>Couldn't stop {0}. It may be running as another user or as administrator - closing its window by hand and then starting it again does the same job.</value>
+    <comment>{0} is a process name. Used when Windows gave no reason.</comment>
+  </data>
+  <data name="SptLaunch_StopFailedReasonFormat" xml:space="preserve">
+    <value>Couldn't stop {0}: {1}. It may be running as another user or as administrator - closing its window by hand and then starting it again does the same job.</value>
+    <comment>{0} is a process name, {1} the reason Windows gave. The same sentence as SptLaunch_StopFailedFormat with the reason in it - keep the two consistent.</comment>
+  </data>
+  <data name="SptLaunch_ServerNotFoundHere" xml:space="preserve">
+    <value>No SPT server executable found in this install.</value>
+  </data>
+  <data name="SptLaunch_ClientNotFoundHere" xml:space="preserve">
+    <value>No SPT launcher found in this install.</value>
+  </data>
+  <data name="SptLaunch_HeadlessNotFoundHere" xml:space="preserve">
+    <value>No Fika headless launcher found in this install.</value>
+  </data>
+  <data name="SptLaunch_Running" xml:space="preserve">
+    <value>Running.</value>
+    <comment>The resting line under a button when that thing is up.</comment>
+  </data>
+  <data name="SptLaunch_ClientRunning" xml:space="preserve">
+    <value>Running - the game or its launcher is already open.</value>
+  </data>
+  <data name="SptLaunch_NotRunning" xml:space="preserve">
+    <value>Not running.</value>
+  </data>
 </root>

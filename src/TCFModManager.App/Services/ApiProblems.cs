@@ -1,4 +1,6 @@
+using System.Globalization;
 using System.Net.Http;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.SpModApi;
 
 namespace TCFModManager.App.Services;
@@ -25,13 +27,15 @@ public static class ApiProblems
     //
     public static string Describe(Exception ex) => ex switch
     {
-        SpModApiRateLimitedException limited =>
-            $"Rate limited by sp-mod.com - try again in {limited.RetryAfter?.TotalSeconds ?? 30:N0}s.",
+        SpModApiRateLimitedException limited => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.Api_RateLimitedFormat,
+            limited.RetryAfter?.TotalSeconds ?? 30),
 
-        SpModApiException => $"sp-mod.com error: {ex.Message}",
+        SpModApiException => string.Format(CultureInfo.CurrentCulture, Strings.Api_ErrorFormat, ex.Message),
 
-        HttpRequestException => $"Network error: {ex.Message}",
+        HttpRequestException => string.Format(CultureInfo.CurrentCulture, Strings.Api_NetworkErrorFormat, ex.Message),
 
-        _ => $"Couldn't reach sp-mod.com: {ex.Message}",
+        _ => string.Format(CultureInfo.CurrentCulture, Strings.Api_UnreachableFormat, ex.Message),
     };
 }

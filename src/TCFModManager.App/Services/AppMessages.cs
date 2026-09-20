@@ -1,3 +1,5 @@
+using TCFModManager.App.Localization;
+
 namespace TCFModManager.App.Services;
 
 //
@@ -19,6 +21,8 @@ public static class AppMessages
     // It names the page to go to rather than only the problem, because the folder is set in exactly
     // one place and the user has no other way of knowing which.
     //
-    public const string NoSptInstallFolder =
-        "No SPT install folder set - configure it on the Options page first.";
+    // A property rather than a const since the text became a resource: a const is baked into every
+    // call site at compile time, which would pin all of them to English.
+    //
+    public static string NoSptInstallFolder => Strings.Common_NoSptInstallFolder;
 }

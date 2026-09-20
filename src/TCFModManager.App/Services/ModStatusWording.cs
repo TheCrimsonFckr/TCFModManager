@@ -1,3 +1,4 @@
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.Services;
@@ -16,12 +17,12 @@ public static class ModStatusWording
 {
     public static string Tooltip(ModStatus status) => status switch
     {
-        ModStatus.Installed => "Installed - up to date",
-        ModStatus.UpdateAvailable => "Installed - update available",
-        ModStatus.NotInstalled => "Not installed",
-        ModStatus.NoCompatibleVersion => "No version compatible with your SPT",
-        ModStatus.Unknown => "Installed - update status unknown",
-        ModStatus.Disabled => "Disabled - installed, but not loaded by SPT",
-        _ => "Conflict - two mods need incompatible versions",
+        ModStatus.Installed => Strings.ModStatus_Installed,
+        ModStatus.UpdateAvailable => Strings.ModStatus_UpdateAvailable,
+        ModStatus.NotInstalled => Strings.ModStatus_NotInstalled,
+        ModStatus.NoCompatibleVersion => Strings.ModStatus_NoCompatibleVersion,
+        ModStatus.Unknown => Strings.ModStatus_Unknown,
+        ModStatus.Disabled => Strings.ModStatus_Disabled,
+        _ => Strings.ModStatus_Conflict,
     };
 }

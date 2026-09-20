@@ -1,3 +1,5 @@
+using System.Globalization;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.Services;
@@ -21,17 +23,21 @@ public static class ModListProblems
         ModListStop.InstallInUse =>
             ModInstallProblems.InstallInUse(result.Running, ModInstallAction.ApplyList),
 
-        ModListStop.FetchCancelled =>
-            "Cancelled before anything was disabled.",
+        ModListStop.FetchCancelled => Strings.ModListApply_Cancelled,
 
+        // Two keys until S5 gives this a plural rule: a language with more than two forms cannot
+        // be served by an if.
         ModListStop.FetchFailed => result.FailedFetches == 1
-            ? "One mod couldn't be downloaded, so nothing was disabled."
-            : $"{result.FailedFetches} mods couldn't be downloaded, so nothing was disabled.",
+            ? Strings.ModListApply_FetchFailedOne
+            : string.Format(
+                CultureInfo.CurrentCulture,
+                Strings.ModListApply_FetchFailedManyFormat,
+                result.FailedFetches),
 
         // The refusal already knows which operation was blocked and what is holding the install.
         ModListStop.MovesRefused when result.Refusal is { } refusal =>
             ModInstallProblems.Describe(refusal),
 
-        _ => "Stopped before it finished.",
+        _ => Strings.ModListApply_Stopped,
     };
 }

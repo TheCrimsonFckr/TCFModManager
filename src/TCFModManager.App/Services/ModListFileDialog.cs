@@ -1,3 +1,4 @@
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.Services;
@@ -11,11 +12,7 @@ namespace TCFModManager.App.Services;
 //
 public static class ModListFileDialog
 {
-    private const string ModListName = "TCF mod list";
-
-    private const string AllFilesName = "All files";
-
     public static string Filter =>
-        $"{ModListName} ({ModListFile.FilePattern})|{ModListFile.FilePattern}"
-        + $"|{AllFilesName} ({ModListFile.AllFilesPattern})|{ModListFile.AllFilesPattern}";
+        $"{Strings.ModListFile_TypeName} ({ModListFile.FilePattern})|{ModListFile.FilePattern}"
+        + $"|{Strings.ModListFile_AllFiles} ({ModListFile.AllFilesPattern})|{ModListFile.AllFilesPattern}";
 }
