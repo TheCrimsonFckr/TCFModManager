@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Channels;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -133,9 +134,9 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         SummaryRemaining = remaining > 0 ? DownloadQueueItemViewModel.SizeLabel(remaining) : NoValue;
 
         HasUnsized = unknown > 0;
-        SummaryUnsized = unknown == 1
-            ? Strings.Downloads_SummaryUnsizedOne
-            : Text(Strings.Downloads_SummaryUnsizedManyFormat, unknown);
+        // Just the count: the caption above this box already says what they are, so there is no
+        // sentence for a plural to agree with.
+        SummaryUnsized = unknown.ToString(CultureInfo.CurrentCulture);
 
         SummaryEta = remaining > 0
             && unfinished.FirstOrDefault(i => i.BytesPerSecond is > 0)?.BytesPerSecond is { } rate

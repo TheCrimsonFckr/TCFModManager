@@ -477,12 +477,11 @@ public partial class ModListsViewModel : LocalizedViewModel
 
             if (IsFiltered)
             {
-                return Strings.ModLists_EntriesHeaderFiltered(total, VisibleEntryCount, total);
+                return Text(
+                    Strings.ModLists_EntriesHeaderFilteredFormat, VisibleEntryCount, total);
             }
 
-            return total == 1
-                ? Strings.ModLists_EntriesHeaderOne
-                : Text(Strings.ModLists_EntriesHeaderManyFormat, total);
+            return Text(Strings.ModLists_EntriesHeaderFormat, total);
         }
     }
 
@@ -490,9 +489,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         ? Strings.ModLists_DetailOneMod
         : Text(Strings.ModLists_DetailModsFormat, count);
 
-    public string UnsavedLabel => UnsavedCount == 1
-        ? Strings.ModLists_UnsavedOne
-        : Text(Strings.ModLists_UnsavedManyFormat, UnsavedCount);
+    public string UnsavedLabel => Strings.ModLists_Unsaved(UnsavedCount);
 
     partial void OnSelectedChanged(ModListRowViewModel? value)
     {

@@ -18,9 +18,7 @@ public sealed partial class AddonsSectionViewModel : LocalizedViewModel
 
     public bool HasAddons => Addons.Count > 0;
 
-    public string Heading => Addons.Count == 1
-        ? Strings.Addon_HeadingOne
-        : Text(Strings.Addon_HeadingManyFormat, Addons.Count);
+    public string Heading => Text(Strings.Addon_HeadingFormat, Addons.Count);
 
     // Shown above the list when the parent isn't installed, so every disabled button on it has one
     // explanation rather than the same sentence repeated on each row.

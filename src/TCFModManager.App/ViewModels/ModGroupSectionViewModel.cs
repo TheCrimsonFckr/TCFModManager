@@ -34,9 +34,7 @@ public partial class ModGroupSectionViewModel : LocalizedViewModel
 
     public ObservableCollection<InstalledModCardViewModel> Items { get; } = [];
 
-    public string CountLabel => Items.Count == 1
-        ? Strings.Installed_GroupCountOne
-        : Text(Strings.Installed_GroupCountManyFormat, Items.Count);
+    public string CountLabel => Strings.Installed_GroupCount(Items.Count);
 
     public int DisabledCount => Items.Count(i => i.IsDisabled);
 

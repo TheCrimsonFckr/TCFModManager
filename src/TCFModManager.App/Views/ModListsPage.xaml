@@ -584,7 +584,7 @@
                             FontWeight="SemiBold"
                             Foreground="{DynamicResource SystemFillColorCautionBrush}"
                             Visibility="{Binding HasUnsavedChanges, Converter={StaticResource BoolToVis}}"
-                            Text="{Binding UnsavedLabel, Mode=OneWay, StringFormat={loc:Str ModLists_UnsavedFormat}}" />
+                            Text="{Binding UnsavedLabel, Mode=OneWay}" />
                     </StackPanel>
 
                     <!-- Only once there is something to filter. A search box over an empty list

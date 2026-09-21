@@ -208,9 +208,7 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     public int SelectedCount => _all.Count(m => m.IsSelected);
 
-    public string SelectedCountLabel => SelectedCount == 1
-        ? Strings.Installed_SelectedOne
-        : Text(Strings.Installed_SelectedManyFormat, SelectedCount);
+    public string SelectedCountLabel => Text(Strings.Installed_SelectedFormat, SelectedCount);
 
     //
     // Everything the current filters match, not just the page on screen - which is why the count is

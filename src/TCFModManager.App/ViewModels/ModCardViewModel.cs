@@ -107,9 +107,7 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
 
     public bool HasAddons => AddonCount > 0;
 
-    public string AddonBadgeText => AddonCount == 1
-        ? Strings.Browse_AddonBadgeOne
-        : Text(Strings.Browse_AddonBadgeManyFormat, AddonCount);
+    public string AddonBadgeText => Strings.Browse_AddonBadge(AddonCount);
 
     // 
     // Builds a card. <paramref name="selectedLines"/> is the SPT release lines currently ticked in
