@@ -940,10 +940,6 @@ internal static class Strings
     internal static string Configs_DiscardFormat => LocalizationService.Get("Configs_DiscardFormat");
     internal static string Configs_DiscardTitle => LocalizationService.Get("Configs_DiscardTitle");
     internal static string Configs_NoneFound => LocalizationService.Get("Configs_NoneFound");
-    internal static string Configs_CountOneOne => LocalizationService.Get("Configs_CountOneOne");
-    internal static string Configs_CountOneManyFormat => LocalizationService.Get("Configs_CountOneManyFormat");
-    internal static string Configs_CountManyOneFormat => LocalizationService.Get("Configs_CountManyOneFormat");
-    internal static string Configs_CountManyManyFormat => LocalizationService.Get("Configs_CountManyManyFormat");
     internal static string Configs_ReadFailedFormat => LocalizationService.Get("Configs_ReadFailedFormat");
     internal static string Configs_FileReadFailedFormat => LocalizationService.Get("Configs_FileReadFailedFormat");
     internal static string Configs_SavedFormat => LocalizationService.Get("Configs_SavedFormat");
@@ -1122,7 +1118,7 @@ internal static class Strings
     internal static string Browse_SptPlainFormat => LocalizationService.Get("Browse_SptPlainFormat");
     internal static string Browse_SptVersionUnknown => LocalizationService.Get("Browse_SptVersionUnknown");
     internal static string Browse_TooltipNoVersion => LocalizationService.Get("Browse_TooltipNoVersion");
-    internal static string Browse_TooltipRunsOnOneFormat => LocalizationService.Get("Browse_TooltipRunsOnOneFormat");
+    internal static string Browse_TooltipRunsOnSingleFormat => LocalizationService.Get("Browse_TooltipRunsOnSingleFormat");
     internal static string Browse_TooltipRunsOnRangeFormat => LocalizationService.Get("Browse_TooltipRunsOnRangeFormat");
     internal static string Browse_TooltipNoRequirementFormat => LocalizationService.Get("Browse_TooltipNoRequirementFormat");
     internal static string Browse_TooltipNeedsFormat => LocalizationService.Get("Browse_TooltipNeedsFormat");
@@ -1298,4 +1294,5 @@ internal static class Strings
     internal static string ModLists_EntriesHeaderFilteredFormat => LocalizationService.Get("ModLists_EntriesHeaderFilteredFormat");
     internal static string ModLists_Unsaved(int count, params object?[] values) =>
         LocalizationService.Plural("ModLists_Unsaved", count, values);
+    internal static string Configs_CountFormat => LocalizationService.Get("Configs_CountFormat");
 }

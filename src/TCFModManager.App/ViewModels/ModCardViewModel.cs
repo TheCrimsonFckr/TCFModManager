@@ -291,7 +291,7 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
         if (supported.Count > 0)
         {
             lines.Add(supported.Count == 1
-                ? Text(Strings.Browse_TooltipRunsOnOneFormat, shown.Version, supported[0].Label)
+                ? Text(Strings.Browse_TooltipRunsOnSingleFormat, shown.Version, supported[0].Label)
                 : Text(
                     Strings.Browse_TooltipRunsOnRangeFormat,
                     shown.Version,

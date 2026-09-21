@@ -443,14 +443,9 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .Count();
 
-            StatusMessage = (_all.Count, mods) switch
-            {
-                (0, _) => Strings.Configs_NoneFound,
-                (1, 1) => Strings.Configs_CountOneOne,
-                (1, _) => Text(Strings.Configs_CountOneManyFormat, mods),
-                (_, 1) => Text(Strings.Configs_CountManyOneFormat, _all.Count),
-                _ => Text(Strings.Configs_CountManyManyFormat, _all.Count, mods),
-            };
+            StatusMessage = _all.Count == 0
+                ? Strings.Configs_NoneFound
+                : Text(Strings.Configs_CountFormat, _all.Count, mods);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
