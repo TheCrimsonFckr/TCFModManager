@@ -149,16 +149,12 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
 
             if (Footprint.PatchClassCount > 0)
             {
-                parts.Add(Footprint.PatchClassCount == 1
-                    ? Strings.Footprint_DetailPatchOne
-                    : Text(Strings.Footprint_DetailPatchManyFormat, Footprint.PatchClassCount));
+                parts.Add(Strings.Footprint_DetailPatch(Footprint.PatchClassCount));
             }
 
             if (Footprint.PerFrameTypeCount > 0)
             {
-                parts.Add(Footprint.PerFrameTypeCount == 1
-                    ? Strings.Footprint_DetailComponentOne
-                    : Text(Strings.Footprint_DetailComponentManyFormat, Footprint.PerFrameTypeCount));
+                parts.Add(Strings.Footprint_DetailComponent(Footprint.PerFrameTypeCount));
             }
 
             parts.Add(Size(Footprint.TotalBytes));
@@ -189,9 +185,7 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
             {
                 findings.Add(new FootprintFinding(
                     FootprintArea.Client,
-                    print.PerFrameTypeCount == 1
-                        ? Strings.Footprint_ComponentsOne
-                        : Text(Strings.Footprint_ComponentsManyFormat, print.PerFrameTypeCount),
+                    Strings.Footprint_Components(print.PerFrameTypeCount),
                     Strings.Footprint_ComponentsEffect));
             }
 
@@ -199,9 +193,7 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
             {
                 findings.Add(new FootprintFinding(
                     FootprintArea.ClientCpu,
-                    Of(print.FrameUpdateTypeCount,
-                        Strings.Footprint_FrameUpdateOne,
-                        Strings.Footprint_FrameUpdateManyFormat),
+                    Strings.Footprint_FrameUpdate(print.FrameUpdateTypeCount),
                     Strings.Footprint_FrameUpdateEffect));
             }
 
@@ -209,9 +201,7 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
             {
                 findings.Add(new FootprintFinding(
                     FootprintArea.ClientCpu,
-                    Of(print.PhysicsTypeCount,
-                        Strings.Footprint_PhysicsOne,
-                        Strings.Footprint_PhysicsManyFormat),
+                    Strings.Footprint_Physics(print.PhysicsTypeCount),
                     Strings.Footprint_PhysicsEffect));
             }
 
@@ -219,7 +209,7 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
             {
                 findings.Add(new FootprintFinding(
                     FootprintArea.ClientCpu,
-                    Of(print.GuiTypeCount, Strings.Footprint_GuiOne, Strings.Footprint_GuiManyFormat),
+                    Strings.Footprint_Gui(print.GuiTypeCount),
                     Strings.Footprint_GuiEffect));
             }
 
@@ -227,9 +217,7 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
             {
                 findings.Add(new FootprintFinding(
                     FootprintArea.ClientGpu,
-                    Of(print.ImageEffectTypeCount,
-                        Strings.Footprint_ImageEffectOne,
-                        Strings.Footprint_ImageEffectManyFormat),
+                    Strings.Footprint_ImageEffect(print.ImageEffectTypeCount),
                     Strings.Footprint_ImageEffectEffect));
             }
 
@@ -237,9 +225,7 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
             {
                 findings.Add(new FootprintFinding(
                     FootprintArea.ClientCpu,
-                    Of(print.CameraCallbackTypeCount,
-                        Strings.Footprint_CameraOne,
-                        Strings.Footprint_CameraManyFormat),
+                    Strings.Footprint_Camera(print.CameraCallbackTypeCount),
                     Strings.Footprint_CameraEffect));
             }
 
@@ -247,9 +233,7 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
             {
                 findings.Add(new FootprintFinding(
                     FootprintArea.ClientCpu,
-                    print.PatchClassCount == 1
-                        ? Strings.Footprint_PatchesOne
-                        : Text(Strings.Footprint_PatchesManyFormat, print.PatchClassCount),
+                    Strings.Footprint_Patches(print.PatchClassCount),
                     Strings.Footprint_PatchesEffect));
             }
 
@@ -281,9 +265,7 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
             {
                 findings.Add(new FootprintFinding(
                     FootprintArea.ServerCpu,
-                    Of(print.ServerPatchClassCount,
-                        Strings.Footprint_ServerPatchesOne,
-                        Strings.Footprint_ServerPatchesManyFormat),
+                    Strings.Footprint_ServerPatches(print.ServerPatchClassCount),
                     Strings.Footprint_ServerPatchesEffect));
             }
 
@@ -303,12 +285,12 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
                 Text(Strings.Footprint_DiskFormat, Size(print.TotalBytes), Files(print.FileCount)),
                 string.Join(
                     Strings.Common_SentenceSeparator,
-                    print.AssemblyCount switch
-                    {
-                        0 => Strings.Footprint_DiskAssembliesNone,
-                        1 => Strings.Footprint_DiskAssembliesOne,
-                        _ => Text(Strings.Footprint_DiskAssembliesManyFormat, print.AssemblyCount),
-                    },
+                    // Nought is its own sentence, not a plural form: CLDR's "zero" category is
+                    // about how a language inflects, and English puts 0 in "other". A message that
+                    // only applies when there are none is a branch, wherever the count falls.
+                    print.AssemblyCount == 0
+                        ? Strings.Footprint_DiskAssembliesNone
+                        : Strings.Footprint_DiskAssemblies(print.AssemblyCount),
                     Strings.Footprint_DiskEffectTail)));
 
             if (print.UnreadableAssemblyCount > 0)
@@ -337,11 +319,7 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
             {
                 findings.Add(new FootprintFinding(
                     FootprintArea.Note,
-                    print.ServerPerFrameTypeCount == 1
-                        ? Strings.Footprint_ServerComponentsOne
-                        : Text(
-                            Strings.Footprint_ServerComponentsManyFormat,
-                            print.ServerPerFrameTypeCount),
+                    Strings.Footprint_ServerComponents(print.ServerPerFrameTypeCount),
                     Strings.Footprint_ServerComponentsEffect));
             }
 
@@ -380,13 +358,7 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
     private static string Text(string format, params object?[] values) =>
         LocalizationService.Text(format, values);
 
-    private static string Files(int count) =>
-        count == 1 ? Strings.Footprint_FilesOne : Text(Strings.Footprint_FilesManyFormat, count);
-
-    // A whole sentence per count rather than a shared "n of those" with a verb phrase dropped in:
-    // the verb has to agree with the count, and in English it already did not.
-    private static string Of(int count, string one, string manyFormat) =>
-        count == 1 ? one : Text(manyFormat, count);
+    private static string Files(int count) => Strings.Footprint_Files(count);
 
     //
     // The actual method names found, so nobody has to take the counts above on trust - this is the
@@ -463,12 +435,9 @@ public sealed partial class FootprintViewModel : LocalizedViewModel
             _all = [.. results.Select(r => new ModFootprintRowViewModel(r))];
             ApplySort();
 
-            Status = _all.Count switch
-            {
-                0 => Strings.Footprint_StatusNone,
-                1 => Strings.Footprint_StatusOne,
-                _ => LocalizationService.Text(Strings.Footprint_StatusManyFormat, _all.Count),
-            };
+            Status = _all.Count == 0
+                ? Strings.Footprint_StatusNone
+                : Strings.Footprint_Status(_all.Count);
         }
         finally
         {

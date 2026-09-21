@@ -42,6 +42,42 @@ public sealed class LocalizationService : INotifyPropertyChanged
         string.Format(CultureInfo.CurrentCulture, format, values);
 
     //
+    // The right form of a counted message, and the count formatted into it.
+    //
+    // The key handed in is the BASE - "Installed_CountFound" - and the category's suffix is added
+    // here: a call site never names a form, which is what lets a language with four of them work
+    // without touching any call site. Missing forms fall back to _other, then to the base key, so a
+    // half-filled translation reads as a plural that does not agree rather than as a raw key.
+    //
+    // The count is passed to the format as well as used to pick the form, because most of these
+    // messages show it. A form that does not - English's "_one" usually spells the 1 out - simply
+    // ignores its argument.
+    //
+    public static string Plural(string baseKey, int count, params object?[] values)
+    {
+        var category = PluralRules.For(AppLanguage.Current, count);
+
+        var form = Lookup(baseKey + PluralRules.Suffix(category))
+            ?? Lookup(baseKey + PluralRules.Suffix(PluralCategory.Other))
+            ?? Get(baseKey);
+
+        return Text(form, values.Length == 0 ? [count] : values);
+    }
+
+    private static string? Lookup(string key)
+    {
+        try
+        {
+            return Strings.ResourceManager.GetString(key, AppLanguage.Current);
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("Language", $"couldn't read {key}: {ex.Message}");
+            return null;
+        }
+    }
+
+    //
     // A key with nothing behind it renders as the key itself - visible, searchable, and obviously
     // wrong, rather than a blank label nobody notices. A key missing only from a translation never
     // reaches this: resource fallback hands back the English value.
