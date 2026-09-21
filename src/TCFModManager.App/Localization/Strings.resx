@@ -4001,4 +4001,495 @@ You can turn it back on at any time.</value>
   <data name="AppUpdate_Cancelled" xml:space="preserve">
     <value>Update cancelled. Nothing was changed.</value>
   </data>
+  <data name="PreLaunch_Checking" xml:space="preserve">
+    <value>Checking the server...</value>
+    <comment>Headline while the pre-launch check runs.</comment>
+  </data>
+  <data name="PreLaunch_Ready" xml:space="preserve">
+    <value>Ready to join</value>
+    <comment>Headline when the install matches the server.</comment>
+  </data>
+  <data name="PreLaunch_Behind" xml:space="preserve">
+    <value>Your install doesn't match this server</value>
+    <comment>Headline when mods are missing or the wrong version.</comment>
+  </data>
+  <data name="PreLaunch_ListMoved" xml:space="preserve">
+    <value>This server's mod list has changed</value>
+    <comment>Headline when the server publishes a newer revision than the one held.</comment>
+  </data>
+  <data name="PreLaunch_Unavailable" xml:space="preserve">
+    <value>Couldn't check the server</value>
+    <comment>Headline when the server did not answer.</comment>
+  </data>
+  <data name="PreLaunch_NoAnswerNoListFormat" xml:space="preserve">
+    <value>{0} didn't answer, so there's nothing to compare against. Launching is unaffected.</value>
+    <comment>{0} is the address that was tried.</comment>
+  </data>
+  <data name="PreLaunch_NoAnswerHeldListFormat" xml:space="preserve">
+    <value>{0} didn't answer, so this is checked against "{1}" as it was last fetched. Launching is unaffected.</value>
+    <comment>{0} is the address that was tried, {1} the name of the mod list already held.</comment>
+  </data>
+  <data name="PreLaunch_ListMovedFormat" xml:space="preserve">
+    <value>The server is publishing revision {0} of "{1}"; you have revision {2}. Fetch it on the Server map page and review what changed before you join.</value>
+    <comment>{0} is the server's revision number, {1} the list's name, {2} the revision held. Server map is the page named by Nav_ServerMap.</comment>
+  </data>
+  <data name="PreLaunch_NotFetchedFormat" xml:space="preserve">
+    <value>{0} publishes a mod list you haven't fetched yet. Get it on the Server map page to see how your install compares.</value>
+    <comment>{0} is the server's name.</comment>
+  </data>
+  <data name="PreLaunch_NoListFormat" xml:space="preserve">
+    <value>Connected to {0}, which doesn't publish a mod list - so there's nothing to check your install against.</value>
+    <comment>{0} is the server's name.</comment>
+  </data>
+  <data name="PreLaunch_MatchesOneFormat" xml:space="preserve">
+    <value>Your install matches "{0}" (revision {1}) - the 1 mod the server expects is present and at the right version.</value>
+    <comment>{0} is the list's name, {1} its revision number. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="PreLaunch_MatchesManyFormat" xml:space="preserve">
+    <value>Your install matches "{0}" (revision {1}) - {2} mods the server expects, all present and at the right versions.</value>
+    <comment>{0} is the list's name, {1} its revision number, {2} how many mods it names.</comment>
+  </data>
+  <data name="PreLaunch_BehindOne" xml:space="preserve">
+    <value>1 mod to install, update or enable</value>
+    <comment>One part of the outstanding-work sentence. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="PreLaunch_BehindManyFormat" xml:space="preserve">
+    <value>{0} mods to install, update or enable</value>
+    <comment>One part of the outstanding-work sentence.</comment>
+  </data>
+  <data name="PreLaunch_ManualOne" xml:space="preserve">
+    <value>1 mod to fetch by hand</value>
+    <comment>One part of the outstanding-work sentence.</comment>
+  </data>
+  <data name="PreLaunch_ManualManyFormat" xml:space="preserve">
+    <value>{0} mods to fetch by hand</value>
+    <comment>One part of the outstanding-work sentence.</comment>
+  </data>
+  <data name="PreLaunch_ComparedFormat" xml:space="preserve">
+    <value>Compared against "{0}": {1}. Apply the list on the Mod lists page to sort it, or join anyway - nothing here stops you.</value>
+    <comment>{0} is the list's name, {1} one or two parts joined by Common_ListPairFormat. Mod lists is the page named by Nav_ModLists.</comment>
+  </data>
+  <data name="Browse_AddonBadgeOne" xml:space="preserve">
+    <value>1 addon</value>
+    <comment>How many addons a mod has. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Browse_AddonBadgeManyFormat" xml:space="preserve">
+    <value>{0} addons</value>
+  </data>
+  <data name="Browse_OlderVersionNoteFormat" xml:space="preserve">
+    <value>Older v{0} available for your installed SPT.</value>
+    <comment>{0} is a version number. The v before it is the usual way this app writes a release.</comment>
+  </data>
+  <data name="Browse_CompatibleVersionNoteFormat" xml:space="preserve">
+    <value>Compatible v{0} available for your installed SPT.</value>
+    <comment>{0} is a version number.</comment>
+  </data>
+  <data name="Browse_SptCompatibleFormat" xml:space="preserve">
+    <value>✓ SPT {0}</value>
+    <comment>Which SPT releases a mod runs on, when this install is one of them. {0} is one or more version numbers joined by Common_ListSeparator. The tick marks it as a fit - change the character if another reads better in your language.</comment>
+  </data>
+  <data name="Browse_SptIncompatibleFormat" xml:space="preserve">
+    <value>✗ SPT {0}</value>
+    <comment>Which SPT releases a mod runs on, when this install is not one of them. {0} is one or more version numbers.</comment>
+  </data>
+  <data name="Browse_SptPlainFormat" xml:space="preserve">
+    <value>SPT {0}</value>
+    <comment>Which SPT releases a mod runs on, when the app cannot tell whether this install is one of them. {0} is one or more version numbers.</comment>
+  </data>
+  <data name="Browse_SptVersionUnknown" xml:space="preserve">
+    <value>SPT version unknown</value>
+    <comment>Shown when a mod says nothing readable about which SPT it needs.</comment>
+  </data>
+  <data name="Browse_TooltipNoVersion" xml:space="preserve">
+    <value>This mod has no published version in the catalog.</value>
+  </data>
+  <data name="Browse_TooltipRunsOnOneFormat" xml:space="preserve">
+    <value>v{0} runs on SPT {1}.</value>
+    <comment>{0} is the mod's version, {1} an SPT release.</comment>
+  </data>
+  <data name="Browse_TooltipRunsOnRangeFormat" xml:space="preserve">
+    <value>v{0} runs on SPT {1} to {2}.</value>
+    <comment>{0} is the mod's version, {1} the oldest SPT release it runs on and {2} the newest.</comment>
+  </data>
+  <data name="Browse_TooltipNoRequirementFormat" xml:space="preserve">
+    <value>v{0} has no readable SPT requirement.</value>
+    <comment>{0} is the mod's version.</comment>
+  </data>
+  <data name="Browse_TooltipNeedsFormat" xml:space="preserve">
+    <value>v{0} needs SPT {1}.</value>
+    <comment>{0} is the mod's version, {1} the SPT versions it requires.</comment>
+  </data>
+  <data name="Browse_TooltipNoInstall" xml:space="preserve">
+    <value>No SPT install detected - set it on the Options page.</value>
+    <comment>Options is the page named by Nav_Options.</comment>
+  </data>
+  <data name="Browse_TooltipYouHaveFormat" xml:space="preserve">
+    <value>You have SPT {0}.</value>
+    <comment>{0} is the installed SPT version.</comment>
+  </data>
+  <data name="Browse_TooltipShowingOlderFormat" xml:space="preserve">
+    <value>Showing this instead of the newest v{0}, which needs SPT {1}.</value>
+    <comment>{0} is the newest published version, {1} the SPT versions it requires.</comment>
+  </data>
+  <data name="Browse_TooltipConstraintFormat" xml:space="preserve">
+    <value>Constraint: {0}</value>
+    <comment>The raw requirement as the mod's author wrote it. {0} is that text and is not translated.</comment>
+  </data>
+  <data name="Play_RoleHeadless" xml:space="preserve">
+    <value>Set up as a dedicated headless: a mod list from a server arrives without the mods only a player would need.</value>
+    <comment>Shown on the Play page when this machine runs a headless client but nobody plays on it.</comment>
+  </data>
+  <data name="Play_RolePlaysAndHosts" xml:space="preserve">
+    <value>Set up as a machine that both plays and hosts, so a served mod list arrives whole.</value>
+    <comment>Shown on the Play page when this machine both plays and runs a headless client.</comment>
+  </data>
+  <data name="Play_StartedFormat" xml:space="preserve">
+    <value>Started {0}.</value>
+    <comment>{0} is a process name, which is not translated.</comment>
+  </data>
+  <data name="Play_RestartedFormat" xml:space="preserve">
+    <value>Restarted {0}.</value>
+    <comment>{0} is a process name, which is not translated.</comment>
+  </data>
+  <data name="Dependencies_NoSptVersion" xml:space="preserve">
+    <value>Couldn't detect your SPT version, which is needed to resolve dependencies.</value>
+  </data>
+  <data name="Dependencies_Scanning" xml:space="preserve">
+    <value>Scanning installed mods...</value>
+  </data>
+  <data name="Dependencies_NoneMatched" xml:space="preserve">
+    <value>None of your installed mods could be matched to sp-mod.com.</value>
+  </data>
+  <data name="Dependencies_ResolvingOne" xml:space="preserve">
+    <value>Resolving dependencies for 1 mod...</value>
+    <comment>See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Dependencies_ResolvingManyFormat" xml:space="preserve">
+    <value>Resolving dependencies for {0} mods...</value>
+    <comment>{0} is how many mods are being asked about.</comment>
+  </data>
+  <data name="Dependencies_NoneDeclared" xml:space="preserve">
+    <value>None of your installed mods declare dependencies.</value>
+  </data>
+  <data name="Dependencies_AllSatisfiedOne" xml:space="preserve">
+    <value>1 mod has dependencies - all satisfied.</value>
+    <comment>See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Dependencies_AllSatisfiedManyFormat" xml:space="preserve">
+    <value>{0} mods have dependencies - all satisfied.</value>
+    <comment>{0} is how many mods declare dependencies.</comment>
+  </data>
+  <data name="Dependencies_AttentionOneFormat" xml:space="preserve">
+    <value>1 mod has dependencies; {0} need attention.</value>
+    <comment>{0} is how many dependencies are missing, outdated or conflicting.</comment>
+  </data>
+  <data name="Dependencies_AttentionManyFormat" xml:space="preserve">
+    <value>{0} mods have dependencies; {1} need attention.</value>
+    <comment>{0} is how many mods declare dependencies, {1} how many of those need attention.</comment>
+  </data>
+  <data name="Dependencies_UnexpectedFormat" xml:space="preserve">
+    <value>Unexpected error resolving dependencies: {0}</value>
+    <comment>{0} is the underlying error, which arrives in English.</comment>
+  </data>
+  <data name="Dependencies_CancelledFormat" xml:space="preserve">
+    <value>Install cancelled - {0}'s page wasn't confirmed as read.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Dependencies_QueuedFormat" xml:space="preserve">
+    <value>Queued {0} {1} - see the Downloads page for progress.</value>
+    <comment>{0} is a mod name, {1} its version. Downloads is the page named by Nav_Downloads.</comment>
+  </data>
+  <data name="Dependencies_UnknownName" xml:space="preserve">
+    <value>(unknown)</value>
+    <comment>Stands in for a dependency the catalog gave neither a name nor a GUID for.</comment>
+  </data>
+  <data name="Dependencies_RowInstalled" xml:space="preserve">
+    <value>installed</value>
+    <comment>A dependency's state, shown beside its name so it is lower case in English.</comment>
+  </data>
+  <data name="Dependencies_RowInstalledVersionFormat" xml:space="preserve">
+    <value>installed {0}</value>
+    <comment>{0} is the version installed.</comment>
+  </data>
+  <data name="Dependencies_RowNeedsUpdateFormat" xml:space="preserve">
+    <value>needs {0} - {1} installed</value>
+    <comment>{0} is the version required, {1} the version installed or Common_Unknown.</comment>
+  </data>
+  <data name="Dependencies_RowNotInstalled" xml:space="preserve">
+    <value>not installed</value>
+  </data>
+  <data name="Dependencies_RowNotInstalledNeedsFormat" xml:space="preserve">
+    <value>not installed - needs {0}</value>
+    <comment>{0} is the version required.</comment>
+  </data>
+  <data name="Dependencies_RowNoCompatible" xml:space="preserve">
+    <value>no version compatible with your SPT</value>
+  </data>
+  <data name="Dependencies_RowDisabled" xml:space="preserve">
+    <value>installed but disabled - SPT won't load it</value>
+  </data>
+  <data name="Dependencies_RowDisabledVersionFormat" xml:space="preserve">
+    <value>installed {0} but disabled - SPT won't load it</value>
+    <comment>{0} is the version installed.</comment>
+  </data>
+  <data name="Dependencies_RowConflict" xml:space="preserve">
+    <value>conflict - two mods need incompatible versions</value>
+  </data>
+  <data name="Dependencies_RowUpdate" xml:space="preserve">
+    <value>Update</value>
+    <comment>On a dependency's button, when a newer version is needed.</comment>
+  </data>
+  <data name="Dependencies_RowInstall" xml:space="preserve">
+    <value>Install</value>
+    <comment>On a dependency's button, when it is not installed at all.</comment>
+  </data>
+  <data name="Dependencies_AlreadyQueuedFormat" xml:space="preserve">
+    <value>{0} is already in the download queue - see the Downloads page for progress.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Dependencies_SummaryMissingFormat" xml:space="preserve">
+    <value>{0} missing</value>
+    <comment>One count in a mod's dependency summary, joined to the others by Common_ListSeparator.</comment>
+  </data>
+  <data name="Dependencies_SummaryOutdatedFormat" xml:space="preserve">
+    <value>{0} outdated</value>
+    <comment>One count in a mod's dependency summary.</comment>
+  </data>
+  <data name="Dependencies_SummaryConflictingFormat" xml:space="preserve">
+    <value>{0} conflicting</value>
+    <comment>One count in a mod's dependency summary.</comment>
+  </data>
+  <data name="Dependencies_SummaryUnresolvedFormat" xml:space="preserve">
+    <value>{0} unresolved</value>
+    <comment>One count in a mod's dependency summary.</comment>
+  </data>
+  <data name="Dependencies_SummarySatisfiedOne" xml:space="preserve">
+    <value>1 dependency, all satisfied</value>
+    <comment>See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Dependencies_SummarySatisfiedManyFormat" xml:space="preserve">
+    <value>{0} dependencies, all satisfied</value>
+    <comment>{0} is how many dependencies the mod declares.</comment>
+  </data>
+  <data name="Addon_NameFormat" xml:space="preserve">
+    <value>Addon {0}</value>
+    <comment>Stands in for an addon the catalog gave no name for. {0} is its numeric id.</comment>
+  </data>
+  <data name="Addon_DownloadsFormat" xml:space="preserve">
+    <value>{0:N0} downloads</value>
+    <comment>How many times an addon has been downloaded. Keep the :N0.</comment>
+  </data>
+  <data name="Addon_TagInstalled" xml:space="preserve">
+    <value> - installed</value>
+    <comment>Appended to an addon version's number. Keep the spacing and dash your language uses before a tag.</comment>
+  </data>
+  <data name="Addon_TagNeedsFormat" xml:space="preserve">
+    <value> - needs {0}</value>
+    <comment>Appended to an addon version's number. {0} is the parent mod version it requires.</comment>
+  </data>
+  <data name="Addon_TagLatest" xml:space="preserve">
+    <value> - latest</value>
+    <comment>Appended to an addon version's number.</comment>
+  </data>
+  <data name="Addon_ActionInstall" xml:space="preserve">
+    <value>Install</value>
+    <comment>On an addon's button, when it is not installed.</comment>
+  </data>
+  <data name="Addon_ActionRedownload" xml:space="preserve">
+    <value>Redownload</value>
+    <comment>On an addon's button, when the selected version is the one installed.</comment>
+  </data>
+  <data name="Addon_ActionUpdate" xml:space="preserve">
+    <value>Update</value>
+    <comment>On an addon's button, when a different version is selected.</comment>
+  </data>
+  <data name="Addon_NoVersionsFormat" xml:space="preserve">
+    <value>{0} has no published versions.</value>
+    <comment>{0} is an addon's name.</comment>
+  </data>
+  <data name="Addon_ParentFallback" xml:space="preserve">
+    <value>the parent mod</value>
+    <comment>Stands in for a parent mod whose name is not known. It appears mid-sentence, so it is lower case in English.</comment>
+  </data>
+  <data name="Addon_InstallParentFirstFormat" xml:space="preserve">
+    <value>Install {0} first - this addon attaches to it.</value>
+    <comment>{0} is the parent mod's name, or Addon_ParentFallback.</comment>
+  </data>
+  <data name="Addon_NeedsParentFormat" xml:space="preserve">
+    <value>Needs {0} {1} - you have {2}.</value>
+    <comment>{0} is the parent mod's name, {1} the version it requires, {2} the version installed.</comment>
+  </data>
+  <data name="Addon_UncheckedFormat" xml:space="preserve">
+    <value>Couldn't check this against {0} {1} - install it only if the author says it fits.</value>
+    <comment>{0} is the parent mod's name, {1} the version installed.</comment>
+  </data>
+  <data name="Addon_CancelledFormat" xml:space="preserve">
+    <value>Cancelled - {0}'s page wasn't confirmed as read.</value>
+    <comment>{0} is an addon's name.</comment>
+  </data>
+  <data name="Addon_QueuedFormat" xml:space="preserve">
+    <value>Queued {0} {1} - see the Downloads page for progress.</value>
+    <comment>{0} is an addon's name, {1} its version.</comment>
+  </data>
+  <data name="Addon_HeadingOne" xml:space="preserve">
+    <value>1 addon</value>
+    <comment>How many addons a mod has. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Addon_HeadingManyFormat" xml:space="preserve">
+    <value>{0} addons</value>
+  </data>
+  <data name="Addon_ThisMod" xml:space="preserve">
+    <value>this mod</value>
+    <comment>Stands in for a mod whose name is not known. It appears mid-sentence, so it is lower case in English.</comment>
+  </data>
+  <data name="Addon_InstallParentNoticeFormat" xml:space="preserve">
+    <value>Install {0} first - an addon needs its parent mod's version to know which of its own versions fit.</value>
+    <comment>{0} is the mod's name, or Addon_ThisMod.</comment>
+  </data>
+  <data name="DataFiles_MissingFormat" xml:space="preserve">
+    <value>{0} doesn't exist yet - it's created the first time the app writes it.</value>
+    <comment>{0} is a file name.</comment>
+  </data>
+  <data name="DataFiles_ReadFailedFormat" xml:space="preserve">
+    <value>Couldn't read {0}: {1}</value>
+    <comment>{0} is a file name, {1} the underlying error, which arrives in English.</comment>
+  </data>
+  <data name="DataFiles_NotSavedFormat" xml:space="preserve">
+    <value>Not saved - {0}</value>
+    <comment>{0} is one of the DataFiles_Error keys, or an error from the operating system.</comment>
+  </data>
+  <data name="DataFiles_SavedFormat" xml:space="preserve">
+    <value>Saved {0}. The previous version was kept as {1}.bak.</value>
+    <comment>{0} and {1} are file names. The .bak suffix is part of the file name and stays as it is.</comment>
+  </data>
+  <data name="DataFiles_ErrorNotManifest" xml:space="preserve">
+    <value>the file doesn't look like a mod install manifest.</value>
+    <comment>Follows DataFiles_NotSavedFormat, so it is lower case in English.</comment>
+  </data>
+  <data name="DataFiles_ErrorInvalidJsonFormat" xml:space="preserve">
+    <value>not valid JSON - {0}</value>
+    <comment>Follows DataFiles_NotSavedFormat, so it is lower case in English. {0} is the parser's own message, which arrives in English.</comment>
+  </data>
+  <data name="Configs_FormatBepInEx" xml:space="preserve">
+    <value>BepInEx config</value>
+    <comment>Which kind of file a config entry is. BepInEx is the mod loader's name and stays as it is.</comment>
+  </data>
+  <data name="Configs_FormatJson" xml:space="preserve">
+    <value>JSON</value>
+    <comment>Which kind of file a config entry is. JSON is a format name and stays as it is.</comment>
+  </data>
+  <data name="Configs_TagShippedDefault" xml:space="preserve">
+    <value>Shipped default</value>
+    <comment>On a config file that is the mod's pristine copy rather than the one it reads.</comment>
+  </data>
+  <data name="Configs_TagModDisabled" xml:space="preserve">
+    <value>Mod disabled</value>
+    <comment>On a config file whose mod is currently disabled.</comment>
+  </data>
+  <data name="Configs_WhereClient" xml:space="preserve">
+    <value>Kept in BepInEx\config, outside the mod's own folder - it survives disabling the mod, and removing it.</value>
+    <comment>BepInEx\config is a folder path and stays as it is.</comment>
+  </data>
+  <data name="Configs_WhereServer" xml:space="preserve">
+    <value>Kept inside the mod's own folder - removing the mod sets this file aside rather than deleting it.</value>
+  </data>
+  <data name="Configs_WhereFramework" xml:space="preserve">
+    <value>BepInEx's own configuration rather than any mod's. Changing it affects how every plugin is loaded.</value>
+    <comment>BepInEx is the mod loader's name and stays as it is.</comment>
+  </data>
+  <data name="Configs_WhereUnclaimed" xml:space="preserve">
+    <value>No installed plugin claims this file, so the mod it belonged to has most likely been removed. Editing it will not affect anything until that mod is installed again.</value>
+  </data>
+  <data name="Configs_NoteShippedDefault" xml:space="preserve">
+    <value>This is the pristine copy of the defaults the mod ships with, not the config it reads. Edits here have no effect.</value>
+  </data>
+  <data name="Configs_NoteModDisabled" xml:space="preserve">
+    <value>This mod is disabled, so SPT isn't loading it. The file moved into the ".disabled" folder with the rest of the mod, and edits will apply when it's enabled again.</value>
+    <comment>.disabled is a folder-name suffix and stays as it is.</comment>
+  </data>
+  <data name="Configs_SectionClient" xml:space="preserve">
+    <value>Client</value>
+    <comment>A group heading: config files the game client reads.</comment>
+  </data>
+  <data name="Configs_SectionServer" xml:space="preserve">
+    <value>Server</value>
+    <comment>A group heading: config files the SPT server reads.</comment>
+  </data>
+  <data name="Configs_SectionFramework" xml:space="preserve">
+    <value>BepInEx</value>
+    <comment>A group heading: BepInEx's own configuration. It is the mod loader's name and stays as it is.</comment>
+  </data>
+  <data name="Configs_SectionUnclaimed" xml:space="preserve">
+    <value>Unclaimed</value>
+    <comment>A group heading: config files no installed mod claims.</comment>
+  </data>
+  <data name="Configs_LocationServer" xml:space="preserve">
+    <value>user\mods</value>
+    <comment>Where a group's files live. A folder path - it stays as it is.</comment>
+  </data>
+  <data name="Configs_LocationClient" xml:space="preserve">
+    <value>BepInEx\config</value>
+    <comment>Where a group's files live. A folder path - it stays as it is.</comment>
+  </data>
+  <data name="Installed_GroupCountOne" xml:space="preserve">
+    <value>1 mod</value>
+    <comment>How many mods are in a group. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Installed_GroupCountManyFormat" xml:space="preserve">
+    <value>{0} mods</value>
+  </data>
+  <data name="Installed_GroupAllDisabled" xml:space="preserve">
+    <value>• all disabled</value>
+    <comment>Shown after the count in a group's header, when none of its mods are loaded. The bullet separates it from the count - change the character if another reads better in your language.</comment>
+  </data>
+  <data name="Installed_GroupSomeDisabledFormat" xml:space="preserve">
+    <value>• {0} disabled</value>
+    <comment>Shown after the count in a group's header. {0} is how many of its mods are not loaded.</comment>
+  </data>
+  <data name="SptEnvironment_TitleFormat" xml:space="preserve">
+    <value>{0} [SPT {1}]</value>
+    <comment>The window title. {0} is the app's own name and version, {1} the detected SPT version - neither is translated.</comment>
+  </data>
+  <data name="SptEnvironment_DetectedFormat" xml:space="preserve">
+    <value>Detected SPT {0}.</value>
+    <comment>{0} is the detected SPT version.</comment>
+  </data>
+  <data name="SptEnvironment_NoInstallFolder" xml:space="preserve">
+    <value>No SPT install folder set.</value>
+  </data>
+  <data name="SptEnvironment_NoServerExeFormat" xml:space="preserve">
+    <value>Couldn't find an SPT server executable under "{0}" - make sure this is the SPT server install folder (the one containing SPT.Server.exe).</value>
+    <comment>{0} is a folder path. SPT.Server.exe is a file name and stays as it is.</comment>
+  </data>
+  <data name="SptEnvironment_NoFileVersionFormat" xml:space="preserve">
+    <value>"{0}" didn't have a recognizable file version.</value>
+    <comment>{0} is a file name.</comment>
+  </data>
+  <data name="SptEnvironment_ReadFailedFormat" xml:space="preserve">
+    <value>Couldn't read the file version from "{0}": {1}</value>
+    <comment>{0} is a file name, {1} the underlying error, which arrives in English.</comment>
+  </data>
+  <data name="SptEnvironment_Unknown" xml:space="preserve">
+    <value>Couldn't work out which version of SPT this is.</value>
+  </data>
+  <data name="ModUpdate_VersionFitsFormat" xml:space="preserve">
+    <value>Fits {0}</value>
+    <comment>On an addon's version row. {0} is the parent mod version it requires.</comment>
+  </data>
+  <data name="ModUpdate_VersionNeedsFormat" xml:space="preserve">
+    <value>Needs {0}</value>
+    <comment>On an addon's version row. {0} is the parent mod version it requires.</comment>
+  </data>
+  <data name="ModUpdate_VersionNeedsUncheckedFormat" xml:space="preserve">
+    <value>Needs {0} - couldn't check it against what you have installed</value>
+    <comment>{0} is the parent mod version it requires.</comment>
+  </data>
+  <data name="ModUpdate_VersionCompatible" xml:space="preserve">
+    <value>Compatible with your installed SPT version</value>
+    <comment>On a mod's version row.</comment>
+  </data>
+  <data name="ModUpdate_VersionIncompatible" xml:space="preserve">
+    <value>Not compatible with your installed SPT version</value>
+    <comment>On a mod's version row.</comment>
+  </data>
 </root>

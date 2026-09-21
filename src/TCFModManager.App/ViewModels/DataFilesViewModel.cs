@@ -88,7 +88,7 @@ public partial class DataFilesViewModel : LocalizedViewModel
         {
             Text = string.Empty;
             _savedText = string.Empty;
-            StatusMessage = $"{SelectedFile} doesn't exist yet - it's created the first time the app writes it.";
+            StatusMessage = LocalizationService.Text(Strings.DataFiles_MissingFormat, SelectedFile);
             return;
         }
 
@@ -103,7 +103,7 @@ public partial class DataFilesViewModel : LocalizedViewModel
             Text = string.Empty;
             _savedText = string.Empty;
             HasError = true;
-            StatusMessage = $"Couldn't read {SelectedFile}: {ex.Message}";
+            StatusMessage = LocalizationService.Text(Strings.DataFiles_ReadFailedFormat, SelectedFile, ex.Message);
         }
     }
 
@@ -126,7 +126,7 @@ public partial class DataFilesViewModel : LocalizedViewModel
         if (!TryValidate(SelectedFile!, Text, out var error))
         {
             HasError = true;
-            StatusMessage = $"Not saved - {error}";
+            StatusMessage = LocalizationService.Text(Strings.DataFiles_NotSavedFormat, error);
             return;
         }
 
@@ -136,12 +136,13 @@ public partial class DataFilesViewModel : LocalizedViewModel
             File.WriteAllText(path, Text);
             _savedText = Text;
             HasError = false;
-            StatusMessage = $"Saved {SelectedFile}. The previous version was kept as {Path.GetFileName(path)}.bak.";
+            StatusMessage = LocalizationService.Text(
+                Strings.DataFiles_SavedFormat, SelectedFile, Path.GetFileName(path));
         }
         catch (IOException ex)
         {
             HasError = true;
-            StatusMessage = $"Not saved - {ex.Message}";
+            StatusMessage = LocalizationService.Text(Strings.DataFiles_NotSavedFormat, ex.Message);
         }
     }
 
@@ -158,7 +159,7 @@ public partial class DataFilesViewModel : LocalizedViewModel
                 var manifest = JsonSerializer.Deserialize<ModInstallManifest>(text);
                 if (manifest is null)
                 {
-                    error = "the file doesn't look like a mod install manifest.";
+                    error = Strings.DataFiles_ErrorNotManifest;
                     return false;
                 }
             }
@@ -168,7 +169,7 @@ public partial class DataFilesViewModel : LocalizedViewModel
         }
         catch (JsonException ex)
         {
-            error = $"not valid JSON - {ex.Message}";
+            error = LocalizationService.Text(Strings.DataFiles_ErrorInvalidJsonFormat, ex.Message);
             return false;
         }
     }

@@ -11,11 +11,16 @@ namespace TCFModManager.App.ViewModels;
 // 
 public sealed partial class AddonsSectionViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     public ObservableCollection<AddonRowViewModel> Addons { get; } = [];
 
     public bool HasAddons => Addons.Count > 0;
 
-    public string Heading => Addons.Count == 1 ? "1 addon" : $"{Addons.Count} addons";
+    public string Heading => Addons.Count == 1
+        ? Strings.Addon_HeadingOne
+        : Text(Strings.Addon_HeadingManyFormat, Addons.Count);
 
     // Shown above the list when the parent isn't installed, so every disabled button on it has one
     // explanation rather than the same sentence repeated on each row.
@@ -44,7 +49,9 @@ public sealed partial class AddonsSectionViewModel : LocalizedViewModel
         }
 
         ParentNotice = Addons.Count > 0 && string.IsNullOrWhiteSpace(parentInstalledVersion)
-            ? $"Install {parentModName ?? "this mod"} first - an addon needs its parent mod's version to know which of its own versions fit."
+            ? Text(
+                Strings.Addon_InstallParentNoticeFormat,
+                parentModName ?? Strings.Addon_ThisMod)
             : null;
 
         OnPropertyChanged(nameof(HasAddons));

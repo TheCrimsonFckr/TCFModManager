@@ -13,9 +13,12 @@ namespace TCFModManager.App.ViewModels;
 // version, not the installed SPT version - that is the whole difference between an addon and a mod.
 public sealed class AddonVersionOption
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     public required AddonVersionSummary Raw { get; init; }
 
-    public string VersionText => Raw.Version ?? "unknown";
+    public string VersionText => Raw.Version ?? Strings.Common_Unknown;
 
     // True when the installed parent version satisfies this version's constraint, false when it
     // doesn't, null when it can't be decided (parent not installed, or an unreadable constraint).
@@ -32,9 +35,9 @@ public sealed class AddonVersionOption
         {
             var suffix = (IsInstalled, IsLatest, IsCompatible) switch
             {
-                (true, _, _) => " - installed",
-                (_, _, false) => $" - needs {Raw.ModVersionConstraint}",
-                (_, true, _) => " - latest",
+                (true, _, _) => Strings.Addon_TagInstalled,
+                (_, _, false) => Text(Strings.Addon_TagNeedsFormat, Raw.ModVersionConstraint),
+                (_, true, _) => Strings.Addon_TagLatest,
                 _ => string.Empty,
             };
 
@@ -49,6 +52,9 @@ public sealed class AddonVersionOption
 // 
 public sealed partial class AddonRowViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     private readonly Addon _addon;
     private readonly string? _parentName;
     private readonly string? _parentVersion;
@@ -86,7 +92,7 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
 
     public int AddonId => _addon.Id;
 
-    public string Name => _addon.Name ?? $"Addon {_addon.Id}";
+    public string Name => _addon.Name ?? Text(Strings.Addon_NameFormat, _addon.Id);
 
     public string? Teaser => _addon.Teaser;
 
@@ -96,7 +102,7 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
 
     public string? DetailUrl => _addon.DetailUrl;
 
-    public string DownloadsText => $"{_addon.Downloads ?? 0:N0} downloads";
+    public string DownloadsText => Text(Strings.Addon_DownloadsFormat, _addon.Downloads ?? 0);
 
     // The content flags as one line, matching how an installed card summarises the same thing.
     public string? FlagsSummary
@@ -139,12 +145,14 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
     // update is offered - the label has to say so rather than reading as a fresh install.
     public string ActionLabel => (IsInstalled, SelectedVersion) switch
     {
-        (false, _) => "Install",
-        (true, { IsInstalled: true }) => "Redownload",
-        _ => "Update",
+        (false, _) => Strings.Addon_ActionInstall,
+        (true, { IsInstalled: true }) => Strings.Addon_ActionRedownload,
+        _ => Strings.Addon_ActionUpdate,
     };
 
-    public string ActionIcon => ActionLabel == "Install" ? "ArrowDownload24" : "ArrowSync24";
+    // Reads the same state the label does rather than comparing against the label's text, which
+    // stops being "Install" the moment the app is in another language.
+    public string ActionIcon => IsInstalled ? "ArrowSync24" : "ArrowDownload24";
 
     // 
     // An addon is only useful next to its parent, so the parent has to be installed and has to
@@ -158,13 +166,19 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
     {
         get
         {
-            if (SelectedVersion is null) return $"{Name} has no published versions.";
+            if (SelectedVersion is null) return Text(Strings.Addon_NoVersionsFormat, Name);
 
             if (string.IsNullOrWhiteSpace(_parentVersion))
-                return $"Install {_parentName ?? "the parent mod"} first - this addon attaches to it.";
+                return Text(
+                    Strings.Addon_InstallParentFirstFormat,
+                    _parentName ?? Strings.Addon_ParentFallback);
 
             if (SelectedVersion.IsCompatible == false)
-                return $"Needs {_parentName ?? "the parent mod"} {SelectedVersion.Raw.ModVersionConstraint} - you have {_parentVersion}.";
+                return Text(
+                    Strings.Addon_NeedsParentFormat,
+                    _parentName ?? Strings.Addon_ParentFallback,
+                    SelectedVersion.Raw.ModVersionConstraint,
+                    _parentVersion);
 
             if (SelectedVersion.Raw.Link is null)
                 return ModInstallProblems.NoDownloadLink(Name, SelectedVersion.VersionText);
@@ -178,7 +192,10 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
     // Shown when the version can be installed but the fit couldn't be confirmed - an addon whose
     // constraint this app can't parse, against a parent whose version is known.
     public string? CompatibilityNote => CanInstall && SelectedVersion?.IsCompatible is null
-        ? $"Couldn't check this against {_parentName ?? "the parent mod"} {_parentVersion} - install it only if the author says it fits."
+        ? Text(
+            Strings.Addon_UncheckedFormat,
+            _parentName ?? Strings.Addon_ParentFallback,
+            _parentVersion)
         : null;
 
     public bool HasCompatibilityNote => CompatibilityNote is not null;
@@ -197,7 +214,7 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
 
         if (!ReadModPageConfirmationWindow.Confirm(Name, DetailUrl))
         {
-            StatusMessage = $"Cancelled - {Name}'s page wasn't confirmed as read.";
+            StatusMessage = Text(Strings.Addon_CancelledFormat, Name);
             return;
         }
 
@@ -220,7 +237,7 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
             () => Task.FromResult<ModVersion?>(version),
             totalBytes: selected.Raw.ContentLength);
 
-        StatusMessage = $"Queued {Name} {selected.VersionText} - see the Downloads page for progress.";
+        StatusMessage = Text(Strings.Addon_QueuedFormat, Name, selected.VersionText);
     }
 
     [RelayCommand]

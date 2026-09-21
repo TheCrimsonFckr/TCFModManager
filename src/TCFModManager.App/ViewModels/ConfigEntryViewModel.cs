@@ -1,4 +1,5 @@
 using System.IO;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -42,7 +43,9 @@ public sealed class ConfigEntryViewModel
 
     public string Glyph => Entry.Format == ModConfigFormat.BepInExCfg ? "TextboxSettings24" : "Braces24";
 
-    public string FormatLabel => Entry.Format == ModConfigFormat.BepInExCfg ? "BepInEx config" : "JSON";
+    public string FormatLabel => Entry.Format == ModConfigFormat.BepInExCfg
+        ? Strings.Configs_FormatBepInEx
+        : Strings.Configs_FormatJson;
 
     //
     // A pristine copy of the defaults shipped alongside the real config - "config.default.json",
@@ -62,9 +65,9 @@ public sealed class ConfigEntryViewModel
     }
 
     public string? Badge => IsShippedDefault
-        ? "Shipped default"
+        ? Strings.Configs_TagShippedDefault
         : Entry.IsModDisabled
-            ? "Mod disabled"
+            ? Strings.Configs_TagModDisabled
             : null;
 
     public double RowOpacity => IsShippedDefault ? 0.6 : 1.0;
@@ -77,20 +80,20 @@ public sealed class ConfigEntryViewModel
     public string LocationNote => Entry.Source switch
     {
         ModConfigSource.Client =>
-            "Kept in BepInEx\\config, outside the mod's own folder - it survives disabling the mod, and removing it.",
+            Strings.Configs_WhereClient,
         ModConfigSource.Server =>
-            "Kept inside the mod's own folder - removing the mod sets this file aside rather than deleting it.",
+            Strings.Configs_WhereServer,
         ModConfigSource.Framework =>
-            "BepInEx's own configuration rather than any mod's. Changing it affects how every plugin is loaded.",
+            Strings.Configs_WhereFramework,
         _ =>
-            "No installed plugin claims this file, so the mod it belonged to has most likely been removed. Editing it will not affect anything until that mod is installed again.",
+            Strings.Configs_WhereUnclaimed,
     };
 
     // Extra note for the rarer states, shown under LocationNote when it applies.
     public string? StateNote => IsShippedDefault
-        ? "This is the pristine copy of the defaults the mod ships with, not the config it reads. Edits here have no effect."
+        ? Strings.Configs_NoteShippedDefault
         : Entry.IsModDisabled
-            ? "This mod is disabled, so SPT isn't loading it. The file moved into the \".disabled\" folder with the rest of the mod, and edits will apply when it's enabled again."
+            ? Strings.Configs_NoteModDisabled
             : null;
 
     public bool HasStateNote => StateNote is not null;

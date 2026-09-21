@@ -47,6 +47,9 @@ public enum PreLaunchState
 //
 public sealed partial class PreLaunchCheckViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     private readonly ModListService _lists = new();
 
     [ObservableProperty]
@@ -79,11 +82,11 @@ public sealed partial class PreLaunchCheckViewModel : LocalizedViewModel
 
     public string Title => State switch
     {
-        PreLaunchState.Checking => "Checking the server...",
-        PreLaunchState.Ready => "Ready to join",
-        PreLaunchState.Behind => "Your install doesn't match this server",
-        PreLaunchState.ListMoved => "This server's mod list has changed",
-        PreLaunchState.Unavailable => "Couldn't check the server",
+        PreLaunchState.Checking => Strings.PreLaunch_Checking,
+        PreLaunchState.Ready => Strings.PreLaunch_Ready,
+        PreLaunchState.Behind => Strings.PreLaunch_Behind,
+        PreLaunchState.ListMoved => Strings.PreLaunch_ListMoved,
+        PreLaunchState.Unavailable => Strings.PreLaunch_Unavailable,
         _ => "",
     };
 
@@ -121,9 +124,8 @@ public sealed partial class PreLaunchCheckViewModel : LocalizedViewModel
         {
             State = PreLaunchState.Unavailable;
             Message = held is null
-                ? $"{gate.HostInput} didn't answer, so there's nothing to compare against. Launching is unaffected."
-                : $"{gate.HostInput} didn't answer, so this is checked against \"{held.Name}\" as it was last"
-                  + " fetched. Launching is unaffected.";
+                ? Text(Strings.PreLaunch_NoAnswerNoListFormat, gate.HostInput)
+                : Text(Strings.PreLaunch_NoAnswerHeldListFormat, gate.HostInput, held.Name);
 
             if (held is not null) await CompareAsync(held, keepMessage: true);
             return;
@@ -138,9 +140,11 @@ public sealed partial class PreLaunchCheckViewModel : LocalizedViewModel
         if (probe.Hello!.HasList && held is not null && probe.Hello.ListRevision > held.Revision)
         {
             State = PreLaunchState.ListMoved;
-            Message = $"The server is publishing revision {probe.Hello.ListRevision} of"
-                + $" \"{probe.Hello.ListName ?? held.Name}\"; you have revision {held.Revision}."
-                + " Fetch it on the Server map page and review what changed before you join.";
+            Message = Text(
+                Strings.PreLaunch_ListMovedFormat,
+                probe.Hello.ListRevision,
+                probe.Hello.ListName ?? held.Name,
+                held.Revision);
             return;
         }
 
@@ -149,10 +153,8 @@ public sealed partial class PreLaunchCheckViewModel : LocalizedViewModel
             State = probe.Hello!.HasList ? PreLaunchState.ListMoved : PreLaunchState.Ready;
 
             Message = probe.Hello.HasList
-                ? $"{gate.ServerName} publishes a mod list you haven't fetched yet. Get it on the"
-                  + " Server map page to see how your install compares."
-                : $"Connected to {gate.ServerName}, which doesn't publish a mod list - so there's"
-                  + " nothing to check your install against.";
+                ? Text(Strings.PreLaunch_NotFetchedFormat, gate.ServerName)
+                : Text(Strings.PreLaunch_NoListFormat, gate.ServerName);
             return;
         }
 
@@ -200,9 +202,15 @@ public sealed partial class PreLaunchCheckViewModel : LocalizedViewModel
                 // whole list here would have it saying "18 mods, all present" while planning
                 // against 12 - two numbers for one question, with the wrong one on screen.
                 //
-                Message = $"Your install matches \"{held.Name}\" (revision {held.Revision}) -"
-                    + $" {Mods(held.EntriesApplyingTo(ModListService.MachineScope).Count())} the server expects,"
-                    + " all present and at the right versions.";
+                var expected = held.EntriesApplyingTo(ModListService.MachineScope).Count();
+
+                Message = expected == 1
+                    ? Text(Strings.PreLaunch_MatchesOneFormat, held.Name, held.Revision)
+                    : Text(
+                        Strings.PreLaunch_MatchesManyFormat,
+                        held.Name,
+                        held.Revision,
+                        expected);
             }
 
             return;
@@ -211,19 +219,21 @@ public sealed partial class PreLaunchCheckViewModel : LocalizedViewModel
         State = PreLaunchState.Behind;
 
         var parts = new List<string>();
-        if (behind.Count > 0) parts.Add($"{Mods(behind.Count)} to install, update or enable");
-        if (manual.Count > 0) parts.Add($"{Mods(manual.Count)} to fetch by hand");
+        if (behind.Count == 1) parts.Add(Strings.PreLaunch_BehindOne);
+        else if (behind.Count > 1) parts.Add(Text(Strings.PreLaunch_BehindManyFormat, behind.Count));
+
+        if (manual.Count == 1) parts.Add(Strings.PreLaunch_ManualOne);
+        else if (manual.Count > 1) parts.Add(Text(Strings.PreLaunch_ManualManyFormat, manual.Count));
 
         if (!keepMessage)
         {
-            Message = $"Compared against \"{held.Name}\": {string.Join(" and ", parts)}."
-                + " Apply the list on the Mod lists page to sort it, or join anyway - nothing here stops you.";
+            Message = Text(Strings.PreLaunch_ComparedFormat, held.Name, TextLists.Join(parts));
         }
 
         // Named rather than counted. "Three mods behind" is not something anyone can act on; the
         // names are, and they are what someone checks against what the server is actually running.
-        Outstanding = string.Join(", ", behind.Concat(manual).Select(a => a.Name).Order(StringComparer.OrdinalIgnoreCase));
+        Outstanding = string.Join(
+            Strings.Common_ListSeparator,
+            behind.Concat(manual).Select(a => a.Name).Order(StringComparer.OrdinalIgnoreCase));
     }
-
-    private static string Mods(int count) => count == 1 ? "1 mod" : $"{count} mods";
 }

@@ -10,6 +10,9 @@ namespace TCFModManager.App.ViewModels;
 // whatever's needed to queue it. Rendered as an indented row inside its mod's expander.
 public sealed partial class DependencyRow : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     public required string Name { get; init; }
 
     // Nesting level within its tree; 0 is a direct dependency of the mod.
@@ -41,14 +44,21 @@ public sealed partial class DependencyRow : LocalizedViewModel
 
     public string StatusText => Status switch
     {
-        ModStatus.Installed => InstalledVersion is null ? "installed" : $"installed {InstalledVersion}",
-        ModStatus.UpdateAvailable => $"needs {RequiredVersion} - {InstalledVersion ?? "unknown"} installed",
-        ModStatus.NotInstalled => RequiredVersion is null ? "not installed" : $"not installed - needs {RequiredVersion}",
-        ModStatus.NoCompatibleVersion => "no version compatible with your SPT",
+        ModStatus.Installed => InstalledVersion is null
+            ? Strings.Dependencies_RowInstalled
+            : Text(Strings.Dependencies_RowInstalledVersionFormat, InstalledVersion),
+        ModStatus.UpdateAvailable => Text(
+            Strings.Dependencies_RowNeedsUpdateFormat,
+            RequiredVersion,
+            InstalledVersion ?? Strings.Common_Unknown),
+        ModStatus.NotInstalled => RequiredVersion is null
+            ? Strings.Dependencies_RowNotInstalled
+            : Text(Strings.Dependencies_RowNotInstalledNeedsFormat, RequiredVersion),
+        ModStatus.NoCompatibleVersion => Strings.Dependencies_RowNoCompatible,
         ModStatus.Disabled => InstalledVersion is null
-            ? "installed but disabled - SPT won't load it"
-            : $"installed {InstalledVersion} but disabled - SPT won't load it",
-        _ => "conflict - two mods need incompatible versions",
+            ? Strings.Dependencies_RowDisabled
+            : Text(Strings.Dependencies_RowDisabledVersionFormat, InstalledVersion),
+        _ => Strings.Dependencies_RowConflict,
     };
 
     // Whether this row can be queued: something is actually missing or outdated, and there's
@@ -58,7 +68,9 @@ public sealed partial class DependencyRow : LocalizedViewModel
         && CatalogMod is not null
         && !string.IsNullOrWhiteSpace(RequiredVersion);
 
-    public string InstallButtonText => Status == ModStatus.UpdateAvailable ? "Update" : "Install";
+    public string InstallButtonText => Status == ModStatus.UpdateAvailable
+        ? Strings.Dependencies_RowUpdate
+        : Strings.Dependencies_RowInstall;
 
     //
     // The button's tooltip. Its most useful job is explaining the DISABLED state: once a row is
@@ -73,7 +85,7 @@ public sealed partial class DependencyRow : LocalizedViewModel
     // changing that setting.
     //
     public string InstallToolTip => IsQueued
-        ? $"{Name} is already in the download queue - see the Downloads page for progress."
+        ? Text(Strings.Dependencies_AlreadyQueuedFormat, Name)
         : Status == ModStatus.UpdateAvailable
             ? AppServices.ModPageGate.UpdateToolTip
             : AppServices.ModPageGate.InstallToolTip;

@@ -10,6 +10,9 @@ namespace TCFModManager.App.ViewModels;
 // expander, plus its flattened, indented dependency rows.
 public sealed partial class DependencyTreeViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     public required string ModName { get; init; }
 
     // The installed version the tree was resolved for.
@@ -40,14 +43,16 @@ public sealed partial class DependencyTreeViewModel : LocalizedViewModel
             var unresolved = Rows.Count(r => r.Status == ModStatus.NoCompatibleVersion);
 
             var parts = new List<string>();
-            if (missing > 0) parts.Add($"{missing} missing");
-            if (outdated > 0) parts.Add($"{outdated} outdated");
-            if (conflicts > 0) parts.Add($"{conflicts} conflicting");
-            if (unresolved > 0) parts.Add($"{unresolved} unresolved");
+            if (missing > 0) parts.Add(Text(Strings.Dependencies_SummaryMissingFormat, missing));
+            if (outdated > 0) parts.Add(Text(Strings.Dependencies_SummaryOutdatedFormat, outdated));
+            if (conflicts > 0) parts.Add(Text(Strings.Dependencies_SummaryConflictingFormat, conflicts));
+            if (unresolved > 0) parts.Add(Text(Strings.Dependencies_SummaryUnresolvedFormat, unresolved));
 
             return parts.Count == 0
-                ? $"{Rows.Count} dependenc{(Rows.Count == 1 ? "y" : "ies")}, all satisfied"
-                : string.Join(", ", parts);
+                ? Rows.Count == 1
+                    ? Strings.Dependencies_SummarySatisfiedOne
+                    : Text(Strings.Dependencies_SummarySatisfiedManyFormat, Rows.Count)
+                : string.Join(Strings.Common_ListSeparator, parts);
         }
     }
 

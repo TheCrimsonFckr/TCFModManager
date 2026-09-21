@@ -7,6 +7,9 @@ namespace TCFModManager.App.ViewModels;
 // Shared, app-lifetime state for where SPT is installed and what version was detected there.
 public partial class SptEnvironmentViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     private readonly SettingsService _settings = new();
 
     [ObservableProperty]
@@ -42,7 +45,7 @@ public partial class SptEnvironmentViewModel : LocalizedViewModel
     //
     public string WindowTitle => string.IsNullOrWhiteSpace(InstalledVersion)
         ? AppVersion.DisplayTitle
-        : $"{AppVersion.DisplayTitle} [SPT {InstalledVersion}]";
+        : Text(Strings.SptEnvironment_TitleFormat, AppVersion.DisplayTitle, InstalledVersion);
 
     public SptEnvironmentViewModel()
     {
@@ -82,7 +85,7 @@ public partial class SptEnvironmentViewModel : LocalizedViewModel
         InstalledVersion = reading.Version;
 
         StatusMessage = reading.Found
-            ? $"Detected SPT {reading.Version}."
+            ? Text(Strings.SptEnvironment_DetectedFormat, reading.Version)
             : Describe(reading);
     }
 
@@ -96,18 +99,17 @@ public partial class SptEnvironmentViewModel : LocalizedViewModel
     //
     private static string Describe(SptVersionReading reading) => reading.Problem switch
     {
-        SptVersionProblem.NoInstallFolder => "No SPT install folder set.",
+        SptVersionProblem.NoInstallFolder => Strings.SptEnvironment_NoInstallFolder,
 
         SptVersionProblem.NoServerExe =>
-            $"Couldn't find an SPT server executable under \"{reading.InstallPath}\" - make sure this "
-            + "is the SPT server install folder (the one containing SPT.Server.exe).",
+            Text(Strings.SptEnvironment_NoServerExeFormat, reading.InstallPath),
 
         SptVersionProblem.NoVersionInExe =>
-            $"\"{reading.ExeName}\" didn't have a recognizable file version.",
+            Text(Strings.SptEnvironment_NoFileVersionFormat, reading.ExeName),
 
         SptVersionProblem.CouldNotReadExe =>
-            $"Couldn't read the file version from \"{reading.ExeName}\": {reading.Error?.Message}",
+            Text(Strings.SptEnvironment_ReadFailedFormat, reading.ExeName, reading.Error?.Message),
 
-        _ => "Couldn't work out which version of SPT this is.",
+        _ => Strings.SptEnvironment_Unknown,
     };
 }

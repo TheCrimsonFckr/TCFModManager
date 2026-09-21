@@ -1,3 +1,4 @@
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Models;
 
 namespace TCFModManager.App.ViewModels;
@@ -5,10 +6,13 @@ namespace TCFModManager.App.ViewModels;
 // Display wrapper for one row in ModUpdateDialogViewModel.Versions, representing one published mod version.
 public sealed class ModVersionRowViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     // The full version record, used to install this version when selected.
     public required ModVersion Raw { get; init; }
 
-    public string VersionText => Raw.Version ?? "unknown";
+    public string VersionText => Raw.Version ?? Strings.Common_Unknown;
 
     // Per-version release notes as raw HTML; null when there are none.
     public string? Changelog => string.IsNullOrWhiteSpace(Raw.Description) ? null : Raw.Description;
@@ -32,11 +36,11 @@ public sealed class ModVersionRowViewModel
 
     public string? CompatibilityLabel => (ParentRequirement, IsCompatible) switch
     {
-        ({ } requirement, true) => $"Fits {requirement}",
-        ({ } requirement, false) => $"Needs {requirement}",
-        ({ } requirement, null) => $"Needs {requirement} - couldn't check it against what you have installed",
-        (null, true) => "Compatible with your installed SPT version",
-        (null, false) => "Not compatible with your installed SPT version",
+        ({ } requirement, true) => Text(Strings.ModUpdate_VersionFitsFormat, requirement),
+        ({ } requirement, false) => Text(Strings.ModUpdate_VersionNeedsFormat, requirement),
+        ({ } requirement, null) => Text(Strings.ModUpdate_VersionNeedsUncheckedFormat, requirement),
+        (null, true) => Strings.ModUpdate_VersionCompatible,
+        (null, false) => Strings.ModUpdate_VersionIncompatible,
         _ => null,
     };
 }

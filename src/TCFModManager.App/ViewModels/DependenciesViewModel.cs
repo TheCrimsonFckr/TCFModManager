@@ -17,6 +17,9 @@ namespace TCFModManager.App.ViewModels;
 // 
 public partial class DependenciesViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     private readonly SpModApiClient _spModApi;
 
     // How many identifier:version pairs go in one request. The endpoint takes many at once,
@@ -62,12 +65,12 @@ public partial class DependenciesViewModel : LocalizedViewModel
         var sptVersion = AppServices.SptEnvironment.InstalledVersion;
         if (string.IsNullOrWhiteSpace(sptVersion))
         {
-            StatusMessage = "Couldn't detect your SPT version, which is needed to resolve dependencies.";
+            StatusMessage = Strings.Dependencies_NoSptVersion;
             return;
         }
 
         IsBusy = true;
-        StatusMessage = "Scanning installed mods...";
+        StatusMessage = Strings.Dependencies_Scanning;
         try
         {
             await AppServices.ModCache.EnsureLoadedAsync();
@@ -92,11 +95,13 @@ public partial class DependenciesViewModel : LocalizedViewModel
                 Trees.Clear();
                 HasLoaded = true;
                 OnPropertyChanged(nameof(IsEmpty));
-                StatusMessage = "None of your installed mods could be matched to sp-mod.com.";
+                StatusMessage = Strings.Dependencies_NoneMatched;
                 return;
             }
 
-            StatusMessage = $"Resolving dependencies for {queryable.Count} mod(s)...";
+            StatusMessage = queryable.Count == 1
+                ? Strings.Dependencies_ResolvingOne
+                : Text(Strings.Dependencies_ResolvingManyFormat, queryable.Count);
 
             var installedByModId = installed
                 .Where(m => m.ModId is not null)
@@ -153,10 +158,14 @@ public partial class DependenciesViewModel : LocalizedViewModel
             AppLog.Info("Dependencies",
                 $"queried {queryable.Count} mod(s); {Trees.Count} have dependencies, {attention} need attention");
             StatusMessage = Trees.Count == 0
-                ? "None of your installed mods declare dependencies."
+                ? Strings.Dependencies_NoneDeclared
                 : attention == 0
-                    ? $"{Trees.Count} mod(s) have dependencies - all satisfied."
-                    : $"{Trees.Count} mod(s) have dependencies; {attention} need attention.";
+                    ? Trees.Count == 1
+                        ? Strings.Dependencies_AllSatisfiedOne
+                        : Text(Strings.Dependencies_AllSatisfiedManyFormat, Trees.Count)
+                    : Trees.Count == 1
+                        ? Text(Strings.Dependencies_AttentionOneFormat, attention)
+                        : Text(Strings.Dependencies_AttentionManyFormat, Trees.Count, attention);
         }
         catch (SpModApiRateLimitedException ex)
         {
@@ -173,7 +182,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
         catch (Exception ex)
         {
             AppLog.Error("Dependencies", "Resolve failed", ex);
-            StatusMessage = $"Unexpected error resolving dependencies: {ex.Message}";
+            StatusMessage = Text(Strings.Dependencies_UnexpectedFormat, ex.Message);
         }
         finally
         {
@@ -197,7 +206,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
         var mod = row.CatalogMod;
         if (!ReadModPageConfirmationWindow.Confirm(mod.Name ?? row.Name, mod.DetailUrl))
         {
-            StatusMessage = $"Install cancelled - {row.Name}'s page wasn't confirmed as read.";
+            StatusMessage = Text(Strings.Dependencies_CancelledFormat, row.Name);
             return;
         }
 
@@ -207,7 +216,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
         AppServices.DownloadQueue.Enqueue(InstallTarget.For(mod), version, installPath, () => ResolveVersionLinkAsync(mod, version));
 
         row.IsQueued = true;
-        StatusMessage = $"Queued {row.Name} {version} - see the Downloads page for progress.";
+        StatusMessage = Text(Strings.Dependencies_QueuedFormat, row.Name, version);
     }
 
     // Resolves the full ModVersion (with its download link) for exactly one version string,
@@ -264,7 +273,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
 
             yield return new DependencyRow
             {
-                Name = node.Name ?? node.Guid ?? "(unknown)",
+                Name = node.Name ?? node.Guid ?? Strings.Dependencies_UnknownName,
                 Depth = depth,
                 Status = status,
                 InstalledVersion = installed?.InstalledVersion,

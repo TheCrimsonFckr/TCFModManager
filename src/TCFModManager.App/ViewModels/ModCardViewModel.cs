@@ -9,6 +9,9 @@ namespace TCFModManager.App.ViewModels;
 // Display wrapper around a Mod for the Browse results grid. Precomputes the fields of the version this card represents.
 public sealed partial class ModCardViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     public required Mod Mod { get; init; }
 
     // The installed match's pin keys (ModListPlanner.PinKeys), empty when it isn't installed, so
@@ -48,7 +51,7 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
     public string? SptVersionConstraint { get; private init; }
 
     // The card's SPT line, e.g. "✓ SPT 4.0.13 - 4.0.x". Falls back to the raw constraint when it can't be parsed.
-    public string SptVersionDisplay { get; private init; } = "SPT version unknown";
+    public string SptVersionDisplay { get; private init; } = Strings.Browse_SptVersionUnknown;
 
     // Tooltip spelling out the requirement, the installed version, and the raw constraint.
     public string SptVersionTooltip { get; private init; } = "";
@@ -104,7 +107,9 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
 
     public bool HasAddons => AddonCount > 0;
 
-    public string AddonBadgeText => AddonCount == 1 ? "1 addon" : $"{AddonCount} addons";
+    public string AddonBadgeText => AddonCount == 1
+        ? Strings.Browse_AddonBadgeOne
+        : Text(Strings.Browse_AddonBadgeManyFormat, AddonCount);
 
     // 
     // Builds a card. <paramref name="selectedLines"/> is the SPT release lines currently ticked in
@@ -189,9 +194,11 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
         // "version (vX)" rather than "vX" was eleven characters that said nothing the number
         // doesn't - and at three or four Browse columns it was what pushed this note past the card
         // and into an ellipsis. The card already writes its release as "v1.6.0" a line above.
-        return isOlder
-            ? $"Older v{shown.Version} available for your installed SPT."
-            : $"Compatible v{shown.Version} available for your installed SPT.";
+        return Text(
+            isOlder
+                ? Strings.Browse_OlderVersionNoteFormat
+                : Strings.Browse_CompatibleVersionNoteFormat,
+            shown.Version);
     }
 
     // 
@@ -223,11 +230,13 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
         IReadOnlyList<SptRelease>? releases,
         bool? compatible)
     {
-        var glyph = compatible switch
+        // The tick and the cross live inside their own whole key rather than being pasted onto a
+        // shared one, so a language can drop them or use something else.
+        var format = compatible switch
         {
-            true => "✓ ",
-            false => "✗ ",
-            _ => "",
+            true => Strings.Browse_SptCompatibleFormat,
+            false => Strings.Browse_SptIncompatibleFormat,
+            _ => Strings.Browse_SptPlainFormat,
         };
 
         // Name the newest release that actually shipped on each ticked line, rather than the
@@ -244,7 +253,8 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
                 .Select(release => release!.Value.Label)
                 .ToList();
 
-            if (named.Count > 0) return $"{glyph}SPT {string.Join(", ", named)}";
+            if (named.Count > 0)
+                return Text(format, string.Join(Strings.Common_ListSeparator, named));
         }
 
         // No release list yet (first run, offline) - fall back to describing the constraint itself.
@@ -257,12 +267,13 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
                 .Distinct()
                 .ToList();
 
-            if (perLine.Count > 0) return $"{glyph}SPT {string.Join(", ", perLine)}";
+            if (perLine.Count > 0)
+                return Text(format, string.Join(Strings.Common_ListSeparator, perLine));
         }
 
-        if (string.IsNullOrWhiteSpace(pickedConstraint)) return "SPT version unknown";
+        if (string.IsNullOrWhiteSpace(pickedConstraint)) return Strings.Browse_SptVersionUnknown;
 
-        return $"{glyph}SPT {SptVersionRangeFormatter.Format(pickedConstraint) ?? pickedConstraint}";
+        return Text(format, SptVersionRangeFormatter.Format(pickedConstraint) ?? pickedConstraint);
     }
 
     private static string BuildTooltip(
@@ -274,7 +285,7 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
         IReadOnlyList<SptRelease>? releases,
         string? alternateNote)
     {
-        if (shown is null) return "This mod has no published version in the catalog.";
+        if (shown is null) return Strings.Browse_TooltipNoVersion;
 
         var lines = new List<string>();
 
@@ -282,29 +293,34 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
         if (supported.Count > 0)
         {
             lines.Add(supported.Count == 1
-                ? $"v{shown.Version} runs on SPT {supported[0].Label}."
-                : $"v{shown.Version} runs on SPT {supported[^1].Label} to {supported[0].Label}.");
+                ? Text(Strings.Browse_TooltipRunsOnOneFormat, shown.Version, supported[0].Label)
+                : Text(
+                    Strings.Browse_TooltipRunsOnRangeFormat,
+                    shown.Version,
+                    supported[^1].Label,
+                    supported[0].Label));
         }
         else
         {
             var range = SptVersionRangeFormatter.Format(shown.SptVersionConstraint);
             lines.Add(range is null
-                ? $"v{shown.Version} has no readable SPT requirement."
-                : $"v{shown.Version} needs SPT {range}.");
+                ? Text(Strings.Browse_TooltipNoRequirementFormat, shown.Version)
+                : Text(Strings.Browse_TooltipNeedsFormat, shown.Version, range));
         }
 
         lines.Add(string.IsNullOrWhiteSpace(installedSptVersion)
-            ? "No SPT install detected - set it on the Options page."
-            : $"You have SPT {installedSptVersion}.");
+            ? Strings.Browse_TooltipNoInstall
+            : Text(Strings.Browse_TooltipYouHaveFormat, installedSptVersion));
 
         if (isOlder && newest is not null)
         {
             var newestRange = SptVersionRangeFormatter.Format(newest.SptVersionConstraint) ?? newest.SptVersionConstraint;
-            lines.Add($"Showing this instead of the newest v{newest.Version}, which needs SPT {newestRange}.");
+            lines.Add(Text(
+                Strings.Browse_TooltipShowingOlderFormat, newest.Version, newestRange));
         }
 
         if (!string.IsNullOrWhiteSpace(shown.SptVersionConstraint))
-            lines.Add($"Constraint: {shown.SptVersionConstraint}");
+            lines.Add(Text(Strings.Browse_TooltipConstraintFormat, shown.SptVersionConstraint));
 
         if (!string.IsNullOrWhiteSpace(alternateNote))
             lines.Add(alternateNote);

@@ -1,3 +1,4 @@
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Models;
 
 namespace TCFModManager.App.ViewModels;
@@ -16,14 +17,16 @@ public sealed record ConfigSectionHeader(ModConfigSource Source)
 {
     public string Title => Source switch
     {
-        ModConfigSource.Client => "Client",
-        ModConfigSource.Server => "Server",
-        ModConfigSource.Framework => "BepInEx",
-        _ => "Unclaimed",
+        ModConfigSource.Client => Strings.Configs_SectionClient,
+        ModConfigSource.Server => Strings.Configs_SectionServer,
+        ModConfigSource.Framework => Strings.Configs_SectionFramework,
+        _ => Strings.Configs_SectionUnclaimed,
     };
 
     // The folder the whole section lives in, so every row underneath can leave it off its own path.
-    public string Location => Source == ModConfigSource.Server ? "user\\mods" : "BepInEx\\config";
+    public string Location => Source == ModConfigSource.Server
+        ? Strings.Configs_LocationServer
+        : Strings.Configs_LocationClient;
 
     public string Glyph => Source switch
     {

@@ -19,6 +19,9 @@ namespace TCFModManager.App.ViewModels;
 //
 public partial class PlayViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     //
     // All three targets are started outside this app, so there is nothing to await and no event to
     // subscribe to - a poll is the only way the buttons can tell that the server came up, or that
@@ -149,10 +152,8 @@ public partial class PlayViewModel : LocalizedViewModel
     //
     public string RoleSummary => (PlaysHere, RunsHeadlessClient) switch
     {
-        (false, true) => "Set up as a dedicated headless: a mod list from a server arrives without"
-            + " the mods only a player would need.",
-        (true, true) => "Set up as a machine that both plays and hosts, so a served mod list arrives"
-            + " whole.",
+        (false, true) => Strings.Play_RoleHeadless,
+        (true, true) => Strings.Play_RolePlaysAndHosts,
         _ => "",
     };
 
@@ -210,7 +211,7 @@ public partial class PlayViewModel : LocalizedViewModel
 
         HasError = !result.Started;
         Message = result.Started
-            ? $"Started {result.Info.ProcessName}."
+            ? Text(Strings.Play_StartedFormat, result.Info.ProcessName)
             : SptLaunchProblems.Describe(result);
 
         Refresh();
@@ -251,7 +252,7 @@ public partial class PlayViewModel : LocalizedViewModel
 
             HasError = !result.Started;
             Message = result.Started
-                ? $"Restarted {result.Info.ProcessName}."
+                ? Text(Strings.Play_RestartedFormat, result.Info.ProcessName)
                 : SptLaunchProblems.Describe(result);
         }
         finally

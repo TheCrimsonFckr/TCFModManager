@@ -9,6 +9,9 @@ namespace TCFModManager.App.ViewModels;
 // fixed "Ungrouped" bucket (GroupId null) holding every installed mod nothing was assigned to.
 public partial class ModGroupSectionViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     // Null for the Ungrouped bucket, which can't be renamed, deleted, reordered, or collapsed.
     public Guid? GroupId { get; init; }
 
@@ -31,7 +34,9 @@ public partial class ModGroupSectionViewModel : LocalizedViewModel
 
     public ObservableCollection<InstalledModCardViewModel> Items { get; } = [];
 
-    public string CountLabel => Items.Count == 1 ? "1 mod" : $"{Items.Count} mods";
+    public string CountLabel => Items.Count == 1
+        ? Strings.Installed_GroupCountOne
+        : Text(Strings.Installed_GroupCountManyFormat, Items.Count);
 
     public int DisabledCount => Items.Count(i => i.IsDisabled);
 
@@ -40,8 +45,8 @@ public partial class ModGroupSectionViewModel : LocalizedViewModel
     public string StateLabel => DisabledCount switch
     {
         0 => string.Empty,
-        var n when n == Items.Count => "• all disabled",
-        var n => $"• {n} disabled",
+        var n when n == Items.Count => Strings.Installed_GroupAllDisabled,
+        var n => Text(Strings.Installed_GroupSomeDisabledFormat, n),
     };
 
     // Whether the header's enable-all/disable-all/invert buttons have anything to act on.
@@ -69,6 +74,6 @@ public partial class ModGroupSectionViewModel : LocalizedViewModel
     public static ModGroupSectionViewModel Ungrouped() => new()
     {
         GroupId = null,
-        Name = "Ungrouped",
+        Name = Strings.Filter_Ungrouped,
     };
 }
