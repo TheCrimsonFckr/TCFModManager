@@ -166,7 +166,7 @@ public sealed class ModInstallService(
         InstallTarget target,
         ModVersion version,
         string installPath,
-        IProgress<string>? status = null,
+        IProgress<ModInstallProgress>? status = null,
         IProgress<double>? downloadProgress = null,
         CancellationToken ct = default)
     {
@@ -194,7 +194,8 @@ public sealed class ModInstallService(
         {
             ct.ThrowIfCancellationRequested();
 
-            status?.Report($"Downloading {target.Name} {version.Version}...");
+            status?.Report(new ModInstallProgress(
+                ModInstallStage.Downloading, target.Name, version.Version));
             await downloadService.DownloadAsync(version.Link, archivePath, downloadProgress, ct).ConfigureAwait(false);
 
             ct.ThrowIfCancellationRequested();
@@ -202,7 +203,7 @@ public sealed class ModInstallService(
             var archiveBytes = new FileInfo(archivePath).Length;
             AppLog.Debug("Install", $"downloaded {archiveBytes:N0} bytes, zip={IsZipArchive(archivePath)}");
 
-            status?.Report("Extracting...");
+            status?.Report(new ModInstallProgress(ModInstallStage.Extracting));
             // Auto-detects archive format from the file header rather than assuming zip.
             var extractTimer = System.Diagnostics.Stopwatch.StartNew();
             await ExtractArchiveAsync(archivePath, extractDir, status, ct).ConfigureAwait(false);
@@ -261,7 +262,8 @@ public sealed class ModInstallService(
 
             if (existing is not null)
             {
-                status?.Report($"Removing the previously installed version ({existing.Version})...");
+                status?.Report(new ModInstallProgress(
+                    ModInstallStage.RemovingPrevious, Version: existing.Version));
 
                 //
                 // Preserve, not Keep: Prepare has already copied every config aside, and moving them
@@ -279,7 +281,8 @@ public sealed class ModInstallService(
                     CancellationToken.None);
             }
 
-            status?.Report(FormatCount("Installing", 0, sourceFiles.Length));
+            status?.Report(new ModInstallProgress(
+                ModInstallStage.Installing, Total: sourceFiles.Length));
             var placedFiles = new List<string>(sourceFiles.Length);
             var reportClock = Stopwatch.StartNew();
 
@@ -313,7 +316,8 @@ public sealed class ModInstallService(
 
                     if (reportClock.Elapsed >= ProgressInterval)
                     {
-                        status?.Report(FormatCount("Installing", i + 1, sourceFiles.Length));
+                        status?.Report(new ModInstallProgress(
+                            ModInstallStage.Installing, Done: i + 1, Total: sourceFiles.Length));
                         reportClock.Restart();
                     }
                 }
@@ -352,7 +356,7 @@ public sealed class ModInstallService(
                     string.Join(", ", report.Files.Select(f => $"{f.Path} {f.Kind}{(f.Reason is { } r ? $" ({r})" : "")}")));
             }
 
-            status?.Report("Done.");
+            status?.Report(new ModInstallProgress(ModInstallStage.Done));
             return new ModInstallResult(record, report.Files.Count > 0 ? report : null);
         }
         catch (OperationCanceledException)
@@ -622,9 +626,6 @@ public sealed class ModInstallService(
         catch (UnauthorizedAccessException) { }
     }
 
-    private static string FormatCount(string verb, int done, int total) =>
-        total > 0 ? $"{verb} {done}/{total} files..." : $"{verb} {done} files...";
-
     // Extracts every file entry in the archive at <paramref name="archivePath"/> into
     // <paramref name="extractDir"/>. Zip archives go through System.IO.Compression; every other
     // format goes through SharpCompress's forward-only reader. Zip-slip protection: any entry whose
@@ -632,7 +633,7 @@ public sealed class ModInstallService(
     private static async Task ExtractArchiveAsync(
         string archivePath,
         string extractDir,
-        IProgress<string>? status,
+        IProgress<ModInstallProgress>? status,
         CancellationToken ct)
     {
         Directory.CreateDirectory(extractDir);
@@ -672,7 +673,7 @@ public sealed class ModInstallService(
         string archivePath,
         string extractDir,
         string extractRoot,
-        IProgress<string>? status,
+        IProgress<ModInstallProgress>? status,
         CancellationToken ct)
     {
         await using var file = new FileStream(
@@ -697,7 +698,8 @@ public sealed class ModInstallService(
             extracted++;
             if (reportClock.Elapsed >= ProgressInterval)
             {
-                status?.Report(FormatCount("Extracting", extracted, entries.Count));
+                status?.Report(new ModInstallProgress(
+                    ModInstallStage.Extracting, Done: extracted, Total: entries.Count));
                 reportClock.Restart();
             }
         }
@@ -707,7 +709,7 @@ public sealed class ModInstallService(
         string archivePath,
         string extractDir,
         string extractRoot,
-        IProgress<string>? status,
+        IProgress<ModInstallProgress>? status,
         CancellationToken ct)
     {
         using var archive = ArchiveFactory.OpenArchive(archivePath);
@@ -733,7 +735,8 @@ public sealed class ModInstallService(
             extracted++;
             if (reportClock.Elapsed >= ProgressInterval)
             {
-                status?.Report(FormatCount("Extracting", extracted, total));
+                status?.Report(new ModInstallProgress(
+                    ModInstallStage.Extracting, Done: extracted, Total: total));
                 reportClock.Restart();
             }
         }

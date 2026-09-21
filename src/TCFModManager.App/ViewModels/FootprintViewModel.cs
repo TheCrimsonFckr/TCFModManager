@@ -402,15 +402,8 @@ public sealed partial class ModFootprintRowViewModel(ModFootprintResult result) 
 
     public bool HasPerFrameTooltip => Footprint.PerFrameMethods.Count > 0;
 
-    // Duplicated from DownloadQueueItemViewModel rather than shared: pulling it out would mean
-    // editing a file this feature otherwise doesn't touch, for three lines.
-    private static string Size(double bytes) => bytes switch
-    {
-        >= 1024d * 1024 * 1024 => $"{bytes / (1024d * 1024 * 1024):0.#} GB",
-        >= 1024d * 1024 => $"{bytes / (1024d * 1024):0.#} MB",
-        >= 1024d => $"{bytes / 1024d:0.#} KB",
-        _ => $"{bytes:0} B",
-    };
+    // The download queue writes the same sizes, so both read the one set of Common_Size keys.
+    private static string Size(double bytes) => DownloadQueueItemViewModel.Size(bytes);
 }
 
 public sealed partial class FootprintViewModel : LocalizedViewModel

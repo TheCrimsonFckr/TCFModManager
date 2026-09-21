@@ -14,10 +14,8 @@ namespace TCFModManager.App.ViewModels;
 //
 public sealed partial class ModPageGateViewModel : LocalizedViewModel
 {
-    private const string SkipNotice =
-        "\n\nYou are skipping this mod's page, and its release notes with it - it is recommended you "
-        + "read them first. They are where the author says what changed, what a version needs and "
-        + "what it breaks.";
+    // Read on every get, so a language change relabels the tooltips with the rest of the app.
+    private static string SkipNotice => $"\n\n{Strings.ModPageGate_SkipNotice}";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(InstallToolTip))]
@@ -26,20 +24,18 @@ public sealed partial class ModPageGateViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(SettingToolTip))]
     private bool _isSkipping;
 
-    public string InstallToolTip => "Install this mod." + (IsSkipping ? SkipNotice : string.Empty);
+    public string InstallToolTip => Strings.ModPageGate_Install + (IsSkipping ? SkipNotice : string.Empty);
 
-    public string RedownloadToolTip => "Redownload this mod." + (IsSkipping ? SkipNotice : string.Empty);
+    public string RedownloadToolTip =>
+        Strings.ModPageGate_Redownload + (IsSkipping ? SkipNotice : string.Empty);
 
-    public string UpdateToolTip => "Update this mod." + (IsSkipping ? SkipNotice : string.Empty);
+    public string UpdateToolTip => Strings.ModPageGate_Update + (IsSkipping ? SkipNotice : string.Empty);
 
     // The Options page's own switch, kept here so there is one description of what the setting
     // currently means rather than two that can drift apart.
     public string SettingToolTip => IsSkipping
-        ? "You are skipping each mod's release notes. It is recommended you read them - they are "
-          + "where an author says what changed, what a version needs and what it breaks. "
-          + "This app's own updates always ask regardless."
-        : "Each mod's page opens before anything downloads, so its release notes and install "
-          + "instructions are in front of you first.";
+        ? Strings.Options_ModPagesToolTipSkipping
+        : Strings.Options_ModPagesToolTipAsking;
 
     // Re-reads the setting. Called at startup and whenever the Options page changes it.
     public void Refresh() => IsSkipping = new SettingsService().Load().SkipModPageConfirmation;

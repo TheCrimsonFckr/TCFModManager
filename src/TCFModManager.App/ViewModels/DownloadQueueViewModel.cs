@@ -15,6 +15,9 @@ namespace TCFModManager.App.ViewModels;
 // App-lifetime download queue that processes one download/install at a time and resolves each item's dependencies before installing it.
 public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     private readonly Channel<DownloadQueueItemViewModel> _channel = Channel.CreateUnbounded<DownloadQueueItemViewModel>();
 
     public ObservableCollection<DownloadQueueItemViewModel> Items { get; } = [];
@@ -125,12 +128,14 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         var unknown = unfinished.Count(i => i.RemainingBytes is null);
 
         HasSummary = true;
-        SummaryProgress = $"{done} of {Items.Count} done";
+        SummaryProgress = Text(Strings.Downloads_SummaryProgressFormat, done, Items.Count);
 
         SummaryRemaining = remaining > 0 ? DownloadQueueItemViewModel.SizeLabel(remaining) : NoValue;
 
         HasUnsized = unknown > 0;
-        SummaryUnsized = unknown == 1 ? "1 item" : $"{unknown} items";
+        SummaryUnsized = unknown == 1
+            ? Strings.Downloads_SummaryUnsizedOne
+            : Text(Strings.Downloads_SummaryUnsizedManyFormat, unknown);
 
         SummaryEta = remaining > 0
             && unfinished.FirstOrDefault(i => i.BytesPerSecond is > 0)?.BytesPerSecond is { } rate
@@ -186,20 +191,21 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         if (item.Status == DownloadQueueItemStatus.Cancelled || item.Token.IsCancellationRequested)
         {
             item.Status = DownloadQueueItemStatus.Cancelled;
-            item.StatusMessage = "Cancelled before it started.";
+            item.StatusMessage = Strings.Downloads_CancelledBeforeStart;
             return;
         }
 
         try
         {
             item.Status = DownloadQueueItemStatus.Downloading;
-            item.StatusMessage = "Resolving download link...";
+            item.StatusMessage = Strings.Downloads_ResolvingLink;
 
             var version = await item.ResolveVersionAsync();
             if (version?.Link is null)
             {
                 item.Status = DownloadQueueItemStatus.Failed;
-                item.StatusMessage = $"Couldn't find a download link for {item.ModName} {item.VersionLabel}.";
+                item.StatusMessage = Text(
+                    Strings.Downloads_NoLinkFormat, item.ModName, item.VersionLabel);
                 return;
             }
 
@@ -211,18 +217,18 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             // lands right behind it in the queue.
             if (item.CheckDependencies)
             {
-                item.StatusMessage = "Checking dependencies...";
+                item.StatusMessage = Strings.Downloads_CheckingDependencies;
                 await CheckDependenciesAsync(item, version);
             }
 
             item.Token.ThrowIfCancellationRequested();
 
-            // Maps the "Downloading ..." status text to the Downloading stage; every other phase
-            // (removing previous version, extracting, copying files) is bucketed under Installing.
-            var status = new Progress<string>(s =>
+            // Core reports which stage it is in; every phase but the download itself (removing the
+            // previous version, extracting, copying files) is bucketed under Installing.
+            var status = new Progress<ModInstallProgress>(p =>
             {
-                item.StatusMessage = s;
-                item.Status = s.Contains("Downloading", StringComparison.OrdinalIgnoreCase)
+                item.StatusMessage = ModInstallWording.Describe(p);
+                item.Status = p.Stage == ModInstallStage.Downloading
                     ? DownloadQueueItemStatus.Downloading
                     : DownloadQueueItemStatus.Installing;
             });
@@ -238,16 +244,19 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             // leaving the user to find out in game - see ConfigUpdateWording.
             var configs = result.Configs is { } report ? ConfigUpdateWording.Summary(report) : null;
 
+            var installed = Text(Strings.Downloads_InstalledFormat, item.ModName, item.VersionLabel);
+
             item.StatusMessage = configs is null
-                ? $"Installed {item.ModName} {item.VersionLabel}."
-                : $"Installed {item.ModName} {item.VersionLabel}. {configs}";
+                ? installed
+                : string.Join(Strings.Common_SentenceSeparator, installed, configs);
             ItemInstalled?.Invoke(this, EventArgs.Empty);
         }
         catch (OperationCanceledException) when (item.Token.IsCancellationRequested)
         {
             item.Status = DownloadQueueItemStatus.Cancelled;
             item.Progress = 0;
-            item.StatusMessage = $"Cancelled {item.ModName} {item.VersionLabel}.";
+            item.StatusMessage = Text(
+                Strings.Downloads_CancelledItemFormat, item.ModName, item.VersionLabel);
         }
         catch (SpModApiRateLimitedException ex)
         {
@@ -279,7 +288,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         catch (Exception ex)
         {
             item.Status = DownloadQueueItemStatus.Failed;
-            item.StatusMessage = $"Unexpected error: {ex.Message}";
+            item.StatusMessage = Text(Strings.Downloads_UnexpectedFormat, ex.Message);
         }
     }
 
@@ -365,7 +374,9 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         // before Continue unlocks, replacing what was previously a separate Yes/No prompt plus a
         // per-dependency read-page confirmation.
         var links = depDetails
-            .Select(d => new ModPageLink(d.Mod.Name ?? d.Dep.Name ?? $"mod {d.Dep.Id}", d.Mod.DetailUrl))
+            .Select(d => new ModPageLink(
+                d.Mod.Name ?? d.Dep.Name ?? Text(Strings.Downloads_UnnamedModFormat, d.Dep.Id),
+                d.Mod.DetailUrl))
             .ToList();
         if (!ReadModPageConfirmationWindow.ConfirmAll(links)) return;
 
@@ -385,7 +396,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
             Enqueue(
                 InstallTarget.For(depMod),
-                depVersion.Version ?? "unknown",
+                depVersion.Version ?? Strings.Common_Unknown,
                 installPath,
                 () => Task.FromResult<ModVersion?>(depVersion),
                 checkDependencies: false,

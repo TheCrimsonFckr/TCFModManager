@@ -26,6 +26,9 @@ namespace TCFModManager.App.ViewModels;
 //
 public partial class AppUpdateViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     private readonly AppUpdateService _updates = new(AppServices.SpModApi);
     private readonly AppUpdateInstaller _installer = new(AppServices.Downloads);
     private readonly SettingsService _settings = new();
@@ -102,10 +105,10 @@ public partial class AppUpdateViewModel : LocalizedViewModel
 
     public string ChangeTitle => Update?.ChangeKind switch
     {
-        VersionChangeKind.Patch => "Bug fix update",
-        VersionChangeKind.Minor => "Feature update",
-        VersionChangeKind.Major => "Major update",
-        _ => "Update available",
+        VersionChangeKind.Patch => Strings.AppUpdate_ChangePatch,
+        VersionChangeKind.Minor => Strings.AppUpdate_ChangeMinor,
+        VersionChangeKind.Major => Strings.AppUpdate_ChangeMajor,
+        _ => Strings.AppUpdate_ChangeUnknown,
     };
 
     public string ChangeSummary => Update is null
@@ -113,20 +116,19 @@ public partial class AppUpdateViewModel : LocalizedViewModel
         : Update.ChangeKind switch
         {
             VersionChangeKind.Patch =>
-                $"{Update.LatestVersion} only changes the last number (x.x.●), so it's fixes to how the "
-                + "current version already works - nothing new to learn. Safe to skip if nothing is broken for you.",
+                Text(Strings.AppUpdate_PatchBodyFormat, Update.LatestVersion),
 
             VersionChangeKind.Minor =>
-                $"{Update.LatestVersion} changes the middle number (x.●.x), so it adds features or "
-                + "changes how something works. Worth reading the notes below before updating.",
+                Text(Strings.AppUpdate_MinorBodyFormat, Update.LatestVersion),
 
             VersionChangeKind.Major =>
-                $"{Update.LatestVersion} changes the first number (●.x.x), so this is a major update - "
-                + "expect significant changes. Read the notes below and the mod page before updating.",
+                Text(Strings.AppUpdate_MajorBodyFormat, Update.LatestVersion),
 
             _ =>
-                $"sp-mod.com lists {Update.LatestVersion}, but it isn't numbered in a way this app can compare "
-                + $"against {Update.CurrentVersion}. Check the mod page to see what changed.",
+                Text(
+                    Strings.AppUpdate_UnknownBodyFormat,
+                    Update.LatestVersion,
+                    Update.CurrentVersion),
         };
 
     public InfoBarSeverity BannerSeverity => Update?.ChangeKind switch
@@ -143,14 +145,14 @@ public partial class AppUpdateViewModel : LocalizedViewModel
         _ => InfoBadgeSeverity.Informational,
     };
 
-    public string BannerTitle => $"{ChangeTitle}: {LatestVersion}";
+    public string BannerTitle => Text(Strings.AppUpdate_BannerTitleFormat, ChangeTitle, LatestVersion);
 
     public string? DownloadSizeText => Update?.DownloadSizeBytes is > 0
-        ? $"{Update.DownloadSizeBytes.Value / (1024d * 1024d):N0} MB download"
+        ? Text(Strings.AppUpdate_DownloadSizeFormat, Update.DownloadSizeBytes.Value / (1024d * 1024d))
         : null;
 
     public string? PublishedText => Update?.PublishedAt is { } published
-        ? $"Published {published.ToLocalTime():d MMMM yyyy}"
+        ? Text(Strings.AppUpdate_PublishedFormat, published.ToLocalTime())
         : null;
 
     // ---- Checking ------------------------------------------------------------------------------
@@ -199,7 +201,7 @@ public partial class AppUpdateViewModel : LocalizedViewModel
         }
         catch (SpModApiRateLimitedException)
         {
-            CheckError = "sp-mod.com is rate limiting right now. Try again in a minute.";
+            CheckError = Strings.AppUpdate_RateLimited;
         }
         catch (SpModApiException ex)
         {
@@ -207,16 +209,16 @@ public partial class AppUpdateViewModel : LocalizedViewModel
         }
         catch (HttpRequestException ex)
         {
-            CheckError = $"Couldn't reach sp-mod.com: {ex.Message}";
+            CheckError = Text(Strings.AppUpdate_UnreachableFormat, ex.Message);
         }
         catch (OperationCanceledException)
         {
             // HttpClient surfaces a request timeout as this rather than HttpRequestException.
-            CheckError = "Timed out reaching sp-mod.com - check your connection and try again.";
+            CheckError = Strings.AppUpdate_TimedOut;
         }
         catch (Exception ex)
         {
-            CheckError = $"Unexpected error checking for updates: {ex.Message}";
+            CheckError = Text(Strings.AppUpdate_CheckUnexpectedFormat, ex.Message);
             AppLog.Error("AppUpdate", "update check failed", ex);
         }
         finally
@@ -264,7 +266,7 @@ public partial class AppUpdateViewModel : LocalizedViewModel
         IsInstalling = true;
         InstallError = null;
         InstallProgress = 0;
-        InstallStatus = $"Downloading {update.LatestVersion} from sp-mod.com...";
+        InstallStatus = Text(Strings.AppUpdate_DownloadingFormat, update.LatestVersion);
 
         try
         {
@@ -272,13 +274,16 @@ public partial class AppUpdateViewModel : LocalizedViewModel
             {
                 InstallProgress = fraction * 100;
                 InstallStatus = fraction < 0.85
-                    ? $"Downloading {update.LatestVersion} from sp-mod.com... {fraction / 0.85:P0}"
-                    : "Unpacking the new version...";
+                    ? Text(
+                        Strings.AppUpdate_DownloadingProgressFormat,
+                        update.LatestVersion,
+                        fraction / 0.85)
+                    : Strings.AppUpdate_Unpacking;
             });
 
             await _installer.PrepareAsync(update, progress, _installCts.Token).ConfigureAwait(true);
 
-            InstallStatus = "Closing and restarting to finish the update...";
+            InstallStatus = Strings.AppUpdate_Restarting;
             AppUpdateInstaller.LaunchApplyScript();
 
             // The script is already waiting on this process. Shutdown (rather than Environment.Exit)
@@ -289,7 +294,7 @@ public partial class AppUpdateViewModel : LocalizedViewModel
         {
             AppUpdateInstaller.ClearWorkingFiles();
             InstallStatus = null;
-            InstallError = "Update cancelled. Nothing was changed.";
+            InstallError = Strings.AppUpdate_Cancelled;
         }
         catch (AppUpdateException ex)
         {

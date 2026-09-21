@@ -24,12 +24,8 @@ public sealed partial class FootprintGateViewModel : LocalizedViewModel
     // they are choosing whether to see it at all.
     //
     public string SettingToolTip => IsPageEnabled
-        ? "The Mod footprint page is in the sidebar. Remember that it reads files rather than "
-          + "timing anything - what a mod actually costs depends on your hardware, your settings "
-          + "and the other mods you run, none of which it can see."
-        : "Adds a page that reads what each installed mod ships and describes how much of the game "
-          + "it is positioned to touch. Nothing on it is timed or measured, and a heavy footprint "
-          + "is not the same as a mod that costs you frames.";
+        ? Strings.Options_FootprintToolTipOn
+        : Strings.Options_FootprintToolTipOff;
 
     // Re-reads the setting. Called at startup and whenever the Options page changes it.
     public void Refresh() => IsPageEnabled = new SettingsService().Load().ShowModFootprintPage;

@@ -24,6 +24,9 @@ public enum DownloadQueueItemStatus
 // 
 public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     // What is being installed - a catalog mod or an addon attached to one.
     public InstallTarget Target { get; }
 
@@ -116,7 +119,8 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     public string TransferredValue =>
         TotalBytes is > 0 and var total ? SizePair(Progress * total, total) : NoValue;
 
-    public string RateValue => BytesPerSecond is { } rate ? $"{Size(rate)}/s" : NoValue;
+    public string RateValue =>
+        BytesPerSecond is { } rate ? Text(Strings.Downloads_RateFormat, Size(rate)) : NoValue;
 
     public string EtaValue => BytesPerSecond is > 0 and var rate && RemainingBytes is { } left
         ? Remaining(TimeSpan.FromSeconds(left / rate))
@@ -190,33 +194,42 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     {
         var (scale, unit) = total switch
         {
-            >= 1024d * 1024 * 1024 => (1024d * 1024 * 1024, "GB"),
-            >= 1024d * 1024 => (1024d * 1024, "MB"),
-            >= 1024d => (1024d, "KB"),
-            _ => (1d, "B"),
+            >= 1024d * 1024 * 1024 => (1024d * 1024 * 1024, Strings.Common_UnitGb),
+            >= 1024d * 1024 => (1024d * 1024, Strings.Common_UnitMb),
+            >= 1024d => (1024d, Strings.Common_UnitKb),
+            _ => (1d, Strings.Common_UnitB),
         };
 
-        return $"{done / scale:0.#} of {total / scale:0.#} {unit}";
+        return Text(Strings.Downloads_TransferredFormat, done / scale, total / scale, unit);
     }
 
-    private static string Size(double bytes) => bytes switch
-    {
-        >= 1024d * 1024 * 1024 => $"{bytes / (1024d * 1024 * 1024):0.#} GB",
-        >= 1024d * 1024 => $"{bytes / (1024d * 1024):0.#} MB",
-        >= 1024d => $"{bytes / 1024d:0.#} KB",
-        _ => $"{bytes:0} B",
-    };
+    // Shared with the Mod footprint page's own sizes, which is why the keys are Common_.
+    public static string Size(double bytes) => Text(
+        bytes switch
+        {
+            >= 1024d * 1024 * 1024 => Strings.Common_SizeGbFormat,
+            >= 1024d * 1024 => Strings.Common_SizeMbFormat,
+            >= 1024d => Strings.Common_SizeKbFormat,
+            _ => Strings.Common_SizeBFormat,
+        },
+        bytes switch
+        {
+            >= 1024d * 1024 * 1024 => bytes / (1024d * 1024 * 1024),
+            >= 1024d * 1024 => bytes / (1024d * 1024),
+            >= 1024d => bytes / 1024d,
+            _ => bytes,
+        });
 
     private static string Remaining(TimeSpan left) => left switch
     {
-        { TotalSeconds: < 10 } => "a few seconds",
-        { TotalMinutes: < 1 } => $"{left.TotalSeconds:0}s",
-        { TotalMinutes: < 60 } => $"{left.TotalMinutes:0}m",
-        _ => $"{left.TotalHours:0.#}h",
+        { TotalSeconds: < 10 } => Strings.Downloads_TimeAFewSeconds,
+        { TotalMinutes: < 1 } => Text(Strings.Downloads_TimeSecondsFormat, left.TotalSeconds),
+        { TotalMinutes: < 60 } => Text(Strings.Downloads_TimeMinutesFormat, left.TotalMinutes),
+        _ => Text(Strings.Downloads_TimeHoursFormat, left.TotalHours),
     };
 
     [ObservableProperty]
-    private string _statusMessage = "Waiting in queue...";
+    private string _statusMessage = Strings.Downloads_WaitingInQueue;
 
     // True while installing, since that stage has no byte count to report fractional progress for.
     public bool IsIndeterminateProgress => Status == DownloadQueueItemStatus.Installing;
@@ -224,13 +237,13 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     // Short badge text for Status.
     public string StatusLabel => Status switch
     {
-        DownloadQueueItemStatus.Pending => "Pending",
-        DownloadQueueItemStatus.Downloading => "Downloading",
-        DownloadQueueItemStatus.Installing => "Installing",
-        DownloadQueueItemStatus.Completed => "Completed",
-        DownloadQueueItemStatus.Failed => "Failed",
-        DownloadQueueItemStatus.Cancelled => "Cancelled",
-        _ => "Unknown",
+        DownloadQueueItemStatus.Pending => Strings.Downloads_StatusPending,
+        DownloadQueueItemStatus.Downloading => Strings.Downloads_StatusDownloading,
+        DownloadQueueItemStatus.Installing => Strings.Downloads_StatusInstalling,
+        DownloadQueueItemStatus.Completed => Strings.Downloads_StatusCompleted,
+        DownloadQueueItemStatus.Failed => Strings.Downloads_StatusFailed,
+        DownloadQueueItemStatus.Cancelled => Strings.Downloads_StatusCancelled,
+        _ => Strings.Downloads_StatusUnknown,
     };
 
     // Whether this item is still in a stage the user can back out of.
@@ -288,7 +301,7 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
 
         Progress = 0;
         Status = DownloadQueueItemStatus.Pending;
-        StatusMessage = "Waiting in queue...";
+        StatusMessage = Strings.Downloads_WaitingInQueue;
 
         Requeue!(this);
     }
@@ -338,11 +351,11 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
         if (Status == DownloadQueueItemStatus.Pending)
         {
             Status = DownloadQueueItemStatus.Cancelled;
-            StatusMessage = "Cancelled before it started.";
+            StatusMessage = Strings.Downloads_CancelledBeforeStart;
         }
         else
         {
-            StatusMessage = "Cancelling...";
+            StatusMessage = Strings.Downloads_Cancelling;
         }
     }
 

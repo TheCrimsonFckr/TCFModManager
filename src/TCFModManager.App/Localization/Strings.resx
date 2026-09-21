@@ -3658,4 +3658,347 @@ You can turn it back on at any time.</value>
     <value>Select your SPT install folder (the one with EscapeFromTarkov.exe)</value>
     <comment>Title of the folder picker. EscapeFromTarkov.exe is a file name and stays as it is.</comment>
   </data>
+  <data name="ServerMap_LocalKeyDescriptionFormat" xml:space="preserve">
+    <value>This machine runs a Server Map server. Its key is {0} - send it to whoever should be able to see what this server publishes, along with the address and port.</value>
+    <comment>{0} is the shared key. Server Map is the mod's name and stays as it is.</comment>
+  </data>
+  <data name="ServerMap_KeyRotateFailed" xml:space="preserve">
+    <value>Couldn't write a new key. Check that this machine's Server Map config folder isn't read-only.</value>
+  </data>
+  <data name="ServerMap_KeyRotated" xml:space="preserve">
+    <value>New key generated. Send it to anyone who connects to this server - the old one stopped working just now. The server picks it up on its own; it does not need restarting.</value>
+  </data>
+  <data name="Options_ServerMapToolTipOn" xml:space="preserve">
+    <value>The Server map page is in the sidebar. It only has anything to show once you point it at an SPT server whose operator has installed the Server Map mod.</value>
+    <comment>On the Server map switch. Server map is the page named by Nav_ServerMap; Server Map is the mod's name and stays as it is.</comment>
+  </data>
+  <data name="Options_ServerMapToolTipOff" xml:space="preserve">
+    <value>Adds a page that connects to an SPT server running the Server Map mod and shows what it runs, so you can compare it against your own install. Needs the mod on the server - installing this app is not enough on its own.</value>
+    <comment>On the Server map switch, when the page is off.</comment>
+  </data>
+  <data name="ServerMap_ListSummaryOneFormat" xml:space="preserve">
+    <value>{0} - revision {1}, 1 mod</value>
+    <comment>A held mod list in one line. {0} is the list's name, {1} its revision number. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="ServerMap_ListSummaryManyFormat" xml:space="preserve">
+    <value>{0} - revision {1}, {2} mods</value>
+    <comment>{0} is the list's name, {1} its revision number, {2} how many mods it names.</comment>
+  </data>
+  <data name="ServerMap_ListSummaryOneUnresolvedFormat" xml:space="preserve">
+    <value>{0} - revision {1}, 1 mod, {2} not on The Forge</value>
+    <comment>{2} is how many of the list's entries have no sp-mod.com listing. The Forge is sp-mod.com's own name and stays as it is.</comment>
+  </data>
+  <data name="ServerMap_ListSummaryManyUnresolvedFormat" xml:space="preserve">
+    <value>{0} - revision {1}, {2} mods, {3} not on The Forge</value>
+    <comment>{3} is how many of the list's entries have no sp-mod.com listing.</comment>
+  </data>
+  <data name="ServerMap_EndpointFormat" xml:space="preserve">
+    <value>{0}:{1}</value>
+    <comment>A server's address. {0} is a host name, {1} a port number - both are data. Only the separator between them is yours, and most languages keep the colon.</comment>
+  </data>
+  <data name="ServerMap_DetailSptFormat" xml:space="preserve">
+    <value>SPT {0}</value>
+    <comment>One fact on the server's detail line. {0} is an SPT version number. SPT is the platform's name and stays as it is.</comment>
+  </data>
+  <data name="ServerMap_DetailModFormat" xml:space="preserve">
+    <value>Server Map {0}</value>
+    <comment>One fact on the server's detail line. {0} is the mod's version number. Server Map is the mod's name and stays as it is.</comment>
+  </data>
+  <data name="ServerMap_DetailPublishingFormat" xml:space="preserve">
+    <value>publishing a mod list (revision {0})</value>
+    <comment>One fact on the server's detail line, so it is lower case in English. {0} is a revision number, or Common_Unknown when the server did not say.</comment>
+  </data>
+  <data name="ServerMap_DetailNoList" xml:space="preserve">
+    <value>no mod list published yet</value>
+    <comment>One fact on the server's detail line, so it is lower case in English.</comment>
+  </data>
+  <data name="ServerMap_DetailSeparator" xml:space="preserve">
+    <value>  -  </value>
+    <comment>Between the facts on the server's detail line. Change the character if another reads better in your language.</comment>
+  </data>
+  <data name="ModPageGate_SkipNotice" xml:space="preserve">
+    <value>You are skipping this mod's page, and its release notes with it - it is recommended you read them first. They are where the author says what changed, what a version needs and what it breaks.</value>
+    <comment>Added under an install button's tooltip while the read-the-mod-page gate is off.</comment>
+  </data>
+  <data name="ModPageGate_Install" xml:space="preserve">
+    <value>Install this mod.</value>
+    <comment>Tooltip on the Install button.</comment>
+  </data>
+  <data name="ModPageGate_Redownload" xml:space="preserve">
+    <value>Redownload this mod.</value>
+    <comment>Tooltip on the Redownload button.</comment>
+  </data>
+  <data name="ModPageGate_Update" xml:space="preserve">
+    <value>Update this mod.</value>
+    <comment>Tooltip on the Update button.</comment>
+  </data>
+  <data name="Options_ModPagesToolTipSkipping" xml:space="preserve">
+    <value>You are skipping each mod's release notes. It is recommended you read them - they are where an author says what changed, what a version needs and what it breaks. This app's own updates always ask regardless.</value>
+    <comment>On the read-the-mod-page switch, when the gate is off.</comment>
+  </data>
+  <data name="Options_ModPagesToolTipAsking" xml:space="preserve">
+    <value>Each mod's page opens before anything downloads, so its release notes and install instructions are in front of you first.</value>
+    <comment>On the read-the-mod-page switch, when the gate is on.</comment>
+  </data>
+  <data name="Options_FootprintToolTipOn" xml:space="preserve">
+    <value>The Mod footprint page is in the sidebar. Remember that it reads files rather than timing anything - what a mod actually costs depends on your hardware, your settings and the other mods you run, none of which it can see.</value>
+    <comment>On the Mod footprint switch. Mod footprint is the page named by Nav_Footprint.</comment>
+  </data>
+  <data name="Options_FootprintToolTipOff" xml:space="preserve">
+    <value>Adds a page that reads what each installed mod ships and describes how much of the game it is positioned to touch. Nothing on it is timed or measured, and a heavy footprint is not the same as a mod that costs you frames.</value>
+    <comment>On the Mod footprint switch, when the page is off.</comment>
+  </data>
+  <data name="Common_SizeGbFormat" xml:space="preserve">
+    <value>{0:0.#} GB</value>
+    <comment>A size in gigabytes. GB, MB, KB and B are the international symbols and normally stay as they are; the number formats itself for your language. Keep the :0.# so it shows at most one decimal.</comment>
+  </data>
+  <data name="Common_SizeMbFormat" xml:space="preserve">
+    <value>{0:0.#} MB</value>
+    <comment>A size in megabytes. Keep the :0.#.</comment>
+  </data>
+  <data name="Common_SizeKbFormat" xml:space="preserve">
+    <value>{0:0.#} KB</value>
+    <comment>A size in kilobytes. Keep the :0.#.</comment>
+  </data>
+  <data name="Common_SizeBFormat" xml:space="preserve">
+    <value>{0:0} B</value>
+    <comment>A size in bytes. Keep the :0 so it shows no decimals.</comment>
+  </data>
+  <data name="Common_UnitGb" xml:space="preserve">
+    <value>GB</value>
+    <comment>The gigabyte symbol on its own, used where a pair of numbers share one unit.</comment>
+  </data>
+  <data name="Common_UnitMb" xml:space="preserve">
+    <value>MB</value>
+    <comment>The megabyte symbol on its own.</comment>
+  </data>
+  <data name="Common_UnitKb" xml:space="preserve">
+    <value>KB</value>
+    <comment>The kilobyte symbol on its own.</comment>
+  </data>
+  <data name="Common_UnitB" xml:space="preserve">
+    <value>B</value>
+    <comment>The byte symbol on its own.</comment>
+  </data>
+  <data name="Downloads_TransferredFormat" xml:space="preserve">
+    <value>{0:0.#} of {1:0.#} {2}</value>
+    <comment>How much of a download has arrived. {0} is what has arrived, {1} the total, {2} one of the Common_Unit keys - both numbers share the one unit so the pair does not jump partway through. Keep the :0.# on both.</comment>
+  </data>
+  <data name="Downloads_RateFormat" xml:space="preserve">
+    <value>{0}/s</value>
+    <comment>A transfer rate. {0} is a size. Keep whatever your language puts after a size to mean "per second".</comment>
+  </data>
+  <data name="Downloads_TimeAFewSeconds" xml:space="preserve">
+    <value>a few seconds</value>
+    <comment>The estimated time left, while it is too short to be worth a number.</comment>
+  </data>
+  <data name="Downloads_TimeSecondsFormat" xml:space="preserve">
+    <value>{0:0}s</value>
+    <comment>The estimated time left, in seconds. Keep the :0.</comment>
+  </data>
+  <data name="Downloads_TimeMinutesFormat" xml:space="preserve">
+    <value>{0:0}m</value>
+    <comment>The estimated time left, in minutes. Keep the :0.</comment>
+  </data>
+  <data name="Downloads_TimeHoursFormat" xml:space="preserve">
+    <value>{0:0.#}h</value>
+    <comment>The estimated time left, in hours. Keep the :0.#.</comment>
+  </data>
+  <data name="Downloads_StatusPending" xml:space="preserve">
+    <value>Pending</value>
+    <comment>One item's stage in the download queue.</comment>
+  </data>
+  <data name="Downloads_StatusDownloading" xml:space="preserve">
+    <value>Downloading</value>
+    <comment>One item's stage in the download queue.</comment>
+  </data>
+  <data name="Downloads_StatusInstalling" xml:space="preserve">
+    <value>Installing</value>
+    <comment>One item's stage in the download queue.</comment>
+  </data>
+  <data name="Downloads_StatusCompleted" xml:space="preserve">
+    <value>Completed</value>
+    <comment>One item's stage in the download queue.</comment>
+  </data>
+  <data name="Downloads_StatusFailed" xml:space="preserve">
+    <value>Failed</value>
+    <comment>One item's stage in the download queue.</comment>
+  </data>
+  <data name="Downloads_StatusCancelled" xml:space="preserve">
+    <value>Cancelled</value>
+    <comment>One item's stage in the download queue.</comment>
+  </data>
+  <data name="Downloads_StatusUnknown" xml:space="preserve">
+    <value>Unknown</value>
+    <comment>One item's stage in the download queue, when it is none of the others.</comment>
+  </data>
+  <data name="Downloads_WaitingInQueue" xml:space="preserve">
+    <value>Waiting in queue...</value>
+  </data>
+  <data name="Downloads_CancelledBeforeStart" xml:space="preserve">
+    <value>Cancelled before it started.</value>
+  </data>
+  <data name="Downloads_Cancelling" xml:space="preserve">
+    <value>Cancelling...</value>
+  </data>
+  <data name="Downloads_SummaryProgressFormat" xml:space="preserve">
+    <value>{0} of {1} done</value>
+    <comment>How much of the whole queue has finished. {0} is how many are done, {1} how many there are.</comment>
+  </data>
+  <data name="Downloads_SummaryUnsizedOne" xml:space="preserve">
+    <value>1 item</value>
+    <comment>How many queued items have no known size yet. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Downloads_SummaryUnsizedManyFormat" xml:space="preserve">
+    <value>{0} items</value>
+  </data>
+  <data name="Downloads_ResolvingLink" xml:space="preserve">
+    <value>Resolving download link...</value>
+  </data>
+  <data name="Downloads_NoLinkFormat" xml:space="preserve">
+    <value>Couldn't find a download link for {0} {1}.</value>
+    <comment>{0} is a mod name, {1} its version.</comment>
+  </data>
+  <data name="Downloads_CheckingDependencies" xml:space="preserve">
+    <value>Checking dependencies...</value>
+  </data>
+  <data name="Downloads_InstalledFormat" xml:space="preserve">
+    <value>Installed {0} {1}.</value>
+    <comment>{0} is a mod name, {1} its version.</comment>
+  </data>
+  <data name="Downloads_CancelledItemFormat" xml:space="preserve">
+    <value>Cancelled {0} {1}.</value>
+    <comment>{0} is a mod name, {1} its version.</comment>
+  </data>
+  <data name="Downloads_UnexpectedFormat" xml:space="preserve">
+    <value>Unexpected error: {0}</value>
+    <comment>{0} is the underlying error, which arrives in English.</comment>
+  </data>
+  <data name="Downloads_UnnamedModFormat" xml:space="preserve">
+    <value>mod {0}</value>
+    <comment>Stands in for a dependency the catalog gave no name for. {0} is its numeric id.</comment>
+  </data>
+  <data name="Downloads_EnterModId" xml:space="preserve">
+    <value>Enter a mod id (or GUID) and an exact version.</value>
+  </data>
+  <data name="Downloads_VersionNotFound" xml:space="preserve">
+    <value>Couldn't find that mod version on sp-mod.com.</value>
+  </data>
+  <data name="Downloads_DownloadedToFormat" xml:space="preserve">
+    <value>Downloaded to {0}</value>
+    <comment>{0} is a file path.</comment>
+  </data>
+  <data name="Downloads_FailedFormat" xml:space="preserve">
+    <value>Download failed: {0}</value>
+    <comment>{0} is the reason from sp-mod.com or the network.</comment>
+  </data>
+  <data name="Downloads_WriteFailedFormat" xml:space="preserve">
+    <value>Couldn't write the file: {0}</value>
+    <comment>{0} is the underlying error, which arrives in English.</comment>
+  </data>
+  <data name="Install_StageDownloadingFormat" xml:space="preserve">
+    <value>Downloading {0} {1}...</value>
+    <comment>{0} is a mod name, {1} its version.</comment>
+  </data>
+  <data name="Install_StageExtracting" xml:space="preserve">
+    <value>Extracting...</value>
+  </data>
+  <data name="Install_StageExtractingCountFormat" xml:space="preserve">
+    <value>Extracting {0}/{1} files...</value>
+    <comment>{0} is how many files are out, {1} how many there are.</comment>
+  </data>
+  <data name="Install_StageExtractingUnknownFormat" xml:space="preserve">
+    <value>Extracting {0} files...</value>
+    <comment>Shown when the archive would not say how many files it holds. {0} is how many are out so far.</comment>
+  </data>
+  <data name="Install_StageRemovingFormat" xml:space="preserve">
+    <value>Removing the previously installed version ({0})...</value>
+    <comment>{0} is the version being replaced.</comment>
+  </data>
+  <data name="Install_StageInstallingCountFormat" xml:space="preserve">
+    <value>Installing {0}/{1} files...</value>
+    <comment>{0} is how many files are placed, {1} how many there are.</comment>
+  </data>
+  <data name="Install_StageInstallingUnknownFormat" xml:space="preserve">
+    <value>Installing {0} files...</value>
+    <comment>{0} is how many files are placed so far.</comment>
+  </data>
+  <data name="Install_StageDone" xml:space="preserve">
+    <value>Done.</value>
+  </data>
+  <data name="AppUpdate_ChangePatch" xml:space="preserve">
+    <value>Bug fix update</value>
+    <comment>The kind of update, from how the version number changed.</comment>
+  </data>
+  <data name="AppUpdate_ChangeMinor" xml:space="preserve">
+    <value>Feature update</value>
+    <comment>The kind of update, from how the version number changed.</comment>
+  </data>
+  <data name="AppUpdate_ChangeMajor" xml:space="preserve">
+    <value>Major update</value>
+    <comment>The kind of update, from how the version number changed.</comment>
+  </data>
+  <data name="AppUpdate_ChangeUnknown" xml:space="preserve">
+    <value>Update available</value>
+    <comment>Shown when the version numbers cannot be compared.</comment>
+  </data>
+  <data name="AppUpdate_PatchBodyFormat" xml:space="preserve">
+    <value>{0} only changes the last number (x.x.●), so it's fixes to how the current version already works - nothing new to learn. Safe to skip if nothing is broken for you.</value>
+    <comment>{0} is the new version number. The x.x.● picture shows which part of the number changed - keep it as it is.</comment>
+  </data>
+  <data name="AppUpdate_MinorBodyFormat" xml:space="preserve">
+    <value>{0} changes the middle number (x.●.x), so it adds features or changes how something works. Worth reading the notes below before updating.</value>
+    <comment>{0} is the new version number.</comment>
+  </data>
+  <data name="AppUpdate_MajorBodyFormat" xml:space="preserve">
+    <value>{0} changes the first number (●.x.x), so this is a major update - expect significant changes. Read the notes below and the mod page before updating.</value>
+    <comment>{0} is the new version number.</comment>
+  </data>
+  <data name="AppUpdate_UnknownBodyFormat" xml:space="preserve">
+    <value>sp-mod.com lists {0}, but it isn't numbered in a way this app can compare against {1}. Check the mod page to see what changed.</value>
+    <comment>{0} is the published version, {1} the one installed.</comment>
+  </data>
+  <data name="AppUpdate_BannerTitleFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+    <comment>{0} is one of the AppUpdate_Change keys, {1} the new version number.</comment>
+  </data>
+  <data name="AppUpdate_DownloadSizeFormat" xml:space="preserve">
+    <value>{0:N0} MB download</value>
+    <comment>How big the update is. MB is the international symbol and normally stays as it is. Keep the :N0.</comment>
+  </data>
+  <data name="AppUpdate_PublishedFormat" xml:space="preserve">
+    <value>Published {0:d MMMM yyyy}</value>
+    <comment>When the update was published. Replace d MMMM yyyy with the date pattern your language uses - d is the day, MMMM the month's name, yyyy the year.</comment>
+  </data>
+  <data name="AppUpdate_RateLimited" xml:space="preserve">
+    <value>sp-mod.com is rate limiting right now. Try again in a minute.</value>
+  </data>
+  <data name="AppUpdate_UnreachableFormat" xml:space="preserve">
+    <value>Couldn't reach sp-mod.com: {0}</value>
+    <comment>{0} is the underlying network error, which arrives in English.</comment>
+  </data>
+  <data name="AppUpdate_TimedOut" xml:space="preserve">
+    <value>Timed out reaching sp-mod.com - check your connection and try again.</value>
+  </data>
+  <data name="AppUpdate_CheckUnexpectedFormat" xml:space="preserve">
+    <value>Unexpected error checking for updates: {0}</value>
+    <comment>{0} is the underlying error, which arrives in English.</comment>
+  </data>
+  <data name="AppUpdate_DownloadingFormat" xml:space="preserve">
+    <value>Downloading {0} from sp-mod.com...</value>
+    <comment>{0} is the new version number.</comment>
+  </data>
+  <data name="AppUpdate_DownloadingProgressFormat" xml:space="preserve">
+    <value>Downloading {0} from sp-mod.com... {1:P0}</value>
+    <comment>{0} is the new version number, {1} how far through. Keep the :P0 - it writes the percent sign the way your language does.</comment>
+  </data>
+  <data name="AppUpdate_Unpacking" xml:space="preserve">
+    <value>Unpacking the new version...</value>
+  </data>
+  <data name="AppUpdate_Restarting" xml:space="preserve">
+    <value>Closing and restarting to finish the update...</value>
+  </data>
+  <data name="AppUpdate_Cancelled" xml:space="preserve">
+    <value>Update cancelled. Nothing was changed.</value>
+  </data>
 </root>

@@ -23,6 +23,9 @@ namespace TCFModManager.App.ViewModels;
 //
 public sealed partial class ServerMapGateViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     // Every write does its own Load first, so this never fights the other things that save settings.
     private readonly SettingsService _settings = new();
 
@@ -189,8 +192,7 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
 
     public string LocalKeyDescription => LocalKey is null
         ? ""
-        : $"This machine runs a Server Map server. Its key is {LocalKey} - send it to whoever "
-          + "should be able to see what this server publishes, along with the address and port.";
+        : Text(Strings.ServerMap_LocalKeyDescriptionFormat, LocalKey);
 
     //
     // The key this app last put in the box on its own. Null when the box holds something the user
@@ -257,8 +259,7 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
 
         if (!ServerMapKeyFile.TryRotateLocal(installPath, out var rotated))
         {
-            KeyNotice = "Couldn't write a new key. Check that this machine's Server Map config"
-                + " folder isn't read-only.";
+            KeyNotice = Strings.ServerMap_KeyRotateFailed;
             return;
         }
 
@@ -272,9 +273,7 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
         KeyInput = rotated;
         _autoFilledKey = rotated;
 
-        KeyNotice = "New key generated. Send it to anyone who connects to this server - the old one"
-            + " stopped working just now. The server picks it up on its own; it does not need"
-            + " restarting.";
+        KeyNotice = Strings.ServerMap_KeyRotated;
     }
 
     //
@@ -283,11 +282,8 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
     // without it this page has nothing to show.
     //
     public string SettingToolTip => IsPageEnabled
-        ? "The Server map page is in the sidebar. It only has anything to show once you point it at "
-          + "an SPT server whose operator has installed the Server Map mod."
-        : "Adds a page that connects to an SPT server running the Server Map mod and shows what it "
-          + "runs, so you can compare it against your own install. Needs the mod on the server - "
-          + "installing this app is not enough on its own.";
+        ? Strings.Options_ServerMapToolTipOn
+        : Strings.Options_ServerMapToolTipOff;
 
     //
     // No confirmation either way. Nothing is at stake in showing or hiding a page, and turning it
@@ -334,11 +330,44 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
     // What the held list is, in one line. Reads from the stored list rather than the handshake, so
     // it keeps saying something true after the server goes down.
     //
-    public string ListSummary => List is null
-        ? ""
-        : $"{List.Name} - revision {List.Revision}, {List.Entries.Count} "
-          + (List.Entries.Count == 1 ? "mod" : "mods")
-          + (List.Unresolved.Any() ? $", {List.Unresolved.Count()} not on The Forge" : "");
+    //
+    // One whole sentence per shape rather than a count, a plural noun and a clause concatenated:
+    // where the unresolved count goes, and whether the noun agrees with it, are the translator's.
+    //
+    public string ListSummary
+    {
+        get
+        {
+            if (List is null) return "";
+
+            var one = List.Entries.Count == 1;
+            var unresolved = List.Unresolved.Count();
+
+            if (unresolved == 0)
+            {
+                return one
+                    ? Text(Strings.ServerMap_ListSummaryOneFormat, List.Name, List.Revision)
+                    : Text(
+                        Strings.ServerMap_ListSummaryManyFormat,
+                        List.Name,
+                        List.Revision,
+                        List.Entries.Count);
+            }
+
+            return one
+                ? Text(
+                    Strings.ServerMap_ListSummaryOneUnresolvedFormat,
+                    List.Name,
+                    List.Revision,
+                    unresolved)
+                : Text(
+                    Strings.ServerMap_ListSummaryManyUnresolvedFormat,
+                    List.Name,
+                    List.Revision,
+                    List.Entries.Count,
+                    unresolved);
+        }
+    }
 
     // The one failure the user is asked to make a judgement about, rather than just told about.
     public bool HasCertificateChanged => Probe?.Problem == ServerMapProblem.CertificateRejected;
@@ -358,16 +387,24 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
         {
             if (Probe?.Hello is not { } hello) return "";
 
-            var parts = new List<string> { $"{Probe.Endpoint.Host}:{Probe.Endpoint.Port}" };
+            var parts = new List<string>
+            {
+                Text(Strings.ServerMap_EndpointFormat, Probe.Endpoint.Host, Probe.Endpoint.Port),
+            };
 
-            if (!string.IsNullOrWhiteSpace(hello.SptVersion)) parts.Add($"SPT {hello.SptVersion}");
-            if (!string.IsNullOrWhiteSpace(hello.ModVersion)) parts.Add($"Server Map {hello.ModVersion}");
+            if (!string.IsNullOrWhiteSpace(hello.SptVersion))
+                parts.Add(Text(Strings.ServerMap_DetailSptFormat, hello.SptVersion));
+
+            if (!string.IsNullOrWhiteSpace(hello.ModVersion))
+                parts.Add(Text(Strings.ServerMap_DetailModFormat, hello.ModVersion));
 
             parts.Add(hello.HasList
-                ? $"publishing a mod list (revision {hello.ListRevision?.ToString() ?? "unknown"})"
-                : "no mod list published yet");
+                ? Text(
+                    Strings.ServerMap_DetailPublishingFormat,
+                    hello.ListRevision?.ToString() ?? Strings.Common_Unknown)
+                : Strings.ServerMap_DetailNoList);
 
-            return string.Join("  -  ", parts);
+            return string.Join(Strings.ServerMap_DetailSeparator, parts);
         }
     }
 

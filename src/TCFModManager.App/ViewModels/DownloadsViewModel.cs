@@ -11,6 +11,9 @@ namespace TCFModManager.App.ViewModels;
 
 public partial class DownloadsViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     private readonly SpModApiClient _spModApi;
     private readonly ModDownloadService _downloadService;
 
@@ -48,7 +51,7 @@ public partial class DownloadsViewModel : LocalizedViewModel
     {
         if (string.IsNullOrWhiteSpace(ModId) || string.IsNullOrWhiteSpace(Version))
         {
-            StatusMessage = "Enter a mod id (or GUID) and an exact version.";
+            StatusMessage = Strings.Downloads_EnterModId;
             return;
         }
 
@@ -64,7 +67,7 @@ public partial class DownloadsViewModel : LocalizedViewModel
             var match = versions.Data.FirstOrDefault(v => v.Version == Version.Trim()) ?? versions.Data.FirstOrDefault();
             if (match?.Link is null)
             {
-                StatusMessage = "Couldn't find that mod version on sp-mod.com.";
+                StatusMessage = Strings.Downloads_VersionNotFound;
                 return;
             }
 
@@ -74,7 +77,7 @@ public partial class DownloadsViewModel : LocalizedViewModel
 
             await _downloadService.DownloadAsync(match.Link, destination, progress);
 
-            StatusMessage = $"Downloaded to {destination}";
+            StatusMessage = Text(Strings.Downloads_DownloadedToFormat, destination);
         }
         catch (SpModApiRateLimitedException ex)
         {
@@ -86,7 +89,7 @@ public partial class DownloadsViewModel : LocalizedViewModel
         }
         catch (HttpRequestException ex)
         {
-            StatusMessage = $"Download failed: {ex.Message}";
+            StatusMessage = Text(Strings.Downloads_FailedFormat, ex.Message);
         }
         catch (ModInstallException ex)
         {
@@ -94,7 +97,7 @@ public partial class DownloadsViewModel : LocalizedViewModel
         }
         catch (IOException ex)
         {
-            StatusMessage = $"Couldn't write the file: {ex.Message}";
+            StatusMessage = Text(Strings.Downloads_WriteFailedFormat, ex.Message);
         }
         finally
         {
