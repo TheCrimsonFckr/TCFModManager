@@ -249,11 +249,36 @@
     </Task>
   </UsingTask>
 
-  <Target Name="GeneratePseudoLocale" BeforeTargets="AssignTargetPaths" Condition="'$(PseudoLocale)' == 'true'">
+  <!--
+    Written on EVERY build, embedded only under the property.
+
+    Generating it always is what keeps it honest: the file is a pure function of Strings.resx, so a
+    build regenerates it the moment a key is added, and D7's test can assert it has a form for every
+    key without anyone having had to remember the flag. Embedding is the part that must stay behind
+    the flag, because a shipped pseudo-locale would show up in the Options dropdown.
+  -->
+  <Target Name="GeneratePseudoLocale"
+          BeforeTargets="AssignTargetPaths"
+          Inputs="$(StringsResx)"
+          Outputs="$(MSBuildProjectDirectory)\Localization\Strings.qps-ploc.resx">
     <WritePseudoLocale Source="$(StringsResx)" Destination="$(MSBuildProjectDirectory)\Localization\Strings.qps-ploc.resx" />
+  </Target>
+
+  <Target Name="EmbedPseudoLocale" BeforeTargets="AssignTargetPaths" DependsOnTargets="GeneratePseudoLocale" Condition="'$(PseudoLocale)' == 'true'">
     <ItemGroup>
       <EmbeddedResource Include="$(MSBuildProjectDirectory)\Localization\Strings.qps-ploc.resx" />
     </ItemGroup>
+  </Target>
+
+  <!--
+    A build without the property takes the pseudo-locale back out of the output.
+
+    Without this it simply stays where the last pseudo build left it, and the app runs against
+    whatever text that build had: every key added since falls back to English, which looks exactly
+    like a half-keyed app rather than a stale one. That cost a round of screenshots on 2026-09-21.
+  -->
+  <Target Name="RemovePseudoLocaleSatellite" AfterTargets="Build" Condition="'$(PseudoLocale)' != 'true'">
+    <RemoveDir Directories="$(OutDir)qps-ploc" ContinueOnError="true" />
   </Target>
 
 </Project>
