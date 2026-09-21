@@ -204,13 +204,8 @@ public sealed partial class PreLaunchCheckViewModel : LocalizedViewModel
                 //
                 var expected = held.EntriesApplyingTo(ModListService.MachineScope).Count();
 
-                Message = expected == 1
-                    ? Text(Strings.PreLaunch_MatchesOneFormat, held.Name, held.Revision)
-                    : Text(
-                        Strings.PreLaunch_MatchesManyFormat,
-                        held.Name,
-                        held.Revision,
-                        expected);
+                Message = Strings.PreLaunch_Matches(
+                    expected, held.Name, held.Revision, expected);
             }
 
             return;
@@ -219,11 +214,8 @@ public sealed partial class PreLaunchCheckViewModel : LocalizedViewModel
         State = PreLaunchState.Behind;
 
         var parts = new List<string>();
-        if (behind.Count == 1) parts.Add(Strings.PreLaunch_BehindOne);
-        else if (behind.Count > 1) parts.Add(Text(Strings.PreLaunch_BehindManyFormat, behind.Count));
-
-        if (manual.Count == 1) parts.Add(Strings.PreLaunch_ManualOne);
-        else if (manual.Count > 1) parts.Add(Text(Strings.PreLaunch_ManualManyFormat, manual.Count));
+        if (behind.Count > 0) parts.Add(Strings.PreLaunch_BehindCount(behind.Count));
+        if (manual.Count > 0) parts.Add(Strings.PreLaunch_Manual(manual.Count));
 
         if (!keepMessage)
         {

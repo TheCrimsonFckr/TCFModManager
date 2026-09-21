@@ -51,19 +51,15 @@ public partial class ModDisableConfirmationWindow : FluentWindow
         // One whole title per action and count rather than a verb and a noun phrase concatenated.
         WindowTitleBar.Title = Title = targets.Count == 1
             ? Text(
-                disabling ? Strings.Disable_TitleDisableOneFormat : Strings.Disable_TitleEnableOneFormat,
+                disabling ? Strings.Disable_TitleDisableNamedFormat : Strings.Disable_TitleEnableNamedFormat,
                 targets[0])
             : Text(
-                disabling ? Strings.Disable_TitleDisableManyFormat : Strings.Disable_TitleEnableManyFormat,
+                disabling ? Strings.Disable_TitleDisableCountFormat : Strings.Disable_TitleEnableCountFormat,
                 targets.Count);
 
         SummaryText.Text = disabling
-            ? impact.Count == 1
-                ? Strings.Disable_ImpactDisableOne
-                : Text(Strings.Disable_ImpactDisableManyFormat, impact.Count)
-            : impact.Count == 1
-                ? Strings.Disable_ImpactEnableOne
-                : Text(Strings.Disable_ImpactEnableManyFormat, impact.Count);
+            ? Strings.Disable_ImpactDisable(impact.Count)
+            : Strings.Disable_ImpactEnable(impact.Count);
 
         TargetsText.Text = targets.Count == 1
             ? Text(Strings.Disable_SelectedFormat, targets[0])

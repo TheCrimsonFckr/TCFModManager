@@ -680,10 +680,8 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
         // agreed in English either.
         var bepInEx = SelectedEntry?.Entry.Format == ModConfigFormat.BepInExCfg;
 
-        RunningWarning = Text(
-            blockers.Count == 1
-                ? bepInEx ? Strings.Configs_RunningBepInExOneFormat : Strings.Configs_RunningServerOneFormat
-                : bepInEx ? Strings.Configs_RunningBepInExManyFormat : Strings.Configs_RunningServerManyFormat,
-            TextLists.Join(blockers));
+        RunningWarning = bepInEx
+            ? Strings.Configs_RunningBepInEx(blockers.Count, TextLists.Join(blockers))
+            : Strings.Configs_RunningServer(blockers.Count, TextLists.Join(blockers));
     }
 }

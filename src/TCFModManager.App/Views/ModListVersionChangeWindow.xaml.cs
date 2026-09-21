@@ -44,8 +44,8 @@ public partial class ModListVersionChangeWindow : FluentWindow
         InitializeComponent();
 
         WindowTitleBar.Title = Title = _rows.Count == 1
-            ? Text(Strings.ModLists_VersionChangeTitleOneFormat, _rows[0].Name)
-            : Text(Strings.ModLists_VersionChangeTitleManyFormat, _rows.Count);
+            ? Text(Strings.ModLists_VersionChangeTitleNamedFormat, _rows[0].Name)
+            : Text(Strings.ModLists_VersionChangeTitleCountFormat, _rows.Count);
 
         ChangesList.ItemsSource = _rows;
 

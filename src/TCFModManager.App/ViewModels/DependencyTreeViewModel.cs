@@ -49,9 +49,7 @@ public sealed partial class DependencyTreeViewModel : LocalizedViewModel
             if (unresolved > 0) parts.Add(Text(Strings.Dependencies_SummaryUnresolvedFormat, unresolved));
 
             return parts.Count == 0
-                ? Rows.Count == 1
-                    ? Strings.Dependencies_SummarySatisfiedOne
-                    : Text(Strings.Dependencies_SummarySatisfiedManyFormat, Rows.Count)
+                ? Strings.Dependencies_SummarySatisfied(Rows.Count)
                 : string.Join(Strings.Common_ListSeparator, parts);
         }
     }

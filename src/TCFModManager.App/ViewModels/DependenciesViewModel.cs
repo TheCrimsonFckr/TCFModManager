@@ -99,9 +99,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
                 return;
             }
 
-            StatusMessage = queryable.Count == 1
-                ? Strings.Dependencies_ResolvingOne
-                : Text(Strings.Dependencies_ResolvingManyFormat, queryable.Count);
+            StatusMessage = Strings.Dependencies_Resolving(queryable.Count);
 
             var installedByModId = installed
                 .Where(m => m.ModId is not null)
@@ -160,12 +158,8 @@ public partial class DependenciesViewModel : LocalizedViewModel
             StatusMessage = Trees.Count == 0
                 ? Strings.Dependencies_NoneDeclared
                 : attention == 0
-                    ? Trees.Count == 1
-                        ? Strings.Dependencies_AllSatisfiedOne
-                        : Text(Strings.Dependencies_AllSatisfiedManyFormat, Trees.Count)
-                    : Trees.Count == 1
-                        ? Text(Strings.Dependencies_AttentionOneFormat, attention)
-                        : Text(Strings.Dependencies_AttentionManyFormat, Trees.Count, attention);
+                    ? Strings.Dependencies_AllSatisfied(Trees.Count)
+                    : Strings.Dependencies_Attention(Trees.Count, Trees.Count, attention);
         }
         catch (SpModApiRateLimitedException ex)
         {

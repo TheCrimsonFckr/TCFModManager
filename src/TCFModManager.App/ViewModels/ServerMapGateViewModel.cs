@@ -345,13 +345,8 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
 
             if (unresolved == 0)
             {
-                return one
-                    ? Text(Strings.ServerMap_ListSummaryOneFormat, List.Name, List.Revision)
-                    : Text(
-                        Strings.ServerMap_ListSummaryManyFormat,
-                        List.Name,
-                        List.Revision,
-                        List.Entries.Count);
+                return Strings.ServerMap_ListSummary(
+                    List.Entries.Count, List.Name, List.Revision, List.Entries.Count);
             }
 
             return one

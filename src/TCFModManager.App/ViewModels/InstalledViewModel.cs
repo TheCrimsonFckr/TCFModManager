@@ -1217,9 +1217,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         //
         var handInstalled = resolved.Where(r => !r.Card.IsAppManaged).Select(r => r.Card.DisplayTitle).ToList();
         if (handInstalled.Count > 0 && !Confirm(
-                handInstalled.Count == 1
-                    ? Strings.Installed_UpdateHandInstalledTitleOne
-                    : Text(Strings.Installed_UpdateHandInstalledTitleManyFormat, handInstalled.Count),
+                Strings.Installed_UpdateHandInstalledTitle(handInstalled.Count),
                 Text(Strings.Installed_UpdateHandInstalledBodyFormat, TextLists.Join(handInstalled))))
         {
             StatusMessage = Strings.Installed_UpdateCancelled;
@@ -1241,9 +1239,7 @@ public partial class InstalledViewModel : LocalizedViewModel
                 InstallTarget.For(mod), version, installPath, () => ResolveVersionLinkAsync(mod, version));
         }
 
-        var queued = resolved.Count == 1
-            ? Strings.Installed_UpdateQueuedOne
-            : Text(Strings.Installed_UpdateQueuedManyFormat, resolved.Count);
+        var queued = Strings.Installed_UpdateQueued(resolved.Count);
         StatusMessage = queued + DescribeSkipped(selected, resolved.Count, unmatched);
 
         AppLog.Info("Installed", $"queued {resolved.Count} update(s) from a selection of {selected.Count}");
@@ -1262,11 +1258,8 @@ public partial class InstalledViewModel : LocalizedViewModel
 
         var reasons = new List<string>();
 
-        if (disabled == 1) reasons.Add(Strings.Installed_ReasonDisabledOne);
-        else if (disabled > 1) reasons.Add(Text(Strings.Installed_ReasonDisabledManyFormat, disabled));
-
-        if (addons == 1) reasons.Add(Strings.Installed_ReasonAddonOne);
-        else if (addons > 1) reasons.Add(Text(Strings.Installed_ReasonAddonManyFormat, addons));
+        if (disabled > 0) reasons.Add(Strings.Installed_ReasonDisabled(disabled));
+        if (addons > 0) reasons.Add(Strings.Installed_ReasonAddon(addons));
 
         return reasons.Count == 0
             ? Strings.Installed_NoUpdatesAvailable
@@ -1286,17 +1279,10 @@ public partial class InstalledViewModel : LocalizedViewModel
         var addons = selected.Count(c => c is { UpdateAvailable: true, IsAddon: true });
         var noUpdate = selected.Count(c => c.UpdateAvailable != true);
 
-        if (noUpdate == 1) parts.Add(Strings.Installed_SkippedUpToDateOne);
-        else if (noUpdate > 1) parts.Add(Text(Strings.Installed_SkippedUpToDateManyFormat, noUpdate));
-
-        if (disabled == 1) parts.Add(Strings.Installed_SkippedDisabledOne);
-        else if (disabled > 1) parts.Add(Text(Strings.Installed_SkippedDisabledManyFormat, disabled));
-
-        if (addons == 1) parts.Add(Strings.Installed_SkippedAddonOne);
-        else if (addons > 1) parts.Add(Text(Strings.Installed_SkippedAddonManyFormat, addons));
-
-        if (unmatched.Count == 1) parts.Add(Strings.Installed_SkippedNotFoundOne);
-        else if (unmatched.Count > 1) parts.Add(Text(Strings.Installed_SkippedNotFoundManyFormat, unmatched.Count));
+        if (noUpdate > 0) parts.Add(Strings.Installed_SkippedUpToDate(noUpdate));
+        if (disabled > 0) parts.Add(Strings.Installed_SkippedDisabled(disabled));
+        if (addons > 0) parts.Add(Strings.Installed_SkippedAddon(addons));
+        if (unmatched.Count > 0) parts.Add(Strings.Installed_SkippedNotFound(unmatched.Count));
 
         return parts.Count == 0
             ? string.Empty
@@ -1342,9 +1328,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         try
         {
             var outcome = ModDisableService.Revert(_lastMoves, AppServices.SptEnvironment.InstallPath);
-            var put = outcome.Moved.Count == 1
-                ? Strings.Installed_UndoneOne
-                : Text(Strings.Installed_UndoneManyFormat, outcome.Moved.Count);
+            var put = Strings.Installed_Undone(outcome.Moved.Count);
             message = outcome.Failed.Count == 0 ? put : Sentences(put, DescribeFailures(outcome.Failed));
         }
         catch (ModInstallException ex)
@@ -1434,11 +1418,9 @@ public partial class InstalledViewModel : LocalizedViewModel
         var moves = (carryOver ?? []).Concat(outcome.Moved).ToList();
         SetLastMoves(moves, label ?? DescribeTargets(targets, disable));
 
-        var message = targets.Count == 1
-            ? disable ? Strings.Installed_DisabledCountOne : Strings.Installed_EnabledCountOne
-            : Text(
-                disable ? Strings.Installed_DisabledCountManyFormat : Strings.Installed_EnabledCountManyFormat,
-                targets.Count);
+        var message = disable
+            ? Strings.Installed_DisabledCount(targets.Count)
+            : Strings.Installed_EnabledCount(targets.Count);
         if (outcome.Failed.Count > 0) message = Sentences(message, DescribeFailures(outcome.Failed));
 
         await ScanAsync();
@@ -1502,20 +1484,20 @@ public partial class InstalledViewModel : LocalizedViewModel
         if (targets.Count == 1)
         {
             return (disable
-                ? nameof(Strings.Installed_UndoDisableOneFormat)
-                : nameof(Strings.Installed_UndoEnableOneFormat), targets[0].DisplayTitle);
+                ? nameof(Strings.Installed_UndoDisableNamedFormat)
+                : nameof(Strings.Installed_UndoEnableNamedFormat), targets[0].DisplayTitle);
         }
 
         return (disable
-            ? nameof(Strings.Installed_UndoDisableManyFormat)
-            : nameof(Strings.Installed_UndoEnableManyFormat), targets.Count);
+            ? nameof(Strings.Installed_UndoDisableCountFormat)
+            : nameof(Strings.Installed_UndoEnableCountFormat), targets.Count);
     }
 
     private static string DescribeFailures(IReadOnlyList<ModDisableFailure> failures) =>
         failures.Count == 1
-            ? Text(Strings.Installed_MoveFailedOneFormat, failures[0].ModName, failures[0].Reason)
+            ? Text(Strings.Installed_MoveFailedNamedFormat, failures[0].ModName, failures[0].Reason)
             : Text(
-                Strings.Installed_MoveFailedManyFormat,
+                Strings.Installed_MoveFailedCountFormat,
                 failures.Count,
                 string.Join(
                     Strings.Common_ClauseSeparator,
@@ -1562,9 +1544,7 @@ public partial class InstalledViewModel : LocalizedViewModel
 
         if (configCount == 0) return Confirm(title, message) ? ConfigAction.Keep : null;
 
-        var configs = configCount == 1
-            ? Text(Strings.Installed_RemoveConfigsOneFormat, modName)
-            : Text(Strings.Installed_RemoveConfigsManyFormat, modName, configCount);
+        var configs = Strings.Installed_RemoveConfigs(configCount, modName, configCount);
 
         var choices = Text(Strings.Installed_RemoveConfigsChoicesFormat, AppPaths.LegacyConfigsDirectory);
 
@@ -1584,20 +1564,15 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     private static string DescribeRemoval(string modName, int failedFiles, int configsKept, string? configsFolder)
     {
-        var message = failedFiles switch
-        {
-            0 => Text(Strings.Installed_RemovedFormat, modName),
-            1 => Text(Strings.Installed_RemovedFailedOneFormat, modName),
-            _ => Text(Strings.Installed_RemovedFailedManyFormat, modName, failedFiles),
-        };
+        var message = failedFiles == 0
+            ? Text(Strings.Installed_RemovedFormat, modName)
+            : Strings.Installed_RemovedFailed(failedFiles, modName, failedFiles);
 
         if (configsKept == 0 || configsFolder is null) return message;
 
         return Sentences(
             message,
-            configsKept == 1
-                ? Text(Strings.Installed_RemovedConfigsKeptOneFormat, configsFolder)
-                : Text(Strings.Installed_RemovedConfigsKeptManyFormat, configsKept, configsFolder));
+            Strings.Installed_RemovedConfigsKept(configsKept, configsKept, configsFolder));
     }
 
     private bool CanGoToPreviousPage() => CurrentPage > 1;
@@ -1689,21 +1664,15 @@ public partial class InstalledViewModel : LocalizedViewModel
     private string DescribeCounts()
     {
         var shown = _filtered.Count == _all.Count
-            ? _all.Count == 1
-                ? Strings.Installed_CountFoundOne
-                : Text(Strings.Installed_CountFoundManyFormat, _all.Count)
-            : _filtered.Count == 1
-                ? Text(Strings.Installed_CountShownOneFormat, _all.Count)
-                : Text(Strings.Installed_CountShownManyFormat, _filtered.Count, _all.Count);
+            ? Strings.Installed_CountFound(_all.Count)
+            : Strings.Installed_CountShown(_filtered.Count, _filtered.Count, _all.Count);
 
         var disabled = _all.Count(m => m.IsDisabled);
         if (disabled == 0) return shown;
 
         return Sentences(
             shown,
-            disabled == 1
-                ? Strings.Installed_CountDisabledOne
-                : Text(Strings.Installed_CountDisabledManyFormat, disabled));
+            Strings.Installed_CountDisabled(disabled));
     }
 
     private static IEnumerable<InstalledModCardViewModel> SortMods(IEnumerable<InstalledModCardViewModel> mods, ModSortOption sort) =>
@@ -1889,12 +1858,10 @@ public partial class InstalledViewModel : LocalizedViewModel
     {
         if (section is not { IsRealGroup: true }) return;
 
-        var message = section.Items.Count switch
-        {
-            0 => Text(Strings.Installed_DeleteGroupEmptyFormat, section.Name),
-            1 => Text(Strings.Installed_DeleteGroupOneFormat, section.Name),
-            _ => Text(Strings.Installed_DeleteGroupManyFormat, section.Name, section.Items.Count),
-        };
+        var message = section.Items.Count == 0
+            ? Text(Strings.Installed_DeleteGroupEmptyFormat, section.Name)
+            : Strings.Installed_DeleteGroup(
+                section.Items.Count, section.Name, section.Items.Count);
 
         if (MessageBox.Show(
                 message,

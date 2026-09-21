@@ -477,9 +477,7 @@ public partial class ModListsViewModel : LocalizedViewModel
 
             if (IsFiltered)
             {
-                return total == 1
-                    ? Text(Strings.ModLists_EntriesHeaderFilteredOneFormat, VisibleEntryCount)
-                    : Text(Strings.ModLists_EntriesHeaderFilteredManyFormat, VisibleEntryCount, total);
+                return Strings.ModLists_EntriesHeaderFiltered(total, VisibleEntryCount, total);
             }
 
             return total == 1
@@ -517,9 +515,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         // here is destructive, but work disappearing without a word is its own kind of bug.
         if (dropped > 0)
         {
-            StatusMessage = dropped == 1
-                ? Strings.ModLists_DroppedOne
-                : Text(Strings.ModLists_DroppedManyFormat, dropped);
+            StatusMessage = Strings.ModLists_Dropped(dropped);
         }
     }
 
@@ -773,9 +769,8 @@ public partial class ModListsViewModel : LocalizedViewModel
 
             NewListName = string.Empty;
             Refresh(captured.Id);
-            StatusMessage = captured.Entries.Count == 1
-                ? Text(Strings.ModLists_CapturedOneFormat, captured.Name)
-                : Text(Strings.ModLists_CapturedManyFormat, captured.Entries.Count, captured.Name);
+            StatusMessage = Strings.ModLists_Captured(
+                captured.Entries.Count, captured.Entries.Count, captured.Name);
         });
     }
 
@@ -976,8 +971,7 @@ public partial class ModListsViewModel : LocalizedViewModel
             var putBack = undone switch
             {
                 0 => string.Empty,
-                1 => " " + Strings.ModLists_PutBackOne,
-                _ => " " + Text(Strings.ModLists_PutBackManyFormat, undone),
+                _ => " " + Strings.ModLists_PutBack(undone),
             };
 
             StatusMessage = ModListProblems.Describe(result) + putBack + FailureDetail(result);
@@ -1004,17 +998,13 @@ public partial class ModListsViewModel : LocalizedViewModel
         var manual = result.Manual.Count;
         if (manual > 0)
         {
-            message += " " + (manual == 1
-                ? Strings.ModLists_AppliedManualOne
-                : Text(Strings.ModLists_AppliedManualManyFormat, manual));
+            message += " " + Strings.ModLists_AppliedManual(manual);
         }
 
         var failedMoves = result.Enabled.Failed.Count + result.Disabled.Failed.Count;
         if (failedMoves > 0)
         {
-            message += " " + (failedMoves == 1
-                ? Strings.ModLists_AppliedMovesFailedOne
-                : Text(Strings.ModLists_AppliedMovesFailedManyFormat, failedMoves));
+            message += " " + Strings.ModLists_AppliedMovesFailed(failedMoves);
         }
 
         return message;
@@ -1109,9 +1099,7 @@ public partial class ModListsViewModel : LocalizedViewModel
             Notify();
             UnsavedCount += added;
 
-            StatusMessage = added == 1
-                ? Text(Strings.ModLists_AddedOneFormat, row.Name)
-                : Text(Strings.ModLists_AddedManyFormat, added, row.Name);
+            StatusMessage = Strings.ModLists_Added(added, added, row.Name);
         });
     }
 
@@ -1322,9 +1310,8 @@ public partial class ModListsViewModel : LocalizedViewModel
                 ? Text(Strings.ModLists_AndMoreFormat, result.Changed.Count - 5)
                 : string.Empty;
 
-            StatusMessage = result.Changed.Count == 1
-                ? Text(Strings.ModLists_VersionsUpdatedOneFormat, named, rest)
-                : Text(Strings.ModLists_VersionsUpdatedManyFormat, result.Changed.Count, named, rest);
+            StatusMessage = Strings.ModLists_VersionsUpdated(
+                result.Changed.Count, result.Changed.Count, named, rest);
         }
         finally
         {
@@ -1347,9 +1334,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         UnsavedCount = 0;
         Refresh(row.Id);
 
-        StatusMessage = count == 1
-            ? Text(Strings.ModLists_SavedOneFormat, row.Name)
-            : Text(Strings.ModLists_SavedManyFormat, row.Name, count);
+        StatusMessage = Strings.ModLists_Saved(count, row.Name, count);
     }
 
     // Throws the unsaved edits away and shows the list as it is stored.
@@ -1500,13 +1485,8 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         if (added.Count == 0 && removed.Count == 0 && changed.Count == 0)
         {
-            return after.Entries.Count == 1
-                ? Text(Strings.ModLists_AlreadyPublishingOneFormat, after.Name, after.Revision)
-                : Text(
-                    Strings.ModLists_AlreadyPublishingManyFormat,
-                    after.Name,
-                    after.Revision,
-                    after.Entries.Count);
+            return Strings.ModLists_AlreadyPublishing(
+                after.Entries.Count, after.Name, after.Revision, after.Entries.Count);
         }
 
         var parts = new List<string>();

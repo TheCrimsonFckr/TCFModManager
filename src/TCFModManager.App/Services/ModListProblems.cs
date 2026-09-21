@@ -25,14 +25,7 @@ public static class ModListProblems
 
         ModListStop.FetchCancelled => Strings.ModListApply_Cancelled,
 
-        // Two keys until S5 gives this a plural rule: a language with more than two forms cannot
-        // be served by an if.
-        ModListStop.FetchFailed => result.FailedFetches == 1
-            ? Strings.ModListApply_FetchFailedOne
-            : string.Format(
-                CultureInfo.CurrentCulture,
-                Strings.ModListApply_FetchFailedManyFormat,
-                result.FailedFetches),
+        ModListStop.FetchFailed => Strings.ModListApply_FetchFailed(result.FailedFetches),
 
         // The refusal already knows which operation was blocked and what is holding the install.
         ModListStop.MovesRefused when result.Refusal is { } refusal =>

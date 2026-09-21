@@ -86,24 +86,19 @@ public static class ServerMapProblems
     public static string DescribeList(ServerMapListResult result, ModList? held, bool servingOwnList = false)
         => result.Problem switch
     {
-        // Two keys per case until S5 gives the count a plural rule.
         ServerMapProblem.None when result.List is not null && servingOwnList =>
-            result.List.Entries.Count == 1
-                ? Format(Strings.ServerMap_ServingOwnListOneFormat, result.List.Name, result.List.Revision)
-                : Format(
-                    Strings.ServerMap_ServingOwnListManyFormat,
-                    result.List.Name,
-                    result.List.Revision,
-                    result.List.Entries.Count),
+            Strings.ServerMap_ServingOwnList(
+                result.List.Entries.Count,
+                result.List.Name,
+                result.List.Revision,
+                result.List.Entries.Count),
 
         ServerMapProblem.None when result.List is not null =>
-            result.List.Entries.Count == 1
-                ? Format(Strings.ServerMap_ListSavedOneFormat, result.List.Name, result.List.Revision)
-                : Format(
-                    Strings.ServerMap_ListSavedManyFormat,
-                    result.List.Name,
-                    result.List.Revision,
-                    result.List.Entries.Count),
+            Strings.ServerMap_ListSaved(
+                result.List.Entries.Count,
+                result.List.Name,
+                result.List.Revision,
+                result.List.Entries.Count),
 
         //
         // Not a failure. A server can run the mod and deliberately publish nothing.
@@ -166,11 +161,10 @@ public static class ServerMapProblems
 
         return (named, hello.ListEntryCount) switch
         {
-            (true, 1) => Format(Strings.ServerMap_PublishedNamedOneFormat, hello.ListName, revision),
-            (true, { } count) => Format(Strings.ServerMap_PublishedNamedManyFormat, hello.ListName, revision, count),
+            (true, { } count) =>
+                Strings.ServerMap_PublishedNamed(count, hello.ListName, revision, count),
             (true, null) => Format(Strings.ServerMap_PublishedNamedFormat, hello.ListName, revision),
-            (false, 1) => Format(Strings.ServerMap_PublishedUnnamedOneFormat, revision),
-            (false, { } count) => Format(Strings.ServerMap_PublishedUnnamedManyFormat, revision, count),
+            (false, { } count) => Strings.ServerMap_PublishedUnnamed(count, revision, count),
             _ => Format(Strings.ServerMap_PublishedUnnamedFormat, revision),
         };
     }

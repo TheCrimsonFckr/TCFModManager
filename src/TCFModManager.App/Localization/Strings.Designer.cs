@@ -381,8 +381,8 @@ internal static class Strings
     internal static string Api_NetworkErrorFormat => LocalizationService.Get("Api_NetworkErrorFormat");
     internal static string Api_UnreachableFormat => LocalizationService.Get("Api_UnreachableFormat");
     internal static string ModListApply_Cancelled => LocalizationService.Get("ModListApply_Cancelled");
-    internal static string ModListApply_FetchFailedOne => LocalizationService.Get("ModListApply_FetchFailedOne");
-    internal static string ModListApply_FetchFailedManyFormat => LocalizationService.Get("ModListApply_FetchFailedManyFormat");
+    internal static string ModListApply_FetchFailed(int count, params object?[] values) =>
+        LocalizationService.Plural("ModListApply_FetchFailed", count, values);
     internal static string ModListApply_Stopped => LocalizationService.Get("ModListApply_Stopped");
     internal static string SptLaunch_ServerExeNotFoundFormat => LocalizationService.Get("SptLaunch_ServerExeNotFoundFormat");
     internal static string SptLaunch_ClientExeNotFoundFormat => LocalizationService.Get("SptLaunch_ClientExeNotFoundFormat");
@@ -431,22 +431,22 @@ internal static class Strings
     internal static string AppUpdate_NoSpaceSizedFormat => LocalizationService.Get("AppUpdate_NoSpaceSizedFormat");
     internal static string AppUpdate_NoSpaceFormat => LocalizationService.Get("AppUpdate_NoSpaceFormat");
     internal static string AppUpdate_UnexpectedFormat => LocalizationService.Get("AppUpdate_UnexpectedFormat");
-    internal static string ConfigUpdate_NotUpdatedOneFormat => LocalizationService.Get("ConfigUpdate_NotUpdatedOneFormat");
-    internal static string ConfigUpdate_NotUpdatedManyFormat => LocalizationService.Get("ConfigUpdate_NotUpdatedManyFormat");
+    internal static string ConfigUpdate_NotUpdatedNamedFormat => LocalizationService.Get("ConfigUpdate_NotUpdatedNamedFormat");
+    internal static string ConfigUpdate_NotUpdatedCountFormat => LocalizationService.Get("ConfigUpdate_NotUpdatedCountFormat");
     internal static string ConfigUpdate_MergedFormat => LocalizationService.Get("ConfigUpdate_MergedFormat");
     internal static string ConfigUpdate_MergedWithLostFormat => LocalizationService.Get("ConfigUpdate_MergedWithLostFormat");
-    internal static string ConfigUpdate_ReplacedOneFormat => LocalizationService.Get("ConfigUpdate_ReplacedOneFormat");
+    internal static string ConfigUpdate_ReplacedNamedFormat => LocalizationService.Get("ConfigUpdate_ReplacedNamedFormat");
     internal static string ConfigUpdate_ReplacedOneWhereFormat => LocalizationService.Get("ConfigUpdate_ReplacedOneWhereFormat");
-    internal static string ConfigUpdate_ReplacedManyFormat => LocalizationService.Get("ConfigUpdate_ReplacedManyFormat");
+    internal static string ConfigUpdate_ReplacedCountFormat => LocalizationService.Get("ConfigUpdate_ReplacedCountFormat");
     internal static string ConfigUpdate_ReplacedManyWhereFormat => LocalizationService.Get("ConfigUpdate_ReplacedManyWhereFormat");
     internal static string ConfigUpdate_ReplacedFirstTime => LocalizationService.Get("ConfigUpdate_ReplacedFirstTime");
-    internal static string ConfigUpdate_RemovedOneFormat => LocalizationService.Get("ConfigUpdate_RemovedOneFormat");
+    internal static string ConfigUpdate_RemovedNamedFormat => LocalizationService.Get("ConfigUpdate_RemovedNamedFormat");
     internal static string ConfigUpdate_RemovedOneWhereFormat => LocalizationService.Get("ConfigUpdate_RemovedOneWhereFormat");
-    internal static string ConfigUpdate_RemovedManyFormat => LocalizationService.Get("ConfigUpdate_RemovedManyFormat");
+    internal static string ConfigUpdate_RemovedCountFormat => LocalizationService.Get("ConfigUpdate_RemovedCountFormat");
     internal static string ConfigUpdate_RemovedManyWhereFormat => LocalizationService.Get("ConfigUpdate_RemovedManyWhereFormat");
     internal static string ConfigUpdate_VersionRangeFormat => LocalizationService.Get("ConfigUpdate_VersionRangeFormat");
-    internal static string ConfigUpdate_NoteMergedOneFormat => LocalizationService.Get("ConfigUpdate_NoteMergedOneFormat");
-    internal static string ConfigUpdate_NoteMergedManyFormat => LocalizationService.Get("ConfigUpdate_NoteMergedManyFormat");
+    internal static string ConfigUpdate_NoteMerged(int count, params object?[] values) =>
+        LocalizationService.Plural("ConfigUpdate_NoteMerged", count, values);
     internal static string ConfigUpdate_AlsoDroppedFormat => LocalizationService.Get("ConfigUpdate_AlsoDroppedFormat");
     internal static string ConfigUpdate_AlsoAddedFormat => LocalizationService.Get("ConfigUpdate_AlsoAddedFormat");
     internal static string ConfigUpdate_AlsoBothFormat => LocalizationService.Get("ConfigUpdate_AlsoBothFormat");
@@ -478,10 +478,10 @@ internal static class Strings
     internal static string ServerMap_ReachFailedFormat => LocalizationService.Get("ServerMap_ReachFailedFormat");
     internal static string ServerMap_NotSetUp => LocalizationService.Get("ServerMap_NotSetUp");
     internal static string ServerMap_NotConnected => LocalizationService.Get("ServerMap_NotConnected");
-    internal static string ServerMap_ServingOwnListOneFormat => LocalizationService.Get("ServerMap_ServingOwnListOneFormat");
-    internal static string ServerMap_ServingOwnListManyFormat => LocalizationService.Get("ServerMap_ServingOwnListManyFormat");
-    internal static string ServerMap_ListSavedOneFormat => LocalizationService.Get("ServerMap_ListSavedOneFormat");
-    internal static string ServerMap_ListSavedManyFormat => LocalizationService.Get("ServerMap_ListSavedManyFormat");
+    internal static string ServerMap_ServingOwnList(int count, params object?[] values) =>
+        LocalizationService.Plural("ServerMap_ServingOwnList", count, values);
+    internal static string ServerMap_ListSaved(int count, params object?[] values) =>
+        LocalizationService.Plural("ServerMap_ListSaved", count, values);
     internal static string ServerMap_NoListHeldFormat => LocalizationService.Get("ServerMap_NoListHeldFormat");
     internal static string ServerMap_NoList => LocalizationService.Get("ServerMap_NoList");
     internal static string ServerMap_KeyRequired => LocalizationService.Get("ServerMap_KeyRequired");
@@ -496,11 +496,11 @@ internal static class Strings
     internal static string ServerMap_KeyHeld => LocalizationService.Get("ServerMap_KeyHeld");
     internal static string ServerMap_PublishesNothing => LocalizationService.Get("ServerMap_PublishesNothing");
     internal static string ServerMap_PublishedNamedFormat => LocalizationService.Get("ServerMap_PublishedNamedFormat");
-    internal static string ServerMap_PublishedNamedOneFormat => LocalizationService.Get("ServerMap_PublishedNamedOneFormat");
-    internal static string ServerMap_PublishedNamedManyFormat => LocalizationService.Get("ServerMap_PublishedNamedManyFormat");
+    internal static string ServerMap_PublishedNamed(int count, params object?[] values) =>
+        LocalizationService.Plural("ServerMap_PublishedNamed", count, values);
     internal static string ServerMap_PublishedUnnamedFormat => LocalizationService.Get("ServerMap_PublishedUnnamedFormat");
-    internal static string ServerMap_PublishedUnnamedOneFormat => LocalizationService.Get("ServerMap_PublishedUnnamedOneFormat");
-    internal static string ServerMap_PublishedUnnamedManyFormat => LocalizationService.Get("ServerMap_PublishedUnnamedManyFormat");
+    internal static string ServerMap_PublishedUnnamed(int count, params object?[] values) =>
+        LocalizationService.Plural("ServerMap_PublishedUnnamed", count, values);
     internal static string ServerMap_NoThumbprint => LocalizationService.Get("ServerMap_NoThumbprint");
     internal static string ServerMap_NoPinRecorded => LocalizationService.Get("ServerMap_NoPinRecorded");
     internal static string ServerMap_PinRecordedFormat => LocalizationService.Get("ServerMap_PinRecordedFormat");
@@ -525,8 +525,8 @@ internal static class Strings
     internal static string ModLists_SortNameDescending => LocalizationService.Get("ModLists_SortNameDescending");
     internal static string ModLists_EntriesHeaderOne => LocalizationService.Get("ModLists_EntriesHeaderOne");
     internal static string ModLists_EntriesHeaderManyFormat => LocalizationService.Get("ModLists_EntriesHeaderManyFormat");
-    internal static string ModLists_EntriesHeaderFilteredOneFormat => LocalizationService.Get("ModLists_EntriesHeaderFilteredOneFormat");
-    internal static string ModLists_EntriesHeaderFilteredManyFormat => LocalizationService.Get("ModLists_EntriesHeaderFilteredManyFormat");
+    internal static string ModLists_EntriesHeaderFiltered(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_EntriesHeaderFiltered", count, values);
     internal static string ModLists_UnsavedOne => LocalizationService.Get("ModLists_UnsavedOne");
     internal static string ModLists_UnsavedManyFormat => LocalizationService.Get("ModLists_UnsavedManyFormat");
     internal static string ModLists_EntryAddon => LocalizationService.Get("ModLists_EntryAddon");
@@ -573,8 +573,8 @@ internal static class Strings
     internal static string ModLists_UndoLabelFormat => LocalizationService.Get("ModLists_UndoLabelFormat");
     internal static string ModLists_FollowingFormat => LocalizationService.Get("ModLists_FollowingFormat");
     internal static string ModLists_NameFirst => LocalizationService.Get("ModLists_NameFirst");
-    internal static string ModLists_CapturedOneFormat => LocalizationService.Get("ModLists_CapturedOneFormat");
-    internal static string ModLists_CapturedManyFormat => LocalizationService.Get("ModLists_CapturedManyFormat");
+    internal static string ModLists_Captured(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_Captured", count, values);
     internal static string ModLists_CloseSptBeforeApply => LocalizationService.Get("ModLists_CloseSptBeforeApply");
     internal static string ModLists_PreviewedFormat => LocalizationService.Get("ModLists_PreviewedFormat");
     internal static string ModLists_PinnedFormat => LocalizationService.Get("ModLists_PinnedFormat");
@@ -584,20 +584,20 @@ internal static class Strings
     internal static string ModLists_CountDisabledFormat => LocalizationService.Get("ModLists_CountDisabledFormat");
     internal static string ModLists_AppliedNothing => LocalizationService.Get("ModLists_AppliedNothing");
     internal static string ModLists_AppliedFormat => LocalizationService.Get("ModLists_AppliedFormat");
-    internal static string ModLists_AppliedManualOne => LocalizationService.Get("ModLists_AppliedManualOne");
-    internal static string ModLists_AppliedManualManyFormat => LocalizationService.Get("ModLists_AppliedManualManyFormat");
-    internal static string ModLists_AppliedMovesFailedOne => LocalizationService.Get("ModLists_AppliedMovesFailedOne");
-    internal static string ModLists_AppliedMovesFailedManyFormat => LocalizationService.Get("ModLists_AppliedMovesFailedManyFormat");
-    internal static string ModLists_PutBackOne => LocalizationService.Get("ModLists_PutBackOne");
-    internal static string ModLists_PutBackManyFormat => LocalizationService.Get("ModLists_PutBackManyFormat");
+    internal static string ModLists_AppliedManual(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_AppliedManual", count, values);
+    internal static string ModLists_AppliedMovesFailed(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_AppliedMovesFailed", count, values);
+    internal static string ModLists_PutBack(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_PutBack", count, values);
     internal static string ModLists_FetchFailureFormat => LocalizationService.Get("ModLists_FetchFailureFormat");
     internal static string ModLists_NothingToUndo => LocalizationService.Get("ModLists_NothingToUndo");
     internal static string ModLists_UndoneFormat => LocalizationService.Get("ModLists_UndoneFormat");
     internal static string ModLists_UndoFailedFormat => LocalizationService.Get("ModLists_UndoFailedFormat");
     internal static string ModLists_NothingToAddFrom => LocalizationService.Get("ModLists_NothingToAddFrom");
     internal static string ModLists_NothingAdded => LocalizationService.Get("ModLists_NothingAdded");
-    internal static string ModLists_AddedOneFormat => LocalizationService.Get("ModLists_AddedOneFormat");
-    internal static string ModLists_AddedManyFormat => LocalizationService.Get("ModLists_AddedManyFormat");
+    internal static string ModLists_Added(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_Added", count, values);
     internal static string ModLists_RemovedEntryFormat => LocalizationService.Get("ModLists_RemovedEntryFormat");
     internal static string ModLists_ScopeServerOnlyFormat => LocalizationService.Get("ModLists_ScopeServerOnlyFormat");
     internal static string ModLists_ScopeClientsAndHeadlessFormat => LocalizationService.Get("ModLists_ScopeClientsAndHeadlessFormat");
@@ -614,10 +614,10 @@ internal static class Strings
     internal static string ModLists_VersionChangeEntryFormat => LocalizationService.Get("ModLists_VersionChangeEntryFormat");
     internal static string ModLists_VersionUnlocked => LocalizationService.Get("ModLists_VersionUnlocked");
     internal static string ModLists_AndMoreFormat => LocalizationService.Get("ModLists_AndMoreFormat");
-    internal static string ModLists_VersionsUpdatedOneFormat => LocalizationService.Get("ModLists_VersionsUpdatedOneFormat");
-    internal static string ModLists_VersionsUpdatedManyFormat => LocalizationService.Get("ModLists_VersionsUpdatedManyFormat");
-    internal static string ModLists_SavedOneFormat => LocalizationService.Get("ModLists_SavedOneFormat");
-    internal static string ModLists_SavedManyFormat => LocalizationService.Get("ModLists_SavedManyFormat");
+    internal static string ModLists_VersionsUpdated(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_VersionsUpdated", count, values);
+    internal static string ModLists_Saved(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_Saved", count, values);
     internal static string ModLists_RevertedFormat => LocalizationService.Get("ModLists_RevertedFormat");
     internal static string ModLists_ShowingFormat => LocalizationService.Get("ModLists_ShowingFormat");
     internal static string ModLists_RenamedFormat => LocalizationService.Get("ModLists_RenamedFormat");
@@ -627,8 +627,8 @@ internal static class Strings
     internal static string ModLists_NoServerAddress => LocalizationService.Get("ModLists_NoServerAddress");
     internal static string ModLists_ListNotFetchedFormat => LocalizationService.Get("ModLists_ListNotFetchedFormat");
     internal static string ModLists_ServerPublishingDifferentFormat => LocalizationService.Get("ModLists_ServerPublishingDifferentFormat");
-    internal static string ModLists_AlreadyPublishingOneFormat => LocalizationService.Get("ModLists_AlreadyPublishingOneFormat");
-    internal static string ModLists_AlreadyPublishingManyFormat => LocalizationService.Get("ModLists_AlreadyPublishingManyFormat");
+    internal static string ModLists_AlreadyPublishing(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_AlreadyPublishing", count, values);
     internal static string ModLists_DiffAddedFormat => LocalizationService.Get("ModLists_DiffAddedFormat");
     internal static string ModLists_DiffRemovedFormat => LocalizationService.Get("ModLists_DiffRemovedFormat");
     internal static string ModLists_DiffChangedFormat => LocalizationService.Get("ModLists_DiffChangedFormat");
@@ -643,8 +643,8 @@ internal static class Strings
     internal static string ModLists_ImportedFormat => LocalizationService.Get("ModLists_ImportedFormat");
     internal static string ModLists_ImportUpdatedFormat => LocalizationService.Get("ModLists_ImportUpdatedFormat");
     internal static string ModLists_SomethingWentWrongFormat => LocalizationService.Get("ModLists_SomethingWentWrongFormat");
-    internal static string ModLists_DroppedOne => LocalizationService.Get("ModLists_DroppedOne");
-    internal static string ModLists_DroppedManyFormat => LocalizationService.Get("ModLists_DroppedManyFormat");
+    internal static string ModLists_Dropped(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_Dropped", count, values);
     internal static string Filter_UpdateAny => LocalizationService.Get("Filter_UpdateAny");
     internal static string Filter_UpdateNeeded => LocalizationService.Get("Filter_UpdateNeeded");
     internal static string Filter_UpdateUpToDate => LocalizationService.Get("Filter_UpdateUpToDate");
@@ -708,22 +708,22 @@ internal static class Strings
     internal static string Installed_SelectedManyFormat => LocalizationService.Get("Installed_SelectedManyFormat");
     internal static string Installed_SelectAllFormat => LocalizationService.Get("Installed_SelectAllFormat");
     internal static string Installed_Undo => LocalizationService.Get("Installed_Undo");
-    internal static string Installed_UndoDisableOneFormat => LocalizationService.Get("Installed_UndoDisableOneFormat");
-    internal static string Installed_UndoDisableManyFormat => LocalizationService.Get("Installed_UndoDisableManyFormat");
-    internal static string Installed_UndoEnableOneFormat => LocalizationService.Get("Installed_UndoEnableOneFormat");
-    internal static string Installed_UndoEnableManyFormat => LocalizationService.Get("Installed_UndoEnableManyFormat");
+    internal static string Installed_UndoDisableNamedFormat => LocalizationService.Get("Installed_UndoDisableNamedFormat");
+    internal static string Installed_UndoDisableCountFormat => LocalizationService.Get("Installed_UndoDisableCountFormat");
+    internal static string Installed_UndoEnableNamedFormat => LocalizationService.Get("Installed_UndoEnableNamedFormat");
+    internal static string Installed_UndoEnableCountFormat => LocalizationService.Get("Installed_UndoEnableCountFormat");
     internal static string Installed_UndoInvertFormat => LocalizationService.Get("Installed_UndoInvertFormat");
     internal static string Installed_UndoSortOutFormat => LocalizationService.Get("Installed_UndoSortOutFormat");
     internal static string Installed_SavedAsDefault => LocalizationService.Get("Installed_SavedAsDefault");
     internal static string Installed_PinnedFormat => LocalizationService.Get("Installed_PinnedFormat");
     internal static string Installed_UnpinnedFormat => LocalizationService.Get("Installed_UnpinnedFormat");
     internal static string Installed_NoModsFoundFormat => LocalizationService.Get("Installed_NoModsFoundFormat");
-    internal static string Installed_CountFoundOne => LocalizationService.Get("Installed_CountFoundOne");
-    internal static string Installed_CountFoundManyFormat => LocalizationService.Get("Installed_CountFoundManyFormat");
-    internal static string Installed_CountShownOneFormat => LocalizationService.Get("Installed_CountShownOneFormat");
-    internal static string Installed_CountShownManyFormat => LocalizationService.Get("Installed_CountShownManyFormat");
-    internal static string Installed_CountDisabledOne => LocalizationService.Get("Installed_CountDisabledOne");
-    internal static string Installed_CountDisabledManyFormat => LocalizationService.Get("Installed_CountDisabledManyFormat");
+    internal static string Installed_CountFound(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_CountFound", count, values);
+    internal static string Installed_CountShown(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_CountShown", count, values);
+    internal static string Installed_CountDisabled(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_CountDisabled", count, values);
     internal static string Installed_RemoveDisabledFirstFormat => LocalizationService.Get("Installed_RemoveDisabledFirstFormat");
     internal static string Installed_RemoveNoRecordFormat => LocalizationService.Get("Installed_RemoveNoRecordFormat");
     internal static string Installed_RemoveAppManagedBody => LocalizationService.Get("Installed_RemoveAppManagedBody");
@@ -732,14 +732,14 @@ internal static class Strings
     internal static string Installed_RemoveFailedFormat => LocalizationService.Get("Installed_RemoveFailedFormat");
     internal static string Installed_RemoveDisableHint => LocalizationService.Get("Installed_RemoveDisableHint");
     internal static string Installed_RemoveTitleFormat => LocalizationService.Get("Installed_RemoveTitleFormat");
-    internal static string Installed_RemoveConfigsOneFormat => LocalizationService.Get("Installed_RemoveConfigsOneFormat");
-    internal static string Installed_RemoveConfigsManyFormat => LocalizationService.Get("Installed_RemoveConfigsManyFormat");
+    internal static string Installed_RemoveConfigs(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_RemoveConfigs", count, values);
     internal static string Installed_RemoveConfigsChoicesFormat => LocalizationService.Get("Installed_RemoveConfigsChoicesFormat");
     internal static string Installed_RemovedFormat => LocalizationService.Get("Installed_RemovedFormat");
-    internal static string Installed_RemovedFailedOneFormat => LocalizationService.Get("Installed_RemovedFailedOneFormat");
-    internal static string Installed_RemovedFailedManyFormat => LocalizationService.Get("Installed_RemovedFailedManyFormat");
-    internal static string Installed_RemovedConfigsKeptOneFormat => LocalizationService.Get("Installed_RemovedConfigsKeptOneFormat");
-    internal static string Installed_RemovedConfigsKeptManyFormat => LocalizationService.Get("Installed_RemovedConfigsKeptManyFormat");
+    internal static string Installed_RemovedFailed(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_RemovedFailed", count, values);
+    internal static string Installed_RemovedConfigsKept(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_RemovedConfigsKept", count, values);
     internal static string Installed_FolderGoneFormat => LocalizationService.Get("Installed_FolderGoneFormat");
     internal static string Common_FolderOpenFailed => LocalizationService.Get("Common_FolderOpenFailed");
     internal static string Installed_DuplicateBodyFormat => LocalizationService.Get("Installed_DuplicateBodyFormat");
@@ -747,47 +747,47 @@ internal static class Strings
     internal static string Installed_DuplicateKeptEnabledFormat => LocalizationService.Get("Installed_DuplicateKeptEnabledFormat");
     internal static string Installed_DuplicateKeptDisabledFormat => LocalizationService.Get("Installed_DuplicateKeptDisabledFormat");
     internal static string Installed_UpdateNotInCatalogFormat => LocalizationService.Get("Installed_UpdateNotInCatalogFormat");
-    internal static string Installed_UpdateHandInstalledTitleOne => LocalizationService.Get("Installed_UpdateHandInstalledTitleOne");
-    internal static string Installed_UpdateHandInstalledTitleManyFormat => LocalizationService.Get("Installed_UpdateHandInstalledTitleManyFormat");
+    internal static string Installed_UpdateHandInstalledTitle(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_UpdateHandInstalledTitle", count, values);
     internal static string Installed_UpdateHandInstalledBodyFormat => LocalizationService.Get("Installed_UpdateHandInstalledBodyFormat");
     internal static string Installed_UpdateCancelled => LocalizationService.Get("Installed_UpdateCancelled");
     internal static string Installed_UpdateCancelledUnread => LocalizationService.Get("Installed_UpdateCancelledUnread");
-    internal static string Installed_UpdateQueuedOne => LocalizationService.Get("Installed_UpdateQueuedOne");
-    internal static string Installed_UpdateQueuedManyFormat => LocalizationService.Get("Installed_UpdateQueuedManyFormat");
+    internal static string Installed_UpdateQueued(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_UpdateQueued", count, values);
     internal static string Installed_NothingSelected => LocalizationService.Get("Installed_NothingSelected");
     internal static string Installed_NoUpdatesAvailable => LocalizationService.Get("Installed_NoUpdatesAvailable");
     internal static string Installed_NoUpdatesReasonsFormat => LocalizationService.Get("Installed_NoUpdatesReasonsFormat");
-    internal static string Installed_ReasonDisabledOne => LocalizationService.Get("Installed_ReasonDisabledOne");
-    internal static string Installed_ReasonDisabledManyFormat => LocalizationService.Get("Installed_ReasonDisabledManyFormat");
-    internal static string Installed_ReasonAddonOne => LocalizationService.Get("Installed_ReasonAddonOne");
-    internal static string Installed_ReasonAddonManyFormat => LocalizationService.Get("Installed_ReasonAddonManyFormat");
+    internal static string Installed_ReasonDisabled(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_ReasonDisabled", count, values);
+    internal static string Installed_ReasonAddon(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_ReasonAddon", count, values);
     internal static string Installed_SkippedFormat => LocalizationService.Get("Installed_SkippedFormat");
-    internal static string Installed_SkippedUpToDateOne => LocalizationService.Get("Installed_SkippedUpToDateOne");
-    internal static string Installed_SkippedUpToDateManyFormat => LocalizationService.Get("Installed_SkippedUpToDateManyFormat");
-    internal static string Installed_SkippedDisabledOne => LocalizationService.Get("Installed_SkippedDisabledOne");
-    internal static string Installed_SkippedDisabledManyFormat => LocalizationService.Get("Installed_SkippedDisabledManyFormat");
-    internal static string Installed_SkippedAddonOne => LocalizationService.Get("Installed_SkippedAddonOne");
-    internal static string Installed_SkippedAddonManyFormat => LocalizationService.Get("Installed_SkippedAddonManyFormat");
-    internal static string Installed_SkippedNotFoundOne => LocalizationService.Get("Installed_SkippedNotFoundOne");
-    internal static string Installed_SkippedNotFoundManyFormat => LocalizationService.Get("Installed_SkippedNotFoundManyFormat");
-    internal static string Installed_UndoneOne => LocalizationService.Get("Installed_UndoneOne");
-    internal static string Installed_UndoneManyFormat => LocalizationService.Get("Installed_UndoneManyFormat");
+    internal static string Installed_SkippedUpToDate(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_SkippedUpToDate", count, values);
+    internal static string Installed_SkippedDisabled(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_SkippedDisabled", count, values);
+    internal static string Installed_SkippedAddon(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_SkippedAddon", count, values);
+    internal static string Installed_SkippedNotFound(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_SkippedNotFound", count, values);
+    internal static string Installed_Undone(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_Undone", count, values);
     internal static string Installed_NothingToDisable => LocalizationService.Get("Installed_NothingToDisable");
     internal static string Installed_NothingToEnable => LocalizationService.Get("Installed_NothingToEnable");
-    internal static string Installed_DisabledCountOne => LocalizationService.Get("Installed_DisabledCountOne");
-    internal static string Installed_DisabledCountManyFormat => LocalizationService.Get("Installed_DisabledCountManyFormat");
-    internal static string Installed_EnabledCountOne => LocalizationService.Get("Installed_EnabledCountOne");
-    internal static string Installed_EnabledCountManyFormat => LocalizationService.Get("Installed_EnabledCountManyFormat");
+    internal static string Installed_DisabledCount(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_DisabledCount", count, values);
+    internal static string Installed_EnabledCount(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_EnabledCount", count, values);
     internal static string Installed_ImpactNeedsFormat => LocalizationService.Get("Installed_ImpactNeedsFormat");
     internal static string Installed_ImpactOptionallyUsesFormat => LocalizationService.Get("Installed_ImpactOptionallyUsesFormat");
     internal static string Installed_ImpactNeededByFormat => LocalizationService.Get("Installed_ImpactNeededByFormat");
     internal static string Installed_ImpactOptionallyUsedByFormat => LocalizationService.Get("Installed_ImpactOptionallyUsedByFormat");
-    internal static string Installed_MoveFailedOneFormat => LocalizationService.Get("Installed_MoveFailedOneFormat");
-    internal static string Installed_MoveFailedManyFormat => LocalizationService.Get("Installed_MoveFailedManyFormat");
+    internal static string Installed_MoveFailedNamedFormat => LocalizationService.Get("Installed_MoveFailedNamedFormat");
+    internal static string Installed_MoveFailedCountFormat => LocalizationService.Get("Installed_MoveFailedCountFormat");
     internal static string Installed_MoveFailedItemFormat => LocalizationService.Get("Installed_MoveFailedItemFormat");
     internal static string Installed_DeleteGroupEmptyFormat => LocalizationService.Get("Installed_DeleteGroupEmptyFormat");
-    internal static string Installed_DeleteGroupOneFormat => LocalizationService.Get("Installed_DeleteGroupOneFormat");
-    internal static string Installed_DeleteGroupManyFormat => LocalizationService.Get("Installed_DeleteGroupManyFormat");
+    internal static string Installed_DeleteGroup(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_DeleteGroup", count, values);
     internal static string Installed_DeleteGroupTitle => LocalizationService.Get("Installed_DeleteGroupTitle");
     internal static string Footprint_AreaClient => LocalizationService.Get("Footprint_AreaClient");
     internal static string Footprint_AreaClientCpu => LocalizationService.Get("Footprint_AreaClientCpu");
@@ -876,8 +876,8 @@ internal static class Strings
     internal static string Browse_UnexpectedRefreshFormat => LocalizationService.Get("Browse_UnexpectedRefreshFormat");
     internal static string Browse_SavedAsDefault => LocalizationService.Get("Browse_SavedAsDefault");
     internal static string Browse_NoMatches => LocalizationService.Get("Browse_NoMatches");
-    internal static string Browse_CountFoundOne => LocalizationService.Get("Browse_CountFoundOne");
-    internal static string Browse_CountFoundManyFormat => LocalizationService.Get("Browse_CountFoundManyFormat");
+    internal static string Browse_CountFound(int count, params object?[] values) =>
+        LocalizationService.Plural("Browse_CountFound", count, values);
     internal static string Browse_DependencyNote => LocalizationService.Get("Browse_DependencyNote");
     internal static string Browse_AllSptVersions => LocalizationService.Get("Browse_AllSptVersions");
     internal static string Browse_SptVersionsFormat => LocalizationService.Get("Browse_SptVersionsFormat");
@@ -907,8 +907,8 @@ internal static class Strings
     internal static string Installed_LatestNotFound => LocalizationService.Get("Installed_LatestNotFound");
     internal static string Installed_AddonForFormat => LocalizationService.Get("Installed_AddonForFormat");
     internal static string Installed_Addon => LocalizationService.Get("Installed_Addon");
-    internal static string Installed_IncompleteMissingOneFormat => LocalizationService.Get("Installed_IncompleteMissingOneFormat");
-    internal static string Installed_IncompleteMissingManyFormat => LocalizationService.Get("Installed_IncompleteMissingManyFormat");
+    internal static string Installed_IncompleteMissing(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_IncompleteMissing", count, values);
     internal static string Installed_IncompletePartial => LocalizationService.Get("Installed_IncompletePartial");
     internal static string Installed_Pin => LocalizationService.Get("Installed_Pin");
     internal static string Installed_Unpin => LocalizationService.Get("Installed_Unpin");
@@ -960,10 +960,10 @@ internal static class Strings
     internal static string Configs_ChangedOnDiskFormat => LocalizationService.Get("Configs_ChangedOnDiskFormat");
     internal static string Configs_ChangedOnDiskTitle => LocalizationService.Get("Configs_ChangedOnDiskTitle");
     internal static string Configs_ReloadedFormat => LocalizationService.Get("Configs_ReloadedFormat");
-    internal static string Configs_RunningBepInExOneFormat => LocalizationService.Get("Configs_RunningBepInExOneFormat");
-    internal static string Configs_RunningBepInExManyFormat => LocalizationService.Get("Configs_RunningBepInExManyFormat");
-    internal static string Configs_RunningServerOneFormat => LocalizationService.Get("Configs_RunningServerOneFormat");
-    internal static string Configs_RunningServerManyFormat => LocalizationService.Get("Configs_RunningServerManyFormat");
+    internal static string Configs_RunningBepInEx(int count, params object?[] values) =>
+        LocalizationService.Plural("Configs_RunningBepInEx", count, values);
+    internal static string Configs_RunningServer(int count, params object?[] values) =>
+        LocalizationService.Plural("Configs_RunningServer", count, values);
     internal static string Configs_PathCopied => LocalizationService.Get("Configs_PathCopied");
     internal static string Configs_PathCopyFailed => LocalizationService.Get("Configs_PathCopyFailed");
     internal static string ModUpdate_ConfigKeepMine => LocalizationService.Get("ModUpdate_ConfigKeepMine");
@@ -971,8 +971,8 @@ internal static class Strings
     internal static string ModUpdate_ConfigMerge => LocalizationService.Get("ModUpdate_ConfigMerge");
     internal static string ModUpdate_DisabledNoticeFormat => LocalizationService.Get("ModUpdate_DisabledNoticeFormat");
     internal static string ModUpdate_ShowingAllVersions => LocalizationService.Get("ModUpdate_ShowingAllVersions");
-    internal static string ModUpdate_HiddenOne => LocalizationService.Get("ModUpdate_HiddenOne");
-    internal static string ModUpdate_HiddenManyFormat => LocalizationService.Get("ModUpdate_HiddenManyFormat");
+    internal static string ModUpdate_Hidden(int count, params object?[] values) =>
+        LocalizationService.Plural("ModUpdate_Hidden", count, values);
     internal static string ModUpdate_NotMatchedFormat => LocalizationService.Get("ModUpdate_NotMatchedFormat");
     internal static string ModUpdate_NoVersionsFormat => LocalizationService.Get("ModUpdate_NoVersionsFormat");
     internal static string ModUpdate_AddonUnlistedFormat => LocalizationService.Get("ModUpdate_AddonUnlistedFormat");
@@ -1022,8 +1022,8 @@ internal static class Strings
     internal static string ServerMap_KeyRotated => LocalizationService.Get("ServerMap_KeyRotated");
     internal static string Options_ServerMapToolTipOn => LocalizationService.Get("Options_ServerMapToolTipOn");
     internal static string Options_ServerMapToolTipOff => LocalizationService.Get("Options_ServerMapToolTipOff");
-    internal static string ServerMap_ListSummaryOneFormat => LocalizationService.Get("ServerMap_ListSummaryOneFormat");
-    internal static string ServerMap_ListSummaryManyFormat => LocalizationService.Get("ServerMap_ListSummaryManyFormat");
+    internal static string ServerMap_ListSummary(int count, params object?[] values) =>
+        LocalizationService.Plural("ServerMap_ListSummary", count, values);
     internal static string ServerMap_ListSummaryOneUnresolvedFormat => LocalizationService.Get("ServerMap_ListSummaryOneUnresolvedFormat");
     internal static string ServerMap_ListSummaryManyUnresolvedFormat => LocalizationService.Get("ServerMap_ListSummaryManyUnresolvedFormat");
     internal static string ServerMap_EndpointFormat => LocalizationService.Get("ServerMap_EndpointFormat");
@@ -1117,12 +1117,12 @@ internal static class Strings
     internal static string PreLaunch_ListMovedFormat => LocalizationService.Get("PreLaunch_ListMovedFormat");
     internal static string PreLaunch_NotFetchedFormat => LocalizationService.Get("PreLaunch_NotFetchedFormat");
     internal static string PreLaunch_NoListFormat => LocalizationService.Get("PreLaunch_NoListFormat");
-    internal static string PreLaunch_MatchesOneFormat => LocalizationService.Get("PreLaunch_MatchesOneFormat");
-    internal static string PreLaunch_MatchesManyFormat => LocalizationService.Get("PreLaunch_MatchesManyFormat");
-    internal static string PreLaunch_BehindOne => LocalizationService.Get("PreLaunch_BehindOne");
-    internal static string PreLaunch_BehindManyFormat => LocalizationService.Get("PreLaunch_BehindManyFormat");
-    internal static string PreLaunch_ManualOne => LocalizationService.Get("PreLaunch_ManualOne");
-    internal static string PreLaunch_ManualManyFormat => LocalizationService.Get("PreLaunch_ManualManyFormat");
+    internal static string PreLaunch_Matches(int count, params object?[] values) =>
+        LocalizationService.Plural("PreLaunch_Matches", count, values);
+    internal static string PreLaunch_BehindCount(int count, params object?[] values) =>
+        LocalizationService.Plural("PreLaunch_BehindCount", count, values);
+    internal static string PreLaunch_Manual(int count, params object?[] values) =>
+        LocalizationService.Plural("PreLaunch_Manual", count, values);
     internal static string PreLaunch_ComparedFormat => LocalizationService.Get("PreLaunch_ComparedFormat");
     internal static string Browse_AddonBadgeOne => LocalizationService.Get("Browse_AddonBadgeOne");
     internal static string Browse_AddonBadgeManyFormat => LocalizationService.Get("Browse_AddonBadgeManyFormat");
@@ -1148,13 +1148,13 @@ internal static class Strings
     internal static string Dependencies_NoSptVersion => LocalizationService.Get("Dependencies_NoSptVersion");
     internal static string Dependencies_Scanning => LocalizationService.Get("Dependencies_Scanning");
     internal static string Dependencies_NoneMatched => LocalizationService.Get("Dependencies_NoneMatched");
-    internal static string Dependencies_ResolvingOne => LocalizationService.Get("Dependencies_ResolvingOne");
-    internal static string Dependencies_ResolvingManyFormat => LocalizationService.Get("Dependencies_ResolvingManyFormat");
+    internal static string Dependencies_Resolving(int count, params object?[] values) =>
+        LocalizationService.Plural("Dependencies_Resolving", count, values);
     internal static string Dependencies_NoneDeclared => LocalizationService.Get("Dependencies_NoneDeclared");
-    internal static string Dependencies_AllSatisfiedOne => LocalizationService.Get("Dependencies_AllSatisfiedOne");
-    internal static string Dependencies_AllSatisfiedManyFormat => LocalizationService.Get("Dependencies_AllSatisfiedManyFormat");
-    internal static string Dependencies_AttentionOneFormat => LocalizationService.Get("Dependencies_AttentionOneFormat");
-    internal static string Dependencies_AttentionManyFormat => LocalizationService.Get("Dependencies_AttentionManyFormat");
+    internal static string Dependencies_AllSatisfied(int count, params object?[] values) =>
+        LocalizationService.Plural("Dependencies_AllSatisfied", count, values);
+    internal static string Dependencies_Attention(int count, params object?[] values) =>
+        LocalizationService.Plural("Dependencies_Attention", count, values);
     internal static string Dependencies_UnexpectedFormat => LocalizationService.Get("Dependencies_UnexpectedFormat");
     internal static string Dependencies_CancelledFormat => LocalizationService.Get("Dependencies_CancelledFormat");
     internal static string Dependencies_QueuedFormat => LocalizationService.Get("Dependencies_QueuedFormat");
@@ -1175,8 +1175,8 @@ internal static class Strings
     internal static string Dependencies_SummaryOutdatedFormat => LocalizationService.Get("Dependencies_SummaryOutdatedFormat");
     internal static string Dependencies_SummaryConflictingFormat => LocalizationService.Get("Dependencies_SummaryConflictingFormat");
     internal static string Dependencies_SummaryUnresolvedFormat => LocalizationService.Get("Dependencies_SummaryUnresolvedFormat");
-    internal static string Dependencies_SummarySatisfiedOne => LocalizationService.Get("Dependencies_SummarySatisfiedOne");
-    internal static string Dependencies_SummarySatisfiedManyFormat => LocalizationService.Get("Dependencies_SummarySatisfiedManyFormat");
+    internal static string Dependencies_SummarySatisfied(int count, params object?[] values) =>
+        LocalizationService.Plural("Dependencies_SummarySatisfied", count, values);
     internal static string Addon_NameFormat => LocalizationService.Get("Addon_NameFormat");
     internal static string Addon_DownloadsFormat => LocalizationService.Get("Addon_DownloadsFormat");
     internal static string Addon_TagInstalled => LocalizationService.Get("Addon_TagInstalled");
@@ -1249,24 +1249,24 @@ internal static class Strings
     internal static string ModLists_AddSourceInstalledNote => LocalizationService.Get("ModLists_AddSourceInstalledNote");
     internal static string ModLists_AddNothingHere => LocalizationService.Get("ModLists_AddNothingHere");
     internal static string ModLists_AddNoMatches => LocalizationService.Get("ModLists_AddNoMatches");
-    internal static string ModLists_AddShownCatalogOneFormat => LocalizationService.Get("ModLists_AddShownCatalogOneFormat");
-    internal static string ModLists_AddShownCatalogManyFormat => LocalizationService.Get("ModLists_AddShownCatalogManyFormat");
-    internal static string ModLists_AddShownInstalledOneFormat => LocalizationService.Get("ModLists_AddShownInstalledOneFormat");
-    internal static string ModLists_AddShownInstalledManyFormat => LocalizationService.Get("ModLists_AddShownInstalledManyFormat");
+    internal static string ModLists_AddShownCatalog(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_AddShownCatalog", count, values);
+    internal static string ModLists_AddShownInstalled(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_AddShownInstalled", count, values);
     internal static string ModLists_AddTruncatedFormat => LocalizationService.Get("ModLists_AddTruncatedFormat");
     internal static string ModLists_AddNonePicked => LocalizationService.Get("ModLists_AddNonePicked");
-    internal static string ModLists_AddPickedOne => LocalizationService.Get("ModLists_AddPickedOne");
-    internal static string ModLists_AddPickedManyFormat => LocalizationService.Get("ModLists_AddPickedManyFormat");
+    internal static string ModLists_AddPicked(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_AddPicked", count, values);
     internal static string ModLists_AddButton => LocalizationService.Get("ModLists_AddButton");
     internal static string ModLists_AddButtonCountFormat => LocalizationService.Get("ModLists_AddButtonCountFormat");
-    internal static string Disable_TitleDisableOneFormat => LocalizationService.Get("Disable_TitleDisableOneFormat");
-    internal static string Disable_TitleDisableManyFormat => LocalizationService.Get("Disable_TitleDisableManyFormat");
-    internal static string Disable_TitleEnableOneFormat => LocalizationService.Get("Disable_TitleEnableOneFormat");
-    internal static string Disable_TitleEnableManyFormat => LocalizationService.Get("Disable_TitleEnableManyFormat");
-    internal static string Disable_ImpactDisableOne => LocalizationService.Get("Disable_ImpactDisableOne");
-    internal static string Disable_ImpactDisableManyFormat => LocalizationService.Get("Disable_ImpactDisableManyFormat");
-    internal static string Disable_ImpactEnableOne => LocalizationService.Get("Disable_ImpactEnableOne");
-    internal static string Disable_ImpactEnableManyFormat => LocalizationService.Get("Disable_ImpactEnableManyFormat");
+    internal static string Disable_TitleDisableNamedFormat => LocalizationService.Get("Disable_TitleDisableNamedFormat");
+    internal static string Disable_TitleDisableCountFormat => LocalizationService.Get("Disable_TitleDisableCountFormat");
+    internal static string Disable_TitleEnableNamedFormat => LocalizationService.Get("Disable_TitleEnableNamedFormat");
+    internal static string Disable_TitleEnableCountFormat => LocalizationService.Get("Disable_TitleEnableCountFormat");
+    internal static string Disable_ImpactDisable(int count, params object?[] values) =>
+        LocalizationService.Plural("Disable_ImpactDisable", count, values);
+    internal static string Disable_ImpactEnable(int count, params object?[] values) =>
+        LocalizationService.Plural("Disable_ImpactEnable", count, values);
     internal static string Disable_SelectedFormat => LocalizationService.Get("Disable_SelectedFormat");
     internal static string Disable_HeadingAffected => LocalizationService.Get("Disable_HeadingAffected");
     internal static string Disable_HeadingStillDisabled => LocalizationService.Get("Disable_HeadingStillDisabled");
@@ -1277,19 +1277,19 @@ internal static class Strings
     internal static string ReadModPage_ButtonNoPage => LocalizationService.Get("ReadModPage_ButtonNoPage");
     internal static string ReadModPage_ButtonOpened => LocalizationService.Get("ReadModPage_ButtonOpened");
     internal static string ReadModPage_ButtonOpen => LocalizationService.Get("ReadModPage_ButtonOpen");
-    internal static string ReadModPage_TitleOneFormat => LocalizationService.Get("ReadModPage_TitleOneFormat");
-    internal static string ReadModPage_TitleManyFormat => LocalizationService.Get("ReadModPage_TitleManyFormat");
+    internal static string ReadModPage_TitleNamedFormat => LocalizationService.Get("ReadModPage_TitleNamedFormat");
+    internal static string ReadModPage_TitleCountFormat => LocalizationService.Get("ReadModPage_TitleCountFormat");
     internal static string ReadModPage_BatchNote => LocalizationService.Get("ReadModPage_BatchNote");
     internal static string ReadModPage_OpenNextFormat => LocalizationService.Get("ReadModPage_OpenNextFormat");
-    internal static string ReadModPage_OpenLastOne => LocalizationService.Get("ReadModPage_OpenLastOne");
-    internal static string ReadModPage_OpenLastManyFormat => LocalizationService.Get("ReadModPage_OpenLastManyFormat");
-    internal static string ReadModPage_SkippingOneFormat => LocalizationService.Get("ReadModPage_SkippingOneFormat");
-    internal static string ReadModPage_SkippingManyFormat => LocalizationService.Get("ReadModPage_SkippingManyFormat");
+    internal static string ReadModPage_OpenLast(int count, params object?[] values) =>
+        LocalizationService.Plural("ReadModPage_OpenLast", count, values);
+    internal static string ReadModPage_Skipping(int count, params object?[] values) =>
+        LocalizationService.Plural("ReadModPage_Skipping", count, values);
     internal static string ReadModPage_AllOpenedFormat => LocalizationService.Get("ReadModPage_AllOpenedFormat");
     internal static string ReadModPage_ProgressFormat => LocalizationService.Get("ReadModPage_ProgressFormat");
     internal static string ModLists_VersionChangeRowFormat => LocalizationService.Get("ModLists_VersionChangeRowFormat");
-    internal static string ModLists_VersionChangeTitleOneFormat => LocalizationService.Get("ModLists_VersionChangeTitleOneFormat");
-    internal static string ModLists_VersionChangeTitleManyFormat => LocalizationService.Get("ModLists_VersionChangeTitleManyFormat");
+    internal static string ModLists_VersionChangeTitleNamedFormat => LocalizationService.Get("ModLists_VersionChangeTitleNamedFormat");
+    internal static string ModLists_VersionChangeTitleCountFormat => LocalizationService.Get("ModLists_VersionChangeTitleCountFormat");
     internal static string Options_HeadlessFoundFormat => LocalizationService.Get("Options_HeadlessFoundFormat");
     internal static string ModList_ReasonVersionNotTakenFormat => LocalizationService.Get("ModList_ReasonVersionNotTakenFormat");
     internal static string ModList_ReasonNoListing => LocalizationService.Get("ModList_ReasonNoListing");

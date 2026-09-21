@@ -72,8 +72,8 @@ public partial class ReadModPageConfirmationWindow : FluentWindow
         InitializeComponent();
 
         WindowTitleBar.Title = Title = _links.Count == 1
-            ? Text(Strings.ReadModPage_TitleOneFormat, _links[0].Name)
-            : Text(Strings.ReadModPage_TitleManyFormat, _links.Count);
+            ? Text(Strings.ReadModPage_TitleNamedFormat, _links[0].Name)
+            : Text(Strings.ReadModPage_TitleCountFormat, _links.Count);
 
         LinksList.ItemsSource = _links;
         foreach (var link in _links) link.PropertyChanged += (_, _) => UpdateContinueEnabled();
@@ -139,15 +139,11 @@ public partial class ReadModPageConfirmationWindow : FluentWindow
         {
             OpenBatchButton.Content = remaining > BatchSize
                 ? Text(Strings.ReadModPage_OpenNextFormat, BatchSize)
-                : remaining == 1
-                    ? Strings.ReadModPage_OpenLastOne
-                    : Text(Strings.ReadModPage_OpenLastManyFormat, remaining);
+                : Strings.ReadModPage_OpenLast(remaining);
         }
 
         BatchProgress.Text = _openingSkipped
-            ? remaining == 1
-                ? Strings.ReadModPage_SkippingOneFormat
-                : Text(Strings.ReadModPage_SkippingManyFormat, remaining)
+            ? Strings.ReadModPage_Skipping(remaining)
             : remaining == 0
                 ? Text(Strings.ReadModPage_AllOpenedFormat, _links.Count)
                 : Text(

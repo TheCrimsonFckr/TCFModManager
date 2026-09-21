@@ -35,8 +35,8 @@ public static class ConfigUpdateWording
         if (notUpdated.Count > 0)
         {
             return notUpdated.Count == 1
-                ? Format(Strings.ConfigUpdate_NotUpdatedOneFormat, FileName(notUpdated))
-                : Format(Strings.ConfigUpdate_NotUpdatedManyFormat, notUpdated.Count);
+                ? Format(Strings.ConfigUpdate_NotUpdatedNamedFormat, FileName(notUpdated))
+                : Format(Strings.ConfigUpdate_NotUpdatedCountFormat, notUpdated.Count);
         }
 
         var merged = Of(report, ConfigOutcomeKind.Merged);
@@ -58,8 +58,8 @@ public static class ConfigUpdateWording
                     ? Format(Strings.ConfigUpdate_ReplacedOneWhereFormat, FileName(replaced), folder)
                     : Format(Strings.ConfigUpdate_ReplacedManyWhereFormat, replaced.Count, folder)
                 : replaced.Count == 1
-                    ? Format(Strings.ConfigUpdate_ReplacedOneFormat, FileName(replaced))
-                    : Format(Strings.ConfigUpdate_ReplacedManyFormat, replaced.Count);
+                    ? Format(Strings.ConfigUpdate_ReplacedNamedFormat, FileName(replaced))
+                    : Format(Strings.ConfigUpdate_ReplacedCountFormat, replaced.Count);
 
             // A second sentence rather than a clause: appending one finished sentence to another is
             // the one kind of assembly that survives translation.
@@ -75,8 +75,8 @@ public static class ConfigUpdateWording
                     ? Format(Strings.ConfigUpdate_RemovedOneWhereFormat, FileName(removed), folder)
                     : Format(Strings.ConfigUpdate_RemovedManyWhereFormat, removed.Count, folder)
                 : removed.Count == 1
-                    ? Format(Strings.ConfigUpdate_RemovedOneFormat, FileName(removed))
-                    : Format(Strings.ConfigUpdate_RemovedManyFormat, removed.Count);
+                    ? Format(Strings.ConfigUpdate_RemovedNamedFormat, FileName(removed))
+                    : Format(Strings.ConfigUpdate_RemovedCountFormat, removed.Count);
         }
 
         return null;
@@ -95,9 +95,7 @@ public static class ConfigUpdateWording
         return outcome.Kind switch
         {
             ConfigOutcomeKind.Merged => Then(
-                outcome.Carried.Count == 1
-                    ? Format(Strings.ConfigUpdate_NoteMergedOneFormat, move)
-                    : Format(Strings.ConfigUpdate_NoteMergedManyFormat, move, outcome.Carried.Count),
+                Strings.ConfigUpdate_NoteMerged(outcome.Carried.Count, move, outcome.Carried.Count),
                 Also(outcome)),
 
             ConfigOutcomeKind.Replaced => Then(

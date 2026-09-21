@@ -620,8 +620,7 @@ public partial class BrowseViewModel : LocalizedViewModel
         StatusMessage = _filtered.Count switch
         {
             0 => Strings.Browse_NoMatches,
-            1 => Strings.Browse_CountFoundOne,
-            _ => Text(Strings.Browse_CountFoundManyFormat, _filtered.Count),
+            _ => Strings.Browse_CountFound(_filtered.Count),
         };
 
         // Said plainly rather than left for someone to work out from a short list.

@@ -224,18 +224,11 @@ public partial class ModListAddModWindow : FluentWindow
     {
         var total = _showingCatalog ? _catalog.Count : _installed.Count;
 
-        CountNote.Text = matched == shown
-            ? Text(
-                _showingCatalog
-                    ? shown == 1
-                        ? Strings.ModLists_AddShownCatalogOneFormat
-                        : Strings.ModLists_AddShownCatalogManyFormat
-                    : shown == 1
-                        ? Strings.ModLists_AddShownInstalledOneFormat
-                        : Strings.ModLists_AddShownInstalledManyFormat,
-                shown == 1 ? total : shown,
-                total)
-            : Text(Strings.ModLists_AddTruncatedFormat, shown, matched);
+        CountNote.Text = matched != shown
+            ? Text(Strings.ModLists_AddTruncatedFormat, shown, matched)
+            : _showingCatalog
+                ? Strings.ModLists_AddShownCatalog(shown, shown, total)
+                : Strings.ModLists_AddShownInstalled(shown, shown, total);
     }
 
     private void RowsBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -255,8 +248,7 @@ public partial class ModListAddModWindow : FluentWindow
         ChosenNote.Text = count switch
         {
             0 => Strings.ModLists_AddNonePicked,
-            1 => Strings.ModLists_AddPickedOne,
-            _ => Text(Strings.ModLists_AddPickedManyFormat, count),
+            _ => Strings.ModLists_AddPicked(count),
         };
 
         AddButton.Content = count == 0

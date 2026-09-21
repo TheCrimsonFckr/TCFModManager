@@ -130,8 +130,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     public string HiddenVersionsNotice => HiddenVersionCount switch
     {
         0 => Strings.ModUpdate_ShowingAllVersions,
-        1 => Strings.ModUpdate_HiddenOne,
-        _ => Text(Strings.ModUpdate_HiddenManyFormat, HiddenVersionCount),
+        _ => Strings.ModUpdate_Hidden(HiddenVersionCount),
     };
 
     partial void OnShowIncompatibleVersionsChanged(bool value) => RepopulateVersions();

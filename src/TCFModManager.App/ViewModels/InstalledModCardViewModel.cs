@@ -274,14 +274,11 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // a verb spliced into a sentence cannot be translated.
     public string? IncompleteSummary => !IsIncompleteInstall
         ? null
-        : MissingFolders.Count switch
-        {
-            0 => Strings.Installed_IncompletePartial,
-            1 => Text(Strings.Installed_IncompleteMissingOneFormat, MissingFolders[0]),
-            _ => Text(
-                Strings.Installed_IncompleteMissingManyFormat,
-                string.Join(Strings.Common_ListSeparator, MissingFolders)),
-        };
+        : MissingFolders.Count == 0
+            ? Strings.Installed_IncompletePartial
+            : Strings.Installed_IncompleteMissing(
+                MissingFolders.Count,
+                string.Join(Strings.Common_ListSeparator, MissingFolders));
 
     //
     // Every scan entry merged into this card: both halves of a client+server mod, and both copies
