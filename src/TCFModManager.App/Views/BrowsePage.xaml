@@ -22,7 +22,7 @@
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     ScrollViewer.CanContentScroll="False"
-    Title="Browse"
+    Title="{loc:Str Nav_Browse}"
     Loaded="BrowsePage_Loaded">
     <Page.Resources>
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />

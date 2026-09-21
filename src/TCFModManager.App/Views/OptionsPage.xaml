@@ -7,7 +7,7 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
-    Title="Options">
+    Title="{loc:Str Nav_Options}">
     <Page.Resources>
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
@@ -224,7 +224,7 @@
                             Margin="8,0,8,0"
                             VerticalAlignment="Center"
                             Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                            Text="x" />
+                            Text="{loc:Str Options_SizeBy}" />
                         <ui:TextBox
                             MinWidth="110"
                             PlaceholderText="{loc:Str Options_HeightPlaceholder}"

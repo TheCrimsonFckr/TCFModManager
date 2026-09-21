@@ -14,7 +14,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
-    Title="Mod lists"
+    Title="{loc:Str Nav_ModLists}"
     Loaded="ModListsPage_Loaded"
     ScrollViewer.CanContentScroll="False">
     <Page.Resources>

@@ -6,7 +6,7 @@
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
-    Title="App update"
+    Title="{loc:Str Nav_AppUpdate}"
     ScrollViewer.CanContentScroll="False">
     <!--
         ScrollViewer.CanContentScroll="False" on the Page itself opts this page out of WPF-UI's

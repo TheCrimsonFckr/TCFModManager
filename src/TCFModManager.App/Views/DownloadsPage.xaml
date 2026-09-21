@@ -7,7 +7,7 @@
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
-    Title="Downloads">
+    Title="{loc:Str Nav_Downloads}">
     <Page.Resources>
         <converters:DownloadQueueStatusToAppearanceConverter x:Key="StatusAppearance" />
         <converters:CountToVisibilityConverter x:Key="HasItems" />

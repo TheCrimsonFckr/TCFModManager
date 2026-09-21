@@ -1295,4 +1295,7 @@ internal static class Strings
     internal static string ModLists_Unsaved(int count, params object?[] values) =>
         LocalizationService.Plural("ModLists_Unsaved", count, values);
     internal static string Configs_CountFormat => LocalizationService.Get("Configs_CountFormat");
+    internal static string Options_SizeBy => LocalizationService.Get("Options_SizeBy");
+    internal static string App_CrashTitle => LocalizationService.Get("App_CrashTitle");
+    internal static string App_CrashBodyFormat => LocalizationService.Get("App_CrashBodyFormat");
 }

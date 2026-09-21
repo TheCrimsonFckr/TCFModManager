@@ -107,9 +107,13 @@ public partial class App : Application
     {
         AppLog.Error("App", "Unhandled UI exception", e.Exception);
 
+        //
+        // Keyed like everything else, and safe to be: Get falls back to the key itself rather than
+        // throwing, so even a failure inside the language stack leaves a readable dialog.
+        //
         MessageBox.Show(
-            $"Something went wrong and wasn't handled:\n\n{e.Exception}\n\nThis was written to:\n{AppLog.CurrentFile}",
-            "TCF Mod Manager - Unexpected Error",
+            LocalizationService.Text(Strings.App_CrashBodyFormat, e.Exception, AppLog.CurrentFile),
+            Strings.App_CrashTitle,
             MessageBoxButton.OK,
             MessageBoxImage.Error);
 

@@ -6,7 +6,7 @@
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:app="clr-namespace:TCFModManager.App"
-    Title="Play">
+    Title="{loc:Str Nav_Play}">
     <Page.Resources>
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     </Page.Resources>

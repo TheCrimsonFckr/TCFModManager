@@ -13,7 +13,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
-    Title="Configs"
+    Title="{loc:Str Nav_Configs}"
     Loaded="ConfigsPage_Loaded"
     ScrollViewer.CanContentScroll="False">
     <Page.Resources>

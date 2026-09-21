@@ -19,7 +19,7 @@
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:viewmodels="clr-namespace:TCFModManager.App.ViewModels"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
-    Title="Installed"
+    Title="{loc:Str Nav_Installed}"
     Loaded="InstalledPage_Loaded"
     ScrollViewer.CanContentScroll="False">
     <Page.Resources>

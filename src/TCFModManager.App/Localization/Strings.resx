@@ -547,10 +547,6 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="ModLists_ImportedNotice" xml:space="preserve">
     <value>This list came from someone else, so it stays exactly as they wrote it. Make a copy to change what's on it.</value>
   </data>
-  <data name="ModLists_UnsavedFormat" xml:space="preserve">
-    <value>{0} - save the list to keep them. Then Preview and Apply to use the saved version.</value>
-    <comment>{0} is a count of unsaved changes, composed in the view model. One key rather than a label beside a sentence: the two halves are one sentence and cannot be reordered separately.</comment>
-  </data>
   <data name="ModLists_EntrySearchPlaceholder" xml:space="preserve">
     <value>Search this list...</value>
   </data>
@@ -1331,11 +1327,11 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="ModListApply_Cancelled" xml:space="preserve">
     <value>Cancelled before anything was disabled.</value>
   </data>
-  <data name="ModListApply_FetchFailedOne" xml:space="preserve">
+  <data name="ModListApply_FetchFailed_one" xml:space="preserve">
     <value>One mod couldn't be downloaded, so nothing was disabled.</value>
     <comment>Said when exactly one download failed. See ModListApply_FetchFailedManyFormat for the other case - these two become one plural key in S5.</comment>
   </data>
-  <data name="ModListApply_FetchFailedManyFormat" xml:space="preserve">
+  <data name="ModListApply_FetchFailed_other" xml:space="preserve">
     <value>{0} mods couldn't be downloaded, so nothing was disabled.</value>
     <comment>{0} is two or more.</comment>
   </data>
@@ -1512,11 +1508,11 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>The update failed: {0}. Nothing was changed - download it from the mod page and replace this folder by hand if it keeps happening.</value>
     <comment>{0} is the reason, which arrives in the system's language.</comment>
   </data>
-  <data name="ConfigUpdate_NotUpdatedOneFormat" xml:space="preserve">
+  <data name="ConfigUpdate_NotUpdatedNamedFormat" xml:space="preserve">
     <value>Your {0} couldn't be copied aside, so your version was left in place and the new one wasn't installed.</value>
     <comment>{0} is a file name.</comment>
   </data>
-  <data name="ConfigUpdate_NotUpdatedManyFormat" xml:space="preserve">
+  <data name="ConfigUpdate_NotUpdatedCountFormat" xml:space="preserve">
     <value>{0} of your config files couldn't be copied aside, so your version was left in place and the new one wasn't installed.</value>
     <comment>{0} is two or more.</comment>
   </data>
@@ -1528,7 +1524,7 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Your settings were carried into the new defaults ({0} of them); {1} could not be and are listed on the Configs page.</value>
     <comment>{0} carried, {1} lost. Configs is the page name, as in the sidebar.</comment>
   </data>
-  <data name="ConfigUpdate_ReplacedOneFormat" xml:space="preserve">
+  <data name="ConfigUpdate_ReplacedNamedFormat" xml:space="preserve">
     <value>Your {0} was replaced by this version's defaults.</value>
     <comment>{0} is a file name.</comment>
   </data>
@@ -1536,7 +1532,7 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Your {0} was replaced by this version's defaults - your copy is in Data\LegacyConfigs\{1}.</value>
     <comment>{0} is a file name, {1} a folder name. Data\LegacyConfigs\ is a path and stays as it is.</comment>
   </data>
-  <data name="ConfigUpdate_ReplacedManyFormat" xml:space="preserve">
+  <data name="ConfigUpdate_ReplacedCountFormat" xml:space="preserve">
     <value>{0} of your config files were replaced by this version's defaults.</value>
   </data>
   <data name="ConfigUpdate_ReplacedManyWhereFormat" xml:space="preserve">
@@ -1546,14 +1542,14 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>The app hadn't recorded what the last version shipped, so it couldn't tell your changes from the mod's.</value>
     <comment>A second sentence, added after one of the ConfigUpdate_Replaced* ones.</comment>
   </data>
-  <data name="ConfigUpdate_RemovedOneFormat" xml:space="preserve">
+  <data name="ConfigUpdate_RemovedNamedFormat" xml:space="preserve">
     <value>Your {0} is no longer part of the mod.</value>
     <comment>{0} is a file name.</comment>
   </data>
   <data name="ConfigUpdate_RemovedOneWhereFormat" xml:space="preserve">
     <value>Your {0} is no longer part of the mod - your copy is in Data\LegacyConfigs\{1}.</value>
   </data>
-  <data name="ConfigUpdate_RemovedManyFormat" xml:space="preserve">
+  <data name="ConfigUpdate_RemovedCountFormat" xml:space="preserve">
     <value>{0} of your config files are no longer part of the mod.</value>
   </data>
   <data name="ConfigUpdate_RemovedManyWhereFormat" xml:space="preserve">
@@ -1563,11 +1559,11 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>{0} to {1}</value>
     <comment>Two version numbers, as in "Updating to 1.2 to 1.3". Used where one version number would otherwise be.</comment>
   </data>
-  <data name="ConfigUpdate_NoteMergedOneFormat" xml:space="preserve">
+  <data name="ConfigUpdate_NoteMerged_one" xml:space="preserve">
     <value>Updating to {0} kept 1 setting of yours in this file.</value>
     <comment>{0} is a version, or a version range from ConfigUpdate_VersionRangeFormat. The one-setting case; see the Many form.</comment>
   </data>
-  <data name="ConfigUpdate_NoteMergedManyFormat" xml:space="preserve">
+  <data name="ConfigUpdate_NoteMerged_other" xml:space="preserve">
     <value>Updating to {0} kept {1} settings of yours in this file.</value>
     <comment>{1} is two or more. These two become one plural key in S5.</comment>
   </data>
@@ -1683,18 +1679,18 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="ServerMap_NotConnected" xml:space="preserve">
     <value>Not connected yet.</value>
   </data>
-  <data name="ServerMap_ServingOwnListOneFormat" xml:space="preserve">
+  <data name="ServerMap_ServingOwnList_one" xml:space="preserve">
     <value>This server is serving your own list "{0}" (revision {1}, 1 mod). It stays yours to edit on the Mod lists page - publish it again after a change to update what the server hands out.</value>
     <comment>{0} is a list name the user typed. Mod lists is the page name, as in the sidebar. The one-mod case; see the Many form.</comment>
   </data>
-  <data name="ServerMap_ServingOwnListManyFormat" xml:space="preserve">
+  <data name="ServerMap_ServingOwnList_other" xml:space="preserve">
     <value>This server is serving your own list "{0}" (revision {1}, {2} mods). It stays yours to edit on the Mod lists page - publish it again after a change to update what the server hands out.</value>
     <comment>{2} is two or more. These two become one plural key in S5.</comment>
   </data>
-  <data name="ServerMap_ListSavedOneFormat" xml:space="preserve">
+  <data name="ServerMap_ListSaved_one" xml:space="preserve">
     <value>"{0}" (revision {1}, 1 mod) is saved in your mod lists. Applying it is done from the Mod lists page, which shows what would change first.</value>
   </data>
-  <data name="ServerMap_ListSavedManyFormat" xml:space="preserve">
+  <data name="ServerMap_ListSaved_other" xml:space="preserve">
     <value>"{0}" (revision {1}, {2} mods) is saved in your mod lists. Applying it is done from the Mod lists page, which shows what would change first.</value>
   </data>
   <data name="ServerMap_NoListHeldFormat" xml:space="preserve">
@@ -1745,10 +1741,10 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>"{0}" (revision {1})</value>
     <comment>{0} is a list name, {1} a revision number or the Common_Unknown word.</comment>
   </data>
-  <data name="ServerMap_PublishedNamedOneFormat" xml:space="preserve">
+  <data name="ServerMap_PublishedNamed_one" xml:space="preserve">
     <value>"{0}" (revision {1}, 1 mod)</value>
   </data>
-  <data name="ServerMap_PublishedNamedManyFormat" xml:space="preserve">
+  <data name="ServerMap_PublishedNamed_other" xml:space="preserve">
     <value>"{0}" (revision {1}, {2} mods)</value>
     <comment>{2} is two or more. Becomes one plural key in S5.</comment>
   </data>
@@ -1756,10 +1752,10 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>A mod list (revision {0})</value>
     <comment>Used when the server publishes a list with no name.</comment>
   </data>
-  <data name="ServerMap_PublishedUnnamedOneFormat" xml:space="preserve">
+  <data name="ServerMap_PublishedUnnamed_one" xml:space="preserve">
     <value>A mod list (revision {0}, 1 mod)</value>
   </data>
-  <data name="ServerMap_PublishedUnnamedManyFormat" xml:space="preserve">
+  <data name="ServerMap_PublishedUnnamed_other" xml:space="preserve">
     <value>A mod list (revision {0}, {1} mods)</value>
   </data>
   <data name="ServerMap_NoThumbprint" xml:space="preserve">
@@ -1837,26 +1833,6 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   </data>
   <data name="ModLists_SortNameDescending" xml:space="preserve">
     <value>Name Z-A</value>
-  </data>
-  <data name="ModLists_EntriesHeaderOne" xml:space="preserve">
-    <value>1 mod on this list</value>
-  </data>
-  <data name="ModLists_EntriesHeaderManyFormat" xml:space="preserve">
-    <value>{0} mods on this list</value>
-  </data>
-  <data name="ModLists_EntriesHeaderFilteredOneFormat" xml:space="preserve">
-    <value>{0} of 1 mod on this list</value>
-    <comment>{0} is how many the filter leaves showing.</comment>
-  </data>
-  <data name="ModLists_EntriesHeaderFilteredManyFormat" xml:space="preserve">
-    <value>{0} of {1} mods on this list</value>
-    <comment>{0} showing, {1} on the list.</comment>
-  </data>
-  <data name="ModLists_UnsavedOne" xml:space="preserve">
-    <value>1 unsaved change</value>
-  </data>
-  <data name="ModLists_UnsavedManyFormat" xml:space="preserve">
-    <value>{0} unsaved changes</value>
   </data>
   <data name="ModLists_EntryAddon" xml:space="preserve">
     <value>addon</value>
@@ -2001,11 +1977,11 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="ModLists_NameFirst" xml:space="preserve">
     <value>Give the list a name first.</value>
   </data>
-  <data name="ModLists_CapturedOneFormat" xml:space="preserve">
-    <value>Captured 1 enabled mod as "{0}".</value>
+  <data name="ModLists_Captured_one" xml:space="preserve">
+    <value>Captured 1 enabled mod as "{1}".</value>
     <comment>{0} is the new list's name. See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="ModLists_CapturedManyFormat" xml:space="preserve">
+  <data name="ModLists_Captured_other" xml:space="preserve">
     <value>Captured {0} enabled mods as "{1}".</value>
   </data>
   <data name="ModLists_CloseSptBeforeApply" xml:space="preserve">
@@ -2038,24 +2014,24 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>Applied: {0}.</value>
     <comment>{0} is the counts above, joined together.</comment>
   </data>
-  <data name="ModLists_AppliedManualOne" xml:space="preserve">
+  <data name="ModLists_AppliedManual_one" xml:space="preserve">
     <value>1 mod still needs installing by hand.</value>
     <comment>A second sentence after the applied summary.</comment>
   </data>
-  <data name="ModLists_AppliedManualManyFormat" xml:space="preserve">
+  <data name="ModLists_AppliedManual_other" xml:space="preserve">
     <value>{0} mods still need installing by hand.</value>
   </data>
-  <data name="ModLists_AppliedMovesFailedOne" xml:space="preserve">
+  <data name="ModLists_AppliedMovesFailed_one" xml:space="preserve">
     <value>1 mod couldn't be moved.</value>
   </data>
-  <data name="ModLists_AppliedMovesFailedManyFormat" xml:space="preserve">
+  <data name="ModLists_AppliedMovesFailed_other" xml:space="preserve">
     <value>{0} mods couldn't be moved.</value>
   </data>
-  <data name="ModLists_PutBackOne" xml:space="preserve">
+  <data name="ModLists_PutBack_one" xml:space="preserve">
     <value>Put 1 mod back the way it was.</value>
     <comment>A second sentence after a stopped apply.</comment>
   </data>
-  <data name="ModLists_PutBackManyFormat" xml:space="preserve">
+  <data name="ModLists_PutBack_other" xml:space="preserve">
     <value>Put {0} mods back the way they were.</value>
   </data>
   <data name="ModLists_FetchFailureFormat" xml:space="preserve">
@@ -2079,11 +2055,11 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="ModLists_NothingAdded" xml:space="preserve">
     <value>Nothing added - the list already names those mods.</value>
   </data>
-  <data name="ModLists_AddedOneFormat" xml:space="preserve">
-    <value>Added 1 mod to "{0}". Save to write it to the list - nothing is installed or enabled until you Apply.</value>
+  <data name="ModLists_Added_one" xml:space="preserve">
+    <value>Added 1 mod to "{1}". Save to write it to the list - nothing is installed or enabled until you Apply.</value>
     <comment>Save and Apply are the buttons named in ModLists_Save and ModLists_Apply - translate them the same way.</comment>
   </data>
-  <data name="ModLists_AddedManyFormat" xml:space="preserve">
+  <data name="ModLists_Added_other" xml:space="preserve">
     <value>Added {0} mods to "{1}". Save to write it to the list - nothing is installed or enabled until you Apply.</value>
   </data>
   <data name="ModLists_RemovedEntryFormat" xml:space="preserve">
@@ -2139,17 +2115,17 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>, and {0} more</value>
     <comment>Added after the first five changes listed.</comment>
   </data>
-  <data name="ModLists_VersionsUpdatedOneFormat" xml:space="preserve">
-    <value>Updated 1 mod to the version installed here: {0}{1}. Save to keep it.</value>
+  <data name="ModLists_VersionsUpdated_one" xml:space="preserve">
+    <value>Updated 1 mod to the version installed here: {1}{2}. Save to keep it.</value>
     <comment>{0} is the change, {1} the "and N more" tail when there is one.</comment>
   </data>
-  <data name="ModLists_VersionsUpdatedManyFormat" xml:space="preserve">
+  <data name="ModLists_VersionsUpdated_other" xml:space="preserve">
     <value>Updated {0} mods to the version installed here: {1}{2}. Save to keep it.</value>
   </data>
-  <data name="ModLists_SavedOneFormat" xml:space="preserve">
+  <data name="ModLists_Saved_one" xml:space="preserve">
     <value>Saved "{0}" - 1 mod. Nothing on disk changed; Apply is what installs, enables and sets mods aside.</value>
   </data>
-  <data name="ModLists_SavedManyFormat" xml:space="preserve">
+  <data name="ModLists_Saved_other" xml:space="preserve">
     <value>Saved "{0}" - {1} mods. Nothing on disk changed; Apply is what installs, enables and sets mods aside.</value>
   </data>
   <data name="ModLists_RevertedFormat" xml:space="preserve">
@@ -2183,10 +2159,10 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>{0} is now publishing a different list - "{1}" is saved here. "{2}" is untouched.</value>
     <comment>{0} is the server's name, {1} the list it now publishes, {2} the one you were looking at.</comment>
   </data>
-  <data name="ModLists_AlreadyPublishingOneFormat" xml:space="preserve">
+  <data name="ModLists_AlreadyPublishing_one" xml:space="preserve">
     <value>"{0}" is already what the server is publishing - nothing changed (revision {1}, 1 mod).</value>
   </data>
-  <data name="ModLists_AlreadyPublishingManyFormat" xml:space="preserve">
+  <data name="ModLists_AlreadyPublishing_other" xml:space="preserve">
     <value>"{0}" is already what the server is publishing - nothing changed (revision {1}, {2} mods).</value>
   </data>
   <data name="ModLists_DiffAddedFormat" xml:space="preserve">
@@ -2237,11 +2213,11 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>Something went wrong - {0}</value>
     <comment>{0} is the reason, which arrives in the system's language.</comment>
   </data>
-  <data name="ModLists_DroppedOne" xml:space="preserve">
+  <data name="ModLists_Dropped_one" xml:space="preserve">
     <value>Dropped 1 unsaved change - it was never written to the list.</value>
     <comment>Said when switching lists throws away an edit. See the Many form.</comment>
   </data>
-  <data name="ModLists_DroppedManyFormat" xml:space="preserve">
+  <data name="ModLists_Dropped_other" xml:space="preserve">
     <value>Dropped {0} unsaved changes - they were never written to the list.</value>
   </data>
   <data name="Filter_UpdateAny" xml:space="preserve">
@@ -2443,14 +2419,6 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value> </value>
     <comment>Between two complete sentences run together on one status line. Keep the space, or use whatever your language puts between sentences.</comment>
   </data>
-  <data name="Installed_SelectedOne" xml:space="preserve">
-    <value>1 selected</value>
-    <comment>The tick count beside Multi select. See the Many form; these become one plural key in S5.</comment>
-  </data>
-  <data name="Installed_SelectedManyFormat" xml:space="preserve">
-    <value>{0} selected</value>
-    <comment>{0} is how many cards are ticked.</comment>
-  </data>
   <data name="Installed_SelectAllFormat" xml:space="preserve">
     <value>Select all {0}</value>
     <comment>{0} is how many mods the current filters match, not how many are on the page.</comment>
@@ -2459,19 +2427,19 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>Undo</value>
     <comment>The undo button before anything has been done.</comment>
   </data>
-  <data name="Installed_UndoDisableOneFormat" xml:space="preserve">
+  <data name="Installed_UndoDisableNamedFormat" xml:space="preserve">
     <value>Undo disabling {0}</value>
     <comment>{0} is a mod name. One whole caption per action rather than "Undo" plus a gerund dropped into it - a verb phrase spliced into a caption cannot be translated.</comment>
   </data>
-  <data name="Installed_UndoDisableManyFormat" xml:space="preserve">
+  <data name="Installed_UndoDisableCountFormat" xml:space="preserve">
     <value>Undo disabling {0} mods</value>
     <comment>{0} is how many mods were disabled.</comment>
   </data>
-  <data name="Installed_UndoEnableOneFormat" xml:space="preserve">
+  <data name="Installed_UndoEnableNamedFormat" xml:space="preserve">
     <value>Undo enabling {0}</value>
     <comment>{0} is a mod name.</comment>
   </data>
-  <data name="Installed_UndoEnableManyFormat" xml:space="preserve">
+  <data name="Installed_UndoEnableCountFormat" xml:space="preserve">
     <value>Undo enabling {0} mods</value>
     <comment>{0} is how many mods were enabled.</comment>
   </data>
@@ -2498,27 +2466,27 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>No mods found under "{0}".</value>
     <comment>{0} is the SPT install folder path.</comment>
   </data>
-  <data name="Installed_CountFoundOne" xml:space="preserve">
+  <data name="Installed_CountFound_one" xml:space="preserve">
     <value>1 mod found.</value>
     <comment>See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Installed_CountFoundManyFormat" xml:space="preserve">
+  <data name="Installed_CountFound_other" xml:space="preserve">
     <value>{0} mods found.</value>
     <comment>{0} is how many mods are installed.</comment>
   </data>
-  <data name="Installed_CountShownOneFormat" xml:space="preserve">
-    <value>1 of {0} mods shown.</value>
+  <data name="Installed_CountShown_one" xml:space="preserve">
+    <value>1 of {1} mods shown.</value>
     <comment>{0} is how many mods are installed. Shown when the filters match exactly one.</comment>
   </data>
-  <data name="Installed_CountShownManyFormat" xml:space="preserve">
+  <data name="Installed_CountShown_other" xml:space="preserve">
     <value>{0} of {1} mods shown.</value>
     <comment>{0} is how many the filters match, {1} how many are installed.</comment>
   </data>
-  <data name="Installed_CountDisabledOne" xml:space="preserve">
+  <data name="Installed_CountDisabled_one" xml:space="preserve">
     <value>1 disabled.</value>
     <comment>Follows the count sentence, joined by Common_SentenceSeparator.</comment>
   </data>
-  <data name="Installed_CountDisabledManyFormat" xml:space="preserve">
+  <data name="Installed_CountDisabled_other" xml:space="preserve">
     <value>{0} disabled.</value>
     <comment>{0} is how many of the installed mods are disabled.</comment>
   </data>
@@ -2556,11 +2524,11 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>Remove {0}?</value>
     <comment>{0} is a mod name. Dialog title.</comment>
   </data>
-  <data name="Installed_RemoveConfigsOneFormat" xml:space="preserve">
+  <data name="Installed_RemoveConfigs_one" xml:space="preserve">
     <value>{0} has 1 config or settings file of its own:</value>
     <comment>{0} is a mod name. See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Installed_RemoveConfigsManyFormat" xml:space="preserve">
+  <data name="Installed_RemoveConfigs_other" xml:space="preserve">
     <value>{0} has {1} config or settings files of its own:</value>
     <comment>{0} is a mod name, {1} how many files.</comment>
   </data>
@@ -2574,19 +2542,19 @@ Cancel  -  don't remove anything</value>
     <value>Removed {0}.</value>
     <comment>{0} is a mod name.</comment>
   </data>
-  <data name="Installed_RemovedFailedOneFormat" xml:space="preserve">
+  <data name="Installed_RemovedFailed_one" xml:space="preserve">
     <value>Removed {0}, but 1 file couldn't be deleted (locked or already gone) - you may need to remove it by hand.</value>
     <comment>{0} is a mod name. See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Installed_RemovedFailedManyFormat" xml:space="preserve">
+  <data name="Installed_RemovedFailed_other" xml:space="preserve">
     <value>Removed {0}, but {1} files couldn't be deleted (locked or already gone) - you may need to remove them by hand.</value>
     <comment>{0} is a mod name, {1} how many files.</comment>
   </data>
-  <data name="Installed_RemovedConfigsKeptOneFormat" xml:space="preserve">
-    <value>1 config file kept in {0}.</value>
+  <data name="Installed_RemovedConfigsKept_one" xml:space="preserve">
+    <value>1 config file kept in {1}.</value>
     <comment>{0} is a folder path. Follows the removal sentence, joined by Common_SentenceSeparator.</comment>
   </data>
-  <data name="Installed_RemovedConfigsKeptManyFormat" xml:space="preserve">
+  <data name="Installed_RemovedConfigsKept_other" xml:space="preserve">
     <value>{0} config files kept in {1}.</value>
     <comment>{0} is how many files, {1} a folder path.</comment>
   </data>
@@ -2626,11 +2594,11 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
     <value>Couldn't find {0} in the cached catalog - try Rescan.</value>
     <comment>{0} is one or more mod names, joined by Common_ListSeparator and Common_ListPairFormat.</comment>
   </data>
-  <data name="Installed_UpdateHandInstalledTitleOne" xml:space="preserve">
+  <data name="Installed_UpdateHandInstalledTitle_one" xml:space="preserve">
     <value>Update a hand-installed mod?</value>
     <comment>Dialog title. See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Installed_UpdateHandInstalledTitleManyFormat" xml:space="preserve">
+  <data name="Installed_UpdateHandInstalledTitle_other" xml:space="preserve">
     <value>Update {0} hand-installed mods?</value>
     <comment>{0} is how many mods in the selection were not installed through this app.</comment>
   </data>
@@ -2644,11 +2612,11 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
   <data name="Installed_UpdateCancelledUnread" xml:space="preserve">
     <value>Update cancelled - the mod pages weren't confirmed as read.</value>
   </data>
-  <data name="Installed_UpdateQueuedOne" xml:space="preserve">
+  <data name="Installed_UpdateQueued_one" xml:space="preserve">
     <value>Queued 1 update - see the Downloads page for progress.</value>
     <comment>See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Installed_UpdateQueuedManyFormat" xml:space="preserve">
+  <data name="Installed_UpdateQueued_other" xml:space="preserve">
     <value>Queued {0} updates - see the Downloads page for progress.</value>
     <comment>{0} is how many updates were queued.</comment>
   </data>
@@ -2662,19 +2630,19 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
     <value>None of the selected mods can be updated here: {0}.</value>
     <comment>{0} is one or more reasons, joined by Common_ListSeparator.</comment>
   </data>
-  <data name="Installed_ReasonDisabledOne" xml:space="preserve">
+  <data name="Installed_ReasonDisabled_one" xml:space="preserve">
     <value>1 disabled (enable it first)</value>
     <comment>One reason in Installed_NoUpdatesReasonsFormat. See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Installed_ReasonDisabledManyFormat" xml:space="preserve">
+  <data name="Installed_ReasonDisabled_other" xml:space="preserve">
     <value>{0} disabled (enable them first)</value>
     <comment>One reason in Installed_NoUpdatesReasonsFormat. {0} is how many.</comment>
   </data>
-  <data name="Installed_ReasonAddonOne" xml:space="preserve">
+  <data name="Installed_ReasonAddon_one" xml:space="preserve">
     <value>1 addon, which updates from its parent mod</value>
     <comment>One reason in Installed_NoUpdatesReasonsFormat.</comment>
   </data>
-  <data name="Installed_ReasonAddonManyFormat" xml:space="preserve">
+  <data name="Installed_ReasonAddon_other" xml:space="preserve">
     <value>{0} addons, which update from their parent mod</value>
     <comment>One reason in Installed_NoUpdatesReasonsFormat. {0} is how many.</comment>
   </data>
@@ -2682,43 +2650,43 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
     <value> Skipped {0}.</value>
     <comment>Follows the queued sentence on the same line, which is why it starts with a space. {0} is one or more counts, joined by Common_ListSeparator.</comment>
   </data>
-  <data name="Installed_SkippedUpToDateOne" xml:space="preserve">
+  <data name="Installed_SkippedUpToDate_one" xml:space="preserve">
     <value>1 already up to date</value>
     <comment>One count in Installed_SkippedFormat. See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Installed_SkippedUpToDateManyFormat" xml:space="preserve">
+  <data name="Installed_SkippedUpToDate_other" xml:space="preserve">
     <value>{0} already up to date</value>
     <comment>One count in Installed_SkippedFormat.</comment>
   </data>
-  <data name="Installed_SkippedDisabledOne" xml:space="preserve">
+  <data name="Installed_SkippedDisabled_one" xml:space="preserve">
     <value>1 disabled</value>
     <comment>One count in Installed_SkippedFormat.</comment>
   </data>
-  <data name="Installed_SkippedDisabledManyFormat" xml:space="preserve">
+  <data name="Installed_SkippedDisabled_other" xml:space="preserve">
     <value>{0} disabled</value>
     <comment>One count in Installed_SkippedFormat.</comment>
   </data>
-  <data name="Installed_SkippedAddonOne" xml:space="preserve">
+  <data name="Installed_SkippedAddon_one" xml:space="preserve">
     <value>1 addon - update that from its parent mod</value>
     <comment>One count in Installed_SkippedFormat.</comment>
   </data>
-  <data name="Installed_SkippedAddonManyFormat" xml:space="preserve">
+  <data name="Installed_SkippedAddon_other" xml:space="preserve">
     <value>{0} addons - update those from their parent mod</value>
     <comment>One count in Installed_SkippedFormat.</comment>
   </data>
-  <data name="Installed_SkippedNotFoundOne" xml:space="preserve">
+  <data name="Installed_SkippedNotFound_one" xml:space="preserve">
     <value>1 not found in the catalog</value>
     <comment>One count in Installed_SkippedFormat.</comment>
   </data>
-  <data name="Installed_SkippedNotFoundManyFormat" xml:space="preserve">
+  <data name="Installed_SkippedNotFound_other" xml:space="preserve">
     <value>{0} not found in the catalog</value>
     <comment>One count in Installed_SkippedFormat.</comment>
   </data>
-  <data name="Installed_UndoneOne" xml:space="preserve">
+  <data name="Installed_Undone_one" xml:space="preserve">
     <value>Put 1 mod back.</value>
     <comment>See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Installed_UndoneManyFormat" xml:space="preserve">
+  <data name="Installed_Undone_other" xml:space="preserve">
     <value>Put {0} mods back.</value>
     <comment>{0} is how many mods were moved back.</comment>
   </data>
@@ -2730,19 +2698,19 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
     <value>Nothing to enable.</value>
     <comment>One whole sentence per action rather than the verb dropped into one.</comment>
   </data>
-  <data name="Installed_DisabledCountOne" xml:space="preserve">
+  <data name="Installed_DisabledCount_one" xml:space="preserve">
     <value>Disabled 1 mod.</value>
     <comment>See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Installed_DisabledCountManyFormat" xml:space="preserve">
+  <data name="Installed_DisabledCount_other" xml:space="preserve">
     <value>Disabled {0} mods.</value>
     <comment>{0} is how many mods were disabled.</comment>
   </data>
-  <data name="Installed_EnabledCountOne" xml:space="preserve">
+  <data name="Installed_EnabledCount_one" xml:space="preserve">
     <value>Enabled 1 mod.</value>
     <comment>See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Installed_EnabledCountManyFormat" xml:space="preserve">
+  <data name="Installed_EnabledCount_other" xml:space="preserve">
     <value>Enabled {0} mods.</value>
     <comment>{0} is how many mods were enabled.</comment>
   </data>
@@ -2762,11 +2730,11 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
     <value>optionally used by {0}</value>
     <comment>{0} is a mod name.</comment>
   </data>
-  <data name="Installed_MoveFailedOneFormat" xml:space="preserve">
+  <data name="Installed_MoveFailedNamedFormat" xml:space="preserve">
     <value>{0} couldn't be moved: {1}</value>
     <comment>{0} is a mod name, {1} the reason.</comment>
   </data>
-  <data name="Installed_MoveFailedManyFormat" xml:space="preserve">
+  <data name="Installed_MoveFailedCountFormat" xml:space="preserve">
     <value>{0} couldn't be moved: {1}</value>
     <comment>{0} is how many mods, {1} the per-mod reasons joined by Common_ClauseSeparator.</comment>
   </data>
@@ -2778,11 +2746,11 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
     <value>Delete "{0}"?</value>
     <comment>{0} is a group name the user typed. The group is empty.</comment>
   </data>
-  <data name="Installed_DeleteGroupOneFormat" xml:space="preserve">
+  <data name="Installed_DeleteGroup_one" xml:space="preserve">
     <value>Delete "{0}"? Its 1 mod moves back to Ungrouped.</value>
     <comment>{0} is a group name the user typed. Ungrouped is the fixed bucket named by Filter_Ungrouped - translate both the same way.</comment>
   </data>
-  <data name="Installed_DeleteGroupManyFormat" xml:space="preserve">
+  <data name="Installed_DeleteGroup_other" xml:space="preserve">
     <value>Delete "{0}"? Its {1} mods move back to Ungrouped.</value>
     <comment>{0} is a group name the user typed, {1} how many mods it holds.</comment>
   </data>
@@ -3103,11 +3071,11 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
   <data name="Browse_NoMatches" xml:space="preserve">
     <value>No mods matched.</value>
   </data>
-  <data name="Browse_CountFoundOne" xml:space="preserve">
+  <data name="Browse_CountFound_one" xml:space="preserve">
     <value>1 mod found.</value>
     <comment>See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Browse_CountFoundManyFormat" xml:space="preserve">
+  <data name="Browse_CountFound_other" xml:space="preserve">
     <value>{0} mods found.</value>
     <comment>{0} is how many mods the filters match.</comment>
   </data>
@@ -3221,11 +3189,11 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
     <value>Addon</value>
     <comment>Shown in place of Installed_AddonForFormat when the parent mod's name is not known.</comment>
   </data>
-  <data name="Installed_IncompleteMissingOneFormat" xml:space="preserve">
+  <data name="Installed_IncompleteMissing_one" xml:space="preserve">
     <value>Files missing - {0} isn't on disk. Reinstall it from Details and versions.</value>
     <comment>{0} is a folder name. Details and versions is the button named by Installed_DetailsAndVersions - translate both the same way. See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Installed_IncompleteMissingManyFormat" xml:space="preserve">
+  <data name="Installed_IncompleteMissing_other" xml:space="preserve">
     <value>Files missing - {0} aren't on disk. Reinstall it from Details and versions.</value>
     <comment>{0} is two or more folder names, joined by Common_ListSeparator.</comment>
   </data>
@@ -3379,20 +3347,6 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
   <data name="Configs_NoneFound" xml:space="preserve">
     <value>No mod configs found. Plenty of plugins only write one the first time the game runs.</value>
   </data>
-  <data name="Configs_CountOneOne" xml:space="preserve">
-    <value>1 config file across 1 mod.</value>
-    <comment>See the Many forms; these four become one plural key in S5.</comment>
-  </data>
-  <data name="Configs_CountOneManyFormat" xml:space="preserve">
-    <value>1 config file across {0} mods.</value>
-  </data>
-  <data name="Configs_CountManyOneFormat" xml:space="preserve">
-    <value>{0} config files across 1 mod.</value>
-  </data>
-  <data name="Configs_CountManyManyFormat" xml:space="preserve">
-    <value>{0} config files across {1} mods.</value>
-    <comment>{0} is how many files, {1} how many mods they belong to.</comment>
-  </data>
   <data name="Configs_ReadFailedFormat" xml:space="preserve">
     <value>Couldn't read the install: {0}</value>
     <comment>{0} is the underlying error, which arrives in English from the operating system.</comment>
@@ -3427,19 +3381,19 @@ Whichever you pick, the version currently on disk is copied into {1} first.</val
     <value>Reloaded {0} from disk.</value>
     <comment>{0} is a file name.</comment>
   </data>
-  <data name="Configs_RunningBepInExOneFormat" xml:space="preserve">
+  <data name="Configs_RunningBepInEx_one" xml:space="preserve">
     <value>{0} is running. BepInEx writes its config files back out when the game closes, which would undo anything saved here - close it first.</value>
     <comment>{0} is one process name. BepInEx is the mod loader's name and stays as it is. See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Configs_RunningBepInExManyFormat" xml:space="preserve">
+  <data name="Configs_RunningBepInEx_other" xml:space="preserve">
     <value>{0} are running. BepInEx writes its config files back out when the game closes, which would undo anything saved here - close them first.</value>
     <comment>{0} is two or more process names, joined by Common_ListSeparator and Common_ListPairFormat.</comment>
   </data>
-  <data name="Configs_RunningServerOneFormat" xml:space="preserve">
+  <data name="Configs_RunningServer_one" xml:space="preserve">
     <value>{0} is running. A server mod reads its config when the server starts, so anything saved here takes effect on the next restart.</value>
     <comment>{0} is one process name.</comment>
   </data>
-  <data name="Configs_RunningServerManyFormat" xml:space="preserve">
+  <data name="Configs_RunningServer_other" xml:space="preserve">
     <value>{0} are running. A server mod reads its config when the server starts, so anything saved here takes effect on the next restart.</value>
     <comment>{0} is two or more process names, joined by Common_ListSeparator and Common_ListPairFormat.</comment>
   </data>
@@ -3469,11 +3423,11 @@ Whichever you pick, the version currently on disk is copied into {1} first.</val
   <data name="ModUpdate_ShowingAllVersions" xml:space="preserve">
     <value>Showing every published version, including ones for other SPT releases.</value>
   </data>
-  <data name="ModUpdate_HiddenOne" xml:space="preserve">
+  <data name="ModUpdate_Hidden_one" xml:space="preserve">
     <value>1 version is hidden - it targets a different SPT release to the one you have.</value>
     <comment>See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="ModUpdate_HiddenManyFormat" xml:space="preserve">
+  <data name="ModUpdate_Hidden_other" xml:space="preserve">
     <value>{0} versions are hidden - they target a different SPT release to the one you have.</value>
     <comment>{0} is how many versions are hidden.</comment>
   </data>
@@ -3676,11 +3630,11 @@ You can turn it back on at any time.</value>
     <value>Adds a page that connects to an SPT server running the Server Map mod and shows what it runs, so you can compare it against your own install. Needs the mod on the server - installing this app is not enough on its own.</value>
     <comment>On the Server map switch, when the page is off.</comment>
   </data>
-  <data name="ServerMap_ListSummaryOneFormat" xml:space="preserve">
+  <data name="ServerMap_ListSummary_one" xml:space="preserve">
     <value>{0} - revision {1}, 1 mod</value>
     <comment>A held mod list in one line. {0} is the list's name, {1} its revision number. See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="ServerMap_ListSummaryManyFormat" xml:space="preserve">
+  <data name="ServerMap_ListSummary_other" xml:space="preserve">
     <value>{0} - revision {1}, {2} mods</value>
     <comment>{0} is the list's name, {1} its revision number, {2} how many mods it names.</comment>
   </data>
@@ -3844,13 +3798,6 @@ You can turn it back on at any time.</value>
   <data name="Downloads_SummaryProgressFormat" xml:space="preserve">
     <value>{0} of {1} done</value>
     <comment>How much of the whole queue has finished. {0} is how many are done, {1} how many there are.</comment>
-  </data>
-  <data name="Downloads_SummaryUnsizedOne" xml:space="preserve">
-    <value>1 item</value>
-    <comment>How many queued items have no known size yet. See the Many form; these become one plural key in S5.</comment>
-  </data>
-  <data name="Downloads_SummaryUnsizedManyFormat" xml:space="preserve">
-    <value>{0} items</value>
   </data>
   <data name="Downloads_ResolvingLink" xml:space="preserve">
     <value>Resolving download link...</value>
@@ -4041,27 +3988,27 @@ You can turn it back on at any time.</value>
     <value>Connected to {0}, which doesn't publish a mod list - so there's nothing to check your install against.</value>
     <comment>{0} is the server's name.</comment>
   </data>
-  <data name="PreLaunch_MatchesOneFormat" xml:space="preserve">
+  <data name="PreLaunch_Matches_one" xml:space="preserve">
     <value>Your install matches "{0}" (revision {1}) - the 1 mod the server expects is present and at the right version.</value>
     <comment>{0} is the list's name, {1} its revision number. See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="PreLaunch_MatchesManyFormat" xml:space="preserve">
+  <data name="PreLaunch_Matches_other" xml:space="preserve">
     <value>Your install matches "{0}" (revision {1}) - {2} mods the server expects, all present and at the right versions.</value>
     <comment>{0} is the list's name, {1} its revision number, {2} how many mods it names.</comment>
   </data>
-  <data name="PreLaunch_BehindOne" xml:space="preserve">
+  <data name="PreLaunch_BehindCount_one" xml:space="preserve">
     <value>1 mod to install, update or enable</value>
     <comment>One part of the outstanding-work sentence. See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="PreLaunch_BehindManyFormat" xml:space="preserve">
+  <data name="PreLaunch_BehindCount_other" xml:space="preserve">
     <value>{0} mods to install, update or enable</value>
     <comment>One part of the outstanding-work sentence.</comment>
   </data>
-  <data name="PreLaunch_ManualOne" xml:space="preserve">
+  <data name="PreLaunch_Manual_one" xml:space="preserve">
     <value>1 mod to fetch by hand</value>
     <comment>One part of the outstanding-work sentence.</comment>
   </data>
-  <data name="PreLaunch_ManualManyFormat" xml:space="preserve">
+  <data name="PreLaunch_Manual_other" xml:space="preserve">
     <value>{0} mods to fetch by hand</value>
     <comment>One part of the outstanding-work sentence.</comment>
   </data>
@@ -4069,11 +4016,11 @@ You can turn it back on at any time.</value>
     <value>Compared against "{0}": {1}. Apply the list on the Mod lists page to sort it, or join anyway - nothing here stops you.</value>
     <comment>{0} is the list's name, {1} one or two parts joined by Common_ListPairFormat. Mod lists is the page named by Nav_ModLists.</comment>
   </data>
-  <data name="Browse_AddonBadgeOne" xml:space="preserve">
+  <data name="Browse_AddonBadge_one" xml:space="preserve">
     <value>1 addon</value>
     <comment>How many addons a mod has. See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Browse_AddonBadgeManyFormat" xml:space="preserve">
+  <data name="Browse_AddonBadge_other" xml:space="preserve">
     <value>{0} addons</value>
   </data>
   <data name="Browse_OlderVersionNoteFormat" xml:space="preserve">
@@ -4103,7 +4050,7 @@ You can turn it back on at any time.</value>
   <data name="Browse_TooltipNoVersion" xml:space="preserve">
     <value>This mod has no published version in the catalog.</value>
   </data>
-  <data name="Browse_TooltipRunsOnOneFormat" xml:space="preserve">
+  <data name="Browse_TooltipRunsOnSingleFormat" xml:space="preserve">
     <value>v{0} runs on SPT {1}.</value>
     <comment>{0} is the mod's version, {1} an SPT release.</comment>
   </data>
@@ -4160,30 +4107,30 @@ You can turn it back on at any time.</value>
   <data name="Dependencies_NoneMatched" xml:space="preserve">
     <value>None of your installed mods could be matched to sp-mod.com.</value>
   </data>
-  <data name="Dependencies_ResolvingOne" xml:space="preserve">
+  <data name="Dependencies_Resolving_one" xml:space="preserve">
     <value>Resolving dependencies for 1 mod...</value>
     <comment>See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Dependencies_ResolvingManyFormat" xml:space="preserve">
+  <data name="Dependencies_Resolving_other" xml:space="preserve">
     <value>Resolving dependencies for {0} mods...</value>
     <comment>{0} is how many mods are being asked about.</comment>
   </data>
   <data name="Dependencies_NoneDeclared" xml:space="preserve">
     <value>None of your installed mods declare dependencies.</value>
   </data>
-  <data name="Dependencies_AllSatisfiedOne" xml:space="preserve">
+  <data name="Dependencies_AllSatisfied_one" xml:space="preserve">
     <value>1 mod has dependencies - all satisfied.</value>
     <comment>See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Dependencies_AllSatisfiedManyFormat" xml:space="preserve">
+  <data name="Dependencies_AllSatisfied_other" xml:space="preserve">
     <value>{0} mods have dependencies - all satisfied.</value>
     <comment>{0} is how many mods declare dependencies.</comment>
   </data>
-  <data name="Dependencies_AttentionOneFormat" xml:space="preserve">
-    <value>1 mod has dependencies; {0} need attention.</value>
+  <data name="Dependencies_Attention_one" xml:space="preserve">
+    <value>1 mod has dependencies; {1} need attention.</value>
     <comment>{0} is how many dependencies are missing, outdated or conflicting.</comment>
   </data>
-  <data name="Dependencies_AttentionManyFormat" xml:space="preserve">
+  <data name="Dependencies_Attention_other" xml:space="preserve">
     <value>{0} mods have dependencies; {1} need attention.</value>
     <comment>{0} is how many mods declare dependencies, {1} how many of those need attention.</comment>
   </data>
@@ -4263,11 +4210,11 @@ You can turn it back on at any time.</value>
     <value>{0} unresolved</value>
     <comment>One count in a mod's dependency summary.</comment>
   </data>
-  <data name="Dependencies_SummarySatisfiedOne" xml:space="preserve">
+  <data name="Dependencies_SummarySatisfied_one" xml:space="preserve">
     <value>1 dependency, all satisfied</value>
     <comment>See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Dependencies_SummarySatisfiedManyFormat" xml:space="preserve">
+  <data name="Dependencies_SummarySatisfied_other" xml:space="preserve">
     <value>{0} dependencies, all satisfied</value>
     <comment>{0} is how many dependencies the mod declares.</comment>
   </data>
@@ -4330,13 +4277,6 @@ You can turn it back on at any time.</value>
   <data name="Addon_QueuedFormat" xml:space="preserve">
     <value>Queued {0} {1} - see the Downloads page for progress.</value>
     <comment>{0} is an addon's name, {1} its version.</comment>
-  </data>
-  <data name="Addon_HeadingOne" xml:space="preserve">
-    <value>1 addon</value>
-    <comment>How many addons a mod has. See the Many form; these become one plural key in S5.</comment>
-  </data>
-  <data name="Addon_HeadingManyFormat" xml:space="preserve">
-    <value>{0} addons</value>
   </data>
   <data name="Addon_ThisMod" xml:space="preserve">
     <value>this mod</value>
@@ -4431,11 +4371,11 @@ You can turn it back on at any time.</value>
     <value>BepInEx\config</value>
     <comment>Where a group's files live. A folder path - it stays as it is.</comment>
   </data>
-  <data name="Installed_GroupCountOne" xml:space="preserve">
+  <data name="Installed_GroupCount_one" xml:space="preserve">
     <value>1 mod</value>
     <comment>How many mods are in a group. See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Installed_GroupCountManyFormat" xml:space="preserve">
+  <data name="Installed_GroupCount_other" xml:space="preserve">
     <value>{0} mods</value>
   </data>
   <data name="Installed_GroupAllDisabled" xml:space="preserve">
@@ -4550,19 +4490,19 @@ You can turn it back on at any time.</value>
     <value>Nothing matches that.</value>
     <comment>Shown when the search matches nothing.</comment>
   </data>
-  <data name="ModLists_AddShownCatalogOneFormat" xml:space="preserve">
-    <value>1 of {0} sp-mod.com mods shown.</value>
+  <data name="ModLists_AddShownCatalog_one" xml:space="preserve">
+    <value>1 of {1} sp-mod.com mods shown.</value>
     <comment>{0} is how many the catalog holds. See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="ModLists_AddShownCatalogManyFormat" xml:space="preserve">
+  <data name="ModLists_AddShownCatalog_other" xml:space="preserve">
     <value>{0} of {1} sp-mod.com mods shown.</value>
     <comment>{0} is how many match, {1} how many the catalog holds.</comment>
   </data>
-  <data name="ModLists_AddShownInstalledOneFormat" xml:space="preserve">
-    <value>1 of {0} installed mods shown.</value>
+  <data name="ModLists_AddShownInstalled_one" xml:space="preserve">
+    <value>1 of {1} installed mods shown.</value>
     <comment>{0} is how many mods this install has.</comment>
   </data>
-  <data name="ModLists_AddShownInstalledManyFormat" xml:space="preserve">
+  <data name="ModLists_AddShownInstalled_other" xml:space="preserve">
     <value>{0} of {1} installed mods shown.</value>
     <comment>{0} is how many match, {1} how many mods this install has.</comment>
   </data>
@@ -4573,11 +4513,11 @@ You can turn it back on at any time.</value>
   <data name="ModLists_AddNonePicked" xml:space="preserve">
     <value>Nothing picked yet.</value>
   </data>
-  <data name="ModLists_AddPickedOne" xml:space="preserve">
+  <data name="ModLists_AddPicked_one" xml:space="preserve">
     <value>1 mod picked.</value>
     <comment>See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="ModLists_AddPickedManyFormat" xml:space="preserve">
+  <data name="ModLists_AddPicked_other" xml:space="preserve">
     <value>{0} mods picked.</value>
   </data>
   <data name="ModLists_AddButton" xml:space="preserve">
@@ -4588,34 +4528,34 @@ You can turn it back on at any time.</value>
     <value>Add {0}</value>
     <comment>On the button. {0} is how many mods are ticked.</comment>
   </data>
-  <data name="Disable_TitleDisableOneFormat" xml:space="preserve">
+  <data name="Disable_TitleDisableNamedFormat" xml:space="preserve">
     <value>Disable {0}?</value>
     <comment>Window title. {0} is a mod name.</comment>
   </data>
-  <data name="Disable_TitleDisableManyFormat" xml:space="preserve">
+  <data name="Disable_TitleDisableCountFormat" xml:space="preserve">
     <value>Disable {0} mods?</value>
     <comment>Window title. {0} is how many mods.</comment>
   </data>
-  <data name="Disable_TitleEnableOneFormat" xml:space="preserve">
+  <data name="Disable_TitleEnableNamedFormat" xml:space="preserve">
     <value>Enable {0}?</value>
     <comment>Window title. {0} is a mod name.</comment>
   </data>
-  <data name="Disable_TitleEnableManyFormat" xml:space="preserve">
+  <data name="Disable_TitleEnableCountFormat" xml:space="preserve">
     <value>Enable {0} mods?</value>
     <comment>Window title. {0} is how many mods.</comment>
   </data>
-  <data name="Disable_ImpactDisableOne" xml:space="preserve">
+  <data name="Disable_ImpactDisable_one" xml:space="preserve">
     <value>1 other mod depends on what you're about to disable.</value>
     <comment>See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="Disable_ImpactDisableManyFormat" xml:space="preserve">
+  <data name="Disable_ImpactDisable_other" xml:space="preserve">
     <value>{0} other mods depend on what you're about to disable.</value>
     <comment>{0} is how many mods would lose a dependency.</comment>
   </data>
-  <data name="Disable_ImpactEnableOne" xml:space="preserve">
+  <data name="Disable_ImpactEnable_one" xml:space="preserve">
     <value>1 mod this needs is still disabled.</value>
   </data>
-  <data name="Disable_ImpactEnableManyFormat" xml:space="preserve">
+  <data name="Disable_ImpactEnable_other" xml:space="preserve">
     <value>{0} mods this needs are still disabled.</value>
     <comment>{0} is how many dependencies are still disabled.</comment>
   </data>
@@ -4659,11 +4599,11 @@ You can turn it back on at any time.</value>
     <value>Open page</value>
     <comment>On a mod's button, before its page has been opened.</comment>
   </data>
-  <data name="ReadModPage_TitleOneFormat" xml:space="preserve">
+  <data name="ReadModPage_TitleNamedFormat" xml:space="preserve">
     <value>Read {0}'s page first</value>
     <comment>Window title. {0} is a mod name.</comment>
   </data>
-  <data name="ReadModPage_TitleManyFormat" xml:space="preserve">
+  <data name="ReadModPage_TitleCountFormat" xml:space="preserve">
     <value>Read {0} mod pages first</value>
     <comment>Window title. {0} is how many mods.</comment>
   </data>
@@ -4674,19 +4614,19 @@ You can turn it back on at any time.</value>
     <value>Open next {0} pages</value>
     <comment>On the button. {0} is how many pages the next press opens.</comment>
   </data>
-  <data name="ReadModPage_OpenLastOne" xml:space="preserve">
+  <data name="ReadModPage_OpenLast_one" xml:space="preserve">
     <value>Open the last page</value>
     <comment>On the button, when one page is left.</comment>
   </data>
-  <data name="ReadModPage_OpenLastManyFormat" xml:space="preserve">
+  <data name="ReadModPage_OpenLast_other" xml:space="preserve">
     <value>Open the last {0}</value>
     <comment>On the button. {0} is how many pages are left.</comment>
   </data>
-  <data name="ReadModPage_SkippingOneFormat" xml:space="preserve">
+  <data name="ReadModPage_Skipping_one" xml:space="preserve">
     <value>Skipping 1 unopened page.</value>
     <comment>See the Many form; these become one plural key in S5.</comment>
   </data>
-  <data name="ReadModPage_SkippingManyFormat" xml:space="preserve">
+  <data name="ReadModPage_Skipping_other" xml:space="preserve">
     <value>Skipping {0} unopened pages.</value>
     <comment>{0} is how many pages were not opened.</comment>
   </data>
@@ -4702,11 +4642,11 @@ You can turn it back on at any time.</value>
     <value>Wanted {0} - newest published is {1}</value>
     <comment>One row in the version-change prompt. {0} is the version the list asked for, {1} what is published now or Common_Unknown.</comment>
   </data>
-  <data name="ModLists_VersionChangeTitleOneFormat" xml:space="preserve">
+  <data name="ModLists_VersionChangeTitleNamedFormat" xml:space="preserve">
     <value>{0}'s version is no longer published</value>
     <comment>Window title. {0} is a mod name.</comment>
   </data>
-  <data name="ModLists_VersionChangeTitleManyFormat" xml:space="preserve">
+  <data name="ModLists_VersionChangeTitleCountFormat" xml:space="preserve">
     <value>{0} versions are no longer published</value>
     <comment>Window title. {0} is how many mods are affected.</comment>
   </data>
@@ -4766,5 +4706,50 @@ You can turn it back on at any time.</value>
   </data>
   <data name="Configs_ChipIgnoredToolTip" xml:space="preserve">
     <value>Not treated as config at all - it isn't listed here, isn't merged, and isn't kept when the mod is removed.</value>
+  </data>
+  <data name="Installed_SelectedFormat" xml:space="preserve">
+    <value>Selected: {0}</value>
+    <comment>The tick count beside Multi select. The number sits outside the sentence, so no language needs a plural form of it. {0} is how many cards are ticked.</comment>
+  </data>
+  <data name="Addon_HeadingFormat" xml:space="preserve">
+    <value>Addons: {0}</value>
+    <comment>Heading above a mod's addons. The number sits outside the sentence, so no language needs a plural form of it. {0} is how many addons the mod has.</comment>
+  </data>
+  <data name="ModLists_EntriesHeaderFormat" xml:space="preserve">
+    <value>Mods on this list: {0}</value>
+    <comment>Header above a list's entries. The number sits outside the sentence, so no language needs a plural form of it. {0} is how many mods the list names.</comment>
+  </data>
+  <data name="ModLists_EntriesHeaderFilteredFormat" xml:space="preserve">
+    <value>Mods on this list: {0} of {1}</value>
+    <comment>The same header while a search narrows the list. {0} is how many are shown, {1} how many the list names.</comment>
+  </data>
+  <data name="ModLists_Unsaved_one" xml:space="preserve">
+    <value>1 unsaved change - save the list to keep it. Then Preview and Apply to use the saved version.</value>
+    <comment>One whole sentence rather than a count and a wrapper: the wrapper said "keep them" whatever the count was. Preview and Apply are the buttons named by ModLists_Preview and ModLists_Apply - translate them the same way.</comment>
+  </data>
+  <data name="ModLists_Unsaved_other" xml:space="preserve">
+    <value>{0} unsaved changes - save the list to keep them. Then Preview and Apply to use the saved version.</value>
+    <comment>{0} is how many edits have not been written to the list.</comment>
+  </data>
+  <data name="Configs_CountFormat" xml:space="preserve">
+    <value>Config files: {0} · Mods: {1}</value>
+    <comment>How much the scan found. Two labelled counts rather than a sentence: a sentence with two counts in it needs a plural form for every combination the two can make - four in English, sixteen in Czech, thirty-six in Arabic - and none of that survives translation intact. {0} is how many config files, {1} how many mods they belong to. Change the separator if another reads better in your language.</comment>
+  </data>
+  <data name="Options_SizeBy" xml:space="preserve">
+    <value>x</value>
+    <comment>Between the width and height boxes on the Options page. Some languages prefer the multiplication sign; either reads as "by".</comment>
+  </data>
+  <data name="App_CrashTitle" xml:space="preserve">
+    <value>TCF Mod Manager - Unexpected Error</value>
+    <comment>Title of the dialog shown when the app hits an error it cannot handle. TCF Mod Manager is the app's name and stays as it is.</comment>
+  </data>
+  <data name="App_CrashBodyFormat" xml:space="preserve">
+    <value>Something went wrong and wasn't handled:
+
+{0}
+
+This was written to:
+{1}</value>
+    <comment>{0} is the error itself, which arrives in English from .NET; {1} is the path to the log file.</comment>
   </data>
 </root>

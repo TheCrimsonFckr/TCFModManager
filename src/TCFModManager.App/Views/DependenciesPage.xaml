@@ -11,7 +11,7 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
-    Title="Dependencies"
+    Title="{loc:Str Nav_Dependencies}"
     Loaded="DependenciesPage_Loaded"
     ScrollViewer.CanContentScroll="False">
     <Page.Resources>
