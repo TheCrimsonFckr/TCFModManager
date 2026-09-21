@@ -45,6 +45,9 @@ public sealed partial class ModListAddRow : LocalizedViewModel
 //
 public partial class ModListAddModWindow : FluentWindow
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     //
     // The catalog runs to thousands of listings and nobody scrolls that. Showing the first slice
     // and saying so is honest about it; typing is how you reach the rest.
@@ -67,9 +70,11 @@ public partial class ModListAddModWindow : FluentWindow
 
         InitializeComponent();
 
-        WindowTitleBar.Title = Title = $"Add mods to \"{listName}\"";
-        InstalledSourceButton.Content = $"Installed ({_installed.Count})";
-        CatalogSourceButton.Content = $"sp-mod.com ({_catalog.Count})";
+        WindowTitleBar.Title = Title = Text(Strings.ModLists_AddTitleFormat, listName);
+        InstalledSourceButton.Content = Text(
+            Strings.ModLists_AddSourceInstalledFormat, _installed.Count);
+        CatalogSourceButton.Content = Text(
+            Strings.ModLists_AddSourceCatalogFormat, _catalog.Count);
 
         // The catalog is the only source worth opening on when there was no install to read.
         _showingCatalog = _installed.Count == 0;
@@ -119,32 +124,37 @@ public partial class ModListAddModWindow : FluentWindow
     {
         var parts = new List<string>();
 
-        if (alreadyOn) parts.Add("already on this list");
-        if (option.Entry.IsAddon) parts.Add("addon");
+        if (alreadyOn) parts.Add(Strings.ModLists_AddFactAlreadyOn);
+        if (option.Entry.IsAddon) parts.Add(Strings.ModLists_AddFactAddon);
 
         if (fromCatalog)
         {
-            if (!string.IsNullOrWhiteSpace(option.Author)) parts.Add($"by {option.Author}");
+            if (!string.IsNullOrWhiteSpace(option.Author))
+                parts.Add(Text(Strings.ModLists_AddFactByFormat, option.Author));
 
             // Said plainly rather than left to be inferred from the version being absent: a list
             // entry with no version means "the newest published", and that is a real choice.
-            parts.Add(option.IsInstalled ? "installed - adds at the newest published version" : "newest published version");
+            parts.Add(option.IsInstalled
+                ? Strings.ModLists_AddFactInstalledNewest
+                : Strings.ModLists_AddFactNewest);
         }
         else
         {
             // The same "installed as" the contents panel shows, left out on the same rule: the
             // title above is the sp-mod.com listing name wherever one matched, and where nothing
             // matched it already is the folder, so printing it again would only repeat it.
-            var folders = string.Join(", ", option.Entry.Folders);
+            var folders = string.Join(Strings.Common_ListSeparator, option.Entry.Folders);
 
             if (folders.Length > 0 && !string.Equals(folders, option.Entry.Name.Trim(), StringComparison.OrdinalIgnoreCase))
-                parts.Add($"installed as {folders}");
+                parts.Add(Text(Strings.ModLists_AddFactInstalledAsFormat, folders));
 
-            parts.Add(option.Entry.Version is { } version ? $"version {version}" : "version not known");
-            if (option.IsDisabled) parts.Add("disabled");
+            parts.Add(option.Entry.Version is { } version
+                ? Text(Strings.ModLists_AddFactVersionFormat, version)
+                : Strings.ModLists_AddFactVersionUnknown);
+            if (option.IsDisabled) parts.Add(Strings.Footprint_DetailDisabled);
         }
 
-        return string.Join(" · ", parts);
+        return string.Join(Strings.Common_FactSeparator, parts);
     }
 
     private void InstalledSource_Click(object sender, RoutedEventArgs e)
@@ -169,8 +179,8 @@ public partial class ModListAddModWindow : FluentWindow
         CatalogSourceButton.Appearance = _showingCatalog ? ControlAppearance.Primary : ControlAppearance.Secondary;
 
         SourceNote.Text = _showingCatalog
-            ? "Mods published on sp-mod.com. Adding one only names it - applying the list is what downloads it."
-            : "Mods this install has, recorded at the version you're running.";
+            ? Strings.ModLists_AddSourceCatalogNote
+            : Strings.ModLists_AddSourceInstalledNote;
 
         Render();
     }
@@ -203,8 +213,8 @@ public partial class ModListAddModWindow : FluentWindow
 
         EmptyNote.Visibility = shown.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         EmptyNote.Text = source.Count == 0
-            ? "Nothing to add from here."
-            : "Nothing matches that.";
+            ? Strings.ModLists_AddNothingHere
+            : Strings.ModLists_AddNoMatches;
 
         ShowCount(matched.Count, shown.Count);
         UpdateChosen();
@@ -212,11 +222,20 @@ public partial class ModListAddModWindow : FluentWindow
 
     private void ShowCount(int matched, int shown)
     {
-        var scope = _showingCatalog ? "sp-mod.com" : "installed";
+        var total = _showingCatalog ? _catalog.Count : _installed.Count;
 
         CountNote.Text = matched == shown
-            ? $"{shown} of {(_showingCatalog ? _catalog.Count : _installed.Count)} {scope} mod(s) shown."
-            : $"Showing the first {shown} of {matched} matches - keep typing to narrow it down.";
+            ? Text(
+                _showingCatalog
+                    ? shown == 1
+                        ? Strings.ModLists_AddShownCatalogOneFormat
+                        : Strings.ModLists_AddShownCatalogManyFormat
+                    : shown == 1
+                        ? Strings.ModLists_AddShownInstalledOneFormat
+                        : Strings.ModLists_AddShownInstalledManyFormat,
+                shown == 1 ? total : shown,
+                total)
+            : Text(Strings.ModLists_AddTruncatedFormat, shown, matched);
     }
 
     private void RowsBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -233,8 +252,16 @@ public partial class ModListAddModWindow : FluentWindow
     {
         var count = _installed.Concat(_catalog).Count(r => r.IsChosen);
 
-        ChosenNote.Text = count == 0 ? "Nothing picked yet." : $"{count} mod(s) picked.";
-        AddButton.Content = count == 0 ? "Add" : $"Add {count}";
+        ChosenNote.Text = count switch
+        {
+            0 => Strings.ModLists_AddNonePicked,
+            1 => Strings.ModLists_AddPickedOne,
+            _ => Text(Strings.ModLists_AddPickedManyFormat, count),
+        };
+
+        AddButton.Content = count == 0
+            ? Strings.ModLists_AddButton
+            : Text(Strings.ModLists_AddButtonCountFormat, count);
         AddButton.IsEnabled = count > 0;
     }
 

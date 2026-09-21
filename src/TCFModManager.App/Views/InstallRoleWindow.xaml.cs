@@ -1,5 +1,6 @@
 using System.Windows;
 using Wpf.Ui.Controls;
+using TCFModManager.App.Localization;
 
 namespace TCFModManager.App.Views;
 
@@ -34,7 +35,8 @@ public partial class InstallRoleWindow : FluentWindow
     {
         InitializeComponent();
 
-        LauncherText.Text = $"Found: {launcherPath}";
+        LauncherText.Text = LocalizationService.Text(
+            Strings.Options_HeadlessFoundFormat, launcherPath);
 
         Owner = Application.Current?.MainWindow;
         WindowStartupLocation = Owner is not null ? WindowStartupLocation.CenterOwner : WindowStartupLocation.CenterScreen;

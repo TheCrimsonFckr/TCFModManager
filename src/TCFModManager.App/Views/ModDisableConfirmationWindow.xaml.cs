@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Media;
 using Wpf.Ui.Controls;
+using TCFModManager.App.Localization;
 
 namespace TCFModManager.App.Views;
 
@@ -40,31 +41,48 @@ public sealed class ModDisableImpactRow(string name, string detail, bool isSoft)
 //
 public partial class ModDisableConfirmationWindow : FluentWindow
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     private ModDisableConfirmationWindow(bool disabling, IReadOnlyList<string> targets, IReadOnlyList<ModDisableImpactRow> impact)
     {
         InitializeComponent();
 
-        var verb = disabling ? "Disable" : "Enable";
-        var targetLabel = targets.Count == 1 ? targets[0] : $"{targets.Count} mods";
-
-        WindowTitleBar.Title = Title = $"{verb} {targetLabel}?";
+        // One whole title per action and count rather than a verb and a noun phrase concatenated.
+        WindowTitleBar.Title = Title = targets.Count == 1
+            ? Text(
+                disabling ? Strings.Disable_TitleDisableOneFormat : Strings.Disable_TitleEnableOneFormat,
+                targets[0])
+            : Text(
+                disabling ? Strings.Disable_TitleDisableManyFormat : Strings.Disable_TitleEnableManyFormat,
+                targets.Count);
 
         SummaryText.Text = disabling
-            ? $"{impact.Count} other mod(s) depend on what you're about to disable."
-            : $"{impact.Count} mod(s) this needs are still disabled.";
+            ? impact.Count == 1
+                ? Strings.Disable_ImpactDisableOne
+                : Text(Strings.Disable_ImpactDisableManyFormat, impact.Count)
+            : impact.Count == 1
+                ? Strings.Disable_ImpactEnableOne
+                : Text(Strings.Disable_ImpactEnableManyFormat, impact.Count);
 
         TargetsText.Text = targets.Count == 1
-            ? $"Selected: {targets[0]}"
-            : $"Selected: {string.Join(", ", targets)}";
+            ? Text(Strings.Disable_SelectedFormat, targets[0])
+            : Text(
+                Strings.Disable_SelectedFormat,
+                string.Join(Strings.Common_ListSeparator, targets));
 
-        ImpactHeading.Text = disabling ? "Affected mods" : "Still disabled";
+        ImpactHeading.Text = disabling
+            ? Strings.Disable_HeadingAffected
+            : Strings.Disable_HeadingStillDisabled;
 
         ImpactList.ItemsSource = impact;
 
-        ProceedOnlyButton.Content = $"{verb} anyway";
+        ProceedOnlyButton.Content = disabling
+            ? Strings.Disable_ProceedDisable
+            : Strings.Disable_ProceedEnable;
         CascadeButton.Content = disabling
-            ? $"{verb} these too"
-            : "Enable these too";
+            ? Strings.Disable_CascadeDisable
+            : Strings.Disable_CascadeEnable;
 
         Owner = Application.Current?.MainWindow;
         WindowStartupLocation = Owner is not null ? WindowStartupLocation.CenterOwner : WindowStartupLocation.CenterScreen;

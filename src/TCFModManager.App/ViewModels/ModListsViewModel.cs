@@ -703,7 +703,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     {
         if (entry.Folders.Count == 0) return null;
 
-        var folders = string.Join(", ", entry.Folders);
+        var folders = string.Join(Strings.Common_ListSeparator, entry.Folders);
 
         // Compared against the name actually shown above it, not the stored one: a mod the catalog
         // never matched is already named after its folder, and repeating it says nothing.
@@ -1310,7 +1310,7 @@ public partial class ModListsViewModel : LocalizedViewModel
 
             // Named rather than counted: "12 versions updated" is not something anybody can check,
             // and the whole point of the button is to be able to see what it decided.
-            var named = string.Join(", ", result.Changed
+            var named = string.Join(Strings.Common_ListSeparator, result.Changed
                 .Take(5)
                 .Select(c => Text(
                     Strings.ModLists_VersionChangeEntryFormat,

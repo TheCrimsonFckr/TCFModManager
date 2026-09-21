@@ -1,4 +1,5 @@
 using System.Windows;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using Wpf.Ui.Controls;
 
@@ -12,7 +13,10 @@ public sealed class ModListVersionChangeRow(ModListVersionChange change)
     public string Name { get; } = change.Target.Name;
 
     public string Detail { get; } =
-        $"Wanted {change.Wanted} - newest published is {change.Available.Version ?? "unknown"}";
+        LocalizationService.Text(
+            Strings.ModLists_VersionChangeRowFormat,
+            change.Wanted,
+            change.Available.Version ?? Strings.Common_Unknown);
 
     // Ticked by default: the substitution is the useful answer, and leaving every box empty would
     // turn "asking" into busywork. Unticking one skips that mod rather than installing something
@@ -29,6 +33,9 @@ public sealed class ModListVersionChangeRow(ModListVersionChange change)
 //
 public partial class ModListVersionChangeWindow : FluentWindow
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     private readonly List<ModListVersionChangeRow> _rows;
 
     public ModListVersionChangeWindow(IReadOnlyList<ModListVersionChange> changes)
@@ -37,8 +44,8 @@ public partial class ModListVersionChangeWindow : FluentWindow
         InitializeComponent();
 
         WindowTitleBar.Title = Title = _rows.Count == 1
-            ? $"{_rows[0].Name}'s version is no longer published"
-            : $"{_rows.Count} versions are no longer published";
+            ? Text(Strings.ModLists_VersionChangeTitleOneFormat, _rows[0].Name)
+            : Text(Strings.ModLists_VersionChangeTitleManyFormat, _rows.Count);
 
         ChangesList.ItemsSource = _rows;
 

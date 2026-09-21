@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Services;
 using Wpf.Ui.Controls;
 
@@ -26,7 +27,9 @@ public sealed class ModPageLink(string name, string? url) : INotifyPropertyChang
         }
     }
 
-    public string ButtonLabel => !HasUrl ? "No page available" : IsOpened ? "Opened" : "Open page";
+    public string ButtonLabel => !HasUrl
+        ? Strings.ReadModPage_ButtonNoPage
+        : IsOpened ? Strings.ReadModPage_ButtonOpened : Strings.ReadModPage_ButtonOpen;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 }
@@ -38,6 +41,9 @@ public sealed class ModPageLink(string name, string? url) : INotifyPropertyChang
 // 
 public partial class ReadModPageConfirmationWindow : FluentWindow
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     private readonly List<ModPageLink> _links;
 
     //
@@ -66,8 +72,8 @@ public partial class ReadModPageConfirmationWindow : FluentWindow
         InitializeComponent();
 
         WindowTitleBar.Title = Title = _links.Count == 1
-            ? $"Read {_links[0].Name}'s page first"
-            : $"Read {_links.Count} mod pages first";
+            ? Text(Strings.ReadModPage_TitleOneFormat, _links[0].Name)
+            : Text(Strings.ReadModPage_TitleManyFormat, _links.Count);
 
         LinksList.ItemsSource = _links;
         foreach (var link in _links) link.PropertyChanged += (_, _) => UpdateContinueEnabled();
@@ -79,9 +85,7 @@ public partial class ReadModPageConfirmationWindow : FluentWindow
         {
             BatchBar.Visibility = Visibility.Visible;
             IntroText.Text =
-                "Same as installing manually from sp-mod.com - these mods' pages are where their authors "
-                + "put install steps, requirements and warnings. Open them a few at a time, or skip them "
-                + "and queue the lot.";
+                Strings.ReadModPage_BatchNote;
         }
 
         UpdateContinueEnabled();
@@ -134,15 +138,23 @@ public partial class ReadModPageConfirmationWindow : FluentWindow
         if (remaining > 0)
         {
             OpenBatchButton.Content = remaining > BatchSize
-                ? $"Open next {BatchSize} pages"
-                : remaining == 1 ? "Open the last page" : $"Open the last {remaining}";
+                ? Text(Strings.ReadModPage_OpenNextFormat, BatchSize)
+                : remaining == 1
+                    ? Strings.ReadModPage_OpenLastOne
+                    : Text(Strings.ReadModPage_OpenLastManyFormat, remaining);
         }
 
         BatchProgress.Text = _openingSkipped
-            ? $"Skipping {remaining} unopened page(s)."
+            ? remaining == 1
+                ? Strings.ReadModPage_SkippingOneFormat
+                : Text(Strings.ReadModPage_SkippingManyFormat, remaining)
             : remaining == 0
-                ? $"All {_links.Count} pages opened."
-                : $"{_links.Count - remaining} of {_links.Count} opened - {remaining} to go.";
+                ? Text(Strings.ReadModPage_AllOpenedFormat, _links.Count)
+                : Text(
+                    Strings.ReadModPage_ProgressFormat,
+                    _links.Count - remaining,
+                    _links.Count,
+                    remaining);
     }
 
     // Every link with a page that has not been opened yet, in list order.

@@ -4492,4 +4492,279 @@ You can turn it back on at any time.</value>
     <value>Not compatible with your installed SPT version</value>
     <comment>On a mod's version row.</comment>
   </data>
+  <data name="ModLists_AddTitleFormat" xml:space="preserve">
+    <value>Add mods to "{0}"</value>
+    <comment>Window title. {0} is the mod list's name, which the user typed.</comment>
+  </data>
+  <data name="ModLists_AddSourceInstalledFormat" xml:space="preserve">
+    <value>Installed ({0})</value>
+    <comment>A source tab. {0} is how many mods this install has.</comment>
+  </data>
+  <data name="ModLists_AddSourceCatalogFormat" xml:space="preserve">
+    <value>sp-mod.com ({0})</value>
+    <comment>A source tab. {0} is how many mods the catalog holds. sp-mod.com is a web address and stays as it is.</comment>
+  </data>
+  <data name="ModLists_AddFactAlreadyOn" xml:space="preserve">
+    <value>already on this list</value>
+    <comment>One fact under a mod in the picker, so it is lower case in English.</comment>
+  </data>
+  <data name="ModLists_AddFactAddon" xml:space="preserve">
+    <value>addon</value>
+    <comment>One fact under a mod in the picker.</comment>
+  </data>
+  <data name="ModLists_AddFactByFormat" xml:space="preserve">
+    <value>by {0}</value>
+    <comment>One fact under a mod in the picker. {0} is an author's name, which is not translated.</comment>
+  </data>
+  <data name="ModLists_AddFactInstalledNewest" xml:space="preserve">
+    <value>installed - adds at the newest published version</value>
+    <comment>One fact under a catalog mod in the picker.</comment>
+  </data>
+  <data name="ModLists_AddFactNewest" xml:space="preserve">
+    <value>newest published version</value>
+    <comment>One fact under a catalog mod in the picker.</comment>
+  </data>
+  <data name="ModLists_AddFactInstalledAsFormat" xml:space="preserve">
+    <value>installed as {0}</value>
+    <comment>One fact under an installed mod in the picker. {0} is one or more folder names, joined by Common_ListSeparator.</comment>
+  </data>
+  <data name="ModLists_AddFactVersionFormat" xml:space="preserve">
+    <value>version {0}</value>
+    <comment>One fact under an installed mod in the picker. {0} is a version number.</comment>
+  </data>
+  <data name="ModLists_AddFactVersionUnknown" xml:space="preserve">
+    <value>version not known</value>
+    <comment>One fact under an installed mod in the picker.</comment>
+  </data>
+  <data name="ModLists_AddSourceCatalogNote" xml:space="preserve">
+    <value>Mods published on sp-mod.com. Adding one only names it - applying the list is what downloads it.</value>
+  </data>
+  <data name="ModLists_AddSourceInstalledNote" xml:space="preserve">
+    <value>Mods this install has, recorded at the version you're running.</value>
+  </data>
+  <data name="ModLists_AddNothingHere" xml:space="preserve">
+    <value>Nothing to add from here.</value>
+    <comment>Shown when a source has nothing left to offer.</comment>
+  </data>
+  <data name="ModLists_AddNoMatches" xml:space="preserve">
+    <value>Nothing matches that.</value>
+    <comment>Shown when the search matches nothing.</comment>
+  </data>
+  <data name="ModLists_AddShownCatalogOneFormat" xml:space="preserve">
+    <value>1 of {0} sp-mod.com mods shown.</value>
+    <comment>{0} is how many the catalog holds. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="ModLists_AddShownCatalogManyFormat" xml:space="preserve">
+    <value>{0} of {1} sp-mod.com mods shown.</value>
+    <comment>{0} is how many match, {1} how many the catalog holds.</comment>
+  </data>
+  <data name="ModLists_AddShownInstalledOneFormat" xml:space="preserve">
+    <value>1 of {0} installed mods shown.</value>
+    <comment>{0} is how many mods this install has.</comment>
+  </data>
+  <data name="ModLists_AddShownInstalledManyFormat" xml:space="preserve">
+    <value>{0} of {1} installed mods shown.</value>
+    <comment>{0} is how many match, {1} how many mods this install has.</comment>
+  </data>
+  <data name="ModLists_AddTruncatedFormat" xml:space="preserve">
+    <value>Showing the first {0} of {1} matches - keep typing to narrow it down.</value>
+    <comment>{0} is how many are listed, {1} how many match.</comment>
+  </data>
+  <data name="ModLists_AddNonePicked" xml:space="preserve">
+    <value>Nothing picked yet.</value>
+  </data>
+  <data name="ModLists_AddPickedOne" xml:space="preserve">
+    <value>1 mod picked.</value>
+    <comment>See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="ModLists_AddPickedManyFormat" xml:space="preserve">
+    <value>{0} mods picked.</value>
+  </data>
+  <data name="ModLists_AddButton" xml:space="preserve">
+    <value>Add</value>
+    <comment>On the button, before anything is ticked.</comment>
+  </data>
+  <data name="ModLists_AddButtonCountFormat" xml:space="preserve">
+    <value>Add {0}</value>
+    <comment>On the button. {0} is how many mods are ticked.</comment>
+  </data>
+  <data name="Disable_TitleDisableOneFormat" xml:space="preserve">
+    <value>Disable {0}?</value>
+    <comment>Window title. {0} is a mod name.</comment>
+  </data>
+  <data name="Disable_TitleDisableManyFormat" xml:space="preserve">
+    <value>Disable {0} mods?</value>
+    <comment>Window title. {0} is how many mods.</comment>
+  </data>
+  <data name="Disable_TitleEnableOneFormat" xml:space="preserve">
+    <value>Enable {0}?</value>
+    <comment>Window title. {0} is a mod name.</comment>
+  </data>
+  <data name="Disable_TitleEnableManyFormat" xml:space="preserve">
+    <value>Enable {0} mods?</value>
+    <comment>Window title. {0} is how many mods.</comment>
+  </data>
+  <data name="Disable_ImpactDisableOne" xml:space="preserve">
+    <value>1 other mod depends on what you're about to disable.</value>
+    <comment>See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Disable_ImpactDisableManyFormat" xml:space="preserve">
+    <value>{0} other mods depend on what you're about to disable.</value>
+    <comment>{0} is how many mods would lose a dependency.</comment>
+  </data>
+  <data name="Disable_ImpactEnableOne" xml:space="preserve">
+    <value>1 mod this needs is still disabled.</value>
+  </data>
+  <data name="Disable_ImpactEnableManyFormat" xml:space="preserve">
+    <value>{0} mods this needs are still disabled.</value>
+    <comment>{0} is how many dependencies are still disabled.</comment>
+  </data>
+  <data name="Disable_SelectedFormat" xml:space="preserve">
+    <value>Selected: {0}</value>
+    <comment>{0} is one or more mod names, joined by Common_ListSeparator.</comment>
+  </data>
+  <data name="Disable_HeadingAffected" xml:space="preserve">
+    <value>Affected mods</value>
+    <comment>Above the list of mods that would lose a dependency.</comment>
+  </data>
+  <data name="Disable_HeadingStillDisabled" xml:space="preserve">
+    <value>Still disabled</value>
+    <comment>Above the list of dependencies that are still disabled.</comment>
+  </data>
+  <data name="Disable_ProceedDisable" xml:space="preserve">
+    <value>Disable anyway</value>
+    <comment>On the button that disables only what was selected.</comment>
+  </data>
+  <data name="Disable_ProceedEnable" xml:space="preserve">
+    <value>Enable anyway</value>
+    <comment>On the button that enables only what was selected.</comment>
+  </data>
+  <data name="Disable_CascadeDisable" xml:space="preserve">
+    <value>Disable these too</value>
+    <comment>On the button that also disables the affected mods.</comment>
+  </data>
+  <data name="Disable_CascadeEnable" xml:space="preserve">
+    <value>Enable these too</value>
+    <comment>On the button that also enables the listed dependencies.</comment>
+  </data>
+  <data name="ReadModPage_ButtonNoPage" xml:space="preserve">
+    <value>No page available</value>
+    <comment>On a mod's button, when the catalog gave no page address.</comment>
+  </data>
+  <data name="ReadModPage_ButtonOpened" xml:space="preserve">
+    <value>Opened</value>
+    <comment>On a mod's button, once its page has been opened.</comment>
+  </data>
+  <data name="ReadModPage_ButtonOpen" xml:space="preserve">
+    <value>Open page</value>
+    <comment>On a mod's button, before its page has been opened.</comment>
+  </data>
+  <data name="ReadModPage_TitleOneFormat" xml:space="preserve">
+    <value>Read {0}'s page first</value>
+    <comment>Window title. {0} is a mod name.</comment>
+  </data>
+  <data name="ReadModPage_TitleManyFormat" xml:space="preserve">
+    <value>Read {0} mod pages first</value>
+    <comment>Window title. {0} is how many mods.</comment>
+  </data>
+  <data name="ReadModPage_BatchNote" xml:space="preserve">
+    <value>Same as installing manually from sp-mod.com - these mods' pages are where their authors put install steps, requirements and warnings. Open them a few at a time, or skip them and queue the lot.</value>
+  </data>
+  <data name="ReadModPage_OpenNextFormat" xml:space="preserve">
+    <value>Open next {0} pages</value>
+    <comment>On the button. {0} is how many pages the next press opens.</comment>
+  </data>
+  <data name="ReadModPage_OpenLastOne" xml:space="preserve">
+    <value>Open the last page</value>
+    <comment>On the button, when one page is left.</comment>
+  </data>
+  <data name="ReadModPage_OpenLastManyFormat" xml:space="preserve">
+    <value>Open the last {0}</value>
+    <comment>On the button. {0} is how many pages are left.</comment>
+  </data>
+  <data name="ReadModPage_SkippingOneFormat" xml:space="preserve">
+    <value>Skipping 1 unopened page.</value>
+    <comment>See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="ReadModPage_SkippingManyFormat" xml:space="preserve">
+    <value>Skipping {0} unopened pages.</value>
+    <comment>{0} is how many pages were not opened.</comment>
+  </data>
+  <data name="ReadModPage_AllOpenedFormat" xml:space="preserve">
+    <value>All {0} pages opened.</value>
+    <comment>{0} is how many pages there were.</comment>
+  </data>
+  <data name="ReadModPage_ProgressFormat" xml:space="preserve">
+    <value>{0} of {1} opened - {2} to go.</value>
+    <comment>{0} is how many are opened, {1} how many there are, {2} how many are left.</comment>
+  </data>
+  <data name="ModLists_VersionChangeRowFormat" xml:space="preserve">
+    <value>Wanted {0} - newest published is {1}</value>
+    <comment>One row in the version-change prompt. {0} is the version the list asked for, {1} what is published now or Common_Unknown.</comment>
+  </data>
+  <data name="ModLists_VersionChangeTitleOneFormat" xml:space="preserve">
+    <value>{0}'s version is no longer published</value>
+    <comment>Window title. {0} is a mod name.</comment>
+  </data>
+  <data name="ModLists_VersionChangeTitleManyFormat" xml:space="preserve">
+    <value>{0} versions are no longer published</value>
+    <comment>Window title. {0} is how many mods are affected.</comment>
+  </data>
+  <data name="Options_HeadlessFoundFormat" xml:space="preserve">
+    <value>Found: {0}</value>
+    <comment>{0} is the path to the headless launcher that was found.</comment>
+  </data>
+  <data name="ModList_ReasonVersionNotTakenFormat" xml:space="preserve">
+    <value>version {0} is no longer published and the newer one wasn't taken</value>
+    <comment>Why a mod on a list could not be fetched. It follows the mod's name, so it is lower case in English. {0} is the version the list asked for.</comment>
+  </data>
+  <data name="ModList_ReasonNoListing" xml:space="preserve">
+    <value>no sp-mod.com listing to download from</value>
+    <comment>Why a mod on a list could not be fetched. It follows the mod's name, so it is lower case in English.</comment>
+  </data>
+  <data name="ModList_ReasonNoAddonListing" xml:space="preserve">
+    <value>no sp-mod.com addon listing to download from</value>
+    <comment>Why an addon on a list could not be fetched.</comment>
+  </data>
+  <data name="ModList_ReasonOrphanedAddonFormat" xml:space="preserve">
+    <value>it is an addon for {0}, which isn't installed and isn't on this list</value>
+    <comment>Why an addon on a list could not be fetched. {0} is the parent mod's name, or ModList_UnnamedModFormat.</comment>
+  </data>
+  <data name="ModList_ReasonNoVersions" xml:space="preserve">
+    <value>it has no published versions</value>
+    <comment>Why a mod on a list could not be fetched.</comment>
+  </data>
+  <data name="ModList_ReasonVersionGoneFormat" xml:space="preserve">
+    <value>version {0} is gone and nothing else is published</value>
+    <comment>Why a mod on a list could not be fetched. {0} is the version the list asked for.</comment>
+  </data>
+  <data name="ModList_ReasonApiFailedFormat" xml:space="preserve">
+    <value>sp-mod.com couldn't be asked about it ({0})</value>
+    <comment>Why a mod on a list could not be fetched. {0} is the underlying error, which arrives in English.</comment>
+  </data>
+  <data name="ModList_UnnamedModFormat" xml:space="preserve">
+    <value>mod {0}</value>
+    <comment>Stands in for a mod the catalog gave no name for. {0} is its numeric id.</comment>
+  </data>
+  <data name="Configs_ChipUserDataFormat" xml:space="preserve">
+    <value>Yours: {0}</value>
+    <comment>A chip naming an extra place a mod keeps files you wrote. {0} is a folder path.</comment>
+  </data>
+  <data name="Configs_ChipSettingsFormat" xml:space="preserve">
+    <value>Settings: {0}</value>
+    <comment>A chip naming an extra settings file. {0} is a file path.</comment>
+  </data>
+  <data name="Configs_ChipIgnoredFormat" xml:space="preserve">
+    <value>Ignored: {0}</value>
+    <comment>A chip naming a file that is not treated as config. {0} is a file path.</comment>
+  </data>
+  <data name="Configs_ChipUserDataToolTip" xml:space="preserve">
+    <value>Files you authored. An update leaves this folder exactly as it is, and removing the mod keeps it.</value>
+  </data>
+  <data name="Configs_ChipSettingsToolTip" xml:space="preserve">
+    <value>Treated as one of the mod's settings files, so an update carries your changes into the new version.</value>
+  </data>
+  <data name="Configs_ChipIgnoredToolTip" xml:space="preserve">
+    <value>Not treated as config at all - it isn't listed here, isn't merged, and isn't kept when the mod is removed.</value>
+  </data>
 </root>

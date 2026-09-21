@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Net;
 using System.Net.Http;
 using System.Windows;
+using TCFModManager.App.Localization;
 using TCFModManager.App.ViewModels;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -56,6 +57,9 @@ public sealed record ModListAddOptions(
 //
 public sealed class ModListService
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     //
     // Scans the install and builds the candidate list, off the UI thread - the same scan-and-match
     // pass InstalledViewModel runs, for the same reason it runs it in Task.Run.
@@ -271,7 +275,7 @@ public sealed class ModListService
         {
             failed.Add(new ModListFetchFailure(
                 change.Action.Name,
-                $"version {change.Wanted} is no longer published and the newer one wasn't taken"));
+                Text(Strings.ModList_ReasonVersionNotTakenFormat, change.Wanted)));
         }
 
         var downloads = new List<ModListDownload>(resolution.Ready);
@@ -379,7 +383,7 @@ public sealed class ModListService
         {
             if (action.ModId is not { } modId)
             {
-                unavailable.Add(new ModListFetchFailure(action.Name, "no sp-mod.com listing to download from"));
+                unavailable.Add(new ModListFetchFailure(action.Name, Strings.ModList_ReasonNoListing));
                 continue;
             }
 
@@ -389,15 +393,19 @@ public sealed class ModListService
             {
                 if (AppServices.Addons.ById(modId) is not { } addon)
                 {
-                    unavailable.Add(new ModListFetchFailure(action.Name, "no sp-mod.com addon listing to download from"));
+                    unavailable.Add(new ModListFetchFailure(
+                        action.Name, Strings.ModList_ReasonNoAddonListing));
                     continue;
                 }
 
                 if (addon.ModId is { } parentId && !parents.Contains(parentId))
                 {
-                    var parentName = catalog.GetValueOrDefault(parentId)?.Name ?? $"mod {parentId}";
+                    var parentName = catalog.GetValueOrDefault(parentId)?.Name
+                        ?? Text(Strings.ModList_UnnamedModFormat, parentId);
+
                     unavailable.Add(new ModListFetchFailure(
-                        action.Name, $"it is an addon for {parentName}, which isn't installed and isn't on this list"));
+                        action.Name,
+                        Text(Strings.ModList_ReasonOrphanedAddonFormat, parentName)));
                     continue;
                 }
 
@@ -407,7 +415,7 @@ public sealed class ModListService
             {
                 if (!catalog.TryGetValue(modId, out var mod))
                 {
-                    unavailable.Add(new ModListFetchFailure(action.Name, "no sp-mod.com listing to download from"));
+                    unavailable.Add(new ModListFetchFailure(action.Name, Strings.ModList_ReasonNoListing));
                     continue;
                 }
 
@@ -437,7 +445,9 @@ public sealed class ModListService
                 {
                     var newest = await NewestAsync(id, action.IsAddon, ct);
 
-                    if (newest is null) unavailable.Add(new ModListFetchFailure(action.Name, "it has no published versions"));
+                    if (newest is null)
+                        unavailable.Add(new ModListFetchFailure(
+                            action.Name, Strings.ModList_ReasonNoVersions));
                     else ready.Add(new ModListDownload(action, target, newest, IsSubstitute: false));
 
                     continue;
@@ -457,14 +467,16 @@ public sealed class ModListService
                 var replacement = await NewestAsync(id, action.IsAddon, ct);
 
                 if (replacement is null)
-                    unavailable.Add(new ModListFetchFailure(action.Name, $"version {wanted} is gone and nothing else is published"));
+                    unavailable.Add(new ModListFetchFailure(
+                        action.Name, Text(Strings.ModList_ReasonVersionGoneFormat, wanted)));
                 else
                     changes.Add(new ModListVersionChange(action, target, wanted, replacement));
             }
             catch (Exception ex) when (ex is SpModApiException or HttpRequestException or TaskCanceledException
                                        && !ct.IsCancellationRequested)
             {
-                unavailable.Add(new ModListFetchFailure(action.Name, $"sp-mod.com couldn't be asked about it ({ex.Message})"));
+                unavailable.Add(new ModListFetchFailure(
+                    action.Name, Text(Strings.ModList_ReasonApiFailedFormat, ex.Message)));
             }
         }
 

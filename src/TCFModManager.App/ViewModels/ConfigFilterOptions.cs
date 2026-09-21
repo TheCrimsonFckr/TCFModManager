@@ -67,20 +67,19 @@ public enum ConfigLocationKind
 //
 public sealed record ConfigLocationChip(ConfigLocationKind Kind, string Path)
 {
-    public string Label => Kind switch
-    {
-        ConfigLocationKind.UserData => $"Yours: {Path}",
-        ConfigLocationKind.Settings => $"Settings: {Path}",
-        _ => $"Ignored: {Path}",
-    };
+    public string Label => LocalizationService.Text(
+        Kind switch
+        {
+            ConfigLocationKind.UserData => Strings.Configs_ChipUserDataFormat,
+            ConfigLocationKind.Settings => Strings.Configs_ChipSettingsFormat,
+            _ => Strings.Configs_ChipIgnoredFormat,
+        },
+        Path);
 
     public string ToolTip => Kind switch
     {
-        ConfigLocationKind.UserData =>
-            "Files you authored. An update leaves this folder exactly as it is, and removing the mod keeps it.",
-        ConfigLocationKind.Settings =>
-            "Treated as one of the mod's settings files, so an update carries your changes into the new version.",
-        _ =>
-            "Not treated as config at all - it isn't listed here, isn't merged, and isn't kept when the mod is removed.",
+        ConfigLocationKind.UserData => Strings.Configs_ChipUserDataToolTip,
+        ConfigLocationKind.Settings => Strings.Configs_ChipSettingsToolTip,
+        _ => Strings.Configs_ChipIgnoredToolTip,
     };
 }
