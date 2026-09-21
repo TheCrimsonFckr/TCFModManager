@@ -435,14 +435,14 @@
                                                     Appearance="Info"
                                                     FontSize="11"
                                                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                    Content="{loc:Str Browse_BadgeFikaCompatible}"
+                                                    Content="{loc:Str Common_FlagFikaCompatible}"
                                                     Visibility="{Binding IsFikaCompatible, Converter={StaticResource TrueToVisible}}" />
                                                 <ui:Badge
                                                     Margin="0,0,6,4"
                                                     Appearance="Info"
                                                     FontSize="11"
                                                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                    Content="{loc:Str Browse_BadgeContainsAds}"
+                                                    Content="{loc:Str Common_FlagContainsAds}"
                                                     Visibility="{Binding ContainsAds, Converter={StaticResource TrueToVisible}}" />
                                             </WrapPanel>
 

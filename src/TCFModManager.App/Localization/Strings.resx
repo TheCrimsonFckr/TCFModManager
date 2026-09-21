@@ -212,13 +212,13 @@
     <value>{0:N0} endorsements</value>
     <comment>{0} is a count, never zero - a card with none hides this line. Keep the :N0.</comment>
   </data>
-  <data name="Browse_BadgeFikaCompatible" xml:space="preserve">
+  <data name="Common_FlagFikaCompatible" xml:space="preserve">
     <value>Fika compatible</value>
-    <comment>Badge on a mod card. Fika is a mod's name and stays as it is.</comment>
+    <comment>Badge on a mod card and one flag on an installed card's summary line. Fika is a mod's name and stays as it is.</comment>
   </data>
-  <data name="Browse_BadgeContainsAds" xml:space="preserve">
+  <data name="Common_FlagContainsAds" xml:space="preserve">
     <value>Contains ads</value>
-    <comment>Badge on a mod card.</comment>
+    <comment>Badge on a mod card and one flag on an installed or addon card's summary line.</comment>
   </data>
   <data name="Browse_BadgeHasDependencies" xml:space="preserve">
     <value>Has dependencies</value>
@@ -3165,5 +3165,153 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
   <data name="Browse_DetailsUnexpectedFormat" xml:space="preserve">
     <value>Unexpected error loading details for {0}: {1}</value>
     <comment>{0} is a mod name, {1} the underlying error, which arrives in English.</comment>
+  </data>
+  <data name="Common_FlagContainsAiContent" xml:space="preserve">
+    <value>Contains AI content</value>
+    <comment>One flag on an installed or addon card's summary line.</comment>
+  </data>
+  <data name="Common_FlagSeparator" xml:space="preserve">
+    <value> • </value>
+    <comment>Between the content flags on a card's summary line. Change the character if another reads better in your language.</comment>
+  </data>
+  <data name="Installed_TargetUnknown" xml:space="preserve">
+    <value>Unknown</value>
+    <comment>Which halves of the install a mod occupies, when none could be identified.</comment>
+  </data>
+  <data name="Installed_TargetClientOnly" xml:space="preserve">
+    <value>Client only</value>
+    <comment>Client, Patcher and Server are the three halves of an SPT install a mod can occupy. Every combination is its own whole phrase rather than words joined with a plus, so the order and the joining are yours.</comment>
+  </data>
+  <data name="Installed_TargetPatcherOnly" xml:space="preserve">
+    <value>Patcher only</value>
+  </data>
+  <data name="Installed_TargetServerOnly" xml:space="preserve">
+    <value>Server only</value>
+  </data>
+  <data name="Installed_TargetClientPatcher" xml:space="preserve">
+    <value>Client + Patcher</value>
+  </data>
+  <data name="Installed_TargetClientServer" xml:space="preserve">
+    <value>Client + Server</value>
+  </data>
+  <data name="Installed_TargetPatcherServer" xml:space="preserve">
+    <value>Patcher + Server</value>
+  </data>
+  <data name="Installed_TargetClientPatcherServer" xml:space="preserve">
+    <value>Client + Patcher + Server</value>
+  </data>
+  <data name="Installed_LatestAddonUnlisted" xml:space="preserve">
+    <value>unknown - this addon is no longer listed on sp-mod.com</value>
+    <comment>Shown where a latest published version would be, so it is lower case in English. sp-mod.com is a web address and stays as it is.</comment>
+  </data>
+  <data name="Installed_LatestPatcherNotListed" xml:space="preserve">
+    <value>not on sp-mod.com - patchers often ship inside another mod</value>
+    <comment>Shown where a latest published version would be, so it is lower case in English.</comment>
+  </data>
+  <data name="Installed_LatestNotFound" xml:space="preserve">
+    <value>not found on sp-mod.com</value>
+    <comment>Shown where a latest published version would be, so it is lower case in English.</comment>
+  </data>
+  <data name="Installed_AddonForFormat" xml:space="preserve">
+    <value>Addon for {0}</value>
+    <comment>{0} is the parent mod's name.</comment>
+  </data>
+  <data name="Installed_Addon" xml:space="preserve">
+    <value>Addon</value>
+    <comment>Shown in place of Installed_AddonForFormat when the parent mod's name is not known.</comment>
+  </data>
+  <data name="Installed_IncompleteMissingOneFormat" xml:space="preserve">
+    <value>Files missing - {0} isn't on disk. Reinstall it from Details and versions.</value>
+    <comment>{0} is a folder name. Details and versions is the button named by Installed_DetailsAndVersions - translate both the same way. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Installed_IncompleteMissingManyFormat" xml:space="preserve">
+    <value>Files missing - {0} aren't on disk. Reinstall it from Details and versions.</value>
+    <comment>{0} is two or more folder names, joined by Common_ListSeparator.</comment>
+  </data>
+  <data name="Installed_IncompletePartial" xml:space="preserve">
+    <value>Only partly installed - the install didn't finish. Reinstall it from Details and versions.</value>
+    <comment>Details and versions is the button named by Installed_DetailsAndVersions - translate both the same way.</comment>
+  </data>
+  <data name="Installed_Pin" xml:space="preserve">
+    <value>Pin</value>
+    <comment>Menu item on a mod card.</comment>
+  </data>
+  <data name="Installed_Unpin" xml:space="preserve">
+    <value>Unpin</value>
+    <comment>Menu item on a mod card.</comment>
+  </data>
+  <data name="Installed_PinToolTip" xml:space="preserve">
+    <value>Pin this mod so no mod list you apply ever sets it aside. For the HUD and quality-of-life mods you want kept whatever list you switch to.</value>
+  </data>
+  <data name="Installed_UnpinToolTip" xml:space="preserve">
+    <value>Unpin this mod, so a mod list you apply can set it aside again when the list leaves it out.</value>
+  </data>
+  <data name="Installed_SourceAppManaged" xml:space="preserve">
+    <value>Installed by this app - Remove deletes exactly the files it placed</value>
+    <comment>Remove is the button named by Installed_Remove - translate both the same way.</comment>
+  </data>
+  <data name="Installed_SourceManualConfirmed" xml:space="preserve">
+    <value>Installed by hand, with its version manually confirmed here</value>
+  </data>
+  <data name="Installed_SourceManual" xml:space="preserve">
+    <value>Installed by hand - Remove deletes its whole folder</value>
+    <comment>Remove is the button named by Installed_Remove - translate both the same way.</comment>
+  </data>
+  <data name="Installed_CardEnableToolTip" xml:space="preserve">
+    <value>Enable - move it back where SPT loads it from</value>
+  </data>
+  <data name="Installed_CardDisableToolTip" xml:space="preserve">
+    <value>Disable - move it to a .disabled folder, deleting nothing</value>
+    <comment>.disabled is a folder-name suffix and stays as it is.</comment>
+  </data>
+  <data name="Installed_StatusDuplicate" xml:space="preserve">
+    <value>This mod is in both an enabled and a disabled folder - use Sort out to keep one copy</value>
+    <comment>Sort out is the button named by Installed_SortOut - translate both the same way.</comment>
+  </data>
+  <data name="Installed_StatusMixed" xml:space="preserve">
+    <value>Partly disabled - some of this mod's folders are disabled and some aren't</value>
+  </data>
+  <data name="Installed_StatusUpdateFormat" xml:space="preserve">
+    <value>Update available - {0}</value>
+    <comment>{0} is a version number.</comment>
+  </data>
+  <data name="Installed_DetailParentMissingFormat" xml:space="preserve">
+    <value>{0} isn't installed, so nothing here can be checked for updates</value>
+    <comment>{0} is the parent mod's name.</comment>
+  </data>
+  <data name="Installed_DetailParentMissingUnnamed" xml:space="preserve">
+    <value>Its parent mod isn't installed, so nothing here can be checked for updates</value>
+    <comment>Shown in place of Installed_DetailParentMissingFormat when the parent mod's name is not known.</comment>
+  </data>
+  <data name="Installed_DetailParentConstraintFormat" xml:space="preserve">
+    <value>Newest published version ({0}) needs {1} {2}, you have {3}</value>
+    <comment>{0} is the addon's newest version, {1} the parent mod's name, {2} the version of it that addon requires, {3} the version of it installed.</comment>
+  </data>
+  <data name="Installed_DetailParentConstraintUnnamedFormat" xml:space="preserve">
+    <value>Newest published version ({0}) needs its parent mod {1}, you have {2}</value>
+    <comment>Shown in place of Installed_DetailParentConstraintFormat when the parent mod's name is not known.</comment>
+  </data>
+  <data name="Installed_DetailFilesReportFormat" xml:space="preserve">
+    <value>Files report {0}</value>
+    <comment>{0} is the version the mod's own files claim, where it differs from the version recorded at install.</comment>
+  </data>
+  <data name="Installed_DetailFilesReportPairFormat" xml:space="preserve">
+    <value>Files report client {0} / server {1}</value>
+    <comment>Shown when a mod's two halves claim different versions. Either may be Common_Unknown.</comment>
+  </data>
+  <data name="Installed_DetailManuallyConfirmed" xml:space="preserve">
+    <value>Manually confirmed</value>
+    <comment>The whole detail line when there is nothing else to say about the version.</comment>
+  </data>
+  <data name="Installed_DetailManuallyConfirmedFormat" xml:space="preserve">
+    <value>{0} - manually confirmed</value>
+    <comment>{0} is whichever other detail line applies.</comment>
+  </data>
+  <data name="Installed_DetailUndeterminedLatestFormat" xml:space="preserve">
+    <value>Version couldn't be determined - assuming the latest published version ({0}) is installed</value>
+    <comment>{0} is a version number.</comment>
+  </data>
+  <data name="Installed_DetailUndetermined" xml:space="preserve">
+    <value>Version couldn't be determined - assuming it's up to date</value>
   </data>
 </root>

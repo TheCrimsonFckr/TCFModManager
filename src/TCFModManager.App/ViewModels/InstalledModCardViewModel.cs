@@ -18,9 +18,40 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // disk report. See InstalledVersionDetail for the file-reported versions when they differ.
     public string? InstalledVersion { get; init; }
 
+    //
     // The versions the files themselves report, shown only when they disagree with each
     // other or with the version recorded at install time. Null when there is nothing to explain.
-    public string? InstalledVersionDetail { get; init; }
+    //
+    // Held as a key and the values it takes rather than as finished text: everything else on this
+    // card is read on every get, so composing the line when the card is built would leave it in
+    // whatever language the last scan ran in. A null value stands for a version that could not be
+    // read, which is the only thing a null means in any of these lines.
+    //
+    public (string Key, object?[] Values)? VersionDetail { get; init; }
+
+    // Wraps whatever VersionDetail says rather than replacing it, so it is carried separately.
+    public bool IsVersionManuallyConfirmed { get; init; }
+
+    public string? InstalledVersionDetail
+    {
+        get
+        {
+            var detail = VersionDetail is { } held
+                ? Text(
+                    LocalizationService.Get(held.Key),
+                    [.. held.Values.Select(v => v ?? Strings.Common_Unknown)])
+                : null;
+
+            if (!IsVersionManuallyConfirmed) return detail;
+
+            return detail is null
+                ? Strings.Installed_DetailManuallyConfirmed
+                : Text(Strings.Installed_DetailManuallyConfirmedFormat, detail);
+        }
+    }
+
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
 
     // Earliest InstalledAt across the merged entries.
     public DateTimeOffset? InstalledAt { get; init; }
@@ -47,17 +78,21 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     {
         get
         {
-            var parts = new List<string>(3);
-            if (HasPlugin) parts.Add("Client");
-            if (HasPatcher) parts.Add("Patcher");
-            if (HasServer) parts.Add("Server");
-
-            return parts.Count switch
+            //
+            // Every combination is its own whole phrase rather than the three words joined with a
+            // plus. A language can put them in another order or join them another way, and "Client
+            // only" is not "Client" with a word appended to it.
+            //
+            return (HasPlugin, HasPatcher, HasServer) switch
             {
-                0 => "Unknown",
-                1 when HasPatcher => "Patcher only",
-                1 => $"{parts[0]} only",
-                _ => string.Join(" + ", parts),
+                (true, false, false) => Strings.Installed_TargetClientOnly,
+                (false, true, false) => Strings.Installed_TargetPatcherOnly,
+                (false, false, true) => Strings.Installed_TargetServerOnly,
+                (true, true, false) => Strings.Installed_TargetClientPatcher,
+                (true, false, true) => Strings.Installed_TargetClientServer,
+                (false, true, true) => Strings.Installed_TargetPatcherServer,
+                (true, true, true) => Strings.Installed_TargetClientPatcherServer,
+                _ => Strings.Installed_TargetUnknown,
             };
         }
     }
@@ -79,10 +114,10 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     public string LatestPublishedText => (LatestPublishedVersion, ModId, HasPlugin || HasServer) switch
     {
         ({ } version, _, _) => version,
-        (null, _, _) when IsAddon => "unknown - this addon is no longer listed on sp-mod.com",
-        (null, not null, _) => "unknown",
-        (null, null, false) when HasPatcher => "not on sp-mod.com - patchers often ship inside another mod",
-        _ => "not found on sp-mod.com",
+        (null, _, _) when IsAddon => Strings.Installed_LatestAddonUnlisted,
+        (null, not null, _) => Strings.Common_Unknown,
+        (null, null, false) when HasPatcher => Strings.Installed_LatestPatcherNotListed,
+        _ => Strings.Installed_LatestNotFound,
     };
 
     // The matched sp-mod.com listing's actual display Name, often different from the installed
@@ -208,7 +243,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     // The card's "Addon for X" line, or null for an ordinary mod.
     public string? AddonSubtitle => IsAddon
-        ? ParentModName is not null ? $"Addon for {ParentModName}" : "Addon"
+        ? ParentModName is not null ? Text(Strings.Installed_AddonForFormat, ParentModName) : Strings.Installed_Addon
         : null;
 
     // True when this mod has an install record this app itself wrote, meaning Remove can delete
@@ -235,12 +270,18 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     public bool IsIncompleteInstall => MissingFolders.Count > 0 || WasPartlyInstalled;
 
+    // One whole sentence per count: the verb has to agree with how many folders are missing, and
+    // a verb spliced into a sentence cannot be translated.
     public string? IncompleteSummary => !IsIncompleteInstall
         ? null
-        : MissingFolders.Count > 0
-            ? $"Files missing - {string.Join(", ", MissingFolders)} {(MissingFolders.Count == 1 ? "isn't" : "aren't")} "
-              + "on disk. Reinstall it from Details and versions."
-            : "Only partly installed - the install didn't finish. Reinstall it from Details and versions.";
+        : MissingFolders.Count switch
+        {
+            0 => Strings.Installed_IncompletePartial,
+            1 => Text(Strings.Installed_IncompleteMissingOneFormat, MissingFolders[0]),
+            _ => Text(
+                Strings.Installed_IncompleteMissingManyFormat,
+                string.Join(Strings.Common_ListSeparator, MissingFolders)),
+        };
 
     //
     // Every scan entry merged into this card: both halves of a client+server mod, and both copies
@@ -277,13 +318,11 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(PinTooltip))]
     private bool _isPinned;
 
-    public string PinLabel => IsPinned ? "Unpin" : "Pin";
+    public string PinLabel => IsPinned ? Strings.Installed_Unpin : Strings.Installed_Pin;
 
     public string PinGlyph => IsPinned ? "PinOff24" : "Pin24";
 
-    public string PinTooltip => IsPinned
-        ? "Unpin this mod, so a mod list you apply can set it aside again when the list leaves it out."
-        : "Pin this mod so no mod list you apply ever sets it aside. For the HUD and quality-of-life mods you want kept whatever list you switch to.";
+    public string PinTooltip => IsPinned ? Strings.Installed_UnpinToolTip : Strings.Installed_PinToolTip;
 
     // True when every one of this mod's folders sits under a ".disabled" container, so SPT loads none of it.
     public bool IsDisabled => Entries.Count > 0 && Entries.All(e => e.IsDisabled);
@@ -343,7 +382,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     [ObservableProperty]
     private Guid? _groupId;
 
-    public string GroupLabel => GroupName ?? "Ungrouped";
+    public string GroupLabel => GroupName ?? Strings.Filter_Ungrouped;
 
     public bool IsGrouped => GroupName is not null;
 
@@ -353,26 +392,26 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         get
         {
             var flags = new List<string>();
-            if (IsFikaCompatible) flags.Add("Fika compatible");
-            if (ContainsAds) flags.Add("Contains ads");
-            if (ContainsAiContent) flags.Add("Contains AI content");
+            if (IsFikaCompatible) flags.Add(Strings.Common_FlagFikaCompatible);
+            if (ContainsAds) flags.Add(Strings.Common_FlagContainsAds);
+            if (ContainsAiContent) flags.Add(Strings.Common_FlagContainsAiContent);
 
-            return flags.Count == 0 ? null : string.Join(" • ", flags);
+            return flags.Count == 0 ? null : string.Join(Strings.Common_FlagSeparator, flags);
         }
     }
 
     // Where this mod's recorded version comes from, spelled out for the details view.
     public string SourceLabel => IsAppManaged
-        ? "Installed by this app - Remove deletes exactly the files it placed"
+        ? Strings.Installed_SourceAppManaged
         : IsManualOverride
-            ? "Installed by hand, with its version manually confirmed here"
-            : "Installed by hand - Remove deletes its whole folder";
+            ? Strings.Installed_SourceManualConfirmed
+            : Strings.Installed_SourceManual;
 
     public string DisableToggleGlyph => IsDisabled ? "PlugConnected24" : "PlugDisconnected24";
 
     public string DisableToggleTooltip => IsDisabled
-        ? "Enable - move it back where SPT loads it from"
-        : "Disable - move it to a .disabled folder, deleting nothing";
+        ? Strings.Installed_CardEnableToolTip
+        : Strings.Installed_CardDisableToolTip;
 
     // This mod's status, using the same vocabulary and icons as the Browse and Dependencies pages.
     // Everything here is installed by definition, so it's only ever disabled, up-to-date or outdated.
@@ -395,11 +434,11 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     public string StatusTooltip =>
         IncompleteSummary
         ?? (HasDuplicateFolders
-            ? "This mod is in both an enabled and a disabled folder - use Sort out to keep one copy"
+            ? Strings.Installed_StatusDuplicate
             : IsMixedState
-                ? "Partly disabled - some of this mod's folders are disabled and some aren't"
+                ? Strings.Installed_StatusMixed
                 : UpdateAvailable == true && !IsDisabled && LatestPublishedVersion is not null
-                    ? $"Update available - {LatestPublishedVersion}"
+                    ? Text(Strings.Installed_StatusUpdateFormat, LatestPublishedVersion)
                     : ModStatusWording.Tooltip(Status));
 
     // Groups raw scan results into one card per distinct mod and looks up each against the cached
@@ -535,29 +574,33 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         var latest = versions.FirstOrDefault(v =>
             ModVersionMatcher.IsSatisfiedBy(v.ModVersionConstraint, parentVersion) == true);
 
-        string? detail = null;
+        (string Key, object?[] Values)? detail = null;
         if (latest is null && versions.Count > 0)
         {
             var newest = versions[0];
-            detail = parentVersion is null
-                ? $"{parentName ?? "Its parent mod"} isn't installed, so nothing here can be checked for updates"
-                : $"Newest published version ({newest.Version}) needs {parentName ?? "its parent mod"} {newest.ModVersionConstraint}, you have {parentVersion}";
+            detail = (parentVersion, parentName) switch
+            {
+                (null, null) => (nameof(Strings.Installed_DetailParentMissingUnnamed), []),
+                (null, _) => (nameof(Strings.Installed_DetailParentMissingFormat), [parentName]),
+                (_, null) => (
+                    nameof(Strings.Installed_DetailParentConstraintUnnamedFormat),
+                    [newest.Version, newest.ModVersionConstraint, parentVersion]),
+                _ => (
+                    nameof(Strings.Installed_DetailParentConstraintFormat),
+                    [newest.Version, parentName, newest.ModVersionConstraint, parentVersion]),
+            };
         }
         else if (fileVersion is not null && !VersionsAreEquivalent(record.Version, fileVersion))
         {
-            detail = $"Files report {fileVersion}";
-        }
-
-        if (!record.IsAppManaged)
-        {
-            detail = detail is null ? "Manually confirmed" : $"{detail} - manually confirmed";
+            detail = (nameof(Strings.Installed_DetailFilesReportFormat), [fileVersion]);
         }
 
         return new InstalledModCardViewModel
         {
             Name = client?.Name ?? server!.Name,
             InstalledVersion = installedVersion,
-            InstalledVersionDetail = detail,
+            VersionDetail = detail,
+            IsVersionManuallyConfirmed = !record.IsAppManaged,
             InstalledAt = new[] { client?.InstalledAt, server?.InstalledAt }
                 .Where(d => d is not null).OrderBy(d => d).FirstOrDefault(),
             HasClient = client is not null,
@@ -1125,23 +1168,22 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         var fileVersion = client?.Version ?? server?.Version;
         var installedVersion = record?.Version ?? fileVersion;
 
-        string? detail = null;
+        (string Key, object?[] Values)? detail = null;
         if (client is not null && server is not null
             && !string.Equals(client.Version, server.Version, StringComparison.OrdinalIgnoreCase))
         {
-            detail = $"Files report client {client.Version ?? "unknown"} / server {server.Version ?? "unknown"}";
+            detail = (
+                nameof(Strings.Installed_DetailFilesReportPairFormat),
+                [client.Version, server.Version]);
         }
         else if (record is not null && fileVersion is not null
                  && ModVersionComparer.IsUpdateAvailable(record.Version, fileVersion) is null or false
                  && !VersionsAreEquivalent(record.Version, fileVersion))
         {
-            detail = $"Files report {fileVersion}";
+            detail = (nameof(Strings.Installed_DetailFilesReportFormat), [fileVersion]);
         }
 
-        if (record is not null && !record.IsAppManaged)
-        {
-            detail = detail is null ? "Manually confirmed" : $"{detail} - manually confirmed";
-        }
+        var manuallyConfirmed = record is not null && !record.IsAppManaged;
 
         var installedAt = new[] { client?.InstalledAt, server?.InstalledAt }
             .Where(d => d is not null)
@@ -1160,9 +1202,15 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         if (versionUndetermined)
         {
             isNewer = false;
-            detail ??= latestPublished is not null
-                ? $"Version couldn't be determined - assuming the latest published version ({latestPublished}) is installed"
-                : "Version couldn't be determined - assuming it's up to date";
+
+            // Only when nothing else has been said about the version - a manually confirmed one
+            // has already been explained, and these two would contradict it.
+            if (detail is null && !manuallyConfirmed)
+            {
+                detail = latestPublished is not null
+                    ? (nameof(Strings.Installed_DetailUndeterminedLatestFormat), [latestPublished])
+                    : (nameof(Strings.Installed_DetailUndetermined), []);
+            }
         }
         else
         {
@@ -1179,7 +1227,8 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             // Client's folder/package name wins when client and server disagree.
             Name = client?.Name ?? server!.Name,
             InstalledVersion = installedVersion,
-            InstalledVersionDetail = detail,
+            VersionDetail = detail,
+            IsVersionManuallyConfirmed = manuallyConfirmed,
             InstalledAt = installedAt,
             HasClient = client is not null,
             HasPlugin = plugin is not null,
