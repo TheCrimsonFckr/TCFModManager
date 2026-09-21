@@ -3450,4 +3450,132 @@ Whichever you pick, the version currently on disk is copied into {1} first.</val
   <data name="Configs_PathCopyFailed" xml:space="preserve">
     <value>Couldn't copy the path - something else is holding the clipboard.</value>
   </data>
+  <data name="ModUpdate_ConfigKeepMine" xml:space="preserve">
+    <value>Your config files for this mod will be left exactly as they are.</value>
+    <comment>Shown before an update, when this mod's config policy is ConfigPolicy_KeepMine.</comment>
+  </data>
+  <data name="ModUpdate_ConfigTakeNew" xml:space="preserve">
+    <value>This mod's config files will be replaced by the new version's - your copies are kept in Data\LegacyConfigs.</value>
+    <comment>Shown before an update, when this mod's config policy is ConfigPolicy_TakeNew. Data\LegacyConfigs is a folder path and stays as it is.</comment>
+  </data>
+  <data name="ModUpdate_ConfigMerge" xml:space="preserve">
+    <value>Settings you changed will be carried into the new version's config files, and your current copies kept in Data\LegacyConfigs.</value>
+    <comment>Shown before an update, when this mod's config policy is ConfigPolicy_Merge. Data\LegacyConfigs is a folder path and stays as it is.</comment>
+  </data>
+  <data name="ModUpdate_DisabledNoticeFormat" xml:space="preserve">
+    <value>{0} is disabled. Enable it on the Installed page to update or redownload it.</value>
+    <comment>{0} is a mod name. Installed is the page name - translate it as in Nav_Installed.</comment>
+  </data>
+  <data name="ModUpdate_ShowingAllVersions" xml:space="preserve">
+    <value>Showing every published version, including ones for other SPT releases.</value>
+  </data>
+  <data name="ModUpdate_HiddenOne" xml:space="preserve">
+    <value>1 version is hidden - it targets a different SPT release to the one you have.</value>
+    <comment>See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="ModUpdate_HiddenManyFormat" xml:space="preserve">
+    <value>{0} versions are hidden - they target a different SPT release to the one you have.</value>
+    <comment>{0} is how many versions are hidden.</comment>
+  </data>
+  <data name="ModUpdate_NotMatchedFormat" xml:space="preserve">
+    <value>{0} isn't matched to a sp-mod.com listing, so there's nothing to check for updates against.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="ModUpdate_NoVersionsFormat" xml:space="preserve">
+    <value>{0} has no published versions on sp-mod.com.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="ModUpdate_AddonUnlistedFormat" xml:space="preserve">
+    <value>{0} is no longer listed on sp-mod.com, so there's nothing to check for updates against.</value>
+    <comment>{0} is an addon name.</comment>
+  </data>
+  <data name="ModUpdate_ParentRequirementFormat" xml:space="preserve">
+    <value>{0} {1}</value>
+    <comment>On an addon's version row: which version of its parent mod that version needs. {0} is the parent mod's name, {1} a version constraint like "&gt;= 1.2". Only the spacing between them is yours.</comment>
+  </data>
+  <data name="ModUpdate_ParentFallback" xml:space="preserve">
+    <value>its parent mod</value>
+    <comment>Stands in for a parent mod whose name is not known. It appears mid-sentence, so it is lower case in English.</comment>
+  </data>
+  <data name="ModUpdate_ParentNotInstalledFormat" xml:space="preserve">
+    <value>{0} isn't installed, so none of these versions can be checked for fit.</value>
+    <comment>{0} is the parent mod's name.</comment>
+  </data>
+  <data name="ModUpdate_ParentNotInstalledUnnamed" xml:space="preserve">
+    <value>This addon's parent mod isn't installed, so none of these versions can be checked for fit.</value>
+    <comment>Shown in place of ModUpdate_ParentNotInstalledFormat when the parent mod's name is not known.</comment>
+  </data>
+  <data name="ModUpdate_DowngradeTitleFormat" xml:space="preserve">
+    <value>Downgrade {0} to {1}?</value>
+    <comment>{0} is a mod name, {1} the version being installed. Dialog title.</comment>
+  </data>
+  <data name="ModUpdate_DowngradeBodyFormat" xml:space="preserve">
+    <value>You have {0} installed, and this will replace it with {1}.
+
+Replacing the files is the easy half. What this app cannot undo is anything the newer version has already written - its own config files, and any changes it made to your SPT profile. An older build may not read those back, and some mods change their data format between versions, which can leave a profile the older version refuses to load.
+
+Back up your profile before continuing if it matters to you.</value>
+    <comment>{0} is the installed version, {1} the older version being installed over it.</comment>
+  </data>
+  <data name="ModUpdate_ANewerVersion" xml:space="preserve">
+    <value>a newer version</value>
+    <comment>Stands in for an installed version the app could not determine. It appears mid-sentence in ModUpdate_DowngradeBodyFormat, so it is lower case in English.</comment>
+  </data>
+  <data name="ModUpdate_DowngradeCancelled" xml:space="preserve">
+    <value>Downgrade cancelled.</value>
+  </data>
+  <data name="ModUpdate_NotInCatalogFormat" xml:space="preserve">
+    <value>Couldn't find {0} in the cached catalog - try Rescan.</value>
+    <comment>{0} is a mod name. Rescan is the button named by Common_Rescan - translate both the same way.</comment>
+  </data>
+  <data name="ModUpdate_HandInstalledUpdateTitleFormat" xml:space="preserve">
+    <value>Update {0}?</value>
+    <comment>{0} is a mod name. Dialog title.</comment>
+  </data>
+  <data name="ModUpdate_HandInstalledRedownloadTitleFormat" xml:space="preserve">
+    <value>Redownload {0}?</value>
+    <comment>{0} is a mod name. Dialog title.</comment>
+  </data>
+  <data name="ModUpdate_HandInstalledDowngradeTitleFormat" xml:space="preserve">
+    <value>Downgrade {0}?</value>
+    <comment>{0} is a mod name. Dialog title.</comment>
+  </data>
+  <data name="ModUpdate_HandInstalledUpdateBody" xml:space="preserve">
+    <value>This mod wasn't installed through this app, so there's no record of exactly which files its current version placed - updating installs the selected version's files on top of what's already there rather than cleanly removing the old version first. You may end up with leftover files from the old version.</value>
+    <comment>One whole paragraph per action rather than one with the verb dropped into it. The app used to build "updating" from the button's label by English spelling rules, which no other language follows.</comment>
+  </data>
+  <data name="ModUpdate_HandInstalledRedownloadBody" xml:space="preserve">
+    <value>This mod wasn't installed through this app, so there's no record of exactly which files its current version placed - redownloading installs the selected version's files on top of what's already there rather than cleanly removing the old version first. You may end up with leftover files from the old version.</value>
+  </data>
+  <data name="ModUpdate_HandInstalledDowngradeBody" xml:space="preserve">
+    <value>This mod wasn't installed through this app, so there's no record of exactly which files its current version placed - downgrading installs the selected version's files on top of what's already there rather than cleanly removing the old version first. You may end up with leftover files from the old version.</value>
+  </data>
+  <data name="ModUpdate_UpdateCancelledFormat" xml:space="preserve">
+    <value>Update cancelled - {0}'s page wasn't confirmed as read.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="ModUpdate_RedownloadCancelledFormat" xml:space="preserve">
+    <value>Redownload cancelled - {0}'s page wasn't confirmed as read.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="ModUpdate_DowngradeCancelledUnreadFormat" xml:space="preserve">
+    <value>Downgrade cancelled - {0}'s page wasn't confirmed as read.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="ModUpdate_QueuedFormat" xml:space="preserve">
+    <value>Queued {0} {1} - see the Downloads page for progress.</value>
+    <comment>{0} is a mod name, {1} its version. Downloads is the page name - translate it as in Nav_Downloads.</comment>
+  </data>
+  <data name="ModUpdate_RecordedFormat" xml:space="preserve">
+    <value>Recorded {0} {1} as installed.</value>
+    <comment>{0} is a mod name, {1} a version.</comment>
+  </data>
+  <data name="ModUpdate_MarkedUpToDateFormat" xml:space="preserve">
+    <value>Marked {0} up to date ({1}).</value>
+    <comment>{0} is a mod name, {1} the newest published version.</comment>
+  </data>
+  <data name="ModUpdate_ClearedOverrideFormat" xml:space="preserve">
+    <value>Cleared the manual override for {0} - it'll go back to auto-detecting from the files on disk.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
 </root>

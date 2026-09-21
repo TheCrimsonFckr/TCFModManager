@@ -16,6 +16,9 @@ namespace TCFModManager.App.ViewModels;
 // Backs ModUpdateContentDialog, showing mod details and letting the user pick a published version to install. Fetches the full version history for the installed mod.
 public partial class ModUpdateDialogViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     private readonly SpModApiClient _spModApi = AppServices.SpModApi;
     private readonly InstalledModCardViewModel _mod;
 
@@ -51,9 +54,9 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
 
             return policy switch
             {
-                ModConfigPolicy.KeepMine => "Your config files for this mod will be left exactly as they are.",
-                ModConfigPolicy.TakeNew => "This mod's config files will be replaced by the new version's - your copies are kept in Data\\LegacyConfigs.",
-                _ => "Settings you changed will be carried into the new version's config files, and your current copies kept in Data\\LegacyConfigs.",
+                ModConfigPolicy.KeepMine => Strings.ModUpdate_ConfigKeepMine,
+                ModConfigPolicy.TakeNew => Strings.ModUpdate_ConfigTakeNew,
+                _ => Strings.ModUpdate_ConfigMerge,
             };
         }
     }
@@ -69,8 +72,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     //
     public bool IsModDisabled => _mod.IsDisabled;
 
-    public string DisabledNotice =>
-        $"{_mod.DisplayTitle} is disabled. Enable it on the Installed page to update or redownload it.";
+    public string DisabledNotice => Text(Strings.ModUpdate_DisabledNoticeFormat, _mod.DisplayTitle);
 
     //
     // Which button is shown is decided by the SELECTED version against the installed one, not by
@@ -127,9 +129,9 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
 
     public string HiddenVersionsNotice => HiddenVersionCount switch
     {
-        0 => "Showing every published version, including ones for other SPT releases.",
-        1 => "1 version is hidden - it targets a different SPT release to the one you have.",
-        _ => $"{HiddenVersionCount} versions are hidden - they target a different SPT release to the one you have.",
+        0 => Strings.ModUpdate_ShowingAllVersions,
+        1 => Strings.ModUpdate_HiddenOne,
+        _ => Text(Strings.ModUpdate_HiddenManyFormat, HiddenVersionCount),
     };
 
     partial void OnShowIncompatibleVersionsChanged(bool value) => RepopulateVersions();
@@ -182,7 +184,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     {
         if (_mod.ModId is not { } modId)
         {
-            StatusMessage = $"{_mod.DisplayTitle} isn't matched to a sp-mod.com listing, so there's nothing to check for updates against.";
+            StatusMessage = Text(Strings.ModUpdate_NotMatchedFormat, _mod.DisplayTitle);
             IsLoading = false;
             return;
         }
@@ -229,7 +231,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
             MarkUpToDateCommand.NotifyCanExecuteChanged();
 
             if (Versions.Count == 0)
-                StatusMessage = $"{_mod.DisplayTitle} has no published versions on sp-mod.com.";
+                StatusMessage = Text(Strings.ModUpdate_NoVersionsFormat, _mod.DisplayTitle);
 
             await Addons.LoadAsync(modId, _catalogMod?.Name ?? _mod.DisplayTitle, _mod.InstalledVersion);
         }
@@ -273,12 +275,12 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
 
             if (_catalogAddon is null)
             {
-                StatusMessage = $"{_mod.DisplayTitle} is no longer listed on sp-mod.com, so there's nothing to check for updates against.";
+                StatusMessage = Text(Strings.ModUpdate_AddonUnlistedFormat, _mod.DisplayTitle);
                 return;
             }
 
             var parentVersion = _mod.ParentInstalledVersion;
-            var parentName = _mod.ParentModName ?? "its parent mod";
+            var parentName = _mod.ParentModName ?? Strings.ModUpdate_ParentFallback;
 
             var ordered = (_catalogAddon.Versions ?? [])
                 .OrderByDescending(v => v.PublishedAt ?? DateTimeOffset.MinValue)
@@ -302,7 +304,10 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
                     IsInstalled = _mod.InstalledVersion is not null
                         && string.Equals(v.Version, _mod.InstalledVersion, StringComparison.OrdinalIgnoreCase),
                     IsCompatible = ModVersionMatcher.IsSatisfiedBy(v.ModVersionConstraint, parentVersion),
-                    ParentRequirement = $"{parentName} {v.ModVersionConstraint}",
+                    ParentRequirement = Text(
+                        Strings.ModUpdate_ParentRequirementFormat,
+                        parentName,
+                        v.ModVersionConstraint),
                 });
             }
 
@@ -312,9 +317,11 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
             MarkUpToDateCommand.NotifyCanExecuteChanged();
 
             if (Versions.Count == 0)
-                StatusMessage = $"{_mod.DisplayTitle} has no published versions on sp-mod.com.";
+                StatusMessage = Text(Strings.ModUpdate_NoVersionsFormat, _mod.DisplayTitle);
             else if (string.IsNullOrWhiteSpace(parentVersion))
-                StatusMessage = $"{_mod.ParentModName ?? "This addon's parent mod"} isn't installed, so none of these versions can be checked for fit.";
+                StatusMessage = _mod.ParentModName is { } known
+                    ? Text(Strings.ModUpdate_ParentNotInstalledFormat, known)
+                    : Strings.ModUpdate_ParentNotInstalledUnnamed;
         }
         finally
         {
@@ -326,13 +333,13 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
 
     // Queues the currently selected version for download and install.
     [RelayCommand(CanExecute = nameof(CanUpdate))]
-    private void Update() => EnqueueSelectedVersion("Update");
+    private void Update() => EnqueueSelectedVersion(ModUpdateAction.Update);
 
     // Re-queues the currently selected version (defaulting to whatever's already installed, when
     // there's no newer one) for a fresh download and reinstall. Shown in Update's place once the
     // mod is up to date, e.g. to recover from corrupted or hand-edited files.
     [RelayCommand(CanExecute = nameof(CanUpdate))]
-    private void Redownload() => EnqueueSelectedVersion("Redownload");
+    private void Redownload() => EnqueueSelectedVersion(ModUpdateAction.Redownload);
 
     //
     // Installs an older version over a newer one. Confirmed first, and separately from the
@@ -346,30 +353,30 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
         if (SelectedVersion is not { } selected) return;
 
         if (!Confirm(
-                $"Downgrade {_mod.DisplayTitle} to {selected.VersionText}?",
-                $"You have {InstalledVersionText ?? "a newer version"} installed, and this will replace it with "
-                + $"{selected.VersionText}.\n\n"
-                + "Replacing the files is the easy half. What this app cannot undo is anything the newer version "
-                + "has already written - its own config files, and any changes it made to your SPT profile. An "
-                + "older build may not read those back, and some mods change their data format between versions, "
-                + "which can leave a profile the older version refuses to load.\n\n"
-                + "Back up your profile before continuing if it matters to you."))
+                Text(Strings.ModUpdate_DowngradeTitleFormat, _mod.DisplayTitle, selected.VersionText),
+                Text(
+                    Strings.ModUpdate_DowngradeBodyFormat,
+                    InstalledVersionText ?? Strings.ModUpdate_ANewerVersion,
+                    selected.VersionText)))
         {
-            StatusMessage = "Downgrade cancelled.";
+            StatusMessage = Strings.ModUpdate_DowngradeCancelled;
             return;
         }
 
-        EnqueueSelectedVersion("Downgrade");
+        EnqueueSelectedVersion(ModUpdateAction.Downgrade);
     }
 
     //
-    // "Update" -> "updating", not "updateing". The verb is reused in this sentence, and a silent
-    // trailing "e" made the old wording wrong for two of the three buttons.
+    // Which of the three buttons asked. The sentences below name the action in the middle of a
+    // paragraph, and the app used to build that word from the button's label by English spelling
+    // rules - "Update" to "updating", not "updateing". No other language spells its verbs that way,
+    // so each action carries its own whole paragraph instead.
     //
-    private static string Gerund(string verb)
+    private enum ModUpdateAction
     {
-        var lower = verb.ToLowerInvariant();
-        return lower.EndsWith('e') ? lower[..^1] + "ing" : lower + "ing";
+        Update,
+        Redownload,
+        Downgrade,
     }
 
     //
@@ -383,7 +390,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     //
     public bool MadeChanges { get; private set; }
 
-    private void EnqueueSelectedVersion(string verb)
+    private void EnqueueSelectedVersion(ModUpdateAction action)
     {
         if (SelectedVersion is null) return;
 
@@ -400,15 +407,25 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
 
         if (target is null)
         {
-            StatusMessage = $"Couldn't find {_mod.DisplayTitle} in the cached catalog - try Rescan.";
+            StatusMessage = Text(Strings.ModUpdate_NotInCatalogFormat, _mod.DisplayTitle);
             return;
         }
 
         if (!_mod.IsAppManaged && !Confirm(
-                $"{verb} {_mod.DisplayTitle}?",
-                "This mod wasn't installed through this app, so there's no record of exactly which files its current " +
-                $"version placed - {Gerund(verb)} installs the selected version's files on top of what's already there rather " +
-                "than cleanly removing the old version first. You may end up with leftover files from the old version."))
+                Text(
+                    action switch
+                    {
+                        ModUpdateAction.Redownload => Strings.ModUpdate_HandInstalledRedownloadTitleFormat,
+                        ModUpdateAction.Downgrade => Strings.ModUpdate_HandInstalledDowngradeTitleFormat,
+                        _ => Strings.ModUpdate_HandInstalledUpdateTitleFormat,
+                    },
+                    _mod.DisplayTitle),
+                action switch
+                {
+                    ModUpdateAction.Redownload => Strings.ModUpdate_HandInstalledRedownloadBody,
+                    ModUpdateAction.Downgrade => Strings.ModUpdate_HandInstalledDowngradeBody,
+                    _ => Strings.ModUpdate_HandInstalledUpdateBody,
+                }))
         {
             return;
         }
@@ -416,7 +433,14 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
         // Require the mod's page to be confirmed as read before installing.
         if (!ReadModPageConfirmationWindow.Confirm(_mod.DisplayTitle, ModPageUrl))
         {
-            StatusMessage = $"{verb} cancelled - {_mod.DisplayTitle}'s page wasn't confirmed as read.";
+            StatusMessage = Text(
+                action switch
+                {
+                    ModUpdateAction.Redownload => Strings.ModUpdate_RedownloadCancelledFormat,
+                    ModUpdateAction.Downgrade => Strings.ModUpdate_DowngradeCancelledUnreadFormat,
+                    _ => Strings.ModUpdate_UpdateCancelledFormat,
+                },
+                _mod.DisplayTitle);
             return;
         }
 
@@ -424,7 +448,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
         AppServices.DownloadQueue.Enqueue(
             target, selectedVersion.VersionText, installPath, () => Task.FromResult<ModVersion?>(selectedVersion.Raw),
             totalBytes: selectedVersion.Raw.ContentLength);
-        StatusMessage = $"Queued {_mod.DisplayTitle} {selectedVersion.VersionText} - see the Downloads page for progress.";
+        StatusMessage = Text(Strings.ModUpdate_QueuedFormat, _mod.DisplayTitle, selectedVersion.VersionText);
         MadeChanges = true;
     }
 
@@ -450,7 +474,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
         if (SelectedVersion is not { } selected) return;
 
         ApplyManualVersion(selected.VersionText, selected.Raw.Id);
-        StatusMessage = $"Recorded {_mod.DisplayTitle} {selected.VersionText} as installed.";
+        StatusMessage = Text(Strings.ModUpdate_RecordedFormat, _mod.DisplayTitle, selected.VersionText);
     }
 
     private bool CanMarkUpToDate() => CanManageVersion && Versions.Count > 0;
@@ -464,7 +488,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
         if (latest is null) return;
 
         ApplyManualVersion(latest.VersionText, latest.Raw.Id);
-        StatusMessage = $"Marked {_mod.DisplayTitle} up to date ({latest.VersionText}).";
+        StatusMessage = Text(Strings.ModUpdate_MarkedUpToDateFormat, _mod.DisplayTitle, latest.VersionText);
     }
 
     private bool CanSetCustomVersion() => CanManageVersion && !string.IsNullOrWhiteSpace(CustomVersionText);
@@ -476,7 +500,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     {
         var version = CustomVersionText.Trim();
         ApplyManualVersion(version, versionId: null);
-        StatusMessage = $"Recorded {_mod.DisplayTitle} {version} as installed.";
+        StatusMessage = Text(Strings.ModUpdate_RecordedFormat, _mod.DisplayTitle, version);
         CustomVersionText = string.Empty;
     }
 
@@ -518,6 +542,6 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
 
         AppServices.InstallManifest.ClearManualVersion(modId, _mod.IsAddon);
         MadeChanges = true;
-        StatusMessage = $"Cleared the manual override for {_mod.DisplayTitle} - it'll go back to auto-detecting from the files on disk.";
+        StatusMessage = Text(Strings.ModUpdate_ClearedOverrideFormat, _mod.DisplayTitle);
     }
 }
