@@ -27,6 +27,9 @@ namespace TCFModManager.App.ViewModels;
 //
 public sealed partial class ConfigsViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     private List<ConfigEntryViewModel> _all = [];
 
     // The file as it was last read from disk. Carries the write time a save is checked against and
@@ -104,7 +107,7 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
 
         var dialog = new OpenFolderDialog
         {
-            Title = $"A folder inside {modName} holding files you authored",
+            Title = Text(Strings.Configs_AddUserDataTitleFormat, modName),
             InitialDirectory = modFolder,
         };
 
@@ -112,7 +115,7 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
 
         if (Inside(modFolder, dialog.FolderName) is not { } relative)
         {
-            StatusMessage = "That folder isn't inside the mod, so it can't belong to it.";
+            StatusMessage = Strings.Configs_FolderNotInsideMod;
             return;
         }
 
@@ -120,14 +123,15 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
         var count = CountFiles(dialog.FolderName);
         if (count > ModConfigFiles.MaxUserDataFiles)
         {
-            StatusMessage =
-                $"{relative} holds {count} files. That is data rather than settings, so it hasn't been added.";
+            StatusMessage = Text(Strings.Configs_TooManyFilesFormat, relative, count);
             return;
         }
 
         var stored = _options.For(modName);
         _options.SetUserData(modName, [.. stored.UserData, relative]);
-        await AfterLocationsChangedAsync(modName, $"{relative} will be left alone by updates and rescued if you remove {modName}.");
+        await AfterLocationsChangedAsync(
+            modName,
+            Text(Strings.Configs_UserDataAddedFormat, relative, modName));
     }
 
     // A settings file the mod keeps somewhere nothing would look - SVM's Loader\loader.json.
@@ -138,22 +142,22 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
 
         var dialog = new OpenFileDialog
         {
-            Title = $"A settings file inside {modName}",
+            Title = Text(Strings.Configs_AddSettingsFileTitleFormat, modName),
             InitialDirectory = modFolder,
-            Filter = "Config files (*.json;*.jsonc;*.json5)|*.json;*.jsonc;*.json5|All files (*.*)|*.*",
+            Filter = Strings.Configs_FileFilter,
         };
 
         if (dialog.ShowDialog() != true) return;
 
         if (Inside(modFolder, dialog.FileName) is not { } relative)
         {
-            StatusMessage = "That file isn't inside the mod, so it can't belong to it.";
+            StatusMessage = Strings.Configs_FileNotInsideMod;
             return;
         }
 
         var stored = _options.For(modName);
         _options.SetSettings(modName, [.. stored.Settings, relative]);
-        await AfterLocationsChangedAsync(modName, $"{relative} will be treated as settings and carried across updates.");
+        await AfterLocationsChangedAsync(modName, Text(Strings.Configs_SettingsAddedFormat, relative));
     }
 
     // The opposite case: a file that sits in a folder called "config" and is really data.
@@ -166,7 +170,7 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
 
         var stored = _options.For(modName);
         _options.SetExclude(modName, [.. stored.Exclude, relative]);
-        await AfterLocationsChangedAsync(modName, $"{relative} is no longer treated as one of {modName}'s configs.");
+        await AfterLocationsChangedAsync(modName, Text(Strings.Configs_ExcludedFormat, relative, modName));
     }
 
     [RelayCommand]
@@ -189,7 +193,7 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
                 break;
         }
 
-        await AfterLocationsChangedAsync(modName, $"{chip.Path} is back to being judged by the usual rules.");
+        await AfterLocationsChangedAsync(modName, Text(Strings.Configs_LocationRemovedFormat, chip.Path));
     }
 
     //
@@ -268,7 +272,18 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
         if (SelectedEntry is not { CanSetPolicy: true, Entry.ModName: { } modName }) return;
 
         _options.SetPolicy(modName, value.Value);
-        StatusMessage = $"{modName}: updates will {value.Label.ToLowerInvariant()}.";
+
+        // A whole sentence per policy rather than the dropdown's own label lower-cased and dropped
+        // into one: a label is a noun phrase in English and need not be one in another language,
+        // and lower-casing a word is not a translation.
+        StatusMessage = Text(
+            value.Value switch
+            {
+                ModConfigPolicy.KeepMine => Strings.Configs_PolicyKeepMineFormat,
+                ModConfigPolicy.TakeNew => Strings.Configs_PolicyTakeNewFormat,
+                _ => Strings.Configs_PolicyMergeFormat,
+            },
+            modName);
         AppLog.Info("Configs", $"{modName} update policy set to {value.Value}");
     }
 
@@ -285,7 +300,7 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
     private bool _isBusy;
 
     [ObservableProperty]
-    private string _statusMessage = "Scanning for mod configs...";
+    private string _statusMessage = Strings.Configs_StatusScanning;
 
     [ObservableProperty]
     private string _searchText = string.Empty;
@@ -360,8 +375,8 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
         if (IsDirty && _loadedEntry is not null && !ReferenceEquals(_loadedEntry, value))
         {
             var keep = MessageBox.Show(
-                $"Discard your unsaved changes to {_loadedEntry.FileName}?",
-                "Unsaved changes",
+                Text(Strings.Configs_DiscardFormat, _loadedEntry.FileName),
+                Strings.Configs_DiscardTitle,
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question) == MessageBoxResult.No;
 
@@ -428,13 +443,18 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .Count();
 
-            StatusMessage = _all.Count == 0
-                ? "No mod configs found. Plenty of plugins only write one the first time the game runs."
-                : $"{_all.Count} config file(s) across {mods} mod(s).";
+            StatusMessage = (_all.Count, mods) switch
+            {
+                (0, _) => Strings.Configs_NoneFound,
+                (1, 1) => Strings.Configs_CountOneOne,
+                (1, _) => Text(Strings.Configs_CountOneManyFormat, mods),
+                (_, 1) => Text(Strings.Configs_CountManyOneFormat, _all.Count),
+                _ => Text(Strings.Configs_CountManyManyFormat, _all.Count, mods),
+            };
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            StatusMessage = $"Couldn't read the install: {ex.Message}";
+            StatusMessage = Text(Strings.Configs_ReadFailedFormat, ex.Message);
         }
         finally
         {
@@ -508,7 +528,7 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
             _loaded = null;
             EditorText = string.Empty;
             IsDirty = false;
-            EditorError = $"Couldn't read this file: {ex.Message}";
+            EditorError = Text(Strings.Configs_FileReadFailedFormat, ex.Message);
         }
     }
 
@@ -543,8 +563,11 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
                 _loaded = result.Saved;
                 IsDirty = false;
                 StatusMessage = result.BackupPath is null
-                    ? $"Saved {entry.FileName}."
-                    : $"Saved {entry.FileName}. The previous version is in {ModConfigStore.BackupDisplayPath}.";
+                    ? Text(Strings.Configs_SavedFormat, entry.FileName)
+                    : Text(
+                        Strings.Configs_SavedBackupFormat,
+                        entry.FileName,
+                        ModConfigStore.BackupDisplayPath);
                 break;
 
             case ModConfigSaveOutcome.Invalid:
@@ -568,12 +591,11 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
     private void HandleChangedOnDisk(ConfigEntryViewModel entry)
     {
         var answer = MessageBox.Show(
-            $"{entry.FileName} has changed on disk since you opened it here.\n\n" +
-            "Yes  -  overwrite it with what's in the editor\n" +
-            "No  -  reload it and lose your changes\n" +
-            "Cancel  -  leave everything as it is\n\n" +
-            $"Whichever you pick, the version currently on disk is copied into {ModConfigStore.BackupDisplayPath} first.",
-            "File changed on disk",
+            Text(
+                Strings.Configs_ChangedOnDiskFormat,
+                entry.FileName,
+                ModConfigStore.BackupDisplayPath),
+            Strings.Configs_ChangedOnDiskTitle,
             MessageBoxButton.YesNoCancel,
             MessageBoxImage.Warning);
 
@@ -590,7 +612,7 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
                     ModConfigStore.Backup(installPath, entry.FullPath, DateTimeOffset.Now);
 
                 Load(entry);
-                StatusMessage = $"Reloaded {entry.FileName} from disk.";
+                StatusMessage = Text(Strings.Configs_ReloadedFormat, entry.FileName);
                 break;
         }
     }
@@ -620,7 +642,7 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
         catch (Exception ex)
         {
             AppLog.Warn("Configs", $"couldn't open the folder for {SelectedEntry.FullPath}: {ex.Message}");
-            StatusMessage = "Couldn't open that folder.";
+            StatusMessage = Strings.Common_FolderOpenFailed;
         }
     }
 
@@ -632,12 +654,12 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
         try
         {
             Clipboard.SetText(SelectedEntry.FullPath);
-            StatusMessage = "Path copied.";
+            StatusMessage = Strings.Configs_PathCopied;
         }
         catch (Exception ex) when (ex is System.Runtime.InteropServices.COMException or InvalidOperationException)
         {
             // The clipboard is held by another process often enough to be worth not crashing over.
-            StatusMessage = "Couldn't copy the path - something else is holding the clipboard.";
+            StatusMessage = Strings.Configs_PathCopyFailed;
         }
     }
 
@@ -654,10 +676,14 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
             return;
         }
 
-        var running = string.Join(" and ", blockers);
+        // One whole sentence per count: "SPT.Server.exe and EscapeFromTarkov.exe is running" never
+        // agreed in English either.
+        var bepInEx = SelectedEntry?.Entry.Format == ModConfigFormat.BepInExCfg;
 
-        RunningWarning = SelectedEntry?.Entry.Format == ModConfigFormat.BepInExCfg
-            ? $"{running} is running. BepInEx writes its config files back out when the game closes, which would undo anything saved here - close it first."
-            : $"{running} is running. A server mod reads its config when the server starts, so anything saved here takes effect on the next restart.";
+        RunningWarning = Text(
+            blockers.Count == 1
+                ? bepInEx ? Strings.Configs_RunningBepInExOneFormat : Strings.Configs_RunningServerOneFormat
+                : bepInEx ? Strings.Configs_RunningBepInExManyFormat : Strings.Configs_RunningServerManyFormat,
+            TextLists.Join(blockers));
     }
 }

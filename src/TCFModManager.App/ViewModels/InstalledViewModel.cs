@@ -981,7 +981,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         catch (Exception ex)
         {
             AppLog.Warn("Installed", $"couldn't open {path}: {ex.Message}");
-            StatusMessage = Strings.Installed_FolderOpenFailed;
+            StatusMessage = Strings.Common_FolderOpenFailed;
         }
     }
 

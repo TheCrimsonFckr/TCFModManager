@@ -2594,8 +2594,9 @@ Cancel  -  don't remove anything</value>
     <value>That folder is no longer there - {0}. Rescan to pick up the change.</value>
     <comment>{0} is a folder path.</comment>
   </data>
-  <data name="Installed_FolderOpenFailed" xml:space="preserve">
+  <data name="Common_FolderOpenFailed" xml:space="preserve">
     <value>Couldn't open that folder.</value>
+    <comment>Shown when Windows refused to open a folder in Explorer. Used by the Installed and Configs pages.</comment>
   </data>
   <data name="Installed_DuplicateBodyFormat" xml:space="preserve">
     <value>{0} is in both an enabled and a disabled folder:
@@ -3313,5 +3314,140 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
   </data>
   <data name="Installed_DetailUndetermined" xml:space="preserve">
     <value>Version couldn't be determined - assuming it's up to date</value>
+  </data>
+  <data name="Configs_AddUserDataTitleFormat" xml:space="preserve">
+    <value>A folder inside {0} holding files you authored</value>
+    <comment>Title of the folder picker. {0} is a mod name.</comment>
+  </data>
+  <data name="Configs_FolderNotInsideMod" xml:space="preserve">
+    <value>That folder isn't inside the mod, so it can't belong to it.</value>
+  </data>
+  <data name="Configs_TooManyFilesFormat" xml:space="preserve">
+    <value>{0} holds {1} files. That is data rather than settings, so it hasn't been added.</value>
+    <comment>{0} is a folder path, {1} how many files it holds - always more than the allowed maximum, so never one.</comment>
+  </data>
+  <data name="Configs_UserDataAddedFormat" xml:space="preserve">
+    <value>{0} will be left alone by updates and rescued if you remove {1}.</value>
+    <comment>{0} is a folder path, {1} a mod name. Remove is the button named by Installed_Remove - translate both the same way.</comment>
+  </data>
+  <data name="Configs_AddSettingsFileTitleFormat" xml:space="preserve">
+    <value>A settings file inside {0}</value>
+    <comment>Title of the file picker. {0} is a mod name.</comment>
+  </data>
+  <data name="Configs_FileFilter" xml:space="preserve">
+    <value>Config files (*.json;*.jsonc;*.json5)|*.json;*.jsonc;*.json5|All files (*.*)|*.*</value>
+    <comment>Windows file-picker filter. Translate only the two descriptions - "Config files" and "All files". Everything else is machine-read: keep every | and the patterns between them exactly as they are, in the same order.</comment>
+  </data>
+  <data name="Configs_FileNotInsideMod" xml:space="preserve">
+    <value>That file isn't inside the mod, so it can't belong to it.</value>
+  </data>
+  <data name="Configs_SettingsAddedFormat" xml:space="preserve">
+    <value>{0} will be treated as settings and carried across updates.</value>
+    <comment>{0} is a file path.</comment>
+  </data>
+  <data name="Configs_ExcludedFormat" xml:space="preserve">
+    <value>{0} is no longer treated as one of {1}'s configs.</value>
+    <comment>{0} is a file path, {1} a mod name.</comment>
+  </data>
+  <data name="Configs_LocationRemovedFormat" xml:space="preserve">
+    <value>{0} is back to being judged by the usual rules.</value>
+    <comment>{0} is a file or folder path.</comment>
+  </data>
+  <data name="Configs_PolicyMergeFormat" xml:space="preserve">
+    <value>{0}: updates will merge your changes.</value>
+    <comment>{0} is a mod name. One whole sentence per policy rather than the dropdown's own label lower-cased and dropped in - see ConfigPolicy_Merge, which this one matches in meaning but not in wording.</comment>
+  </data>
+  <data name="Configs_PolicyKeepMineFormat" xml:space="preserve">
+    <value>{0}: updates will keep your file as it is.</value>
+    <comment>{0} is a mod name. Matches ConfigPolicy_KeepMine in meaning.</comment>
+  </data>
+  <data name="Configs_PolicyTakeNewFormat" xml:space="preserve">
+    <value>{0}: updates will take the new file.</value>
+    <comment>{0} is a mod name. Matches ConfigPolicy_TakeNew in meaning.</comment>
+  </data>
+  <data name="Configs_StatusScanning" xml:space="preserve">
+    <value>Scanning for mod configs...</value>
+  </data>
+  <data name="Configs_DiscardFormat" xml:space="preserve">
+    <value>Discard your unsaved changes to {0}?</value>
+    <comment>{0} is a file name.</comment>
+  </data>
+  <data name="Configs_DiscardTitle" xml:space="preserve">
+    <value>Unsaved changes</value>
+    <comment>Dialog title.</comment>
+  </data>
+  <data name="Configs_NoneFound" xml:space="preserve">
+    <value>No mod configs found. Plenty of plugins only write one the first time the game runs.</value>
+  </data>
+  <data name="Configs_CountOneOne" xml:space="preserve">
+    <value>1 config file across 1 mod.</value>
+    <comment>See the Many forms; these four become one plural key in S5.</comment>
+  </data>
+  <data name="Configs_CountOneManyFormat" xml:space="preserve">
+    <value>1 config file across {0} mods.</value>
+  </data>
+  <data name="Configs_CountManyOneFormat" xml:space="preserve">
+    <value>{0} config files across 1 mod.</value>
+  </data>
+  <data name="Configs_CountManyManyFormat" xml:space="preserve">
+    <value>{0} config files across {1} mods.</value>
+    <comment>{0} is how many files, {1} how many mods they belong to.</comment>
+  </data>
+  <data name="Configs_ReadFailedFormat" xml:space="preserve">
+    <value>Couldn't read the install: {0}</value>
+    <comment>{0} is the underlying error, which arrives in English from the operating system.</comment>
+  </data>
+  <data name="Configs_FileReadFailedFormat" xml:space="preserve">
+    <value>Couldn't read this file: {0}</value>
+    <comment>{0} is the underlying error, which arrives in English from the operating system.</comment>
+  </data>
+  <data name="Configs_SavedFormat" xml:space="preserve">
+    <value>Saved {0}.</value>
+    <comment>{0} is a file name.</comment>
+  </data>
+  <data name="Configs_SavedBackupFormat" xml:space="preserve">
+    <value>Saved {0}. The previous version is in {1}.</value>
+    <comment>{0} is a file name, {1} a folder path.</comment>
+  </data>
+  <data name="Configs_ChangedOnDiskFormat" xml:space="preserve">
+    <value>{0} has changed on disk since you opened it here.
+
+Yes  -  overwrite it with what's in the editor
+No  -  reload it and lose your changes
+Cancel  -  leave everything as it is
+
+Whichever you pick, the version currently on disk is copied into {1} first.</value>
+    <comment>{0} is a file name, {1} a folder path. Yes/No/Cancel are the Windows button captions and follow the operating system's language, so keep them as they appear there.</comment>
+  </data>
+  <data name="Configs_ChangedOnDiskTitle" xml:space="preserve">
+    <value>File changed on disk</value>
+    <comment>Dialog title.</comment>
+  </data>
+  <data name="Configs_ReloadedFormat" xml:space="preserve">
+    <value>Reloaded {0} from disk.</value>
+    <comment>{0} is a file name.</comment>
+  </data>
+  <data name="Configs_RunningBepInExOneFormat" xml:space="preserve">
+    <value>{0} is running. BepInEx writes its config files back out when the game closes, which would undo anything saved here - close it first.</value>
+    <comment>{0} is one process name. BepInEx is the mod loader's name and stays as it is. See the Many form; these become one plural key in S5.</comment>
+  </data>
+  <data name="Configs_RunningBepInExManyFormat" xml:space="preserve">
+    <value>{0} are running. BepInEx writes its config files back out when the game closes, which would undo anything saved here - close them first.</value>
+    <comment>{0} is two or more process names, joined by Common_ListSeparator and Common_ListPairFormat.</comment>
+  </data>
+  <data name="Configs_RunningServerOneFormat" xml:space="preserve">
+    <value>{0} is running. A server mod reads its config when the server starts, so anything saved here takes effect on the next restart.</value>
+    <comment>{0} is one process name.</comment>
+  </data>
+  <data name="Configs_RunningServerManyFormat" xml:space="preserve">
+    <value>{0} are running. A server mod reads its config when the server starts, so anything saved here takes effect on the next restart.</value>
+    <comment>{0} is two or more process names, joined by Common_ListSeparator and Common_ListPairFormat.</comment>
+  </data>
+  <data name="Configs_PathCopied" xml:space="preserve">
+    <value>Path copied.</value>
+    <comment>Shown after Copy path puts a config file's full path on the clipboard.</comment>
+  </data>
+  <data name="Configs_PathCopyFailed" xml:space="preserve">
+    <value>Couldn't copy the path - something else is holding the clipboard.</value>
   </data>
 </root>
