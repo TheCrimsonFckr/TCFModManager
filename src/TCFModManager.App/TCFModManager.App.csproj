@@ -165,6 +165,74 @@
   </ItemGroup>
 
   <!--
+    How complete each shipped translation is, printed on every build.
+
+    The failure mode of a volunteer translation is not the first translator, it is the release after
+    them: forty keys are added, fifteen reworded, and the language is quietly 88% translated with
+    nothing anywhere saying so. A missing key renders its English value, so nothing breaks and
+    nothing complains - which is exactly why it has to be counted out loud.
+
+    Nothing here fails a build. English is complete by construction and a release is never held up
+    by a translation; a language that has fallen behind ships as a partly-English app, which is the
+    resource fallback working as intended.
+
+    Silent when there is nothing to say. Today the app ships English and the pseudo-locale, so this
+    prints nothing at all - the neutral file is the baseline it would be measured against, and the
+    pseudo-locale is generated from that same file every build and has its own test.
+  -->
+  <UsingTask TaskName="ReportLanguageCoverage" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Source ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.Collections.Generic" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Linq" />
+      <Using Namespace="System.Xml.Linq" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        Func<string, HashSet<string>> read = path => new HashSet<string>(
+            XDocument.Load(path).Root.Elements("data")
+                .Select(d => (string)d.Attribute("name"))
+                .Where(n => !string.IsNullOrEmpty(n)),
+            StringComparer.Ordinal);
+
+        var english = read(Source);
+
+        // Which languages ship is answered by the neutral file alone, so a translation never holds
+        // a copy of it and its absence is not a gap.
+        english.Remove("Meta_ShippedLanguages");
+
+        var folder = Path.GetDirectoryName(Source);
+
+        foreach (var path in Directory.GetFiles(folder, "Strings.*.resx").OrderBy(p => p, StringComparer.Ordinal))
+        {
+            var tag = Path.GetFileNameWithoutExtension(path).Substring("Strings.".Length);
+
+            // Generated from Strings.resx on every build, so counting it would only ever say 100%.
+            if (tag == "qps-ploc") continue;
+
+            var translated = read(path);
+
+            var missing = english.Count(k => !translated.Contains(k));
+            var dead = translated.Count(k => !english.Contains(k));
+
+            var line = tag + ": " + (english.Count - missing) + "/" + english.Count;
+            if (missing > 0) line += ", " + missing + " missing";
+            if (dead > 0) line += ", " + dead + " no longer used";
+            if (missing == 0 && dead == 0) line += ", complete";
+
+            Log.LogMessage(MessageImportance.High, line);
+        }
+      ]]></Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="ReportLanguageCoverage" AfterTargets="Build">
+    <ReportLanguageCoverage Source="$(StringsResx)" />
+  </Target>
+
+  <!--
     The pseudo-locale. Generated on demand, never on an ordinary build:
 
         dotnet build src\TCFModManager.App -p:PseudoLocale=true
@@ -215,8 +283,10 @@
             if (name == "Meta_LanguageName") { valueElement.Value = "Pseudo (qps-ploc)"; continue; }
 
             // Which languages ship is read from the neutral file by design, so a copy here would
-            // only be a second answer to the same question.
-            if (name.StartsWith("Meta_", StringComparison.Ordinal)) { data.Remove(); continue; }
+            // only be a second answer to the same question. Every other Meta_ key is ordinary text
+            // and is mangled with the rest - the translation credit included, which is how a pseudo
+            // build shows that the credit line under the dropdown appears at all.
+            if (name == "Meta_ShippedLanguages") { data.Remove(); continue; }
 
             var source = valueElement.Value;
             var builder = new StringBuilder(source.Length * 2);

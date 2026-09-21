@@ -11,6 +11,7 @@
     <Page.Resources>
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
+        <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
     </Page.Resources>
     <StackPanel Margin="16">
         <ui:Card Padding="16" VerticalAlignment="Top">
@@ -190,6 +191,15 @@
                     DisplayMemberPath="Label"
                     ItemsSource="{Binding LanguageOptions}"
                     SelectedItem="{Binding SelectedLanguage}" />
+
+                <!-- Collapsed while the credit is empty, which is every build that ships English
+                     alone - so this row appears the first time a translation carries a name. -->
+                <TextBlock
+                    Margin="0,8,0,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="{Binding TranslationCredit}"
+                    Visibility="{Binding TranslationCredit, Converter={StaticResource NullToCollapsed}}" />
             </StackPanel>
         </ui:Card>
 

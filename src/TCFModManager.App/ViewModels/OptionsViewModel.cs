@@ -59,6 +59,15 @@ public partial class OptionsViewModel : LocalizedViewModel
     [ObservableProperty]
     private LanguageOptionItem _selectedLanguage;
 
+    //
+    // Who translated the language now being read. Empty in English, and the row is collapsed when
+    // it is empty, so nothing appears until a translation carries a name.
+    //
+    // Read fresh rather than stored: LocalizedViewModel re-raises every property when the language
+    // changes, so picking a language relabels this line along with the rest of the page.
+    //
+    public string TranslationCredit => Strings.Meta_TranslationCredit;
+
     // Turning this on is confirmed first - see the warning in OnSkipModPageConfirmationChanged.
     [ObservableProperty]
     private bool _skipModPageConfirmation;

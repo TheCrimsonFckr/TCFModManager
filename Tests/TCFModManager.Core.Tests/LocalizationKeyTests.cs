@@ -194,12 +194,7 @@ public class LocalizationKeyTests
     [Fact]
     public void Every_shipped_language_has_a_plural_rule()
     {
-        var shipped = XDocument.Load(AppSource.Resx).Root!.Elements("data")
-            .First(d => (string)d.Attribute("name")! == "Meta_ShippedLanguages")
-            .Element("value")!.Value
-            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-
-        var withoutRule = shipped
+        var withoutRule = Shipped()
             .Where(tag => !HasOwnRule(tag))
             .Order()
             .ToList();
@@ -208,6 +203,41 @@ public class LocalizationKeyTests
             withoutRule.Count == 0,
             "Shipped with no plural rule in PluralRules.For:" + Environment.NewLine + string.Join(Environment.NewLine, withoutRule));
     }
+
+    //
+    // The other half of the same pairing, and the one thing about a translation's state worth
+    // failing over. How complete a language is only ever gets reported - a release is never held up
+    // by a translation, and a language that has fallen behind renders the English value. A tag with
+    // no file at all is different: it is our mistake rather than a translator's, and it puts an
+    // entry in the Options dropdown that changes nothing when chosen.
+    //
+    [Fact]
+    public void Every_shipped_language_has_a_resource_file()
+    {
+        var missing = Shipped()
+            .Where(tag => !File.Exists(ResxFor(tag)))
+            .Order()
+            .ToList();
+
+        Assert.True(
+            missing.Count == 0,
+            "Named in Meta_ShippedLanguages with no Strings.<tag>.resx beside it (the pseudo-locale "
+            + "is generated, so build TCFModManager.App if that is the one listed):"
+            + Environment.NewLine + string.Join(Environment.NewLine, missing));
+    }
+
+    // English is the neutral file rather than a language of its own - it is what the others are
+    // translations OF, and the end of the fallback chain.
+    private static string ResxFor(string tag) =>
+        tag == "en"
+            ? AppSource.Resx
+            : Path.Combine(AppSource.ProjectDir, "Localization", $"Strings.{tag}.resx");
+
+    private static string[] Shipped() =>
+        XDocument.Load(AppSource.Resx).Root!.Elements("data")
+            .First(d => (string)d.Attribute("name")! == "Meta_ShippedLanguages")
+            .Element("value")!.Value
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
     //
     // There is no way to ask PluralRules whether a language is named in it, and adding one would be
