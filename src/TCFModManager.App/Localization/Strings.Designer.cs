@@ -997,4 +997,23 @@ internal static class Strings
     internal static string ModUpdate_RecordedFormat => LocalizationService.Get("ModUpdate_RecordedFormat");
     internal static string ModUpdate_MarkedUpToDateFormat => LocalizationService.Get("ModUpdate_MarkedUpToDateFormat");
     internal static string ModUpdate_ClearedOverrideFormat => LocalizationService.Get("ModUpdate_ClearedOverrideFormat");
+    internal static string Options_SkipGateBody => LocalizationService.Get("Options_SkipGateBody");
+    internal static string Options_SkipGateTitle => LocalizationService.Get("Options_SkipGateTitle");
+    internal static string Options_WindowRememberNote => LocalizationService.Get("Options_WindowRememberNote");
+    internal static string Options_WindowMaximisedNote => LocalizationService.Get("Options_WindowMaximisedNote");
+    internal static string Options_WindowCustomNote => LocalizationService.Get("Options_WindowCustomNote");
+    internal static string Options_WindowFullScreenNote => LocalizationService.Get("Options_WindowFullScreenNote");
+    internal static string Options_WindowSizeSavedFormat => LocalizationService.Get("Options_WindowSizeSavedFormat");
+    internal static string Options_WindowSizeRestoreFirst => LocalizationService.Get("Options_WindowSizeRestoreFirst");
+    internal static string Options_InstalledNoDefault => LocalizationService.Get("Options_InstalledNoDefault");
+    internal static string Options_InstalledHasDefault => LocalizationService.Get("Options_InstalledHasDefault");
+    internal static string Options_BrowseNoDefault => LocalizationService.Get("Options_BrowseNoDefault");
+    internal static string Options_BrowseHasDefault => LocalizationService.Get("Options_BrowseHasDefault");
+    internal static string Options_HeadlessPickerTitle => LocalizationService.Get("Options_HeadlessPickerTitle");
+    internal static string Options_HeadlessPickerFilter => LocalizationService.Get("Options_HeadlessPickerFilter");
+    internal static string Options_RoleHeadless => LocalizationService.Get("Options_RoleHeadless");
+    internal static string Options_RolePlaysAndHosts => LocalizationService.Get("Options_RolePlaysAndHosts");
+    internal static string Options_RoleNeither => LocalizationService.Get("Options_RoleNeither");
+    internal static string Options_RolePlayer => LocalizationService.Get("Options_RolePlayer");
+    internal static string Options_InstallPathPickerTitle => LocalizationService.Get("Options_InstallPathPickerTitle");
 }

@@ -3578,4 +3578,84 @@ Back up your profile before continuing if it matters to you.</value>
     <value>Cleared the manual override for {0} - it'll go back to auto-detecting from the files on disk.</value>
     <comment>{0} is a mod name.</comment>
   </data>
+  <data name="Options_SkipGateBody" xml:space="preserve">
+    <value>A mod's page is where its author puts install steps, requirements, known conflicts and warnings. Some mods won't work if you skip that, and this app has no way of telling you which ones.
+
+Turn this off and mods are downloaded and installed straight away, without showing you any of it. Knowing what a mod needs becomes yours to keep track of.
+
+You can turn it back on at any time.</value>
+    <comment>Shown when turning off the read-the-mod-page gate. Deliberately blunt - it is the one thing standing between someone and installing a mod whose page says it needs something this app cannot see.</comment>
+  </data>
+  <data name="Options_SkipGateTitle" xml:space="preserve">
+    <value>Stop asking me to read mod pages?</value>
+    <comment>Dialog title.</comment>
+  </data>
+  <data name="Options_WindowRememberNote" xml:space="preserve">
+    <value>The window will reopen wherever you leave it.</value>
+    <comment>Shown under the window startup dropdown. Matches Options_WindowRemember.</comment>
+  </data>
+  <data name="Options_WindowMaximisedNote" xml:space="preserve">
+    <value>The window will open maximised.</value>
+    <comment>Matches Options_WindowMaximised.</comment>
+  </data>
+  <data name="Options_WindowCustomNote" xml:space="preserve">
+    <value>The window will open at the size below.</value>
+    <comment>Matches Options_WindowCustom.</comment>
+  </data>
+  <data name="Options_WindowFullScreenNote" xml:space="preserve">
+    <value>The window will open full screen. F11 leaves full screen at any time.</value>
+    <comment>Matches Options_WindowFullScreen. F11 is a keyboard key and stays as it is.</comment>
+  </data>
+  <data name="Options_WindowSizeSavedFormat" xml:space="preserve">
+    <value>Saved - the window will open at {0} x {1}.</value>
+    <comment>{0} is the width in pixels, {1} the height. The x between them is yours to change.</comment>
+  </data>
+  <data name="Options_WindowSizeRestoreFirst" xml:space="preserve">
+    <value>Restore the window down from maximised or full screen first - there is no chosen size to read while it fills the screen.</value>
+    <comment>Shown when Use current size is pressed while the window is maximised or full screen.</comment>
+  </data>
+  <data name="Options_InstalledNoDefault" xml:space="preserve">
+    <value>Installed: no default saved - it opens on Cards, unfiltered, sorted by name.</value>
+    <comment>Installed is the page name - translate it as in Nav_Installed. Cards is the view named by Installed_ViewCards.</comment>
+  </data>
+  <data name="Options_InstalledHasDefault" xml:space="preserve">
+    <value>Installed: a default is saved. Clearing it takes effect the next time the app starts.</value>
+    <comment>Installed is the page name - translate it as in Nav_Installed.</comment>
+  </data>
+  <data name="Options_BrowseNoDefault" xml:space="preserve">
+    <value>Browse: no default saved - it opens sorted by newest, filtered to your installed SPT version.</value>
+    <comment>Browse is the page name - translate it as in Nav_Browse.</comment>
+  </data>
+  <data name="Options_BrowseHasDefault" xml:space="preserve">
+    <value>Browse: a default is saved. Clearing it takes effect the next time the app starts.</value>
+    <comment>Browse is the page name - translate it as in Nav_Browse.</comment>
+  </data>
+  <data name="Options_HeadlessPickerTitle" xml:space="preserve">
+    <value>Select the Fika headless launcher</value>
+    <comment>Title of the file picker. Fika is a mod's name and stays as it is.</comment>
+  </data>
+  <data name="Options_HeadlessPickerFilter" xml:space="preserve">
+    <value>Programs (*.exe)|*.exe|All files (*.*)|*.*</value>
+    <comment>Windows file-picker filter. Translate only the two descriptions - "Programs" and "All files". Everything else is machine-read: keep every | and the patterns between them exactly as they are, in the same order.</comment>
+  </data>
+  <data name="Options_RoleHeadless" xml:space="preserve">
+    <value>Dedicated headless. A mod list a server hands this machine arrives without the mods only a player would need - it still gets everything that decides how a raid goes.</value>
+    <comment>What this machine is, when it runs a headless client but nobody plays on it. A raid is a match in Escape from Tarkov.</comment>
+  </data>
+  <data name="Options_RolePlaysAndHosts" xml:space="preserve">
+    <value>Plays and hosts. A served list arrives whole, because both kinds of mod have somewhere to be useful here.</value>
+    <comment>What this machine is, when it both plays and runs a headless client.</comment>
+  </data>
+  <data name="Options_RoleNeither" xml:space="preserve">
+    <value>Neither switch is on, so this reads as an ordinary player install - the same as leaving both alone. Turn one on rather than relying on that.</value>
+    <comment>What this machine is, when both switches are off.</comment>
+  </data>
+  <data name="Options_RolePlayer" xml:space="preserve">
+    <value>An ordinary player install. A served list arrives as it always has.</value>
+    <comment>What this machine is, when somebody plays on it and it runs no headless client.</comment>
+  </data>
+  <data name="Options_InstallPathPickerTitle" xml:space="preserve">
+    <value>Select your SPT install folder (the one with EscapeFromTarkov.exe)</value>
+    <comment>Title of the folder picker. EscapeFromTarkov.exe is a file name and stays as it is.</comment>
+  </data>
 </root>

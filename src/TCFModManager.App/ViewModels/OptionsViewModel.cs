@@ -12,6 +12,9 @@ namespace TCFModManager.App.ViewModels;
 
 public partial class OptionsViewModel : LocalizedViewModel
 {
+    private static string Text(string format, params object?[] values) =>
+        LocalizationService.Text(format, values);
+
     // Suppresses the save while the dropdown is being set to what is already stored, so opening the
     // page doesn't count as choosing a theme.
     private readonly bool _loaded;
@@ -255,13 +258,8 @@ public partial class OptionsViewModel : LocalizedViewModel
     //
     private static bool ConfirmSkip() =>
         MessageBox.Show(
-            "A mod's page is where its author puts install steps, requirements, known conflicts and "
-            + "warnings. Some mods won't work if you skip that, and this app has no way of telling "
-            + "you which ones.\n\n"
-            + "Turn this off and mods are downloaded and installed straight away, without showing "
-            + "you any of it. Knowing what a mod needs becomes yours to keep track of.\n\n"
-            + "You can turn it back on at any time.",
-            "Stop asking me to read mod pages?",
+            Strings.Options_SkipGateBody,
+            Strings.Options_SkipGateTitle,
             MessageBoxButton.YesNo,
             MessageBoxImage.Warning,
             MessageBoxResult.No) == MessageBoxResult.Yes;
@@ -279,10 +277,10 @@ public partial class OptionsViewModel : LocalizedViewModel
 
         WindowSizeMessage = value.Value switch
         {
-            WindowStartupMode.Remember => "The window will reopen wherever you leave it.",
-            WindowStartupMode.Maximized => "The window will open maximised.",
-            WindowStartupMode.Custom => "The window will open at the size below.",
-            _ => "The window will open full screen. F11 leaves full screen at any time.",
+            WindowStartupMode.Remember => Strings.Options_WindowRememberNote,
+            WindowStartupMode.Maximized => Strings.Options_WindowMaximisedNote,
+            WindowStartupMode.Custom => Strings.Options_WindowCustomNote,
+            _ => Strings.Options_WindowFullScreenNote,
         };
 
         AppLog.Info("Window", $"startup mode set to {value.Value}");
@@ -310,7 +308,10 @@ public partial class OptionsViewModel : LocalizedViewModel
 
         WindowLayout.ApplyCustomSizeNow(settings.Window);
 
-        WindowSizeMessage = $"Saved - the window will open at {CustomWidthInput} x {CustomHeightInput}.";
+        WindowSizeMessage = Text(
+            Strings.Options_WindowSizeSavedFormat,
+            CustomWidthInput,
+            CustomHeightInput);
     }
 
     /// <summary>Fills the two boxes from the window as it is right now, so a size can be chosen by
@@ -320,7 +321,7 @@ public partial class OptionsViewModel : LocalizedViewModel
     {
         if (WindowLayout.CurrentSize() is not { } size)
         {
-            WindowSizeMessage = "Restore the window down from maximised or full screen first - there is no chosen size to read while it fills the screen.";
+            WindowSizeMessage = Strings.Options_WindowSizeRestoreFirst;
             return;
         }
 
@@ -370,12 +371,12 @@ public partial class OptionsViewModel : LocalizedViewModel
     private void RefreshPageDefaultDescriptions(AppSettings settings)
     {
         InstalledDefaultsDescription = settings.InstalledDefaults is null
-            ? "Installed: no default saved - it opens on Cards, unfiltered, sorted by name."
-            : "Installed: a default is saved. Clearing it takes effect the next time the app starts.";
+            ? Strings.Options_InstalledNoDefault
+            : Strings.Options_InstalledHasDefault;
 
         BrowseDefaultsDescription = settings.BrowseDefaults is null
-            ? "Browse: no default saved - it opens sorted by newest, filtered to your installed SPT version."
-            : "Browse: a default is saved. Clearing it takes effect the next time the app starts.";
+            ? Strings.Options_BrowseNoDefault
+            : Strings.Options_BrowseHasDefault;
     }
 
     //
@@ -412,8 +413,8 @@ public partial class OptionsViewModel : LocalizedViewModel
     {
         var dialog = new OpenFileDialog
         {
-            Title = "Select the Fika headless launcher",
-            Filter = "Programs (*.exe)|*.exe|All files (*.*)|*.*",
+            Title = Strings.Options_HeadlessPickerTitle,
+            Filter = Strings.Options_HeadlessPickerFilter,
             CheckFileExists = true,
         };
 
@@ -484,19 +485,10 @@ public partial class OptionsViewModel : LocalizedViewModel
     {
         InstallRoleDescription = (PlaysHere, RunsHeadlessClient) switch
         {
-            (false, true) =>
-                "Dedicated headless. A mod list a server hands this machine arrives without the mods"
-                + " only a player would need - it still gets everything that decides how a raid goes.",
-
-            (true, true) =>
-                "Plays and hosts. A served list arrives whole, because both kinds of mod have"
-                + " somewhere to be useful here.",
-
-            (false, false) =>
-                "Neither switch is on, so this reads as an ordinary player install - the same as"
-                + " leaving both alone. Turn one on rather than relying on that.",
-
-            _ => "An ordinary player install. A served list arrives as it always has.",
+            (false, true) => Strings.Options_RoleHeadless,
+            (true, true) => Strings.Options_RolePlaysAndHosts,
+            (false, false) => Strings.Options_RoleNeither,
+            _ => Strings.Options_RolePlayer,
         };
     }
 
@@ -541,7 +533,7 @@ public partial class OptionsViewModel : LocalizedViewModel
     [RelayCommand]
     private void Browse()
     {
-        var dialog = new OpenFolderDialog { Title = "Select your SPT install folder (the one with EscapeFromTarkov.exe)" };
+        var dialog = new OpenFolderDialog { Title = Strings.Options_InstallPathPickerTitle };
         if (!string.IsNullOrWhiteSpace(InstallPathInput)) dialog.InitialDirectory = InstallPathInput;
 
         if (dialog.ShowDialog() == true)
