@@ -595,9 +595,11 @@ public partial class BrowseViewModel : LocalizedViewModel
             .Where(m => !IsOn(ModAttributeFilter.HasDependencies)
                 || DependencyBadgeLoader.KnownHasDependencies(m) == true);
 
+        var installedSptVersion = AppServices.SptEnvironment.InstalledVersion;
+
         _filtered = SelectedSortOption.Value switch
         {
-            ModSortOrder.LastUpdated => matched.OrderByDescending(m => m.UpdatedAt ?? DateTimeOffset.MinValue).ToList(),
+            ModSortOrder.LastUpdated => matched.OrderByDescending(m => LastUpdatedDate(m, installedSptVersion)).ToList(),
             ModSortOrder.MostDownloaded => matched.OrderByDescending(m => m.Downloads ?? 0).ToList(),
             ModSortOrder.MostFavourited => matched.OrderByDescending(m => m.FavouritesCount ?? 0).ToList(),
             // Endorsements are new enough that only a few dozen mods have any at all and the counts
@@ -607,9 +609,10 @@ public partial class BrowseViewModel : LocalizedViewModel
                 .OrderByDescending(m => m.EndorsementsCount ?? 0)
                 .ThenByDescending(m => m.Downloads ?? 0)
                 .ToList(),
-            // Newest - by the most recent release, so a mod that shipped an update today sorts
-            // above an older mod that happened to be created more recently.
-            _ => matched.OrderByDescending(NewestReleaseDate).ToList(),
+            // Newest - by the most recent release that runs on the installed SPT, so a mod that
+            // shipped an update today sorts above an older mod that happened to be created more
+            // recently, while an update for an SPT line this install isn't on doesn't count as new.
+            _ => matched.OrderByDescending(m => NewestReleaseDate(m, installedSptVersion)).ToList(),
         };
         AppLog.Debug("Browse", $"ApplyFilter: filter/sort took {sw.ElapsedMilliseconds}ms over {AppServices.ModCache.AllMods.Count} cached mods, {_filtered.Count} matched");
 
@@ -637,10 +640,16 @@ public partial class BrowseViewModel : LocalizedViewModel
     /// release lines. Checking every cached version rather than only the newest is what keeps a mod
     /// whose latest release targets 4.1 visible under a 4.0 filter when it still has a 4.0 release.
     /// A mod with no cached version data is never hidden.</summary>
-    /// <summary>The publish date of the mod's most recent cached version, falling back to the mod's
-    /// own dates when it carries no version data.</summary>
-    private static DateTimeOffset NewestReleaseDate(Mod mod)
+    /// <summary>The publish date of the version this mod's card represents - the newest cached
+    /// version that runs on the installed SPT, or the newest overall when none of them do - falling
+    /// back to the mod's own dates when it carries no usable version data. Dating a mod by a release
+    /// that doesn't run on this install is what let a 4.1-only update sort above a mod that shipped
+    /// a usable update more recently.</summary>
+    private static DateTimeOffset NewestReleaseDate(Mod mod, string? installedSptVersion)
     {
+        if (ModCardViewModel.PickDisplayVersion(mod, installedSptVersion)?.PublishedAt is { } shown)
+            return shown;
+
         var newest = (mod.Versions ?? [])
             .Select(v => v.PublishedAt)
             .Where(d => d is not null)
@@ -648,6 +657,24 @@ public partial class BrowseViewModel : LocalizedViewModel
             .Max();
 
         return newest ?? mod.PublishedAt ?? mod.CreatedAt ?? DateTimeOffset.MinValue;
+    }
+
+    /// <summary>The date "Recently updated" sorts by. The Forge's own record date stands while the
+    /// mod's newest release is one that runs on the installed SPT - it moves for description and
+    /// metadata edits too, which is part of what this sort is for - but when the newest release
+    /// targets a line this install isn't on, that date is describing an update that can't be used
+    /// here, so the newest usable release's date is used instead.</summary>
+    private static DateTimeOffset LastUpdatedDate(Mod mod, string? installedSptVersion)
+    {
+        var newest = ModCardViewModel.LatestVersion(mod);
+
+        var newestRunsHere = newest is not null
+            && SptVersionMatcher.IsSatisfiedBy(newest.SptVersionConstraint, installedSptVersion) == true;
+
+        if (newest is null || newestRunsHere)
+            return mod.UpdatedAt ?? NewestReleaseDate(mod, installedSptVersion);
+
+        return NewestReleaseDate(mod, installedSptVersion);
     }
 
     private static bool MatchesSptVersionFilter(Mod mod, List<(int Major, int Minor)> selectedLines)
