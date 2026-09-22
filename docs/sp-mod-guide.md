@@ -517,6 +517,49 @@ It is reading as an ordinary player. **Options - What this machine is** says whe
 Grab `Data\logs\tcfmm-<date>.log` - ideally after adding the `verbose` marker file and reproducing the problem - and open an issue at [github.com/TheCrimsonFckr/TCFModManager](https://github.com/TheCrimsonFckr/TCFModManager).
 
 
+### Translating
+**Options - Language** picks the language the app's own text is read in. **System default** follows whatever display language Windows is set to.
+
+Five languages ship: English, Deutsch, Français, Italiano and Русский.
+
+#### warning
+**Four of those five are machine translations and no native speaker has checked them.** They were made so that the app is usable in your language today rather than never - the alternative was English only, waiting for a volunteer to translate 1,290 strings from nothing. Expect to find wording that is clumsy, a term that isn't what your community actually says, and the occasional sentence that is simply wrong. The language picker in Options says which language a translation came from a person and which from a machine.
+
+Mod names, descriptions, changelogs and category names come from sp-mod and stay in whatever language their author wrote them in, so the app being in your language does not put the catalog in it.
+
+#### Found something wrong? That is the useful thing
+You do not need git, an editor, or the whole file. One bad line is worth reporting on its own.
+
+Open an issue at [github.com/TheCrimsonFckr/TCFModManager](https://github.com/TheCrimsonFckr/TCFModManager) with three things:
+
+1. Which language.
+2. What it says now - a screenshot is perfect, or just the text.
+3. What it should say.
+
+That is it. A dozen of those from someone who actually speaks the language is worth more than a whole new translation, and it is how these four stop being machine output.
+
+#### Adding a language that isn't there
+Rarer, and bigger, but no tooling from here and no build environment.
+
+1. Take `src/TCFModManager.App/Localization/Strings.resx` from [the repository](https://github.com/TheCrimsonFckr/TCFModManager).
+2. Open it in **ResXResourceManager** - the [standalone build](https://github.com/dotnet/ResXResourceManager/releases), not the Visual Studio extension. It shows every language side by side in a grid, one row per string, so you can read the English and the four existing translations while you fill in yours.
+3. Add a column for your language and work down it. Most entries carry a note saying what the string is for and what each `{0}` gets replaced with.
+4. Send the `Strings.<tag>.resx` it generates back: a pull request if you use git, the file attached to an issue if you don't. Either is fine.
+
+#### warning
+Leave anything in braces exactly as it is - `{0}`, `{1}`, and the part after a colon in `{0:N0}`. Those are where a count, a name or a file path is dropped in, and the bit after the colon is what formats a number for your region. The words either side of them can move anywhere your language needs them.
+
+#### information
+You don't have to finish, and you don't have to keep up. A string you haven't translated is shown in English, so a half-done language is a part-English app rather than a broken one - send what you have. The same holds after a release adds new text: your language carries on working and only the new strings read in English until somebody gets to them.
+
+#### Things worth knowing before you start
+**Counted sentences are split by form.** "1 mod installed" and "3 mods installed" are separate entries whose keys end `_one` and `_other`. English needs two forms; Russian needs three and already has them in this file, Czech four, Arabic six. Say which your language needs when you send it - the extra forms are a small change here, and the key names were built to take them.
+
+**Two entries are not translations.** `Meta_LanguageName` is your language's name written in your language, the way the dropdown should list it - `Deutsch`, not `German`. `Meta_TranslationCredit` is yours: put your name in it and it appears under the language picker in Options.
+
+**Some English in the app is deliberate.** The diagnostic log stays English so a log file means the same thing whoever reads it, and a handful of strings the app matches on rather than displays are kept out of the file entirely.
+
+
 ### Planning
 - Mod lists / profiles - Completed
 - Mod list sharing and handling (if you have played Arma modded or Total War modded, think like that) - Completed

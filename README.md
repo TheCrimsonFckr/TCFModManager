@@ -207,6 +207,56 @@ Everything lives next to the exe, not in `%LocalAppData%`:
 Info level by default. Drop an empty file named `verbose` (no extension) next to the exe to get
 Debug-level output in the same log. Logs rotate daily as `tcfmm-<yyyyMMdd>.log`.
 
+### Translating the app
+
+**Options - Language** picks the language the app's own text is read in; **System default** follows
+the display language Windows is set to. Five languages ship: English, German, French, Italian and
+Russian.
+
+**Four of those five are machine translations that no native speaker has checked.** They exist
+because the alternative was English only until a volunteer translated 1,290 strings from nothing,
+which was not going to happen. Each one says so in its own `Meta_TranslationCredit`, shown under the
+language picker, and that line is what a human translator replaces with their name.
+
+Mod names, descriptions, changelogs and category names come from sp-mod and stay in whatever
+language their author wrote them in, so a translated app still shows an English catalog.
+
+**Reporting a bad line** is the contribution that matters and needs no tooling: open an issue with
+the language, what it says now, and what it should say. One line is worth reporting on its own.
+
+**Adding a language.** No account, no build environment - one file out of this repo and one free
+editor:
+
+1. Take `src\TCFModManager.App\Localization\Strings.resx`.
+2. Open it in [ResXResourceManager](https://github.com/dotnet/ResXResourceManager/releases) - the
+   standalone build, not the Visual Studio extension. It shows every language side by side in a
+   grid, so the English and the four existing translations are all readable while filling in a new
+   column.
+3. Add a column for the new language and fill it in. Most entries carry a comment saying what the
+   string is for and what each `{0}` is replaced with.
+4. Send the `Strings.<tag>.resx` it generates back - a pull request, or the file attached to an
+   issue.
+
+Anything in braces stays exactly as it is, including the part after a colon in `{0:N0}`, which is
+what formats a number for the reader's region. The words either side can move anywhere the language
+needs them.
+
+A translation never has to be complete. An untranslated key falls back to its English value, so a
+partial language is a part-English app rather than a blank one, and a release is never held up
+waiting for one. Every build prints each shipped language's coverage - `ru: 1220/1220, complete` -
+so drift after a release that adds strings is visible rather than silent. Coverage is counted in
+translatable units rather than raw keys, because a plural family is one thing to translate and the
+number of forms it needs is a property of the language.
+
+Two entries are not translations. `Meta_LanguageName` is the language's name written in itself, the
+way the dropdown should list it (`Deutsch`, not `German`). `Meta_TranslationCredit` is the
+translator's own line, shown under the language picker in Options and hidden when empty.
+
+Counted sentences are split into one entry per plural form. English and German need two (`_one`,
+`_other`), French two but with 0 taking the singular, Russian three (`_one`, `_few`, `_many`); the
+key schema reserves all six CLDR categories, so a language needing more is a resx change plus one
+rule in `Core\Services\PluralRules.cs` - no call site moves.
+
 ## Known limitations
 
 **What it can see**

@@ -24,9 +24,13 @@ public enum PluralCategory
 // Which category a count falls into, per language.
 //
 // .NET exposes no CLDR plural data - CultureInfo has nothing for it - so the rules are ours to
-// write. Per R3 a rule is written only for a language actually shipped; Russian is here anyway
-// because D15 asks for the machinery to be proved against a three-form language before one ships,
-// and its last-digit rule is the case a two-form language would never exercise.
+// write. Per R3 a rule is written for every language actually shipped, and a test fails if one is
+// offered in the dropdown without a rule here.
+//
+// Each shipped language gets its own arm even when it lands on a shape another already uses. German
+// and Italian could sit on English's, and the compiler would not care - but an arm is the record
+// that a language was looked at, and a list that merges them cannot be read for which ones have
+// been.
 //
 // Lives in Core rather than beside the resx for one reason: it is the part of this design that can
 // be silently wrong in a way that is expensive to fix later, and Core is what the test project can
@@ -45,7 +49,12 @@ public static class PluralRules
             // qps-Ploc reports "qps". It is English with the letters mangled, so it plurals like
             // English - and it has to, or the pseudo build stops exercising the same code paths.
             "en" or "qps" => TwoForm(n),
+
+            "de" => TwoForm(n),
+            "it" => TwoForm(n),
+            "fr" => FrenchAndFriends(n),
             "ru" or "uk" => EastSlavic(n),
+
             _ => TwoForm(n),
         };
     }
@@ -55,11 +64,23 @@ public static class PluralRules
     // including nought - is "other".
     //
     // Also the fallback for a language with no rule, because resource fallback is already handing
-    // back English values for anything untranslated. A language that needs something else must say
-    // so above; French puts 0 in the singular and would be wrong here.
+    // back English values for anything untranslated. It is a fallback and not a default worth
+    // relying on: French has the same two forms and still disagrees with this about 0 - see below.
     //
     private static PluralCategory TwoForm(int n) =>
         n == 1 ? PluralCategory.One : PluralCategory.Other;
+
+    //
+    // French, and Brazilian Portuguese if it ever ships: two forms like English, but NOUGHT TAKES
+    // THE SINGULAR - "0 mod", not "0 mods".
+    //
+    // The one line of this file that a reviewer reading English will think is a bug. It is the
+    // cheapest possible demonstration of why a language cannot inherit another's rule because the
+    // shapes look alike: French has exactly as many forms as English and still disagrees with it
+    // about a number the app shows on every empty page.
+    //
+    private static PluralCategory FrenchAndFriends(int n) =>
+        n is 0 or 1 ? PluralCategory.One : PluralCategory.Other;
 
     //
     // Russian and Ukrainian, by the last digit - except in the teens, which are all "many".

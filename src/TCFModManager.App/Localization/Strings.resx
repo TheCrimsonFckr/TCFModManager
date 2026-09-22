@@ -79,7 +79,7 @@
     <comment>Who translated this language, shown under the Options language dropdown - "Deutsch von Alex Weber", written in the translated language rather than in English. Left empty here because the app's own text is not a translation of anything; the line is hidden whenever this is empty, so a language whose translator would rather not be named simply leaves it alone.</comment>
   </data>
   <data name="Meta_ShippedLanguages" xml:space="preserve">
-    <value>en, qps-ploc</value>
+    <value>en, de, fr, it, ru, qps-ploc</value>
     <comment>Every language tag this build ships, comma separated, English first. Adding a language means dropping in Strings.&lt;tag&gt;.resx and adding its tag here - the whole of it. Read from this file only, never from a translation, so translating this key cannot change what the app offers. A tag with no resources behind it is dropped at startup, which is how qps-ploc can sit here permanently and still only appear in a build made with -p:PseudoLocale=true.</comment>
   </data>
   <data name="Options_Language_Header" xml:space="preserve">

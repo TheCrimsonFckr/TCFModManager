@@ -64,14 +64,41 @@ public class PluralRulesTests
         Assert.Equal(expected, For("qps-ploc", count));
 
     //
+    // French has exactly as many forms as English and still disagrees with it: NOUGHT TAKES THE
+    // SINGULAR. Every empty page in the app shows a zero, so getting this wrong would be wrong in
+    // the most-seen string in the language rather than an edge case.
+    //
+    [Theory]
+    [InlineData(0, PluralCategory.One)]
+    [InlineData(1, PluralCategory.One)]
+    [InlineData(2, PluralCategory.Other)]
+    [InlineData(21, PluralCategory.Other)]
+    public void French_puts_nought_in_the_singular(int count, PluralCategory expected) =>
+        Assert.Equal(expected, For("fr", count));
+
+    //
+    // German and Italian land on English's shape. Asserted rather than assumed, because they are
+    // written as their own arms and an arm can be edited.
+    //
+    [Theory]
+    [InlineData("de", 0, PluralCategory.Other)]
+    [InlineData("de", 1, PluralCategory.One)]
+    [InlineData("de", 4, PluralCategory.Other)]
+    [InlineData("it", 0, PluralCategory.Other)]
+    [InlineData("it", 1, PluralCategory.One)]
+    [InlineData("it", 4, PluralCategory.Other)]
+    public void German_and_italian_split_at_one(string tag, int count, PluralCategory expected) =>
+        Assert.Equal(expected, For(tag, count));
+
+    //
     // A language nobody has written a rule for falls back to the two-form shape, which is the same
     // shape as the English values resource fallback is already handing it.
     //
     [Fact]
     public void A_language_with_no_rule_uses_the_two_form_shape()
     {
-        Assert.Equal(PluralCategory.One, For("de", 1));
-        Assert.Equal(PluralCategory.Other, For("de", 4));
+        Assert.Equal(PluralCategory.One, For("nl", 1));
+        Assert.Equal(PluralCategory.Other, For("nl", 4));
     }
 
     //

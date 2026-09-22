@@ -66,8 +66,10 @@
     9.0.318: the SDK route fails with "The name 'Strings' does not exist in the current context" in
     the _wpftmp project, whichever folder it is told to generate into.
 
-    Every line is its own item deliberately: a newline written inside one would stay LF in a file
-    whose other lines are CRLF, and the committed file would then differ from itself.
+    Both generated files are written with LF endings explicitly, because the rest of the repo is LF
+    and a generator using the platform's newline writes CRLF on Windows and LF everywhere else. The
+    file then flips every time it is regenerated on the other machine - 1,302 lines changed, none of
+    them meaningfully - and shows up in git status after an ordinary build.
 
     Strings.Designer.cs is committed for a related reason. MSBuild settles which files it is
     compiling before any target runs, so a clone with nothing on disk fails its first build even
@@ -146,7 +148,9 @@
 
         sb.AppendLine("}");
 
-        var text = sb.ToString();
+        // AppendLine writes the platform's newline, and this file is committed.
+        var text = sb.ToString().Replace("\r\n", "\n");
+
         if (!System.IO.File.Exists(Destination) || System.IO.File.ReadAllText(Destination) != text)
             System.IO.File.WriteAllText(Destination, text);
       ]]></Code>
@@ -197,7 +201,24 @@
                 .Where(n => !string.IsNullOrEmpty(n)),
             StringComparer.Ordinal);
 
-        var english = read(Source);
+        var categories = new[] { "_zero", "_one", "_two", "_few", "_many", "_other" };
+
+        //
+        // A plural family is ONE thing to translate, not one per form, and which forms a language
+        // needs is a property of that language: English writes two, Russian three, Chinese one.
+        // Counting raw key names reads Russian's _few and _many as junk and its absent _other as a
+        // gap - 70 missing and 140 unused for a translation that is in fact complete.
+        //
+        Func<string, string> baseOf = key =>
+        {
+            foreach (var c in categories)
+                if (key.EndsWith(c, StringComparison.Ordinal)) return key.Substring(0, key.Length - c.Length);
+            return key;
+        };
+
+        Func<string, HashSet<string>> units = path => new HashSet<string>(read(path).Select(baseOf), StringComparer.Ordinal);
+
+        var english = units(Source);
 
         // Which languages ship is answered by the neutral file alone, so a translation never holds
         // a copy of it and its absence is not a gap.
@@ -212,15 +233,26 @@
             // Generated from Strings.resx on every build, so counting it would only ever say 100%.
             if (tag == "qps-ploc") continue;
 
-            var translated = read(path);
+            var keys = read(path);
+            var translated = new HashSet<string>(keys.Select(baseOf), StringComparer.Ordinal);
 
             var missing = english.Count(k => !translated.Contains(k));
             var dead = translated.Count(k => !english.Contains(k));
+
+            //
+            // A family with a single form is the mistake worth naming separately. A missing form is
+            // worse than a missing key: Plural() falls back to _other and then to the base key,
+            // neither of which a translation holds, so it renders the key name rather than English.
+            //
+            var lonely = keys.Where(k => baseOf(k) != k)
+                .GroupBy(baseOf)
+                .Count(g => g.Count() == 1);
 
             var line = tag + ": " + (english.Count - missing) + "/" + english.Count;
             if (missing > 0) line += ", " + missing + " missing";
             if (dead > 0) line += ", " + dead + " no longer used";
             if (missing == 0 && dead == 0) line += ", complete";
+            if (lonely > 0) line += " (" + lonely + " plural families have only one form)";
 
             Log.LogMessage(MessageImportance.High, line);
         }
@@ -313,7 +345,16 @@
             valueElement.Value = builder.ToString();
         }
 
-        doc.Save(Destination);
+        // Same reason as the accessor: LF whatever platform generated it. This file is gitignored,
+        // but it is compared against Strings.resx by a test and by hand often enough that it should
+        // not differ from itself between machines either.
+        var settings = new System.Xml.XmlWriterSettings();
+        settings.Indent = true;
+        settings.NewLineChars = "\n";
+        settings.Encoding = new System.Text.UTF8Encoding(false);
+
+        using (var writer = System.Xml.XmlWriter.Create(Destination, settings)) doc.Save(writer);
+
         Log.LogMessage(MessageImportance.High, "Pseudo-locale written to " + Destination);
       ]]></Code>
     </Task>
