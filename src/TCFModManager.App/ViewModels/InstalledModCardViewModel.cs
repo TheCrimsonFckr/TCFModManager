@@ -101,6 +101,10 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // the catalog hasn't loaded yet or nothing matched.
     public string? LatestPublishedVersion { get; init; }
 
+    // The version an update would install - the newest release that runs on the installed SPT,
+    // which is not always the newest published. Null when no update is available.
+    public string? UpdateVersion { get; init; }
+
     // The matched sp-mod.com listing's UpdatedAt. Null under the same conditions as LatestPublishedVersion.
     public DateTimeOffset? LatestUpdatedAt { get; init; }
 
@@ -462,8 +466,8 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             ? Strings.Installed_StatusDuplicate
             : IsMixedState
                 ? Strings.Installed_StatusMixed
-                : UpdateAvailable == true && !IsDisabled && LatestPublishedVersion is not null
-                    ? Text(Strings.Installed_StatusUpdateFormat, LatestPublishedVersion)
+                : UpdateAvailable == true && !IsDisabled && (UpdateVersion ?? LatestPublishedVersion) is { } target
+                    ? Text(Strings.Installed_StatusUpdateFormat, target)
                     : ModStatusWording.Tooltip(Status));
 
     // Groups raw scan results into one card per distinct mod and looks up each against the cached
@@ -1218,6 +1222,14 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         var latestVersion = match is null ? null : ModCardViewModel.LatestVersion(match);
         var latestPublished = latestVersion?.Version;
 
+        //
+        // What an update would install: the newest release that runs on this SPT - the same pick
+        // Browse's card, its sort and Update selected all use. Comparing against the newest release
+        // overall hid real updates: Task Search 1.0.1 on 4.0.13 has 1.9.1 for 4.0 and 2.0.2 for 4.1
+        // only, and with the newest being 4.1-only the card said nothing at all.
+        //
+        var updateTarget = match is null ? null : ModCardViewModel.PickDisplayVersion(match, installedSptVersion);
+
         // No installed version could be determined at all (no record, and nothing readable off the
         // files themselves) - plenty of mods never expose a usable version this way. Rather than
         // reading as an update forever, assume the latest published version is what's on disk.
@@ -1240,11 +1252,11 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         else
         {
             // A newer version alone isn't enough - it also has to target the installed SPT version.
-            isNewer = ModVersionComparer.IsUpdateAvailable(installedVersion, latestPublished);
+            isNewer = ModVersionComparer.IsUpdateAvailable(installedVersion, updateTarget?.Version);
         }
 
         var updateAvailable = isNewer == true
-            ? SptVersionMatcher.IsSatisfiedBy(latestVersion?.SptVersionConstraint, installedSptVersion)
+            ? SptVersionMatcher.IsSatisfiedBy(updateTarget?.SptVersionConstraint, installedSptVersion)
             : isNewer;
 
         return new InstalledModCardViewModel
@@ -1260,6 +1272,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             HasPatcher = patcher is not null,
             HasServer = server is not null,
             LatestPublishedVersion = latestPublished,
+            UpdateVersion = updateAvailable == true ? updateTarget?.Version : null,
             LatestUpdatedAt = match?.UpdatedAt,
             MatchedModName = match?.Name,
             Guid = match?.Guid,

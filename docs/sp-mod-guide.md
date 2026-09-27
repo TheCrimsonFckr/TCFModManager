@@ -2,6 +2,8 @@
 
 It also keeps **mod lists** - save the set you run, switch between sets, send one to a friend, or follow the list a server publishes and know what you are missing before you launch. Plus a config editor, a start button for the server and the launcher, and an optional page that reads what each installed mod actually ships.
 
+Rather install mods yourself? **Monitor mode** has the app download each mod for you to install by hand, and still keep track of what you have.
+
 WPF with Fluent Design and .NET 9
 
 The released build is entirely self-contained.
@@ -360,6 +362,33 @@ Installing and removing both refuse to start while **T***** or the SPT server is
 Before anything is queued, the app asks you to open the mod's page here on sp-mod first - same as installing manually, and it keeps mod authors' page views and instructions in the loop.
 
 
+### Monitor mode
+For when you would rather install mods yourself. Instead of installing, the app downloads each mod's archive from sp-mod into a folder you choose and leaves the installing to you. Browsing, update checks, dependencies and mod lists all keep working.
+
+**Turning it on.** In **Options - Monitor mode**, change **Install mods for me** to **Download only - I install them myself**. The **Download folder** below it is where archives go; leave it empty to use your Windows Downloads folder, wherever Windows keeps it. The app never deletes anything it saves there.
+
+**One mod the other way round.** Whichever you pick, every install button has a smaller button beside it that does the opposite for that one mod - download just this one while the app installs everything else, or have the app install just this one while you download the rest. It is on Browse cards, in the update dialog, on addon rows and on the Dependencies page. Hover it to see which way round it is.
+
+**What a download does.** It goes through the Downloads queue like any install, and its card says where the file was saved, with a **Show in folder** button. Nothing inside your SPT install is touched, so you can download while SPT is running. Any dependencies it offers to fetch are downloaded the same way. Files keep the name sp-mod serves them under and are never overwritten - a second copy is saved as `Name (2).zip`. An archive the app can't recognise as an SPT mod is still saved, and the card tells you to follow the mod page's install steps.
+
+#### Once you've installed it
+The next time the **Installed** page scans, it checks each download against your install. When every file in the archive is on disk at the size the archive says, the download counts as installed:
+
+- **By default, you're asked.** A window after the scan lists every download that now looks installed, all ticked. **Mark installed** records the ones you leave ticked; any you untick aren't asked about again until you download a newer version. **Not now** leaves them all waiting, and won't ask again until the app is next started.
+- **Or just note it.** Under **When a downloaded mod shows up installed** in Options, pick **Just note it on the mod's card**, and the mod's opened card says so and gets a **Confirm install** button instead.
+
+Confirming only tells the app which version you have, so update checks and dependencies are right - nothing on disk changes. When only some of the files match - part of the mod is missing, or the old version is still there - the card says so and it is never confirmed. **Show - Downloaded, not confirmed** lists every mod in either state.
+
+#### Mod lists in Monitor mode
+Applying a list downloads what it would install or update, and says so in the preview before anything runs. The downloads go into a folder named after the list, inside your download folder - the switch under **Download folder** in Options puts them straight into the download folder instead. Mods the list enables or disables are still moved, since that places nothing new. Applying the list again doesn't download anything that is still waiting for you to install.
+
+#### warning
+**Your settings are only carried across an update the app does itself.** Copying a new version over your install by hand replaces the mod's config files with the author's defaults. The queue card warns you when a download holds config files you already have - back yours up first, or copy only the files you need.
+
+#### information
+Everything still comes from sp-mod. Monitor mode changes who places the files, not where they come from - it does not install archives from anywhere else.
+
+
 ### App updates
 The app has its own page here on sp-mod, the same as everything else you install through it. On launch it asks that page whether anything newer has been published. If there is, you get a banner and a badge on the **App update** item in the sidebar. That page is always there, with a **Check now** button, whether or not an update is waiting.
 
@@ -400,6 +429,7 @@ Everything lives next to the exe:
 | `Data\dependency_flags.json` | Per-mod "has dependencies" answers, re-checked when a mod publishes |
 | `Data\mod_groups.json` | Your groups, and which mod is in which |
 | `Data\mod_lists.json` | Your mod lists, which ones you follow, your pinned mods, and the single undo point |
+| `Data\downloads.json` | Monitor mode: each archive saved for you to install, what it would place, and whether you've confirmed it |
 | `Data\addon_cache.json` | Cached addon catalog |
 | `Data\mod_footprints.json` | Cached footprint readings, only if that page is on |
 | `Data\config-backups\` | One timestamped folder per config save, laid out like your install |
@@ -460,6 +490,12 @@ Worth knowing before you rely on it. None of these lose data quietly - they're p
 - **A setting you added yourself is reported, not carried.** So is one the new version has dropped.
 - **Settings kept somewhere unusual are only recognised once you say so** - a `Presets\` folder rather than `config\`, for instance. The three buttons on the Configs page are how you say so, and SVM comes set up already.
 - **A folder of your own files is matched by name.** Renaming the mod's folder loses its entry, the same way a mod group does.
+
+#### Monitor mode
+- **Your settings aren't carried across a hand install.** Config protection only runs on an install the app does; copying an update over by hand replaces the mod's configs.
+- **A hand install is recognised by file size, not contents.** A file of the right size is taken as the right file.
+- **A mod installed somewhere other than where its archive lays it out isn't recognised** - into a different folder, or straight into a disabled one. It stays waiting; **Confirm as installed** in the mod's update dialog records the version by hand.
+- **"Not now" lasts until the app is closed.** The next time it starts, anything still waiting is asked about again.
 
 #### Server map
 - **Client and server must be on the same SPT line**, which is SPT's rule rather than this app's.
