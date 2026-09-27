@@ -111,6 +111,26 @@ public partial class OptionsViewModel : LocalizedViewModel
     public string DownloadFolderPlaceholder =>
         Text(Strings.Options_MonitorFolderPlaceholderFormat, DownloadFolders.Default());
 
+    //
+    // Update notifications (§8): a Windows notification when an installed mod has a new release,
+    // checked on a timer while the app runs. Both take effect the moment they change - switching it
+    // on starts the timer and takes the baseline, no restart.
+    //
+    [ObservableProperty]
+    private bool _updateNotificationsEnabled;
+
+    public IReadOnlyList<UpdateIntervalItem> UpdateIntervalOptions { get; } =
+    [
+        new(nameof(Strings.Options_UpdateInterval30Minutes), UpdateCheckInterval.ThirtyMinutes),
+        new(nameof(Strings.Options_UpdateInterval1Hour), UpdateCheckInterval.OneHour),
+        new(nameof(Strings.Options_UpdateInterval3Hours), UpdateCheckInterval.ThreeHours),
+        new(nameof(Strings.Options_UpdateInterval6Hours), UpdateCheckInterval.SixHours),
+        new(nameof(Strings.Options_UpdateInterval12Hours), UpdateCheckInterval.TwelveHours),
+    ];
+
+    [ObservableProperty]
+    private UpdateIntervalItem _selectedUpdateInterval;
+
     // Whether the Mod footprint page is in the sidebar. Off by default - see AppSettings.
     [ObservableProperty]
     private bool _showModFootprintPage;
@@ -228,6 +248,11 @@ public partial class OptionsViewModel : LocalizedViewModel
             DownloadConfirmationOptions.FirstOrDefault(o => o.Value == settings.Monitor.DownloadConfirmation)
             ?? DownloadConfirmationOptions[0];
 
+        _updateNotificationsEnabled = settings.UpdateNotifications.Enabled;
+        _selectedUpdateInterval =
+            UpdateIntervalOptions.FirstOrDefault(o => o.Value == settings.UpdateNotifications.Interval)
+            ?? UpdateIntervalOptions[1];
+
         _selectedWindowStartup = WindowStartupOptions.FirstOrDefault(o => o.Value == settings.Window.StartupMode)
             ?? WindowStartupOptions[0];
         _customWidthInput = FormatSize(settings.Window.CustomWidth);
@@ -335,6 +360,36 @@ public partial class OptionsViewModel : LocalizedViewModel
         _settings.Save(settings);
 
         AppLog.Info("Monitor", $"download confirmation set to {value.Value}");
+    }
+
+    partial void OnUpdateNotificationsEnabledChanged(bool value)
+    {
+        if (!_loaded) return;
+
+        var settings = _settings.Load();
+        settings.UpdateNotifications.Enabled = value;
+        _settings.Save(settings);
+
+        AppLog.Info("Updates", value ? "notifications switched on" : "notifications switched off");
+
+        // Off keeps update_notifications.json, so switching back on doesn't announce the same
+        // versions again (§8). On takes a fresh baseline (D6).
+        if (value) AppServices.UpdateWatcher.SwitchedOn();
+        else AppServices.UpdateWatcher.Stop();
+    }
+
+    partial void OnSelectedUpdateIntervalChanged(UpdateIntervalItem value)
+    {
+        if (!_loaded) return;
+
+        var settings = _settings.Load();
+        settings.UpdateNotifications.Interval = value.Value;
+        _settings.Save(settings);
+
+        AppLog.Info("Updates", $"check interval set to {value.Value}");
+
+        // Restarts the timer on the new interval; does nothing while notifications are off.
+        AppServices.UpdateWatcher.Start();
     }
 
     //

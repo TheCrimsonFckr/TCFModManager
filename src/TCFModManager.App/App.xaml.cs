@@ -4,6 +4,7 @@ using System.Windows.Markup;
 using System.Windows.Threading;
 using TCFModManager.App.Behaviors;
 using TCFModManager.App.Localization;
+using TCFModManager.App.Services;
 using TCFModManager.Core.ServerMap;
 using TCFModManager.Core.Services;
 
@@ -11,9 +12,27 @@ namespace TCFModManager.App;
 
 public partial class App : Application
 {
+    // Set when another copy is already running from this folder, so this one leaves no trace.
+    private bool _secondCopy;
+
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+
+        //
+        // First, before anything reads or writes Data\. A second launch from the same folder asks
+        // the running copy to show its window and goes no further (D11).
+        //
+        // The window is created at the end of this method rather than through StartupUri, which
+        // would open it even for a copy that is on its way out.
+        //
+        if (!SingleInstance.Claim(() => Dispatcher.BeginInvoke(ShowMainWindow)))
+        {
+            _secondCopy = true;
+            AppLog.Flush();
+            Shutdown();
+            return;
+        }
 
         AppLog.Start($"{AppVersion.Current}, SPT install: {AppServices.SptEnvironment.InstallPath ?? "(not set)"}");
 
@@ -65,6 +84,22 @@ public partial class App : Application
             AppLog.Error("App", "Unobserved task exception", args.Exception);
             args.SetObserved();
         };
+
+        // Before the window, so a launch that came from clicking a notification opens on Installed.
+        UpdateToasts.Initialize(e.Args, new SettingsService().Load().UpdateNotifications.Enabled);
+
+        var window = new MainWindow();
+        MainWindow = window;
+        window.Show();
+
+        // The first check is one interval from now, never at launch (R2). A no-op while it's off.
+        AppServices.UpdateWatcher.Start();
+    }
+
+    // Another launch of the exe from this folder asked for the window.
+    private void ShowMainWindow()
+    {
+        if (MainWindow is { } window) WindowActivation.BringForward(window);
     }
 
     //
@@ -97,6 +132,13 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
+        if (_secondCopy)
+        {
+            base.OnExit(e);
+            return;
+        }
+
+        AppServices.UpdateWatcher.Stop();
         DependencyBadgeLoader.Flush();
         AppLog.Info("App", "Shutting down");
         AppLog.Flush();

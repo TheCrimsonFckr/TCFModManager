@@ -37,6 +37,13 @@ internal static class AppServices
     // constructor subscribes to DownloadQueue.ItemInstalled and needs it already constructed.
     public static DownloadQueueViewModel DownloadQueue { get; } = new();
 
+    //
+    // Update notifications' timer. Declared before Browse for the same reason as DownloadQueue:
+    // BrowseViewModel's constructor subscribes to UpdatesFound. It only needs SpModApi to be
+    // built; everything else a check reads is looked up when the check runs.
+    //
+    public static UpdateWatcher UpdateWatcher { get; } = new();
+
     // Shared with MainWindow to render the mod details overlay at the window level.
     public static ModDetailsOverlayViewModel ModDetailsOverlay { get; } = new();
 

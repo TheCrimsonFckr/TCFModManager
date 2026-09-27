@@ -177,12 +177,27 @@ public class UpdateCheckServiceTests
         var handler = new FakeHttpMessageHandler(HttpStatusCode.OK, UpdatesResponse);
         using var client = new SpModApiClient(new HttpClient(handler));
 
-        var updated = await new UpdateCheckService(client)
+        var check = await new UpdateCheckService(client)
             .FindUpdatedModsAsync([(2909, "1.0.1"), (1090, "1.1.1"), (2935, "1.0.0")], "4.0.13");
 
-        Assert.Equal([2909], updated);
+        Assert.Equal([2909], check.Updated);
+        Assert.Empty(check.NotRecognised);
         Assert.Contains("mods=2909%3A1.0.1%2C1090%3A1.1.1%2C2935%3A1.0.0", handler.LastRequestUri!.Query);
         Assert.Contains("spt_version=4.0.13", handler.LastRequestUri.Query);
+    }
+
+    [Fact]
+    public async Task AModTheAnswerLeavesOutIsReadAgainDirectly()
+    {
+        // 3001 was sent as a file version with no matching release, which the endpoint drops.
+        var handler = new FakeHttpMessageHandler(HttpStatusCode.OK, UpdatesResponse);
+        using var client = new SpModApiClient(new HttpClient(handler));
+
+        var check = await new UpdateCheckService(client)
+            .FindUpdatedModsAsync([(2909, "1.0.1"), (1090, "1.1.1"), (3001, "1.0.1.0")], "4.0.13");
+
+        Assert.Equal([3001], check.NotRecognised);
+        Assert.Equal([2909, 3001], check.ToRefetch);
     }
 
     [Fact]
@@ -223,5 +238,43 @@ public class UpdateCheckServiceTests
     public void AModWithNoVersionIsLeftOut()
     {
         Assert.Equal("1:1.0", Assert.Single(UpdateCheckService.ModsQueryChunks([(1, "1.0"), (2, " ")])));
+    }
+}
+
+public class UpdateNotificationSettingsTests
+{
+    [Fact]
+    public void OffAndHourlyUntilChosen()
+    {
+        var settings = System.Text.Json.JsonSerializer.Deserialize<AppSettings>("{}")!;
+
+        Assert.False(settings.UpdateNotifications.Enabled);
+        Assert.Equal(TimeSpan.FromHours(1), settings.UpdateNotifications.Interval.ToTimeSpan());
+    }
+
+    [Fact]
+    public void TheIntervalIsWrittenAsAName()
+    {
+        var json = System.Text.Json.JsonSerializer.Serialize(new AppSettings
+        {
+            UpdateNotifications = new UpdateNotificationSettings { Enabled = true, Interval = UpdateCheckInterval.SixHours },
+        });
+
+        Assert.Contains("\"Interval\":\"SixHours\"", json);
+    }
+
+    [Fact]
+    public void ANullBlockReadsAsTheDefaults()
+    {
+        var settings = System.Text.Json.JsonSerializer.Deserialize<AppSettings>("""{"UpdateNotifications":null}""")!;
+
+        Assert.False(settings.UpdateNotifications.Enabled);
+    }
+
+    [Fact]
+    public void AHandEditedNumberIsNeverATightLoop()
+    {
+        Assert.Equal(TimeSpan.FromHours(1), ((UpdateCheckInterval)99).ToTimeSpan());
+        Assert.Equal(TimeSpan.FromMinutes(30), UpdateCheckInterval.ThirtyMinutes.ToTimeSpan());
     }
 }

@@ -1347,4 +1347,21 @@ internal static class Strings
     internal static string ModLists_AppliedDownloadOnlyFormat => LocalizationService.Get("ModLists_AppliedDownloadOnlyFormat");
     internal static string ModLists_DownloadOnlyNotice(int count, params object?[] values) =>
         LocalizationService.Plural("ModLists_DownloadOnlyNotice", count, values);
+    internal static string Options_UpdateNotificationsHeader => LocalizationService.Get("Options_UpdateNotificationsHeader");
+    internal static string Options_UpdateNotificationsDescription => LocalizationService.Get("Options_UpdateNotificationsDescription");
+    internal static string Options_UpdateNotificationsOn => LocalizationService.Get("Options_UpdateNotificationsOn");
+    internal static string Options_UpdateNotificationsOff => LocalizationService.Get("Options_UpdateNotificationsOff");
+    internal static string Options_UpdateIntervalHeader => LocalizationService.Get("Options_UpdateIntervalHeader");
+    internal static string Options_UpdateInterval30Minutes => LocalizationService.Get("Options_UpdateInterval30Minutes");
+    internal static string Options_UpdateInterval1Hour => LocalizationService.Get("Options_UpdateInterval1Hour");
+    internal static string Options_UpdateInterval3Hours => LocalizationService.Get("Options_UpdateInterval3Hours");
+    internal static string Options_UpdateInterval6Hours => LocalizationService.Get("Options_UpdateInterval6Hours");
+    internal static string Options_UpdateInterval12Hours => LocalizationService.Get("Options_UpdateInterval12Hours");
+    internal static string Options_UpdateNotificationsNote => LocalizationService.Get("Options_UpdateNotificationsNote");
+    internal static string UpdateToast_Title(int count, params object?[] values) =>
+        LocalizationService.Plural("UpdateToast_Title", count, values);
+    internal static string UpdateToast_ItemFormat => LocalizationService.Get("UpdateToast_ItemFormat");
+    internal static string UpdateToast_More(int count, params object?[] values) =>
+        LocalizationService.Plural("UpdateToast_More", count, values);
+    internal static string UpdateToast_Open => LocalizationService.Get("UpdateToast_Open");
 }

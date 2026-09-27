@@ -405,6 +405,49 @@
             </StackPanel>
         </ui:Card>
 
+        <!--
+            Update notifications. Apart from Monitor mode (R3): it works the same whichever mode the
+            install buttons are in. The interval is greyed out while the switch is off, rather than
+            hidden, so what switching it on would do is readable before doing it.
+        -->
+        <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
+            <StackPanel>
+                <TextBlock
+                    Text="{loc:Str Options_UpdateNotificationsHeader}"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,0,0,8"
+                    Text="{loc:Str Options_UpdateNotificationsDescription}" />
+                <ui:ToggleSwitch
+                    HorizontalAlignment="Left"
+                    IsChecked="{Binding UpdateNotificationsEnabled}"
+                    OnContent="{loc:Str Options_UpdateNotificationsOn}"
+                    OffContent="{loc:Str Options_UpdateNotificationsOff}" />
+
+                <TextBlock
+                    Text="{loc:Str Options_UpdateIntervalHeader}"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Margin="0,16,0,8" />
+                <ComboBox
+                    MinWidth="200"
+                    HorizontalAlignment="Left"
+                    IsEnabled="{Binding UpdateNotificationsEnabled}"
+                    ItemsSource="{Binding UpdateIntervalOptions}"
+                    SelectedItem="{Binding SelectedUpdateInterval}" />
+
+                <TextBlock
+                    Margin="0,8,0,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                    Text="{loc:Str Options_UpdateNotificationsNote}" />
+            </StackPanel>
+        </ui:Card>
+
         <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
             <StackPanel>
                 <TextBlock

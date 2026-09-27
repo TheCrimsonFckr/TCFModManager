@@ -4122,4 +4122,55 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="ModLists_DownloadOnlyNotice_other" xml:space="preserve">
     <value>Der Überwachungsmodus steht auf Nur herunterladen, daher werden die {0} Mods, die diese Liste installieren oder aktualisieren würde, für dich zum Selbstinstallieren gespeichert - installiert wird nichts. Mods, die sie aktiviert oder deaktiviert, werden trotzdem verschoben.</value>
   </data>
+  <data name="Options_UpdateNotificationsHeader" xml:space="preserve">
+    <value>Update-Benachrichtigungen</value>
+  </data>
+  <data name="Options_UpdateNotificationsDescription" xml:space="preserve">
+    <value>Solange die App geöffnet ist, fragt sie The Forge regelmäßig nach deinen installierten Mods und zeigt eine Windows-Benachrichtigung, wenn einer davon eine neue Version hat. Gefragt wird nur nach deinen installierten Mods. Jede Version wird einmal gemeldet, und Updates, die die Seite Installiert beim Einschalten schon anzeigt, werden nicht gemeldet.</value>
+  </data>
+  <data name="Options_UpdateNotificationsOn" xml:space="preserve">
+    <value>Benachrichtigen, wenn ein installierter Mod ein Update hat</value>
+  </data>
+  <data name="Options_UpdateNotificationsOff" xml:space="preserve">
+    <value>Keine Update-Benachrichtigungen</value>
+  </data>
+  <data name="Options_UpdateIntervalHeader" xml:space="preserve">
+    <value>Prüfen alle</value>
+  </data>
+  <data name="Options_UpdateInterval30Minutes" xml:space="preserve">
+    <value>30 Minuten</value>
+  </data>
+  <data name="Options_UpdateInterval1Hour" xml:space="preserve">
+    <value>1 Stunde</value>
+  </data>
+  <data name="Options_UpdateInterval3Hours" xml:space="preserve">
+    <value>3 Stunden</value>
+  </data>
+  <data name="Options_UpdateInterval6Hours" xml:space="preserve">
+    <value>6 Stunden</value>
+  </data>
+  <data name="Options_UpdateInterval12Hours" xml:space="preserve">
+    <value>12 Stunden</value>
+  </data>
+  <data name="Options_UpdateNotificationsNote" xml:space="preserve">
+    <value>Die erste Prüfung läuft ein Intervall nach dem Start der App, und die Prüfungen enden, wenn die App geschlossen wird. Keine Benachrichtigungen? Prüfe, ob TCF Mod Manager sie unter Windows-Einstellungen &gt; System &gt; Benachrichtigungen anzeigen darf.</value>
+  </data>
+  <data name="UpdateToast_Title_one" xml:space="preserve">
+    <value>Mod-Update verfügbar</value>
+  </data>
+  <data name="UpdateToast_Title_other" xml:space="preserve">
+    <value>{0} Mod-Updates verfügbar</value>
+  </data>
+  <data name="UpdateToast_ItemFormat" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="UpdateToast_More_one" xml:space="preserve">
+    <value>1 weiteres</value>
+  </data>
+  <data name="UpdateToast_More_other" xml:space="preserve">
+    <value>{0} weitere</value>
+  </data>
+  <data name="UpdateToast_Open" xml:space="preserve">
+    <value>Öffnen</value>
+  </data>
 </root>

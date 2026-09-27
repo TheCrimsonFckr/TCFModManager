@@ -24,25 +24,41 @@ public sealed class UpdateCheckService(SpModApiClient api)
     private const int PageSize = 50;
 
     //
-    // The ids /mods/updates lists under "updates" for <paramref name="installed"/>, on
-    // <paramref name="sptVersion"/>. Blocked and incompatible entries are not updates: incompatible
-    // is about what is installed not fitting this SPT, which the Installed page already shows.
+    // What /mods/updates says about <paramref name="installed"/> on <paramref name="sptVersion"/>.
     //
-    public async Task<IReadOnlyList<int>> FindUpdatedModsAsync(
+    // Updated is the ids it lists under "updates". Blocked and incompatible entries are not updates:
+    // incompatible is about what is installed not fitting this SPT, which the Installed page already
+    // shows.
+    //
+    // NotRecognised is every id it left out of all four lists. It does that, silently, for a version
+    // that isn't one of the mod's releases - found live on 2026-09-27: 1.0.1.0, v1.0.1 or banana for
+    // a mod with a 1.0.1 release all vanish, HTTP 200. That is exactly a hand install whose version
+    // came from its files (R7), so those mods are re-read directly rather than dropped.
+    //
+    public async Task<InstalledUpdateCheck> FindUpdatedModsAsync(
         IReadOnlyList<(int ModId, string Version)> installed, string sptVersion, CancellationToken ct = default)
     {
         var updated = new List<int>();
+        var answered = new HashSet<int>();
 
         foreach (var chunk in ModsQueryChunks(installed))
         {
             var result = await api.GetModUpdatesAsync(chunk, sptVersion, ct).ConfigureAwait(false);
-            updated.AddRange(result.Updates
-                .Select(u => u.CurrentVersion?.ModId)
-                .Where(id => id is not null)
-                .Select(id => id!.Value));
+
+            var ids = result.Updates.Select(u => u.CurrentVersion?.ModId).OfType<int>().ToList();
+            updated.AddRange(ids);
+
+            answered.UnionWith(ids);
+            answered.UnionWith(result.BlockedUpdates.Select(u => u.CurrentVersion?.ModId).OfType<int>());
+            answered.UnionWith(result.UpToDate.Select(u => u.ModId));
+            answered.UnionWith(result.IncompatibleWithSpt.Select(u => u.ModId));
         }
 
-        return [.. updated.Distinct()];
+        var asked = installed.Where(m => !string.IsNullOrWhiteSpace(m.Version)).Select(m => m.ModId);
+
+        return new InstalledUpdateCheck(
+            [.. updated.Distinct()],
+            [.. asked.Distinct().Where(id => !answered.Contains(id))]);
     }
 
     // Fresh listings, with categories and versions, shaped like the catalog cache's own.
@@ -115,4 +131,10 @@ public sealed class UpdateCheckService(SpModApiClient api)
 
         if (current.Count > 0) yield return string.Join(',', current);
     }
+}
+
+// What one /mods/updates round said. ToRefetch is every mod whose listing a check should re-read.
+public sealed record InstalledUpdateCheck(IReadOnlyList<int> Updated, IReadOnlyList<int> NotRecognised)
+{
+    public IReadOnlyList<int> ToRefetch => [.. Updated.Concat(NotRecognised).Distinct()];
 }

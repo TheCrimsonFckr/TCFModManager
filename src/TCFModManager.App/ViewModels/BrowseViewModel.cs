@@ -70,6 +70,21 @@ public partial class BrowseViewModel : LocalizedViewModel
             ShowInstalledChange();
         };
 
+        //
+        // The update watcher swapped fresh listings into the catalog. The cards on screen still
+        // hold the old ones, so the filter runs again over the patched list - on the same page -
+        // and the status dots pick up the new versions.
+        //
+        AppServices.UpdateWatcher.UpdatesFound += async (_, _) =>
+        {
+            await RefreshInstalledIndexAsync();
+            if (!HasLoadedResults) return;
+
+            var page = CurrentPage;
+            ApplyFilter();
+            if (page > 1) GoToPage(page);
+        };
+
         // Before the subscription below, so applying a saved default doesn't count as a change.
         SavedFilterDefaults.ApplyAttributes(AttributeOptions, _defaults?.Attributes);
 

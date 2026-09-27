@@ -4341,4 +4341,61 @@
   <data name="ModLists_DownloadOnlyNotice_many" xml:space="preserve">
     <value>Режим наблюдения настроен только на скачивание, поэтому {0} модов, которые этот список установил бы или обновил, будут сохранены для самостоятельной установки - ничего не будет установлено. Моды, которые он включает или отключает, всё равно перемещаются.</value>
   </data>
+  <data name="Options_UpdateNotificationsHeader" xml:space="preserve">
+    <value>Уведомления об обновлениях</value>
+  </data>
+  <data name="Options_UpdateNotificationsDescription" xml:space="preserve">
+    <value>Пока приложение открыто, оно время от времени спрашивает The Forge об установленных у вас модах и показывает уведомление Windows, когда у одного из них выходит новая версия. Проверяются только установленные моды. О каждой версии сообщается один раз, а об обновлениях, которые страница «Установленные» уже показывает в момент включения, не сообщается.</value>
+  </data>
+  <data name="Options_UpdateNotificationsOn" xml:space="preserve">
+    <value>Сообщать, когда у установленного мода есть обновление</value>
+  </data>
+  <data name="Options_UpdateNotificationsOff" xml:space="preserve">
+    <value>Без уведомлений об обновлениях</value>
+  </data>
+  <data name="Options_UpdateIntervalHeader" xml:space="preserve">
+    <value>Проверять каждые</value>
+  </data>
+  <data name="Options_UpdateInterval30Minutes" xml:space="preserve">
+    <value>30 минут</value>
+  </data>
+  <data name="Options_UpdateInterval1Hour" xml:space="preserve">
+    <value>1 час</value>
+  </data>
+  <data name="Options_UpdateInterval3Hours" xml:space="preserve">
+    <value>3 часа</value>
+  </data>
+  <data name="Options_UpdateInterval6Hours" xml:space="preserve">
+    <value>6 часов</value>
+  </data>
+  <data name="Options_UpdateInterval12Hours" xml:space="preserve">
+    <value>12 часов</value>
+  </data>
+  <data name="Options_UpdateNotificationsNote" xml:space="preserve">
+    <value>Первая проверка проходит через один интервал после запуска приложения, а при закрытии приложения проверки прекращаются. Нет уведомлений? Проверьте, что TCF Mod Manager разрешено их показывать в разделе Параметры Windows &gt; Система &gt; Уведомления.</value>
+  </data>
+  <data name="UpdateToast_Title_one" xml:space="preserve">
+    <value>Доступно {0} обновление мода</value>
+  </data>
+  <data name="UpdateToast_Title_few" xml:space="preserve">
+    <value>Доступно {0} обновления модов</value>
+  </data>
+  <data name="UpdateToast_Title_many" xml:space="preserve">
+    <value>Доступно {0} обновлений модов</value>
+  </data>
+  <data name="UpdateToast_ItemFormat" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="UpdateToast_More_one" xml:space="preserve">
+    <value>ещё {0}</value>
+  </data>
+  <data name="UpdateToast_More_few" xml:space="preserve">
+    <value>ещё {0}</value>
+  </data>
+  <data name="UpdateToast_More_many" xml:space="preserve">
+    <value>ещё {0}</value>
+  </data>
+  <data name="UpdateToast_Open" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
 </root>

@@ -4122,4 +4122,55 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="ModLists_DownloadOnlyNotice_other" xml:space="preserve">
     <value>Le mode surveillance est réglé sur Télécharger seulement : les {0} mods que cette liste installerait ou mettrait à jour seront enregistrés pour que vous les installiez vous-même - rien ne sera installé. Les mods qu'elle active ou désactive sont quand même déplacés.</value>
   </data>
+  <data name="Options_UpdateNotificationsHeader" xml:space="preserve">
+    <value>Notifications de mise à jour</value>
+  </data>
+  <data name="Options_UpdateNotificationsDescription" xml:space="preserve">
+    <value>Tant que l'application est ouverte, elle interroge régulièrement The Forge sur les mods que vous avez installés et affiche une notification Windows quand l'un d'eux a une nouvelle version. Seuls vos mods installés sont concernés. Chaque version n'est annoncée qu'une fois, et les mises à jour que la page Installés affiche déjà quand vous activez cette option ne sont pas annoncées.</value>
+  </data>
+  <data name="Options_UpdateNotificationsOn" xml:space="preserve">
+    <value>Me prévenir quand un mod installé a une mise à jour</value>
+  </data>
+  <data name="Options_UpdateNotificationsOff" xml:space="preserve">
+    <value>Pas de notifications de mise à jour</value>
+  </data>
+  <data name="Options_UpdateIntervalHeader" xml:space="preserve">
+    <value>Vérifier toutes les</value>
+  </data>
+  <data name="Options_UpdateInterval30Minutes" xml:space="preserve">
+    <value>30 minutes</value>
+  </data>
+  <data name="Options_UpdateInterval1Hour" xml:space="preserve">
+    <value>1 heure</value>
+  </data>
+  <data name="Options_UpdateInterval3Hours" xml:space="preserve">
+    <value>3 heures</value>
+  </data>
+  <data name="Options_UpdateInterval6Hours" xml:space="preserve">
+    <value>6 heures</value>
+  </data>
+  <data name="Options_UpdateInterval12Hours" xml:space="preserve">
+    <value>12 heures</value>
+  </data>
+  <data name="Options_UpdateNotificationsNote" xml:space="preserve">
+    <value>La première vérification a lieu un intervalle après le démarrage de l'application, et les vérifications s'arrêtent quand elle se ferme. Pas de notifications ? Vérifiez que TCF Mod Manager a le droit d'en afficher dans Paramètres Windows &gt; Système &gt; Notifications.</value>
+  </data>
+  <data name="UpdateToast_Title_one" xml:space="preserve">
+    <value>Mise à jour de mod disponible</value>
+  </data>
+  <data name="UpdateToast_Title_other" xml:space="preserve">
+    <value>{0} mises à jour de mods disponibles</value>
+  </data>
+  <data name="UpdateToast_ItemFormat" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="UpdateToast_More_one" xml:space="preserve">
+    <value>1 autre</value>
+  </data>
+  <data name="UpdateToast_More_other" xml:space="preserve">
+    <value>{0} autres</value>
+  </data>
+  <data name="UpdateToast_Open" xml:space="preserve">
+    <value>Ouvrir</value>
+  </data>
 </root>

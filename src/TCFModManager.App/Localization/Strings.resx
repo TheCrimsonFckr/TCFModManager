@@ -4926,4 +4926,65 @@ This was written to:
     <value>Monitor mode is set to download only, so the {0} mods this list would install or update will be saved for you to install yourself - nothing will be installed. Mods it enables or disables are still moved.</value>
     <comment>Shown above a mod list's plan in download-only mode. {0} is how many mods would be installed or updated.</comment>
   </data>
+  <data name="Options_UpdateNotificationsHeader" xml:space="preserve">
+    <value>Update notifications</value>
+  </data>
+  <data name="Options_UpdateNotificationsDescription" xml:space="preserve">
+    <value>While the app is open, it asks The Forge every so often about the mods you have installed, and shows a Windows notification when one of them has a new release. Only your installed mods are asked about. Each release is announced once, and the updates the Installed page already shows when you switch this on are not announced.</value>
+  </data>
+  <data name="Options_UpdateNotificationsOn" xml:space="preserve">
+    <value>Notify me when an installed mod has an update</value>
+    <comment>Label on the switch when it is ON.</comment>
+  </data>
+  <data name="Options_UpdateNotificationsOff" xml:space="preserve">
+    <value>No update notifications</value>
+    <comment>Label on the same switch when it is OFF.</comment>
+  </data>
+  <data name="Options_UpdateIntervalHeader" xml:space="preserve">
+    <value>Check every</value>
+    <comment>Heading above the dropdown of how often to check: 30 minutes, 1 hour and so on.</comment>
+  </data>
+  <data name="Options_UpdateInterval30Minutes" xml:space="preserve">
+    <value>30 minutes</value>
+  </data>
+  <data name="Options_UpdateInterval1Hour" xml:space="preserve">
+    <value>1 hour</value>
+  </data>
+  <data name="Options_UpdateInterval3Hours" xml:space="preserve">
+    <value>3 hours</value>
+  </data>
+  <data name="Options_UpdateInterval6Hours" xml:space="preserve">
+    <value>6 hours</value>
+  </data>
+  <data name="Options_UpdateInterval12Hours" xml:space="preserve">
+    <value>12 hours</value>
+  </data>
+  <data name="Options_UpdateNotificationsNote" xml:space="preserve">
+    <value>The first check runs one interval after the app starts, and checks stop when the app closes. No notifications? Check that TCF Mod Manager is allowed to show them in Windows Settings &gt; System &gt; Notifications.</value>
+    <comment>Windows Settings &gt; System &gt; Notifications is the path in Windows; use the names Windows itself shows in your language.</comment>
+  </data>
+  <data name="UpdateToast_Title_one" xml:space="preserve">
+    <value>Mod update available</value>
+    <comment>Title of the Windows notification. {0} is how many installed mods have a new release.</comment>
+  </data>
+  <data name="UpdateToast_Title_other" xml:space="preserve">
+    <value>{0} mod updates available</value>
+    <comment>Title of the Windows notification. {0} is how many installed mods have a new release.</comment>
+  </data>
+  <data name="UpdateToast_ItemFormat" xml:space="preserve">
+    <value>{0} {1}</value>
+    <comment>One update in the notification text. {0} is the mod name, {1} the new version.</comment>
+  </data>
+  <data name="UpdateToast_More_one" xml:space="preserve">
+    <value>1 more</value>
+    <comment>Ends the notification text when more updates were found than it names. {0} is how many more.</comment>
+  </data>
+  <data name="UpdateToast_More_other" xml:space="preserve">
+    <value>{0} more</value>
+    <comment>Ends the notification text when more updates were found than it names. {0} is how many more.</comment>
+  </data>
+  <data name="UpdateToast_Open" xml:space="preserve">
+    <value>Open</value>
+    <comment>Button on the notification. Opens the app on the Installed page.</comment>
+  </data>
 </root>

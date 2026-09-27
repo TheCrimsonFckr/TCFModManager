@@ -358,6 +358,9 @@ public partial class InstalledViewModel : LocalizedViewModel
             : GroupFilterItem.All;
     }
 
+    // Whether this page has scanned at least once - see the UpdatesFound subscription below.
+    private bool _hasScanned;
+
     public InstalledViewModel()
     {
         var settings = new SettingsService().Load();
@@ -393,7 +396,31 @@ public partial class InstalledViewModel : LocalizedViewModel
                 AutoApplyFilter();
             };
         }
+
+        //
+        // A click on an update notification opens this page on "Updates available" (§6). Taken
+        // here when the click is what built the page, and from the event when it already existed.
+        //
+        if (AppNavigation.TakeShowUpdates()) _selectedUpdateFilter = UpdatesAvailableFilter();
+
+        AppNavigation.ShowUpdatesRequested += (_, _) =>
+        {
+            if (AppNavigation.TakeShowUpdates()) SelectedUpdateFilter = UpdatesAvailableFilter();
+        };
+
+        //
+        // The update watcher patched the catalog, so the arrows on screen are out of date. Only once
+        // the page has scanned - before that, its first scan reads the patched catalog anyway.
+        //
+        AppServices.UpdateWatcher.UpdatesFound += async (_, _) =>
+        {
+            if (!_hasScanned || ScanCommand.IsRunning) return;
+            await ScanCommand.ExecuteAsync(null);
+        };
     }
+
+    private UpdateFilterItem UpdatesAvailableFilter() =>
+        UpdateFilterOptions.First(o => o.Value == UpdateFilter.NeedsUpdate);
 
     partial void OnSelectedCategoryChanged(CategoryFilterItem value) => AutoApplyFilter();
 
@@ -715,6 +742,8 @@ public partial class InstalledViewModel : LocalizedViewModel
     [RelayCommand]
     private async Task ScanAsync()
     {
+        _hasScanned = true;
+
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath))
         {

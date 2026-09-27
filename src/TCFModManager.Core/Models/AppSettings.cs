@@ -175,11 +175,20 @@ public sealed class AppSettings
         set => _monitor = value ?? new MonitorSettings();
     }
 
+    // Update notifications. Never null, for the same reason as ServerMap above.
+    public UpdateNotificationSettings UpdateNotifications
+    {
+        get => _updateNotifications;
+        set => _updateNotifications = value ?? new UpdateNotificationSettings();
+    }
+
     private ServerMapSettings _serverMap = new();
 
     private WindowSettings _window = new();
 
     private MonitorSettings _monitor = new();
+
+    private UpdateNotificationSettings _updateNotifications = new();
 }
 
 //

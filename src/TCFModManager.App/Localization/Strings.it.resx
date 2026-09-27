@@ -4122,4 +4122,55 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="ModLists_DownloadOnlyNotice_other" xml:space="preserve">
     <value>La modalità monitoraggio è impostata su Solo download, quindi i {0} mod che questa lista installerebbe o aggiornerebbe verranno salvati perché tu li installi da solo - non verrà installato nulla. I mod che attiva o disattiva vengono comunque spostati.</value>
   </data>
+  <data name="Options_UpdateNotificationsHeader" xml:space="preserve">
+    <value>Notifiche di aggiornamento</value>
+  </data>
+  <data name="Options_UpdateNotificationsDescription" xml:space="preserve">
+    <value>Finché l'app è aperta, chiede ogni tanto a The Forge dei mod che hai installato e mostra una notifica di Windows quando uno di loro ha una nuova versione. Vengono controllati solo i mod installati. Ogni versione viene annunciata una volta sola, e gli aggiornamenti che la pagina Installati mostra già quando attivi questa opzione non vengono annunciati.</value>
+  </data>
+  <data name="Options_UpdateNotificationsOn" xml:space="preserve">
+    <value>Avvisami quando un mod installato ha un aggiornamento</value>
+  </data>
+  <data name="Options_UpdateNotificationsOff" xml:space="preserve">
+    <value>Nessuna notifica di aggiornamento</value>
+  </data>
+  <data name="Options_UpdateIntervalHeader" xml:space="preserve">
+    <value>Controlla ogni</value>
+  </data>
+  <data name="Options_UpdateInterval30Minutes" xml:space="preserve">
+    <value>30 minuti</value>
+  </data>
+  <data name="Options_UpdateInterval1Hour" xml:space="preserve">
+    <value>1 ora</value>
+  </data>
+  <data name="Options_UpdateInterval3Hours" xml:space="preserve">
+    <value>3 ore</value>
+  </data>
+  <data name="Options_UpdateInterval6Hours" xml:space="preserve">
+    <value>6 ore</value>
+  </data>
+  <data name="Options_UpdateInterval12Hours" xml:space="preserve">
+    <value>12 ore</value>
+  </data>
+  <data name="Options_UpdateNotificationsNote" xml:space="preserve">
+    <value>Il primo controllo avviene un intervallo dopo l'avvio dell'app, e i controlli si fermano quando l'app si chiude. Nessuna notifica? Verifica che TCF Mod Manager possa mostrarle in Impostazioni di Windows &gt; Sistema &gt; Notifiche.</value>
+  </data>
+  <data name="UpdateToast_Title_one" xml:space="preserve">
+    <value>Aggiornamento mod disponibile</value>
+  </data>
+  <data name="UpdateToast_Title_other" xml:space="preserve">
+    <value>{0} aggiornamenti mod disponibili</value>
+  </data>
+  <data name="UpdateToast_ItemFormat" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="UpdateToast_More_one" xml:space="preserve">
+    <value>1 altro</value>
+  </data>
+  <data name="UpdateToast_More_other" xml:space="preserve">
+    <value>altri {0}</value>
+  </data>
+  <data name="UpdateToast_Open" xml:space="preserve">
+    <value>Apri</value>
+  </data>
 </root>
