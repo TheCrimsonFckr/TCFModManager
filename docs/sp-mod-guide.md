@@ -2,7 +2,7 @@
 
 It also keeps **mod lists** - save the set you run, switch between sets, send one to a friend, or follow the list a server publishes and know what you are missing before you launch. Plus a config editor, a start button for the server and the launcher, and an optional page that reads what each installed mod actually ships.
 
-Rather install mods yourself? **Monitor mode** has the app download each mod for you to install by hand, and still keep track of what you have.
+Rather install mods yourself? **Monitor mode** has the app download each mod for you to install by hand, and still keep track of what you have. And with **update notifications** on, it tells you when a mod you have gets a new release - even from the tray, with its window closed.
 
 WPF with Fluent Design and .NET 9
 
@@ -389,6 +389,37 @@ Applying a list downloads what it would install or update, and says so in the pr
 Everything still comes from sp-mod. Monitor mode changes who places the files, not where they come from - it does not install archives from anywhere else.
 
 
+### Update notifications
+Off until you switch it on. With it on, the app asks sp-mod every so often whether any mod you have installed has a new release, and shows a Windows notification when one has - so you hear about an update without going to look for it. It works the same whether the app installs your mods or Monitor mode has you install them.
+
+**Turning it on.** In **Options - Update notifications**, switch on **Notify me when an installed mod has an update**, and pick how often under **Check every** - from 30 minutes to 12 hours, every hour to start with. The first check runs one interval after the app starts, never at launch. **Check now** runs one straight away and says underneath what it found.
+
+**What gets announced.**
+- **Only what you have installed is asked about** - one request per check for the lot, not a trawl through the whole catalog. Addons are checked too.
+- **An update means what the Installed page means by it:** the newest release that runs on your SPT. A notification never names an update the Installed page doesn't show.
+- **Each release is announced once.** Restarting the app doesn't repeat it; a newer release of the same mod is news again.
+- **Switching it on doesn't announce what's already there.** The first check notes every update the Installed page already shows, and from then on only new releases are announced. Updates that come out while the app is closed are announced on the first check after it starts.
+- **Disabled mods aren't announced**, and neither is an update you've already downloaded in Monitor mode but not installed yet.
+- **One notification per check**, however many it found - "3 mod updates available: SAIN 4.5.2, UI Fixes 6.0.2 and 1 more". A newer one replaces an older one still waiting in the Notification Centre.
+
+**Clicking it** - the notification or its **Open** button - brings the app forward on the **Installed** page with **Show** set to **Needs update**. If the app has been closed since, clicking it starts the app on that page. There's no "update all" on the notification: updating goes through the app, where the running-SPT check and the dependency prompt can do their jobs.
+
+When a check finds something, the Installed page and Browse's status dots pick up the new version without a refresh.
+
+#### Keeping it running in the tray
+Closing the window normally quits the app, and the checks stop with it. Under the notifications switch, turn on **Closing the window keeps the app running in the tray** and closing hides the window instead, leaving the app's icon in the notification area by the clock. The first time it happens, a notification says so. The switch is only available while notifications are on.
+
+- **Click the icon** to open the window again.
+- **Right-click it** for **Open**, **Check for updates now** and **Quit**. While this is on, Quit is how you actually close the app.
+- **Launching the app again** while it's in the tray just brings the window back.
+
+#### information
+Only one copy of the app runs from a folder at a time - launching it again brings the running one forward instead of opening a second. A separate copy kept beside a second SPT install still runs alongside it.
+
+#### warning
+Windows has the last word on notifications. If none appear, check that TCF Mod Manager is allowed under **Windows Settings - System - Notifications**, and that Do not disturb isn't on. Windows also holds notifications back while a game is full screen, and the app doesn't try to get around that.
+
+
 ### App updates
 The app has its own page here on sp-mod, the same as everything else you install through it. On launch it asks that page whether anything newer has been published. If there is, you get a banner and a badge on the **App update** item in the sidebar. That page is always there, with a **Check now** button, whether or not an update is waiting.
 
@@ -430,6 +461,7 @@ Everything lives next to the exe:
 | `Data\mod_groups.json` | Your groups, and which mod is in which |
 | `Data\mod_lists.json` | Your mod lists, which ones you follow, your pinned mods, and the single undo point |
 | `Data\downloads.json` | Monitor mode: each archive saved for you to install, what it would place, and whether you've confirmed it |
+| `Data\update_notifications.json` | Update notifications: which releases have already been announced, so none is announced twice |
 | `Data\addon_cache.json` | Cached addon catalog |
 | `Data\mod_footprints.json` | Cached footprint readings, only if that page is on |
 | `Data\config-backups\` | One timestamped folder per config save, laid out like your install |
@@ -497,6 +529,11 @@ Worth knowing before you rely on it. None of these lose data quietly - they're p
 - **A mod installed somewhere other than where its archive lays it out isn't recognised** - into a different folder, or straight into a disabled one. It stays waiting; **Confirm as installed** in the mod's update dialog records the version by hand.
 - **"Not now" lasts until the app is closed.** The next time it starts, anything still waiting is asked about again.
 
+#### Update notifications
+- **Checks only run while the app does.** Closing the window ends them unless the app is kept in the tray, and it doesn't start with Windows.
+- **A mod you installed by hand can be announced once too often.** With no install record, its version is read from its files, and a file version that lags behind the real one reads as out of date. It's announced once at most, and confirming the version on the mod's card ends it.
+- **Checks are at least 30 minutes apart.** **Check now** is there when you want one sooner.
+
 #### Server map
 - **Client and server must be on the same SPT line**, which is SPT's rule rather than this app's.
 - **The server publishes a list, not files**, and the page reports nothing about your install back to it.
@@ -504,7 +541,7 @@ Worth knowing before you rely on it. None of these lose data quietly - they're p
 
 #### Scope
 - **One SPT install at a time.** The record of what's installed belongs to the app, not to the install it points at, so pointing Options at a second SPT folder will carry the first one's records across. Use a separate copy of the app per install.
-- **The catalog refreshes once per session** in the background. Mods published while the app is open won't appear until you press Refresh cache or restart.
+- **The catalog refreshes once per session** in the background. Mods published while the app is open won't appear until you press Refresh cache or restart - except the mods you have installed, which update notifications re-read on every check while they're on.
 - **It won't run while SPT does.** Installing or removing anything with T***** or the server open is refused, because those lock the files being replaced.
 
 
@@ -548,6 +585,9 @@ Press **Refresh from server** on the list, on the Mod lists page. It asks again 
 
 #### My headless installed a pile of mods it doesn't need
 It is reading as an ordinary player. **Options - What this machine is** says whether anybody plays there and whether it runs a headless client; a served list is only trimmed once that is answered. If the app never asked, it didn't find `FikaHeadlessManager.exe` at the top of the install folder - point **Options - Fika headless launcher** at it.
+
+#### No update notifications appear
+First make sure a check has actually run: press **Check now** in **Options - Update notifications** and read the line under it. The first check after switching on only notes what's already there, so it never shows one. A check is also skipped while downloads are running, while no SPT install is set, and while sp-mod can't be reached - the log's `Updates` lines say which. If checks are finding updates and still nothing appears, Windows is holding them back: check **Windows Settings - System - Notifications** allows TCF Mod Manager, and that Do not disturb is off.
 
 #### Reporting a bug
 Grab `Data\logs\tcfmm-<date>.log` - ideally after adding the `verbose` marker file and reproducing the problem - and open an issue on the new [issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues).
@@ -607,7 +647,8 @@ You don't have to finish, and you don't have to keep up. A string you haven't tr
 - Per-mod pins, so a mod you always want on survives any list you apply - *Completed*
 - Server mapping - *Initial release, ongoing*
 - Local languages based on OS - *Initial release, ongoing*
-- Options to use app to monitor mods rather than manage them - *Planning/developing*
+- Options to use app to monitor mods rather than manage them - *Completed*
+- Update notifications, with the app kept running in the tray - *Completed*
 - Additional mod footprint monitoring to show data around their usage on 
 your systems - *Planning/developing*
 
