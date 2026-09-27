@@ -27,6 +27,12 @@ internal static class AppServices
     // Places (and removes) a mod's files in the SPT install.
     public static ModInstallService ModInstall { get; } = new(Downloads, InstallManifest);
 
+    // Monitor mode's saved archives and what each would place - Data\downloads.json.
+    public static DownloadLedgerService DownloadLedger { get; } = new();
+
+    // Saves a mod's archive for the user to install by hand, instead of installing it.
+    public static ModArchiveService ModArchive { get; } = new(Downloads, DownloadLedger);
+
     // App-lifetime download queue. Declared before Browse because BrowseViewModel's
     // constructor subscribes to DownloadQueue.ItemInstalled and needs it already constructed.
     public static DownloadQueueViewModel DownloadQueue { get; } = new();

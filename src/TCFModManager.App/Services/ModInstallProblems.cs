@@ -53,6 +53,17 @@ public static class ModInstallProblems
             Strings.ModInstall_UnsafeArchiveEntryFormat,
             problem.ArchiveEntry),
 
+        ModInstallFailure.DownloadFolderMissing => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.ModInstall_DownloadFolderMissingFormat,
+            problem.Folder),
+
+        ModInstallFailure.DownloadFolderNotWritable => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.ModInstall_DownloadFolderNotWritableFormat,
+            problem.Folder,
+            problem.InnerException?.Message),
+
         _ => string.Format(CultureInfo.CurrentCulture, Strings.ModInstall_UnexpectedFormat, problem.Reason),
     };
 

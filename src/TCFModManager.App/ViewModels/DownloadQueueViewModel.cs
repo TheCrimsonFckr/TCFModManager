@@ -68,6 +68,9 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
     // Adds a request to the end of the queue and returns immediately; the download/install
     // happens later when the worker reaches it. When <paramref name="dependencyOf"/> is set, the
     // new item is registered against it so cancelling that item cancels this one too.
+    //
+    // <paramref name="downloadOnly"/> saves the archive for the user to install instead (Monitor
+    // mode). A dependency takes its parent's value, whatever is passed here.
     public DownloadQueueItemViewModel Enqueue(
         InstallTarget target,
         string versionLabel,
@@ -75,9 +78,19 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         Func<Task<ModVersion?>> resolveVersion,
         bool checkDependencies = true,
         DownloadQueueItemViewModel? dependencyOf = null,
-        long? totalBytes = null)
+        long? totalBytes = null,
+        bool downloadOnly = false,
+        string? downloadSubfolder = null)
     {
-        var item = new DownloadQueueItemViewModel(target, versionLabel, installPath, resolveVersion, checkDependencies, totalBytes);
+        if (dependencyOf is not null)
+        {
+            downloadOnly = dependencyOf.DownloadOnly;
+            downloadSubfolder = dependencyOf.DownloadSubfolder;
+        }
+
+        var item = new DownloadQueueItemViewModel(
+            target, versionLabel, installPath, resolveVersion, checkDependencies, totalBytes,
+            downloadOnly, downloadSubfolder);
         dependencyOf?.AddDependency(item);
         item.PropertyChanged += OnItemChanged;
 
@@ -224,6 +237,12 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
             item.Token.ThrowIfCancellationRequested();
 
+            if (item.DownloadOnly)
+            {
+                await SaveArchiveAsync(item, version);
+                return;
+            }
+
             // Core reports which stage it is in; every phase but the download itself (removing the
             // previous version, extracting, copying files) is bucketed under Installing.
             var status = new Progress<ModInstallProgress>(p =>
@@ -291,6 +310,33 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             item.Status = DownloadQueueItemStatus.Failed;
             item.StatusMessage = Text(Strings.Downloads_UnexpectedFormat, ex.Message);
         }
+    }
+
+    //
+    // Monitor mode's branch: the same download, saved to the user's folder instead of installed.
+    // Nothing in the SPT install is touched, so there is no running-SPT check and no ItemInstalled -
+    // what is on disk has not changed.
+    //
+    private static async Task SaveArchiveAsync(DownloadQueueItemViewModel item, ModVersion version)
+    {
+        var folder = DownloadFolders.Resolve(new SettingsService().Load().Monitor.DownloadFolder);
+
+        item.Status = DownloadQueueItemStatus.Downloading;
+        item.StatusMessage = Text(Strings.Downloads_SavingToFormat, folder);
+
+        var downloadProgress = new Progress<double>(p => item.Progress = p);
+
+        var result = await AppServices.ModArchive.SaveArchiveAsync(
+            item.Target, version, folder, item.InstallPath, item.DownloadSubfolder, downloadProgress, item.Token);
+
+        item.Status = DownloadQueueItemStatus.Completed;
+        item.Progress = 1.0;
+        item.SavedPath = result.Record.ArchivePath;
+        item.StatusMessage = Text(
+            result.Record.Unrecognised ? Strings.Downloads_SavedUnrecognisedFormat : Strings.Downloads_SavedFormat,
+            item.ModName,
+            item.VersionLabel,
+            result.Record.ArchivePath);
     }
 
     // Resolves item's full dependency tree for the version being installed, cross-references it against
