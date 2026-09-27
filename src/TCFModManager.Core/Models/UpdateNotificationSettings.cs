@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 namespace TCFModManager.Core.Models;
 
 //
-// Update notifications (docs\OPEN-TCFUpdateNotifications-DESIGN.md §8): a Windows notification when
+// Update notifications (docs\CLOSED-TCFUpdateNotifications-DESIGN.md §8): a Windows notification when
 // an installed mod gets a new release, checked on a timer while the app runs. One object in
 // settings.json, the same as Monitor and ServerMap, so the feature reads as one block to anyone
 // hand-editing the file.

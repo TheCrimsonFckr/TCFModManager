@@ -8,7 +8,7 @@ using TCFModManager.Core.Services;
 namespace TCFModManager.App;
 
 //
-// One running copy per app folder (D11, docs\OPEN-TCFUpdateNotifications-DESIGN.md §8a).
+// One running copy per app folder (D11, docs\CLOSED-TCFUpdateNotifications-DESIGN.md §8a).
 //
 // Two copies of the same app writing the same Data\ folder would each save over the other's
 // settings, manifest and caches. Keyed on the exe's folder rather than on the app, so a second copy
