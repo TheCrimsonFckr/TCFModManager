@@ -1299,4 +1299,26 @@ internal static class Strings
     internal static string Options_SizeBy => LocalizationService.Get("Options_SizeBy");
     internal static string App_CrashTitle => LocalizationService.Get("App_CrashTitle");
     internal static string App_CrashBodyFormat => LocalizationService.Get("App_CrashBodyFormat");
+    internal static string Options_MonitorHeader => LocalizationService.Get("Options_MonitorHeader");
+    internal static string Options_MonitorDescription => LocalizationService.Get("Options_MonitorDescription");
+    internal static string Options_MonitorModeInstall => LocalizationService.Get("Options_MonitorModeInstall");
+    internal static string Options_MonitorModeDownloadOnly => LocalizationService.Get("Options_MonitorModeDownloadOnly");
+    internal static string Options_MonitorFolderHeader => LocalizationService.Get("Options_MonitorFolderHeader");
+    internal static string Options_MonitorFolderDescription => LocalizationService.Get("Options_MonitorFolderDescription");
+    internal static string Options_MonitorFolderPlaceholderFormat => LocalizationService.Get("Options_MonitorFolderPlaceholderFormat");
+    internal static string Options_MonitorFolderPickerTitle => LocalizationService.Get("Options_MonitorFolderPickerTitle");
+    internal static string Options_MonitorFolderReset => LocalizationService.Get("Options_MonitorFolderReset");
+    internal static string Options_MonitorFolderResetToolTip => LocalizationService.Get("Options_MonitorFolderResetToolTip");
+    internal static string ModPageGate_InstallDownloadOnly => LocalizationService.Get("ModPageGate_InstallDownloadOnly");
+    internal static string ModPageGate_RedownloadDownloadOnly => LocalizationService.Get("ModPageGate_RedownloadDownloadOnly");
+    internal static string ModPageGate_UpdateDownloadOnly => LocalizationService.Get("ModPageGate_UpdateDownloadOnly");
+    internal static string ModPageGate_AlternateDownload => LocalizationService.Get("ModPageGate_AlternateDownload");
+    internal static string ModPageGate_AlternateInstall => LocalizationService.Get("ModPageGate_AlternateInstall");
+    internal static string Downloads_SavingToFormat => LocalizationService.Get("Downloads_SavingToFormat");
+    internal static string Downloads_SavedFormat => LocalizationService.Get("Downloads_SavedFormat");
+    internal static string Downloads_SavedUnrecognisedFormat => LocalizationService.Get("Downloads_SavedUnrecognisedFormat");
+    internal static string Downloads_ShowInFolder => LocalizationService.Get("Downloads_ShowInFolder");
+    internal static string Downloads_ShowInFolderToolTip => LocalizationService.Get("Downloads_ShowInFolderToolTip");
+    internal static string ModInstall_DownloadFolderMissingFormat => LocalizationService.Get("ModInstall_DownloadFolderMissingFormat");
+    internal static string ModInstall_DownloadFolderNotWritableFormat => LocalizationService.Get("ModInstall_DownloadFolderNotWritableFormat");
 }

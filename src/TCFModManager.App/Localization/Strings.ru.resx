@@ -4188,4 +4188,70 @@
   <data name="SptLaunch_StopFailedReasonFormat" xml:space="preserve">
     <value>Не удалось остановить {0}: {1}. Возможно, он запущен от имени другого пользователя или от имени администратора - закройте его окно вручную и запустите снова, результат будет тот же.</value>
   </data>
+  <data name="Options_MonitorHeader" xml:space="preserve">
+    <value>Режим наблюдения</value>
+  </data>
+  <data name="Options_MonitorDescription" xml:space="preserve">
+    <value>Выберите, будет ли приложение устанавливать моды за вас или только скачивать их, чтобы вы установили их сами. Просмотр, проверка обновлений и зависимости работают в обоих случаях. Что бы вы ни выбрали, рядом с каждой кнопкой установки есть маленькая кнопка, которая делает обратное - только для этого мода.</value>
+  </data>
+  <data name="Options_MonitorModeInstall" xml:space="preserve">
+    <value>Устанавливать моды за меня</value>
+  </data>
+  <data name="Options_MonitorModeDownloadOnly" xml:space="preserve">
+    <value>Только скачивать - устанавливаю сам</value>
+  </data>
+  <data name="Options_MonitorFolderHeader" xml:space="preserve">
+    <value>Папка загрузок</value>
+  </data>
+  <data name="Options_MonitorFolderDescription" xml:space="preserve">
+    <value>Куда сохраняется мод, если он скачивается, а не устанавливается. Оставьте пустым, чтобы использовать папку «Загрузки» Windows. Приложение никогда не удаляет то, что сохраняет сюда.</value>
+  </data>
+  <data name="Options_MonitorFolderPlaceholderFormat" xml:space="preserve">
+    <value>Загрузки Windows ({0})</value>
+  </data>
+  <data name="Options_MonitorFolderPickerTitle" xml:space="preserve">
+    <value>Выберите, куда сохранять скачанные моды</value>
+  </data>
+  <data name="Options_MonitorFolderReset" xml:space="preserve">
+    <value>Использовать «Загрузки»</value>
+  </data>
+  <data name="Options_MonitorFolderResetToolTip" xml:space="preserve">
+    <value>Вернуться к папке «Загрузки» Windows, где бы Windows её ни хранил.</value>
+  </data>
+  <data name="ModPageGate_InstallDownloadOnly" xml:space="preserve">
+    <value>Скачать этот мод в папку загрузок, чтобы установить его самостоятельно.</value>
+  </data>
+  <data name="ModPageGate_RedownloadDownloadOnly" xml:space="preserve">
+    <value>Скачать этот мод заново в папку загрузок, чтобы установить его самостоятельно.</value>
+  </data>
+  <data name="ModPageGate_UpdateDownloadOnly" xml:space="preserve">
+    <value>Скачать эту версию в папку загрузок, чтобы установить её самостоятельно.</value>
+  </data>
+  <data name="ModPageGate_AlternateDownload" xml:space="preserve">
+    <value>Только скачать: сохранить в папку загрузок и установить самостоятельно, вместо установки этим приложением.</value>
+  </data>
+  <data name="ModPageGate_AlternateInstall" xml:space="preserve">
+    <value>Установить: приложение установит это за вас, а не только скачает.</value>
+  </data>
+  <data name="Downloads_SavingToFormat" xml:space="preserve">
+    <value>Загрузка в {0}...</value>
+  </data>
+  <data name="Downloads_SavedFormat" xml:space="preserve">
+    <value>{0} {1} сохранён в {2}. Установите его сами, когда будете готовы - в SPT ничего не изменено.</value>
+  </data>
+  <data name="Downloads_SavedUnrecognisedFormat" xml:space="preserve">
+    <value>{0} {1} сохранён в {2}. Приложение не смогло определить, как он устанавливается, поэтому следуйте инструкциям на странице мода.</value>
+  </data>
+  <data name="Downloads_ShowInFolder" xml:space="preserve">
+    <value>Показать в папке</value>
+  </data>
+  <data name="Downloads_ShowInFolderToolTip" xml:space="preserve">
+    <value>Открыть папку с выделенным скачанным файлом.</value>
+  </data>
+  <data name="ModInstall_DownloadFolderMissingFormat" xml:space="preserve">
+    <value>Папка загрузок {0} не существует. Выберите другую на странице «Параметры» или верните папку «Загрузки».</value>
+  </data>
+  <data name="ModInstall_DownloadFolderNotWritableFormat" xml:space="preserve">
+    <value>Не удалось сохранить в {0} ({1}). Выберите на странице «Параметры» папку, в которую можно записывать.</value>
+  </data>
 </root>

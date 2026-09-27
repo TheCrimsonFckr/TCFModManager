@@ -3978,4 +3978,70 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="SptLaunch_StopFailedReasonFormat" xml:space="preserve">
     <value>{0} konnte nicht gestoppt werden: {1}. Vielleicht läuft es als anderer Benutzer oder als Administrator - sein Fenster von Hand zu schließen und es dann neu zu starten, bewirkt dasselbe.</value>
   </data>
+  <data name="Options_MonitorHeader" xml:space="preserve">
+    <value>Überwachungsmodus</value>
+  </data>
+  <data name="Options_MonitorDescription" xml:space="preserve">
+    <value>Lege fest, ob diese App Mods für dich installiert oder sie nur herunterlädt, damit du sie selbst installierst. Durchsuchen, Update-Prüfungen und Abhängigkeiten funktionieren in beiden Fällen. Egal was du wählst: Neben jeder Installieren-Schaltfläche sitzt eine kleine Schaltfläche, die für diesen einen Mod das jeweils andere tut.</value>
+  </data>
+  <data name="Options_MonitorModeInstall" xml:space="preserve">
+    <value>Mods für mich installieren</value>
+  </data>
+  <data name="Options_MonitorModeDownloadOnly" xml:space="preserve">
+    <value>Nur herunterladen - ich installiere selbst</value>
+  </data>
+  <data name="Options_MonitorFolderHeader" xml:space="preserve">
+    <value>Download-Ordner</value>
+  </data>
+  <data name="Options_MonitorFolderDescription" xml:space="preserve">
+    <value>Wohin ein Mod gespeichert wird, wenn er heruntergeladen statt installiert wird. Leer lassen, um deinen Windows-Downloads-Ordner zu verwenden. Die App löscht nichts, was sie hier speichert.</value>
+  </data>
+  <data name="Options_MonitorFolderPlaceholderFormat" xml:space="preserve">
+    <value>Windows-Downloads ({0})</value>
+  </data>
+  <data name="Options_MonitorFolderPickerTitle" xml:space="preserve">
+    <value>Wähle, wo heruntergeladene Mods gespeichert werden</value>
+  </data>
+  <data name="Options_MonitorFolderReset" xml:space="preserve">
+    <value>Downloads verwenden</value>
+  </data>
+  <data name="Options_MonitorFolderResetToolTip" xml:space="preserve">
+    <value>Zurück zu deinem Windows-Downloads-Ordner, wo auch immer Windows ihn ablegt.</value>
+  </data>
+  <data name="ModPageGate_InstallDownloadOnly" xml:space="preserve">
+    <value>Diesen Mod in deinen Download-Ordner herunterladen, um ihn selbst zu installieren.</value>
+  </data>
+  <data name="ModPageGate_RedownloadDownloadOnly" xml:space="preserve">
+    <value>Diesen Mod erneut in deinen Download-Ordner herunterladen, um ihn selbst zu installieren.</value>
+  </data>
+  <data name="ModPageGate_UpdateDownloadOnly" xml:space="preserve">
+    <value>Diese Version in deinen Download-Ordner herunterladen, um sie selbst zu installieren.</value>
+  </data>
+  <data name="ModPageGate_AlternateDownload" xml:space="preserve">
+    <value>Nur herunterladen: in deinen Download-Ordner speichern und selbst installieren, statt es von dieser App installieren zu lassen.</value>
+  </data>
+  <data name="ModPageGate_AlternateInstall" xml:space="preserve">
+    <value>Installieren: diese App installiert es für dich, statt es nur herunterzuladen.</value>
+  </data>
+  <data name="Downloads_SavingToFormat" xml:space="preserve">
+    <value>Wird nach {0} heruntergeladen...</value>
+  </data>
+  <data name="Downloads_SavedFormat" xml:space="preserve">
+    <value>{0} {1} wurde unter {2} gespeichert. Installiere es selbst, wenn du so weit bist - an SPT wurde nichts verändert.</value>
+  </data>
+  <data name="Downloads_SavedUnrecognisedFormat" xml:space="preserve">
+    <value>{0} {1} wurde unter {2} gespeichert. Diese App konnte nicht erkennen, wie es installiert wird - folge daher den Schritten auf der Seite des Mods.</value>
+  </data>
+  <data name="Downloads_ShowInFolder" xml:space="preserve">
+    <value>Im Ordner anzeigen</value>
+  </data>
+  <data name="Downloads_ShowInFolderToolTip" xml:space="preserve">
+    <value>Den Ordner öffnen und die heruntergeladene Datei markieren.</value>
+  </data>
+  <data name="ModInstall_DownloadFolderMissingFormat" xml:space="preserve">
+    <value>Der Download-Ordner {0} existiert nicht. Wähle auf der Seite Optionen einen anderen oder setze ihn auf deinen Downloads-Ordner zurück.</value>
+  </data>
+  <data name="ModInstall_DownloadFolderNotWritableFormat" xml:space="preserve">
+    <value>In {0} konnte nicht gespeichert werden ({1}). Wähle auf der Seite Optionen einen Ordner, in den du schreiben darfst.</value>
+  </data>
 </root>

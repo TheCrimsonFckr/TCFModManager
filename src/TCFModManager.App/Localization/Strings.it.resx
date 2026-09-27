@@ -3978,4 +3978,70 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="SptLaunch_StopFailedReasonFormat" xml:space="preserve">
     <value>Impossibile fermare {0}: {1}. Potrebbe essere in esecuzione con un altro utente o come amministratore - chiudere la sua finestra a mano e poi riavviarlo ottiene lo stesso risultato.</value>
   </data>
+  <data name="Options_MonitorHeader" xml:space="preserve">
+    <value>Modalità monitoraggio</value>
+  </data>
+  <data name="Options_MonitorDescription" xml:space="preserve">
+    <value>Scegli se questa app installa i mod per te o si limita a scaricarli perché tu li installi da solo. La navigazione, il controllo degli aggiornamenti e le dipendenze funzionano in entrambi i casi. Qualunque sia la scelta, accanto a ogni pulsante di installazione c'è un piccolo pulsante che fa l'altra cosa, solo per quel mod.</value>
+  </data>
+  <data name="Options_MonitorModeInstall" xml:space="preserve">
+    <value>Installa i mod per me</value>
+  </data>
+  <data name="Options_MonitorModeDownloadOnly" xml:space="preserve">
+    <value>Solo download - li installo io</value>
+  </data>
+  <data name="Options_MonitorFolderHeader" xml:space="preserve">
+    <value>Cartella di download</value>
+  </data>
+  <data name="Options_MonitorFolderDescription" xml:space="preserve">
+    <value>Dove viene salvato un mod quando viene scaricato invece che installato. Lascia vuoto per usare la cartella Download di Windows. L'app non elimina mai nulla di ciò che salva qui.</value>
+  </data>
+  <data name="Options_MonitorFolderPlaceholderFormat" xml:space="preserve">
+    <value>Download di Windows ({0})</value>
+  </data>
+  <data name="Options_MonitorFolderPickerTitle" xml:space="preserve">
+    <value>Scegli dove salvare i mod scaricati</value>
+  </data>
+  <data name="Options_MonitorFolderReset" xml:space="preserve">
+    <value>Usa Download</value>
+  </data>
+  <data name="Options_MonitorFolderResetToolTip" xml:space="preserve">
+    <value>Torna alla cartella Download di Windows, ovunque Windows la tenga.</value>
+  </data>
+  <data name="ModPageGate_InstallDownloadOnly" xml:space="preserve">
+    <value>Scarica questo mod nella cartella di download, per installarlo da solo.</value>
+  </data>
+  <data name="ModPageGate_RedownloadDownloadOnly" xml:space="preserve">
+    <value>Scarica di nuovo questo mod nella cartella di download, per installarlo da solo.</value>
+  </data>
+  <data name="ModPageGate_UpdateDownloadOnly" xml:space="preserve">
+    <value>Scarica questa versione nella cartella di download, per installarla da solo.</value>
+  </data>
+  <data name="ModPageGate_AlternateDownload" xml:space="preserve">
+    <value>Solo download: salvalo nella cartella di download e installalo da solo, invece di farlo installare a questa app.</value>
+  </data>
+  <data name="ModPageGate_AlternateInstall" xml:space="preserve">
+    <value>Installa: lascia che sia questa app a installarlo, invece di scaricarlo soltanto.</value>
+  </data>
+  <data name="Downloads_SavingToFormat" xml:space="preserve">
+    <value>Download in {0}...</value>
+  </data>
+  <data name="Downloads_SavedFormat" xml:space="preserve">
+    <value>{0} {1} salvato in {2}. Installalo da solo quando sei pronto - in SPT non è stato cambiato nulla.</value>
+  </data>
+  <data name="Downloads_SavedUnrecognisedFormat" xml:space="preserve">
+    <value>{0} {1} salvato in {2}. Questa app non è riuscita a capire come si installa, quindi segui i passaggi sulla pagina del mod.</value>
+  </data>
+  <data name="Downloads_ShowInFolder" xml:space="preserve">
+    <value>Mostra nella cartella</value>
+  </data>
+  <data name="Downloads_ShowInFolderToolTip" xml:space="preserve">
+    <value>Apri la cartella con il file scaricato selezionato.</value>
+  </data>
+  <data name="ModInstall_DownloadFolderMissingFormat" xml:space="preserve">
+    <value>La cartella di download {0} non esiste. Scegline un'altra nella pagina Opzioni, oppure torna alla cartella Download.</value>
+  </data>
+  <data name="ModInstall_DownloadFolderNotWritableFormat" xml:space="preserve">
+    <value>Impossibile salvare in {0} ({1}). Scegli nella pagina Opzioni una cartella in cui puoi scrivere.</value>
+  </data>
 </root>

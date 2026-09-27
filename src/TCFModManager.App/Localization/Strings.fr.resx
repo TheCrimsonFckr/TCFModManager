@@ -3978,4 +3978,70 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="SptLaunch_StopFailedReasonFormat" xml:space="preserve">
     <value>Impossible d'arrêter {0} : {1}. Il s'exécute peut-être sous un autre utilisateur ou en administrateur - fermer sa fenêtre à la main puis le relancer fait le même travail.</value>
   </data>
+  <data name="Options_MonitorHeader" xml:space="preserve">
+    <value>Mode surveillance</value>
+  </data>
+  <data name="Options_MonitorDescription" xml:space="preserve">
+    <value>Choisissez si cette application installe les mods pour vous, ou se contente de les télécharger pour que vous les installiez vous-même. La navigation, la recherche de mises à jour et les dépendances fonctionnent dans les deux cas. Quel que soit votre choix, chaque bouton d'installation a un petit bouton à côté qui fait l'inverse, pour ce seul mod.</value>
+  </data>
+  <data name="Options_MonitorModeInstall" xml:space="preserve">
+    <value>Installer les mods pour moi</value>
+  </data>
+  <data name="Options_MonitorModeDownloadOnly" xml:space="preserve">
+    <value>Télécharger seulement - je les installe moi-même</value>
+  </data>
+  <data name="Options_MonitorFolderHeader" xml:space="preserve">
+    <value>Dossier de téléchargement</value>
+  </data>
+  <data name="Options_MonitorFolderDescription" xml:space="preserve">
+    <value>L'endroit où un mod est enregistré lorsqu'il est téléchargé au lieu d'être installé. Laissez vide pour utiliser votre dossier Téléchargements de Windows. L'application ne supprime jamais ce qu'elle enregistre ici.</value>
+  </data>
+  <data name="Options_MonitorFolderPlaceholderFormat" xml:space="preserve">
+    <value>Téléchargements Windows ({0})</value>
+  </data>
+  <data name="Options_MonitorFolderPickerTitle" xml:space="preserve">
+    <value>Choisissez où enregistrer les mods téléchargés</value>
+  </data>
+  <data name="Options_MonitorFolderReset" xml:space="preserve">
+    <value>Utiliser Téléchargements</value>
+  </data>
+  <data name="Options_MonitorFolderResetToolTip" xml:space="preserve">
+    <value>Revenir à votre dossier Téléchargements de Windows, où que Windows le place.</value>
+  </data>
+  <data name="ModPageGate_InstallDownloadOnly" xml:space="preserve">
+    <value>Télécharger ce mod dans votre dossier de téléchargement, pour l'installer vous-même.</value>
+  </data>
+  <data name="ModPageGate_RedownloadDownloadOnly" xml:space="preserve">
+    <value>Retélécharger ce mod dans votre dossier de téléchargement, pour l'installer vous-même.</value>
+  </data>
+  <data name="ModPageGate_UpdateDownloadOnly" xml:space="preserve">
+    <value>Télécharger cette version dans votre dossier de téléchargement, pour l'installer vous-même.</value>
+  </data>
+  <data name="ModPageGate_AlternateDownload" xml:space="preserve">
+    <value>Télécharger seulement : l'enregistrer dans votre dossier de téléchargement et l'installer vous-même, au lieu de laisser cette application l'installer.</value>
+  </data>
+  <data name="ModPageGate_AlternateInstall" xml:space="preserve">
+    <value>Installer : laisser cette application l'installer pour vous, au lieu de seulement le télécharger.</value>
+  </data>
+  <data name="Downloads_SavingToFormat" xml:space="preserve">
+    <value>Téléchargement vers {0}...</value>
+  </data>
+  <data name="Downloads_SavedFormat" xml:space="preserve">
+    <value>{0} {1} enregistré dans {2}. Installez-le vous-même quand vous êtes prêt - rien n'a été modifié dans SPT.</value>
+  </data>
+  <data name="Downloads_SavedUnrecognisedFormat" xml:space="preserve">
+    <value>{0} {1} enregistré dans {2}. Cette application n'a pas pu déterminer comment l'installer, suivez donc les étapes indiquées sur la page du mod.</value>
+  </data>
+  <data name="Downloads_ShowInFolder" xml:space="preserve">
+    <value>Afficher dans le dossier</value>
+  </data>
+  <data name="Downloads_ShowInFolderToolTip" xml:space="preserve">
+    <value>Ouvrir le dossier avec le fichier téléchargé sélectionné.</value>
+  </data>
+  <data name="ModInstall_DownloadFolderMissingFormat" xml:space="preserve">
+    <value>Le dossier de téléchargement {0} n'existe pas. Choisissez-en un autre dans la page Options, ou revenez à votre dossier Téléchargements.</value>
+  </data>
+  <data name="ModInstall_DownloadFolderNotWritableFormat" xml:space="preserve">
+    <value>Impossible d'enregistrer dans {0} ({1}). Choisissez dans la page Options un dossier où vous pouvez écrire.</value>
+  </data>
 </root>

@@ -4756,4 +4756,82 @@ This was written to:
 {1}</value>
     <comment>{0} is the error itself, which arrives in English from .NET; {1} is the path to the log file.</comment>
   </data>
+  <data name="Options_MonitorHeader" xml:space="preserve">
+    <value>Monitor mode</value>
+  </data>
+  <data name="Options_MonitorDescription" xml:space="preserve">
+    <value>Choose whether this app installs mods for you, or only downloads them so you can install them yourself. Browsing, update checks and dependencies keep working either way. Whichever you pick, every install button has a small button beside it that does the other one, for that mod alone.</value>
+  </data>
+  <data name="Options_MonitorModeInstall" xml:space="preserve">
+    <value>Install mods for me</value>
+  </data>
+  <data name="Options_MonitorModeDownloadOnly" xml:space="preserve">
+    <value>Download only - I install them myself</value>
+  </data>
+  <data name="Options_MonitorFolderHeader" xml:space="preserve">
+    <value>Download folder</value>
+  </data>
+  <data name="Options_MonitorFolderDescription" xml:space="preserve">
+    <value>Where a mod is saved when it is downloaded rather than installed. Leave it empty to use your Windows Downloads folder. The app never deletes anything it saves here.</value>
+  </data>
+  <data name="Options_MonitorFolderPlaceholderFormat" xml:space="preserve">
+    <value>Windows Downloads ({0})</value>
+    <comment>{0} is the path of the user's Windows Downloads folder.</comment>
+  </data>
+  <data name="Options_MonitorFolderPickerTitle" xml:space="preserve">
+    <value>Choose where downloaded mods are saved</value>
+  </data>
+  <data name="Options_MonitorFolderReset" xml:space="preserve">
+    <value>Use Downloads</value>
+    <comment>Button that clears the download folder back to the Windows Downloads folder.</comment>
+  </data>
+  <data name="Options_MonitorFolderResetToolTip" xml:space="preserve">
+    <value>Go back to your Windows Downloads folder, wherever Windows keeps it.</value>
+  </data>
+  <data name="ModPageGate_InstallDownloadOnly" xml:space="preserve">
+    <value>Download this mod to your download folder, to install yourself.</value>
+    <comment>Tooltip on the Install button while Monitor mode is set to download only.</comment>
+  </data>
+  <data name="ModPageGate_RedownloadDownloadOnly" xml:space="preserve">
+    <value>Download this mod again to your download folder, to install yourself.</value>
+    <comment>Tooltip on the Redownload button while Monitor mode is set to download only.</comment>
+  </data>
+  <data name="ModPageGate_UpdateDownloadOnly" xml:space="preserve">
+    <value>Download this version to your download folder, to install yourself.</value>
+    <comment>Tooltip on the Update button while Monitor mode is set to download only.</comment>
+  </data>
+  <data name="ModPageGate_AlternateDownload" xml:space="preserve">
+    <value>Download only: save it to your download folder and install it yourself, instead of having this app install it.</value>
+    <comment>Tooltip on the small button beside an install button, while the app installs mods. It downloads the mod only.</comment>
+  </data>
+  <data name="ModPageGate_AlternateInstall" xml:space="preserve">
+    <value>Install it: have this app install it for you, instead of only downloading it.</value>
+    <comment>Tooltip on the small button beside an install button, while Monitor mode is set to download only. It installs the mod.</comment>
+  </data>
+  <data name="Downloads_SavingToFormat" xml:space="preserve">
+    <value>Downloading to {0}...</value>
+    <comment>{0} is the folder the file is being saved into.</comment>
+  </data>
+  <data name="Downloads_SavedFormat" xml:space="preserve">
+    <value>Saved {0} {1} to {2}. Install it yourself when you are ready - nothing in SPT has been changed.</value>
+    <comment>{0} is a mod name, {1} its version, {2} the full path of the saved file.</comment>
+  </data>
+  <data name="Downloads_SavedUnrecognisedFormat" xml:space="preserve">
+    <value>Saved {0} {1} to {2}. This app couldn't tell how it installs, so follow the steps on the mod's page.</value>
+    <comment>{0} is a mod name, {1} its version, {2} the full path of the saved file.</comment>
+  </data>
+  <data name="Downloads_ShowInFolder" xml:space="preserve">
+    <value>Show in folder</value>
+  </data>
+  <data name="Downloads_ShowInFolderToolTip" xml:space="preserve">
+    <value>Open the folder with the downloaded file selected.</value>
+  </data>
+  <data name="ModInstall_DownloadFolderMissingFormat" xml:space="preserve">
+    <value>The download folder {0} doesn't exist. Choose another one on the Options page, or reset it to your Downloads folder.</value>
+    <comment>{0} is the folder path.</comment>
+  </data>
+  <data name="ModInstall_DownloadFolderNotWritableFormat" xml:space="preserve">
+    <value>Couldn't save into {0} ({1}). Choose a folder you can write to on the Options page.</value>
+    <comment>{0} is the folder path; {1} is the error from Windows, which may arrive in English.</comment>
+  </data>
 </root>
