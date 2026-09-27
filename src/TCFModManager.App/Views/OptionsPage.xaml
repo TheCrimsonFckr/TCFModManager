@@ -380,6 +380,13 @@
                         Command="{Binding ResetDownloadFolderCommand}" />
                 </Grid>
 
+                <ui:ToggleSwitch
+                    Margin="0,8,0,0"
+                    HorizontalAlignment="Left"
+                    IsChecked="{Binding DownloadListSubfolders}"
+                    OnContent="{loc:Str Options_MonitorListSubfoldersOn}"
+                    OffContent="{loc:Str Options_MonitorListSubfoldersOff}" />
+
                 <TextBlock
                     Text="{loc:Str Options_MonitorConfirmHeader}"
                     FontWeight="SemiBold"

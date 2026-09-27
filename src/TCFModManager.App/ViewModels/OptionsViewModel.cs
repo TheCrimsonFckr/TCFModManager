@@ -100,6 +100,10 @@ public partial class OptionsViewModel : LocalizedViewModel
     [ObservableProperty]
     private DownloadConfirmationItem _selectedDownloadConfirmation;
 
+    // Whether a mod list's downloads go into a subfolder named after the list (§9).
+    [ObservableProperty]
+    private bool _downloadListSubfolders;
+
     // Empty means the Windows Downloads folder, which the placeholder names.
     [ObservableProperty]
     private string _downloadFolderInput = string.Empty;
@@ -219,6 +223,7 @@ public partial class OptionsViewModel : LocalizedViewModel
         _selectedInstallMode = InstallModeOptions.FirstOrDefault(o => o.Value == settings.Monitor.InstallMode)
             ?? InstallModeOptions[0];
         _downloadFolderInput = settings.Monitor.DownloadFolder ?? string.Empty;
+        _downloadListSubfolders = settings.Monitor.DownloadListSubfolders;
         _selectedDownloadConfirmation =
             DownloadConfirmationOptions.FirstOrDefault(o => o.Value == settings.Monitor.DownloadConfirmation)
             ?? DownloadConfirmationOptions[0];
@@ -308,6 +313,17 @@ public partial class OptionsViewModel : LocalizedViewModel
         AppServices.ModPageGate.Refresh();
 
         AppLog.Info("Monitor", $"install mode set to {value.Value}");
+    }
+
+    partial void OnDownloadListSubfoldersChanged(bool value)
+    {
+        if (!_loaded) return;
+
+        var settings = _settings.Load();
+        settings.Monitor.DownloadListSubfolders = value;
+        _settings.Save(settings);
+
+        AppLog.Info("Monitor", value ? "list downloads go into subfolders" : "list downloads go into the folder itself");
     }
 
     partial void OnSelectedDownloadConfirmationChanged(DownloadConfirmationItem value)
