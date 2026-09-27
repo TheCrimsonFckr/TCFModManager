@@ -398,6 +398,13 @@ public partial class ModListsViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(HasVersionWarning))]
     private string? _versionWarning;
 
+    // Monitor mode (§9): said before an apply whose installs and updates will only be downloaded.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasDownloadOnlyNotice))]
+    private string? _downloadOnlyNotice;
+
+    public bool HasDownloadOnlyNotice => DownloadOnlyNotice is not null;
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanRevert))]
     [NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
@@ -709,6 +716,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         PlanRows.Clear();
         PlanSummary = null;
         VersionWarning = null;
+        DownloadOnlyNotice = null;
         ApplyCommand.NotifyCanExecuteChanged();
     }
 
@@ -820,6 +828,12 @@ public partial class ModListsViewModel : LocalizedViewModel
             && !string.Equals(captured, current, StringComparison.OrdinalIgnoreCase)
                 ? Text(Strings.ModLists_VersionWarningFormat, captured, current)
                 : null;
+
+        var downloads = plan.Install.Count() + plan.Update.Count()
+            + plan.Enable.Count(a => a.NeedsUpdateAfterEnable);
+        DownloadOnlyNotice = downloads > 0 && ModListDownloadMode.For(preview.List).DownloadOnly
+            ? Strings.ModLists_DownloadOnlyNotice(downloads)
+            : null;
 
         ApplyCommand.NotifyCanExecuteChanged();
         StatusMessage = plan.RequiresGameClosed
@@ -947,7 +961,7 @@ public partial class ModListsViewModel : LocalizedViewModel
 
             if (result.Completed)
             {
-                StatusMessage = Completed(result);
+                StatusMessage = Completed(result, ModListDownloadMode.For(preview.List));
                 ClearPlan();
                 Refresh(preview.List.Id);
                 return;
@@ -978,7 +992,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         });
     }
 
-    private static string Completed(ModListApplyResult result)
+    private static string Completed(ModListApplyResult result, ModListDownloadMode mode)
     {
         var parts = new List<string>();
         void Count(int n, string format) { if (n > 0) parts.Add(Text(format, n)); }
@@ -992,6 +1006,14 @@ public partial class ModListsViewModel : LocalizedViewModel
             : Text(Strings.ModLists_AppliedFormat, string.Join(Strings.Common_ListSeparator, parts));
 
         // Whole sentences appended to a whole sentence, rather than clauses glued to one.
+        if (mode.DownloadOnly && result.Fetched.Fetched.Count > 0)
+        {
+            var folder = DownloadFolders.Resolve(new SettingsService().Load().Monitor.DownloadFolder);
+            if (mode.Subfolder is { } subfolder) folder = Path.Combine(folder, DownloadFolders.SafeName(subfolder));
+
+            message += " " + Text(Strings.ModLists_AppliedDownloadOnlyFormat, folder);
+        }
+
         var manual = result.Manual.Count;
         if (manual > 0)
         {

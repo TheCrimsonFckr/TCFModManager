@@ -460,13 +460,23 @@
                     Text="{Binding StatusMessage}" />
             </StackPanel>
 
-            <ui:InfoBar
-                Grid.Row="2"
-                Margin="0,16,0,0"
-                Severity="Warning"
-                IsClosable="False"
-                IsOpen="{Binding HasVersionWarning, Mode=OneWay}"
-                Message="{Binding VersionWarning}" />
+            <StackPanel Grid.Row="2">
+                <ui:InfoBar
+                    Margin="0,16,0,0"
+                    Severity="Warning"
+                    IsClosable="False"
+                    IsOpen="{Binding HasVersionWarning, Mode=OneWay}"
+                    Message="{Binding VersionWarning}" />
+
+                <!-- Monitor mode: this apply downloads its installs and updates for the user to
+                     install, and says so before anything runs. -->
+                <ui:InfoBar
+                    Margin="0,16,0,0"
+                    Severity="Informational"
+                    IsClosable="False"
+                    IsOpen="{Binding HasDownloadOnlyNotice, Mode=OneWay}"
+                    Message="{Binding DownloadOnlyNotice}" />
+            </StackPanel>
 
             <TextBlock
                 Grid.Row="3"
