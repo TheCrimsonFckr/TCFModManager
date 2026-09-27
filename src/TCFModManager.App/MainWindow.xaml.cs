@@ -37,6 +37,23 @@ public partial class MainWindow : FluentWindow
             _ = AppServices.ServerMap.ConnectOnStartupAsync();
         };
 
+        //
+        // Running in the tray (§8a): with the setting on, closing hides the window instead, and the
+        // tray icon goes as soon as the window is back, however it came back.
+        //
+        Closing += (_, e) =>
+        {
+            if (!AppTray.HidesOnClose()) return;
+
+            e.Cancel = true;
+            AppTray.HideToTray(this);
+        };
+
+        IsVisibleChanged += (_, _) =>
+        {
+            if (IsVisible) AppTray.OnWindowShown();
+        };
+
         // Constructs and shows the mod details dialog when requested.
         AppServices.ModDetailsOverlay.Requested += async (_, request) =>
             await new ModDetailsContentDialog(RootContentDialogPresenter, request).ShowAsync();

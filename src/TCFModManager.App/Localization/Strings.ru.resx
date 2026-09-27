@@ -4372,7 +4372,7 @@
     <value>12 часов</value>
   </data>
   <data name="Options_UpdateNotificationsNote" xml:space="preserve">
-    <value>Первая проверка проходит через один интервал после запуска приложения, а при закрытии приложения проверки прекращаются. Нет уведомлений? Проверьте, что TCF Mod Manager разрешено их показывать в разделе Параметры Windows &gt; Система &gt; Уведомления.</value>
+    <value>Первая проверка проходит через один интервал после запуска приложения, а при выходе из приложения проверки прекращаются - закрытие окна завершает приложение, если оно не оставлено в области уведомлений. Нет уведомлений? Проверьте, что TCF Mod Manager разрешено их показывать в разделе Параметры Windows &gt; Система &gt; Уведомления.</value>
   </data>
   <data name="UpdateToast_Title_one" xml:space="preserve">
     <value>Доступно {0} обновление мода</value>
@@ -4451,5 +4451,35 @@
   </data>
   <data name="Options_UpdateCheckTimeFormat" xml:space="preserve">
     <value>{0} ({1:t})</value>
+  </data>
+  <data name="Options_TrayOn" xml:space="preserve">
+    <value>При закрытии окна приложение продолжает работать в области уведомлений</value>
+  </data>
+  <data name="Options_TrayOff" xml:space="preserve">
+    <value>При закрытии окна приложение завершается</value>
+  </data>
+  <data name="Options_TrayToolTip" xml:space="preserve">
+    <value>Если включено, закрытие окна скрывает его и оставляет значок в области уведомлений, чтобы проверки продолжались. Щёлкните значок, чтобы снова открыть окно; щёлкните правой кнопкой, чтобы проверить сейчас или выйти. Доступно, только пока включены уведомления об обновлениях.</value>
+  </data>
+  <data name="Tray_ToolTip" xml:space="preserve">
+    <value>TCF Mod Manager - проверка обновлений модов</value>
+  </data>
+  <data name="Tray_Open" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="Tray_CheckNow" xml:space="preserve">
+    <value>Проверить обновления сейчас</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>Выйти</value>
+  </data>
+  <data name="Tray_CheckResultTitle" xml:space="preserve">
+    <value>Проверка обновлений</value>
+  </data>
+  <data name="Tray_NoticeTitle" xml:space="preserve">
+    <value>TCF Mod Manager всё ещё работает</value>
+  </data>
+  <data name="Tray_NoticeBody" xml:space="preserve">
+    <value>Приложение в области уведомлений и проверяет обновления модов. Щёлкните его значок, чтобы снова открыть, или щёлкните правой кнопкой, чтобы выйти. Это можно отключить в настройках.</value>
   </data>
 </root>

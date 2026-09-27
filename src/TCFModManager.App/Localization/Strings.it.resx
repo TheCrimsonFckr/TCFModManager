@@ -4153,7 +4153,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>12 ore</value>
   </data>
   <data name="Options_UpdateNotificationsNote" xml:space="preserve">
-    <value>Il primo controllo avviene un intervallo dopo l'avvio dell'app, e i controlli si fermano quando l'app si chiude. Nessuna notifica? Verifica che TCF Mod Manager possa mostrarle in Impostazioni di Windows &gt; Sistema &gt; Notifiche.</value>
+    <value>Il primo controllo avviene un intervallo dopo l'avvio dell'app, e i controlli si fermano quando l'app si chiude - chiudere la finestra la chiude, a meno che non resti nell'area di notifica. Nessuna notifica? Verifica che TCF Mod Manager possa mostrarle in Impostazioni di Windows &gt; Sistema &gt; Notifiche.</value>
   </data>
   <data name="UpdateToast_Title_one" xml:space="preserve">
     <value>Aggiornamento mod disponibile</value>
@@ -4220,5 +4220,35 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   </data>
   <data name="Options_UpdateCheckTimeFormat" xml:space="preserve">
     <value>{0} ({1:t})</value>
+  </data>
+  <data name="Options_TrayOn" xml:space="preserve">
+    <value>Chiudendo la finestra l'app resta attiva nell'area di notifica</value>
+  </data>
+  <data name="Options_TrayOff" xml:space="preserve">
+    <value>Chiudendo la finestra l'app si chiude</value>
+  </data>
+  <data name="Options_TrayToolTip" xml:space="preserve">
+    <value>Se è attivo, chiudere la finestra la nasconde e lascia un'icona nell'area di notifica, così i controlli continuano. Fai clic sull'icona per riaprire la finestra; clic destro per controllare subito o uscire. Disponibile solo con le notifiche di aggiornamento attive.</value>
+  </data>
+  <data name="Tray_ToolTip" xml:space="preserve">
+    <value>TCF Mod Manager - controlla gli aggiornamenti dei mod</value>
+  </data>
+  <data name="Tray_Open" xml:space="preserve">
+    <value>Apri</value>
+  </data>
+  <data name="Tray_CheckNow" xml:space="preserve">
+    <value>Controlla aggiornamenti ora</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>Esci</value>
+  </data>
+  <data name="Tray_CheckResultTitle" xml:space="preserve">
+    <value>Controllo aggiornamenti</value>
+  </data>
+  <data name="Tray_NoticeTitle" xml:space="preserve">
+    <value>TCF Mod Manager è ancora attivo</value>
+  </data>
+  <data name="Tray_NoticeBody" xml:space="preserve">
+    <value>È nell'area di notifica e controlla gli aggiornamenti dei mod. Fai clic sulla sua icona per riaprirlo, o clic destro per uscire. Puoi disattivarlo nelle Opzioni.</value>
   </data>
 </root>

@@ -17,6 +17,20 @@ public sealed class UpdateNotificationSettings
     // How often the check runs. A name rather than a number, like Theme, so the file stays readable.
     [JsonConverter(typeof(JsonStringEnumConverter<UpdateCheckInterval>))]
     public UpdateCheckInterval Interval { get; set; } = UpdateCheckInterval.OneHour;
+
+    //
+    // Closing the window hides it to the tray instead of quitting, so the checks carry on (§8a).
+    // Off by default (D8): an app that stays running after you close it is a surprise nobody opted
+    // into. Only honoured while Enabled is on - see KeepsRunningInTray.
+    //
+    public bool KeepRunningInTray { get; set; }
+
+    // Whether the one-time "still running in the tray" notification (D9) has been shown.
+    public bool TrayNoticeShown { get; set; }
+
+    // Hiding to the tray is for the checks; with notifications off there is nothing to stay for.
+    [JsonIgnore]
+    public bool KeepsRunningInTray => Enabled && KeepRunningInTray;
 }
 
 //

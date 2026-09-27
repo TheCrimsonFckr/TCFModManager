@@ -85,6 +85,10 @@ public partial class App : Application
             args.SetObserved();
         };
 
+        // Signing out or shutting Windows down closes the window like anything else, and that close
+        // has to end the app rather than hide it in the tray.
+        SessionEnding += (_, _) => AppTray.MarkQuitting();
+
         // Before the window, so a launch that came from clicking a notification opens on Installed.
         UpdateToasts.Initialize(e.Args, new SettingsService().Load().UpdateNotifications.Enabled);
 
@@ -139,6 +143,8 @@ public partial class App : Application
         }
 
         AppServices.UpdateWatcher.Stop();
+        AppTray.Dispose();
+        UpdateToasts.RemoveMessages();
         DependencyBadgeLoader.Flush();
         AppLog.Info("App", "Shutting down");
         AppLog.Flush();

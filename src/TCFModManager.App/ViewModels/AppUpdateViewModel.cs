@@ -287,8 +287,9 @@ public partial class AppUpdateViewModel : LocalizedViewModel
             AppUpdateInstaller.LaunchApplyScript();
 
             // The script is already waiting on this process. Shutdown (rather than Environment.Exit)
-            // so App.OnExit still runs and the log is flushed before the swap happens.
-            Application.Current.Shutdown();
+            // so App.OnExit still runs and the log is flushed before the swap happens. Through the
+            // tray's Quit, so the window closing isn't taken for a close to the tray.
+            AppTray.Quit();
         }
         catch (OperationCanceledException)
         {

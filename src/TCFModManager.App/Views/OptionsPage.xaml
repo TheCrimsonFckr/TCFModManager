@@ -428,6 +428,17 @@
                     OnContent="{loc:Str Options_UpdateNotificationsOn}"
                     OffContent="{loc:Str Options_UpdateNotificationsOff}" />
 
+                <!-- Only means anything while notifications are on (D8), so greyed out otherwise. -->
+                <ui:ToggleSwitch
+                    Margin="0,8,0,0"
+                    HorizontalAlignment="Left"
+                    IsEnabled="{Binding UpdateNotificationsEnabled}"
+                    ToolTip="{loc:Str Options_TrayToolTip}"
+                    ToolTipService.ShowDuration="20000"
+                    IsChecked="{Binding KeepRunningInTray}"
+                    OnContent="{loc:Str Options_TrayOn}"
+                    OffContent="{loc:Str Options_TrayOff}" />
+
                 <TextBlock
                     Text="{loc:Str Options_UpdateIntervalHeader}"
                     FontWeight="SemiBold"

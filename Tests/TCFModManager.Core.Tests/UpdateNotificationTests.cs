@@ -278,3 +278,23 @@ public class UpdateNotificationSettingsTests
         Assert.Equal(TimeSpan.FromMinutes(30), UpdateCheckInterval.ThirtyMinutes.ToTimeSpan());
     }
 }
+
+public class TraySettingTests
+{
+    [Fact]
+    public void TheTrayIsOnlyKeptWhileNotificationsAreOn()
+    {
+        Assert.False(new UpdateNotificationSettings { KeepRunningInTray = true }.KeepsRunningInTray);
+        Assert.False(new UpdateNotificationSettings { Enabled = true }.KeepsRunningInTray);
+        Assert.True(new UpdateNotificationSettings { Enabled = true, KeepRunningInTray = true }.KeepsRunningInTray);
+    }
+
+    [Fact]
+    public void TheDerivedAnswerIsNotWrittenToSettings()
+    {
+        var json = System.Text.Json.JsonSerializer.Serialize(new UpdateNotificationSettings { Enabled = true, KeepRunningInTray = true });
+
+        Assert.DoesNotContain("KeepsRunningInTray", json);
+        Assert.Contains("\"KeepRunningInTray\":true", json);
+    }
+}

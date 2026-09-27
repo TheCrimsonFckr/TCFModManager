@@ -4960,7 +4960,7 @@ This was written to:
     <value>12 hours</value>
   </data>
   <data name="Options_UpdateNotificationsNote" xml:space="preserve">
-    <value>The first check runs one interval after the app starts, and checks stop when the app closes. No notifications? Check that TCF Mod Manager is allowed to show them in Windows Settings &gt; System &gt; Notifications.</value>
+    <value>The first check runs one interval after the app starts, and checks stop when the app quits - closing the window quits it, unless it's kept in the tray. No notifications? Check that TCF Mod Manager is allowed to show them in Windows Settings &gt; System &gt; Notifications.</value>
     <comment>Windows Settings &gt; System &gt; Notifications is the path in Windows; use the names Windows itself shows in your language.</comment>
   </data>
   <data name="UpdateToast_Title_one" xml:space="preserve">
@@ -5039,5 +5039,43 @@ This was written to:
   <data name="Options_UpdateCheckTimeFormat" xml:space="preserve">
     <value>{0} ({1:t})</value>
     <comment>{0} is the result of the check, {1} the time it finished.</comment>
+  </data>
+  <data name="Options_TrayOn" xml:space="preserve">
+    <value>Closing the window keeps the app running in the tray</value>
+    <comment>Label on the switch when it is ON. The tray is the Windows notification area by the clock.</comment>
+  </data>
+  <data name="Options_TrayOff" xml:space="preserve">
+    <value>Closing the window quits the app</value>
+    <comment>Label on the same switch when it is OFF.</comment>
+  </data>
+  <data name="Options_TrayToolTip" xml:space="preserve">
+    <value>With this on, closing the window hides it and leaves an icon in the notification area, so the checks carry on. Click the icon to open the window again; right-click it to check now or quit. Only available while update notifications are on.</value>
+  </data>
+  <data name="Tray_ToolTip" xml:space="preserve">
+    <value>TCF Mod Manager - checking for mod updates</value>
+    <comment>Shown when the mouse rests on the tray icon. Keep it short: Windows cuts it off at 127 characters.</comment>
+  </data>
+  <data name="Tray_Open" xml:space="preserve">
+    <value>Open</value>
+    <comment>Tray icon menu: shows the window.</comment>
+  </data>
+  <data name="Tray_CheckNow" xml:space="preserve">
+    <value>Check for updates now</value>
+    <comment>Tray icon menu.</comment>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>Quit</value>
+    <comment>Tray icon menu: ends the app.</comment>
+  </data>
+  <data name="Tray_CheckResultTitle" xml:space="preserve">
+    <value>Update check</value>
+    <comment>Title of the notification that answers the tray menu's Check for updates now.</comment>
+  </data>
+  <data name="Tray_NoticeTitle" xml:space="preserve">
+    <value>TCF Mod Manager is still running</value>
+    <comment>Notification shown the first time the window is closed to the tray.</comment>
+  </data>
+  <data name="Tray_NoticeBody" xml:space="preserve">
+    <value>It's in the tray, checking for mod updates. Click its icon to open it again, or right-click it to quit. You can turn this off in Options.</value>
   </data>
 </root>

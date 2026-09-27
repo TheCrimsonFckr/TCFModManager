@@ -4153,7 +4153,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>12 Stunden</value>
   </data>
   <data name="Options_UpdateNotificationsNote" xml:space="preserve">
-    <value>Die erste Prüfung läuft ein Intervall nach dem Start der App, und die Prüfungen enden, wenn die App geschlossen wird. Keine Benachrichtigungen? Prüfe, ob TCF Mod Manager sie unter Windows-Einstellungen &gt; System &gt; Benachrichtigungen anzeigen darf.</value>
+    <value>Die erste Prüfung läuft ein Intervall nach dem Start der App, und die Prüfungen enden, wenn die App beendet wird - das Schließen des Fensters beendet sie, außer sie bleibt im Infobereich. Keine Benachrichtigungen? Prüfe, ob TCF Mod Manager sie unter Windows-Einstellungen &gt; System &gt; Benachrichtigungen anzeigen darf.</value>
   </data>
   <data name="UpdateToast_Title_one" xml:space="preserve">
     <value>Mod-Update verfügbar</value>
@@ -4220,5 +4220,35 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   </data>
   <data name="Options_UpdateCheckTimeFormat" xml:space="preserve">
     <value>{0} ({1:t})</value>
+  </data>
+  <data name="Options_TrayOn" xml:space="preserve">
+    <value>Beim Schließen des Fensters läuft die App im Infobereich weiter</value>
+  </data>
+  <data name="Options_TrayOff" xml:space="preserve">
+    <value>Beim Schließen des Fensters wird die App beendet</value>
+  </data>
+  <data name="Options_TrayToolTip" xml:space="preserve">
+    <value>Ist das an, wird das Fenster beim Schließen ausgeblendet und ein Symbol im Infobereich bleibt, damit die Prüfungen weiterlaufen. Klicke auf das Symbol, um das Fenster wieder zu öffnen; per Rechtsklick kannst du sofort prüfen oder die App beenden. Nur verfügbar, solange Update-Benachrichtigungen an sind.</value>
+  </data>
+  <data name="Tray_ToolTip" xml:space="preserve">
+    <value>TCF Mod Manager - prüft auf Mod-Updates</value>
+  </data>
+  <data name="Tray_Open" xml:space="preserve">
+    <value>Öffnen</value>
+  </data>
+  <data name="Tray_CheckNow" xml:space="preserve">
+    <value>Jetzt auf Updates prüfen</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>Beenden</value>
+  </data>
+  <data name="Tray_CheckResultTitle" xml:space="preserve">
+    <value>Update-Prüfung</value>
+  </data>
+  <data name="Tray_NoticeTitle" xml:space="preserve">
+    <value>TCF Mod Manager läuft noch</value>
+  </data>
+  <data name="Tray_NoticeBody" xml:space="preserve">
+    <value>Die App ist im Infobereich und prüft auf Mod-Updates. Klicke auf ihr Symbol, um sie wieder zu öffnen, oder per Rechtsklick, um sie zu beenden. Du kannst das in den Optionen ausschalten.</value>
   </data>
 </root>

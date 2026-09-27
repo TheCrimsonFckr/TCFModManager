@@ -121,6 +121,11 @@ public partial class OptionsViewModel : LocalizedViewModel
     [NotifyCanExecuteChangedFor(nameof(CheckUpdatesNowCommand))]
     private bool _updateNotificationsEnabled;
 
+    // Closing the window hides it to the tray instead (§8a). Greyed out while notifications are off,
+    // and ignored then too (D8) - see UpdateNotificationSettings.KeepsRunningInTray.
+    [ObservableProperty]
+    private bool _keepRunningInTray;
+
     // What the last Check now came to, under the button. Empty until it has been pressed.
     [ObservableProperty]
     private string _updateCheckStatus = string.Empty;
@@ -255,6 +260,7 @@ public partial class OptionsViewModel : LocalizedViewModel
             ?? DownloadConfirmationOptions[0];
 
         _updateNotificationsEnabled = settings.UpdateNotifications.Enabled;
+        _keepRunningInTray = settings.UpdateNotifications.KeepRunningInTray;
         _selectedUpdateInterval =
             UpdateIntervalOptions.FirstOrDefault(o => o.Value == settings.UpdateNotifications.Interval)
             ?? UpdateIntervalOptions[1];
@@ -395,23 +401,20 @@ public partial class OptionsViewModel : LocalizedViewModel
 
         var outcome = await AppServices.UpdateWatcher.CheckNowAsync();
 
-        var message = outcome.Result switch
-        {
-            UpdateCheckResult.Checked when outcome.WasBaseline => Strings.Options_UpdateCheckBaseline,
-            UpdateCheckResult.Checked when outcome.Announced > 0 =>
-                Strings.Options_UpdateCheckAnnounced(outcome.Announced, outcome.Announced),
-            UpdateCheckResult.Checked when outcome.Available > 0 =>
-                Strings.Options_UpdateCheckNothingNew(outcome.Available, outcome.Available),
-            UpdateCheckResult.Checked => Strings.Options_UpdateCheckNone,
-            UpdateCheckResult.AlreadyChecking => Strings.Options_UpdateCheckAlreadyRunning,
-            UpdateCheckResult.NoInstall => Strings.Options_UpdateCheckNoInstall,
-            UpdateCheckResult.QueueBusy => Strings.Options_UpdateCheckQueueBusy,
-            UpdateCheckResult.Offline => Strings.Options_UpdateCheckOffline,
-            UpdateCheckResult.RateLimited => Strings.Options_UpdateCheckRateLimited,
-            _ => Strings.Options_UpdateCheckFailed,
-        };
+        var message = UpdateCheckWording.Describe(outcome);
 
         UpdateCheckStatus = Text(Strings.Options_UpdateCheckTimeFormat, message, DateTime.Now);
+    }
+
+    partial void OnKeepRunningInTrayChanged(bool value)
+    {
+        if (!_loaded) return;
+
+        var settings = _settings.Load();
+        settings.UpdateNotifications.KeepRunningInTray = value;
+        _settings.Save(settings);
+
+        AppLog.Info("Tray", value ? "closing the window will hide it to the tray" : "closing the window will quit");
     }
 
     partial void OnSelectedUpdateIntervalChanged(UpdateIntervalItem value)

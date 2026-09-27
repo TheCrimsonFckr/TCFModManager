@@ -4153,7 +4153,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>12 heures</value>
   </data>
   <data name="Options_UpdateNotificationsNote" xml:space="preserve">
-    <value>La première vérification a lieu un intervalle après le démarrage de l'application, et les vérifications s'arrêtent quand elle se ferme. Pas de notifications ? Vérifiez que TCF Mod Manager a le droit d'en afficher dans Paramètres Windows &gt; Système &gt; Notifications.</value>
+    <value>La première vérification a lieu un intervalle après le démarrage de l'application, et les vérifications s'arrêtent quand elle quitte - fermer la fenêtre la quitte, sauf si elle reste dans la zone de notification. Pas de notifications ? Vérifiez que TCF Mod Manager a le droit d'en afficher dans Paramètres Windows &gt; Système &gt; Notifications.</value>
   </data>
   <data name="UpdateToast_Title_one" xml:space="preserve">
     <value>Mise à jour de mod disponible</value>
@@ -4220,5 +4220,35 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   </data>
   <data name="Options_UpdateCheckTimeFormat" xml:space="preserve">
     <value>{0} ({1:t})</value>
+  </data>
+  <data name="Options_TrayOn" xml:space="preserve">
+    <value>Fermer la fenêtre laisse l'application tourner dans la zone de notification</value>
+  </data>
+  <data name="Options_TrayOff" xml:space="preserve">
+    <value>Fermer la fenêtre quitte l'application</value>
+  </data>
+  <data name="Options_TrayToolTip" xml:space="preserve">
+    <value>Si cette option est activée, fermer la fenêtre la masque et laisse une icône dans la zone de notification, pour que les vérifications continuent. Cliquez sur l'icône pour rouvrir la fenêtre ; clic droit pour vérifier maintenant ou quitter. Disponible uniquement quand les notifications de mise à jour sont activées.</value>
+  </data>
+  <data name="Tray_ToolTip" xml:space="preserve">
+    <value>TCF Mod Manager - vérifie les mises à jour de mods</value>
+  </data>
+  <data name="Tray_Open" xml:space="preserve">
+    <value>Ouvrir</value>
+  </data>
+  <data name="Tray_CheckNow" xml:space="preserve">
+    <value>Vérifier les mises à jour maintenant</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>Quitter</value>
+  </data>
+  <data name="Tray_CheckResultTitle" xml:space="preserve">
+    <value>Vérification des mises à jour</value>
+  </data>
+  <data name="Tray_NoticeTitle" xml:space="preserve">
+    <value>TCF Mod Manager tourne toujours</value>
+  </data>
+  <data name="Tray_NoticeBody" xml:space="preserve">
+    <value>Il est dans la zone de notification et vérifie les mises à jour de mods. Cliquez sur son icône pour le rouvrir, ou faites un clic droit pour le quitter. Vous pouvez désactiver ce comportement dans les Options.</value>
   </data>
 </root>

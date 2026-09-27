@@ -1380,4 +1380,14 @@ internal static class Strings
     internal static string Options_UpdateCheckRateLimited => LocalizationService.Get("Options_UpdateCheckRateLimited");
     internal static string Options_UpdateCheckFailed => LocalizationService.Get("Options_UpdateCheckFailed");
     internal static string Options_UpdateCheckTimeFormat => LocalizationService.Get("Options_UpdateCheckTimeFormat");
+    internal static string Options_TrayOn => LocalizationService.Get("Options_TrayOn");
+    internal static string Options_TrayOff => LocalizationService.Get("Options_TrayOff");
+    internal static string Options_TrayToolTip => LocalizationService.Get("Options_TrayToolTip");
+    internal static string Tray_ToolTip => LocalizationService.Get("Tray_ToolTip");
+    internal static string Tray_Open => LocalizationService.Get("Tray_Open");
+    internal static string Tray_CheckNow => LocalizationService.Get("Tray_CheckNow");
+    internal static string Tray_Quit => LocalizationService.Get("Tray_Quit");
+    internal static string Tray_CheckResultTitle => LocalizationService.Get("Tray_CheckResultTitle");
+    internal static string Tray_NoticeTitle => LocalizationService.Get("Tray_NoticeTitle");
+    internal static string Tray_NoticeBody => LocalizationService.Get("Tray_NoticeBody");
 }
