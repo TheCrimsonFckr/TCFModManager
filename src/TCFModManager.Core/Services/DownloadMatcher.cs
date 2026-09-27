@@ -12,6 +12,33 @@ namespace TCFModManager.Core.Services;
 //
 public static class DownloadMatcher
 {
+    //
+    // Every name a scan knows its folders by, for Check's first question: each entry's own name,
+    // its folder's name, and a loose DLL's file name without the extension - the same spellings an
+    // install record's folder list uses.
+    //
+    // Disabled entries are left out. A hand install lands in the live folders, so a copy sitting in
+    // a ".disabled" container is not it - and counting it would call every disabled mod with a
+    // pending download half-installed.
+    //
+    public static HashSet<string> FolderNames(IEnumerable<InstalledMod> scanned)
+    {
+        var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var entry in scanned)
+        {
+            if (entry.IsDisabled) continue;
+            if (!string.IsNullOrWhiteSpace(entry.Name)) names.Add(entry.Name);
+            if (string.IsNullOrWhiteSpace(entry.FolderPath)) continue;
+
+            var path = entry.FolderPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            names.Add(Path.GetFileName(path));
+            names.Add(Path.GetFileNameWithoutExtension(path));
+        }
+
+        return names;
+    }
+
     public static DownloadMatch Check(
         DownloadedModRecord download, string installPath, IEnumerable<string> scannedFolders)
     {

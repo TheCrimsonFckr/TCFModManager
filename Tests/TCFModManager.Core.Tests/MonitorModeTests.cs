@@ -374,6 +374,36 @@ public class DownloadMatcherTests : IDisposable
         Assert.Equal(1, DownloadMatcher.Check(download, _install, ["Foo"]).MissingFiles);
     }
 
+    private static InstalledMod Scanned(string name, string folderPath, bool disabled = false) => new()
+    {
+        Name = name,
+        FolderPath = folderPath,
+        Target = InstalledModTarget.Client,
+        IsDisabled = disabled,
+    };
+
+    [Fact]
+    public void FolderNamesCoverTheFolderAndALooseDllWithoutItsExtension()
+    {
+        var names = DownloadMatcher.FolderNames(
+        [
+            Scanned("Epic's All in One", Path.Combine("BepInEx", "plugins", "EpicsAIO")),
+            Scanned("Loose", Path.Combine("BepInEx", "plugins", "LooseMod.dll")),
+        ]);
+
+        Assert.Contains("EpicsAIO", names);
+        Assert.Contains("LooseMod", names);
+        Assert.Contains("Epic's All in One", names);
+    }
+
+    [Fact]
+    public void ADisabledCopyIsNotAHandInstall()
+    {
+        var names = DownloadMatcher.FolderNames([Scanned("Foo", Path.Combine("BepInEx", "plugins.disabled", "Foo"), disabled: true)]);
+
+        Assert.Equal(DownloadMatch.Absent, DownloadMatcher.Check(DownloadLedgerTests.Download(), _install, names));
+    }
+
     [Fact]
     public void AnUnrecognisedDownloadNeverMatches()
     {
