@@ -20,9 +20,6 @@ public sealed class ModInstallService(
     private readonly ModConfigOptionsStore _options = configOptions ?? new ModConfigOptionsStore();
     private readonly ConfigUpdateLog _configLog = configUpdateLog ?? new ConfigUpdateLog();
 
-    private static readonly HashSet<string> KnownRootFolders =
-        new(StringComparer.OrdinalIgnoreCase) { "BepInEx", "user", "SPT", "SPT_Runtime" };
-
     // Scratch folder created inside the SPT install so extracted files can be moved into
     // place rather than copied across volumes. Falls back to %TEMP% when it can't be created.
     private const string WorkFolderName = ".tcfmm-work";
@@ -201,7 +198,7 @@ public sealed class ModInstallService(
             ct.ThrowIfCancellationRequested();
 
             var archiveBytes = new FileInfo(archivePath).Length;
-            AppLog.Debug("Install", $"downloaded {archiveBytes:N0} bytes, zip={IsZipArchive(archivePath)}");
+            AppLog.Debug("Install", $"downloaded {archiveBytes:N0} bytes, zip={ArchiveLayout.IsZipArchive(archivePath)}");
 
             status?.Report(new ModInstallProgress(ModInstallStage.Extracting));
             // Auto-detects archive format from the file header rather than assuming zip.
@@ -211,9 +208,9 @@ public sealed class ModInstallService(
 
             ct.ThrowIfCancellationRequested();
 
-            var contentRoot = FindContentRoot(extractDir);
+            var contentRoot = ArchiveLayout.FindContentRoot(extractDir);
             var topLevelNames = Directory.GetFileSystemEntries(contentRoot).Select(Path.GetFileName);
-            if (!topLevelNames.Any(n => n is not null && KnownRootFolders.Contains(n)))
+            if (!topLevelNames.Any(ArchiveLayout.IsKnownRoot))
             {
                 AppLog.Warn("Install",
                     $"{target.Name} {version.Version} archive has no known root folder; top level: " +
@@ -249,7 +246,7 @@ public sealed class ModInstallService(
             var placements = sourceFiles
                 .Select(file =>
                 {
-                    var installRelative = RemapForServerRoot(Path.GetRelativePath(contentRoot, file), serverRoot);
+                    var installRelative = ArchiveLayout.RemapForServerRoot(Path.GetRelativePath(contentRoot, file), serverRoot);
                     // Forward-slash regardless of OS, matching InstalledModRecord.Files's documented format.
                     return (File: file, Relative: installRelative, Forward: installRelative.Replace('\\', '/'));
                 })
@@ -534,27 +531,6 @@ public sealed class ModInstallService(
     public static KeptConfigs KeepLegacyConfigs(string installPath, IEnumerable<string> relativeFiles, string modName) =>
         ModConfigFiles.MoveOut(installPath, relativeFiles, modName, DateTimeOffset.UtcNow);
 
-    // Some mod archives wrap their real content ("BepInEx/...", "user/...") inside an
-    // extra top-level folder (e.g. "HollywoodFX-1.8.4/"). Descends through single-directory wrapper
-    // levels (capped at 4) until it finds the real content root.
-    private static string FindContentRoot(string extractDir)
-    {
-        var current = extractDir;
-
-        for (var depth = 0; depth < 4; depth++)
-        {
-            var entries = Directory.GetFileSystemEntries(current);
-            if (entries.Length != 1 || !Directory.Exists(entries[0])) break;
-
-            var name = Path.GetFileName(entries[0]);
-            if (name is not null && KnownRootFolders.Contains(name)) break;
-
-            current = entries[0];
-        }
-
-        return current;
-    }
-
     // Creates a per-install scratch folder for the download and extraction. Prefers a
     // hidden folder inside <paramref name="installPath"/> so extracted files can be moved into
     // place; falls back to %TEMP% when that folder can't be created. <paramref name="canMove"/> is
@@ -639,34 +615,13 @@ public sealed class ModInstallService(
         Directory.CreateDirectory(extractDir);
         var extractRoot = Path.GetFullPath(extractDir) + Path.DirectorySeparatorChar;
 
-        if (IsZipArchive(archivePath))
+        if (ArchiveLayout.IsZipArchive(archivePath))
         {
             await ExtractZipAsync(archivePath, extractDir, extractRoot, status, ct).ConfigureAwait(false);
             return;
         }
 
         ExtractWithSharpCompress(archivePath, extractDir, extractRoot, status, ct);
-    }
-
-    // Reads the local-file-header magic rather than trusting the file extension, matching
-    // how the previous SharpCompress-only path detected format.
-    private static bool IsZipArchive(string archivePath)
-    {
-        try
-        {
-            using var stream = File.OpenRead(archivePath);
-            Span<byte> header = stackalloc byte[4];
-            if (stream.ReadAtLeast(header, 4, throwOnEndOfStream: false) < 4) return false;
-
-            return header[0] == 0x50 && header[1] == 0x4B
-                && ((header[2] == 0x03 && header[3] == 0x04)
-                    || (header[2] == 0x05 && header[3] == 0x06)
-                    || (header[2] == 0x07 && header[3] == 0x08));
-        }
-        catch (IOException)
-        {
-            return false;
-        }
     }
 
     private static async Task ExtractZipAsync(
@@ -766,18 +721,6 @@ public sealed class ModInstallService(
         if (!string.IsNullOrEmpty(destinationDir)) Directory.CreateDirectory(destinationDir);
 
         return destination;
-    }
-
-    // Remaps the "user" top-level folder to <paramref name="serverRoot"/>. No-op when
-    // <paramref name="serverRoot"/> is "".
-    private static string RemapForServerRoot(string archiveRelative, string serverRoot)
-    {
-        if (string.IsNullOrEmpty(serverRoot)) return archiveRelative;
-
-        var firstSegment = archiveRelative.Split(Path.DirectorySeparatorChar, 2)[0];
-        return string.Equals(firstSegment, "user", StringComparison.OrdinalIgnoreCase)
-            ? Path.Combine(serverRoot, archiveRelative)
-            : archiveRelative;
     }
 
     private static bool IsUnderInstallPath(string? dir, string installPath)
