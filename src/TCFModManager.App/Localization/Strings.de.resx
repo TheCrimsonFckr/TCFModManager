@@ -4107,4 +4107,19 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="Installed_DownloadsConfirmed_other" xml:space="preserve">
     <value>{0} Downloads als installiert markiert.</value>
   </data>
+  <data name="Options_MonitorListSubfoldersOn" xml:space="preserve">
+    <value>Die Downloads jeder Modliste landen in einem Ordner mit dem Namen der Liste</value>
+  </data>
+  <data name="Options_MonitorListSubfoldersOff" xml:space="preserve">
+    <value>Downloads von Modlisten landen direkt im Download-Ordner</value>
+  </data>
+  <data name="ModLists_AppliedDownloadOnlyFormat" xml:space="preserve">
+    <value>Sie wurden unter {0} gespeichert, damit du sie installierst - installiert wurde nichts.</value>
+  </data>
+  <data name="ModLists_DownloadOnlyNotice_one" xml:space="preserve">
+    <value>Der Überwachungsmodus steht auf Nur herunterladen, daher wird der Mod, den diese Liste installieren oder aktualisieren würde, für dich zum Selbstinstallieren gespeichert - installiert wird nichts. Mods, die sie aktiviert oder deaktiviert, werden trotzdem verschoben.</value>
+  </data>
+  <data name="ModLists_DownloadOnlyNotice_other" xml:space="preserve">
+    <value>Der Überwachungsmodus steht auf Nur herunterladen, daher werden die {0} Mods, die diese Liste installieren oder aktualisieren würde, für dich zum Selbstinstallieren gespeichert - installiert wird nichts. Mods, die sie aktiviert oder deaktiviert, werden trotzdem verschoben.</value>
+  </data>
 </root>

@@ -4906,4 +4906,24 @@ This was written to:
     <value>Marked {0} downloads installed.</value>
     <comment>{0} is how many downloads were marked installed.</comment>
   </data>
+  <data name="Options_MonitorListSubfoldersOn" xml:space="preserve">
+    <value>Each mod list's downloads go in a folder named after the list</value>
+    <comment>Label on the switch when it is ON.</comment>
+  </data>
+  <data name="Options_MonitorListSubfoldersOff" xml:space="preserve">
+    <value>Mod list downloads go straight into the download folder</value>
+    <comment>Label on the same switch when it is OFF.</comment>
+  </data>
+  <data name="ModLists_AppliedDownloadOnlyFormat" xml:space="preserve">
+    <value>They were saved in {0} for you to install - nothing was installed.</value>
+    <comment>Added after the applied summary in download-only mode. {0} is the folder the downloads were saved in.</comment>
+  </data>
+  <data name="ModLists_DownloadOnlyNotice_one" xml:space="preserve">
+    <value>Monitor mode is set to download only, so the mod this list would install or update will be saved for you to install yourself - nothing will be installed. Mods it enables or disables are still moved.</value>
+    <comment>Shown above a mod list's plan in download-only mode. {0} is how many mods would be installed or updated.</comment>
+  </data>
+  <data name="ModLists_DownloadOnlyNotice_other" xml:space="preserve">
+    <value>Monitor mode is set to download only, so the {0} mods this list would install or update will be saved for you to install yourself - nothing will be installed. Mods it enables or disables are still moved.</value>
+    <comment>Shown above a mod list's plan in download-only mode. {0} is how many mods would be installed or updated.</comment>
+  </data>
 </root>

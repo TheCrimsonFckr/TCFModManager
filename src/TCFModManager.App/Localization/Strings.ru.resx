@@ -4323,4 +4323,22 @@
   <data name="Installed_DownloadsConfirmed_many" xml:space="preserve">
     <value>{0} загрузок отмечены как установленные.</value>
   </data>
+  <data name="Options_MonitorListSubfoldersOn" xml:space="preserve">
+    <value>Загрузки каждого списка модов попадают в папку с именем списка</value>
+  </data>
+  <data name="Options_MonitorListSubfoldersOff" xml:space="preserve">
+    <value>Загрузки списков модов попадают прямо в папку загрузок</value>
+  </data>
+  <data name="ModLists_AppliedDownloadOnlyFormat" xml:space="preserve">
+    <value>Они сохранены в {0}, чтобы вы установили их сами, - ничего не установлено.</value>
+  </data>
+  <data name="ModLists_DownloadOnlyNotice_one" xml:space="preserve">
+    <value>Режим наблюдения настроен только на скачивание, поэтому {0} мод, который этот список установил бы или обновил, будет сохранён для самостоятельной установки - ничего не будет установлено. Моды, которые он включает или отключает, всё равно перемещаются.</value>
+  </data>
+  <data name="ModLists_DownloadOnlyNotice_few" xml:space="preserve">
+    <value>Режим наблюдения настроен только на скачивание, поэтому {0} мода, которые этот список установил бы или обновил, будут сохранены для самостоятельной установки - ничего не будет установлено. Моды, которые он включает или отключает, всё равно перемещаются.</value>
+  </data>
+  <data name="ModLists_DownloadOnlyNotice_many" xml:space="preserve">
+    <value>Режим наблюдения настроен только на скачивание, поэтому {0} модов, которые этот список установил бы или обновил, будут сохранены для самостоятельной установки - ничего не будет установлено. Моды, которые он включает или отключает, всё равно перемещаются.</value>
+  </data>
 </root>

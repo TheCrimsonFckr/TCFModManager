@@ -4107,4 +4107,19 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="Installed_DownloadsConfirmed_other" xml:space="preserve">
     <value>{0} téléchargements marqués comme installés.</value>
   </data>
+  <data name="Options_MonitorListSubfoldersOn" xml:space="preserve">
+    <value>Les téléchargements de chaque liste de mods vont dans un dossier portant le nom de la liste</value>
+  </data>
+  <data name="Options_MonitorListSubfoldersOff" xml:space="preserve">
+    <value>Les téléchargements des listes de mods vont directement dans le dossier de téléchargement</value>
+  </data>
+  <data name="ModLists_AppliedDownloadOnlyFormat" xml:space="preserve">
+    <value>Ils ont été enregistrés dans {0} pour que vous les installiez - rien n'a été installé.</value>
+  </data>
+  <data name="ModLists_DownloadOnlyNotice_one" xml:space="preserve">
+    <value>Le mode surveillance est réglé sur Télécharger seulement : le mod que cette liste installerait ou mettrait à jour sera enregistré pour que vous l'installiez vous-même - rien ne sera installé. Les mods qu'elle active ou désactive sont quand même déplacés.</value>
+  </data>
+  <data name="ModLists_DownloadOnlyNotice_other" xml:space="preserve">
+    <value>Le mode surveillance est réglé sur Télécharger seulement : les {0} mods que cette liste installerait ou mettrait à jour seront enregistrés pour que vous les installiez vous-même - rien ne sera installé. Les mods qu'elle active ou désactive sont quand même déplacés.</value>
+  </data>
 </root>

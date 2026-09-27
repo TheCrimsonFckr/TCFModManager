@@ -4107,4 +4107,19 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Installed_DownloadsConfirmed_other" xml:space="preserve">
     <value>{0} download segnati come installati.</value>
   </data>
+  <data name="Options_MonitorListSubfoldersOn" xml:space="preserve">
+    <value>I download di ogni lista di mod vanno in una cartella con il nome della lista</value>
+  </data>
+  <data name="Options_MonitorListSubfoldersOff" xml:space="preserve">
+    <value>I download delle liste di mod vanno direttamente nella cartella di download</value>
+  </data>
+  <data name="ModLists_AppliedDownloadOnlyFormat" xml:space="preserve">
+    <value>Sono stati salvati in {0} perché tu li installi - non è stato installato nulla.</value>
+  </data>
+  <data name="ModLists_DownloadOnlyNotice_one" xml:space="preserve">
+    <value>La modalità monitoraggio è impostata su Solo download, quindi il mod che questa lista installerebbe o aggiornerebbe verrà salvato perché tu lo installi da solo - non verrà installato nulla. I mod che attiva o disattiva vengono comunque spostati.</value>
+  </data>
+  <data name="ModLists_DownloadOnlyNotice_other" xml:space="preserve">
+    <value>La modalità monitoraggio è impostata su Solo download, quindi i {0} mod che questa lista installerebbe o aggiornerebbe verranno salvati perché tu li installi da solo - non verrà installato nulla. I mod che attiva o disattiva vengono comunque spostati.</value>
+  </data>
 </root>

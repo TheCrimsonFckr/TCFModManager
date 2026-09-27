@@ -1342,4 +1342,9 @@ internal static class Strings
         LocalizationService.Plural("DownloadConfirm_Summary", count, values);
     internal static string Installed_DownloadsConfirmed(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_DownloadsConfirmed", count, values);
+    internal static string Options_MonitorListSubfoldersOn => LocalizationService.Get("Options_MonitorListSubfoldersOn");
+    internal static string Options_MonitorListSubfoldersOff => LocalizationService.Get("Options_MonitorListSubfoldersOff");
+    internal static string ModLists_AppliedDownloadOnlyFormat => LocalizationService.Get("ModLists_AppliedDownloadOnlyFormat");
+    internal static string ModLists_DownloadOnlyNotice(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_DownloadOnlyNotice", count, values);
 }
