@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Channels;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -332,12 +333,27 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         item.Status = DownloadQueueItemStatus.Completed;
         item.Progress = 1.0;
         item.SavedPath = result.Record.ArchivePath;
-        item.StatusMessage = Text(
+
+        var saved = Text(
             result.Record.Unrecognised ? Strings.Downloads_SavedUnrecognisedFormat : Strings.Downloads_SavedFormat,
             item.ModName,
             item.VersionLabel,
             result.Record.ArchivePath);
+
+        item.StatusMessage = ReplacesConfigs(result.Record, item.InstallPath)
+            ? string.Join(Strings.Common_SentenceSeparator, saved, Strings.Downloads_SavedConfigsNote)
+            : saved;
     }
+
+    //
+    // §8: config protection only runs on an install this app does. Said when the archive carries a
+    // server config file that is already on disk - an update the user will be copying over their
+    // own settings - and not for a first download, where there is nothing of theirs to lose.
+    //
+    private static bool ReplacesConfigs(DownloadedModRecord download, string installPath) =>
+        download.ExpectedFiles.Any(f =>
+            ModConfigFiles.IsServerModConfig(f.Path)
+            && File.Exists(Path.Combine(installPath, f.Path.Replace('/', Path.DirectorySeparatorChar))));
 
     // Resolves item's full dependency tree for the version being installed, cross-references it against
     // a fresh disk scan + catalog match, and offers to queue anything missing via one
