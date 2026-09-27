@@ -2,9 +2,9 @@
 
 It also keeps **mod lists** - save the set you run, switch between sets, send one to a friend, or follow the list a server publishes and know what you are missing before you launch. Plus a config editor, a start button for the server and the launcher, and an optional page that reads what each installed mod actually ships.
 
-WPF with Fluent Design, .NET 9, no account or API key needed.
+WPF with Fluent Design and .NET 9
 
-The released build is self-contained - you don't need to install .NET separately.
+The released build is entirely self-contained.
 
 #### Guide and Information
 
@@ -389,7 +389,7 @@ The app doesn't list *itself* on the Browse page, since installing it into `BepI
 
 
 ### Files & logs
-Everything lives next to the exe, not in `%LocalAppData%`:
+Everything lives next to the exe:
 
 | Path | What |
 | --- | --- |
@@ -514,7 +514,7 @@ Press **Refresh from server** on the list, on the Mod lists page. It asks again 
 It is reading as an ordinary player. **Options - What this machine is** says whether anybody plays there and whether it runs a headless client; a served list is only trimmed once that is answered. If the app never asked, it didn't find `FikaHeadlessManager.exe` at the top of the install folder - point **Options - Fika headless launcher** at it.
 
 #### Reporting a bug
-Grab `Data\logs\tcfmm-<date>.log` - ideally after adding the `verbose` marker file and reproducing the problem - and open an issue at [github.com/TheCrimsonFckr/TCFModManager](https://github.com/TheCrimsonFckr/TCFModManager).
+Grab `Data\logs\tcfmm-<date>.log` - ideally after adding the `verbose` marker file and reproducing the problem - and open an issue on the new [issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues).
 
 
 ### Translating
@@ -530,7 +530,7 @@ Mod names, descriptions, changelogs and category names come from sp-mod and stay
 #### Found something wrong? That is the useful thing
 You do not need git, an editor, or the whole file. One bad line is worth reporting on its own.
 
-Open an issue at [github.com/TheCrimsonFckr/TCFModManager](https://github.com/TheCrimsonFckr/TCFModManager) with three things:
+Open an issue on the new [issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues) with three things:
 
 1. Which language.
 2. What it says now - a screenshot is perfect, or just the text.
@@ -552,7 +552,7 @@ Leave anything in braces exactly as it is - `{0}`, `{1}`, and the part after a c
 #### information
 You don't have to finish, and you don't have to keep up. A string you haven't translated is shown in English, so a half-done language is a part-English app rather than a broken one - send what you have. The same holds after a release adds new text: your language carries on working and only the new strings read in English until somebody gets to them.
 
-#### Things worth knowing before you start
+#### Things to keep in mind
 **Counted sentences are split by form.** "1 mod installed" and "3 mods installed" are separate entries whose keys end `_one` and `_other`. English needs two forms; Russian needs three and already has them in this file, Czech four, Arabic six. Say which your language needs when you send it - the extra forms are a small change here, and the key names were built to take them.
 
 **Two entries are not translations.** `Meta_LanguageName` is your language's name written in your language, the way the dropdown should list it - `Deutsch`, not `German`. `Meta_TranslationCredit` is yours: put your name in it and it appears under the language picker in Options.
@@ -561,14 +561,29 @@ You don't have to finish, and you don't have to keep up. A string you haven't tr
 
 
 ### Planning
-- Mod lists / profiles - Completed
-- Mod list sharing and handling (if you have played Arma modded or Total War modded, think like that) - Completed
-- Mod syncing, getting on the same level as the server you are joining - Completed
-- Server mapping - Released, and being built on
-- Fika headless support, so a headless is served only what it needs - Completed
-- Window default sizes - Completed
-- Default filtering and page defaults - Completed
-- Config protection, so updating a mod stops replacing your settings - Completed
-- Per-mod pins, so a mod you always want on survives any list you apply - Completed
+- Mod lists / profiles - *Completed*
+- Mod list sharing and handling (if you have played Arma modded or Total War modded, think like that) - *Completed*
+- Mod syncing, getting on the same level as the server you are joining - *Completed*
+- Fika headless support, so a headless is served only what it needs - *Completed*
+- Window default sizes - *Completed*
+- Default filtering and page defaults - *Completed*
+- Config protection, so updating a mod stops replacing your settings - *Completed*
+- Per-mod pins, so a mod you always want on survives any list you apply - *Completed*
+- Server mapping - *Initial release, ongoing*
+- Local languages based on OS - *Initial release, ongoing*
+- Options to use app to monitor mods rather than manage them - *Planning/developing*
+- Additional mod footprint monitoring to show data around their usage on 
+your systems - *Planning/developing*
+
+
+### New Issues Feature (beta) 
+If you find an issue, be it bug, spelling, language, want to request a feature or ask a question please use the new [Issues Tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues).
+When reporting an issue please grab the `Data\logs\tcfmm-<date>.log` - ideally after adding the `verbose` marker file and reproducing the problem.
+
+
+### Disclaimer
+I use AI to help write this mod, everything is initially written by myself (I'm a
+developer by profession), then passed though Claude (Fable model) for refinements and to highlight any additional changes the LLM thinks are worth making. Absolutely everything is reviewed and tested by myself before I commit anything. This is done because I simply do not have enough time in day to make full refinements and multiple passes myself. If you are not
+comfortable using an application that uses AI as a tool then please do not download it.
 
 {.endtabset}
