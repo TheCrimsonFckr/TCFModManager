@@ -9,7 +9,13 @@ namespace TCFModManager.Core.Services;
 // 
 public sealed class ModInstallManifestService
 {
-    private readonly string _filePath = Path.Combine(AppPaths.DataDirectory, "installed-mods.json");
+    private readonly string _filePath;
+
+    public ModInstallManifestService(string? filePath = null)
+    {
+        // Optional path for testability, matching ModListStore's accepted deviation.
+        _filePath = filePath ?? Path.Combine(AppPaths.DataDirectory, "installed-mods.json");
+    }
 
     public ModInstallManifest Load()
     {
@@ -63,6 +69,53 @@ public sealed class ModInstallManifestService
         };
 
         manifest.Mods.RemoveAll(m => m.ModId == modId && m.IsAddon == isAddon);
+        manifest.Mods.Add(record);
+        Save(manifest);
+
+        return record;
+    }
+
+    //
+    // Records a Monitor mode download the user has confirmed installing by hand.
+    //
+    // Over an app-managed record - a mod this app installed, then updated by hand - the record stays
+    // app-managed and takes the download's file list. Keeping the old list would leave Remove
+    // deleting the previous version's files and missing the new version's extras; the new list was
+    // checked on disk by DownloadMatcher before the user was asked, so the app does know exactly what
+    // is there. Anything else goes through SetManualVersion as an IsAppManaged: false record.
+    //
+    public InstalledModRecord ConfirmDownload(DownloadedModRecord download)
+    {
+        var manifest = Load();
+        var existing = manifest.Mods.FirstOrDefault(m => m.ModId == download.ModId && m.IsAddon == download.IsAddon);
+
+        if (existing is not { IsAppManaged: true })
+        {
+            return SetManualVersion(
+                download.ModId, download.Guid, download.Name, download.Version, download.VersionId,
+                download.ExpectedFolders, download.IsAddon);
+        }
+
+        var files = download.ExpectedFiles.Select(f => f.Path).ToList();
+
+        var record = new InstalledModRecord
+        {
+            ModId = download.ModId,
+            IsAddon = download.IsAddon,
+            Guid = download.Guid ?? existing.Guid,
+            Name = existing.Name,
+            VersionId = download.VersionId,
+            Version = download.Version,
+            InstalledAt = DateTimeOffset.UtcNow,
+            Files = files,
+            Folders = download.ExpectedFolders.Count > 0
+                ? [.. download.ExpectedFolders]
+                : InstalledModFolders.FromPlacedFiles(files),
+            Incomplete = false,
+            IsAppManaged = true,
+        };
+
+        manifest.Mods.RemoveAll(m => m.ModId == download.ModId && m.IsAddon == download.IsAddon);
         manifest.Mods.Add(record);
         Save(manifest);
 
