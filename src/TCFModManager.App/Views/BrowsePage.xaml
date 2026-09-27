@@ -499,8 +499,8 @@
                             </StackPanel>
 
                             <!-- Install button, shown only for mods not yet installed. Follows Monitor
-                                 mode's setting; the smaller button to its left does the other thing
-                                 for this one mod. -->
+                                 mode's setting; the button to its left does the other thing for this
+                                 one mod. -->
                             <StackPanel
                                 Grid.Column="1"
                                 Margin="8,0,0,0"
@@ -509,16 +509,14 @@
                                 Orientation="Horizontal"
                                 Visibility="{Binding IsInstalled, Converter={StaticResource FalseToVisible}}">
                                 <ui:Button
-                                    Padding="4"
-                                    VerticalAlignment="Center"
+                                    Margin="0,0,4,0"
+                                    Padding="6"
                                     Appearance="Transparent"
                                     Command="{Binding DataContext.InstallAlternateCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                                     CommandParameter="{Binding}"
                                     ToolTip="{Binding AlternateToolTip, Source={x:Static app:AppServices.ModPageGate}}">
                                     <ui:Button.Icon>
-                                        <ui:SymbolIcon
-                                            FontSize="14"
-                                            Symbol="{Binding AlternateSymbol, Source={x:Static app:AppServices.ModPageGate}}" />
+                                        <ui:SymbolIcon Symbol="{Binding AlternateSymbol, Source={x:Static app:AppServices.ModPageGate}}" />
                                     </ui:Button.Icon>
                                 </ui:Button>
                                 <ui:Button
@@ -542,16 +540,14 @@
                                 Orientation="Horizontal"
                                 Visibility="{Binding IsInstalled, Converter={StaticResource TrueToVisible}}">
                                 <ui:Button
-                                    Padding="4"
-                                    VerticalAlignment="Center"
+                                    Margin="0,0,4,0"
+                                    Padding="6"
                                     Appearance="Transparent"
                                     Command="{Binding DataContext.RedownloadAlternateCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                                     CommandParameter="{Binding}"
                                     ToolTip="{Binding AlternateToolTip, Source={x:Static app:AppServices.ModPageGate}}">
                                     <ui:Button.Icon>
-                                        <ui:SymbolIcon
-                                            FontSize="14"
-                                            Symbol="{Binding AlternateSymbol, Source={x:Static app:AppServices.ModPageGate}}" />
+                                        <ui:SymbolIcon Symbol="{Binding AlternateSymbol, Source={x:Static app:AppServices.ModPageGate}}" />
                                     </ui:Button.Icon>
                                 </ui:Button>
                                 <ui:Button
