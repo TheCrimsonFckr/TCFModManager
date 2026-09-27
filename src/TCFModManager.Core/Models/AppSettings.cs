@@ -168,9 +168,18 @@ public sealed class AppSettings
         set => _serverMap = value ?? new ServerMapSettings();
     }
 
+    // Monitor mode. Never null, for the same reason as ServerMap above.
+    public MonitorSettings Monitor
+    {
+        get => _monitor;
+        set => _monitor = value ?? new MonitorSettings();
+    }
+
     private ServerMapSettings _serverMap = new();
 
     private WindowSettings _window = new();
+
+    private MonitorSettings _monitor = new();
 }
 
 //
