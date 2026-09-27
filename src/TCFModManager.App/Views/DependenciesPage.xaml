@@ -11,6 +11,7 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:app="clr-namespace:TCFModManager.App"
     Title="{loc:Str Nav_Dependencies}"
     Loaded="DependenciesPage_Loaded"
     ScrollViewer.CanContentScroll="False">
@@ -139,20 +140,40 @@
                                                 <Run Text="{Binding StatusText, StringFormat=' - {0}', Mode=OneWay}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                             </TextBlock>
 
-                                            <!-- Only rows that are actually missing or outdated get an action. -->
-                                            <ui:Button
+                                            <!-- Only rows that are actually missing or outdated get an action. The
+                                                 small button does the opposite of Monitor mode's setting. -->
+                                            <StackPanel
                                                 Grid.Column="2"
-                                                Padding="10,2"
                                                 VerticalAlignment="Center"
-                                                Appearance="Secondary"
-                                                Content="{Binding InstallButtonText}"
-                                                Command="{Binding DataContext.InstallCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                                                CommandParameter="{Binding}"
-                                                Visibility="{Binding CanInstall, Converter={StaticResource BoolToVisibility}}"
-                                                IsEnabled="{Binding IsNotQueued}"
-                                                ToolTip="{Binding InstallToolTip}"
-                                                ToolTipService.ShowOnDisabled="True"
-                                                ToolTipService.ShowDuration="20000" />
+                                                Orientation="Horizontal"
+                                                Visibility="{Binding CanInstall, Converter={StaticResource BoolToVisibility}}">
+                                                <ui:Button
+                                                    Margin="0,0,4,0"
+                                                    Padding="4"
+                                                    VerticalAlignment="Center"
+                                                    Appearance="Transparent"
+                                                    Command="{Binding DataContext.InstallAlternateCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                                    CommandParameter="{Binding}"
+                                                    IsEnabled="{Binding IsNotQueued}"
+                                                    ToolTip="{Binding AlternateToolTip, Source={x:Static app:AppServices.ModPageGate}}">
+                                                    <ui:Button.Icon>
+                                                        <ui:SymbolIcon
+                                                            FontSize="14"
+                                                            Symbol="{Binding AlternateSymbol, Source={x:Static app:AppServices.ModPageGate}}" />
+                                                    </ui:Button.Icon>
+                                                </ui:Button>
+                                                <ui:Button
+                                                    Padding="10,2"
+                                                    VerticalAlignment="Center"
+                                                    Appearance="Secondary"
+                                                    Content="{Binding InstallButtonText}"
+                                                    Command="{Binding DataContext.InstallCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                                    CommandParameter="{Binding}"
+                                                    IsEnabled="{Binding IsNotQueued}"
+                                                    ToolTip="{Binding InstallToolTip}"
+                                                    ToolTipService.ShowOnDisabled="True"
+                                                    ToolTipService.ShowDuration="20000" />
+                                            </StackPanel>
                                             </Grid>
                                         </Border>
                                     </DataTemplate>

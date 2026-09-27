@@ -98,6 +98,9 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     //
     public bool ShowRedownloadButton => CanAct && !ShowUpdateButton && !ShowDowngradeButton;
 
+    // Monitor mode's opposite-way button, beside whichever of the three is showing.
+    public bool ShowAlternateButton => CanAct;
+
     // Whether the "manage installed version" controls should be shown - only meaningful once a
     // catalog mod is known, since confirming/overriding a version needs a mod to record it against.
     public bool CanManageVersion => _mod.IsAddon ? _catalogAddon is not null : _catalogMod is not null;
@@ -166,6 +169,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(ShowUpdateButton))]
     [NotifyPropertyChangedFor(nameof(ShowDowngradeButton))]
     [NotifyPropertyChangedFor(nameof(ShowRedownloadButton))]
+    [NotifyPropertyChangedFor(nameof(ShowAlternateButton))]
     private ModVersionRowViewModel? _selectedVersion;
 
     [ObservableProperty]
@@ -332,13 +336,25 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
 
     // Queues the currently selected version for download and install.
     [RelayCommand(CanExecute = nameof(CanUpdate))]
-    private void Update() => EnqueueSelectedVersion(ModUpdateAction.Update);
+    private void Update() => EnqueueSelectedVersion(ModUpdateAction.Update, alternate: false);
 
     // Re-queues the currently selected version (defaulting to whatever's already installed, when
     // there's no newer one) for a fresh download and reinstall. Shown in Update's place once the
     // mod is up to date, e.g. to recover from corrupted or hand-edited files.
     [RelayCommand(CanExecute = nameof(CanUpdate))]
-    private void Redownload() => EnqueueSelectedVersion(ModUpdateAction.Redownload);
+    private void Redownload() => EnqueueSelectedVersion(ModUpdateAction.Redownload, alternate: false);
+
+    //
+    // The small button beside whichever of Update / Downgrade / Redownload is showing: the same
+    // action, the opposite way round from Monitor mode's setting, for this one mod.
+    //
+    [RelayCommand(CanExecute = nameof(CanUpdate))]
+    private void Alternate()
+    {
+        if (ShowDowngradeButton) Downgrade(alternate: true);
+        else EnqueueSelectedVersion(
+            ShowUpdateButton ? ModUpdateAction.Update : ModUpdateAction.Redownload, alternate: true);
+    }
 
     //
     // Installs an older version over a newer one. Confirmed first, and separately from the
@@ -347,7 +363,9 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     // written and the older one may not understand.
     //
     [RelayCommand(CanExecute = nameof(CanUpdate))]
-    private void Downgrade()
+    private void Downgrade() => Downgrade(alternate: false);
+
+    private void Downgrade(bool alternate)
     {
         if (SelectedVersion is not { } selected) return;
 
@@ -362,7 +380,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
             return;
         }
 
-        EnqueueSelectedVersion(ModUpdateAction.Downgrade);
+        EnqueueSelectedVersion(ModUpdateAction.Downgrade, alternate);
     }
 
     //
@@ -389,9 +407,11 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     //
     public bool MadeChanges { get; private set; }
 
-    private void EnqueueSelectedVersion(ModUpdateAction action)
+    private void EnqueueSelectedVersion(ModUpdateAction action, bool alternate)
     {
         if (SelectedVersion is null) return;
+
+        var downloadOnly = AppServices.ModPageGate.DownloadOnlyFor(alternate);
 
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath))
@@ -410,7 +430,9 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
             return;
         }
 
-        if (!_mod.IsAppManaged && !Confirm(
+        // The hand-installed warning is about this app placing files over ones it has no record of.
+        // A download places nothing, so there is nothing to warn about.
+        if (!downloadOnly && !_mod.IsAppManaged && !Confirm(
                 Text(
                     action switch
                     {
@@ -446,7 +468,8 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
         var selectedVersion = SelectedVersion;
         AppServices.DownloadQueue.Enqueue(
             target, selectedVersion.VersionText, installPath, () => Task.FromResult<ModVersion?>(selectedVersion.Raw),
-            totalBytes: selectedVersion.Raw.ContentLength);
+            totalBytes: selectedVersion.Raw.ContentLength,
+            downloadOnly: downloadOnly);
         StatusMessage = Text(Strings.ModUpdate_QueuedFormat, _mod.DisplayTitle, selectedVersion.VersionText);
         MadeChanges = true;
     }

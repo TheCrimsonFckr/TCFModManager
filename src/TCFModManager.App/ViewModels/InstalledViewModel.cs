@@ -1213,8 +1213,11 @@ public partial class InstalledViewModel : LocalizedViewModel
         // single-mod path warns at all: there is no record of which files the current version
         // placed, so the new one goes on top of it.
         //
+        // Follows Monitor mode's setting. A download places nothing, so the warning below is moot.
+        var downloadOnly = AppServices.ModPageGate.DownloadOnlyFor(alternate: false);
+
         var handInstalled = resolved.Where(r => !r.Card.IsAppManaged).Select(r => r.Card.DisplayTitle).ToList();
-        if (handInstalled.Count > 0 && !Confirm(
+        if (!downloadOnly && handInstalled.Count > 0 && !Confirm(
                 Strings.Installed_UpdateHandInstalledTitle(handInstalled.Count),
                 Text(Strings.Installed_UpdateHandInstalledBodyFormat, TextLists.Join(handInstalled))))
         {
@@ -1234,7 +1237,8 @@ public partial class InstalledViewModel : LocalizedViewModel
         foreach (var (_, mod, version) in resolved)
         {
             AppServices.DownloadQueue.Enqueue(
-                InstallTarget.For(mod), version, installPath, () => ResolveVersionLinkAsync(mod, version));
+                InstallTarget.For(mod), version, installPath, () => ResolveVersionLinkAsync(mod, version),
+                downloadOnly: downloadOnly);
         }
 
         var queued = Strings.Installed_UpdateQueued(resolved.Count);

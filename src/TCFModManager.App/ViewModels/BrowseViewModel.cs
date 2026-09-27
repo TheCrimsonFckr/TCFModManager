@@ -836,13 +836,21 @@ public partial class BrowseViewModel : LocalizedViewModel
     /// Install never waits on a network call. Gated on ReadModPageConfirmationWindow first; declining
     /// leaves the card alone.</summary>
     [RelayCommand]
-    private void Install(ModCardViewModel? card) => QueueForDownload(card, DownloadAction.Install);
+    private void Install(ModCardViewModel? card) => QueueForDownload(card, DownloadAction.Install, alternate: false);
+
+    // The small button beside Install: the opposite of Monitor mode's setting, for this one mod.
+    [RelayCommand]
+    private void InstallAlternate(ModCardViewModel? card) => QueueForDownload(card, DownloadAction.Install, alternate: true);
 
     /// <summary>Re-queues an already-installed mod's currently displayed version - the same pick
     /// Install would make - for a fresh download and reinstall. Shown on the card in Install's place
     /// once a mod is installed, e.g. to recover from corrupted or hand-edited files.</summary>
     [RelayCommand]
-    private void Redownload(ModCardViewModel? card) => QueueForDownload(card, DownloadAction.Redownload);
+    private void Redownload(ModCardViewModel? card) => QueueForDownload(card, DownloadAction.Redownload, alternate: false);
+
+    [RelayCommand]
+    private void RedownloadAlternate(ModCardViewModel? card) =>
+        QueueForDownload(card, DownloadAction.Redownload, alternate: true);
 
     // Which of the two buttons asked, rather than the word one of them is labelled with: the
     // cancellation message is a whole sentence per action, not a verb dropped into a shared one.
@@ -852,7 +860,7 @@ public partial class BrowseViewModel : LocalizedViewModel
         Redownload,
     }
 
-    private void QueueForDownload(ModCardViewModel? card, DownloadAction action)
+    private void QueueForDownload(ModCardViewModel? card, DownloadAction action, bool alternate)
     {
         if (card is null) return;
 
@@ -864,11 +872,12 @@ public partial class BrowseViewModel : LocalizedViewModel
         }
 
         var mod = card.Mod;
+        var downloadOnly = AppServices.ModPageGate.DownloadOnlyFor(alternate);
 
         // Same rule as the Installed page: a disabled mod's install record points at folders it no
         // longer occupies, so reinstalling over it would place files where nothing loads them and
-        // leave the disabled copy behind as a duplicate.
-        if (card.IsDisabled)
+        // leave the disabled copy behind as a duplicate. A download places nothing, so it is spared.
+        if (card.IsDisabled && !downloadOnly)
         {
             StatusMessage = Text(Strings.Browse_DisabledFormat, mod.Name);
             return;
@@ -896,7 +905,9 @@ public partial class BrowseViewModel : LocalizedViewModel
         }
 
         var chosenVersion = chosen.Version;
-        AppServices.DownloadQueue.Enqueue(InstallTarget.For(mod), chosenVersion, installPath, () => ResolveVersionLinkAsync(mod, chosenVersion));
+        AppServices.DownloadQueue.Enqueue(
+            InstallTarget.For(mod), chosenVersion, installPath, () => ResolveVersionLinkAsync(mod, chosenVersion),
+            downloadOnly: downloadOnly);
         StatusMessage = Text(Strings.Browse_QueuedFormat, mod.Name, chosenVersion);
     }
 

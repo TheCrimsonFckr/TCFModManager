@@ -186,7 +186,13 @@ public partial class DependenciesViewModel : LocalizedViewModel
 
     // Queues a missing or outdated dependency, behind the same read-the-mod-page gate Browse uses.
     [RelayCommand]
-    private void Install(DependencyRow? row)
+    private void Install(DependencyRow? row) => Queue(row, alternate: false);
+
+    // The small button beside Install: the opposite of Monitor mode's setting, for this one mod.
+    [RelayCommand]
+    private void InstallAlternate(DependencyRow? row) => Queue(row, alternate: true);
+
+    private void Queue(DependencyRow? row, bool alternate)
     {
         if (row?.CatalogMod is null || string.IsNullOrWhiteSpace(row.RequiredVersion)) return;
 
@@ -207,7 +213,9 @@ public partial class DependenciesViewModel : LocalizedViewModel
         var version = row.RequiredVersion!;
 
         // checkDependencies stays on: a dependency can have dependencies of its own.
-        AppServices.DownloadQueue.Enqueue(InstallTarget.For(mod), version, installPath, () => ResolveVersionLinkAsync(mod, version));
+        AppServices.DownloadQueue.Enqueue(
+            InstallTarget.For(mod), version, installPath, () => ResolveVersionLinkAsync(mod, version),
+            downloadOnly: AppServices.ModPageGate.DownloadOnlyFor(alternate));
 
         row.IsQueued = true;
         StatusMessage = Text(Strings.Dependencies_QueuedFormat, row.Name, version);
