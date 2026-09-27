@@ -55,10 +55,13 @@ public sealed partial class ModPageGateViewModel : LocalizedViewModel
     public string AlternateToolTip =>
         (IsDownloadOnly ? Strings.ModPageGate_AlternateInstall : Strings.ModPageGate_AlternateDownload) + Notice;
 
-    // Install keeps the icon it has always had; a download-only action is a file arriving.
-    public SymbolRegular MainSymbol => IsDownloadOnly ? SymbolRegular.DocumentArrowDown24 : SymbolRegular.ArrowDownload24;
+    // Install keeps the icon it has always had; a download-only action is a file being saved.
+    //
+    // Only a symbol whose code point fits in 16 bits works: WPF-UI 4.3.0 truncates the rest, so
+    // DocumentArrowDown24 (0xF0527) drew as the Cyrillic letter at 0x0527.
+    public SymbolRegular MainSymbol => IsDownloadOnly ? SymbolRegular.DocumentSave24 : SymbolRegular.ArrowDownload24;
 
-    public SymbolRegular AlternateSymbol => IsDownloadOnly ? SymbolRegular.ArrowDownload24 : SymbolRegular.DocumentArrowDown24;
+    public SymbolRegular AlternateSymbol => IsDownloadOnly ? SymbolRegular.ArrowDownload24 : SymbolRegular.DocumentSave24;
 
     // What a click on the main button does; the alternate button passes the opposite.
     public bool DownloadOnlyFor(bool alternate) => IsDownloadOnly != alternate;
