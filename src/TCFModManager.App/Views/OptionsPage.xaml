@@ -379,6 +379,22 @@
                         ToolTip="{loc:Str Options_MonitorFolderResetToolTip}"
                         Command="{Binding ResetDownloadFolderCommand}" />
                 </Grid>
+
+                <TextBlock
+                    Text="{loc:Str Options_MonitorConfirmHeader}"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Margin="0,16,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,0,0,8"
+                    Text="{loc:Str Options_MonitorConfirmDescription}" />
+                <ComboBox
+                    MinWidth="320"
+                    HorizontalAlignment="Left"
+                    ItemsSource="{Binding DownloadConfirmationOptions}"
+                    SelectedItem="{Binding SelectedDownloadConfirmation}" />
             </StackPanel>
         </ui:Card>
 

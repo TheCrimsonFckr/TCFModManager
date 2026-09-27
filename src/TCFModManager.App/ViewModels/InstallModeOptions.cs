@@ -15,3 +15,13 @@ public sealed class InstallModeItem(string key, InstallMode value) : LocalizedVi
 
     public override string ToString() => Label;
 }
+
+// One entry in the Monitor mode card's "when a downloaded mod shows up installed" dropdown (R2).
+public sealed class DownloadConfirmationItem(string key, DownloadConfirmation value) : LocalizedViewModel
+{
+    public DownloadConfirmation Value { get; } = value;
+
+    public string Label => LocalizationService.Get(key);
+
+    public override string ToString() => Label;
+}

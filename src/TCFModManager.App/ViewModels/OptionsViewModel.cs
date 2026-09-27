@@ -90,6 +90,16 @@ public partial class OptionsViewModel : LocalizedViewModel
     [ObservableProperty]
     private InstallModeItem _selectedInstallMode;
 
+    // What a scan does when it finds a downloaded mod installed (R2): ask, or just note it.
+    public IReadOnlyList<DownloadConfirmationItem> DownloadConfirmationOptions { get; } =
+    [
+        new(nameof(Strings.Options_MonitorConfirmAsk), DownloadConfirmation.Ask),
+        new(nameof(Strings.Options_MonitorConfirmQuiet), DownloadConfirmation.MarkQuietly),
+    ];
+
+    [ObservableProperty]
+    private DownloadConfirmationItem _selectedDownloadConfirmation;
+
     // Empty means the Windows Downloads folder, which the placeholder names.
     [ObservableProperty]
     private string _downloadFolderInput = string.Empty;
@@ -209,6 +219,9 @@ public partial class OptionsViewModel : LocalizedViewModel
         _selectedInstallMode = InstallModeOptions.FirstOrDefault(o => o.Value == settings.Monitor.InstallMode)
             ?? InstallModeOptions[0];
         _downloadFolderInput = settings.Monitor.DownloadFolder ?? string.Empty;
+        _selectedDownloadConfirmation =
+            DownloadConfirmationOptions.FirstOrDefault(o => o.Value == settings.Monitor.DownloadConfirmation)
+            ?? DownloadConfirmationOptions[0];
 
         _selectedWindowStartup = WindowStartupOptions.FirstOrDefault(o => o.Value == settings.Window.StartupMode)
             ?? WindowStartupOptions[0];
@@ -295,6 +308,17 @@ public partial class OptionsViewModel : LocalizedViewModel
         AppServices.ModPageGate.Refresh();
 
         AppLog.Info("Monitor", $"install mode set to {value.Value}");
+    }
+
+    partial void OnSelectedDownloadConfirmationChanged(DownloadConfirmationItem value)
+    {
+        if (!_loaded) return;
+
+        var settings = _settings.Load();
+        settings.Monitor.DownloadConfirmation = value.Value;
+        _settings.Save(settings);
+
+        AppLog.Info("Monitor", $"download confirmation set to {value.Value}");
     }
 
     //
