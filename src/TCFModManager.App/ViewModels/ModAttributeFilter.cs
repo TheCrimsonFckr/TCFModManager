@@ -27,6 +27,10 @@ public enum ModAttributeFilter
 
     // Mods already installed are hidden. Browse only - on Installed it would empty the page.
     HideInstalled,
+
+    // Only mods with a Monitor mode download on disk that nobody has confirmed yet, whether it
+    // looks fully installed or only partly. Installed only (R8).
+    DownloadedNotConfirmed,
 }
 
 //

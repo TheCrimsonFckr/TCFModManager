@@ -281,6 +281,32 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
                 string.Join(Strings.Common_ListSeparator, MissingFolders));
 
     //
+    // A Monitor mode download of this mod that a scan found on disk but nobody has confirmed yet -
+    // installed as far as its files show, or only partly. Set after a scan by InstalledViewModel,
+    // the same way Lists is; null when there is none, which is every card outside Monitor mode.
+    //
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasPendingDownload))]
+    [NotifyPropertyChangedFor(nameof(CanConfirmDownload))]
+    [NotifyPropertyChangedFor(nameof(DownloadSummary))]
+    [NotifyPropertyChangedFor(nameof(StatusTooltip))]
+    private PendingDownload? _pendingDownload;
+
+    public bool HasPendingDownload => PendingDownload is not null;
+
+    // Only a download whose every file is on disk at its size. A partial one is never confirmed,
+    // by the prompt or by hand - a half-copied install is exactly what the note is there to show.
+    public bool CanConfirmDownload => PendingDownload?.Match.Kind == DownloadMatchKind.Installed;
+
+    public string? DownloadSummary => PendingDownload switch
+    {
+        null => null,
+        { Match.Kind: DownloadMatchKind.Installed } p =>
+            Text(Strings.Installed_DownloadLooksInstalledFormat, p.Download.Version),
+        { } p => Text(Strings.Installed_DownloadPartialFormat, p.Download.Version),
+    };
+
+    //
     // Every scan entry merged into this card: both halves of a client+server mod, and both copies
     // of a mod left in a container and in that container's ".disabled" sibling. What the disable
     // commands actually move, and what ModDependencyGraph is keyed on.
@@ -428,8 +454,10 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         : ModStatusDisplay.Glyph(Status);
 
     // Missing files first: it is the only one of these the card gives no other sign of.
+    // A pending download next: the collapsed card's only sign of one is this tooltip.
     public string StatusTooltip =>
         IncompleteSummary
+        ?? DownloadSummary
         ?? (HasDuplicateFolders
             ? Strings.Installed_StatusDuplicate
             : IsMixedState
@@ -1409,3 +1437,6 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         && candidateToken.Length - folderToken.Length is > 0 and <= 5
         && candidateToken.StartsWith(folderToken, StringComparison.Ordinal);
 }
+
+// A download from the ledger and what the last scan made of it.
+public sealed record PendingDownload(DownloadedModRecord Download, DownloadMatch Match);

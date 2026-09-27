@@ -134,8 +134,21 @@ public partial class InstalledViewModel : LocalizedViewModel
     // graph built off the scan, which reads BepInEx's own metadata, so it covers everything
     // installed rather than whatever has been looked up so far.
     //
+    // Plus one of Installed's own: Monitor mode downloads that are on disk but unconfirmed (R8).
     public ObservableCollection<ModAttributeOption> AttributeOptions { get; } =
-        ModAttributeOption.Standard(nameof(Strings.Filter_HasDependenciesInstalledToolTip));
+    [
+        .. ModAttributeOption.Standard(nameof(Strings.Filter_HasDependenciesInstalledToolTip)),
+        new(ModAttributeFilter.DownloadedNotConfirmed,
+            nameof(Strings.Filter_DownloadedNotConfirmed),
+            nameof(Strings.Filter_DownloadedNotConfirmedToolTip)),
+    ];
+
+    //
+    // Downloads the confirm prompt has already put to the user this session and been told "not
+    // now". A scan runs after every remove, enable and dialog close, so without this the same
+    // question would come back every few seconds.
+    //
+    private readonly HashSet<(int ModId, bool IsAddon, string Version)> _deferredDownloads = [];
 
     [ObservableProperty]
     private string _attributeFilterSummary = Strings.Filter_AnyMod;
@@ -733,7 +746,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             // The whole scan-and-match pass runs off the UI thread. Matching a large install
             // against a full catalog is the slower half of the two, and doing it inline is what
             // made navigating to this page hang.
-            var (scanned, cards, dependencies) = await Task.Run(() =>
+            var (scanned, cards, dependencies, downloads) = await Task.Run(() =>
             {
                 var found = InstalledModScanner.Scan(installPath);
 
@@ -743,7 +756,7 @@ public partial class InstalledViewModel : LocalizedViewModel
 
                 // Built off the same scan the cards came from, so every link points at an entry
                 // some card owns.
-                return (found, built, ModDependencyGraph.Build(found));
+                return (found, built, ModDependencyGraph.Build(found), MatchDownloads(found, installPath, installRecords));
             });
 
             // What was open in each view, keyed the same way group assignments are, so the sets
@@ -764,6 +777,7 @@ public partial class InstalledViewModel : LocalizedViewModel
 
             ApplyListMembership(cards);
             ApplyPins(cards);
+            ApplyPendingDownloads(cards, downloads);
             ApplyBadgeVisibility();
             _dependencies = dependencies;
 
@@ -814,6 +828,140 @@ public partial class InstalledViewModel : LocalizedViewModel
         {
             IsBusy = false;
         }
+
+        await OfferDownloadConfirmationsAsync();
+    }
+
+    //
+    // Monitor mode, §7: every pending download checked against this scan. Runs on the scan's
+    // background thread, since the size check is one stat per file the archive would place.
+    //
+    // A download this app has since installed itself - its record is app-managed at the same
+    // version - is settled here without asking: there is nothing for the user to confirm.
+    //
+    private static List<PendingDownload> MatchDownloads(
+        IReadOnlyList<InstalledMod> scanned, string installPath, IReadOnlyList<InstalledModRecord> records)
+    {
+        var pending = AppServices.DownloadLedger.Pending();
+        if (pending.Count == 0) return [];
+
+        var folders = DownloadMatcher.FolderNames(scanned);
+        var results = new List<PendingDownload>();
+
+        foreach (var download in pending)
+        {
+            var record = records.FirstOrDefault(r => r.ModId == download.ModId && r.IsAddon == download.IsAddon);
+            if (record is { IsAppManaged: true, Incomplete: false }
+                && string.Equals(record.Version, download.Version, StringComparison.Ordinal))
+            {
+                AppServices.DownloadLedger.SetState(
+                    download.ModId, download.IsAddon, download.Version, DownloadState.Confirmed);
+                continue;
+            }
+
+            var match = DownloadMatcher.Check(download, installPath, folders);
+            if (match.Kind != DownloadMatchKind.Absent) results.Add(new PendingDownload(download, match));
+        }
+
+        AppLog.Debug("Monitor",
+            $"{pending.Count} pending download(s): " +
+            $"{results.Count(r => r.Match.Kind == DownloadMatchKind.Installed)} look installed, " +
+            $"{results.Count(r => r.Match.Kind == DownloadMatchKind.Partial)} partly");
+
+        return results;
+    }
+
+    //
+    // Ties each matched download to its card: by listing id first, and by folder when the card
+    // resolved to a different listing (or none) - the folder is what the download named.
+    //
+    private static void ApplyPendingDownloads(
+        IReadOnlyList<InstalledModCardViewModel> cards, IReadOnlyList<PendingDownload> downloads)
+    {
+        foreach (var card in cards) card.PendingDownload = null;
+
+        foreach (var download in downloads)
+        {
+            var d = download.Download;
+            var expected = d.ExpectedFolders.ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            var card = cards.FirstOrDefault(c => c.ModId == d.ModId && c.IsAddon == d.IsAddon)
+                ?? cards.FirstOrDefault(c => c.Entries.Any(e => !e.IsDisabled && expected.Overlaps(
+                    DownloadMatcher.FolderNames([e]))));
+
+            if (card is not null) card.PendingDownload = download;
+        }
+    }
+
+    //
+    // R2's default: one prompt per scan listing every download that now looks installed, each with
+    // a tick box. Ticked ones are confirmed, unticked ones dismissed for that version; "Not now"
+    // leaves them all pending and doesn't ask again this session. The quiet setting skips the
+    // prompt, and the card's own Confirm install button does the same job one mod at a time.
+    //
+    private async Task OfferDownloadConfirmationsAsync()
+    {
+        if (new SettingsService().Load().Monitor.DownloadConfirmation != DownloadConfirmation.Ask) return;
+
+        var offered = _all
+            .Where(c => c.CanConfirmDownload)
+            .Select(c => c.PendingDownload!)
+            .Where(p => !_deferredDownloads.Contains(Key(p.Download)))
+            .GroupBy(p => Key(p.Download))
+            .Select(g => g.First())
+            .ToList();
+
+        if (offered.Count == 0) return;
+
+        var answer = DownloadConfirmWindow.Ask(offered.Select(p => p.Download).ToList());
+
+        if (answer is null)
+        {
+            foreach (var p in offered) _deferredDownloads.Add(Key(p.Download));
+            AppLog.Info("Monitor", $"confirm prompt deferred for {offered.Count} download(s)");
+            return;
+        }
+
+        foreach (var p in offered)
+        {
+            var d = p.Download;
+
+            if (answer.Contains(d))
+            {
+                AppServices.InstallManifest.ConfirmDownload(d);
+                AppServices.DownloadLedger.SetState(d.ModId, d.IsAddon, d.Version, DownloadState.Confirmed);
+            }
+            else
+            {
+                AppServices.DownloadLedger.SetState(d.ModId, d.IsAddon, d.Version, DownloadState.Dismissed);
+            }
+        }
+
+        AppLog.Info("Monitor", $"confirmed {answer.Count} of {offered.Count} download(s) from the prompt");
+
+        await ScanAsync();
+
+        if (answer.Count > 0) StatusMessage = Strings.Installed_DownloadsConfirmed(answer.Count);
+    }
+
+    private static (int, bool, string) Key(DownloadedModRecord d) => (d.ModId, d.IsAddon, d.Version);
+
+    // The card's own Confirm install - the quiet setting's way in, and always available on a card
+    // whose download looks installed.
+    [RelayCommand]
+    private async Task ConfirmDownloadAsync(InstalledModCardViewModel? mod)
+    {
+        if (mod?.PendingDownload is not { Match.Kind: DownloadMatchKind.Installed } pending) return;
+
+        var d = pending.Download;
+        AppServices.InstallManifest.ConfirmDownload(d);
+        AppServices.DownloadLedger.SetState(d.ModId, d.IsAddon, d.Version, DownloadState.Confirmed);
+
+        AppLog.Info("Monitor", $"confirmed {d.Name} {d.Version} from its card");
+
+        await ScanAsync();
+
+        StatusMessage = Text(Strings.Installed_DownloadConfirmedFormat, d.Name, d.Version);
     }
 
     /// <summary>Removes a mod from the install: the manifest-precise ModInstallService.UninstallAsync path
@@ -1636,7 +1784,8 @@ public partial class InstalledViewModel : LocalizedViewModel
             .Where(m => !IsOn(ModAttributeFilter.HideAds) || !m.ContainsAds)
             .Where(m => !IsOn(ModAttributeFilter.HideAiContent) || !m.ContainsAiContent)
             .Where(m => !IsOn(ModAttributeFilter.HasDependencies) || m.HasDependencies)
-            .Where(m => !IsOn(ModAttributeFilter.HasAddons) || m.HasAddons);
+            .Where(m => !IsOn(ModAttributeFilter.HasAddons) || m.HasAddons)
+            .Where(m => !IsOn(ModAttributeFilter.DownloadedNotConfirmed) || m.HasPendingDownload);
 
         _filtered = SortMods(matched, SelectedSortOption.Value).ToList();
 
