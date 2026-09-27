@@ -80,8 +80,12 @@ internal sealed class UpdateWatcher
         Start();
     }
 
-    // Runs a check straight away - the tray's "Check for updates now" (§8a, step 5).
-    public Task CheckNowAsync() => CheckAsync(_loop?.Token ?? CancellationToken.None);
+    //
+    // Runs a check straight away - the Options page's Check now, and the tray's "Check for updates
+    // now" (§8a, step 5). Counts exactly like a timer tick: a baseline check announces nothing, and
+    // what it announces isn't announced again. The timer keeps its own schedule.
+    //
+    public Task<UpdateCheckOutcome> CheckNowAsync() => CheckAsync(_loop?.Token ?? CancellationToken.None);
 
     private async Task RunAsync(TimeSpan interval, CancellationToken ct)
     {
@@ -98,15 +102,15 @@ internal sealed class UpdateWatcher
         }
     }
 
-    private async Task CheckAsync(CancellationToken ct)
+    private async Task<UpdateCheckOutcome> CheckAsync(CancellationToken ct)
     {
         // A tick that lands while the previous check is still going is skipped, not queued (§5).
-        if (_checking) return;
+        if (_checking) return new UpdateCheckOutcome(UpdateCheckResult.AlreadyChecking);
         _checking = true;
 
         try
         {
-            await CheckCoreAsync(ct);
+            return await CheckCoreAsync(ct);
         }
         catch (OperationCanceledException) when (ct.IsCancellationRequested)
         {
@@ -116,16 +120,19 @@ internal sealed class UpdateWatcher
         {
             // Nothing is retried within the tick; the next one tries again (§5).
             AppLog.Warn("Updates", $"check skipped: The Forge is rate limiting ({ex.Message}), trying again next time");
+            return new UpdateCheckOutcome(UpdateCheckResult.RateLimited);
         }
         catch (Exception ex) when (ex is SpModApiException or HttpRequestException or TaskCanceledException)
         {
             // Offline, or The Forge is down. Skipped, not caught up later.
             AppLog.Warn("Updates", $"check skipped: couldn't reach The Forge ({ex.Message})");
+            return new UpdateCheckOutcome(UpdateCheckResult.Offline);
         }
         catch (Exception ex)
         {
             // A check that fails for any other reason must not take the timer down with it.
             AppLog.Error("Updates", "check failed", ex);
+            return new UpdateCheckOutcome(UpdateCheckResult.Failed);
         }
         finally
         {
@@ -133,7 +140,7 @@ internal sealed class UpdateWatcher
         }
     }
 
-    private async Task CheckCoreAsync(CancellationToken ct)
+    private async Task<UpdateCheckOutcome> CheckCoreAsync(CancellationToken ct)
     {
         var installPath = AppServices.SptEnvironment.InstallPath;
         var sptVersion = AppServices.SptEnvironment.InstalledVersion;
@@ -141,14 +148,14 @@ internal sealed class UpdateWatcher
         if (string.IsNullOrWhiteSpace(installPath) || string.IsNullOrWhiteSpace(sptVersion))
         {
             AppLog.Info("Updates", "check skipped: no SPT install set");
-            return;
+            return new UpdateCheckOutcome(UpdateCheckResult.NoInstall);
         }
 
         // An install or a list apply in progress would be scanned half-placed (§5).
         if (AppServices.DownloadQueue.Items.Any(i => !i.IsFinished))
         {
             AppLog.Info("Updates", "check skipped: the download queue is busy");
-            return;
+            return new UpdateCheckOutcome(UpdateCheckResult.QueueBusy);
         }
 
         await AppServices.ModCache.EnsureLoadedAsync(ct);
@@ -211,6 +218,8 @@ internal sealed class UpdateWatcher
         _lastShown = shown;
 
         if (changed) UpdatesFound?.Invoke(this, EventArgs.Empty);
+
+        return new UpdateCheckOutcome(UpdateCheckResult.Checked, available.Count, result.New.Count, !previous.BaselineTaken);
     }
 
     private static Task<List<InstalledModCardViewModel>> BuildCardsAsync(
@@ -223,3 +232,18 @@ internal sealed class UpdateWatcher
         return Task.Run(() => InstalledModCardViewModel.BuildFrom(scanned, catalog, sptVersion, records, addons), ct);
     }
 }
+
+public enum UpdateCheckResult
+{
+    Checked,
+    AlreadyChecking,
+    NoInstall,
+    QueueBusy,
+    Offline,
+    RateLimited,
+    Failed,
+}
+
+// What one check came to. The counts are only meaningful when Result is Checked.
+internal sealed record UpdateCheckOutcome(
+    UpdateCheckResult Result, int Available = 0, int Announced = 0, bool WasBaseline = false);

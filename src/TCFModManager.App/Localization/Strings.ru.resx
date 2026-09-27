@@ -4398,4 +4398,58 @@
   <data name="UpdateToast_Open" xml:space="preserve">
     <value>Открыть</value>
   </data>
+  <data name="Options_UpdateCheckNow" xml:space="preserve">
+    <value>Проверить сейчас</value>
+  </data>
+  <data name="Options_UpdateCheckNowToolTip" xml:space="preserve">
+    <value>Проверяет сразу, не дожидаясь очередной проверки. Считается обычной проверкой: первая после включения запоминает уже доступные обновления без уведомления, а об объявленном обновлении второй раз не сообщается.</value>
+  </data>
+  <data name="Options_UpdateCheckChecking" xml:space="preserve">
+    <value>Проверка...</value>
+  </data>
+  <data name="Options_UpdateCheckBaseline" xml:space="preserve">
+    <value>Первая проверка выполнена. Уже доступные обновления запомнены без уведомления - дальше о новых будет сообщаться.</value>
+  </data>
+  <data name="Options_UpdateCheckAnnounced_one" xml:space="preserve">
+    <value>{0} новое обновление - показано в уведомлении.</value>
+  </data>
+  <data name="Options_UpdateCheckAnnounced_few" xml:space="preserve">
+    <value>{0} новых обновления - показаны в одном уведомлении.</value>
+  </data>
+  <data name="Options_UpdateCheckAnnounced_many" xml:space="preserve">
+    <value>{0} новых обновлений - показаны в одном уведомлении.</value>
+  </data>
+  <data name="Options_UpdateCheckNothingNew_one" xml:space="preserve">
+    <value>Ничего нового. У {0} установленного мода есть обновление, о нём уже сообщалось.</value>
+  </data>
+  <data name="Options_UpdateCheckNothingNew_few" xml:space="preserve">
+    <value>Ничего нового. У {0} установленных модов есть обновления, о них уже сообщалось.</value>
+  </data>
+  <data name="Options_UpdateCheckNothingNew_many" xml:space="preserve">
+    <value>Ничего нового. У {0} установленных модов есть обновления, о них уже сообщалось.</value>
+  </data>
+  <data name="Options_UpdateCheckNone" xml:space="preserve">
+    <value>Ни у одного установленного мода нет обновлений.</value>
+  </data>
+  <data name="Options_UpdateCheckAlreadyRunning" xml:space="preserve">
+    <value>Проверка уже выполняется.</value>
+  </data>
+  <data name="Options_UpdateCheckNoInstall" xml:space="preserve">
+    <value>Не проверено - папка установки SPT не указана.</value>
+  </data>
+  <data name="Options_UpdateCheckQueueBusy" xml:space="preserve">
+    <value>Не проверено - дождитесь окончания текущих загрузок.</value>
+  </data>
+  <data name="Options_UpdateCheckOffline" xml:space="preserve">
+    <value>Не проверено - не удалось связаться с The Forge.</value>
+  </data>
+  <data name="Options_UpdateCheckRateLimited" xml:space="preserve">
+    <value>Не проверено - The Forge попросил сделать паузу. Попробуйте через минуту.</value>
+  </data>
+  <data name="Options_UpdateCheckFailed" xml:space="preserve">
+    <value>Проверка не удалась. Подробности - в журнале в Data\logs.</value>
+  </data>
+  <data name="Options_UpdateCheckTimeFormat" xml:space="preserve">
+    <value>{0} ({1:t})</value>
+  </data>
 </root>

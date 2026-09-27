@@ -4173,4 +4173,52 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="UpdateToast_Open" xml:space="preserve">
     <value>Apri</value>
   </data>
+  <data name="Options_UpdateCheckNow" xml:space="preserve">
+    <value>Controlla ora</value>
+  </data>
+  <data name="Options_UpdateCheckNowToolTip" xml:space="preserve">
+    <value>Controlla subito invece di aspettare. Vale come un controllo: il primo dopo l'attivazione annota gli aggiornamenti già disponibili senza notifica, e un aggiornamento annunciato non viene annunciato di nuovo.</value>
+  </data>
+  <data name="Options_UpdateCheckChecking" xml:space="preserve">
+    <value>Controllo in corso...</value>
+  </data>
+  <data name="Options_UpdateCheckBaseline" xml:space="preserve">
+    <value>Primo controllo fatto. Gli aggiornamenti già disponibili sono stati annotati senza notifica - d'ora in poi quelli nuovi verranno annunciati.</value>
+  </data>
+  <data name="Options_UpdateCheckAnnounced_one" xml:space="preserve">
+    <value>1 nuovo aggiornamento - mostrato in una notifica.</value>
+  </data>
+  <data name="Options_UpdateCheckAnnounced_other" xml:space="preserve">
+    <value>{0} nuovi aggiornamenti - mostrati in una notifica.</value>
+  </data>
+  <data name="Options_UpdateCheckNothingNew_one" xml:space="preserve">
+    <value>Niente di nuovo. 1 mod installato ha un aggiornamento, già annunciato.</value>
+  </data>
+  <data name="Options_UpdateCheckNothingNew_other" xml:space="preserve">
+    <value>Niente di nuovo. {0} mod installati hanno un aggiornamento, già annunciato.</value>
+  </data>
+  <data name="Options_UpdateCheckNone" xml:space="preserve">
+    <value>Nessun mod installato ha un aggiornamento.</value>
+  </data>
+  <data name="Options_UpdateCheckAlreadyRunning" xml:space="preserve">
+    <value>Un controllo è già in corso.</value>
+  </data>
+  <data name="Options_UpdateCheckNoInstall" xml:space="preserve">
+    <value>Non controllato - nessuna cartella d'installazione di SPT impostata.</value>
+  </data>
+  <data name="Options_UpdateCheckQueueBusy" xml:space="preserve">
+    <value>Non controllato - aspetta che finiscano i download in corso.</value>
+  </data>
+  <data name="Options_UpdateCheckOffline" xml:space="preserve">
+    <value>Non controllato - impossibile raggiungere The Forge.</value>
+  </data>
+  <data name="Options_UpdateCheckRateLimited" xml:space="preserve">
+    <value>Non controllato - The Forge ha chiesto una pausa. Riprova tra un minuto.</value>
+  </data>
+  <data name="Options_UpdateCheckFailed" xml:space="preserve">
+    <value>Il controllo non è riuscito. Il log in Data\logs ha i dettagli.</value>
+  </data>
+  <data name="Options_UpdateCheckTimeFormat" xml:space="preserve">
+    <value>{0} ({1:t})</value>
+  </data>
 </root>

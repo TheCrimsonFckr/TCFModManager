@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using TCFModManager.App.Localization;
+using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -117,7 +118,12 @@ public partial class OptionsViewModel : LocalizedViewModel
     // on starts the timer and takes the baseline, no restart.
     //
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CheckUpdatesNowCommand))]
     private bool _updateNotificationsEnabled;
+
+    // What the last Check now came to, under the button. Empty until it has been pressed.
+    [ObservableProperty]
+    private string _updateCheckStatus = string.Empty;
 
     public IReadOnlyList<UpdateIntervalItem> UpdateIntervalOptions { get; } =
     [
@@ -376,6 +382,36 @@ public partial class OptionsViewModel : LocalizedViewModel
         // versions again (§8). On takes a fresh baseline (D6).
         if (value) AppServices.UpdateWatcher.SwitchedOn();
         else AppServices.UpdateWatcher.Stop();
+    }
+
+    //
+    // Runs a check now rather than at the next tick. It counts like any other check - the first
+    // after switching on is the baseline - so it doubles as the quick way to try the feature out.
+    //
+    [RelayCommand(CanExecute = nameof(UpdateNotificationsEnabled))]
+    private async Task CheckUpdatesNowAsync()
+    {
+        UpdateCheckStatus = Strings.Options_UpdateCheckChecking;
+
+        var outcome = await AppServices.UpdateWatcher.CheckNowAsync();
+
+        var message = outcome.Result switch
+        {
+            UpdateCheckResult.Checked when outcome.WasBaseline => Strings.Options_UpdateCheckBaseline,
+            UpdateCheckResult.Checked when outcome.Announced > 0 =>
+                Strings.Options_UpdateCheckAnnounced(outcome.Announced, outcome.Announced),
+            UpdateCheckResult.Checked when outcome.Available > 0 =>
+                Strings.Options_UpdateCheckNothingNew(outcome.Available, outcome.Available),
+            UpdateCheckResult.Checked => Strings.Options_UpdateCheckNone,
+            UpdateCheckResult.AlreadyChecking => Strings.Options_UpdateCheckAlreadyRunning,
+            UpdateCheckResult.NoInstall => Strings.Options_UpdateCheckNoInstall,
+            UpdateCheckResult.QueueBusy => Strings.Options_UpdateCheckQueueBusy,
+            UpdateCheckResult.Offline => Strings.Options_UpdateCheckOffline,
+            UpdateCheckResult.RateLimited => Strings.Options_UpdateCheckRateLimited,
+            _ => Strings.Options_UpdateCheckFailed,
+        };
+
+        UpdateCheckStatus = Text(Strings.Options_UpdateCheckTimeFormat, message, DateTime.Now);
     }
 
     partial void OnSelectedUpdateIntervalChanged(UpdateIntervalItem value)

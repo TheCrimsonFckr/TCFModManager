@@ -4173,4 +4173,52 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="UpdateToast_Open" xml:space="preserve">
     <value>Öffnen</value>
   </data>
+  <data name="Options_UpdateCheckNow" xml:space="preserve">
+    <value>Jetzt prüfen</value>
+  </data>
+  <data name="Options_UpdateCheckNowToolTip" xml:space="preserve">
+    <value>Prüft sofort, statt zu warten. Das zählt als Prüfung: Die erste nach dem Einschalten merkt sich die schon verfügbaren Updates ohne Benachrichtigung, und ein gemeldetes Update wird nicht noch einmal gemeldet.</value>
+  </data>
+  <data name="Options_UpdateCheckChecking" xml:space="preserve">
+    <value>Wird geprüft...</value>
+  </data>
+  <data name="Options_UpdateCheckBaseline" xml:space="preserve">
+    <value>Erste Prüfung erledigt. Die schon verfügbaren Updates wurden ohne Benachrichtigung vermerkt - ab jetzt werden neue gemeldet.</value>
+  </data>
+  <data name="Options_UpdateCheckAnnounced_one" xml:space="preserve">
+    <value>1 neues Update - als Benachrichtigung angezeigt.</value>
+  </data>
+  <data name="Options_UpdateCheckAnnounced_other" xml:space="preserve">
+    <value>{0} neue Updates - in einer Benachrichtigung angezeigt.</value>
+  </data>
+  <data name="Options_UpdateCheckNothingNew_one" xml:space="preserve">
+    <value>Nichts Neues. 1 installierter Mod hat ein Update, und es wurde schon gemeldet.</value>
+  </data>
+  <data name="Options_UpdateCheckNothingNew_other" xml:space="preserve">
+    <value>Nichts Neues. {0} installierte Mods haben ein Update, und sie wurden schon gemeldet.</value>
+  </data>
+  <data name="Options_UpdateCheckNone" xml:space="preserve">
+    <value>Kein installierter Mod hat ein Update.</value>
+  </data>
+  <data name="Options_UpdateCheckAlreadyRunning" xml:space="preserve">
+    <value>Es läuft schon eine Prüfung.</value>
+  </data>
+  <data name="Options_UpdateCheckNoInstall" xml:space="preserve">
+    <value>Nicht geprüft - kein SPT-Installationsordner festgelegt.</value>
+  </data>
+  <data name="Options_UpdateCheckQueueBusy" xml:space="preserve">
+    <value>Nicht geprüft - warte, bis die laufenden Downloads fertig sind.</value>
+  </data>
+  <data name="Options_UpdateCheckOffline" xml:space="preserve">
+    <value>Nicht geprüft - The Forge war nicht erreichbar.</value>
+  </data>
+  <data name="Options_UpdateCheckRateLimited" xml:space="preserve">
+    <value>Nicht geprüft - The Forge hat um eine Pause gebeten. Versuch es in einer Minute noch einmal.</value>
+  </data>
+  <data name="Options_UpdateCheckFailed" xml:space="preserve">
+    <value>Die Prüfung ist fehlgeschlagen. Details stehen im Log unter Data\logs.</value>
+  </data>
+  <data name="Options_UpdateCheckTimeFormat" xml:space="preserve">
+    <value>{0} ({1:t})</value>
+  </data>
 </root>

@@ -1364,4 +1364,20 @@ internal static class Strings
     internal static string UpdateToast_More(int count, params object?[] values) =>
         LocalizationService.Plural("UpdateToast_More", count, values);
     internal static string UpdateToast_Open => LocalizationService.Get("UpdateToast_Open");
+    internal static string Options_UpdateCheckNow => LocalizationService.Get("Options_UpdateCheckNow");
+    internal static string Options_UpdateCheckNowToolTip => LocalizationService.Get("Options_UpdateCheckNowToolTip");
+    internal static string Options_UpdateCheckChecking => LocalizationService.Get("Options_UpdateCheckChecking");
+    internal static string Options_UpdateCheckBaseline => LocalizationService.Get("Options_UpdateCheckBaseline");
+    internal static string Options_UpdateCheckAnnounced(int count, params object?[] values) =>
+        LocalizationService.Plural("Options_UpdateCheckAnnounced", count, values);
+    internal static string Options_UpdateCheckNothingNew(int count, params object?[] values) =>
+        LocalizationService.Plural("Options_UpdateCheckNothingNew", count, values);
+    internal static string Options_UpdateCheckNone => LocalizationService.Get("Options_UpdateCheckNone");
+    internal static string Options_UpdateCheckAlreadyRunning => LocalizationService.Get("Options_UpdateCheckAlreadyRunning");
+    internal static string Options_UpdateCheckNoInstall => LocalizationService.Get("Options_UpdateCheckNoInstall");
+    internal static string Options_UpdateCheckQueueBusy => LocalizationService.Get("Options_UpdateCheckQueueBusy");
+    internal static string Options_UpdateCheckOffline => LocalizationService.Get("Options_UpdateCheckOffline");
+    internal static string Options_UpdateCheckRateLimited => LocalizationService.Get("Options_UpdateCheckRateLimited");
+    internal static string Options_UpdateCheckFailed => LocalizationService.Get("Options_UpdateCheckFailed");
+    internal static string Options_UpdateCheckTimeFormat => LocalizationService.Get("Options_UpdateCheckTimeFormat");
 }

@@ -4987,4 +4987,57 @@ This was written to:
     <value>Open</value>
     <comment>Button on the notification. Opens the app on the Installed page.</comment>
   </data>
+  <data name="Options_UpdateCheckNow" xml:space="preserve">
+    <value>Check now</value>
+  </data>
+  <data name="Options_UpdateCheckNowToolTip" xml:space="preserve">
+    <value>Checks straight away instead of waiting. It counts as a check: the first one after switching notifications on notes the updates already available without a notification, and an update it announces isn't announced again.</value>
+  </data>
+  <data name="Options_UpdateCheckChecking" xml:space="preserve">
+    <value>Checking...</value>
+  </data>
+  <data name="Options_UpdateCheckBaseline" xml:space="preserve">
+    <value>First check done. The updates already available were noted without a notification - from now on, new ones are announced.</value>
+  </data>
+  <data name="Options_UpdateCheckAnnounced_one" xml:space="preserve">
+    <value>1 new update - shown as a notification.</value>
+    <comment>{0} is how many new updates the notification lists.</comment>
+  </data>
+  <data name="Options_UpdateCheckAnnounced_other" xml:space="preserve">
+    <value>{0} new updates - shown in one notification.</value>
+    <comment>{0} is how many new updates the notification lists.</comment>
+  </data>
+  <data name="Options_UpdateCheckNothingNew_one" xml:space="preserve">
+    <value>Nothing new. 1 installed mod has an update, and it has already been announced.</value>
+    <comment>{0} is how many installed mods have an update.</comment>
+  </data>
+  <data name="Options_UpdateCheckNothingNew_other" xml:space="preserve">
+    <value>Nothing new. {0} installed mods have an update, and they have already been announced.</value>
+    <comment>{0} is how many installed mods have an update.</comment>
+  </data>
+  <data name="Options_UpdateCheckNone" xml:space="preserve">
+    <value>No installed mod has an update.</value>
+  </data>
+  <data name="Options_UpdateCheckAlreadyRunning" xml:space="preserve">
+    <value>A check is already running.</value>
+  </data>
+  <data name="Options_UpdateCheckNoInstall" xml:space="preserve">
+    <value>Not checked - no SPT install folder is set.</value>
+  </data>
+  <data name="Options_UpdateCheckQueueBusy" xml:space="preserve">
+    <value>Not checked - wait for the downloads in progress to finish.</value>
+  </data>
+  <data name="Options_UpdateCheckOffline" xml:space="preserve">
+    <value>Not checked - couldn't reach The Forge.</value>
+  </data>
+  <data name="Options_UpdateCheckRateLimited" xml:space="preserve">
+    <value>Not checked - The Forge asked for a pause. Try again in a minute.</value>
+  </data>
+  <data name="Options_UpdateCheckFailed" xml:space="preserve">
+    <value>The check failed. The log in Data\logs has the details.</value>
+  </data>
+  <data name="Options_UpdateCheckTimeFormat" xml:space="preserve">
+    <value>{0} ({1:t})</value>
+    <comment>{0} is the result of the check, {1} the time it finished.</comment>
+  </data>
 </root>

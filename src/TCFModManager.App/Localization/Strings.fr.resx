@@ -4173,4 +4173,52 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="UpdateToast_Open" xml:space="preserve">
     <value>Ouvrir</value>
   </data>
+  <data name="Options_UpdateCheckNow" xml:space="preserve">
+    <value>Vérifier maintenant</value>
+  </data>
+  <data name="Options_UpdateCheckNowToolTip" xml:space="preserve">
+    <value>Vérifie tout de suite au lieu d'attendre. Cela compte comme une vérification : la première après l'activation note les mises à jour déjà disponibles sans notification, et une mise à jour annoncée ne l'est pas une seconde fois.</value>
+  </data>
+  <data name="Options_UpdateCheckChecking" xml:space="preserve">
+    <value>Vérification...</value>
+  </data>
+  <data name="Options_UpdateCheckBaseline" xml:space="preserve">
+    <value>Première vérification faite. Les mises à jour déjà disponibles ont été notées sans notification - désormais, les nouvelles seront annoncées.</value>
+  </data>
+  <data name="Options_UpdateCheckAnnounced_one" xml:space="preserve">
+    <value>1 nouvelle mise à jour - affichée dans une notification.</value>
+  </data>
+  <data name="Options_UpdateCheckAnnounced_other" xml:space="preserve">
+    <value>{0} nouvelles mises à jour - affichées dans une notification.</value>
+  </data>
+  <data name="Options_UpdateCheckNothingNew_one" xml:space="preserve">
+    <value>Rien de nouveau. 1 mod installé a une mise à jour, et elle a déjà été annoncée.</value>
+  </data>
+  <data name="Options_UpdateCheckNothingNew_other" xml:space="preserve">
+    <value>Rien de nouveau. {0} mods installés ont une mise à jour, et elles ont déjà été annoncées.</value>
+  </data>
+  <data name="Options_UpdateCheckNone" xml:space="preserve">
+    <value>Aucun mod installé n'a de mise à jour.</value>
+  </data>
+  <data name="Options_UpdateCheckAlreadyRunning" xml:space="preserve">
+    <value>Une vérification est déjà en cours.</value>
+  </data>
+  <data name="Options_UpdateCheckNoInstall" xml:space="preserve">
+    <value>Pas de vérification - aucun dossier d'installation SPT n'est défini.</value>
+  </data>
+  <data name="Options_UpdateCheckQueueBusy" xml:space="preserve">
+    <value>Pas de vérification - attendez la fin des téléchargements en cours.</value>
+  </data>
+  <data name="Options_UpdateCheckOffline" xml:space="preserve">
+    <value>Pas de vérification - impossible de joindre The Forge.</value>
+  </data>
+  <data name="Options_UpdateCheckRateLimited" xml:space="preserve">
+    <value>Pas de vérification - The Forge a demandé une pause. Réessayez dans une minute.</value>
+  </data>
+  <data name="Options_UpdateCheckFailed" xml:space="preserve">
+    <value>La vérification a échoué. Le journal dans Data\logs donne les détails.</value>
+  </data>
+  <data name="Options_UpdateCheckTimeFormat" xml:space="preserve">
+    <value>{0} ({1:t})</value>
+  </data>
 </root>

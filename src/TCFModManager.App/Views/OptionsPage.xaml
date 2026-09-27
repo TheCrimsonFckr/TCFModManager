@@ -433,12 +433,29 @@
                     FontWeight="SemiBold"
                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     Margin="0,16,0,8" />
-                <ComboBox
-                    MinWidth="200"
-                    HorizontalAlignment="Left"
-                    IsEnabled="{Binding UpdateNotificationsEnabled}"
-                    ItemsSource="{Binding UpdateIntervalOptions}"
-                    SelectedItem="{Binding SelectedUpdateInterval}" />
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox
+                        MinWidth="200"
+                        IsEnabled="{Binding UpdateNotificationsEnabled}"
+                        ItemsSource="{Binding UpdateIntervalOptions}"
+                        SelectedItem="{Binding SelectedUpdateInterval}" />
+
+                    <!-- Greyed while notifications are off, through the command's CanExecute. -->
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Content="{loc:Str Options_UpdateCheckNow}"
+                        Icon="{ui:SymbolIcon ArrowSync24}"
+                        ToolTip="{loc:Str Options_UpdateCheckNowToolTip}"
+                        ToolTipService.ShowDuration="20000"
+                        Command="{Binding CheckUpdatesNowCommand}" />
+                </StackPanel>
+
+                <TextBlock
+                    Margin="0,8,0,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="{Binding UpdateCheckStatus}"
+                    Visibility="{Binding UpdateCheckStatus, Converter={StaticResource NullToCollapsed}}" />
 
                 <TextBlock
                     Margin="0,8,0,0"
