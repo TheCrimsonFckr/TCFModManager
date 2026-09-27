@@ -24,8 +24,9 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
     private static readonly TimeSpan ReportInterval = TimeSpan.FromMilliseconds(100);
 
     // Downloads <paramref name="downloadUrl"/> to <paramref name="destinationPath"/>,
-    // reporting fractional progress (0.0-1.0) when a Content-Length header is available.
-    public async Task DownloadAsync(
+    // reporting fractional progress (0.0-1.0) when a Content-Length header is available. Returns the
+    // file name the server offered, for a caller that saves the archive under a name of its own.
+    public async Task<DownloadResponse> DownloadAsync(
         string downloadUrl,
         string destinationPath,
         IProgress<double>? progress = null,
@@ -37,6 +38,7 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
         response.EnsureSuccessStatusCode();
 
         var totalBytes = response.Content.Headers.ContentLength;
+        var offeredName = OfferedFileName(response);
 
         var directory = Path.GetDirectoryName(destinationPath);
         if (!string.IsNullOrEmpty(directory)) Directory.CreateDirectory(directory);
@@ -87,6 +89,26 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
         // Unconditional, so the throttle above can never swallow the last fraction and leave a bar
         // stopped short of the end.
         progress?.Report(1.0);
+
+        return new DownloadResponse(offeredName, totalRead);
+    }
+
+    //
+    // The Content-Disposition file name, preferring the RFC 5987 filename* form, which is the one
+    // that carries non-ASCII names intact. Only the last path segment is kept: the header is the
+    // server's to write, and a name holding a folder is not one to follow out of the folder chosen.
+    //
+    private static string? OfferedFileName(HttpResponseMessage response)
+    {
+        var disposition = response.Content.Headers.ContentDisposition;
+        var name = disposition?.FileNameStar ?? disposition?.FileName;
+        if (string.IsNullOrWhiteSpace(name)) return null;
+
+        name = name.Trim().Trim('"').Replace('\\', '/');
+        var slash = name.LastIndexOf('/');
+        if (slash >= 0) name = name[(slash + 1)..];
+
+        return string.IsNullOrWhiteSpace(name) ? null : name;
     }
 
     public void Dispose()
@@ -94,3 +116,7 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
         if (_ownsHttpClient) _http.Dispose();
     }
 }
+
+// What a finished download reported: the name the server offered for the file, if any, and how many
+// bytes arrived.
+public sealed record DownloadResponse(string? OfferedFileName, long Bytes);

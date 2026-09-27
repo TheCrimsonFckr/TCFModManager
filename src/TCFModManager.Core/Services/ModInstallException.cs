@@ -51,6 +51,14 @@ public enum ModInstallFailure
     // The download ended before all of the bytes the server promised had arrived. Carries
     // ExpectedBytes and ReceivedBytes.
     DownloadIncomplete,
+
+    // A download-only save was pointed at a folder that doesn't exist - most likely one picked on
+    // Options and since moved or deleted. Carries Folder.
+    DownloadFolderMissing,
+
+    // A download-only save couldn't create its file in the chosen folder. Carries Folder, and the
+    // underlying exception as InnerException.
+    DownloadFolderNotWritable,
 }
 
 //
@@ -84,4 +92,7 @@ public sealed class ModInstallException(ModInstallFailure reason, Exception? inn
     public long? ExpectedBytes { get; init; }
 
     public long? ReceivedBytes { get; init; }
+
+    // The download folder a download-only save was refused.
+    public string? Folder { get; init; }
 }
