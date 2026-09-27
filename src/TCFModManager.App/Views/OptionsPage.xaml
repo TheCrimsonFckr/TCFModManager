@@ -318,6 +318,70 @@
             </StackPanel>
         </ui:Card>
 
+        <!--
+            Monitor mode. The dropdown decides what every install button does; the small button
+            beside each one does the other thing for a single mod. The folder applies to any
+            download-only save, whichever button started it.
+        -->
+        <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
+            <StackPanel>
+                <TextBlock
+                    Text="{loc:Str Options_MonitorHeader}"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,0,0,8"
+                    Text="{loc:Str Options_MonitorDescription}" />
+                <ComboBox
+                    MinWidth="320"
+                    HorizontalAlignment="Left"
+                    ItemsSource="{Binding InstallModeOptions}"
+                    SelectedItem="{Binding SelectedInstallMode}" />
+
+                <TextBlock
+                    Text="{loc:Str Options_MonitorFolderHeader}"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Margin="0,16,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,0,0,8"
+                    Text="{loc:Str Options_MonitorFolderDescription}" />
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <ui:TextBox
+                        Grid.Column="0"
+                        PlaceholderText="{Binding DownloadFolderPlaceholder}"
+                        Text="{Binding DownloadFolderInput, UpdateSourceTrigger=LostFocus}" />
+
+                    <ui:Button
+                        Grid.Column="1"
+                        Margin="8,0,0,0"
+                        Content="{loc:Str Options_Browse}"
+                        Icon="{ui:SymbolIcon FolderOpen24}"
+                        Command="{Binding BrowseDownloadFolderCommand}" />
+
+                    <ui:Button
+                        Grid.Column="2"
+                        Margin="8,0,0,0"
+                        Appearance="Transparent"
+                        Content="{loc:Str Options_MonitorFolderReset}"
+                        ToolTip="{loc:Str Options_MonitorFolderResetToolTip}"
+                        Command="{Binding ResetDownloadFolderCommand}" />
+                </Grid>
+            </StackPanel>
+        </ui:Card>
+
         <ui:Card Padding="16" VerticalAlignment="Top" Margin="0,16,0,0">
             <StackPanel>
                 <TextBlock

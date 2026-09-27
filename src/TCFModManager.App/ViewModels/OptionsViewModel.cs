@@ -76,6 +76,27 @@ public partial class OptionsViewModel : LocalizedViewModel
     // currently means, shared rather than restated here.
     public ModPageGateViewModel ModPageGate => AppServices.ModPageGate;
 
+    //
+    // Monitor mode: what the install buttons do, and where a download-only save goes. The mode is
+    // applied and saved the moment it changes, and every install button re-reads it through
+    // ModPageGate.
+    //
+    public IReadOnlyList<InstallModeItem> InstallModeOptions { get; } =
+    [
+        new(nameof(Strings.Options_MonitorModeInstall), InstallMode.Install),
+        new(nameof(Strings.Options_MonitorModeDownloadOnly), InstallMode.DownloadOnly),
+    ];
+
+    [ObservableProperty]
+    private InstallModeItem _selectedInstallMode;
+
+    // Empty means the Windows Downloads folder, which the placeholder names.
+    [ObservableProperty]
+    private string _downloadFolderInput = string.Empty;
+
+    public string DownloadFolderPlaceholder =>
+        Text(Strings.Options_MonitorFolderPlaceholderFormat, DownloadFolders.Default());
+
     // Whether the Mod footprint page is in the sidebar. Off by default - see AppSettings.
     [ObservableProperty]
     private bool _showModFootprintPage;
@@ -185,6 +206,10 @@ public partial class OptionsViewModel : LocalizedViewModel
         _skipModPageConfirmation = settings.SkipModPageConfirmation;
         _showModFootprintPage = settings.ShowModFootprintPage;
 
+        _selectedInstallMode = InstallModeOptions.FirstOrDefault(o => o.Value == settings.Monitor.InstallMode)
+            ?? InstallModeOptions[0];
+        _downloadFolderInput = settings.Monitor.DownloadFolder ?? string.Empty;
+
         _selectedWindowStartup = WindowStartupOptions.FirstOrDefault(o => o.Value == settings.Window.StartupMode)
             ?? WindowStartupOptions[0];
         _customWidthInput = FormatSize(settings.Window.CustomWidth);
@@ -258,6 +283,50 @@ public partial class OptionsViewModel : LocalizedViewModel
 
         AppLog.Info("Footprint", value ? "page shown" : "page hidden");
     }
+
+    partial void OnSelectedInstallModeChanged(InstallModeItem value)
+    {
+        if (!_loaded) return;
+
+        var settings = _settings.Load();
+        settings.Monitor.InstallMode = value.Value;
+        _settings.Save(settings);
+
+        AppServices.ModPageGate.Refresh();
+
+        AppLog.Info("Monitor", $"install mode set to {value.Value}");
+    }
+
+    //
+    // Saved as typed, on leaving the box. A folder that doesn't exist is not refused here: it may be
+    // a drive that isn't plugged in yet, and the download that needs it says so if it still isn't.
+    //
+    partial void OnDownloadFolderInputChanged(string value)
+    {
+        if (!_loaded) return;
+
+        var settings = _settings.Load();
+        settings.Monitor.DownloadFolder = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+        _settings.Save(settings);
+
+        AppLog.Info("Monitor", $"download folder set to \"{settings.Monitor.DownloadFolder}\"");
+    }
+
+    [RelayCommand]
+    private void BrowseDownloadFolder()
+    {
+        var dialog = new OpenFolderDialog
+        {
+            Title = Strings.Options_MonitorFolderPickerTitle,
+            InitialDirectory = DownloadFolders.Resolve(DownloadFolderInput),
+        };
+
+        if (dialog.ShowDialog() == true) DownloadFolderInput = dialog.FolderName;
+    }
+
+    // Back to null rather than the resolved path, so a Downloads folder Windows later moves is followed.
+    [RelayCommand]
+    private void ResetDownloadFolder() => DownloadFolderInput = string.Empty;
 
     //
     // Deliberately blunt, and defaulting to No. The gate is the one thing standing between someone
