@@ -4044,4 +4044,67 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="ModInstall_DownloadFolderNotWritableFormat" xml:space="preserve">
     <value>Impossible d'enregistrer dans {0} ({1}). Choisissez dans la page Options un dossier où vous pouvez écrire.</value>
   </data>
+  <data name="DownloadConfirm_Title" xml:space="preserve">
+    <value>Mods téléchargés maintenant installés</value>
+  </data>
+  <data name="DownloadConfirm_RowDetailFormat" xml:space="preserve">
+    <value>Version {0}, depuis {1}</value>
+  </data>
+  <data name="DownloadConfirm_Note" xml:space="preserve">
+    <value>Décochez ceux qui ne sont pas corrects - la question ne sera plus posée avant que vous téléchargiez une version plus récente. Marquer un mod comme installé ne change rien sur le disque.</value>
+  </data>
+  <data name="DownloadConfirm_NotNow" xml:space="preserve">
+    <value>Pas maintenant</value>
+  </data>
+  <data name="DownloadConfirm_Confirm" xml:space="preserve">
+    <value>Marquer comme installé</value>
+  </data>
+  <data name="Installed_DownloadLooksInstalledFormat" xml:space="preserve">
+    <value>Vous avez téléchargé {0} et il est sur le disque, mais son installation n'a pas encore été confirmée. Confirmez-la pour que cette application sache quelle version vous avez.</value>
+  </data>
+  <data name="Installed_DownloadPartialFormat" xml:space="preserve">
+    <value>Vous avez téléchargé {0}, mais les fichiers sur le disque ne correspondent pas encore - une partie manque peut-être, ou la version précédente est toujours là.</value>
+  </data>
+  <data name="Installed_ConfirmDownload" xml:space="preserve">
+    <value>Confirmer l'installation</value>
+  </data>
+  <data name="Installed_ConfirmDownloadToolTip" xml:space="preserve">
+    <value>Enregistrer la version téléchargée comme celle qui est installée. Rien ne change sur le disque.</value>
+  </data>
+  <data name="Installed_DownloadConfirmedFormat" xml:space="preserve">
+    <value>{0} {1} marqué comme installé.</value>
+  </data>
+  <data name="Filter_DownloadedNotConfirmed" xml:space="preserve">
+    <value>Téléchargé, non confirmé</value>
+  </data>
+  <data name="Filter_DownloadedNotConfirmedToolTip" xml:space="preserve">
+    <value>Les mods téléchargés pour les installer vous-même qui sont sur le disque mais pas encore confirmés - y compris ceux dont les fichiers ne correspondent pas au téléchargement.</value>
+  </data>
+  <data name="Options_MonitorConfirmHeader" xml:space="preserve">
+    <value>Quand un mod téléchargé apparaît installé</value>
+  </data>
+  <data name="Options_MonitorConfirmDescription" xml:space="preserve">
+    <value>Une fois que vous installez vous-même un mod téléchargé, la prochaine analyse de la page Installés le trouve. Cette application peut alors vous demander de le confirmer, ou simplement le signaler sur la carte du mod pour que vous le confirmiez là. Confirmer indique à l'application quelle version vous avez, pour que les vérifications de mise à jour restent justes.</value>
+  </data>
+  <data name="Options_MonitorConfirmAsk" xml:space="preserve">
+    <value>Me demander après l'analyse</value>
+  </data>
+  <data name="Options_MonitorConfirmQuiet" xml:space="preserve">
+    <value>Le signaler seulement sur la carte du mod</value>
+  </data>
+  <data name="Downloads_SavedConfigsNote" xml:space="preserve">
+    <value>Il contient des fichiers de configuration que vous avez déjà - le copier sur votre installation remplace vos réglages, et cette application ne peut pas les conserver lors d'une installation qu'elle ne fait pas elle-même.</value>
+  </data>
+  <data name="DownloadConfirm_Summary_one" xml:space="preserve">
+    <value>Un mod que vous avez téléchargé semble maintenant installé. Le marquer comme installé, pour que cette application sache quelle version vous avez ?</value>
+  </data>
+  <data name="DownloadConfirm_Summary_other" xml:space="preserve">
+    <value>{0} mods que vous avez téléchargés semblent maintenant installés. Les marquer comme installés, pour que cette application sache quelles versions vous avez ?</value>
+  </data>
+  <data name="Installed_DownloadsConfirmed_one" xml:space="preserve">
+    <value>1 téléchargement marqué comme installé.</value>
+  </data>
+  <data name="Installed_DownloadsConfirmed_other" xml:space="preserve">
+    <value>{0} téléchargements marqués comme installés.</value>
+  </data>
 </root>

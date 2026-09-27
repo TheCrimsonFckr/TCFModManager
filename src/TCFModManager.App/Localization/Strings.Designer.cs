@@ -1321,4 +1321,25 @@ internal static class Strings
     internal static string Downloads_ShowInFolderToolTip => LocalizationService.Get("Downloads_ShowInFolderToolTip");
     internal static string ModInstall_DownloadFolderMissingFormat => LocalizationService.Get("ModInstall_DownloadFolderMissingFormat");
     internal static string ModInstall_DownloadFolderNotWritableFormat => LocalizationService.Get("ModInstall_DownloadFolderNotWritableFormat");
+    internal static string DownloadConfirm_Title => LocalizationService.Get("DownloadConfirm_Title");
+    internal static string DownloadConfirm_RowDetailFormat => LocalizationService.Get("DownloadConfirm_RowDetailFormat");
+    internal static string DownloadConfirm_Note => LocalizationService.Get("DownloadConfirm_Note");
+    internal static string DownloadConfirm_NotNow => LocalizationService.Get("DownloadConfirm_NotNow");
+    internal static string DownloadConfirm_Confirm => LocalizationService.Get("DownloadConfirm_Confirm");
+    internal static string Installed_DownloadLooksInstalledFormat => LocalizationService.Get("Installed_DownloadLooksInstalledFormat");
+    internal static string Installed_DownloadPartialFormat => LocalizationService.Get("Installed_DownloadPartialFormat");
+    internal static string Installed_ConfirmDownload => LocalizationService.Get("Installed_ConfirmDownload");
+    internal static string Installed_ConfirmDownloadToolTip => LocalizationService.Get("Installed_ConfirmDownloadToolTip");
+    internal static string Installed_DownloadConfirmedFormat => LocalizationService.Get("Installed_DownloadConfirmedFormat");
+    internal static string Filter_DownloadedNotConfirmed => LocalizationService.Get("Filter_DownloadedNotConfirmed");
+    internal static string Filter_DownloadedNotConfirmedToolTip => LocalizationService.Get("Filter_DownloadedNotConfirmedToolTip");
+    internal static string Options_MonitorConfirmHeader => LocalizationService.Get("Options_MonitorConfirmHeader");
+    internal static string Options_MonitorConfirmDescription => LocalizationService.Get("Options_MonitorConfirmDescription");
+    internal static string Options_MonitorConfirmAsk => LocalizationService.Get("Options_MonitorConfirmAsk");
+    internal static string Options_MonitorConfirmQuiet => LocalizationService.Get("Options_MonitorConfirmQuiet");
+    internal static string Downloads_SavedConfigsNote => LocalizationService.Get("Downloads_SavedConfigsNote");
+    internal static string DownloadConfirm_Summary(int count, params object?[] values) =>
+        LocalizationService.Plural("DownloadConfirm_Summary", count, values);
+    internal static string Installed_DownloadsConfirmed(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_DownloadsConfirmed", count, values);
 }

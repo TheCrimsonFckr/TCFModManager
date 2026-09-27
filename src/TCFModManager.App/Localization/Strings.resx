@@ -4834,4 +4834,76 @@ This was written to:
     <value>Couldn't save into {0} ({1}). Choose a folder you can write to on the Options page.</value>
     <comment>{0} is the folder path; {1} is the error from Windows, which may arrive in English.</comment>
   </data>
+  <data name="DownloadConfirm_Title" xml:space="preserve">
+    <value>Downloaded mods now installed</value>
+  </data>
+  <data name="DownloadConfirm_RowDetailFormat" xml:space="preserve">
+    <value>Version {0}, from {1}</value>
+    <comment>{0} is a version, {1} the name of the downloaded file.</comment>
+  </data>
+  <data name="DownloadConfirm_Note" xml:space="preserve">
+    <value>Untick any that aren't right - they won't be asked about again until you download a newer version. Marking a mod installed changes nothing on disk.</value>
+  </data>
+  <data name="DownloadConfirm_NotNow" xml:space="preserve">
+    <value>Not now</value>
+  </data>
+  <data name="DownloadConfirm_Confirm" xml:space="preserve">
+    <value>Mark installed</value>
+  </data>
+  <data name="Installed_DownloadLooksInstalledFormat" xml:space="preserve">
+    <value>You downloaded {0} and it is on disk, but its install hasn't been confirmed yet. Confirm it so this app knows which version you have.</value>
+    <comment>{0} is the version that was downloaded.</comment>
+  </data>
+  <data name="Installed_DownloadPartialFormat" xml:space="preserve">
+    <value>You downloaded {0}, but the files on disk don't match it yet - part of it may be missing, or the previous version is still there.</value>
+    <comment>{0} is the version that was downloaded.</comment>
+  </data>
+  <data name="Installed_ConfirmDownload" xml:space="preserve">
+    <value>Confirm install</value>
+  </data>
+  <data name="Installed_ConfirmDownloadToolTip" xml:space="preserve">
+    <value>Record the downloaded version as the one installed. Nothing on disk changes.</value>
+  </data>
+  <data name="Installed_DownloadConfirmedFormat" xml:space="preserve">
+    <value>Marked {0} {1} installed.</value>
+    <comment>{0} is a mod name, {1} its version.</comment>
+  </data>
+  <data name="Filter_DownloadedNotConfirmed" xml:space="preserve">
+    <value>Downloaded, not confirmed</value>
+  </data>
+  <data name="Filter_DownloadedNotConfirmedToolTip" xml:space="preserve">
+    <value>Mods you downloaded to install yourself that are on disk but not confirmed yet - including ones whose files don't match the download.</value>
+  </data>
+  <data name="Options_MonitorConfirmHeader" xml:space="preserve">
+    <value>When a downloaded mod shows up installed</value>
+  </data>
+  <data name="Options_MonitorConfirmDescription" xml:space="preserve">
+    <value>Once you install a downloaded mod yourself, the next scan of the Installed page finds it. This app can ask you to confirm it then, or just note it on the mod's card for you to confirm there. Confirming tells the app which version you have, so update checks stay right.</value>
+  </data>
+  <data name="Options_MonitorConfirmAsk" xml:space="preserve">
+    <value>Ask me after the scan</value>
+  </data>
+  <data name="Options_MonitorConfirmQuiet" xml:space="preserve">
+    <value>Just note it on the mod's card</value>
+  </data>
+  <data name="Downloads_SavedConfigsNote" xml:space="preserve">
+    <value>It includes config files you already have - copying it over your install replaces your settings, and this app can't carry them across an install it doesn't do.</value>
+    <comment>Added after the saved message when the archive holds config files the install already has.</comment>
+  </data>
+  <data name="DownloadConfirm_Summary_one" xml:space="preserve">
+    <value>A mod you downloaded now looks installed. Mark it installed, so this app knows which version you have?</value>
+    <comment>{0} is how many downloads the scan found installed.</comment>
+  </data>
+  <data name="DownloadConfirm_Summary_other" xml:space="preserve">
+    <value>{0} mods you downloaded now look installed. Mark them installed, so this app knows which versions you have?</value>
+    <comment>{0} is how many downloads the scan found installed.</comment>
+  </data>
+  <data name="Installed_DownloadsConfirmed_one" xml:space="preserve">
+    <value>Marked 1 download installed.</value>
+    <comment>{0} is how many downloads were marked installed.</comment>
+  </data>
+  <data name="Installed_DownloadsConfirmed_other" xml:space="preserve">
+    <value>Marked {0} downloads installed.</value>
+    <comment>{0} is how many downloads were marked installed.</comment>
+  </data>
 </root>

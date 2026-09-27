@@ -4044,4 +4044,67 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="ModInstall_DownloadFolderNotWritableFormat" xml:space="preserve">
     <value>Impossibile salvare in {0} ({1}). Scegli nella pagina Opzioni una cartella in cui puoi scrivere.</value>
   </data>
+  <data name="DownloadConfirm_Title" xml:space="preserve">
+    <value>Mod scaricati ora installati</value>
+  </data>
+  <data name="DownloadConfirm_RowDetailFormat" xml:space="preserve">
+    <value>Versione {0}, da {1}</value>
+  </data>
+  <data name="DownloadConfirm_Note" xml:space="preserve">
+    <value>Togli la spunta a quelli che non sono corretti - non verrà più chiesto finché non scarichi una versione più recente. Segnare un mod come installato non cambia nulla sul disco.</value>
+  </data>
+  <data name="DownloadConfirm_NotNow" xml:space="preserve">
+    <value>Non ora</value>
+  </data>
+  <data name="DownloadConfirm_Confirm" xml:space="preserve">
+    <value>Segna come installato</value>
+  </data>
+  <data name="Installed_DownloadLooksInstalledFormat" xml:space="preserve">
+    <value>Hai scaricato {0} ed è sul disco, ma la sua installazione non è ancora stata confermata. Confermala perché questa app sappia quale versione hai.</value>
+  </data>
+  <data name="Installed_DownloadPartialFormat" xml:space="preserve">
+    <value>Hai scaricato {0}, ma i file sul disco non corrispondono ancora - potrebbe mancarne una parte, o c'è ancora la versione precedente.</value>
+  </data>
+  <data name="Installed_ConfirmDownload" xml:space="preserve">
+    <value>Conferma installazione</value>
+  </data>
+  <data name="Installed_ConfirmDownloadToolTip" xml:space="preserve">
+    <value>Registra la versione scaricata come quella installata. Sul disco non cambia nulla.</value>
+  </data>
+  <data name="Installed_DownloadConfirmedFormat" xml:space="preserve">
+    <value>{0} {1} segnato come installato.</value>
+  </data>
+  <data name="Filter_DownloadedNotConfirmed" xml:space="preserve">
+    <value>Scaricato, non confermato</value>
+  </data>
+  <data name="Filter_DownloadedNotConfirmedToolTip" xml:space="preserve">
+    <value>Mod scaricati per installarli da solo che sono sul disco ma non ancora confermati - compresi quelli i cui file non corrispondono al download.</value>
+  </data>
+  <data name="Options_MonitorConfirmHeader" xml:space="preserve">
+    <value>Quando un mod scaricato risulta installato</value>
+  </data>
+  <data name="Options_MonitorConfirmDescription" xml:space="preserve">
+    <value>Quando installi da solo un mod scaricato, la successiva scansione della pagina Installati lo trova. Questa app può chiederti di confermarlo allora, oppure segnalarlo sulla scheda del mod perché tu lo confermi lì. Confermare dice all'app quale versione hai, così i controlli degli aggiornamenti restano corretti.</value>
+  </data>
+  <data name="Options_MonitorConfirmAsk" xml:space="preserve">
+    <value>Chiedimelo dopo la scansione</value>
+  </data>
+  <data name="Options_MonitorConfirmQuiet" xml:space="preserve">
+    <value>Segnalarlo solo sulla scheda del mod</value>
+  </data>
+  <data name="Downloads_SavedConfigsNote" xml:space="preserve">
+    <value>Contiene file di configurazione che hai già - copiarlo sulla tua installazione sostituisce le tue impostazioni, e questa app non può conservarle in un'installazione che non fa lei.</value>
+  </data>
+  <data name="DownloadConfirm_Summary_one" xml:space="preserve">
+    <value>Un mod che hai scaricato ora risulta installato. Segnarlo come installato, così questa app sa quale versione hai?</value>
+  </data>
+  <data name="DownloadConfirm_Summary_other" xml:space="preserve">
+    <value>{0} mod che hai scaricato ora risultano installati. Segnarli come installati, così questa app sa quali versioni hai?</value>
+  </data>
+  <data name="Installed_DownloadsConfirmed_one" xml:space="preserve">
+    <value>1 download segnato come installato.</value>
+  </data>
+  <data name="Installed_DownloadsConfirmed_other" xml:space="preserve">
+    <value>{0} download segnati come installati.</value>
+  </data>
 </root>

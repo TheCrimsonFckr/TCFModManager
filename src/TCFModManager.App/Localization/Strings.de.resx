@@ -4044,4 +4044,67 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="ModInstall_DownloadFolderNotWritableFormat" xml:space="preserve">
     <value>In {0} konnte nicht gespeichert werden ({1}). Wähle auf der Seite Optionen einen Ordner, in den du schreiben darfst.</value>
   </data>
+  <data name="DownloadConfirm_Title" xml:space="preserve">
+    <value>Heruntergeladene Mods jetzt installiert</value>
+  </data>
+  <data name="DownloadConfirm_RowDetailFormat" xml:space="preserve">
+    <value>Version {0}, aus {1}</value>
+  </data>
+  <data name="DownloadConfirm_Note" xml:space="preserve">
+    <value>Entferne den Haken bei allen, die nicht stimmen - danach wird erst wieder gefragt, wenn du eine neuere Version herunterlädst. Einen Mod als installiert zu markieren, ändert nichts auf der Festplatte.</value>
+  </data>
+  <data name="DownloadConfirm_NotNow" xml:space="preserve">
+    <value>Nicht jetzt</value>
+  </data>
+  <data name="DownloadConfirm_Confirm" xml:space="preserve">
+    <value>Als installiert markieren</value>
+  </data>
+  <data name="Installed_DownloadLooksInstalledFormat" xml:space="preserve">
+    <value>Du hast {0} heruntergeladen und es liegt auf der Festplatte, aber die Installation wurde noch nicht bestätigt. Bestätige sie, damit diese App weiß, welche Version du hast.</value>
+  </data>
+  <data name="Installed_DownloadPartialFormat" xml:space="preserve">
+    <value>Du hast {0} heruntergeladen, aber die Dateien auf der Festplatte passen noch nicht dazu - vielleicht fehlt ein Teil, oder die vorherige Version ist noch da.</value>
+  </data>
+  <data name="Installed_ConfirmDownload" xml:space="preserve">
+    <value>Installation bestätigen</value>
+  </data>
+  <data name="Installed_ConfirmDownloadToolTip" xml:space="preserve">
+    <value>Die heruntergeladene Version als installierte Version eintragen. Auf der Festplatte ändert sich nichts.</value>
+  </data>
+  <data name="Installed_DownloadConfirmedFormat" xml:space="preserve">
+    <value>{0} {1} als installiert markiert.</value>
+  </data>
+  <data name="Filter_DownloadedNotConfirmed" xml:space="preserve">
+    <value>Heruntergeladen, nicht bestätigt</value>
+  </data>
+  <data name="Filter_DownloadedNotConfirmedToolTip" xml:space="preserve">
+    <value>Mods, die du zum Selbstinstallieren heruntergeladen hast und die auf der Festplatte liegen, aber noch nicht bestätigt sind - auch solche, deren Dateien nicht zum Download passen.</value>
+  </data>
+  <data name="Options_MonitorConfirmHeader" xml:space="preserve">
+    <value>Wenn ein heruntergeladener Mod installiert auftaucht</value>
+  </data>
+  <data name="Options_MonitorConfirmDescription" xml:space="preserve">
+    <value>Sobald du einen heruntergeladenen Mod selbst installierst, findet ihn der nächste Scan der Seite Installiert. Diese App kann dich dann um Bestätigung bitten oder es nur auf der Karte des Mods vermerken, damit du es dort bestätigst. Die Bestätigung sagt der App, welche Version du hast, damit Update-Prüfungen stimmen.</value>
+  </data>
+  <data name="Options_MonitorConfirmAsk" xml:space="preserve">
+    <value>Nach dem Scan fragen</value>
+  </data>
+  <data name="Options_MonitorConfirmQuiet" xml:space="preserve">
+    <value>Nur auf der Karte des Mods vermerken</value>
+  </data>
+  <data name="Downloads_SavedConfigsNote" xml:space="preserve">
+    <value>Es enthält Konfigurationsdateien, die du schon hast - wenn du es über deine Installation kopierst, werden deine Einstellungen ersetzt, und diese App kann sie bei einer Installation, die sie nicht selbst macht, nicht übernehmen.</value>
+  </data>
+  <data name="DownloadConfirm_Summary_one" xml:space="preserve">
+    <value>Ein Mod, den du heruntergeladen hast, scheint jetzt installiert zu sein. Als installiert markieren, damit diese App weiß, welche Version du hast?</value>
+  </data>
+  <data name="DownloadConfirm_Summary_other" xml:space="preserve">
+    <value>{0} Mods, die du heruntergeladen hast, scheinen jetzt installiert zu sein. Als installiert markieren, damit diese App weiß, welche Versionen du hast?</value>
+  </data>
+  <data name="Installed_DownloadsConfirmed_one" xml:space="preserve">
+    <value>1 Download als installiert markiert.</value>
+  </data>
+  <data name="Installed_DownloadsConfirmed_other" xml:space="preserve">
+    <value>{0} Downloads als installiert markiert.</value>
+  </data>
 </root>

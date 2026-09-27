@@ -4254,4 +4254,73 @@
   <data name="ModInstall_DownloadFolderNotWritableFormat" xml:space="preserve">
     <value>Не удалось сохранить в {0} ({1}). Выберите на странице «Параметры» папку, в которую можно записывать.</value>
   </data>
+  <data name="DownloadConfirm_Title" xml:space="preserve">
+    <value>Скачанные моды теперь установлены</value>
+  </data>
+  <data name="DownloadConfirm_RowDetailFormat" xml:space="preserve">
+    <value>Версия {0}, из {1}</value>
+  </data>
+  <data name="DownloadConfirm_Note" xml:space="preserve">
+    <value>Снимите отметку с тех, что указаны неверно, - о них не спросят снова, пока вы не скачаете более новую версию. Отметка мода как установленного ничего не меняет на диске.</value>
+  </data>
+  <data name="DownloadConfirm_NotNow" xml:space="preserve">
+    <value>Не сейчас</value>
+  </data>
+  <data name="DownloadConfirm_Confirm" xml:space="preserve">
+    <value>Отметить как установленные</value>
+  </data>
+  <data name="Installed_DownloadLooksInstalledFormat" xml:space="preserve">
+    <value>Вы скачали {0}, и он уже на диске, но установка ещё не подтверждена. Подтвердите её, чтобы приложение знало, какая у вас версия.</value>
+  </data>
+  <data name="Installed_DownloadPartialFormat" xml:space="preserve">
+    <value>Вы скачали {0}, но файлы на диске пока ему не соответствуют - возможно, часть отсутствует или всё ещё стоит предыдущая версия.</value>
+  </data>
+  <data name="Installed_ConfirmDownload" xml:space="preserve">
+    <value>Подтвердить установку</value>
+  </data>
+  <data name="Installed_ConfirmDownloadToolTip" xml:space="preserve">
+    <value>Записать скачанную версию как установленную. На диске ничего не меняется.</value>
+  </data>
+  <data name="Installed_DownloadConfirmedFormat" xml:space="preserve">
+    <value>{0} {1} отмечен как установленный.</value>
+  </data>
+  <data name="Filter_DownloadedNotConfirmed" xml:space="preserve">
+    <value>Скачан, не подтверждён</value>
+  </data>
+  <data name="Filter_DownloadedNotConfirmedToolTip" xml:space="preserve">
+    <value>Моды, скачанные для самостоятельной установки, которые уже на диске, но ещё не подтверждены, - включая те, чьи файлы не совпадают со скачанным.</value>
+  </data>
+  <data name="Options_MonitorConfirmHeader" xml:space="preserve">
+    <value>Когда скачанный мод оказывается установлен</value>
+  </data>
+  <data name="Options_MonitorConfirmDescription" xml:space="preserve">
+    <value>Когда вы сами устанавливаете скачанный мод, следующее сканирование страницы «Установленные» его находит. Приложение может тогда попросить подтвердить это или просто отметить на карточке мода, чтобы вы подтвердили там. Подтверждение сообщает приложению, какая у вас версия, чтобы проверка обновлений оставалась верной.</value>
+  </data>
+  <data name="Options_MonitorConfirmAsk" xml:space="preserve">
+    <value>Спрашивать после сканирования</value>
+  </data>
+  <data name="Options_MonitorConfirmQuiet" xml:space="preserve">
+    <value>Только отмечать на карточке мода</value>
+  </data>
+  <data name="Downloads_SavedConfigsNote" xml:space="preserve">
+    <value>Он содержит файлы конфигурации, которые у вас уже есть, - копирование поверх установки заменит ваши настройки, а приложение не может перенести их при установке, которую выполняет не оно.</value>
+  </data>
+  <data name="DownloadConfirm_Summary_one" xml:space="preserve">
+    <value>{0} скачанный вами мод теперь выглядит установленным. Отметить его как установленный, чтобы приложение знало вашу версию?</value>
+  </data>
+  <data name="DownloadConfirm_Summary_few" xml:space="preserve">
+    <value>{0} скачанных вами мода теперь выглядят установленными. Отметить их как установленные, чтобы приложение знало ваши версии?</value>
+  </data>
+  <data name="DownloadConfirm_Summary_many" xml:space="preserve">
+    <value>{0} скачанных вами модов теперь выглядят установленными. Отметить их как установленные, чтобы приложение знало ваши версии?</value>
+  </data>
+  <data name="Installed_DownloadsConfirmed_one" xml:space="preserve">
+    <value>{0} загрузка отмечена как установленная.</value>
+  </data>
+  <data name="Installed_DownloadsConfirmed_few" xml:space="preserve">
+    <value>{0} загрузки отмечены как установленные.</value>
+  </data>
+  <data name="Installed_DownloadsConfirmed_many" xml:space="preserve">
+    <value>{0} загрузок отмечены как установленные.</value>
+  </data>
 </root>
