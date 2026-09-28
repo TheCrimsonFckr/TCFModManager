@@ -93,6 +93,73 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+
+        <!--
+            The container contributes nothing - no padding, margin, fill or chrome - so the row
+            Border inside the template draws the whole thing.
+        -->
+        <Style x:Key="BareContainer" TargetType="ListBoxItem">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+
+            <!--
+                The template is replaced outright rather than just having its Background zeroed.
+                Setting Background="Transparent" does not stop a selected row being painted: the
+                stock template draws selection with its own accent fill and left indicator, which
+                the property never touches. With the row below drawing its own selected state too,
+                a picked list came out as a solid accent slab with a second edge around it - two
+                selection visuals stacked, one of them nobody chose.
+
+                A bare ContentPresenter leaves selection entirely to the row style, which is the
+                only place it is described. Selection behaviour is unaffected - IsSelected is
+                ListBox input handling, not something the template provides.
+            -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <ContentPresenter />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ReadOnlyContainer" TargetType="ListBoxItem" BasedOn="{StaticResource BareContainer}">
+            <Setter Property="Focusable" Value="False" />
+        </Style>
+
+        <!--
+            One saved list. A card-coloured row with space around it rather than a bare strip pressed
+            against its neighbours, so the left column reads the way the Installed page's List view
+            does. Margin and Padding live in the style, not on the Border, so the two triggers still
+            win over the resting fill - a local value on the element would outrank them.
+        -->
+        <Style x:Key="ListCardRow" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorSecondaryBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Margin" Value="2,0,6,8" />
+            <Setter Property="Padding" Value="12,11" />
+            <Style.Triggers>
+                <!-- Selected first, hover second, so pointing at the current list still reads as
+                     pointing at it. Same ordering as ClickableRow in App.xaml.
+
+                     The selected row keeps its own text colours: the fill is a tint over the card
+                     rather than a solid accent, so primary/tertiary stay readable on it and the
+                     row does not change shape or weight when it is picked. -->
+                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                    <Setter Property="Background" Value="{StaticResource RowSelectedBrush}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource SelectedRowStroke}" />
+                </DataTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
 
     <Grid
