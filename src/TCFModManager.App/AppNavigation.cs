@@ -5,8 +5,9 @@ using Wpf.Ui.Controls;
 namespace TCFModManager.App;
 
 //
-// Getting to a page from outside the window - today, only an update notification's Open (§6),
-// which goes to Installed with the Show filter on "Updates available".
+// Getting to a page from somewhere else: an update notification's Open (§6), which goes to
+// Installed with the Show filter on "Updates available", and Review and install on the Play page
+// and the Server map page, which goes to Mod lists with a server's list selected and previewed.
 //
 // The request can arrive before there is anywhere to go: a click on a toast after the app has
 // quit starts it, and the toast's arguments can land before the main window has loaded. So the
@@ -18,6 +19,8 @@ internal static class AppNavigation
     private static NavigationView? _navigation;
 
     private static bool _showUpdatesPending;
+
+    private static Guid? _reviewListPending;
 
     // Raised on the UI thread when an open Installed page should switch its filter to updates.
     public static event EventHandler? ShowUpdatesRequested;
@@ -40,6 +43,25 @@ internal static class AppNavigation
         if (Application.Current?.MainWindow is { } window) WindowActivation.BringForward(window);
 
         _navigation?.Navigate(typeof(InstalledPage));
+    }
+
+    //
+    // Opens Mod lists on this list with its Preview already worked out. Stops there on purpose:
+    // a server's list is never applied without the person seeing what it would do and pressing
+    // Apply themselves.
+    //
+    public static void ReviewList(Guid listId)
+    {
+        _reviewListPending = listId;
+        _navigation?.Navigate(typeof(ModListsPage));
+    }
+
+    // Consumed by the Mod lists page when it loads: the list to review, once per request.
+    public static Guid? TakeReviewList()
+    {
+        var pending = _reviewListPending;
+        _reviewListPending = null;
+        return pending;
     }
 
     // Consumed by the Installed page: true once per request.

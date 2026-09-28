@@ -5263,4 +5263,10 @@ This was written to:
   <data name="Options_ServerMapDisplayNameHint" xml:space="preserve">
     <value>Leave empty to use this computer's name.</value>
   </data>
+  <data name="Common_ReviewAndInstall" xml:space="preserve">
+    <value>Review and install</value>
+  </data>
+  <data name="Common_ReviewAndInstallToolTip" xml:space="preserve">
+    <value>Opens Mod lists with the server's list selected and its Preview already worked out. Nothing is installed until you press Apply there.</value>
+  </data>
 </root>

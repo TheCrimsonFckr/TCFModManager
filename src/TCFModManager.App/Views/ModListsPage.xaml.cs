@@ -22,7 +22,16 @@ public partial class ModListsPage : Page
         AddHandler(PreviewMouseWheelEvent, new MouseWheelEventHandler(Page_PreviewMouseWheel), handledEventsToo: true);
     }
 
-    private void ModListsPage_Loaded(object sender, RoutedEventArgs e) => ViewModel.Refresh();
+    private async void ModListsPage_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (AppNavigation.TakeReviewList() is { } review)
+        {
+            await ViewModel.ReviewAsync(review);
+            return;
+        }
+
+        ViewModel.Refresh();
+    }
 
     //
     // Sends the wheel to whichever list the pointer is nearest, so scrolling works anywhere on the

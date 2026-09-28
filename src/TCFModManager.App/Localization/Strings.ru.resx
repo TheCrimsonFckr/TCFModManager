@@ -4698,4 +4698,10 @@
   <data name="Options_ServerMapDisplayNameHint" xml:space="preserve">
     <value>Оставьте пустым, чтобы использовать имя этого компьютера.</value>
   </data>
+  <data name="Common_ReviewAndInstall" xml:space="preserve">
+    <value>Просмотреть и установить</value>
+  </data>
+  <data name="Common_ReviewAndInstallToolTip" xml:space="preserve">
+    <value>Открывает «Списки модов» с выбранным списком сервера и уже готовым предпросмотром. Ничего не устанавливается, пока вы не нажмёте «Применить».</value>
+  </data>
 </root>

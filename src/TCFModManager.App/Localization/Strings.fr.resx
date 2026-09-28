@@ -4443,4 +4443,10 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="Options_ServerMapDisplayNameHint" xml:space="preserve">
     <value>Laisser vide pour utiliser le nom de cet ordinateur.</value>
   </data>
+  <data name="Common_ReviewAndInstall" xml:space="preserve">
+    <value>Vérifier et installer</value>
+  </data>
+  <data name="Common_ReviewAndInstallToolTip" xml:space="preserve">
+    <value>Ouvre Listes de mods avec la liste du serveur sélectionnée et son Aperçu déjà calculé. Rien n'est installé tant que vous n'appuyez pas sur Appliquer.</value>
+  </data>
 </root>

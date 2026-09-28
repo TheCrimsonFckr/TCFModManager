@@ -4443,4 +4443,10 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="Options_ServerMapDisplayNameHint" xml:space="preserve">
     <value>Leer lassen, um den Namen dieses Computers zu verwenden.</value>
   </data>
+  <data name="Common_ReviewAndInstall" xml:space="preserve">
+    <value>Prüfen und installieren</value>
+  </data>
+  <data name="Common_ReviewAndInstallToolTip" xml:space="preserve">
+    <value>Öffnet Modlisten mit der Liste des Servers ausgewählt und ihrer Vorschau bereits erstellt. Installiert wird erst, wenn du dort auf Anwenden drückst.</value>
+  </data>
 </root>

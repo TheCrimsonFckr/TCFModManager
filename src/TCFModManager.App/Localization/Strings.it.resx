@@ -4443,4 +4443,10 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Options_ServerMapDisplayNameHint" xml:space="preserve">
     <value>Lascia vuoto per usare il nome di questo computer.</value>
   </data>
+  <data name="Common_ReviewAndInstall" xml:space="preserve">
+    <value>Controlla e installa</value>
+  </data>
+  <data name="Common_ReviewAndInstallToolTip" xml:space="preserve">
+    <value>Apre Liste mod con la lista del server selezionata e la sua Anteprima già pronta. Non viene installato nulla finché non premi Applica.</value>
+  </data>
 </root>

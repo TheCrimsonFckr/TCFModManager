@@ -1454,4 +1454,6 @@ internal static class Strings
     internal static string Options_ServerMapReportHint => LocalizationService.Get("Options_ServerMapReportHint");
     internal static string Options_ServerMapDisplayName => LocalizationService.Get("Options_ServerMapDisplayName");
     internal static string Options_ServerMapDisplayNameHint => LocalizationService.Get("Options_ServerMapDisplayNameHint");
+    internal static string Common_ReviewAndInstall => LocalizationService.Get("Common_ReviewAndInstall");
+    internal static string Common_ReviewAndInstallToolTip => LocalizationService.Get("Common_ReviewAndInstallToolTip");
 }

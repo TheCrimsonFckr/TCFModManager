@@ -63,12 +63,22 @@
                     Text="{Binding Outstanding}"
                     Visibility="{Binding HasOutstanding, Converter={StaticResource BoolToVisibility}}" />
 
-                <ui:Button
-                    Margin="0,12,0,0"
-                    HorizontalAlignment="Left"
-                    Content="{loc:Str Play_CheckAgain}"
-                    Icon="{ui:SymbolIcon ArrowSync24}"
-                    Command="{Binding CheckCommand}" />
+                <!-- Review and install only when behind a list a server served: it opens Mod lists
+                     with that list previewed, and installing is still the Apply there. -->
+                <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                    <ui:Button
+                        Appearance="Primary"
+                        Margin="0,0,8,0"
+                        Content="{loc:Str Common_ReviewAndInstall}"
+                        Icon="{ui:SymbolIcon ArrowDownload24}"
+                        ToolTip="{loc:Str Common_ReviewAndInstallToolTip}"
+                        Command="{Binding ReviewCommand}"
+                        Visibility="{Binding CanReview, Converter={StaticResource BoolToVisibility}}" />
+                    <ui:Button
+                        Content="{loc:Str Play_CheckAgain}"
+                        Icon="{ui:SymbolIcon ArrowSync24}"
+                        Command="{Binding CheckCommand}" />
+                </StackPanel>
             </StackPanel>
         </ui:Card>
 

@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
@@ -32,6 +33,8 @@ public sealed class MapMachineViewModel : LocalizedViewModel
         _intervalSeconds = intervalSeconds;
         _list = list;
         _standing = list is null ? null : ServerMapMachines.StandingOf(list, machine);
+
+        ReviewCommand = new RelayCommand(() => { if (_list is not null) AppNavigation.ReviewList(_list.Id); });
 
         Mods = (machine.Mods ?? [])
             .OrderBy(m => m.Name, StringComparer.OrdinalIgnoreCase)
@@ -124,6 +127,16 @@ public sealed class MapMachineViewModel : LocalizedViewModel
             return string.Join(Environment.NewLine, parts);
         }
     }
+
+    //
+    // On this machine's own card only, when it is behind a list a server served. Never on the host's
+    // card: the host compares against the operator's own Local copy, and previewing that as their
+    // own list would sweep every server mod off the box.
+    //
+    public bool CanReview =>
+        IsYou && _list is { Origin: ModListOrigin.Server } && _standing is { UpToDate: false };
+
+    public IRelayCommand ReviewCommand { get; }
 
     public bool HasExtras => _standing is { Extras.Count: > 0 };
 

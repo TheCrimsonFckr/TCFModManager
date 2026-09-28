@@ -290,6 +290,16 @@
                                             Visibility="{Binding HasExtras, Converter={StaticResource BoolToVisibility}}"
                                             Text="{Binding ExtrasText}" />
 
+                                        <ui:Button
+                                            Margin="0,8,0,0"
+                                            HorizontalAlignment="Left"
+                                            Appearance="Primary"
+                                            Content="{loc:Str Common_ReviewAndInstall}"
+                                            Icon="{ui:SymbolIcon ArrowDownload24}"
+                                            ToolTip="{loc:Str Common_ReviewAndInstallToolTip}"
+                                            Command="{Binding ReviewCommand}"
+                                            Visibility="{Binding CanReview, Converter={StaticResource BoolToVisibility}}" />
+
                                         <Expander
                                             Margin="0,6,0,0"
                                             Header="{Binding ModsHeader}"

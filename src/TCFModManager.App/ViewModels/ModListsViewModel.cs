@@ -779,6 +779,19 @@ public partial class ModListsViewModel : LocalizedViewModel
         });
     }
 
+    //
+    // Selects a list and previews it - where Review and install on the Play page and the Server map
+    // page lands. The plan is on screen and Apply is one press away; nothing is applied from here.
+    //
+    public async Task ReviewAsync(Guid listId)
+    {
+        Refresh(listId);
+
+        if (Selected?.Id != listId || !PreviewCommand.CanExecute(null)) return;
+
+        await PreviewCommand.ExecuteAsync(null);
+    }
+
     // Works out what applying the selected list would do. Nothing moves and nothing downloads.
     [RelayCommand(CanExecute = nameof(CanUseStoredList))]
     private async Task PreviewAsync()
