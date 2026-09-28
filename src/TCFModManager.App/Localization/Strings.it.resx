@@ -4560,4 +4560,37 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Options_ServerMapLanOnlyFailed" xml:space="preserve">
     <value>Impossibile salvare l'impostazione - vedi il log.</value>
   </data>
+  <data name="AppUpdate_ServerMapHeader" xml:space="preserve">
+    <value>Mod Server Map</value>
+  </data>
+  <data name="AppUpdate_ServerMapLocalLabel" xml:space="preserve">
+    <value>Su questo computer:</value>
+  </data>
+  <data name="AppUpdate_ServerMapConnectedLabel" xml:space="preserve">
+    <value>Sul server a cui ti colleghi:</value>
+  </data>
+  <data name="AppUpdate_ServerMapBehindTitle" xml:space="preserve">
+    <value>È uscita una mod Server Map più recente</value>
+  </data>
+  <data name="AppUpdate_ServerMapLocalBehindFormat" xml:space="preserve">
+    <value>È uscita la versione {0} e il server di questo computer usa la {1}. Ferma il server, sostituisci payload e stub con quelli del nuovo zip, poi riavvialo - i passaggi sono in INSTALL.txt nello zip.</value>
+  </data>
+  <data name="AppUpdate_ServerMapStubBehindTitle" xml:space="preserve">
+    <value>Lo stub è più vecchio del payload</value>
+  </data>
+  <data name="AppUpdate_ServerMapStubBehindFormat" xml:space="preserve">
+    <value>Lo stub in user\mods è {0} e il payload è {1}. Sostituisci lo stub con quello dello stesso zip del payload - finché non lo fai, Rispondi solo a questa rete rifiuta ogni computer.</value>
+  </data>
+  <data name="AppUpdate_ServerMapConnectedBehindFormat" xml:space="preserve">
+    <value>Il server a cui ti colleghi usa la {0}, ed è uscita la {1}. Può aggiornarlo solo chi gestisce quel server - avvisalo.</value>
+  </data>
+  <data name="AppUpdate_ServerMapUpToDate" xml:space="preserve">
+    <value>La mod Server Map è aggiornata.</value>
+  </data>
+  <data name="AppUpdate_ServerMapCheckFailed" xml:space="preserve">
+    <value>Impossibile controllare su sp-mod.com se c'è una mod Server Map più recente. Controlla ora riprova.</value>
+  </data>
+  <data name="AppUpdate_ServerMapOpenPage" xml:space="preserve">
+    <value>Apri la pagina del mod</value>
+  </data>
 </root>

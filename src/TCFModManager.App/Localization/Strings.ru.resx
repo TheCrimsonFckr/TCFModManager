@@ -4848,4 +4848,37 @@
   <data name="Options_ServerMapLanOnlyFailed" xml:space="preserve">
     <value>Не удалось сохранить настройку — см. журнал.</value>
   </data>
+  <data name="AppUpdate_ServerMapHeader" xml:space="preserve">
+    <value>Мод Server Map</value>
+  </data>
+  <data name="AppUpdate_ServerMapLocalLabel" xml:space="preserve">
+    <value>На этом компьютере:</value>
+  </data>
+  <data name="AppUpdate_ServerMapConnectedLabel" xml:space="preserve">
+    <value>На сервере, к которому вы подключаетесь:</value>
+  </data>
+  <data name="AppUpdate_ServerMapBehindTitle" xml:space="preserve">
+    <value>Вышел более новый мод Server Map</value>
+  </data>
+  <data name="AppUpdate_ServerMapLocalBehindFormat" xml:space="preserve">
+    <value>Вышла версия {0}, а сервер на этом компьютере работает на {1}. Остановите сервер, замените payload и stub на те, что в новом архиве, и запустите его снова - шаги описаны в INSTALL.txt в архиве.</value>
+  </data>
+  <data name="AppUpdate_ServerMapStubBehindTitle" xml:space="preserve">
+    <value>Stub старше, чем payload</value>
+  </data>
+  <data name="AppUpdate_ServerMapStubBehindFormat" xml:space="preserve">
+    <value>Stub в user\mods - версии {0}, а payload - {1}. Замените stub на тот, что из того же архива, что и payload, - до тех пор Отвечать только этой сети отказывает всем компьютерам.</value>
+  </data>
+  <data name="AppUpdate_ServerMapConnectedBehindFormat" xml:space="preserve">
+    <value>Сервер, к которому вы подключаетесь, работает на {0}, а вышла {1}. Обновить его может только тот, кто им управляет, - сообщите ему.</value>
+  </data>
+  <data name="AppUpdate_ServerMapUpToDate" xml:space="preserve">
+    <value>Мод Server Map обновлён.</value>
+  </data>
+  <data name="AppUpdate_ServerMapCheckFailed" xml:space="preserve">
+    <value>Не удалось проверить на sp-mod.com, есть ли более новый мод Server Map. Проверить сейчас попробует снова.</value>
+  </data>
+  <data name="AppUpdate_ServerMapOpenPage" xml:space="preserve">
+    <value>Открыть страницу мода</value>
+  </data>
 </root>

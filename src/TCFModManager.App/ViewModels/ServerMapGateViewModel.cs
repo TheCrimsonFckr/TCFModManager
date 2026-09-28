@@ -160,15 +160,9 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
 
     public bool HasKeyNotice => !string.IsNullOrWhiteSpace(KeyNotice);
 
-    //
-    // ===================================================================================
-    // SET THIS: the Server Map server mod's page on sp-mod.com, published as an addon of
-    // TCF Mod Manager. Blank hides the button entirely, so a build that ships without it
-    // never shows a dead link - but the guide tells operators to get the mod from there,
-    // so it wants filling in before release.
-    // ===================================================================================
-    //
-    public const string AddonPageUrl = "https://sp-mod.com/addon/126/tfc-server-mapper";
+    // The Server Map mod's page on sp-mod.com, an addon of TCF Mod Manager. Blank hides the button;
+    // kept in Core with the addon's id so the App update page's check links the same page.
+    public const string AddonPageUrl = ServerMapAddon.PageUrl;
 
     public bool HasAddonPage => !string.IsNullOrWhiteSpace(AddonPageUrl);
 

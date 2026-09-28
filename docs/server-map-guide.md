@@ -285,6 +285,13 @@ is forgotten on its own.
 
 ## Update the mod?
 
+**TCF Mod Manager tells you when to.** Its **App update** page has a **Server Map mod** card on the
+machine that runs the server: the version installed, the newest on sp-mod.com, and a warning - with
+a coloured dot on the sidebar item - when a newer one is out. It also warns when the stub in
+`user\mods` is older than the payload, which is easy to miss and stops LAN-only letting anyone in.
+Players connected to your server see the same card for your server's version, telling them to ask
+you.
+
 1. **Stop the server.**
 2. Replace `TCFModManager\ServerMap\payload\` and `user\mods\TCFMM.ServerMap\` with the ones from
    the new zip - the stub for your line only.
@@ -292,6 +299,9 @@ is forgotten on its own.
 
 **Leave `TCFModManager\Data\ServerMap\` alone.** Your key, your published list and the map's
 `clients.json` are there, and none of them are in the zip.
+
+The app never updates the mod itself: it is installed by hand, one stub of two, so the card only
+says it is behind and links the mod's page.
 
 ## Remove it?
 

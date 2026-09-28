@@ -5380,4 +5380,48 @@ This was written to:
   <data name="Options_ServerMapLanOnlyFailed" xml:space="preserve">
     <value>Couldn't save that setting - see the log.</value>
   </data>
+  <data name="AppUpdate_ServerMapHeader" xml:space="preserve">
+    <value>Server Map mod</value>
+    <comment>Header of the App update page card about the Server Map server mod.</comment>
+  </data>
+  <data name="AppUpdate_ServerMapLocalLabel" xml:space="preserve">
+    <value>On this machine:</value>
+    <comment>Label left of the Server Map mod version installed on this machine's server.</comment>
+  </data>
+  <data name="AppUpdate_ServerMapConnectedLabel" xml:space="preserve">
+    <value>On the server you connect to:</value>
+    <comment>Label left of the Server Map mod version the connected server reports.</comment>
+  </data>
+  <data name="AppUpdate_ServerMapBehindTitle" xml:space="preserve">
+    <value>A newer Server Map mod is out</value>
+    <comment>Title of the warning when the Server Map mod is older than the newest on sp-mod.com.</comment>
+  </data>
+  <data name="AppUpdate_ServerMapLocalBehindFormat" xml:space="preserve">
+    <value>Version {0} is out and this machine's server runs {1}. Stop the server, replace the payload and the stub with the ones in the new zip, then start it again - INSTALL.txt in the zip has the steps.</value>
+    <comment>{0} newest version on sp-mod.com, {1} version installed here. The mod is installed by hand; the app cannot update it.</comment>
+  </data>
+  <data name="AppUpdate_ServerMapStubBehindTitle" xml:space="preserve">
+    <value>The stub is older than the payload</value>
+    <comment>Title of the warning when the Server Map stub in user\mods is older than its payload.</comment>
+  </data>
+  <data name="AppUpdate_ServerMapStubBehindFormat" xml:space="preserve">
+    <value>The stub in user\mods is {0} and the payload is {1}. Replace the stub with the one from the same zip as the payload - until you do, Only answer this network refuses every machine.</value>
+    <comment>{0} stub version, {1} payload version. 'Only answer this network' is the Options switch Options_ServerMapLanOnly; use its translation.</comment>
+  </data>
+  <data name="AppUpdate_ServerMapConnectedBehindFormat" xml:space="preserve">
+    <value>The server you connect to runs {0}, and {1} is out. Only whoever runs that server can update it - let them know.</value>
+    <comment>{0} version the connected server reports, {1} newest version on sp-mod.com.</comment>
+  </data>
+  <data name="AppUpdate_ServerMapUpToDate" xml:space="preserve">
+    <value>The Server Map mod is up to date.</value>
+    <comment>Shown on the Server Map mod card when nothing is behind.</comment>
+  </data>
+  <data name="AppUpdate_ServerMapCheckFailed" xml:space="preserve">
+    <value>Couldn't check sp-mod.com for a newer Server Map mod. Check now tries again.</value>
+    <comment>'Check now' is AppUpdate_CheckNow; use its translation.</comment>
+  </data>
+  <data name="AppUpdate_ServerMapOpenPage" xml:space="preserve">
+    <value>Open the mod page</value>
+    <comment>Button opening the Server Map mod's page on sp-mod.com.</comment>
+  </data>
 </root>

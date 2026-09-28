@@ -4560,4 +4560,37 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="Options_ServerMapLanOnlyFailed" xml:space="preserve">
     <value>Die Einstellung konnte nicht gespeichert werden – siehe Log.</value>
   </data>
+  <data name="AppUpdate_ServerMapHeader" xml:space="preserve">
+    <value>Server-Map-Mod</value>
+  </data>
+  <data name="AppUpdate_ServerMapLocalLabel" xml:space="preserve">
+    <value>Auf diesem Rechner:</value>
+  </data>
+  <data name="AppUpdate_ServerMapConnectedLabel" xml:space="preserve">
+    <value>Auf dem verbundenen Server:</value>
+  </data>
+  <data name="AppUpdate_ServerMapBehindTitle" xml:space="preserve">
+    <value>Eine neuere Server-Map-Mod ist erschienen</value>
+  </data>
+  <data name="AppUpdate_ServerMapLocalBehindFormat" xml:space="preserve">
+    <value>Version {0} ist erschienen, der Server auf diesem Rechner läuft mit {1}. Stoppe den Server, ersetze Payload und Stub durch die aus dem neuen Zip und starte ihn wieder - die Schritte stehen in INSTALL.txt im Zip.</value>
+  </data>
+  <data name="AppUpdate_ServerMapStubBehindTitle" xml:space="preserve">
+    <value>Der Stub ist älter als die Payload</value>
+  </data>
+  <data name="AppUpdate_ServerMapStubBehindFormat" xml:space="preserve">
+    <value>Der Stub in user\mods ist {0}, die Payload ist {1}. Ersetze den Stub durch den aus demselben Zip wie die Payload - bis dahin weist Nur dieses Netzwerk beantworten jeden Rechner ab.</value>
+  </data>
+  <data name="AppUpdate_ServerMapConnectedBehindFormat" xml:space="preserve">
+    <value>Der verbundene Server läuft mit {0}, erschienen ist {1}. Aktualisieren kann ihn nur, wer den Server betreibt - sag ihm Bescheid.</value>
+  </data>
+  <data name="AppUpdate_ServerMapUpToDate" xml:space="preserve">
+    <value>Die Server-Map-Mod ist aktuell.</value>
+  </data>
+  <data name="AppUpdate_ServerMapCheckFailed" xml:space="preserve">
+    <value>sp-mod.com konnte nicht nach einer neueren Server-Map-Mod gefragt werden. Jetzt prüfen versucht es erneut.</value>
+  </data>
+  <data name="AppUpdate_ServerMapOpenPage" xml:space="preserve">
+    <value>Mod-Seite öffnen</value>
+  </data>
 </root>

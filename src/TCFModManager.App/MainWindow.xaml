@@ -187,7 +187,7 @@
             <ui:NavigationView.FooterMenuItems>
                 <!-- The badge only appears when there's actually an update, and its colour matches
                      the banner's: informational for a bug fix, success for a feature release,
-                     attention for a major one. DataContext is set explicitly because an InfoBadge
+                     attention for a major one - or caution when only the Server Map mod is behind. DataContext is set explicitly because an InfoBadge
                      assigned to this property doesn't inherit one from the nav item. -->
                 <ui:NavigationViewItem
                     Content="{loc:Str Nav_AppUpdate}"
@@ -206,7 +206,7 @@
                             VerticalAlignment="Center"
                             DataContext="{x:Static app:AppServices.AppUpdate}"
                             Severity="{Binding BadgeSeverity}"
-                            Visibility="{Binding UpdateAvailable, Converter={StaticResource BoolToVis}}" />
+                            Visibility="{Binding ShowUpdateBadge, Converter={StaticResource BoolToVis}}" />
                     </ui:NavigationViewItem.InfoBadge>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem

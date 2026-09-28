@@ -1493,4 +1493,15 @@ internal static class Strings
     internal static string Options_ServerMapLanOnly => LocalizationService.Get("Options_ServerMapLanOnly");
     internal static string Options_ServerMapLanOnlyHint => LocalizationService.Get("Options_ServerMapLanOnlyHint");
     internal static string Options_ServerMapLanOnlyFailed => LocalizationService.Get("Options_ServerMapLanOnlyFailed");
+    internal static string AppUpdate_ServerMapHeader => LocalizationService.Get("AppUpdate_ServerMapHeader");
+    internal static string AppUpdate_ServerMapLocalLabel => LocalizationService.Get("AppUpdate_ServerMapLocalLabel");
+    internal static string AppUpdate_ServerMapConnectedLabel => LocalizationService.Get("AppUpdate_ServerMapConnectedLabel");
+    internal static string AppUpdate_ServerMapBehindTitle => LocalizationService.Get("AppUpdate_ServerMapBehindTitle");
+    internal static string AppUpdate_ServerMapLocalBehindFormat => LocalizationService.Get("AppUpdate_ServerMapLocalBehindFormat");
+    internal static string AppUpdate_ServerMapStubBehindTitle => LocalizationService.Get("AppUpdate_ServerMapStubBehindTitle");
+    internal static string AppUpdate_ServerMapStubBehindFormat => LocalizationService.Get("AppUpdate_ServerMapStubBehindFormat");
+    internal static string AppUpdate_ServerMapConnectedBehindFormat => LocalizationService.Get("AppUpdate_ServerMapConnectedBehindFormat");
+    internal static string AppUpdate_ServerMapUpToDate => LocalizationService.Get("AppUpdate_ServerMapUpToDate");
+    internal static string AppUpdate_ServerMapCheckFailed => LocalizationService.Get("AppUpdate_ServerMapCheckFailed");
+    internal static string AppUpdate_ServerMapOpenPage => LocalizationService.Get("AppUpdate_ServerMapOpenPage");
 }

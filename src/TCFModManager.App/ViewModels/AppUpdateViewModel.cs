@@ -39,6 +39,7 @@ public partial class AppUpdateViewModel : LocalizedViewModel
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(UpdateAvailable))]
+    [NotifyPropertyChangedFor(nameof(ShowUpdateBadge))]
     [NotifyPropertyChangedFor(nameof(ShowUpToDate))]
     [NotifyPropertyChangedFor(nameof(LatestVersion))]
     [NotifyPropertyChangedFor(nameof(Changelog))]
@@ -138,12 +139,16 @@ public partial class AppUpdateViewModel : LocalizedViewModel
         _ => InfoBarSeverity.Informational,
     };
 
-    public InfoBadgeSeverity BadgeSeverity => Update?.ChangeKind switch
-    {
-        VersionChangeKind.Minor => InfoBadgeSeverity.Success,
-        VersionChangeKind.Major => InfoBadgeSeverity.Attention,
-        _ => InfoBadgeSeverity.Informational,
-    };
+    // The app's own update decides the colour when there is one; a Server Map mod that is behind
+    // on its own is Caution - something to act on, on another machine or by hand.
+    public InfoBadgeSeverity BadgeSeverity => !UpdateAvailable && ServerMapModBehind
+        ? InfoBadgeSeverity.Caution
+        : Update?.ChangeKind switch
+        {
+            VersionChangeKind.Minor => InfoBadgeSeverity.Success,
+            VersionChangeKind.Major => InfoBadgeSeverity.Attention,
+            _ => InfoBadgeSeverity.Informational,
+        };
 
     public string BannerTitle => Text(Strings.AppUpdate_BannerTitleFormat, ChangeTitle, LatestVersion);
 
@@ -191,12 +196,11 @@ public partial class AppUpdateViewModel : LocalizedViewModel
             Update = await _updates.CheckAsync().ConfigureAwait(true);
             HasChecked = true;
 
-            if (!UpdateAvailable) return;
-
             // A version the user has already closed the banner on stays closed until something
             // newer than it is published.
             var dismissed = _settings.Load().DismissedAppUpdateVersion;
-            if (announce && !string.Equals(dismissed, Update!.LatestVersion, StringComparison.OrdinalIgnoreCase))
+            if (UpdateAvailable && announce
+                && !string.Equals(dismissed, Update!.LatestVersion, StringComparison.OrdinalIgnoreCase))
                 IsBannerOpen = true;
         }
         catch (SpModApiRateLimitedException)
@@ -226,6 +230,8 @@ public partial class AppUpdateViewModel : LocalizedViewModel
             IsChecking = false;
             if (CheckError is not null) AppLog.Warn("AppUpdate", CheckError);
         }
+
+        await CheckServerMapModAsync().ConfigureAwait(true);
     }
 
     // ---- Acting on it ---------------------------------------------------------------------------
