@@ -36,6 +36,42 @@ public sealed partial class ServerMapGateViewModel
 
     private bool _reporterHooked;
 
+    //
+    // LAN-only, for the server running on THIS machine: the server refuses every request from
+    // outside its own network (Tailscale counts as inside). Read from and written to the same
+    // Data\ServerMap\servermap.json the mod re-reads on every change, so it takes effect without a
+    // restart. Only offered where the key file is found - there is no server here to configure
+    // anywhere else.
+    //
+    [ObservableProperty]
+    private bool _serverLanOnly;
+
+    private bool _loadingLanOnly;
+
+    public void RefreshServerSettings(string? sptInstallPath)
+    {
+        var path = ServerMapServerSettings.PathFor(sptInstallPath);
+
+        _loadingLanOnly = true;
+        ServerLanOnly = path is not null && ServerMapServerSettings.ReadLanOnly(path);
+        _loadingLanOnly = false;
+    }
+
+    partial void OnServerLanOnlyChanged(bool value)
+    {
+        if (_loadingLanOnly) return;
+
+        var path = ServerMapServerSettings.PathFor(_settings.Load().SptInstallPath);
+
+        if (path is not null && ServerMapServerSettings.TryWriteLanOnly(path, value)) return;
+
+        // Not saved, so the switch goes back to what the server is actually doing.
+        KeyNotice = Strings.Options_ServerMapLanOnlyFailed;
+        _loadingLanOnly = true;
+        ServerLanOnly = !value;
+        _loadingLanOnly = false;
+    }
+
     // Set when reporting is switched on, so the map is read again once this machine is on it.
     private bool _refreshAfterReport;
 

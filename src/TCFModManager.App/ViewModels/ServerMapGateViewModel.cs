@@ -216,6 +216,7 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
     public void RefreshLocalKey(string? sptInstallPath = null)
     {
         LocalKey = ServerMapKeyFile.TryReadLocal(sptInstallPath ?? _settings.Load().SptInstallPath);
+        RefreshServerSettings(sptInstallPath ?? _settings.Load().SptInstallPath);
 
         if (LocalKey is null) return;
 

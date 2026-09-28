@@ -4548,4 +4548,16 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="ModLists_ChipAlreadyRight_other" xml:space="preserve">
     <value>{0} corrects</value>
   </data>
+  <data name="ServerMap_LanOnly" xml:space="preserve">
+    <value>Ce serveur ne répond qu'aux machines de son propre réseau, et celle-ci est en dehors. Demandez à la personne qui le gère, ou rejoignez son réseau via un VPN comme Tailscale.</value>
+  </data>
+  <data name="Options_ServerMapLanOnly" xml:space="preserve">
+    <value>Ne répondre qu'à ce réseau</value>
+  </data>
+  <data name="Options_ServerMapLanOnlyHint" xml:space="preserve">
+    <value>Refuse toute requête Server Map venant de l'extérieur du réseau de cette machine - les joueurs qui se connectent par Internet ne voient plus votre liste ni la carte. Les appareils Tailscale comptent toujours comme locaux. Prend effet immédiatement ; nécessite le mod Server Map 0.3.0 ou plus récent, stub compris.</value>
+  </data>
+  <data name="Options_ServerMapLanOnlyFailed" xml:space="preserve">
+    <value>Impossible d'enregistrer ce réglage - voir le journal.</value>
+  </data>
 </root>

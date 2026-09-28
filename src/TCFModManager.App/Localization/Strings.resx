@@ -5368,4 +5368,16 @@ This was written to:
   <data name="ModLists_ChipAlreadyRight_other" xml:space="preserve">
     <value>{0} correct</value>
   </data>
+  <data name="ServerMap_LanOnly" xml:space="preserve">
+    <value>This server only answers machines on its own network, and this one is outside it. Ask whoever runs it, or join their network over a VPN such as Tailscale.</value>
+  </data>
+  <data name="Options_ServerMapLanOnly" xml:space="preserve">
+    <value>Only answer this network</value>
+  </data>
+  <data name="Options_ServerMapLanOnlyHint" xml:space="preserve">
+    <value>Refuses every Server Map request from outside this machine's network - players connecting over the internet no longer see your list or the map. Tailscale peers still count as local. Takes effect straight away; needs the Server Map mod 0.3.0 or later, stub included.</value>
+  </data>
+  <data name="Options_ServerMapLanOnlyFailed" xml:space="preserve">
+    <value>Couldn't save that setting - see the log.</value>
+  </data>
 </root>

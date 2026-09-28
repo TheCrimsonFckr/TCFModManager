@@ -48,6 +48,8 @@ public static class ServerMapProblems
         // A plain SPT server 404s the route and a stub whose payload is missing 503s it - the same
         // answer either way, so the wording covers both without guessing which.
         //
+        ServerMapProblem.LanOnly => Strings.ServerMap_LanOnly,
+
         ServerMapProblem.NotServerMap => Format(
             Strings.ServerMap_NotServerMapFormat, probe.Endpoint.Host, probe.Endpoint.Port),
 
@@ -123,6 +125,8 @@ public static class ServerMapProblems
 
         ServerMapProblem.KeyRejected => Strings.ServerMap_KeyRejected,
 
+        ServerMapProblem.LanOnly => Strings.ServerMap_LanOnly,
+
         ServerMapProblem.ListUnreadable => Format(Strings.ServerMap_ListUnreadableFormat, result.ParseError),
 
         ServerMapProblem.Unreachable => Strings.ServerMap_ListFetchDropped,
@@ -145,6 +149,7 @@ public static class ServerMapProblems
     public static string DescribeMap(ServerMapProblem problem) => problem switch
     {
         ServerMapProblem.MapUnsupported => Strings.ServerMap_MapUnsupported,
+        ServerMapProblem.LanOnly => Strings.ServerMap_LanOnly,
         ServerMapProblem.KeyRequired => Strings.ServerMap_KeyRequired,
         ServerMapProblem.KeyRejected => Strings.ServerMap_KeyRejected,
         _ => Strings.ServerMap_MapUnavailable,

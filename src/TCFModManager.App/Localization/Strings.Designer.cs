@@ -1489,4 +1489,8 @@ internal static class Strings
         LocalizationService.Plural("ModLists_ChipPinned", count, values);
     internal static string ModLists_ChipAlreadyRight(int count, params object?[] values) =>
         LocalizationService.Plural("ModLists_ChipAlreadyRight", count, values);
+    internal static string ServerMap_LanOnly => LocalizationService.Get("ServerMap_LanOnly");
+    internal static string Options_ServerMapLanOnly => LocalizationService.Get("Options_ServerMapLanOnly");
+    internal static string Options_ServerMapLanOnlyHint => LocalizationService.Get("Options_ServerMapLanOnlyHint");
+    internal static string Options_ServerMapLanOnlyFailed => LocalizationService.Get("Options_ServerMapLanOnlyFailed");
 }

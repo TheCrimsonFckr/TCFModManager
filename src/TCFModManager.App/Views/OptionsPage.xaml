@@ -669,6 +669,25 @@
                                 ToolTip="{loc:Str Options_GenerateKeyToolTip}"
                                 Command="{Binding NewLocalKeyCommand}" />
                         </WrapPanel>
+                        <!-- LAN-only, for this machine's own server. Beside the key because it is the
+                             other thing only the operator decides, and only here is there a server. -->
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapLanOnly}" />
+                                <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapLanOnlyHint}" />
+                            </StackPanel>
+                            <ui:ToggleSwitch
+                                Grid.Column="1"
+                                Margin="14,0,0,0"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource RowSwitch}"
+                                IsChecked="{Binding ServerLanOnly, Mode=TwoWay}" />
+                        </Grid>
+
                         <TextBlock
                             Style="{StaticResource SettingHint}"
                             Margin="0,8,0,0"
