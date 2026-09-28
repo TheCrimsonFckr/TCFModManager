@@ -238,6 +238,25 @@ public sealed class ServerMapSettings
     public string? SharedKey { get; set; }
 
     //
+    // This install's identity on every server map it reports to. Generated the first time it
+    // reports and never changed after, so renaming the machine moves its row rather than adding a
+    // second one. Kept per install, not per server: it identifies nobody, and servers never send it
+    // back out.
+    //
+    public string? ClientId { get; set; }
+
+    // The name this install shows on the map. Null means the computer's own name.
+    public string? DisplayName { get; set; }
+
+    //
+    // Whether this install may report to a server, answered once per server (D9). A server with no
+    // entry has not been asked. Keyed on the server's certificate where there is one, so the same
+    // server reached over its LAN and its WAN address is asked once, and a different certificate is
+    // a different server that is asked again.
+    //
+    public List<ServerMapConsent> ReportConsent { get; set; } = [];
+
+    //
     // JsonIgnore because System.Text.Json serialises get-only properties by default, so these were
     // being written into settings.json - a file the Options page invites people to hand-edit, where
     // "IsConfigured": true reads as a switch you can flip and is in fact ignored on load.
@@ -249,4 +268,14 @@ public sealed class ServerMapSettings
     public bool HasKey => !string.IsNullOrWhiteSpace(SharedKey);
 
     public ServerMapEndpoint ToEndpoint() => new(Host ?? string.Empty, Port, PinnedThumbprint, SharedKey);
+}
+
+public sealed class ServerMapConsent
+{
+    // The server's pinned certificate thumbprint, or host:port for one reached before it was pinned.
+    public string Server { get; set; } = "";
+
+    public bool Allowed { get; set; }
+
+    public DateTimeOffset AnsweredAt { get; set; }
 }
