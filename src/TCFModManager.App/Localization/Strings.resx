@@ -5375,7 +5375,7 @@ This was written to:
     <value>Only answer this network</value>
   </data>
   <data name="Options_ServerMapLanOnlyHint" xml:space="preserve">
-    <value>Refuses every Server Map request from outside this machine's network - players connecting over the internet no longer see your list or the map. Tailscale peers still count as local. Takes effect straight away; needs the Server Map mod 0.3.0 or later, stub included.</value>
+    <value>Refuses every Server Map request from outside this machine's network - players connecting over the internet no longer see your list or the map. Tailscale peers still count as local. Takes effect straight away; needs the Server Map mod 0.2.0 or later, stub included.</value>
   </data>
   <data name="Options_ServerMapLanOnlyFailed" xml:space="preserve">
     <value>Couldn't save that setting - see the log.</value>

@@ -4555,7 +4555,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Rispondi solo a questa rete</value>
   </data>
   <data name="Options_ServerMapLanOnlyHint" xml:space="preserve">
-    <value>Rifiuta ogni richiesta Server Map che arriva da fuori della rete di questa macchina - chi si connette via Internet non vede più la tua lista né la mappa. I dispositivi Tailscale contano ancora come locali. Ha effetto subito; richiede il mod Server Map 0.3.0 o successivo, stub compreso.</value>
+    <value>Rifiuta ogni richiesta Server Map che arriva da fuori della rete di questa macchina - chi si connette via Internet non vede più la tua lista né la mappa. I dispositivi Tailscale contano ancora come locali. Ha effetto subito; richiede il mod Server Map 0.2.0 o successivo, stub compreso.</value>
   </data>
   <data name="Options_ServerMapLanOnlyFailed" xml:space="preserve">
     <value>Impossibile salvare l'impostazione - vedi il log.</value>

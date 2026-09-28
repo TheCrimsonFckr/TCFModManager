@@ -331,6 +331,7 @@ An optional page - **off by default**, turned on in Options - that connects to a
 - **The server serves a list, never files.** Mods are still only ever downloaded from sp-mod.com. A server that could push files at you would break the one rule this app is built on, so there is no route for it to do so.
 - **Certificates are pinned on first use.** SPT serves a self-signed certificate, so the app remembers the exact one your server presented and tells you if it ever changes - which is what a machine-in-the-middle would look like. Trust the new one or refuse it.
 - **A shared key** guards everything but the handshake. The operator gives it to you; on the server's own machine the app finds it by itself.
+- **LAN-only, for the operator.** On the server machine, **Options - Server map connection - Only answer this network** makes the server refuse every request from outside its own network - Tailscale peers still count as inside.
 
 **Connecting fetches the list for you** and saves it as a read-only mod list, marked as coming from that server; it is fetched again on its own whenever the server's revision moves. **Fetch again** asks for it even when the revision hasn't moved, for a copy you have edited or deleted.
 

@@ -4555,7 +4555,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Nur dieses Netzwerk beantworten</value>
   </data>
   <data name="Options_ServerMapLanOnlyHint" xml:space="preserve">
-    <value>Lehnt jede Server-Map-Anfrage von außerhalb des Netzwerks dieser Maschine ab – wer sich über das Internet verbindet, sieht deine Liste und die Map nicht mehr. Tailscale-Geräte gelten weiterhin als lokal. Wirkt sofort; braucht den Server-Map-Mod ab 0.3.0, einschließlich Stub.</value>
+    <value>Lehnt jede Server-Map-Anfrage von außerhalb des Netzwerks dieser Maschine ab – wer sich über das Internet verbindet, sieht deine Liste und die Map nicht mehr. Tailscale-Geräte gelten weiterhin als lokal. Wirkt sofort; braucht den Server-Map-Mod ab 0.2.0, einschließlich Stub.</value>
   </data>
   <data name="Options_ServerMapLanOnlyFailed" xml:space="preserve">
     <value>Die Einstellung konnte nicht gespeichert werden – siehe Log.</value>

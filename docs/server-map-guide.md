@@ -245,6 +245,29 @@ If you are setting that up from scratch, in `SPT_Data/configs/http.json`:
 
 Then give people your external address, the port, and the key.
 
+## Keep it to my own network?
+
+If only people at home - or on your Tailscale - ever play, turn on **Only answer this network** in
+**Options - Server map connection** on the server machine. Needs the Server Map mod **0.2.0** or
+later, stub included.
+
+From then on the server refuses every Server Map request from outside its own network, even the
+handshake, and the player sees *This server only answers machines on its own network*. It takes
+effect straight away; no restart.
+
+What counts as your network:
+
+- the server machine itself
+- the private ranges a router hands out - `192.168.x.x`, `10.x.x.x`, `172.16-31.x.x`
+- **Tailscale** peers (`100.64.0.0/10`), so a group on Tailscale still gets in. ZeroTier uses
+  private ranges already.
+
+It only covers Server Map. Whether people can join the SPT server itself is still `http.json` and
+your router.
+
+The switch writes `TCFModManager\Data\ServerMap\servermap.json`; `{ "lanOnly": true }` there by
+hand does the same.
+
 ## See who is on my server?
 
 The **Server map** page on any machine connected to your server - yours included - lists every
@@ -506,6 +529,15 @@ Work through these:
 3. Has this machine connected since the server's certificate changed? A new certificate is asked
    about again.
 4. Press **Refresh** on the Server map page - it reports first, then reads the map.
+
+## It says the server only answers its own network
+
+The operator has turned on **Only answer this network**, and your machine is outside it. Either
+ask them to turn it off, or join their network - Tailscale is the usual way.
+
+If you **are** on the same network and still see it, the server's stub is older than its payload:
+replace `user\mods\TCFMM.ServerMap\` with the stub from the same zip. Without it the server cannot
+see who is asking, so it refuses everyone.
 
 ## Nothing answers at all
 
