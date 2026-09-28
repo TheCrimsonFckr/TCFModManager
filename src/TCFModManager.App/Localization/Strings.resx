@@ -5269,4 +5269,34 @@ This was written to:
   <data name="Common_ReviewAndInstallToolTip" xml:space="preserve">
     <value>Opens Mod lists with the server's list selected and its Preview already worked out. Nothing is installed until you press Apply there.</value>
   </data>
+  <data name="ModLists_MissingHereFormat" xml:space="preserve">
+    <value>Missing on this machine: {0}.</value>
+  </data>
+  <data name="ModLists_MissingInstalledFrom_one" xml:space="preserve">
+    <value>Apply installs it from sp-mod.com.</value>
+  </data>
+  <data name="ModLists_MissingInstalledFrom_other" xml:space="preserve">
+    <value>Apply installs them from sp-mod.com.</value>
+  </data>
+  <data name="ModLists_ApplyInstall_one" xml:space="preserve">
+    <value>Install 1 mod</value>
+  </data>
+  <data name="ModLists_ApplyInstall_other" xml:space="preserve">
+    <value>Install {0} mods</value>
+  </data>
+  <data name="ModLists_ApplyUpdate_one" xml:space="preserve">
+    <value>Update 1 mod</value>
+  </data>
+  <data name="ModLists_ApplyUpdate_other" xml:space="preserve">
+    <value>Update {0} mods</value>
+  </data>
+  <data name="ModLists_ApplyDownload_one" xml:space="preserve">
+    <value>Download 1 mod</value>
+  </data>
+  <data name="ModLists_ApplyDownload_other" xml:space="preserve">
+    <value>Download {0} mods</value>
+  </data>
+  <data name="ModLists_ApplyInstallUpdateFormat" xml:space="preserve">
+    <value>Install {0}, update {1}</value>
+  </data>
 </root>

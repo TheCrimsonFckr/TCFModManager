@@ -4449,4 +4449,34 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="Common_ReviewAndInstallToolTip" xml:space="preserve">
     <value>Ouvre Listes de mods avec la liste du serveur sélectionnée et son Aperçu déjà calculé. Rien n'est installé tant que vous n'appuyez pas sur Appliquer.</value>
   </data>
+  <data name="ModLists_MissingHereFormat" xml:space="preserve">
+    <value>Manquant sur cette machine : {0}.</value>
+  </data>
+  <data name="ModLists_MissingInstalledFrom_one" xml:space="preserve">
+    <value>Appliquer l'installe depuis sp-mod.com.</value>
+  </data>
+  <data name="ModLists_MissingInstalledFrom_other" xml:space="preserve">
+    <value>Appliquer les installe depuis sp-mod.com.</value>
+  </data>
+  <data name="ModLists_ApplyInstall_one" xml:space="preserve">
+    <value>Installer {0} mod</value>
+  </data>
+  <data name="ModLists_ApplyInstall_other" xml:space="preserve">
+    <value>Installer {0} mods</value>
+  </data>
+  <data name="ModLists_ApplyUpdate_one" xml:space="preserve">
+    <value>Mettre à jour {0} mod</value>
+  </data>
+  <data name="ModLists_ApplyUpdate_other" xml:space="preserve">
+    <value>Mettre à jour {0} mods</value>
+  </data>
+  <data name="ModLists_ApplyDownload_one" xml:space="preserve">
+    <value>Télécharger {0} mod</value>
+  </data>
+  <data name="ModLists_ApplyDownload_other" xml:space="preserve">
+    <value>Télécharger {0} mods</value>
+  </data>
+  <data name="ModLists_ApplyInstallUpdateFormat" xml:space="preserve">
+    <value>Installer {0}, mettre à jour {1}</value>
+  </data>
 </root>

@@ -4449,4 +4449,34 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Common_ReviewAndInstallToolTip" xml:space="preserve">
     <value>Apre Liste mod con la lista del server selezionata e la sua Anteprima già pronta. Non viene installato nulla finché non premi Applica.</value>
   </data>
+  <data name="ModLists_MissingHereFormat" xml:space="preserve">
+    <value>Mancante su questa macchina: {0}.</value>
+  </data>
+  <data name="ModLists_MissingInstalledFrom_one" xml:space="preserve">
+    <value>Applica lo installa da sp-mod.com.</value>
+  </data>
+  <data name="ModLists_MissingInstalledFrom_other" xml:space="preserve">
+    <value>Applica li installa da sp-mod.com.</value>
+  </data>
+  <data name="ModLists_ApplyInstall_one" xml:space="preserve">
+    <value>Installa un mod</value>
+  </data>
+  <data name="ModLists_ApplyInstall_other" xml:space="preserve">
+    <value>Installa {0} mod</value>
+  </data>
+  <data name="ModLists_ApplyUpdate_one" xml:space="preserve">
+    <value>Aggiorna un mod</value>
+  </data>
+  <data name="ModLists_ApplyUpdate_other" xml:space="preserve">
+    <value>Aggiorna {0} mod</value>
+  </data>
+  <data name="ModLists_ApplyDownload_one" xml:space="preserve">
+    <value>Scarica un mod</value>
+  </data>
+  <data name="ModLists_ApplyDownload_other" xml:space="preserve">
+    <value>Scarica {0} mod</value>
+  </data>
+  <data name="ModLists_ApplyInstallUpdateFormat" xml:space="preserve">
+    <value>Installa {0}, aggiorna {1}</value>
+  </data>
 </root>

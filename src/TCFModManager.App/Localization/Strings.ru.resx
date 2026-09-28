@@ -4704,4 +4704,46 @@
   <data name="Common_ReviewAndInstallToolTip" xml:space="preserve">
     <value>Открывает «Списки модов» с выбранным списком сервера и уже готовым предпросмотром. Ничего не устанавливается, пока вы не нажмёте «Применить».</value>
   </data>
+  <data name="ModLists_MissingHereFormat" xml:space="preserve">
+    <value>Нет на этой машине: {0}.</value>
+  </data>
+  <data name="ModLists_MissingInstalledFrom_one" xml:space="preserve">
+    <value>«Применить» установит его с sp-mod.com.</value>
+  </data>
+  <data name="ModLists_MissingInstalledFrom_few" xml:space="preserve">
+    <value>«Применить» установит их с sp-mod.com.</value>
+  </data>
+  <data name="ModLists_MissingInstalledFrom_many" xml:space="preserve">
+    <value>«Применить» установит их с sp-mod.com.</value>
+  </data>
+  <data name="ModLists_ApplyInstall_one" xml:space="preserve">
+    <value>Установить {0} мод</value>
+  </data>
+  <data name="ModLists_ApplyInstall_few" xml:space="preserve">
+    <value>Установить {0} мода</value>
+  </data>
+  <data name="ModLists_ApplyInstall_many" xml:space="preserve">
+    <value>Установить {0} модов</value>
+  </data>
+  <data name="ModLists_ApplyUpdate_one" xml:space="preserve">
+    <value>Обновить {0} мод</value>
+  </data>
+  <data name="ModLists_ApplyUpdate_few" xml:space="preserve">
+    <value>Обновить {0} мода</value>
+  </data>
+  <data name="ModLists_ApplyUpdate_many" xml:space="preserve">
+    <value>Обновить {0} модов</value>
+  </data>
+  <data name="ModLists_ApplyDownload_one" xml:space="preserve">
+    <value>Скачать {0} мод</value>
+  </data>
+  <data name="ModLists_ApplyDownload_few" xml:space="preserve">
+    <value>Скачать {0} мода</value>
+  </data>
+  <data name="ModLists_ApplyDownload_many" xml:space="preserve">
+    <value>Скачать {0} модов</value>
+  </data>
+  <data name="ModLists_ApplyInstallUpdateFormat" xml:space="preserve">
+    <value>Установить {0}, обновить {1}</value>
+  </data>
 </root>

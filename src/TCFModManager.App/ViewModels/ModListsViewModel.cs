@@ -405,6 +405,61 @@ public partial class ModListsViewModel : LocalizedViewModel
 
     public bool HasDownloadOnlyNotice => DownloadOnlyNotice is not null;
 
+    //
+    // The mods the previewed list names that this machine does not have, by name. A summary line of
+    // counts at the top of seventy rows is easy to read past; a missing mod about to be installed is
+    // the one thing in a preview somebody must not miss.
+    //
+    public bool HasMissingNotice => _preview?.Plan.Install.Any() == true;
+
+    public string MissingNotice
+    {
+        get
+        {
+            if (_preview is not { } preview || !preview.Plan.Install.Any()) return "";
+
+            var names = preview.Plan.Install.Select(a => a.Name).Order(StringComparer.OrdinalIgnoreCase).ToList();
+            var line = Text(Strings.ModLists_MissingHereFormat, string.Join(Strings.Common_ListSeparator, names));
+
+            return ModListDownloadMode.For(preview.List).DownloadOnly
+                ? line
+                : line + " " + Strings.ModLists_MissingInstalledFrom(names.Count);
+        }
+    }
+
+    //
+    // What Apply will do, on the button itself: "Install 1 mod", "Install 2, update 1", or in
+    // Install mode "Download 3 mods". Plain Apply when there is nothing to fetch - an apply that only
+    // enables or disables, or nothing previewed yet.
+    //
+    public string ApplyLabel
+    {
+        get
+        {
+            if (_preview is not { } preview) return Strings.ModLists_Apply;
+
+            var plan = preview.Plan;
+            var installs = plan.Install.Count();
+            var updates = plan.Update.Count() + plan.Enable.Count(a => a.NeedsUpdateAfterEnable);
+
+            if (installs + updates == 0) return Strings.ModLists_Apply;
+
+            if (ModListDownloadMode.For(preview.List).DownloadOnly)
+                return Strings.ModLists_ApplyDownload(installs + updates);
+
+            if (installs > 0 && updates > 0) return Text(Strings.ModLists_ApplyInstallUpdateFormat, installs, updates);
+
+            return installs > 0 ? Strings.ModLists_ApplyInstall(installs) : Strings.ModLists_ApplyUpdate(updates);
+        }
+    }
+
+    private void NotifyPlanWording()
+    {
+        OnPropertyChanged(nameof(ApplyLabel));
+        OnPropertyChanged(nameof(HasMissingNotice));
+        OnPropertyChanged(nameof(MissingNotice));
+    }
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanRevert))]
     [NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
@@ -718,6 +773,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         VersionWarning = null;
         DownloadOnlyNotice = null;
         ApplyCommand.NotifyCanExecuteChanged();
+        NotifyPlanWording();
     }
 
     [RelayCommand]
@@ -849,6 +905,7 @@ public partial class ModListsViewModel : LocalizedViewModel
             : null;
 
         ApplyCommand.NotifyCanExecuteChanged();
+        NotifyPlanWording();
         StatusMessage = plan.RequiresGameClosed
             ? Strings.ModLists_CloseSptBeforeApply
             : Text(Strings.ModLists_PreviewedFormat, preview.List.Name);

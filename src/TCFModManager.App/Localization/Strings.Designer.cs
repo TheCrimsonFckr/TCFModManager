@@ -1456,4 +1456,14 @@ internal static class Strings
     internal static string Options_ServerMapDisplayNameHint => LocalizationService.Get("Options_ServerMapDisplayNameHint");
     internal static string Common_ReviewAndInstall => LocalizationService.Get("Common_ReviewAndInstall");
     internal static string Common_ReviewAndInstallToolTip => LocalizationService.Get("Common_ReviewAndInstallToolTip");
+    internal static string ModLists_MissingHereFormat => LocalizationService.Get("ModLists_MissingHereFormat");
+    internal static string ModLists_MissingInstalledFrom(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_MissingInstalledFrom", count, values);
+    internal static string ModLists_ApplyInstall(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_ApplyInstall", count, values);
+    internal static string ModLists_ApplyUpdate(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_ApplyUpdate", count, values);
+    internal static string ModLists_ApplyDownload(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_ApplyDownload", count, values);
+    internal static string ModLists_ApplyInstallUpdateFormat => LocalizationService.Get("ModLists_ApplyInstallUpdateFormat");
 }

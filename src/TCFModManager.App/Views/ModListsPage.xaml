@@ -372,7 +372,7 @@
                         Margin="10,0,0,0"
                         HorizontalContentAlignment="Center"
                         Appearance="Primary"
-                        Content="{loc:Str ModLists_Apply}"
+                        Content="{Binding ApplyLabel}"
                         ToolTip="{loc:Str ModLists_ApplyToolTip}"
                         Command="{Binding ApplyCommand}" />
 
@@ -467,6 +467,15 @@
                     IsClosable="False"
                     IsOpen="{Binding HasVersionWarning, Mode=OneWay}"
                     Message="{Binding VersionWarning}" />
+
+                <!-- The mods this machine does not have, by name - the one thing in a preview that
+                     must not be read past. -->
+                <ui:InfoBar
+                    Margin="0,16,0,0"
+                    Severity="Warning"
+                    IsClosable="False"
+                    IsOpen="{Binding HasMissingNotice, Mode=OneWay}"
+                    Message="{Binding MissingNotice}" />
 
                 <!-- Monitor mode: this apply downloads its installs and updates for the user to
                      install, and says so before anything runs. -->

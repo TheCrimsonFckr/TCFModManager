@@ -4449,4 +4449,34 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="Common_ReviewAndInstallToolTip" xml:space="preserve">
     <value>Öffnet Modlisten mit der Liste des Servers ausgewählt und ihrer Vorschau bereits erstellt. Installiert wird erst, wenn du dort auf Anwenden drückst.</value>
   </data>
+  <data name="ModLists_MissingHereFormat" xml:space="preserve">
+    <value>Fehlt auf dieser Maschine: {0}.</value>
+  </data>
+  <data name="ModLists_MissingInstalledFrom_one" xml:space="preserve">
+    <value>Anwenden installiert ihn von sp-mod.com.</value>
+  </data>
+  <data name="ModLists_MissingInstalledFrom_other" xml:space="preserve">
+    <value>Anwenden installiert sie von sp-mod.com.</value>
+  </data>
+  <data name="ModLists_ApplyInstall_one" xml:space="preserve">
+    <value>1 Mod installieren</value>
+  </data>
+  <data name="ModLists_ApplyInstall_other" xml:space="preserve">
+    <value>{0} Mods installieren</value>
+  </data>
+  <data name="ModLists_ApplyUpdate_one" xml:space="preserve">
+    <value>1 Mod aktualisieren</value>
+  </data>
+  <data name="ModLists_ApplyUpdate_other" xml:space="preserve">
+    <value>{0} Mods aktualisieren</value>
+  </data>
+  <data name="ModLists_ApplyDownload_one" xml:space="preserve">
+    <value>1 Mod herunterladen</value>
+  </data>
+  <data name="ModLists_ApplyDownload_other" xml:space="preserve">
+    <value>{0} Mods herunterladen</value>
+  </data>
+  <data name="ModLists_ApplyInstallUpdateFormat" xml:space="preserve">
+    <value>{0} installieren, {1} aktualisieren</value>
+  </data>
 </root>
