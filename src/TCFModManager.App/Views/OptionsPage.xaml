@@ -712,6 +712,53 @@
                             Command="{Binding ForgetPinCommand}" />
                     </Grid>
                 </Border>
+
+                <!--
+                    Whether this machine reports to the server's map, and under what name. The same
+                    answer the question on the Server map page records (D9, once per server) - so
+                    switching it off here takes the machine off the map. Disabled until this machine
+                    has connected once, because the answer is keyed on the certificate that
+                    connection records.
+                -->
+                <Border Style="{StaticResource SubSetting}" Margin="0,12,0,0">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapReport}" />
+                                <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapReportHint}" />
+                            </StackPanel>
+                            <ui:ToggleSwitch
+                                Grid.Column="1"
+                                Margin="14,0,0,0"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource RowSwitch}"
+                                IsEnabled="{Binding CanChooseReporting}"
+                                IsChecked="{Binding ReportsToServer, Mode=TwoWay}" />
+                        </Grid>
+
+                        <TextBlock
+                            Style="{StaticResource SettingTitle}"
+                            Margin="0,12,0,0"
+                            Text="{loc:Str Options_ServerMapDisplayName}" />
+                        <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapDisplayNameHint}" />
+                        <!-- Saved when the box loses focus, not on every keystroke. -->
+                        <ui:TextBox
+                            MinWidth="260"
+                            HorizontalAlignment="Left"
+                            Margin="0,6,0,0"
+                            PlaceholderText="{Binding DisplayNamePlaceholder}"
+                            Text="{Binding DisplayNameInput, UpdateSourceTrigger=LostFocus}" />
+
+                        <TextBlock
+                            Style="{StaticResource SettingNote}"
+                            Margin="0,8,0,0"
+                            Text="{Binding ReportingStatus}" />
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </ui:CardExpander>
 
