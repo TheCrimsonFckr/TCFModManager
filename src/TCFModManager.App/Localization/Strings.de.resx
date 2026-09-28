@@ -4495,7 +4495,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Selbst holen</value>
   </data>
   <data name="ModLists_StatusAlreadyRight" xml:space="preserve">
-    <value>Bereits richtig</value>
+    <value>Korrekt</value>
   </data>
   <data name="ModLists_StatusVersionFormat" xml:space="preserve">
     <value>{0} → {1}</value>
@@ -4507,10 +4507,10 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>{0} fehlen</value>
   </data>
   <data name="ModLists_ChipDifferentVersion_one" xml:space="preserve">
-    <value>{0} andere Version</value>
+    <value>{0} falsche Version</value>
   </data>
   <data name="ModLists_ChipDifferentVersion_other" xml:space="preserve">
-    <value>{0} andere Versionen</value>
+    <value>{0} falsche Versionen</value>
   </data>
   <data name="ModLists_ChipHalfInstalled_one" xml:space="preserve">
     <value>{0} halb installiert</value>
@@ -4543,9 +4543,9 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>{0} angeheftet</value>
   </data>
   <data name="ModLists_ChipAlreadyRight_one" xml:space="preserve">
-    <value>{0} bereits richtig</value>
+    <value>{0} korrekt</value>
   </data>
   <data name="ModLists_ChipAlreadyRight_other" xml:space="preserve">
-    <value>{0} bereits richtig</value>
+    <value>{0} korrekt</value>
   </data>
 </root>

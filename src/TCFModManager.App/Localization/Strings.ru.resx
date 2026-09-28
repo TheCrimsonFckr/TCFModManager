@@ -4759,7 +4759,7 @@
     <value>Скачать вручную</value>
   </data>
   <data name="ModLists_StatusAlreadyRight" xml:space="preserve">
-    <value>Уже в порядке</value>
+    <value>Верно</value>
   </data>
   <data name="ModLists_StatusVersionFormat" xml:space="preserve">
     <value>{0} → {1}</value>
@@ -4774,13 +4774,13 @@
     <value>{0} отсутствуют</value>
   </data>
   <data name="ModLists_ChipDifferentVersion_one" xml:space="preserve">
-    <value>{0} другая версия</value>
+    <value>{0} неверная версия</value>
   </data>
   <data name="ModLists_ChipDifferentVersion_few" xml:space="preserve">
-    <value>{0} другие версии</value>
+    <value>{0} неверные версии</value>
   </data>
   <data name="ModLists_ChipDifferentVersion_many" xml:space="preserve">
-    <value>{0} других версий</value>
+    <value>{0} неверных версий</value>
   </data>
   <data name="ModLists_ChipHalfInstalled_one" xml:space="preserve">
     <value>{0} установлен не полностью</value>
@@ -4828,12 +4828,12 @@
     <value>{0} закреплено</value>
   </data>
   <data name="ModLists_ChipAlreadyRight_one" xml:space="preserve">
-    <value>{0} уже в порядке</value>
+    <value>{0} верно</value>
   </data>
   <data name="ModLists_ChipAlreadyRight_few" xml:space="preserve">
-    <value>{0} уже в порядке</value>
+    <value>{0} верно</value>
   </data>
   <data name="ModLists_ChipAlreadyRight_many" xml:space="preserve">
-    <value>{0} уже в порядке</value>
+    <value>{0} верно</value>
   </data>
 </root>

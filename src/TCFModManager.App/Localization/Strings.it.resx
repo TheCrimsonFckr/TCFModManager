@@ -4495,7 +4495,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Scarica tu</value>
   </data>
   <data name="ModLists_StatusAlreadyRight" xml:space="preserve">
-    <value>Già a posto</value>
+    <value>Corretto</value>
   </data>
   <data name="ModLists_StatusVersionFormat" xml:space="preserve">
     <value>{0} → {1}</value>
@@ -4507,10 +4507,10 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>{0} mancanti</value>
   </data>
   <data name="ModLists_ChipDifferentVersion_one" xml:space="preserve">
-    <value>{0} versione diversa</value>
+    <value>{0} versione errata</value>
   </data>
   <data name="ModLists_ChipDifferentVersion_other" xml:space="preserve">
-    <value>{0} versioni diverse</value>
+    <value>{0} versioni errate</value>
   </data>
   <data name="ModLists_ChipHalfInstalled_one" xml:space="preserve">
     <value>{0} installato a metà</value>
@@ -4543,9 +4543,9 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>{0} fissati</value>
   </data>
   <data name="ModLists_ChipAlreadyRight_one" xml:space="preserve">
-    <value>{0} già a posto</value>
+    <value>{0} corretto</value>
   </data>
   <data name="ModLists_ChipAlreadyRight_other" xml:space="preserve">
-    <value>{0} già a posto</value>
+    <value>{0} corretti</value>
   </data>
 </root>

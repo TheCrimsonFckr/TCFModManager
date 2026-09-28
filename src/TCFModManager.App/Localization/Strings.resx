@@ -5315,7 +5315,7 @@ This was written to:
     <value>Fetch yourself</value>
   </data>
   <data name="ModLists_StatusAlreadyRight" xml:space="preserve">
-    <value>Already right</value>
+    <value>Correct</value>
   </data>
   <data name="ModLists_StatusVersionFormat" xml:space="preserve">
     <value>{0} → {1}</value>
@@ -5327,10 +5327,10 @@ This was written to:
     <value>{0} missing</value>
   </data>
   <data name="ModLists_ChipDifferentVersion_one" xml:space="preserve">
-    <value>{0} different version</value>
+    <value>{0} incorrect version</value>
   </data>
   <data name="ModLists_ChipDifferentVersion_other" xml:space="preserve">
-    <value>{0} different versions</value>
+    <value>{0} incorrect versions</value>
   </data>
   <data name="ModLists_ChipHalfInstalled_one" xml:space="preserve">
     <value>{0} half installed</value>
@@ -5363,9 +5363,9 @@ This was written to:
     <value>{0} pinned</value>
   </data>
   <data name="ModLists_ChipAlreadyRight_one" xml:space="preserve">
-    <value>{0} already right</value>
+    <value>{0} correct</value>
   </data>
   <data name="ModLists_ChipAlreadyRight_other" xml:space="preserve">
-    <value>{0} already right</value>
+    <value>{0} correct</value>
   </data>
 </root>
