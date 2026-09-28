@@ -54,9 +54,6 @@ internal static class AppTray
             _icon.TooltipText = Strings.Tray_ToolTip;
             _icon.Menu = BuildMenu();
             _icon.Register();
-
-            // Register reports failure by leaving this false rather than by throwing.
-            if (!_icon.IsRegistered) throw new InvalidOperationException("the shell refused the tray icon");
         }
         catch (Exception ex)
         {
@@ -65,6 +62,14 @@ internal static class AppTray
             // can reach it but a second launch of the exe. Better to leave the window where it was.
             //
             AppLog.Error("Tray", "couldn't put the icon in the tray - showing the window again", ex);
+            window.Show();
+            return;
+        }
+
+        // Register reports failure by leaving this false rather than by throwing. Same way out as above.
+        if (!_icon.IsRegistered)
+        {
+            AppLog.Error("Tray", "the shell refused the tray icon - showing the window again");
             window.Show();
             return;
         }

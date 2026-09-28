@@ -3225,9 +3225,6 @@ Sauvegardez votre profil avant de continuer si vous y tenez.</value>
   <data name="Options_Browse" xml:space="preserve">
     <value>Parcourir</value>
   </data>
-  <data name="Options_BrowseEllipsis" xml:space="preserve">
-    <value>Parcourir...</value>
-  </data>
   <data name="Options_BrowseHasDefault" xml:space="preserve">
     <value>Parcourir : un réglage par défaut est enregistré. Le réinitialiser prend effet au prochain démarrage de l'app.</value>
   </data>
@@ -3325,7 +3322,7 @@ Sauvegardez votre profil avant de continuer si vous y tenez.</value>
     <value>Installés : aucun réglage par défaut enregistré - la page s'ouvre en vue Cartes, sans filtre, triée par nom.</value>
   </data>
   <data name="Options_InstallFolderDescription" xml:space="preserve">
-    <value>Indiquez ici le dossier d'installation de votre serveur SPT (celui qui contient SPT.Server.exe). Une fois défini, la version de SPT installée sert à préremplir le filtre de version de la page Parcourir et à signaler les mods qui ne sont pas prévus pour elle.</value>
+    <value>Indiquez ici le dossier de jeu SPT - celui qui contient EscapeFromTarkov.exe, pas le dossier du serveur SPT qu'il contient. Une fois défini, la version de SPT installée sert à préremplir le filtre de version de la page Parcourir et à signaler les mods qui ne sont pas prévus pour elle.</value>
   </data>
   <data name="Options_InstallFolderHeader" xml:space="preserve">
     <value>Dossier d'installation SPT</value>
@@ -3350,15 +3347,6 @@ Sauvegardez votre profil avant de continuer si vous y tenez.</value>
   </data>
   <data name="Options_ModPagesDescription" xml:space="preserve">
     <value>Avant tout téléchargement, cette application vous propose d'ouvrir la page du mod - là où son auteur indique les étapes d'installation, les prérequis, les conflits connus et les avertissements. Désactivez cela si vous préférez passer directement à l'installation. Les mises à jour de l'application elle-même le demandent toujours, car c'est sur cette page que se trouvent ses notes de version.</value>
-  </data>
-  <data name="Options_ModPagesHeader" xml:space="preserve">
-    <value>Pages des mods</value>
-  </data>
-  <data name="Options_ModPagesSwitchOff" xml:space="preserve">
-    <value>Activé - ouvrir d'abord la page de chaque mod</value>
-  </data>
-  <data name="Options_ModPagesSwitchOn" xml:space="preserve">
-    <value>Désactivé - installer sans ouvrir les pages des mods</value>
   </data>
   <data name="Options_ModPagesToolTipAsking" xml:space="preserve">
     <value>La page de chaque mod s'ouvre avant tout téléchargement, pour que ses notes de version et ses instructions d'installation soient d'abord sous vos yeux.</value>
@@ -3419,12 +3407,6 @@ Sauvegardez votre profil avant de continuer si vous y tenez.</value>
   </data>
   <data name="Options_SharedKeyPlaceholder" xml:space="preserve">
     <value>Clé partagée (si le serveur en demande une)</value>
-  </data>
-  <data name="Options_SidebarOff" xml:space="preserve">
-    <value>Désactivé - masquée</value>
-  </data>
-  <data name="Options_SidebarOn" xml:space="preserve">
-    <value>Activé - affichée dans la barre latérale</value>
   </data>
   <data name="Options_SizeBy" xml:space="preserve">
     <value>x</value>
@@ -3978,9 +3960,6 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="SptLaunch_StopFailedReasonFormat" xml:space="preserve">
     <value>Impossible d'arrêter {0} : {1}. Il s'exécute peut-être sous un autre utilisateur ou en administrateur - fermer sa fenêtre à la main puis le relancer fait le même travail.</value>
   </data>
-  <data name="Options_MonitorHeader" xml:space="preserve">
-    <value>Mode surveillance</value>
-  </data>
   <data name="Options_MonitorDescription" xml:space="preserve">
     <value>Choisissez si cette application installe les mods pour vous, ou se contente de les télécharger pour que vous les installiez vous-même. La navigation, la recherche de mises à jour et les dépendances fonctionnent dans les deux cas. Quel que soit votre choix, chaque bouton d'installation a un petit bouton à côté qui fait l'inverse, pour ce seul mod.</value>
   </data>
@@ -4128,12 +4107,6 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="Options_UpdateNotificationsDescription" xml:space="preserve">
     <value>Tant que l'application est ouverte, elle interroge régulièrement The Forge sur les mods que vous avez installés et affiche une notification Windows quand l'un d'eux a une nouvelle version. Seuls vos mods installés sont concernés. Chaque version n'est annoncée qu'une fois, et les mises à jour que la page Installés affiche déjà quand vous activez cette option ne sont pas annoncées.</value>
   </data>
-  <data name="Options_UpdateNotificationsOn" xml:space="preserve">
-    <value>Me prévenir quand un mod installé a une mise à jour</value>
-  </data>
-  <data name="Options_UpdateNotificationsOff" xml:space="preserve">
-    <value>Pas de notifications de mise à jour</value>
-  </data>
   <data name="Options_UpdateIntervalHeader" xml:space="preserve">
     <value>Vérifier toutes les</value>
   </data>
@@ -4250,5 +4223,95 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   </data>
   <data name="Tray_NoticeBody" xml:space="preserve">
     <value>Il est dans la zone de notification et vérifie les mises à jour de mods. Cliquez sur son icône pour le rouvrir, ou faites un clic droit pour le quitter. Vous pouvez désactiver ce comportement dans les Options.</value>
+  </data>
+  <data name="Common_On" xml:space="preserve">
+    <value>Activé</value>
+  </data>
+  <data name="Common_Off" xml:space="preserve">
+    <value>Désactivé</value>
+  </data>
+  <data name="Options_SectionGeneral" xml:space="preserve">
+    <value>Général</value>
+  </data>
+  <data name="Options_SectionInstalling" xml:space="preserve">
+    <value>Installation des mods</value>
+  </data>
+  <data name="Options_SectionUpdates" xml:space="preserve">
+    <value>Mises à jour</value>
+  </data>
+  <data name="Options_SectionPages" xml:space="preserve">
+    <value>Pages</value>
+  </data>
+  <data name="Options_SectionMultiplayer" xml:space="preserve">
+    <value>Fika et serveurs</value>
+  </data>
+  <data name="Options_SectionAdvanced" xml:space="preserve">
+    <value>Avancé</value>
+  </data>
+  <data name="Options_InstallFolderHint" xml:space="preserve">
+    <value>Le dossier du jeu, celui qui contient EscapeFromTarkov.exe.</value>
+  </data>
+  <data name="Options_LanguageHint" xml:space="preserve">
+    <value>Les textes de l'application. Les descriptions des mods restent dans la langue de leur auteur.</value>
+  </data>
+  <data name="Options_AppearanceHint" xml:space="preserve">
+    <value>Clair, sombre, ou comme Windows.</value>
+  </data>
+  <data name="Options_WindowHint" xml:space="preserve">
+    <value>Comment la fenêtre s'ouvre. F11 active ou quitte le plein écran à tout moment.</value>
+  </data>
+  <data name="Options_InstallModeHeader" xml:space="preserve">
+    <value>Mode d'installation</value>
+  </data>
+  <data name="Options_InstallModeHint" xml:space="preserve">
+    <value>Installer les mods pour vous, ou seulement les télécharger. À côté de chaque bouton d'installation, un petit bouton fait l'inverse.</value>
+  </data>
+  <data name="Options_MonitorFolderHint" xml:space="preserve">
+    <value>L'endroit où les mods téléchargés sont enregistrés. Vide signifie votre dossier Téléchargements de Windows.</value>
+  </data>
+  <data name="Options_MonitorConfirmHint" xml:space="preserve">
+    <value>Confirmer indique à l'application quelle version vous avez installée, pour que les recherches de mises à jour restent justes.</value>
+  </data>
+  <data name="Options_ModPagesTitle" xml:space="preserve">
+    <value>Ouvrir d'abord la page de chaque mod</value>
+  </data>
+  <data name="Options_ModPagesHint" xml:space="preserve">
+    <value>Étapes d'installation, prérequis et avertissements, avant tout téléchargement.</value>
+  </data>
+  <data name="Options_UpdateNotificationsHint" xml:space="preserve">
+    <value>Une notification Windows quand un mod installé a une nouvelle version.</value>
+  </data>
+  <data name="Options_FootprintHint" xml:space="preserve">
+    <value>Jusqu'où chaque mod s'étend dans le jeu. Des fichiers sont lus - rien n'est mesuré.</value>
+  </data>
+  <data name="Options_ServerMapPageHint" xml:space="preserve">
+    <value>Comparez ce qu'un serveur fait tourner avec votre installation. Nécessite le mod Server Map sur le serveur.</value>
+  </data>
+  <data name="Options_ServerMapConnectionHeader" xml:space="preserve">
+    <value>Connexion à la carte du serveur</value>
+  </data>
+  <data name="Options_ServerMapConnectionHint" xml:space="preserve">
+    <value>L'adresse et le port de votre launcher SPT, et la clé si le serveur en a une.</value>
+  </data>
+  <data name="Options_PageDefaultsHint" xml:space="preserve">
+    <value>Défini avec « Enregistrer par défaut » sur les pages Installés et Parcourir.</value>
+  </data>
+  <data name="Options_HeadlessLauncherHint" xml:space="preserve">
+    <value>Nécessaire seulement s'il n'est pas directement dans le dossier d'installation.</value>
+  </data>
+  <data name="Options_RoleSummaryPlayer" xml:space="preserve">
+    <value>Joueur</value>
+  </data>
+  <data name="Options_RoleSummaryPlaysAndHosts" xml:space="preserve">
+    <value>Joueur et hôte headless Fika</value>
+  </data>
+  <data name="Options_RoleSummaryHeadless" xml:space="preserve">
+    <value>Headless Fika dédié</value>
+  </data>
+  <data name="Options_RoleSummaryNeither" xml:space="preserve">
+    <value>Rien de défini - traité comme un joueur</value>
+  </data>
+  <data name="Options_DataFilesHint" xml:space="preserve">
+    <value>Afficher ou modifier à la main les fichiers JSON sous Data\.</value>
   </data>
 </root>

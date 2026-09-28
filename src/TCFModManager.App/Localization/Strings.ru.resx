@@ -3405,9 +3405,6 @@
   <data name="Options_Browse" xml:space="preserve">
     <value>Обзор</value>
   </data>
-  <data name="Options_BrowseEllipsis" xml:space="preserve">
-    <value>Обзор...</value>
-  </data>
   <data name="Options_BrowseHasDefault" xml:space="preserve">
     <value>Обзор: настройки по умолчанию сохранены. Их сброс подействует при следующем запуске приложения.</value>
   </data>
@@ -3505,7 +3502,7 @@
     <value>Установленные: настройки по умолчанию не сохранены - страница открывается в виде «Карточки», без фильтров, с сортировкой по имени.</value>
   </data>
   <data name="Options_InstallFolderDescription" xml:space="preserve">
-    <value>Укажите здесь папку установки сервера SPT (ту, в которой лежит SPT.Server.exe). После этого установленная версия SPT используется как значение по умолчанию для фильтра версий на странице Обзор и для пометки модов, которые под неё не собраны.</value>
+    <value>Укажите здесь папку игры SPT - ту, в которой лежит EscapeFromTarkov.exe, а не папку сервера SPT внутри неё. После этого установленная версия SPT используется как значение по умолчанию для фильтра версий на странице Обзор и для пометки модов, которые под неё не собраны.</value>
   </data>
   <data name="Options_InstallFolderHeader" xml:space="preserve">
     <value>Папка установки SPT</value>
@@ -3530,15 +3527,6 @@
   </data>
   <data name="Options_ModPagesDescription" xml:space="preserve">
     <value>Перед любой загрузкой приложение предлагает открыть страницу мода - там автор размещает порядок установки, требования, известные конфликты и предупреждения. Отключите это, если предпочитаете сразу переходить к установке. Для обновлений самого приложения вопрос задаётся всегда, ведь на той странице находятся заметки о выпуске.</value>
-  </data>
-  <data name="Options_ModPagesHeader" xml:space="preserve">
-    <value>Страницы модов</value>
-  </data>
-  <data name="Options_ModPagesSwitchOff" xml:space="preserve">
-    <value>Вкл. - сначала открывать страницу каждого мода</value>
-  </data>
-  <data name="Options_ModPagesSwitchOn" xml:space="preserve">
-    <value>Выкл. - устанавливать, не открывая страницы модов</value>
   </data>
   <data name="Options_ModPagesToolTipAsking" xml:space="preserve">
     <value>Страница каждого мода открывается до начала загрузки, так что описание релиза и порядок установки оказываются перед вами первыми.</value>
@@ -3599,12 +3587,6 @@
   </data>
   <data name="Options_SharedKeyPlaceholder" xml:space="preserve">
     <value>Общий ключ (если сервер его требует)</value>
-  </data>
-  <data name="Options_SidebarOff" xml:space="preserve">
-    <value>Выкл. - скрыта</value>
-  </data>
-  <data name="Options_SidebarOn" xml:space="preserve">
-    <value>Вкл. - показана в боковой панели</value>
   </data>
   <data name="Options_SizeBy" xml:space="preserve">
     <value>×</value>
@@ -4188,9 +4170,6 @@
   <data name="SptLaunch_StopFailedReasonFormat" xml:space="preserve">
     <value>Не удалось остановить {0}: {1}. Возможно, он запущен от имени другого пользователя или от имени администратора - закройте его окно вручную и запустите снова, результат будет тот же.</value>
   </data>
-  <data name="Options_MonitorHeader" xml:space="preserve">
-    <value>Режим наблюдения</value>
-  </data>
   <data name="Options_MonitorDescription" xml:space="preserve">
     <value>Выберите, будет ли приложение устанавливать моды за вас или только скачивать их, чтобы вы установили их сами. Просмотр, проверка обновлений и зависимости работают в обоих случаях. Что бы вы ни выбрали, рядом с каждой кнопкой установки есть маленькая кнопка, которая делает обратное - только для этого мода.</value>
   </data>
@@ -4347,12 +4326,6 @@
   <data name="Options_UpdateNotificationsDescription" xml:space="preserve">
     <value>Пока приложение открыто, оно время от времени спрашивает The Forge об установленных у вас модах и показывает уведомление Windows, когда у одного из них выходит новая версия. Проверяются только установленные моды. О каждой версии сообщается один раз, а об обновлениях, которые страница «Установленные» уже показывает в момент включения, не сообщается.</value>
   </data>
-  <data name="Options_UpdateNotificationsOn" xml:space="preserve">
-    <value>Сообщать, когда у установленного мода есть обновление</value>
-  </data>
-  <data name="Options_UpdateNotificationsOff" xml:space="preserve">
-    <value>Без уведомлений об обновлениях</value>
-  </data>
   <data name="Options_UpdateIntervalHeader" xml:space="preserve">
     <value>Проверять каждые</value>
   </data>
@@ -4481,5 +4454,95 @@
   </data>
   <data name="Tray_NoticeBody" xml:space="preserve">
     <value>Приложение в области уведомлений и проверяет обновления модов. Щёлкните его значок, чтобы снова открыть, или щёлкните правой кнопкой, чтобы выйти. Это можно отключить в настройках.</value>
+  </data>
+  <data name="Common_On" xml:space="preserve">
+    <value>Вкл</value>
+  </data>
+  <data name="Common_Off" xml:space="preserve">
+    <value>Выкл</value>
+  </data>
+  <data name="Options_SectionGeneral" xml:space="preserve">
+    <value>Общие</value>
+  </data>
+  <data name="Options_SectionInstalling" xml:space="preserve">
+    <value>Установка модов</value>
+  </data>
+  <data name="Options_SectionUpdates" xml:space="preserve">
+    <value>Обновления</value>
+  </data>
+  <data name="Options_SectionPages" xml:space="preserve">
+    <value>Страницы</value>
+  </data>
+  <data name="Options_SectionMultiplayer" xml:space="preserve">
+    <value>Fika и серверы</value>
+  </data>
+  <data name="Options_SectionAdvanced" xml:space="preserve">
+    <value>Дополнительно</value>
+  </data>
+  <data name="Options_InstallFolderHint" xml:space="preserve">
+    <value>Папка игры, в которой лежит EscapeFromTarkov.exe.</value>
+  </data>
+  <data name="Options_LanguageHint" xml:space="preserve">
+    <value>Текст самого приложения. Описания модов остаются на языке их автора.</value>
+  </data>
+  <data name="Options_AppearanceHint" xml:space="preserve">
+    <value>Светлая, тёмная или как в Windows.</value>
+  </data>
+  <data name="Options_WindowHint" xml:space="preserve">
+    <value>Как открывается окно. F11 в любой момент включает и выключает полноэкранный режим.</value>
+  </data>
+  <data name="Options_InstallModeHeader" xml:space="preserve">
+    <value>Режим установки</value>
+  </data>
+  <data name="Options_InstallModeHint" xml:space="preserve">
+    <value>Устанавливать моды за вас или только скачивать их. Рядом с каждой кнопкой установки есть маленькая кнопка, которая делает обратное.</value>
+  </data>
+  <data name="Options_MonitorFolderHint" xml:space="preserve">
+    <value>Куда сохраняются скачанные моды. Пусто - папка «Загрузки» Windows.</value>
+  </data>
+  <data name="Options_MonitorConfirmHint" xml:space="preserve">
+    <value>Подтверждение сообщает приложению, какую версию вы установили, чтобы проверка обновлений оставалась верной.</value>
+  </data>
+  <data name="Options_ModPagesTitle" xml:space="preserve">
+    <value>Сначала открывать страницу мода</value>
+  </data>
+  <data name="Options_ModPagesHint" xml:space="preserve">
+    <value>Шаги установки, требования и предупреждения - до начала загрузки.</value>
+  </data>
+  <data name="Options_UpdateNotificationsHint" xml:space="preserve">
+    <value>Уведомление Windows, когда у установленного мода выходит новый релиз.</value>
+  </data>
+  <data name="Options_FootprintHint" xml:space="preserve">
+    <value>Насколько глубоко каждый мод затрагивает игру. Читаются файлы - ничего не измеряется.</value>
+  </data>
+  <data name="Options_ServerMapPageHint" xml:space="preserve">
+    <value>Сравнение того, что запущено на сервере, с вашей установкой. Нужен мод Server Map на сервере.</value>
+  </data>
+  <data name="Options_ServerMapConnectionHeader" xml:space="preserve">
+    <value>Подключение к карте сервера</value>
+  </data>
+  <data name="Options_ServerMapConnectionHint" xml:space="preserve">
+    <value>Адрес и порт из вашего лаунчера SPT, а также ключ, если он есть у сервера.</value>
+  </data>
+  <data name="Options_PageDefaultsHint" xml:space="preserve">
+    <value>Задаются кнопкой «Сохранить по умолчанию» на страницах Установленные и Обзор.</value>
+  </data>
+  <data name="Options_HeadlessLauncherHint" xml:space="preserve">
+    <value>Нужен, только если он лежит не прямо в папке установки.</value>
+  </data>
+  <data name="Options_RoleSummaryPlayer" xml:space="preserve">
+    <value>Игрок</value>
+  </data>
+  <data name="Options_RoleSummaryPlaysAndHosts" xml:space="preserve">
+    <value>Игрок и хост headless Fika</value>
+  </data>
+  <data name="Options_RoleSummaryHeadless" xml:space="preserve">
+    <value>Выделенный headless Fika</value>
+  </data>
+  <data name="Options_RoleSummaryNeither" xml:space="preserve">
+    <value>Ничего не задано - считается игроком</value>
+  </data>
+  <data name="Options_DataFilesHint" xml:space="preserve">
+    <value>Просмотр и ручное редактирование JSON-файлов в Data\.</value>
   </data>
 </root>

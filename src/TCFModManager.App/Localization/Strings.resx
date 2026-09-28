@@ -588,12 +588,8 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>SPT Install Folder</value>
   </data>
   <data name="Options_InstallFolderDescription" xml:space="preserve">
-    <value>Point this at your SPT server install folder (the one containing SPT.Server.exe). Once set, the installed SPT version is used to default the Browse version filter and to flag mods that aren't built for it.</value>
+    <value>Point this at your SPT game folder - the one with EscapeFromTarkov.exe in it, not the SPT server folder inside it. Once set, the installed SPT version is used to default the Browse version filter and to flag mods that aren't built for it.</value>
     <comment>SPT.Server.exe is a file name and stays as it is.</comment>
-  </data>
-  <data name="Options_BrowseEllipsis" xml:space="preserve">
-    <value>Browse...</value>
-    <comment>Button that opens a folder picker.</comment>
   </data>
   <data name="Options_MachineRoleHeader" xml:space="preserve">
     <value>What this machine is</value>
@@ -691,33 +687,14 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Clear the Browse default</value>
     <comment>Browse is the page name, as in the sidebar.</comment>
   </data>
-  <data name="Options_ModPagesHeader" xml:space="preserve">
-    <value>Mod pages</value>
-  </data>
   <data name="Options_ModPagesDescription" xml:space="preserve">
     <value>Before anything downloads, this app asks you to open the mod's page - where its author puts install steps, requirements, known conflicts and warnings. Turn that off if you would rather go straight to installing. This app's own updates always ask, since that page is where its release notes are.</value>
-  </data>
-  <data name="Options_ModPagesSwitchOn" xml:space="preserve">
-    <value>Off - install without opening mod pages</value>
-    <comment>Label on the switch when it is ON. The switch turns the asking OFF, which is why the label reads the other way round.</comment>
-  </data>
-  <data name="Options_ModPagesSwitchOff" xml:space="preserve">
-    <value>On - open each mod's page first</value>
-    <comment>Label on the same switch when it is OFF, meaning the app still asks.</comment>
   </data>
   <data name="Options_FootprintHeader" xml:space="preserve">
     <value>Mod footprint page</value>
   </data>
   <data name="Options_FootprintDescription" xml:space="preserve">
     <value>Adds a page that reads the files each installed mod ships and describes how much of the game it is positioned to touch, and where any cost would land - client or server, CPU, GPU, memory or start-up. Nothing on it is timed or measured: what a mod actually costs you depends on your hardware, your settings and the other mods you run, none of which it can see. A heavy footprint means a mod reaches a long way into the game, which is usually why you installed it - it is a place to start looking, not a verdict. Off by default.</value>
-  </data>
-  <data name="Options_SidebarOn" xml:space="preserve">
-    <value>On - shown in the sidebar</value>
-    <comment>Label on a switch that adds a page to the sidebar. Used by both the Mod footprint and Server map switches.</comment>
-  </data>
-  <data name="Options_SidebarOff" xml:space="preserve">
-    <value>Off - hidden</value>
-    <comment>The same switch, off.</comment>
   </data>
   <data name="Options_ServerMapHeader" xml:space="preserve">
     <value>Server map</value>
@@ -4756,9 +4733,6 @@ This was written to:
 {1}</value>
     <comment>{0} is the error itself, which arrives in English from .NET; {1} is the path to the log file.</comment>
   </data>
-  <data name="Options_MonitorHeader" xml:space="preserve">
-    <value>Monitor mode</value>
-  </data>
   <data name="Options_MonitorDescription" xml:space="preserve">
     <value>Choose whether this app installs mods for you, or only downloads them so you can install them yourself. Browsing, update checks and dependencies keep working either way. Whichever you pick, every install button has a small button beside it that does the other one, for that mod alone.</value>
   </data>
@@ -4932,14 +4906,6 @@ This was written to:
   <data name="Options_UpdateNotificationsDescription" xml:space="preserve">
     <value>While the app is open, it asks The Forge every so often about the mods you have installed, and shows a Windows notification when one of them has a new release. Only your installed mods are asked about. Each release is announced once, and the updates the Installed page already shows when you switch this on are not announced.</value>
   </data>
-  <data name="Options_UpdateNotificationsOn" xml:space="preserve">
-    <value>Notify me when an installed mod has an update</value>
-    <comment>Label on the switch when it is ON.</comment>
-  </data>
-  <data name="Options_UpdateNotificationsOff" xml:space="preserve">
-    <value>No update notifications</value>
-    <comment>Label on the same switch when it is OFF.</comment>
-  </data>
   <data name="Options_UpdateIntervalHeader" xml:space="preserve">
     <value>Check every</value>
     <comment>Heading above the dropdown of how often to check: 30 minutes, 1 hour and so on.</comment>
@@ -5077,5 +5043,95 @@ This was written to:
   </data>
   <data name="Tray_NoticeBody" xml:space="preserve">
     <value>It's in the tray, checking for mod updates. Click its icon to open it again, or right-click it to quit. You can turn this off in Options.</value>
+  </data>
+  <data name="Common_On" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="Common_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Options_SectionGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Options_SectionInstalling" xml:space="preserve">
+    <value>Installing mods</value>
+  </data>
+  <data name="Options_SectionUpdates" xml:space="preserve">
+    <value>Updates</value>
+  </data>
+  <data name="Options_SectionPages" xml:space="preserve">
+    <value>Pages</value>
+  </data>
+  <data name="Options_SectionMultiplayer" xml:space="preserve">
+    <value>Fika and servers</value>
+  </data>
+  <data name="Options_SectionAdvanced" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="Options_InstallFolderHint" xml:space="preserve">
+    <value>The game folder, with EscapeFromTarkov.exe in it.</value>
+  </data>
+  <data name="Options_LanguageHint" xml:space="preserve">
+    <value>The app's own text. Mod descriptions stay in their author's language.</value>
+  </data>
+  <data name="Options_AppearanceHint" xml:space="preserve">
+    <value>Light, dark, or follow Windows.</value>
+  </data>
+  <data name="Options_WindowHint" xml:space="preserve">
+    <value>How the window opens. F11 switches full screen on and off at any time.</value>
+  </data>
+  <data name="Options_InstallModeHeader" xml:space="preserve">
+    <value>Install mode</value>
+  </data>
+  <data name="Options_InstallModeHint" xml:space="preserve">
+    <value>Install mods for you, or only download them. Every install button has a small button beside it that does the other.</value>
+  </data>
+  <data name="Options_MonitorFolderHint" xml:space="preserve">
+    <value>Where downloaded mods are saved. Empty means your Windows Downloads folder.</value>
+  </data>
+  <data name="Options_MonitorConfirmHint" xml:space="preserve">
+    <value>Confirming tells the app which version you installed, so update checks stay right.</value>
+  </data>
+  <data name="Options_ModPagesTitle" xml:space="preserve">
+    <value>Open each mod's page first</value>
+  </data>
+  <data name="Options_ModPagesHint" xml:space="preserve">
+    <value>Install steps, requirements and warnings, before anything downloads.</value>
+  </data>
+  <data name="Options_UpdateNotificationsHint" xml:space="preserve">
+    <value>A Windows notification when an installed mod has a new release.</value>
+  </data>
+  <data name="Options_FootprintHint" xml:space="preserve">
+    <value>How far each mod reaches into the game. It reads files - nothing is measured.</value>
+  </data>
+  <data name="Options_ServerMapPageHint" xml:space="preserve">
+    <value>Compare what a server runs with your install. Needs the Server Map mod on the server.</value>
+  </data>
+  <data name="Options_ServerMapConnectionHeader" xml:space="preserve">
+    <value>Server map connection</value>
+  </data>
+  <data name="Options_ServerMapConnectionHint" xml:space="preserve">
+    <value>The address and port from your SPT launcher, and the key if the server has one.</value>
+  </data>
+  <data name="Options_PageDefaultsHint" xml:space="preserve">
+    <value>Set with Save as default on the Installed and Browse pages.</value>
+  </data>
+  <data name="Options_HeadlessLauncherHint" xml:space="preserve">
+    <value>Only needed if it isn't at the top of the install folder.</value>
+  </data>
+  <data name="Options_RoleSummaryPlayer" xml:space="preserve">
+    <value>Player</value>
+  </data>
+  <data name="Options_RoleSummaryPlaysAndHosts" xml:space="preserve">
+    <value>Player and Fika headless host</value>
+  </data>
+  <data name="Options_RoleSummaryHeadless" xml:space="preserve">
+    <value>Dedicated Fika headless</value>
+  </data>
+  <data name="Options_RoleSummaryNeither" xml:space="preserve">
+    <value>Nothing set - treated as a player</value>
+  </data>
+  <data name="Options_DataFilesHint" xml:space="preserve">
+    <value>View or hand-edit the JSON files under Data\.</value>
   </data>
 </root>

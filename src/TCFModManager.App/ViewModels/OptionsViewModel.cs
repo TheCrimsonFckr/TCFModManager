@@ -227,6 +227,10 @@ public partial class OptionsViewModel : LocalizedViewModel
     [ObservableProperty]
     private string _installRoleDescription = string.Empty;
 
+    // The same answer in a few words, for the collapsed row.
+    [ObservableProperty]
+    private string _installRoleSummary = string.Empty;
+
     //
     // The Server Map section binds straight to the shared connection rather than mirroring it into
     // properties here. It is not a stored setting the way the two switches above are: connecting is
@@ -693,6 +697,15 @@ public partial class OptionsViewModel : LocalizedViewModel
         RefreshInstallRoleDescription();
     }
 
+    // The two role lines and the page-default lines are stored strings, so a language change has to
+    // compose them again rather than just re-raise them.
+    protected internal override void RefreshText()
+    {
+        RefreshInstallRoleDescription();
+        RefreshPageDefaultDescriptions(_settings.Load());
+        base.RefreshText();
+    }
+
     private void RefreshInstallRoleDescription()
     {
         InstallRoleDescription = (PlaysHere, RunsHeadlessClient) switch
@@ -701,6 +714,14 @@ public partial class OptionsViewModel : LocalizedViewModel
             (true, true) => Strings.Options_RolePlaysAndHosts,
             (false, false) => Strings.Options_RoleNeither,
             _ => Strings.Options_RolePlayer,
+        };
+
+        InstallRoleSummary = (PlaysHere, RunsHeadlessClient) switch
+        {
+            (false, true) => Strings.Options_RoleSummaryHeadless,
+            (true, true) => Strings.Options_RoleSummaryPlaysAndHosts,
+            (false, false) => Strings.Options_RoleSummaryNeither,
+            _ => Strings.Options_RoleSummaryPlayer,
         };
     }
 

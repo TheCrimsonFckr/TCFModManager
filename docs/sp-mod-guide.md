@@ -482,7 +482,6 @@ Info level by default, rotated daily as `tcfmm-<yyyyMMdd>.log`. To get Debug-lev
 
 
 ### Limitations
-Worth knowing before you rely on it. None of these lose data quietly - they're places where the app either won't help or will tell you it can't.
 
 #### What it can and can't see
 - **Mods nested a folder deeper** - `BepInEx\plugins\Author\ModName\mod.dll` rather than `BepInEx\plugins\ModName\mod.dll` - are listed under the outer folder's name with an unknown version.
