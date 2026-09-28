@@ -5269,15 +5269,6 @@ This was written to:
   <data name="Common_ReviewAndInstallToolTip" xml:space="preserve">
     <value>Opens Mod lists with the server's list selected and its Preview already worked out. Nothing is installed until you press Apply there.</value>
   </data>
-  <data name="ModLists_MissingHereFormat" xml:space="preserve">
-    <value>Missing on this machine: {0}.</value>
-  </data>
-  <data name="ModLists_MissingInstalledFrom_one" xml:space="preserve">
-    <value>Apply installs it from sp-mod.com.</value>
-  </data>
-  <data name="ModLists_MissingInstalledFrom_other" xml:space="preserve">
-    <value>Apply installs them from sp-mod.com.</value>
-  </data>
   <data name="ModLists_ApplyInstall_one" xml:space="preserve">
     <value>Install 1 mod</value>
   </data>
@@ -5298,5 +5289,83 @@ This was written to:
   </data>
   <data name="ModLists_ApplyInstallUpdateFormat" xml:space="preserve">
     <value>Install {0}, update {1}</value>
+  </data>
+  <data name="ModLists_ChangeVersionPairFormat" xml:space="preserve">
+    <value>{0} ({1} → {2})</value>
+  </data>
+  <data name="ModLists_StatusMissing" xml:space="preserve">
+    <value>Missing</value>
+  </data>
+  <data name="ModLists_StatusHalfInstalled" xml:space="preserve">
+    <value>Half installed</value>
+  </data>
+  <data name="ModLists_StatusDisabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="ModLists_StatusDisabledMovingFormat" xml:space="preserve">
+    <value>Disabled · {0}</value>
+  </data>
+  <data name="ModLists_StatusWillDisable" xml:space="preserve">
+    <value>Will be disabled</value>
+  </data>
+  <data name="ModLists_StatusPinned" xml:space="preserve">
+    <value>Pinned</value>
+  </data>
+  <data name="ModLists_StatusGetByHand" xml:space="preserve">
+    <value>Fetch yourself</value>
+  </data>
+  <data name="ModLists_StatusAlreadyRight" xml:space="preserve">
+    <value>Already right</value>
+  </data>
+  <data name="ModLists_StatusVersionFormat" xml:space="preserve">
+    <value>{0} → {1}</value>
+  </data>
+  <data name="ModLists_ChipMissing_one" xml:space="preserve">
+    <value>{0} missing</value>
+  </data>
+  <data name="ModLists_ChipMissing_other" xml:space="preserve">
+    <value>{0} missing</value>
+  </data>
+  <data name="ModLists_ChipDifferentVersion_one" xml:space="preserve">
+    <value>{0} different version</value>
+  </data>
+  <data name="ModLists_ChipDifferentVersion_other" xml:space="preserve">
+    <value>{0} different versions</value>
+  </data>
+  <data name="ModLists_ChipHalfInstalled_one" xml:space="preserve">
+    <value>{0} half installed</value>
+  </data>
+  <data name="ModLists_ChipHalfInstalled_other" xml:space="preserve">
+    <value>{0} half installed</value>
+  </data>
+  <data name="ModLists_ChipDisabled_one" xml:space="preserve">
+    <value>{0} disabled</value>
+  </data>
+  <data name="ModLists_ChipDisabled_other" xml:space="preserve">
+    <value>{0} disabled</value>
+  </data>
+  <data name="ModLists_ChipGetByHand_one" xml:space="preserve">
+    <value>{0} to fetch yourself</value>
+  </data>
+  <data name="ModLists_ChipGetByHand_other" xml:space="preserve">
+    <value>{0} to fetch yourself</value>
+  </data>
+  <data name="ModLists_ChipWillDisable_one" xml:space="preserve">
+    <value>{0} to disable</value>
+  </data>
+  <data name="ModLists_ChipWillDisable_other" xml:space="preserve">
+    <value>{0} to disable</value>
+  </data>
+  <data name="ModLists_ChipPinned_one" xml:space="preserve">
+    <value>{0} pinned</value>
+  </data>
+  <data name="ModLists_ChipPinned_other" xml:space="preserve">
+    <value>{0} pinned</value>
+  </data>
+  <data name="ModLists_ChipAlreadyRight_one" xml:space="preserve">
+    <value>{0} already right</value>
+  </data>
+  <data name="ModLists_ChipAlreadyRight_other" xml:space="preserve">
+    <value>{0} already right</value>
   </data>
 </root>

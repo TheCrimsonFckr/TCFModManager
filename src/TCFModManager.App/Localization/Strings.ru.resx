@@ -4704,18 +4704,6 @@
   <data name="Common_ReviewAndInstallToolTip" xml:space="preserve">
     <value>Открывает «Списки модов» с выбранным списком сервера и уже готовым предпросмотром. Ничего не устанавливается, пока вы не нажмёте «Применить».</value>
   </data>
-  <data name="ModLists_MissingHereFormat" xml:space="preserve">
-    <value>Нет на этой машине: {0}.</value>
-  </data>
-  <data name="ModLists_MissingInstalledFrom_one" xml:space="preserve">
-    <value>«Применить» установит его с sp-mod.com.</value>
-  </data>
-  <data name="ModLists_MissingInstalledFrom_few" xml:space="preserve">
-    <value>«Применить» установит их с sp-mod.com.</value>
-  </data>
-  <data name="ModLists_MissingInstalledFrom_many" xml:space="preserve">
-    <value>«Применить» установит их с sp-mod.com.</value>
-  </data>
   <data name="ModLists_ApplyInstall_one" xml:space="preserve">
     <value>Установить {0} мод</value>
   </data>
@@ -4745,5 +4733,107 @@
   </data>
   <data name="ModLists_ApplyInstallUpdateFormat" xml:space="preserve">
     <value>Установить {0}, обновить {1}</value>
+  </data>
+  <data name="ModLists_ChangeVersionPairFormat" xml:space="preserve">
+    <value>{0} ({1} → {2})</value>
+  </data>
+  <data name="ModLists_StatusMissing" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="ModLists_StatusHalfInstalled" xml:space="preserve">
+    <value>Установлен не полностью</value>
+  </data>
+  <data name="ModLists_StatusDisabled" xml:space="preserve">
+    <value>Отключён</value>
+  </data>
+  <data name="ModLists_StatusDisabledMovingFormat" xml:space="preserve">
+    <value>Отключён · {0}</value>
+  </data>
+  <data name="ModLists_StatusWillDisable" xml:space="preserve">
+    <value>Будет отключён</value>
+  </data>
+  <data name="ModLists_StatusPinned" xml:space="preserve">
+    <value>Закреплён</value>
+  </data>
+  <data name="ModLists_StatusGetByHand" xml:space="preserve">
+    <value>Скачать вручную</value>
+  </data>
+  <data name="ModLists_StatusAlreadyRight" xml:space="preserve">
+    <value>Уже в порядке</value>
+  </data>
+  <data name="ModLists_StatusVersionFormat" xml:space="preserve">
+    <value>{0} → {1}</value>
+  </data>
+  <data name="ModLists_ChipMissing_one" xml:space="preserve">
+    <value>{0} отсутствует</value>
+  </data>
+  <data name="ModLists_ChipMissing_few" xml:space="preserve">
+    <value>{0} отсутствуют</value>
+  </data>
+  <data name="ModLists_ChipMissing_many" xml:space="preserve">
+    <value>{0} отсутствуют</value>
+  </data>
+  <data name="ModLists_ChipDifferentVersion_one" xml:space="preserve">
+    <value>{0} другая версия</value>
+  </data>
+  <data name="ModLists_ChipDifferentVersion_few" xml:space="preserve">
+    <value>{0} другие версии</value>
+  </data>
+  <data name="ModLists_ChipDifferentVersion_many" xml:space="preserve">
+    <value>{0} других версий</value>
+  </data>
+  <data name="ModLists_ChipHalfInstalled_one" xml:space="preserve">
+    <value>{0} установлен не полностью</value>
+  </data>
+  <data name="ModLists_ChipHalfInstalled_few" xml:space="preserve">
+    <value>{0} установлены не полностью</value>
+  </data>
+  <data name="ModLists_ChipHalfInstalled_many" xml:space="preserve">
+    <value>{0} установлены не полностью</value>
+  </data>
+  <data name="ModLists_ChipDisabled_one" xml:space="preserve">
+    <value>{0} отключён</value>
+  </data>
+  <data name="ModLists_ChipDisabled_few" xml:space="preserve">
+    <value>{0} отключены</value>
+  </data>
+  <data name="ModLists_ChipDisabled_many" xml:space="preserve">
+    <value>{0} отключены</value>
+  </data>
+  <data name="ModLists_ChipGetByHand_one" xml:space="preserve">
+    <value>{0} скачать вручную</value>
+  </data>
+  <data name="ModLists_ChipGetByHand_few" xml:space="preserve">
+    <value>{0} скачать вручную</value>
+  </data>
+  <data name="ModLists_ChipGetByHand_many" xml:space="preserve">
+    <value>{0} скачать вручную</value>
+  </data>
+  <data name="ModLists_ChipWillDisable_one" xml:space="preserve">
+    <value>{0} будет отключён</value>
+  </data>
+  <data name="ModLists_ChipWillDisable_few" xml:space="preserve">
+    <value>{0} будут отключены</value>
+  </data>
+  <data name="ModLists_ChipWillDisable_many" xml:space="preserve">
+    <value>{0} будут отключены</value>
+  </data>
+  <data name="ModLists_ChipPinned_one" xml:space="preserve">
+    <value>{0} закреплён</value>
+  </data>
+  <data name="ModLists_ChipPinned_few" xml:space="preserve">
+    <value>{0} закреплено</value>
+  </data>
+  <data name="ModLists_ChipPinned_many" xml:space="preserve">
+    <value>{0} закреплено</value>
+  </data>
+  <data name="ModLists_ChipAlreadyRight_one" xml:space="preserve">
+    <value>{0} уже в порядке</value>
+  </data>
+  <data name="ModLists_ChipAlreadyRight_few" xml:space="preserve">
+    <value>{0} уже в порядке</value>
+  </data>
+  <data name="ModLists_ChipAlreadyRight_many" xml:space="preserve">
+    <value>{0} уже в порядке</value>
   </data>
 </root>

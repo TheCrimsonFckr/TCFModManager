@@ -4449,15 +4449,6 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Common_ReviewAndInstallToolTip" xml:space="preserve">
     <value>Apre Liste mod con la lista del server selezionata e la sua Anteprima già pronta. Non viene installato nulla finché non premi Applica.</value>
   </data>
-  <data name="ModLists_MissingHereFormat" xml:space="preserve">
-    <value>Mancante su questa macchina: {0}.</value>
-  </data>
-  <data name="ModLists_MissingInstalledFrom_one" xml:space="preserve">
-    <value>Applica lo installa da sp-mod.com.</value>
-  </data>
-  <data name="ModLists_MissingInstalledFrom_other" xml:space="preserve">
-    <value>Applica li installa da sp-mod.com.</value>
-  </data>
   <data name="ModLists_ApplyInstall_one" xml:space="preserve">
     <value>Installa un mod</value>
   </data>
@@ -4478,5 +4469,83 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   </data>
   <data name="ModLists_ApplyInstallUpdateFormat" xml:space="preserve">
     <value>Installa {0}, aggiorna {1}</value>
+  </data>
+  <data name="ModLists_ChangeVersionPairFormat" xml:space="preserve">
+    <value>{0} ({1} → {2})</value>
+  </data>
+  <data name="ModLists_StatusMissing" xml:space="preserve">
+    <value>Mancante</value>
+  </data>
+  <data name="ModLists_StatusHalfInstalled" xml:space="preserve">
+    <value>Installato a metà</value>
+  </data>
+  <data name="ModLists_StatusDisabled" xml:space="preserve">
+    <value>Disattivato</value>
+  </data>
+  <data name="ModLists_StatusDisabledMovingFormat" xml:space="preserve">
+    <value>Disattivato · {0}</value>
+  </data>
+  <data name="ModLists_StatusWillDisable" xml:space="preserve">
+    <value>Verrà disattivato</value>
+  </data>
+  <data name="ModLists_StatusPinned" xml:space="preserve">
+    <value>Fissato</value>
+  </data>
+  <data name="ModLists_StatusGetByHand" xml:space="preserve">
+    <value>Scarica tu</value>
+  </data>
+  <data name="ModLists_StatusAlreadyRight" xml:space="preserve">
+    <value>Già a posto</value>
+  </data>
+  <data name="ModLists_StatusVersionFormat" xml:space="preserve">
+    <value>{0} → {1}</value>
+  </data>
+  <data name="ModLists_ChipMissing_one" xml:space="preserve">
+    <value>{0} mancante</value>
+  </data>
+  <data name="ModLists_ChipMissing_other" xml:space="preserve">
+    <value>{0} mancanti</value>
+  </data>
+  <data name="ModLists_ChipDifferentVersion_one" xml:space="preserve">
+    <value>{0} versione diversa</value>
+  </data>
+  <data name="ModLists_ChipDifferentVersion_other" xml:space="preserve">
+    <value>{0} versioni diverse</value>
+  </data>
+  <data name="ModLists_ChipHalfInstalled_one" xml:space="preserve">
+    <value>{0} installato a metà</value>
+  </data>
+  <data name="ModLists_ChipHalfInstalled_other" xml:space="preserve">
+    <value>{0} installati a metà</value>
+  </data>
+  <data name="ModLists_ChipDisabled_one" xml:space="preserve">
+    <value>{0} disattivato</value>
+  </data>
+  <data name="ModLists_ChipDisabled_other" xml:space="preserve">
+    <value>{0} disattivati</value>
+  </data>
+  <data name="ModLists_ChipGetByHand_one" xml:space="preserve">
+    <value>{0} da scaricare tu</value>
+  </data>
+  <data name="ModLists_ChipGetByHand_other" xml:space="preserve">
+    <value>{0} da scaricare tu</value>
+  </data>
+  <data name="ModLists_ChipWillDisable_one" xml:space="preserve">
+    <value>{0} da disattivare</value>
+  </data>
+  <data name="ModLists_ChipWillDisable_other" xml:space="preserve">
+    <value>{0} da disattivare</value>
+  </data>
+  <data name="ModLists_ChipPinned_one" xml:space="preserve">
+    <value>{0} fissato</value>
+  </data>
+  <data name="ModLists_ChipPinned_other" xml:space="preserve">
+    <value>{0} fissati</value>
+  </data>
+  <data name="ModLists_ChipAlreadyRight_one" xml:space="preserve">
+    <value>{0} già a posto</value>
+  </data>
+  <data name="ModLists_ChipAlreadyRight_other" xml:space="preserve">
+    <value>{0} già a posto</value>
   </data>
 </root>

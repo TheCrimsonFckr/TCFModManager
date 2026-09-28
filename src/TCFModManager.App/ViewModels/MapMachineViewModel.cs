@@ -152,7 +152,7 @@ public sealed class MapMachineViewModel : LocalizedViewModel
     public string ModsHeader => Strings.ServerMap_InstalledCount(Mods.Count, Mods.Count);
 
     private static string Names(IEnumerable<ModListAction> actions) =>
-        string.Join(Strings.Common_ListSeparator, actions.Select(a => a.Name).Order(StringComparer.OrdinalIgnoreCase));
+        string.Join(Strings.Common_ListSeparator, actions.Select(ModListActionWording.Named).Order(StringComparer.OrdinalIgnoreCase));
 
     private static string ModDetail(ReportedMod mod)
     {

@@ -22,6 +22,47 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
 
         <!--
+            A preview's colours: the summary chips and each plan row's status badge. Red for what is
+            missing here, amber for what is here but not as the list has it, green for what is
+            already right, grey for the rest. The same system fill brushes the shared StatusIcon
+            style uses, so a preview reads in the colours the rest of the app does.
+        -->
+        <Style x:Key="ToneBadge" TargetType="Border">
+            <Setter Property="Padding" Value="8,3" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Tone}" Value="Good">
+                    <Setter Property="Background" Value="{DynamicResource SystemFillColorSuccessBackgroundBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Tone}" Value="Warn">
+                    <Setter Property="Background" Value="{DynamicResource SystemFillColorCautionBackgroundBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Tone}" Value="Bad">
+                    <Setter Property="Background" Value="{DynamicResource SystemFillColorCriticalBackgroundBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ToneBadgeText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Tone}" Value="Good">
+                    <Setter Property="Foreground" Value="{DynamicResource SystemFillColorSuccessBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Tone}" Value="Warn">
+                    <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Tone}" Value="Bad">
+                    <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!--
             The container contributes nothing - no padding, margin, fill or chrome - so the row
             Border inside the template draws the whole thing.
         -->
@@ -468,15 +509,6 @@
                     IsOpen="{Binding HasVersionWarning, Mode=OneWay}"
                     Message="{Binding VersionWarning}" />
 
-                <!-- The mods this machine does not have, by name - the one thing in a preview that
-                     must not be read past. -->
-                <ui:InfoBar
-                    Margin="0,16,0,0"
-                    Severity="Warning"
-                    IsClosable="False"
-                    IsOpen="{Binding HasMissingNotice, Mode=OneWay}"
-                    Message="{Binding MissingNotice}" />
-
                 <!-- Monitor mode: this apply downloads its installs and updates for the user to
                      install, and says so before anything runs. -->
                 <ui:InfoBar
@@ -487,14 +519,27 @@
                     Message="{Binding DownloadOnlyNotice}" />
             </StackPanel>
 
-            <TextBlock
+            <!-- The plan at a glance: one coloured count per kind of change, in the colours the
+                 rows below carry. -->
+            <ItemsControl
                 Grid.Row="3"
-                TextWrapping="Wrap"
-                FontWeight="SemiBold"
-                Margin="2,20,0,10"
-                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                Visibility="{Binding HasPlan, Converter={StaticResource BoolToVis}}"
-                Text="{Binding PlanSummary}" />
+                Margin="0,16,0,6"
+                ItemsSource="{Binding PlanChips}"
+                ToolTip="{Binding PlanSummary}"
+                Visibility="{Binding HasPlan, Converter={StaticResource BoolToVis}}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource ToneBadge}" Margin="0,0,8,6" Padding="10,4">
+                            <TextBlock Style="{StaticResource ToneBadgeText}" FontSize="12" Text="{Binding Text}" />
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
             <!--
                 What the list names, and where mods are added to it or taken off it.
@@ -779,33 +824,50 @@
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Border Style="{StaticResource HoverRow}" Padding="10,7">
+                            <!-- Laid out as the contents rows are, so previewing a list shows the
+                                 same list - with where this machine stands against each entry. -->
+                            <Border Style="{StaticResource HoverRow}" Padding="10,8">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="140" />
                                     <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock
-                                    Grid.Column="0"
-                                    FontWeight="SemiBold"
-                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                    Text="{Binding Kind}" />
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,12,0">
+                                    <TextBlock
+                                        TextWrapping="Wrap"
+                                        FontWeight="SemiBold"
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                        Text="{Binding Name}" />
+                                    <TextBlock
+                                        TextWrapping="Wrap"
+                                        FontSize="12"
+                                        Margin="0,3,0,0"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                        Text="{Binding EntryDetail}" />
+                                </StackPanel>
 
-                                <TextBlock
+                                <Border
                                     Grid.Column="1"
-                                    TextWrapping="Wrap"
-                                    Margin="12,0,16,0"
-                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                    Text="{Binding Name}" />
-
-                                <TextBlock
-                                    Grid.Column="2"
                                     VerticalAlignment="Center"
-                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                    Text="{Binding Detail}" />
+                                    Margin="0,0,8,0"
+                                    Padding="8,3"
+                                    CornerRadius="4"
+                                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                    Visibility="{Binding HasScope, Converter={StaticResource BoolToVis}}">
+                                    <TextBlock
+                                        FontSize="11"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding ScopeLabel}" />
+                                </Border>
+
+                                <!-- Where this machine stands: Missing, 3.0.0 → 3.1.2, Disabled,
+                                     Already right. The action it leads to is the tooltip. -->
+                                <Border Grid.Column="2" Style="{StaticResource ToneBadge}" ToolTip="{Binding Kind}">
+                                    <TextBlock Style="{StaticResource ToneBadgeText}" Text="{Binding Status}" />
+                                </Border>
 
                                 <ui:Button
                                     Grid.Column="3"

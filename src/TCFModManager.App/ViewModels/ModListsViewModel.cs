@@ -97,13 +97,31 @@ public sealed partial class ModListRowViewModel(
     }
 }
 
-// One line of a plan, as the diff shows it.
-public sealed record ModListActionRowViewModel(string Kind, string Name, string Detail, int Order, ModListAction Action)
+//
+// One line of a plan, laid out like a line of the list's contents - title, what the list records
+// about it, its scope - with a coloured badge saying where this machine stands against the entry.
+// Tone picks the badge colour: Good (green), Warn (amber), Bad (red), Neutral (grey).
+//
+public sealed record ModListActionRowViewModel(
+    string Kind,
+    string Name,
+    string Detail,
+    int Order,
+    ModListAction Action,
+    string EntryDetail,
+    string? ScopeLabel,
+    string Status,
+    string Tone)
 {
+    public bool HasScope => ScopeLabel is not null;
+
     public bool CanPin => Action is { Kind: ModListActionKind.Disable, Installed: not null };
 
     public bool CanUnpin => Action is { Kind: ModListActionKind.Pinned, Installed: not null };
 }
+
+// One coloured count at the top of a preview: "1 missing", "72 already right".
+public sealed record PlanChip(string Text, string Tone);
 
 // One mod on the selected list, as the contents panel shows it.
 public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, string Detail, bool IsPinnedHere = false)
@@ -406,26 +424,12 @@ public partial class ModListsViewModel : LocalizedViewModel
     public bool HasDownloadOnlyNotice => DownloadOnlyNotice is not null;
 
     //
-    // The mods the previewed list names that this machine does not have, by name. A summary line of
-    // counts at the top of seventy rows is easy to read past; a missing mod about to be installed is
-    // the one thing in a preview somebody must not miss.
+    // The plan at a glance, as coloured counts in the shared status colours: red for what is missing
+    // here, amber for what is here but not as the list has it, green for what is already right, grey
+    // for what needs a person or is left alone. Each row below carries the same colour, so the chip
+    // and the rows it counts are one thing.
     //
-    public bool HasMissingNotice => _preview?.Plan.Install.Any() == true;
-
-    public string MissingNotice
-    {
-        get
-        {
-            if (_preview is not { } preview || !preview.Plan.Install.Any()) return "";
-
-            var names = preview.Plan.Install.Select(a => a.Name).Order(StringComparer.OrdinalIgnoreCase).ToList();
-            var line = Text(Strings.ModLists_MissingHereFormat, string.Join(Strings.Common_ListSeparator, names));
-
-            return ModListDownloadMode.For(preview.List).DownloadOnly
-                ? line
-                : line + " " + Strings.ModLists_MissingInstalledFrom(names.Count);
-        }
-    }
+    public ObservableCollection<PlanChip> PlanChips { get; } = [];
 
     //
     // What Apply will do, on the button itself: "Install 1 mod", "Install 2, update 1", or in
@@ -453,12 +457,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         }
     }
 
-    private void NotifyPlanWording()
-    {
-        OnPropertyChanged(nameof(ApplyLabel));
-        OnPropertyChanged(nameof(HasMissingNotice));
-        OnPropertyChanged(nameof(MissingNotice));
-    }
+    private void NotifyPlanWording() => OnPropertyChanged(nameof(ApplyLabel));
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanRevert))]
@@ -769,6 +768,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     {
         _preview = null;
         PlanRows.Clear();
+        PlanChips.Clear();
         PlanSummary = null;
         VersionWarning = null;
         DownloadOnlyNotice = null;
@@ -877,6 +877,9 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         var plan = preview.Plan;
 
+        PlanChips.Clear();
+        foreach (var chip in Chips(plan)) PlanChips.Add(chip);
+
         var counts = new List<string>();
         void Count(int n, string format) { if (n > 0) counts.Add(Text(format, n)); }
 
@@ -911,11 +914,90 @@ public partial class ModListsViewModel : LocalizedViewModel
             : Text(Strings.ModLists_PreviewedFormat, preview.List.Name);
     }
 
-    private static IEnumerable<ModListActionRowViewModel> Rows(ModListPlan plan) =>
-        plan.Actions
-            .Select(a => new ModListActionRowViewModel(Label(a), a.Name, Detail(a), Order(a.Kind), a))
+    private IEnumerable<ModListActionRowViewModel> Rows(ModListPlan plan)
+    {
+        _titles = CatalogTitles();
+
+        return plan.Actions
+            .Select(PlanRow)
             .OrderBy(r => r.Order)
             .ThenBy(r => r.Name, StringComparer.OrdinalIgnoreCase);
+    }
+
+    //
+    // A row with an entry reads exactly as that entry does in the contents view. A row without one -
+    // a mod installed here that the list does not name, about to be disabled or held by a pin - is
+    // described from what is installed, in the same shape.
+    //
+    private ModListActionRowViewModel PlanRow(ModListAction action)
+    {
+        var entry = action.Entry ?? (action.Installed is { } installed
+            ? new ModListEntry
+            {
+                Name = installed.Name,
+                ModId = installed.ModId,
+                IsAddon = installed.IsAddon,
+                Version = installed.Version,
+                Folders = [.. installed.Folders],
+            }
+            : null);
+
+        var name = entry?.ModId is { } id && _titles.TryGetValue((id, entry.IsAddon), out var title)
+            ? title
+            : action.Name;
+
+        var (status, tone) = StatusOf(action);
+
+        return new ModListActionRowViewModel(
+            Label(action),
+            name,
+            Detail(action),
+            Order(action.Kind),
+            action,
+            entry is null ? string.Empty : EntryDetail(entry, name),
+            action.Entry is { } listed ? ModListScopes.Label(listed.EffectiveScope) : null,
+            status,
+            tone);
+    }
+
+    private static (string Status, string Tone) StatusOf(ModListAction action) => action.Kind switch
+    {
+        ModListActionKind.Install => (Strings.ModLists_StatusMissing, "Bad"),
+        ModListActionKind.Update when action.IsRepair => (Strings.ModLists_StatusHalfInstalled, "Warn"),
+        ModListActionKind.Update => (VersionMove(action), "Warn"),
+        ModListActionKind.Enable when action.NeedsUpdateAfterEnable && !action.IsRepair =>
+            (Text(Strings.ModLists_StatusDisabledMovingFormat, VersionMove(action)), "Warn"),
+        ModListActionKind.Enable => (Strings.ModLists_StatusDisabled, "Warn"),
+        ModListActionKind.Disable => (Strings.ModLists_StatusWillDisable, "Neutral"),
+        ModListActionKind.Pinned => (Strings.ModLists_StatusPinned, "Neutral"),
+        ModListActionKind.Manual => (Strings.ModLists_StatusGetByHand, "Neutral"),
+        _ => (Strings.ModLists_StatusAlreadyRight, "Good"),
+    };
+
+    // "3.0.0 → 3.1.2": the version installed here, then the one the list asks for.
+    private static string VersionMove(ModListAction action) =>
+        Text(Strings.ModLists_StatusVersionFormat,
+            action.InstalledVersion ?? Strings.Common_Unknown,
+            action.TargetVersion ?? Strings.ModLists_ActionNewestPublished);
+
+    private static IEnumerable<PlanChip> Chips(ModListPlan plan)
+    {
+        var repairs = plan.Update.Count(a => a.IsRepair);
+
+        (int Count, Func<int, string> Text, string Tone)[] chips =
+        [
+            (plan.Install.Count(), n => Strings.ModLists_ChipMissing(n), "Bad"),
+            (plan.Update.Count() - repairs, n => Strings.ModLists_ChipDifferentVersion(n), "Warn"),
+            (repairs, n => Strings.ModLists_ChipHalfInstalled(n), "Warn"),
+            (plan.Enable.Count(), n => Strings.ModLists_ChipDisabled(n), "Warn"),
+            (plan.Manual.Count(), n => Strings.ModLists_ChipGetByHand(n), "Neutral"),
+            (plan.Disable.Count(), n => Strings.ModLists_ChipWillDisable(n), "Neutral"),
+            (plan.Pinned.Count(), n => Strings.ModLists_ChipPinned(n), "Neutral"),
+            (plan.Keep.Count(), n => Strings.ModLists_ChipAlreadyRight(n), "Good"),
+        ];
+
+        return chips.Where(c => c.Count > 0).Select(c => new PlanChip(c.Text(c.Count), c.Tone));
+    }
 
     private static string Label(ModListAction action) => action.Kind switch
     {

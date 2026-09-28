@@ -249,6 +249,6 @@ public sealed partial class PreLaunchCheckViewModel : LocalizedViewModel
         // names are, and they are what someone checks against what the server is actually running.
         Outstanding = string.Join(
             Strings.Common_ListSeparator,
-            behind.Concat(manual).Select(a => a.Name).Order(StringComparer.OrdinalIgnoreCase));
+            behind.Concat(manual).Select(ModListActionWording.Named).Order(StringComparer.OrdinalIgnoreCase));
     }
 }
