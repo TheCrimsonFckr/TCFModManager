@@ -24,7 +24,7 @@ public sealed partial class ServerMapGateViewModel
     private string _mapMessage = "";
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(RefreshMapCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RefreshMapNowCommand))]
     private bool _isMapBusy;
 
     //
@@ -167,10 +167,23 @@ public sealed partial class ServerMapGateViewModel
     private bool CanRefreshMap() => !IsMapBusy;
 
     //
+    // The Refresh button: this machine reports first, so its own row is as current as the person
+    // pressing it, then the map is read. The page's timer only reads - the reporter keeps its own
+    // schedule, and a second report every minute from an open page would be traffic for nothing.
+    //
+    [RelayCommand(CanExecute = nameof(CanRefreshMap))]
+    private async Task RefreshMapNowAsync()
+    {
+        HookReporter();
+
+        await AppServices.ServerMapReporter.ReportNowAsync();
+        await RefreshMapAsync();
+    }
+
+    //
     // Asks the server who is on it. Called when the page opens, on a timer while it is open, after
     // this machine's own report lands, and from the Refresh button.
     //
-    [RelayCommand(CanExecute = nameof(CanRefreshMap))]
     public async Task RefreshMapAsync()
     {
         HookReporter();

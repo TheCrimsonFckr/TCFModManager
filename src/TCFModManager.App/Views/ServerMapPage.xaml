@@ -200,7 +200,7 @@
                             Content="{loc:Str ServerMap_RefreshMap}"
                             Icon="{ui:SymbolIcon ArrowSync24}"
                             ToolTip="{loc:Str ServerMap_RefreshMapToolTip}"
-                            Command="{Binding RefreshMapCommand}" />
+                            Command="{Binding RefreshMapNowCommand}" />
                     </StackPanel>
                 </Grid>
 

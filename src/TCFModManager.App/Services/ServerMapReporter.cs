@@ -1,3 +1,4 @@
+using System.IO;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.ServerMap;
 using TCFModManager.Core.Services;
@@ -13,8 +14,9 @@ namespace TCFModManager.App.Services;
 // said yes to reporting to THAT server (D9). Start() re-checks all four every time it is called, so
 // every place that changes one of them just calls Start() again.
 //
-// The inventory is read from disk at most every five minutes, or sooner when the download queue
-// installs something. A heartbeat in between sends only the hash of it; the full list goes when it
+// The inventory is re-read whenever the install looks different from the last read - a mod folder
+// added, removed, disabled or enabled, or the install record rewritten - and at least every five
+// minutes regardless. A heartbeat in between sends only the hash of it; the full list goes when it
 // changed or the server asks for it.
 //
 internal sealed class ServerMapReporter
@@ -26,6 +28,8 @@ internal sealed class ServerMapReporter
     private CancellationTokenSource? _loop;
     private List<ReportedMod>? _inventory;
     private DateTimeOffset _inventoryReadAt;
+    private string? _installStamp;
+    private bool _reporting;
     private string? _sentHash;
     private string? _sentTo;
     private bool _serverWantsInventory;
@@ -84,6 +88,25 @@ internal sealed class ServerMapReporter
     public void InventoryChanged() => _inventory = null;
 
     //
+    // Reports straight away rather than at the next tick - the map page's Refresh, so what it shows
+    // for this machine is never older than what the person pressing it can see on their own screen.
+    // Does nothing when reporting is off, or while a report is already on its way.
+    //
+    public async Task ReportNowAsync()
+    {
+        if (_loop is not { } loop) return;
+
+        try
+        {
+            await ReportOnceAsync(loop.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            // Stopped while it was on its way.
+        }
+    }
+
+    //
     // Takes this machine off the map of the server it is configured for. Best effort: a server that
     // is down forgets the machine on its own after 30 days, and shows it as away long before that.
     //
@@ -123,6 +146,10 @@ internal sealed class ServerMapReporter
 
     private async Task<int> ReportOnceAsync(CancellationToken ct)
     {
+        // The timer and the Refresh button can land together; one report is enough.
+        if (_reporting) return ServerMapMachines.DefaultIntervalSeconds;
+        _reporting = true;
+
         try
         {
             var settings = _settings.Load();
@@ -130,7 +157,7 @@ internal sealed class ServerMapReporter
 
             if (string.IsNullOrWhiteSpace(installPath)) return ServerMapMachines.DefaultIntervalSeconds;
 
-            await RefreshInventoryAsync();
+            await RefreshInventoryAsync(installPath);
             if (_inventory is null) return ServerMapMachines.DefaultIntervalSeconds;
 
             var hash = ServerMapMachines.HashOf(_inventory);
@@ -193,11 +220,22 @@ internal sealed class ServerMapReporter
             AppLog.Error("ServerMap", "report failed", ex);
             return ServerMapMachines.DefaultIntervalSeconds;
         }
+        finally
+        {
+            _reporting = false;
+        }
     }
 
-    private async Task RefreshInventoryAsync()
+    private async Task RefreshInventoryAsync(string installPath)
     {
-        if (_inventory is not null && DateTimeOffset.Now - _inventoryReadAt < InventoryMaxAge) return;
+        var stamp = await Task.Run(() => InstallStamp(installPath));
+
+        if (_inventory is not null
+            && DateTimeOffset.Now - _inventoryReadAt < InventoryMaxAge
+            && string.Equals(stamp, _installStamp, StringComparison.Ordinal))
+        {
+            return;
+        }
 
         // An install or a list apply in progress would be read half-placed. The last read stands.
         if (AppServices.DownloadQueue.Items.Any(i => !i.IsFinished)) return;
@@ -207,6 +245,49 @@ internal sealed class ServerMapReporter
 
         _inventory = ServerMapMachines.InventoryOf(install.Candidates);
         _inventoryReadAt = DateTimeOffset.Now;
+        _installStamp = stamp;
+    }
+
+    //
+    // A cheap fingerprint of the install, taken every heartbeat: when each mod container and its
+    // ".disabled" sibling was last written, and when the install record was. A folder's timestamp
+    // moves whenever something is added to it, removed from it or moved out of it - so a Remove,
+    // a disable, an enable, a list apply or a mod dropped in by hand all change this, and the full
+    // re-read (a scan and a catalog match, seconds on a big install) only runs when one did.
+    //
+    // A file overwritten inside an existing mod folder does not move the container's timestamp.
+    // The app's own updates rewrite the install record, which does; a hand update is caught by the
+    // five-minute re-read.
+    //
+    private static string InstallStamp(string installPath)
+    {
+        var parts = new List<string>();
+
+        try
+        {
+            var containers = DisabledModPaths.ClientContainers(installPath)
+                .Concat(DisabledModPaths.ServerContainers(installPath));
+
+            foreach (var container in containers)
+            {
+                foreach (var folder in new[] { container, DisabledModPaths.Disabled(container) })
+                {
+                    parts.Add(Directory.Exists(folder)
+                        ? Directory.GetLastWriteTimeUtc(folder).Ticks.ToString()
+                        : "-");
+                }
+            }
+
+            var manifest = Path.Combine(AppPaths.DataDirectory, "installed-mods.json");
+            parts.Add(File.Exists(manifest) ? File.GetLastWriteTimeUtc(manifest).Ticks.ToString() : "-");
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            // Unreadable reads as changed, so the next heartbeat re-reads rather than trusting it.
+            return Guid.NewGuid().ToString();
+        }
+
+        return string.Join("|", parts);
     }
 
     private void LogOnChange(ServerMapProblem problem)
