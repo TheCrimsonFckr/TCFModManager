@@ -47,6 +47,13 @@ public enum ServerMapProblem
 
     KeyRejected,
 
+    //
+    // The map routes only: a Server Map older than 0.2.0, which serves the list but has no map.
+    // Reached, keyed, and simply without the route - worth saying as "update the server mod", not
+    // as a failure.
+    //
+    MapUnsupported,
+
     // Anything else. Carries Error.
     Failed,
 }

@@ -24,6 +24,16 @@ public sealed class ServerMapClient : IDisposable
 
     public const string ListPath = "/tcfservermap/list";
 
+    public const string ReportPath = "/tcfservermap/report";
+
+    public const string WithdrawPath = "/tcfservermap/withdraw";
+
+    public const string ClientsPath = "/tcfservermap/clients";
+
+    public const string ClientHeaderName = "X-ServerMap-Client";
+
+    public const string MapCapability = "map";
+
     private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(6);
 
     private static readonly JsonSerializerOptions Json = new() { PropertyNameCaseInsensitive = true };
@@ -250,6 +260,138 @@ public sealed class ServerMapClient : IDisposable
         {
             return new ServerMapListResult { Endpoint = _endpoint, Problem = ServerMapProblem.Failed, Error = ex };
         }
+    }
+
+    //
+    // Tells the server this machine is here. Mods travels only when the report carries it - an
+    // ordinary heartbeat is a few hundred bytes, and the reply says when the server wants the rest.
+    //
+    public async Task<ServerMapReportResult> ReportAsync(MachineReport report,
+        CancellationToken cancellationToken = default)
+    {
+        var (problem, status, body, error) = await SendAsync(HttpMethod.Post, ReportPath,
+            JsonSerializer.Serialize(report, ServerMapMachines.Json), null, cancellationToken).ConfigureAwait(false);
+
+        if (problem != ServerMapProblem.None)
+            return new ServerMapReportResult { Endpoint = _endpoint, Problem = problem, StatusCode = status, Error = error };
+
+        try
+        {
+            var reply = JsonSerializer.Deserialize<ReportReply>(body!, ServerMapMachines.Json);
+
+            return new ServerMapReportResult
+            {
+                Endpoint = _endpoint,
+                Resend = reply?.Resend ?? false,
+                IntervalSeconds = reply?.IntervalSeconds is > 0 ? reply.IntervalSeconds : ServerMapMachines.DefaultIntervalSeconds,
+                StatusCode = status,
+            };
+        }
+        catch (JsonException ex)
+        {
+            return new ServerMapReportResult
+            {
+                Endpoint = _endpoint, Problem = ServerMapProblem.Failed, StatusCode = status, Error = ex,
+            };
+        }
+    }
+
+    // Takes this machine off the map. The server forgetting it is the whole effect.
+    public async Task<ServerMapProblem> WithdrawAsync(string clientId, CancellationToken cancellationToken = default)
+    {
+        var (problem, _, _, _) = await SendAsync(HttpMethod.Post, WithdrawPath,
+            JsonSerializer.Serialize(new { clientId }, ServerMapMachines.Json), null, cancellationToken)
+            .ConfigureAwait(false);
+
+        return problem;
+    }
+
+    //
+    // The map. clientId is sent only so the server can mark this machine's own row; it never comes
+    // back, and passing null simply means no row is marked.
+    //
+    public async Task<ServerMapClientsResult> ClientsAsync(string? clientId, CancellationToken cancellationToken = default)
+    {
+        var (problem, status, body, error) = await SendAsync(HttpMethod.Get, ClientsPath, null, clientId,
+            cancellationToken).ConfigureAwait(false);
+
+        if (problem != ServerMapProblem.None)
+            return new ServerMapClientsResult { Endpoint = _endpoint, Problem = problem, StatusCode = status, Error = error };
+
+        try
+        {
+            var (machines, interval) = ServerMapMachines.ParseClients(body!);
+
+            return new ServerMapClientsResult
+            {
+                Endpoint = _endpoint, Machines = machines, IntervalSeconds = interval, StatusCode = status,
+            };
+        }
+        catch (JsonException ex)
+        {
+            return new ServerMapClientsResult
+            {
+                Endpoint = _endpoint, Problem = ServerMapProblem.Failed, StatusCode = status, Error = ex,
+            };
+        }
+    }
+
+    //
+    // The map routes share one way of failing: a missing route is an older server mod, not a wrong
+    // address - the handshake already established the mod is there.
+    //
+    private async Task<(ServerMapProblem Problem, int? Status, string? Body, Exception? Error)> SendAsync(
+        HttpMethod method, string path, string? json, string? clientId, CancellationToken cancellationToken)
+    {
+        _pin.Reset();
+
+        try
+        {
+            using var request = new HttpRequestMessage(method, path);
+
+            if (json is not null) request.Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            if (!string.IsNullOrWhiteSpace(clientId)) request.Headers.TryAddWithoutValidation(ClientHeaderName, clientId);
+
+            using var response = await _http
+                .SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken)
+                .ConfigureAwait(false);
+
+            var status = (int)response.StatusCode;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var problem = response.StatusCode switch
+                {
+                    System.Net.HttpStatusCode.NotFound => ServerMapProblem.MapUnsupported,
+                    System.Net.HttpStatusCode.Unauthorized or System.Net.HttpStatusCode.Forbidden =>
+                        _endpoint.HasKey ? ServerMapProblem.KeyRejected : ServerMapProblem.KeyRequired,
+                    System.Net.HttpStatusCode.Conflict => ServerMapProblem.ProtocolMismatch,
+                    System.Net.HttpStatusCode.ServiceUnavailable => ServerMapProblem.NotServerMap,
+                    _ => ServerMapProblem.Failed,
+                };
+
+                return (problem, status, null, null);
+            }
+
+            var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            return (ServerMapProblem.None, status, body, null);
+        }
+        catch (Exception ex) when (ex is HttpRequestException or IOException or OperationCanceledException)
+        {
+            return (_pin.Verdict == PinVerdict.Mismatch ? ServerMapProblem.CertificateRejected : ServerMapProblem.Unreachable,
+                null, null, ex);
+        }
+        catch (Exception ex)
+        {
+            return (ServerMapProblem.Failed, null, null, ex);
+        }
+    }
+
+    private sealed class ReportReply
+    {
+        public bool Resend { get; set; }
+
+        public int IntervalSeconds { get; set; }
     }
 
     private ServerHelloProbe Fail(ServerMapProblem problem, Exception? error = null, int? statusCode = null,
