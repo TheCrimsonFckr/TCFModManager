@@ -100,8 +100,9 @@ public sealed partial class ModListRowViewModel(
 //
 // One line of a plan, laid out like a line of the list's contents - title, what the list records
 // about it, its scope - with a coloured badge saying where this machine stands against the entry.
-// Tone picks the badge colour: Good (green), Update (the yellow arrow Installed shows for an update),
-// Warn (amber), Bad (red), Neutral (grey).
+// Tone picks the badge colour - Good (green), Warn (caution yellow), Disabled (blue), Bad (red),
+// Neutral (grey) - and Icon is the shared status glyph for the same state, so a badge reads as the
+// icon Installed would show for that mod.
 //
 public sealed record ModListActionRowViewModel(
     string Kind,
@@ -112,7 +113,8 @@ public sealed record ModListActionRowViewModel(
     string EntryDetail,
     string? ScopeLabel,
     string Status,
-    string Tone)
+    string Tone,
+    string Icon)
 {
     public bool HasScope => ScopeLabel is not null;
 
@@ -122,7 +124,7 @@ public sealed record ModListActionRowViewModel(
 }
 
 // One coloured count at the top of a preview: "1 missing", "72 already right".
-public sealed record PlanChip(string Text, string Tone);
+public sealed record PlanChip(string Text, string Tone, string Icon);
 
 // One mod on the selected list, as the contents panel shows it.
 public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, string Detail, bool IsPinnedHere = false)
@@ -947,7 +949,7 @@ public partial class ModListsViewModel : LocalizedViewModel
             ? title
             : action.Name;
 
-        var (status, tone) = StatusOf(action);
+        var (status, tone, icon) = StatusOf(action);
 
         return new ModListActionRowViewModel(
             Label(action),
@@ -958,21 +960,28 @@ public partial class ModListsViewModel : LocalizedViewModel
             entry is null ? string.Empty : EntryDetail(entry, name),
             action.Entry is { } listed ? ModListScopes.Label(listed.EffectiveScope) : null,
             status,
-            tone);
+            tone,
+            icon);
     }
 
-    private static (string Status, string Tone) StatusOf(ModListAction action) => action.Kind switch
+    private const string DisabledGlyph = "PlugDisconnected24";
+
+    private static (string Status, string Tone, string Icon) StatusOf(ModListAction action) => action.Kind switch
     {
-        ModListActionKind.Install => (Strings.ModLists_StatusMissing, "Bad"),
-        ModListActionKind.Update when action.IsRepair => (Strings.ModLists_StatusHalfInstalled, "Warn"),
-        ModListActionKind.Update => (VersionMove(action), "Update"),
+        ModListActionKind.Install =>
+            (Strings.ModLists_StatusMissing, "Bad", ModStatusDisplay.Glyph(ModStatus.NotInstalled)),
+        ModListActionKind.Update when action.IsRepair =>
+            (Strings.ModLists_StatusHalfInstalled, "Warn", "ErrorCircle24"),
+        ModListActionKind.Update =>
+            (VersionMove(action), "Warn", ModStatusDisplay.Glyph(ModStatus.UpdateAvailable)),
         ModListActionKind.Enable when action.NeedsUpdateAfterEnable && !action.IsRepair =>
-            (Text(Strings.ModLists_StatusDisabledMovingFormat, VersionMove(action)), "Warn"),
-        ModListActionKind.Enable => (Strings.ModLists_StatusDisabled, "Warn"),
-        ModListActionKind.Disable => (Strings.ModLists_StatusWillDisable, "Neutral"),
-        ModListActionKind.Pinned => (Strings.ModLists_StatusPinned, "Neutral"),
-        ModListActionKind.Manual => (Strings.ModLists_StatusGetByHand, "Neutral"),
-        _ => (Strings.ModLists_StatusAlreadyRight, "Good"),
+            (Text(Strings.ModLists_StatusDisabledMovingFormat, VersionMove(action)), "Disabled", DisabledGlyph),
+        ModListActionKind.Enable => (Strings.ModLists_StatusDisabled, "Disabled", DisabledGlyph),
+        ModListActionKind.Disable => (Strings.ModLists_StatusWillDisable, "Neutral", DisabledGlyph),
+        ModListActionKind.Pinned => (Strings.ModLists_StatusPinned, "Neutral", "Pin24"),
+        ModListActionKind.Manual =>
+            (Strings.ModLists_StatusGetByHand, "Neutral", ModStatusDisplay.Glyph(ModStatus.NoCompatibleVersion)),
+        _ => (Strings.ModLists_StatusAlreadyRight, "Good", ModStatusDisplay.Glyph(ModStatus.Installed)),
     };
 
     // "3.0.0 → 3.1.2": the version installed here, then the one the list asks for.
@@ -985,19 +994,21 @@ public partial class ModListsViewModel : LocalizedViewModel
     {
         var repairs = plan.Update.Count(a => a.IsRepair);
 
-        (int Count, Func<int, string> Text, string Tone)[] chips =
+        (int Count, Func<int, string> Text, string Tone, string Icon)[] chips =
         [
-            (plan.Install.Count(), n => Strings.ModLists_ChipMissing(n), "Bad"),
-            (plan.Update.Count() - repairs, n => Strings.ModLists_ChipDifferentVersion(n), "Update"),
-            (repairs, n => Strings.ModLists_ChipHalfInstalled(n), "Warn"),
-            (plan.Enable.Count(), n => Strings.ModLists_ChipDisabled(n), "Warn"),
-            (plan.Manual.Count(), n => Strings.ModLists_ChipGetByHand(n), "Neutral"),
-            (plan.Disable.Count(), n => Strings.ModLists_ChipWillDisable(n), "Neutral"),
-            (plan.Pinned.Count(), n => Strings.ModLists_ChipPinned(n), "Neutral"),
-            (plan.Keep.Count(), n => Strings.ModLists_ChipAlreadyRight(n), "Good"),
+            (plan.Install.Count(), n => Strings.ModLists_ChipMissing(n), "Bad", ModStatusDisplay.Glyph(ModStatus.NotInstalled)),
+            (plan.Update.Count() - repairs, n => Strings.ModLists_ChipDifferentVersion(n), "Warn",
+                ModStatusDisplay.Glyph(ModStatus.UpdateAvailable)),
+            (repairs, n => Strings.ModLists_ChipHalfInstalled(n), "Warn", "ErrorCircle24"),
+            (plan.Enable.Count(), n => Strings.ModLists_ChipDisabled(n), "Disabled", DisabledGlyph),
+            (plan.Manual.Count(), n => Strings.ModLists_ChipGetByHand(n), "Neutral",
+                ModStatusDisplay.Glyph(ModStatus.NoCompatibleVersion)),
+            (plan.Disable.Count(), n => Strings.ModLists_ChipWillDisable(n), "Neutral", DisabledGlyph),
+            (plan.Pinned.Count(), n => Strings.ModLists_ChipPinned(n), "Neutral", "Pin24"),
+            (plan.Keep.Count(), n => Strings.ModLists_ChipAlreadyRight(n), "Good", ModStatusDisplay.Glyph(ModStatus.Installed)),
         ];
 
-        return chips.Where(c => c.Count > 0).Select(c => new PlanChip(c.Text(c.Count), c.Tone));
+        return chips.Where(c => c.Count > 0).Select(c => new PlanChip(c.Text(c.Count), c.Tone, c.Icon));
     }
 
     private static string Label(ModListAction action) => action.Kind switch

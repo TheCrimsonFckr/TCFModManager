@@ -39,6 +39,9 @@
                 <DataTrigger Binding="{Binding Tone}" Value="Warn">
                     <Setter Property="Background" Value="{DynamicResource SystemFillColorCautionBackgroundBrush}" />
                 </DataTrigger>
+                <DataTrigger Binding="{Binding Tone}" Value="Disabled">
+                    <Setter Property="Background" Value="{DynamicResource SystemFillColorAttentionBackgroundBrush}" />
+                </DataTrigger>
                 <DataTrigger Binding="{Binding Tone}" Value="Bad">
                     <Setter Property="Background" Value="{DynamicResource SystemFillColorCriticalBackgroundBrush}" />
                 </DataTrigger>
@@ -56,8 +59,8 @@
                 <DataTrigger Binding="{Binding Tone}" Value="Warn">
                     <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Tone}" Value="Update">
-                    <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
+                <DataTrigger Binding="{Binding Tone}" Value="Disabled">
+                    <Setter Property="Foreground" Value="{DynamicResource SystemFillColorAttentionBrush}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Tone}" Value="Bad">
                     <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
@@ -66,88 +69,28 @@
         </Style>
 
         <!--
-            An incorrect version reads as Installed's update arrow does: the same ArrowCircleUp24 in
-            the same caution yellow, on the neutral chip rather than the caution background - that
-            tint turns the yellow muddy orange in the dark theme. Hidden on every other tone.
+            Each badge leads with the shared status icon for its state - the one Installed shows for
+            that mod - in the badge's own colour.
         -->
-        <Style x:Key="ToneUpdateIcon" TargetType="ui:SymbolIcon">
-            <Setter Property="Symbol" Value="ArrowCircleUp24" />
+        <Style x:Key="ToneIcon" TargetType="ui:SymbolIcon">
+            <Setter Property="Symbol" Value="{Binding Icon}" />
             <Setter Property="FontSize" Value="14" />
             <Setter Property="Margin" Value="0,0,5,0" />
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
-            <Setter Property="Visibility" Value="Collapsed" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Tone}" Value="Update">
-                    <Setter Property="Visibility" Value="Visible" />
+                <DataTrigger Binding="{Binding Tone}" Value="Good">
+                    <Setter Property="Foreground" Value="{DynamicResource SystemFillColorSuccessBrush}" />
                 </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <!--
-            The container contributes nothing - no padding, margin, fill or chrome - so the row
-            Border inside the template draws the whole thing.
-        -->
-        <Style x:Key="BareContainer" TargetType="ListBoxItem">
-            <Setter Property="Margin" Value="0" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-
-            <!--
-                The template is replaced outright rather than just having its Background zeroed.
-                Setting Background="Transparent" does not stop a selected row being painted: the
-                stock template draws selection with its own accent fill and left indicator, which
-                the property never touches. With the row below drawing its own selected state too,
-                a picked list came out as a solid accent slab with a second edge around it - two
-                selection visuals stacked, one of them nobody chose.
-
-                A bare ContentPresenter leaves selection entirely to the row style, which is the
-                only place it is described. Selection behaviour is unaffected - IsSelected is
-                ListBox input handling, not something the template provides.
-            -->
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListBoxItem">
-                        <ContentPresenter />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="ReadOnlyContainer" TargetType="ListBoxItem" BasedOn="{StaticResource BareContainer}">
-            <Setter Property="Focusable" Value="False" />
-        </Style>
-
-        <!--
-            One saved list. A card-coloured row with space around it rather than a bare strip pressed
-            against its neighbours, so the left column reads the way the Installed page's List view
-            does. Margin and Padding live in the style, not on the Border, so the two triggers still
-            win over the resting fill - a local value on the element would outrank them.
-        -->
-        <Style x:Key="ListCardRow" TargetType="Border">
-            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorSecondaryBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefaultBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="6" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="Margin" Value="2,0,6,8" />
-            <Setter Property="Padding" Value="12,11" />
-            <Style.Triggers>
-                <!-- Selected first, hover second, so pointing at the current list still reads as
-                     pointing at it. Same ordering as ClickableRow in App.xaml.
-
-                     The selected row keeps its own text colours: the fill is a tint over the card
-                     rather than a solid accent, so primary/tertiary stay readable on it and the
-                     row does not change shape or weight when it is picked. -->
-                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
-                    <Setter Property="Background" Value="{StaticResource RowSelectedBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource SelectedRowStroke}" />
+                <DataTrigger Binding="{Binding Tone}" Value="Warn">
+                    <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
                 </DataTrigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
-                </Trigger>
+                <DataTrigger Binding="{Binding Tone}" Value="Disabled">
+                    <Setter Property="Foreground" Value="{DynamicResource SystemFillColorAttentionBrush}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Tone}" Value="Bad">
+                    <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                </DataTrigger>
             </Style.Triggers>
         </Style>
     </Page.Resources>
@@ -558,7 +501,7 @@
                     <DataTemplate>
                         <Border Style="{StaticResource ToneBadge}" Margin="0,0,8,6" Padding="10,4">
                             <StackPanel Orientation="Horizontal">
-                                <ui:SymbolIcon Style="{StaticResource ToneUpdateIcon}" />
+                                <ui:SymbolIcon Style="{StaticResource ToneIcon}" />
                                 <TextBlock Style="{StaticResource ToneBadgeText}" FontSize="12" VerticalAlignment="Center" Text="{Binding Text}" />
                             </StackPanel>
                         </Border>
@@ -892,7 +835,7 @@
                                      Already right. The action it leads to is the tooltip. -->
                                 <Border Grid.Column="2" Style="{StaticResource ToneBadge}" ToolTip="{Binding Kind}">
                                     <StackPanel Orientation="Horizontal">
-                                        <ui:SymbolIcon Style="{StaticResource ToneUpdateIcon}" />
+                                        <ui:SymbolIcon Style="{StaticResource ToneIcon}" />
                                         <TextBlock Style="{StaticResource ToneBadgeText}" VerticalAlignment="Center" Text="{Binding Status}" />
                                     </StackPanel>
                                 </Border>
