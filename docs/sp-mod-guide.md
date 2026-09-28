@@ -43,7 +43,7 @@ Starts the install rather than making you go and find it. It is the first page i
 - **Fika headless client** gets its own card, and only on a setup that has a headless launcher. A headless hosts raids for other people rather than being the one you play on, so it never shares a button with the game.
 
 #### Before you join
-The page checks your install against the mod list you are following - your own, or one a server published - and says what is outstanding. **Check again** re-runs it.
+The page checks your install against the mod list you are following - your own, or one a server published - and says what is outstanding, with versions where a version is wrong: *SAIN (3.0.0 → 3.1.2)*. **Check again** re-runs it. When you are behind a server's list, **Review and install** opens that list on the Mod lists page with its preview already done.
 
 It never blocks a launch. The mods it names may not matter for the raid you are about to play, the server may be wrong, and a launch held up by a warning nobody can override is worse than a mismatch.
 
@@ -170,7 +170,7 @@ A move interrupted partway - or one done by hand - can leave the same mod in bot
 ### Mod lists
 A **mod list** is a named set of mods and the versions of them you run. Capture what you have now, switch between sets, send one to a friend, or follow the one a server publishes. It records mods and versions, never files, so capturing is instant however big your install is.
 
-**Capture** saves whatever is enabled right now. **Preview** works out what applying it would do and shows you one row per mod - install, update, enable, set aside - and nothing moves until you press **Apply**.
+**Capture** saves whatever is enabled right now. **Preview** works out what applying it would do and nothing moves until you press **Apply**. The preview starts with coloured counts - *1 missing* in red, *2 incorrect versions* in amber, *1 disabled* in blue, *72 correct* in green, and grey for anything you have to fetch yourself, anything it would set aside and pinned mods. Every row below reads like the list itself - name, folder, version, scope - with a badge in the same colours and the icon the Installed page uses for that state. An incorrect version shows the move, *3.0.0 → 3.1.2*, and the Apply button says what it is about to do: *Install 1 mod*, *Install 2, update 1*.
 
 **Apply** downloads what the list names and you do not have, enables what you have but had switched off, and moves anything the list does not name into the disabled folder. **Nothing is ever deleted.** Setting a mod aside is the same move the Installed page's disable button makes, and it is near-instant however large the mod is.
 
@@ -326,8 +326,8 @@ Readings are cached in `Data\mod_footprints.json` and a mod is re-read only when
 ### Server map
 An optional page - **off by default**, turned on in Options - that connects to an SPT server running the **Server Map mod** and shows what that server runs, so you can be ready before you launch rather than after a raid fails to load.
 
-- **The mod goes on the server**, not on your machine. It is a separate download, published as an addon of this mod - **Options - Server map - Get the Server Map mod** opens its page - and a player joining a server needs none of it.
-- **Connecting sends nothing about your install.** It asks the server who it is; the server never asks anything about you.
+- **The mod goes on the server**, not on your machine. It is a separate download, published as an addon of this mod - **Options - Server map connection - Get the Server Map mod** opens its page - and a player joining a server needs none of it.
+- **Nothing about your install is sent without asking.** Connecting asks the server who it is. With the Server Map mod 0.2.0 the page asks once whether to **Share** this machine on the server's map; say no and nothing is sent. **Options - Server map connection** has the same answer as a switch, and the name the machine shows.
 - **The server serves a list, never files.** Mods are still only ever downloaded from sp-mod.com. A server that could push files at you would break the one rule this app is built on, so there is no route for it to do so.
 - **Certificates are pinned on first use.** SPT serves a self-signed certificate, so the app remembers the exact one your server presented and tells you if it ever changes - which is what a machine-in-the-middle would look like. Trust the new one or refuse it.
 - **A shared key** guards everything but the handshake. The operator gives it to you; on the server's own machine the app finds it by itself.
@@ -335,6 +335,8 @@ An optional page - **off by default**, turned on in Options - that connects to a
 **Connecting fetches the list for you** and saves it as a read-only mod list, marked as coming from that server; it is fetched again on its own whenever the server's revision moves. **Fetch again** asks for it even when the revision hasn't moved, for a copy you have edited or deleted.
 
 Saving is not applying. From there it is an ordinary list - preview it on the Mod lists page, apply it, keep your own alongside it - and the Play page's check compares against it before you launch.
+
+**The map** lists every machine that shares itself with the server, the server first and yours marked *This machine*: whether each is in game, has the app open or was last seen some time ago, and whether it has what the server's list asks for - named, with versions, in the usual status colours. When your own card is behind, **Review and install** takes you to the fix. Only machines running this app appear, and the map needs the Server Map mod 0.2.0 on the server.
 
 #### If you run the server
 The Server Map mod's own page carries the operator guide - installing the payload and the stub for your SPT line, where the key and the published list live (`TCFModManager\Data\ServerMap\`), rotating the key, and opening a port. The mod list half - capturing, pruning, publishing, and the one thing not to apply on the machine that hosts - is on the Mod lists tab.
@@ -470,7 +472,7 @@ Everything lives next to the exe:
 | `Data\LegacyConfigs\` | Config files kept from removed and updated mods, one timestamped folder each |
 | `Data\ConfigBaselines\` | A copy of the config files each mod version shipped, which is what lets an update tell your changes from the author's |
 | `Data\mod_configs.json` | Your per-mod choice of what an update does with that mod's configs, and any unusual places it keeps them |
-| `Data\ServerMap\` | On a server: the shared key (`servermap-key.txt`) and the list it publishes |
+| `Data\ServerMap\` | On a server: the shared key (`servermap-key.txt`), the list it publishes, and the map's machines (`clients.json`) |
 | `.tcfmm-update\` | Hidden. Only exists while an app update is downloading, or if one failed; cleaned up on the next launch |
 
 Two more folders are created inside your **SPT install**, both hidden: `.tcfmm-work\` (scratch space while a mod installs, swept each run) and `.tcfmm-duplicates\` (copies set aside by **Sort out**, kept until you delete them).
@@ -535,7 +537,8 @@ Info level by default, rotated daily as `tcfmm-<yyyyMMdd>.log`. To get Debug-lev
 
 #### Server map
 - **Client and server must be on the same SPT line**, which is SPT's rule rather than this app's.
-- **The server publishes a list, not files**, and the page reports nothing about your install back to it.
+- **The server publishes a list, not files.** The page reports this machine to the server's map only after you say **Share**, and only to that server.
+- **Only machines running this app appear on the map.** A player who installs by hand is invisible to it.
 - **A server's certificate is pinned on first connect.** If it changes you are asked before anything else happens, because that is also what an interception would look like.
 
 #### Scope
@@ -644,7 +647,7 @@ You don't have to finish, and you don't have to keep up. A string you haven't tr
 - Default filtering and page defaults - *Completed*
 - Config protection, so updating a mod stops replacing your settings - *Completed*
 - Per-mod pins, so a mod you always want on survives any list you apply - *Completed*
-- Server mapping - *Initial release, ongoing*
+- Server mapping, with who is on the server and where each machine stands - *Completed*
 - Local languages based on OS - *Initial release, ongoing*
 - Options to use app to monitor mods rather than manage them - *Completed*
 - Update notifications, with the app kept running in the tray - *Completed*
