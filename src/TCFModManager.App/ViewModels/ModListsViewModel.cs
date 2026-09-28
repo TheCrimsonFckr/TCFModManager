@@ -100,7 +100,8 @@ public sealed partial class ModListRowViewModel(
 //
 // One line of a plan, laid out like a line of the list's contents - title, what the list records
 // about it, its scope - with a coloured badge saying where this machine stands against the entry.
-// Tone picks the badge colour: Good (green), Warn (amber), Bad (red), Neutral (grey).
+// Tone picks the badge colour: Good (green), Update (the yellow arrow Installed shows for an update),
+// Warn (amber), Bad (red), Neutral (grey).
 //
 public sealed record ModListActionRowViewModel(
     string Kind,
@@ -964,7 +965,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     {
         ModListActionKind.Install => (Strings.ModLists_StatusMissing, "Bad"),
         ModListActionKind.Update when action.IsRepair => (Strings.ModLists_StatusHalfInstalled, "Warn"),
-        ModListActionKind.Update => (VersionMove(action), "Warn"),
+        ModListActionKind.Update => (VersionMove(action), "Update"),
         ModListActionKind.Enable when action.NeedsUpdateAfterEnable && !action.IsRepair =>
             (Text(Strings.ModLists_StatusDisabledMovingFormat, VersionMove(action)), "Warn"),
         ModListActionKind.Enable => (Strings.ModLists_StatusDisabled, "Warn"),
@@ -987,7 +988,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         (int Count, Func<int, string> Text, string Tone)[] chips =
         [
             (plan.Install.Count(), n => Strings.ModLists_ChipMissing(n), "Bad"),
-            (plan.Update.Count() - repairs, n => Strings.ModLists_ChipDifferentVersion(n), "Warn"),
+            (plan.Update.Count() - repairs, n => Strings.ModLists_ChipDifferentVersion(n), "Update"),
             (repairs, n => Strings.ModLists_ChipHalfInstalled(n), "Warn"),
             (plan.Enable.Count(), n => Strings.ModLists_ChipDisabled(n), "Warn"),
             (plan.Manual.Count(), n => Strings.ModLists_ChipGetByHand(n), "Neutral"),

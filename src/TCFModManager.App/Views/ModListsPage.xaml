@@ -56,8 +56,30 @@
                 <DataTrigger Binding="{Binding Tone}" Value="Warn">
                     <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
                 </DataTrigger>
+                <DataTrigger Binding="{Binding Tone}" Value="Update">
+                    <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
+                </DataTrigger>
                 <DataTrigger Binding="{Binding Tone}" Value="Bad">
                     <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!--
+            An incorrect version reads as Installed's update arrow does: the same ArrowCircleUp24 in
+            the same caution yellow, on the neutral chip rather than the caution background - that
+            tint turns the yellow muddy orange in the dark theme. Hidden on every other tone.
+        -->
+        <Style x:Key="ToneUpdateIcon" TargetType="ui:SymbolIcon">
+            <Setter Property="Symbol" Value="ArrowCircleUp24" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="0,0,5,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
+            <Setter Property="Visibility" Value="Collapsed" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Tone}" Value="Update">
+                    <Setter Property="Visibility" Value="Visible" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -535,7 +557,10 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Style="{StaticResource ToneBadge}" Margin="0,0,8,6" Padding="10,4">
-                            <TextBlock Style="{StaticResource ToneBadgeText}" FontSize="12" Text="{Binding Text}" />
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Style="{StaticResource ToneUpdateIcon}" />
+                                <TextBlock Style="{StaticResource ToneBadgeText}" FontSize="12" VerticalAlignment="Center" Text="{Binding Text}" />
+                            </StackPanel>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -866,7 +891,10 @@
                                 <!-- Where this machine stands: Missing, 3.0.0 → 3.1.2, Disabled,
                                      Already right. The action it leads to is the tooltip. -->
                                 <Border Grid.Column="2" Style="{StaticResource ToneBadge}" ToolTip="{Binding Kind}">
-                                    <TextBlock Style="{StaticResource ToneBadgeText}" Text="{Binding Status}" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Style="{StaticResource ToneUpdateIcon}" />
+                                        <TextBlock Style="{StaticResource ToneBadgeText}" VerticalAlignment="Center" Text="{Binding Status}" />
+                                    </StackPanel>
                                 </Border>
 
                                 <ui:Button
