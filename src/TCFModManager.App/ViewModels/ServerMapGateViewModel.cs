@@ -298,6 +298,9 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
         _settings.Save(settings);
 
         AppLog.Info("ServerMap", value ? "page shown" : "page hidden");
+
+        // Switched off means no requests to the server, reports included.
+        AppServices.ServerMapReporter.Start();
     }
 
     public bool IsConfigured => !string.IsNullOrWhiteSpace(HostInput);
@@ -461,6 +464,8 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
                 : $"{endpoint.Host}:{endpoint.Port} - {probe.Problem}");
 
             if (probe.Hello is { } hello) await SyncListAsync(client, endpoint, hello, cancellationToken: default);
+
+            await AfterConnectAsync();
         }
         finally
         {
@@ -671,5 +676,9 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
         _settings.Save(settings);
 
         PinnedThumbprint = thumbprint;
+
+        // Consent is keyed on the certificate, so a new one is a server that has not been asked.
+        AppServices.ServerMapReporter.Start();
+        NotifyReporting();
     }
 }
