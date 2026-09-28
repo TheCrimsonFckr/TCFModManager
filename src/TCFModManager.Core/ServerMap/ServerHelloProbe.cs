@@ -54,6 +54,13 @@ public enum ServerMapProblem
     //
     MapUnsupported,
 
+    //
+    // The server answers its own network only (LAN-only), and this machine is outside it. Said
+    // outright rather than as "no server map here": the address is right and the mod is there, and
+    // the fix is the operator's or a VPN such as Tailscale.
+    //
+    LanOnly,
+
     // Anything else. Carries Error.
     Failed,
 }

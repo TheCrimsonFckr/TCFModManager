@@ -121,6 +121,9 @@ public sealed class ServerMapClient : IDisposable
 
             if (!response.IsSuccessStatusCode)
             {
+                if (await IsLanOnlyRefusalAsync(response, cancellationToken).ConfigureAwait(false))
+                    return Fail(ServerMapProblem.LanOnly, statusCode: (int)response.StatusCode);
+
                 // A 404 from a plain SPT server and a 503 from a stub with no payload mean the same
                 // thing to us: there is no server map here.
                 return Fail(ServerMapProblem.NotServerMap, statusCode: (int)response.StatusCode);
@@ -196,6 +199,12 @@ public sealed class ServerMapClient : IDisposable
 
             if (!response.IsSuccessStatusCode)
             {
+                if (await IsLanOnlyRefusalAsync(response, cancellationToken).ConfigureAwait(false))
+                    return new ServerMapListResult
+                    {
+                        Endpoint = _endpoint, Problem = ServerMapProblem.LanOnly, StatusCode = (int)response.StatusCode,
+                    };
+
                 //
                 // A 404 here is the server saying it publishes nothing, which is a normal thing for
                 // a server to say. It is only "wrong address" on /hello, where nothing has yet
@@ -360,6 +369,9 @@ public sealed class ServerMapClient : IDisposable
 
             if (!response.IsSuccessStatusCode)
             {
+                if (await IsLanOnlyRefusalAsync(response, cancellationToken).ConfigureAwait(false))
+                    return (ServerMapProblem.LanOnly, status, null, null);
+
                 var problem = response.StatusCode switch
                 {
                     System.Net.HttpStatusCode.NotFound => ServerMapProblem.MapUnsupported,
@@ -384,6 +396,30 @@ public sealed class ServerMapClient : IDisposable
         catch (Exception ex)
         {
             return (ServerMapProblem.Failed, null, null, ex);
+        }
+    }
+
+    //
+    // A LAN-only server refuses with a 403 carrying "reason": "lanOnly". Read from the body because
+    // the status alone is the same one a rejected key gets, and the two need different sentences.
+    //
+    private static async Task<bool> IsLanOnlyRefusalAsync(HttpResponseMessage response, CancellationToken cancellationToken)
+    {
+        if (response.StatusCode != System.Net.HttpStatusCode.Forbidden) return false;
+
+        try
+        {
+            var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            using var document = JsonDocument.Parse(body);
+
+            return document.RootElement.ValueKind == JsonValueKind.Object
+                && document.RootElement.TryGetProperty("reason", out var reason)
+                && reason.ValueKind == JsonValueKind.String
+                && string.Equals(reason.GetString(), "lanOnly", StringComparison.OrdinalIgnoreCase);
+        }
+        catch (JsonException)
+        {
+            return false;
         }
     }
 
