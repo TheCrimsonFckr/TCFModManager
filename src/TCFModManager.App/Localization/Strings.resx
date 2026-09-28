@@ -1168,12 +1168,6 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="ServerMap_FetchAgainToolTip" xml:space="preserve">
     <value>Asks for the list again even if its revision hasn't moved - for when the copy you hold has been edited or deleted.</value>
   </data>
-  <data name="ServerMap_WhoElseHeader" xml:space="preserve">
-    <value>Who else is on this map</value>
-  </data>
-  <data name="ServerMap_WhoElseEmpty" xml:space="preserve">
-    <value>Nothing yet. The server does not report the other machines connected to it, so this page can only show the server itself for now. Nobody's install is being sent anywhere, including yours. That arrives with a later version of the server mod, and asks before it reports anything about this machine.</value>
-  </data>
   <data name="ReadModPage_Title" xml:space="preserve">
     <value>Read the mod page first</value>
   </data>
@@ -5133,5 +5127,140 @@ This was written to:
   </data>
   <data name="Options_DataFilesHint" xml:space="preserve">
     <value>View or hand-edit the JSON files under Data\.</value>
+  </data>
+  <data name="ServerMap_MachinesHeader" xml:space="preserve">
+    <value>Machines on this server</value>
+  </data>
+  <data name="ServerMap_MachinesEmpty" xml:space="preserve">
+    <value>Nobody reports to this server yet. A machine appears here once someone running TCF Mod Manager connects and agrees to share what it has installed. Machines that do not run TCF Mod Manager never appear.</value>
+  </data>
+  <data name="ServerMap_MapUnsupported" xml:space="preserve">
+    <value>This server's Server Map mod is older than 0.2.0. It can serve its mod list, but it cannot show who is on it. Ask whoever runs the server to update the mod.</value>
+  </data>
+  <data name="ServerMap_MapUnavailable" xml:space="preserve">
+    <value>Couldn't read the map just now. It is tried again in a minute.</value>
+  </data>
+  <data name="ServerMap_RefreshMap" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="ServerMap_RefreshMapToolTip" xml:space="preserve">
+    <value>Ask the server again who reports to it. The page also does this every minute while it is open.</value>
+  </data>
+  <data name="ServerMap_ThisMachine" xml:space="preserve">
+    <value>This machine</value>
+  </data>
+  <data name="ServerMap_RoleServer" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="ServerMap_RolePlayer" xml:space="preserve">
+    <value>Player</value>
+  </data>
+  <data name="ServerMap_RoleHeadless" xml:space="preserve">
+    <value>Headless</value>
+  </data>
+  <data name="ServerMap_AppVersionFormat" xml:space="preserve">
+    <value>TCF Mod Manager {0}</value>
+  </data>
+  <data name="ServerMap_PresenceInGame" xml:space="preserve">
+    <value>In game</value>
+  </data>
+  <data name="ServerMap_PresenceAppOpen" xml:space="preserve">
+    <value>App open</value>
+  </data>
+  <data name="ServerMap_LastSeenMinutes_one" xml:space="preserve">
+    <value>Last seen 1 minute ago</value>
+  </data>
+  <data name="ServerMap_LastSeenMinutes_other" xml:space="preserve">
+    <value>Last seen {0} minutes ago</value>
+  </data>
+  <data name="ServerMap_LastSeenHours_one" xml:space="preserve">
+    <value>Last seen 1 hour ago</value>
+  </data>
+  <data name="ServerMap_LastSeenHours_other" xml:space="preserve">
+    <value>Last seen {0} hours ago</value>
+  </data>
+  <data name="ServerMap_LastSeenDays_one" xml:space="preserve">
+    <value>Last seen 1 day ago</value>
+  </data>
+  <data name="ServerMap_LastSeenDays_other" xml:space="preserve">
+    <value>Last seen {0} days ago</value>
+  </data>
+  <data name="ServerMap_StandingNoList" xml:space="preserve">
+    <value>This install holds no mod list from this server, so there is nothing to compare against.</value>
+  </data>
+  <data name="ServerMap_StandingUnreadable" xml:space="preserve">
+    <value>Sent a mod list this version of the app can't read. Updating TCF Mod Manager here should fix it.</value>
+  </data>
+  <data name="ServerMap_StandingNotReported" xml:space="preserve">
+    <value>Hasn't sent its mod list yet.</value>
+  </data>
+  <data name="ServerMap_StandingUpToDate_one" xml:space="preserve">
+    <value>Has everything "{1}" asks of it (1 mod)</value>
+  </data>
+  <data name="ServerMap_StandingUpToDate_other" xml:space="preserve">
+    <value>Has everything "{1}" asks of it ({0} mods)</value>
+  </data>
+  <data name="ServerMap_StandingBehind_one" xml:space="preserve">
+    <value>1 mod to install, update or enable: {1}</value>
+  </data>
+  <data name="ServerMap_StandingBehind_other" xml:space="preserve">
+    <value>{0} mods to install, update or enable: {1}</value>
+  </data>
+  <data name="ServerMap_StandingManual_one" xml:space="preserve">
+    <value>1 mod to get by hand: {1}</value>
+  </data>
+  <data name="ServerMap_StandingManual_other" xml:space="preserve">
+    <value>{0} mods to get by hand: {1}</value>
+  </data>
+  <data name="ServerMap_Extras_one" xml:space="preserve">
+    <value>1 mod not on the list: {1}</value>
+  </data>
+  <data name="ServerMap_Extras_other" xml:space="preserve">
+    <value>{0} mods not on the list: {1}</value>
+  </data>
+  <data name="ServerMap_InstalledCount_one" xml:space="preserve">
+    <value>1 mod installed</value>
+  </data>
+  <data name="ServerMap_InstalledCount_other" xml:space="preserve">
+    <value>{0} mods installed</value>
+  </data>
+  <data name="ServerMap_ModDisabledFormat" xml:space="preserve">
+    <value>{0} (disabled)</value>
+  </data>
+  <data name="ServerMap_ConsentTitle" xml:space="preserve">
+    <value>Share this machine with the server?</value>
+  </data>
+  <data name="ServerMap_ConsentMessageFormat" xml:space="preserve">
+    <value>{0} can show everyone who holds its key this machine's name, which mods it has installed and at what versions, and whether the game is running. Nothing is sent until you say yes, and you can stop at any time in Options, which also takes this machine off the map.</value>
+  </data>
+  <data name="ServerMap_ConsentAllow" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="ServerMap_ConsentDecline" xml:space="preserve">
+    <value>Don't share</value>
+  </data>
+  <data name="ServerMap_ReportingPendingFormat" xml:space="preserve">
+    <value>This machine reports to this server as "{0}".</value>
+  </data>
+  <data name="ServerMap_ReportingFormat" xml:space="preserve">
+    <value>This machine reports to this server as "{0}". Last report at {1}.</value>
+  </data>
+  <data name="ServerMap_ReportFailed" xml:space="preserve">
+    <value>The last report didn't reach the server. It is tried again every minute.</value>
+  </data>
+  <data name="ServerMap_NotReporting" xml:space="preserve">
+    <value>This machine does not report to this server. You can change that in Options, under Server map connection.</value>
+  </data>
+  <data name="Options_ServerMapReport" xml:space="preserve">
+    <value>Report this machine to the server</value>
+  </data>
+  <data name="Options_ServerMapReportHint" xml:space="preserve">
+    <value>Shares this machine's name, installed mods and whether the game is running with everyone who holds the server's key. Asked once per server; switching it off takes this machine off the map.</value>
+  </data>
+  <data name="Options_ServerMapDisplayName" xml:space="preserve">
+    <value>Name on the map</value>
+  </data>
+  <data name="Options_ServerMapDisplayNameHint" xml:space="preserve">
+    <value>Leave empty to use this computer's name.</value>
   </data>
 </root>

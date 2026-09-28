@@ -4035,12 +4035,6 @@
   <data name="ServerMap_UnreachableFormat" xml:space="preserve">
     <value>По адресу {0}:{1} никто не ответил. Возможно, сервер не запущен либо адрес или порт указаны неверно - они те же, что и в лаунчере SPT.</value>
   </data>
-  <data name="ServerMap_WhoElseEmpty" xml:space="preserve">
-    <value>Пока ничего. Сервер не сообщает о других подключённых к нему машинах, поэтому эта страница пока может показать только сам сервер. Ничья установка никуда не отправляется, в том числе ваша. Это появится в следующей версии серверного мода и будет спрашивать, прежде чем сообщать что-либо об этой машине.</value>
-  </data>
-  <data name="ServerMap_WhoElseHeader" xml:space="preserve">
-    <value>Кто ещё на этой карте</value>
-  </data>
   <data name="Sort_AuthorAscending" xml:space="preserve">
     <value>По автору (А-Я)</value>
   </data>
@@ -4544,5 +4538,164 @@
   </data>
   <data name="Options_DataFilesHint" xml:space="preserve">
     <value>Просмотр и ручное редактирование JSON-файлов в Data\.</value>
+  </data>
+  <data name="ServerMap_MachinesHeader" xml:space="preserve">
+    <value>Машины на этом сервере</value>
+  </data>
+  <data name="ServerMap_MachinesEmpty" xml:space="preserve">
+    <value>На этом сервере пока никто не отмечается. Машина появится здесь, когда кто-то с TCF Mod Manager подключится и согласится поделиться тем, что у него установлено. Машины без TCF Mod Manager здесь не появляются.</value>
+  </data>
+  <data name="ServerMap_MapUnsupported" xml:space="preserve">
+    <value>Мод Server Map на этом сервере старше версии 0.2.0. Он может раздавать свой список модов, но не может показать, кто на нём. Попросите того, кто управляет сервером, обновить мод.</value>
+  </data>
+  <data name="ServerMap_MapUnavailable" xml:space="preserve">
+    <value>Не удалось прочитать карту. Повторная попытка через минуту.</value>
+  </data>
+  <data name="ServerMap_RefreshMap" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="ServerMap_RefreshMapToolTip" xml:space="preserve">
+    <value>Снова спросить сервер, кто на нём отмечается. Пока страница открыта, это происходит и само каждую минуту.</value>
+  </data>
+  <data name="ServerMap_ThisMachine" xml:space="preserve">
+    <value>Эта машина</value>
+  </data>
+  <data name="ServerMap_RoleServer" xml:space="preserve">
+    <value>Сервер</value>
+  </data>
+  <data name="ServerMap_RolePlayer" xml:space="preserve">
+    <value>Игрок</value>
+  </data>
+  <data name="ServerMap_RoleHeadless" xml:space="preserve">
+    <value>Headless</value>
+  </data>
+  <data name="ServerMap_AppVersionFormat" xml:space="preserve">
+    <value>TCF Mod Manager {0}</value>
+  </data>
+  <data name="ServerMap_PresenceInGame" xml:space="preserve">
+    <value>В игре</value>
+  </data>
+  <data name="ServerMap_PresenceAppOpen" xml:space="preserve">
+    <value>Приложение открыто</value>
+  </data>
+  <data name="ServerMap_LastSeenMinutes_one" xml:space="preserve">
+    <value>Последняя связь {0} минуту назад</value>
+  </data>
+  <data name="ServerMap_LastSeenMinutes_few" xml:space="preserve">
+    <value>Последняя связь {0} минуты назад</value>
+  </data>
+  <data name="ServerMap_LastSeenMinutes_many" xml:space="preserve">
+    <value>Последняя связь {0} минут назад</value>
+  </data>
+  <data name="ServerMap_LastSeenHours_one" xml:space="preserve">
+    <value>Последняя связь {0} час назад</value>
+  </data>
+  <data name="ServerMap_LastSeenHours_few" xml:space="preserve">
+    <value>Последняя связь {0} часа назад</value>
+  </data>
+  <data name="ServerMap_LastSeenHours_many" xml:space="preserve">
+    <value>Последняя связь {0} часов назад</value>
+  </data>
+  <data name="ServerMap_LastSeenDays_one" xml:space="preserve">
+    <value>Последняя связь {0} день назад</value>
+  </data>
+  <data name="ServerMap_LastSeenDays_few" xml:space="preserve">
+    <value>Последняя связь {0} дня назад</value>
+  </data>
+  <data name="ServerMap_LastSeenDays_many" xml:space="preserve">
+    <value>Последняя связь {0} дней назад</value>
+  </data>
+  <data name="ServerMap_StandingNoList" xml:space="preserve">
+    <value>В этой установке нет списка модов с этого сервера, поэтому сравнивать не с чем.</value>
+  </data>
+  <data name="ServerMap_StandingUnreadable" xml:space="preserve">
+    <value>Прислала список модов, который эта версия приложения не может прочитать. Обновление TCF Mod Manager здесь должно это исправить.</value>
+  </data>
+  <data name="ServerMap_StandingNotReported" xml:space="preserve">
+    <value>Ещё не прислала свой список модов.</value>
+  </data>
+  <data name="ServerMap_StandingUpToDate_one" xml:space="preserve">
+    <value>Есть всё, что требует «{1}» ({0} мод)</value>
+  </data>
+  <data name="ServerMap_StandingUpToDate_few" xml:space="preserve">
+    <value>Есть всё, что требует «{1}» ({0} мода)</value>
+  </data>
+  <data name="ServerMap_StandingUpToDate_many" xml:space="preserve">
+    <value>Есть всё, что требует «{1}» ({0} модов)</value>
+  </data>
+  <data name="ServerMap_StandingBehind_one" xml:space="preserve">
+    <value>{0} мод нужно установить, обновить или включить: {1}</value>
+  </data>
+  <data name="ServerMap_StandingBehind_few" xml:space="preserve">
+    <value>{0} мода нужно установить, обновить или включить: {1}</value>
+  </data>
+  <data name="ServerMap_StandingBehind_many" xml:space="preserve">
+    <value>{0} модов нужно установить, обновить или включить: {1}</value>
+  </data>
+  <data name="ServerMap_StandingManual_one" xml:space="preserve">
+    <value>{0} мод нужно скачать вручную: {1}</value>
+  </data>
+  <data name="ServerMap_StandingManual_few" xml:space="preserve">
+    <value>{0} мода нужно скачать вручную: {1}</value>
+  </data>
+  <data name="ServerMap_StandingManual_many" xml:space="preserve">
+    <value>{0} модов нужно скачать вручную: {1}</value>
+  </data>
+  <data name="ServerMap_Extras_one" xml:space="preserve">
+    <value>{0} мод не из списка: {1}</value>
+  </data>
+  <data name="ServerMap_Extras_few" xml:space="preserve">
+    <value>{0} мода не из списка: {1}</value>
+  </data>
+  <data name="ServerMap_Extras_many" xml:space="preserve">
+    <value>{0} модов не из списка: {1}</value>
+  </data>
+  <data name="ServerMap_InstalledCount_one" xml:space="preserve">
+    <value>Установлен {0} мод</value>
+  </data>
+  <data name="ServerMap_InstalledCount_few" xml:space="preserve">
+    <value>Установлено {0} мода</value>
+  </data>
+  <data name="ServerMap_InstalledCount_many" xml:space="preserve">
+    <value>Установлено {0} модов</value>
+  </data>
+  <data name="ServerMap_ModDisabledFormat" xml:space="preserve">
+    <value>{0} (отключён)</value>
+  </data>
+  <data name="ServerMap_ConsentTitle" xml:space="preserve">
+    <value>Поделиться этой машиной с сервером?</value>
+  </data>
+  <data name="ServerMap_ConsentMessageFormat" xml:space="preserve">
+    <value>{0} сможет показывать всем, у кого есть его ключ, имя этой машины, установленные моды и их версии, а также запущена ли игра. Ничего не отправляется, пока вы не согласитесь, и вы можете прекратить в любой момент в параметрах — это также уберёт машину с карты.</value>
+  </data>
+  <data name="ServerMap_ConsentAllow" xml:space="preserve">
+    <value>Поделиться</value>
+  </data>
+  <data name="ServerMap_ConsentDecline" xml:space="preserve">
+    <value>Не делиться</value>
+  </data>
+  <data name="ServerMap_ReportingPendingFormat" xml:space="preserve">
+    <value>Эта машина отмечается на этом сервере как «{0}».</value>
+  </data>
+  <data name="ServerMap_ReportingFormat" xml:space="preserve">
+    <value>Эта машина отмечается на этом сервере как «{0}». Последняя отметка в {1}.</value>
+  </data>
+  <data name="ServerMap_ReportFailed" xml:space="preserve">
+    <value>Последняя отметка не дошла до сервера. Повтор каждую минуту.</value>
+  </data>
+  <data name="ServerMap_NotReporting" xml:space="preserve">
+    <value>Эта машина не отмечается на этом сервере. Это можно изменить в параметрах, в разделе «Подключение к карте сервера».</value>
+  </data>
+  <data name="Options_ServerMapReport" xml:space="preserve">
+    <value>Отмечать эту машину на сервере</value>
+  </data>
+  <data name="Options_ServerMapReportHint" xml:space="preserve">
+    <value>Показывает имя этой машины, установленные моды и запущена ли игра всем, у кого есть ключ сервера. Спрашивается один раз для каждого сервера; выключение убирает машину с карты.</value>
+  </data>
+  <data name="Options_ServerMapDisplayName" xml:space="preserve">
+    <value>Имя на карте</value>
+  </data>
+  <data name="Options_ServerMapDisplayNameHint" xml:space="preserve">
+    <value>Оставьте пустым, чтобы использовать имя этого компьютера.</value>
   </data>
 </root>

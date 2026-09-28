@@ -138,6 +138,18 @@ public static class ServerMapProblems
     // How the key is described in Options. Says what it is and is not, because the word "key"
     // invites people to treat it as a password and reuse one.
     //
+    //
+    // Why the map could not be read. A server mod older than 0.2.0 is not a failure - it is a server
+    // that has no map yet, and the operator is the one who can change that.
+    //
+    public static string DescribeMap(ServerMapProblem problem) => problem switch
+    {
+        ServerMapProblem.MapUnsupported => Strings.ServerMap_MapUnsupported,
+        ServerMapProblem.KeyRequired => Strings.ServerMap_KeyRequired,
+        ServerMapProblem.KeyRejected => Strings.ServerMap_KeyRejected,
+        _ => Strings.ServerMap_MapUnavailable,
+    };
+
     public static string DescribeKey(bool hasKey, bool serverRequiresKey) => (hasKey, serverRequiresKey) switch
     {
         (false, true) => Strings.ServerMap_KeyNeeded,

@@ -333,8 +333,6 @@ internal static class Strings
     internal static string ServerMap_PublishedListHeader => LocalizationService.Get("ServerMap_PublishedListHeader");
     internal static string ServerMap_FetchAgain => LocalizationService.Get("ServerMap_FetchAgain");
     internal static string ServerMap_FetchAgainToolTip => LocalizationService.Get("ServerMap_FetchAgainToolTip");
-    internal static string ServerMap_WhoElseHeader => LocalizationService.Get("ServerMap_WhoElseHeader");
-    internal static string ServerMap_WhoElseEmpty => LocalizationService.Get("ServerMap_WhoElseEmpty");
     internal static string ReadModPage_Title => LocalizationService.Get("ReadModPage_Title");
     internal static string ReadModPage_Intro => LocalizationService.Get("ReadModPage_Intro");
     internal static string ReadModPage_SkipOpening => LocalizationService.Get("ReadModPage_SkipOpening");
@@ -1411,4 +1409,49 @@ internal static class Strings
     internal static string Options_RoleSummaryHeadless => LocalizationService.Get("Options_RoleSummaryHeadless");
     internal static string Options_RoleSummaryNeither => LocalizationService.Get("Options_RoleSummaryNeither");
     internal static string Options_DataFilesHint => LocalizationService.Get("Options_DataFilesHint");
+    internal static string ServerMap_MachinesHeader => LocalizationService.Get("ServerMap_MachinesHeader");
+    internal static string ServerMap_MachinesEmpty => LocalizationService.Get("ServerMap_MachinesEmpty");
+    internal static string ServerMap_MapUnsupported => LocalizationService.Get("ServerMap_MapUnsupported");
+    internal static string ServerMap_MapUnavailable => LocalizationService.Get("ServerMap_MapUnavailable");
+    internal static string ServerMap_RefreshMap => LocalizationService.Get("ServerMap_RefreshMap");
+    internal static string ServerMap_RefreshMapToolTip => LocalizationService.Get("ServerMap_RefreshMapToolTip");
+    internal static string ServerMap_ThisMachine => LocalizationService.Get("ServerMap_ThisMachine");
+    internal static string ServerMap_RoleServer => LocalizationService.Get("ServerMap_RoleServer");
+    internal static string ServerMap_RolePlayer => LocalizationService.Get("ServerMap_RolePlayer");
+    internal static string ServerMap_RoleHeadless => LocalizationService.Get("ServerMap_RoleHeadless");
+    internal static string ServerMap_AppVersionFormat => LocalizationService.Get("ServerMap_AppVersionFormat");
+    internal static string ServerMap_PresenceInGame => LocalizationService.Get("ServerMap_PresenceInGame");
+    internal static string ServerMap_PresenceAppOpen => LocalizationService.Get("ServerMap_PresenceAppOpen");
+    internal static string ServerMap_LastSeenMinutes(int count, params object?[] values) =>
+        LocalizationService.Plural("ServerMap_LastSeenMinutes", count, values);
+    internal static string ServerMap_LastSeenHours(int count, params object?[] values) =>
+        LocalizationService.Plural("ServerMap_LastSeenHours", count, values);
+    internal static string ServerMap_LastSeenDays(int count, params object?[] values) =>
+        LocalizationService.Plural("ServerMap_LastSeenDays", count, values);
+    internal static string ServerMap_StandingNoList => LocalizationService.Get("ServerMap_StandingNoList");
+    internal static string ServerMap_StandingUnreadable => LocalizationService.Get("ServerMap_StandingUnreadable");
+    internal static string ServerMap_StandingNotReported => LocalizationService.Get("ServerMap_StandingNotReported");
+    internal static string ServerMap_StandingUpToDate(int count, params object?[] values) =>
+        LocalizationService.Plural("ServerMap_StandingUpToDate", count, values);
+    internal static string ServerMap_StandingBehind(int count, params object?[] values) =>
+        LocalizationService.Plural("ServerMap_StandingBehind", count, values);
+    internal static string ServerMap_StandingManual(int count, params object?[] values) =>
+        LocalizationService.Plural("ServerMap_StandingManual", count, values);
+    internal static string ServerMap_Extras(int count, params object?[] values) =>
+        LocalizationService.Plural("ServerMap_Extras", count, values);
+    internal static string ServerMap_InstalledCount(int count, params object?[] values) =>
+        LocalizationService.Plural("ServerMap_InstalledCount", count, values);
+    internal static string ServerMap_ModDisabledFormat => LocalizationService.Get("ServerMap_ModDisabledFormat");
+    internal static string ServerMap_ConsentTitle => LocalizationService.Get("ServerMap_ConsentTitle");
+    internal static string ServerMap_ConsentMessageFormat => LocalizationService.Get("ServerMap_ConsentMessageFormat");
+    internal static string ServerMap_ConsentAllow => LocalizationService.Get("ServerMap_ConsentAllow");
+    internal static string ServerMap_ConsentDecline => LocalizationService.Get("ServerMap_ConsentDecline");
+    internal static string ServerMap_ReportingPendingFormat => LocalizationService.Get("ServerMap_ReportingPendingFormat");
+    internal static string ServerMap_ReportingFormat => LocalizationService.Get("ServerMap_ReportingFormat");
+    internal static string ServerMap_ReportFailed => LocalizationService.Get("ServerMap_ReportFailed");
+    internal static string ServerMap_NotReporting => LocalizationService.Get("ServerMap_NotReporting");
+    internal static string Options_ServerMapReport => LocalizationService.Get("Options_ServerMapReport");
+    internal static string Options_ServerMapReportHint => LocalizationService.Get("Options_ServerMapReportHint");
+    internal static string Options_ServerMapDisplayName => LocalizationService.Get("Options_ServerMapDisplayName");
+    internal static string Options_ServerMapDisplayNameHint => LocalizationService.Get("Options_ServerMapDisplayNameHint");
 }

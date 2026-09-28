@@ -3825,12 +3825,6 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="ServerMap_UnreachableFormat" xml:space="preserve">
     <value>Rien n'a répondu à {0}:{1}. Le serveur n'est peut-être pas démarré, ou l'adresse ou le port sont erronés - c'est la même adresse que dans le launcher SPT.</value>
   </data>
-  <data name="ServerMap_WhoElseEmpty" xml:space="preserve">
-    <value>Rien pour l'instant. Le serveur ne signale pas les autres machines qui lui sont connectées, cette page ne peut donc afficher que le serveur lui-même pour le moment. L'installation de personne n'est envoyée où que ce soit, y compris la vôtre. Cela arrivera avec une version ultérieure du mod serveur, et vous serez consulté avant que quoi que ce soit ne soit signalé au sujet de cette machine.</value>
-  </data>
-  <data name="ServerMap_WhoElseHeader" xml:space="preserve">
-    <value>Qui d'autre est sur cette carte</value>
-  </data>
   <data name="Sort_AuthorAscending" xml:space="preserve">
     <value>Par auteur (A-Z)</value>
   </data>
@@ -4313,5 +4307,140 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   </data>
   <data name="Options_DataFilesHint" xml:space="preserve">
     <value>Afficher ou modifier à la main les fichiers JSON sous Data\.</value>
+  </data>
+  <data name="ServerMap_MachinesHeader" xml:space="preserve">
+    <value>Machines sur ce serveur</value>
+  </data>
+  <data name="ServerMap_MachinesEmpty" xml:space="preserve">
+    <value>Personne ne se signale encore à ce serveur. Une machine apparaît ici dès qu'une personne utilisant TCF Mod Manager s'y connecte et accepte de partager ce qu'elle a installé. Les machines sans TCF Mod Manager n'apparaissent jamais.</value>
+  </data>
+  <data name="ServerMap_MapUnsupported" xml:space="preserve">
+    <value>Le mod Server Map de ce serveur est antérieur à la 0.2.0. Il peut servir sa liste de mods, mais pas montrer qui s'y trouve. Demandez à la personne qui gère le serveur de mettre le mod à jour.</value>
+  </data>
+  <data name="ServerMap_MapUnavailable" xml:space="preserve">
+    <value>Impossible de lire la carte pour le moment. Nouvel essai dans une minute.</value>
+  </data>
+  <data name="ServerMap_RefreshMap" xml:space="preserve">
+    <value>Actualiser</value>
+  </data>
+  <data name="ServerMap_RefreshMapToolTip" xml:space="preserve">
+    <value>Redemander au serveur qui se signale à lui. La page le fait aussi chaque minute tant qu'elle est ouverte.</value>
+  </data>
+  <data name="ServerMap_ThisMachine" xml:space="preserve">
+    <value>Cette machine</value>
+  </data>
+  <data name="ServerMap_RoleServer" xml:space="preserve">
+    <value>Serveur</value>
+  </data>
+  <data name="ServerMap_RolePlayer" xml:space="preserve">
+    <value>Joueur</value>
+  </data>
+  <data name="ServerMap_RoleHeadless" xml:space="preserve">
+    <value>Headless</value>
+  </data>
+  <data name="ServerMap_AppVersionFormat" xml:space="preserve">
+    <value>TCF Mod Manager {0}</value>
+  </data>
+  <data name="ServerMap_PresenceInGame" xml:space="preserve">
+    <value>En jeu</value>
+  </data>
+  <data name="ServerMap_PresenceAppOpen" xml:space="preserve">
+    <value>Application ouverte</value>
+  </data>
+  <data name="ServerMap_LastSeenMinutes_one" xml:space="preserve">
+    <value>Vu pour la dernière fois il y a {0} minute</value>
+  </data>
+  <data name="ServerMap_LastSeenMinutes_other" xml:space="preserve">
+    <value>Vu pour la dernière fois il y a {0} minutes</value>
+  </data>
+  <data name="ServerMap_LastSeenHours_one" xml:space="preserve">
+    <value>Vu pour la dernière fois il y a {0} heure</value>
+  </data>
+  <data name="ServerMap_LastSeenHours_other" xml:space="preserve">
+    <value>Vu pour la dernière fois il y a {0} heures</value>
+  </data>
+  <data name="ServerMap_LastSeenDays_one" xml:space="preserve">
+    <value>Vu pour la dernière fois il y a {0} jour</value>
+  </data>
+  <data name="ServerMap_LastSeenDays_other" xml:space="preserve">
+    <value>Vu pour la dernière fois il y a {0} jours</value>
+  </data>
+  <data name="ServerMap_StandingNoList" xml:space="preserve">
+    <value>Cette installation ne détient aucune liste de mods de ce serveur, il n'y a donc rien à comparer.</value>
+  </data>
+  <data name="ServerMap_StandingUnreadable" xml:space="preserve">
+    <value>A envoyé une liste de mods que cette version de l'application ne sait pas lire. Mettre à jour TCF Mod Manager ici devrait régler le problème.</value>
+  </data>
+  <data name="ServerMap_StandingNotReported" xml:space="preserve">
+    <value>N'a pas encore envoyé sa liste de mods.</value>
+  </data>
+  <data name="ServerMap_StandingUpToDate_one" xml:space="preserve">
+    <value>A tout ce que « {1} » demande ({0} mod)</value>
+  </data>
+  <data name="ServerMap_StandingUpToDate_other" xml:space="preserve">
+    <value>A tout ce que « {1} » demande ({0} mods)</value>
+  </data>
+  <data name="ServerMap_StandingBehind_one" xml:space="preserve">
+    <value>{0} mod à installer, mettre à jour ou activer : {1}</value>
+  </data>
+  <data name="ServerMap_StandingBehind_other" xml:space="preserve">
+    <value>{0} mods à installer, mettre à jour ou activer : {1}</value>
+  </data>
+  <data name="ServerMap_StandingManual_one" xml:space="preserve">
+    <value>{0} mod à récupérer à la main : {1}</value>
+  </data>
+  <data name="ServerMap_StandingManual_other" xml:space="preserve">
+    <value>{0} mods à récupérer à la main : {1}</value>
+  </data>
+  <data name="ServerMap_Extras_one" xml:space="preserve">
+    <value>{0} mod absent de la liste : {1}</value>
+  </data>
+  <data name="ServerMap_Extras_other" xml:space="preserve">
+    <value>{0} mods absents de la liste : {1}</value>
+  </data>
+  <data name="ServerMap_InstalledCount_one" xml:space="preserve">
+    <value>{0} mod installé</value>
+  </data>
+  <data name="ServerMap_InstalledCount_other" xml:space="preserve">
+    <value>{0} mods installés</value>
+  </data>
+  <data name="ServerMap_ModDisabledFormat" xml:space="preserve">
+    <value>{0} (désactivé)</value>
+  </data>
+  <data name="ServerMap_ConsentTitle" xml:space="preserve">
+    <value>Partager cette machine avec le serveur ?</value>
+  </data>
+  <data name="ServerMap_ConsentMessageFormat" xml:space="preserve">
+    <value>{0} peut montrer à toute personne détenant sa clé le nom de cette machine, les mods installés et leurs versions, et si le jeu est lancé. Rien n'est envoyé tant que vous n'avez pas dit oui, et vous pouvez arrêter à tout moment dans les Options, ce qui retire aussi cette machine de la carte.</value>
+  </data>
+  <data name="ServerMap_ConsentAllow" xml:space="preserve">
+    <value>Partager</value>
+  </data>
+  <data name="ServerMap_ConsentDecline" xml:space="preserve">
+    <value>Ne pas partager</value>
+  </data>
+  <data name="ServerMap_ReportingPendingFormat" xml:space="preserve">
+    <value>Cette machine se signale à ce serveur sous le nom « {0} ».</value>
+  </data>
+  <data name="ServerMap_ReportingFormat" xml:space="preserve">
+    <value>Cette machine se signale à ce serveur sous le nom « {0} ». Dernier signalement à {1}.</value>
+  </data>
+  <data name="ServerMap_ReportFailed" xml:space="preserve">
+    <value>Le dernier signalement n'a pas atteint le serveur. Nouvel essai chaque minute.</value>
+  </data>
+  <data name="ServerMap_NotReporting" xml:space="preserve">
+    <value>Cette machine ne se signale pas à ce serveur. Vous pouvez changer cela dans les Options, sous Connexion à la carte du serveur.</value>
+  </data>
+  <data name="Options_ServerMapReport" xml:space="preserve">
+    <value>Signaler cette machine au serveur</value>
+  </data>
+  <data name="Options_ServerMapReportHint" xml:space="preserve">
+    <value>Partage le nom de cette machine, ses mods installés et si le jeu est lancé avec toute personne détenant la clé du serveur. Demandé une fois par serveur ; le désactiver retire cette machine de la carte.</value>
+  </data>
+  <data name="Options_ServerMapDisplayName" xml:space="preserve">
+    <value>Nom sur la carte</value>
+  </data>
+  <data name="Options_ServerMapDisplayNameHint" xml:space="preserve">
+    <value>Laisser vide pour utiliser le nom de cet ordinateur.</value>
   </data>
 </root>

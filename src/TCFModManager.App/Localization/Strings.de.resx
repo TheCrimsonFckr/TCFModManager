@@ -3825,12 +3825,6 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="ServerMap_UnreachableFormat" xml:space="preserve">
     <value>Unter {0}:{1} hat nichts geantwortet. Vielleicht läuft der Server nicht, oder Adresse oder Port stimmen nicht - es ist dieselbe, die du im SPT-Launcher benutzt.</value>
   </data>
-  <data name="ServerMap_WhoElseEmpty" xml:space="preserve">
-    <value>Noch nichts. Der Server meldet die anderen mit ihm verbundenen Maschinen nicht, deshalb kann diese Seite vorerst nur den Server selbst zeigen. Es wird niemandes Installation irgendwohin gesendet, deine auch nicht. Das kommt mit einer späteren Version des Server-Mods und fragt nach, bevor es irgendetwas über diese Maschine meldet.</value>
-  </data>
-  <data name="ServerMap_WhoElseHeader" xml:space="preserve">
-    <value>Wer sonst noch auf dieser Map ist</value>
-  </data>
   <data name="Sort_AuthorAscending" xml:space="preserve">
     <value>Nach Autor (A-Z)</value>
   </data>
@@ -4313,5 +4307,140 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   </data>
   <data name="Options_DataFilesHint" xml:space="preserve">
     <value>JSON-Dateien unter Data\ ansehen oder von Hand bearbeiten.</value>
+  </data>
+  <data name="ServerMap_MachinesHeader" xml:space="preserve">
+    <value>Maschinen auf diesem Server</value>
+  </data>
+  <data name="ServerMap_MachinesEmpty" xml:space="preserve">
+    <value>Noch meldet sich niemand bei diesem Server. Eine Maschine erscheint hier, sobald jemand mit TCF Mod Manager sich verbindet und zustimmt, zu teilen, was installiert ist. Maschinen ohne TCF Mod Manager erscheinen nie.</value>
+  </data>
+  <data name="ServerMap_MapUnsupported" xml:space="preserve">
+    <value>Der Server-Map-Mod dieses Servers ist älter als 0.2.0. Er kann seine Modliste bereitstellen, aber nicht zeigen, wer darauf ist. Frag denjenigen, der den Server betreibt, ob er den Mod aktualisiert.</value>
+  </data>
+  <data name="ServerMap_MapUnavailable" xml:space="preserve">
+    <value>Die Map konnte gerade nicht gelesen werden. In einer Minute wird es erneut versucht.</value>
+  </data>
+  <data name="ServerMap_RefreshMap" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="ServerMap_RefreshMapToolTip" xml:space="preserve">
+    <value>Den Server erneut fragen, wer sich bei ihm meldet. Solange die Seite offen ist, passiert das auch jede Minute von selbst.</value>
+  </data>
+  <data name="ServerMap_ThisMachine" xml:space="preserve">
+    <value>Diese Maschine</value>
+  </data>
+  <data name="ServerMap_RoleServer" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="ServerMap_RolePlayer" xml:space="preserve">
+    <value>Spieler</value>
+  </data>
+  <data name="ServerMap_RoleHeadless" xml:space="preserve">
+    <value>Headless</value>
+  </data>
+  <data name="ServerMap_AppVersionFormat" xml:space="preserve">
+    <value>TCF Mod Manager {0}</value>
+  </data>
+  <data name="ServerMap_PresenceInGame" xml:space="preserve">
+    <value>Im Spiel</value>
+  </data>
+  <data name="ServerMap_PresenceAppOpen" xml:space="preserve">
+    <value>App geöffnet</value>
+  </data>
+  <data name="ServerMap_LastSeenMinutes_one" xml:space="preserve">
+    <value>Zuletzt gesehen vor 1 Minute</value>
+  </data>
+  <data name="ServerMap_LastSeenMinutes_other" xml:space="preserve">
+    <value>Zuletzt gesehen vor {0} Minuten</value>
+  </data>
+  <data name="ServerMap_LastSeenHours_one" xml:space="preserve">
+    <value>Zuletzt gesehen vor 1 Stunde</value>
+  </data>
+  <data name="ServerMap_LastSeenHours_other" xml:space="preserve">
+    <value>Zuletzt gesehen vor {0} Stunden</value>
+  </data>
+  <data name="ServerMap_LastSeenDays_one" xml:space="preserve">
+    <value>Zuletzt gesehen vor 1 Tag</value>
+  </data>
+  <data name="ServerMap_LastSeenDays_other" xml:space="preserve">
+    <value>Zuletzt gesehen vor {0} Tagen</value>
+  </data>
+  <data name="ServerMap_StandingNoList" xml:space="preserve">
+    <value>Diese Installation hat keine Modliste von diesem Server, es gibt also nichts zum Vergleichen.</value>
+  </data>
+  <data name="ServerMap_StandingUnreadable" xml:space="preserve">
+    <value>Hat eine Modliste gesendet, die diese Version der App nicht lesen kann. Ein Update von TCF Mod Manager hier sollte das beheben.</value>
+  </data>
+  <data name="ServerMap_StandingNotReported" xml:space="preserve">
+    <value>Hat seine Modliste noch nicht gesendet.</value>
+  </data>
+  <data name="ServerMap_StandingUpToDate_one" xml:space="preserve">
+    <value>Hat alles, was „{1}“ verlangt (1 Mod)</value>
+  </data>
+  <data name="ServerMap_StandingUpToDate_other" xml:space="preserve">
+    <value>Hat alles, was „{1}“ verlangt ({0} Mods)</value>
+  </data>
+  <data name="ServerMap_StandingBehind_one" xml:space="preserve">
+    <value>1 Mod zu installieren, aktualisieren oder aktivieren: {1}</value>
+  </data>
+  <data name="ServerMap_StandingBehind_other" xml:space="preserve">
+    <value>{0} Mods zu installieren, aktualisieren oder aktivieren: {1}</value>
+  </data>
+  <data name="ServerMap_StandingManual_one" xml:space="preserve">
+    <value>1 Mod von Hand zu holen: {1}</value>
+  </data>
+  <data name="ServerMap_StandingManual_other" xml:space="preserve">
+    <value>{0} Mods von Hand zu holen: {1}</value>
+  </data>
+  <data name="ServerMap_Extras_one" xml:space="preserve">
+    <value>1 Mod nicht auf der Liste: {1}</value>
+  </data>
+  <data name="ServerMap_Extras_other" xml:space="preserve">
+    <value>{0} Mods nicht auf der Liste: {1}</value>
+  </data>
+  <data name="ServerMap_InstalledCount_one" xml:space="preserve">
+    <value>1 Mod installiert</value>
+  </data>
+  <data name="ServerMap_InstalledCount_other" xml:space="preserve">
+    <value>{0} Mods installiert</value>
+  </data>
+  <data name="ServerMap_ModDisabledFormat" xml:space="preserve">
+    <value>{0} (deaktiviert)</value>
+  </data>
+  <data name="ServerMap_ConsentTitle" xml:space="preserve">
+    <value>Diese Maschine mit dem Server teilen?</value>
+  </data>
+  <data name="ServerMap_ConsentMessageFormat" xml:space="preserve">
+    <value>{0} kann allen, die seinen Schlüssel haben, den Namen dieser Maschine zeigen, welche Mods in welchen Versionen installiert sind und ob das Spiel läuft. Nichts wird gesendet, bevor du zustimmst, und du kannst jederzeit in den Optionen aufhören – dabei wird diese Maschine auch von der Map genommen.</value>
+  </data>
+  <data name="ServerMap_ConsentAllow" xml:space="preserve">
+    <value>Teilen</value>
+  </data>
+  <data name="ServerMap_ConsentDecline" xml:space="preserve">
+    <value>Nicht teilen</value>
+  </data>
+  <data name="ServerMap_ReportingPendingFormat" xml:space="preserve">
+    <value>Diese Maschine meldet sich bei diesem Server als „{0}“.</value>
+  </data>
+  <data name="ServerMap_ReportingFormat" xml:space="preserve">
+    <value>Diese Maschine meldet sich bei diesem Server als „{0}“. Letzte Meldung um {1}.</value>
+  </data>
+  <data name="ServerMap_ReportFailed" xml:space="preserve">
+    <value>Die letzte Meldung hat den Server nicht erreicht. Es wird jede Minute erneut versucht.</value>
+  </data>
+  <data name="ServerMap_NotReporting" xml:space="preserve">
+    <value>Diese Maschine meldet sich nicht bei diesem Server. Das kannst du in den Optionen unter Server-Map-Verbindung ändern.</value>
+  </data>
+  <data name="Options_ServerMapReport" xml:space="preserve">
+    <value>Diese Maschine beim Server melden</value>
+  </data>
+  <data name="Options_ServerMapReportHint" xml:space="preserve">
+    <value>Teilt den Namen dieser Maschine, die installierten Mods und ob das Spiel läuft mit allen, die den Schlüssel des Servers haben. Wird einmal pro Server gefragt; ausschalten nimmt diese Maschine von der Map.</value>
+  </data>
+  <data name="Options_ServerMapDisplayName" xml:space="preserve">
+    <value>Name auf der Map</value>
+  </data>
+  <data name="Options_ServerMapDisplayNameHint" xml:space="preserve">
+    <value>Leer lassen, um den Namen dieses Computers zu verwenden.</value>
   </data>
 </root>
