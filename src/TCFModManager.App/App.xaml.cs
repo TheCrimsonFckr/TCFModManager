@@ -98,6 +98,9 @@ public partial class App : Application
 
         // The first check is one interval from now, never at launch (R2). A no-op while it's off.
         AppServices.UpdateWatcher.Start();
+
+        // A no-op unless the page is on and the user agreed to report to this server (D9).
+        AppServices.ServerMapReporter.Start();
     }
 
     // Another launch of the exe from this folder asked for the window.
@@ -143,6 +146,7 @@ public partial class App : Application
         }
 
         AppServices.UpdateWatcher.Stop();
+        AppServices.ServerMapReporter.Stop();
         AppTray.Dispose();
         UpdateToasts.RemoveMessages();
         DependencyBadgeLoader.Flush();

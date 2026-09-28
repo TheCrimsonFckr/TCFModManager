@@ -95,4 +95,10 @@ internal static class AppServices
     // Turns a mod list into an installed set and back - the scan and the downloads Core can't do
     // for itself. Declared after DownloadQueue, which it enqueues onto.
     public static ModListService ModListWorkflow { get; } = new();
+
+    //
+    // Tells the Server Map server this machine is here, once a minute while the app runs. Last,
+    // because it subscribes to DownloadQueue and reads the install through ModListWorkflow.
+    //
+    public static ServerMapReporter ServerMapReporter { get; } = new();
 }
