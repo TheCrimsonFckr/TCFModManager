@@ -23,6 +23,9 @@ public partial class HelpPage : Page
         // Navigating to this page again while it is on screen doesn't reload it, so a request made
         // from here - the no-install banner - arrives by the event instead.
         Loaded += (_, _) => TakeRequest();
+
+        // The page is cached, so without this the next visit opens on whatever was left open.
+        Unloaded += (_, _) => ViewModel.CollapseAll();
         AppNavigation.HelpRequested += (_, _) =>
         {
             if (IsLoaded) TakeRequest();

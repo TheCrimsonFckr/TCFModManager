@@ -51,7 +51,22 @@ public partial class HelpViewModel : LocalizedViewModel
     [ObservableProperty]
     private bool _hasMatches = true;
 
-    partial void OnSearchTextChanged(string value) => ApplyFilter();
+    partial void OnSearchTextChanged(string value)
+    {
+        ApplyFilter();
+
+        // Clearing the search puts the page back as it opens, rather than leaving every match open.
+        if (string.IsNullOrWhiteSpace(value)) CollapseAll();
+    }
+
+    // Leaving the page and clearing the search both close every how-to.
+    public void CollapseAll()
+    {
+        foreach (var section in Sections)
+        {
+            foreach (var topic in section.Topics) topic.IsExpanded = false;
+        }
+    }
 
     private void ApplyFilter()
     {
