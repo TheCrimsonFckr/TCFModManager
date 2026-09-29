@@ -160,9 +160,20 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
 
     public bool HasKeyNotice => !string.IsNullOrWhiteSpace(KeyNotice);
 
-    // The Server Map mod's page on sp-mod.com, an addon of TCF Mod Manager. Blank hides the button;
-    // kept in Core with the addon's id so the App update page's check links the same page.
-    public const string AddonPageUrl = ServerMapAddon.PageUrl;
+    //
+    // The Server Map mod's page on sp-mod.com, an addon of TCF Mod Manager - the one for this
+    // machine's SPT line, since each line has its own. Blank hides the button; the ids live in Core
+    // so the App update page's check links the same page.
+    //
+    public string AddonPageUrl
+    {
+        get
+        {
+            var installPath = _settings.Load().SptInstallPath;
+            return ServerMapAddon.PageUrl(
+                ServerMapModVersions.LineFor(ServerMapModVersions.FindInstalled(installPath), installPath));
+        }
+    }
 
     public bool HasAddonPage => !string.IsNullOrWhiteSpace(AddonPageUrl);
 
@@ -174,11 +185,12 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
     // server once, and every player joining it needs nothing but this page switched on.
     //
     [RelayCommand(CanExecute = nameof(HasAddonPage))]
-    private static void OpenAddonPage()
+    private void OpenAddonPage()
     {
-        if (string.IsNullOrWhiteSpace(AddonPageUrl)) return;
+        var url = AddonPageUrl;
+        if (string.IsNullOrWhiteSpace(url)) return;
 
-        Process.Start(new ProcessStartInfo(AddonPageUrl) { UseShellExecute = true });
+        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
     }
 
     public bool CanUseLocalKey =>

@@ -89,6 +89,7 @@ public class ServerMapModVersionsTests : IDisposable
         Assert.Equal(ExpectedVersion, found.PayloadVersion);
         Assert.Equal(stub, found.StubPath);
         Assert.Equal(ExpectedVersion, found.StubVersion);
+        Assert.Equal(ServerMapSptLine.Spt41, found.StubLine);
         Assert.False(found.StubBehindPayload);
     }
 
@@ -102,6 +103,7 @@ public class ServerMapModVersionsTests : IDisposable
         var found = ServerMapModVersions.FindInstalled(sptInstallPath: _root, appDirectory: Path.Combine(_root, "elsewhere"))!;
 
         Assert.Equal(stub, found.StubPath);
+        Assert.Equal(ServerMapSptLine.Spt40, found.StubLine);
     }
 
     [Fact]
@@ -113,7 +115,35 @@ public class ServerMapModVersionsTests : IDisposable
 
         Assert.Null(found.StubPath);
         Assert.Null(found.StubVersion);
+        Assert.Null(found.StubLine);
         Assert.False(found.StubBehindPayload);
+    }
+
+    [Theory]
+    [InlineData(ServerMapSptLine.Spt40, "126", "https://sp-mod.com/addon/126/tfc-server-mapper")]
+    [InlineData(ServerMapSptLine.Spt41, "142", "https://sp-mod.com/addon/142/tfc-server-mapper-41")]
+    public void Each_line_has_its_own_addon(ServerMapSptLine line, string id, string url)
+    {
+        Assert.Equal(id, ServerMapAddon.AddonId(line));
+        Assert.Equal(url, ServerMapAddon.PageUrl(line));
+    }
+
+    [Theory]
+    [InlineData(ServerMapSptLine.Spt40)]
+    [InlineData(ServerMapSptLine.Spt41)]
+    public void The_stub_on_disk_decides_the_line(ServerMapSptLine line)
+    {
+        var installed = new InstalledServerMapMod { PayloadPath = "p", StubLine = line };
+
+        Assert.Equal(line, ServerMapModVersions.LineFor(installed, sptInstallPath: null));
+    }
+
+    // Nothing on disk says which line - no stub, no readable server exe - so the current one.
+    [Fact]
+    public void With_nothing_to_go_on_the_line_is_41()
+    {
+        Assert.Equal(ServerMapSptLine.Spt41, ServerMapModVersions.LineFor(null, sptInstallPath: null));
+        Assert.Equal(ServerMapSptLine.Spt41, ServerMapModVersions.LineFor(null, _root));
     }
 
     [Fact]
@@ -138,11 +168,22 @@ public class ServerMapModVersionsTests : IDisposable
         var handler = new FakeHttpMessageHandler(HttpStatusCode.OK, VersionsFixture);
         using var client = new SpModApiClient(new HttpClient(handler));
 
-        var latest = await new ServerMapModUpdateService(client).LatestAsync();
+        var latest = await new ServerMapModUpdateService(client).LatestAsync(ServerMapSptLine.Spt41);
 
         Assert.Equal("0.2.0", latest!.LatestVersion);
         Assert.Equal("<p>The map.</p>", latest.Changelog);
-        Assert.Contains($"/api/v0/addon/{ServerMapAddon.AddonId}/versions", handler.LastRequestUri!.AbsolutePath);
+        Assert.Contains("/api/v0/addon/142/versions", handler.LastRequestUri!.AbsolutePath);
+    }
+
+    [Fact]
+    public async Task The_40_line_asks_its_own_addon()
+    {
+        var handler = new FakeHttpMessageHandler(HttpStatusCode.OK, VersionsFixture);
+        using var client = new SpModApiClient(new HttpClient(handler));
+
+        await new ServerMapModUpdateService(client).LatestAsync(ServerMapSptLine.Spt40);
+
+        Assert.Contains("/api/v0/addon/126/versions", handler.LastRequestUri!.AbsolutePath);
     }
 
     [Fact]
@@ -151,6 +192,6 @@ public class ServerMapModVersionsTests : IDisposable
         var handler = new FakeHttpMessageHandler(HttpStatusCode.OK, """{"success":true,"data":[],"links":{},"meta":{}}""");
         using var client = new SpModApiClient(new HttpClient(handler));
 
-        Assert.Null(await new ServerMapModUpdateService(client).LatestAsync());
+        Assert.Null(await new ServerMapModUpdateService(client).LatestAsync(ServerMapSptLine.Spt41));
     }
 }

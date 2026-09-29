@@ -4606,10 +4606,10 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>La pagina dell'app su sp-mod.com - tutto quello che c'è qui più in dettaglio, con i limiti e la risoluzione dei problemi. È in inglese.</value>
   </data>
   <data name="Help_SearchPlaceholder" xml:space="preserve">
-    <value>Cerca nella guida...</value>
+    <value>Come faccio a...?</value>
   </data>
   <data name="Help_NoMatches" xml:space="preserve">
-    <value>Nessuna voce corrisponde. Prova con meno parole, o apri la guida completa.</value>
+    <value>Non c'è ancora una risposta. Prova con meno parole, o apri la guida completa.</value>
   </data>
   <data name="Help_StepNumberFormat" xml:space="preserve">
     <value>{0}.</value>
@@ -5186,5 +5186,320 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   </data>
   <data name="Help_Downloads_Watch_Note_Monitor" xml:space="preserve">
     <value>Un download non sovrascrive mai un file - una seconda copia viene salvata accanto alla prima.</value>
+  </data>
+  <data name="Help_ReportProblem" xml:space="preserve">
+    <value>Segnala un problema</value>
+  </data>
+  <data name="Help_ReportProblemToolTip" xml:space="preserve">
+    <value>Apre la scheda delle segnalazioni sulla pagina sp-mod.com di questa app, dove puoi dire all'autore cosa è andato storto. È in inglese.</value>
+  </data>
+  <data name="Help_OpenPageFormat" xml:space="preserve">
+    <value>Apri {0}</value>
+  </data>
+  <data name="Help_ShowMeHow" xml:space="preserve">
+    <value>Mostrami come</value>
+  </data>
+  <data name="Help_Problems_Title" xml:space="preserve">
+    <value>Qualcosa non va</value>
+  </data>
+  <data name="Help_Installed_Remove_Title" xml:space="preserve">
+    <value>Rimuovere un mod</value>
+  </data>
+  <data name="Help_Installed_Remove_Step1" xml:space="preserve">
+    <value>In {0}, fai clic sulla scheda del mod per aprirla e premi {1}.</value>
+  </data>
+  <data name="Help_Installed_Remove_Step2" xml:space="preserve">
+    <value>Conferma. Se il mod ha file di configurazione suoi, ti viene chiesto se tenerli - vengono messi da parte, non eliminati - o rimuoverli insieme.</value>
+  </data>
+  <data name="Help_Installed_Remove_Note" xml:space="preserve">
+    <value>Un mod disattivato va riattivato prima di poterlo rimuovere. Per togliere un mod dal gioco senza eliminarlo, disattivalo invece.</value>
+  </data>
+  <data name="Help_Installed_Downgrade_Title" xml:space="preserve">
+    <value>Tornare a una versione più vecchia di un mod</value>
+  </data>
+  <data name="Help_Installed_Downgrade_Step1" xml:space="preserve">
+    <value>In {0}, fai clic sulla scheda del mod per aprirla, poi premi {1}.</value>
+  </data>
+  <data name="Help_Installed_Downgrade_Step2" xml:space="preserve">
+    <value>Scegli la versione più vecchia nell'elenco. Le versioni per altre release di SPT sono nascoste - premi {0} per vederle.</value>
+  </data>
+  <data name="Help_Installed_Downgrade_Step3" xml:space="preserve">
+    <value>Premi {0} e conferma.</value>
+  </data>
+  <data name="Help_Installed_Downgrade_Note" xml:space="preserve">
+    <value>Una versione più vecchia potrebbe non leggere impostazioni o dati del profilo salvati da una più recente, quindi controlla prima la pagina del mod.</value>
+  </data>
+  <data name="Help_Installed_SortOut_Title" xml:space="preserve">
+    <value>Sistemare un mod che si trova in due posti</value>
+  </data>
+  <data name="Help_Installed_SortOut_Step1" xml:space="preserve">
+    <value>In {0}, un mod presente sia in una cartella attiva sia in una disattivata ha un avviso sulla scheda. È il motivo più comune per cui un mod disattivato si carica ancora.</value>
+  </data>
+  <data name="Help_Installed_SortOut_Step2" xml:space="preserve">
+    <value>Apri la scheda, premi {0} e scegli la copia da tenere.</value>
+  </data>
+  <data name="Help_Installed_SortOut_Note" xml:space="preserve">
+    <value>L'altra copia viene messa da parte, non eliminata.</value>
+  </data>
+  <data name="Help_Options_Language_Title" xml:space="preserve">
+    <value>Cambiare la lingua dell'app</value>
+  </data>
+  <data name="Help_Options_Language_Step1" xml:space="preserve">
+    <value>In {0}, sotto {1}, scegli una lingua in {2}.</value>
+  </data>
+  <data name="Help_Options_Language_Step2" xml:space="preserve">
+    <value>Predefinita di sistema segue la lingua impostata in Windows. Il cambio è immediato - non si riavvia nulla.</value>
+  </data>
+  <data name="Help_Options_Language_Note" xml:space="preserve">
+    <value>La maggior parte delle traduzioni è automatica. Se qualcosa suona male, premi {0} in cima a questa pagina e scrivi come dovrebbe essere.</value>
+  </data>
+  <data name="Help_Options_Theme_Title" xml:space="preserve">
+    <value>Passare dal chiaro allo scuro</value>
+  </data>
+  <data name="Help_Options_Theme_Step1" xml:space="preserve">
+    <value>In {0}, cambia {1} in {2}, {3} o {4}.</value>
+  </data>
+  <data name="Help_Options_Role_Title" xml:space="preserve">
+    <value>Dire all'app che questa macchina è un headless Fika</value>
+  </data>
+  <data name="Help_Options_Role_Step1" xml:space="preserve">
+    <value>In {0}, sotto {1}, apri {2} con la freccia sulla sua riga.</value>
+  </data>
+  <data name="Help_Options_Role_Step2" xml:space="preserve">
+    <value>Imposta le opzioni in modo che mostrino {0} e {1}.</value>
+  </data>
+  <data name="Help_Options_Role_Note" xml:space="preserve">
+    <value>La lista mod di un server arriva poi senza i mod che servono solo a chi gioca. Se il launcher headless non viene trovato da solo, indicalo in {0}.</value>
+  </data>
+  <data name="Help_Problems_Greyed_Title" xml:space="preserve">
+    <value>Aggiorna o Rimuovi è disattivato</value>
+  </data>
+  <data name="Help_Problems_Greyed_Step1" xml:space="preserve">
+    <value>Il mod è disattivato. In {0}, premi il pulsante di accensione sulla sua scheda per riattivarlo.</value>
+  </data>
+  <data name="Help_Problems_Greyed_Step2" xml:space="preserve">
+    <value>Una volta attivo, Aggiorna e Rimuovi tornano a funzionare.</value>
+  </data>
+  <data name="Help_Problems_CloseSpt_Title" xml:space="preserve">
+    <value>Mi dice di chiudere prima il gioco o il server</value>
+  </data>
+  <data name="Help_Problems_CloseSpt_Step1" xml:space="preserve">
+    <value>Chiudi il gioco e la finestra della console del server.</value>
+  </data>
+  <data name="Help_Problems_CloseSpt_Step2" xml:space="preserve">
+    <value>Riprova.</value>
+  </data>
+  <data name="Help_Problems_CloseSpt_Note" xml:space="preserve">
+    <value>Tengono aperti i file dei mod, e un file in uso non si può sostituire.</value>
+  </data>
+  <data name="Help_Problems_Partial_Title" xml:space="preserve">
+    <value>Un'installazione si è fermata a metà</value>
+  </data>
+  <data name="Help_Problems_Partial_Step1" xml:space="preserve">
+    <value>In {0}, la scheda del mod dice che è installato solo in parte.</value>
+  </data>
+  <data name="Help_Problems_Partial_Step2" xml:space="preserve">
+    <value>Apri la scheda, premi {0} e poi {1} per completarla - oppure premi {2} sulla scheda per ripulirla.</value>
+  </data>
+  <data name="Help_Problems_Partial_Note" xml:space="preserve">
+    <value>La causa più comune è avviare SPT mentre un'installazione è in corso.</value>
+  </data>
+  <data name="Help_Problems_Notifications_Title" xml:space="preserve">
+    <value>Le notifiche degli aggiornamenti non compaiono</value>
+  </data>
+  <data name="Help_Problems_Notifications_Step1" xml:space="preserve">
+    <value>In {0}, sotto {1}, premi {2} e leggi la riga sotto.</value>
+  </data>
+  <data name="Help_Problems_Notifications_Step2" xml:space="preserve">
+    <value>Il primo controllo dopo l'attivazione registra solo gli aggiornamenti già presenti - non mostra mai una notifica.</value>
+  </data>
+  <data name="Help_Problems_Notifications_Step3" xml:space="preserve">
+    <value>Se i controlli trovano aggiornamenti ma non compare nulla, apri Impostazioni di Windows, poi Sistema, poi Notifiche, consenti TCF Mod Manager e disattiva Non disturbare.</value>
+  </data>
+  <data name="Help_Problems_AppUpdate_Title" xml:space="preserve">
+    <value>Un aggiornamento dell'app non è andato a buon fine</value>
+  </data>
+  <data name="Help_Problems_AppUpdate_Step1" xml:space="preserve">
+    <value>La versione che hai non è stata toccata e funziona ancora.</value>
+  </data>
+  <data name="Help_Problems_AppUpdate_Step2" xml:space="preserve">
+    <value>Se l'app è in Programmi, spostala in una cartella dove puoi scrivere, controlla lo spazio libero sul disco e riprova in {0}.</value>
+  </data>
+  <data name="Help_Problems_AppUpdate_Note" xml:space="preserve">
+    <value>Il log in Data\logs dice cosa l'ha fermato.</value>
+  </data>
+  <data name="Help_Problems_Report_Title" xml:space="preserve">
+    <value>Segnalare un problema</value>
+  </data>
+  <data name="Help_Problems_Report_Step1" xml:space="preserve">
+    <value>Premi {0} in cima a questa pagina. Apre la scheda delle segnalazioni sulla pagina sp-mod.com di questa app.</value>
+  </data>
+  <data name="Help_Problems_Report_Step2" xml:space="preserve">
+    <value>Scrivi cosa hai fatto e cosa è successo, e allega il log di oggi da Data\logs - il file che si chiama tcfmm- seguito dalla data.</value>
+  </data>
+  <data name="Help_Problems_Report_Step3" xml:space="preserve">
+    <value>Per più dettagli, metti un file vuoto chiamato verbose, senza estensione, accanto a TCFModManager.exe, rifallo e invia il nuovo log.</value>
+  </data>
+  <data name="Help_Problems_Report_Note" xml:space="preserve">
+    <value>Anche una traduzione sbagliata merita una segnalazione: quale lingua, cosa dice e cosa dovrebbe dire.</value>
+  </data>
+  <data name="Help_Start_Setup_Keywords" xml:space="preserve">
+    <value>cartella di installazione, percorso, configurare, prima volta</value>
+  </data>
+  <data name="Help_Start_Version_Keywords" xml:space="preserve">
+    <value>versione sconosciuta, versione sbagliata, rilevare, versione SPT</value>
+  </data>
+  <data name="Help_Play_Start_Keywords" xml:space="preserve">
+    <value>avviare, giocare, avvia gioco, server, launcher</value>
+  </data>
+  <data name="Help_Play_Check_Keywords" xml:space="preserve">
+    <value>mod mancanti, entrare, prima del raid, confrontare, lista del server</value>
+  </data>
+  <data name="Help_Browse_Compatible_Keywords" xml:space="preserve">
+    <value>compatibile, funziona con, filtrare, versione SPT</value>
+  </data>
+  <data name="Help_Browse_Install_Keywords" xml:space="preserve">
+    <value>installare, aggiungere, ottenere, scaricare, dipendenze</value>
+  </data>
+  <data name="Help_Browse_Author_Keywords" xml:space="preserve">
+    <value>autore, creatore, di, cercare, modder</value>
+  </data>
+  <data name="Help_Browse_HideInstalled_Keywords" xml:space="preserve">
+    <value>nascondere installati, già presenti, filtrare</value>
+  </data>
+  <data name="Help_Browse_Addon_Keywords" xml:space="preserve">
+    <value>addon, estensione, aggiunta, extra</value>
+  </data>
+  <data name="Help_Installed_Updates_Keywords" xml:space="preserve">
+    <value>aggiornamenti, obsoleto, nuova versione, da aggiornare</value>
+  </data>
+  <data name="Help_Installed_Update_Keywords" xml:space="preserve">
+    <value>aggiornare, riscaricare, reinstallare, ultima versione</value>
+  </data>
+  <data name="Help_Installed_Views_Keywords" xml:space="preserve">
+    <value>vista, disposizione, schede, elenco, gruppi</value>
+  </data>
+  <data name="Help_Installed_Groups_Keywords" xml:space="preserve">
+    <value>gruppi, categorie, separatori, organizzare, ordinare, cartelle</value>
+  </data>
+  <data name="Help_Installed_Disable_Keywords" xml:space="preserve">
+    <value>disattivare, spegnere, attivare</value>
+  </data>
+  <data name="Help_Installed_DisableMany_Keywords" xml:space="preserve">
+    <value>più mod, tanti, selezionare, disattivare tutti</value>
+  </data>
+  <data name="Help_Installed_Undo_Keywords" xml:space="preserve">
+    <value>annullare, tornare indietro, ripristinare, errore</value>
+  </data>
+  <data name="Help_Installed_Remove_Keywords" xml:space="preserve">
+    <value>rimuovere, disinstallare, eliminare, cancellare, togliere</value>
+  </data>
+  <data name="Help_Installed_Downgrade_Keywords" xml:space="preserve">
+    <value>downgrade, versione più vecchia, tornare indietro, versione precedente</value>
+  </data>
+  <data name="Help_Installed_SortOut_Keywords" xml:space="preserve">
+    <value>duplicato, due volte, due copie, si carica ancora</value>
+  </data>
+  <data name="Help_ModLists_Capture_Keywords" xml:space="preserve">
+    <value>salvare, profilo, preset, istantanea</value>
+  </data>
+  <data name="Help_ModLists_Apply_Keywords" xml:space="preserve">
+    <value>cambiare, caricare, applicare, profilo, cambiare lista</value>
+  </data>
+  <data name="Help_ModLists_Pin_Keywords" xml:space="preserve">
+    <value>fissare, tenere, sempre, proteggere, mai disattivare</value>
+  </data>
+  <data name="Help_ModLists_Edit_Keywords" xml:space="preserve">
+    <value>modificare, cambiare, aggiungere mod, togliere dalla lista</value>
+  </data>
+  <data name="Help_ModLists_Share_Keywords" xml:space="preserve">
+    <value>condividere, esportare, importare, inviare, amico, file</value>
+  </data>
+  <data name="Help_ModLists_Server_Keywords" xml:space="preserve">
+    <value>server, sincronizzare, stessi mod, amici, multigiocatore</value>
+  </data>
+  <data name="Help_ModLists_Undo_Keywords" xml:space="preserve">
+    <value>annullare, tornare indietro, ripristinare</value>
+  </data>
+  <data name="Help_Configs_Edit_Keywords" xml:space="preserve">
+    <value>configurazione, impostazioni, opzioni, cfg, json, modificare</value>
+  </data>
+  <data name="Help_Configs_Policy_Keywords" xml:space="preserve">
+    <value>tenere impostazioni, aggiornamento, unire, sovrascrivere</value>
+  </data>
+  <data name="Help_Configs_Original_Keywords" xml:space="preserve">
+    <value>predefinito, ripristinare, valore originale, fabbrica</value>
+  </data>
+  <data name="Help_Configs_Leftover_Keywords" xml:space="preserve">
+    <value>avanzi, vecchie impostazioni, orfano, mod rimosso</value>
+  </data>
+  <data name="Help_Dependencies_Check_Keywords" xml:space="preserve">
+    <value>dipendenze, requisiti, serve, manca, richiesto</value>
+  </data>
+  <data name="Help_Footprint_Enable_Keywords" xml:space="preserve">
+    <value>impronta, prestazioni, attivare, attivare pagina</value>
+  </data>
+  <data name="Help_Footprint_Read_Keywords" xml:space="preserve">
+    <value>impronta, prestazioni, lag, fps, pesante, impatto</value>
+  </data>
+  <data name="Help_ServerMap_Enable_Keywords" xml:space="preserve">
+    <value>mappa server, attivare, attivare pagina, server</value>
+  </data>
+  <data name="Help_ServerMap_Connect_Keywords" xml:space="preserve">
+    <value>collegare, server, indirizzo, chiave, porta, certificato</value>
+  </data>
+  <data name="Help_ServerMap_Publish_Keywords" xml:space="preserve">
+    <value>pubblicare, ospitare, lista del server, gestore</value>
+  </data>
+  <data name="Help_Downloads_Watch_Keywords" xml:space="preserve">
+    <value>download, avanzamento, annullare, fermare, coda</value>
+  </data>
+  <data name="Help_Downloads_Where_Keywords" xml:space="preserve">
+    <value>dove, trovare il file, cartella download, zip</value>
+  </data>
+  <data name="Help_Monitor_Enable_Keywords" xml:space="preserve">
+    <value>solo download, installazione manuale, da solo, a mano</value>
+  </data>
+  <data name="Help_Monitor_Other_Keywords" xml:space="preserve">
+    <value>un mod, al contrario, eccezione</value>
+  </data>
+  <data name="Help_Monitor_Confirm_Keywords" xml:space="preserve">
+    <value>confermare, segnare installato, installato a mano</value>
+  </data>
+  <data name="Help_Updates_Enable_Keywords" xml:space="preserve">
+    <value>notifiche, avvisi, avvisare, segnalare</value>
+  </data>
+  <data name="Help_Updates_Tray_Keywords" xml:space="preserve">
+    <value>area di notifica, sfondo, ridurre, continuare</value>
+  </data>
+  <data name="Help_AppUpdate_Update_Keywords" xml:space="preserve">
+    <value>aggiornare app, nuova versione</value>
+  </data>
+  <data name="Help_Options_Language_Keywords" xml:space="preserve">
+    <value>lingua, traduzione, italiano, inglese</value>
+  </data>
+  <data name="Help_Options_Theme_Keywords" xml:space="preserve">
+    <value>modalità scura, chiaro, scuro, tema, colori, aspetto</value>
+  </data>
+  <data name="Help_Options_Role_Keywords" xml:space="preserve">
+    <value>headless, Fika, dedicato, host, nessun giocatore</value>
+  </data>
+  <data name="Help_Problems_Greyed_Keywords" xml:space="preserve">
+    <value>disattivato, grigio, pulsante disattivato, non posso aggiornare, non posso rimuovere</value>
+  </data>
+  <data name="Help_Problems_CloseSpt_Keywords" xml:space="preserve">
+    <value>chiudere il gioco, in uso, bloccato, in esecuzione, non installa</value>
+  </data>
+  <data name="Help_Problems_Partial_Keywords" xml:space="preserve">
+    <value>installato a metà, fallito, rotto, incompleto</value>
+  </data>
+  <data name="Help_Problems_Notifications_Keywords" xml:space="preserve">
+    <value>nessuna notifica, non avvisato</value>
+  </data>
+  <data name="Help_Problems_AppUpdate_Keywords" xml:space="preserve">
+    <value>aggiornamento fallito, non aggiornato, errore</value>
+  </data>
+  <data name="Help_Problems_Report_Keywords" xml:space="preserve">
+    <value>bug, problema, crash, errore, segnalare, log</value>
   </data>
 </root>

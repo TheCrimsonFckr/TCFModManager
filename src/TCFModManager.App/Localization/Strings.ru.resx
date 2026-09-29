@@ -4894,10 +4894,10 @@
     <value>Страница приложения на sp-mod.com - всё, что здесь, только подробнее, плюс ограничения и решение проблем. Она на английском.</value>
   </data>
   <data name="Help_SearchPlaceholder" xml:space="preserve">
-    <value>Поиск по справке...</value>
+    <value>Как мне...?</value>
   </data>
   <data name="Help_NoMatches" xml:space="preserve">
-    <value>Ничего не найдено. Попробуйте меньше слов или откройте полное руководство.</value>
+    <value>Ответа на это пока нет. Попробуйте меньше слов или откройте полное руководство.</value>
   </data>
   <data name="Help_StepNumberFormat" xml:space="preserve">
     <value>{0}.</value>
@@ -5474,5 +5474,320 @@
   </data>
   <data name="Help_Downloads_Watch_Note_Monitor" xml:space="preserve">
     <value>Скачивание никогда не перезаписывает файл - вторая копия сохраняется рядом с первой.</value>
+  </data>
+  <data name="Help_ReportProblem" xml:space="preserve">
+    <value>Сообщить о проблеме</value>
+  </data>
+  <data name="Help_ReportProblemToolTip" xml:space="preserve">
+    <value>Открывает вкладку обращений на странице этого приложения на sp-mod.com, где можно рассказать автору, что пошло не так. Она на английском.</value>
+  </data>
+  <data name="Help_OpenPageFormat" xml:space="preserve">
+    <value>Открыть: {0}</value>
+  </data>
+  <data name="Help_ShowMeHow" xml:space="preserve">
+    <value>Показать как</value>
+  </data>
+  <data name="Help_Problems_Title" xml:space="preserve">
+    <value>Что-то не так</value>
+  </data>
+  <data name="Help_Installed_Remove_Title" xml:space="preserve">
+    <value>Удалить мод</value>
+  </data>
+  <data name="Help_Installed_Remove_Step1" xml:space="preserve">
+    <value>На странице {0} щёлкните карточку мода, чтобы открыть её, и нажмите {1}.</value>
+  </data>
+  <data name="Help_Installed_Remove_Step2" xml:space="preserve">
+    <value>Подтвердите. Если у мода есть свои файлы конфигурации, вас спросят, оставить их - они откладываются, а не удаляются - или удалить вместе с модом.</value>
+  </data>
+  <data name="Help_Installed_Remove_Note" xml:space="preserve">
+    <value>Отключённый мод сначала нужно снова включить, и только потом удалять. Чтобы убрать мод из игры, не удаляя его, просто отключите его.</value>
+  </data>
+  <data name="Help_Installed_Downgrade_Title" xml:space="preserve">
+    <value>Вернуться к более старой версии мода</value>
+  </data>
+  <data name="Help_Installed_Downgrade_Step1" xml:space="preserve">
+    <value>На странице {0} щёлкните карточку мода, чтобы открыть её, затем нажмите {1}.</value>
+  </data>
+  <data name="Help_Installed_Downgrade_Step2" xml:space="preserve">
+    <value>Выберите старую версию в списке. Версии для других релизов SPT скрыты - нажмите {0}, чтобы их увидеть.</value>
+  </data>
+  <data name="Help_Installed_Downgrade_Step3" xml:space="preserve">
+    <value>Нажмите {0} и подтвердите.</value>
+  </data>
+  <data name="Help_Installed_Downgrade_Note" xml:space="preserve">
+    <value>Старая версия может не прочитать настройки или данные профиля, сохранённые более новой, поэтому сначала загляните на страницу мода.</value>
+  </data>
+  <data name="Help_Installed_SortOut_Title" xml:space="preserve">
+    <value>Исправить мод, который лежит в двух местах сразу</value>
+  </data>
+  <data name="Help_Installed_SortOut_Step1" xml:space="preserve">
+    <value>На странице {0} у мода, который есть и во включённой, и в отключённой папке, на карточке предупреждение. Это обычная причина, почему отключённый мод всё равно загружается.</value>
+  </data>
+  <data name="Help_Installed_SortOut_Step2" xml:space="preserve">
+    <value>Откройте карточку, нажмите {0} и выберите, какую копию оставить.</value>
+  </data>
+  <data name="Help_Installed_SortOut_Note" xml:space="preserve">
+    <value>Другая копия откладывается, а не удаляется.</value>
+  </data>
+  <data name="Help_Options_Language_Title" xml:space="preserve">
+    <value>Сменить язык приложения</value>
+  </data>
+  <data name="Help_Options_Language_Step1" xml:space="preserve">
+    <value>В разделе {0}, в группе {1}, выберите язык в пункте {2}.</value>
+  </data>
+  <data name="Help_Options_Language_Step2" xml:space="preserve">
+    <value>Системный по умолчанию следует языку Windows. Смена сразу вступает в силу - ничего не перезапускается.</value>
+  </data>
+  <data name="Help_Options_Language_Note" xml:space="preserve">
+    <value>Большинство переводов сделано машиной. Если что-то звучит неправильно, нажмите {0} вверху этой страницы и напишите, как должно быть.</value>
+  </data>
+  <data name="Help_Options_Theme_Title" xml:space="preserve">
+    <value>Переключиться между светлой и тёмной темой</value>
+  </data>
+  <data name="Help_Options_Theme_Step1" xml:space="preserve">
+    <value>В разделе {0} переключите {1} на {2}, {3} или {4}.</value>
+  </data>
+  <data name="Help_Options_Role_Title" xml:space="preserve">
+    <value>Сообщить приложению, что эта машина - headless Fika</value>
+  </data>
+  <data name="Help_Options_Role_Step1" xml:space="preserve">
+    <value>В разделе {0}, в группе {1}, раскройте {2} стрелкой в строке.</value>
+  </data>
+  <data name="Help_Options_Role_Step2" xml:space="preserve">
+    <value>Переключите настройки так, чтобы там было написано {0} и {1}.</value>
+  </data>
+  <data name="Help_Options_Role_Note" xml:space="preserve">
+    <value>Тогда список модов сервера приходит без модов, нужных только игроку. Если headless-лаунчер не находится сам, укажите его в пункте {0}.</value>
+  </data>
+  <data name="Help_Problems_Greyed_Title" xml:space="preserve">
+    <value>Кнопки «Обновить» или «Удалить» неактивны</value>
+  </data>
+  <data name="Help_Problems_Greyed_Step1" xml:space="preserve">
+    <value>Мод отключён. На странице {0} нажмите кнопку включения на его карточке, чтобы снова его включить.</value>
+  </data>
+  <data name="Help_Problems_Greyed_Step2" xml:space="preserve">
+    <value>Когда он включён, «Обновить» и «Удалить» снова работают.</value>
+  </data>
+  <data name="Help_Problems_CloseSpt_Title" xml:space="preserve">
+    <value>Просит сначала закрыть игру или сервер</value>
+  </data>
+  <data name="Help_Problems_CloseSpt_Step1" xml:space="preserve">
+    <value>Закройте игру и окно консоли сервера.</value>
+  </data>
+  <data name="Help_Problems_CloseSpt_Step2" xml:space="preserve">
+    <value>Попробуйте ещё раз.</value>
+  </data>
+  <data name="Help_Problems_CloseSpt_Note" xml:space="preserve">
+    <value>Они держат файлы модов открытыми, а занятый файл нельзя заменить.</value>
+  </data>
+  <data name="Help_Problems_Partial_Title" xml:space="preserve">
+    <value>Установка остановилась на полпути</value>
+  </data>
+  <data name="Help_Problems_Partial_Step1" xml:space="preserve">
+    <value>На странице {0} на карточке мода написано, что он установлен лишь частично.</value>
+  </data>
+  <data name="Help_Problems_Partial_Step2" xml:space="preserve">
+    <value>Откройте карточку, нажмите {0}, затем {1}, чтобы довести установку до конца, - или нажмите {2} на карточке, чтобы всё убрать.</value>
+  </data>
+  <data name="Help_Problems_Partial_Note" xml:space="preserve">
+    <value>Обычная причина - SPT запустили во время установки.</value>
+  </data>
+  <data name="Help_Problems_Notifications_Title" xml:space="preserve">
+    <value>Уведомления об обновлениях не появляются</value>
+  </data>
+  <data name="Help_Problems_Notifications_Step1" xml:space="preserve">
+    <value>В разделе {0}, в группе {1}, нажмите {2} и прочитайте строку под кнопкой.</value>
+  </data>
+  <data name="Help_Problems_Notifications_Step2" xml:space="preserve">
+    <value>Первая проверка после включения только запоминает уже имеющиеся обновления - уведомления она не показывает никогда.</value>
+  </data>
+  <data name="Help_Problems_Notifications_Step3" xml:space="preserve">
+    <value>Если проверки находят обновления, но ничего не появляется, откройте Параметры Windows, затем Система, затем Уведомления, разрешите TCF Mod Manager и выключите «Не беспокоить».</value>
+  </data>
+  <data name="Help_Problems_AppUpdate_Title" xml:space="preserve">
+    <value>Обновление приложения не прошло</value>
+  </data>
+  <data name="Help_Problems_AppUpdate_Step1" xml:space="preserve">
+    <value>Ваша текущая версия не тронута и продолжает работать.</value>
+  </data>
+  <data name="Help_Problems_AppUpdate_Step2" xml:space="preserve">
+    <value>Если приложение лежит в Program Files, перенесите его туда, где у вас есть права на запись, проверьте свободное место на диске и попробуйте снова на странице {0}.</value>
+  </data>
+  <data name="Help_Problems_AppUpdate_Note" xml:space="preserve">
+    <value>Что помешало, написано в журнале в Data\logs.</value>
+  </data>
+  <data name="Help_Problems_Report_Title" xml:space="preserve">
+    <value>Сообщить о проблеме</value>
+  </data>
+  <data name="Help_Problems_Report_Step1" xml:space="preserve">
+    <value>Нажмите {0} вверху этой страницы. Откроется вкладка обращений на странице этого приложения на sp-mod.com.</value>
+  </data>
+  <data name="Help_Problems_Report_Step2" xml:space="preserve">
+    <value>Опишите, что вы делали и что произошло, и приложите сегодняшний журнал из Data\logs - файл, названный tcfmm- и датой.</value>
+  </data>
+  <data name="Help_Problems_Report_Step3" xml:space="preserve">
+    <value>Для подробностей положите рядом с TCFModManager.exe пустой файл с именем verbose без расширения, повторите действия и пришлите новый журнал.</value>
+  </data>
+  <data name="Help_Problems_Report_Note" xml:space="preserve">
+    <value>Об ошибке в переводе тоже стоит сообщить: какой язык, что написано и как должно быть.</value>
+  </data>
+  <data name="Help_Start_Setup_Keywords" xml:space="preserve">
+    <value>папка установки, путь, настроить, первый раз</value>
+  </data>
+  <data name="Help_Start_Version_Keywords" xml:space="preserve">
+    <value>версия неизвестна, неправильная версия, определить, версия SPT</value>
+  </data>
+  <data name="Help_Play_Start_Keywords" xml:space="preserve">
+    <value>запустить, играть, запуск игры, сервер, лаунчер</value>
+  </data>
+  <data name="Help_Play_Check_Keywords" xml:space="preserve">
+    <value>недостающие моды, зайти, перед рейдом, сравнить, список сервера</value>
+  </data>
+  <data name="Help_Browse_Compatible_Keywords" xml:space="preserve">
+    <value>совместимый, работает с, фильтр, версия SPT</value>
+  </data>
+  <data name="Help_Browse_Install_Keywords" xml:space="preserve">
+    <value>установить, добавить, скачать, зависимости</value>
+  </data>
+  <data name="Help_Browse_Author_Keywords" xml:space="preserve">
+    <value>автор, создатель, поиск, моддер</value>
+  </data>
+  <data name="Help_Browse_HideInstalled_Keywords" xml:space="preserve">
+    <value>скрыть установленные, уже есть, фильтр</value>
+  </data>
+  <data name="Help_Browse_Addon_Keywords" xml:space="preserve">
+    <value>аддон, дополнение, расширение</value>
+  </data>
+  <data name="Help_Installed_Updates_Keywords" xml:space="preserve">
+    <value>обновления, устарел, новая версия, нужно обновить</value>
+  </data>
+  <data name="Help_Installed_Update_Keywords" xml:space="preserve">
+    <value>обновить, скачать заново, переустановить, последняя версия</value>
+  </data>
+  <data name="Help_Installed_Views_Keywords" xml:space="preserve">
+    <value>вид, раскладка, карточки, список, группы</value>
+  </data>
+  <data name="Help_Installed_Groups_Keywords" xml:space="preserve">
+    <value>группы, категории, разделители, упорядочить, сортировать, папки</value>
+  </data>
+  <data name="Help_Installed_Disable_Keywords" xml:space="preserve">
+    <value>отключить, выключить, включить, деактивировать</value>
+  </data>
+  <data name="Help_Installed_DisableMany_Keywords" xml:space="preserve">
+    <value>несколько, много, выбрать, отключить все</value>
+  </data>
+  <data name="Help_Installed_Undo_Keywords" xml:space="preserve">
+    <value>отменить, вернуть, откатить, ошибка</value>
+  </data>
+  <data name="Help_Installed_Remove_Keywords" xml:space="preserve">
+    <value>удалить, деинсталлировать, стереть, убрать</value>
+  </data>
+  <data name="Help_Installed_Downgrade_Keywords" xml:space="preserve">
+    <value>понизить версию, старая версия, откатить, предыдущая версия</value>
+  </data>
+  <data name="Help_Installed_SortOut_Keywords" xml:space="preserve">
+    <value>дубликат, дважды, две копии, всё равно загружается</value>
+  </data>
+  <data name="Help_ModLists_Capture_Keywords" xml:space="preserve">
+    <value>сохранить, профиль, пресет, снимок</value>
+  </data>
+  <data name="Help_ModLists_Apply_Keywords" xml:space="preserve">
+    <value>переключить, загрузить, применить, профиль, сменить список</value>
+  </data>
+  <data name="Help_ModLists_Pin_Keywords" xml:space="preserve">
+    <value>закрепить, оставить, всегда, защитить, не отключать</value>
+  </data>
+  <data name="Help_ModLists_Edit_Keywords" xml:space="preserve">
+    <value>редактировать, изменить, добавить моды, убрать из списка</value>
+  </data>
+  <data name="Help_ModLists_Share_Keywords" xml:space="preserve">
+    <value>поделиться, экспорт, импорт, отправить, друг, файл</value>
+  </data>
+  <data name="Help_ModLists_Server_Keywords" xml:space="preserve">
+    <value>сервер, синхронизировать, те же моды, друзья, мультиплеер</value>
+  </data>
+  <data name="Help_ModLists_Undo_Keywords" xml:space="preserve">
+    <value>отменить, вернуть, восстановить</value>
+  </data>
+  <data name="Help_Configs_Edit_Keywords" xml:space="preserve">
+    <value>конфигурация, настройки, параметры, cfg, json, изменить</value>
+  </data>
+  <data name="Help_Configs_Policy_Keywords" xml:space="preserve">
+    <value>сохранить настройки, обновление, объединить, перезаписать</value>
+  </data>
+  <data name="Help_Configs_Original_Keywords" xml:space="preserve">
+    <value>по умолчанию, сброс, исходное значение, заводские</value>
+  </data>
+  <data name="Help_Configs_Leftover_Keywords" xml:space="preserve">
+    <value>остатки, старые настройки, осиротевшие, удалённый мод</value>
+  </data>
+  <data name="Help_Dependencies_Check_Keywords" xml:space="preserve">
+    <value>зависимости, требования, нужно, не хватает, обязательно</value>
+  </data>
+  <data name="Help_Footprint_Enable_Keywords" xml:space="preserve">
+    <value>след, производительность, включить, включить страницу</value>
+  </data>
+  <data name="Help_Footprint_Read_Keywords" xml:space="preserve">
+    <value>след, производительность, лаги, fps, тяжёлый, влияние</value>
+  </data>
+  <data name="Help_ServerMap_Enable_Keywords" xml:space="preserve">
+    <value>карта сервера, включить, включить страницу, сервер</value>
+  </data>
+  <data name="Help_ServerMap_Connect_Keywords" xml:space="preserve">
+    <value>подключиться, сервер, адрес, ключ, порт, сертификат</value>
+  </data>
+  <data name="Help_ServerMap_Publish_Keywords" xml:space="preserve">
+    <value>опубликовать, хостить, список сервера, администратор</value>
+  </data>
+  <data name="Help_Downloads_Watch_Keywords" xml:space="preserve">
+    <value>загрузки, ход, отменить, остановить, очередь</value>
+  </data>
+  <data name="Help_Downloads_Where_Keywords" xml:space="preserve">
+    <value>где, найти файл, папка загрузок, zip</value>
+  </data>
+  <data name="Help_Monitor_Enable_Keywords" xml:space="preserve">
+    <value>только скачивать, ручная установка, сам, вручную</value>
+  </data>
+  <data name="Help_Monitor_Other_Keywords" xml:space="preserve">
+    <value>один мод, наоборот, исключение</value>
+  </data>
+  <data name="Help_Monitor_Confirm_Keywords" xml:space="preserve">
+    <value>подтвердить, отметить установленным, установлен вручную</value>
+  </data>
+  <data name="Help_Updates_Enable_Keywords" xml:space="preserve">
+    <value>уведомления, оповещения, сообщать</value>
+  </data>
+  <data name="Help_Updates_Tray_Keywords" xml:space="preserve">
+    <value>трей, фон, свернуть, продолжать работать</value>
+  </data>
+  <data name="Help_AppUpdate_Update_Keywords" xml:space="preserve">
+    <value>обновить приложение, новая версия</value>
+  </data>
+  <data name="Help_Options_Language_Keywords" xml:space="preserve">
+    <value>язык, перевод, русский, английский</value>
+  </data>
+  <data name="Help_Options_Theme_Keywords" xml:space="preserve">
+    <value>тёмная тема, светлая, тёмная, тема, цвета, оформление</value>
+  </data>
+  <data name="Help_Options_Role_Keywords" xml:space="preserve">
+    <value>headless, Fika, выделенный, хост, без игрока</value>
+  </data>
+  <data name="Help_Problems_Greyed_Keywords" xml:space="preserve">
+    <value>неактивна, серая кнопка, не могу обновить, не могу удалить</value>
+  </data>
+  <data name="Help_Problems_CloseSpt_Keywords" xml:space="preserve">
+    <value>закрыть игру, занят, заблокирован, запущен, не устанавливается</value>
+  </data>
+  <data name="Help_Problems_Partial_Keywords" xml:space="preserve">
+    <value>установлен наполовину, ошибка, сломан, не до конца</value>
+  </data>
+  <data name="Help_Problems_Notifications_Keywords" xml:space="preserve">
+    <value>нет уведомлений, не приходят уведомления</value>
+  </data>
+  <data name="Help_Problems_AppUpdate_Keywords" xml:space="preserve">
+    <value>обновление не удалось, не обновилось, ошибка</value>
+  </data>
+  <data name="Help_Problems_Report_Keywords" xml:space="preserve">
+    <value>баг, проблема, вылет, ошибка, сообщить, журнал, лог</value>
   </data>
 </root>

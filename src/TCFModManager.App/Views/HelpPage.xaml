@@ -27,6 +27,14 @@
             <DockPanel>
                 <ui:Button
                     DockPanel.Dock="Right"
+                    Margin="8,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="{loc:Str Help_ReportProblem}"
+                    Icon="{ui:SymbolIcon Bug24}"
+                    Command="{Binding ReportProblemCommand}"
+                    ToolTip="{loc:Str Help_ReportProblemToolTip}" />
+                <ui:Button
+                    DockPanel.Dock="Right"
                     Margin="12,0,0,0"
                     VerticalAlignment="Center"
                     Content="{loc:Str Help_OpenGuide}"
@@ -158,6 +166,14 @@
                                                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                                         behaviors:HelpInlines.Step="{Binding Note}" />
                                                 </Grid>
+
+                                                <ui:Button
+                                                    Margin="0,10,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    Content="{Binding OpenPageLabel}"
+                                                    Icon="{ui:SymbolIcon ArrowRight24}"
+                                                    Command="{Binding OpenPageCommand}"
+                                                    Visibility="{Binding CanOpenPage, Converter={StaticResource BoolToVisibility}}" />
                                             </StackPanel>
                                         </ui:CardExpander>
                                     </DataTemplate>

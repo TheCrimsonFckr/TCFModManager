@@ -7,14 +7,35 @@ using TCFModManager.Core.SpModApi;
 namespace TCFModManager.Core.ServerMap;
 
 //
-// The Server Map mod's own listing on sp-mod.com: an addon of this app's mod page. One set of
-// constants so the Options link, the update check and the file probe can never drift apart.
+// The SPT line a Server Map mod build is for. Each line has its own stub and, on sp-mod.com, its
+// own addon listing.
+//
+public enum ServerMapSptLine
+{
+    Spt40,
+    Spt41,
+}
+
+//
+// The Server Map mod's listings on sp-mod.com: addons of this app's mod page, one per SPT line.
+// One set of constants so the Options link, the update check and the file probe can never drift
+// apart.
 //
 public static class ServerMapAddon
 {
-    public const string AddonId = "126";
+    public const string Spt40AddonId = "126";
 
-    public const string PageUrl = "https://sp-mod.com/addon/126/tfc-server-mapper";
+    public const string Spt40PageUrl = "https://sp-mod.com/addon/126/tfc-server-mapper";
+
+    public const string Spt41AddonId = "142";
+
+    public const string Spt41PageUrl = "https://sp-mod.com/addon/142/tfc-server-mapper-41";
+
+    public static string AddonId(ServerMapSptLine line) =>
+        line == ServerMapSptLine.Spt40 ? Spt40AddonId : Spt41AddonId;
+
+    public static string PageUrl(ServerMapSptLine line) =>
+        line == ServerMapSptLine.Spt40 ? Spt40PageUrl : Spt41PageUrl;
 
     public const string PayloadFileName = "TCFMM.ServerMap.Payload.dll";
 
@@ -37,6 +58,10 @@ public sealed record InstalledServerMapMod
     public string? StubPath { get; init; }
 
     public string? StubVersion { get; init; }
+
+    // Which line the stub is for, from the server folder it sits in. Null when no stub was found or
+    // it sits in neither SPT_Runtime\ nor SPT\.
+    public ServerMapSptLine? StubLine { get; init; }
 
     //
     // The stub is older than the payload beside it. 0.2.0 is where this starts to matter: an older
@@ -67,6 +92,24 @@ public static class ServerMapModVersions
         ["user", "mods"],
     ];
 
+    // The line whose addon to check and link. A stub on disk decides it; otherwise the configured
+    // install's SPT version does, which on a player's machine is also the line of the server they
+    // join. With neither, the current line.
+    public static ServerMapSptLine LineFor(InstalledServerMapMod? installed, string? sptInstallPath)
+    {
+        if (installed?.StubLine is { } stubLine) return stubLine;
+
+        var version = SptInstallationService.GetInstalledVersion(sptInstallPath).Version;
+        if (version is not null)
+        {
+            var parts = version.Split('.');
+            if (parts.Length >= 2 && int.TryParse(parts[0], out var major) && int.TryParse(parts[1], out var minor))
+                return major < 4 || (major == 4 && minor < 1) ? ServerMapSptLine.Spt40 : ServerMapSptLine.Spt41;
+        }
+
+        return ServerMapSptLine.Spt41;
+    }
+
     // True when candidate is a newer release than installed. Unparsable either side is not behind:
     // the check never claims an update it cannot show.
     public static bool IsBehind(string? installed, string? candidate) =>
@@ -96,6 +139,7 @@ public static class ServerMapModVersions
                 PayloadVersion = VersionOf(payload),
                 StubPath = stub,
                 StubVersion = stub is null ? null : VersionOf(stub),
+                StubLine = stub is null ? null : LineOfStub(stub),
             };
         }
 
@@ -131,6 +175,16 @@ public static class ServerMapModVersions
             if (File.Exists(candidate)) return candidate;
         }
 
+        return null;
+    }
+
+    // <server>\user\mods\TCFMM.ServerMap\x.dll -> the name of <server>.
+    private static ServerMapSptLine? LineOfStub(string stubPath)
+    {
+        var server = Path.GetFileName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(stubPath)))));
+
+        if (string.Equals(server, "SPT_Runtime", StringComparison.OrdinalIgnoreCase)) return ServerMapSptLine.Spt41;
+        if (string.Equals(server, "SPT", StringComparison.OrdinalIgnoreCase)) return ServerMapSptLine.Spt40;
         return null;
     }
 
@@ -193,7 +247,7 @@ public static class ServerMapModVersions
 }
 
 //
-// Asks sp-mod.com for the newest Server Map mod, through the same public API the app's own update
+// Asks sp-mod.com for the newest Server Map mod for one SPT line, through the same public API the app's own update
 // check uses. The mod is installed by hand, so this only ever says what is out - it never downloads.
 //
 public sealed class ServerMapModUpdateService(SpModApiClient spModApi)
@@ -202,11 +256,13 @@ public sealed class ServerMapModUpdateService(SpModApiClient spModApi)
 
     // Null when the listing carries no parsable version. Failures surface as exceptions, as the
     // app's own check does, so a caller can tell "nothing published" from "could not ask".
-    public async Task<ServerMapModRelease?> LatestAsync(CancellationToken ct = default)
+    public async Task<ServerMapModRelease?> LatestAsync(ServerMapSptLine line, CancellationToken ct = default)
     {
+        var addonId = ServerMapAddon.AddonId(line);
+
         var versions = await spModApi
             .GetAddonVersionsAsync(
-                ServerMapAddon.AddonId,
+                addonId,
                 new AddonVersionsQuery { Sort = "-published_at", PerPage = VersionsToInspect },
                 ct)
             .ConfigureAwait(false);
@@ -221,11 +277,11 @@ public sealed class ServerMapModUpdateService(SpModApiClient spModApi)
 
         if (newest?.Version is null)
         {
-            AppLog.Info("ServerMapMod", $"addon {ServerMapAddon.AddonId} returned no parsable version");
+            AppLog.Info("ServerMapMod", $"addon {addonId} returned no parsable version");
             return null;
         }
 
-        AppLog.Info("ServerMapMod", $"newest Server Map mod published: {newest.Version}");
+        AppLog.Info("ServerMapMod", $"newest Server Map mod published for {line}: {newest.Version}");
 
         return new ServerMapModRelease
         {

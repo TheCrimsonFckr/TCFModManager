@@ -5441,11 +5441,11 @@ This was written to:
     <comment>Tooltip on Help_OpenGuide. Keep saying the guide is in English.</comment>
   </data>
   <data name="Help_SearchPlaceholder" xml:space="preserve">
-    <value>Search the how-tos...</value>
-    <comment>Search box on the Help page. Matches how-to titles.</comment>
+    <value>How do I...?</value>
+    <comment>Search box on the Help page, read as the start of the question the reader types - "How do I... install a mod". Matches the titles, which are written to finish that sentence.</comment>
   </data>
   <data name="Help_NoMatches" xml:space="preserve">
-    <value>No how-to matches that. Try fewer words, or open the full guide.</value>
+    <value>Nothing answers that yet. Try fewer words, or open the full guide.</value>
     <comment>Shown when the search finds nothing.</comment>
   </data>
   <data name="Help_StepNumberFormat" xml:space="preserve">
@@ -6180,5 +6180,412 @@ This was written to:
   <data name="Help_Downloads_Watch_Note_Monitor" xml:space="preserve">
     <value>A download never overwrites a file - a second copy is saved beside the first.</value>
     <comment>Shown instead of the key without _Monitor while Monitor mode (download only) is on.</comment>
+  </data>
+  <data name="Help_ReportProblem" xml:space="preserve">
+    <value>Report a problem</value>
+    <comment>Button at the top of the Help page; opens the issues tab of the app's page on sp-mod.com.</comment>
+  </data>
+  <data name="Help_ReportProblemToolTip" xml:space="preserve">
+    <value>Opens the issues tab on this app's sp-mod.com page, where you can tell the author what went wrong. It is in English.</value>
+    <comment>Tooltip on Help_ReportProblem.</comment>
+  </data>
+  <data name="Help_OpenPageFormat" xml:space="preserve">
+    <value>Open {0}</value>
+    <comment>Button under a how-to that goes to the page its steps are on. {0} is the page's sidebar name.</comment>
+  </data>
+  <data name="Help_ShowMeHow" xml:space="preserve">
+    <value>Show me how</value>
+    <comment>Button beside a notice elsewhere in the app; opens the Help answer to it.</comment>
+  </data>
+  <data name="Help_Problems_Title" xml:space="preserve">
+    <value>Something's wrong</value>
+    <comment>Help section heading for troubleshooting.</comment>
+  </data>
+  <data name="Help_Installed_Remove_Title" xml:space="preserve">
+    <value>Remove a mod</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Installed_Remove_Step1" xml:space="preserve">
+    <value>On {0}, click the mod's card to open it and press {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Remove_Step2" xml:space="preserve">
+    <value>Confirm. If the mod has config files of its own, you're asked whether to keep them - they're set aside, not deleted - or remove them too.</value>
+  </data>
+  <data name="Help_Installed_Remove_Note" xml:space="preserve">
+    <value>A disabled mod has to be turned back on before it can be removed. To take a mod out of the game without deleting it, turn it off instead.</value>
+  </data>
+  <data name="Help_Installed_Downgrade_Title" xml:space="preserve">
+    <value>Go back to an older version of a mod</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Installed_Downgrade_Step1" xml:space="preserve">
+    <value>On {0}, click the mod's card to open it, then press {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Downgrade_Step2" xml:space="preserve">
+    <value>Pick the older version in the list. Versions for other SPT releases are hidden - press {0} to see them.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Downgrade_Step3" xml:space="preserve">
+    <value>Press {0} and confirm.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Downgrade_Note" xml:space="preserve">
+    <value>An older version may not read settings or profile data a newer one saved, so check the mod's page first.</value>
+  </data>
+  <data name="Help_Installed_SortOut_Title" xml:space="preserve">
+    <value>Fix a mod that's in two places at once</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Installed_SortOut_Step1" xml:space="preserve">
+    <value>On {0}, a mod in both an enabled and a disabled folder has a warning on its card. It's the usual reason a mod you turned off still loads.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_SortOut_Step2" xml:space="preserve">
+    <value>Open the card, press {0} and pick the copy to keep.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_SortOut_Note" xml:space="preserve">
+    <value>The other copy is set aside, not deleted.</value>
+  </data>
+  <data name="Help_Options_Language_Title" xml:space="preserve">
+    <value>Change the app's language</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Options_Language_Step1" xml:space="preserve">
+    <value>In {0}, under {1}, pick a language from {2}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Options_Language_Step2" xml:space="preserve">
+    <value>System default follows the language Windows is set to. The change is immediate - nothing restarts.</value>
+  </data>
+  <data name="Help_Options_Language_Note" xml:space="preserve">
+    <value>Most translations were made by machine. If something reads wrong, press {0} at the top of this page and say what it should say.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Options_Theme_Title" xml:space="preserve">
+    <value>Switch between light and dark</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Options_Theme_Step1" xml:space="preserve">
+    <value>In {0}, change {1} to {2}, {3} or {4}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Options_Role_Title" xml:space="preserve">
+    <value>Tell the app this machine is a Fika headless</value>
+    <comment>How-to title. A Fika headless is a machine that hosts raids with nobody playing on it.</comment>
+  </data>
+  <data name="Help_Options_Role_Step1" xml:space="preserve">
+    <value>In {0}, under {1}, open {2} with the arrow on its row.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Options_Role_Step2" xml:space="preserve">
+    <value>Switch the settings so they read {0} and {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Options_Role_Note" xml:space="preserve">
+    <value>A server's mod list then arrives without the mods only a player needs. If the headless launcher isn't found by itself, point {0} at it.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Problems_Greyed_Title" xml:space="preserve">
+    <value>Update or Remove is greyed out</value>
+    <comment>How-to title, phrased as the problem the reader sees.</comment>
+  </data>
+  <data name="Help_Problems_Greyed_Step1" xml:space="preserve">
+    <value>The mod is turned off. On {0}, press the on/off button on its card to turn it back on.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Problems_Greyed_Step2" xml:space="preserve">
+    <value>Update and Remove work again once it's on.</value>
+  </data>
+  <data name="Help_Problems_CloseSpt_Title" xml:space="preserve">
+    <value>It says to close the game or server first</value>
+    <comment>How-to title, phrased as the problem the reader sees.</comment>
+  </data>
+  <data name="Help_Problems_CloseSpt_Step1" xml:space="preserve">
+    <value>Close the game, and the server's console window.</value>
+  </data>
+  <data name="Help_Problems_CloseSpt_Step2" xml:space="preserve">
+    <value>Try again.</value>
+  </data>
+  <data name="Help_Problems_CloseSpt_Note" xml:space="preserve">
+    <value>They hold the mod files open, and files in use can't be replaced.</value>
+  </data>
+  <data name="Help_Problems_Partial_Title" xml:space="preserve">
+    <value>An install stopped partway</value>
+    <comment>How-to title, phrased as the problem the reader sees.</comment>
+  </data>
+  <data name="Help_Problems_Partial_Step1" xml:space="preserve">
+    <value>On {0}, the mod's card says it's only partly installed.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Problems_Partial_Step2" xml:space="preserve">
+    <value>Open the card, press {0} and then {1} to finish it - or press {2} on the card to clear it out.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Problems_Partial_Note" xml:space="preserve">
+    <value>The usual cause is starting SPT while an install is running.</value>
+  </data>
+  <data name="Help_Problems_Notifications_Title" xml:space="preserve">
+    <value>Update notifications don't appear</value>
+    <comment>How-to title, phrased as the problem the reader sees.</comment>
+  </data>
+  <data name="Help_Problems_Notifications_Step1" xml:space="preserve">
+    <value>In {0}, under {1}, press {2} and read the line under it.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Problems_Notifications_Step2" xml:space="preserve">
+    <value>The first check after switching on only notes the updates already there - it never shows a notification.</value>
+  </data>
+  <data name="Help_Problems_Notifications_Step3" xml:space="preserve">
+    <value>If checks find updates but nothing appears, open Windows Settings, then System, then Notifications, allow TCF Mod Manager and turn Do not disturb off.</value>
+    <comment>Windows Settings, System, Notifications and Do not disturb are Windows' own names - use what your Windows calls them.</comment>
+  </data>
+  <data name="Help_Problems_AppUpdate_Title" xml:space="preserve">
+    <value>An app update didn't go through</value>
+    <comment>How-to title, phrased as the problem the reader sees.</comment>
+  </data>
+  <data name="Help_Problems_AppUpdate_Step1" xml:space="preserve">
+    <value>The version you have is untouched and still works.</value>
+  </data>
+  <data name="Help_Problems_AppUpdate_Step2" xml:space="preserve">
+    <value>If the app is in Program Files, move it somewhere you can write to, make sure there's free disk space, and try again on {0}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Problems_AppUpdate_Note" xml:space="preserve">
+    <value>The log in Data\logs says what stopped it.</value>
+    <comment>Data\logs is a literal folder name.</comment>
+  </data>
+  <data name="Help_Problems_Report_Title" xml:space="preserve">
+    <value>Report a problem</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Problems_Report_Step1" xml:space="preserve">
+    <value>Press {0} at the top of this page. It opens the issues tab on this app's sp-mod.com page.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Problems_Report_Step2" xml:space="preserve">
+    <value>Say what you did and what happened, and attach today's log from Data\logs - the file named tcfmm- and the date.</value>
+    <comment>Data\logs and tcfmm- are literal.</comment>
+  </data>
+  <data name="Help_Problems_Report_Step3" xml:space="preserve">
+    <value>For more detail, put an empty file named verbose, with no extension, next to TCFModManager.exe, do it again and send the new log.</value>
+    <comment>verbose and TCFModManager.exe are literal - don't translate them.</comment>
+  </data>
+  <data name="Help_Problems_Report_Note" xml:space="preserve">
+    <value>A wrong translation is worth reporting too: say which language, what it says, and what it should say.</value>
+  </data>
+  <data name="Help_Start_Setup_Keywords" xml:space="preserve">
+    <value>install folder, path, set up, first time, configure, EscapeFromTarkov</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Start_Version_Keywords" xml:space="preserve">
+    <value>version unknown, wrong version, detect, SPT version</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Play_Start_Keywords" xml:space="preserve">
+    <value>launch, run, play, start game, server, launcher</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Play_Check_Keywords" xml:space="preserve">
+    <value>missing mods, join, before raid, compare, server list</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Browse_Compatible_Keywords" xml:space="preserve">
+    <value>compatible, works with, filter, SPT version, supported</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Browse_Install_Keywords" xml:space="preserve">
+    <value>install, add, get, download, dependencies</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Browse_Author_Keywords" xml:space="preserve">
+    <value>author, creator, by, search, modder</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Browse_HideInstalled_Keywords" xml:space="preserve">
+    <value>hide installed, already have, filter, not installed</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Browse_Addon_Keywords" xml:space="preserve">
+    <value>addon, add-on, extra, expansion, plugin for a mod</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Installed_Updates_Keywords" xml:space="preserve">
+    <value>updates, outdated, out of date, new version, needs update</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Installed_Update_Keywords" xml:space="preserve">
+    <value>update, upgrade, redownload, reinstall, latest</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Installed_Views_Keywords" xml:space="preserve">
+    <value>layout, view, cards, list, groups, display</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Installed_Groups_Keywords" xml:space="preserve">
+    <value>groups, categories, separators, organise, organize, folders, sort</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Installed_Disable_Keywords" xml:space="preserve">
+    <value>disable, turn off, switch off, deactivate, enable</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Installed_DisableMany_Keywords" xml:space="preserve">
+    <value>bulk, several, many, select, multiple, disable all</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Installed_Undo_Keywords" xml:space="preserve">
+    <value>undo, revert, put back, mistake</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Installed_Remove_Keywords" xml:space="preserve">
+    <value>remove, uninstall, delete, get rid of</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Installed_Downgrade_Keywords" xml:space="preserve">
+    <value>downgrade, older version, roll back, previous version, revert</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Installed_SortOut_Keywords" xml:space="preserve">
+    <value>duplicate, twice, two copies, still loads, sort out</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_ModLists_Capture_Keywords" xml:space="preserve">
+    <value>save, profile, preset, snapshot, capture, loadout</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_ModLists_Apply_Keywords" xml:space="preserve">
+    <value>switch, load, apply, profile, change list</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_ModLists_Pin_Keywords" xml:space="preserve">
+    <value>pin, keep, always, protect, never disable</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_ModLists_Edit_Keywords" xml:space="preserve">
+    <value>edit, change, add mods, remove from list</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_ModLists_Share_Keywords" xml:space="preserve">
+    <value>share, export, import, send, friend, file</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_ModLists_Server_Keywords" xml:space="preserve">
+    <value>server, sync, match, same mods, friends, multiplayer</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_ModLists_Undo_Keywords" xml:space="preserve">
+    <value>undo, revert, put back, restore</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Configs_Edit_Keywords" xml:space="preserve">
+    <value>config, settings, options, cfg, json, edit, change</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Configs_Policy_Keywords" xml:space="preserve">
+    <value>keep settings, update, merge, overwrite, lose settings</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Configs_Original_Keywords" xml:space="preserve">
+    <value>default, reset, original value, factory</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Configs_Leftover_Keywords" xml:space="preserve">
+    <value>leftover, old settings, orphan, removed mod, unclaimed</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Dependencies_Check_Keywords" xml:space="preserve">
+    <value>dependencies, requirements, needs, missing, required</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Footprint_Enable_Keywords" xml:space="preserve">
+    <value>footprint, performance, turn on, enable page</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Footprint_Read_Keywords" xml:space="preserve">
+    <value>footprint, performance, lag, fps, heavy, impact</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_ServerMap_Enable_Keywords" xml:space="preserve">
+    <value>server map, turn on, enable page, server</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_ServerMap_Connect_Keywords" xml:space="preserve">
+    <value>connect, server, address, key, port, certificate</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_ServerMap_Publish_Keywords" xml:space="preserve">
+    <value>publish, host, server list, operator, serve</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Downloads_Watch_Keywords" xml:space="preserve">
+    <value>downloads, progress, cancel, stop, queue, retry</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Downloads_Where_Keywords" xml:space="preserve">
+    <value>where, find file, download folder, zip, saved</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Monitor_Enable_Keywords" xml:space="preserve">
+    <value>download only, manual install, myself, by hand, monitor</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Monitor_Other_Keywords" xml:space="preserve">
+    <value>one mod, opposite, other way, exception</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Monitor_Confirm_Keywords" xml:space="preserve">
+    <value>confirm, mark installed, installed manually, by hand</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Updates_Enable_Keywords" xml:space="preserve">
+    <value>notifications, alerts, notify, toast, tell me</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Updates_Tray_Keywords" xml:space="preserve">
+    <value>tray, background, minimise, minimize, keep running, system tray</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_AppUpdate_Update_Keywords" xml:space="preserve">
+    <value>update app, new version, upgrade app, self update</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Options_Language_Keywords" xml:space="preserve">
+    <value>language, translation, English, German, French, Italian, Russian</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Options_Theme_Keywords" xml:space="preserve">
+    <value>dark mode, light mode, theme, colours, colors, appearance</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Options_Role_Keywords" xml:space="preserve">
+    <value>headless, Fika, dedicated, host, no player</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Problems_Greyed_Keywords" xml:space="preserve">
+    <value>greyed out, grayed out, disabled button, can't update, can't remove</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Problems_CloseSpt_Keywords" xml:space="preserve">
+    <value>close game, in use, locked, running, can't install</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Problems_Partial_Keywords" xml:space="preserve">
+    <value>half installed, failed, broken install, partly, incomplete</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Problems_Notifications_Keywords" xml:space="preserve">
+    <value>no notifications, not notified, alerts not showing</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Problems_AppUpdate_Keywords" xml:space="preserve">
+    <value>update failed, didn't update, app update error</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Problems_Report_Keywords" xml:space="preserve">
+    <value>bug, issue, crash, error, report, feedback, log</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
 </root>

@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using TCFModManager.App.ViewModels;
 
@@ -22,10 +23,15 @@ public partial class HelpPage : Page
 
         // Navigating to this page again while it is on screen doesn't reload it, so a request made
         // from here - the no-install banner - arrives by the event instead.
-        Loaded += (_, _) => TakeRequest();
+        Loaded += (_, _) =>
+        {
+            ViewModel.RefreshOpenButtons();
+            TakeRequest();
+        };
 
         // The page is cached, so without this the next visit opens on whatever was left open.
         Unloaded += (_, _) => ViewModel.CollapseAll();
+
         AppNavigation.HelpRequested += (_, _) =>
         {
             if (IsLoaded) TakeRequest();
@@ -34,20 +40,38 @@ public partial class HelpPage : Page
 
     private void TakeRequest()
     {
-        if (AppNavigation.TakeHelpSection() is not { } sectionId) return;
+        if (AppNavigation.TakeHelpRequest() is not { } request) return;
 
-        var section = ViewModel.Arrive(sectionId);
+        var (section, topic) = ViewModel.Arrive(request.SectionId, request.TopicId);
 
         // After the expanders have opened and the list has laid itself out again, or the offset
         // is measured against the old, collapsed heights.
         Dispatcher.BeginInvoke(DispatcherPriority.Loaded, () =>
         {
-            if (SectionsList.ItemContainerGenerator.ContainerFromItem(section) is not FrameworkElement container)
-                return;
+            var target = topic is null
+                ? SectionsList.ItemContainerGenerator.ContainerFromItem(section) as FrameworkElement
+                : FindByDataContext(SectionsList, topic);
 
-            var top = container.TranslatePoint(new Point(0, 0), SectionsList).Y;
+            if (target is null) return;
+
+            var top = target.TranslatePoint(new Point(0, 0), SectionsList).Y;
             SectionsScrollViewer.ScrollToVerticalOffset(top);
         });
+    }
+
+    // The CardExpander showing a topic - it sits in its section's own ItemsControl, one level down,
+    // so the outer list's generator can't hand it back.
+    private static FrameworkElement? FindByDataContext(DependencyObject root, object item)
+    {
+        for (var i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
+        {
+            var child = VisualTreeHelper.GetChild(root, i);
+
+            if (child is Wpf.Ui.Controls.CardExpander card && card.DataContext == item) return card;
+            if (FindByDataContext(child, item) is { } found) return found;
+        }
+
+        return null;
     }
 
     private void Page_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

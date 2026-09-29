@@ -36,6 +36,9 @@ public partial class AppUpdateViewModel
 
     private bool _serverMapHooked;
 
+    // Which SPT line's addon the check and the link use. Set with the files on disk.
+    private ServerMapSptLine _serverMapLine = ServerMapSptLine.Spt41;
+
     public string? ServerMapLatestVersion => ServerMapRelease?.LatestVersion;
 
     // The version the connected server reports. Only used when this machine runs no server itself:
@@ -82,14 +85,18 @@ public partial class AppUpdateViewModel
         Text(Strings.AppUpdate_ServerMapConnectedBehindFormat, ConnectedServerMapVersion, ServerMapLatestVersion);
 
     [RelayCommand]
-    private static void OpenServerMapModPage() =>
-        Process.Start(new ProcessStartInfo(ServerMapAddon.PageUrl) { UseShellExecute = true });
+    private void OpenServerMapModPage() =>
+        Process.Start(new ProcessStartInfo(ServerMapAddon.PageUrl(_serverMapLine)) { UseShellExecute = true });
 
     // The files on disk, read again. Cheap, so the page does it every time it is shown.
     public void RefreshServerMapInstall()
     {
         HookServerMap();
-        ServerMapInstalled = ServerMapModVersions.FindInstalled(_settings.Load().SptInstallPath);
+        var installPath = _settings.Load().SptInstallPath;
+        var installed = ServerMapModVersions.FindInstalled(installPath);
+
+        _serverMapLine = ServerMapModVersions.LineFor(installed, installPath);
+        ServerMapInstalled = installed;
     }
 
     //
@@ -102,7 +109,7 @@ public partial class AppUpdateViewModel
 
         try
         {
-            ServerMapRelease = await _serverMapMod.LatestAsync().ConfigureAwait(true);
+            ServerMapRelease = await _serverMapMod.LatestAsync(_serverMapLine).ConfigureAwait(true);
             ServerMapCheckFailed = false;
         }
         catch (Exception ex) when (ex is SpModApiException or HttpRequestException or OperationCanceledException)

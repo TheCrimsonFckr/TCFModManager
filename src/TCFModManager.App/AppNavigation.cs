@@ -35,6 +35,8 @@ internal static class AppNavigation
 
     private static string? _helpSectionPending;
 
+    private static string? _helpTopicPending;
+
     // Raised on the UI thread when Help should open on a section - heard by a Help page that is
     // already on screen, where navigating to it again does nothing.
     public static event EventHandler? HelpRequested;
@@ -56,20 +58,28 @@ internal static class AppNavigation
         ShowHelp(HelpCatalog.SectionIdFor(_currentPage));
     }
 
-    // Help at one section - Getting started from the no-install banner, for one.
-    public static void ShowHelp(string sectionId)
+    // Any page by type - the Open button on a Help topic.
+    public static void Navigate(Type page) => _navigation?.Navigate(page);
+
+    // Help at one section - Getting started from the no-install banner, for one - or at one topic
+    // in it, for a notice that has an answer.
+    public static void ShowHelp(string sectionId, string? topicId = null)
     {
         _helpSectionPending = sectionId;
+        _helpTopicPending = topicId;
         HelpRequested?.Invoke(null, EventArgs.Empty);
         _navigation?.Navigate(typeof(HelpPage));
     }
 
-    // Consumed by the Help page: the section to open on, once per request.
-    public static string? TakeHelpSection()
+    // Consumed by the Help page: the section to open on, and the topic if one was named, once per request.
+    public static (string SectionId, string? TopicId)? TakeHelpRequest()
     {
-        var pending = _helpSectionPending;
+        if (_helpSectionPending is not { } section) return null;
+
+        var topic = _helpTopicPending;
         _helpSectionPending = null;
-        return pending;
+        _helpTopicPending = null;
+        return (section, topic);
     }
 
     //

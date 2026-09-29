@@ -1,3 +1,4 @@
+using System.Windows;
 using System.Windows.Controls;
 using TCFModManager.App.ViewModels;
 
@@ -29,4 +30,7 @@ public partial class PlayPage : Page
 
         Unloaded += (_, _) => ViewModel.StopPolling();
     }
+
+    private void RoleShowMeHow_Click(object sender, RoutedEventArgs e) =>
+        AppNavigation.ShowHelp("options", "options.role");
 }

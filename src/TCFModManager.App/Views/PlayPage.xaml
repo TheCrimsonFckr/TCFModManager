@@ -273,6 +273,14 @@
                     Title="{loc:Str Play_RoleNoticeTitle}"
                     Message="{loc:Str Play_RoleNoticeMessage}"
                     Visibility="{Binding NeedsRoleAnswer, Converter={StaticResource BoolToVisibility}}" />
+                <!-- The answer to the notice above, in Help (Help S5). -->
+                <ui:Button
+                    Margin="0,8,0,0"
+                    HorizontalAlignment="Left"
+                    Content="{loc:Str Help_ShowMeHow}"
+                    Icon="{ui:SymbolIcon BookQuestionMark24}"
+                    Click="RoleShowMeHow_Click"
+                    Visibility="{Binding NeedsRoleAnswer, Converter={StaticResource BoolToVisibility}}" />
             </StackPanel>
         </ui:Card>
 
