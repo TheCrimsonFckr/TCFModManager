@@ -62,4 +62,30 @@ public class LocalizationPlaceholderTests
             wrong.Count == 0,
             "Placeholders that don't match English:" + Environment.NewLine + string.Join(Environment.NewLine, wrong));
     }
+
+    //
+    // A Help step with a Monitor mode form is handed the same labels whichever form is showing, so
+    // the two have to agree on their placeholders - checked in English, and the test above then
+    // holds every translation of both to that.
+    //
+    [Fact]
+    public void Every_monitor_mode_form_keeps_its_base_placeholders()
+    {
+        const string suffix = "_Monitor";
+        var english = Values(AppSource.Resx);
+
+        var wrong = english
+            .Where(e => e.Key.EndsWith(suffix, StringComparison.Ordinal))
+            .Select(e => (Key: e.Key, Base: e.Key[..^suffix.Length], Value: e.Value))
+            .Where(e => !english.ContainsKey(e.Base) || Shape(english[e.Base]) != Shape(e.Value))
+            .Select(e => english.ContainsKey(e.Base)
+                ? $"{e.Key}: {{{Shape(e.Value)}}}, but {e.Base} has {{{Shape(english[e.Base])}}}"
+                : $"{e.Key}: no {e.Base} for it to be the Monitor mode form of")
+            .Order()
+            .ToList();
+
+        Assert.True(
+            wrong.Count == 0,
+            "Monitor mode forms that don't match their base key:" + Environment.NewLine + string.Join(Environment.NewLine, wrong));
+    }
 }

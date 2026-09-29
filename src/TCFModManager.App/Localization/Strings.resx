@@ -5756,7 +5756,7 @@ This was written to:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_ModLists_Server_Step2" xml:space="preserve">
-    <value>Under {0}, fill in the server's address, port and key, then press {1}.</value>
+    <value>Open {0} with the arrow on its row, fill in the server's address, port and key, then press {1}.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_ModLists_Server_Step3" xml:space="preserve">
@@ -5979,7 +5979,7 @@ This was written to:
     <comment>How-to title.</comment>
   </data>
   <data name="Help_ServerMap_Connect_Step1" xml:space="preserve">
-    <value>In {0}, under {1}, fill in the address and port from your SPT launcher, and the key if the server has one.</value>
+    <value>In {0}, open {1} with the arrow on its row and fill in the address and port from your SPT launcher, and the key if the server has one.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_ServerMap_Connect_Step2" xml:space="preserve">
@@ -6048,8 +6048,8 @@ This was written to:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Monitor_Title" xml:space="preserve">
-    <value>Monitor mode (download only)</value>
-    <comment>Help section heading for installing mods yourself.</comment>
+    <value>Installing mods yourself</value>
+    <comment>Help section heading: the download-only install mode, where the reader installs mods by hand. Options calls the setting Install mode.</comment>
   </data>
   <data name="Help_Monitor_Enable_Title" xml:space="preserve">
     <value>Download mods to install myself</value>
@@ -6064,7 +6064,7 @@ This was written to:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Monitor_Enable_Step3" xml:space="preserve">
-    <value>Under {0}, pick where files go, or leave it empty for your Windows Downloads folder.</value>
+    <value>To choose where files go, open the row with its arrow and pick a folder under {0}. Left empty, they go to your Windows Downloads folder.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Monitor_Enable_Note" xml:space="preserve">
@@ -6108,7 +6108,7 @@ This was written to:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Updates_Enable_Step2" xml:space="preserve">
-    <value>Pick how often under {0}.</value>
+    <value>Open the row with its arrow and pick how often under {0}.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Updates_Enable_Step3" xml:space="preserve">
@@ -6124,7 +6124,7 @@ This was written to:
     <comment>How-to title.</comment>
   </data>
   <data name="Help_Updates_Tray_Step1" xml:space="preserve">
-    <value>Under {0}, switch on the setting that reads {1}.</value>
+    <value>Open {0} with the arrow on its row and switch on the setting that reads {1}.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Updates_Tray_Step2" xml:space="preserve">
@@ -6152,5 +6152,33 @@ This was written to:
   <data name="Help_AppUpdate_Update_Note" xml:space="preserve">
     <value>Your settings and mods are left alone. {0} looks for a new version straight away.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Install_Title_Monitor" xml:space="preserve">
+    <value>Download a mod and the mods it needs</value>
+    <comment>How-to title. Shown instead of the key without _Monitor while Monitor mode (download only) is on.</comment>
+  </data>
+  <data name="Help_Browse_Install_Step4_Monitor" xml:space="preserve">
+    <value>Follow it on {0}. The card says where the file was saved - install it from there yourself.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it. Shown instead of the key without _Monitor while Monitor mode (download only) is on.</comment>
+  </data>
+  <data name="Help_Browse_Install_Note_Monitor" xml:space="preserve">
+    <value>Nothing in your SPT folder is touched, so SPT can stay running while you download.</value>
+    <comment>Shown instead of the key without _Monitor while Monitor mode (download only) is on.</comment>
+  </data>
+  <data name="Help_Installed_Update_Step2_Monitor" xml:space="preserve">
+    <value>The newest version that runs on your SPT is already selected. Press {0} to download it - or {1} to download the version you have again - then install the file yourself.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it. Shown instead of the key without _Monitor while Monitor mode (download only) is on.</comment>
+  </data>
+  <data name="Help_ModLists_Apply_Note_Monitor" xml:space="preserve">
+    <value>Applying saves what's missing to your download folder for you to install, and moves mods the list leaves out to the disabled folder. Nothing is deleted.</value>
+    <comment>Shown instead of the key without _Monitor while Monitor mode (download only) is on.</comment>
+  </data>
+  <data name="Help_Downloads_Watch_Step1_Monitor" xml:space="preserve">
+    <value>Open {0}. Each mod shows its progress and the time left, and they're downloaded one at a time.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it. Shown instead of the key without _Monitor while Monitor mode (download only) is on.</comment>
+  </data>
+  <data name="Help_Downloads_Watch_Note_Monitor" xml:space="preserve">
+    <value>A download never overwrites a file - a second copy is saved beside the first.</value>
+    <comment>Shown instead of the key without _Monitor while Monitor mode (download only) is on.</comment>
   </data>
 </root>

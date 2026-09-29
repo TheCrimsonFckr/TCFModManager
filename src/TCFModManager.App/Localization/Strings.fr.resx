@@ -4852,7 +4852,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Dans {0}, sous {1}, activez {2}.</value>
   </data>
   <data name="Help_ModLists_Server_Step2" xml:space="preserve">
-    <value>Sous {0}, indiquez l'adresse, le port et la clé du serveur, puis cliquez sur {1}.</value>
+    <value>Ouvrez {0} avec la flèche de sa ligne, indiquez l'adresse, le port et la clé du serveur, puis cliquez sur {1}.</value>
   </data>
   <data name="Help_ModLists_Server_Step3" xml:space="preserve">
     <value>Ouvrez {0}. S'il vous manque quelque chose, cliquez sur {1}.</value>
@@ -5029,7 +5029,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Se connecter à un serveur</value>
   </data>
   <data name="Help_ServerMap_Connect_Step1" xml:space="preserve">
-    <value>Dans {0}, sous {1}, indiquez l'adresse et le port de votre launcher SPT, et la clé si le serveur en a une.</value>
+    <value>Dans {0}, ouvrez {1} avec la flèche de sa ligne et indiquez l'adresse et le port de votre launcher SPT, et la clé si le serveur en a une.</value>
   </data>
   <data name="Help_ServerMap_Connect_Step2" xml:space="preserve">
     <value>Cliquez sur {0}.</value>
@@ -5083,7 +5083,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Cliquez sur {0} pour ouvrir ce dossier avec le fichier sélectionné.</value>
   </data>
   <data name="Help_Monitor_Title" xml:space="preserve">
-    <value>Mode surveillance (téléchargement seul)</value>
+    <value>Installer les mods soi-même</value>
   </data>
   <data name="Help_Monitor_Enable_Title" xml:space="preserve">
     <value>Télécharger des mods pour les installer moi-même</value>
@@ -5095,7 +5095,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Passez {0} sur {1}.</value>
   </data>
   <data name="Help_Monitor_Enable_Step3" xml:space="preserve">
-    <value>Sous {0}, choisissez où vont les fichiers, ou laissez vide pour votre dossier Téléchargements de Windows.</value>
+    <value>Pour choisir où vont les fichiers, ouvrez la ligne avec sa flèche et choisissez un dossier sous {0}. Laissé vide, ils vont dans votre dossier Téléchargements de Windows.</value>
   </data>
   <data name="Help_Monitor_Enable_Note" xml:space="preserve">
     <value>La navigation, les mises à jour, les dépendances et les listes de mods continuent de fonctionner. Rien n'est touché dans votre dossier SPT, vous pouvez donc télécharger pendant que SPT tourne.</value>
@@ -5131,7 +5131,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Dans {0}, sous {1}, activez {2}.</value>
   </data>
   <data name="Help_Updates_Enable_Step2" xml:space="preserve">
-    <value>Choisissez la fréquence sous {0}.</value>
+    <value>Ouvrez la ligne avec sa flèche et choisissez la fréquence sous {0}.</value>
   </data>
   <data name="Help_Updates_Enable_Step3" xml:space="preserve">
     <value>Cliquez sur {0} pour vérifier tout de suite.</value>
@@ -5143,7 +5143,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Continuer à vérifier avec la fenêtre fermée</value>
   </data>
   <data name="Help_Updates_Tray_Step1" xml:space="preserve">
-    <value>Sous {0}, activez le réglage qui affiche {1}.</value>
+    <value>Ouvrez {0} avec la flèche de sa ligne et activez le réglage qui affiche {1}.</value>
   </data>
   <data name="Help_Updates_Tray_Step2" xml:space="preserve">
     <value>Fermer la fenêtre laisse maintenant une icône dans la zone de notification. Cliquez dessus pour rouvrir l'application.</value>
@@ -5165,5 +5165,26 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   </data>
   <data name="Help_AppUpdate_Update_Note" xml:space="preserve">
     <value>Vos réglages et vos mods ne sont pas touchés. {0} cherche une nouvelle version tout de suite.</value>
+  </data>
+  <data name="Help_Browse_Install_Title_Monitor" xml:space="preserve">
+    <value>Télécharger un mod et les mods dont il a besoin</value>
+  </data>
+  <data name="Help_Browse_Install_Step4_Monitor" xml:space="preserve">
+    <value>Suivez l'opération dans {0}. La fiche indique où le fichier a été enregistré - installez-le vous-même à partir de là.</value>
+  </data>
+  <data name="Help_Browse_Install_Note_Monitor" xml:space="preserve">
+    <value>Rien n'est touché dans votre dossier SPT, SPT peut donc rester lancé pendant le téléchargement.</value>
+  </data>
+  <data name="Help_Installed_Update_Step2_Monitor" xml:space="preserve">
+    <value>La dernière version qui fonctionne sur votre SPT est déjà sélectionnée. Cliquez sur {0} pour la télécharger - ou sur {1} pour retélécharger la version que vous avez - puis installez le fichier vous-même.</value>
+  </data>
+  <data name="Help_ModLists_Apply_Note_Monitor" xml:space="preserve">
+    <value>Appliquer enregistre ce qui manque dans votre dossier de téléchargement pour que vous l'installiez, et déplace les mods que la liste ne nomme pas dans le dossier désactivé. Rien n'est supprimé.</value>
+  </data>
+  <data name="Help_Downloads_Watch_Step1_Monitor" xml:space="preserve">
+    <value>Ouvrez {0}. Chaque mod affiche sa progression et le temps restant, et ils se téléchargent un par un.</value>
+  </data>
+  <data name="Help_Downloads_Watch_Note_Monitor" xml:space="preserve">
+    <value>Un téléchargement n'écrase jamais un fichier - une deuxième copie est enregistrée à côté de la première.</value>
   </data>
 </root>

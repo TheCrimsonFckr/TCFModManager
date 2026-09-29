@@ -27,6 +27,20 @@ public partial class HelpViewModel : LocalizedViewModel
         foreach (var topic in Sections[0].Topics) topic.IsExpanded = true;
 
         AppLanguage.Changed += (_, _) => ApplyFilter();
+
+        // The install steps read differently in Monitor mode (R6), so a switch in Options rewords
+        // the page the way a language switch does.
+        AppServices.ModPageGate.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName != nameof(ModPageGateViewModel.IsDownloadOnly)) return;
+
+            foreach (var section in Sections)
+            {
+                foreach (var topic in section.Topics) topic.Reword();
+            }
+
+            ApplyFilter();
+        };
     }
 
     public ObservableCollection<HelpSectionViewModel> Sections { get; }
@@ -142,6 +156,14 @@ public partial class HelpTopicViewModel : LocalizedViewModel
 
     public HelpStepViewModel? Note { get; }
 
+    // Re-reads the title and every step - HelpInlines rebuilds a step when it hears this.
+    internal void Reword()
+    {
+        OnPropertyChanged(string.Empty);
+        foreach (var step in Steps) step.Reword();
+        Note?.Reword();
+    }
+
     public bool HasNote => Note is not null;
 
     [ObservableProperty]
@@ -170,4 +192,6 @@ public class HelpStepViewModel : LocalizedViewModel
 
     // Same text without the bold, for the screen reader and for anyone copying a step.
     public string PlainText => HelpText.Plain(_step);
+
+    internal void Reword() => OnPropertyChanged(string.Empty);
 }

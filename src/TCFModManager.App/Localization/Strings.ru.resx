@@ -5140,7 +5140,7 @@
     <value>В разделе {0}, в группе {1}, включите {2}.</value>
   </data>
   <data name="Help_ModLists_Server_Step2" xml:space="preserve">
-    <value>В разделе {0} укажите адрес, порт и ключ сервера, затем нажмите {1}.</value>
+    <value>Раскройте {0} стрелкой в строке, укажите адрес, порт и ключ сервера, затем нажмите {1}.</value>
   </data>
   <data name="Help_ModLists_Server_Step3" xml:space="preserve">
     <value>Откройте {0}. Если вам чего-то не хватает, нажмите {1}.</value>
@@ -5317,7 +5317,7 @@
     <value>Подключиться к серверу</value>
   </data>
   <data name="Help_ServerMap_Connect_Step1" xml:space="preserve">
-    <value>В разделе {0}, в группе {1}, укажите адрес и порт из лаунчера SPT и ключ, если он есть у сервера.</value>
+    <value>В разделе {0} раскройте {1} стрелкой в строке и укажите адрес и порт из лаунчера SPT и ключ, если он есть у сервера.</value>
   </data>
   <data name="Help_ServerMap_Connect_Step2" xml:space="preserve">
     <value>Нажмите {0}.</value>
@@ -5371,7 +5371,7 @@
     <value>Нажмите {0}, чтобы открыть эту папку с выделенным файлом.</value>
   </data>
   <data name="Help_Monitor_Title" xml:space="preserve">
-    <value>Режим наблюдения (только скачивание)</value>
+    <value>Установка модов вручную</value>
   </data>
   <data name="Help_Monitor_Enable_Title" xml:space="preserve">
     <value>Скачивать моды, чтобы ставить их самому</value>
@@ -5383,7 +5383,7 @@
     <value>Переключите {0} на {1}.</value>
   </data>
   <data name="Help_Monitor_Enable_Step3" xml:space="preserve">
-    <value>В разделе {0} выберите, куда класть файлы, или оставьте пустым для папки «Загрузки» Windows.</value>
+    <value>Чтобы выбрать, куда класть файлы, раскройте строку стрелкой и выберите папку в разделе {0}. Если оставить пустым, они попадут в папку «Загрузки» Windows.</value>
   </data>
   <data name="Help_Monitor_Enable_Note" xml:space="preserve">
     <value>Обзор, обновления, зависимости и списки модов продолжают работать. В папке SPT ничего не трогается, так что скачивать можно при запущенном SPT.</value>
@@ -5419,7 +5419,7 @@
     <value>В разделе {0}, в группе {1}, включите {2}.</value>
   </data>
   <data name="Help_Updates_Enable_Step2" xml:space="preserve">
-    <value>Выберите частоту в пункте {0}.</value>
+    <value>Раскройте строку стрелкой и выберите частоту в пункте {0}.</value>
   </data>
   <data name="Help_Updates_Enable_Step3" xml:space="preserve">
     <value>Нажмите {0}, чтобы проверить сразу.</value>
@@ -5431,7 +5431,7 @@
     <value>Продолжать проверку с закрытым окном</value>
   </data>
   <data name="Help_Updates_Tray_Step1" xml:space="preserve">
-    <value>В группе {0} включите настройку с надписью {1}.</value>
+    <value>Раскройте {0} стрелкой в строке и включите настройку с надписью {1}.</value>
   </data>
   <data name="Help_Updates_Tray_Step2" xml:space="preserve">
     <value>Теперь при закрытии окна в области уведомлений остаётся значок. Щёлкните его, чтобы снова открыть приложение.</value>
@@ -5453,5 +5453,26 @@
   </data>
   <data name="Help_AppUpdate_Update_Note" xml:space="preserve">
     <value>Ваши настройки и моды не затрагиваются. {0} сразу ищет новую версию.</value>
+  </data>
+  <data name="Help_Browse_Install_Title_Monitor" xml:space="preserve">
+    <value>Скачать мод и нужные ему моды</value>
+  </data>
+  <data name="Help_Browse_Install_Step4_Monitor" xml:space="preserve">
+    <value>Следите за ходом на странице {0}. На карточке написано, куда сохранён файл, - установите его оттуда сами.</value>
+  </data>
+  <data name="Help_Browse_Install_Note_Monitor" xml:space="preserve">
+    <value>В папке SPT ничего не трогается, так что SPT может оставаться запущенным, пока идёт скачивание.</value>
+  </data>
+  <data name="Help_Installed_Update_Step2_Monitor" xml:space="preserve">
+    <value>Последняя версия, которая работает на вашем SPT, уже выбрана. Нажмите {0}, чтобы скачать её, - или {1}, чтобы заново скачать ту версию, что у вас стоит, - затем установите файл сами.</value>
+  </data>
+  <data name="Help_ModLists_Apply_Note_Monitor" xml:space="preserve">
+    <value>При применении недостающее сохраняется в папку загрузок, чтобы вы установили его сами, а моды, которых нет в списке, переносятся в папку отключённых. Ничего не удаляется.</value>
+  </data>
+  <data name="Help_Downloads_Watch_Step1_Monitor" xml:space="preserve">
+    <value>Откройте {0}. У каждого мода виден ход загрузки и оставшееся время, а скачиваются они по одному.</value>
+  </data>
+  <data name="Help_Downloads_Watch_Note_Monitor" xml:space="preserve">
+    <value>Скачивание никогда не перезаписывает файл - вторая копия сохраняется рядом с первой.</value>
   </data>
 </root>

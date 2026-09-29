@@ -1695,4 +1695,11 @@ internal static class Strings
     internal static string Help_AppUpdate_Update_Step2 => LocalizationService.Get("Help_AppUpdate_Update_Step2");
     internal static string Help_AppUpdate_Update_Step3 => LocalizationService.Get("Help_AppUpdate_Update_Step3");
     internal static string Help_AppUpdate_Update_Note => LocalizationService.Get("Help_AppUpdate_Update_Note");
+    internal static string Help_Browse_Install_Title_Monitor => LocalizationService.Get("Help_Browse_Install_Title_Monitor");
+    internal static string Help_Browse_Install_Step4_Monitor => LocalizationService.Get("Help_Browse_Install_Step4_Monitor");
+    internal static string Help_Browse_Install_Note_Monitor => LocalizationService.Get("Help_Browse_Install_Note_Monitor");
+    internal static string Help_Installed_Update_Step2_Monitor => LocalizationService.Get("Help_Installed_Update_Step2_Monitor");
+    internal static string Help_ModLists_Apply_Note_Monitor => LocalizationService.Get("Help_ModLists_Apply_Note_Monitor");
+    internal static string Help_Downloads_Watch_Step1_Monitor => LocalizationService.Get("Help_Downloads_Watch_Step1_Monitor");
+    internal static string Help_Downloads_Watch_Note_Monitor => LocalizationService.Get("Help_Downloads_Watch_Note_Monitor");
 }

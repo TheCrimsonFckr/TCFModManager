@@ -60,13 +60,15 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Browse_Compatible_Step2),
                 Step(() => Strings.Help_Browse_Compatible_Step3, () => Strings.Common_ClearFilters)),
 
-            Topic("browse.install", () => Strings.Help_Browse_Install_Title,
+            Topic("browse.install",
+                ByMode(() => Strings.Help_Browse_Install_Title, () => Strings.Help_Browse_Install_Title_Monitor),
                 Step(() => Strings.Help_Browse_Install_Step1, () => Strings.Nav_Browse),
                 Step(() => Strings.Help_Browse_Install_Step2,
                     () => Strings.ReadModPage_ButtonOpen, () => Strings.Common_Continue),
                 Step(() => Strings.Help_Browse_Install_Step3, () => Strings.Common_Continue),
-                Step(() => Strings.Help_Browse_Install_Step4, () => Strings.Nav_Downloads))
-                .WithNote(() => Strings.Help_Browse_Install_Note),
+                Step(ByMode(() => Strings.Help_Browse_Install_Step4, () => Strings.Help_Browse_Install_Step4_Monitor),
+                    () => Strings.Nav_Downloads))
+                .WithNote(ByMode(() => Strings.Help_Browse_Install_Note, () => Strings.Help_Browse_Install_Note_Monitor)),
 
             Topic("browse.author", () => Strings.Help_Browse_Author_Title,
                 Step(() => Strings.Help_Browse_Author_Step1, () => Strings.Nav_Browse),
@@ -95,7 +97,7 @@ internal static class HelpCatalog
             Topic("installed.update", () => Strings.Help_Installed_Update_Title,
                 Step(() => Strings.Help_Installed_Update_Step1,
                     () => Strings.Nav_Installed, () => Strings.Installed_DetailsAndVersions),
-                Step(() => Strings.Help_Installed_Update_Step2,
+                Step(ByMode(() => Strings.Help_Installed_Update_Step2, () => Strings.Help_Installed_Update_Step2_Monitor),
                     () => Strings.ModUpdate_Update, () => Strings.ModUpdate_Redownload),
                 Step(() => Strings.Help_Installed_Update_Step3, () => Strings.Common_Continue))
                 .WithNote(() => Strings.Help_Installed_Update_Note,
@@ -146,7 +148,7 @@ internal static class HelpCatalog
                     () => Strings.Nav_ModLists, () => Strings.ModLists_SavedHeader),
                 Step(() => Strings.Help_ModLists_Apply_Step2, () => Strings.ModLists_Preview),
                 Step(() => Strings.Help_ModLists_Apply_Step3, () => Strings.ModLists_Apply))
-                .WithNote(() => Strings.Help_ModLists_Apply_Note),
+                .WithNote(ByMode(() => Strings.Help_ModLists_Apply_Note, () => Strings.Help_ModLists_Apply_Note_Monitor)),
 
             Topic("modlists.pin", () => Strings.Help_ModLists_Pin_Title,
                 Step(() => Strings.Help_ModLists_Pin_Step1,
@@ -268,10 +270,11 @@ internal static class HelpCatalog
         new("downloads", () => Strings.Nav_Downloads, SymbolRegular.ArrowDownload24, typeof(DownloadsPage),
         [
             Topic("downloads.watch", () => Strings.Help_Downloads_Watch_Title,
-                Step(() => Strings.Help_Downloads_Watch_Step1, () => Strings.Nav_Downloads),
+                Step(ByMode(() => Strings.Help_Downloads_Watch_Step1, () => Strings.Help_Downloads_Watch_Step1_Monitor),
+                    () => Strings.Nav_Downloads),
                 Step(() => Strings.Help_Downloads_Watch_Step2, () => Strings.Common_Cancel),
                 Step(() => Strings.Help_Downloads_Watch_Step3, () => Strings.Downloads_RetryFailed))
-                .WithNote(() => Strings.Help_Downloads_Watch_Note),
+                .WithNote(ByMode(() => Strings.Help_Downloads_Watch_Note, () => Strings.Help_Downloads_Watch_Note_Monitor)),
 
             Topic("downloads.where", () => Strings.Help_Downloads_Where_Title,
                 Step(() => Strings.Help_Downloads_Where_Step1, () => Strings.Nav_Downloads),
@@ -333,6 +336,14 @@ internal static class HelpCatalog
     // The section the "?" opens for a page: its own, or Getting started for a page that has none.
     public static string SectionIdFor(Type? pageType) =>
         Sections.FirstOrDefault(s => pageType is not null && s.PageType == pageType)?.Id ?? StartSectionId;
+
+    //
+    // A string that reads differently in Monitor mode (R6), so an install step describes the buttons
+    // the reader is actually looking at. Both forms are handed the same labels, so they must use the
+    // same placeholders. Read on every get - the Help view models are refreshed when the mode changes.
+    //
+    private static Func<string> ByMode(Func<string> install, Func<string> downloadOnly) =>
+        () => AppServices.ModPageGate.IsDownloadOnly ? downloadOnly() : install();
 
     private static HelpTopic Topic(string id, Func<string> title, params HelpStep[] steps) =>
         new(id, title, steps);

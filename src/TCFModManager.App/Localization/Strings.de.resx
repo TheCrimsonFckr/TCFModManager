@@ -4852,7 +4852,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Schalte unter {0}, im Bereich {1}, {2} ein.</value>
   </data>
   <data name="Help_ModLists_Server_Step2" xml:space="preserve">
-    <value>Trag unter {0} Adresse, Port und Schlüssel des Servers ein und klicke auf {1}.</value>
+    <value>Öffne {0} mit dem Pfeil in der Zeile, trag Adresse, Port und Schlüssel des Servers ein und klicke auf {1}.</value>
   </data>
   <data name="Help_ModLists_Server_Step3" xml:space="preserve">
     <value>Öffne {0}. Fehlt dir etwas, klicke auf {1}.</value>
@@ -5029,7 +5029,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Mit einem Server verbinden</value>
   </data>
   <data name="Help_ServerMap_Connect_Step1" xml:space="preserve">
-    <value>Trag unter {0}, im Bereich {1}, Adresse und Port aus deinem SPT-Launcher ein und den Schlüssel, falls der Server einen hat.</value>
+    <value>Öffne unter {0} {1} mit dem Pfeil in der Zeile und trag Adresse und Port aus deinem SPT-Launcher ein und den Schlüssel, falls der Server einen hat.</value>
   </data>
   <data name="Help_ServerMap_Connect_Step2" xml:space="preserve">
     <value>Klicke auf {0}.</value>
@@ -5083,7 +5083,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Klicke auf {0}, um den Ordner mit der markierten Datei zu öffnen.</value>
   </data>
   <data name="Help_Monitor_Title" xml:space="preserve">
-    <value>Monitor-Modus (nur herunterladen)</value>
+    <value>Mods selbst installieren</value>
   </data>
   <data name="Help_Monitor_Enable_Title" xml:space="preserve">
     <value>Mods herunterladen, um sie selbst zu installieren</value>
@@ -5095,7 +5095,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Stell {0} auf {1}.</value>
   </data>
   <data name="Help_Monitor_Enable_Step3" xml:space="preserve">
-    <value>Wähle unter {0}, wohin die Dateien kommen, oder lass es leer für deinen Windows-Downloads-Ordner.</value>
+    <value>Um festzulegen, wohin die Dateien kommen, öffne die Zeile mit ihrem Pfeil und wähle unter {0} einen Ordner. Leer gelassen landen sie in deinem Windows-Downloads-Ordner.</value>
   </data>
   <data name="Help_Monitor_Enable_Note" xml:space="preserve">
     <value>Durchsuchen, Updates, Abhängigkeiten und Modlisten funktionieren weiter. In deinem SPT-Ordner wird nichts angefasst, also kannst du herunterladen, während SPT läuft.</value>
@@ -5131,7 +5131,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Schalte unter {0}, im Bereich {1}, {2} ein.</value>
   </data>
   <data name="Help_Updates_Enable_Step2" xml:space="preserve">
-    <value>Wähle unter {0}, wie oft.</value>
+    <value>Öffne die Zeile mit ihrem Pfeil und wähle unter {0}, wie oft.</value>
   </data>
   <data name="Help_Updates_Enable_Step3" xml:space="preserve">
     <value>Klicke auf {0}, um sofort zu prüfen.</value>
@@ -5143,7 +5143,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Mit geschlossenem Fenster weiter prüfen</value>
   </data>
   <data name="Help_Updates_Tray_Step1" xml:space="preserve">
-    <value>Schalte unter {0} die Einstellung ein, in der {1} steht.</value>
+    <value>Öffne {0} mit dem Pfeil in seiner Zeile und schalte die Einstellung ein, in der {1} steht.</value>
   </data>
   <data name="Help_Updates_Tray_Step2" xml:space="preserve">
     <value>Wenn du das Fenster schließt, bleibt jetzt ein Symbol im Infobereich. Klicke darauf, um die App wieder zu öffnen.</value>
@@ -5165,5 +5165,26 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   </data>
   <data name="Help_AppUpdate_Update_Note" xml:space="preserve">
     <value>Deine Einstellungen und Mods bleiben unberührt. {0} sucht sofort nach einer neuen Version.</value>
+  </data>
+  <data name="Help_Browse_Install_Title_Monitor" xml:space="preserve">
+    <value>Einen Mod und die Mods, die er braucht, herunterladen</value>
+  </data>
+  <data name="Help_Browse_Install_Step4_Monitor" xml:space="preserve">
+    <value>Verfolge es unter {0}. Auf der Karte steht, wo die Datei gespeichert wurde - installiere sie von dort selbst.</value>
+  </data>
+  <data name="Help_Browse_Install_Note_Monitor" xml:space="preserve">
+    <value>In deinem SPT-Ordner wird nichts angefasst, also kann SPT beim Herunterladen weiterlaufen.</value>
+  </data>
+  <data name="Help_Installed_Update_Step2_Monitor" xml:space="preserve">
+    <value>Die neueste Version, die auf deinem SPT läuft, ist schon ausgewählt. Klicke auf {0}, um sie herunterzuladen - oder auf {1}, um die Version, die du hast, erneut herunterzuladen - und installiere die Datei dann selbst.</value>
+  </data>
+  <data name="Help_ModLists_Apply_Note_Monitor" xml:space="preserve">
+    <value>Beim Anwenden wird, was fehlt, zum Selbstinstallieren in deinen Download-Ordner gespeichert, und Mods, die die Liste nicht nennt, kommen in den deaktivierten Ordner. Nichts wird gelöscht.</value>
+  </data>
+  <data name="Help_Downloads_Watch_Step1_Monitor" xml:space="preserve">
+    <value>Öffne {0}. Jeder Mod zeigt seinen Fortschritt und die Restzeit, und sie werden nacheinander heruntergeladen.</value>
+  </data>
+  <data name="Help_Downloads_Watch_Note_Monitor" xml:space="preserve">
+    <value>Ein Download überschreibt nie eine Datei - eine zweite Kopie wird neben der ersten gespeichert.</value>
   </data>
 </root>
