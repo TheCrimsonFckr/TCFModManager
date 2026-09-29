@@ -209,6 +209,13 @@
                             Visibility="{Binding ShowUpdateBadge, Converter={StaticResource BoolToVis}}" />
                     </ui:NavigationViewItem.InfoBadge>
                 </ui:NavigationViewItem>
+                <!-- Between App update and Options (Help R4). Not QuestionCircle: that glyph is the
+                     "unknown" status icon everywhere else in the app. -->
+                <ui:NavigationViewItem
+                    Content="{loc:Str Nav_Help}"
+                    Icon="{ui:SymbolIcon BookQuestionMark24}"
+                    NavigationCacheMode="Required"
+                    TargetPageType="{x:Type views:HelpPage}" />
                 <ui:NavigationViewItem
                     Content="{loc:Str Nav_Options}"
                     Icon="{ui:SymbolIcon Settings24}"

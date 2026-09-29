@@ -5424,4 +5424,361 @@ This was written to:
     <value>Open the mod page</value>
     <comment>Button opening the Server Map mod's page on sp-mod.com.</comment>
   </data>
+  <data name="Nav_Help" xml:space="preserve">
+    <value>Help</value>
+    <comment>Sidebar item for the Help page.</comment>
+  </data>
+  <data name="Help_Intro" xml:space="preserve">
+    <value>Step-by-step answers to the things people most often want to do. Each one names the page and the buttons to use.</value>
+    <comment>Top of the Help page.</comment>
+  </data>
+  <data name="Help_OpenGuide" xml:space="preserve">
+    <value>Open the full guide</value>
+    <comment>Button opening the app's page on sp-mod.com.</comment>
+  </data>
+  <data name="Help_OpenGuideToolTip" xml:space="preserve">
+    <value>The app's page on sp-mod.com - everything here in more depth, plus its limitations and troubleshooting. It is in English.</value>
+    <comment>Tooltip on Help_OpenGuide. Keep saying the guide is in English.</comment>
+  </data>
+  <data name="Help_SearchPlaceholder" xml:space="preserve">
+    <value>Search the how-tos...</value>
+    <comment>Search box on the Help page. Matches how-to titles.</comment>
+  </data>
+  <data name="Help_NoMatches" xml:space="preserve">
+    <value>No how-to matches that. Try fewer words, or open the full guide.</value>
+    <comment>Shown when the search finds nothing.</comment>
+  </data>
+  <data name="Help_StepNumberFormat" xml:space="preserve">
+    <value>{0}.</value>
+    <comment>The number in front of each step. {0} is the step number.</comment>
+  </data>
+  <data name="Help_Start_Title" xml:space="preserve">
+    <value>Getting started</value>
+    <comment>Help section heading.</comment>
+  </data>
+  <data name="Help_Start_Setup_Title" xml:space="preserve">
+    <value>Set the app up for my SPT install</value>
+    <comment>How-to title. Titles are phrased as what the reader wants to do.</comment>
+  </data>
+  <data name="Help_Start_Setup_Step1" xml:space="preserve">
+    <value>Open {0} in the sidebar.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Start_Setup_Step2" xml:space="preserve">
+    <value>Under {0}, press {1} and pick your SPT game folder - the one with EscapeFromTarkov.exe in it, not the server folder inside it.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Start_Setup_Step3" xml:space="preserve">
+    <value>Press {0}. The line underneath should now name your SPT version.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Start_Setup_Note" xml:space="preserve">
+    <value>The app isn't a mod. Keep it in a folder of its own, never in BepInEx\plugins or user\mods.</value>
+    <comment>Folder names are literal - don't translate them.</comment>
+  </data>
+  <data name="Help_Start_Version_Title" xml:space="preserve">
+    <value>Check the app found the right SPT version</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Start_Version_Step1" xml:space="preserve">
+    <value>Look at the end of the window title - it shows your SPT version in square brackets.</value>
+  </data>
+  <data name="Help_Start_Version_Step2" xml:space="preserve">
+    <value>If it's missing or wrong, open {0} and read the line under {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Start_Version_Step3" xml:space="preserve">
+    <value>A version that can't be found usually means the folder is one level too deep. Pick the folder with EscapeFromTarkov.exe in it and press {0}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Compatible_Title" xml:space="preserve">
+    <value>Find mods that work on my SPT version</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Browse_Compatible_Step1" xml:space="preserve">
+    <value>Open {0}. It starts filtered to your SPT version.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Compatible_Step2" xml:space="preserve">
+    <value>A tick beside SPT on a card means its newest version runs on yours; a cross means it doesn't.</value>
+  </data>
+  <data name="Help_Browse_Compatible_Step3" xml:space="preserve">
+    <value>To see more, open the SPT version dropdown at the top and tick other versions, or press {0}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Install_Title" xml:space="preserve">
+    <value>Install a mod and the mods it needs</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Browse_Install_Step1" xml:space="preserve">
+    <value>Find the mod on {0} and press the download button at the bottom right of its card.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Install_Step2" xml:space="preserve">
+    <value>A window asks you to read the mod's page first. Press {0}, read it, then press {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Install_Step3" xml:space="preserve">
+    <value>If it needs mods you don't have, their pages are listed the same way - {0} queues them too.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Install_Step4" xml:space="preserve">
+    <value>Follow it on {0}. Once it says installed, the mod loads the next time you start SPT.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Install_Note" xml:space="preserve">
+    <value>Close the game and the server first - mod files can't be replaced while they're running.</value>
+  </data>
+  <data name="Help_Browse_Author_Title" xml:space="preserve">
+    <value>Find every mod by one author</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Browse_Author_Step1" xml:space="preserve">
+    <value>In the search box on {0}, type @ followed by the author's name, with no space.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it. The @ is literal.</comment>
+  </data>
+  <data name="Help_Browse_Author_Step2" xml:space="preserve">
+    <value>Leave the @ out to search mod names instead.</value>
+    <comment>The @ is literal.</comment>
+  </data>
+  <data name="Help_Browse_HideInstalled_Title" xml:space="preserve">
+    <value>Hide mods I already have</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Browse_HideInstalled_Step1" xml:space="preserve">
+    <value>On {0}, open the dropdown that reads {1} and tick {2}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_HideInstalled_Step2" xml:space="preserve">
+    <value>To have Browse open this way every time, press {0}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it. 'Browse' is the page name, Nav_Browse.</comment>
+  </data>
+  <data name="Help_Browse_HideInstalled_Note" xml:space="preserve">
+    <value>A disabled mod counts as installed, so it's hidden too.</value>
+  </data>
+  <data name="Help_Installed_Updates_Title" xml:space="preserve">
+    <value>See which mods need updating</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Installed_Updates_Step1" xml:space="preserve">
+    <value>Open {0}. A mod with an update shows an upward arrow as its status icon.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Updates_Step2" xml:space="preserve">
+    <value>To list only those, change the dropdown that reads {0} to {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Update_Title" xml:space="preserve">
+    <value>Update or redownload a mod</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Installed_Update_Step1" xml:space="preserve">
+    <value>On {0}, click the mod's card to open it, then press {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Update_Step2" xml:space="preserve">
+    <value>The newest version that runs on your SPT is already selected. Press {0} - or {1} to fetch a fresh copy of the version you have.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Update_Step3" xml:space="preserve">
+    <value>Read the mod's page when asked, then press {0}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Update_Note" xml:space="preserve">
+    <value>To update several at once, press {0}, tick them and press {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Views_Title" xml:space="preserve">
+    <value>Change how the Installed page is laid out</value>
+    <comment>How-to title. 'Installed' is the page name, Nav_Installed.</comment>
+  </data>
+  <data name="Help_Installed_Views_Step1" xml:space="preserve">
+    <value>At the top of {0}, press {1}, {2} or {3}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Views_Step2" xml:space="preserve">
+    <value>All three show the same mods with the same filters and sort - only the layout changes.</value>
+  </data>
+  <data name="Help_Installed_Groups_Title" xml:space="preserve">
+    <value>Sort my mods into my own groups</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Installed_Groups_Step1" xml:space="preserve">
+    <value>On {0}, press {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Groups_Step2" xml:space="preserve">
+    <value>Type a name in the box that reads {0} and press {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Groups_Step3" xml:space="preserve">
+    <value>Drag a mod onto a group to move it there. Click a mod without dragging to open it.</value>
+  </data>
+  <data name="Help_Installed_Groups_Note" xml:space="preserve">
+    <value>Groups are only for you - SPT never sees them. Each group has buttons to turn all of it on or off at once.</value>
+  </data>
+  <data name="Help_Installed_Disable_Title" xml:space="preserve">
+    <value>Turn a mod off without deleting it</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Installed_Disable_Step1" xml:space="preserve">
+    <value>On {0}, press the on/off button on the mod's card or row.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Disable_Step2" xml:space="preserve">
+    <value>If another mod depends on it, you're shown which, and can turn those off with it.</value>
+  </data>
+  <data name="Help_Installed_Disable_Step3" xml:space="preserve">
+    <value>Press the same button again to turn it back on.</value>
+  </data>
+  <data name="Help_Installed_Disable_Note" xml:space="preserve">
+    <value>Nothing is deleted - the mod moves to a .disabled folder that SPT doesn't load, and its settings are kept.</value>
+    <comment>'.disabled' is a literal folder suffix.</comment>
+  </data>
+  <data name="Help_Installed_DisableMany_Title" xml:space="preserve">
+    <value>Turn several mods off at once</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Installed_DisableMany_Step1" xml:space="preserve">
+    <value>On {0}, press {1} and tick the mods.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_DisableMany_Step2" xml:space="preserve">
+    <value>Press {0}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_DisableMany_Note" xml:space="preserve">
+    <value>In the {0} view, each group's own buttons turn the whole group off or on.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Undo_Title" xml:space="preserve">
+    <value>Undo turning mods off or on</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Installed_Undo_Step1" xml:space="preserve">
+    <value>At the top of {0}, press {1}. The button names the change it puts back.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Undo_Step2" xml:space="preserve">
+    <value>Only the most recent change can be undone.</value>
+  </data>
+  <data name="Help_ModLists_Capture_Title" xml:space="preserve">
+    <value>Save the mods I run as a list</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_ModLists_Capture_Step1" xml:space="preserve">
+    <value>Open {0}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Capture_Step2" xml:space="preserve">
+    <value>Under {0}, type a name and press {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Capture_Note" xml:space="preserve">
+    <value>The list records every enabled mod at the version you have. Nothing on disk changes.</value>
+  </data>
+  <data name="Help_ModLists_Apply_Title" xml:space="preserve">
+    <value>Switch to another list</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_ModLists_Apply_Step1" xml:space="preserve">
+    <value>On {0}, pick the list under {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Apply_Step2" xml:space="preserve">
+    <value>Press {0} to see what would change. Nothing moves yet.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Apply_Step3" xml:space="preserve">
+    <value>Close the game and the server, then press {0}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Apply_Note" xml:space="preserve">
+    <value>Applying downloads what's missing and moves mods the list leaves out to the disabled folder. Nothing is deleted.</value>
+  </data>
+  <data name="Help_ModLists_Pin_Title" xml:space="preserve">
+    <value>Keep a mod whatever list I switch to</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_ModLists_Pin_Step1" xml:space="preserve">
+    <value>On {0}, click the mod's card to open it and press {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Pin_Step2" xml:space="preserve">
+    <value>A pinned mod is never set aside by a list. Press {0} in the same place to undo it.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Edit_Title" xml:space="preserve">
+    <value>Change what's on a list</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_ModLists_Edit_Step1" xml:space="preserve">
+    <value>Pick the list on {0}. Press {1} to put mods on it, or the X on a row to take one off.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it. The X is the remove button's glyph.</comment>
+  </data>
+  <data name="Help_ModLists_Edit_Step2" xml:space="preserve">
+    <value>Press {0}. Only the list changes - nothing is installed or moved.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Edit_Step3" xml:space="preserve">
+    <value>Press {0} when you want your install to match it.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Edit_Note" xml:space="preserve">
+    <value>A list you imported, or one a server sent you, is read-only - press {0} to get one you can change.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Share_Title" xml:space="preserve">
+    <value>Share a list with a friend</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_ModLists_Share_Step1" xml:space="preserve">
+    <value>Pick the list on {0}, press {1} and save the file.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Share_Step2" xml:space="preserve">
+    <value>Send the file however you like. Your friend presses {0} on {1} and picks it.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Share_Step3" xml:space="preserve">
+    <value>They press {0}, then {1}. Their app downloads each mod from sp-mod.com itself.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Share_Note" xml:space="preserve">
+    <value>The file names mods and versions, never the mod files, so it's tiny.</value>
+  </data>
+  <data name="Help_ModLists_Server_Title" xml:space="preserve">
+    <value>Get the mods a server runs</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_ModLists_Server_Step1" xml:space="preserve">
+    <value>In {0}, under {1}, switch on {2}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Server_Step2" xml:space="preserve">
+    <value>Under {0}, fill in the server's address, port and key, then press {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Server_Step3" xml:space="preserve">
+    <value>Open {0}. If you're missing anything, press {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Server_Step4" xml:space="preserve">
+    <value>Check the preview and press {0}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Server_Note" xml:space="preserve">
+    <value>The server needs the Server Map mod. A server's list never turns off mods of your own.</value>
+  </data>
+  <data name="Help_ModLists_Undo_Title" xml:space="preserve">
+    <value>Put things back after applying a list</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_ModLists_Undo_Step1" xml:space="preserve">
+    <value>On {0}, press {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_Undo_Step2" xml:space="preserve">
+    <value>Every mod goes back to how it was before the last apply. Applying another list replaces this undo.</value>
+  </data>
 </root>

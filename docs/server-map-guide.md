@@ -38,25 +38,22 @@ In the app: switch the Server map page on (**Options** → **Pages** → **Serve
 **Options** → **Fika and servers** → **Server map connection** → **Get the Server Map mod**. That opens the page in your
 browser.
 
-**One zip covers both SPT lines.** Inside are the payload, which is the same for both, and two stub
-folders - `spt-4.0.13\` and `spt-4.1.x\`. **Install only the stub that matches your server.**
+**There is one zip per SPT line** - `...-SPT4.1.zip` and `...-SPT4.0.13.zip`. Take the one that
+matches your server. The payload inside is the same build either way; only the stub differs.
 
-If you install the wrong one, SPT refuses to load it and says so - it will not half-work. Do not
-install both: they share a mod id.
+If you take the wrong one, SPT refuses to load the stub and says so - it will not half-work.
 
 ## Install the Server Map mod?
 
-You need two folders. The **stub** goes where SPT looks for mods; the **payload** goes outside it,
-so removing the feature later is one folder deletion.
+The zip is laid out exactly as it installs, so installing it is one extraction.
 
 1. **Stop the server.** The payload DLL is locked while it runs, and a copy over a locked file
    fails silently you will then spend an hour debugging the previous build.
-2. Copy the **stub folder** (`TCFMM.ServerMap`, containing `TCFMM.ServerMap.Stub.dll`,
-   `TCFMM.ServerMap.Shared.dll` and the `.deps.json`) into `user\mods\` the `user` folder that
-   sits beside `SPT.Server.exe`.
-3. Copy the **payload** (`TCFMM.ServerMap.Payload.dll`) into a folder called
-   `TCFModManager\ServerMap\payload\`.
-4. **Start the server.**
+2. **Extract the zip into your SPT root** - the folder that holds `SPT_Runtime\` (4.1) or `SPT\`
+   (4.0), and `TCFModManager\`. The **stub** lands in `user\mods\TCFMM.ServerMap\`, where SPT
+   looks for mods; the **payload** lands in `TCFModManager\ServerMap\payload\`, outside it, so
+   removing the feature later is one folder deletion.
+3. **Start the server.**
 
 ## Where exactly does the payload folder go?
 
@@ -293,15 +290,14 @@ Players connected to your server see the same card for your server's version, te
 you.
 
 1. **Stop the server.**
-2. Replace `TCFModManager\ServerMap\payload\` and `user\mods\TCFMM.ServerMap\` with the ones from
-   the new zip - the stub for your line only.
+2. Extract the new zip for your SPT line into your SPT root, over the old files.
 3. Start the server.
 
 **Leave `TCFModManager\Data\ServerMap\` alone.** Your key, your published list and the map's
 `clients.json` are there, and none of them are in the zip.
 
-The app never updates the mod itself: it is installed by hand, one stub of two, so the card only
-says it is behind and links the mod's page.
+The app never updates the mod itself - it is installed by hand, on the server machine - so the card
+only says it is behind and links the mod's page.
 
 ## Remove it?
 

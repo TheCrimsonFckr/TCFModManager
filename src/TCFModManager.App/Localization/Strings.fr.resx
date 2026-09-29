@@ -4593,4 +4593,283 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="AppUpdate_ServerMapOpenPage" xml:space="preserve">
     <value>Ouvrir la page du mod</value>
   </data>
+  <data name="Nav_Help" xml:space="preserve">
+    <value>Aide</value>
+  </data>
+  <data name="Help_Intro" xml:space="preserve">
+    <value>Des réponses pas à pas aux choses qu'on veut faire le plus souvent. Chacune indique la page et les boutons à utiliser.</value>
+  </data>
+  <data name="Help_OpenGuide" xml:space="preserve">
+    <value>Ouvrir le guide complet</value>
+  </data>
+  <data name="Help_OpenGuideToolTip" xml:space="preserve">
+    <value>La page de l'application sur sp-mod.com - tout ce qui est ici plus en détail, avec ses limites et le dépannage. Elle est en anglais.</value>
+  </data>
+  <data name="Help_SearchPlaceholder" xml:space="preserve">
+    <value>Rechercher dans l'aide...</value>
+  </data>
+  <data name="Help_NoMatches" xml:space="preserve">
+    <value>Aucune fiche ne correspond. Essayez avec moins de mots, ou ouvrez le guide complet.</value>
+  </data>
+  <data name="Help_StepNumberFormat" xml:space="preserve">
+    <value>{0}.</value>
+  </data>
+  <data name="Help_Start_Title" xml:space="preserve">
+    <value>Pour commencer</value>
+  </data>
+  <data name="Help_Start_Setup_Title" xml:space="preserve">
+    <value>Configurer l'application pour mon installation de SPT</value>
+  </data>
+  <data name="Help_Start_Setup_Step1" xml:space="preserve">
+    <value>Ouvrez {0} dans la barre latérale.</value>
+  </data>
+  <data name="Help_Start_Setup_Step2" xml:space="preserve">
+    <value>Sous {0}, cliquez sur {1} et choisissez le dossier du jeu SPT - celui qui contient EscapeFromTarkov.exe, pas le dossier du serveur qu'il contient.</value>
+  </data>
+  <data name="Help_Start_Setup_Step3" xml:space="preserve">
+    <value>Cliquez sur {0}. La ligne en dessous doit maintenant indiquer votre version de SPT.</value>
+  </data>
+  <data name="Help_Start_Setup_Note" xml:space="preserve">
+    <value>L'application n'est pas un mod. Gardez-la dans son propre dossier, jamais dans BepInEx\plugins ni user\mods.</value>
+  </data>
+  <data name="Help_Start_Version_Title" xml:space="preserve">
+    <value>Vérifier que l'application a trouvé la bonne version de SPT</value>
+  </data>
+  <data name="Help_Start_Version_Step1" xml:space="preserve">
+    <value>Regardez la fin du titre de la fenêtre - votre version de SPT y figure entre crochets.</value>
+  </data>
+  <data name="Help_Start_Version_Step2" xml:space="preserve">
+    <value>Si elle manque ou est fausse, ouvrez {0} et lisez la ligne sous {1}.</value>
+  </data>
+  <data name="Help_Start_Version_Step3" xml:space="preserve">
+    <value>Une version introuvable veut souvent dire que le dossier est un niveau trop bas. Choisissez le dossier qui contient EscapeFromTarkov.exe et cliquez sur {0}.</value>
+  </data>
+  <data name="Help_Browse_Compatible_Title" xml:space="preserve">
+    <value>Trouver les mods compatibles avec ma version de SPT</value>
+  </data>
+  <data name="Help_Browse_Compatible_Step1" xml:space="preserve">
+    <value>Ouvrez {0}. La page est déjà filtrée sur votre version de SPT.</value>
+  </data>
+  <data name="Help_Browse_Compatible_Step2" xml:space="preserve">
+    <value>Une coche à côté de SPT sur une fiche veut dire que sa dernière version fonctionne sur la vôtre ; une croix, qu'elle ne fonctionne pas.</value>
+  </data>
+  <data name="Help_Browse_Compatible_Step3" xml:space="preserve">
+    <value>Pour en voir plus, ouvrez la liste des versions de SPT en haut et cochez d'autres versions, ou cliquez sur {0}.</value>
+  </data>
+  <data name="Help_Browse_Install_Title" xml:space="preserve">
+    <value>Installer un mod et les mods dont il a besoin</value>
+  </data>
+  <data name="Help_Browse_Install_Step1" xml:space="preserve">
+    <value>Trouvez le mod dans {0} et cliquez sur le bouton de téléchargement en bas à droite de sa fiche.</value>
+  </data>
+  <data name="Help_Browse_Install_Step2" xml:space="preserve">
+    <value>Une fenêtre vous demande de lire d'abord la page du mod. Cliquez sur {0}, lisez-la, puis cliquez sur {1}.</value>
+  </data>
+  <data name="Help_Browse_Install_Step3" xml:space="preserve">
+    <value>S'il a besoin de mods que vous n'avez pas, leurs pages sont listées de la même façon - {0} les met aussi en file.</value>
+  </data>
+  <data name="Help_Browse_Install_Step4" xml:space="preserve">
+    <value>Suivez l'opération dans {0}. Une fois qu'elle indique installé, le mod se charge au prochain lancement de SPT.</value>
+  </data>
+  <data name="Help_Browse_Install_Note" xml:space="preserve">
+    <value>Fermez d'abord le jeu et le serveur - les fichiers de mods ne peuvent pas être remplacés pendant qu'ils tournent.</value>
+  </data>
+  <data name="Help_Browse_Author_Title" xml:space="preserve">
+    <value>Trouver tous les mods d'un auteur</value>
+  </data>
+  <data name="Help_Browse_Author_Step1" xml:space="preserve">
+    <value>Dans la zone de recherche de {0}, tapez @ suivi du nom de l'auteur, sans espace.</value>
+  </data>
+  <data name="Help_Browse_Author_Step2" xml:space="preserve">
+    <value>Sans le @, la recherche porte sur le nom des mods.</value>
+  </data>
+  <data name="Help_Browse_HideInstalled_Title" xml:space="preserve">
+    <value>Masquer les mods que j'ai déjà</value>
+  </data>
+  <data name="Help_Browse_HideInstalled_Step1" xml:space="preserve">
+    <value>Dans {0}, ouvrez la liste qui affiche {1} et cochez {2}.</value>
+  </data>
+  <data name="Help_Browse_HideInstalled_Step2" xml:space="preserve">
+    <value>Pour que Parcourir s'ouvre toujours ainsi, cliquez sur {0}.</value>
+  </data>
+  <data name="Help_Browse_HideInstalled_Note" xml:space="preserve">
+    <value>Un mod désactivé compte comme installé, il est donc masqué lui aussi.</value>
+  </data>
+  <data name="Help_Installed_Updates_Title" xml:space="preserve">
+    <value>Voir quels mods ont besoin d'une mise à jour</value>
+  </data>
+  <data name="Help_Installed_Updates_Step1" xml:space="preserve">
+    <value>Ouvrez {0}. Un mod qui a une mise à jour affiche une flèche vers le haut comme icône d'état.</value>
+  </data>
+  <data name="Help_Installed_Updates_Step2" xml:space="preserve">
+    <value>Pour n'afficher que ceux-là, passez la liste qui affiche {0} sur {1}.</value>
+  </data>
+  <data name="Help_Installed_Update_Title" xml:space="preserve">
+    <value>Mettre à jour ou retélécharger un mod</value>
+  </data>
+  <data name="Help_Installed_Update_Step1" xml:space="preserve">
+    <value>Dans {0}, cliquez sur la fiche du mod pour l'ouvrir, puis sur {1}.</value>
+  </data>
+  <data name="Help_Installed_Update_Step2" xml:space="preserve">
+    <value>La dernière version qui fonctionne sur votre SPT est déjà sélectionnée. Cliquez sur {0} - ou sur {1} pour récupérer une copie neuve de la version que vous avez.</value>
+  </data>
+  <data name="Help_Installed_Update_Step3" xml:space="preserve">
+    <value>Lisez la page du mod quand on vous le demande, puis cliquez sur {0}.</value>
+  </data>
+  <data name="Help_Installed_Update_Note" xml:space="preserve">
+    <value>Pour en mettre plusieurs à jour d'un coup, cliquez sur {0}, cochez-les et cliquez sur {1}.</value>
+  </data>
+  <data name="Help_Installed_Views_Title" xml:space="preserve">
+    <value>Changer l'affichage de la page Installés</value>
+  </data>
+  <data name="Help_Installed_Views_Step1" xml:space="preserve">
+    <value>En haut de {0}, cliquez sur {1}, {2} ou {3}.</value>
+  </data>
+  <data name="Help_Installed_Views_Step2" xml:space="preserve">
+    <value>Les trois montrent les mêmes mods avec les mêmes filtres et le même tri - seule la disposition change.</value>
+  </data>
+  <data name="Help_Installed_Groups_Title" xml:space="preserve">
+    <value>Ranger mes mods dans mes propres groupes</value>
+  </data>
+  <data name="Help_Installed_Groups_Step1" xml:space="preserve">
+    <value>Dans {0}, cliquez sur {1}.</value>
+  </data>
+  <data name="Help_Installed_Groups_Step2" xml:space="preserve">
+    <value>Tapez un nom dans la zone qui affiche {0} et cliquez sur {1}.</value>
+  </data>
+  <data name="Help_Installed_Groups_Step3" xml:space="preserve">
+    <value>Faites glisser un mod sur un groupe pour l'y déplacer. Cliquez sur un mod sans le faire glisser pour l'ouvrir.</value>
+  </data>
+  <data name="Help_Installed_Groups_Note" xml:space="preserve">
+    <value>Les groupes ne servent qu'à vous - SPT ne les voit jamais. Chaque groupe a des boutons pour tout activer ou tout désactiver d'un coup.</value>
+  </data>
+  <data name="Help_Installed_Disable_Title" xml:space="preserve">
+    <value>Désactiver un mod sans le supprimer</value>
+  </data>
+  <data name="Help_Installed_Disable_Step1" xml:space="preserve">
+    <value>Dans {0}, cliquez sur le bouton marche/arrêt de la fiche ou de la ligne du mod.</value>
+  </data>
+  <data name="Help_Installed_Disable_Step2" xml:space="preserve">
+    <value>Si un autre mod en dépend, on vous montre lequel, et vous pouvez le désactiver en même temps.</value>
+  </data>
+  <data name="Help_Installed_Disable_Step3" xml:space="preserve">
+    <value>Cliquez de nouveau sur le même bouton pour le réactiver.</value>
+  </data>
+  <data name="Help_Installed_Disable_Note" xml:space="preserve">
+    <value>Rien n'est supprimé - le mod va dans un dossier .disabled que SPT ne charge pas, et ses réglages sont conservés.</value>
+  </data>
+  <data name="Help_Installed_DisableMany_Title" xml:space="preserve">
+    <value>Désactiver plusieurs mods d'un coup</value>
+  </data>
+  <data name="Help_Installed_DisableMany_Step1" xml:space="preserve">
+    <value>Dans {0}, cliquez sur {1} et cochez les mods.</value>
+  </data>
+  <data name="Help_Installed_DisableMany_Step2" xml:space="preserve">
+    <value>Cliquez sur {0}.</value>
+  </data>
+  <data name="Help_Installed_DisableMany_Note" xml:space="preserve">
+    <value>Dans l'affichage {0}, les boutons de chaque groupe activent ou désactivent tout le groupe.</value>
+  </data>
+  <data name="Help_Installed_Undo_Title" xml:space="preserve">
+    <value>Annuler l'activation ou la désactivation de mods</value>
+  </data>
+  <data name="Help_Installed_Undo_Step1" xml:space="preserve">
+    <value>En haut de {0}, cliquez sur {1}. Le bouton indique le changement qu'il annule.</value>
+  </data>
+  <data name="Help_Installed_Undo_Step2" xml:space="preserve">
+    <value>Seul le dernier changement peut être annulé.</value>
+  </data>
+  <data name="Help_ModLists_Capture_Title" xml:space="preserve">
+    <value>Enregistrer les mods que j'utilise comme liste</value>
+  </data>
+  <data name="Help_ModLists_Capture_Step1" xml:space="preserve">
+    <value>Ouvrez {0}.</value>
+  </data>
+  <data name="Help_ModLists_Capture_Step2" xml:space="preserve">
+    <value>Sous {0}, tapez un nom et cliquez sur {1}.</value>
+  </data>
+  <data name="Help_ModLists_Capture_Note" xml:space="preserve">
+    <value>La liste enregistre chaque mod activé dans la version que vous avez. Rien ne change sur le disque.</value>
+  </data>
+  <data name="Help_ModLists_Apply_Title" xml:space="preserve">
+    <value>Passer à une autre liste</value>
+  </data>
+  <data name="Help_ModLists_Apply_Step1" xml:space="preserve">
+    <value>Dans {0}, choisissez la liste sous {1}.</value>
+  </data>
+  <data name="Help_ModLists_Apply_Step2" xml:space="preserve">
+    <value>Cliquez sur {0} pour voir ce qui changerait. Rien ne bouge encore.</value>
+  </data>
+  <data name="Help_ModLists_Apply_Step3" xml:space="preserve">
+    <value>Fermez le jeu et le serveur, puis cliquez sur {0}.</value>
+  </data>
+  <data name="Help_ModLists_Apply_Note" xml:space="preserve">
+    <value>Appliquer télécharge ce qui manque et déplace les mods que la liste ne nomme pas dans le dossier désactivé. Rien n'est supprimé.</value>
+  </data>
+  <data name="Help_ModLists_Pin_Title" xml:space="preserve">
+    <value>Garder un mod quelle que soit la liste choisie</value>
+  </data>
+  <data name="Help_ModLists_Pin_Step1" xml:space="preserve">
+    <value>Dans {0}, cliquez sur la fiche du mod pour l'ouvrir, puis sur {1}.</value>
+  </data>
+  <data name="Help_ModLists_Pin_Step2" xml:space="preserve">
+    <value>Un mod épinglé n'est jamais mis de côté par une liste. Cliquez sur {0} au même endroit pour l'annuler.</value>
+  </data>
+  <data name="Help_ModLists_Edit_Title" xml:space="preserve">
+    <value>Modifier le contenu d'une liste</value>
+  </data>
+  <data name="Help_ModLists_Edit_Step1" xml:space="preserve">
+    <value>Choisissez la liste dans {0}. Cliquez sur {1} pour ajouter des mods, ou sur le X d'une ligne pour en retirer un.</value>
+  </data>
+  <data name="Help_ModLists_Edit_Step2" xml:space="preserve">
+    <value>Cliquez sur {0}. Seule la liste change - rien n'est installé ni déplacé.</value>
+  </data>
+  <data name="Help_ModLists_Edit_Step3" xml:space="preserve">
+    <value>Cliquez sur {0} quand vous voulez que votre installation lui corresponde.</value>
+  </data>
+  <data name="Help_ModLists_Edit_Note" xml:space="preserve">
+    <value>Une liste importée, ou envoyée par un serveur, est en lecture seule - cliquez sur {0} pour en avoir une modifiable.</value>
+  </data>
+  <data name="Help_ModLists_Share_Title" xml:space="preserve">
+    <value>Partager une liste avec un ami</value>
+  </data>
+  <data name="Help_ModLists_Share_Step1" xml:space="preserve">
+    <value>Choisissez la liste dans {0}, cliquez sur {1} et enregistrez le fichier.</value>
+  </data>
+  <data name="Help_ModLists_Share_Step2" xml:space="preserve">
+    <value>Envoyez le fichier comme vous voulez. Votre ami clique sur {0} dans {1} et le sélectionne.</value>
+  </data>
+  <data name="Help_ModLists_Share_Step3" xml:space="preserve">
+    <value>Il clique sur {0}, puis sur {1}. Son application télécharge elle-même chaque mod depuis sp-mod.com.</value>
+  </data>
+  <data name="Help_ModLists_Share_Note" xml:space="preserve">
+    <value>Le fichier nomme des mods et des versions, jamais les fichiers des mods, il est donc minuscule.</value>
+  </data>
+  <data name="Help_ModLists_Server_Title" xml:space="preserve">
+    <value>Récupérer les mods d'un serveur</value>
+  </data>
+  <data name="Help_ModLists_Server_Step1" xml:space="preserve">
+    <value>Dans {0}, sous {1}, activez {2}.</value>
+  </data>
+  <data name="Help_ModLists_Server_Step2" xml:space="preserve">
+    <value>Sous {0}, indiquez l'adresse, le port et la clé du serveur, puis cliquez sur {1}.</value>
+  </data>
+  <data name="Help_ModLists_Server_Step3" xml:space="preserve">
+    <value>Ouvrez {0}. S'il vous manque quelque chose, cliquez sur {1}.</value>
+  </data>
+  <data name="Help_ModLists_Server_Step4" xml:space="preserve">
+    <value>Vérifiez l'aperçu et cliquez sur {0}.</value>
+  </data>
+  <data name="Help_ModLists_Server_Note" xml:space="preserve">
+    <value>Le serveur a besoin du mod Server Map. La liste d'un serveur ne désactive jamais vos propres mods.</value>
+  </data>
+  <data name="Help_ModLists_Undo_Title" xml:space="preserve">
+    <value>Tout remettre après avoir appliqué une liste</value>
+  </data>
+  <data name="Help_ModLists_Undo_Step1" xml:space="preserve">
+    <value>Dans {0}, cliquez sur {1}.</value>
+  </data>
+  <data name="Help_ModLists_Undo_Step2" xml:space="preserve">
+    <value>Chaque mod revient à son état d'avant la dernière application. Appliquer une autre liste remplace cette annulation.</value>
+  </data>
 </root>

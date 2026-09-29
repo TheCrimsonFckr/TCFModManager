@@ -4881,4 +4881,283 @@
   <data name="AppUpdate_ServerMapOpenPage" xml:space="preserve">
     <value>Открыть страницу мода</value>
   </data>
+  <data name="Nav_Help" xml:space="preserve">
+    <value>Справка</value>
+  </data>
+  <data name="Help_Intro" xml:space="preserve">
+    <value>Пошаговые ответы на то, что чаще всего нужно сделать. В каждом указано, на какой странице и какие кнопки нажимать.</value>
+  </data>
+  <data name="Help_OpenGuide" xml:space="preserve">
+    <value>Открыть полное руководство</value>
+  </data>
+  <data name="Help_OpenGuideToolTip" xml:space="preserve">
+    <value>Страница приложения на sp-mod.com - всё, что здесь, только подробнее, плюс ограничения и решение проблем. Она на английском.</value>
+  </data>
+  <data name="Help_SearchPlaceholder" xml:space="preserve">
+    <value>Поиск по справке...</value>
+  </data>
+  <data name="Help_NoMatches" xml:space="preserve">
+    <value>Ничего не найдено. Попробуйте меньше слов или откройте полное руководство.</value>
+  </data>
+  <data name="Help_StepNumberFormat" xml:space="preserve">
+    <value>{0}.</value>
+  </data>
+  <data name="Help_Start_Title" xml:space="preserve">
+    <value>С чего начать</value>
+  </data>
+  <data name="Help_Start_Setup_Title" xml:space="preserve">
+    <value>Настроить приложение под мою установку SPT</value>
+  </data>
+  <data name="Help_Start_Setup_Step1" xml:space="preserve">
+    <value>Откройте {0} на боковой панели.</value>
+  </data>
+  <data name="Help_Start_Setup_Step2" xml:space="preserve">
+    <value>В разделе {0} нажмите {1} и выберите папку игры SPT - ту, где лежит EscapeFromTarkov.exe, а не папку сервера внутри неё.</value>
+  </data>
+  <data name="Help_Start_Setup_Step3" xml:space="preserve">
+    <value>Нажмите {0}. В строке ниже должна появиться ваша версия SPT.</value>
+  </data>
+  <data name="Help_Start_Setup_Note" xml:space="preserve">
+    <value>Приложение - не мод. Держите его в отдельной папке, никогда не в BepInEx\plugins или user\mods.</value>
+  </data>
+  <data name="Help_Start_Version_Title" xml:space="preserve">
+    <value>Проверить, что приложение нашло правильную версию SPT</value>
+  </data>
+  <data name="Help_Start_Version_Step1" xml:space="preserve">
+    <value>Посмотрите на конец заголовка окна - там в квадратных скобках указана ваша версия SPT.</value>
+  </data>
+  <data name="Help_Start_Version_Step2" xml:space="preserve">
+    <value>Если её нет или она неверная, откройте {0} и прочитайте строку под {1}.</value>
+  </data>
+  <data name="Help_Start_Version_Step3" xml:space="preserve">
+    <value>Если версия не находится, обычно выбрана папка на уровень глубже. Выберите папку с EscapeFromTarkov.exe и нажмите {0}.</value>
+  </data>
+  <data name="Help_Browse_Compatible_Title" xml:space="preserve">
+    <value>Найти моды, которые работают на моей версии SPT</value>
+  </data>
+  <data name="Help_Browse_Compatible_Step1" xml:space="preserve">
+    <value>Откройте {0}. Страница уже отфильтрована по вашей версии SPT.</value>
+  </data>
+  <data name="Help_Browse_Compatible_Step2" xml:space="preserve">
+    <value>Галочка рядом с SPT на карточке значит, что последняя версия мода работает на вашей; крестик - что нет.</value>
+  </data>
+  <data name="Help_Browse_Compatible_Step3" xml:space="preserve">
+    <value>Чтобы увидеть больше, откройте вверху список версий SPT и отметьте другие версии или нажмите {0}.</value>
+  </data>
+  <data name="Help_Browse_Install_Title" xml:space="preserve">
+    <value>Установить мод и нужные ему моды</value>
+  </data>
+  <data name="Help_Browse_Install_Step1" xml:space="preserve">
+    <value>Найдите мод на странице {0} и нажмите кнопку загрузки в правом нижнем углу его карточки.</value>
+  </data>
+  <data name="Help_Browse_Install_Step2" xml:space="preserve">
+    <value>Окно попросит сначала прочитать страницу мода. Нажмите {0}, прочитайте её, затем нажмите {1}.</value>
+  </data>
+  <data name="Help_Browse_Install_Step3" xml:space="preserve">
+    <value>Если ему нужны моды, которых у вас нет, их страницы показываются так же - {0} ставит в очередь и их.</value>
+  </data>
+  <data name="Help_Browse_Install_Step4" xml:space="preserve">
+    <value>Следите за ходом на странице {0}. Когда там написано, что мод установлен, он загрузится при следующем запуске SPT.</value>
+  </data>
+  <data name="Help_Browse_Install_Note" xml:space="preserve">
+    <value>Сначала закройте игру и сервер - файлы модов нельзя заменить, пока они запущены.</value>
+  </data>
+  <data name="Help_Browse_Author_Title" xml:space="preserve">
+    <value>Найти все моды одного автора</value>
+  </data>
+  <data name="Help_Browse_Author_Step1" xml:space="preserve">
+    <value>В поле поиска на странице {0} введите @ и сразу имя автора, без пробела.</value>
+  </data>
+  <data name="Help_Browse_Author_Step2" xml:space="preserve">
+    <value>Без @ поиск идёт по названиям модов.</value>
+  </data>
+  <data name="Help_Browse_HideInstalled_Title" xml:space="preserve">
+    <value>Скрыть моды, которые у меня уже есть</value>
+  </data>
+  <data name="Help_Browse_HideInstalled_Step1" xml:space="preserve">
+    <value>На странице {0} откройте список с надписью {1} и отметьте {2}.</value>
+  </data>
+  <data name="Help_Browse_HideInstalled_Step2" xml:space="preserve">
+    <value>Чтобы страница Обзор всегда открывалась так, нажмите {0}.</value>
+  </data>
+  <data name="Help_Browse_HideInstalled_Note" xml:space="preserve">
+    <value>Отключённый мод считается установленным, поэтому он тоже скрывается.</value>
+  </data>
+  <data name="Help_Installed_Updates_Title" xml:space="preserve">
+    <value>Посмотреть, каким модам нужно обновление</value>
+  </data>
+  <data name="Help_Installed_Updates_Step1" xml:space="preserve">
+    <value>Откройте {0}. У мода с обновлением значок состояния - стрелка вверх.</value>
+  </data>
+  <data name="Help_Installed_Updates_Step2" xml:space="preserve">
+    <value>Чтобы показать только их, переключите список с надписью {0} на {1}.</value>
+  </data>
+  <data name="Help_Installed_Update_Title" xml:space="preserve">
+    <value>Обновить или заново скачать мод</value>
+  </data>
+  <data name="Help_Installed_Update_Step1" xml:space="preserve">
+    <value>На странице {0} щёлкните карточку мода, чтобы открыть её, затем нажмите {1}.</value>
+  </data>
+  <data name="Help_Installed_Update_Step2" xml:space="preserve">
+    <value>Последняя версия, которая работает на вашем SPT, уже выбрана. Нажмите {0} - или {1}, чтобы скачать заново ту версию, что у вас стоит.</value>
+  </data>
+  <data name="Help_Installed_Update_Step3" xml:space="preserve">
+    <value>Когда попросят, прочитайте страницу мода, затем нажмите {0}.</value>
+  </data>
+  <data name="Help_Installed_Update_Note" xml:space="preserve">
+    <value>Чтобы обновить несколько сразу, нажмите {0}, отметьте их и нажмите {1}.</value>
+  </data>
+  <data name="Help_Installed_Views_Title" xml:space="preserve">
+    <value>Изменить вид страницы Установленные</value>
+  </data>
+  <data name="Help_Installed_Views_Step1" xml:space="preserve">
+    <value>Вверху страницы {0} нажмите {1}, {2} или {3}.</value>
+  </data>
+  <data name="Help_Installed_Views_Step2" xml:space="preserve">
+    <value>Все три показывают одни и те же моды с теми же фильтрами и сортировкой - меняется только раскладка.</value>
+  </data>
+  <data name="Help_Installed_Groups_Title" xml:space="preserve">
+    <value>Разложить моды по своим группам</value>
+  </data>
+  <data name="Help_Installed_Groups_Step1" xml:space="preserve">
+    <value>На странице {0} нажмите {1}.</value>
+  </data>
+  <data name="Help_Installed_Groups_Step2" xml:space="preserve">
+    <value>Введите название в поле с надписью {0} и нажмите {1}.</value>
+  </data>
+  <data name="Help_Installed_Groups_Step3" xml:space="preserve">
+    <value>Перетащите мод на группу, чтобы переместить его туда. Щёлкните мод, не перетаскивая, чтобы открыть его.</value>
+  </data>
+  <data name="Help_Installed_Groups_Note" xml:space="preserve">
+    <value>Группы нужны только вам - SPT их не видит. У каждой группы есть кнопки, чтобы включить или отключить её целиком.</value>
+  </data>
+  <data name="Help_Installed_Disable_Title" xml:space="preserve">
+    <value>Отключить мод, не удаляя его</value>
+  </data>
+  <data name="Help_Installed_Disable_Step1" xml:space="preserve">
+    <value>На странице {0} нажмите кнопку включения на карточке или в строке мода.</value>
+  </data>
+  <data name="Help_Installed_Disable_Step2" xml:space="preserve">
+    <value>Если от него зависит другой мод, вам покажут какой, и его можно отключить вместе с ним.</value>
+  </data>
+  <data name="Help_Installed_Disable_Step3" xml:space="preserve">
+    <value>Нажмите ту же кнопку ещё раз, чтобы снова его включить.</value>
+  </data>
+  <data name="Help_Installed_Disable_Note" xml:space="preserve">
+    <value>Ничего не удаляется - мод переносится в папку .disabled, которую SPT не загружает, и его настройки сохраняются.</value>
+  </data>
+  <data name="Help_Installed_DisableMany_Title" xml:space="preserve">
+    <value>Отключить несколько модов сразу</value>
+  </data>
+  <data name="Help_Installed_DisableMany_Step1" xml:space="preserve">
+    <value>На странице {0} нажмите {1} и отметьте моды.</value>
+  </data>
+  <data name="Help_Installed_DisableMany_Step2" xml:space="preserve">
+    <value>Нажмите {0}.</value>
+  </data>
+  <data name="Help_Installed_DisableMany_Note" xml:space="preserve">
+    <value>В виде {0} кнопки каждой группы включают или отключают её целиком.</value>
+  </data>
+  <data name="Help_Installed_Undo_Title" xml:space="preserve">
+    <value>Отменить включение или отключение модов</value>
+  </data>
+  <data name="Help_Installed_Undo_Step1" xml:space="preserve">
+    <value>Вверху страницы {0} нажмите {1}. На кнопке написано, какое изменение она отменит.</value>
+  </data>
+  <data name="Help_Installed_Undo_Step2" xml:space="preserve">
+    <value>Отменить можно только последнее изменение.</value>
+  </data>
+  <data name="Help_ModLists_Capture_Title" xml:space="preserve">
+    <value>Сохранить мои моды как список</value>
+  </data>
+  <data name="Help_ModLists_Capture_Step1" xml:space="preserve">
+    <value>Откройте {0}.</value>
+  </data>
+  <data name="Help_ModLists_Capture_Step2" xml:space="preserve">
+    <value>В разделе {0} введите название и нажмите {1}.</value>
+  </data>
+  <data name="Help_ModLists_Capture_Note" xml:space="preserve">
+    <value>Список записывает каждый включённый мод с той версией, что у вас стоит. На диске ничего не меняется.</value>
+  </data>
+  <data name="Help_ModLists_Apply_Title" xml:space="preserve">
+    <value>Перейти на другой список</value>
+  </data>
+  <data name="Help_ModLists_Apply_Step1" xml:space="preserve">
+    <value>На странице {0} выберите список в разделе {1}.</value>
+  </data>
+  <data name="Help_ModLists_Apply_Step2" xml:space="preserve">
+    <value>Нажмите {0}, чтобы увидеть, что изменится. Пока ничего не переносится.</value>
+  </data>
+  <data name="Help_ModLists_Apply_Step3" xml:space="preserve">
+    <value>Закройте игру и сервер, затем нажмите {0}.</value>
+  </data>
+  <data name="Help_ModLists_Apply_Note" xml:space="preserve">
+    <value>При применении скачивается недостающее, а моды, которых нет в списке, переносятся в папку отключённых. Ничего не удаляется.</value>
+  </data>
+  <data name="Help_ModLists_Pin_Title" xml:space="preserve">
+    <value>Оставить мод при любом списке</value>
+  </data>
+  <data name="Help_ModLists_Pin_Step1" xml:space="preserve">
+    <value>На странице {0} щёлкните карточку мода, чтобы открыть её, и нажмите {1}.</value>
+  </data>
+  <data name="Help_ModLists_Pin_Step2" xml:space="preserve">
+    <value>Закреплённый мод никакой список не отложит. Чтобы отменить, нажмите {0} там же.</value>
+  </data>
+  <data name="Help_ModLists_Edit_Title" xml:space="preserve">
+    <value>Изменить состав списка</value>
+  </data>
+  <data name="Help_ModLists_Edit_Step1" xml:space="preserve">
+    <value>Выберите список на странице {0}. Нажмите {1}, чтобы добавить моды, или X в строке, чтобы убрать мод.</value>
+  </data>
+  <data name="Help_ModLists_Edit_Step2" xml:space="preserve">
+    <value>Нажмите {0}. Меняется только список - ничего не устанавливается и не переносится.</value>
+  </data>
+  <data name="Help_ModLists_Edit_Step3" xml:space="preserve">
+    <value>Нажмите {0}, когда захотите, чтобы установка ему соответствовала.</value>
+  </data>
+  <data name="Help_ModLists_Edit_Note" xml:space="preserve">
+    <value>Импортированный список или присланный сервером доступен только для чтения - нажмите {0}, чтобы получить свой, который можно менять.</value>
+  </data>
+  <data name="Help_ModLists_Share_Title" xml:space="preserve">
+    <value>Поделиться списком с другом</value>
+  </data>
+  <data name="Help_ModLists_Share_Step1" xml:space="preserve">
+    <value>Выберите список на странице {0}, нажмите {1} и сохраните файл.</value>
+  </data>
+  <data name="Help_ModLists_Share_Step2" xml:space="preserve">
+    <value>Отправьте файл как угодно. Друг нажимает {0} на странице {1} и выбирает его.</value>
+  </data>
+  <data name="Help_ModLists_Share_Step3" xml:space="preserve">
+    <value>Затем он нажимает {0}, а потом {1}. Его приложение само скачивает каждый мод с sp-mod.com.</value>
+  </data>
+  <data name="Help_ModLists_Share_Note" xml:space="preserve">
+    <value>В файле названы моды и версии, но не сами файлы модов, поэтому он крошечный.</value>
+  </data>
+  <data name="Help_ModLists_Server_Title" xml:space="preserve">
+    <value>Получить моды, которые стоят на сервере</value>
+  </data>
+  <data name="Help_ModLists_Server_Step1" xml:space="preserve">
+    <value>В разделе {0}, в группе {1}, включите {2}.</value>
+  </data>
+  <data name="Help_ModLists_Server_Step2" xml:space="preserve">
+    <value>В разделе {0} укажите адрес, порт и ключ сервера, затем нажмите {1}.</value>
+  </data>
+  <data name="Help_ModLists_Server_Step3" xml:space="preserve">
+    <value>Откройте {0}. Если вам чего-то не хватает, нажмите {1}.</value>
+  </data>
+  <data name="Help_ModLists_Server_Step4" xml:space="preserve">
+    <value>Проверьте предпросмотр и нажмите {0}.</value>
+  </data>
+  <data name="Help_ModLists_Server_Note" xml:space="preserve">
+    <value>На сервере должен стоять мод Server Map. Список сервера никогда не отключает ваши собственные моды.</value>
+  </data>
+  <data name="Help_ModLists_Undo_Title" xml:space="preserve">
+    <value>Вернуть всё как было после применения списка</value>
+  </data>
+  <data name="Help_ModLists_Undo_Step1" xml:space="preserve">
+    <value>На странице {0} нажмите {1}.</value>
+  </data>
+  <data name="Help_ModLists_Undo_Step2" xml:space="preserve">
+    <value>Каждый мод возвращается в состояние до последнего применения. Применение другого списка заменяет эту отмену.</value>
+  </data>
 </root>
