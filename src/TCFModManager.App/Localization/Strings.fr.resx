@@ -4872,4 +4872,13 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="Help_ModLists_Undo_Step2" xml:space="preserve">
     <value>Chaque mod revient à son état d'avant la dernière application. Appliquer une autre liste remplace cette annulation.</value>
   </data>
+  <data name="Help_TitleBarToolTip" xml:space="preserve">
+    <value>Aide sur cette page (F1)</value>
+  </data>
+  <data name="MainWindow_HowToSetUp" xml:space="preserve">
+    <value>Comment configurer</value>
+  </data>
+  <data name="MainWindow_HowToSetUpToolTip" xml:space="preserve">
+    <value>La configuration pas à pas dans l'aide.</value>
+  </data>
 </root>

@@ -1,4 +1,5 @@
 using System.Windows;
+using TCFModManager.App.Help;
 using TCFModManager.App.Views;
 using Wpf.Ui.Controls;
 
@@ -28,8 +29,48 @@ internal static class AppNavigation
     // True when the window should open on Installed rather than Browse.
     public static bool StartOnInstalled => _showUpdatesPending;
 
+    // The page on screen, for the Help "?" and F1 - kept from Navigated rather than read from
+    // SelectedItem, which a footer item or a Navigate(type) call doesn't always move.
+    private static Type? _currentPage;
+
+    private static string? _helpSectionPending;
+
+    // Raised on the UI thread when Help should open on a section - heard by a Help page that is
+    // already on screen, where navigating to it again does nothing.
+    public static event EventHandler? HelpRequested;
+
     // Called once the main window's navigation exists (MainWindow's Loaded).
-    public static void Attach(NavigationView navigation) => _navigation = navigation;
+    public static void Attach(NavigationView navigation)
+    {
+        _navigation = navigation;
+        navigation.Navigated += (_, e) => _currentPage = e.Page?.GetType();
+    }
+
+    //
+    // The "?" in the title bar and F1: Help, at the section for the page that was showing. From
+    // Help itself there is nowhere better to go, so it stays put.
+    //
+    public static void ShowHelpForCurrentPage()
+    {
+        if (_currentPage == typeof(HelpPage)) return;
+        ShowHelp(HelpCatalog.SectionIdFor(_currentPage));
+    }
+
+    // Help at one section - Getting started from the no-install banner, for one.
+    public static void ShowHelp(string sectionId)
+    {
+        _helpSectionPending = sectionId;
+        HelpRequested?.Invoke(null, EventArgs.Empty);
+        _navigation?.Navigate(typeof(HelpPage));
+    }
+
+    // Consumed by the Help page: the section to open on, once per request.
+    public static string? TakeHelpSection()
+    {
+        var pending = _helpSectionPending;
+        _helpSectionPending = null;
+        return pending;
+    }
 
     //
     // Must be called on the UI thread. Sets the request first, so an Installed page built by the

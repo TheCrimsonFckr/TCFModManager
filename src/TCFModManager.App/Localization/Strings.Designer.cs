@@ -1597,4 +1597,7 @@ internal static class Strings
     internal static string Help_ModLists_Undo_Title => LocalizationService.Get("Help_ModLists_Undo_Title");
     internal static string Help_ModLists_Undo_Step1 => LocalizationService.Get("Help_ModLists_Undo_Step1");
     internal static string Help_ModLists_Undo_Step2 => LocalizationService.Get("Help_ModLists_Undo_Step2");
+    internal static string Help_TitleBarToolTip => LocalizationService.Get("Help_TitleBarToolTip");
+    internal static string MainWindow_HowToSetUp => LocalizationService.Get("MainWindow_HowToSetUp");
+    internal static string MainWindow_HowToSetUpToolTip => LocalizationService.Get("MainWindow_HowToSetUpToolTip");
 }

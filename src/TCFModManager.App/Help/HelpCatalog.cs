@@ -20,7 +20,7 @@ internal static class HelpCatalog
 {
     public static IReadOnlyList<HelpSection> Sections { get; } =
     [
-        new("start", () => Strings.Help_Start_Title, SymbolRegular.Rocket24, null,
+        new(StartSectionId, () => Strings.Help_Start_Title, SymbolRegular.Rocket24, null,
         [
             Topic("start.setup", () => Strings.Help_Start_Setup_Title,
                 Step(() => Strings.Help_Start_Setup_Step1, () => Strings.Nav_Options),
@@ -164,6 +164,12 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_ModLists_Undo_Step2)),
         ]),
     ];
+
+    public const string StartSectionId = "start";
+
+    // The section the "?" opens for a page: its own, or Getting started for a page that has none.
+    public static string SectionIdFor(Type? pageType) =>
+        Sections.FirstOrDefault(s => pageType is not null && s.PageType == pageType)?.Id ?? StartSectionId;
 
     private static HelpTopic Topic(string id, Func<string> title, params HelpStep[] steps) =>
         new(id, title, steps);

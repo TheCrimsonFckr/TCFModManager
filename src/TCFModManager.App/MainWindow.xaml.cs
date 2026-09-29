@@ -1,5 +1,8 @@
 using System.Windows;
-
+using System.Windows.Data;
+using System.Windows.Input;
+using TCFModManager.App.Help;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Views;
 using Wpf.Ui.Controls;
 
@@ -16,8 +19,19 @@ public partial class MainWindow : FluentWindow
         // F11/Escape and records the window's position on close - see WindowLayout.
         WindowLayout.Attach(this, RootTitleBar);
 
+        // F1 is the title bar's "?" (Help R8). Preview, so a focused text box doesn't get it first.
+        PreviewKeyDown += (_, e) =>
+        {
+            if (e.Key != Key.F1 || Keyboard.Modifiers != ModifierKeys.None) return;
+
+            AppNavigation.ShowHelpForCurrentPage();
+            e.Handled = true;
+        };
+
         Loaded += (_, _) =>
         {
+            HelpButtonToolTip();
+
             // The theme itself was applied at startup. This hooks up the two things that need a
             // window: repainting the chrome when the theme changes, and following Windows.
             AppTheme.Attach(this);
@@ -65,6 +79,28 @@ public partial class MainWindow : FluentWindow
             await dialog.ShowAsync();
             return dialog.ViewModel.MadeChanges;
         };
+    }
+
+    private void RootTitleBar_HelpClicked(TitleBar sender, RoutedEventArgs e) =>
+        AppNavigation.ShowHelpForCurrentPage();
+
+    private void HowToSetUp_Click(object sender, RoutedEventArgs e) =>
+        AppNavigation.ShowHelp(HelpCatalog.StartSectionId);
+
+    //
+    // The caption "?" is a template part with no tooltip of its own. Bound rather than set, so it
+    // follows a language change like every {loc:Str}. Whether Windows shows it depends on the
+    // caption hit-testing handing the mouse to WPF there; if it doesn't, nothing is lost.
+    //
+    private void HelpButtonToolTip()
+    {
+        if (RootTitleBar.Template?.FindName("PART_HelpButton", RootTitleBar) is not FrameworkElement button) return;
+
+        button.SetBinding(ToolTipProperty, new Binding($"[{nameof(Strings.Help_TitleBarToolTip)}]")
+        {
+            Source = LocalizationService.Instance,
+            Mode = BindingMode.OneWay,
+        });
     }
 
     // The banner's action takes the user to the update page to read what changed and decide there,

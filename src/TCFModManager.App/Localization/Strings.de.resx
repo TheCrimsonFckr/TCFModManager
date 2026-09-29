@@ -4872,4 +4872,13 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="Help_ModLists_Undo_Step2" xml:space="preserve">
     <value>Jeder Mod kommt zurück in den Zustand vor dem letzten Anwenden. Wendest du eine andere Liste an, ersetzt das dieses Rückgängig.</value>
   </data>
+  <data name="Help_TitleBarToolTip" xml:space="preserve">
+    <value>Hilfe zu dieser Seite (F1)</value>
+  </data>
+  <data name="MainWindow_HowToSetUp" xml:space="preserve">
+    <value>Anleitung zur Einrichtung</value>
+  </data>
+  <data name="MainWindow_HowToSetUpToolTip" xml:space="preserve">
+    <value>Schritt-für-Schritt-Einrichtung in der Hilfe.</value>
+  </data>
 </root>

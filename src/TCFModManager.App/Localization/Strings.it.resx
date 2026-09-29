@@ -4872,4 +4872,13 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Help_ModLists_Undo_Step2" xml:space="preserve">
     <value>Ogni mod torna com'era prima dell'ultima applicazione. Applicare un'altra lista sostituisce questo annullamento.</value>
   </data>
+  <data name="Help_TitleBarToolTip" xml:space="preserve">
+    <value>Guida per questa pagina (F1)</value>
+  </data>
+  <data name="MainWindow_HowToSetUp" xml:space="preserve">
+    <value>Come configurare</value>
+  </data>
+  <data name="MainWindow_HowToSetUpToolTip" xml:space="preserve">
+    <value>La configurazione passo passo nella guida.</value>
+  </data>
 </root>

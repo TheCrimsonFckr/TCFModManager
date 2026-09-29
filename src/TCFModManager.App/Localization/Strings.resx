@@ -5781,4 +5781,16 @@ This was written to:
   <data name="Help_ModLists_Undo_Step2" xml:space="preserve">
     <value>Every mod goes back to how it was before the last apply. Applying another list replaces this undo.</value>
   </data>
+  <data name="Help_TitleBarToolTip" xml:space="preserve">
+    <value>Help for this page (F1)</value>
+    <comment>Tooltip on the ? button in the window's title bar. F1 is the key; keep it.</comment>
+  </data>
+  <data name="MainWindow_HowToSetUp" xml:space="preserve">
+    <value>How to set up</value>
+    <comment>Button beside the 'SPT install folder not set' banner; opens Help at Getting started.</comment>
+  </data>
+  <data name="MainWindow_HowToSetUpToolTip" xml:space="preserve">
+    <value>Step-by-step setup in Help.</value>
+    <comment>Tooltip on MainWindow_HowToSetUp.</comment>
+  </data>
 </root>

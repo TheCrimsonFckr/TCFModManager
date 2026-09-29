@@ -5160,4 +5160,13 @@
   <data name="Help_ModLists_Undo_Step2" xml:space="preserve">
     <value>Каждый мод возвращается в состояние до последнего применения. Применение другого списка заменяет эту отмену.</value>
   </data>
+  <data name="Help_TitleBarToolTip" xml:space="preserve">
+    <value>Справка по этой странице (F1)</value>
+  </data>
+  <data name="MainWindow_HowToSetUp" xml:space="preserve">
+    <value>Как настроить</value>
+  </data>
+  <data name="MainWindow_HowToSetUpToolTip" xml:space="preserve">
+    <value>Пошаговая настройка в справке.</value>
+  </data>
 </root>

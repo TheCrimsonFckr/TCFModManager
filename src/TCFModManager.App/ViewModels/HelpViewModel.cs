@@ -83,9 +83,22 @@ public partial class HelpViewModel : LocalizedViewModel
         }
     }
 
-    // The section the "?" opens on for this page; Getting started when the page has none of its own.
-    internal HelpSectionViewModel SectionFor(Type? pageType) =>
-        Sections.FirstOrDefault(s => pageType is not null && s.PageType == pageType) ?? Sections[0];
+    //
+    // Arriving from the "?", F1 or the no-install banner: the search is cleared so the section is
+    // actually there, and its how-tos open.
+    //
+    // Nothing else is closed. The page scrolls to the section straight after this, and a section
+    // above it animating shut would move the target while the scroll is being measured.
+    //
+    public HelpSectionViewModel Arrive(string sectionId)
+    {
+        SearchText = string.Empty;
+
+        var target = Sections.FirstOrDefault(s => s.Id == sectionId) ?? Sections[0];
+        foreach (var topic in target.Topics) topic.IsExpanded = true;
+
+        return target;
+    }
 }
 
 public partial class HelpSectionViewModel : LocalizedViewModel
@@ -103,8 +116,6 @@ public partial class HelpSectionViewModel : LocalizedViewModel
     public string Title => _section.Title();
 
     public SymbolRegular Icon => _section.Icon;
-
-    internal Type? PageType => _section.PageType;
 
     public IReadOnlyList<HelpTopicViewModel> Topics { get; }
 
