@@ -36,6 +36,23 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Start_Version_Step3, () => Strings.Common_Save)),
         ]),
 
+        new("play", () => Strings.Nav_Play, SymbolRegular.Play24, typeof(PlayPage),
+        [
+            Topic("play.start", () => Strings.Help_Play_Start_Title,
+                Step(() => Strings.Help_Play_Start_Step1, () => Strings.Nav_Play),
+                Step(() => Strings.Help_Play_Start_Step2,
+                    () => Strings.Play_ServerHeader, () => Strings.Play_StartServer),
+                Step(() => Strings.Help_Play_Start_Step3, () => Strings.Play_OpenLauncher))
+                .WithNote(() => Strings.Help_Play_Start_Note),
+
+            Topic("play.check", () => Strings.Help_Play_Check_Title,
+                Step(() => Strings.Help_Play_Check_Step1, () => Strings.Nav_Play),
+                Step(() => Strings.Help_Play_Check_Step2, () => Strings.Play_CheckAgain),
+                Step(() => Strings.Help_Play_Check_Step3,
+                    () => Strings.Common_ReviewAndInstall, () => Strings.ModLists_Apply))
+                .WithNote(() => Strings.Help_Play_Check_Note),
+        ]),
+
         new("browse", () => Strings.Nav_Browse, SymbolRegular.Apps24, typeof(BrowsePage),
         [
             Topic("browse.compatible", () => Strings.Help_Browse_Compatible_Title,
@@ -60,6 +77,12 @@ internal static class HelpCatalog
                     () => Strings.Nav_Browse, () => Strings.Filter_AnyMod, () => Strings.Filter_HideInstalled),
                 Step(() => Strings.Help_Browse_HideInstalled_Step2, () => Strings.Common_SaveAsDefault))
                 .WithNote(() => Strings.Help_Browse_HideInstalled_Note),
+
+            Topic("browse.addon", () => Strings.Help_Browse_Addon_Title,
+                Step(() => Strings.Help_Browse_Addon_Step1, () => Strings.Nav_Browse),
+                Step(() => Strings.Help_Browse_Addon_Step2),
+                Step(() => Strings.Help_Browse_Addon_Step3))
+                .WithNote(() => Strings.Help_Browse_Addon_Note),
         ]),
 
         new("installed", () => Strings.Nav_Installed, SymbolRegular.CheckmarkCircle24, typeof(InstalledPage),
@@ -162,6 +185,146 @@ internal static class HelpCatalog
                     () => Strings.Nav_ModLists,
                     () => LocalizationService.Text(Strings.ModLists_UndoLabelFormat, "…")),
                 Step(() => Strings.Help_ModLists_Undo_Step2)),
+        ]),
+        new("configs", () => Strings.Nav_Configs, SymbolRegular.EditSettings24, typeof(ConfigsPage),
+        [
+            Topic("configs.edit", () => Strings.Help_Configs_Edit_Title,
+                Step(() => Strings.Help_Configs_Edit_Step1, () => Strings.Nav_Configs),
+                Step(() => Strings.Help_Configs_Edit_Step2),
+                Step(() => Strings.Help_Configs_Edit_Step3, () => Strings.Common_Save))
+                .WithNote(() => Strings.Help_Configs_Edit_Note, () => Strings.Configs_Revert),
+
+            Topic("configs.policy", () => Strings.Help_Configs_Policy_Title,
+                Step(() => Strings.Help_Configs_Policy_Step1, () => Strings.Nav_Configs),
+                Step(() => Strings.Help_Configs_Policy_Step2,
+                    () => Strings.Configs_UpdatePolicyLabel, () => Strings.ConfigPolicy_Merge,
+                    () => Strings.ConfigPolicy_KeepMine, () => Strings.ConfigPolicy_TakeNew))
+                .WithNote(() => Strings.Help_Configs_Policy_Note),
+
+            Topic("configs.original", () => Strings.Help_Configs_Original_Title,
+                Step(() => Strings.Help_Configs_Original_Step1,
+                    () => Strings.Nav_Configs, () => Strings.Configs_TagShippedDefault),
+                Step(() => Strings.Help_Configs_Original_Step2, () => Strings.Common_Save))
+                .WithNote(() => Strings.Help_Configs_Original_Note),
+
+            Topic("configs.leftover", () => Strings.Help_Configs_Leftover_Title,
+                Step(() => Strings.Help_Configs_Leftover_Step1,
+                    () => Strings.Nav_Configs, () => Strings.Filter_ConfigOther),
+                Step(() => Strings.Help_Configs_Leftover_Step2, () => Strings.Configs_SectionUnclaimed))
+                .WithNote(() => Strings.Help_Configs_Leftover_Note),
+        ]),
+
+        new("dependencies", () => Strings.Nav_Dependencies, SymbolRegular.Branch24, typeof(DependenciesPage),
+        [
+            Topic("dependencies.check", () => Strings.Help_Dependencies_Check_Title,
+                Step(() => Strings.Help_Dependencies_Check_Step1, () => Strings.Nav_Dependencies),
+                Step(() => Strings.Help_Dependencies_Check_Step2),
+                Step(() => Strings.Help_Dependencies_Check_Step3, () => Strings.Dependencies_Refresh)),
+        ]),
+
+        new("footprint", () => Strings.Nav_Footprint, SymbolRegular.Scales24, typeof(FootprintPage),
+        [
+            Topic("footprint.enable", () => Strings.Help_Footprint_Enable_Title,
+                Step(() => Strings.Help_Footprint_Enable_Step1,
+                    () => Strings.Nav_Options, () => Strings.Options_SectionPages,
+                    () => Strings.Options_FootprintHeader),
+                Step(() => Strings.Help_Footprint_Enable_Step2, () => Strings.Nav_Footprint)),
+
+            Topic("footprint.read", () => Strings.Help_Footprint_Read_Title,
+                Step(() => Strings.Help_Footprint_Read_Step1, () => Strings.Nav_Footprint),
+                Step(() => Strings.Help_Footprint_Read_Step2, () => Strings.Footprint_SortByLabel),
+                Step(() => Strings.Help_Footprint_Read_Step3))
+                .WithNote(() => Strings.Help_Footprint_Read_Note),
+        ]),
+
+        new("servermap", () => Strings.Nav_ServerMap, SymbolRegular.ServerSurfaceMultiple16, typeof(ServerMapPage),
+        [
+            Topic("servermap.enable", () => Strings.Help_ServerMap_Enable_Title,
+                Step(() => Strings.Help_ServerMap_Enable_Step1,
+                    () => Strings.Nav_Options, () => Strings.Options_SectionPages,
+                    () => Strings.Options_ServerMapHeader),
+                Step(() => Strings.Help_ServerMap_Enable_Step2, () => Strings.Nav_ServerMap))
+                .WithNote(() => Strings.Help_ServerMap_Enable_Note, () => Strings.Options_GetServerMapMod),
+
+            Topic("servermap.connect", () => Strings.Help_ServerMap_Connect_Title,
+                Step(() => Strings.Help_ServerMap_Connect_Step1,
+                    () => Strings.Nav_Options, () => Strings.Options_ServerMapConnectionHeader),
+                Step(() => Strings.Help_ServerMap_Connect_Step2, () => Strings.Options_Connect),
+                Step(() => Strings.Help_ServerMap_Connect_Step3,
+                    () => Strings.ServerMap_ConsentAllow, () => Strings.ServerMap_ConsentDecline),
+                Step(() => Strings.Help_ServerMap_Connect_Step4,
+                    () => Strings.Nav_ServerMap, () => Strings.Nav_ModLists))
+                .WithNote(() => Strings.Help_ServerMap_Connect_Note, () => Strings.Options_TrustCertificate),
+
+            Topic("servermap.publish", () => Strings.Help_ServerMap_Publish_Title,
+                Step(() => Strings.Help_ServerMap_Publish_Step1,
+                    () => Strings.Nav_ModLists, () => Strings.ModLists_Capture),
+                Step(() => Strings.Help_ServerMap_Publish_Step2),
+                Step(() => Strings.Help_ServerMap_Publish_Step3,
+                    () => Strings.Common_Save, () => Strings.ModLists_Publish))
+                .WithNote(() => Strings.Help_ServerMap_Publish_Note),
+        ]),
+
+        new("downloads", () => Strings.Nav_Downloads, SymbolRegular.ArrowDownload24, typeof(DownloadsPage),
+        [
+            Topic("downloads.watch", () => Strings.Help_Downloads_Watch_Title,
+                Step(() => Strings.Help_Downloads_Watch_Step1, () => Strings.Nav_Downloads),
+                Step(() => Strings.Help_Downloads_Watch_Step2, () => Strings.Common_Cancel),
+                Step(() => Strings.Help_Downloads_Watch_Step3, () => Strings.Downloads_RetryFailed))
+                .WithNote(() => Strings.Help_Downloads_Watch_Note),
+
+            Topic("downloads.where", () => Strings.Help_Downloads_Where_Title,
+                Step(() => Strings.Help_Downloads_Where_Step1, () => Strings.Nav_Downloads),
+                Step(() => Strings.Help_Downloads_Where_Step2, () => Strings.Downloads_ShowInFolder)),
+        ]),
+
+        new("monitor", () => Strings.Help_Monitor_Title, SymbolRegular.DocumentSave24, null,
+        [
+            Topic("monitor.enable", () => Strings.Help_Monitor_Enable_Title,
+                Step(() => Strings.Help_Monitor_Enable_Step1,
+                    () => Strings.Nav_Options, () => Strings.Options_SectionInstalling),
+                Step(() => Strings.Help_Monitor_Enable_Step2,
+                    () => Strings.Options_InstallModeHeader, () => Strings.Options_MonitorModeDownloadOnly),
+                Step(() => Strings.Help_Monitor_Enable_Step3, () => Strings.Options_MonitorFolderHeader))
+                .WithNote(() => Strings.Help_Monitor_Enable_Note),
+
+            Topic("monitor.other", () => Strings.Help_Monitor_Other_Title,
+                Step(() => Strings.Help_Monitor_Other_Step1),
+                Step(() => Strings.Help_Monitor_Other_Step2)),
+
+            Topic("monitor.confirm", () => Strings.Help_Monitor_Confirm_Title,
+                Step(() => Strings.Help_Monitor_Confirm_Step1),
+                Step(() => Strings.Help_Monitor_Confirm_Step2,
+                    () => Strings.Nav_Installed, () => Strings.DownloadConfirm_Confirm),
+                Step(() => Strings.Help_Monitor_Confirm_Step3, () => Strings.Installed_ConfirmDownload))
+                .WithNote(() => Strings.Help_Monitor_Confirm_Note, () => Strings.Options_MonitorConfirmHeader),
+        ]),
+
+        new("updates", () => Strings.Options_UpdateNotificationsHeader, SymbolRegular.Alert24, null,
+        [
+            Topic("updates.enable", () => Strings.Help_Updates_Enable_Title,
+                Step(() => Strings.Help_Updates_Enable_Step1,
+                    () => Strings.Nav_Options, () => Strings.Options_SectionUpdates,
+                    () => Strings.Options_UpdateNotificationsHeader),
+                Step(() => Strings.Help_Updates_Enable_Step2, () => Strings.Options_UpdateIntervalHeader),
+                Step(() => Strings.Help_Updates_Enable_Step3, () => Strings.Options_UpdateCheckNow))
+                .WithNote(() => Strings.Help_Updates_Enable_Note, () => Strings.Nav_Installed),
+
+            Topic("updates.tray", () => Strings.Help_Updates_Tray_Title,
+                Step(() => Strings.Help_Updates_Tray_Step1,
+                    () => Strings.Options_UpdateNotificationsHeader, () => Strings.Options_TrayOff),
+                Step(() => Strings.Help_Updates_Tray_Step2),
+                Step(() => Strings.Help_Updates_Tray_Step3, () => Strings.Tray_Quit)),
+        ]),
+
+        new("appupdate", () => Strings.Nav_AppUpdate, SymbolRegular.ArrowCircleUp24, typeof(AppUpdatePage),
+        [
+            Topic("appupdate.update", () => Strings.Help_AppUpdate_Update_Title,
+                Step(() => Strings.Help_AppUpdate_Update_Step1,
+                    () => Strings.MainWindow_SeeWhatsNew, () => Strings.Nav_AppUpdate),
+                Step(() => Strings.Help_AppUpdate_Update_Step2, () => Strings.AppUpdate_DownloadAndInstall),
+                Step(() => Strings.Help_AppUpdate_Update_Step3))
+                .WithNote(() => Strings.Help_AppUpdate_Update_Note, () => Strings.AppUpdate_CheckNow),
         ]),
     ];
 

@@ -4881,4 +4881,289 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="MainWindow_HowToSetUpToolTip" xml:space="preserve">
     <value>Schritt-für-Schritt-Einrichtung in der Hilfe.</value>
   </data>
+  <data name="Help_Play_Start_Title" xml:space="preserve">
+    <value>Server und Spiel starten</value>
+  </data>
+  <data name="Help_Play_Start_Step1" xml:space="preserve">
+    <value>Öffne {0}.</value>
+  </data>
+  <data name="Help_Play_Start_Step2" xml:space="preserve">
+    <value>Klicke unter {0} auf {1} und warte, bis sein Konsolenfenster fertig gestartet ist.</value>
+  </data>
+  <data name="Help_Play_Start_Step3" xml:space="preserve">
+    <value>Klicke auf {0}, wähle dein Profil und starte das Spiel.</value>
+  </data>
+  <data name="Help_Play_Start_Note" xml:space="preserve">
+    <value>Der Server läuft weiter, wenn du diese App schließt. Schließ sein eigenes Fenster, wenn du fertig bist.</value>
+  </data>
+  <data name="Help_Play_Check_Title" xml:space="preserve">
+    <value>Sehen, was mir fehlt, bevor ich einem Server beitrete</value>
+  </data>
+  <data name="Help_Play_Check_Step1" xml:space="preserve">
+    <value>Öffne {0}. Die Prüfung oben vergleicht deine Installation mit der Modliste, der du folgst, und nennt alles, was fehlt oder in der falschen Version vorliegt.</value>
+  </data>
+  <data name="Help_Play_Check_Step2" xml:space="preserve">
+    <value>Klicke auf {0}, nachdem du etwas geändert hast.</value>
+  </data>
+  <data name="Help_Play_Check_Step3" xml:space="preserve">
+    <value>Liegst du hinter der Liste eines Servers zurück, klicke auf {0}, prüf die Vorschau und klicke auf {1}.</value>
+  </data>
+  <data name="Help_Play_Check_Note" xml:space="preserve">
+    <value>Die Prüfung hält dich nie vom Starten ab - sie sagt es dir nur.</value>
+  </data>
+  <data name="Help_Browse_Addon_Title" xml:space="preserve">
+    <value>Ein Addon für einen Mod installieren</value>
+  </data>
+  <data name="Help_Browse_Addon_Step1" xml:space="preserve">
+    <value>Klicke unter {0} auf die Karte des Mods, um sie zu öffnen. Eine Karte, die eine Anzahl Addons nennt, hat welche.</value>
+  </data>
+  <data name="Help_Browse_Addon_Step2" xml:space="preserve">
+    <value>Scroll nach unten zu den Addons und klicke beim gewünschten auf die Installieren-Schaltfläche.</value>
+  </data>
+  <data name="Help_Browse_Addon_Step3" xml:space="preserve">
+    <value>Lies die Seite des Addons, wenn du gefragt wirst, und mach dann weiter wie bei jeder anderen Installation.</value>
+  </data>
+  <data name="Help_Browse_Addon_Note" xml:space="preserve">
+    <value>Ein Addon muss zur Version seines Mods passen, die du hast, nicht zu deiner SPT-Version - installiere oder aktualisiere also zuerst den Mod.</value>
+  </data>
+  <data name="Help_Configs_Edit_Title" xml:space="preserve">
+    <value>Die Einstellungen eines Mods ändern</value>
+  </data>
+  <data name="Help_Configs_Edit_Step1" xml:space="preserve">
+    <value>Öffne {0} und wähle die Datei des Mods aus der Liste - das Suchfeld findet sie über den Mod- oder Dateinamen.</value>
+  </data>
+  <data name="Help_Configs_Edit_Step2" xml:space="preserve">
+    <value>Bearbeite den Text rechts.</value>
+  </data>
+  <data name="Help_Configs_Edit_Step3" xml:space="preserve">
+    <value>Klicke auf {0}. Nur die Zeilen, die du geändert hast, werden neu geschrieben.</value>
+  </data>
+  <data name="Help_Configs_Edit_Note" xml:space="preserve">
+    <value>Jedes Speichern legt eine Kopie der alten Datei in Data\config-backups ab. {0} verwirft Änderungen, die du nicht gespeichert hast.</value>
+  </data>
+  <data name="Help_Configs_Policy_Title" xml:space="preserve">
+    <value>Festlegen, was mit meinen Einstellungen passiert, wenn ein Mod aktualisiert wird</value>
+  </data>
+  <data name="Help_Configs_Policy_Step1" xml:space="preserve">
+    <value>Öffne unter {0} eine der Konfigurationsdateien des Mods.</value>
+  </data>
+  <data name="Help_Configs_Policy_Step2" xml:space="preserve">
+    <value>Wähle neben {0} {1}, {2} oder {3}.</value>
+  </data>
+  <data name="Help_Configs_Policy_Note" xml:space="preserve">
+    <value>Die Wahl gilt für jede Konfigurationsdatei dieses Mods und wird für sein nächstes Update gemerkt.</value>
+  </data>
+  <data name="Help_Configs_Original_Title" xml:space="preserve">
+    <value>Den ursprünglichen Wert einer Einstellung zurückholen</value>
+  </data>
+  <data name="Help_Configs_Original_Step1" xml:space="preserve">
+    <value>Öffne unter {0} die Datei, die neben der Konfiguration des Mods mit {1} markiert ist - sie enthält die Werte, mit denen der Mod kam.</value>
+  </data>
+  <data name="Help_Configs_Original_Step2" xml:space="preserve">
+    <value>Kopier den gewünschten Wert in die echte Konfiguration und klicke auf {0}.</value>
+  </data>
+  <data name="Help_Configs_Original_Note" xml:space="preserve">
+    <value>Nicht jeder Mod liefert eine mit. Jedes Speichern legt außerdem die vorherige Datei in Data\config-backups im Ordner dieser App ab.</value>
+  </data>
+  <data name="Help_Configs_Leftover_Title" xml:space="preserve">
+    <value>Einstellungen finden, die ein entfernter Mod zurückgelassen hat</value>
+  </data>
+  <data name="Help_Configs_Leftover_Step1" xml:space="preserve">
+    <value>Stell unter {0} den Filter neben dem Suchfeld auf {1}.</value>
+  </data>
+  <data name="Help_Configs_Leftover_Step2" xml:space="preserve">
+    <value>Dateien unter {0} gehören zu keinem installierten Plugin - meist zu einem Mod, den du entfernt hast.</value>
+  </data>
+  <data name="Help_Configs_Leftover_Note" xml:space="preserve">
+    <value>Sie zu bearbeiten ändert im Spiel nichts. Sie sind nur da, falls du die alten Einstellungen zurückwillst.</value>
+  </data>
+  <data name="Help_Dependencies_Check_Title" xml:space="preserve">
+    <value>Prüfen, ob jeder Mod hat, was er braucht</value>
+  </data>
+  <data name="Help_Dependencies_Check_Step1" xml:space="preserve">
+    <value>Öffne {0}. Dort steht jeder installierte Mod, der andere Mods braucht, und ob jeder davon vorhanden ist.</value>
+  </data>
+  <data name="Help_Dependencies_Check_Step2" xml:space="preserve">
+    <value>Mods, denen etwas fehlt, stehen oben und sind schon aufgeklappt. Klicke neben dem Fehlenden auf die Installieren-Schaltfläche.</value>
+  </data>
+  <data name="Help_Dependencies_Check_Step3" xml:space="preserve">
+    <value>Klicke nach dem Installieren auf {0}, um erneut zu prüfen.</value>
+  </data>
+  <data name="Help_Footprint_Enable_Title" xml:space="preserve">
+    <value>Die Seite Mod-Fußabdruck einschalten</value>
+  </data>
+  <data name="Help_Footprint_Enable_Step1" xml:space="preserve">
+    <value>Schalte unter {0}, im Bereich {1}, {2} ein.</value>
+  </data>
+  <data name="Help_Footprint_Enable_Step2" xml:space="preserve">
+    <value>{0} erscheint in der Seitenleiste.</value>
+  </data>
+  <data name="Help_Footprint_Read_Title" xml:space="preserve">
+    <value>Lesen, was die Seite Mod-Fußabdruck zeigt</value>
+  </data>
+  <data name="Help_Footprint_Read_Step1" xml:space="preserve">
+    <value>Öffne {0}. Jeder Mod zeigt, in welche Teile des Spiels seine Dateien reichen - Client, Server, Festplatte.</value>
+  </data>
+  <data name="Help_Footprint_Read_Step2" xml:space="preserve">
+    <value>Nutze {0}, um die Mods, die am weitesten reichen, nach oben zu holen.</value>
+  </data>
+  <data name="Help_Footprint_Read_Step3" xml:space="preserve">
+    <value>Öffne einen Mod, um zu sehen, was jeder Teil bedeutet.</value>
+  </data>
+  <data name="Help_Footprint_Read_Note" xml:space="preserve">
+    <value>Nichts wird gemessen oder gestoppt. Die Seite zeigt, was ein Mod mitbringt, nicht wie schnell er läuft.</value>
+  </data>
+  <data name="Help_ServerMap_Enable_Title" xml:space="preserve">
+    <value>Die Seite Server-Map einschalten</value>
+  </data>
+  <data name="Help_ServerMap_Enable_Step1" xml:space="preserve">
+    <value>Schalte unter {0}, im Bereich {1}, {2} ein.</value>
+  </data>
+  <data name="Help_ServerMap_Enable_Step2" xml:space="preserve">
+    <value>{0} erscheint in der Seitenleiste.</value>
+  </data>
+  <data name="Help_ServerMap_Enable_Note" xml:space="preserve">
+    <value>Sie braucht einen Server, auf dem der Mod Server Map läuft. {0}, an derselben Stelle, öffnet seine Seite.</value>
+  </data>
+  <data name="Help_ServerMap_Connect_Title" xml:space="preserve">
+    <value>Mit einem Server verbinden</value>
+  </data>
+  <data name="Help_ServerMap_Connect_Step1" xml:space="preserve">
+    <value>Trag unter {0}, im Bereich {1}, Adresse und Port aus deinem SPT-Launcher ein und den Schlüssel, falls der Server einen hat.</value>
+  </data>
+  <data name="Help_ServerMap_Connect_Step2" xml:space="preserve">
+    <value>Klicke auf {0}.</value>
+  </data>
+  <data name="Help_ServerMap_Connect_Step3" xml:space="preserve">
+    <value>Beim ersten Mal wirst du gefragt, ob dieser Rechner auf der Karte des Servers erscheinen soll. Klicke auf {0} oder {1}.</value>
+  </data>
+  <data name="Help_ServerMap_Connect_Step4" xml:space="preserve">
+    <value>Öffne {0}. Die Modliste des Servers wird für dich geholt und unter {1} gespeichert.</value>
+  </data>
+  <data name="Help_ServerMap_Connect_Note" xml:space="preserve">
+    <value>Ändert sich das Zertifikat des Servers einmal, wirst du gefragt, bevor irgendetwas anderes passiert. Klicke nur auf {0}, wenn du weißt, warum es sich geändert hat.</value>
+  </data>
+  <data name="Help_ServerMap_Publish_Title" xml:space="preserve">
+    <value>Meine Modliste von meinem Server veröffentlichen</value>
+  </data>
+  <data name="Help_ServerMap_Publish_Step1" xml:space="preserve">
+    <value>Öffne auf dem Rechner, auf dem der Server läuft, {0}, gib einen Namen ein und klicke auf {1}.</value>
+  </data>
+  <data name="Help_ServerMap_Publish_Step2" xml:space="preserve">
+    <value>Nimm alles raus, was die Spieler nicht brauchen. Die Scope-Schaltfläche jeder Zeile sagt, für welche Rechner sie ist.</value>
+  </data>
+  <data name="Help_ServerMap_Publish_Step3" xml:space="preserve">
+    <value>Klicke auf {0} und dann auf {1}.</value>
+  </data>
+  <data name="Help_ServerMap_Publish_Note" xml:space="preserve">
+    <value>Wende diese gekürzte Liste nicht auf dem Serverrechner an - sie würde die eigenen Mods des Servers ausschalten. Behalte eine volle Liste für den Server und veröffentliche die gekürzte.</value>
+  </data>
+  <data name="Help_Downloads_Watch_Title" xml:space="preserve">
+    <value>Einen Download verfolgen oder abbrechen</value>
+  </data>
+  <data name="Help_Downloads_Watch_Step1" xml:space="preserve">
+    <value>Öffne {0}. Jeder Mod zeigt seinen Fortschritt und die Restzeit, und sie werden nacheinander installiert.</value>
+  </data>
+  <data name="Help_Downloads_Watch_Step2" xml:space="preserve">
+    <value>Klicke auf einer Karte auf {0}, um sie anzuhalten. Was sie als Abhängigkeit eingereiht hat, wird mit abgebrochen.</value>
+  </data>
+  <data name="Help_Downloads_Watch_Step3" xml:space="preserve">
+    <value>Ist etwas fehlgeschlagen, klicke auf {0}, um es erneut zu versuchen.</value>
+  </data>
+  <data name="Help_Downloads_Watch_Note" xml:space="preserve">
+    <value>Sobald die Dateien an ihren Platz kommen, wird die Installation zu Ende geführt, damit ein Mod nie halb installiert bleibt.</value>
+  </data>
+  <data name="Help_Downloads_Where_Title" xml:space="preserve">
+    <value>Einen Mod finden, den ich zum Selbstinstallieren heruntergeladen habe</value>
+  </data>
+  <data name="Help_Downloads_Where_Step1" xml:space="preserve">
+    <value>Unter {0} steht auf der Karte des Mods, wo die Datei gespeichert wurde.</value>
+  </data>
+  <data name="Help_Downloads_Where_Step2" xml:space="preserve">
+    <value>Klicke auf {0}, um den Ordner mit der markierten Datei zu öffnen.</value>
+  </data>
+  <data name="Help_Monitor_Title" xml:space="preserve">
+    <value>Monitor-Modus (nur herunterladen)</value>
+  </data>
+  <data name="Help_Monitor_Enable_Title" xml:space="preserve">
+    <value>Mods herunterladen, um sie selbst zu installieren</value>
+  </data>
+  <data name="Help_Monitor_Enable_Step1" xml:space="preserve">
+    <value>Öffne {0} und such {1}.</value>
+  </data>
+  <data name="Help_Monitor_Enable_Step2" xml:space="preserve">
+    <value>Stell {0} auf {1}.</value>
+  </data>
+  <data name="Help_Monitor_Enable_Step3" xml:space="preserve">
+    <value>Wähle unter {0}, wohin die Dateien kommen, oder lass es leer für deinen Windows-Downloads-Ordner.</value>
+  </data>
+  <data name="Help_Monitor_Enable_Note" xml:space="preserve">
+    <value>Durchsuchen, Updates, Abhängigkeiten und Modlisten funktionieren weiter. In deinem SPT-Ordner wird nichts angefasst, also kannst du herunterladen, während SPT läuft.</value>
+  </data>
+  <data name="Help_Monitor_Other_Title" xml:space="preserve">
+    <value>Einen einzelnen Mod andersherum behandeln</value>
+  </data>
+  <data name="Help_Monitor_Other_Step1" xml:space="preserve">
+    <value>Jede Installieren-Schaltfläche hat daneben eine kleinere, die für diesen einen Mod das Gegenteil tut.</value>
+  </data>
+  <data name="Help_Monitor_Other_Step2" xml:space="preserve">
+    <value>Fahr mit der Maus darüber, um zu sehen, in welche Richtung sie geht, und klicke dann darauf.</value>
+  </data>
+  <data name="Help_Monitor_Confirm_Title" xml:space="preserve">
+    <value>Der App sagen, dass ich einen heruntergeladenen Mod installiert habe</value>
+  </data>
+  <data name="Help_Monitor_Confirm_Step1" xml:space="preserve">
+    <value>Installiere den Mod von Hand aus der heruntergeladenen Datei.</value>
+  </data>
+  <data name="Help_Monitor_Confirm_Step2" xml:space="preserve">
+    <value>Öffne {0}. Der Scan findet den Mod und fragt - klicke auf {1}.</value>
+  </data>
+  <data name="Help_Monitor_Confirm_Step3" xml:space="preserve">
+    <value>Oder klicke auf der Karte des Mods auf {0}.</value>
+  </data>
+  <data name="Help_Monitor_Confirm_Note" xml:space="preserve">
+    <value>Wenn du es lieber auf der Karte vermerkt haben willst statt gefragt zu werden, ändere {0} in den Optionen.</value>
+  </data>
+  <data name="Help_Updates_Enable_Title" xml:space="preserve">
+    <value>Benachrichtigt werden, wenn ein Mod, den ich habe, ein Update bekommt</value>
+  </data>
+  <data name="Help_Updates_Enable_Step1" xml:space="preserve">
+    <value>Schalte unter {0}, im Bereich {1}, {2} ein.</value>
+  </data>
+  <data name="Help_Updates_Enable_Step2" xml:space="preserve">
+    <value>Wähle unter {0}, wie oft.</value>
+  </data>
+  <data name="Help_Updates_Enable_Step3" xml:space="preserve">
+    <value>Klicke auf {0}, um sofort zu prüfen.</value>
+  </data>
+  <data name="Help_Updates_Enable_Note" xml:space="preserve">
+    <value>Ein Klick auf eine Benachrichtigung öffnet {0} mit den Mods, die Updates haben. Jedes Release wird einmal gemeldet.</value>
+  </data>
+  <data name="Help_Updates_Tray_Title" xml:space="preserve">
+    <value>Mit geschlossenem Fenster weiter prüfen</value>
+  </data>
+  <data name="Help_Updates_Tray_Step1" xml:space="preserve">
+    <value>Schalte unter {0} die Einstellung ein, in der {1} steht.</value>
+  </data>
+  <data name="Help_Updates_Tray_Step2" xml:space="preserve">
+    <value>Wenn du das Fenster schließt, bleibt jetzt ein Symbol im Infobereich. Klicke darauf, um die App wieder zu öffnen.</value>
+  </data>
+  <data name="Help_Updates_Tray_Step3" xml:space="preserve">
+    <value>Klicke mit rechts auf das Symbol und dann auf {0}, um die App ganz zu beenden.</value>
+  </data>
+  <data name="Help_AppUpdate_Update_Title" xml:space="preserve">
+    <value>Diese App aktualisieren</value>
+  </data>
+  <data name="Help_AppUpdate_Update_Step1" xml:space="preserve">
+    <value>Wenn eine neue Version da ist, sagt es ein Banner. Klicke auf {0} oder öffne {1}.</value>
+  </data>
+  <data name="Help_AppUpdate_Update_Step2" xml:space="preserve">
+    <value>Lies, was sich geändert hat, und klicke dann auf {0}.</value>
+  </data>
+  <data name="Help_AppUpdate_Update_Step3" xml:space="preserve">
+    <value>Öffne die Mod-Seite, wenn du gefragt wirst. Die App lädt dann das Update herunter, schließt sich, tauscht sich aus und öffnet sich wieder.</value>
+  </data>
+  <data name="Help_AppUpdate_Update_Note" xml:space="preserve">
+    <value>Deine Einstellungen und Mods bleiben unberührt. {0} sucht sofort nach einer neuen Version.</value>
+  </data>
 </root>
