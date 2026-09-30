@@ -51,12 +51,18 @@ public sealed class ModDependencyGraph
                     continue;
                 }
 
-                // SPT 4.x mods often give both halves one GUID. A server mod's ModDependencies name
-                // server mods and a plugin's [BepInDependency] names plugins, so a dependency
-                // resolves to the dependant's own side when that side has a match.
+                // A server mod's ModDependencies can only be met by a server mod, and a plugin's
+                // [BepInDependency] only by a plugin - SPT and BepInEx each check their own side. That
+                // matters now server mods carry GUIDs: SPT 4.x mods often give both halves one, and
+                // some plugins depend on a GUID that only the other side declares.
                 var sameSide = matches.Where(m => m.Target == mod.Target).ToList();
+                if (sameSide.Count == 0)
+                {
+                    graph.AddUnresolved(mod, declared.Identifier);
+                    continue;
+                }
 
-                foreach (var dependency in sameSide.Count > 0 ? sameSide : matches)
+                foreach (var dependency in sameSide)
                 {
                     if (ReferenceEquals(dependency, mod)) continue;
 

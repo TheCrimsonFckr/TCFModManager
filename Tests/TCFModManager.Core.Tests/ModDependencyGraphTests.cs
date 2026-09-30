@@ -220,15 +220,20 @@ public class ModDependencyGraphTests
         Assert.Same(libraryClient, Assert.Single(graph.DependenciesOf(clientConsumer)).Dependency);
     }
 
+    // Seen on the real 4.0 install: Foldables' plugin depends on "com.tyfon.uifixes", which only UI
+    // Fixes' SERVER half declares. BepInEx can't satisfy that from a server mod, so it stays
+    // unresolved rather than tying the plugin to the server half in the disable cascade.
     [Fact]
-    public void Dependency_WithNoMatchOnItsOwnSide_StillResolvesAcross()
+    public void Dependency_WithNoMatchOnItsOwnSide_StaysUnresolved()
     {
-        var clientOnly = Client("ClientOnlyLib", "com.example.lib");
-        var serverConsumer = Spt4Server("Consumer", "com.example.consumer",
-            new ModDependencyRef("com.example.lib", IsSoft: false));
+        var serverOnly = Spt4Server("Tyfon.UIFixes.Server", "com.tyfon.uifixes");
+        var clientConsumer = Client("ozen-Foldables", "com.ozen.foldables", false,
+            new ModDependencyRef("com.tyfon.uifixes", IsSoft: true));
 
-        var graph = ModDependencyGraph.Build([clientOnly, serverConsumer]);
+        var graph = ModDependencyGraph.Build([serverOnly, clientConsumer]);
 
-        Assert.Same(clientOnly, Assert.Single(graph.DependenciesOf(serverConsumer)).Dependency);
+        Assert.Empty(graph.DependenciesOf(clientConsumer));
+        Assert.Empty(graph.DependentsOf(serverOnly));
+        Assert.Equal(["com.tyfon.uifixes"], graph.UnresolvedOf(clientConsumer));
     }
 }

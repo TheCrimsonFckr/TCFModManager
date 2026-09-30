@@ -1206,8 +1206,10 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         var installedVersion = record?.Version ?? fileVersion;
 
         (string Key, object?[] Values)? detail = null;
+        // Compared as versions, not text: a plugin declaring "1.1.5" beside a server half that only
+        // has its file version "1.1.5.0" is the same release, not a disagreement.
         if (client is not null && server is not null
-            && !string.Equals(client.Version, server.Version, StringComparison.OrdinalIgnoreCase))
+            && !VersionsAreEquivalent(client.Version, server.Version))
         {
             detail = (
                 nameof(Strings.Installed_DetailFilesReportPairFormat),
