@@ -29,8 +29,9 @@ public partial class HelpPage : Page
             TakeRequest();
         };
 
-        // The page is cached, so without this the next visit opens on whatever was left open.
-        Unloaded += (_, _) => ViewModel.CollapseAll();
+        // The page is cached, so without this the next visit opens on whatever was left open, or
+        // searched for.
+        Unloaded += (_, _) => ViewModel.Leave();
 
         AppNavigation.HelpRequested += (_, _) =>
         {

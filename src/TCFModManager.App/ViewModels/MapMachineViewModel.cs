@@ -26,6 +26,7 @@ public sealed class MapMachineViewModel : LocalizedViewModel
     private readonly int _intervalSeconds;
     private readonly ModList? _list;
     private readonly MachineStanding? _standing;
+    private readonly IReadOnlyList<ReportedMod> _mods;
 
     public MapMachineViewModel(MapMachine machine, int intervalSeconds, ModList? list)
     {
@@ -36,9 +37,8 @@ public sealed class MapMachineViewModel : LocalizedViewModel
 
         ReviewCommand = new RelayCommand(() => { if (_list is not null) AppNavigation.ReviewList(_list.Id); });
 
-        Mods = (machine.Mods ?? [])
+        _mods = (machine.Mods ?? [])
             .OrderBy(m => m.Name, StringComparer.OrdinalIgnoreCase)
-            .Select(m => new MapModLine(m.Name, ModDetail(m)))
             .ToList();
     }
 
@@ -145,11 +145,13 @@ public sealed class MapMachineViewModel : LocalizedViewModel
             string.Join(Strings.Common_ListSeparator, s.Extras.Select(m => m.Name).Order(StringComparer.OrdinalIgnoreCase)))
         : "";
 
-    public IReadOnlyList<MapModLine> Mods { get; }
+    // Composed on every read, so "disabled" and "unknown" follow a language change like the rest of
+    // the card.
+    public IReadOnlyList<MapModLine> Mods => _mods.Select(m => new MapModLine(m.Name, ModDetail(m))).ToList();
 
-    public bool HasMods => Mods.Count > 0;
+    public bool HasMods => _mods.Count > 0;
 
-    public string ModsHeader => Strings.ServerMap_InstalledCount(Mods.Count, Mods.Count);
+    public string ModsHeader => Strings.ServerMap_InstalledCount(_mods.Count, _mods.Count);
 
     private static string Names(IEnumerable<ModListAction> actions) =>
         string.Join(Strings.Common_ListSeparator, actions.Select(ModListActionWording.Named).Order(StringComparer.OrdinalIgnoreCase));

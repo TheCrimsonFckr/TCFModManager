@@ -75,6 +75,10 @@ public sealed partial class ServerMapGateViewModel
     // Set when reporting is switched on, so the map is read again once this machine is on it.
     private bool _refreshAfterReport;
 
+    // A read asked for while another was on its way. Run once that one finishes rather than
+    // alongside it, and never dropped: it may be the read that follows this machine's own report.
+    private bool _mapRefreshQueued;
+
     public bool HasMapMessage => !string.IsNullOrWhiteSpace(MapMessage);
 
     public bool HasMachines => Machines.Count > 0;
@@ -240,6 +244,12 @@ public sealed partial class ServerMapGateViewModel
             return;
         }
 
+        if (IsMapBusy)
+        {
+            _mapRefreshQueued = true;
+            return;
+        }
+
         IsMapBusy = true;
 
         try
@@ -268,6 +278,12 @@ public sealed partial class ServerMapGateViewModel
         {
             IsMapBusy = false;
             OnPropertyChanged(nameof(HasMachines));
+
+            if (_mapRefreshQueued)
+            {
+                _mapRefreshQueued = false;
+                _ = RefreshMapAsync();
+            }
         }
     }
 

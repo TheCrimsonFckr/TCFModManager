@@ -60,6 +60,16 @@ public partial class HelpViewModel : LocalizedViewModel
         if (string.IsNullOrWhiteSpace(value)) CollapseAll();
     }
 
+    //
+    // Leaving the page: the search goes as well as every open how-to, so the next visit starts as the
+    // page opens. Keeping the search would bring back its matches filtered in but closed.
+    //
+    public void Leave()
+    {
+        SearchText = string.Empty;
+        CollapseAll();
+    }
+
     // Leaving the page and clearing the search both close every how-to.
     public void CollapseAll()
     {
