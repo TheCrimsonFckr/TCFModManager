@@ -177,4 +177,58 @@ public class ModDependencyGraphTests
         Assert.Empty(graph.DependentsOf(mod));
         Assert.Empty(graph.DependenciesOf(mod));
     }
+
+    private static InstalledMod Spt4Server(string name, string guid, params ModDependencyRef[] dependencies) =>
+        new()
+        {
+            Name = name,
+            Guid = guid,
+            Guids = [guid],
+            Target = InstalledModTarget.Server,
+            FolderPath = Path.Combine("C:", "SPT", "SPT", "user", "mods", name),
+            Dependencies = dependencies,
+        };
+
+    [Fact]
+    public void DependentsOf_MatchesAnSpt4ServerModByItsDeclaredGuid()
+    {
+        var library = Spt4Server("WTT-ServerCommonLib", "com.wtt.commonlib");
+        var consumer = Spt4Server("BlackDivServer", "com.blackdiv.tacticaltoaster",
+            new ModDependencyRef("com.wtt.commonlib", IsSoft: false, ">=2.0.0"));
+
+        var graph = ModDependencyGraph.Build([library, consumer]);
+
+        Assert.Same(consumer, Assert.Single(graph.DependentsOf(library)).Dependent);
+        Assert.Empty(graph.UnresolvedOf(consumer));
+    }
+
+    // SPT 4.x mods commonly give both halves one GUID. A server mod's dependency is on the other
+    // mod's server half, and a plugin's on its client half - never across.
+    [Fact]
+    public void Dependency_OnAGuidBothHalvesShare_ResolvesToTheDependantsOwnSide()
+    {
+        var libraryClient = Client("WTT-ClientCommonLib", "com.wtt.commonlib");
+        var libraryServer = Spt4Server("WTT-ServerCommonLib", "com.wtt.commonlib");
+        var serverConsumer = Spt4Server("BlackDivServer", "com.blackdiv.tacticaltoaster",
+            new ModDependencyRef("com.wtt.commonlib", IsSoft: false));
+        var clientConsumer = Client("BlackDiv", "com.blackdiv.tacticaltoaster", false,
+            new ModDependencyRef("com.wtt.commonlib", IsSoft: false));
+
+        var graph = ModDependencyGraph.Build([libraryClient, libraryServer, serverConsumer, clientConsumer]);
+
+        Assert.Same(libraryServer, Assert.Single(graph.DependenciesOf(serverConsumer)).Dependency);
+        Assert.Same(libraryClient, Assert.Single(graph.DependenciesOf(clientConsumer)).Dependency);
+    }
+
+    [Fact]
+    public void Dependency_WithNoMatchOnItsOwnSide_StillResolvesAcross()
+    {
+        var clientOnly = Client("ClientOnlyLib", "com.example.lib");
+        var serverConsumer = Spt4Server("Consumer", "com.example.consumer",
+            new ModDependencyRef("com.example.lib", IsSoft: false));
+
+        var graph = ModDependencyGraph.Build([clientOnly, serverConsumer]);
+
+        Assert.Same(clientOnly, Assert.Single(graph.DependenciesOf(serverConsumer)).Dependency);
+    }
 }

@@ -24,9 +24,10 @@ public sealed class ModDependencyGraph
         var all = mods.ToList();
         var graph = new ModDependencyGraph();
 
-        // A client mod is identified by its [BepInPlugin] GUID, a server mod by its package name.
-        // Both can resolve more than one installed mod - the same mod present in a container and in
-        // that container's ".disabled" sibling, or a mod shipping both halves.
+        // A client mod is identified by its [BepInPlugin] GUID, a server mod by its declared ModGuid
+        // (SPT 4.x) or package name (SPT 3.x). Both can resolve more than one installed mod - the
+        // same mod present in a container and in that container's ".disabled" sibling, or a mod
+        // shipping both halves.
         var byIdentifier = new Dictionary<string, List<InstalledMod>>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var mod in all)
@@ -50,7 +51,12 @@ public sealed class ModDependencyGraph
                     continue;
                 }
 
-                foreach (var dependency in matches)
+                // SPT 4.x mods often give both halves one GUID. A server mod's ModDependencies name
+                // server mods and a plugin's [BepInDependency] names plugins, so a dependency
+                // resolves to the dependant's own side when that side has a match.
+                var sameSide = matches.Where(m => m.Target == mod.Target).ToList();
+
+                foreach (var dependency in sameSide.Count > 0 ? sameSide : matches)
                 {
                     if (ReferenceEquals(dependency, mod)) continue;
 

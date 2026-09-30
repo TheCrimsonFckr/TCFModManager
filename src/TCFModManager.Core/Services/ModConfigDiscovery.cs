@@ -87,7 +87,10 @@ public static class ModConfigDiscovery
         {
             // Every GUID the mod's folder registers, not just its primary one - a folder holding an
             // API or config-UI assembly alongside the plugin itself has a config file for each.
-            foreach (var guid in mod.AllGuids) byGuid.TryAdd(guid, mod);
+            // Client mods only: an SPT 4.x server half often declares the same GUID as its client
+            // half, and a BepInEx config file is always the client's.
+            if (mod.Target == InstalledModTarget.Client)
+                foreach (var guid in mod.AllGuids) byGuid.TryAdd(guid, mod);
 
             var normalized = Normalize(mod.Name);
             if (normalized.Length == 0) continue;

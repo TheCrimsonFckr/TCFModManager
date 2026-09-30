@@ -183,7 +183,9 @@ internal sealed class ModMetadataFixture
         return this;
     }
 
-    public string Write(string directory)
+    // Writes the DLL into directory - under fileName when given, otherwise a unique name - and
+    // returns its path.
+    public string Write(string directory, string? fileName = null)
     {
         var baseType = _kind == Kind.Spt40 ? (EntityHandle)_baseOrInterface : _object;
         var type = _md.AddTypeDefinition(
@@ -206,7 +208,8 @@ internal sealed class ModMetadataFixture
         var image = new BlobBuilder();
         pe.Serialize(image);
 
-        var path = Path.Combine(directory, Guid.NewGuid().ToString("N") + ".dll");
+        Directory.CreateDirectory(directory);
+        var path = Path.Combine(directory, fileName ?? Guid.NewGuid().ToString("N") + ".dll");
         File.WriteAllBytes(path, image.ToArray());
         return path;
     }

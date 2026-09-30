@@ -23,13 +23,35 @@ public sealed class InstalledMod
 {
     public required string Name { get; init; }
 
-    // Null when no version could be determined.
+    //
+    // The version the mod says it is: package.json's "version" for an SPT 3.x server mod, the
+    // declared version for an SPT 4.x server mod or a client plugin ([BepInPlugin]'s third
+    // argument), and the DLL's file version only when nothing is declared. Null when no version
+    // could be determined.
+    //
     public string? Version { get; init; }
 
     //
-    // The GUID that stands for this mod's identity - the first [BepInPlugin] GUID found in its
-    // folder. Null for server mods, and for a client mod whose GUID couldn't be read. Catalog
-    // matching and the dependency graph key on this, so it stays one value per mod.
+    // The DLL's own file version, whatever Version ended up as. Authors routinely leave it at
+    // 1.0.0.0, which is why it is only a fallback - kept for the "Files report ..." line.
+    //
+    public string? FileVersion { get; init; }
+
+    //
+    // The name the mod gives itself - [BepInPlugin]'s name, or an SPT 4.x server mod's declared
+    // Name - when it declares one. Display only: Name stays the folder name, since groups, pins
+    // and list entries are keyed on it.
+    //
+    public string? DeclaredName { get; init; }
+
+    // SPT 4.x server mods only: the SPT range the mod says it was built for, e.g. "~4.0.0".
+    public string? SptVersion { get; init; }
+
+    //
+    // The GUID that stands for this mod's identity - the first [BepInPlugin] GUID found in a client
+    // mod's folder, or an SPT 4.x server mod's declared ModGuid. Null for an SPT 3.x server mod, and
+    // whenever none could be read. Catalog matching and the dependency graph key on this, so it
+    // stays one value per mod.
     //
     public string? Guid { get; init; }
 
@@ -39,7 +61,7 @@ public sealed class InstalledMod
     // A single mod folder routinely holds several plugin DLLs - an API, a config UI, a utilities
     // assembly - each registering its own GUID, and each keeping its own file in BepInEx\config
     // named after it. Keeping only the first would leave all the others' configs looking like they
-    // belonged to no installed mod at all. Empty for a server mod.
+    // belonged to no installed mod at all. A server mod has at most one - its declared ModGuid.
     //
     public IReadOnlyList<string> Guids { get; init; } = [];
 
@@ -48,7 +70,7 @@ public sealed class InstalledMod
     public IReadOnlyList<string> AllGuids =>
         Guids.Count > 0 ? Guids : Guid is null ? [] : [Guid];
 
-    // Populated only for server mods, from package.json's "author" field.
+    // Populated only for server mods, from package.json's "author" field or the declared Author.
     public string? Author { get; init; }
 
     public required InstalledModTarget Target { get; init; }
