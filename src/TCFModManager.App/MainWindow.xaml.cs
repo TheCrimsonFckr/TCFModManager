@@ -24,7 +24,7 @@ public partial class MainWindow : FluentWindow
         {
             if (e.Key != Key.F1 || Keyboard.Modifiers != ModifierKeys.None) return;
 
-            AppNavigation.ShowHelpForCurrentPage();
+            ShowHelp();
             e.Handled = true;
         };
 
@@ -81,8 +81,21 @@ public partial class MainWindow : FluentWindow
         };
     }
 
-    private void RootTitleBar_HelpClicked(TitleBar sender, RoutedEventArgs e) =>
+    private void RootTitleBar_HelpClicked(TitleBar sender, RoutedEventArgs e) => ShowHelp();
+
+    //
+    // The "?" and F1. A ContentDialog (mod details, mod update) sits over the page inside this
+    // window, so both still reach the window while it is up - and Help would open underneath it,
+    // hidden. The dialog is closed first, the same as its Close button, and Help opens at the
+    // section for the page it was over. The other dialogs are separate modal windows, which keep
+    // this window from getting either.
+    //
+    private void ShowHelp()
+    {
+        if (RootContentDialogPresenter.Content is ContentDialog dialog) dialog.Hide(ContentDialogResult.None);
+
         AppNavigation.ShowHelpForCurrentPage();
+    }
 
     private void HowToSetUp_Click(object sender, RoutedEventArgs e) =>
         AppNavigation.ShowHelp(HelpCatalog.StartSectionId);
