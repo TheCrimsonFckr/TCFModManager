@@ -51,6 +51,41 @@ public class ServerMapLanOnlyTests
         Assert.Equal(ServerMapProblem.KeyRejected, (await client.ListAsync()).Problem);
     }
 
+    // Stopping the reporter cancels its report. That is the caller walking away, not the server
+    // being unreachable, so it surfaces as a cancellation rather than as a failed report.
+    [Fact]
+    public async Task ACancelledReportThrowsRatherThanReadingAsUnreachable()
+    {
+        using var client = ServerMapClient.TryCreate(Keyed, new Hangs())!;
+        using var cts = new CancellationTokenSource();
+
+        var report = client.ReportAsync(new MachineReport { ClientId = Guid.NewGuid().ToString(), InventoryHash = "x" }, cts.Token);
+        cts.Cancel();
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => report);
+    }
+
+    // A server that never answers still reads as unreachable: the HttpClient's own timeout is not
+    // the caller cancelling.
+    [Fact]
+    public async Task ATimeoutStillReadsAsUnreachable()
+    {
+        using var client = ServerMapClient.TryCreate(Keyed, new Hangs(), TimeSpan.FromMilliseconds(100))!;
+
+        var result = await client.ReportAsync(new MachineReport { ClientId = Guid.NewGuid().ToString(), InventoryHash = "x" });
+
+        Assert.Equal(ServerMapProblem.Unreachable, result.Problem);
+    }
+
+    private sealed class Hangs : HttpMessageHandler
+    {
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
+        {
+            await Task.Delay(Timeout.Infinite, ct);
+            throw new InvalidOperationException("unreachable");
+        }
+    }
+
     private sealed class Canned(HttpStatusCode status, string body) : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct) =>
