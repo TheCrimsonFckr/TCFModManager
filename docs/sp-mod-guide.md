@@ -90,6 +90,11 @@ Clicking any mod opens a dialog with:
 
 Mods can be removed from here too.
 
+#### Mods you installed by hand
+A mod this app installed is known exactly - its listing and version come from the install record. For one you installed yourself, the app reads what the mod says about itself: a client plugin's ID, name and version, and on SPT 4 a server mod's ID, name, version and the other server mods it needs. The ID matches it to its listing on sp-mod, whatever you named the folder. When nothing on sp-mod matches, the card is titled with the name the mod gives itself, with the folder shown as **Installed as**.
+
+If a mod says it is a different version from the one you know you have, **Confirm as installed** in its details records the right one, and that wins from then on.
+
 #### Three ways to look at the list
 The buttons at the top of the page switch between them. They all show the same filtered, sorted mods - only the layout changes.
 
@@ -490,7 +495,9 @@ Info level by default, rotated daily as `tcfmm-<yyyyMMdd>.log`. To get Debug-lev
 
 #### What it can and can't see
 - **Mods nested a folder deeper** - `BepInEx\plugins\Author\ModName\mod.dll` rather than `BepInEx\plugins\ModName\mod.dll` - are listed under the outer folder's name with an unknown version.
-- **Mods you installed by hand are matched by folder name**, since there's no install record to read. If the folder name doesn't clearly point at one listing, the mod shows as not found on sp-mod: you can still see, group, disable and remove it, but not update it from here. A folder name that could plausibly be two different mods is deliberately left unmatched rather than guessed at.
+- **Mods you installed by hand are matched by the ID they declare, then by folder name**, since there's no install record to read. If neither clearly points at one listing, the mod shows as not found on sp-mod: you can still see, group, disable and remove it, but not update it from here. A folder name that could plausibly be two different mods is deliberately left unmatched rather than guessed at.
+- **A mod's version is only as good as what it declares.** Some authors forget to update it, and some mods work theirs out while the game runs, which the app can't read - those fall back to the DLL's file version. Either way, **Confirm as installed** puts it right.
+- **A listing can number its releases differently from the mod it installs.** A helper mod declaring 0.0.7 on a listing whose releases are 4.x shows an update that never clears. Confirm as installed ends it.
 
 #### Installing
 - **Archives have to be packaged normally** - a `BepInEx\`, `user\`, `SPT\` or `SPT_Runtime\` folder at the top, optionally inside one wrapper folder. Anything else is refused with a message telling you to install it by hand, rather than being scattered into your install.
@@ -535,7 +542,7 @@ Info level by default, rotated daily as `tcfmm-<yyyyMMdd>.log`. To get Debug-lev
 
 #### Update notifications
 - **Checks only run while the app does.** Closing the window ends them unless the app is kept in the tray, and it doesn't start with Windows.
-- **A mod you installed by hand can be announced once too often.** With no install record, its version is read from its files, and a file version that lags behind the real one reads as out of date. It's announced once at most, and confirming the version on the mod's card ends it.
+- **A mod you installed by hand can be announced once too often.** With no install record, its version is read from what the mod declares, and a declared version that lags behind the real one reads as out of date. It's announced once at most, and confirming the version on the mod's card ends it.
 - **Checks are at least 30 minutes apart.** **Check now** is there when you want one sooner.
 
 #### Server map
