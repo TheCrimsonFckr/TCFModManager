@@ -128,14 +128,21 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // folder/package Name. Null when nothing matched.
     public string? MatchedModName { get; init; }
 
-    // The title the card leads with: the real sp-mod.com display name when there is one,
-    // otherwise the folder/package Name.
-    public string DisplayTitle => MatchedModName ?? Name;
+    //
+    // The name the mod gives itself in its own DLL - an SPT 4.x server mod's declared Name, or its
+    // [BepInPlugin] name. Only ever set on a card nothing in the catalog matched: a matched card
+    // keeps the catalog's name (R2 of the server mod metadata design).
+    //
+    public string? DeclaredName { get; init; }
+
+    // The title the card leads with: the real sp-mod.com display name when there is one, then the
+    // name the mod declares for itself, otherwise the folder/package Name.
+    public string DisplayTitle => MatchedModName ?? DeclaredName ?? Name;
 
     // The raw installed folder/package name, shown as a secondary line under DisplayTitle only
-    // when there's a catalog match whose name differs from the folder name.
+    // when the title came from somewhere else and differs from the folder name.
     public string? FolderNameIfDifferent =>
-        MatchedModName is not null && !string.Equals(MatchedModName, Name, StringComparison.OrdinalIgnoreCase)
+        (MatchedModName ?? DeclaredName) is { } title && !string.Equals(title, Name, StringComparison.OrdinalIgnoreCase)
             ? Name
             : null;
 
@@ -777,13 +784,14 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             if (fromRecord is not null) return fromRecord;
         }
 
-        // The real GUID, read from a client DLL's [BepInPlugin] attribute, is tried first as an
-        // exact identifier before falling back to the folder-name heuristics below. Taken from
-        // whichever client entry actually carries one rather than the first client entry, since a
-        // patcher never has one and would otherwise skip the whole tier for a plugin sitting
-        // alongside it.
+        // The real GUID the mod declares - a client DLL's [BepInPlugin], or an SPT 4.x server mod's
+        // ModGuid - is tried first as an exact identifier before falling back to the folder-name
+        // heuristics below. The client's goes first when a card has both halves, as it always has;
+        // a server-only hand install, which never had a GUID to offer before, now matches exactly
+        // too. Taken from whichever entry actually carries one rather than the first entry, since
+        // a patcher never has one and would otherwise skip the whole tier.
         var installedGuid = entries
-            .Where(m => m.Target == InstalledModTarget.Client)
+            .OrderBy(m => m.Target == InstalledModTarget.Client ? 0 : 1)
             .Select(m => m.Guid)
             .FirstOrDefault(g => !string.IsNullOrWhiteSpace(g));
 
@@ -970,7 +978,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
         // A manually-confirmed record places no files, so the GUID is all there is to go on.
         var guid = group.Entries
-            .Where(m => m.Target == InstalledModTarget.Client)
+            .OrderBy(m => m.Target == InstalledModTarget.Client ? 0 : 1)
             .SelectMany(m => m.AllGuids)
             .FirstOrDefault(g => !string.IsNullOrWhiteSpace(g));
 
@@ -1275,6 +1283,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             UpdateVersion = updateAvailable == true ? updateTarget?.Version : null,
             LatestUpdatedAt = match?.UpdatedAt,
             MatchedModName = match?.Name,
+            DeclaredName = match is null ? server?.DeclaredName ?? plugin?.DeclaredName : null,
             Guid = match?.Guid,
             Author = match?.Owner?.Name,
             CategoryTag = match?.Category?.Title,
