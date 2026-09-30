@@ -88,32 +88,71 @@ public partial class AppUpdateViewModel
     private void OpenServerMapModPage() =>
         Process.Start(new ProcessStartInfo(ServerMapAddon.PageUrl(_serverMapLine)) { UseShellExecute = true });
 
-    // The files on disk, read again. Cheap, so the page does it every time it is shown.
+    //
+    // The files on disk, read again. Cheap, so the page does it every time it is shown, and again
+    // whenever the install folder changes - the sidebar badge reads from this too.
+    //
+    // A different install folder can mean a different SPT line, and each line has its own listing.
+    // The release already fetched is then for the other line and says nothing about this one, so it
+    // is dropped and the new line's asked for - otherwise the page compares against the wrong mod
+    // until the next Check. Only once a check has run: before that, the startup check is on its way.
+    //
     public void RefreshServerMapInstall()
     {
-        HookServerMap();
-        var installPath = _settings.Load().SptInstallPath;
-        var installed = ServerMapModVersions.FindInstalled(installPath);
+        if (!ReadServerMapInstall()) return;
+        if (ServerMapRelease is null && !ServerMapCheckFailed) return;
 
-        _serverMapLine = ServerMapModVersions.LineFor(installed, installPath);
+        ServerMapRelease = null;
+        ServerMapCheckFailed = false;
+        _ = FetchServerMapReleaseAsync();
+    }
+
+    // True when the SPT line changed.
+    private bool ReadServerMapInstall()
+    {
+        HookServerMap();
+
+        // The environment's path, not settings.json: it changes before the new path is saved.
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        var installed = ServerMapModVersions.FindInstalled(installPath);
+        var line = ServerMapModVersions.LineFor(installed, installPath);
+
+        var changed = line != _serverMapLine;
+        _serverMapLine = line;
         ServerMapInstalled = installed;
+
+        return changed;
+    }
+
+    private async Task CheckServerMapModAsync()
+    {
+        ReadServerMapInstall();
+        await FetchServerMapReleaseAsync().ConfigureAwait(true);
     }
 
     //
     // Asks sp-mod.com for the newest Server Map mod. Its own failure stays its own: the app's check
     // above has already said whether sp-mod.com could be reached at all.
     //
-    private async Task CheckServerMapModAsync()
+    // An answer for a line that is no longer this machine's - the folder changed while it was on its
+    // way - is thrown away; the fetch for the new line is what counts.
+    //
+    private async Task FetchServerMapReleaseAsync()
     {
-        RefreshServerMapInstall();
+        var line = _serverMapLine;
 
         try
         {
-            ServerMapRelease = await _serverMapMod.LatestAsync(_serverMapLine).ConfigureAwait(true);
+            var release = await _serverMapMod.LatestAsync(line).ConfigureAwait(true);
+            if (line != _serverMapLine) return;
+
+            ServerMapRelease = release;
             ServerMapCheckFailed = false;
         }
         catch (Exception ex) when (ex is SpModApiException or HttpRequestException or OperationCanceledException)
         {
+            if (line != _serverMapLine) return;
+
             ServerMapCheckFailed = true;
             AppLog.Warn("ServerMapMod", $"couldn't check for a newer Server Map mod: {ex.Message}");
         }
@@ -133,6 +172,11 @@ public partial class AppUpdateViewModel
         _serverMapHooked = true;
 
         AppServices.ServerMap.PropertyChanged += OnServerMapConnectionChanged;
+
+        AppServices.SptEnvironment.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(SptEnvironmentViewModel.InstallPath)) RefreshServerMapInstall();
+        };
     }
 
     private void OnServerMapConnectionChanged(object? sender, PropertyChangedEventArgs e)
