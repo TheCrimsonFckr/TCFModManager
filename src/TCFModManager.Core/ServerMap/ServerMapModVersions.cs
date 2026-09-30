@@ -25,11 +25,11 @@ public static class ServerMapAddon
 {
     public const string Spt40AddonId = "126";
 
-    public const string Spt40PageUrl = "https://sp-mod.com/addon/126/tfc-server-mapper";
+    public const string Spt40PageUrl = "https://sp-mod.com/addon/126/tcf-server-mapper";
 
     public const string Spt41AddonId = "142";
 
-    public const string Spt41PageUrl = "https://sp-mod.com/addon/142/tfc-server-mapper-41";
+    public const string Spt41PageUrl = "https://sp-mod.com/addon/142/tcf-server-mapper-41";
 
     public static string AddonId(ServerMapSptLine line) =>
         line == ServerMapSptLine.Spt40 ? Spt40AddonId : Spt41AddonId;

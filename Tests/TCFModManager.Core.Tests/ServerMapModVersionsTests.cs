@@ -120,8 +120,8 @@ public class ServerMapModVersionsTests : IDisposable
     }
 
     [Theory]
-    [InlineData(ServerMapSptLine.Spt40, "126", "https://sp-mod.com/addon/126/tfc-server-mapper")]
-    [InlineData(ServerMapSptLine.Spt41, "142", "https://sp-mod.com/addon/142/tfc-server-mapper-41")]
+    [InlineData(ServerMapSptLine.Spt40, "126", "https://sp-mod.com/addon/126/tcf-server-mapper")]
+    [InlineData(ServerMapSptLine.Spt41, "142", "https://sp-mod.com/addon/142/tcf-server-mapper-41")]
     public void Each_line_has_its_own_addon(ServerMapSptLine line, string id, string url)
     {
         Assert.Equal(id, ServerMapAddon.AddonId(line));
