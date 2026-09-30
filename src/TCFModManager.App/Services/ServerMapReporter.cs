@@ -29,7 +29,10 @@ internal sealed class ServerMapReporter
     private List<ReportedMod>? _inventory;
     private DateTimeOffset _inventoryReadAt;
     private string? _installStamp;
-    private bool _reporting;
+
+    // The loop whose report is on its way, if any. Per loop rather than a flag, so a report still
+    // winding down from a stopped loop never holds up the first report of the one that replaced it.
+    private CancellationTokenSource? _reportingFor;
     private string? _sentHash;
     private string? _sentTo;
     private bool _serverWantsInventory;
@@ -65,10 +68,14 @@ internal sealed class ServerMapReporter
         {
             _sentHash = null;
             _sentTo = server;
+
+            // What was said about the last server is not true of this one.
+            LastResult = null;
+            LastReportedAt = null;
         }
 
         _loop = new CancellationTokenSource();
-        _ = RunAsync(_loop.Token);
+        _ = RunAsync(_loop, _loop.Token);
 
         AppLog.Info("ServerMap", $"reporting to {endpoint.Host}:{endpoint.Port}");
     }
@@ -98,7 +105,7 @@ internal sealed class ServerMapReporter
 
         try
         {
-            await ReportOnceAsync(loop.Token);
+            await ReportOnceAsync(loop, loop.Token);
         }
         catch (OperationCanceledException)
         {
@@ -128,13 +135,13 @@ internal sealed class ServerMapReporter
         return problem;
     }
 
-    private async Task RunAsync(CancellationToken ct)
+    private async Task RunAsync(CancellationTokenSource loop, CancellationToken ct)
     {
         try
         {
             while (!ct.IsCancellationRequested)
             {
-                var interval = await ReportOnceAsync(ct);
+                var interval = await ReportOnceAsync(loop, ct);
                 await Task.Delay(TimeSpan.FromSeconds(interval), ct);
             }
         }
@@ -144,15 +151,18 @@ internal sealed class ServerMapReporter
         }
     }
 
-    private async Task<int> ReportOnceAsync(CancellationToken ct)
+    //
+    // loop is the loop this report belongs to, and ct its token - taken by the caller, since the
+    // token of a loop that has been stopped and disposed can no longer be read from it.
+    //
+    private async Task<int> ReportOnceAsync(CancellationTokenSource loop, CancellationToken ct)
     {
         // The timer and the Refresh button can land together; one report is enough.
-        if (_reporting) return ServerMapMachines.DefaultIntervalSeconds;
-        _reporting = true;
+        if (ReferenceEquals(_reportingFor, loop)) return ServerMapMachines.DefaultIntervalSeconds;
+        _reportingFor = loop;
 
         try
         {
-            var settings = _settings.Load();
             var installPath = AppServices.SptEnvironment.InstallPath;
 
             if (string.IsNullOrWhiteSpace(installPath)) return ServerMapMachines.DefaultIntervalSeconds;
@@ -171,6 +181,10 @@ internal sealed class ServerMapReporter
             // The id is made the first time this install reports and must survive to the next
             // launch, or every restart would add the same machine to the map again.
             //
+            // Loaded here, after the slow reads above, and saved with nothing awaited in between:
+            // a copy loaded before them would put back anything changed in Options meanwhile.
+            //
+            var settings = _settings.Load();
             var idBefore = settings.ServerMap.ClientId;
             ServerMapReporting.EnsureClientId(settings.ServerMap);
             if (idBefore != settings.ServerMap.ClientId) _settings.Save(settings);
@@ -190,6 +204,10 @@ internal sealed class ServerMapReporter
 
             var result = await client.ReportAsync(report, ct);
 
+            // Answered just as the loop was stopped: it belongs to a server or a choice that has
+            // since changed, so it is not recorded, logged or announced.
+            ct.ThrowIfCancellationRequested();
+
             LastResult = result;
 
             if (result.Succeeded)
@@ -202,11 +220,9 @@ internal sealed class ServerMapReporter
             LogOnChange(result.Problem);
             Reported?.Invoke(this, EventArgs.Empty);
 
-            if (result.Problem == ServerMapProblem.MapUnsupported)
-            {
-                // Nothing will change until the server mod is updated; the next connect restarts this.
-                Stop();
-            }
+            // Nothing will change until the server mod is updated; the next connect restarts this.
+            // Only this report's own loop - never one started since.
+            if (result.Problem == ServerMapProblem.MapUnsupported && ReferenceEquals(_loop, loop)) Stop();
 
             return result.Succeeded ? result.IntervalSeconds : ServerMapMachines.DefaultIntervalSeconds;
         }
@@ -222,7 +238,7 @@ internal sealed class ServerMapReporter
         }
         finally
         {
-            _reporting = false;
+            if (ReferenceEquals(_reportingFor, loop)) _reportingFor = null;
         }
     }
 
