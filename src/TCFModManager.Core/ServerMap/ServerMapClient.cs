@@ -388,6 +388,12 @@ public sealed class ServerMapClient : IDisposable
             var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
             return (ServerMapProblem.None, status, body, null);
         }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            // The caller stopped asking. Not the server's fault, so not reported as unreachable -
+            // only the HttpClient's own timeout, which arrives without the caller's token, is.
+            throw;
+        }
         catch (Exception ex) when (ex is HttpRequestException or IOException or OperationCanceledException)
         {
             return (_pin.Verdict == PinVerdict.Mismatch ? ServerMapProblem.CertificateRejected : ServerMapProblem.Unreachable,
