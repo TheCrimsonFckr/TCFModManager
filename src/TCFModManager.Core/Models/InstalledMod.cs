@@ -9,10 +9,14 @@ public enum InstalledModTarget
 
 //
 // One dependency an installed mod declares about itself. Identifier is a BepInEx plugin GUID for a
-// client mod (from [BepInDependency]) or a package.json package name for a server mod (from
-// "modDependencies"). A soft dependency is one the dependent still loads without.
+// client mod (from [BepInDependency]), a package.json package name for an SPT 3.x server mod (from
+// "modDependencies"), or a mod GUID for an SPT 4.x server mod (from its ModDependencies). A soft
+// dependency is one the dependent still loads without.
 //
-public sealed record ModDependencyRef(string Identifier, bool IsSoft);
+// VersionRange is the version the dependant asks for, as written ("~1.0.0", ">=2.0.0"), when it
+// declared one. Carried, not judged: compare it with ModVersionMatcher, never SptVersionMatcher.
+//
+public sealed record ModDependencyRef(string Identifier, bool IsSoft, string? VersionRange = null);
 
 // One mod found on disk by InstalledModScanner. Represents what's installed locally, not a catalog listing.
 public sealed class InstalledMod
