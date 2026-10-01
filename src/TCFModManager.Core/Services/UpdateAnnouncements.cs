@@ -4,7 +4,7 @@ using TCFModManager.Core.Models;
 namespace TCFModManager.Core.Services;
 
 //
-// Update notifications (docs\CLOSED-TCFUpdateNotifications-DESIGN.md): which updates are news.
+// Update notifications (docs\CLOSED-07-TCFUpdateNotifications-DESIGN.md): which updates are news.
 //
 // The watcher works out what has an update the same way the Installed page does, then hands the
 // list here. This decides which of them to announce - once per version (D5), none at all on the
