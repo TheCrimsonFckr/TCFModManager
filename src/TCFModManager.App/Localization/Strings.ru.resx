@@ -2391,6 +2391,12 @@
   <data name="ModInstall_ArchiveContainsLinkFormat" xml:space="preserve">
     <value>{0} {1} не установлен: архив содержит ссылку («{2}»). Архивы со ссылками отклоняются, чтобы ничего за пределами мода не было затронуто.</value>
   </data>
+  <data name="ModInstall_InstallThroughLinkFormat" xml:space="preserve">
+    <value>{0} {1} не установлен: {2} находится в папке, которая является ссылкой на другое место, и установка изменила бы то, на что она указывает. Ничего не изменено.</value>
+  </data>
+  <data name="ModInstall_OriginalNotKeptFormat" xml:space="preserve">
+    <value>{0} {1} не установлен: он заменил бы {2}, а сохранить копию этого файла заранее не удалось ({3}). Ничего не изменено.</value>
+  </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>{0} не удалён: он находится вне вашей папки SPT. Ничего не удалено.</value>
   </data>

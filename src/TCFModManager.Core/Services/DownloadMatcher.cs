@@ -51,7 +51,9 @@ public static class DownloadMatcher
         var missing = 0;
         var differing = 0;
 
-        foreach (var file in download.ExpectedFiles)
+        // A download recorded before protected paths were left out may still list SPT's own files;
+        // the user was right not to copy those over (D6).
+        foreach (var file in download.ExpectedFiles.Where(f => !ProtectedInstallPaths.IsProtected(f.Path)))
         {
             var info = new FileInfo(Path.Combine(installPath, file.Path.Replace('/', Path.DirectorySeparatorChar)));
 

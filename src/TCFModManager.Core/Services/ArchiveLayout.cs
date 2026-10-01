@@ -153,6 +153,9 @@ public static class ArchiveLayout
                 var placed = RemapForServerRoot(relative, serverRoot).Replace('\\', '/');
                 return e with { Path = placed };
             })
+            // SPT's own files are never placed by an install, so a hand install isn't expected to
+            // place them either (D6).
+            .Where(e => !ProtectedInstallPaths.IsProtected(e.Path))
             .ToList();
 
         return new ArchivePlan(true, files, InstalledModFolders.FromPlacedFiles(files.Select(f => f.Path)));

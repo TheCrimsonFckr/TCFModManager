@@ -89,7 +89,12 @@ public sealed class ModInstallManifestService
     // checked on disk by DownloadMatcher before the user was asked, so the app does know exactly what
     // is there. Anything else goes through SetManualVersion as an IsAppManaged: false record.
     //
-    public InstalledModRecord ConfirmDownload(DownloadedModRecord download)
+    //
+    // With installPath, every confirmed file still on disk is fingerprinted as it is now, so removal can
+    // tell later whether it was changed (D21), and the record is stamped with that install (D17).
+    // SPT's own files are never part of the record (D4).
+    //
+    public InstalledModRecord ConfirmDownload(DownloadedModRecord download, string? installPath = null)
     {
         var manifest = Load();
         var existing = manifest.Mods.FirstOrDefault(m => m.ModId == download.ModId && m.IsAddon == download.IsAddon);
@@ -101,7 +106,23 @@ public sealed class ModInstallManifestService
                 download.ExpectedFolders, download.IsAddon);
         }
 
-        var files = download.ExpectedFiles.Select(f => f.Path).ToList();
+        var files = download.ExpectedFiles
+            .Select(f => f.Path)
+            .Where(p => !ProtectedInstallPaths.IsProtected(p))
+            .ToList();
+
+        var fingerprints = new List<FileFingerprint>();
+        if (!string.IsNullOrWhiteSpace(installPath))
+        {
+            foreach (var path in files)
+            {
+                if (InstallPathGuard.CheckRecordedPath(installPath, path, out var full) is null
+                    && FileFingerprint.Compute(full, path) is { } print)
+                {
+                    fingerprints.Add(print);
+                }
+            }
+        }
 
         var record = new InstalledModRecord
         {
@@ -119,10 +140,9 @@ public sealed class ModInstallManifestService
             Incomplete = false,
             IsAppManaged = true,
 
-            // Fingerprints of the new list are taken from disk at confirm time in stage 3; until then
-            // none, so this record falls back to the path checks. The originals an earlier install
-            // replaced are still in Data and still owed back.
-            InstallPath = existing.InstallPath,
+            // The originals an earlier install replaced are still in Data and still owed back.
+            Fingerprints = fingerprints,
+            InstallPath = string.IsNullOrWhiteSpace(installPath) ? existing.InstallPath : InstallStamp.Of(installPath),
             Overwrote = existing.Overwrote,
         };
 

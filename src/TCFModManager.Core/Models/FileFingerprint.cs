@@ -54,7 +54,11 @@ public sealed record FileFingerprint(string Path, long Size, string Sha256)
 
 //
 // A file that was already in the install, owned by no record, when an install placed over it. The
-// original is kept in the app's Data folder and put back when the mod that replaced it is removed
-// (D22). BackupPath is relative to the Data folder, so moving the app with its Data keeps it valid.
+// original is kept in the app's Data folder (D22). BackupPath is relative to the Data folder, so
+// moving the app with its Data keeps it valid.
 //
-public sealed record OverwrittenFile(string Path, long Size, string Sha256, string BackupPath);
+// InOwnFolder: the file sat inside one of the folders this install places - almost always an earlier
+// copy of the same mod, installed by hand. Whether removal puts those back is stage 4's call; the
+// originals are kept either way.
+//
+public sealed record OverwrittenFile(string Path, long Size, string Sha256, string BackupPath, bool InOwnFolder = false);

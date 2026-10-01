@@ -73,6 +73,21 @@ public static class ModInstallProblems
 
         ModInstallFailure.RemovalRefused => RemovalRefused(problem.Folder, problem.Refusal),
 
+        ModInstallFailure.InstallThroughLink => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.ModInstall_InstallThroughLinkFormat,
+            problem.ModName,
+            problem.Version,
+            problem.Folder),
+
+        ModInstallFailure.OriginalNotKept => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.ModInstall_OriginalNotKeptFormat,
+            problem.ModName,
+            problem.Version,
+            problem.Folder,
+            problem.InnerException?.Message),
+
         _ => string.Format(CultureInfo.CurrentCulture, Strings.ModInstall_UnexpectedFormat, problem.Reason),
     };
 

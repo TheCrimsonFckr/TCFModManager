@@ -260,7 +260,7 @@ public sealed class ModInstallService(
             // Where each source file is going, worked out before anything is removed: the config
             // files the archive is about to place over have to be known while they are still there.
             //
-            var placements = sourceFiles
+            var allPlacements = sourceFiles
                 .Select(file =>
                 {
                     var installRelative = ArchiveLayout.RemapForServerRoot(Path.GetRelativePath(contentRoot, file), serverRoot);
@@ -269,10 +269,52 @@ public sealed class ModInstallService(
                 })
                 .ToList();
 
+            //
+            // Every destination is judged before anything in the install is removed or placed (D3, D7).
+            // SPT's, BepInEx's and the game's own files - and this app's own folder - are skipped and
+            // never recorded, so nothing can later remove them. A destination reached through a link
+            // would write into whatever the link points at, so the whole install is refused instead.
+            //
+            var skippedProtected = new List<string>();
+            var placements = new List<(string File, string Relative, string Forward)>(allPlacements.Count);
+
+            foreach (var placement in allPlacements)
+            {
+                switch (InstallPathGuard.CheckRecordedPath(installPath, placement.Forward, out _))
+                {
+                    case null:
+                        placements.Add(placement);
+                        break;
+
+                    case PathRefusal.Protected or PathRefusal.AppFolder:
+                        skippedProtected.Add(placement.Forward);
+                        AppLog.Warn("Install", $"{target.Name} {version.Version}: kept the install's own {placement.Forward}; the archive's copy was not placed");
+                        break;
+
+                    case PathRefusal.Link:
+                        throw new ModInstallException(ModInstallFailure.InstallThroughLink)
+                        {
+                            ModName = target.Name,
+                            Version = version.Version,
+                            Folder = placement.Forward,
+                        };
+
+                    default:
+                        throw new ModInstallException(ModInstallFailure.UnsafeArchiveEntry) { ArchiveEntry = placement.Forward };
+                }
+            }
+
             var timestamp = DateTimeOffset.UtcNow;
 
             var pending = _configs.Prepare(
                 installPath, existing, placements.Select(p => p.Forward), target.Name, timestamp);
+
+            //
+            // Files this install will place over that no record owns - a hand install's, or a game file
+            // outside the protected set - are copied into Data before anything is touched (D22). One
+            // that can't be copied stops the install here, while the install is still as it was.
+            //
+            var overwrote = KeepOriginals(installPath, target, version, existing, manifest, placements, pending, timestamp);
 
             if (existing is not null)
             {
@@ -296,13 +338,13 @@ public sealed class ModInstallService(
             }
 
             status?.Report(new ModInstallProgress(
-                ModInstallStage.Installing, Total: sourceFiles.Length));
-            var placedFiles = new List<string>(sourceFiles.Length);
+                ModInstallStage.Installing, Total: placements.Count));
+            var placedFiles = new List<string>(placements.Count);
             var reportClock = Stopwatch.StartNew();
 
             try
             {
-                for (var i = 0; i < sourceFiles.Length; i++)
+                for (var i = 0; i < placements.Count; i++)
                 {
                     var (file, installRelative, installRelativeForward) = placements[i];
 
@@ -331,7 +373,7 @@ public sealed class ModInstallService(
                     if (reportClock.Elapsed >= ProgressInterval)
                     {
                         status?.Report(new ModInstallProgress(
-                            ModInstallStage.Installing, Done: i + 1, Total: sourceFiles.Length));
+                            ModInstallStage.Installing, Done: i + 1, Total: placements.Count));
                         reportClock.Restart();
                     }
                 }
@@ -340,25 +382,29 @@ public sealed class ModInstallService(
             {
                 // What was placed before the failure is recorded anyway, so those files stay
                 // app-managed: a retry overwrites them and a removal cleans them up. Without this an
-                // interrupted update leaves the old version deleted and the new one untracked.
-                SaveRecord(target, version, placedFiles, incomplete: true);
+                // interrupted update leaves the old version deleted and the new one untracked. The
+                // originals kept so far are recorded too - they are owed back whatever happens next.
+                SaveRecord(target, version, placedFiles, incomplete: true, installPath, overwrote,
+                    Fingerprint(installPath, placedFiles));
 
                 AppLog.Error("Install",
-                    $"{target.Name} {version.Version} incomplete after {placedFiles.Count}/{sourceFiles.Length} file(s)", ex);
+                    $"{target.Name} {version.Version} incomplete after {placedFiles.Count}/{placements.Count} file(s)", ex);
 
                 throw new ModInstallException(ModInstallFailure.PartlyInstalled, ex)
                 {
                     ModName = target.Name,
                     Version = version.Version,
                     PlacedFiles = placedFiles.Count,
-                    TotalFiles = sourceFiles.Length,
+                    TotalFiles = placements.Count,
                 };
             }
 
-            var record = SaveRecord(target, version, placedFiles, incomplete: false);
+            var record = SaveRecord(target, version, placedFiles, incomplete: false, installPath, overwrote, fingerprints: []);
 
             AppLog.Info("Install",
-                $"{target.Name} {version.Version} placed {placedFiles.Count} file(s) in folders [{string.Join(", ", record.Folders)}]");
+                $"{target.Name} {version.Version} placed {placedFiles.Count} file(s) in folders [{string.Join(", ", record.Folders)}]"
+                + (skippedProtected.Count > 0 ? $"; kept {skippedProtected.Count} of the install's own file(s)" : "")
+                + (overwrote.Count > 0 ? $"; kept {overwrote.Count} original(s) it replaced" : ""));
 
             var report = _configs.Settle(pending, installPath, target, existing, record, timestamp);
 
@@ -370,8 +416,17 @@ public sealed class ModInstallService(
                     string.Join(", ", report.Files.Select(f => $"{f.Path} {f.Kind}{(f.Reason is { } r ? $" ({r})" : "")}")));
             }
 
+            //
+            // Fingerprinted last, after Settle has merged or restored configs, so what is recorded is
+            // what is actually on disk now (D21).
+            //
+            var fingerprintClock = Stopwatch.StartNew();
+            record = SaveRecord(target, version, placedFiles, incomplete: false, installPath, overwrote,
+                Fingerprint(installPath, placedFiles));
+            AppLog.Debug("Install", $"fingerprinted {record.Fingerprints.Count} file(s) in {fingerprintClock.ElapsedMilliseconds}ms");
+
             status?.Report(new ModInstallProgress(ModInstallStage.Done));
-            return new ModInstallResult(record, report.Files.Count > 0 ? report : null);
+            return new ModInstallResult(record, report.Files.Count > 0 ? report : null, skippedProtected);
         }
         catch (OperationCanceledException)
         {
@@ -392,7 +447,14 @@ public sealed class ModInstallService(
     // Writes the record for what an install placed, replacing any previous record for the same mod.
     // The manifest is reloaded rather than reusing an earlier copy, since UninstallAsync may have
     // saved a removal of the old record in between.
-    private InstalledModRecord SaveRecord(InstallTarget target, ModVersion version, List<string> placedFiles, bool incomplete)
+    private InstalledModRecord SaveRecord(
+        InstallTarget target,
+        ModVersion version,
+        List<string> placedFiles,
+        bool incomplete,
+        string installPath,
+        List<OverwrittenFile> overwrote,
+        List<FileFingerprint> fingerprints)
     {
         var record = new InstalledModRecord
         {
@@ -406,6 +468,9 @@ public sealed class ModInstallService(
             Files = placedFiles,
             Folders = InstalledModFolders.FromPlacedFiles(placedFiles),
             Incomplete = incomplete,
+            Fingerprints = fingerprints,
+            InstallPath = InstallStamp.Of(installPath),
+            Overwrote = overwrote,
         };
 
         var current = manifestService.Load();
@@ -415,6 +480,104 @@ public sealed class ModInstallService(
 
         return record;
     }
+
+    //
+    // The size and SHA-256 of every recorded file still on disk. A file that can't be read gets no
+    // fingerprint, and removal falls back to the path checks for it - never a guessed one.
+    //
+    private static List<FileFingerprint> Fingerprint(string installPath, IEnumerable<string> recorded)
+    {
+        var prints = new List<FileFingerprint>();
+
+        foreach (var path in recorded)
+        {
+            if (InstallPathGuard.CheckRecordedPath(installPath, path, out var full) is null
+                && FileFingerprint.Compute(full, path) is { } print)
+            {
+                prints.Add(print);
+            }
+        }
+
+        return prints;
+    }
+
+    //
+    // Copies every file this install is about to place over, that no record owns, into
+    // Data\overwritten\<mod>\<time>\<path> and returns them, together with the originals an earlier
+    // version of this mod already kept (still owed back). Skipped: files another record lists (that's
+    // shared-file ownership, D9/D10), files the earlier version of this mod placed (its own old copy,
+    // removed by the update), configs Prepare already copied aside, files that keep their version on
+    // disk, and anything already kept by an earlier install of this mod.
+    //
+    private static List<OverwrittenFile> KeepOriginals(
+        string installPath,
+        InstallTarget target,
+        ModVersion version,
+        InstalledModRecord? existing,
+        ModInstallManifest manifest,
+        IReadOnlyList<(string File, string Relative, string Forward)> placements,
+        PendingConfigs pending,
+        DateTimeOffset timestamp)
+    {
+        var kept = new List<OverwrittenFile>(existing?.Overwrote ?? []);
+        var alreadyKept = kept.Select(k => k.Path).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var owned = manifest.Mods
+            .SelectMany(m => m.Files)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var ownFolders = InstalledModFolders.FromPlacedFiles(placements.Select(p => p.Forward))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var key = target.IsAddon ? $"{target.Id}-addon" : target.Id.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        var folder = Path.Combine(OverwrittenDirectoryName, key, $"{timestamp.ToLocalTime():yyyyMMdd-HHmmss}");
+
+        foreach (var (_, relative, forward) in placements)
+        {
+            if (owned.Contains(forward) || alreadyKept.Contains(forward)) continue;
+            if (pending.Archived.ContainsKey(forward)) continue;
+            if (pending.Untouchable.Contains(forward) || pending.Preserved.Contains(forward)) continue;
+
+            var destination = Path.Combine(installPath, relative);
+            if (!File.Exists(destination)) continue;
+
+            var backupRelative = Path.Combine(folder, relative);
+            var backup = Path.Combine(AppPaths.DataDirectory, backupRelative);
+
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(backup)!);
+                File.Copy(destination, backup, overwrite: false);
+
+                var print = FileFingerprint.Compute(backup, forward)
+                    ?? throw new IOException($"couldn't read back {backup}");
+
+                var inOwnFolder = InstalledModFolders.FromPlacedFiles([forward]) is [var name] && ownFolders.Contains(name);
+
+                kept.Add(new OverwrittenFile(forward, print.Size, print.Sha256, backupRelative.Replace('\\', '/'), inOwnFolder));
+                alreadyKept.Add(forward);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                AppLog.Error("Install", $"{target.Name} {version.Version}: couldn't keep the original {forward} before replacing it", ex);
+
+                throw new ModInstallException(ModInstallFailure.OriginalNotKept, ex)
+                {
+                    ModName = target.Name,
+                    Version = version.Version,
+                    Folder = forward,
+                };
+            }
+        }
+
+        if (kept.Count > (existing?.Overwrote.Count ?? 0))
+            AppLog.Info("Install", $"{target.Name} {version.Version}: kept {kept.Count - (existing?.Overwrote.Count ?? 0)} original file(s) in {folder}");
+
+        return kept;
+    }
+
+    // Under the Data folder: where the originals an install replaced are kept (D22).
+    public const string OverwrittenDirectoryName = "overwritten";
 
     // Removes every file InstalledModRecord.Files lists, then deletes any directory left
     // empty (working bottom-up), then drops the record from the manifest. Files that can't be
@@ -780,7 +943,14 @@ public sealed class ModInstallService(
 // Configs is null when the mod has none - most client-only mods, and anything whose settings live in
 // BepInEx\config rather than inside its own folder.
 //
-public sealed record ModInstallResult(InstalledModRecord Record, ConfigUpdateReport? Configs);
+//
+// SkippedProtected lists the archive's files that were not placed because the install's own copy is
+// SPT's, BepInEx's or the game's (D3-D5).
+//
+public sealed record ModInstallResult(
+    InstalledModRecord Record,
+    ConfigUpdateReport? Configs,
+    IReadOnlyList<string>? SkippedProtected = null);
 
 // Result of ModInstallService.UninstallAsync. FailedFiles lists files that couldn't be
 // deleted; the mod is still removed from the manifest regardless. ConfigsKept/ConfigsFolder

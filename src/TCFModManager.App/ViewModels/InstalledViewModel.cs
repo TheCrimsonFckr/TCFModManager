@@ -957,7 +957,7 @@ public partial class InstalledViewModel : LocalizedViewModel
 
             if (answer.Contains(d))
             {
-                AppServices.InstallManifest.ConfirmDownload(d);
+                AppServices.InstallManifest.ConfirmDownload(d, AppServices.SptEnvironment.InstallPath);
                 AppServices.DownloadLedger.SetState(d.ModId, d.IsAddon, d.Version, DownloadState.Confirmed);
             }
             else
@@ -983,7 +983,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         if (mod?.PendingDownload is not { Match.Kind: DownloadMatchKind.Installed } pending) return;
 
         var d = pending.Download;
-        AppServices.InstallManifest.ConfirmDownload(d);
+        AppServices.InstallManifest.ConfirmDownload(d, AppServices.SptEnvironment.InstallPath);
         AppServices.DownloadLedger.SetState(d.ModId, d.IsAddon, d.Version, DownloadState.Confirmed);
 
         AppLog.Info("Monitor", $"confirmed {d.Name} {d.Version} from its card");

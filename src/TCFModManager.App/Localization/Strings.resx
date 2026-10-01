@@ -1400,6 +1400,14 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>{0} {1} wasn't installed: its archive contains a link ("{2}"). Archives with links are refused, so nothing outside the mod can be touched.</value>
     <comment>{0} is a mod name, {1} its version, {2} a path inside the archive. "Link" means a junction or symbolic link.</comment>
   </data>
+  <data name="ModInstall_InstallThroughLinkFormat" xml:space="preserve">
+    <value>{0} {1} wasn't installed: {2} is inside a folder that is a link to somewhere else, and installing would change what it points at. Nothing was changed.</value>
+    <comment>{0} is a mod name, {1} its version, {2} a path inside the SPT folder. "Link" means a junction or symbolic link.</comment>
+  </data>
+  <data name="ModInstall_OriginalNotKeptFormat" xml:space="preserve">
+    <value>{0} {1} wasn't installed: it would replace {2}, and a copy of that file couldn't be kept first ({3}). Nothing was changed.</value>
+    <comment>{0} is a mod name, {1} its version, {2} a path inside the SPT folder, {3} the operating system's reason.</comment>
+  </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>Didn't remove {0}: it isn't inside your SPT folder. Nothing was deleted.</value>
     <comment>{0} is a folder or file path.</comment>

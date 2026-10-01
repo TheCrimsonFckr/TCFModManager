@@ -68,6 +68,16 @@ public enum ModInstallFailure
     // is removed or placed. Carries ModName, Version and ArchiveEntry (the link, relative to the
     // archive's content).
     ArchiveContainsLink,
+
+    // A file the archive places would be written through a junction or symbolic link in the install,
+    // which would change whatever the link points at. Refused before anything is removed or placed.
+    // Carries ModName, Version and Folder (the install-relative path that passes through the link).
+    InstallThroughLink,
+
+    // A file the archive places would replace one no record owns, and that file couldn't be copied
+    // aside first. Refused before anything is removed or placed. Carries ModName, Version, Folder
+    // (the install-relative path) and the underlying exception as InnerException.
+    OriginalNotKept,
 }
 
 //

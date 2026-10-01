@@ -2256,6 +2256,12 @@ Annuler  -  ne rien supprimer</value>
   <data name="ModInstall_ArchiveContainsLinkFormat" xml:space="preserve">
     <value>{0} {1} n'a pas été installé : son archive contient un lien (« {2} »). Les archives contenant des liens sont refusées, afin que rien en dehors du mod ne puisse être modifié.</value>
   </data>
+  <data name="ModInstall_InstallThroughLinkFormat" xml:space="preserve">
+    <value>{0} {1} n'a pas été installé : {2} se trouve dans un dossier qui est un lien vers un autre emplacement, et l'installation modifierait sa cible. Rien n'a été modifié.</value>
+  </data>
+  <data name="ModInstall_OriginalNotKeptFormat" xml:space="preserve">
+    <value>{0} {1} n'a pas été installé : il remplacerait {2}, et une copie de ce fichier n'a pas pu être conservée au préalable ({3}). Rien n'a été modifié.</value>
+  </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>{0} n'a pas été supprimé : il ne se trouve pas dans votre dossier SPT. Rien n'a été effacé.</value>
   </data>

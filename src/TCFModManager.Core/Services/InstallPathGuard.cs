@@ -1,6 +1,16 @@
 namespace TCFModManager.Core.Services;
 
 //
+// The form an install path is stamped on a record in (D17): full, without a trailing separator, so the
+// same folder always compares equal however it was typed.
+//
+public static class InstallStamp
+{
+    public static string Of(string installPath) =>
+        Path.TrimEndingDirectorySeparator(Path.GetFullPath(installPath));
+}
+
+//
 // Why a path was refused before anything was deleted or moved.
 //
 public enum PathRefusal

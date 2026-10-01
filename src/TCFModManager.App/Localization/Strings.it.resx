@@ -2256,6 +2256,12 @@ Annulla  -  non rimuove nulla</value>
   <data name="ModInstall_ArchiveContainsLinkFormat" xml:space="preserve">
     <value>{0} {1} non è stato installato: il suo archivio contiene un collegamento ("{2}"). Gli archivi con collegamenti vengono rifiutati, così niente al di fuori della mod può essere toccato.</value>
   </data>
+  <data name="ModInstall_InstallThroughLinkFormat" xml:space="preserve">
+    <value>{0} {1} non è stato installato: {2} si trova in una cartella che è un collegamento a un altro percorso, e l'installazione ne modificherebbe la destinazione. Non è stato modificato nulla.</value>
+  </data>
+  <data name="ModInstall_OriginalNotKeptFormat" xml:space="preserve">
+    <value>{0} {1} non è stato installato: sostituirebbe {2}, e prima non è stato possibile conservarne una copia ({3}). Non è stato modificato nulla.</value>
+  </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>{0} non è stato rimosso: non si trova nella tua cartella di SPT. Non è stato eliminato nulla.</value>
   </data>
