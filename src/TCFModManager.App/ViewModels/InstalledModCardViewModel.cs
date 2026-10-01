@@ -97,8 +97,8 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         }
     }
 
-    // The latest version published on sp-mod.com for whatever mod matched this one. Null when
-    // the catalog hasn't loaded yet or nothing matched.
+    // The newest version published on sp-mod.com that runs on the installed SPT, else the newest
+    // overall when none does. Null when the catalog hasn't loaded yet or nothing matched.
     public string? LatestPublishedVersion { get; init; }
 
     // The version an update would install - the newest release that runs on the installed SPT,
@@ -1229,9 +1229,6 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             .OrderBy(d => d)
             .FirstOrDefault();
 
-        var latestVersion = match is null ? null : ModCardViewModel.LatestVersion(match);
-        var latestPublished = latestVersion?.Version;
-
         //
         // What an update would install: the newest release that runs on this SPT - the same pick
         // Browse's card, its sort and Update selected all use. Comparing against the newest release
@@ -1239,6 +1236,9 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         // only, and with the newest being 4.1-only the card said nothing at all.
         //
         var updateTarget = match is null ? null : ModCardViewModel.PickDisplayVersion(match, installedSptVersion);
+
+        // The card's "Latest published" is the same pick, so it names a release this SPT can run whenever one exists.
+        var latestPublished = updateTarget?.Version;
 
         // No installed version could be determined at all (no record, and nothing readable off the
         // files themselves) - plenty of mods never expose a usable version this way. Rather than
