@@ -2250,6 +2250,24 @@ Annuler  -  ne rien supprimer</value>
   <data name="ModInstall_UnsafeArchiveEntryFormat" xml:space="preserve">
     <value>L'entrée d'archive « {0} » s'extrairait hors du dossier cible - extraction refusée.</value>
   </data>
+  <data name="ModInstall_ArchiveContainsLinkFormat" xml:space="preserve">
+    <value>{0} {1} n'a pas été installé : son archive contient un lien (« {2} »). Les archives contenant des liens sont refusées, afin que rien en dehors du mod ne puisse être modifié.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
+    <value>{0} n'a pas été supprimé : il ne se trouve pas dans votre dossier SPT. Rien n'a été effacé.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedProtectedFormat" xml:space="preserve">
+    <value>{0} n'a pas été supprimé : il appartient à SPT, à BepInEx ou au jeu. Rien n'a été effacé.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedAppFolderFormat" xml:space="preserve">
+    <value>{0} n'a pas été supprimé : il fait partie de TCF Mod Manager. Rien n'a été effacé.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedNotModFolderFormat" xml:space="preserve">
+    <value>{0} n'a pas été supprimé : ce n'est pas un dossier de mod dans BepInEx\plugins, BepInEx\patchers ou user\mods. Rien n'a été effacé.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedLinkFormat" xml:space="preserve">
+    <value>{0} n'a pas été supprimé : c'est un lien vers un autre dossier, ou il en contient un. Rien n'a été effacé - supprimez-le vous-même dans l'Explorateur de fichiers si c'était voulu.</value>
+  </data>
   <data name="ModList_ReasonApiFailedFormat" xml:space="preserve">
     <value>sp-mod.com n'a pas pu être interrogé à son sujet ({0})</value>
   </data>

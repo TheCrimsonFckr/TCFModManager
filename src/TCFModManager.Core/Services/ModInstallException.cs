@@ -59,6 +59,15 @@ public enum ModInstallFailure
     // A download-only save couldn't create its file in the chosen folder. Carries Folder, and the
     // underlying exception as InnerException.
     DownloadFolderNotWritable,
+
+    // A removal was refused before anything was deleted, because the path failed one of
+    // InstallPathGuard's checks. Carries Folder (the path) and Refusal (which check).
+    RemovalRefused,
+
+    // The extracted archive holds a junction or symbolic link. Refused before anything in the install
+    // is removed or placed. Carries ModName, Version and ArchiveEntry (the link, relative to the
+    // archive's content).
+    ArchiveContainsLink,
 }
 
 //
@@ -93,6 +102,9 @@ public sealed class ModInstallException(ModInstallFailure reason, Exception? inn
 
     public long? ReceivedBytes { get; init; }
 
-    // The download folder a download-only save was refused.
+    // The download folder a download-only save was refused, or the path a removal refused.
     public string? Folder { get; init; }
+
+    // Which of InstallPathGuard's checks refused a removal.
+    public PathRefusal? Refusal { get; init; }
 }

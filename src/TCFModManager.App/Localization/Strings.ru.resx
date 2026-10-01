@@ -2385,6 +2385,24 @@
   <data name="ModInstall_UnsafeArchiveEntryFormat" xml:space="preserve">
     <value>Элемент архива «{0}» распаковался бы за пределы целевой папки - распаковка отменена.</value>
   </data>
+  <data name="ModInstall_ArchiveContainsLinkFormat" xml:space="preserve">
+    <value>{0} {1} не установлен: архив содержит ссылку («{2}»). Архивы со ссылками отклоняются, чтобы ничего за пределами мода не было затронуто.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
+    <value>{0} не удалён: он находится вне вашей папки SPT. Ничего не удалено.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedProtectedFormat" xml:space="preserve">
+    <value>{0} не удалён: он принадлежит SPT, BepInEx или игре. Ничего не удалено.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedAppFolderFormat" xml:space="preserve">
+    <value>{0} не удалён: он является частью TCF Mod Manager. Ничего не удалено.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedNotModFolderFormat" xml:space="preserve">
+    <value>{0} не удалён: это не папка мода в BepInEx\plugins, BepInEx\patchers или user\mods. Ничего не удалено.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedLinkFormat" xml:space="preserve">
+    <value>{0} не удалён: это ссылка на другую папку или он содержит ссылку. Ничего не удалено - удалите его сами в Проводнике, если это было нужно.</value>
+  </data>
   <data name="ModList_ReasonApiFailedFormat" xml:space="preserve">
     <value>не удалось спросить о нём sp-mod.com ({0})</value>
   </data>

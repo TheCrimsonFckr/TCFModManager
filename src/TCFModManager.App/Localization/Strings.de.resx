@@ -2250,6 +2250,24 @@ Abbrechen  -  nichts entfernen</value>
   <data name="ModInstall_UnsafeArchiveEntryFormat" xml:space="preserve">
     <value>Der Archiveintrag "{0}" würde außerhalb des Zielordners entpackt - das wird abgelehnt.</value>
   </data>
+  <data name="ModInstall_ArchiveContainsLinkFormat" xml:space="preserve">
+    <value>{0} {1} wurde nicht installiert: Das Archiv enthält eine Verknüpfung ("{2}"). Archive mit Verknüpfungen werden abgelehnt, damit nichts außerhalb des Mods verändert werden kann.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
+    <value>{0} wurde nicht entfernt: Es liegt nicht in deinem SPT-Ordner. Es wurde nichts gelöscht.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedProtectedFormat" xml:space="preserve">
+    <value>{0} wurde nicht entfernt: Es gehört zu SPT, BepInEx oder dem Spiel. Es wurde nichts gelöscht.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedAppFolderFormat" xml:space="preserve">
+    <value>{0} wurde nicht entfernt: Es gehört zu TCF Mod Manager. Es wurde nichts gelöscht.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedNotModFolderFormat" xml:space="preserve">
+    <value>{0} wurde nicht entfernt: Es ist kein Mod-Ordner in BepInEx\plugins, BepInEx\patchers oder user\mods. Es wurde nichts gelöscht.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedLinkFormat" xml:space="preserve">
+    <value>{0} wurde nicht entfernt: Es ist eine Verknüpfung zu einem anderen Ordner oder enthält eine. Es wurde nichts gelöscht - entferne es selbst im Datei-Explorer, wenn du das wolltest.</value>
+  </data>
   <data name="ModList_ReasonApiFailedFormat" xml:space="preserve">
     <value>sp-mod.com konnte nicht dazu befragt werden ({0})</value>
   </data>

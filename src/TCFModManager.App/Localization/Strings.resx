@@ -1396,6 +1396,30 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Archive entry "{0}" would extract outside the target folder - refusing to extract it.</value>
     <comment>{0} is a path inside the archive.</comment>
   </data>
+  <data name="ModInstall_ArchiveContainsLinkFormat" xml:space="preserve">
+    <value>{0} {1} wasn't installed: its archive contains a link ("{2}"). Archives with links are refused, so nothing outside the mod can be touched.</value>
+    <comment>{0} is a mod name, {1} its version, {2} a path inside the archive. "Link" means a junction or symbolic link.</comment>
+  </data>
+  <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
+    <value>Didn't remove {0}: it isn't inside your SPT folder. Nothing was deleted.</value>
+    <comment>{0} is a folder or file path.</comment>
+  </data>
+  <data name="ModInstall_RemoveRefusedProtectedFormat" xml:space="preserve">
+    <value>Didn't remove {0}: it belongs to SPT, BepInEx or the game. Nothing was deleted.</value>
+    <comment>{0} is a folder or file path.</comment>
+  </data>
+  <data name="ModInstall_RemoveRefusedAppFolderFormat" xml:space="preserve">
+    <value>Didn't remove {0}: it is part of TCF Mod Manager. Nothing was deleted.</value>
+    <comment>{0} is a folder or file path. TCF Mod Manager is the app name, not translated.</comment>
+  </data>
+  <data name="ModInstall_RemoveRefusedNotModFolderFormat" xml:space="preserve">
+    <value>Didn't remove {0}: it isn't a mod folder in BepInEx\plugins, BepInEx\patchers or user\mods. Nothing was deleted.</value>
+    <comment>{0} is a folder or file path. The folder names are literal and not translated.</comment>
+  </data>
+  <data name="ModInstall_RemoveRefusedLinkFormat" xml:space="preserve">
+    <value>Didn't remove {0}: it is a link to another folder, or holds one. Nothing was deleted - remove it yourself in File Explorer if you meant to.</value>
+    <comment>{0} is a folder or file path. "Link" means a junction or symbolic link; File Explorer is the Windows app.</comment>
+  </data>
   <data name="ModInstall_UnexpectedFormat" xml:space="preserve">
     <value>Couldn't finish that: {0}.</value>
     <comment>{0} is the name of the failure, which is not translated.</comment>

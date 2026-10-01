@@ -202,8 +202,13 @@ public static class ModConfigFiles
             {
                 if (ModConfigPaths.Normalise(relative) is not { } clean) continue;
 
-                var folder = Path.Combine(installPath, ToNative($"{prefix}/{clean}"));
-                if (!Directory.Exists(folder)) continue;
+                if (InstallPathGuard.CheckRecordedPath(installPath, $"{prefix}/{clean}", out var folder) is { } refusal)
+                {
+                    AppLog.Warn("Configs", $"not reading {prefix}/{clean} ({refusal})");
+                    continue;
+                }
+
+                if (!Directory.Exists(folder) || InstallPathGuard.ContainsLink(folder)) continue;
 
                 try
                 {
@@ -313,7 +318,13 @@ public static class ModConfigFiles
 
         foreach (var relative in relativeFiles)
         {
-            var source = Path.Combine(installPath, relative.Replace('/', Path.DirectorySeparatorChar));
+            // Moving a file out of the install is as final for the install as deleting it (D13).
+            if (InstallPathGuard.CheckRecordedPath(installPath, relative, out var source) is { } refusal)
+            {
+                AppLog.Warn("Configs", $"left {relative} in place ({refusal})");
+                continue;
+            }
+
             if (!File.Exists(source)) continue;
 
             var destination = Path.Combine(destinationRoot, relative.Replace('/', Path.DirectorySeparatorChar));

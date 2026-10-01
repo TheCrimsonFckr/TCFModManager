@@ -206,6 +206,23 @@ public sealed class ModInstallService(
             await ExtractArchiveAsync(archivePath, extractDir, status, ct).ConfigureAwait(false);
             AppLog.Debug("Install", $"extracted in {extractTimer.ElapsedMilliseconds}ms");
 
+            //
+            // Neither extractor is trusted to have refused links (SharpCompress 0.50.4 writes 7z links
+            // as plain files; RAR was never tested), so the tree is checked before anything in the
+            // install is touched (D16).
+            //
+            if (InstallPathGuard.FirstLink(extractDir) is { } link)
+            {
+                AppLog.Warn("Install", $"{target.Name} {version.Version} archive holds a link: {link}");
+
+                throw new ModInstallException(ModInstallFailure.ArchiveContainsLink)
+                {
+                    ModName = target.Name,
+                    Version = version.Version,
+                    ArchiveEntry = link,
+                };
+            }
+
             ct.ThrowIfCancellationRequested();
 
             var contentRoot = ArchiveLayout.FindContentRoot(extractDir);
@@ -434,6 +451,7 @@ public sealed class ModInstallService(
         CancellationToken ct)
     {
         var failed = new List<string>();
+        var refused = new List<string>();
         var deleted = 0;
         var touchedDirectories = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -471,7 +489,18 @@ public sealed class ModInstallService(
             if (keep is not null && keep.Contains(relative)) continue;
             if (preserve.Contains(relative)) continue;
 
-            var fullPath = Path.Combine(installPath, relative.Replace('/', Path.DirectorySeparatorChar));
+            //
+            // A record is only as trustworthy as whatever last wrote it - the Data files page edits
+            // it by hand - so every path is checked against the disk as it is now before anything is
+            // deleted (D13). A refused path is left exactly as it is and reported.
+            //
+            if (InstallPathGuard.CheckRecordedPath(installPath, relative, out var fullPath) is { } refusal)
+            {
+                refused.Add(relative);
+                AppLog.Warn("Remove", $"{record.Name}: left {relative} in place ({refusal})");
+                continue;
+            }
+
             try
             {
                 if (File.Exists(fullPath))
@@ -480,8 +509,13 @@ public sealed class ModInstallService(
                     deleted++;
                 }
 
-                for (var dir = Path.GetDirectoryName(fullPath); IsUnderInstallPath(dir, installPath); dir = Path.GetDirectoryName(dir))
-                    touchedDirectories.Add(dir!);
+                // Only a mod's own folder and what's below it are ever tidied away (D14).
+                for (var dir = Path.GetDirectoryName(fullPath);
+                     dir is not null && InstallPathGuard.MayRemoveEmptyFolder(installPath, dir);
+                     dir = Path.GetDirectoryName(dir))
+                {
+                    touchedDirectories.Add(dir);
+                }
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
@@ -493,8 +527,12 @@ public sealed class ModInstallService(
         {
             try
             {
-                if (Directory.Exists(dir) && !Directory.EnumerateFileSystemEntries(dir).Any())
+                if (Directory.Exists(dir)
+                    && InstallPathGuard.MayRemoveEmptyFolder(installPath, dir)
+                    && !Directory.EnumerateFileSystemEntries(dir).Any())
+                {
                     Directory.Delete(dir);
+                }
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
@@ -506,17 +544,29 @@ public sealed class ModInstallService(
         manifest.Mods.RemoveAll(m => m.ModId == record.ModId && m.IsAddon == record.IsAddon);
         manifestService.Save(manifest);
 
-        return new UninstallResult(deleted, failed, kept.Count, kept.Folder);
+        return new UninstallResult(deleted, failed, kept.Count, kept.Folder, refused);
     }
 
     // Deletes a mod's whole folder (or, for a loose top-level DLL, just that file) - the
     // removal path for a mod this app didn't install itself, since there's no per-file manifest
     // record to work from. Callers should confirm the exact path with the user before calling this.
-    // <paramref name="installPath"/> is the install <paramref name="path"/> lives in, and only
-    // scopes the in-use check - the deletion itself is driven by path alone.
-    public static void RemoveLegacyPath(string path, string? installPath = null)
+    //
+    // Refused, before anything is touched, unless the path is a mod folder directly inside one of
+    // this install's mod containers, isn't SPT's, and is neither a link nor holds one (D15).
+    // Callers check every path with InstallPathGuard.CheckModFolder first, so a refusal here is the
+    // second line, not the first.
+    public static void RemoveLegacyPath(string path, string installPath)
     {
+        if (string.IsNullOrWhiteSpace(installPath))
+            throw new ModInstallException(ModInstallFailure.NoInstallFolder);
+
         EnsureInstallNotInUse(ModInstallAction.Remove, installPath);
+
+        if (InstallPathGuard.CheckModFolder(installPath, path) is { } refusal)
+        {
+            AppLog.Warn("Remove", $"refused to remove {path} ({refusal})");
+            throw new ModInstallException(ModInstallFailure.RemovalRefused) { Folder = path, Refusal = refusal };
+        }
 
         if (Directory.Exists(path)) Directory.Delete(path, recursive: true);
         else if (File.Exists(path)) File.Delete(path);
@@ -722,16 +772,6 @@ public sealed class ModInstallService(
 
         return destination;
     }
-
-    private static bool IsUnderInstallPath(string? dir, string installPath)
-    {
-        if (string.IsNullOrEmpty(dir)) return false;
-
-        var fullDir = Path.GetFullPath(dir).TrimEnd(Path.DirectorySeparatorChar);
-        var fullInstall = Path.GetFullPath(installPath).TrimEnd(Path.DirectorySeparatorChar);
-        return fullDir.Length > fullInstall.Length
-            && fullDir.StartsWith(fullInstall, StringComparison.OrdinalIgnoreCase);
-    }
 }
 
 //
@@ -745,7 +785,13 @@ public sealed record ModInstallResult(InstalledModRecord Record, ConfigUpdateRep
 // Result of ModInstallService.UninstallAsync. FailedFiles lists files that couldn't be
 // deleted; the mod is still removed from the manifest regardless. ConfigsKept/ConfigsFolder
 // describe the mod's own config files when they were moved out rather than deleted.
-public sealed record UninstallResult(int FilesDeleted, List<string> FailedFiles, int ConfigsKept = 0, string? ConfigsFolder = null);
+// RefusedFiles lists recorded paths that failed InstallPathGuard's checks and were left untouched.
+public sealed record UninstallResult(
+    int FilesDeleted,
+    List<string> FailedFiles,
+    int ConfigsKept = 0,
+    string? ConfigsFolder = null,
+    List<string>? RefusedFiles = null);
 
 // What to do with a mod's own config and user-data files when its files are being removed.
 public enum ConfigAction

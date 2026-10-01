@@ -2250,6 +2250,24 @@ Annulla  -  non rimuove nulla</value>
   <data name="ModInstall_UnsafeArchiveEntryFormat" xml:space="preserve">
     <value>La voce "{0}" dell'archivio verrebbe estratta fuori dalla cartella di destinazione - estrazione rifiutata.</value>
   </data>
+  <data name="ModInstall_ArchiveContainsLinkFormat" xml:space="preserve">
+    <value>{0} {1} non è stato installato: il suo archivio contiene un collegamento ("{2}"). Gli archivi con collegamenti vengono rifiutati, così niente al di fuori della mod può essere toccato.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
+    <value>{0} non è stato rimosso: non si trova nella tua cartella di SPT. Non è stato eliminato nulla.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedProtectedFormat" xml:space="preserve">
+    <value>{0} non è stato rimosso: appartiene a SPT, BepInEx o al gioco. Non è stato eliminato nulla.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedAppFolderFormat" xml:space="preserve">
+    <value>{0} non è stato rimosso: fa parte di TCF Mod Manager. Non è stato eliminato nulla.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedNotModFolderFormat" xml:space="preserve">
+    <value>{0} non è stato rimosso: non è una cartella di mod in BepInEx\plugins, BepInEx\patchers o user\mods. Non è stato eliminato nulla.</value>
+  </data>
+  <data name="ModInstall_RemoveRefusedLinkFormat" xml:space="preserve">
+    <value>{0} non è stato rimosso: è un collegamento a un'altra cartella, o ne contiene uno. Non è stato eliminato nulla - rimuovilo tu da Esplora file, se era quello che volevi.</value>
+  </data>
   <data name="ModList_ReasonApiFailedFormat" xml:space="preserve">
     <value>non è stato possibile interrogare sp-mod.com a riguardo ({0})</value>
   </data>

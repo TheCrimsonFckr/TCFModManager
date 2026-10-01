@@ -1073,6 +1073,19 @@ public partial class InstalledViewModel : LocalizedViewModel
                 return;
             }
 
+            //
+            // Every folder is checked before the user is asked and before anything moves, so a mod
+            // with one acceptable folder and one refused one is left whole rather than half removed.
+            //
+            foreach (var path in paths)
+            {
+                if (InstallPathGuard.CheckModFolder(installPath, path!) is { } refusal)
+                {
+                    StatusMessage = ModInstallProblems.RemovalRefused(path, refusal);
+                    return;
+                }
+            }
+
             var configs = ModInstallService.FindLegacyConfigs(installPath, paths!);
             if (ConfirmRemoval(
                     mod.Name,
@@ -1089,7 +1102,7 @@ public partial class InstalledViewModel : LocalizedViewModel
                     ? ModInstallService.KeepLegacyConfigs(installPath, configs, mod.Name)
                     : new KeptConfigs(0, null);
 
-                foreach (var path in paths) ModInstallService.RemoveLegacyPath(path!, AppServices.SptEnvironment.InstallPath);
+                foreach (var path in paths) ModInstallService.RemoveLegacyPath(path!, installPath);
 
                 // A manually-confirmed version record would otherwise dangle, pointing at a mod
                 // that's no longer on disk.

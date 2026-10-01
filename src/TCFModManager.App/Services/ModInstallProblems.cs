@@ -64,8 +64,30 @@ public static class ModInstallProblems
             problem.Folder,
             problem.InnerException?.Message),
 
+        ModInstallFailure.ArchiveContainsLink => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.ModInstall_ArchiveContainsLinkFormat,
+            problem.ModName,
+            problem.Version,
+            problem.ArchiveEntry),
+
+        ModInstallFailure.RemovalRefused => RemovalRefused(problem.Folder, problem.Refusal),
+
         _ => string.Format(CultureInfo.CurrentCulture, Strings.ModInstall_UnexpectedFormat, problem.Reason),
     };
+
+    // Why a path was not removed. Every one of these is said before anything was deleted.
+    public static string RemovalRefused(string? path, PathRefusal? refusal) => string.Format(
+        CultureInfo.CurrentCulture,
+        refusal switch
+        {
+            PathRefusal.Protected => Strings.ModInstall_RemoveRefusedProtectedFormat,
+            PathRefusal.AppFolder => Strings.ModInstall_RemoveRefusedAppFolderFormat,
+            PathRefusal.NotAModFolder => Strings.ModInstall_RemoveRefusedNotModFolderFormat,
+            PathRefusal.Link => Strings.ModInstall_RemoveRefusedLinkFormat,
+            _ => Strings.ModInstall_RemoveRefusedOutsideFormat,
+        },
+        path);
 
     // Bytes as the Downloads page writes them, so one failure doesn't spell sizes its own way.
     private static string Size(long? bytes) =>
