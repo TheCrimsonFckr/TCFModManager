@@ -74,6 +74,8 @@ public sealed class ModListStore
         }
         catch (JsonException)
         {
+            // Kept aside first: the next save would otherwise write an empty list set over every list.
+            SafeFile.PreserveDamaged(_filePath);
             return new ModListData { SchemaVersion = SchemaVersion };
         }
     }
@@ -147,7 +149,7 @@ public sealed class ModListStore
         data.SchemaVersion = SchemaVersion;
 
         Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
-        File.WriteAllText(_filePath, JsonSerializer.Serialize(data, Options));
+        SafeFile.WriteText(_filePath, JsonSerializer.Serialize(data, Options), keepBackups: true);
     }
 
     public ModList? Find(Guid id) => Load().Lists.FirstOrDefault(l => l.Id == id);

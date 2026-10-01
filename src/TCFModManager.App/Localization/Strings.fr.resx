@@ -768,6 +768,9 @@ Quel que soit votre choix, la version actuellement sur le disque est d'abord cop
   <data name="Configs_SavedBackupFormat" xml:space="preserve">
     <value>{0} enregistré. La version précédente est dans {1}.</value>
   </data>
+  <data name="Configs_BackupFailedFormat" xml:space="preserve">
+    <value>{0} n'a pas été enregistré : sa sauvegarde n'a pas pu être faite au préalable ({1}). Rien n'a été modifié - libérez de l'espace ou vérifiez que le dossier Data de l'application est accessible en écriture, puis enregistrez à nouveau.</value>
+  </data>
   <data name="Configs_SavedFormat" xml:space="preserve">
     <value>{0} enregistré.</value>
   </data>

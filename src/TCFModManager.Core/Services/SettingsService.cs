@@ -21,7 +21,8 @@ public sealed class SettingsService
         }
         catch (JsonException)
         {
-            // Corrupt or hand-edited settings file - fall back to defaults.
+            // Corrupt or hand-edited settings file - kept aside, then fall back to defaults.
+            SafeFile.PreserveDamaged(_filePath);
             return new AppSettings();
         }
     }
@@ -29,6 +30,6 @@ public sealed class SettingsService
     public void Save(AppSettings settings)
     {
         var json = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(_filePath, json);
+        SafeFile.WriteText(_filePath, json, keepBackups: true);
     }
 }

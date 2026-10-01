@@ -16,6 +16,10 @@ public enum ModConfigSaveOutcome
     // its own settings.
     Invalid,
 
+    // The file as it stood couldn't be copied aside first, so it was not written (D20). Error carries
+    // the operating system's reason.
+    BackupFailed,
+
     Failed,
 }
 
@@ -107,9 +111,18 @@ public static class ModConfigStore
                     "This file has changed on disk since it was opened here.");
             }
 
-            var backup = Backup(installPath, path, timestamp);
+            //
+            // No copy, no write: the backup is what makes a save undoable, so a save that can't make one
+            // is refused rather than made without it (D20 - reverses the earlier rule that a failed
+            // backup never stopped the save).
+            //
+            if (!TryBackup(installPath, path, timestamp, out var backup, out var backupError))
+            {
+                return new ModConfigSaveResult(ModConfigSaveOutcome.BackupFailed, null, null, backupError);
+            }
 
-            File.WriteAllText(path, text, loaded.HasByteOrderMark ? Utf8WithBom : Utf8NoBom);
+            // Written beside the file and renamed over it, so an interrupted save leaves the old file whole.
+            SafeFile.WriteText(path, text, encoding: loaded.HasByteOrderMark ? Utf8WithBom : Utf8NoBom);
 
             AppLog.Info("Configs", $"saved {Path.GetFileName(path)}{(backup is null ? "" : $" (backup: {backup})")}");
 
@@ -131,12 +144,22 @@ public static class ModConfigStore
     // the install so a whole timestamped folder can be copied back over an SPT install to undo a
     // round of edits. Returns null when there was nothing to copy.
     //
-    // A failure here is not allowed to stop the save: the backup is a convenience, and refusing to
-    // write a config because a spare copy couldn't be made would be the more annoying failure.
+    // Save refuses to write when this fails (D20); the reload path uses it as a courtesy and carries on.
     //
-    public static string? Backup(string installPath, string path, DateTimeOffset timestamp)
+    public static string? Backup(string installPath, string path, DateTimeOffset timestamp) =>
+        TryBackup(installPath, path, timestamp, out var destination, out _) ? destination : null;
+
+    //
+    // True when the file was copied aside, or when there is no file yet and so nothing to keep.
+    // A backup taken in the same second as an earlier one gets its own name rather than replacing it.
+    //
+    public static bool TryBackup(
+        string installPath, string path, DateTimeOffset timestamp, out string? destination, out string? error)
     {
-        if (!File.Exists(path)) return null;
+        destination = null;
+        error = null;
+
+        if (!File.Exists(path)) return true;
 
         try
         {
@@ -144,19 +167,25 @@ public static class ModConfigStore
             // itself lives with the app, so a timestamped folder can still be copied straight back
             // over an install to undo a round of edits.
             var relative = RelativeForBackup(installPath, path);
-            var destination = Path.Combine(BackupDirectory, $"{timestamp.ToLocalTime():yyyyMMdd-HHmmss}", relative);
+            var stamp = $"{timestamp.ToLocalTime():yyyyMMdd-HHmmss}";
+            var target = Path.Combine(BackupDirectory, stamp, relative);
 
-            var directory = Path.GetDirectoryName(destination);
+            for (var n = 2; File.Exists(target); n++)
+                target = Path.Combine(BackupDirectory, $"{stamp}-{n}", relative);
+
+            var directory = Path.GetDirectoryName(target);
             if (!string.IsNullOrEmpty(directory)) Directory.CreateDirectory(directory);
 
-            File.Copy(path, destination, overwrite: true);
+            File.Copy(path, target, overwrite: false);
 
-            return destination;
+            destination = target;
+            return true;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or NotSupportedException or ArgumentException)
         {
             AppLog.Warn("Configs", $"couldn't back up {path}: {ex.Message}");
-            return null;
+            error = ex.Message;
+            return false;
         }
     }
 

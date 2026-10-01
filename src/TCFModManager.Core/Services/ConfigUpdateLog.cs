@@ -36,6 +36,7 @@ public sealed class ConfigUpdateLog(string? filePath = null)
         }
         catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
         {
+            if (ex is JsonException) SafeFile.PreserveDamaged(_filePath);
             return new ConfigUpdateHistory();
         }
     }
@@ -53,7 +54,7 @@ public sealed class ConfigUpdateLog(string? filePath = null)
             if (history.Reports.Count > Keep) history.Reports.RemoveRange(Keep, history.Reports.Count - Keep);
 
             Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
-            File.WriteAllText(_filePath, JsonSerializer.Serialize(history, Options));
+            SafeFile.WriteText(_filePath, JsonSerializer.Serialize(history, Options), keepBackups: true);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {

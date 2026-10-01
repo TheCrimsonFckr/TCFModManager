@@ -780,6 +780,9 @@
   <data name="Configs_SavedBackupFormat" xml:space="preserve">
     <value>Сохранено: {0}. Предыдущая версия лежит в {1}.</value>
   </data>
+  <data name="Configs_BackupFailedFormat" xml:space="preserve">
+    <value>{0} не сохранён: не удалось сначала сделать его резервную копию ({1}). Ничего не изменено - освободите место или проверьте, что в папку Data приложения можно записывать, затем сохраните снова.</value>
+  </data>
   <data name="Configs_SavedFormat" xml:space="preserve">
     <value>Сохранено: {0}.</value>
   </data>

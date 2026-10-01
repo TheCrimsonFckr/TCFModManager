@@ -942,6 +942,7 @@ internal static class Strings
     internal static string Configs_FileReadFailedFormat => LocalizationService.Get("Configs_FileReadFailedFormat");
     internal static string Configs_SavedFormat => LocalizationService.Get("Configs_SavedFormat");
     internal static string Configs_SavedBackupFormat => LocalizationService.Get("Configs_SavedBackupFormat");
+    internal static string Configs_BackupFailedFormat => LocalizationService.Get("Configs_BackupFailedFormat");
     internal static string Configs_ChangedOnDiskFormat => LocalizationService.Get("Configs_ChangedOnDiskFormat");
     internal static string Configs_ChangedOnDiskTitle => LocalizationService.Get("Configs_ChangedOnDiskTitle");
     internal static string Configs_ReloadedFormat => LocalizationService.Get("Configs_ReloadedFormat");

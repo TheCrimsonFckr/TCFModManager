@@ -3359,6 +3359,10 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
     <value>Saved {0}. The previous version is in {1}.</value>
     <comment>{0} is a file name, {1} a folder path.</comment>
   </data>
+  <data name="Configs_BackupFailedFormat" xml:space="preserve">
+    <value>{0} wasn't saved: a backup of it couldn't be made first ({1}). Nothing was changed - free some space or check the app's Data folder can be written to, then save again.</value>
+    <comment>{0} is a config file name, {1} the operating system's reason.</comment>
+  </data>
   <data name="Configs_ChangedOnDiskFormat" xml:space="preserve">
     <value>{0} has changed on disk since you opened it here.
 

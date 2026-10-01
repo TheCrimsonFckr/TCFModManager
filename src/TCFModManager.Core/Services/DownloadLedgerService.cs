@@ -33,6 +33,7 @@ public sealed class DownloadLedgerService
         }
         catch (JsonException)
         {
+            SafeFile.PreserveDamaged(_filePath);
             return new DownloadLedger();
         }
     }
@@ -40,7 +41,7 @@ public sealed class DownloadLedgerService
     public void Save(DownloadLedger ledger)
     {
         var json = JsonSerializer.Serialize(ledger, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(_filePath, json);
+        SafeFile.WriteText(_filePath, json, keepBackups: true);
     }
 
     // Adds a download, replacing any earlier entry for the same mod or addon.

@@ -55,6 +55,27 @@ public sealed class InstalledModRecord
     // app-managed install - keep meaning what they always meant.
     //
     public bool IsAppManaged { get; init; } = true;
+
+    //
+    // The size and SHA-256 of files in Files as they were placed, so a removal only ever takes a file
+    // that is still exactly what was put there (D21). Empty on records written before v1.19.0 and on
+    // manually-confirmed ones; a file with no fingerprint falls back to the path checks alone.
+    // A list rather than a dictionary because a deserialized dictionary would lose its
+    // case-insensitive comparer - look one up with FingerprintFor.
+    //
+    public List<FileFingerprint> Fingerprints { get; init; } = [];
+
+    //
+    // The SPT install this record was made in, as a full path - removal refuses anywhere else (D17).
+    // Null on records written before v1.19.0 until they are stamped.
+    //
+    public string? InstallPath { get; init; }
+
+    // Files this install placed over that no record owned, with where the originals were kept (D22).
+    public List<OverwrittenFile> Overwrote { get; init; } = [];
+
+    public FileFingerprint? FingerprintFor(string path) =>
+        Fingerprints.FirstOrDefault(f => string.Equals(f.Path, path, StringComparison.OrdinalIgnoreCase));
 }
 
 // The full set of installed-mod records for one SPT install.

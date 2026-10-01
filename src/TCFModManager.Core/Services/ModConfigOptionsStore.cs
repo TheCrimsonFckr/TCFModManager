@@ -74,6 +74,7 @@ public sealed class ModConfigOptionsStore(string? filePath = null)
             // A hand-edited file that no longer parses means every mod is back on the default, which
             // is what it was before anybody set anything.
             AppLog.Warn("Configs", $"couldn't read {_filePath}: {ex.Message}");
+            if (ex is JsonException) SafeFile.PreserveDamaged(_filePath);
             return new Dictionary<string, ModConfigOptions>(StringComparer.OrdinalIgnoreCase);
         }
     }
@@ -157,7 +158,7 @@ public sealed class ModConfigOptionsStore(string? filePath = null)
         try
         {
             Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
-            File.WriteAllText(_filePath, JsonSerializer.Serialize(options, Options));
+            SafeFile.WriteText(_filePath, JsonSerializer.Serialize(options, Options), keepBackups: true);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {

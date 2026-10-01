@@ -136,6 +136,7 @@ public sealed class UpdateNotificationStore
         }
         catch (Exception ex) when (ex is JsonException or IOException)
         {
+            if (ex is JsonException) SafeFile.PreserveDamaged(_filePath);
             return new UpdateNotificationState();
         }
     }
@@ -143,7 +144,7 @@ public sealed class UpdateNotificationStore
     public void Save(UpdateNotificationState state)
     {
         var json = JsonSerializer.Serialize(state, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(_filePath, json);
+        SafeFile.WriteText(_filePath, json, keepBackups: true);
     }
 
     //

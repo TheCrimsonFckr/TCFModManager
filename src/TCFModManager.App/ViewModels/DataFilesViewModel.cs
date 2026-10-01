@@ -133,7 +133,7 @@ public partial class DataFilesViewModel : LocalizedViewModel
         try
         {
             if (File.Exists(path)) File.Copy(path, path + ".bak", overwrite: true);
-            File.WriteAllText(path, Text);
+            SafeFile.WriteText(path, Text, keepBackups: true);
             _savedText = Text;
             HasError = false;
             StatusMessage = LocalizationService.Text(

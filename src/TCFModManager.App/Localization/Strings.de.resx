@@ -768,6 +768,9 @@ Was du auch wählst: Die Version, die gerade auf der Festplatte liegt, wird zuer
   <data name="Configs_SavedBackupFormat" xml:space="preserve">
     <value>{0} gespeichert. Die vorherige Version liegt in {1}.</value>
   </data>
+  <data name="Configs_BackupFailedFormat" xml:space="preserve">
+    <value>{0} wurde nicht gespeichert: Vorher konnte keine Sicherung davon angelegt werden ({1}). Es wurde nichts geändert - mach etwas Speicher frei oder prüfe, ob der Data-Ordner der App beschreibbar ist, und speichere dann erneut.</value>
+  </data>
   <data name="Configs_SavedFormat" xml:space="preserve">
     <value>{0} gespeichert.</value>
   </data>

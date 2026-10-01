@@ -28,6 +28,8 @@ public sealed class ModInstallManifestService
         }
         catch (JsonException)
         {
+            // Kept aside before the next save writes an empty manifest over it (D18).
+            SafeFile.PreserveDamaged(_filePath);
             return new ModInstallManifest();
         }
     }
@@ -35,7 +37,7 @@ public sealed class ModInstallManifestService
     public void Save(ModInstallManifest manifest)
     {
         var json = JsonSerializer.Serialize(manifest, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(_filePath, json);
+        SafeFile.WriteText(_filePath, json, keepBackups: true);
     }
 
     //
@@ -66,6 +68,9 @@ public sealed class ModInstallManifestService
             Folders = existing is { Folders.Count: > 0 } ? existing.Folders : folders.ToList(),
             Incomplete = existing?.Incomplete ?? false,
             IsAppManaged = existing?.IsAppManaged ?? false,
+            Fingerprints = existing?.Fingerprints ?? [],
+            InstallPath = existing?.InstallPath,
+            Overwrote = existing?.Overwrote ?? [],
         };
 
         manifest.Mods.RemoveAll(m => m.ModId == modId && m.IsAddon == isAddon);
@@ -113,6 +118,12 @@ public sealed class ModInstallManifestService
                 : InstalledModFolders.FromPlacedFiles(files),
             Incomplete = false,
             IsAppManaged = true,
+
+            // Fingerprints of the new list are taken from disk at confirm time in stage 3; until then
+            // none, so this record falls back to the path checks. The originals an earlier install
+            // replaced are still in Data and still owed back.
+            InstallPath = existing.InstallPath,
+            Overwrote = existing.Overwrote,
         };
 
         manifest.Mods.RemoveAll(m => m.ModId == download.ModId && m.IsAddon == download.IsAddon);

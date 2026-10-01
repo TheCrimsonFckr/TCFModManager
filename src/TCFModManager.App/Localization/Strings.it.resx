@@ -768,6 +768,9 @@ Qualunque cosa scegli, la versione ora sul disco viene prima copiata in {1}.</va
   <data name="Configs_SavedBackupFormat" xml:space="preserve">
     <value>{0} salvato. La versione precedente si trova in {1}.</value>
   </data>
+  <data name="Configs_BackupFailedFormat" xml:space="preserve">
+    <value>{0} non è stato salvato: prima non è stato possibile farne un backup ({1}). Non è stato modificato nulla - libera un po' di spazio o controlla che la cartella Data dell'app sia scrivibile, poi salva di nuovo.</value>
+  </data>
   <data name="Configs_SavedFormat" xml:space="preserve">
     <value>{0} salvato.</value>
   </data>

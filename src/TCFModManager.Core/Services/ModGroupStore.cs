@@ -24,6 +24,7 @@ public sealed class ModGroupStore
         }
         catch (JsonException)
         {
+            SafeFile.PreserveDamaged(_filePath);
             return new ModGroupData();
         }
     }
@@ -31,7 +32,7 @@ public sealed class ModGroupStore
     public void Save(ModGroupData data)
     {
         var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(_filePath, json);
+        SafeFile.WriteText(_filePath, json, keepBackups: true);
     }
 
     // The key an installed mod is tracked under - InstalledModCardViewModel.Name, lowercased so
