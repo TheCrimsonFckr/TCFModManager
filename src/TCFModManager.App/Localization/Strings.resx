@@ -110,7 +110,7 @@
   </data>
   <data name="Common_PinnedToolTip" xml:space="preserve">
     <value>Pinned - no mod list you apply will set this mod aside</value>
-    <comment>On the pin icon. Four copies of this sentence across Browse and Installed's three views.</comment>
+    <comment>On the pin icon. Five copies: Browse, Installed's three views, and a Mod lists entry.</comment>
   </data>
   <data name="Common_DownloadsFormat" xml:space="preserve">
     <value>{0:N0} downloads</value>
@@ -568,9 +568,6 @@ A mod list records which mods to install and enable. Applying one downloads what
   </data>
   <data name="ModLists_NoMatches" xml:space="preserve">
     <value>Nothing on this list matches. Everything is still here - widen the search or the scope filter to see it.</value>
-  </data>
-  <data name="ModLists_EntryPinnedToolTip" xml:space="preserve">
-    <value>Pinned on this install - no list you apply will set it aside</value>
   </data>
   <data name="ModLists_ScopeToolTip" xml:space="preserve">
     <value>Which machines this entry is for - the server, playing clients, a Fika headless client, or any combination of them. Capture works this out from where the mod's files live; change it for the exceptions, like a server mod nobody playing needs to install, or a HUD mod a headless client has no use for.</value>

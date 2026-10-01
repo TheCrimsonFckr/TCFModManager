@@ -155,7 +155,6 @@ internal static class Strings
     internal static string ModLists_EntrySortToolTip => LocalizationService.Get("ModLists_EntrySortToolTip");
     internal static string ModLists_NoEntries => LocalizationService.Get("ModLists_NoEntries");
     internal static string ModLists_NoMatches => LocalizationService.Get("ModLists_NoMatches");
-    internal static string ModLists_EntryPinnedToolTip => LocalizationService.Get("ModLists_EntryPinnedToolTip");
     internal static string ModLists_ScopeToolTip => LocalizationService.Get("ModLists_ScopeToolTip");
     internal static string ModLists_RemoveEntryToolTip => LocalizationService.Get("ModLists_RemoveEntryToolTip");
     internal static string ModLists_PinToolTip => LocalizationService.Get("ModLists_PinToolTip");

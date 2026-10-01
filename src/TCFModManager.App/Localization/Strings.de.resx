@@ -2627,9 +2627,6 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="ModLists_EntryNotOnForge" xml:space="preserve">
     <value>nicht auf sp-mod.com - von Hand installiert</value>
   </data>
-  <data name="ModLists_EntryPinnedToolTip" xml:space="preserve">
-    <value>Auf dieser Installation angeheftet - keine Liste, die du anwendest, legt ihn beiseite</value>
-  </data>
   <data name="ModLists_EntrySearchPlaceholder" xml:space="preserve">
     <value>Diese Liste durchsuchen...</value>
   </data>

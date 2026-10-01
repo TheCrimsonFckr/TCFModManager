@@ -777,7 +777,7 @@
                                                         Margin="0,1,6,0"
                                                         VerticalAlignment="Top"
                                                         Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                                                        ToolTip="{loc:Str ModLists_EntryPinnedToolTip}"
+                                                        ToolTip="{loc:Str Common_PinnedToolTip}"
                                                         Visibility="{Binding IsPinnedHere, Converter={StaticResource BoolToVis}}" />
 
                                                     <TextBlock

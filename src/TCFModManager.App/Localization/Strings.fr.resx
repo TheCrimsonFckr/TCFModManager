@@ -2627,9 +2627,6 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   <data name="ModLists_EntryNotOnForge" xml:space="preserve">
     <value>absent de sp-mod.com - installé à la main</value>
   </data>
-  <data name="ModLists_EntryPinnedToolTip" xml:space="preserve">
-    <value>Épinglé sur cette installation - aucune liste que vous appliquez ne le mettra de côté</value>
-  </data>
   <data name="ModLists_EntrySearchPlaceholder" xml:space="preserve">
     <value>Rechercher dans cette liste...</value>
   </data>

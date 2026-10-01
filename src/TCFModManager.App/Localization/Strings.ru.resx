@@ -2792,9 +2792,6 @@
   <data name="ModLists_EntryNotOnForge" xml:space="preserve">
     <value>нет на sp-mod.com - установлен вручную</value>
   </data>
-  <data name="ModLists_EntryPinnedToolTip" xml:space="preserve">
-    <value>Закреплён в этой установке - ни один применённый список не отложит этот мод</value>
-  </data>
   <data name="ModLists_EntrySearchPlaceholder" xml:space="preserve">
     <value>Поиск по этому списку...</value>
   </data>
