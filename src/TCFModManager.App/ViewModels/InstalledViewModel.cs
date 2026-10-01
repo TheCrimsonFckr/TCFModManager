@@ -81,7 +81,11 @@ public partial class InstalledViewModel : LocalizedViewModel
         new(nameof(Strings.Filter_UpdateNeeded), UpdateFilter.NeedsUpdate),
         new(nameof(Strings.Filter_UpdateUpToDate), UpdateFilter.UpToDate),
         new(nameof(Strings.Filter_UpdateNotFound), UpdateFilter.NotFound),
+        new(nameof(Strings.Filter_UpdateRecentlyInstalled), UpdateFilter.RecentlyInstalled),
     ];
+
+    // How far back the Recently installed filter looks.
+    private const int RecentDays = 7;
 
     [ObservableProperty]
     private UpdateFilterItem _selectedUpdateFilter;
@@ -115,7 +119,6 @@ public partial class InstalledViewModel : LocalizedViewModel
         new(nameof(Strings.Sort_AuthorDescending), ModSortOption.AuthorDescending),
         new(nameof(Strings.Sort_GroupAscending), ModSortOption.GroupAscending),
         new(nameof(Strings.Sort_GroupDescending), ModSortOption.GroupDescending),
-        new(nameof(Strings.Sort_RecentlyInstalled), ModSortOption.RecentlyInstalled),
     ];
 
     [ObservableProperty]
@@ -304,10 +307,14 @@ public partial class InstalledViewModel : LocalizedViewModel
     private bool _categoryDefaultApplied;
     private bool _groupDefaultApplied;
 
+    // A default saved before Recently installed moved from Sort by to this dropdown carries it as
+    // Sort = "RecentlyInstalled"; with no update status of its own saved, that becomes this filter.
     private UpdateFilterItem DefaultUpdateFilter() =>
-        SavedFilterDefaults.Parse<UpdateFilter>(_defaults?.UpdateStatus) is { } value
+        SavedFilterDefaults.Parse<UpdateFilter>(_defaults?.UpdateStatus) is { } value and not UpdateFilter.All
             ? UpdateFilterOptions.FirstOrDefault(o => o.Value == value) ?? UpdateFilterOptions[0]
-            : UpdateFilterOptions[0];
+            : _defaults?.Sort == nameof(UpdateFilter.RecentlyInstalled)
+                ? UpdateFilterOptions.First(o => o.Value == UpdateFilter.RecentlyInstalled)
+                : UpdateFilterOptions[0];
 
     private EnabledFilterItem DefaultEnabledFilter() =>
         SavedFilterDefaults.Parse<EnabledFilter>(_defaults?.Enabled) is { } value
@@ -1980,12 +1987,15 @@ public partial class InstalledViewModel : LocalizedViewModel
         // author instead of name - e.g. "@Acidphantasm".
         var authorQuery = query.StartsWith('@') ? query[1..].Trim() : null;
 
+        var recentSince = DateTimeOffset.Now.AddDays(-RecentDays);
+
         var matched = _all
             .Where(m => SelectedUpdateFilter.Value switch
             {
                 UpdateFilter.NeedsUpdate => m.UpdateAvailable == true,
                 UpdateFilter.UpToDate => m.UpdateAvailable == false,
                 UpdateFilter.NotFound => m.MatchedModName is null,
+                UpdateFilter.RecentlyInstalled => m.InstalledAt is { } at && at >= recentSince,
                 _ => true, // All - no restriction
             })
             .Where(m => SelectedEnabledFilter.Value switch
@@ -2008,7 +2018,12 @@ public partial class InstalledViewModel : LocalizedViewModel
             .Where(m => !IsOn(ModAttributeFilter.HasAddons) || m.HasAddons)
             .Where(m => !IsOn(ModAttributeFilter.DownloadedNotConfirmed) || m.HasPendingDownload);
 
-        _filtered = SortMods(matched, SelectedSortOption.Value).ToList();
+        _filtered = SelectedUpdateFilter.Value == UpdateFilter.RecentlyInstalled
+            ? matched
+                .OrderByDescending(m => m.InstalledAt)
+                .ThenBy(m => m.DisplayTitle, StringComparer.OrdinalIgnoreCase)
+                .ToList()
+            : SortMods(matched, SelectedSortOption.Value).ToList();
 
         // Every view now disagrees with _filtered, including the two that aren't on screen - they
         // catch up when switched to.
@@ -2070,9 +2085,6 @@ public partial class InstalledViewModel : LocalizedViewModel
             ModSortOption.GroupDescending => mods
                 .OrderBy(m => m.GroupName is null)
                 .ThenByDescending(m => m.GroupName, StringComparer.OrdinalIgnoreCase)
-                .ThenBy(m => m.DisplayTitle, StringComparer.OrdinalIgnoreCase),
-            ModSortOption.RecentlyInstalled => mods
-                .OrderByDescending(m => m.InstalledAt ?? DateTimeOffset.MinValue)
                 .ThenBy(m => m.DisplayTitle, StringComparer.OrdinalIgnoreCase),
             _ => mods,
         };

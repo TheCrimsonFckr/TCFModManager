@@ -3906,8 +3906,8 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="Sort_NameDescending" xml:space="preserve">
     <value>Par nom (Z-A)</value>
   </data>
-  <data name="Sort_RecentlyInstalled" xml:space="preserve">
-    <value>Installés récemment</value>
+  <data name="Filter_UpdateRecentlyInstalled" xml:space="preserve">
+    <value>Installés ces 7 derniers jours</value>
   </data>
   <data name="SptEnvironment_DetectedFormat" xml:space="preserve">
     <value>SPT {0} détecté.</value>

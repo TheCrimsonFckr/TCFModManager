@@ -102,7 +102,7 @@ The buttons at the top of the page switch between them. They all show the same f
 - **Groups** - your own MO2-style separators. Make a group, drag mods into it, collapse the ones you're not working on, and enable, disable or invert a whole group in one click. Drag a mod to the top edge of the window and the list scrolls for you.
 - **List** - one row per mod, scrolling continuously. Open a row for everything the app knows about that mod: its GUID, installed and published versions, install date, group, content flags, whether this app installed it or you did by hand, and the exact folders it occupies.
 
-Sort by name, author, group or install date. Every filter and sort applies to all three views.
+Sort by name, author or group. To see what you've just installed, pick **Installed in the last 7 days** in the update status filter - newest first. Every filter and sort applies to all three views.
 
 #### information
 Groups are yours to organise however you like - SPT never sees them. They do matter for one thing: disabling a whole group at once.

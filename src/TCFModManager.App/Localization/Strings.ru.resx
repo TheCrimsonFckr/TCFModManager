@@ -4116,8 +4116,8 @@
   <data name="Sort_NameDescending" xml:space="preserve">
     <value>По названию (Я-А)</value>
   </data>
-  <data name="Sort_RecentlyInstalled" xml:space="preserve">
-    <value>Недавно установленные</value>
+  <data name="Filter_UpdateRecentlyInstalled" xml:space="preserve">
+    <value>Установлены за последние 7 дней</value>
   </data>
   <data name="SptEnvironment_DetectedFormat" xml:space="preserve">
     <value>Обнаружен SPT {0}.</value>
