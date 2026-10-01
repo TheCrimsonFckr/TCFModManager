@@ -285,7 +285,22 @@ public sealed class ModInstallService(
 
             foreach (var placement in allPlacements)
             {
-                switch (InstallPathGuard.CheckRecordedPath(installPath, placement.Forward, out _))
+                var refusal = InstallPathGuard.CheckPlacedPath(installPath, placement.Forward, out var destinationPath);
+
+                //
+                // In a new-file-only area (R17) the archive's file goes in only where nothing is there yet -
+                // or where what is there is the previous version's own copy, proven by its fingerprint,
+                // which the removal half below takes into holding first.
+                //
+                if (refusal is null
+                    && ProtectedInstallPaths.IsNewFileOnly(placement.Forward)
+                    && (File.Exists(destinationPath) || Directory.Exists(destinationPath))
+                    && !(existing is not null && InstallPathGuard.ProvenPlacedFile(installPath, existing, placement.Forward, out _)))
+                {
+                    refusal = PathRefusal.Protected;
+                }
+
+                switch (refusal)
                 {
                     case null:
                         placements.Add(placement);
@@ -369,6 +384,17 @@ public sealed class ModInstallService(
                     }
 
                     var destination = Path.Combine(installPath, installRelative);
+
+                    // Checked again at the moment of placing: a new-file-only path (R17) is never
+                    // written over, whatever was decided before the previous version was removed.
+                    if (ProtectedInstallPaths.IsNewFileOnly(installRelativeForward)
+                        && (File.Exists(destination) || Directory.Exists(destination)))
+                    {
+                        skippedProtected.Add(installRelativeForward);
+                        AppLog.Warn("Install", $"{target.Name} {version.Version}: {installRelativeForward} appeared before it was placed; left as it is");
+                        continue;
+                    }
+
                     var destinationDir = Path.GetDirectoryName(destination);
                     if (!string.IsNullOrEmpty(destinationDir)) Directory.CreateDirectory(destinationDir);
 
@@ -501,7 +527,9 @@ public sealed class ModInstallService(
 
         foreach (var path in recorded)
         {
-            if (InstallPathGuard.CheckRecordedPath(installPath, path, out var full) is null
+            // CheckPlacedPath: a file this install just put in a new-file-only area (R17) needs its
+            // fingerprint more than any - it is the only thing that lets a removal take it back out.
+            if (InstallPathGuard.CheckPlacedPath(installPath, path, out var full) is null
                 && FileFingerprint.Compute(full, path) is { } print)
             {
                 prints.Add(print);
@@ -746,7 +774,10 @@ public sealed class ModInstallService(
                 continue;
             }
 
-            if (InstallPathGuard.CheckRecordedPath(installPath, relative, out var fullPath) is { } refusal)
+            // A file in a new-file-only area (R17) is taken only when its fingerprint proves it is the
+            // copy this app placed; anything else there stays, as SPT's or the game's.
+            if (InstallPathGuard.CheckRecordedPath(installPath, relative, out var fullPath) is { } refusal
+                && !(refusal == PathRefusal.Protected && InstallPathGuard.ProvenPlacedFile(installPath, record, relative, out fullPath)))
             {
                 refused.Add(relative);
                 session.Note(relative, RemovalOutcome.Refused, refusal);
@@ -1006,8 +1037,13 @@ public sealed class ModInstallService(
 
             if (!File.Exists(held) && !Directory.Exists(held)) { blocked.Add(entry.Path); continue; }
 
-            if (InstallPathGuard.CheckRecordedPath(installPath, entry.Path, out _) is not null
-                || File.Exists(target) || Directory.Exists(target))
+            // A held file may go back into a new-file-only area (R17): it only left it because its
+            // fingerprint proved it this app's, and it only goes back to a free path.
+            var check = File.Exists(held)
+                ? InstallPathGuard.CheckPlacedPath(installPath, entry.Path, out _)
+                : InstallPathGuard.CheckRecordedPath(installPath, entry.Path, out _);
+
+            if (check is not null || File.Exists(target) || Directory.Exists(target))
             {
                 blocked.Add(entry.Path);
                 continue;
@@ -1163,7 +1199,7 @@ public sealed class ModInstallService(
     // <paramref name="extractDir"/>. Zip archives go through System.IO.Compression; every other
     // format goes through SharpCompress's forward-only reader. Zip-slip protection: any entry whose
     // resolved destination would land outside extractDir is rejected before anything is written.
-    private static async Task ExtractArchiveAsync(
+    internal static async Task ExtractArchiveAsync(
         string archivePath,
         string extractDir,
         IProgress<ModInstallProgress>? status,
@@ -1217,6 +1253,15 @@ public sealed class ModInstallService(
         }
     }
 
+    //
+    // Three paths, by what the archive is (D24):
+    //   - solid archives and 7z: the forward-only reader, so a solid archive decompresses its blocks
+    //     once here, instead of once per entry;
+    //   - other archives (a non-solid RAR, a plain tar): the random-access entries - the reader throws
+    //     for these, which failed every non-solid RAR install before v1.19.0;
+    //   - a compressed tar (.tar.gz, .tar.bz2...), which SharpCompress can't open as an archive: the
+    //     stream reader.
+    //
     private static void ExtractWithSharpCompress(
         string archivePath,
         string extractDir,
@@ -1224,16 +1269,58 @@ public sealed class ModInstallService(
         IProgress<ModInstallProgress>? status,
         CancellationToken ct)
     {
-        using var archive = ArchiveFactory.OpenArchive(archivePath);
+        IArchive archive;
+        try
+        {
+            archive = ArchiveFactory.OpenArchive(archivePath);
+        }
+        catch (ArchiveOperationException)
+        {
+            ExtractWithStreamReader(archivePath, extractDir, extractRoot, status, ct);
+            return;
+        }
 
-        var total = TryCountEntries(archive);
+        using (archive)
+        {
+            var total = TryCountEntries(archive);
+            var progress = new ExtractProgress(status, total);
 
-        // Forward-only reader rather than random-access Entries: a solid archive decompresses its
-        // blocks once here, instead of once per entry.
-        using var reader = archive.ExtractAllEntries();
-        var extracted = 0;
-        var reportClock = Stopwatch.StartNew();
+            if (archive.IsSolid || archive.Type == ArchiveType.SevenZip)
+            {
+                using var reader = archive.ExtractAllEntries();
+                ExtractFromReader(reader, extractDir, extractRoot, progress, ct);
+                return;
+            }
 
+            foreach (var entry in archive.Entries)
+            {
+                ct.ThrowIfCancellationRequested();
+
+                if (entry.IsDirectory) continue;
+                if (entry.Key is not { Length: > 0 } key) continue;
+
+                var destination = ResolveEntryDestination(key, extractDir, extractRoot);
+                entry.WriteToFile(destination, new ExtractionOptions { Overwrite = true });
+                progress.Step();
+            }
+        }
+    }
+
+    private static void ExtractWithStreamReader(
+        string archivePath,
+        string extractDir,
+        string extractRoot,
+        IProgress<ModInstallProgress>? status,
+        CancellationToken ct)
+    {
+        using var file = File.OpenRead(archivePath);
+        using var reader = ReaderFactory.OpenReader(file);
+        ExtractFromReader(reader, extractDir, extractRoot, new ExtractProgress(status, 0), ct);
+    }
+
+    private static void ExtractFromReader(
+        IReader reader, string extractDir, string extractRoot, ExtractProgress progress, CancellationToken ct)
+    {
         while (reader.MoveToNextEntry())
         {
             ct.ThrowIfCancellationRequested();
@@ -1243,14 +1330,23 @@ public sealed class ModInstallService(
 
             var destination = ResolveEntryDestination(key, extractDir, extractRoot);
             reader.WriteEntryToFile(destination, new ExtractionOptions { Overwrite = true });
+            progress.Step();
+        }
+    }
 
-            extracted++;
-            if (reportClock.Elapsed >= ProgressInterval)
-            {
-                status?.Report(new ModInstallProgress(
-                    ModInstallStage.Extracting, Done: extracted, Total: total));
-                reportClock.Restart();
-            }
+    // Reports extraction progress at most once per ProgressInterval.
+    private sealed class ExtractProgress(IProgress<ModInstallProgress>? status, int total)
+    {
+        private readonly Stopwatch _clock = Stopwatch.StartNew();
+        private int _done;
+
+        public void Step()
+        {
+            _done++;
+            if (_clock.Elapsed < ProgressInterval) return;
+
+            status?.Report(new ModInstallProgress(ModInstallStage.Extracting, Done: _done, Total: total));
+            _clock.Restart();
         }
     }
 

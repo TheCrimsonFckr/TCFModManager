@@ -5239,7 +5239,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Confirmez. Si le mod a ses propres fichiers de configuration, on vous demande si vous voulez les garder - ils sont mis de côté, pas supprimés - ou les supprimer aussi.</value>
   </data>
   <data name="Help_Installed_Remove_Note" xml:space="preserve">
-    <value>Un mod désactivé doit être réactivé avant de pouvoir être supprimé. Pour retirer un mod du jeu sans le supprimer, désactivez-le plutôt.</value>
+    <value>Les fichiers supprimés sont conservés un temps (Options, Conserver les mods supprimés), et la page Installés permet d'annuler la dernière suppression. Un mod désactivé doit être réactivé avant de pouvoir être supprimé. Pour retirer un mod du jeu sans le supprimer, désactivez-le plutôt.</value>
   </data>
   <data name="Help_Installed_Downgrade_Title" xml:space="preserve">
     <value>Revenir à une version plus ancienne d'un mod</value>

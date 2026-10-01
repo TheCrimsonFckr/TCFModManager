@@ -113,13 +113,18 @@ A BepInEx patcher belongs to a mod rather than being one, so a patcher folder is
 Two things in `BepInEx\patchers` are deliberately left out, the same way core SPT plugins are: SPT's own preloader patcher, and general BepInEx utilities that mods bundle alongside themselves (currently FixPluginTypesSerialization). Neither is published on sp-mod, and neither is yours to manage from here.
 
 #### warning
-Mods installed with this app have every file they placed recorded, which is what makes a clean uninstall possible. Anything you installed by hand beforehand has no such record, so removing it deletes its whole folder rather than a known file list.
+Mods installed with this app have every file they placed recorded, which is what makes a clean uninstall possible. Anything you installed by hand beforehand has no such record, so removing it takes its whole folder rather than a known file list.
 
 
 #### Your configs aren't thrown away
 If a server mod has config files of its own (`user\mods\<mod>\config\*.json`), removing it asks what you want done with them: keep them - they're moved to a timestamped folder under `Data\LegacyConfigs\`, with their original paths intact so the folder can be copied back over your SPT install - or delete them with the rest of the mod. Updating a mod always keeps a copy, without asking, and carries your settings into the new version - see the Configs tab.
 
 Client mod settings live in `BepInEx\config`, outside the mod's own folder, so removing a mod never touches them.
+
+#### Removing a mod can be undone
+Remove doesn't delete anything straight away. The mod's files move to a hidden `.tcfmm-removed\` folder inside your SPT install, and **Undo** on the Installed page puts the most recent removal back exactly as it was - it never overwrites something that has taken a file's place since. How long removed mods are kept is up to you under **Options, Keep removed mods**: delete straight away, 1, 7, 14 (the default) or 30 days, or until you clear them; **Clear removed mods** frees the space now.
+
+A removal only takes what is provably the mod's. It leaves a file that changed since it was installed, a file another installed mod also uses, and anything belonging to SPT, BepInEx or the game - and it puts back any file the mod had replaced when it went in. The result line says what was left and why.
 
 
 ### Disabling mods
@@ -363,6 +368,8 @@ The install queue. Items process one at a time; each resolves its dependencies a
 #### How an install actually runs
 The archive is downloaded and extracted into a hidden scratch folder inside your SPT install (`.tcfmm-work\`, swept of stale runs each time), then moved into place.
 
+SPT's, BepInEx's and the game's own files are never replaced. When a mod replaces a file you put there yourself - a hand-installed mod's, say - the original is kept and goes back if the mod is removed. The result line says what was left as it was.
+
 When you're updating, the previous version is only removed **after** the new one has downloaded and extracted successfully - a failed or cancelled download can't leave you with neither. Once files start being placed, the operation runs to completion rather than tearing out a half-installed mod.
 
 #### warning
@@ -478,12 +485,13 @@ Everything lives next to the exe:
 | `Data\logs\tcfmm-<date>.log` | Daily log |
 | `Staging\` | Default destination for manually downloaded archives |
 | `Data\LegacyConfigs\` | Config files kept from removed and updated mods, one timestamped folder each |
+| `Data\overwritten\` | Files an install replaced that weren't another installed mod's, kept to put back when that mod is removed |
 | `Data\ConfigBaselines\` | A copy of the config files each mod version shipped, which is what lets an update tell your changes from the author's |
 | `Data\mod_configs.json` | Your per-mod choice of what an update does with that mod's configs, and any unusual places it keeps them |
 | `Data\ServerMap\` | On a server: the shared key (`servermap-key.txt`), the list it publishes, and the map's machines (`clients.json`) |
 | `.tcfmm-update\` | Hidden. Only exists while an app update is downloading, or if one failed; cleaned up on the next launch |
 
-Two more folders are created inside your **SPT install**, both hidden: `.tcfmm-work\` (scratch space while a mod installs, swept each run) and `.tcfmm-duplicates\` (copies set aside by **Sort out**, kept until you delete them).
+Three more folders are created inside your **SPT install**, all hidden: `.tcfmm-work\` (scratch space while a mod installs, swept each run), `.tcfmm-duplicates\` (copies set aside by **Sort out**, kept until you delete them) and `.tcfmm-removed\` (removed mods, kept for Undo as long as **Keep removed mods** says).
 
 `Data\installed-mods.json` - not folder names, not DLL file versions - is the authority on what's installed and at what version.
 
@@ -502,8 +510,8 @@ Info level by default, rotated daily as `tcfmm-<yyyyMMdd>.log`. To get Debug-lev
 #### Installing
 - **Archives have to be packaged normally** - a `BepInEx\`, `user\`, `SPT\` or `SPT_Runtime\` folder at the top, optionally inside one wrapper folder. Anything else is refused with a message telling you to install it by hand, rather than being scattered into your install.
 - **Everything in the archive gets installed.** Mods that ship optional variants in separate folders, or a readme, get all of it copied in. Choose-your-variant mods are worth installing by hand.
-- **Files are overwritten without a backup.** If two mods ship the same file, the second one installed wins.
-- **Removing a mod deletes the files it recorded.** If another mod happens to share one of those files, removing the first takes it with it.
+- **If two mods ship the same file, the second one installed wins.** Removing either one leaves the file for the other.
+- **Mods installed before v1.19.0 are only fully protected after their next update or reinstall.** Until then their record has no fingerprints: removing one also takes a file you changed since (into `.tcfmm-removed\`, so it can be got back), and leaves its files in the install root or `EscapeFromTarkov_Data\Managed` in place.
 - **You need roughly twice the archive's size free** on the SPT drive - the download and extraction are staged there before anything is placed.
 - **Very large mods on a slow connection can time out** and have to be started again; downloads don't resume.
 

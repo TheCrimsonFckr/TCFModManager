@@ -1,3 +1,5 @@
+using TCFModManager.Core.Models;
+
 namespace TCFModManager.Core.Services;
 
 //
@@ -84,7 +86,35 @@ public static class InstallPathGuard
     // resolves inside the install, isn't inside this app's own folder, isn't protected, and isn't
     // reached through a link anywhere between the install root and the file.
     //
-    public static PathRefusal? CheckRecordedPath(string installPath, string installRelative, out string fullPath)
+    public static PathRefusal? CheckRecordedPath(string installPath, string installRelative, out string fullPath) =>
+        Check(installPath, installRelative, allowNewFileOnly: false, out fullPath);
+
+    //
+    // CheckRecordedPath, except a path in a new-file-only area (ProtectedInstallPaths.IsNewFileOnly,
+    // R17) isn't refused as protected. Passing this proves nothing about the file: the caller must
+    // still check that the path is free (placing, Undo) or that the file is provably this app's
+    // (removal, ProvenPlacedFile).
+    //
+    public static PathRefusal? CheckPlacedPath(string installPath, string installRelative, out string fullPath) =>
+        Check(installPath, installRelative, allowNewFileOnly: true, out fullPath);
+
+    //
+    // Whether a recorded file in a new-file-only area is provably the one this app placed there: the
+    // record carries its fingerprint and the file on disk still matches it byte-for-byte (R17). A
+    // record from before v1.19.0 has no fingerprint, so its files there are never taken.
+    //
+    public static bool ProvenPlacedFile(string installPath, InstalledModRecord record, string installRelative, out string fullPath)
+    {
+        fullPath = string.Empty;
+
+        return ProtectedInstallPaths.IsNewFileOnly(installRelative)
+            && record.FingerprintFor(installRelative) is { } print
+            && CheckPlacedPath(installPath, installRelative, out fullPath) is null
+            && File.Exists(fullPath)
+            && print.Matches(fullPath);
+    }
+
+    private static PathRefusal? Check(string installPath, string installRelative, bool allowNewFileOnly, out string fullPath)
     {
         fullPath = string.Empty;
 
@@ -99,7 +129,12 @@ public static class InstallPathGuard
 
         if (IsInAppFolder(full)) return PathRefusal.AppFolder;
 
-        if (ProtectedInstallPaths.IsProtected(Path.GetRelativePath(root, full))) return PathRefusal.Protected;
+        var relative = Path.GetRelativePath(root, full);
+        if (ProtectedInstallPaths.IsProtected(relative)
+            && !(allowNewFileOnly && ProtectedInstallPaths.IsNewFileOnly(relative)))
+        {
+            return PathRefusal.Protected;
+        }
 
         if (PassesThroughLink(root, full)) return PathRefusal.Link;
 

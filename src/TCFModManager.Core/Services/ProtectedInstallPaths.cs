@@ -50,6 +50,24 @@ public static class ProtectedInstallPaths
         return IsProtectedInServer(s);
     }
 
+    //
+    // The two protected areas where a mod may still ADD a file (R17, found by the stage-6 proof run):
+    // a loose file directly in the install root (SVM's Greed.exe) and anything under
+    // EscapeFromTarkov_Data/Managed (Dynamic Maps' Unity.VectorGraphics.dll). IsProtected stays true
+    // for them, so every caller that doesn't ask this is as strict as before. The few that do must
+    // prove the rest themselves: the installer places there only where nothing exists yet, a removal
+    // takes from there only what its fingerprint proves this app placed, and Undo puts back only into
+    // a free path.
+    //
+    public static bool IsNewFileOnly(string? installRelative)
+    {
+        if (Segments(installRelative) is not { } s) return false;
+
+        if (s.Length == 1) return true;
+
+        return s.Length >= 3 && Is(s[0], "EscapeFromTarkov_Data") && Is(s[1], "Managed");
+    }
+
     private static bool IsProtectedInBepInEx(string[] s)
     {
         if (Is(s[1], "core")) return true;

@@ -104,18 +104,22 @@ public class ResilienceInstallTests : IDisposable
         Assert.Contains("SPT/user/profiles/x.json", result.SkippedProtected);
     }
 
+    // R17 replaced "never": a loose file is placed in the install root only where nothing is there.
     [Fact]
-    public async Task LooseFilesBesideTheArchiveRoots_LandInNeitherTheInstallRootNorTheRecord()
+    public async Task LooseFilesBesideTheArchiveRoots_LandInTheInstallRootOnlyWhereNothingIsThere()
     {
         var target = NewTarget();
+        Write("LICENSE", "SPT's licence");
 
         var result = await Install(target, "1.0.0",
             ("README.txt", "readme"),
+            ("LICENSE", "the mod's licence"),
             ("BepInEx/plugins/Mod/mod.dll", "the mod"));
 
-        Assert.False(File.Exists(Full("README.txt")));
-        Assert.Equal(["BepInEx/plugins/Mod/mod.dll"], result.Record.Files);
-        Assert.Equal(["README.txt"], result.SkippedProtected);
+        Assert.Equal("readme", File.ReadAllText(Full("README.txt")));
+        Assert.Equal("SPT's licence", File.ReadAllText(Full("LICENSE")));
+        Assert.Equal(["BepInEx/plugins/Mod/mod.dll", "README.txt"], result.Record.Files.Order());
+        Assert.Equal(["LICENSE"], result.SkippedProtected);
     }
 
     // --- Fingerprints and stamp (D21, D17) -----------------------------------------------------
