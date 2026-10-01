@@ -267,9 +267,22 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
             var installed = Text(Strings.Downloads_InstalledFormat, item.ModName, item.VersionLabel);
 
-            item.StatusMessage = configs is null
-                ? installed
-                : string.Join(Strings.Common_SentenceSeparator, installed, configs);
+            //
+            // What the install deliberately didn't do is said on the card (D5): SPT's own files it left
+            // alone - named one per line in the tooltip - and originals it kept to put back later (D22).
+            //
+            var skipped = result.SkippedProtected ?? [];
+            var keptSpt = skipped.Count > 0 ? Strings.Downloads_KeptSptFiles(skipped.Count, skipped.Count) : null;
+            var keptOriginals = result.OriginalsKept > 0
+                ? Strings.Downloads_KeptOriginals(result.OriginalsKept, result.OriginalsKept)
+                : null;
+
+            item.StatusMessage = string.Join(
+                Strings.Common_SentenceSeparator,
+                new[] { installed, configs, keptSpt, keptOriginals }.Where(s => !string.IsNullOrEmpty(s)));
+            item.StatusDetail = skipped.Count > 0
+                ? string.Join(Environment.NewLine, new[] { item.StatusMessage, "" }.Concat(skipped))
+                : null;
             ItemInstalled?.Invoke(this, EventArgs.Empty);
         }
         catch (OperationCanceledException) when (item.Token.IsCancellationRequested)

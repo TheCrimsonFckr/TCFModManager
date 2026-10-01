@@ -1816,4 +1816,41 @@ internal static class Strings
     internal static string Help_Problems_Notifications_Keywords => LocalizationService.Get("Help_Problems_Notifications_Keywords");
     internal static string Help_Problems_AppUpdate_Keywords => LocalizationService.Get("Help_Problems_AppUpdate_Keywords");
     internal static string Help_Problems_Report_Keywords => LocalizationService.Get("Help_Problems_Report_Keywords");
+    internal static string Installed_RemovedUndoHint => LocalizationService.Get("Installed_RemovedUndoHint");
+    internal static string Installed_UndoRemovalFormat => LocalizationService.Get("Installed_UndoRemovalFormat");
+    internal static string Installed_UndoRemovalToolTip => LocalizationService.Get("Installed_UndoRemovalToolTip");
+    internal static string Installed_UndoneFormat => LocalizationService.Get("Installed_UndoneFormat");
+    internal static string Installed_UndoNothing => LocalizationService.Get("Installed_UndoNothing");
+    internal static string Installed_RemoveHeldFormat => LocalizationService.Get("Installed_RemoveHeldFormat");
+    internal static string Installed_RemoveHeldUntilCleared => LocalizationService.Get("Installed_RemoveHeldUntilCleared");
+    internal static string Installed_RemoveNotHeld => LocalizationService.Get("Installed_RemoveNotHeld");
+    internal static string Installed_RemoveUnstampedFormat => LocalizationService.Get("Installed_RemoveUnstampedFormat");
+    internal static string Options_RemovedModsHeader => LocalizationService.Get("Options_RemovedModsHeader");
+    internal static string Options_RemovedModsHint => LocalizationService.Get("Options_RemovedModsHint");
+    internal static string Options_RemovedModsDescription => LocalizationService.Get("Options_RemovedModsDescription");
+    internal static string Options_RemovedModsDeleteStraightAway => LocalizationService.Get("Options_RemovedModsDeleteStraightAway");
+    internal static string Options_RemovedModsOneDay => LocalizationService.Get("Options_RemovedModsOneDay");
+    internal static string Options_RemovedModsSevenDays => LocalizationService.Get("Options_RemovedModsSevenDays");
+    internal static string Options_RemovedModsFourteenDays => LocalizationService.Get("Options_RemovedModsFourteenDays");
+    internal static string Options_RemovedModsThirtyDays => LocalizationService.Get("Options_RemovedModsThirtyDays");
+    internal static string Options_RemovedModsUntilCleared => LocalizationService.Get("Options_RemovedModsUntilCleared");
+    internal static string Options_RemovedModsClearFormat => LocalizationService.Get("Options_RemovedModsClearFormat");
+    internal static string Options_RemovedModsClearTitle => LocalizationService.Get("Options_RemovedModsClearTitle");
+    internal static string Options_RemovedModsClearConfirmFormat => LocalizationService.Get("Options_RemovedModsClearConfirmFormat");
+    internal static string Options_RemovedModsClearedFormat => LocalizationService.Get("Options_RemovedModsClearedFormat");
+    internal static string Options_RemovedModsNothingToClear => LocalizationService.Get("Options_RemovedModsNothingToClear");
+    internal static string Installed_RemovedKeptChanged(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_RemovedKeptChanged", count, values);
+    internal static string Installed_RemovedKeptOwned(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_RemovedKeptOwned", count, values);
+    internal static string Installed_RemovedRefused(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_RemovedRefused", count, values);
+    internal static string Installed_RemovedRestored(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_RemovedRestored", count, values);
+    internal static string Installed_UndoneBlocked(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_UndoneBlocked", count, values);
+    internal static string Downloads_KeptSptFiles(int count, params object?[] values) =>
+        LocalizationService.Plural("Downloads_KeptSptFiles", count, values);
+    internal static string Downloads_KeptOriginals(int count, params object?[] values) =>
+        LocalizationService.Plural("Downloads_KeptOriginals", count, values);
 }

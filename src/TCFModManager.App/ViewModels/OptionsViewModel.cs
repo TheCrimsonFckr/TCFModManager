@@ -78,6 +78,90 @@ public partial class OptionsViewModel : LocalizedViewModel
     public ModPageGateViewModel ModPageGate => AppServices.ModPageGate;
 
     //
+    // How long removed mods stay in the install's holding folder (R11, D27), and the button that
+    // clears it now. The label carries the size held, so the button says what it would free.
+    //
+    public IReadOnlyList<RemovedModsRetentionItem> RemovedModsRetentionOptions { get; } =
+    [
+        new(nameof(Strings.Options_RemovedModsDeleteStraightAway), RemovedModsRetention.DeleteStraightAway),
+        new(nameof(Strings.Options_RemovedModsOneDay), RemovedModsRetention.OneDay),
+        new(nameof(Strings.Options_RemovedModsSevenDays), RemovedModsRetention.SevenDays),
+        new(nameof(Strings.Options_RemovedModsFourteenDays), RemovedModsRetention.FourteenDays),
+        new(nameof(Strings.Options_RemovedModsThirtyDays), RemovedModsRetention.ThirtyDays),
+        new(nameof(Strings.Options_RemovedModsUntilCleared), RemovedModsRetention.UntilCleared),
+    ];
+
+    // The same words the dropdown uses, for the removal confirmation's "kept for 14 days".
+    public static string RetentionLabel(RemovedModsRetention value) => value switch
+    {
+        RemovedModsRetention.DeleteStraightAway => Strings.Options_RemovedModsDeleteStraightAway,
+        RemovedModsRetention.OneDay => Strings.Options_RemovedModsOneDay,
+        RemovedModsRetention.SevenDays => Strings.Options_RemovedModsSevenDays,
+        RemovedModsRetention.ThirtyDays => Strings.Options_RemovedModsThirtyDays,
+        RemovedModsRetention.UntilCleared => Strings.Options_RemovedModsUntilCleared,
+        _ => Strings.Options_RemovedModsFourteenDays,
+    };
+
+    [ObservableProperty]
+    private RemovedModsRetentionItem _selectedRemovedModsRetention;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ClearRemovedModsCommand))]
+    private long _removedModsBytes;
+
+    [ObservableProperty]
+    private string _removedModsStatus = string.Empty;
+
+    public string ClearRemovedModsLabel => RemovedModsBytes > 0
+        ? Text(Strings.Options_RemovedModsClearFormat, DownloadQueueItemViewModel.SizeLabel(RemovedModsBytes))
+        : Strings.Options_RemovedModsNothingToClear;
+
+    partial void OnRemovedModsBytesChanged(long value) => OnPropertyChanged(nameof(ClearRemovedModsLabel));
+
+    partial void OnSelectedRemovedModsRetentionChanged(RemovedModsRetentionItem value)
+    {
+        if (!_loaded) return;
+
+        var settings = _settings.Load();
+        settings.RemovedModsRetention = value.Value;
+        _settings.Save(settings);
+
+        AppLog.Info("Remove", $"keep removed mods set to {value.Value}");
+    }
+
+    // Also run each time the Options page opens: removals and Undo on the Installed page change it.
+    public void RefreshRemovedModsSize()
+    {
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        RemovedModsBytes = string.IsNullOrWhiteSpace(installPath) ? 0 : RemovedMods.Size(installPath);
+    }
+
+    private bool CanClearRemovedMods() => RemovedModsBytes > 0;
+
+    // Deletes everything held for this install, after saying how much and that it ends every Undo.
+    [RelayCommand(CanExecute = nameof(CanClearRemovedMods))]
+    private void ClearRemovedMods()
+    {
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        if (string.IsNullOrWhiteSpace(installPath)) return;
+
+        var size = DownloadQueueItemViewModel.SizeLabel(RemovedModsBytes);
+
+        var answer = MessageBox.Show(
+            Text(Strings.Options_RemovedModsClearConfirmFormat, size, installPath),
+            Strings.Options_RemovedModsClearTitle,
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning,
+            MessageBoxResult.No);
+
+        if (answer != MessageBoxResult.Yes) return;
+
+        RemovedMods.Clear(installPath);
+        RefreshRemovedModsSize();
+        RemovedModsStatus = Text(Strings.Options_RemovedModsClearedFormat, size);
+    }
+
+    //
     // Monitor mode: what the install buttons do, and where a download-only save goes. The mode is
     // applied and saved the moment it changes, and every install button re-reads it through
     // ModPageGate.
@@ -257,6 +341,10 @@ public partial class OptionsViewModel : LocalizedViewModel
 
         _selectedInstallMode = InstallModeOptions.FirstOrDefault(o => o.Value == settings.Monitor.InstallMode)
             ?? InstallModeOptions[0];
+        _selectedRemovedModsRetention =
+            RemovedModsRetentionOptions.FirstOrDefault(o => o.Value == settings.RemovedModsRetention)
+            ?? RemovedModsRetentionOptions[3];
+        RefreshRemovedModsSize();
         _downloadFolderInput = settings.Monitor.DownloadFolder ?? string.Empty;
         _downloadListSubfolders = settings.Monitor.DownloadListSubfolders;
         _selectedDownloadConfirmation =

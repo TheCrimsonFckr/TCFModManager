@@ -795,6 +795,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             var openRows = OpenKeys(_all, m => m.IsRowExpanded);
 
             _all = cards;
+            RefreshUndo();
 
             if (openCards.Count > 0 || openRows.Count > 0)
                 foreach (var card in cards)
@@ -1039,7 +1040,16 @@ public partial class InstalledViewModel : LocalizedViewModel
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-            if (ConfirmRemoval(mod.Name, Strings.Installed_RemoveAppManagedBody, configs.Count)
+            //
+            // A record made before v1.19.0 doesn't say which install it came from (D17). When the app
+            // doesn't sit inside this install either, nothing proves it belongs here - so the install
+            // is named before anything happens.
+            //
+            var body = record.InstallPath is null && !InstallStamp.AppIsInside(installPath)
+                ? Sentences(Strings.Installed_RemoveAppManagedBody, Text(Strings.Installed_RemoveUnstampedFormat, installPath))
+                : Strings.Installed_RemoveAppManagedBody;
+
+            if (ConfirmRemoval(mod.Name, body, configs.Count)
                 is not { } configAction)
             {
                 return;
@@ -1049,7 +1059,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             try
             {
                 var result = await AppServices.ModInstall.UninstallAsync(installPath, record, configAction);
-                StatusMessage = DescribeRemoval(mod.Name, result.FailedFiles.Count, result.ConfigsKept, result.ConfigsFolder);
+                StatusMessage = DescribeRemoval(mod.Name, result.FailedFiles.Count, result.ConfigsKept, result.ConfigsFolder, result);
                 ModRemoved?.Invoke(this, EventArgs.Empty);
             }
             catch (ModInstallException ex)
@@ -1098,11 +1108,15 @@ public partial class InstalledViewModel : LocalizedViewModel
             IsBusy = true;
             try
             {
+                // Checked before the configs move, so SPT running can't leave them moved out of a mod
+                // whose folder then stays put.
+                ModInstallService.EnsureInstallNotInUse(ModInstallAction.Remove, installPath);
+
                 var kept = configAction == ConfigAction.Keep && configs.Count > 0
                     ? ModInstallService.KeepLegacyConfigs(installPath, configs, mod.Name)
                     : new KeptConfigs(0, null);
 
-                AppServices.ModInstall.RemoveHandInstalled(
+                var held = AppServices.ModInstall.RemoveHandInstalled(
                     [.. paths.Select(p => p!)], installPath, mod.Name, kept.Folder);
 
                 // A manually-confirmed version record would otherwise dangle, pointing at a mod
@@ -1110,7 +1124,7 @@ public partial class InstalledViewModel : LocalizedViewModel
                 if (mod.IsManualOverride && mod.ModId is { } overriddenModId)
                     AppServices.InstallManifest.ClearManualVersion(overriddenModId, mod.IsAddon);
 
-                StatusMessage = DescribeRemoval(mod.Name, failedFiles: 0, kept.Count, kept.Folder);
+                StatusMessage = DescribeRemoval(mod.Name, failedFiles: 0, kept.Count, kept.Folder, held: held is not null);
                 ModRemoved?.Invoke(this, EventArgs.Empty);
             }
             catch (ModInstallException ex)
@@ -1730,8 +1744,9 @@ public partial class InstalledViewModel : LocalizedViewModel
     private static ConfigAction? ConfirmRemoval(string modName, string message, int configCount)
     {
         // Most people reaching for Remove are troubleshooting, where disabling does the job without
-        // deleting anything - worth saying at the point they're about to delete.
-        message = $"{message}\n\n{Strings.Installed_RemoveDisableHint}";
+        // deleting anything - worth saying at the point they're about to delete. Then how long the
+        // removed files are kept, which is what decides whether it can be undone.
+        message = $"{message}\n\n{HeldSentence()}\n\n{Strings.Installed_RemoveDisableHint}";
 
         var title = Text(Strings.Installed_RemoveTitleFormat, modName);
 
@@ -1755,17 +1770,110 @@ public partial class InstalledViewModel : LocalizedViewModel
         };
     }
 
-    private static string DescribeRemoval(string modName, int failedFiles, int configsKept, string? configsFolder)
+    //
+    // What a removal did, in order of what the user most needs to know: whether it went, what it left
+    // in place and why, what it put back, where configs went, and that it can be undone.
+    //
+    private static string DescribeRemoval(
+        string modName, int failedFiles, int configsKept, string? configsFolder, UninstallResult? result = null, bool held = false)
     {
-        var message = failedFiles == 0
-            ? Text(Strings.Installed_RemovedFormat, modName)
-            : Strings.Installed_RemovedFailed(failedFiles, modName, failedFiles);
+        var parts = new List<string>
+        {
+            failedFiles == 0
+                ? Text(Strings.Installed_RemovedFormat, modName)
+                : Strings.Installed_RemovedFailed(failedFiles, modName, failedFiles),
+        };
 
-        if (configsKept == 0 || configsFolder is null) return message;
+        if (result is not null)
+        {
+            if (result.KeptChanged.Count > 0)
+                parts.Add(Strings.Installed_RemovedKeptChanged(result.KeptChanged.Count, result.KeptChanged.Count));
+            if (result.KeptOwned.Count > 0)
+                parts.Add(Strings.Installed_RemovedKeptOwned(result.KeptOwned.Count, result.KeptOwned.Count));
+            if (result.RefusedFiles is { Count: > 0 } refused)
+                parts.Add(Strings.Installed_RemovedRefused(refused.Count, refused.Count));
+            if (result.OriginalsRestored > 0)
+                parts.Add(Strings.Installed_RemovedRestored(result.OriginalsRestored, result.OriginalsRestored));
+        }
 
-        return Sentences(
-            message,
-            Strings.Installed_RemovedConfigsKept(configsKept, configsKept, configsFolder));
+        if (configsKept > 0 && configsFolder is not null)
+            parts.Add(Strings.Installed_RemovedConfigsKept(configsKept, configsKept, configsFolder));
+
+        if (held || result?.HoldingFolder is not null)
+            parts.Add(Strings.Installed_RemovedUndoHint);
+
+        return string.Join(Strings.Common_SentenceSeparator, parts);
+    }
+
+    //
+    // The sentence the removal confirmation ends with: how long removed files are kept, from the
+    // Keep removed mods setting (D27).
+    //
+    private static string HeldSentence() => new SettingsService().Load().RemovedModsRetention switch
+    {
+        RemovedModsRetention.DeleteStraightAway => Strings.Installed_RemoveNotHeld,
+        RemovedModsRetention.UntilCleared => Strings.Installed_RemoveHeldUntilCleared,
+        var days => Text(Strings.Installed_RemoveHeldFormat, OptionsViewModel.RetentionLabel(days)),
+    };
+
+    // The Undo button's text, or null to hide it: the most recent removal still held for this install.
+    [ObservableProperty]
+    private string? _undoRemovalLabel;
+
+    private void RefreshUndo()
+    {
+        var installPath = AppServices.SptEnvironment.InstallPath;
+
+        UndoRemovalLabel = !string.IsNullOrWhiteSpace(installPath) && RemovedMods.LatestUndoable(installPath) is { } latest
+            ? Text(Strings.Installed_UndoRemovalFormat, latest.Log.ModName)
+            : null;
+    }
+
+    //
+    // Puts the most recent removal back (D28). Never overwrites: anything that has taken a removed
+    // file's place since is reported and stays where it is.
+    //
+    [RelayCommand]
+    private async Task UndoRemovalAsync()
+    {
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        if (string.IsNullOrWhiteSpace(installPath)) return;
+
+        if (RemovedMods.LatestUndoable(installPath) is not { } latest)
+        {
+            StatusMessage = Strings.Installed_UndoNothing;
+            RefreshUndo();
+            return;
+        }
+
+        IsBusy = true;
+        try
+        {
+            // Off the UI thread: putting back a large mod copies a lot of files.
+            var result = await Task.Run(() => AppServices.ModInstall.UndoRemoval(installPath, latest.Folder));
+
+            StatusMessage = !result.Ran
+                ? Strings.Installed_UndoNothing
+                : result.Blocked.Count == 0
+                    ? Text(Strings.Installed_UndoneFormat, latest.Log.ModName)
+                    : Strings.Installed_UndoneBlocked(result.Blocked.Count, result.Blocked.Count, latest.Log.ModName, latest.Folder);
+
+            ModRemoved?.Invoke(this, EventArgs.Empty);
+        }
+        catch (ModInstallException ex)
+        {
+            StatusMessage = ModInstallProblems.Describe(ex);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            StatusMessage = Text(Strings.Installed_RemoveFailedFormat, latest.Log.ModName, ex.Message);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+
+        await ScanAsync();
     }
 
     private bool CanGoToPreviousPage() => CurrentPage > 1;

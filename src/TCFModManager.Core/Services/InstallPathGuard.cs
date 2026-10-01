@@ -8,6 +8,21 @@ public static class InstallStamp
 {
     public static string Of(string installPath) =>
         Path.TrimEndingDirectorySeparator(Path.GetFullPath(installPath));
+
+    // Whether this app's own folder sits inside the install - the layout where an unstamped record
+    // can only have been made in this install.
+    public static bool AppIsInside(string installPath)
+    {
+        try
+        {
+            var root = Of(installPath) + Path.DirectorySeparatorChar;
+            return Path.GetFullPath(AppContext.BaseDirectory).StartsWith(root, StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
+        {
+            return false;
+        }
+    }
 }
 
 //

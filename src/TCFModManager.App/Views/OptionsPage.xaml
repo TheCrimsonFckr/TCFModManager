@@ -318,6 +318,33 @@
                 IsChecked="{Binding SkipModPageConfirmation, Converter={StaticResource Inverse}}" />
         </ui:CardControl>
 
+        <!-- How long removed mods are kept in the install's holding folder (R11, D27). -->
+        <ui:CardControl
+            Style="{StaticResource SettingRow}"
+            Icon="{ui:SymbolIcon Delete24}"
+            ToolTip="{loc:Str Options_RemovedModsDescription}">
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_RemovedModsHeader}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_RemovedModsHint}" />
+                    <TextBlock
+                        Style="{StaticResource SettingHint}"
+                        Text="{Binding RemovedModsStatus}"
+                        Visibility="{Binding RemovedModsStatus, Converter={StaticResource NullToCollapsed}}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <StackPanel Orientation="Horizontal">
+                <ComboBox
+                    MinWidth="200"
+                    ItemsSource="{Binding RemovedModsRetentionOptions}"
+                    SelectedItem="{Binding SelectedRemovedModsRetention}" />
+                <ui:Button
+                    Margin="8,0,0,0"
+                    Content="{Binding ClearRemovedModsLabel}"
+                    Command="{Binding ClearRemovedModsCommand}" />
+            </StackPanel>
+        </ui:CardControl>
+
         <!-- ─── Updates ─── -->
         <TextBlock Style="{StaticResource SectionHeader}" Text="{loc:Str Options_SectionUpdates}" />
 

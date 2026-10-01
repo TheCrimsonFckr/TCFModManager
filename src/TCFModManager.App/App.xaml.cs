@@ -72,6 +72,25 @@ public partial class App : Application
         // is gone, so its own log is the only record of it) and clears out the staged files.
         AppUpdateInstaller.SweepAfterStartup();
 
+        // Removed mods whose time is up under Keep removed mods are deleted from the install's holding
+        // folder (D27) - off the UI thread, since a large held mod takes a moment to delete.
+        var pruneInstall = SptInstallationService.ToGameRoot(new SettingsService().Load().SptInstallPath);
+        if (!string.IsNullOrWhiteSpace(pruneInstall))
+        {
+            _ = Task.Run(() =>
+            {
+                try
+                {
+                    var pruned = new RemovedMods().Prune(pruneInstall, DateTimeOffset.Now);
+                    if (pruned > 0) AppLog.Info("Remove", $"cleared {pruned} held removal(s) past Keep removed mods");
+                }
+                catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException)
+                {
+                    AppLog.Warn("Remove", $"couldn't clear old removals: {ex.Message}");
+                }
+            });
+        }
+
         // Shows unhandled dispatcher exceptions instead of crashing/hanging silently.
         DispatcherUnhandledException += OnDispatcherUnhandledException;
 

@@ -192,6 +192,7 @@
                                         FontSize="11"
                                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                         TextTrimming="CharacterEllipsis"
+                                        ToolTip="{Binding StatusDetail}"
                                         Text="{Binding StatusMessage}" />
 
                                     <!-- One box per figure - see StatBox above for why they aren't

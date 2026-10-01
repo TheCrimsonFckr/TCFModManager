@@ -370,6 +370,18 @@
                     Click="ListView_Click" />
             </StackPanel>
 
+            <!-- Undo for the most recent removal (D28) - shown while it is still held. -->
+            <ui:Button
+                DockPanel.Dock="Right"
+                Margin="8,0,0,0"
+                Padding="10,5"
+                VerticalAlignment="Center"
+                Icon="{ui:SymbolIcon ArrowUndo24}"
+                Content="{Binding UndoRemovalLabel}"
+                ToolTip="{loc:Str Installed_UndoRemovalToolTip}"
+                Command="{Binding UndoRemovalCommand}"
+                Visibility="{Binding UndoRemovalLabel, Converter={StaticResource NullToCollapsed}}" />
+
             <TextBlock
                 VerticalAlignment="Center"
                 TextWrapping="Wrap"

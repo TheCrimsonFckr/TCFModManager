@@ -433,7 +433,10 @@ public sealed class ModInstallService(
             AppLog.Debug("Install", $"fingerprinted {record.Fingerprints.Count} file(s) in {fingerprintClock.ElapsedMilliseconds}ms");
 
             status?.Report(new ModInstallProgress(ModInstallStage.Done));
-            return new ModInstallResult(record, report.Files.Count > 0 ? report : null, skippedProtected);
+            return new ModInstallResult(record, report.Files.Count > 0 ? report : null, skippedProtected)
+            {
+                OriginalsKept = overwrote.Count - (existing?.Overwrote.Count ?? 0),
+            };
         }
         catch (OperationCanceledException)
         {
@@ -1291,7 +1294,12 @@ public sealed class ModInstallService(
 public sealed record ModInstallResult(
     InstalledModRecord Record,
     ConfigUpdateReport? Configs,
-    IReadOnlyList<string>? SkippedProtected = null);
+    IReadOnlyList<string>? SkippedProtected = null)
+{
+    // Files no record owned that this install replaced, kept in Data to put back on removal (D22).
+    // Only the ones this install kept - originals an earlier version kept aren't counted again.
+    public int OriginalsKept { get; init; }
+}
 
 // Result of ModInstallService.UninstallAsync. FailedFiles lists files that couldn't be
 // deleted; the mod is still removed from the manifest regardless. ConfigsKept/ConfigsFolder

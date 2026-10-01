@@ -1,5 +1,6 @@
 using TCFModManager.App.Localization;
 using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -10,6 +11,16 @@ namespace TCFModManager.App.ViewModels;
 public sealed class InstallModeItem(string key, InstallMode value) : LocalizedViewModel
 {
     public InstallMode Value { get; } = value;
+
+    public string Label => LocalizationService.Get(key);
+
+    public override string ToString() => Label;
+}
+
+// One entry in the Options page's Keep removed mods dropdown (R11).
+public sealed class RemovedModsRetentionItem(string key, RemovedModsRetention value) : LocalizedViewModel
+{
+    public RemovedModsRetention Value { get; } = value;
 
     public string Label => LocalizationService.Get(key);
 

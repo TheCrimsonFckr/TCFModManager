@@ -2013,7 +2013,7 @@
     <value>Удалить</value>
   </data>
   <data name="Installed_RemoveAppManagedBody" xml:space="preserve">
-    <value>Будут удалены ровно те файлы, которые приложение установило для этого мода.</value>
+    <value>Это удаляет ровно те файлы, которые это приложение установило для него, и возвращает все файлы, которые он заменил. Файлы, изменённые после установки или используемые другим модом, остаются на месте.</value>
   </data>
   <data name="Installed_RemoveConfigs_few" xml:space="preserve">
     <value>У мода {0} есть {1} собственных файла конфигурации или настроек:</value>
@@ -2060,7 +2060,7 @@
     <value>Не удалось удалить {0}: {1}</value>
   </data>
   <data name="Installed_RemoveLegacyBodyFormat" xml:space="preserve">
-    <value>Этот мод установлен не через это приложение, поэтому будет безвозвратно удалена вся его папка, а не только размещённые им файлы:
+    <value>Этот мод установлен не через это приложение, поэтому удаляется вся его папка, а не только размещённые им файлы:
 
 {0}</value>
   </data>
@@ -5816,5 +5816,137 @@
   </data>
   <data name="Help_Problems_Report_Keywords" xml:space="preserve">
     <value>баг, проблема, вылет, ошибка, сообщить, журнал, лог</value>
+  </data>
+  <data name="Installed_RemovedUndoHint" xml:space="preserve">
+    <value>Нажмите «Отменить», чтобы вернуть его.</value>
+  </data>
+  <data name="Installed_UndoRemovalFormat" xml:space="preserve">
+    <value>Отменить удаление {0}</value>
+  </data>
+  <data name="Installed_UndoRemovalToolTip" xml:space="preserve">
+    <value>Возвращает мод точно в том виде, в каком он был до удаления. То, что с тех пор оказалось на его месте, не перезаписывается.</value>
+  </data>
+  <data name="Installed_UndoneFormat" xml:space="preserve">
+    <value>{0} возвращён.</value>
+  </data>
+  <data name="Installed_UndoNothing" xml:space="preserve">
+    <value>Отменять нечего - удалённые файлы уже стёрты.</value>
+  </data>
+  <data name="Installed_RemoveHeldFormat" xml:space="preserve">
+    <value>Удалённые файлы хранятся в установке {0}, так что это можно отменить.</value>
+  </data>
+  <data name="Installed_RemoveHeldUntilCleared" xml:space="preserve">
+    <value>Удалённые файлы хранятся в установке, пока вы не очистите их в «Параметрах», так что это можно отменить.</value>
+  </data>
+  <data name="Installed_RemoveNotHeld" xml:space="preserve">
+    <value>Удалённые файлы стираются сразу (Параметры, Хранить удалённые моды), так что это нельзя отменить.</value>
+  </data>
+  <data name="Installed_RemoveUnstampedFormat" xml:space="preserve">
+    <value>Запись приложения о нём не указывает, в какой установке SPT она сделана. Он будет удалён из {0}.</value>
+  </data>
+  <data name="Options_RemovedModsHeader" xml:space="preserve">
+    <value>Хранить удалённые моды</value>
+  </data>
+  <data name="Options_RemovedModsHint" xml:space="preserve">
+    <value>При удалении мода его файлы переносятся в скрытую папку установки, чтобы это можно было отменить. Выберите, как долго они там хранятся.</value>
+  </data>
+  <data name="Options_RemovedModsDescription" xml:space="preserve">
+    <value>Удалённые моды хранятся в .tcfmm-removed в папке SPT и стираются при запуске приложения, когда их срок истёк. Обновления тоже оставляют там заменённую версию.</value>
+  </data>
+  <data name="Options_RemovedModsDeleteStraightAway" xml:space="preserve">
+    <value>Удалять сразу</value>
+  </data>
+  <data name="Options_RemovedModsOneDay" xml:space="preserve">
+    <value>1 день</value>
+  </data>
+  <data name="Options_RemovedModsSevenDays" xml:space="preserve">
+    <value>7 дней</value>
+  </data>
+  <data name="Options_RemovedModsFourteenDays" xml:space="preserve">
+    <value>14 дней</value>
+  </data>
+  <data name="Options_RemovedModsThirtyDays" xml:space="preserve">
+    <value>30 дней</value>
+  </data>
+  <data name="Options_RemovedModsUntilCleared" xml:space="preserve">
+    <value>Пока я их не очищу</value>
+  </data>
+  <data name="Options_RemovedModsClearFormat" xml:space="preserve">
+    <value>Очистить удалённые моды ({0})</value>
+  </data>
+  <data name="Options_RemovedModsClearTitle" xml:space="preserve">
+    <value>Очистить удалённые моды</value>
+  </data>
+  <data name="Options_RemovedModsClearConfirmFormat" xml:space="preserve">
+    <value>Стереть все удалённые моды, хранящиеся в {1} ({0})? После этого ни одно сделанное удаление нельзя будет отменить.</value>
+  </data>
+  <data name="Options_RemovedModsClearedFormat" xml:space="preserve">
+    <value>Удалённые моды очищены - освобождено {0}.</value>
+  </data>
+  <data name="Options_RemovedModsNothingToClear" xml:space="preserve">
+    <value>Нечего очищать</value>
+  </data>
+  <data name="Installed_RemovedKeptChanged_one" xml:space="preserve">
+    <value>{0} файл, изменённый после установки, оставлен на месте.</value>
+  </data>
+  <data name="Installed_RemovedKeptChanged_few" xml:space="preserve">
+    <value>{0} файла, изменённых после установки, оставлены на месте.</value>
+  </data>
+  <data name="Installed_RemovedKeptChanged_many" xml:space="preserve">
+    <value>{0} файлов, изменённых после установки, оставлены на месте.</value>
+  </data>
+  <data name="Installed_RemovedKeptOwned_one" xml:space="preserve">
+    <value>{0} файл, который использует и другой мод, оставлен на месте.</value>
+  </data>
+  <data name="Installed_RemovedKeptOwned_few" xml:space="preserve">
+    <value>{0} файла, которые используют и другие моды, оставлены на месте.</value>
+  </data>
+  <data name="Installed_RemovedKeptOwned_many" xml:space="preserve">
+    <value>{0} файлов, которые используют и другие моды, оставлены на месте.</value>
+  </data>
+  <data name="Installed_RemovedRefused_one" xml:space="preserve">
+    <value>{0} файл, принадлежащий SPT или игре либо лежащий вне мода, не тронут.</value>
+  </data>
+  <data name="Installed_RemovedRefused_few" xml:space="preserve">
+    <value>{0} файла, принадлежащих SPT или игре либо лежащих вне мода, не тронуты.</value>
+  </data>
+  <data name="Installed_RemovedRefused_many" xml:space="preserve">
+    <value>{0} файлов, принадлежащих SPT или игре либо лежащих вне мода, не тронуты.</value>
+  </data>
+  <data name="Installed_RemovedRestored_one" xml:space="preserve">
+    <value>{0} файл, который он заменил, возвращён.</value>
+  </data>
+  <data name="Installed_RemovedRestored_few" xml:space="preserve">
+    <value>{0} файла, которые он заменил, возвращены.</value>
+  </data>
+  <data name="Installed_RemovedRestored_many" xml:space="preserve">
+    <value>{0} файлов, которые он заменил, возвращены.</value>
+  </data>
+  <data name="Installed_UndoneBlocked_one" xml:space="preserve">
+    <value>{1} возвращён, кроме {0} элемента: на его месте теперь другое. Он всё ещё в {2}.</value>
+  </data>
+  <data name="Installed_UndoneBlocked_few" xml:space="preserve">
+    <value>{1} возвращён, кроме {0} элементов: на их месте теперь другое. Они всё ещё в {2}.</value>
+  </data>
+  <data name="Installed_UndoneBlocked_many" xml:space="preserve">
+    <value>{1} возвращён, кроме {0} элементов: на их месте теперь другое. Они всё ещё в {2}.</value>
+  </data>
+  <data name="Downloads_KeptSptFiles_one" xml:space="preserve">
+    <value>{0} файл из этого архива принадлежит SPT, BepInEx или игре и оставлен как есть.</value>
+  </data>
+  <data name="Downloads_KeptSptFiles_few" xml:space="preserve">
+    <value>{0} файла из этого архива принадлежат SPT, BepInEx или игре и оставлены как есть.</value>
+  </data>
+  <data name="Downloads_KeptSptFiles_many" xml:space="preserve">
+    <value>{0} файлов из этого архива принадлежат SPT, BepInEx или игре и оставлены как есть.</value>
+  </data>
+  <data name="Downloads_KeptOriginals_one" xml:space="preserve">
+    <value>{0} файл, который он заменил, сохранён, чтобы вернуть его при удалении.</value>
+  </data>
+  <data name="Downloads_KeptOriginals_few" xml:space="preserve">
+    <value>{0} файла, которые он заменил, сохранены, чтобы вернуть их при удалении.</value>
+  </data>
+  <data name="Downloads_KeptOriginals_many" xml:space="preserve">
+    <value>{0} файлов, которые он заменил, сохранены, чтобы вернуть их при удалении.</value>
   </data>
 </root>

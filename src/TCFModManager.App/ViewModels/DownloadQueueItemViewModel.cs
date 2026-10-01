@@ -252,6 +252,11 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     [ObservableProperty]
     private string _statusMessage = Strings.Downloads_WaitingInQueue;
 
+    // The status line in full plus anything worth naming one per line - shown as its tooltip, since the
+    // line itself is trimmed to one row. Null for no tooltip.
+    [ObservableProperty]
+    private string? _statusDetail;
+
     // True while installing, since that stage has no byte count to report fractional progress for.
     public bool IsIndeterminateProgress => Status == DownloadQueueItemStatus.Installing;
 

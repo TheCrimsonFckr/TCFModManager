@@ -1908,7 +1908,7 @@ La copia che non conservi viene spostata in una cartella nascosta .tcfmm-duplica
     <value>Rimuovi</value>
   </data>
   <data name="Installed_RemoveAppManagedBody" xml:space="preserve">
-    <value>Verranno eliminati esattamente i file che questa app ha installato per questo mod.</value>
+    <value>Questo rimuove esattamente i file che questa app ha installato per la mod e rimette ogni file che aveva sostituito. I file modificati dopo l'installazione, o usati anche da un'altra mod, restano dove sono.</value>
   </data>
   <data name="Installed_RemoveConfigs_one" xml:space="preserve">
     <value>{0} ha un proprio file di configurazione o impostazioni:</value>
@@ -1946,7 +1946,7 @@ Annulla  -  non rimuove nulla</value>
     <value>Impossibile rimuovere {0}: {1}</value>
   </data>
   <data name="Installed_RemoveLegacyBodyFormat" xml:space="preserve">
-    <value>Questo mod non è stato installato tramite questa app, quindi verrà eliminata definitivamente tutta la sua cartella e non solo i file che ha inserito:
+    <value>Questa mod non è stata installata tramite questa app, quindi viene rimossa tutta la sua cartella e non solo i file che ha inserito:
 
 {0}</value>
   </data>
@@ -5528,5 +5528,116 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   </data>
   <data name="Help_Problems_Report_Keywords" xml:space="preserve">
     <value>bug, problema, crash, errore, segnalare, log</value>
+  </data>
+  <data name="Installed_RemovedUndoHint" xml:space="preserve">
+    <value>Usa Annulla per rimetterla.</value>
+  </data>
+  <data name="Installed_UndoRemovalFormat" xml:space="preserve">
+    <value>Annulla la rimozione di {0}</value>
+  </data>
+  <data name="Installed_UndoRemovalToolTip" xml:space="preserve">
+    <value>Rimette la mod esattamente com'era prima della rimozione. Niente di ciò che ha preso il suo posto nel frattempo viene sovrascritto.</value>
+  </data>
+  <data name="Installed_UndoneFormat" xml:space="preserve">
+    <value>{0} è stata rimessa.</value>
+  </data>
+  <data name="Installed_UndoNothing" xml:space="preserve">
+    <value>Non c'è niente da annullare - i file rimossi sono stati eliminati.</value>
+  </data>
+  <data name="Installed_RemoveHeldFormat" xml:space="preserve">
+    <value>I file rimossi restano nell'installazione per {0}, quindi puoi annullare.</value>
+  </data>
+  <data name="Installed_RemoveHeldUntilCleared" xml:space="preserve">
+    <value>I file rimossi restano nell'installazione finché non li elimini nelle Opzioni, quindi puoi annullare.</value>
+  </data>
+  <data name="Installed_RemoveNotHeld" xml:space="preserve">
+    <value>I file rimossi vengono eliminati subito (Opzioni, Conserva le mod rimosse), quindi non si può annullare.</value>
+  </data>
+  <data name="Installed_RemoveUnstampedFormat" xml:space="preserve">
+    <value>La registrazione dell'app non indica in quale installazione di SPT è stata fatta. Verrà rimossa da {0}.</value>
+  </data>
+  <data name="Options_RemovedModsHeader" xml:space="preserve">
+    <value>Conserva le mod rimosse</value>
+  </data>
+  <data name="Options_RemovedModsHint" xml:space="preserve">
+    <value>Rimuovere una mod sposta i suoi file in una cartella nascosta dell'installazione, così si può annullare. Scegli per quanto tempo restano lì.</value>
+  </data>
+  <data name="Options_RemovedModsDescription" xml:space="preserve">
+    <value>Le mod rimosse restano in .tcfmm-removed nella tua cartella di SPT e vengono eliminate all'avvio dell'app quando il loro tempo è scaduto. Anche gli aggiornamenti vi conservano la versione che hanno sostituito.</value>
+  </data>
+  <data name="Options_RemovedModsDeleteStraightAway" xml:space="preserve">
+    <value>Elimina subito</value>
+  </data>
+  <data name="Options_RemovedModsOneDay" xml:space="preserve">
+    <value>1 giorno</value>
+  </data>
+  <data name="Options_RemovedModsSevenDays" xml:space="preserve">
+    <value>7 giorni</value>
+  </data>
+  <data name="Options_RemovedModsFourteenDays" xml:space="preserve">
+    <value>14 giorni</value>
+  </data>
+  <data name="Options_RemovedModsThirtyDays" xml:space="preserve">
+    <value>30 giorni</value>
+  </data>
+  <data name="Options_RemovedModsUntilCleared" xml:space="preserve">
+    <value>Finché non le elimino</value>
+  </data>
+  <data name="Options_RemovedModsClearFormat" xml:space="preserve">
+    <value>Elimina le mod rimosse ({0})</value>
+  </data>
+  <data name="Options_RemovedModsClearTitle" xml:space="preserve">
+    <value>Elimina le mod rimosse</value>
+  </data>
+  <data name="Options_RemovedModsClearConfirmFormat" xml:space="preserve">
+    <value>Eliminare tutte le mod rimosse conservate in {1} ({0})? Dopo non sarà più possibile annullare nessuna rimozione fatta finora.</value>
+  </data>
+  <data name="Options_RemovedModsClearedFormat" xml:space="preserve">
+    <value>Mod rimosse eliminate - {0} liberati.</value>
+  </data>
+  <data name="Options_RemovedModsNothingToClear" xml:space="preserve">
+    <value>Niente da eliminare</value>
+  </data>
+  <data name="Installed_RemovedKeptChanged_one" xml:space="preserve">
+    <value>1 file modificato dopo l'installazione è stato lasciato al suo posto.</value>
+  </data>
+  <data name="Installed_RemovedKeptChanged_other" xml:space="preserve">
+    <value>{0} file modificati dopo l'installazione sono stati lasciati al loro posto.</value>
+  </data>
+  <data name="Installed_RemovedKeptOwned_one" xml:space="preserve">
+    <value>1 file usato anche da un'altra mod è stato lasciato al suo posto.</value>
+  </data>
+  <data name="Installed_RemovedKeptOwned_other" xml:space="preserve">
+    <value>{0} file usati anche da altre mod sono stati lasciati al loro posto.</value>
+  </data>
+  <data name="Installed_RemovedRefused_one" xml:space="preserve">
+    <value>1 file che appartiene a SPT o al gioco, o che si trova fuori dalla mod, non è stato toccato.</value>
+  </data>
+  <data name="Installed_RemovedRefused_other" xml:space="preserve">
+    <value>{0} file che appartengono a SPT o al gioco, o che si trovano fuori dalla mod, non sono stati toccati.</value>
+  </data>
+  <data name="Installed_RemovedRestored_one" xml:space="preserve">
+    <value>1 file che aveva sostituito è stato rimesso.</value>
+  </data>
+  <data name="Installed_RemovedRestored_other" xml:space="preserve">
+    <value>{0} file che aveva sostituito sono stati rimessi.</value>
+  </data>
+  <data name="Installed_UndoneBlocked_one" xml:space="preserve">
+    <value>{1} è stata rimessa, tranne 1 elemento: al suo posto ora c'è altro. È ancora in {2}.</value>
+  </data>
+  <data name="Installed_UndoneBlocked_other" xml:space="preserve">
+    <value>{1} è stata rimessa, tranne {0} elementi: al loro posto ora c'è altro. Sono ancora in {2}.</value>
+  </data>
+  <data name="Downloads_KeptSptFiles_one" xml:space="preserve">
+    <value>1 file di questo archivio appartiene a SPT, BepInEx o al gioco ed è stato lasciato com'è.</value>
+  </data>
+  <data name="Downloads_KeptSptFiles_other" xml:space="preserve">
+    <value>{0} file di questo archivio appartengono a SPT, BepInEx o al gioco e sono stati lasciati come sono.</value>
+  </data>
+  <data name="Downloads_KeptOriginals_one" xml:space="preserve">
+    <value>1 file che ha sostituito è stato conservato, per rimetterlo se la mod viene rimossa.</value>
+  </data>
+  <data name="Downloads_KeptOriginals_other" xml:space="preserve">
+    <value>{0} file che ha sostituito sono stati conservati, per rimetterli se la mod viene rimossa.</value>
   </data>
 </root>

@@ -2507,7 +2507,7 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <comment>{0} is a mod name.</comment>
   </data>
   <data name="Installed_RemoveAppManagedBody" xml:space="preserve">
-    <value>This deletes exactly the files this app installed for it.</value>
+    <value>This removes exactly the files this app installed for it and puts back any file it replaced. Files that changed since it was installed, or that another mod also uses, are left where they are.</value>
     <comment>First paragraph of the Remove prompt for a mod this app installed.</comment>
   </data>
   <data name="Installed_RemoveNoFolderFormat" xml:space="preserve">
@@ -2515,7 +2515,7 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <comment>{0} is a mod name.</comment>
   </data>
   <data name="Installed_RemoveLegacyBodyFormat" xml:space="preserve">
-    <value>This mod wasn't installed through this app, so this permanently deletes its whole folder rather than just the files it placed:
+    <value>This mod wasn't installed through this app, so its whole folder is removed rather than just the files it placed:
 
 {0}</value>
     <comment>{0} is one or more folder paths, one per line.</comment>
@@ -2542,7 +2542,7 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   </data>
   <data name="Installed_RemoveConfigsChoicesFormat" xml:space="preserve">
     <value>Yes  -  keep them, moved to {0}
-No  -  delete them along with the rest of the mod
+No  -  remove them along with the rest of the mod
 Cancel  -  don't remove anything</value>
     <comment>What the three dialog buttons do. {0} is a folder path. Yes/No/Cancel are the Windows button captions and follow the operating system's language, so keep them as they appear there.</comment>
   </data>
@@ -6624,5 +6624,153 @@ This was written to:
   <data name="Help_Problems_Report_Keywords" xml:space="preserve">
     <value>bug, issue, crash, error, report, feedback, log</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Installed_RemovedUndoHint" xml:space="preserve">
+    <value>Use Undo to put it back.</value>
+    <comment>Shown after a removal that can be undone. 'Undo' is the button beside this message.</comment>
+  </data>
+  <data name="Installed_UndoRemovalFormat" xml:space="preserve">
+    <value>Undo removing {0}</value>
+    <comment>Button text. {0} is a mod name.</comment>
+  </data>
+  <data name="Installed_UndoRemovalToolTip" xml:space="preserve">
+    <value>Puts the mod back exactly as it was before it was removed. Nothing that has taken its place since is overwritten.</value>
+    <comment>Tooltip on the Undo button.</comment>
+  </data>
+  <data name="Installed_UndoneFormat" xml:space="preserve">
+    <value>Put {0} back.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="Installed_UndoNothing" xml:space="preserve">
+    <value>There's nothing to undo - the removed files have been cleared.</value>
+    <comment>Shown when Undo is pressed but the removal can no longer be undone.</comment>
+  </data>
+  <data name="Installed_RemoveHeldFormat" xml:space="preserve">
+    <value>Removed files are kept in the install for {0}, so you can undo it.</value>
+    <comment>Part of the removal confirmation. {0} is one of the Keep removed mods choices, e.g. '14 days'.</comment>
+  </data>
+  <data name="Installed_RemoveHeldUntilCleared" xml:space="preserve">
+    <value>Removed files are kept in the install until you clear them in Options, so you can undo it.</value>
+    <comment>Part of the removal confirmation.</comment>
+  </data>
+  <data name="Installed_RemoveNotHeld" xml:space="preserve">
+    <value>Removed files are deleted straight away (Options, Keep removed mods), so this can't be undone.</value>
+    <comment>Part of the removal confirmation when the Keep removed mods setting is Delete straight away.</comment>
+  </data>
+  <data name="Installed_RemoveUnstampedFormat" xml:space="preserve">
+    <value>This app's record of it doesn't say which SPT install it was made in. It will be removed from {0}.</value>
+    <comment>Part of the removal confirmation for a mod installed before v1.19.0 when the app isn't inside the SPT folder. {0} is the SPT folder.</comment>
+  </data>
+  <data name="Options_RemovedModsHeader" xml:space="preserve">
+    <value>Keep removed mods</value>
+    <comment>Options setting title.</comment>
+  </data>
+  <data name="Options_RemovedModsHint" xml:space="preserve">
+    <value>Removing a mod moves its files into a hidden folder in the install, so it can be undone. Choose how long they stay there.</value>
+    <comment>Options setting hint, under the title.</comment>
+  </data>
+  <data name="Options_RemovedModsDescription" xml:space="preserve">
+    <value>Removed mods are kept in .tcfmm-removed inside your SPT folder, and deleted when the app starts once their time is up. Updates keep the version they replaced there too.</value>
+    <comment>Tooltip on the Keep removed mods setting. .tcfmm-removed is a folder name, not translated.</comment>
+  </data>
+  <data name="Options_RemovedModsDeleteStraightAway" xml:space="preserve">
+    <value>Delete straight away</value>
+    <comment>Keep removed mods choice.</comment>
+  </data>
+  <data name="Options_RemovedModsOneDay" xml:space="preserve">
+    <value>1 day</value>
+    <comment>Keep removed mods choice; also used in 'kept in the install for {0}'.</comment>
+  </data>
+  <data name="Options_RemovedModsSevenDays" xml:space="preserve">
+    <value>7 days</value>
+    <comment>Keep removed mods choice; also used in 'kept in the install for {0}'.</comment>
+  </data>
+  <data name="Options_RemovedModsFourteenDays" xml:space="preserve">
+    <value>14 days</value>
+    <comment>Keep removed mods choice; also used in 'kept in the install for {0}'.</comment>
+  </data>
+  <data name="Options_RemovedModsThirtyDays" xml:space="preserve">
+    <value>30 days</value>
+    <comment>Keep removed mods choice; also used in 'kept in the install for {0}'.</comment>
+  </data>
+  <data name="Options_RemovedModsUntilCleared" xml:space="preserve">
+    <value>Until I clear them</value>
+    <comment>Keep removed mods choice.</comment>
+  </data>
+  <data name="Options_RemovedModsClearFormat" xml:space="preserve">
+    <value>Clear removed mods ({0})</value>
+    <comment>Button. {0} is a size, e.g. '12.4 MB'.</comment>
+  </data>
+  <data name="Options_RemovedModsClearTitle" xml:space="preserve">
+    <value>Clear removed mods</value>
+    <comment>Title of the confirmation before clearing.</comment>
+  </data>
+  <data name="Options_RemovedModsClearConfirmFormat" xml:space="preserve">
+    <value>Delete every removed mod kept in {1} ({0})? Nothing removed so far can be undone after this.</value>
+    <comment>Confirmation before clearing. {0} is a size, {1} the SPT folder.</comment>
+  </data>
+  <data name="Options_RemovedModsClearedFormat" xml:space="preserve">
+    <value>Removed mods cleared - {0} freed.</value>
+    <comment>Shown after clearing. {0} is a size.</comment>
+  </data>
+  <data name="Options_RemovedModsNothingToClear" xml:space="preserve">
+    <value>Nothing to clear</value>
+    <comment>Clear button text when nothing is held.</comment>
+  </data>
+  <data name="Installed_RemovedKeptChanged_one" xml:space="preserve">
+    <value>1 file that changed since it was installed was left in place.</value>
+    <comment>{0} is a count. Part of the message after a removal.</comment>
+  </data>
+  <data name="Installed_RemovedKeptChanged_other" xml:space="preserve">
+    <value>{0} files that changed since it was installed were left in place.</value>
+    <comment>{0} is a count. Part of the message after a removal.</comment>
+  </data>
+  <data name="Installed_RemovedKeptOwned_one" xml:space="preserve">
+    <value>1 file another mod also uses was left in place.</value>
+    <comment>{0} is a count. Part of the message after a removal.</comment>
+  </data>
+  <data name="Installed_RemovedKeptOwned_other" xml:space="preserve">
+    <value>{0} files other mods also use were left in place.</value>
+    <comment>{0} is a count. Part of the message after a removal.</comment>
+  </data>
+  <data name="Installed_RemovedRefused_one" xml:space="preserve">
+    <value>1 file that belongs to SPT, the game, or lies outside the mod was left alone.</value>
+    <comment>{0} is a count. Part of the message after a removal.</comment>
+  </data>
+  <data name="Installed_RemovedRefused_other" xml:space="preserve">
+    <value>{0} files that belong to SPT, the game, or lie outside the mod were left alone.</value>
+    <comment>{0} is a count. Part of the message after a removal.</comment>
+  </data>
+  <data name="Installed_RemovedRestored_one" xml:space="preserve">
+    <value>1 file it had replaced was put back.</value>
+    <comment>{0} is a count. Part of the message after a removal.</comment>
+  </data>
+  <data name="Installed_RemovedRestored_other" xml:space="preserve">
+    <value>{0} files it had replaced were put back.</value>
+    <comment>{0} is a count. Part of the message after a removal.</comment>
+  </data>
+  <data name="Installed_UndoneBlocked_one" xml:space="preserve">
+    <value>Put {1} back, except 1 item: something else is there now. It's still in {2}.</value>
+    <comment>{0} is a count, {1} a mod name, {2} a folder.</comment>
+  </data>
+  <data name="Installed_UndoneBlocked_other" xml:space="preserve">
+    <value>Put {1} back, except {0} items: something else is there now. They're still in {2}.</value>
+    <comment>{0} is a count, {1} a mod name, {2} a folder.</comment>
+  </data>
+  <data name="Downloads_KeptSptFiles_one" xml:space="preserve">
+    <value>1 file in this archive belongs to SPT, BepInEx or the game and was left as it is.</value>
+    <comment>{0} is a count. Added to a finished install's status line.</comment>
+  </data>
+  <data name="Downloads_KeptSptFiles_other" xml:space="preserve">
+    <value>{0} files in this archive belong to SPT, BepInEx or the game and were left as they are.</value>
+    <comment>{0} is a count. Added to a finished install's status line.</comment>
+  </data>
+  <data name="Downloads_KeptOriginals_one" xml:space="preserve">
+    <value>1 file it replaced was kept, to put back if it's removed.</value>
+    <comment>{0} is a count. Added to a finished install's status line.</comment>
+  </data>
+  <data name="Downloads_KeptOriginals_other" xml:space="preserve">
+    <value>{0} files it replaced were kept, to put back if it's removed.</value>
+    <comment>{0} is a count. Added to a finished install's status line.</comment>
   </data>
 </root>
