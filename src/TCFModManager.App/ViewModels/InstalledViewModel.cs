@@ -1020,7 +1020,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         if (mod.IsAppManaged && mod.ModId is { } modId)
         {
             var manifest = AppServices.InstallManifest.Load();
-            var record = manifest.Mods.FirstOrDefault(m => m.ModId == modId);
+            var record = manifest.Find(modId, mod.IsAddon);
             if (record is null)
             {
                 StatusMessage = Text(Strings.Installed_RemoveNoRecordFormat, mod.Name);
@@ -1094,7 +1094,7 @@ public partial class InstalledViewModel : LocalizedViewModel
                 // A manually-confirmed version record would otherwise dangle, pointing at a mod
                 // that's no longer on disk.
                 if (mod.IsManualOverride && mod.ModId is { } overriddenModId)
-                    AppServices.InstallManifest.ClearManualVersion(overriddenModId);
+                    AppServices.InstallManifest.ClearManualVersion(overriddenModId, mod.IsAddon);
 
                 StatusMessage = DescribeRemoval(mod.Name, failedFiles: 0, kept.Count, kept.Folder);
                 ModRemoved?.Invoke(this, EventArgs.Empty);

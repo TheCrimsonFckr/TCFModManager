@@ -53,6 +53,32 @@ public class AddonSupportTests
     }
 
     [Fact]
+    public void Manifest_Find_NeverHandsBackTheOtherKindWithTheSameId()
+    {
+        // Mod 106 and addon 106 both exist on sp-mod.com. Removing one used to look its record up by
+        // id alone and could delete the other's files.
+        var addon = new InstalledModRecord
+        {
+            ModId = 106, IsAddon = true, Name = "Addon 106", Version = "1.0.0",
+            InstalledAt = DateTimeOffset.UtcNow, Files = ["BepInEx/plugins/AddonFolder/a.dll"],
+        };
+        var mod = new InstalledModRecord
+        {
+            ModId = 106, IsAddon = false, Name = "Mod 106", Version = "2.0.0",
+            InstalledAt = DateTimeOffset.UtcNow, Files = ["BepInEx/plugins/ModFolder/m.dll"],
+        };
+
+        var addonFirst = new ModInstallManifest { Mods = [addon, mod] };
+        var modFirst = new ModInstallManifest { Mods = [mod, addon] };
+
+        Assert.Same(mod, addonFirst.Find(106, isAddon: false));
+        Assert.Same(addon, addonFirst.Find(106, isAddon: true));
+        Assert.Same(mod, modFirst.Find(106, isAddon: false));
+        Assert.Same(addon, modFirst.Find(106, isAddon: true));
+        Assert.Null(addonFirst.Find(107, isAddon: false));
+    }
+
+    [Fact]
     public void InstalledModRecord_DefaultsToNotAnAddon()
     {
         // Every record written before addons were supported has no IsAddon field at all; the

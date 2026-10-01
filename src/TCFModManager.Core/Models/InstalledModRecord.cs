@@ -61,4 +61,9 @@ public sealed class InstalledModRecord
 public sealed class ModInstallManifest
 {
     public List<InstalledModRecord> Mods { get; init; } = [];
+
+    // Mods and addons are numbered separately and the numbers overlap, so a record is only ever
+    // found by both halves of its identity.
+    public InstalledModRecord? Find(int modId, bool isAddon) =>
+        Mods.FirstOrDefault(m => m.ModId == modId && m.IsAddon == isAddon);
 }
