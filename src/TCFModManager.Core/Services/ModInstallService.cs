@@ -843,6 +843,11 @@ public sealed class ModInstallService(
             }
         }
 
+        // On a real removal, the mod's folders that had to stay because they hold files it didn't
+        // install - said in the result and marked on the leftover's card, never taken.
+        var foldersLeft = kind == RemovalKind.ReplacedByUpdate ? [] : FoldersLeftBehind(installPath, record);
+        session.Log.FoldersLeft = [.. foldersLeft.Select(f => f.Folder)];
+
         var manifest = manifestService.Load();
         manifest.Mods.RemoveAll(m => m.ModId == record.ModId && m.IsAddon == record.IsAddon);
         manifestService.Save(manifest);
@@ -855,6 +860,7 @@ public sealed class ModInstallService(
             KeptOwned = keptOwned,
             OriginalsRestored = restored,
             HoldingFolder = holding,
+            FoldersLeft = foldersLeft,
         };
     }
 
@@ -1043,6 +1049,18 @@ public sealed class ModInstallService(
                 ? InstallPathGuard.CheckPlacedPath(installPath, entry.Path, out _)
                 : InstallPathGuard.CheckRecordedPath(installPath, entry.Path, out _);
 
+            //
+            // A held folder whose place has since been taken by a folder of the same name - the mod
+            // put back first, then a folder of leftovers removed after it - is merged file by file,
+            // each file only into a free path. Anything occupied stays held and is reported.
+            //
+            if (check is null && Directory.Exists(held) && Directory.Exists(target) && !InstallPathGuard.IsLink(target))
+            {
+                var merged = MergeHeldFolder(installPath, held, entry.Path, blocked);
+                if (merged > 0) back++;
+                continue;
+            }
+
             if (check is not null || File.Exists(target) || Directory.Exists(target))
             {
                 blocked.Add(entry.Path);
@@ -1094,6 +1112,8 @@ public sealed class ModInstallService(
                 Directory.CreateDirectory(Path.GetDirectoryName(target)!);
                 File.Move(file, target, overwrite: false);
             }
+
+            DeleteEmptyConfigFolders(configsFolder);
         }
 
         // 5. The record.
@@ -1113,6 +1133,106 @@ public sealed class ModInstallService(
         if (blocked.Count == 0) RemovedMods.DeleteHeld(installPath, folder);
 
         return new UndoResult(true, back, blocked);
+    }
+
+    // Moves each file of a held folder back to its place under an existing folder, only where that
+    // place is free and passes the guard. Returns how many came back; the rest go in blocked.
+    private static int MergeHeldFolder(string installPath, string held, string relativeFolder, List<string> blocked)
+    {
+        var moved = 0;
+        var walk = new EnumerationOptions { RecurseSubdirectories = true, AttributesToSkip = FileAttributes.ReparsePoint };
+
+        foreach (var file in Directory.EnumerateFiles(held, "*", walk).ToList())
+        {
+            var relative = relativeFolder + "/" + Path.GetRelativePath(held, file).Replace('\\', '/');
+
+            if (InstallPathGuard.CheckRecordedPath(installPath, relative, out var target) is not null
+                || File.Exists(target) || Directory.Exists(target))
+            {
+                blocked.Add(relative);
+                continue;
+            }
+
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(target)!);
+                File.Move(file, target, overwrite: false);
+                moved++;
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                AppLog.Warn("Undo", $"couldn't put back {relative}: {ex.Message}");
+                blocked.Add(relative);
+            }
+        }
+
+        return moved;
+    }
+
+    //
+    // Each of the record's mod folders still on disk after its removal, with how many files in it the
+    // record doesn't list. Files the record does list and that stayed (changed, another mod's) are
+    // reported on their own, so a folder left only for those isn't counted here. Read-only; links are
+    // not followed.
+    //
+    private static List<FolderLeft> FoldersLeftBehind(string installPath, InstalledModRecord record)
+    {
+        var recorded = record.Files.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var left = new List<FolderLeft>();
+        var walk = new EnumerationOptions { RecurseSubdirectories = true, AttributesToSkip = FileAttributes.ReparsePoint };
+
+        foreach (var folder in record.Files.Select(InstallPathGuard.ModFolderOf).OfType<string>().Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            if (InstallPathGuard.CheckRecordedPath(installPath, folder, out var full) is not null || !Directory.Exists(full))
+                continue;
+
+            try
+            {
+                var foreign = Directory.EnumerateFiles(full, "*", walk)
+                    .Count(f => !recorded.Contains(Path.GetRelativePath(installPath, f).Replace('\\', '/')));
+
+                if (foreign > 0) left.Add(new FolderLeft(folder, foreign));
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                // Only a report - a folder that can't be read is simply not mentioned.
+            }
+        }
+
+        return left;
+    }
+
+    //
+    // Removes the folders an Undo emptied under Data\LegacyConfigs - the timestamped folder and the
+    // install-shaped path inside it. Empty folders only, never a link, never outside LegacyConfigs.
+    //
+    private static void DeleteEmptyConfigFolders(string configsFolder)
+    {
+        var root = Path.TrimEndingDirectorySeparator(Path.GetFullPath(AppPaths.LegacyConfigsDirectory)) + Path.DirectorySeparatorChar;
+        var top = Path.GetFullPath(configsFolder);
+        if (!top.StartsWith(root, StringComparison.OrdinalIgnoreCase) || !Directory.Exists(top)) return;
+
+        try
+        {
+            var folders = Directory.EnumerateDirectories(top, "*", new EnumerationOptions
+                {
+                    RecurseSubdirectories = true,
+                    AttributesToSkip = FileAttributes.ReparsePoint,
+                })
+                .Append(top)
+                .OrderByDescending(d => d.Length)
+                .ToList();
+
+            foreach (var dir in folders)
+            {
+                if (InstallPathGuard.IsLink(dir) || Directory.EnumerateFileSystemEntries(dir).Any()) continue;
+                Directory.Delete(dir);
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            // Tidying only: an empty folder that won't go is left.
+        }
     }
 
     // The config files a hand-installed mod keeps in its own folder, as install-relative paths.
@@ -1417,7 +1537,13 @@ public sealed record UninstallResult(
     public List<string> KeptOwned { get; init; } = [];
     public int OriginalsRestored { get; init; }
     public string? HoldingFolder { get; init; }
+
+    // The mod's folders that stayed because they hold files it didn't install.
+    public List<FolderLeft> FoldersLeft { get; init; } = [];
 }
+
+// A mod folder a removal left in place, install-relative, and how many files in it the mod didn't install.
+public sealed record FolderLeft(string Folder, int Files);
 
 // What Undo did: whether it ran at all, how many files and folders came back, and the paths it left in
 // the holding folder because something else now occupies them.

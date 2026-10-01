@@ -1853,4 +1853,9 @@ internal static class Strings
         LocalizationService.Plural("Downloads_KeptSptFiles", count, values);
     internal static string Downloads_KeptOriginals(int count, params object?[] values) =>
         LocalizationService.Plural("Downloads_KeptOriginals", count, values);
+    internal static string Installed_UndoRemovalPickFormat => LocalizationService.Get("Installed_UndoRemovalPickFormat");
+    internal static string Installed_UndoRemovalItemFormat => LocalizationService.Get("Installed_UndoRemovalItemFormat");
+    internal static string Installed_LeftoverFormat => LocalizationService.Get("Installed_LeftoverFormat");
+    internal static string Installed_RemovedFolderLeft(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_RemovedFolderLeft", count, values);
 }

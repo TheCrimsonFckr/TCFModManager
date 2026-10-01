@@ -6773,4 +6773,24 @@ This was written to:
     <value>{0} files it replaced were kept, to put back if it's removed.</value>
     <comment>{0} is a count. Added to a finished install's status line.</comment>
   </data>
+  <data name="Installed_UndoRemovalPickFormat" xml:space="preserve">
+    <value>Undo a removal ({0})</value>
+    <comment>Undo button text when more than one removal can be undone; opens a menu to pick one. {0} is how many.</comment>
+  </data>
+  <data name="Installed_UndoRemovalItemFormat" xml:space="preserve">
+    <value>{0} - removed {1}</value>
+    <comment>One entry in the Undo menu. {0} is a mod name, {1} the date and time it was removed.</comment>
+  </data>
+  <data name="Installed_LeftoverFormat" xml:space="preserve">
+    <value>Left behind when {0} was removed ({1}) - this folder holds files {0} didn't install.</value>
+    <comment>On the card of a folder a removal had to leave. {0} is the removed mod's name, {1} the date and time.</comment>
+  </data>
+  <data name="Installed_RemovedFolderLeft_one" xml:space="preserve">
+    <value>Its folder {1} was left in place: it holds 1 file the mod didn't install.</value>
+    <comment>{0} is a count, {1} a folder. Part of the message after a removal.</comment>
+  </data>
+  <data name="Installed_RemovedFolderLeft_other" xml:space="preserve">
+    <value>Its folder {1} was left in place: it holds {0} files the mod didn't install.</value>
+    <comment>{0} is a count, {1} a folder. Part of the message after a removal.</comment>
+  </data>
 </root>

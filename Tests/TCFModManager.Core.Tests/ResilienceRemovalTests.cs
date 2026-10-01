@@ -311,6 +311,109 @@ public class ResilienceRemovalTests : IDisposable
         Assert.False(Service().UndoRemoval(_install, removal.HoldingFolder!).Ran);
     }
 
+    // --- Chris's 2026-10-01 Windows test: a file the user added, several removals -----------------
+
+    [Fact]
+    public async Task Remove_SaysWhenTheModsFolderStays_ForAFileItDidntInstall()
+    {
+        var target = NewTarget();
+        await Install(target, "1.0.0", ("BepInEx/plugins/Mod/mod.dll", "the mod"), ("BepInEx/plugins/Mod/README.md", "readme"));
+        Write("BepInEx/plugins/Mod/TEST.md", "the user's own note");
+
+        var result = await Service().UninstallAsync(_install, RecordOf(target), ConfigAction.Delete);
+
+        Assert.Equal("the user's own note", File.ReadAllText(Full("BepInEx/plugins/Mod/TEST.md")));
+        Assert.Equal([new FolderLeft("BepInEx/plugins/Mod", 1)], result.FoldersLeft);
+        Assert.Equal(["BepInEx/plugins/Mod"], RemovedMods.ReadLog(result.HoldingFolder!)!.FoldersLeft);
+    }
+
+    [Fact]
+    public async Task Remove_DoesntReportAFolderLeftOnlyForAChangedFile()
+    {
+        var target = NewTarget();
+        await Install(target, "1.0.0", ("BepInEx/plugins/Mod/mod.dll", "the mod"), ("BepInEx/plugins/Mod/notes.txt", "as shipped"));
+        Write("BepInEx/plugins/Mod/notes.txt", "edited");
+
+        var result = await Service().UninstallAsync(_install, RecordOf(target), ConfigAction.Delete);
+
+        Assert.Equal(["BepInEx/plugins/Mod/notes.txt"], result.KeptChanged);
+        Assert.Empty(result.FoldersLeft);
+    }
+
+    [Fact]
+    public async Task Undoable_ListsEveryRemoval_AndAnyCanBeUndoneFirst()
+    {
+        var first = NewTarget();
+        var second = NewTarget();
+        await Install(first, "1.0.0", ("BepInEx/plugins/First/f.dll", "first"));
+        await Install(second, "1.0.0", ("BepInEx/plugins/Second/s.dll", "second"));
+        var a = await Service().UninstallAsync(_install, RecordOf(first), ConfigAction.Delete);
+        var b = await Service().UninstallAsync(_install, RecordOf(second), ConfigAction.Delete);
+
+        Assert.Equal([b.HoldingFolder, a.HoldingFolder], RemovedMods.Undoable(_install).Select(u => u.Folder));
+
+        Assert.Empty(Service().UndoRemoval(_install, a.HoldingFolder!).Blocked);
+
+        Assert.Equal("first", File.ReadAllText(Full("BepInEx/plugins/First/f.dll")));
+        Assert.False(File.Exists(Full("BepInEx/plugins/Second/s.dll")));
+        Assert.Equal([b.HoldingFolder], RemovedMods.Undoable(_install).Select(u => u.Folder));
+        Assert.Equal(b.HoldingFolder, RemovedMods.LatestUndoable(_install)?.Folder);
+    }
+
+    [Fact]
+    public async Task Undo_InEitherOrder_PutsTheModAndTheLeftoverFolderBackTogether()
+    {
+        var target = NewTarget();
+        await Install(target, "1.0.0", ("BepInEx/plugins/Mod/mod.dll", "the mod"));
+        Write("BepInEx/plugins/Mod/TEST.md", "the user's own note");
+        var modRemoval = await Service().UninstallAsync(_install, RecordOf(target), ConfigAction.Delete);
+        var leftoverRemoval = Service().RemoveHandInstalled([Full("BepInEx/plugins/Mod")], _install, "Mod");
+        Assert.False(Directory.Exists(Full("BepInEx/plugins/Mod")));
+
+        // The older one first: the mod's file recreates the folder, then the leftover merges into it.
+        Assert.Empty(Service().UndoRemoval(_install, modRemoval.HoldingFolder!).Blocked);
+        Assert.Empty(Service().UndoRemoval(_install, leftoverRemoval!).Blocked);
+
+        Assert.Equal("the mod", File.ReadAllText(Full("BepInEx/plugins/Mod/mod.dll")));
+        Assert.Equal("the user's own note", File.ReadAllText(Full("BepInEx/plugins/Mod/TEST.md")));
+        Assert.False(Directory.Exists(modRemoval.HoldingFolder));
+        Assert.False(Directory.Exists(leftoverRemoval));
+    }
+
+    [Fact]
+    public void Undo_MergingAFolder_NeverOverwritesAFileThatIsThere()
+    {
+        Write("BepInEx/plugins/Hand/a.txt", "held a");
+        Write("BepInEx/plugins/Hand/b.txt", "held b");
+        var held = Service().RemoveHandInstalled([Full("BepInEx/plugins/Hand")], _install, "Hand");
+        Write("BepInEx/plugins/Hand/a.txt", "new a");
+
+        var undo = Service().UndoRemoval(_install, held!);
+
+        Assert.Equal(["BepInEx/plugins/Hand/a.txt"], undo.Blocked);
+        Assert.Equal("new a", File.ReadAllText(Full("BepInEx/plugins/Hand/a.txt")));
+        Assert.Equal("held b", File.ReadAllText(Full("BepInEx/plugins/Hand/b.txt")));
+        Assert.True(Directory.Exists(held));
+    }
+
+    [Fact]
+    public async Task Undo_TidiesTheEmptiedKeptConfigsFolder()
+    {
+        var target = NewTarget();
+        await Install(target, "1.0.0",
+            ("user/mods/CfgMod/mod.dll", "server"),
+            ("user/mods/CfgMod/config/config.json", "{ \"a\": 1 }"));
+        var removal = await Service().UninstallAsync(_install, RecordOf(target), ConfigAction.Keep);
+        Assert.NotNull(removal.ConfigsFolder);
+        Assert.True(Directory.Exists(removal.ConfigsFolder));
+
+        Assert.Empty(Service().UndoRemoval(_install, removal.HoldingFolder!).Blocked);
+
+        Assert.Equal("{ \"a\": 1 }", File.ReadAllText(Full("SPT/user/mods/CfgMod/config/config.json")));
+        Assert.False(Directory.Exists(removal.ConfigsFolder));
+        Assert.True(Directory.Exists(AppPaths.LegacyConfigsDirectory));
+    }
+
     // --- Retention (D27) -------------------------------------------------------------------------
 
     [Fact]

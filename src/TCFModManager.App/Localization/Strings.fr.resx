@@ -5640,4 +5640,19 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="Downloads_KeptOriginals_other" xml:space="preserve">
     <value>{0} fichiers qu'il a remplacés ont été conservés, pour être remis s'il est supprimé.</value>
   </data>
+  <data name="Installed_UndoRemovalPickFormat" xml:space="preserve">
+    <value>Annuler une suppression ({0})</value>
+  </data>
+  <data name="Installed_UndoRemovalItemFormat" xml:space="preserve">
+    <value>{0} - supprimé le {1}</value>
+  </data>
+  <data name="Installed_LeftoverFormat" xml:space="preserve">
+    <value>Resté après la suppression de {0} ({1}) - ce dossier contient des fichiers que {0} n'a pas installés.</value>
+  </data>
+  <data name="Installed_RemovedFolderLeft_one" xml:space="preserve">
+    <value>Son dossier {1} a été laissé en place : il contient 1 fichier que le mod n'a pas installé.</value>
+  </data>
+  <data name="Installed_RemovedFolderLeft_other" xml:space="preserve">
+    <value>Son dossier {1} a été laissé en place : il contient {0} fichiers que le mod n'a pas installés.</value>
+  </data>
 </root>

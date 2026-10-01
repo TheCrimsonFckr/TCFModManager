@@ -144,6 +144,13 @@
                         Text="{Binding IncompleteSummary}"
                         Visibility="{Binding IncompleteSummary, Converter={StaticResource NullToCollapsed}}" />
 
+                    <!-- What a removal left behind because it holds files the mod didn't install. -->
+                    <TextBlock
+                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                        TextWrapping="Wrap"
+                        Text="{Binding LeftoverSummary}"
+                        Visibility="{Binding LeftoverSummary, Converter={StaticResource NullToCollapsed}}" />
+
                     <!-- Monitor mode: a download of this mod the scan found on disk, not yet
                          confirmed - or found only partly, which is never confirmed. -->
                     <TextBlock
@@ -370,17 +377,18 @@
                     Click="ListView_Click" />
             </StackPanel>
 
-            <!-- Undo for the most recent removal (D28) - shown while it is still held. -->
+            <!-- Undo a removal (D28) - shown while one is held. With several held, it opens a menu
+                 of them to pick from (UndoRemoval_Click). Sized like the view buttons beside it. -->
             <ui:Button
                 DockPanel.Dock="Right"
-                Margin="8,0,0,0"
-                Padding="10,5"
+                Margin="12,0,0,0"
+                Padding="12,7"
                 VerticalAlignment="Center"
                 Icon="{ui:SymbolIcon ArrowUndo24}"
                 Content="{Binding UndoRemovalLabel}"
                 ToolTip="{loc:Str Installed_UndoRemovalToolTip}"
-                Command="{Binding UndoRemovalCommand}"
-                Visibility="{Binding UndoRemovalLabel, Converter={StaticResource NullToCollapsed}}" />
+                Visibility="{Binding UndoRemovalLabel, Converter={StaticResource NullToCollapsed}}"
+                Click="UndoRemoval_Click" />
 
             <TextBlock
                 VerticalAlignment="Center"

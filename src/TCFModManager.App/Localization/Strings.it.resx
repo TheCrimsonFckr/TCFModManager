@@ -5640,4 +5640,19 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Downloads_KeptOriginals_other" xml:space="preserve">
     <value>{0} file che ha sostituito sono stati conservati, per rimetterli se la mod viene rimossa.</value>
   </data>
+  <data name="Installed_UndoRemovalPickFormat" xml:space="preserve">
+    <value>Annulla una rimozione ({0})</value>
+  </data>
+  <data name="Installed_UndoRemovalItemFormat" xml:space="preserve">
+    <value>{0} - rimossa il {1}</value>
+  </data>
+  <data name="Installed_LeftoverFormat" xml:space="preserve">
+    <value>Rimasta dopo la rimozione di {0} ({1}) - questa cartella contiene file che {0} non ha installato.</value>
+  </data>
+  <data name="Installed_RemovedFolderLeft_one" xml:space="preserve">
+    <value>La sua cartella {1} è stata lasciata: contiene 1 file che la mod non ha installato.</value>
+  </data>
+  <data name="Installed_RemovedFolderLeft_other" xml:space="preserve">
+    <value>La sua cartella {1} è stata lasciata: contiene {0} file che la mod non ha installato.</value>
+  </data>
 </root>

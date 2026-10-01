@@ -36,3 +36,6 @@ public sealed class DownloadConfirmationItem(string key, DownloadConfirmation va
 
     public override string ToString() => Label;
 }
+
+// One removal in the Installed page's Undo menu: its holding folder, and "<mod> - removed <when>".
+public sealed record HeldRemovalItem(string Folder, string Label);

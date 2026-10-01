@@ -5949,4 +5949,22 @@
   <data name="Downloads_KeptOriginals_many" xml:space="preserve">
     <value>{0} файлов, которые он заменил, сохранены, чтобы вернуть их при удалении.</value>
   </data>
+  <data name="Installed_UndoRemovalPickFormat" xml:space="preserve">
+    <value>Отменить удаление ({0})</value>
+  </data>
+  <data name="Installed_UndoRemovalItemFormat" xml:space="preserve">
+    <value>{0} - удалён {1}</value>
+  </data>
+  <data name="Installed_LeftoverFormat" xml:space="preserve">
+    <value>Осталось после удаления {0} ({1}) - в этой папке есть файлы, которые {0} не устанавливал.</value>
+  </data>
+  <data name="Installed_RemovedFolderLeft_one" xml:space="preserve">
+    <value>Его папка {1} оставлена: в ней {0} файл, который мод не устанавливал.</value>
+  </data>
+  <data name="Installed_RemovedFolderLeft_few" xml:space="preserve">
+    <value>Его папка {1} оставлена: в ней {0} файла, которые мод не устанавливал.</value>
+  </data>
+  <data name="Installed_RemovedFolderLeft_many" xml:space="preserve">
+    <value>Его папка {1} оставлена: в ней {0} файлов, которые мод не устанавливал.</value>
+  </data>
 </root>

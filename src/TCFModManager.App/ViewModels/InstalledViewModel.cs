@@ -808,6 +808,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             ApplyListMembership(cards);
             ApplyPins(cards);
             ApplyPendingDownloads(cards, downloads);
+            ApplyLeftovers(cards);
             ApplyBadgeVisibility();
             _dependencies = dependencies;
 
@@ -1794,6 +1795,11 @@ public partial class InstalledViewModel : LocalizedViewModel
                 parts.Add(Strings.Installed_RemovedRefused(refused.Count, refused.Count));
             if (result.OriginalsRestored > 0)
                 parts.Add(Strings.Installed_RemovedRestored(result.OriginalsRestored, result.OriginalsRestored));
+
+            // A folder that had to stay for files the mod didn't install - otherwise it looks like a
+            // mod still installed, with nothing saying why.
+            foreach (var left in result.FoldersLeft)
+                parts.Add(Strings.Installed_RemovedFolderLeft(left.Files, left.Files, left.Folder.Replace('/', '\\')));
         }
 
         if (configsKept > 0 && configsFolder is not null)
@@ -1816,35 +1822,99 @@ public partial class InstalledViewModel : LocalizedViewModel
         var days => Text(Strings.Installed_RemoveHeldFormat, OptionsViewModel.RetentionLabel(days)),
     };
 
-    // The Undo button's text, or null to hide it: the most recent removal still held for this install.
+    // The Undo button's text, or null to hide it. One removal held: "Undo removing <mod>", which
+    // undoes it on click. Several: "Undo a removal (n)", which opens HeldRemovals to pick from.
     [ObservableProperty]
     private string? _undoRemovalLabel;
+
+    // Every removal still held for this install that can be undone, newest first - the Undo menu.
+    [ObservableProperty]
+    private IReadOnlyList<HeldRemovalItem> _heldRemovals = [];
 
     private void RefreshUndo()
     {
         var installPath = AppServices.SptEnvironment.InstallPath;
+        var held = string.IsNullOrWhiteSpace(installPath) ? [] : RemovedMods.Undoable(installPath);
 
-        UndoRemovalLabel = !string.IsNullOrWhiteSpace(installPath) && RemovedMods.LatestUndoable(installPath) is { } latest
-            ? Text(Strings.Installed_UndoRemovalFormat, latest.Log.ModName)
-            : null;
+        HeldRemovals =
+        [
+            .. held.Select(h => new HeldRemovalItem(
+                h.Folder, Text(Strings.Installed_UndoRemovalItemFormat, h.Log.ModName, WhenLabel(h.Log.RemovedAt)))),
+        ];
+
+        UndoRemovalLabel = held.Count switch
+        {
+            0 => null,
+            1 => Text(Strings.Installed_UndoRemovalFormat, held[0].Log.ModName),
+            var count => Text(Strings.Installed_UndoRemovalPickFormat, count),
+        };
+    }
+
+    private static string WhenLabel(DateTimeOffset at) =>
+        at.ToLocalTime().ToString("g", System.Globalization.CultureInfo.CurrentCulture);
+
+    //
+    // Marks the card of each folder a removal had to leave behind (RemovalLog.FoldersLeft) while that
+    // removal is still held, so a leftover doesn't pass for a mod that's still installed.
+    //
+    private static void ApplyLeftovers(IReadOnlyList<InstalledModCardViewModel> cards)
+    {
+        foreach (var card in cards) card.LeftoverSummary = null;
+
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        if (string.IsNullOrWhiteSpace(installPath)) return;
+
+        var left = new Dictionary<string, RemovalLog>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (_, log) in RemovedMods.Undoable(installPath))
+            foreach (var folder in log.FoldersLeft)
+                left.TryAdd(SamePath(Path.Combine(installPath, folder)), log);
+
+        if (left.Count == 0) return;
+
+        foreach (var card in cards.Where(c => !c.IsAppManaged))
+        {
+            var log = card.Entries
+                .Select(e => left.GetValueOrDefault(SamePath(e.FolderPath)))
+                .FirstOrDefault(l => l is not null);
+
+            if (log is not null)
+                card.LeftoverSummary = Text(Strings.Installed_LeftoverFormat, log.ModName, WhenLabel(log.RemovedAt));
+        }
+    }
+
+    private static string SamePath(string path)
+    {
+        try { return Path.TrimEndingDirectorySeparator(Path.GetFullPath(path)); }
+        catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
+        {
+            return path;
+        }
     }
 
     //
-    // Puts the most recent removal back (D28). Never overwrites: anything that has taken a removed
-    // file's place since is reported and stays where it is.
+    // Puts a removal back (D28): the one picked from the Undo menu, or the only one held. Any can go
+    // first, and none ever overwrites: anything that has taken a removed file's place since is
+    // reported and stays held.
     //
     [RelayCommand]
-    private async Task UndoRemovalAsync()
+    private async Task UndoRemovalAsync(string? folder)
     {
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath)) return;
 
-        if (RemovedMods.LatestUndoable(installPath) is not { } latest)
+        var undoable = RemovedMods.Undoable(installPath);
+        var picked = folder is null
+            ? (undoable.Count == 1 ? undoable[0] : default)
+            : undoable.FirstOrDefault(u => string.Equals(u.Folder, folder, StringComparison.OrdinalIgnoreCase));
+
+        if (picked.Folder is null)
         {
             StatusMessage = Strings.Installed_UndoNothing;
             RefreshUndo();
             return;
         }
+
+        var latest = picked;
 
         IsBusy = true;
         try

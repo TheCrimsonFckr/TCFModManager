@@ -279,6 +279,13 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     public bool WasPartlyInstalled { get; init; }
 
+    //
+    // Set after a scan by InstalledViewModel when this folder is one a removal had to leave because
+    // it holds files the removed mod didn't install. Null otherwise.
+    //
+    [ObservableProperty]
+    private string? _leftoverSummary;
+
     public bool IsIncompleteInstall => MissingFolders.Count > 0 || WasPartlyInstalled;
 
     // One whole sentence per count: the verb has to agree with how many folders are missing, and

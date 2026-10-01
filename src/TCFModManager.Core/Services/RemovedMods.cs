@@ -95,6 +95,10 @@ public sealed class RemovalLog
     // Where the removal moved the mod's configs (Data\LegacyConfigs\...), so Undo can bring them back.
     public string? ConfigsKeptFolder { get; set; }
 
+    // The mod's folders a removal had to leave because they still hold files the mod didn't install
+    // (a file the user added, say), install-relative. The Installed page marks those folders' cards.
+    public List<string> FoldersLeft { get; set; } = [];
+
     // True once Undo has put this removal back.
     public bool Undone { get; set; }
 }
@@ -187,14 +191,36 @@ public sealed class RemovedMods(Func<RemovedModsRetention>? retention = null)
         return [.. found.OrderByDescending(f => f.Item2.RemovedAt)];
     }
 
-    // The most recent removal the user made that can still be undone, if any (D28).
+    //
+    // Every removal the user made in this install that can still be undone, newest first (D28). An
+    // update's removal half, one already undone and one from another install are left out. Any of
+    // them can be undone in any order: Undo only ever puts things back into free paths.
+    //
+    public static List<(string Folder, RemovalLog Log)> Undoable(string installPath)
+    {
+        var stamp = InstallStamp.Of(installPath);
+
+        return
+        [
+            .. List(installPath).Where(r =>
+                r.Log.Kind != RemovalKind.ReplacedByUpdate
+                && !r.Log.Undone
+                && string.Equals(StampOrNull(r.Log.InstallPath), stamp, StringComparison.OrdinalIgnoreCase)),
+        ];
+    }
+
+    // The most recent of those, if any.
     public static (string Folder, RemovalLog Log)? LatestUndoable(string installPath) =>
-        List(installPath)
-            .Where(r => r.Log.Kind != RemovalKind.ReplacedByUpdate)
-            .Select(r => ((string, RemovalLog)?)r)
-            .FirstOrDefault() is { } latest && !latest.Item2.Undone
-            ? latest
-            : null;
+        Undoable(installPath) is [var latest, ..] ? latest : null;
+
+    private static string? StampOrNull(string path)
+    {
+        try { return InstallStamp.Of(path); }
+        catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
+        {
+            return null;
+        }
+    }
 
     // Deletes held removals older than the retention (D27). Run at startup.
     public int Prune(string installPath, DateTimeOffset now)

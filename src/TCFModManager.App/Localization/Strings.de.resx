@@ -5640,4 +5640,19 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="Downloads_KeptOriginals_other" xml:space="preserve">
     <value>{0} Dateien, die er ersetzt hat, wurden aufbewahrt, um sie beim Entfernen zurückzulegen.</value>
   </data>
+  <data name="Installed_UndoRemovalPickFormat" xml:space="preserve">
+    <value>Entfernen rückgängig machen ({0})</value>
+  </data>
+  <data name="Installed_UndoRemovalItemFormat" xml:space="preserve">
+    <value>{0} - entfernt am {1}</value>
+  </data>
+  <data name="Installed_LeftoverFormat" xml:space="preserve">
+    <value>Zurückgeblieben, als {0} entfernt wurde ({1}) - dieser Ordner enthält Dateien, die {0} nicht installiert hat.</value>
+  </data>
+  <data name="Installed_RemovedFolderLeft_one" xml:space="preserve">
+    <value>Sein Ordner {1} wurde nicht entfernt: Er enthält 1 Datei, die der Mod nicht installiert hat.</value>
+  </data>
+  <data name="Installed_RemovedFolderLeft_other" xml:space="preserve">
+    <value>Sein Ordner {1} wurde nicht entfernt: Er enthält {0} Dateien, die der Mod nicht installiert hat.</value>
+  </data>
 </root>
