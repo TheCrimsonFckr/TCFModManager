@@ -5239,7 +5239,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Bestätige. Hat der Mod eigene Konfigurationsdateien, wirst du gefragt, ob du sie behalten willst - sie werden beiseitegelegt, nicht gelöscht - oder ob sie mit entfernt werden sollen.</value>
   </data>
   <data name="Help_Installed_Remove_Note" xml:space="preserve">
-    <value>Entfernte Dateien werden eine Weile aufbewahrt (Optionen, Entfernte Mods behalten), und auf der Seite Installiert lässt sich das zuletzt Entfernte zurückholen. Ein deaktivierter Mod muss erst wieder eingeschaltet werden, bevor er sich entfernen lässt. Um einen Mod aus dem Spiel zu nehmen, ohne ihn zu löschen, schalte ihn stattdessen aus.</value>
+    <value>Entfernte Dateien werden eine Weile aufbewahrt (Optionen, Entfernte Mods behalten), und auf der Seite Installiert lässt sich jedes davon zurückholen. Ein deaktivierter Mod muss erst wieder eingeschaltet werden, bevor er sich entfernen lässt. Um einen Mod aus dem Spiel zu nehmen, ohne ihn zu löschen, schalte ihn stattdessen aus.</value>
   </data>
   <data name="Help_Installed_Downgrade_Title" xml:space="preserve">
     <value>Zu einer älteren Version eines Mods zurückkehren</value>

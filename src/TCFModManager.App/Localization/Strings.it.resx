@@ -5239,7 +5239,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Conferma. Se il mod ha file di configurazione suoi, ti viene chiesto se tenerli - vengono messi da parte, non eliminati - o rimuoverli insieme.</value>
   </data>
   <data name="Help_Installed_Remove_Note" xml:space="preserve">
-    <value>I file rimossi vengono conservati per un po' (Opzioni, Conserva le mod rimosse) e dalla pagina Installati puoi annullare l'ultima rimozione. Un mod disattivato va riattivato prima di poterlo rimuovere. Per togliere un mod dal gioco senza eliminarlo, disattivalo invece.</value>
+    <value>I file rimossi vengono conservati per un po' (Opzioni, Conserva le mod rimosse) e dalla pagina Installati puoi annullare una qualsiasi di queste rimozioni. Un mod disattivato va riattivato prima di poterlo rimuovere. Per togliere un mod dal gioco senza eliminarlo, disattivalo invece.</value>
   </data>
   <data name="Help_Installed_Downgrade_Title" xml:space="preserve">
     <value>Tornare a una versione più vecchia di un mod</value>

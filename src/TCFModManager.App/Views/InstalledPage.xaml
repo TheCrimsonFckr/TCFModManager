@@ -301,7 +301,7 @@
                 DockPanel.Dock="Right"
                 Margin="0,0,8,0"
                 Content="{Binding UndoLabel}"
-                Icon="{ui:SymbolIcon ArrowUndo24}"
+                Icon="{ui:SymbolIcon ArrowUndo20}"
                 Command="{Binding UndoCommand}"
                 Visibility="{Binding CanUndo, Converter={StaticResource BoolToVis}}" />
 
@@ -378,18 +378,15 @@
             </StackPanel>
 
             <!-- Undo a removal (D28) - shown while one is held. With several held, it opens a menu
-                 of them to pick from (UndoRemoval_Click). Sized like the view buttons beside it. -->
+                of them to pick from (UndoRemoval_Click). Default padding, like Rescan and Undo beside it. -->
             <ui:Button
                 DockPanel.Dock="Right"
-                Margin="12,0,0,0"
-                Padding="12,7"
-                VerticalAlignment="Center"
-                Icon="{ui:SymbolIcon ArrowUndo24}"
+                Margin="0,0,8,0"
+                Icon="{ui:SymbolIcon ArrowUndo20}"
                 Content="{Binding UndoRemovalLabel}"
                 ToolTip="{loc:Str Installed_UndoRemovalToolTip}"
                 Visibility="{Binding UndoRemovalLabel, Converter={StaticResource NullToCollapsed}}"
                 Click="UndoRemoval_Click" />
-
             <TextBlock
                 VerticalAlignment="Center"
                 TextWrapping="Wrap"
