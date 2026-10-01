@@ -1408,6 +1408,10 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>{0} {1} wasn't installed: it would replace {2}, and a copy of that file couldn't be kept first ({3}). Nothing was changed.</value>
     <comment>{0} is a mod name, {1} its version, {2} a path inside the SPT folder, {3} the operating system's reason.</comment>
   </data>
+  <data name="ModInstall_RecordFromAnotherInstallFormat" xml:space="preserve">
+    <value>Didn't touch {0}: this app's record of it was made in another SPT install ({1}). Switch Options back to that install to remove or update it there.</value>
+    <comment>{0} is a mod name, {1} the folder of another SPT install.</comment>
+  </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>Didn't remove {0}: it isn't inside your SPT folder. Nothing was deleted.</value>
     <comment>{0} is a folder or file path.</comment>

@@ -80,6 +80,12 @@ public static class ModInstallProblems
             problem.Version,
             problem.Folder),
 
+        ModInstallFailure.RecordFromAnotherInstall => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.ModInstall_RecordFromAnotherInstallFormat,
+            problem.ModName,
+            problem.Folder),
+
         ModInstallFailure.OriginalNotKept => string.Format(
             CultureInfo.CurrentCulture,
             Strings.ModInstall_OriginalNotKeptFormat,

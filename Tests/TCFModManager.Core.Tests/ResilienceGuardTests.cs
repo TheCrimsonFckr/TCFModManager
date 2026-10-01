@@ -34,6 +34,11 @@ public class ResilienceGuardTests : IDisposable
         return full;
     }
 
+    private ModInstallService Service() => new(
+        new ModDownloadService(),
+        new ModInstallManifestService(Path.Combine(_root, "installed-mods.json")),
+        removedMods: new RemovedMods(() => RemovedModsRetention.UntilCleared));
+
     private string Dir(string relative)
     {
         var full = Path.Combine(_install, relative.Replace('/', Path.DirectorySeparatorChar));
@@ -214,7 +219,7 @@ public class ResilienceGuardTests : IDisposable
 
         Assert.Equal(PathRefusal.Link, InstallPathGuard.CheckModFolder(_install, link));
 
-        var ex = Assert.Throws<ModInstallException>(() => ModInstallService.RemoveLegacyPath(link, _install));
+        var ex = Assert.Throws<ModInstallException>(() => Service().RemoveHandInstalled([link], _install, "Linked"));
         Assert.Equal(ModInstallFailure.RemovalRefused, ex.Reason);
         Assert.Equal(PathRefusal.Link, ex.Refusal);
         Assert.True(File.Exists(precious));
@@ -235,12 +240,12 @@ public class ResilienceGuardTests : IDisposable
     }
 
     [Fact]
-    public void RemoveLegacyPath_RefusesAContainerAndLeavesIt()
+    public void RemoveHandInstalled_RefusesAContainerAndLeavesIt()
     {
         Write("BepInEx/plugins/OtherMod/o.dll");
         var plugins = Path.Combine(_install, "BepInEx", "plugins");
 
-        var ex = Assert.Throws<ModInstallException>(() => ModInstallService.RemoveLegacyPath(plugins, _install));
+        var ex = Assert.Throws<ModInstallException>(() => Service().RemoveHandInstalled([plugins], _install, "Plugins"));
 
         Assert.Equal(ModInstallFailure.RemovalRefused, ex.Reason);
         Assert.Equal(PathRefusal.NotAModFolder, ex.Refusal);
@@ -248,21 +253,34 @@ public class ResilienceGuardTests : IDisposable
     }
 
     [Fact]
-    public void RemoveLegacyPath_RemovesAModFolder()
+    public void RemoveHandInstalled_MovesAModFolderIntoHolding()
     {
-        Write("BepInEx/plugins/SomeMod/a.dll");
+        Write("BepInEx/plugins/SomeMod/a.dll", "the mod");
         Write("BepInEx/plugins/OtherMod/o.dll");
 
-        ModInstallService.RemoveLegacyPath(Path.Combine(_install, "BepInEx", "plugins", "SomeMod"), _install);
+        var held = Service().RemoveHandInstalled([Path.Combine(_install, "BepInEx", "plugins", "SomeMod")], _install, "Some Mod");
 
         Assert.False(Directory.Exists(Path.Combine(_install, "BepInEx", "plugins", "SomeMod")));
         Assert.True(File.Exists(Path.Combine(_install, "BepInEx", "plugins", "OtherMod", "o.dll")));
+        Assert.Equal("the mod", File.ReadAllText(Path.Combine(held!, "files", "BepInEx", "plugins", "SomeMod", "a.dll")));
     }
 
     [Fact]
-    public void RemoveLegacyPath_RefusesWithNoInstallFolder()
+    public void RemoveHandInstalled_ChecksEveryPathBeforeMovingAny()
     {
-        var ex = Assert.Throws<ModInstallException>(() => ModInstallService.RemoveLegacyPath(_install, ""));
+        Write("BepInEx/plugins/SomeMod/a.dll");
+        var good = Path.Combine(_install, "BepInEx", "plugins", "SomeMod");
+        var bad = Path.Combine(_install, "BepInEx", "plugins");
+
+        Assert.Throws<ModInstallException>(() => Service().RemoveHandInstalled([good, bad], _install, "Some Mod"));
+
+        Assert.True(File.Exists(Path.Combine(good, "a.dll")));
+    }
+
+    [Fact]
+    public void RemoveHandInstalled_RefusesWithNoInstallFolder()
+    {
+        var ex = Assert.Throws<ModInstallException>(() => Service().RemoveHandInstalled([_install], "", "x"));
         Assert.Equal(ModInstallFailure.NoInstallFolder, ex.Reason);
     }
 

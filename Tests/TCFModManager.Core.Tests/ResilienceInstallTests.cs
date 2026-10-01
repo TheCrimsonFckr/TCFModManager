@@ -35,13 +35,16 @@ public class ResilienceInstallTests : IDisposable
 
         foreach (var id in _ids)
         {
-            var kept = Path.Combine(AppPaths.DataDirectory, ModInstallService.OverwrittenDirectoryName, id.ToString());
-            try
+            foreach (var key in new[] { id.ToString(), $"{id}-addon" })
             {
-                if (Directory.Exists(kept)) Directory.Delete(kept, recursive: true);
-                else if (File.Exists(kept)) File.Delete(kept);
+                var kept = Path.Combine(AppPaths.DataDirectory, ModInstallService.OverwrittenDirectoryName, key);
+                try
+                {
+                    if (Directory.Exists(kept)) Directory.Delete(kept, recursive: true);
+                    else if (File.Exists(kept)) File.Delete(kept);
+                }
+                catch (IOException) { }
             }
-            catch (IOException) { }
         }
     }
 
@@ -152,11 +155,62 @@ public class ResilienceInstallTests : IDisposable
 
         var shared = result.Record.Overwrote.Single(o => o.Path == "BepInEx/plugins/Other/shared.dll");
         Assert.Equal("the original", File.ReadAllText(Path.Combine(AppPaths.DataDirectory, shared.BackupPath)));
-        Assert.True(shared.InOwnFolder);
+        Assert.False(shared.SameMod);
 
         var own = result.Record.Overwrote.Single(o => o.Path == "BepInEx/plugins/Mod/mod.dll");
         Assert.Equal("an earlier hand-installed copy", File.ReadAllText(Path.Combine(AppPaths.DataDirectory, own.BackupPath)));
-        Assert.True(own.InOwnFolder);
+        Assert.False(own.SameMod);
+    }
+
+    [Fact]
+    public async Task AnEarlierCopyOfTheSameMod_ProvenByItsGuid_IsMarkedSameMod()
+    {
+        Directory.CreateDirectory(Full("BepInEx/plugins/Mod"));
+        new ModMetadataFixture(ModMetadataFixture.Kind.Plain)
+            .Plugin("com.test.samemod", "Mod", "0.9.0")
+            .Write(Full("BepInEx/plugins/Mod"), "Mod.dll");
+
+        var id = Interlocked.Add(ref _nextId, 1);
+        _ids.Add(id);
+        var target = new InstallTarget(id, false, "Mod", "com.test.samemod", null, null);
+
+        var result = await Install(target, "1.0.0", ("BepInEx/plugins/Mod/Mod.dll", "the new version"));
+
+        Assert.True(Assert.Single(result.Record.Overwrote).SameMod);
+    }
+
+    [Fact]
+    public async Task AFolderDeclaringADifferentGuid_IsNotTheSameMod()
+    {
+        Directory.CreateDirectory(Full("BepInEx/plugins/Parent"));
+        new ModMetadataFixture(ModMetadataFixture.Kind.Plain)
+            .Plugin("com.test.parent", "Parent", "1.0.0")
+            .Write(Full("BepInEx/plugins/Parent"), "Parent.dll");
+
+        var id = Interlocked.Add(ref _nextId, 1);
+        _ids.Add(id);
+        var target = new InstallTarget(id, false, "Patch", "com.test.patch", null, null);
+
+        var result = await Install(target, "1.0.0", ("BepInEx/plugins/Parent/Parent.dll", "patched"));
+
+        Assert.False(Assert.Single(result.Record.Overwrote).SameMod);
+    }
+
+    [Fact]
+    public async Task AnAddon_IsNeverTheSameMod()
+    {
+        Directory.CreateDirectory(Full("BepInEx/plugins/Parent"));
+        new ModMetadataFixture(ModMetadataFixture.Kind.Plain)
+            .Plugin("com.test.parent2", "Parent", "1.0.0")
+            .Write(Full("BepInEx/plugins/Parent"), "Parent.dll");
+
+        var id = Interlocked.Add(ref _nextId, 1);
+        _ids.Add(id);
+        var target = new InstallTarget(id, true, "Addon", null, null, null);
+
+        var result = await Install(target, "1.0.0", ("BepInEx/plugins/Parent/Parent.dll", "addon's copy"));
+
+        Assert.False(Assert.Single(result.Record.Overwrote).SameMod);
     }
 
     [Fact]
@@ -179,7 +233,7 @@ public class ResilienceInstallTests : IDisposable
 
         var kept = Assert.Single(result2.Record.Overwrote);
         Assert.Equal("BepInEx/config/other.cfg", kept.Path);
-        Assert.False(kept.InOwnFolder);
+        Assert.False(kept.SameMod);
         Assert.Equal("someone else's settings", File.ReadAllText(Path.Combine(AppPaths.DataDirectory, kept.BackupPath)));
     }
 

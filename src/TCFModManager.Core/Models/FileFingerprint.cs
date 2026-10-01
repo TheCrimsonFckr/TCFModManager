@@ -57,8 +57,9 @@ public sealed record FileFingerprint(string Path, long Size, string Sha256)
 // original is kept in the app's Data folder (D22). BackupPath is relative to the Data folder, so
 // moving the app with its Data keeps it valid.
 //
-// InOwnFolder: the file sat inside one of the folders this install places - almost always an earlier
-// copy of the same mod, installed by hand. Whether removal puts those back is stage 4's call; the
-// originals are kept either way.
+// SameMod: the mod folder the file sat in declared the GUID of the mod being installed, so it was an
+// earlier copy of that same mod - proven, not guessed (R16). Removal keeps those recoverable but does
+// not put them back, so Remove really removes the mod. Every other original - another mod's file, an
+// addon's parent's file, anything with no declared ID, anything outside a mod folder - is put back.
 //
-public sealed record OverwrittenFile(string Path, long Size, string Sha256, string BackupPath, bool InOwnFolder = false);
+public sealed record OverwrittenFile(string Path, long Size, string Sha256, string BackupPath, bool SameMod = false);

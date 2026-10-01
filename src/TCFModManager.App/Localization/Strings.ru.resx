@@ -2397,6 +2397,9 @@
   <data name="ModInstall_OriginalNotKeptFormat" xml:space="preserve">
     <value>{0} {1} не установлен: он заменил бы {2}, а сохранить копию этого файла заранее не удалось ({3}). Ничего не изменено.</value>
   </data>
+  <data name="ModInstall_RecordFromAnotherInstallFormat" xml:space="preserve">
+    <value>{0} не затронут: запись приложения о нём сделана в другой установке SPT ({1}). Переключитесь на ту установку в «Параметрах», чтобы удалить или обновить его там.</value>
+  </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>{0} не удалён: он находится вне вашей папки SPT. Ничего не удалено.</value>
   </data>

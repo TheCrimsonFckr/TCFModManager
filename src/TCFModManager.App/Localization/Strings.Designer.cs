@@ -402,6 +402,7 @@ internal static class Strings
     internal static string ModInstall_ArchiveContainsLinkFormat => LocalizationService.Get("ModInstall_ArchiveContainsLinkFormat");
     internal static string ModInstall_InstallThroughLinkFormat => LocalizationService.Get("ModInstall_InstallThroughLinkFormat");
     internal static string ModInstall_OriginalNotKeptFormat => LocalizationService.Get("ModInstall_OriginalNotKeptFormat");
+    internal static string ModInstall_RecordFromAnotherInstallFormat => LocalizationService.Get("ModInstall_RecordFromAnotherInstallFormat");
     internal static string ModInstall_RemoveRefusedOutsideFormat => LocalizationService.Get("ModInstall_RemoveRefusedOutsideFormat");
     internal static string ModInstall_RemoveRefusedProtectedFormat => LocalizationService.Get("ModInstall_RemoveRefusedProtectedFormat");
     internal static string ModInstall_RemoveRefusedAppFolderFormat => LocalizationService.Get("ModInstall_RemoveRefusedAppFolderFormat");

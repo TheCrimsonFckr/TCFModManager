@@ -2262,6 +2262,9 @@ Annuler  -  ne rien supprimer</value>
   <data name="ModInstall_OriginalNotKeptFormat" xml:space="preserve">
     <value>{0} {1} n'a pas été installé : il remplacerait {2}, et une copie de ce fichier n'a pas pu être conservée au préalable ({3}). Rien n'a été modifié.</value>
   </data>
+  <data name="ModInstall_RecordFromAnotherInstallFormat" xml:space="preserve">
+    <value>{0} n'a pas été touché : l'enregistrement de l'application le concernant a été fait dans une autre installation de SPT ({1}). Revenez à cette installation dans les Options pour le supprimer ou le mettre à jour là-bas.</value>
+  </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>{0} n'a pas été supprimé : il ne se trouve pas dans votre dossier SPT. Rien n'a été effacé.</value>
   </data>

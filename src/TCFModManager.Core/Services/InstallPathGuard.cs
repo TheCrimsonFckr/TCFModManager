@@ -120,6 +120,23 @@ public static class InstallPathGuard
     }
 
     //
+    // The install-relative path of the mod folder (or loose DLL) a path sits in - the container plus
+    // its first segment below - or null when the path isn't inside a mod container.
+    //
+    public static string? ModFolderOf(string installRelative)
+    {
+        if (ProtectedInstallPaths.Segments(installRelative) is not { } segments) return null;
+
+        foreach (var container in ModContainers.OrderByDescending(c => c.Length))
+        {
+            if (segments.Length > container.Length && StartsWith(segments, container))
+                return string.Join('/', segments[..(container.Length + 1)]);
+        }
+
+        return null;
+    }
+
+    //
     // Whether an empty folder left behind by a removal may itself be removed: only a mod's own folder
     // or something below it (D14). A container, anything above one, and every folder outside the mod
     // containers (BepInEx\config, user\, the install root) are left even when empty.

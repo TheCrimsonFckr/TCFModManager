@@ -14,8 +14,11 @@ public sealed class ModInstallService(
     ModInstallManifestService manifestService,
     ConfigCarryOver? configCarryOver = null,
     ConfigUpdateLog? configUpdateLog = null,
-    ModConfigOptionsStore? configOptions = null)
+    ModConfigOptionsStore? configOptions = null,
+    RemovedMods? removedMods = null)
 {
+    private readonly RemovedMods _removed = removedMods ?? new RemovedMods();
+
     private readonly ConfigCarryOver _configs = configCarryOver ?? new ConfigCarryOver();
     private readonly ModConfigOptionsStore _options = configOptions ?? new ModConfigOptionsStore();
     private readonly ConfigUpdateLog _configLog = configUpdateLog ?? new ConfigUpdateLog();
@@ -256,6 +259,8 @@ public sealed class ModInstallService(
             var manifest = manifestService.Load();
             var existing = manifest.Mods.FirstOrDefault(target.Matches);
 
+            if (existing is not null) EnsureRecordBelongsHere(existing, installPath);
+
             //
             // Where each source file is going, worked out before anything is removed: the config
             // files the archive is about to place over have to be known while they are still there.
@@ -334,6 +339,8 @@ public sealed class ModInstallService(
                     existing,
                     ConfigAction.Preserve,
                     pending.Protected.ToHashSet(StringComparer.OrdinalIgnoreCase),
+                    placements.Select(p => p.Forward).ToHashSet(StringComparer.OrdinalIgnoreCase),
+                    RemovalKind.ReplacedByUpdate,
                     CancellationToken.None);
             }
 
@@ -526,8 +533,9 @@ public sealed class ModInstallService(
             .SelectMany(m => m.Files)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-        var ownFolders = InstalledModFolders.FromPlacedFiles(placements.Select(p => p.Forward))
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        // The GUIDs each affected mod folder declares, read once per folder while it still holds what
+        // was there before this install.
+        var declared = new Dictionary<string, IReadOnlySet<string>>(StringComparer.OrdinalIgnoreCase);
 
         var key = target.IsAddon ? $"{target.Id}-addon" : target.Id.ToString(System.Globalization.CultureInfo.InvariantCulture);
         var folder = Path.Combine(OverwrittenDirectoryName, key, $"{timestamp.ToLocalTime():yyyyMMdd-HHmmss}");
@@ -552,9 +560,9 @@ public sealed class ModInstallService(
                 var print = FileFingerprint.Compute(backup, forward)
                     ?? throw new IOException($"couldn't read back {backup}");
 
-                var inOwnFolder = InstalledModFolders.FromPlacedFiles([forward]) is [var name] && ownFolders.Contains(name);
+                var sameMod = IsEarlierCopyOfSameMod(installPath, target, forward, declared);
 
-                kept.Add(new OverwrittenFile(forward, print.Size, print.Sha256, backupRelative.Replace('\\', '/'), inOwnFolder));
+                kept.Add(new OverwrittenFile(forward, print.Size, print.Sha256, backupRelative.Replace('\\', '/'), sameMod));
                 alreadyKept.Add(forward);
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -576,13 +584,59 @@ public sealed class ModInstallService(
         return kept;
     }
 
+    //
+    // Whether the mod folder a replaced file sits in declares the GUID of the mod being installed -
+    // proof that the file belongs to an earlier copy of the same mod (R16). False whenever that can't be
+    // shown: an addon (sp-mod.com gives addons no GUID), a mod with no catalog GUID, a file outside any
+    // mod folder, or a folder whose DLLs declare something else or nothing.
+    //
+    private static bool IsEarlierCopyOfSameMod(
+        string installPath, InstallTarget target, string forward, Dictionary<string, IReadOnlySet<string>> declared)
+    {
+        if (target.IsAddon || string.IsNullOrWhiteSpace(target.Guid)) return false;
+        if (InstallPathGuard.ModFolderOf(forward) is not { } folder) return false;
+
+        if (!declared.TryGetValue(folder, out var guids))
+        {
+            guids = DeclaredGuids(Path.Combine(installPath, folder.Replace('/', Path.DirectorySeparatorChar)));
+            declared[folder] = guids;
+        }
+
+        return guids.Contains(target.Guid);
+    }
+
+    // Every GUID the DLLs in a mod folder (or a loose DLL) declare, client and server alike.
+    private static IReadOnlySet<string> DeclaredGuids(string modPath)
+    {
+        var guids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        IEnumerable<string> dlls = File.Exists(modPath)
+            ? [modPath]
+            : Directory.Exists(modPath)
+                ? Directory.EnumerateFiles(modPath, "*.dll", SearchOption.AllDirectories).Take(MaxDllsReadForIdentity)
+                : [];
+
+        foreach (var dll in dlls)
+        {
+            if (ModAssemblyMetadata.ReadPlugin(dll).Guid is { Length: > 0 } client) guids.Add(client);
+            if (ModAssemblyMetadata.ReadServer(dll)?.Guid is { Length: > 0 } server) guids.Add(server);
+        }
+
+        return guids;
+    }
+
+    // A mod folder holding more DLLs than this is not read further for its identity.
+    private const int MaxDllsReadForIdentity = 200;
+
     // Under the Data folder: where the originals an install replaced are kept (D22).
     public const string OverwrittenDirectoryName = "overwritten";
 
-    // Removes every file InstalledModRecord.Files lists, then deletes any directory left
-    // empty (working bottom-up), then drops the record from the manifest. Files that can't be
-    // deleted are collected into the result instead of aborting the rest of the removal.
-    // <paramref name="configs"/> decides what happens to the mod's own config JSON files first.
+    //
+    // Removes a mod this app installed (D23): every recorded file that is still exactly what was placed
+    // and that no other mod owns is MOVED into the install's holding folder, never deleted; the files it
+    // replaced are put back (D22, R16); every path's outcome is logged and written to removal.json
+    // (D26). <paramref name="configs"/> decides what happens to the mod's own config JSON files first.
+    //
     public Task<UninstallResult> UninstallAsync(
         string installPath,
         InstalledModRecord record,
@@ -590,8 +644,9 @@ public sealed class ModInstallService(
         CancellationToken ct = default)
     {
         EnsureInstallNotInUse(ModInstallAction.Remove, installPath);
+        EnsureRecordBelongsHere(record, installPath);
 
-        var result = RemoveRecordedFiles(installPath, record, configs, null, ct);
+        var result = RemoveRecordedFiles(installPath, record, configs, null, null, RemovalKind.AppInstalled, ct);
 
         // A mod that is gone has no shipped copies worth keeping. An update does not come through
         // here, which is why this is safe to do unconditionally - see InstallAsync.
@@ -601,24 +656,48 @@ public sealed class ModInstallService(
     }
 
     //
-    // The removal itself, shared by a real uninstall and the update path.
+    // A record stamped with a different install is never acted on here (D17). An unstamped one - made
+    // before v1.19.0 - is: the App names the install in its confirmation before anything happens.
     //
-    // <paramref name="keep"/> names files this must not touch whatever else it is told - the configs
-    // ConfigCarryOver could not copy aside. Null on the removal path, which has nothing to protect.
+    private static void EnsureRecordBelongsHere(InstalledModRecord record, string installPath)
+    {
+        if (record.InstallPath is not { } stamped) return;
+        if (string.Equals(stamped, InstallStamp.Of(installPath), StringComparison.OrdinalIgnoreCase)) return;
+
+        AppLog.Warn("Remove", $"{record.Name}: its record belongs to {stamped}, not {installPath}; refused");
+        throw new ModInstallException(ModInstallFailure.RecordFromAnotherInstall)
+        {
+            ModName = record.Name,
+            Folder = stamped,
+        };
+    }
+
+    //
+    // The removal itself, shared by Remove and the update path. For every recorded file, in order:
+    // kept for the user (keep/preserve), refused by InstallPathGuard (D13), kept because another record
+    // owns it (D9), already gone, kept because it changed since install (D21 - unless an update is about
+    // to place over it, when it is moved and so stays recoverable), otherwise moved into holding (D23).
+    //
+    // <paramref name="keep"/>: configs ConfigCarryOver could not copy aside. <paramref name="incoming"/>:
+    // what the update will place. Both null on a real removal.
     //
     private UninstallResult RemoveRecordedFiles(
         string installPath,
         InstalledModRecord record,
         ConfigAction configs,
         IReadOnlySet<string>? keep,
+        IReadOnlySet<string>? incoming,
+        RemovalKind kind,
         CancellationToken ct)
     {
         var failed = new List<string>();
         var refused = new List<string>();
-        var deleted = 0;
+        var keptChanged = new List<string>();
+        var keptOwned = new List<string>();
+        var moved = 0;
+        var restored = 0;
         var touchedDirectories = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        // Moved out before the delete loop runs, so the loop simply finds them gone.
         var options = _options.Effective();
 
         //
@@ -645,46 +724,73 @@ public sealed class ModInstallService(
             ? ModConfigFiles.UserDataInRecord(record, options).ToHashSet(StringComparer.OrdinalIgnoreCase)
             : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
+        // Every file another record lists - those stay with their other owner (D9).
+        var owned = manifestService.Load().Mods
+            .Where(m => !(m.ModId == record.ModId && m.IsAddon == record.IsAddon))
+            .SelectMany(m => m.Files)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var session = RemovedMods.Begin(installPath, record.Name, kind, record);
+        session.Log.ConfigsKeptFolder = kept.Folder;
+
         foreach (var relative in record.Files)
         {
             ct.ThrowIfCancellationRequested();
 
-            if (keep is not null && keep.Contains(relative)) continue;
-            if (preserve.Contains(relative)) continue;
+            if ((keep is not null && keep.Contains(relative)) || preserve.Contains(relative))
+            {
+                session.Note(relative, RemovalOutcome.KeptForTheUser);
+                continue;
+            }
 
-            //
-            // A record is only as trustworthy as whatever last wrote it - the Data files page edits
-            // it by hand - so every path is checked against the disk as it is now before anything is
-            // deleted (D13). A refused path is left exactly as it is and reported.
-            //
             if (InstallPathGuard.CheckRecordedPath(installPath, relative, out var fullPath) is { } refusal)
             {
                 refused.Add(relative);
-                AppLog.Warn("Remove", $"{record.Name}: left {relative} in place ({refusal})");
+                session.Note(relative, RemovalOutcome.Refused, refusal);
+                continue;
+            }
+
+            if (owned.Contains(relative))
+            {
+                keptOwned.Add(relative);
+                session.Note(relative, RemovalOutcome.KeptOwnedByAnotherMod);
+                continue;
+            }
+
+            if (!File.Exists(fullPath))
+            {
+                session.Note(relative, RemovalOutcome.AlreadyGone);
+                NoteFoldersToTidy(installPath, fullPath, touchedDirectories);
+                continue;
+            }
+
+            if (record.FingerprintFor(relative) is { } print
+                && !print.Matches(fullPath)
+                && !(kind == RemovalKind.ReplacedByUpdate && incoming is not null && incoming.Contains(relative)))
+            {
+                keptChanged.Add(relative);
+                session.Note(relative, RemovalOutcome.KeptChangedSinceInstall);
                 continue;
             }
 
             try
             {
-                if (File.Exists(fullPath))
-                {
-                    File.Delete(fullPath);
-                    deleted++;
-                }
-
-                // Only a mod's own folder and what's below it are ever tidied away (D14).
-                for (var dir = Path.GetDirectoryName(fullPath);
-                     dir is not null && InstallPathGuard.MayRemoveEmptyFolder(installPath, dir);
-                     dir = Path.GetDirectoryName(dir))
-                {
-                    touchedDirectories.Add(dir);
-                }
+                session.MoveFileIn(fullPath, relative);
+                session.Note(relative, RemovalOutcome.Moved);
+                moved++;
+                NoteFoldersToTidy(installPath, fullPath, touchedDirectories);
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
+                AppLog.Warn("Remove", $"{record.Name}: couldn't move {relative} out: {ex.Message}");
                 failed.Add(relative);
+                session.Note(relative, RemovalOutcome.Failed);
             }
         }
+
+        // On a real removal, what this mod replaced comes back. An update carries them forward instead.
+        if (kind == RemovalKind.AppInstalled)
+            restored = RestoreOriginals(installPath, record, session);
 
         foreach (var dir in touchedDirectories.OrderByDescending(d => d.Length))
         {
@@ -707,32 +813,267 @@ public sealed class ModInstallService(
         manifest.Mods.RemoveAll(m => m.ModId == record.ModId && m.IsAddon == record.IsAddon);
         manifestService.Save(manifest);
 
-        return new UninstallResult(deleted, failed, kept.Count, kept.Folder, refused);
+        var holding = _removed.Finish(session);
+
+        return new UninstallResult(moved, failed, kept.Count, kept.Folder, refused)
+        {
+            KeptChanged = keptChanged,
+            KeptOwned = keptOwned,
+            OriginalsRestored = restored,
+            HoldingFolder = holding,
+        };
     }
 
-    // Deletes a mod's whole folder (or, for a loose top-level DLL, just that file) - the
-    // removal path for a mod this app didn't install itself, since there's no per-file manifest
-    // record to work from. Callers should confirm the exact path with the user before calling this.
     //
-    // Refused, before anything is touched, unless the path is a mod folder directly inside one of
-    // this install's mod containers, isn't SPT's, and is neither a link nor holds one (D15).
-    // Callers check every path with InstallPathGuard.CheckModFolder first, so a refusal here is the
-    // second line, not the first.
-    public static void RemoveLegacyPath(string path, string installPath)
+    // Puts back what this mod replaced (D22): every original except an earlier copy of the same mod
+    // proven by its GUID (R16), and only where the path is free and passes the path checks. Every kept
+    // copy then moves out of Data into the holding folder, so Undo has it and retention clears it.
+    //
+    private static int RestoreOriginals(string installPath, InstalledModRecord record, RemovalSession session)
+    {
+        var restored = 0;
+
+        foreach (var original in record.Overwrote)
+        {
+            var backup = Path.Combine(AppPaths.DataDirectory, original.BackupPath.Replace('/', Path.DirectorySeparatorChar));
+
+            if (!File.Exists(backup))
+            {
+                session.Note(original.Path, RemovalOutcome.OriginalMissing);
+                continue;
+            }
+
+            try
+            {
+                if (original.SameMod)
+                {
+                    session.Note(original.Path, RemovalOutcome.OriginalHeldSameMod);
+                }
+                else if (InstallPathGuard.CheckRecordedPath(installPath, original.Path, out var target) is { } refusal)
+                {
+                    session.Note(original.Path, RemovalOutcome.Refused, refusal);
+                }
+                else if (File.Exists(target))
+                {
+                    session.Note(original.Path, RemovalOutcome.OriginalNotRestoredOccupied);
+                }
+                else
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(target)!);
+                    File.Copy(backup, target, overwrite: false);
+
+                    if (!new FileFingerprint(original.Path, original.Size, original.Sha256).Matches(target))
+                        AppLog.Warn("Remove", $"{record.Name}: put back {original.Path}, but its kept copy no longer matches what was kept");
+
+                    session.Note(original.Path, RemovalOutcome.OriginalRestored);
+                    restored++;
+                }
+
+                session.MoveOriginalIn(original.BackupPath);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                AppLog.Warn("Remove", $"{record.Name}: couldn't put back {original.Path}: {ex.Message}");
+                session.Note(original.Path, RemovalOutcome.Failed);
+            }
+        }
+
+        TidyEmptyOriginalsFolders(record);
+        return restored;
+    }
+
+    // Removes the now-empty Data\overwritten\<mod>\<time>\... folders - only empty ones, only in there.
+    private static void TidyEmptyOriginalsFolders(InstalledModRecord record)
+    {
+        var key = record.IsAddon ? $"{record.ModId}-addon" : record.ModId.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        var root = Path.Combine(AppPaths.DataDirectory, OverwrittenDirectoryName, key);
+        if (!Directory.Exists(root)) return;
+
+        try
+        {
+            foreach (var dir in Directory.EnumerateDirectories(root, "*", SearchOption.AllDirectories).OrderByDescending(d => d.Length).Append(root))
+            {
+                if (!Directory.EnumerateFileSystemEntries(dir).Any()) Directory.Delete(dir);
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+        }
+    }
+
+    private static void NoteFoldersToTidy(string installPath, string fullPath, HashSet<string> touched)
+    {
+        // Only a mod's own folder and what's below it are ever tidied away (D14).
+        for (var dir = Path.GetDirectoryName(fullPath);
+             dir is not null && InstallPathGuard.MayRemoveEmptyFolder(installPath, dir);
+             dir = Path.GetDirectoryName(dir))
+        {
+            touched.Add(dir);
+        }
+    }
+
+    //
+    // Removes a mod installed by hand (D15, D23): every folder (or loose DLL) is checked first, and only
+    // when all pass are they moved - whole - into the holding folder. <paramref name="configsFolder"/> is
+    // where KeepLegacyConfigs put the mod's configs, if it did, so Undo can bring them back too.
+    //
+    public string? RemoveHandInstalled(
+        IReadOnlyList<string> paths, string installPath, string modName, string? configsFolder = null)
     {
         if (string.IsNullOrWhiteSpace(installPath))
             throw new ModInstallException(ModInstallFailure.NoInstallFolder);
 
         EnsureInstallNotInUse(ModInstallAction.Remove, installPath);
 
-        if (InstallPathGuard.CheckModFolder(installPath, path) is { } refusal)
+        foreach (var path in paths)
         {
-            AppLog.Warn("Remove", $"refused to remove {path} ({refusal})");
-            throw new ModInstallException(ModInstallFailure.RemovalRefused) { Folder = path, Refusal = refusal };
+            if (InstallPathGuard.CheckModFolder(installPath, path) is { } refusal)
+            {
+                AppLog.Warn("Remove", $"refused to remove {path} ({refusal})");
+                throw new ModInstallException(ModInstallFailure.RemovalRefused) { Folder = path, Refusal = refusal };
+            }
         }
 
-        if (Directory.Exists(path)) Directory.Delete(path, recursive: true);
-        else if (File.Exists(path)) File.Delete(path);
+        var session = RemovedMods.Begin(installPath, modName, RemovalKind.HandInstalled, record: null);
+        session.Log.ConfigsKeptFolder = configsFolder;
+
+        foreach (var path in paths)
+        {
+            var full = Path.GetFullPath(path);
+            var relative = Path.GetRelativePath(Path.GetFullPath(installPath), full).Replace('\\', '/');
+
+            if (Directory.Exists(full)) session.MoveFolderIn(full, relative);
+            else if (File.Exists(full)) session.MoveFileIn(full, relative);
+            else
+            {
+                session.Note(relative, RemovalOutcome.AlreadyGone);
+                continue;
+            }
+
+            session.Note(relative, RemovalOutcome.Moved);
+        }
+
+        return _removed.Finish(session);
+    }
+
+    //
+    // Puts a removal back (D28): the original files this mod had replaced go back to Data, the mod's
+    // files and folders come back to the install, its kept configs come back, and its record is
+    // restored. A path something else now occupies is never overwritten - it is reported and its copy
+    // stays in the holding folder, which is then kept rather than deleted.
+    //
+    public UndoResult UndoRemoval(string installPath, string folder)
+    {
+        EnsureInstallNotInUse(ModInstallAction.Undo, installPath);
+
+        var log = RemovedMods.ReadLog(folder);
+        if (log is null || log.Undone || log.Kind == RemovalKind.ReplacedByUpdate
+            || !string.Equals(log.InstallPath, InstallStamp.Of(installPath), StringComparison.OrdinalIgnoreCase))
+        {
+            return new UndoResult(false, 0, []);
+        }
+
+        var blocked = new List<string>();
+        var back = 0;
+
+        // 1. Originals this removal put back leave the install again - into the holding folder, never deleted.
+        if (log.Record is { } removedRecord)
+        {
+            foreach (var entry in log.Entries.Where(e => e.Outcome == RemovalOutcome.OriginalRestored))
+            {
+                var original = removedRecord.Overwrote.FirstOrDefault(o => string.Equals(o.Path, entry.Path, StringComparison.OrdinalIgnoreCase));
+                if (original is null) continue;
+
+                if (InstallPathGuard.CheckRecordedPath(installPath, entry.Path, out var target) is null
+                    && File.Exists(target)
+                    && new FileFingerprint(original.Path, original.Size, original.Sha256).Matches(target))
+                {
+                    var aside = Path.Combine(folder, "undo-displaced", entry.Path.Replace('/', Path.DirectorySeparatorChar));
+                    Directory.CreateDirectory(Path.GetDirectoryName(aside)!);
+                    File.Move(target, aside, overwrite: false);
+                }
+            }
+        }
+
+        // 2. The mod's files and folders.
+        foreach (var entry in log.Entries.Where(e => e.Outcome == RemovalOutcome.Moved))
+        {
+            var held = Path.Combine(folder, RemovedMods.FilesFolder, entry.Path.Replace('/', Path.DirectorySeparatorChar));
+            var target = Path.Combine(installPath, entry.Path.Replace('/', Path.DirectorySeparatorChar));
+
+            if (!File.Exists(held) && !Directory.Exists(held)) { blocked.Add(entry.Path); continue; }
+
+            if (InstallPathGuard.CheckRecordedPath(installPath, entry.Path, out _) is not null
+                || File.Exists(target) || Directory.Exists(target))
+            {
+                blocked.Add(entry.Path);
+                continue;
+            }
+
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(target)!);
+                if (Directory.Exists(held)) Directory.Move(held, target);
+                else File.Move(held, target, overwrite: false);
+                back++;
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                AppLog.Warn("Undo", $"couldn't put back {entry.Path}: {ex.Message}");
+                blocked.Add(entry.Path);
+            }
+        }
+
+        // 3. The copies of files it had replaced, back into Data where the record expects them.
+        var originals = Path.Combine(folder, RemovedMods.OriginalsFolder);
+        if (Directory.Exists(originals))
+        {
+            foreach (var file in Directory.EnumerateFiles(originals, "*", SearchOption.AllDirectories).ToList())
+            {
+                var dataRelative = Path.GetRelativePath(originals, file);
+                var destination = Path.Combine(AppPaths.DataDirectory, dataRelative);
+                if (File.Exists(destination)) continue;
+
+                Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+                File.Move(file, destination, overwrite: false);
+            }
+        }
+
+        // 4. Configs the removal moved out to Data\LegacyConfigs.
+        if (log.ConfigsKeptFolder is { } configsFolder && Directory.Exists(configsFolder))
+        {
+            foreach (var file in Directory.EnumerateFiles(configsFolder, "*", SearchOption.AllDirectories).ToList())
+            {
+                var relative = Path.GetRelativePath(configsFolder, file).Replace('\\', '/');
+
+                if (InstallPathGuard.CheckRecordedPath(installPath, relative, out var target) is not null || File.Exists(target))
+                {
+                    blocked.Add(relative);
+                    continue;
+                }
+
+                Directory.CreateDirectory(Path.GetDirectoryName(target)!);
+                File.Move(file, target, overwrite: false);
+            }
+        }
+
+        // 5. The record.
+        if (log.Record is { } record)
+        {
+            var manifest = manifestService.Load();
+            manifest.Mods.RemoveAll(m => m.ModId == record.ModId && m.IsAddon == record.IsAddon);
+            manifest.Mods.Add(record);
+            manifestService.Save(manifest);
+        }
+
+        log.Undone = true;
+        SafeFile.WriteText(Path.Combine(folder, RemovedMods.LogName), System.Text.Json.JsonSerializer.Serialize(log));
+
+        AppLog.Info("Undo", $"{log.ModName}: put back {back} item(s){(blocked.Count > 0 ? $"; {blocked.Count} path(s) were occupied and left in {folder}" : "")}");
+
+        if (blocked.Count == 0) RemovedMods.DeleteHeld(installPath, folder);
+
+        return new UndoResult(true, back, blocked);
     }
 
     // The config files a hand-installed mod keeps in its own folder, as install-relative paths.
@@ -956,12 +1297,27 @@ public sealed record ModInstallResult(
 // deleted; the mod is still removed from the manifest regardless. ConfigsKept/ConfigsFolder
 // describe the mod's own config files when they were moved out rather than deleted.
 // RefusedFiles lists recorded paths that failed InstallPathGuard's checks and were left untouched.
+//
+// Since v1.19.0 FilesDeleted counts files MOVED into the holding folder - nothing is deleted outright.
+// KeptChanged: left because they changed since install (D21). KeptOwned: left because another mod's
+// record lists them (D9). OriginalsRestored: files this mod had replaced, put back (D22).
+// HoldingFolder: where this removal is held, or null when the setting deleted it straight away.
 public sealed record UninstallResult(
     int FilesDeleted,
     List<string> FailedFiles,
     int ConfigsKept = 0,
     string? ConfigsFolder = null,
-    List<string>? RefusedFiles = null);
+    List<string>? RefusedFiles = null)
+{
+    public List<string> KeptChanged { get; init; } = [];
+    public List<string> KeptOwned { get; init; } = [];
+    public int OriginalsRestored { get; init; }
+    public string? HoldingFolder { get; init; }
+}
+
+// What Undo did: whether it ran at all, how many files and folders came back, and the paths it left in
+// the holding folder because something else now occupies them.
+public sealed record UndoResult(bool Ran, int PutBack, List<string> Blocked);
 
 // What to do with a mod's own config and user-data files when its files are being removed.
 public enum ConfigAction

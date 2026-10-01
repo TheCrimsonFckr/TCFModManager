@@ -994,7 +994,7 @@ public partial class InstalledViewModel : LocalizedViewModel
     }
 
     /// <summary>Removes a mod from the install: the manifest-precise ModInstallService.UninstallAsync path
-    /// for anything IsAppManaged, or RemoveLegacyPath (delete the mod's whole folder) otherwise. Both paths
+    /// for anything IsAppManaged, or RemoveHandInstalled (move the mod's whole folder into holding) otherwise. Both paths
     /// confirm first.</summary>
     [RelayCommand]
     private async Task RemoveAsync(InstalledModCardViewModel? mod)
@@ -1102,7 +1102,8 @@ public partial class InstalledViewModel : LocalizedViewModel
                     ? ModInstallService.KeepLegacyConfigs(installPath, configs, mod.Name)
                     : new KeptConfigs(0, null);
 
-                foreach (var path in paths) ModInstallService.RemoveLegacyPath(path!, installPath);
+                AppServices.ModInstall.RemoveHandInstalled(
+                    [.. paths.Select(p => p!)], installPath, mod.Name, kept.Folder);
 
                 // A manually-confirmed version record would otherwise dangle, pointing at a mod
                 // that's no longer on disk.

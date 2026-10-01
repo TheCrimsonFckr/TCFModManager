@@ -2262,6 +2262,9 @@ Abbrechen  -  nichts entfernen</value>
   <data name="ModInstall_OriginalNotKeptFormat" xml:space="preserve">
     <value>{0} {1} wurde nicht installiert: Es würde {2} ersetzen, und vorher konnte keine Kopie dieser Datei angelegt werden ({3}). Es wurde nichts geändert.</value>
   </data>
+  <data name="ModInstall_RecordFromAnotherInstallFormat" xml:space="preserve">
+    <value>{0} wurde nicht angerührt: Der Eintrag dieser App dazu stammt aus einer anderen SPT-Installation ({1}). Stell in den Optionen wieder diese Installation ein, um es dort zu entfernen oder zu aktualisieren.</value>
+  </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>{0} wurde nicht entfernt: Es liegt nicht in deinem SPT-Ordner. Es wurde nichts gelöscht.</value>
   </data>

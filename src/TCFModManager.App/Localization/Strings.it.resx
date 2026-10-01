@@ -2262,6 +2262,9 @@ Annulla  -  non rimuove nulla</value>
   <data name="ModInstall_OriginalNotKeptFormat" xml:space="preserve">
     <value>{0} {1} non è stato installato: sostituirebbe {2}, e prima non è stato possibile conservarne una copia ({3}). Non è stato modificato nulla.</value>
   </data>
+  <data name="ModInstall_RecordFromAnotherInstallFormat" xml:space="preserve">
+    <value>{0} non è stato toccato: la registrazione dell'app che lo riguarda è stata fatta in un'altra installazione di SPT ({1}). Torna a quell'installazione nelle Opzioni per rimuoverlo o aggiornarlo lì.</value>
+  </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>{0} non è stato rimosso: non si trova nella tua cartella di SPT. Non è stato eliminato nulla.</value>
   </data>

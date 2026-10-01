@@ -8,6 +8,10 @@ public sealed class AppSettings
 {
     public string? SptInstallPath { get; set; }
 
+    // How long removed mods stay in the install's holding folder before they are deleted (R11, R15).
+    public TCFModManager.Core.Services.RemovedModsRetention RemovedModsRetention { get; set; } =
+        TCFModManager.Core.Services.RemovedModsRetention.FourteenDays;
+
     //
     // What this machine does with that install: whether anyone plays on it, and whether it runs a
     // Fika headless client. Together they decide which entries of a SERVED mod list are this

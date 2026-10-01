@@ -78,6 +78,10 @@ public enum ModInstallFailure
     // aside first. Refused before anything is removed or placed. Carries ModName, Version, Folder
     // (the install-relative path) and the underlying exception as InnerException.
     OriginalNotKept,
+
+    // The record being removed or updated was made in a different SPT install (D17). Refused before
+    // anything is touched. Carries ModName and Folder (the install the record belongs to).
+    RecordFromAnotherInstall,
 }
 
 //
