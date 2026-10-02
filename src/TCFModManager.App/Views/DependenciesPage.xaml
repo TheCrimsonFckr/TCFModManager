@@ -72,6 +72,7 @@
                 Margin="0,0,0,8"
                 FontSize="16"
                 FontWeight="SemiBold"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 Text="{loc:Str Conflicts_Header}"
                 Visibility="{Binding ConflictsChecked, Converter={StaticResource BoolToVisibility}}" />
             <TextBlock
@@ -144,6 +145,7 @@
                 Margin="0,0,0,8"
                 FontSize="16"
                 FontWeight="SemiBold"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 Text="{loc:Str Dependencies_Header}"
                 Visibility="{Binding HasLoaded, Converter={StaticResource BoolToVisibility}}" />
             <!-- Shown once a scan has finished and found no dependencies to report. -->
