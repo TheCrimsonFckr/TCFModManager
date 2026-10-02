@@ -5764,4 +5764,7 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Play_ConflictsHint" xml:space="preserve">
     <value>Alcune mod potrebbero non caricarsi. Puoi comunque avviare.</value>
   </data>
+  <data name="Conflicts_KeepBlockedFormat" xml:space="preserve">
+    <value>{0} ha anche file che non sono duplicati, ed è stata installata con questa app, quindi si può rimuovere solo per intero - anche quei file andrebbero via. Rimuovila invece dalla pagina Installati, dove Rimuovi mostra tutto ciò che porta via.</value>
+  </data>
 </root>

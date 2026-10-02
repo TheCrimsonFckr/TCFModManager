@@ -26,7 +26,20 @@ public sealed class ConflictMemberRow
 
     // Only for the same mod installed twice (C1, C2). Different copies of a file are information
     // only (D7): neither mod is the wrong one.
-    public bool CanKeep { get; init; }
+    public bool IsKeepable { get; init; }
+
+    //
+    // What Keep this one would remove, set by PlanKeeps: each other mod in the conflict, with every
+    // folder of it that duplicates this copy's mod - client and server halves at once.
+    //
+    public IReadOnlyList<(InstalledModCardViewModel Card, IReadOnlyList<InstalledMod> Entries)> Removals { get; internal set; } = [];
+
+    // Set by PlanKeeps when keeping this copy would also take files that aren't duplicated.
+    public string? KeepBlockedReason { get; internal set; }
+
+    public bool CanKeep => IsKeepable && KeepBlockedReason is null;
+
+    public string? KeepToolTip => !IsKeepable ? null : KeepBlockedReason ?? Strings.Conflicts_KeepThisToolTip;
 
     public ConflictItemViewModel Owner { get; internal set; } = null!;
 }
@@ -63,13 +76,54 @@ public sealed class ConflictItemViewModel
                     FullPath = m.Assembly is null ? m.Entry.FolderPath : ModConflictFinder.FullPath(m),
                     Card = cards[m.ModIndex],
                     Entry = m.Entry,
-                    CanKeep = canKeep,
+                    IsKeepable = canKeep,
                 }),
             ],
         };
 
         foreach (var row in item.Members) row.Owner = item;
         return item;
+    }
+
+    //
+    // Works out, for every keepable copy on the page, what keeping it would remove - and refuses
+    // (KeepBlockedReason) when that would take more than duplicates. For each other mod in the
+    // conflict, every enabled folder of it that sits in ANY same-mod conflict with the kept mod goes,
+    // so a hand-installed copy of both halves is cleared in one step. A mod this app installed can
+    // only be removed whole, by its record; if it has a folder that duplicates nothing of the kept
+    // mod, removing it would take that too, so it is refused and left to Remove on Installed.
+    //
+    public static void PlanKeeps(IReadOnlyList<ConflictItemViewModel> items, ModInstallManifest manifest)
+    {
+        var sameMod = items.SelectMany(i => i.Members).Where(m => m.IsKeepable).ToList();
+
+        foreach (var keep in sameMod)
+        {
+            var removals = new List<(InstalledModCardViewModel, IReadOnlyList<InstalledMod>)>();
+            string? blocked = null;
+
+            foreach (var other in keep.Owner.Members.Select(m => m.Card).Where(c => !ReferenceEquals(c, keep.Card)).Distinct())
+            {
+                // Every conflict on the page that has both the kept mod and this one in it.
+                var shared = items
+                    .Where(i => i.Members.Any(m => m.IsKeepable && ReferenceEquals(m.Card, keep.Card))
+                        && i.Members.Any(m => ReferenceEquals(m.Card, other)))
+                    .SelectMany(i => i.Members.Where(m => ReferenceEquals(m.Card, other)).Select(m => m.Entry))
+                    .Distinct()
+                    .ToList();
+
+                var recorded = other is { IsAppManaged: true, ModId: { } id } && manifest.Find(id, other.IsAddon) is not null;
+                if (recorded && other.Entries.Any(e => !e.IsDisabled && !shared.Contains(e)))
+                {
+                    blocked ??= LocalizationService.Text(Strings.Conflicts_KeepBlockedFormat, other.DisplayTitle);
+                }
+
+                removals.Add((other, shared));
+            }
+
+            keep.Removals = removals;
+            keep.KeepBlockedReason = blocked;
+        }
     }
 
     private static string Describe(ModAssembly copy)

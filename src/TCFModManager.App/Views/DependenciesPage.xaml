@@ -128,11 +128,12 @@
                                                         VerticalAlignment="Center"
                                                         Appearance="Secondary"
                                                         Content="{loc:Str Conflicts_KeepThis}"
-                                                        ToolTip="{loc:Str Conflicts_KeepThisToolTip}"
+                                                        ToolTip="{Binding KeepToolTip}"
+                                                        ToolTipService.ShowOnDisabled="True"
                                                         Command="{Binding DataContext.KeepConflictCopyCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                                                         CommandParameter="{Binding}"
-                                                        IsEnabled="{Binding DataContext.IsNotBusy, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                                                        Visibility="{Binding CanKeep, Converter={StaticResource BoolToVisibility}}" />
+                                                        IsEnabled="{Binding CanKeep}"
+                                                        Visibility="{Binding IsKeepable, Converter={StaticResource BoolToVisibility}}" />
                                                     <ui:Button
                                                         Padding="4"
                                                         VerticalAlignment="Center"

@@ -79,6 +79,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
                 .Select(c => ConflictItemViewModel.From(c, cards, installPath))
                 .OrderBy(c => c.Title, StringComparer.CurrentCulture)
                 .ToList();
+            ConflictItemViewModel.PlanKeeps(items, AppServices.InstallManifest.Load());
 
             Conflicts.Clear();
             foreach (var item in items) Conflicts.Add(item);
@@ -107,14 +108,12 @@ public partial class DependenciesViewModel : LocalizedViewModel
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath)) return;
 
-        var others = keep.Owner.Members
-            .Where(m => !ReferenceEquals(m.Card, keep.Card))
-            .GroupBy(m => m.Card)
-            .ToList();
+        var others = keep.Removals;
         if (others.Count == 0) return;
 
-        var lines = string.Join("\n", others.SelectMany(g => g.Select(m =>
-            Text(Strings.Conflicts_KeepLineFormat, m.ModName, m.Location))));
+        var lines = string.Join("\n", others.SelectMany(o =>
+            (o.Card.IsAppManaged ? o.Card.Entries.Where(e => !e.IsDisabled) : o.Entries).Select(e =>
+                Text(Strings.Conflicts_KeepLineFormat, o.Card.DisplayTitle, Path.GetRelativePath(installPath, e.FolderPath)))));
 
         var answer = System.Windows.MessageBox.Show(
             Text(Strings.Conflicts_KeepConfirmFormat, keep.ModName, keep.Location, lines, InstalledViewModel.HeldSentence()),
@@ -130,9 +129,8 @@ public partial class DependenciesViewModel : LocalizedViewModel
         {
             var manifest = AppServices.InstallManifest.Load();
 
-            foreach (var group in others)
+            foreach (var (card, entries) in others)
             {
-                var card = group.Key;
                 try
                 {
                     if (card is { IsAppManaged: true, ModId: { } id } && manifest.Find(id, card.IsAddon) is { } record)
@@ -141,7 +139,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
                     }
                     else
                     {
-                        var paths = group.Select(m => m.Entry.FolderPath).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                        var paths = entries.Select(e => e.FolderPath).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
                         await Task.Run(() => AppServices.ModInstall.RemoveHandInstalled(paths, installPath, card.DisplayTitle));
                     }
 

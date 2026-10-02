@@ -1890,4 +1890,5 @@ internal static class Strings
     internal static string Filter_HasConflicts => LocalizationService.Get("Filter_HasConflicts");
     internal static string Filter_HasConflictsToolTip => LocalizationService.Get("Filter_HasConflictsToolTip");
     internal static string Play_ConflictsHint => LocalizationService.Get("Play_ConflictsHint");
+    internal static string Conflicts_KeepBlockedFormat => LocalizationService.Get("Conflicts_KeepBlockedFormat");
 }

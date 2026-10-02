@@ -5764,4 +5764,7 @@ Voir Dépendances et conflits.</value>
   <data name="Play_ConflictsHint" xml:space="preserve">
     <value>Certains mods risquent de ne pas se charger. Vous pouvez quand même lancer.</value>
   </data>
+  <data name="Conflicts_KeepBlockedFormat" xml:space="preserve">
+    <value>{0} a aussi des fichiers qui ne sont pas en double, et il a été installé avec cette application : il ne peut être supprimé qu'en entier, et ces fichiers partiraient aussi. Supprimez-le plutôt depuis la page Installés, où Supprimer montre tout ce qu'il emporte.</value>
+  </data>
 </root>

@@ -5764,4 +5764,7 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Play_ConflictsHint" xml:space="preserve">
     <value>Manche Mods werden vielleicht nicht geladen. Starten kannst du trotzdem.</value>
   </data>
+  <data name="Conflicts_KeepBlockedFormat" xml:space="preserve">
+    <value>{0} hat auch Dateien, die nicht doppelt sind, und wurde mit dieser App installiert, kann also nur als Ganzes entfernt werden - diese Dateien gingen mit. Entferne es stattdessen auf der Seite Installiert, wo Entfernen alles zeigt, was es mitnimmt.</value>
+  </data>
 </root>

@@ -6934,4 +6934,8 @@ See Dependencies and Conflicts.</value>
     <value>Some mods may not load. You can still launch.</value>
     <comment>Under the conflict count on the Play page.</comment>
   </data>
+  <data name="Conflicts_KeepBlockedFormat" xml:space="preserve">
+    <value>{0} also has files that aren't duplicated, and it was installed with this app, so it can only be removed whole - those files would go too. Remove it from the Installed page instead, where Remove shows everything it takes.</value>
+    <comment>Tooltip on a disabled Keep this one. {0} the other mod.</comment>
+  </data>
 </root>
