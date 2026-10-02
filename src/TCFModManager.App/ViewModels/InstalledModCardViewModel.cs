@@ -286,6 +286,19 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     [ObservableProperty]
     private string? _leftoverSummary;
 
+    //
+    // Set after a scan by InstalledViewModel (ModConflicts.Apply): what this mod clashes with at load
+    // time and where to see more, or null when it clashes with nothing (OPEN-11).
+    //
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasConflicts))]
+    [NotifyPropertyChangedFor(nameof(Status))]
+    [NotifyPropertyChangedFor(nameof(StatusGlyph))]
+    [NotifyPropertyChangedFor(nameof(StatusTooltip))]
+    private string? _conflictSummary;
+
+    public bool HasConflicts => ConflictSummary is not null;
+
     public bool IsIncompleteInstall => MissingFolders.Count > 0 || WasPartlyInstalled;
 
     // One whole sentence per count: the verb has to agree with how many folders are missing, and
@@ -456,9 +469,12 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     // This mod's status, using the same vocabulary and icons as the Browse and Dependencies pages.
     // Everything here is installed by definition, so it's only ever disabled, up-to-date or outdated.
+    // A conflict outranks the update state: the mod may not load at all.
     public ModStatus Status => IsDisabled
         ? ModStatus.Disabled
-        : UpdateAvailable switch
+        : HasConflicts
+            ? ModStatus.Conflict
+            : UpdateAvailable switch
         {
             true => ModStatus.UpdateAvailable,
             false => ModStatus.Installed,
@@ -475,6 +491,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // A pending download next: the collapsed card's only sign of one is this tooltip.
     public string StatusTooltip =>
         IncompleteSummary
+        ?? ConflictSummary
         ?? DownloadSummary
         ?? (HasDuplicateFolders
             ? Strings.Installed_StatusDuplicate

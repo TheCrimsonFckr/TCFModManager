@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Net.Http;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -49,6 +50,65 @@ public partial class DependenciesViewModel : LocalizedViewModel
 
     public ObservableCollection<DependencyTreeViewModel> Trees { get; } = [];
 
+    //
+    // What clashes at load time (OPEN-11) - worked out from the install alone, with no network, so it
+    // shows even when the dependency lookup can't run. Rechecked each time the page opens.
+    //
+    public ObservableCollection<ConflictItemViewModel> Conflicts { get; } = [];
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ShowNoConflicts))]
+    private bool _conflictsChecked;
+
+    public bool ShowNoConflicts => ConflictsChecked && Conflicts.Count == 0;
+
+    //
+    // Scans the install and lists its conflicts. Uses whatever catalog is already loaded for the
+    // mods' names and doesn't wait for one - a hand-installed mod is still named by its folder.
+    //
+    [RelayCommand]
+    private async Task RefreshConflictsAsync()
+    {
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        if (string.IsNullOrWhiteSpace(installPath)) return;
+
+        var catalog = AppServices.ModCache.AllMods;
+        var addons = AppServices.Addons.AllAddons;
+        var sptVersion = AppServices.SptEnvironment.InstalledVersion;
+        var records = AppServices.InstallManifest.Load().Mods;
+
+        try
+        {
+            var items = await Task.Run(() =>
+            {
+                var cards = InstalledModCardViewModel.BuildFrom(
+                    InstalledModScanner.Scan(installPath), catalog, sptVersion, records, addons);
+
+                return ModConflicts.Find(cards)
+                    .Select(c => ConflictItemViewModel.From(c, cards, installPath))
+                    .OrderBy(c => c.Title, StringComparer.CurrentCulture)
+                    .ToList();
+            });
+
+            Conflicts.Clear();
+            foreach (var item in items) Conflicts.Add(item);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.Warn("Conflicts", $"couldn't check for conflicts: {ex.Message}");
+            Conflicts.Clear();
+        }
+
+        ConflictsChecked = true;
+        OnPropertyChanged(nameof(ShowNoConflicts));
+    }
+
+    [RelayCommand]
+    private void OpenConflictFolder(ConflictMemberRow? row)
+    {
+        if (row is not null && !ModConflicts.OpenFolder(row.FullPath)) StatusMessage = Strings.Common_FolderOpenFailed;
+    }
+
     // True when nothing installed declares a dependency - distinct from "not loaded yet".
     public bool IsEmpty => HasLoaded && Trees.Count == 0;
 
@@ -66,6 +126,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
         if (string.IsNullOrWhiteSpace(sptVersion))
         {
             StatusMessage = Strings.Dependencies_NoSptVersion;
+            await RefreshConflictsAsync();
             return;
         }
 
@@ -74,6 +135,9 @@ public partial class DependenciesViewModel : LocalizedViewModel
         try
         {
             await AppServices.ModCache.EnsureLoadedAsync();
+
+            // Before anything that needs the network, so conflicts show even when the lookup fails.
+            await RefreshConflictsAsync();
 
             var scanned = await Task.Run(() => InstalledModScanner.Scan(installPath));
             var installed = InstalledModCardViewModel.BuildFrom(

@@ -164,7 +164,7 @@ public static class ModConflictFinder
     }
 
     // A loose DLL's FolderPath is the DLL itself; a folder entry's assemblies are relative to it.
-    internal static string FullPath(ModConflictMember member) =>
+    public static string FullPath(ModConflictMember member) =>
         File.Exists(member.Entry.FolderPath)
             ? member.Entry.FolderPath
             : Path.Combine(member.Entry.FolderPath, member.Assembly!.RelativePath.Replace('/', Path.DirectorySeparatorChar));

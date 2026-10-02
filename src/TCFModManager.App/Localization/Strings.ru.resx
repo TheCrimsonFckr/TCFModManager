@@ -1012,7 +1012,7 @@
     <value>Установка отменена - страница мода {0} не подтверждена как прочитанная.</value>
   </data>
   <data name="Dependencies_Description" xml:space="preserve">
-    <value>Все установленные моды, которые объявляют зависимости, и состояние каждой из них. Моды, требующие внимания, идут первыми и сразу развёрнуты.</value>
+    <value>Моды, установленные дважды или несущие конфликтующие файлы, затем все установленные моды, которые объявляют зависимости, и состояние каждой из них. Проблемы идут первыми.</value>
   </data>
   <data name="Dependencies_Empty" xml:space="preserve">
     <value>Ни один установленный мод не объявляет зависимостей.</value>
@@ -3397,7 +3397,7 @@
     <value>Конфигурации</value>
   </data>
   <data name="Nav_Dependencies" xml:space="preserve">
-    <value>Зависимости</value>
+    <value>Зависимости и конфликты</value>
   </data>
   <data name="Nav_Downloads" xml:space="preserve">
     <value>Загрузки</value>
@@ -5995,5 +5995,54 @@
   </data>
   <data name="ModList_ReasonIncompatibleFormat" xml:space="preserve">
     <value>версия {0} не поддерживает SPT {1}, а установка всё равно не была выбрана</value>
+  </data>
+  <data name="Conflicts_Header" xml:space="preserve">
+    <value>Конфликты</value>
+  </data>
+  <data name="Dependencies_Header" xml:space="preserve">
+    <value>Зависимости</value>
+  </data>
+  <data name="Conflicts_None" xml:space="preserve">
+    <value>Конфликтов нет: ничего не установлено дважды, и никакие два мода не несут разные копии одного файла.</value>
+  </data>
+  <data name="Conflicts_KindDuplicatePlugin" xml:space="preserve">
+    <value>Один и тот же плагин установлен дважды</value>
+  </data>
+  <data name="Conflicts_KindDuplicateServerMod" xml:space="preserve">
+    <value>Один и тот же серверный мод установлен дважды</value>
+  </data>
+  <data name="Conflicts_KindDifferentCopies" xml:space="preserve">
+    <value>Разные копии одного файла</value>
+  </data>
+  <data name="Conflicts_ExplainDuplicatePluginFormat" xml:space="preserve">
+    <value>Все они регистрируют плагин {0}. BepInEx загрузит только один, и выбрать какой нельзя. Оставьте один, остальные отключите или удалите.</value>
+  </data>
+  <data name="Conflicts_ExplainDuplicateServerModFormat" xml:space="preserve">
+    <value>Все они объявляют серверный мод {0}. SPT пропускает серверный мод, ID которого встречается дважды, поэтому не загрузится ни один. Оставьте один, остальные отключите или удалите.</value>
+  </data>
+  <data name="Conflicts_ExplainDifferentCopiesFormat" xml:space="preserve">
+    <value>Каждый несёт свою копию {0}, и копии различаются. Используется только та, что загрузилась первой, всеми модами, которым она нужна, поэтому один из этих модов может работать не так, как задумано. Спросите авторов или оставьте нужный.</value>
+  </data>
+  <data name="Conflicts_CopyFormat" xml:space="preserve">
+    <value>{0}, версия {1}</value>
+  </data>
+  <data name="Conflicts_OpenFolderToolTip" xml:space="preserve">
+    <value>Открыть эту папку</value>
+  </data>
+  <data name="Installed_StatusConflictFormat" xml:space="preserve">
+    <value>{0}
+См. «Зависимости и конфликты».</value>
+  </data>
+  <data name="Installed_ConflictWithFormat" xml:space="preserve">
+    <value>{0}: вместе с {1}</value>
+  </data>
+  <data name="Installed_ConflictCount_one" xml:space="preserve">
+    <value>{0} конфликт - см. «Зависимости и конфликты»</value>
+  </data>
+  <data name="Installed_ConflictCount_few" xml:space="preserve">
+    <value>{0} конфликта - см. «Зависимости и конфликты»</value>
+  </data>
+  <data name="Installed_ConflictCount_many" xml:space="preserve">
+    <value>{0} конфликтов - см. «Зависимости и конфликты»</value>
   </data>
 </root>

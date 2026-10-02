@@ -991,7 +991,7 @@ Was du auch wählst: Die Version, die gerade auf der Festplatte liegt, wird zuer
     <value>Installation abgebrochen - die Seite von {0} wurde nicht als gelesen bestätigt.</value>
   </data>
   <data name="Dependencies_Description" xml:space="preserve">
-    <value>Jeder installierte Mod, der Abhängigkeiten angibt, und ob jede davon erfüllt ist. Mods, die Aufmerksamkeit brauchen, stehen oben und sind schon aufgeklappt.</value>
+    <value>Doppelt installierte Mods oder Mods mit kollidierenden Dateien, dann jeder installierte Mod, der Abhängigkeiten angibt, und ob jede davon erfüllt ist. Probleme stehen oben.</value>
   </data>
   <data name="Dependencies_Empty" xml:space="preserve">
     <value>Nichts Installiertes gibt eine Abhängigkeit an.</value>
@@ -3217,7 +3217,7 @@ Sicher dein Profil, bevor du fortfährst, wenn es dir wichtig ist.</value>
     <value>Konfigurationen</value>
   </data>
   <data name="Nav_Dependencies" xml:space="preserve">
-    <value>Abhängigkeiten</value>
+    <value>Abhängigkeiten und Konflikte</value>
   </data>
   <data name="Nav_Downloads" xml:space="preserve">
     <value>Downloads</value>
@@ -5683,5 +5683,51 @@ Trotzdem installieren? SPT lädt sie möglicherweise nicht. Mit Nein wird der Re
   </data>
   <data name="ModList_ReasonIncompatibleFormat" xml:space="preserve">
     <value>Version {0} unterstützt SPT {1} nicht, und sie trotzdem zu installieren wurde nicht gewählt</value>
+  </data>
+  <data name="Conflicts_Header" xml:space="preserve">
+    <value>Konflikte</value>
+  </data>
+  <data name="Dependencies_Header" xml:space="preserve">
+    <value>Abhängigkeiten</value>
+  </data>
+  <data name="Conflicts_None" xml:space="preserve">
+    <value>Keine Konflikte: Nichts ist doppelt installiert, und keine zwei Mods bringen unterschiedliche Kopien derselben Datei mit.</value>
+  </data>
+  <data name="Conflicts_KindDuplicatePlugin" xml:space="preserve">
+    <value>Dasselbe Plugin doppelt installiert</value>
+  </data>
+  <data name="Conflicts_KindDuplicateServerMod" xml:space="preserve">
+    <value>Derselbe Server-Mod doppelt installiert</value>
+  </data>
+  <data name="Conflicts_KindDifferentCopies" xml:space="preserve">
+    <value>Unterschiedliche Kopien einer Datei</value>
+  </data>
+  <data name="Conflicts_ExplainDuplicatePluginFormat" xml:space="preserve">
+    <value>Diese registrieren alle das Plugin {0}. BepInEx lädt nur eines davon, und du kannst nicht wählen, welches. Behalte eines und deaktiviere oder entferne die anderen.</value>
+  </data>
+  <data name="Conflicts_ExplainDuplicateServerModFormat" xml:space="preserve">
+    <value>Diese geben alle den Server-Mod {0} an. SPT überspringt einen Server-Mod, dessen ID es doppelt findet - keiner davon wird geladen. Behalte einen und deaktiviere oder entferne die anderen.</value>
+  </data>
+  <data name="Conflicts_ExplainDifferentCopiesFormat" xml:space="preserve">
+    <value>Jeder bringt eine eigene Kopie von {0} mit, und die Kopien unterscheiden sich. Nur die zuerst geladene wird verwendet, von jedem Mod, der sie braucht - einer dieser Mods funktioniert also vielleicht nicht wie gedacht. Frag die Autoren oder behalte den, den du brauchst.</value>
+  </data>
+  <data name="Conflicts_CopyFormat" xml:space="preserve">
+    <value>{0}, Version {1}</value>
+  </data>
+  <data name="Conflicts_OpenFolderToolTip" xml:space="preserve">
+    <value>Diesen Ordner öffnen</value>
+  </data>
+  <data name="Installed_StatusConflictFormat" xml:space="preserve">
+    <value>{0}
+Siehe Abhängigkeiten und Konflikte.</value>
+  </data>
+  <data name="Installed_ConflictWithFormat" xml:space="preserve">
+    <value>{0}: mit {1}</value>
+  </data>
+  <data name="Installed_ConflictCount_one" xml:space="preserve">
+    <value>1 Konflikt - siehe Abhängigkeiten und Konflikte</value>
+  </data>
+  <data name="Installed_ConflictCount_other" xml:space="preserve">
+    <value>{0} Konflikte - siehe Abhängigkeiten und Konflikte</value>
   </data>
 </root>

@@ -306,8 +306,16 @@ Three things a merge deliberately does not do. **A setting you added yourself** 
 #### warning
 The first update of any mod after this feature arrived has nothing to compare against - the app has to have recorded what the previous version shipped, which it now does at every install - so that one update replaces the file and says so. From its next update on, that mod merges normally. A config the merge can't read (JSON5, or one big enough to be data rather than settings) is replaced too, and says which it was; set that mod to **Keep mine** if you edit it.
 
-### Dependencies
-Resolves the dependency tree of every installed mod that declares one, and reports each dependency's state against what's actually on disk.
+### Dependencies and Conflicts
+**Conflicts** come first: mods that will fight when the game loads. Worked out from your install alone, so it works offline and for mods you installed by hand, and checked again every time you open the page.
+
+- **The same plugin installed twice** - two folders registering one plugin, such as `SAIN` and `SAIN.4.4.3`. BepInEx loads only one, and you don't get to choose which.
+- **The same server mod installed twice** - SPT skips a server mod whose ID it finds twice, so **neither copy loads**.
+- **Different copies of one file** - two mods each shipping their own, different copy of a library. Only one copy loads, for everyone. Identical copies are fine and aren't listed.
+
+Each lists every mod involved with the folder it's in, and a button to open it. A mod in a conflict shows a red status on the Installed page, and the Installed status line counts them with a link here.
+
+**Dependencies** resolves the dependency tree of every installed mod that declares one, and reports each dependency's state against what's actually on disk.
 
 That includes **version conflicts** - where two installed mods want incompatible versions of the same dependency - which is the failure mode that usually shows up as an unexplained crash on load rather than an error message. Dependencies you've disabled are called out as disabled rather than missing.
 
@@ -384,7 +392,7 @@ For when you would rather install mods yourself. Instead of installing, the app 
 
 **Turning it on.** In **Options - Monitor mode**, change **Install mods for me** to **Download only - I install them myself**. The **Download folder** below it is where archives go; leave it empty to use your Windows Downloads folder, wherever Windows keeps it. The app never deletes anything it saves there.
 
-**One mod the other way round.** Whichever you pick, every install button has a smaller button beside it that does the opposite for that one mod - download just this one while the app installs everything else, or have the app install just this one while you download the rest. It is on Browse cards, in the update dialog, on addon rows and on the Dependencies page. Hover it to see which way round it is.
+**One mod the other way round.** Whichever you pick, every install button has a smaller button beside it that does the opposite for that one mod - download just this one while the app installs everything else, or have the app install just this one while you download the rest. It is on Browse cards, in the update dialog, on addon rows and on the Dependencies and Conflicts page. Hover it to see which way round it is.
 
 **What a download does.** It goes through the Downloads queue like any install, and its card says where the file was saved, with a **Show in folder** button. Nothing inside your SPT install is touched, so you can download while SPT is running. Any dependencies it offers to fetch are downloaded the same way. Files keep the name sp-mod serves them under and are never overwritten - a second copy is saved as `Name (2).zip`. An archive the app can't recognise as an SPT mod is still saved, and the card tells you to follow the mod page's install steps.
 

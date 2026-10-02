@@ -782,7 +782,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             // The whole scan-and-match pass runs off the UI thread. Matching a large install
             // against a full catalog is the slower half of the two, and doing it inline is what
             // made navigating to this page hang.
-            var (scanned, cards, dependencies, downloads) = await Task.Run(() =>
+            var (scanned, cards, dependencies, downloads, conflicts) = await Task.Run(() =>
             {
                 var found = InstalledModScanner.Scan(installPath);
 
@@ -792,7 +792,8 @@ public partial class InstalledViewModel : LocalizedViewModel
 
                 // Built off the same scan the cards came from, so every link points at an entry
                 // some card owns.
-                return (found, built, ModDependencyGraph.Build(found), MatchDownloads(found, installPath, installRecords));
+                return (found, built, ModDependencyGraph.Build(found), MatchDownloads(found, installPath, installRecords),
+                    ModConflicts.Find(built));
             });
 
             // What was open in each view, keyed the same way group assignments are, so the sets
@@ -816,6 +817,13 @@ public partial class InstalledViewModel : LocalizedViewModel
             ApplyPins(cards);
             ApplyPendingDownloads(cards, downloads);
             ApplyLeftovers(cards);
+            ModConflicts.Apply(cards, conflicts);
+            ConflictCountLabel = conflicts.Count == 0 ? null : Strings.Installed_ConflictCount(conflicts.Count, conflicts.Count);
+            if (conflicts.Count > 0)
+            {
+                AppLog.Info("Conflicts", string.Join("; ", conflicts.Select(c =>
+                    $"{c.Kind} {c.Identifier}: {string.Join(", ", c.Members.Select(m => m.Entry.Name).Distinct())}")));
+            }
             ApplyBadgeVisibility();
             _dependencies = dependencies;
 
@@ -1858,6 +1866,13 @@ public partial class InstalledViewModel : LocalizedViewModel
         RemovedModsRetention.UntilCleared => Strings.Installed_RemoveHeldUntilCleared,
         var days => Text(Strings.Installed_RemoveHeldFormat, OptionsViewModel.RetentionLabel(days)),
     };
+
+    // "N conflicts - see Dependencies and Conflicts" on the status line, or null when there are none.
+    [ObservableProperty]
+    private string? _conflictCountLabel;
+
+    [RelayCommand]
+    private static void ShowConflicts() => AppNavigation.Navigate(typeof(DependenciesPage));
 
     // The Undo button's text, or null to hide it. One removal held: "Undo removing <mod>", which
     // undoes it on click. Several: "Undo a removal (n)", which opens HeldRemovals to pick from.

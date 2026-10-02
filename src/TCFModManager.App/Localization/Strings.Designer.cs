@@ -1865,4 +1865,19 @@ internal static class Strings
     internal static string Install_IncompatibleNotInstalledFormat => LocalizationService.Get("Install_IncompatibleNotInstalledFormat");
     internal static string Install_IncompatibleLeftOutFormat => LocalizationService.Get("Install_IncompatibleLeftOutFormat");
     internal static string ModList_ReasonIncompatibleFormat => LocalizationService.Get("ModList_ReasonIncompatibleFormat");
+    internal static string Conflicts_Header => LocalizationService.Get("Conflicts_Header");
+    internal static string Dependencies_Header => LocalizationService.Get("Dependencies_Header");
+    internal static string Conflicts_None => LocalizationService.Get("Conflicts_None");
+    internal static string Conflicts_KindDuplicatePlugin => LocalizationService.Get("Conflicts_KindDuplicatePlugin");
+    internal static string Conflicts_KindDuplicateServerMod => LocalizationService.Get("Conflicts_KindDuplicateServerMod");
+    internal static string Conflicts_KindDifferentCopies => LocalizationService.Get("Conflicts_KindDifferentCopies");
+    internal static string Conflicts_ExplainDuplicatePluginFormat => LocalizationService.Get("Conflicts_ExplainDuplicatePluginFormat");
+    internal static string Conflicts_ExplainDuplicateServerModFormat => LocalizationService.Get("Conflicts_ExplainDuplicateServerModFormat");
+    internal static string Conflicts_ExplainDifferentCopiesFormat => LocalizationService.Get("Conflicts_ExplainDifferentCopiesFormat");
+    internal static string Conflicts_CopyFormat => LocalizationService.Get("Conflicts_CopyFormat");
+    internal static string Conflicts_OpenFolderToolTip => LocalizationService.Get("Conflicts_OpenFolderToolTip");
+    internal static string Installed_StatusConflictFormat => LocalizationService.Get("Installed_StatusConflictFormat");
+    internal static string Installed_ConflictWithFormat => LocalizationService.Get("Installed_ConflictWithFormat");
+    internal static string Installed_ConflictCount(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_ConflictCount", count, values);
 }

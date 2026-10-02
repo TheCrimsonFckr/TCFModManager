@@ -387,6 +387,17 @@
                 ToolTip="{loc:Str Installed_UndoRemovalToolTip}"
                 Visibility="{Binding UndoRemovalLabel, Converter={StaticResource NullToCollapsed}}"
                 Click="UndoRemoval_Click" />
+
+            <!-- "N conflicts - see Dependencies and Conflicts" (OPEN-11), shown only when there are any. -->
+            <ui:Button
+                DockPanel.Dock="Right"
+                Margin="0,0,8,0"
+                Appearance="Transparent"
+                Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                Icon="{ui:SymbolIcon ErrorCircle20}"
+                Content="{Binding ConflictCountLabel}"
+                Command="{Binding ShowConflictsCommand}"
+                Visibility="{Binding ConflictCountLabel, Converter={StaticResource NullToCollapsed}}" />
             <TextBlock
                 VerticalAlignment="Center"
                 TextWrapping="Wrap"

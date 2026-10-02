@@ -183,7 +183,7 @@
     <comment>{0} is a version number.</comment>
   </data>
   <data name="Dependencies_Description" xml:space="preserve">
-    <value>Every installed mod that declares dependencies, and whether each one is satisfied. Mods needing attention are listed first and start expanded.</value>
+    <value>Mods installed twice or shipping clashing files, then every installed mod that declares dependencies and whether each one is satisfied. Problems are listed first.</value>
   </data>
   <data name="Dependencies_Empty" xml:space="preserve">
     <value>Nothing installed declares a dependency.</value>
@@ -1084,7 +1084,7 @@ A mod list records which mods to install and enable. Applying one downloads what
     <comment>Sidebar item. Mod configuration files.</comment>
   </data>
   <data name="Nav_Dependencies" xml:space="preserve">
-    <value>Dependencies</value>
+    <value>Dependencies and Conflicts</value>
     <comment>Sidebar item.</comment>
   </data>
   <data name="Nav_Footprint" xml:space="preserve">
@@ -6828,5 +6828,66 @@ Install them anyway? SPT may refuse to load them. No installs the rest without t
   <data name="ModList_ReasonIncompatibleFormat" xml:space="preserve">
     <value>version {0} doesn't support SPT {1}, and installing it anyway wasn't chosen</value>
     <comment>Why a mod list fetch was left out. {0} a version, {1} the installed SPT version.</comment>
+  </data>
+  <data name="Conflicts_Header" xml:space="preserve">
+    <value>Conflicts</value>
+    <comment>Section heading on the Dependencies and Conflicts page.</comment>
+  </data>
+  <data name="Dependencies_Header" xml:space="preserve">
+    <value>Dependencies</value>
+    <comment>Section heading on the Dependencies and Conflicts page.</comment>
+  </data>
+  <data name="Conflicts_None" xml:space="preserve">
+    <value>No conflicts: nothing is installed twice, and no two mods ship different copies of the same file.</value>
+    <comment>Shown in the Conflicts section when nothing clashes.</comment>
+  </data>
+  <data name="Conflicts_KindDuplicatePlugin" xml:space="preserve">
+    <value>The same plugin installed twice</value>
+    <comment>Title of a conflict: two folders register the same BepInEx plugin.</comment>
+  </data>
+  <data name="Conflicts_KindDuplicateServerMod" xml:space="preserve">
+    <value>The same server mod installed twice</value>
+    <comment>Title of a conflict: two folders declare the same SPT server mod.</comment>
+  </data>
+  <data name="Conflicts_KindDifferentCopies" xml:space="preserve">
+    <value>Different copies of one file</value>
+    <comment>Title of a conflict: two mods ship different copies of one DLL.</comment>
+  </data>
+  <data name="Conflicts_ExplainDuplicatePluginFormat" xml:space="preserve">
+    <value>These all register plugin {0}. BepInEx loads only one of them, and you don't get to choose which. Keep one and disable or remove the rest.</value>
+    <comment>{0} is a plugin ID.</comment>
+  </data>
+  <data name="Conflicts_ExplainDuplicateServerModFormat" xml:space="preserve">
+    <value>These all declare server mod {0}. SPT skips a server mod whose ID it finds twice, so none of them loads. Keep one and disable or remove the rest.</value>
+    <comment>{0} is a server mod ID.</comment>
+  </data>
+  <data name="Conflicts_ExplainDifferentCopiesFormat" xml:space="preserve">
+    <value>Each ships its own copy of {0}, and the copies differ. Only the first one loaded is used, by every mod that needs it, so one of these mods may not work as intended. Ask their authors, or keep the one you need.</value>
+    <comment>{0} is an assembly or DLL name.</comment>
+  </data>
+  <data name="Conflicts_CopyFormat" xml:space="preserve">
+    <value>{0}, version {1}</value>
+    <comment>One copy in a 'different copies' conflict. {0} the file's path inside the mod, {1} its version.</comment>
+  </data>
+  <data name="Conflicts_OpenFolderToolTip" xml:space="preserve">
+    <value>Open this folder</value>
+    <comment>Tooltip on the button that opens a conflicting mod's folder.</comment>
+  </data>
+  <data name="Installed_StatusConflictFormat" xml:space="preserve">
+    <value>{0}
+See Dependencies and Conflicts.</value>
+    <comment>Card tooltip. {0} is one or more Installed_ConflictWithFormat lines.</comment>
+  </data>
+  <data name="Installed_ConflictWithFormat" xml:space="preserve">
+    <value>{0}: with {1}</value>
+    <comment>{0} a conflict title, {1} the other mods' names.</comment>
+  </data>
+  <data name="Installed_ConflictCount_one" xml:space="preserve">
+    <value>1 conflict - see Dependencies and Conflicts</value>
+    <comment>{0} is a count. A link on the Installed page's status line.</comment>
+  </data>
+  <data name="Installed_ConflictCount_other" xml:space="preserve">
+    <value>{0} conflicts - see Dependencies and Conflicts</value>
+    <comment>{0} is a count. A link on the Installed page's status line.</comment>
   </data>
 </root>
