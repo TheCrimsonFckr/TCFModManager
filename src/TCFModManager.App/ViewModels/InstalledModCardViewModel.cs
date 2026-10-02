@@ -572,8 +572,33 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             .GroupBy(a => a.ModId!.Value)
             .ToDictionary(g => g.Key, g => g.Count());
 
-        var cards = MergeSplitClientServerHalves(MergePatcherFolders(groups))
-            .Select(g => BuildCard(g.Entries, g.Match, installedSptVersion, recordsByModId, addonsByParent))
+        var merged = MergeSplitClientServerHalves(MergePatcherFolders(groups));
+
+        //
+        // A record belongs to the card holding the folders it placed. A second copy of the same mod
+        // installed by hand ("SomeMod - Copy") resolves to the same catalog listing, and taking the
+        // record by listing alone made that copy app-managed too - so removing the copy (Remove, or
+        // Keep this one on the original) went by the record and took the ORIGINAL's files instead.
+        // Where some card holds the record's folders, every other card of that listing is the
+        // copy it looks like. Where none does, the record still applies by listing, as before.
+        //
+        var ownedRecords = merged
+            .Where(g => g.Match is not null
+                && recordsByModId.TryGetValue(g.Match.Id, out var r)
+                && HoldsRecordFolder(g.Entries, r))
+            .Select(g => g.Match!.Id)
+            .ToHashSet();
+
+        var cards = merged
+            .Select(g =>
+            {
+                var record = g.Match is not null && recordsByModId.TryGetValue(g.Match.Id, out var found)
+                    && (!ownedRecords.Contains(g.Match.Id) || HoldsRecordFolder(g.Entries, found))
+                    ? found
+                    : null;
+
+                return BuildCard(g.Entries, g.Match, installedSptVersion, record, addonsByParent);
+            })
             .ToList();
 
         if (addonFolders.Count == 0) return cards;
@@ -1204,7 +1229,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         List<InstalledMod> entries,
         Mod? match,
         string? installedSptVersion,
-        IReadOnlyDictionary<int, InstalledModRecord> recordsByModId,
+        InstalledModRecord? record,
         IReadOnlyDictionary<int, int> addonsByParent)
     {
         // The plugin half speaks for the client side wherever there's a choice - it's the one with
@@ -1214,8 +1239,6 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         var patcher = entries.FirstOrDefault(m => m is { Target: InstalledModTarget.Client, IsPatcher: true });
         var client = plugin ?? patcher;
         var server = entries.FirstOrDefault(m => m.Target == InstalledModTarget.Server);
-
-        var record = match is not null && recordsByModId.TryGetValue(match.Id, out var found) ? found : null;
 
         // Not done for addon cards: an addon's record names its PARENT's folders, so comparing them
         // against the addon's own scan entries would report every one of them as missing.
@@ -1341,6 +1364,12 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // path gives both spellings - the folder itself, and a loose DLL's file name with the extension
     // dropped, which is how the scanner and the record both name that case.
     //
+    private static bool HoldsRecordFolder(List<InstalledMod> entries, InstalledModRecord record)
+    {
+        var folders = InstalledModFolders.Resolve(record).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        return entries.SelectMany(FolderNamesOf).Any(folders.Contains);
+    }
+
     private static IEnumerable<string> FolderNamesOf(InstalledMod entry)
     {
         yield return entry.Name;
