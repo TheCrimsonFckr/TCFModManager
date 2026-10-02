@@ -1880,4 +1880,14 @@ internal static class Strings
     internal static string Installed_ConflictWithFormat => LocalizationService.Get("Installed_ConflictWithFormat");
     internal static string Installed_ConflictCount(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_ConflictCount", count, values);
+    internal static string Conflicts_KeepThis => LocalizationService.Get("Conflicts_KeepThis");
+    internal static string Conflicts_KeepThisToolTip => LocalizationService.Get("Conflicts_KeepThisToolTip");
+    internal static string Conflicts_KeepConfirmTitle => LocalizationService.Get("Conflicts_KeepConfirmTitle");
+    internal static string Conflicts_KeepConfirmFormat => LocalizationService.Get("Conflicts_KeepConfirmFormat");
+    internal static string Conflicts_KeepLineFormat => LocalizationService.Get("Conflicts_KeepLineFormat");
+    internal static string Conflicts_KeptFormat => LocalizationService.Get("Conflicts_KeptFormat");
+    internal static string Conflicts_KeepFailedFormat => LocalizationService.Get("Conflicts_KeepFailedFormat");
+    internal static string Filter_HasConflicts => LocalizationService.Get("Filter_HasConflicts");
+    internal static string Filter_HasConflictsToolTip => LocalizationService.Get("Filter_HasConflictsToolTip");
+    internal static string Play_ConflictsHint => LocalizationService.Get("Play_ConflictsHint");
 }

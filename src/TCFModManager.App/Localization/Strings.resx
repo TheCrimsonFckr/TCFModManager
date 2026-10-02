@@ -6890,4 +6890,48 @@ See Dependencies and Conflicts.</value>
     <value>{0} conflicts - see Dependencies and Conflicts</value>
     <comment>{0} is a count. A link on the Installed page's status line.</comment>
   </data>
+  <data name="Conflicts_KeepThis" xml:space="preserve">
+    <value>Keep this one</value>
+    <comment>Button on one copy in a conflict.</comment>
+  </data>
+  <data name="Conflicts_KeepThisToolTip" xml:space="preserve">
+    <value>Keep this copy and remove the others. They go where removed mods go, so Undo on the Installed page can put them back.</value>
+    <comment>Tooltip on Keep this one.</comment>
+  </data>
+  <data name="Conflicts_KeepConfirmTitle" xml:space="preserve">
+    <value>Keep one copy</value>
+    <comment>Title of the question before keeping one copy.</comment>
+  </data>
+  <data name="Conflicts_KeepConfirmFormat" xml:space="preserve">
+    <value>Keep {0} in {1}, and remove:
+
+{2}
+
+{3}</value>
+    <comment>{0} mod name, {1} its folder, {2} one line per mod that will be removed, {3} how long removed files are kept.</comment>
+  </data>
+  <data name="Conflicts_KeepLineFormat" xml:space="preserve">
+    <value>{0} - {1}</value>
+    <comment>One mod in the Keep one copy question. {0} mod name, {1} folder.</comment>
+  </data>
+  <data name="Conflicts_KeptFormat" xml:space="preserve">
+    <value>Kept {0}. Removed {1} - Undo on the Installed page puts it back.</value>
+    <comment>Status after keeping one copy. {0} the kept mod, {1} the removed ones.</comment>
+  </data>
+  <data name="Conflicts_KeepFailedFormat" xml:space="preserve">
+    <value>Couldn't remove {0}: {1}</value>
+    <comment>Status when removing a copy failed. {0} mod name, {1} the reason.</comment>
+  </data>
+  <data name="Filter_HasConflicts" xml:space="preserve">
+    <value>Has conflicts</value>
+    <comment>Installed page Show filter.</comment>
+  </data>
+  <data name="Filter_HasConflictsToolTip" xml:space="preserve">
+    <value>Only mods in a conflict: installed twice, or shipping a different copy of a file another mod ships. See Dependencies and Conflicts.</value>
+    <comment>Tooltip on the Has conflicts filter.</comment>
+  </data>
+  <data name="Play_ConflictsHint" xml:space="preserve">
+    <value>Some mods may not load. You can still launch.</value>
+    <comment>Under the conflict count on the Play page.</comment>
+  </data>
 </root>

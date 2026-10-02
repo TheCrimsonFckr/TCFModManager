@@ -144,6 +144,9 @@ public partial class InstalledViewModel : LocalizedViewModel
         new(ModAttributeFilter.DownloadedNotConfirmed,
             nameof(Strings.Filter_DownloadedNotConfirmed),
             nameof(Strings.Filter_DownloadedNotConfirmedToolTip)),
+        new(ModAttributeFilter.HasConflicts,
+            nameof(Strings.Filter_HasConflicts),
+            nameof(Strings.Filter_HasConflictsToolTip)),
     ];
 
     //
@@ -1860,7 +1863,7 @@ public partial class InstalledViewModel : LocalizedViewModel
     // The sentence the removal confirmation ends with: how long removed files are kept, from the
     // Keep removed mods setting (D27).
     //
-    private static string HeldSentence() => new SettingsService().Load().RemovedModsRetention switch
+    internal static string HeldSentence() => new SettingsService().Load().RemovedModsRetention switch
     {
         RemovedModsRetention.DeleteStraightAway => Strings.Installed_RemoveNotHeld,
         RemovedModsRetention.UntilCleared => Strings.Installed_RemoveHeldUntilCleared,
@@ -2061,7 +2064,8 @@ public partial class InstalledViewModel : LocalizedViewModel
             .Where(m => !IsOn(ModAttributeFilter.HideAiContent) || !m.ContainsAiContent)
             .Where(m => !IsOn(ModAttributeFilter.HasDependencies) || m.HasDependencies)
             .Where(m => !IsOn(ModAttributeFilter.HasAddons) || m.HasAddons)
-            .Where(m => !IsOn(ModAttributeFilter.DownloadedNotConfirmed) || m.HasPendingDownload);
+            .Where(m => !IsOn(ModAttributeFilter.DownloadedNotConfirmed) || m.HasPendingDownload)
+            .Where(m => !IsOn(ModAttributeFilter.HasConflicts) || m.HasConflicts);
 
         _filtered = SelectedUpdateFilter.Value == UpdateFilter.RecentlyInstalled
             ? matched

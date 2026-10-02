@@ -31,6 +31,9 @@ public enum ModAttributeFilter
     // Only mods with a Monitor mode download on disk that nobody has confirmed yet, whether it
     // looks fully installed or only partly. Installed only (R8).
     DownloadedNotConfirmed,
+
+    // Only mods in a conflict (OPEN-11). Installed only.
+    HasConflicts,
 }
 
 //

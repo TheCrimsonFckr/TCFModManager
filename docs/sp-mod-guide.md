@@ -313,7 +313,7 @@ The first update of any mod after this feature arrived has nothing to compare ag
 - **The same server mod installed twice** - SPT skips a server mod whose ID it finds twice, so **neither copy loads**.
 - **Different copies of one file** - two mods each shipping their own, different copy of a library. Only one copy loads, for everyone. Identical copies are fine and aren't listed.
 
-Each lists every mod involved with the folder it's in, and a button to open it. A mod in a conflict shows a red status on the Installed page, and the Installed status line counts them with a link here.
+Each lists every mod involved with the folder it's in, and a button to open it. For a mod installed twice, **Keep this one** keeps that copy and removes the others the normal way - so **Undo** on the Installed page can put them back. A mod in a conflict shows a red status on the Installed page, where **Show - Has conflicts** narrows the list to them and the status line counts them with a link here. The Play page warns too, without stopping you launching.
 
 **Dependencies** resolves the dependency tree of every installed mod that declares one, and reports each dependency's state against what's actually on disk.
 

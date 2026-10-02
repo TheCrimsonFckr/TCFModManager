@@ -19,6 +19,26 @@ public static class ModConflicts
     public static List<ModConflict> Find(IReadOnlyList<InstalledModCardViewModel> cards) =>
         ModConflictFinder.Find([.. cards.Select(c => (IReadOnlyList<InstalledMod>)c.Entries)]);
 
+    //
+    // Scans the install and finds its conflicts, grouping folders into mods the way the Installed page
+    // does - with whatever catalog is already loaded, never waiting for one. Runs off the UI thread.
+    // Returns the cards too, which the conflicts' member indices point into.
+    //
+    public static Task<(List<InstalledModCardViewModel> Cards, List<ModConflict> Conflicts)> ScanAsync(string installPath)
+    {
+        var catalog = AppServices.ModCache.AllMods;
+        var addons = AppServices.Addons.AllAddons;
+        var sptVersion = AppServices.SptEnvironment.InstalledVersion;
+        var records = AppServices.InstallManifest.Load().Mods;
+
+        return Task.Run(() =>
+        {
+            var cards = InstalledModCardViewModel.BuildFrom(
+                InstalledModScanner.Scan(installPath), catalog, sptVersion, records, addons);
+            return (cards, Find(cards));
+        });
+    }
+
     public static string Title(ModConflictKind kind) => kind switch
     {
         ModConflictKind.DuplicatePlugin => Strings.Conflicts_KindDuplicatePlugin,

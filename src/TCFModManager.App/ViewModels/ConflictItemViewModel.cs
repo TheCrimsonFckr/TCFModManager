@@ -6,8 +6,30 @@ using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
-// One copy in a conflict, as the Dependencies and Conflicts page lists it.
-public sealed record ConflictMemberRow(string ModName, string Location, string? Detail, string FullPath);
+//
+// One copy in a conflict, as the Dependencies and Conflicts page lists it. Card and Entry are what
+// Keep this one acts on: the mod the copy belongs to, and the folder that clashes.
+//
+public sealed class ConflictMemberRow
+{
+    public required string ModName { get; init; }
+
+    public required string Location { get; init; }
+
+    public string? Detail { get; init; }
+
+    public required string FullPath { get; init; }
+
+    public required InstalledModCardViewModel Card { get; init; }
+
+    public required InstalledMod Entry { get; init; }
+
+    // Only for the same mod installed twice (C1, C2). Different copies of a file are information
+    // only (D7): neither mod is the wrong one.
+    public bool CanKeep { get; init; }
+
+    public ConflictItemViewModel Owner { get; internal set; } = null!;
+}
 
 //
 // One conflict on the Dependencies and Conflicts page (OPEN-11): what kind, why it matters, and
@@ -23,19 +45,32 @@ public sealed class ConflictItemViewModel
     public required IReadOnlyList<ConflictMemberRow> Members { get; init; }
 
     public static ConflictItemViewModel From(
-        ModConflict conflict, IReadOnlyList<InstalledModCardViewModel> cards, string installPath) => new()
+        ModConflict conflict, IReadOnlyList<InstalledModCardViewModel> cards, string installPath)
     {
-        Title = ModConflicts.Title(conflict.Kind),
-        Explanation = ModConflicts.Explanation(conflict),
-        Members =
-        [
-            .. conflict.Members.Select(m => new ConflictMemberRow(
-                cards[m.ModIndex].DisplayTitle,
-                Relative(installPath, m.Entry.FolderPath),
-                m.Assembly is { } copy ? Describe(copy) : null,
-                m.Assembly is null ? m.Entry.FolderPath : ModConflictFinder.FullPath(m))),
-        ],
-    };
+        var canKeep = conflict.Kind is ModConflictKind.DuplicatePlugin or ModConflictKind.DuplicateServerMod;
+
+        var item = new ConflictItemViewModel
+        {
+            Title = ModConflicts.Title(conflict.Kind),
+            Explanation = ModConflicts.Explanation(conflict),
+            Members =
+            [
+                .. conflict.Members.Select(m => new ConflictMemberRow
+                {
+                    ModName = cards[m.ModIndex].DisplayTitle,
+                    Location = Relative(installPath, m.Entry.FolderPath),
+                    Detail = m.Assembly is { } copy ? Describe(copy) : null,
+                    FullPath = m.Assembly is null ? m.Entry.FolderPath : ModConflictFinder.FullPath(m),
+                    Card = cards[m.ModIndex],
+                    Entry = m.Entry,
+                    CanKeep = canKeep,
+                }),
+            ],
+        };
+
+        foreach (var row in item.Members) row.Owner = item;
+        return item;
+    }
 
     private static string Describe(ModAssembly copy)
     {

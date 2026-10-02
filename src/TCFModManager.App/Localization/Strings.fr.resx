@@ -5730,4 +5730,38 @@ Voir Dépendances et conflits.</value>
   <data name="Installed_ConflictCount_other" xml:space="preserve">
     <value>{0} conflits - voir Dépendances et conflits</value>
   </data>
+  <data name="Conflicts_KeepThis" xml:space="preserve">
+    <value>Garder celui-ci</value>
+  </data>
+  <data name="Conflicts_KeepThisToolTip" xml:space="preserve">
+    <value>Garder cette copie et supprimer les autres. Elles vont là où vont les mods supprimés : Annuler sur la page Installés peut les remettre.</value>
+  </data>
+  <data name="Conflicts_KeepConfirmTitle" xml:space="preserve">
+    <value>Garder une copie</value>
+  </data>
+  <data name="Conflicts_KeepConfirmFormat" xml:space="preserve">
+    <value>Garder {0} dans {1}, et supprimer :
+
+{2}
+
+{3}</value>
+  </data>
+  <data name="Conflicts_KeepLineFormat" xml:space="preserve">
+    <value>{0} - {1}</value>
+  </data>
+  <data name="Conflicts_KeptFormat" xml:space="preserve">
+    <value>{0} gardé. {1} supprimé - Annuler sur la page Installés le remet.</value>
+  </data>
+  <data name="Conflicts_KeepFailedFormat" xml:space="preserve">
+    <value>Impossible de supprimer {0} : {1}</value>
+  </data>
+  <data name="Filter_HasConflicts" xml:space="preserve">
+    <value>A des conflits</value>
+  </data>
+  <data name="Filter_HasConflictsToolTip" xml:space="preserve">
+    <value>Seulement les mods en conflit : installés deux fois, ou apportant une autre copie d'un fichier qu'un autre mod apporte. Voir Dépendances et conflits.</value>
+  </data>
+  <data name="Play_ConflictsHint" xml:space="preserve">
+    <value>Certains mods risquent de ne pas se charger. Vous pouvez quand même lancer.</value>
+  </data>
 </root>

@@ -26,6 +26,7 @@ public partial class PlayPage : Page
             // and "Check again" covers the rest.
             //
             _ = AppServices.PreLaunchCheck.CheckAsync();
+            _ = ViewModel.RefreshConflictsAsync();
         };
 
         Unloaded += (_, _) => ViewModel.StopPolling();

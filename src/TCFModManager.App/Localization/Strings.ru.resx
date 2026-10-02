@@ -6045,4 +6045,38 @@
   <data name="Installed_ConflictCount_many" xml:space="preserve">
     <value>{0} конфликтов - см. «Зависимости и конфликты»</value>
   </data>
+  <data name="Conflicts_KeepThis" xml:space="preserve">
+    <value>Оставить этот</value>
+  </data>
+  <data name="Conflicts_KeepThisToolTip" xml:space="preserve">
+    <value>Оставить эту копию и удалить остальные. Они попадут туда же, куда удалённые моды, и «Отменить» на странице «Установленные» сможет их вернуть.</value>
+  </data>
+  <data name="Conflicts_KeepConfirmTitle" xml:space="preserve">
+    <value>Оставить одну копию</value>
+  </data>
+  <data name="Conflicts_KeepConfirmFormat" xml:space="preserve">
+    <value>Оставить {0} в {1} и удалить:
+
+{2}
+
+{3}</value>
+  </data>
+  <data name="Conflicts_KeepLineFormat" xml:space="preserve">
+    <value>{0} - {1}</value>
+  </data>
+  <data name="Conflicts_KeptFormat" xml:space="preserve">
+    <value>{0} оставлен. {1} удалён - «Отменить» на странице «Установленные» вернёт его.</value>
+  </data>
+  <data name="Conflicts_KeepFailedFormat" xml:space="preserve">
+    <value>Не удалось удалить {0}: {1}</value>
+  </data>
+  <data name="Filter_HasConflicts" xml:space="preserve">
+    <value>Есть конфликты</value>
+  </data>
+  <data name="Filter_HasConflictsToolTip" xml:space="preserve">
+    <value>Только моды в конфликте: установленные дважды или несущие другую копию файла, который несёт другой мод. См. «Зависимости и конфликты».</value>
+  </data>
+  <data name="Play_ConflictsHint" xml:space="preserve">
+    <value>Некоторые моды могут не загрузиться. Запустить всё равно можно.</value>
+  </data>
 </root>

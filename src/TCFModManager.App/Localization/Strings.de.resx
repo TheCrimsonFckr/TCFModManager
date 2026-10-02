@@ -5730,4 +5730,38 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Installed_ConflictCount_other" xml:space="preserve">
     <value>{0} Konflikte - siehe Abhängigkeiten und Konflikte</value>
   </data>
+  <data name="Conflicts_KeepThis" xml:space="preserve">
+    <value>Diesen behalten</value>
+  </data>
+  <data name="Conflicts_KeepThisToolTip" xml:space="preserve">
+    <value>Diese Kopie behalten und die anderen entfernen. Sie landen dort, wo entfernte Mods landen, sodass Rückgängig auf der Seite Installiert sie zurückholen kann.</value>
+  </data>
+  <data name="Conflicts_KeepConfirmTitle" xml:space="preserve">
+    <value>Eine Kopie behalten</value>
+  </data>
+  <data name="Conflicts_KeepConfirmFormat" xml:space="preserve">
+    <value>{0} in {1} behalten und entfernen:
+
+{2}
+
+{3}</value>
+  </data>
+  <data name="Conflicts_KeepLineFormat" xml:space="preserve">
+    <value>{0} - {1}</value>
+  </data>
+  <data name="Conflicts_KeptFormat" xml:space="preserve">
+    <value>{0} behalten. {1} entfernt - Rückgängig auf der Seite Installiert holt es zurück.</value>
+  </data>
+  <data name="Conflicts_KeepFailedFormat" xml:space="preserve">
+    <value>{0} konnte nicht entfernt werden: {1}</value>
+  </data>
+  <data name="Filter_HasConflicts" xml:space="preserve">
+    <value>Hat Konflikte</value>
+  </data>
+  <data name="Filter_HasConflictsToolTip" xml:space="preserve">
+    <value>Nur Mods in einem Konflikt: doppelt installiert oder mit einer anderen Kopie einer Datei, die ein anderer Mod mitbringt. Siehe Abhängigkeiten und Konflikte.</value>
+  </data>
+  <data name="Play_ConflictsHint" xml:space="preserve">
+    <value>Manche Mods werden vielleicht nicht geladen. Starten kannst du trotzdem.</value>
+  </data>
 </root>

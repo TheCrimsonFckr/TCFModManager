@@ -72,23 +72,13 @@ public partial class DependenciesViewModel : LocalizedViewModel
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath)) return;
 
-        var catalog = AppServices.ModCache.AllMods;
-        var addons = AppServices.Addons.AllAddons;
-        var sptVersion = AppServices.SptEnvironment.InstalledVersion;
-        var records = AppServices.InstallManifest.Load().Mods;
-
         try
         {
-            var items = await Task.Run(() =>
-            {
-                var cards = InstalledModCardViewModel.BuildFrom(
-                    InstalledModScanner.Scan(installPath), catalog, sptVersion, records, addons);
-
-                return ModConflicts.Find(cards)
-                    .Select(c => ConflictItemViewModel.From(c, cards, installPath))
-                    .OrderBy(c => c.Title, StringComparer.CurrentCulture)
-                    .ToList();
-            });
+            var (cards, conflicts) = await ModConflicts.ScanAsync(installPath);
+            var items = conflicts
+                .Select(c => ConflictItemViewModel.From(c, cards, installPath))
+                .OrderBy(c => c.Title, StringComparer.CurrentCulture)
+                .ToList();
 
             Conflicts.Clear();
             foreach (var item in items) Conflicts.Add(item);
@@ -101,6 +91,82 @@ public partial class DependenciesViewModel : LocalizedViewModel
 
         ConflictsChecked = true;
         OnPropertyChanged(nameof(ShowNoConflicts));
+    }
+
+    //
+    // Keep this one (OPEN-11 D6): keeps the chosen copy and removes every other mod holding the same
+    // plugin or server mod - through the normal Remove, so each goes into the install's holding folder
+    // and Undo on the Installed page can put it back. A mod this app installed is removed by its
+    // record; one installed by hand has just the clashing folder moved.
+    //
+    [RelayCommand]
+    private async Task KeepConflictCopyAsync(ConflictMemberRow? keep)
+    {
+        if (keep is not { CanKeep: true }) return;
+
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        if (string.IsNullOrWhiteSpace(installPath)) return;
+
+        var others = keep.Owner.Members
+            .Where(m => !ReferenceEquals(m.Card, keep.Card))
+            .GroupBy(m => m.Card)
+            .ToList();
+        if (others.Count == 0) return;
+
+        var lines = string.Join("\n", others.SelectMany(g => g.Select(m =>
+            Text(Strings.Conflicts_KeepLineFormat, m.ModName, m.Location))));
+
+        var answer = System.Windows.MessageBox.Show(
+            Text(Strings.Conflicts_KeepConfirmFormat, keep.ModName, keep.Location, lines, InstalledViewModel.HeldSentence()),
+            Strings.Conflicts_KeepConfirmTitle,
+            System.Windows.MessageBoxButton.YesNo,
+            System.Windows.MessageBoxImage.Warning,
+            System.Windows.MessageBoxResult.No);
+        if (answer != System.Windows.MessageBoxResult.Yes) return;
+
+        IsBusy = true;
+        var removed = new List<string>();
+        try
+        {
+            var manifest = AppServices.InstallManifest.Load();
+
+            foreach (var group in others)
+            {
+                var card = group.Key;
+                try
+                {
+                    if (card is { IsAppManaged: true, ModId: { } id } && manifest.Find(id, card.IsAddon) is { } record)
+                    {
+                        await AppServices.ModInstall.UninstallAsync(installPath, record, ConfigAction.Keep);
+                    }
+                    else
+                    {
+                        var paths = group.Select(m => m.Entry.FolderPath).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                        await Task.Run(() => AppServices.ModInstall.RemoveHandInstalled(paths, installPath, card.DisplayTitle));
+                    }
+
+                    removed.Add(card.DisplayTitle);
+                    AppLog.Info("Conflicts", $"kept {keep.ModName} ({keep.Location}); removed {card.DisplayTitle}");
+                }
+                catch (ModInstallException ex)
+                {
+                    StatusMessage = Text(Strings.Conflicts_KeepFailedFormat, card.DisplayTitle, ModInstallProblems.Describe(ex));
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                {
+                    StatusMessage = Text(Strings.Conflicts_KeepFailedFormat, card.DisplayTitle, ex.Message);
+                }
+            }
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+
+        if (removed.Count > 0)
+            StatusMessage = Text(Strings.Conflicts_KeptFormat, keep.ModName, TextLists.Join(removed));
+
+        await RefreshConflictsAsync();
     }
 
     [RelayCommand]

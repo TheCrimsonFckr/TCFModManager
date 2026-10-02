@@ -6,11 +6,36 @@
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:app="clr-namespace:TCFModManager.App"
+    xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     Title="{loc:Str Nav_Play}">
     <Page.Resources>
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+        <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
     </Page.Resources>
     <StackPanel Margin="16">
+
+        <!-- Conflicts in this install (OPEN-11 R4): shown only when there are any, and never a gate. -->
+        <ui:Card
+            Padding="16"
+            VerticalAlignment="Top"
+            Margin="0,0,0,16"
+            Visibility="{Binding ConflictWarning, Converter={StaticResource NullToCollapsed}}">
+            <StackPanel>
+                <ui:Button
+                    Padding="0"
+                    Appearance="Transparent"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                    Icon="{ui:SymbolIcon ErrorCircle20}"
+                    Content="{Binding ConflictWarning}"
+                    Command="{Binding ShowConflictsCommand}" />
+                <TextBlock
+                    Margin="0,4,0,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="{loc:Str Play_ConflictsHint}" />
+            </StackPanel>
+        </ui:Card>
 
         <!--
             The pre-launch check, above the buttons because that is the order it matters in.

@@ -5730,4 +5730,38 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Installed_ConflictCount_other" xml:space="preserve">
     <value>{0} conflitti - vedi Dipendenze e conflitti</value>
   </data>
+  <data name="Conflicts_KeepThis" xml:space="preserve">
+    <value>Tieni questa</value>
+  </data>
+  <data name="Conflicts_KeepThisToolTip" xml:space="preserve">
+    <value>Tieni questa copia e rimuovi le altre. Finiscono dove vanno le mod rimosse, quindi Annulla nella pagina Installati può rimetterle.</value>
+  </data>
+  <data name="Conflicts_KeepConfirmTitle" xml:space="preserve">
+    <value>Tieni una copia</value>
+  </data>
+  <data name="Conflicts_KeepConfirmFormat" xml:space="preserve">
+    <value>Tenere {0} in {1} e rimuovere:
+
+{2}
+
+{3}</value>
+  </data>
+  <data name="Conflicts_KeepLineFormat" xml:space="preserve">
+    <value>{0} - {1}</value>
+  </data>
+  <data name="Conflicts_KeptFormat" xml:space="preserve">
+    <value>Tenuta {0}. Rimossa {1} - Annulla nella pagina Installati la rimette.</value>
+  </data>
+  <data name="Conflicts_KeepFailedFormat" xml:space="preserve">
+    <value>Impossibile rimuovere {0}: {1}</value>
+  </data>
+  <data name="Filter_HasConflicts" xml:space="preserve">
+    <value>Ha conflitti</value>
+  </data>
+  <data name="Filter_HasConflictsToolTip" xml:space="preserve">
+    <value>Solo le mod in conflitto: installate due volte, o con una copia diversa di un file che porta un'altra mod. Vedi Dipendenze e conflitti.</value>
+  </data>
+  <data name="Play_ConflictsHint" xml:space="preserve">
+    <value>Alcune mod potrebbero non caricarsi. Puoi comunque avviare.</value>
+  </data>
 </root>
