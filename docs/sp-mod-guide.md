@@ -313,7 +313,7 @@ The first update of any mod after this feature arrived has nothing to compare ag
 - **The same server mod installed twice** - SPT skips a server mod whose ID it finds twice, so **neither copy loads**.
 - **Different copies of one file** - two mods each shipping their own, different copy of a library. Only one copy loads, for everyone. Identical copies are fine and aren't listed.
 
-Each lists every mod involved with the folder it's in, and a button to open it. For a mod installed twice, **Keep this one** keeps that copy and removes the others the normal way - so **Undo** on the Installed page can put them back. A mod in a conflict shows a red status on the Installed page, where **Show - Has conflicts** narrows the list to them and the status line counts them with a link here. The Play page warns too, without stopping you launching.
+Each lists every mod involved with the folder it's in, and a button to open it. For a mod installed twice, **Keep this one** keeps that copy and removes the others the normal way - a mod's client and server halves together - so **Undo** on the Installed page can put them back. It's greyed out when removing a copy would also take files that aren't duplicated: hover it to see why, and use **Remove** on the Installed page instead. A mod in a conflict shows a red status on the Installed page, where **Show - Has conflicts** narrows the list to them and the status line counts them with a link here. The Play page warns too, without stopping you launching.
 
 **Dependencies** resolves the dependency tree of every installed mod that declares one, and reports each dependency's state against what's actually on disk.
 
@@ -513,6 +513,7 @@ Info level by default, rotated daily as `tcfmm-<yyyyMMdd>.log`. To get Debug-lev
 - **Mods nested a folder deeper** - `BepInEx\plugins\Author\ModName\mod.dll` rather than `BepInEx\plugins\ModName\mod.dll` - are listed under the outer folder's name with an unknown version.
 - **Mods you installed by hand are matched by the ID they declare, then by folder name**, since there's no install record to read. If neither clearly points at one listing, the mod shows as not found on sp-mod: you can still see, group, disable and remove it, but not update it from here. A folder name that could plausibly be two different mods is deliberately left unmatched rather than guessed at.
 - **A mod's version is only as good as what it declares.** Some authors forget to update it, and some mods work theirs out while the game runs, which the app can't read - those fall back to the DLL's file version. Either way, **Confirm as installed** puts it right.
+- **Conflicts are found from files, not from what mods do in game.** Two mods changing the same thing - the same item, trader or setting - can't be told from their files, so they don't show as a conflict.
 - **A listing can number its releases differently from the mod it installs.** A helper mod declaring 0.0.7 on a listing whose releases are 4.x shows an update that never clears. Confirm as installed ends it.
 
 #### Installing
@@ -595,6 +596,9 @@ The mod is disabled. Enable it first - see the Disabling mods tab.
 
 #### A mod I disabled is still loading in game
 Check it isn't installed twice. If the same mod sits in both the normal folder and the `.disabled` one, its card says so and offers **Sort out** to keep one copy and set the other aside.
+
+#### A mod is installed but doesn't load in game
+Open **Dependencies and Conflicts**. The usual reason is under **Conflicts**: the same mod installed twice - SPT loads neither copy of a server mod it finds twice - or two mods shipping different copies of one file. **Keep this one** clears a mod installed twice. With no conflicts, check under **Dependencies** that it has everything it needs, then that it's turned on and made for your SPT version.
 
 #### "Close T***** / SPT.Server before installing a mod"
 Exactly what it says: those hold open the files being replaced. Close the game and the server window, then try again.
