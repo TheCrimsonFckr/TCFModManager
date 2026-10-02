@@ -5008,10 +5008,10 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Controllare che ogni mod abbia ciò che gli serve</value>
   </data>
   <data name="Help_Dependencies_Check_Step1" xml:space="preserve">
-    <value>Apri {0}. Elenca ogni mod installato che ha bisogno di altri mod, e se ognuno è presente.</value>
+    <value>Apri {0}. Sotto i conflitti, {1} elenca ogni mod installato che ha bisogno di altri mod, e se ognuno è presente.</value>
   </data>
   <data name="Help_Dependencies_Check_Step2" xml:space="preserve">
-    <value>I mod a cui manca qualcosa sono in cima, già aperti. Premi il pulsante di installazione accanto a ciò che manca.</value>
+    <value>I mod a cui manca qualcosa sono in cima a quell'elenco, già aperti. Premi il pulsante di installazione accanto a ciò che manca.</value>
   </data>
   <data name="Help_Dependencies_Check_Step3" xml:space="preserve">
     <value>Premi {0} per ricontrollare dopo l'installazione.</value>
@@ -5266,7 +5266,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Apri la scheda, premi {0} e scegli la copia da tenere.</value>
   </data>
   <data name="Help_Installed_SortOut_Note" xml:space="preserve">
-    <value>L'altra copia viene messa da parte, non eliminata.</value>
+    <value>L'altra copia viene messa da parte, non eliminata. Due copie entrambe attive compaiono invece sotto Dipendenze e conflitti.</value>
   </data>
   <data name="Help_Options_Language_Title" xml:space="preserve">
     <value>Cambiare la lingua dell'app</value>
@@ -5462,6 +5462,75 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   </data>
   <data name="Help_Dependencies_Check_Keywords" xml:space="preserve">
     <value>dipendenze, requisiti, serve, manca, richiesto</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Title" xml:space="preserve">
+    <value>Trovare i mod che si scontrano</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Step1" xml:space="preserve">
+    <value>Apri {0}. {1}, in alto, elenca i mod installati due volte e i mod che portano copie diverse dello stesso file.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Step2" xml:space="preserve">
+    <value>Ognuno indica di che tipo è. {0}: BepInEx ne carica solo uno, e non puoi scegliere quale. {1}: SPT non ne carica nessuno. {2}: ogni mod riceve la copia caricata per prima, quindi uno di loro potrebbe non funzionare come previsto.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Step3" xml:space="preserve">
+    <value>Premi {0} per ricontrollare dopo ogni modifica.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Note" xml:space="preserve">
+    <value>Il controllo legge ciò che c'è sul disco, quindi vengono controllati anche i mod installati a mano. I mod disattivati non vengono controllati, perché SPT non li carica, e le copie identiche di un file non vengono mai elencate - non fanno danni.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Keywords" xml:space="preserve">
+    <value>conflitto, scontro, duplicato, due volte, due copie, non si carica, non viene caricato, stesso mod, dll</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Title" xml:space="preserve">
+    <value>Tenere una copia di un mod installato due volte</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Step1" xml:space="preserve">
+    <value>Sotto {0}, trova la copia da tenere e premi {1}.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Step2" xml:space="preserve">
+    <value>Controlla cosa verrà rimosso e conferma. Se il mod ha una parte client e una server, le metà duplicate dell'altra copia vengono rimosse insieme.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Step3" xml:space="preserve">
+    <value>Hai cambiato idea? Premi Annulla in cima a {0} per rimettere le copie rimosse.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Note" xml:space="preserve">
+    <value>{0} è disattivato quando un'altra copia è stata installata con questa app e ha anche file non duplicati, perché rimuoverla porterebbe via anche quelli. Passa il mouse sul pulsante per vedere il motivo, e rimuovi invece quel mod dalla pagina Installati, dove Rimuovi mostra tutto ciò che porta via. Le copie diverse di un file non hanno un pulsante: tieni il mod che ti serve, o chiedi agli autori.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Keywords" xml:space="preserve">
+    <value>tieni, tenerne uno, rimuovi duplicato, elimina copia, annulla</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Title" xml:space="preserve">
+    <value>Vedere i conflitti da altre pagine</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Step1" xml:space="preserve">
+    <value>In {0}, un mod in conflitto ha un avviso sulla scheda - passaci sopra il mouse per vedere con quali mod si scontra. Il numero di conflitti sopra l'elenco apre {1}.</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Step2" xml:space="preserve">
+    <value>Per mostrare solo quei mod, scegli {0} nei filtri.</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Step3" xml:space="preserve">
+    <value>Anche {0} avvisa dei conflitti prima dell'avvio. Non ti impedisce mai di giocare.</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Keywords" xml:space="preserve">
+    <value>avviso di conflitto, ha conflitti, filtro, avviso prima di giocare, rosso</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Title" xml:space="preserve">
+    <value>Un mod non si carica</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Step1" xml:space="preserve">
+    <value>Apri {0}. Sotto {1}, un mod installato due volte, o due mod con file in conflitto, è il motivo più comune.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Step2" xml:space="preserve">
+    <value>Più in basso, sotto {0}, controlla che abbia tutti i mod che gli servono.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Step3" xml:space="preserve">
+    <value>In {0}, controlla che il mod sia attivo. Un mod presente sia in una cartella attiva sia in una disattivata ha un avviso sulla scheda.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Note" xml:space="preserve">
+    <value>Ancora non si carica? Controlla in {0} che il mod sia fatto per la tua versione di SPT.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Keywords" xml:space="preserve">
+    <value>non si carica, non viene caricato, non funziona, manca nel gioco, rotto, non compare</value>
   </data>
   <data name="Help_Footprint_Enable_Keywords" xml:space="preserve">
     <value>impronta, prestazioni, attivare, attivare pagina</value>

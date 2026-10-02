@@ -5008,10 +5008,10 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Prüfen, ob jeder Mod hat, was er braucht</value>
   </data>
   <data name="Help_Dependencies_Check_Step1" xml:space="preserve">
-    <value>Öffne {0}. Dort steht jeder installierte Mod, der andere Mods braucht, und ob jeder davon vorhanden ist.</value>
+    <value>Öffne {0}. Unter den Konflikten listet {1} jeden installierten Mod, der andere Mods braucht, und ob jeder davon vorhanden ist.</value>
   </data>
   <data name="Help_Dependencies_Check_Step2" xml:space="preserve">
-    <value>Mods, denen etwas fehlt, stehen oben und sind schon aufgeklappt. Klicke neben dem Fehlenden auf die Installieren-Schaltfläche.</value>
+    <value>Mods, denen etwas fehlt, stehen oben in dieser Liste und sind schon aufgeklappt. Klicke neben dem Fehlenden auf die Installieren-Schaltfläche.</value>
   </data>
   <data name="Help_Dependencies_Check_Step3" xml:space="preserve">
     <value>Klicke nach dem Installieren auf {0}, um erneut zu prüfen.</value>
@@ -5266,7 +5266,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Öffne die Karte, klicke auf {0} und wähle die Kopie, die bleiben soll.</value>
   </data>
   <data name="Help_Installed_SortOut_Note" xml:space="preserve">
-    <value>Die andere Kopie wird beiseitegelegt, nicht gelöscht.</value>
+    <value>Die andere Kopie wird beiseitegelegt, nicht gelöscht. Zwei Kopien, die beide eingeschaltet sind, stehen stattdessen unter Abhängigkeiten und Konflikte.</value>
   </data>
   <data name="Help_Options_Language_Title" xml:space="preserve">
     <value>Die Sprache der App ändern</value>
@@ -5462,6 +5462,75 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   </data>
   <data name="Help_Dependencies_Check_Keywords" xml:space="preserve">
     <value>Abhängigkeiten, Voraussetzungen, braucht, fehlt, benötigt</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Title" xml:space="preserve">
+    <value>Mods finden, die sich in die Quere kommen</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Step1" xml:space="preserve">
+    <value>Öffne {0}. {1} ganz oben listet doppelt installierte Mods und Mods, die unterschiedliche Kopien derselben Datei mitbringen.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Step2" xml:space="preserve">
+    <value>Jeder Eintrag nennt seine Art. {0}: BepInEx lädt nur einen davon, und du kannst nicht wählen, welchen. {1}: SPT lädt keinen davon. {2}: Jeder Mod bekommt die Kopie, die zuerst geladen wird, also funktioniert einer davon vielleicht nicht wie gedacht.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Step3" xml:space="preserve">
+    <value>Klicke nach jeder Änderung auf {0}, um erneut zu prüfen.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Note" xml:space="preserve">
+    <value>Die Prüfung liest, was auf der Festplatte liegt, also werden auch von Hand installierte Mods geprüft. Ausgeschaltete Mods werden nicht geprüft, weil SPT sie nicht lädt, und identische Kopien einer Datei werden nie aufgeführt - sie schaden nicht.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Keywords" xml:space="preserve">
+    <value>Konflikt, Kollision, doppelt, zweimal, zwei Kopien, lädt nicht, wird nicht geladen, gleicher Mod, dll</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Title" xml:space="preserve">
+    <value>Eine Kopie eines doppelt installierten Mods behalten</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Step1" xml:space="preserve">
+    <value>Suche unter {0} die Kopie, die du behalten willst, und klicke auf {1}.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Step2" xml:space="preserve">
+    <value>Prüfe, was entfernt wird, und bestätige. Hat der Mod Client- und Serverteile, werden die doppelten Hälften der anderen Kopie zusammen entfernt.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Step3" xml:space="preserve">
+    <value>Doch anders entschieden? Klicke oben auf {0} auf die Rückgängig-Schaltfläche, um die entfernten Kopien zurückzuholen.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Note" xml:space="preserve">
+    <value>{0} ist ausgegraut, wenn eine andere Kopie mit dieser App installiert wurde und auch Dateien hat, die nicht doppelt sind - beim Entfernen gingen diese mit. Fahre mit der Maus über die Schaltfläche, um den Grund zu sehen, und entferne diesen Mod stattdessen auf der Seite Installiert, wo Entfernen alles zeigt, was es mitnimmt. Für unterschiedliche Kopien einer Datei gibt es keine Schaltfläche: Behalte den Mod, den du brauchst, oder frag die Autoren.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Keywords" xml:space="preserve">
+    <value>behalten, einen behalten, Duplikat entfernen, Kopie löschen, rückgängig</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Title" xml:space="preserve">
+    <value>Konflikte auf anderen Seiten sehen</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Step1" xml:space="preserve">
+    <value>Unter {0} hat ein Mod in einem Konflikt eine Warnung auf seiner Karte - fahre mit der Maus darüber, um zu sehen, mit welchen Mods er kollidiert. Die Konfliktanzahl über der Liste öffnet {1}.</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Step2" xml:space="preserve">
+    <value>Um nur diese Mods zu zeigen, wähle in den Filtern {0}.</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Step3" xml:space="preserve">
+    <value>{0} warnt vor dem Start ebenfalls vor Konflikten. Am Spielen hindert es dich nie.</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Keywords" xml:space="preserve">
+    <value>Konfliktwarnung, hat Konflikte, Filter, Warnung beim Spielen, rot</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Title" xml:space="preserve">
+    <value>Ein Mod lädt nicht</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Step1" xml:space="preserve">
+    <value>Öffne {0}. Unter {1} ist ein doppelt installierter Mod oder zwei Mods mit kollidierenden Dateien der häufigste Grund.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Step2" xml:space="preserve">
+    <value>Prüfe weiter unten unter {0}, ob er jeden Mod hat, den er braucht.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Step3" xml:space="preserve">
+    <value>Prüfe unter {0}, ob der Mod eingeschaltet ist. Ein Mod, der in einem aktivierten und einem deaktivierten Ordner liegt, hat eine Warnung auf seiner Karte.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Note" xml:space="preserve">
+    <value>Lädt er immer noch nicht? Prüfe unter {0}, ob der Mod für deine SPT-Version gemacht ist.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Keywords" xml:space="preserve">
+    <value>lädt nicht, wird nicht geladen, funktioniert nicht, fehlt im Spiel, kaputt, wird nicht angezeigt</value>
   </data>
   <data name="Help_Footprint_Enable_Keywords" xml:space="preserve">
     <value>Fußabdruck, Leistung, einschalten, Seite aktivieren</value>

@@ -270,8 +270,35 @@ internal static class HelpCatalog
 
         new("dependencies", () => Strings.Nav_Dependencies, SymbolRegular.Branch24, typeof(DependenciesPage),
         [
+            Topic("dependencies.conflicts", () => Strings.Help_Dependencies_Conflicts_Title,
+                Step(() => Strings.Help_Dependencies_Conflicts_Step1,
+                    () => Strings.Nav_Dependencies, () => Strings.Conflicts_Header),
+                Step(() => Strings.Help_Dependencies_Conflicts_Step2,
+                    () => Strings.Conflicts_KindDuplicatePlugin, () => Strings.Conflicts_KindDuplicateServerMod,
+                    () => Strings.Conflicts_KindDifferentCopies),
+                Step(() => Strings.Help_Dependencies_Conflicts_Step3, () => Strings.Dependencies_Refresh))
+                .WithNote(() => Strings.Help_Dependencies_Conflicts_Note)
+                .WithKeywords(() => Strings.Help_Dependencies_Conflicts_Keywords),
+
+            Topic("dependencies.keep", () => Strings.Help_Dependencies_Keep_Title,
+                Step(() => Strings.Help_Dependencies_Keep_Step1,
+                    () => Strings.Conflicts_Header, () => Strings.Conflicts_KeepThis),
+                Step(() => Strings.Help_Dependencies_Keep_Step2),
+                Step(() => Strings.Help_Dependencies_Keep_Step3, () => Strings.Nav_Installed))
+                .WithNote(() => Strings.Help_Dependencies_Keep_Note, () => Strings.Conflicts_KeepThis)
+                .WithKeywords(() => Strings.Help_Dependencies_Keep_Keywords),
+
+            Topic("dependencies.spot", () => Strings.Help_Dependencies_Spot_Title,
+                Step(() => Strings.Help_Dependencies_Spot_Step1,
+                    () => Strings.Nav_Installed, () => Strings.Nav_Dependencies),
+                Step(() => Strings.Help_Dependencies_Spot_Step2, () => Strings.Filter_HasConflicts),
+                Step(() => Strings.Help_Dependencies_Spot_Step3, () => Strings.Nav_Play))
+                .WithKeywords(() => Strings.Help_Dependencies_Spot_Keywords)
+                .WithPage(typeof(InstalledPage)),
+
             Topic("dependencies.check", () => Strings.Help_Dependencies_Check_Title,
-                Step(() => Strings.Help_Dependencies_Check_Step1, () => Strings.Nav_Dependencies),
+                Step(() => Strings.Help_Dependencies_Check_Step1,
+                    () => Strings.Nav_Dependencies, () => Strings.Dependencies_Header),
                 Step(() => Strings.Help_Dependencies_Check_Step2),
                 Step(() => Strings.Help_Dependencies_Check_Step3, () => Strings.Dependencies_Refresh))
                 .WithKeywords(() => Strings.Help_Dependencies_Check_Keywords),
@@ -434,6 +461,15 @@ internal static class HelpCatalog
 
         new(ProblemsSectionId, () => Strings.Help_Problems_Title, SymbolRegular.Wrench24, null,
         [
+            Topic("problems.notloading", () => Strings.Help_Problems_NotLoading_Title,
+                Step(() => Strings.Help_Problems_NotLoading_Step1,
+                    () => Strings.Nav_Dependencies, () => Strings.Conflicts_Header),
+                Step(() => Strings.Help_Problems_NotLoading_Step2, () => Strings.Dependencies_Header),
+                Step(() => Strings.Help_Problems_NotLoading_Step3, () => Strings.Nav_Installed))
+                .WithNote(() => Strings.Help_Problems_NotLoading_Note, () => Strings.Nav_Browse)
+                .WithKeywords(() => Strings.Help_Problems_NotLoading_Keywords)
+                .WithPage(typeof(DependenciesPage)),
+
             Topic("problems.greyed", () => Strings.Help_Problems_Greyed_Title,
                 Step(() => Strings.Help_Problems_Greyed_Step1, () => Strings.Nav_Installed),
                 Step(() => Strings.Help_Problems_Greyed_Step2))

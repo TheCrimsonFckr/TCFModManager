@@ -5296,10 +5296,10 @@
     <value>Проверить, что у каждого мода есть всё нужное</value>
   </data>
   <data name="Help_Dependencies_Check_Step1" xml:space="preserve">
-    <value>Откройте {0}. Там перечислен каждый установленный мод, которому нужны другие моды, и есть ли каждый из них.</value>
+    <value>Откройте {0}. Под конфликтами раздел {1} перечисляет каждый установленный мод, которому нужны другие моды, и есть ли каждый из них.</value>
   </data>
   <data name="Help_Dependencies_Check_Step2" xml:space="preserve">
-    <value>Моды, которым чего-то не хватает, стоят вверху и уже раскрыты. Нажмите кнопку установки рядом с недостающим.</value>
+    <value>Моды, которым чего-то не хватает, стоят вверху этого списка и уже раскрыты. Нажмите кнопку установки рядом с недостающим.</value>
   </data>
   <data name="Help_Dependencies_Check_Step3" xml:space="preserve">
     <value>После установки нажмите {0}, чтобы проверить снова.</value>
@@ -5554,7 +5554,7 @@
     <value>Откройте карточку, нажмите {0} и выберите, какую копию оставить.</value>
   </data>
   <data name="Help_Installed_SortOut_Note" xml:space="preserve">
-    <value>Другая копия откладывается, а не удаляется.</value>
+    <value>Другая копия откладывается, а не удаляется. Две копии, которые обе включены, показываются в разделе «Зависимости и конфликты».</value>
   </data>
   <data name="Help_Options_Language_Title" xml:space="preserve">
     <value>Сменить язык приложения</value>
@@ -5750,6 +5750,75 @@
   </data>
   <data name="Help_Dependencies_Check_Keywords" xml:space="preserve">
     <value>зависимости, требования, нужно, не хватает, обязательно</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Title" xml:space="preserve">
+    <value>Найти моды, которые мешают друг другу</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Step1" xml:space="preserve">
+    <value>Откройте {0}. Раздел {1} вверху перечисляет моды, установленные дважды, и моды, которые приносят разные копии одного и того же файла.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Step2" xml:space="preserve">
+    <value>У каждого указан его вид. {0}: BepInEx загружает только один из них, и выбрать, какой, нельзя. {1}: SPT не загружает ни одного. {2}: каждый мод получает ту копию, что загрузилась первой, поэтому один из них может работать не так, как задумано.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Step3" xml:space="preserve">
+    <value>Нажмите {0}, чтобы проверить снова после любых изменений.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Note" xml:space="preserve">
+    <value>Проверка читает то, что лежит на диске, поэтому моды, установленные вручную, тоже проверяются. Отключённые моды не проверяются, потому что SPT их не загружает, а одинаковые копии файла никогда не показываются - они не мешают.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Keywords" xml:space="preserve">
+    <value>конфликт, дубликат, дважды, две копии, не загружается, не грузится, тот же мод, dll</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Title" xml:space="preserve">
+    <value>Оставить одну копию мода, установленного дважды</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Step1" xml:space="preserve">
+    <value>В разделе {0} найдите копию, которую хотите оставить, и нажмите {1}.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Step2" xml:space="preserve">
+    <value>Проверьте, что будет удалено, и подтвердите. Если у мода есть клиентская и серверная части, дублирующиеся половины другой копии удаляются вместе.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Step3" xml:space="preserve">
+    <value>Передумали? Нажмите «Отменить» вверху страницы {0}, чтобы вернуть удалённые копии.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Note" xml:space="preserve">
+    <value>Кнопка {0} неактивна, если другая копия установлена этим приложением и в ней есть файлы, которые не дублируются: при удалении они тоже уйдут. Наведите на кнопку, чтобы увидеть причину, и удалите этот мод на странице «Установленные», где «Удалить» показывает всё, что будет удалено. У разных копий одного файла кнопки нет: оставьте нужный мод или обратитесь к авторам.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Keywords" xml:space="preserve">
+    <value>оставить, оставить один, удалить дубликат, удалить копию, отменить</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Title" xml:space="preserve">
+    <value>Увидеть конфликты на других страницах</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Step1" xml:space="preserve">
+    <value>На странице {0} у мода в конфликте на карточке есть предупреждение - наведите на него, чтобы увидеть, с какими модами он конфликтует. Число конфликтов над списком открывает {1}.</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Step2" xml:space="preserve">
+    <value>Чтобы показать только эти моды, выберите в фильтрах {0}.</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Step3" xml:space="preserve">
+    <value>Страница {0} тоже предупреждает о конфликтах перед запуском. Играть она никогда не мешает.</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Keywords" xml:space="preserve">
+    <value>предупреждение о конфликте, есть конфликты, фильтр, предупреждение перед игрой, красный</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Title" xml:space="preserve">
+    <value>Мод не загружается</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Step1" xml:space="preserve">
+    <value>Откройте {0}. В разделе {1} самая частая причина - мод, установленный дважды, или два мода с конфликтующими файлами.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Step2" xml:space="preserve">
+    <value>Ниже, в разделе {0}, проверьте, что у него есть все нужные моды.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Step3" xml:space="preserve">
+    <value>На странице {0} проверьте, что мод включён. У мода, который есть и во включённой, и в отключённой папке, на карточке предупреждение.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Note" xml:space="preserve">
+    <value>Всё равно не загружается? Проверьте на странице {0}, что мод сделан для вашей версии SPT.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Keywords" xml:space="preserve">
+    <value>не загружается, не грузится, не работает, нет в игре, сломан, не отображается</value>
   </data>
   <data name="Help_Footprint_Enable_Keywords" xml:space="preserve">
     <value>след, производительность, включить, включить страницу</value>

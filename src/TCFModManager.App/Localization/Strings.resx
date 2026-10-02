@@ -5955,11 +5955,11 @@ This was written to:
     <comment>How-to title.</comment>
   </data>
   <data name="Help_Dependencies_Check_Step1" xml:space="preserve">
-    <value>Open {0}. It lists every installed mod that needs other mods, and whether each one is there.</value>
+    <value>Open {0}. Below the conflicts, {1} lists every installed mod that needs other mods, and whether each one is there.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Dependencies_Check_Step2" xml:space="preserve">
-    <value>Mods missing something are at the top, already open. Press the install button beside what's missing.</value>
+    <value>Mods missing something are at the top of that list, already open. Press the install button beside what's missing.</value>
   </data>
   <data name="Help_Dependencies_Check_Step3" xml:space="preserve">
     <value>Press {0} to check again after installing.</value>
@@ -6284,7 +6284,7 @@ This was written to:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Installed_SortOut_Note" xml:space="preserve">
-    <value>The other copy is set aside, not deleted.</value>
+    <value>The other copy is set aside, not deleted. Two copies that are both turned on are listed under Dependencies and Conflicts instead.</value>
   </data>
   <data name="Help_Options_Language_Title" xml:space="preserve">
     <value>Change the app's language</value>
@@ -6536,6 +6536,75 @@ This was written to:
   <data name="Help_Dependencies_Check_Keywords" xml:space="preserve">
     <value>dependencies, requirements, needs, missing, required</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Title" xml:space="preserve">
+    <value>Find mods that clash</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Step1" xml:space="preserve">
+    <value>Open {0}. {1} at the top lists mods installed twice, and mods that ship different copies of the same file.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Step2" xml:space="preserve">
+    <value>Each one says which kind it is. {0}: BepInEx loads only one of them, and you don't get to choose which. {1}: SPT loads none of them. {2}: every mod gets whichever copy loads first, so one of them may not work as intended.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Step3" xml:space="preserve">
+    <value>Press {0} to check again after changing anything.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Note" xml:space="preserve">
+    <value>The check reads what's on disk, so mods you installed by hand are checked too. Turned-off mods aren't checked, since SPT doesn't load them, and identical copies of a file are never listed - they do no harm.</value>
+  </data>
+  <data name="Help_Dependencies_Conflicts_Keywords" xml:space="preserve">
+    <value>conflict, clash, duplicate, twice, two copies, doesn't load, not loading, same mod, dll</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Title" xml:space="preserve">
+    <value>Keep one copy of a mod installed twice</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Step1" xml:space="preserve">
+    <value>Under {0}, find the copy you want to keep and press {1}.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Step2" xml:space="preserve">
+    <value>Check what will be removed and confirm. If the mod has client and server parts, the other copy's duplicated halves are removed together.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Step3" xml:space="preserve">
+    <value>Changed your mind? Press Undo at the top of {0} to put the removed copies back.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Note" xml:space="preserve">
+    <value>{0} is greyed out when another copy was installed with this app and also has files that aren't duplicated, because removing it would take those too. Hover the button to see why, and remove that mod from the Installed page instead, where Remove shows everything it takes. Different copies of one file have no button: keep the mod you need, or ask the authors.</value>
+  </data>
+  <data name="Help_Dependencies_Keep_Keywords" xml:space="preserve">
+    <value>keep, keep one, remove duplicate, delete copy, undo</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Title" xml:space="preserve">
+    <value>See conflicts from other pages</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Step1" xml:space="preserve">
+    <value>On {0}, a mod in a conflict has a warning on its card - hover it to see which mods it clashes with. The conflict count above the list opens {1}.</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Step2" xml:space="preserve">
+    <value>To show only those mods, choose {0} in the filters.</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Step3" xml:space="preserve">
+    <value>{0} warns about conflicts too, before you launch. It never stops you playing.</value>
+  </data>
+  <data name="Help_Dependencies_Spot_Keywords" xml:space="preserve">
+    <value>conflict warning, has conflicts, filter, play warning, red</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Title" xml:space="preserve">
+    <value>A mod doesn't load</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Step1" xml:space="preserve">
+    <value>Open {0}. Under {1}, a mod installed twice, or two mods with clashing files, is the most common reason.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Step2" xml:space="preserve">
+    <value>Further down, under {0}, check it has every mod it needs.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Step3" xml:space="preserve">
+    <value>On {0}, check the mod is turned on. A mod in both an enabled and a disabled folder has a warning on its card.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Note" xml:space="preserve">
+    <value>Still not loading? Check on {0} that the mod is made for your SPT version.</value>
+  </data>
+  <data name="Help_Problems_NotLoading_Keywords" xml:space="preserve">
+    <value>doesn't load, not loading, not working, missing in game, broken, not showing</value>
   </data>
   <data name="Help_Footprint_Enable_Keywords" xml:space="preserve">
     <value>footprint, performance, turn on, enable page</value>
