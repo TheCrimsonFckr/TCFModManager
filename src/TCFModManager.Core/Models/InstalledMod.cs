@@ -18,6 +18,17 @@ public enum InstalledModTarget
 //
 public sealed record ModDependencyRef(string Identifier, bool IsSoft, string? VersionRange = null);
 
+//
+// One DLL inside an enabled client entry, for the conflict check (OPEN-11 C3). RelativePath is from
+// the entry's own folder, forward-slash; a loose DLL's is just its file name. AssemblyName and
+// AssemblyVersion come from the assembly's own definition and are null for a file that isn't a
+// managed assembly (a native DLL), which is then known only by its file name.
+//
+public sealed record ModAssembly(string RelativePath, string? AssemblyName, string? AssemblyVersion, long Size)
+{
+    public string FileName => RelativePath[(RelativePath.LastIndexOf('/') + 1)..];
+}
+
 // One mod found on disk by InstalledModScanner. Represents what's installed locally, not a catalog listing.
 public sealed class InstalledMod
 {
@@ -98,4 +109,11 @@ public sealed class InstalledMod
 
     // What this mod declares it needs, read from its own files. Empty when it declares nothing.
     public IReadOnlyList<ModDependencyRef> Dependencies { get; init; } = [];
+
+    //
+    // Every DLL BepInEx would load from this entry - recursive, as BepInEx searches plugins - with its
+    // assembly identity. Filled for enabled client entries only: a disabled one isn't loaded, so it
+    // can't conflict, and a server mod's DLLs are loaded by SPT one mod at a time.
+    //
+    public IReadOnlyList<ModAssembly> Assemblies { get; init; } = [];
 }

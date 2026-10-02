@@ -78,6 +78,30 @@ public static class ModAssemblyMetadata
     }
 
     //
+    // The assembly's own name and version from its definition row, or nulls for a file that isn't a
+    // managed assembly - a native DLL, a netmodule, or anything unreadable. Reads headers only.
+    //
+    public static (string? Name, string? Version) ReadIdentity(string dllPath)
+    {
+        try
+        {
+            using var stream = File.OpenRead(dllPath);
+            using var peReader = new PEReader(stream);
+            if (!peReader.HasMetadata) return (null, null);
+
+            var reader = peReader.GetMetadataReader();
+            if (!reader.IsAssembly) return (null, null);
+
+            var definition = reader.GetAssemblyDefinition();
+            return (reader.GetString(definition.Name), definition.Version.ToString());
+        }
+        catch (Exception)
+        {
+            return (null, null);
+        }
+    }
+
+    //
     // The SPT 4.x server mod metadata record in this DLL, or null when there isn't one - a bundled
     // library, an SPT 3.x mod's helper DLL, or anything that isn't managed code.
     //

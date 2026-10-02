@@ -129,6 +129,7 @@ public static class InstalledModScanner
                 InstalledAt = TryGetCreationTime(dir),
                 IsDisabled = disabled,
                 Dependencies = MergeDependencies(metadata.SelectMany(m => m.Declared.Dependencies)),
+                Assemblies = disabled ? [] : ListAssemblies(dir),
             });
         }
 
@@ -154,6 +155,7 @@ public static class InstalledModScanner
                 InstalledAt = TryGetCreationTime(dll),
                 IsDisabled = disabled,
                 Dependencies = MergeDependencies(metadata.Dependencies),
+                Assemblies = disabled ? [] : [Describe(dll, Path.GetFileName(dll))],
             });
         }
     }
@@ -265,6 +267,47 @@ public static class InstalledModScanner
                 Dependencies = MergeDependencies(dependencies),
             });
         }
+    }
+
+    // A folder holding more DLLs than this is listed up to it - no real mod comes close, and the
+    // conflict check must not be what makes a scan of a strange folder slow.
+    private const int MaxAssembliesPerEntry = 500;
+
+    //
+    // Every DLL under a client mod folder, at any depth - BepInEx loads plugins recursively. Folders
+    // that are links are not followed, the same as every other walk inside an install.
+    //
+    private static List<ModAssembly> ListAssemblies(string folder)
+    {
+        try
+        {
+            return
+            [
+                .. Directory.EnumerateFiles(folder, "*.dll", new EnumerationOptions
+                    {
+                        RecurseSubdirectories = true,
+                        AttributesToSkip = FileAttributes.ReparsePoint,
+                        IgnoreInaccessible = true,
+                    })
+                    .Take(MaxAssembliesPerEntry)
+                    .Select(dll => Describe(dll, Path.GetRelativePath(folder, dll).Replace('\\', '/'))),
+            ];
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return [];
+        }
+    }
+
+    private static ModAssembly Describe(string dll, string relativePath)
+    {
+        var (name, version) = ModAssemblyMetadata.ReadIdentity(dll);
+
+        long size;
+        try { size = new FileInfo(dll).Length; }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { size = -1; }
+
+        return new ModAssembly(relativePath, name, version, size);
     }
 
     //
