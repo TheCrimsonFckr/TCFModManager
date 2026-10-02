@@ -1438,6 +1438,35 @@ public partial class InstalledViewModel : LocalizedViewModel
             return;
         }
 
+        //
+        // Any update whose version doesn't support the installed SPT - PickDisplayVersion falls back
+        // to the newest when none does - is asked about once for the batch. No leaves those out and
+        // updates the rest.
+        //
+        var incompatible = resolved
+            .Select(r => (r.Card, Version: r.Mod.Versions?.FirstOrDefault(v => v.Version == r.Version)))
+            .Where(r => SptCompatibility.IsIncompatible(r.Version?.SptVersionConstraint))
+            .ToList();
+
+        var leftOut = string.Empty;
+        if (incompatible.Count > 0 && !SptCompatibility.ConfirmAnyway(
+                [.. incompatible.Select(r => SptCompatibility.Line(r.Card.DisplayTitle, r.Version!.Version, r.Version.SptVersionConstraint))],
+                batch: true))
+        {
+            var dropped = incompatible.Select(r => r.Card).ToHashSet();
+            resolved.RemoveAll(r => dropped.Contains(r.Card));
+            leftOut = Text(
+                Strings.Install_IncompatibleLeftOutFormat,
+                AppServices.SptEnvironment.InstalledVersion,
+                TextLists.Join([.. incompatible.Select(r => r.Card.DisplayTitle)]));
+
+            if (resolved.Count == 0)
+            {
+                StatusMessage = leftOut;
+                return;
+            }
+        }
+
         // The same gate a single install goes through, asked once for the batch. ConfirmAll honours
         // the Options switch that turns the gate off.
         var links = resolved.Select(r => new ModPageLink(r.Card.DisplayTitle, r.Mod.DetailUrl)).ToList();
@@ -1455,7 +1484,8 @@ public partial class InstalledViewModel : LocalizedViewModel
         }
 
         var queued = Strings.Installed_UpdateQueued(resolved.Count);
-        StatusMessage = queued + DescribeSkipped(selected, resolved.Count, unmatched);
+        var summary = queued + DescribeSkipped(selected, resolved.Count, unmatched);
+        StatusMessage = leftOut.Length == 0 ? summary : Sentences(summary, leftOut);
 
         AppLog.Info("Installed", $"queued {resolved.Count} update(s) from a selection of {selected.Count}");
     }

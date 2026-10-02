@@ -5,7 +5,7 @@ using Xunit;
 namespace TCFModManager.Core.Tests;
 
 //
-// Stage 1 of OPEN-10-TCFResilience-DESIGN.md: the rules every deletion and move inside an install
+// Stage 1 of CLOSED-10-TCFResilience-DESIGN.md: the rules every deletion and move inside an install
 // goes through. Each test that touches the disk builds a throwaway install under the temp folder and
 // asserts on what is still there afterwards, not on what the code says it did.
 //

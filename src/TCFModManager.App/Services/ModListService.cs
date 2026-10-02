@@ -309,6 +309,24 @@ public sealed class ModListService
         if (downloads.Count == 0) return new ModListFetchOutcome([], failed, false);
 
         //
+        // Versions that don't support the installed SPT are asked about once for the batch, like a
+        // single install. No leaves those out, each named as a failure, and fetches the rest.
+        //
+        var incompatible = downloads.Where(d => SptCompatibility.IsIncompatible(d.Version.SptVersionConstraint)).ToList();
+        if (incompatible.Count > 0 && !prompts.InstallIncompatible(incompatible))
+        {
+            foreach (var d in incompatible)
+            {
+                failed.Add(new ModListFetchFailure(
+                    d.Action.Name,
+                    Text(Strings.ModList_ReasonIncompatibleFormat, d.Version.Version, AppServices.SptEnvironment.InstalledVersion)));
+            }
+
+            downloads.RemoveAll(incompatible.Contains);
+            if (downloads.Count == 0) return new ModListFetchOutcome([], failed, false);
+        }
+
+        //
         // The same gate a manual install goes through, asked once for the whole batch rather than
         // once per mod - ConfirmAll is the existing path for exactly this, and it honours the
         // Options switch that turns the gate off.

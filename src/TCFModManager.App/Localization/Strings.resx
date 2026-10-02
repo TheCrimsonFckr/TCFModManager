@@ -6793,4 +6793,40 @@ This was written to:
     <value>Its folder {1} was left in place: it holds {0} files the mod didn't install.</value>
     <comment>{0} is a count, {1} a folder. Part of the message after a removal.</comment>
   </data>
+  <data name="Install_IncompatibleTitle" xml:space="preserve">
+    <value>Not made for your SPT version</value>
+    <comment>Title of the question asked before installing a version that doesn't support the installed SPT.</comment>
+  </data>
+  <data name="Install_IncompatibleOneFormat" xml:space="preserve">
+    <value>No version of this mod on sp-mod.com supports SPT {0}. The newest is:
+
+{1}
+
+Install it anyway? SPT may refuse to load it.</value>
+    <comment>{0} is the installed SPT version, {1} one Install_IncompatibleLineFormat line.</comment>
+  </data>
+  <data name="Install_IncompatibleBatchFormat" xml:space="preserve">
+    <value>These don't support SPT {0}:
+
+{1}
+
+Install them anyway? SPT may refuse to load them. No installs the rest without them.</value>
+    <comment>{0} is the installed SPT version, {1} one Install_IncompatibleLineFormat line per mod.</comment>
+  </data>
+  <data name="Install_IncompatibleLineFormat" xml:space="preserve">
+    <value>{0} {1} - needs SPT {2}</value>
+    <comment>{0} mod name, {1} its version, {2} the SPT versions it supports, e.g. '4.1.6 - 4.1.x'.</comment>
+  </data>
+  <data name="Install_IncompatibleNotInstalledFormat" xml:space="preserve">
+    <value>{0} wasn't installed - no version of it supports SPT {1}.</value>
+    <comment>Status line after answering No. {0} mod name, {1} installed SPT version.</comment>
+  </data>
+  <data name="Install_IncompatibleLeftOutFormat" xml:space="preserve">
+    <value>Left out because they don't support SPT {0}: {1}.</value>
+    <comment>Added to a batch's status line after answering No. {0} installed SPT version, {1} mod names.</comment>
+  </data>
+  <data name="ModList_ReasonIncompatibleFormat" xml:space="preserve">
+    <value>version {0} doesn't support SPT {1}, and installing it anyway wasn't chosen</value>
+    <comment>Why a mod list fetch was left out. {0} a version, {1} the installed SPT version.</comment>
+  </data>
 </root>

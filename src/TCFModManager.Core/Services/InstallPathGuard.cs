@@ -50,7 +50,7 @@ public enum PathRefusal
 
 //
 // The checks every deletion and move inside an install goes through first
-// (OPEN-10-TCFResilience-DESIGN.md §4, D13-D15). Each answers from the path and the disk as they are
+// (CLOSED-10-TCFResilience-DESIGN.md §4, D13-D15). Each answers from the path and the disk as they are
 // now - never from what a record or a scan said earlier - and anything it cannot work out is a
 // refusal, never a pass.
 //

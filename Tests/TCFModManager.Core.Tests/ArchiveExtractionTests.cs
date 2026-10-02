@@ -5,7 +5,7 @@ using TCFModManager.Core.Services;
 namespace TCFModManager.Core.Tests;
 
 //
-// D24 (OPEN-10): every archive format a Forge download can be extracts the same tree. Before
+// D24 (CLOSED-10): every archive format a Forge download can be extracts the same tree. Before
 // v1.19.0 SharpCompress's forward-only reader threw for non-solid archives other than 7z (tar, a
 // non-solid RAR), so those installs failed.
 //

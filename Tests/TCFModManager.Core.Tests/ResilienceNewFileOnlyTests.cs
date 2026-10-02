@@ -6,7 +6,7 @@ using Xunit;
 namespace TCFModManager.Core.Tests;
 
 //
-// R17 (OPEN-10, found by the stage-6 proof run): a mod may ADD a file directly in the install root
+// R17 (CLOSED-10, found by the stage-6 proof run): a mod may ADD a file directly in the install root
 // (SVM's Greed.exe) or under EscapeFromTarkov_Data/Managed (Dynamic Maps' Unity.VectorGraphics.dll),
 // but never replace one that is there, and a removal takes one back out only when its fingerprint
 // proves it is the copy this app placed.

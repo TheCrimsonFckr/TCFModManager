@@ -7,7 +7,7 @@ using Xunit;
 namespace TCFModManager.Core.Tests;
 
 //
-// Stage 2 of OPEN-10-TCFResilience-DESIGN.md: how the app's own files are written and kept, and the
+// Stage 2 of CLOSED-10-TCFResilience-DESIGN.md: how the app's own files are written and kept, and the
 // record fields stages 3 and 4 fill in. Every test works in its own temp folder and checks the disk
 // afterwards.
 //

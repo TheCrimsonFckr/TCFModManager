@@ -5655,4 +5655,33 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="Installed_RemovedFolderLeft_other" xml:space="preserve">
     <value>Son dossier {1} a été laissé en place : il contient {0} fichiers que le mod n'a pas installés.</value>
   </data>
+  <data name="Install_IncompatibleTitle" xml:space="preserve">
+    <value>Pas prévu pour votre version de SPT</value>
+  </data>
+  <data name="Install_IncompatibleOneFormat" xml:space="preserve">
+    <value>Aucune version de ce mod sur sp-mod.com ne prend en charge SPT {0}. La plus récente est :
+
+{1}
+
+L'installer quand même ? SPT risque de refuser de la charger.</value>
+  </data>
+  <data name="Install_IncompatibleBatchFormat" xml:space="preserve">
+    <value>Ceux-ci ne prennent pas en charge SPT {0} :
+
+{1}
+
+Les installer quand même ? SPT risque de refuser de les charger. Non installe le reste sans eux.</value>
+  </data>
+  <data name="Install_IncompatibleLineFormat" xml:space="preserve">
+    <value>{0} {1} - nécessite SPT {2}</value>
+  </data>
+  <data name="Install_IncompatibleNotInstalledFormat" xml:space="preserve">
+    <value>{0} n'a pas été installé - aucune de ses versions ne prend en charge SPT {1}.</value>
+  </data>
+  <data name="Install_IncompatibleLeftOutFormat" xml:space="preserve">
+    <value>Laissés de côté car ils ne prennent pas en charge SPT {0} : {1}.</value>
+  </data>
+  <data name="ModList_ReasonIncompatibleFormat" xml:space="preserve">
+    <value>la version {0} ne prend pas en charge SPT {1}, et l'installer quand même n'a pas été choisi</value>
+  </data>
 </root>

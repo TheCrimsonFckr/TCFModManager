@@ -919,6 +919,17 @@ public partial class BrowseViewModel : LocalizedViewModel
             return;
         }
 
+        // PickDisplayVersion falls back to the newest version when none supports the installed SPT -
+        // the card says so in red, and installing it is asked about rather than done silently.
+        if (SptCompatibility.IsIncompatible(chosen.SptVersionConstraint)
+            && !SptCompatibility.ConfirmAnyway(
+                [SptCompatibility.Line(mod.Name ?? Strings.Browse_ThisMod, chosen.Version, chosen.SptVersionConstraint)],
+                batch: false))
+        {
+            StatusMessage = Text(Strings.Install_IncompatibleNotInstalledFormat, mod.Name, installedSptVersion);
+            return;
+        }
+
         var chosenVersion = chosen.Version;
         AppServices.DownloadQueue.Enqueue(
             InstallTarget.For(mod), chosenVersion, installPath, () => ResolveVersionLinkAsync(mod, chosenVersion),

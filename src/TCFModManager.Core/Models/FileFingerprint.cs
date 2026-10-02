@@ -4,7 +4,7 @@ namespace TCFModManager.Core.Models;
 
 //
 // A placed file's size and SHA-256, so a later removal can tell whether the file on disk is still
-// exactly what this app put there (OPEN-10-TCFResilience-DESIGN.md §6, D21). Path is the same
+// exactly what this app put there (CLOSED-10-TCFResilience-DESIGN.md §6, D21). Path is the same
 // forward-slash, install-relative path the record's Files list uses.
 //
 // SHA-256 because it is in the base library: XxHash64 would need the System.IO.Hashing package, and

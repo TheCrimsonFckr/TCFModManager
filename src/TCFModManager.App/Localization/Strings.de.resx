@@ -5655,4 +5655,33 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="Installed_RemovedFolderLeft_other" xml:space="preserve">
     <value>Sein Ordner {1} wurde nicht entfernt: Er enthält {0} Dateien, die der Mod nicht installiert hat.</value>
   </data>
+  <data name="Install_IncompatibleTitle" xml:space="preserve">
+    <value>Nicht für deine SPT-Version gemacht</value>
+  </data>
+  <data name="Install_IncompatibleOneFormat" xml:space="preserve">
+    <value>Keine Version dieses Mods auf sp-mod.com unterstützt SPT {0}. Die neueste ist:
+
+{1}
+
+Trotzdem installieren? SPT lädt ihn möglicherweise nicht.</value>
+  </data>
+  <data name="Install_IncompatibleBatchFormat" xml:space="preserve">
+    <value>Diese unterstützen SPT {0} nicht:
+
+{1}
+
+Trotzdem installieren? SPT lädt sie möglicherweise nicht. Mit Nein wird der Rest ohne sie installiert.</value>
+  </data>
+  <data name="Install_IncompatibleLineFormat" xml:space="preserve">
+    <value>{0} {1} - braucht SPT {2}</value>
+  </data>
+  <data name="Install_IncompatibleNotInstalledFormat" xml:space="preserve">
+    <value>{0} wurde nicht installiert - keine Version davon unterstützt SPT {1}.</value>
+  </data>
+  <data name="Install_IncompatibleLeftOutFormat" xml:space="preserve">
+    <value>Ausgelassen, weil sie SPT {0} nicht unterstützen: {1}.</value>
+  </data>
+  <data name="ModList_ReasonIncompatibleFormat" xml:space="preserve">
+    <value>Version {0} unterstützt SPT {1} nicht, und sie trotzdem zu installieren wurde nicht gewählt</value>
+  </data>
 </root>

@@ -6,7 +6,7 @@ namespace TCFModManager.Core.Services;
 
 //
 // How every file this app keeps is written, and what happens when one can't be read back
-// (OPEN-10-TCFResilience-DESIGN.md §9, D18/D19).
+// (CLOSED-10-TCFResilience-DESIGN.md §9, D18/D19).
 //
 // A write goes to a temporary file beside the target, is flushed to disk, and only then renamed over
 // the old one - so a crash, a full disk or a killed process leaves either the old file or the new

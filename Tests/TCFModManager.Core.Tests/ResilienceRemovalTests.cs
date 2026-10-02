@@ -6,7 +6,7 @@ using Xunit;
 namespace TCFModManager.Core.Tests;
 
 //
-// Stage 4 of OPEN-10-TCFResilience-DESIGN.md: the removal engine. Mods are installed with a real
+// Stage 4 of CLOSED-10-TCFResilience-DESIGN.md: the removal engine. Mods are installed with a real
 // InstallAsync into a throwaway SPT layout, removed, updated and put back, and every test asserts on
 // the disk - the install, the holding folder and Data - not on what the code reports.
 //

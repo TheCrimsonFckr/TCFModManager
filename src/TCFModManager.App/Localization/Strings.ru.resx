@@ -5967,4 +5967,33 @@
   <data name="Installed_RemovedFolderLeft_many" xml:space="preserve">
     <value>Его папка {1} оставлена: в ней {0} файлов, которые мод не устанавливал.</value>
   </data>
+  <data name="Install_IncompatibleTitle" xml:space="preserve">
+    <value>Не для вашей версии SPT</value>
+  </data>
+  <data name="Install_IncompatibleOneFormat" xml:space="preserve">
+    <value>Ни одна версия этого мода на sp-mod.com не поддерживает SPT {0}. Самая новая:
+
+{1}
+
+Всё равно установить? SPT может отказаться его загружать.</value>
+  </data>
+  <data name="Install_IncompatibleBatchFormat" xml:space="preserve">
+    <value>Эти моды не поддерживают SPT {0}:
+
+{1}
+
+Всё равно установить? SPT может отказаться их загружать. «Нет» установит остальные без них.</value>
+  </data>
+  <data name="Install_IncompatibleLineFormat" xml:space="preserve">
+    <value>{0} {1} - нужна SPT {2}</value>
+  </data>
+  <data name="Install_IncompatibleNotInstalledFormat" xml:space="preserve">
+    <value>{0} не установлен - ни одна его версия не поддерживает SPT {1}.</value>
+  </data>
+  <data name="Install_IncompatibleLeftOutFormat" xml:space="preserve">
+    <value>Пропущены, так как не поддерживают SPT {0}: {1}.</value>
+  </data>
+  <data name="ModList_ReasonIncompatibleFormat" xml:space="preserve">
+    <value>версия {0} не поддерживает SPT {1}, а установка всё равно не была выбрана</value>
+  </data>
 </root>

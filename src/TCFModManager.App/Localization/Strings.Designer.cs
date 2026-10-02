@@ -1858,4 +1858,11 @@ internal static class Strings
     internal static string Installed_LeftoverFormat => LocalizationService.Get("Installed_LeftoverFormat");
     internal static string Installed_RemovedFolderLeft(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_RemovedFolderLeft", count, values);
+    internal static string Install_IncompatibleTitle => LocalizationService.Get("Install_IncompatibleTitle");
+    internal static string Install_IncompatibleOneFormat => LocalizationService.Get("Install_IncompatibleOneFormat");
+    internal static string Install_IncompatibleBatchFormat => LocalizationService.Get("Install_IncompatibleBatchFormat");
+    internal static string Install_IncompatibleLineFormat => LocalizationService.Get("Install_IncompatibleLineFormat");
+    internal static string Install_IncompatibleNotInstalledFormat => LocalizationService.Get("Install_IncompatibleNotInstalledFormat");
+    internal static string Install_IncompatibleLeftOutFormat => LocalizationService.Get("Install_IncompatibleLeftOutFormat");
+    internal static string ModList_ReasonIncompatibleFormat => LocalizationService.Get("ModList_ReasonIncompatibleFormat");
 }

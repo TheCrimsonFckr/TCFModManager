@@ -6,7 +6,7 @@ using Xunit;
 namespace TCFModManager.Core.Tests;
 
 //
-// Stage 3 of OPEN-10-TCFResilience-DESIGN.md: the install side. Each test runs a real InstallAsync
+// Stage 3 of CLOSED-10-TCFResilience-DESIGN.md: the install side. Each test runs a real InstallAsync
 // against a throwaway SPT layout (EscapeFromTarkov.exe at the root, the server under SPT\), with the
 // archive served from memory, and asserts on what is on disk and in the record afterwards.
 //

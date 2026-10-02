@@ -5655,4 +5655,33 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Installed_RemovedFolderLeft_other" xml:space="preserve">
     <value>La sua cartella {1} è stata lasciata: contiene {0} file che la mod non ha installato.</value>
   </data>
+  <data name="Install_IncompatibleTitle" xml:space="preserve">
+    <value>Non fatta per la tua versione di SPT</value>
+  </data>
+  <data name="Install_IncompatibleOneFormat" xml:space="preserve">
+    <value>Nessuna versione di questa mod su sp-mod.com supporta SPT {0}. La più recente è:
+
+{1}
+
+Installarla comunque? SPT potrebbe rifiutarsi di caricarla.</value>
+  </data>
+  <data name="Install_IncompatibleBatchFormat" xml:space="preserve">
+    <value>Queste non supportano SPT {0}:
+
+{1}
+
+Installarle comunque? SPT potrebbe rifiutarsi di caricarle. No installa il resto senza di loro.</value>
+  </data>
+  <data name="Install_IncompatibleLineFormat" xml:space="preserve">
+    <value>{0} {1} - richiede SPT {2}</value>
+  </data>
+  <data name="Install_IncompatibleNotInstalledFormat" xml:space="preserve">
+    <value>{0} non è stata installata - nessuna sua versione supporta SPT {1}.</value>
+  </data>
+  <data name="Install_IncompatibleLeftOutFormat" xml:space="preserve">
+    <value>Escluse perché non supportano SPT {0}: {1}.</value>
+  </data>
+  <data name="ModList_ReasonIncompatibleFormat" xml:space="preserve">
+    <value>la versione {0} non supporta SPT {1}, e non si è scelto di installarla comunque</value>
+  </data>
 </root>

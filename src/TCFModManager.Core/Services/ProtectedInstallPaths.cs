@@ -3,7 +3,7 @@ namespace TCFModManager.Core.Services;
 //
 // The files in an SPT install that belong to SPT, BepInEx or the game rather than to any mod: never
 // placed over, never recorded, never removed. One rule set, read by the installer, by Monitor mode's
-// archive plan and by every removal path (OPEN-10-TCFResilience-DESIGN.md §3, D1/D2).
+// archive plan and by every removal path (CLOSED-10-TCFResilience-DESIGN.md §3, D1/D2).
 //
 // It works on the install-relative path alone and needs no server root: both server layouts (SPT\
 // on 4.0, SPT_Runtime\ on 4.1) and a standalone server at the install root are all recognised by
