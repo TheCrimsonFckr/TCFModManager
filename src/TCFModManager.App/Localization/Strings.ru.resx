@@ -2400,6 +2400,9 @@
   <data name="ModInstall_RecordFromAnotherInstallFormat" xml:space="preserve">
     <value>{0} не затронут: запись приложения о нём сделана в другой установке SPT ({1}). Переключитесь на ту установку в «Параметрах», чтобы удалить или обновить его там.</value>
   </data>
+  <data name="ModInstall_NothingToPlaceFormat" xml:space="preserve">
+    <value>{0} {1} не установлен: каждый файл в нём (всего {2}) заменил бы файл, принадлежащий SPT, BepInEx, игре или TCF Mod Manager, например {3}. Ничего не изменено.</value>
+  </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>{0} не удалён: он находится вне вашей папки SPT. Ничего не удалено.</value>
   </data>
@@ -6014,6 +6017,15 @@
   </data>
   <data name="Downloads_KeptSptFiles_many" xml:space="preserve">
     <value>{0} файлов из этого архива принадлежат SPT, BepInEx или игре и оставлены как есть.</value>
+  </data>
+  <data name="Downloads_KeptAppFiles_one" xml:space="preserve">
+    <value>{0} файл из этого архива попал бы на собственные файлы TCF Mod Manager и был пропущен.</value>
+  </data>
+  <data name="Downloads_KeptAppFiles_few" xml:space="preserve">
+    <value>{0} файла из этого архива попали бы на собственные файлы TCF Mod Manager и были пропущены.</value>
+  </data>
+  <data name="Downloads_KeptAppFiles_many" xml:space="preserve">
+    <value>{0} файлов из этого архива попали бы на собственные файлы TCF Mod Manager и были пропущены.</value>
   </data>
   <data name="Downloads_KeptOriginals_one" xml:space="preserve">
     <value>{0} файл, который он заменил, сохранён, чтобы вернуть его при удалении.</value>

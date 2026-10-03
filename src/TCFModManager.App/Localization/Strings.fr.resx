@@ -2265,6 +2265,9 @@ Annuler  -  ne rien supprimer</value>
   <data name="ModInstall_RecordFromAnotherInstallFormat" xml:space="preserve">
     <value>{0} n'a pas été touché : l'enregistrement de l'application le concernant a été fait dans une autre installation de SPT ({1}). Revenez à cette installation dans les Options pour le supprimer ou le mettre à jour là-bas.</value>
   </data>
+  <data name="ModInstall_NothingToPlaceFormat" xml:space="preserve">
+    <value>{0} {1} n'a pas été installé : chaque fichier qu'il contient ({2} au total) aurait remplacé un fichier appartenant à SPT, BepInEx, au jeu ou à TCF Mod Manager, par exemple {3}. Rien n'a été modifié.</value>
+  </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>{0} n'a pas été supprimé : il ne se trouve pas dans votre dossier SPT. Rien n'a été effacé.</value>
   </data>
@@ -5708,6 +5711,12 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   </data>
   <data name="Downloads_KeptSptFiles_other" xml:space="preserve">
     <value>{0} fichiers de cette archive appartiennent à SPT, BepInEx ou au jeu et ont été laissés tels quels.</value>
+  </data>
+  <data name="Downloads_KeptAppFiles_one" xml:space="preserve">
+    <value>1 fichier de cette archive aurait atterri sur les propres fichiers de TCF Mod Manager et a été laissé de côté.</value>
+  </data>
+  <data name="Downloads_KeptAppFiles_other" xml:space="preserve">
+    <value>{0} fichiers de cette archive auraient atterri sur les propres fichiers de TCF Mod Manager et ont été laissés de côté.</value>
   </data>
   <data name="Downloads_KeptOriginals_one" xml:space="preserve">
     <value>1 fichier qu'il a remplacé a été conservé, pour être remis s'il est supprimé.</value>

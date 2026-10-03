@@ -403,6 +403,7 @@ internal static class Strings
     internal static string ModInstall_InstallThroughLinkFormat => LocalizationService.Get("ModInstall_InstallThroughLinkFormat");
     internal static string ModInstall_OriginalNotKeptFormat => LocalizationService.Get("ModInstall_OriginalNotKeptFormat");
     internal static string ModInstall_RecordFromAnotherInstallFormat => LocalizationService.Get("ModInstall_RecordFromAnotherInstallFormat");
+    internal static string ModInstall_NothingToPlaceFormat => LocalizationService.Get("ModInstall_NothingToPlaceFormat");
     internal static string ModInstall_RemoveRefusedOutsideFormat => LocalizationService.Get("ModInstall_RemoveRefusedOutsideFormat");
     internal static string ModInstall_RemoveRefusedProtectedFormat => LocalizationService.Get("ModInstall_RemoveRefusedProtectedFormat");
     internal static string ModInstall_RemoveRefusedAppFolderFormat => LocalizationService.Get("ModInstall_RemoveRefusedAppFolderFormat");
@@ -1876,6 +1877,8 @@ internal static class Strings
         LocalizationService.Plural("Installed_UndoneBlocked", count, values);
     internal static string Downloads_KeptSptFiles(int count, params object?[] values) =>
         LocalizationService.Plural("Downloads_KeptSptFiles", count, values);
+    internal static string Downloads_KeptAppFiles(int count, params object?[] values) =>
+        LocalizationService.Plural("Downloads_KeptAppFiles", count, values);
     internal static string Downloads_KeptOriginals(int count, params object?[] values) =>
         LocalizationService.Plural("Downloads_KeptOriginals", count, values);
     internal static string Installed_UndoRemovalPickFormat => LocalizationService.Get("Installed_UndoRemovalPickFormat");

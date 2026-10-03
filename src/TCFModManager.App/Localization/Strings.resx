@@ -1412,6 +1412,10 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Didn't touch {0}: this app's record of it was made in another SPT install ({1}). Switch Options back to that install to remove or update it there.</value>
     <comment>{0} is a mod name, {1} the folder of another SPT install.</comment>
   </data>
+  <data name="ModInstall_NothingToPlaceFormat" xml:space="preserve">
+    <value>{0} {1} wasn't installed: every file in it ({2} in all) would have replaced one that belongs to SPT, BepInEx, the game or TCF Mod Manager, such as {3}. Nothing was changed.</value>
+    <comment>{0} is a mod name, {1} its version, {2} a count of files, {3} a path inside the SPT folder. TCF Mod Manager is the app name, not translated.</comment>
+  </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>Didn't remove {0}: it isn't inside your SPT folder. Nothing was deleted.</value>
     <comment>{0} is a folder or file path.</comment>
@@ -6839,6 +6843,14 @@ This was written to:
   <data name="Downloads_KeptSptFiles_other" xml:space="preserve">
     <value>{0} files in this archive belong to SPT, BepInEx or the game and were left as they are.</value>
     <comment>{0} is a count. Added to a finished install's status line.</comment>
+  </data>
+  <data name="Downloads_KeptAppFiles_one" xml:space="preserve">
+    <value>1 file in this archive would have landed on TCF Mod Manager's own files and was left out.</value>
+    <comment>{0} is a count. Added to a finished install's status line. TCF Mod Manager is the app name, not translated.</comment>
+  </data>
+  <data name="Downloads_KeptAppFiles_other" xml:space="preserve">
+    <value>{0} files in this archive would have landed on TCF Mod Manager's own files and were left out.</value>
+    <comment>{0} is a count. Added to a finished install's status line. TCF Mod Manager is the app name, not translated.</comment>
   </data>
   <data name="Downloads_KeptOriginals_one" xml:space="preserve">
     <value>1 file it replaced was kept, to put back if it's removed.</value>
