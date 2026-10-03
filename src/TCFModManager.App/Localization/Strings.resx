@@ -2348,7 +2348,13 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="Sort_GroupDescending" xml:space="preserve">
     <value>By group (Z-A)</value>
   </data>
-  <data name="Filter_UpdateRecentlyInstalled" xml:space="preserve">
+  <data name="Sort_InstalledNewest" xml:space="preserve">
+    <value>Last installed (newest)</value>
+  </data>
+  <data name="Sort_InstalledOldest" xml:space="preserve">
+    <value>Last installed (oldest)</value>
+  </data>
+  <data name="Filter_InstalledRecently" xml:space="preserve">
     <value>Installed in the last 7 days</value>
   </data>
   <data name="Sort_GroupsManual" xml:space="preserve">

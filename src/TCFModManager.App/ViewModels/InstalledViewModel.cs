@@ -81,10 +81,9 @@ public partial class InstalledViewModel : LocalizedViewModel
         new(nameof(Strings.Filter_UpdateNeeded), UpdateFilter.NeedsUpdate),
         new(nameof(Strings.Filter_UpdateUpToDate), UpdateFilter.UpToDate),
         new(nameof(Strings.Filter_UpdateNotFound), UpdateFilter.NotFound),
-        new(nameof(Strings.Filter_UpdateRecentlyInstalled), UpdateFilter.RecentlyInstalled),
     ];
 
-    // How far back the Recently installed filter looks.
+    // How far back the Installed in the last 7 days tick box looks.
     private const int RecentDays = 7;
 
     [ObservableProperty]
@@ -119,6 +118,8 @@ public partial class InstalledViewModel : LocalizedViewModel
         new(nameof(Strings.Sort_AuthorDescending), ModSortOption.AuthorDescending),
         new(nameof(Strings.Sort_GroupAscending), ModSortOption.GroupAscending),
         new(nameof(Strings.Sort_GroupDescending), ModSortOption.GroupDescending),
+        new(nameof(Strings.Sort_InstalledNewest), ModSortOption.InstalledNewest),
+        new(nameof(Strings.Sort_InstalledOldest), ModSortOption.InstalledOldest),
     ];
 
     [ObservableProperty]
@@ -147,6 +148,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         new(ModAttributeFilter.HasConflicts,
             nameof(Strings.Filter_HasConflicts),
             nameof(Strings.Filter_HasConflictsToolTip)),
+        new(ModAttributeFilter.InstalledRecently, nameof(Strings.Filter_InstalledRecently)),
     ];
 
     //
@@ -310,14 +312,19 @@ public partial class InstalledViewModel : LocalizedViewModel
     private bool _categoryDefaultApplied;
     private bool _groupDefaultApplied;
 
-    // A default saved before Recently installed moved from Sort by to this dropdown carries it as
-    // Sort = "RecentlyInstalled"; with no update status of its own saved, that becomes this filter.
+    // The name Recently installed was saved under, as a Sort before v1.19.0 and as an UpdateStatus
+    // in v1.19.0. The first is read as Last installed (newest), the second as the tick box.
+    private const string LegacyRecentlyInstalled = "RecentlyInstalled";
+
     private UpdateFilterItem DefaultUpdateFilter() =>
-        SavedFilterDefaults.Parse<UpdateFilter>(_defaults?.UpdateStatus) is { } value and not UpdateFilter.All
+        SavedFilterDefaults.Parse<UpdateFilter>(_defaults?.UpdateStatus) is { } value
             ? UpdateFilterOptions.FirstOrDefault(o => o.Value == value) ?? UpdateFilterOptions[0]
-            : _defaults?.Sort == nameof(UpdateFilter.RecentlyInstalled)
-                ? UpdateFilterOptions.First(o => o.Value == UpdateFilter.RecentlyInstalled)
-                : UpdateFilterOptions[0];
+            : UpdateFilterOptions[0];
+
+    private IReadOnlyCollection<string>? DefaultAttributes() =>
+        _defaults?.UpdateStatus == LegacyRecentlyInstalled
+            ? [.. _defaults.Attributes, nameof(ModAttributeFilter.InstalledRecently)]
+            : _defaults?.Attributes;
 
     private EnabledFilterItem DefaultEnabledFilter() =>
         SavedFilterDefaults.Parse<EnabledFilter>(_defaults?.Enabled) is { } value
@@ -327,7 +334,9 @@ public partial class InstalledViewModel : LocalizedViewModel
     private ModSortItem DefaultSortOption() =>
         SavedFilterDefaults.Parse<ModSortOption>(_defaults?.Sort) is { } value
             ? SortOptions.FirstOrDefault(o => o.Value == value) ?? SortOptions[0]
-            : SortOptions[0];
+            : _defaults?.Sort == LegacyRecentlyInstalled
+                ? SortOptions.First(o => o.Value == ModSortOption.InstalledNewest)
+                : SortOptions[0];
 
     private GroupSortItem DefaultGroupSortOption() =>
         SavedFilterDefaults.Parse<GroupSortOption>(_defaults?.GroupSort) is { } value
@@ -394,7 +403,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         _selectedGroupFilter = GroupFilterItem.All;
 
         // Before the subscription below, so applying a saved default doesn't count as a change.
-        SavedFilterDefaults.ApplyAttributes(AttributeOptions, _defaults?.Attributes);
+        SavedFilterDefaults.ApplyAttributes(AttributeOptions, DefaultAttributes());
         UpdateAttributeFilterSummary();
 
         // Each tick box drives the same re-filter a dropdown selection does.
@@ -602,7 +611,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             SelectedGroupSortOption = DefaultGroupSortOption();
             SelectedCategory = CategoryOptions.FirstOrDefault(c => c.SameAs(DefaultCategory()))
                 ?? CategoryOptions[0];
-            SavedFilterDefaults.ApplyAttributes(AttributeOptions, _defaults?.Attributes ?? []);
+            SavedFilterDefaults.ApplyAttributes(AttributeOptions, DefaultAttributes() ?? []);
             UpdateAttributeFilterSummary();
             PageSize = DefaultPageSize();
         }
@@ -2043,7 +2052,6 @@ public partial class InstalledViewModel : LocalizedViewModel
                 UpdateFilter.NeedsUpdate => m.UpdateAvailable == true,
                 UpdateFilter.UpToDate => m.UpdateAvailable == false,
                 UpdateFilter.NotFound => m.MatchedModName is null,
-                UpdateFilter.RecentlyInstalled => m.InstalledAt is { } at && at >= recentSince,
                 _ => true, // All - no restriction
             })
             .Where(m => SelectedEnabledFilter.Value switch
@@ -2065,14 +2073,11 @@ public partial class InstalledViewModel : LocalizedViewModel
             .Where(m => !IsOn(ModAttributeFilter.HasDependencies) || m.HasDependencies)
             .Where(m => !IsOn(ModAttributeFilter.HasAddons) || m.HasAddons)
             .Where(m => !IsOn(ModAttributeFilter.DownloadedNotConfirmed) || m.HasPendingDownload)
-            .Where(m => !IsOn(ModAttributeFilter.HasConflicts) || m.HasConflicts);
+            .Where(m => !IsOn(ModAttributeFilter.HasConflicts) || m.HasConflicts)
+            .Where(m => !IsOn(ModAttributeFilter.InstalledRecently)
+                || (m.InstalledAt is { } at && at >= recentSince));
 
-        _filtered = SelectedUpdateFilter.Value == UpdateFilter.RecentlyInstalled
-            ? matched
-                .OrderByDescending(m => m.InstalledAt)
-                .ThenBy(m => m.DisplayTitle, StringComparer.OrdinalIgnoreCase)
-                .ToList()
-            : SortMods(matched, SelectedSortOption.Value).ToList();
+        _filtered = SortMods(matched, SelectedSortOption.Value).ToList();
 
         // Every view now disagrees with _filtered, including the two that aren't on screen - they
         // catch up when switched to.
@@ -2125,6 +2130,15 @@ public partial class InstalledViewModel : LocalizedViewModel
             ModSortOption.AuthorDescending => mods
                 .OrderBy(m => m.Author is null)
                 .ThenByDescending(m => m.Author, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(m => m.DisplayTitle, StringComparer.OrdinalIgnoreCase),
+            // No known install date sorts last in both directions, same as a missing author.
+            ModSortOption.InstalledNewest => mods
+                .OrderBy(m => m.InstalledAt is null)
+                .ThenByDescending(m => m.InstalledAt)
+                .ThenBy(m => m.DisplayTitle, StringComparer.OrdinalIgnoreCase),
+            ModSortOption.InstalledOldest => mods
+                .OrderBy(m => m.InstalledAt is null)
+                .ThenBy(m => m.InstalledAt)
                 .ThenBy(m => m.DisplayTitle, StringComparer.OrdinalIgnoreCase),
             // Ungrouped mods sort last in both directions, same treatment as a missing author.
             ModSortOption.GroupAscending => mods

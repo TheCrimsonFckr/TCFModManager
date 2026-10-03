@@ -3906,7 +3906,13 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="Sort_NameDescending" xml:space="preserve">
     <value>Nach Name (Z-A)</value>
   </data>
-  <data name="Filter_UpdateRecentlyInstalled" xml:space="preserve">
+  <data name="Sort_InstalledNewest" xml:space="preserve">
+    <value>Zuletzt installiert (neueste)</value>
+  </data>
+  <data name="Sort_InstalledOldest" xml:space="preserve">
+    <value>Zuletzt installiert (älteste)</value>
+  </data>
+  <data name="Filter_InstalledRecently" xml:space="preserve">
     <value>In den letzten 7 Tagen installiert</value>
   </data>
   <data name="SptEnvironment_DetectedFormat" xml:space="preserve">

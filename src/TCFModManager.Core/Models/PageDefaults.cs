@@ -21,7 +21,8 @@ public sealed class InstalledPageDefaults
     // InstalledViewMode: Cards, Groups or List.
     public string? ViewMode { get; set; }
 
-    // UpdateFilter: All, NeedsUpdate, UpToDate, NotFound, RecentlyInstalled.
+    // UpdateFilter: All, NeedsUpdate, UpToDate, NotFound. RecentlyInstalled was one in v1.19.0, when
+    // it moved to the InstalledRecently attribute; a saved one ticks that box instead.
     public string? UpdateStatus { get; set; }
 
     // EnabledFilter: All, EnabledOnly, DisabledOnly.
@@ -37,8 +38,8 @@ public sealed class InstalledPageDefaults
     public string? Group { get; set; }
 
     // ModSortOption: NameAscending, NameDescending, AuthorAscending, AuthorDescending,
-    // GroupAscending, GroupDescending. RecentlyInstalled was one until v1.19.0, when it became an
-    // update status filter; a saved one is read as that filter (InstalledViewModel.DefaultUpdateFilter).
+    // GroupAscending, GroupDescending, InstalledNewest, InstalledOldest. RecentlyInstalled was one
+    // before v1.19.0; a saved one is read as InstalledNewest (InstalledViewModel.DefaultSortOption).
     public string? Sort { get; set; }
 
     // GroupSortOption: Manual, NameAscending, NameDescending.

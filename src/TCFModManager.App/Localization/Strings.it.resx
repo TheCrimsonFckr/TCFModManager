@@ -3906,7 +3906,13 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Sort_NameDescending" xml:space="preserve">
     <value>Per nome (Z-A)</value>
   </data>
-  <data name="Filter_UpdateRecentlyInstalled" xml:space="preserve">
+  <data name="Sort_InstalledNewest" xml:space="preserve">
+    <value>Ultima installazione (più recente)</value>
+  </data>
+  <data name="Sort_InstalledOldest" xml:space="preserve">
+    <value>Ultima installazione (meno recente)</value>
+  </data>
+  <data name="Filter_InstalledRecently" xml:space="preserve">
     <value>Installati negli ultimi 7 giorni</value>
   </data>
   <data name="SptEnvironment_DetectedFormat" xml:space="preserve">

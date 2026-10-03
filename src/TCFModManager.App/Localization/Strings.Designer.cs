@@ -674,7 +674,9 @@ internal static class Strings
     internal static string Sort_AuthorDescending => LocalizationService.Get("Sort_AuthorDescending");
     internal static string Sort_GroupAscending => LocalizationService.Get("Sort_GroupAscending");
     internal static string Sort_GroupDescending => LocalizationService.Get("Sort_GroupDescending");
-    internal static string Filter_UpdateRecentlyInstalled => LocalizationService.Get("Filter_UpdateRecentlyInstalled");
+    internal static string Sort_InstalledNewest => LocalizationService.Get("Sort_InstalledNewest");
+    internal static string Sort_InstalledOldest => LocalizationService.Get("Sort_InstalledOldest");
+    internal static string Filter_InstalledRecently => LocalizationService.Get("Filter_InstalledRecently");
     internal static string Sort_GroupsManual => LocalizationService.Get("Sort_GroupsManual");
     internal static string Sort_GroupNameAscending => LocalizationService.Get("Sort_GroupNameAscending");
     internal static string Sort_GroupNameDescending => LocalizationService.Get("Sort_GroupNameDescending");

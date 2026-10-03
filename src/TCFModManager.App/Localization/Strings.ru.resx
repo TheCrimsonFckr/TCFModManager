@@ -4116,7 +4116,13 @@
   <data name="Sort_NameDescending" xml:space="preserve">
     <value>По названию (Я-А)</value>
   </data>
-  <data name="Filter_UpdateRecentlyInstalled" xml:space="preserve">
+  <data name="Sort_InstalledNewest" xml:space="preserve">
+    <value>Последняя установка (сначала новые)</value>
+  </data>
+  <data name="Sort_InstalledOldest" xml:space="preserve">
+    <value>Последняя установка (сначала старые)</value>
+  </data>
+  <data name="Filter_InstalledRecently" xml:space="preserve">
     <value>Установлены за последние 7 дней</value>
   </data>
   <data name="SptEnvironment_DetectedFormat" xml:space="preserve">

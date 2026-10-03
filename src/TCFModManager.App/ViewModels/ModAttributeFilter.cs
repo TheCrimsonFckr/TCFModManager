@@ -34,6 +34,10 @@ public enum ModAttributeFilter
 
     // Only mods in a conflict (OPEN-11). Installed only.
     HasConflicts,
+
+    // Only mods installed in the last 7 days. Mods with no known install date are left out.
+    // Installed only.
+    InstalledRecently,
 }
 
 //
