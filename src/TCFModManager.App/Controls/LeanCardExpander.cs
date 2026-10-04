@@ -19,12 +19,12 @@ namespace TCFModManager.App.Controls;
 //
 internal sealed class LeanCardExpander : CardExpander
 {
-    public LeanCardExpander()
-    {
-        // The theme's CardExpander style, as the base class gets by default. A style set in XAML,
-        // which every current usage has, replaces this.
-        SetResourceReference(StyleProperty, typeof(CardExpander));
-    }
+    //
+    // No constructor setting a fallback Style on purpose: every usage sets one in XAML, and a
+    // fallback would apply the theme style to each row only to replace it a moment later - a second
+    // style application per row, on exactly the lists this class exists to make cheaper. A new usage
+    // must set Style (any of the CardExpander styles in App.xaml will do).
+    //
 
     protected override AutomationPeer OnCreateAutomationPeer() => new LeanPeer(this);
 
