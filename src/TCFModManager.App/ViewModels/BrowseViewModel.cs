@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Behaviors;
@@ -266,6 +267,10 @@ public partial class BrowseViewModel : LocalizedViewModel
 
     public ObservableCollection<ModCardViewModel> Results { get; } = [];
 
+    // The first page at startup only - see GoToPage. Two cards a frame keeps the startup panel's
+    // spinner turning while they are built.
+    private readonly GradualFill<ModCardViewModel> _startupFill = new(batchSize: 2);
+
     /// <summary>True once a search has actually completed. Lets BrowsePage skip redundantly re-running the initial search on re-navigation.</summary>
     public bool HasLoadedResults { get; private set; }
 
@@ -307,6 +312,18 @@ public partial class BrowseViewModel : LocalizedViewModel
             EnsureCategoryOptionsBuilt();
             ApplyFilter();
             HasLoadedResults = true;
+
+            //
+            // Keeps the startup panel up until the first page of cards has been built and drawn
+            // underneath it. Building them is ~300ms of WPF work; done after the panel had gone, that
+            // was a frozen, empty results area. Built a couple per frame behind the panel instead,
+            // the spinner keeps turning and the cards are simply there when it lifts.
+            //
+            if (IsStartingUp)
+            {
+                await _startupFill.WhenFilledAsync();
+                await Dispatcher.Yield(DispatcherPriority.ContextIdle);
+            }
         }
         catch (SpModApiException ex)
         {
@@ -463,7 +480,7 @@ public partial class BrowseViewModel : LocalizedViewModel
 
         var pins = AppServices.ModLists.GetPins();
 
-        Results.Clear();
+        var cards = new List<ModCardViewModel>();
         foreach (var mod in _filtered.Skip((CurrentPage - 1) * PageSize).Take(PageSize))
         {
             var installed = FindInstalledMatch(mod);
@@ -474,7 +491,20 @@ public partial class BrowseViewModel : LocalizedViewModel
                 installed is null ? null : ModListPlanner.PinKeys(ModListCandidates.From(installed)));
 
             card.RefreshPin(pins);
-            Results.Add(card);
+            cards.Add(card);
+        }
+
+        // Behind the startup panel the first page is built a couple of cards per frame (see
+        // SearchAsync); with the page on screen it is replaced in one go, as it always was.
+        if (IsStartingUp)
+        {
+            _startupFill.Apply(Results, cards);
+        }
+        else
+        {
+            _startupFill.Cancel();
+            Results.Clear();
+            foreach (var card in cards) Results.Add(card);
         }
 
         AppLog.Debug("Browse", $"GoToPage: page {CurrentPage}/{TotalPages} rendered in {sw.ElapsedMilliseconds}ms");

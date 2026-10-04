@@ -41,6 +41,26 @@ public sealed class GradualFill<T>(int batchSize) where T : class
 
     public event EventHandler? IsFillingChanged;
 
+    //
+    // Completes once the list is whole - straight away when no fill is running. Browse's startup
+    // panel waits on this so the first page of cards is built while the panel is still up.
+    //
+    public Task WhenFilledAsync()
+    {
+        if (!IsFilling) return Task.CompletedTask;
+
+        var done = new TaskCompletionSource();
+        EventHandler? handler = null;
+        handler = (_, _) =>
+        {
+            if (IsFilling) return;
+            IsFillingChanged -= handler;
+            done.TrySetResult();
+        };
+        IsFillingChanged += handler;
+        return done.Task;
+    }
+
     private bool _filling;
 
     public void Apply(ObservableCollection<T> target, IReadOnlyList<T> wanted)
@@ -70,6 +90,13 @@ public sealed class GradualFill<T>(int batchSize) where T : class
         for (var i = 0; i < batchSize; i++) target.Add(wanted[i]);
 
         _ = ContinueAsync(target, wanted, generation, batchSize);
+    }
+
+    // Stops a fill still in progress, for a caller about to fill the list some other way.
+    public void Cancel()
+    {
+        _generation++;
+        IsFilling = false;
     }
 
     private async Task ContinueAsync(
