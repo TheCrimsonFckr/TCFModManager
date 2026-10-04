@@ -11,11 +11,8 @@ namespace TCFModManager.App.Help;
 public sealed record Contributor(string Name, Func<string> Contribution, string? Link = null);
 
 //
-// Everyone in the Credits window, in the order they contributed. Adding a person is one line here
-// and one string key in each language.
-//
-// Translators are not listed here: each language's Meta_TranslationCredit says who translated it,
-// and the Credits window reads that from every shipped language.
+// Everyone in the Credits window, in the order they contributed - only the people Chris names.
+// Adding a person is one line here and one string key in each language.
 //
 public static class Contributors
 {

@@ -7331,9 +7331,6 @@ See Dependencies and Conflicts.</value>
   <data name="Credits_ContributorsHeader" xml:space="preserve">
     <value>Contributors</value>
   </data>
-  <data name="Credits_TranslationsHeader" xml:space="preserve">
-    <value>Translations</value>
-  </data>
   <data name="Credits_Brunolz13" xml:space="preserve">
     <value>Wrote the TCF File Generator, the original sp-mod list extractor that Import from sp-mod is built on.</value>
     <comment>What this contributor did. Their name is shown above it and isn't translated.</comment>
@@ -7342,7 +7339,7 @@ See Dependencies and Conflicts.</value>
     <value>Credits</value>
   </data>
   <data name="Options_CreditsHint" xml:space="preserve">
-    <value>The people who have helped build TCF Mod Manager, and who translated it.</value>
+    <value>The people who have helped build TCF Mod Manager.</value>
   </data>
   <data name="Options_Credits" xml:space="preserve">
     <value>Show credits</value>

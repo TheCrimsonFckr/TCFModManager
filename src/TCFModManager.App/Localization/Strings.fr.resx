@@ -6109,9 +6109,6 @@ Voir Dépendances et conflits.</value>
   <data name="Credits_ContributorsHeader" xml:space="preserve">
     <value>Contributeurs</value>
   </data>
-  <data name="Credits_TranslationsHeader" xml:space="preserve">
-    <value>Traductions</value>
-  </data>
   <data name="Credits_Brunolz13" xml:space="preserve">
     <value>A écrit le TCF File Generator, l'extracteur de listes sp-mod d'origine sur lequel repose « Importer depuis sp-mod ».</value>
   </data>
@@ -6119,7 +6116,7 @@ Voir Dépendances et conflits.</value>
     <value>Remerciements</value>
   </data>
   <data name="Options_CreditsHint" xml:space="preserve">
-    <value>Les personnes qui ont aidé à construire TCF Mod Manager et qui l'ont traduit.</value>
+    <value>Les personnes qui ont aidé à construire TCF Mod Manager.</value>
   </data>
   <data name="Options_Credits" xml:space="preserve">
     <value>Afficher les remerciements</value>

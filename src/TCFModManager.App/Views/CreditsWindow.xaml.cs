@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Globalization;
 using System.Windows;
 using TCFModManager.App.Help;
 using TCFModManager.App.Localization;
@@ -14,10 +13,8 @@ public sealed record CreditRow(string Name, string Detail, string? Link = null)
 }
 
 //
-// Who has helped build the app. Opened from Options and from Help.
-//
-// Translations are read from every shipped language's own resources rather than listed here, so
-// a translator who puts their name in Meta_TranslationCredit appears without a code change.
+// Who has helped build the app. Opened from Options and from Help. Lists Help/Contributors.cs and
+// nothing else - who appears here is decided there, by hand.
 //
 public partial class CreditsWindow : FluentWindow
 {
@@ -32,45 +29,9 @@ public partial class CreditsWindow : FluentWindow
         ContributorList.ItemsSource = Contributors.All
             .Select(c => new CreditRow(c.Name, c.Contribution(), c.Link))
             .ToList();
-
-        var translations = Translations();
-        TranslationList.ItemsSource = translations;
-        TranslationsHeader.Visibility = translations.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
     }
 
     public static void Open(Window? owner) => new CreditsWindow(owner).ShowDialog();
-
-    private static List<CreditRow> Translations()
-    {
-        var rows = new List<CreditRow>();
-
-        foreach (var culture in AppLanguage.Available)
-        {
-            var credit = CreditFor(culture);
-            if (string.IsNullOrWhiteSpace(credit)) continue;
-
-            rows.Add(new CreditRow(AppLanguage.DisplayName(culture), credit));
-        }
-
-        return rows;
-    }
-
-    //
-    // The language's own credit line, or nothing. English has none, and a language that hasn't set
-    // one falls back to the neutral resources - English's empty one - which is the same answer.
-    //
-    private static string? CreditFor(CultureInfo culture)
-    {
-        try
-        {
-            return Strings.ResourceManager.GetString("Meta_TranslationCredit", culture);
-        }
-        catch (Exception ex)
-        {
-            AppLog.Warn("Credits", $"couldn't read the translation credit for {culture.Name}: {ex.Message}");
-            return null;
-        }
-    }
 
     private void OpenLink_Click(object sender, RoutedEventArgs e)
     {

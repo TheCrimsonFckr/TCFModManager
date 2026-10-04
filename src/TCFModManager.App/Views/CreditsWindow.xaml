@@ -13,8 +13,7 @@
     TextOptions.TextFormattingMode="Display"
     TextOptions.TextRenderingMode="ClearType">
     <!--
-        Who has helped build the app: contributors from Help/Contributors.cs, then each shipped
-        language's own translation credit.
+        Who has helped build the app: the people listed in Help/Contributors.cs, and nobody else.
 
         Every TextBlock sets its own Foreground; nothing here may inherit the system foreground.
     -->
@@ -85,34 +84,6 @@
                                         Visibility="{Binding HasLink, Converter={StaticResource BoolToVis}}"
                                         Click="OpenLink_Click" />
                                 </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
-                <TextBlock
-                    x:Name="TranslationsHeader"
-                    Margin="0,18,0,6"
-                    FontWeight="SemiBold"
-                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    Text="{loc:Str Credits_TranslationsHeader}" />
-
-                <ItemsControl x:Name="TranslationList" Focusable="False">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Style="{StaticResource HoverRow}" Padding="8,6">
-                                <StackPanel>
-                                    <TextBlock
-                                        FontWeight="SemiBold"
-                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                        Text="{Binding Name}" />
-
-                                    <TextBlock
-                                        Margin="0,2,0,0"
-                                        TextWrapping="Wrap"
-                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                        Text="{Binding Detail}" />
-                                </StackPanel>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
