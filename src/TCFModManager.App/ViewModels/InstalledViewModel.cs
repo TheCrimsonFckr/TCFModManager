@@ -78,6 +78,7 @@ public partial class InstalledViewModel : LocalizedViewModel
     // Batch sizes keep each frame's worth of row building to roughly 50-80ms - see GradualFill.
     private readonly GradualFill<InstalledModCardViewModel> _cardsFill = new(batchSize: 4);
     private readonly GradualFill<InstalledModCardViewModel> _listFill = new(batchSize: 6);
+    private readonly GradualFill<ModGroupSectionViewModel> _sectionsFill = new(batchSize: 2);
 
     public List<UpdateFilterItem> UpdateFilterOptions { get; } =
     [
@@ -2269,8 +2270,6 @@ public partial class InstalledViewModel : LocalizedViewModel
     {
         var data = AppServices.ModGroups.Load();
 
-        Sections.Clear();
-
         IEnumerable<ModGroup> ordered = SelectedGroupSortOption.Value switch
         {
             GroupSortOption.NameAscending => data.Groups.OrderBy(g => g.Name, StringComparer.OrdinalIgnoreCase),
@@ -2278,13 +2277,14 @@ public partial class InstalledViewModel : LocalizedViewModel
             _ => data.Groups.OrderBy(g => g.SortOrder),
         };
 
-        foreach (var group in ordered)
-            Sections.Add(ModGroupSectionViewModel.FromGroup(group));
+        // Built in full off to the side, then handed over a couple of sections per frame - every
+        // section is a new object, so every one needs a new container anyway. See GradualFill.
+        var sections = ordered.Select(ModGroupSectionViewModel.FromGroup).ToList();
 
         var ungrouped = ModGroupSectionViewModel.Ungrouped();
-        Sections.Add(ungrouped);
+        sections.Add(ungrouped);
 
-        var byId = Sections.Where(s => s.GroupId is not null).ToDictionary(s => s.GroupId!.Value);
+        var byId = sections.Where(s => s.GroupId is not null).ToDictionary(s => s.GroupId!.Value);
 
         foreach (var mod in _filtered)
         {
@@ -2295,6 +2295,8 @@ public partial class InstalledViewModel : LocalizedViewModel
 
             section.Items.Add(mod);
         }
+
+        _sectionsFill.Apply(Sections, sections);
 
         _sectionsDirty = false;
     }
