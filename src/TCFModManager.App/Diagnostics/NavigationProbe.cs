@@ -1,7 +1,9 @@
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 using TCFModManager.Core.Services;
 using Wpf.Ui.Controls;
 
@@ -25,6 +27,10 @@ namespace TCFModManager.App.Diagnostics;
 //   worst      the longest gap between frames in the first 1.5s, and when it started - catches
 //              async refreshes landing back on the UI thread after the animation
 //
+// WatchList adds an indented line each time a watched list is filled, splitting the time between
+// filling the collection, the layout pass that realizes its items (template instantiation and
+// measure), and whatever follows before the dispatcher goes idle (render, mostly).
+//
 internal static class NavigationProbe
 {
     private const int TransitionMs = 200;
@@ -40,6 +46,13 @@ internal static class NavigationProbe
     {
         if (!_classHandlerRegistered)
         {
+#if DEBUG
+            const string build = "Debug";
+#else
+            const string build = "Release";
+#endif
+            AppLog.Info("NavProbe", $"{build} build, debugger {(Debugger.IsAttached ? "attached" : "not attached")}");
+
             EventManager.RegisterClassHandler(typeof(Page), FrameworkElement.LoadedEvent,
                 new RoutedEventHandler(OnAnyPageLoadedStart));
             _classHandlerRegistered = true;
@@ -55,6 +68,73 @@ internal static class NavigationProbe
 
         if (navigation.IsLoaded) HookFrame();
         else navigation.Loaded += (_, _) => HookFrame();
+    }
+
+    public static void WatchList(ItemsControl list, string name)
+    {
+        ListFill? fill = null;
+
+        ((INotifyCollectionChanged)list.Items).CollectionChanged += (_, _) =>
+        {
+            var now = Clock.Elapsed.TotalMilliseconds;
+
+            if (fill is { } open)
+            {
+                open.LastChange = now;
+                return;
+            }
+
+            var started = new ListFill(now, _current is { } visit ? now - visit.Start : null);
+            fill = started;
+
+            EventHandler? onLayout = null;
+            onLayout = (_, _) =>
+            {
+                started.LayoutEnd ??= Clock.Elapsed.TotalMilliseconds;
+                list.LayoutUpdated -= onLayout;
+            };
+            list.LayoutUpdated += onLayout;
+
+            list.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                list.LayoutUpdated -= onLayout;
+                fill = null;
+
+                var end = Clock.Elapsed.TotalMilliseconds;
+                var layoutEnd = started.LayoutEnd ?? end;
+
+                AppLog.Info("NavProbe",
+                    $"  {name}{(started.SinceClick is { } at ? $" at +{at:0}" : "")}: {list.Items.Count} item(s)" +
+                    $"{(list.IsVisible ? "" : " (hidden)")}, fill {started.LastChange - started.Start:0}ms, " +
+                    $"layout {layoutEnd - started.LastChange:0}ms, render+rest {end - layoutEnd:0}ms, " +
+                    $"{CountVisuals(list)} elements");
+            }), DispatcherPriority.ContextIdle);
+        };
+    }
+
+    private static int CountVisuals(DependencyObject root)
+    {
+        var count = 0;
+        var stack = new Stack<DependencyObject>();
+        stack.Push(root);
+
+        while (stack.Count > 0)
+        {
+            var node = stack.Pop();
+            count++;
+            for (var i = VisualTreeHelper.GetChildrenCount(node) - 1; i >= 0; i--)
+                stack.Push(VisualTreeHelper.GetChild(node, i));
+        }
+
+        return count;
+    }
+
+    private sealed class ListFill(double start, double? sinceClick)
+    {
+        public double Start { get; } = start;
+        public double? SinceClick { get; } = sinceClick;
+        public double LastChange { get; set; } = start;
+        public double? LayoutEnd { get; set; }
     }
 
     private static void Begin(object page)
