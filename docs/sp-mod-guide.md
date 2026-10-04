@@ -213,6 +213,20 @@ What travels is a manifest - "install mod 2426 at version 5" - and never mod fil
 - **Mods the catalog cannot resolve** - GitHub-only mods, hand-built things - are listed by name rather than quietly dropped, so you know what to go and fetch yourself.
 - **A locked version that has since been withdrawn** asks rather than failing: it offers the nearest version and lets you untick anything you would rather skip.
 
+#### Importing a list from sp-mod
+sp-mod has Mod Lists of its own, and **Import from sp-mod** brings one in by its address. Paste the link - a private list's share link works too - press **Read list**, and see everything on it before anything is saved. **Find lists on sp-mod** opens the site's lists page, where you can search and filter by SPT version; copy a list's address, come back, and the box fills itself.
+
+The review sorts the list into what each entry is, with a tick on every row:
+
+- **Parent mods missing** - an addon on the list whose mod isn't. An addon does nothing without its mod, so these are ticked for you.
+- **Mods** and **Addons** - what the list holds, at the version its page shows.
+- **Dependencies to add** - mods the list needs but doesn't name, with what needs each one. One with no version for the SPT is shown but can't be added.
+- **No version for your SPT** - see below.
+
+A list on sp-mod doesn't store versions: its page shows each mod's newest version for the list's SPT, or the newest outright when it names none. If that isn't the SPT you run, switch on **Use versions for SPT x** and every mod moves to its newest version for yours, each addon to the newest that fits its mod. Anything with nothing published for your SPT goes under **No version for your SPT**, unticked.
+
+**Create list** stores it as an imported list - read-only, like any list you didn't write - and applying it only adds: it installs and enables what it names and sets nothing aside. **Refresh from sp-mod** reads the page again and shows what was added, removed or changed before updating, keeping the rows you unticked last time; importing the same list again does the same. **Open on sp-mod** opens its page.
+
 #### Who each mod is for
 Every entry names the machines it is for. It is worked out for you at capture time from where the mod's files actually live, and shown on every row. The **scope button** cycles a row through the six, and the filter above the list matches one exactly - which answers the question you have when tidying a list: what have I already pruned, and what is still carrying the capture default?
 
@@ -543,6 +557,8 @@ Info level by default, rotated daily as `tcfmm-<yyyyMMdd>.log`. To get Debug-lev
 - **There is one undo point**, replaced by each apply and cleared by using it. It puts mods back where they were; it is not a history.
 - **An addon that ships inside its parent's folder can be installed and updated by a list, but not set aside by one** - there is no folder of its own to move. Disabling the parent takes it along.
 - **A list you edited but never applied exports under its old revision number**, since a revision counts an apply. Apply before sharing if you want the receiver's copy to read as newer.
+- **An sp-mod list is read from its web page**, because sp-mod has no API for lists yet. If sp-mod changes that page, the import says the list may be incomplete rather than guessing.
+- **An sp-mod list's versions are the ones its page showed on the day you imported it.** Refresh from sp-mod picks up newer ones.
 
 #### Configs
 - **The first update of a mod after this app version can't merge.** Nothing recorded what its previous version shipped, so the update takes the new file and says so; from its next update on it merges. A copy of your file is always kept in `Data\LegacyConfigs\`.

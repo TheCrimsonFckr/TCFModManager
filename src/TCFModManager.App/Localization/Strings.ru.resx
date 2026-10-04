@@ -6466,4 +6466,25 @@
   <data name="Help_CreditsToolTip" xml:space="preserve">
     <value>Кто помог создать TCF Mod Manager</value>
   </data>
+  <data name="Help_ModLists_SpMod_Title" xml:space="preserve">
+    <value>Импортировать список с sp-mod</value>
+  </data>
+  <data name="Help_ModLists_SpMod_Step1" xml:space="preserve">
+    <value>На странице {0} нажмите {1}.</value>
+  </data>
+  <data name="Help_ModLists_SpMod_Step2" xml:space="preserve">
+    <value>Вставьте адрес списка с sp-mod и нажмите {0}. Если список ещё нужно найти, {1} откроет страницу списков sp-mod.</value>
+  </data>
+  <data name="Help_ModLists_SpMod_Step3" xml:space="preserve">
+    <value>Проверьте содержимое - недостающие родительские моды и зависимости показаны вместе с остальным, - снимите отметки с ненужного и нажмите {0}.</value>
+  </data>
+  <data name="Help_ModLists_SpMod_Step4" xml:space="preserve">
+    <value>Затем {0} и {1}, как с любым списком. Применение добавляет то, что в нём есть, и ничего не отключает.</value>
+  </data>
+  <data name="Help_ModLists_SpMod_Note" xml:space="preserve">
+    <value>Список для другой версии SPT? Включите {0} в окне импорта, чтобы перевести каждый мод на версию для вашего SPT. Позже {1} подтянет изменения с sp-mod.</value>
+  </data>
+  <data name="Help_ModLists_SpMod_Keywords" xml:space="preserve">
+    <value>sp-mod, forge, сайт, ссылка, url, адрес, импорт, подборка, список модов, страница</value>
+  </data>
 </root>

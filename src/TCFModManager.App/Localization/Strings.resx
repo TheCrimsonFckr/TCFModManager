@@ -7355,4 +7355,32 @@ See Dependencies and Conflicts.</value>
   <data name="Help_CreditsToolTip" xml:space="preserve">
     <value>Who has helped build TCF Mod Manager</value>
   </data>
+  <data name="Help_ModLists_SpMod_Title" xml:space="preserve">
+    <value>Import a list from sp-mod</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_ModLists_SpMod_Step1" xml:space="preserve">
+    <value>On {0}, press {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_SpMod_Step2" xml:space="preserve">
+    <value>Paste the list's address from sp-mod and press {0}. If you still need to find one, {1} opens sp-mod's lists page.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_SpMod_Step3" xml:space="preserve">
+    <value>Check what's on it - missing parent mods and dependencies are listed with the rest - untick anything you don't want, and press {0}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_SpMod_Step4" xml:space="preserve">
+    <value>Then {0} and {1}, as with any list. Applying it adds what it names and sets nothing aside.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_SpMod_Note" xml:space="preserve">
+    <value>Made for a different SPT than yours? Switch on {0} in the import window to move every mod to its version for your SPT. Later, {1} picks up changes made on sp-mod.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_ModLists_SpMod_Keywords" xml:space="preserve">
+    <value>sp-mod, forge, website, link, url, address, import, collection, mod list, page</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
 </root>

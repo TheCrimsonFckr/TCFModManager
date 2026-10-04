@@ -216,6 +216,19 @@ internal static class HelpCatalog
                 .WithNote(() => Strings.Help_ModLists_Share_Note)
                 .WithKeywords(() => Strings.Help_ModLists_Share_Keywords),
 
+            Topic("modlists.spmod", () => Strings.Help_ModLists_SpMod_Title,
+                Step(() => Strings.Help_ModLists_SpMod_Step1,
+                    () => Strings.Nav_ModLists, () => Strings.ModLists_ImportFromSpMod),
+                Step(() => Strings.Help_ModLists_SpMod_Step2,
+                    () => Strings.SpModImport_Read, () => Strings.SpModImport_FindLists),
+                Step(() => Strings.Help_ModLists_SpMod_Step3, () => Strings.SpModImport_Create),
+                Step(() => Strings.Help_ModLists_SpMod_Step4,
+                    () => Strings.ModLists_Preview, () => Strings.ModLists_Apply))
+                .WithNote(() => Strings.Help_ModLists_SpMod_Note,
+                    () => LocalizationService.Text(Strings.SpModImport_UseVersionsForFormat, "…"),
+                    () => Strings.ModLists_RefreshFromSpMod)
+                .WithKeywords(() => Strings.Help_ModLists_SpMod_Keywords),
+
             Topic("modlists.server", () => Strings.Help_ModLists_Server_Title,
                 Step(() => Strings.Help_ModLists_Server_Step1,
                     () => Strings.Nav_Options, () => Strings.Options_SectionPages,

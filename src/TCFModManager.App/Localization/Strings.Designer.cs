@@ -2012,4 +2012,11 @@ internal static class Strings
     internal static string Options_Credits => LocalizationService.Get("Options_Credits");
     internal static string Help_Credits => LocalizationService.Get("Help_Credits");
     internal static string Help_CreditsToolTip => LocalizationService.Get("Help_CreditsToolTip");
+    internal static string Help_ModLists_SpMod_Title => LocalizationService.Get("Help_ModLists_SpMod_Title");
+    internal static string Help_ModLists_SpMod_Step1 => LocalizationService.Get("Help_ModLists_SpMod_Step1");
+    internal static string Help_ModLists_SpMod_Step2 => LocalizationService.Get("Help_ModLists_SpMod_Step2");
+    internal static string Help_ModLists_SpMod_Step3 => LocalizationService.Get("Help_ModLists_SpMod_Step3");
+    internal static string Help_ModLists_SpMod_Step4 => LocalizationService.Get("Help_ModLists_SpMod_Step4");
+    internal static string Help_ModLists_SpMod_Note => LocalizationService.Get("Help_ModLists_SpMod_Note");
+    internal static string Help_ModLists_SpMod_Keywords => LocalizationService.Get("Help_ModLists_SpMod_Keywords");
 }

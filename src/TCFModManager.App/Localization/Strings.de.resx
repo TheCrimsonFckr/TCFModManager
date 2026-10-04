@@ -6130,4 +6130,25 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Help_CreditsToolTip" xml:space="preserve">
     <value>Wer beim Bau von TCF Mod Manager geholfen hat</value>
   </data>
+  <data name="Help_ModLists_SpMod_Title" xml:space="preserve">
+    <value>Eine Liste von sp-mod importieren</value>
+  </data>
+  <data name="Help_ModLists_SpMod_Step1" xml:space="preserve">
+    <value>Klicke unter {0} auf {1}.</value>
+  </data>
+  <data name="Help_ModLists_SpMod_Step2" xml:space="preserve">
+    <value>Füge die Adresse der Liste von sp-mod ein und klicke auf {0}. Wenn du erst eine suchen musst, öffnet {1} die Listenseite von sp-mod.</value>
+  </data>
+  <data name="Help_ModLists_SpMod_Step3" xml:space="preserve">
+    <value>Prüfe, was darauf steht - fehlende Eltern-Mods und Abhängigkeiten stehen mit dabei -, entferne die Haken bei allem, was du nicht willst, und klicke auf {0}.</value>
+  </data>
+  <data name="Help_ModLists_SpMod_Step4" xml:space="preserve">
+    <value>Dann {0} und {1}, wie bei jeder Liste. Das Anwenden fügt hinzu, was sie nennt, und legt nichts beiseite.</value>
+  </data>
+  <data name="Help_ModLists_SpMod_Note" xml:space="preserve">
+    <value>Für ein anderes SPT als deins erstellt? Schalte im Importfenster {0} ein, um jeden Mod auf seine Version für dein SPT zu setzen. Später holt {1} Änderungen von sp-mod.</value>
+  </data>
+  <data name="Help_ModLists_SpMod_Keywords" xml:space="preserve">
+    <value>sp-mod, forge, Webseite, Link, URL, Adresse, importieren, Sammlung, Modliste, Seite</value>
+  </data>
 </root>
