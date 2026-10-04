@@ -11,6 +11,7 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:tcf="clr-namespace:TCFModManager.App.Controls"
     xmlns:app="clr-namespace:TCFModManager.App"
     Title="{loc:Str Nav_Dependencies}"
     Loaded="DependenciesPage_Loaded"
@@ -172,7 +173,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <!-- One expander per installed mod, holding its flattened dependency rows. -->
-                        <ui:CardExpander Style="{StaticResource HoverCardExpander}" Margin="0,0,0,8" IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
+                        <tcf:LeanCardExpander AutomationProperties.Name="{Binding ModName}" Style="{StaticResource HoverCardExpander}" Margin="0,0,0,8" IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
                             <ui:CardExpander.Header>
                                 <Grid Margin="0,0,12,0">
                                     <Grid.ColumnDefinitions>
@@ -269,7 +270,7 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                        </ui:CardExpander>
+                        </tcf:LeanCardExpander>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

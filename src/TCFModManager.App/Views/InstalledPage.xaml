@@ -19,6 +19,7 @@
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:viewmodels="clr-namespace:TCFModManager.App.ViewModels"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:tcf="clr-namespace:TCFModManager.App.Controls"
     Title="{loc:Str Nav_Installed}"
     Loaded="InstalledPage_Loaded"
     ScrollViewer.CanContentScroll="False">
@@ -705,7 +706,8 @@
                              about to act on is readable from across the grid rather than from a
                              checkbox at the corner of each card. Outside that mode nothing is
                              ticked, and it behaves exactly as it did. -->
-                        <ui:CardExpander
+                        <tcf:LeanCardExpander
+                            AutomationProperties.Name="{Binding DisplayTitle}"
                             VerticalAlignment="Top"
                             Style="{StaticResource TickableCardExpander}"
                             Margin="0,0,6,6"
@@ -845,7 +847,7 @@
                             <ContentPresenter
                                 ContentTemplate="{StaticResource ModDetailBody}"
                                 Content="{Binding}" />
-                        </ui:CardExpander>
+                        </tcf:LeanCardExpander>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -1113,7 +1115,8 @@
             <ItemsControl Focusable="False" ItemsSource="{Binding ListItems}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:InstalledModCardViewModel}">
-                        <ui:CardExpander
+                        <tcf:LeanCardExpander
+                            AutomationProperties.Name="{Binding DisplayTitle}"
                             Style="{StaticResource HoverCardExpander}"
                             Margin="0,0,6,6"
                             IsExpanded="{Binding IsRowExpanded, Mode=TwoWay}"
@@ -1212,7 +1215,7 @@
                             <ContentPresenter
                                 ContentTemplate="{StaticResource ModDetailBody}"
                                 Content="{Binding}" />
-                        </ui:CardExpander>
+                        </tcf:LeanCardExpander>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

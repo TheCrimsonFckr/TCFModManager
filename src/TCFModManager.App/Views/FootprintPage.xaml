@@ -11,6 +11,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:tcf="clr-namespace:TCFModManager.App.Controls"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     Title="{loc:Str Nav_Footprint}"
     Loaded="FootprintPage_Loaded"
@@ -174,7 +175,8 @@
                         <DataTemplate>
                             <!-- Same shape as the Dependencies page's trees: the header is the
                                  summary, and opening it shows the breakdown. -->
-                            <ui:CardExpander
+                            <tcf:LeanCardExpander
+                                AutomationProperties.Name="{Binding Title}"
                                 Style="{StaticResource HoverCardExpander}"
                                 Margin="0,0,0,8"
                                 IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
@@ -262,7 +264,7 @@
                                         Text="{Binding PerFrameTooltip}"
                                         Visibility="{Binding HasPerFrameTooltip, Converter={StaticResource BoolToVis}}" />
                                 </StackPanel>
-                            </ui:CardExpander>
+                            </tcf:LeanCardExpander>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
