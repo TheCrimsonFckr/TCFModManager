@@ -686,6 +686,38 @@
                 Focusable="False"
                 ItemsSource="{Binding Results}"
                 SizeChanged="ResultsItems_SizeChanged">
+                <!-- A fresh page of cards is built a few at a time so the app never freezes (see
+                     GradualFill), but shown whole: hidden while IsCardsFilling, then faded in.
+                     FillBehavior="Stop" hands Opacity back to the style once the fade ends, so the
+                     setter can hide the grid again on the next page; StopStoryboard cuts a fade
+                     still running when the next fill starts. Not hit-testable while hidden, so a
+                     click can't land on a card nobody can see. -->
+                <ItemsControl.Style>
+                    <!-- BasedOn keeps WPF-UI's own ItemsControl style, which a bare Style would replace. -->
+                    <Style TargetType="ItemsControl" BasedOn="{StaticResource {x:Type ItemsControl}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsCardsFilling}" Value="True">
+                                <Setter Property="Opacity" Value="0" />
+                                <Setter Property="IsHitTestVisible" Value="False" />
+                                <DataTrigger.EnterActions>
+                                    <StopStoryboard BeginStoryboardName="CardsFadeIn" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard x:Name="CardsFadeIn">
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="Opacity"
+                                                From="0"
+                                                To="1"
+                                                Duration="0:0:0.15"
+                                                FillBehavior="Stop" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ItemsControl.Style>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel ItemWidth="{Binding CardWidth}" />

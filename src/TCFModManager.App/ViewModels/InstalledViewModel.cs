@@ -77,6 +77,11 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     // Batch sizes keep each frame's worth of row building to roughly 50-80ms - see GradualFill.
     private readonly GradualFill<InstalledModCardViewModel> _cardsFill = new(batchSize: 4);
+
+    // While a fresh page of cards is still being built - the grid stays hidden until it is whole,
+    // then fades in, rather than showing cards arriving a few at a time.
+    [ObservableProperty]
+    private bool _isCardsFilling;
     private readonly GradualFill<InstalledModCardViewModel> _listFill = new(batchSize: 6);
     private readonly GradualFill<ModGroupSectionViewModel> _sectionsFill = new(batchSize: 2);
 
@@ -392,6 +397,8 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     public InstalledViewModel()
     {
+        _cardsFill.IsFillingChanged += (_, _) => IsCardsFilling = _cardsFill.IsFilling;
+
         var settings = new SettingsService().Load();
         _showListBadges = settings.ShowModListBadges;
         _defaults = settings.InstalledDefaults;

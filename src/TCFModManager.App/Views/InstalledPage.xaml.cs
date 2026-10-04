@@ -45,9 +45,6 @@ public partial class InstalledPage : Page
     {
         DataContext = ViewModel;
         InitializeComponent();
-        Diagnostics.NavigationProbe.WatchList(ResultsItems, "Installed cards");
-        Diagnostics.NavigationProbe.WatchList((ItemsControl)GroupsScrollViewer.Content, "Installed groups");
-        Diagnostics.NavigationProbe.WatchList((ItemsControl)ListScrollViewer.Content, "Installed list");
 
         // Registered directly on the Page (not via a XAML attribute on a specific element) so it's
         // the very first thing to see every wheel event over this page - PreviewMouseWheel tunnels

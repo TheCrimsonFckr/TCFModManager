@@ -38,7 +38,6 @@ public partial class MainWindow : FluentWindow
 
             // Installed when this launch came from clicking an update notification (§6), Browse
             // otherwise. Attached first, so a click landing from here on navigates by itself.
-            Diagnostics.NavigationProbe.Attach(RootNavigationView);
             AppNavigation.Attach(RootNavigationView);
             RootNavigationView.Navigate(AppNavigation.StartOnInstalled ? typeof(InstalledPage) : typeof(BrowsePage));
 

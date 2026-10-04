@@ -16,7 +16,6 @@ public partial class BrowsePage : Page
     {
         DataContext = ViewModel;
         InitializeComponent();
-        Diagnostics.NavigationProbe.WatchList(ResultsListBox, "Browse results");
     }
 
     private async void BrowsePage_Loaded(object sender, RoutedEventArgs e)

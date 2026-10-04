@@ -11,7 +11,6 @@ public partial class FootprintPage : Page
     public FootprintPage()
     {
         InitializeComponent();
-        Diagnostics.NavigationProbe.WatchList((ItemsControl)RowsScrollViewer.Content, "Footprint rows");
         DataContext = ViewModel;
     }
 

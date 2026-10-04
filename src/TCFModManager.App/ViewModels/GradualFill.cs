@@ -26,7 +26,21 @@ public sealed class GradualFill<T>(int batchSize) where T : class
     // Bumped by every Apply, so a fill still in progress stops as soon as a newer one starts.
     private int _generation;
 
-    // True while batches are still being added.
+    // True while batches are still being added. A page that would rather not show a list arriving
+    // a few items at a time (Installed's Cards) hides it while this is set and reveals it whole.
+    public bool IsFilling
+    {
+        get => _filling;
+        private set
+        {
+            if (_filling == value) return;
+            _filling = value;
+            IsFillingChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    public event EventHandler? IsFillingChanged;
+
     private bool _filling;
 
     public void Apply(ObservableCollection<T> target, IReadOnlyList<T> wanted)
@@ -47,7 +61,7 @@ public sealed class GradualFill<T>(int batchSize) where T : class
 
         if (wanted.Count <= batchSize || Overlaps(target, wanted))
         {
-            _filling = false;
+            IsFilling = false;
             ItemsSync.Apply(target, wanted);
             return;
         }
@@ -61,7 +75,7 @@ public sealed class GradualFill<T>(int batchSize) where T : class
     private async Task ContinueAsync(
         ObservableCollection<T> target, IReadOnlyList<T> wanted, int generation, int next)
     {
-        _filling = true;
+        IsFilling = true;
 
         while (next < wanted.Count)
         {
@@ -74,7 +88,7 @@ public sealed class GradualFill<T>(int batchSize) where T : class
             for (; next < end; next++) target.Add(wanted[next]);
         }
 
-        _filling = false;
+        IsFilling = false;
     }
 
     private static bool Overlaps(ObservableCollection<T> target, IReadOnlyList<T> wanted)

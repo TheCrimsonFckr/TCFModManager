@@ -16,7 +16,6 @@ public partial class ConfigsPage : Page
     public ConfigsPage()
     {
         InitializeComponent();
-        Diagnostics.NavigationProbe.WatchList(ConfigList, "Configs list");
         DataContext = ViewModel;
 
         //
