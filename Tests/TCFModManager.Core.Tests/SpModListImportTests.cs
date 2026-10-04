@@ -325,7 +325,13 @@ public class SpModListImportTests
         Assert.Equal(ModListPolicy.Additive, list.Policy);
         Assert.Equal("Kryptic-S01", list.Source);
         Assert.Null(list.SptVersion);
-        Assert.Equal("https://sp-mod.com/list/126308/addons", list.Description);
+        Assert.Null(list.Description);
+        Assert.Equal(126308, list.SpModSource!.ListId);
+        Assert.Equal("https://sp-mod.com/list/126308/addons?share=secret", list.SpModSource.Url);
+        Assert.Equal(now, list.SpModSource.ReadAt);
+        Assert.Equal(page.UpdatedAt, list.SpModSource.PageUpdatedAt);
+        Assert.Empty(list.SpModSource.Excluded);
+        Assert.Empty(list.SpModSource.Added);
         Assert.Equal(now, list.CreatedAt);
         Assert.Equal(page.UpdatedAt, list.UpdatedAt);
         Assert.Equal(11, list.Entries.Count);

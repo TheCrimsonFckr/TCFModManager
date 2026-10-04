@@ -216,6 +216,10 @@ public sealed class ModList
 
     public List<ModListEntry> Entries { get; init; } = [];
 
+    // Set on a list imported from an sp-mod Mod List page. Null for every other list.
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public SpModListSource? SpModSource { get; init; }
+
     //
     // IsEditable was the actively misleading one: a served list is written by an app where it was
     // Local, so the file said "IsEditable": true while the receiving app - which sets Origin to

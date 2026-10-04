@@ -107,38 +107,128 @@ public sealed class SpModListPage
     public IEnumerable<SpModListItem> Addons => Items.Where(i => i.Kind == SpModListItemKind.Addon);
 
     //
-    // The list ready to store. Entries keep page order; the Id is derived from the list id, so
-    // importing the same sp-mod list again replaces the stored one rather than adding a second.
+    // The list ready to store. Entries keep page order, then anything the user added beyond the
+    // page. The Id is derived from the list id, so importing the same sp-mod list again replaces the
+    // stored one rather than adding a second.
     //
-    // Description carries the address without its query string: the share token of a private list
-    // must not travel in an exported .tcfmodlist.
+    // choices carries what was decided in the import window - or, on a refresh, what was decided
+    // last time (SpModListChoices.From). Without it, every page item goes in.
     //
-    public ModList ToModList(string fallbackName, DateTimeOffset now)
+    public ModList ToModList(string fallbackName, DateTimeOffset now, SpModListChoices? choices = null)
     {
+        choices ??= SpModListChoices.None;
+
+        var excluded = new HashSet<string>(choices.Excluded, StringComparer.OrdinalIgnoreCase);
+
+        var fromPage = Items
+            .Where(i => !excluded.Contains(SpModListSource.RefFor(i.Kind == SpModListItemKind.Addon, i.Id)))
+            .Select(i => new ModListEntry
+            {
+                Name = i.Name,
+                ModId = i.Id,
+                IsAddon = i.Kind == SpModListItemKind.Addon,
+                Version = i.Version,
+            })
+            .ToList();
+
+        var onPage = new HashSet<string>(fromPage.Select(e => SpModListSource.RefFor(e)!), StringComparer.OrdinalIgnoreCase);
+
+        var added = choices.Added
+            .Where(e => SpModListSource.RefFor(e) is { } r && !onPage.Contains(r) && !excluded.Contains(r))
+            .GroupBy(e => SpModListSource.RefFor(e)!, StringComparer.OrdinalIgnoreCase)
+            .Select(g => g.First())
+            .ToList();
+
         var list = new ModList
         {
             Id = SpModListImport.ListIdFor(ListId),
             Name = string.IsNullOrWhiteSpace(Name) ? fallbackName : Name,
-            Description = SpModListImport.CanonicalUrl(ListId, Source).GetLeftPart(UriPartial.Path),
             Revision = 1,
             Origin = ModListOrigin.Imported,
             Policy = ModListPolicy.Additive,
             Source = Author,
-            SptVersion = SptVersion,
+            SptVersion = choices.SptVersion ?? SptVersion,
             CreatedAt = now,
             UpdatedAt = UpdatedAt ?? now,
+            SpModSource = new SpModListSource
+            {
+                ListId = ListId,
+                Url = Source.ToString(),
+                ReadAt = now,
+                PageUpdatedAt = UpdatedAt,
+                Retargeted = choices.Retargeted,
+                DependenciesAdded = choices.DependenciesAdded,
+                Excluded = [.. excluded.Order(StringComparer.Ordinal)],
+                Added = [.. added.Select(e => SpModListSource.RefFor(e)!)],
+            },
         };
 
-        list.Entries.AddRange(Items.Select(i => new ModListEntry
-        {
-            Name = i.Name,
-            ModId = i.Id,
-            IsAddon = i.Kind == SpModListItemKind.Addon,
-            Version = i.Version,
-        }));
+        list.Entries.AddRange(fromPage);
+        list.Entries.AddRange(added);
 
         return list;
     }
+}
+
+//
+// What the import window decided, carried into the stored list.
+//
+// SptVersion is the list's target after a retarget - this install's SPT - and null to keep the
+// page's own. Added holds whole entries, because a missing parent or a dependency is not on the
+// page and has to bring its own name and version.
+//
+public sealed record SpModListChoices(
+    IReadOnlyCollection<string> Excluded,
+    IReadOnlyList<ModListEntry> Added,
+    bool Retargeted = false,
+    bool DependenciesAdded = false,
+    string? SptVersion = null)
+{
+    public static SpModListChoices None { get; } = new([], []);
+
+    // The choices a stored list was made with, for reading its page again.
+    public static SpModListChoices From(ModList stored)
+    {
+        if (stored.SpModSource is not { } source) return None;
+
+        var added = new HashSet<string>(source.Added, StringComparer.OrdinalIgnoreCase);
+
+        return new SpModListChoices(
+            source.Excluded,
+            [.. stored.Entries.Where(e => SpModListSource.RefFor(e) is { } r && added.Contains(r))],
+            source.Retargeted,
+            source.DependenciesAdded,
+            source.Retargeted ? stored.SptVersion : null);
+    }
+}
+
+public sealed record SpModListVersionChange(ModListEntry From, ModListEntry To);
+
+// What reading a list again changed, entry by entry. Matched on mod/addon id.
+public sealed record SpModListDiff(
+    IReadOnlyList<ModListEntry> Added,
+    IReadOnlyList<ModListEntry> Removed,
+    IReadOnlyList<SpModListVersionChange> VersionChanged,
+    string? OldName,
+    string? OldSptVersion)
+{
+    public bool NameChanged => OldName is not null;
+
+    public bool SptVersionChanged { get; init; }
+
+    public bool HasChanges => Added.Count > 0 || Removed.Count > 0 || VersionChanged.Count > 0 || NameChanged || SptVersionChanged;
+}
+
+//
+// The stored list after an import or refresh, and what changed.
+//
+// Previous is the list that was stored before, null for a first import. Diff is null then too.
+//
+public sealed record SpModListUpdate(ModList List, ModList? Previous, SpModListDiff? Diff)
+{
+    public bool IsNew => Previous is null;
+
+    public bool HasChanges => Diff?.HasChanges ?? true;
 }
 
 public enum SpModListFailure
@@ -609,4 +699,74 @@ public static partial class SpModListImport
     }
 
     private static string Clean(string text) => Whitespace().Replace(text, " ").Trim();
+
+    //
+    // Folds a fresh read into what is stored.
+    //
+    // The revision moves by one when anything a user would care about changed - an entry added,
+    // removed or at a different version, the list's name or its target SPT - and stays put when
+    // nothing did, so "updated from revision 3 to 4" means something. The stored list keeps its
+    // CreatedAt; the read time is updated either way.
+    //
+    // An entry whose only change is its display name is not a change: mods get renamed, and the
+    // new name is carried without bumping anything.
+    //
+    public static SpModListUpdate Merge(ModList? stored, ModList incoming)
+    {
+        if (stored is null) return new SpModListUpdate(incoming, null, null);
+
+        var diff = Diff(stored, incoming);
+
+        var merged = new ModList
+        {
+            Id = incoming.Id,
+            Name = incoming.Name,
+            Description = incoming.Description,
+            Revision = stored.Revision + (diff.HasChanges ? 1 : 0),
+            Origin = incoming.Origin,
+            Policy = incoming.Policy,
+            DerivedFrom = incoming.DerivedFrom,
+            Source = incoming.Source,
+            SptVersion = incoming.SptVersion,
+            CreatedAt = stored.CreatedAt,
+            UpdatedAt = diff.HasChanges ? incoming.UpdatedAt : stored.UpdatedAt,
+            Entries = [.. incoming.Entries],
+            SpModSource = incoming.SpModSource,
+        };
+
+        return new SpModListUpdate(merged, stored, diff);
+    }
+
+    public static SpModListDiff Diff(ModList before, ModList after)
+    {
+        static Dictionary<string, ModListEntry> Keyed(ModList list) =>
+            list.Entries
+                .Select(e => (Ref: SpModListSource.RefFor(e), Entry: e))
+                .Where(x => x.Ref is not null)
+                .GroupBy(x => x.Ref!, StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(g => g.Key, g => g.First().Entry, StringComparer.OrdinalIgnoreCase);
+
+        var old = Keyed(before);
+        var now = Keyed(after);
+
+        var added = after.Entries.Where(e => SpModListSource.RefFor(e) is { } r && !old.ContainsKey(r)).ToList();
+        var removed = before.Entries.Where(e => SpModListSource.RefFor(e) is { } r && !now.ContainsKey(r)).ToList();
+
+        var changed = after.Entries
+            .Where(e => SpModListSource.RefFor(e) is { } r
+                        && old.TryGetValue(r, out var was)
+                        && !string.Equals(was.Version, e.Version, StringComparison.OrdinalIgnoreCase))
+            .Select(e => new SpModListVersionChange(old[SpModListSource.RefFor(e)!], e))
+            .ToList();
+
+        return new SpModListDiff(
+            added,
+            removed,
+            changed,
+            string.Equals(before.Name, after.Name, StringComparison.Ordinal) ? null : before.Name,
+            before.SptVersion)
+        {
+            SptVersionChanged = !string.Equals(before.SptVersion, after.SptVersion, StringComparison.OrdinalIgnoreCase),
+        };
+    }
 }

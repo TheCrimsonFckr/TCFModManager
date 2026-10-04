@@ -147,6 +147,17 @@ public static class ModListFile
             document[nameof(ModListDocument.List)]?.AsObject().Remove(nameof(ModList.Source));
         }
 
+        //
+        // A private sp-mod list's share token is in its address. It is this install's to use for a
+        // refresh, and no one else's, so the query string is dropped from the shared copy.
+        //
+        if (list.SpModSource is { } spMod
+            && document[nameof(ModListDocument.List)]?[nameof(ModList.SpModSource)] is JsonObject source
+            && Uri.TryCreate(spMod.Url, UriKind.Absolute, out var url))
+        {
+            source[nameof(SpModListSource.Url)] = url.GetLeftPart(UriPartial.Path);
+        }
+
         return document.ToJsonString(Options);
     }
 
@@ -221,6 +232,7 @@ public static class ModListFile
             IsSnapshot = false,
             CreatedAt = list.CreatedAt,
             UpdatedAt = list.UpdatedAt,
+            SpModSource = list.SpModSource,
         };
 
         // Entries with no name at all can't be shown or matched on, so they are dropped rather than
