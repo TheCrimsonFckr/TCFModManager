@@ -7321,4 +7321,38 @@ See Dependencies and Conflicts.</value>
     <value>Versions for SPT {0} couldn't be looked up, so the list can't be saved with them yet. Switch the option off to keep the page's versions, or switch it back on to try again.</value>
     <comment>Under the review when the retarget asked for failed. {0} the SPT version.</comment>
   </data>
+  <data name="Credits_Title" xml:space="preserve">
+    <value>Credits</value>
+    <comment>Title of the window listing everyone who has contributed.</comment>
+  </data>
+  <data name="Credits_Intro" xml:space="preserve">
+    <value>TCF Mod Manager is built by TCF, with help from the people below. Thank you.</value>
+  </data>
+  <data name="Credits_ContributorsHeader" xml:space="preserve">
+    <value>Contributors</value>
+  </data>
+  <data name="Credits_TranslationsHeader" xml:space="preserve">
+    <value>Translations</value>
+  </data>
+  <data name="Credits_Brunolz13" xml:space="preserve">
+    <value>Wrote the TCF File Generator, the original sp-mod list extractor that Import from sp-mod is built on.</value>
+    <comment>What this contributor did. Their name is shown above it and isn't translated.</comment>
+  </data>
+  <data name="Options_CreditsHeader" xml:space="preserve">
+    <value>Credits</value>
+  </data>
+  <data name="Options_CreditsHint" xml:space="preserve">
+    <value>The people who have helped build TCF Mod Manager, and who translated it.</value>
+  </data>
+  <data name="Options_Credits" xml:space="preserve">
+    <value>Show credits</value>
+    <comment>Button on the Options page.</comment>
+  </data>
+  <data name="Help_Credits" xml:space="preserve">
+    <value>Credits</value>
+    <comment>Button at the top of the Help page.</comment>
+  </data>
+  <data name="Help_CreditsToolTip" xml:space="preserve">
+    <value>Who has helped build TCF Mod Manager</value>
+  </data>
 </root>

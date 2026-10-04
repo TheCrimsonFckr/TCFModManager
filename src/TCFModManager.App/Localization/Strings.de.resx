@@ -6100,4 +6100,34 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="SpModImport_RetargetBlockedFormat" xml:space="preserve">
     <value>Versionen für SPT {0} konnten nicht nachgeschlagen werden, daher lässt sich die Liste noch nicht damit speichern. Schalte die Option aus, um die Versionen der Seite zu behalten, oder wieder ein, um es erneut zu versuchen.</value>
   </data>
+  <data name="Credits_Title" xml:space="preserve">
+    <value>Mitwirkende</value>
+  </data>
+  <data name="Credits_Intro" xml:space="preserve">
+    <value>TCF Mod Manager wird von TCF entwickelt, mit Hilfe der unten genannten Leute. Danke.</value>
+  </data>
+  <data name="Credits_ContributorsHeader" xml:space="preserve">
+    <value>Mitwirkende</value>
+  </data>
+  <data name="Credits_TranslationsHeader" xml:space="preserve">
+    <value>Übersetzungen</value>
+  </data>
+  <data name="Credits_Brunolz13" xml:space="preserve">
+    <value>Hat den TCF File Generator geschrieben, den ursprünglichen sp-mod-Listenextraktor, auf dem "Von sp-mod importieren" aufbaut.</value>
+  </data>
+  <data name="Options_CreditsHeader" xml:space="preserve">
+    <value>Mitwirkende</value>
+  </data>
+  <data name="Options_CreditsHint" xml:space="preserve">
+    <value>Die Leute, die beim Bau von TCF Mod Manager geholfen und es übersetzt haben.</value>
+  </data>
+  <data name="Options_Credits" xml:space="preserve">
+    <value>Mitwirkende anzeigen</value>
+  </data>
+  <data name="Help_Credits" xml:space="preserve">
+    <value>Mitwirkende</value>
+  </data>
+  <data name="Help_CreditsToolTip" xml:space="preserve">
+    <value>Wer beim Bau von TCF Mod Manager geholfen hat</value>
+  </data>
 </root>

@@ -825,5 +825,20 @@
                 Content="{loc:Str Options_DataFiles}"
                 Click="DataFiles_Click" />
         </ui:CardControl>
+
+        <ui:CardControl
+            Style="{StaticResource SettingRow}"
+            Icon="{ui:SymbolIcon People24}"
+            ToolTip="{loc:Str Options_CreditsHint}">
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_CreditsHeader}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_CreditsHint}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <ui:Button
+                Content="{loc:Str Options_Credits}"
+                Click="Credits_Click" />
+        </ui:CardControl>
     </StackPanel>
 </Page>

@@ -35,6 +35,14 @@
                     ToolTip="{loc:Str Help_ReportProblemToolTip}" />
                 <ui:Button
                     DockPanel.Dock="Right"
+                    Margin="8,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="{loc:Str Help_Credits}"
+                    Icon="{ui:SymbolIcon People24}"
+                    ToolTip="{loc:Str Help_CreditsToolTip}"
+                    Click="Credits_Click" />
+                <ui:Button
+                    DockPanel.Dock="Right"
                     Margin="12,0,0,0"
                     VerticalAlignment="Center"
                     Content="{loc:Str Help_OpenGuide}"

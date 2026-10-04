@@ -2002,4 +2002,14 @@ internal static class Strings
     internal static string ModLists_SpModImported(int count, params object?[] values) =>
         LocalizationService.Plural("ModLists_SpModImported", count, values);
     internal static string SpModImport_RetargetBlockedFormat => LocalizationService.Get("SpModImport_RetargetBlockedFormat");
+    internal static string Credits_Title => LocalizationService.Get("Credits_Title");
+    internal static string Credits_Intro => LocalizationService.Get("Credits_Intro");
+    internal static string Credits_ContributorsHeader => LocalizationService.Get("Credits_ContributorsHeader");
+    internal static string Credits_TranslationsHeader => LocalizationService.Get("Credits_TranslationsHeader");
+    internal static string Credits_Brunolz13 => LocalizationService.Get("Credits_Brunolz13");
+    internal static string Options_CreditsHeader => LocalizationService.Get("Options_CreditsHeader");
+    internal static string Options_CreditsHint => LocalizationService.Get("Options_CreditsHint");
+    internal static string Options_Credits => LocalizationService.Get("Options_Credits");
+    internal static string Help_Credits => LocalizationService.Get("Help_Credits");
+    internal static string Help_CreditsToolTip => LocalizationService.Get("Help_CreditsToolTip");
 }

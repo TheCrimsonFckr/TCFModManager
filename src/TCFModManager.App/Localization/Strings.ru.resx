@@ -6436,4 +6436,34 @@
   <data name="SpModImport_RetargetBlockedFormat" xml:space="preserve">
     <value>Не удалось найти версии для SPT {0}, поэтому сохранить список с ними пока нельзя. Выключите параметр, чтобы оставить версии со страницы, или включите его снова, чтобы повторить попытку.</value>
   </data>
+  <data name="Credits_Title" xml:space="preserve">
+    <value>Благодарности</value>
+  </data>
+  <data name="Credits_Intro" xml:space="preserve">
+    <value>TCF Mod Manager разрабатывает TCF при помощи людей, перечисленных ниже. Спасибо.</value>
+  </data>
+  <data name="Credits_ContributorsHeader" xml:space="preserve">
+    <value>Участники</value>
+  </data>
+  <data name="Credits_TranslationsHeader" xml:space="preserve">
+    <value>Переводы</value>
+  </data>
+  <data name="Credits_Brunolz13" xml:space="preserve">
+    <value>Написал TCF File Generator - исходный инструмент для извлечения списков sp-mod, на котором основан «Импорт с sp-mod».</value>
+  </data>
+  <data name="Options_CreditsHeader" xml:space="preserve">
+    <value>Благодарности</value>
+  </data>
+  <data name="Options_CreditsHint" xml:space="preserve">
+    <value>Люди, которые помогли создать TCF Mod Manager и перевели его.</value>
+  </data>
+  <data name="Options_Credits" xml:space="preserve">
+    <value>Показать благодарности</value>
+  </data>
+  <data name="Help_Credits" xml:space="preserve">
+    <value>Благодарности</value>
+  </data>
+  <data name="Help_CreditsToolTip" xml:space="preserve">
+    <value>Кто помог создать TCF Mod Manager</value>
+  </data>
 </root>

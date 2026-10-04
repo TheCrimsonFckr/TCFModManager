@@ -25,4 +25,6 @@ public partial class OptionsPage : Page
 
     private void DataFiles_Click(object sender, RoutedEventArgs e) =>
         new DataFilesWindow { Owner = Window.GetWindow(this) }.Show();
+
+    private void Credits_Click(object sender, RoutedEventArgs e) => CreditsWindow.Open(Window.GetWindow(this));
 }

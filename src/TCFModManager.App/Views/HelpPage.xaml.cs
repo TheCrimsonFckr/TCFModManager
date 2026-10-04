@@ -11,6 +11,8 @@ public partial class HelpPage : Page
 {
     public HelpViewModel ViewModel { get; }
 
+    private void Credits_Click(object sender, RoutedEventArgs e) => CreditsWindow.Open(Window.GetWindow(this));
+
     public HelpPage()
     {
         ViewModel = new HelpViewModel();
