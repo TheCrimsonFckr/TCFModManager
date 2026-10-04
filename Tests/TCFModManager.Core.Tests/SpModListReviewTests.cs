@@ -68,6 +68,20 @@ public class SpModListReviewTests
     }
 
     [Fact]
+    public void RowsCarryTheirCardsAndAMissingParentTakesTheDetachedOne()
+    {
+        var card = new SpModCard("u", "t", "Chazut", 5, null, "4.1.6", false, []);
+        var parentCard = card with { Author = "parent" };
+        var mod = new SpModListItem(SpModListItemKind.Mod, 1, "Mod 1", "1.0.0", Card: card);
+        var addon = new SpModListItem(SpModListItemKind.Addon, 135, "Addon 135", "1.0.0", 2706, false, ParentName: "ORBIT", ParentVersion: "2.1.1", ParentCard: parentCard);
+
+        var review = SpModListReview.Build(Page(mod, addon));
+
+        Assert.Same(card, review.Rows.Single(r => r.Ref == "mod/1").Card);
+        Assert.Same(parentCard, review.Rows.Single(r => r.Ref == "mod/2706").Card);
+    }
+
+    [Fact]
     public void TheDependencyAnswerGivesAMissingParentItsVersion()
     {
         var review = SpModListReview.Build(

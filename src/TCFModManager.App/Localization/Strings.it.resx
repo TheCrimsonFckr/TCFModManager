@@ -6148,4 +6148,31 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Help_ModLists_SpMod_Keywords" xml:space="preserve">
     <value>sp-mod, forge, sito, link, url, indirizzo, importare, raccolta, lista mod, pagina</value>
   </data>
+  <data name="SpModImport_BadgeSptFormat" xml:space="preserve">
+    <value>SPT {0}</value>
+  </data>
+  <data name="SpModImport_BadgeDependency" xml:space="preserve">
+    <value>Dipendenza</value>
+  </data>
+  <data name="SpModImport_OpenModPage" xml:space="preserve">
+    <value>Apri la sua pagina su sp-mod</value>
+  </data>
+  <data name="SpModImport_TipOnListFormat" xml:space="preserve">
+    <value>Nella lista: {0}</value>
+  </data>
+  <data name="SpModImport_TipMissingFormat" xml:space="preserve">
+    <value>Mancanti: {0}</value>
+  </data>
+  <data name="SpModImport_BadgeMissing_one" xml:space="preserve">
+    <value>1 dipendenza mancante</value>
+  </data>
+  <data name="SpModImport_BadgeMissing_other" xml:space="preserve">
+    <value>{0} dipendenze mancanti</value>
+  </data>
+  <data name="SpModImport_BadgeSatisfied_one" xml:space="preserve">
+    <value>1 dipendenza soddisfatta</value>
+  </data>
+  <data name="SpModImport_BadgeSatisfied_other" xml:space="preserve">
+    <value>{0} dipendenze soddisfatte</value>
+  </data>
 </root>

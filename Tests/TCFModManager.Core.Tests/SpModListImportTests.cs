@@ -188,6 +188,69 @@ public class SpModListImportTests
         Assert.All(page.Addons, a => Assert.Null(a.ParentModId));
     }
 
+    // ---- what each card shows ----
+
+    [Fact]
+    public void AModCardCarriesWhatSpModShowsBesideIt()
+    {
+        var orbit = Read("list-126308.html", AddonsList.ToString()).Mods.Single(m => m.Id == 2706).Card!;
+
+        Assert.Equal("https://sp-mod.com/mod/2706/orbit-20", orbit.Url);
+        Assert.StartsWith("https://files.sp-mod.com/mods/", orbit.Thumbnail);
+        Assert.Equal("Chazut", orbit.Author);
+        Assert.Equal(51156, orbit.Downloads);
+        Assert.Equal(new DateTimeOffset(2026, 10, 4, 8, 18, 36, TimeSpan.Zero), orbit.UpdatedAt);
+        Assert.Equal("4.1.6", orbit.SptVersion);
+        Assert.False(orbit.IsDependency);
+        Assert.Equal(
+            [("SAIN - Solarint's AI Modifications - Full AI Combat System Replacement", false), ("Waypoints - Expanded Navmesh", false), ("BigBrain", false)],
+            orbit.Dependencies.Select(d => (d.Name, d.OnList)));
+    }
+
+    [Fact]
+    public void DependencyBadgesAndListsAreRead()
+    {
+        var page = Read("list-127707.html", "https://sp-mod.com/list/127707/spt-4013-part-1");
+
+        Assert.Equal(22, page.Mods.Count(m => m.Card!.IsDependency));
+        Assert.True(page.Mods.Single(m => m.Id == 902).Card!.IsDependency);
+
+        var sain = page.Mods.Single(m => m.Id == 791).Card!;
+        Assert.Equal(1314222, sain.Downloads);
+        Assert.Equal("4.0.13", sain.SptVersion);
+        Assert.Equal([("Waypoints - Expanded Navmesh", true), ("BigBrain", true)], sain.Dependencies.Select(d => (d.Name, d.OnList)));
+    }
+
+    [Fact]
+    public void AnAddonCardHasItsThumbnailAndAuthorOnly()
+    {
+        var addon = Read("list-126308.html", AddonsList.ToString()).Addons.Single(a => a.Id == 135).Card!;
+
+        Assert.StartsWith("https://files.sp-mod.com/addons/", addon.Thumbnail);
+        Assert.Equal("TomiNyxer", addon.Author);
+        Assert.Null(addon.Downloads);
+        Assert.Null(addon.SptVersion);
+        Assert.Empty(addon.Dependencies);
+    }
+
+    [Fact]
+    public void ADetachedParentsCardTravelsWithItsAddon()
+    {
+        var html = Page("1 addon", Group("detached-77", Mod(2706, "ORBIT 2.0"), Addon(77, 135, "Live-Like ORBIT")));
+
+        var addon = Assert.Single(SpModListImport.Parse(html, AddonsList).Page!.Addons);
+
+        Assert.Equal("https://sp-mod.com/mod/2706/x", addon.ParentCard!.Url);
+        Assert.Equal("4.1.6", addon.ParentCard.SptVersion);
+    }
+
+    [Fact]
+    public void APageForAnyModOrAddonCanBeLinkedWithoutItsSlug()
+    {
+        Assert.Equal("https://sp-mod.com/mod/791/-", SpModListImport.PageFor(false, 791));
+        Assert.Equal("https://sp-mod.com/addon/135/-", SpModListImport.PageFor(true, 135));
+    }
+
     // ---- shapes the real pages above don't happen to contain ----
 
     [Fact]

@@ -6484,4 +6484,37 @@
   <data name="Help_ModLists_SpMod_Keywords" xml:space="preserve">
     <value>sp-mod, forge, сайт, ссылка, url, адрес, импорт, подборка, список модов, страница</value>
   </data>
+  <data name="SpModImport_BadgeSptFormat" xml:space="preserve">
+    <value>SPT {0}</value>
+  </data>
+  <data name="SpModImport_BadgeDependency" xml:space="preserve">
+    <value>Зависимость</value>
+  </data>
+  <data name="SpModImport_OpenModPage" xml:space="preserve">
+    <value>Открыть его страницу на sp-mod</value>
+  </data>
+  <data name="SpModImport_TipOnListFormat" xml:space="preserve">
+    <value>В списке: {0}</value>
+  </data>
+  <data name="SpModImport_TipMissingFormat" xml:space="preserve">
+    <value>Не хватает: {0}</value>
+  </data>
+  <data name="SpModImport_BadgeMissing_one" xml:space="preserve">
+    <value>{0} зависимость отсутствует</value>
+  </data>
+  <data name="SpModImport_BadgeMissing_few" xml:space="preserve">
+    <value>{0} зависимости отсутствуют</value>
+  </data>
+  <data name="SpModImport_BadgeMissing_many" xml:space="preserve">
+    <value>{0} зависимостей отсутствуют</value>
+  </data>
+  <data name="SpModImport_BadgeSatisfied_one" xml:space="preserve">
+    <value>{0} зависимость на месте</value>
+  </data>
+  <data name="SpModImport_BadgeSatisfied_few" xml:space="preserve">
+    <value>{0} зависимости на месте</value>
+  </data>
+  <data name="SpModImport_BadgeSatisfied_many" xml:space="preserve">
+    <value>{0} зависимостей на месте</value>
+  </data>
 </root>

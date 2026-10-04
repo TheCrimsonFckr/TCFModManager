@@ -12,14 +12,57 @@ using Wpf.Ui.Controls;
 
 namespace TCFModManager.App.Views;
 
-// One line of the review. Ticked writes straight through to the review row, which is what is stored.
-public sealed partial class SpModImportRow(SpModReviewRow? row, string name, string detail, Action? changed) : ObservableObject
+//
+// One card of the review, laid out like the cards on sp-mod's own list page and on Browse. Ticked
+// writes straight through to the review row, which is what is stored. The dependencies badge is the
+// one part that moves: it is worked out again whenever any tick changes (see RefreshDependencies).
+//
+public sealed partial class SpModImportRow : ObservableObject
 {
-    public SpModReviewRow? Row { get; } = row;
+    private readonly Action? _changed;
 
-    public string Name { get; } = name;
+    public SpModImportRow(SpModReviewRow? row, string name, string? detail, Action? changed)
+    {
+        Row = row;
+        Name = name;
+        Detail = string.IsNullOrWhiteSpace(detail) ? null : detail;
+        _changed = changed;
+    }
 
-    public string Detail { get; } = detail;
+    public SpModReviewRow? Row { get; }
+
+    public string Name { get; }
+
+    public string? Version { get; init; }
+
+    // "by author · downloads · updated date" - whatever is known; null hides the line.
+    public string? Facts { get; init; }
+
+    public string? Detail { get; }
+
+    public string? Thumbnail { get; init; }
+
+    public SymbolRegular PlaceholderSymbol { get; init; } = SymbolRegular.PuzzleCube24;
+
+    public string? Url { get; init; }
+
+    public string? SptBadge { get; init; }
+
+    public bool IsDependency { get; init; }
+
+    public string? DependencyOfTip { get; init; }
+
+    // The dependencies sp-mod lists on the card, by name. Empty for rows with no card.
+    public IReadOnlyList<SpModCardDependency> Dependencies { get; init; } = [];
+
+    [ObservableProperty]
+    private string? _dependenciesBadge;
+
+    [ObservableProperty]
+    private ControlAppearance _dependenciesAppearance = ControlAppearance.Success;
+
+    [ObservableProperty]
+    private string? _dependenciesTip;
 
     // False for the information-only rows: entries going away, and dependencies with no version.
     public bool CanTick => Row is not null;
@@ -33,8 +76,42 @@ public sealed partial class SpModImportRow(SpModReviewRow? row, string name, str
 
             Row.Ticked = value;
             OnPropertyChanged();
-            changed?.Invoke();
+            _changed?.Invoke();
         }
+    }
+
+    //
+    // A dependency is covered when a ticked row carries its name. One the review has no row for at
+    // all - already installed, or simply on the list under a name sp-mod shows differently - falls
+    // back to what sp-mod's own card said.
+    //
+    public void RefreshDependencies(ISet<string> ticked, ISet<string> reviewed)
+    {
+        if (Dependencies.Count == 0)
+        {
+            DependenciesBadge = null;
+            DependenciesTip = null;
+            return;
+        }
+
+        var covered = new List<string>();
+        var missing = new List<string>();
+
+        foreach (var dependency in Dependencies)
+        {
+            var ok = ticked.Contains(dependency.Name) || (!reviewed.Contains(dependency.Name) && dependency.OnList);
+            (ok ? covered : missing).Add(dependency.Name);
+        }
+
+        DependenciesAppearance = missing.Count > 0 ? ControlAppearance.Danger : ControlAppearance.Success;
+        DependenciesBadge = missing.Count > 0
+            ? Strings.SpModImport_BadgeMissing(missing.Count)
+            : Strings.SpModImport_BadgeSatisfied(covered.Count);
+
+        var lines = new List<string>();
+        if (covered.Count > 0) lines.Add(LocalizationService.Text(Strings.SpModImport_TipOnListFormat, string.Join(Strings.Common_ListSeparator, covered)));
+        if (missing.Count > 0) lines.Add(LocalizationService.Text(Strings.SpModImport_TipMissingFormat, string.Join(Strings.Common_ListSeparator, missing)));
+        DependenciesTip = string.Join(Environment.NewLine, lines);
     }
 }
 
@@ -333,7 +410,11 @@ public partial class SpModListImportWindow : FluentWindow
 
         ShowSptPanel(review);
 
-        SectionsList.ItemsSource = Sections(review);
+        var sections = Sections(review);
+        _cards = [.. sections.SelectMany(section => section.Rows)];
+        RefreshDependencies();
+
+        SectionsList.ItemsSource = sections;
         SectionsScroller.ScrollToTop();
 
         PrimaryButton.Content = review.IsRefresh ? Strings.SpModImport_Update : Strings.SpModImport_Create;
@@ -472,15 +553,20 @@ public partial class SpModListImportWindow : FluentWindow
         return sections;
     }
 
+    private List<SpModImportRow> _cards = [];
+
+    //
+    // A card: what sp-mod's list page showed beside the entry, or - for the rows the page never
+    // showed (missing parents with no card, dependencies) - what the catalog knows about it.
+    //
     private SpModImportRow Row(SpModReviewRow row)
     {
         var parts = new List<string>();
 
         if (row.Change == SpModReviewChange.New) parts.Add(Strings.SpModImport_FactNew);
 
-        parts.Add(row.FromVersion is not null
-            ? Text(Strings.SpModImport_FactRetargetedFormat, row.FromVersion, row.Entry.Version)
-            : VersionFact(row.Entry.Version));
+        if (row.FromVersion is not null) parts.Add(Text(Strings.SpModImport_FactRetargetedFormat, row.FromVersion, row.Entry.Version));
+        else if (row.Entry.Version is null) parts.Add(Strings.SpModImport_FactNoVersion);
 
         if (row.Change == SpModReviewChange.VersionChanged) parts.Add(Text(Strings.SpModImport_FactWasFormat, row.StoredVersion));
         if (row.ParentName is not null) parts.Add(Text(Strings.SpModImport_FactAddonForFormat, row.ParentName));
@@ -489,7 +575,76 @@ public partial class SpModListImportWindow : FluentWindow
         if (row.NotCompatible && !_review!.Retargeted) parts.Add(Strings.SpModImport_FactNotCompatible);
         if (row.ParentUnknown) parts.Add(Strings.SpModImport_FactParentNotOnList);
 
-        return new SpModImportRow(row, row.Entry.Name, string.Join(Strings.Common_FactSeparator, parts), UpdateSummary);
+        var entry = row.Entry;
+        var card = row.Card;
+
+        string? thumbnail = card?.Thumbnail, author = card?.Author, url = card?.Url;
+        long? downloads = card?.Downloads;
+        var updated = card?.UpdatedAt;
+
+        if (entry.ModId is int id && (thumbnail is null || author is null || downloads is null || url is null))
+        {
+            if (entry.IsAddon && AppServices.Addons.ById(id) is { } addon)
+            {
+                thumbnail ??= addon.Thumbnail;
+                author ??= addon.Owner?.Name;
+                downloads ??= addon.Downloads;
+                updated ??= addon.UpdatedAt;
+                url ??= addon.DetailUrl;
+            }
+            else if (!entry.IsAddon && AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == id) is { } mod)
+            {
+                thumbnail ??= mod.Thumbnail;
+                author ??= mod.Owner?.Name;
+                downloads ??= mod.Downloads;
+                updated ??= mod.UpdatedAt;
+                url ??= mod.DetailUrl;
+            }
+
+            url ??= SpModListImport.PageFor(entry.IsAddon, id);
+        }
+
+        var facts = new List<string>();
+        if (!string.IsNullOrWhiteSpace(author)) facts.Add(Text(Strings.SpModImport_ByFormat, author));
+        if (downloads is { } count) facts.Add(Text(Strings.Common_DownloadsFormat, count));
+        if (updated is { } when) facts.Add(Text(Strings.SpModImport_UpdatedFormat, when.LocalDateTime.ToString("d")));
+
+        // A retargeted version is for this install's SPT, not the one the page showed it for.
+        var spt = row.FromVersion is not null ? _review!.Retarget?.TargetSptVersion : card?.SptVersion;
+
+        return new SpModImportRow(row, entry.Name, string.Join(Strings.Common_FactSeparator, parts), CardsChanged)
+        {
+            Version = entry.Version,
+            Facts = facts.Count > 0 ? string.Join(Strings.Common_FactSeparator, facts) : null,
+            Thumbnail = thumbnail,
+            PlaceholderSymbol = entry.IsAddon ? SymbolRegular.PuzzlePiece24 : SymbolRegular.PuzzleCube24,
+            Url = url,
+            SptBadge = spt is null ? null : Text(Strings.SpModImport_BadgeSptFormat, spt),
+            IsDependency = card?.IsDependency == true || row.Section == SpModReviewSection.Dependencies,
+            DependencyOfTip = row.NeededBy.Count > 0
+                ? Text(Strings.SpModImport_FactNeededByFormat, string.Join(Strings.Common_ListSeparator, row.NeededBy))
+                : null,
+            Dependencies = card?.Dependencies ?? [],
+        };
+    }
+
+    private void CardsChanged()
+    {
+        RefreshDependencies();
+        UpdateSummary();
+    }
+
+    private void RefreshDependencies()
+    {
+        var ticked = _cards.Where(c => c.Ticked).Select(c => c.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var reviewed = _cards.Where(c => c.CanTick).Select(c => c.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var card in _cards) card.RefreshDependencies(ticked, reviewed);
+    }
+
+    private void OpenRowPage_Click(object sender, RoutedEventArgs e)
+    {
+        if ((sender as FrameworkElement)?.DataContext is SpModImportRow { Url: { } url }) OpenInBrowser(url);
     }
 
     private static string VersionFact(string? version) => version is null

@@ -2018,4 +2018,13 @@ internal static class Strings
     internal static string Help_ModLists_SpMod_Step4 => LocalizationService.Get("Help_ModLists_SpMod_Step4");
     internal static string Help_ModLists_SpMod_Note => LocalizationService.Get("Help_ModLists_SpMod_Note");
     internal static string Help_ModLists_SpMod_Keywords => LocalizationService.Get("Help_ModLists_SpMod_Keywords");
+    internal static string SpModImport_BadgeSptFormat => LocalizationService.Get("SpModImport_BadgeSptFormat");
+    internal static string SpModImport_BadgeDependency => LocalizationService.Get("SpModImport_BadgeDependency");
+    internal static string SpModImport_OpenModPage => LocalizationService.Get("SpModImport_OpenModPage");
+    internal static string SpModImport_TipOnListFormat => LocalizationService.Get("SpModImport_TipOnListFormat");
+    internal static string SpModImport_TipMissingFormat => LocalizationService.Get("SpModImport_TipMissingFormat");
+    internal static string SpModImport_BadgeMissing(int count, params object?[] values) =>
+        LocalizationService.Plural("SpModImport_BadgeMissing", count, values);
+    internal static string SpModImport_BadgeSatisfied(int count, params object?[] values) =>
+        LocalizationService.Plural("SpModImport_BadgeSatisfied", count, values);
 }

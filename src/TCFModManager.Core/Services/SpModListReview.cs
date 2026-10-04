@@ -65,6 +65,10 @@ public sealed class SpModReviewRow
 
     // The stored version, when Change is VersionChanged.
     public string? StoredVersion { get; init; }
+
+    // What sp-mod's card showed for it - thumbnail, author, badges. Null for a row that isn't on the
+    // page; the window fills those from the app's catalog.
+    public SpModCard? Card { get; init; }
 }
 
 //
@@ -202,6 +206,7 @@ public sealed class SpModListReview
                 ParentUnknown = parentUnknown,
                 Change = change,
                 StoredVersion = storedVersion,
+                Card = item.Card,
             });
         }
 
@@ -218,6 +223,11 @@ public sealed class SpModListReview
             .Where(a => !a.ParentOnList && a.ParentModId is not null)
             .GroupBy(a => a.ParentModId!.Value)
             .ToDictionary(g => g.Key, g => (IReadOnlyList<string>)[.. g.Select(a => a.Name)]);
+
+        var parentCards = page.Addons
+            .Where(a => !a.ParentOnList && a.ParentModId is not null && a.ParentCard is not null)
+            .GroupBy(a => a.ParentModId!.Value)
+            .ToDictionary(g => g.Key, g => g.First().ParentCard);
 
         foreach (var addon in page.Addons.Where(a => !a.ParentOnList && a.ParentModId is not null))
         {
@@ -240,6 +250,7 @@ public sealed class SpModListReview
                 NeededBy = addonNamesByParent[id],
                 Change = change,
                 StoredVersion = storedVersion,
+                Card = parentCards.GetValueOrDefault(id),
             });
         }
 

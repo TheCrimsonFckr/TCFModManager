@@ -37,7 +37,31 @@ public sealed record SpModListItem(
     bool ParentOnList = true,
     bool NotCompatible = false,
     string? ParentName = null,
-    string? ParentVersion = null);
+    string? ParentVersion = null,
+    SpModCard? Card = null,
+    SpModCard? ParentCard = null);
+
+// One dependency sp-mod lists under a mod's card, and whether the list already has it.
+public sealed record SpModCardDependency(string Name, bool OnList);
+
+//
+// What sp-mod's card shows about an entry beside its name: the same facts a Browse card shows.
+// Display only - nothing here decides what is imported.
+//
+// SptVersion is the card's badge: the newest SPT the shown version supports, or the list's target
+// when it matches it. IsDependency is sp-mod's "Dependency" badge - another mod on the list needs
+// this one. Dependencies is the mod version's own dependency list, each marked on the list or not;
+// an addon card carries none of these, only its thumbnail and author.
+//
+public sealed record SpModCard(
+    string? Url,
+    string? Thumbnail,
+    string? Author,
+    long? Downloads,
+    DateTimeOffset? UpdatedAt,
+    string? SptVersion,
+    bool IsDependency,
+    IReadOnlyList<SpModCardDependency> Dependencies);
 
 public enum SpModListReadPass
 {
@@ -306,6 +330,9 @@ public static partial class SpModListImport
     [GeneratedRegex(@"\s+", RegexOptions.CultureInvariant)]
     private static partial Regex Whitespace();
 
+    [GeneratedRegex(@"^\s*([\d.,\u00a0]+)\s", RegexOptions.CultureInvariant)]
+    private static partial Regex DownloadsTitle();
+
     //
     // Accepts https://sp-mod.com/list/<id>[/<slug>][?query], with or without the scheme or www,
     // surrounding whitespace allowed. The query is kept because a private list's share link
@@ -346,6 +373,13 @@ public static partial class SpModListImport
     }
 
     // RFC 4122 version 5 (SHA-1, name-based) over "sp-mod.com/list/<id>".
+    //
+    // The sp-mod page of a mod or addon. sp-mod needs some slug after the id and redirects any slug
+    // to the real one, so this works without knowing it.
+    //
+    public static string PageFor(bool isAddon, int id) =>
+        $"https://{Host}/{(isAddon ? "addon" : "mod")}/{id.ToString(CultureInfo.InvariantCulture)}/-";
+
     public static Guid ListIdFor(int listId)
     {
         var name = Encoding.UTF8.GetBytes($"{Host}/list/{listId.ToString(CultureInfo.InvariantCulture)}");
@@ -519,12 +553,14 @@ public static partial class SpModListImport
         int? parentId = null;
         string? parentName = null;
         string? parentVersion = null;
+        SpModCard? parentCard = null;
 
         if (modLink is not null && ItemKind(modLink) is (_, var modId))
         {
             parentId = modId;
             parentName = Text(modLink);
             parentVersion = VersionAfter(modLink);
+            parentCard = ReadCard(group, addonRows, SpModListItemKind.Mod, modId);
 
             if (!detached)
             {
@@ -533,7 +569,8 @@ public static partial class SpModListImport
                     modId,
                     Text(modLink)!,
                     VersionAfter(modLink),
-                    NotCompatible: IsMarkedNotCompatible(group, addonRows)));
+                    NotCompatible: IsMarkedNotCompatible(group, addonRows),
+                    Card: parentCard));
             }
         }
         else if (!detached)
@@ -560,9 +597,111 @@ public static partial class SpModListImport
                 ParentModId: parentId,
                 ParentOnList: !detached,
                 ParentName: detached ? parentName : null,
-                ParentVersion: detached ? parentVersion : null));
+                ParentVersion: detached ? parentVersion : null,
+                Card: ReadCard(row, [], SpModListItemKind.Addon, addonId),
+                ParentCard: detached ? parentCard : null));
         }
     }
+
+    //
+    // The facts beside an entry's name, read from inside scope but outside the exclude rows (a mod
+    // card's own addon rows). Everything here is best-effort and display-only: a fact that can't be
+    // found is null, never a failed read.
+    //
+    // Read by markup shape wherever sp-mod gives one - the downloads count's exact title, the
+    // <time>, the badge colours, the tick and cross icon colours on the dependency list - and only
+    // fall back to the page's screen-reader labels ("On list:", "Missing:") where it doesn't.
+    //
+    private static SpModCard ReadCard(IElement scope, List<IElement> exclude, SpModListItemKind kind, int id)
+    {
+        bool Mine(IElement e) => !exclude.Any(r => r.Contains(e));
+
+        var link = scope.QuerySelectorAll("a[href]").FirstOrDefault(a => Mine(a) && ItemKind(a) == (kind, id))?.GetAttribute("href");
+
+        var thumbnail = scope.QuerySelectorAll("a[href] img[src]")
+            .FirstOrDefault(img => Mine(img) && img.Closest("a") is { } a && ItemKind(a) == (kind, id))
+            ?.GetAttribute("src");
+
+        // "by <owner> · <downloads> · <time>" - the first line under the name.
+        var facts = scope.QuerySelectorAll("div")
+            .Where(Mine)
+            .FirstOrDefault(d => d.ClassList.Contains("text-xs")
+                                 && d.Children.All(c => c.LocalName is "span" or "time")
+                                 && Clean(d.TextContent).Length > 0
+                                 && !d.HasAttribute("popover")
+                                 && d.Closest("[data-flux-tooltip-content]") is null
+                                 && d.Closest("a") is null
+                                 && d.QuerySelector("[data-flux-badge]") is null);
+
+        string? author = null;
+        long? downloads = null;
+        DateTimeOffset? updated = null;
+
+        if (facts is not null)
+        {
+            var first = facts.ChildNodes.OfType<IText>().FirstOrDefault(t => !string.IsNullOrWhiteSpace(t.Text))?.Text;
+            if (first is not null)
+            {
+                var text = Clean(first);
+                var space = text.IndexOf(' ');
+                author = space > 0 ? text[(space + 1)..].Trim() : null;
+                if (string.IsNullOrWhiteSpace(author)) author = null;
+            }
+
+            var count = facts.QuerySelectorAll("span[title]")
+                .Select(e => DownloadsTitle().Match(e.GetAttribute("title") ?? ""))
+                .FirstOrDefault(m => m.Success);
+            if (count is not null && long.TryParse(count.Groups[1].Value.Replace(",", "").Replace(".", "").Replace("\u00a0", ""),
+                    NumberStyles.None, CultureInfo.InvariantCulture, out var n))
+            {
+                downloads = n;
+            }
+
+            updated = ReadTimeAttribute(facts.QuerySelector("time"));
+        }
+
+        var badges = scope.QuerySelectorAll(".badge-version").Where(Mine).ToList();
+        var spt = badges.Select(b => SptNumber().Match(b.TextContent)).FirstOrDefault(m => m.Success)?.Value;
+
+        var isDependency = scope.QuerySelectorAll("[data-flux-badge]")
+            .Where(Mine)
+            .Any(b => (b.GetAttribute("class") ?? "").Contains("zinc", StringComparison.Ordinal)
+                      && b.Closest("[data-flux-tooltip]") is null);
+
+        var dependencies = new List<SpModCardDependency>();
+
+        foreach (var tip in scope.QuerySelectorAll("[data-flux-tooltip-content]").Where(Mine))
+        {
+            foreach (var line in tip.QuerySelectorAll("div").Where(d => d.Children.Any(c => c.LocalName == "svg" || c.ClassList.Contains("sr-only"))))
+            {
+                var name = line.Children
+                    .Where(c => c.LocalName == "span" && !c.ClassList.Contains("sr-only"))
+                    .Select(Text)
+                    .LastOrDefault(t => t is not null);
+                if (name is null) continue;
+
+                var icon = line.QuerySelector("svg")?.GetAttribute("class") ?? "";
+                var label = Text(line.QuerySelector(".sr-only")) ?? "";
+
+                bool? onList = icon.Contains("emerald", StringComparison.Ordinal) || icon.Contains("green", StringComparison.Ordinal)
+                    ? true
+                    : icon.Contains("red", StringComparison.Ordinal)
+                        ? false
+                        : label.StartsWith("On list", StringComparison.OrdinalIgnoreCase)
+                            ? true
+                            : label.StartsWith("Missing", StringComparison.OrdinalIgnoreCase) ? false : null;
+
+                if (onList is { } known) dependencies.Add(new SpModCardDependency(name, known));
+            }
+        }
+
+        return new SpModCard(link, thumbnail, author, downloads, updated, spt, isDependency, dependencies);
+    }
+
+    private static DateTimeOffset? ReadTimeAttribute(IElement? time) =>
+        DateTimeOffset.TryParse(time?.GetAttribute("datetime"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var t)
+            ? t
+            : null;
 
     //
     // A card or row with no link is one of two placeholders. An opted-out one carries a title line

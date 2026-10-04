@@ -7380,4 +7380,38 @@ See Dependencies and Conflicts.</value>
     <value>sp-mod, forge, website, link, url, address, import, collection, mod list, page</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
+  <data name="SpModImport_BadgeSptFormat" xml:space="preserve">
+    <value>SPT {0}</value>
+    <comment>Badge on a mod's card in the sp-mod import window: the SPT version the mod's chosen version is for. {0} is a version number; SPT is the platform's name and stays as it is.</comment>
+  </data>
+  <data name="SpModImport_BadgeDependency" xml:space="preserve">
+    <value>Dependency</value>
+    <comment>Badge on a mod's card in the sp-mod import window: another mod on the list needs this one. Short - it sits in a small pill.</comment>
+  </data>
+  <data name="SpModImport_OpenModPage" xml:space="preserve">
+    <value>Open its page on sp-mod</value>
+    <comment>Tooltip of the open button on each mod's card in the sp-mod import window.</comment>
+  </data>
+  <data name="SpModImport_TipOnListFormat" xml:space="preserve">
+    <value>On the list: {0}</value>
+    <comment>First line of the tooltip on a card's dependencies badge. {0} is mod names, joined by Common_ListSeparator.</comment>
+  </data>
+  <data name="SpModImport_TipMissingFormat" xml:space="preserve">
+    <value>Missing: {0}</value>
+    <comment>Second line of the tooltip on a card's dependencies badge: dependencies that nothing ticked covers. {0} is mod names, joined by Common_ListSeparator.</comment>
+  </data>
+  <data name="SpModImport_BadgeMissing_one" xml:space="preserve">
+    <value>1 missing dependency</value>
+    <comment>Red badge on a mod's card in the sp-mod import window: how many of its dependencies nothing ticked covers. {0} the count.</comment>
+  </data>
+  <data name="SpModImport_BadgeMissing_other" xml:space="preserve">
+    <value>{0} missing dependencies</value>
+  </data>
+  <data name="SpModImport_BadgeSatisfied_one" xml:space="preserve">
+    <value>1 dependency satisfied</value>
+    <comment>Green badge on a mod's card in the sp-mod import window: all of its dependencies are on the list. {0} the count.</comment>
+  </data>
+  <data name="SpModImport_BadgeSatisfied_other" xml:space="preserve">
+    <value>{0} dependencies satisfied</value>
+  </data>
 </root>
