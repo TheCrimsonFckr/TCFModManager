@@ -380,6 +380,11 @@ public partial class InstalledViewModel : LocalizedViewModel
     // Whether this page has scanned at least once - see the UpdatesFound subscription below.
     private bool _hasScanned;
 
+    public bool HasScanned => _hasScanned;
+
+    // InstallFingerprint as of the last scan - see RefreshOnReturnAsync.
+    private string? _fingerprint;
+
     public InstalledViewModel()
     {
         var settings = new SettingsService().Load();
@@ -436,6 +441,32 @@ public partial class InstalledViewModel : LocalizedViewModel
             if (!_hasScanned || ScanCommand.IsRunning) return;
             await ScanCommand.ExecuteAsync(null);
         };
+    }
+
+    //
+    // A return visit to the page. Rescanning replaces every card and rebuilds the view, which is
+    // the expensive part, so it is skipped when nothing the page reads has changed since the last
+    // scan. The Rescan button still always rescans.
+    //
+    public async Task RefreshOnReturnAsync()
+    {
+        if (ScanCommand.IsRunning) return;
+
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        if (_fingerprint is { } last && !string.IsNullOrWhiteSpace(installPath))
+        {
+            var catalog = AppServices.ModCache.AllMods;
+            var addons = AppServices.Addons.AllAddons;
+            var sptVersion = AppServices.SptEnvironment.InstalledVersion;
+
+            var now = await Task.Run(() => InstallFingerprint.Compute(installPath, catalog, addons, sptVersion));
+            if (now == last) return;
+
+            AppLog.Debug("Installed", "install changed since the last scan - rescanning");
+        }
+
+        if (ScanCommand.IsRunning) return;
+        await ScanCommand.ExecuteAsync(null);
     }
 
     private UpdateFilterItem UpdatesAvailableFilter() =>
@@ -767,6 +798,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         if (string.IsNullOrWhiteSpace(installPath))
         {
             _all = [];
+            _fingerprint = null;
             ApplyFilter();
             RefreshActiveView(CurrentPage);
             StatusMessage = AppMessages.NoSptInstallFolder;
@@ -794,7 +826,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             // The whole scan-and-match pass runs off the UI thread. Matching a large install
             // against a full catalog is the slower half of the two, and doing it inline is what
             // made navigating to this page hang.
-            var (scanned, cards, dependencies, downloads, conflicts) = await Task.Run(() =>
+            var (scanned, cards, dependencies, downloads, conflicts, fingerprint) = await Task.Run(() =>
             {
                 var found = InstalledModScanner.Scan(installPath);
 
@@ -804,9 +836,17 @@ public partial class InstalledViewModel : LocalizedViewModel
 
                 // Built off the same scan the cards came from, so every link points at an entry
                 // some card owns.
-                return (found, built, ModDependencyGraph.Build(found), MatchDownloads(found, installPath, installRecords),
-                    ModConflicts.Find(built));
+                var dependencyGraph = ModDependencyGraph.Build(found);
+                var pendingDownloads = MatchDownloads(found, installPath, installRecords);
+                var foundConflicts = ModConflicts.Find(built);
+
+                // Taken last, after MatchDownloads, which can itself update the download ledger.
+                var stamp = InstallFingerprint.Compute(installPath, catalog, addons, sptVersion);
+
+                return (found, built, dependencyGraph, pendingDownloads, foundConflicts, stamp);
             });
+
+            _fingerprint = fingerprint;
 
             // What was open in each view, keyed the same way group assignments are, so the sets
             // survive every card object being replaced. Captured before _all is reassigned, and

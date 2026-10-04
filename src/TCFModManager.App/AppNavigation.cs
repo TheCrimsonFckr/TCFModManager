@@ -61,6 +61,15 @@ internal static class AppNavigation
     // Any page by type - the Open button on a Help topic.
     public static void Navigate(Type page) => _navigation?.Navigate(page);
 
+    //
+    // Completes once the sidebar's page transition has had time to finish. A page that refreshes on
+    // every visit awaits this first, so its refresh lands on a page that has stopped moving instead
+    // of stalling the animation. The transition starts before the page's Loaded, so waiting the
+    // full duration from Loaded is a little longer than needed, never shorter.
+    //
+    public static Task AfterTransitionAsync() =>
+        Task.Delay((_navigation?.TransitionDuration ?? 200) + 50);
+
     // Help at one section - Getting started from the no-install banner, for one - or at one topic
     // in it, for a notice that has an answer.
     public static void ShowHelp(string sectionId, string? topicId = null)

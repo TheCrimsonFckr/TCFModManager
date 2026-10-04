@@ -432,8 +432,19 @@ public sealed partial class FootprintViewModel : LocalizedViewModel
         try
         {
             var results = await _footprints.ReadAsync(force);
-            _all = [.. results.Select(r => new ModFootprintRowViewModel(r))];
-            ApplySort();
+
+            //
+            // Rebuilding the rows is what costs - every row's template is realized again - so a
+            // visit that finds the same mods with the same stamps keeps the rows it has, along with
+            // whatever was expanded. Rescan always rebuilds.
+            //
+            var signature = SignatureOf(results);
+            if (force || signature != _signature)
+            {
+                _all = [.. results.Select(r => new ModFootprintRowViewModel(r))];
+                ApplySort();
+                _signature = signature;
+            }
 
             Status = _all.Count == 0
                 ? Strings.Footprint_StatusNone
@@ -447,6 +458,14 @@ public sealed partial class FootprintViewModel : LocalizedViewModel
 
     [RelayCommand]
     private Task Rescan() => RefreshAsync(force: true);
+
+    // The rows as last built - see RefreshAsync.
+    private string? _signature;
+
+    // Stamp is what the footprint cache itself trusts to say a mod's files are unchanged.
+    private static string SignatureOf(IReadOnlyList<ModFootprintResult> results) =>
+        string.Join('\n', results.Select(r =>
+            $"{r.Name}|{r.Version}|{r.IsDisabled}|{r.Footprint.FolderKey}|{r.Footprint.Stamp}"));
 
     private void ApplySort()
     {

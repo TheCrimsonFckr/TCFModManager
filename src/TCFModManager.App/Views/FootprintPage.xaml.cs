@@ -14,10 +14,22 @@ public partial class FootprintPage : Page
         DataContext = ViewModel;
     }
 
+    private bool _visited;
+
     //
     // Refreshes on every visit rather than once, so a mod installed since the last visit appears -
     // off the cache, so the usual cost is a directory walk rather than re-reading every assembly.
+    // A return visit waits for the page transition to finish first, so the refresh doesn't stall it.
     //
-    private async void FootprintPage_Loaded(object sender, RoutedEventArgs e) =>
+    private async void FootprintPage_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (_visited)
+        {
+            await AppNavigation.AfterTransitionAsync();
+            if (!IsLoaded) return;
+        }
+
+        _visited = true;
         await ViewModel.RefreshAsync();
+    }
 }

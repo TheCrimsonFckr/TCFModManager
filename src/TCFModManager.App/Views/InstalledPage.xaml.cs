@@ -66,10 +66,25 @@ public partial class InstalledPage : Page
         GroupsScrollViewer.AddHandler(DropEvent, new DragEventHandler(GroupsScrollViewer_Drop), true);
     }
 
+    //
+    // The first visit scans straight away - there is nothing to show until it does. A return visit
+    // waits for the page transition to finish and then only rescans if the install has changed,
+    // since rebuilding every card is what stalled the animation.
+    //
     private async void InstalledPage_Loaded(object sender, RoutedEventArgs e)
     {
         ViewModel.UpdateLayoutForWidth(ResultsItems.ActualWidth);
-        await ViewModel.ScanCommand.ExecuteAsync(null);
+
+        if (!ViewModel.HasScanned)
+        {
+            await ViewModel.ScanCommand.ExecuteAsync(null);
+            return;
+        }
+
+        await AppNavigation.AfterTransitionAsync();
+        if (!IsLoaded) return;
+
+        await ViewModel.RefreshOnReturnAsync();
     }
 
     //
