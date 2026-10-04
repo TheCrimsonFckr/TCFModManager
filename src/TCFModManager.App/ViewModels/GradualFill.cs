@@ -26,12 +26,28 @@ public sealed class GradualFill<T>(int batchSize) where T : class
     // Bumped by every Apply, so a fill still in progress stops as soon as a newer one starts.
     private int _generation;
 
+    // True while batches are still being added.
+    private bool _filling;
+
     public void Apply(ObservableCollection<T> target, IReadOnlyList<T> wanted)
     {
         var generation = ++_generation;
 
+        //
+        // A second Apply landing mid-fill - the Installed scan re-applies its filter more than once
+        // in a row, for one - is not a reason to finish the job in one go. Bring what is already in
+        // the list in line with the start of the new list, and carry on in batches from there.
+        //
+        if (_filling && wanted.Count > target.Count)
+        {
+            ItemsSync.Apply(target, [.. wanted.Take(target.Count)]);
+            _ = ContinueAsync(target, wanted, generation, target.Count);
+            return;
+        }
+
         if (wanted.Count <= batchSize || Overlaps(target, wanted))
         {
+            _filling = false;
             ItemsSync.Apply(target, wanted);
             return;
         }
@@ -39,12 +55,13 @@ public sealed class GradualFill<T>(int batchSize) where T : class
         target.Clear();
         for (var i = 0; i < batchSize; i++) target.Add(wanted[i]);
 
-        _ = ContinueAsync(target, wanted, generation);
+        _ = ContinueAsync(target, wanted, generation, batchSize);
     }
 
-    private async Task ContinueAsync(ObservableCollection<T> target, IReadOnlyList<T> wanted, int generation)
+    private async Task ContinueAsync(
+        ObservableCollection<T> target, IReadOnlyList<T> wanted, int generation, int next)
     {
-        var next = batchSize;
+        _filling = true;
 
         while (next < wanted.Count)
         {
@@ -56,6 +73,8 @@ public sealed class GradualFill<T>(int batchSize) where T : class
             var end = Math.Min(next + batchSize, wanted.Count);
             for (; next < end; next++) target.Add(wanted[next]);
         }
+
+        _filling = false;
     }
 
     private static bool Overlaps(ObservableCollection<T> target, IReadOnlyList<T> wanted)

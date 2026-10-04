@@ -144,7 +144,8 @@ internal static class NavigationProbe
         public double? SinceClick { get; } = sinceClick;
         public double LastChange { get; set; } = start;
         public double? LayoutEnd { get; set; }
-        public double? LastFrame { get; set; }
+        // From the first change, so a freeze before the first frame after it counts as a gap too.
+        public double? LastFrame { get; set; } = start;
         public double WorstGap { get; set; }
     }
 
