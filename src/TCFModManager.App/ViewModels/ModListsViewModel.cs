@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -47,6 +48,9 @@ public sealed partial class ModListRowViewModel(
     //
     public bool IsFromServer => List.Origin == ModListOrigin.Server;
 
+    // Imported from an sp-mod Mod List page, so it has a page to be read again.
+    public bool IsFromSpMod => List.SpModSource is not null;
+
     //
     // The list THIS machine serves to its own clients. Badged because among a dozen personal lists
     // the one that other people are being handed is the one you must not edit carelessly.
@@ -81,6 +85,9 @@ public sealed partial class ModListRowViewModel(
 
             parts.Add(List.Origin switch
             {
+                ModListOrigin.Imported when List.SpModSource is not null => List.Source is null
+                    ? Strings.ModLists_DetailFromSpMod
+                    : Text(Strings.ModLists_DetailFromSpModFormat, List.Source),
                 ModListOrigin.Imported => List.Source is null
                     ? Strings.ModLists_DetailImported
                     : Text(Strings.ModLists_DetailFromFormat, List.Source),
@@ -356,6 +363,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(SelectionIsEditable))]
     [NotifyPropertyChangedFor(nameof(SelectionIsImported))]
     [NotifyPropertyChangedFor(nameof(SelectionIsFromServer))]
+    [NotifyPropertyChangedFor(nameof(SelectionIsFromSpMod))]
     [NotifyPropertyChangedFor(nameof(SelectionIsActive))]
     [NotifyPropertyChangedFor(nameof(SelectionDetail))]
     [NotifyPropertyChangedFor(nameof(ShowContents))]
@@ -368,6 +376,8 @@ public partial class ModListsViewModel : LocalizedViewModel
     [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
     [NotifyCanExecuteChangedFor(nameof(ForkCommand))]
     [NotifyCanExecuteChangedFor(nameof(RefreshFromServerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RefreshFromSpModCommand))]
+    [NotifyCanExecuteChangedFor(nameof(OpenOnSpModCommand))]
     [NotifyCanExecuteChangedFor(nameof(RenameCommand))]
     //
     // Both of these were missing, and a command whose CanExecute is never re-raised is evaluated
@@ -467,6 +477,8 @@ public partial class ModListsViewModel : LocalizedViewModel
     [NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
     [NotifyCanExecuteChangedFor(nameof(RevertCommand))]
     [NotifyCanExecuteChangedFor(nameof(RefreshFromServerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ImportFromSpModCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RefreshFromSpModCommand))]
     private bool _isBusy;
 
     public bool HasSelection => Selected is not null;
@@ -477,6 +489,8 @@ public partial class ModListsViewModel : LocalizedViewModel
 
     // A list a SERVER handed this install - the only kind there is anywhere to refresh it FROM.
     public bool SelectionIsFromServer => Selected?.IsFromServer == true;
+
+    public bool SelectionIsFromSpMod => Selected?.IsFromSpMod == true;
 
     public bool SelectionIsActive => Selected?.IsActive == true;
 
@@ -1637,6 +1651,57 @@ public partial class ModListsViewModel : LocalizedViewModel
     }
 
     private bool CanRefreshFromServer() => SelectionIsFromServer && !IsBusy;
+
+    //
+    // An sp-mod Mod List, read by its address and reviewed in its own window before anything is
+    // stored (OPEN-18). The window hands back the list folded into any copy already here; storing
+    // it is the same Add a file import uses, so a re-import replaces rather than duplicates.
+    //
+    [RelayCommand(CanExecute = nameof(CanUseSpMod))]
+    private void ImportFromSpMod() => StoreFromSpMod(SpModListImportWindow.Import());
+
+    [RelayCommand(CanExecute = nameof(CanRefreshFromSpMod))]
+    private void RefreshFromSpMod()
+    {
+        if (Selected is not { IsFromSpMod: true } row) return;
+
+        StoreFromSpMod(SpModListImportWindow.Refresh(row.List));
+    }
+
+    [RelayCommand(CanExecute = nameof(CanOpenOnSpMod))]
+    private void OpenOnSpMod()
+    {
+        if (Selected?.List.SpModSource is not { } source) return;
+
+        try
+        {
+            Process.Start(new ProcessStartInfo(source.Url) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("ModLists", $"couldn't open {source.Url}: {ex.Message}");
+        }
+    }
+
+    private bool CanUseSpMod() => !IsBusy;
+
+    private bool CanRefreshFromSpMod() => SelectionIsFromSpMod && !IsBusy;
+
+    private bool CanOpenOnSpMod() => SelectionIsFromSpMod;
+
+    private void StoreFromSpMod(SpModListUpdate? update)
+    {
+        if (update is null) return;
+
+        var stored = AppServices.ModLists.Add(update.List);
+        Refresh(stored.Id);
+
+        StatusMessage = update.IsNew
+            ? Strings.ModLists_SpModImported(stored.Entries.Count, stored.Entries.Count, stored.Name)
+            : update.HasChanges
+                ? Text(Strings.ModLists_SpModUpdatedFormat, stored.Name, update.Previous!.Revision, stored.Revision)
+                : Text(Strings.ModLists_SpModUnchangedFormat, stored.Name);
+    }
 
     //
     // What the refresh actually brought back, named rather than counted - the whole reason for

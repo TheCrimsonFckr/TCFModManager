@@ -41,8 +41,11 @@ public sealed class SpModListApi(SpModApiClient api) : ISpModListApi
     // sp-mod's page size cap.
     private const int VersionBatch = 50;
 
-    private const int MaxRetries = 2;
-    private static readonly TimeSpan MaxWait = TimeSpan.FromSeconds(30);
+    private const int MaxRetries = 3;
+
+    // sp-mod's Retry-After is honoured up to this; the window's Cancel is the way out of a long one.
+    private static readonly TimeSpan MaxWait = TimeSpan.FromSeconds(90);
+    private static readonly TimeSpan DefaultWait = TimeSpan.FromSeconds(20);
 
     public async Task<IReadOnlyDictionary<int, IReadOnlyList<SpModCandidateVersion>>> ModVersionsAsync(
         IReadOnlyList<int> modIds, CancellationToken ct)
@@ -121,7 +124,9 @@ public sealed class SpModListApi(SpModApiClient api) : ISpModListApi
             }
             catch (SpModApiRateLimitedException ex) when (attempt < MaxRetries)
             {
-                var wait = ex.RetryAfter is { } after && after > TimeSpan.Zero && after < MaxWait ? after : MaxWait;
+                var wait = ex.RetryAfter is { } after && after > TimeSpan.Zero
+                    ? (after < MaxWait ? after : MaxWait)
+                    : DefaultWait;
                 AppLog.Warn("SpModListResolver", $"rate limited by sp-mod, waiting {wait.TotalSeconds:0}s");
                 await Task.Delay(wait, ct).ConfigureAwait(false);
             }
@@ -281,6 +286,14 @@ public static class SpModListResolver
 
             var newModVersion = new Dictionary<int, string>();
 
+            //
+            // The batch embeds only each mod's most recent versions, up to a cap sp-mod sets. A mod
+            // with fewer than the most any mod came back with has had its whole history returned, so
+            // asking for "all" of it again would only spend requests - on a 250-entry list that is
+            // most of the lookups, and sp-mod allows 300 a minute.
+            //
+            var embedCap = modVersions.Count == 0 ? 0 : modVersions.Values.Max(v => v.Count);
+
             for (var i = 0; i < entries.Count; i++)
             {
                 var e = entries[i];
@@ -297,7 +310,7 @@ public static class SpModListResolver
                     var pick = Newest(candidates, c => SptVersionMatcher.IsSatisfiedBy(c.Constraint, targetSpt) == true);
 
                     // The batch carries only recent versions. An older one may still fit the target.
-                    if (pick is null && candidates.Count > 0)
+                    if (pick is null && candidates.Count > 0 && candidates.Count >= embedCap)
                     {
                         pick = Newest(await api.AllModVersionsAsync(id, ct).ConfigureAwait(false),
                             c => SptVersionMatcher.IsSatisfiedBy(c.Constraint, targetSpt) == true);

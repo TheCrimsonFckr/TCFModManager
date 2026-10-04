@@ -25,7 +25,8 @@ public enum SpModListItemKind
 //
 // ParentModId is set on an addon when the page groups it under a mod. ParentOnList is false when
 // that card is a "detached" one - sp-mod draws an addon whose parent isn't on the list under its
-// parent anyway, and that parent is not a list entry.
+// parent anyway, and that parent is not a list entry. ParentName and ParentVersion are what that
+// card shows, so the parent can be offered without asking sp-mod again.
 //
 public sealed record SpModListItem(
     SpModListItemKind Kind,
@@ -34,7 +35,9 @@ public sealed record SpModListItem(
     string? Version,
     int? ParentModId = null,
     bool ParentOnList = true,
-    bool NotCompatible = false);
+    bool NotCompatible = false,
+    string? ParentName = null,
+    string? ParentVersion = null);
 
 public enum SpModListReadPass
 {
@@ -121,13 +124,14 @@ public sealed class SpModListPage
         var excluded = new HashSet<string>(choices.Excluded, StringComparer.OrdinalIgnoreCase);
 
         var fromPage = Items
-            .Where(i => !excluded.Contains(SpModListSource.RefFor(i.Kind == SpModListItemKind.Addon, i.Id)))
-            .Select(i => new ModListEntry
+            .Select(i => (Item: i, Ref: SpModListSource.RefFor(i.Kind == SpModListItemKind.Addon, i.Id)))
+            .Where(x => !excluded.Contains(x.Ref))
+            .Select(x => choices.Replace?.GetValueOrDefault(x.Ref) ?? new ModListEntry
             {
-                Name = i.Name,
-                ModId = i.Id,
-                IsAddon = i.Kind == SpModListItemKind.Addon,
-                Version = i.Version,
+                Name = x.Item.Name,
+                ModId = x.Item.Id,
+                IsAddon = x.Item.Kind == SpModListItemKind.Addon,
+                Version = x.Item.Version,
             })
             .ToList();
 
@@ -177,12 +181,16 @@ public sealed class SpModListPage
 // page's own. Added holds whole entries, because a missing parent or a dependency is not on the
 // page and has to bring its own name and version.
 //
+// Replace swaps a page item's entry for another, keyed by its ref - what a retarget produces. It is
+// not stored: a refresh retargets again rather than trusting versions picked on an earlier day.
+//
 public sealed record SpModListChoices(
     IReadOnlyCollection<string> Excluded,
     IReadOnlyList<ModListEntry> Added,
     bool Retargeted = false,
     bool DependenciesAdded = false,
-    string? SptVersion = null)
+    string? SptVersion = null,
+    IReadOnlyDictionary<string, ModListEntry>? Replace = null)
 {
     public static SpModListChoices None { get; } = new([], []);
 
@@ -509,10 +517,14 @@ public static partial class SpModListImport
                                  && !addonRows.Any(r => r.Contains(a)));
 
         int? parentId = null;
+        string? parentName = null;
+        string? parentVersion = null;
 
         if (modLink is not null && ItemKind(modLink) is (_, var modId))
         {
             parentId = modId;
+            parentName = Text(modLink);
+            parentVersion = VersionAfter(modLink);
 
             if (!detached)
             {
@@ -546,7 +558,9 @@ public static partial class SpModListImport
                 Text(link)!,
                 VersionAfter(link),
                 ParentModId: parentId,
-                ParentOnList: !detached));
+                ParentOnList: !detached,
+                ParentName: detached ? parentName : null,
+                ParentVersion: detached ? parentVersion : null));
         }
     }
 

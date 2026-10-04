@@ -1919,4 +1919,87 @@ internal static class Strings
     internal static string Filter_HasConflictsToolTip => LocalizationService.Get("Filter_HasConflictsToolTip");
     internal static string Play_ConflictsHint => LocalizationService.Get("Play_ConflictsHint");
     internal static string Conflicts_KeepBlockedFormat => LocalizationService.Get("Conflicts_KeepBlockedFormat");
+    internal static string SpModImport_Title => LocalizationService.Get("SpModImport_Title");
+    internal static string SpModImport_RefreshTitleFormat => LocalizationService.Get("SpModImport_RefreshTitleFormat");
+    internal static string SpModImport_LinkHeader => LocalizationService.Get("SpModImport_LinkHeader");
+    internal static string SpModImport_LinkDescription => LocalizationService.Get("SpModImport_LinkDescription");
+    internal static string SpModImport_LinkPlaceholder => LocalizationService.Get("SpModImport_LinkPlaceholder");
+    internal static string SpModImport_FindLists => LocalizationService.Get("SpModImport_FindLists");
+    internal static string SpModImport_FindListsToolTip => LocalizationService.Get("SpModImport_FindListsToolTip");
+    internal static string SpModImport_OpenOnSpMod => LocalizationService.Get("SpModImport_OpenOnSpMod");
+    internal static string SpModImport_Read => LocalizationService.Get("SpModImport_Read");
+    internal static string SpModImport_Create => LocalizationService.Get("SpModImport_Create");
+    internal static string SpModImport_Update => LocalizationService.Get("SpModImport_Update");
+    internal static string SpModImport_NotAListUrl => LocalizationService.Get("SpModImport_NotAListUrl");
+    internal static string SpModImport_Reading => LocalizationService.Get("SpModImport_Reading");
+    internal static string SpModImport_RetargetingFormat => LocalizationService.Get("SpModImport_RetargetingFormat");
+    internal static string SpModImport_RetargetingProgressFormat => LocalizationService.Get("SpModImport_RetargetingProgressFormat");
+    internal static string SpModImport_CheckingDependencies => LocalizationService.Get("SpModImport_CheckingDependencies");
+    internal static string SpModImport_CheckingDependenciesProgressFormat => LocalizationService.Get("SpModImport_CheckingDependenciesProgressFormat");
+    internal static string SpModImport_FallbackNameFormat => LocalizationService.Get("SpModImport_FallbackNameFormat");
+    internal static string SpModImport_FailedNetworkFormat => LocalizationService.Get("SpModImport_FailedNetworkFormat");
+    internal static string SpModImport_FailedNotFound => LocalizationService.Get("SpModImport_FailedNotFound");
+    internal static string SpModImport_FailedStatusFormat => LocalizationService.Get("SpModImport_FailedStatusFormat");
+    internal static string SpModImport_FailedBlocked => LocalizationService.Get("SpModImport_FailedBlocked");
+    internal static string SpModImport_FailedNotAListPage => LocalizationService.Get("SpModImport_FailedNotAListPage");
+    internal static string SpModImport_ByFormat => LocalizationService.Get("SpModImport_ByFormat");
+    internal static string SpModImport_UpdatedFormat => LocalizationService.Get("SpModImport_UpdatedFormat");
+    internal static string SpModImport_TargetFormat => LocalizationService.Get("SpModImport_TargetFormat");
+    internal static string SpModImport_NoTarget => LocalizationService.Get("SpModImport_NoTarget");
+    internal static string SpModImport_NoticeLayoutChanged => LocalizationService.Get("SpModImport_NoticeLayoutChanged");
+    internal static string SpModImport_NoticeModsShortFormat => LocalizationService.Get("SpModImport_NoticeModsShortFormat");
+    internal static string SpModImport_NoticeAddonsShortFormat => LocalizationService.Get("SpModImport_NoticeAddonsShortFormat");
+    internal static string SpModImport_DependenciesFailedFormat => LocalizationService.Get("SpModImport_DependenciesFailedFormat");
+    internal static string SpModImport_DependenciesUnknownSptFormat => LocalizationService.Get("SpModImport_DependenciesUnknownSptFormat");
+    internal static string SpModImport_SptMismatchFormat => LocalizationService.Get("SpModImport_SptMismatchFormat");
+    internal static string SpModImport_SptNoTargetFormat => LocalizationService.Get("SpModImport_SptNoTargetFormat");
+    internal static string SpModImport_UseVersionsForFormat => LocalizationService.Get("SpModImport_UseVersionsForFormat");
+    internal static string SpModImport_RetargetFailedFormat => LocalizationService.Get("SpModImport_RetargetFailedFormat");
+    internal static string SpModImport_SectionCountFormat => LocalizationService.Get("SpModImport_SectionCountFormat");
+    internal static string SpModImport_SectionMissingParents => LocalizationService.Get("SpModImport_SectionMissingParents");
+    internal static string SpModImport_MissingParentsNote => LocalizationService.Get("SpModImport_MissingParentsNote");
+    internal static string SpModImport_SectionMods => LocalizationService.Get("SpModImport_SectionMods");
+    internal static string SpModImport_SectionAddons => LocalizationService.Get("SpModImport_SectionAddons");
+    internal static string SpModImport_SectionDependencies => LocalizationService.Get("SpModImport_SectionDependencies");
+    internal static string SpModImport_DependenciesNote => LocalizationService.Get("SpModImport_DependenciesNote");
+    internal static string SpModImport_SectionNoVersion => LocalizationService.Get("SpModImport_SectionNoVersion");
+    internal static string SpModImport_NoVersionNoteFormat => LocalizationService.Get("SpModImport_NoVersionNoteFormat");
+    internal static string SpModImport_SectionUnaddable => LocalizationService.Get("SpModImport_SectionUnaddable");
+    internal static string SpModImport_UnaddableNoteFormat => LocalizationService.Get("SpModImport_UnaddableNoteFormat");
+    internal static string SpModImport_SectionRemoved => LocalizationService.Get("SpModImport_SectionRemoved");
+    internal static string SpModImport_RemovedNote => LocalizationService.Get("SpModImport_RemovedNote");
+    internal static string SpModImport_FactNew => LocalizationService.Get("SpModImport_FactNew");
+    internal static string SpModImport_FactNoVersion => LocalizationService.Get("SpModImport_FactNoVersion");
+    internal static string SpModImport_FactRetargetedFormat => LocalizationService.Get("SpModImport_FactRetargetedFormat");
+    internal static string SpModImport_FactWasFormat => LocalizationService.Get("SpModImport_FactWasFormat");
+    internal static string SpModImport_FactAddonForFormat => LocalizationService.Get("SpModImport_FactAddonForFormat");
+    internal static string SpModImport_FactNeededByFormat => LocalizationService.Get("SpModImport_FactNeededByFormat");
+    internal static string SpModImport_FactConflict => LocalizationService.Get("SpModImport_FactConflict");
+    internal static string SpModImport_FactNotCompatible => LocalizationService.Get("SpModImport_FactNotCompatible");
+    internal static string SpModImport_FactParentNotOnList => LocalizationService.Get("SpModImport_FactParentNotOnList");
+    internal static string SpModImport_TickedFormat => LocalizationService.Get("SpModImport_TickedFormat");
+    internal static string SpModImport_NoChanges => LocalizationService.Get("SpModImport_NoChanges");
+    internal static string ModLists_ImportFromSpMod => LocalizationService.Get("ModLists_ImportFromSpMod");
+    internal static string ModLists_ImportFromSpModToolTip => LocalizationService.Get("ModLists_ImportFromSpModToolTip");
+    internal static string ModLists_RefreshFromSpMod => LocalizationService.Get("ModLists_RefreshFromSpMod");
+    internal static string ModLists_RefreshFromSpModToolTip => LocalizationService.Get("ModLists_RefreshFromSpModToolTip");
+    internal static string ModLists_OpenOnSpMod => LocalizationService.Get("ModLists_OpenOnSpMod");
+    internal static string ModLists_OpenOnSpModToolTip => LocalizationService.Get("ModLists_OpenOnSpModToolTip");
+    internal static string ModLists_DetailFromSpModFormat => LocalizationService.Get("ModLists_DetailFromSpModFormat");
+    internal static string ModLists_DetailFromSpMod => LocalizationService.Get("ModLists_DetailFromSpMod");
+    internal static string ModLists_SpModUpdatedFormat => LocalizationService.Get("ModLists_SpModUpdatedFormat");
+    internal static string ModLists_SpModUnchangedFormat => LocalizationService.Get("ModLists_SpModUnchangedFormat");
+    internal static string SpModImport_CountMods(int count, params object?[] values) =>
+        LocalizationService.Plural("SpModImport_CountMods", count, values);
+    internal static string SpModImport_CountAddons(int count, params object?[] values) =>
+        LocalizationService.Plural("SpModImport_CountAddons", count, values);
+    internal static string SpModImport_NoticeOptedOut(int count, params object?[] values) =>
+        LocalizationService.Plural("SpModImport_NoticeOptedOut", count, values);
+    internal static string SpModImport_NoticeUnavailable(int count, params object?[] values) =>
+        LocalizationService.Plural("SpModImport_NoticeUnavailable", count, values);
+    internal static string SpModImport_NoticeNoVersion(int count, params object?[] values) =>
+        LocalizationService.Plural("SpModImport_NoticeNoVersion", count, values);
+    internal static string ModLists_SpModImported(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_SpModImported", count, values);
+    internal static string SpModImport_RetargetBlockedFormat => LocalizationService.Get("SpModImport_RetargetBlockedFormat");
 }

@@ -224,6 +224,15 @@
                             Content="{loc:Str ModLists_Import}"
                             Command="{Binding ImportCommand}" />
                     </Grid>
+
+                    <ui:Button
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        ToolTip="{loc:Str ModLists_ImportFromSpModToolTip}"
+                        Icon="{ui:SymbolIcon Globe24}"
+                        Content="{loc:Str ModLists_ImportFromSpMod}"
+                        Command="{Binding ImportFromSpModCommand}" />
                 </StackPanel>
             </ui:Card>
 
@@ -465,8 +474,11 @@
                     Margin="0,16,0,0"
                     Background="{DynamicResource DividerStrokeColorDefaultBrush}" />
 
-                <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                <!-- A WrapPanel: an sp-mod list shows five of these, and fixed labels can't shorten.
+                     Gaps sit on each button's trailing edge so a wrapped row starts flush. -->
+                <WrapPanel Margin="0,12,0,0">
                     <ui:Button
+                        Margin="0,0,8,4"
                         Appearance="Transparent"
                         Icon="{ui:SymbolIcon ArrowExportLtr24}"
                         Content="{loc:Str ModLists_Export}"
@@ -476,7 +488,7 @@
                     <!-- Only a served list has anywhere to be refreshed FROM, so it is the only
                          one that shows this. -->
                     <ui:Button
-                        Margin="8,0,0,0"
+                        Margin="0,0,8,4"
                         Appearance="Transparent"
                         Icon="{ui:SymbolIcon ArrowSync24}"
                         Content="{loc:Str ModLists_RefreshFromServer}"
@@ -485,7 +497,25 @@
                         Command="{Binding RefreshFromServerCommand}" />
 
                     <ui:Button
-                        Margin="8,0,0,0"
+                        Margin="0,0,8,4"
+                        Appearance="Transparent"
+                        Icon="{ui:SymbolIcon ArrowSync24}"
+                        Content="{loc:Str ModLists_RefreshFromSpMod}"
+                        ToolTip="{loc:Str ModLists_RefreshFromSpModToolTip}"
+                        Visibility="{Binding SelectionIsFromSpMod, Converter={StaticResource BoolToVis}}"
+                        Command="{Binding RefreshFromSpModCommand}" />
+
+                    <ui:Button
+                        Margin="0,0,8,4"
+                        Appearance="Transparent"
+                        Icon="{ui:SymbolIcon Open24}"
+                        Content="{loc:Str ModLists_OpenOnSpMod}"
+                        ToolTip="{loc:Str ModLists_OpenOnSpModToolTip}"
+                        Visibility="{Binding SelectionIsFromSpMod, Converter={StaticResource BoolToVis}}"
+                        Command="{Binding OpenOnSpModCommand}" />
+
+                    <ui:Button
+                        Margin="0,0,8,4"
                         Appearance="Transparent"
                         Icon="{ui:SymbolIcon Branch24}"
                         Content="{loc:Str ModLists_MakeCopy}"
@@ -494,7 +524,7 @@
                         Command="{Binding ForkCommand}" />
 
                     <ui:Button
-                        Margin="8,0,0,0"
+                        Margin="0,0,8,4"
                         Appearance="Transparent"
                         Icon="{ui:SymbolIcon ArrowUndo24}"
                         Content="{loc:Str ModLists_StopFollowing}"
@@ -503,12 +533,12 @@
                         Command="{Binding StopFollowingCommand}" />
 
                     <ui:Button
-                        Margin="8,0,0,0"
+                        Margin="0,0,8,4"
                         Appearance="Transparent"
                         Content="{loc:Str ModLists_Delete}"
                         ToolTip="{loc:Str ModLists_DeleteToolTip}"
                         Command="{Binding DeleteCommand}" />
-                </StackPanel>
+                </WrapPanel>
             </StackPanel>
 
             <!-- What just happened, directly under the buttons that cause it rather than in a

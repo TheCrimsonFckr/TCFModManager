@@ -122,6 +122,19 @@ public class SpModListResolverTests
     }
 
     [Fact]
+    public async Task OnlyAModCutOffAtTheEmbedCapIsAskedForMore()
+    {
+        var api = new FakeApi();
+        api.Recent[1] = [.. Enumerable.Range(1, 10).Select(i => V(i, $"3.{i}.0", "~4.1.0"))];
+        api.Recent[2] = [V(20, "1.0.0", "~4.1.0"), V(21, "0.9.0", "~4.1.0")];
+
+        var result = await SpModListResolver.RetargetAsync([Mod(1, "3.1.0"), Mod(2, "1.0.0")], NoParents, "4.0.13", api);
+
+        Assert.Equal(["mods 1,2", "all 1"], api.Calls);
+        Assert.All(result.Rows, r => Assert.Equal(SpModRetargetOutcome.NoVersion, r.Outcome));
+    }
+
+    [Fact]
     public async Task ARecentFitNeedsNoSecondRequest()
     {
         var api = new FakeApi();

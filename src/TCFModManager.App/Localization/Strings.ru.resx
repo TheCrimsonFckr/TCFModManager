@@ -6169,4 +6169,271 @@
   <data name="Conflicts_KeepBlockedFormat" xml:space="preserve">
     <value>У {0} есть и файлы, которые не дублируются, а установлен он этим приложением, поэтому удалить его можно только целиком - эти файлы тоже уйдут. Удалите его на странице «Установленные», где «Удалить» показывает всё, что будет удалено.</value>
   </data>
+  <data name="SpModImport_Title" xml:space="preserve">
+    <value>Импорт с sp-mod</value>
+  </data>
+  <data name="SpModImport_RefreshTitleFormat" xml:space="preserve">
+    <value>Обновить «{0}» с sp-mod</value>
+  </data>
+  <data name="SpModImport_LinkHeader" xml:space="preserve">
+    <value>Адрес списка</value>
+  </data>
+  <data name="SpModImport_LinkDescription" xml:space="preserve">
+    <value>Вставьте адрес списка модов на sp-mod. Подходят и публичные списки, и ссылки для общего доступа. Вы увидите всё его содержимое до того, как что-либо будет сохранено.</value>
+  </data>
+  <data name="SpModImport_LinkPlaceholder" xml:space="preserve">
+    <value>https://sp-mod.com/list/12345/name</value>
+  </data>
+  <data name="SpModImport_FindLists" xml:space="preserve">
+    <value>Найти списки на sp-mod</value>
+  </data>
+  <data name="SpModImport_FindListsToolTip" xml:space="preserve">
+    <value>Открывает страницу списков sp-mod в браузере, где можно искать и фильтровать по версии SPT. Скопируйте адрес списка и вернитесь - он будет взят из буфера обмена.</value>
+  </data>
+  <data name="SpModImport_OpenOnSpMod" xml:space="preserve">
+    <value>Открыть на sp-mod</value>
+  </data>
+  <data name="SpModImport_Read" xml:space="preserve">
+    <value>Прочитать список</value>
+  </data>
+  <data name="SpModImport_Create" xml:space="preserve">
+    <value>Создать список</value>
+  </data>
+  <data name="SpModImport_Update" xml:space="preserve">
+    <value>Обновить список</value>
+  </data>
+  <data name="SpModImport_NotAListUrl" xml:space="preserve">
+    <value>Это не адрес списка sp-mod. Он должен выглядеть так: https://sp-mod.com/list/12345/name.</value>
+  </data>
+  <data name="SpModImport_Reading" xml:space="preserve">
+    <value>Чтение списка с sp-mod...</value>
+  </data>
+  <data name="SpModImport_RetargetingFormat" xml:space="preserve">
+    <value>Поиск версий для SPT {0}...</value>
+  </data>
+  <data name="SpModImport_RetargetingProgressFormat" xml:space="preserve">
+    <value>Поиск версий для SPT {0}... {1} из {2}</value>
+  </data>
+  <data name="SpModImport_CheckingDependencies" xml:space="preserve">
+    <value>Проверка зависимостей...</value>
+  </data>
+  <data name="SpModImport_CheckingDependenciesProgressFormat" xml:space="preserve">
+    <value>Проверка зависимостей... {0} из {1}</value>
+  </data>
+  <data name="SpModImport_FallbackNameFormat" xml:space="preserve">
+    <value>Список sp-mod {0}</value>
+  </data>
+  <data name="SpModImport_FailedNetworkFormat" xml:space="preserve">
+    <value>Не удалось связаться с sp-mod ({0}).</value>
+  </data>
+  <data name="SpModImport_FailedNotFound" xml:space="preserve">
+    <value>На sp-mod нет списка по этому адресу, или он закрытый. Закрытый список можно импортировать по ссылке для общего доступа.</value>
+  </data>
+  <data name="SpModImport_FailedStatusFormat" xml:space="preserve">
+    <value>sp-mod ответил ошибкой ({0}). Попробуйте ещё раз чуть позже.</value>
+  </data>
+  <data name="SpModImport_FailedBlocked" xml:space="preserve">
+    <value>sp-mod прислал проверку на бота вместо списка. Откройте список один раз в браузере и попробуйте снова.</value>
+  </data>
+  <data name="SpModImport_FailedNotAListPage" xml:space="preserve">
+    <value>Эта страница - не список модов.</value>
+  </data>
+  <data name="SpModImport_ByFormat" xml:space="preserve">
+    <value>автор {0} на sp-mod</value>
+  </data>
+  <data name="SpModImport_UpdatedFormat" xml:space="preserve">
+    <value>обновлён {0}</value>
+  </data>
+  <data name="SpModImport_TargetFormat" xml:space="preserve">
+    <value>для SPT {0}</value>
+  </data>
+  <data name="SpModImport_NoTarget" xml:space="preserve">
+    <value>без целевой версии SPT</value>
+  </data>
+  <data name="SpModImport_NoticeLayoutChanged" xml:space="preserve">
+    <value>Вёрстка страниц sp-mod изменилась, поэтому список прочитан упрощённым способом и может быть неполным.</value>
+  </data>
+  <data name="SpModImport_NoticeModsShortFormat" xml:space="preserve">
+    <value>На странице указано модов: {0}, но прочитать удалось только {1}.</value>
+  </data>
+  <data name="SpModImport_NoticeAddonsShortFormat" xml:space="preserve">
+    <value>На странице указано аддонов: {0}, но прочитать удалось только {1}.</value>
+  </data>
+  <data name="SpModImport_DependenciesFailedFormat" xml:space="preserve">
+    <value>Не удалось проверить зависимости ({0}).</value>
+  </data>
+  <data name="SpModImport_DependenciesUnknownSptFormat" xml:space="preserve">
+    <value>Не удалось проверить зависимости: sp-mod не знает SPT {0}.</value>
+  </data>
+  <data name="SpModImport_SptMismatchFormat" xml:space="preserve">
+    <value>Этот список составлен для SPT {0}, а у вас SPT {1}. Показаны версии для {0}.</value>
+  </data>
+  <data name="SpModImport_SptNoTargetFormat" xml:space="preserve">
+    <value>У этого списка нет целевой версии SPT, поэтому у каждого мода стоит самая новая версия, которая может не работать на вашем SPT {0}.</value>
+  </data>
+  <data name="SpModImport_UseVersionsForFormat" xml:space="preserve">
+    <value>Использовать версии для SPT {0}</value>
+  </data>
+  <data name="SpModImport_RetargetFailedFormat" xml:space="preserve">
+    <value>Не удалось найти версии для SPT {0} ({1}).</value>
+  </data>
+  <data name="SpModImport_SectionCountFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="SpModImport_SectionMissingParents" xml:space="preserve">
+    <value>Недостающие родительские моды</value>
+  </data>
+  <data name="SpModImport_MissingParentsNote" xml:space="preserve">
+    <value>Аддоны из этого списка относятся к этим модам, а их в списке нет. Аддон без своего мода ничего не делает, поэтому их рекомендуется добавить.</value>
+  </data>
+  <data name="SpModImport_SectionMods" xml:space="preserve">
+    <value>Моды</value>
+  </data>
+  <data name="SpModImport_SectionAddons" xml:space="preserve">
+    <value>Аддоны</value>
+  </data>
+  <data name="SpModImport_SectionDependencies" xml:space="preserve">
+    <value>Зависимости для добавления</value>
+  </data>
+  <data name="SpModImport_DependenciesNote" xml:space="preserve">
+    <value>Они нужны модам из этого списка, а в списке их нет.</value>
+  </data>
+  <data name="SpModImport_SectionNoVersion" xml:space="preserve">
+    <value>Нет версии для вашего SPT</value>
+  </data>
+  <data name="SpModImport_NoVersionNoteFormat" xml:space="preserve">
+    <value>Ничего из опубликованного не работает на SPT {0}. Оставлены без отметки - отметьте мод, чтобы оставить версию со страницы.</value>
+  </data>
+  <data name="SpModImport_SectionUnaddable" xml:space="preserve">
+    <value>Нужны, но добавить нельзя</value>
+  </data>
+  <data name="SpModImport_UnaddableNoteFormat" xml:space="preserve">
+    <value>Они нужны модам из этого списка, но ни одна их версия не работает на SPT {0}.</value>
+  </data>
+  <data name="SpModImport_SectionRemoved" xml:space="preserve">
+    <value>Больше нет в списке</value>
+  </data>
+  <data name="SpModImport_RemovedNote" xml:space="preserve">
+    <value>В копии здесь они есть, а в списке на sp-mod их больше нет. При обновлении они будут убраны из списка - на диске ничего не меняется.</value>
+  </data>
+  <data name="SpModImport_FactNew" xml:space="preserve">
+    <value>новый</value>
+  </data>
+  <data name="SpModImport_FactNoVersion" xml:space="preserve">
+    <value>версия не указана</value>
+  </data>
+  <data name="SpModImport_FactRetargetedFormat" xml:space="preserve">
+    <value>версия {0} → {1}</value>
+  </data>
+  <data name="SpModImport_FactWasFormat" xml:space="preserve">
+    <value>было {0}</value>
+  </data>
+  <data name="SpModImport_FactAddonForFormat" xml:space="preserve">
+    <value>аддон для {0}</value>
+  </data>
+  <data name="SpModImport_FactNeededByFormat" xml:space="preserve">
+    <value>нужен для {0}</value>
+  </data>
+  <data name="SpModImport_FactConflict" xml:space="preserve">
+    <value>моды, которым он нужен, требуют разные версии</value>
+  </data>
+  <data name="SpModImport_FactNotCompatible" xml:space="preserve">
+    <value>sp-mod отмечает его как несовместимый с SPT списка</value>
+  </data>
+  <data name="SpModImport_FactParentNotOnList" xml:space="preserve">
+    <value>его мода нет в списке, поэтому версия не проверялась</value>
+  </data>
+  <data name="SpModImport_TickedFormat" xml:space="preserve">
+    <value>Отмечено {0} из {1}</value>
+  </data>
+  <data name="SpModImport_NoChanges" xml:space="preserve">
+    <value>с прошлого чтения ничего не изменилось</value>
+  </data>
+  <data name="ModLists_ImportFromSpMod" xml:space="preserve">
+    <value>Импорт с sp-mod</value>
+  </data>
+  <data name="ModLists_ImportFromSpModToolTip" xml:space="preserve">
+    <value>Взять список модов с sp-mod по его адресу. Вы увидите всё его содержимое, разобранное по группам, до того как что-либо будет сохранено.</value>
+  </data>
+  <data name="ModLists_RefreshFromSpMod" xml:space="preserve">
+    <value>Обновить с sp-mod</value>
+  </data>
+  <data name="ModLists_RefreshFromSpModToolTip" xml:space="preserve">
+    <value>Заново читает страницу этого списка на sp-mod и показывает, что изменилось, до любого обновления. Ничего не устанавливается и не включается; применение остаётся отдельным шагом.</value>
+  </data>
+  <data name="ModLists_OpenOnSpMod" xml:space="preserve">
+    <value>Открыть на sp-mod</value>
+  </data>
+  <data name="ModLists_OpenOnSpModToolTip" xml:space="preserve">
+    <value>Открывает страницу этого списка на sp-mod в браузере.</value>
+  </data>
+  <data name="ModLists_DetailFromSpModFormat" xml:space="preserve">
+    <value>от {0} на sp-mod</value>
+  </data>
+  <data name="ModLists_DetailFromSpMod" xml:space="preserve">
+    <value>с sp-mod</value>
+  </data>
+  <data name="ModLists_SpModUpdatedFormat" xml:space="preserve">
+    <value>«{0}» обновлён с sp-mod, ревизия {1} → {2}. Откройте предпросмотр, чтобы увидеть, что даст применение.</value>
+  </data>
+  <data name="ModLists_SpModUnchangedFormat" xml:space="preserve">
+    <value>«{0}» на sp-mod не изменился.</value>
+  </data>
+  <data name="SpModImport_CountMods_one" xml:space="preserve">
+    <value>{0} мод</value>
+  </data>
+  <data name="SpModImport_CountMods_few" xml:space="preserve">
+    <value>{0} мода</value>
+  </data>
+  <data name="SpModImport_CountMods_many" xml:space="preserve">
+    <value>{0} модов</value>
+  </data>
+  <data name="SpModImport_CountAddons_one" xml:space="preserve">
+    <value>{0} аддон</value>
+  </data>
+  <data name="SpModImport_CountAddons_few" xml:space="preserve">
+    <value>{0} аддона</value>
+  </data>
+  <data name="SpModImport_CountAddons_many" xml:space="preserve">
+    <value>{0} аддонов</value>
+  </data>
+  <data name="SpModImport_NoticeOptedOut_one" xml:space="preserve">
+    <value>{0} запись скрыта: её автор запретил добавлять мод в списки.</value>
+  </data>
+  <data name="SpModImport_NoticeOptedOut_few" xml:space="preserve">
+    <value>{0} записи скрыты: их авторы запретили добавлять моды в списки.</value>
+  </data>
+  <data name="SpModImport_NoticeOptedOut_many" xml:space="preserve">
+    <value>{0} записей скрыто: их авторы запретили добавлять моды в списки.</value>
+  </data>
+  <data name="SpModImport_NoticeUnavailable_one" xml:space="preserve">
+    <value>{0} запись больше недоступна на sp-mod.</value>
+  </data>
+  <data name="SpModImport_NoticeUnavailable_few" xml:space="preserve">
+    <value>{0} записи больше недоступны на sp-mod.</value>
+  </data>
+  <data name="SpModImport_NoticeUnavailable_many" xml:space="preserve">
+    <value>{0} записей больше недоступны на sp-mod.</value>
+  </data>
+  <data name="SpModImport_NoticeNoVersion_one" xml:space="preserve">
+    <value>У {0} записи не указана версия, поэтому при применении будет взята самая новая.</value>
+  </data>
+  <data name="SpModImport_NoticeNoVersion_few" xml:space="preserve">
+    <value>У {0} записей не указана версия, поэтому при применении будут взяты самые новые.</value>
+  </data>
+  <data name="SpModImport_NoticeNoVersion_many" xml:space="preserve">
+    <value>У {0} записей не указана версия, поэтому при применении будут взяты самые новые.</value>
+  </data>
+  <data name="ModLists_SpModImported_one" xml:space="preserve">
+    <value>«{1}» импортирован с sp-mod: {0} запись. Откройте предпросмотр, чтобы увидеть, что даст применение.</value>
+  </data>
+  <data name="ModLists_SpModImported_few" xml:space="preserve">
+    <value>«{1}» импортирован с sp-mod: {0} записи. Откройте предпросмотр, чтобы увидеть, что даст применение.</value>
+  </data>
+  <data name="ModLists_SpModImported_many" xml:space="preserve">
+    <value>«{1}» импортирован с sp-mod: {0} записей. Откройте предпросмотр, чтобы увидеть, что даст применение.</value>
+  </data>
+  <data name="SpModImport_RetargetBlockedFormat" xml:space="preserve">
+    <value>Не удалось найти версии для SPT {0}, поэтому сохранить список с ними пока нельзя. Выключите параметр, чтобы оставить версии со страницы, или включите его снова, чтобы повторить попытку.</value>
+  </data>
 </root>

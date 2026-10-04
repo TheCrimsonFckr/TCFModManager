@@ -5851,4 +5851,253 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Conflicts_KeepBlockedFormat" xml:space="preserve">
     <value>{0} ha anche file che non sono duplicati, ed è stata installata con questa app, quindi si può rimuovere solo per intero - anche quei file andrebbero via. Rimuovila invece dalla pagina Installati, dove Rimuovi mostra tutto ciò che porta via.</value>
   </data>
+  <data name="SpModImport_Title" xml:space="preserve">
+    <value>Importa da sp-mod</value>
+  </data>
+  <data name="SpModImport_RefreshTitleFormat" xml:space="preserve">
+    <value>Ricarica "{0}" da sp-mod</value>
+  </data>
+  <data name="SpModImport_LinkHeader" xml:space="preserve">
+    <value>Indirizzo della lista</value>
+  </data>
+  <data name="SpModImport_LinkDescription" xml:space="preserve">
+    <value>Incolla l'indirizzo di una lista mod su sp-mod. Funzionano sia le liste pubbliche sia i link di condivisione. Vedrai tutto il contenuto prima che venga salvato qualcosa.</value>
+  </data>
+  <data name="SpModImport_LinkPlaceholder" xml:space="preserve">
+    <value>https://sp-mod.com/list/12345/name</value>
+  </data>
+  <data name="SpModImport_FindLists" xml:space="preserve">
+    <value>Trova liste su sp-mod</value>
+  </data>
+  <data name="SpModImport_FindListsToolTip" xml:space="preserve">
+    <value>Apre la pagina delle liste di sp-mod nel browser, dove puoi cercare e filtrare per versione di SPT. Copia l'indirizzo di una lista e torna qui - viene preso dagli appunti.</value>
+  </data>
+  <data name="SpModImport_OpenOnSpMod" xml:space="preserve">
+    <value>Apri su sp-mod</value>
+  </data>
+  <data name="SpModImport_Read" xml:space="preserve">
+    <value>Leggi la lista</value>
+  </data>
+  <data name="SpModImport_Create" xml:space="preserve">
+    <value>Crea la lista</value>
+  </data>
+  <data name="SpModImport_Update" xml:space="preserve">
+    <value>Aggiorna la lista</value>
+  </data>
+  <data name="SpModImport_NotAListUrl" xml:space="preserve">
+    <value>Non è un indirizzo di lista di sp-mod. Dovrebbe essere come https://sp-mod.com/list/12345/name.</value>
+  </data>
+  <data name="SpModImport_Reading" xml:space="preserve">
+    <value>Lettura della lista da sp-mod...</value>
+  </data>
+  <data name="SpModImport_RetargetingFormat" xml:space="preserve">
+    <value>Ricerca delle versioni per SPT {0}...</value>
+  </data>
+  <data name="SpModImport_RetargetingProgressFormat" xml:space="preserve">
+    <value>Ricerca delle versioni per SPT {0}... {1} di {2}</value>
+  </data>
+  <data name="SpModImport_CheckingDependencies" xml:space="preserve">
+    <value>Controllo delle dipendenze...</value>
+  </data>
+  <data name="SpModImport_CheckingDependenciesProgressFormat" xml:space="preserve">
+    <value>Controllo delle dipendenze... {0} di {1}</value>
+  </data>
+  <data name="SpModImport_FallbackNameFormat" xml:space="preserve">
+    <value>Lista sp-mod {0}</value>
+  </data>
+  <data name="SpModImport_FailedNetworkFormat" xml:space="preserve">
+    <value>Impossibile raggiungere sp-mod ({0}).</value>
+  </data>
+  <data name="SpModImport_FailedNotFound" xml:space="preserve">
+    <value>sp-mod non ha nessuna lista a quell'indirizzo, oppure è privata. Una lista privata si può importare con il suo link di condivisione.</value>
+  </data>
+  <data name="SpModImport_FailedStatusFormat" xml:space="preserve">
+    <value>sp-mod ha risposto con un errore ({0}). Riprova tra poco.</value>
+  </data>
+  <data name="SpModImport_FailedBlocked" xml:space="preserve">
+    <value>sp-mod ha inviato un controllo anti-bot al posto della lista. Apri la lista una volta nel browser, poi riprova.</value>
+  </data>
+  <data name="SpModImport_FailedNotAListPage" xml:space="preserve">
+    <value>Quella pagina non è una lista mod.</value>
+  </data>
+  <data name="SpModImport_ByFormat" xml:space="preserve">
+    <value>di {0} su sp-mod</value>
+  </data>
+  <data name="SpModImport_UpdatedFormat" xml:space="preserve">
+    <value>aggiornata il {0}</value>
+  </data>
+  <data name="SpModImport_TargetFormat" xml:space="preserve">
+    <value>fatta per SPT {0}</value>
+  </data>
+  <data name="SpModImport_NoTarget" xml:space="preserve">
+    <value>nessuna versione di SPT indicata</value>
+  </data>
+  <data name="SpModImport_NoticeLayoutChanged" xml:space="preserve">
+    <value>L'impaginazione di sp-mod è cambiata, quindi questa lista è stata letta in modo più semplice e potrebbe essere incompleta.</value>
+  </data>
+  <data name="SpModImport_NoticeModsShortFormat" xml:space="preserve">
+    <value>La pagina elenca {0} mod, ma se ne sono potute leggere solo {1}.</value>
+  </data>
+  <data name="SpModImport_NoticeAddonsShortFormat" xml:space="preserve">
+    <value>La pagina elenca {0} addon, ma se ne sono potuti leggere solo {1}.</value>
+  </data>
+  <data name="SpModImport_DependenciesFailedFormat" xml:space="preserve">
+    <value>Non è stato possibile controllare le dipendenze ({0}).</value>
+  </data>
+  <data name="SpModImport_DependenciesUnknownSptFormat" xml:space="preserve">
+    <value>Non è stato possibile controllare le dipendenze: sp-mod non conosce SPT {0}.</value>
+  </data>
+  <data name="SpModImport_SptMismatchFormat" xml:space="preserve">
+    <value>Questa lista è stata fatta per SPT {0} e tu usi SPT {1}. Le versioni mostrate sono quelle per {0}.</value>
+  </data>
+  <data name="SpModImport_SptNoTargetFormat" xml:space="preserve">
+    <value>Questa lista non indica una versione di SPT, quindi ogni mod è alla sua versione più recente, che potrebbe non funzionare sul tuo SPT {0}.</value>
+  </data>
+  <data name="SpModImport_UseVersionsForFormat" xml:space="preserve">
+    <value>Usa le versioni per SPT {0}</value>
+  </data>
+  <data name="SpModImport_RetargetFailedFormat" xml:space="preserve">
+    <value>Non è stato possibile cercare le versioni per SPT {0} ({1}).</value>
+  </data>
+  <data name="SpModImport_SectionCountFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="SpModImport_SectionMissingParents" xml:space="preserve">
+    <value>Mod principali mancanti</value>
+  </data>
+  <data name="SpModImport_MissingParentsNote" xml:space="preserve">
+    <value>Alcuni addon di questa lista appartengono a queste mod, che la lista non ha. Un addon non fa nulla senza la sua mod, quindi conviene aggiungerle.</value>
+  </data>
+  <data name="SpModImport_SectionMods" xml:space="preserve">
+    <value>Mod</value>
+  </data>
+  <data name="SpModImport_SectionAddons" xml:space="preserve">
+    <value>Addon</value>
+  </data>
+  <data name="SpModImport_SectionDependencies" xml:space="preserve">
+    <value>Dipendenze da aggiungere</value>
+  </data>
+  <data name="SpModImport_DependenciesNote" xml:space="preserve">
+    <value>Alcune mod di questa lista ne hanno bisogno, e la lista non le nomina.</value>
+  </data>
+  <data name="SpModImport_SectionNoVersion" xml:space="preserve">
+    <value>Nessuna versione per il tuo SPT</value>
+  </data>
+  <data name="SpModImport_NoVersionNoteFormat" xml:space="preserve">
+    <value>Niente di pubblicato funziona su SPT {0}. Lasciate senza spunta - spuntane una per tenere la versione mostrata sulla pagina.</value>
+  </data>
+  <data name="SpModImport_SectionUnaddable" xml:space="preserve">
+    <value>Necessarie, ma non aggiungibili</value>
+  </data>
+  <data name="SpModImport_UnaddableNoteFormat" xml:space="preserve">
+    <value>Alcune mod di questa lista ne hanno bisogno, ma nessuna delle loro versioni funziona su SPT {0}.</value>
+  </data>
+  <data name="SpModImport_SectionRemoved" xml:space="preserve">
+    <value>Non più nella lista</value>
+  </data>
+  <data name="SpModImport_RemovedNote" xml:space="preserve">
+    <value>La copia qui le contiene, ma la lista su sp-mod non più. Aggiornando vengono tolte dalla lista - sul disco non cambia niente.</value>
+  </data>
+  <data name="SpModImport_FactNew" xml:space="preserve">
+    <value>nuova</value>
+  </data>
+  <data name="SpModImport_FactNoVersion" xml:space="preserve">
+    <value>nessuna versione indicata</value>
+  </data>
+  <data name="SpModImport_FactRetargetedFormat" xml:space="preserve">
+    <value>versione {0} → {1}</value>
+  </data>
+  <data name="SpModImport_FactWasFormat" xml:space="preserve">
+    <value>prima {0}</value>
+  </data>
+  <data name="SpModImport_FactAddonForFormat" xml:space="preserve">
+    <value>addon per {0}</value>
+  </data>
+  <data name="SpModImport_FactNeededByFormat" xml:space="preserve">
+    <value>richiesta da {0}</value>
+  </data>
+  <data name="SpModImport_FactConflict" xml:space="preserve">
+    <value>le mod che la richiedono non concordano sulla versione</value>
+  </data>
+  <data name="SpModImport_FactNotCompatible" xml:space="preserve">
+    <value>sp-mod la segna come non compatibile con l'SPT della lista</value>
+  </data>
+  <data name="SpModImport_FactParentNotOnList" xml:space="preserve">
+    <value>la sua mod non è nella lista, quindi la versione non è stata controllata</value>
+  </data>
+  <data name="SpModImport_TickedFormat" xml:space="preserve">
+    <value>{0} di {1} spuntate</value>
+  </data>
+  <data name="SpModImport_NoChanges" xml:space="preserve">
+    <value>non è cambiato niente dall'ultima lettura</value>
+  </data>
+  <data name="ModLists_ImportFromSpMod" xml:space="preserve">
+    <value>Importa da sp-mod</value>
+  </data>
+  <data name="ModLists_ImportFromSpModToolTip" xml:space="preserve">
+    <value>Prendi una lista mod da sp-mod tramite il suo indirizzo. Vedi tutto il contenuto, ordinato, prima che venga salvato qualcosa.</value>
+  </data>
+  <data name="ModLists_RefreshFromSpMod" xml:space="preserve">
+    <value>Ricarica da sp-mod</value>
+  </data>
+  <data name="ModLists_RefreshFromSpModToolTip" xml:space="preserve">
+    <value>Rilegge la pagina sp-mod di questa lista e mostra cosa è cambiato prima di aggiornare qualcosa. Niente viene installato o attivato; applicarla resta un passaggio a parte.</value>
+  </data>
+  <data name="ModLists_OpenOnSpMod" xml:space="preserve">
+    <value>Apri su sp-mod</value>
+  </data>
+  <data name="ModLists_OpenOnSpModToolTip" xml:space="preserve">
+    <value>Apre la pagina di questa lista su sp-mod nel browser.</value>
+  </data>
+  <data name="ModLists_DetailFromSpModFormat" xml:space="preserve">
+    <value>di {0} su sp-mod</value>
+  </data>
+  <data name="ModLists_DetailFromSpMod" xml:space="preserve">
+    <value>da sp-mod</value>
+  </data>
+  <data name="ModLists_SpModUpdatedFormat" xml:space="preserve">
+    <value>"{0}" aggiornata da sp-mod, dalla revisione {1} alla {2}. Guarda l'anteprima per vedere cosa farebbe applicarla.</value>
+  </data>
+  <data name="ModLists_SpModUnchangedFormat" xml:space="preserve">
+    <value>"{0}" non è cambiata su sp-mod.</value>
+  </data>
+  <data name="SpModImport_CountMods_one" xml:space="preserve">
+    <value>1 mod</value>
+  </data>
+  <data name="SpModImport_CountMods_other" xml:space="preserve">
+    <value>{0} mod</value>
+  </data>
+  <data name="SpModImport_CountAddons_one" xml:space="preserve">
+    <value>1 addon</value>
+  </data>
+  <data name="SpModImport_CountAddons_other" xml:space="preserve">
+    <value>{0} addon</value>
+  </data>
+  <data name="SpModImport_NoticeOptedOut_one" xml:space="preserve">
+    <value>1 voce è nascosta perché il suo autore ha escluso le liste mod.</value>
+  </data>
+  <data name="SpModImport_NoticeOptedOut_other" xml:space="preserve">
+    <value>{0} voci sono nascoste perché i loro autori hanno escluso le liste mod.</value>
+  </data>
+  <data name="SpModImport_NoticeUnavailable_one" xml:space="preserve">
+    <value>1 voce non è più disponibile su sp-mod.</value>
+  </data>
+  <data name="SpModImport_NoticeUnavailable_other" xml:space="preserve">
+    <value>{0} voci non sono più disponibili su sp-mod.</value>
+  </data>
+  <data name="SpModImport_NoticeNoVersion_one" xml:space="preserve">
+    <value>1 voce non mostra una versione, quindi applicando la lista si prende la più recente.</value>
+  </data>
+  <data name="SpModImport_NoticeNoVersion_other" xml:space="preserve">
+    <value>{0} voci non mostrano una versione, quindi applicando la lista si prende la più recente di ognuna.</value>
+  </data>
+  <data name="ModLists_SpModImported_one" xml:space="preserve">
+    <value>"{1}" importata da sp-mod con 1 voce. Guarda l'anteprima per vedere cosa farebbe applicarla.</value>
+  </data>
+  <data name="ModLists_SpModImported_other" xml:space="preserve">
+    <value>"{1}" importata da sp-mod con {0} voci. Guarda l'anteprima per vedere cosa farebbe applicarla.</value>
+  </data>
+  <data name="SpModImport_RetargetBlockedFormat" xml:space="preserve">
+    <value>Non è stato possibile cercare le versioni per SPT {0}, quindi la lista non si può ancora salvare con quelle. Disattiva l'opzione per tenere le versioni della pagina, oppure riattivala per riprovare.</value>
+  </data>
 </root>
