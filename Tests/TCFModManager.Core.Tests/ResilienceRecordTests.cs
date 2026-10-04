@@ -11,6 +11,7 @@ namespace TCFModManager.Core.Tests;
 // record fields stages 3 and 4 fill in. Every test works in its own temp folder and checks the disk
 // afterwards.
 //
+[Collection(ConfigBackupFolder.Name)]
 public class ResilienceRecordTests : IDisposable
 {
     private readonly string _root = Path.Combine(Path.GetTempPath(), "tcfmm-records-" + Guid.NewGuid().ToString("N"));

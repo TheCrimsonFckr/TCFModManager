@@ -4,6 +4,7 @@ using Xunit;
 
 namespace TCFModManager.Core.Tests;
 
+[Collection(ConfigBackupFolder.Name)]
 public class ModConfigStoreTests : IDisposable
 {
     private readonly string _installRoot;
