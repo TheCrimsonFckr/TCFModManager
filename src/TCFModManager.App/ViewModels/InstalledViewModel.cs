@@ -75,6 +75,10 @@ public partial class InstalledViewModel : LocalizedViewModel
     // Every filtered mod, unpaginated, for the List view - which scrolls rather than pages.
     public ObservableCollection<InstalledModCardViewModel> ListItems { get; } = [];
 
+    // Batch sizes keep each frame's worth of row building to roughly 50-80ms - see GradualFill.
+    private readonly GradualFill<InstalledModCardViewModel> _cardsFill = new(batchSize: 4);
+    private readonly GradualFill<InstalledModCardViewModel> _listFill = new(batchSize: 6);
+
     public List<UpdateFilterItem> UpdateFilterOptions { get; } =
     [
         new(nameof(Strings.Filter_UpdateAny), UpdateFilter.All),
@@ -612,7 +616,7 @@ public partial class InstalledViewModel : LocalizedViewModel
     private void RebuildList()
     {
         // Synced rather than cleared, for the same reason the card grid is - see Sync.
-        ItemsSync.Apply(ListItems, _filtered);
+        _listFill.Apply(ListItems, _filtered);
         _listDirty = false;
     }
 
@@ -2071,7 +2075,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         if (!_cardsDirty && target == CurrentPage) return;
 
         CurrentPage = target;
-        ItemsSync.Apply(Results, _filtered.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList());
+        _cardsFill.Apply(Results, _filtered.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList());
 
         _cardsDirty = false;
     }

@@ -385,6 +385,8 @@ public sealed partial class FootprintViewModel : LocalizedViewModel
 
     public ObservableCollection<ModFootprintRowViewModel> Rows { get; } = [];
 
+    private readonly GradualFill<ModFootprintRowViewModel> _rowsFill = new(batchSize: 12);
+
     // Name first, and the default: the page opens as a list of what is installed rather than as an
     // ordering of it. The count-based sorts are there for someone who went looking for them.
     public IReadOnlyList<FootprintSortItem> SortOptions { get; } =
@@ -488,8 +490,10 @@ public sealed partial class FootprintViewModel : LocalizedViewModel
                 _all.OrderBy(r => r.Name, StringComparer.CurrentCultureIgnoreCase),
         };
 
-        Rows.Clear();
-        foreach (var row in sorted) Rows.Add(row);
-        HasRows = Rows.Count > 0;
+        // Synced rather than cleared, so a sort change only moves the rows it already has, and a
+        // fresh set is built a few rows per frame - see GradualFill.
+        var rows = sorted.ToList();
+        _rowsFill.Apply(Rows, rows);
+        HasRows = rows.Count > 0;
     }
 }

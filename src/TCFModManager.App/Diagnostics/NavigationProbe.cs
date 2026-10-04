@@ -87,6 +87,14 @@ internal static class NavigationProbe
             var started = new ListFill(now, _current is { } visit ? now - visit.Start : null);
             fill = started;
 
+            EventHandler onFrame = (_, _) =>
+            {
+                var at = Clock.Elapsed.TotalMilliseconds;
+                if (started.LastFrame is { } last) started.WorstGap = Math.Max(started.WorstGap, at - last);
+                started.LastFrame = at;
+            };
+            CompositionTarget.Rendering += onFrame;
+
             EventHandler? onLayout = null;
             onLayout = (_, _) =>
             {
@@ -98,6 +106,7 @@ internal static class NavigationProbe
             list.Dispatcher.BeginInvoke(new Action(() =>
             {
                 list.LayoutUpdated -= onLayout;
+                CompositionTarget.Rendering -= onFrame;
                 fill = null;
 
                 var end = Clock.Elapsed.TotalMilliseconds;
@@ -107,7 +116,7 @@ internal static class NavigationProbe
                     $"  {name}{(started.SinceClick is { } at ? $" at +{at:0}" : "")}: {list.Items.Count} item(s)" +
                     $"{(list.IsVisible ? "" : " (hidden)")}, fill {started.LastChange - started.Start:0}ms, " +
                     $"layout {layoutEnd - started.LastChange:0}ms, render+rest {end - layoutEnd:0}ms, " +
-                    $"{CountVisuals(list)} elements");
+                    $"{CountVisuals(list)} elements, longest frame gap {started.WorstGap:0}ms");
             }), DispatcherPriority.ContextIdle);
         };
     }
@@ -135,6 +144,8 @@ internal static class NavigationProbe
         public double? SinceClick { get; } = sinceClick;
         public double LastChange { get; set; } = start;
         public double? LayoutEnd { get; set; }
+        public double? LastFrame { get; set; }
+        public double WorstGap { get; set; }
     }
 
     private static void Begin(object page)
