@@ -57,7 +57,8 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     private static string Text(string format, params object?[] values) =>
         LocalizationService.Text(format, values);
 
-    // Earliest InstalledAt across the merged entries.
+    // When this app last installed or updated the mod, from its record; for a mod installed by hand,
+    // the earliest folder date across the merged entries (see InstallDate).
     public DateTimeOffset? InstalledAt { get; init; }
 
     // True when any half of this mod is a client one - a BepInEx plugin, a patcher, or both.
@@ -690,8 +691,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             InstalledVersion = installedVersion,
             VersionDetail = detail,
             IsVersionManuallyConfirmed = !record.IsAppManaged,
-            InstalledAt = new[] { client?.InstalledAt, server?.InstalledAt }
-                .Where(d => d is not null).OrderBy(d => d).FirstOrDefault(),
+            InstalledAt = InstallDate(record, client, server),
             HasClient = client is not null,
             HasPlugin = plugin is not null,
             HasPatcher = patcher is not null,
@@ -1275,10 +1275,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
         var manuallyConfirmed = record is not null && !record.IsAppManaged;
 
-        var installedAt = new[] { client?.InstalledAt, server?.InstalledAt }
-            .Where(d => d is not null)
-            .OrderBy(d => d)
-            .FirstOrDefault();
+        var installedAt = InstallDate(record, client, server);
 
         //
         // What an update would install: the newest release that runs on this SPT - the same pick
@@ -1388,6 +1385,16 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         yield return Path.GetFileName(path);
         yield return Path.GetFileNameWithoutExtension(path);
     }
+
+    //
+    // The record's date when this app placed the files - the last install or update. A folder's
+    // creation date is only a stand-in for a mod installed by hand (a confirmed version included):
+    // copied or extracted with its original dates, a mod installed today can read as a year old.
+    //
+    private static DateTimeOffset? InstallDate(InstalledModRecord? record, InstalledMod? client, InstalledMod? server) =>
+        record is { IsAppManaged: true }
+            ? record.InstalledAt
+            : new[] { client?.InstalledAt, server?.InstalledAt }.Where(d => d is not null).Min();
 
     // True when two loosely-formatted version strings mean the same release, so a trailing ".0" - or
     // a label the files can't carry - isn't reported as a discrepancy.
