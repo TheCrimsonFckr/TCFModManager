@@ -2295,6 +2295,12 @@ Annulla  -  non rimuove nulla</value>
   <data name="ModList_ReasonNoVersions" xml:space="preserve">
     <value>non ha versioni pubblicate</value>
   </data>
+  <data name="ModList_ReasonNoVersionForSptFormat" xml:space="preserve">
+    <value>nessuna delle sue versioni funziona con SPT {0}</value>
+  </data>
+  <data name="ModList_ReasonNoVersionForParentFormat" xml:space="preserve">
+    <value>nessuna delle sue versioni è adatta alla versione {0} della mod di cui è un addon</value>
+  </data>
   <data name="ModList_ReasonOrphanedAddonFormat" xml:space="preserve">
     <value>è un addon per {0}, che non è installato e non è in questa lista</value>
   </data>

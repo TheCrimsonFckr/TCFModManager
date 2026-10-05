@@ -4696,6 +4696,14 @@ You can turn it back on at any time.</value>
     <value>it has no published versions</value>
     <comment>Why a mod on a list could not be fetched.</comment>
   </data>
+  <data name="ModList_ReasonNoVersionForSptFormat" xml:space="preserve">
+    <value>none of its versions runs on SPT {0}</value>
+    <comment>Why a mod on a list with no version named could not be fetched: versions are published, but none for this SPT. {0} is the installed SPT version.</comment>
+  </data>
+  <data name="ModList_ReasonNoVersionForParentFormat" xml:space="preserve">
+    <value>none of its versions works with version {0} of the mod it's an addon for</value>
+    <comment>Why an addon on a list with no version named could not be fetched: versions are published, but none fits its parent mod. {0} is the parent mod's version.</comment>
+  </data>
   <data name="ModList_ReasonVersionGoneFormat" xml:space="preserve">
     <value>version {0} is gone and nothing else is published</value>
     <comment>Why a mod on a list could not be fetched. {0} is the version the list asked for.</comment>

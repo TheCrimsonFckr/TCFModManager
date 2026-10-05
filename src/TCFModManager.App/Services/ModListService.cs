@@ -452,6 +452,21 @@ public sealed class ModListService
         foreach (var action in fetches.Where(a => a is { IsAddon: false, ModId: not null }))
             parents.Add(action.ModId!.Value);
 
+        //
+        // The version each parent will be at once this apply is done - the one the list names when it
+        // fetches the parent, otherwise the one installed - so an addon is picked to fit it. A parent
+        // fetched with no version named is not known yet; its addons take their newest.
+        //
+        var parentVersions = installed
+            .Where(c => c is { IsAddon: false, ModId: not null })
+            .GroupBy(c => c.ModId!.Value)
+            .ToDictionary(g => g.Key, g => g.First().Version);
+
+        foreach (var action in fetches.Where(a => a is { IsAddon: false, ModId: not null }))
+            parentVersions[action.ModId!.Value] = action.TargetVersion;
+
+        var sptVersion = AppServices.SptEnvironment.InstalledVersion;
+
         var ready = new List<ModListDownload>();
         var changes = new List<ModListVersionChange>();
         var unavailable = new List<ModListFetchFailure>();
@@ -465,6 +480,7 @@ public sealed class ModListService
             }
 
             InstallTarget target;
+            string? parentVersion = null;
 
             if (action.IsAddon)
             {
@@ -487,6 +503,7 @@ public sealed class ModListService
                 }
 
                 target = InstallTarget.For(addon);
+                parentVersion = addon.ModId is { } parent ? parentVersions.GetValueOrDefault(parent) : null;
             }
             else
             {
@@ -520,12 +537,13 @@ public sealed class ModListService
                 // only thing it can mean, so it needs no asking.
                 if (string.IsNullOrWhiteSpace(wanted))
                 {
-                    var newest = await NewestAsync(id, action.IsAddon, ct);
+                    var (newest, anyPublished) = await NewestAsync(id, action.IsAddon, sptVersion, parentVersion, ct);
 
-                    if (newest is null)
+                    if (newest is not null)
+                        ready.Add(new ModListDownload(action, target, newest, IsSubstitute: false));
+                    else
                         unavailable.Add(new ModListFetchFailure(
-                            action.Name, Strings.ModList_ReasonNoVersions));
-                    else ready.Add(new ModListDownload(action, target, newest, IsSubstitute: false));
+                            action.Name, anyPublished ? NoFitReason(action.IsAddon, sptVersion, parentVersion) : Strings.ModList_ReasonNoVersions));
 
                     continue;
                 }
@@ -541,7 +559,7 @@ public sealed class ModListService
                     continue;
                 }
 
-                var replacement = await NewestAsync(id, action.IsAddon, ct);
+                var (replacement, _) = await NewestAsync(id, action.IsAddon, sptVersion, parentVersion, ct);
 
                 if (replacement is null)
                     unavailable.Add(new ModListFetchFailure(
@@ -604,18 +622,32 @@ public sealed class ModListService
         return [.. addons.Data.Select(AsModVersion)];
     }
 
-    private static async Task<ModVersion?> NewestAsync(string id, bool isAddon, CancellationToken ct)
+    //
+    // The newest version that fits: for a mod, this install's SPT; for an addon, the version its
+    // parent will be at. AnyPublished tells "nothing fits" from "nothing published at all".
+    //
+    private static async Task<(ModVersion? Version, bool AnyPublished)> NewestAsync(
+        string id, bool isAddon, string? sptVersion, string? parentVersion, CancellationToken ct)
     {
         if (!isAddon)
         {
-            var mods = await AppServices.SpModApi.GetModVersionsAsync(id, new ModVersionsQuery { PerPage = 5 }, ct);
-            return mods.Data.FirstOrDefault();
+            var mods = await AppServices.SpModApi.GetModVersionsAsync(
+                id, new ModVersionsQuery { Sort = "-published_at", PerPage = NewestLookupSize }, ct);
+            return (NewestFittingVersion.ForSpt(mods.Data, sptVersion), mods.Data.Count > 0);
         }
 
         var addons = await AppServices.SpModApi.GetAddonVersionsAsync(
-            id, new AddonVersionsQuery { Sort = "-published_at", PerPage = 5 }, ct);
-        return addons.Data.Select(AsModVersion).FirstOrDefault();
+            id, new AddonVersionsQuery { Sort = "-published_at", PerPage = NewestLookupSize }, ct);
+        return (NewestFittingVersion.ForParent(addons.Data, parentVersion) is { } fit ? AsModVersion(fit) : null, addons.Data.Count > 0);
     }
+
+    // Enough of the newest versions to reach back past a run of releases for a newer SPT.
+    private const int NewestLookupSize = 50;
+
+    private static string NoFitReason(bool isAddon, string? sptVersion, string? parentVersion) =>
+        isAddon
+            ? Text(Strings.ModList_ReasonNoVersionForParentFormat, parentVersion)
+            : Text(Strings.ModList_ReasonNoVersionForSptFormat, sptVersion);
 
     //
     // An addon version carries everything the download pipeline reads. ModVersionConstraint is

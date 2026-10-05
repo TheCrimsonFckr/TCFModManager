@@ -337,9 +337,9 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         item.Status = DownloadQueueItemStatus.Failed;
         item.StatusMessage = message;
 
-        var line = $"{item.ModName} {item.VersionLabel} failed: {message}";
-        if (unexpected) AppLog.Error("Downloads", line, ex);
-        else AppLog.Warn("Downloads", ex is null ? line : $"{line} ({ex.GetType().Name}: {ex.Message})");
+        if (unexpected) AppLog.Error("Downloads", $"{item.ModName} {item.VersionLabel} failed: {message}", ex);
+        else if (ex is null) AppLog.Warn("Downloads", $"{item.ModName} {item.VersionLabel} failed: {message}");
+        else AppLog.Warn("Downloads", $"{item.ModName} {item.VersionLabel} failed: {message} ({ex.GetType().Name}: {ex.Message})");
     }
 
     //

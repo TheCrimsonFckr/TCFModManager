@@ -2295,6 +2295,12 @@ Abbrechen  -  nichts entfernen</value>
   <data name="ModList_ReasonNoVersions" xml:space="preserve">
     <value>es hat keine veröffentlichten Versionen</value>
   </data>
+  <data name="ModList_ReasonNoVersionForSptFormat" xml:space="preserve">
+    <value>keine seiner Versionen läuft mit SPT {0}</value>
+  </data>
+  <data name="ModList_ReasonNoVersionForParentFormat" xml:space="preserve">
+    <value>keine seiner Versionen passt zu Version {0} der Mod, für die es ein Addon ist</value>
+  </data>
   <data name="ModList_ReasonOrphanedAddonFormat" xml:space="preserve">
     <value>es ist ein Addon für {0}, das weder installiert ist noch auf dieser Liste steht</value>
   </data>

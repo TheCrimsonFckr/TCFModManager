@@ -2430,6 +2430,12 @@
   <data name="ModList_ReasonNoVersions" xml:space="preserve">
     <value>у него нет опубликованных версий</value>
   </data>
+  <data name="ModList_ReasonNoVersionForSptFormat" xml:space="preserve">
+    <value>ни одна из его версий не работает с SPT {0}</value>
+  </data>
+  <data name="ModList_ReasonNoVersionForParentFormat" xml:space="preserve">
+    <value>ни одна из его версий не подходит к версии {0} мода, для которого это аддон</value>
+  </data>
   <data name="ModList_ReasonOrphanedAddonFormat" xml:space="preserve">
     <value>это аддон для {0}, который не установлен и не входит в этот список</value>
   </data>

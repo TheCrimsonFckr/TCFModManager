@@ -1284,6 +1284,8 @@ internal static class Strings
     internal static string ModList_ReasonNoAddonListing => LocalizationService.Get("ModList_ReasonNoAddonListing");
     internal static string ModList_ReasonOrphanedAddonFormat => LocalizationService.Get("ModList_ReasonOrphanedAddonFormat");
     internal static string ModList_ReasonNoVersions => LocalizationService.Get("ModList_ReasonNoVersions");
+    internal static string ModList_ReasonNoVersionForSptFormat => LocalizationService.Get("ModList_ReasonNoVersionForSptFormat");
+    internal static string ModList_ReasonNoVersionForParentFormat => LocalizationService.Get("ModList_ReasonNoVersionForParentFormat");
     internal static string ModList_ReasonVersionGoneFormat => LocalizationService.Get("ModList_ReasonVersionGoneFormat");
     internal static string ModList_ReasonApiFailedFormat => LocalizationService.Get("ModList_ReasonApiFailedFormat");
     internal static string ModList_UnnamedModFormat => LocalizationService.Get("ModList_UnnamedModFormat");
