@@ -43,12 +43,20 @@
                     Click="Credits_Click" />
                 <ui:Button
                     DockPanel.Dock="Right"
-                    Margin="12,0,0,0"
+                    Margin="8,0,0,0"
                     VerticalAlignment="Center"
                     Content="{loc:Str Help_OpenGuide}"
                     Icon="{ui:SymbolIcon Open24}"
                     Command="{Binding OpenGuideCommand}"
                     ToolTip="{loc:Str Help_OpenGuideToolTip}" />
+                <ui:Button
+                    DockPanel.Dock="Right"
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="{loc:Str Help_OpenWiki}"
+                    Icon="{ui:SymbolIcon Globe24}"
+                    Command="{Binding OpenWikiCommand}"
+                    ToolTip="{loc:Str Help_OpenWikiToolTip}" />
                 <TextBlock
                     VerticalAlignment="Center"
                     TextWrapping="Wrap"

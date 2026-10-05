@@ -4674,6 +4674,12 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="Help_OpenGuideToolTip" xml:space="preserve">
     <value>La page de l'application sur sp-mod.com - tout ce qui est ici plus en détail, avec ses limites et le dépannage. Elle est en anglais.</value>
   </data>
+  <data name="Help_OpenWiki" xml:space="preserve">
+    <value>Ouvrir le wiki</value>
+  </data>
+  <data name="Help_OpenWikiToolTip" xml:space="preserve">
+    <value>Le guide complet sous forme de wiki sur GitHub, une page par fonction, guide Server Map compris. Il est en anglais.</value>
+  </data>
   <data name="Help_SearchPlaceholder" xml:space="preserve">
     <value>Comment faire pour...?</value>
   </data>

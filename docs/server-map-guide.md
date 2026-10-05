@@ -1,4 +1,4 @@
-# Server Map how do I…?
+# Server Map - how do I…?
 
 Server Map lets an SPT server publish the mod list it expects players to be running, so TCF Mod
 Manager can tell someone what they are missing **before** they launch instead of after a raid fails
@@ -7,9 +7,9 @@ agrees to report, whether it is in game, and whether it has what the list asks f
 
 Two halves, and they are separate installs:
 
-**The Server Map mod** > goes on the machine running the SPT server. Installed by the server operator.
+**The Server Map mod** - goes on the machine running the SPT server. Installed by the server operator.
 
-**The Server Map page** > lives in TCF Mod Manager. Installed by anyone joining that server.
+**The Server Map page** - lives in TCF Mod Manager. Installed by anyone joining that server.
 
 
 #### Three things it does not do:
@@ -21,7 +21,7 @@ Two halves, and they are separate installs:
 - It never blocks you playing. The check on the Play page says what it found and leaves the launch
   buttons working.
 
-Client and server must be on the same SPT line a 4.1 client cannot join a 4.0.13 server, and that
+Client and server must be on the same SPT line: a 4.1 client cannot join a 4.0.13 server, and that
 is SPT's rule, not this mod's. So a published list only ever reaches people already on your version.
 
 # If you run the server 
@@ -30,7 +30,7 @@ How Do I?...
 # {.tabset}
 ## Get the Server Map mod?
 
-It is **not bundled with TCF Mod Manager** it is a separate download, published as an addon on the
+It is **not bundled with TCF Mod Manager** - it is a separate download, published as an addon on the
 app's mod page at sp-mod.com. That is deliberate: it is installed on a different machine from the
 app, by a different person, and a player joining your server needs none of it.
 
@@ -48,7 +48,7 @@ If you take the wrong one, SPT refuses to load the stub and says so - it will no
 The zip is laid out exactly as it installs, so installing it is one extraction.
 
 1. **Stop the server.** The payload DLL is locked while it runs, and a copy over a locked file
-   fails silently you will then spend an hour debugging the previous build.
+   fails silently - you will then spend an hour debugging the previous build.
 2. **Extract the zip into your SPT root** - the folder that holds `SPT_Runtime\` (4.1) or `SPT\`
    (4.0), and `TCFModManager\`. The **stub** lands in `user\mods\TCFMM.ServerMap\`, where SPT
    looks for mods; the **payload** lands in `TCFModManager\ServerMap\payload\`, outside it, so
@@ -74,11 +74,11 @@ SPT 4.1.x
 ```
 
 If TCF Mod Manager is already installed on that machine, it lives in that same `TCFModManager`
-folder so `ServerMap\payload\` goes right next to the app.
+folder - so `ServerMap\payload\` goes right next to the app.
 
 **`Data\` is the folder to keep.** Your key and your published list live there, with the app's
 settings and install history. Replacing `TCFModManager\` wholesale when you deploy takes all of it
-with you lay a new build over the old one instead, the way the app's own updater does.
+with you - lay a new build over the old one instead, the way the app's own updater does.
 
 ## Know when it is loaded?
 
@@ -90,11 +90,11 @@ Watch the server's console on startup:
 
 That is the only line you need. Two others tell you what went wrong:
 
-- `No payload found, so this mod does nothing. Looked for TCFMM.ServerMap.Payload.dll in: …` the
+- `No payload found, so this mod does nothing. Looked for TCFMM.ServerMap.Payload.dll in: …` - the
   stub loaded but cannot find the payload. The message lists every folder it checked; put the
   payload in one of them. **The server starts normally**, which is the point: deleting the payload
   folder is the supported way to switch the feature off.
-- `Found <path> but could not load it: …` the payload is there but broken. If it complains about
+- `Found <path> but could not load it: …` - the payload is there but broken. If it complains about
   casting `IServerMapPayload` to `IServerMapPayload`, there is a stray copy of
   `TCFMM.ServerMap.Shared.dll` in the payload folder. There should not be one; delete it.
 
@@ -114,7 +114,7 @@ It is in a text file in the app's data folder:
 compared with dashes, spaces and case ignored, so it does not matter how they paste it.
 
 The key is generated **once**, the first time the server starts without one. After that it is left
-alone restarting the server does not change it, and neither does updating the mod. The file is the
+alone - restarting the server does not change it, and neither does updating the mod. The file is the
 key: whatever is in it is what the server expects.
 
 **If TCF Mod Manager is on the same machine as the server**, you never need to open this file: the
@@ -126,7 +126,7 @@ app reads it and fills the key in on its own. See "How do I fill in my own serve
 running the server.
 
 Everyone holding the old key stops being able to see what your server publishes the moment you press
-it, so only do this if a key has gone somewhere it should not have and send the new one out
+it, so only do this if a key has gone somewhere it should not have, and send the new one out
 afterwards.
 
 The server picks the change up on its own. **It does not need restarting.**
@@ -135,7 +135,7 @@ The server picks the change up on its own. **It does not need restarting.**
 
 1. Get the server's install the way you want it, then on **Mod lists** press **Capture** to make a
    list of what is there. (Or pick an existing list.)
-2. Check the scopes see the next question. This is the step people skip and regret.
+2. Check the scopes - see the next question. This is the step people skip and regret.
 3. With the list selected, press **Publish to this server**.
 
 That writes the list into `TCFModManager\Data\ServerMap\` on this machine. Nothing is installed,
@@ -151,7 +151,7 @@ lists you can see which one other people are being handed.
 **Do not apply your published list on the machine that hosts.** Scope decides what a machine takes
 from a list a *server* served it; a list of your own applies whole, every entry whatever its scope.
 So a list pruned down to what players need names none of your server's mods, and applying it on the
-server box sets aside `fika-server`, SVM and the Server Map mod itself which is the thing serving the
+server box sets aside `fika-server`, SVM and the Server Map mod itself, which is the thing serving the
 list. Nothing is deleted and **Undo** puts it straight back, but your server stops publishing until
 you do.
 
@@ -163,7 +163,7 @@ A list is a manifest rather than a copy of anything, so a second one costs nothi
 Mark it **Server only**.
 
 The problem: your server needs `fika-server`, the Server Map mod itself, and anything else living
-in `user\mods`. None of those are on The Forge, and none of them belong on a player's machine. But
+in `user\mods`. None of those are on sp-mod, and none of them belong on a player's machine. But
 if you leave them off your list entirely, applying your own list on the server switches them off.
 
 So every entry on a list has a **scope**, named after the machines that get the mod. What is in the
@@ -215,7 +215,7 @@ then is read as **Client + Headless** now.
 
 ## Update the list my server is serving?
 
-Edit the list, **Save** it, then **Publish to this server** again. That is all the server picks
+Edit the list, **Save** it, then **Publish to this server** again. That is all - the server picks
 up the new file on its own.
 
 **The list you publish stays yours to edit.** A copy of it coming back off your own server never
@@ -231,7 +231,7 @@ which asks again whether or not the revision has moved.
 
 ## Let people connect from outside my network?
 
-Server Map uses the SPT server's own port there is no second listener so if people can already
+Server Map uses the SPT server's own port - there is no second listener - so if people can already
 join your server, they can already reach it.
 
 If you are setting that up from scratch, in `SPT_Data/configs/http.json`:
@@ -323,10 +323,10 @@ It is off by default, because without a server running the mod there is nothing 
 
 **Options** → **Fika and servers** → open **Server map connection**:
 
-1. **Server address** the same address you put in the SPT launcher. Not `0.0.0.0`: that is a bind
+1. **Server address** - the same address you put in the SPT launcher. Not `0.0.0.0`: that is a bind
    address, not one you can dial.
-2. **Port** 6969 unless the operator says otherwise.
-3. **Shared key** paste what the operator sent you.
+2. **Port** - 6969 unless the operator says otherwise.
+3. **Shared key** - paste what the operator sent you.
 4. Press **Connect**.
 
 The **Server map** page in the sidebar then shows the server's name, its SPT version, and whether it
@@ -335,7 +335,7 @@ publishes a list.
 ## Fill in my own server's details?
 
 When the app is on the server machine? You do not. If a Server Map server is installed on this machine, 
-the app finds its key file andfills the box in for you every time you open Options or the Server map page, 
+the app finds its key file and fills the box in for you every time you open Options or the Server map page, 
 so it appears the first time you start the server without restarting the app, and it follows the 
 key if you rotate it.
 
@@ -343,7 +343,7 @@ key if you rotate it.
 different server's key into the box, the app leaves it alone rather than overwriting it, and that
 button puts your own back.
 
-On any machine that is not running a server, no file is found and the box stays empty which is
+On any machine that is not running a server, no file is found and the box stays empty, which is
 correct. A key belongs to one server.
 
 ## Tell the app this machine is a headless?
@@ -371,7 +371,7 @@ server's revision moves. **Fetch again** on the **Server map** page asks for it 
 revision has not moved, for a copy you have edited or deleted.
 
 The list is saved here as a new mod list, badged red as **From server** on the Mod lists page. It
-stays exactly as the server wrote it you cannot edit it. If you want a version of your own, use
+stays exactly as the server wrote it - you cannot edit it. If you want a version of your own, use
 **Make a copy**. **Refresh from server**, on the list itself, is the same re-ask from the page where
 the list actually lives.
 
@@ -401,7 +401,7 @@ You do not have to choose. A server's list and one of your own can be **active a
 which is what the two separate tick marks on the Mod lists page mean.
 
 Following a server does not drop the personal list you were already following, and applying a list
-of your own will not sweep away the mods the server requires they are protected from your own list's
+of your own will not sweep away the mods the server requires - they are protected from your own list's
 tidy-up.
 
 It works the other way too: a list a server hands you never disables anything of yours, whatever its
@@ -415,7 +415,7 @@ Open the **Play** page. It checks automatically, and **Check again** re-runs it.
 |---|---|
 | **Ready to join** | your install matches the list, at the versions it names |
 | **Your install doesn't match this server** | it names exactly which mods are outstanding |
-| **This server's mod list has changed** | the server publishes a newer revision than you hold fetch it |
+| **This server's mod list has changed** | the server publishes a newer revision than you hold - fetch it |
 | **Couldn't check the server** | it did not answer; you are compared against your last fetched copy |
 
 It names what is outstanding, with versions where a version is wrong: *SAIN (3.0.0 → 3.1.2)*.
@@ -429,7 +429,7 @@ buttons still work.
 A served list can run to eighty mods. Above the list contents there is a **search box**, a **scope
 filter** (All scopes, then each of the six scopes) and a **sort** (A-Z / Z-A).
 
-Search matches the mod's name, the name the list stored, and the folder it installs into so you
+Search matches the mod's name, the name the list stored, and the folder it installs into, so you
 can find something by the folder name if that is what you know it by.
 
 The header reads "12 of 76 mods on this list" while a filter is on, so a filtered view is never
@@ -472,7 +472,7 @@ machine leaves the map straight away. Switching the Server map page off stops th
 ## Stop using a server's list?
 
 Delete it on the Mod lists page, or apply one of your own. To stop connecting altogether, switch the
-**Server map** toggle off in Options the page disappears from the sidebar and nothing is
+**Server map** toggle off in Options - the page disappears from the sidebar and nothing is
 contacted.
 
 {.endtabset}
@@ -486,7 +486,7 @@ Troubleshooting...
 The server is running the mod but is not publishing anything. Either the operator has not published
 one yet, or the file did not land in `TCFModManager\Data\ServerMap\`. Operators: check the file is
 there, and that there is either exactly one `.tcfmodlist` in the folder or one named
-`published.tcfmodlist` several files with no preferred name is ambiguous, so the server serves
+`published.tcfmodlist` - several files with no preferred name is ambiguous, so the server serves
 nothing rather than guessing.
 
 ## This server's certificate has changed
@@ -494,7 +494,7 @@ nothing rather than guessing.
 SPT serves a self-signed certificate, so the app remembers the exact one your server presented the
 first time and checks it every time after. A change means one of three things:
 
-- the operator reinstalled or moved the server, and it generated a new certificate normal
+- the operator reinstalled or moved the server, and it generated a new certificate - normal
 - you are connecting to a different machine than you think
 - someone is sitting between you and the server
 
@@ -506,18 +506,18 @@ expected it. If yes, **Trust the new certificate**. If you are not sure, do not.
 ## It says the key was rejected
 
 Keys are compared ignoring dashes, spaces and case, so a formatting difference is not the cause. Ask
-the operator to re-read `servermap-key.txt` it is regenerated only if the file is deleted, so a
+the operator to re-read `servermap-key.txt` - it is regenerated only if the file is deleted, so a
 mismatch usually means you have an old one.
 
 ## My headless installed a pile of player mods
 
 It is reading as an ordinary player, which is what an unanswered machine is treated as. On that
 machine: **Options** → **What this machine is**. If the app never asked, it did not find
-`FikaHeadlessManager.exe` at the top of the install folder point **Options** → **Fika headless
+`FikaHeadlessManager.exe` at the top of the install folder - point **Options** → **Fika headless
 launcher** at the one you have.
 
 Operators: check the list too. A row still scoped **Client + Headless** goes to the headless by
-design that is the capture default, and pruning it is the operator's job.
+design - that is the capture default, and pruning it is the operator's job.
 
 ## The map says the server mod needs updating
 
@@ -549,7 +549,7 @@ see who is asking, so it refuses everyone.
 
 Work outwards:
 
-1. Can you join the server in SPT at all? If not, this was never going to work it uses the same
+1. Can you join the server in SPT at all? If not, this was never going to work - it uses the same
    port.
 2. Is the address the one you use in the SPT launcher, and not `0.0.0.0`?
 3. Did the server log the `Ready - serving /tcfservermap` line on startup?

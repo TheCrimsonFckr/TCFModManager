@@ -22,4 +22,7 @@ public static class SelfMod
     // Fallback only. The live Mod.DetailUrl from the API is preferred wherever one is available,
     // so a slug change on sp-mod.com doesn't leave the app pointing at a dead link.
     public const string ModPageUrl = "https://sp-mod.com/mod/2945/tcf-mod-manager";
+
+    // The guide again, as the GitHub wiki - built from docs/ by tools/build-wiki.py, one page per feature.
+    public const string WikiUrl = "https://github.com/TheCrimsonFckr/TCFModManager/wiki";
 }

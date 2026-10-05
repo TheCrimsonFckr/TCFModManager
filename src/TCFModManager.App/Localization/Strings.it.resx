@@ -4674,6 +4674,12 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Help_OpenGuideToolTip" xml:space="preserve">
     <value>La pagina dell'app su sp-mod.com - tutto quello che c'è qui più in dettaglio, con i limiti e la risoluzione dei problemi. È in inglese.</value>
   </data>
+  <data name="Help_OpenWiki" xml:space="preserve">
+    <value>Apri la wiki</value>
+  </data>
+  <data name="Help_OpenWikiToolTip" xml:space="preserve">
+    <value>La guida completa come wiki su GitHub, una pagina per funzione, compresa la guida di Server Map. È in inglese.</value>
+  </data>
   <data name="Help_SearchPlaceholder" xml:space="preserve">
     <value>Come faccio a...?</value>
   </data>

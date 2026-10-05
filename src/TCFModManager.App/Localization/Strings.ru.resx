@@ -4962,6 +4962,12 @@
   <data name="Help_OpenGuideToolTip" xml:space="preserve">
     <value>Страница приложения на sp-mod.com - всё, что здесь, только подробнее, плюс ограничения и решение проблем. Она на английском.</value>
   </data>
+  <data name="Help_OpenWiki" xml:space="preserve">
+    <value>Открыть вики</value>
+  </data>
+  <data name="Help_OpenWikiToolTip" xml:space="preserve">
+    <value>Полное руководство в виде вики на GitHub, по странице на каждую функцию, включая руководство по Server Map. Она на английском.</value>
+  </data>
   <data name="Help_SearchPlaceholder" xml:space="preserve">
     <value>Как мне...?</value>
   </data>

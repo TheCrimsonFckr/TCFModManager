@@ -116,6 +116,9 @@ public partial class HelpViewModel : LocalizedViewModel
     [RelayCommand]
     private void OpenGuide() => OpenUrl(SelfMod.ModPageUrl);
 
+    [RelayCommand]
+    private void OpenWiki() => OpenUrl(SelfMod.WikiUrl);
+
     private static void OpenUrl(string url)
     {
         try
