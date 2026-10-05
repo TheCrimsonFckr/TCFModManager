@@ -38,8 +38,7 @@ public class SemanticVersionTests
     [InlineData("1.3.0", "2.0.0", -1)]
     [InlineData("1.3.0", "1.3.0", 0)]
     [InlineData("1.2.0", "1.10.0", -1)] // numeric, not lexicographic
-    // A release outranks a pre-release of the same numbers - the case ModVersionComparer can't see,
-    // since it throws the suffix away.
+    // A release outranks a pre-release of the same numbers.
     [InlineData("1.3.0-beta", "1.3.0", -1)]
     [InlineData("1.3.0", "1.3.0-beta", 1)]
     [InlineData("1.3.0-beta", "1.3.0-beta.2", -1)] // more identifiers rank higher

@@ -371,9 +371,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
             string.Equals(v.Version, card.InstalledVersion, StringComparison.OrdinalIgnoreCase));
         if (exact?.Version is not null) return exact.Version;
 
-        var equivalent = published.FirstOrDefault(v =>
-            ModVersionComparer.IsUpdateAvailable(card.InstalledVersion, v.Version) == false
-            && ModVersionComparer.IsUpdateAvailable(v.Version, card.InstalledVersion) == false);
+        var equivalent = published.FirstOrDefault(v => ModVersionComparer.SameNumbers(card.InstalledVersion, v.Version));
         if (equivalent?.Version is not null) return equivalent.Version;
 
         return ModCardViewModel.LatestVersion(mod)?.Version;
@@ -399,7 +397,8 @@ public partial class DependenciesViewModel : LocalizedViewModel
             // A disabled dependency is on disk but isn't loaded, so anything needing it is as
             // broken as if it were missing - shown as its own state rather than as "installed".
             var status = DependencyStatusResolver.Resolve(
-                node, installed?.InstalledVersion, required, installed?.IsDisabled == true);
+                node, installed?.InstalledVersion, required, installed?.IsDisabled == true,
+                installed?.InstalledVersionFromFiles == true);
 
             yield return new DependencyRow
             {

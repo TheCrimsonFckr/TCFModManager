@@ -23,10 +23,9 @@ public enum VersionChangeKind
 // A strict major.minor.patch[-prerelease] version, used for this app's own releases.
 //
 // Deliberately separate from ModVersionComparer, which handles arbitrary mod authors' version
-// strings and is lax on purpose (variable segment count, pre-release suffix thrown away entirely).
-// This app's own releases are the one case where the format is known and both things it throws
-// away matter: which segment changed is what tells the user whether an update is a bug fix or a
-// major release, and the pre-release suffix is what distinguishes 1.3.0-beta from 1.3.0.
+// strings and is lax on purpose (variable segment count, post-release words like -hotfix ranked
+// above the release). This app's own releases are the one case where the format is known: which
+// segment changed is what tells the user whether an update is a bug fix or a major release.
 //
 public readonly record struct SemanticVersion(int Major, int Minor, int Patch, string? PreRelease)
     : IComparable<SemanticVersion>

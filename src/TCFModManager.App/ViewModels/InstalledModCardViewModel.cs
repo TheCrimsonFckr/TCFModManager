@@ -32,6 +32,10 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // Wraps whatever VersionDetail says rather than replacing it, so it is carried separately.
     public bool IsVersionManuallyConfirmed { get; init; }
 
+    // True when InstalledVersion was read off the mod's files rather than an install record. A file
+    // can't carry a label (-beta, -hotfix), so it is compared with published versions by its numbers.
+    public bool InstalledVersionFromFiles { get; init; }
+
     public string? InstalledVersionDetail
     {
         get
@@ -1263,7 +1267,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
                 [client.Version, server.Version]);
         }
         else if (record is not null && fileVersion is not null
-                 && ModVersionComparer.IsUpdateAvailable(record.Version, fileVersion) is null or false
+                 && ModVersionComparer.IsUpdateAvailableByNumbers(record.Version, fileVersion) is null or false
                  && !VersionsAreEquivalent(record.Version, fileVersion))
         {
             detail = (nameof(Strings.Installed_DetailFilesReportFormat), [fileVersion]);
@@ -1309,7 +1313,9 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         else
         {
             // A newer version alone isn't enough - it also has to target the installed SPT version.
-            isNewer = ModVersionComparer.IsUpdateAvailable(installedVersion, updateTarget?.Version);
+            isNewer = record is null
+                ? ModVersionComparer.IsUpdateAvailableByNumbers(installedVersion, updateTarget?.Version)
+                : ModVersionComparer.IsUpdateAvailable(installedVersion, updateTarget?.Version);
         }
 
         var updateAvailable = isNewer == true
@@ -1323,6 +1329,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             InstalledVersion = installedVersion,
             VersionDetail = detail,
             IsVersionManuallyConfirmed = manuallyConfirmed,
+            InstalledVersionFromFiles = record is null && installedVersion is not null,
             InstalledAt = installedAt,
             HasClient = client is not null,
             HasPlugin = plugin is not null,
@@ -1382,10 +1389,9 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         yield return Path.GetFileNameWithoutExtension(path);
     }
 
-    // True when two loosely-formatted version strings mean the same release, so a trailing
-    // ".0" difference isn't reported as a discrepancy.
-    private static bool VersionsAreEquivalent(string? a, string? b) =>
-        ModVersionComparer.IsUpdateAvailable(a, b) == false && ModVersionComparer.IsUpdateAvailable(b, a) == false;
+    // True when two loosely-formatted version strings mean the same release, so a trailing ".0" - or
+    // a label the files can't carry - isn't reported as a discrepancy.
+    private static bool VersionsAreEquivalent(string? a, string? b) => ModVersionComparer.SameNumbers(a, b);
 
     // The folder names a catalog mod's GUID would plausibly have been installed under, normalized
     // ready to compare. Two folder-naming conventions:

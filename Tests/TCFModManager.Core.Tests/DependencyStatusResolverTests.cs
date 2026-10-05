@@ -30,6 +30,15 @@ public class DependencyStatusResolverTests
         Assert.Equal(ModStatus.UpdateAvailable, DependencyStatusResolver.Resolve(Node(), "1.2.0", "1.3.0"));
 
     [Fact]
+    public void Resolve_AHotfixIsAnUpdateOverTheRecordedRelease() =>
+        Assert.Equal(ModStatus.UpdateAvailable, DependencyStatusResolver.Resolve(Node(), "1.3.0", "1.3.0-hotfix"));
+
+    [Fact]
+    public void Resolve_AVersionReadOffTheFilesIgnoresTheLabel() =>
+        Assert.Equal(ModStatus.Installed,
+            DependencyStatusResolver.Resolve(Node(), "1.3.0.0", "1.3.0-hotfix", installedVersionFromFiles: true));
+
+    [Fact]
     public void Resolve_NoCompatibleVersionWhenNothingPublishedFitsAndItIsMissing() =>
         // latest_compatible_version comes back null when no release suits the installed SPT.
         Assert.Equal(ModStatus.NoCompatibleVersion, DependencyStatusResolver.Resolve(Node(), null, null));

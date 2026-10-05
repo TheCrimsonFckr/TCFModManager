@@ -10,7 +10,9 @@ public static class DependencyStatusResolver
     // isn't on disk. <paramref name="requiredVersion"/> is the node's latest compatible version,
     // which the API leaves null when nothing published fits the installed SPT.
     // 
-    public static ModStatus Resolve(DependencyNode node, string? installedVersion, string? requiredVersion, bool installedButDisabled = false)
+    public static ModStatus Resolve(
+        DependencyNode node, string? installedVersion, string? requiredVersion,
+        bool installedButDisabled = false, bool installedVersionFromFiles = false)
     {
         // A conflict is about the graph as a whole, so it outranks whatever is on disk.
         if (node.Conflict) return ModStatus.Conflict;
@@ -27,7 +29,11 @@ public static class DependencyStatusResolver
                 : ModStatus.NotInstalled;
         }
 
-        return ModVersionComparer.IsUpdateAvailable(installedVersion, requiredVersion) == true
+        var newer = installedVersionFromFiles
+            ? ModVersionComparer.IsUpdateAvailableByNumbers(installedVersion, requiredVersion)
+            : ModVersionComparer.IsUpdateAvailable(installedVersion, requiredVersion);
+
+        return newer == true
             ? ModStatus.UpdateAvailable
             : ModStatus.Installed;
     }
