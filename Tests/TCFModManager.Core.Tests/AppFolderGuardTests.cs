@@ -214,6 +214,22 @@ public class AppFolderGuardTests : IDisposable
         Assert.Empty(_manifest.Load().Mods);
     }
 
+    [Fact]
+    public async Task AnUpdateWithOnlyAReadMeAndAnEmptyFolder_FailsWithNothingChanged()
+    {
+        var target = NewTarget();
+        await Install(target, "1.0.0", ("BepInEx/plugins/Mod/mod.dll", "v1"));
+
+        var ex = await Assert.ThrowsAsync<ModInstallException>(() => Install(target, "2.0.0",
+            ("README.txt", "readme"),
+            ("BepInEx/", "")));
+
+        Assert.Equal(ModInstallFailure.UnrecognisedArchive, ex.Reason);
+        Assert.False(File.Exists(Full("README.txt")));
+        Assert.Equal("v1", File.ReadAllText(Full("BepInEx/plugins/Mod/mod.dll")));
+        Assert.Equal("1.0.0", Assert.Single(_manifest.Load().Mods).Version);
+    }
+
     // The v1.19.0 damage: an update that placed nothing swapped the record for an empty one.
     [Fact]
     public async Task AnUpdateWhoseEveryFileIsRefused_LeavesThePreviousVersionAndItsRecord()
