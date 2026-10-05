@@ -23,6 +23,6 @@ public static class SelfMod
     // so a slug change on sp-mod.com doesn't leave the app pointing at a dead link.
     public const string ModPageUrl = "https://sp-mod.com/mod/2945/tcf-mod-manager";
 
-    // The guide again, as the GitHub wiki - built from docs/ by tools/build-wiki.py, one page per feature.
+    // The full guide. The wiki is the one place it is kept; the sp-mod page only covers installing.
     public const string WikiUrl = "https://github.com/TheCrimsonFckr/TCFModManager/wiki";
 }

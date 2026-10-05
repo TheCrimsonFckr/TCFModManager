@@ -4672,13 +4672,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Vollständige Anleitung öffnen</value>
   </data>
   <data name="Help_OpenGuideToolTip" xml:space="preserve">
-    <value>Die Seite der App auf sp-mod.com - alles hier ausführlicher, dazu Einschränkungen und Fehlerbehebung. Sie ist auf Englisch.</value>
-  </data>
-  <data name="Help_OpenWiki" xml:space="preserve">
-    <value>Wiki öffnen</value>
-  </data>
-  <data name="Help_OpenWikiToolTip" xml:space="preserve">
-    <value>Die vollständige Anleitung als Wiki auf GitHub, eine Seite pro Funktion, die Server-Map-Anleitung eingeschlossen. Es ist auf Englisch.</value>
+    <value>Die vollständige Anleitung auf GitHub - alles hier ausführlicher, dazu Einschränkungen und Fehlerbehebung. Sie ist auf Englisch.</value>
   </data>
   <data name="Help_SearchPlaceholder" xml:space="preserve">
     <value>Wie kann ich ...?</value>

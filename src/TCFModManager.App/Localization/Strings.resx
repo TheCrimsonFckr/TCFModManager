@@ -5522,19 +5522,11 @@ This was written to:
   </data>
   <data name="Help_OpenGuide" xml:space="preserve">
     <value>Open the full guide</value>
-    <comment>Button opening the app's page on sp-mod.com.</comment>
+    <comment>Button opening the app's wiki on GitHub, which is the full guide.</comment>
   </data>
   <data name="Help_OpenGuideToolTip" xml:space="preserve">
-    <value>The app's page on sp-mod.com - everything here in more depth, plus its limitations and troubleshooting. It is in English.</value>
+    <value>The full guide, on GitHub - everything here in more depth, plus its limitations and troubleshooting. It is in English.</value>
     <comment>Tooltip on Help_OpenGuide. Keep saying the guide is in English.</comment>
-  </data>
-  <data name="Help_OpenWiki" xml:space="preserve">
-    <value>Open the wiki</value>
-    <comment>Button opening the app's wiki on GitHub - the same guide as Help_OpenGuide, a page per feature.</comment>
-  </data>
-  <data name="Help_OpenWikiToolTip" xml:space="preserve">
-    <value>The full guide as a wiki on GitHub, one page per feature, the Server Map guide included. It is in English.</value>
-    <comment>Tooltip on Help_OpenWiki. Keep saying the wiki is in English.</comment>
   </data>
   <data name="Help_SearchPlaceholder" xml:space="preserve">
     <value>How do I...?</value>
