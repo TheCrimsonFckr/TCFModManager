@@ -6115,6 +6115,9 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Credits_Brunolz13" xml:space="preserve">
     <value>Ha scritto il TCF File Generator, l'estrattore originale di liste sp-mod su cui si basa "Importa da sp-mod".</value>
   </data>
+  <data name="Credits_Wuvgawore" xml:space="preserve">
+    <value>Ha trovato e corretto dei bug nella propria versione dell'app - impostazioni BepInEx sostituite con l'aggiornamento, cartelle di mod vuote, versioni preliminari e altro - poi riportati in questa.</value>
+  </data>
   <data name="Options_CreditsHeader" xml:space="preserve">
     <value>Riconoscimenti</value>
   </data>

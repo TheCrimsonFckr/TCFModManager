@@ -6115,6 +6115,9 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Credits_Brunolz13" xml:space="preserve">
     <value>Hat den TCF File Generator geschrieben, den ursprünglichen sp-mod-Listenextraktor, auf dem "Von sp-mod importieren" aufbaut.</value>
   </data>
+  <data name="Credits_Wuvgawore" xml:space="preserve">
+    <value>Hat in seiner eigenen Version der App Fehler gefunden und behoben - BepInEx-Einstellungen, die beim Update ersetzt wurden, leere Mod-Ordner, Vorabversionen und mehr -, die in diese App übernommen wurden.</value>
+  </data>
   <data name="Options_CreditsHeader" xml:space="preserve">
     <value>Mitwirkende</value>
   </data>

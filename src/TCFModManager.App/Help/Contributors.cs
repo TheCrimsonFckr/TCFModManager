@@ -19,5 +19,6 @@ public static class Contributors
     public static IReadOnlyList<Contributor> All { get; } =
     [
         new("brunolz13", () => Strings.Credits_Brunolz13),
+        new("WUVGAWORE", () => Strings.Credits_Wuvgawore, "https://sp-mod.com/user/62485/wuvgawore"),
     ];
 }

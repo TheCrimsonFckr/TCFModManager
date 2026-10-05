@@ -6454,6 +6454,9 @@
   <data name="Credits_Brunolz13" xml:space="preserve">
     <value>Написал TCF File Generator - исходный инструмент для извлечения списков sp-mod, на котором основан «Импорт с sp-mod».</value>
   </data>
+  <data name="Credits_Wuvgawore" xml:space="preserve">
+    <value>Нашёл и исправил ошибки в своей версии приложения - замена настроек BepInEx при обновлении, пустые папки модов, предварительные версии и другое; эти исправления перенесены сюда.</value>
+  </data>
   <data name="Options_CreditsHeader" xml:space="preserve">
     <value>Благодарности</value>
   </data>

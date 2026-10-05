@@ -7341,6 +7341,10 @@ See Dependencies and Conflicts.</value>
     <value>Wrote the TCF File Generator, the original sp-mod list extractor that Import from sp-mod is built on.</value>
     <comment>What this contributor did. Their name is shown above it and isn't translated.</comment>
   </data>
+  <data name="Credits_Wuvgawore" xml:space="preserve">
+    <value>Found and fixed bugs in their own version of the app - BepInEx settings being replaced on update, empty mod folders, pre-release versions and more - which were brought back into it.</value>
+    <comment>What this contributor did. Their name is shown above it and isn't translated.</comment>
+  </data>
   <data name="Options_CreditsHeader" xml:space="preserve">
     <value>Credits</value>
   </data>
