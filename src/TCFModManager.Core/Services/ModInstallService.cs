@@ -206,7 +206,8 @@ public sealed class ModInstallService(
             status?.Report(new ModInstallProgress(ModInstallStage.Extracting));
             // Auto-detects archive format from the file header rather than assuming zip.
             var extractTimer = System.Diagnostics.Stopwatch.StartNew();
-            await ExtractArchiveAsync(archivePath, extractDir, status, ct).ConfigureAwait(false);
+            var folderEntries = new List<string>();
+            await ExtractArchiveAsync(archivePath, extractDir, status, ct, folderEntries).ConfigureAwait(false);
             AppLog.Debug("Install", $"extracted in {extractTimer.ElapsedMilliseconds}ms");
 
             //
@@ -466,7 +467,9 @@ public sealed class ModInstallService(
                 };
             }
 
-            var record = SaveRecord(target, version, placedFiles, incomplete: false, installPath, overwrote, fingerprints: []);
+            var emptyFolders = PlaceEmptyFolders(folderEntries, extractDir, contentRoot, serverRoot, installPath, existing, target, version);
+
+            var record = SaveRecord(target, version, placedFiles, incomplete: false, installPath, overwrote, fingerprints: [], emptyFolders);
 
             AppLog.Info("Install",
                 $"{target.Name} {version.Version} placed {placedFiles.Count} file(s) in folders [{string.Join(", ", record.Folders)}]"
@@ -490,7 +493,7 @@ public sealed class ModInstallService(
             //
             var fingerprintClock = Stopwatch.StartNew();
             record = SaveRecord(target, version, placedFiles, incomplete: false, installPath, overwrote,
-                KeepSettingsPrints(Fingerprint(installPath, placedFiles), pending, existing));
+                KeepSettingsPrints(Fingerprint(installPath, placedFiles), pending, existing), emptyFolders);
             AppLog.Debug("Install", $"fingerprinted {record.Fingerprints.Count} file(s) in {fingerprintClock.ElapsedMilliseconds}ms");
 
             status?.Report(new ModInstallProgress(ModInstallStage.Done));
@@ -519,6 +522,56 @@ public sealed class ModInstallService(
         }
     }
 
+    //
+    // The folders an archive ships with nothing in them (SVM's Presets\, which its own tool refuses to
+    // run without). Neither extractor writes folder entries, so they arrive as the entry list the
+    // extraction collected; one that holds anything in the archive exists in extractDir already and is
+    // not empty. Created only below a mod's own folder and where the path checks allow. Returned are
+    // the ones this install owns - created now, or carried from the previous version's record - so a
+    // removal can tidy them away while they are still empty.
+    //
+    private static List<string> PlaceEmptyFolders(
+        IReadOnlyList<string> folderEntries, string extractDir, string contentRoot, string serverRoot,
+        string installPath, InstalledModRecord? existing, InstallTarget target, ModVersion version)
+    {
+        var owned = new List<string>();
+        var leaves = folderEntries
+            .Where(f => !Directory.Exists(f) && !folderEntries.Any(o => IsInside(o, f)))
+            .Distinct(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var folder in leaves)
+        {
+            var relative = Path.GetRelativePath(contentRoot, folder);
+            if (relative == "." || relative.StartsWith("..", StringComparison.Ordinal) || Path.IsPathRooted(relative)) continue;
+
+            var forward = ArchiveLayout.RemapForServerRoot(relative, serverRoot).Replace('\\', '/');
+            if (InstallPathGuard.ModFolderOf(forward) is not { } modFolder || modFolder.Length >= forward.Length) continue;
+            if (InstallPathGuard.CheckPlacedPath(installPath, forward, out var full) is not null) continue;
+
+            try
+            {
+                if (!Directory.Exists(full))
+                {
+                    Directory.CreateDirectory(full);
+                    owned.Add(forward);
+                }
+                else if (existing?.EmptyFolders.Contains(forward, StringComparer.OrdinalIgnoreCase) == true)
+                {
+                    owned.Add(forward);
+                }
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                AppLog.Warn("Install", $"{target.Name} {version.Version}: couldn't create the archive's empty folder {forward}: {ex.Message}");
+            }
+        }
+
+        if (owned.Count > 0)
+            AppLog.Info("Install", $"{target.Name} {version.Version}: empty folder(s) from the archive: {string.Join(", ", owned)}");
+
+        return owned;
+    }
+
     // Writes the record for what an install placed, replacing any previous record for the same mod.
     // The manifest is reloaded rather than reusing an earlier copy, since UninstallAsync may have
     // saved a removal of the old record in between.
@@ -529,7 +582,8 @@ public sealed class ModInstallService(
         bool incomplete,
         string installPath,
         List<OverwrittenFile> overwrote,
-        List<FileFingerprint> fingerprints)
+        List<FileFingerprint> fingerprints,
+        List<string>? emptyFolders = null)
     {
         var record = new InstalledModRecord
         {
@@ -546,6 +600,7 @@ public sealed class ModInstallService(
             Fingerprints = fingerprints,
             InstallPath = InstallStamp.Of(installPath),
             Overwrote = overwrote,
+            EmptyFolders = emptyFolders ?? [],
         };
 
         var current = manifestService.Load();
@@ -884,6 +939,19 @@ public sealed class ModInstallService(
         // On a real removal, what this mod replaced comes back. An update carries them forward instead.
         if (kind == RemovalKind.AppInstalled)
             restored = RestoreOriginals(installPath, record, session);
+
+        // The empty folders the archive shipped go too, while still empty and no other record lists
+        // them. An update's own install creates them again.
+        var otherEmptyFolders = manifestService.Load().Mods
+            .Where(m => !(m.ModId == record.ModId && m.IsAddon == record.IsAddon))
+            .SelectMany(m => m.EmptyFolders)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var folder in record.EmptyFolders.Where(f => !otherEmptyFolders.Contains(f)))
+        {
+            if (InstallPathGuard.CheckRecordedPath(installPath, folder, out var fullFolder) is null)
+                NoteFoldersToTidy(installPath, Path.Combine(fullFolder, "_"), touchedDirectories);
+        }
 
         foreach (var dir in touchedDirectories.OrderByDescending(d => d.Length))
         {
@@ -1382,18 +1450,35 @@ public sealed class ModInstallService(
         string archivePath,
         string extractDir,
         IProgress<ModInstallProgress>? status,
-        CancellationToken ct)
+        CancellationToken ct,
+        List<string>? folderEntries = null)
     {
         Directory.CreateDirectory(extractDir);
         var extractRoot = Path.GetFullPath(extractDir) + Path.DirectorySeparatorChar;
+        var folders = new FolderEntries(extractDir, extractRoot, folderEntries);
 
         if (ArchiveLayout.IsZipArchive(archivePath))
         {
-            await ExtractZipAsync(archivePath, extractDir, extractRoot, status, ct).ConfigureAwait(false);
+            await ExtractZipAsync(archivePath, extractDir, extractRoot, status, folders, ct).ConfigureAwait(false);
             return;
         }
 
-        ExtractWithSharpCompress(archivePath, extractDir, extractRoot, status, ct);
+        ExtractWithSharpCompress(archivePath, extractDir, extractRoot, status, folders, ct);
+    }
+
+    //
+    // The folder entries an archive lists, as full paths below extractDir; one that would land outside
+    // it is dropped. Only collected when the caller asks for them.
+    //
+    private sealed class FolderEntries(string extractDir, string extractRoot, List<string>? into)
+    {
+        public void Add(string? key)
+        {
+            if (into is null || string.IsNullOrEmpty(key)) return;
+
+            var full = Path.GetFullPath(Path.Combine(extractDir, key)).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            if (full.StartsWith(extractRoot, StringComparison.OrdinalIgnoreCase)) into.Add(full);
+        }
     }
 
     private static async Task ExtractZipAsync(
@@ -1401,11 +1486,14 @@ public sealed class ModInstallService(
         string extractDir,
         string extractRoot,
         IProgress<ModInstallProgress>? status,
+        FolderEntries folders,
         CancellationToken ct)
     {
         await using var file = new FileStream(
             archivePath, FileMode.Open, FileAccess.Read, FileShare.Read, CopyBufferSize, useAsync: true);
         using var zip = new ZipArchive(file, ZipArchiveMode.Read);
+
+        foreach (var folder in zip.Entries.Where(e => string.IsNullOrEmpty(e.Name))) folders.Add(folder.FullName);
 
         var entries = zip.Entries.Where(e => !string.IsNullOrEmpty(e.Name)).ToList();
         var extracted = 0;
@@ -1446,6 +1534,7 @@ public sealed class ModInstallService(
         string extractDir,
         string extractRoot,
         IProgress<ModInstallProgress>? status,
+        FolderEntries folders,
         CancellationToken ct)
     {
         IArchive archive;
@@ -1455,7 +1544,7 @@ public sealed class ModInstallService(
         }
         catch (ArchiveOperationException)
         {
-            ExtractWithStreamReader(archivePath, extractDir, extractRoot, status, ct);
+            ExtractWithStreamReader(archivePath, extractDir, extractRoot, status, folders, ct);
             return;
         }
 
@@ -1467,7 +1556,7 @@ public sealed class ModInstallService(
             if (archive.IsSolid || archive.Type == ArchiveType.SevenZip)
             {
                 using var reader = archive.ExtractAllEntries();
-                ExtractFromReader(reader, extractDir, extractRoot, progress, ct);
+                ExtractFromReader(reader, extractDir, extractRoot, progress, folders, ct);
                 return;
             }
 
@@ -1475,7 +1564,12 @@ public sealed class ModInstallService(
             {
                 ct.ThrowIfCancellationRequested();
 
-                if (entry.IsDirectory) continue;
+                if (entry.IsDirectory)
+                {
+                    folders.Add(entry.Key);
+                    continue;
+                }
+
                 if (entry.Key is not { Length: > 0 } key) continue;
 
                 var destination = ResolveEntryDestination(key, extractDir, extractRoot);
@@ -1490,21 +1584,27 @@ public sealed class ModInstallService(
         string extractDir,
         string extractRoot,
         IProgress<ModInstallProgress>? status,
+        FolderEntries folders,
         CancellationToken ct)
     {
         using var file = File.OpenRead(archivePath);
         using var reader = ReaderFactory.OpenReader(file);
-        ExtractFromReader(reader, extractDir, extractRoot, new ExtractProgress(status, 0), ct);
+        ExtractFromReader(reader, extractDir, extractRoot, new ExtractProgress(status, 0), folders, ct);
     }
 
     private static void ExtractFromReader(
-        IReader reader, string extractDir, string extractRoot, ExtractProgress progress, CancellationToken ct)
+        IReader reader, string extractDir, string extractRoot, ExtractProgress progress, FolderEntries folders, CancellationToken ct)
     {
         while (reader.MoveToNextEntry())
         {
             ct.ThrowIfCancellationRequested();
 
-            if (reader.Entry.IsDirectory) continue;
+            if (reader.Entry.IsDirectory)
+            {
+                folders.Add(reader.Entry.Key);
+                continue;
+            }
+
             if (reader.Entry.Key is not { Length: > 0 } key) continue;
 
             var destination = ResolveEntryDestination(key, extractDir, extractRoot);

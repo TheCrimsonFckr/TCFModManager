@@ -74,6 +74,12 @@ public sealed class InstalledModRecord
     // Files this install placed over that no record owned, with where the originals were kept (D22).
     public List<OverwrittenFile> Overwrote { get; init; } = [];
 
+    //
+    // Folders the archive shipped empty that this install created (SVM's Presets\), relative to the SPT
+    // install root, forward-slash separated. A removal takes them while they are still empty.
+    //
+    public List<string> EmptyFolders { get; init; } = [];
+
     public FileFingerprint? FingerprintFor(string path) =>
         Fingerprints.FirstOrDefault(f => string.Equals(f.Path, path, StringComparison.OrdinalIgnoreCase));
 }
