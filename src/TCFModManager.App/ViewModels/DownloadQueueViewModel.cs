@@ -434,10 +434,12 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         var installedGuids = installedMatches.Where(m => m.Guid is not null)
             .Select(m => m.Guid!).ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-        // Guards against two mods sharing a dependency both queuing the same download twice. A
-        // cancelled card doesn't count, so a dependency dropped earlier can be picked up again.
+        // Guards against two mods sharing a dependency both queuing the same download twice. Only a
+        // card still waiting or running counts: a finished one is either on disk (the scan above
+        // finds it) or isn't - removed since, failed, cancelled, or only downloaded in Monitor mode -
+        // and is offered again.
         var queuedIds = Items
-            .Where(i => i.Status != DownloadQueueItemStatus.Cancelled && !i.Target.IsAddon)
+            .Where(i => !i.IsFinished && !i.Target.IsAddon)
             .Select(i => i.Target.Id)
             .ToHashSet();
 
