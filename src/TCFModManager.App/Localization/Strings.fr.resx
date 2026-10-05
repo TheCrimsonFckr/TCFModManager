@@ -6157,12 +6157,6 @@ Voir Dépendances et conflits.</value>
   <data name="SpModImport_OpenModPage" xml:space="preserve">
     <value>Ouvrir sa page sur sp-mod</value>
   </data>
-  <data name="SpModImport_TipOnListFormat" xml:space="preserve">
-    <value>Sur la liste : {0}</value>
-  </data>
-  <data name="SpModImport_TipMissingFormat" xml:space="preserve">
-    <value>Manquantes : {0}</value>
-  </data>
   <data name="SpModImport_BadgeMissing_one" xml:space="preserve">
     <value>{0} dépendance manquante</value>
   </data>

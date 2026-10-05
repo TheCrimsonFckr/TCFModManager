@@ -7392,14 +7392,6 @@ See Dependencies and Conflicts.</value>
     <value>Open its page on sp-mod</value>
     <comment>Tooltip of the open button on each mod's card in the sp-mod import window.</comment>
   </data>
-  <data name="SpModImport_TipOnListFormat" xml:space="preserve">
-    <value>On the list: {0}</value>
-    <comment>First line of the tooltip on a card's dependencies badge. {0} is mod names, joined by Common_ListSeparator.</comment>
-  </data>
-  <data name="SpModImport_TipMissingFormat" xml:space="preserve">
-    <value>Missing: {0}</value>
-    <comment>Second line of the tooltip on a card's dependencies badge: dependencies that nothing ticked covers. {0} is mod names, joined by Common_ListSeparator.</comment>
-  </data>
   <data name="SpModImport_BadgeMissing_one" xml:space="preserve">
     <value>1 missing dependency</value>
     <comment>Red badge on a mod's card in the sp-mod import window: how many of its dependencies nothing ticked covers. {0} the count.</comment>

@@ -17,6 +17,15 @@ namespace TCFModManager.App.Views;
 // writes straight through to the review row, which is what is stored. The dependencies badge is the
 // one part that moves: it is worked out again whenever any tick changes (see RefreshDependencies).
 //
+// One line of a dependencies badge's tooltip: the name, with a green tick or a red cross.
+public sealed class SpModDependencyTip(string name, bool covered)
+{
+    public string Name { get; } = name;
+
+    // The window's template picks the icon and its colour from this, so the colour stays a DynamicResource.
+    public bool Covered { get; } = covered;
+}
+
 public sealed partial class SpModImportRow : ObservableObject
 {
     private readonly Action? _changed;
@@ -61,8 +70,9 @@ public sealed partial class SpModImportRow : ObservableObject
     [ObservableProperty]
     private ControlAppearance _dependenciesAppearance = ControlAppearance.Success;
 
+    // Covered first, then missing - each group in the order sp-mod lists them.
     [ObservableProperty]
-    private string? _dependenciesTip;
+    private IReadOnlyList<SpModDependencyTip> _dependencyTips = [];
 
     // False for the information-only rows: entries going away, and dependencies with no version.
     public bool CanTick => Row is not null;
@@ -90,7 +100,7 @@ public sealed partial class SpModImportRow : ObservableObject
         if (Dependencies.Count == 0)
         {
             DependenciesBadge = null;
-            DependenciesTip = null;
+            DependencyTips = [];
             return;
         }
 
@@ -108,10 +118,8 @@ public sealed partial class SpModImportRow : ObservableObject
             ? Strings.SpModImport_BadgeMissing(missing.Count)
             : Strings.SpModImport_BadgeSatisfied(covered.Count);
 
-        var lines = new List<string>();
-        if (covered.Count > 0) lines.Add(LocalizationService.Text(Strings.SpModImport_TipOnListFormat, string.Join(Strings.Common_ListSeparator, covered)));
-        if (missing.Count > 0) lines.Add(LocalizationService.Text(Strings.SpModImport_TipMissingFormat, string.Join(Strings.Common_ListSeparator, missing)));
-        DependenciesTip = string.Join(Environment.NewLine, lines);
+        DependencyTips = [.. covered.Select(name => new SpModDependencyTip(name, true)),
+                          .. missing.Select(name => new SpModDependencyTip(name, false))];
     }
 }
 

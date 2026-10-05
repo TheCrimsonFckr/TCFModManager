@@ -6493,12 +6493,6 @@
   <data name="SpModImport_OpenModPage" xml:space="preserve">
     <value>Открыть его страницу на sp-mod</value>
   </data>
-  <data name="SpModImport_TipOnListFormat" xml:space="preserve">
-    <value>В списке: {0}</value>
-  </data>
-  <data name="SpModImport_TipMissingFormat" xml:space="preserve">
-    <value>Не хватает: {0}</value>
-  </data>
   <data name="SpModImport_BadgeMissing_one" xml:space="preserve">
     <value>{0} зависимость отсутствует</value>
   </data>

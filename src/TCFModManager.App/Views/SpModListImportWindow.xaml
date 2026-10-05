@@ -296,8 +296,44 @@
                                                                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                                     Appearance="{Binding DependenciesAppearance}"
                                                                     Content="{Binding DependenciesBadge}"
-                                                                    ToolTip="{Binding DependenciesTip}"
-                                                                    Visibility="{Binding DependenciesBadge, Converter={StaticResource NullToCollapsed}}" />
+                                                                    ToolTipService.ShowDuration="20000"
+                                                                    Visibility="{Binding DependenciesBadge, Converter={StaticResource NullToCollapsed}}">
+                                                                    <!-- One line per dependency, ticked or crossed, as sp-mod's own cards show it. -->
+                                                                    <ui:Badge.ToolTip>
+                                                                        <ToolTip>
+                                                                            <ItemsControl ItemsSource="{Binding DependencyTips}" Focusable="False">
+                                                                                <ItemsControl.ItemTemplate>
+                                                                                    <DataTemplate>
+                                                                                        <StackPanel Margin="0,1" Orientation="Horizontal">
+                                                                                            <ui:SymbolIcon
+                                                                                                Width="16"
+                                                                                                Margin="0,0,8,0"
+                                                                                                VerticalAlignment="Center"
+                                                                                                FontSize="14">
+                                                                                                <ui:SymbolIcon.Style>
+                                                                                                    <Style TargetType="ui:SymbolIcon">
+                                                                                                        <Setter Property="Symbol" Value="Dismiss16" />
+                                                                                                        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                                                                                                        <Style.Triggers>
+                                                                                                            <DataTrigger Binding="{Binding Covered}" Value="True">
+                                                                                                                <Setter Property="Symbol" Value="Checkmark16" />
+                                                                                                                <Setter Property="Foreground" Value="{DynamicResource SystemFillColorSuccessBrush}" />
+                                                                                                            </DataTrigger>
+                                                                                                        </Style.Triggers>
+                                                                                                    </Style>
+                                                                                                </ui:SymbolIcon.Style>
+                                                                                            </ui:SymbolIcon>
+                                                                                            <TextBlock
+                                                                                                VerticalAlignment="Center"
+                                                                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                                                                Text="{Binding Name}" />
+                                                                                        </StackPanel>
+                                                                                    </DataTemplate>
+                                                                                </ItemsControl.ItemTemplate>
+                                                                            </ItemsControl>
+                                                                        </ToolTip>
+                                                                    </ui:Badge.ToolTip>
+                                                                </ui:Badge>
                                                             </WrapPanel>
 
                                                             <TextBlock
