@@ -189,9 +189,18 @@ public static class ModConfigStore
         }
     }
 
-    // Null when the text is fine to write, otherwise why it isn't.
+    //
+    // Null when the text is fine to write, otherwise why it isn't. A .json5 file is not checked:
+    // JSON5 allows unquoted keys and single-quoted strings, which no JSON reader here accepts, so a
+    // check would refuse every file the mod itself reads happily.
+    //
     public static string? ValidateFor(string path, string text) =>
-        Path.GetExtension(path).Equals(".cfg", StringComparison.OrdinalIgnoreCase) ? null : ValidateJson(text);
+        Path.GetExtension(path).ToLowerInvariant() switch
+        {
+            ".cfg" => null,
+            ".json5" => string.IsNullOrWhiteSpace(text) ? "The file is empty." : null,
+            _ => ValidateJson(text),
+        };
 
     //
     // Null when the text parses as JSON, otherwise a message naming where it stopped making sense.
