@@ -251,6 +251,7 @@
                                     <ui:Badge
                                         HorizontalAlignment="Right"
                                         Appearance="{Binding Status, Converter={StaticResource StatusAppearance}}"
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                         Content="{Binding StatusLabel}" />
 
                                     <!-- Cancels this item and any dependencies it queued; hidden once the item is finished. -->
