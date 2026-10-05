@@ -6027,6 +6027,15 @@
   <data name="Downloads_KeptAppFiles_many" xml:space="preserve">
     <value>{0} файлов из этого архива попали бы на собственные файлы TCF Mod Manager и были пропущены.</value>
   </data>
+  <data name="Downloads_KeptSettings_one" xml:space="preserve">
+    <value>Ваши настройки в BepInEx\config уже были на месте и сохранены: {0} файл.</value>
+  </data>
+  <data name="Downloads_KeptSettings_few" xml:space="preserve">
+    <value>Ваши настройки в BepInEx\config уже были на месте и сохранены: {0} файла.</value>
+  </data>
+  <data name="Downloads_KeptSettings_many" xml:space="preserve">
+    <value>Ваши настройки в BepInEx\config уже были на месте и сохранены: {0} файлов.</value>
+  </data>
   <data name="Downloads_KeptOriginals_one" xml:space="preserve">
     <value>{0} файл, который он заменил, сохранён, чтобы вернуть его при удалении.</value>
   </data>

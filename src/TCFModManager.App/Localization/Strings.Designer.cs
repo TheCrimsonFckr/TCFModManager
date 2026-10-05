@@ -1879,6 +1879,8 @@ internal static class Strings
         LocalizationService.Plural("Downloads_KeptSptFiles", count, values);
     internal static string Downloads_KeptAppFiles(int count, params object?[] values) =>
         LocalizationService.Plural("Downloads_KeptAppFiles", count, values);
+    internal static string Downloads_KeptSettings(int count, params object?[] values) =>
+        LocalizationService.Plural("Downloads_KeptSettings", count, values);
     internal static string Downloads_KeptOriginals(int count, params object?[] values) =>
         LocalizationService.Plural("Downloads_KeptOriginals", count, values);
     internal static string Installed_UndoRemovalPickFormat => LocalizationService.Get("Installed_UndoRemovalPickFormat");

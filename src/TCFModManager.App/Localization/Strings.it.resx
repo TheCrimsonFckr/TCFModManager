@@ -5718,6 +5718,12 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Downloads_KeptAppFiles_other" xml:space="preserve">
     <value>{0} file di questo archivio sarebbero finiti sui file di TCF Mod Manager e sono stati esclusi.</value>
   </data>
+  <data name="Downloads_KeptSettings_one" xml:space="preserve">
+    <value>Le tue impostazioni in BepInEx\config c'erano già e sono state mantenute: 1 file.</value>
+  </data>
+  <data name="Downloads_KeptSettings_other" xml:space="preserve">
+    <value>Le tue impostazioni in BepInEx\config c'erano già e sono state mantenute: {0} file.</value>
+  </data>
   <data name="Downloads_KeptOriginals_one" xml:space="preserve">
     <value>1 file che ha sostituito è stato conservato, per rimetterlo se la mod viene rimossa.</value>
   </data>

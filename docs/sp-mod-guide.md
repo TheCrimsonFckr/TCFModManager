@@ -119,7 +119,7 @@ Mods installed with this app have every file they placed recorded, which is what
 #### Your configs aren't thrown away
 If a server mod has config files of its own (`user\mods\<mod>\config\*.json`), removing it asks what you want done with them: keep them - they're moved to a timestamped folder under `Data\LegacyConfigs\`, with their original paths intact so the folder can be copied back over your SPT install - or delete them with the rest of the mod. Updating a mod always keeps a copy, without asking, and carries your settings into the new version - see the Configs tab.
 
-Client mod settings live in `BepInEx\config`, outside the mod's own folder, so removing a mod never touches them.
+Client mod settings live in `BepInEx\config`, outside the mod's own folder, so removing a mod never touches them. If a mod's download ships its own settings file, it's only placed when you don't have one yet - an install or update never puts the mod's defaults over settings you've already got.
 
 #### Removing a mod can be undone
 Remove doesn't delete anything straight away. The mod's files move to a hidden `.tcfmm-removed\` folder inside your SPT install, and **Undo** on the Installed page puts a removal back exactly as it was - with several held, it lists them so you can pick which, in any order. It never overwrites something that has taken a file's place since. How long removed mods are kept is up to you under **Options, Keep removed mods**: delete straight away, 1, 7, 14 (the default) or 30 days, or until you clear them; **Clear removed mods** frees the space now.

@@ -5718,6 +5718,12 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="Downloads_KeptAppFiles_other" xml:space="preserve">
     <value>{0} Dateien in diesem Archiv wären auf den eigenen Dateien von TCF Mod Manager gelandet und wurden ausgelassen.</value>
   </data>
+  <data name="Downloads_KeptSettings_one" xml:space="preserve">
+    <value>Deine Einstellungen in BepInEx\config waren schon da und wurden behalten: 1 Datei.</value>
+  </data>
+  <data name="Downloads_KeptSettings_other" xml:space="preserve">
+    <value>Deine Einstellungen in BepInEx\config waren schon da und wurden behalten: {0} Dateien.</value>
+  </data>
   <data name="Downloads_KeptOriginals_one" xml:space="preserve">
     <value>1 Datei, die er ersetzt hat, wurde aufbewahrt, um sie beim Entfernen zurückzulegen.</value>
   </data>
