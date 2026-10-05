@@ -29,8 +29,6 @@ public sealed class Mod
     public bool? FikaCompatibility { get; set; }
     public bool? Featured { get; set; }
     public bool? ContainsAds { get; set; }
-    public bool? ContainsAiContent { get; set; }
-    public string? CustomAiDisclosure { get; set; }
     public bool? ShowsProfileBindingNotice { get; set; }
     public bool? CheatNotice { get; set; }
     public int? CategoryId { get; set; }

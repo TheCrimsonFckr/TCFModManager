@@ -111,7 +111,6 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
         {
             var flags = new List<string>();
             if (_addon.ContainsAds == true) flags.Add(Strings.Common_FlagContainsAds);
-            if (_addon.ContainsAiContent == true) flags.Add(Strings.Common_FlagContainsAiContent);
 
             return flags.Count == 0 ? null : string.Join(Strings.Common_FlagSeparator, flags);
         }

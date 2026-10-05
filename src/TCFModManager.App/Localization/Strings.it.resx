@@ -487,7 +487,7 @@
     <value>Errore imprevisto durante il ricaricamento del catalogo mod: {0}</value>
   </data>
   <data name="Common_AttributeFilterToolTip" xml:space="preserve">
-    <value>Filtra per supporto Fika, pubblicità, contenuti IA, dipendenze e addon</value>
+    <value>Filtra per supporto Fika, pubblicità, dipendenze e addon</value>
   </data>
   <data name="Common_Cancel" xml:space="preserve">
     <value>Annulla</value>
@@ -515,9 +515,6 @@
   </data>
   <data name="Common_FlagContainsAds" xml:space="preserve">
     <value>Contiene pubblicità</value>
-  </data>
-  <data name="Common_FlagContainsAiContent" xml:space="preserve">
-    <value>Contiene contenuti IA</value>
   </data>
   <data name="Common_FlagFikaCompatible" xml:space="preserve">
     <value>Compatibile con Fika</value>
@@ -1316,9 +1313,6 @@ Qualunque cosa scegli, la versione ora sul disco viene prima copiata in {1}.</va
   </data>
   <data name="Filter_HideAds" xml:space="preserve">
     <value>Nascondi i mod con pubblicità</value>
-  </data>
-  <data name="Filter_HideAiContent" xml:space="preserve">
-    <value>Nascondi i mod con contenuti IA</value>
   </data>
   <data name="Filter_HideInstalled" xml:space="preserve">
     <value>Nascondi i mod installati</value>

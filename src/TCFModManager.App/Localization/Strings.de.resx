@@ -487,7 +487,7 @@ Das wurde hier hingeschrieben:
     <value>Unerwarteter Fehler beim Neuladen des Mod-Katalogs: {0}</value>
   </data>
   <data name="Common_AttributeFilterToolTip" xml:space="preserve">
-    <value>Nach Fika-Unterstützung, Werbung, KI-Inhalten, Abhängigkeiten und Addons filtern</value>
+    <value>Nach Fika-Unterstützung, Werbung, Abhängigkeiten und Addons filtern</value>
   </data>
   <data name="Common_Cancel" xml:space="preserve">
     <value>Abbrechen</value>
@@ -515,9 +515,6 @@ Das wurde hier hingeschrieben:
   </data>
   <data name="Common_FlagContainsAds" xml:space="preserve">
     <value>Enthält Werbung</value>
-  </data>
-  <data name="Common_FlagContainsAiContent" xml:space="preserve">
-    <value>Enthält KI-Inhalte</value>
   </data>
   <data name="Common_FlagFikaCompatible" xml:space="preserve">
     <value>Fika-kompatibel</value>
@@ -1316,9 +1313,6 @@ Was du auch wählst: Die Version, die gerade auf der Festplatte liegt, wird zuer
   </data>
   <data name="Filter_HideAds" xml:space="preserve">
     <value>Mods mit Werbung ausblenden</value>
-  </data>
-  <data name="Filter_HideAiContent" xml:space="preserve">
-    <value>Mods mit KI-Inhalten ausblenden</value>
   </data>
   <data name="Filter_HideInstalled" xml:space="preserve">
     <value>Installierte Mods ausblenden</value>

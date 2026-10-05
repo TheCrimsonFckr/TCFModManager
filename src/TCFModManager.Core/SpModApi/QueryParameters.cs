@@ -36,7 +36,6 @@ public sealed class ModsQuery : QueryParameters
     public string? FilterTeaser { get; set; }
     public bool? FilterFeatured { get; set; }
     public bool? FilterContainsAds { get; set; }
-    public bool? FilterContainsAiContent { get; set; }
     public string? FilterCategoryId { get; set; }
     public string? FilterCategorySlug { get; set; }
     public string? FilterCreatedBetween { get; set; }
@@ -59,7 +58,6 @@ public sealed class ModsQuery : QueryParameters
         if (FilterTeaser is not null) yield return new("filter[teaser]", FilterTeaser);
         if (FilterFeatured is not null) yield return new("filter[featured]", BoolParam(FilterFeatured));
         if (FilterContainsAds is not null) yield return new("filter[contains_ads]", BoolParam(FilterContainsAds));
-        if (FilterContainsAiContent is not null) yield return new("filter[contains_ai_content]", BoolParam(FilterContainsAiContent));
         if (FilterCategoryId is not null) yield return new("filter[category_id]", FilterCategoryId);
         if (FilterCategorySlug is not null) yield return new("filter[category_slug]", FilterCategorySlug);
         if (FilterCreatedBetween is not null) yield return new("filter[created_between]", FilterCreatedBetween);
@@ -113,7 +111,6 @@ public sealed class AddonsQuery : QueryParameters
     public string? FilterTeaser { get; set; }
     public string? FilterModId { get; set; }
     public bool? FilterContainsAds { get; set; }
-    public bool? FilterContainsAiContent { get; set; }
     public bool? FilterIsDetached { get; set; }
     public string? FilterCreatedBetween { get; set; }
     public string? FilterUpdatedBetween { get; set; }
@@ -128,7 +125,6 @@ public sealed class AddonsQuery : QueryParameters
         if (FilterTeaser is not null) yield return new("filter[teaser]", FilterTeaser);
         if (FilterModId is not null) yield return new("filter[mod_id]", FilterModId);
         if (FilterContainsAds is not null) yield return new("filter[contains_ads]", BoolParam(FilterContainsAds));
-        if (FilterContainsAiContent is not null) yield return new("filter[contains_ai_content]", BoolParam(FilterContainsAiContent));
         if (FilterIsDetached is not null) yield return new("filter[is_detached]", BoolParam(FilterIsDetached));
         if (FilterCreatedBetween is not null) yield return new("filter[created_between]", FilterCreatedBetween);
         if (FilterUpdatedBetween is not null) yield return new("filter[updated_between]", FilterUpdatedBetween);

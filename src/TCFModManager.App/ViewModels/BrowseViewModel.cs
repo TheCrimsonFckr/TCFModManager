@@ -632,7 +632,6 @@ public partial class BrowseViewModel : LocalizedViewModel
                 || string.Equals(m.Category?.Title, category, StringComparison.OrdinalIgnoreCase))
             .Where(m => !IsOn(ModAttributeFilter.FikaCompatible) || m.FikaCompatibility == true)
             .Where(m => !IsOn(ModAttributeFilter.HideAds) || m.ContainsAds != true)
-            .Where(m => !IsOn(ModAttributeFilter.HideAiContent) || m.ContainsAiContent != true)
             .Where(m => !IsOn(ModAttributeFilter.HasAddons) || AppServices.Addons.CountFor(m.Id) > 0)
             .Where(m => !IsOn(ModAttributeFilter.HideInstalled) || FindInstalledMatch(m) is null)
             // Only mods already known to have dependencies. A mod nobody has looked at yet is not

@@ -15,8 +15,6 @@ public sealed class Addon
     public List<SourceCodeLink>? SourceCodeLinks { get; set; }
     public string? DetailUrl { get; set; }
     public bool? ContainsAds { get; set; }
-    public bool? ContainsAiContent { get; set; }
-    public string? CustomAiDisclosure { get; set; }
     public int? ModId { get; set; }
     public bool? IsDetached { get; set; }
 

@@ -487,7 +487,7 @@ Il a été écrit dans :
     <value>Erreur inattendue lors de l'actualisation du catalogue de mods : {0}</value>
   </data>
   <data name="Common_AttributeFilterToolTip" xml:space="preserve">
-    <value>Filtrer par compatibilité Fika, publicités, contenu IA, dépendances et addons</value>
+    <value>Filtrer par compatibilité Fika, publicités, dépendances et addons</value>
   </data>
   <data name="Common_Cancel" xml:space="preserve">
     <value>Annuler</value>
@@ -515,9 +515,6 @@ Il a été écrit dans :
   </data>
   <data name="Common_FlagContainsAds" xml:space="preserve">
     <value>Contient des publicités</value>
-  </data>
-  <data name="Common_FlagContainsAiContent" xml:space="preserve">
-    <value>Contient du contenu IA</value>
   </data>
   <data name="Common_FlagFikaCompatible" xml:space="preserve">
     <value>Compatible Fika</value>
@@ -1316,9 +1313,6 @@ Quel que soit votre choix, la version actuellement sur le disque est d'abord cop
   </data>
   <data name="Filter_HideAds" xml:space="preserve">
     <value>Masquer les mods avec publicités</value>
-  </data>
-  <data name="Filter_HideAiContent" xml:space="preserve">
-    <value>Masquer les mods avec contenu IA</value>
   </data>
   <data name="Filter_HideInstalled" xml:space="preserve">
     <value>Masquer les mods installés</value>

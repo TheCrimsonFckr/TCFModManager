@@ -184,9 +184,6 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // True when the matched catalog listing is flagged as containing ads.
     public bool ContainsAds { get; init; }
 
-    // True when the matched catalog listing is flagged as containing AI content.
-    public bool ContainsAiContent { get; init; }
-
     // True when a newer, SPT-compatible version than InstalledVersion is published. False when
     // there's no newer or no compatible newer version. Null when it can't be determined (no catalog match,
     // unparsable version, or no installed SPT version detected).
@@ -453,7 +450,6 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             var flags = new List<string>();
             if (IsFikaCompatible) flags.Add(Strings.Common_FlagFikaCompatible);
             if (ContainsAds) flags.Add(Strings.Common_FlagContainsAds);
-            if (ContainsAiContent) flags.Add(Strings.Common_FlagContainsAiContent);
 
             return flags.Count == 0 ? null : string.Join(Strings.Common_FlagSeparator, flags);
         }
@@ -701,7 +697,6 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             MatchedModName = addon?.Name ?? record.Name,
             Author = addon?.Owner?.Name,
             ContainsAds = addon?.ContainsAds == true,
-            ContainsAiContent = addon?.ContainsAiContent == true,
             UpdateAvailable = ModVersionComparer.IsUpdateAvailable(installedVersion, latest?.Version),
             ClientFolderPath = client?.FolderPath,
             ServerFolderPath = server?.FolderPath,
@@ -1343,7 +1338,6 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             AddonCount = match is null ? 0 : addonsByParent.GetValueOrDefault(match.Id),
             IsFikaCompatible = match?.FikaCompatibility == true,
             ContainsAds = match?.ContainsAds == true,
-            ContainsAiContent = match?.ContainsAiContent == true,
             UpdateAvailable = updateAvailable,
             ClientFolderPath = client?.FolderPath,
             ServerFolderPath = server?.FolderPath,

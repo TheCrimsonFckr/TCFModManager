@@ -142,7 +142,7 @@
     <value>Puts every filter back to what this page opens with.</value>
   </data>
   <data name="Common_AttributeFilterToolTip" xml:space="preserve">
-    <value>Filter by Fika support, ads, AI content, dependencies and addons</value>
+    <value>Filter by Fika support, ads, dependencies and addons</value>
     <comment>Fika is a mod's name and stays as it is.</comment>
   </data>
   <data name="Common_SortToolTip" xml:space="preserve">
@@ -2292,9 +2292,6 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="Filter_HideAds" xml:space="preserve">
     <value>Hide mods with ads</value>
   </data>
-  <data name="Filter_HideAiContent" xml:space="preserve">
-    <value>Hide mods with AI content</value>
-  </data>
   <data name="Filter_HasDependencies" xml:space="preserve">
     <value>Has dependencies</value>
   </data>
@@ -3152,10 +3149,6 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
   <data name="Browse_DetailsUnexpectedFormat" xml:space="preserve">
     <value>Unexpected error loading details for {0}: {1}</value>
     <comment>{0} is a mod name, {1} the underlying error, which arrives in English.</comment>
-  </data>
-  <data name="Common_FlagContainsAiContent" xml:space="preserve">
-    <value>Contains AI content</value>
-    <comment>One flag on an installed or addon card's summary line.</comment>
   </data>
   <data name="Common_FlagSeparator" xml:space="preserve">
     <value> • </value>

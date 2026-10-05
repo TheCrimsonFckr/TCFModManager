@@ -493,7 +493,7 @@
     <value>Непредвиденная ошибка при перезагрузке каталога модов: {0}</value>
   </data>
   <data name="Common_AttributeFilterToolTip" xml:space="preserve">
-    <value>Фильтр по поддержке Fika, рекламе, ИИ-контенту, зависимостям и аддонам</value>
+    <value>Фильтр по поддержке Fika, рекламе, зависимостям и аддонам</value>
   </data>
   <data name="Common_Cancel" xml:space="preserve">
     <value>Отмена</value>
@@ -521,9 +521,6 @@
   </data>
   <data name="Common_FlagContainsAds" xml:space="preserve">
     <value>Содержит рекламу</value>
-  </data>
-  <data name="Common_FlagContainsAiContent" xml:space="preserve">
-    <value>Содержит ИИ-контент</value>
   </data>
   <data name="Common_FlagFikaCompatible" xml:space="preserve">
     <value>Совместим с Fika</value>
@@ -1349,9 +1346,6 @@
   </data>
   <data name="Filter_HideAds" xml:space="preserve">
     <value>Скрыть моды с рекламой</value>
-  </data>
-  <data name="Filter_HideAiContent" xml:space="preserve">
-    <value>Скрыть моды с ИИ-контентом</value>
   </data>
   <data name="Filter_HideInstalled" xml:space="preserve">
     <value>Скрыть установленные моды</value>

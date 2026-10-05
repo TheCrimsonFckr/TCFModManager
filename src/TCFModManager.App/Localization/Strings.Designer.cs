@@ -657,7 +657,6 @@ internal static class Strings
     internal static string Filter_SelectedCountFormat => LocalizationService.Get("Filter_SelectedCountFormat");
     internal static string Filter_FikaOnly => LocalizationService.Get("Filter_FikaOnly");
     internal static string Filter_HideAds => LocalizationService.Get("Filter_HideAds");
-    internal static string Filter_HideAiContent => LocalizationService.Get("Filter_HideAiContent");
     internal static string Filter_HasDependencies => LocalizationService.Get("Filter_HasDependencies");
     internal static string Filter_HasDependenciesInstalledToolTip => LocalizationService.Get("Filter_HasDependenciesInstalledToolTip");
     internal static string Filter_HasDependenciesBrowseToolTip => LocalizationService.Get("Filter_HasDependenciesBrowseToolTip");
@@ -887,7 +886,6 @@ internal static class Strings
     internal static string Browse_DetailsNetworkFormat => LocalizationService.Get("Browse_DetailsNetworkFormat");
     internal static string Browse_DetailsTimedOutFormat => LocalizationService.Get("Browse_DetailsTimedOutFormat");
     internal static string Browse_DetailsUnexpectedFormat => LocalizationService.Get("Browse_DetailsUnexpectedFormat");
-    internal static string Common_FlagContainsAiContent => LocalizationService.Get("Common_FlagContainsAiContent");
     internal static string Common_FlagSeparator => LocalizationService.Get("Common_FlagSeparator");
     internal static string Installed_TargetUnknown => LocalizationService.Get("Installed_TargetUnknown");
     internal static string Installed_TargetClientOnly => LocalizationService.Get("Installed_TargetClientOnly");
