@@ -113,6 +113,7 @@ public class ResilienceGuardTests : IDisposable
     [InlineData("SPT_Runtime/user/patchers/com.cj.skillsextended/EnumExtensions.json")]
     [InlineData("SPT/user/patchers/SomeMod/x.json")]
     [InlineData("user/patchers/SomeMod/x.json")]
+    [InlineData("SPT_Runtime/user/patchers.disabled/com.cj.skillsextended/EnumExtensions.json")]
     [InlineData("EscapeFromTarkov_Data/Plugins/x86_64/graphics.dll")]
     [InlineData("EscapeFromTarkov_Data/StreamingAssets/Windows/assets/x.bundle")]
     [InlineData("./BepInEx/plugins/SAIN/SAIN.dll")]

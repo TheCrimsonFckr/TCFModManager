@@ -18,7 +18,7 @@ public static class ProtectedInstallPaths
 
     // The only folders under <server>/user that hold mod files; everything else there is SPT's or the
     // player's (profiles, certs, credentials, settings, registry, app data).
-    private static readonly string[] UserModFolders = ["mods", "mods" + DisabledModPaths.DisabledSuffix, "patchers"];
+    private static readonly string[] UserModFolders = ["mods", "mods" + DisabledModPaths.DisabledSuffix, "patchers", "patchers" + DisabledModPaths.DisabledSuffix];
 
     private static readonly string[] SptPatchers = ["spt-prepatch.dll", "aki-prepatch.dll"];
 
