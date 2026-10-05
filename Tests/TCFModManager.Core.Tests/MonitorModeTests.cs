@@ -34,7 +34,45 @@ public class ArchiveLayoutTests
     [Fact]
     public void Prefix_StopsWhenAFileSitsBesideTheWrapper()
     {
-        Assert.Equal("", ArchiveLayout.FindContentPrefix(["readme.txt", "Wrapper/BepInEx/plugins/Foo.dll"]));
+        Assert.Equal("", ArchiveLayout.FindContentPrefix(["Foo.dll", "Wrapper/BepInEx/plugins/Foo.dll"]));
+    }
+
+    [Fact]
+    public void Prefix_LooksThroughAWrapperWithReadMesAndPicturesBesideIt()
+    {
+        Assert.Equal("Wrapper/", ArchiveLayout.FindContentPrefix(["readme.txt", "cover.png", "LICENSE", "Wrapper/BepInEx/plugins/Foo.dll"]));
+    }
+
+    [Fact]
+    public void Prefix_StopsAtPluginsWithoutBepInEx()
+    {
+        Assert.Equal("Foo-1.0/", ArchiveLayout.FindContentPrefix(["Foo-1.0/plugins/Foo/Foo.dll"]));
+    }
+
+    [Fact]
+    public void Plan_PlacesBarePluginsAndPatchersUnderBepInEx_AndLeavesTheReadMe()
+    {
+        var plan = ArchiveLayout.Plan(
+            Entries("Foo-1.0/README.md", "Foo-1.0/plugins/Foo/Foo.dll", "Foo-1.0/patchers/FooPatcher.dll"), "");
+
+        Assert.True(plan.Recognised);
+        Assert.Equal(["BepInEx/patchers/FooPatcher.dll", "BepInEx/plugins/Foo/Foo.dll"], plan.Files.Select(f => f.Path).Order());
+    }
+
+    [Fact]
+    public void Plan_LeavesReadMesAtTheTopOfTheContentOut_ButKeepsTheModsOwn()
+    {
+        var plan = ArchiveLayout.Plan(
+            Entries("README.txt", "BepInEx/plugins/Foo/Foo.dll", "BepInEx/plugins/Foo/README.txt", "Greed.exe"), "");
+
+        // Greed.exe is a loose root file, which a hand install isn't expected to place either (D6).
+        Assert.Equal(["BepInEx/plugins/Foo/Foo.dll", "BepInEx/plugins/Foo/README.txt"], plan.Files.Select(f => f.Path).Order(StringComparer.Ordinal));
+    }
+
+    [Fact]
+    public void Plan_PluginsBesideAnythingElse_IsNotABareLayout()
+    {
+        Assert.False(ArchiveLayout.Plan(Entries("plugins/Foo/Foo.dll", "Foo.exe"), "").Recognised);
     }
 
     [Fact]

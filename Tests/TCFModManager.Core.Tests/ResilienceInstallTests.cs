@@ -109,17 +109,52 @@ public class ResilienceInstallTests : IDisposable
     public async Task LooseFilesBesideTheArchiveRoots_LandInTheInstallRootOnlyWhereNothingIsThere()
     {
         var target = NewTarget();
-        Write("LICENSE", "SPT's licence");
+        Write("Tool.exe", "SPT's tool");
+
+        var result = await Install(target, "1.0.0",
+            ("Greed.exe", "greed"),
+            ("Tool.exe", "the mod's tool"),
+            ("BepInEx/plugins/Mod/mod.dll", "the mod"));
+
+        Assert.Equal("greed", File.ReadAllText(Full("Greed.exe")));
+        Assert.Equal("SPT's tool", File.ReadAllText(Full("Tool.exe")));
+        Assert.Equal(["BepInEx/plugins/Mod/mod.dll", "Greed.exe"], result.Record.Files.Order());
+        Assert.Equal(["Tool.exe"], result.SkippedProtected);
+    }
+
+    // OPEN-19 B8: read-me files, licences and pictures beside the content are for people, not SPT.
+    [Fact]
+    public async Task ReadMesLicencesAndPicturesBesideTheArchiveRoots_AreNotPlaced()
+    {
+        var target = NewTarget();
 
         var result = await Install(target, "1.0.0",
             ("README.txt", "readme"),
             ("LICENSE", "the mod's licence"),
-            ("BepInEx/plugins/Mod/mod.dll", "the mod"));
+            ("cover.png", "picture"),
+            ("BepInEx/plugins/Mod/mod.dll", "the mod"),
+            ("BepInEx/plugins/Mod/README.txt", "the mod's own"));
 
-        Assert.Equal("readme", File.ReadAllText(Full("README.txt")));
-        Assert.Equal("SPT's licence", File.ReadAllText(Full("LICENSE")));
-        Assert.Equal(["BepInEx/plugins/Mod/mod.dll", "README.txt"], result.Record.Files.Order());
-        Assert.Equal(["LICENSE"], result.SkippedProtected);
+        Assert.False(File.Exists(Full("README.txt")));
+        Assert.False(File.Exists(Full("LICENSE")));
+        Assert.False(File.Exists(Full("cover.png")));
+        Assert.Equal(["BepInEx/plugins/Mod/README.txt", "BepInEx/plugins/Mod/mod.dll"], result.Record.Files.Order(StringComparer.Ordinal));
+        Assert.Empty(result.SkippedProtected);
+    }
+
+    [Fact]
+    public async Task PluginsAndPatchersWithoutBepInEx_InAWrapperBesideAReadMe_LandUnderBepInEx()
+    {
+        var target = NewTarget();
+
+        var result = await Install(target, "1.0.0",
+            ("Mod-1.0/README.md", "readme"),
+            ("Mod-1.0/plugins/Mod/mod.dll", "the mod"),
+            ("Mod-1.0/patchers/ModPatcher.dll", "the patcher"));
+
+        Assert.Equal("the mod", File.ReadAllText(Full("BepInEx/plugins/Mod/mod.dll")));
+        Assert.Equal("the patcher", File.ReadAllText(Full("BepInEx/patchers/ModPatcher.dll")));
+        Assert.Equal(["BepInEx/patchers/ModPatcher.dll", "BepInEx/plugins/Mod/mod.dll"], result.Record.Files.Order());
     }
 
     // --- Fingerprints and stamp (D21, D17) -----------------------------------------------------

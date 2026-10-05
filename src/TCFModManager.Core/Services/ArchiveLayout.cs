@@ -24,9 +24,79 @@ public static class ArchiveLayout
     public static bool IsKnownRoot(string? name) => name is not null && KnownRootFolders.Contains(name);
 
     //
+    // BepInEx's own folders, packed without the BepInEx folder around them ("plugins/MyMod.dll").
+    // A content level holding only these - and files beside them - is placed under BepInEx\.
+    //
+    private static readonly IReadOnlyDictionary<string, string> BareBepInExFolders =
+        new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["plugins"] = "BepInEx/plugins",
+            ["patchers"] = "BepInEx/patchers",
+        };
+
+    // Files for people rather than the game: by extension, or by whole name when there is none.
+    private static readonly HashSet<string> BesideExtensions = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ".txt", ".md", ".url", ".pdf", ".rtf", ".nfo",
+        ".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".html", ".htm",
+    };
+
+    private static readonly HashSet<string> BesideNames = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "readme", "license", "licence", "changelog", "changes", "credits", "copying", "notice",
+    };
+
+    //
+    // A read-me, licence or picture: what an author leaves beside the real content - beside a wrapper
+    // folder, beside BepInEx\ and user\, beside plugins\. At the top of the content it would land in
+    // the SPT folder itself, so it is never placed there (see Place); deeper down it goes with the mod.
+    //
+    public static bool IsBeside(string fileName)
+    {
+        var extension = Path.GetExtension(fileName);
+        return extension.Length == 0 ? BesideNames.Contains(fileName) : BesideExtensions.Contains(extension);
+    }
+
+    private static bool StopsDescent(string name) => IsKnownRoot(name) || BareBepInExFolders.ContainsKey(name);
+
+    // Whether a content level is BepInEx's folders on their own, with nothing else but files beside them.
+    public static bool IsBareBepInEx(IEnumerable<string> folderNames, IEnumerable<string> fileNames)
+    {
+        var folders = folderNames.ToList();
+        return folders.Count > 0 && folders.All(BareBepInExFolders.ContainsKey) && fileNames.All(IsBeside);
+    }
+
+    public static bool IsBareBepInEx(string contentRoot) =>
+        IsBareBepInEx(
+            Directory.GetDirectories(contentRoot).Select(d => Path.GetFileName(d)!),
+            Directory.GetFiles(contentRoot).Select(f => Path.GetFileName(f)!));
+
+    // Whether a content level is something an install can place: a known root, or a bare BepInEx layout.
+    public static bool IsRecognised(IReadOnlyCollection<string> folderNames, IReadOnlyCollection<string> fileNames) =>
+        folderNames.Any(IsKnownRoot) || fileNames.Any(IsKnownRoot) || IsBareBepInEx(folderNames, fileNames);
+
+    //
+    // Where a content-relative path (forward slashes) goes in the install, before the server-root
+    // remap - or null when it is not placed: a file beside the content at its top, or, in a bare
+    // BepInEx layout, anything outside plugins\ and patchers\.
+    //
+    public static string? Place(string contentRelative, bool bareBepInEx)
+    {
+        var parts = contentRelative.Split('/', 2);
+        if (parts.Length == 1 && IsBeside(parts[0])) return null;
+
+        if (!bareBepInEx) return contentRelative;
+
+        return parts.Length == 2 && BareBepInExFolders.TryGetValue(parts[0], out var folder)
+            ? folder + "/" + parts[1]
+            : null;
+    }
+
+    //
     // The folder under an extracted archive that holds its real content. Some archives wrap
     // "BepInEx/..." and "user/..." inside an extra top-level folder ("HollywoodFX-1.8.4/"), so single
-    // folders are descended through until a known root, a second entry, or the depth cap is reached.
+    // folders are descended through until a known root, plugins\ or patchers\, a second folder, a file
+    // that isn't a read-me or picture, or the depth cap.
     //
     public static string FindContentRoot(string extractDir)
     {
@@ -34,11 +104,11 @@ public static class ArchiveLayout
 
         for (var depth = 0; depth < MaxWrapperDepth; depth++)
         {
-            var entries = Directory.GetFileSystemEntries(current);
-            if (entries.Length != 1 || !Directory.Exists(entries[0])) break;
-            if (IsKnownRoot(Path.GetFileName(entries[0]))) break;
+            var folders = Directory.GetDirectories(current);
+            if (folders.Length != 1 || !Directory.GetFiles(current).All(f => IsBeside(Path.GetFileName(f)))) break;
+            if (StopsDescent(Path.GetFileName(folders[0]))) break;
 
-            current = entries[0];
+            current = folders[0];
         }
 
         return current;
@@ -66,15 +136,21 @@ public static class ArchiveLayout
                 var rest = file[prefix.Length..];
                 var slash = rest.IndexOf('/');
 
-                // A file directly at this level means the level is not a lone wrapper folder.
-                if (slash < 0) { single = false; break; }
+                // A file directly at this level means the level is not a lone wrapper folder - unless
+                // it is a read-me or picture beside it.
+                if (slash < 0)
+                {
+                    if (IsBeside(rest)) continue;
+                    single = false;
+                    break;
+                }
 
                 var name = rest[..slash];
                 if (only is null) only = name;
                 else if (!string.Equals(only, name, StringComparison.Ordinal)) { single = false; break; }
             }
 
-            if (!single || only is null || IsKnownRoot(only)) break;
+            if (!single || only is null || StopsDescent(only)) break;
 
             prefix += only + "/";
         }
@@ -143,16 +219,18 @@ public static class ArchiveLayout
         var prefix = FindContentPrefix(normalised.Select(e => e.Path).ToList());
         var content = normalised.Where(e => e.Path.StartsWith(prefix, StringComparison.Ordinal)).ToList();
 
-        var topLevel = content.Select(e => e.Path[prefix.Length..].Split('/', 2)[0]);
-        if (!topLevel.Any(IsKnownRoot)) return ArchivePlan.Unrecognised;
+        var topLevel = content.Select(e => e.Path[prefix.Length..].Split('/', 2)).ToList();
+        var topFolders = topLevel.Where(p => p.Length == 2).Select(p => p[0]).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+        var topFiles = topLevel.Where(p => p.Length == 1).Select(p => p[0]).ToList();
+
+        if (!IsRecognised(topFolders, topFiles)) return ArchivePlan.Unrecognised;
+        var bare = IsBareBepInEx(topFolders, topFiles);
 
         var files = content
-            .Select(e =>
-            {
-                var relative = e.Path[prefix.Length..].Replace('/', Path.DirectorySeparatorChar);
-                var placed = RemapForServerRoot(relative, serverRoot).Replace('\\', '/');
-                return e with { Path = placed };
-            })
+            .Select(e => Place(e.Path[prefix.Length..], bare) is { } placed
+                ? e with { Path = RemapForServerRoot(placed.Replace('/', Path.DirectorySeparatorChar), serverRoot).Replace('\\', '/') }
+                : null)
+            .OfType<ArchiveFileEntry>()
             // SPT's own files are never placed by an install, so a hand install isn't expected to
             // place them either (D6).
             .Where(e => !ProtectedInstallPaths.IsProtected(e.Path))

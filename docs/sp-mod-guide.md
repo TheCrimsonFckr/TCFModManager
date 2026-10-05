@@ -531,8 +531,8 @@ Info level by default, rotated daily as `tcfmm-<yyyyMMdd>.log`. To get Debug-lev
 - **A listing can number its releases differently from the mod it installs.** A helper mod declaring 0.0.7 on a listing whose releases are 4.x shows an update that never clears. Confirm as installed ends it.
 
 #### Installing
-- **Archives have to be packaged normally** - a `BepInEx\`, `user\`, `SPT\` or `SPT_Runtime\` folder at the top, optionally inside one wrapper folder. Anything else is refused with a message telling you to install it by hand, rather than being scattered into your install.
-- **Everything in the archive gets installed.** Mods that ship optional variants in separate folders, or a readme, get all of it copied in. Choose-your-variant mods are worth installing by hand.
+- **Archives have to be packaged normally** - a `BepInEx\`, `user\`, `SPT\` or `SPT_Runtime\` folder at the top, optionally inside one wrapper folder. A `plugins\` or `patchers\` folder without `BepInEx\` around it is placed under `BepInEx\`. Anything else is refused with a message telling you to install it by hand, rather than being scattered into your install.
+- **Everything in the archive gets installed** - except read-me files, licences and pictures sitting at the top of it, which would otherwise land in your SPT folder. Mods that ship optional variants in separate folders get all of them copied in. Choose-your-variant mods are worth installing by hand.
 - **If two mods ship the same file, the second one installed wins.** Removing either one leaves the file for the other.
 - **Mods installed before v1.19.0 are only fully protected after their next update or reinstall.** Until then their record has no fingerprints: removing one also takes a file you changed since (into `.tcfmm-removed\`, so it can be got back), and leaves its files in the install root or `EscapeFromTarkov_Data\Managed` in place.
 - **You need roughly twice the archive's size free** on the SPT drive - the download and extraction are staged there before anything is placed.

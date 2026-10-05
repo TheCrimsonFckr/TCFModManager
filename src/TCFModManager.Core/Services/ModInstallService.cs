@@ -230,8 +230,9 @@ public sealed class ModInstallService(
             ct.ThrowIfCancellationRequested();
 
             var contentRoot = ArchiveLayout.FindContentRoot(extractDir);
-            var topLevelNames = Directory.GetFileSystemEntries(contentRoot).Select(Path.GetFileName);
-            if (!topLevelNames.Any(ArchiveLayout.IsKnownRoot))
+            var topFolders = Directory.GetDirectories(contentRoot).Select(d => Path.GetFileName(d)!).ToList();
+            var topFiles = Directory.GetFiles(contentRoot).Select(f => Path.GetFileName(f)!).ToList();
+            if (!ArchiveLayout.IsRecognised(topFolders, topFiles))
             {
                 AppLog.Warn("Install",
                     $"{target.Name} {version.Version} archive has no known root folder; top level: " +
@@ -251,6 +252,10 @@ public sealed class ModInstallService(
 
             var sourceFiles = Directory.GetFiles(contentRoot, "*", SearchOption.AllDirectories);
 
+            // plugins\ and patchers\ without BepInEx\ around them go under BepInEx\.
+            var bareBepInEx = ArchiveLayout.IsBareBepInEx(topFolders, topFiles);
+            if (bareBepInEx) AppLog.Info("Install", $"{target.Name} {version.Version}: plugins/patchers packed without BepInEx; placed under BepInEx");
+
             ct.ThrowIfCancellationRequested();
 
             // Re-checked now the download is finished: SPT may have been started while it ran, and
@@ -266,14 +271,27 @@ public sealed class ModInstallService(
             // Where each source file is going, worked out before anything is removed: the config
             // files the archive is about to place over have to be known while they are still there.
             //
-            var allPlacements = sourceFiles
-                .Select(file =>
+            // Read-me files, licences and pictures at the top of the content are left out (they would
+            // land in the SPT folder itself), logged so the log shows why the archive had more files.
+            var allPlacements = new List<(string File, string Relative, string Forward)>(sourceFiles.Length);
+            var leftBeside = new List<string>();
+
+            foreach (var file in sourceFiles)
+            {
+                var contentRelative = Path.GetRelativePath(contentRoot, file).Replace('\\', '/');
+                if (ArchiveLayout.Place(contentRelative, bareBepInEx) is not { } placed)
                 {
-                    var installRelative = ArchiveLayout.RemapForServerRoot(Path.GetRelativePath(contentRoot, file), serverRoot);
-                    // Forward-slash regardless of OS, matching InstalledModRecord.Files's documented format.
-                    return (File: file, Relative: installRelative, Forward: installRelative.Replace('\\', '/'));
-                })
-                .ToList();
+                    leftBeside.Add(contentRelative);
+                    continue;
+                }
+
+                var installRelative = ArchiveLayout.RemapForServerRoot(placed.Replace('/', Path.DirectorySeparatorChar), serverRoot);
+                // Forward-slash regardless of OS, matching InstalledModRecord.Files's documented format.
+                allPlacements.Add((file, installRelative, installRelative.Replace('\\', '/')));
+            }
+
+            if (leftBeside.Count > 0)
+                AppLog.Info("Install", $"{target.Name} {version.Version}: not placed (beside the content): {string.Join(", ", leftBeside)}");
 
             //
             // Every destination is judged before anything in the install is removed or placed (D3, D7).
@@ -467,7 +485,7 @@ public sealed class ModInstallService(
                 };
             }
 
-            var emptyFolders = PlaceEmptyFolders(folderEntries, extractDir, contentRoot, serverRoot, installPath, existing, target, version);
+            var emptyFolders = PlaceEmptyFolders(folderEntries, contentRoot, bareBepInEx, serverRoot, installPath, existing, target, version);
 
             var record = SaveRecord(target, version, placedFiles, incomplete: false, installPath, overwrote, fingerprints: [], emptyFolders);
 
@@ -531,7 +549,7 @@ public sealed class ModInstallService(
     // removal can tidy them away while they are still empty.
     //
     private static List<string> PlaceEmptyFolders(
-        IReadOnlyList<string> folderEntries, string extractDir, string contentRoot, string serverRoot,
+        IReadOnlyList<string> folderEntries, string contentRoot, bool bareBepInEx, string serverRoot,
         string installPath, InstalledModRecord? existing, InstallTarget target, ModVersion version)
     {
         var owned = new List<string>();
@@ -543,8 +561,9 @@ public sealed class ModInstallService(
         {
             var relative = Path.GetRelativePath(contentRoot, folder);
             if (relative == "." || relative.StartsWith("..", StringComparison.Ordinal) || Path.IsPathRooted(relative)) continue;
+            if (ArchiveLayout.Place(relative.Replace('\\', '/') + "/", bareBepInEx) is not { } placed) continue;
 
-            var forward = ArchiveLayout.RemapForServerRoot(relative, serverRoot).Replace('\\', '/');
+            var forward = ArchiveLayout.RemapForServerRoot(placed.TrimEnd('/').Replace('/', Path.DirectorySeparatorChar), serverRoot).Replace('\\', '/');
             if (InstallPathGuard.ModFolderOf(forward) is not { } modFolder || modFolder.Length >= forward.Length) continue;
             if (InstallPathGuard.CheckPlacedPath(installPath, forward, out var full) is not null) continue;
 
