@@ -16,9 +16,9 @@ public static class ProtectedInstallPaths
 {
     private static readonly string[] ServerRootNames = ["SPT", "SPT_Runtime"];
 
-    // The only folders under <server>/user that hold mods; everything else there is SPT's or the
+    // The only folders under <server>/user that hold mod files; everything else there is SPT's or the
     // player's (profiles, certs, credentials, settings, registry, app data).
-    private static readonly string[] UserModFolders = ["mods", "mods" + DisabledModPaths.DisabledSuffix];
+    private static readonly string[] UserModFolders = ["mods", "mods" + DisabledModPaths.DisabledSuffix, "patchers"];
 
     private static readonly string[] SptPatchers = ["spt-prepatch.dll", "aki-prepatch.dll"];
 
@@ -88,8 +88,8 @@ public static class ProtectedInstallPaths
 
         if (Is(s[0], "user"))
         {
-            // user/mods/<anything> is mod territory; user itself, user/mods itself, and everything
-            // else under user is not.
+            // user/mods/<anything> and user/patchers/<anything> are mod territory; user itself, the
+            // containers themselves, and everything else under user is not.
             return !(s.Length >= 3 && UserModFolders.Any(f => Is(s[1], f)));
         }
 
