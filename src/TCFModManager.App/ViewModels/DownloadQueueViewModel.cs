@@ -218,9 +218,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             var version = await item.ResolveVersionAsync();
             if (version?.Link is null)
             {
-                item.Status = DownloadQueueItemStatus.Failed;
-                item.StatusMessage = Text(
-                    Strings.Downloads_NoLinkFormat, item.ModName, item.VersionLabel);
+                Fail(item, Text(Strings.Downloads_NoLinkFormat, item.ModName, item.VersionLabel));
                 return;
             }
 
@@ -303,36 +301,45 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         }
         catch (SpModApiRateLimitedException ex)
         {
-            item.Status = DownloadQueueItemStatus.Failed;
-            item.StatusMessage = ApiProblems.Describe(ex);
+            Fail(item, ApiProblems.Describe(ex), ex);
         }
         catch (SpModApiException ex)
         {
-            item.Status = DownloadQueueItemStatus.Failed;
-            item.StatusMessage = ApiProblems.Describe(ex);
+            Fail(item, ApiProblems.Describe(ex), ex);
         }
         catch (HttpRequestException ex)
         {
-            item.Status = DownloadQueueItemStatus.Failed;
-            item.StatusMessage = ApiProblems.Describe(ex);
+            Fail(item, ApiProblems.Describe(ex), ex);
         }
         catch (ModInstallException ex)
         {
             // ModInstallService refused or gave up part way; ModInstallProblems words it.
-            item.Status = DownloadQueueItemStatus.Failed;
-            item.StatusMessage = ModInstallProblems.Describe(ex);
+            Fail(item, ModInstallProblems.Describe(ex), ex);
         }
         catch (InvalidOperationException ex)
         {
             // Anything else that reached here already carries a readable message of its own.
-            item.Status = DownloadQueueItemStatus.Failed;
-            item.StatusMessage = ex.Message;
+            Fail(item, ex.Message, ex);
         }
         catch (Exception ex)
         {
-            item.Status = DownloadQueueItemStatus.Failed;
-            item.StatusMessage = Text(Strings.Downloads_UnexpectedFormat, ex.Message);
+            Fail(item, Text(Strings.Downloads_UnexpectedFormat, ex.Message), ex, unexpected: true);
         }
+    }
+
+    //
+    // Marks the card failed and writes the same reason to the log - the card was the only place it
+    // ever showed, so a failure on a user's PC left the log ending mid-install. The line carries the
+    // card's sentence and the exception's type and message; an unexpected one gets its stack trace.
+    //
+    private static void Fail(DownloadQueueItemViewModel item, string message, Exception? ex = null, bool unexpected = false)
+    {
+        item.Status = DownloadQueueItemStatus.Failed;
+        item.StatusMessage = message;
+
+        var line = $"{item.ModName} {item.VersionLabel} failed: {message}";
+        if (unexpected) AppLog.Error("Downloads", line, ex);
+        else AppLog.Warn("Downloads", ex is null ? line : $"{line} ({ex.GetType().Name}: {ex.Message})");
     }
 
     //
