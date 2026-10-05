@@ -6562,4 +6562,16 @@
   <data name="SpModImport_NoMatches" xml:space="preserve">
     <value>В списке ничего не найдено.</value>
   </data>
+  <data name="ModLists_StepHintPreview" xml:space="preserve">
+    <value>Сначала предпросмотр. Он покажет, что применение списка установит, обновит, включит и отложит, прежде чем что-то изменится.</value>
+  </data>
+  <data name="ModLists_StepHintApply" xml:space="preserve">
+    <value>Пока ничего не изменилось. Проверьте план ниже и примените его - или вернитесь к модам.</value>
+  </data>
+  <data name="ModLists_EntrySptBadgeFormat" xml:space="preserve">
+    <value>SPT {0}</value>
+  </data>
+  <data name="ModLists_OpenEntryPageToolTip" xml:space="preserve">
+    <value>Открыть его страницу на sp-mod</value>
+  </data>
 </root>

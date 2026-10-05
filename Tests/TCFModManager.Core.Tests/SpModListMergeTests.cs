@@ -290,4 +290,68 @@ public class SpModListMergeTests : IDisposable
         Assert.Equal(list.Id, fork.DerivedFrom);
         Assert.Null(_store.Find(fork.Id)!.SpModSource);
     }
+
+    private static ModListCandidate Installed(int id, ModListEntryScope scope, bool addon = false) =>
+        new() { Name = $"Mod {id}", ModId = id, IsAddon = addon, Scope = scope };
+
+    [Fact]
+    public void AnApplyLearnsEachInstalledModsScopeOntoAnSpModList()
+    {
+        var list = Page(items: Base).ToModList("x", Monday);
+        _store.Add(list);
+
+        var learned = _store.LearnScopes(list.Id, [
+            Installed(1, ModListEntryScope.Server),
+            Installed(2, ModListEntryScope.Client | ModListEntryScope.Headless),
+            Installed(1, ModListEntryScope.Everyone, addon: true),
+        ]);
+
+        Assert.NotNull(learned);
+        var stored = _store.Find(list.Id)!;
+        Assert.Equal(ModListEntryScope.Server, stored.Entries.Single(e => e.ModId == 1 && !e.IsAddon).Scope);
+        Assert.Equal(ModListEntryScope.Client | ModListEntryScope.Headless, stored.Entries.Single(e => e.ModId == 2).Scope);
+
+        // A mod the scanner couldn't place stays as it was rather than taking a guess.
+        Assert.Null(stored.Entries.Single(e => e.IsAddon).Scope);
+
+        // The page's read time is not an edit time.
+        Assert.Equal(list.UpdatedAt, stored.UpdatedAt);
+        Assert.Equal(list.Revision, stored.Revision);
+    }
+
+    [Fact]
+    public void NothingInstalledMeansNothingLearned()
+    {
+        var list = Page(items: Base).ToModList("x", Monday);
+        _store.Add(list);
+
+        Assert.Null(_store.LearnScopes(list.Id, [Installed(77, ModListEntryScope.Server)]));
+    }
+
+    [Fact]
+    public void ALearnedScopeIsKeptAndALocalListIsLeftAlone()
+    {
+        var spMod = Page(items: [Mod(1)]).ToModList("x", Monday);
+        spMod.Entries[0] = ModListEntries.WithScope(spMod.Entries[0], ModListEntryScope.Server);
+
+        // Already known: not re-learned from a different reading.
+        Assert.Null(ModListScopeLearning.Learn(spMod, [Installed(1, ModListEntryScope.Client)]));
+
+        // On a list made here, no scope is somebody's choice.
+        var local = new ModList { Id = Guid.NewGuid(), Name = "mine", CreatedAt = Monday, UpdatedAt = Monday, Entries = [new() { Name = "Mod 1", ModId = 1 }] };
+        Assert.Null(ModListScopeLearning.Learn(local, [Installed(1, ModListEntryScope.Server)]));
+    }
+
+    [Fact]
+    public void ARefreshFromSpModKeepsWhatWasLearned()
+    {
+        var first = Page(items: Base).ToModList("x", Monday);
+        _store.Add(first);
+        _store.LearnScopes(first.Id, [Installed(2, ModListEntryScope.Server)]);
+
+        var update = SpModListImport.Merge(_store.Find(first.Id), Page(items: [Mod(1), Mod(2, "1.1.0"), Mod(3)]).ToModList("x", Friday));
+
+        Assert.Equal(ModListEntryScope.Server, update.List.Entries.Single(e => e.ModId == 2).Scope);
+        Assert.Null(update.List.Entries.Single(e => e.ModId == 3).Scope);
+    }
 }

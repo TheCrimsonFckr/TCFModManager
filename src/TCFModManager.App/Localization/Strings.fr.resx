@@ -6220,4 +6220,16 @@ Voir Dépendances et conflits.</value>
   <data name="SpModImport_NoMatches" xml:space="preserve">
     <value>Rien dans la liste ne correspond.</value>
   </data>
+  <data name="ModLists_StepHintPreview" xml:space="preserve">
+    <value>Prévisualisez d'abord. L'aperçu montre ce que l'application de cette liste installerait, mettrait à jour, activerait et mettrait de côté, avant que quoi que ce soit change.</value>
+  </data>
+  <data name="ModLists_StepHintApply" xml:space="preserve">
+    <value>Rien n'a encore changé. Vérifiez le plan ci-dessous, puis appliquez-le - ou revenez aux mods.</value>
+  </data>
+  <data name="ModLists_EntrySptBadgeFormat" xml:space="preserve">
+    <value>SPT {0}</value>
+  </data>
+  <data name="ModLists_OpenEntryPageToolTip" xml:space="preserve">
+    <value>Ouvrir sa page sur sp-mod</value>
+  </data>
 </root>

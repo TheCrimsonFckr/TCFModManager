@@ -870,6 +870,13 @@ public static partial class SpModListImport
 
         var diff = Diff(stored, incoming);
 
+        // What earlier applies learned about each mod's files (ModListScopeLearning). sp-mod's page
+        // never says, so a fresh read would otherwise put every entry back to Server + Client + Headless.
+        var scopes = stored.Entries
+            .Where(e => e.Scope is not null && SpModListSource.RefFor(e) is not null)
+            .GroupBy(e => SpModListSource.RefFor(e)!, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(g => g.Key, g => g.First().Scope, StringComparer.OrdinalIgnoreCase);
+
         var merged = new ModList
         {
             Id = incoming.Id,
@@ -883,12 +890,17 @@ public static partial class SpModListImport
             SptVersion = incoming.SptVersion,
             CreatedAt = stored.CreatedAt,
             UpdatedAt = diff.HasChanges ? incoming.UpdatedAt : stored.UpdatedAt,
-            Entries = [.. incoming.Entries],
+            Entries = [.. incoming.Entries.Select(e => KeepScope(e, scopes))],
             SpModSource = incoming.SpModSource,
         };
 
         return new SpModListUpdate(merged, stored, diff);
     }
+
+    private static ModListEntry KeepScope(ModListEntry entry, Dictionary<string, ModListEntryScope?> scopes) =>
+        entry.Scope is null && SpModListSource.RefFor(entry) is { } key && scopes.TryGetValue(key, out var scope)
+            ? ModListEntries.WithScope(entry, scope)
+            : entry;
 
     public static SpModListDiff Diff(ModList before, ModList after)
     {

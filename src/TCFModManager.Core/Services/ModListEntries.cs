@@ -49,4 +49,20 @@ public static class ModListEntries
         IsAddon = isAddon,
         Guid = string.IsNullOrWhiteSpace(guid) ? null : guid.Trim(),
     };
+
+    //
+    // The same entry with another scope. ModListEntry is a class with init-only properties, so this
+    // is a rebuild; every field is carried across, because a missed one would silently drop a pin.
+    //
+    public static ModListEntry WithScope(ModListEntry source, ModListEntryScope? scope) => new()
+    {
+        Name = source.Name,
+        ModId = source.ModId,
+        IsAddon = source.IsAddon,
+        VersionId = source.VersionId,
+        Version = source.Version,
+        Guid = source.Guid,
+        Folders = [.. source.Folders],
+        Scope = scope,
+    };
 }

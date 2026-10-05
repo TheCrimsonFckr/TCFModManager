@@ -227,9 +227,35 @@ public sealed class ModListService
             // The revision counts applies, not edits - see ModListStore.BumpRevision. An apply that
             // stopped part way is not one: it is unwound, and the install ends up where it started.
             AppServices.ModLists.BumpRevision(preview.List.Id);
+
+            await LearnScopesAsync(preview.List);
         }
 
         return result;
+    }
+
+    //
+    // An sp-mod list can't say which machines each mod is for until its files are on disk, so once an
+    // apply has put them there the install is read again and what it shows is stored on the list (see
+    // ModListScopeLearning). A failure here costs nothing but the chip staying as it was, so it is
+    // logged rather than reported.
+    //
+    private async Task LearnScopesAsync(ModList list)
+    {
+        if (!ModListScopeLearning.Learns(list)) return;
+
+        try
+        {
+            var install = await ReadInstallAsync();
+            if (install is null) return;
+
+            if (AppServices.ModLists.LearnScopes(list.Id, install.Candidates) is { } learned)
+                AppLog.Info("ModLists", $"learned scopes for {learned.Entries.Count(e => e.Scope is not null)} entries of {list.Name}");
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("ModLists", $"couldn't learn scopes for {list.Name}: {ex.Message}");
+        }
     }
 
     //

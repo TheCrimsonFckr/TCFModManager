@@ -13,12 +13,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     Title="{loc:Str Nav_ModLists}"
     Loaded="ModListsPage_Loaded"
     ScrollViewer.CanContentScroll="False">
     <Page.Resources>
         <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
+        <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
 
         <!--
@@ -441,21 +443,30 @@
                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                     Text="{Binding SelectionDetail}" />
 
+                <!--
+                    Preview, then Apply, in one place: only the next step is ever shown. Preview until a
+                    plan is showing, then Apply in the same spot, worded as what it will do; the line
+                    under it says which step it is on. See ModListsViewModel.StepIsApply.
+                -->
                 <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
                     <ui:Button
-                        MinWidth="110"
+                        MinWidth="140"
                         HorizontalContentAlignment="Center"
+                        Appearance="Primary"
+                        Icon="{ui:SymbolIcon Eye24}"
                         Content="{loc:Str ModLists_Preview}"
                         ToolTip="{loc:Str ModLists_PreviewToolTip}"
+                        Visibility="{Binding StepIsApply, Converter={StaticResource FalseToVisible}}"
                         Command="{Binding PreviewCommand}" />
 
                     <ui:Button
-                        MinWidth="110"
-                        Margin="10,0,0,0"
+                        MinWidth="140"
                         HorizontalContentAlignment="Center"
                         Appearance="Primary"
+                        Icon="{ui:SymbolIcon Checkmark24}"
                         Content="{Binding ApplyLabel}"
                         ToolTip="{loc:Str ModLists_ApplyToolTip}"
+                        Visibility="{Binding StepIsApply, Converter={StaticResource BoolToVis}}"
                         Command="{Binding ApplyCommand}" />
 
                     <!-- Only while a plan is showing: the plan sits in the same cell as the list's
@@ -469,6 +480,14 @@
                         Visibility="{Binding HasPlan, Converter={StaticResource BoolToVis}}"
                         Command="{Binding ClosePlanCommand}" />
                 </StackPanel>
+
+                <TextBlock
+                    Margin="2,6,0,0"
+                    FontSize="12"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                    Visibility="{Binding HasSelection, Converter={StaticResource BoolToVis}}"
+                    Text="{Binding StepHint}" />
 
                 <Separator
                     Margin="0,16,0,0"
@@ -791,14 +810,45 @@
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
 
-                                            <!-- The listing title, then the folder it occupies and
-                                                 the version the list names. Two lines because the
-                                                 title and the folder name are often nothing like
-                                                 each other, and both are worth reading. -->
+                                            <!--
+                                                A card, as Browse and the sp-mod import window show a
+                                                mod: thumbnail, then the listing title, who made it and
+                                                how widely it is used, badges, and the folder it
+                                                occupies with the version the list names. Everything
+                                                but the title and detail comes from the catalog, so an
+                                                entry it doesn't know is the plain row it always was.
+                                            -->
+                                            <Grid Grid.Column="0" Margin="0,0,12,0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Border
+                                                    Grid.Column="0"
+                                                    Width="44"
+                                                    Height="44"
+                                                    Margin="0,0,10,0"
+                                                    VerticalAlignment="Top"
+                                                    CornerRadius="4"
+                                                    ClipToBounds="True"
+                                                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                                    Visibility="{Binding Entry.ModId, Converter={StaticResource NullToCollapsed}}">
+                                                    <Grid>
+                                                        <ui:SymbolIcon
+                                                            Symbol="{Binding PlaceholderSymbol}"
+                                                            FontSize="20"
+                                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                                                        <Image
+                                                            Stretch="UniformToFill"
+                                                            behaviors:ThumbnailLoader.Source="{Binding Thumbnail}" />
+                                                    </Grid>
+                                                </Border>
+
                                             <StackPanel
-                                                Grid.Column="0"
-                                                VerticalAlignment="Center"
-                                                Margin="0,0,12,0">
+                                                Grid.Column="1"
+                                                VerticalAlignment="Center">
                                                 <DockPanel>
                                                     <ui:SymbolIcon
                                                         DockPanel.Dock="Left"
@@ -818,12 +868,50 @@
                                                 </DockPanel>
 
                                                 <TextBlock
+                                                    Margin="0,2,0,0"
+                                                    FontSize="11"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                    Visibility="{Binding Facts, Converter={StaticResource NullToCollapsed}}"
+                                                    Text="{Binding Facts}" />
+
+                                                <WrapPanel Margin="0,4,0,0">
+                                                    <ui:Badge
+                                                        Margin="0,0,6,2"
+                                                        Appearance="Info"
+                                                        FontSize="11"
+                                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                        Content="{Binding SptBadge}"
+                                                        Visibility="{Binding SptBadge, Converter={StaticResource NullToCollapsed}}" />
+                                                    <ui:Badge
+                                                        Margin="0,0,6,2"
+                                                        Appearance="Caution"
+                                                        FontSize="11"
+                                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                        Content="{loc:Str Browse_BadgeHasDependencies}"
+                                                        Visibility="Collapsed"
+                                                        behaviors:DependencyBadgeLoader.Mod="{Binding Mod}" />
+                                                </WrapPanel>
+
+                                                <TextBlock
                                                     TextWrapping="Wrap"
                                                     FontSize="12"
                                                     Margin="0,3,0,0"
                                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                     Text="{Binding Detail}" />
                                             </StackPanel>
+
+                                                <ui:Button
+                                                    Grid.Column="2"
+                                                    Margin="8,0,0,0"
+                                                    Padding="8,4"
+                                                    VerticalAlignment="Center"
+                                                    Appearance="Transparent"
+                                                    Icon="{ui:SymbolIcon Open24}"
+                                                    ToolTip="{loc:Str ModLists_OpenEntryPageToolTip}"
+                                                    Visibility="{Binding Url, Converter={StaticResource NullToCollapsed}}"
+                                                    Click="OpenEntryPage_Click" />
+                                            </Grid>
 
                                             <!-- On every row, every state. This is a value you
                                                  cycle, so an unlabelled row would read as "not set"

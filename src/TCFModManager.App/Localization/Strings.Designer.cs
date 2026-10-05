@@ -2042,4 +2042,8 @@ internal static class Strings
     internal static string SpModImport_CollapseAllToolTip => LocalizationService.Get("SpModImport_CollapseAllToolTip");
     internal static string SpModImport_SectionToggleToolTip => LocalizationService.Get("SpModImport_SectionToggleToolTip");
     internal static string SpModImport_NoMatches => LocalizationService.Get("SpModImport_NoMatches");
+    internal static string ModLists_StepHintPreview => LocalizationService.Get("ModLists_StepHintPreview");
+    internal static string ModLists_StepHintApply => LocalizationService.Get("ModLists_StepHintApply");
+    internal static string ModLists_EntrySptBadgeFormat => LocalizationService.Get("ModLists_EntrySptBadgeFormat");
+    internal static string ModLists_OpenEntryPageToolTip => LocalizationService.Get("ModLists_OpenEntryPageToolTip");
 }

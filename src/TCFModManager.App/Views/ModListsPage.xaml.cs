@@ -1,7 +1,9 @@
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using TCFModManager.App.ViewModels;
+using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.Views;
 
@@ -40,6 +42,21 @@ public partial class ModListsPage : Page
     // The right-hand column holds two lists in one cell - the selected list's contents and, after a
     // preview, the plan - so which one is on screen decides where the wheel goes.
     //
+    // An entry's card links to its page on sp-mod, as the import window's cards do.
+    private void OpenEntryPage_Click(object sender, RoutedEventArgs e)
+    {
+        if ((sender as FrameworkElement)?.DataContext is not ModListEntryRowViewModel { Url: { } url }) return;
+
+        try
+        {
+            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("ModLists", $"couldn't open {url}: {ex.Message}");
+        }
+    }
+
     private void Page_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         if (e.Handled) return;

@@ -302,6 +302,27 @@ public sealed class ModListStore
     }
 
     //
+    // Stores the scopes an apply learned for an sp-mod list (see ModListScopeLearning). The one write
+    // a read-only list takes from this app, because it is a fact about the mods' files rather than an
+    // edit of what the list names. Leaves UpdatedAt alone - that is when the list was last read from
+    // sp-mod - and so does Revision. Returns null when nothing was learned.
+    //
+    public ModList? LearnScopes(Guid id, IReadOnlyList<ModListCandidate> candidates)
+    {
+        var data = Load();
+        var list = data.Lists.FirstOrDefault(l => l.Id == id);
+        if (list is null) return null;
+
+        var learned = ModListScopeLearning.Learn(list, candidates);
+        if (learned is null) return null;
+
+        list.Entries.Clear();
+        list.Entries.AddRange(learned);
+        Save(data);
+        return list;
+    }
+
+    //
     // Counts one more time this list has been put into effect.
     //
     // The revision moves here and nowhere else. Editing a list is thinking about it; applying one

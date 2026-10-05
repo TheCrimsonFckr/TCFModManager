@@ -7475,4 +7475,20 @@ See Dependencies and Conflicts.</value>
     <value>Nothing on the list matches.</value>
     <comment>In the sp-mod import window. Shown when the search and filter hide every row.</comment>
   </data>
+  <data name="ModLists_StepHintPreview" xml:space="preserve">
+    <value>Preview first. It shows what applying this list would install, update, enable and set aside, before anything changes.</value>
+    <comment>Mod lists page, under the Preview button while no plan is showing. Preview and Apply share one spot: Apply appears there once a plan is showing.</comment>
+  </data>
+  <data name="ModLists_StepHintApply" xml:space="preserve">
+    <value>Nothing has changed yet. Check the plan below, then apply it - or go back to the mods.</value>
+    <comment>Mod lists page, under the Apply button while a plan is showing.</comment>
+  </data>
+  <data name="ModLists_EntrySptBadgeFormat" xml:space="preserve">
+    <value>SPT {0}</value>
+    <comment>Badge on a mod list entry: the SPT releases its version is for. {0} is a version or a range of versions; SPT is the platform's name and stays as it is.</comment>
+  </data>
+  <data name="ModLists_OpenEntryPageToolTip" xml:space="preserve">
+    <value>Open its page on sp-mod</value>
+    <comment>Tooltip of the open button on each mod list entry.</comment>
+  </data>
 </root>

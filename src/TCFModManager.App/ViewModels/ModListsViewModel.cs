@@ -144,6 +144,27 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
     // it has no visible starting point. Every state gets a label, always visible.
     //
     public string ScopeLabel => ModListScopes.Label(Entry.EffectiveScope);
+
+    //
+    // The card half, as Browse and the sp-mod import window show a mod: thumbnail, who made it and
+    // how widely it is used, the SPT its version is for, and a link to its page. All of it from the
+    // catalog already loaded - nothing here asks sp-mod anything - so an entry the catalog doesn't
+    // know (one added by hand, or a mod not on sp-mod) is the plain row it always was.
+    //
+    public string? Thumbnail { get; init; }
+
+    public Wpf.Ui.Controls.SymbolRegular PlaceholderSymbol => Entry.IsAddon
+        ? Wpf.Ui.Controls.SymbolRegular.PuzzlePiece24
+        : Wpf.Ui.Controls.SymbolRegular.PuzzleCube24;
+
+    public string? Facts { get; init; }
+
+    public string? SptBadge { get; init; }
+
+    public string? Url { get; init; }
+
+    // For Browse's "Has dependencies" badge, which looks it up once per mod and remembers it.
+    public Mod? Mod { get; init; }
 }
 
 //
@@ -470,7 +491,22 @@ public partial class ModListsViewModel : LocalizedViewModel
         }
     }
 
-    private void NotifyPlanWording() => OnPropertyChanged(nameof(ApplyLabel));
+    private void NotifyPlanWording()
+    {
+        OnPropertyChanged(nameof(ApplyLabel));
+        OnPropertyChanged(nameof(StepHint));
+        OnPropertyChanged(nameof(StepIsApply));
+    }
+
+    //
+    // Preview and Apply share one spot. Before a plan is showing it holds Preview; once one is,
+    // Apply takes its place, worded as what it will do. Two buttons side by side, one greyed out until
+    // the other had been pressed, left people wondering why Apply did nothing - this way the only
+    // thing to press is the next step, and the line under it says what that step does.
+    //
+    public bool StepIsApply => _preview is not null;
+
+    public string StepHint => StepIsApply ? Strings.ModLists_StepHintApply : Strings.ModLists_StepHintPreview;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanRevert))]
@@ -622,6 +658,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         Entries.Clear();
 
         _titles = CatalogTitles();
+        _mods = AppServices.ModCache.AllMods.GroupBy(m => m.Id).ToDictionary(g => g.Key, g => g.First());
         RefreshPinLookup();
 
         if (Selected is { } row)
@@ -668,7 +705,58 @@ public partial class ModListsViewModel : LocalizedViewModel
             ? title
             : entry.Name;
 
-        return new ModListEntryRowViewModel(entry, name, EntryDetail(entry, name), IsPinnedHere(entry));
+        var row = new ModListEntryRowViewModel(entry, name, EntryDetail(entry, name), IsPinnedHere(entry));
+        if (entry.ModId is not { } modId) return row;
+
+        var url = SpModListImport.PageFor(entry.IsAddon, modId);
+
+        if (entry.IsAddon)
+        {
+            return AppServices.Addons.ById(modId) is { } addon
+                ? row with
+                {
+                    Thumbnail = addon.Thumbnail,
+                    Facts = CardFacts(addon.Owner?.Name, addon.Downloads),
+                    Url = addon.DetailUrl ?? url,
+                }
+                : row with { Url = url };
+        }
+
+        if (!_mods.TryGetValue(modId, out var mod)) return row with { Url = url };
+
+        return row with
+        {
+            Thumbnail = mod.Thumbnail,
+            Facts = CardFacts(mod.Owner?.Name, mod.Downloads),
+            SptBadge = SptBadgeFor(mod, entry),
+            Url = mod.DetailUrl ?? url,
+            Mod = mod,
+        };
+    }
+
+    private Dictionary<int, Mod> _mods = [];
+
+    private static string? CardFacts(string? author, int? downloads)
+    {
+        var parts = new List<string>();
+        if (!string.IsNullOrWhiteSpace(author)) parts.Add(Text(Strings.Browse_ByAuthorFormat, author));
+        if (downloads is { } count) parts.Add(Text(Strings.Common_DownloadsFormat, count));
+        return parts.Count > 0 ? string.Join(Strings.Common_FactSeparator, parts) : null;
+    }
+
+    //
+    // The SPT range of the version the entry names - the pinned build, or the version it was last
+    // read at - as the catalog knows it. Read through SptVersionRangeFormatter, so a constraint shows
+    // as the releases it covers rather than its raw operators.
+    //
+    private static string? SptBadgeFor(Mod mod, ModListEntry entry)
+    {
+        var versions = mod.Versions ?? [];
+        var version = versions.FirstOrDefault(v => entry.VersionId is { } id && v.Id == id)
+            ?? versions.FirstOrDefault(v => string.Equals(v.Version, entry.Version, StringComparison.OrdinalIgnoreCase));
+
+        var range = SptVersionRangeFormatter.Format(version?.SptVersionConstraint);
+        return range is null ? null : Text(Strings.ModLists_EntrySptBadgeFormat, range);
     }
 
     //
