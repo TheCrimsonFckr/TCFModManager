@@ -1023,6 +1023,9 @@ Qualunque cosa scegli, la versione ora sul disco viene prima copiata in {1}.</va
   <data name="Dependencies_RowDisabledVersionFormat" xml:space="preserve">
     <value>installato {0} ma disattivato - SPT non lo carica</value>
   </data>
+  <data name="Dependencies_RowTooNewFormat" xml:space="preserve">
+    <value>troppo recente: richiede fino a {0} - installato {1}</value>
+  </data>
   <data name="Dependencies_RowInstall" xml:space="preserve">
     <value>Installa</value>
   </data>
@@ -1067,6 +1070,12 @@ Qualunque cosa scegli, la versione ora sul disco viene prima copiata in {1}.</va
   </data>
   <data name="Dependencies_SummaryUnresolvedFormat" xml:space="preserve">
     <value>{0} non risolte</value>
+  </data>
+  <data name="Dependencies_SummaryTooNewFormat" xml:space="preserve">
+    <value>{0} troppo recenti</value>
+  </data>
+  <data name="Dependencies_SummaryDisabledFormat" xml:space="preserve">
+    <value>{0} disattivate</value>
   </data>
   <data name="Dependencies_UnexpectedFormat" xml:space="preserve">
     <value>Errore imprevisto durante la risoluzione delle dipendenze: {0}</value>
@@ -1861,6 +1870,9 @@ La copia che non conservi viene spostata in una cartella nascosta .tcfmm-duplica
   </data>
   <data name="Installed_NoModsFoundFormat" xml:space="preserve">
     <value>Nessun mod trovato in "{0}".</value>
+  </data>
+  <data name="Installed_CatalogUnavailable" xml:space="preserve">
+    <value>sp-mod non era raggiungibile e non c'è ancora una copia salvata del catalogo, quindi sono elencate senza aggiornamenti, nomi del catalogo o dipendenze - premi "Ripeti scansione" quando sei online.</value>
   </data>
   <data name="Installed_NothingSelected" xml:space="preserve">
     <value>Nessuna selezione.</value>
@@ -3019,6 +3031,9 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   </data>
   <data name="ModStatus_Disabled" xml:space="preserve">
     <value>Disattivato - installato, ma non caricato da SPT</value>
+  </data>
+  <data name="ModStatus_TooNew" xml:space="preserve">
+    <value>Installato - più recente della versione richiesta</value>
   </data>
   <data name="ModStatus_Installed" xml:space="preserve">
     <value>Installato - aggiornato</value>

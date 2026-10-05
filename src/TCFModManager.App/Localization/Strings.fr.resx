@@ -1023,6 +1023,9 @@ Quel que soit votre choix, la version actuellement sur le disque est d'abord cop
   <data name="Dependencies_RowDisabledVersionFormat" xml:space="preserve">
     <value>{0} installé mais désactivé - SPT ne le chargera pas</value>
   </data>
+  <data name="Dependencies_RowTooNewFormat" xml:space="preserve">
+    <value>trop récent : nécessite jusqu'à {0} - {1} installé</value>
+  </data>
   <data name="Dependencies_RowInstall" xml:space="preserve">
     <value>Installer</value>
   </data>
@@ -1067,6 +1070,12 @@ Quel que soit votre choix, la version actuellement sur le disque est d'abord cop
   </data>
   <data name="Dependencies_SummaryUnresolvedFormat" xml:space="preserve">
     <value>{0} non résolues</value>
+  </data>
+  <data name="Dependencies_SummaryTooNewFormat" xml:space="preserve">
+    <value>{0} trop récents</value>
+  </data>
+  <data name="Dependencies_SummaryDisabledFormat" xml:space="preserve">
+    <value>{0} désactivés</value>
   </data>
   <data name="Dependencies_UnexpectedFormat" xml:space="preserve">
     <value>Erreur inattendue lors de la résolution des dépendances : {0}</value>
@@ -1861,6 +1870,9 @@ La copie que vous ne gardez pas est déplacée dans un dossier caché .tcfmm-dup
   </data>
   <data name="Installed_NoModsFoundFormat" xml:space="preserve">
     <value>Aucun mod trouvé dans « {0} ».</value>
+  </data>
+  <data name="Installed_CatalogUnavailable" xml:space="preserve">
+    <value>sp-mod était injoignable et aucune copie de son catalogue n'est encore enregistrée : ils sont donc listés sans mises à jour, noms du catalogue ni dépendances - cliquez sur « Réanalyser » une fois en ligne.</value>
   </data>
   <data name="Installed_NothingSelected" xml:space="preserve">
     <value>Aucune sélection.</value>
@@ -3019,6 +3031,9 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   </data>
   <data name="ModStatus_Disabled" xml:space="preserve">
     <value>Désactivé - installé, mais non chargé par SPT</value>
+  </data>
+  <data name="ModStatus_TooNew" xml:space="preserve">
+    <value>Installé - plus récent que la version requise</value>
   </data>
   <data name="ModStatus_Installed" xml:space="preserve">
     <value>Installé - à jour</value>

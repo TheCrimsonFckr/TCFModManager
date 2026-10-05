@@ -1047,6 +1047,9 @@
   <data name="Dependencies_RowDisabledVersionFormat" xml:space="preserve">
     <value>установлен {0}, но отключён - SPT его не загрузит</value>
   </data>
+  <data name="Dependencies_RowTooNewFormat" xml:space="preserve">
+    <value>слишком новая: нужна до {0} - установлено: {1}</value>
+  </data>
   <data name="Dependencies_RowInstall" xml:space="preserve">
     <value>Установить</value>
   </data>
@@ -1094,6 +1097,12 @@
   </data>
   <data name="Dependencies_SummaryUnresolvedFormat" xml:space="preserve">
     <value>не разрешено: {0}</value>
+  </data>
+  <data name="Dependencies_SummaryTooNewFormat" xml:space="preserve">
+    <value>слишком новые: {0}</value>
+  </data>
+  <data name="Dependencies_SummaryDisabledFormat" xml:space="preserve">
+    <value>отключено: {0}</value>
   </data>
   <data name="Dependencies_UnexpectedFormat" xml:space="preserve">
     <value>Непредвиденная ошибка при разрешении зависимостей: {0}</value>
@@ -1960,6 +1969,9 @@
   </data>
   <data name="Installed_NoModsFoundFormat" xml:space="preserve">
     <value>В «{0}» моды не найдены.</value>
+  </data>
+  <data name="Installed_CatalogUnavailable" xml:space="preserve">
+    <value>sp-mod недоступен, а сохранённой копии каталога ещё нет, поэтому моды показаны без обновлений, названий из каталога и зависимостей - нажмите «Пересканировать», когда будет сеть.</value>
   </data>
   <data name="Installed_NothingSelected" xml:space="preserve">
     <value>Ничего не выбрано.</value>
@@ -3196,6 +3208,9 @@
   </data>
   <data name="ModStatus_Disabled" xml:space="preserve">
     <value>Отключён - установлен, но не загружается SPT</value>
+  </data>
+  <data name="ModStatus_TooNew" xml:space="preserve">
+    <value>Установлен - новее требуемой версии</value>
   </data>
   <data name="ModStatus_Installed" xml:space="preserve">
     <value>Установлен - актуальная версия</value>

@@ -238,6 +238,10 @@ internal static class Strings
     internal static string Play_Restart => LocalizationService.Get("Play_Restart");
     internal static string Play_RestartServerToolTip => LocalizationService.Get("Play_RestartServerToolTip");
     internal static string Play_RestartServerWarning => LocalizationService.Get("Play_RestartServerWarning");
+    internal static string Play_Stop => LocalizationService.Get("Play_Stop");
+    internal static string Play_StopServerToolTip => LocalizationService.Get("Play_StopServerToolTip");
+    internal static string Play_StopServerWarning => LocalizationService.Get("Play_StopServerWarning");
+    internal static string Play_StopServerConfirm => LocalizationService.Get("Play_StopServerConfirm");
     internal static string Play_RestartServerConfirm => LocalizationService.Get("Play_RestartServerConfirm");
     internal static string Play_LauncherHeader => LocalizationService.Get("Play_LauncherHeader");
     internal static string Play_LauncherDescription => LocalizationService.Get("Play_LauncherDescription");
@@ -364,6 +368,7 @@ internal static class Strings
     internal static string ModStatus_NoCompatibleVersion => LocalizationService.Get("ModStatus_NoCompatibleVersion");
     internal static string ModStatus_Unknown => LocalizationService.Get("ModStatus_Unknown");
     internal static string ModStatus_Disabled => LocalizationService.Get("ModStatus_Disabled");
+    internal static string ModStatus_TooNew => LocalizationService.Get("ModStatus_TooNew");
     internal static string ModStatus_Conflict => LocalizationService.Get("ModStatus_Conflict");
     internal static string ModListFile_TypeName => LocalizationService.Get("ModListFile_TypeName");
     internal static string ModListFile_AllFiles => LocalizationService.Get("ModListFile_AllFiles");
@@ -383,6 +388,7 @@ internal static class Strings
     internal static string SptLaunch_HeadlessAlreadyRunning => LocalizationService.Get("SptLaunch_HeadlessAlreadyRunning");
     internal static string SptLaunch_StartFailedFormat => LocalizationService.Get("SptLaunch_StartFailedFormat");
     internal static string SptLaunch_ServerNotRunning => LocalizationService.Get("SptLaunch_ServerNotRunning");
+    internal static string SptLaunch_ServerNotRunningToStop => LocalizationService.Get("SptLaunch_ServerNotRunningToStop");
     internal static string SptLaunch_HeadlessNotRunning => LocalizationService.Get("SptLaunch_HeadlessNotRunning");
     internal static string SptLaunch_StopFailedFormat => LocalizationService.Get("SptLaunch_StopFailedFormat");
     internal static string SptLaunch_StopFailedReasonFormat => LocalizationService.Get("SptLaunch_StopFailedReasonFormat");
@@ -712,6 +718,7 @@ internal static class Strings
     internal static string Installed_PinnedFormat => LocalizationService.Get("Installed_PinnedFormat");
     internal static string Installed_UnpinnedFormat => LocalizationService.Get("Installed_UnpinnedFormat");
     internal static string Installed_NoModsFoundFormat => LocalizationService.Get("Installed_NoModsFoundFormat");
+    internal static string Installed_CatalogUnavailable => LocalizationService.Get("Installed_CatalogUnavailable");
     internal static string Installed_CountFound(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_CountFound", count, values);
     internal static string Installed_CountShown(int count, params object?[] values) =>
@@ -1133,6 +1140,7 @@ internal static class Strings
     internal static string Play_RolePlaysAndHosts => LocalizationService.Get("Play_RolePlaysAndHosts");
     internal static string Play_StartedFormat => LocalizationService.Get("Play_StartedFormat");
     internal static string Play_RestartedFormat => LocalizationService.Get("Play_RestartedFormat");
+    internal static string Play_StoppedFormat => LocalizationService.Get("Play_StoppedFormat");
     internal static string Dependencies_NoSptVersion => LocalizationService.Get("Dependencies_NoSptVersion");
     internal static string Dependencies_Scanning => LocalizationService.Get("Dependencies_Scanning");
     internal static string Dependencies_NoneMatched => LocalizationService.Get("Dependencies_NoneMatched");
@@ -1155,6 +1163,7 @@ internal static class Strings
     internal static string Dependencies_RowNoCompatible => LocalizationService.Get("Dependencies_RowNoCompatible");
     internal static string Dependencies_RowDisabled => LocalizationService.Get("Dependencies_RowDisabled");
     internal static string Dependencies_RowDisabledVersionFormat => LocalizationService.Get("Dependencies_RowDisabledVersionFormat");
+    internal static string Dependencies_RowTooNewFormat => LocalizationService.Get("Dependencies_RowTooNewFormat");
     internal static string Dependencies_RowConflict => LocalizationService.Get("Dependencies_RowConflict");
     internal static string Dependencies_RowUpdate => LocalizationService.Get("Dependencies_RowUpdate");
     internal static string Dependencies_RowInstall => LocalizationService.Get("Dependencies_RowInstall");
@@ -1163,6 +1172,8 @@ internal static class Strings
     internal static string Dependencies_SummaryOutdatedFormat => LocalizationService.Get("Dependencies_SummaryOutdatedFormat");
     internal static string Dependencies_SummaryConflictingFormat => LocalizationService.Get("Dependencies_SummaryConflictingFormat");
     internal static string Dependencies_SummaryUnresolvedFormat => LocalizationService.Get("Dependencies_SummaryUnresolvedFormat");
+    internal static string Dependencies_SummaryTooNewFormat => LocalizationService.Get("Dependencies_SummaryTooNewFormat");
+    internal static string Dependencies_SummaryDisabledFormat => LocalizationService.Get("Dependencies_SummaryDisabledFormat");
     internal static string Dependencies_SummarySatisfied(int count, params object?[] values) =>
         LocalizationService.Plural("Dependencies_SummarySatisfied", count, values);
     internal static string Addon_NameFormat => LocalizationService.Get("Addon_NameFormat");

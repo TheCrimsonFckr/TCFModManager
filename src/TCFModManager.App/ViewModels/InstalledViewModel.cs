@@ -821,9 +821,20 @@ public partial class InstalledViewModel : LocalizedViewModel
         try
         {
             // Reuses whatever's already cached; triggers the one-time catalog fetch if Browse
-            // hasn't been visited yet this session.
-            await AppServices.ModCache.EnsureLoadedAsync();
-            await AppServices.Addons.EnsureLoadedAsync();
+            // hasn't been visited yet this session. Offline with no copy saved yet, the mods in the
+            // SPT folder are still listed - scanning them needs no network - just without what
+            // sp-mod knows about them.
+            var catalogUnavailable = false;
+            try
+            {
+                await AppServices.ModCache.EnsureLoadedAsync();
+                await AppServices.Addons.EnsureLoadedAsync();
+            }
+            catch (Exception ex)
+            {
+                AppLog.Warn("Installed", $"catalog unavailable, listing the SPT folder only: {ex.GetType().Name}: {ex.Message}");
+                catalogUnavailable = true;
+            }
 
             // What this app itself installed, and which folders it placed - identifies those mods
             // exactly instead of inferring them from folder names.
@@ -933,6 +944,9 @@ public partial class InstalledViewModel : LocalizedViewModel
             StatusMessage = _all.Count == 0
                 ? Text(Strings.Installed_NoModsFoundFormat, installPath)
                 : DescribeCounts();
+
+            if (catalogUnavailable)
+                StatusMessage = string.Join(Strings.Common_SentenceSeparator, StatusMessage, Strings.Installed_CatalogUnavailable);
         }
         finally
         {

@@ -40,6 +40,17 @@ public static class ModVersionComparer
     public static bool SameNumbers(string? a, string? b) =>
         Parse(a) is { } left && Parse(b) is { } right && left.Numbers == right.Numbers;
 
+    // True when a is a later breaking line than b: a higher major, or for 0.x a higher minor. Null
+    // when either can't be read.
+    public static bool? IsLaterMajor(string? a, string? b)
+    {
+        if (Parse(a) is not { } left || Parse(b) is not { } right) return null;
+
+        var (l, r) = (left.Numbers, right.Numbers);
+        if (l.Major != r.Major) return l.Major > r.Major;
+        return l.Major == 0 && l.Minor > r.Minor;
+    }
+
     private static readonly string[] PostReleaseWords = ["hotfix", "fix", "patch", "hf", "post"];
 
     // -1 below the plain release, 0 the release itself, 1 a fix after it.

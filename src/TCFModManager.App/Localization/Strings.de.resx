@@ -1023,6 +1023,9 @@ Was du auch wählst: Die Version, die gerade auf der Festplatte liegt, wird zuer
   <data name="Dependencies_RowDisabledVersionFormat" xml:space="preserve">
     <value>{0} installiert, aber deaktiviert - SPT lädt ihn nicht</value>
   </data>
+  <data name="Dependencies_RowTooNewFormat" xml:space="preserve">
+    <value>zu neu: braucht bis {0} - {1} installiert</value>
+  </data>
   <data name="Dependencies_RowInstall" xml:space="preserve">
     <value>Installieren</value>
   </data>
@@ -1067,6 +1070,12 @@ Was du auch wählst: Die Version, die gerade auf der Festplatte liegt, wird zuer
   </data>
   <data name="Dependencies_SummaryUnresolvedFormat" xml:space="preserve">
     <value>{0} ungeklärt</value>
+  </data>
+  <data name="Dependencies_SummaryTooNewFormat" xml:space="preserve">
+    <value>{0} zu neu</value>
+  </data>
+  <data name="Dependencies_SummaryDisabledFormat" xml:space="preserve">
+    <value>{0} deaktiviert</value>
   </data>
   <data name="Dependencies_UnexpectedFormat" xml:space="preserve">
     <value>Unerwarteter Fehler beim Auflösen der Abhängigkeiten: {0}</value>
@@ -1861,6 +1870,9 @@ Die Kopie, die du nicht behältst, wird in einen versteckten Ordner .tcfmm-dupli
   </data>
   <data name="Installed_NoModsFoundFormat" xml:space="preserve">
     <value>Keine Mods unter "{0}" gefunden.</value>
+  </data>
+  <data name="Installed_CatalogUnavailable" xml:space="preserve">
+    <value>sp-mod war nicht erreichbar und es gibt noch keine gespeicherte Kopie des Katalogs, daher werden diese ohne Updates, Katalognamen oder Abhängigkeiten aufgelistet - drücke „Neu einlesen“, sobald du online bist.</value>
   </data>
   <data name="Installed_NothingSelected" xml:space="preserve">
     <value>Nichts ausgewählt.</value>
@@ -3019,6 +3031,9 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   </data>
   <data name="ModStatus_Disabled" xml:space="preserve">
     <value>Deaktiviert - installiert, aber von SPT nicht geladen</value>
+  </data>
+  <data name="ModStatus_TooNew" xml:space="preserve">
+    <value>Installiert - neuer als die benötigte Version</value>
   </data>
   <data name="ModStatus_Installed" xml:space="preserve">
     <value>Installiert - aktuell</value>

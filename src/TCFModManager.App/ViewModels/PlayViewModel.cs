@@ -53,6 +53,23 @@ public partial class PlayViewModel : LocalizedViewModel
     [NotifyCanExecuteChangedFor(nameof(AskRestartHeadlessCommand))]
     private SptLaunchTargetInfo? _headless;
 
+    //
+    // A target that went down on its own takes the question about stopping or restarting it with it:
+    // left up, Confirm would only answer that there is nothing to stop.
+    //
+    partial void OnServerChanged(SptLaunchTargetInfo? value)
+    {
+        if (value?.IsRunning == true) return;
+
+        ConfirmingServerStop = false;
+        if (ConfirmingRestart == SptLaunchTarget.Server) ConfirmingRestart = null;
+    }
+
+    partial void OnHeadlessChanged(SptLaunchTargetInfo? value)
+    {
+        if (value?.IsRunning != true && ConfirmingRestart == SptLaunchTarget.Headless) ConfirmingRestart = null;
+    }
+
     // The result of the last button press, cleared the next time one is pressed.
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasMessage))]

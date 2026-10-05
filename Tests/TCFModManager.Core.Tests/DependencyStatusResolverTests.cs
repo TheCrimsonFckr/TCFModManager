@@ -16,9 +16,11 @@ public class DependencyStatusResolverTests
     public void Resolve_InstalledWhenTheDiskVersionMatches() =>
         Assert.Equal(ModStatus.Installed, DependencyStatusResolver.Resolve(Node(), "1.3.0", "1.3.0"));
 
+    // The required version is the newest that satisfies the constraint and this SPT, not a minimum -
+    // one above it doesn't fit (OPEN-20 X2). Was Installed until 2026-10-05.
     [Fact]
-    public void Resolve_InstalledWhenTheDiskVersionIsNewerThanRequired() =>
-        Assert.Equal(ModStatus.Installed, DependencyStatusResolver.Resolve(Node(), "1.4.0", "1.3.0"));
+    public void Resolve_TooNewWhenTheDiskVersionIsNewerThanRequired() =>
+        Assert.Equal(ModStatus.TooNew, DependencyStatusResolver.Resolve(Node(), "1.4.0", "1.3.0"));
 
     [Fact]
     public void Resolve_InstalledWhenTheScannedVersionCarriesAnExtraZero() =>
@@ -82,4 +84,17 @@ public class DependencyStatusResolverTests
         Assert.True(
             DependencyStatusResolver.Severity(ModStatus.NotInstalled)
             < DependencyStatusResolver.Severity(ModStatus.UpdateAvailable));
+
+    [Fact]
+    public void Resolve_AVersionReadOffTheFiles_IsOnlyTooNewAcrossAMajorVersion()
+    {
+        Assert.Equal(ModStatus.Installed,
+            DependencyStatusResolver.Resolve(Node(), "2.5.0.0", "2.4.1", installedVersionFromFiles: true));
+        Assert.Equal(ModStatus.TooNew,
+            DependencyStatusResolver.Resolve(Node(), "3.0.0.0", "2.4.1", installedVersionFromFiles: true));
+    }
+
+    [Fact]
+    public void Worst_RanksTooNewAboveAnUpdate() =>
+        Assert.Equal(ModStatus.TooNew, DependencyStatusResolver.Worst([ModStatus.UpdateAvailable, ModStatus.TooNew, ModStatus.Installed]));
 }

@@ -510,11 +510,21 @@ public partial class BrowseViewModel : LocalizedViewModel
         AppLog.Debug("Browse", $"GoToPage: page {CurrentPage}/{TotalPages} rendered in {sw.ElapsedMilliseconds}ms");
     }
 
+    // Which RefreshInstalledIndexAsync is the newest - see there.
+    private int _installedIndexGeneration;
+
     /// <summary>Scans the configured SPT install folder and matches it against the cached catalog to drive the
     /// install/update status dot on Browse's cards. Best-effort: no install path or nothing found just means
     /// no dot shows, not an error.</summary>
     private async Task RefreshInstalledIndexAsync()
     {
+        //
+        // Every install in a run fires one of these, and each scans off the UI thread, so they can
+        // finish out of order. Only the newest one started is kept: an older scan landing last
+        // would put back marks from before the latest install.
+        //
+        var generation = ++_installedIndexGeneration;
+
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath))
         {
@@ -543,6 +553,8 @@ public partial class BrowseViewModel : LocalizedViewModel
                 .Where(m => !m.IsAddon)
                 .ToList();
         });
+
+        if (generation != _installedIndexGeneration) return;
 
         // Keyed by Guid when available, MatchedModName as a fallback. Only matched entries are indexed.
         _installedByGuid = matched

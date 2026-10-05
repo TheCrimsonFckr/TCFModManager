@@ -229,8 +229,10 @@ public partial class DependenciesViewModel : LocalizedViewModel
 
             StatusMessage = Strings.Dependencies_Resolving(queryable.Count);
 
+            // Mods only: an addon's id comes from a separate sequence, and would take a dependency's
+            // place whenever the two numbers happened to match.
             var installedByModId = installed
-                .Where(m => m.ModId is not null)
+                .Where(m => m is { IsAddon: false, ModId: not null })
                 .GroupBy(m => m.ModId!.Value)
                 .ToDictionary(g => g.Key, g => g.First());
 

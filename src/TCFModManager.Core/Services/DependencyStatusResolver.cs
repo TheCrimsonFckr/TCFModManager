@@ -33,9 +33,18 @@ public static class DependencyStatusResolver
             ? ModVersionComparer.IsUpdateAvailableByNumbers(installedVersion, requiredVersion)
             : ModVersionComparer.IsUpdateAvailable(installedVersion, requiredVersion);
 
-        return newer == true
-            ? ModStatus.UpdateAvailable
-            : ModStatus.Installed;
+        if (newer == true) return ModStatus.UpdateAvailable;
+
+        //
+        // requiredVersion is the newest that satisfies both the constraint and this SPT, so one above
+        // it doesn't fit - CommonLib 3.0.6 installed for a mod made against 2.x. A version read off a
+        // DLL isn't kept in step by every author, so there only a later major line counts.
+        //
+        var tooNew = installedVersionFromFiles
+            ? ModVersionComparer.IsLaterMajor(installedVersion, requiredVersion)
+            : ModVersionComparer.IsUpdateAvailable(requiredVersion, installedVersion);
+
+        return tooNew == true ? ModStatus.TooNew : ModStatus.Installed;
     }
 
     // Sort key for "worst" - lower is more severe. Drives the per-mod header icon.
@@ -44,9 +53,10 @@ public static class DependencyStatusResolver
         ModStatus.Conflict => 0,
         ModStatus.NotInstalled => 1,
         ModStatus.Disabled => 2,
-        ModStatus.NoCompatibleVersion => 3,
-        ModStatus.UpdateAvailable => 4,
-        _ => 5,
+        ModStatus.TooNew => 3,
+        ModStatus.NoCompatibleVersion => 4,
+        ModStatus.UpdateAvailable => 5,
+        _ => 6,
     };
 
     // The most severe status in a set, or Installed when empty.

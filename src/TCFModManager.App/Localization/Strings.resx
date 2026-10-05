@@ -1284,6 +1284,9 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="ModStatus_Disabled" xml:space="preserve">
     <value>Disabled - installed, but not loaded by SPT</value>
   </data>
+  <data name="ModStatus_TooNew" xml:space="preserve">
+    <value>Installed - newer than the version that's needed</value>
+  </data>
   <data name="ModStatus_Conflict" xml:space="preserve">
     <value>Conflict - two mods need incompatible versions</value>
   </data>
@@ -2497,6 +2500,10 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="Installed_NoModsFoundFormat" xml:space="preserve">
     <value>No mods found under "{0}".</value>
     <comment>{0} is the SPT install folder path.</comment>
+  </data>
+  <data name="Installed_CatalogUnavailable" xml:space="preserve">
+    <value>sp-mod couldn't be reached and there's no saved copy of its catalog yet, so these are listed without updates, catalog names or dependencies - press Rescan once you're online.</value>
+    <comment>Added after the scan summary when the sp-mod catalog could not be loaded. Rescan is the button named by Common_Rescan - translate it the same way.</comment>
   </data>
   <data name="Installed_CountFound_one" xml:space="preserve">
     <value>1 mod found.</value>
@@ -4215,6 +4222,10 @@ You can turn it back on at any time.</value>
     <value>installed {0} but disabled - SPT won't load it</value>
     <comment>{0} is the version installed.</comment>
   </data>
+  <data name="Dependencies_RowTooNewFormat" xml:space="preserve">
+    <value>too new: needs up to {0} - {1} installed</value>
+    <comment>{0} is the newest version that fits, {1} the version installed.</comment>
+  </data>
   <data name="Dependencies_RowConflict" xml:space="preserve">
     <value>conflict - two mods need incompatible versions</value>
   </data>
@@ -4245,6 +4256,14 @@ You can turn it back on at any time.</value>
   <data name="Dependencies_SummaryUnresolvedFormat" xml:space="preserve">
     <value>{0} unresolved</value>
     <comment>One count in a mod's dependency summary.</comment>
+  </data>
+  <data name="Dependencies_SummaryTooNewFormat" xml:space="preserve">
+    <value>{0} too new</value>
+    <comment>{0} is a count.</comment>
+  </data>
+  <data name="Dependencies_SummaryDisabledFormat" xml:space="preserve">
+    <value>{0} disabled</value>
+    <comment>{0} is a count.</comment>
   </data>
   <data name="Dependencies_SummarySatisfied_one" xml:space="preserve">
     <value>1 dependency, all satisfied</value>
