@@ -25,6 +25,7 @@
     <ui:FluentWindow.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
+        <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
     </ui:FluentWindow.Resources>
 
     <Grid>
@@ -109,6 +110,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -175,26 +177,108 @@
                 would hang in the middle of the window. The card is still measured against the
                 cell, so a long one scrolls inside it.
             -->
+            <!--
+                Search, Show and sort act on every section at once; the two buttons fold them all
+                open or shut, as on the Installed page's groups view.
+            -->
+            <DockPanel Grid.Row="3" Margin="0,12,0,0" LastChildFill="True">
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                    <ComboBox
+                        x:Name="ShowBox"
+                        MinWidth="120"
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        SelectedIndex="0"
+                        ToolTip="{loc:Str SpModImport_ShowToolTip}"
+                        SelectionChanged="ViewOption_Changed">
+                        <ComboBoxItem Content="{loc:Str SpModImport_ShowAll}" />
+                        <ComboBoxItem Content="{loc:Str SpModImport_ShowTicked}" />
+                        <ComboBoxItem Content="{loc:Str SpModImport_ShowUnticked}" />
+                    </ComboBox>
+                    <ComboBox
+                        x:Name="SortBox"
+                        MinWidth="160"
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        SelectedIndex="0"
+                        ToolTip="{loc:Str Common_SortToolTip}"
+                        SelectionChanged="ViewOption_Changed">
+                        <ComboBoxItem Content="{loc:Str SpModImport_SortPage}" />
+                        <ComboBoxItem Content="{loc:Str SpModImport_SortName}" />
+                        <ComboBoxItem Content="{loc:Str SpModImport_SortDownloads}" />
+                        <ComboBoxItem Content="{loc:Str SpModImport_SortUpdated}" />
+                    </ComboBox>
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Padding="10,7"
+                        Icon="{ui:SymbolIcon ChevronDoubleDown20}"
+                        ToolTip="{loc:Str SpModImport_ExpandAllToolTip}"
+                        Click="ExpandAll_Click" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Padding="10,7"
+                        Icon="{ui:SymbolIcon ChevronDoubleUp20}"
+                        ToolTip="{loc:Str SpModImport_CollapseAllToolTip}"
+                        Click="CollapseAll_Click" />
+                </StackPanel>
+
+                <ui:TextBox
+                    x:Name="SearchBox"
+                    VerticalAlignment="Center"
+                    Icon="{ui:SymbolIcon Search24}"
+                    ClearButtonEnabled="True"
+                    PlaceholderText="{loc:Str SpModImport_SearchPlaceholder}"
+                    TextChanged="SearchBox_TextChanged" />
+            </DockPanel>
+
             <ui:Card
-                Grid.Row="3"
-                Margin="0,12,0,0"
+                Grid.Row="4"
+                Margin="0,8,0,0"
                 Padding="4"
                 VerticalAlignment="Top">
                 <ScrollViewer
                     x:Name="SectionsScroller"
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                    <TextBlock
+                        x:Name="NoMatchesText"
+                        Margin="12"
+                        Visibility="Collapsed"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="{loc:Str SpModImport_NoMatches}" />
+
                     <ItemsControl x:Name="SectionsList" Focusable="False">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Margin="8,8,8,12">
-                                    <TextBlock
-                                        FontWeight="SemiBold"
-                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                        Text="{Binding Title}" />
+                                <StackPanel
+                                    Margin="8,4,8,8"
+                                    Visibility="{Binding IsShown, Converter={StaticResource BoolToVis}}">
+                                    <!-- The whole header folds the section, like a group header on Installed. -->
+                                    <Border
+                                        Style="{StaticResource HoverRow}"
+                                        Padding="4,6"
+                                        Cursor="Hand"
+                                        ToolTip="{loc:Str SpModImport_SectionToggleToolTip}"
+                                        MouseLeftButtonUp="SectionHeader_Click">
+                                        <StackPanel Orientation="Horizontal">
+                                            <ui:SymbolIcon
+                                                Margin="0,0,8,0"
+                                                VerticalAlignment="Center"
+                                                FontSize="16"
+                                                Symbol="{Binding ChevronSymbol}"
+                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                FontWeight="SemiBold"
+                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                Text="{Binding Title}" />
+                                        </StackPanel>
+                                    </Border>
 
+                                    <StackPanel Visibility="{Binding IsCollapsed, Converter={StaticResource FalseToVisible}}">
                                     <TextBlock
-                                        Margin="0,2,0,6"
+                                        Margin="4,2,0,6"
                                         TextWrapping="Wrap"
                                         FontSize="12"
                                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
@@ -358,10 +442,12 @@
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
+                                    </StackPanel>
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+                    </StackPanel>
                 </ScrollViewer>
             </ui:Card>
         </Grid>

@@ -1975,7 +1975,6 @@ internal static class Strings
     internal static string SpModImport_FactAddonForFormat => LocalizationService.Get("SpModImport_FactAddonForFormat");
     internal static string SpModImport_FactNeededByFormat => LocalizationService.Get("SpModImport_FactNeededByFormat");
     internal static string SpModImport_FactConflict => LocalizationService.Get("SpModImport_FactConflict");
-    internal static string SpModImport_FactNotCompatible => LocalizationService.Get("SpModImport_FactNotCompatible");
     internal static string SpModImport_FactParentNotOnList => LocalizationService.Get("SpModImport_FactParentNotOnList");
     internal static string SpModImport_TickedFormat => LocalizationService.Get("SpModImport_TickedFormat");
     internal static string SpModImport_NoChanges => LocalizationService.Get("SpModImport_NoChanges");
@@ -2025,4 +2024,22 @@ internal static class Strings
         LocalizationService.Plural("SpModImport_BadgeMissing", count, values);
     internal static string SpModImport_BadgeSatisfied(int count, params object?[] values) =>
         LocalizationService.Plural("SpModImport_BadgeSatisfied", count, values);
+    internal static string SpModImport_SectionOtherSpt => LocalizationService.Get("SpModImport_SectionOtherSpt");
+    internal static string SpModImport_OtherSptNoteFormat => LocalizationService.Get("SpModImport_OtherSptNoteFormat");
+    internal static string SpModImport_SectionUnmet => LocalizationService.Get("SpModImport_SectionUnmet");
+    internal static string SpModImport_UnmetNote => LocalizationService.Get("SpModImport_UnmetNote");
+    internal static string SpModImport_SectionFilteredFormat => LocalizationService.Get("SpModImport_SectionFilteredFormat");
+    internal static string SpModImport_SearchPlaceholder => LocalizationService.Get("SpModImport_SearchPlaceholder");
+    internal static string SpModImport_ShowToolTip => LocalizationService.Get("SpModImport_ShowToolTip");
+    internal static string SpModImport_ShowAll => LocalizationService.Get("SpModImport_ShowAll");
+    internal static string SpModImport_ShowTicked => LocalizationService.Get("SpModImport_ShowTicked");
+    internal static string SpModImport_ShowUnticked => LocalizationService.Get("SpModImport_ShowUnticked");
+    internal static string SpModImport_SortPage => LocalizationService.Get("SpModImport_SortPage");
+    internal static string SpModImport_SortName => LocalizationService.Get("SpModImport_SortName");
+    internal static string SpModImport_SortDownloads => LocalizationService.Get("SpModImport_SortDownloads");
+    internal static string SpModImport_SortUpdated => LocalizationService.Get("SpModImport_SortUpdated");
+    internal static string SpModImport_ExpandAllToolTip => LocalizationService.Get("SpModImport_ExpandAllToolTip");
+    internal static string SpModImport_CollapseAllToolTip => LocalizationService.Get("SpModImport_CollapseAllToolTip");
+    internal static string SpModImport_SectionToggleToolTip => LocalizationService.Get("SpModImport_SectionToggleToolTip");
+    internal static string SpModImport_NoMatches => LocalizationService.Get("SpModImport_NoMatches");
 }

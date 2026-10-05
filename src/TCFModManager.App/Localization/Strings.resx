@@ -7227,9 +7227,6 @@ See Dependencies and Conflicts.</value>
   <data name="SpModImport_FactConflict" xml:space="preserve">
     <value>the mods that need it disagree on its version</value>
   </data>
-  <data name="SpModImport_FactNotCompatible" xml:space="preserve">
-    <value>sp-mod marks it not compatible with the list's SPT</value>
-  </data>
   <data name="SpModImport_FactParentNotOnList" xml:space="preserve">
     <value>its mod isn't on the list, so its version wasn't checked</value>
   </data>
@@ -7405,5 +7402,77 @@ See Dependencies and Conflicts.</value>
   </data>
   <data name="SpModImport_BadgeSatisfied_other" xml:space="preserve">
     <value>{0} dependencies satisfied</value>
+  </data>
+  <data name="SpModImport_SectionOtherSpt" xml:space="preserve">
+    <value>Built for another SPT version</value>
+    <comment>In the sp-mod import window. Section heading for mods sp-mod has no version of for the list's SPT.</comment>
+  </data>
+  <data name="SpModImport_OtherSptNoteFormat" xml:space="preserve">
+    <value>sp-mod has no version of these for SPT {0}, so the list shows the closest one. They may not load - check each before keeping it, or switch on the option above to use your SPT's versions.</value>
+    <comment>In the sp-mod import window. Note under that heading. {0} is an SPT version number.</comment>
+  </data>
+  <data name="SpModImport_SectionUnmet" xml:space="preserve">
+    <value>Missing dependencies</value>
+    <comment>In the sp-mod import window. Section heading for mods that need a mod the list won't provide.</comment>
+  </data>
+  <data name="SpModImport_UnmetNote" xml:space="preserve">
+    <value>Each of these needs a mod the list won't provide. Hover the red badge to see which.</value>
+    <comment>In the sp-mod import window. Note under that heading.</comment>
+  </data>
+  <data name="SpModImport_SectionFilteredFormat" xml:space="preserve">
+    <value>{0} ({1} of {2})</value>
+    <comment>In the sp-mod import window. A section heading while a search or filter hides some of it. {0} the section's name, {1} how many are shown, {2} how many it has.</comment>
+  </data>
+  <data name="SpModImport_SearchPlaceholder" xml:space="preserve">
+    <value>Search this list...</value>
+    <comment>In the sp-mod import window. Placeholder of the search box above the sections.</comment>
+  </data>
+  <data name="SpModImport_ShowToolTip" xml:space="preserve">
+    <value>Show</value>
+    <comment>In the sp-mod import window. Tooltip of the dropdown that filters by tick.</comment>
+  </data>
+  <data name="SpModImport_ShowAll" xml:space="preserve">
+    <value>All</value>
+    <comment>In the sp-mod import window. Show dropdown option: every row.</comment>
+  </data>
+  <data name="SpModImport_ShowTicked" xml:space="preserve">
+    <value>Ticked</value>
+    <comment>In the sp-mod import window. Show dropdown option: only ticked rows.</comment>
+  </data>
+  <data name="SpModImport_ShowUnticked" xml:space="preserve">
+    <value>Unticked</value>
+    <comment>In the sp-mod import window. Show dropdown option: only unticked rows.</comment>
+  </data>
+  <data name="SpModImport_SortPage" xml:space="preserve">
+    <value>As on sp-mod</value>
+    <comment>In the sp-mod import window. Sort option: the order the list's page shows.</comment>
+  </data>
+  <data name="SpModImport_SortName" xml:space="preserve">
+    <value>Name</value>
+    <comment>In the sp-mod import window. Sort option.</comment>
+  </data>
+  <data name="SpModImport_SortDownloads" xml:space="preserve">
+    <value>Most downloaded</value>
+    <comment>In the sp-mod import window. Sort option.</comment>
+  </data>
+  <data name="SpModImport_SortUpdated" xml:space="preserve">
+    <value>Recently updated</value>
+    <comment>In the sp-mod import window. Sort option.</comment>
+  </data>
+  <data name="SpModImport_ExpandAllToolTip" xml:space="preserve">
+    <value>Open every section</value>
+    <comment>In the sp-mod import window. Tooltip.</comment>
+  </data>
+  <data name="SpModImport_CollapseAllToolTip" xml:space="preserve">
+    <value>Close every section</value>
+    <comment>In the sp-mod import window. Tooltip.</comment>
+  </data>
+  <data name="SpModImport_SectionToggleToolTip" xml:space="preserve">
+    <value>Show or hide this section</value>
+    <comment>In the sp-mod import window. Tooltip of a section's heading.</comment>
+  </data>
+  <data name="SpModImport_NoMatches" xml:space="preserve">
+    <value>Nothing on the list matches.</value>
+    <comment>In the sp-mod import window. Shown when the search and filter hide every row.</comment>
   </data>
 </root>

@@ -6337,9 +6337,6 @@
   <data name="SpModImport_FactConflict" xml:space="preserve">
     <value>моды, которым он нужен, требуют разные версии</value>
   </data>
-  <data name="SpModImport_FactNotCompatible" xml:space="preserve">
-    <value>sp-mod отмечает его как несовместимый с SPT списка</value>
-  </data>
   <data name="SpModImport_FactParentNotOnList" xml:space="preserve">
     <value>его мода нет в списке, поэтому версия не проверялась</value>
   </data>
@@ -6510,5 +6507,59 @@
   </data>
   <data name="SpModImport_BadgeSatisfied_many" xml:space="preserve">
     <value>{0} зависимостей на месте</value>
+  </data>
+  <data name="SpModImport_SectionOtherSpt" xml:space="preserve">
+    <value>Сделаны для другой версии SPT</value>
+  </data>
+  <data name="SpModImport_OtherSptNoteFormat" xml:space="preserve">
+    <value>На sp-mod нет их версий для SPT {0}, поэтому в списке показана ближайшая. Они могут не загрузиться - проверьте каждый, прежде чем оставить, или включите вариант выше, чтобы взять версии для вашего SPT.</value>
+  </data>
+  <data name="SpModImport_SectionUnmet" xml:space="preserve">
+    <value>Не хватает зависимостей</value>
+  </data>
+  <data name="SpModImport_UnmetNote" xml:space="preserve">
+    <value>Каждому из них нужен мод, которого в списке не будет. Наведите на красный значок, чтобы увидеть какой.</value>
+  </data>
+  <data name="SpModImport_SectionFilteredFormat" xml:space="preserve">
+    <value>{0} ({1} из {2})</value>
+  </data>
+  <data name="SpModImport_SearchPlaceholder" xml:space="preserve">
+    <value>Поиск по списку...</value>
+  </data>
+  <data name="SpModImport_ShowToolTip" xml:space="preserve">
+    <value>Показать</value>
+  </data>
+  <data name="SpModImport_ShowAll" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="SpModImport_ShowTicked" xml:space="preserve">
+    <value>Отмеченные</value>
+  </data>
+  <data name="SpModImport_ShowUnticked" xml:space="preserve">
+    <value>Неотмеченные</value>
+  </data>
+  <data name="SpModImport_SortPage" xml:space="preserve">
+    <value>Как на sp-mod</value>
+  </data>
+  <data name="SpModImport_SortName" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="SpModImport_SortDownloads" xml:space="preserve">
+    <value>Больше загрузок</value>
+  </data>
+  <data name="SpModImport_SortUpdated" xml:space="preserve">
+    <value>Недавно обновлённые</value>
+  </data>
+  <data name="SpModImport_ExpandAllToolTip" xml:space="preserve">
+    <value>Развернуть все разделы</value>
+  </data>
+  <data name="SpModImport_CollapseAllToolTip" xml:space="preserve">
+    <value>Свернуть все разделы</value>
+  </data>
+  <data name="SpModImport_SectionToggleToolTip" xml:space="preserve">
+    <value>Показать или скрыть раздел</value>
+  </data>
+  <data name="SpModImport_NoMatches" xml:space="preserve">
+    <value>В списке ничего не найдено.</value>
   </data>
 </root>

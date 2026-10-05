@@ -6019,9 +6019,6 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="SpModImport_FactConflict" xml:space="preserve">
     <value>die Mods, die ihn brauchen, sind sich über seine Version uneinig</value>
   </data>
-  <data name="SpModImport_FactNotCompatible" xml:space="preserve">
-    <value>sp-mod markiert ihn als nicht kompatibel mit dem SPT der Liste</value>
-  </data>
   <data name="SpModImport_FactParentNotOnList" xml:space="preserve">
     <value>sein Mod ist nicht auf der Liste, daher wurde seine Version nicht geprüft</value>
   </data>
@@ -6168,5 +6165,59 @@ Siehe Abhängigkeiten und Konflikte.</value>
   </data>
   <data name="SpModImport_BadgeSatisfied_other" xml:space="preserve">
     <value>{0} Abhängigkeiten erfüllt</value>
+  </data>
+  <data name="SpModImport_SectionOtherSpt" xml:space="preserve">
+    <value>Für eine andere SPT-Version erstellt</value>
+  </data>
+  <data name="SpModImport_OtherSptNoteFormat" xml:space="preserve">
+    <value>sp-mod hat von diesen keine Version für SPT {0}, daher zeigt die Liste die nächstliegende. Sie laden womöglich nicht - prüfe jeden, bevor du ihn behältst, oder schalte oben die Option für die Versionen deines SPT ein.</value>
+  </data>
+  <data name="SpModImport_SectionUnmet" xml:space="preserve">
+    <value>Fehlende Abhängigkeiten</value>
+  </data>
+  <data name="SpModImport_UnmetNote" xml:space="preserve">
+    <value>Jeder davon braucht einen Mod, den die Liste nicht mitbringt. Fahre über das rote Abzeichen, um zu sehen, welchen.</value>
+  </data>
+  <data name="SpModImport_SectionFilteredFormat" xml:space="preserve">
+    <value>{0} ({1} von {2})</value>
+  </data>
+  <data name="SpModImport_SearchPlaceholder" xml:space="preserve">
+    <value>Diese Liste durchsuchen...</value>
+  </data>
+  <data name="SpModImport_ShowToolTip" xml:space="preserve">
+    <value>Anzeigen</value>
+  </data>
+  <data name="SpModImport_ShowAll" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="SpModImport_ShowTicked" xml:space="preserve">
+    <value>Angehakt</value>
+  </data>
+  <data name="SpModImport_ShowUnticked" xml:space="preserve">
+    <value>Nicht angehakt</value>
+  </data>
+  <data name="SpModImport_SortPage" xml:space="preserve">
+    <value>Wie auf sp-mod</value>
+  </data>
+  <data name="SpModImport_SortName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="SpModImport_SortDownloads" xml:space="preserve">
+    <value>Meiste Downloads</value>
+  </data>
+  <data name="SpModImport_SortUpdated" xml:space="preserve">
+    <value>Zuletzt aktualisiert</value>
+  </data>
+  <data name="SpModImport_ExpandAllToolTip" xml:space="preserve">
+    <value>Alle Abschnitte öffnen</value>
+  </data>
+  <data name="SpModImport_CollapseAllToolTip" xml:space="preserve">
+    <value>Alle Abschnitte schließen</value>
+  </data>
+  <data name="SpModImport_SectionToggleToolTip" xml:space="preserve">
+    <value>Diesen Abschnitt ein- oder ausblenden</value>
+  </data>
+  <data name="SpModImport_NoMatches" xml:space="preserve">
+    <value>Nichts auf der Liste passt.</value>
   </data>
 </root>

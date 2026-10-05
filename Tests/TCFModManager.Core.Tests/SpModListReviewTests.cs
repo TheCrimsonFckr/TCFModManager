@@ -81,6 +81,51 @@ public class SpModListReviewTests
         Assert.Same(parentCard, review.Rows.Single(r => r.Ref == "mod/2706").Card);
     }
 
+    private static SpModListItem Needing(int id, params SpModCardDependency[] dependencies) =>
+        Mod(id) with { Card = new SpModCard(null, null, null, null, null, "4.0.13", false, dependencies) };
+
+    private static SpModCardDependency D(string name, bool onList) => new(name, onList);
+
+    [Fact]
+    public void AModShownAtAnotherSptsVersionIsBuiltForOtherSptUntilARetarget()
+    {
+        var page = Page(Mod(1) with { NotCompatible = true }, Mod(2), Addon(135, parent: 1));
+
+        var review = SpModListReview.Build(page);
+        Assert.Equal(["mod/1"], review.Rows.Where(review.IsBuiltForOtherSpt).Select(r => r.Ref));
+
+        var retargeted = SpModListReview.Build(page, retarget: Retarget(Changed(E(1, "1.0.0"), "1.1.0")));
+        Assert.DoesNotContain(retargeted.Rows, retargeted.IsBuiltForOtherSpt);
+    }
+
+    [Fact]
+    public void ADependencyIsCoveredByATickedRowAndOtherwiseByWhatSpModSaid()
+    {
+        var review = SpModListReview.Build(Page(
+            Needing(1, D("Mod 2", true), D("Elsewhere", true), D("Gone", false)),
+            Mod(2)));
+
+        var needing = review.Rows.Single(r => r.Ref == "mod/1");
+        var coverage = review.Coverage(needing);
+        Assert.Equal(["Mod 2", "Elsewhere"], coverage.Covered);
+        Assert.Equal(["Gone"], coverage.Missing);
+        Assert.False(coverage.Satisfied);
+
+        // Unticking the row that provides it uncovers it, even though sp-mod's card said it was on the list.
+        review.Rows.Single(r => r.Ref == "mod/2").Ticked = false;
+        Assert.Equal(["Mod 2", "Gone"], review.Coverage(needing).Missing);
+
+        Assert.False(review.Coverage(review.Rows.Single(r => r.Ref == "mod/2")).Any);
+    }
+
+    [Fact]
+    public void AnAddedDependencyCoversTheCardThatNeededIt()
+    {
+        var review = SpModListReview.Build(Page(Needing(1, D("Dep 50", false))), dependencies: Deps(Dep(50)));
+
+        Assert.True(review.Coverage(review.Rows.Single(r => r.Ref == "mod/1")).Satisfied);
+    }
+
     [Fact]
     public void TheDependencyAnswerGivesAMissingParentItsVersion()
     {

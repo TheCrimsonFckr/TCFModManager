@@ -71,6 +71,16 @@ public sealed class SpModReviewRow
     public SpModCard? Card { get; init; }
 }
 
+// A row's dependencies split by whether the list, as ticked, provides them.
+public sealed record SpModDependencyCoverage(IReadOnlyList<string> Covered, IReadOnlyList<string> Missing)
+{
+    public static SpModDependencyCoverage None { get; } = new([], []);
+
+    public bool Any => Covered.Count + Missing.Count > 0;
+
+    public bool Satisfied => Missing.Count == 0;
+}
+
 //
 // Everything the import window shows, and the list its ticks make.
 //
@@ -104,6 +114,42 @@ public sealed class SpModListReview
     public IEnumerable<SpModReviewRow> In(SpModReviewSection section) => Rows.Where(r => r.Section == section);
 
     public IEnumerable<SpModReviewRow> TickedRows => Rows.Where(r => r.Ticked);
+
+    //
+    // A mod the page could only show at a version for another SPT: sp-mod has nothing of it for the
+    // list's target, so it drew the closest version with a "Not compatible" badge. A retarget
+    // replaces those versions with ones for this install (or moves them to NoVersion), so once one
+    // has run nothing is left in this state.
+    //
+    public bool IsBuiltForOtherSpt(SpModReviewRow row) =>
+        row.Section == SpModReviewSection.Mods && row.NotCompatible && !Retargeted;
+
+    //
+    // Which of the dependencies sp-mod lists on a row's card the list will actually provide, by the
+    // ticks as they stand. A dependency is covered when a ticked row carries its name. One the
+    // review has no row for at all - already on the list under a name sp-mod shows differently, or
+    // simply not asked about - goes by what sp-mod's card said. Covered first, then missing, each in
+    // sp-mod's order.
+    //
+    public SpModDependencyCoverage Coverage(SpModReviewRow row)
+    {
+        var dependencies = row.Card?.Dependencies ?? [];
+        if (dependencies.Count == 0) return SpModDependencyCoverage.None;
+
+        var ticked = Rows.Where(r => r.Ticked).Select(r => r.Entry.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var reviewed = Rows.Select(r => r.Entry.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var covered = new List<string>();
+        var missing = new List<string>();
+
+        foreach (var dependency in dependencies)
+        {
+            var ok = ticked.Contains(dependency.Name) || (!reviewed.Contains(dependency.Name) && dependency.OnList);
+            (ok ? covered : missing).Add(dependency.Name);
+        }
+
+        return new SpModDependencyCoverage(covered, missing);
+    }
 
     //
     // The rows for a page.

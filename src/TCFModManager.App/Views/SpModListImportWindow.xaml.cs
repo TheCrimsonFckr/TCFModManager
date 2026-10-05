@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
@@ -51,6 +52,13 @@ public sealed partial class SpModImportRow : ObservableObject
 
     public string? Thumbnail { get; init; }
 
+    // For sorting: where it sits on sp-mod's page, and the raw figures behind the facts line.
+    public int Order { get; init; }
+
+    public long? DownloadCount { get; init; }
+
+    public DateTimeOffset? Updated { get; init; }
+
     public SymbolRegular PlaceholderSymbol { get; init; } = SymbolRegular.PuzzleCube24;
 
     public string? Url { get; init; }
@@ -60,9 +68,6 @@ public sealed partial class SpModImportRow : ObservableObject
     public bool IsDependency { get; init; }
 
     public string? DependencyOfTip { get; init; }
-
-    // The dependencies sp-mod lists on the card, by name. Empty for rows with no card.
-    public IReadOnlyList<SpModCardDependency> Dependencies { get; init; } = [];
 
     [ObservableProperty]
     private string? _dependenciesBadge;
@@ -90,42 +95,90 @@ public sealed partial class SpModImportRow : ObservableObject
         }
     }
 
-    //
-    // A dependency is covered when a ticked row carries its name. One the review has no row for at
-    // all - already installed, or simply on the list under a name sp-mod shows differently - falls
-    // back to what sp-mod's own card said.
-    //
-    public void RefreshDependencies(ISet<string> ticked, ISet<string> reviewed)
+    // Shows what the list, as ticked now, provides of this row's dependencies.
+    public void ShowCoverage(SpModDependencyCoverage coverage)
     {
-        if (Dependencies.Count == 0)
+        if (!coverage.Any)
         {
             DependenciesBadge = null;
             DependencyTips = [];
             return;
         }
 
-        var covered = new List<string>();
-        var missing = new List<string>();
+        DependenciesAppearance = coverage.Satisfied ? ControlAppearance.Success : ControlAppearance.Danger;
+        DependenciesBadge = coverage.Satisfied
+            ? Strings.SpModImport_BadgeSatisfied(coverage.Covered.Count)
+            : Strings.SpModImport_BadgeMissing(coverage.Missing.Count);
 
-        foreach (var dependency in Dependencies)
-        {
-            var ok = ticked.Contains(dependency.Name) || (!reviewed.Contains(dependency.Name) && dependency.OnList);
-            (ok ? covered : missing).Add(dependency.Name);
-        }
-
-        DependenciesAppearance = missing.Count > 0 ? ControlAppearance.Danger : ControlAppearance.Success;
-        DependenciesBadge = missing.Count > 0
-            ? Strings.SpModImport_BadgeMissing(missing.Count)
-            : Strings.SpModImport_BadgeSatisfied(covered.Count);
-
-        DependencyTips = [.. covered.Select(name => new SpModDependencyTip(name, true)),
-                          .. missing.Select(name => new SpModDependencyTip(name, false))];
+        DependencyTips = [.. coverage.Covered.Select(name => new SpModDependencyTip(name, true)),
+                          .. coverage.Missing.Select(name => new SpModDependencyTip(name, false))];
     }
 }
 
-public sealed record SpModImportSection(string Title, string? Note, IReadOnlyList<SpModImportRow> Rows)
+public enum SpModImportSort
 {
+    Page,
+    Name,
+    Downloads,
+    Updated,
+}
+
+public enum SpModImportShow
+{
+    All,
+    Ticked,
+    Unticked,
+}
+
+//
+// One section of the review, collapsible like a group on the Installed page. AllRows is fixed when
+// the review is shown; Rows is what the search, the Show filter and the sort leave of it.
+//
+public sealed partial class SpModImportSection : ObservableObject
+{
+    public SpModImportSection(string name, string? note, IReadOnlyList<SpModImportRow> rows)
+    {
+        Name = name;
+        Note = note;
+        AllRows = rows;
+        _rows = rows;
+        _title = LocalizationService.Text(Strings.SpModImport_SectionCountFormat, name, rows.Count);
+    }
+
+    public string Name { get; }
+
+    public string? Note { get; }
+
     public bool HasNote => !string.IsNullOrWhiteSpace(Note);
+
+    public IReadOnlyList<SpModImportRow> AllRows { get; }
+
+    [ObservableProperty]
+    private IReadOnlyList<SpModImportRow> _rows;
+
+    [ObservableProperty]
+    private string _title;
+
+    [ObservableProperty]
+    private bool _isShown = true;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ChevronSymbol))]
+    private bool _isCollapsed;
+
+    public SymbolRegular ChevronSymbol => IsCollapsed ? SymbolRegular.ChevronRight24 : SymbolRegular.ChevronDown24;
+
+    [RelayCommand]
+    private void Toggle() => IsCollapsed = !IsCollapsed;
+
+    public void Apply(Func<SpModImportRow, bool> keep, Func<IEnumerable<SpModImportRow>, IEnumerable<SpModImportRow>> order)
+    {
+        Rows = [.. order(AllRows.Where(keep))];
+        IsShown = Rows.Count > 0;
+        Title = Rows.Count == AllRows.Count
+            ? LocalizationService.Text(Strings.SpModImport_SectionCountFormat, Name, AllRows.Count)
+            : LocalizationService.Text(Strings.SpModImport_SectionFilteredFormat, Name, Rows.Count, AllRows.Count);
+    }
 }
 
 //
@@ -418,11 +471,17 @@ public partial class SpModListImportWindow : FluentWindow
 
         ShowSptPanel(review);
 
-        var sections = Sections(review);
-        _cards = [.. sections.SelectMany(section => section.Rows)];
-        RefreshDependencies();
+        // A rebuild (the retarget switch) keeps what the user had folded away.
+        var collapsed = _sections.Where(s => s.IsCollapsed).Select(s => s.Name).ToHashSet();
 
-        SectionsList.ItemsSource = sections;
+        _sections = Sections(review);
+        foreach (var section in _sections) section.IsCollapsed = collapsed.Contains(section.Name);
+
+        _cards = [.. _sections.SelectMany(section => section.AllRows)];
+        RefreshDependencies();
+        ApplyView();
+
+        SectionsList.ItemsSource = _sections;
         SectionsScroller.ScrollToTop();
 
         PrimaryButton.Content = review.IsRefresh ? Strings.SpModImport_Update : Strings.SpModImport_Create;
@@ -524,41 +583,124 @@ public partial class SpModListImportWindow : FluentWindow
         await BusyAsync(Strings.SpModImport_Reading, ct => ResolveAsync(previous, ct));
     }
 
+    //
+    // The sections, in the order the window shows them. Mods and Addons are split further than the
+    // review's own sections: a mod sp-mod could only show at another SPT's version, and a mod whose
+    // dependencies the list doesn't provide, each get a section of their own so the problems sit
+    // together rather than scattered through a long list. Which section a row is in is decided once,
+    // here - ticking afterwards changes its badge, not where it is, so nothing jumps under the pointer.
+    //
     private List<SpModImportSection> Sections(SpModListReview review)
     {
         var sections = new List<SpModImportSection>();
         var target = review.Retargeted ? review.Retarget!.TargetSptVersion : review.Page.SptVersion ?? InstalledSpt;
+        var order = 0;
 
-        void Add(SpModReviewSection section, string title, string? note)
+        var cards = review.Rows.ToDictionary(r => r, r => Row(r, order++));
+
+        void Add(string title, string? note, IEnumerable<SpModReviewRow> rows)
         {
-            var rows = review.In(section).Select(Row).ToList();
-            if (rows.Count > 0) sections.Add(new SpModImportSection(Text(Strings.SpModImport_SectionCountFormat, title, rows.Count), note, rows));
+            var list = rows.Select(r => cards[r]).ToList();
+            if (list.Count > 0) sections.Add(new SpModImportSection(title, note, list));
         }
 
-        Add(SpModReviewSection.MissingParents, Strings.SpModImport_SectionMissingParents, Strings.SpModImport_MissingParentsNote);
-        Add(SpModReviewSection.Mods, Strings.SpModImport_SectionMods, null);
-        Add(SpModReviewSection.Addons, Strings.SpModImport_SectionAddons, null);
-        Add(SpModReviewSection.Dependencies, Strings.SpModImport_SectionDependencies, Strings.SpModImport_DependenciesNote);
-        Add(SpModReviewSection.NoVersion, Strings.SpModImport_SectionNoVersion, Text(Strings.SpModImport_NoVersionNoteFormat, target));
+        bool OtherSpt(SpModReviewRow r) => review.IsBuiltForOtherSpt(r);
+        bool Unmet(SpModReviewRow r) => !OtherSpt(r) && !review.Coverage(r).Satisfied;
+
+        var mods = review.In(SpModReviewSection.Mods).ToList();
+        var addons = review.In(SpModReviewSection.Addons).ToList();
+
+        Add(Strings.SpModImport_SectionMissingParents, Strings.SpModImport_MissingParentsNote, review.In(SpModReviewSection.MissingParents));
+        Add(Strings.SpModImport_SectionOtherSpt, Text(Strings.SpModImport_OtherSptNoteFormat, review.Page.SptVersion), mods.Where(OtherSpt));
+        Add(Strings.SpModImport_SectionUnmet, Strings.SpModImport_UnmetNote, mods.Concat(addons).Where(Unmet));
+        Add(Strings.SpModImport_SectionMods, null, mods.Where(r => !OtherSpt(r) && !Unmet(r)));
+        Add(Strings.SpModImport_SectionAddons, null, addons.Where(r => !Unmet(r)));
+        Add(Strings.SpModImport_SectionDependencies, Strings.SpModImport_DependenciesNote, review.In(SpModReviewSection.Dependencies));
+        Add(Strings.SpModImport_SectionNoVersion, Text(Strings.SpModImport_NoVersionNoteFormat, target), review.In(SpModReviewSection.NoVersion));
 
         if (review.Unaddable.Count > 0)
         {
             sections.Add(new SpModImportSection(
-                Text(Strings.SpModImport_SectionCountFormat, Strings.SpModImport_SectionUnaddable, review.Unaddable.Count),
+                Strings.SpModImport_SectionUnaddable,
                 Text(Strings.SpModImport_UnaddableNoteFormat, review.Dependencies!.SptVersion),
                 [.. review.Unaddable.Select(d => new SpModImportRow(null, d.Name,
-                    Text(Strings.SpModImport_FactNeededByFormat, string.Join(Strings.Common_ListSeparator, d.NeededBy)), null))]));
+                    Text(Strings.SpModImport_FactNeededByFormat, string.Join(Strings.Common_ListSeparator, d.NeededBy)), null)
+                    { Order = order++ })]));
         }
 
         if (review.Removed.Count > 0)
         {
             sections.Add(new SpModImportSection(
-                Text(Strings.SpModImport_SectionCountFormat, Strings.SpModImport_SectionRemoved, review.Removed.Count),
+                Strings.SpModImport_SectionRemoved,
                 Strings.SpModImport_RemovedNote,
-                [.. review.Removed.Select(e => new SpModImportRow(null, e.Name, VersionFact(e.Version), null))]));
+                [.. review.Removed.Select(e => new SpModImportRow(null, e.Name, VersionFact(e.Version), null) { Order = order++ })]));
         }
 
         return sections;
+    }
+
+    // ---- search, show, sort, collapse ----
+
+    private List<SpModImportSection> _sections = [];
+
+    private SpModImportSort Sort => (SpModImportSort)Math.Max(0, SortBox.SelectedIndex);
+
+    private SpModImportShow ShowFilter => (SpModImportShow)Math.Max(0, ShowBox.SelectedIndex);
+
+    //
+    // Re-applies the search box, the Show filter and the sort to every section. Run when one of them
+    // changes, not on every tick: with Show on "Ticked", unticking a row leaves it where it is until
+    // the filter is next applied, rather than whisking it away mid-click.
+    //
+    private void ApplyView()
+    {
+        if (_sections.Count == 0) return;
+
+        var words = (SearchBox.Text ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var show = ShowFilter;
+
+        bool Keep(SpModImportRow row) =>
+            words.All(w => row.Name.Contains(w, StringComparison.CurrentCultureIgnoreCase)
+                           || (row.Facts?.Contains(w, StringComparison.CurrentCultureIgnoreCase) ?? false))
+            && show switch
+            {
+                SpModImportShow.Ticked => row.Ticked,
+                SpModImportShow.Unticked => row.CanTick && !row.Ticked,
+                _ => true,
+            };
+
+        IEnumerable<SpModImportRow> Order(IEnumerable<SpModImportRow> rows) => Sort switch
+        {
+            SpModImportSort.Name => rows.OrderBy(r => r.Name, StringComparer.CurrentCultureIgnoreCase),
+            SpModImportSort.Downloads => rows.OrderByDescending(r => r.DownloadCount ?? -1).ThenBy(r => r.Order),
+            SpModImportSort.Updated => rows.OrderByDescending(r => r.Updated ?? DateTimeOffset.MinValue).ThenBy(r => r.Order),
+            _ => rows.OrderBy(r => r.Order),
+        };
+
+        foreach (var section in _sections) section.Apply(Keep, Order);
+
+        NoMatchesText.Visibility = _sections.Any(s => s.IsShown) ? Visibility.Collapsed : Visibility.Visible;
+    }
+
+    private void SearchBox_TextChanged(object sender, TextChangedEventArgs e) => ApplyView();
+
+    private void ViewOption_Changed(object sender, SelectionChangedEventArgs e) => ApplyView();
+
+    private void SectionHeader_Click(object sender, MouseButtonEventArgs e)
+    {
+        if ((sender as FrameworkElement)?.DataContext is not SpModImportSection section) return;
+
+        section.IsCollapsed = !section.IsCollapsed;
+        e.Handled = true;
+    }
+
+    private void ExpandAll_Click(object sender, RoutedEventArgs e) => SetCollapsed(false);
+
+    private void CollapseAll_Click(object sender, RoutedEventArgs e) => SetCollapsed(true);
+
+    private void SetCollapsed(bool collapsed)
+    {
+        foreach (var section in _sections) section.IsCollapsed = collapsed;
     }
 
     private List<SpModImportRow> _cards = [];
@@ -567,7 +709,7 @@ public partial class SpModListImportWindow : FluentWindow
     // A card: what sp-mod's list page showed beside the entry, or - for the rows the page never
     // showed (missing parents with no card, dependencies) - what the catalog knows about it.
     //
-    private SpModImportRow Row(SpModReviewRow row)
+    private SpModImportRow Row(SpModReviewRow row, int order)
     {
         var parts = new List<string>();
 
@@ -580,7 +722,6 @@ public partial class SpModListImportWindow : FluentWindow
         if (row.ParentName is not null) parts.Add(Text(Strings.SpModImport_FactAddonForFormat, row.ParentName));
         if (row.NeededBy.Count > 0) parts.Add(Text(Strings.SpModImport_FactNeededByFormat, string.Join(Strings.Common_ListSeparator, row.NeededBy)));
         if (row.Conflict) parts.Add(Strings.SpModImport_FactConflict);
-        if (row.NotCompatible && !_review!.Retargeted) parts.Add(Strings.SpModImport_FactNotCompatible);
         if (row.ParentUnknown) parts.Add(Strings.SpModImport_FactParentNotOnList);
 
         var entry = row.Entry;
@@ -622,6 +763,9 @@ public partial class SpModListImportWindow : FluentWindow
 
         return new SpModImportRow(row, entry.Name, string.Join(Strings.Common_FactSeparator, parts), CardsChanged)
         {
+            Order = order,
+            DownloadCount = downloads,
+            Updated = updated,
             Version = entry.Version,
             Facts = facts.Count > 0 ? string.Join(Strings.Common_FactSeparator, facts) : null,
             Thumbnail = thumbnail,
@@ -632,7 +776,6 @@ public partial class SpModListImportWindow : FluentWindow
             DependencyOfTip = row.NeededBy.Count > 0
                 ? Text(Strings.SpModImport_FactNeededByFormat, string.Join(Strings.Common_ListSeparator, row.NeededBy))
                 : null,
-            Dependencies = card?.Dependencies ?? [],
         };
     }
 
@@ -644,10 +787,10 @@ public partial class SpModListImportWindow : FluentWindow
 
     private void RefreshDependencies()
     {
-        var ticked = _cards.Where(c => c.Ticked).Select(c => c.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
-        var reviewed = _cards.Where(c => c.CanTick).Select(c => c.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        if (_review is null) return;
 
-        foreach (var card in _cards) card.RefreshDependencies(ticked, reviewed);
+        foreach (var card in _cards)
+            if (card.Row is { } row) card.ShowCoverage(_review.Coverage(row));
     }
 
     private void OpenRowPage_Click(object sender, RoutedEventArgs e)
