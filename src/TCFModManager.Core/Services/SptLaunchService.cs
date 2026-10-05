@@ -36,8 +36,8 @@ public enum SptLaunchProblem
     // Starting the process threw. Carries ExePath and Error.
     StartFailed,
 
-    // Asked to restart something that is not up. Restart is not a second Start - a target that is
-    // not running has nothing to put back the way it was.
+    // Asked to stop or restart something that is not up. Restart is not a second Start - a target
+    // that is not running has nothing to put back the way it was.
     NotRunning,
 
     // It would not stop: refused, or still there after being asked and then killed. Carries
@@ -73,7 +73,7 @@ public sealed record SptLaunchResult
 
     public bool Started { get; init; }
 
-    // How many processes a restart stopped on the way. Zero for an ordinary start.
+    // How many processes a stop or restart took down. Zero for an ordinary start.
     public int Stopped { get; init; }
 
     public SptLaunchProblem Problem { get; init; }
@@ -85,11 +85,8 @@ public sealed record SptLaunchResult
 // Starts an install's server, its game launcher, and - where one exists - its Fika headless
 // launcher, and reports which of them is already up.
 //
-// It also RESTARTS one, which is the single exception to a rule this file used to state absolutely:
-// nothing here stops a process. Stopping still is not offered on its own - a server left down is a
-// state somebody has to notice - but a restart is a thing an operator does constantly (a config
-// edited, a server mod dropped in) and the alternative was hunting a console window. Every stop is
-// scoped to ONE target of THIS install and is asked for explicitly.
+// It also STOPS and RESTARTS one. Every stop is scoped to ONE target of THIS install and is asked
+// for explicitly.
 //
 public static class SptLaunchService
 {
@@ -226,6 +223,41 @@ public static class SptLaunchService
     // Refused when the target is not running. A restart that quietly becomes a start is how somebody
     // ends up with a second server they did not know they had.
     //
+    //
+    // Stops this target and leaves it down. The same scoping and the same close-then-kill as a
+    // restart, and refused the same way when there is nothing running.
+    //
+    public static SptLaunchResult Stop(
+        string? installPath, SptLaunchTarget target, string? headlessExePath = null)
+    {
+        var info = Describe(installPath, target, headlessExePath);
+
+        if (info.Problem != SptLaunchProblem.None)
+        {
+            return new SptLaunchResult { Info = info, Problem = info.Problem };
+        }
+
+        if (!info.IsRunning)
+        {
+            return new SptLaunchResult { Info = info, Problem = SptLaunchProblem.NotRunning };
+        }
+
+        int stopped;
+
+        try
+        {
+            stopped = StopProcesses(info);
+        }
+        catch (Exception ex)
+        {
+            return new SptLaunchResult { Info = info, Problem = SptLaunchProblem.StopFailed, Error = ex };
+        }
+
+        return stopped == 0
+            ? new SptLaunchResult { Info = info, Problem = SptLaunchProblem.StopFailed }
+            : new SptLaunchResult { Info = info, Stopped = stopped };
+    }
+
     public static SptLaunchResult Restart(
         string? installPath, SptLaunchTarget target, string? headlessExePath = null)
     {
@@ -245,7 +277,7 @@ public static class SptLaunchService
 
         try
         {
-            stopped = Stop(info);
+            stopped = StopProcesses(info);
         }
         catch (Exception ex)
         {
@@ -284,7 +316,7 @@ public static class SptLaunchService
     // NOT the process tree. Killing the tree would take a headless manager's game client with it,
     // which is a decision this method has not been asked to make.
     //
-    private static int Stop(SptLaunchTargetInfo info)
+    private static int StopProcesses(SptLaunchTargetInfo info)
     {
         var stopped = 0;
 

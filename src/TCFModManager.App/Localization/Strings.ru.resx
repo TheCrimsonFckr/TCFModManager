@@ -3718,6 +3718,9 @@
   <data name="Play_RestartedFormat" xml:space="preserve">
     <value>{0} перезапущен.</value>
   </data>
+  <data name="Play_StoppedFormat" xml:space="preserve">
+    <value>{0} остановлен.</value>
+  </data>
   <data name="Play_RestartHeadlessConfirm" xml:space="preserve">
     <value>Перезапустить headless</value>
   </data>
@@ -3736,6 +3739,18 @@
   <data name="Play_RestartServerWarning" xml:space="preserve">
     <value>Перезапуск сервера завершает любой идущий на нём рейд. Всех, кто в рейде, выбрасывает.</value>
   </data>
+  <data name="Play_Stop" xml:space="preserve">
+    <value>Остановить</value>
+  </data>
+  <data name="Play_StopServerToolTip" xml:space="preserve">
+    <value>Останавливает сервер этой установки и не запускает его снова. Только этой установки - второй сервер SPT в другой папке не затрагивается.</value>
+  </data>
+  <data name="Play_StopServerWarning" xml:space="preserve">
+    <value>Остановка сервера завершает любой идущий на нём рейд. Все, кто в рейде, будут отключены, и никто не сможет подключиться, пока сервер не запустят снова.</value>
+  </data>
+  <data name="Play_StopServerConfirm" xml:space="preserve">
+    <value>Остановить сервер</value>
+  </data>
   <data name="Play_RoleHeadless" xml:space="preserve">
     <value>Настроено как выделенный headless: список модов с сервера приходит без модов, которые нужны только игроку.</value>
   </data>
@@ -3749,7 +3764,7 @@
     <value>Настроено как машина, которая и играет, и хостит, поэтому присланный список модов приходит целиком.</value>
   </data>
   <data name="Play_ServerDescription" xml:space="preserve">
-    <value>Запускает сервер этой установки и оставляет его работать в отдельном окне консоли. Он продолжает работать, даже если закрыть приложение. Перезапустить останавливает его и запускает снова - после правки конфигурации или добавления серверного мода - и ничто здесь не остановит его окончательно; закройте его окно, когда закончите.</value>
+    <value>Запускает сервер этой установки и оставляет его работать в отдельном окне консоли. Он продолжает работать, даже если закрыть приложение. Перезапустить останавливает его и запускает снова - после правки конфигурации или добавления серверного мода - а Остановить выключает его, пока вы не запустите его снова.</value>
   </data>
   <data name="Play_ServerHeader" xml:space="preserve">
     <value>Сервер SPT</value>
@@ -4190,6 +4205,9 @@
   </data>
   <data name="SptLaunch_ServerNotRunning" xml:space="preserve">
     <value>Сервер не запущен, перезапускать нечего - запустите его.</value>
+  </data>
+  <data name="SptLaunch_ServerNotRunningToStop" xml:space="preserve">
+    <value>Сервер не запущен, останавливать нечего.</value>
   </data>
   <data name="SptLaunch_StartFailedFormat" xml:space="preserve">
     <value>Не удалось запустить {0}: {1}</value>

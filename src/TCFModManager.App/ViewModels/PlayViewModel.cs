@@ -14,8 +14,7 @@ namespace TCFModManager.App.ViewModels;
 // headless launcher, and say which of them is already up.
 //
 // The server and the headless can also be RESTARTED, one at a time and never as a side effect of
-// each other. Stopping on its own is still not offered: a server left down is a state somebody has
-// to notice, while a restart puts back what it took.
+// each other, and the server can be STOPPED.
 //
 public partial class PlayViewModel : LocalizedViewModel
 {
@@ -34,7 +33,9 @@ public partial class PlayViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(ServerPath))]
     [NotifyPropertyChangedFor(nameof(CanStartServer))]
     [NotifyPropertyChangedFor(nameof(CanRestartServer))]
+    [NotifyPropertyChangedFor(nameof(CanStopServer))]
     [NotifyCanExecuteChangedFor(nameof(AskRestartServerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AskStopServerCommand))]
     private SptLaunchTargetInfo? _server;
 
     [ObservableProperty]
@@ -127,9 +128,11 @@ public partial class PlayViewModel : LocalizedViewModel
     // Only while it is actually up. A restart is not a second start - offering it on something that
     // is down invites a press that quietly starts a server nobody asked for.
     //
-    public bool CanRestartServer => Server?.IsRunning == true && !IsRestarting;
+    public bool CanRestartServer => Server?.IsRunning == true && !IsBusy;
 
-    public bool CanRestartHeadless => Headless?.IsRunning == true && !IsRestarting;
+    public bool CanRestartHeadless => Headless?.IsRunning == true && !IsBusy;
+
+    public bool CanStopServer => Server?.IsRunning == true && !IsBusy;
 
     //
     // Which target the page is asking about before it kills anything, or null when it is not asking.
@@ -144,12 +147,19 @@ public partial class PlayViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(ConfirmingHeadlessRestart))]
     private SptLaunchTarget? _confirmingRestart;
 
+    // Asked on the card the same way as a restart, and for the same reason.
+    [ObservableProperty]
+    private bool _confirmingServerStop;
+
+    // A stop or a restart is under way.
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanRestartServer))]
     [NotifyPropertyChangedFor(nameof(CanRestartHeadless))]
+    [NotifyPropertyChangedFor(nameof(CanStopServer))]
     [NotifyCanExecuteChangedFor(nameof(AskRestartServerCommand))]
     [NotifyCanExecuteChangedFor(nameof(AskRestartHeadlessCommand))]
-    private bool _isRestarting;
+    [NotifyCanExecuteChangedFor(nameof(AskStopServerCommand))]
+    private bool _isBusy;
 
     public bool ConfirmingServerRestart => ConfirmingRestart == SptLaunchTarget.Server;
 
@@ -248,11 +258,58 @@ public partial class PlayViewModel : LocalizedViewModel
         Refresh();
     }
 
+    // Only one question on the page at a time, so asking one withdraws the other.
     [RelayCommand(CanExecute = nameof(CanRestartServer))]
-    private void AskRestartServer() => ConfirmingRestart = SptLaunchTarget.Server;
+    private void AskRestartServer()
+    {
+        ConfirmingServerStop = false;
+        ConfirmingRestart = SptLaunchTarget.Server;
+    }
 
     [RelayCommand(CanExecute = nameof(CanRestartHeadless))]
-    private void AskRestartHeadless() => ConfirmingRestart = SptLaunchTarget.Headless;
+    private void AskRestartHeadless()
+    {
+        ConfirmingServerStop = false;
+        ConfirmingRestart = SptLaunchTarget.Headless;
+    }
+
+    [RelayCommand(CanExecute = nameof(CanStopServer))]
+    private void AskStopServer()
+    {
+        ConfirmingRestart = null;
+        ConfirmingServerStop = true;
+    }
+
+    [RelayCommand]
+    private void CancelStop() => ConfirmingServerStop = false;
+
+    [RelayCommand]
+    private async Task ConfirmStopAsync()
+    {
+        if (!ConfirmingServerStop) return;
+
+        ConfirmingServerStop = false;
+        IsBusy = true;
+        _poll.Stop();
+
+        try
+        {
+            var installPath = AppServices.SptEnvironment.InstallPath;
+
+            var result = await Task.Run(() => SptLaunchService.Stop(installPath, SptLaunchTarget.Server));
+
+            HasError = result.Problem != SptLaunchProblem.None;
+            Message = HasError
+                ? SptLaunchProblems.DescribeStop(result)
+                : Text(Strings.Play_StoppedFormat, result.Info.ProcessName);
+        }
+        finally
+        {
+            IsBusy = false;
+            Refresh();
+            _poll.Start();
+        }
+    }
 
     [RelayCommand]
     private void CancelRestart() => ConfirmingRestart = null;
@@ -268,7 +325,7 @@ public partial class PlayViewModel : LocalizedViewModel
         if (ConfirmingRestart is not { } target) return;
 
         ConfirmingRestart = null;
-        IsRestarting = true;
+        IsBusy = true;
 
         // The poll would otherwise redraw the card mid-stop and offer a Start for the gap between
         // the process going and the new one appearing.
@@ -288,7 +345,7 @@ public partial class PlayViewModel : LocalizedViewModel
         }
         finally
         {
-            IsRestarting = false;
+            IsBusy = false;
             Refresh();
             _poll.Start();
         }

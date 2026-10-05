@@ -3538,6 +3538,9 @@ Du kannst es jederzeit wieder einschalten.</value>
   <data name="Play_RestartedFormat" xml:space="preserve">
     <value>{0} neu gestartet.</value>
   </data>
+  <data name="Play_StoppedFormat" xml:space="preserve">
+    <value>{0} gestoppt.</value>
+  </data>
   <data name="Play_RestartHeadlessConfirm" xml:space="preserve">
     <value>Headless neu starten</value>
   </data>
@@ -3556,6 +3559,18 @@ Du kannst es jederzeit wieder einschalten.</value>
   <data name="Play_RestartServerWarning" xml:space="preserve">
     <value>Ein Neustart des Servers beendet jeden Raid, der darauf läuft. Wer gerade in einem ist, fliegt raus.</value>
   </data>
+  <data name="Play_Stop" xml:space="preserve">
+    <value>Stoppen</value>
+  </data>
+  <data name="Play_StopServerToolTip" xml:space="preserve">
+    <value>Stoppt den Server dieser Installation und lässt ihn aus. Nur den dieser Installation - ein zweiter SPT-Server in einem anderen Ordner bleibt unangetastet.</value>
+  </data>
+  <data name="Play_StopServerWarning" xml:space="preserve">
+    <value>Ein Stoppen des Servers beendet jeden Raid, der darauf läuft. Wer gerade in einem ist, fliegt raus, und niemand kann sich verbinden, bis er wieder gestartet wird.</value>
+  </data>
+  <data name="Play_StopServerConfirm" xml:space="preserve">
+    <value>Server stoppen</value>
+  </data>
   <data name="Play_RoleHeadless" xml:space="preserve">
     <value>Als dediziertes Headless eingerichtet: Eine Modliste vom Server kommt ohne die Mods an, die nur ein Spieler braucht.</value>
   </data>
@@ -3569,7 +3584,7 @@ Du kannst es jederzeit wieder einschalten.</value>
     <value>Als Rechner eingerichtet, der spielt und hostet, sodass eine vom Server gelieferte Modliste vollständig ankommt.</value>
   </data>
   <data name="Play_ServerDescription" xml:space="preserve">
-    <value>Startet den Server dieser Installation und lässt ihn in einem eigenen Konsolenfenster laufen. Er läuft weiter, wenn du diese App schließt. Neu starten stoppt ihn und startet ihn erneut - etwa für eine geänderte Konfiguration oder einen neu abgelegten Server-Mod - und nichts hier beendet ihn endgültig; schließe sein Fenster, wenn du fertig bist.</value>
+    <value>Startet den Server dieser Installation und lässt ihn in einem eigenen Konsolenfenster laufen. Er läuft weiter, wenn du diese App schließt. Neu starten stoppt ihn und startet ihn erneut - etwa für eine geänderte Konfiguration oder einen neu abgelegten Server-Mod - und Stoppen fährt ihn herunter, bis du ihn wieder startest.</value>
   </data>
   <data name="Play_ServerHeader" xml:space="preserve">
     <value>SPT-Server</value>
@@ -3980,6 +3995,9 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   </data>
   <data name="SptLaunch_ServerNotRunning" xml:space="preserve">
     <value>Der Server läuft nicht, es gibt also nichts neu zu starten - starte ihn stattdessen.</value>
+  </data>
+  <data name="SptLaunch_ServerNotRunningToStop" xml:space="preserve">
+    <value>Der Server läuft nicht, es gibt also nichts zu stoppen.</value>
   </data>
   <data name="SptLaunch_StartFailedFormat" xml:space="preserve">
     <value>{0} konnte nicht gestartet werden: {1}</value>

@@ -133,6 +133,12 @@
                         Icon="{ui:SymbolIcon ArrowSync24}"
                         ToolTip="{loc:Str Play_RestartServerToolTip}"
                         Command="{Binding AskRestartServerCommand}" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Content="{loc:Str Play_Stop}"
+                        Icon="{ui:SymbolIcon Stop24}"
+                        ToolTip="{loc:Str Play_StopServerToolTip}"
+                        Command="{Binding AskStopServerCommand}" />
                     <TextBlock
                         VerticalAlignment="Center"
                         Margin="12,0,0,0"
@@ -162,6 +168,28 @@
                             Appearance="Transparent"
                             Content="{loc:Str Common_Cancel}"
                             Command="{Binding CancelRestartCommand}" />
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel
+                    Margin="0,0,0,8"
+                    Visibility="{Binding ConfirmingServerStop, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock
+                        TextWrapping="Wrap"
+                        Margin="0,0,0,8"
+                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                        Text="{loc:Str Play_StopServerWarning}" />
+                    <StackPanel Orientation="Horizontal">
+                        <ui:Button
+                            Appearance="Danger"
+                            Content="{loc:Str Play_StopServerConfirm}"
+                            Icon="{ui:SymbolIcon Stop24}"
+                            Command="{Binding ConfirmStopCommand}" />
+                        <ui:Button
+                            Margin="8,0,0,0"
+                            Appearance="Transparent"
+                            Content="{loc:Str Common_Cancel}"
+                            Command="{Binding CancelStopCommand}" />
                     </StackPanel>
                 </StackPanel>
 

@@ -828,8 +828,8 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>SPT server</value>
   </data>
   <data name="Play_ServerDescription" xml:space="preserve">
-    <value>Starts this install's server and leaves it running in its own console window. It keeps running if you close this app. Restart stops it and starts it again - for a config edited or a server mod dropped in - and nothing here will stop it for good; close its window when you're done.</value>
-    <comment>Restart is the button named in Play_Restart - translate it the same way.</comment>
+    <value>Starts this install's server and leaves it running in its own console window. It keeps running if you close this app. Restart stops it and starts it again - for a config edited or a server mod dropped in - and Stop shuts it down until you start it again.</value>
+    <comment>Restart and Stop are the buttons named in Play_Restart and Play_Stop - translate them the same way.</comment>
   </data>
   <data name="Play_StartServer" xml:space="preserve">
     <value>Start server</value>
@@ -843,6 +843,20 @@ A mod list records which mods to install and enable. Applying one downloads what
   </data>
   <data name="Play_RestartServerWarning" xml:space="preserve">
     <value>Restarting the server ends any raid running on it. Anyone in one is dropped.</value>
+  </data>
+  <data name="Play_Stop" xml:space="preserve">
+    <value>Stop</value>
+    <comment>Button label: stops the server and leaves it down. Pairs with Play_Restart.</comment>
+  </data>
+  <data name="Play_StopServerToolTip" xml:space="preserve">
+    <value>Stops this install's server and leaves it stopped. Only this install's - a second SPT server on another folder is left alone.</value>
+  </data>
+  <data name="Play_StopServerWarning" xml:space="preserve">
+    <value>Stopping the server ends any raid running on it. Anyone in one is dropped, and nobody can connect until it's started again.</value>
+  </data>
+  <data name="Play_StopServerConfirm" xml:space="preserve">
+    <value>Stop the server</value>
+    <comment>Confirms the warning above it.</comment>
   </data>
   <data name="Play_RestartServerConfirm" xml:space="preserve">
     <value>Restart the server</value>
@@ -1337,6 +1351,9 @@ A mod list records which mods to install and enable. Applying one downloads what
   </data>
   <data name="SptLaunch_ServerNotRunning" xml:space="preserve">
     <value>The server isn't running, so there's nothing to restart - start it instead.</value>
+  </data>
+  <data name="SptLaunch_ServerNotRunningToStop" xml:space="preserve">
+    <value>The server isn't running, so there's nothing to stop.</value>
   </data>
   <data name="SptLaunch_HeadlessNotRunning" xml:space="preserve">
     <value>The headless launcher isn't running, so there's nothing to restart - start it instead.</value>
@@ -4111,6 +4128,10 @@ You can turn it back on at any time.</value>
   </data>
   <data name="Play_RestartedFormat" xml:space="preserve">
     <value>Restarted {0}.</value>
+    <comment>{0} is a process name, which is not translated.</comment>
+  </data>
+  <data name="Play_StoppedFormat" xml:space="preserve">
+    <value>Stopped {0}.</value>
     <comment>{0} is a process name, which is not translated.</comment>
   </data>
   <data name="Dependencies_NoSptVersion" xml:space="preserve">

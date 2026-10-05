@@ -3538,6 +3538,9 @@ Puoi riattivarla quando vuoi.</value>
   <data name="Play_RestartedFormat" xml:space="preserve">
     <value>{0} riavviato.</value>
   </data>
+  <data name="Play_StoppedFormat" xml:space="preserve">
+    <value>{0} arrestato.</value>
+  </data>
   <data name="Play_RestartHeadlessConfirm" xml:space="preserve">
     <value>Riavvia l'headless</value>
   </data>
@@ -3556,6 +3559,18 @@ Puoi riattivarla quando vuoi.</value>
   <data name="Play_RestartServerWarning" xml:space="preserve">
     <value>Riavviare il server termina qualsiasi raid in corso su di esso. Chi si trova in un raid viene disconnesso.</value>
   </data>
+  <data name="Play_Stop" xml:space="preserve">
+    <value>Arresta</value>
+  </data>
+  <data name="Play_StopServerToolTip" xml:space="preserve">
+    <value>Ferma il server di questa installazione senza riavviarlo. Solo quello di questa installazione - un secondo server SPT in un'altra cartella non viene toccato.</value>
+  </data>
+  <data name="Play_StopServerWarning" xml:space="preserve">
+    <value>Fermare il server termina qualsiasi raid in corso su di esso. Chi è in un raid viene disconnesso, e nessuno può connettersi finché non viene riavviato.</value>
+  </data>
+  <data name="Play_StopServerConfirm" xml:space="preserve">
+    <value>Arresta il server</value>
+  </data>
   <data name="Play_RoleHeadless" xml:space="preserve">
     <value>Configurato come headless dedicato: una lista mod che arriva da un server non porta i mod che servono solo a chi gioca.</value>
   </data>
@@ -3569,7 +3584,7 @@ Puoi riattivarla quando vuoi.</value>
     <value>Configurato come macchina che gioca e ospita insieme, così una lista mod servita arriva completa.</value>
   </data>
   <data name="Play_ServerDescription" xml:space="preserve">
-    <value>Avvia il server di questa installazione e lo lascia in esecuzione in una finestra di console tutta sua. Continua a funzionare anche se chiudi questa app. Riavvia lo ferma e lo avvia di nuovo - per una configurazione modificata o un mod server appena aggiunto - e qui niente lo ferma per sempre; chiudi la sua finestra quando hai finito.</value>
+    <value>Avvia il server di questa installazione e lo lascia in esecuzione in una finestra di console tutta sua. Continua a funzionare anche se chiudi questa app. Riavvia lo ferma e lo avvia di nuovo - per una configurazione modificata o un mod server appena aggiunto - e Arresta lo spegne finché non lo avvii di nuovo.</value>
   </data>
   <data name="Play_ServerHeader" xml:space="preserve">
     <value>Server SPT</value>
@@ -3980,6 +3995,9 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   </data>
   <data name="SptLaunch_ServerNotRunning" xml:space="preserve">
     <value>Il server non è in esecuzione, quindi non c'è niente da riavviare - avvialo e basta.</value>
+  </data>
+  <data name="SptLaunch_ServerNotRunningToStop" xml:space="preserve">
+    <value>Il server non è in esecuzione, quindi non c'è niente da fermare.</value>
   </data>
   <data name="SptLaunch_StartFailedFormat" xml:space="preserve">
     <value>Impossibile avviare {0}: {1}</value>

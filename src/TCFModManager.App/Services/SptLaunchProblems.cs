@@ -79,6 +79,14 @@ public static class SptLaunchProblems
         _ => "",
     };
 
+    // A stop's result. Only NotRunning reads differently - the restart wording sends the reader to
+    // Start, which is the opposite of what a Stop press wanted.
+    public static string DescribeStop(SptLaunchResult result) => result.Problem switch
+    {
+        SptLaunchProblem.NotRunning => Strings.SptLaunch_ServerNotRunningToStop,
+        _ => Describe(result),
+    };
+
     //
     // The resting line under each button - what this install can do for that target right now,
     // before anything is clicked. Kept here beside the failure wording so the page never says one

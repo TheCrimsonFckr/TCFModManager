@@ -3538,6 +3538,9 @@ Vous pouvez le réactiver à tout moment.</value>
   <data name="Play_RestartedFormat" xml:space="preserve">
     <value>{0} redémarré.</value>
   </data>
+  <data name="Play_StoppedFormat" xml:space="preserve">
+    <value>{0} arrêté.</value>
+  </data>
   <data name="Play_RestartHeadlessConfirm" xml:space="preserve">
     <value>Redémarrer le headless</value>
   </data>
@@ -3556,6 +3559,18 @@ Vous pouvez le réactiver à tout moment.</value>
   <data name="Play_RestartServerWarning" xml:space="preserve">
     <value>Redémarrer le serveur met fin à tout raid en cours dessus. Toute personne en raid est déconnectée.</value>
   </data>
+  <data name="Play_Stop" xml:space="preserve">
+    <value>Arrêter</value>
+  </data>
+  <data name="Play_StopServerToolTip" xml:space="preserve">
+    <value>Arrête le serveur de cette installation sans le relancer. Seulement celui de cette installation - un second serveur SPT dans un autre dossier n'est pas touché.</value>
+  </data>
+  <data name="Play_StopServerWarning" xml:space="preserve">
+    <value>Arrêter le serveur met fin à tout raid en cours dessus. Toute personne dans un raid est déconnectée, et personne ne peut se connecter avant qu'il soit relancé.</value>
+  </data>
+  <data name="Play_StopServerConfirm" xml:space="preserve">
+    <value>Arrêter le serveur</value>
+  </data>
   <data name="Play_RoleHeadless" xml:space="preserve">
     <value>Configuré comme headless dédié : une liste de mods servie par un serveur arrive sans les mods utiles au seul joueur.</value>
   </data>
@@ -3569,7 +3584,7 @@ Vous pouvez le réactiver à tout moment.</value>
     <value>Configuré comme machine qui joue et héberge à la fois, pour qu'une liste de mods servie arrive complète.</value>
   </data>
   <data name="Play_ServerDescription" xml:space="preserve">
-    <value>Démarre le serveur de cette installation et le laisse tourner dans sa propre fenêtre de console. Il continue de tourner si vous fermez cette application. Redémarrer l'arrête puis le relance - après une configuration modifiée ou un mod serveur ajouté - et rien ici ne l'arrêtera définitivement ; fermez sa fenêtre quand vous avez terminé.</value>
+    <value>Démarre le serveur de cette installation et le laisse tourner dans sa propre fenêtre de console. Il continue de tourner si vous fermez cette application. Redémarrer l'arrête puis le relance - après une configuration modifiée ou un mod serveur ajouté - et Arrêter l'éteint jusqu'à ce que vous le relanciez.</value>
   </data>
   <data name="Play_ServerHeader" xml:space="preserve">
     <value>Serveur SPT</value>
@@ -3980,6 +3995,9 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   </data>
   <data name="SptLaunch_ServerNotRunning" xml:space="preserve">
     <value>Le serveur n'est pas en cours d'exécution, il n'y a donc rien à redémarrer - démarrez-le plutôt.</value>
+  </data>
+  <data name="SptLaunch_ServerNotRunningToStop" xml:space="preserve">
+    <value>Le serveur ne tourne pas, il n'y a donc rien à arrêter.</value>
   </data>
   <data name="SptLaunch_StartFailedFormat" xml:space="preserve">
     <value>Impossible de démarrer {0} : {1}</value>
