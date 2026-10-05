@@ -17,7 +17,7 @@ public class DependencyStatusResolverTests
         Assert.Equal(ModStatus.Installed, DependencyStatusResolver.Resolve(Node(), "1.3.0", "1.3.0"));
 
     // The required version is the newest that satisfies the constraint and this SPT, not a minimum -
-    // one above it doesn't fit (OPEN-20 X2). Was Installed until 2026-10-05.
+    // one above it doesn't fit (OPEN-21 X2). Was Installed until 2026-10-05.
     [Fact]
     public void Resolve_TooNewWhenTheDiskVersionIsNewerThanRequired() =>
         Assert.Equal(ModStatus.TooNew, DependencyStatusResolver.Resolve(Node(), "1.4.0", "1.3.0"));

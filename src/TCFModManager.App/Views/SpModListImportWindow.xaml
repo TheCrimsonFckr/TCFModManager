@@ -17,7 +17,7 @@
     <!--
         Imports an sp-mod Mod List: paste its address, read it, review it, then create the list.
         Nothing is stored until the last button - the window's job is to show what the list will
-        hold, sorted into what each entry is, before any of it exists (OPEN-18 R8).
+        hold, sorted into what each entry is, before any of it exists (OPEN-20 R8).
 
         Every TextBlock and SymbolIcon sets its own Foreground: nothing here may inherit the system
         control foreground, which is black whatever the theme is.
