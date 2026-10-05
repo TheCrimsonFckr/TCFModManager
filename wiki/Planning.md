@@ -1,3 +1,5 @@
+## Done and in progress
+
 - Mod lists / profiles - *Completed*
 - Mod list sharing and handling (if you have played Arma modded or Total War modded, think like that) - *Completed*
 - Mod syncing, getting on the same level as the server you are joining - *Completed*
@@ -10,5 +12,28 @@
 - Local languages based on OS - *Initial release, ongoing*
 - Options to use app to monitor mods rather than manage them - *Completed*
 - Update notifications, with the app kept running in the tray - *Completed*
-- Additional mod footprint monitoring to show data around their usage on
-your systems - *Planning/developing*
+- Additional mod footprint monitoring to show data around their usage on your systems - *Planning/developing*
+
+## Planned
+
+- Never left half-installed - an install that is interrupted is finished or undone the next time the app runs - *Planned*
+- Profile backups - your SPT profiles are backed up before any install, update, remove or list apply - *Planned*
+- Held-back updates - an update that would break another mod is flagged and left out of updating everything - *Planned*
+- Fika warnings - a version not marked for Fika on a Fika install, and a remove that may change your profile - *Planned*
+- Faster downloads - up to three at once, with retry and resume - *Planned*
+- Diagnose logs - reads the server, BepInEx and game logs, names the mod at fault, and builds a report with private details taken out - *Planned*
+- SPT upgrade check - pick a newer SPT and see which of your mods are ready for it - *Planned*
+- Mod tools - launch the programs a mod ships from the Play page - *Planned*
+- Server without its window - the server log live on the Play page, and the server closed along with the game - *Planned*
+- Direct launch - start the game from the Play page without SPT's launcher (experimental, off by default) - *Planned*
+- Mod descriptions shown in full - tabs, tables and GIFs as sp-mod shows them - *Planned*
+- Filter by date, and search mod descriptions as well as titles - *Planned*
+- Select several mods on Installed and update, enable, disable or remove them together - *Planned*
+- An Update button on each card - *Planned*
+- A Versions tab with Switch to this version - *Planned*
+- Author pages, and following an author - *Planned*
+- A right-click menu on every mod - *Planned*
+- Quick view - hover a mod for a preview - *Planned*
+- A downloads bar - *Planned*
+- Page size options, including endless scrolling - *Planned*
+- Mod comments in the app - *Planned*
