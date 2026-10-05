@@ -7491,4 +7491,12 @@ See Dependencies and Conflicts.</value>
     <value>Open its page on sp-mod</value>
     <comment>Tooltip of the open button on each mod list entry.</comment>
   </data>
+  <data name="ModLists_ScopeUnchecked" xml:space="preserve">
+    <value>Not checked yet</value>
+    <comment>Mod lists page, the scope chip on an entry of a list imported from sp-mod whose files haven't been seen yet, so nobody knows yet which machines it is for. Short - it sits in a small chip where the other values read like "Server + Client + Headless".</comment>
+  </data>
+  <data name="ModLists_ScopeUncheckedToolTip" xml:space="preserve">
+    <value>sp-mod doesn't say which machines a mod is for. Once this list is applied, it's worked out from where the mod's files land - client, server or both - the same way as for a list made from your install.</value>
+    <comment>Tooltip on that chip.</comment>
+  </data>
 </root>

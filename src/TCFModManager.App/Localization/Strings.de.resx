@@ -6232,4 +6232,10 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="ModLists_OpenEntryPageToolTip" xml:space="preserve">
     <value>Seine Seite auf sp-mod öffnen</value>
   </data>
+  <data name="ModLists_ScopeUnchecked" xml:space="preserve">
+    <value>Noch nicht geprüft</value>
+  </data>
+  <data name="ModLists_ScopeUncheckedToolTip" xml:space="preserve">
+    <value>sp-mod gibt nicht an, für welche Rechner ein Mod ist. Sobald diese Liste angewendet wurde, wird es daraus ermittelt, wo die Dateien des Mods landen - Client, Server oder beides -, genau wie bei einer Liste aus deiner Installation.</value>
+  </data>
 </root>

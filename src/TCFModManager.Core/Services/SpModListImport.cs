@@ -877,6 +877,14 @@ public static partial class SpModListImport
             .GroupBy(e => SpModListSource.RefFor(e)!, StringComparer.OrdinalIgnoreCase)
             .ToDictionary(g => g.Key, g => g.First().Scope, StringComparer.OrdinalIgnoreCase);
 
+        // And which entries have been checked at all - including the ones that came out as every
+        // machine, which store no scope and so can't be told apart any other way.
+        if (stored.SpModSource is { } was && incoming.SpModSource is { } now)
+        {
+            var refs = incoming.Entries.Select(SpModListSource.RefFor).OfType<string>().ToHashSet(StringComparer.OrdinalIgnoreCase);
+            now.ScopesChecked.AddRange(was.ScopesChecked.Where(refs.Contains).Except(now.ScopesChecked, StringComparer.OrdinalIgnoreCase));
+        }
+
         var merged = new ModList
         {
             Id = incoming.Id,

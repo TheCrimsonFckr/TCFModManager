@@ -922,7 +922,8 @@
                                                 Margin="0,0,8,0"
                                                 Padding="8,3"
                                                 CornerRadius="4"
-                                                Background="{DynamicResource ControlFillColorSecondaryBrush}">
+                                                Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                                ToolTip="{Binding ScopeToolTip}">
                                                 <TextBlock
                                                     FontSize="11"
                                                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"

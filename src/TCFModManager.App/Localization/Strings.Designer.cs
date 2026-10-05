@@ -2046,4 +2046,6 @@ internal static class Strings
     internal static string ModLists_StepHintApply => LocalizationService.Get("ModLists_StepHintApply");
     internal static string ModLists_EntrySptBadgeFormat => LocalizationService.Get("ModLists_EntrySptBadgeFormat");
     internal static string ModLists_OpenEntryPageToolTip => LocalizationService.Get("ModLists_OpenEntryPageToolTip");
+    internal static string ModLists_ScopeUnchecked => LocalizationService.Get("ModLists_ScopeUnchecked");
+    internal static string ModLists_ScopeUncheckedToolTip => LocalizationService.Get("ModLists_ScopeUncheckedToolTip");
 }

@@ -143,7 +143,16 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
     // unlabelled row reads as "not set" rather than "set to everyone", and the button that changes
     // it has no visible starting point. Every state gets a label, always visible.
     //
-    public string ScopeLabel => ModListScopes.Label(Entry.EffectiveScope);
+    public string ScopeLabel => ScopeUnchecked ? Strings.ModLists_ScopeUnchecked : ModListScopes.Label(Entry.EffectiveScope);
+
+    //
+    // An sp-mod list's entry whose files haven't been seen yet. Its stored scope is only the default,
+    // and showing that as "Server + Client + Headless" would read as a decision already made, so the
+    // chip says it hasn't been checked and the tooltip says when it will be.
+    //
+    public bool ScopeUnchecked { get; init; }
+
+    public string? ScopeToolTip => ScopeUnchecked ? Strings.ModLists_ScopeUncheckedToolTip : null;
 
     //
     // The card half, as Browse and the sp-mod import window show a mod: thumbnail, who made it and
@@ -705,7 +714,10 @@ public partial class ModListsViewModel : LocalizedViewModel
             ? title
             : entry.Name;
 
-        var row = new ModListEntryRowViewModel(entry, name, EntryDetail(entry, name), IsPinnedHere(entry));
+        var row = new ModListEntryRowViewModel(entry, name, EntryDetail(entry, name), IsPinnedHere(entry))
+        {
+            ScopeUnchecked = Selected?.List.SpModSource?.IsScopeUnchecked(entry) == true,
+        };
         if (entry.ModId is not { } modId) return row;
 
         var url = SpModListImport.PageFor(entry.IsAddon, modId);
@@ -1060,7 +1072,11 @@ public partial class ModListsViewModel : LocalizedViewModel
             Order(action.Kind),
             action,
             entry is null ? string.Empty : EntryDetail(entry, name),
-            action.Entry is { } listed ? ModListScopes.Label(listed.EffectiveScope) : null,
+            action.Entry is { } listed
+                ? _preview?.List.SpModSource?.IsScopeUnchecked(listed) == true
+                    ? Strings.ModLists_ScopeUnchecked
+                    : ModListScopes.Label(listed.EffectiveScope)
+                : null,
             status,
             tone,
             icon);

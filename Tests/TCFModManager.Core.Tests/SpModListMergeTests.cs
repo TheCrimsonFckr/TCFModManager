@@ -311,8 +311,10 @@ public class SpModListMergeTests : IDisposable
         Assert.Equal(ModListEntryScope.Server, stored.Entries.Single(e => e.ModId == 1 && !e.IsAddon).Scope);
         Assert.Equal(ModListEntryScope.Client | ModListEntryScope.Headless, stored.Entries.Single(e => e.ModId == 2).Scope);
 
-        // A mod the scanner couldn't place stays as it was rather than taking a guess.
-        Assert.Null(stored.Entries.Single(e => e.IsAddon).Scope);
+        // Found to belong to every machine: no scope stored, but no longer unchecked either.
+        var addon = stored.Entries.Single(e => e.IsAddon);
+        Assert.Null(addon.Scope);
+        Assert.False(stored.SpModSource!.IsScopeUnchecked(addon));
 
         // The page's read time is not an edit time.
         Assert.Equal(list.UpdatedAt, stored.UpdatedAt);
@@ -326,16 +328,19 @@ public class SpModListMergeTests : IDisposable
         _store.Add(list);
 
         Assert.Null(_store.LearnScopes(list.Id, [Installed(77, ModListEntryScope.Server)]));
+        Assert.All(_store.Find(list.Id)!.Entries, e => Assert.True(list.SpModSource!.IsScopeUnchecked(e)));
     }
 
     [Fact]
     public void ALearnedScopeIsKeptAndALocalListIsLeftAlone()
     {
-        var spMod = Page(items: [Mod(1)]).ToModList("x", Monday);
+        var spMod = Page(items: [Mod(1), Mod(2)]).ToModList("x", Monday);
         spMod.Entries[0] = ModListEntries.WithScope(spMod.Entries[0], ModListEntryScope.Server);
+        spMod.SpModSource!.ScopesChecked.Add("mod/2");
 
-        // Already known: not re-learned from a different reading.
-        Assert.Null(ModListScopeLearning.Learn(spMod, [Installed(1, ModListEntryScope.Client)]));
+        // Already known - a stored scope, or checked and found to be every machine's - so neither
+        // is re-learned from a different reading.
+        Assert.Null(ModListScopeLearning.Learn(spMod, [Installed(1, ModListEntryScope.Client), Installed(2, ModListEntryScope.Server)]));
 
         // On a list made here, no scope is somebody's choice.
         var local = new ModList { Id = Guid.NewGuid(), Name = "mine", CreatedAt = Monday, UpdatedAt = Monday, Entries = [new() { Name = "Mod 1", ModId = 1 }] };
@@ -347,11 +352,15 @@ public class SpModListMergeTests : IDisposable
     {
         var first = Page(items: Base).ToModList("x", Monday);
         _store.Add(first);
-        _store.LearnScopes(first.Id, [Installed(2, ModListEntryScope.Server)]);
+        _store.LearnScopes(first.Id, [Installed(2, ModListEntryScope.Server), Installed(1, ModListEntryScope.Everyone)]);
 
         var update = SpModListImport.Merge(_store.Find(first.Id), Page(items: [Mod(1), Mod(2, "1.1.0"), Mod(3)]).ToModList("x", Friday));
 
         Assert.Equal(ModListEntryScope.Server, update.List.Entries.Single(e => e.ModId == 2).Scope);
         Assert.Null(update.List.Entries.Single(e => e.ModId == 3).Scope);
+
+        var source = update.List.SpModSource!;
+        Assert.False(source.IsScopeUnchecked(update.List.Entries.Single(e => e.ModId == 1 && !e.IsAddon)));
+        Assert.True(source.IsScopeUnchecked(update.List.Entries.Single(e => e.ModId == 3)));
     }
 }

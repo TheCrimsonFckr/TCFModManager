@@ -6574,4 +6574,10 @@
   <data name="ModLists_OpenEntryPageToolTip" xml:space="preserve">
     <value>Открыть его страницу на sp-mod</value>
   </data>
+  <data name="ModLists_ScopeUnchecked" xml:space="preserve">
+    <value>Ещё не проверено</value>
+  </data>
+  <data name="ModLists_ScopeUncheckedToolTip" xml:space="preserve">
+    <value>sp-mod не сообщает, для каких машин предназначен мод. После применения списка это определяется по тому, куда легли файлы мода - клиент, сервер или оба, - так же, как для списка из вашей установки.</value>
+  </data>
 </root>

@@ -39,6 +39,17 @@ public sealed class SpModListSource
     //
     public List<string> Added { get; init; } = [];
 
+    //
+    // Entries whose scope has been read off their installed files (ModListScopeLearning), whatever it
+    // came out as. Needed because "Server + Client + Headless" is stored as no scope at all, so
+    // without it a mod found to have both halves would look exactly like one nobody has looked at.
+    //
+    public List<string> ScopesChecked { get; init; } = [];
+
+    // Whether this entry's scope is still only the default, because its files haven't been seen yet.
+    public bool IsScopeUnchecked(ModListEntry entry) =>
+        entry.Scope is null && RefFor(entry) is { } key && !ScopesChecked.Contains(key, StringComparer.OrdinalIgnoreCase);
+
     public static string RefFor(bool isAddon, int id) => (isAddon ? "addon/" : "mod/") + id;
 
     public static string? RefFor(ModListEntry entry) => entry.ModId is { } id ? RefFor(entry.IsAddon, id) : null;

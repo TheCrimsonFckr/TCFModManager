@@ -317,7 +317,8 @@ public sealed class ModListStore
         if (learned is null) return null;
 
         list.Entries.Clear();
-        list.Entries.AddRange(learned);
+        list.Entries.AddRange(learned.Entries);
+        list.SpModSource!.ScopesChecked.AddRange(learned.Checked);
         Save(data);
         return list;
     }
