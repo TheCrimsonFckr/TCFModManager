@@ -171,7 +171,7 @@ public static class SptLaunchService
             InstallPath = installPath,
             ExePath = exePath,
             ProcessName = processName,
-            IsRunning = IsRunning(target, processName),
+            IsRunning = IsRunning(target, processName, exePath, installPath),
         };
     }
 
@@ -372,6 +372,18 @@ public static class SptLaunchService
     //
     private static bool IsThisInstall(Process process, SptLaunchTargetInfo info)
     {
+        var ours = RunsFrom(process, info.ExePath, info.InstallPath);
+        if (ours is null) AppLog.Debug("Launch", $"could not read the path of {process.ProcessName}; leaving it alone");
+
+        return ours == true;
+    }
+
+    //
+    // Whether a process runs from this install, or is the very exe that would be started: true, false,
+    // or null when its path can't be read (another user's, or elevated).
+    //
+    private static bool? RunsFrom(Process process, string? exePath, string? installPath)
+    {
         string? executable;
 
         try
@@ -380,19 +392,18 @@ public static class SptLaunchService
         }
         catch (Exception ex) when (ex is Win32Exception or InvalidOperationException or NotSupportedException)
         {
-            AppLog.Debug("Launch", $"could not read the path of {process.ProcessName}; leaving it alone");
-            return false;
+            return null;
         }
 
-        if (executable is null) return false;
+        if (executable is null) return null;
 
-        if (info.ExePath is { } exe
-            && string.Equals(Path.GetFullPath(executable), Path.GetFullPath(exe), StringComparison.OrdinalIgnoreCase))
+        if (exePath is not null
+            && string.Equals(Path.GetFullPath(executable), Path.GetFullPath(exePath), StringComparison.OrdinalIgnoreCase))
         {
             return true;
         }
 
-        return info.InstallPath is { } root && ModInstallService.IsInside(executable, root);
+        return installPath is not null && ModInstallService.IsInside(executable, installPath);
     }
 
     private static string[] KnownProcessNames(SptLaunchTarget target) => target switch
@@ -499,7 +510,13 @@ public static class SptLaunchService
         }
     }
 
-    private static bool IsRunning(SptLaunchTarget target, string processName)
+    //
+    // Running FROM THIS INSTALL. With a second SPT on the machine - another version, a dedicated
+    // server kept apart - its server being up made this install's Play page read as running, refuse
+    // Start, and then fail to Stop it, since Stop only ever touches this install's processes. One
+    // whose path can't be read still counts: this can't tell it is someone else's.
+    //
+    private static bool IsRunning(SptLaunchTarget target, string processName, string? exePath, string? installPath)
     {
         //
         // The headless launcher is checked by its own name only. A headless client runs
@@ -525,7 +542,7 @@ public static class SptLaunchService
 
             try
             {
-                if (found.Length > 0) return true;
+                if (found.Any(p => RunsFrom(p, exePath, installPath) != false)) return true;
             }
             finally
             {
