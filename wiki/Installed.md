@@ -20,9 +20,15 @@ If a mod says it is a different version from the one you know you have, **Confir
 ## Three ways to look at the list
 The buttons at the top of the page switch between them. They all show the same filtered, sorted mods - only the layout changes.
 
-- **Cards** - the paginated grid. Turn on **Select** mode to tick several mods and act on them together.
+- **Cards** - the paginated grid.
 - **Groups** - your own MO2-style separators. Make a group, drag mods into it, collapse the ones you're not working on, and enable, disable or invert a whole group in one click. Drag a mod to the top edge of the window and the list scrolls for you.
 - **List** - one row per mod, scrolling continuously. Open a row for everything the app knows about that mod: its GUID, installed and published versions, install date, group, content flags, whether this app installed it or you did by hand, and the exact folders it occupies.
+
+## Acting on several mods at once
+Turn on **Multi select**, or just Ctrl-click a mod - in any of the three views. Shift-click ticks every mod between the last one you clicked and this one, and Ctrl+A ticks everything the filters match; Esc clears it. Ticked mods carry an accent edge, and the bar above the list acts on all of them: **Update selected**, **Enable selected**, **Disable selected** and **Remove selected**. Remove selected asks once for the lot, keeps their config files, and names any mod sp-mod warns may have changed your profile.
+
+## Updating and the right-click menu
+A mod with an update shows an **Update** button on its card and its List row - one click queues it. Right-click any mod for the same actions its card has: details and versions, update, enable or disable, pin, open its folders, its sp-mod page, and remove. Right-click one of several ticked mods and the menu acts on all of them.
 
 Sort by name, author, group or install date - **Last installed (newest)** puts what you've just installed at the top. To see only those, tick **Installed in the last 7 days** under **Show**. Every filter and sort applies to all three views.
 
