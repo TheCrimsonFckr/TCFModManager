@@ -21,13 +21,15 @@ public static class SptReleases
     public static readonly Version Floor = new(3, 10, 0, 0);
 
     // Parses the API's SPT version list into releases at or above <see cref="Floor"/>,
-    // newest first.
+    // newest first, each version once. sp-mod has published the same version twice (4.1.6, seen
+    // 2026-10-06), which showed up twice in the SPT upgrade check's release dropdown.
     public static List<SptRelease> FromApi(IEnumerable<SptVersion> versions) =>
         versions
             .Select(v => (Parsed: ParseVersion(v.Version), v.Version))
             .Where(v => v.Parsed is not null && !string.IsNullOrWhiteSpace(v.Version))
-            .Select(v => new SptRelease(v.Parsed!, v.Version!))
+            .Select(v => new SptRelease(v.Parsed!, v.Version!.Trim()))
             .Where(r => r.Value >= Floor)
+            .DistinctBy(r => r.Value)
             .OrderByDescending(r => r.Value)
             .ToList();
 

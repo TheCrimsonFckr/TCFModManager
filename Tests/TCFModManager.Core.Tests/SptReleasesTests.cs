@@ -31,6 +31,20 @@ public class SptReleasesTests
         Assert.Contains(Releases, r => r.Label == "3.10.5");
     }
 
+    // sp-mod's list carried 4.1.6 twice as of 2026-10-06.
+    [Fact]
+    public void FromApi_ListsEachVersionOnce()
+    {
+        var releases = SptReleases.FromApi(
+        [
+            new SptVersion { Version = "4.1.6" },
+            new SptVersion { Version = "4.1.6" },
+            new SptVersion { Version = "4.1.4" },
+        ]);
+
+        Assert.Equal(["4.1.6", "4.1.4"], releases.Select(r => r.Label));
+    }
+
     [Fact]
     public void Lines_AreDistinctAndNewestFirst() =>
         Assert.Equal([(4, 1), (4, 0), (3, 11), (3, 10)], SptReleases.Lines(Releases));
