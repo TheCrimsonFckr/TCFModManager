@@ -726,9 +726,8 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:InstalledModCardViewModel}">
-                        <!-- A disabled mod's card is dimmed by TickableCardExpander; the DISABLED
-                             chip and the status icon carry the same state for anyone who can't read
-                             a dimming. -->
+                        <!-- A disabled mod is marked by the red DISABLED tag and its status icon;
+                             the card itself is drawn at full strength so it stays readable. -->
                         <!-- Top, not the default stretch: a WrapPanel arranges each line at the
                              height of its tallest item, so without this every card beside an
                              expanded one would stretch to match it. -->
@@ -882,11 +881,9 @@
 
                                             <Border
                                                 Margin="6,0,0,0"
-                                                Padding="8,2"
-                                                CornerRadius="3"
-                                                Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                                Style="{StaticResource DisabledBadge}"
                                                 Visibility="{Binding IsDisabled, Converter={StaticResource BoolToVis}}">
-                                                <TextBlock Text="{loc:Str Installed_DisabledTag}" FontSize="10" FontWeight="SemiBold" />
+                                                <TextBlock Style="{StaticResource DisabledBadgeText}" Text="{loc:Str Installed_DisabledTag}" />
                                             </Border>
                                         </StackPanel>
                                     </StackPanel>
@@ -1104,10 +1101,20 @@
                                                         </StackPanel>
 
                                                         <StackPanel Grid.Column="1">
-                                                            <TextBlock
-                                                                FontWeight="SemiBold"
-                                                                TextTrimming="CharacterEllipsis"
-                                                                Text="{Binding DisplayTitle}" />
+                                                            <DockPanel>
+                                                                <Border
+                                                                    DockPanel.Dock="Right"
+                                                                    Margin="6,0,0,0"
+                                                                    VerticalAlignment="Center"
+                                                                    Style="{StaticResource DisabledBadge}"
+                                                                    Visibility="{Binding IsDisabled, Converter={StaticResource BoolToVis}}">
+                                                                    <TextBlock Style="{StaticResource DisabledBadgeText}" Text="{loc:Str Installed_DisabledTag}" />
+                                                                </Border>
+                                                                <TextBlock
+                                                                    FontWeight="SemiBold"
+                                                                    TextTrimming="CharacterEllipsis"
+                                                                    Text="{Binding DisplayTitle}" />
+                                                            </DockPanel>
                                                             <TextBlock
                                                                 FontSize="11"
                                                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
@@ -1246,11 +1253,9 @@
 
                                         <Border
                                             Margin="6,0,0,0"
-                                            Padding="8,2"
-                                            CornerRadius="3"
-                                            Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                            Style="{StaticResource DisabledBadge}"
                                             Visibility="{Binding IsDisabled, Converter={StaticResource BoolToVis}}">
-                                            <TextBlock Text="{loc:Str Installed_DisabledTag}" FontSize="10" FontWeight="SemiBold" />
+                                            <TextBlock Style="{StaticResource DisabledBadgeText}" Text="{loc:Str Installed_DisabledTag}" />
                                         </Border>
                                     </StackPanel>
 

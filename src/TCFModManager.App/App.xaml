@@ -61,6 +61,25 @@
             </Style>
 
             <!--
+                The DISABLED tag on a mod's card, list row and group row. The one cue that a mod is
+                disabled besides its status icon: in the critical red rather than a dimmed card, which
+                left disabled mods hard to read (Chris, 2026-10-06). Its TextBlock takes the matching
+                foreground and size from DisabledBadgeText.
+            -->
+            <Style x:Key="DisabledBadge" TargetType="Border">
+                <Setter Property="Padding" Value="8,2" />
+                <Setter Property="CornerRadius" Value="3" />
+                <Setter Property="Background" Value="{DynamicResource SystemFillColorCriticalBackgroundBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+            </Style>
+            <Style x:Key="DisabledBadgeText" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="10" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+            </Style>
+
+            <!--
                 Group-view mod rows since OPEN-12 A1: ClickableCardRow, plus the ticked state Multi
                 select gives a card - the accent edge and tint, read from the row's own IsSelected.
                 The border is always there and transparent, so ticking a row never moves its content.
