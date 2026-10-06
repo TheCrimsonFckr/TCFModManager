@@ -435,7 +435,7 @@
                 OnContent="{loc:Str Installed_ListBadges}"
                 OffContent="{loc:Str Installed_ListBadges}" />
 
-            <WrapPanel>
+            <WrapPanel x:Name="FilterRow">
                 <ui:TextBox
                     Width="320"
                     Margin="0,0,8,4"
@@ -483,7 +483,7 @@
                 </ToggleButton>
                 <Popup
                     IsOpen="{Binding IsChecked, ElementName=MoreFiltersToggle, Mode=TwoWay}"
-                    PlacementTarget="{Binding ElementName=MoreFiltersToggle}"
+                    PlacementTarget="{Binding ElementName=FilterRow}"
                     Placement="Bottom"
                     StaysOpen="False"
                     AllowsTransparency="True">
