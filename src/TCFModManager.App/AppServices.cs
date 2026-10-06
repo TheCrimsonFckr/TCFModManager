@@ -24,8 +24,11 @@ internal static class AppServices
     // self-defined group. Purely organizational; nothing else in the app reads it.
     public static ModGroupStore ModGroups { get; } = new();
 
+    // Copies of the SPT profiles, taken before the app changes the install (OPEN-12 F4).
+    public static ProfileBackups ProfileBackups { get; } = new();
+
     // Places (and removes) a mod's files in the SPT install.
-    public static ModInstallService ModInstall { get; } = new(Downloads, InstallManifest);
+    public static ModInstallService ModInstall { get; } = new(Downloads, InstallManifest, profileBackups: ProfileBackups);
 
     // Monitor mode's saved archives and what each would place - Data\downloads.json.
     public static DownloadLedgerService DownloadLedger { get; } = new();

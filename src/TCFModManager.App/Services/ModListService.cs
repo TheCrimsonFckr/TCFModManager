@@ -178,6 +178,16 @@ public sealed class ModListService
     }
 
     //
+    // A copy of the SPT profiles before a list changes the install, when they changed since the last
+    // one (OPEN-12 F4) - one copy for the whole apply. Not while SPT runs from the install: the apply
+    // is refused then anyway.
+    //
+    private static Task BackUpProfilesAsync(string installPath) =>
+        ModInstallService.RunningBlockers(installPath).Count > 0
+            ? Task.CompletedTask
+            : Task.Run(() => AppServices.ProfileBackups.BackupIfChanged(installPath, ProfileBackups.BeforeList));
+
+    //
     // Applies a preview. Core decides the order and when to stop; everything here is the download
     // half plus storing what came back.
     //
@@ -193,6 +203,8 @@ public sealed class ModListService
         prompts ??= ModListPrompts.Reject;
 
         var mode = ModListDownloadMode.For(preview.List);
+
+        await BackUpProfilesAsync(preview.Install.InstallPath);
 
         var result = await ModListApplier.ApplyAsync(
             preview.Plan,
@@ -274,6 +286,8 @@ public sealed class ModListService
 
         var preview = await PreviewAsync(snapshot);
         if (preview is null) return null;
+
+        await BackUpProfilesAsync(preview.Install.InstallPath);
 
         var result = await ModListApplier.ApplyAsync(
             preview.Plan,

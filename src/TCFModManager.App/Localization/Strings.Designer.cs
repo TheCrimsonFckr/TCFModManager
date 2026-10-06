@@ -2062,4 +2062,25 @@ internal static class Strings
     internal static string ModLists_OpenEntryPageToolTip => LocalizationService.Get("ModLists_OpenEntryPageToolTip");
     internal static string ModLists_ScopeUnchecked => LocalizationService.Get("ModLists_ScopeUnchecked");
     internal static string ModLists_ScopeUncheckedToolTip => LocalizationService.Get("ModLists_ScopeUncheckedToolTip");
+    internal static string ModInstall_InUseRestoreProfilesFormat => LocalizationService.Get("ModInstall_InUseRestoreProfilesFormat");
+    internal static string Profiles_Header => LocalizationService.Get("Profiles_Header");
+    internal static string Profiles_SummaryFormat => LocalizationService.Get("Profiles_SummaryFormat");
+    internal static string Profiles_DescriptionFormat => LocalizationService.Get("Profiles_DescriptionFormat");
+    internal static string Profiles_Empty => LocalizationService.Get("Profiles_Empty");
+    internal static string Profiles_DetailFormat => LocalizationService.Get("Profiles_DetailFormat");
+    internal static string Profiles_Restore => LocalizationService.Get("Profiles_Restore");
+    internal static string Profiles_BackUpNow => LocalizationService.Get("Profiles_BackUpNow");
+    internal static string Profiles_OpenFolder => LocalizationService.Get("Profiles_OpenFolder");
+    internal static string Profiles_ReasonInstall => LocalizationService.Get("Profiles_ReasonInstall");
+    internal static string Profiles_ReasonRemove => LocalizationService.Get("Profiles_ReasonRemove");
+    internal static string Profiles_ReasonList => LocalizationService.Get("Profiles_ReasonList");
+    internal static string Profiles_ReasonDisable => LocalizationService.Get("Profiles_ReasonDisable");
+    internal static string Profiles_ReasonRestore => LocalizationService.Get("Profiles_ReasonRestore");
+    internal static string Profiles_ReasonManual => LocalizationService.Get("Profiles_ReasonManual");
+    internal static string Profiles_NoneFound => LocalizationService.Get("Profiles_NoneFound");
+    internal static string Profiles_BackedUp => LocalizationService.Get("Profiles_BackedUp");
+    internal static string Profiles_FailedFormat => LocalizationService.Get("Profiles_FailedFormat");
+    internal static string Profiles_RestoreTitle => LocalizationService.Get("Profiles_RestoreTitle");
+    internal static string Profiles_RestoreConfirmFormat => LocalizationService.Get("Profiles_RestoreConfirmFormat");
+    internal static string Profiles_RestoredFormat => LocalizationService.Get("Profiles_RestoredFormat");
 }

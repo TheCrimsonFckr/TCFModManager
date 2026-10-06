@@ -6625,4 +6625,69 @@
   <data name="ModLists_ScopeUncheckedToolTip" xml:space="preserve">
     <value>sp-mod не сообщает, для каких машин предназначен мод. После применения списка это определяется по тому, куда легли файлы мода - клиент, сервер или оба, - так же, как для списка из вашей установки.</value>
   </data>
+  <data name="ModInstall_InUseRestoreProfilesFormat" xml:space="preserve">
+    <value>Закройте {0}, прежде чем возвращать профили: сервер SPT сохраняет профили при закрытии и перезапишет возвращённые.</value>
+  </data>
+  <data name="Profiles_Header" xml:space="preserve">
+    <value>Резервные копии профилей SPT</value>
+  </data>
+  <data name="Profiles_SummaryFormat" xml:space="preserve">
+    <value>Профили SPT копируются перед изменением модов, чтобы профиль, который перестал загружаться, можно было вернуть. Хранятся последние {0} копий.</value>
+  </data>
+  <data name="Profiles_DescriptionFormat" xml:space="preserve">
+    <value>Копия профилей SPT (user\profiles) делается перед тем, как приложение устанавливает, обновляет, удаляет, отключает или включает моды или применяет список модов, - всякий раз, когда профили изменились с последней копии. Удаление мода может оставить в профиле предметы, которых SPT больше не знает, и тогда он не загрузится; возврат копии, сделанной до этого, возвращает вашего персонажа. Хранятся последние {0} копий.</value>
+  </data>
+  <data name="Profiles_Empty" xml:space="preserve">
+    <value>Копий пока нет.</value>
+  </data>
+  <data name="Profiles_DetailFormat" xml:space="preserve">
+    <value>Файлов: {0} - {1}</value>
+  </data>
+  <data name="Profiles_Restore" xml:space="preserve">
+    <value>Вернуть</value>
+  </data>
+  <data name="Profiles_BackUpNow" xml:space="preserve">
+    <value>Создать копию сейчас</value>
+  </data>
+  <data name="Profiles_OpenFolder" xml:space="preserve">
+    <value>Открыть папку</value>
+  </data>
+  <data name="Profiles_ReasonInstall" xml:space="preserve">
+    <value>Перед установкой или обновлением мода</value>
+  </data>
+  <data name="Profiles_ReasonRemove" xml:space="preserve">
+    <value>Перед удалением мода</value>
+  </data>
+  <data name="Profiles_ReasonList" xml:space="preserve">
+    <value>Перед применением списка модов</value>
+  </data>
+  <data name="Profiles_ReasonDisable" xml:space="preserve">
+    <value>Перед отключением или включением модов</value>
+  </data>
+  <data name="Profiles_ReasonRestore" xml:space="preserve">
+    <value>Перед возвратом более старой копии</value>
+  </data>
+  <data name="Profiles_ReasonManual" xml:space="preserve">
+    <value>Создана вручную</value>
+  </data>
+  <data name="Profiles_NoneFound" xml:space="preserve">
+    <value>В этой установке пока нет профилей SPT - они создаются при первом запуске сервера.</value>
+  </data>
+  <data name="Profiles_BackedUp" xml:space="preserve">
+    <value>Профили скопированы.</value>
+  </data>
+  <data name="Profiles_FailedFormat" xml:space="preserve">
+    <value>Не получилось: {0}</value>
+  </data>
+  <data name="Profiles_RestoreTitle" xml:space="preserve">
+    <value>Вернуть профили</value>
+  </data>
+  <data name="Profiles_RestoreConfirmFormat" xml:space="preserve">
+    <value>Вернуть профили в состояние на {0} ({1})?
+
+Текущее содержимое сначала копируется, так что это можно отменить тем же способом. Профили, созданные с тех пор, остаются как есть.</value>
+  </data>
+  <data name="Profiles_RestoredFormat" xml:space="preserve">
+    <value>Профили от {0} возвращены. То, что было до этого, - вверху списка.</value>
+  </data>
 </root>

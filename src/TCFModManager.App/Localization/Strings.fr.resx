@@ -6280,4 +6280,69 @@ Voir Dépendances et conflits.</value>
   <data name="ModLists_ScopeUncheckedToolTip" xml:space="preserve">
     <value>sp-mod n'indique pas à quelles machines un mod est destiné. Une fois cette liste appliquée, c'est déterminé d'après l'endroit où arrivent les fichiers du mod - client, serveur ou les deux -, comme pour une liste créée depuis votre installation.</value>
   </data>
+  <data name="ModInstall_InUseRestoreProfilesFormat" xml:space="preserve">
+    <value>Ferme {0} avant de remettre des profils - le serveur SPT enregistre les profils en se fermant et écraserait ceux remis en place.</value>
+  </data>
+  <data name="Profiles_Header" xml:space="preserve">
+    <value>Sauvegardes des profils SPT</value>
+  </data>
+  <data name="Profiles_SummaryFormat" xml:space="preserve">
+    <value>Tes profils SPT sont copiés avant que les mods changent, pour pouvoir remettre un profil qui ne se charge plus. Les {0} dernières copies sont gardées.</value>
+  </data>
+  <data name="Profiles_DescriptionFormat" xml:space="preserve">
+    <value>Une copie de tes profils SPT (user\profiles) est faite avant que l'appli installe, mette à jour, supprime, désactive ou active des mods, ou applique une liste de mods - chaque fois que les profils ont changé depuis la dernière copie. Supprimer un mod peut laisser un profil contenant des objets que SPT ne connaît plus, et il ne se charge alors plus ; remettre une copie d'avant ramène ton personnage. Les {0} dernières copies sont gardées.</value>
+  </data>
+  <data name="Profiles_Empty" xml:space="preserve">
+    <value>Aucune copie pour l'instant.</value>
+  </data>
+  <data name="Profiles_DetailFormat" xml:space="preserve">
+    <value>Fichiers : {0} - {1}</value>
+  </data>
+  <data name="Profiles_Restore" xml:space="preserve">
+    <value>Remettre</value>
+  </data>
+  <data name="Profiles_BackUpNow" xml:space="preserve">
+    <value>Sauvegarder maintenant</value>
+  </data>
+  <data name="Profiles_OpenFolder" xml:space="preserve">
+    <value>Ouvrir le dossier</value>
+  </data>
+  <data name="Profiles_ReasonInstall" xml:space="preserve">
+    <value>Avant d'installer ou de mettre à jour un mod</value>
+  </data>
+  <data name="Profiles_ReasonRemove" xml:space="preserve">
+    <value>Avant de supprimer un mod</value>
+  </data>
+  <data name="Profiles_ReasonList" xml:space="preserve">
+    <value>Avant d'appliquer une liste de mods</value>
+  </data>
+  <data name="Profiles_ReasonDisable" xml:space="preserve">
+    <value>Avant de désactiver ou d'activer des mods</value>
+  </data>
+  <data name="Profiles_ReasonRestore" xml:space="preserve">
+    <value>Avant de remettre une copie plus ancienne</value>
+  </data>
+  <data name="Profiles_ReasonManual" xml:space="preserve">
+    <value>Faite à la main</value>
+  </data>
+  <data name="Profiles_NoneFound" xml:space="preserve">
+    <value>Il n'y a pas encore de profils SPT dans cette installation - ils sont créés au premier lancement du serveur.</value>
+  </data>
+  <data name="Profiles_BackedUp" xml:space="preserve">
+    <value>Les profils ont été copiés.</value>
+  </data>
+  <data name="Profiles_FailedFormat" xml:space="preserve">
+    <value>Ça n'a pas marché : {0}</value>
+  </data>
+  <data name="Profiles_RestoreTitle" xml:space="preserve">
+    <value>Remettre les profils</value>
+  </data>
+  <data name="Profiles_RestoreConfirmFormat" xml:space="preserve">
+    <value>Remettre les profils tels qu'ils étaient le {0} ({1}) ?
+
+Ce qu'ils contiennent maintenant est d'abord copié, cela peut donc être annulé de la même façon. Les profils créés depuis restent tels quels.</value>
+  </data>
+  <data name="Profiles_RestoredFormat" xml:space="preserve">
+    <value>Les profils du {0} ont été remis. Ce qu'il y avait avant est en haut de la liste.</value>
+  </data>
 </root>

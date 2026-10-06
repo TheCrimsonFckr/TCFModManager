@@ -16,7 +16,8 @@ public sealed class ModInstallService(
     ConfigUpdateLog? configUpdateLog = null,
     ModConfigOptionsStore? configOptions = null,
     RemovedMods? removedMods = null,
-    InstallJournal? installJournal = null)
+    InstallJournal? installJournal = null,
+    ProfileBackups? profileBackups = null)
 {
     private readonly RemovedMods _removed = removedMods ?? new RemovedMods();
 
@@ -371,6 +372,12 @@ public sealed class ModInstallService(
                     ArchiveEntry = skippedProtected.Concat(skippedAppFolder).First(),
                 };
             }
+
+            //
+            // A copy of the SPT profiles from before the change, when they changed since the last one
+            // (OPEN-12 F4). Past every refusal above, so an install that is refused takes none.
+            //
+            profileBackups?.BackupIfChanged(installPath, ProfileBackups.BeforeInstall);
 
             var timestamp = DateTimeOffset.UtcNow;
 
@@ -840,6 +847,9 @@ public sealed class ModInstallService(
         EnsureRecordBelongsHere(record, installPath);
         RecoverInterruptedInstalls(installPath);
 
+        // The SPT profiles as they were before the removal (OPEN-12 F4).
+        profileBackups?.BackupIfChanged(installPath, ProfileBackups.BeforeRemove);
+
         var result = RemoveRecordedFiles(installPath, record, configs, null, null, RemovalKind.AppInstalled, ct);
 
         // A mod that is gone has no shipped copies worth keeping. An update does not come through
@@ -1170,6 +1180,8 @@ public sealed class ModInstallService(
                 throw new ModInstallException(ModInstallFailure.RemovalRefused) { Folder = path, Refusal = refusal };
             }
         }
+
+        profileBackups?.BackupIfChanged(installPath, ProfileBackups.BeforeRemove);
 
         var session = RemovedMods.Begin(installPath, modName, RemovalKind.HandInstalled, record: null);
         session.Log.ConfigsKeptFolder = configsFolder;

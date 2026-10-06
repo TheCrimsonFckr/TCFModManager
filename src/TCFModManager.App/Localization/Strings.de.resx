@@ -6280,4 +6280,69 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="ModLists_ScopeUncheckedToolTip" xml:space="preserve">
     <value>sp-mod gibt nicht an, für welche Rechner ein Mod ist. Sobald diese Liste angewendet wurde, wird es daraus ermittelt, wo die Dateien des Mods landen - Client, Server oder beides -, genau wie bei einer Liste aus deiner Installation.</value>
   </data>
+  <data name="ModInstall_InUseRestoreProfilesFormat" xml:space="preserve">
+    <value>Schließe {0}, bevor du Profile zurückspielst - der SPT-Server speichert die Profile beim Beenden und würde die zurückgespielten überschreiben.</value>
+  </data>
+  <data name="Profiles_Header" xml:space="preserve">
+    <value>SPT-Profil-Sicherungen</value>
+  </data>
+  <data name="Profiles_SummaryFormat" xml:space="preserve">
+    <value>Deine SPT-Profile werden kopiert, bevor sich Mods ändern, damit ein Profil, das nicht mehr lädt, zurückgespielt werden kann. Die letzten {0} werden behalten.</value>
+  </data>
+  <data name="Profiles_DescriptionFormat" xml:space="preserve">
+    <value>Eine Kopie deiner SPT-Profile (user\profiles) wird angelegt, bevor die App Mods installiert, aktualisiert, entfernt, deaktiviert oder aktiviert oder eine Modliste anwendet - immer dann, wenn sich die Profile seit der letzten Kopie geändert haben. Das Entfernen eines Mods kann ein Profil mit Gegenständen zurücklassen, die SPT nicht mehr kennt, und dann lädt es nicht; eine Kopie von vorher zurückzuspielen bringt deinen Charakter zurück. Die letzten {0} Kopien werden behalten.</value>
+  </data>
+  <data name="Profiles_Empty" xml:space="preserve">
+    <value>Noch keine Kopien.</value>
+  </data>
+  <data name="Profiles_DetailFormat" xml:space="preserve">
+    <value>Dateien: {0} - {1}</value>
+  </data>
+  <data name="Profiles_Restore" xml:space="preserve">
+    <value>Zurückspielen</value>
+  </data>
+  <data name="Profiles_BackUpNow" xml:space="preserve">
+    <value>Jetzt sichern</value>
+  </data>
+  <data name="Profiles_OpenFolder" xml:space="preserve">
+    <value>Ordner öffnen</value>
+  </data>
+  <data name="Profiles_ReasonInstall" xml:space="preserve">
+    <value>Vor dem Installieren oder Aktualisieren eines Mods</value>
+  </data>
+  <data name="Profiles_ReasonRemove" xml:space="preserve">
+    <value>Vor dem Entfernen eines Mods</value>
+  </data>
+  <data name="Profiles_ReasonList" xml:space="preserve">
+    <value>Vor dem Anwenden einer Modliste</value>
+  </data>
+  <data name="Profiles_ReasonDisable" xml:space="preserve">
+    <value>Vor dem Deaktivieren oder Aktivieren von Mods</value>
+  </data>
+  <data name="Profiles_ReasonRestore" xml:space="preserve">
+    <value>Vor dem Zurückspielen einer älteren Kopie</value>
+  </data>
+  <data name="Profiles_ReasonManual" xml:space="preserve">
+    <value>Von Hand angelegt</value>
+  </data>
+  <data name="Profiles_NoneFound" xml:space="preserve">
+    <value>In dieser Installation gibt es noch keine SPT-Profile - sie entstehen beim ersten Start des Servers.</value>
+  </data>
+  <data name="Profiles_BackedUp" xml:space="preserve">
+    <value>Die Profile wurden kopiert.</value>
+  </data>
+  <data name="Profiles_FailedFormat" xml:space="preserve">
+    <value>Das hat nicht geklappt: {0}</value>
+  </data>
+  <data name="Profiles_RestoreTitle" xml:space="preserve">
+    <value>Profile zurückspielen</value>
+  </data>
+  <data name="Profiles_RestoreConfirmFormat" xml:space="preserve">
+    <value>Die Profile so zurückspielen, wie sie am {0} waren ({1})?
+
+Der jetzige Stand wird zuerst kopiert, das lässt sich also auf demselben Weg rückgängig machen. Seitdem angelegte Profile bleiben, wie sie sind.</value>
+  </data>
+  <data name="Profiles_RestoredFormat" xml:space="preserve">
+    <value>Die Profile vom {0} wurden zurückgespielt. Der vorherige Stand steht oben in der Liste.</value>
+  </data>
 </root>

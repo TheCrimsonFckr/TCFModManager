@@ -20,6 +20,9 @@ public enum ModInstallAction
 
     // Applying a mod list, which enables and disables mods in one pass.
     ApplyList,
+
+    // Putting a copy of the SPT profiles back (OPEN-12 F4) - the server saves the profiles as it closes.
+    RestoreProfiles,
 }
 
 //

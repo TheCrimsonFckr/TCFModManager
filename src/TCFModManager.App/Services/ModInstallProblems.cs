@@ -160,6 +160,7 @@ public static class ModInstallProblems
         ModInstallAction.Undo => Strings.ModInstall_InUseUndoFormat,
         ModInstallAction.ApplyList => Strings.ModInstall_InUseApplyListFormat,
         ModInstallAction.SortOutDuplicate => Strings.ModInstall_InUseSortOutFormat,
+        ModInstallAction.RestoreProfiles => Strings.ModInstall_InUseRestoreProfilesFormat,
         _ => Strings.ModInstall_InUseGenericFormat,
     };
 }

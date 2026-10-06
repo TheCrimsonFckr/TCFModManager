@@ -345,6 +345,79 @@
             </StackPanel>
         </ui:CardControl>
 
+        <!-- Copies of the SPT profiles taken before the app changes the install (OPEN-12 F4). -->
+        <ui:CardExpander
+            Style="{StaticResource SettingExpander}"
+            Icon="{ui:SymbolIcon History24}"
+            DataContext="{Binding Profiles}"
+            ToolTip="{Binding Description}"
+            ToolTipService.ShowDuration="30000">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Profiles_Header}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{Binding Summary}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
+
+            <StackPanel>
+                <TextBlock
+                    Style="{StaticResource SettingNote}"
+                    Margin="0,0,0,8"
+                    Text="{loc:Str Profiles_Empty}"
+                    Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibility}}" />
+
+                <ItemsControl ItemsSource="{Binding Backups}" Margin="0,0,0,8">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="170" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                    Text="{Binding When}" />
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                        Text="{Binding Why}"
+                                        TextWrapping="Wrap" />
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                        Text="{Binding Detail}" />
+                                </StackPanel>
+                                <ui:Button
+                                    Grid.Column="2"
+                                    Margin="8,0,0,0"
+                                    Content="{loc:Str Profiles_Restore}"
+                                    Command="{Binding DataContext.RestoreCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                    CommandParameter="{Binding}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <StackPanel Orientation="Horizontal">
+                    <ui:Button
+                        Content="{loc:Str Profiles_BackUpNow}"
+                        Command="{Binding BackUpNowCommand}" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Content="{loc:Str Profiles_OpenFolder}"
+                        Command="{Binding OpenFolderCommand}" />
+                </StackPanel>
+
+                <TextBlock
+                    Style="{StaticResource SettingHint}"
+                    Margin="0,8,0,0"
+                    Text="{Binding StatusMessage}"
+                    Visibility="{Binding StatusMessage, Converter={StaticResource NullToCollapsed}}" />
+            </StackPanel>
+        </ui:CardExpander>
+
         <!-- ─── Updates ─── -->
         <TextBlock Style="{StaticResource SectionHeader}" Text="{loc:Str Options_SectionUpdates}" />
 

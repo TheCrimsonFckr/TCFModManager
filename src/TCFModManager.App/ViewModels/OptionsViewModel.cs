@@ -129,6 +129,9 @@ public partial class OptionsViewModel : LocalizedViewModel
         AppLog.Info("Remove", $"keep removed mods set to {value.Value}");
     }
 
+    // Copies of the SPT profiles (OPEN-12 F4) - see ProfileBackupsViewModel.
+    public ProfileBackupsViewModel Profiles { get; } = new();
+
     // Also run each time the Options page opens: removals and Undo on the Installed page change it.
     public void RefreshRemovedModsSize()
     {

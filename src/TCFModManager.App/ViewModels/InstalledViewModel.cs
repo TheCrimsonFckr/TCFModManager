@@ -1731,6 +1731,15 @@ public partial class InstalledViewModel : LocalizedViewModel
         var entries = targets.SelectMany(c => c.Entries).Where(e => e.IsDisabled != disable).ToList();
 
         IsBusy = true;
+
+        // A copy of the SPT profiles first, when they changed since the last one (OPEN-12 F4). Not
+        // while SPT runs from the install: the move is refused then, and the server is mid-save.
+        if (AppServices.SptEnvironment.InstallPath is { Length: > 0 } profilesOf
+            && ModInstallService.RunningBlockers(profilesOf).Count == 0)
+        {
+            await Task.Run(() => AppServices.ProfileBackups.BackupIfChanged(profilesOf, ProfileBackups.BeforeDisable));
+        }
+
         ModDisableOutcome outcome;
         try
         {
