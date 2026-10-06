@@ -2088,4 +2088,9 @@ internal static class Strings
     internal static string Installed_HeldBackNeedsFormat => LocalizationService.Get("Installed_HeldBackNeedsFormat");
     internal static string Installed_HeldBackChainFormat => LocalizationService.Get("Installed_HeldBackChainFormat");
     internal static string Installed_HeldBackPlainFormat => LocalizationService.Get("Installed_HeldBackPlainFormat");
+    internal static string Downloads_FikaIncompatibleTitle => LocalizationService.Get("Downloads_FikaIncompatibleTitle");
+    internal static string Downloads_FikaIncompatibleFormat => LocalizationService.Get("Downloads_FikaIncompatibleFormat");
+    internal static string Downloads_FikaIncompatibleDownloadFormat => LocalizationService.Get("Downloads_FikaIncompatibleDownloadFormat");
+    internal static string Downloads_FikaDeclinedFormat => LocalizationService.Get("Downloads_FikaDeclinedFormat");
+    internal static string Installed_RemoveProfileWarningFormat => LocalizationService.Get("Installed_RemoveProfileWarningFormat");
 }

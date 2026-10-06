@@ -6360,4 +6360,23 @@ Il loro contenuto attuale viene copiato prima, quindi si può annullare allo ste
   <data name="Installed_HeldBackPlainFormat" xml:space="preserve">
     <value>Aggiornamento a {0} trattenuto da sp-mod.</value>
   </data>
+  <data name="Downloads_FikaIncompatibleTitle" xml:space="preserve">
+    <value>Non per Fika</value>
+  </data>
+  <data name="Downloads_FikaIncompatibleFormat" xml:space="preserve">
+    <value>Fika è installato qui, e sp-mod segnala che {0} {1} non funziona con Fika. Installato comunque, può rompere i raid in coop o impedire a Fika di caricarsi.
+
+Installarlo comunque?</value>
+  </data>
+  <data name="Downloads_FikaIncompatibleDownloadFormat" xml:space="preserve">
+    <value>Fika è installato qui, e sp-mod segnala che {0} {1} non funziona con Fika. Una volta installato, può rompere i raid in coop o impedire a Fika di caricarsi.
+
+Scaricarlo comunque?</value>
+  </data>
+  <data name="Downloads_FikaDeclinedFormat" xml:space="preserve">
+    <value>{0} {1} escluso - sp-mod segnala che non funziona con Fika.</value>
+  </data>
+  <data name="Installed_RemoveProfileWarningFormat" xml:space="preserve">
+    <value>sp-mod segnala che {0} può apportare modifiche permanenti al tuo profilo e potrebbe non essere rimovibile senza iniziare un nuovo profilo. Rimuoverlo può lasciare un profilo che SPT non carica. Se succede, Ripristina rimette la mod, e una copia dei tuoi profili di poco prima è in Opzioni, Backup dei profili SPT.</value>
+  </data>
 </root>

@@ -226,6 +226,22 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
             item.Token.ThrowIfCancellationRequested();
 
+            //
+            // A version sp-mod marks as not working with Fika, on an install that runs Fika (OPEN-12
+            // F17): asked before anything is downloaded. Asked, never refused - the mark is the
+            // author's word - and No leaves this one out, nothing else.
+            //
+            if (FikaInstall.IsIncompatible(version.FikaCompatibility)
+                && await RunsFikaAsync(item.InstallPath)
+                && !ConfirmNotForFika(item))
+            {
+                item.Status = DownloadQueueItemStatus.Cancelled;
+                item.Progress = 0;
+                item.StatusMessage = Text(Strings.Downloads_FikaDeclinedFormat, item.ModName, item.VersionLabel);
+                AppLog.Info("Downloads", $"{item.ModName} {item.VersionLabel}: not for Fika, left out");
+                return;
+            }
+
             // Checked before this item's own download starts, so an accepted missing dependency
             // lands right behind it in the queue.
             if (item.CheckDependencies)
@@ -332,6 +348,34 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
     // ever showed, so a failure on a user's PC left the log ending mid-install. The line carries the
     // card's sentence and the exception's type and message; an unexpected one gets its stack trace.
     //
+    // Whether the install runs Fika, remembered for a minute: a mod list queues dozens of items, and
+    // each would otherwise scan the install again.
+    private (string Install, bool Runs, DateTime At)? _fika;
+
+    private async Task<bool> RunsFikaAsync(string installPath)
+    {
+        if (_fika is { } known
+            && string.Equals(known.Install, installPath, StringComparison.OrdinalIgnoreCase)
+            && DateTime.UtcNow - known.At < TimeSpan.FromMinutes(1))
+        {
+            return known.Runs;
+        }
+
+        var runs = await Task.Run(() => FikaInstall.IsPresent(InstalledModScanner.Scan(installPath)));
+        _fika = (installPath, runs, DateTime.UtcNow);
+        return runs;
+    }
+
+    // Defaults to No, like the SPT question (SptCompatibility).
+    private static bool ConfirmNotForFika(DownloadQueueItemViewModel item) =>
+        System.Windows.MessageBox.Show(
+            Text(item.DownloadOnly ? Strings.Downloads_FikaIncompatibleDownloadFormat : Strings.Downloads_FikaIncompatibleFormat,
+                item.ModName, item.VersionLabel),
+            Strings.Downloads_FikaIncompatibleTitle,
+            System.Windows.MessageBoxButton.YesNo,
+            System.Windows.MessageBoxImage.Warning,
+            System.Windows.MessageBoxResult.No) == System.Windows.MessageBoxResult.Yes;
+
     private static void Fail(DownloadQueueItemViewModel item, string message, Exception? ex = null, bool unexpected = false)
     {
         item.Status = DownloadQueueItemStatus.Failed;

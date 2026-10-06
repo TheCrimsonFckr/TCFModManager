@@ -6360,4 +6360,23 @@ Der jetzige Stand wird zuerst kopiert, das lässt sich also auf demselben Weg r�
   <data name="Installed_HeldBackPlainFormat" xml:space="preserve">
     <value>Update auf {0} von sp-mod zurückgehalten.</value>
   </data>
+  <data name="Downloads_FikaIncompatibleTitle" xml:space="preserve">
+    <value>Nicht für Fika</value>
+  </data>
+  <data name="Downloads_FikaIncompatibleFormat" xml:space="preserve">
+    <value>Fika ist hier installiert, und sp-mod kennzeichnet {0} {1} als nicht mit Fika funktionierend. Trotzdem installiert, kann es Koop-Raids kaputt machen oder Fika am Laden hindern.
+
+Trotzdem installieren?</value>
+  </data>
+  <data name="Downloads_FikaIncompatibleDownloadFormat" xml:space="preserve">
+    <value>Fika ist hier installiert, und sp-mod kennzeichnet {0} {1} als nicht mit Fika funktionierend. Einmal installiert, kann es Koop-Raids kaputt machen oder Fika am Laden hindern.
+
+Trotzdem herunterladen?</value>
+  </data>
+  <data name="Downloads_FikaDeclinedFormat" xml:space="preserve">
+    <value>{0} {1} ausgelassen - sp-mod kennzeichnet es als nicht mit Fika funktionierend.</value>
+  </data>
+  <data name="Installed_RemoveProfileWarningFormat" xml:space="preserve">
+    <value>sp-mod kennzeichnet {0} als Mod, der dauerhafte Änderungen an deinem Profil vornehmen kann und sich eventuell nicht ohne neues Profil entfernen lässt. Das Entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Passiert das, holt Rückgängig den Mod zurück, und eine Kopie deiner Profile von kurz davor liegt unter Optionen, SPT-Profil-Sicherungen.</value>
+  </data>
 </root>

@@ -1166,7 +1166,7 @@ public partial class InstalledViewModel : LocalizedViewModel
                 ? Sentences(Strings.Installed_RemoveAppManagedBody, Text(Strings.Installed_RemoveUnstampedFormat, installPath))
                 : Strings.Installed_RemoveAppManagedBody;
 
-            if (ConfirmRemoval(mod.Name, body, configs.Count)
+            if (ConfirmRemoval(mod.Name, WithProfileWarning(mod, body), configs.Count)
                 is not { } configAction)
             {
                 return;
@@ -1216,7 +1216,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             var configs = ModInstallService.FindLegacyConfigs(installPath, paths!);
             if (ConfirmRemoval(
                     mod.Name,
-                    Text(Strings.Installed_RemoveLegacyBodyFormat, string.Join("\n", paths)),
+                    WithProfileWarning(mod, Text(Strings.Installed_RemoveLegacyBodyFormat, string.Join("\n", paths))),
                     configs.Count) is not { } configAction)
             {
                 return;
@@ -1893,6 +1893,22 @@ public partial class InstalledViewModel : LocalizedViewModel
         EnableSelectedCommand.NotifyCanExecuteChanged();
         UpdateSelectedCommand.NotifyCanExecuteChanged();
     }
+
+    //
+    // OPEN-12 F17: a mod whose sp-mod page carries the profile notice ("may make permanent changes to
+    // your profile, and may not be removable without starting a new profile" - traders, SVM, Skills
+    // Extended) says so first in its removal question. Read from the cached catalog; an addon (no such
+    // field) or a mod not in the catalog is never flagged.
+    //
+    private static string WithProfileWarning(InstalledModCardViewModel mod, string message) =>
+        ChangesProfile(mod)
+            ? string.Join("\n\n", Text(Strings.Installed_RemoveProfileWarningFormat, mod.DisplayTitle), message)
+            : message;
+
+    private static bool ChangesProfile(InstalledModCardViewModel mod) =>
+        !mod.IsAddon
+        && mod.ModId is { } id
+        && AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == id) is { ShowsProfileBindingNotice: true };
 
     private static bool Confirm(string title, string message) =>
         MessageBox.Show(message, title, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;

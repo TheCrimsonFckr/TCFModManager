@@ -6360,4 +6360,23 @@ Ce qu'ils contiennent maintenant est d'abord copié, cela peut donc être annul�
   <data name="Installed_HeldBackPlainFormat" xml:space="preserve">
     <value>Mise à jour vers {0} retenue par sp-mod.</value>
   </data>
+  <data name="Downloads_FikaIncompatibleTitle" xml:space="preserve">
+    <value>Pas pour Fika</value>
+  </data>
+  <data name="Downloads_FikaIncompatibleFormat" xml:space="preserve">
+    <value>Fika est installé ici, et sp-mod indique que {0} {1} ne fonctionne pas avec Fika. Installé malgré tout, il peut casser les raids en coop ou empêcher Fika de se charger.
+
+L'installer quand même ?</value>
+  </data>
+  <data name="Downloads_FikaIncompatibleDownloadFormat" xml:space="preserve">
+    <value>Fika est installé ici, et sp-mod indique que {0} {1} ne fonctionne pas avec Fika. Une fois installé, il peut casser les raids en coop ou empêcher Fika de se charger.
+
+Le télécharger quand même ?</value>
+  </data>
+  <data name="Downloads_FikaDeclinedFormat" xml:space="preserve">
+    <value>{0} {1} laissé de côté - sp-mod indique qu'il ne fonctionne pas avec Fika.</value>
+  </data>
+  <data name="Installed_RemoveProfileWarningFormat" xml:space="preserve">
+    <value>sp-mod indique que {0} peut modifier ton profil de façon permanente et ne pas pouvoir être retiré sans commencer un nouveau profil. Le supprimer peut laisser un profil que SPT ne chargera pas. Si cela arrive, Restaurer remet le mod, et une copie de tes profils d'avant sa suppression se trouve dans Options, Sauvegardes des profils SPT.</value>
+  </data>
 </root>

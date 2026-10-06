@@ -37,7 +37,7 @@ Coming next, in no particular order - the [Planning page](https://github.com/The
 - Never left half-installed - an install that is interrupted (the app closed or the PC lost power part way) is shown as partly installed the next time the app runs, so a reinstall puts it right - *In progress*
 - Profile backups - your SPT profiles are backed up before any install, update, remove, disable or list apply, and can be put back from Options - *In progress*
 - Held-back updates - an update that would break another installed mod isn't offered, and the card says why - *In progress*
-- Fika warnings - a version not marked for Fika on a Fika install, and a remove that may change your profile - *Planned*
+- Fika warnings - asked before installing a version sp-mod marks as not working with Fika on a Fika install, and warned before removing a mod that may have changed your profile - *In progress*
 - Faster downloads - up to three at once, with retry and resume - *Planned*
 - Diagnose logs - reads the server, BepInEx and game logs, names the mod at fault, and builds a report with private details taken out - *Planned*
 - SPT upgrade check - pick a newer SPT and see which of your mods are ready for it - *Planned*

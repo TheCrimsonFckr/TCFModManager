@@ -6705,4 +6705,23 @@
   <data name="Installed_HeldBackPlainFormat" xml:space="preserve">
     <value>Обновление до {0} задержано sp-mod.</value>
   </data>
+  <data name="Downloads_FikaIncompatibleTitle" xml:space="preserve">
+    <value>Не для Fika</value>
+  </data>
+  <data name="Downloads_FikaIncompatibleFormat" xml:space="preserve">
+    <value>Здесь установлен Fika, а sp-mod отмечает {0} {1} как несовместимый с Fika. Если всё же установить, он может сломать совместные рейды или не дать Fika загрузиться.
+
+Всё равно установить?</value>
+  </data>
+  <data name="Downloads_FikaIncompatibleDownloadFormat" xml:space="preserve">
+    <value>Здесь установлен Fika, а sp-mod отмечает {0} {1} как несовместимый с Fika. После установки он может сломать совместные рейды или не дать Fika загрузиться.
+
+Всё равно скачать?</value>
+  </data>
+  <data name="Downloads_FikaDeclinedFormat" xml:space="preserve">
+    <value>{0} {1} пропущен - sp-mod отмечает его как несовместимый с Fika.</value>
+  </data>
+  <data name="Installed_RemoveProfileWarningFormat" xml:space="preserve">
+    <value>sp-mod отмечает {0} как мод, который может навсегда изменить ваш профиль и который, возможно, нельзя удалить без создания нового профиля. Его удаление может оставить профиль, который SPT не загрузит. Если так случится, «Вернуть» вернёт мод, а копия ваших профилей перед удалением есть в Параметрах, в разделе «Резервные копии профилей SPT».</value>
+  </data>
 </root>

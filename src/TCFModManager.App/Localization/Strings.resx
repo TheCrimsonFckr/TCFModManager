@@ -7658,4 +7658,28 @@ What is in them now is copied first, so this can be undone the same way. Profile
     <value>Update to {0} held back by sp-mod.</value>
     <comment>sp-mod holds the update back without naming a reason. {0} is the version.</comment>
   </data>
+  <data name="Downloads_FikaIncompatibleTitle" xml:space="preserve">
+    <value>Not for Fika</value>
+    <comment>Title of the question before installing a version sp-mod marks as not working with Fika, on an install that runs Fika (OPEN-12 F17).</comment>
+  </data>
+  <data name="Downloads_FikaIncompatibleFormat" xml:space="preserve">
+    <value>Fika is installed here, and sp-mod marks {0} {1} as not working with Fika. Installed anyway, it may break co-op raids or stop Fika from loading.
+
+Install it anyway?</value>
+    <comment>{0} is the mod, {1} the version.</comment>
+  </data>
+  <data name="Downloads_FikaIncompatibleDownloadFormat" xml:space="preserve">
+    <value>Fika is installed here, and sp-mod marks {0} {1} as not working with Fika. Once installed, it may break co-op raids or stop Fika from loading.
+
+Download it anyway?</value>
+    <comment>As Downloads_FikaIncompatibleFormat, for Monitor mode, where the archive is only saved. {0} is the mod, {1} the version.</comment>
+  </data>
+  <data name="Downloads_FikaDeclinedFormat" xml:space="preserve">
+    <value>{0} {1} left out - sp-mod marks it as not working with Fika.</value>
+    <comment>Downloads card after No to the Fika question. {0} is the mod, {1} the version.</comment>
+  </data>
+  <data name="Installed_RemoveProfileWarningFormat" xml:space="preserve">
+    <value>sp-mod marks {0} as a mod that may make permanent changes to your profile, and may not be removable without starting a new profile. Removing it can leave a profile SPT won't load. If that happens, Undo puts the mod back, and a copy of your profiles from just before it went is under Options, SPT profile backups.</value>
+    <comment>At the top of the removal question for a mod whose sp-mod page shows the profile notice (OPEN-12 F17). {0} is the mod. Undo is the Installed page's undo-removal button; the last part names the Options card (Profiles_Header) - translate both the same way.</comment>
+  </data>
 </root>
