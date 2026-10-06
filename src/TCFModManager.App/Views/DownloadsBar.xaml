@@ -1,0 +1,73 @@
+<!--
+    OPEN-12 A7: the downloads bar along the bottom of the window - what is downloading or installing
+    now, how far the whole queue is, and a click through to the Downloads page. Shown only while the
+    queue has work and for a few seconds after (DownloadQueueViewModel.BarVisible), so it takes no
+    room when nothing is happening (Chris, 2026-10-06). Theme brushes throughout, so it follows light
+    and dark like the rest of the window.
+-->
+<UserControl
+    x:Class="TCFModManager.App.Views.DownloadsBar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:app="clr-namespace:TCFModManager.App"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    DataContext="{x:Static app:AppServices.DownloadQueue}">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+
+    <Border
+        x:Name="Face"
+        Visibility="{Binding BarVisible, Converter={StaticResource BoolToVis}}"
+        Background="{DynamicResource ControlFillColorDefaultBrush}"
+        BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}"
+        BorderThickness="0,1,0,0"
+        Padding="16,8"
+        Cursor="Hand"
+        ToolTip="{loc:Str Downloads_BarToolTip}"
+        MouseEnter="Face_MouseEnter"
+        MouseLeave="Face_MouseLeave"
+        MouseLeftButtonUp="Face_MouseLeftButtonUp">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="240" />
+            </Grid.ColumnDefinitions>
+
+            <ui:SymbolIcon
+                Grid.Column="0"
+                Margin="0,0,10,0"
+                VerticalAlignment="Center"
+                FontSize="18"
+                Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                Symbol="ArrowDownload24" />
+
+            <TextBlock
+                Grid.Column="1"
+                Margin="0,0,12,0"
+                VerticalAlignment="Center"
+                FontWeight="SemiBold"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                Text="{Binding BarTitle}" />
+
+            <TextBlock
+                Grid.Column="2"
+                Margin="0,0,16,0"
+                VerticalAlignment="Center"
+                TextTrimming="CharacterEllipsis"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                Text="{Binding BarDetail}" />
+
+            <ProgressBar
+                Grid.Column="3"
+                Height="4"
+                VerticalAlignment="Center"
+                Minimum="0"
+                Maximum="1"
+                Value="{Binding BarFraction, Mode=OneWay}" />
+        </Grid>
+    </Border>
+</UserControl>

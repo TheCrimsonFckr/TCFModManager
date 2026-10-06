@@ -29,7 +29,7 @@ public sealed class ModInstallService(
 
     // Scratch folder created inside the SPT install so extracted files can be moved into
     // place rather than copied across volumes. Falls back to %TEMP% when it can't be created.
-    private const string WorkFolderName = ".tcfmm-work";
+    internal const string WorkFolderName = ".tcfmm-work";
 
     private const int CopyBufferSize = 1 << 20;
 
@@ -166,18 +166,23 @@ public sealed class ModInstallService(
     //
     // The result carries the record plus what the update did to the mod's own config files - see
     // ConfigCarryOver. Null configs means there were none to have an opinion about.
+    //
+    // OPEN-12 F7 - <paramref name="downloadedArchive"/>: the version's archive, already downloaded
+    // (the queue downloads up to three ahead of the one installing). Read where it is - not moved or
+    // deleted, that is the caller's - and nothing is downloaded.
     public async Task<ModInstallResult> InstallAsync(
         InstallTarget target,
         ModVersion version,
         string installPath,
         IProgress<ModInstallProgress>? status = null,
         IProgress<double>? downloadProgress = null,
-        CancellationToken ct = default)
+        CancellationToken ct = default,
+        string? downloadedArchive = null)
     {
         if (string.IsNullOrWhiteSpace(installPath) || !Directory.Exists(installPath))
             throw new ModInstallException(ModInstallFailure.NoInstallFolder);
 
-        if (string.IsNullOrWhiteSpace(version.Link))
+        if (downloadedArchive is null && string.IsNullOrWhiteSpace(version.Link))
             throw new ModInstallException(ModInstallFailure.NoDownloadLink)
             {
                 ModName = target.Name,
@@ -191,7 +196,7 @@ public sealed class ModInstallService(
 
         var workDir = CreateWorkDirectory(installPath, out var canMoveIntoInstall);
         AppLog.Debug("Install", $"work dir {workDir} (move into install: {canMoveIntoInstall})");
-        var archivePath = Path.Combine(workDir, "download.bin");
+        var archivePath = downloadedArchive ?? Path.Combine(workDir, "download.bin");
         var extractDir = Path.Combine(workDir, "extracted");
         InstallJournalEntry? journalEntry = null;
 
@@ -199,9 +204,19 @@ public sealed class ModInstallService(
         {
             ct.ThrowIfCancellationRequested();
 
-            status?.Report(new ModInstallProgress(
-                ModInstallStage.Downloading, target.Name, version.Version));
-            await downloadService.DownloadAsync(version.Link, archivePath, downloadProgress, ct).ConfigureAwait(false);
+            if (downloadedArchive is null)
+            {
+                status?.Report(new ModInstallProgress(
+                    ModInstallStage.Downloading, target.Name, version.Version));
+                await downloadService.DownloadAsync(version.Link!, archivePath, downloadProgress, ct).ConfigureAwait(false);
+            }
+            else
+            {
+                // Off the caller's thread for the rest, as the download's ConfigureAwait(false) would
+                // have put it - the queue calls this from the UI thread, and extracting and placing
+                // would otherwise freeze the window for the whole install.
+                await Task.CompletedTask.ConfigureAwait(ConfigureAwaitOptions.ForceYielding);
+            }
 
             ct.ThrowIfCancellationRequested();
 

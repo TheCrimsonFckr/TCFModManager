@@ -36,6 +36,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Both titles come from SptEnvironmentViewModel.WindowTitle. The version half is read
@@ -246,12 +247,15 @@
             </ui:NavigationView.FooterMenuItems>
         </ui:NavigationView>
 
+        <!-- The downloads bar (OPEN-12 A7): only while the queue has work, and a few seconds after. -->
+        <views:DownloadsBar Grid.Row="3" />
+
         <!-- Loading overlay shown during the first mod catalog fetch. The scrim stays a
              literal rather than a theme brush on purpose: its job is to dim whatever is
              behind it, which a translucent black does correctly in either theme. -->
         <Border
             Grid.Row="0"
-            Grid.RowSpan="3"
+            Grid.RowSpan="4"
             Background="#AA000000"
             DataContext="{x:Static app:AppServices.ModCache}"
             Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}}">
@@ -292,6 +296,6 @@
         <ContentPresenter
             x:Name="RootContentDialogPresenter"
             Grid.Row="0"
-            Grid.RowSpan="3" />
+            Grid.RowSpan="4" />
     </Grid>
 </ui:FluentWindow>

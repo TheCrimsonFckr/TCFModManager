@@ -6379,4 +6379,34 @@ Scaricarlo comunque?</value>
   <data name="Installed_RemoveProfileWarningFormat" xml:space="preserve">
     <value>sp-mod segnala che {0} può apportare modifiche permanenti al tuo profilo e potrebbe non essere rimovibile senza iniziare un nuovo profilo. Rimuoverlo può lasciare un profilo che SPT non carica. Se succede, Ripristina rimette la mod, e una copia dei tuoi profili di poco prima è in Opzioni, Backup dei profili SPT.</value>
   </data>
+  <data name="Downloads_WaitingToDownload" xml:space="preserve">
+    <value>In attesa di uno slot di download libero</value>
+  </data>
+  <data name="Downloads_WaitingToInstall" xml:space="preserve">
+    <value>Scaricato - in attesa del suo turno per l'installazione</value>
+  </data>
+  <data name="Downloads_RetryingFormat" xml:space="preserve">
+    <value>Connessione interrotta - nuovo tentativo tra {0:0} s</value>
+  </data>
+  <data name="Downloads_BarDownloading" xml:space="preserve">
+    <value>Download in corso</value>
+  </data>
+  <data name="Downloads_BarInstalling" xml:space="preserve">
+    <value>Installazione in corso</value>
+  </data>
+  <data name="Downloads_BarFinished" xml:space="preserve">
+    <value>Download completati</value>
+  </data>
+  <data name="Downloads_BarDetailFormat" xml:space="preserve">
+    <value>{0} {1} - {2} di {3} completati</value>
+  </data>
+  <data name="Downloads_BarDoneFormat" xml:space="preserve">
+    <value>{0} di {1} completati</value>
+  </data>
+  <data name="Downloads_BarSomeFailed" xml:space="preserve">
+    <value>Non tutto è stato completato - clicca per vedere cosa</value>
+  </data>
+  <data name="Downloads_BarToolTip" xml:space="preserve">
+    <value>Apri i download</value>
+  </data>
 </root>

@@ -14,7 +14,7 @@ using TCFModManager.Core.SpModApi;
 
 namespace TCFModManager.App.ViewModels;
 
-// App-lifetime download queue that processes one download/install at a time and resolves each item's dependencies before installing it.
+// App-lifetime download queue: up to three downloads at once, installs one at a time in the order queued (OPEN-12 F7), each item's dependencies resolved before it downloads.
 public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 {
     private static string Text(string format, params object?[] values) =>
@@ -58,12 +58,37 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
     private const string NoValue = "\u2014";
 
+    // ---- OPEN-12 A7: the downloads bar along the bottom of the window (Views/DownloadsBar) ----------
+    //
+    // Shown only while the queue has work, and for a few seconds after it finishes (Chris,
+    // 2026-10-06), so it takes no room when nothing is happening.
+
+    [ObservableProperty]
+    private bool _barVisible;
+
+    // "Downloading" / "Installing" while the queue has work, "Downloads finished" after.
+    [ObservableProperty]
+    private string _barTitle = string.Empty;
+
+    // What is happening now - "SAIN 4.4.3 - 2 of 5 done".
+    [ObservableProperty]
+    private string _barDetail = string.Empty;
+
+    // How far the whole queue is, 0 to 1: finished items count whole, the rest by how far along they are.
+    [ObservableProperty]
+    private double _barFraction;
+
+    private static readonly TimeSpan BarLinger = TimeSpan.FromSeconds(5);
+    private System.Windows.Threading.DispatcherTimer? _barTimer;
+    private bool _barBusy;
+
     // Raised after an item finishes installing successfully. BrowseViewModel subscribes to refresh its cards' install/update status dots.
     public event EventHandler? ItemInstalled;
 
     public DownloadQueueViewModel()
     {
-        _ = ProcessQueueAsync();
+        _ = PrepareLoopAsync();
+        _ = InstallLoopAsync();
     }
 
     // Adds a request to the end of the queue and returns immediately; the download/install
@@ -126,6 +151,8 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
     {
         var unfinished = Items.Where(i => !i.IsFinished).ToList();
 
+        UpdateBar(unfinished);
+
         if (unfinished.Count == 0)
         {
             HasSummary = false;
@@ -152,12 +179,67 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         // sentence for a plural to agree with.
         SummaryUnsized = unknown.ToString(CultureInfo.CurrentCulture);
 
-        SummaryEta = remaining > 0
-            && unfinished.FirstOrDefault(i => i.BytesPerSecond is > 0)?.BytesPerSecond is { } rate
-                ? DownloadQueueItemViewModel.RemainingLabel(TimeSpan.FromSeconds(remaining / rate))
-                : NoValue;
+        // Every download running now together - up to three at once (OPEN-12 F7).
+        var rate = unfinished.Sum(i => i.BytesPerSecond ?? 0);
+        SummaryEta = remaining > 0 && rate > 0
+            ? DownloadQueueItemViewModel.RemainingLabel(TimeSpan.FromSeconds(remaining / rate))
+            : NoValue;
 
         OnPropertyChanged(nameof(HasRetryable));
+    }
+
+    // The bar's text is set as the queue moves, so a language change has it written again.
+    protected internal override void RefreshText()
+    {
+        base.RefreshText();
+        UpdateSummary();
+    }
+
+    private void UpdateBar(List<DownloadQueueItemViewModel> unfinished)
+    {
+        var total = Items.Count;
+        var done = total - unfinished.Count;
+
+        if (unfinished.Count > 0)
+        {
+            _barTimer?.Stop();
+            _barBusy = true;
+            BarVisible = true;
+
+            var installing = unfinished.FirstOrDefault(i => i.Status == DownloadQueueItemStatus.Installing);
+            var current = installing
+                ?? unfinished.FirstOrDefault(i => i.Status == DownloadQueueItemStatus.Downloading && i.Progress < 1)
+                ?? unfinished[0];
+
+            BarTitle = installing is not null ? Strings.Downloads_BarInstalling : Strings.Downloads_BarDownloading;
+            BarDetail = Text(Strings.Downloads_BarDetailFormat, current.ModName, current.VersionLabel, done, total);
+
+            // A download is most of an item's time; installing it is the rest.
+            var partly = unfinished.Sum(i => i.Progress * 0.8 + (i.Status == DownloadQueueItemStatus.Installing ? 0.1 : 0));
+            BarFraction = total == 0 ? 0 : Math.Clamp((done + partly) / total, 0, 1);
+            return;
+        }
+
+        if (!_barBusy) return;
+
+        // The queue has just emptied: say so for a moment, then step out of the way.
+        _barBusy = false;
+        BarTitle = Strings.Downloads_BarFinished;
+        BarDetail = Items.Any(i => i.Status is DownloadQueueItemStatus.Failed)
+            ? Strings.Downloads_BarSomeFailed
+            : Text(Strings.Downloads_BarDoneFormat, Items.Count(i => i.Status == DownloadQueueItemStatus.Completed), total);
+        BarFraction = 1;
+
+        _barTimer ??= new System.Windows.Threading.DispatcherTimer { Interval = BarLinger };
+        _barTimer.Tick -= OnBarTimer;
+        _barTimer.Tick += OnBarTimer;
+        _barTimer.Start();
+    }
+
+    private void OnBarTimer(object? sender, EventArgs e)
+    {
+        _barTimer?.Stop();
+        if (!_barBusy) BarVisible = false;
     }
 
     //
@@ -191,16 +273,71 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         UpdateSummary();
     }
 
-    // FIFO single-reader loop that processes one item at a time for the entire app session. A failed item doesn't stop the loop.
-    private async Task ProcessQueueAsync()
+    //
+    // OPEN-12 F7: the queue runs in three stages rather than one item start to finish.
+    //
+    //   1. Prepare - one item at a time, in the order queued: the version is looked up and the
+    //      Fika and dependency questions asked. Questions stay one at a time and in order.
+    //   2. Download - up to MaxDownloads at once, each retried after a dropped connection and
+    //      resumed from where it broke off when the server allows it.
+    //   3. Install - one at a time, in the order queued: installs write into the same folders,
+    //      so they never overlap, and a dependency queued behind its mod still lands behind it.
+    //
+    // So a mod list of forty downloads three at a time while the first ones install, where it used
+    // to download and install one after another. Ported from SSPTMM's queue, without its archive
+    // cache (F6 not taken): each archive is a one-off file, deleted once it is installed.
+    //
+    private const int MaxDownloads = 3;
+    private readonly SemaphoreSlim _downloadSlots = new(MaxDownloads);
+
+    // A download that fails in a way that can pass (the connection dropped, the host busy) is tried
+    // again after these waits - resuming, not starting over, when the server allows it.
+    private static readonly TimeSpan[] RetryDelays = [TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(6)];
+
+    private readonly Channel<InstallTurn> _installs = Channel.CreateUnbounded<InstallTurn>();
+
+    //
+    // One item's turn to install: the attempt it belongs to (its token) and that attempt's archive.
+    // Carried together because a retry starts a NEW attempt on the same item - a turn left in the
+    // channel by the attempt it replaced must not install the old archive.
+    //
+    private sealed record InstallTurn(DownloadQueueItemViewModel Item, CancellationToken Token, ModVersion Version, Task<string> Archive);
+
+    // Stage 1, for the whole session. Nothing that goes wrong with one item stops the queue.
+    private async Task PrepareLoopAsync()
     {
         await foreach (var item in _channel.Reader.ReadAllAsync())
         {
-            await ProcessItemAsync(item);
+            try
+            {
+                await PrepareAsync(item);
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error("Downloads", $"preparing {item.ModName} failed", ex);
+                Settle(item, item.Token, ex);
+            }
         }
     }
 
-    private async Task ProcessItemAsync(DownloadQueueItemViewModel item)
+    // Stage 3, likewise.
+    private async Task InstallLoopAsync()
+    {
+        await foreach (var turn in _installs.Reader.ReadAllAsync())
+        {
+            try
+            {
+                await InstallTurnAsync(turn);
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error("Downloads", $"installing {turn.Item.ModName} failed", ex);
+                Settle(turn.Item, turn.Token, ex);
+            }
+        }
+    }
+
+    private async Task PrepareAsync(DownloadQueueItemViewModel item)
     {
         // Cancelled while it sat in the queue behind something else.
         if (item.Status == DownloadQueueItemStatus.Cancelled || item.Token.IsCancellationRequested)
@@ -210,12 +347,33 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             return;
         }
 
+        // Already under way: an item cancelled while waiting and then retried is in the queue twice,
+        // and the second time round is not a second attempt.
+        var token = item.Token;
+        if (item.Status != DownloadQueueItemStatus.Pending || item.PreparedFor == token) return;
+        item.PreparedFor = token;
+
+        //
+        // Cancel says so at once - while the item waits for a download slot or its turn to install -
+        // rather than when the installs reach it. An install under way finishes placing files first,
+        // so that one settles when it is done.
+        //
+        token.Register(() =>
+        {
+            if (item.Status != DownloadQueueItemStatus.Installing)
+                Settle(item, token, new OperationCanceledException(token));
+        });
+
         try
         {
             item.Status = DownloadQueueItemStatus.Downloading;
             item.StatusMessage = Strings.Downloads_ResolvingLink;
 
             var version = await item.ResolveVersionAsync();
+
+            // Retried since: the new attempt is the one that goes on.
+            if (token != item.Token) return;
+
             if (version?.Link is null)
             {
                 Fail(item, Text(Strings.Downloads_NoLinkFormat, item.ModName, item.VersionLabel));
@@ -224,7 +382,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
             item.TotalBytes ??= version.ContentLength;
 
-            item.Token.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
 
             //
             // A version sp-mod marks as not working with Fika, on an install that runs Fika (OPEN-12
@@ -250,96 +408,225 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
                 await CheckDependenciesAsync(item, version);
             }
 
-            item.Token.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
+            if (token != item.Token) return;
 
+            //
+            // Monitor mode keeps the archive instead of installing it, so it never takes an install
+            // turn. It takes a download slot like any other download, and runs beside this loop so
+            // the items queued after it are not held up.
+            //
             if (item.DownloadOnly)
             {
-                await SaveArchiveAsync(item, version);
+                item.StatusMessage = Strings.Downloads_WaitingToDownload;
+                _ = SaveArchiveAsync(item, version, token);
                 return;
             }
 
-            // Core reports which stage it is in; every phase but the download itself (removing the
-            // previous version, extracting, copying files) is bucketed under Installing.
-            var status = new Progress<ModInstallProgress>(p =>
-            {
-                item.StatusMessage = ModInstallWording.Describe(p);
-                item.Status = p.Stage == ModInstallStage.Downloading
-                    ? DownloadQueueItemStatus.Downloading
-                    : DownloadQueueItemStatus.Installing;
-            });
-            var downloadProgress = new Progress<double>(p => item.Progress = p);
-
-            var result = await AppServices.ModInstall.InstallAsync(
-                item.Target, version, item.InstallPath, status, downloadProgress, item.Token);
-
-            item.Status = DownloadQueueItemStatus.Completed;
-            item.Progress = 1.0;
-
-            // An update that changed one of the mod's own config files says so here rather than
-            // leaving the user to find out in game - see ConfigUpdateWording.
-            var configs = result.Configs is { } report ? ConfigUpdateWording.Summary(report) : null;
-
-            var installed = Text(Strings.Downloads_InstalledFormat, item.ModName, item.VersionLabel);
-
-            //
-            // What the install deliberately didn't do is said on the card (D5): SPT's own files it left
-            // alone and any that would have landed on this app's own files - named one per line in the
-            // tooltip - and originals it kept to put back later (D22).
-            //
-            var skippedSpt = result.SkippedProtected ?? [];
-            var skippedApp = result.SkippedAppFolder ?? [];
-            var skipped = skippedSpt.Concat(skippedApp).ToList();
-            var keptSpt = skippedSpt.Count > 0 ? Strings.Downloads_KeptSptFiles(skippedSpt.Count, skippedSpt.Count) : null;
-            var keptApp = skippedApp.Count > 0 ? Strings.Downloads_KeptAppFiles(skippedApp.Count, skippedApp.Count) : null;
-            var keptOriginals = result.OriginalsKept > 0
-                ? Strings.Downloads_KeptOriginals(result.OriginalsKept, result.OriginalsKept)
-                : null;
-
-            var keptSettings = result.KeptSettings.Count > 0
-                ? Strings.Downloads_KeptSettings(result.KeptSettings.Count, result.KeptSettings.Count)
-                : null;
-
-            item.StatusMessage = string.Join(
-                Strings.Common_SentenceSeparator,
-                new[] { installed, configs, keptSpt, keptApp, keptSettings, keptOriginals }.Where(s => !string.IsNullOrEmpty(s)));
-            var named = skipped.Concat(result.KeptSettings).ToList();
-            item.StatusDetail = named.Count > 0
-                ? string.Join(Environment.NewLine, new[] { item.StatusMessage, "" }.Concat(named))
-                : null;
-            ItemInstalled?.Invoke(this, EventArgs.Empty);
-        }
-        catch (OperationCanceledException) when (item.Token.IsCancellationRequested)
-        {
-            item.Status = DownloadQueueItemStatus.Cancelled;
-            item.Progress = 0;
-            item.StatusMessage = Text(
-                Strings.Downloads_CancelledItemFormat, item.ModName, item.VersionLabel);
-        }
-        catch (SpModApiRateLimitedException ex)
-        {
-            Fail(item, ApiProblems.Describe(ex), ex);
-        }
-        catch (SpModApiException ex)
-        {
-            Fail(item, ApiProblems.Describe(ex), ex);
-        }
-        catch (HttpRequestException ex)
-        {
-            Fail(item, ApiProblems.Describe(ex), ex);
-        }
-        catch (ModInstallException ex)
-        {
-            // ModInstallService refused or gave up part way; ModInstallProblems words it.
-            Fail(item, ModInstallProblems.Describe(ex), ex);
-        }
-        catch (InvalidOperationException ex)
-        {
-            // Anything else that reached here already carries a readable message of its own.
-            Fail(item, ex.Message, ex);
+            _installs.Writer.TryWrite(new InstallTurn(item, token, version, FetchArchiveAsync(item, version, token)));
         }
         catch (Exception ex)
         {
-            Fail(item, Text(Strings.Downloads_UnexpectedFormat, ex.Message), ex, unexpected: true);
+            // An attempt a retry has replaced says nothing: the card is the new attempt's now.
+            Settle(item, token, ex);
+        }
+    }
+
+    // Stage 2: this item's archive, downloaded to a one-off file. Settles the card itself on failure.
+    private async Task<string> FetchArchiveAsync(DownloadQueueItemViewModel item, ModVersion version, CancellationToken token)
+    {
+        var path = QueueArchives.NewPath(item.InstallPath);
+        var part = path + ".part";
+        var slot = false;
+
+        try
+        {
+            item.StatusMessage = Strings.Downloads_WaitingToDownload;
+            await _downloadSlots.WaitAsync(token);
+            slot = true;
+
+            var progress = new Progress<double>(p => item.Progress = p);
+
+            for (var attempt = 0; ; attempt++)
+            {
+                item.StatusMessage = ModInstallWording.Describe(
+                    new ModInstallProgress(ModInstallStage.Downloading, item.ModName, version.Version));
+                try
+                {
+                    // A second attempt carries on from where the first broke off, when it can.
+                    await AppServices.Downloads.DownloadAsync(version.Link!, part, progress, token,
+                        resume: attempt > 0, resumable: true);
+                    File.Move(part, path, overwrite: true);
+                    break;
+                }
+                catch (Exception ex) when (attempt < RetryDelays.Length && IsPassing(ex, token))
+                {
+                    var wait = RetryDelays[attempt];
+                    AppLog.Info("Downloads", $"{item.ModName} {item.VersionLabel}: {ex.Message} - trying again in {wait.TotalSeconds:F0}s");
+                    item.StatusMessage = Text(Strings.Downloads_RetryingFormat, wait.TotalSeconds);
+                    await Task.Delay(wait, token);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            QueueArchives.Delete(path);
+            QueueArchives.Delete(part);
+            QueueArchives.Delete(ModDownloadService.ValidatorPathFor(part));
+
+            // Said now, not when the installs reach this item.
+            Settle(item, token, ex);
+            throw;
+        }
+        finally
+        {
+            if (slot) _downloadSlots.Release();
+        }
+
+        // Downloaded; the install is one at a time, in the order queued.
+        if (token == item.Token && !item.IsFinished)
+        {
+            item.Progress = 1.0;
+            item.StatusMessage = Strings.Downloads_WaitingToInstall;
+        }
+
+        return path;
+    }
+
+    //
+    // A failure that may not happen again: the connection dropped, reset or timed out, the host was
+    // busy or failing (5xx, 408, 429), or the file arrived short. Not one that will happen again the
+    // same way - a refusal (403, 404), a name that does not resolve, a certificate, a full disk.
+    //
+    private static bool IsPassing(Exception ex, CancellationToken token) => ex switch
+    {
+        _ when token.IsCancellationRequested => false,
+        HttpRequestException { StatusCode: { } code } => (int)code >= 500 || (int)code is 408 or 429,
+        HttpRequestException { HttpRequestError: HttpRequestError.ConnectionError or HttpRequestError.ResponseEnded or HttpRequestError.Unknown } => true,
+        HttpIOException => true,
+        ModInstallException { Reason: ModInstallFailure.DownloadIncomplete } => true,
+        TaskCanceledException => true,
+        _ => false,
+    };
+
+    // Stage 3.
+    private async Task InstallTurnAsync(InstallTurn turn)
+    {
+        var item = turn.Item;
+
+        string archive;
+        try
+        {
+            archive = await turn.Archive;
+        }
+        catch (Exception)
+        {
+            // Its download failed or was cancelled, and said so on the card already.
+            return;
+        }
+
+        try
+        {
+            // Cancelled while it waited, or retried since: the archive is let go, nothing installed.
+            if (turn.Token != item.Token || item.IsFinished || turn.Token.IsCancellationRequested)
+            {
+                if (turn.Token == item.Token && !item.IsFinished) Settle(item, turn.Token, new OperationCanceledException(turn.Token));
+                return;
+            }
+
+            // Core reports which stage it is in; every phase past the download (removing the previous
+            // version, extracting, copying files) is bucketed under Installing.
+            var status = new Progress<ModInstallProgress>(p =>
+            {
+                item.StatusMessage = ModInstallWording.Describe(p);
+                item.Status = DownloadQueueItemStatus.Installing;
+            });
+
+            item.Status = DownloadQueueItemStatus.Installing;
+
+            var result = await AppServices.ModInstall.InstallAsync(
+                item.Target, turn.Version, item.InstallPath, status, null, turn.Token, downloadedArchive: archive);
+
+            Installed(item, result);
+        }
+        catch (Exception ex)
+        {
+            Settle(item, turn.Token, ex);
+        }
+        finally
+        {
+            QueueArchives.Delete(archive);
+        }
+    }
+
+    private void Installed(DownloadQueueItemViewModel item, ModInstallResult result)
+    {
+        item.Status = DownloadQueueItemStatus.Completed;
+        item.Progress = 1.0;
+
+        // An update that changed one of the mod's own config files says so here rather than
+        // leaving the user to find out in game - see ConfigUpdateWording.
+        var configs = result.Configs is { } report ? ConfigUpdateWording.Summary(report) : null;
+
+        var installed = Text(Strings.Downloads_InstalledFormat, item.ModName, item.VersionLabel);
+
+        //
+        // What the install deliberately didn't do is said on the card (D5): SPT's own files it left
+        // alone and any that would have landed on this app's own files - named one per line in the
+        // tooltip - and originals it kept to put back later (D22).
+        //
+        var skippedSpt = result.SkippedProtected ?? [];
+        var skippedApp = result.SkippedAppFolder ?? [];
+        var skipped = skippedSpt.Concat(skippedApp).ToList();
+        var keptSpt = skippedSpt.Count > 0 ? Strings.Downloads_KeptSptFiles(skippedSpt.Count, skippedSpt.Count) : null;
+        var keptApp = skippedApp.Count > 0 ? Strings.Downloads_KeptAppFiles(skippedApp.Count, skippedApp.Count) : null;
+        var keptOriginals = result.OriginalsKept > 0
+            ? Strings.Downloads_KeptOriginals(result.OriginalsKept, result.OriginalsKept)
+            : null;
+
+        var keptSettings = result.KeptSettings.Count > 0
+            ? Strings.Downloads_KeptSettings(result.KeptSettings.Count, result.KeptSettings.Count)
+            : null;
+
+        item.StatusMessage = string.Join(
+            Strings.Common_SentenceSeparator,
+            new[] { installed, configs, keptSpt, keptApp, keptSettings, keptOriginals }.Where(s => !string.IsNullOrEmpty(s)));
+        var named = skipped.Concat(result.KeptSettings).ToList();
+        item.StatusDetail = named.Count > 0
+            ? string.Join(Environment.NewLine, new[] { item.StatusMessage, "" }.Concat(named))
+            : null;
+        ItemInstalled?.Invoke(this, EventArgs.Empty);
+    }
+
+    //
+    // How any stage ends an item that didn't succeed - only for the attempt it belongs to, and only
+    // once: an attempt a retry has replaced, or an item already settled, says nothing.
+    //
+    private static void Settle(DownloadQueueItemViewModel item, CancellationToken token, Exception ex)
+    {
+        if (token != item.Token || item.IsFinished) return;
+
+        switch (ex)
+        {
+            case OperationCanceledException when token.IsCancellationRequested:
+                item.Status = DownloadQueueItemStatus.Cancelled;
+                item.Progress = 0;
+                item.StatusMessage = Text(Strings.Downloads_CancelledItemFormat, item.ModName, item.VersionLabel);
+                break;
+            case SpModApiException or HttpRequestException or HttpIOException:
+                Fail(item, ApiProblems.Describe(ex), ex);
+                break;
+            case ModInstallException problem:
+                // ModInstallService refused or gave up part way; ModInstallProblems words it.
+                Fail(item, ModInstallProblems.Describe(problem), ex);
+                break;
+            case InvalidOperationException:
+                // Anything else that reached here already carries a readable message of its own.
+                Fail(item, ex.Message, ex);
+                break;
+            default:
+                Fail(item, Text(Strings.Downloads_UnexpectedFormat, ex.Message), ex, unexpected: true);
+                break;
         }
     }
 
@@ -391,7 +678,27 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
     // Nothing in the SPT install is touched, so there is no running-SPT check and no ItemInstalled -
     // what is on disk has not changed.
     //
-    private static async Task SaveArchiveAsync(DownloadQueueItemViewModel item, ModVersion version)
+    private async Task SaveArchiveAsync(DownloadQueueItemViewModel item, ModVersion version, CancellationToken token)
+    {
+        var slot = false;
+        try
+        {
+            await _downloadSlots.WaitAsync(token);
+            slot = true;
+
+            await SaveArchiveCoreAsync(item, version, token);
+        }
+        catch (Exception ex)
+        {
+            Settle(item, token, ex);
+        }
+        finally
+        {
+            if (slot) _downloadSlots.Release();
+        }
+    }
+
+    private static async Task SaveArchiveCoreAsync(DownloadQueueItemViewModel item, ModVersion version, CancellationToken token)
     {
         var folder = DownloadFolders.Resolve(new SettingsService().Load().Monitor.DownloadFolder);
 
@@ -401,7 +708,9 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         var downloadProgress = new Progress<double>(p => item.Progress = p);
 
         var result = await AppServices.ModArchive.SaveArchiveAsync(
-            item.Target, version, folder, item.InstallPath, item.DownloadSubfolder, downloadProgress, item.Token);
+            item.Target, version, folder, item.InstallPath, item.DownloadSubfolder, downloadProgress, token);
+
+        if (token != item.Token || item.IsFinished) return;
 
         item.Status = DownloadQueueItemStatus.Completed;
         item.Progress = 1.0;

@@ -6724,4 +6724,34 @@
   <data name="Installed_RemoveProfileWarningFormat" xml:space="preserve">
     <value>sp-mod отмечает {0} как мод, который может навсегда изменить ваш профиль и который, возможно, нельзя удалить без создания нового профиля. Его удаление может оставить профиль, который SPT не загрузит. Если так случится, «Вернуть» вернёт мод, а копия ваших профилей перед удалением есть в Параметрах, в разделе «Резервные копии профилей SPT».</value>
   </data>
+  <data name="Downloads_WaitingToDownload" xml:space="preserve">
+    <value>Ожидание свободного слота загрузки</value>
+  </data>
+  <data name="Downloads_WaitingToInstall" xml:space="preserve">
+    <value>Загружено - ждёт своей очереди на установку</value>
+  </data>
+  <data name="Downloads_RetryingFormat" xml:space="preserve">
+    <value>Соединение прервано - повтор через {0:0} с</value>
+  </data>
+  <data name="Downloads_BarDownloading" xml:space="preserve">
+    <value>Загрузка</value>
+  </data>
+  <data name="Downloads_BarInstalling" xml:space="preserve">
+    <value>Установка</value>
+  </data>
+  <data name="Downloads_BarFinished" xml:space="preserve">
+    <value>Загрузки завершены</value>
+  </data>
+  <data name="Downloads_BarDetailFormat" xml:space="preserve">
+    <value>{0} {1} - готово {2} из {3}</value>
+  </data>
+  <data name="Downloads_BarDoneFormat" xml:space="preserve">
+    <value>Готово {0} из {1}</value>
+  </data>
+  <data name="Downloads_BarSomeFailed" xml:space="preserve">
+    <value>Не всё завершилось - нажмите, чтобы посмотреть</value>
+  </data>
+  <data name="Downloads_BarToolTip" xml:space="preserve">
+    <value>Открыть загрузки</value>
+  </data>
 </root>

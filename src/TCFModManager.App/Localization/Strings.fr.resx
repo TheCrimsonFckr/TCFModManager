@@ -6379,4 +6379,34 @@ Le télécharger quand même ?</value>
   <data name="Installed_RemoveProfileWarningFormat" xml:space="preserve">
     <value>sp-mod indique que {0} peut modifier ton profil de façon permanente et ne pas pouvoir être retiré sans commencer un nouveau profil. Le supprimer peut laisser un profil que SPT ne chargera pas. Si cela arrive, Restaurer remet le mod, et une copie de tes profils d'avant sa suppression se trouve dans Options, Sauvegardes des profils SPT.</value>
   </data>
+  <data name="Downloads_WaitingToDownload" xml:space="preserve">
+    <value>En attente d'un emplacement de téléchargement libre</value>
+  </data>
+  <data name="Downloads_WaitingToInstall" xml:space="preserve">
+    <value>Téléchargé - attend son tour pour l'installation</value>
+  </data>
+  <data name="Downloads_RetryingFormat" xml:space="preserve">
+    <value>La connexion a été coupée - nouvel essai dans {0:0} s</value>
+  </data>
+  <data name="Downloads_BarDownloading" xml:space="preserve">
+    <value>Téléchargement</value>
+  </data>
+  <data name="Downloads_BarInstalling" xml:space="preserve">
+    <value>Installation</value>
+  </data>
+  <data name="Downloads_BarFinished" xml:space="preserve">
+    <value>Téléchargements terminés</value>
+  </data>
+  <data name="Downloads_BarDetailFormat" xml:space="preserve">
+    <value>{0} {1} - {2} sur {3} terminés</value>
+  </data>
+  <data name="Downloads_BarDoneFormat" xml:space="preserve">
+    <value>{0} sur {1} terminés</value>
+  </data>
+  <data name="Downloads_BarSomeFailed" xml:space="preserve">
+    <value>Tout n'est pas terminé - clique pour voir quoi</value>
+  </data>
+  <data name="Downloads_BarToolTip" xml:space="preserve">
+    <value>Ouvrir les téléchargements</value>
+  </data>
 </root>

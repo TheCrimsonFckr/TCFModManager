@@ -7682,4 +7682,44 @@ Download it anyway?</value>
     <value>sp-mod marks {0} as a mod that may make permanent changes to your profile, and may not be removable without starting a new profile. Removing it can leave a profile SPT won't load. If that happens, Undo puts the mod back, and a copy of your profiles from just before it went is under Options, SPT profile backups.</value>
     <comment>At the top of the removal question for a mod whose sp-mod page shows the profile notice (OPEN-12 F17). {0} is the mod. Undo is the Installed page's undo-removal button; the last part names the Options card (Profiles_Header) - translate both the same way.</comment>
   </data>
+  <data name="Downloads_WaitingToDownload" xml:space="preserve">
+    <value>Waiting for a free download slot</value>
+    <comment>Card status while up to three other downloads run (OPEN-12 F7).</comment>
+  </data>
+  <data name="Downloads_WaitingToInstall" xml:space="preserve">
+    <value>Downloaded - waiting its turn to install</value>
+    <comment>Card status once the archive is downloaded; installs run one at a time in the order queued (OPEN-12 F7).</comment>
+  </data>
+  <data name="Downloads_RetryingFormat" xml:space="preserve">
+    <value>The connection dropped - trying again in {0:0} s</value>
+    <comment>Card status between download attempts; the next one carries on where this one stopped when it can. {0} is seconds.</comment>
+  </data>
+  <data name="Downloads_BarDownloading" xml:space="preserve">
+    <value>Downloading</value>
+    <comment>Title of the downloads bar along the bottom of the window (OPEN-12 A7) while the queue is downloading.</comment>
+  </data>
+  <data name="Downloads_BarInstalling" xml:space="preserve">
+    <value>Installing</value>
+    <comment>Title of the downloads bar while a mod is installing.</comment>
+  </data>
+  <data name="Downloads_BarFinished" xml:space="preserve">
+    <value>Downloads finished</value>
+    <comment>Title of the downloads bar for a few seconds after the queue empties.</comment>
+  </data>
+  <data name="Downloads_BarDetailFormat" xml:space="preserve">
+    <value>{0} {1} - {2} of {3} done</value>
+    <comment>Downloads bar: {0} the mod being worked on, {1} its version, {2} how many items are finished, {3} how many are on the Downloads page.</comment>
+  </data>
+  <data name="Downloads_BarDoneFormat" xml:space="preserve">
+    <value>{0} of {1} done</value>
+    <comment>Downloads bar after the queue empties. {0} items installed or saved, {1} items on the Downloads page.</comment>
+  </data>
+  <data name="Downloads_BarSomeFailed" xml:space="preserve">
+    <value>Not everything finished - click to see what</value>
+    <comment>Downloads bar after the queue empties with something failed.</comment>
+  </data>
+  <data name="Downloads_BarToolTip" xml:space="preserve">
+    <value>Open Downloads</value>
+    <comment>Tooltip on the downloads bar.</comment>
+  </data>
 </root>

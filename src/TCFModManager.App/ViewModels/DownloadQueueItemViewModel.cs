@@ -133,7 +133,7 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     // Only while downloading, and only once the size is known - there is nothing to put in the
     // boxes otherwise.
     public bool HasTransferDetails =>
-        Status == DownloadQueueItemStatus.Downloading && TotalBytes is > 0;
+        Status == DownloadQueueItemStatus.Downloading && TotalBytes is > 0 && Progress < 1;
 
     // "173 of 258.3 MB" - both halves in the same unit, so the pair doesn't switch units partway
     // through and jump.
@@ -167,7 +167,8 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     {
         get
         {
-            if (Status != DownloadQueueItemStatus.Downloading || TotalBytes is not > 0) return null;
+            // Progress 1 is a download finished and waiting its turn to install (OPEN-12 F7).
+            if (Status != DownloadQueueItemStatus.Downloading || TotalBytes is not > 0 || Progress >= 1) return null;
             if (_samples.Count < 2) return null;
 
             var oldest = _samples.Peek();
@@ -293,6 +294,10 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     // runs to completion regardless, so a mod is never left half-placed.
     internal CancellationToken Token => _cancellation.Token;
 
+    // The attempt the queue has already started preparing - a retried item can sit in the queue
+    // twice, and the second entry must not start the same attempt again (OPEN-12 F7).
+    internal CancellationToken? PreparedFor { get; set; }
+
     //
     // Puts this item back on the queue. Set by DownloadQueueViewModel.Enqueue, because the queue is
     // the only thing that owns the channel - the card just asks to go round again.
@@ -401,8 +406,10 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
             Status = DownloadQueueItemStatus.Cancelled;
             StatusMessage = Strings.Downloads_CancelledBeforeStart;
         }
-        else
+        else if (!IsFinished)
         {
+            // The queue settles a waiting item the moment it is cancelled (OPEN-12 F7); only one
+            // still downloading or installing is left to unwind.
             StatusMessage = Strings.Downloads_Cancelling;
         }
     }

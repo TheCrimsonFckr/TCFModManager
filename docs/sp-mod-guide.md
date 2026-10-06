@@ -38,7 +38,7 @@ Coming next, in no particular order - the [Planning page](https://github.com/The
 - Profile backups - your SPT profiles are backed up before any install, update, remove, disable or list apply, and can be put back from Options - *In progress*
 - Held-back updates - an update that would break another installed mod isn't offered, and the card says why - *In progress*
 - Fika warnings - asked before installing a version sp-mod marks as not working with Fika on a Fika install, and warned before removing a mod that may have changed your profile - *In progress*
-- Faster downloads - up to three at once, with retry and resume - *Planned*
+- Faster downloads - up to three at once while installs carry on one at a time, with retry and resume - *In progress*
 - Diagnose logs - reads the server, BepInEx and game logs, names the mod at fault, and builds a report with private details taken out - *Planned*
 - SPT upgrade check - pick a newer SPT and see which of your mods are ready for it - *Planned*
 - Mod tools - launch the programs a mod ships from the Play page - *Planned*
@@ -52,7 +52,7 @@ Coming next, in no particular order - the [Planning page](https://github.com/The
 - Author pages, and following an author - *Planned*
 - A right-click menu on every mod - *Planned*
 - Quick view - hover a mod for a preview - *Planned*
-- A downloads bar - *Planned*
+- A downloads bar along the bottom of the window while anything downloads or installs - *In progress*
 - Page size options, including endless scrolling - *Planned*
 - Mod comments in the app - *Planned*
 
