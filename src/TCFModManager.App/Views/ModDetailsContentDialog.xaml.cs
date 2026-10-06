@@ -45,10 +45,10 @@ public partial class ModDetailsContentDialog : ContentDialog
     {
         Size result = base.MeasureOverride(availableSize);
 
-        // Wider and taller with a full description to show (OPEN-12 F18) - tables and pictures.
-        var described = !string.IsNullOrWhiteSpace(_mod.Description);
-        SetCurrentValue(DialogWidthProperty, described ? 760.0 : 520.0);
-        SetCurrentValue(DialogHeightProperty, described || _addons.HasAddons ? 640.0 : 478.0);
+        // One size for every mod (Chris, 2026-10-06): sized for a full description (OPEN-12 F18) -
+        // tables and pictures - so the window no longer jumps between sizes from one mod to the next.
+        SetCurrentValue(DialogWidthProperty, 760.0);
+        SetCurrentValue(DialogHeightProperty, 640.0);
 
         return result;
     }

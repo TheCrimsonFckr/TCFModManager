@@ -15,7 +15,6 @@
     x:Class="TCFModManager.App.Views.InstalledPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:viewmodels="clr-namespace:TCFModManager.App.ViewModels"
@@ -26,7 +25,6 @@
     ScrollViewer.CanContentScroll="False">
     <Page.Resources>
         <!-- One width for every filter in the filter row, so a wrapped row lines up in columns. -->
-        <sys:Double x:Key="FilterWidth">210</sys:Double>
 
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
         <converters:UpdateAvailableToVisibilityConverter x:Key="UpdateAvailableToVisible" />
@@ -531,7 +529,7 @@
 
                         <!-- "Has dependencies" is answered from the dependency graph built off the scan, so unlike
                              Browse's it covers everything installed. -->
-                        <Expander Style="{StaticResource FilterSection}" IsExpanded="True">
+                        <Expander Style="{StaticResource FilterSection}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_ShowHeader}" TextWrapping="Wrap" />
                             </Expander.Header>
@@ -614,6 +612,12 @@
                             Content="{loc:Str Common_SaveAsDefault}"
                             ToolTip="{loc:Str Installed_SaveAsDefaultToolTip}"
                             Command="{Binding SaveAsDefaultCommand}" />
+                        <ui:Button
+                            Margin="0,0,0,6"
+                            HorizontalAlignment="Stretch"
+                            Content="{loc:Str Common_RestoreDefaults}"
+                            ToolTip="{loc:Str Common_RestoreDefaultsToolTip}"
+                            Command="{Binding RestoreDefaultsCommand}" />
                         <ui:Button
                             HorizontalAlignment="Stretch"
                             Content="{loc:Str Common_ClearFilters}"

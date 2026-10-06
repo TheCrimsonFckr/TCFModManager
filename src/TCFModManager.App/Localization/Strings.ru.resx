@@ -502,7 +502,7 @@
     <value>Сбросить фильтры</value>
   </data>
   <data name="Common_ClearFiltersToolTip" xml:space="preserve">
-    <value>Возвращает каждый фильтр в состояние, с которым открывается страница.</value>
+    <value>Возвращает все фильтры и параметры вида к исходным настройкам приложения.</value>
   </data>
   <data name="Common_Close" xml:space="preserve">
     <value>Закрыть</value>
@@ -4999,7 +4999,7 @@
     <value>Галочка рядом с SPT на карточке значит, что последняя версия мода работает на вашей; крестик - что нет.</value>
   </data>
   <data name="Help_Browse_Compatible_Step3" xml:space="preserve">
-    <value>Чтобы увидеть больше, откройте вверху список версий SPT и отметьте другие версии или нажмите {0}.</value>
+    <value>Чтобы увидеть больше, откройте {0} и отметьте другие версии в разделе {1} или нажмите {2}.</value>
   </data>
   <data name="Help_Browse_Install_Title" xml:space="preserve">
     <value>Установить мод и нужные ему моды</value>
@@ -6993,5 +6993,95 @@
   </data>
   <data name="NewModsToast_ItemFormat" xml:space="preserve">
     <value>{0} от {1}</value>
+  </data>
+  <data name="Filter_SectionSptVersion" xml:space="preserve">
+    <value>Версия SPT</value>
+  </data>
+  <data name="Help_Browse_Filters_Title" xml:space="preserve">
+    <value>Фильтры, сортировка и их сброс</value>
+  </data>
+  <data name="Help_Browse_Filters_Step1" xml:space="preserve">
+    <value>На странице {0} или {1} нажмите {2}. Слева откроется панель со всеми фильтрами, сортировкой и числом элементов на странице.</value>
+  </data>
+  <data name="Help_Browse_Filters_Step2" xml:space="preserve">
+    <value>Нажмите на название раздела, чтобы открыть его, и выберите нужное. Список сразу изменится.</value>
+  </data>
+  <data name="Help_Browse_Filters_Step3" xml:space="preserve">
+    <value>Каждый заданный фильтр показывается плашкой над списком. Нажмите X на плашке, чтобы убрать этот фильтр, или {0}, чтобы убрать все.</value>
+  </data>
+  <data name="Help_Browse_Filters_Note" xml:space="preserve">
+    <value>{0} заставляет страницу открываться с текущими настройками, а {1} возвращает их в любой момент. {2} всегда возвращает исходные настройки приложения.</value>
+  </data>
+  <data name="Help_Browse_Filters_Keywords" xml:space="preserve">
+    <value>фильтры, сортировка, плашки, сбросить фильтры, параметры вида, на странице</value>
+  </data>
+  <data name="Help_Browse_Dates_Title" xml:space="preserve">
+    <value>Найти новые или недавно обновлённые моды</value>
+  </data>
+  <data name="Help_Browse_Dates_Step1" xml:space="preserve">
+    <value>На странице {0} откройте {1}, затем {2}, чтобы искать по дате первой публикации мода, или {3} - по дате его последней версии.</value>
+  </data>
+  <data name="Help_Browse_Dates_Step2" xml:space="preserve">
+    <value>Выберите период, например {0}, или {1}, чтобы задать дни самостоятельно.</value>
+  </data>
+  <data name="Help_Browse_Dates_Step3" xml:space="preserve">
+    <value>В разделе {0} выберите {1}, чтобы искать только по названиям модов.</value>
+  </data>
+  <data name="Help_Browse_Dates_Keywords" xml:space="preserve">
+    <value>новые моды, недавние, опубликован, обновлён, дата, искать в, название</value>
+  </data>
+  <data name="Help_Browse_Follow_Title" xml:space="preserve">
+    <value>Подписаться на автора</value>
+  </data>
+  <data name="Help_Browse_Follow_Step1" xml:space="preserve">
+    <value>Нажмите на имя автора - на карточке мода, в его подробностях или в списке, - чтобы открыть его страницу.</value>
+  </data>
+  <data name="Help_Browse_Follow_Step2" xml:space="preserve">
+    <value>Нажмите {0}. На странице {1} можно также щёлкнуть мод правой кнопкой мыши и подписаться на автора оттуда.</value>
+  </data>
+  <data name="Help_Browse_Follow_Step3" xml:space="preserve">
+    <value>Чтобы на странице {0} показывать только их моды, откройте {1} и отметьте {2}.</value>
+  </data>
+  <data name="Help_Browse_Follow_Note" xml:space="preserve">
+    <value>Если уведомления об обновлениях включены, вы узнаете, когда кто-то из тех, на кого вы подписаны, выпустит новый мод. Все ваши подписки перечислены в {0}, в разделе {1}.</value>
+  </data>
+  <data name="Help_Browse_Follow_Keywords" xml:space="preserve">
+    <value>подписаться, автор, создатель, новые моды, уведомить, отписаться</value>
+  </data>
+  <data name="Help_Browse_Details_Title" xml:space="preserve">
+    <value>Прочитать полное описание мода</value>
+  </data>
+  <data name="Help_Browse_Details_Step1" xml:space="preserve">
+    <value>На странице {0} или {1} нажмите на карточку мода, чтобы открыть его подробности.</value>
+  </data>
+  <data name="Help_Browse_Details_Step2" xml:space="preserve">
+    <value>Его описание с sp-mod показывается полностью - с картинками, таблицами и ссылками.</value>
+  </data>
+  <data name="Help_Browse_Details_Note" xml:space="preserve">
+    <value>Ссылки, картинки и видео открываются в браузере.</value>
+  </data>
+  <data name="Help_Browse_Details_Keywords" xml:space="preserve">
+    <value>описание, подробности, подробнее, картинки, о моде</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Title" xml:space="preserve">
+    <value>Узнать, какие моды готовы к новой версии SPT</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Step1" xml:space="preserve">
+    <value>Откройте {0}. В самом верху откройте {1}.</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Step2" xml:space="preserve">
+    <value>Выберите выпуск рядом с {0}. Для каждого вашего мода указано, работает ли он на нём, нужно ли сначала обновление или он ещё не готов.</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Note" xml:space="preserve">
+    <value>Это только проверка - ничего не устанавливается и не меняется.</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Keywords" xml:space="preserve">
+    <value>обновить SPT, новая версия SPT, готов, совместим, переход</value>
+  </data>
+  <data name="Common_RestoreDefaults" xml:space="preserve">
+    <value>Вернуть мои настройки</value>
+  </data>
+  <data name="Common_RestoreDefaultsToolTip" xml:space="preserve">
+    <value>Возвращает фильтры, сортировку и число на странице к тому, что вы в последний раз сохранили по умолчанию для этой страницы. Если ничего не сохранено, действует как «Сбросить фильтры».</value>
   </data>
 </root>

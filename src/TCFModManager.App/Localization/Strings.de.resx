@@ -496,7 +496,7 @@ Das wurde hier hingeschrieben:
     <value>Filter zurücksetzen</value>
   </data>
   <data name="Common_ClearFiltersToolTip" xml:space="preserve">
-    <value>Setzt jeden Filter auf den Stand zurück, mit dem diese Seite öffnet.</value>
+    <value>Setzt alle Filter und Ansichtsoptionen auf die Standardwerte der App zurück.</value>
   </data>
   <data name="Common_Close" xml:space="preserve">
     <value>Schließen</value>
@@ -4711,7 +4711,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Ein Häkchen neben SPT auf einer Karte heißt, dass die neueste Version auf deiner läuft; ein Kreuz heißt, dass nicht.</value>
   </data>
   <data name="Help_Browse_Compatible_Step3" xml:space="preserve">
-    <value>Um mehr zu sehen, öffne oben das Auswahlfeld für die SPT-Version und hake weitere Versionen an, oder klicke auf {0}.</value>
+    <value>Um mehr zu sehen, öffne {0} und hake unter {1} weitere Versionen an - oder klicke auf {2}.</value>
   </data>
   <data name="Help_Browse_Install_Title" xml:space="preserve">
     <value>Einen Mod und die Mods, die er braucht, installieren</value>
@@ -6648,5 +6648,95 @@ Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie d
   </data>
   <data name="NewModsToast_ItemFormat" xml:space="preserve">
     <value>{0} von {1}</value>
+  </data>
+  <data name="Filter_SectionSptVersion" xml:space="preserve">
+    <value>SPT-Version</value>
+  </data>
+  <data name="Help_Browse_Filters_Title" xml:space="preserve">
+    <value>Filtern, sortieren und Filter zurücksetzen</value>
+  </data>
+  <data name="Help_Browse_Filters_Step1" xml:space="preserve">
+    <value>Klicke unter {0} oder {1} auf {2}. Links öffnet sich ein Bereich mit allen Filtern, der Sortierung und der Anzahl pro Seite.</value>
+  </data>
+  <data name="Help_Browse_Filters_Step2" xml:space="preserve">
+    <value>Klicke auf den Namen eines Abschnitts, um ihn zu öffnen, und wähle aus. Die Liste ändert sich sofort.</value>
+  </data>
+  <data name="Help_Browse_Filters_Step3" xml:space="preserve">
+    <value>Jeder gesetzte Filter erscheint als Kärtchen über der Liste. Klicke auf das X eines Kärtchens, um diesen Filter zu entfernen, oder auf {0}, um alle zu entfernen.</value>
+  </data>
+  <data name="Help_Browse_Filters_Note" xml:space="preserve">
+    <value>{0} lässt die Seite künftig so öffnen, wie sie gerade eingestellt ist, und {1} holt diesen Stand jederzeit zurück. {2} setzt immer alles auf die Standardwerte der App zurück.</value>
+  </data>
+  <data name="Help_Browse_Filters_Keywords" xml:space="preserve">
+    <value>Filter, sortieren, Kärtchen, Filter zurücksetzen, Ansichtsoptionen, pro Seite</value>
+  </data>
+  <data name="Help_Browse_Dates_Title" xml:space="preserve">
+    <value>Neue oder kürzlich aktualisierte Mods finden</value>
+  </data>
+  <data name="Help_Browse_Dates_Step1" xml:space="preserve">
+    <value>Öffne unter {0} {1} und dann {2} für die erste Veröffentlichung eines Mods oder {3} für seine neueste Version.</value>
+  </data>
+  <data name="Help_Browse_Dates_Step2" xml:space="preserve">
+    <value>Wähle einen Zeitraum wie {0} oder {1}, um die Tage selbst festzulegen.</value>
+  </data>
+  <data name="Help_Browse_Dates_Step3" xml:space="preserve">
+    <value>Wähle unter {0} {1}, damit nur Mod-Namen durchsucht werden.</value>
+  </data>
+  <data name="Help_Browse_Dates_Keywords" xml:space="preserve">
+    <value>neue Mods, kürzlich, veröffentlicht, aktualisiert, Datum, suchen in, Titel</value>
+  </data>
+  <data name="Help_Browse_Follow_Title" xml:space="preserve">
+    <value>Einem Autor folgen</value>
+  </data>
+  <data name="Help_Browse_Follow_Step1" xml:space="preserve">
+    <value>Klicke auf den Namen eines Autors - auf der Karte eines Mods, in seinen Details oder in einer Liste -, um seine Seite zu öffnen.</value>
+  </data>
+  <data name="Help_Browse_Follow_Step2" xml:space="preserve">
+    <value>Klicke auf {0}. Unter {1} kannst du auch mit der rechten Maustaste auf einen Mod klicken und seinem Autor von dort folgen.</value>
+  </data>
+  <data name="Help_Browse_Follow_Step3" xml:space="preserve">
+    <value>Um unter {0} nur ihre Mods zu sehen, öffne {1} und hake {2} an.</value>
+  </data>
+  <data name="Help_Browse_Follow_Note" xml:space="preserve">
+    <value>Sind Update-Benachrichtigungen an, erfährst du, wenn jemand, dem du folgst, einen neuen Mod veröffentlicht. Alle, denen du folgst, stehen unter {0} bei {1}.</value>
+  </data>
+  <data name="Help_Browse_Follow_Keywords" xml:space="preserve">
+    <value>folgen, Autor, Ersteller, neue Mods, benachrichtigen, entfolgen</value>
+  </data>
+  <data name="Help_Browse_Details_Title" xml:space="preserve">
+    <value>Die vollständige Beschreibung eines Mods lesen</value>
+  </data>
+  <data name="Help_Browse_Details_Step1" xml:space="preserve">
+    <value>Klicke unter {0} oder {1} auf die Karte eines Mods, um seine Details zu öffnen.</value>
+  </data>
+  <data name="Help_Browse_Details_Step2" xml:space="preserve">
+    <value>Seine Beschreibung von sp-mod wird vollständig angezeigt, mit Bildern, Tabellen und Links.</value>
+  </data>
+  <data name="Help_Browse_Details_Note" xml:space="preserve">
+    <value>Links, Bilder und Videos öffnen sich in deinem Browser.</value>
+  </data>
+  <data name="Help_Browse_Details_Keywords" xml:space="preserve">
+    <value>Beschreibung, Details, mehr lesen, Bilder, über</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Title" xml:space="preserve">
+    <value>Sehen, welche Mods für ein neueres SPT bereit sind</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Step1" xml:space="preserve">
+    <value>Öffne {0}. Öffne ganz oben {1}.</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Step2" xml:space="preserve">
+    <value>Wähle neben {0} die Version. Bei jedem deiner Mods steht, ob er darauf läuft, vorher ein Update braucht oder noch nicht bereit ist.</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Note" xml:space="preserve">
+    <value>Das ist nur eine Prüfung - nichts wird installiert oder geändert.</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Keywords" xml:space="preserve">
+    <value>SPT aktualisieren, neue SPT-Version, bereit, kompatibel, umsteigen</value>
+  </data>
+  <data name="Common_RestoreDefaults" xml:space="preserve">
+    <value>Meine Standards wiederherstellen</value>
+  </data>
+  <data name="Common_RestoreDefaultsToolTip" xml:space="preserve">
+    <value>Setzt Filter, Sortierung und Anzahl pro Seite auf das zurück, was du zuletzt als Standard dieser Seite gespeichert hast. Ist nichts gespeichert, wirkt es wie „Filter zurücksetzen“.</value>
   </data>
 </root>

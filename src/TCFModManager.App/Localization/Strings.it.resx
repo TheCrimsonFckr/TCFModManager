@@ -496,7 +496,7 @@
     <value>Azzera filtri</value>
   </data>
   <data name="Common_ClearFiltersToolTip" xml:space="preserve">
-    <value>Riporta ogni filtro a come si presenta all'apertura della pagina.</value>
+    <value>Riporta tutti i filtri e le opzioni di visualizzazione alle impostazioni predefinite dell'app.</value>
   </data>
   <data name="Common_Close" xml:space="preserve">
     <value>Chiudi</value>
@@ -4711,7 +4711,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Una spunta accanto a SPT su una scheda significa che la sua versione più recente funziona sulla tua; una croce, che non funziona.</value>
   </data>
   <data name="Help_Browse_Compatible_Step3" xml:space="preserve">
-    <value>Per vederne di più, apri in alto il menu delle versioni di SPT e spunta altre versioni, oppure premi {0}.</value>
+    <value>Per vederne di più, apri {0} e spunta altre versioni sotto {1}, oppure premi {2}.</value>
   </data>
   <data name="Help_Browse_Install_Title" xml:space="preserve">
     <value>Installare un mod e i mod che gli servono</value>
@@ -6648,5 +6648,95 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
   </data>
   <data name="NewModsToast_ItemFormat" xml:space="preserve">
     <value>{0} di {1}</value>
+  </data>
+  <data name="Filter_SectionSptVersion" xml:space="preserve">
+    <value>Versione di SPT</value>
+  </data>
+  <data name="Help_Browse_Filters_Title" xml:space="preserve">
+    <value>Filtrare, ordinare e azzerare i filtri</value>
+  </data>
+  <data name="Help_Browse_Filters_Step1" xml:space="preserve">
+    <value>In {0} o {1}, premi {2}. A sinistra si apre un pannello con tutti i filtri, l'ordinamento e quanti elementi mostrare per pagina.</value>
+  </data>
+  <data name="Help_Browse_Filters_Step2" xml:space="preserve">
+    <value>Fai clic sul nome di una sezione per aprirla, poi scegli ciò che vuoi. L'elenco cambia subito.</value>
+  </data>
+  <data name="Help_Browse_Filters_Step3" xml:space="preserve">
+    <value>Ogni filtro impostato compare come etichetta sopra l'elenco. Premi la X di un'etichetta per togliere quel filtro, oppure {0} per toglierli tutti.</value>
+  </data>
+  <data name="Help_Browse_Filters_Note" xml:space="preserve">
+    <value>{0} fa aprire la pagina così com'è impostata ora, e {1} ripristina quelle impostazioni quando vuoi. {2} torna sempre alle impostazioni predefinite dell'app.</value>
+  </data>
+  <data name="Help_Browse_Filters_Keywords" xml:space="preserve">
+    <value>filtri, ordinare, etichette, azzera filtri, opzioni di visualizzazione, per pagina</value>
+  </data>
+  <data name="Help_Browse_Dates_Title" xml:space="preserve">
+    <value>Trovare mod nuovi o aggiornati di recente</value>
+  </data>
+  <data name="Help_Browse_Dates_Step1" xml:space="preserve">
+    <value>In {0}, apri {1}, poi {2} per quando un mod è uscito la prima volta, oppure {3} per la sua ultima versione.</value>
+  </data>
+  <data name="Help_Browse_Dates_Step2" xml:space="preserve">
+    <value>Scegli un periodo come {0}, oppure {1} per scegliere tu i giorni.</value>
+  </data>
+  <data name="Help_Browse_Dates_Step3" xml:space="preserve">
+    <value>Sotto {0}, scegli {1} per cercare solo nei nomi dei mod.</value>
+  </data>
+  <data name="Help_Browse_Dates_Keywords" xml:space="preserve">
+    <value>nuovi mod, recenti, pubblicato, aggiornato, data, cerca in, titolo</value>
+  </data>
+  <data name="Help_Browse_Follow_Title" xml:space="preserve">
+    <value>Seguire un autore</value>
+  </data>
+  <data name="Help_Browse_Follow_Step1" xml:space="preserve">
+    <value>Fai clic sul nome di un autore - sulla scheda di un mod, nei suoi dettagli o in un elenco - per aprire la sua pagina.</value>
+  </data>
+  <data name="Help_Browse_Follow_Step2" xml:space="preserve">
+    <value>Premi {0}. In {1} puoi anche fare clic destro su un mod e seguirne l'autore da lì.</value>
+  </data>
+  <data name="Help_Browse_Follow_Step3" xml:space="preserve">
+    <value>Per vedere solo i loro mod in {0}, apri {1} e spunta {2}.</value>
+  </data>
+  <data name="Help_Browse_Follow_Note" xml:space="preserve">
+    <value>Con le notifiche degli aggiornamenti attive, ti viene detto quando qualcuno che segui pubblica un nuovo mod. Tutti quelli che segui sono elencati in {0}, sotto {1}.</value>
+  </data>
+  <data name="Help_Browse_Follow_Keywords" xml:space="preserve">
+    <value>seguire, autore, creatore, nuovi mod, notifica, smetti di seguire</value>
+  </data>
+  <data name="Help_Browse_Details_Title" xml:space="preserve">
+    <value>Leggere la descrizione completa di un mod</value>
+  </data>
+  <data name="Help_Browse_Details_Step1" xml:space="preserve">
+    <value>In {0} o {1}, fai clic sulla scheda di un mod per aprirne i dettagli.</value>
+  </data>
+  <data name="Help_Browse_Details_Step2" xml:space="preserve">
+    <value>La sua descrizione da sp-mod è mostrata per intero, con immagini, tabelle e link.</value>
+  </data>
+  <data name="Help_Browse_Details_Note" xml:space="preserve">
+    <value>Link, immagini e video si aprono nel browser.</value>
+  </data>
+  <data name="Help_Browse_Details_Keywords" xml:space="preserve">
+    <value>descrizione, dettagli, leggi di più, immagini, informazioni</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Title" xml:space="preserve">
+    <value>Vedere quali mod sono pronti per un SPT più recente</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Step1" xml:space="preserve">
+    <value>Apri {0}. In alto, apri {1}.</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Step2" xml:space="preserve">
+    <value>Scegli la versione accanto a {0}. Per ogni mod che hai è indicato se funziona, se va prima aggiornato o se non è ancora pronto.</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Note" xml:space="preserve">
+    <value>È solo un controllo: non viene installato né modificato nulla.</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Keywords" xml:space="preserve">
+    <value>aggiornare SPT, nuova versione di SPT, pronto, compatibile, passare</value>
+  </data>
+  <data name="Common_RestoreDefaults" xml:space="preserve">
+    <value>Ripristina i miei predefiniti</value>
+  </data>
+  <data name="Common_RestoreDefaultsToolTip" xml:space="preserve">
+    <value>Riporta filtri, ordinamento e numero per pagina a ciò che hai salvato l'ultima volta come predefinito di questa pagina. Se non hai salvato nulla, fa come «Azzera filtri».</value>
   </data>
 </root>

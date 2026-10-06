@@ -227,9 +227,8 @@
                     Made to behave like the ComboBoxes beside it (WPF-UI 4.3's DefaultComboBoxStyle,
                     read from its BAML): the chevron is part of the template and turns 180 degrees
                     over 167ms as the panel opens and back as it closes, and the hover fill is the
-                    ComboBox's. Used by the Filters button, which opens a side panel (see
-                    Behaviors/FilterSidePanel), and by Browse's SPT version dropdown, whose popup needs
-                    Behaviors/DropDownToggle so a click on the button closes it rather than reopening it.
+                    ComboBox's. Used by the Filters and view options button, which opens a side panel
+                    (see Behaviors/FilterSidePanel).
                 -->
                 <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                 <Setter Property="MinWidth" Value="150" />
@@ -302,47 +301,6 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
-            </Style>
-
-            <!--
-                The panel itself, opening the way a ComboBox's list does (WPF-UI 4.3's DropDownBorder):
-                slid down 90px into place over 167ms, easing out. Loaded fires each time the popup
-                opens, since its content is put into a fresh window every time. The slide happens
-                inside the popup's own window, so the part still above it is simply not drawn yet.
-            -->
-            <Style x:Key="FilterDropDownPopup" TargetType="Border">
-                <Setter Property="RenderTransform">
-                    <Setter.Value>
-                        <TranslateTransform Y="0" />
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Padding" Value="0,4,0,6" />
-                <Setter Property="Background" Value="{DynamicResource ComboBoxDropDownBackground}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource ComboBoxDropDownBorderBrush}" />
-                <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="CornerRadius" Value="{DynamicResource PopupCornerRadius}" />
-                <Setter Property="Effect">
-                    <Setter.Value>
-                        <DropShadowEffect BlurRadius="20" Direction="270" Opacity="0.135" ShadowDepth="10" Color="#202020" />
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation
-                                    Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
-                                    From="-90"
-                                    To="0"
-                                    Duration="00:00:00.167">
-                                    <DoubleAnimation.EasingFunction>
-                                        <CircleEase EasingMode="EaseOut" />
-                                    </DoubleAnimation.EasingFunction>
-                                </DoubleAnimation>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </Style.Triggers>
             </Style>
 
             <!-- The Filters side panel on Installed and Browse: the dropdown's surface, without the

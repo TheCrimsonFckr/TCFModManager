@@ -139,7 +139,7 @@
     <comment>Placeholder in the search box. "@author" is typed syntax, not a word - leave it as it is and translate only the sentence around it.</comment>
   </data>
   <data name="Common_ClearFiltersToolTip" xml:space="preserve">
-    <value>Puts every filter back to what this page opens with.</value>
+    <value>Puts every filter and view option back to the app's own settings.</value>
   </data>
   <data name="Common_SortToolTip" xml:space="preserve">
     <value>Sort order</value>
@@ -5575,7 +5575,7 @@ This was written to:
     <value>A tick beside SPT on a card means its newest version runs on yours; a cross means it doesn't.</value>
   </data>
   <data name="Help_Browse_Compatible_Step3" xml:space="preserve">
-    <value>To see more, open the SPT version dropdown at the top and tick other versions, or press {0}.</value>
+    <value>To see more, open {0}, then tick other versions under {1} - or press {2}.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Browse_Install_Title" xml:space="preserve">
@@ -8014,5 +8014,114 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
   <data name="NewModsToast_ItemFormat" xml:space="preserve">
     <value>{0} by {1}</value>
     <comment>One new mod in the notification. {0} the mod, {1} the author.</comment>
+  </data>
+  <data name="Filter_SectionSptVersion" xml:space="preserve">
+    <value>SPT version</value>
+    <comment>Heading of the Browse filter section ticking which SPT release lines to show mods for.</comment>
+  </data>
+  <data name="Help_Browse_Filters_Title" xml:space="preserve">
+    <value>Filter, sort and clear what's listed</value>
+  </data>
+  <data name="Help_Browse_Filters_Step1" xml:space="preserve">
+    <value>On {0} or {1}, press {2}. A panel opens down the left with every filter, the sort order and how many show per page.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Filters_Step2" xml:space="preserve">
+    <value>Click a section's name to open it, then pick what you want. The list changes straight away.</value>
+  </data>
+  <data name="Help_Browse_Filters_Step3" xml:space="preserve">
+    <value>Each filter you set shows as a pill above the list. Press a pill's X to drop that filter, or {0} to drop them all.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Filters_Note" xml:space="preserve">
+    <value>{0} makes the page open the way it's set now, and {1} brings that back whenever you like. {2} always goes back to the app's own settings.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Filters_Keywords" xml:space="preserve">
+    <value>filters, sort, pills, clear filters, view options, per page</value>
+    <comment>Comma-separated words the Help search also matches this topic on.</comment>
+  </data>
+  <data name="Help_Browse_Dates_Title" xml:space="preserve">
+    <value>Find new or recently updated mods</value>
+  </data>
+  <data name="Help_Browse_Dates_Step1" xml:space="preserve">
+    <value>On {0}, open {1}, then open {2} for when a mod first came out, or {3} for its latest release.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Dates_Step2" xml:space="preserve">
+    <value>Pick a span such as {0}, or {1} to choose the days yourself.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Dates_Step3" xml:space="preserve">
+    <value>Under {0}, pick {1} to search mod names only.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Dates_Keywords" xml:space="preserve">
+    <value>new mods, recent, published, updated, date, search in, title</value>
+    <comment>Comma-separated words the Help search also matches this topic on.</comment>
+  </data>
+  <data name="Help_Browse_Follow_Title" xml:space="preserve">
+    <value>Follow an author</value>
+  </data>
+  <data name="Help_Browse_Follow_Step1" xml:space="preserve">
+    <value>Click an author's name - on a mod's card, in its details or in a list - to open their page.</value>
+  </data>
+  <data name="Help_Browse_Follow_Step2" xml:space="preserve">
+    <value>Press {0}. On {1} you can also right-click a mod and follow its author from there.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Follow_Step3" xml:space="preserve">
+    <value>To list only their mods on {0}, open {1} and tick {2}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Follow_Note" xml:space="preserve">
+    <value>With update notifications on, you're told when someone you follow publishes a new mod. Everyone you follow is listed in {0} under {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Follow_Keywords" xml:space="preserve">
+    <value>follow, author, creator, new mods, notify, unfollow</value>
+    <comment>Comma-separated words the Help search also matches this topic on.</comment>
+  </data>
+  <data name="Help_Browse_Details_Title" xml:space="preserve">
+    <value>Read a mod's full description</value>
+  </data>
+  <data name="Help_Browse_Details_Step1" xml:space="preserve">
+    <value>On {0} or {1}, click a mod's card to open its details.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Details_Step2" xml:space="preserve">
+    <value>Its description from sp-mod is shown in full, with its pictures, tables and links.</value>
+  </data>
+  <data name="Help_Browse_Details_Note" xml:space="preserve">
+    <value>Links, pictures and videos open in your browser.</value>
+  </data>
+  <data name="Help_Browse_Details_Keywords" xml:space="preserve">
+    <value>description, details, read more, pictures, about</value>
+    <comment>Comma-separated words the Help search also matches this topic on.</comment>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Title" xml:space="preserve">
+    <value>See which mods are ready for a newer SPT</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Step1" xml:space="preserve">
+    <value>Open {0}. At the top, open {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Step2" xml:space="preserve">
+    <value>Pick the release beside {0}. Each mod you have says whether it runs on it, needs an update first or isn't ready yet.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Note" xml:space="preserve">
+    <value>It's only a check - nothing is installed or changed.</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Keywords" xml:space="preserve">
+    <value>upgrade SPT, new SPT version, ready, compatible, move</value>
+    <comment>Comma-separated words the Help search also matches this topic on.</comment>
+  </data>
+  <data name="Common_RestoreDefaults" xml:space="preserve">
+    <value>Restore my defaults</value>
+    <comment>Button in the Filters and view options panel putting the page back to its saved defaults.</comment>
+  </data>
+  <data name="Common_RestoreDefaultsToolTip" xml:space="preserve">
+    <value>Puts the filters, sort and per-page back to what you last saved as this page's default. With nothing saved, it does the same as Clear filters.</value>
   </data>
 </root>

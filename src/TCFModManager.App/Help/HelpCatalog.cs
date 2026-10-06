@@ -64,8 +64,28 @@ internal static class HelpCatalog
             Topic("browse.compatible", () => Strings.Help_Browse_Compatible_Title,
                 Step(() => Strings.Help_Browse_Compatible_Step1, () => Strings.Nav_Browse),
                 Step(() => Strings.Help_Browse_Compatible_Step2),
-                Step(() => Strings.Help_Browse_Compatible_Step3, () => Strings.Common_ClearFilters))
+                Step(() => Strings.Help_Browse_Compatible_Step3,
+                    () => Strings.Filter_More, () => Strings.Filter_SectionSptVersion, () => Strings.Common_ClearFilters))
                 .WithKeywords(() => Strings.Help_Browse_Compatible_Keywords),
+
+            Topic("browse.filters", () => Strings.Help_Browse_Filters_Title,
+                Step(() => Strings.Help_Browse_Filters_Step1,
+                    () => Strings.Nav_Browse, () => Strings.Nav_Installed, () => Strings.Filter_More),
+                Step(() => Strings.Help_Browse_Filters_Step2),
+                Step(() => Strings.Help_Browse_Filters_Step3, () => Strings.Common_ClearFilters))
+                .WithNote(() => Strings.Help_Browse_Filters_Note,
+                    () => Strings.Common_SaveAsDefault, () => Strings.Common_RestoreDefaults, () => Strings.Common_ClearFilters)
+                .WithKeywords(() => Strings.Help_Browse_Filters_Keywords),
+
+            Topic("browse.dates", () => Strings.Help_Browse_Dates_Title,
+                Step(() => Strings.Help_Browse_Dates_Step1,
+                    () => Strings.Nav_Browse, () => Strings.Filter_More,
+                    () => Strings.Filter_SectionPublished, () => Strings.Filter_SectionUpdated),
+                Step(() => Strings.Help_Browse_Dates_Step2,
+                    () => Strings.Filter_DateLast30Days, () => Strings.Filter_DateCustom),
+                Step(() => Strings.Help_Browse_Dates_Step3,
+                    () => Strings.Filter_SectionSearchIn, () => Strings.Filter_SearchTitleOnly))
+                .WithKeywords(() => Strings.Help_Browse_Dates_Keywords),
 
             Topic("browse.install",
                 ByMode(() => Strings.Help_Browse_Install_Title, () => Strings.Help_Browse_Install_Title_Monitor),
@@ -82,6 +102,20 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Browse_Author_Step1, () => Strings.Nav_Browse),
                 Step(() => Strings.Help_Browse_Author_Step2))
                 .WithKeywords(() => Strings.Help_Browse_Author_Keywords),
+
+            Topic("browse.follow", () => Strings.Help_Browse_Follow_Title,
+                Step(() => Strings.Help_Browse_Follow_Step1),
+                Step(() => Strings.Help_Browse_Follow_Step2, () => Strings.Author_Follow, () => Strings.Nav_Installed),
+                Step(() => Strings.Help_Browse_Follow_Step3,
+                    () => Strings.Nav_Browse, () => Strings.Filter_More, () => Strings.Filter_ByFollowedAuthors))
+                .WithNote(() => Strings.Help_Browse_Follow_Note, () => Strings.Nav_Options, () => Strings.Followed_Header)
+                .WithKeywords(() => Strings.Help_Browse_Follow_Keywords),
+
+            Topic("browse.details", () => Strings.Help_Browse_Details_Title,
+                Step(() => Strings.Help_Browse_Details_Step1, () => Strings.Nav_Browse, () => Strings.Nav_Installed),
+                Step(() => Strings.Help_Browse_Details_Step2))
+                .WithNote(() => Strings.Help_Browse_Details_Note)
+                .WithKeywords(() => Strings.Help_Browse_Details_Keywords),
 
             Topic("browse.hideinstalled", () => Strings.Help_Browse_HideInstalled_Title,
                 Step(() => Strings.Help_Browse_HideInstalled_Step1,
@@ -284,6 +318,12 @@ internal static class HelpCatalog
 
         new("dependencies", () => Strings.Nav_Dependencies, SymbolRegular.Branch24, typeof(DependenciesPage),
         [
+            Topic("dependencies.upgrade", () => Strings.Help_Dependencies_Upgrade_Title,
+                Step(() => Strings.Help_Dependencies_Upgrade_Step1, () => Strings.Nav_Dependencies, () => Strings.Upgrade_Header),
+                Step(() => Strings.Help_Dependencies_Upgrade_Step2, () => Strings.Upgrade_Target))
+                .WithNote(() => Strings.Help_Dependencies_Upgrade_Note)
+                .WithKeywords(() => Strings.Help_Dependencies_Upgrade_Keywords),
+
             Topic("dependencies.conflicts", () => Strings.Help_Dependencies_Conflicts_Title,
                 Step(() => Strings.Help_Dependencies_Conflicts_Step1,
                     () => Strings.Nav_Dependencies, () => Strings.Conflicts_Header),

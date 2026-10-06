@@ -496,7 +496,7 @@ Il a été écrit dans :
     <value>Réinitialiser les filtres</value>
   </data>
   <data name="Common_ClearFiltersToolTip" xml:space="preserve">
-    <value>Remet chaque filtre dans l'état d'ouverture de la page.</value>
+    <value>Remet tous les filtres et options d'affichage aux réglages d'origine de l'application.</value>
   </data>
   <data name="Common_Close" xml:space="preserve">
     <value>Fermer</value>
@@ -4711,7 +4711,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Une coche à côté de SPT sur une fiche veut dire que sa dernière version fonctionne sur la vôtre ; une croix, qu'elle ne fonctionne pas.</value>
   </data>
   <data name="Help_Browse_Compatible_Step3" xml:space="preserve">
-    <value>Pour en voir plus, ouvrez la liste des versions de SPT en haut et cochez d'autres versions, ou cliquez sur {0}.</value>
+    <value>Pour en voir plus, ouvrez {0}, puis cochez d'autres versions sous {1} - ou cliquez sur {2}.</value>
   </data>
   <data name="Help_Browse_Install_Title" xml:space="preserve">
     <value>Installer un mod et les mods dont il a besoin</value>
@@ -6648,5 +6648,95 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
   </data>
   <data name="NewModsToast_ItemFormat" xml:space="preserve">
     <value>{0} par {1}</value>
+  </data>
+  <data name="Filter_SectionSptVersion" xml:space="preserve">
+    <value>Version de SPT</value>
+  </data>
+  <data name="Help_Browse_Filters_Title" xml:space="preserve">
+    <value>Filtrer, trier et effacer les filtres</value>
+  </data>
+  <data name="Help_Browse_Filters_Step1" xml:space="preserve">
+    <value>Dans {0} ou {1}, cliquez sur {2}. Un panneau s'ouvre à gauche avec tous les filtres, le tri et le nombre affiché par page.</value>
+  </data>
+  <data name="Help_Browse_Filters_Step2" xml:space="preserve">
+    <value>Cliquez sur le nom d'une section pour l'ouvrir, puis choisissez ce que vous voulez. La liste change aussitôt.</value>
+  </data>
+  <data name="Help_Browse_Filters_Step3" xml:space="preserve">
+    <value>Chaque filtre défini apparaît sous forme de pastille au-dessus de la liste. Cliquez sur le X d'une pastille pour retirer ce filtre, ou sur {0} pour tous les retirer.</value>
+  </data>
+  <data name="Help_Browse_Filters_Note" xml:space="preserve">
+    <value>{0} fait s'ouvrir la page telle qu'elle est réglée maintenant, et {1} rétablit ces réglages quand vous voulez. {2} revient toujours aux réglages d'origine de l'application.</value>
+  </data>
+  <data name="Help_Browse_Filters_Keywords" xml:space="preserve">
+    <value>filtres, trier, pastilles, effacer les filtres, options d'affichage, par page</value>
+  </data>
+  <data name="Help_Browse_Dates_Title" xml:space="preserve">
+    <value>Trouver des mods nouveaux ou mis à jour récemment</value>
+  </data>
+  <data name="Help_Browse_Dates_Step1" xml:space="preserve">
+    <value>Dans {0}, ouvrez {1}, puis {2} pour la date de première publication d'un mod, ou {3} pour sa dernière version.</value>
+  </data>
+  <data name="Help_Browse_Dates_Step2" xml:space="preserve">
+    <value>Choisissez une période comme {0}, ou {1} pour choisir les jours vous-même.</value>
+  </data>
+  <data name="Help_Browse_Dates_Step3" xml:space="preserve">
+    <value>Sous {0}, choisissez {1} pour ne chercher que dans les noms des mods.</value>
+  </data>
+  <data name="Help_Browse_Dates_Keywords" xml:space="preserve">
+    <value>nouveaux mods, récent, publié, mis à jour, date, rechercher dans, titre</value>
+  </data>
+  <data name="Help_Browse_Follow_Title" xml:space="preserve">
+    <value>Suivre un auteur</value>
+  </data>
+  <data name="Help_Browse_Follow_Step1" xml:space="preserve">
+    <value>Cliquez sur le nom d'un auteur - sur la carte d'un mod, dans ses détails ou dans une liste - pour ouvrir sa page.</value>
+  </data>
+  <data name="Help_Browse_Follow_Step2" xml:space="preserve">
+    <value>Cliquez sur {0}. Dans {1}, vous pouvez aussi faire un clic droit sur un mod et suivre son auteur depuis ce menu.</value>
+  </data>
+  <data name="Help_Browse_Follow_Step3" xml:space="preserve">
+    <value>Pour n'afficher que leurs mods dans {0}, ouvrez {1} et cochez {2}.</value>
+  </data>
+  <data name="Help_Browse_Follow_Note" xml:space="preserve">
+    <value>Avec les notifications de mise à jour activées, vous êtes prévenu quand quelqu'un que vous suivez publie un nouveau mod. Toutes les personnes suivies sont listées dans {0}, sous {1}.</value>
+  </data>
+  <data name="Help_Browse_Follow_Keywords" xml:space="preserve">
+    <value>suivre, auteur, créateur, nouveaux mods, notifier, ne plus suivre</value>
+  </data>
+  <data name="Help_Browse_Details_Title" xml:space="preserve">
+    <value>Lire la description complète d'un mod</value>
+  </data>
+  <data name="Help_Browse_Details_Step1" xml:space="preserve">
+    <value>Dans {0} ou {1}, cliquez sur la carte d'un mod pour ouvrir ses détails.</value>
+  </data>
+  <data name="Help_Browse_Details_Step2" xml:space="preserve">
+    <value>Sa description sur sp-mod s'affiche en entier, avec ses images, tableaux et liens.</value>
+  </data>
+  <data name="Help_Browse_Details_Note" xml:space="preserve">
+    <value>Les liens, images et vidéos s'ouvrent dans votre navigateur.</value>
+  </data>
+  <data name="Help_Browse_Details_Keywords" xml:space="preserve">
+    <value>description, détails, en savoir plus, images, à propos</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Title" xml:space="preserve">
+    <value>Voir quels mods sont prêts pour un SPT plus récent</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Step1" xml:space="preserve">
+    <value>Ouvrez {0}. Tout en haut, ouvrez {1}.</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Step2" xml:space="preserve">
+    <value>Choisissez la version à côté de {0}. Chaque mod installé indique s'il fonctionne dessus, s'il doit d'abord être mis à jour ou s'il n'est pas encore prêt.</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Note" xml:space="preserve">
+    <value>Ce n'est qu'une vérification - rien n'est installé ni modifié.</value>
+  </data>
+  <data name="Help_Dependencies_Upgrade_Keywords" xml:space="preserve">
+    <value>mettre à niveau SPT, nouvelle version de SPT, prêt, compatible, passer</value>
+  </data>
+  <data name="Common_RestoreDefaults" xml:space="preserve">
+    <value>Rétablir mes réglages par défaut</value>
+  </data>
+  <data name="Common_RestoreDefaultsToolTip" xml:space="preserve">
+    <value>Remet les filtres, le tri et le nombre par page à ce que vous avez enregistré en dernier comme réglage par défaut de cette page. Si rien n'est enregistré, fait comme « Réinitialiser les filtres ».</value>
   </data>
 </root>

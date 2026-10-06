@@ -371,7 +371,14 @@ public partial class InstalledViewModel : LocalizedViewModel
     // rather than set from Options - see Core's PageDefaults. Null on an install that has never
     // saved one, in which case every Default* helper below answers with the app's own default.
     //
-    private readonly InstalledPageDefaults? _defaults;
+    // Not readonly: Save as default and Restore my defaults both bring it up to date.
+    private InstalledPageDefaults? _defaults;
+
+    // What the Default* helpers read: the saved defaults, except while Clear filters runs, when
+    // they answer with the app's own (see ClearFilters).
+    private InstalledPageDefaults? Defaults => _clearingToAppDefaults ? null : _defaults;
+
+    private bool _clearingToAppDefaults;
 
     //
     // Whether the saved category/group defaults have been handed to their dropdowns yet. Both lists
@@ -387,37 +394,37 @@ public partial class InstalledViewModel : LocalizedViewModel
     private const string LegacyRecentlyInstalled = "RecentlyInstalled";
 
     private UpdateFilterItem DefaultUpdateFilter() =>
-        SavedFilterDefaults.Parse<UpdateFilter>(_defaults?.UpdateStatus) is { } value
+        SavedFilterDefaults.Parse<UpdateFilter>(Defaults?.UpdateStatus) is { } value
             ? UpdateFilterOptions.FirstOrDefault(o => o.Value == value) ?? UpdateFilterOptions[0]
             : UpdateFilterOptions[0];
 
     private IReadOnlyCollection<string>? DefaultAttributes() =>
-        _defaults?.UpdateStatus == LegacyRecentlyInstalled
-            ? [.. _defaults.Attributes, nameof(ModAttributeFilter.InstalledRecently)]
-            : _defaults?.Attributes;
+        Defaults?.UpdateStatus == LegacyRecentlyInstalled
+            ? [.. Defaults.Attributes, nameof(ModAttributeFilter.InstalledRecently)]
+            : Defaults?.Attributes;
 
     private EnabledFilterItem DefaultEnabledFilter() =>
-        SavedFilterDefaults.Parse<EnabledFilter>(_defaults?.Enabled) is { } value
+        SavedFilterDefaults.Parse<EnabledFilter>(Defaults?.Enabled) is { } value
             ? EnabledFilterOptions.FirstOrDefault(o => o.Value == value) ?? EnabledFilterOptions[0]
             : EnabledFilterOptions[0];
 
     private ModSortItem DefaultSortOption() =>
-        SavedFilterDefaults.Parse<ModSortOption>(_defaults?.Sort) is { } value
+        SavedFilterDefaults.Parse<ModSortOption>(Defaults?.Sort) is { } value
             ? SortOptions.FirstOrDefault(o => o.Value == value) ?? SortOptions[0]
-            : _defaults?.Sort == LegacyRecentlyInstalled
+            : Defaults?.Sort == LegacyRecentlyInstalled
                 ? SortOptions.First(o => o.Value == ModSortOption.InstalledNewest)
                 : SortOptions[0];
 
     private GroupSortItem DefaultGroupSortOption() =>
-        SavedFilterDefaults.Parse<GroupSortOption>(_defaults?.GroupSort) is { } value
+        SavedFilterDefaults.Parse<GroupSortOption>(Defaults?.GroupSort) is { } value
             ? GroupSortOptions.FirstOrDefault(o => o.Value == value) ?? GroupSortOptions[0]
             : GroupSortOptions[0];
 
     private InstalledViewMode DefaultViewMode() =>
-        SavedFilterDefaults.Parse<InstalledViewMode>(_defaults?.ViewMode) ?? InstalledViewMode.Cards;
+        SavedFilterDefaults.Parse<InstalledViewMode>(Defaults?.ViewMode) ?? InstalledViewMode.Cards;
 
     private int DefaultPageSize() =>
-        SavedFilterDefaults.PageSize(_defaults?.PageSize, PageSizeOptions, InstalledViewModel.DefaultPageSizeValue);
+        SavedFilterDefaults.PageSize(Defaults?.PageSize, PageSizeOptions, InstalledViewModel.DefaultPageSizeValue);
 
     //
     // Described rather than looked up, because the entry it describes may not exist: the category
@@ -426,9 +433,9 @@ public partial class InstalledViewModel : LocalizedViewModel
     // and falls back to "All categories" when there isn't.
     //
     private CategoryFilterItem DefaultCategory() =>
-        string.IsNullOrWhiteSpace(_defaults?.Category)
+        string.IsNullOrWhiteSpace(Defaults?.Category)
             ? CategoryFilterItem.All
-            : new CategoryFilterItem(_defaults.Category!, _defaults.Category);
+            : new CategoryFilterItem(Defaults.Category!, Defaults.Category);
 
     //
     // Same again for groups. A saved group that has since been deleted reads as "All groups" -
@@ -436,7 +443,7 @@ public partial class InstalledViewModel : LocalizedViewModel
     //
     private GroupFilterItem DefaultGroupFilter()
     {
-        var saved = _defaults?.Group;
+        var saved = Defaults?.Group;
 
         if (string.IsNullOrWhiteSpace(saved)) return GroupFilterItem.All;
         if (saved.Equals("ungrouped", StringComparison.OrdinalIgnoreCase)) return GroupFilterItem.Ungrouped;
@@ -702,20 +709,34 @@ public partial class InstalledViewModel : LocalizedViewModel
     }
 
     //
-    // Resets every filter/search control back to this page's opening default, then re-applies once
-    // immediately.
+    // Two ways back (Chris, 2026-10-06), the same pair as Browse's:
     //
-    // "Default" means whatever SaveAsDefault last captured, not the app's own - once you have told
-    // the page how you want it to open, that is what clearing the filters should give you back.
-    // With nothing saved the two are the same thing, which is what every Default* helper answers.
+    // Clear filters - every filter, sort and search control back to the app's own defaults, so
+    // every pill goes. Defaults reads null while it runs.
+    //
+    // Restore my defaults - back to what Save as default last captured, read from disk each time.
+    // With nothing saved it is the same as Clear filters.
     //
     // The view mode is deliberately left alone: which of Cards/Groups/List you are looking at is
     // not a filter, and a button in the filter row that also switched view would be a surprise.
     //
     [RelayCommand]
-    private void ClearFilters()
+    private void ClearFilters() => ResetFilters(toSaved: false);
+
+    [RelayCommand]
+    private void RestoreDefaults()
+    {
+        _defaults = new SettingsService().Load().InstalledDefaults;
+        ResetFilters(toSaved: true);
+        AppLog.Info("Installed", _defaults is null
+            ? "restore defaults: none saved, cleared to the app's own"
+            : "restored the saved filters");
+    }
+
+    private void ResetFilters(bool toSaved)
     {
         _suppressAutoApplyFilter = true;
+        _clearingToAppDefaults = !toSaved;
         try
         {
             SearchText = string.Empty;
@@ -733,6 +754,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         }
         finally
         {
+            _clearingToAppDefaults = false;
             _suppressAutoApplyFilter = false;
         }
 
@@ -756,7 +778,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         var service = new SettingsService();
         var settings = service.Load();
 
-        settings.InstalledDefaults = new InstalledPageDefaults
+        settings.InstalledDefaults = _defaults = new InstalledPageDefaults
         {
             ViewMode = ViewMode.ToString(),
             UpdateStatus = SelectedUpdateFilter.Value.ToString(),

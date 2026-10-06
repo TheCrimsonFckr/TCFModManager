@@ -127,19 +127,29 @@ public partial class BrowseViewModel : LocalizedViewModel
     // rather than set from Options - see Core's PageDefaults. Null on an install that has never
     // saved one, in which case every Default* helper below answers with the app's own default.
     //
-    private readonly BrowsePageDefaults? _defaults;
+    // Not readonly: Save as default and Restore my defaults both bring it up to date.
+    private BrowsePageDefaults? _defaults;
 
     // Whether the saved category default has reached its dropdown yet. The list is built from the
     // catalog, so the first build is the earliest moment it can be resolved to a real entry.
     private bool _categoryDefaultApplied;
 
+    //
+    // What the Default* helpers below read: the saved defaults, except while Clear filters runs.
+    // Clearing puts the page back to the app's own defaults, not the saved ones, so every pill goes
+    // (Chris, 2026-10-06) - the saved defaults are still what the page opens at next time.
+    //
+    private BrowsePageDefaults? Defaults => _clearingToAppDefaults ? null : _defaults;
+
+    private bool _clearingToAppDefaults;
+
     private SortOptionItem DefaultSortOption() =>
-        SavedFilterDefaults.Parse<ModSortOrder>(_defaults?.Sort) is { } value
+        SavedFilterDefaults.Parse<ModSortOrder>(Defaults?.Sort) is { } value
             ? SortOptions.FirstOrDefault(o => o.Value == value) ?? SortOptions[0]
             : SortOptions[0];
 
     private FeaturedFilterItem DefaultFeaturedFilter() =>
-        SavedFilterDefaults.Parse<FeaturedFilter>(_defaults?.Featured) is { } value
+        SavedFilterDefaults.Parse<FeaturedFilter>(Defaults?.Featured) is { } value
             ? FeaturedFilterOptions.FirstOrDefault(o => o.Value == value) ?? FeaturedFilterOptions[0]
             : FeaturedFilterOptions[0];
 
@@ -150,19 +160,19 @@ public partial class BrowseViewModel : LocalizedViewModel
             : DateRangeOptions[0];
 
     private SearchScopeItem DefaultSearchScope() =>
-        SavedFilterDefaults.Parse<SearchScope>(_defaults?.SearchScope) is { } value
+        SavedFilterDefaults.Parse<SearchScope>(Defaults?.SearchScope) is { } value
             ? SearchScopeOptions.FirstOrDefault(o => o.Value == value) ?? SearchScopeOptions[0]
             : SearchScopeOptions[0];
 
     private int DefaultPageSize() =>
-        SavedFilterDefaults.PageSize(_defaults?.PageSize, PageSizeOptions, DefaultPageSizeValue);
+        SavedFilterDefaults.PageSize(Defaults?.PageSize, PageSizeOptions, DefaultPageSizeValue);
 
     // Described rather than looked up: the entry may not be in the list yet, or at all if The Forge
     // has stopped using that category. CategoryFilterItem.SameAs matches on the title.
     private CategoryFilterItem DefaultCategory() =>
-        string.IsNullOrWhiteSpace(_defaults?.Category)
+        string.IsNullOrWhiteSpace(Defaults?.Category)
             ? CategoryFilterItem.All
-            : new CategoryFilterItem(_defaults.Category!, _defaults.Category);
+            : new CategoryFilterItem(Defaults.Category!, Defaults.Category);
 
     // Set while ClearFilters is resetting several properties at once, so each individual
     // OnXxxChanged below doesn't run its own ApplyFilter.
@@ -338,7 +348,11 @@ public partial class BrowseViewModel : LocalizedViewModel
         + (SelectedFeaturedFilter.Value == FeaturedFilter.Include ? 0 : 1)
         + (DateRangeFilter.IsActive(SelectedPublishedRange.Value, PublishedFrom, PublishedUntil) ? 1 : 0)
         + (DateRangeFilter.IsActive(SelectedUpdatedRange.Value, UpdatedFrom, UpdatedUntil) ? 1 : 0)
-        + (SelectedSearchScope.Value == SearchScope.TitleAndTeaser ? 0 : 1);
+        + (SelectedSearchScope.Value == SearchScope.TitleAndTeaser ? 0 : 1)
+        + (SptVersionsChanged ? 1 : 0);
+
+    // Whether the SPT version ticks differ from the app's own - just the line this install is on.
+    private bool SptVersionsChanged => SptVersionOptions.Any(o => o.IsSelected != o.IsInstalledLine);
 
     //
     // The filters narrowing the list, as pills above the results - see ActiveFilterPill. Rebuilt
@@ -410,6 +424,15 @@ public partial class BrowseViewModel : LocalizedViewModel
         if (SelectedSearchScope.Value != SearchScope.TitleAndTeaser)
             ActiveFilters.Add(new(Pill(Strings.Filter_SectionSearchIn, SelectedSearchScope),
                 () => SelectedSearchScope = SearchScopeOptions[0]));
+
+        if (SptVersionsChanged)
+        {
+            var ticked = SptVersionOptions.Where(o => o.IsSelected).Select(o => o.Label).ToList();
+            ActiveFilters.Add(new(
+                Pill(Strings.Filter_SectionSptVersion,
+                    ticked.Count == 0 ? Strings.Browse_AllSptVersions : string.Join(Strings.Common_ListSeparator, ticked)),
+                ResetSptVersions));
+        }
 
         OnPropertyChanged(nameof(HasActiveFilters));
     }
@@ -592,37 +615,57 @@ public partial class BrowseViewModel : LocalizedViewModel
     }
 
     //
-    // Resets every filter/sort control back to this page's opening default, then re-applies once
-    // immediately.
+    // Two ways back (Chris, 2026-10-06):
     //
-    // "Default" means whatever SaveAsDefault last captured, not the app's own - once you have told
-    // the page how you want it to open, that is what clearing the filters should give you back.
-    // The SPT version boxes already worked this way, through SptVersionOption.IsDefault; the saved
-    // defaults are folded into that same flag as the options are built, so this line is unchanged.
+    // Clear filters - every filter and view option back to the app's own defaults, so every pill
+    // goes. Defaults reads null while it runs, so each Default* helper answers with the app's own,
+    // and the SPT version ticks go back to the line this install is on.
+    //
+    // Restore my defaults - back to what Save as default last captured, which is also what the page
+    // opens at. Read from disk each time, so a save from the page or a reset in Options since the
+    // page opened is what you get. With nothing saved it is the same as Clear filters.
+    //
+    // Either re-applies once, immediately.
     //
     [RelayCommand]
-    private void ClearFilters()
+    private void ClearFilters() => ResetFilters(toSaved: false);
+
+    [RelayCommand]
+    private void RestoreDefaults()
+    {
+        _defaults = new SettingsService().Load().BrowseDefaults;
+        ResetFilters(toSaved: true);
+        AppLog.Info("Browse", _defaults is null
+            ? "restore defaults: none saved, cleared to the app's own"
+            : "restored the saved filters");
+    }
+
+    private void ResetFilters(bool toSaved)
     {
         _suppressAutoApplyFilter = true;
+        _clearingToAppDefaults = !toSaved;
         try
         {
             SearchText = string.Empty;
-            foreach (var option in SptVersionOptions) option.IsSelected = option.IsDefault;
+            var savedVersions = Defaults?.SptVersions;
+            foreach (var option in SptVersionOptions)
+                option.IsSelected = savedVersions is null ? option.IsInstalledLine : savedVersions.Contains(option.Label);
             UpdateSptVersionFilterSummary();
             SelectedSortOption = DefaultSortOption();
             PageSize = DefaultPageSize();
             SelectedFeaturedFilter = DefaultFeaturedFilter();
             SelectedCategory = CategoryOptions.FirstOrDefault(c => c.SameAs(DefaultCategory()))
                 ?? CategoryOptions[0];
-            SavedFilterDefaults.ApplyAttributes(AttributeOptions, _defaults?.Attributes ?? []);
+            SavedFilterDefaults.ApplyAttributes(AttributeOptions, Defaults?.Attributes ?? []);
             UpdateAttributeFilterSummary();
             PublishedFrom = PublishedUntil = UpdatedFrom = UpdatedUntil = null;
-            SelectedPublishedRange = DefaultDateRange(_defaults?.Published);
-            SelectedUpdatedRange = DefaultDateRange(_defaults?.Updated);
+            SelectedPublishedRange = DefaultDateRange(Defaults?.Published);
+            SelectedUpdatedRange = DefaultDateRange(Defaults?.Updated);
             SelectedSearchScope = DefaultSearchScope();
         }
         finally
         {
+            _clearingToAppDefaults = false;
             _suppressAutoApplyFilter = false;
         }
 
@@ -645,7 +688,7 @@ public partial class BrowseViewModel : LocalizedViewModel
         var service = new SettingsService();
         var settings = service.Load();
 
-        settings.BrowseDefaults = new BrowsePageDefaults
+        settings.BrowseDefaults = _defaults = new BrowsePageDefaults
         {
             Sort = SelectedSortOption.Value.ToString(),
             Featured = SelectedFeaturedFilter.Value.ToString(),
@@ -1036,13 +1079,13 @@ public partial class BrowseViewModel : LocalizedViewModel
         {
             var isInstalled = label == installedMajorMinor?.Label;
 
-            // Also becomes the option's IsDefault, which is what Clear filters puts back.
+            // Clear filters puts back isInstalled, the app's own; this is only what the page opens at.
             var isSelected = saved is null ? isInstalled : saved.Contains(label);
 
             // The installed option uses the exact detected version; every other option uses ".0"
             // as that release line's representative version.
             var value = isInstalled && !string.IsNullOrWhiteSpace(installedVersion) ? installedVersion! : $"{label}.0";
-            var option = new SptVersionOption(label, value, isSelected);
+            var option = new SptVersionOption(label, value, isSelected, isInstalled);
             option.PropertyChanged += (_, _) =>
             {
                 UpdateSptVersionFilterSummary();
@@ -1088,8 +1131,28 @@ public partial class BrowseViewModel : LocalizedViewModel
 
     private bool _categoryOptionsBuilt;
 
+    // The SPT version pill's X: back to the line this install is on, filtered once.
+    private void ResetSptVersions()
+    {
+        _suppressAutoApplyFilter = true;
+        try
+        {
+            foreach (var option in SptVersionOptions) option.IsSelected = option.IsInstalledLine;
+        }
+        finally
+        {
+            _suppressAutoApplyFilter = false;
+        }
+
+        UpdateSptVersionFilterSummary();
+        if (HasLoadedResults) ApplyFilter();
+    }
+
     private void UpdateSptVersionFilterSummary()
     {
+        // The count on Filters and view options, and the pills, follow the ticks.
+        OnPropertyChanged(nameof(MoreFiltersLabel));
+
         // Carries its own "SPT" now: the leading label that used to supply it is gone, and
         // "All versions" on its own doesn't say versions of what.
         var selected = SptVersionOptions.Where(o => o.IsSelected).Select(o => o.Label).ToList();
