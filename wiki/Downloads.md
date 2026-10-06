@@ -1,4 +1,6 @@
-The install queue. Items process one at a time; each resolves its dependencies and queues those alongside it.
+The install queue. Up to three items download at once while the ones already downloaded install one at a time, in the order they were queued; each resolves its dependencies and queues those alongside it. A download that breaks off is tried again twice, carrying on from where it stopped when the server allows it.
+
+While anything is downloading or installing, a bar along the bottom of the window says what and how far the whole queue has got; click it to come here. It goes a few seconds after the queue finishes.
 
 - Live progress per item
 - **Cancel** on any individual item - cancelling a mod also cancels the dependencies it dragged in
