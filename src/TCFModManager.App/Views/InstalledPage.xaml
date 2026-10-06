@@ -726,9 +726,9 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:InstalledModCardViewModel}">
-                        <!-- Opacity is the whole-card cue for a disabled mod (CardOpacity is 1.0
-                             when enabled); the DISABLED chip and the status icon carry the same
-                             state for anyone who can't read a dimming. -->
+                        <!-- A disabled mod's card is dimmed by TickableCardExpander; the DISABLED
+                             chip and the status icon carry the same state for anyone who can't read
+                             a dimming. -->
                         <!-- Top, not the default stretch: a WrapPanel arranges each line at the
                              height of its tallest item, so without this every card beside an
                              expanded one would stretch to match it. -->
@@ -743,7 +743,6 @@
                             Style="{StaticResource TickableCardExpander}"
                             Margin="0,0,6,6"
                             IsExpanded="{Binding IsCardExpanded, Mode=TwoWay}"
-                            Opacity="{Binding CardOpacity}"
                             PreviewMouseLeftButtonDown="Card_PreviewMouseLeftButtonDown"
                             MouseRightButtonUp="Mod_MouseRightButtonUp">
                             <ui:CardExpander.Header>
@@ -1075,7 +1074,6 @@
                                                     Style="{StaticResource TickableCardRow}"
                                                     Margin="0,0,0,4"
                                                     Padding="8,6"
-                                                    Opacity="{Binding CardOpacity}"
                                                     ToolTip="{loc:Str Installed_GroupRowToolTip}"
                                                     MouseRightButtonUp="Mod_MouseRightButtonUp"
                                                     PreviewMouseLeftButtonDown="ModRow_PreviewMouseLeftButtonDown"
@@ -1181,7 +1179,6 @@
                             Style="{StaticResource TickableCardExpander}"
                             Margin="0,0,6,6"
                             IsExpanded="{Binding IsRowExpanded, Mode=TwoWay}"
-                            Opacity="{Binding CardOpacity}"
                             PreviewMouseLeftButtonDown="Card_PreviewMouseLeftButtonDown"
                             MouseRightButtonUp="Mod_MouseRightButtonUp">
                             <ui:CardExpander.Header>

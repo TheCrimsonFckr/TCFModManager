@@ -417,9 +417,6 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     public bool HasDuplicateFolders => DuplicateFolders.Count > 0;
 
-    // Dims the whole card (and the group-view row) while disabled.
-    public double CardOpacity => IsDisabled ? 0.45 : 1.0;
-
     // Ticked in the flat grid's multi-select mode. Cards are rebuilt on every scan, so a selection
     // doesn't survive one.
     [ObservableProperty]
