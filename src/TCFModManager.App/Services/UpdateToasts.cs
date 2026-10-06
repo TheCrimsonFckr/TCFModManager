@@ -30,6 +30,10 @@ internal static class UpdateToasts
     private const string PageArgument = "page";
     private const string InstalledPage = "installed";
 
+    // OPEN-12 A4: a new-mods notification opens Browse filtered to followed authors.
+    private const string FollowedPage = "followed";
+    private const string NewModsTag = "new-mods";
+
     private const string ActionArgument = "action";
     private const string OpenAction = "open";
 
@@ -108,6 +112,44 @@ internal static class UpdateToasts
         }
     }
 
+    //
+    // OPEN-12 A4 (R7): followed authors' new mods - one notification per check, like updates, with
+    // its own tag so it doesn't replace an update notification.
+    //
+    public static void ShowNewMods(IReadOnlyList<NewModCandidate> mods)
+    {
+        if (mods.Count == 0) return;
+
+        try
+        {
+            Listen();
+
+            var named = Math.Min(mods.Count, NamedInText);
+            var parts = mods
+                .Take(named)
+                .Select(m => LocalizationService.Text(Strings.NewModsToast_ItemFormat, m.Name, m.AuthorName))
+                .ToList();
+            if (mods.Count > named) parts.Add(Strings.UpdateToast_More(mods.Count - named, mods.Count - named));
+
+            new ToastContentBuilder()
+                .AddArgument(PageArgument, FollowedPage)
+                .AddText(Strings.NewModsToast_Title)
+                .AddText(TextLists.Join(parts))
+                .AddButton(new ToastButton()
+                    .SetContent(Strings.UpdateToast_Open)
+                    .AddArgument(PageArgument, FollowedPage))
+                .Show(toast =>
+                {
+                    toast.Tag = NewModsTag;
+                    toast.Group = Group;
+                });
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("Authors", $"couldn't show the notification: {ex.Message}");
+        }
+    }
+
     // "SAIN 4.5.2", "SAIN 4.5.2 and UI Fixes 6.0.2", "SAIN 4.5.2, UI Fixes 6.0.2 and 1 more".
     internal static string Body(IReadOnlyList<UpdateCandidate> updates)
     {
@@ -175,6 +217,11 @@ internal static class UpdateToasts
         {
             AppLog.Info("Updates", "notification clicked - opening Installed on the updates");
             dispatcher?.BeginInvoke(AppNavigation.ShowInstalledUpdates);
+        }
+        else if (args.TryGetValue(PageArgument, out var followed) && followed == FollowedPage)
+        {
+            AppLog.Info("Authors", "notification clicked - opening Browse on followed authors");
+            dispatcher?.BeginInvoke(AppNavigation.ShowFollowedInBrowse);
         }
         else if (args.TryGetValue(ActionArgument, out var action) && action == OpenAction)
         {

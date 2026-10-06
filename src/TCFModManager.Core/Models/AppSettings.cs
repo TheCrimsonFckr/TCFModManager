@@ -158,6 +158,10 @@ public sealed class AppSettings
 
     public BrowsePageDefaults? BrowseDefaults { get; set; }
 
+    // The sp-mod authors the user follows (OPEN-12 A4) - a Browse filter, a list in Options, and
+    // notifications of their new mods alongside update notifications (R7).
+    public List<FollowedAuthor> FollowedAuthors { get; set; } = [];
+
     //
     // Server Map. Always present in settings.json so the shape is obvious to anyone hand-editing
     // it, even on an install that never turns the page on.

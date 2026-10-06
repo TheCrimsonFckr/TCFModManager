@@ -35,6 +35,9 @@ public enum ModAttributeFilter
     // Only mods installed in the last 7 days. Mods with no known install date are left out.
     // Installed only.
     InstalledRecently,
+
+    // Only mods by an author the user follows, as owner or co-author (OPEN-12 A4, R23). Browse only.
+    ByFollowedAuthors,
 }
 
 //

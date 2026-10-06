@@ -51,6 +51,91 @@ public partial class DependenciesViewModel : LocalizedViewModel
     public ObservableCollection<DependencyTreeViewModel> Trees { get; } = [];
 
     //
+    // OPEN-12 F12 (R18): pick a newer SPT release and see which installed mods would come with you -
+    // worked out from the catalog alone, nothing changed and nothing fetched but the release list.
+    // The cards are the ones the last refresh scanned.
+    //
+    private List<InstalledModCardViewModel> _upgradeCards = [];
+
+    public ObservableCollection<SptRelease> UpgradeTargets { get; } = [];
+
+    [ObservableProperty]
+    private SptRelease? _selectedUpgradeTarget;
+
+    public ObservableCollection<SptUpgradeRowViewModel> UpgradeRows { get; } = [];
+
+    [ObservableProperty]
+    private string? _upgradeSummary;
+
+    public bool HasUpgradeTargets => UpgradeTargets.Count > 0;
+
+    partial void OnSelectedUpgradeTargetChanged(SptRelease? value) => BuildUpgradeReport();
+
+    private async Task PrepareUpgradeCheckAsync(List<InstalledModCardViewModel> cards)
+    {
+        _upgradeCards = cards;
+
+        try
+        {
+            await AppServices.SptCatalog.EnsureLoadedAsync();
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or SpModApiException)
+        {
+            AppLog.Warn("Upgrade", $"couldn't load the SPT releases: {ex.Message}");
+        }
+
+        var previous = SelectedUpgradeTarget;
+        UpgradeTargets.Clear();
+        foreach (var release in SptReleases.NewerThan(AppServices.SptCatalog.Releases, AppServices.SptEnvironment.InstalledVersion))
+            UpgradeTargets.Add(release);
+        OnPropertyChanged(nameof(HasUpgradeTargets));
+
+        var pick = UpgradeTargets.FirstOrDefault(r => previous is { } p && r.Label == p.Label);
+        if (pick.Label is null && UpgradeTargets.Count > 0) pick = UpgradeTargets[0];
+
+        if (UpgradeTargets.Count == 0)
+        {
+            SelectedUpgradeTarget = null;
+            UpgradeRows.Clear();
+            UpgradeSummary = AppServices.SptCatalog.Releases.Count == 0 ? Strings.Upgrade_Offline : Strings.Upgrade_NoNewer;
+        }
+        else if (SelectedUpgradeTarget is { } current && current.Label == pick.Label)
+        {
+            BuildUpgradeReport();
+        }
+        else
+        {
+            SelectedUpgradeTarget = pick;
+        }
+    }
+
+    // The rows carry text of their own, so a language change rebuilds them.
+    protected internal override void RefreshText()
+    {
+        base.RefreshText();
+        BuildUpgradeReport();
+    }
+
+    private void BuildUpgradeReport()
+    {
+        UpgradeRows.Clear();
+        if (SelectedUpgradeTarget is not { } target) return;
+
+        // Addons go with their mod, so only mods are listed.
+        var inputs = _upgradeCards
+            .Where(c => !c.IsAddon)
+            .Select(c => new SptUpgradeInput(c.DisplayTitle, c.ModId, c.InstalledVersion));
+
+        var rows = SptUpgradeReport.Build(inputs, AppServices.ModCache.AllMods, target.Label);
+        foreach (var row in rows) UpgradeRows.Add(new SptUpgradeRowViewModel(row));
+
+        int Count(SptUpgradeStanding s) => rows.Count(r => r.Standing == s);
+        UpgradeSummary = LocalizationService.Text(Strings.Upgrade_SummaryFormat,
+            Count(SptUpgradeStanding.Ready), Count(SptUpgradeStanding.UpdateNeeded),
+            Count(SptUpgradeStanding.NotYet), Count(SptUpgradeStanding.Unknown));
+    }
+
+    //
     // What clashes at load time (OPEN-11) - worked out from the install alone, with no network, so it
     // shows even when the dependency lookup can't run. Rechecked each time the page opens.
     //
@@ -207,6 +292,8 @@ public partial class DependenciesViewModel : LocalizedViewModel
             var installed = InstalledModCardViewModel.BuildFrom(
                 scanned, AppServices.ModCache.AllMods, sptVersion, AppServices.InstallManifest.Load().Mods,
                 AppServices.Addons.AllAddons);
+
+            await PrepareUpgradeCheckAsync(installed);
 
             // Only mods that matched the catalog can be asked about; a hand-installed mod we
             // couldn't identify has no identifier to query with.

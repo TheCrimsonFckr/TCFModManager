@@ -28,6 +28,9 @@ internal static class AppServices
     // Declared before anything that builds Installed cards, which read it.
     public static HeldBackUpdates HeldBack { get; } = new();
 
+    // The authors the user follows (OPEN-12 A4). Before Browse, which reads it as it is built.
+    public static FollowedAuthors Followed { get; } = new();
+
     // Copies of the SPT profiles, taken before the app changes the install (OPEN-12 F4).
     public static ProfileBackups ProfileBackups { get; } = new();
 

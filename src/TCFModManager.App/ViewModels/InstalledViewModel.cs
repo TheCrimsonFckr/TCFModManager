@@ -1941,6 +1941,20 @@ public partial class InstalledViewModel : LocalizedViewModel
     // ---- OPEN-12 A5: the right-click menu's actions that have no command of their own ------------
 
     // View mod page: the matched sp-mod listing (or addon), when there is one.
+    // OPEN-12 A4: the author's page, from the name on a card or List row, or the right-click menu.
+    [RelayCommand]
+    private void OpenAuthor(InstalledModCardViewModel? mod)
+    {
+        if (mod?.AuthorId is { } id) AppNavigation.ShowAuthor(id, mod.Author);
+    }
+
+    // OPEN-12 A4 (R23): Follow / Unfollow the author, from the right-click menu.
+    [RelayCommand]
+    private void ToggleFollowAuthor(InstalledModCardViewModel? mod)
+    {
+        if (mod?.AuthorId is { } id) AppServices.Followed.Toggle(id, mod.Author);
+    }
+
     public static string? ModPageUrl(InstalledModCardViewModel mod) =>
         mod.ModId is not { } id
             ? null

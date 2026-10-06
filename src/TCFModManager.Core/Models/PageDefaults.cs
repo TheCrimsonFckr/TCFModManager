@@ -81,4 +81,13 @@ public sealed class BrowsePageDefaults
     // null is "follow the install" and is what a fresh install does.
     //
     public List<string>? SptVersions { get; set; }
+
+    // DateRangePreset for the Published and Updated filters (OPEN-12 F19). Presets only: a custom
+    // range of days is a one-off and is saved as AnyTime (R20).
+    public string? Published { get; set; }
+
+    public string? Updated { get; set; }
+
+    // SearchScope: TitleAndTeaser, TitleOnly.
+    public string? SearchScope { get; set; }
 }

@@ -209,6 +209,9 @@ internal sealed class UpdateWatcher
 
         UpdateToasts.Show(result.New);
 
+        // OPEN-12 A4 (R7): new mods from followed authors, announced the same way.
+        var catalogGrew = await AnnounceFollowedAsync(ct);
+
         AppLog.Info("Updates",
             $"checked {mods.Count} mods and {addonIds.Count} addons: {answer?.Updated.Count ?? 0} moved on The Forge, "
             + $"{answer?.NotRecognised.Count ?? 0} read directly, "
@@ -218,12 +221,48 @@ internal sealed class UpdateWatcher
         var shown = available.Select(c => (c.ModId, c.IsAddon, c.Version)).ToHashSet();
         // A patched cache always goes to the pages - a release that isn't an update still changes
         // a card's "Latest published" line - and so does a different set of arrows.
-        var changed = patched || (_lastShown is not null && !shown.SetEquals(_lastShown));
+        var changed = patched || catalogGrew || (_lastShown is not null && !shown.SetEquals(_lastShown));
         _lastShown = shown;
 
         if (changed) UpdatesFound?.Invoke(this, EventArgs.Empty);
 
         return new UpdateCheckOutcome(UpdateCheckResult.Checked, available.Count, result.New.Count, !previous.BaselineTaken);
+    }
+
+    // How many of sp-mod's newest listings each check reads for followed authors' new mods - more
+    // than are published between two checks at the shortest interval.
+    private const int NewModsLookback = 50;
+
+    //
+    // OPEN-12 A4, R7: reads sp-mod's newest listings and announces the ones by followed authors
+    // published since they were followed (NewModAnnouncer). A failure here is logged and leaves the
+    // update half of the check standing. Returns whether the catalog gained listings.
+    //
+    private async Task<bool> AnnounceFollowedAsync(CancellationToken ct)
+    {
+        var followed = AppServices.Followed.All;
+        if (followed.Count == 0) return false;
+
+        try
+        {
+            var newest = await AppServices.SpModApi.GetModsAsync(
+                new ModsQuery { Sort = "-published_at", PerPage = NewModsLookback, Include = "category,versions" }, ct);
+
+            var state = _store.Load();
+            var (fresh, announced) = NewModAnnouncer.Pick(newest.Data, followed, state.AnnouncedNewMods);
+            state.AnnouncedNewMods = announced;
+            _store.Save(state);
+
+            UpdateToasts.ShowNewMods(fresh);
+            AppLog.Info("Authors", $"read {newest.Data.Count} newest listings for {followed.Count} followed authors: {fresh.Count} announced");
+
+            return AppServices.ModCache.AddNew(newest.Data);
+        }
+        catch (Exception ex) when (ex is SpModApiException or HttpRequestException)
+        {
+            AppLog.Warn("Authors", $"couldn't check followed authors for new mods: {ex.Message}");
+            return false;
+        }
     }
 
     private static Task<List<InstalledModCardViewModel>> BuildCardsAsync(

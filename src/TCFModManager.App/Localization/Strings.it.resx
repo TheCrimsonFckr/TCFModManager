@@ -6478,4 +6478,175 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
   <data name="Filter_SectionGroupSort" xml:space="preserve">
     <value>Ordina gruppi</value>
   </data>
+  <data name="Filter_SectionPublished" xml:space="preserve">
+    <value>Pubblicato</value>
+  </data>
+  <data name="Filter_SectionUpdated" xml:space="preserve">
+    <value>Aggiornato</value>
+  </data>
+  <data name="Filter_SectionSearchIn" xml:space="preserve">
+    <value>Cerca in</value>
+  </data>
+  <data name="Filter_DateAnyTime" xml:space="preserve">
+    <value>In qualsiasi momento</value>
+  </data>
+  <data name="Filter_DateLast7Days" xml:space="preserve">
+    <value>Ultimi 7 giorni</value>
+  </data>
+  <data name="Filter_DateLast30Days" xml:space="preserve">
+    <value>Ultimi 30 giorni</value>
+  </data>
+  <data name="Filter_DateLast90Days" xml:space="preserve">
+    <value>Ultimi 90 giorni</value>
+  </data>
+  <data name="Filter_DateLastYear" xml:space="preserve">
+    <value>Ultimi 12 mesi</value>
+  </data>
+  <data name="Filter_DateCustom" xml:space="preserve">
+    <value>Date personalizzate</value>
+  </data>
+  <data name="Filter_DateFrom" xml:space="preserve">
+    <value>Dal</value>
+  </data>
+  <data name="Filter_DateUntil" xml:space="preserve">
+    <value>Al</value>
+  </data>
+  <data name="Filter_DateBetweenFormat" xml:space="preserve">
+    <value>dal {0} al {1}</value>
+  </data>
+  <data name="Filter_DateFromFormat" xml:space="preserve">
+    <value>dal {0}</value>
+  </data>
+  <data name="Filter_DateUntilFormat" xml:space="preserve">
+    <value>fino al {0}</value>
+  </data>
+  <data name="Filter_SearchTitleAndTeaser" xml:space="preserve">
+    <value>Titolo e anteprima</value>
+  </data>
+  <data name="Filter_SearchTitleOnly" xml:space="preserve">
+    <value>Solo titolo</value>
+  </data>
+  <data name="Browse_PublishedFilterToolTip" xml:space="preserve">
+    <value>Quando la mod è stata pubblicata per la prima volta su sp-mod</value>
+  </data>
+  <data name="Browse_UpdatedFilterToolTip" xml:space="preserve">
+    <value>Quando la mod ha avuto l'ultima nuova versione</value>
+  </data>
+  <data name="Browse_SearchScopeToolTip" xml:space="preserve">
+    <value>Cosa esamina la casella di ricerca. Iniziare con @ cerca sempre gli autori.</value>
+  </data>
+  <data name="Upgrade_Header" xml:space="preserve">
+    <value>Passare a un SPT più recente</value>
+  </data>
+  <data name="Upgrade_Intro" xml:space="preserve">
+    <value>Scegli una versione di SPT per vedere quali delle tue mod sono pronte. Ricavato dalle pagine sp-mod delle mod - non viene cambiato nulla.</value>
+  </data>
+  <data name="Upgrade_Target" xml:space="preserve">
+    <value>Passaggio a SPT</value>
+  </data>
+  <data name="Upgrade_SummaryFormat" xml:space="preserve">
+    <value>{0} pronte, {1} da aggiornare prima, {2} non ancora pronte, {3} da verificare a mano</value>
+  </data>
+  <data name="Upgrade_ReadyFormat" xml:space="preserve">
+    <value>La {0} funziona.</value>
+  </data>
+  <data name="Upgrade_UpdateFormat" xml:space="preserve">
+    <value>Aggiorna prima alla {0}.</value>
+  </data>
+  <data name="Upgrade_NotYet" xml:space="preserve">
+    <value>Non c'è ancora nulla di pubblicato.</value>
+  </data>
+  <data name="Upgrade_UnknownNotListed" xml:space="preserve">
+    <value>Non associata a una pagina sp-mod - verificala a mano.</value>
+  </data>
+  <data name="Upgrade_UnknownConstraint" xml:space="preserve">
+    <value>La pagina non dice quale SPT richiede la tua versione - verificala a mano.</value>
+  </data>
+  <data name="Upgrade_NoNewer" xml:space="preserve">
+    <value>Stai già usando la versione di SPT più recente.</value>
+  </data>
+  <data name="Upgrade_Offline" xml:space="preserve">
+    <value>Impossibile caricare le versioni di SPT - controlla la connessione e aggiorna.</value>
+  </data>
+  <data name="Author_Title" xml:space="preserve">
+    <value>Autore</value>
+  </data>
+  <data name="Author_CountsFormat" xml:space="preserve">
+    <value>{0} mod, {1} addon su sp-mod</value>
+  </data>
+  <data name="Author_Follow" xml:space="preserve">
+    <value>Segui</value>
+  </data>
+  <data name="Author_Unfollow" xml:space="preserve">
+    <value>Non seguire più</value>
+  </data>
+  <data name="Author_FollowToolTip" xml:space="preserve">
+    <value>Seguire un autore ti avvisa delle sue nuove mod, insieme alle notifiche degli aggiornamenti, e permette a Sfoglia di mostrare solo le sue mod</value>
+  </data>
+  <data name="Author_OpenOnSite" xml:space="preserve">
+    <value>Apri su sp-mod</value>
+  </data>
+  <data name="Author_ModsHeader" xml:space="preserve">
+    <value>Mod</value>
+  </data>
+  <data name="Author_AddonsHeader" xml:space="preserve">
+    <value>Addon</value>
+  </data>
+  <data name="Author_InstalledTag" xml:space="preserve">
+    <value>INSTALLATA</value>
+  </data>
+  <data name="Author_AddonForFormat" xml:space="preserve">
+    <value>per {0}</value>
+  </data>
+  <data name="Author_OpenModToolTip" xml:space="preserve">
+    <value>Apri i dettagli di questa mod</value>
+  </data>
+  <data name="Author_OpenAddonToolTip" xml:space="preserve">
+    <value>Apri questo addon su sp-mod</value>
+  </data>
+  <data name="Author_CatalogFailed" xml:space="preserve">
+    <value>Impossibile caricare il catalogo delle mod - controlla la connessione e riprova.</value>
+  </data>
+  <data name="Author_NothingListed" xml:space="preserve">
+    <value>Non c'è nulla di questo autore nel catalogo.</value>
+  </data>
+  <data name="Author_LinkToolTip" xml:space="preserve">
+    <value>Apri la pagina di questo autore</value>
+  </data>
+  <data name="Author_MoreByFormat" xml:space="preserve">
+    <value>Altro di {0}</value>
+  </data>
+  <data name="Author_FollowFormat" xml:space="preserve">
+    <value>Segui {0}</value>
+  </data>
+  <data name="Author_UnfollowFormat" xml:space="preserve">
+    <value>Non seguire più {0}</value>
+  </data>
+  <data name="Author_ModCountFormat" xml:space="preserve">
+    <value>{0} mod nel catalogo</value>
+  </data>
+  <data name="Followed_Header" xml:space="preserve">
+    <value>Autori che segui</value>
+  </data>
+  <data name="Followed_SummaryFormat" xml:space="preserve">
+    <value>{0} seguiti - le loro nuove mod arrivano con le notifiche degli aggiornamenti</value>
+  </data>
+  <data name="Followed_Empty" xml:space="preserve">
+    <value>Non segui ancora nessuno. Fai clic sul nome di un autore in qualsiasi punto dell'app per aprire la sua pagina e seguirlo.</value>
+  </data>
+  <data name="Followed_Open" xml:space="preserve">
+    <value>Apri</value>
+  </data>
+  <data name="Filter_ByFollowedAuthors" xml:space="preserve">
+    <value>Degli autori che segui</value>
+  </data>
+  <data name="Filter_ByFollowedAuthorsToolTip" xml:space="preserve">
+    <value>Solo mod di un autore che segui, come proprietario o coautore</value>
+  </data>
+  <data name="NewModsToast_Title" xml:space="preserve">
+    <value>Novità dagli autori che segui</value>
+  </data>
+  <data name="NewModsToast_ItemFormat" xml:space="preserve">
+    <value>{0} di {1}</value>
+  </data>
 </root>

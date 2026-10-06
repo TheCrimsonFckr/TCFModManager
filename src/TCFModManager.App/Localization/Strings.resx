@@ -7812,4 +7812,207 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <value>Sort groups</value>
     <comment>Heading of the group order section in the Filters and view options panel (Installed, Groups view only).</comment>
   </data>
+  <data name="Filter_SectionPublished" xml:space="preserve">
+    <value>Published</value>
+    <comment>Heading of the Browse section that filters by when a mod was first published (OPEN-12 F19). Also the name in its pill.</comment>
+  </data>
+  <data name="Filter_SectionUpdated" xml:space="preserve">
+    <value>Updated</value>
+    <comment>Heading of the Browse section that filters by when a mod last had a new version (OPEN-12 F19).</comment>
+  </data>
+  <data name="Filter_SectionSearchIn" xml:space="preserve">
+    <value>Search in</value>
+    <comment>Heading of the Browse section choosing what the search box looks at (OPEN-12 F19).</comment>
+  </data>
+  <data name="Filter_DateAnyTime" xml:space="preserve">
+    <value>Any time</value>
+    <comment>Date filter choice: no restriction.</comment>
+  </data>
+  <data name="Filter_DateLast7Days" xml:space="preserve">
+    <value>Last 7 days</value>
+    <comment>Date filter choice, counted back from today including today.</comment>
+  </data>
+  <data name="Filter_DateLast30Days" xml:space="preserve">
+    <value>Last 30 days</value>
+  </data>
+  <data name="Filter_DateLast90Days" xml:space="preserve">
+    <value>Last 90 days</value>
+  </data>
+  <data name="Filter_DateLastYear" xml:space="preserve">
+    <value>Last year</value>
+    <comment>Date filter choice: the last twelve months, not the previous calendar year.</comment>
+  </data>
+  <data name="Filter_DateCustom" xml:space="preserve">
+    <value>Custom dates</value>
+    <comment>Date filter choice that shows two date pickers under it.</comment>
+  </data>
+  <data name="Filter_DateFrom" xml:space="preserve">
+    <value>From</value>
+    <comment>Label above the first date picker of a custom date range.</comment>
+  </data>
+  <data name="Filter_DateUntil" xml:space="preserve">
+    <value>Until</value>
+    <comment>Label above the second date picker of a custom date range; that day counts.</comment>
+  </data>
+  <data name="Filter_DateBetweenFormat" xml:space="preserve">
+    <value>{0} to {1}</value>
+    <comment>A custom date range in a filter pill. {0} and {1} are dates in the PC's short date format.</comment>
+  </data>
+  <data name="Filter_DateFromFormat" xml:space="preserve">
+    <value>from {0}</value>
+    <comment>A custom date range with only its first day set, in a filter pill. {0} is a date.</comment>
+  </data>
+  <data name="Filter_DateUntilFormat" xml:space="preserve">
+    <value>until {0}</value>
+    <comment>A custom date range with only its last day set, in a filter pill. {0} is a date.</comment>
+  </data>
+  <data name="Filter_SearchTitleAndTeaser" xml:space="preserve">
+    <value>Title and teaser</value>
+    <comment>Search scope choice: the mod's name and its one-line teaser.</comment>
+  </data>
+  <data name="Filter_SearchTitleOnly" xml:space="preserve">
+    <value>Title only</value>
+    <comment>Search scope choice: the mod's name only.</comment>
+  </data>
+  <data name="Browse_PublishedFilterToolTip" xml:space="preserve">
+    <value>When the mod was first published on sp-mod</value>
+  </data>
+  <data name="Browse_UpdatedFilterToolTip" xml:space="preserve">
+    <value>When the mod last had a new version</value>
+  </data>
+  <data name="Browse_SearchScopeToolTip" xml:space="preserve">
+    <value>What the search box looks at. Starting with @ always searches authors.</value>
+  </data>
+  <data name="Upgrade_Header" xml:space="preserve">
+    <value>Moving to a newer SPT</value>
+    <comment>Heading of the SPT upgrade check on the Dependencies page (OPEN-12 F12).</comment>
+  </data>
+  <data name="Upgrade_Intro" xml:space="preserve">
+    <value>Pick an SPT release to see which of your mods are ready for it. Worked out from the mods' sp-mod listings - nothing is changed.</value>
+  </data>
+  <data name="Upgrade_Target" xml:space="preserve">
+    <value>Moving to SPT</value>
+    <comment>Label beside the list of newer SPT releases.</comment>
+  </data>
+  <data name="Upgrade_SummaryFormat" xml:space="preserve">
+    <value>{0} ready, {1} need an update first, {2} not ready yet, {3} to check by hand</value>
+    <comment>Counts of installed mods for the picked SPT release.</comment>
+  </data>
+  <data name="Upgrade_ReadyFormat" xml:space="preserve">
+    <value>{0} runs on it.</value>
+    <comment>{0} is the installed version.</comment>
+  </data>
+  <data name="Upgrade_UpdateFormat" xml:space="preserve">
+    <value>Update to {0} first.</value>
+    <comment>{0} is the newer version published for the picked SPT release.</comment>
+  </data>
+  <data name="Upgrade_NotYet" xml:space="preserve">
+    <value>Nothing published for it yet.</value>
+  </data>
+  <data name="Upgrade_UnknownNotListed" xml:space="preserve">
+    <value>Not matched to an sp-mod listing - check it by hand.</value>
+  </data>
+  <data name="Upgrade_UnknownConstraint" xml:space="preserve">
+    <value>Its listing doesn't say which SPT your version needs - check it by hand.</value>
+  </data>
+  <data name="Upgrade_NoNewer" xml:space="preserve">
+    <value>You're on the newest SPT release.</value>
+  </data>
+  <data name="Upgrade_Offline" xml:space="preserve">
+    <value>Couldn't load the SPT releases - check your connection and refresh.</value>
+  </data>
+  <data name="Author_Title" xml:space="preserve">
+    <value>Author</value>
+    <comment>Title of an sp-mod author's page (OPEN-12 A4).</comment>
+  </data>
+  <data name="Author_CountsFormat" xml:space="preserve">
+    <value>{0} mods, {1} addons on sp-mod</value>
+    <comment>Under the author's name. {0} mods, {1} addons.</comment>
+  </data>
+  <data name="Author_Follow" xml:space="preserve">
+    <value>Follow</value>
+  </data>
+  <data name="Author_Unfollow" xml:space="preserve">
+    <value>Unfollow</value>
+  </data>
+  <data name="Author_FollowToolTip" xml:space="preserve">
+    <value>Following an author tells you when they publish a new mod, with the update notifications, and lets Browse show only their mods</value>
+  </data>
+  <data name="Author_OpenOnSite" xml:space="preserve">
+    <value>Open on sp-mod</value>
+  </data>
+  <data name="Author_ModsHeader" xml:space="preserve">
+    <value>Mods</value>
+  </data>
+  <data name="Author_AddonsHeader" xml:space="preserve">
+    <value>Addons</value>
+  </data>
+  <data name="Author_InstalledTag" xml:space="preserve">
+    <value>INSTALLED</value>
+    <comment>Tag on one of the author's mods that is installed.</comment>
+  </data>
+  <data name="Author_AddonForFormat" xml:space="preserve">
+    <value>for {0}</value>
+    <comment>Under an addon on an author's page. {0} is the mod it belongs to.</comment>
+  </data>
+  <data name="Author_OpenModToolTip" xml:space="preserve">
+    <value>Open this mod's details</value>
+  </data>
+  <data name="Author_OpenAddonToolTip" xml:space="preserve">
+    <value>Open this addon on sp-mod</value>
+  </data>
+  <data name="Author_CatalogFailed" xml:space="preserve">
+    <value>Couldn't load the mod catalog - check your connection and come back.</value>
+  </data>
+  <data name="Author_NothingListed" xml:space="preserve">
+    <value>Nothing by this author is in the catalog.</value>
+  </data>
+  <data name="Author_LinkToolTip" xml:space="preserve">
+    <value>Open this author's page</value>
+  </data>
+  <data name="Author_MoreByFormat" xml:space="preserve">
+    <value>More by {0}</value>
+    <comment>Right-click menu item opening the author's page. {0} is the author.</comment>
+  </data>
+  <data name="Author_FollowFormat" xml:space="preserve">
+    <value>Follow {0}</value>
+    <comment>Right-click menu item. {0} is the author.</comment>
+  </data>
+  <data name="Author_UnfollowFormat" xml:space="preserve">
+    <value>Unfollow {0}</value>
+    <comment>Right-click menu item. {0} is the author.</comment>
+  </data>
+  <data name="Author_ModCountFormat" xml:space="preserve">
+    <value>{0} mods in the catalog</value>
+    <comment>Under a followed author in Options.</comment>
+  </data>
+  <data name="Followed_Header" xml:space="preserve">
+    <value>Authors you follow</value>
+    <comment>Options section (OPEN-12 A4).</comment>
+  </data>
+  <data name="Followed_SummaryFormat" xml:space="preserve">
+    <value>{0} followed - their new mods come with the update notifications</value>
+    <comment>{0} is how many authors are followed.</comment>
+  </data>
+  <data name="Followed_Empty" xml:space="preserve">
+    <value>You don't follow anyone yet. Click an author's name anywhere in the app to open their page and follow them.</value>
+  </data>
+  <data name="Followed_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Filter_ByFollowedAuthors" xml:space="preserve">
+    <value>By authors you follow</value>
+    <comment>Browse Show only tick box (OPEN-12 A4).</comment>
+  </data>
+  <data name="Filter_ByFollowedAuthorsToolTip" xml:space="preserve">
+    <value>Only mods by an author you follow, as owner or co-author</value>
+  </data>
+  <data name="NewModsToast_Title" xml:space="preserve">
+    <value>New from authors you follow</value>
+    <comment>Notification title (OPEN-12 A4).</comment>
+  </data>
+  <data name="NewModsToast_ItemFormat" xml:space="preserve">
+    <value>{0} by {1}</value>
+    <comment>One new mod in the notification. {0} the mod, {1} the author.</comment>
+  </data>
 </root>

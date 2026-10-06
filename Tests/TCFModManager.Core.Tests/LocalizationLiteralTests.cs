@@ -40,6 +40,8 @@ public class LocalizationLiteralTests
         ("ModListFileDialog.cs",
             "|{Strings.ModListFile_AllFiles} ({ModListFile.AllFilesPattern})|{ModListFile.AllFilesPattern}",
             "Win32 filter syntax; both names in it are keyed"),
+        ("MarkupRenderer.cs", "Cascadia Mono, Consolas, Courier New",
+            "font family names for code in a description (OPEN-12 F18)"),
     ];
 
     //

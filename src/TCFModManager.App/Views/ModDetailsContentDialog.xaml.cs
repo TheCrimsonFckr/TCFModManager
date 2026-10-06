@@ -45,10 +45,20 @@ public partial class ModDetailsContentDialog : ContentDialog
     {
         Size result = base.MeasureOverride(availableSize);
 
-        SetCurrentValue(DialogWidthProperty, 520.0);
-        SetCurrentValue(DialogHeightProperty, _addons.HasAddons ? 640.0 : 478.0);
+        // Wider and taller with a full description to show (OPEN-12 F18) - tables and pictures.
+        var described = !string.IsNullOrWhiteSpace(_mod.Description);
+        SetCurrentValue(DialogWidthProperty, described ? 760.0 : 520.0);
+        SetCurrentValue(DialogHeightProperty, described || _addons.HasAddons ? 640.0 : 478.0);
 
         return result;
+    }
+
+    private void Author_Click(object sender, RoutedEventArgs e)
+    {
+        if (_mod.Owner is not { } owner) return;
+
+        Hide();
+        AppNavigation.ShowAuthor(owner.Id, owner.Name);
     }
 
     private void ViewModPageButton_Click(object sender, RoutedEventArgs e)

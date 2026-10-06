@@ -110,6 +110,28 @@ public partial class ModCacheViewModel : LocalizedViewModel
         return true;
     }
 
+    //
+    // OPEN-12 A4: listings the catalog doesn't have yet - a followed author's new mods, found by the
+    // update watcher - added so their author page and Browse show them before the next full refresh.
+    // Returns whether any were added.
+    //
+    public bool AddNew(IReadOnlyList<Mod> fresh)
+    {
+        if (fresh.Count == 0 || AllMods.Count == 0) return false;
+
+        var known = AllMods.Select(m => m.Id).ToHashSet();
+        var added = fresh.Where(m => known.Add(m.Id)).ToList();
+        if (added.Count == 0) return false;
+
+        var grown = AllMods.Concat(added).ToList();
+        AllMods = grown;
+        _loadTask = Task.FromResult(grown);
+        _ = Task.Run(() => _store.Save(grown));
+
+        AppLog.Debug("Catalog", $"AddNew: added {added.Count} new listings");
+        return true;
+    }
+
     private static string ReleasesOf(Mod mod) =>
         string.Join(',', (mod.Versions ?? []).Select(v => $"{v.Id}:{v.Version}:{v.SptVersionConstraint}"));
 

@@ -177,6 +177,10 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // "@author" search syntax in InstalledViewModel's search box.
     public string? Author { get; init; }
 
+    // The author's sp-mod id, for their page and Follow (OPEN-12 A4); null for a mod not matched to
+    // a listing.
+    public int? AuthorId { get; init; }
+
     // The matched sp-mod.com listing's category title, for the Installed page's Category filter.
     // Null when nothing matched, or for an addon - addons carry no category of their own.
     public string? CategoryTag { get; init; }
@@ -713,6 +717,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             LatestUpdatedAt = addon?.UpdatedAt,
             MatchedModName = addon?.Name ?? record.Name,
             Author = addon?.Owner?.Name,
+            AuthorId = addon?.Owner?.Id,
             ContainsAds = addon?.ContainsAds == true,
             UpdateAvailable = ModVersionComparer.IsUpdateAvailable(installedVersion, latest?.Version),
             ClientFolderPath = client?.FolderPath,
@@ -1380,6 +1385,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             DeclaredName = match is null ? server?.DeclaredName ?? plugin?.DeclaredName : null,
             Guid = match?.Guid ?? client?.Guid ?? server?.Guid,
             Author = match?.Owner?.Name ?? (match is null ? server?.Author : null),
+            AuthorId = match?.Owner?.Id,
             CategoryTag = match?.Category?.Title,
             AddonCount = match is null ? 0 : addonsByParent.GetValueOrDefault(match.Id),
             IsFikaCompatible = match?.FikaCompatibility == true,

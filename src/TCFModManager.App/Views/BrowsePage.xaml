@@ -187,6 +187,14 @@
                         <!-- Each filter is a section that opens like a group does: its header names the filter and
                              shows what it is set to, and opening it lists every choice. No dropdowns to aim at in a
                              narrow panel, and what is set reads at a glance down the headers. -->
+                        <!-- OPEN-12 F19: what the search box looks at. -->
+                        <Expander Style="{StaticResource FilterSection}" ToolTip="{loc:Str Browse_SearchScopeToolTip}">
+                            <Expander.Header>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionSearchIn}" TextWrapping="Wrap" />
+                            </Expander.Header>
+                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding SearchScopeOptions}" SelectedItem="{Binding SelectedSearchScope}" />
+                        </Expander>
+
                         <!-- Everything that describes the mod itself: Fika, ads, dependencies, addons, installed. -->
                         <Expander Style="{StaticResource FilterSection}" IsExpanded="True">
                             <Expander.Header>
@@ -223,6 +231,39 @@
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionFeatured}" TextWrapping="Wrap" />
                             </Expander.Header>
                             <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding FeaturedFilterOptions}" SelectedItem="{Binding SelectedFeaturedFilter}" />
+                        </Expander>
+
+                        <!-- OPEN-12 F19: when the mod was first published, and when it last had a release. -->
+                        <Expander Style="{StaticResource FilterSection}" ToolTip="{loc:Str Browse_PublishedFilterToolTip}">
+                            <Expander.Header>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionPublished}" TextWrapping="Wrap" />
+                            </Expander.Header>
+                            <StackPanel>
+                                <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding DateRangeOptions}" SelectedItem="{Binding SelectedPublishedRange}" />
+                                <!-- Custom: two days, either may be left empty; the until day counts in full. -->
+                                <StackPanel Margin="0,4,0,0" Visibility="{Binding IsPublishedCustom, Converter={StaticResource BoolToVis}}">
+                                    <TextBlock Margin="0,0,0,2" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{loc:Str Filter_DateFrom}" />
+                                    <DatePicker Margin="0,0,0,6" SelectedDate="{Binding PublishedFrom}" />
+                                    <TextBlock Margin="0,0,0,2" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{loc:Str Filter_DateUntil}" />
+                                    <DatePicker SelectedDate="{Binding PublishedUntil}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Expander>
+
+                        <Expander Style="{StaticResource FilterSection}" ToolTip="{loc:Str Browse_UpdatedFilterToolTip}">
+                            <Expander.Header>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionUpdated}" TextWrapping="Wrap" />
+                            </Expander.Header>
+                            <StackPanel>
+                                <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding DateRangeOptions}" SelectedItem="{Binding SelectedUpdatedRange}" />
+                                <!-- Custom: two days, either may be left empty; the until day counts in full. -->
+                                <StackPanel Margin="0,4,0,0" Visibility="{Binding IsUpdatedCustom, Converter={StaticResource BoolToVis}}">
+                                    <TextBlock Margin="0,0,0,2" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{loc:Str Filter_DateFrom}" />
+                                    <DatePicker Margin="0,0,0,6" SelectedDate="{Binding UpdatedFrom}" />
+                                    <TextBlock Margin="0,0,0,2" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{loc:Str Filter_DateUntil}" />
+                                    <DatePicker SelectedDate="{Binding UpdatedUntil}" />
+                                </StackPanel>
+                            </StackPanel>
                         </Expander>
 
                         <!-- The options are plain ints and "12" says nothing on its own, hence the template. -->
@@ -381,12 +422,21 @@
                                         Text="{Binding Name}"
                                         FontWeight="SemiBold"
                                         TextTrimming="CharacterEllipsis" />
+                                    <!-- The author opens their page (OPEN-12 A4); the link takes the
+                                         click, so the card doesn't open its details as well. -->
                                     <TextBlock
-                                        Text="{Binding Author, StringFormat={loc:Str Browse_ByAuthorFormat}}"
                                         FontSize="11"
                                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                         TextTrimming="CharacterEllipsis"
-                                        Visibility="{Binding Author, Converter={StaticResource NullToCollapsed}}" />
+                                        Visibility="{Binding Author, Converter={StaticResource NullToCollapsed}}">
+                                        <Hyperlink
+                                            Style="{StaticResource AuthorLink}"
+                                            ToolTip="{loc:Str Author_LinkToolTip}"
+                                            Command="{Binding DataContext.OpenAuthorCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                            CommandParameter="{Binding}">
+                                            <Run Text="{Binding Author, StringFormat={loc:Str Browse_ByAuthorFormat}, Mode=OneWay}" />
+                                        </Hyperlink>
+                                    </TextBlock>
                                     <TextBlock
                                         Text="{Binding Guid}"
                                         FontSize="11"

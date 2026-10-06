@@ -345,6 +345,58 @@
             </StackPanel>
         </ui:CardControl>
 
+        <!-- The authors the user follows (OPEN-12 A4, R23): open each one's page, or unfollow. -->
+        <ui:CardExpander
+            Style="{StaticResource SettingExpander}"
+            Icon="{ui:SymbolIcon People24}"
+            DataContext="{Binding Followed}">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Followed_Header}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{Binding Summary}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
+
+            <StackPanel>
+                <TextBlock
+                    Style="{StaticResource SettingNote}"
+                    Text="{loc:Str Followed_Empty}"
+                    Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibility}}" />
+
+                <ItemsControl ItemsSource="{Binding Authors}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding Name}" />
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                        Text="{Binding Detail}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <ui:Button
+                                        Margin="8,0,0,0"
+                                        Content="{loc:Str Followed_Open}"
+                                        Command="{Binding DataContext.OpenCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}" />
+                                    <ui:Button
+                                        Margin="8,0,0,0"
+                                        Content="{loc:Str Author_Unfollow}"
+                                        Command="{Binding DataContext.UnfollowCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}" />
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ui:CardExpander>
+
         <!-- Copies of the SPT profiles taken before the app changes the install (OPEN-12 F4). -->
         <ui:CardExpander
             Style="{StaticResource SettingExpander}"

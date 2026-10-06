@@ -31,6 +31,15 @@ public static class SptReleases
             .OrderByDescending(r => r.Value)
             .ToList();
 
+    //
+    // The releases newer than the installed one, newest first - what the SPT upgrade check (OPEN-12
+    // F12) offers to move to. Every release when the installed version can't be read.
+    //
+    public static List<SptRelease> NewerThan(IEnumerable<SptRelease> releases, string? installed) =>
+        ParseVersion(installed) is { } current
+            ? [.. releases.Where(r => r.Value > current).OrderByDescending(r => r.Value)]
+            : [.. releases.OrderByDescending(r => r.Value)];
+
     // The distinct major.minor lines present in <paramref name="releases"/>, newest first.
     public static List<(int Major, int Minor)> Lines(IEnumerable<SptRelease> releases) =>
         releases

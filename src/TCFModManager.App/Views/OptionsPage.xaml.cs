@@ -22,6 +22,7 @@ public partial class OptionsPage : Page
         AppServices.ServerMap.RefreshLocalKey();
         ViewModel.RefreshRemovedModsSize();
         ViewModel.Profiles.Refresh();
+        ViewModel.Followed.Refresh();
     }
 
     private void DataFiles_Click(object sender, RoutedEventArgs e) =>

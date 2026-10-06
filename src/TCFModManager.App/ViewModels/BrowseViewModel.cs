@@ -53,6 +53,9 @@ public partial class BrowseViewModel : LocalizedViewModel
         _selectedSortOption = DefaultSortOption();
         _selectedFeaturedFilter = DefaultFeaturedFilter();
         _pageSize = DefaultPageSize();
+        _selectedPublishedRange = DefaultDateRange(_defaults?.Published);
+        _selectedUpdatedRange = DefaultDateRange(_defaults?.Updated);
+        _selectedSearchScope = DefaultSearchScope();
 
         // Category and SPT version are resolved later: both lists are built from the catalog, and
         // neither exists yet - see EnsureCategoryOptionsBuilt/EnsureSptVersionOptionsBuilt.
@@ -97,6 +100,18 @@ public partial class BrowseViewModel : LocalizedViewModel
 
         UpdateAttributeFilterSummary();
 
+        // OPEN-12 A4: a new-mods notification opens Browse on the followed authors' mods, and
+        // following someone changes what that filter matches.
+        if (AppNavigation.TakeShowFollowed()) ShowFollowed();
+        AppNavigation.ShowFollowedRequested += (_, _) =>
+        {
+            if (AppNavigation.TakeShowFollowed()) ShowFollowed();
+        };
+        AppServices.Followed.Changed += (_, _) =>
+        {
+            if (IsOn(ModAttributeFilter.ByFollowedAuthors)) AutoApplyFilter();
+        };
+
         // The addon catalog usually settles after the first page has already rendered, so the
         // "N addons" badges are redrawn once it does rather than waiting for a page change.
         AppServices.Addons.AddonsChanged += (_, _) =>
@@ -128,6 +143,17 @@ public partial class BrowseViewModel : LocalizedViewModel
             ? FeaturedFilterOptions.FirstOrDefault(o => o.Value == value) ?? FeaturedFilterOptions[0]
             : FeaturedFilterOptions[0];
 
+    // A saved Custom never comes back as Custom - its days were not saved (R20).
+    private DateRangeItem DefaultDateRange(string? saved) =>
+        SavedFilterDefaults.Parse<DateRangePreset>(saved) is { } value && value != DateRangePreset.Custom
+            ? DateRangeOptions.FirstOrDefault(o => o.Value == value) ?? DateRangeOptions[0]
+            : DateRangeOptions[0];
+
+    private SearchScopeItem DefaultSearchScope() =>
+        SavedFilterDefaults.Parse<SearchScope>(_defaults?.SearchScope) is { } value
+            ? SearchScopeOptions.FirstOrDefault(o => o.Value == value) ?? SearchScopeOptions[0]
+            : SearchScopeOptions[0];
+
     private int DefaultPageSize() =>
         SavedFilterDefaults.PageSize(_defaults?.PageSize, PageSizeOptions, DefaultPageSizeValue);
 
@@ -155,6 +181,40 @@ public partial class BrowseViewModel : LocalizedViewModel
     }
 
     partial void OnSelectedCategoryChanged(CategoryFilterItem value)
+    {
+        OnPropertyChanged(nameof(MoreFiltersLabel));
+        AutoApplyFilter();
+    }
+
+    partial void OnSelectedPublishedRangeChanged(DateRangeItem value)
+    {
+        OnPropertyChanged(nameof(IsPublishedCustom));
+        OnPropertyChanged(nameof(MoreFiltersLabel));
+        AutoApplyFilter();
+    }
+
+    partial void OnPublishedFromChanged(DateTime? value) => DateChanged();
+
+    partial void OnPublishedUntilChanged(DateTime? value) => DateChanged();
+
+    partial void OnSelectedUpdatedRangeChanged(DateRangeItem value)
+    {
+        OnPropertyChanged(nameof(IsUpdatedCustom));
+        OnPropertyChanged(nameof(MoreFiltersLabel));
+        AutoApplyFilter();
+    }
+
+    partial void OnUpdatedFromChanged(DateTime? value) => DateChanged();
+
+    partial void OnUpdatedUntilChanged(DateTime? value) => DateChanged();
+
+    partial void OnSelectedSearchScopeChanged(SearchScopeItem value)
+    {
+        OnPropertyChanged(nameof(MoreFiltersLabel));
+        AutoApplyFilter();
+    }
+
+    private void DateChanged()
     {
         OnPropertyChanged(nameof(MoreFiltersLabel));
         AutoApplyFilter();
@@ -190,6 +250,52 @@ public partial class BrowseViewModel : LocalizedViewModel
     [ObservableProperty]
     private int _pageSize = DefaultPageSizeValue;
 
+    //
+    // OPEN-12 F19: when a mod was first published, and when it last had a new version - a preset
+    // counted back from today, or Custom with two days picked under it (R20). Both sections share the
+    // one list of presets.
+    //
+    public List<DateRangeItem> DateRangeOptions { get; } =
+    [
+        new(nameof(Strings.Filter_DateAnyTime), DateRangePreset.AnyTime),
+        new(nameof(Strings.Filter_DateLast7Days), DateRangePreset.Last7Days),
+        new(nameof(Strings.Filter_DateLast30Days), DateRangePreset.Last30Days),
+        new(nameof(Strings.Filter_DateLast90Days), DateRangePreset.Last90Days),
+        new(nameof(Strings.Filter_DateLastYear), DateRangePreset.LastYear),
+        new(nameof(Strings.Filter_DateCustom), DateRangePreset.Custom),
+    ];
+
+    [ObservableProperty]
+    private DateRangeItem _selectedPublishedRange;
+
+    [ObservableProperty]
+    private DateTime? _publishedFrom;
+
+    [ObservableProperty]
+    private DateTime? _publishedUntil;
+
+    public bool IsPublishedCustom => SelectedPublishedRange?.Value == DateRangePreset.Custom;
+
+    [ObservableProperty]
+    private DateRangeItem _selectedUpdatedRange;
+
+    [ObservableProperty]
+    private DateTime? _updatedFrom;
+
+    [ObservableProperty]
+    private DateTime? _updatedUntil;
+
+    public bool IsUpdatedCustom => SelectedUpdatedRange?.Value == DateRangePreset.Custom;
+
+    public List<SearchScopeItem> SearchScopeOptions { get; } =
+    [
+        new(nameof(Strings.Filter_SearchTitleAndTeaser), SearchScope.TitleAndTeaser),
+        new(nameof(Strings.Filter_SearchTitleOnly), SearchScope.TitleOnly),
+    ];
+
+    [ObservableProperty]
+    private SearchScopeItem _selectedSearchScope;
+
     public List<FeaturedFilterItem> FeaturedFilterOptions { get; } =
     [
         // The worst case for dropping a label: "Include" / "Exclude" / "Only" say nothing at all
@@ -212,6 +318,9 @@ public partial class BrowseViewModel : LocalizedViewModel
         new(ModAttributeFilter.HideInstalled,
             nameof(Strings.Filter_HideInstalled),
             nameof(Strings.Filter_HideInstalledToolTip)),
+        new(ModAttributeFilter.ByFollowedAuthors,
+            nameof(Strings.Filter_ByFollowedAuthors),
+            nameof(Strings.Filter_ByFollowedAuthorsToolTip)),
     ];
 
     //
@@ -226,7 +335,10 @@ public partial class BrowseViewModel : LocalizedViewModel
     private int MoreFiltersSet =>
         AttributeOptions.Count(o => o.IsSelected)
         + (SelectedCategory.Title is not null ? 1 : 0)
-        + (SelectedFeaturedFilter.Value == FeaturedFilter.Include ? 0 : 1);
+        + (SelectedFeaturedFilter.Value == FeaturedFilter.Include ? 0 : 1)
+        + (DateRangeFilter.IsActive(SelectedPublishedRange.Value, PublishedFrom, PublishedUntil) ? 1 : 0)
+        + (DateRangeFilter.IsActive(SelectedUpdatedRange.Value, UpdatedFrom, UpdatedUntil) ? 1 : 0)
+        + (SelectedSearchScope.Value == SearchScope.TitleAndTeaser ? 0 : 1);
 
     //
     // The filters narrowing the list, as pills above the results - see ActiveFilterPill. Rebuilt
@@ -245,10 +357,26 @@ public partial class BrowseViewModel : LocalizedViewModel
     private static string Pill(string section, object? value) =>
         LocalizationService.Text(Strings.Filter_PillFormat, section, value?.ToString() ?? string.Empty);
 
+    // A preset by its name; a custom range by its days, in the PC's own short date format.
+    private static string DateLabel(DateRangeItem range, DateTime? from, DateTime? until)
+    {
+        if (range.Value != DateRangePreset.Custom) return range.Label;
+
+        var (a, b) = DateRangeFilter.Window(DateRangePreset.Custom, DateTime.Today, from, until);
+        return (a, b) switch
+        {
+            ({ } x, { } y) => LocalizationService.Text(Strings.Filter_DateBetweenFormat, x.ToShortDateString(), y.ToShortDateString()),
+            ({ } x, null) => LocalizationService.Text(Strings.Filter_DateFromFormat, x.ToShortDateString()),
+            (null, { } y) => LocalizationService.Text(Strings.Filter_DateUntilFormat, y.ToShortDateString()),
+            _ => range.Label,
+        };
+    }
+
     private void RebuildActiveFilters()
     {
         // The generated properties raise during construction, before every option is in place.
-        if (SelectedCategory is null || SelectedFeaturedFilter is null) return;
+        if (SelectedCategory is null || SelectedFeaturedFilter is null
+            || SelectedPublishedRange is null || SelectedUpdatedRange is null || SelectedSearchScope is null) return;
 
         ActiveFilters.Clear();
 
@@ -262,6 +390,26 @@ public partial class BrowseViewModel : LocalizedViewModel
         if (SelectedFeaturedFilter.Value != FeaturedFilter.Include)
             ActiveFilters.Add(new(Pill(Strings.Filter_SectionFeatured, SelectedFeaturedFilter),
                 () => SelectedFeaturedFilter = FeaturedFilterOptions.First(o => o.Value == FeaturedFilter.Include)));
+
+        if (DateRangeFilter.IsActive(SelectedPublishedRange.Value, PublishedFrom, PublishedUntil))
+            ActiveFilters.Add(new(Pill(Strings.Filter_SectionPublished, DateLabel(SelectedPublishedRange, PublishedFrom, PublishedUntil)),
+                () =>
+                {
+                    PublishedFrom = PublishedUntil = null;
+                    SelectedPublishedRange = DateRangeOptions[0];
+                }));
+
+        if (DateRangeFilter.IsActive(SelectedUpdatedRange.Value, UpdatedFrom, UpdatedUntil))
+            ActiveFilters.Add(new(Pill(Strings.Filter_SectionUpdated, DateLabel(SelectedUpdatedRange, UpdatedFrom, UpdatedUntil)),
+                () =>
+                {
+                    UpdatedFrom = UpdatedUntil = null;
+                    SelectedUpdatedRange = DateRangeOptions[0];
+                }));
+
+        if (SelectedSearchScope.Value != SearchScope.TitleAndTeaser)
+            ActiveFilters.Add(new(Pill(Strings.Filter_SectionSearchIn, SelectedSearchScope),
+                () => SelectedSearchScope = SearchScopeOptions[0]));
 
         OnPropertyChanged(nameof(HasActiveFilters));
     }
@@ -468,6 +616,10 @@ public partial class BrowseViewModel : LocalizedViewModel
                 ?? CategoryOptions[0];
             SavedFilterDefaults.ApplyAttributes(AttributeOptions, _defaults?.Attributes ?? []);
             UpdateAttributeFilterSummary();
+            PublishedFrom = PublishedUntil = UpdatedFrom = UpdatedUntil = null;
+            SelectedPublishedRange = DefaultDateRange(_defaults?.Published);
+            SelectedUpdatedRange = DefaultDateRange(_defaults?.Updated);
+            SelectedSearchScope = DefaultSearchScope();
         }
         finally
         {
@@ -500,6 +652,9 @@ public partial class BrowseViewModel : LocalizedViewModel
             Category = SelectedCategory.Title,
             PageSize = PageSize,
             Attributes = SavedFilterDefaults.CapturedAttributes(AttributeOptions),
+            Published = SavedPreset(SelectedPublishedRange),
+            Updated = SavedPreset(SelectedUpdatedRange),
+            SearchScope = SelectedSearchScope.Value.ToString(),
 
             // Only once the options exist. Saving an empty list from a page whose version filter
             // has not been built yet would read back as "show every SPT version", which is a real
@@ -514,6 +669,10 @@ public partial class BrowseViewModel : LocalizedViewModel
         StatusMessage = Strings.Browse_SavedAsDefault;
         AppLog.Info("Browse", "saved the current filters as this page's default");
     }
+
+    // A custom range is a one-off, so it saves as Any time (R20).
+    private static string SavedPreset(DateRangeItem range) =>
+        (range.Value == DateRangePreset.Custom ? DateRangePreset.AnyTime : range.Value).ToString();
 
     private bool CanGoToPreviousPage() => CurrentPage > 1;
 
@@ -658,6 +817,23 @@ public partial class BrowseViewModel : LocalizedViewModel
         foreach (var card in Results) card.RefreshPin(pins);
     }
 
+    // Ticks "By authors you follow" (the notification's Open); the tick box re-filters as usual.
+    private void ShowFollowed()
+    {
+        foreach (var option in AttributeOptions)
+            if (option.Value == ModAttributeFilter.ByFollowedAuthors) option.IsSelected = true;
+    }
+
+    // An author's page, from the "by" line on a card (OPEN-12 A4).
+    [RelayCommand]
+    private void OpenAuthor(ModCardViewModel? card)
+    {
+        if (card?.Mod.Owner is { } owner) AppNavigation.ShowAuthor(owner.Id, owner.Name);
+    }
+
+    // Whether this listing is installed, as far as the last scan Browse made knows (OPEN-12 A4).
+    public bool IsInstalled(Mod mod) => FindInstalledMatch(mod) is not null;
+
     private InstalledModCardViewModel? FindInstalledMatch(Mod mod)
     {
         if (!string.IsNullOrWhiteSpace(mod.Guid) && _installedByGuid.TryGetValue(mod.Guid, out var byGuid))
@@ -687,6 +863,10 @@ public partial class BrowseViewModel : LocalizedViewModel
             .ToList();
         var selectedLines = _selectedLines;
         var featured = SelectedFeaturedFilter.Value;
+        var titleOnly = SelectedSearchScope.Value == SearchScope.TitleOnly;
+        var (publishedFrom, publishedUntil) = DateRangeFilter.Window(SelectedPublishedRange.Value, DateTime.Today, PublishedFrom, PublishedUntil);
+        var (updatedFrom, updatedUntil) = DateRangeFilter.Window(SelectedUpdatedRange.Value, DateTime.Today, UpdatedFrom, UpdatedUntil);
+        var sptForDates = AppServices.SptEnvironment.InstalledVersion;
 
         var matched = AppServices.ModCache.AllMods
             // This app's own sp-mod.com listing is hidden here rather than dropped from the cached
@@ -697,7 +877,11 @@ public partial class BrowseViewModel : LocalizedViewModel
             .Where(m => !string.Equals(m.Id.ToString(), SelfMod.ModId, StringComparison.Ordinal))
             .Where(m => authorQuery is not null
                 ? MatchesAuthor(m, authorQuery)
-                : query.Length == 0 || Matches(m.Name, query) || Matches(m.Teaser, query) || Matches(m.Slug, query))
+                : query.Length == 0 || Matches(m.Name, query) || Matches(m.Slug, query) || (!titleOnly && Matches(m.Teaser, query)))
+            // OPEN-12 F19. Published is when the listing first went up; Updated is when it last had
+            // a release, the same date the Last updated sort uses.
+            .Where(m => DateRangeFilter.Contains(m.PublishedAt ?? m.CreatedAt, publishedFrom, publishedUntil))
+            .Where(m => DateRangeFilter.Contains(UpdatedDate(m, sptForDates), updatedFrom, updatedUntil))
             .Where(m => selectedLines.Count == 0 || MatchesSptVersionFilter(m, selectedLines))
             .Where(m => featured switch
             {
@@ -711,6 +895,7 @@ public partial class BrowseViewModel : LocalizedViewModel
             .Where(m => !IsOn(ModAttributeFilter.HideAds) || m.ContainsAds != true)
             .Where(m => !IsOn(ModAttributeFilter.HasAddons) || AppServices.Addons.CountFor(m.Id) > 0)
             .Where(m => !IsOn(ModAttributeFilter.HideInstalled) || FindInstalledMatch(m) is null)
+            .Where(m => !IsOn(ModAttributeFilter.ByFollowedAuthors) || AppServices.Followed.IsByFollowed(m))
             // Only mods already known to have dependencies. A mod nobody has looked at yet is not
             // claimed either way, so it drops out of this filter rather than being asserted clean.
             .Where(m => !IsOn(ModAttributeFilter.HasDependencies)
@@ -785,6 +970,9 @@ public partial class BrowseViewModel : LocalizedViewModel
     /// metadata edits too, which is part of what this sort is for - but when the newest release
     /// targets a line this install isn't on, that date is describing an update that can't be used
     /// here, so the newest usable release's date is used instead.</summary>
+    private static DateTimeOffset? UpdatedDate(Mod mod, string? installedSptVersion) =>
+        LastUpdatedDate(mod, installedSptVersion) is var when && when != DateTimeOffset.MinValue ? when : null;
+
     private static DateTimeOffset LastUpdatedDate(Mod mod, string? installedSptVersion)
     {
         var newest = ModCardViewModel.LatestVersion(mod);

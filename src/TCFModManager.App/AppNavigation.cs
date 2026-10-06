@@ -124,6 +124,53 @@ internal static class AppNavigation
         return pending;
     }
 
+    //
+    // OPEN-12 A4: an author's page, from any author name. Held like the other requests: the page
+    // takes it as it loads, and one already on screen hears AuthorRequested instead.
+    //
+    private static (int Id, string? Name)? _authorPending;
+
+    public static event EventHandler? AuthorRequested;
+
+    public static void ShowAuthor(int authorId, string? name)
+    {
+        _authorPending = (authorId, name);
+        AuthorRequested?.Invoke(null, EventArgs.Empty);
+        _navigation?.Navigate(typeof(AuthorPage));
+    }
+
+    public static (int Id, string? Name)? TakeAuthor()
+    {
+        var pending = _authorPending;
+        _authorPending = null;
+        return pending;
+    }
+
+    //
+    // Browse with "By authors you follow" ticked - a new-mods notification's Open. Same shape as
+    // ShowInstalledUpdates: the flag first, so a Browse page built by the navigation reads it.
+    //
+    private static bool _showFollowedPending;
+
+    public static event EventHandler? ShowFollowedRequested;
+
+    public static void ShowFollowedInBrowse()
+    {
+        _showFollowedPending = true;
+        ShowFollowedRequested?.Invoke(null, EventArgs.Empty);
+
+        if (Application.Current?.MainWindow is { } window) WindowActivation.BringForward(window);
+
+        _navigation?.Navigate(typeof(BrowsePage));
+    }
+
+    public static bool TakeShowFollowed()
+    {
+        var pending = _showFollowedPending;
+        _showFollowedPending = false;
+        return pending;
+    }
+
     // Consumed by the Installed page: true once per request.
     public static bool TakeShowUpdates()
     {

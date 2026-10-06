@@ -211,6 +211,17 @@ public partial class InstalledPage : Page
             if (mod.ServerFolderLink is { } server) Add(Strings.Installed_ServerFolder, "FolderOpen24", ViewModel.OpenModFolderCommand, server);
             if (InstalledViewModel.ModPageUrl(mod) is not null) Add(Strings.Common_ViewModPage, "Open24", ViewModel.OpenModPageCommand, mod);
 
+            // OPEN-12 A4 (R23): the author's page, and following them.
+            if (mod.AuthorId is { } authorId)
+            {
+                menu.Items.Add(new Separator());
+                Add(LocalizationService.Text(Strings.Author_MoreByFormat, mod.Author), "Person24", ViewModel.OpenAuthorCommand, mod);
+                Add(LocalizationService.Text(
+                        AppServices.Followed.IsFollowing(authorId) ? Strings.Author_UnfollowFormat : Strings.Author_FollowFormat, mod.Author),
+                    AppServices.Followed.IsFollowing(authorId) ? "PersonDelete24" : "PersonAdd24",
+                    ViewModel.ToggleFollowAuthorCommand, mod);
+            }
+
             menu.Items.Add(new Separator());
             Add(Strings.Installed_Remove, "Delete24", ViewModel.RemoveCommand, mod);
         }

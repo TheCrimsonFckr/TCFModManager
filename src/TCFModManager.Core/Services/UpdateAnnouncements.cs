@@ -38,6 +38,10 @@ public sealed class UpdateNotificationState
 
     // At most one entry per (ModId, IsAddon): the newest version announced for it.
     public List<AnnouncedUpdate> Announced { get; init; } = [];
+
+    // The new mods from followed authors already announced (OPEN-12 A4), newest last - see
+    // NewModAnnouncer. Carried over unchanged by UpdateAnnouncer.Pick.
+    public List<int> AnnouncedNewMods { get; set; } = [];
 }
 
 // What one check decided: the updates to announce, in the order they arrived, and the state to keep.
@@ -100,7 +104,12 @@ public static class UpdateAnnouncer
             });
         }
 
-        return new UpdateAnnouncement(fresh, new UpdateNotificationState { BaselineTaken = true, Announced = kept });
+        return new UpdateAnnouncement(fresh, new UpdateNotificationState
+        {
+            BaselineTaken = true,
+            Announced = kept,
+            AnnouncedNewMods = state.AnnouncedNewMods,
+        });
     }
 
     // A pending download at the candidate's version or newer. Unparsable versions only count when

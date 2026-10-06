@@ -6823,4 +6823,175 @@
   <data name="Filter_SectionGroupSort" xml:space="preserve">
     <value>Сортировка групп</value>
   </data>
+  <data name="Filter_SectionPublished" xml:space="preserve">
+    <value>Опубликован</value>
+  </data>
+  <data name="Filter_SectionUpdated" xml:space="preserve">
+    <value>Обновлён</value>
+  </data>
+  <data name="Filter_SectionSearchIn" xml:space="preserve">
+    <value>Искать в</value>
+  </data>
+  <data name="Filter_DateAnyTime" xml:space="preserve">
+    <value>За всё время</value>
+  </data>
+  <data name="Filter_DateLast7Days" xml:space="preserve">
+    <value>Последние 7 дней</value>
+  </data>
+  <data name="Filter_DateLast30Days" xml:space="preserve">
+    <value>Последние 30 дней</value>
+  </data>
+  <data name="Filter_DateLast90Days" xml:space="preserve">
+    <value>Последние 90 дней</value>
+  </data>
+  <data name="Filter_DateLastYear" xml:space="preserve">
+    <value>Последние 12 месяцев</value>
+  </data>
+  <data name="Filter_DateCustom" xml:space="preserve">
+    <value>Свои даты</value>
+  </data>
+  <data name="Filter_DateFrom" xml:space="preserve">
+    <value>С</value>
+  </data>
+  <data name="Filter_DateUntil" xml:space="preserve">
+    <value>По</value>
+  </data>
+  <data name="Filter_DateBetweenFormat" xml:space="preserve">
+    <value>с {0} по {1}</value>
+  </data>
+  <data name="Filter_DateFromFormat" xml:space="preserve">
+    <value>с {0}</value>
+  </data>
+  <data name="Filter_DateUntilFormat" xml:space="preserve">
+    <value>по {0}</value>
+  </data>
+  <data name="Filter_SearchTitleAndTeaser" xml:space="preserve">
+    <value>Название и анонс</value>
+  </data>
+  <data name="Filter_SearchTitleOnly" xml:space="preserve">
+    <value>Только название</value>
+  </data>
+  <data name="Browse_PublishedFilterToolTip" xml:space="preserve">
+    <value>Когда мод впервые опубликован на sp-mod</value>
+  </data>
+  <data name="Browse_UpdatedFilterToolTip" xml:space="preserve">
+    <value>Когда у мода последний раз вышла новая версия</value>
+  </data>
+  <data name="Browse_SearchScopeToolTip" xml:space="preserve">
+    <value>Где ищет поле поиска. Запрос, начинающийся с @, всегда ищет авторов.</value>
+  </data>
+  <data name="Upgrade_Header" xml:space="preserve">
+    <value>Переход на новую версию SPT</value>
+  </data>
+  <data name="Upgrade_Intro" xml:space="preserve">
+    <value>Выберите версию SPT, чтобы увидеть, какие из ваших модов к ней готовы. Определяется по страницам модов на sp-mod - ничего не меняется.</value>
+  </data>
+  <data name="Upgrade_Target" xml:space="preserve">
+    <value>Переход на SPT</value>
+  </data>
+  <data name="Upgrade_SummaryFormat" xml:space="preserve">
+    <value>Готовы: {0}, сначала обновить: {1}, ещё не готовы: {2}, проверить вручную: {3}</value>
+  </data>
+  <data name="Upgrade_ReadyFormat" xml:space="preserve">
+    <value>{0} работает на ней.</value>
+  </data>
+  <data name="Upgrade_UpdateFormat" xml:space="preserve">
+    <value>Сначала обновите до {0}.</value>
+  </data>
+  <data name="Upgrade_NotYet" xml:space="preserve">
+    <value>Для неё пока ничего не опубликовано.</value>
+  </data>
+  <data name="Upgrade_UnknownNotListed" xml:space="preserve">
+    <value>Не сопоставлен со страницей на sp-mod - проверьте вручную.</value>
+  </data>
+  <data name="Upgrade_UnknownConstraint" xml:space="preserve">
+    <value>На странице не указано, какой SPT нужен вашей версии - проверьте вручную.</value>
+  </data>
+  <data name="Upgrade_NoNewer" xml:space="preserve">
+    <value>У вас самая новая версия SPT.</value>
+  </data>
+  <data name="Upgrade_Offline" xml:space="preserve">
+    <value>Не удалось загрузить версии SPT - проверьте подключение и обновите.</value>
+  </data>
+  <data name="Author_Title" xml:space="preserve">
+    <value>Автор</value>
+  </data>
+  <data name="Author_CountsFormat" xml:space="preserve">
+    <value>Модов: {0}, аддонов: {1} на sp-mod</value>
+  </data>
+  <data name="Author_Follow" xml:space="preserve">
+    <value>Подписаться</value>
+  </data>
+  <data name="Author_Unfollow" xml:space="preserve">
+    <value>Отписаться</value>
+  </data>
+  <data name="Author_FollowToolTip" xml:space="preserve">
+    <value>Подписка на автора сообщает о его новых модах вместе с уведомлениями об обновлениях и позволяет в Обзоре показывать только его моды</value>
+  </data>
+  <data name="Author_OpenOnSite" xml:space="preserve">
+    <value>Открыть на sp-mod</value>
+  </data>
+  <data name="Author_ModsHeader" xml:space="preserve">
+    <value>Моды</value>
+  </data>
+  <data name="Author_AddonsHeader" xml:space="preserve">
+    <value>Аддоны</value>
+  </data>
+  <data name="Author_InstalledTag" xml:space="preserve">
+    <value>УСТАНОВЛЕН</value>
+  </data>
+  <data name="Author_AddonForFormat" xml:space="preserve">
+    <value>для {0}</value>
+  </data>
+  <data name="Author_OpenModToolTip" xml:space="preserve">
+    <value>Открыть сведения о моде</value>
+  </data>
+  <data name="Author_OpenAddonToolTip" xml:space="preserve">
+    <value>Открыть аддон на sp-mod</value>
+  </data>
+  <data name="Author_CatalogFailed" xml:space="preserve">
+    <value>Не удалось загрузить каталог модов - проверьте подключение и вернитесь.</value>
+  </data>
+  <data name="Author_NothingListed" xml:space="preserve">
+    <value>В каталоге нет ничего от этого автора.</value>
+  </data>
+  <data name="Author_LinkToolTip" xml:space="preserve">
+    <value>Открыть страницу автора</value>
+  </data>
+  <data name="Author_MoreByFormat" xml:space="preserve">
+    <value>Ещё от {0}</value>
+  </data>
+  <data name="Author_FollowFormat" xml:space="preserve">
+    <value>Подписаться на {0}</value>
+  </data>
+  <data name="Author_UnfollowFormat" xml:space="preserve">
+    <value>Отписаться от {0}</value>
+  </data>
+  <data name="Author_ModCountFormat" xml:space="preserve">
+    <value>Модов в каталоге: {0}</value>
+  </data>
+  <data name="Followed_Header" xml:space="preserve">
+    <value>Авторы, на которых вы подписаны</value>
+  </data>
+  <data name="Followed_SummaryFormat" xml:space="preserve">
+    <value>Подписок: {0} - их новые моды приходят вместе с уведомлениями об обновлениях</value>
+  </data>
+  <data name="Followed_Empty" xml:space="preserve">
+    <value>Вы пока ни на кого не подписаны. Нажмите на имя автора в любом месте приложения, чтобы открыть его страницу и подписаться.</value>
+  </data>
+  <data name="Followed_Open" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="Filter_ByFollowedAuthors" xml:space="preserve">
+    <value>От авторов из подписок</value>
+  </data>
+  <data name="Filter_ByFollowedAuthorsToolTip" xml:space="preserve">
+    <value>Только моды авторов из подписок - владельцев или соавторов</value>
+  </data>
+  <data name="NewModsToast_Title" xml:space="preserve">
+    <value>Новое от авторов из подписок</value>
+  </data>
+  <data name="NewModsToast_ItemFormat" xml:space="preserve">
+    <value>{0} от {1}</value>
+  </data>
 </root>

@@ -132,6 +132,9 @@ public partial class OptionsViewModel : LocalizedViewModel
     // Copies of the SPT profiles (OPEN-12 F4) - see ProfileBackupsViewModel.
     public ProfileBackupsViewModel Profiles { get; } = new();
 
+    // The authors the user follows (OPEN-12 A4) - see FollowedAuthorsViewModel.
+    public FollowedAuthorsViewModel Followed { get; } = new();
+
     // Also run each time the Options page opens: removals and Undo on the Installed page change it.
     public void RefreshRemovedModsSize()
     {

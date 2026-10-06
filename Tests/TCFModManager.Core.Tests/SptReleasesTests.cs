@@ -102,4 +102,19 @@ public class SptReleasesTests
 
         Assert.Equal(["4.1.2", "4.1.1", "4.1.0", "4.0.13", "4.0.12", "4.0.4"], supported);
     }
+
+    [Fact]
+    public void NewerThan_lists_the_releases_above_the_installed_one_newest_first()
+    {
+        var releases = new[]
+        {
+            new SptRelease(new Version(4, 0, 13), "4.0.13"),
+            new SptRelease(new Version(4, 1, 6), "4.1.6"),
+            new SptRelease(new Version(4, 1, 3), "4.1.3"),
+            new SptRelease(new Version(4, 2, 0), "4.2.0"),
+        };
+
+        Assert.Equal(["4.2.0", "4.1.6"], SptReleases.NewerThan(releases, "4.1.3").Select(r => r.Label));
+        Assert.Equal(4, SptReleases.NewerThan(releases, null).Count);
+    }
 }
