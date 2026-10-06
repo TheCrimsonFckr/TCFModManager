@@ -34,7 +34,7 @@ Once it's set up, the app keeps itself up to date from this page. On launch it c
 ## Planning
 Coming next, in no particular order - the [Planning page](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Planning) on the wiki has the full list, including everything already done.
 
-- Never left half-installed - an install that is interrupted is finished or undone the next time the app runs - *Planned*
+- Never left half-installed - an install that is interrupted (the app closed or the PC lost power part way) is shown as partly installed the next time the app runs, so a reinstall puts it right - *In progress*
 - Profile backups - your SPT profiles are backed up before any install, update, remove or list apply - *Planned*
 - Held-back updates - an update that would break another mod is flagged and left out of updating everything - *Planned*
 - Fika warnings - a version not marked for Fika on a Fika install, and a remove that may change your profile - *Planned*

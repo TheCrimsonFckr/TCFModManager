@@ -17,6 +17,9 @@ public sealed class ModInstallManifestService
         _filePath = filePath ?? Path.Combine(AppPaths.DataDirectory, "installed-mods.json");
     }
 
+    // Where the manifest lives - the install journal keeps its notes beside it (InstallJournal.Beside).
+    public string FilePath => _filePath;
+
     public ModInstallManifest Load()
     {
         if (!File.Exists(_filePath)) return new ModInstallManifest();

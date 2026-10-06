@@ -72,9 +72,15 @@ public partial class App : Application
         // is gone, so its own log is the only record of it) and clears out the staged files.
         AppUpdateInstaller.SweepAfterStartup();
 
+        var pruneInstall = SptInstallationService.ToGameRoot(new SettingsService().Load().SptInstallPath);
+
+        // An install the app was stopped in the middle of last time is recorded as partly installed
+        // before any page reads the records, so its card says so (OPEN-12 F1, see InstallJournal).
+        if (!string.IsNullOrWhiteSpace(pruneInstall))
+            AppServices.ModInstall.RecoverInterruptedInstalls(pruneInstall);
+
         // Removed mods whose time is up under Keep removed mods are deleted from the install's holding
         // folder (D27) - off the UI thread, since a large held mod takes a moment to delete.
-        var pruneInstall = SptInstallationService.ToGameRoot(new SettingsService().Load().SptInstallPath);
         if (!string.IsNullOrWhiteSpace(pruneInstall))
         {
             _ = Task.Run(() =>

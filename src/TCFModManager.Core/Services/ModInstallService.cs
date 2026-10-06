@@ -15,9 +15,12 @@ public sealed class ModInstallService(
     ConfigCarryOver? configCarryOver = null,
     ConfigUpdateLog? configUpdateLog = null,
     ModConfigOptionsStore? configOptions = null,
-    RemovedMods? removedMods = null)
+    RemovedMods? removedMods = null,
+    InstallJournal? installJournal = null)
 {
     private readonly RemovedMods _removed = removedMods ?? new RemovedMods();
+
+    private readonly InstallJournal _journal = installJournal ?? InstallJournal.Beside(manifestService);
 
     private readonly ConfigCarryOver _configs = configCarryOver ?? new ConfigCarryOver();
     private readonly ModConfigOptionsStore _options = configOptions ?? new ModConfigOptionsStore();
@@ -189,6 +192,7 @@ public sealed class ModInstallService(
         AppLog.Debug("Install", $"work dir {workDir} (move into install: {canMoveIntoInstall})");
         var archivePath = Path.Combine(workDir, "download.bin");
         var extractDir = Path.Combine(workDir, "extracted");
+        InstallJournalEntry? journalEntry = null;
 
         try
         {
@@ -261,6 +265,7 @@ public sealed class ModInstallService(
             // Re-checked now the download is finished: SPT may have been started while it ran, and
             // everything past this point deletes or places files inside the install.
             EnsureInstallNotInUse(ModInstallAction.Install, installPath);
+            RecoverInterruptedInstalls(installPath);
 
             var manifest = manifestService.Load();
             var existing = manifest.Mods.FirstOrDefault(target.Matches);
@@ -379,6 +384,27 @@ public sealed class ModInstallService(
             //
             var overwrote = KeepOriginals(installPath, target, version, existing, manifest, placements, pending, timestamp);
 
+            //
+            // The last moment the install is still exactly as it was: from here the previous version's
+            // record goes and the new files land. Noted first, so a process that ends part way leaves
+            // nothing untracked - see InstallJournal (OPEN-12 F1).
+            //
+            journalEntry = new InstallJournalEntry
+            {
+                InstallPath = InstallStamp.Of(installPath),
+                ModId = target.Id,
+                IsAddon = target.IsAddon,
+                Guid = target.Guid,
+                Name = target.Name,
+                VersionId = version.Id,
+                Version = version.Version ?? "unknown",
+                StartedAt = timestamp,
+                Planned = [.. placements.Select(p => p.Forward)],
+                Overwrote = [.. overwrote],
+                ConfigsFolder = pending.ArchiveFolder,
+            };
+            _journal.Write(journalEntry);
+
             if (existing is not null)
             {
                 status?.Report(new ModInstallProgress(
@@ -472,6 +498,7 @@ public sealed class ModInstallService(
                 // originals kept so far are recorded too - they are owed back whatever happens next.
                 SaveRecord(target, version, placedFiles, incomplete: true, installPath, overwrote,
                     KeepSettingsPrints(Fingerprint(installPath, placedFiles), pending, existing));
+                _journal.Delete(journalEntry);
 
                 AppLog.Error("Install",
                     $"{target.Name} {version.Version} incomplete after {placedFiles.Count}/{placements.Count} file(s)", ex);
@@ -512,6 +539,7 @@ public sealed class ModInstallService(
             var fingerprintClock = Stopwatch.StartNew();
             record = SaveRecord(target, version, placedFiles, incomplete: false, installPath, overwrote,
                 KeepSettingsPrints(Fingerprint(installPath, placedFiles), pending, existing), emptyFolders);
+            _journal.Delete(journalEntry);
             AppLog.Debug("Install", $"fingerprinted {record.Fingerprints.Count} file(s) in {fingerprintClock.ElapsedMilliseconds}ms");
 
             status?.Report(new ModInstallProgress(ModInstallStage.Done));
@@ -536,6 +564,7 @@ public sealed class ModInstallService(
         }
         finally
         {
+            if (journalEntry is not null) _journal.Release(journalEntry);
             TryDeleteDirectory(workDir);
         }
     }
@@ -809,6 +838,7 @@ public sealed class ModInstallService(
     {
         EnsureInstallNotInUse(ModInstallAction.Remove, installPath);
         EnsureRecordBelongsHere(record, installPath);
+        RecoverInterruptedInstalls(installPath);
 
         var result = RemoveRecordedFiles(installPath, record, configs, null, null, RemovalKind.AppInstalled, ct);
 
@@ -817,6 +847,26 @@ public sealed class ModInstallService(
         _configs.Baselines.Remove(record.ModId, record.IsAddon);
 
         return Task.FromResult(result);
+    }
+
+    //
+    // Installs this app was stopped in the middle of, settled so every file they placed is owned by a
+    // record (OPEN-12 F1, see InstallJournal). Run before every change to the install, and by the App
+    // once at start. Returns the names of the mods now marked partly installed.
+    //
+    public IReadOnlyList<string> RecoverInterruptedInstalls(string installPath)
+    {
+        if (string.IsNullOrWhiteSpace(installPath) || !Directory.Exists(installPath)) return [];
+
+        try
+        {
+            return _journal.Recover(installPath, manifestService);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.Warn("Install", $"couldn't settle interrupted installs: {ex.Message}");
+            return [];
+        }
     }
 
     //
@@ -1110,6 +1160,7 @@ public sealed class ModInstallService(
             throw new ModInstallException(ModInstallFailure.NoInstallFolder);
 
         EnsureInstallNotInUse(ModInstallAction.Remove, installPath);
+        RecoverInterruptedInstalls(installPath);
 
         foreach (var path in paths)
         {
@@ -1151,6 +1202,7 @@ public sealed class ModInstallService(
     public UndoResult UndoRemoval(string installPath, string folder)
     {
         EnsureInstallNotInUse(ModInstallAction.Undo, installPath);
+        RecoverInterruptedInstalls(installPath);
 
         var log = RemovedMods.ReadLog(folder);
         if (log is null || log.Undone || log.Kind == RemovalKind.ReplacedByUpdate

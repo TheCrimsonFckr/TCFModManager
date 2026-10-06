@@ -7372,7 +7372,7 @@ See Dependencies and Conflicts.</value>
     <comment>Title of the window listing everyone who has contributed.</comment>
   </data>
   <data name="Credits_Intro" xml:space="preserve">
-    <value>TCF Mod Manager is built by TCF, with help from the people below. Thank you.</value>
+    <value>TCF Mod Manager is built by TheCrimsonFuckr, with help from the people below. Thank you.</value>
   </data>
   <data name="Credits_ContributorsHeader" xml:space="preserve">
     <value>Contributors</value>

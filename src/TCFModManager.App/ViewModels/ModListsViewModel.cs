@@ -1758,7 +1758,7 @@ public partial class ModListsViewModel : LocalizedViewModel
 
     //
     // An sp-mod Mod List, read by its address and reviewed in its own window before anything is
-    // stored (OPEN-20). The window hands back the list folded into any copy already here; storing
+    // stored (CLOSED-20). The window hands back the list folded into any copy already here; storing
     // it is the same Add a file import uses, so a re-import replaces rather than duplicates.
     //
     [RelayCommand(CanExecute = nameof(CanUseSpMod))]
