@@ -4,6 +4,7 @@ The install queue. Items process one at a time; each resolves its dependencies a
 - **Cancel** on any individual item - cancelling a mod also cancels the dependencies it dragged in
 - **Clear finished** to tidy up
 - Plain archive downloads, for when you'd rather install something by hand
+- **Not for Fika:** on an install that runs Fika, a version sp-mod marks as not working with Fika is asked about before it downloads. **No** leaves just that one out; the default is No.
 
 ## How an install actually runs
 The archive is downloaded and extracted into a hidden scratch folder inside your SPT install (`.tcfmm-work\`, swept of stale runs each time), then moved into place.
