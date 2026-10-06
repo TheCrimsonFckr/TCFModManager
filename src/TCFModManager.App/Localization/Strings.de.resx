@@ -1863,7 +1863,7 @@ Die Kopie, die du nicht behältst, wird in einen versteckten Ordner .tcfmm-dupli
     <value>Mehrfachauswahl</value>
   </data>
   <data name="Installed_MultiSelectToolTip" xml:space="preserve">
-    <value>Mehrere Mods anhaken, um sie zusammen zu aktivieren oder zu deaktivieren</value>
+    <value>Mehrere Mods anhaken, um sie zusammen zu aktualisieren, zu aktivieren, zu deaktivieren oder zu entfernen - Strg-Klick, Umschalt-Klick und Strg+A haken sie ebenfalls an</value>
   </data>
   <data name="Installed_NewGroupPlaceholder" xml:space="preserve">
     <value>Name der neuen Gruppe...</value>
@@ -6408,5 +6408,44 @@ Trotzdem herunterladen?</value>
   </data>
   <data name="Downloads_BarToolTip" xml:space="preserve">
     <value>Downloads öffnen</value>
+  </data>
+  <data name="Installed_RemoveSelected" xml:space="preserve">
+    <value>Ausgewählte entfernen</value>
+  </data>
+  <data name="Installed_RemoveSelectedToolTip" xml:space="preserve">
+    <value>Alle ausgewählten Mods nach einer einzigen Rückfrage entfernen. Ihre Konfigurationsdateien werden behalten.</value>
+  </data>
+  <data name="Installed_RemoveSelectedTitle" xml:space="preserve">
+    <value>Ausgewählte Mods entfernen?</value>
+  </data>
+  <data name="Installed_RemoveSelectedBodyFormat" xml:space="preserve">
+    <value>Diese Mods werden entfernt:
+{0}
+
+Ihre Konfigurationsdateien werden in {1} behalten.</value>
+  </data>
+  <data name="Installed_RemoveSelectedProfileFormat" xml:space="preserve">
+    <value>sp-mod kennzeichnet diese als Mods, die dauerhafte Änderungen an deinem Profil vornehmen können und sich eventuell nicht ohne neues Profil entfernen lassen:
+{0}
+
+Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie deiner Profile von kurz davor liegt unter Optionen, SPT-Profil-Sicherungen.</value>
+  </data>
+  <data name="Installed_RemoveSelectedLeavesDisabledFormat" xml:space="preserve">
+    <value>Ausgelassen, weil sie deaktiviert sind - zum Entfernen zuerst aktivieren: {0}.</value>
+  </data>
+  <data name="Installed_RemoveSelectedAllDisabledFormat" xml:space="preserve">
+    <value>Nichts entfernt - die ausgewählten Mods sind deaktiviert. Zum Entfernen zuerst aktivieren: {0}.</value>
+  </data>
+  <data name="Installed_RemoveSelectedCancelled" xml:space="preserve">
+    <value>Es wurde nichts entfernt.</value>
+  </data>
+  <data name="Installed_RemovedSelectedFormat" xml:space="preserve">
+    <value>{0} von {1} ausgewählten Mods entfernt.</value>
+  </data>
+  <data name="Installed_RemoveSelectedFailedFormat" xml:space="preserve">
+    <value>Nicht entfernt: {0} - der Grund steht im Log.</value>
+  </data>
+  <data name="Installed_UpdateOneToolTipFormat" xml:space="preserve">
+    <value>Auf {0} aktualisieren</value>
   </data>
 </root>

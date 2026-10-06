@@ -1962,7 +1962,7 @@
     <value>Выбор нескольких</value>
   </data>
   <data name="Installed_MultiSelectToolTip" xml:space="preserve">
-    <value>Отметьте несколько модов, чтобы включить или отключить их вместе</value>
+    <value>Отметьте несколько модов, чтобы обновить, включить, отключить или удалить их вместе - Ctrl-клик, Shift-клик и Ctrl+A тоже их отмечают</value>
   </data>
   <data name="Installed_NewGroupPlaceholder" xml:space="preserve">
     <value>Название новой группы...</value>
@@ -6753,5 +6753,44 @@
   </data>
   <data name="Downloads_BarToolTip" xml:space="preserve">
     <value>Открыть загрузки</value>
+  </data>
+  <data name="Installed_RemoveSelected" xml:space="preserve">
+    <value>Удалить выбранные</value>
+  </data>
+  <data name="Installed_RemoveSelectedToolTip" xml:space="preserve">
+    <value>Удалить все выбранные моды после одного вопроса. Их файлы настроек сохраняются.</value>
+  </data>
+  <data name="Installed_RemoveSelectedTitle" xml:space="preserve">
+    <value>Удалить выбранные моды?</value>
+  </data>
+  <data name="Installed_RemoveSelectedBodyFormat" xml:space="preserve">
+    <value>Эти моды будут удалены:
+{0}
+
+Их файлы настроек сохраняются в {1}.</value>
+  </data>
+  <data name="Installed_RemoveSelectedProfileFormat" xml:space="preserve">
+    <value>sp-mod отмечает эти моды как способные навсегда изменить ваш профиль и, возможно, неудаляемые без создания нового профиля:
+{0}
+
+Их удаление может оставить профиль, который SPT не загрузит. Копия ваших профилей перед этим есть в Параметрах, в разделе «Резервные копии профилей SPT».</value>
+  </data>
+  <data name="Installed_RemoveSelectedLeavesDisabledFormat" xml:space="preserve">
+    <value>Пропущены, потому что отключены - сначала включите их, чтобы удалить: {0}.</value>
+  </data>
+  <data name="Installed_RemoveSelectedAllDisabledFormat" xml:space="preserve">
+    <value>Ничего не удалено - выбранные моды отключены. Сначала включите их, чтобы удалить: {0}.</value>
+  </data>
+  <data name="Installed_RemoveSelectedCancelled" xml:space="preserve">
+    <value>Ничего не удалено.</value>
+  </data>
+  <data name="Installed_RemovedSelectedFormat" xml:space="preserve">
+    <value>Удалено модов: {0} из {1} выбранных.</value>
+  </data>
+  <data name="Installed_RemoveSelectedFailedFormat" xml:space="preserve">
+    <value>Не удалены: {0} - причина в журнале.</value>
+  </data>
+  <data name="Installed_UpdateOneToolTipFormat" xml:space="preserve">
+    <value>Обновить до {0}</value>
   </data>
 </root>

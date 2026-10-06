@@ -46,11 +46,11 @@ Coming next, in no particular order - the [Planning page](https://github.com/The
 - Direct launch - start the game from the Play page without SPT's launcher (experimental, off by default) - *Planned*
 - Mod descriptions shown in full - tabs, tables and GIFs as sp-mod shows them - *Planned*
 - Filter by date, and search mod descriptions as well as titles - *Planned*
-- Select several mods on Installed and update, enable, disable or remove them together - *Planned*
-- An Update button on each card - *Planned*
-- A Versions tab with Switch to this version - *Planned*
+- Select several mods on Installed - Ctrl-click, Shift-click, Ctrl+A, in every view - and update, enable, disable or remove them together - *In progress*
+- An Update button on each card and List row - *In progress*
+- Switching to any version - already in Details and versions, which lists every release with Update, Downgrade or Redownload - *Completed*
 - Author pages, and following an author - *Planned*
-- A right-click menu on every mod - *Planned*
+- A right-click menu on every mod - *In progress*
 - Quick view - hover a mod for a preview - *Planned*
 - A downloads bar along the bottom of the window while anything downloads or installs - *In progress*
 - Page size options, including endless scrolling - *Planned*

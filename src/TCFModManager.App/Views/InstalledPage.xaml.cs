@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
+using TCFModManager.App.Localization;
 using TCFModManager.App.ViewModels;
 
 namespace TCFModManager.App.Views;
@@ -73,6 +74,7 @@ public partial class InstalledPage : Page
     //
     private async void InstalledPage_Loaded(object sender, RoutedEventArgs e)
     {
+        HookKeys();
         ViewModel.UpdateLayoutForWidth(ResultsItems.ActualWidth);
 
         if (!ViewModel.HasScanned)
@@ -96,16 +98,116 @@ public partial class InstalledPage : Page
     // what opens the card. The versions dialog is reached from "Details and versions" inside the
     // card, exactly as it already was in the List view.
     //
+    //
+    // Cards and List rows. Ctrl-click and Shift-click pick a mod in any mode, switching Multi select
+    // on (OPEN-12 A1); in Multi select a plain click picks too. Marked handled so the expander doesn't
+    // also open while you are picking mods.
+    //
     private void Card_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        if (!ViewModel.SelectionMode) return;
         if (sender is not FrameworkElement { DataContext: InstalledModCardViewModel mod }) return;
 
         // A button or the checkbox itself still does its own job; this only claims the empty parts
         // of the card. IsInsideButton is the same helper the group-view row gesture uses.
         if (IsInsideButton(e.OriginalSource)) return;
 
-        mod.IsSelected = !mod.IsSelected;
+        if (!IsPickingClick()) return;
+
+        ViewModel.ClickSelect(mod, range: Keyboard.Modifiers.HasFlag(ModifierKeys.Shift));
+        e.Handled = true;
+    }
+
+    private bool IsPickingClick() =>
+        ViewModel.SelectionMode
+        || Keyboard.Modifiers.HasFlag(ModifierKeys.Control)
+        || Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
+
+    //
+    // OPEN-12 A1: Ctrl+A picks everything the filters match and Esc leaves Multi select - heard on
+    // the window, since nothing in the lists takes keyboard focus. Not while typing in a box, where
+    // Ctrl+A selects the text and Esc is the box's own.
+    //
+    private Window? _keyWindow;
+
+    private void InstalledPage_Unloaded(object sender, RoutedEventArgs e)
+    {
+        if (_keyWindow is not null) _keyWindow.PreviewKeyDown -= Window_PreviewKeyDown;
+        _keyWindow = null;
+    }
+
+    private void HookKeys()
+    {
+        if (_keyWindow is not null) return;
+
+        _keyWindow = Window.GetWindow(this);
+        if (_keyWindow is not null) _keyWindow.PreviewKeyDown += Window_PreviewKeyDown;
+    }
+
+    private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (!IsVisible || Keyboard.FocusedElement is TextBoxBase or PasswordBox or ComboBox) return;
+
+        if (e.Key == Key.A && Keyboard.Modifiers == ModifierKeys.Control)
+        {
+            ViewModel.SelectAllFromKeyboard();
+            e.Handled = true;
+        }
+        else if (e.Key == Key.Escape && ViewModel.SelectionMode)
+        {
+            ViewModel.SelectionMode = false;
+            e.Handled = true;
+        }
+    }
+
+    //
+    // OPEN-12 A5: the right-click menu on a card, a group row or a List row - the card's own actions,
+    // nothing new. Right-clicking one of several ticked mods acts on all the ticked ones.
+    //
+    private void Mod_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is not FrameworkElement { DataContext: InstalledModCardViewModel mod } element) return;
+
+        var menu = new ContextMenu { PlacementTarget = element, Placement = PlacementMode.MousePoint };
+
+        void Add(string header, string symbol, System.Windows.Input.ICommand command, object? parameter = null)
+        {
+            menu.Items.Add(new MenuItem
+            {
+                Header = header,
+                Icon = new Wpf.Ui.Controls.SymbolIcon { Symbol = Enum.Parse<Wpf.Ui.Controls.SymbolRegular>(symbol) },
+                Command = command,
+                CommandParameter = parameter,
+            });
+        }
+
+        if (mod.IsSelected && ViewModel.SelectedCount > 1)
+        {
+            menu.Items.Add(new MenuItem { Header = ViewModel.SelectedCountLabel, IsEnabled = false });
+            menu.Items.Add(new Separator());
+            Add(Strings.Installed_UpdateSelected, "ArrowDownload24", ViewModel.UpdateSelectedCommand);
+            Add(Strings.Installed_EnableSelected, "PlugConnected24", ViewModel.EnableSelectedCommand);
+            Add(Strings.Installed_DisableSelected, "PlugDisconnected24", ViewModel.DisableSelectedCommand);
+            menu.Items.Add(new Separator());
+            Add(Strings.Installed_RemoveSelected, "Delete24", ViewModel.RemoveSelectedCommand);
+        }
+        else
+        {
+            Add(Strings.Installed_DetailsAndVersions, "Info24", ViewModel.ShowDetailsCommand, mod);
+            if (mod.CanQuickUpdate) Add(mod.QuickUpdateToolTip, "ArrowDownload24", ViewModel.UpdateOneCommand, mod);
+            Add(mod.DisableToggleTooltip, mod.DisableToggleGlyph, ViewModel.ToggleDisableCommand, mod);
+            Add(mod.PinLabel, mod.PinGlyph, ViewModel.TogglePinCommand, mod);
+
+            if (mod.ClientFolderLink is not null || mod.ServerFolderLink is not null || InstalledViewModel.ModPageUrl(mod) is not null)
+                menu.Items.Add(new Separator());
+            if (mod.ClientFolderLink is { } client) Add(Strings.Installed_ClientFolder, "FolderOpen24", ViewModel.OpenModFolderCommand, client);
+            if (mod.ServerFolderLink is { } server) Add(Strings.Installed_ServerFolder, "FolderOpen24", ViewModel.OpenModFolderCommand, server);
+            if (InstalledViewModel.ModPageUrl(mod) is not null) Add(Strings.Common_ViewModPage, "Open24", ViewModel.OpenModPageCommand, mod);
+
+            menu.Items.Add(new Separator());
+            Add(Strings.Installed_Remove, "Delete24", ViewModel.RemoveCommand, mod);
+        }
+
+        menu.IsOpen = true;
         e.Handled = true;
     }
 
@@ -201,6 +303,16 @@ public partial class InstalledPage : Page
         {
             _dragCandidate = null;
             _dragStarted = false;
+            return;
+        }
+
+        // Picking (OPEN-12 A1): no drag, no details - the row just takes or loses its tick.
+        if (IsPickingClick() && (sender as FrameworkElement)?.DataContext is InstalledModCardViewModel picked)
+        {
+            _dragCandidate = null;
+            _dragStarted = false;
+            ViewModel.ClickSelect(picked, range: Keyboard.Modifiers.HasFlag(ModifierKeys.Shift));
+            e.Handled = true;
             return;
         }
 

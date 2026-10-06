@@ -21,6 +21,7 @@
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     Title="{loc:Str Nav_Installed}"
     Loaded="InstalledPage_Loaded"
+    Unloaded="InstalledPage_Unloaded"
     ScrollViewer.CanContentScroll="False">
     <Page.Resources>
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
@@ -313,8 +314,8 @@
                 Command="{Binding UndoCommand}"
                 Visibility="{Binding CanUndo, Converter={StaticResource BoolToVis}}" />
 
-            <!-- Turns the card grid into a tick-list for disabling several mods at once. Cards
-                 view only; group view has its own per-group buttons. -->
+            <!-- Turns the list into a tick-list for acting on several mods at once - in all three
+                 views (OPEN-12 A1). Ctrl-click, Shift-click and Ctrl+A switch it on too. -->
             <ui:Button
                 DockPanel.Dock="Right"
                 Margin="0,0,8,0"
@@ -322,7 +323,6 @@
                 Icon="{ui:SymbolIcon SelectAllOn24}"
                 ToolTip="{loc:Str Installed_MultiSelectToolTip}"
                 Appearance="{Binding SelectionMode, Converter={StaticResource BoolToAppearance}}"
-                Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}"
                 Click="SelectMode_Click" />
 
             <!-- Open/close everything the filters match, in whichever of the two expandable views
@@ -600,11 +600,10 @@
             </WrapPanel>
         </DockPanel>
 
-        <!-- Multi-select bar. Shares row 3 with the group management bar below, which is safe
-             because switching to group view turns selection mode off (see
-             InstalledViewModel.OnViewModeChanged) - the two can never show together. -->
+        <!-- Row 3: the multi-select bar above the group management bar. Since OPEN-12 A1 selection
+             works in group view too, so the two can show together and are stacked. -->
+        <StackPanel Grid.Row="3">
         <DockPanel
-            Grid.Row="3"
             Margin="0,0,0,8"
             Visibility="{Binding SelectionMode, Converter={StaticResource BoolToVis}}">
             <ui:Button
@@ -639,6 +638,14 @@
                 Content="{loc:Str Installed_DisableSelected}"
                 Icon="{ui:SymbolIcon PlugDisconnected24}"
                 Command="{Binding DisableSelectedCommand}" />
+            <!-- One question for all of them, configs kept (OPEN-12 A1). -->
+            <ui:Button
+                DockPanel.Dock="Right"
+                Margin="0,0,8,0"
+                Content="{loc:Str Installed_RemoveSelected}"
+                Icon="{ui:SymbolIcon Delete24}"
+                ToolTip="{loc:Str Installed_RemoveSelectedToolTip}"
+                Command="{Binding RemoveSelectedCommand}" />
             <TextBlock
                 VerticalAlignment="Center"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
@@ -647,7 +654,6 @@
 
         <!-- Group management bar - only meaningful, so only shown, in group view. -->
         <DockPanel
-            Grid.Row="3"
             Margin="0,0,0,8"
             Visibility="{Binding ShowGroups, Converter={StaticResource BoolToVis}}">
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
@@ -669,6 +675,7 @@
                 PlaceholderText="{loc:Str Installed_NewGroupPlaceholder}"
                 Text="{Binding NewGroupName, UpdateSourceTrigger=PropertyChanged}" />
         </DockPanel>
+        </StackPanel>
 
         <!-- Installed mods grid; column count is set from code-behind based on width. Hidden in
              group view (see Sections below, occupying the same cell). -->
@@ -751,7 +758,8 @@
                             Margin="0,0,6,6"
                             IsExpanded="{Binding IsCardExpanded, Mode=TwoWay}"
                             Opacity="{Binding CardOpacity}"
-                            PreviewMouseLeftButtonDown="Card_PreviewMouseLeftButtonDown">
+                            PreviewMouseLeftButtonDown="Card_PreviewMouseLeftButtonDown"
+                            MouseRightButtonUp="Mod_MouseRightButtonUp">
                             <ui:CardExpander.Header>
                                 <Grid Margin="0,0,8,0">
                                     <Grid.ColumnDefinitions>
@@ -808,6 +816,24 @@
                                             CommandParameter="{Binding}"
                                             ToolTip="{Binding DisableToggleTooltip}">
                                             <ui:SymbolIcon Symbol="{Binding DisableToggleGlyph}" FontSize="16" />
+                                        </ui:Button>
+
+                                        <!-- OPEN-12 A2: one click queues this mod's update. -->
+                                        <ui:Button
+                                            Margin="0,2,10,0"
+                                            Padding="0"
+                                            MinWidth="0"
+                                            MinHeight="0"
+                                            Width="30"
+                                            Height="30"
+                                            HorizontalAlignment="Center"
+                                            Appearance="Transparent"
+                                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                            Visibility="{Binding CanQuickUpdate, Converter={StaticResource BoolToVis}}"
+                                            Command="{Binding DataContext.UpdateOneCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                            CommandParameter="{Binding}"
+                                            ToolTip="{Binding QuickUpdateToolTip}">
+                                            <ui:SymbolIcon Symbol="ArrowDownload24" FontSize="16" />
                                         </ui:Button>
 
                                         <ui:SymbolIcon
@@ -1059,11 +1085,12 @@
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate DataType="{x:Type viewmodels:InstalledModCardViewModel}">
                                                 <Border
-                                                    Style="{StaticResource ClickableCardRow}"
+                                                    Style="{StaticResource TickableCardRow}"
                                                     Margin="0,0,0,4"
                                                     Padding="8,6"
                                                     Opacity="{Binding CardOpacity}"
                                                     ToolTip="{loc:Str Installed_GroupRowToolTip}"
+                                                    MouseRightButtonUp="Mod_MouseRightButtonUp"
                                                     PreviewMouseLeftButtonDown="ModRow_PreviewMouseLeftButtonDown"
                                                     PreviewMouseMove="ModRow_PreviewMouseMove"
                                                     PreviewMouseLeftButtonUp="ModRow_PreviewMouseLeftButtonUp">
@@ -1074,14 +1101,22 @@
                                                             <ColumnDefinition Width="Auto" />
                                                         </Grid.ColumnDefinitions>
 
+                                                        <!-- Multi select (OPEN-12 A1): the tick sits before the status icon. -->
+                                                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                                        <CheckBox
+                                                            Margin="0,0,8,0"
+                                                            VerticalAlignment="Center"
+                                                            IsChecked="{Binding IsSelected}"
+                                                            IsHitTestVisible="False"
+                                                            Visibility="{Binding DataContext.SelectionMode, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Converter={StaticResource BoolToVis}}" />
                                                         <ui:SymbolIcon
-                                                            Grid.Column="0"
                                                             Margin="0,0,8,0"
                                                             VerticalAlignment="Center"
                                                             FontSize="20"
                                                             Symbol="{Binding StatusGlyph}"
                                                             Style="{StaticResource StatusIcon}"
                                                             ToolTip="{Binding StatusTooltip}" />
+                                                        </StackPanel>
 
                                                         <StackPanel Grid.Column="1">
                                                             <TextBlock
@@ -1153,11 +1188,14 @@
             <ItemsControl Focusable="False" ItemsSource="{Binding ListItems}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+                        <!-- Tickable (OPEN-12 A1): a ticked row carries the accent edge, as a card does. -->
                         <ui:CardExpander
-                            Style="{StaticResource HoverCardExpander}"
+                            Style="{StaticResource TickableCardExpander}"
                             Margin="0,0,6,6"
                             IsExpanded="{Binding IsRowExpanded, Mode=TwoWay}"
-                            Opacity="{Binding CardOpacity}">
+                            Opacity="{Binding CardOpacity}"
+                            PreviewMouseLeftButtonDown="Card_PreviewMouseLeftButtonDown"
+                            MouseRightButtonUp="Mod_MouseRightButtonUp">
                             <ui:CardExpander.Header>
                                 <Grid Margin="0,0,8,0">
                                     <Grid.ColumnDefinitions>
@@ -1167,14 +1205,20 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
+                                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                    <CheckBox
+                                        Margin="0,0,8,0"
+                                        VerticalAlignment="Center"
+                                        IsChecked="{Binding IsSelected}"
+                                        Visibility="{Binding DataContext.SelectionMode, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Converter={StaticResource BoolToVis}}" />
                                     <ui:SymbolIcon
-                                        Grid.Column="0"
                                         Margin="0,0,12,0"
                                         VerticalAlignment="Center"
                                         FontSize="20"
                                         Symbol="{Binding StatusGlyph}"
                                         Style="{StaticResource StatusIcon}"
                                         ToolTip="{Binding StatusTooltip}" />
+                                    </StackPanel>
 
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                         <TextBlock
@@ -1227,7 +1271,21 @@
 
                                     <!-- Only the non-destructive actions live in the header; Remove
                                          and Sort out are inside the row, which has to be opened first. -->
-                                    <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                                    <StackPanel Grid.Column="3" VerticalAlignment="Center" Orientation="Horizontal">
+                                    <!-- OPEN-12 A2: one click queues this mod's update. -->
+                                    <ui:Button
+                                        Padding="6"
+                                        Margin="0,0,4,0"
+                                        VerticalAlignment="Top"
+                                        Appearance="Transparent"
+                                        Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                        Visibility="{Binding CanQuickUpdate, Converter={StaticResource BoolToVis}}"
+                                        Command="{Binding DataContext.UpdateOneCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip="{Binding QuickUpdateToolTip}">
+                                        <ui:SymbolIcon Symbol="ArrowDownload24" FontSize="16" />
+                                    </ui:Button>
+                                    <StackPanel VerticalAlignment="Center">
                                         <ui:Button
                                             Padding="6"
                                             Appearance="Transparent"
@@ -1245,6 +1303,7 @@
                                             Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
                                             ToolTip="{loc:Str Common_PinnedToolTip}"
                                             Visibility="{Binding IsPinned, Converter={StaticResource BoolToVis}}" />
+                                    </StackPanel>
                                     </StackPanel>
                                 </Grid>
                             </ui:CardExpander.Header>

@@ -1863,7 +1863,7 @@ La copie que vous ne gardez pas est déplacée dans un dossier caché .tcfmm-dup
     <value>Sélection multiple</value>
   </data>
   <data name="Installed_MultiSelectToolTip" xml:space="preserve">
-    <value>Cochez plusieurs mods pour les activer ou les désactiver ensemble</value>
+    <value>Cochez plusieurs mods pour les mettre à jour, les activer, les désactiver ou les supprimer ensemble - Ctrl-clic, Maj-clic et Ctrl+A les cochent aussi</value>
   </data>
   <data name="Installed_NewGroupPlaceholder" xml:space="preserve">
     <value>Nom du nouveau groupe...</value>
@@ -6281,16 +6281,16 @@ Voir Dépendances et conflits.</value>
     <value>sp-mod n'indique pas à quelles machines un mod est destiné. Une fois cette liste appliquée, c'est déterminé d'après l'endroit où arrivent les fichiers du mod - client, serveur ou les deux -, comme pour une liste créée depuis votre installation.</value>
   </data>
   <data name="ModInstall_InUseRestoreProfilesFormat" xml:space="preserve">
-    <value>Ferme {0} avant de remettre des profils - le serveur SPT enregistre les profils en se fermant et écraserait ceux remis en place.</value>
+    <value>Fermez {0} avant de remettre des profils - le serveur SPT enregistre les profils en se fermant et écraserait ceux remis en place.</value>
   </data>
   <data name="Profiles_Header" xml:space="preserve">
     <value>Sauvegardes des profils SPT</value>
   </data>
   <data name="Profiles_SummaryFormat" xml:space="preserve">
-    <value>Tes profils SPT sont copiés avant que les mods changent, pour pouvoir remettre un profil qui ne se charge plus. Les {0} dernières copies sont gardées.</value>
+    <value>Vos profils SPT sont copiés avant que les mods changent, pour pouvoir remettre un profil qui ne se charge plus. Les {0} dernières copies sont gardées.</value>
   </data>
   <data name="Profiles_DescriptionFormat" xml:space="preserve">
-    <value>Une copie de tes profils SPT (user\profiles) est faite avant que l'appli installe, mette à jour, supprime, désactive ou active des mods, ou applique une liste de mods - chaque fois que les profils ont changé depuis la dernière copie. Supprimer un mod peut laisser un profil contenant des objets que SPT ne connaît plus, et il ne se charge alors plus ; remettre une copie d'avant ramène ton personnage. Les {0} dernières copies sont gardées.</value>
+    <value>Une copie de vos profils SPT (user\profiles) est faite avant que l'appli installe, mette à jour, supprime, désactive ou active des mods, ou applique une liste de mods - chaque fois que les profils ont changé depuis la dernière copie. Supprimer un mod peut laisser un profil contenant des objets que SPT ne connaît plus, et il ne se charge alors plus ; remettre une copie d'avant ramène votre personnage. Les {0} dernières copies sont gardées.</value>
   </data>
   <data name="Profiles_Empty" xml:space="preserve">
     <value>Aucune copie pour l'instant.</value>
@@ -6377,7 +6377,7 @@ Le télécharger quand même ?</value>
     <value>{0} {1} laissé de côté - sp-mod indique qu'il ne fonctionne pas avec Fika.</value>
   </data>
   <data name="Installed_RemoveProfileWarningFormat" xml:space="preserve">
-    <value>sp-mod indique que {0} peut modifier ton profil de façon permanente et ne pas pouvoir être retiré sans commencer un nouveau profil. Le supprimer peut laisser un profil que SPT ne chargera pas. Si cela arrive, Restaurer remet le mod, et une copie de tes profils d'avant sa suppression se trouve dans Options, Sauvegardes des profils SPT.</value>
+    <value>sp-mod indique que {0} peut modifier votre profil de façon permanente et ne pas pouvoir être retiré sans commencer un nouveau profil. Le supprimer peut laisser un profil que SPT ne chargera pas. Si cela arrive, Restaurer remet le mod, et une copie de vos profils d'avant sa suppression se trouve dans Options, Sauvegardes des profils SPT.</value>
   </data>
   <data name="Downloads_WaitingToDownload" xml:space="preserve">
     <value>En attente d'un emplacement de téléchargement libre</value>
@@ -6404,9 +6404,48 @@ Le télécharger quand même ?</value>
     <value>{0} sur {1} terminés</value>
   </data>
   <data name="Downloads_BarSomeFailed" xml:space="preserve">
-    <value>Tout n'est pas terminé - clique pour voir quoi</value>
+    <value>Tout n'est pas terminé - cliquez pour voir quoi</value>
   </data>
   <data name="Downloads_BarToolTip" xml:space="preserve">
     <value>Ouvrir les téléchargements</value>
+  </data>
+  <data name="Installed_RemoveSelected" xml:space="preserve">
+    <value>Supprimer la sélection</value>
+  </data>
+  <data name="Installed_RemoveSelectedToolTip" xml:space="preserve">
+    <value>Supprimer tous les mods sélectionnés après une seule question. Leurs fichiers de configuration sont gardés.</value>
+  </data>
+  <data name="Installed_RemoveSelectedTitle" xml:space="preserve">
+    <value>Supprimer les mods sélectionnés ?</value>
+  </data>
+  <data name="Installed_RemoveSelectedBodyFormat" xml:space="preserve">
+    <value>Ces mods seront supprimés :
+{0}
+
+Leurs fichiers de configuration sont gardés dans {1}.</value>
+  </data>
+  <data name="Installed_RemoveSelectedProfileFormat" xml:space="preserve">
+    <value>sp-mod indique que ces mods peuvent modifier votre profil de façon permanente et ne pas pouvoir être retirés sans commencer un nouveau profil :
+{0}
+
+Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos profils d'avant se trouve dans Options, Sauvegardes des profils SPT.</value>
+  </data>
+  <data name="Installed_RemoveSelectedLeavesDisabledFormat" xml:space="preserve">
+    <value>Laissés de côté car désactivés - activez-les d'abord pour les supprimer : {0}.</value>
+  </data>
+  <data name="Installed_RemoveSelectedAllDisabledFormat" xml:space="preserve">
+    <value>Rien n'a été supprimé - les mods sélectionnés sont désactivés. Activez-les d'abord pour les supprimer : {0}.</value>
+  </data>
+  <data name="Installed_RemoveSelectedCancelled" xml:space="preserve">
+    <value>Rien n'a été supprimé.</value>
+  </data>
+  <data name="Installed_RemovedSelectedFormat" xml:space="preserve">
+    <value>{0} mods supprimés sur {1} sélectionnés.</value>
+  </data>
+  <data name="Installed_RemoveSelectedFailedFormat" xml:space="preserve">
+    <value>Non supprimés : {0} - le journal dit pourquoi.</value>
+  </data>
+  <data name="Installed_UpdateOneToolTipFormat" xml:space="preserve">
+    <value>Mettre à jour vers {0}</value>
   </data>
 </root>

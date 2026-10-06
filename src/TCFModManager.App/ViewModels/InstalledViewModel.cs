@@ -569,9 +569,7 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     partial void OnViewModeChanged(InstalledViewMode value)
     {
-        // Multi-select is built on the card grid, so leaving Cards turns it off rather than leaving
-        // it running invisibly behind another view.
-        if (value != InstalledViewMode.Cards) SelectionMode = false;
+        // Multi-select works in all three views (OPEN-12 A1), so the ticks carry across a switch.
 
         // Deliberately not AutoApplyFilter: no filter, search or sort has changed, so re-running
         // ApplyFilter would produce the same _filtered it already holds. Refreshing the view being
@@ -926,11 +924,13 @@ public partial class InstalledViewModel : LocalizedViewModel
             RefreshGroups();
 
             // A rescan replaces every card, so any previous selection is gone with them.
+            _selectionAnchor = null;
             OnPropertyChanged(nameof(SelectedCount));
             OnPropertyChanged(nameof(SelectedCountLabel));
             DisableSelectedCommand.NotifyCanExecuteChanged();
             EnableSelectedCommand.NotifyCanExecuteChanged();
             UpdateSelectedCommand.NotifyCanExecuteChanged();
+            RemoveSelectedCommand.NotifyCanExecuteChanged();
             OnPropertyChanged(nameof(AllSelected));
             OnPropertyChanged(nameof(SelectAllLabel));
 
@@ -1490,7 +1490,17 @@ public partial class InstalledViewModel : LocalizedViewModel
     // gate off globally, which is strictly worse for them than one demanding prompt.
     //
     [RelayCommand(CanExecute = nameof(HasUpdatableSelection))]
-    private void UpdateSelected()
+    private void UpdateSelected() => UpdateCards(SelectedCards());
+
+    // OPEN-12 A2: the Update button on one card or List row, and the right-click menu's Update - the
+    // same path as Update selected, for one mod.
+    [RelayCommand]
+    private void UpdateOne(InstalledModCardViewModel? mod)
+    {
+        if (mod is not null) UpdateCards([mod]);
+    }
+
+    private void UpdateCards(List<InstalledModCardViewModel> selected)
     {
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath))
@@ -1499,7 +1509,6 @@ public partial class InstalledViewModel : LocalizedViewModel
             return;
         }
 
-        var selected = SelectedCards();
         var targets = selected.Where(IsUpdatable).ToList();
 
         if (targets.Count == 0)
@@ -1671,6 +1680,219 @@ public partial class InstalledViewModel : LocalizedViewModel
     private void ClearSelection()
     {
         foreach (var mod in _all) mod.IsSelected = false;
+        _selectionAnchor = null;
+    }
+
+    // ---- OPEN-12 A1: Ctrl-click, Shift-click and Ctrl+A in every view -----------------------------
+
+    // The mod a Shift-click range runs from: the last one ticked or unticked by a click.
+    private InstalledModCardViewModel? _selectionAnchor;
+
+    // The mods in the order the current view shows them - what a Shift-click range runs along.
+    private List<InstalledModCardViewModel> VisibleOrder() => ViewMode switch
+    {
+        InstalledViewMode.Groups => [.. Sections.SelectMany(s => s.Items)],
+        InstalledViewMode.List => [.. ListItems],
+        _ => [.. Results],
+    };
+
+    //
+    // A click that picks rather than opens: Ctrl-click, Shift-click, or any click while Multi select
+    // is on. Switches Multi select on. A range ticks every mod between the anchor and this one, in the
+    // order on screen, and adds to what is ticked; anything else toggles this one and moves the anchor.
+    //
+    public void ClickSelect(InstalledModCardViewModel mod, bool range)
+    {
+        SelectionMode = true;
+
+        if (range && _selectionAnchor is { } anchor)
+        {
+            var order = VisibleOrder();
+            var from = order.IndexOf(anchor);
+            var to = order.IndexOf(mod);
+
+            if (from >= 0 && to >= 0)
+            {
+                for (var i = Math.Min(from, to); i <= Math.Max(from, to); i++) order[i].IsSelected = true;
+                return;
+            }
+        }
+
+        mod.IsSelected = !mod.IsSelected;
+        _selectionAnchor = mod;
+    }
+
+    // Ctrl+A: everything the filters match, as Select all does.
+    public void SelectAllFromKeyboard()
+    {
+        SelectionMode = true;
+        SelectAll();
+    }
+
+    //
+    // Removes every ticked mod after ONE question - the same reasoning as Update selected: a
+    // question per mod over a long selection trains people to stop reading. Their config files are
+    // always kept (LegacyConfigs), the safe half of the single removal's choice, and every removal can
+    // be undone from the holding folder as usual. Mods sp-mod marks as changing the profile are named
+    // in the question (OPEN-12 F17). A disabled mod is left out: its record points at folders it no
+    // longer occupies, the same reason a single removal asks to enable it first.
+    //
+    [RelayCommand(CanExecute = nameof(HasSelection))]
+    private async Task RemoveSelectedAsync()
+    {
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        if (string.IsNullOrWhiteSpace(installPath))
+        {
+            StatusMessage = AppMessages.NoSptInstallFolder;
+            return;
+        }
+
+        var selected = SelectedCards();
+        var targets = selected.Where(m => !m.IsDisabled).ToList();
+        var leftDisabled = selected.Where(m => m.IsDisabled).Select(m => m.DisplayTitle).ToList();
+
+        if (targets.Count == 0)
+        {
+            StatusMessage = Text(Strings.Installed_RemoveSelectedAllDisabledFormat, TextLists.Join(leftDisabled));
+            return;
+        }
+
+        var body = new List<string> { Text(Strings.Installed_RemoveSelectedBodyFormat, string.Join("\n", targets.Select(t => t.DisplayTitle)), AppPaths.LegacyConfigsDirectory) };
+
+        var profileMods = targets.Where(ChangesProfile).Select(t => t.DisplayTitle).ToList();
+        if (profileMods.Count > 0) body.Insert(0, Text(Strings.Installed_RemoveSelectedProfileFormat, string.Join("\n", profileMods)));
+
+        if (leftDisabled.Count > 0) body.Add(Text(Strings.Installed_RemoveSelectedLeavesDisabledFormat, TextLists.Join(leftDisabled)));
+
+        body.Add(HeldSentence());
+
+        if (!Confirm(Strings.Installed_RemoveSelectedTitle, string.Join("\n\n", body)))
+        {
+            StatusMessage = Strings.Installed_RemoveSelectedCancelled;
+            return;
+        }
+
+        var removed = 0;
+        var failed = new List<string>();
+
+        IsBusy = true;
+        try
+        {
+            var manifest = AppServices.InstallManifest.Load();
+
+            foreach (var mod in targets)
+            {
+                try
+                {
+                    if (await RemoveOneQuietlyAsync(mod, installPath, manifest)) removed++;
+                    else failed.Add(mod.DisplayTitle);
+                }
+                catch (ModInstallException ex)
+                {
+                    AppLog.Warn("Remove", $"{mod.Name}: {ModInstallProblems.Describe(ex)}");
+                    failed.Add(mod.DisplayTitle);
+
+                    // SPT started part way through: nothing after this would go either.
+                    if (ex.Reason == ModInstallFailure.InstallInUse)
+                    {
+                        failed.AddRange(targets.SkipWhile(t => t != mod).Skip(1).Select(t => t.DisplayTitle));
+                        break;
+                    }
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                {
+                    AppLog.Warn("Remove", $"{mod.Name}: {ex.Message}");
+                    failed.Add(mod.DisplayTitle);
+                }
+            }
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+
+        if (removed > 0) ModRemoved?.Invoke(this, EventArgs.Empty);
+
+        await ScanAsync();
+
+        var message = Text(Strings.Installed_RemovedSelectedFormat, removed, targets.Count);
+        if (failed.Count > 0) message = Sentences(message, Text(Strings.Installed_RemoveSelectedFailedFormat, TextLists.Join(failed)));
+        StatusMessage = message;
+    }
+
+    //
+    // One mod of a Remove selected, with no question of its own: the app-managed path through its
+    // record, or a hand-installed mod's folders moved whole into the holding folder - configs kept
+    // either way. False when there was nothing it could act on (no record, no folder, a refused
+    // folder); throws what the single removal would have shown.
+    //
+    private async Task<bool> RemoveOneQuietlyAsync(InstalledModCardViewModel mod, string installPath, ModInstallManifest manifest)
+    {
+        if (mod.IsAppManaged && mod.ModId is { } modId)
+        {
+            if (manifest.Find(modId, mod.IsAddon) is not { } record)
+            {
+                AppLog.Warn("Remove", $"{mod.Name}: no install record");
+                return false;
+            }
+
+            var result = await AppServices.ModInstall.UninstallAsync(installPath, record, ConfigAction.Keep);
+            return result.FailedFiles.Count == 0;
+        }
+
+        var paths = new[] { mod.ClientFolderPath, mod.ServerFolderPath }
+            .Where(p => !string.IsNullOrWhiteSpace(p))
+            .Select(p => p!)
+            .ToList();
+        if (paths.Count == 0) return false;
+
+        foreach (var path in paths)
+        {
+            if (InstallPathGuard.CheckModFolder(installPath, path) is { } refusal)
+            {
+                AppLog.Warn("Remove", $"{mod.Name}: {path} refused ({refusal})");
+                return false;
+            }
+        }
+
+        ModInstallService.EnsureInstallNotInUse(ModInstallAction.Remove, installPath);
+
+        var configs = ModInstallService.FindLegacyConfigs(installPath, paths);
+        var kept = configs.Count > 0
+            ? ModInstallService.KeepLegacyConfigs(installPath, configs, mod.Name)
+            : new KeptConfigs(0, null);
+
+        AppServices.ModInstall.RemoveHandInstalled(paths, installPath, mod.Name, kept.Folder);
+
+        if (mod.IsManualOverride && mod.ModId is { } overriddenModId)
+            AppServices.InstallManifest.ClearManualVersion(overriddenModId, mod.IsAddon);
+
+        return true;
+    }
+
+    // ---- OPEN-12 A5: the right-click menu's actions that have no command of their own ------------
+
+    // View mod page: the matched sp-mod listing (or addon), when there is one.
+    public static string? ModPageUrl(InstalledModCardViewModel mod) =>
+        mod.ModId is not { } id
+            ? null
+            : mod.IsAddon
+                ? AppServices.Addons.AllAddons.FirstOrDefault(a => a.Id == id)?.DetailUrl
+                : AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == id)?.DetailUrl;
+
+    [RelayCommand]
+    private void OpenModPage(InstalledModCardViewModel? mod)
+    {
+        if (mod is null || ModPageUrl(mod) is not { } url) return;
+
+        try
+        {
+            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("Installed", $"couldn't open {url}: {ex.Message}");
+        }
     }
 
     /// <summary>Puts the last disable/enable back. Fails softly per mod if anything moved on disk since.</summary>
@@ -1892,6 +2114,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         DisableSelectedCommand.NotifyCanExecuteChanged();
         EnableSelectedCommand.NotifyCanExecuteChanged();
         UpdateSelectedCommand.NotifyCanExecuteChanged();
+        RemoveSelectedCommand.NotifyCanExecuteChanged();
     }
 
     //

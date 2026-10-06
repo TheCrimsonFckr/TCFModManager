@@ -61,6 +61,25 @@
             </Style>
 
             <!--
+                Group-view mod rows since OPEN-12 A1: ClickableCardRow, plus the ticked state Multi
+                select gives a card - the accent edge and tint, read from the row's own IsSelected.
+                The border is always there and transparent, so ticking a row never moves its content.
+            -->
+            <Style x:Key="TickableCardRow" TargetType="Border" BasedOn="{StaticResource ClickableCardRow}">
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                        <Setter Property="Background" Value="{StaticResource RowSelectedBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource SelectedRowStroke}" />
+                    </DataTrigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--
                 The same tint on a row you can't click. Dependencies rows are read-only - the only
                 thing you can press in one is a conditional Install button - so this deliberately
                 leaves the cursor alone: it tracks what you are looking at across a wide row without

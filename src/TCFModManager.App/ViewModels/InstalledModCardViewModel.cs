@@ -119,6 +119,16 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     public string? HeldBackNote => HeldBack is { } held ? HeldBackUpdates.Describe(held) : null;
 
+    //
+    // OPEN-12 A2: the Update button on the card header and List row - the same mods Update selected
+    // would update (InstalledViewModel.IsUpdatable): an enabled, catalogued mod with an update. An
+    // addon's update depends on its parent's version, so it stays in Details and versions.
+    //
+    public bool CanQuickUpdate =>
+        UpdateAvailable == true && !IsDisabled && !IsAddon && ModId is not null && LatestPublishedVersion is not null;
+
+    public string QuickUpdateToolTip => Text(Strings.Installed_UpdateOneToolTipFormat, UpdateVersion ?? LatestPublishedVersion);
+
     // The matched sp-mod.com listing's UpdatedAt. Null under the same conditions as LatestPublishedVersion.
     public DateTimeOffset? LatestUpdatedAt { get; init; }
 

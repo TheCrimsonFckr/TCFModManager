@@ -243,7 +243,7 @@
     <comment>Button label - turns the card grid into a tick list.</comment>
   </data>
   <data name="Installed_MultiSelectToolTip" xml:space="preserve">
-    <value>Tick several mods to enable or disable them together</value>
+    <value>Tick several mods to update, enable, disable or remove them together - Ctrl-click, Shift-click and Ctrl+A tick them too</value>
   </data>
   <data name="Installed_ExpandAllToolTip" xml:space="preserve">
     <value>Open every mod the filters match</value>
@@ -7721,5 +7721,55 @@ Download it anyway?</value>
   <data name="Downloads_BarToolTip" xml:space="preserve">
     <value>Open Downloads</value>
     <comment>Tooltip on the downloads bar.</comment>
+  </data>
+  <data name="Installed_RemoveSelected" xml:space="preserve">
+    <value>Remove selected</value>
+    <comment>Multi-select bar button (OPEN-12 A1).</comment>
+  </data>
+  <data name="Installed_RemoveSelectedToolTip" xml:space="preserve">
+    <value>Remove every selected mod after one question. Their config files are kept.</value>
+    <comment>Tooltip on Remove selected.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedTitle" xml:space="preserve">
+    <value>Remove the selected mods?</value>
+    <comment>Title of the one question Remove selected asks.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedBodyFormat" xml:space="preserve">
+    <value>These mods will be removed:
+{0}
+
+Their config files are kept in {1}.</value>
+    <comment>{0} is the mods, one per line. {1} is the folder configs are kept in.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedProfileFormat" xml:space="preserve">
+    <value>sp-mod marks these as mods that may make permanent changes to your profile, and may not be removable without starting a new profile:
+{0}
+
+Removing them can leave a profile SPT won't load. A copy of your profiles from just before is under Options, SPT profile backups.</value>
+    <comment>At the top of the Remove selected question when some selected mods carry sp-mod's profile notice (OPEN-12 F17). {0} is those mods, one per line.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedLeavesDisabledFormat" xml:space="preserve">
+    <value>Left out because they're disabled - enable them first to remove them: {0}.</value>
+    <comment>In the Remove selected question. {0} is the disabled mods, joined.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedAllDisabledFormat" xml:space="preserve">
+    <value>Nothing removed - the selected mods are disabled. Enable them first to remove them: {0}.</value>
+    <comment>Status line. {0} is the mods, joined.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedCancelled" xml:space="preserve">
+    <value>Nothing was removed.</value>
+    <comment>Status line after No to the Remove selected question.</comment>
+  </data>
+  <data name="Installed_RemovedSelectedFormat" xml:space="preserve">
+    <value>Removed {0} of {1} selected mods.</value>
+    <comment>Status line after Remove selected. {0} removed, {1} asked for.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedFailedFormat" xml:space="preserve">
+    <value>Not removed: {0} - the log says why.</value>
+    <comment>After Remove selected. {0} is the mods that weren't removed, joined.</comment>
+  </data>
+  <data name="Installed_UpdateOneToolTipFormat" xml:space="preserve">
+    <value>Update to {0}</value>
+    <comment>Tooltip on a card's Update button (OPEN-12 A2), and its right-click menu entry. {0} is the version.</comment>
   </data>
 </root>

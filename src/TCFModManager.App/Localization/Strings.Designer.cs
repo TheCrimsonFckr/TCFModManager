@@ -2103,4 +2103,15 @@ internal static class Strings
     internal static string Downloads_BarDoneFormat => LocalizationService.Get("Downloads_BarDoneFormat");
     internal static string Downloads_BarSomeFailed => LocalizationService.Get("Downloads_BarSomeFailed");
     internal static string Downloads_BarToolTip => LocalizationService.Get("Downloads_BarToolTip");
+    internal static string Installed_RemoveSelected => LocalizationService.Get("Installed_RemoveSelected");
+    internal static string Installed_RemoveSelectedToolTip => LocalizationService.Get("Installed_RemoveSelectedToolTip");
+    internal static string Installed_RemoveSelectedTitle => LocalizationService.Get("Installed_RemoveSelectedTitle");
+    internal static string Installed_RemoveSelectedBodyFormat => LocalizationService.Get("Installed_RemoveSelectedBodyFormat");
+    internal static string Installed_RemoveSelectedProfileFormat => LocalizationService.Get("Installed_RemoveSelectedProfileFormat");
+    internal static string Installed_RemoveSelectedLeavesDisabledFormat => LocalizationService.Get("Installed_RemoveSelectedLeavesDisabledFormat");
+    internal static string Installed_RemoveSelectedAllDisabledFormat => LocalizationService.Get("Installed_RemoveSelectedAllDisabledFormat");
+    internal static string Installed_RemoveSelectedCancelled => LocalizationService.Get("Installed_RemoveSelectedCancelled");
+    internal static string Installed_RemovedSelectedFormat => LocalizationService.Get("Installed_RemovedSelectedFormat");
+    internal static string Installed_RemoveSelectedFailedFormat => LocalizationService.Get("Installed_RemoveSelectedFailedFormat");
+    internal static string Installed_UpdateOneToolTipFormat => LocalizationService.Get("Installed_UpdateOneToolTipFormat");
 }
