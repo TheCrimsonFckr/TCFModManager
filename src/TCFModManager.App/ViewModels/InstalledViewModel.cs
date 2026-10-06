@@ -218,7 +218,7 @@ public partial class InstalledViewModel : LocalizedViewModel
                 () => SelectedEnabledFilter = EnabledFilterOptions.First(o => o.Value == EnabledFilter.All)));
 
         foreach (var option in AttributeOptions.Where(o => o.IsSelected))
-            ActiveFilters.Add(new(option.Label, () => option.IsSelected = false));
+            ActiveFilters.Add(new(Pill(Strings.Filter_ShowHeader, option.Label), () => option.IsSelected = false));
 
         if (SelectedCategory.Title is not null)
             ActiveFilters.Add(new(Pill(Strings.Filter_SectionCategory, SelectedCategory),

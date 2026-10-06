@@ -267,8 +267,10 @@
             <!--
                  The filters narrowing the list, one pill each, the way Steam's workshop search shows them
                  (Chris, 2026-10-06): each X drops that one filter, and Clear filters drops them all.
+             Always laid out, with Clear filters hidden rather than collapsed when nothing is set, so
+             the results don't jump down the moment the first filter goes on.
             -->
-            <DockPanel Margin="0,0,0,8" Visibility="{Binding HasActiveFilters, Converter={StaticResource BoolToVis}}">
+            <DockPanel Margin="0,0,0,8">
                 <ItemsControl DockPanel.Dock="Left" Focusable="False" ItemsSource="{Binding ActiveFilters}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -304,7 +306,17 @@
                     HorizontalAlignment="Left"
                     Content="{loc:Str Common_ClearFilters}"
                     ToolTip="{loc:Str Common_ClearFiltersToolTip}"
-                    Command="{Binding ClearFiltersCommand}" />
+                    Command="{Binding ClearFiltersCommand}">
+                    <ui:Button.Style>
+                        <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasActiveFilters}" Value="False">
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:Button.Style>
+                </ui:Button>
             </DockPanel>
         </StackPanel>
 
