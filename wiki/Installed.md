@@ -38,6 +38,8 @@ Every filter narrowing the list also shows as a pill above the mods - "Update st
 
 Disabled mods carry a red **DISABLED** tag, in every view.
 
+A mod's author is a link to their page, and the right-click menu has **More by** and **Follow** for them - see [Browse](Browse#authors).
+
 > [!NOTE]
 > Groups are yours to organise however you like - SPT never sees them. They do matter for one thing: disabling a whole group at once.
 

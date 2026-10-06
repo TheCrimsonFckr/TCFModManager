@@ -11,3 +11,6 @@ Each lists every mod involved with the folder it's in, and a button to open it. 
 That includes **version conflicts** - where two installed mods want incompatible versions of the same dependency - which is the failure mode that usually shows up as an unexplained crash on load rather than an error message. Dependencies you've disabled are called out as disabled rather than missing.
 
 Anything missing can be installed straight from the list.
+
+## Moving to a newer SPT
+At the bottom of the page, **Moving to a newer SPT** answers "if I moved to SPT x, which of my mods would come with me?" Pick a release newer than yours and every installed mod is listed as **ready** (the version you have runs on it), **update first** (a newer version does - it names which), **not ready yet** (nothing is published for it), or **check by hand** (installed by hand and not matched to sp-mod, or its listing doesn't say). It's worked out from the mods' sp-mod listings, and nothing is changed.

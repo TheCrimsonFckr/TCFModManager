@@ -11,6 +11,8 @@ Off until you switch it on. With it on, the app asks sp-mod every so often wheth
 - **Disabled mods aren't announced**, and neither is an update you've already downloaded in Monitor mode but not installed yet.
 - **One notification per check**, however many it found - "3 mod updates available: SAIN 4.5.2, UI Fixes 6.0.2 and 1 more". A newer one replaces an older one still waiting in the Notification Centre.
 
+**Authors you follow.** With notifications on, each check also looks at sp-mod's newest listings for mods by the authors you follow (see [Browse](Browse)). A new one gets its own notification - "New from authors you follow: Better Loot by Alice" - announced once, and only for mods published after you followed the author, so following someone doesn't announce their back catalogue. Clicking it opens Browse with **By authors you follow** ticked.
+
 **Clicking it** - the notification or its **Open** button - brings the app forward on the **Installed** page with **Show** set to **Needs update**. If the app has been closed since, clicking it starts the app on that page. There's no "update all" on the notification: updating goes through the app, where the running-SPT check and the dependency prompt can do their jobs.
 
 When a check finds something, the Installed page and Browse's status dots pick up the new version without a refresh.
