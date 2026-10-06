@@ -15,6 +15,7 @@
     x:Class="TCFModManager.App.Views.InstalledPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:viewmodels="clr-namespace:TCFModManager.App.ViewModels"
@@ -24,6 +25,9 @@
     Unloaded="InstalledPage_Unloaded"
     ScrollViewer.CanContentScroll="False">
     <Page.Resources>
+        <!-- One width for every filter in the filter row, so a wrapped row lines up in columns. -->
+        <sys:Double x:Key="FilterWidth">210</sys:Double>
+
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
         <converters:UpdateAvailableToVisibilityConverter x:Key="UpdateAvailableToVisible" />
         <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
@@ -437,57 +441,32 @@
         </DockPanel>
 
         <DockPanel Grid.Row="2" Margin="0,0,0,8">
-            <ui:Button
-                DockPanel.Dock="Right"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Content="{loc:Str Common_ClearFilters}"
-                ToolTip="{loc:Str Common_ClearFiltersToolTip}"
-                Command="{Binding ClearFiltersCommand}" />
-
-            <!-- Saving the defaults from the page itself, rather than as a second set of dropdowns
-                 in Options: these controls already exist, you can see what they do as you set them,
-                 and a filter added to this page later is covered without Options knowing about it.
-                 Declared after Clear filters because in a DockPanel the first-declared Right
-                 element lands furthest right. -->
-            <ui:Button
-                DockPanel.Dock="Right"
-                Margin="0,0,8,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Content="{loc:Str Common_SaveAsDefault}"
-                ToolTip="{loc:Str Installed_SaveAsDefaultToolTip}"
-                Command="{Binding SaveAsDefaultCommand}" />
 
             <!-- A WrapPanel: seven filters don't fit on one line at every window width, and a
                  filter that has run off the edge of the page may as well not exist. -->
             <WrapPanel>
                 <!--
-                     No inline labels on the five filters: each one's neutral option names what it
-                     filters ("Any update status" rather than a bare "All"), which is the only
-                     reason the labels could go - three of these used to read plain "All" and would
-                     have been indistinguishable side by side.
-
-                     Width is fixed on the three whose contents change - Category and Group,
-                     whose lists are rebuilt after a scan or a rename, and the attribute dropdown,
-                     whose summary is rewritten as you tick. Sizing those to their contents is what
-                     used to shuffle the whole row sideways mid-use. The rest have fixed item sets,
-                     so they size to a constant widest item and MinWidth cannot move anything; they
-                     carry MinWidth instead, which is the headroom a longer language needs. The
-                     numbers are what each dropdown's longest English option needs - "Not found on
-                     sp-mod.com" sets this one.
+                     Every filter is the same width (FilterWidth, in this page's resources), so when
+                     the row wraps on a narrow window the filters line up in columns instead of a
+                     ragged run, and Save as default / Clear filters follow on after the last one
+                     rather than floating at the side. 210 is what the longest English option needs
+                     ("Not found on sp-mod.com") with headroom for a longer language; the three
+                     whose contents change (summaries rewritten as you tick, lists rebuilt after a
+                     scan) never resize the row either.
                 -->
+                <!-- No inline labels: each filter's neutral option names what it filters ("Any update
+                     status" rather than a bare "All"). -->
                 <ComboBox
-                    MinWidth="205"
-                    Margin="0,0,16,4"
+                    Width="{StaticResource FilterWidth}"
+                    Margin="0,0,8,8"
                     VerticalAlignment="Center"
                     ToolTip="{loc:Str Installed_UpdateFilterToolTip}"
                     ItemsSource="{Binding UpdateFilterOptions}"
                     SelectedItem="{Binding SelectedUpdateFilter}" />
 
                 <ComboBox
-                    MinWidth="170"
-                    Margin="0,0,16,4"
+                    Width="{StaticResource FilterWidth}"
+                    Margin="0,0,8,8"
                     VerticalAlignment="Center"
                     ToolTip="{loc:Str Installed_EnabledFilterToolTip}"
                     ItemsSource="{Binding EnabledFilterOptions}"
@@ -498,8 +477,8 @@
                      everything installed rather than what has been looked up so far. -->
                 <ToggleButton
                     x:Name="AttributeToggle"
-                    Width="220"
-                    Margin="0,0,16,4"
+                    Width="{StaticResource FilterWidth}"
+                    Margin="0,0,8,8"
                     VerticalAlignment="Center"
                     ToolTip="{loc:Str Common_AttributeFilterToolTip}"
                     Style="{StaticResource FilterDropDownToggle}">
@@ -550,8 +529,8 @@
                 <!-- Wider than any category currently installed: this list is rebuilt from the
                      catalog after every scan, so a longer name arriving must not move the row. -->
                 <ComboBox
-                    Width="165"
-                    Margin="0,0,16,4"
+                    Width="{StaticResource FilterWidth}"
+                    Margin="0,0,8,8"
                     VerticalAlignment="Center"
                     ToolTip="{loc:Str Installed_CategoryFilterToolTip}"
                     ItemsSource="{Binding CategoryOptions}"
@@ -563,16 +542,16 @@
                      sized for a comfortably long name and left to trim beyond that, rather than
                      resizing itself every time a group is renamed. -->
                 <ComboBox
-                    Width="180"
-                    Margin="0,0,16,4"
+                    Width="{StaticResource FilterWidth}"
+                    Margin="0,0,8,8"
                     VerticalAlignment="Center"
                     ToolTip="{loc:Str Installed_GroupFilterToolTip}"
                     ItemsSource="{Binding GroupFilterOptions}"
                     SelectedItem="{Binding SelectedGroupFilter}" />
 
                 <ComboBox
-                    MinWidth="175"
-                    Margin="0,0,16,4"
+                    Width="{StaticResource FilterWidth}"
+                    Margin="0,0,8,8"
                     VerticalAlignment="Center"
                     ToolTip="{loc:Str Common_SortToolTip}"
                     ItemsSource="{Binding SortOptions}"
@@ -584,8 +563,8 @@
                      ints, and "12" on its own says nothing. SelectedItem stays an int, so none of
                      the paging arithmetic changes. -->
                 <ComboBox
-                    MinWidth="130"
-                    Margin="0,0,16,4"
+                    Width="{StaticResource FilterWidth}"
+                    Margin="0,0,8,8"
                     VerticalAlignment="Center"
                     ToolTip="{loc:Str Common_PageSizeToolTip}"
                     ItemsSource="{Binding PageSizeOptions}"
@@ -597,6 +576,22 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
+            
+                <!-- Saving the defaults from the page itself, rather than as a second set of
+                     dropdowns in Options: these controls already exist, you can see what they do as
+                     you set them, and a filter added to this page later is covered without Options
+                     knowing about it. Part of the wrapping row, after the last filter. -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8" VerticalAlignment="Center">
+                    <ui:Button
+                        Margin="0,0,8,0"
+                        Content="{loc:Str Common_SaveAsDefault}"
+                        ToolTip="{loc:Str Installed_SaveAsDefaultToolTip}"
+                        Command="{Binding SaveAsDefaultCommand}" />
+                    <ui:Button
+                        Content="{loc:Str Common_ClearFilters}"
+                        ToolTip="{loc:Str Common_ClearFiltersToolTip}"
+                        Command="{Binding ClearFiltersCommand}" />
+                </StackPanel>
             </WrapPanel>
         </DockPanel>
 
