@@ -200,6 +200,49 @@ public class UpdateCheckServiceTests
         Assert.Equal([2909, 3001], check.ToRefetch);
     }
 
+    // OPEN-12 F11: an update that would break another installed mod is held back, not an update.
+    private const string BlockedResponse = """
+        {"success":true,"data":{"spt_version":"4.0.13",
+        "updates":[],
+        "blocked_updates":[{"current_version":{"id":2001,"mod_id":1500,"guid":"com.example.commonlib","name":"CommonLib","slug":"commonlib","version":"2.0.24"},
+                            "latest_version":{"id":2050,"version":"3.0.6","spt_versions":["4.0.13"]},
+                            "block_reason":"dependency_conflict",
+                            "blocking_mods":[{"mod_id":1600,"mod_guid":"com.example.blackandblue","mod_name":"Black and Blue","current_version":"1.0.0","constraint":"~2.0.24","incompatible_with":"3.0.6"}]}],
+        "up_to_date":[],
+        "incompatible_with_spt":[]}}
+        """;
+
+    [Fact]
+    public async Task ABlockedUpdateIsHeldBack_AndNotAnUpdate()
+    {
+        var handler = new FakeHttpMessageHandler(HttpStatusCode.OK, BlockedResponse);
+        using var client = new SpModApiClient(new HttpClient(handler));
+
+        var check = await new UpdateCheckService(client).FindUpdatedModsAsync([(1500, "2.0.24")], "4.0.13");
+
+        Assert.Empty(check.Updated);
+        Assert.Empty(check.NotRecognised);
+
+        var held = Assert.Single(check.HeldBack);
+        Assert.Equal(1500, held.ModId);
+        Assert.Equal("3.0.6", held.Version);
+        Assert.Equal("dependency_conflict", held.Reason);
+        Assert.True(held.Holds("3.0.6"));
+        Assert.False(held.Holds("3.0.7"));
+
+        var blocker = Assert.Single(held.Blockers);
+        Assert.Equal(("Black and Blue", "~2.0.24"), (blocker.Name, blocker.Constraint));
+    }
+
+    [Fact]
+    public void ABlockedEntryWithNoVersionHoldsNothing()
+    {
+        Assert.Null(HeldBackUpdate.From(new ModBlockedUpdateEntry
+        {
+            CurrentVersion = new ModUpdateCurrentVersionRef { ModId = 1500, Version = "2.0.24" },
+        }));
+    }
+
     [Fact]
     public async Task FetchingModsAsksForJustThoseIdsWithTheirVersions()
     {

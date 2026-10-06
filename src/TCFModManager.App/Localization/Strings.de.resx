@@ -6345,4 +6345,19 @@ Der jetzige Stand wird zuerst kopiert, das lässt sich also auf demselben Weg r�
   <data name="Profiles_RestoredFormat" xml:space="preserve">
     <value>Die Profile vom {0} wurden zurückgespielt. Der vorherige Stand steht oben in der Liste.</value>
   </data>
+  <data name="Installed_HeldBackFormat" xml:space="preserve">
+    <value>Update auf {0} zurückgehalten: {1}.</value>
+  </data>
+  <data name="Installed_HeldBackNeedsUpToFormat" xml:space="preserve">
+    <value>{0} braucht höchstens {1}</value>
+  </data>
+  <data name="Installed_HeldBackNeedsFormat" xml:space="preserve">
+    <value>{0} braucht {1}</value>
+  </data>
+  <data name="Installed_HeldBackChainFormat" xml:space="preserve">
+    <value>Update auf {0} zurückgehalten: es braucht ein anderes Update, das ebenfalls zurückgehalten wird.</value>
+  </data>
+  <data name="Installed_HeldBackPlainFormat" xml:space="preserve">
+    <value>Update auf {0} von sp-mod zurückgehalten.</value>
+  </data>
 </root>

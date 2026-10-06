@@ -453,6 +453,13 @@ public partial class InstalledViewModel : LocalizedViewModel
             if (!_hasScanned || ScanCommand.IsRunning) return;
             await ScanCommand.ExecuteAsync(null);
         };
+
+        // sp-mod's answer on held-back updates changed (OPEN-12 F11): the cards are built with it.
+        AppServices.HeldBack.Changed += async (_, _) =>
+        {
+            if (!_hasScanned || ScanCommand.IsRunning) return;
+            await ScanCommand.ExecuteAsync(null);
+        };
     }
 
     //
@@ -954,6 +961,22 @@ public partial class InstalledViewModel : LocalizedViewModel
         }
 
         await OfferDownloadConfirmationsAsync();
+
+        // Asked after the cards are on screen, so the page never waits on sp-mod. A changed answer
+        // rescans (the Changed subscription above); the same answer does nothing.
+        _ = RefreshHeldBackAsync();
+    }
+
+    // OPEN-12 F11: which of the installed mods' updates sp-mod holds back - see HeldBackUpdates.
+    private Task RefreshHeldBackAsync()
+    {
+        var installed = _all
+            .Where(c => c is { IsAddon: false, ModId: > 0 } && !string.IsNullOrWhiteSpace(c.InstalledVersion))
+            .Select(c => (c.ModId!.Value, c.InstalledVersion!))
+            .DistinctBy(c => c.Item1)
+            .ToList();
+
+        return AppServices.HeldBack.RefreshAsync(installed, AppServices.SptEnvironment.InstalledVersion);
     }
 
     //
@@ -1493,9 +1516,11 @@ public partial class InstalledViewModel : LocalizedViewModel
         foreach (var card in targets)
         {
             var match = AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == card.ModId);
+            // The card's own target: below a release sp-mod holds back, it is the newest one that
+            // breaks nothing (OPEN-12 F11).
             var version = match is null
                 ? null
-                : ModCardViewModel.PickDisplayVersion(match, AppServices.SptEnvironment.InstalledVersion)?.Version;
+                : card.UpdateVersion ?? ModCardViewModel.PickDisplayVersion(match, AppServices.SptEnvironment.InstalledVersion)?.Version;
 
             if (match is null || version is null) unmatched.Add(card.DisplayTitle);
             else resolved.Add((card, match, version));

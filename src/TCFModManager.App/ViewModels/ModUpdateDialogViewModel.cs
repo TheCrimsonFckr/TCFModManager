@@ -158,7 +158,12 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
         OnPropertyChanged(nameof(ShowVersionFilterNotice));
         OnPropertyChanged(nameof(HiddenVersionsNotice));
 
-        SelectedVersion = Versions.FirstOrDefault(v => v.IsCompatible == true) ?? Versions.FirstOrDefault();
+        // Below a release sp-mod holds back, the card's own target - the newest that breaks nothing.
+        SelectedVersion = (_mod.HeldBack is not null && _mod.UpdateVersion is { } target
+                ? Versions.FirstOrDefault(v => string.Equals(v.Raw.Version, target, StringComparison.OrdinalIgnoreCase))
+                : null)
+            ?? Versions.FirstOrDefault(v => v.IsCompatible == true)
+            ?? Versions.FirstOrDefault();
     }
 
     [ObservableProperty]
@@ -170,7 +175,14 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(ShowDowngradeButton))]
     [NotifyPropertyChangedFor(nameof(ShowRedownloadButton))]
     [NotifyPropertyChangedFor(nameof(ShowAlternateButton))]
+    [NotifyPropertyChangedFor(nameof(HeldBackNote))]
     private ModVersionRowViewModel? _selectedVersion;
+
+    // OPEN-12 F11: the selected release is the one sp-mod holds back - installing it is allowed, with this said.
+    public string? HeldBackNote =>
+        _mod.HeldBack is { } held && SelectedVersion is { } selected && held.Held.Holds(selected.Raw.Version)
+            ? HeldBackUpdates.Describe(held)
+            : null;
 
     [ObservableProperty]
     private bool _isLoading = true;

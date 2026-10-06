@@ -6345,4 +6345,19 @@ Il loro contenuto attuale viene copiato prima, quindi si può annullare allo ste
   <data name="Profiles_RestoredFormat" xml:space="preserve">
     <value>I profili del {0} sono stati ripristinati. Ciò che c'era prima è in cima alla lista.</value>
   </data>
+  <data name="Installed_HeldBackFormat" xml:space="preserve">
+    <value>Aggiornamento a {0} trattenuto: {1}.</value>
+  </data>
+  <data name="Installed_HeldBackNeedsUpToFormat" xml:space="preserve">
+    <value>{0} richiede al massimo {1}</value>
+  </data>
+  <data name="Installed_HeldBackNeedsFormat" xml:space="preserve">
+    <value>{0} richiede {1}</value>
+  </data>
+  <data name="Installed_HeldBackChainFormat" xml:space="preserve">
+    <value>Aggiornamento a {0} trattenuto: richiede un altro aggiornamento anch'esso trattenuto.</value>
+  </data>
+  <data name="Installed_HeldBackPlainFormat" xml:space="preserve">
+    <value>Aggiornamento a {0} trattenuto da sp-mod.</value>
+  </data>
 </root>

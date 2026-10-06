@@ -76,15 +76,10 @@ public partial class BrowseViewModel : LocalizedViewModel
         // hold the old ones, so the filter runs again over the patched list - on the same page -
         // and the status dots pick up the new versions.
         //
-        AppServices.UpdateWatcher.UpdatesFound += async (_, _) =>
-        {
-            await RefreshInstalledIndexAsync();
-            if (!HasLoadedResults) return;
+        AppServices.UpdateWatcher.UpdatesFound += async (_, _) => await RefreshAfterUpdateCheckAsync();
 
-            var page = CurrentPage;
-            ApplyFilter();
-            if (page > 1) GoToPage(page);
-        };
+        // Held-back updates (OPEN-12 F11) change which installed mods show an update, the same way.
+        AppServices.HeldBack.Changed += async (_, _) => await RefreshAfterUpdateCheckAsync();
 
         // Before the subscription below, so applying a saved default doesn't count as a change.
         SavedFilterDefaults.ApplyAttributes(AttributeOptions, _defaults?.Attributes);
@@ -516,6 +511,17 @@ public partial class BrowseViewModel : LocalizedViewModel
     /// <summary>Scans the configured SPT install folder and matches it against the cached catalog to drive the
     /// install/update status dot on Browse's cards. Best-effort: no install path or nothing found just means
     /// no dot shows, not an error.</summary>
+    // The filter runs again over the refreshed index, on the same page.
+    private async Task RefreshAfterUpdateCheckAsync()
+    {
+        await RefreshInstalledIndexAsync();
+        if (!HasLoadedResults) return;
+
+        var page = CurrentPage;
+        ApplyFilter();
+        if (page > 1) GoToPage(page);
+    }
+
     private async Task RefreshInstalledIndexAsync()
     {
         //

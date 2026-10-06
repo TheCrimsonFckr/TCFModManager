@@ -2083,4 +2083,9 @@ internal static class Strings
     internal static string Profiles_RestoreTitle => LocalizationService.Get("Profiles_RestoreTitle");
     internal static string Profiles_RestoreConfirmFormat => LocalizationService.Get("Profiles_RestoreConfirmFormat");
     internal static string Profiles_RestoredFormat => LocalizationService.Get("Profiles_RestoredFormat");
+    internal static string Installed_HeldBackFormat => LocalizationService.Get("Installed_HeldBackFormat");
+    internal static string Installed_HeldBackNeedsUpToFormat => LocalizationService.Get("Installed_HeldBackNeedsUpToFormat");
+    internal static string Installed_HeldBackNeedsFormat => LocalizationService.Get("Installed_HeldBackNeedsFormat");
+    internal static string Installed_HeldBackChainFormat => LocalizationService.Get("Installed_HeldBackChainFormat");
+    internal static string Installed_HeldBackPlainFormat => LocalizationService.Get("Installed_HeldBackPlainFormat");
 }

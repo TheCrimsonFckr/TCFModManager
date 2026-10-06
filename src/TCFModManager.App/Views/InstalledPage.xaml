@@ -159,6 +159,14 @@
                         Text="{Binding DownloadSummary}"
                         Visibility="{Binding DownloadSummary, Converter={StaticResource NullToCollapsed}}" />
 
+                    <!-- sp-mod holds this mod's newest release back: it would break another installed
+                         mod (OPEN-12 F11). -->
+                    <TextBlock
+                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                        TextWrapping="Wrap"
+                        Text="{Binding HeldBackNote}"
+                        Visibility="{Binding HeldBackNote, Converter={StaticResource NullToCollapsed}}" />
+
                     <TextBlock
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         TextWrapping="Wrap"

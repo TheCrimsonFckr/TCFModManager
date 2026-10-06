@@ -28,7 +28,8 @@ public sealed class UpdateCheckService(SpModApiClient api)
     //
     // Updated is the ids it lists under "updates". Blocked and incompatible entries are not updates:
     // incompatible is about what is installed not fitting this SPT, which the Installed page already
-    // shows.
+    // shows. Blocked ones come back as HeldBack (OPEN-12 F11) - an update that would break another
+    // installed mod, which the Installed page then doesn't offer.
     //
     // NotRecognised is every id it left out of all four lists. It does that, silently, for a version
     // that isn't one of the mod's releases - found live on 2026-09-27: 1.0.1.0, v1.0.1 or banana for
@@ -40,6 +41,7 @@ public sealed class UpdateCheckService(SpModApiClient api)
     {
         var updated = new List<int>();
         var answered = new HashSet<int>();
+        var heldBack = new List<HeldBackUpdate>();
 
         foreach (var chunk in ModsQueryChunks(installed))
         {
@@ -50,6 +52,7 @@ public sealed class UpdateCheckService(SpModApiClient api)
 
             answered.UnionWith(ids);
             answered.UnionWith(result.BlockedUpdates.Select(u => u.CurrentVersion?.ModId).OfType<int>());
+            heldBack.AddRange(result.BlockedUpdates.Select(HeldBackUpdate.From).OfType<HeldBackUpdate>());
             answered.UnionWith(result.UpToDate.Select(u => u.ModId));
             answered.UnionWith(result.IncompatibleWithSpt.Select(u => u.ModId));
         }
@@ -58,7 +61,10 @@ public sealed class UpdateCheckService(SpModApiClient api)
 
         return new InstalledUpdateCheck(
             [.. updated.Distinct()],
-            [.. asked.Distinct().Where(id => !answered.Contains(id))]);
+            [.. asked.Distinct().Where(id => !answered.Contains(id))])
+        {
+            HeldBack = [.. heldBack.DistinctBy(h => h.ModId)],
+        };
     }
 
     // Fresh listings, with categories and versions, shaped like the catalog cache's own.
@@ -136,5 +142,8 @@ public sealed class UpdateCheckService(SpModApiClient api)
 // What one /mods/updates round said. ToRefetch is every mod whose listing a check should re-read.
 public sealed record InstalledUpdateCheck(IReadOnlyList<int> Updated, IReadOnlyList<int> NotRecognised)
 {
+    // Updates sp-mod holds back because they would break another installed mod (OPEN-12 F11).
+    public IReadOnlyList<HeldBackUpdate> HeldBack { get; init; } = [];
+
     public IReadOnlyList<int> ToRefetch => [.. Updated.Concat(NotRecognised).Distinct()];
 }

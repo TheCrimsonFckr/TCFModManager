@@ -7638,4 +7638,24 @@ What is in them now is copied first, so this can be undone the same way. Profile
     <value>The profiles from {0} have been put back. What was there before is at the top of the list.</value>
     <comment>After a restore. {0} when the copy was taken.</comment>
   </data>
+  <data name="Installed_HeldBackFormat" xml:space="preserve">
+    <value>Update to {0} held back: {1}.</value>
+    <comment>On a mod whose newest release sp-mod holds back because it would break another installed mod (OPEN-12 F11), e.g. "Update to 3.0.6 held back: Black and Blue needs up to 2.0.31." {0} is the held-back version, {1} the mods it would break (Installed_HeldBackNeedsUpToFormat / Installed_HeldBackNeedsFormat, joined).</comment>
+  </data>
+  <data name="Installed_HeldBackNeedsUpToFormat" xml:space="preserve">
+    <value>{0} needs up to {1}</value>
+    <comment>Part of Installed_HeldBackFormat: {0} is an installed mod, {1} the newest published version of this mod it accepts.</comment>
+  </data>
+  <data name="Installed_HeldBackNeedsFormat" xml:space="preserve">
+    <value>{0} needs {1}</value>
+    <comment>Part of Installed_HeldBackFormat when no published version fits: {0} is an installed mod, {1} the versions of this mod it accepts, as sp-mod writes them ("~2.0.24").</comment>
+  </data>
+  <data name="Installed_HeldBackChainFormat" xml:space="preserve">
+    <value>Update to {0} held back: it needs another update that is held back.</value>
+    <comment>sp-mod holds the update back because something it depends on is held back itself. {0} is the version.</comment>
+  </data>
+  <data name="Installed_HeldBackPlainFormat" xml:space="preserve">
+    <value>Update to {0} held back by sp-mod.</value>
+    <comment>sp-mod holds the update back without naming a reason. {0} is the version.</comment>
+  </data>
 </root>

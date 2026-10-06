@@ -110,6 +110,15 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // which is not always the newest published. Null when no update is available.
     public string? UpdateVersion { get; init; }
 
+    //
+    // OPEN-12 F11: sp-mod holds back the release this card would otherwise offer, because it would
+    // break another installed mod. UpdateVersion is then the newest release those mods all accept,
+    // when that is still newer than the one installed, and no update otherwise - see HeldBackUpdates.
+    //
+    public HeldBackResolution? HeldBack { get; init; }
+
+    public string? HeldBackNote => HeldBack is { } held ? HeldBackUpdates.Describe(held) : null;
+
     // The matched sp-mod.com listing's UpdatedAt. Null under the same conditions as LatestPublishedVersion.
     public DateTimeOffset? LatestUpdatedAt { get; init; }
 
@@ -494,6 +503,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         IncompleteSummary
         ?? ConflictSummary
         ?? DownloadSummary
+        ?? (UpdateAvailable == true ? null : HeldBackNote)
         ?? (HasDuplicateFolders
             ? Strings.Installed_StatusDuplicate
             : IsMixedState
@@ -1314,6 +1324,34 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             ? SptVersionMatcher.IsSatisfiedBy(updateTarget?.SptVersionConstraint, installedSptVersion)
             : isNewer;
 
+        var updateVersion = updateAvailable == true ? updateTarget?.Version : null;
+
+        //
+        // sp-mod holds that release back: it would break another installed mod (OPEN-12 F11). Not an
+        // update, unless an older release every such mod accepts is still newer than this one.
+        //
+        HeldBackResolution? heldBack = null;
+        if (updateVersion is not null && AppServices.HeldBack.For(match?.Id, installedSptVersion) is { } held && held.Holds(updateVersion))
+        {
+            heldBack = HeldBackVersions.Resolve(held, match!.Versions ?? [], installedSptVersion);
+
+            var safeIsNewer = heldBack.Safe is not { } safe
+                ? false
+                : record is null
+                    ? ModVersionComparer.IsUpdateAvailableByNumbers(installedVersion, safe)
+                    : ModVersionComparer.IsUpdateAvailable(installedVersion, safe);
+
+            if (safeIsNewer == true)
+            {
+                updateVersion = heldBack.Safe;
+            }
+            else
+            {
+                updateAvailable = false;
+                updateVersion = null;
+            }
+        }
+
         return new InstalledModCardViewModel
         {
             // Client's folder/package name wins when client and server disagree.
@@ -1328,7 +1366,8 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             HasPatcher = patcher is not null,
             HasServer = server is not null,
             LatestPublishedVersion = latestPublished,
-            UpdateVersion = updateAvailable == true ? updateTarget?.Version : null,
+            UpdateVersion = updateVersion,
+            HeldBack = heldBack,
             LatestUpdatedAt = match?.UpdatedAt,
             MatchedModName = match?.Name,
             DeclaredName = match is null ? server?.DeclaredName ?? plugin?.DeclaredName : null,

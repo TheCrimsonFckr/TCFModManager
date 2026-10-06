@@ -81,6 +81,14 @@
                 Foreground="{DynamicResource SystemFillColorCautionBrush}"
                 Text="{Binding DisabledNotice}"
                 Visibility="{Binding IsModDisabled, Converter={StaticResource TrueToVisible}}" />
+
+            <!-- The selected release would break another installed mod (OPEN-12 F11). Allowed, said. -->
+            <TextBlock
+                Margin="0,4,0,0"
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                Text="{Binding HeldBackNote}"
+                Visibility="{Binding HeldBackNote, Converter={StaticResource NullToCollapsed}}" />
         </StackPanel>
 
         <!-- "View mod page" shows when a catalog match exists. Which of Update / Downgrade /

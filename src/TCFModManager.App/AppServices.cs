@@ -24,6 +24,10 @@ internal static class AppServices
     // self-defined group. Purely organizational; nothing else in the app reads it.
     public static ModGroupStore ModGroups { get; } = new();
 
+    // The updates sp-mod holds back because they would break another installed mod (OPEN-12 F11).
+    // Declared before anything that builds Installed cards, which read it.
+    public static HeldBackUpdates HeldBack { get; } = new();
+
     // Copies of the SPT profiles, taken before the app changes the install (OPEN-12 F4).
     public static ProfileBackups ProfileBackups { get; } = new();
 

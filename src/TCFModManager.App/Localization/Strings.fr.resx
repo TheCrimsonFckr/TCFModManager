@@ -6345,4 +6345,19 @@ Ce qu'ils contiennent maintenant est d'abord copié, cela peut donc être annul�
   <data name="Profiles_RestoredFormat" xml:space="preserve">
     <value>Les profils du {0} ont été remis. Ce qu'il y avait avant est en haut de la liste.</value>
   </data>
+  <data name="Installed_HeldBackFormat" xml:space="preserve">
+    <value>Mise à jour vers {0} retenue : {1}.</value>
+  </data>
+  <data name="Installed_HeldBackNeedsUpToFormat" xml:space="preserve">
+    <value>{0} demande au plus {1}</value>
+  </data>
+  <data name="Installed_HeldBackNeedsFormat" xml:space="preserve">
+    <value>{0} demande {1}</value>
+  </data>
+  <data name="Installed_HeldBackChainFormat" xml:space="preserve">
+    <value>Mise à jour vers {0} retenue : elle a besoin d'une autre mise à jour qui est retenue.</value>
+  </data>
+  <data name="Installed_HeldBackPlainFormat" xml:space="preserve">
+    <value>Mise à jour vers {0} retenue par sp-mod.</value>
+  </data>
 </root>
