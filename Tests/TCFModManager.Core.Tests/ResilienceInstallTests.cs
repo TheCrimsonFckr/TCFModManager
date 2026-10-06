@@ -139,7 +139,7 @@ public class ResilienceInstallTests : IDisposable
         Assert.False(File.Exists(Full("LICENSE")));
         Assert.False(File.Exists(Full("cover.png")));
         Assert.Equal(["BepInEx/plugins/Mod/README.txt", "BepInEx/plugins/Mod/mod.dll"], result.Record.Files.Order(StringComparer.Ordinal));
-        Assert.Empty(result.SkippedProtected);
+        Assert.Empty(result.SkippedProtected ?? []);
     }
 
     [Fact]
