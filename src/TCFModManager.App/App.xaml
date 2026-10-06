@@ -357,12 +357,27 @@
 
             <!-- One active filter above the results on Installed and Browse - see ActiveFilterPill. -->
             <Style x:Key="FilterPill" TargetType="Border">
+                <!-- The same height as the Clear filters button beside the pills (FilterPillButton). -->
+                <Setter Property="Height" Value="28" />
                 <Setter Property="Margin" Value="0,0,6,6" />
-                <Setter Property="Padding" Value="10,2,3,2" />
+                <Setter Property="Padding" Value="10,0,3,0" />
                 <Setter Property="CornerRadius" Value="4" />
                 <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
                 <Setter Property="BorderThickness" Value="1" />
+            </Style>
+
+            <!-- Clear filters at the end of the pills: their height, so the row lines up. -->
+            <Style x:Key="FilterPillButton" TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
+                <Setter Property="Height" Value="28" />
+                <Setter Property="Padding" Value="10,0" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding HasActiveFilters}" Value="False">
+                        <Setter Property="Visibility" Value="Hidden" />
+                    </DataTrigger>
+                </Style.Triggers>
             </Style>
 
             <!--

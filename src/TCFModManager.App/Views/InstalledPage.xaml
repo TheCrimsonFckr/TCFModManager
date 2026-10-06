@@ -655,21 +655,12 @@
             </ItemsControl>
             <ui:Button
                 Margin="0,0,0,6"
-                VerticalAlignment="Center"
+                VerticalAlignment="Top"
                 HorizontalAlignment="Left"
                 Content="{loc:Str Common_ClearFilters}"
                 ToolTip="{loc:Str Common_ClearFiltersToolTip}"
-                Command="{Binding ClearFiltersCommand}">
-                <ui:Button.Style>
-                    <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasActiveFilters}" Value="False">
-                                <Setter Property="Visibility" Value="Hidden" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ui:Button.Style>
-            </ui:Button>
+                Command="{Binding ClearFiltersCommand}"
+                Style="{StaticResource FilterPillButton}" />
         </DockPanel>
         <DockPanel
             Margin="0,0,0,8"
