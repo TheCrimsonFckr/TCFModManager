@@ -10,6 +10,8 @@ Clicking any mod opens a dialog with:
 
 Mods can be removed from here too.
 
+**An update that would break another mod isn't offered.** sp-mod knows which versions of a mod each of your other mods accepts, and holds back a release that one of them can't take - CommonLib 3.0.6, say, while Black and Blue needs a 2.0.x. The card then says so ("Update to 3.0.6 held back: Black and Blue needs up to 2.0.31") and isn't counted as an update - not in the update filter, not by **Update selected**, not in a notification. When an older release that every one of those mods accepts is still newer than yours, that one is offered instead. You can still pick the held release in the dialog; it shows the same note.
+
 ## Mods you installed by hand
 A mod this app installed is known exactly - its listing and version come from the install record. For one you installed yourself, the app reads what the mod says about itself: a client plugin's ID, name and version, and on SPT 4 a server mod's ID, name, version and the other server mods it needs. The ID matches it to its listing on sp-mod, whatever you named the folder. When nothing on sp-mod matches, the card is titled with the name the mod gives itself, with the folder shown as **Installed as**.
 

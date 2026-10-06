@@ -7,6 +7,7 @@ Off until you switch it on. With it on, the app asks sp-mod every so often wheth
 - **An update means what the Installed page means by it:** the newest release that runs on your SPT. A notification never names an update the Installed page doesn't show.
 - **Each release is announced once.** Restarting the app doesn't repeat it; a newer release of the same mod is news again.
 - **Switching it on doesn't announce what's already there.** The first check notes every update the Installed page already shows, and from then on only new releases are announced. Updates that come out while the app is closed are announced on the first check after it starts.
+- **A held-back update isn't announced** - one sp-mod holds back because it would break another installed mod (see Installed).
 - **Disabled mods aren't announced**, and neither is an update you've already downloaded in Monitor mode but not installed yet.
 - **One notification per check**, however many it found - "3 mod updates available: SAIN 4.5.2, UI Fixes 6.0.2 and 1 more". A newer one replaces an older one still waiting in the Notification Centre.
 
