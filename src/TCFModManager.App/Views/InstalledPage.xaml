@@ -1081,6 +1081,7 @@
                                                             <ColumnDefinition Width="Auto" />
                                                             <ColumnDefinition Width="*" />
                                                             <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
                                                         </Grid.ColumnDefinitions>
 
                                                         <!-- Multi select (OPEN-12 A1): the tick sits before the status icon. -->
@@ -1101,20 +1102,10 @@
                                                         </StackPanel>
 
                                                         <StackPanel Grid.Column="1">
-                                                            <DockPanel>
-                                                                <Border
-                                                                    DockPanel.Dock="Right"
-                                                                    Margin="6,0,0,0"
-                                                                    VerticalAlignment="Center"
-                                                                    Style="{StaticResource DisabledBadge}"
-                                                                    Visibility="{Binding IsDisabled, Converter={StaticResource BoolToVis}}">
-                                                                    <TextBlock Style="{StaticResource DisabledBadgeText}" Text="{loc:Str Installed_DisabledTag}" />
-                                                                </Border>
-                                                                <TextBlock
-                                                                    FontWeight="SemiBold"
-                                                                    TextTrimming="CharacterEllipsis"
-                                                                    Text="{Binding DisplayTitle}" />
-                                                            </DockPanel>
+                                                            <TextBlock
+                                                                FontWeight="SemiBold"
+                                                                TextTrimming="CharacterEllipsis"
+                                                                Text="{Binding DisplayTitle}" />
                                                             <TextBlock
                                                                 FontSize="11"
                                                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
@@ -1131,10 +1122,20 @@
                                                                 Content="{Binding}" />
                                                         </StackPanel>
 
+                                                        <!-- Beside the disable toggle, centred on the row, as in the List view. -->
+                                                        <Border
+                                                            Grid.Column="2"
+                                                            Margin="8,0,8,0"
+                                                            VerticalAlignment="Center"
+                                                            Style="{StaticResource DisabledBadge}"
+                                                            Visibility="{Binding IsDisabled, Converter={StaticResource BoolToVis}}">
+                                                            <TextBlock Style="{StaticResource DisabledBadgeText}" Text="{loc:Str Installed_DisabledTag}" />
+                                                        </Border>
+
                                                         <!-- Per-row disable toggle. ModRow_PreviewMouseLeftButtonDown
                                                              steps aside for anything inside a button, so this click
                                                              isn't swallowed by the row's own click/drag gesture. -->
-                                                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                                        <StackPanel Grid.Column="3" VerticalAlignment="Center">
                                                             <ui:Button
                                                                 Padding="4"
                                                                 Appearance="Transparent"
