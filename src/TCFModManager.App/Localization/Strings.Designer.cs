@@ -27,7 +27,6 @@ internal static class Strings
     internal static string Common_Save => LocalizationService.Get("Common_Save");
     internal static string Common_SearchPlaceholder => LocalizationService.Get("Common_SearchPlaceholder");
     internal static string Common_ClearFiltersToolTip => LocalizationService.Get("Common_ClearFiltersToolTip");
-    internal static string Common_AttributeFilterToolTip => LocalizationService.Get("Common_AttributeFilterToolTip");
     internal static string Common_SortToolTip => LocalizationService.Get("Common_SortToolTip");
     internal static string Common_PageSizeToolTip => LocalizationService.Get("Common_PageSizeToolTip");
     internal static string Common_PageSizeFormat => LocalizationService.Get("Common_PageSizeFormat");
@@ -659,8 +658,6 @@ internal static class Strings
     internal static string Filter_FeaturedIncluded => LocalizationService.Get("Filter_FeaturedIncluded");
     internal static string Filter_FeaturedExcluded => LocalizationService.Get("Filter_FeaturedExcluded");
     internal static string Filter_FeaturedOnly => LocalizationService.Get("Filter_FeaturedOnly");
-    internal static string Filter_AnyMod => LocalizationService.Get("Filter_AnyMod");
-    internal static string Filter_SelectedCountFormat => LocalizationService.Get("Filter_SelectedCountFormat");
     internal static string Filter_FikaOnly => LocalizationService.Get("Filter_FikaOnly");
     internal static string Filter_HideAds => LocalizationService.Get("Filter_HideAds");
     internal static string Filter_HasDependencies => LocalizationService.Get("Filter_HasDependencies");
@@ -2114,4 +2111,8 @@ internal static class Strings
     internal static string Installed_RemovedSelectedFormat => LocalizationService.Get("Installed_RemovedSelectedFormat");
     internal static string Installed_RemoveSelectedFailedFormat => LocalizationService.Get("Installed_RemoveSelectedFailedFormat");
     internal static string Installed_UpdateOneToolTipFormat => LocalizationService.Get("Installed_UpdateOneToolTipFormat");
+    internal static string Filter_More => LocalizationService.Get("Filter_More");
+    internal static string Filter_MoreCountFormat => LocalizationService.Get("Filter_MoreCountFormat");
+    internal static string Filter_MoreToolTip => LocalizationService.Get("Filter_MoreToolTip");
+    internal static string Filter_ShowHeader => LocalizationService.Get("Filter_ShowHeader");
 }

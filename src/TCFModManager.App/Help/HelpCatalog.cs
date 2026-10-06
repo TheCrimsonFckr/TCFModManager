@@ -85,7 +85,7 @@ internal static class HelpCatalog
 
             Topic("browse.hideinstalled", () => Strings.Help_Browse_HideInstalled_Title,
                 Step(() => Strings.Help_Browse_HideInstalled_Step1,
-                    () => Strings.Nav_Browse, () => Strings.Filter_AnyMod, () => Strings.Filter_HideInstalled),
+                    () => Strings.Nav_Browse, () => Strings.Filter_More, () => Strings.Filter_HideInstalled),
                 Step(() => Strings.Help_Browse_HideInstalled_Step2, () => Strings.Common_SaveAsDefault))
                 .WithNote(() => Strings.Help_Browse_HideInstalled_Note)
                 .WithKeywords(() => Strings.Help_Browse_HideInstalled_Keywords),

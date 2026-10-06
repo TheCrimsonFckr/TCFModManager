@@ -168,8 +168,19 @@ public partial class InstalledViewModel : LocalizedViewModel
     //
     private readonly HashSet<(int ModId, bool IsAddon, string Version)> _deferredDownloads = [];
 
-    [ObservableProperty]
-    private string _attributeFilterSummary = Strings.Filter_AnyMod;
+    //
+    // The Filters button (the filters behind it in a panel): "Filters", or "Filters (2)" when any of
+    // them narrow the list, so nothing hidden in the panel goes unnoticed. Sort and page size don't
+    // narrow anything and aren't counted. Computed, so a language change rewrites it.
+    //
+    public string MoreFiltersLabel => MoreFiltersSet is var set && set > 0
+        ? Text(Strings.Filter_MoreCountFormat, set)
+        : Strings.Filter_More;
+
+    private int MoreFiltersSet =>
+        AttributeOptions.Count(o => o.IsSelected)
+        + (SelectedCategory.Title is not null ? 1 : 0)
+        + (SelectedGroupFilter.AllGroups ? 0 : 1);
 
     /// <summary>The Category dropdown's entries, rebuilt after each scan from the categories actually present in the install.</summary>
     public ObservableCollection<CategoryFilterItem> CategoryOptions { get; } = [CategoryFilterItem.All];
@@ -491,20 +502,14 @@ public partial class InstalledViewModel : LocalizedViewModel
     private UpdateFilterItem UpdatesAvailableFilter() =>
         UpdateFilterOptions.First(o => o.Value == UpdateFilter.NeedsUpdate);
 
-    partial void OnSelectedCategoryChanged(CategoryFilterItem value) => AutoApplyFilter();
-
-    // "Any mod", the one option's own label, or a count.
-    private void UpdateAttributeFilterSummary()
+    partial void OnSelectedCategoryChanged(CategoryFilterItem value)
     {
-        var selected = AttributeOptions.Where(o => o.IsSelected).ToList();
-
-        AttributeFilterSummary = selected.Count switch
-        {
-            0 => Strings.Filter_AnyMod,
-            1 => selected[0].Label,
-            _ => Text(Strings.Filter_SelectedCountFormat, selected.Count),
-        };
+        OnPropertyChanged(nameof(MoreFiltersLabel));
+        AutoApplyFilter();
     }
+
+    // Ticking a box in the Filters panel changes the count on its button.
+    private void UpdateAttributeFilterSummary() => OnPropertyChanged(nameof(MoreFiltersLabel));
 
     //
     // Rebuilt from what is actually installed rather than from the whole catalog: filtering your
@@ -538,7 +543,11 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     partial void OnSelectedEnabledFilterChanged(EnabledFilterItem value) => AutoApplyFilter();
 
-    partial void OnSelectedGroupFilterChanged(GroupFilterItem value) => AutoApplyFilter();
+    partial void OnSelectedGroupFilterChanged(GroupFilterItem value) 
+    {
+        OnPropertyChanged(nameof(MoreFiltersLabel));
+        AutoApplyFilter();
+    }
 
     // Leaving selection mode drops the selection with it, so a stale tick can't be acted on later.
     partial void OnSelectionModeChanged(bool value)

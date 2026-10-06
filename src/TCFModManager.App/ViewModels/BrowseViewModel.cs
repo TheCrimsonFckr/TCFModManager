@@ -146,9 +146,17 @@ public partial class BrowseViewModel : LocalizedViewModel
 
     partial void OnPageSizeChanged(int value) => AutoApplyFilter();
 
-    partial void OnSelectedFeaturedFilterChanged(FeaturedFilterItem value) => AutoApplyFilter();
+    partial void OnSelectedFeaturedFilterChanged(FeaturedFilterItem value) 
+    {
+        OnPropertyChanged(nameof(MoreFiltersLabel));
+        AutoApplyFilter();
+    }
 
-    partial void OnSelectedCategoryChanged(CategoryFilterItem value) => AutoApplyFilter();
+    partial void OnSelectedCategoryChanged(CategoryFilterItem value)
+    {
+        OnPropertyChanged(nameof(MoreFiltersLabel));
+        AutoApplyFilter();
+    }
 
     private void AutoApplyFilter()
     {
@@ -204,8 +212,19 @@ public partial class BrowseViewModel : LocalizedViewModel
             nameof(Strings.Filter_HideInstalledToolTip)),
     ];
 
-    [ObservableProperty]
-    private string _attributeFilterSummary = Strings.Filter_AnyMod;
+    //
+    // The Filters button (the filters behind it in a panel): "Filters", or "Filters (2)" when any of
+    // them narrow the list, so nothing hidden in the panel goes unnoticed. Sort and page size don't
+    // narrow anything and aren't counted. Computed, so a language change rewrites it.
+    //
+    public string MoreFiltersLabel => MoreFiltersSet is var set && set > 0
+        ? Text(Strings.Filter_MoreCountFormat, set)
+        : Strings.Filter_More;
+
+    private int MoreFiltersSet =>
+        AttributeOptions.Count(o => o.IsSelected)
+        + (SelectedCategory.Title is not null ? 1 : 0)
+        + (SelectedFeaturedFilter.Value == FeaturedFilter.Include ? 0 : 1);
 
     /// <summary>The Category dropdown's entries, rebuilt from the cached catalog once it has loaded.</summary>
     public ObservableCollection<CategoryFilterItem> CategoryOptions { get; } = [CategoryFilterItem.All];
@@ -807,18 +826,8 @@ public partial class BrowseViewModel : LocalizedViewModel
         UpdateSptVersionFilterSummary();
     }
 
-    // "Any mod", the one option's own label, or a count. Same shape as the SPT version summary.
-    private void UpdateAttributeFilterSummary()
-    {
-        var selected = AttributeOptions.Where(o => o.IsSelected).ToList();
-
-        AttributeFilterSummary = selected.Count switch
-        {
-            0 => Strings.Filter_AnyMod,
-            1 => selected[0].Label,
-            _ => Text(Strings.Filter_SelectedCountFormat, selected.Count),
-        };
-    }
+    // Ticking a box in the Filters panel changes the count on its button.
+    private void UpdateAttributeFilterSummary() => OnPropertyChanged(nameof(MoreFiltersLabel));
 
     //
     // Rebuilt from the catalog rather than hardcoded, so the list is whatever The Forge is

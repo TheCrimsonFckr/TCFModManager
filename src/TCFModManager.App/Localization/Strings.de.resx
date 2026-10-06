@@ -486,9 +486,6 @@ Das wurde hier hingeschrieben:
   <data name="Browse_UnexpectedRefreshFormat" xml:space="preserve">
     <value>Unerwarteter Fehler beim Neuladen des Mod-Katalogs: {0}</value>
   </data>
-  <data name="Common_AttributeFilterToolTip" xml:space="preserve">
-    <value>Nach Fika-Unterstützung, Werbung, Abhängigkeiten und Addons filtern</value>
-  </data>
   <data name="Common_Cancel" xml:space="preserve">
     <value>Abbrechen</value>
   </data>
@@ -1269,9 +1266,6 @@ Was du auch wählst: Die Version, die gerade auf der Festplatte liegt, wird zuer
   <data name="Filter_AllGroups" xml:space="preserve">
     <value>Alle Gruppen</value>
   </data>
-  <data name="Filter_AnyMod" xml:space="preserve">
-    <value>Beliebiger Mod</value>
-  </data>
   <data name="Filter_ConfigAll" xml:space="preserve">
     <value>Alle</value>
   </data>
@@ -1328,9 +1322,6 @@ Was du auch wählst: Die Version, die gerade auf der Festplatte liegt, wird zuer
   </data>
   <data name="Filter_HideInstalledToolTip" xml:space="preserve">
     <value>Nur Mods, die du noch nicht hast. Ein deaktivierter Mod zählt als installiert.</value>
-  </data>
-  <data name="Filter_SelectedCountFormat" xml:space="preserve">
-    <value>{0} ausgewählt</value>
   </data>
   <data name="Filter_Ungrouped" xml:space="preserve">
     <value>Ohne Gruppe</value>
@@ -6447,5 +6438,17 @@ Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie d
   </data>
   <data name="Installed_UpdateOneToolTipFormat" xml:space="preserve">
     <value>Auf {0} aktualisieren</value>
+  </data>
+  <data name="Filter_More" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Filter_MoreCountFormat" xml:space="preserve">
+    <value>Filter ({0})</value>
+  </data>
+  <data name="Filter_MoreToolTip" xml:space="preserve">
+    <value>Weitere Filter, Sortierung und Seitengröße - dazu Als Standard speichern und Filter zurücksetzen</value>
+  </data>
+  <data name="Filter_ShowHeader" xml:space="preserve">
+    <value>Nur anzeigen</value>
   </data>
 </root>

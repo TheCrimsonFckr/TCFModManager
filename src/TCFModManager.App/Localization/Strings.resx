@@ -141,10 +141,6 @@
   <data name="Common_ClearFiltersToolTip" xml:space="preserve">
     <value>Puts every filter back to what this page opens with.</value>
   </data>
-  <data name="Common_AttributeFilterToolTip" xml:space="preserve">
-    <value>Filter by Fika support, ads, dependencies and addons</value>
-    <comment>Fika is a mod's name and stays as it is.</comment>
-  </data>
   <data name="Common_SortToolTip" xml:space="preserve">
     <value>Sort order</value>
   </data>
@@ -2296,14 +2292,6 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   </data>
   <data name="Filter_FeaturedOnly" xml:space="preserve">
     <value>Featured only</value>
-  </data>
-  <data name="Filter_AnyMod" xml:space="preserve">
-    <value>Any mod</value>
-    <comment>The attribute dropdown's summary when nothing is ticked.</comment>
-  </data>
-  <data name="Filter_SelectedCountFormat" xml:space="preserve">
-    <value>{0} selected</value>
-    <comment>The attribute dropdown's summary when more than one box is ticked. {0} is how many boxes.</comment>
   </data>
   <data name="Filter_FikaOnly" xml:space="preserve">
     <value>Fika compatible only</value>
@@ -7771,5 +7759,21 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
   <data name="Installed_UpdateOneToolTipFormat" xml:space="preserve">
     <value>Update to {0}</value>
     <comment>Tooltip on a card's Update button (OPEN-12 A2), and its right-click menu entry. {0} is the version.</comment>
+  </data>
+  <data name="Filter_More" xml:space="preserve">
+    <value>Filters</value>
+    <comment>The button on Installed and Browse that opens the filters panel (category, group, the Show tick boxes, sort, page size).</comment>
+  </data>
+  <data name="Filter_MoreCountFormat" xml:space="preserve">
+    <value>Filters ({0})</value>
+    <comment>The same button when some of the filters in its panel narrow the list. {0} is how many.</comment>
+  </data>
+  <data name="Filter_MoreToolTip" xml:space="preserve">
+    <value>More filters, sort and page size - and Save as default and Clear filters</value>
+    <comment>Tooltip on the Filters button. Name Common_SaveAsDefault and Common_ClearFilters as they are translated.</comment>
+  </data>
+  <data name="Filter_ShowHeader" xml:space="preserve">
+    <value>Show only</value>
+    <comment>Heading over the tick boxes in the Filters panel (Fika compatible only, Hide mods with ads, Has dependencies...).</comment>
   </data>
 </root>

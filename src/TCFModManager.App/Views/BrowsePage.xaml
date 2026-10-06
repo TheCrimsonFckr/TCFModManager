@@ -43,36 +43,32 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="0,0,0,8">
-            <DockPanel>
-                <!-- The Fika / ads / AI toggles that used to sit along this row are now three of
-                     the five tick boxes in the "Show" dropdown below, next to the other filters. -->
+        <!--
+             Search and the filters, the same shape as Installed's: what is reached for most - search,
+             SPT version and sort - sits in the row, the rest behind Filters, which says how many of them
+             are set. One line at almost any width, so the results keep the room. Save as default and
+             Clear filters are inside the panel; Refresh cache, an action rather than a filter, stays out.
+        -->
+        <DockPanel Grid.Row="0" Margin="0,0,0,8">
+            <ui:Button
+                DockPanel.Dock="Right"
+                VerticalAlignment="Top"
+                Content="{loc:Str Browse_RefreshCache}"
+                Command="{Binding RefreshCacheCommand}" />
+
+            <WrapPanel>
                 <ui:TextBox
-                    MinWidth="320"
-                    HorizontalAlignment="Left"
+                    Width="320"
+                    Margin="0,0,8,4"
+                    VerticalAlignment="Center"
                     PlaceholderText="{loc:Str Common_SearchPlaceholder}"
                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
-            </DockPanel>
 
-            <DockPanel Margin="0,8,0,0">
-
-                <!-- A WrapPanel: six filters don't fit on one line at every window width, and a
-                     filter that has run off the edge of the page may as well not exist. -->
-                <WrapPanel>
-                <!--
-                     Every filter is the same width (FilterWidth, in this page's resources), so when
-                     the row wraps on a narrow window the filters line up in columns instead of a
-                     ragged run, and Save as default / Clear filters follow on after the last one
-                     rather than floating at the side. 210 is what the longest English option needs
-                     ("Not found on sp-mod.com") with headroom for a longer language; the three
-                     whose contents change (summaries rewritten as you tick, lists rebuilt after a
-                     scan) never resize the row either.
-                -->
                 <!-- SPT version multi-select filter, styled to match the ComboBoxes beside it. -->
                 <ToggleButton
                     x:Name="SptVersionToggle"
                     Width="{StaticResource FilterWidth}"
-                    Margin="0,0,8,8"
+                    Margin="0,0,8,4"
                     VerticalAlignment="Center"
                     ToolTip="{loc:Str Browse_SptVersionFilterToolTip}"
                     Style="{StaticResource FilterDropDownToggle}">
@@ -119,117 +115,113 @@
                     </Border>
                 </Popup>
 
-                <!-- Everything that describes the mod itself, in one place: what used to be three
-                     toggle switches, plus dependencies and addons. -->
-                <ToggleButton
-                    x:Name="AttributeToggle"
-                    Width="{StaticResource FilterWidth}"
-                    Margin="0,0,8,8"
-                    VerticalAlignment="Center"
-                    ToolTip="{loc:Str Common_AttributeFilterToolTip}"
-                    Style="{StaticResource FilterDropDownToggle}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock
-                                Grid.Column="0"
-                                VerticalAlignment="Center"
-                                TextTrimming="CharacterEllipsis"
-                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                Text="{Binding AttributeFilterSummary}" />
-                            <ui:SymbolIcon
-                                Grid.Column="1"
-                                Margin="8,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="11"
-                                Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
-                                Symbol="ChevronDown24" />
-                        </Grid>
-                </ToggleButton>
-                <Popup
-                    IsOpen="{Binding IsChecked, ElementName=AttributeToggle, Mode=TwoWay}"
-                    PlacementTarget="{Binding ElementName=AttributeToggle}"
-                    Placement="Bottom"
-                    StaysOpen="False"
-                    AllowsTransparency="True">
-                    <Border Style="{StaticResource FilterDropDownPopup}" MinWidth="{Binding ActualWidth, ElementName=AttributeToggle}">
-                        <ItemsControl Margin="8,4" ItemsSource="{Binding AttributeOptions}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <CheckBox
-                                        Margin="2"
-                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                        IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                        Content="{Binding Label}"
-                                        ToolTip="{Binding ToolTip}" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </Border>
-                </Popup>
-
                 <ComboBox
                     Width="{StaticResource FilterWidth}"
-                    Margin="0,0,8,8"
-                    VerticalAlignment="Center"
-                    ToolTip="{loc:Str Browse_CategoryFilterToolTip}"
-                    ItemsSource="{Binding CategoryOptions}"
-                    SelectedItem="{Binding SelectedCategory}" />
-
-                <ComboBox
-                    Width="{StaticResource FilterWidth}"
-                    Margin="0,0,8,8"
+                    Margin="0,0,8,4"
                     VerticalAlignment="Center"
                     ToolTip="{loc:Str Common_SortToolTip}"
                     ItemsSource="{Binding SortOptions}"
                     SelectedItem="{Binding SelectedSortOption}" />
 
-                <!-- Item template, because the options are plain ints and "12" says nothing on its
-                     own. SelectedItem stays an int, so the paging arithmetic is untouched. -->
-                <ComboBox
-                    Width="{StaticResource FilterWidth}"
-                    Margin="0,0,8,8"
+                <ToggleButton
+                    x:Name="MoreFiltersToggle"
+                    MinWidth="130"
+                    Margin="0,0,8,4"
                     VerticalAlignment="Center"
-                    ToolTip="{loc:Str Common_PageSizeToolTip}"
-                    ItemsSource="{Binding PageSizeOptions}"
-                    SelectedItem="{Binding PageSize}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding StringFormat={loc:Str Common_PageSizeFormat}}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+                    ToolTip="{loc:Str Filter_MoreToolTip}"
+                    Style="{StaticResource FilterDropDownToggle}">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon
+                            Margin="0,0,8,0"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                            Symbol="Filter24" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                            Text="{Binding MoreFiltersLabel}" />
+                        <ui:SymbolIcon
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Center"
+                            FontSize="11"
+                            Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
+                            Symbol="ChevronDown24" />
+                    </StackPanel>
+                </ToggleButton>
+                <Popup
+                    IsOpen="{Binding IsChecked, ElementName=MoreFiltersToggle, Mode=TwoWay}"
+                    PlacementTarget="{Binding ElementName=MoreFiltersToggle}"
+                    Placement="Bottom"
+                    StaysOpen="False"
+                    AllowsTransparency="True">
+                    <Border Style="{StaticResource FilterDropDownPopup}">
+                        <StackPanel Width="240" Margin="12,10">
+                            <!-- Everything that describes the mod itself: Fika, ads, dependencies, addons,
+                                 installed. -->
+                            <TextBlock
+                                Margin="0,0,0,4"
+                                FontWeight="SemiBold"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{loc:Str Filter_ShowHeader}" />
+                            <ItemsControl Margin="0,0,0,8" ItemsSource="{Binding AttributeOptions}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox
+                                            Margin="0,2"
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                            IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                            Content="{Binding Label}"
+                                            ToolTip="{Binding ToolTip}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
 
-                <ComboBox
-                    Width="{StaticResource FilterWidth}"
-                    Margin="0,0,8,8"
-                    VerticalAlignment="Center"
-                    ToolTip="{loc:Str Browse_FeaturedFilterToolTip}"
-                    ItemsSource="{Binding FeaturedFilterOptions}"
-                    SelectedItem="{Binding SelectedFeaturedFilter}" />
-                
-                <!-- Same as Installed's: the defaults are saved from the page, not restated in
-                     Options. Part of the wrapping row, after the last filter. -->
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,8" VerticalAlignment="Center">
-                    <ui:Button
-                        Margin="0,0,8,0"
-                        Content="{loc:Str Browse_RefreshCache}"
-                        Command="{Binding RefreshCacheCommand}" />
-                    <ui:Button
-                        Margin="0,0,8,0"
-                        Content="{loc:Str Common_SaveAsDefault}"
-                        ToolTip="{loc:Str Browse_SaveAsDefaultToolTip}"
-                        Command="{Binding SaveAsDefaultCommand}" />
-                    <ui:Button
-                        Content="{loc:Str Common_ClearFilters}"
-                        ToolTip="{loc:Str Common_ClearFiltersToolTip}"
-                        Command="{Binding ClearFiltersCommand}" />
-                </StackPanel>
-                </WrapPanel>
-            </DockPanel>
-        </StackPanel>
+                            <ComboBox
+                                Margin="0,0,0,6"
+                                HorizontalAlignment="Stretch"
+                                ToolTip="{loc:Str Browse_CategoryFilterToolTip}"
+                                ItemsSource="{Binding CategoryOptions}"
+                                SelectedItem="{Binding SelectedCategory}" />
+
+                            <ComboBox
+                                Margin="0,0,0,6"
+                                HorizontalAlignment="Stretch"
+                                ToolTip="{loc:Str Browse_FeaturedFilterToolTip}"
+                                ItemsSource="{Binding FeaturedFilterOptions}"
+                                SelectedItem="{Binding SelectedFeaturedFilter}" />
+
+                            <!-- The options are plain ints and "12" says nothing on its own, hence the template. -->
+                            <ComboBox
+                                Margin="0,0,0,6"
+                                HorizontalAlignment="Stretch"
+                                ToolTip="{loc:Str Common_PageSizeToolTip}"
+                                ItemsSource="{Binding PageSizeOptions}"
+                                SelectedItem="{Binding PageSize}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding StringFormat={loc:Str Common_PageSizeFormat}}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                            <!-- Same as Installed's: the defaults are saved from the page, not restated in Options. -->
+                            <ui:Button
+                                Margin="0,6,0,6"
+                                HorizontalAlignment="Stretch"
+                                Content="{loc:Str Common_SaveAsDefault}"
+                                ToolTip="{loc:Str Browse_SaveAsDefaultToolTip}"
+                                Command="{Binding SaveAsDefaultCommand}" />
+                            <ui:Button
+                                HorizontalAlignment="Stretch"
+                                Content="{loc:Str Common_ClearFilters}"
+                                ToolTip="{loc:Str Common_ClearFiltersToolTip}"
+                                Command="{Binding ClearFiltersCommand}" />
+                        </StackPanel>
+                    </Border>
+                </Popup>
+            </WrapPanel>
+        </DockPanel>
 
         <TextBlock
             Grid.Row="1"

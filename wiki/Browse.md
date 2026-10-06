@@ -3,7 +3,7 @@ The whole sp-mod catalog, fetched once and cached to disk so it opens instantly 
 - **Search** by name, or by author with `@author`
 - **Filter** by SPT release line, category, Fika compatibility and featured status
 - **Sort** by newest, last updated, most downloaded, most favourited or most endorsed
-- **Show** options for hiding ads and **mods you already have installed**
+- **Filters** - the **Show only** tick boxes (hiding ads and **mods you already have installed**, among others), category, featured and page size, with **Save as default** and **Clear filters**; the button says how many are narrowing the list. Search, SPT version and sort stay in the row
 - **Refresh cache** re-pulls the catalog when you want the newest listings
 
 Each card shows the download count, the endorsement count when the mod has any, a status dot, and a badge for mods that pull in dependencies. A **pin** under the status dot means you have pinned that mod, so no mod list you apply will set it aside - see [Mod lists](Mod-lists):
