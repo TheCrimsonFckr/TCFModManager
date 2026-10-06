@@ -83,13 +83,6 @@
                                 TextTrimming="CharacterEllipsis"
                                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                 Text="{Binding SptVersionFilterSummary}" />
-                            <ui:SymbolIcon
-                                Grid.Column="1"
-                                Margin="8,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="11"
-                                Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
-                                Symbol="ChevronDown24" />
                         </Grid>
                 </ToggleButton>
                 <Popup
@@ -141,12 +134,6 @@
                             VerticalAlignment="Center"
                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                             Text="{Binding MoreFiltersLabel}" />
-                        <ui:SymbolIcon
-                            Margin="10,0,0,0"
-                            VerticalAlignment="Center"
-                            FontSize="11"
-                            Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
-                            Symbol="ChevronDown24" />
                     </StackPanel>
                 </ToggleButton>
                 <Popup
