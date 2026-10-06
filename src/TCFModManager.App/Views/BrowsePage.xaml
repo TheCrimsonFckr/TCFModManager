@@ -182,53 +182,92 @@
                                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                 Text="{loc:Str Filter_More}" />
                         </DockPanel>
-                        <!-- Everything that describes the mod itself: Fika, ads, dependencies, addons,
-                             installed. -->
-                        <TextBlock
-                            Margin="0,0,0,4"
-                            FontWeight="SemiBold"
-                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Text="{loc:Str Filter_ShowHeader}" />
-                        <ItemsControl Margin="0,0,0,8" ItemsSource="{Binding AttributeOptions}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <CheckBox
-                                        Margin="0,2"
-                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                        IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                        Content="{Binding Label}"
-                                        ToolTip="{Binding ToolTip}" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
 
-                        <ComboBox
-                            Margin="0,0,0,6"
-                            HorizontalAlignment="Stretch"
-                            ToolTip="{loc:Str Browse_CategoryFilterToolTip}"
-                            ItemsSource="{Binding CategoryOptions}"
-                            SelectedItem="{Binding SelectedCategory}" />
+                        <!-- Each filter is a section that opens like a group does: its header names the filter and
+                             shows what it is set to, and opening it lists every choice. No dropdowns to aim at in a
+                             narrow panel, and what is set reads at a glance down the headers. -->
+                        <!-- Everything that describes the mod itself: Fika, ads, dependencies, addons, installed. -->
+                        <Expander Style="{StaticResource FilterSection}" IsExpanded="True">
+                            <Expander.Header>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_ShowHeader}" />
+                            </Expander.Header>
+                            <ItemsControl ItemsSource="{Binding AttributeOptions}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox
+                                            Margin="0,2"
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                            IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                            Content="{Binding Label}"
+                                            ToolTip="{Binding ToolTip}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Expander>
 
-                        <ComboBox
-                            Margin="0,0,0,6"
-                            HorizontalAlignment="Stretch"
-                            ToolTip="{loc:Str Browse_FeaturedFilterToolTip}"
-                            ItemsSource="{Binding FeaturedFilterOptions}"
-                            SelectedItem="{Binding SelectedFeaturedFilter}" />
+                        <Expander
+                            Style="{StaticResource FilterSection}"
+                            ToolTip="{loc:Str Browse_CategoryFilterToolTip}">
+                            <Expander.Header>
+                                <DockPanel>
+                                    <TextBlock
+                                        DockPanel.Dock="Right"
+                                        MaxWidth="120"
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        TextTrimming="CharacterEllipsis"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding SelectedCategory}" />
+                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionCategory}" />
+                                </DockPanel>
+                            </Expander.Header>
+                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding CategoryOptions}" SelectedItem="{Binding SelectedCategory}" />
+                        </Expander>
+
+                        <Expander
+                            Style="{StaticResource FilterSection}"
+                            ToolTip="{loc:Str Browse_FeaturedFilterToolTip}">
+                            <Expander.Header>
+                                <DockPanel>
+                                    <TextBlock
+                                        DockPanel.Dock="Right"
+                                        MaxWidth="120"
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        TextTrimming="CharacterEllipsis"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding SelectedFeaturedFilter}" />
+                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionFeatured}" />
+                                </DockPanel>
+                            </Expander.Header>
+                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding FeaturedFilterOptions}" SelectedItem="{Binding SelectedFeaturedFilter}" />
+                        </Expander>
 
                         <!-- The options are plain ints and "12" says nothing on its own, hence the template. -->
-                        <ComboBox
-                            Margin="0,0,0,6"
-                            HorizontalAlignment="Stretch"
-                            ToolTip="{loc:Str Common_PageSizeToolTip}"
-                            ItemsSource="{Binding PageSizeOptions}"
-                            SelectedItem="{Binding PageSize}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding StringFormat={loc:Str Common_PageSizeFormat}}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                        <Expander
+                            Style="{StaticResource FilterSection}"
+                            ToolTip="{loc:Str Common_PageSizeToolTip}">
+                            <Expander.Header>
+                                <DockPanel>
+                                    <TextBlock
+                                        DockPanel.Dock="Right"
+                                        MaxWidth="120"
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        TextTrimming="CharacterEllipsis"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding PageSize, StringFormat={loc:Str Common_PageSizeFormat}}" />
+                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionPageSize}" />
+                                </DockPanel>
+                            </Expander.Header>
+                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding PageSizeOptions}" SelectedItem="{Binding PageSize}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding StringFormat={loc:Str Common_PageSizeFormat}}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Expander>
 
                         <!-- Same as Installed's: the defaults are saved from the page, not restated in Options. -->
                         <ui:Button

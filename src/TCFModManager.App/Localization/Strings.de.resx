@@ -6451,4 +6451,25 @@ Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie d
   <data name="Filter_ShowHeader" xml:space="preserve">
     <value>Nur anzeigen</value>
   </data>
+  <data name="Filter_SectionUpdateStatus" xml:space="preserve">
+    <value>Update-Status</value>
+  </data>
+  <data name="Filter_SectionEnabled" xml:space="preserve">
+    <value>Aktiviert oder deaktiviert</value>
+  </data>
+  <data name="Filter_SectionCategory" xml:space="preserve">
+    <value>Kategorie</value>
+  </data>
+  <data name="Filter_SectionGroup" xml:space="preserve">
+    <value>Gruppe</value>
+  </data>
+  <data name="Filter_SectionSort" xml:space="preserve">
+    <value>Sortieren nach</value>
+  </data>
+  <data name="Filter_SectionPageSize" xml:space="preserve">
+    <value>Pro Seite</value>
+  </data>
+  <data name="Filter_SectionFeatured" xml:space="preserve">
+    <value>Empfohlen</value>
+  </data>
 </root>

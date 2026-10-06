@@ -508,78 +508,152 @@
                                 Text="{loc:Str Filter_More}" />
                         </DockPanel>
 
-                        <!-- No inline labels: each filter's neutral option names what it filters ("Any
-                             update status" rather than a bare "All"). -->
-                        <ComboBox
-                            Margin="0,0,0,6"
-                            HorizontalAlignment="Stretch"
-                            ToolTip="{loc:Str Installed_UpdateFilterToolTip}"
-                            ItemsSource="{Binding UpdateFilterOptions}"
-                            SelectedItem="{Binding SelectedUpdateFilter}" />
-                        <ComboBox
-                            Margin="0,0,0,10"
-                            HorizontalAlignment="Stretch"
-                            ToolTip="{loc:Str Installed_EnabledFilterToolTip}"
-                            ItemsSource="{Binding EnabledFilterOptions}"
-                            SelectedItem="{Binding SelectedEnabledFilter}" />
+                        <!-- Each filter is a section that opens like a group does: its header names the filter and
+                             shows what it is set to, and opening it lists every choice. No dropdowns to aim at in a
+                             narrow panel, and what is set reads at a glance down the headers. -->
+                        <Expander
+                            Style="{StaticResource FilterSection}"
+                            ToolTip="{loc:Str Installed_UpdateFilterToolTip}">
+                            <Expander.Header>
+                                <DockPanel>
+                                    <TextBlock
+                                        DockPanel.Dock="Right"
+                                        MaxWidth="120"
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        TextTrimming="CharacterEllipsis"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding SelectedUpdateFilter}" />
+                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionUpdateStatus}" />
+                                </DockPanel>
+                            </Expander.Header>
+                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding UpdateFilterOptions}" SelectedItem="{Binding SelectedUpdateFilter}" />
+                        </Expander>
 
-                        <!-- "Has dependencies" is answered from the dependency graph built off the
-                             scan, so unlike Browse's it covers everything installed. -->
-                        <TextBlock
-                            Margin="0,0,0,4"
-                            FontWeight="SemiBold"
-                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Text="{loc:Str Filter_ShowHeader}" />
-                        <ItemsControl Margin="0,0,0,8" ItemsSource="{Binding AttributeOptions}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <CheckBox
-                                        Margin="0,2"
-                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                        IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                        Content="{Binding Label}"
-                                        ToolTip="{Binding ToolTip}" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                        <Expander
+                            Style="{StaticResource FilterSection}"
+                            ToolTip="{loc:Str Installed_EnabledFilterToolTip}">
+                            <Expander.Header>
+                                <DockPanel>
+                                    <TextBlock
+                                        DockPanel.Dock="Right"
+                                        MaxWidth="120"
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        TextTrimming="CharacterEllipsis"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding SelectedEnabledFilter}" />
+                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionEnabled}" />
+                                </DockPanel>
+                            </Expander.Header>
+                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding EnabledFilterOptions}" SelectedItem="{Binding SelectedEnabledFilter}" />
+                        </Expander>
+
+                        <!-- "Has dependencies" is answered from the dependency graph built off the scan, so unlike
+                             Browse's it covers everything installed. -->
+                        <Expander Style="{StaticResource FilterSection}" IsExpanded="True">
+                            <Expander.Header>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_ShowHeader}" />
+                            </Expander.Header>
+                            <ItemsControl ItemsSource="{Binding AttributeOptions}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox
+                                            Margin="0,2"
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                            IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                            Content="{Binding Label}"
+                                            ToolTip="{Binding ToolTip}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Expander>
 
                         <!-- Built from the categories actually present in this install. -->
-                        <ComboBox
-                            Margin="0,0,0,6"
-                            HorizontalAlignment="Stretch"
-                            ToolTip="{loc:Str Installed_CategoryFilterToolTip}"
-                            ItemsSource="{Binding CategoryOptions}"
-                            SelectedItem="{Binding SelectedCategory}" />
+                        <Expander
+                            Style="{StaticResource FilterSection}"
+                            ToolTip="{loc:Str Installed_CategoryFilterToolTip}">
+                            <Expander.Header>
+                                <DockPanel>
+                                    <TextBlock
+                                        DockPanel.Dock="Right"
+                                        MaxWidth="120"
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        TextTrimming="CharacterEllipsis"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding SelectedCategory}" />
+                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionCategory}" />
+                                </DockPanel>
+                            </Expander.Header>
+                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding CategoryOptions}" SelectedItem="{Binding SelectedCategory}" />
+                        </Expander>
 
                         <!-- Rebuilt from the group store whenever groups change. -->
-                        <ComboBox
-                            Margin="0,0,0,6"
-                            HorizontalAlignment="Stretch"
-                            ToolTip="{loc:Str Installed_GroupFilterToolTip}"
-                            ItemsSource="{Binding GroupFilterOptions}"
-                            SelectedItem="{Binding SelectedGroupFilter}" />
+                        <Expander
+                            Style="{StaticResource FilterSection}"
+                            ToolTip="{loc:Str Installed_GroupFilterToolTip}">
+                            <Expander.Header>
+                                <DockPanel>
+                                    <TextBlock
+                                        DockPanel.Dock="Right"
+                                        MaxWidth="120"
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        TextTrimming="CharacterEllipsis"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding SelectedGroupFilter}" />
+                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionGroup}" />
+                                </DockPanel>
+                            </Expander.Header>
+                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding GroupFilterOptions}" SelectedItem="{Binding SelectedGroupFilter}" />
+                        </Expander>
 
-                        <ComboBox
-                            Margin="0,0,0,6"
-                            HorizontalAlignment="Stretch"
-                            ToolTip="{loc:Str Common_SortToolTip}"
-                            ItemsSource="{Binding SortOptions}"
-                            SelectedItem="{Binding SelectedSortOption}" />
+                        <Expander
+                            Style="{StaticResource FilterSection}"
+                            ToolTip="{loc:Str Common_SortToolTip}">
+                            <Expander.Header>
+                                <DockPanel>
+                                    <TextBlock
+                                        DockPanel.Dock="Right"
+                                        MaxWidth="120"
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        TextTrimming="CharacterEllipsis"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding SelectedSortOption}" />
+                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionSort}" />
+                                </DockPanel>
+                            </Expander.Header>
+                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSortOption}" />
+                        </Expander>
 
                         <!-- Pagination is Cards only. The options are plain ints, hence the template. -->
-                        <ComboBox
-                            Margin="0,0,0,6"
-                            HorizontalAlignment="Stretch"
+                        <Expander
+                            Style="{StaticResource FilterSection}"
                             ToolTip="{loc:Str Common_PageSizeToolTip}"
-                            ItemsSource="{Binding PageSizeOptions}"
-                            SelectedItem="{Binding PageSize}"
                             Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding StringFormat={loc:Str Common_PageSizeFormat}}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                            <Expander.Header>
+                                <DockPanel>
+                                    <TextBlock
+                                        DockPanel.Dock="Right"
+                                        MaxWidth="120"
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        TextTrimming="CharacterEllipsis"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding PageSize, StringFormat={loc:Str Common_PageSizeFormat}}" />
+                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionPageSize}" />
+                                </DockPanel>
+                            </Expander.Header>
+                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding PageSizeOptions}" SelectedItem="{Binding PageSize}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding StringFormat={loc:Str Common_PageSizeFormat}}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Expander>
 
                         <!-- Saving the defaults from the page itself rather than restating them in
                              Options: these controls already exist and show what they do. -->

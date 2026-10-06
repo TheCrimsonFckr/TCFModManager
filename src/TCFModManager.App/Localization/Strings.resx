@@ -7776,4 +7776,32 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <value>Show only</value>
     <comment>Heading over the tick boxes in the Filters panel (Fika compatible only, Hide mods with ads, Has dependencies...).</comment>
   </data>
+  <data name="Filter_SectionUpdateStatus" xml:space="preserve">
+    <value>Update status</value>
+    <comment>Heading of the Update status section in the Filters and view options panel (Installed). Beside it, the current choice.</comment>
+  </data>
+  <data name="Filter_SectionEnabled" xml:space="preserve">
+    <value>Enabled or disabled</value>
+    <comment>Heading of the section that filters enabled and disabled mods in the Filters and view options panel (Installed).</comment>
+  </data>
+  <data name="Filter_SectionCategory" xml:space="preserve">
+    <value>Category</value>
+    <comment>Heading of the Category section in the Filters and view options panel (Installed and Browse).</comment>
+  </data>
+  <data name="Filter_SectionGroup" xml:space="preserve">
+    <value>Group</value>
+    <comment>Heading of the Group section in the Filters and view options panel (Installed).</comment>
+  </data>
+  <data name="Filter_SectionSort" xml:space="preserve">
+    <value>Sort by</value>
+    <comment>Heading of the sort order section in the Filters and view options panel (Installed).</comment>
+  </data>
+  <data name="Filter_SectionPageSize" xml:space="preserve">
+    <value>Per page</value>
+    <comment>Heading of the page size section in the Filters and view options panel (Installed and Browse).</comment>
+  </data>
+  <data name="Filter_SectionFeatured" xml:space="preserve">
+    <value>Featured</value>
+    <comment>Heading of the section that filters featured mods in the Filters and view options panel (Browse).</comment>
+  </data>
 </root>

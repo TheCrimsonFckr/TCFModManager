@@ -6451,4 +6451,25 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
   <data name="Filter_ShowHeader" xml:space="preserve">
     <value>Mostra solo</value>
   </data>
+  <data name="Filter_SectionUpdateStatus" xml:space="preserve">
+    <value>Stato aggiornamenti</value>
+  </data>
+  <data name="Filter_SectionEnabled" xml:space="preserve">
+    <value>Attivato o disattivato</value>
+  </data>
+  <data name="Filter_SectionCategory" xml:space="preserve">
+    <value>Categoria</value>
+  </data>
+  <data name="Filter_SectionGroup" xml:space="preserve">
+    <value>Gruppo</value>
+  </data>
+  <data name="Filter_SectionSort" xml:space="preserve">
+    <value>Ordina per</value>
+  </data>
+  <data name="Filter_SectionPageSize" xml:space="preserve">
+    <value>Per pagina</value>
+  </data>
+  <data name="Filter_SectionFeatured" xml:space="preserve">
+    <value>In evidenza</value>
+  </data>
 </root>

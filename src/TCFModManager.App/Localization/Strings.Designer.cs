@@ -2115,4 +2115,11 @@ internal static class Strings
     internal static string Filter_MoreCountFormat => LocalizationService.Get("Filter_MoreCountFormat");
     internal static string Filter_MoreToolTip => LocalizationService.Get("Filter_MoreToolTip");
     internal static string Filter_ShowHeader => LocalizationService.Get("Filter_ShowHeader");
+    internal static string Filter_SectionUpdateStatus => LocalizationService.Get("Filter_SectionUpdateStatus");
+    internal static string Filter_SectionEnabled => LocalizationService.Get("Filter_SectionEnabled");
+    internal static string Filter_SectionCategory => LocalizationService.Get("Filter_SectionCategory");
+    internal static string Filter_SectionGroup => LocalizationService.Get("Filter_SectionGroup");
+    internal static string Filter_SectionSort => LocalizationService.Get("Filter_SectionSort");
+    internal static string Filter_SectionPageSize => LocalizationService.Get("Filter_SectionPageSize");
+    internal static string Filter_SectionFeatured => LocalizationService.Get("Filter_SectionFeatured");
 }

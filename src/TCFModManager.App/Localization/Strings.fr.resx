@@ -6451,4 +6451,25 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
   <data name="Filter_ShowHeader" xml:space="preserve">
     <value>Afficher seulement</value>
   </data>
+  <data name="Filter_SectionUpdateStatus" xml:space="preserve">
+    <value>Statut des mises à jour</value>
+  </data>
+  <data name="Filter_SectionEnabled" xml:space="preserve">
+    <value>Activé ou désactivé</value>
+  </data>
+  <data name="Filter_SectionCategory" xml:space="preserve">
+    <value>Catégorie</value>
+  </data>
+  <data name="Filter_SectionGroup" xml:space="preserve">
+    <value>Groupe</value>
+  </data>
+  <data name="Filter_SectionSort" xml:space="preserve">
+    <value>Trier par</value>
+  </data>
+  <data name="Filter_SectionPageSize" xml:space="preserve">
+    <value>Par page</value>
+  </data>
+  <data name="Filter_SectionFeatured" xml:space="preserve">
+    <value>En vedette</value>
+  </data>
 </root>

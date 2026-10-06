@@ -6796,4 +6796,25 @@
   <data name="Filter_ShowHeader" xml:space="preserve">
     <value>Показывать только</value>
   </data>
+  <data name="Filter_SectionUpdateStatus" xml:space="preserve">
+    <value>Статус обновлений</value>
+  </data>
+  <data name="Filter_SectionEnabled" xml:space="preserve">
+    <value>Включён или отключён</value>
+  </data>
+  <data name="Filter_SectionCategory" xml:space="preserve">
+    <value>Категория</value>
+  </data>
+  <data name="Filter_SectionGroup" xml:space="preserve">
+    <value>Группа</value>
+  </data>
+  <data name="Filter_SectionSort" xml:space="preserve">
+    <value>Сортировка</value>
+  </data>
+  <data name="Filter_SectionPageSize" xml:space="preserve">
+    <value>На странице</value>
+  </data>
+  <data name="Filter_SectionFeatured" xml:space="preserve">
+    <value>Рекомендуемые</value>
+  </data>
 </root>
