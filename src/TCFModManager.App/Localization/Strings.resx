@@ -7804,4 +7804,12 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <value>Featured</value>
     <comment>Heading of the section that filters featured mods in the Filters and view options panel (Browse).</comment>
   </data>
+  <data name="Filter_PillFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+    <comment>A pill above the results naming one filter that narrows the list, as in "Category: Weapons". {0} is the filter's section heading (Filter_Section*), {1} its current setting.</comment>
+  </data>
+  <data name="Filter_PillRemoveToolTip" xml:space="preserve">
+    <value>Remove this filter</value>
+    <comment>Tooltip on the X in a filter pill above the results.</comment>
+  </data>
 </root>

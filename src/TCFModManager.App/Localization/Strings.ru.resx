@@ -6817,4 +6817,10 @@
   <data name="Filter_SectionFeatured" xml:space="preserve">
     <value>Рекомендуемые</value>
   </data>
+  <data name="Filter_PillFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Filter_PillRemoveToolTip" xml:space="preserve">
+    <value>Убрать этот фильтр</value>
+  </data>
 </root>

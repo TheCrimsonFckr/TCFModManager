@@ -355,10 +355,21 @@
                 <Setter Property="CornerRadius" Value="{DynamicResource PopupCornerRadius}" />
             </Style>
 
+            <!-- One active filter above the results on Installed and Browse - see ActiveFilterPill. -->
+            <Style x:Key="FilterPill" TargetType="Border">
+                <Setter Property="Margin" Value="0,0,6,6" />
+                <Setter Property="Padding" Value="10,2,3,2" />
+                <Setter Property="CornerRadius" Value="4" />
+                <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+            </Style>
+
             <!--
                 One filter in the Filters and view options panel, opened and closed the way a group
-                section is (Chris, 2026-10-06): a full-width header - chevron, the filter's name and
-                what it is set to - that turns the chevron and shows the choices below it.
+                section is (Chris, 2026-10-06): a full-width header - chevron and the filter's name -
+                that turns the chevron and shows the choices below it. What is set shows as pills
+                above the results instead (FilterPill).
             -->
             <Style x:Key="FilterSection" TargetType="Expander">
                 <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
@@ -477,7 +488,14 @@
                                                 Focusable="False"
                                                 IsHitTestVisible="False"
                                                 IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}">
-                                                <ContentPresenter />
+                                                <!-- Long choices wrap rather than being cut off. -->
+                                                <ContentPresenter>
+                                                    <ContentPresenter.Resources>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="TextWrapping" Value="Wrap" />
+                                                        </Style>
+                                                    </ContentPresenter.Resources>
+                                                </ContentPresenter>
                                             </RadioButton>
                                         </Border>
                                     </ControlTemplate>

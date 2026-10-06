@@ -6472,4 +6472,10 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
   <data name="Filter_SectionFeatured" xml:space="preserve">
     <value>In evidenza</value>
   </data>
+  <data name="Filter_PillFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Filter_PillRemoveToolTip" xml:space="preserve">
+    <value>Rimuovi questo filtro</value>
+  </data>
 </root>

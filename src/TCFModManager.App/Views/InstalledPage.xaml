@@ -486,7 +486,7 @@
             Visibility="Collapsed">
             <Border
                 x:Name="FiltersPanel"
-                Width="266"
+                Width="300"
                 HorizontalAlignment="Right"
                 Style="{StaticResource FilterSidePanelSurface}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -515,17 +515,7 @@
                             Style="{StaticResource FilterSection}"
                             ToolTip="{loc:Str Installed_UpdateFilterToolTip}">
                             <Expander.Header>
-                                <DockPanel>
-                                    <TextBlock
-                                        DockPanel.Dock="Right"
-                                        MaxWidth="120"
-                                        Margin="8,0,0,0"
-                                        VerticalAlignment="Center"
-                                        TextTrimming="CharacterEllipsis"
-                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                        Text="{Binding SelectedUpdateFilter}" />
-                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionUpdateStatus}" />
-                                </DockPanel>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionUpdateStatus}" TextWrapping="Wrap" />
                             </Expander.Header>
                             <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding UpdateFilterOptions}" SelectedItem="{Binding SelectedUpdateFilter}" />
                         </Expander>
@@ -534,17 +524,7 @@
                             Style="{StaticResource FilterSection}"
                             ToolTip="{loc:Str Installed_EnabledFilterToolTip}">
                             <Expander.Header>
-                                <DockPanel>
-                                    <TextBlock
-                                        DockPanel.Dock="Right"
-                                        MaxWidth="120"
-                                        Margin="8,0,0,0"
-                                        VerticalAlignment="Center"
-                                        TextTrimming="CharacterEllipsis"
-                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                        Text="{Binding SelectedEnabledFilter}" />
-                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionEnabled}" />
-                                </DockPanel>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionEnabled}" TextWrapping="Wrap" />
                             </Expander.Header>
                             <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding EnabledFilterOptions}" SelectedItem="{Binding SelectedEnabledFilter}" />
                         </Expander>
@@ -553,7 +533,7 @@
                              Browse's it covers everything installed. -->
                         <Expander Style="{StaticResource FilterSection}" IsExpanded="True">
                             <Expander.Header>
-                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_ShowHeader}" />
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_ShowHeader}" TextWrapping="Wrap" />
                             </Expander.Header>
                             <ItemsControl ItemsSource="{Binding AttributeOptions}">
                                 <ItemsControl.ItemTemplate>
@@ -562,8 +542,9 @@
                                             Margin="0,2"
                                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                            Content="{Binding Label}"
-                                            ToolTip="{Binding ToolTip}" />
+                                            ToolTip="{Binding ToolTip}">
+                                            <TextBlock Text="{Binding Label}" TextWrapping="Wrap" />
+                                        </CheckBox>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -574,17 +555,7 @@
                             Style="{StaticResource FilterSection}"
                             ToolTip="{loc:Str Installed_CategoryFilterToolTip}">
                             <Expander.Header>
-                                <DockPanel>
-                                    <TextBlock
-                                        DockPanel.Dock="Right"
-                                        MaxWidth="120"
-                                        Margin="8,0,0,0"
-                                        VerticalAlignment="Center"
-                                        TextTrimming="CharacterEllipsis"
-                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                        Text="{Binding SelectedCategory}" />
-                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionCategory}" />
-                                </DockPanel>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionCategory}" TextWrapping="Wrap" />
                             </Expander.Header>
                             <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding CategoryOptions}" SelectedItem="{Binding SelectedCategory}" />
                         </Expander>
@@ -594,17 +565,7 @@
                             Style="{StaticResource FilterSection}"
                             ToolTip="{loc:Str Installed_GroupFilterToolTip}">
                             <Expander.Header>
-                                <DockPanel>
-                                    <TextBlock
-                                        DockPanel.Dock="Right"
-                                        MaxWidth="120"
-                                        Margin="8,0,0,0"
-                                        VerticalAlignment="Center"
-                                        TextTrimming="CharacterEllipsis"
-                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                        Text="{Binding SelectedGroupFilter}" />
-                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionGroup}" />
-                                </DockPanel>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionGroup}" TextWrapping="Wrap" />
                             </Expander.Header>
                             <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding GroupFilterOptions}" SelectedItem="{Binding SelectedGroupFilter}" />
                         </Expander>
@@ -613,17 +574,7 @@
                             Style="{StaticResource FilterSection}"
                             ToolTip="{loc:Str Common_SortToolTip}">
                             <Expander.Header>
-                                <DockPanel>
-                                    <TextBlock
-                                        DockPanel.Dock="Right"
-                                        MaxWidth="120"
-                                        Margin="8,0,0,0"
-                                        VerticalAlignment="Center"
-                                        TextTrimming="CharacterEllipsis"
-                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                        Text="{Binding SelectedSortOption}" />
-                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionSort}" />
-                                </DockPanel>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionSort}" TextWrapping="Wrap" />
                             </Expander.Header>
                             <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSortOption}" />
                         </Expander>
@@ -634,17 +585,7 @@
                             ToolTip="{loc:Str Common_PageSizeToolTip}"
                             Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
                             <Expander.Header>
-                                <DockPanel>
-                                    <TextBlock
-                                        DockPanel.Dock="Right"
-                                        MaxWidth="120"
-                                        Margin="8,0,0,0"
-                                        VerticalAlignment="Center"
-                                        TextTrimming="CharacterEllipsis"
-                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                        Text="{Binding PageSize, StringFormat={loc:Str Common_PageSizeFormat}}" />
-                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionPageSize}" />
-                                </DockPanel>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionPageSize}" TextWrapping="Wrap" />
                             </Expander.Header>
                             <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding PageSizeOptions}" SelectedItem="{Binding PageSize}">
                                 <ListBox.ItemTemplate>
@@ -676,6 +617,48 @@
         <!-- Row 3: the multi-select bar above the group management bar. Since OPEN-12 A1 selection
              works in group view too, so the two can show together and are stacked. -->
         <StackPanel Grid.Row="3" Grid.Column="1">
+        <!--
+             The filters narrowing the list, one pill each, the way Steam's workshop search shows them
+             (Chris, 2026-10-06): each X drops that one filter, and Clear filters drops them all.
+        -->
+        <DockPanel Margin="0,0,0,8" Visibility="{Binding HasActiveFilters, Converter={StaticResource BoolToVis}}">
+            <ItemsControl DockPanel.Dock="Left" Focusable="False" ItemsSource="{Binding ActiveFilters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource FilterPill}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                    Text="{Binding Label}" />
+                                <ui:Button
+                                    Margin="6,0,0,0"
+                                    Padding="3"
+                                    VerticalAlignment="Center"
+                                    Appearance="Transparent"
+                                    ToolTip="{loc:Str Filter_PillRemoveToolTip}"
+                                    Command="{Binding RemoveCommand}">
+                                    <ui:SymbolIcon Symbol="Dismiss24" FontSize="11" />
+                                </ui:Button>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <ui:Button
+                Margin="0,0,0,6"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                Content="{loc:Str Common_ClearFilters}"
+                ToolTip="{loc:Str Common_ClearFiltersToolTip}"
+                Command="{Binding ClearFiltersCommand}" />
+        </DockPanel>
         <DockPanel
             Margin="0,0,0,8"
             Visibility="{Binding SelectionMode, Converter={StaticResource BoolToVis}}">

@@ -6472,4 +6472,10 @@ Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie d
   <data name="Filter_SectionFeatured" xml:space="preserve">
     <value>Empfohlen</value>
   </data>
+  <data name="Filter_PillFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Filter_PillRemoveToolTip" xml:space="preserve">
+    <value>Diesen Filter entfernen</value>
+  </data>
 </root>

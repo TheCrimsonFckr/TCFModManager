@@ -2122,4 +2122,6 @@ internal static class Strings
     internal static string Filter_SectionSort => LocalizationService.Get("Filter_SectionSort");
     internal static string Filter_SectionPageSize => LocalizationService.Get("Filter_SectionPageSize");
     internal static string Filter_SectionFeatured => LocalizationService.Get("Filter_SectionFeatured");
+    internal static string Filter_PillFormat => LocalizationService.Get("Filter_PillFormat");
+    internal static string Filter_PillRemoveToolTip => LocalizationService.Get("Filter_PillRemoveToolTip");
 }

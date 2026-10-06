@@ -6472,4 +6472,10 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
   <data name="Filter_SectionFeatured" xml:space="preserve">
     <value>En vedette</value>
   </data>
+  <data name="Filter_PillFormat" xml:space="preserve">
+    <value>{0} : {1}</value>
+  </data>
+  <data name="Filter_PillRemoveToolTip" xml:space="preserve">
+    <value>Retirer ce filtre</value>
+  </data>
 </root>

@@ -184,6 +184,53 @@ public partial class InstalledViewModel : LocalizedViewModel
         + (SelectedCategory.Title is not null ? 1 : 0)
         + (SelectedGroupFilter.AllGroups ? 0 : 1);
 
+    //
+    // The filters narrowing the list, as pills above the results - see ActiveFilterPill. Rebuilt
+    // whenever the count on the Filters and view options button changes, and on a language change.
+    //
+    public ObservableCollection<ActiveFilterPill> ActiveFilters { get; } = [];
+
+    public bool HasActiveFilters => ActiveFilters.Count > 0;
+
+    protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        if (e.PropertyName is null or "" or nameof(MoreFiltersLabel)) RebuildActiveFilters();
+    }
+
+    private static string Pill(string section, object? value) =>
+        LocalizationService.Text(Strings.Filter_PillFormat, section, value?.ToString() ?? string.Empty);
+
+    private void RebuildActiveFilters()
+    {
+        // The generated properties raise during construction, before every option is in place.
+        if (SelectedUpdateFilter is null || SelectedEnabledFilter is null || SelectedCategory is null || SelectedGroupFilter is null)
+            return;
+
+        ActiveFilters.Clear();
+
+        if (SelectedUpdateFilter.Value != UpdateFilter.All)
+            ActiveFilters.Add(new(Pill(Strings.Filter_SectionUpdateStatus, SelectedUpdateFilter),
+                () => SelectedUpdateFilter = UpdateFilterOptions.First(o => o.Value == UpdateFilter.All)));
+
+        if (SelectedEnabledFilter.Value != EnabledFilter.All)
+            ActiveFilters.Add(new(Pill(Strings.Filter_SectionEnabled, SelectedEnabledFilter),
+                () => SelectedEnabledFilter = EnabledFilterOptions.First(o => o.Value == EnabledFilter.All)));
+
+        foreach (var option in AttributeOptions.Where(o => o.IsSelected))
+            ActiveFilters.Add(new(option.Label, () => option.IsSelected = false));
+
+        if (SelectedCategory.Title is not null)
+            ActiveFilters.Add(new(Pill(Strings.Filter_SectionCategory, SelectedCategory),
+                () => SelectedCategory = CategoryOptions.FirstOrDefault(o => o.Title is null) ?? CategoryFilterItem.All));
+
+        if (!SelectedGroupFilter.AllGroups)
+            ActiveFilters.Add(new(Pill(Strings.Filter_SectionGroup, SelectedGroupFilter),
+                () => SelectedGroupFilter = GroupFilterOptions.FirstOrDefault(o => o.AllGroups) ?? GroupFilterItem.All));
+
+        OnPropertyChanged(nameof(HasActiveFilters));
+    }
+
     /// <summary>The Category dropdown's entries, rebuilt after each scan from the categories actually present in the install.</summary>
     public ObservableCollection<CategoryFilterItem> CategoryOptions { get; } = [CategoryFilterItem.All];
 
@@ -473,6 +520,8 @@ public partial class InstalledViewModel : LocalizedViewModel
             if (!_hasScanned || ScanCommand.IsRunning) return;
             await ScanCommand.ExecuteAsync(null);
         };
+
+        RebuildActiveFilters();
     }
 
     //
