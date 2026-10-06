@@ -107,9 +107,10 @@ public partial class InstalledPage : Page
     {
         if (sender is not FrameworkElement { DataContext: InstalledModCardViewModel mod }) return;
 
-        // A button or the checkbox itself still does its own job; this only claims the empty parts
-        // of the card. IsInsideButton is the same helper the group-view row gesture uses.
-        if (IsInsideButton(e.OriginalSource)) return;
+        // A button or the checkbox itself still does its own job; this only claims the rest of the
+        // card. The expander's own header is a toggle button too - it is what opens the card - so it
+        // is skipped, or a picking click on the header would only ever expand it.
+        if (IsInsideButton(e.OriginalSource, ignoreTogglesOf: sender as DependencyObject)) return;
 
         if (!IsPickingClick()) return;
 
@@ -280,11 +281,22 @@ public partial class InstalledPage : Page
     // True when the click landed on (or inside) a button within the row - the row's own gesture
     // steps aside for those, since PreviewMouseLeftButtonDown tunnels through the row Border before
     // reaching the button and would otherwise mark the event handled before the button ever saw it.
-    private static bool IsInsideButton(object? originalSource)
+    private static bool IsCardsOwnToggle(ButtonBase button, DependencyObject? card) =>
+        card is not null
+        && (ReferenceEquals(button.TemplatedParent, card)
+            || (button is ToggleButton && button is not CheckBox && button is not RadioButton));
+
+    private static bool IsInsideButton(object? originalSource, DependencyObject? ignoreTogglesOf = null)
     {
         for (var node = originalSource as DependencyObject; node is not null;)
         {
-            if (node is ButtonBase) return true;
+            // The card itself: nothing above it is part of the click.
+            if (ignoreTogglesOf is not null && ReferenceEquals(node, ignoreTogglesOf)) return false;
+
+            // The expander's own header toggle - the thing that opens the card - is not a button
+            // inside the card. Told apart by being a plain ToggleButton (the card's own buttons are
+            // ui:Buttons, its tick a CheckBox) or by belonging to the card's template.
+            if (node is ButtonBase button && !IsCardsOwnToggle(button, ignoreTogglesOf)) return true;
 
             // The visual tree is what the templated parts of a button live in, but a click can
             // report a ContentElement such as a Run as its OriginalSource, and VisualTreeHelper
