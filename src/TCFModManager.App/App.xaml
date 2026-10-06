@@ -367,6 +367,32 @@
                 <Setter Property="BorderThickness" Value="1" />
             </Style>
 
+            <!-- The X inside a filter pill: the bare glyph, no button outline, a faint fill on hover. -->
+            <Style x:Key="FilterPillRemove" TargetType="Button">
+                <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border
+                                x:Name="Face"
+                                Padding="4"
+                                Background="Transparent"
+                                CornerRadius="3">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Face" Property="Background" Value="{StaticResource RowHoverBrush}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <!-- Clear filters at the end of the pills: their height, so the row lines up. -->
             <Style x:Key="FilterPillButton" TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
                 <Setter Property="Height" Value="28" />

@@ -286,15 +286,14 @@
                                         FontSize="12"
                                         Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                         Text="{Binding Label}" />
-                                    <ui:Button
-                                        Margin="6,0,0,0"
-                                        Padding="3"
+                                    <Button
+                                        Margin="4,0,0,0"
                                         VerticalAlignment="Center"
-                                        Appearance="Transparent"
+                                        Style="{StaticResource FilterPillRemove}"
                                         ToolTip="{loc:Str Filter_PillRemoveToolTip}"
                                         Command="{Binding RemoveCommand}">
-                                        <ui:SymbolIcon Symbol="Dismiss24" FontSize="11" />
-                                    </ui:Button>
+                                        <ui:SymbolIcon Symbol="Dismiss24" FontSize="11" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                    </Button>
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
