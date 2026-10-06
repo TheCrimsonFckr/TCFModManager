@@ -17,6 +17,8 @@ Everything lives next to the exe:
 | `Data\logs\tcfmm-<date>.log` | Daily log |
 | `Staging\` | Default destination for manually downloaded archives |
 | `Data\LegacyConfigs\` | Config files kept from removed and updated mods, one timestamped folder each |
+| `Data\ProfileBackups\` | Copies of your SPT profiles taken before mods change, one folder per SPT install, the last 10 kept - see **Options, SPT profile backups** |
+| `Data\install-journal\` | A note for an install in progress, gone once it finishes; one left over means the app was stopped part way, and that mod is shown as partly installed |
 | `Data\overwritten\` | Files an install replaced that weren't another installed mod's, kept to put back when that mod is removed |
 | `Data\ConfigBaselines\` | A copy of the config files each mod version shipped, which is what lets an update tell your changes from the author's |
 | `Data\mod_configs.json` | Your per-mod choice of what an update does with that mod's configs, and any unusual places it keeps them |
