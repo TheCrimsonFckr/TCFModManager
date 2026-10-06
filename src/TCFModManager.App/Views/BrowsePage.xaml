@@ -33,6 +33,7 @@
         <converters:UpdateAvailableToVisibilityConverter x:Key="TrueToVisible" />
         <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
         <converters:CountToVisibilityConverter x:Key="HasCount" />
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
 
     </Page.Resources>
     <Grid Margin="16">
