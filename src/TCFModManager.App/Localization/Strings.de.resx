@@ -2007,9 +2007,6 @@ Abbrechen  -  nichts entfernen</value>
   <data name="Installed_SkippedUpToDate_other" xml:space="preserve">
     <value>{0} bereits aktuell</value>
   </data>
-  <data name="Installed_SortGroupsLabel" xml:space="preserve">
-    <value>Gruppen sortieren:</value>
-  </data>
   <data name="Installed_SortOut" xml:space="preserve">
     <value>Bereinigen</value>
   </data>
@@ -4747,7 +4744,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Mods ausblenden, die ich schon habe</value>
   </data>
   <data name="Help_Browse_HideInstalled_Step1" xml:space="preserve">
-    <value>Öffne unter {0} das Auswahlfeld, in dem {1} steht, und hake {2} an.</value>
+    <value>Öffne unter {0} {1} und hake unter {3} {2} an.</value>
   </data>
   <data name="Help_Browse_HideInstalled_Step2" xml:space="preserve">
     <value>Damit Durchsuchen jedes Mal so öffnet, klicke auf {0}.</value>
@@ -6477,5 +6474,8 @@ Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie d
   </data>
   <data name="Filter_PillRemoveToolTip" xml:space="preserve">
     <value>Diesen Filter entfernen</value>
+  </data>
+  <data name="Filter_SectionGroupSort" xml:space="preserve">
+    <value>Gruppen sortieren</value>
   </data>
 </root>

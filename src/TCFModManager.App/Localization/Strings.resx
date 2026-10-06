@@ -307,10 +307,6 @@
   <data name="Installed_DisableSelected" xml:space="preserve">
     <value>Disable selected</value>
   </data>
-  <data name="Installed_SortGroupsLabel" xml:space="preserve">
-    <value>Sort groups:</value>
-    <comment>Label to the left of the group sort dropdown.</comment>
-  </data>
   <data name="Installed_AddGroup" xml:space="preserve">
     <value>Add group</value>
   </data>
@@ -5622,7 +5618,7 @@ This was written to:
     <comment>How-to title.</comment>
   </data>
   <data name="Help_Browse_HideInstalled_Step1" xml:space="preserve">
-    <value>On {0}, open the dropdown that reads {1} and tick {2}.</value>
+    <value>On {0}, open {1}, then tick {2} under {3}.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Browse_HideInstalled_Step2" xml:space="preserve">
@@ -7811,5 +7807,9 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
   <data name="Filter_PillRemoveToolTip" xml:space="preserve">
     <value>Remove this filter</value>
     <comment>Tooltip on the X in a filter pill above the results.</comment>
+  </data>
+  <data name="Filter_SectionGroupSort" xml:space="preserve">
+    <value>Sort groups</value>
+    <comment>Heading of the group order section in the Filters and view options panel (Installed, Groups view only).</comment>
   </data>
 </root>

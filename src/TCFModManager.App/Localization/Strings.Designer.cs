@@ -75,7 +75,6 @@ internal static class Strings
     internal static string Installed_UpdateSelectedToolTip => LocalizationService.Get("Installed_UpdateSelectedToolTip");
     internal static string Installed_EnableSelected => LocalizationService.Get("Installed_EnableSelected");
     internal static string Installed_DisableSelected => LocalizationService.Get("Installed_DisableSelected");
-    internal static string Installed_SortGroupsLabel => LocalizationService.Get("Installed_SortGroupsLabel");
     internal static string Installed_AddGroup => LocalizationService.Get("Installed_AddGroup");
     internal static string Installed_NewGroupPlaceholder => LocalizationService.Get("Installed_NewGroupPlaceholder");
     internal static string Installed_ListChipToolTip => LocalizationService.Get("Installed_ListChipToolTip");
@@ -2124,4 +2123,5 @@ internal static class Strings
     internal static string Filter_SectionFeatured => LocalizationService.Get("Filter_SectionFeatured");
     internal static string Filter_PillFormat => LocalizationService.Get("Filter_PillFormat");
     internal static string Filter_PillRemoveToolTip => LocalizationService.Get("Filter_PillRemoveToolTip");
+    internal static string Filter_SectionGroupSort => LocalizationService.Get("Filter_SectionGroupSort");
 }

@@ -7,10 +7,10 @@ Its own files travel with it, server configs included, and client settings in `B
 **How to disable something**
 
 - One mod, from its card, its List row, or its row in Groups view
-- Several at once, by ticking them in Cards view's **Select** mode
+- Several at once, with **Multi select** or Ctrl-click in any view
 - A whole group, with its **enable all** / **disable all** / **invert** buttons
 
-Disabled mods stay in the list, dimmed and marked, and the enabled/disabled filter pulls up either set on its own.
+Disabled mods stay in the list with a red **DISABLED** tag, and the enabled or disabled filter pulls up either set on its own.
 
 **You get a warning before you break something.** If disabling a mod would take away something another mod depends on - or if you enable a mod whose own dependencies are still switched off - the app lists what's affected and offers to carry those along. Dependencies are read from the mods themselves, so this works offline and covers mods you installed by hand that were never matched to a listing here.
 

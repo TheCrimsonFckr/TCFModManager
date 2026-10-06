@@ -2007,9 +2007,6 @@ Annuler  -  ne rien supprimer</value>
   <data name="Installed_SkippedUpToDate_other" xml:space="preserve">
     <value>{0} déjà à jour</value>
   </data>
-  <data name="Installed_SortGroupsLabel" xml:space="preserve">
-    <value>Trier les groupes :</value>
-  </data>
   <data name="Installed_SortOut" xml:space="preserve">
     <value>Régler</value>
   </data>
@@ -4747,7 +4744,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Masquer les mods que j'ai déjà</value>
   </data>
   <data name="Help_Browse_HideInstalled_Step1" xml:space="preserve">
-    <value>Dans {0}, ouvrez la liste qui affiche {1} et cochez {2}.</value>
+    <value>Dans {0}, ouvrez {1}, puis cochez {2} sous {3}.</value>
   </data>
   <data name="Help_Browse_HideInstalled_Step2" xml:space="preserve">
     <value>Pour que Parcourir s'ouvre toujours ainsi, cliquez sur {0}.</value>
@@ -6477,5 +6474,8 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
   </data>
   <data name="Filter_PillRemoveToolTip" xml:space="preserve">
     <value>Retirer ce filtre</value>
+  </data>
+  <data name="Filter_SectionGroupSort" xml:space="preserve">
+    <value>Trier les groupes</value>
   </data>
 </root>

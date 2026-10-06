@@ -2007,9 +2007,6 @@ Annulla  -  non rimuove nulla</value>
   <data name="Installed_SkippedUpToDate_other" xml:space="preserve">
     <value>{0} già aggiornati</value>
   </data>
-  <data name="Installed_SortGroupsLabel" xml:space="preserve">
-    <value>Ordina gruppi:</value>
-  </data>
   <data name="Installed_SortOut" xml:space="preserve">
     <value>Risolvi</value>
   </data>
@@ -4747,7 +4744,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Nascondere i mod che ho già</value>
   </data>
   <data name="Help_Browse_HideInstalled_Step1" xml:space="preserve">
-    <value>In {0}, apri il menu che mostra {1} e spunta {2}.</value>
+    <value>In {0}, apri {1} e spunta {2} sotto {3}.</value>
   </data>
   <data name="Help_Browse_HideInstalled_Step2" xml:space="preserve">
     <value>Perché Sfoglia si apra sempre così, premi {0}.</value>
@@ -6477,5 +6474,8 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
   </data>
   <data name="Filter_PillRemoveToolTip" xml:space="preserve">
     <value>Rimuovi questo filtro</value>
+  </data>
+  <data name="Filter_SectionGroupSort" xml:space="preserve">
+    <value>Ordina gruppi</value>
   </data>
 </root>

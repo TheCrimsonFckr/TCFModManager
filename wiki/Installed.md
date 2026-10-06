@@ -30,9 +30,13 @@ Turn on **Multi select**, or just Ctrl-click a mod - in any of the three views. 
 ## Updating and the right-click menu
 A mod with an update shows an **Update** button on its card and its List row - one click queues it. Right-click any mod for the same actions its card has: details and versions, update, enable or disable, pin, open its folders, its sp-mod page, and remove. Right-click one of several ticked mods and the menu acts on all of them.
 
-Sort by name, author, group or install date - **Last installed (newest)** puts what you've just installed at the top. To see only those, tick **Installed in the last 7 days** under **Filters**. Every filter and sort applies to all three views.
+Sort by name, author, group or install date - **Last installed (newest)** puts what you've just installed at the top. To see only those, tick **Installed in the last 7 days** under **Show only**. Every filter and sort applies to all three views.
 
-Search, update status and enabled state sit in the row above the list; the rest - the **Show only** tick boxes, category, group, sort and page size, with **Save as default** and **Clear filters** - are behind the **Filters** button, which says how many of them are narrowing the list ("Filters (2)").
+Search sits in the row above the list. Everything else is in the **Filters and view options** panel down the left - update status, enabled or disabled, the **Show only** tick boxes, category, group, sort, how the groups are ordered (Groups view) and page size (Cards view), with **Save as default** and **Clear filters**. Each is a section you open like a group. The button says how many filters are narrowing the list, and the panel's X or the button again closes it. On a wide window the panel takes its own column and the mods move over; on a narrow one it lies over them and a click elsewhere closes it.
+
+Every filter narrowing the list also shows as a pill above the mods - "Update status: Updates available", "Show only: Has conflicts". A pill's X drops just that filter.
+
+Disabled mods carry a red **DISABLED** tag, in every view.
 
 > [!NOTE]
 > Groups are yours to organise however you like - SPT never sees them. They do matter for one thing: disabling a whole group at once.

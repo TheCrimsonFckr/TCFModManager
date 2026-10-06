@@ -2133,9 +2133,6 @@
   <data name="Installed_SkippedUpToDate_one" xml:space="preserve">
     <value>{0} уже актуален</value>
   </data>
-  <data name="Installed_SortGroupsLabel" xml:space="preserve">
-    <value>Сортировка групп:</value>
-  </data>
   <data name="Installed_SortOut" xml:space="preserve">
     <value>Устранить</value>
   </data>
@@ -5035,7 +5032,7 @@
     <value>Скрыть моды, которые у меня уже есть</value>
   </data>
   <data name="Help_Browse_HideInstalled_Step1" xml:space="preserve">
-    <value>На странице {0} откройте список с надписью {1} и отметьте {2}.</value>
+    <value>На странице {0} откройте {1} и отметьте {2} в разделе {3}.</value>
   </data>
   <data name="Help_Browse_HideInstalled_Step2" xml:space="preserve">
     <value>Чтобы страница Обзор всегда открывалась так, нажмите {0}.</value>
@@ -6822,5 +6819,8 @@
   </data>
   <data name="Filter_PillRemoveToolTip" xml:space="preserve">
     <value>Убрать этот фильтр</value>
+  </data>
+  <data name="Filter_SectionGroupSort" xml:space="preserve">
+    <value>Сортировка групп</value>
   </data>
 </root>

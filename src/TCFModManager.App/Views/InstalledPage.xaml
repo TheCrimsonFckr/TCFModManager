@@ -579,6 +579,16 @@
                             <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSortOption}" />
                         </Expander>
 
+                        <!-- How the group sections are ordered - Groups view only. -->
+                        <Expander
+                            Style="{StaticResource FilterSection}"
+                            Visibility="{Binding ShowGroups, Converter={StaticResource BoolToVis}}">
+                            <Expander.Header>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionGroupSort}" TextWrapping="Wrap" />
+                            </Expander.Header>
+                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding GroupSortOptions}" SelectedItem="{Binding SelectedGroupSortOption}" />
+                        </Expander>
+
                         <!-- Pagination is Cards only. The options are plain ints, hence the template. -->
                         <Expander
                             Style="{StaticResource FilterSection}"
@@ -714,16 +724,9 @@
         <DockPanel
             Margin="0,0,0,8"
             Visibility="{Binding ShowGroups, Converter={StaticResource BoolToVis}}">
-            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="{loc:Str Installed_SortGroupsLabel}" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                <ComboBox
-                    MinWidth="150"
-                    ItemsSource="{Binding GroupSortOptions}"
-                    SelectedItem="{Binding SelectedGroupSortOption}" />
-            </StackPanel>
+            <!-- Sort groups is in the Filters and view options panel, with the other orderings. -->
             <ui:Button
                 DockPanel.Dock="Right"
-                Margin="0,0,16,0"
                 Content="{loc:Str Installed_AddGroup}"
                 Icon="{ui:SymbolIcon Add24}"
                 Command="{Binding AddGroupCommand}" />

@@ -9,8 +9,12 @@ namespace TCFModManager.App.Behaviors;
 // that popup, so a click on the button while the popup is open closes it and leaves it closed.
 //
 // The popup closes on the mouse-down of that click, which unchecks the button, and the click then
-// carries on to the button and checks it again - the dropdown flickered shut and back open. This
-// swallows a mouse-down on the button that arrives just after its popup closed.
+// carries on to the button and checks it again - the dropdown flickered shut and back open.
+//
+// The first try timed the click from the popup's Closed event, but that is raised later, once the
+// popup's window has gone - after the click it was meant to catch (Chris tested, 2026-10-06). This
+// times it from the moment the button unchecks, which happens as the popup closes, and also takes a
+// press that arrives while the popup still reads open.
 //
 public static class DropDownToggle
 {
@@ -30,18 +34,30 @@ public static class DropDownToggle
     {
         if (d is not ToggleButton toggle) return;
 
-        if (e.NewValue is Popup popup) popup.Closed += Closed;
-
+        toggle.Unchecked -= Toggle_Unchecked;
+        toggle.Unchecked += Toggle_Unchecked;
         toggle.PreviewMouseLeftButtonDown -= Toggle_PreviewMouseLeftButtonDown;
         toggle.PreviewMouseLeftButtonDown += Toggle_PreviewMouseLeftButtonDown;
-
-        void Closed(object? sender, EventArgs args) => toggle.SetValue(ClosedAtProperty, Environment.TickCount64);
     }
+
+    private static void Toggle_Unchecked(object sender, RoutedEventArgs e) =>
+        ((DependencyObject)sender).SetValue(ClosedAtProperty, Environment.TickCount64);
 
     private static void Toggle_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        if (sender is not ToggleButton toggle || toggle.IsChecked == true) return;
+        if (sender is not ToggleButton toggle) return;
 
+        // The press reached the button before the popup let go of it: close it here, and stop the
+        // press from toggling the button back on.
+        if (GetPopup(toggle) is { IsOpen: true } popup)
+        {
+            popup.IsOpen = false;
+            toggle.IsChecked = false;
+            e.Handled = true;
+            return;
+        }
+
+        // The popup has just closed on this same press.
         if (Environment.TickCount64 - (long)toggle.GetValue(ClosedAtProperty) < ReclickWindowMs) e.Handled = true;
     }
 }
