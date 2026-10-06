@@ -387,13 +387,19 @@
                 above the results instead (FilterPill).
             -->
             <Style x:Key="FilterSection" TargetType="Expander">
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
                 <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                 <Setter Property="Margin" Value="0,0,0,2" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Expander">
                             <StackPanel>
+                                <!-- Stretched explicitly: WPF-UI's own ToggleButton style, which still
+                                     applies under this template, left-aligns it, so the hover fill
+                                     stopped at the end of the heading. -->
                                 <ToggleButton
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Stretch"
                                     Content="{TemplateBinding Header}"
                                     Foreground="{TemplateBinding Foreground}"
                                     FocusVisualStyle="{x:Null}"
