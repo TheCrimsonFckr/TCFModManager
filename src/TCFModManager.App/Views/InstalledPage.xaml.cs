@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
+using TCFModManager.App.Behaviors;
 using TCFModManager.App.Localization;
 using TCFModManager.App.ViewModels;
 
@@ -13,6 +14,9 @@ namespace TCFModManager.App.Views;
 public partial class InstalledPage : Page
 {
     public InstalledViewModel ViewModel { get; } = new();
+
+    // The Filters panel down the left of the results - see Behaviors/FilterSidePanel.
+    private readonly FilterSidePanel _filters;
 
     // Drag/click state for the manual gesture on a group-view mod row (see ModRow_PreviewMouseMove
     // and ModRow_PreviewMouseLeftButtonUp) - WPF has no built-in "drag this ItemsControl row"
@@ -46,6 +50,8 @@ public partial class InstalledPage : Page
     {
         DataContext = ViewModel;
         InitializeComponent();
+
+        _filters = new FilterSidePanel(this, MoreFiltersToggle, FiltersPanel, FiltersColumn);
 
         // Registered directly on the Page (not via a XAML attribute on a specific element) so it's
         // the very first thing to see every wheel event over this page - PreviewMouseWheel tunnels
@@ -264,6 +270,9 @@ public partial class InstalledPage : Page
     // ItemsControl in its own ScrollViewer rather than a ListBox.
     private void Page_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
+        // The Filters panel scrolls itself when the window is too short for it.
+        if (_filters.Contains(e.OriginalSource)) return;
+
         var scroller = ViewModel.ViewMode switch
         {
             InstalledViewMode.Groups => GroupsScrollViewer,

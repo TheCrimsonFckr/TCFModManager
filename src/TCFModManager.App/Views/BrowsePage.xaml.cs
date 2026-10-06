@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using TCFModManager.App.Behaviors;
 using TCFModManager.App.ViewModels;
 
 using TCFModManager.Core.Services;
@@ -16,6 +17,9 @@ public partial class BrowsePage : Page
     {
         DataContext = ViewModel;
         InitializeComponent();
+
+        // The Filters panel down the left of the results - see Behaviors/FilterSidePanel.
+        _ = new FilterSidePanel(this, MoreFiltersToggle, FiltersPanel, FiltersColumn);
     }
 
     private async void BrowsePage_Loaded(object sender, RoutedEventArgs e)

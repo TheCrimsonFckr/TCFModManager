@@ -208,9 +208,9 @@
                     Made to behave like the ComboBoxes beside it (WPF-UI 4.3's DefaultComboBoxStyle,
                     read from its BAML): the chevron is part of the template and turns 180 degrees
                     over 167ms as the panel opens and back as it closes, and the hover fill is the
-                    ComboBox's. While open the toggle takes no clicks: a click on it then lands
-                    outside the StaysOpen=False popup, which closes it - left hit-testable, the same
-                    click would also re-check the toggle and open it straight back up.
+                    ComboBox's. Used by the Filters button, which opens a side panel (see
+                    Behaviors/FilterSidePanel), and by Browse's SPT version dropdown, whose popup needs
+                    Behaviors/DropDownToggle so a click on the button closes it rather than reopening it.
                 -->
                 <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                 <Setter Property="MinWidth" Value="150" />
@@ -254,7 +254,6 @@
                                     <Setter TargetName="Face" Property="Background" Value="{DynamicResource ComboBoxBackgroundPointerOver}" />
                                 </Trigger>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="IsHitTestVisible" Value="False" />
                                     <Trigger.EnterActions>
                                         <BeginStoryboard>
                                             <Storyboard>
@@ -325,6 +324,16 @@
                         </BeginStoryboard>
                     </EventTrigger>
                 </Style.Triggers>
+            </Style>
+
+            <!-- The Filters side panel on Installed and Browse: the dropdown's surface, without the
+                 dropdown's own slide (FilterSidePanel slides it in, and shadows it only when it lies
+                 over the results). -->
+            <Style x:Key="FilterSidePanelSurface" TargetType="Border">
+                <Setter Property="Background" Value="{DynamicResource ComboBoxDropDownBackground}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ComboBoxDropDownBorderBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="{DynamicResource PopupCornerRadius}" />
             </Style>
 
             <!--

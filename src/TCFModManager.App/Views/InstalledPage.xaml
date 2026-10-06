@@ -301,8 +301,12 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="FiltersColumn" Width="0" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-        <DockPanel Grid.Row="0" Margin="0,0,0,8">
+        <DockPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,8">
             <ui:Button
                 DockPanel.Dock="Right"
                 Content="{loc:Str Common_Rescan}"
@@ -423,7 +427,7 @@
              so nothing narrows the list unseen. One line at almost any width, so the cards keep the
              room. Save as default and Clear filters are inside the panel with what they act on.
         -->
-        <DockPanel Grid.Row="1" Margin="0,0,0,8">
+        <DockPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,8">
             <!-- A display preference rather than a filter: it changes what each row draws, not which
                  rows are shown, so Clear filters leaves it alone and it is remembered between sessions. -->
             <ui:ToggleSwitch
@@ -435,7 +439,7 @@
                 OnContent="{loc:Str Installed_ListBadges}"
                 OffContent="{loc:Str Installed_ListBadges}" />
 
-            <WrapPanel x:Name="FilterRow">
+            <WrapPanel>
                 <ui:TextBox
                     Width="320"
                     Margin="0,0,8,4"
@@ -481,94 +485,102 @@
                             Text="{Binding MoreFiltersLabel}" />
                     </StackPanel>
                 </ToggleButton>
-                <Popup
-                    IsOpen="{Binding IsChecked, ElementName=MoreFiltersToggle, Mode=TwoWay}"
-                    PlacementTarget="{Binding ElementName=FilterRow}"
-                    Placement="Bottom"
-                    StaysOpen="False"
-                    AllowsTransparency="True">
-                    <Border Style="{StaticResource FilterDropDownPopup}">
-                        <StackPanel Width="240" Margin="12,10">
-                            <!-- "Has dependencies" is answered from the dependency graph built off the
-                                 scan, so unlike Browse's it covers everything installed. -->
-                            <TextBlock
-                                Margin="0,0,0,4"
-                                FontWeight="SemiBold"
-                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                Text="{loc:Str Filter_ShowHeader}" />
-                            <ItemsControl Margin="0,0,0,8" ItemsSource="{Binding AttributeOptions}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <CheckBox
-                                            Margin="0,2"
-                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                            IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                            Content="{Binding Label}"
-                                            ToolTip="{Binding ToolTip}" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-
-                            <!-- Built from the categories actually present in this install. -->
-                            <ComboBox
-                                Margin="0,0,0,6"
-                                HorizontalAlignment="Stretch"
-                                ToolTip="{loc:Str Installed_CategoryFilterToolTip}"
-                                ItemsSource="{Binding CategoryOptions}"
-                                SelectedItem="{Binding SelectedCategory}" />
-
-                            <!-- Rebuilt from the group store whenever groups change. -->
-                            <ComboBox
-                                Margin="0,0,0,6"
-                                HorizontalAlignment="Stretch"
-                                ToolTip="{loc:Str Installed_GroupFilterToolTip}"
-                                ItemsSource="{Binding GroupFilterOptions}"
-                                SelectedItem="{Binding SelectedGroupFilter}" />
-
-                            <ComboBox
-                                Margin="0,0,0,6"
-                                HorizontalAlignment="Stretch"
-                                ToolTip="{loc:Str Common_SortToolTip}"
-                                ItemsSource="{Binding SortOptions}"
-                                SelectedItem="{Binding SelectedSortOption}" />
-
-                            <!-- Pagination is Cards only. The options are plain ints, hence the template. -->
-                            <ComboBox
-                                Margin="0,0,0,6"
-                                HorizontalAlignment="Stretch"
-                                ToolTip="{loc:Str Common_PageSizeToolTip}"
-                                ItemsSource="{Binding PageSizeOptions}"
-                                SelectedItem="{Binding PageSize}"
-                                Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding StringFormat={loc:Str Common_PageSizeFormat}}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-
-                            <!-- Saving the defaults from the page itself rather than restating them in
-                                 Options: these controls already exist and show what they do. -->
-                            <ui:Button
-                                Margin="0,6,0,6"
-                                HorizontalAlignment="Stretch"
-                                Content="{loc:Str Common_SaveAsDefault}"
-                                ToolTip="{loc:Str Installed_SaveAsDefaultToolTip}"
-                                Command="{Binding SaveAsDefaultCommand}" />
-                            <ui:Button
-                                HorizontalAlignment="Stretch"
-                                Content="{loc:Str Common_ClearFilters}"
-                                ToolTip="{loc:Str Common_ClearFiltersToolTip}"
-                                Command="{Binding ClearFiltersCommand}" />
-                        </StackPanel>
-                    </Border>
-                </Popup>
             </WrapPanel>
         </DockPanel>
 
+        <!--
+             The rest of the filters, opened and closed by Filters in the row above. On a wide page it
+             is a column of its own down the left and the results move over; on a narrow one it lies
+             over the left of the results and a click elsewhere closes it (Behaviors/FilterSidePanel).
+        -->
+        <Border
+            x:Name="FiltersPanel"
+            Grid.Row="2"
+            Grid.RowSpan="4"
+            Grid.Column="0"
+            Width="266"
+            Visibility="Collapsed"
+            Style="{StaticResource FilterSidePanelSurface}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="12,10">
+                    <!-- "Has dependencies" is answered from the dependency graph built off the
+                         scan, so unlike Browse's it covers everything installed. -->
+                    <TextBlock
+                        Margin="0,0,0,4"
+                        FontWeight="SemiBold"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        Text="{loc:Str Filter_ShowHeader}" />
+                    <ItemsControl Margin="0,0,0,8" ItemsSource="{Binding AttributeOptions}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox
+                                    Margin="0,2"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                    IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                    Content="{Binding Label}"
+                                    ToolTip="{Binding ToolTip}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- Built from the categories actually present in this install. -->
+                    <ComboBox
+                        Margin="0,0,0,6"
+                        HorizontalAlignment="Stretch"
+                        ToolTip="{loc:Str Installed_CategoryFilterToolTip}"
+                        ItemsSource="{Binding CategoryOptions}"
+                        SelectedItem="{Binding SelectedCategory}" />
+
+                    <!-- Rebuilt from the group store whenever groups change. -->
+                    <ComboBox
+                        Margin="0,0,0,6"
+                        HorizontalAlignment="Stretch"
+                        ToolTip="{loc:Str Installed_GroupFilterToolTip}"
+                        ItemsSource="{Binding GroupFilterOptions}"
+                        SelectedItem="{Binding SelectedGroupFilter}" />
+
+                    <ComboBox
+                        Margin="0,0,0,6"
+                        HorizontalAlignment="Stretch"
+                        ToolTip="{loc:Str Common_SortToolTip}"
+                        ItemsSource="{Binding SortOptions}"
+                        SelectedItem="{Binding SelectedSortOption}" />
+
+                    <!-- Pagination is Cards only. The options are plain ints, hence the template. -->
+                    <ComboBox
+                        Margin="0,0,0,6"
+                        HorizontalAlignment="Stretch"
+                        ToolTip="{loc:Str Common_PageSizeToolTip}"
+                        ItemsSource="{Binding PageSizeOptions}"
+                        SelectedItem="{Binding PageSize}"
+                        Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding StringFormat={loc:Str Common_PageSizeFormat}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <!-- Saving the defaults from the page itself rather than restating them in
+                         Options: these controls already exist and show what they do. -->
+                    <ui:Button
+                        Margin="0,6,0,6"
+                        HorizontalAlignment="Stretch"
+                        Content="{loc:Str Common_SaveAsDefault}"
+                        ToolTip="{loc:Str Installed_SaveAsDefaultToolTip}"
+                        Command="{Binding SaveAsDefaultCommand}" />
+                    <ui:Button
+                        HorizontalAlignment="Stretch"
+                        Content="{loc:Str Common_ClearFilters}"
+                        ToolTip="{loc:Str Common_ClearFiltersToolTip}"
+                        Command="{Binding ClearFiltersCommand}" />
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
         <!-- Row 3: the multi-select bar above the group management bar. Since OPEN-12 A1 selection
              works in group view too, so the two can show together and are stacked. -->
-        <StackPanel Grid.Row="3">
+        <StackPanel Grid.Row="3" Grid.Column="1">
         <DockPanel
             Margin="0,0,0,8"
             Visibility="{Binding SelectionMode, Converter={StaticResource BoolToVis}}">
@@ -658,6 +670,7 @@
         <ScrollViewer
             x:Name="CardsScrollViewer"
             Grid.Row="4"
+            Grid.Column="1"
             Focusable="False"
             Padding="4"
             VerticalScrollBarVisibility="Auto"
@@ -907,6 +920,7 @@
         <ScrollViewer
             x:Name="GroupsScrollViewer"
             Grid.Row="4"
+            Grid.Column="1"
             AllowDrop="True"
             Background="Transparent"
             Focusable="False"
@@ -1148,6 +1162,7 @@
         <ScrollViewer
             x:Name="ListScrollViewer"
             Grid.Row="4"
+            Grid.Column="1"
             Focusable="False"
             VerticalScrollBarVisibility="Auto"
             Visibility="{Binding ShowList, Converter={StaticResource BoolToVis}}">
@@ -1286,6 +1301,7 @@
         <!-- Only shown in Cards view - the two scrolling views have no use for pages. -->
         <StackPanel
             Grid.Row="5"
+            Grid.Column="1"
             Orientation="Horizontal"
             HorizontalAlignment="Center"
             Margin="0,8,0,0"
