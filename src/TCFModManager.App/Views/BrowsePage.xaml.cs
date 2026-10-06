@@ -19,7 +19,8 @@ public partial class BrowsePage : Page
         InitializeComponent();
 
         // The Filters panel down the left of the results - see Behaviors/FilterSidePanel.
-        _ = new FilterSidePanel(this, MoreFiltersToggle, FiltersHost, FiltersPanel, FiltersColumn);
+        new FilterSidePanel(this, MoreFiltersToggle, FiltersHost, FiltersPanel, FiltersColumn)
+            .CloseWith(FiltersCloseButton);
     }
 
     private async void BrowsePage_Loaded(object sender, RoutedEventArgs e)

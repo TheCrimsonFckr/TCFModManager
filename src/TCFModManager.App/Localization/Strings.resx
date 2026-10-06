@@ -7761,15 +7761,15 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <comment>Tooltip on a card's Update button (OPEN-12 A2), and its right-click menu entry. {0} is the version.</comment>
   </data>
   <data name="Filter_More" xml:space="preserve">
-    <value>Filters</value>
-    <comment>The button on Installed and Browse that opens the filters panel (category, group, the Show tick boxes, sort, page size).</comment>
+    <value>Filters and view options</value>
+    <comment>The button on Installed and Browse that opens the side panel of filters and view options (update status, enabled state, category, group, the Show tick boxes, sort, page size), and that panel's heading.</comment>
   </data>
   <data name="Filter_MoreCountFormat" xml:space="preserve">
-    <value>Filters ({0})</value>
+    <value>Filters and view options ({0})</value>
     <comment>The same button when some of the filters in its panel narrow the list. {0} is how many.</comment>
   </data>
   <data name="Filter_MoreToolTip" xml:space="preserve">
-    <value>More filters, sort and page size - and Save as default and Clear filters</value>
+    <value>Filters, sort and page size - and Save as default and Clear filters</value>
     <comment>Tooltip on the Filters button. Name Common_SaveAsDefault and Common_ClearFilters as they are translated.</comment>
   </data>
   <data name="Filter_ShowHeader" xml:space="preserve">

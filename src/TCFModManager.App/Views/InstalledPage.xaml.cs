@@ -52,6 +52,7 @@ public partial class InstalledPage : Page
         InitializeComponent();
 
         _filters = new FilterSidePanel(this, MoreFiltersToggle, FiltersHost, FiltersPanel, FiltersColumn);
+        _filters.CloseWith(FiltersCloseButton);
 
         // Registered directly on the Page (not via a XAML attribute on a specific element) so it's
         // the very first thing to see every wheel event over this page - PreviewMouseWheel tunnels

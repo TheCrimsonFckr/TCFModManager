@@ -169,9 +169,9 @@ public partial class InstalledViewModel : LocalizedViewModel
     private readonly HashSet<(int ModId, bool IsAddon, string Version)> _deferredDownloads = [];
 
     //
-    // The Filters button (the filters behind it in a panel): "Filters", or "Filters (2)" when any of
-    // them narrow the list, so nothing hidden in the panel goes unnoticed. Sort and page size don't
-    // narrow anything and aren't counted. Computed, so a language change rewrites it.
+    // The Filters and view options button (everything behind it in the side panel), with a count when
+    // any of its filters narrow the list, so nothing hidden in the panel goes unnoticed. Sort and page
+    // size don't narrow anything and aren't counted. Computed, so a language change rewrites it.
     //
     public string MoreFiltersLabel => MoreFiltersSet is var set && set > 0
         ? Text(Strings.Filter_MoreCountFormat, set)
@@ -179,6 +179,8 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     private int MoreFiltersSet =>
         AttributeOptions.Count(o => o.IsSelected)
+        + (SelectedUpdateFilter.Value != UpdateFilter.All ? 1 : 0)
+        + (SelectedEnabledFilter.Value != EnabledFilter.All ? 1 : 0)
         + (SelectedCategory.Title is not null ? 1 : 0)
         + (SelectedGroupFilter.AllGroups ? 0 : 1);
 
@@ -539,9 +541,17 @@ public partial class InstalledViewModel : LocalizedViewModel
         SelectedCategory = CategoryOptions.FirstOrDefault(c => c.SameAs(previous)) ?? CategoryOptions[0];
     }
 
-    partial void OnSelectedUpdateFilterChanged(UpdateFilterItem value) => AutoApplyFilter();
+    partial void OnSelectedUpdateFilterChanged(UpdateFilterItem value)
+    {
+        OnPropertyChanged(nameof(MoreFiltersLabel));
+        AutoApplyFilter();
+    }
 
-    partial void OnSelectedEnabledFilterChanged(EnabledFilterItem value) => AutoApplyFilter();
+    partial void OnSelectedEnabledFilterChanged(EnabledFilterItem value)
+    {
+        OnPropertyChanged(nameof(MoreFiltersLabel));
+        AutoApplyFilter();
+    }
 
     partial void OnSelectedGroupFilterChanged(GroupFilterItem value) 
     {

@@ -81,6 +81,9 @@ public sealed class FilterSidePanel
         Apply(animate: false);
     }
 
+    // The X in the panel's heading closes it, the same as a second click on the button.
+    public void CloseWith(ButtonBase button) => button.Click += (_, _) => _toggle.IsChecked = false;
+
     private bool IsDocked => _page.ActualWidth >= DockWidth;
 
     // Whether an event came from inside the panel - the page's scroll-anywhere wheel steps aside for it.

@@ -6440,13 +6440,13 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
     <value>Mettre à jour vers {0}</value>
   </data>
   <data name="Filter_More" xml:space="preserve">
-    <value>Filtres</value>
+    <value>Filtres et options d'affichage</value>
   </data>
   <data name="Filter_MoreCountFormat" xml:space="preserve">
-    <value>Filtres ({0})</value>
+    <value>Filtres et options d'affichage ({0})</value>
   </data>
   <data name="Filter_MoreToolTip" xml:space="preserve">
-    <value>Autres filtres, tri et taille de page - ainsi qu'Enregistrer par défaut et Réinitialiser les filtres</value>
+    <value>Filtres, tri et taille de page - ainsi qu'Enregistrer par défaut et Réinitialiser les filtres</value>
   </data>
   <data name="Filter_ShowHeader" xml:space="preserve">
     <value>Afficher seulement</value>

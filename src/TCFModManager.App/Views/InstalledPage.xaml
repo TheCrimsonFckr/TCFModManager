@@ -422,10 +422,10 @@
         </DockPanel>
 
         <!--
-             Search and the filters. The three reached for most - search, update status and enabled
-             state - sit in the row; the rest are behind Filters, which says how many of them are set
-             so nothing narrows the list unseen. One line at almost any width, so the cards keep the
-             room. Save as default and Clear filters are inside the panel with what they act on.
+             Search and the filters. Search sits in the row; every filter and view option is in the
+             side panel behind Filters and view options, which says how many of them are set so nothing
+             narrows the list unseen. Save as default and Clear filters are inside the panel with what
+             they act on.
         -->
         <DockPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,8">
             <!-- A display preference rather than a filter: it changes what each row draws, not which
@@ -446,24 +446,6 @@
                     VerticalAlignment="Center"
                     PlaceholderText="{loc:Str Common_SearchPlaceholder}"
                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
-
-                <!-- No inline labels: each filter's neutral option names what it filters ("Any update
-                     status" rather than a bare "All"). -->
-                <ComboBox
-                    Width="{StaticResource FilterWidth}"
-                    Margin="0,0,8,4"
-                    VerticalAlignment="Center"
-                    ToolTip="{loc:Str Installed_UpdateFilterToolTip}"
-                    ItemsSource="{Binding UpdateFilterOptions}"
-                    SelectedItem="{Binding SelectedUpdateFilter}" />
-
-                <ComboBox
-                    Width="{StaticResource FilterWidth}"
-                    Margin="0,0,8,4"
-                    VerticalAlignment="Center"
-                    ToolTip="{loc:Str Installed_EnabledFilterToolTip}"
-                    ItemsSource="{Binding EnabledFilterOptions}"
-                    SelectedItem="{Binding SelectedEnabledFilter}" />
 
                 <ToggleButton
                     x:Name="MoreFiltersToggle"
@@ -509,6 +491,38 @@
                 Style="{StaticResource FilterSidePanelSurface}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="12,10">
+                        <DockPanel Margin="0,0,0,10">
+                            <ui:Button
+                                x:Name="FiltersCloseButton"
+                                DockPanel.Dock="Right"
+                                Padding="4"
+                                Appearance="Transparent"
+                                ToolTip="{loc:Str Common_Close}">
+                                <ui:SymbolIcon Symbol="Dismiss24" FontSize="14" />
+                            </ui:Button>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{loc:Str Filter_More}" />
+                        </DockPanel>
+
+                        <!-- No inline labels: each filter's neutral option names what it filters ("Any
+                             update status" rather than a bare "All"). -->
+                        <ComboBox
+                            Margin="0,0,0,6"
+                            HorizontalAlignment="Stretch"
+                            ToolTip="{loc:Str Installed_UpdateFilterToolTip}"
+                            ItemsSource="{Binding UpdateFilterOptions}"
+                            SelectedItem="{Binding SelectedUpdateFilter}" />
+                        <ComboBox
+                            Margin="0,0,0,10"
+                            HorizontalAlignment="Stretch"
+                            ToolTip="{loc:Str Installed_EnabledFilterToolTip}"
+                            ItemsSource="{Binding EnabledFilterOptions}"
+                            SelectedItem="{Binding SelectedEnabledFilter}" />
+
                         <!-- "Has dependencies" is answered from the dependency graph built off the
                              scan, so unlike Browse's it covers everything installed. -->
                         <TextBlock
