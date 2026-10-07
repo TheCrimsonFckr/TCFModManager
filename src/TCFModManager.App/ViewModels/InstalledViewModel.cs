@@ -521,6 +521,9 @@ public partial class InstalledViewModel : LocalizedViewModel
             await ScanCommand.ExecuteAsync(null);
         };
 
+        // A queued install or update finished (Chris, 2026-10-07): the cards were built before it.
+        AppServices.DownloadQueue.ItemInstalled += async (_, _) => await RescanAfterInstallAsync();
+
         // sp-mod's answer on held-back updates changed (OPEN-12 F11): the cards are built with it.
         AppServices.HeldBack.Changed += async (_, _) =>
         {
@@ -555,6 +558,47 @@ public partial class InstalledViewModel : LocalizedViewModel
 
         if (ScanCommand.IsRunning) return;
         await ScanCommand.ExecuteAsync(null);
+    }
+
+    //
+    // Rescans once a queued install has landed, so a mod installed or updated from Browse, a card
+    // or a mod list shows as it now is without pressing Rescan. A mod and its dependencies install
+    // one after another, so the scan waits for the run to go quiet and then happens once; an install
+    // that lands while a scan is running gets a scan of its own afterwards rather than being missed.
+    // Download-only (Monitor) items never raise ItemInstalled - nothing in the install changed.
+    //
+    private bool _installRescanPending;
+    private bool _installRescanRunning;
+
+    private static readonly TimeSpan InstallRescanQuiet = TimeSpan.FromMilliseconds(750);
+
+    private async Task RescanAfterInstallAsync()
+    {
+        // Before the first scan there is nothing stale; that scan will see the new mod.
+        if (!_hasScanned) return;
+
+        _installRescanPending = true;
+        if (_installRescanRunning) return;
+
+        _installRescanRunning = true;
+        try
+        {
+            while (_installRescanPending)
+            {
+                _installRescanPending = false;
+                await Task.Delay(InstallRescanQuiet);
+                if (_installRescanPending) continue;
+
+                while (ScanCommand.IsRunning) await Task.Delay(200);
+
+                AppLog.Debug("Installed", "a queued install finished - rescanning");
+                await ScanCommand.ExecuteAsync(null);
+            }
+        }
+        finally
+        {
+            _installRescanRunning = false;
+        }
     }
 
     private UpdateFilterItem UpdatesAvailableFilter() =>
@@ -972,15 +1016,19 @@ public partial class InstalledViewModel : LocalizedViewModel
             var openCards = OpenKeys(_all, m => m.IsCardExpanded);
             var openRows = OpenKeys(_all, m => m.IsRowExpanded);
 
+            // The ticks too, so the rescan after an install doesn't untick the rest of a selection.
+            var ticked = OpenKeys(_all, m => m.IsSelected);
+
             _all = cards;
             RefreshUndo();
 
-            if (openCards.Count > 0 || openRows.Count > 0)
+            if (openCards.Count > 0 || openRows.Count > 0 || ticked.Count > 0)
                 foreach (var card in cards)
                 {
                     var key = ModGroupStore.KeyFor(card.Name);
                     card.IsCardExpanded = openCards.Contains(key);
                     card.IsRowExpanded = openRows.Contains(key);
+                    card.IsSelected = ticked.Contains(key);
                 }
 
             ApplyListMembership(cards);
@@ -1013,7 +1061,7 @@ public partial class InstalledViewModel : LocalizedViewModel
 
             RefreshGroups();
 
-            // A rescan replaces every card, so any previous selection is gone with them.
+            // A rescan replaces every card; the ticks were carried over by key above, the anchor is not.
             _selectionAnchor = null;
             OnPropertyChanged(nameof(SelectedCount));
             OnPropertyChanged(nameof(SelectedCountLabel));
