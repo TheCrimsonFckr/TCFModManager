@@ -1036,6 +1036,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             ApplyPendingDownloads(cards, downloads);
             ApplyLeftovers(cards);
             ModConflicts.Apply(cards, conflicts);
+            DependencyVersions.Apply(DependencyVersions.Solve(cards, AppServices.SptEnvironment.InstalledVersion));
             ConflictCountLabel = conflicts.Count == 0 ? null : Strings.Installed_ConflictCount(conflicts.Count, conflicts.Count);
             if (conflicts.Count > 0)
             {

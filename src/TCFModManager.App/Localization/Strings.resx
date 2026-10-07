@@ -4313,6 +4313,63 @@ You can turn it back on at any time.</value>
     <value>{0} needs {1}</value>
     <comment>{0} the server mod, {1} the dependency it needs.</comment>
   </data>
+  <data name="Dependencies_VersionUpdateDependentFormat" xml:space="preserve">
+    <value>Update to {0}</value>
+    <comment>S3 button: install the asking mod's update. {0} its version.</comment>
+  </data>
+  <data name="Dependencies_VersionUpdateDependentToolTipFormat" xml:space="preserve">
+    <value>{0} {1} may accept the installed {2} - check its changelog first.</value>
+    <comment>{0} the asking mod, {1} its update, {2} the dependency.</comment>
+  </data>
+  <data name="Dependencies_VersionAccept" xml:space="preserve">
+    <value>Accept</value>
+    <comment>R6 button on an amber row.</comment>
+  </data>
+  <data name="Dependencies_VersionAcceptToolTip" xml:space="preserve">
+    <value>You've checked it works: stop warning about this pair until either version changes.</value>
+  </data>
+  <data name="Installed_VersionMissedFormat" xml:space="preserve">
+    <value>{0}: {1}, {2} installed</value>
+    <comment>Installed card tooltip line. {0} dependency, {1} Dependencies_VersionNeeds* phrase, {2} version found.</comment>
+  </data>
+  <data name="Installed_VersionMissingFormat" xml:space="preserve">
+    <value>{0}: not installed or disabled</value>
+    <comment>{0} dependency.</comment>
+  </data>
+  <data name="Installed_StatusVersionFormat" xml:space="preserve">
+    <value>Won't load:
+{0}
+See Dependencies and Conflicts.</value>
+    <comment>Installed card tooltip. {0} is one or more Installed_Version*Format lines.</comment>
+  </data>
+  <data name="Play_InstallWideFormat" xml:space="preserve">
+    <value>SPT will load no server mods: {0}. Open Dependencies and Conflicts to fix it.</value>
+    <comment>Play page warning. {0} is a list of Dependencies_InstallWidePieceFormat.</comment>
+  </data>
+  <data name="Play_InstallWideHint" xml:space="preserve">
+    <value>You can still launch, but the server will start without any mods.</value>
+    <comment>Under Play_InstallWideFormat.</comment>
+  </data>
+  <data name="Downloads_BreaksTitle" xml:space="preserve">
+    <value>This would stop other mods loading</value>
+    <comment>Message box title.</comment>
+  </data>
+  <data name="Downloads_BreaksFormat" xml:space="preserve">
+    <value>Installing {0} {1} would stop these mods loading - their own files ask for another version:
+
+{2}
+
+Install anyway?</value>
+    <comment>Message box before installing. {0} mod, {1} version, {2} one Downloads_BreaksLineFormat per line.</comment>
+  </data>
+  <data name="Downloads_BreaksLineFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+    <comment>{0} the mod that would stop loading, {1} a Dependencies_VersionNeeds* phrase.</comment>
+  </data>
+  <data name="Downloads_BreaksDeclinedFormat" xml:space="preserve">
+    <value>{0} {1} left out - it would stop other mods loading.</value>
+    <comment>Download card after No.</comment>
+  </data>
   <data name="Dependencies_RowUpdate" xml:space="preserve">
     <value>Update</value>
     <comment>On a dependency's button, when a newer version is needed.</comment>

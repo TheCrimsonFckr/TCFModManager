@@ -211,4 +211,64 @@ public static class DependencyVersionSolver
             .ThenBy(r => r.Dependency?.Name ?? r.Identifier, StringComparer.OrdinalIgnoreCase)
             .ToList();
     }
+
+    //
+    // OPEN-23 S4: the file requirements installing <paramref name="newVersion"/> of a mod would break -
+    // met (or not yet asked of, for a new install) today, missed with the new version. The mod is found
+    // by sp-mod id among the installed mods, or by <paramref name="guid"/> when it isn't installed yet.
+    // The new version is the sp-mod version string, which stands in for the declared version its files
+    // will carry. Optional dependencies never count.
+    //
+    public static IReadOnlyList<DependencyRequirement> WouldBreak(
+        IReadOnlyList<SolverMod> mods, int modId, string? guid, string newVersion)
+    {
+        var target = mods.FirstOrDefault(m => m.ModId == modId);
+
+        var identifiers = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var sides = new HashSet<InstalledModTarget>();
+        if (target is not null)
+        {
+            foreach (var entry in target.Entries)
+            {
+                foreach (var id in ModDependencyGraph.Identifiers(entry)) identifiers.Add(id);
+                sides.Add(entry.Target);
+            }
+        }
+        else if (!string.IsNullOrWhiteSpace(guid))
+        {
+            identifiers.Add(guid);
+            sides.Add(InstalledModTarget.Client);
+            sides.Add(InstalledModTarget.Server);
+        }
+
+        var broken = new List<DependencyRequirement>();
+        if (identifiers.Count == 0) return broken;
+
+        foreach (var mod in mods)
+        {
+            if (ReferenceEquals(mod, target)) continue;
+
+            foreach (var entry in mod.Entries.Where(e => !e.IsDisabled && sides.Contains(e.Target)))
+            foreach (var declared in entry.Dependencies)
+            {
+                if (declared.IsSoft || string.IsNullOrWhiteSpace(declared.VersionRange)) continue;
+                if (!identifiers.Contains(declared.Identifier)) continue;
+                if (ModVersionMatcher.IsSatisfiedBy(declared.VersionRange, newVersion) != false) continue;
+
+                var current = target?.Entries
+                    .Where(e => !e.IsDisabled && e.Target == entry.Target)
+                    .Select(e => e.Version)
+                    .FirstOrDefault(v => v is not null);
+
+                // Already broken today - not something this install does.
+                if (current is not null && ModVersionMatcher.IsSatisfiedBy(declared.VersionRange, current) == false) continue;
+
+                broken.Add(new DependencyRequirement(
+                    mod, RequirementSource.Files, entry.Target, declared.Identifier, declared.VersionRange,
+                    false, newVersion, RequirementStanding.Missed));
+            }
+        }
+
+        return broken;
+    }
 }

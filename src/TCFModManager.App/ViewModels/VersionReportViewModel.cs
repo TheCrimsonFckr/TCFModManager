@@ -54,7 +54,7 @@ public sealed class VersionReportViewModel : LocalizedViewModel
 }
 
 // One dependent's ask, as a row under its dependency.
-public sealed class VersionRequirementRow
+public sealed partial class VersionRequirementRow : LocalizedViewModel
 {
     private static string Text(string format, params object?[] values) => LocalizationService.Text(format, values);
 
@@ -65,6 +65,38 @@ public sealed class VersionRequirementRow
     public string? DependentVersion { get; init; }
 
     public IEnumerable<ModVersionSummary>? DependencyVersions { get; init; }
+
+    public string DependencyName { get; init; } = "";
+
+    public int? DependencyModId { get; init; }
+
+    public string? DependencyInstalledVersion { get; init; }
+
+    // S3: the dependent's own update, when one is on offer - a newer version may accept what's installed.
+    public string? DependentUpdateVersion { get; init; }
+
+    public Mod? DependentCatalogMod { get; init; }
+
+    [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
+    [CommunityToolkit.Mvvm.ComponentModel.NotifyPropertyChangedFor(nameof(CanUpdateDependent))]
+    private bool _isQueued;
+
+    private bool IsProblem => !IsOptional && Requirement.Standing is RequirementStanding.Missed or RequirementStanding.Missing;
+
+    // R6: only sp-mod's ranges can be accepted, and only with both versions known.
+    public bool CanAccept =>
+        !IsOptional
+        && Requirement.Source == RequirementSource.SpMod
+        && Requirement.Standing == RequirementStanding.Missed
+        && Requirement.Dependent.ModId is not null && DependencyModId is not null
+        && DependentVersion is not null && DependencyInstalledVersion is not null;
+
+    public bool CanUpdateDependent => IsProblem && !IsQueued && DependentUpdateVersion is not null && DependentCatalogMod is not null;
+
+    public string UpdateDependentText => Text(Strings.Dependencies_VersionUpdateDependentFormat, DependentUpdateVersion);
+
+    public string UpdateDependentToolTip => Text(Strings.Dependencies_VersionUpdateDependentToolTipFormat,
+        DependentName, DependentUpdateVersion, DependencyName);
 
     public string Name => DependentVersion is null ? DependentName : string.Join(" ", DependentName, DependentVersion);
 

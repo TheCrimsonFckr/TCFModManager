@@ -322,7 +322,22 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(StatusTooltip))]
     private string? _conflictSummary;
 
-    public bool HasConflicts => ConflictSummary is not null;
+    //
+    // OPEN-23 S4: set after a scan (DependencyVersions.Apply) when this mod's own files ask for a
+    // dependency the install doesn't meet - SPT or BepInEx won't load it. Null otherwise.
+    //
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasConflicts))]
+    [NotifyPropertyChangedFor(nameof(Status))]
+    [NotifyPropertyChangedFor(nameof(StatusGlyph))]
+    [NotifyPropertyChangedFor(nameof(StatusTooltip))]
+    private string? _versionSummary;
+
+    public bool HasConflicts => ConflictSummary is not null || VersionSummary is not null;
+
+    private string? JoinConflicts() => ConflictSummary is null
+        ? VersionSummary
+        : VersionSummary is null ? ConflictSummary : ConflictSummary + "\n\n" + VersionSummary;
 
     public bool IsIncompleteInstall => MissingFolders.Count > 0 || WasPartlyInstalled;
 
@@ -512,7 +527,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // A pending download next: the collapsed card's only sign of one is this tooltip.
     public string StatusTooltip =>
         IncompleteSummary
-        ?? ConflictSummary
+        ?? JoinConflicts()
         ?? DownloadSummary
         ?? (UpdateAvailable == true ? null : HeldBackNote)
         ?? (HasDuplicateFolders

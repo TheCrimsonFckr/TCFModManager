@@ -20,7 +20,7 @@ The mod is disabled. Enable it first - see [Disabling mods](Disabling-mods).
 Check it isn't installed twice. If the same mod sits in both the normal folder and the `.disabled` one, its card says so and offers **Sort out** to keep one copy and set the other aside.
 
 ## A mod is installed but doesn't load in game
-Open **Dependencies and Conflicts**. The usual reason is under **Conflicts**: the same mod installed twice - SPT loads neither copy of a server mod it finds twice - or two mods shipping different copies of one file. **Keep this one** clears a mod installed twice. With no conflicts, check under **Dependencies** that it has everything it needs, then that it's turned on and made for your SPT version.
+Open **Dependencies and Conflicts**. The usual reason is under **Conflicts**: the same mod installed twice - SPT loads neither copy of a server mod it finds twice - or two mods shipping different copies of one file. **Keep this one** clears a mod installed twice. With no conflicts, check **Version conflicts** and **Dependencies** for what it needs, then that it's turned on and made for your SPT version.
 
 ## "Close T***** / SPT.Server before installing a mod"
 Exactly what it says: those hold open the files being replaced. Close the game and the server window, then try again.

@@ -86,6 +86,13 @@ public partial class PlayViewModel : LocalizedViewModel
     [ObservableProperty]
     private string? _conflictWarning;
 
+    //
+    // OPEN-23 R4: a server mod's dependency missed or missing - SPT then loads no server mods at all.
+    // Null when nothing does. A warning only, like the conflicts above.
+    //
+    [ObservableProperty]
+    private string? _installWideWarning;
+
     // Rechecked whenever the page opens - the install alone, no network.
     public async Task RefreshConflictsAsync()
     {
@@ -93,17 +100,21 @@ public partial class PlayViewModel : LocalizedViewModel
         if (string.IsNullOrWhiteSpace(installPath))
         {
             ConflictWarning = null;
+            InstallWideWarning = null;
             return;
         }
 
         try
         {
-            var (_, conflicts) = await ModConflicts.ScanAsync(installPath);
+            var (cards, conflicts) = await ModConflicts.ScanAsync(installPath);
             ConflictWarning = conflicts.Count == 0 ? null : Strings.Installed_ConflictCount(conflicts.Count, conflicts.Count);
+            InstallWideWarning = DependencyVersions.InstallWideText(
+                DependencyVersions.Solve(cards, AppServices.SptEnvironment.InstalledVersion), forPlayPage: true);
         }
         catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException)
         {
             ConflictWarning = null;
+            InstallWideWarning = null;
         }
     }
 

@@ -172,4 +172,31 @@ public class DependencyVersionSolverTests
 
         Assert.Equal("CommonLib", reports[0].Dependency?.Name);
     }
+
+    [Fact]
+    public void WouldBreak_UpdatingTheDependencyPastADependentsRange()
+    {
+        var broken = DependencyVersionSolver.WouldBreak(
+            [CommonLib("3.0.3"), Dependent("Eco", 2882, "<=3.0.4"), Dependent("Msga", 1453, ">=3.0.0")], 2310, null, "3.0.6");
+
+        var eco = Assert.Single(broken);
+        Assert.Equal("Eco", eco.Dependent.Name);
+        Assert.Equal("<=3.0.4", eco.Range);
+    }
+
+    [Fact]
+    public void WouldBreak_NothingWhenEveryRangeAcceptsTheNewVersion() =>
+        Assert.Empty(DependencyVersionSolver.WouldBreak([CommonLib("3.0.3"), Dependent("Eco", 2882, "~3.0.0")], 2310, null, "3.0.6"));
+
+    [Fact]
+    public void WouldBreak_LeavesOutWhatIsAlreadyBroken() =>
+        Assert.Empty(DependencyVersionSolver.WouldBreak([CommonLib("3.0.6"), Dependent("Eco", 2882, "3.0.3")], 2310, null, "3.0.5"));
+
+    [Fact]
+    public void WouldBreak_ANewInstallIsMatchedByGuid() =>
+        Assert.Single(DependencyVersionSolver.WouldBreak([Dependent("Eco", 2882, "^2.0.0")], 2310, "com.wtt.commonlib", "3.0.6"));
+
+    [Fact]
+    public void WouldBreak_IgnoresOptionalDependencies() =>
+        Assert.Empty(DependencyVersionSolver.WouldBreak([CommonLib("3.0.3"), Dependent("Eco", 2882, "3.0.3", soft: true)], 2310, null, "3.0.6"));
 }

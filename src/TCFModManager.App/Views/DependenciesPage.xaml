@@ -66,7 +66,8 @@
             x:Name="TreesScrollViewer"
             Grid.Row="2"
             VerticalScrollBarVisibility="Auto">
-            <StackPanel>
+            <!-- Right margin keeps the overlay scrollbar off the expanders' chevrons. -->
+            <StackPanel Margin="0,0,14,0">
             <!--
                 OPEN-12 F12 (R18), kept at the top so a long tree list doesn't bury it: which installed mods would come with you to a newer SPT. Worked out
                 from the catalog when the page refreshes and again whenever another release is picked;
@@ -190,10 +191,11 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Border Style="{StaticResource HoverRow}" Opacity="{Binding RowOpacity}">
-                                                <Grid Height="30">
+                                                <Grid MinHeight="30">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="Auto" />
                                                         <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
                                                     </Grid.ColumnDefinitions>
                                                     <ui:SymbolIcon
                                                         Grid.Column="0"
@@ -206,6 +208,27 @@
                                                         <Run Text="{Binding Name, Mode=OneWay}" />
                                                         <Run Text="{Binding Detail, StringFormat=' - {0}', Mode=OneWay}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                                     </TextBlock>
+                                                    <!-- S3: update the asking mod (a newer version may accept what's installed);
+                                                         R6: accept sp-mod's range for these two versions. -->
+                                                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                                        <ui:Button
+                                                            Margin="0,0,4,0"
+                                                            Padding="10,2"
+                                                            Appearance="Secondary"
+                                                            Content="{Binding UpdateDependentText}"
+                                                            ToolTip="{Binding UpdateDependentToolTip}"
+                                                            Command="{Binding DataContext.UpdateDependentCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                                            CommandParameter="{Binding}"
+                                                            Visibility="{Binding CanUpdateDependent, Converter={StaticResource BoolToVisibility}}" />
+                                                        <ui:Button
+                                                            Padding="10,2"
+                                                            Appearance="Secondary"
+                                                            Content="{loc:Str Dependencies_VersionAccept}"
+                                                            ToolTip="{loc:Str Dependencies_VersionAcceptToolTip}"
+                                                            Command="{Binding DataContext.AcceptWarningCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                                            CommandParameter="{Binding}"
+                                                            Visibility="{Binding CanAccept, Converter={StaticResource BoolToVisibility}}" />
+                                                    </StackPanel>
                                                 </Grid>
                                             </Border>
                                         </DataTemplate>

@@ -1119,6 +1119,51 @@ Quel que soit votre choix, la version actuellement sur le disque est d'abord cop
   <data name="Dependencies_InstallWidePieceFormat" xml:space="preserve">
     <value>{0} nécessite {1}</value>
   </data>
+  <data name="Dependencies_VersionUpdateDependentFormat" xml:space="preserve">
+    <value>Mettre à jour vers {0}</value>
+  </data>
+  <data name="Dependencies_VersionUpdateDependentToolTipFormat" xml:space="preserve">
+    <value>{0} {1} accepte peut-être le {2} installé - consultez d'abord son journal des modifications.</value>
+  </data>
+  <data name="Dependencies_VersionAccept" xml:space="preserve">
+    <value>Accepter</value>
+  </data>
+  <data name="Dependencies_VersionAcceptToolTip" xml:space="preserve">
+    <value>Vous avez vérifié que ça fonctionne : ne plus avertir pour cette paire tant qu'aucune des versions ne change.</value>
+  </data>
+  <data name="Installed_VersionMissedFormat" xml:space="preserve">
+    <value>{0} : {1}, {2} installé</value>
+  </data>
+  <data name="Installed_VersionMissingFormat" xml:space="preserve">
+    <value>{0} : non installé ou désactivé</value>
+  </data>
+  <data name="Installed_StatusVersionFormat" xml:space="preserve">
+    <value>Ne se charge pas :
+{0}
+Voir Dépendances et conflits.</value>
+  </data>
+  <data name="Play_InstallWideFormat" xml:space="preserve">
+    <value>SPT ne chargera aucun mod serveur : {0}. Ouvrez Dépendances et conflits pour corriger.</value>
+  </data>
+  <data name="Play_InstallWideHint" xml:space="preserve">
+    <value>Vous pouvez quand même lancer, mais le serveur démarrera sans aucun mod.</value>
+  </data>
+  <data name="Downloads_BreaksTitle" xml:space="preserve">
+    <value>D'autres mods ne se chargeraient plus</value>
+  </data>
+  <data name="Downloads_BreaksFormat" xml:space="preserve">
+    <value>Installer {0} {1} empêcherait ces mods de se charger - leurs propres fichiers demandent une autre version :
+
+{2}
+
+Installer quand même ?</value>
+  </data>
+  <data name="Downloads_BreaksLineFormat" xml:space="preserve">
+    <value>{0} : {1}</value>
+  </data>
+  <data name="Downloads_BreaksDeclinedFormat" xml:space="preserve">
+    <value>{0} {1} laissé de côté - d'autres mods ne se chargeraient plus.</value>
+  </data>
   <data name="Dependencies_RowUpdate" xml:space="preserve">
     <value>Mettre à jour</value>
   </data>

@@ -429,65 +429,88 @@ public partial class DependenciesViewModel : LocalizedViewModel
 
     private void BuildVersionReports(IReadOnlyList<InstalledModCardViewModel> installed, string? sptVersion)
     {
-        var cards = installed.ToList();
-        var mods = cards
-            .Select((c, i) => new SolverMod(i.ToString(System.Globalization.CultureInfo.InvariantCulture), c.DisplayTitle,
-                c is { IsAddon: false, ModId: not null } ? c.ModId : null, c.Entries))
-            .ToList();
-
+        var result = DependencyVersions.Solve(installed, sptVersion);
         var catalog = AppServices.ModCache.AllMods;
-        IEnumerable<string> Published(int id) =>
-            (catalog.FirstOrDefault(m => m.Id == id)?.Versions ?? []).Select(v => v.Version ?? "");
-
-        var spMod = AppServices.HeldBack.All(sptVersion)
-            .SelectMany(h => h.Blockers
-                .Where(b => !string.IsNullOrWhiteSpace(b.Constraint))
-                .Select(b => new SpModRequirement(b.ModId, h.ModId, b.Constraint!)));
-
-        var reports = DependencyVersionSolver.Solve(mods, Published, spMod);
-
-        InstalledModCardViewModel CardOf(SolverMod mod) => cards[int.Parse(mod.Key, System.Globalization.CultureInfo.InvariantCulture)];
 
         VersionReports.Clear();
-        foreach (var report in reports.Where(r => r.HasFileProblem || r.HasSpModWarning))
+        foreach (var report in result.Reports.Where(r => r.HasFileProblem || r.HasSpModWarning))
         {
-            var dependencyCard = report.Dependency is null ? null : CardOf(report.Dependency);
+            var dependencyCard = report.Dependency is null ? null : result.CardOf(report.Dependency);
             var catalogMod = report.Dependency?.ModId is { } id ? catalog.FirstOrDefault(m => m.Id == id) : null;
+            var dependencyVersion = dependencyCard is { IsDisabled: false } ? dependencyCard.InstalledVersion : null;
 
             VersionReports.Add(new VersionReportViewModel
             {
                 Report = report,
                 DependencyName = report.Dependency?.Name ?? report.Identifier,
-                InstalledVersion = dependencyCard is { IsDisabled: false } ? dependencyCard.InstalledVersion : null,
+                InstalledVersion = dependencyVersion,
                 CatalogMod = catalogMod,
                 Rows = report.Requirements
                     .OrderBy(r => r.Standing == RequirementStanding.Met)
                     .ThenBy(r => r.Dependent.Name, StringComparer.OrdinalIgnoreCase)
-                    .Select(r => new VersionRequirementRow
+                    .Select(r =>
                     {
-                        Requirement = r,
-                        DependentName = r.Dependent.Name,
-                        DependentVersion = CardOf(r.Dependent).InstalledVersion,
-                        DependencyVersions = catalogMod?.Versions,
+                        var dependentCard = result.CardOf(r.Dependent);
+                        return new VersionRequirementRow
+                        {
+                            Requirement = r,
+                            DependentName = r.Dependent.Name,
+                            DependentVersion = dependentCard.InstalledVersion,
+                            DependencyVersions = catalogMod?.Versions,
+                            DependencyName = report.Dependency?.Name ?? report.Identifier,
+                            DependencyModId = report.Dependency?.ModId,
+                            DependencyInstalledVersion = dependencyVersion,
+                            DependentUpdateVersion = dependentCard.UpdateAvailable == true ? dependentCard.UpdateVersion : null,
+                            DependentCatalogMod = r.Dependent.ModId is { } did ? catalog.FirstOrDefault(m => m.Id == did) : null,
+                        };
                     })
                     .ToList(),
             });
         }
 
-        var installWide = reports
-            .Where(r => r.InstallWide)
-            .SelectMany(r => r.Requirements
-                .Where(q => q.Source == RequirementSource.Files && !q.IsOptional && q.Side == InstalledModTarget.Server
-                            && q.Standing is RequirementStanding.Missed or RequirementStanding.Missing)
-                .Select(q => Text(Strings.Dependencies_InstallWidePieceFormat, q.Dependent.Name, r.Dependency?.Name ?? r.Identifier)))
-            .Distinct()
-            .ToList();
-
-        InstallWideBanner = installWide.Count == 0 ? null : Text(Strings.Dependencies_InstallWideFormat, TextLists.Join(installWide));
+        InstallWideBanner = DependencyVersions.InstallWideText(result);
         OnPropertyChanged(nameof(HasVersionReports));
 
-        if (reports.Count > 0)
-            AppLog.Info("Dependencies", $"version check: {reports.Count} dependencies asked for, {VersionReports.Count} need attention, {installWide.Count} install-wide");
+        if (result.Reports.Count > 0)
+            AppLog.Info("Dependencies", $"version check: {result.Reports.Count} dependencies asked for, {VersionReports.Count} need attention, install-wide: {InstallWideBanner is not null}");
+    }
+
+    // R6: "I've checked, it works" on an amber (sp-mod only) row, for these two versions.
+    [RelayCommand]
+    private async Task AcceptWarningAsync(VersionRequirementRow? row)
+    {
+        if (row is not { CanAccept: true } || row.Requirement.Dependent.ModId is not { } dependentId || row.DependencyModId is not { } dependencyId) return;
+
+        DependencyVersions.Accepted.Accept(AcceptedWarningStore.Key(dependentId, row.DependentVersion, dependencyId, row.DependencyInstalledVersion));
+        AppLog.Info("Dependencies", $"accepted sp-mod's range for {row.DependentName} {row.DependentVersion} -> {row.DependencyName} {row.DependencyInstalledVersion}");
+        await RefreshAsync();
+    }
+
+    // S3: queues the update of the mod asking for the dependency - a newer version may accept it.
+    [RelayCommand]
+    private void UpdateDependent(VersionRequirementRow? row)
+    {
+        if (row is not { CanUpdateDependent: true } || row.DependentCatalogMod is not { } mod || row.DependentUpdateVersion is not { } version) return;
+
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        if (string.IsNullOrWhiteSpace(installPath))
+        {
+            StatusMessage = AppMessages.NoSptInstallFolder;
+            return;
+        }
+
+        if (!ReadModPageConfirmationWindow.Confirm(mod.Name ?? row.DependentName, mod.DetailUrl))
+        {
+            StatusMessage = Text(Strings.Dependencies_CancelledFormat, row.DependentName);
+            return;
+        }
+
+        AppServices.DownloadQueue.Enqueue(
+            InstallTarget.For(mod), version, installPath, () => ResolveVersionLinkAsync(mod, version),
+            downloadOnly: AppServices.ModPageGate.DownloadOnlyFor(false));
+
+        row.IsQueued = true;
+        StatusMessage = Text(Strings.Dependencies_QueuedFormat, row.DependentName, version);
     }
 
     // Switches a dependency to the version every installed mod's files accept.
@@ -615,11 +638,17 @@ public partial class DependenciesViewModel : LocalizedViewModel
             var held = AppServices.HeldBack.For(node.Id, sptVersion);
             var blocker = held?.Blockers.FirstOrDefault(b => b.ModId == dependentModId);
 
+            // R6: an accepted pair is no longer amber here either.
+            var spModConstraint = blocker?.Constraint;
+            if (spModConstraint is not null && dependentModId is { } did && installed is not null
+                && DependencyVersions.IsAccepted(did, dependent?.InstalledVersion, node.Id, installed.InstalledVersion))
+                spModConstraint = null;
+
             // A disabled dependency is on disk but isn't loaded, so anything needing it is as
             // broken as if it were missing - shown as its own state rather than as "installed".
             var status = DependencyStatusResolver.Resolve(
                 installed?.InstalledVersion, required, installed?.IsDisabled == true,
-                installed?.InstalledVersionFromFiles == true, filesMiss, blocker?.Constraint);
+                installed?.InstalledVersionFromFiles == true, filesMiss, spModConstraint);
 
             yield return new DependencyRow
             {

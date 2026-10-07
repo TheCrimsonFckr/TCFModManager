@@ -6,11 +6,15 @@
 
 Each lists every mod involved with the folder it's in, and a button to open it. For a mod installed twice, **Keep this one** keeps that copy and removes the others the normal way - a mod's client and server halves together - so **Undo** on the Installed page can put them back. It's greyed out when removing a copy would also take files that aren't duplicated: hover it to see why, and use **Remove** on the Installed page instead. A mod in a conflict shows a red status on the Installed page, where **Show - Has conflicts** narrows the list to them and the status line counts them with a link here. The Play page warns too, without stopping you launching.
 
-**Dependencies** resolves the dependency tree of every installed mod that declares one, and reports each dependency's state against what's actually on disk.
+**Version conflicts** come next: dependencies the installed mods disagree about. Worked out from what each mod's own files ask for - the same check SPT and BepInEx make when they load - so it's offline too. One card per dependency names the version installed and lists every mod that needs it, with what each one asks for:
 
-That includes **version conflicts** - where two installed mods want incompatible versions of the same dependency - which is the failure mode that usually shows up as an unexplained crash on load rather than an error message. Dependencies you've disabled are called out as disabled rather than missing.
+- **Red** - a mod's own files refuse the installed version, so it won't load. If it's a **server** mod, SPT loads **no server mods at all**: a red banner at the top of the page names it, and the Play page warns before you start the server.
+- **Amber** - only sp-mod lists another version; the mod's files accept this one. **Accept** stops the warning for those two versions, and it comes back if either changes.
+- **Switch to** installs the version that works for every mod, when there is one. **Update to** installs the asking mod's own update, which may accept what you have.
 
-Anything missing can be installed straight from the list.
+A mod that won't load shows red on the Installed page too, and is counted by **Show - Has conflicts**. Installing or updating a mod that would stop another one loading asks first (No is the default).
+
+**Dependencies** then lists every installed mod that declares any, with each dependency's state against what's actually on disk. Dependencies you've disabled are called out as disabled rather than missing, anything missing can be installed straight from the list, and a dependency whose update sp-mod is holding back says which mod is holding it.
 
 ## Moving to a newer SPT
 At the top of the page, **Moving to a newer SPT** answers "if I moved to SPT x, which of my mods would come with me?" Pick a release newer than yours and every installed mod is listed as **ready** (the version you have runs on it), **update first** (a newer version does - it names which), **not ready yet** (nothing is published for it), or **check by hand** (installed by hand and not matched to sp-mod, or its listing doesn't say). It's worked out from the mods' sp-mod listings, and nothing is changed.

@@ -1143,6 +1143,51 @@
   <data name="Dependencies_InstallWidePieceFormat" xml:space="preserve">
     <value>{0} нужен {1}</value>
   </data>
+  <data name="Dependencies_VersionUpdateDependentFormat" xml:space="preserve">
+    <value>Обновить до {0}</value>
+  </data>
+  <data name="Dependencies_VersionUpdateDependentToolTipFormat" xml:space="preserve">
+    <value>{0} {1}, возможно, принимает установленный {2} - сначала проверьте список изменений.</value>
+  </data>
+  <data name="Dependencies_VersionAccept" xml:space="preserve">
+    <value>Принять</value>
+  </data>
+  <data name="Dependencies_VersionAcceptToolTip" xml:space="preserve">
+    <value>Вы проверили, что всё работает: не предупреждать об этой паре, пока не изменится одна из версий.</value>
+  </data>
+  <data name="Installed_VersionMissedFormat" xml:space="preserve">
+    <value>{0}: {1}, установлено: {2}</value>
+  </data>
+  <data name="Installed_VersionMissingFormat" xml:space="preserve">
+    <value>{0}: не установлен или отключён</value>
+  </data>
+  <data name="Installed_StatusVersionFormat" xml:space="preserve">
+    <value>Не загрузится:
+{0}
+См. «Зависимости и конфликты».</value>
+  </data>
+  <data name="Play_InstallWideFormat" xml:space="preserve">
+    <value>SPT не загрузит серверные моды: {0}. Откройте «Зависимости и конфликты», чтобы исправить.</value>
+  </data>
+  <data name="Play_InstallWideHint" xml:space="preserve">
+    <value>Запустить всё равно можно, но сервер запустится без модов.</value>
+  </data>
+  <data name="Downloads_BreaksTitle" xml:space="preserve">
+    <value>Другие моды перестанут загружаться</value>
+  </data>
+  <data name="Downloads_BreaksFormat" xml:space="preserve">
+    <value>Установка {0} {1} не даст этим модам загрузиться - их собственные файлы требуют другую версию:
+
+{2}
+
+Установить всё равно?</value>
+  </data>
+  <data name="Downloads_BreaksLineFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Downloads_BreaksDeclinedFormat" xml:space="preserve">
+    <value>{0} {1} пропущен - другие моды перестали бы загружаться.</value>
+  </data>
   <data name="Dependencies_RowUpdate" xml:space="preserve">
     <value>Обновить</value>
   </data>

@@ -14,6 +14,31 @@
     </Page.Resources>
     <StackPanel Margin="16">
 
+        <!-- OPEN-23 R4: SPT would load no server mods. Shown only then, and never a gate. -->
+        <ui:Card
+            Padding="16"
+            VerticalAlignment="Top"
+            Margin="0,0,0,16"
+            Visibility="{Binding InstallWideWarning, Converter={StaticResource NullToCollapsed}}">
+            <StackPanel>
+                <ui:Button
+                    Padding="0"
+                    HorizontalContentAlignment="Left"
+                    Appearance="Transparent"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                    Icon="{ui:SymbolIcon ErrorCircle20}"
+                    Command="{Binding ShowConflictsCommand}">
+                    <TextBlock TextWrapping="Wrap" Text="{Binding InstallWideWarning}" />
+                </ui:Button>
+                <TextBlock
+                    Margin="0,4,0,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="{loc:Str Play_InstallWideHint}" />
+            </StackPanel>
+        </ui:Card>
+
         <!-- Conflicts in this install (OPEN-11 R4): shown only when there are any, and never a gate. -->
         <ui:Card
             Padding="16"

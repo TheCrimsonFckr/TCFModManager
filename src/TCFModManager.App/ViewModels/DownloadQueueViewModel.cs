@@ -400,6 +400,24 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
                 return;
             }
 
+            //
+            // OPEN-23 S4: a version that would stop another installed mod loading - its own files ask
+            // for a range this version is outside. Asked, never refused, default No; No leaves this one
+            // out. Only for an install, and only for mods (an addon is no one's dependency).
+            //
+            if (!item.DownloadOnly && !item.IsAddon && version.Version is { Length: > 0 } newVersion)
+            {
+                var broken = await WouldBreakAsync(item, newVersion);
+                if (broken.Count > 0 && !ConfirmBreaks(item, newVersion, broken))
+                {
+                    item.Status = DownloadQueueItemStatus.Cancelled;
+                    item.Progress = 0;
+                    item.StatusMessage = Text(Strings.Downloads_BreaksDeclinedFormat, item.ModName, item.VersionLabel);
+                    AppLog.Info("Downloads", $"{item.ModName} {item.VersionLabel}: would break {string.Join(", ", broken.Select(b => b.Dependent.Name))}, left out");
+                    return;
+                }
+            }
+
             // Checked before this item's own download starts, so an accepted missing dependency
             // lands right behind it in the queue.
             if (item.CheckDependencies)
@@ -651,6 +669,51 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         var runs = await Task.Run(() => FikaInstall.IsPresent(InstalledModScanner.Scan(installPath)));
         _fika = (installPath, runs, DateTime.UtcNow);
         return runs;
+    }
+
+    // The installed mods, grouped as cards, remembered for a minute for the same reason as _fika.
+    private (string Install, List<SolverMod> Mods, DateTime At)? _solverMods;
+
+    private async Task<IReadOnlyList<DependencyRequirement>> WouldBreakAsync(DownloadQueueItemViewModel item, string newVersion)
+    {
+        try
+        {
+            if (_solverMods is not { } known
+                || !string.Equals(known.Install, item.InstallPath, StringComparison.OrdinalIgnoreCase)
+                || DateTime.UtcNow - known.At >= TimeSpan.FromMinutes(1))
+            {
+                var (cards, _) = await ModConflicts.ScanAsync(item.InstallPath);
+                _solverMods = known = (item.InstallPath, DependencyVersions.ToSolverMods(cards), DateTime.UtcNow);
+            }
+
+            return DependencyVersionSolver.WouldBreak(known.Mods, item.Target.Id, item.Target.Guid, newVersion);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.Warn("Downloads", $"couldn't check what {item.ModName} {newVersion} would break: {ex.Message}");
+            return [];
+        }
+    }
+
+    private static bool ConfirmBreaks(DownloadQueueItemViewModel item, string newVersion, IReadOnlyList<DependencyRequirement> broken)
+    {
+        var versions = AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == item.Target.Id)?.Versions;
+        var lines = broken
+            .Select(b => Text(Strings.Downloads_BreaksLineFormat, b.Dependent.Name,
+                RangeWording.Describe(b.Range!, newVersion, versions) switch
+                {
+                    (var v, RangeWordingKind.UpTo) => Text(Strings.Dependencies_VersionNeedsUpToFormat, v),
+                    (var v, RangeWordingKind.AtLeast) => Text(Strings.Dependencies_VersionNeedsAtLeastFormat, v),
+                    var (v, _) => Text(Strings.Dependencies_VersionNeedsFormat, v),
+                }))
+            .Distinct();
+
+        return System.Windows.MessageBox.Show(
+            Text(Strings.Downloads_BreaksFormat, item.ModName, newVersion, string.Join("\n", lines)),
+            Strings.Downloads_BreaksTitle,
+            System.Windows.MessageBoxButton.YesNo,
+            System.Windows.MessageBoxImage.Warning,
+            System.Windows.MessageBoxResult.No) == System.Windows.MessageBoxResult.Yes;
     }
 
     // Defaults to No, like the SPT question (SptCompatibility).

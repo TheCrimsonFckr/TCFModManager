@@ -7,6 +7,7 @@ Everything lives next to the exe:
 | `Data\mod_cache.json` | Cached catalog |
 | `Data\spt_versions.json` | Cached SPT release list, refetched daily |
 | `Data\dependency_flags.json` | Per-mod "has dependencies" answers, re-checked when a mod publishes |
+| `Data\accepted_dependency_warnings.json` | sp-mod version warnings you accepted on Dependencies and Conflicts, per pair of versions |
 | `Data\mod_groups.json` | Your groups, and which mod is in which |
 | `Data\mod_lists.json` | Your mod lists, which ones you follow, your pinned mods, and the single undo point |
 | `Data\downloads.json` | Monitor mode: each archive saved for you to install, what it would place, and whether you've confirmed it |
