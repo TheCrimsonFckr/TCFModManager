@@ -147,7 +147,9 @@ public sealed class ModDependencyGraph
     // dependency as unresolved and leave the dependant out of the disable cascade - while the mod
     // providing it is sitting right there installed.
     //
-    private static IEnumerable<string> Identifiers(InstalledMod mod)
+    // The names other mods' declared dependencies can use for this one: its plugin GUIDs, and for a
+    // server mod its folder name (an SPT 3.x package name). Shared with DeclaredVersionCheck.
+    public static IEnumerable<string> Identifiers(InstalledMod mod)
     {
         foreach (var guid in mod.AllGuids) yield return guid;
         if (mod.Target == InstalledModTarget.Server && !string.IsNullOrWhiteSpace(mod.Name)) yield return mod.Name;

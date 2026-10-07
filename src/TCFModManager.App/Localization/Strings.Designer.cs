@@ -1159,16 +1159,21 @@ internal static class Strings
     internal static string Dependencies_RowNoCompatible => LocalizationService.Get("Dependencies_RowNoCompatible");
     internal static string Dependencies_RowDisabled => LocalizationService.Get("Dependencies_RowDisabled");
     internal static string Dependencies_RowDisabledVersionFormat => LocalizationService.Get("Dependencies_RowDisabledVersionFormat");
-    internal static string Dependencies_RowTooNewFormat => LocalizationService.Get("Dependencies_RowTooNewFormat");
-    internal static string Dependencies_RowConflict => LocalizationService.Get("Dependencies_RowConflict");
+    internal static string Dependencies_RowWontLoadUpToFormat => LocalizationService.Get("Dependencies_RowWontLoadUpToFormat");
+    internal static string Dependencies_RowWontLoadAtLeastFormat => LocalizationService.Get("Dependencies_RowWontLoadAtLeastFormat");
+    internal static string Dependencies_RowWontLoadFormat => LocalizationService.Get("Dependencies_RowWontLoadFormat");
+    internal static string Dependencies_RowSpModUpToFormat => LocalizationService.Get("Dependencies_RowSpModUpToFormat");
+    internal static string Dependencies_RowSpModFormat => LocalizationService.Get("Dependencies_RowSpModFormat");
+    internal static string Dependencies_RowHeldBackUpToFormat => LocalizationService.Get("Dependencies_RowHeldBackUpToFormat");
+    internal static string Dependencies_RowHeldBackFormat => LocalizationService.Get("Dependencies_RowHeldBackFormat");
+    internal static string Dependencies_SummaryWontLoadFormat => LocalizationService.Get("Dependencies_SummaryWontLoadFormat");
+    internal static string Dependencies_SummarySpModFormat => LocalizationService.Get("Dependencies_SummarySpModFormat");
     internal static string Dependencies_RowUpdate => LocalizationService.Get("Dependencies_RowUpdate");
     internal static string Dependencies_RowInstall => LocalizationService.Get("Dependencies_RowInstall");
     internal static string Dependencies_AlreadyQueuedFormat => LocalizationService.Get("Dependencies_AlreadyQueuedFormat");
     internal static string Dependencies_SummaryMissingFormat => LocalizationService.Get("Dependencies_SummaryMissingFormat");
     internal static string Dependencies_SummaryOutdatedFormat => LocalizationService.Get("Dependencies_SummaryOutdatedFormat");
-    internal static string Dependencies_SummaryConflictingFormat => LocalizationService.Get("Dependencies_SummaryConflictingFormat");
     internal static string Dependencies_SummaryUnresolvedFormat => LocalizationService.Get("Dependencies_SummaryUnresolvedFormat");
-    internal static string Dependencies_SummaryTooNewFormat => LocalizationService.Get("Dependencies_SummaryTooNewFormat");
     internal static string Dependencies_SummaryDisabledFormat => LocalizationService.Get("Dependencies_SummaryDisabledFormat");
     internal static string Dependencies_SummarySatisfied(int count, params object?[] values) =>
         LocalizationService.Plural("Dependencies_SummarySatisfied", count, values);

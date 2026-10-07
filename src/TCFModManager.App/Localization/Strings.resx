@@ -4206,12 +4206,41 @@ You can turn it back on at any time.</value>
     <value>installed {0} but disabled - SPT won't load it</value>
     <comment>{0} is the version installed.</comment>
   </data>
-  <data name="Dependencies_RowTooNewFormat" xml:space="preserve">
-    <value>too new: needs up to {0} - {1} installed</value>
-    <comment>{0} is the newest version that fits, {1} the version installed.</comment>
+  <data name="Dependencies_RowWontLoadUpToFormat" xml:space="preserve">
+    <value>won't load: needs up to {0} - {1} installed</value>
+    <comment>OPEN-23. The dependent's own files ask for a range the installed dependency's declared version doesn't meet. {0} is the newest published version the range accepts, {1} the version found.</comment>
   </data>
-  <data name="Dependencies_RowConflict" xml:space="preserve">
-    <value>conflict - two mods need incompatible versions</value>
+  <data name="Dependencies_RowWontLoadAtLeastFormat" xml:space="preserve">
+    <value>won't load: needs {0} or later - {1} installed</value>
+    <comment>OPEN-23. As Dependencies_RowWontLoadUpToFormat, when the installed version is below the range: {0} is the oldest published version it accepts.</comment>
+  </data>
+  <data name="Dependencies_RowWontLoadFormat" xml:space="preserve">
+    <value>won't load: needs {0} - {1} installed</value>
+    <comment>OPEN-23. Fallback when no published version brackets the range: {0} is the range in words (no operators), {1} the version found.</comment>
+  </data>
+  <data name="Dependencies_RowSpModUpToFormat" xml:space="preserve">
+    <value>sp-mod lists up to {0} - {1} installed</value>
+    <comment>OPEN-23. sp-mod's range for this pair (from its held-back answer) excludes the installed version; a warning, the mod may still load. {0} newest accepted version, {1} installed.</comment>
+  </data>
+  <data name="Dependencies_RowSpModFormat" xml:space="preserve">
+    <value>sp-mod lists {0} - {1} installed</value>
+    <comment>OPEN-23. As Dependencies_RowSpModUpToFormat when no published version brackets the range: {0} the range in words.</comment>
+  </data>
+  <data name="Dependencies_RowHeldBackUpToFormat" xml:space="preserve">
+    <value>holds back {0}: needs up to {1}</value>
+    <comment>OPEN-23. Shown after the status: sp-mod holds back update {0} of this dependency because the mod above needs it at {1} or below.</comment>
+  </data>
+  <data name="Dependencies_RowHeldBackFormat" xml:space="preserve">
+    <value>holds back {0}: needs {1}</value>
+    <comment>OPEN-23. As Dependencies_RowHeldBackUpToFormat when no published version brackets the range: {1} is the range in words.</comment>
+  </data>
+  <data name="Dependencies_SummaryWontLoadFormat" xml:space="preserve">
+    <value>{0} won't load</value>
+    <comment>OPEN-23. One count in a mod's dependency summary: dependencies whose installed version the mod's files refuse.</comment>
+  </data>
+  <data name="Dependencies_SummarySpModFormat" xml:space="preserve">
+    <value>{0} not listed by sp-mod</value>
+    <comment>OPEN-23. One count in a mod's dependency summary: dependencies sp-mod lists another version of.</comment>
   </data>
   <data name="Dependencies_RowUpdate" xml:space="preserve">
     <value>Update</value>
@@ -4233,17 +4262,9 @@ You can turn it back on at any time.</value>
     <value>{0} outdated</value>
     <comment>One count in a mod's dependency summary.</comment>
   </data>
-  <data name="Dependencies_SummaryConflictingFormat" xml:space="preserve">
-    <value>{0} conflicting</value>
-    <comment>One count in a mod's dependency summary.</comment>
-  </data>
   <data name="Dependencies_SummaryUnresolvedFormat" xml:space="preserve">
     <value>{0} unresolved</value>
     <comment>One count in a mod's dependency summary.</comment>
-  </data>
-  <data name="Dependencies_SummaryTooNewFormat" xml:space="preserve">
-    <value>{0} too new</value>
-    <comment>{0} is a count.</comment>
   </data>
   <data name="Dependencies_SummaryDisabledFormat" xml:space="preserve">
     <value>{0} disabled</value>

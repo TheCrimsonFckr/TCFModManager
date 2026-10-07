@@ -6,56 +6,76 @@ namespace TCFModManager.Core.Tests;
 
 public class DependencyStatusResolverTests
 {
-    private static DependencyNode Node(bool conflict = false) => new() { Id = 902, Name = "BigBrain", Conflict = conflict };
+    private static readonly DeclaredVersionMiss Miss = new("~3.0.3", "3.0.6", InstalledModTarget.Server);
 
     [Fact]
     public void Resolve_NotInstalledWhenNothingIsOnDisk() =>
-        Assert.Equal(ModStatus.NotInstalled, DependencyStatusResolver.Resolve(Node(), null, "1.3.0"));
+        Assert.Equal(ModStatus.NotInstalled, DependencyStatusResolver.Resolve(null, "1.3.0"));
 
     [Fact]
     public void Resolve_InstalledWhenTheDiskVersionMatches() =>
-        Assert.Equal(ModStatus.Installed, DependencyStatusResolver.Resolve(Node(), "1.3.0", "1.3.0"));
+        Assert.Equal(ModStatus.Installed, DependencyStatusResolver.Resolve("1.3.0", "1.3.0"));
 
-    // The required version is the newest that satisfies the constraint and this SPT, not a minimum -
-    // one above it doesn't fit (OPEN-21 X2). Was Installed until 2026-10-05.
+    // OPEN-23 S0: the newest version sp-mod resolves is not an upper bound - it stops where sp-mod's
+    // list was frozen. CommonLib 3.0.6 under Canted Aiming 2.0.0 (resolved 3.0.3) loads fine.
     [Fact]
-    public void Resolve_TooNewWhenTheDiskVersionIsNewerThanRequired() =>
-        Assert.Equal(ModStatus.TooNew, DependencyStatusResolver.Resolve(Node(), "1.4.0", "1.3.0"));
+    public void Resolve_ANewerVersionThanSpModResolvesIsInstalled() =>
+        Assert.Equal(ModStatus.Installed, DependencyStatusResolver.Resolve("3.0.6", "3.0.3"));
+
+    [Fact]
+    public void Resolve_TooNewWhenSpModsRangeExcludesTheInstalledVersion() =>
+        Assert.Equal(ModStatus.TooNew, DependencyStatusResolver.Resolve("3.0.6", "3.0.3", spModConstraint: "3.0.3"));
+
+    [Fact]
+    public void Resolve_InstalledWhenSpModsRangeAcceptsTheInstalledVersion() =>
+        Assert.Equal(ModStatus.Installed, DependencyStatusResolver.Resolve("3.0.3", "3.0.3", spModConstraint: "~3.0.0"));
+
+    [Fact]
+    public void Resolve_SpModsRangeIsNotHeldAgainstAVersionReadOffTheFiles() =>
+        Assert.Equal(ModStatus.Installed,
+            DependencyStatusResolver.Resolve("3.0.6.0", "3.0.3", installedVersionFromFiles: true, spModConstraint: "3.0.3"));
 
     [Fact]
     public void Resolve_InstalledWhenTheScannedVersionCarriesAnExtraZero() =>
         // The scanner reports a DLL's file version as "1.3.0.0" against a published "1.3.0".
-        Assert.Equal(ModStatus.Installed, DependencyStatusResolver.Resolve(Node(), "1.3.0.0", "1.3.0"));
+        Assert.Equal(ModStatus.Installed, DependencyStatusResolver.Resolve("1.3.0.0", "1.3.0"));
 
     [Fact]
     public void Resolve_UpdateAvailableWhenTheDiskVersionIsOlder() =>
-        Assert.Equal(ModStatus.UpdateAvailable, DependencyStatusResolver.Resolve(Node(), "1.2.0", "1.3.0"));
+        Assert.Equal(ModStatus.UpdateAvailable, DependencyStatusResolver.Resolve("1.2.0", "1.3.0"));
 
     [Fact]
     public void Resolve_AHotfixIsAnUpdateOverTheRecordedRelease() =>
-        Assert.Equal(ModStatus.UpdateAvailable, DependencyStatusResolver.Resolve(Node(), "1.3.0", "1.3.0-hotfix"));
+        Assert.Equal(ModStatus.UpdateAvailable, DependencyStatusResolver.Resolve("1.3.0", "1.3.0-hotfix"));
 
     [Fact]
     public void Resolve_AVersionReadOffTheFilesIgnoresTheLabel() =>
         Assert.Equal(ModStatus.Installed,
-            DependencyStatusResolver.Resolve(Node(), "1.3.0.0", "1.3.0-hotfix", installedVersionFromFiles: true));
+            DependencyStatusResolver.Resolve("1.3.0.0", "1.3.0-hotfix", installedVersionFromFiles: true));
 
     [Fact]
     public void Resolve_NoCompatibleVersionWhenNothingPublishedFitsAndItIsMissing() =>
         // latest_compatible_version comes back null when no release suits the installed SPT.
-        Assert.Equal(ModStatus.NoCompatibleVersion, DependencyStatusResolver.Resolve(Node(), null, null));
+        Assert.Equal(ModStatus.NoCompatibleVersion, DependencyStatusResolver.Resolve(null, null));
 
     [Fact]
     public void Resolve_InstalledEvenWhenNoCompatibleVersionIsPublished() =>
         // Already on disk and nothing newer to move to - not a problem to flag.
-        Assert.Equal(ModStatus.Installed, DependencyStatusResolver.Resolve(Node(), "1.2.0", null));
+        Assert.Equal(ModStatus.Installed, DependencyStatusResolver.Resolve("1.2.0", null));
 
     [Theory]
-    [InlineData(null, "1.3.0")]
     [InlineData("1.2.0", "1.3.0")]
-    [InlineData("1.3.0", "1.3.0")]
-    public void Resolve_ConflictOutranksWhateverIsOnDisk(string? installed, string? required) =>
-        Assert.Equal(ModStatus.Conflict, DependencyStatusResolver.Resolve(Node(conflict: true), installed, required));
+    [InlineData("3.0.6", "3.0.6")]
+    public void Resolve_AFilesMissIsAConflictWhateverSpModSays(string installed, string? required) =>
+        Assert.Equal(ModStatus.Conflict, DependencyStatusResolver.Resolve(installed, required, filesMiss: Miss));
+
+    [Fact]
+    public void Resolve_AMissingDependencyIsNotInstalledEvenWithAFilesMiss() =>
+        Assert.Equal(ModStatus.NotInstalled, DependencyStatusResolver.Resolve(null, "1.3.0", filesMiss: Miss));
+
+    [Fact]
+    public void Resolve_DisabledOutranksAFilesMiss() =>
+        Assert.Equal(ModStatus.Disabled, DependencyStatusResolver.Resolve("3.0.6", "3.0.6", installedButDisabled: true, filesMiss: Miss));
 
     [Fact]
     public void Worst_IsInstalledForAnEmptyTree() =>
@@ -86,13 +106,9 @@ public class DependencyStatusResolverTests
             < DependencyStatusResolver.Severity(ModStatus.UpdateAvailable));
 
     [Fact]
-    public void Resolve_AVersionReadOffTheFiles_IsOnlyTooNewAcrossAMajorVersion()
-    {
+    public void Resolve_AVersionReadOffTheFilesAboveSpModsIsInstalled() =>
         Assert.Equal(ModStatus.Installed,
-            DependencyStatusResolver.Resolve(Node(), "2.5.0.0", "2.4.1", installedVersionFromFiles: true));
-        Assert.Equal(ModStatus.TooNew,
-            DependencyStatusResolver.Resolve(Node(), "3.0.0.0", "2.4.1", installedVersionFromFiles: true));
-    }
+            DependencyStatusResolver.Resolve("3.0.0.0", "2.4.1", installedVersionFromFiles: true));
 
     [Fact]
     public void Worst_RanksTooNewAboveAnUpdate() =>

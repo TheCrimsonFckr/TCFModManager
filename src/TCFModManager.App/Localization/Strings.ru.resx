@@ -1035,17 +1035,11 @@
   <data name="Dependencies_Resolving_one" xml:space="preserve">
     <value>Определение зависимостей для {0} мода...</value>
   </data>
-  <data name="Dependencies_RowConflict" xml:space="preserve">
-    <value>конфликт - двум модам нужны несовместимые версии</value>
-  </data>
   <data name="Dependencies_RowDisabled" xml:space="preserve">
     <value>установлен, но отключён - SPT его не загрузит</value>
   </data>
   <data name="Dependencies_RowDisabledVersionFormat" xml:space="preserve">
     <value>установлен {0}, но отключён - SPT его не загрузит</value>
-  </data>
-  <data name="Dependencies_RowTooNewFormat" xml:space="preserve">
-    <value>слишком новая: нужна до {0} - установлено: {1}</value>
   </data>
   <data name="Dependencies_RowInstall" xml:space="preserve">
     <value>Установить</value>
@@ -1068,14 +1062,38 @@
   <data name="Dependencies_RowNotInstalledNeedsFormat" xml:space="preserve">
     <value>не установлен - нужна {0}</value>
   </data>
+  <data name="Dependencies_RowWontLoadUpToFormat" xml:space="preserve">
+    <value>не загрузится: нужна до {0} - установлено: {1}</value>
+  </data>
+  <data name="Dependencies_RowWontLoadAtLeastFormat" xml:space="preserve">
+    <value>не загрузится: нужна {0} или новее - установлено: {1}</value>
+  </data>
+  <data name="Dependencies_RowWontLoadFormat" xml:space="preserve">
+    <value>не загрузится: нужна {0} - установлено: {1}</value>
+  </data>
+  <data name="Dependencies_RowSpModUpToFormat" xml:space="preserve">
+    <value>sp-mod указывает до {0} - установлено: {1}</value>
+  </data>
+  <data name="Dependencies_RowSpModFormat" xml:space="preserve">
+    <value>sp-mod указывает {0} - установлено: {1}</value>
+  </data>
+  <data name="Dependencies_RowHeldBackUpToFormat" xml:space="preserve">
+    <value>сдерживает {0}: нужна до {1}</value>
+  </data>
+  <data name="Dependencies_RowHeldBackFormat" xml:space="preserve">
+    <value>сдерживает {0}: нужна {1}</value>
+  </data>
+  <data name="Dependencies_SummaryWontLoadFormat" xml:space="preserve">
+    <value>не загрузится: {0}</value>
+  </data>
+  <data name="Dependencies_SummarySpModFormat" xml:space="preserve">
+    <value>не указано на sp-mod: {0}</value>
+  </data>
   <data name="Dependencies_RowUpdate" xml:space="preserve">
     <value>Обновить</value>
   </data>
   <data name="Dependencies_Scanning" xml:space="preserve">
     <value>Сканирование установленных модов...</value>
-  </data>
-  <data name="Dependencies_SummaryConflictingFormat" xml:space="preserve">
-    <value>конфликт: {0}</value>
   </data>
   <data name="Dependencies_SummaryMissingFormat" xml:space="preserve">
     <value>отсутствует: {0}</value>
@@ -1094,9 +1112,6 @@
   </data>
   <data name="Dependencies_SummaryUnresolvedFormat" xml:space="preserve">
     <value>не разрешено: {0}</value>
-  </data>
-  <data name="Dependencies_SummaryTooNewFormat" xml:space="preserve">
-    <value>слишком новые: {0}</value>
   </data>
   <data name="Dependencies_SummaryDisabledFormat" xml:space="preserve">
     <value>отключено: {0}</value>

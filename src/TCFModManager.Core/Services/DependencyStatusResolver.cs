@@ -5,18 +5,22 @@ namespace TCFModManager.Core.Services;
 // Decides a dependency's status, and how severe it is relative to others.
 public static class DependencyStatusResolver
 {
-    // 
-    // Resolves one node's status. <paramref name="installedVersion"/> is null when the dependency
-    // isn't on disk. <paramref name="requiredVersion"/> is the node's latest compatible version,
-    // which the API leaves null when nothing published fits the installed SPT.
-    // 
+    //
+    // Resolves one dependency's status. <paramref name="installedVersion"/> is null when the dependency
+    // isn't on disk. <paramref name="requiredVersion"/> is the newest version sp-mod resolves for it,
+    // null when nothing published fits the installed SPT.
+    //
+    // OPEN-23 S0: sp-mod's per-request "conflict" flag and the "too new" read off requiredVersion are
+    // gone - the first changed with whichever mods shared a request, the second came from a list sp-mod
+    // seems to freeze when the dependent is published. A dependent's own files decide an error
+    // (<paramref name="filesMiss"/>); a range sp-mod gives (<paramref name="spModConstraint"/>, from its
+    // held-back answer) only ever warns.
+    //
     public static ModStatus Resolve(
-        DependencyNode node, string? installedVersion, string? requiredVersion,
-        bool installedButDisabled = false, bool installedVersionFromFiles = false)
+        string? installedVersion, string? requiredVersion,
+        bool installedButDisabled = false, bool installedVersionFromFiles = false,
+        DeclaredVersionMiss? filesMiss = null, string? spModConstraint = null)
     {
-        // A conflict is about the graph as a whole, so it outranks whatever is on disk.
-        if (node.Conflict) return ModStatus.Conflict;
-
         // A disabled dependency is on disk but isn't loaded, so nothing depending on it works.
         if (installedButDisabled) return ModStatus.Disabled;
 
@@ -29,22 +33,21 @@ public static class DependencyStatusResolver
                 : ModStatus.NotInstalled;
         }
 
+        // The loader itself will refuse this pairing.
+        if (filesMiss is not null) return ModStatus.Conflict;
+
         var newer = installedVersionFromFiles
             ? ModVersionComparer.IsUpdateAvailableByNumbers(installedVersion, requiredVersion)
             : ModVersionComparer.IsUpdateAvailable(installedVersion, requiredVersion);
 
         if (newer == true) return ModStatus.UpdateAvailable;
 
-        //
-        // requiredVersion is the newest that satisfies both the constraint and this SPT, so one above
-        // it doesn't fit - CommonLib 3.0.6 installed for a mod made against 2.x. A version read off a
-        // DLL isn't kept in step by every author, so there only a later major line counts.
-        //
-        var tooNew = installedVersionFromFiles
-            ? ModVersionComparer.IsLaterMajor(installedVersion, requiredVersion)
-            : ModVersionComparer.IsUpdateAvailable(requiredVersion, installedVersion);
+        // A version read off a DLL isn't kept in step with sp-mod by every author, so sp-mod's range
+        // is only held against a version this app installed.
+        if (!installedVersionFromFiles && ModVersionMatcher.IsSatisfiedBy(spModConstraint, installedVersion) == false)
+            return ModStatus.TooNew;
 
-        return tooNew == true ? ModStatus.TooNew : ModStatus.Installed;
+        return ModStatus.Installed;
     }
 
     // Sort key for "worst" - lower is more severe. Drives the per-mod header icon.

@@ -301,6 +301,8 @@
                                                 TextTrimming="CharacterEllipsis">
                                                 <Run Text="{Binding Name, Mode=OneWay}" />
                                                 <Run Text="{Binding StatusText, StringFormat=' - {0}', Mode=OneWay}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                <!-- OPEN-23 S0: sp-mod holds back an update of this dependency because of the mod above. -->
+                                                <Run Text="{Binding Note, StringFormat=' - {0}', TargetNullValue='', Mode=OneWay}" Foreground="{DynamicResource SystemFillColorCautionBrush}" />
                                             </TextBlock>
 
                                             <!-- Only rows that are actually missing or outdated get an action. The

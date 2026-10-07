@@ -295,6 +295,16 @@ public partial class DependenciesViewModel : LocalizedViewModel
 
             await PrepareUpgradeCheckAsync(installed);
 
+            // OPEN-23 S0: sp-mod's held-back answer is the only place it gives a dependency's range,
+            // so ask for it fresh rather than trusting whatever the Installed page last saw.
+            await AppServices.HeldBack.RefreshAsync(
+                installed
+                    .Where(c => c is { IsAddon: false, ModId: > 0 } && !string.IsNullOrWhiteSpace(c.InstalledVersion))
+                    .Select(c => (c.ModId!.Value, c.InstalledVersion!))
+                    .DistinctBy(c => c.Item1)
+                    .ToList(),
+                sptVersion);
+
             // Only mods that matched the catalog can be asked about; a hand-installed mod we
             // couldn't identify has no identifier to query with.
             var queryable = installed
@@ -350,7 +360,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
                         Mod = mod,
                     };
 
-                    foreach (var row in Flatten(nodes, 0, installedByModId)) tree.Rows.Add(row);
+                    foreach (var row in Flatten(nodes, 0, installedByModId, card, mod.Id, sptVersion)) tree.Rows.Add(row);
 
                     tree.Refresh();
                     trees.Add(tree);
@@ -470,24 +480,41 @@ public partial class DependenciesViewModel : LocalizedViewModel
     private static string Identifier(Mod mod) =>
         string.IsNullOrWhiteSpace(mod.Guid) ? mod.Id.ToString() : mod.Guid!;
 
-    // Walks a resolved tree depth-first into indented rows, tagging each with its status
-    // against what's installed.
+    //
+    // Walks a resolved tree depth-first into indented rows, tagging each with its status against
+    // what's installed. <paramref name="dependent"/> is the installed mod whose dependencies these
+    // nodes are (null when that mod isn't installed, deeper in the tree), and
+    // <paramref name="dependentModId"/> its sp-mod id: OPEN-23 S0 checks each dependency against the
+    // range the dependent's own files declare, and against any range sp-mod gives for the pair in its
+    // held-back answer.
+    //
     private static IEnumerable<DependencyRow> Flatten(
         IEnumerable<DependencyNode> nodes,
         int depth,
-        IReadOnlyDictionary<int, InstalledModCardViewModel> installedByModId)
+        IReadOnlyDictionary<int, InstalledModCardViewModel> installedByModId,
+        InstalledModCardViewModel? dependent,
+        int? dependentModId,
+        string? sptVersion)
     {
         foreach (var node in nodes)
         {
             installedByModId.TryGetValue(node.Id, out var installed);
 
             var required = node.LatestCompatibleVersion?.Version;
+            var catalogMod = AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == node.Id);
+
+            var filesMiss = dependent is not null && installed is not null
+                ? DeclaredVersionCheck.FindMiss(dependent.Entries, installed.Entries)
+                : null;
+
+            var held = AppServices.HeldBack.For(node.Id, sptVersion);
+            var blocker = held?.Blockers.FirstOrDefault(b => b.ModId == dependentModId);
 
             // A disabled dependency is on disk but isn't loaded, so anything needing it is as
             // broken as if it were missing - shown as its own state rather than as "installed".
             var status = DependencyStatusResolver.Resolve(
-                node, installed?.InstalledVersion, required, installed?.IsDisabled == true,
-                installed?.InstalledVersionFromFiles == true);
+                installed?.InstalledVersion, required, installed?.IsDisabled == true,
+                installed?.InstalledVersionFromFiles == true, filesMiss, blocker?.Constraint);
 
             yield return new DependencyRow
             {
@@ -496,10 +523,13 @@ public partial class DependenciesViewModel : LocalizedViewModel
                 Status = status,
                 InstalledVersion = installed?.InstalledVersion,
                 RequiredVersion = required,
-                CatalogMod = AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == node.Id),
+                CatalogMod = catalogMod,
+                FilesMiss = filesMiss,
+                HeldVersion = blocker is null ? null : held!.Version,
+                SpModConstraint = blocker?.Constraint,
             };
 
-            foreach (var child in Flatten(node.Dependencies, depth + 1, installedByModId))
+            foreach (var child in Flatten(node.Dependencies, depth + 1, installedByModId, installed, node.Id, sptVersion))
                 yield return child;
         }
     }

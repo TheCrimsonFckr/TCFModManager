@@ -39,18 +39,18 @@ public sealed partial class DependencyTreeViewModel : LocalizedViewModel
         {
             var missing = Rows.Count(r => r.Status == ModStatus.NotInstalled);
             var outdated = Rows.Count(r => r.Status == ModStatus.UpdateAvailable);
-            var conflicts = Rows.Count(r => r.Status == ModStatus.Conflict);
+            var wontLoad = Rows.Count(r => r.Status == ModStatus.Conflict);
             var unresolved = Rows.Count(r => r.Status == ModStatus.NoCompatibleVersion);
             var disabled = Rows.Count(r => r.Status == ModStatus.Disabled);
-            var tooNew = Rows.Count(r => r.Status == ModStatus.TooNew);
+            var notListed = Rows.Count(r => r.Status == ModStatus.TooNew);
 
             var parts = new List<string>();
             if (missing > 0) parts.Add(Text(Strings.Dependencies_SummaryMissingFormat, missing));
             if (outdated > 0) parts.Add(Text(Strings.Dependencies_SummaryOutdatedFormat, outdated));
-            if (conflicts > 0) parts.Add(Text(Strings.Dependencies_SummaryConflictingFormat, conflicts));
+            if (wontLoad > 0) parts.Add(Text(Strings.Dependencies_SummaryWontLoadFormat, wontLoad));
             if (unresolved > 0) parts.Add(Text(Strings.Dependencies_SummaryUnresolvedFormat, unresolved));
             if (disabled > 0) parts.Add(Text(Strings.Dependencies_SummaryDisabledFormat, disabled));
-            if (tooNew > 0) parts.Add(Text(Strings.Dependencies_SummaryTooNewFormat, tooNew));
+            if (notListed > 0) parts.Add(Text(Strings.Dependencies_SummarySpModFormat, notListed));
 
             return parts.Count == 0
                 ? Strings.Dependencies_SummarySatisfied(Rows.Count)

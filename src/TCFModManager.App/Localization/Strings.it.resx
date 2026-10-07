@@ -1011,17 +1011,11 @@ Qualunque cosa scegli, la versione ora sul disco viene prima copiata in {1}.</va
   <data name="Dependencies_Resolving_other" xml:space="preserve">
     <value>Risoluzione delle dipendenze di {0} mod...</value>
   </data>
-  <data name="Dependencies_RowConflict" xml:space="preserve">
-    <value>conflitto - due mod richiedono versioni incompatibili</value>
-  </data>
   <data name="Dependencies_RowDisabled" xml:space="preserve">
     <value>installato ma disattivato - SPT non lo carica</value>
   </data>
   <data name="Dependencies_RowDisabledVersionFormat" xml:space="preserve">
     <value>installato {0} ma disattivato - SPT non lo carica</value>
-  </data>
-  <data name="Dependencies_RowTooNewFormat" xml:space="preserve">
-    <value>troppo recente: richiede fino a {0} - installato {1}</value>
   </data>
   <data name="Dependencies_RowInstall" xml:space="preserve">
     <value>Installa</value>
@@ -1044,14 +1038,38 @@ Qualunque cosa scegli, la versione ora sul disco viene prima copiata in {1}.</va
   <data name="Dependencies_RowNotInstalledNeedsFormat" xml:space="preserve">
     <value>non installato - richiede {0}</value>
   </data>
+  <data name="Dependencies_RowWontLoadUpToFormat" xml:space="preserve">
+    <value>non si carica: richiede fino a {0} - installato {1}</value>
+  </data>
+  <data name="Dependencies_RowWontLoadAtLeastFormat" xml:space="preserve">
+    <value>non si carica: richiede {0} o successiva - installato {1}</value>
+  </data>
+  <data name="Dependencies_RowWontLoadFormat" xml:space="preserve">
+    <value>non si carica: richiede {0} - installato {1}</value>
+  </data>
+  <data name="Dependencies_RowSpModUpToFormat" xml:space="preserve">
+    <value>sp-mod indica fino a {0} - installato {1}</value>
+  </data>
+  <data name="Dependencies_RowSpModFormat" xml:space="preserve">
+    <value>sp-mod indica {0} - installato {1}</value>
+  </data>
+  <data name="Dependencies_RowHeldBackUpToFormat" xml:space="preserve">
+    <value>blocca {0}: richiede fino a {1}</value>
+  </data>
+  <data name="Dependencies_RowHeldBackFormat" xml:space="preserve">
+    <value>blocca {0}: richiede {1}</value>
+  </data>
+  <data name="Dependencies_SummaryWontLoadFormat" xml:space="preserve">
+    <value>{0} non si caricano</value>
+  </data>
+  <data name="Dependencies_SummarySpModFormat" xml:space="preserve">
+    <value>{0} non elencate da sp-mod</value>
+  </data>
   <data name="Dependencies_RowUpdate" xml:space="preserve">
     <value>Aggiorna</value>
   </data>
   <data name="Dependencies_Scanning" xml:space="preserve">
     <value>Scansione dei mod installati...</value>
-  </data>
-  <data name="Dependencies_SummaryConflictingFormat" xml:space="preserve">
-    <value>{0} in conflitto</value>
   </data>
   <data name="Dependencies_SummaryMissingFormat" xml:space="preserve">
     <value>{0} mancanti</value>
@@ -1067,9 +1085,6 @@ Qualunque cosa scegli, la versione ora sul disco viene prima copiata in {1}.</va
   </data>
   <data name="Dependencies_SummaryUnresolvedFormat" xml:space="preserve">
     <value>{0} non risolte</value>
-  </data>
-  <data name="Dependencies_SummaryTooNewFormat" xml:space="preserve">
-    <value>{0} troppo recenti</value>
   </data>
   <data name="Dependencies_SummaryDisabledFormat" xml:space="preserve">
     <value>{0} disattivate</value>

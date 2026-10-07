@@ -32,6 +32,15 @@ public sealed partial class DependencyRow : LocalizedViewModel
     // The catalog listing, when the dependency matched one. Needed to queue an install.
     public Mod? CatalogMod { get; init; }
 
+    // OPEN-23 S0: the range the dependent's own files declare that the installed version misses.
+    public DeclaredVersionMiss? FilesMiss { get; init; }
+
+    // OPEN-23 S0: the update sp-mod holds back because of the mod above, and the range sp-mod says
+    // that mod accepts. Both null when sp-mod holds nothing back for this pair.
+    public string? HeldVersion { get; init; }
+
+    public string? SpModConstraint { get; init; }
+
     // Set once this row has been queued, so the button doesn't invite a second click.
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsNotQueued))]
@@ -58,18 +67,80 @@ public sealed partial class DependencyRow : LocalizedViewModel
         ModStatus.Disabled => InstalledVersion is null
             ? Strings.Dependencies_RowDisabled
             : Text(Strings.Dependencies_RowDisabledVersionFormat, InstalledVersion),
-        ModStatus.TooNew => Text(Strings.Dependencies_RowTooNewFormat, RequiredVersion, InstalledVersion),
-        _ => Strings.Dependencies_RowConflict,
+        ModStatus.TooNew => SpModConstraint is null
+            ? Text(Strings.Dependencies_RowInstalledVersionFormat, InstalledVersion)
+            : Needs(SpModConstraint, InstalledVersion) switch
+            {
+                (var v, NeedKind.UpTo) => Text(Strings.Dependencies_RowSpModUpToFormat, v, InstalledVersion),
+                var (v, _) => Text(Strings.Dependencies_RowSpModFormat, v, InstalledVersion),
+            },
+        _ => FilesMiss is null
+            ? Text(Strings.Dependencies_RowInstalledVersionFormat, InstalledVersion)
+            : Needs(FilesMiss.Range, FilesMiss.Found) switch
+            {
+                (var v, NeedKind.UpTo) => Text(Strings.Dependencies_RowWontLoadUpToFormat, v, FilesMiss.Found),
+                (var v, NeedKind.AtLeast) => Text(Strings.Dependencies_RowWontLoadAtLeastFormat, v, FilesMiss.Found),
+                var (v, _) => Text(Strings.Dependencies_RowWontLoadFormat, v, FilesMiss.Found),
+            },
     };
+
+    //
+    // OPEN-23 S0: sp-mod holds back an update of this dependency because of the mod above. Shown after
+    // the status in caution colour; left out when the status already says the same (TooNew).
+    //
+    public string? Note => HeldVersion is null || SpModConstraint is null || Status == ModStatus.TooNew
+        ? null
+        : Needs(SpModConstraint, HeldVersion) switch
+        {
+            (var v, NeedKind.UpTo) => Text(Strings.Dependencies_RowHeldBackUpToFormat, HeldVersion, v),
+            var (v, _) => Text(Strings.Dependencies_RowHeldBackFormat, HeldVersion, v),
+        };
+
+    private enum NeedKind { UpTo, AtLeast, Plain }
+
+    //
+    // A range in words, never with operators (feedback: no ^ ~ >= shown): the newest published version
+    // it accepts when <paramref name="against"/> is above them all ("up to 3.0.3"), the oldest when it
+    // is below them all ("3.0.4 or later"), otherwise the range read out.
+    //
+    private (string Version, NeedKind Kind) Needs(string range, string? against)
+    {
+        var accepted = (CatalogMod?.Versions ?? [])
+            .Select(v => v.Version)
+            .Where(v => ModVersionMatcher.IsSatisfiedBy(range, v) == true)
+            .Select(v => v!)
+            .Order(Comparer<string>.Create((a, b) => ModVersionComparer.Compare(a, b) ?? 0))
+            .ToList();
+
+        if (accepted.Count > 0 && against is not null)
+        {
+            if (ModVersionComparer.Compare(against, accepted[^1]) > 0) return (accepted[^1], NeedKind.UpTo);
+            if (ModVersionComparer.Compare(against, accepted[0]) < 0) return (accepted[0], NeedKind.AtLeast);
+        }
+
+        // A bare version is that version exactly here (ModVersionMatcher), not the SPT reading of it
+        // the formatter gives ("3.0.3 - 3.0.x").
+        if (Version.TryParse(range.Trim(), out _)) return (range.Trim(), NeedKind.Plain);
+
+        return (SptVersionRangeFormatter.Format(range) ?? range, NeedKind.Plain);
+    }
+
+    // Whether the version sp-mod resolves would satisfy the dependent's files, so updating fixes a
+    // Conflict row (a dependency below the range the files ask for).
+    private bool UpdateFixesMiss =>
+        Status == ModStatus.Conflict
+        && FilesMiss is not null
+        && ModVersionComparer.IsUpdateAvailable(InstalledVersion, RequiredVersion) == true
+        && ModVersionMatcher.IsSatisfiedBy(FilesMiss.Range, RequiredVersion) == true;
 
     // Whether this row can be queued: something is actually missing or outdated, and there's
     // a resolved version and catalog listing to install.
     public bool CanInstall =>
-        Status is ModStatus.NotInstalled or ModStatus.UpdateAvailable
+        (Status is ModStatus.NotInstalled or ModStatus.UpdateAvailable || UpdateFixesMiss)
         && CatalogMod is not null
         && !string.IsNullOrWhiteSpace(RequiredVersion);
 
-    public string InstallButtonText => Status == ModStatus.UpdateAvailable
+    public string InstallButtonText => Status == ModStatus.UpdateAvailable || UpdateFixesMiss
         ? Strings.Dependencies_RowUpdate
         : Strings.Dependencies_RowInstall;
 
@@ -87,7 +158,7 @@ public sealed partial class DependencyRow : LocalizedViewModel
     //
     public string InstallToolTip => IsQueued
         ? Text(Strings.Dependencies_AlreadyQueuedFormat, Name)
-        : Status == ModStatus.UpdateAvailable
+        : Status == ModStatus.UpdateAvailable || UpdateFixesMiss
             ? AppServices.ModPageGate.UpdateToolTip
             : AppServices.ModPageGate.InstallToolTip;
 }
