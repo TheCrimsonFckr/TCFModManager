@@ -1065,6 +1065,60 @@ Quel que soit votre choix, la version actuellement sur le disque est d'abord cop
   <data name="Dependencies_SummarySpModFormat" xml:space="preserve">
     <value>{0} non listés par sp-mod</value>
   </data>
+  <data name="Dependencies_VersionsHeader" xml:space="preserve">
+    <value>Conflits de versions</value>
+  </data>
+  <data name="Dependencies_VersionTitleFormat" xml:space="preserve">
+    <value>{0} - {1} installé</value>
+  </data>
+  <data name="Dependencies_VersionTitleMissingFormat" xml:space="preserve">
+    <value>{0} - non installé ou désactivé</value>
+  </data>
+  <data name="Dependencies_VersionInstallWide" xml:space="preserve">
+    <value>SPT ne charge aucun mod serveur tant que ce n'est pas réglé.</value>
+  </data>
+  <data name="Dependencies_VersionConflict" xml:space="preserve">
+    <value>Aucune version ne convient à tous - mettez à jour ou désactivez l'un des mods.</value>
+  </data>
+  <data name="Dependencies_VersionFixFormat" xml:space="preserve">
+    <value>La version {0} convient à tous les mods ici.</value>
+  </data>
+  <data name="Dependencies_VersionSpModOnly" xml:space="preserve">
+    <value>sp-mod indique une autre version, mais les fichiers des mods acceptent celle-ci.</value>
+  </data>
+  <data name="Dependencies_VersionSwitchFormat" xml:space="preserve">
+    <value>Passer à {0}</value>
+  </data>
+  <data name="Dependencies_VersionNeedsAny" xml:space="preserve">
+    <value>accepte toute version</value>
+  </data>
+  <data name="Dependencies_VersionNeedsUpToFormat" xml:space="preserve">
+    <value>nécessite jusqu'à {0}</value>
+  </data>
+  <data name="Dependencies_VersionNeedsAtLeastFormat" xml:space="preserve">
+    <value>nécessite {0} ou plus récent</value>
+  </data>
+  <data name="Dependencies_VersionNeedsFormat" xml:space="preserve">
+    <value>nécessite {0}</value>
+  </data>
+  <data name="Dependencies_VersionSourceFiles" xml:space="preserve">
+    <value>ses fichiers</value>
+  </data>
+  <data name="Dependencies_VersionSourceSpMod" xml:space="preserve">
+    <value>sp-mod</value>
+  </data>
+  <data name="Dependencies_VersionDetailFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Dependencies_VersionOptionalFormat" xml:space="preserve">
+    <value>facultatif - {0}</value>
+  </data>
+  <data name="Dependencies_InstallWideFormat" xml:space="preserve">
+    <value>SPT ne chargera aucun mod serveur : {0}. Corrigez-le ci-dessous avant de lancer le serveur.</value>
+  </data>
+  <data name="Dependencies_InstallWidePieceFormat" xml:space="preserve">
+    <value>{0} nécessite {1}</value>
+  </data>
   <data name="Dependencies_RowUpdate" xml:space="preserve">
     <value>Mettre à jour</value>
   </data>

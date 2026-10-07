@@ -305,6 +305,8 @@ public partial class DependenciesViewModel : LocalizedViewModel
                     .ToList(),
                 sptVersion);
 
+            BuildVersionReports(installed, sptVersion);
+
             // Only mods that matched the catalog can be asked about; a hand-installed mod we
             // couldn't identify has no identifier to query with.
             var queryable = installed
@@ -409,6 +411,109 @@ public partial class DependenciesViewModel : LocalizedViewModel
         {
             IsBusy = false;
         }
+    }
+
+    // ---- OPEN-23 S2: version conflicts across the whole install -------------------------------
+
+    public ObservableCollection<VersionReportViewModel> VersionReports { get; } = [];
+
+    public bool HasVersionReports => VersionReports.Count > 0;
+
+    // R4: a server mod whose dependency is missing or the wrong version makes SPT load no server
+    // mods at all. Null when nothing does.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasInstallWideBanner))]
+    private string? _installWideBanner;
+
+    public bool HasInstallWideBanner => InstallWideBanner is not null;
+
+    private void BuildVersionReports(IReadOnlyList<InstalledModCardViewModel> installed, string? sptVersion)
+    {
+        var cards = installed.ToList();
+        var mods = cards
+            .Select((c, i) => new SolverMod(i.ToString(System.Globalization.CultureInfo.InvariantCulture), c.DisplayTitle,
+                c is { IsAddon: false, ModId: not null } ? c.ModId : null, c.Entries))
+            .ToList();
+
+        var catalog = AppServices.ModCache.AllMods;
+        IEnumerable<string> Published(int id) =>
+            (catalog.FirstOrDefault(m => m.Id == id)?.Versions ?? []).Select(v => v.Version ?? "");
+
+        var spMod = AppServices.HeldBack.All(sptVersion)
+            .SelectMany(h => h.Blockers
+                .Where(b => !string.IsNullOrWhiteSpace(b.Constraint))
+                .Select(b => new SpModRequirement(b.ModId, h.ModId, b.Constraint!)));
+
+        var reports = DependencyVersionSolver.Solve(mods, Published, spMod);
+
+        InstalledModCardViewModel CardOf(SolverMod mod) => cards[int.Parse(mod.Key, System.Globalization.CultureInfo.InvariantCulture)];
+
+        VersionReports.Clear();
+        foreach (var report in reports.Where(r => r.HasFileProblem || r.HasSpModWarning))
+        {
+            var dependencyCard = report.Dependency is null ? null : CardOf(report.Dependency);
+            var catalogMod = report.Dependency?.ModId is { } id ? catalog.FirstOrDefault(m => m.Id == id) : null;
+
+            VersionReports.Add(new VersionReportViewModel
+            {
+                Report = report,
+                DependencyName = report.Dependency?.Name ?? report.Identifier,
+                InstalledVersion = dependencyCard is { IsDisabled: false } ? dependencyCard.InstalledVersion : null,
+                CatalogMod = catalogMod,
+                Rows = report.Requirements
+                    .OrderBy(r => r.Standing == RequirementStanding.Met)
+                    .ThenBy(r => r.Dependent.Name, StringComparer.OrdinalIgnoreCase)
+                    .Select(r => new VersionRequirementRow
+                    {
+                        Requirement = r,
+                        DependentName = r.Dependent.Name,
+                        DependentVersion = CardOf(r.Dependent).InstalledVersion,
+                        DependencyVersions = catalogMod?.Versions,
+                    })
+                    .ToList(),
+            });
+        }
+
+        var installWide = reports
+            .Where(r => r.InstallWide)
+            .SelectMany(r => r.Requirements
+                .Where(q => q.Source == RequirementSource.Files && !q.IsOptional && q.Side == InstalledModTarget.Server
+                            && q.Standing is RequirementStanding.Missed or RequirementStanding.Missing)
+                .Select(q => Text(Strings.Dependencies_InstallWidePieceFormat, q.Dependent.Name, r.Dependency?.Name ?? r.Identifier)))
+            .Distinct()
+            .ToList();
+
+        InstallWideBanner = installWide.Count == 0 ? null : Text(Strings.Dependencies_InstallWideFormat, TextLists.Join(installWide));
+        OnPropertyChanged(nameof(HasVersionReports));
+
+        if (reports.Count > 0)
+            AppLog.Info("Dependencies", $"version check: {reports.Count} dependencies asked for, {VersionReports.Count} need attention, {installWide.Count} install-wide");
+    }
+
+    // Switches a dependency to the version every installed mod's files accept.
+    [RelayCommand]
+    private void SwitchVersion(VersionReportViewModel? report)
+    {
+        if (report?.CatalogMod is not { } mod || report.Report.FixVersion is not { } version) return;
+
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        if (string.IsNullOrWhiteSpace(installPath))
+        {
+            StatusMessage = AppMessages.NoSptInstallFolder;
+            return;
+        }
+
+        if (!ReadModPageConfirmationWindow.Confirm(mod.Name ?? report.DependencyName, mod.DetailUrl))
+        {
+            StatusMessage = Text(Strings.Dependencies_CancelledFormat, report.DependencyName);
+            return;
+        }
+
+        AppServices.DownloadQueue.Enqueue(
+            InstallTarget.For(mod), version, installPath, () => ResolveVersionLinkAsync(mod, version),
+            downloadOnly: AppServices.ModPageGate.DownloadOnlyFor(false));
+
+        StatusMessage = Text(Strings.Dependencies_QueuedFormat, report.DependencyName, version);
     }
 
     // Queues a missing or outdated dependency, behind the same read-the-mod-page gate Browse uses.

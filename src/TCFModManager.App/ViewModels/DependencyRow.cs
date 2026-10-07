@@ -1,6 +1,7 @@
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using TCFModManager.App.Localization;
+using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -71,15 +72,15 @@ public sealed partial class DependencyRow : LocalizedViewModel
             ? Text(Strings.Dependencies_RowInstalledVersionFormat, InstalledVersion)
             : Needs(SpModConstraint, InstalledVersion) switch
             {
-                (var v, NeedKind.UpTo) => Text(Strings.Dependencies_RowSpModUpToFormat, v, InstalledVersion),
+                (var v, RangeWordingKind.UpTo) => Text(Strings.Dependencies_RowSpModUpToFormat, v, InstalledVersion),
                 var (v, _) => Text(Strings.Dependencies_RowSpModFormat, v, InstalledVersion),
             },
         _ => FilesMiss is null
             ? Text(Strings.Dependencies_RowInstalledVersionFormat, InstalledVersion)
             : Needs(FilesMiss.Range, FilesMiss.Found) switch
             {
-                (var v, NeedKind.UpTo) => Text(Strings.Dependencies_RowWontLoadUpToFormat, v, FilesMiss.Found),
-                (var v, NeedKind.AtLeast) => Text(Strings.Dependencies_RowWontLoadAtLeastFormat, v, FilesMiss.Found),
+                (var v, RangeWordingKind.UpTo) => Text(Strings.Dependencies_RowWontLoadUpToFormat, v, FilesMiss.Found),
+                (var v, RangeWordingKind.AtLeast) => Text(Strings.Dependencies_RowWontLoadAtLeastFormat, v, FilesMiss.Found),
                 var (v, _) => Text(Strings.Dependencies_RowWontLoadFormat, v, FilesMiss.Found),
             },
     };
@@ -92,38 +93,12 @@ public sealed partial class DependencyRow : LocalizedViewModel
         ? null
         : Needs(SpModConstraint, HeldVersion) switch
         {
-            (var v, NeedKind.UpTo) => Text(Strings.Dependencies_RowHeldBackUpToFormat, HeldVersion, v),
+            (var v, RangeWordingKind.UpTo) => Text(Strings.Dependencies_RowHeldBackUpToFormat, HeldVersion, v),
             var (v, _) => Text(Strings.Dependencies_RowHeldBackFormat, HeldVersion, v),
         };
 
-    private enum NeedKind { UpTo, AtLeast, Plain }
-
-    //
-    // A range in words, never with operators (feedback: no ^ ~ >= shown): the newest published version
-    // it accepts when <paramref name="against"/> is above them all ("up to 3.0.3"), the oldest when it
-    // is below them all ("3.0.4 or later"), otherwise the range read out.
-    //
-    private (string Version, NeedKind Kind) Needs(string range, string? against)
-    {
-        var accepted = (CatalogMod?.Versions ?? [])
-            .Select(v => v.Version)
-            .Where(v => ModVersionMatcher.IsSatisfiedBy(range, v) == true)
-            .Select(v => v!)
-            .Order(Comparer<string>.Create((a, b) => ModVersionComparer.Compare(a, b) ?? 0))
-            .ToList();
-
-        if (accepted.Count > 0 && against is not null)
-        {
-            if (ModVersionComparer.Compare(against, accepted[^1]) > 0) return (accepted[^1], NeedKind.UpTo);
-            if (ModVersionComparer.Compare(against, accepted[0]) < 0) return (accepted[0], NeedKind.AtLeast);
-        }
-
-        // A bare version is that version exactly here (ModVersionMatcher), not the SPT reading of it
-        // the formatter gives ("3.0.3 - 3.0.x").
-        if (Version.TryParse(range.Trim(), out _)) return (range.Trim(), NeedKind.Plain);
-
-        return (SptVersionRangeFormatter.Format(range) ?? range, NeedKind.Plain);
-    }
+    private (string Version, RangeWordingKind Kind) Needs(string range, string? against) =>
+        RangeWording.Describe(range, against, CatalogMod?.Versions);
 
     // Whether the version sp-mod resolves would satisfy the dependent's files, so updating fixes a
     // Conflict row (a dependency below the range the files ask for).

@@ -1089,6 +1089,60 @@
   <data name="Dependencies_SummarySpModFormat" xml:space="preserve">
     <value>не указано на sp-mod: {0}</value>
   </data>
+  <data name="Dependencies_VersionsHeader" xml:space="preserve">
+    <value>Конфликты версий</value>
+  </data>
+  <data name="Dependencies_VersionTitleFormat" xml:space="preserve">
+    <value>{0} - установлено: {1}</value>
+  </data>
+  <data name="Dependencies_VersionTitleMissingFormat" xml:space="preserve">
+    <value>{0} - не установлен или отключён</value>
+  </data>
+  <data name="Dependencies_VersionInstallWide" xml:space="preserve">
+    <value>SPT не загрузит ни одного серверного мода, пока это не исправлено.</value>
+  </data>
+  <data name="Dependencies_VersionConflict" xml:space="preserve">
+    <value>Ни одна версия не подходит всем - обновите или отключите один из модов.</value>
+  </data>
+  <data name="Dependencies_VersionFixFormat" xml:space="preserve">
+    <value>Версия {0} подходит всем модам здесь.</value>
+  </data>
+  <data name="Dependencies_VersionSpModOnly" xml:space="preserve">
+    <value>sp-mod указывает другую версию, но файлы модов принимают эту.</value>
+  </data>
+  <data name="Dependencies_VersionSwitchFormat" xml:space="preserve">
+    <value>Перейти на {0}</value>
+  </data>
+  <data name="Dependencies_VersionNeedsAny" xml:space="preserve">
+    <value>подходит любая версия</value>
+  </data>
+  <data name="Dependencies_VersionNeedsUpToFormat" xml:space="preserve">
+    <value>нужна до {0}</value>
+  </data>
+  <data name="Dependencies_VersionNeedsAtLeastFormat" xml:space="preserve">
+    <value>нужна {0} или новее</value>
+  </data>
+  <data name="Dependencies_VersionNeedsFormat" xml:space="preserve">
+    <value>нужна {0}</value>
+  </data>
+  <data name="Dependencies_VersionSourceFiles" xml:space="preserve">
+    <value>его файлы</value>
+  </data>
+  <data name="Dependencies_VersionSourceSpMod" xml:space="preserve">
+    <value>sp-mod</value>
+  </data>
+  <data name="Dependencies_VersionDetailFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Dependencies_VersionOptionalFormat" xml:space="preserve">
+    <value>необязательно - {0}</value>
+  </data>
+  <data name="Dependencies_InstallWideFormat" xml:space="preserve">
+    <value>SPT не загрузит серверные моды: {0}. Исправьте это ниже до запуска сервера.</value>
+  </data>
+  <data name="Dependencies_InstallWidePieceFormat" xml:space="preserve">
+    <value>{0} нужен {1}</value>
+  </data>
   <data name="Dependencies_RowUpdate" xml:space="preserve">
     <value>Обновить</value>
   </data>

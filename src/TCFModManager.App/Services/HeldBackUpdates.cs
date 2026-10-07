@@ -41,6 +41,13 @@ public sealed class HeldBackUpdates
             ? held
             : null;
 
+    // Every update held back on this SPT - empty for an answer about another SPT. OPEN-23 reads the
+    // blockers' ranges from it.
+    public IReadOnlyCollection<HeldBackUpdate> All(string? sptVersion) =>
+        string.Equals(sptVersion, _sptVersion, StringComparison.OrdinalIgnoreCase)
+            ? _held.Values.ToList()
+            : [];
+
     //
     // Takes an answer an update check already has (UpdateWatcher). Returns whether it changed what is
     // held back, and raises Changed when it did.

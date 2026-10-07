@@ -1065,6 +1065,60 @@ Was du auch wählst: Die Version, die gerade auf der Festplatte liegt, wird zuer
   <data name="Dependencies_SummarySpModFormat" xml:space="preserve">
     <value>{0} nicht bei sp-mod gelistet</value>
   </data>
+  <data name="Dependencies_VersionsHeader" xml:space="preserve">
+    <value>Versionskonflikte</value>
+  </data>
+  <data name="Dependencies_VersionTitleFormat" xml:space="preserve">
+    <value>{0} - {1} installiert</value>
+  </data>
+  <data name="Dependencies_VersionTitleMissingFormat" xml:space="preserve">
+    <value>{0} - nicht installiert oder deaktiviert</value>
+  </data>
+  <data name="Dependencies_VersionInstallWide" xml:space="preserve">
+    <value>SPT lädt keine Server-Mods, solange das offen ist.</value>
+  </data>
+  <data name="Dependencies_VersionConflict" xml:space="preserve">
+    <value>Keine einzelne Version passt für alle - aktualisiere oder deaktiviere einen der Mods.</value>
+  </data>
+  <data name="Dependencies_VersionFixFormat" xml:space="preserve">
+    <value>Version {0} passt für jeden Mod hier.</value>
+  </data>
+  <data name="Dependencies_VersionSpModOnly" xml:space="preserve">
+    <value>sp-mod listet eine andere Version, aber die Dateien der Mods akzeptieren diese.</value>
+  </data>
+  <data name="Dependencies_VersionSwitchFormat" xml:space="preserve">
+    <value>Zu {0} wechseln</value>
+  </data>
+  <data name="Dependencies_VersionNeedsAny" xml:space="preserve">
+    <value>braucht eine beliebige Version</value>
+  </data>
+  <data name="Dependencies_VersionNeedsUpToFormat" xml:space="preserve">
+    <value>braucht bis {0}</value>
+  </data>
+  <data name="Dependencies_VersionNeedsAtLeastFormat" xml:space="preserve">
+    <value>braucht {0} oder neuer</value>
+  </data>
+  <data name="Dependencies_VersionNeedsFormat" xml:space="preserve">
+    <value>braucht {0}</value>
+  </data>
+  <data name="Dependencies_VersionSourceFiles" xml:space="preserve">
+    <value>seine Dateien</value>
+  </data>
+  <data name="Dependencies_VersionSourceSpMod" xml:space="preserve">
+    <value>sp-mod</value>
+  </data>
+  <data name="Dependencies_VersionDetailFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Dependencies_VersionOptionalFormat" xml:space="preserve">
+    <value>optional - {0}</value>
+  </data>
+  <data name="Dependencies_InstallWideFormat" xml:space="preserve">
+    <value>SPT lädt keine Server-Mods: {0}. Behebe das unten, bevor du den Server startest.</value>
+  </data>
+  <data name="Dependencies_InstallWidePieceFormat" xml:space="preserve">
+    <value>{0} braucht {1}</value>
+  </data>
   <data name="Dependencies_RowUpdate" xml:space="preserve">
     <value>Aktualisieren</value>
   </data>

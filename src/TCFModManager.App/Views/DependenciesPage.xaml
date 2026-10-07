@@ -140,6 +140,83 @@
                 </StackPanel>
             </ui:CardExpander>
 
+            <!-- OPEN-23 R4: a server mod's dependency missed or missing makes SPT load no server mods. -->
+            <ui:InfoBar
+                Margin="0,0,0,12"
+                IsClosable="False"
+                IsOpen="{Binding HasInstallWideBanner}"
+                Severity="Error"
+                Message="{Binding InstallWideBanner}"
+                Visibility="{Binding InstallWideBanner, Converter={StaticResource NullToCollapsed}}" />
+
+            <!-- OPEN-23 R5: one card per dependency the installed mods disagree about. -->
+            <TextBlock
+                Margin="0,0,0,8"
+                FontSize="16"
+                FontWeight="SemiBold"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                Text="{loc:Str Dependencies_VersionsHeader}"
+                Visibility="{Binding HasVersionReports, Converter={StaticResource BoolToVisibility}}" />
+            <ItemsControl Margin="0,0,0,16" ItemsSource="{Binding VersionReports}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ui:Card Margin="0,0,0,8" Padding="16,12">
+                            <StackPanel>
+                                <DockPanel>
+                                    <ui:Button
+                                        DockPanel.Dock="Right"
+                                        Padding="10,2"
+                                        VerticalAlignment="Center"
+                                        Appearance="Secondary"
+                                        Content="{Binding SwitchText}"
+                                        ToolTip="{Binding UpdateToolTip, Source={x:Static app:AppServices.ModPageGate}}"
+                                        Command="{Binding DataContext.SwitchVersionCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                        CommandParameter="{Binding}"
+                                        Visibility="{Binding CanSwitch, Converter={StaticResource BoolToVisibility}}" />
+                                    <ui:SymbolIcon
+                                        Margin="0,0,10,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
+                                        Symbol="{Binding Glyph}"
+                                        Style="{StaticResource StatusIcon}" />
+                                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding Title}" />
+                                </DockPanel>
+                                <TextBlock
+                                    Margin="28,4,0,8"
+                                    TextWrapping="Wrap"
+                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                    Text="{Binding Explanation}" />
+                                <ItemsControl Margin="28,0,0,0" ItemsSource="{Binding Rows}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Style="{StaticResource HoverRow}" Opacity="{Binding RowOpacity}">
+                                                <Grid Height="30">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <ui:SymbolIcon
+                                                        Grid.Column="0"
+                                                        Margin="0,0,10,0"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="16"
+                                                        Symbol="{Binding Glyph}"
+                                                        Style="{StaticResource StatusIcon}" />
+                                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis">
+                                                        <Run Text="{Binding Name, Mode=OneWay}" />
+                                                        <Run Text="{Binding Detail, StringFormat=' - {0}', Mode=OneWay}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                    </TextBlock>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </ui:Card>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
             <!-- Conflicts first (OPEN-11): a mod that won't load matters more than one that's behind. -->
             <TextBlock
                 Margin="0,0,0,8"

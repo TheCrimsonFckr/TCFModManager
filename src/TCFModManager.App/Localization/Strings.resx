@@ -4242,6 +4242,77 @@ You can turn it back on at any time.</value>
     <value>{0} not listed by sp-mod</value>
     <comment>OPEN-23. One count in a mod's dependency summary: dependencies sp-mod lists another version of.</comment>
   </data>
+  <data name="Dependencies_VersionsHeader" xml:space="preserve">
+    <value>Version conflicts</value>
+    <comment>OPEN-23 S2. Heading of the block listing dependencies the installed mods disagree about.</comment>
+  </data>
+  <data name="Dependencies_VersionTitleFormat" xml:space="preserve">
+    <value>{0} - installed {1}</value>
+    <comment>{0} dependency name, {1} its installed version.</comment>
+  </data>
+  <data name="Dependencies_VersionTitleMissingFormat" xml:space="preserve">
+    <value>{0} - not installed or disabled</value>
+    <comment>{0} dependency name.</comment>
+  </data>
+  <data name="Dependencies_VersionInstallWide" xml:space="preserve">
+    <value>SPT loads no server mods while this is unresolved.</value>
+    <comment>After a block title when a server mod's dependency is missed - SPT then loads no server mods at all.</comment>
+  </data>
+  <data name="Dependencies_VersionConflict" xml:space="preserve">
+    <value>No single version works for all of these - update or disable one of the mods.</value>
+  </data>
+  <data name="Dependencies_VersionFixFormat" xml:space="preserve">
+    <value>Version {0} works for every mod here.</value>
+    <comment>{0} the newest published version every installed mod's files accept.</comment>
+  </data>
+  <data name="Dependencies_VersionSpModOnly" xml:space="preserve">
+    <value>sp-mod lists another version, but the mods' own files accept this one.</value>
+    <comment>Amber only: sp-mod's range for a pair excludes the installed version.</comment>
+  </data>
+  <data name="Dependencies_VersionSwitchFormat" xml:space="preserve">
+    <value>Switch to {0}</value>
+    <comment>Button: install that version of the dependency.</comment>
+  </data>
+  <data name="Dependencies_VersionNeedsAny" xml:space="preserve">
+    <value>needs any version</value>
+    <comment>A dependent row when the mod's files name no version.</comment>
+  </data>
+  <data name="Dependencies_VersionNeedsUpToFormat" xml:space="preserve">
+    <value>needs up to {0}</value>
+    <comment>{0} newest published version the range accepts.</comment>
+  </data>
+  <data name="Dependencies_VersionNeedsAtLeastFormat" xml:space="preserve">
+    <value>needs {0} or later</value>
+    <comment>{0} oldest published version the range accepts.</comment>
+  </data>
+  <data name="Dependencies_VersionNeedsFormat" xml:space="preserve">
+    <value>needs {0}</value>
+    <comment>{0} the range in words (no operators).</comment>
+  </data>
+  <data name="Dependencies_VersionSourceFiles" xml:space="preserve">
+    <value>its files</value>
+    <comment>Where a requirement comes from: the dependent mod's own files.</comment>
+  </data>
+  <data name="Dependencies_VersionSourceSpMod" xml:space="preserve">
+    <value>sp-mod</value>
+    <comment>Where a requirement comes from: sp-mod's held-back answer.</comment>
+  </data>
+  <data name="Dependencies_VersionDetailFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+    <comment>{0} what it needs, {1} where that comes from.</comment>
+  </data>
+  <data name="Dependencies_VersionOptionalFormat" xml:space="preserve">
+    <value>optional - {0}</value>
+    <comment>{0} the rest of the row.</comment>
+  </data>
+  <data name="Dependencies_InstallWideFormat" xml:space="preserve">
+    <value>SPT will load no server mods: {0}. Fix it below before starting the server.</value>
+    <comment>Banner at the top of Dependencies and Conflicts. {0} is a list of Dependencies_InstallWidePieceFormat joined by TextLists.</comment>
+  </data>
+  <data name="Dependencies_InstallWidePieceFormat" xml:space="preserve">
+    <value>{0} needs {1}</value>
+    <comment>{0} the server mod, {1} the dependency it needs.</comment>
+  </data>
   <data name="Dependencies_RowUpdate" xml:space="preserve">
     <value>Update</value>
     <comment>On a dependency's button, when a newer version is needed.</comment>
