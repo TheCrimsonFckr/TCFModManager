@@ -1010,7 +1010,7 @@
             VerticalScrollBarVisibility="Auto"
             Visibility="{Binding ShowGroups, Converter={StaticResource BoolToVis}}">
             <!-- Right margin keeps the overlay scrollbar off the rows' right-hand buttons and chevrons. -->
-            <ItemsControl Margin="0,0,14,0" Focusable="False" ItemsSource="{Binding Sections}">
+            <ItemsControl Margin="0,0,6,0" Focusable="False" ItemsSource="{Binding Sections}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:ModGroupSectionViewModel}">
                         <ui:Card
@@ -1261,7 +1261,7 @@
             VerticalScrollBarVisibility="Auto"
             Visibility="{Binding ShowList, Converter={StaticResource BoolToVis}}">
             <!-- Right margin keeps the overlay scrollbar off the rows' right-hand buttons and chevrons. -->
-            <ItemsControl Margin="0,0,14,0" Focusable="False" ItemsSource="{Binding ListItems}">
+            <ItemsControl Margin="0,0,6,0" Focusable="False" ItemsSource="{Binding ListItems}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:InstalledModCardViewModel}">
                         <!-- Tickable (OPEN-12 A1): a ticked row carries the accent edge, as a card does. -->
