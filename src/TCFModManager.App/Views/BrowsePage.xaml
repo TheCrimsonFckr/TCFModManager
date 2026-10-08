@@ -182,6 +182,7 @@
             <!-- OPEN-24 R7: the pinned sections, one dropdown each in panel order, on their own row under
                  the search bar and wrapping onto more as more are pinned. Gone with nothing pinned. -->
             <ItemsControl
+                Margin="0,4,0,0"
                 Focusable="False"
                 ItemsSource="{Binding FilterPins.Bar}"
                 ItemTemplate="{StaticResource PinnedFilterDropDown}"
