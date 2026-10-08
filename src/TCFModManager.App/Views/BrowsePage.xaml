@@ -20,6 +20,7 @@
     xmlns:app="clr-namespace:TCFModManager.App"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
+    xmlns:controls="clr-namespace:TCFModManager.App.Controls"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     ScrollViewer.CanContentScroll="False"
     Title="{loc:Str Nav_Browse}"
@@ -400,7 +401,8 @@
             SizeChanged="ResultsListBox_SizeChanged">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="{Binding Columns}" />
+                    <!-- Cards slide to a new row or column as the column count changes (OPEN-26). -->
+                    <controls:GlideUniformGrid Columns="{Binding Columns}" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemContainerStyle>

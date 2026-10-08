@@ -20,6 +20,7 @@
     xmlns:viewmodels="clr-namespace:TCFModManager.App.ViewModels"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
+    xmlns:controls="clr-namespace:TCFModManager.App.Controls"
     Title="{loc:Str Nav_Installed}"
     Loaded="InstalledPage_Loaded"
     Unloaded="InstalledPage_Unloaded"
@@ -870,7 +871,9 @@
                 </ItemsControl.Style>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel ItemWidth="{Binding CardWidth}" />
+                        <!-- Cards slide to a new row or column as the window narrows or widens, and as
+                             a filter or sort change moves them (OPEN-26). -->
+                        <controls:GlideWrapPanel ItemWidth="{Binding CardWidth}" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
