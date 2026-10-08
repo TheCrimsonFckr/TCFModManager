@@ -366,10 +366,11 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
+                    <!-- One width for every pinned dropdown, so picking a choice never resizes it and moves
+                         the ones after it. A label too long for it ends in "..." and shows whole on hover. -->
                     <ToggleButton
                         x:Name="Toggle"
-                        MinWidth="130"
-                        MaxWidth="320"
+                        Width="240"
                         VerticalAlignment="Center"
                         Style="{StaticResource FilterDropDownToggle}"
                         ToolTip="{Binding Label}"
@@ -394,21 +395,28 @@
                         IsOpen="{Binding IsChecked, ElementName=Toggle, Mode=TwoWay}"
                         PlacementTarget="{Binding ElementName=Toggle}"
                         Placement="Bottom"
+                        HorizontalOffset="-8"
                         StaysOpen="False"
                         AllowsTransparency="True">
-                        <Border Style="{StaticResource FilterDropDownPopup}" MinWidth="{Binding ActualWidth, ElementName=Toggle}">
-                            <ScrollViewer MaxHeight="420" VerticalScrollBarVisibility="Auto">
-                                <!-- A ContentControl, not a ContentPresenter: a ContentPresenter takes its Content
-                                     as its own DataContext, which would turn these two bindings on themselves. -->
-                                <ContentControl
-                                    Width="252"
-                                    Margin="12,8,12,4"
-                                    Focusable="False"
-                                    IsTabStop="False"
-                                    Content="{Binding Owner}"
-                                    behaviors:FilterPin.Body="{Binding Section}" />
-                            </ScrollViewer>
-                        </Border>
+                        <!-- The slide is on the inner Border, never on the popup's own child: Popup places
+                             itself by its child's RenderTransform, so the open-time -90 offset left the
+                             whole dropdown 90px below its button once the slide finished. The margin is
+                             room for the shadow; HorizontalOffset puts the surface back under the button. -->
+                        <Grid>
+                            <Border Margin="8,0,8,16" Style="{StaticResource FilterDropDownPopup}" MinWidth="{Binding ActualWidth, ElementName=Toggle}">
+                                <ScrollViewer MaxHeight="420" VerticalScrollBarVisibility="Auto">
+                                    <!-- A ContentControl, not a ContentPresenter: a ContentPresenter takes its Content
+                                         as its own DataContext, which would turn these two bindings on themselves. -->
+                                    <ContentControl
+                                        Width="252"
+                                        Margin="12,8,12,4"
+                                        Focusable="False"
+                                        IsTabStop="False"
+                                        Content="{Binding Owner}"
+                                        behaviors:FilterPin.Body="{Binding Section}" />
+                                </ScrollViewer>
+                            </Border>
+                        </Grid>
                     </Popup>
                 </Grid>
             </DataTemplate>
