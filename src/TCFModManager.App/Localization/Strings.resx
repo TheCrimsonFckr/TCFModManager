@@ -7957,6 +7957,14 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <value>Remove this filter</value>
     <comment>Tooltip on the X in a filter pill above the results.</comment>
   </data>
+  <data name="Filter_PinToolTip" xml:space="preserve">
+    <value>Pin this filter under the search bar</value>
+    <comment>Tooltip on the pin button of a Filters panel section header: pins that whole filter as a dropdown in the row under the search bar (OPEN-24).</comment>
+  </data>
+  <data name="Filter_UnpinToolTip" xml:space="preserve">
+    <value>Unpin this filter from under the search bar</value>
+    <comment>Tooltip on the filled pin button of a pinned Filters panel section: takes its dropdown out of the row under the search bar (OPEN-24).</comment>
+  </data>
   <data name="Filter_SectionGroupSort" xml:space="preserve">
     <value>Sort groups</value>
     <comment>Heading of the group order section in the Filters and view options panel (Installed, Groups view only).</comment>

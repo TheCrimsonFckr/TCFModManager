@@ -6934,6 +6934,12 @@
   <data name="Filter_PillRemoveToolTip" xml:space="preserve">
     <value>Убрать этот фильтр</value>
   </data>
+  <data name="Filter_PinToolTip" xml:space="preserve">
+    <value>Закрепить этот фильтр под строкой поиска</value>
+  </data>
+  <data name="Filter_UnpinToolTip" xml:space="preserve">
+    <value>Открепить этот фильтр от строки поиска</value>
+  </data>
   <data name="Filter_SectionGroupSort" xml:space="preserve">
     <value>Сортировка групп</value>
   </data>

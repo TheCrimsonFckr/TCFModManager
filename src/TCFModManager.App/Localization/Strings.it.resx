@@ -6589,6 +6589,12 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
   <data name="Filter_PillRemoveToolTip" xml:space="preserve">
     <value>Rimuovi questo filtro</value>
   </data>
+  <data name="Filter_PinToolTip" xml:space="preserve">
+    <value>Fissa questo filtro sotto la barra di ricerca</value>
+  </data>
+  <data name="Filter_UnpinToolTip" xml:space="preserve">
+    <value>Non fissare più questo filtro sotto la barra di ricerca</value>
+  </data>
   <data name="Filter_SectionGroupSort" xml:space="preserve">
     <value>Ordina gruppi</value>
   </data>

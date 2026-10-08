@@ -32,6 +32,9 @@ public partial class BrowseViewModel : LocalizedViewModel
     private Dictionary<string, InstalledModCardViewModel> _installedByGuid = new(StringComparer.OrdinalIgnoreCase);
     private Dictionary<string, InstalledModCardViewModel> _installedByName = new(StringComparer.OrdinalIgnoreCase);
 
+    // The Filters panel sections pinned under the search bar (OPEN-24).
+    public PinnedFilterSections<BrowseFilterSection> FilterPins { get; }
+
     public BrowseViewModel() : this(AppServices.SpModApi)
     {
     }
@@ -40,7 +43,9 @@ public partial class BrowseViewModel : LocalizedViewModel
     {
         _spModApi = spModApi;
 
-        _defaults = new SettingsService().Load().BrowseDefaults;
+        var settings = new SettingsService().Load();
+        _defaults = settings.BrowseDefaults;
+        FilterPins = new PinnedFilterSections<BrowseFilterSection>("Browse", settings, x => x.BrowsePinnedFilters, (x, v) => x.BrowsePinnedFilters = v);
 
         //
         // Backing fields rather than the properties: this is the page opening at its default, not

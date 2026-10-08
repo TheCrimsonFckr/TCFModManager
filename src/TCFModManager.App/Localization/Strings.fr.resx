@@ -6589,6 +6589,12 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
   <data name="Filter_PillRemoveToolTip" xml:space="preserve">
     <value>Retirer ce filtre</value>
   </data>
+  <data name="Filter_PinToolTip" xml:space="preserve">
+    <value>Épingler ce filtre sous la barre de recherche</value>
+  </data>
+  <data name="Filter_UnpinToolTip" xml:space="preserve">
+    <value>Ne plus épingler ce filtre sous la barre de recherche</value>
+  </data>
   <data name="Filter_SectionGroupSort" xml:space="preserve">
     <value>Trier les groupes</value>
   </data>

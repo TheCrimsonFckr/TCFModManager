@@ -6589,6 +6589,12 @@ Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie d
   <data name="Filter_PillRemoveToolTip" xml:space="preserve">
     <value>Diesen Filter entfernen</value>
   </data>
+  <data name="Filter_PinToolTip" xml:space="preserve">
+    <value>Diesen Filter unter der Suchleiste anheften</value>
+  </data>
+  <data name="Filter_UnpinToolTip" xml:space="preserve">
+    <value>Diesen Filter nicht mehr unter der Suchleiste anheften</value>
+  </data>
   <data name="Filter_SectionGroupSort" xml:space="preserve">
     <value>Gruppen sortieren</value>
   </data>

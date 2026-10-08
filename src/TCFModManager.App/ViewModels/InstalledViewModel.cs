@@ -462,6 +462,9 @@ public partial class InstalledViewModel : LocalizedViewModel
     // InstallFingerprint as of the last scan - see RefreshOnReturnAsync.
     private string? _fingerprint;
 
+    // The Filters panel sections pinned under the search bar (OPEN-24).
+    public PinnedFilterSections<InstalledFilterSection> FilterPins { get; }
+
     public InstalledViewModel()
     {
         _cardsFill.IsFillingChanged += (_, _) => IsCardsFilling = _cardsFill.IsFilling;
@@ -469,6 +472,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         var settings = new SettingsService().Load();
         _showListBadges = settings.ShowModListBadges;
         _defaults = settings.InstalledDefaults;
+        FilterPins = new PinnedFilterSections<InstalledFilterSection>("Installed", settings, x => x.InstalledPinnedFilters, (x, v) => x.InstalledPinnedFilters = v);
 
         //
         // Backing fields rather than the properties: this is the page opening at its default, not

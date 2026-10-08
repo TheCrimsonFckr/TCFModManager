@@ -158,6 +158,15 @@ public sealed class AppSettings
 
     public BrowsePageDefaults? BrowseDefaults { get; set; }
 
+    //
+    // The Filters panel sections pinned to the row under the search bar on each page (OPEN-24), by
+    // section name. A layout preference, not a filter: Clear filters, Restore my defaults and Save
+    // as default leave it alone. Null or empty means nothing pinned; see PinnedFilters.Normalise.
+    //
+    public List<string>? InstalledPinnedFilters { get; set; }
+
+    public List<string>? BrowsePinnedFilters { get; set; }
+
     // The sp-mod authors the user follows (OPEN-12 A4) - a Browse filter, a list in Options, and
     // notifications of their new mods alongside update notifications (R7).
     public List<FollowedAuthor> FollowedAuthors { get; set; } = [];

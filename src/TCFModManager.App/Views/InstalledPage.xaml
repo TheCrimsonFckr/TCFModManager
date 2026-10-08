@@ -19,6 +19,7 @@
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:viewmodels="clr-namespace:TCFModManager.App.ViewModels"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     Title="{loc:Str Nav_Installed}"
     Loaded="InstalledPage_Loaded"
     Unloaded="InstalledPage_Unloaded"
@@ -511,6 +512,7 @@
                              narrow panel, and what is set reads at a glance down the headers. -->
                         <Expander
                             Style="{StaticResource FilterSection}"
+                            behaviors:FilterPin.Section="UpdateStatus"
                             ToolTip="{loc:Str Installed_UpdateFilterToolTip}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionUpdateStatus}" TextWrapping="Wrap" />
@@ -520,6 +522,7 @@
 
                         <Expander
                             Style="{StaticResource FilterSection}"
+                            behaviors:FilterPin.Section="Enabled"
                             ToolTip="{loc:Str Installed_EnabledFilterToolTip}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionEnabled}" TextWrapping="Wrap" />
@@ -529,7 +532,7 @@
 
                         <!-- "Has dependencies" is answered from the dependency graph built off the scan, so unlike
                              Browse's it covers everything installed. -->
-                        <Expander Style="{StaticResource FilterSection}">
+                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Show">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_ShowHeader}" TextWrapping="Wrap" />
                             </Expander.Header>
@@ -551,6 +554,7 @@
                         <!-- Built from the categories actually present in this install. -->
                         <Expander
                             Style="{StaticResource FilterSection}"
+                            behaviors:FilterPin.Section="Category"
                             ToolTip="{loc:Str Installed_CategoryFilterToolTip}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionCategory}" TextWrapping="Wrap" />
@@ -561,6 +565,7 @@
                         <!-- Rebuilt from the group store whenever groups change. -->
                         <Expander
                             Style="{StaticResource FilterSection}"
+                            behaviors:FilterPin.Section="Group"
                             ToolTip="{loc:Str Installed_GroupFilterToolTip}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionGroup}" TextWrapping="Wrap" />
@@ -570,6 +575,7 @@
 
                         <Expander
                             Style="{StaticResource FilterSection}"
+                            behaviors:FilterPin.Section="Sort"
                             ToolTip="{loc:Str Common_SortToolTip}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionSort}" TextWrapping="Wrap" />
@@ -580,6 +586,7 @@
                         <!-- How the group sections are ordered - Groups view only. -->
                         <Expander
                             Style="{StaticResource FilterSection}"
+                            behaviors:FilterPin.Section="GroupSort"
                             Visibility="{Binding ShowGroups, Converter={StaticResource BoolToVis}}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionGroupSort}" TextWrapping="Wrap" />
@@ -590,6 +597,7 @@
                         <!-- Pagination is Cards only. The options are plain ints, hence the template. -->
                         <Expander
                             Style="{StaticResource FilterSection}"
+                            behaviors:FilterPin.Section="PageSize"
                             ToolTip="{loc:Str Common_PageSizeToolTip}"
                             Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
                             <Expander.Header>

@@ -133,7 +133,7 @@
                              narrow panel, and what is set reads at a glance down the headers. -->
                         <!-- Which SPT release lines to show mods for; none ticked shows every line. Moved
                              here from the row (Chris, 2026-10-06), so its dropdown went with it. -->
-                        <Expander Style="{StaticResource FilterSection}" ToolTip="{loc:Str Browse_SptVersionFilterToolTip}">
+                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="SptVersion" ToolTip="{loc:Str Browse_SptVersionFilterToolTip}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionSptVersion}" TextWrapping="Wrap" />
                             </Expander.Header>
@@ -151,7 +151,7 @@
                         </Expander>
 
                         <!-- OPEN-12 F19: what the search box looks at. -->
-                        <Expander Style="{StaticResource FilterSection}" ToolTip="{loc:Str Browse_SearchScopeToolTip}">
+                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="SearchIn" ToolTip="{loc:Str Browse_SearchScopeToolTip}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionSearchIn}" TextWrapping="Wrap" />
                             </Expander.Header>
@@ -159,7 +159,7 @@
                         </Expander>
 
                         <!-- Everything that describes the mod itself: Fika, ads, dependencies, addons, installed. -->
-                        <Expander Style="{StaticResource FilterSection}">
+                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Show">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_ShowHeader}" TextWrapping="Wrap" />
                             </Expander.Header>
@@ -180,6 +180,7 @@
 
                         <Expander
                             Style="{StaticResource FilterSection}"
+                            behaviors:FilterPin.Section="Category"
                             ToolTip="{loc:Str Browse_CategoryFilterToolTip}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionCategory}" TextWrapping="Wrap" />
@@ -189,6 +190,7 @@
 
                         <Expander
                             Style="{StaticResource FilterSection}"
+                            behaviors:FilterPin.Section="Featured"
                             ToolTip="{loc:Str Browse_FeaturedFilterToolTip}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionFeatured}" TextWrapping="Wrap" />
@@ -197,7 +199,7 @@
                         </Expander>
 
                         <!-- OPEN-12 F19: when the mod was first published, and when it last had a release. -->
-                        <Expander Style="{StaticResource FilterSection}" ToolTip="{loc:Str Browse_PublishedFilterToolTip}">
+                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Published" ToolTip="{loc:Str Browse_PublishedFilterToolTip}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionPublished}" TextWrapping="Wrap" />
                             </Expander.Header>
@@ -213,7 +215,7 @@
                             </StackPanel>
                         </Expander>
 
-                        <Expander Style="{StaticResource FilterSection}" ToolTip="{loc:Str Browse_UpdatedFilterToolTip}">
+                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Updated" ToolTip="{loc:Str Browse_UpdatedFilterToolTip}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionUpdated}" TextWrapping="Wrap" />
                             </Expander.Header>
@@ -229,7 +231,7 @@
                             </StackPanel>
                         </Expander>
 
-                        <Expander Style="{StaticResource FilterSection}" ToolTip="{loc:Str Common_SortToolTip}">
+                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Sort" ToolTip="{loc:Str Common_SortToolTip}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionSort}" TextWrapping="Wrap" />
                             </Expander.Header>
@@ -239,6 +241,7 @@
                         <!-- The options are plain ints and "12" says nothing on its own, hence the template. -->
                         <Expander
                             Style="{StaticResource FilterSection}"
+                            behaviors:FilterPin.Section="PageSize"
                             ToolTip="{loc:Str Common_PageSizeToolTip}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionPageSize}" TextWrapping="Wrap" />

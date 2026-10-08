@@ -2159,6 +2159,8 @@ internal static class Strings
     internal static string Filter_SectionFeatured => LocalizationService.Get("Filter_SectionFeatured");
     internal static string Filter_PillFormat => LocalizationService.Get("Filter_PillFormat");
     internal static string Filter_PillRemoveToolTip => LocalizationService.Get("Filter_PillRemoveToolTip");
+    internal static string Filter_PinToolTip => LocalizationService.Get("Filter_PinToolTip");
+    internal static string Filter_UnpinToolTip => LocalizationService.Get("Filter_UnpinToolTip");
     internal static string Filter_SectionGroupSort => LocalizationService.Get("Filter_SectionGroupSort");
     internal static string Filter_SectionPublished => LocalizationService.Get("Filter_SectionPublished");
     internal static string Filter_SectionUpdated => LocalizationService.Get("Filter_SectionUpdated");
