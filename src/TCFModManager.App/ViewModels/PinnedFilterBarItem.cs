@@ -18,4 +18,9 @@ public sealed partial class PinnedFilterBarItem(string section, object owner, IC
 
     [ObservableProperty]
     private string _label = string.Empty;
+
+    // False while the page's current view has no use for the section (Installed's Sort groups
+    // outside Groups view, Per page outside Cards), the same as its panel section.
+    [ObservableProperty]
+    private bool _isShown = true;
 }

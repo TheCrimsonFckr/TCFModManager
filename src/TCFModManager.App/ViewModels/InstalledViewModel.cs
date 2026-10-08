@@ -196,7 +196,45 @@ public partial class InstalledViewModel : LocalizedViewModel
     {
         base.OnPropertyChanged(e);
         if (e.PropertyName is null or "" or nameof(MoreFiltersLabel)) RebuildActiveFilters();
+        FilterPins?.RefreshLabels();
     }
+
+    //
+    // The text on a pinned section's dropdown under the search bar (OPEN-24): the section and what it
+    // is set to, unset values included - "Update status: Any update status", "Group: All groups".
+    // Null while the constructor is still filling the filters in.
+    //
+    private string? PinnedLabel(InstalledFilterSection section)
+    {
+        if (SelectedUpdateFilter is null || SelectedEnabledFilter is null || SelectedCategory is null
+            || SelectedGroupFilter is null || SelectedSortOption is null || SelectedGroupSortOption is null) return null;
+
+        return section switch
+        {
+            InstalledFilterSection.UpdateStatus => Pill(Strings.Filter_SectionUpdateStatus, SelectedUpdateFilter),
+            InstalledFilterSection.Enabled => Pill(Strings.Filter_SectionEnabled, SelectedEnabledFilter),
+            InstalledFilterSection.Show => Pill(Strings.Filter_ShowHeader, AttributeOptions.Where(o => o.IsSelected).ToList() switch
+            {
+                [] => Strings.Filter_ShowNone,
+                [var one] => one.Label,
+                var many => LocalizationService.Text(Strings.Filter_SelectedCountFormat, many.Count),
+            }),
+            InstalledFilterSection.Category => Pill(Strings.Filter_SectionCategory, SelectedCategory),
+            InstalledFilterSection.Group => Pill(Strings.Filter_SectionGroup, SelectedGroupFilter),
+            InstalledFilterSection.Sort => Pill(Strings.Filter_SectionSort, SelectedSortOption),
+            InstalledFilterSection.GroupSort => Pill(Strings.Filter_SectionGroupSort, SelectedGroupSortOption),
+            InstalledFilterSection.PageSize => LocalizationService.Text(Strings.Common_PageSizeFormat, PageSize),
+            _ => null,
+        };
+    }
+
+    // The same rule the panel applies to these two sections.
+    private bool PinnedShown(InstalledFilterSection section) => section switch
+    {
+        InstalledFilterSection.GroupSort => ShowGroups,
+        InstalledFilterSection.PageSize => ShowCards,
+        _ => true,
+    };
 
     private static string Pill(string section, object? value) =>
         LocalizationService.Text(Strings.Filter_PillFormat, section, value?.ToString() ?? string.Empty);
@@ -472,7 +510,6 @@ public partial class InstalledViewModel : LocalizedViewModel
         var settings = new SettingsService().Load();
         _showListBadges = settings.ShowModListBadges;
         _defaults = settings.InstalledDefaults;
-        FilterPins = new PinnedFilterSections<InstalledFilterSection>("Installed", settings, x => x.InstalledPinnedFilters, (x, v) => x.InstalledPinnedFilters = v, this, _ => null);
 
         //
         // Backing fields rather than the properties: this is the page opening at its default, not
@@ -534,6 +571,10 @@ public partial class InstalledViewModel : LocalizedViewModel
             if (!_hasScanned || ScanCommand.IsRunning) return;
             await ScanCommand.ExecuteAsync(null);
         };
+
+        // Last, so every filter the dropdown labels read is in place.
+        FilterPins = new PinnedFilterSections<InstalledFilterSection>(
+            "Installed", settings, x => x.InstalledPinnedFilters, (x, v) => x.InstalledPinnedFilters = v, this, PinnedLabel, PinnedShown);
 
         RebuildActiveFilters();
     }

@@ -285,6 +285,10 @@ public partial class InstalledPage : Page
         // The Filters panel scrolls itself when the window is too short for it.
         if (_filters.Contains(e.OriginalSource)) return;
 
+        // So does a pinned filter's dropdown (OPEN-24): its own window, not the page's.
+        if (e.OriginalSource is Visual source && PresentationSource.FromVisual(source) is { } from
+            && !ReferenceEquals(from, PresentationSource.FromVisual(this))) return;
+
         var scroller = ViewModel.ViewMode switch
         {
             InstalledViewMode.Groups => GroupsScrollViewer,

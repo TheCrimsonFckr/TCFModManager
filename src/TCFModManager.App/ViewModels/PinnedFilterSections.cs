@@ -23,10 +23,12 @@ public sealed partial class PinnedFilterSections<TSection> : ObservableObject
     private readonly Action<AppSettings, List<string>?> _write;
     private readonly object _owner;
     private readonly Func<TSection, string?> _label;
+    private readonly Func<TSection, bool>? _shown;
 
     //
     // `label` gives the text on a section's dropdown in the bar; it may return null while the page
-    // view model is still being built, and the label is filled in by the next RefreshLabels.
+    // view model is still being built, and the label is filled in by the next RefreshLabels. `shown`,
+    // when given, hides a section's dropdown while the page's panel hides that section.
     //
     public PinnedFilterSections(
         string page,
@@ -34,12 +36,14 @@ public sealed partial class PinnedFilterSections<TSection> : ObservableObject
         Func<AppSettings, List<string>?> read,
         Action<AppSettings, List<string>?> write,
         object owner,
-        Func<TSection, string?> label)
+        Func<TSection, string?> label,
+        Func<TSection, bool>? shown = null)
     {
         _page = page;
         _write = write;
         _owner = owner;
         _label = label;
+        _shown = shown;
         _names = PinnedFilters.Normalise(read(settings), Known);
         SyncBar();
     }
@@ -50,13 +54,15 @@ public sealed partial class PinnedFilterSections<TSection> : ObservableObject
     //
     public ObservableCollection<PinnedFilterBarItem> Bar { get; } = [];
 
-    // Rewrites each dropdown's label from the page's current filters. Cheap; the page calls it
-    // whenever any of its properties change.
+    // Rewrites each dropdown's label from the page's current filters, and whether it shows. Cheap;
+    // the page calls it whenever any of its properties change.
     public void RefreshLabels()
     {
         foreach (var item in Bar)
         {
-            if (_label(Enum.Parse<TSection>(item.Section)) is { } text && text != item.Label) item.Label = text;
+            var section = Enum.Parse<TSection>(item.Section);
+            if (_label(section) is { } text && text != item.Label) item.Label = text;
+            if (_shown is not null) item.IsShown = _shown(section);
         }
     }
 

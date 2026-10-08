@@ -34,6 +34,62 @@
         <converters:BoolToButtonAppearanceConverter x:Key="BoolToAppearance" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
 
+        <!--
+            Each Filters panel section's body, kept here rather than inside its Expander so the same
+            controls can also open from the section's pinned dropdown under the search bar (OPEN-24).
+            The key is FilterBody.<section>, which is how Behaviors/FilterPin.Body finds it; the
+            content is always this page's view model.
+        -->
+        <DataTemplate x:Key="FilterBody.UpdateStatus">
+            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding UpdateFilterOptions}" SelectedItem="{Binding SelectedUpdateFilter}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="FilterBody.Enabled">
+            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding EnabledFilterOptions}" SelectedItem="{Binding SelectedEnabledFilter}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="FilterBody.Show">
+            <ItemsControl ItemsSource="{Binding AttributeOptions}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox
+                            Margin="0,2"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                            IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                            ToolTip="{Binding ToolTip}">
+                            <TextBlock Text="{Binding Label}" TextWrapping="Wrap" />
+                        </CheckBox>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FilterBody.Category">
+            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding CategoryOptions}" SelectedItem="{Binding SelectedCategory}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="FilterBody.Group">
+            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding GroupFilterOptions}" SelectedItem="{Binding SelectedGroupFilter}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="FilterBody.Sort">
+            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSortOption}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="FilterBody.GroupSort">
+            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding GroupSortOptions}" SelectedItem="{Binding SelectedGroupSortOption}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="FilterBody.PageSize">
+            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding PageSizeOptions}" SelectedItem="{Binding PageSize}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding StringFormat={loc:Str Common_PageSizeFormat}}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DataTemplate>
+
         <!-- One chip per mod list a mod belongs to, shared by all three views so they can't drift
              apart. Membership comes from ModListMembership, which runs the real planner, so a chip
              here and what applying that list would do can't disagree. ShowLists folds in the
@@ -426,48 +482,64 @@
              narrows the list unseen. Save as default and Clear filters are inside the panel with what
              they act on.
         -->
-        <DockPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,8">
-            <!-- A display preference rather than a filter: it changes what each row draws, not which
-                 rows are shown, so Clear filters leaves it alone and it is remembered between sessions. -->
-            <ui:ToggleSwitch
-                DockPanel.Dock="Right"
-                VerticalAlignment="Center"
-                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                ToolTip="{loc:Str Installed_ListBadgesToolTip}"
-                IsChecked="{Binding ShowListBadges}"
-                OnContent="{loc:Str Installed_ListBadges}"
-                OffContent="{loc:Str Installed_ListBadges}" />
-
-            <WrapPanel>
-                <ui:TextBox
-                    Width="320"
-                    Margin="0,0,8,4"
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,8">
+            <DockPanel>
+                <!-- A display preference rather than a filter: it changes what each row draws, not which
+                     rows are shown, so Clear filters leaves it alone and it is remembered between sessions. -->
+                <ui:ToggleSwitch
+                    DockPanel.Dock="Right"
                     VerticalAlignment="Center"
-                    PlaceholderText="{loc:Str Common_SearchPlaceholder}"
-                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    ToolTip="{loc:Str Installed_ListBadgesToolTip}"
+                    IsChecked="{Binding ShowListBadges}"
+                    OnContent="{loc:Str Installed_ListBadges}"
+                    OffContent="{loc:Str Installed_ListBadges}" />
 
-                <ToggleButton
-                    x:Name="MoreFiltersToggle"
-                    MinWidth="130"
-                    Margin="0,0,8,4"
-                    VerticalAlignment="Center"
-                    ToolTip="{loc:Str Filter_MoreToolTip}"
-                    Style="{StaticResource FilterDropDownToggle}">
-                    <StackPanel Orientation="Horizontal">
-                        <ui:SymbolIcon
-                            Margin="0,0,8,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Symbol="Filter24" />
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Text="{Binding MoreFiltersLabel}" />
-                    </StackPanel>
-                </ToggleButton>
-            </WrapPanel>
-        </DockPanel>
+                <WrapPanel>
+                    <ui:TextBox
+                        Width="320"
+                        Margin="0,0,8,4"
+                        VerticalAlignment="Center"
+                        PlaceholderText="{loc:Str Common_SearchPlaceholder}"
+                        Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <ToggleButton
+                        x:Name="MoreFiltersToggle"
+                        MinWidth="130"
+                        Margin="0,0,8,4"
+                        VerticalAlignment="Center"
+                        ToolTip="{loc:Str Filter_MoreToolTip}"
+                        Style="{StaticResource FilterDropDownToggle}">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon
+                                Margin="0,0,8,0"
+                                VerticalAlignment="Center"
+                                FontSize="14"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Symbol="Filter24" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{Binding MoreFiltersLabel}" />
+                        </StackPanel>
+                    </ToggleButton>
+                </WrapPanel>
+            </DockPanel>
+
+            <!-- OPEN-24 R7: the pinned sections, one dropdown each in panel order, on their own row under
+                 the search bar and wrapping onto more as more are pinned. Gone with nothing pinned. -->
+            <ItemsControl
+                Focusable="False"
+                ItemsSource="{Binding FilterPins.Bar}"
+                ItemTemplate="{StaticResource PinnedFilterDropDown}"
+                Visibility="{Binding FilterPins.Any, Converter={StaticResource BoolToVis}}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </StackPanel>
 
         <!--
              The rest of the filters, opened and closed by Filters in the row above. On a wide page it
@@ -513,85 +585,78 @@
                         <Expander
                             Style="{StaticResource FilterSection}"
                             behaviors:FilterPin.Section="UpdateStatus"
-                            ToolTip="{loc:Str Installed_UpdateFilterToolTip}">
+                            ToolTip="{loc:Str Installed_UpdateFilterToolTip}"
+                            Content="{Binding}"
+                            ContentTemplate="{StaticResource FilterBody.UpdateStatus}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionUpdateStatus}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding UpdateFilterOptions}" SelectedItem="{Binding SelectedUpdateFilter}" />
                         </Expander>
 
                         <Expander
                             Style="{StaticResource FilterSection}"
                             behaviors:FilterPin.Section="Enabled"
-                            ToolTip="{loc:Str Installed_EnabledFilterToolTip}">
+                            ToolTip="{loc:Str Installed_EnabledFilterToolTip}"
+                            Content="{Binding}"
+                            ContentTemplate="{StaticResource FilterBody.Enabled}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionEnabled}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding EnabledFilterOptions}" SelectedItem="{Binding SelectedEnabledFilter}" />
                         </Expander>
 
                         <!-- "Has dependencies" is answered from the dependency graph built off the scan, so unlike
                              Browse's it covers everything installed. -->
-                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Show">
+                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Show" Content="{Binding}" ContentTemplate="{StaticResource FilterBody.Show}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_ShowHeader}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <ItemsControl ItemsSource="{Binding AttributeOptions}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <CheckBox
-                                            Margin="0,2"
-                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                            IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                            ToolTip="{Binding ToolTip}">
-                                            <TextBlock Text="{Binding Label}" TextWrapping="Wrap" />
-                                        </CheckBox>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
                         </Expander>
 
                         <!-- Built from the categories actually present in this install. -->
                         <Expander
                             Style="{StaticResource FilterSection}"
                             behaviors:FilterPin.Section="Category"
-                            ToolTip="{loc:Str Installed_CategoryFilterToolTip}">
+                            ToolTip="{loc:Str Installed_CategoryFilterToolTip}"
+                            Content="{Binding}"
+                            ContentTemplate="{StaticResource FilterBody.Category}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionCategory}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding CategoryOptions}" SelectedItem="{Binding SelectedCategory}" />
                         </Expander>
 
                         <!-- Rebuilt from the group store whenever groups change. -->
                         <Expander
                             Style="{StaticResource FilterSection}"
                             behaviors:FilterPin.Section="Group"
-                            ToolTip="{loc:Str Installed_GroupFilterToolTip}">
+                            ToolTip="{loc:Str Installed_GroupFilterToolTip}"
+                            Content="{Binding}"
+                            ContentTemplate="{StaticResource FilterBody.Group}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionGroup}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding GroupFilterOptions}" SelectedItem="{Binding SelectedGroupFilter}" />
                         </Expander>
 
                         <Expander
                             Style="{StaticResource FilterSection}"
                             behaviors:FilterPin.Section="Sort"
-                            ToolTip="{loc:Str Common_SortToolTip}">
+                            ToolTip="{loc:Str Common_SortToolTip}"
+                            Content="{Binding}"
+                            ContentTemplate="{StaticResource FilterBody.Sort}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionSort}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSortOption}" />
                         </Expander>
 
                         <!-- How the group sections are ordered - Groups view only. -->
                         <Expander
                             Style="{StaticResource FilterSection}"
                             behaviors:FilterPin.Section="GroupSort"
-                            Visibility="{Binding ShowGroups, Converter={StaticResource BoolToVis}}">
+                            Visibility="{Binding ShowGroups, Converter={StaticResource BoolToVis}}"
+                            Content="{Binding}"
+                            ContentTemplate="{StaticResource FilterBody.GroupSort}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionGroupSort}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding GroupSortOptions}" SelectedItem="{Binding SelectedGroupSortOption}" />
                         </Expander>
 
                         <!-- Pagination is Cards only. The options are plain ints, hence the template. -->
@@ -599,17 +664,12 @@
                             Style="{StaticResource FilterSection}"
                             behaviors:FilterPin.Section="PageSize"
                             ToolTip="{loc:Str Common_PageSizeToolTip}"
-                            Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}">
+                            Visibility="{Binding ShowCards, Converter={StaticResource BoolToVis}}"
+                            Content="{Binding}"
+                            ContentTemplate="{StaticResource FilterBody.PageSize}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionPageSize}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding PageSizeOptions}" SelectedItem="{Binding PageSize}">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding StringFormat={loc:Str Common_PageSizeFormat}}" />
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
                         </Expander>
 
                         <!-- Saving the defaults from the page itself rather than restating them in
