@@ -4,6 +4,8 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
+using TCFModManager.App.Behaviors;
+
 namespace TCFModManager.App.Controls;
 
 //
@@ -43,8 +45,6 @@ internal sealed class LayoutGlide
     private readonly Panel _panel;
     private Dictionary<UIElement, Placement> _last = new();
     private readonly Dictionary<UIElement, TranslateTransform> _transforms = new();
-    private readonly Dictionary<TranslateTransform, Run> _runs = new();
-    private bool _ticking;
     private bool _fresh = true;
 
     public LayoutGlide(Panel panel)
@@ -86,7 +86,7 @@ internal sealed class LayoutGlide
             // running has it from there - measured from its new slot.
             var dx = before.Origin.X + transform.X - placement.Origin.X;
             var dy = before.Origin.Y + transform.Y - placement.Origin.Y;
-            Start(transform, dx, dy, TimeSpan.Zero, Motion.Glide.TimeSpan);
+            Start(transform, dx, dy);
         }
 
         arrivals.Sort((a, b) => a.Placement.Row != b.Placement.Row
@@ -101,10 +101,7 @@ internal sealed class LayoutGlide
 
         // Children that have gone take their transforms with them.
         foreach (var gone in _transforms.Keys.Where(child => !now.ContainsKey(child)).ToList())
-        {
-            _runs.Remove(_transforms[gone]);
             _transforms.Remove(gone);
-        }
 
         _last = now;
         _fresh = false;
@@ -151,64 +148,22 @@ internal sealed class LayoutGlide
     }
 
     //
-    // Moves are driven frame by frame here rather than by a DoubleAnimation, so every offset can be
-    // snapped to a whole device pixel (Chris, 2026-10-08: text and icons looked jagged while the
-    // window was dragged). The windows use TextFormattingMode="Display", which lays glyphs on the
-    // pixel grid - a RenderTransform at a fractional offset then shifts that crisp text between
-    // pixels, and it shimmers and steps. Whole-pixel offsets keep it on the grid all the way.
+    // Every offset lands on a whole device pixel (SnappedDoubleAnimation), so text and icons stay on
+    // the pixel grid while they move (Chris, 2026-10-08: jagged while the window was dragged). The
+    // windows use TextFormattingMode="Display", and a fractional RenderTransform shifts that crisp
+    // text between pixels every frame. Timeline animations rather than a per-frame handler so they
+    // run at the display's refresh rate - see Motion.ApplyFrameRate.
     //
-    private void Start(TranslateTransform transform, double fromX, double fromY, TimeSpan delay, TimeSpan duration)
+    private void Start(TranslateTransform transform, double fromX, double fromY)
     {
-        transform.BeginAnimation(TranslateTransform.XProperty, null);
-        transform.BeginAnimation(TranslateTransform.YProperty, null);
-
-        var run = new Run(fromX, fromY, delay, duration);
-        _runs[transform] = run;
-        Apply(transform, run, 0);
-
-        if (_ticking) return;
-        _ticking = true;
-        CompositionTarget.Rendering += OnRendering;
-    }
-
-    private void OnRendering(object? sender, EventArgs e)
-    {
-        var now = e is RenderingEventArgs rendering ? rendering.RenderingTime : TimeSpan.Zero;
-
-        foreach (var (transform, run) in _runs.ToList())
-        {
-            run.Started ??= now;
-            var elapsed = now - run.Started.Value - run.Delay;
-            var progress = elapsed <= TimeSpan.Zero ? 0
-                : run.Duration <= TimeSpan.Zero ? 1
-                : Math.Min(1, elapsed.TotalMilliseconds / run.Duration.TotalMilliseconds);
-
-            Apply(transform, run, progress);
-            if (progress >= 1) _runs.Remove(transform);
-        }
-
-        if (_runs.Count > 0) return;
-        _ticking = false;
-        CompositionTarget.Rendering -= OnRendering;
-    }
-
-    private void Apply(TranslateTransform transform, Run run, double progress)
-    {
-        var remaining = 1 - Motion.GlideEase.Ease(progress);
-        transform.X = Snap(run.FromX * remaining);
-        transform.Y = Snap(run.FromY * remaining);
-    }
-
-    private double Snap(double value)
-    {
-        var scale = VisualTreeHelper.GetDpi(_panel).DpiScaleY;
-        return scale > 0 ? Math.Round(value * scale) / scale : Math.Round(value);
+        transform.BeginAnimation(TranslateTransform.XProperty, Snapped(fromX, 0, Motion.Glide, TimeSpan.Zero, FillBehavior.HoldEnd));
+        transform.BeginAnimation(TranslateTransform.YProperty, Snapped(fromY, 0, Motion.Glide, TimeSpan.Zero, FillBehavior.HoldEnd));
     }
 
     //
     // Held hidden until its turn, then faded up and risen into its slot. FillBehavior.Stop hands
-    // Opacity back to 1 when the fade ends, so nothing is left pinned. The rise goes through Start,
-    // so it is pixel-snapped like a glide.
+    // Opacity and Y back to their resting values (1 and 0) when it ends, so nothing is left pinned.
+    // The rise only begins at its turn; until then the child sits in its slot, but at opacity 0.
     //
     private void FadeIn(UIElement child, TranslateTransform transform, TimeSpan delay)
     {
@@ -219,25 +174,31 @@ internal sealed class LayoutGlide
         opacity.KeyFrames.Add(new EasingDoubleKeyFrame(1, KeyTime.FromTimeSpan(delay + duration), Motion.GlideEase));
         child.BeginAnimation(UIElement.OpacityProperty, opacity);
 
-        Start(transform, 0, Rise, delay, duration);
+        transform.BeginAnimation(TranslateTransform.XProperty, null);
+        transform.BeginAnimation(TranslateTransform.YProperty, Snapped(Rise, 0, Motion.FadeIn, delay, FillBehavior.Stop));
     }
 
-    private void Stop(UIElement child, TranslateTransform transform)
+    private SnappedDoubleAnimation Snapped(double from, double to, Duration duration, TimeSpan delay, FillBehavior fill) =>
+        new()
+        {
+            From = from,
+            To = to,
+            Duration = Motion.Of(duration),
+            BeginTime = delay,
+            FillBehavior = fill,
+            EasingFunction = Motion.GlideEase,
+            Scale = VisualTreeHelper.GetDpi(_panel).DpiScaleY,
+        };
+
+    private static void Stop(UIElement child, TranslateTransform transform)
     {
         child.BeginAnimation(UIElement.OpacityProperty, null);
-        _runs.Remove(transform);
+        if (transform.X == 0 && transform.Y == 0 && !transform.HasAnimatedProperties) return;
+
+        transform.BeginAnimation(TranslateTransform.XProperty, null);
+        transform.BeginAnimation(TranslateTransform.YProperty, null);
         transform.X = 0;
         transform.Y = 0;
-    }
-
-    // One move in progress: where it started from (relative to its slot), and when.
-    private sealed class Run(double fromX, double fromY, TimeSpan delay, TimeSpan duration)
-    {
-        public double FromX { get; } = fromX;
-        public double FromY { get; } = fromY;
-        public TimeSpan Delay { get; } = delay;
-        public TimeSpan Duration { get; } = duration;
-        public TimeSpan? Started { get; set; }
     }
 
     private readonly record struct Placement(Point Origin, int Row, int Column);
