@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Wpf.Ui.Controls;
@@ -107,7 +108,15 @@ internal static class ExpanderMotion
             return;
         }
 
-        var animation = new DoubleAnimation(from, to, Motion.Of(Motion.Resize)) { EasingFunction = Motion.GlideEase };
+        // Snapped to whole pixels, so the cards and rows it pushes never sit between them mid-grow.
+        var animation = new SnappedDoubleAnimation
+        {
+            From = from,
+            To = to,
+            Duration = Motion.Of(Motion.Resize),
+            EasingFunction = Motion.GlideEase,
+            Scale = VisualTreeHelper.GetDpi(card).DpiScaleY,
+        };
         animation.Completed += (_, _) =>
         {
             if ((int)card.GetValue(GenerationProperty) == generation) Release(card);
