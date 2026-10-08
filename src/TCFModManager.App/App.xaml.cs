@@ -50,6 +50,9 @@ public partial class App : Application
         // moment after it opens. Following the OS needs a real window and is set up in MainWindow.
         AppTheme.ApplyStored();
 
+        // Every CardExpander grows and shrinks as it opens and closes (OPEN-26 S3).
+        ExpanderMotion.Register();
+
         // TEMPORARY, ADDED IN v1.5.0 - DELETE WHEN THE APP LEAVES BETA, along with the method
         // itself. Carries a pre-v1.5.0 LegacyConfigs folder from beside the exe into Data\. A no-op
         // on every launch after the first, and on any install that never had one.
