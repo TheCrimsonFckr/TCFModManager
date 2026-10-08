@@ -72,7 +72,8 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Browse_Filters_Step1,
                     () => Strings.Nav_Browse, () => Strings.Nav_Installed, () => Strings.Filter_More),
                 Step(() => Strings.Help_Browse_Filters_Step2),
-                Step(() => Strings.Help_Browse_Filters_Step3, () => Strings.Common_ClearFilters))
+                Step(() => Strings.Help_Browse_Filters_Step3, () => Strings.Common_ClearFilters),
+                Step(() => Strings.Help_Browse_Filters_Step4))
                 .WithNote(() => Strings.Help_Browse_Filters_Note,
                     () => Strings.Common_SaveAsDefault, () => Strings.Common_RestoreDefaults, () => Strings.Common_ClearFilters)
                 .WithKeywords(() => Strings.Help_Browse_Filters_Keywords),

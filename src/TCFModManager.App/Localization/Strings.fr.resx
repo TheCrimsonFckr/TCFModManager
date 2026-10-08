@@ -6793,11 +6793,14 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
   <data name="Help_Browse_Filters_Step3" xml:space="preserve">
     <value>Chaque filtre défini apparaît sous forme de pastille au-dessus de la liste. Cliquez sur le X d'une pastille pour retirer ce filtre, ou sur {0} pour tous les retirer.</value>
   </data>
+  <data name="Help_Browse_Filters_Step4" xml:space="preserve">
+    <value>Cliquez sur l'épingle à droite du nom d'une section pour la garder en liste déroulante sous la barre de recherche et la changer sans ouvrir le panneau. Cliquez de nouveau sur l'épingle, ou faites un clic droit sur la liste, pour la désépingler.</value>
+  </data>
   <data name="Help_Browse_Filters_Note" xml:space="preserve">
     <value>{0} fait s'ouvrir la page telle qu'elle est réglée maintenant, et {1} rétablit ces réglages quand vous voulez. {2} revient toujours aux réglages d'origine de l'application.</value>
   </data>
   <data name="Help_Browse_Filters_Keywords" xml:space="preserve">
-    <value>filtres, trier, pastilles, effacer les filtres, options d'affichage, par page</value>
+    <value>filtres, trier, pastilles, effacer les filtres, options d'affichage, par page, épingler, filtres épinglés</value>
   </data>
   <data name="Help_Browse_Dates_Title" xml:space="preserve">
     <value>Trouver des mods nouveaux ou mis à jour récemment</value>

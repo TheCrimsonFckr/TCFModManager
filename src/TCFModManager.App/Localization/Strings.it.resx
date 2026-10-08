@@ -6793,11 +6793,14 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
   <data name="Help_Browse_Filters_Step3" xml:space="preserve">
     <value>Ogni filtro impostato compare come etichetta sopra l'elenco. Premi la X di un'etichetta per togliere quel filtro, oppure {0} per toglierli tutti.</value>
   </data>
+  <data name="Help_Browse_Filters_Step4" xml:space="preserve">
+    <value>Fai clic sulla puntina a destra del nome di una sezione per tenerla come menu a tendina sotto la barra di ricerca e cambiarla senza aprire il pannello. Fai di nuovo clic sulla puntina, o clic destro sul menu, per toglierla.</value>
+  </data>
   <data name="Help_Browse_Filters_Note" xml:space="preserve">
     <value>{0} fa aprire la pagina così com'è impostata ora, e {1} ripristina quelle impostazioni quando vuoi. {2} torna sempre alle impostazioni predefinite dell'app.</value>
   </data>
   <data name="Help_Browse_Filters_Keywords" xml:space="preserve">
-    <value>filtri, ordinare, etichette, azzera filtri, opzioni di visualizzazione, per pagina</value>
+    <value>filtri, ordinare, etichette, azzera filtri, opzioni di visualizzazione, per pagina, fissare, filtri fissati</value>
   </data>
   <data name="Help_Browse_Dates_Title" xml:space="preserve">
     <value>Trovare mod nuovi o aggiornati di recente</value>

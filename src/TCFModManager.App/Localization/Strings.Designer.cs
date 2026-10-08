@@ -2227,6 +2227,7 @@ internal static class Strings
     internal static string Help_Browse_Filters_Step1 => LocalizationService.Get("Help_Browse_Filters_Step1");
     internal static string Help_Browse_Filters_Step2 => LocalizationService.Get("Help_Browse_Filters_Step2");
     internal static string Help_Browse_Filters_Step3 => LocalizationService.Get("Help_Browse_Filters_Step3");
+    internal static string Help_Browse_Filters_Step4 => LocalizationService.Get("Help_Browse_Filters_Step4");
     internal static string Help_Browse_Filters_Note => LocalizationService.Get("Help_Browse_Filters_Note");
     internal static string Help_Browse_Filters_Keywords => LocalizationService.Get("Help_Browse_Filters_Keywords");
     internal static string Help_Browse_Dates_Title => LocalizationService.Get("Help_Browse_Dates_Title");

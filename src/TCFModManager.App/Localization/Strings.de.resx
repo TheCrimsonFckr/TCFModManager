@@ -6793,11 +6793,14 @@ Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie d
   <data name="Help_Browse_Filters_Step3" xml:space="preserve">
     <value>Jeder gesetzte Filter erscheint als Kärtchen über der Liste. Klicke auf das X eines Kärtchens, um diesen Filter zu entfernen, oder auf {0}, um alle zu entfernen.</value>
   </data>
+  <data name="Help_Browse_Filters_Step4" xml:space="preserve">
+    <value>Klicke auf die Stecknadel rechts neben dem Namen eines Abschnitts, um ihn als Auswahlliste unter der Suchleiste anzuheften – so änderst du ihn, ohne den Bereich zu öffnen. Klicke erneut auf die Nadel oder mit der rechten Maustaste auf die Auswahlliste, um ihn wieder zu lösen.</value>
+  </data>
   <data name="Help_Browse_Filters_Note" xml:space="preserve">
     <value>{0} lässt die Seite künftig so öffnen, wie sie gerade eingestellt ist, und {1} holt diesen Stand jederzeit zurück. {2} setzt immer alles auf die Standardwerte der App zurück.</value>
   </data>
   <data name="Help_Browse_Filters_Keywords" xml:space="preserve">
-    <value>Filter, sortieren, Kärtchen, Filter zurücksetzen, Ansichtsoptionen, pro Seite</value>
+    <value>Filter, sortieren, Kärtchen, Filter zurücksetzen, Ansichtsoptionen, pro Seite, anheften, angeheftete Filter</value>
   </data>
   <data name="Help_Browse_Dates_Title" xml:space="preserve">
     <value>Neue oder kürzlich aktualisierte Mods finden</value>

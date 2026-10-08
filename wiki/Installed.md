@@ -36,6 +36,8 @@ Search sits in the row above the list. Everything else is in the **Filters and v
 
 Every filter narrowing the list also shows as a pill above the mods - "Update status: Updates available", "Show only: Has conflicts". A pill's X drops just that filter.
 
+Pin the sections you use most and they sit in a row under the search bar as dropdowns, the same as on [Browse](Browse) - the pin is at the right of each section's name in the panel. A pinned **Sort groups** shows only in Groups view and **Per page** only in Cards view, as in the panel.
+
 Disabled mods carry a red **DISABLED** tag, in every view.
 
 A mod's author is a link to their page, and the right-click menu has **More by** and **Follow** for them - see [Browse](Browse#authors).

@@ -8202,12 +8202,15 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <value>Each filter you set shows as a pill above the list. Press a pill's X to drop that filter, or {0} to drop them all.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
+  <data name="Help_Browse_Filters_Step4" xml:space="preserve">
+    <value>Press the pin at the right of a section's name to keep it as a dropdown under the search bar, so you can change it without opening the panel. Press the pin again, or right-click the dropdown, to unpin it.</value>
+  </data>
   <data name="Help_Browse_Filters_Note" xml:space="preserve">
     <value>{0} makes the page open the way it's set now, and {1} brings that back whenever you like. {2} always goes back to the app's own settings.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Browse_Filters_Keywords" xml:space="preserve">
-    <value>filters, sort, pills, clear filters, view options, per page</value>
+    <value>filters, sort, pills, clear filters, view options, per page, pin, pinned filters</value>
     <comment>Comma-separated words the Help search also matches this topic on.</comment>
   </data>
   <data name="Help_Browse_Dates_Title" xml:space="preserve">
