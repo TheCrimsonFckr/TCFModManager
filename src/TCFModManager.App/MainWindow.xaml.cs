@@ -19,6 +19,9 @@ public partial class MainWindow : FluentWindow
         // F11/Escape and records the window's position on close - see WindowLayout.
         WindowLayout.Attach(this, RootTitleBar);
 
+        // Cards snap rather than glide while the window is being resized by hand (OPEN-26).
+        Motion.TrackWindowDrag(this);
+
         // F1 is the title bar's "?" (Help R8). Preview, so a focused text box doesn't get it first.
         PreviewKeyDown += (_, e) =>
         {

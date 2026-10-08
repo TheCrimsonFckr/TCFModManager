@@ -87,7 +87,8 @@ internal sealed class LayoutGlide
     private void Settle()
     {
         var now = Place();
-        var glide = Motion.Enabled && !_fresh;
+        // Not while the window edge is being dragged (Motion.WindowDragging): cards snap then.
+        var glide = Motion.Enabled && !_fresh && !Motion.WindowDragging;
         var arrivals = new List<(UIElement Child, Placement Placement)>();
 
         foreach (var (child, placement) in now)

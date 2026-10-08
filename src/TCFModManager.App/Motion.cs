@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media.Animation;
 
 namespace TCFModManager.App;
@@ -42,6 +43,36 @@ internal static class Motion
     static Motion()
     {
         SystemParameters.StaticPropertyChanged += OnSystemParameterChanged;
+    }
+
+    //
+    // True while the user is dragging the main window's edge (or its title bar). Cards don't glide
+    // then - they snap, as they did before OPEN-26 (Chris, 2026-10-08, after a screen recording):
+    // a drag back and forth across a column breakpoint changes every card's row and column several
+    // times a second, and gliding each change left the whole grid mid-flight and overlapping until
+    // the mouse stopped. Windows' own apps don't animate a reflow during a live resize either.
+    // Maximise, restore and snapping still glide - those aren't a drag.
+    //
+    public static bool WindowDragging { get; private set; }
+
+    private const int WmEnterSizeMove = 0x0231;
+    private const int WmExitSizeMove = 0x0232;
+
+    // Called once for the main window, before it is shown.
+    public static void TrackWindowDrag(Window window)
+    {
+        window.SourceInitialized += (_, _) =>
+        {
+            var source = HwndSource.FromHwnd(new WindowInteropHelper(window).Handle);
+            source?.AddHook(WindowDragHook);
+        };
+    }
+
+    private static IntPtr WindowDragHook(IntPtr hwnd, int message, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        if (message == WmEnterSizeMove) WindowDragging = true;
+        else if (message == WmExitSizeMove) WindowDragging = false;
+        return IntPtr.Zero;
     }
 
     // The duration to animate for: as given with motion on, zero with it off.
