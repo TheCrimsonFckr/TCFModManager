@@ -1,6 +1,7 @@
 using System.Windows;
 using TCFModManager.App.Help;
 using TCFModManager.App.Views;
+using Wpf.Ui.Animations;
 using Wpf.Ui.Controls;
 
 namespace TCFModManager.App;
@@ -18,6 +19,9 @@ namespace TCFModManager.App;
 internal static class AppNavigation
 {
     private static NavigationView? _navigation;
+
+    // The page transition the sidebar was given, put back when Windows' animations come back on.
+    private static Transition _transition = Transition.FadeInWithSlide;
 
     private static bool _showUpdatesPending;
 
@@ -46,6 +50,21 @@ internal static class AppNavigation
     {
         _navigation = navigation;
         navigation.Navigated += (_, e) => _currentPage = e.Page?.GetType();
+
+        _transition = navigation.Transition;
+        ApplyMotion();
+        Motion.EnabledChanged += (_, _) => ApplyMotion();
+    }
+
+    //
+    // No page transition while Windows' Animation effects are off (OPEN-26 R9). Transition.None is
+    // the one WPF-UI's TransitionAnimationProvider skips outright; a zero duration would do the same
+    // (it skips anything under 10ms) but None says so.
+    //
+    private static void ApplyMotion()
+    {
+        if (_navigation is null) return;
+        _navigation.Transition = Motion.Enabled ? _transition : Transition.None;
     }
 
     //
@@ -68,7 +87,7 @@ internal static class AppNavigation
     // full duration from Loaded is a little longer than needed, never shorter.
     //
     public static Task AfterTransitionAsync() =>
-        Task.Delay((_navigation?.TransitionDuration ?? 200) + 50);
+        Motion.Enabled ? Task.Delay((_navigation?.TransitionDuration ?? 200) + 50) : Task.CompletedTask;
 
     // Help at one section - Getting started from the no-install banner, for one - or at one topic
     // in it, for a notice that has an answer.

@@ -859,7 +859,7 @@
                                                 Storyboard.TargetProperty="Opacity"
                                                 From="0"
                                                 To="1"
-                                                Duration="0:0:0.15"
+                                                Duration="{behaviors:MotionDuration 150}"
                                                 FillBehavior="Stop" />
                                         </Storyboard>
                                     </BeginStoryboard>

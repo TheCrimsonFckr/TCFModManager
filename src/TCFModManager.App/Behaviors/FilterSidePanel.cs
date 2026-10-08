@@ -168,7 +168,8 @@ public sealed class FilterSidePanel
     private static void Animate(IAnimatable target, DependencyProperty property, double from, double to,
         Duration duration, IEasingFunction ease, Action? completed = null)
     {
-        var animation = new DoubleAnimation(from, to, duration) { EasingFunction = ease };
+        // Instant when Windows' Animation effects are off (OPEN-26 R9); Completed still fires.
+        var animation = new DoubleAnimation(from, to, Motion.Of(duration)) { EasingFunction = ease };
         if (completed is not null) animation.Completed += (_, _) => completed();
         target.BeginAnimation(property, animation);
     }

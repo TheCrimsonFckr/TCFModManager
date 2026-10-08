@@ -283,7 +283,7 @@
                                                     Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
                                                     From="0"
                                                     To="180"
-                                                    Duration="00:00:00.167" />
+                                                    Duration="{behaviors:MotionDuration 167}" />
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </Trigger.EnterActions>
@@ -295,7 +295,7 @@
                                                     Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
                                                     From="180"
                                                     To="0"
-                                                    Duration="00:00:00.167" />
+                                                    Duration="{behaviors:MotionDuration 167}" />
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </Trigger.ExitActions>
@@ -337,7 +337,7 @@
                                     Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
                                     From="-90"
                                     To="0"
-                                    Duration="00:00:00.167">
+                                    Duration="{behaviors:MotionDuration 167}">
                                     <DoubleAnimation.EasingFunction>
                                         <CircleEase EasingMode="EaseOut" />
                                     </DoubleAnimation.EasingFunction>
@@ -565,7 +565,7 @@
                                                                         Storyboard.TargetName="Chevron"
                                                                         Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
                                                                         To="90"
-                                                                        Duration="00:00:00.167" />
+                                                                        Duration="{behaviors:MotionDuration 167}" />
                                                                 </Storyboard>
                                                             </BeginStoryboard>
                                                         </Trigger.EnterActions>
@@ -576,7 +576,7 @@
                                                                         Storyboard.TargetName="Chevron"
                                                                         Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
                                                                         To="0"
-                                                                        Duration="00:00:00.167" />
+                                                                        Duration="{behaviors:MotionDuration 167}" />
                                                                 </Storyboard>
                                                             </BeginStoryboard>
                                                         </Trigger.ExitActions>
