@@ -472,7 +472,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         var settings = new SettingsService().Load();
         _showListBadges = settings.ShowModListBadges;
         _defaults = settings.InstalledDefaults;
-        FilterPins = new PinnedFilterSections<InstalledFilterSection>("Installed", settings, x => x.InstalledPinnedFilters, (x, v) => x.InstalledPinnedFilters = v);
+        FilterPins = new PinnedFilterSections<InstalledFilterSection>("Installed", settings, x => x.InstalledPinnedFilters, (x, v) => x.InstalledPinnedFilters = v, this, _ => null);
 
         //
         // Backing fields rather than the properties: this is the page opening at its default, not

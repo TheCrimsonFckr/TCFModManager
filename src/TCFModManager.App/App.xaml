@@ -316,6 +316,94 @@
                 <Setter Property="CornerRadius" Value="{DynamicResource PopupCornerRadius}" />
             </Style>
 
+            <!-- A dropdown's surface: the Filters panel's, plus a shadow and a short slide down as it opens,
+                 the way WPF-UI's ComboBox drops. Used by the pinned filter dropdowns (OPEN-24). -->
+            <Style x:Key="FilterDropDownPopup" TargetType="Border" BasedOn="{StaticResource FilterSidePanelSurface}">
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <TranslateTransform Y="0" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect BlurRadius="20" Direction="270" Opacity="0.135" ShadowDepth="10" Color="#202020" />
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                                    From="-90"
+                                    To="0"
+                                    Duration="00:00:00.167">
+                                    <DoubleAnimation.EasingFunction>
+                                        <CircleEase EasingMode="EaseOut" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--
+                One pinned Filters panel section in the row under the search bar on Installed and Browse
+                (OPEN-24), over a PinnedFilterBarItem. The button reads what the filter is set to; the
+                dropdown is the section's own body from the page's "FilterBody.<section>" template, the
+                same one the panel shows, so the two are always the same filter. Right-click to unpin.
+                The body keeps the panel's width so its choices wrap the same way in both.
+            -->
+            <DataTemplate x:Key="PinnedFilterDropDown">
+                <Grid Margin="0,0,8,4">
+                    <ToggleButton
+                        x:Name="Toggle"
+                        MinWidth="130"
+                        MaxWidth="320"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource FilterDropDownToggle}"
+                        ToolTip="{Binding Label}"
+                        behaviors:DropDownToggle.Popup="{Binding ElementName=DropDown}">
+                        <ToggleButton.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{loc:Str Filter_UnpinMenu}" Command="{Binding UnpinCommand}" CommandParameter="{Binding Section}">
+                                    <MenuItem.Icon>
+                                        <ui:SymbolIcon Symbol="PinOff24" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </ToggleButton.ContextMenu>
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                            Text="{Binding Label}"
+                            TextTrimming="CharacterEllipsis" />
+                    </ToggleButton>
+                    <Popup
+                        x:Name="DropDown"
+                        IsOpen="{Binding IsChecked, ElementName=Toggle, Mode=TwoWay}"
+                        PlacementTarget="{Binding ElementName=Toggle}"
+                        Placement="Bottom"
+                        StaysOpen="False"
+                        AllowsTransparency="True">
+                        <Border Style="{StaticResource FilterDropDownPopup}" MinWidth="{Binding ActualWidth, ElementName=Toggle}">
+                            <ScrollViewer MaxHeight="420" VerticalScrollBarVisibility="Auto">
+                                <!-- A ContentControl, not a ContentPresenter: a ContentPresenter takes its Content
+                                     as its own DataContext, which would turn these two bindings on themselves. -->
+                                <ContentControl
+                                    Width="252"
+                                    Margin="12,8,12,4"
+                                    Focusable="False"
+                                    IsTabStop="False"
+                                    Content="{Binding Owner}"
+                                    behaviors:FilterPin.Body="{Binding Section}" />
+                            </ScrollViewer>
+                        </Border>
+                    </Popup>
+                </Grid>
+            </DataTemplate>
+
             <!--
                 An author's name that opens their page (OPEN-12 A4): the text of the line it sits in,
                 underlined in the accent colour when pointed at. OverridesDefaultStyle drops WPF's own

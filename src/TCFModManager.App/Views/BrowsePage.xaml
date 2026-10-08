@@ -33,6 +33,94 @@
         <converters:CountToVisibilityConverter x:Key="HasCount" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
 
+        <!--
+            Each Filters panel section's body, kept here rather than inside its Expander so the same
+            controls can also open from the section's pinned dropdown under the search bar (OPEN-24).
+            The key is FilterBody.<section>, which is how Behaviors/FilterPin.Body finds it; the
+            content is always this page's view model.
+        -->
+        <DataTemplate x:Key="FilterBody.SptVersion">
+            <ItemsControl ItemsSource="{Binding SptVersionOptions}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox
+                            Margin="0,2"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                            IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                            Content="{Binding Label, StringFormat={loc:Str Browse_SptVersionItemFormat}}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FilterBody.SearchIn">
+            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding SearchScopeOptions}" SelectedItem="{Binding SelectedSearchScope}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="FilterBody.Show">
+            <ItemsControl ItemsSource="{Binding AttributeOptions}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox
+                            Margin="0,2"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                            IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                            ToolTip="{Binding ToolTip}">
+                            <TextBlock Text="{Binding Label}" TextWrapping="Wrap" />
+                        </CheckBox>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FilterBody.Category">
+            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding CategoryOptions}" SelectedItem="{Binding SelectedCategory}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="FilterBody.Featured">
+            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding FeaturedFilterOptions}" SelectedItem="{Binding SelectedFeaturedFilter}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="FilterBody.Published">
+            <StackPanel>
+                <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding DateRangeOptions}" SelectedItem="{Binding SelectedPublishedRange}" />
+                <!-- Custom: two days, either may be left empty; the until day counts in full. -->
+                <StackPanel Margin="0,4,0,0" Visibility="{Binding IsPublishedCustom, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Margin="0,0,0,2" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{loc:Str Filter_DateFrom}" />
+                    <DatePicker Margin="0,0,0,6" SelectedDate="{Binding PublishedFrom}" />
+                    <TextBlock Margin="0,0,0,2" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{loc:Str Filter_DateUntil}" />
+                    <DatePicker SelectedDate="{Binding PublishedUntil}" />
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FilterBody.Updated">
+            <StackPanel>
+                <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding DateRangeOptions}" SelectedItem="{Binding SelectedUpdatedRange}" />
+                <!-- Custom: two days, either may be left empty; the until day counts in full. -->
+                <StackPanel Margin="0,4,0,0" Visibility="{Binding IsUpdatedCustom, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Margin="0,0,0,2" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{loc:Str Filter_DateFrom}" />
+                    <DatePicker Margin="0,0,0,6" SelectedDate="{Binding UpdatedFrom}" />
+                    <TextBlock Margin="0,0,0,2" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{loc:Str Filter_DateUntil}" />
+                    <DatePicker SelectedDate="{Binding UpdatedUntil}" />
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FilterBody.Sort">
+            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSortOption}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="FilterBody.PageSize">
+            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding PageSizeOptions}" SelectedItem="{Binding PageSize}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding StringFormat={loc:Str Common_PageSizeFormat}}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DataTemplate>
+
     </Page.Resources>
     <Grid Margin="16">
         <Grid.RowDefinitions>
@@ -52,43 +140,59 @@
              options, which says how many of them are set. One line at almost any width, so the results keep the room. Save as default and
              Clear filters are inside the panel; Refresh cache, an action rather than a filter, stays out.
         -->
-        <DockPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,8">
-            <ui:Button
-                DockPanel.Dock="Right"
-                VerticalAlignment="Top"
-                Content="{loc:Str Browse_RefreshCache}"
-                Command="{Binding RefreshCacheCommand}" />
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,8">
+            <DockPanel>
+                <ui:Button
+                    DockPanel.Dock="Right"
+                    VerticalAlignment="Top"
+                    Content="{loc:Str Browse_RefreshCache}"
+                    Command="{Binding RefreshCacheCommand}" />
 
-            <WrapPanel>
-                <ui:TextBox
-                    Width="320"
-                    Margin="0,0,8,4"
-                    VerticalAlignment="Center"
-                    PlaceholderText="{loc:Str Common_SearchPlaceholder}"
-                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                <WrapPanel>
+                    <ui:TextBox
+                        Width="320"
+                        Margin="0,0,8,4"
+                        VerticalAlignment="Center"
+                        PlaceholderText="{loc:Str Common_SearchPlaceholder}"
+                        Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
 
-                <ToggleButton
-                    x:Name="MoreFiltersToggle"
-                    MinWidth="130"
-                    Margin="0,0,8,4"
-                    VerticalAlignment="Center"
-                    ToolTip="{loc:Str Filter_MoreToolTip}"
-                    Style="{StaticResource FilterDropDownToggle}">
-                    <StackPanel Orientation="Horizontal">
-                        <ui:SymbolIcon
-                            Margin="0,0,8,0"
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Symbol="Filter24" />
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Text="{Binding MoreFiltersLabel}" />
-                    </StackPanel>
-                </ToggleButton>
-            </WrapPanel>
-        </DockPanel>
+                    <ToggleButton
+                        x:Name="MoreFiltersToggle"
+                        MinWidth="130"
+                        Margin="0,0,8,4"
+                        VerticalAlignment="Center"
+                        ToolTip="{loc:Str Filter_MoreToolTip}"
+                        Style="{StaticResource FilterDropDownToggle}">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon
+                                Margin="0,0,8,0"
+                                VerticalAlignment="Center"
+                                FontSize="14"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Symbol="Filter24" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{Binding MoreFiltersLabel}" />
+                        </StackPanel>
+                    </ToggleButton>
+                </WrapPanel>
+            </DockPanel>
+
+            <!-- OPEN-24 R7: the pinned sections, one dropdown each in panel order, on their own row under
+                 the search bar and wrapping onto more as more are pinned. Gone with nothing pinned. -->
+            <ItemsControl
+                Focusable="False"
+                ItemsSource="{Binding FilterPins.Bar}"
+                ItemTemplate="{StaticResource PinnedFilterDropDown}"
+                Visibility="{Binding FilterPins.Any, Converter={StaticResource BoolToVis}}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </StackPanel>
 
         <!--
              The rest of the filters, opened and closed by Filters in the row above. On a wide page it
@@ -133,126 +237,77 @@
                              narrow panel, and what is set reads at a glance down the headers. -->
                         <!-- Which SPT release lines to show mods for; none ticked shows every line. Moved
                              here from the row (Chris, 2026-10-06), so its dropdown went with it. -->
-                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="SptVersion" ToolTip="{loc:Str Browse_SptVersionFilterToolTip}">
+                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="SptVersion" ToolTip="{loc:Str Browse_SptVersionFilterToolTip}" Content="{Binding}" ContentTemplate="{StaticResource FilterBody.SptVersion}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionSptVersion}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <ItemsControl ItemsSource="{Binding SptVersionOptions}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <CheckBox
-                                            Margin="0,2"
-                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                            IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                            Content="{Binding Label, StringFormat={loc:Str Browse_SptVersionItemFormat}}" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
                         </Expander>
 
                         <!-- OPEN-12 F19: what the search box looks at. -->
-                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="SearchIn" ToolTip="{loc:Str Browse_SearchScopeToolTip}">
+                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="SearchIn" ToolTip="{loc:Str Browse_SearchScopeToolTip}" Content="{Binding}" ContentTemplate="{StaticResource FilterBody.SearchIn}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionSearchIn}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding SearchScopeOptions}" SelectedItem="{Binding SelectedSearchScope}" />
                         </Expander>
 
                         <!-- Everything that describes the mod itself: Fika, ads, dependencies, addons, installed. -->
-                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Show">
+                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Show" Content="{Binding}" ContentTemplate="{StaticResource FilterBody.Show}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_ShowHeader}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <ItemsControl ItemsSource="{Binding AttributeOptions}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <CheckBox
-                                            Margin="0,2"
-                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                            IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                            ToolTip="{Binding ToolTip}">
-                                            <TextBlock Text="{Binding Label}" TextWrapping="Wrap" />
-                                        </CheckBox>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
                         </Expander>
 
                         <Expander
                             Style="{StaticResource FilterSection}"
                             behaviors:FilterPin.Section="Category"
-                            ToolTip="{loc:Str Browse_CategoryFilterToolTip}">
+                            ToolTip="{loc:Str Browse_CategoryFilterToolTip}"
+                            Content="{Binding}"
+                            ContentTemplate="{StaticResource FilterBody.Category}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionCategory}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding CategoryOptions}" SelectedItem="{Binding SelectedCategory}" />
                         </Expander>
 
                         <Expander
                             Style="{StaticResource FilterSection}"
                             behaviors:FilterPin.Section="Featured"
-                            ToolTip="{loc:Str Browse_FeaturedFilterToolTip}">
+                            ToolTip="{loc:Str Browse_FeaturedFilterToolTip}"
+                            Content="{Binding}"
+                            ContentTemplate="{StaticResource FilterBody.Featured}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionFeatured}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding FeaturedFilterOptions}" SelectedItem="{Binding SelectedFeaturedFilter}" />
                         </Expander>
 
                         <!-- OPEN-12 F19: when the mod was first published, and when it last had a release. -->
-                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Published" ToolTip="{loc:Str Browse_PublishedFilterToolTip}">
+                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Published" ToolTip="{loc:Str Browse_PublishedFilterToolTip}" Content="{Binding}" ContentTemplate="{StaticResource FilterBody.Published}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionPublished}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <StackPanel>
-                                <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding DateRangeOptions}" SelectedItem="{Binding SelectedPublishedRange}" />
-                                <!-- Custom: two days, either may be left empty; the until day counts in full. -->
-                                <StackPanel Margin="0,4,0,0" Visibility="{Binding IsPublishedCustom, Converter={StaticResource BoolToVis}}">
-                                    <TextBlock Margin="0,0,0,2" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{loc:Str Filter_DateFrom}" />
-                                    <DatePicker Margin="0,0,0,6" SelectedDate="{Binding PublishedFrom}" />
-                                    <TextBlock Margin="0,0,0,2" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{loc:Str Filter_DateUntil}" />
-                                    <DatePicker SelectedDate="{Binding PublishedUntil}" />
-                                </StackPanel>
-                            </StackPanel>
                         </Expander>
 
-                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Updated" ToolTip="{loc:Str Browse_UpdatedFilterToolTip}">
+                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Updated" ToolTip="{loc:Str Browse_UpdatedFilterToolTip}" Content="{Binding}" ContentTemplate="{StaticResource FilterBody.Updated}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionUpdated}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <StackPanel>
-                                <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding DateRangeOptions}" SelectedItem="{Binding SelectedUpdatedRange}" />
-                                <!-- Custom: two days, either may be left empty; the until day counts in full. -->
-                                <StackPanel Margin="0,4,0,0" Visibility="{Binding IsUpdatedCustom, Converter={StaticResource BoolToVis}}">
-                                    <TextBlock Margin="0,0,0,2" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{loc:Str Filter_DateFrom}" />
-                                    <DatePicker Margin="0,0,0,6" SelectedDate="{Binding UpdatedFrom}" />
-                                    <TextBlock Margin="0,0,0,2" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{loc:Str Filter_DateUntil}" />
-                                    <DatePicker SelectedDate="{Binding UpdatedUntil}" />
-                                </StackPanel>
-                            </StackPanel>
                         </Expander>
 
-                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Sort" ToolTip="{loc:Str Common_SortToolTip}">
+                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Sort" ToolTip="{loc:Str Common_SortToolTip}" Content="{Binding}" ContentTemplate="{StaticResource FilterBody.Sort}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionSort}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSortOption}" />
                         </Expander>
 
                         <!-- The options are plain ints and "12" says nothing on its own, hence the template. -->
                         <Expander
                             Style="{StaticResource FilterSection}"
                             behaviors:FilterPin.Section="PageSize"
-                            ToolTip="{loc:Str Common_PageSizeToolTip}">
+                            ToolTip="{loc:Str Common_PageSizeToolTip}"
+                            Content="{Binding}"
+                            ContentTemplate="{StaticResource FilterBody.PageSize}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionPageSize}" TextWrapping="Wrap" />
                             </Expander.Header>
-                            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding PageSizeOptions}" SelectedItem="{Binding PageSize}">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding StringFormat={loc:Str Common_PageSizeFormat}}" />
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
                         </Expander>
 
                         <!-- Same as Installed's: the defaults are saved from the page, not restated in Options. -->

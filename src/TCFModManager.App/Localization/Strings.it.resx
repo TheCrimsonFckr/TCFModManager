@@ -6595,6 +6595,15 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
   <data name="Filter_UnpinToolTip" xml:space="preserve">
     <value>Non fissare più questo filtro sotto la barra di ricerca</value>
   </data>
+  <data name="Filter_ShowNone" xml:space="preserve">
+    <value>Tutte le mod</value>
+  </data>
+  <data name="Filter_SelectedCountFormat" xml:space="preserve">
+    <value>{0} selezionati</value>
+  </data>
+  <data name="Filter_UnpinMenu" xml:space="preserve">
+    <value>Non fissare più</value>
+  </data>
   <data name="Filter_SectionGroupSort" xml:space="preserve">
     <value>Ordina gruppi</value>
   </data>

@@ -6940,6 +6940,15 @@
   <data name="Filter_UnpinToolTip" xml:space="preserve">
     <value>Открепить этот фильтр от строки поиска</value>
   </data>
+  <data name="Filter_ShowNone" xml:space="preserve">
+    <value>Все моды</value>
+  </data>
+  <data name="Filter_SelectedCountFormat" xml:space="preserve">
+    <value>Выбрано: {0}</value>
+  </data>
+  <data name="Filter_UnpinMenu" xml:space="preserve">
+    <value>Открепить</value>
+  </data>
   <data name="Filter_SectionGroupSort" xml:space="preserve">
     <value>Сортировка групп</value>
   </data>

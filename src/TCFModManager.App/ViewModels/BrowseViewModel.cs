@@ -45,7 +45,6 @@ public partial class BrowseViewModel : LocalizedViewModel
 
         var settings = new SettingsService().Load();
         _defaults = settings.BrowseDefaults;
-        FilterPins = new PinnedFilterSections<BrowseFilterSection>("Browse", settings, x => x.BrowsePinnedFilters, (x, v) => x.BrowsePinnedFilters = v);
 
         //
         // Backing fields rather than the properties: this is the page opening at its default, not
@@ -123,6 +122,10 @@ public partial class BrowseViewModel : LocalizedViewModel
         {
             if (HasLoadedResults) GoToPage(CurrentPage);
         };
+
+        // Last, so every filter the dropdown labels read is in place.
+        FilterPins = new PinnedFilterSections<BrowseFilterSection>(
+            "Browse", settings, x => x.BrowsePinnedFilters, (x, v) => x.BrowsePinnedFilters = v, this, PinnedLabel);
 
         RebuildActiveFilters();
     }
@@ -371,6 +374,37 @@ public partial class BrowseViewModel : LocalizedViewModel
     {
         base.OnPropertyChanged(e);
         if (e.PropertyName is null or "" or nameof(MoreFiltersLabel)) RebuildActiveFilters();
+        FilterPins?.RefreshLabels();
+    }
+
+    //
+    // The text on a pinned section's dropdown under the search bar (OPEN-24): the section and what it
+    // is set to, unset values included - "Category: All categories", "Sort by: Newest". Null while
+    // the constructor is still filling the filters in.
+    //
+    private string? PinnedLabel(BrowseFilterSection section)
+    {
+        if (SelectedCategory is null || SelectedFeaturedFilter is null || SelectedSortOption is null
+            || SelectedPublishedRange is null || SelectedUpdatedRange is null || SelectedSearchScope is null) return null;
+
+        return section switch
+        {
+            BrowseFilterSection.SptVersion => SptVersionFilterSummary,
+            BrowseFilterSection.SearchIn => Pill(Strings.Filter_SectionSearchIn, SelectedSearchScope),
+            BrowseFilterSection.Show => Pill(Strings.Filter_ShowHeader, AttributeOptions.Where(o => o.IsSelected).ToList() switch
+            {
+                [] => Strings.Filter_ShowNone,
+                [var one] => one.Label,
+                var many => Text(Strings.Filter_SelectedCountFormat, many.Count),
+            }),
+            BrowseFilterSection.Category => Pill(Strings.Filter_SectionCategory, SelectedCategory),
+            BrowseFilterSection.Featured => Pill(Strings.Filter_SectionFeatured, SelectedFeaturedFilter),
+            BrowseFilterSection.Published => Pill(Strings.Filter_SectionPublished, DateLabel(SelectedPublishedRange, PublishedFrom, PublishedUntil)),
+            BrowseFilterSection.Updated => Pill(Strings.Filter_SectionUpdated, DateLabel(SelectedUpdatedRange, UpdatedFrom, UpdatedUntil)),
+            BrowseFilterSection.Sort => Pill(Strings.Filter_SectionSort, SelectedSortOption),
+            BrowseFilterSection.PageSize => Text(Strings.Common_PageSizeFormat, PageSize),
+            _ => null,
+        };
     }
 
     private static string Pill(string section, object? value) =>

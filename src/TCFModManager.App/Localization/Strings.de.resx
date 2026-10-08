@@ -6595,6 +6595,15 @@ Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie d
   <data name="Filter_UnpinToolTip" xml:space="preserve">
     <value>Diesen Filter nicht mehr unter der Suchleiste anheften</value>
   </data>
+  <data name="Filter_ShowNone" xml:space="preserve">
+    <value>Alle Mods</value>
+  </data>
+  <data name="Filter_SelectedCountFormat" xml:space="preserve">
+    <value>{0} ausgewählt</value>
+  </data>
+  <data name="Filter_UnpinMenu" xml:space="preserve">
+    <value>Nicht mehr anheften</value>
+  </data>
   <data name="Filter_SectionGroupSort" xml:space="preserve">
     <value>Gruppen sortieren</value>
   </data>

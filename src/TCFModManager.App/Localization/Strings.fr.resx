@@ -6595,6 +6595,15 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
   <data name="Filter_UnpinToolTip" xml:space="preserve">
     <value>Ne plus épingler ce filtre sous la barre de recherche</value>
   </data>
+  <data name="Filter_ShowNone" xml:space="preserve">
+    <value>Tous les mods</value>
+  </data>
+  <data name="Filter_SelectedCountFormat" xml:space="preserve">
+    <value>{0} sélectionnés</value>
+  </data>
+  <data name="Filter_UnpinMenu" xml:space="preserve">
+    <value>Désépingler</value>
+  </data>
   <data name="Filter_SectionGroupSort" xml:space="preserve">
     <value>Trier les groupes</value>
   </data>

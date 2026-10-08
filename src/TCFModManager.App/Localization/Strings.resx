@@ -7965,6 +7965,18 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <value>Unpin this filter from under the search bar</value>
     <comment>Tooltip on the filled pin button of a pinned Filters panel section: takes its dropdown out of the row under the search bar (OPEN-24).</comment>
   </data>
+  <data name="Filter_ShowNone" xml:space="preserve">
+    <value>All mods</value>
+    <comment>What a pinned Show only dropdown under the search bar reads when none of its boxes are ticked (OPEN-24), after "Show only: ".</comment>
+  </data>
+  <data name="Filter_SelectedCountFormat" xml:space="preserve">
+    <value>{0} selected</value>
+    <comment>What a pinned dropdown under the search bar reads when several of its boxes are ticked (OPEN-24), after "Show only: ". {0} is how many.</comment>
+  </data>
+  <data name="Filter_UnpinMenu" xml:space="preserve">
+    <value>Unpin</value>
+    <comment>Right-click menu item on a pinned filter dropdown under the search bar (OPEN-24): takes it out of that row. The filter stays in the Filters panel.</comment>
+  </data>
   <data name="Filter_SectionGroupSort" xml:space="preserve">
     <value>Sort groups</value>
     <comment>Heading of the group order section in the Filters and view options panel (Installed, Groups view only).</comment>
