@@ -47,6 +47,9 @@ internal sealed class LayoutGlide
     private readonly Dictionary<UIElement, TranslateTransform> _transforms = new();
     private bool _fresh = true;
 
+    // Waiting for the current layout pass to finish before comparing - see AfterArrange.
+    private bool _pending;
+
     public LayoutGlide(Panel panel)
     {
         _panel = panel;
@@ -56,7 +59,32 @@ internal sealed class LayoutGlide
         };
     }
 
+    //
+    // Called from the panel's ArrangeOverride, but nothing is compared there. One layout pass can
+    // arrange the panel more than once on its way to the answer, and the in-between arrangements
+    // are wrong. Dragging the window narrower on Installed: the panel is first arranged at the new
+    // width with the previous frame's CardWidth, so the last card of every row wraps onto the next;
+    // only then does SizeChanged set the new CardWidth and the cards go back. Gliding from those
+    // in-between slots is what sent the cards bouncing and the icons flickering on every step of a
+    // drag (Chris, 2026-10-08). So this just asks to be told once the whole pass has finished -
+    // LayoutUpdated, which fires after layout and before anything is drawn - and compares the
+    // settled slots with the last settled slots.
+    //
     public void AfterArrange()
+    {
+        if (_pending) return;
+        _pending = true;
+        _panel.LayoutUpdated += OnLayoutUpdated;
+    }
+
+    private void OnLayoutUpdated(object? sender, EventArgs e)
+    {
+        _panel.LayoutUpdated -= OnLayoutUpdated;
+        _pending = false;
+        Settle();
+    }
+
+    private void Settle()
     {
         var now = Place();
         var glide = Motion.Enabled && !_fresh;
