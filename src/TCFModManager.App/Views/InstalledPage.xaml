@@ -1083,6 +1083,12 @@
             Visibility="{Binding ShowGroups, Converter={StaticResource BoolToVis}}">
             <!-- Right margin keeps the overlay scrollbar off the rows' right-hand buttons and chevrons. -->
             <ItemsControl Margin="0,0,6,0" Focusable="False" ItemsSource="{Binding Sections}">
+                <!-- Groups slide to a new position, and new ones fade in, as a filter or sort changes them (OPEN-26). -->
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <controls:GlideStackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:ModGroupSectionViewModel}">
                         <ui:Card
@@ -1334,6 +1340,12 @@
             Visibility="{Binding ShowList, Converter={StaticResource BoolToVis}}">
             <!-- Right margin keeps the overlay scrollbar off the rows' right-hand buttons and chevrons. -->
             <ItemsControl Margin="0,0,6,0" Focusable="False" ItemsSource="{Binding ListItems}">
+                <!-- Rows slide to a new position, and new ones fade in, as a filter or sort changes them (OPEN-26). -->
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <controls:GlideStackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type viewmodels:InstalledModCardViewModel}">
                         <!-- Tickable (OPEN-12 A1): a ticked row carries the accent edge, as a card does. -->

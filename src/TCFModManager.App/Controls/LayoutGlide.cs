@@ -24,13 +24,21 @@ namespace TCFModManager.App.Controls;
 //
 // Nothing glides on a panel's first arrange, or the first after it becomes visible again: a view
 // that was hidden while the window changed size would otherwise open with every card sliding in.
-// Children without a previous slot - new results - don't glide either; S4 fades them in.
+//
+// Children without a previous slot - new results - fade in instead (§2.4): opacity 0 -> 1 with a
+// short rise, one after another in reading order (R7, R10). That covers a filter or sort change
+// inserting rows, a Browse search or page turn (every card new), and each batch of a GradualFill
+// arriving below the last. Not on a fresh arrange, so a page or view's first paint is immediate.
+// Removed children just go (R6).
 //
 internal sealed class LayoutGlide
 {
     // Two slots whose tops are within this of each other are on the same line. Layout rounding can
     // leave cards in one row a fraction of a pixel apart.
     private const double SameLine = 0.5;
+
+    // How far below its slot a new child starts as it fades in.
+    private const double Rise = 8;
 
     private readonly Panel _panel;
     private Dictionary<UIElement, Placement> _last = new();
@@ -50,14 +58,21 @@ internal sealed class LayoutGlide
     {
         var now = Place();
         var glide = Motion.Enabled && !_fresh;
+        var arrivals = new List<(UIElement Child, Placement Placement)>();
 
         foreach (var (child, placement) in now)
         {
             _transforms.TryGetValue(child, out var transform);
 
-            if (!glide || !_last.TryGetValue(child, out var before))
+            if (!glide)
             {
-                if (transform is not null) Stop(transform);
+                if (transform is not null) Stop(child, transform);
+                continue;
+            }
+
+            if (!_last.TryGetValue(child, out var before))
+            {
+                arrivals.Add((child, placement));
                 continue;
             }
 
@@ -70,6 +85,16 @@ internal sealed class LayoutGlide
             var dx = before.Origin.X + transform.X - placement.Origin.X;
             var dy = before.Origin.Y + transform.Y - placement.Origin.Y;
             Start(transform, dx, dy);
+        }
+
+        arrivals.Sort((a, b) => a.Placement.Row != b.Placement.Row
+            ? a.Placement.Row.CompareTo(b.Placement.Row)
+            : a.Placement.Column.CompareTo(b.Placement.Column));
+        for (var i = 0; i < arrivals.Count; i++)
+        {
+            var child = arrivals[i].Child;
+            if (!_transforms.TryGetValue(child, out var transform)) transform = Attach(child);
+            FadeIn(child, transform, Motion.StaggerFor(i));
         }
 
         // Children that have gone take their transforms with them.
@@ -129,8 +154,30 @@ internal sealed class LayoutGlide
     private static DoubleAnimation Glide(double from) =>
         new(from, 0, Motion.Of(Motion.Glide)) { EasingFunction = Motion.GlideEase };
 
-    private static void Stop(TranslateTransform transform)
+    //
+    // Held hidden until its turn, then faded up and risen into its slot. FillBehavior.Stop hands
+    // Opacity and Y back to their resting values (1 and 0) when it ends, so nothing is left pinned.
+    //
+    private static void FadeIn(UIElement child, TranslateTransform transform, TimeSpan delay)
     {
+        var end = delay + Motion.FadeIn.TimeSpan;
+        child.BeginAnimation(UIElement.OpacityProperty, Arrive(0, 1, delay, end));
+        transform.BeginAnimation(TranslateTransform.XProperty, null);
+        transform.BeginAnimation(TranslateTransform.YProperty, Arrive(Rise, 0, delay, end));
+    }
+
+    private static DoubleAnimationUsingKeyFrames Arrive(double from, double to, TimeSpan delay, TimeSpan end)
+    {
+        var animation = new DoubleAnimationUsingKeyFrames { FillBehavior = FillBehavior.Stop };
+        animation.KeyFrames.Add(new DiscreteDoubleKeyFrame(from, KeyTime.FromTimeSpan(TimeSpan.Zero)));
+        animation.KeyFrames.Add(new DiscreteDoubleKeyFrame(from, KeyTime.FromTimeSpan(delay)));
+        animation.KeyFrames.Add(new EasingDoubleKeyFrame(to, KeyTime.FromTimeSpan(end), Motion.GlideEase));
+        return animation;
+    }
+
+    private static void Stop(UIElement child, TranslateTransform transform)
+    {
+        child.BeginAnimation(UIElement.OpacityProperty, null);
         if (transform.X == 0 && transform.Y == 0 && !transform.HasAnimatedProperties) return;
 
         transform.BeginAnimation(TranslateTransform.XProperty, null);
