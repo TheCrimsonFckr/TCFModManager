@@ -329,6 +329,28 @@
             </Grid>
         </DataTemplate>
 
+        <!-- Cards, Groups and List share one cell; the one being switched to fades in (OPEN-26
+             §2.5, R8) and the one being left just goes. A Trigger on the ScrollViewer's own
+             Visibility, not IsVisible, so it fires on a view switch and not every time you come
+             back to the page. FillBehavior="Stop" hands Opacity back once the fade ends. -->
+        <Style x:Key="ViewFadeIn" TargetType="ScrollViewer" BasedOn="{StaticResource {x:Type ScrollViewer}}">
+            <Style.Triggers>
+                <Trigger Property="Visibility" Value="Visible">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetProperty="Opacity"
+                                    From="0"
+                                    To="1"
+                                    Duration="{behaviors:MotionDuration 150}"
+                                    FillBehavior="Stop" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
     <!-- Scroll-anywhere for group view is wired up in code-behind (see the constructor and
          Page_PreviewMouseWheel in InstalledPage.xaml.cs), not via a XAML MouseWheel attribute here
@@ -826,6 +848,7 @@
         -->
         <ScrollViewer
             x:Name="CardsScrollViewer"
+            Style="{StaticResource ViewFadeIn}"
             Grid.Row="4"
             Grid.Column="1"
             Focusable="False"
@@ -1074,6 +1097,7 @@
              testing, unset does not. -->
         <ScrollViewer
             x:Name="GroupsScrollViewer"
+            Style="{StaticResource ViewFadeIn}"
             Grid.Row="4"
             Grid.Column="1"
             AllowDrop="True"
@@ -1333,6 +1357,7 @@
              shouldn't bubble focus up and nudge the scroller. -->
         <ScrollViewer
             x:Name="ListScrollViewer"
+            Style="{StaticResource ViewFadeIn}"
             Grid.Row="4"
             Grid.Column="1"
             Focusable="False"
