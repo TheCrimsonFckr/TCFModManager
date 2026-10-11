@@ -90,29 +90,24 @@ public partial class PlayViewModel : LocalizedViewModel
     [ObservableProperty]
     private bool _showServerLog;
 
+    // The log's last lines, drawn console-style by Behaviors/ConsoleLog (which keeps the reader's
+    // place when they have scrolled up).
     [ObservableProperty]
-    private string _serverLogText = "";
+    private IReadOnlyList<string> _serverLogLines = [];
 
     [ObservableProperty]
     private string? _serverLogPath;
 
-    // Set by the page: false while the user has scrolled up to read, so the text is not replaced
-    // (and their place lost) under them. Back at the bottom, it follows again.
-    public bool FollowServerLog { get; set; } = true;
-
     partial void OnShowServerLogChanged(bool value)
     {
-        if (!value) return;
-
-        FollowServerLog = true;
-        UpdateServerLog(AppServices.SptEnvironment.InstallPath);
+        if (value) UpdateServerLog(AppServices.SptEnvironment.InstallPath);
     }
 
     private void UpdateServerLog(string? installPath)
     {
         var file = ServerLogs.Newest(installPath);
         ServerLogPath = file;
-        ServerLogText = file is null ? Strings.Play_ServerLogNone : string.Join(Environment.NewLine, ServerLogs.Tail(file));
+        ServerLogLines = file is null ? [Strings.Play_ServerLogNone] : ServerLogs.Tail(file);
     }
 
     [RelayCommand]
@@ -334,7 +329,7 @@ public partial class PlayViewModel : LocalizedViewModel
 
         HidesServerWindow = settings.HideServerWindow;
 
-        if (ShowServerLog && FollowServerLog) UpdateServerLog(installPath);
+        if (ShowServerLog) UpdateServerLog(installPath);
 
         RefreshGame(installPath, settings);
         RefreshDirect(installPath, settings);

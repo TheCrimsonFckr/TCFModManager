@@ -7,6 +7,7 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:app="clr-namespace:TCFModManager.App"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     Title="{loc:Str Nav_Play}">
     <Page.Resources>
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
@@ -239,18 +240,31 @@
                     Header="{loc:Str Play_ServerLog}"
                     IsExpanded="{Binding ShowServerLog}">
                     <StackPanel Margin="0,8,0,0">
-                        <TextBox
-                            x:Name="ServerLogBox"
-                            Height="280"
-                            IsReadOnly="True"
-                            TextWrapping="NoWrap"
-                            FontFamily="Consolas"
-                            FontSize="12"
-                            HorizontalScrollBarVisibility="Auto"
-                            VerticalScrollBarVisibility="Auto"
-                            Text="{Binding ServerLogText, Mode=OneWay}"
-                            TextChanged="ServerLogBox_TextChanged"
-                            ScrollViewer.ScrollChanged="ServerLogBox_ScrollChanged" />
+                        <!-- Drawn as a console: dark whatever the theme, lines coloured by level
+                             (Behaviors/ConsoleLog). Selectable, so lines can be copied. -->
+                        <Border
+                            CornerRadius="4"
+                            Padding="8,6"
+                            BorderThickness="1"
+                            BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                            Background="{x:Static behaviors:ConsoleLog.Background}">
+                            <!-- Style cleared: the themed one repaints the box on focus, and a console doesn't. -->
+                            <RichTextBox
+                                Style="{x:Null}"
+                                Height="300"
+                                Padding="0"
+                                BorderThickness="0"
+                                Background="Transparent"
+                                Foreground="#CCCCCC"
+                                CaretBrush="Transparent"
+                                IsReadOnly="True"
+                                IsReadOnlyCaretVisible="False"
+                                FontFamily="Cascadia Mono, Consolas"
+                                FontSize="12"
+                                HorizontalScrollBarVisibility="Auto"
+                                VerticalScrollBarVisibility="Auto"
+                                behaviors:ConsoleLog.Lines="{Binding ServerLogLines}" />
+                        </Border>
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                             <ui:Button
                                 Content="{loc:Str Play_ServerLogOpenFolder}"

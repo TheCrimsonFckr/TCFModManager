@@ -21,6 +21,9 @@ public static class ThumbnailLoader
     // Decode resolution for thumbnails, which are only ever shown small.
     private const int DecodePixelWidth = 128;
 
+    // Decode resolution for LargeSource - the hover preview's picture (OPEN-12 A6), 360 wide on screen.
+    private const int LargeDecodePixelWidth = 720;
+
     // In-memory cache of decoded thumbnails, keyed by URL. Only touched from the UI thread.
     private static readonly Dictionary<string, BitmapImage> Cache = new();
 
@@ -45,35 +48,51 @@ public static class ThumbnailLoader
 
     public static string? GetSource(DependencyObject element) => (string?)element.GetValue(SourceProperty);
 
-    private static void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    // The same picture decoded big enough to be shown large, cached apart from the small one.
+    public static readonly DependencyProperty LargeSourceProperty = DependencyProperty.RegisterAttached(
+        "LargeSource", typeof(string), typeof(ThumbnailLoader), new PropertyMetadata(null, OnLargeSourceChanged));
+
+    public static void SetLargeSource(DependencyObject element, string? value) => element.SetValue(LargeSourceProperty, value);
+
+    public static string? GetLargeSource(DependencyObject element) => (string?)element.GetValue(LargeSourceProperty);
+
+    private static void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
+        Begin(d, e.NewValue as string, SourceProperty, DecodePixelWidth);
+
+    private static void OnLargeSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
+        Begin(d, e.NewValue as string, LargeSourceProperty, LargeDecodePixelWidth);
+
+    private static void Begin(DependencyObject d, string? url, DependencyProperty property, int width)
     {
         if (d is not Image image) return;
 
-        var url = e.NewValue as string;
         image.Source = null;
         if (string.IsNullOrWhiteSpace(url)) return;
 
-        if (Cache.TryGetValue(url, out var cached))
+        if (Cache.TryGetValue(Key(url, width), out var cached))
         {
             image.Source = cached;
             return;
         }
 
         AppLog.Debug("Thumbnails", $"ThumbnailLoader: queuing {url}");
-        _ = LoadAsync(image, url);
+        _ = LoadAsync(image, url, property, width);
     }
 
-    private static async Task LoadAsync(Image image, string url)
+    private static string Key(string url, int width) => width == DecodePixelWidth ? url : $"{width}|{url}";
+
+    private static async Task LoadAsync(Image image, string url, DependencyProperty property, int width)
     {
+        var key = Key(url, width);
         var sw = Stopwatch.StartNew();
         await Gate.WaitAsync();
         AppLog.Debug("Thumbnails", $"ThumbnailLoader: gate acquired after {sw.ElapsedMilliseconds}ms for {url}");
         try
         {
             // Re-check the cache in case another card loaded this URL while waiting on the gate.
-            if (Cache.TryGetValue(url, out var cached))
+            if (Cache.TryGetValue(key, out var cached))
             {
-                if (GetSource(image) as string == url) image.Source = cached;
+                if (image.GetValue(property) as string == url) image.Source = cached;
                 return;
             }
 
@@ -93,7 +112,7 @@ public static class ThumbnailLoader
             {
                 bitmap = new BitmapImage();
                 bitmap.BeginInit();
-                bitmap.DecodePixelWidth = DecodePixelWidth;
+                bitmap.DecodePixelWidth = width;
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
                 bitmap.StreamSource = new MemoryStream(bytes);
                 bitmap.EndInit();
@@ -109,8 +128,8 @@ public static class ThumbnailLoader
 
             AppLog.Debug("Thumbnails", $"ThumbnailLoader: loaded {bytes.Length} bytes after {sw.ElapsedMilliseconds}ms total for {url}");
 
-            Cache[url] = bitmap;
-            if (GetSource(image) as string == url) image.Source = bitmap;
+            Cache[key] = bitmap;
+            if (image.GetValue(property) as string == url) image.Source = bitmap;
         }
         finally
         {

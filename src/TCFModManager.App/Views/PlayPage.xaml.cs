@@ -34,20 +34,6 @@ public partial class PlayPage : Page
         Unloaded += (_, _) => ViewModel.StopPolling();
     }
 
-    // The newest lines at the bottom, as a console has them.
-    private void ServerLogBox_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        ServerLogBox.ScrollToEnd();
-        ViewModel.FollowServerLog = true;
-    }
-
-    // Scrolled up by the user: stop replacing the text until they are back at the bottom.
-    private void ServerLogBox_ScrollChanged(object sender, ScrollChangedEventArgs e)
-    {
-        if (e.ExtentHeightChange != 0) return;
-        ViewModel.FollowServerLog = e.VerticalOffset + e.ViewportHeight >= e.ExtentHeight - 2;
-    }
-
     // The Play card's "..." - the things done now and then, kept off the card.
     private void DirectMore_Click(object sender, RoutedEventArgs e)
     {

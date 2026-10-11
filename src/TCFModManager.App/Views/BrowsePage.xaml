@@ -434,7 +434,7 @@
                         VerticalAlignment="Stretch"
                         ClipToBounds="True"
                         ToolTip="{StaticResource ModHoverPreview}"
-                        ToolTipService.InitialShowDelay="600"
+                        ToolTipService.InitialShowDelay="1200"
                         ToolTipService.ShowDuration="60000"
                         ToolTipService.Placement="Right">
                         <!-- Fills the card. The right-hand column is a gutter the status icon and

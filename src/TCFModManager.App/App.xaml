@@ -435,11 +435,18 @@
             <converters:NullToVisibilityConverter x:Key="PreviewNullToCollapsed" />
             <ToolTip x:Key="ModHoverPreview" x:Shared="False" Placement="Right" MaxWidth="380" Padding="0">
                 <StackPanel Width="360">
-                    <Image
-                        Height="190"
-                        Stretch="UniformToFill"
-                        behaviors:ThumbnailLoader.Source="{Binding PreviewThumbnail}"
-                        Visibility="{Binding PreviewThumbnail, Converter={StaticResource PreviewNullToCollapsed}}" />
+                    <!-- The whole picture, never cropped: wide ones fill the width, tall or square
+                         ones are centred on a dark band at most 240 high. -->
+                    <Border
+                        Background="#FF141414"
+                        Visibility="{Binding PreviewThumbnail, Converter={StaticResource PreviewNullToCollapsed}}">
+                        <Image
+                            MaxHeight="240"
+                            HorizontalAlignment="Center"
+                            Stretch="Uniform"
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            behaviors:ThumbnailLoader.LargeSource="{Binding PreviewThumbnail}" />
+                    </Border>
                     <StackPanel Margin="12,10,12,12">
                         <TextBlock FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding PreviewTitle}" />
                         <TextBlock
