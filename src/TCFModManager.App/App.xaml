@@ -229,8 +229,9 @@
 
                     Made to behave like the ComboBoxes beside it (WPF-UI 4.3's DefaultComboBoxStyle,
                     read from its BAML): the chevron is part of the template and turns 180 degrees
-                    over 167ms as the panel opens and back as it closes, and the hover fill is the
-                    ComboBox's. Used by the Filters and view options button, which opens a side panel
+                    over 167ms as the panel opens and back as it closes. The hover fill is the
+                    button one, not the ComboBox's, so it picks up the stronger light-theme hover
+                    AppTheme sets (2026-10-11); in dark the two are the same colour. Used by the Filters and view options button, which opens a side panel
                     (see Behaviors/FilterSidePanel).
                 -->
                 <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
@@ -272,7 +273,7 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="Face" Property="Background" Value="{DynamicResource ComboBoxBackgroundPointerOver}" />
+                                    <Setter TargetName="Face" Property="Background" Value="{DynamicResource ButtonBackgroundPointerOver}" />
                                 </Trigger>
                                 <Trigger Property="IsChecked" Value="True">
                                     <Trigger.EnterActions>
