@@ -74,6 +74,15 @@ public sealed record ModListAction
     //
     public bool IsRepair { get; init; }
 
+    //
+    // OPEN-22: not on the list - a mod the list's mods need, ticked on the preview to go with it.
+    // NeededBy names what needs it. Such an action is never an Update: one already installed at
+    // another version is left as it is (OPEN-22 Q3) - a Keep, or an Enable that doesn't update.
+    //
+    public bool IsDependency { get; init; }
+
+    public IReadOnlyList<string> NeededBy { get; init; } = [];
+
     // True for anything this action will fetch from The Forge.
     public bool IsFetch =>
         Kind is ModListActionKind.Install or ModListActionKind.Update || NeedsUpdateAfterEnable;
@@ -153,7 +162,8 @@ public static class ModListPlanner
         IEnumerable<ModListCandidate> installed,
         IReadOnlySet<string>? neverAutoDisable = null,
         ModList? alsoRequiredBy = null,
-        ModListEntryScope machine = ModListEntryScope.Client)
+        ModListEntryScope machine = ModListEntryScope.Client,
+        IReadOnlyList<ModListDependencyPick>? dependencies = null)
     {
         var serverProtected = Protecting(alsoRequiredBy, machine);
 
@@ -186,6 +196,19 @@ public static class ModListPlanner
         {
             var found = match.IndexOf(entry);
             if (found >= 0) matched[found] = true;
+        }
+
+        //
+        // OPEN-22: the dependencies ticked on the preview count as on the list for this apply - put
+        // in when missing, enabled when disabled, and spared by the Exclusive sweep (Q4).
+        //
+        foreach (var pick in dependencies ?? [])
+        {
+            var found = match.IndexOf(pick.Entry);
+            if (found >= 0 && matched[found]) continue;
+            if (found >= 0) matched[found] = true;
+
+            actions.Add(DependencyAction(pick, found >= 0 ? candidates[found] : null));
         }
 
         //
@@ -225,6 +248,31 @@ public static class ModListPlanner
             ListName = list.Name,
             Policy = list.Policy,
             Actions = actions,
+        };
+    }
+
+    private static ModListAction DependencyAction(ModListDependencyPick pick, ModListCandidate? installed)
+    {
+        var entry = pick.Entry;
+
+        if (installed is null)
+        {
+            return ActionFor(entry, null) with { IsDependency = true, NeededBy = pick.NeededBy };
+        }
+
+        return new ModListAction
+        {
+            Kind = installed.IsDisabled ? ModListActionKind.Enable : ModListActionKind.Keep,
+            Name = entry.Name,
+            Entry = entry,
+            Installed = installed,
+            ModId = entry.ModId ?? installed.ModId,
+            IsAddon = entry.IsAddon,
+            VersionId = entry.VersionId,
+            TargetVersion = installed.Version,
+            InstalledVersion = installed.Version,
+            IsDependency = true,
+            NeededBy = pick.NeededBy,
         };
     }
 

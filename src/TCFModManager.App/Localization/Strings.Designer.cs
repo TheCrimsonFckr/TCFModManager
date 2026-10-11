@@ -1563,8 +1563,6 @@ internal static class Strings
     internal static string Help_Intro => LocalizationService.Get("Help_Intro");
     internal static string Help_OpenGuide => LocalizationService.Get("Help_OpenGuide");
     internal static string Help_OpenGuideToolTip => LocalizationService.Get("Help_OpenGuideToolTip");
-    internal static string Options_SearchPlaceholder => LocalizationService.Get("Options_SearchPlaceholder");
-    internal static string Options_SearchNoMatches => LocalizationService.Get("Options_SearchNoMatches");
     internal static string Help_SearchPlaceholder => LocalizationService.Get("Help_SearchPlaceholder");
     internal static string Help_NoMatches => LocalizationService.Get("Help_NoMatches");
     internal static string Help_StepNumberFormat => LocalizationService.Get("Help_StepNumberFormat");
@@ -2502,4 +2500,27 @@ internal static class Strings
     internal static string Filter_PresetSaveToolTip => LocalizationService.Get("Filter_PresetSaveToolTip");
     internal static string Filter_PresetRowToolTipFormat => LocalizationService.Get("Filter_PresetRowToolTipFormat");
     internal static string Filter_PresetRowActiveToolTipFormat => LocalizationService.Get("Filter_PresetRowActiveToolTipFormat");
+    internal static string Options_SearchPlaceholder => LocalizationService.Get("Options_SearchPlaceholder");
+    internal static string Options_SearchNoMatches => LocalizationService.Get("Options_SearchNoMatches");
+    internal static string Dependencies_VersionBestFitFormat => LocalizationService.Get("Dependencies_VersionBestFitFormat");
+    internal static string Dependencies_BestFitTitleFormat => LocalizationService.Get("Dependencies_BestFitTitleFormat");
+    internal static string Dependencies_BestFitQuestionFormat => LocalizationService.Get("Dependencies_BestFitQuestionFormat");
+    internal static string Dependencies_BestFitBreakLineFormat => LocalizationService.Get("Dependencies_BestFitBreakLineFormat");
+    internal static string Dependencies_BestFitCancelledFormat => LocalizationService.Get("Dependencies_BestFitCancelledFormat");
+    internal static string Dependencies_VersionDisable => LocalizationService.Get("Dependencies_VersionDisable");
+    internal static string Dependencies_VersionDisableToolTipFormat => LocalizationService.Get("Dependencies_VersionDisableToolTipFormat");
+    internal static string Dependencies_DisabledFormat => LocalizationService.Get("Dependencies_DisabledFormat");
+    internal static string Dependencies_DisableFailedFormat => LocalizationService.Get("Dependencies_DisableFailedFormat");
+    internal static string SpModImport_FactConflictWhoFormat => LocalizationService.Get("SpModImport_FactConflictWhoFormat");
+    internal static string SpModImport_FactWantsFormat => LocalizationService.Get("SpModImport_FactWantsFormat");
+    internal static string ModLists_DepsHeader => LocalizationService.Get("ModLists_DepsHeader");
+    internal static string ModLists_DepsHint => LocalizationService.Get("ModLists_DepsHint");
+    internal static string ModLists_DepsNeededByFormat => LocalizationService.Get("ModLists_DepsNeededByFormat");
+    internal static string ModLists_DepsNeedInstallFormat => LocalizationService.Get("ModLists_DepsNeedInstallFormat");
+    internal static string ModLists_DepsNeedEnable => LocalizationService.Get("ModLists_DepsNeedEnable");
+    internal static string ModLists_DepsNeedKeep => LocalizationService.Get("ModLists_DepsNeedKeep");
+    internal static string ModLists_DepsAddToList => LocalizationService.Get("ModLists_DepsAddToList");
+    internal static string ModLists_DepsAddToListToolTip => LocalizationService.Get("ModLists_DepsAddToListToolTip");
+    internal static string ModLists_DepsUnreachable => LocalizationService.Get("ModLists_DepsUnreachable");
+    internal static string ModLists_DepsNoVersionFormat => LocalizationService.Get("ModLists_DepsNoVersionFormat");
 }

@@ -7620,4 +7620,71 @@ Clic destro per salvarci i filtri attuali, rinominarla o eliminarla.</value>
   <data name="Options_SearchNoMatches" xml:space="preserve">
     <value>Nessuna impostazione corrisponde. Prova con meno parole o con parole diverse.</value>
   </data>
+  <data name="Dependencies_VersionBestFitFormat" xml:space="preserve">
+    <value>La versione {0} va bene per {1} delle {2} mod qui.</value>
+  </data>
+  <data name="Dependencies_BestFitTitleFormat" xml:space="preserve">
+    <value>Passare {0} alla versione {1}?</value>
+  </data>
+  <data name="Dependencies_BestFitQuestionFormat" xml:space="preserve">
+    <value>Con la versione {1} di {0} si caricano più mod, ma queste smetterebbero di caricarsi:
+
+{2}
+
+Passare comunque?</value>
+  </data>
+  <data name="Dependencies_BestFitBreakLineFormat" xml:space="preserve">
+    <value>• {0} - {1}</value>
+  </data>
+  <data name="Dependencies_BestFitCancelledFormat" xml:space="preserve">
+    <value>{0} è rimasto com'era.</value>
+  </data>
+  <data name="Dependencies_VersionDisable" xml:space="preserve">
+    <value>Disattiva</value>
+  </data>
+  <data name="Dependencies_VersionDisableToolTipFormat" xml:space="preserve">
+    <value>Disattiva {0}, così smette di chiedere una versione di {1} che non può avere. Riattivala da Installati.</value>
+  </data>
+  <data name="Dependencies_DisabledFormat" xml:space="preserve">
+    <value>{0} disattivata. Riattivala da Installati.</value>
+  </data>
+  <data name="Dependencies_DisableFailedFormat" xml:space="preserve">
+    <value>Impossibile disattivare {0}: {1}</value>
+  </data>
+  <data name="SpModImport_FactConflictWhoFormat" xml:space="preserve">
+    <value>le mod che la richiedono non concordano sulla versione: {0}</value>
+  </data>
+  <data name="SpModImport_FactWantsFormat" xml:space="preserve">
+    <value>{0} vuole la {1}</value>
+  </data>
+  <data name="ModLists_DepsHeader" xml:space="preserve">
+    <value>Servono anche</value>
+  </data>
+  <data name="ModLists_DepsHint" xml:space="preserve">
+    <value>Alcune mod di questa lista ne hanno bisogno, ma la lista non le nomina. Quelle spuntate vengono installate o attivate con la lista, e restano attive se la lista le metterebbe da parte.</value>
+  </data>
+  <data name="ModLists_DepsNeededByFormat" xml:space="preserve">
+    <value>Richiesta da {0}</value>
+  </data>
+  <data name="ModLists_DepsNeedInstallFormat" xml:space="preserve">
+    <value>Installa la {0}</value>
+  </data>
+  <data name="ModLists_DepsNeedEnable" xml:space="preserve">
+    <value>Attiva</value>
+  </data>
+  <data name="ModLists_DepsNeedKeep" xml:space="preserve">
+    <value>Lascia attiva</value>
+  </data>
+  <data name="ModLists_DepsAddToList" xml:space="preserve">
+    <value>Aggiungi anche quelle spuntate a questa lista</value>
+  </data>
+  <data name="ModLists_DepsAddToListToolTip" xml:space="preserve">
+    <value>Le scrive nella lista quando l'applicazione è finita, così da quel momento la lista le nomina.</value>
+  </data>
+  <data name="ModLists_DepsUnreachable" xml:space="preserve">
+    <value>Non è stato possibile chiedere a sp-mod di cosa hanno bisogno le mod di questa lista, quindi le mod che la lista non nomina non verranno aggiunte. Puoi comunque applicarla.</value>
+  </data>
+  <data name="ModLists_DepsNoVersionFormat" xml:space="preserve">
+    <value>Servono anche, ma per questo SPT non è pubblicato nulla: {0}</value>
+  </data>
 </root>

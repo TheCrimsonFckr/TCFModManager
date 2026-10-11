@@ -598,6 +598,81 @@
                     IsClosable="False"
                     IsOpen="{Binding HasDownloadOnlyNotice, Mode=OneWay}"
                     Message="{Binding DownloadOnlyNotice}" />
+
+                <!-- OPEN-22: sp-mod couldn't be asked what the list's mods need. Apply still works. -->
+                <ui:InfoBar
+                    Margin="0,16,0,0"
+                    Severity="Warning"
+                    IsClosable="False"
+                    IsOpen="{Binding HasDependencyProblem, Mode=OneWay}"
+                    Message="{Binding DependencyProblem}" />
+
+                <!-- OPEN-22: mods the list's mods need that the list doesn't name, ticked to go with it. -->
+                <ui:Card
+                    Margin="0,16,0,0"
+                    Padding="14,12"
+                    Visibility="{Binding HasDependencyRows, Converter={StaticResource BoolToVis}}">
+                    <StackPanel>
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                            Text="{loc:Str ModLists_DepsHeader}" />
+                        <TextBlock
+                            Margin="0,2,0,8"
+                            FontSize="12"
+                            TextWrapping="Wrap"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                            Text="{loc:Str ModLists_DepsHint}" />
+                        <ScrollViewer MaxHeight="220" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                            <ItemsControl ItemsSource="{Binding DependencyRows}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,0,14,6">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0" VerticalAlignment="Center" IsChecked="{Binding IsTicked}">
+                                                <StackPanel>
+                                                    <TextBlock
+                                                        TextWrapping="Wrap"
+                                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                        Text="{Binding Name}" />
+                                                    <TextBlock
+                                                        TextWrapping="Wrap"
+                                                        FontSize="12"
+                                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                        Text="{Binding Detail}" />
+                                                </StackPanel>
+                                            </CheckBox>
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                Margin="12,0,0,0"
+                                                VerticalAlignment="Center"
+                                                FontSize="12"
+                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                Text="{Binding Need}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                        <TextBlock
+                            Margin="0,6,0,0"
+                            FontSize="12"
+                            TextWrapping="Wrap"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{Binding DependencyNoVersionNote}"
+                            Visibility="{Binding HasDependencyNoVersionNote, Converter={StaticResource BoolToVis}}" />
+                        <CheckBox
+                            Margin="0,8,0,0"
+                            IsChecked="{Binding AddDependenciesToList}"
+                            ToolTip="{loc:Str ModLists_DepsAddToListToolTip}"
+                            Visibility="{Binding CanAddDependenciesToList, Converter={StaticResource BoolToVis}}">
+                            <TextBlock Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{loc:Str ModLists_DepsAddToList}" />
+                        </CheckBox>
+                    </StackPanel>
+                </ui:Card>
             </StackPanel>
 
             <!-- The plan at a glance: one coloured count per kind of change, in the colours the

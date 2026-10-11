@@ -64,6 +64,34 @@ public class DependencyVersionSolverTests
     }
 
     [Fact]
+    public void Solve_Conflict_OffersTheVersionThatFitsTheMost_AndNamesWhatItBreaks()
+    {
+        // Installed 3.0.6 meets only Msga; 3.0.3 meets Eco and Canted but not Msga.
+        var report = Assert.Single(DependencyVersionSolver.Solve(
+            [CommonLib(), Dependent("Msga", 1453, ">=3.0.6"), Dependent("Eco", 2882, "<=3.0.3"), Dependent("Canted", 2001, "~3.0.0 <3.0.4")],
+            Published));
+
+        Assert.True(report.Conflict);
+        Assert.Equal("3.0.3", report.BestFit);
+        Assert.Equal(2, report.BestFitMeets);
+        Assert.Equal(3, report.RangedCount);
+        Assert.Equal("Msga", Assert.Single(report.BestFitBreaks).Dependent.Name);
+    }
+
+    [Fact]
+    public void Solve_Conflict_NoBestFitWhenNothingBeatsWhatIsInstalled()
+    {
+        // 3.0.6 meets one; every other version also meets only one.
+        var report = Assert.Single(DependencyVersionSolver.Solve(
+            [CommonLib(), Dependent("Msga", 1453, ">=3.0.6"), Dependent("Old", 2882, "<=2.0.24")],
+            Published));
+
+        Assert.True(report.Conflict);
+        Assert.Null(report.BestFit);
+        Assert.Empty(report.BestFitBreaks);
+    }
+
+    [Fact]
     public void Solve_NoSingleVersionFits_IsAConflict()
     {
         var report = Assert.Single(DependencyVersionSolver.Solve(

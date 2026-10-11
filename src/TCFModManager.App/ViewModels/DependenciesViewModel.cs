@@ -462,6 +462,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
                             DependencyInstalledVersion = dependencyVersion,
                             DependentUpdateVersion = dependentCard.UpdateAvailable == true ? dependentCard.UpdateVersion : null,
                             DependentCatalogMod = r.Dependent.ModId is { } did ? catalog.FirstOrDefault(m => m.Id == did) : null,
+                            DependentCard = dependentCard,
                         };
                     })
                     .ToList(),
@@ -513,11 +514,33 @@ public partial class DependenciesViewModel : LocalizedViewModel
         StatusMessage = Text(Strings.Dependencies_QueuedFormat, row.DependentName, version);
     }
 
-    // Switches a dependency to the version every installed mod's files accept.
+    //
+    // Switches a dependency to the version every installed mod's files accept - or, when none does,
+    // to the one that fits the most (OPEN-23 S5), after naming the mods that version would stop.
+    //
     [RelayCommand]
     private void SwitchVersion(VersionReportViewModel? report)
     {
-        if (report?.CatalogMod is not { } mod || report.Report.FixVersion is not { } version) return;
+        if (report?.CatalogMod is not { } mod || report.SwitchTarget is not { } version) return;
+
+        if (report.IsBestFit && report.Report.BestFitBreaks.Count > 0)
+        {
+            var lines = report.Report.BestFitBreaks
+                .Select(b => report.Rows.FirstOrDefault(r => ReferenceEquals(r.Requirement, b)) is { } row
+                    ? Text(Strings.Dependencies_BestFitBreakLineFormat, row.Name, row.Detail)
+                    : Text(Strings.Dependencies_BestFitBreakLineFormat, b.Dependent.Name, b.Range));
+
+            var question = Text(Strings.Dependencies_BestFitQuestionFormat, report.DependencyName, version,
+                string.Join(Environment.NewLine, lines));
+
+            if (System.Windows.MessageBox.Show(question, Text(Strings.Dependencies_BestFitTitleFormat, report.DependencyName, version),
+                    System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Warning, System.Windows.MessageBoxResult.No)
+                != System.Windows.MessageBoxResult.Yes)
+            {
+                StatusMessage = Text(Strings.Dependencies_BestFitCancelledFormat, report.DependencyName);
+                return;
+            }
+        }
 
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath))
@@ -537,6 +560,87 @@ public partial class DependenciesViewModel : LocalizedViewModel
             downloadOnly: AppServices.ModPageGate.DownloadOnlyFor(false));
 
         StatusMessage = Text(Strings.Dependencies_QueuedFormat, report.DependencyName, version);
+    }
+
+    //
+    // OPEN-23 S5: turns off the mod asking for a version it can't have, so it stops asking. Goes the
+    // same way as Installed's disable - what else it reaches is asked about first, the profiles are
+    // copied, the folders moved - and Installed picks the change up when it is next opened.
+    //
+    [RelayCommand]
+    private async Task DisableDependentAsync(VersionRequirementRow? row)
+    {
+        if (row is not { CanDisable: true, DependentCard: { } card }) return;
+
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        if (string.IsNullOrWhiteSpace(installPath))
+        {
+            StatusMessage = AppMessages.NoSptInstallFolder;
+            return;
+        }
+
+        if (ModInstallService.RunningBlockers(installPath) is { Count: > 0 } blockers)
+        {
+            StatusMessage = ModInstallProblems.InstallInUse(blockers, ModInstallAction.Disable);
+            return;
+        }
+
+        var cards = _upgradeCards;
+        var cardByEntry = new Dictionary<InstalledMod, InstalledModCardViewModel>(ReferenceEqualityComparer.Instance);
+        foreach (var c in cards)
+        foreach (var e in c.Entries)
+            cardByEntry[e] = c;
+
+        var graph = ModDependencyGraph.Build(cards.SelectMany(c => c.Entries));
+        var targets = new List<InstalledModCardViewModel> { card };
+        var affected = new List<(InstalledModCardViewModel Card, ModDisableImpactRow Row)>();
+
+        foreach (var link in graph.DisableImpact(card.Entries))
+        {
+            if (!cardByEntry.TryGetValue(link.Dependent, out var reached) || targets.Contains(reached) || affected.Any(a => a.Card == reached)) continue;
+
+            var neededName = cardByEntry.TryGetValue(link.Dependency, out var other) ? other.DisplayTitle : link.Dependency.Name;
+            var detail = Text(link.IsSoft ? Strings.Installed_ImpactOptionallyUsesFormat : Strings.Installed_ImpactNeedsFormat, neededName);
+            affected.Add((reached, new ModDisableImpactRow(reached.DisplayTitle, detail, link.IsSoft)));
+        }
+
+        if (affected.Count > 0)
+        {
+            switch (ModDisableConfirmationWindow.Confirm(true, [card.DisplayTitle], affected.Select(a => a.Row).ToList()))
+            {
+                case ModDisableChoice.Cancel:
+                    return;
+                case ModDisableChoice.ProceedWithCascade:
+                    targets.AddRange(affected.Select(a => a.Card));
+                    break;
+            }
+        }
+
+        var entries = targets.SelectMany(c => c.Entries).Where(e => !e.IsDisabled).ToList();
+
+        IsBusy = true;
+        ModDisableOutcome outcome;
+        try
+        {
+            await Task.Run(() => AppServices.ProfileBackups.BackupIfChanged(installPath, ProfileBackups.BeforeDisable));
+            outcome = ModDisableService.Apply(entries, true, installPath);
+        }
+        catch (ModInstallException ex)
+        {
+            StatusMessage = ModInstallProblems.Describe(ex);
+            return;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+
+        AppLog.Info("Dependencies", $"disabled {string.Join(", ", targets.Select(t => t.DisplayTitle))} from a version requirement row ({outcome.Failed.Count} failed)");
+
+        await RefreshAsync();
+        StatusMessage = outcome.Failed.Count == 0
+            ? Text(Strings.Dependencies_DisabledFormat, card.DisplayTitle)
+            : Text(Strings.Dependencies_DisableFailedFormat, card.DisplayTitle, outcome.Failed[0].Reason);
     }
 
     // Queues a missing or outdated dependency, behind the same read-the-mod-page gate Browse uses.

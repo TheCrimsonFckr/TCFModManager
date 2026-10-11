@@ -9164,4 +9164,80 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>No setting matches that. Try fewer or different words.</value>
     <comment>Shown on the Options page when the search hides every setting.</comment>
   </data>
+  <data name="Dependencies_VersionBestFitFormat" xml:space="preserve">
+    <value>Version {0} works for {1} of the {2} mods here.</value>
+    <comment>Version conflicts card, when no version suits every mod: {0} the version that suits the most, {1} how many it suits, {2} how many ask.</comment>
+  </data>
+  <data name="Dependencies_BestFitTitleFormat" xml:space="preserve">
+    <value>Switch {0} to {1}?</value>
+  </data>
+  <data name="Dependencies_BestFitQuestionFormat" xml:space="preserve">
+    <value>Version {1} of {0} lets more of your mods load, but these would stop loading:
+
+{2}
+
+Switch anyway?</value>
+    <comment>{0} dependency name, {1} version, {2} one line per mod it would break (Dependencies_BestFitBreakLineFormat).</comment>
+  </data>
+  <data name="Dependencies_BestFitBreakLineFormat" xml:space="preserve">
+    <value>• {0} - {1}</value>
+    <comment>{0} mod name and version, {1} what it needs.</comment>
+  </data>
+  <data name="Dependencies_BestFitCancelledFormat" xml:space="preserve">
+    <value>Left {0} as it is.</value>
+  </data>
+  <data name="Dependencies_VersionDisable" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="Dependencies_VersionDisableToolTipFormat" xml:space="preserve">
+    <value>Turn {0} off, so it stops asking for a version of {1} it can't have. Turn it back on from Installed.</value>
+  </data>
+  <data name="Dependencies_DisabledFormat" xml:space="preserve">
+    <value>Disabled {0}. Turn it back on from Installed.</value>
+  </data>
+  <data name="Dependencies_DisableFailedFormat" xml:space="preserve">
+    <value>Couldn't disable {0}: {1}</value>
+  </data>
+  <data name="SpModImport_FactConflictWhoFormat" xml:space="preserve">
+    <value>the mods that need it disagree on its version: {0}</value>
+    <comment>{0} a list of SpModImport_FactWantsFormat, joined by Common_ListSeparator.</comment>
+  </data>
+  <data name="SpModImport_FactWantsFormat" xml:space="preserve">
+    <value>{0} wants {1}</value>
+    <comment>{0} a mod name, {1} a version of the dependency.</comment>
+  </data>
+  <data name="ModLists_DepsHeader" xml:space="preserve">
+    <value>Also needed</value>
+    <comment>Heading of the preview card listing mods the list's mods need but the list doesn't name.</comment>
+  </data>
+  <data name="ModLists_DepsHint" xml:space="preserve">
+    <value>Mods on this list need these, but the list doesn't name them. Ticked ones are installed or enabled with the list, and kept on if the list would set them aside.</value>
+  </data>
+  <data name="ModLists_DepsNeededByFormat" xml:space="preserve">
+    <value>Needed by {0}</value>
+    <comment>{0} the mods that need it, joined by Common_ListSeparator.</comment>
+  </data>
+  <data name="ModLists_DepsNeedInstallFormat" xml:space="preserve">
+    <value>Install {0}</value>
+    <comment>{0} a version.</comment>
+  </data>
+  <data name="ModLists_DepsNeedEnable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="ModLists_DepsNeedKeep" xml:space="preserve">
+    <value>Keep enabled</value>
+  </data>
+  <data name="ModLists_DepsAddToList" xml:space="preserve">
+    <value>Also add the ticked ones to this list</value>
+  </data>
+  <data name="ModLists_DepsAddToListToolTip" xml:space="preserve">
+    <value>Writes them onto the list once the apply finishes, so the list names them from then on.</value>
+  </data>
+  <data name="ModLists_DepsUnreachable" xml:space="preserve">
+    <value>Couldn't ask sp-mod what this list's mods need, so mods the list doesn't name won't be added. You can still apply it.</value>
+  </data>
+  <data name="ModLists_DepsNoVersionFormat" xml:space="preserve">
+    <value>Also needed, but nothing is published for this SPT: {0}</value>
+    <comment>{0} mod names joined by Common_ListSeparator.</comment>
+  </data>
 </root>

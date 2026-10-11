@@ -61,6 +61,19 @@ public sealed record DependencyVersionReport(
     string? FixVersion,
     bool InstallWide)
 {
+    //
+    // When Conflict: the published version that meets the most hard ranged file requirements - more
+    // than the installed one does - newest first among equals. Null when no version beats what is
+    // installed. BestFitBreaks are the requirements met today that it would miss; switching asks first.
+    //
+    public string? BestFit { get; init; }
+
+    public IReadOnlyList<DependencyRequirement> BestFitBreaks { get; init; } = [];
+
+    public int BestFitMeets { get; init; }
+
+    public int RangedCount { get; init; }
+
     public bool HasFileProblem => Requirements.Any(r =>
         r.Source == RequirementSource.Files && !r.IsOptional
         && r.Standing is RequirementStanding.Missed or RequirementStanding.Missing);
@@ -183,6 +196,9 @@ public static class DependencyVersionSolver
 
             string? fix = null;
             var conflict = false;
+            string? bestFit = null;
+            var bestMeets = 0;
+            List<DependencyRequirement> breaks = [];
 
             if (missed && dependency?.ModId is { } id && publishedVersions is not null)
             {
@@ -194,6 +210,26 @@ public static class DependencyVersionSolver
                         .OrderByDescending(v => v, Comparer<string>.Create((a, b) => ModVersionComparer.Compare(a, b) ?? 0))
                         .FirstOrDefault();
                     conflict = fix is null;
+
+                    if (conflict)
+                    {
+                        var metToday = ranged.Count(r => r.Standing == RequirementStanding.Met);
+                        var best = published
+                            .Select(v => (Version: v, Meets: ranged.Count(r => ModVersionMatcher.IsSatisfiedBy(r.Range, v) == true)))
+                            .Where(c => c.Meets > metToday)
+                            .OrderByDescending(c => c.Meets)
+                            .ThenByDescending(c => c.Version, Comparer<string>.Create((a, b) => ModVersionComparer.Compare(a, b) ?? 0))
+                            .FirstOrDefault();
+
+                        if (best.Version is not null)
+                        {
+                            bestFit = best.Version;
+                            bestMeets = best.Meets;
+                            breaks = ranged
+                                .Where(r => r.Standing == RequirementStanding.Met && ModVersionMatcher.IsSatisfiedBy(r.Range, best.Version) != true)
+                                .ToList();
+                        }
+                    }
                 }
             }
 
@@ -201,7 +237,13 @@ public static class DependencyVersionSolver
                 r.Side == InstalledModTarget.Server
                 && r.Standing is RequirementStanding.Missed or RequirementStanding.Missing);
 
-            reports.Add(new DependencyVersionReport(dependency, identifier, reqs, conflict, fix, installWide));
+            reports.Add(new DependencyVersionReport(dependency, identifier, reqs, conflict, fix, installWide)
+            {
+                BestFit = bestFit,
+                BestFitBreaks = breaks,
+                BestFitMeets = bestMeets,
+                RangedCount = ranged.Count,
+            });
         }
 
         return reports

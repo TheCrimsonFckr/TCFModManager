@@ -334,6 +334,21 @@ public class SpModListResolverTests
     }
 
     [Fact]
+    public async Task AConflictKeepsWhichVersionEachAskerWasGiven()
+    {
+        var api = new FakeApi();
+        var forTwo = Node(902, "3.0.6");
+        forTwo.Conflict = true;
+        api.ModTrees["1:1.0.0"] = [Node(902, "3.0.3")];
+        api.ModTrees["2:1.0.0"] = [forTwo];
+
+        var result = await SpModListResolver.MissingDependenciesAsync([Mod(1, "1.0.0", "Eco"), Mod(2, "1.0.0", "Msga")], NoParents, "4.1.6", api);
+
+        var dep = Assert.Single(result.Missing);
+        Assert.Equal([new SpModDependencyAsk("Eco", "3.0.3"), new SpModDependencyAsk("Msga", "3.0.6")], dep.Asks);
+    }
+
+    [Fact]
     public async Task ADependencyWithNoVersionIsReportedButNotAddable()
     {
         var api = new FakeApi();

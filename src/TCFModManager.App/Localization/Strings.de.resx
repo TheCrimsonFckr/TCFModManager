@@ -7620,4 +7620,71 @@ Rechtsklick, um die aktuellen Filter darin zu speichern, sie umzubenennen oder z
   <data name="Options_SearchNoMatches" xml:space="preserve">
     <value>Keine Einstellung passt dazu. Versuch weniger oder andere Wörter.</value>
   </data>
+  <data name="Dependencies_VersionBestFitFormat" xml:space="preserve">
+    <value>Version {0} passt für {1} der {2} Mods hier.</value>
+  </data>
+  <data name="Dependencies_BestFitTitleFormat" xml:space="preserve">
+    <value>{0} auf {1} wechseln?</value>
+  </data>
+  <data name="Dependencies_BestFitQuestionFormat" xml:space="preserve">
+    <value>Mit Version {1} von {0} laden mehr deiner Mods, aber diese würden nicht mehr laden:
+
+{2}
+
+Trotzdem wechseln?</value>
+  </data>
+  <data name="Dependencies_BestFitBreakLineFormat" xml:space="preserve">
+    <value>• {0} - {1}</value>
+  </data>
+  <data name="Dependencies_BestFitCancelledFormat" xml:space="preserve">
+    <value>{0} bleibt, wie es ist.</value>
+  </data>
+  <data name="Dependencies_VersionDisable" xml:space="preserve">
+    <value>Deaktivieren</value>
+  </data>
+  <data name="Dependencies_VersionDisableToolTipFormat" xml:space="preserve">
+    <value>{0} ausschalten, damit es keine Version von {1} mehr verlangt, die es nicht bekommen kann. Auf Installiert wieder einschalten.</value>
+  </data>
+  <data name="Dependencies_DisabledFormat" xml:space="preserve">
+    <value>{0} deaktiviert. Auf Installiert wieder einschalten.</value>
+  </data>
+  <data name="Dependencies_DisableFailedFormat" xml:space="preserve">
+    <value>{0} konnte nicht deaktiviert werden: {1}</value>
+  </data>
+  <data name="SpModImport_FactConflictWhoFormat" xml:space="preserve">
+    <value>die Mods, die ihn brauchen, sind sich über seine Version uneinig: {0}</value>
+  </data>
+  <data name="SpModImport_FactWantsFormat" xml:space="preserve">
+    <value>{0} will {1}</value>
+  </data>
+  <data name="ModLists_DepsHeader" xml:space="preserve">
+    <value>Wird auch gebraucht</value>
+  </data>
+  <data name="ModLists_DepsHint" xml:space="preserve">
+    <value>Mods auf dieser Liste brauchen diese, aber die Liste nennt sie nicht. Angehakte werden mit der Liste installiert oder aktiviert und bleiben an, falls die Liste sie sonst beiseitelegen würde.</value>
+  </data>
+  <data name="ModLists_DepsNeededByFormat" xml:space="preserve">
+    <value>Gebraucht von {0}</value>
+  </data>
+  <data name="ModLists_DepsNeedInstallFormat" xml:space="preserve">
+    <value>{0} installieren</value>
+  </data>
+  <data name="ModLists_DepsNeedEnable" xml:space="preserve">
+    <value>Aktivieren</value>
+  </data>
+  <data name="ModLists_DepsNeedKeep" xml:space="preserve">
+    <value>Aktiviert lassen</value>
+  </data>
+  <data name="ModLists_DepsAddToList" xml:space="preserve">
+    <value>Die angehakten auch zu dieser Liste hinzufügen</value>
+  </data>
+  <data name="ModLists_DepsAddToListToolTip" xml:space="preserve">
+    <value>Schreibt sie nach dem Anwenden in die Liste, damit die Liste sie ab dann nennt.</value>
+  </data>
+  <data name="ModLists_DepsUnreachable" xml:space="preserve">
+    <value>sp-mod konnte nicht gefragt werden, was die Mods dieser Liste brauchen, daher werden Mods, die die Liste nicht nennt, nicht hinzugefügt. Du kannst sie trotzdem anwenden.</value>
+  </data>
+  <data name="ModLists_DepsNoVersionFormat" xml:space="preserve">
+    <value>Wird auch gebraucht, aber für dieses SPT ist nichts veröffentlicht: {0}</value>
+  </data>
 </root>

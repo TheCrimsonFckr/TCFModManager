@@ -7983,4 +7983,71 @@
   <data name="Options_SearchNoMatches" xml:space="preserve">
     <value>Нет подходящих настроек. Попробуйте меньше слов или другие слова.</value>
   </data>
+  <data name="Dependencies_VersionBestFitFormat" xml:space="preserve">
+    <value>Версия {0} подходит {1} из {2} модов здесь.</value>
+  </data>
+  <data name="Dependencies_BestFitTitleFormat" xml:space="preserve">
+    <value>Переключить {0} на {1}?</value>
+  </data>
+  <data name="Dependencies_BestFitQuestionFormat" xml:space="preserve">
+    <value>С версией {1} мода {0} загрузится больше ваших модов, но эти перестанут загружаться:
+
+{2}
+
+Всё равно переключить?</value>
+  </data>
+  <data name="Dependencies_BestFitBreakLineFormat" xml:space="preserve">
+    <value>• {0} - {1}</value>
+  </data>
+  <data name="Dependencies_BestFitCancelledFormat" xml:space="preserve">
+    <value>{0} оставлен как есть.</value>
+  </data>
+  <data name="Dependencies_VersionDisable" xml:space="preserve">
+    <value>Отключить</value>
+  </data>
+  <data name="Dependencies_VersionDisableToolTipFormat" xml:space="preserve">
+    <value>Отключить {0}, чтобы он перестал требовать версию {1}, которую нельзя получить. Включить его снова можно на странице «Установленные».</value>
+  </data>
+  <data name="Dependencies_DisabledFormat" xml:space="preserve">
+    <value>{0} отключён. Включить его снова можно на странице «Установленные».</value>
+  </data>
+  <data name="Dependencies_DisableFailedFormat" xml:space="preserve">
+    <value>Не удалось отключить {0}: {1}</value>
+  </data>
+  <data name="SpModImport_FactConflictWhoFormat" xml:space="preserve">
+    <value>моды, которым он нужен, требуют разные версии: {0}</value>
+  </data>
+  <data name="SpModImport_FactWantsFormat" xml:space="preserve">
+    <value>{0} требует {1}</value>
+  </data>
+  <data name="ModLists_DepsHeader" xml:space="preserve">
+    <value>Также нужны</value>
+  </data>
+  <data name="ModLists_DepsHint" xml:space="preserve">
+    <value>Они нужны модам из этого списка, но в самом списке их нет. Отмеченные будут установлены или включены вместе со списком и останутся включёнными, даже если список отключил бы их.</value>
+  </data>
+  <data name="ModLists_DepsNeededByFormat" xml:space="preserve">
+    <value>Нужен для: {0}</value>
+  </data>
+  <data name="ModLists_DepsNeedInstallFormat" xml:space="preserve">
+    <value>Установить {0}</value>
+  </data>
+  <data name="ModLists_DepsNeedEnable" xml:space="preserve">
+    <value>Включить</value>
+  </data>
+  <data name="ModLists_DepsNeedKeep" xml:space="preserve">
+    <value>Оставить включённым</value>
+  </data>
+  <data name="ModLists_DepsAddToList" xml:space="preserve">
+    <value>Также добавить отмеченные в этот список</value>
+  </data>
+  <data name="ModLists_DepsAddToListToolTip" xml:space="preserve">
+    <value>Записывает их в список после применения, чтобы дальше список их содержал.</value>
+  </data>
+  <data name="ModLists_DepsUnreachable" xml:space="preserve">
+    <value>Не удалось узнать у sp-mod, что нужно модам этого списка, поэтому моды, которых нет в списке, добавлены не будут. Применить список всё равно можно.</value>
+  </data>
+  <data name="ModLists_DepsNoVersionFormat" xml:space="preserve">
+    <value>Также нужны, но для этой версии SPT ничего не опубликовано: {0}</value>
+  </data>
 </root>

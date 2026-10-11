@@ -55,6 +55,9 @@ public sealed class SpModReviewRow
     // sp-mod reports this dependency as wanted at incompatible versions by different mods.
     public bool Conflict { get; init; }
 
+    // Who asked for it and the version sp-mod picked for each - names a Conflict (OPEN-23 S5).
+    public IReadOnlyList<SpModDependencyAsk> Asks { get; init; } = [];
+
     // sp-mod's own "Not compatible" badge on the page: no version for the list's target.
     public bool NotCompatible { get; init; }
 
@@ -317,6 +320,7 @@ public sealed class SpModListReview
                 Ticked = !excluded.Contains(key),
                 NeededBy = dep.NeededBy,
                 Conflict = dep.Conflict,
+                Asks = dep.Asks,
                 Change = change,
                 StoredVersion = storedVersion,
             });

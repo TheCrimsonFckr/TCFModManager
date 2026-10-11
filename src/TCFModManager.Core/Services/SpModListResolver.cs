@@ -203,11 +203,20 @@ public sealed record SpModDependency(
     bool IsParent,
     bool Conflict)
 {
+    //
+    // Which version sp-mod picked for each mod that needs it (OPEN-23 S5) - so a Conflict can say who
+    // wants what instead of only that they disagree.
+    //
+    public IReadOnlyList<SpModDependencyAsk> Asks { get; init; } = [];
+
     // Nothing published satisfies the requirement on this SPT, so it can't be added.
     public bool HasVersion => Version is not null;
 
     public ModListEntry ToEntry() => new() { Name = Name, ModId = ModId, Version = Version, VersionId = VersionId };
 }
+
+// One mod asking for a dependency, and the version sp-mod picked for that ask (null: none fits).
+public sealed record SpModDependencyAsk(string NeededBy, string? Version);
 
 public sealed record SpModDependencies(
     string SptVersion,
@@ -430,7 +439,7 @@ public static class SpModListResolver
         var askable = entries.Where(e => e.ModId is not null && !string.IsNullOrWhiteSpace(e.Version)).ToList();
         var notChecked = entries.Where(e => e.ModId is null || string.IsNullOrWhiteSpace(e.Version)).ToList();
 
-        var found = new Dictionary<int, (DependencyNode Node, List<string> NeededBy, bool Conflict)>();
+        var found = new Dictionary<int, (DependencyNode Node, List<string> NeededBy, bool Conflict, List<SpModDependencyAsk> Asks)>();
 
         var batches = askable.Where(e => !e.IsAddon).Chunk(DependencyBatch).Select(b => (Addons: false, Entries: b))
             .Concat(askable.Where(e => e.IsAddon).Chunk(DependencyBatch).Select(b => (Addons: true, Entries: b)))
@@ -483,7 +492,10 @@ public static class SpModListResolver
                 f.Node.LatestCompatibleVersion?.Id,
                 [.. f.NeededBy.Distinct(StringComparer.OrdinalIgnoreCase)],
                 parentIds.Contains(f.Node.Id),
-                f.Conflict))
+                f.Conflict)
+            {
+                Asks = [.. f.Asks.DistinctBy(a => a.NeededBy, StringComparer.OrdinalIgnoreCase)],
+            })
             .OrderByDescending(d => d.IsParent)
             .ThenBy(d => d.Name, StringComparer.OrdinalIgnoreCase)
             .ToList();
@@ -524,14 +536,16 @@ public static class SpModListResolver
 
                 if (!onList.Contains(node.Id))
                 {
+                    var ask = new SpModDependencyAsk(requiredBy, node.LatestCompatibleVersion?.Version);
                     if (found.TryGetValue(node.Id, out var seen))
                     {
                         seen.NeededBy.Add(requiredBy);
+                        seen.Asks.Add(ask);
                         found[node.Id] = seen with { Conflict = seen.Conflict || node.Conflict };
                     }
                     else
                     {
-                        found[node.Id] = (node, [requiredBy], node.Conflict);
+                        found[node.Id] = (node, [requiredBy], node.Conflict, [ask]);
                     }
                 }
 

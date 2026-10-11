@@ -551,6 +551,74 @@ public partial class ModListsViewModel : LocalizedViewModel
 
     public bool HasPlan => PlanSummary is not null;
 
+    // ---- OPEN-22: dependencies the list doesn't name ---------------------------------------------
+
+    public ObservableCollection<ModListDependencyRowViewModel> DependencyRows { get; } = [];
+
+    public bool HasDependencyRows => DependencyRows.Count > 0;
+
+    // Set when sp-mod couldn't be asked - the list can still be applied (Q5).
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasDependencyProblem))]
+    private string? _dependencyProblem;
+
+    public bool HasDependencyProblem => DependencyProblem is not null;
+
+    // Needed, but nothing is published for this SPT - named, never offered.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasDependencyNoVersionNote))]
+    private string? _dependencyNoVersionNote;
+
+    public bool HasDependencyNoVersionNote => DependencyNoVersionNote is not null;
+
+    // Q1: your own lists can have the ticked ones written onto them as the apply finishes.
+    public bool CanAddDependenciesToList => HasDependencyRows && _preview?.List.IsEditable == true;
+
+    [ObservableProperty]
+    private bool _addDependenciesToList;
+
+    partial void OnAddDependenciesToListChanged(bool value) => ReplanDependencies();
+
+    // The offers the rows were built from, so a replan keeps the rows (and their ticks) in place.
+    private IReadOnlyList<ModListDependencyOffer>? _dependencyOffers;
+
+    private bool _replanning;
+
+    private void ShowDependencies(ModListPreview preview)
+    {
+        var check = preview.Dependencies;
+        DependencyProblem = check?.Problem;
+        DependencyNoVersionNote = check is { NoVersion.Count: > 0 }
+            ? Text(Strings.ModLists_DepsNoVersionFormat, string.Join(Strings.Common_ListSeparator, check.NoVersion.Select(d => d.Name)))
+            : null;
+
+        if (ReferenceEquals(check?.Offers, _dependencyOffers)) return;
+
+        _dependencyOffers = check?.Offers;
+        DependencyRows.Clear();
+        foreach (var offer in check?.Offers ?? [])
+            DependencyRows.Add(new ModListDependencyRowViewModel(offer, !check!.Unticked.Contains(offer.Dependency.ModId), ReplanDependencies));
+
+        if (check is not null && !check.AddToList && AddDependenciesToList)
+        {
+            _replanning = true;
+            AddDependenciesToList = false;
+            _replanning = false;
+        }
+
+        OnPropertyChanged(nameof(HasDependencyRows));
+        OnPropertyChanged(nameof(CanAddDependenciesToList));
+    }
+
+    // A tick or the add-to-list box changed: plan the same preview again, without rescanning.
+    private void ReplanDependencies()
+    {
+        if (_replanning || _preview is not { Dependencies: { } check } preview) return;
+
+        var unticked = DependencyRows.Where(r => !r.IsTicked).Select(r => r.ModId).ToHashSet();
+        ShowPlan(ModListService.Replan(preview, check with { Unticked = unticked, AddToList = AddDependenciesToList && preview.List.IsEditable }));
+    }
+
     public bool HasVersionWarning => VersionWarning is not null;
 
     //
@@ -885,6 +953,12 @@ public partial class ModListsViewModel : LocalizedViewModel
     {
         _preview = null;
         PlanRows.Clear();
+        DependencyRows.Clear();
+        _dependencyOffers = null;
+        DependencyProblem = null;
+        DependencyNoVersionNote = null;
+        OnPropertyChanged(nameof(HasDependencyRows));
+        OnPropertyChanged(nameof(CanAddDependenciesToList));
         PlanChips.Clear();
         PlanSummary = null;
         VersionWarning = null;
@@ -973,7 +1047,7 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         await RunAsync(async () =>
         {
-            var preview = await _service.PreviewAsync(row.List);
+            var preview = await _service.PreviewAsync(row.List, withDependencies: true);
 
             if (preview is null)
             {
@@ -991,6 +1065,8 @@ public partial class ModListsViewModel : LocalizedViewModel
         PlanRows.Clear();
 
         foreach (var row in Rows(preview.Plan)) PlanRows.Add(row);
+
+        ShowDependencies(preview);
 
         var plan = preview.Plan;
 
@@ -1035,7 +1111,9 @@ public partial class ModListsViewModel : LocalizedViewModel
     {
         _titles = CatalogTitles();
 
+        // A dependency the list doesn't name has its own row above, with its tick.
         return plan.Actions
+            .Where(a => !a.IsDependency)
             .Select(PlanRow)
             .OrderBy(r => r.Order)
             .ThenBy(r => r.Name, StringComparer.OrdinalIgnoreCase);
@@ -1208,7 +1286,10 @@ public partial class ModListsViewModel : LocalizedViewModel
             RefreshPinLookup();
             for (var i = 0; i < Entries.Count; i++) Entries[i] = Row(Entries[i].Entry);
 
-            var replanned = await _service.PreviewAsync(preview.List);
+            // Dependencies already asked about are kept - planned again, not asked again.
+            var replanned = preview.Dependencies is { } check
+                ? ModListService.Replan(preview, check)
+                : await _service.PreviewAsync(preview.List);
 
             if (replanned is null)
             {

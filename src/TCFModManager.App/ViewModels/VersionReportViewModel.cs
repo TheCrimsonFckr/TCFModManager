@@ -40,7 +40,12 @@ public sealed class VersionReportViewModel : LocalizedViewModel
             var parts = new List<string>();
             if (Report.InstallWide) parts.Add(Strings.Dependencies_VersionInstallWide);
 
-            if (Report.Conflict) parts.Add(Strings.Dependencies_VersionConflict);
+            if (Report.Conflict)
+            {
+                parts.Add(Strings.Dependencies_VersionConflict);
+                if (Report.BestFit is { } best)
+                    parts.Add(Text(Strings.Dependencies_VersionBestFitFormat, best, Report.BestFitMeets, Report.RangedCount));
+            }
             else if (Report.FixVersion is { } fix) parts.Add(Text(Strings.Dependencies_VersionFixFormat, fix));
             else if (!Report.HasFileProblem) parts.Add(Strings.Dependencies_VersionSpModOnly);
 
@@ -48,9 +53,15 @@ public sealed class VersionReportViewModel : LocalizedViewModel
         }
     }
 
-    public bool CanSwitch => Report.FixVersion is not null && CatalogMod is not null;
+    // The version every mod's files accept, or else the one that fits the most (OPEN-23 S5) - that
+    // one asks first, naming the mods it would stop loading.
+    public string? SwitchTarget => Report.FixVersion ?? Report.BestFit;
 
-    public string SwitchText => Text(Strings.Dependencies_VersionSwitchFormat, Report.FixVersion);
+    public bool IsBestFit => Report.FixVersion is null && Report.BestFit is not null;
+
+    public bool CanSwitch => SwitchTarget is not null && CatalogMod is not null;
+
+    public string SwitchText => Text(Strings.Dependencies_VersionSwitchFormat, SwitchTarget);
 }
 
 // One dependent's ask, as a row under its dependency.
@@ -77,6 +88,9 @@ public sealed partial class VersionRequirementRow : LocalizedViewModel
 
     public Mod? DependentCatalogMod { get; init; }
 
+    // OPEN-23 S5: the asking mod's card, for Disable on a red row.
+    public InstalledModCardViewModel? DependentCard { get; init; }
+
     [CommunityToolkit.Mvvm.ComponentModel.ObservableProperty]
     [CommunityToolkit.Mvvm.ComponentModel.NotifyPropertyChangedFor(nameof(CanUpdateDependent))]
     private bool _isQueued;
@@ -92,6 +106,12 @@ public sealed partial class VersionRequirementRow : LocalizedViewModel
         && DependentVersion is not null && DependencyInstalledVersion is not null;
 
     public bool CanUpdateDependent => IsProblem && !IsQueued && DependentUpdateVersion is not null && DependentCatalogMod is not null;
+
+    // A red (files) row can be cleared by turning the asking mod off - it then asks for nothing.
+    public bool CanDisable =>
+        IsProblem && Requirement.Source == RequirementSource.Files && DependentCard is { IsDisabled: false };
+
+    public string DisableToolTip => Text(Strings.Dependencies_VersionDisableToolTipFormat, DependentName, DependencyName);
 
     public string UpdateDependentText => Text(Strings.Dependencies_VersionUpdateDependentFormat, DependentUpdateVersion);
 

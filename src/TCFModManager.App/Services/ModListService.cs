@@ -23,7 +23,30 @@ public sealed record ModListInstall(
 // Held together on purpose: the plan shown to the user and the plan that runs have to be the same
 // one, worked out against the same scan, or a rescan between the two silently changes what happens.
 //
-public sealed record ModListPreview(ModList List, ModListPlan Plan, ModListInstall Install);
+public sealed record ModListPreview(ModList List, ModListPlan Plan, ModListInstall Install)
+{
+    // OPEN-22: the dependencies the list's mods need that it doesn't name. Null when not asked.
+    public ModListDependencyCheck? Dependencies { get; init; }
+}
+
+//
+// What sp-mod said the list's mods need (OPEN-22), and which of those the user has unticked.
+// Problem is set when sp-mod couldn't be asked: the apply is still allowed (Q5), and says so.
+// AddToList: also store the ticked ones on the list (Q1) - only ever offered for your own lists.
+//
+public sealed record ModListDependencyCheck(
+    IReadOnlyList<ModListDependencyOffer> Offers,
+    IReadOnlyList<SpModDependency> NoVersion,
+    IReadOnlySet<int> Unticked,
+    string? Problem,
+    bool AddToList = false)
+{
+    public static ModListDependencyCheck Failed(string problem) => new([], [], new HashSet<int>(), problem);
+
+    public IEnumerable<ModListDependencyOffer> Ticked => Offers.Where(o => !Unticked.Contains(o.Dependency.ModId));
+
+    public IReadOnlyList<ModListDependencyPick> Picks => Ticked.Select(o => o.Pick).ToList();
+}
 
 //
 // Monitor mode's say in a list apply (§9, R6): whether its installs and updates are saved for the
@@ -158,12 +181,34 @@ public sealed class ModListService
     public static ModListEntryScope MachineScope =>
         InstallRole.ScopeFor(new SettingsService().Load().Roles);
 
+    //
     // Works out what applying this list would do. Nothing moves and nothing downloads.
-    public async Task<ModListPreview?> PreviewAsync(ModList list)
+    //
+    // withDependencies (OPEN-22) also asks sp-mod what the list's mods need that it doesn't name, and
+    // plans those in, all ticked - the Mod lists page asks; the pre-launch check, which only compares,
+    // doesn't.
+    //
+    public async Task<ModListPreview?> PreviewAsync(ModList list, bool withDependencies = false)
     {
         var install = await ReadInstallAsync();
         if (install is null) return null;
 
+        var preview = Plan(list, install, null);
+        if (!withDependencies) return preview;
+
+        var check = await DependenciesAsync(list, install, preview.Plan);
+        return Plan(list, install, check);
+    }
+
+    //
+    // The same preview planned again with other dependencies ticked, or the add-to-list choice
+    // changed - no rescan and no second question to sp-mod, so the rows don't move under the user.
+    //
+    public static ModListPreview Replan(ModListPreview preview, ModListDependencyCheck check) =>
+        Plan(preview.List, preview.Install, check);
+
+    private static ModListPreview Plan(ModList list, ModListInstall install, ModListDependencyCheck? check)
+    {
         //
         // A personal list is planned knowing what the followed server also requires, so its
         // Exclusive sweep spares those mods. Passed as null when planning the server list itself -
@@ -173,8 +218,47 @@ public sealed class ModListService
 
         return new ModListPreview(
             list,
-            ModListPlanner.Build(list, install.Candidates, AppServices.ModLists.GetPins(), serverList, MachineScope),
-            install);
+            ModListPlanner.Build(list, install.Candidates, AppServices.ModLists.GetPins(), serverList, MachineScope, check?.Picks),
+            install)
+        {
+            Dependencies = check,
+        };
+    }
+
+    //
+    // Asks sp-mod for the dependencies of every entry the list applies here, at the install's SPT,
+    // and offers the ones applying the list would leave out (ModListDependencies.Offer). A failure is
+    // a Problem on the check, never an exception: the list can still be applied (Q5).
+    //
+    private static async Task<ModListDependencyCheck> DependenciesAsync(ModList list, ModListInstall install, ModListPlan planWithout)
+    {
+        if (install.SptVersion is not { Length: > 0 } spt) return ModListDependencyCheck.Failed(Strings.ModLists_DepsUnreachable);
+
+        var entries = ModListDependencies.Askable(list, MachineScope);
+        if (entries.Count == 0) return new ModListDependencyCheck([], [], new HashSet<int>(), null);
+
+        SpModDependencies answer;
+        try
+        {
+            answer = await SpModListResolver.MissingDependenciesAsync(
+                entries, new Dictionary<int, int>(), spt, new SpModListApi(AppServices.SpModApi));
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or SpModApiException)
+        {
+            AppLog.Warn("ModLists", $"dependency check for '{list.Name}' failed: {ex.Message}");
+            return ModListDependencyCheck.Failed(Strings.ModLists_DepsUnreachable);
+        }
+
+        if (!answer.Succeeded)
+        {
+            AppLog.Warn("ModLists", $"dependency check for '{list.Name}' failed: {answer.Failure} {answer.Detail}");
+            return ModListDependencyCheck.Failed(Strings.ModLists_DepsUnreachable);
+        }
+
+        var (offers, noVersion) = ModListDependencies.Offer(answer, install.Candidates, planWithout);
+        AppLog.Info("ModLists", $"dependency check for '{list.Name}': {offers.Count} offered, {noVersion.Count} with no version for SPT {spt}");
+
+        return new ModListDependencyCheck(offers, noVersion, new HashSet<int>(), null);
     }
 
     //
@@ -227,6 +311,13 @@ public sealed class ModListService
 
         if (result.Completed)
         {
+            // Q1: the ticked dependencies written onto the list too, when asked - your own lists only.
+            if (preview.Dependencies is { AddToList: true } deps && preview.List.IsEditable && deps.Picks.Count > 0)
+            {
+                AppServices.ModLists.ReplaceEntries(preview.List.Id, ModListDependencies.WithAdded(preview.List, deps.Picks));
+                AppLog.Info("ModLists", $"added {deps.Picks.Count} dependencies to '{preview.List.Name}'");
+            }
+
             //
             // Into whichever slot it belongs to. Following a server must not cost the user the
             // personal list they were already following, and vice versa - see ModListData.

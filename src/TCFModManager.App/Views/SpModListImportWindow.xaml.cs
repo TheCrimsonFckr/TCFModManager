@@ -706,6 +706,19 @@ public partial class SpModListImportWindow : FluentWindow
     private List<SpModImportRow> _cards = [];
 
     //
+    // Who disagrees and on what (OPEN-23 S5): "Eco wants 3.0.3, MSGA wants 3.0.6". Only when the
+    // versions sp-mod picked actually differ; otherwise the plain sentence.
+    //
+    private static string ConflictFact(SpModReviewRow row)
+    {
+        var asks = row.Asks.Where(a => a.Version is not null).ToList();
+        if (asks.Select(a => a.Version).Distinct(StringComparer.OrdinalIgnoreCase).Count() < 2) return Strings.SpModImport_FactConflict;
+
+        var who = asks.Select(a => Text(Strings.SpModImport_FactWantsFormat, a.NeededBy, a.Version));
+        return Text(Strings.SpModImport_FactConflictWhoFormat, string.Join(Strings.Common_ListSeparator, who));
+    }
+
+    //
     // A card: what sp-mod's list page showed beside the entry, or - for the rows the page never
     // showed (missing parents with no card, dependencies) - what the catalog knows about it.
     //
@@ -721,7 +734,7 @@ public partial class SpModListImportWindow : FluentWindow
         if (row.Change == SpModReviewChange.VersionChanged) parts.Add(Text(Strings.SpModImport_FactWasFormat, row.StoredVersion));
         if (row.ParentName is not null) parts.Add(Text(Strings.SpModImport_FactAddonForFormat, row.ParentName));
         if (row.NeededBy.Count > 0) parts.Add(Text(Strings.SpModImport_FactNeededByFormat, string.Join(Strings.Common_ListSeparator, row.NeededBy)));
-        if (row.Conflict) parts.Add(Strings.SpModImport_FactConflict);
+        if (row.Conflict) parts.Add(ConflictFact(row));
         if (row.ParentUnknown) parts.Add(Strings.SpModImport_FactParentNotOnList);
 
         var entry = row.Entry;

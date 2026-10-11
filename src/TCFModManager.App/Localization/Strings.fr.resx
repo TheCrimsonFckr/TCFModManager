@@ -7620,4 +7620,71 @@ Clic droit pour y enregistrer les filtres actuels, le renommer ou le supprimer.<
   <data name="Options_SearchNoMatches" xml:space="preserve">
     <value>Aucun paramètre ne correspond. Essayez avec moins de mots ou d'autres mots.</value>
   </data>
+  <data name="Dependencies_VersionBestFitFormat" xml:space="preserve">
+    <value>La version {0} convient à {1} des {2} mods ici.</value>
+  </data>
+  <data name="Dependencies_BestFitTitleFormat" xml:space="preserve">
+    <value>Passer {0} en version {1} ?</value>
+  </data>
+  <data name="Dependencies_BestFitQuestionFormat" xml:space="preserve">
+    <value>La version {1} de {0} permet à plus de vos mods de se charger, mais ceux-ci ne se chargeraient plus :
+
+{2}
+
+Passer quand même à cette version ?</value>
+  </data>
+  <data name="Dependencies_BestFitBreakLineFormat" xml:space="preserve">
+    <value>• {0} - {1}</value>
+  </data>
+  <data name="Dependencies_BestFitCancelledFormat" xml:space="preserve">
+    <value>{0} n'a pas été modifié.</value>
+  </data>
+  <data name="Dependencies_VersionDisable" xml:space="preserve">
+    <value>Désactiver</value>
+  </data>
+  <data name="Dependencies_VersionDisableToolTipFormat" xml:space="preserve">
+    <value>Désactiver {0}, pour qu'il cesse de demander une version de {1} qu'il ne peut pas avoir. Réactivez-le depuis Installés.</value>
+  </data>
+  <data name="Dependencies_DisabledFormat" xml:space="preserve">
+    <value>{0} désactivé. Réactivez-le depuis Installés.</value>
+  </data>
+  <data name="Dependencies_DisableFailedFormat" xml:space="preserve">
+    <value>Impossible de désactiver {0} : {1}</value>
+  </data>
+  <data name="SpModImport_FactConflictWhoFormat" xml:space="preserve">
+    <value>les mods qui en ont besoin ne s'accordent pas sur sa version : {0}</value>
+  </data>
+  <data name="SpModImport_FactWantsFormat" xml:space="preserve">
+    <value>{0} veut la {1}</value>
+  </data>
+  <data name="ModLists_DepsHeader" xml:space="preserve">
+    <value>Également nécessaires</value>
+  </data>
+  <data name="ModLists_DepsHint" xml:space="preserve">
+    <value>Des mods de cette liste en ont besoin, mais la liste ne les cite pas. Ceux qui sont cochés sont installés ou activés avec la liste, et restent actifs si la liste devait les mettre de côté.</value>
+  </data>
+  <data name="ModLists_DepsNeededByFormat" xml:space="preserve">
+    <value>Requis par {0}</value>
+  </data>
+  <data name="ModLists_DepsNeedInstallFormat" xml:space="preserve">
+    <value>Installer la {0}</value>
+  </data>
+  <data name="ModLists_DepsNeedEnable" xml:space="preserve">
+    <value>Activer</value>
+  </data>
+  <data name="ModLists_DepsNeedKeep" xml:space="preserve">
+    <value>Laisser activé</value>
+  </data>
+  <data name="ModLists_DepsAddToList" xml:space="preserve">
+    <value>Ajouter aussi ceux qui sont cochés à cette liste</value>
+  </data>
+  <data name="ModLists_DepsAddToListToolTip" xml:space="preserve">
+    <value>Les inscrit dans la liste une fois l'application terminée, pour que la liste les cite désormais.</value>
+  </data>
+  <data name="ModLists_DepsUnreachable" xml:space="preserve">
+    <value>Impossible de demander à sp-mod ce dont les mods de cette liste ont besoin : les mods que la liste ne cite pas ne seront pas ajoutés. Vous pouvez quand même l'appliquer.</value>
+  </data>
+  <data name="ModLists_DepsNoVersionFormat" xml:space="preserve">
+    <value>Également nécessaires, mais rien n'est publié pour ce SPT : {0}</value>
+  </data>
 </root>

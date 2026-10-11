@@ -220,6 +220,16 @@
                                                             Command="{Binding DataContext.UpdateDependentCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                                                             CommandParameter="{Binding}"
                                                             Visibility="{Binding CanUpdateDependent, Converter={StaticResource BoolToVisibility}}" />
+                                                        <!-- OPEN-23 S5: turn the asking mod off. -->
+                                                        <ui:Button
+                                                            Margin="0,0,4,0"
+                                                            Padding="10,2"
+                                                            Appearance="Secondary"
+                                                            Content="{loc:Str Dependencies_VersionDisable}"
+                                                            ToolTip="{Binding DisableToolTip}"
+                                                            Command="{Binding DataContext.DisableDependentCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                                            CommandParameter="{Binding}"
+                                                            Visibility="{Binding CanDisable, Converter={StaticResource BoolToVisibility}}" />
                                                         <ui:Button
                                                             Padding="10,2"
                                                             Appearance="Secondary"
