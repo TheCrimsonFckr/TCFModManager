@@ -206,6 +206,12 @@ public sealed class AppSettings
 
     public List<string>? BrowsePinnedFilters { get; set; }
 
+    // Named filter presets on each page (OPEN-25), in the order they were made. Separate from the
+    // page defaults above: applying one changes the page now, never what it opens at.
+    public List<BrowseFilterPreset> BrowseFilterPresets { get; set; } = [];
+
+    public List<InstalledFilterPreset> InstalledFilterPresets { get; set; } = [];
+
     // The sp-mod authors the user follows (OPEN-12 A4) - a Browse filter, a list in Options, and
     // notifications of their new mods alongside update notifications (R7).
     public List<FollowedAuthor> FollowedAuthors { get; set; } = [];
