@@ -16,6 +16,10 @@ namespace TCFModManager.App.Behaviors;
 // Rebuilt only when the lines change. Scrolled to the bottom it follows new lines; scrolled up to
 // read, it stays where it is.
 //
+// The mouse wheel over it scrolls the log, never the page. Only once the log is at its top or
+// bottom AND the wheel has rested for a moment does it move the page again - so scrolling the log
+// to its end doesn't run straight on into the page, but a fresh turn of the wheel there still can.
+//
 public static class ConsoleLog
 {
     public static readonly Brush Background = Frozen(0x0C, 0x0C, 0x0C);
@@ -41,9 +45,59 @@ public static class ConsoleLog
 
     public static IReadOnlyList<string>? GetLines(DependencyObject element) => (IReadOnlyList<string>?)element.GetValue(LinesProperty);
 
+    // How long the wheel must rest at the log's end before it scrolls the page instead.
+    private static readonly TimeSpan PageScrollPause = TimeSpan.FromSeconds(1);
+
+    private const double PixelsPerNotch = 48;
+
+    private static readonly DependencyProperty LastLogScrollProperty = DependencyProperty.RegisterAttached(
+        "LastLogScroll", typeof(DateTime), typeof(ConsoleLog), new PropertyMetadata(DateTime.MinValue));
+
+    private static void OnPreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+    {
+        if (sender is not RichTextBox box || FindScrollViewer(box) is not { } log) return;
+
+        e.Handled = true;
+        var now = DateTime.UtcNow;
+        var atEnd = e.Delta > 0 ? log.VerticalOffset <= 0 : log.VerticalOffset >= log.ScrollableHeight;
+
+        if (!atEnd)
+        {
+            log.ScrollToVerticalOffset(log.VerticalOffset - e.Delta / 120.0 * PixelsPerNotch);
+            box.SetValue(LastLogScrollProperty, now);
+            return;
+        }
+
+        // At the end: the turn that got it here, and any following straight on, stop at the log.
+        if (now - (DateTime)box.GetValue(LastLogScrollProperty) < PageScrollPause)
+        {
+            box.SetValue(LastLogScrollProperty, now);
+            return;
+        }
+
+        if (PageScrollViewer(box) is { } page) page.ScrollToVerticalOffset(page.VerticalOffset - e.Delta);
+    }
+
+    // The scroll viewer around the page, above the log's own.
+    private static ScrollViewer? PageScrollViewer(DependencyObject from)
+    {
+        for (var node = VisualTreeHelper.GetParent(from); node is not null; node = VisualTreeHelper.GetParent(node))
+        {
+            if (node is ScrollViewer viewer) return viewer;
+        }
+
+        return null;
+    }
+
     private static void OnLinesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is not RichTextBox box) return;
+
+        if (e.OldValue is null)
+        {
+            box.PreviewMouseWheel -= OnPreviewMouseWheel;
+            box.PreviewMouseWheel += OnPreviewMouseWheel;
+        }
 
         var lines = e.NewValue as IReadOnlyList<string> ?? [];
         var old = e.OldValue as IReadOnlyList<string>;

@@ -7498,4 +7498,31 @@ Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie d
   <data name="ModDetails_CommentsOpen" xml:space="preserve">
     <value>Kommentare auf sp-mod öffnen</value>
   </data>
+  <data name="ServerRunning_Title" xml:space="preserve">
+    <value>Der SPT-Server läuft</value>
+  </data>
+  <data name="ServerRunning_Closing" xml:space="preserve">
+    <value>Der SPT-Server dieser Installation läuft noch. Er läuft weiter, wenn diese App geschlossen wird - jetzt stoppen oder für später laufen lassen?</value>
+  </data>
+  <data name="ServerRunning_ClosingHidden" xml:space="preserve">
+    <value>Der SPT-Server dieser Installation läuft noch, ohne eigenes Fenster - sobald diese App geschlossen ist, zeigt nichts mehr an, dass er läuft. Jetzt stoppen oder laufen lassen?</value>
+  </data>
+  <data name="ServerRunning_StopAndClose" xml:space="preserve">
+    <value>Stoppen und schließen</value>
+  </data>
+  <data name="ServerRunning_LeaveAndClose" xml:space="preserve">
+    <value>Laufen lassen</value>
+  </data>
+  <data name="ServerRunning_Opening" xml:space="preserve">
+    <value>Der SPT-Server dieser Installation lief schon, als die App geöffnet wurde - beim letzten Mal laufen gelassen oder anders gestartet. Die Spielen-Seite zeigt sein Log und kann ihn stoppen.</value>
+  </data>
+  <data name="ServerRunning_Stop" xml:space="preserve">
+    <value>Stoppen</value>
+  </data>
+  <data name="ServerRunning_ShowPlay" xml:space="preserve">
+    <value>Zu Spielen</value>
+  </data>
+  <data name="ServerRunning_LeaveRunning" xml:space="preserve">
+    <value>Laufen lassen</value>
+  </data>
 </root>

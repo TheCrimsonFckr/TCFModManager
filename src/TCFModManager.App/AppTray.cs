@@ -29,12 +29,24 @@ internal static class AppTray
     //
     public static bool IsQuitting { get; private set; }
 
-    public static void MarkQuitting() => IsQuitting = true;
-
-    // Ends the app, whatever the tray setting says.
-    public static void Quit()
+    // Windows signing out: nothing is asked on the way down, the server question included.
+    public static void MarkQuitting()
     {
         IsQuitting = true;
+        AsksAboutServer = false;
+    }
+
+    //
+    // Whether closing may stop to say this install's server is still running (ServerStillRunningWindow).
+    // Not while Windows signs out, and not for a self-update, which restarts the app straight away.
+    //
+    public static bool AsksAboutServer { get; private set; } = true;
+
+    // Ends the app, whatever the tray setting says.
+    public static void Quit(bool askAboutServer = true)
+    {
+        IsQuitting = true;
+        AsksAboutServer = askAboutServer;
         Application.Current.Shutdown();
     }
 

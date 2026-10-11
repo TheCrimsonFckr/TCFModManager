@@ -42,6 +42,8 @@ public class LocalizationLiteralTests
             "Win32 filter syntax; both names in it are keyed"),
         ("MarkupRenderer.cs", "Cascadia Mono, Consolas, Courier New",
             "font family names for code in a description (OPEN-12 F18)"),
+        ("ConsoleLog.cs", "happy playing",
+            "matched in SPT's own log line \"Server has started, happy playing\" to colour it green"),
     ];
 
     //

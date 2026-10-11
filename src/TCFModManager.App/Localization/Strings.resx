@@ -9030,4 +9030,31 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
   <data name="ModDetails_CommentsOpen" xml:space="preserve">
     <value>Open comments on sp-mod</value>
   </data>
+  <data name="ServerRunning_Title" xml:space="preserve">
+    <value>The SPT server is running</value>
+  </data>
+  <data name="ServerRunning_Closing" xml:space="preserve">
+    <value>This install's SPT server is still running. It keeps running after this app closes - stop it now, or leave it for later?</value>
+  </data>
+  <data name="ServerRunning_ClosingHidden" xml:space="preserve">
+    <value>This install's SPT server is still running, with no window of its own - once this app closes, nothing on screen will show it is up. Stop it now, or leave it running?</value>
+  </data>
+  <data name="ServerRunning_StopAndClose" xml:space="preserve">
+    <value>Stop it and close</value>
+  </data>
+  <data name="ServerRunning_LeaveAndClose" xml:space="preserve">
+    <value>Leave it running</value>
+  </data>
+  <data name="ServerRunning_Opening" xml:space="preserve">
+    <value>This install's SPT server was already running when the app opened - left running last time, or started some other way. The Play page shows its log and can stop it.</value>
+  </data>
+  <data name="ServerRunning_Stop" xml:space="preserve">
+    <value>Stop it</value>
+  </data>
+  <data name="ServerRunning_ShowPlay" xml:space="preserve">
+    <value>Go to Play</value>
+  </data>
+  <data name="ServerRunning_LeaveRunning" xml:space="preserve">
+    <value>Leave it running</value>
+  </data>
 </root>

@@ -7861,4 +7861,31 @@
   <data name="ModDetails_CommentsOpen" xml:space="preserve">
     <value>Открыть комментарии на sp-mod</value>
   </data>
+  <data name="ServerRunning_Title" xml:space="preserve">
+    <value>Сервер SPT запущен</value>
+  </data>
+  <data name="ServerRunning_Closing" xml:space="preserve">
+    <value>Сервер SPT этой установки всё ещё работает. Он продолжит работать после закрытия приложения - остановить его сейчас или оставить?</value>
+  </data>
+  <data name="ServerRunning_ClosingHidden" xml:space="preserve">
+    <value>Сервер SPT этой установки всё ещё работает, и у него нет своего окна - после закрытия приложения ничто на экране не покажет, что он запущен. Остановить его сейчас или оставить?</value>
+  </data>
+  <data name="ServerRunning_StopAndClose" xml:space="preserve">
+    <value>Остановить и закрыть</value>
+  </data>
+  <data name="ServerRunning_LeaveAndClose" xml:space="preserve">
+    <value>Оставить работать</value>
+  </data>
+  <data name="ServerRunning_Opening" xml:space="preserve">
+    <value>Сервер SPT этой установки уже работал при открытии приложения - оставлен в прошлый раз или запущен иначе. На странице Играть виден его журнал, там же его можно остановить.</value>
+  </data>
+  <data name="ServerRunning_Stop" xml:space="preserve">
+    <value>Остановить</value>
+  </data>
+  <data name="ServerRunning_ShowPlay" xml:space="preserve">
+    <value>Перейти в Играть</value>
+  </data>
+  <data name="ServerRunning_LeaveRunning" xml:space="preserve">
+    <value>Оставить работать</value>
+  </data>
 </root>

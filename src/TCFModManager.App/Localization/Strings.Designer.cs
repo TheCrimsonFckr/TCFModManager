@@ -2462,4 +2462,13 @@ internal static class Strings
     internal static string ModDetails_CommentsNone => LocalizationService.Get("ModDetails_CommentsNone");
     internal static string ModDetails_CommentsNoWebView => LocalizationService.Get("ModDetails_CommentsNoWebView");
     internal static string ModDetails_CommentsOpen => LocalizationService.Get("ModDetails_CommentsOpen");
+    internal static string ServerRunning_Title => LocalizationService.Get("ServerRunning_Title");
+    internal static string ServerRunning_Closing => LocalizationService.Get("ServerRunning_Closing");
+    internal static string ServerRunning_ClosingHidden => LocalizationService.Get("ServerRunning_ClosingHidden");
+    internal static string ServerRunning_StopAndClose => LocalizationService.Get("ServerRunning_StopAndClose");
+    internal static string ServerRunning_LeaveAndClose => LocalizationService.Get("ServerRunning_LeaveAndClose");
+    internal static string ServerRunning_Opening => LocalizationService.Get("ServerRunning_Opening");
+    internal static string ServerRunning_Stop => LocalizationService.Get("ServerRunning_Stop");
+    internal static string ServerRunning_ShowPlay => LocalizationService.Get("ServerRunning_ShowPlay");
+    internal static string ServerRunning_LeaveRunning => LocalizationService.Get("ServerRunning_LeaveRunning");
 }

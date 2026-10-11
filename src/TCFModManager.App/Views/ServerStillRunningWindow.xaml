@@ -1,0 +1,56 @@
+<ui:FluentWindow
+    x:Class="TCFModManager.App.Views.ServerStillRunningWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    Width="520"
+    SizeToContent="Height"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    ExtendsContentIntoTitleBar="True"
+    TextOptions.TextFormattingMode="Display"
+    TextOptions.TextRenderingMode="ClearType">
+    <!-- This install's server is up as the app closes, or was already up as it opened. Same plain
+         modal FluentWindow pattern as InstallRoleWindow. -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar x:Name="WindowTitleBar" Grid.Row="0" Title="{loc:Str ServerRunning_Title}" />
+
+        <StackPanel Grid.Row="1" Margin="24,12,24,24">
+            <TextBlock
+                x:Name="MessageText"
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                Margin="0,0,0,8" />
+            <TextBlock
+                x:Name="PathText"
+                FontSize="11"
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Margin="0,0,0,20" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <ui:Button
+                    x:Name="CancelButton"
+                    Margin="0,0,8,0"
+                    Content="{loc:Str Common_Cancel}"
+                    Click="Cancel_Click" />
+                <ui:Button
+                    x:Name="StopButton"
+                    Margin="0,0,8,0"
+                    Appearance="Danger"
+                    Icon="{ui:SymbolIcon Stop24}"
+                    Click="Stop_Click" />
+                <ui:Button
+                    x:Name="LeaveButton"
+                    Appearance="Primary"
+                    Click="Leave_Click" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</ui:FluentWindow>

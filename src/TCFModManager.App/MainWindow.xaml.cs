@@ -4,6 +4,7 @@ using System.Windows.Input;
 using TCFModManager.App.Help;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Views;
+using TCFModManager.Core.Services;
 using Wpf.Ui.Controls;
 
 namespace TCFModManager.App;
@@ -55,6 +56,9 @@ public partial class MainWindow : FluentWindow
 
             // Closes the game when the server stops, if that is ticked on the Play page.
             Services.GameCloser.Start();
+
+            // A server already up as the app opens - left running last time, perhaps with no window.
+            _ = SayServerAlreadyRunningAsync();
         };
 
         //
@@ -67,6 +71,47 @@ public partial class MainWindow : FluentWindow
 
             e.Cancel = true;
             AppTray.HideToTray(this);
+        };
+
+        //
+        // Really closing (not to the tray) with this install's server still up: it keeps running
+        // without the app, and with no window of its own nothing else would say so. Asked once.
+        //
+        Closing += (_, e) =>
+        {
+            if (e.Cancel || _serverAnswered || !AppTray.AsksAboutServer) return;
+
+            var installPath = AppServices.SptEnvironment.InstallPath;
+            var server = SptLaunchService.Describe(installPath, SptLaunchTarget.Server);
+            if (!server.IsRunning) return;
+
+            var hidden = new SettingsService().Load().HideServerWindow;
+            var choice = ServerStillRunningWindow.Ask(closing: true, server.ExePath ?? "", hidden, canCancel: !AppTray.IsQuitting);
+
+            if (choice == ServerRunningChoice.Cancel && !AppTray.IsQuitting)
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            _serverAnswered = true;
+            if (choice != ServerRunningChoice.Stop)
+            {
+                AppLog.Info("Launch", "closing with the server left running, as asked");
+                return;
+            }
+
+            var previous = Mouse.OverrideCursor;
+            Mouse.OverrideCursor = Cursors.Wait;
+            try
+            {
+                var result = SptLaunchService.Stop(installPath, SptLaunchTarget.Server);
+                AppLog.Info("Launch", $"closing: server stop {(result.Problem == SptLaunchProblem.None ? "done" : result.Problem.ToString())}");
+            }
+            finally
+            {
+                Mouse.OverrideCursor = previous;
+            }
         };
 
         IsVisibleChanged += (_, _) =>
@@ -85,6 +130,32 @@ public partial class MainWindow : FluentWindow
             await dialog.ShowAsync();
             return dialog.ViewModel.MadeChanges;
         };
+    }
+
+    private bool _serverAnswered;
+
+    private static async Task SayServerAlreadyRunningAsync()
+    {
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        if (string.IsNullOrWhiteSpace(installPath)) return;
+
+        var server = await Task.Run(() => SptLaunchService.Describe(installPath, SptLaunchTarget.Server));
+        if (!server.IsRunning) return;
+
+        AppLog.Info("Launch", "the server was already running as the app opened");
+        var hidden = new SettingsService().Load().HideServerWindow;
+
+        switch (ServerStillRunningWindow.Ask(closing: false, server.ExePath ?? "", hidden))
+        {
+            case ServerRunningChoice.ShowPlay:
+                AppNavigation.Navigate(typeof(PlayPage));
+                break;
+
+            case ServerRunningChoice.Stop:
+                var result = await Task.Run(() => SptLaunchService.Stop(installPath, SptLaunchTarget.Server));
+                AppLog.Info("Launch", $"opening: server stop {(result.Problem == SptLaunchProblem.None ? "done" : result.Problem.ToString())}");
+                break;
+        }
     }
 
     private void RootTitleBar_HelpClicked(TitleBar sender, RoutedEventArgs e) => ShowHelp();
