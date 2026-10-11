@@ -55,6 +55,14 @@ public partial class ServerStillRunningWindow : FluentWindow
         var owner = Application.Current?.MainWindow;
         Owner = owner is { IsVisible: true } ? owner : null;
         WindowStartupLocation = Owner is not null ? WindowStartupLocation.CenterOwner : WindowStartupLocation.CenterScreen;
+
+        // Asked from the tray, with the main window hidden: on top, and in the taskbar, so it
+        // can't open unseen behind whatever is in front.
+        if (Owner is null)
+        {
+            Topmost = true;
+            ShowInTaskbar = true;
+        }
     }
 
     /// <param name="closing">True as the app closes, false as it opens.</param>

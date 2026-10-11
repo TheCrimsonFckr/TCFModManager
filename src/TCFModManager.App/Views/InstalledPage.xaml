@@ -927,6 +927,7 @@
                                     Background="Transparent"
                                     ToolTip="{StaticResource ModHoverPreview}"
                                     ToolTipService.InitialShowDelay="3000"
+                                    ToolTipService.BetweenShowDelay="0"
                                     ToolTipService.ShowDuration="60000"
                                     ToolTipService.Placement="Right">
                                     <Grid.ColumnDefinitions>

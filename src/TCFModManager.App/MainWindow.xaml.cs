@@ -3,6 +3,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using TCFModManager.App.Help;
 using TCFModManager.App.Localization;
+using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Services;
 using Wpf.Ui.Controls;
@@ -75,43 +76,13 @@ public partial class MainWindow : FluentWindow
 
         //
         // Really closing (not to the tray) with this install's server still up: it keeps running
-        // without the app, and with no window of its own nothing else would say so. Asked once.
+        // without the app, and with no window of its own nothing else would say so. The tray's Quit
+        // asks before it shuts the app down (see AppTray.Quit), so this is the window's own close.
         //
         Closing += (_, e) =>
         {
-            if (e.Cancel || _serverAnswered || !AppTray.AsksAboutServer) return;
-
-            var installPath = AppServices.SptEnvironment.InstallPath;
-            var server = SptLaunchService.Describe(installPath, SptLaunchTarget.Server);
-            if (!server.IsRunning) return;
-
-            var hidden = new SettingsService().Load().HideServerWindow;
-            var choice = ServerStillRunningWindow.Ask(closing: true, server.ExePath ?? "", hidden, canCancel: !AppTray.IsQuitting);
-
-            if (choice == ServerRunningChoice.Cancel && !AppTray.IsQuitting)
-            {
-                e.Cancel = true;
-                return;
-            }
-
-            _serverAnswered = true;
-            if (choice != ServerRunningChoice.Stop)
-            {
-                AppLog.Info("Launch", "closing with the server left running, as asked");
-                return;
-            }
-
-            var previous = Mouse.OverrideCursor;
-            Mouse.OverrideCursor = Cursors.Wait;
-            try
-            {
-                var result = SptLaunchService.Stop(installPath, SptLaunchTarget.Server);
-                AppLog.Info("Launch", $"closing: server stop {(result.Problem == SptLaunchProblem.None ? "done" : result.Problem.ToString())}");
-            }
-            finally
-            {
-                Mouse.OverrideCursor = previous;
-            }
+            if (e.Cancel || AppTray.IsQuitting) return;
+            if (!ServerExitCheck.AllowExit()) e.Cancel = true;
         };
 
         IsVisibleChanged += (_, _) =>
@@ -131,8 +102,6 @@ public partial class MainWindow : FluentWindow
             return dialog.ViewModel.MadeChanges;
         };
     }
-
-    private bool _serverAnswered;
 
     private static async Task SayServerAlreadyRunningAsync()
     {

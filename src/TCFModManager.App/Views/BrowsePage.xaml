@@ -435,6 +435,7 @@
                         ClipToBounds="True"
                         ToolTip="{StaticResource ModHoverPreview}"
                         ToolTipService.InitialShowDelay="3000"
+                        ToolTipService.BetweenShowDelay="0"
                         ToolTipService.ShowDuration="60000"
                         ToolTipService.Placement="Right">
                         <!-- Fills the card. The right-hand column is a gutter the status icon and

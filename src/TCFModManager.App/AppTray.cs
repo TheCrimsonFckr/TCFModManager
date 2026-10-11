@@ -45,6 +45,9 @@ internal static class AppTray
     // Ends the app, whatever the tray setting says.
     public static void Quit(bool askAboutServer = true)
     {
+        // Asked here, before shutting down: once Shutdown has begun the window can't stop to ask.
+        if (askAboutServer && !ServerExitCheck.AllowExit()) return;
+
         IsQuitting = true;
         AsksAboutServer = askAboutServer;
         Application.Current.Shutdown();
