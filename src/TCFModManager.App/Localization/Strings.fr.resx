@@ -7532,7 +7532,7 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
     <value>Enregistrez sous un nom la configuration de cette page, et revenez-y en un clic.</value>
   </data>
   <data name="Filter_PresetsHint" xml:space="preserve">
-    <value>Aucun préréglage pour l'instant. Un préréglage garde sous un nom les filtres, le tri, la taille de page, la recherche et les filtres épinglés de cette page - saisissez un nom ci-dessous et enregistrez.</value>
+    <value>Aucun préréglage pour l'instant. Un préréglage garde sous un nom les filtres, le tri, la taille de page, la recherche et les filtres épinglés de cette page - et sur Installés, la vue. Saisissez un nom ci-dessous et enregistrez.</value>
   </data>
   <data name="Filter_PresetNamePlaceholder" xml:space="preserve">
     <value>Nom du préréglage</value>
@@ -7584,5 +7584,26 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
   </data>
   <data name="Filter_PresetsNone" xml:space="preserve">
     <value>aucun</value>
+  </data>
+  <data name="Filter_PresetGroupGoneFormat" xml:space="preserve">
+    <value>Préréglage de filtres {0} appliqué - le groupe qu'il désigne n'existe plus, tous les groupes sont donc affichés.</value>
+  </data>
+  <data name="Help_Browse_Presets_Title" xml:space="preserve">
+    <value>Enregistrer des filtres fréquents comme préréglage</value>
+  </data>
+  <data name="Help_Browse_Presets_Step1" xml:space="preserve">
+    <value>Configurez la page comme vous le voulez, ouvrez {0}, puis {1} tout en haut. Saisissez un nom et appuyez sur {2}.</value>
+  </data>
+  <data name="Help_Browse_Presets_Step2" xml:space="preserve">
+    <value>Cliquez sur le nom d'un préréglage pour configurer la page ainsi : tous les filtres, le tri, la taille de page, le texte recherché et les filtres épinglés - et sur Installés, la vue. Celui qui correspond à la page en ce moment est coché.</value>
+  </data>
+  <data name="Help_Browse_Presets_Step3" xml:space="preserve">
+    <value>À côté de chaque préréglage : enregistrer la page telle qu'elle est à sa place, le renommer ou le supprimer. Épinglez la section pour changer de préréglage depuis la ligne sous la recherche.</value>
+  </data>
+  <data name="Help_Browse_Presets_Note" xml:space="preserve">
+    <value>Les préréglages sont distincts de {0} : en appliquer un change la page maintenant, jamais ce qu'elle affiche à l'ouverture.</value>
+  </data>
+  <data name="Help_Browse_Presets_Keywords" xml:space="preserve">
+    <value>préréglage préréglages filtres enregistrés jeu de filtres enregistrer changer</value>
   </data>
 </root>

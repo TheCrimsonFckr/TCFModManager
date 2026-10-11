@@ -88,6 +88,15 @@ internal static class HelpCatalog
                     () => Strings.Filter_SectionSearchIn, () => Strings.Filter_SearchTitleOnly))
                 .WithKeywords(() => Strings.Help_Browse_Dates_Keywords),
 
+            // OPEN-25: named filter presets, on Browse and Installed.
+            Topic("browse.presets", () => Strings.Help_Browse_Presets_Title,
+                Step(() => Strings.Help_Browse_Presets_Step1,
+                    () => Strings.Filter_More, () => Strings.Filter_SectionPresets, () => Strings.Filter_PresetSave),
+                Step(() => Strings.Help_Browse_Presets_Step2),
+                Step(() => Strings.Help_Browse_Presets_Step3))
+                .WithNote(() => Strings.Help_Browse_Presets_Note, () => Strings.Common_SaveAsDefault)
+                .WithKeywords(() => Strings.Help_Browse_Presets_Keywords),
+
             Topic("browse.install",
                 ByMode(() => Strings.Help_Browse_Install_Title, () => Strings.Help_Browse_Install_Title_Monitor),
                 Step(() => Strings.Help_Browse_Install_Step1, () => Strings.Nav_Browse),

@@ -7895,7 +7895,7 @@
     <value>Сохраните настройку этой страницы под именем и возвращайтесь к ней одним щелчком.</value>
   </data>
   <data name="Filter_PresetsHint" xml:space="preserve">
-    <value>Наборов пока нет. Набор хранит под именем фильтры, сортировку, размер страницы, поиск и закреплённые фильтры этой страницы - введите имя ниже и сохраните.</value>
+    <value>Наборов пока нет. Набор хранит под именем фильтры, сортировку, размер страницы, поиск и закреплённые фильтры этой страницы, а на Установленных - и вид. Введите имя ниже и сохраните.</value>
   </data>
   <data name="Filter_PresetNamePlaceholder" xml:space="preserve">
     <value>Имя набора</value>
@@ -7947,5 +7947,26 @@
   </data>
   <data name="Filter_PresetsNone" xml:space="preserve">
     <value>нет</value>
+  </data>
+  <data name="Filter_PresetGroupGoneFormat" xml:space="preserve">
+    <value>Применён набор фильтров {0} - указанной в нём группы больше нет, поэтому показаны все группы.</value>
+  </data>
+  <data name="Help_Browse_Presets_Title" xml:space="preserve">
+    <value>Сохранить часто используемые фильтры как набор</value>
+  </data>
+  <data name="Help_Browse_Presets_Step1" xml:space="preserve">
+    <value>Настройте страницу как нужно, откройте {0}, затем {1} в самом верху. Введите имя и нажмите {2}.</value>
+  </data>
+  <data name="Help_Browse_Presets_Step2" xml:space="preserve">
+    <value>Щёлкните имя набора, чтобы настроить страницу по нему: все фильтры, сортировка, размер страницы, текст поиска и закреплённые фильтры, а на Установленных - и вид. Набор, которому страница соответствует сейчас, отмечен галочкой.</value>
+  </data>
+  <data name="Help_Browse_Presets_Step3" xml:space="preserve">
+    <value>Рядом с каждым набором: сохранить в него текущую настройку, переименовать или удалить. Закрепите раздел, чтобы переключать наборы из строки под поиском.</value>
+  </data>
+  <data name="Help_Browse_Presets_Note" xml:space="preserve">
+    <value>Наборы не связаны с {0}: применение набора меняет страницу сейчас, но не то, с чем она открывается.</value>
+  </data>
+  <data name="Help_Browse_Presets_Keywords" xml:space="preserve">
+    <value>набор наборы сохранённые фильтры сохранить фильтры переключить</value>
   </data>
 </root>

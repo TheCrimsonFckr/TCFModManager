@@ -7532,7 +7532,7 @@ Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie d
     <value>Speichere unter einem Namen, wie diese Seite eingestellt ist, und wechsle mit einem Klick dorthin zurück.</value>
   </data>
   <data name="Filter_PresetsHint" xml:space="preserve">
-    <value>Noch keine Vorlagen. Eine Vorlage speichert Filter, Sortierung, Seitengröße, Suche und angeheftete Filter dieser Seite unter einem Namen - gib unten einen ein und speichere.</value>
+    <value>Noch keine Vorlagen. Eine Vorlage speichert Filter, Sortierung, Seitengröße, Suche und angeheftete Filter dieser Seite - auf Installiert auch die Ansicht - unter einem Namen. Gib unten einen ein und speichere.</value>
   </data>
   <data name="Filter_PresetNamePlaceholder" xml:space="preserve">
     <value>Name der Vorlage</value>
@@ -7584,5 +7584,26 @@ Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie d
   </data>
   <data name="Filter_PresetsNone" xml:space="preserve">
     <value>keine</value>
+  </data>
+  <data name="Filter_PresetGroupGoneFormat" xml:space="preserve">
+    <value>Filtervorlage {0} angewendet - die Gruppe, die sie nennt, gibt es nicht mehr, daher werden alle Gruppen gezeigt.</value>
+  </data>
+  <data name="Help_Browse_Presets_Title" xml:space="preserve">
+    <value>Oft genutzte Filter als Vorlage speichern</value>
+  </data>
+  <data name="Help_Browse_Presets_Step1" xml:space="preserve">
+    <value>Stelle die Seite so ein, wie du sie willst, öffne {0} und oben {1}. Gib einen Namen ein und drücke {2}.</value>
+  </data>
+  <data name="Help_Browse_Presets_Step2" xml:space="preserve">
+    <value>Klicke auf den Namen einer Vorlage, um die Seite so einzustellen: alle Filter, Sortierung, Seitengröße, Suchtext und angeheftete Filter - auf Installiert auch die Ansicht. Die Vorlage, der die Seite gerade entspricht, ist abgehakt.</value>
+  </data>
+  <data name="Help_Browse_Presets_Step3" xml:space="preserve">
+    <value>Neben jeder Vorlage: die Seite, wie sie jetzt ist, darüber speichern, umbenennen oder löschen. Hefte den Abschnitt an, um Vorlagen in der Zeile unter der Suche zu wechseln.</value>
+  </data>
+  <data name="Help_Browse_Presets_Note" xml:space="preserve">
+    <value>Vorlagen sind getrennt von {0}: Eine anzuwenden ändert die Seite jetzt, nie, womit sie öffnet.</value>
+  </data>
+  <data name="Help_Browse_Presets_Keywords" xml:space="preserve">
+    <value>vorlage vorlagen gespeicherte filter filtersatz filter speichern wechseln</value>
   </data>
 </root>

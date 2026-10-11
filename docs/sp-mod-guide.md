@@ -82,7 +82,7 @@ Once it's set up, the app keeps itself up to date from this page. On launch it c
 ## Planning
 Coming next, in no particular order - the [Planning page](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Planning) on the wiki has the full list, including everything already done.
 
-- Filter presets - save the filters you use under a name and switch between them on Browse and Installed - *Planned*
+- Nothing new lined up right now - ideas are welcome on the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues)
 
 ## Reporting a problem
 Use the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues) - bugs, wording, translations, feature requests or questions. Attach `Data\logs\tcfmm-<date>.log`, ideally after adding the `verbose` marker file and reproducing the problem. The [wiki](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Troubleshooting) covers the common ones first.

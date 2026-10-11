@@ -196,6 +196,7 @@ public partial class InstalledViewModel : LocalizedViewModel
     {
         base.OnPropertyChanged(e);
         if (e.PropertyName is null or "" or nameof(MoreFiltersLabel)) RebuildActiveFilters();
+        Presets?.Refresh();
         FilterPins?.RefreshLabels();
     }
 
@@ -211,6 +212,7 @@ public partial class InstalledViewModel : LocalizedViewModel
 
         return section switch
         {
+            InstalledFilterSection.Presets => Pill(Strings.Filter_SectionPresets, Presets?.ActiveName ?? Strings.Filter_PresetsNone),
             InstalledFilterSection.UpdateStatus => Pill(Strings.Filter_SectionUpdateStatus, SelectedUpdateFilter),
             InstalledFilterSection.Enabled => Pill(Strings.Filter_SectionEnabled, SelectedEnabledFilter),
             InstalledFilterSection.Show => Pill(Strings.Filter_ShowHeader, AttributeOptions.Where(o => o.IsSelected).ToList() switch
@@ -433,7 +435,11 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     // What the Default* helpers read: the saved defaults, except while Clear filters runs, when
     // they answer with the app's own (see ClearFilters).
-    private InstalledPageDefaults? Defaults => _clearingToAppDefaults ? null : _defaults;
+    private InstalledPageDefaults? Defaults => _presetFilters ?? (_clearingToAppDefaults ? null : _defaults);
+
+    // A filter preset's filters while ApplyPreset runs (OPEN-25), read through the same Default*
+    // helpers as Restore my defaults.
+    private InstalledPageDefaults? _presetFilters;
 
     private bool _clearingToAppDefaults;
 
@@ -519,6 +525,9 @@ public partial class InstalledViewModel : LocalizedViewModel
     // InstallFingerprint as of the last scan - see RefreshOnReturnAsync.
     private string? _fingerprint;
 
+    // Named filter presets (OPEN-25), the first section of the Filters panel.
+    public FilterPresetList<InstalledFilterPreset> Presets { get; }
+
     // The Filters panel sections pinned under the search bar (OPEN-24).
     public PinnedFilterSections<InstalledFilterSection> FilterPins { get; }
 
@@ -602,6 +611,18 @@ public partial class InstalledViewModel : LocalizedViewModel
         // Last, so every filter the dropdown labels read is in place.
         FilterPins = new PinnedFilterSections<InstalledFilterSection>(
             "Installed", settings, x => x.InstalledPinnedFilters, (x, v) => x.InstalledPinnedFilters = v, this, PinnedLabel, PinnedShown);
+
+        Presets = new FilterPresetList<InstalledFilterPreset>(
+            "Installed", settings, x => x.InstalledFilterPresets, CapturePreset, ApplyPreset, text => StatusMessage = text);
+        Presets.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(Presets.ActiveName)) FilterPins.RefreshLabels();
+        };
+        FilterPins.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(FilterPins.Names)) Presets.Refresh();
+        };
+        Presets.Refresh();
 
         RebuildActiveFilters();
     }
@@ -854,13 +875,15 @@ public partial class InstalledViewModel : LocalizedViewModel
             : "restored the saved filters");
     }
 
-    private void ResetFilters(bool toSaved)
+    private void ResetFilters(bool toSaved, InstalledFilterPreset? preset = null)
     {
         _suppressAutoApplyFilter = true;
         _clearingToAppDefaults = !toSaved;
         try
         {
-            SearchText = string.Empty;
+            // A preset brings its own search text; a hand-edited one with none leaves the box alone.
+            if (preset is null) SearchText = string.Empty;
+            else if (preset.Search is { } search) SearchText = search;
             SelectedUpdateFilter = DefaultUpdateFilter();
             SelectedEnabledFilter = DefaultEnabledFilter();
             SelectedGroupFilter = GroupFilterOptions.FirstOrDefault(o => o.SameAs(DefaultGroupFilter()))
@@ -899,25 +922,75 @@ public partial class InstalledViewModel : LocalizedViewModel
         var service = new SettingsService();
         var settings = service.Load();
 
-        settings.InstalledDefaults = _defaults = new InstalledPageDefaults
-        {
-            ViewMode = ViewMode.ToString(),
-            UpdateStatus = SelectedUpdateFilter.Value.ToString(),
-            Enabled = SelectedEnabledFilter.Value.ToString(),
-            Category = SelectedCategory.Title,
-            Group = SelectedGroupFilter.AllGroups
-                ? "all"
-                : SelectedGroupFilter.GroupId?.ToString() ?? "ungrouped",
-            Sort = SelectedSortOption.Value.ToString(),
-            GroupSort = SelectedGroupSortOption.Value.ToString(),
-            PageSize = PageSize,
-            Attributes = SavedFilterDefaults.CapturedAttributes(AttributeOptions),
-        };
+        settings.InstalledDefaults = _defaults = CaptureFilters();
 
         service.Save(settings);
 
         StatusMessage = Strings.Installed_SavedAsDefault;
         AppLog.Info("Installed", "saved the current filters as this page's default");
+    }
+
+    // The page's filters and view mode as a record - what Save as default saves, and the heart of a
+    // filter preset (OPEN-25 R3).
+    private InstalledPageDefaults CaptureFilters() => new()
+    {
+        ViewMode = ViewMode.ToString(),
+        UpdateStatus = SelectedUpdateFilter.Value.ToString(),
+        Enabled = SelectedEnabledFilter.Value.ToString(),
+        Category = SelectedCategory.Title,
+        Group = SelectedGroupFilter.AllGroups
+            ? "all"
+            : SelectedGroupFilter.GroupId?.ToString() ?? "ungrouped",
+        Sort = SelectedSortOption.Value.ToString(),
+        GroupSort = SelectedGroupSortOption.Value.ToString(),
+        PageSize = PageSize,
+        Attributes = SavedFilterDefaults.CapturedAttributes(AttributeOptions),
+    };
+
+    // The page as it is now, as a filter preset called `name` (OPEN-25 R3).
+    private InstalledFilterPreset CapturePreset(string name) => new()
+    {
+        Name = name,
+        Filters = CaptureFilters(),
+        Search = SearchText ?? "",
+        Pinned = FilterPins.ForPreset(),
+    };
+
+    //
+    // Sets the page up as a filter preset (OPEN-25 §2.3): every filter, sort and page size replaced -
+    // anything the preset doesn't name goes to the app's own - then its search text, pins and view
+    // mode. Returns a note when the category or group it names no longer exists.
+    //
+    private string? ApplyPreset(InstalledFilterPreset preset)
+    {
+        string? note = null;
+        _presetFilters = preset.Filters;
+        try
+        {
+            ResetFilters(toSaved: true, preset);
+
+            if (preset.Filters.Group is { Length: > 0 } group
+                && !string.Equals(group, "all", StringComparison.OrdinalIgnoreCase)
+                && SelectedGroupFilter.AllGroups)
+            {
+                note = LocalizationService.Text(Strings.Filter_PresetGroupGoneFormat, preset.Name);
+            }
+            else if (preset.Filters.Category is { Length: > 0 } category && SelectedCategory.Title is null)
+            {
+                note = LocalizationService.Text(Strings.Filter_PresetCategoryGoneFormat, preset.Name, category);
+            }
+        }
+        finally
+        {
+            _presetFilters = null;
+        }
+
+        FilterPins.ApplyPreset(preset.Pinned);
+
+        // Last: switching view rebuilds that view from the filters just set.
+        if (SavedFilterDefaults.Parse<InstalledViewMode>(preset.Filters.ViewMode) is { } mode) ViewMode = mode;
+
+        return note;
     }
 
     //

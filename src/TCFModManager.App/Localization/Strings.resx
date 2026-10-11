@@ -9064,7 +9064,7 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <value>Save how this page is set up under a name, and switch back to it in one click.</value>
   </data>
   <data name="Filter_PresetsHint" xml:space="preserve">
-    <value>No presets yet. A preset keeps this page's filters, sort, page size, search and pinned filters under a name - type one below and save.</value>
+    <value>No presets yet. A preset keeps this page's filters, sort, page size, search and pinned filters - and on Installed, the view - under a name. Type one below and save.</value>
   </data>
   <data name="Filter_PresetNamePlaceholder" xml:space="preserve">
     <value>Preset name</value>
@@ -9121,5 +9121,29 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
   </data>
   <data name="Filter_PresetsNone" xml:space="preserve">
     <value>none</value>
+  </data>
+  <data name="Filter_PresetGroupGoneFormat" xml:space="preserve">
+    <value>Applied the filter preset {0} - the group it names no longer exists, so all groups are shown.</value>
+    <comment>{0} is a preset name.</comment>
+  </data>
+  <data name="Help_Browse_Presets_Title" xml:space="preserve">
+    <value>Save filters you use often as a preset</value>
+  </data>
+  <data name="Help_Browse_Presets_Step1" xml:space="preserve">
+    <value>Set the page up the way you want, open {0}, then {1} at the top. Type a name and press {2}.</value>
+    <comment>{0} Filters button, {1} section, {2} button.</comment>
+  </data>
+  <data name="Help_Browse_Presets_Step2" xml:space="preserve">
+    <value>Click a preset's name to set the page up as it: every filter, the sort, page size, search text and pinned filters - and on Installed, the view. The one the page matches right now is ticked.</value>
+  </data>
+  <data name="Help_Browse_Presets_Step3" xml:space="preserve">
+    <value>Beside each preset: save the page as it is now over it, rename it, or delete it. Pin the section to switch presets from the row under the search bar.</value>
+  </data>
+  <data name="Help_Browse_Presets_Note" xml:space="preserve">
+    <value>Presets are separate from {0}: applying one changes the page now, never what it opens at.</value>
+    <comment>{0} Save as default button.</comment>
+  </data>
+  <data name="Help_Browse_Presets_Keywords" xml:space="preserve">
+    <value>preset presets saved filters filter set save filters switch named</value>
   </data>
 </root>

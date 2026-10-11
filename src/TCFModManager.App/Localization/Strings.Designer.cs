@@ -2491,4 +2491,11 @@ internal static class Strings
     internal static string Filter_PresetAppliedFormat => LocalizationService.Get("Filter_PresetAppliedFormat");
     internal static string Filter_PresetCategoryGoneFormat => LocalizationService.Get("Filter_PresetCategoryGoneFormat");
     internal static string Filter_PresetsNone => LocalizationService.Get("Filter_PresetsNone");
+    internal static string Filter_PresetGroupGoneFormat => LocalizationService.Get("Filter_PresetGroupGoneFormat");
+    internal static string Help_Browse_Presets_Title => LocalizationService.Get("Help_Browse_Presets_Title");
+    internal static string Help_Browse_Presets_Step1 => LocalizationService.Get("Help_Browse_Presets_Step1");
+    internal static string Help_Browse_Presets_Step2 => LocalizationService.Get("Help_Browse_Presets_Step2");
+    internal static string Help_Browse_Presets_Step3 => LocalizationService.Get("Help_Browse_Presets_Step3");
+    internal static string Help_Browse_Presets_Note => LocalizationService.Get("Help_Browse_Presets_Note");
+    internal static string Help_Browse_Presets_Keywords => LocalizationService.Get("Help_Browse_Presets_Keywords");
 }

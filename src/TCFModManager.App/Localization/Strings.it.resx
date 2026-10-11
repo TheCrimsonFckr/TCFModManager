@@ -7532,7 +7532,7 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
     <value>Salva con un nome come è impostata questa pagina e tornaci con un clic.</value>
   </data>
   <data name="Filter_PresetsHint" xml:space="preserve">
-    <value>Ancora nessuna preimpostazione. Una preimpostazione conserva con un nome i filtri, l'ordinamento, la dimensione della pagina, la ricerca e i filtri fissati di questa pagina - scrivi un nome qui sotto e salva.</value>
+    <value>Ancora nessuna preimpostazione. Una preimpostazione conserva con un nome i filtri, l'ordinamento, la dimensione della pagina, la ricerca e i filtri fissati di questa pagina - e in Installati, la vista. Scrivi un nome qui sotto e salva.</value>
   </data>
   <data name="Filter_PresetNamePlaceholder" xml:space="preserve">
     <value>Nome della preimpostazione</value>
@@ -7584,5 +7584,26 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
   </data>
   <data name="Filter_PresetsNone" xml:space="preserve">
     <value>nessuna</value>
+  </data>
+  <data name="Filter_PresetGroupGoneFormat" xml:space="preserve">
+    <value>Preimpostazione dei filtri {0} applicata - il gruppo che indica non esiste più, quindi sono mostrati tutti i gruppi.</value>
+  </data>
+  <data name="Help_Browse_Presets_Title" xml:space="preserve">
+    <value>Salvare come preimpostazione i filtri che usi spesso</value>
+  </data>
+  <data name="Help_Browse_Presets_Step1" xml:space="preserve">
+    <value>Imposta la pagina come vuoi, apri {0}, poi {1} in alto. Scrivi un nome e premi {2}.</value>
+  </data>
+  <data name="Help_Browse_Presets_Step2" xml:space="preserve">
+    <value>Fai clic sul nome di una preimpostazione per impostare la pagina così: tutti i filtri, l'ordinamento, la dimensione della pagina, il testo cercato e i filtri fissati - e in Installati, la vista. Quella che corrisponde alla pagina in questo momento è spuntata.</value>
+  </data>
+  <data name="Help_Browse_Presets_Step3" xml:space="preserve">
+    <value>Accanto a ogni preimpostazione: salvarci sopra la pagina com'è ora, rinominarla o eliminarla. Fissa la sezione per cambiare preimpostazione dalla riga sotto la ricerca.</value>
+  </data>
+  <data name="Help_Browse_Presets_Note" xml:space="preserve">
+    <value>Le preimpostazioni sono separate da {0}: applicarne una cambia la pagina ora, mai come si apre.</value>
+  </data>
+  <data name="Help_Browse_Presets_Keywords" xml:space="preserve">
+    <value>preimpostazione preimpostazioni filtri salvati set di filtri salva cambia</value>
   </data>
 </root>
