@@ -7525,4 +7525,64 @@ Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie d
   <data name="ServerRunning_LeaveRunning" xml:space="preserve">
     <value>Laufen lassen</value>
   </data>
+  <data name="Filter_SectionPresets" xml:space="preserve">
+    <value>Filtervorlagen</value>
+  </data>
+  <data name="Filter_PresetsToolTip" xml:space="preserve">
+    <value>Speichere unter einem Namen, wie diese Seite eingestellt ist, und wechsle mit einem Klick dorthin zurück.</value>
+  </data>
+  <data name="Filter_PresetsHint" xml:space="preserve">
+    <value>Noch keine Vorlagen. Eine Vorlage speichert Filter, Sortierung, Seitengröße, Suche und angeheftete Filter dieser Seite unter einem Namen - gib unten einen ein und speichere.</value>
+  </data>
+  <data name="Filter_PresetNamePlaceholder" xml:space="preserve">
+    <value>Name der Vorlage</value>
+  </data>
+  <data name="Filter_PresetSave" xml:space="preserve">
+    <value>Als Vorlage speichern</value>
+  </data>
+  <data name="Filter_PresetApplyToolTip" xml:space="preserve">
+    <value>Die Seite wie diese Vorlage einstellen</value>
+  </data>
+  <data name="Filter_PresetActiveToolTip" xml:space="preserve">
+    <value>Die Seite ist genau wie diese Vorlage eingestellt</value>
+  </data>
+  <data name="Filter_PresetUpdateToolTip" xml:space="preserve">
+    <value>Die Seite, wie sie jetzt ist, über diese Vorlage speichern</value>
+  </data>
+  <data name="Filter_PresetRename" xml:space="preserve">
+    <value>Umbenennen</value>
+  </data>
+  <data name="Filter_PresetDelete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Filter_PresetDeleteTitle" xml:space="preserve">
+    <value>Filtervorlage löschen</value>
+  </data>
+  <data name="Filter_PresetDeleteQuestionFormat" xml:space="preserve">
+    <value>Filtervorlage „{0}“ löschen? Die Seite bleibt, wie sie ist.</value>
+  </data>
+  <data name="Filter_PresetReplaceTitle" xml:space="preserve">
+    <value>Filtervorlage ersetzen</value>
+  </data>
+  <data name="Filter_PresetReplaceQuestionFormat" xml:space="preserve">
+    <value>Es gibt bereits eine Filtervorlage namens „{0}“. Durch die Seite, wie sie jetzt ist, ersetzen?</value>
+  </data>
+  <data name="Filter_PresetNameTaken" xml:space="preserve">
+    <value>Eine andere Filtervorlage hat diesen Namen schon.</value>
+  </data>
+  <data name="Filter_PresetNameEmpty" xml:space="preserve">
+    <value>Eine Filtervorlage braucht einen Namen.</value>
+  </data>
+  <data name="Filter_PresetSavedFormat" xml:space="preserve">
+    <value>Filtervorlage {0} gespeichert.</value>
+  </data>
+  <data name="Filter_PresetAppliedFormat" xml:space="preserve">
+    <value>Filtervorlage {0} angewendet.</value>
+  </data>
+  <data name="Filter_PresetCategoryGoneFormat" xml:space="preserve">
+    <value>Filtervorlage {0} angewendet - die Kategorie {1} gibt es im Katalog nicht mehr, daher werden alle Kategorien gezeigt.</value>
+  </data>
+  <data name="Filter_PresetsNone" xml:space="preserve">
+    <value>keine</value>
+  </data>
 </root>

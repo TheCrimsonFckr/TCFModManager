@@ -35,6 +35,9 @@ public partial class BrowseViewModel : LocalizedViewModel
     // The Filters panel sections pinned under the search bar (OPEN-24).
     public PinnedFilterSections<BrowseFilterSection> FilterPins { get; }
 
+    // Named filter presets (OPEN-25), the first section of the Filters panel.
+    public FilterPresetList<BrowseFilterPreset> Presets { get; }
+
     public BrowseViewModel() : this(AppServices.SpModApi)
     {
     }
@@ -127,6 +130,18 @@ public partial class BrowseViewModel : LocalizedViewModel
         FilterPins = new PinnedFilterSections<BrowseFilterSection>(
             "Browse", settings, x => x.BrowsePinnedFilters, (x, v) => x.BrowsePinnedFilters = v, this, PinnedLabel);
 
+        Presets = new FilterPresetList<BrowseFilterPreset>(
+            "Browse", settings, x => x.BrowseFilterPresets, CapturePreset, ApplyPreset, text => StatusMessage = text);
+        Presets.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(Presets.ActiveName)) FilterPins.RefreshLabels();
+        };
+        FilterPins.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(FilterPins.Names)) Presets.Refresh();
+        };
+        Presets.Refresh();
+
         RebuildActiveFilters();
     }
 
@@ -147,7 +162,11 @@ public partial class BrowseViewModel : LocalizedViewModel
     // Clearing puts the page back to the app's own defaults, not the saved ones, so every pill goes
     // (Chris, 2026-10-06) - the saved defaults are still what the page opens at next time.
     //
-    private BrowsePageDefaults? Defaults => _clearingToAppDefaults ? null : _defaults;
+    private BrowsePageDefaults? Defaults => _presetFilters ?? (_clearingToAppDefaults ? null : _defaults);
+
+    // A filter preset's filters while ApplyPreset runs (OPEN-25), read through the same Default*
+    // helpers as Restore my defaults.
+    private BrowsePageDefaults? _presetFilters;
 
     private bool _clearingToAppDefaults;
 
@@ -181,6 +200,23 @@ public partial class BrowseViewModel : LocalizedViewModel
         string.IsNullOrWhiteSpace(Defaults?.Category)
             ? CategoryFilterItem.All
             : new CategoryFilterItem(Defaults.Category!, Defaults.Category);
+
+    private void ApplyCustomRanges(BrowseFilterPreset preset)
+    {
+        var custom = DateRangeOptions.First(o => o.Value == DateRangePreset.Custom);
+
+        if (SavedFilterDefaults.Parse<DateRangePreset>(preset.Filters.Published) == DateRangePreset.Custom)
+        {
+            (PublishedFrom, PublishedUntil) = (preset.PublishedFrom, preset.PublishedUntil);
+            SelectedPublishedRange = custom;
+        }
+
+        if (SavedFilterDefaults.Parse<DateRangePreset>(preset.Filters.Updated) == DateRangePreset.Custom)
+        {
+            (UpdatedFrom, UpdatedUntil) = (preset.UpdatedFrom, preset.UpdatedUntil);
+            SelectedUpdatedRange = custom;
+        }
+    }
 
     // Set while ClearFilters is resetting several properties at once, so each individual
     // OnXxxChanged below doesn't run its own ApplyFilter.
@@ -401,6 +437,7 @@ public partial class BrowseViewModel : LocalizedViewModel
     {
         base.OnPropertyChanged(e);
         if (e.PropertyName is null or "" or nameof(MoreFiltersLabel)) RebuildActiveFilters();
+        Presets?.Refresh();
         FilterPins?.RefreshLabels();
     }
 
@@ -416,6 +453,7 @@ public partial class BrowseViewModel : LocalizedViewModel
 
         return section switch
         {
+            BrowseFilterSection.Presets => Pill(Strings.Filter_SectionPresets, Presets?.ActiveName ?? Strings.Filter_PresetsNone),
             BrowseFilterSection.SptVersion => SptVersionFilterSummary,
             BrowseFilterSection.SearchIn => Pill(Strings.Filter_SectionSearchIn, SelectedSearchScope),
             BrowseFilterSection.Show => Pill(Strings.Filter_ShowHeader, AttributeOptions.Where(o => o.IsSelected).ToList() switch
@@ -706,13 +744,15 @@ public partial class BrowseViewModel : LocalizedViewModel
             : "restored the saved filters");
     }
 
-    private void ResetFilters(bool toSaved)
+    private void ResetFilters(bool toSaved, BrowseFilterPreset? preset = null)
     {
         _suppressAutoApplyFilter = true;
         _clearingToAppDefaults = !toSaved;
         try
         {
-            SearchText = string.Empty;
+            // A preset brings its own search text; a hand-edited one with none leaves the box alone.
+            if (preset is null) SearchText = string.Empty;
+            else if (preset.Search is { } search) SearchText = search;
             var savedVersions = Defaults?.SptVersions;
             foreach (var option in SptVersionOptions)
                 option.IsSelected = savedVersions is null ? option.IsInstalledLine : savedVersions.Contains(option.Label);
@@ -728,6 +768,9 @@ public partial class BrowseViewModel : LocalizedViewModel
             SelectedPublishedRange = DefaultDateRange(Defaults?.Published);
             SelectedUpdatedRange = DefaultDateRange(Defaults?.Updated);
             SelectedSearchScope = DefaultSearchScope();
+
+            // A preset's custom range comes back with its days (OPEN-25 R5); a default's never does.
+            if (preset is not null) ApplyCustomRanges(preset);
         }
         finally
         {
@@ -754,24 +797,7 @@ public partial class BrowseViewModel : LocalizedViewModel
         var service = new SettingsService();
         var settings = service.Load();
 
-        settings.BrowseDefaults = _defaults = new BrowsePageDefaults
-        {
-            Sort = SelectedSortOption.Value.ToString(),
-            Featured = SelectedFeaturedFilter.Value.ToString(),
-            Category = SelectedCategory.Title,
-            PageSize = PageSize,
-            Attributes = SavedFilterDefaults.CapturedAttributes(AttributeOptions),
-            Published = SavedPreset(SelectedPublishedRange),
-            Updated = SavedPreset(SelectedUpdatedRange),
-            SearchScope = SelectedSearchScope.Value.ToString(),
-
-            // Only once the options exist. Saving an empty list from a page whose version filter
-            // has not been built yet would read back as "show every SPT version", which is a real
-            // setting and not what was on screen.
-            SptVersions = _sptVersionOptionsBuilt
-                ? SptVersionOptions.Where(o => o.IsSelected).Select(o => o.Label).ToList()
-                : _defaults?.SptVersions,
-        };
+        settings.BrowseDefaults = _defaults = CaptureFilters(keepCustomRanges: false);
 
         service.Save(settings);
 
@@ -779,9 +805,73 @@ public partial class BrowseViewModel : LocalizedViewModel
         AppLog.Info("Browse", "saved the current filters as this page's default");
     }
 
-    // A custom range is a one-off, so it saves as Any time (R20).
-    private static string SavedPreset(DateRangeItem range) =>
-        (range.Value == DateRangePreset.Custom ? DateRangePreset.AnyTime : range.Value).ToString();
+    //
+    // The page's filters as a record - what Save as default saves, and the heart of a filter preset
+    // (OPEN-25). A custom range is a one-off for a default, so there it saves as Any time (OPEN-12
+    // R20); a preset keeps it, with its days (OPEN-25 R5).
+    //
+    private BrowsePageDefaults CaptureFilters(bool keepCustomRanges) => new()
+    {
+        Sort = SelectedSortOption.Value.ToString(),
+        Featured = SelectedFeaturedFilter.Value.ToString(),
+        Category = SelectedCategory.Title,
+        PageSize = PageSize,
+        Attributes = SavedFilterDefaults.CapturedAttributes(AttributeOptions),
+        Published = SavedRange(SelectedPublishedRange, keepCustomRanges),
+        Updated = SavedRange(SelectedUpdatedRange, keepCustomRanges),
+        SearchScope = SelectedSearchScope.Value.ToString(),
+
+        // Only once the options exist. Saving an empty list from a page whose version filter has not
+        // been built yet would read back as "show every SPT version", which is a real setting and not
+        // what was on screen.
+        SptVersions = _sptVersionOptionsBuilt
+            ? SptVersionOptions.Where(o => o.IsSelected).Select(o => o.Label).ToList()
+            : _defaults?.SptVersions,
+    };
+
+    private static string SavedRange(DateRangeItem range, bool keepCustom) =>
+        (range.Value == DateRangePreset.Custom && !keepCustom ? DateRangePreset.AnyTime : range.Value).ToString();
+
+    // The page as it is now, as a filter preset called `name` (OPEN-25 R3, R5).
+    private BrowseFilterPreset CapturePreset(string name)
+    {
+        var preset = new BrowseFilterPreset
+        {
+            Name = name,
+            Filters = CaptureFilters(keepCustomRanges: true),
+            Search = SearchText ?? "",
+            Pinned = FilterPins.ForPreset(),
+        };
+
+        if (IsPublishedCustom) (preset.PublishedFrom, preset.PublishedUntil) = (PublishedFrom, PublishedUntil);
+        if (IsUpdatedCustom) (preset.UpdatedFrom, preset.UpdatedUntil) = (UpdatedFrom, UpdatedUntil);
+        return preset;
+    }
+
+    //
+    // Sets the page up as a filter preset (OPEN-25 §2.3): every filter, sort and page size replaced -
+    // anything the preset doesn't name goes to the app's own - then its search text and pins, and
+    // one filter pass. Returns a note when the category it names is no longer in the catalog.
+    //
+    private string? ApplyPreset(BrowseFilterPreset preset)
+    {
+        string? note = null;
+        _presetFilters = preset.Filters;
+        try
+        {
+            ResetFilters(toSaved: true, preset);
+
+            if (preset.Filters.Category is { Length: > 0 } category && SelectedCategory.Title is null)
+                note = Text(Strings.Filter_PresetCategoryGoneFormat, preset.Name, category);
+        }
+        finally
+        {
+            _presetFilters = null;
+        }
+
+        FilterPins.ApplyPreset(preset.Pinned);
+        return note;
+    }
 
     private bool CanGoToPreviousPage() => CurrentPage > 1;
 

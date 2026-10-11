@@ -7525,4 +7525,64 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
   <data name="ServerRunning_LeaveRunning" xml:space="preserve">
     <value>Lascialo acceso</value>
   </data>
+  <data name="Filter_SectionPresets" xml:space="preserve">
+    <value>Preimpostazioni dei filtri</value>
+  </data>
+  <data name="Filter_PresetsToolTip" xml:space="preserve">
+    <value>Salva con un nome come è impostata questa pagina e tornaci con un clic.</value>
+  </data>
+  <data name="Filter_PresetsHint" xml:space="preserve">
+    <value>Ancora nessuna preimpostazione. Una preimpostazione conserva con un nome i filtri, l'ordinamento, la dimensione della pagina, la ricerca e i filtri fissati di questa pagina - scrivi un nome qui sotto e salva.</value>
+  </data>
+  <data name="Filter_PresetNamePlaceholder" xml:space="preserve">
+    <value>Nome della preimpostazione</value>
+  </data>
+  <data name="Filter_PresetSave" xml:space="preserve">
+    <value>Salva come preimpostazione</value>
+  </data>
+  <data name="Filter_PresetApplyToolTip" xml:space="preserve">
+    <value>Imposta la pagina come questa preimpostazione</value>
+  </data>
+  <data name="Filter_PresetActiveToolTip" xml:space="preserve">
+    <value>La pagina è impostata esattamente come questa preimpostazione</value>
+  </data>
+  <data name="Filter_PresetUpdateToolTip" xml:space="preserve">
+    <value>Salva la pagina com'è ora al posto di questa preimpostazione</value>
+  </data>
+  <data name="Filter_PresetRename" xml:space="preserve">
+    <value>Rinomina</value>
+  </data>
+  <data name="Filter_PresetDelete" xml:space="preserve">
+    <value>Elimina</value>
+  </data>
+  <data name="Filter_PresetDeleteTitle" xml:space="preserve">
+    <value>Elimina preimpostazione dei filtri</value>
+  </data>
+  <data name="Filter_PresetDeleteQuestionFormat" xml:space="preserve">
+    <value>Eliminare la preimpostazione dei filtri "{0}"? La pagina resta com'è.</value>
+  </data>
+  <data name="Filter_PresetReplaceTitle" xml:space="preserve">
+    <value>Sostituisci preimpostazione dei filtri</value>
+  </data>
+  <data name="Filter_PresetReplaceQuestionFormat" xml:space="preserve">
+    <value>Esiste già una preimpostazione dei filtri chiamata "{0}". Sostituirla con la pagina com'è ora?</value>
+  </data>
+  <data name="Filter_PresetNameTaken" xml:space="preserve">
+    <value>Un'altra preimpostazione dei filtri ha già quel nome.</value>
+  </data>
+  <data name="Filter_PresetNameEmpty" xml:space="preserve">
+    <value>Una preimpostazione dei filtri ha bisogno di un nome.</value>
+  </data>
+  <data name="Filter_PresetSavedFormat" xml:space="preserve">
+    <value>Preimpostazione dei filtri {0} salvata.</value>
+  </data>
+  <data name="Filter_PresetAppliedFormat" xml:space="preserve">
+    <value>Preimpostazione dei filtri {0} applicata.</value>
+  </data>
+  <data name="Filter_PresetCategoryGoneFormat" xml:space="preserve">
+    <value>Preimpostazione dei filtri {0} applicata - la categoria {1} non è più nel catalogo, quindi sono mostrate tutte le categorie.</value>
+  </data>
+  <data name="Filter_PresetsNone" xml:space="preserve">
+    <value>nessuna</value>
+  </data>
 </root>

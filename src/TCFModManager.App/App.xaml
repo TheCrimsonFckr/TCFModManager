@@ -702,6 +702,131 @@
                 selection behind them. No ScrollViewer in the template, so the wheel scrolls the panel
                 rather than stopping at each list.
             -->
+            <!--
+                OPEN-25: the Filter presets section's body, shared by Browse and Installed - in the
+                Filters panel and, when pinned, in its dropdown under the search bar. DataContext is
+                the page view model; everything here is on its Presets (FilterPresetList).
+            -->
+            <BooleanToVisibilityConverter x:Key="PresetBoolToVis" />
+            <converters:FalseToVisibilityConverter x:Key="PresetFalseToVis" />
+            <DataTemplate x:Key="FilterBody.Presets">
+                <StackPanel x:Name="PresetsRoot" MinWidth="240">
+                    <TextBlock
+                        Margin="0,0,0,8"
+                        FontSize="12"
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="{loc:Str Filter_PresetsHint}"
+                        Visibility="{Binding Presets.HasNone, Converter={StaticResource PresetBoolToVis}}" />
+
+                    <ItemsControl Focusable="False" ItemsSource="{Binding Presets.Rows}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,1">
+                                    <!-- The name applies the preset; the tick says the page is set up as it. -->
+                                    <DockPanel Visibility="{Binding IsRenaming, Converter={StaticResource PresetFalseToVis}}">
+                                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                            <ui:Button
+                                                Padding="4"
+                                                Appearance="Transparent"
+                                                ToolTip="{loc:Str Filter_PresetUpdateToolTip}"
+                                                Command="{Binding DataContext.Presets.UpdateCommand, ElementName=PresetsRoot}"
+                                                CommandParameter="{Binding}">
+                                                <ui:SymbolIcon Symbol="Save24" FontSize="14" />
+                                            </ui:Button>
+                                            <ui:Button
+                                                Padding="4"
+                                                Appearance="Transparent"
+                                                ToolTip="{loc:Str Filter_PresetRename}"
+                                                Command="{Binding DataContext.Presets.StartRenameCommand, ElementName=PresetsRoot}"
+                                                CommandParameter="{Binding}">
+                                                <ui:SymbolIcon Symbol="Rename24" FontSize="14" />
+                                            </ui:Button>
+                                            <ui:Button
+                                                Padding="4"
+                                                Appearance="Transparent"
+                                                ToolTip="{loc:Str Filter_PresetDelete}"
+                                                Command="{Binding DataContext.Presets.DeleteCommand, ElementName=PresetsRoot}"
+                                                CommandParameter="{Binding}">
+                                                <ui:SymbolIcon Symbol="Delete24" FontSize="14" />
+                                            </ui:Button>
+                                        </StackPanel>
+                                        <ui:Button
+                                            Padding="6,4"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Left"
+                                            Appearance="Transparent"
+                                            ToolTip="{loc:Str Filter_PresetApplyToolTip}"
+                                            Command="{Binding DataContext.Presets.ApplyCommand, ElementName=PresetsRoot}"
+                                            CommandParameter="{Binding}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Grid Width="18">
+                                                    <ui:SymbolIcon
+                                                        Symbol="Checkmark16"
+                                                        FontSize="14"
+                                                        Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                                        ToolTip="{loc:Str Filter_PresetActiveToolTip}"
+                                                        Visibility="{Binding IsActive, Converter={StaticResource PresetBoolToVis}}" />
+                                                </Grid>
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                    Text="{Binding Name}" />
+                                            </StackPanel>
+                                        </ui:Button>
+                                    </DockPanel>
+
+                                    <!-- Renaming, in place: Enter keeps it, Esc puts it back. -->
+                                    <DockPanel Visibility="{Binding IsRenaming, Converter={StaticResource PresetBoolToVis}}">
+                                        <ui:Button
+                                            DockPanel.Dock="Right"
+                                            Padding="4"
+                                            Appearance="Transparent"
+                                            ToolTip="{loc:Str Common_Cancel}"
+                                            Command="{Binding DataContext.Presets.CancelRenameCommand, ElementName=PresetsRoot}"
+                                            CommandParameter="{Binding}">
+                                            <ui:SymbolIcon Symbol="Dismiss24" FontSize="14" />
+                                        </ui:Button>
+                                        <ui:Button
+                                            DockPanel.Dock="Right"
+                                            Padding="4"
+                                            Appearance="Transparent"
+                                            ToolTip="{loc:Str Filter_PresetRename}"
+                                            Command="{Binding DataContext.Presets.FinishRenameCommand, ElementName=PresetsRoot}"
+                                            CommandParameter="{Binding}">
+                                            <ui:SymbolIcon Symbol="Checkmark24" FontSize="14" />
+                                        </ui:Button>
+                                        <ui:TextBox Text="{Binding RenameText, UpdateSourceTrigger=PropertyChanged}">
+                                            <ui:TextBox.InputBindings>
+                                                <KeyBinding Key="Enter" Command="{Binding DataContext.Presets.FinishRenameCommand, ElementName=PresetsRoot}" CommandParameter="{Binding}" />
+                                                <KeyBinding Key="Escape" Command="{Binding DataContext.Presets.CancelRenameCommand, ElementName=PresetsRoot}" CommandParameter="{Binding}" />
+                                            </ui:TextBox.InputBindings>
+                                        </ui:TextBox>
+                                    </DockPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- Save the page as it is now under a name; a name already used asks to replace it. -->
+                    <DockPanel Margin="0,8,0,0">
+                        <ui:Button
+                            DockPanel.Dock="Right"
+                            Margin="6,0,0,0"
+                            Content="{loc:Str Filter_PresetSave}"
+                            Command="{Binding Presets.SaveCommand}" />
+                        <ui:TextBox
+                            PlaceholderText="{loc:Str Filter_PresetNamePlaceholder}"
+                            Text="{Binding Presets.NewName, UpdateSourceTrigger=PropertyChanged}">
+                            <ui:TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding Presets.SaveCommand}" />
+                            </ui:TextBox.InputBindings>
+                        </ui:TextBox>
+                    </DockPanel>
+                </StackPanel>
+            </DataTemplate>
+
             <Style x:Key="FilterOptionList" TargetType="ListBox">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderThickness" Value="0" />

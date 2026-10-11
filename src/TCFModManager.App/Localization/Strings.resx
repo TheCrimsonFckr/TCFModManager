@@ -9057,4 +9057,69 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
   <data name="ServerRunning_LeaveRunning" xml:space="preserve">
     <value>Leave it running</value>
   </data>
+  <data name="Filter_SectionPresets" xml:space="preserve">
+    <value>Filter presets</value>
+  </data>
+  <data name="Filter_PresetsToolTip" xml:space="preserve">
+    <value>Save how this page is set up under a name, and switch back to it in one click.</value>
+  </data>
+  <data name="Filter_PresetsHint" xml:space="preserve">
+    <value>No presets yet. A preset keeps this page's filters, sort, page size, search and pinned filters under a name - type one below and save.</value>
+  </data>
+  <data name="Filter_PresetNamePlaceholder" xml:space="preserve">
+    <value>Preset name</value>
+  </data>
+  <data name="Filter_PresetSave" xml:space="preserve">
+    <value>Save as preset</value>
+  </data>
+  <data name="Filter_PresetApplyToolTip" xml:space="preserve">
+    <value>Set the page up as this preset</value>
+  </data>
+  <data name="Filter_PresetActiveToolTip" xml:space="preserve">
+    <value>The page is set up exactly as this preset</value>
+  </data>
+  <data name="Filter_PresetUpdateToolTip" xml:space="preserve">
+    <value>Save the page as it is now over this preset</value>
+  </data>
+  <data name="Filter_PresetRename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Filter_PresetDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Filter_PresetDeleteTitle" xml:space="preserve">
+    <value>Delete filter preset</value>
+  </data>
+  <data name="Filter_PresetDeleteQuestionFormat" xml:space="preserve">
+    <value>Delete the filter preset "{0}"? The page stays as it is.</value>
+    <comment>{0} is a preset name.</comment>
+  </data>
+  <data name="Filter_PresetReplaceTitle" xml:space="preserve">
+    <value>Replace filter preset</value>
+  </data>
+  <data name="Filter_PresetReplaceQuestionFormat" xml:space="preserve">
+    <value>There's already a filter preset called "{0}". Replace it with the page as it is now?</value>
+    <comment>{0} is a preset name.</comment>
+  </data>
+  <data name="Filter_PresetNameTaken" xml:space="preserve">
+    <value>Another filter preset already has that name.</value>
+  </data>
+  <data name="Filter_PresetNameEmpty" xml:space="preserve">
+    <value>A filter preset needs a name.</value>
+  </data>
+  <data name="Filter_PresetSavedFormat" xml:space="preserve">
+    <value>Saved the filter preset {0}.</value>
+    <comment>{0} is a preset name.</comment>
+  </data>
+  <data name="Filter_PresetAppliedFormat" xml:space="preserve">
+    <value>Applied the filter preset {0}.</value>
+    <comment>{0} is a preset name.</comment>
+  </data>
+  <data name="Filter_PresetCategoryGoneFormat" xml:space="preserve">
+    <value>Applied the filter preset {0} - the category {1} isn't in the catalog any more, so all categories are shown.</value>
+    <comment>{0} is a preset name, {1} a category.</comment>
+  </data>
+  <data name="Filter_PresetsNone" xml:space="preserve">
+    <value>none</value>
+  </data>
 </root>

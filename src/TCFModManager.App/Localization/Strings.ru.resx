@@ -7888,4 +7888,64 @@
   <data name="ServerRunning_LeaveRunning" xml:space="preserve">
     <value>Оставить работать</value>
   </data>
+  <data name="Filter_SectionPresets" xml:space="preserve">
+    <value>Наборы фильтров</value>
+  </data>
+  <data name="Filter_PresetsToolTip" xml:space="preserve">
+    <value>Сохраните настройку этой страницы под именем и возвращайтесь к ней одним щелчком.</value>
+  </data>
+  <data name="Filter_PresetsHint" xml:space="preserve">
+    <value>Наборов пока нет. Набор хранит под именем фильтры, сортировку, размер страницы, поиск и закреплённые фильтры этой страницы - введите имя ниже и сохраните.</value>
+  </data>
+  <data name="Filter_PresetNamePlaceholder" xml:space="preserve">
+    <value>Имя набора</value>
+  </data>
+  <data name="Filter_PresetSave" xml:space="preserve">
+    <value>Сохранить набор</value>
+  </data>
+  <data name="Filter_PresetApplyToolTip" xml:space="preserve">
+    <value>Настроить страницу по этому набору</value>
+  </data>
+  <data name="Filter_PresetActiveToolTip" xml:space="preserve">
+    <value>Страница настроена точно по этому набору</value>
+  </data>
+  <data name="Filter_PresetUpdateToolTip" xml:space="preserve">
+    <value>Сохранить текущую настройку страницы в этот набор</value>
+  </data>
+  <data name="Filter_PresetRename" xml:space="preserve">
+    <value>Переименовать</value>
+  </data>
+  <data name="Filter_PresetDelete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="Filter_PresetDeleteTitle" xml:space="preserve">
+    <value>Удалить набор фильтров</value>
+  </data>
+  <data name="Filter_PresetDeleteQuestionFormat" xml:space="preserve">
+    <value>Удалить набор фильтров «{0}»? Страница останется как есть.</value>
+  </data>
+  <data name="Filter_PresetReplaceTitle" xml:space="preserve">
+    <value>Заменить набор фильтров</value>
+  </data>
+  <data name="Filter_PresetReplaceQuestionFormat" xml:space="preserve">
+    <value>Набор фильтров «{0}» уже есть. Заменить его текущей настройкой страницы?</value>
+  </data>
+  <data name="Filter_PresetNameTaken" xml:space="preserve">
+    <value>Это имя уже занято другим набором фильтров.</value>
+  </data>
+  <data name="Filter_PresetNameEmpty" xml:space="preserve">
+    <value>У набора фильтров должно быть имя.</value>
+  </data>
+  <data name="Filter_PresetSavedFormat" xml:space="preserve">
+    <value>Набор фильтров {0} сохранён.</value>
+  </data>
+  <data name="Filter_PresetAppliedFormat" xml:space="preserve">
+    <value>Применён набор фильтров {0}.</value>
+  </data>
+  <data name="Filter_PresetCategoryGoneFormat" xml:space="preserve">
+    <value>Применён набор фильтров {0} - категории {1} больше нет в каталоге, поэтому показаны все категории.</value>
+  </data>
+  <data name="Filter_PresetsNone" xml:space="preserve">
+    <value>нет</value>
+  </data>
 </root>

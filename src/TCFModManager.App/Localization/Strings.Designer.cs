@@ -2471,4 +2471,24 @@ internal static class Strings
     internal static string ServerRunning_Stop => LocalizationService.Get("ServerRunning_Stop");
     internal static string ServerRunning_ShowPlay => LocalizationService.Get("ServerRunning_ShowPlay");
     internal static string ServerRunning_LeaveRunning => LocalizationService.Get("ServerRunning_LeaveRunning");
+    internal static string Filter_SectionPresets => LocalizationService.Get("Filter_SectionPresets");
+    internal static string Filter_PresetsToolTip => LocalizationService.Get("Filter_PresetsToolTip");
+    internal static string Filter_PresetsHint => LocalizationService.Get("Filter_PresetsHint");
+    internal static string Filter_PresetNamePlaceholder => LocalizationService.Get("Filter_PresetNamePlaceholder");
+    internal static string Filter_PresetSave => LocalizationService.Get("Filter_PresetSave");
+    internal static string Filter_PresetApplyToolTip => LocalizationService.Get("Filter_PresetApplyToolTip");
+    internal static string Filter_PresetActiveToolTip => LocalizationService.Get("Filter_PresetActiveToolTip");
+    internal static string Filter_PresetUpdateToolTip => LocalizationService.Get("Filter_PresetUpdateToolTip");
+    internal static string Filter_PresetRename => LocalizationService.Get("Filter_PresetRename");
+    internal static string Filter_PresetDelete => LocalizationService.Get("Filter_PresetDelete");
+    internal static string Filter_PresetDeleteTitle => LocalizationService.Get("Filter_PresetDeleteTitle");
+    internal static string Filter_PresetDeleteQuestionFormat => LocalizationService.Get("Filter_PresetDeleteQuestionFormat");
+    internal static string Filter_PresetReplaceTitle => LocalizationService.Get("Filter_PresetReplaceTitle");
+    internal static string Filter_PresetReplaceQuestionFormat => LocalizationService.Get("Filter_PresetReplaceQuestionFormat");
+    internal static string Filter_PresetNameTaken => LocalizationService.Get("Filter_PresetNameTaken");
+    internal static string Filter_PresetNameEmpty => LocalizationService.Get("Filter_PresetNameEmpty");
+    internal static string Filter_PresetSavedFormat => LocalizationService.Get("Filter_PresetSavedFormat");
+    internal static string Filter_PresetAppliedFormat => LocalizationService.Get("Filter_PresetAppliedFormat");
+    internal static string Filter_PresetCategoryGoneFormat => LocalizationService.Get("Filter_PresetCategoryGoneFormat");
+    internal static string Filter_PresetsNone => LocalizationService.Get("Filter_PresetsNone");
 }

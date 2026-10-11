@@ -7525,4 +7525,64 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
   <data name="ServerRunning_LeaveRunning" xml:space="preserve">
     <value>Le laisser tourner</value>
   </data>
+  <data name="Filter_SectionPresets" xml:space="preserve">
+    <value>Préréglages de filtres</value>
+  </data>
+  <data name="Filter_PresetsToolTip" xml:space="preserve">
+    <value>Enregistrez sous un nom la configuration de cette page, et revenez-y en un clic.</value>
+  </data>
+  <data name="Filter_PresetsHint" xml:space="preserve">
+    <value>Aucun préréglage pour l'instant. Un préréglage garde sous un nom les filtres, le tri, la taille de page, la recherche et les filtres épinglés de cette page - saisissez un nom ci-dessous et enregistrez.</value>
+  </data>
+  <data name="Filter_PresetNamePlaceholder" xml:space="preserve">
+    <value>Nom du préréglage</value>
+  </data>
+  <data name="Filter_PresetSave" xml:space="preserve">
+    <value>Enregistrer comme préréglage</value>
+  </data>
+  <data name="Filter_PresetApplyToolTip" xml:space="preserve">
+    <value>Configurer la page selon ce préréglage</value>
+  </data>
+  <data name="Filter_PresetActiveToolTip" xml:space="preserve">
+    <value>La page est configurée exactement selon ce préréglage</value>
+  </data>
+  <data name="Filter_PresetUpdateToolTip" xml:space="preserve">
+    <value>Enregistrer la page telle qu'elle est maintenant à la place de ce préréglage</value>
+  </data>
+  <data name="Filter_PresetRename" xml:space="preserve">
+    <value>Renommer</value>
+  </data>
+  <data name="Filter_PresetDelete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="Filter_PresetDeleteTitle" xml:space="preserve">
+    <value>Supprimer le préréglage de filtres</value>
+  </data>
+  <data name="Filter_PresetDeleteQuestionFormat" xml:space="preserve">
+    <value>Supprimer le préréglage de filtres « {0} » ? La page reste telle quelle.</value>
+  </data>
+  <data name="Filter_PresetReplaceTitle" xml:space="preserve">
+    <value>Remplacer le préréglage de filtres</value>
+  </data>
+  <data name="Filter_PresetReplaceQuestionFormat" xml:space="preserve">
+    <value>Un préréglage de filtres nommé « {0} » existe déjà. Le remplacer par la page telle qu'elle est maintenant ?</value>
+  </data>
+  <data name="Filter_PresetNameTaken" xml:space="preserve">
+    <value>Un autre préréglage de filtres porte déjà ce nom.</value>
+  </data>
+  <data name="Filter_PresetNameEmpty" xml:space="preserve">
+    <value>Un préréglage de filtres a besoin d'un nom.</value>
+  </data>
+  <data name="Filter_PresetSavedFormat" xml:space="preserve">
+    <value>Préréglage de filtres {0} enregistré.</value>
+  </data>
+  <data name="Filter_PresetAppliedFormat" xml:space="preserve">
+    <value>Préréglage de filtres {0} appliqué.</value>
+  </data>
+  <data name="Filter_PresetCategoryGoneFormat" xml:space="preserve">
+    <value>Préréglage de filtres {0} appliqué - la catégorie {1} n'est plus dans le catalogue, toutes les catégories sont donc affichées.</value>
+  </data>
+  <data name="Filter_PresetsNone" xml:space="preserve">
+    <value>aucun</value>
+  </data>
 </root>

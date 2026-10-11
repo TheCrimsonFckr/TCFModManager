@@ -99,6 +99,34 @@ public sealed partial class PinnedFilterSections<TSection> : ObservableObject
 
     public bool IsPinned(TSection section) => Names.Contains(section.ToString());
 
+    //
+    // A filter preset's pins (OPEN-25 R3), saved like a toggle. Null - a hand-edited preset that
+    // names none - leaves them alone. The Filter presets section's own pin is never touched (R6):
+    // switching presets from the pinned presets dropdown must not take that dropdown away.
+    //
+    public void ApplyPreset(IReadOnlyList<string>? pinned)
+    {
+        if (pinned is null) return;
+
+        var presets = Core.Services.FilterPresetMatch.PresetsSection;
+        var keepPresets = Names.Contains(presets);
+        var wanted = pinned.Where(n => !string.Equals(n, presets, StringComparison.OrdinalIgnoreCase))
+            .Concat(keepPresets ? [presets] : []);
+        var names = PinnedFilters.Normalise(wanted, Known);
+        if (names.SequenceEqual(Names)) return;
+
+        Names = names;
+
+        var service = new SettingsService();
+        var current = service.Load();
+        _write(current, Names.Count > 0 ? Names.ToList() : null);
+        service.Save(current);
+    }
+
+    // The pins as a preset keeps them - without the Filter presets section's own (R6).
+    public List<string> ForPreset() =>
+        Names.Where(n => n != Core.Services.FilterPresetMatch.PresetsSection).ToList();
+
     [RelayCommand]
     private void Toggle(string? section)
     {

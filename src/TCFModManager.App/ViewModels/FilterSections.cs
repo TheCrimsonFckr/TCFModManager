@@ -7,6 +7,8 @@ namespace TCFModManager.App.ViewModels;
 //
 public enum BrowseFilterSection
 {
+    // OPEN-25: first in the panel (R1). Named to match Core's FilterPresetMatch.PresetsSection.
+    Presets,
     SptVersion,
     SearchIn,
     Show,
@@ -20,6 +22,8 @@ public enum BrowseFilterSection
 
 public enum InstalledFilterSection
 {
+    // OPEN-25: first in the panel (R1). Named to match Core's FilterPresetMatch.PresetsSection.
+    Presets,
     UpdateStatus,
     Enabled,
     Show,

@@ -238,6 +238,13 @@
                         <!-- Each filter is a section that opens like a group does: its header names the filter and
                              shows what it is set to, and opening it lists every choice. No dropdowns to aim at in a
                              narrow panel, and what is set reads at a glance down the headers. -->
+                        <!-- OPEN-25: named filter presets, first in the panel (R1); pinnable like any section (R6). -->
+                        <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="Presets" ToolTip="{loc:Str Filter_PresetsToolTip}" Content="{Binding}" ContentTemplate="{StaticResource FilterBody.Presets}">
+                            <Expander.Header>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionPresets}" TextWrapping="Wrap" />
+                            </Expander.Header>
+                        </Expander>
+
                         <!-- Which SPT release lines to show mods for; none ticked shows every line. Moved
                              here from the row (Chris, 2026-10-06), so its dropdown went with it. -->
                         <Expander Style="{StaticResource FilterSection}" behaviors:FilterPin.Section="SptVersion" ToolTip="{loc:Str Browse_SptVersionFilterToolTip}" Content="{Binding}" ContentTemplate="{StaticResource FilterBody.SptVersion}">
