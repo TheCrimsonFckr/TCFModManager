@@ -359,6 +359,17 @@ internal static class HelpCatalog
                 .WithKeywords(() => Strings.Help_Dependencies_Check_Keywords),
         ]),
 
+        // OPEN-12 F8: Diagnose logs.
+        new("diagnose", () => Strings.Nav_Diagnose, SymbolRegular.DocumentSearch24, typeof(DiagnosePage),
+        [
+            Topic("diagnose.read", () => Strings.Help_Diagnose_Read_Title,
+                Step(() => Strings.Help_Diagnose_Read_Step1, () => Strings.Nav_Diagnose),
+                Step(() => Strings.Help_Diagnose_Read_Step2, () => Strings.Diagnose_ShowMod),
+                Step(() => Strings.Help_Diagnose_Read_Step3, () => Strings.Diagnose_Refresh))
+                .WithNote(() => Strings.Help_Diagnose_Read_Note, () => Strings.Diagnose_CopyReport)
+                .WithKeywords(() => Strings.Help_Diagnose_Read_Keywords),
+        ]),
+
         new("footprint", () => Strings.Nav_Footprint, SymbolRegular.Scales24, typeof(FootprintPage),
         [
             Topic("footprint.enable", () => Strings.Help_Footprint_Enable_Title,

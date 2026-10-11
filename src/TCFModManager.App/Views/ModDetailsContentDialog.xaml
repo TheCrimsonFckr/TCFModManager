@@ -50,70 +50,98 @@
         </DataTemplate>
     </ui:ContentDialog.TitleTemplate>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel>
-            <Grid Margin="0,0,0,12">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+    <!-- OPEN-12 A9: Details, and sp-mod's own comments for the mod (ModCommentsView). -->
+    <TabControl x:Name="Tabs" SelectionChanged="Tabs_SelectionChanged">
+        <TabItem Header="{loc:Str ModDetails_DetailsTab}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                <Image
-                    Grid.Column="0"
-                    Width="64"
-                    Height="64"
-                    Margin="0,0,12,0"
-                    Stretch="UniformToFill"
-                    behaviors:ThumbnailLoader.Source="{Binding Thumbnail}" />
+                        <Image
+                            Grid.Column="0"
+                            Width="64"
+                            Height="64"
+                            Margin="0,0,12,0"
+                            Stretch="UniformToFill"
+                            behaviors:ThumbnailLoader.Source="{Binding Thumbnail}" />
 
-                <!-- The author opens their page (OPEN-12 A4), closing this dialog first. -->
+                        <!-- The author opens their page (OPEN-12 A4), closing this dialog first. -->
+                        <TextBlock
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                            <Hyperlink Style="{StaticResource AuthorLink}" ToolTip="{loc:Str Author_LinkToolTip}" Click="Author_Click">
+                                <Run Text="{Binding Owner.Name, Mode=OneWay}" />
+                            </Hyperlink>
+                        </TextBlock>
+                    </Grid>
+
+                    <TextBlock
+                        Margin="0,0,0,12"
+                        TextWrapping="Wrap"
+                        Text="{Binding Teaser}" />
+
+                    <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Downloads, StringFormat={loc:Str Common_DownloadsFormat}}" />
+                    <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Category.Title, StringFormat={loc:Str ModDetails_CategoryFormat}}" />
+                    <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding License.Name, StringFormat={loc:Str ModDetails_LicenseFormat}}" />
+
+                    <ui:Button
+                        Margin="0,12,0,0"
+                        HorizontalAlignment="Left"
+                        Content="{loc:Str Common_ViewModPage}"
+                        Icon="{ui:SymbolIcon Open24}"
+                        Click="ViewModPageButton_Click" />
+
+                    <!--
+                        OPEN-12 F18: the mod's full description, as sp-mod lays it out - tabs, tables, pictures
+                        and playing GIFs (Behaviors/HtmlText). Only the details fetch carries it; a listing
+                        without one shows the teaser above and nothing here.
+                    -->
+                    <RichTextBox
+                        Margin="0,16,0,0"
+                        Padding="0"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        IsReadOnly="True"
+                        IsDocumentEnabled="True"
+                        Focusable="False"
+                        VerticalScrollBarVisibility="Disabled"
+                        HorizontalScrollBarVisibility="Disabled"
+                        behaviors:HtmlText.Html="{Binding Description}" />
+
+                    <!-- DataContext is set in code-behind: the rest of this dialog binds against the Mod
+                         itself, and this section needs its own view model. Collapses when there are none. -->
+                    <views:AddonsSection x:Name="AddonsHost" />
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+
+        <TabItem x:Name="CommentsTab" Header="{loc:Str ModDetails_CommentsTab}">
+            <Grid Margin="0,8,0,0">
+                <Border x:Name="CommentsHost" />
                 <TextBlock
-                    Grid.Column="1"
-                    VerticalAlignment="Center"
-                    Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                    <Hyperlink Style="{StaticResource AuthorLink}" ToolTip="{loc:Str Author_LinkToolTip}" Click="Author_Click">
-                        <Run Text="{Binding Owner.Name, Mode=OneWay}" />
-                    </Hyperlink>
-                </TextBlock>
+                    x:Name="CommentsOff"
+                    Visibility="Collapsed"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="{loc:Str ModDetails_CommentsNone}" />
+                <StackPanel x:Name="CommentsFallback" Visibility="Collapsed">
+                    <TextBlock
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="{loc:Str ModDetails_CommentsNoWebView}" />
+                    <ui:Button
+                        Margin="0,12,0,0"
+                        Content="{loc:Str ModDetails_CommentsOpen}"
+                        Icon="{ui:SymbolIcon Open24}"
+                        Click="OpenCommentsInBrowser_Click" />
+                </StackPanel>
             </Grid>
-
-            <TextBlock
-                Margin="0,0,0,12"
-                TextWrapping="Wrap"
-                Text="{Binding Teaser}" />
-
-            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Downloads, StringFormat={loc:Str Common_DownloadsFormat}}" />
-            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Category.Title, StringFormat={loc:Str ModDetails_CategoryFormat}}" />
-            <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding License.Name, StringFormat={loc:Str ModDetails_LicenseFormat}}" />
-
-            <ui:Button
-                Margin="0,12,0,0"
-                HorizontalAlignment="Left"
-                Content="{loc:Str Common_ViewModPage}"
-                Icon="{ui:SymbolIcon Open24}"
-                Click="ViewModPageButton_Click" />
-
-            <!--
-                OPEN-12 F18: the mod's full description, as sp-mod lays it out - tabs, tables, pictures
-                and playing GIFs (Behaviors/HtmlText). Only the details fetch carries it; a listing
-                without one shows the teaser above and nothing here.
-            -->
-            <RichTextBox
-                Margin="0,16,0,0"
-                Padding="0"
-                BorderThickness="0"
-                Background="Transparent"
-                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                IsReadOnly="True"
-                IsDocumentEnabled="True"
-                Focusable="False"
-                VerticalScrollBarVisibility="Disabled"
-                HorizontalScrollBarVisibility="Disabled"
-                behaviors:HtmlText.Html="{Binding Description}" />
-
-            <!-- DataContext is set in code-behind: the rest of this dialog binds against the Mod
-                 itself, and this section needs its own view model. Collapses when there are none. -->
-            <views:AddonsSection x:Name="AddonsHost" />
-        </StackPanel>
-    </ScrollViewer>
+        </TabItem>
+    </TabControl>
 </ui:ContentDialog>

@@ -7216,4 +7216,649 @@
   <data name="Common_RestoreDefaultsToolTip" xml:space="preserve">
     <value>Возвращает фильтры, сортировку и число на странице к тому, что вы в последний раз сохранили по умолчанию для этой страницы. Если ничего не сохранено, действует как «Сбросить фильтры».</value>
   </data>
+  <data name="Play_ServerDescriptionHidden" xml:space="preserve">
+    <value>Запускает сервер этой установки без окна (настраивается в параметрах) - что он делает, видно в журнале сервера ниже. Он продолжает работать, даже если закрыть приложение. Перезапустить останавливает его и запускает снова - после правки конфигурации или добавления серверного мода - а Остановить корректно выключает его, пока вы не запустите его снова.</value>
+  </data>
+  <data name="Play_WaitingForServer" xml:space="preserve">
+    <value>Сервер запускается - лаунчер откроется, как только сервер будет готов.</value>
+  </data>
+  <data name="Play_WaitingForServerOnly" xml:space="preserve">
+    <value>Сервер запускается...</value>
+  </data>
+  <data name="Play_ServerIsUp" xml:space="preserve">
+    <value>Сервер готов.</value>
+  </data>
+  <data name="Play_ServerNotUpFormat" xml:space="preserve">
+    <value>Сервер не начал слушать порт {0} за три минуты, поэтому лаунчер не был открыт. Откройте его сами, когда сервер будет готов.</value>
+  </data>
+  <data name="Play_ServerNotUpOnlyFormat" xml:space="preserve">
+    <value>Сервер работает, но за три минуты так и не начал слушать порт {0}. Причина может быть в журнале сервера.</value>
+  </data>
+  <data name="Play_ServerPortTakenFormat" xml:space="preserve">
+    <value>Порт {0} был занят ещё до запуска сервера, поэтому нельзя понять, когда он готов. Откройте лаунчер сами, когда сервер будет готов.</value>
+  </data>
+  <data name="Play_ServerStoppedStarting" xml:space="preserve">
+    <value>Сервер закрылся, не успев запуститься, поэтому лаунчер не был открыт. Причина - в журнале сервера.</value>
+  </data>
+  <data name="Play_ServerStoppedStartingOnly" xml:space="preserve">
+    <value>Сервер закрылся, не успев запуститься. Причина - в журнале сервера.</value>
+  </data>
+  <data name="Play_ServerLog" xml:space="preserve">
+    <value>Журнал сервера</value>
+  </data>
+  <data name="Play_ServerLogNone" xml:space="preserve">
+    <value>Сервер ещё не записал здесь журнал - он сделает это после первого запуска.</value>
+  </data>
+  <data name="Play_ServerLogOpenFolder" xml:space="preserve">
+    <value>Открыть папку журналов</value>
+  </data>
+  <data name="Play_CloseGame" xml:space="preserve">
+    <value>Закрыть игру</value>
+  </data>
+  <data name="Play_CloseGameToolTip" xml:space="preserve">
+    <value>Закрыть Escape From Tarkov отсюда. Только игру этой установки - игра из другой папки не затрагивается.</value>
+  </data>
+  <data name="Play_CloseGameWarning" xml:space="preserve">
+    <value>Всё, что в незавершённом рейде, будет потеряно. Закрыть игру?</value>
+  </data>
+  <data name="Play_CloseGameConfirm" xml:space="preserve">
+    <value>Закрыть игру</value>
+  </data>
+  <data name="Play_CloseGameWithServer" xml:space="preserve">
+    <value>Закрывать игру, когда сервер останавливается</value>
+  </data>
+  <data name="Play_CloseGameWithServerToolTip" xml:space="preserve">
+    <value>Когда сервер этой установки останавливается - кнопкой Остановить, закрытием его окна или из-за сбоя - игра тоже закрывается, потому что без сервера она ничего не сохранит. Остановить сначала закрывает игру, пока сервер ещё может ей ответить. Перезапуск с этой страницы не считается.</value>
+  </data>
+  <data name="Play_GameClosed" xml:space="preserve">
+    <value>Игра закрыта.</value>
+  </data>
+  <data name="Play_GameNotRunning" xml:space="preserve">
+    <value>Игра не запущена.</value>
+  </data>
+  <data name="Play_GameClosedWithServer" xml:space="preserve">
+    <value>Сервер остановлен, поэтому игра закрыта.</value>
+  </data>
+  <data name="Play_StoppedAfterGameFormat" xml:space="preserve">
+    <value>{0} остановлен. Сначала была закрыта игра, как отмечено на карточке лаунчера.</value>
+  </data>
+  <data name="Options_StartingSptHeader" xml:space="preserve">
+    <value>Запуск SPT</value>
+  </data>
+  <data name="Options_StartingSptHint" xml:space="preserve">
+    <value>Как кнопка Запустить сервер на странице Играть запускает сервер и что происходит после.</value>
+  </data>
+  <data name="Options_StartLauncherOn" xml:space="preserve">
+    <value>Открывать лаунчер, когда сервер готов</value>
+  </data>
+  <data name="Options_StartLauncherOff" xml:space="preserve">
+    <value>Открывать лаунчер вручную</value>
+  </data>
+  <data name="Options_StartLauncherNote" xml:space="preserve">
+    <value>Готов - значит слушает свой порт (из его http.json, и 6969): только тогда лаунчер может к нему подключиться. Сильно модифицированному серверу даётся три минуты.</value>
+  </data>
+  <data name="Options_HideServerOn" xml:space="preserve">
+    <value>Запускать сервер без окна</value>
+  </data>
+  <data name="Options_HideServerOff" xml:space="preserve">
+    <value>Показывать окно сервера</value>
+  </data>
+  <data name="Options_HideServerNote" xml:space="preserve">
+    <value>Без окна журнал сервера показывается на странице Играть, а кнопка Остановить там корректно его выключает. Сервер продолжает работать после закрытия приложения - останавливайте его на странице Играть.</value>
+  </data>
+  <data name="Play_ToolsHeader" xml:space="preserve">
+    <value>Инструменты модов</value>
+  </data>
+  <data name="Play_ToolsDescription" xml:space="preserve">
+    <value>Программы, которые установили ваши моды, - каждый .exe, положенный модом в папку SPT, по записям этого приложения и из папок модов, установленных вручную. Инструмент отключённого мода показан серым. Скройте всё, что не предназначено для запуска; его всегда можно показать снова.</value>
+  </data>
+  <data name="Play_ToolFromFormat" xml:space="preserve">
+    <value>из {0}</value>
+  </data>
+  <data name="Play_ToolOpen" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="Play_ToolOpenToolTip" xml:space="preserve">
+    <value>Запустить этот инструмент из его папки</value>
+  </data>
+  <data name="Play_ToolFolderToolTip" xml:space="preserve">
+    <value>Открыть папку мода</value>
+  </data>
+  <data name="Play_ToolHide" xml:space="preserve">
+    <value>Скрыть</value>
+  </data>
+  <data name="Play_ToolHideToolTip" xml:space="preserve">
+    <value>Убрать со страницы Играть. Вернуть можно по ссылке под списком.</value>
+  </data>
+  <data name="Play_ToolUnhide" xml:space="preserve">
+    <value>Показывать на Играть</value>
+  </data>
+  <data name="Play_ToolsShowHidden_one" xml:space="preserve">
+    <value>Показать {0} скрытый инструмент</value>
+  </data>
+  <data name="Play_ToolsShowHidden_other" xml:space="preserve">
+    <value>Показать {0} скрытого инструмента</value>
+  </data>
+  <data name="Play_ToolsShowHidden_few" xml:space="preserve">
+    <value>Показать {0} скрытых инструмента</value>
+  </data>
+  <data name="Play_ToolsShowHidden_many" xml:space="preserve">
+    <value>Показать {0} скрытых инструментов</value>
+  </data>
+  <data name="Play_ToolsHideHidden" xml:space="preserve">
+    <value>Снова скрыть</value>
+  </data>
+  <data name="Play_ToolNeedsServerRunning" xml:space="preserve">
+    <value>Нужен запущенный сервер.</value>
+  </data>
+  <data name="Play_ToolNeedsServerRunningDown" xml:space="preserve">
+    <value>Нужен запущенный сервер - он не запущен.</value>
+  </data>
+  <data name="Play_ToolNeedsServerStopped" xml:space="preserve">
+    <value>Используйте при остановленном сервере - изменения применятся при следующем запуске.</value>
+  </data>
+  <data name="Play_ToolNeedsServerStoppedUp" xml:space="preserve">
+    <value>Сервер запущен - сначала остановите его. Изменения применятся при следующем запуске.</value>
+  </data>
+  <data name="Play_ToolModDisabledFormat" xml:space="preserve">
+    <value>{0} отключён, поэтому открыть нельзя.</value>
+  </data>
+  <data name="Play_ToolOpenedFormat" xml:space="preserve">
+    <value>{0} открыт.</value>
+  </data>
+  <data name="Play_ToolOpenFailedFormat" xml:space="preserve">
+    <value>Не удалось открыть {0}: {1}</value>
+  </data>
+  <data name="Profiles_ReasonWipe" xml:space="preserve">
+    <value>Перед сбросом профиля</value>
+  </data>
+  <data name="Profiles_ReasonProfileDelete" xml:space="preserve">
+    <value>Перед удалением профиля</value>
+  </data>
+  <data name="Play_DirectHeader" xml:space="preserve">
+    <value>Играть (экспериментально)</value>
+  </data>
+  <data name="Play_DirectSummary" xml:space="preserve">
+    <value>Выберите профиль и нажмите Играть - сервер запустится сам, если не запущен, а лаунчер SPT не открывается.</value>
+  </data>
+  <data name="Play_DirectDescription" xml:space="preserve">
+    <value>Играть при необходимости запускает сервер, ждёт его, выполняет проверки, патч и бандлы лаунчера SPT, затем запускает игру с этим профилем. Сброс, Новый профиль, Удаление и Очистка кэша - в меню ... рядом с Играть. Выключите это в параметрах, чтобы пользоваться только лаунчером SPT.</value>
+  </data>
+  <data name="Play_DirectPlay" xml:space="preserve">
+    <value>ИГРАТЬ</value>
+  </data>
+  <data name="Play_DirectPlayToolTip" xml:space="preserve">
+    <value>При необходимости запустить сервер, затем игру с этим профилем.</value>
+  </data>
+  <data name="Play_DirectProfileToolTip" xml:space="preserve">
+    <value>Профиль, с которым запускается игра. Профили читаются из вашей папки SPT, поэтому видны ещё до запуска сервера.</value>
+  </data>
+  <data name="Play_DirectMoreToolTip" xml:space="preserve">
+    <value>Сброс, новый профиль, удаление, очистка кэша, лаунчер SPT</value>
+  </data>
+  <data name="Play_DirectNoProfiles" xml:space="preserve">
+    <value>Профилей пока нет - создайте его через Новый профиль в меню ...</value>
+  </data>
+  <data name="Play_DirectUnavailableFormat" xml:space="preserve">
+    <value>Эта установка - SPT {0}. Запускать игру отсюда можно только начиная с SPT 4.1.3 в линейке 4.1 - лаунчер SPT 4.0 проверяет владение игрой, и это приложение эту проверку не заменяет, - поэтому используйте лаунчер ниже.</value>
+  </data>
+  <data name="Play_DirectUntestedFormat" xml:space="preserve">
+    <value>SPT {0} новее версии {1}, на которой это проверялось. Если игра не запустится, используйте лаунчер SPT ниже.</value>
+  </data>
+  <data name="Play_WipeArmedFormat" xml:space="preserve">
+    <value>Следующее нажатие Играть начнёт {0} заново с новым персонажем - прогресс будет стёрт. Сначала сохраняется копия ваших профилей.</value>
+  </data>
+  <data name="Play_ProfileDetailFormat" xml:space="preserve">
+    <value>Уровень {0} · {1} · {2}</value>
+  </data>
+  <data name="Play_ProfileNewFormat" xml:space="preserve">
+    <value>{0} · новый персонаж · {1}</value>
+  </data>
+  <data name="Play_DirectStartingServer" xml:space="preserve">
+    <value>Запуск сервера...</value>
+  </data>
+  <data name="Play_DirectWaitingForServerFormat" xml:space="preserve">
+    <value>Ожидание загрузки сервера... {0} с</value>
+  </data>
+  <data name="Play_DirectServerStopped" xml:space="preserve">
+    <value>Сервер остановился, не успев запуститься, - причина в его журнале.</value>
+  </data>
+  <data name="Play_DirectServerTimeoutFormat" xml:space="preserve">
+    <value>Сервер по адресу {0} не ответил за 3 минуты. Причина может быть в его журнале.</value>
+  </data>
+  <data name="Play_DirectServerUnreachableFormat" xml:space="preserve">
+    <value>Сервер не ответил: {0}</value>
+  </data>
+  <data name="Play_DirectStageChecking" xml:space="preserve">
+    <value>Проверка, что сервер и spt-core.dll одной версии SPT...</value>
+  </data>
+  <data name="Play_DirectStageCleaning" xml:space="preserve">
+    <value>Очистка папки игры...</value>
+  </data>
+  <data name="Play_DirectStageWiping" xml:space="preserve">
+    <value>Сброс профиля...</value>
+  </data>
+  <data name="Play_DirectStageCache" xml:space="preserve">
+    <value>Очистка кэша игры...</value>
+  </data>
+  <data name="Play_DirectStagePatching" xml:space="preserve">
+    <value>Применение игрового патча SPT...</value>
+  </data>
+  <data name="Play_DirectStageBundlesFormat" xml:space="preserve">
+    <value>Загрузка бандлов модов: {0} из {1} ({2:N0} из {3:N0} МБ)...</value>
+  </data>
+  <data name="Play_DirectStageStarting" xml:space="preserve">
+    <value>Запуск игры...</value>
+  </data>
+  <data name="Play_DirectStartingGameFormat" xml:space="preserve">
+    <value>Запуск игры от имени {0}...</value>
+  </data>
+  <data name="Play_DirectPlayingFormat" xml:space="preserve">
+    <value>Игра от имени {0}.</value>
+  </data>
+  <data name="Play_DirectGameNotSeen" xml:space="preserve">
+    <value>Игра запущена, но пока не появилась. Если ничего не появится, загляните в BepInEx\LogOutput.log или попробуйте лаунчер SPT.</value>
+  </data>
+  <data name="Play_DirectCancelled" xml:space="preserve">
+    <value>Остановлено.</value>
+  </data>
+  <data name="Play_DirectErrorFormat" xml:space="preserve">
+    <value>Запуск прерван: {0}</value>
+  </data>
+  <data name="Play_DirectFailed" xml:space="preserve">
+    <value>Не удалось запустить игру.</value>
+  </data>
+  <data name="Play_DirectNoGame" xml:space="preserve">
+    <value>EscapeFromTarkov.exe нет в вашей папке SPT.</value>
+  </data>
+  <data name="Play_DirectNoCoreDll" xml:space="preserve">
+    <value>Нет BepInEx\plugins\spt\spt-core.dll - клиентские файлы SPT неполные. Переустановите SPT.</value>
+  </data>
+  <data name="Play_DirectVersionMismatchFormat" xml:space="preserve">
+    <value>Сервер - SPT {0}, а spt-core.dll - {1}, с таким сочетанием игра не заработает. Переустановите SPT, чтобы версии совпадали.</value>
+  </data>
+  <data name="Play_DirectNoSuchProfile" xml:space="preserve">
+    <value>На сервере больше нет этого профиля. Выберите другой.</value>
+  </data>
+  <data name="Play_DirectWipeRefused" xml:space="preserve">
+    <value>Сервер отказал в сбросе - его конфигурация не разрешает сбрасывать профили. Ничего не запущено.</value>
+  </data>
+  <data name="Play_DirectProfileInvalid" xml:space="preserve">
+    <value>SPT не загружает этот профиль: в нём есть предметы, торговец или одежда из мода, который больше не установлен. Сброс не поможет - SPT не сохраняет сброс профиля, который не может загрузить. Верните мод, восстановите резервную копию профиля (Параметры) или создайте новый профиль. Или сохраните профиль: задайте removeModItemsFromProfile и removeInvalidTradersFromProfile = true в SPT_Data\configs\core.json и перезапустите сервер - SPT сам уберёт недостающее. Ничего не запущено.</value>
+  </data>
+  <data name="Play_DirectPatchFailedFormat" xml:space="preserve">
+    <value>Не удалось применить игровой патч SPT ({0}): {1}. Ничего не запущено; у лаунчера SPT была бы та же проблема - обычно помогает переустановка SPT.</value>
+  </data>
+  <data name="Play_DirectBundlesFailedFormat" xml:space="preserve">
+    <value>Не удалось скачать бандлы модов с сервера (всего {0}, например {1}). Ничего не запущено.</value>
+  </data>
+  <data name="Play_DirectStartFailedFormat" xml:space="preserve">
+    <value>Не удалось запустить игру: {0}</value>
+  </data>
+  <data name="Play_DirectBackupFailed" xml:space="preserve">
+    <value>Не удалось сделать копию ваших профилей, поэтому ничего не изменено. Причина - в журнале приложения.</value>
+  </data>
+  <data name="Play_DirectWipe" xml:space="preserve">
+    <value>Сбросить этот профиль при следующем запуске</value>
+  </data>
+  <data name="Play_DirectWipeCancel" xml:space="preserve">
+    <value>Не сбрасывать при следующем запуске</value>
+  </data>
+  <data name="Play_DirectWipeToolTip" xml:space="preserve">
+    <value>Следующий запуск начнёт этот профиль заново с новым персонажем, как сброс в лаунчере SPT. Сначала сохраняется копия ваших профилей.</value>
+  </data>
+  <data name="Play_DirectNewProfile" xml:space="preserve">
+    <value>Новый профиль...</value>
+  </data>
+  <data name="Play_DirectNewProfileToolTip" xml:space="preserve">
+    <value>Создать профиль на сервере - имя и стартовое издание. Запускает сервер, если он не запущен.</value>
+  </data>
+  <data name="Play_DirectNewProfileHeader" xml:space="preserve">
+    <value>Новый профиль</value>
+  </data>
+  <data name="Play_DirectNewProfileName" xml:space="preserve">
+    <value>Имя профиля</value>
+  </data>
+  <data name="Play_DirectCreateProfile" xml:space="preserve">
+    <value>Создать</value>
+  </data>
+  <data name="Play_DirectProfileCreatedFormat" xml:space="preserve">
+    <value>Профиль {0} создан. Игра создаст персонажа при первом запуске.</value>
+  </data>
+  <data name="Play_DirectProfileNotCreatedFormat" xml:space="preserve">
+    <value>Сервер не создал {0} - возможно, это имя занято.</value>
+  </data>
+  <data name="Play_DirectDeleteProfile" xml:space="preserve">
+    <value>Удалить этот профиль...</value>
+  </data>
+  <data name="Play_DirectDeleteProfileToolTip" xml:space="preserve">
+    <value>Удалить профиль с сервера. Сначала сохраняется копия ваших профилей (Параметры, резервные копии профилей SPT).</value>
+  </data>
+  <data name="Play_DirectDeleteWarningFormat" xml:space="preserve">
+    <value>Удалить {0}? Персонаж и прогресс исчезнут с сервера. Сначала сохраняется копия ваших профилей, её можно вернуть в параметрах.</value>
+  </data>
+  <data name="Play_DirectDeleteConfirm" xml:space="preserve">
+    <value>Удалить профиль</value>
+  </data>
+  <data name="Play_DirectDeleteWhileRunning" xml:space="preserve">
+    <value>Закройте игру перед удалением профиля.</value>
+  </data>
+  <data name="Play_DirectProfileDeletedFormat" xml:space="preserve">
+    <value>{0} удалён. Копия ваших профилей - в Параметрах, резервные копии профилей SPT.</value>
+  </data>
+  <data name="Play_DirectProfileNotDeletedFormat" xml:space="preserve">
+    <value>Сервер не удалил {0}.</value>
+  </data>
+  <data name="Play_DirectClearCache" xml:space="preserve">
+    <value>Очистить кэш игры</value>
+  </data>
+  <data name="Play_DirectClearCacheToolTip" xml:space="preserve">
+    <value>Удалить папку user\sptappdata сервера, как это делает Очистка кэша в лаунчере SPT. При следующем запуске она создаётся заново.</value>
+  </data>
+  <data name="Play_DirectCacheCleared" xml:space="preserve">
+    <value>Кэш игры очищен.</value>
+  </data>
+  <data name="Play_DirectCacheWhileRunning" xml:space="preserve">
+    <value>Закройте игру перед очисткой её кэша.</value>
+  </data>
+  <data name="Play_DirectOpenLauncher" xml:space="preserve">
+    <value>Открыть вместо этого лаунчер SPT</value>
+  </data>
+  <data name="Play_DirectOpenLauncherToolTip" xml:space="preserve">
+    <value>Запустить игру как обычно, через лаунчер SPT.</value>
+  </data>
+  <data name="Play_DirectSettings" xml:space="preserve">
+    <value>Настройки...</value>
+  </data>
+  <data name="Options_DirectLaunchHeader" xml:space="preserve">
+    <value>Запуск игры из этого приложения (экспериментально)</value>
+  </data>
+  <data name="Options_DirectLaunchSummary" xml:space="preserve">
+    <value>Добавляет на страницу Играть карточку, которая сама запускает сервер и игру - без окна лаунчера SPT. По умолчанию выключено.</value>
+  </data>
+  <data name="Options_DirectLaunchDescription" xml:space="preserve">
+    <value>Играть делает то же, что лаунчер SPT по кнопке Старт: запускает сервер, если он не запущен, и ждёт его, проверяет, что сервер и spt-core.dll одной версии SPT, удаляет те же файлы, применяет игровой патч SPT, скачивает недостающие бандлы модов и запускает игру с выбранным профилем. Профили создаются, сбрасываются и удаляются из меню ... карточки. Собственные настройки лаунчера SPT (исключённые файлы, очистка кэша при запуске) соблюдаются. Журналы последних игровых сессий сохраняются для диагностики журналов.</value>
+  </data>
+  <data name="Options_DirectLaunchOn" xml:space="preserve">
+    <value>Запускать игру отсюда</value>
+  </data>
+  <data name="Options_DirectLaunchOff" xml:space="preserve">
+    <value>Использовать лаунчер SPT</value>
+  </data>
+  <data name="Options_DirectLaunchWarningTitle" xml:space="preserve">
+    <value>Не от команды SPT</value>
+  </data>
+  <data name="Options_DirectLaunchWarning" xml:space="preserve">
+    <value>Это повторяет то, что делает лаунчер SPT 4.1, по его исходному коду, - это не сделано и не поддерживается командой SPT. Будущее обновление SPT может изменить способ запуска игры; для неизвестных версий карточка тогда возвращается к лаунчеру SPT. Если игра не запускается или ведёт себя странно, выключите это, используйте лаунчер SPT и, обращаясь за помощью, укажите, что игра запускалась из этого приложения. SPT 4.0 не поддерживается: его лаунчер проверяет владение игрой, и это приложение эту проверку не заменяет.</value>
+  </data>
+  <data name="Options_DirectLaunchSupportedFormat" xml:space="preserve">
+    <value>Эта установка - SPT {0}: карточка запускает игру отсюда.</value>
+  </data>
+  <data name="Options_DirectLaunchUntestedFormat" xml:space="preserve">
+    <value>Эта установка - SPT {0}, новее версии {1}, на которой это проверялось. Карточка всё равно запускает игру отсюда, но при сбое используйте лаунчер SPT.</value>
+  </data>
+  <data name="Options_DirectLaunchUnsupportedFormat" xml:space="preserve">
+    <value>Эта установка - SPT {0}: отсюда можно запускать только SPT 4.1.3 и новее в линейке 4.1, поэтому карточка отправляет вас к лаунчеру SPT.</value>
+  </data>
+  <data name="Options_DirectLaunchNoInstall" xml:space="preserve">
+    <value>Сначала укажите папку SPT.</value>
+  </data>
+  <data name="Options_MinimizeWhilePlayingOn" xml:space="preserve">
+    <value>Сворачивать приложение после запуска игры</value>
+  </data>
+  <data name="Options_MinimizeWhilePlayingOff" xml:space="preserve">
+    <value>Не сворачивать приложение при запуске игры</value>
+  </data>
+  <data name="Nav_Diagnose" xml:space="preserve">
+    <value>Диагностика журналов</value>
+  </data>
+  <data name="Diagnose_Description" xml:space="preserve">
+    <value>Читает последний запуск сервера, журнал BepInEx последней игровой сессии и журнал ошибок игры и говорит, что не так и из-за какого мода.</value>
+  </data>
+  <data name="Diagnose_CopyReport" xml:space="preserve">
+    <value>Скопировать отчёт для помощи</value>
+  </data>
+  <data name="Diagnose_CopyReportToolTip" xml:space="preserve">
+    <value>Копирует найденное и строки журналов за ним. Ваше имя пользователя и папка Windows, идентификаторы профилей и предметов и адреса других игроков удаляются.</value>
+  </data>
+  <data name="Diagnose_Refresh" xml:space="preserve">
+    <value>Перечитать журналы</value>
+  </data>
+  <data name="Diagnose_Reading" xml:space="preserve">
+    <value>Чтение журналов...</value>
+  </data>
+  <data name="Diagnose_NoInstall" xml:space="preserve">
+    <value>Сначала укажите папку SPT в параметрах.</value>
+  </data>
+  <data name="Diagnose_NothingFound" xml:space="preserve">
+    <value>В этих журналах проблем не найдено.</value>
+  </data>
+  <data name="Diagnose_Found_one" xml:space="preserve">
+    <value>Найдена {0} проблема.</value>
+  </data>
+  <data name="Diagnose_Found_other" xml:space="preserve">
+    <value>Найдено проблем: {0}.</value>
+  </data>
+  <data name="Diagnose_Found_few" xml:space="preserve">
+    <value>Найдено {0} проблемы.</value>
+  </data>
+  <data name="Diagnose_Found_many" xml:space="preserve">
+    <value>Найдено {0} проблем.</value>
+  </data>
+  <data name="Diagnose_ServerRunFormat" xml:space="preserve">
+    <value>Журнал сервера: {0}, с последнего запуска в {1}.</value>
+  </data>
+  <data name="Diagnose_ServerLogNone" xml:space="preserve">
+    <value>Журнал сервера: не найден - сервер ещё не запускался.</value>
+  </data>
+  <data name="Diagnose_BepInExFormat" xml:space="preserve">
+    <value>Игра: BepInEx\LogOutput.log, с последнего запуска игры.</value>
+  </data>
+  <data name="Diagnose_BepInExNone" xml:space="preserve">
+    <value>Игра: журнала BepInEx нет - игра ещё не запускалась с BepInEx.</value>
+  </data>
+  <data name="Diagnose_GameErrorsFormat" xml:space="preserve">
+    <value>Ошибки игры: {0}.</value>
+  </data>
+  <data name="Diagnose_LauncherClears" xml:space="preserve">
+    <value>Лаунчер SPT удаляет папку Logs игры при каждом запуске, поэтому здесь только журналы последней сессии.</value>
+  </data>
+  <data name="Diagnose_OtherErrors_one" xml:space="preserve">
+    <value>Ещё {0} ошибка в журналах этой странице неизвестна - она есть в скопированном отчёте.</value>
+  </data>
+  <data name="Diagnose_OtherErrors_other" xml:space="preserve">
+    <value>Ещё ошибок в журналах, неизвестных этой странице: {0} - они есть в скопированном отчёте.</value>
+  </data>
+  <data name="Diagnose_OtherErrors_few" xml:space="preserve">
+    <value>Ещё {0} ошибки в журналах этой странице неизвестны - они есть в скопированном отчёте.</value>
+  </data>
+  <data name="Diagnose_OtherErrors_many" xml:space="preserve">
+    <value>Ещё {0} ошибок в журналах этой странице неизвестны - они есть в скопированном отчёте.</value>
+  </data>
+  <data name="Diagnose_ModFormat" xml:space="preserve">
+    <value>Мод: {0}</value>
+  </data>
+  <data name="Diagnose_ModsFormat" xml:space="preserve">
+    <value>Моды: {0}</value>
+  </data>
+  <data name="Diagnose_CountFormat" xml:space="preserve">
+    <value>Повторов: {0}</value>
+  </data>
+  <data name="Diagnose_LineFormat" xml:space="preserve">
+    <value>{0}, строка {1}</value>
+  </data>
+  <data name="Diagnose_ShowMod" xml:space="preserve">
+    <value>Показать в Установленных</value>
+  </data>
+  <data name="Diagnose_OpenFolder" xml:space="preserve">
+    <value>Открыть его папку</value>
+  </data>
+  <data name="Diagnose_OpenLog" xml:space="preserve">
+    <value>Открыть журнал</value>
+  </data>
+  <data name="Diagnose_GoToPlay" xml:space="preserve">
+    <value>Перейти в Играть</value>
+  </data>
+  <data name="Diagnose_ProfileBackups" xml:space="preserve">
+    <value>Резервные копии профилей</value>
+  </data>
+  <data name="Diagnose_Copied" xml:space="preserve">
+    <value>Скопировано. Вставьте туда, где просите помощи.</value>
+  </data>
+  <data name="Diagnose_FromModCode" xml:space="preserve">
+    <value>Ошибка возникла в коде этого мода. Проверьте обновление или отправьте автору скопированный отчёт.</value>
+  </data>
+  <data name="Diagnose_ReportHeader" xml:space="preserve">
+    <value>Отчёт по журналам - {0}, SPT {1}</value>
+  </data>
+  <data name="Diagnose_ReportServerFormat" xml:space="preserve">
+    <value>Журнал сервера: {0} (последний запуск {1})</value>
+  </data>
+  <data name="Diagnose_ReportGameFormat" xml:space="preserve">
+    <value>Журнал BepInEx: {0}; ошибки игры: {1}</value>
+  </data>
+  <data name="Diagnose_ReportOtherFormat" xml:space="preserve">
+    <value>Другие ошибки ({0}):</value>
+  </data>
+  <data name="Diagnose_Title_ProfileInvalid" xml:space="preserve">
+    <value>Профиль не загружается</value>
+  </data>
+  <data name="Diagnose_Title_ProfileClothingMissing" xml:space="preserve">
+    <value>Профиль носит одежду из отсутствующего мода</value>
+  </data>
+  <data name="Diagnose_Title_ProfileItemMissing" xml:space="preserve">
+    <value>В профиле есть предмет, который не добавляет ни один мод</value>
+  </data>
+  <data name="Diagnose_Title_ProfileTraderMissing" xml:space="preserve">
+    <value>Профиль знает торговца, которого не добавляет ни один мод</value>
+  </data>
+  <data name="Diagnose_Title_RaidResultsLost" xml:space="preserve">
+    <value>Результаты рейда не сохранены</value>
+  </data>
+  <data name="Diagnose_Title_PortInUse" xml:space="preserve">
+    <value>Сервер не смог запуститься</value>
+  </data>
+  <data name="Diagnose_Title_PluginMissingDependency" xml:space="preserve">
+    <value>Мод не загрузился: не хватает того, что ему нужно</value>
+  </data>
+  <data name="Diagnose_Title_PluginIncompatible" xml:space="preserve">
+    <value>Мод не загрузился: он несовместим с другим</value>
+  </data>
+  <data name="Diagnose_Title_PluginDependencyNotLoaded" xml:space="preserve">
+    <value>Мод не загрузился: не загрузился нужный ему мод</value>
+  </data>
+  <data name="Diagnose_Title_PluginDuplicate" xml:space="preserve">
+    <value>Мод установлен дважды</value>
+  </data>
+  <data name="Diagnose_Title_PluginLoadError" xml:space="preserve">
+    <value>Мод не удалось загрузить</value>
+  </data>
+  <data name="Diagnose_Title_ServerModNotLoaded" xml:space="preserve">
+    <value>Серверный мод не работает</value>
+  </data>
+  <data name="Diagnose_Title_ModLoaderProblem" xml:space="preserve">
+    <value>Загрузчик модов SPT сообщил о проблеме</value>
+  </data>
+  <data name="Diagnose_Title_RequestFailed" xml:space="preserve">
+    <value>Ошибка сервера при ответе игре</value>
+  </data>
+  <data name="Diagnose_Title_ScheduledTaskFailed" xml:space="preserve">
+    <value>Задача сервера постоянно завершается ошибкой</value>
+  </data>
+  <data name="Diagnose_Title_ModReportedError" xml:space="preserve">
+    <value>Мод сообщил об ошибке</value>
+  </data>
+  <data name="Diagnose_Title_BundleClash" xml:space="preserve">
+    <value>Два мода содержат один и тот же бандл</value>
+  </data>
+  <data name="Diagnose_Title_BundleMissingDependency" xml:space="preserve">
+    <value>Бандлу нужны отсутствующие файлы</value>
+  </data>
+  <data name="Diagnose_Title_PluginLoggedErrors" xml:space="preserve">
+    <value>Мод записал ошибки в игре</value>
+  </data>
+  <data name="Diagnose_Body_ProfileInvalid" xml:space="preserve">
+    <value>SPT пометил профиль {0} как недействительный и не загружает его - сброс не поможет, потому что SPT не сохраняет изменения профиля, который не может загрузить. Верните мод, чьи предметы, торговца или одежду он содержит, восстановите резервную копию профиля или создайте новый. Или сохраните профиль: задайте removeModItemsFromProfile и removeInvalidTradersFromProfile = true в SPT_Data\configs\core.json сервера и перезапустите его - SPT сам уберёт недостающее.</value>
+  </data>
+  <data name="Diagnose_Body_ProfileClothingMissing" xml:space="preserve">
+    <value>В профиле есть одежда (id {0}), которую не добавляет ни один установленный мод. По словам SPT, так бывает после удаления мода одежды. Верните мод одежды или восстановите резервную копию профиля.</value>
+  </data>
+  <data name="Diagnose_Body_ProfileItemMissing" xml:space="preserve">
+    <value>В профиле есть предмет (id {0}), который не добавляет ни один установленный мод, поэтому SPT его не загружает - сброс не поможет, потому что SPT не сохраняет изменения профиля, который не может загрузить. Верните мод, добавляющий предмет, восстановите резервную копию профиля или создайте новый. Или сохраните профиль: задайте removeModItemsFromProfile и removeInvalidTradersFromProfile = true в SPT_Data\configs\core.json сервера и перезапустите его.</value>
+  </data>
+  <data name="Diagnose_Body_ProfileTraderMissing" xml:space="preserve">
+    <value>Профиль имел дело с торговцем (id {0}), которого не добавляет ни один установленный мод, поэтому SPT его не загружает - сброс не поможет, потому что SPT не сохраняет изменения профиля, который не может загрузить. Верните мод, добавляющий торговца, восстановите резервную копию профиля или создайте новый. Или сохраните профиль: задайте removeModItemsFromProfile и removeInvalidTradersFromProfile = true в SPT_Data\configs\core.json сервера и перезапустите его.</value>
+  </data>
+  <data name="Diagnose_Body_RaidResultsLost" xml:space="preserve">
+    <value>В конце рейда игра отправила значение {0}, которого сервер не знает, поэтому он не смог прочитать результаты и рейд не сохранён. Скорее всего, мод, расширяющий {0}, загружен в игре, а его серверная часть - нет: например, нет его препатча в user\patchers.</value>
+  </data>
+  <data name="Diagnose_Body_PortInUse" xml:space="preserve">
+    <value>{0} уже занят - чаще всего ещё работающим сервером. Остановите его на странице Играть или закройте другую программу.</value>
+  </data>
+  <data name="Diagnose_Body_PluginMissingDependency" xml:space="preserve">
+    <value>BepInEx не загрузил {0}: ему нужен {1}, который не установлен или слишком старый.</value>
+  </data>
+  <data name="Diagnose_Body_PluginIncompatible" xml:space="preserve">
+    <value>BepInEx не загрузил {0}, потому что установлен {1}. Выключите один из двух.</value>
+  </data>
+  <data name="Diagnose_Body_PluginDependencyNotLoaded" xml:space="preserve">
+    <value>BepInEx пропустил {0}, потому что не загрузился нужный ему мод. Сначала исправьте его.</value>
+  </data>
+  <data name="Diagnose_Body_PluginDuplicate" xml:space="preserve">
+    <value>BepInEx пропустил {0}, потому что установлена его более новая копия. Удалите старую.</value>
+  </data>
+  <data name="Diagnose_Body_PluginLoadError" xml:space="preserve">
+    <value>BepInEx не смог загрузить {0}: {1}</value>
+  </data>
+  <data name="Diagnose_Body_ServerModNotLoaded" xml:space="preserve">
+    <value>Он установлен и включён, но при последнем запуске сервер не указал его среди загруженных модов. Причина может быть в журнале сервера около этого запуска. Если вы добавили его позже, перезапустите сервер.</value>
+  </data>
+  <data name="Diagnose_Body_RequestFailedFormat" xml:space="preserve">
+    <value>Сервер столкнулся с ошибкой при обработке {0}: {1}</value>
+  </data>
+  <data name="Diagnose_Body_ScheduledTaskFailedFormat" xml:space="preserve">
+    <value>{0} завершилась ошибкой: {1}</value>
+  </data>
+  <data name="Diagnose_Body_BundleClash" xml:space="preserve">
+    <value>{0} есть в нескольких модах, и SPT смог добавить только один - копия другого мода не используется.</value>
+  </data>
+  <data name="Diagnose_Body_BundleMissingDependency" xml:space="preserve">
+    <value>Игра не смогла полностью загрузить {0}: он зависит от неустановленных бандлов. Переустановка мода может помочь; если нет - сообщите автору.</value>
+  </data>
+  <data name="Help_Diagnose_Read_Title" xml:space="preserve">
+    <value>Выяснить, почему что-то не работает</value>
+  </data>
+  <data name="Help_Diagnose_Read_Step1" xml:space="preserve">
+    <value>Откройте {0} на боковой панели. Страница сама читает последний запуск сервера и журналы последней игровой сессии.</value>
+  </data>
+  <data name="Help_Diagnose_Read_Step2" xml:space="preserve">
+    <value>Каждая карточка простыми словами говорит, что пошло не так, из-за какого мода (если журнал его называет) и из какой строки журнала это прочитано. {0} открывает этот мод.</value>
+  </data>
+  <data name="Help_Diagnose_Read_Step3" xml:space="preserve">
+    <value>После изменения снова запустите сервер или игру, затем нажмите {0}: журналы говорят только о последнем запуске.</value>
+  </data>
+  <data name="Help_Diagnose_Read_Note" xml:space="preserve">
+    <value>{0} копирует найденное, чтобы попросить помощи в другом месте, - без вашего имени пользователя Windows, папок, идентификаторов и адресов других игроков. Ничто на этой странице не меняет файлы.</value>
+  </data>
+  <data name="Help_Diagnose_Read_Keywords" xml:space="preserve">
+    <value>журнал журналы лог ошибка ошибки вылет сломано не работает диагностика проблема bepinex сервер лаунчер отчёт помощь</value>
+  </data>
+  <data name="Common_PageSizeEndless" xml:space="preserve">
+    <value>Бесконечно</value>
+  </data>
+  <data name="ModDetails_DetailsTab" xml:space="preserve">
+    <value>Подробности</value>
+  </data>
+  <data name="ModDetails_CommentsTab" xml:space="preserve">
+    <value>Комментарии</value>
+  </data>
+  <data name="ModDetails_CommentsNone" xml:space="preserve">
+    <value>У этого мода нет раздела комментариев на sp-mod.</value>
+  </data>
+  <data name="ModDetails_CommentsNoWebView" xml:space="preserve">
+    <value>Комментарии показываются здесь через среду WebView2 от Microsoft, которой нет на этом компьютере. Откройте их в браузере.</value>
+  </data>
+  <data name="ModDetails_CommentsOpen" xml:space="preserve">
+    <value>Открыть комментарии на sp-mod</value>
+  </data>
 </root>

@@ -344,6 +344,10 @@ public partial class OptionsViewModel : LocalizedViewModel
         var settings = _settings.Load();
         _skipModPageConfirmation = settings.SkipModPageConfirmation;
         _showModFootprintPage = settings.ShowModFootprintPage;
+        _startLauncherAfterServer = settings.StartLauncherAfterServer;
+        _hideServerWindow = settings.HideServerWindow;
+        _directLaunch = settings.DirectLaunch;
+        _minimizeWhilePlaying = settings.MinimizeWhilePlaying;
 
         _selectedInstallMode = InstallModeOptions.FirstOrDefault(o => o.Value == settings.Monitor.InstallMode)
             ?? InstallModeOptions[0];
@@ -370,6 +374,7 @@ public partial class OptionsViewModel : LocalizedViewModel
 
         RefreshPageDefaultDescriptions(settings);
         RefreshInstallRole(settings);
+        HookDirectLaunch();
 
         _loaded = true;
     }
@@ -435,6 +440,36 @@ public partial class OptionsViewModel : LocalizedViewModel
         AppServices.FootprintGate.Refresh();
 
         AppLog.Info("Footprint", value ? "page shown" : "page hidden");
+    }
+
+    // Whether Start server also opens the launcher once the server is up - see AppSettings.
+    [ObservableProperty]
+    private bool _startLauncherAfterServer;
+
+    partial void OnStartLauncherAfterServerChanged(bool value)
+    {
+        if (!_loaded) return;
+
+        var settings = _settings.Load();
+        settings.StartLauncherAfterServer = value;
+        _settings.Save(settings);
+
+        AppLog.Info("Launch", value ? "launcher follows the server" : "launcher no longer follows the server");
+    }
+
+    // Whether Start server runs it with no console window - see AppSettings.
+    [ObservableProperty]
+    private bool _hideServerWindow;
+
+    partial void OnHideServerWindowChanged(bool value)
+    {
+        if (!_loaded) return;
+
+        var settings = _settings.Load();
+        settings.HideServerWindow = value;
+        _settings.Save(settings);
+
+        AppLog.Info("Launch", value ? "the server starts without a window" : "the server starts in its window");
     }
 
     partial void OnSelectedInstallModeChanged(InstallModeItem value)

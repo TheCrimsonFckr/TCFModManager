@@ -722,6 +722,88 @@
             </StackPanel>
         </ui:CardExpander>
 
+        <!-- How Start server on the Play page runs the server, and whether the launcher follows it. -->
+        <ui:CardExpander
+            x:Name="StartingSptCard"
+            Style="{StaticResource SettingExpander}"
+            Icon="{ui:SymbolIcon Play24}">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_StartingSptHeader}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_StartingSptHint}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
+
+            <StackPanel>
+                <ui:ToggleSwitch
+                    HorizontalAlignment="Left"
+                    IsChecked="{Binding StartLauncherAfterServer}"
+                    OnContent="{loc:Str Options_StartLauncherOn}"
+                    OffContent="{loc:Str Options_StartLauncherOff}" />
+                <TextBlock
+                    Style="{StaticResource SettingNote}"
+                    Margin="0,6,0,12"
+                    Text="{loc:Str Options_StartLauncherNote}" />
+                <ui:ToggleSwitch
+                    HorizontalAlignment="Left"
+                    IsChecked="{Binding HideServerWindow}"
+                    OnContent="{loc:Str Options_HideServerOn}"
+                    OffContent="{loc:Str Options_HideServerOff}" />
+                <TextBlock
+                    Style="{StaticResource SettingNote}"
+                    Margin="0,6,0,0"
+                    Text="{loc:Str Options_HideServerNote}" />
+            </StackPanel>
+        </ui:CardExpander>
+
+        <!-- OPEN-12 F20, experimental and off by default: a Play card that starts the game itself
+             (SptDirectLaunch). The warning is always on show - it is the reason it is opt-in. -->
+        <ui:CardExpander
+            Style="{StaticResource SettingExpander}"
+            Icon="{ui:SymbolIcon Rocket24}">
+            <ui:CardExpander.Header>
+                <StackPanel ToolTip="{loc:Str Options_DirectLaunchDescription}" ToolTipService.ShowDuration="30000">
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_DirectLaunchHeader}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_DirectLaunchSummary}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
+
+            <StackPanel>
+                <ui:InfoBar
+                    Margin="0,0,0,12"
+                    IsOpen="True"
+                    IsClosable="False"
+                    Severity="Warning"
+                    Title="{loc:Str Options_DirectLaunchWarningTitle}"
+                    Message="{loc:Str Options_DirectLaunchWarning}" />
+                <ui:ToggleSwitch
+                    HorizontalAlignment="Left"
+                    IsChecked="{Binding DirectLaunch}"
+                    OnContent="{loc:Str Options_DirectLaunchOn}"
+                    OffContent="{loc:Str Options_DirectLaunchOff}" />
+                <TextBlock
+                    Margin="0,6,0,12"
+                    TextWrapping="Wrap"
+                    Text="{Binding DirectLaunchSupportText}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource SettingNote}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding DirectLaunchSupportIsCaution}" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <ui:ToggleSwitch
+                    HorizontalAlignment="Left"
+                    IsEnabled="{Binding DirectLaunch}"
+                    IsChecked="{Binding MinimizeWhilePlaying}"
+                    OnContent="{loc:Str Options_MinimizeWhilePlayingOn}"
+                    OffContent="{loc:Str Options_MinimizeWhilePlayingOff}" />
+            </StackPanel>
+        </ui:CardExpander>
+
         <!--
             The Server map page's connection, only while that page is switched on. Set up here
             because it is a one-off and the page itself is for reading.

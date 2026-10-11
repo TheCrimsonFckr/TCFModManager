@@ -11,6 +11,8 @@
     <Page.Resources>
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
+        <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
+        <converters:InverseBooleanConverter x:Key="Inverse" />
     </Page.Resources>
     <StackPanel Margin="16">
 
@@ -143,7 +145,7 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Margin="0,0,0,8"
-                    Text="{loc:Str Play_ServerDescription}" />
+                    Text="{Binding ServerDescription}" />
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                     <ui:Button
@@ -170,6 +172,13 @@
                         TextWrapping="Wrap"
                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                         Text="{Binding ServerState}" />
+                    <ProgressBar
+                        Width="60"
+                        Height="4"
+                        Margin="12,0,0,0"
+                        VerticalAlignment="Center"
+                        IsIndeterminate="True"
+                        Visibility="{Binding IsWaitingForServer, Converter={StaticResource BoolToVisibility}}" />
                 </StackPanel>
 
                 <!-- Asked on the card, not in a dialog: the warning is about the thing the card is
@@ -222,6 +231,232 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                     Text="{Binding ServerPath}" />
+
+                <!-- The server's own log file, read on the poll while this is open (ServerLogs).
+                     Opens by itself when the server runs without its window. -->
+                <Expander
+                    Margin="0,12,0,0"
+                    Header="{loc:Str Play_ServerLog}"
+                    IsExpanded="{Binding ShowServerLog}">
+                    <StackPanel Margin="0,8,0,0">
+                        <TextBox
+                            x:Name="ServerLogBox"
+                            Height="280"
+                            IsReadOnly="True"
+                            TextWrapping="NoWrap"
+                            FontFamily="Consolas"
+                            FontSize="12"
+                            HorizontalScrollBarVisibility="Auto"
+                            VerticalScrollBarVisibility="Auto"
+                            Text="{Binding ServerLogText, Mode=OneWay}"
+                            TextChanged="ServerLogBox_TextChanged"
+                            ScrollViewer.ScrollChanged="ServerLogBox_ScrollChanged" />
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <ui:Button
+                                Content="{loc:Str Play_ServerLogOpenFolder}"
+                                Icon="{ui:SymbolIcon FolderOpen24}"
+                                Command="{Binding OpenServerLogFolderCommand}" />
+                            <TextBlock
+                                Margin="12,0,0,0"
+                                VerticalAlignment="Center"
+                                TextTrimming="CharacterEllipsis"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="{Binding ServerLogPath}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Expander>
+            </StackPanel>
+        </ui:Card>
+
+        <!-- OPEN-12 F20, experimental and off by default: Play starts the server and the game itself
+             (SptDirectLaunch). On an SPT version it was not made for, the card says so and the
+             launcher card below is the way in. -->
+        <ui:Card
+            Padding="16"
+            VerticalAlignment="Top"
+            Margin="0,16,0,0"
+            Visibility="{Binding IsDirectLaunchEnabled, Converter={StaticResource BoolToVisibility}}">
+            <StackPanel>
+                <TextBlock
+                    Text="{loc:Str Play_DirectHeader}"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Margin="0,0,0,4" />
+
+                <TextBlock
+                    Margin="0,0,0,8"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                    Text="{Binding DirectLaunchUnavailable}"
+                    Visibility="{Binding DirectLaunchUnavailable, Converter={StaticResource NullToCollapsed}}" />
+
+                <StackPanel Visibility="{Binding IsDirectLaunchOn, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Margin="0,0,0,10"
+                        ToolTip="{loc:Str Play_DirectDescription}"
+                        ToolTipService.ShowDuration="30000"
+                        Text="{loc:Str Play_DirectSummary}" />
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <ComboBox
+                            MinWidth="320"
+                            ItemsSource="{Binding Profiles}"
+                            SelectedItem="{Binding SelectedProfile}"
+                            IsEnabled="{Binding IsPlaying, Converter={StaticResource Inverse}}"
+                            ToolTip="{loc:Str Play_DirectProfileToolTip}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock FontWeight="SemiBold" Text="{Binding Title}" />
+                                        <TextBlock FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Detail}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ui:Button
+                            Margin="10,0,0,0"
+                            MinWidth="120"
+                            VerticalAlignment="Stretch"
+                            Appearance="Primary"
+                            FontWeight="SemiBold"
+                            Content="{loc:Str Play_DirectPlay}"
+                            Icon="{ui:SymbolIcon Play24}"
+                            ToolTip="{loc:Str Play_DirectPlayToolTip}"
+                            Command="{Binding PlayCommand}" />
+                        <ui:Button
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Stretch"
+                            Icon="{ui:SymbolIcon MoreHorizontal24}"
+                            ToolTip="{loc:Str Play_DirectMoreToolTip}"
+                            Click="DirectMore_Click" />
+                        <ui:Button
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            Appearance="Transparent"
+                            Content="{loc:Str Common_Cancel}"
+                            Command="{Binding CancelPlayCommand}"
+                            Visibility="{Binding IsPlaying, Converter={StaticResource BoolToVisibility}}" />
+                    </StackPanel>
+
+                    <!-- What Play is doing, or why it stopped. -->
+                    <StackPanel Margin="0,0,0,8" Visibility="{Binding PlayStatus, Converter={StaticResource NullToCollapsed}}">
+                        <TextBlock TextWrapping="Wrap" Text="{Binding PlayStatus}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding PlayStatusIsError}" Value="True">
+                                            <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <ProgressBar
+                            Height="4"
+                            Margin="0,6,0,0"
+                            Width="500"
+                            HorizontalAlignment="Left"
+                            Minimum="0"
+                            Maximum="100"
+                            Value="{Binding PlayProgress, Mode=OneWay, TargetNullValue=0}"
+                            Visibility="{Binding IsPlaying, Converter={StaticResource BoolToVisibility}}">
+                            <ProgressBar.Style>
+                                <Style TargetType="ProgressBar" BasedOn="{StaticResource {x:Type ProgressBar}}">
+                                    <Setter Property="IsIndeterminate" Value="False" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding PlayProgress}" Value="{x:Null}">
+                                            <Setter Property="IsIndeterminate" Value="True" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ProgressBar.Style>
+                        </ProgressBar>
+                    </StackPanel>
+
+                    <TextBlock
+                        Margin="0,0,0,8"
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                        Text="{Binding WipeWarning}"
+                        Visibility="{Binding WipeWarning, Converter={StaticResource NullToCollapsed}}" />
+                    <TextBlock
+                        Margin="0,0,0,8"
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                        Text="{Binding DirectLaunchUntested}"
+                        Visibility="{Binding DirectLaunchUntested, Converter={StaticResource NullToCollapsed}}" />
+                    <TextBlock
+                        Margin="0,0,0,8"
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="{loc:Str Play_DirectNoProfiles}"
+                        Visibility="{Binding HasNoProfiles, Converter={StaticResource BoolToVisibility}}" />
+
+                    <!-- New profile, on the card. -->
+                    <Border
+                        Margin="0,0,0,8"
+                        Padding="12"
+                        CornerRadius="4"
+                        Background="{DynamicResource ControlFillColorDefaultBrush}"
+                        Visibility="{Binding ShowNewProfile, Converter={StaticResource BoolToVisibility}}">
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold" Margin="0,0,0,8" Text="{loc:Str Play_DirectNewProfileHeader}" />
+                            <StackPanel Orientation="Horizontal">
+                                <ui:TextBox
+                                    MinWidth="220"
+                                    PlaceholderText="{loc:Str Play_DirectNewProfileName}"
+                                    Text="{Binding NewProfileName, UpdateSourceTrigger=PropertyChanged}" />
+                                <ComboBox
+                                    Margin="8,0,0,0"
+                                    MinWidth="220"
+                                    ItemsSource="{Binding Editions}"
+                                    SelectedItem="{Binding SelectedEdition}"
+                                    DisplayMemberPath="Key"
+                                    ToolTip="{Binding SelectedEdition.Value}" />
+                                <ui:Button
+                                    Margin="8,0,0,0"
+                                    Appearance="Primary"
+                                    Content="{loc:Str Play_DirectCreateProfile}"
+                                    Command="{Binding CreateProfileCommand}" />
+                                <ui:Button
+                                    Margin="8,0,0,0"
+                                    Appearance="Transparent"
+                                    Content="{loc:Str Common_Cancel}"
+                                    Command="{Binding CancelNewProfileCommand}" />
+                            </StackPanel>
+                            <TextBlock
+                                Margin="0,8,0,0"
+                                TextWrapping="Wrap"
+                                FontSize="12"
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                Text="{Binding SelectedEdition.Value}" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Delete profile, asked on the card. -->
+                    <StackPanel Margin="0,0,0,8" Visibility="{Binding ConfirmingDeleteProfile, Converter={StaticResource BoolToVisibility}}">
+                        <TextBlock
+                            TextWrapping="Wrap"
+                            Margin="0,0,0,8"
+                            Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                            Text="{Binding DeleteProfileWarning}" />
+                        <StackPanel Orientation="Horizontal">
+                            <ui:Button
+                                Appearance="Danger"
+                                Content="{loc:Str Play_DirectDeleteConfirm}"
+                                Icon="{ui:SymbolIcon Delete24}"
+                                Command="{Binding ConfirmDeleteProfileCommand}" />
+                            <ui:Button
+                                Margin="8,0,0,0"
+                                Appearance="Transparent"
+                                Content="{loc:Str Common_Cancel}"
+                                Command="{Binding CancelDeleteProfileCommand}" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
         </ui:Card>
 
@@ -245,6 +480,13 @@
                         Icon="{ui:SymbolIcon Play24}"
                         IsEnabled="{Binding CanStartClient}"
                         Command="{Binding StartClientCommand}" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Content="{loc:Str Play_CloseGame}"
+                        Icon="{ui:SymbolIcon Dismiss24}"
+                        ToolTip="{loc:Str Play_CloseGameToolTip}"
+                        IsEnabled="{Binding CanCloseGame}"
+                        Command="{Binding AskCloseGameCommand}" />
                     <TextBlock
                         VerticalAlignment="Center"
                         Margin="12,0,0,0"
@@ -253,10 +495,158 @@
                         Text="{Binding ClientState}" />
                 </StackPanel>
 
+                <StackPanel
+                    Margin="0,0,0,8"
+                    Visibility="{Binding ConfirmingCloseGame, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock
+                        TextWrapping="Wrap"
+                        Margin="0,0,0,8"
+                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                        Text="{loc:Str Play_CloseGameWarning}" />
+                    <StackPanel Orientation="Horizontal">
+                        <ui:Button
+                            Appearance="Danger"
+                            Content="{loc:Str Play_CloseGameConfirm}"
+                            Icon="{ui:SymbolIcon Dismiss24}"
+                            Command="{Binding ConfirmCloseGameCommand}" />
+                        <ui:Button
+                            Margin="8,0,0,0"
+                            Appearance="Transparent"
+                            Content="{loc:Str Common_Cancel}"
+                            Command="{Binding CancelCloseGameCommand}" />
+                    </StackPanel>
+                </StackPanel>
+
                 <TextBlock
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                     Text="{Binding ClientPath}" />
+
+                <CheckBox
+                    Margin="0,8,0,0"
+                    Content="{loc:Str Play_CloseGameWithServer}"
+                    ToolTip="{loc:Str Play_CloseGameWithServerToolTip}"
+                    ToolTipService.ShowDuration="20000"
+                    IsChecked="{Binding CloseGameWithServer}" />
+            </StackPanel>
+        </ui:Card>
+
+        <!-- Mod tools - every .exe an installed mod put in the SPT folder, found by itself
+             (ModTools). Shown while there is anything to list, hidden tools included. -->
+        <ui:Card
+            Padding="16"
+            VerticalAlignment="Top"
+            Margin="0,16,0,0"
+            Visibility="{Binding HasTools, Converter={StaticResource BoolToVisibility}}">
+            <StackPanel>
+                <TextBlock
+                    Text="{loc:Str Play_ToolsHeader}"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Margin="0,0,0,4" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Margin="0,0,0,8"
+                    Text="{loc:Str Play_ToolsDescription}" />
+
+                <ItemsControl Focusable="False" ItemsSource="{Binding Tools}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                x:Name="ToolRow"
+                                Margin="0,0,0,6"
+                                Padding="10,8"
+                                CornerRadius="4"
+                                Background="{DynamicResource ControlFillColorDefaultBrush}">
+                                <DockPanel>
+                                    <!-- Open, the folder, and Hide (or Show on Play while it is hidden). -->
+                                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <ui:Button
+                                            Margin="0,0,6,0"
+                                            Content="{loc:Str Play_StartServer}"
+                                            Icon="{ui:SymbolIcon Play24}"
+                                            Command="{Binding DataContext.StartServerCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            Visibility="{Binding ShowStartServer, Converter={StaticResource BoolToVisibility}}" />
+                                        <ui:Button
+                                            Appearance="Primary"
+                                            Content="{loc:Str Play_ToolOpen}"
+                                            Icon="{ui:SymbolIcon Open24}"
+                                            ToolTip="{loc:Str Play_ToolOpenToolTip}"
+                                            IsEnabled="{Binding CanOpen}"
+                                            Command="{Binding DataContext.OpenToolCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            CommandParameter="{Binding}" />
+                                        <ui:Button
+                                            Margin="6,0,0,0"
+                                            Padding="8,6"
+                                            Icon="{ui:SymbolIcon Folder24}"
+                                            ToolTip="{loc:Str Play_ToolFolderToolTip}"
+                                            Command="{Binding DataContext.OpenToolFolderCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            CommandParameter="{Binding}" />
+                                        <ui:Button
+                                            Margin="6,0,0,0"
+                                            Appearance="Transparent"
+                                            Content="{loc:Str Play_ToolHide}"
+                                            ToolTip="{loc:Str Play_ToolHideToolTip}"
+                                            Command="{Binding DataContext.HideToolCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            CommandParameter="{Binding}"
+                                            Visibility="{Binding IsHidden, Converter={StaticResource FalseToVisible}}" />
+                                        <ui:Button
+                                            Margin="6,0,0,0"
+                                            Appearance="Transparent"
+                                            Content="{loc:Str Play_ToolUnhide}"
+                                            Command="{Binding DataContext.UnhideToolCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            CommandParameter="{Binding}"
+                                            Visibility="{Binding IsHidden, Converter={StaticResource BoolToVisibility}}" />
+                                    </StackPanel>
+
+                                    <!-- The tool's own icon, or a plain tool symbol when it has none. -->
+                                    <Grid Width="32" Height="32" Margin="0,0,10,0" VerticalAlignment="Center">
+                                        <Image Source="{Binding Icon}" Width="32" Height="32" Visibility="{Binding HasIcon, Converter={StaticResource BoolToVisibility}}" />
+                                        <ui:SymbolIcon FontSize="24" Symbol="Wrench24" Visibility="{Binding HasIcon, Converter={StaticResource FalseToVisible}}" />
+                                    </Grid>
+
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding Name}" />
+                                        <TextBlock FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding FromText}" />
+                                        <TextBlock
+                                            x:Name="Note"
+                                            FontSize="12"
+                                            TextWrapping="Wrap"
+                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                            Text="{Binding Note}"
+                                            Visibility="{Binding HasNote, Converter={StaticResource BoolToVisibility}}" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            TextWrapping="Wrap"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            Text="{Binding DisabledText}"
+                                            Visibility="{Binding DisabledText, Converter={StaticResource NullToCollapsed}}" />
+                                    </StackPanel>
+                                </DockPanel>
+                            </Border>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding NoteIsCaution}" Value="True">
+                                    <Setter TargetName="Note" Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding CanOpen}" Value="False">
+                                    <Setter TargetName="ToolRow" Property="Opacity" Value="0.6" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsHidden}" Value="True">
+                                    <Setter TargetName="ToolRow" Property="Opacity" Value="0.6" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Show the hidden ones, or hide them again. -->
+                <ui:Button
+                    Appearance="Transparent"
+                    HorizontalAlignment="Left"
+                    Content="{Binding ShowHiddenToolsText}"
+                    Command="{Binding ToggleHiddenToolsCommand}"
+                    Visibility="{Binding HasHiddenTools, Converter={StaticResource BoolToVisibility}}" />
             </StackPanel>
         </ui:Card>
 

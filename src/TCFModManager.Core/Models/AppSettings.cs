@@ -49,6 +49,45 @@ public sealed class AppSettings
     public string? HeadlessLauncherPath { get; set; }
 
     //
+    // Whether Start server on the Play page also opens the SPT launcher once the server is up -
+    // up meaning listening on its port, which is when the launcher can reach it. Off by default:
+    // a machine that hosts for others often has nobody playing on it.
+    //
+    public bool StartLauncherAfterServer { get; set; }
+
+    //
+    // Whether Start server (and its restart) runs the server with no console window. Its log is
+    // still written to user/logs and shown on the Play page; Stop server asks it to stop with
+    // Ctrl+C, as the window's close did. Off by default: the window is where SPT has always shown
+    // what it is doing.
+    //
+    public bool HideServerWindow { get; set; }
+
+    //
+    // Close the game when this install's SPT server stops - by Stop server, from its own window, or
+    // a crash (the App's GameCloser). Off unless ticked on the Play page.
+    //
+    public bool CloseGameWithServer { get; set; }
+
+    // Mod tools hidden from the Play page, by ModTool.Key (the .exe's install-relative path,
+    // lowercased). See ModTools.
+    public List<string> HiddenModTools { get; set; } = [];
+
+    //
+    // OPEN-12 F20, experimental: the Play page's Play card starts the game itself - server, profile,
+    // the launcher's checks, patches and bundles - instead of opening SPT's launcher
+    // (SptDirectLaunch). Off by default (R2); only used on SPT 4.1.3 and later in 4.1.
+    //
+    public bool DirectLaunch { get; set; }
+
+    // The profile Play starts (its profile id), picked on the Play page. Null: the one SPT's launcher
+    // last started, else the first.
+    public string? DirectLaunchProfileId { get; set; }
+
+    // Minimise this app once the game has started from it, as SPT's launcher does by default.
+    public bool MinimizeWhilePlaying { get; set; } = true;
+
+    //
     // The two answers as the roles the rest of the app reasons about.
     //
     // An unanswered PlaysHere reads as yes. An install nobody has been asked about is overwhelmingly

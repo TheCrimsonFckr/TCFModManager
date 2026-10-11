@@ -190,6 +190,27 @@ internal static class AppNavigation
         return pending;
     }
 
+    //
+    // Installed searched for one mod - Diagnose logs' Show the mod. Same shape as ShowInstalledUpdates.
+    //
+    private static string? _installedSearchPending;
+
+    public static event EventHandler? InstalledSearchRequested;
+
+    public static void ShowInInstalled(string modName)
+    {
+        _installedSearchPending = modName;
+        InstalledSearchRequested?.Invoke(null, EventArgs.Empty);
+        _navigation?.Navigate(typeof(InstalledPage));
+    }
+
+    public static string? TakeInstalledSearch()
+    {
+        var pending = _installedSearchPending;
+        _installedSearchPending = null;
+        return pending;
+    }
+
     // Consumed by the Installed page: true once per request.
     public static bool TakeShowUpdates()
     {

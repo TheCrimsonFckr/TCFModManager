@@ -426,6 +426,48 @@
                 underlined in the accent colour when pointed at. OverridesDefaultStyle drops WPF's own
                 hyperlink blue, so the name keeps the colour of the sentence around it.
             -->
+            <!--
+                OPEN-12 A6: the hover preview on a mod card - a bigger picture, the teaser, the counts
+                and the SPT line. A tooltip, so it opens after resting on the card and goes as the
+                mouse leaves; a click still opens the details as before. Bound to the Preview*
+                properties both card view models carry.
+            -->
+            <converters:NullToVisibilityConverter x:Key="PreviewNullToCollapsed" />
+            <ToolTip x:Key="ModHoverPreview" x:Shared="False" Placement="Right" MaxWidth="380" Padding="0">
+                <StackPanel Width="360">
+                    <Image
+                        Height="190"
+                        Stretch="UniformToFill"
+                        behaviors:ThumbnailLoader.Source="{Binding PreviewThumbnail}"
+                        Visibility="{Binding PreviewThumbnail, Converter={StaticResource PreviewNullToCollapsed}}" />
+                    <StackPanel Margin="12,10,12,12">
+                        <TextBlock FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding PreviewTitle}" />
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                            Text="{Binding PreviewAuthor, StringFormat={loc:Str Browse_ByAuthorFormat}}"
+                            Visibility="{Binding PreviewAuthor, Converter={StaticResource PreviewNullToCollapsed}}" />
+                        <TextBlock
+                            Margin="0,8,0,0"
+                            TextWrapping="Wrap"
+                            Text="{Binding PreviewTeaser}"
+                            Visibility="{Binding PreviewTeaser, Converter={StaticResource PreviewNullToCollapsed}}" />
+                        <TextBlock
+                            Margin="0,8,0,0"
+                            FontSize="12"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{Binding PreviewDownloads, StringFormat={loc:Str Common_DownloadsFormat}}"
+                            Visibility="{Binding PreviewDownloads, Converter={StaticResource PreviewNullToCollapsed}}" />
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            TextWrapping="Wrap"
+                            Text="{Binding PreviewSpt}"
+                            Visibility="{Binding PreviewSpt, Converter={StaticResource PreviewNullToCollapsed}}" />
+                    </StackPanel>
+                </StackPanel>
+            </ToolTip>
+
             <Style x:Key="AuthorLink" TargetType="Hyperlink">
                 <Setter Property="OverridesDefaultStyle" Value="True" />
                 <Setter Property="TextDecorations" Value="{x:Null}" />

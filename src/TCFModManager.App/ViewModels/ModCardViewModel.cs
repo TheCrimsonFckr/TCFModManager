@@ -41,6 +41,14 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
     // The mod's primary owner/author.
     public string? Author => Mod.Owner?.Name;
 
+    // The hover preview (OPEN-12 A6, App.xaml ModHoverPreview).
+    public string? PreviewThumbnail => Thumbnail;
+    public string? PreviewTitle => Name;
+    public string? PreviewAuthor => Author;
+    public string? PreviewTeaser => string.IsNullOrWhiteSpace(Teaser) ? null : Teaser;
+    public int? PreviewDownloads => Downloads;
+    public string? PreviewSpt => SptVersionDisplay;
+
     // The mod's category title, shown as a tag chip.
     public string? CategoryTag => Mod.Category?.Title;
 

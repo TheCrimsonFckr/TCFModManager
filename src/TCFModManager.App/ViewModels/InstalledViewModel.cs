@@ -223,7 +223,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             InstalledFilterSection.Group => Pill(Strings.Filter_SectionGroup, SelectedGroupFilter),
             InstalledFilterSection.Sort => Pill(Strings.Filter_SectionSort, SelectedSortOption),
             InstalledFilterSection.GroupSort => Pill(Strings.Filter_SectionGroupSort, SelectedGroupSortOption),
-            InstalledFilterSection.PageSize => LocalizationService.Text(Strings.Common_PageSizeFormat, PageSize),
+            InstalledFilterSection.PageSize => Converters.PageSizeLabelConverter.Label(PageSize),
             _ => null,
         };
     }
@@ -285,6 +285,7 @@ public partial class InstalledViewModel : LocalizedViewModel
     //
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ShowCards))]
+    [NotifyPropertyChangedFor(nameof(ShowPager))]
     [NotifyPropertyChangedFor(nameof(ShowGroups))]
     [NotifyPropertyChangedFor(nameof(ShowList))]
     [NotifyPropertyChangedFor(nameof(ShowExpanders))]
@@ -390,7 +391,25 @@ public partial class InstalledViewModel : LocalizedViewModel
     // virtualising, so a hundred-odd of them in one page is work the app does not need to be doing.
     // List view is the cheap way to see the lot.
     //
-    public List<int> PageSizeOptions { get; } = [8, DefaultPageSizeValue, 16, 24, 32];
+    // OPEN-12 A8: 48 and 64 too, and Endless (0) - no pager, more cards as the list nears its end.
+    public List<int> PageSizeOptions { get; } = [8, DefaultPageSizeValue, 16, 24, 32, 48, 64, Converters.PageSizeLabelConverter.Endless];
+
+    public bool IsEndless => PageSize == Converters.PageSizeLabelConverter.Endless;
+
+    // Cards view's pager, which Endless has no use for.
+    public bool ShowPager => ShowCards && !IsEndless;
+
+    private const int EndlessStep = 24;
+    private int _endlessShown = EndlessStep;
+
+    // Endless only: the next step of cards, once the list has been scrolled near its end.
+    public void LoadMore()
+    {
+        if (!IsEndless || !ShowCards || Results.Count >= _filtered.Count || _endlessShown >= _filtered.Count) return;
+
+        _endlessShown += EndlessStep;
+        _cardsFill.Apply(Results, _filtered.Take(_endlessShown).ToList());
+    }
 
     [ObservableProperty]
     private int _pageSize = DefaultPageSizeValue;
@@ -550,6 +569,14 @@ public partial class InstalledViewModel : LocalizedViewModel
         AppNavigation.ShowUpdatesRequested += (_, _) =>
         {
             if (AppNavigation.TakeShowUpdates()) SelectedUpdateFilter = UpdatesAvailableFilter();
+        };
+
+        // Diagnose logs' Show the mod: the page searched for that mod's name.
+        if (AppNavigation.TakeInstalledSearch() is { } search) _searchText = search;
+
+        AppNavigation.InstalledSearchRequested += (_, _) =>
+        {
+            if (AppNavigation.TakeInstalledSearch() is { } wanted) SearchText = wanted;
         };
 
         //
@@ -712,7 +739,12 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     partial void OnSelectedSortOptionChanged(ModSortItem value) => AutoApplyFilter();
 
-    partial void OnPageSizeChanged(int value) => AutoApplyFilter();
+    partial void OnPageSizeChanged(int value)
+    {
+        OnPropertyChanged(nameof(IsEndless));
+        OnPropertyChanged(nameof(ShowPager));
+        AutoApplyFilter();
+    }
 
     //
     // Deliberately not AutoApplyFilter: nothing about what is shown changes, only whether each row
@@ -2568,7 +2600,9 @@ public partial class InstalledViewModel : LocalizedViewModel
         if (!_cardsDirty && target == CurrentPage) return;
 
         CurrentPage = target;
-        _cardsFill.Apply(Results, _filtered.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList());
+        _cardsFill.Apply(Results, IsEndless
+            ? _filtered.Take(_endlessShown).ToList()
+            : _filtered.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList());
 
         _cardsDirty = false;
     }
@@ -2619,7 +2653,8 @@ public partial class InstalledViewModel : LocalizedViewModel
         // catch up when switched to.
         _cardsDirty = _listDirty = _sectionsDirty = true;
 
-        TotalPages = Math.Max(1, (int)Math.Ceiling(_filtered.Count / (double)PageSize));
+        TotalPages = IsEndless ? 1 : Math.Max(1, (int)Math.Ceiling(_filtered.Count / (double)PageSize));
+        _endlessShown = EndlessStep;
 
         // The button names the number it would select, so narrowing the filter has to re-label it -
         // and re-decide whether everything it now matches is already ticked.

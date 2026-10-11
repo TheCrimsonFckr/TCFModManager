@@ -167,6 +167,12 @@
                     Icon="{ui:SymbolIcon Branch24}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:DependenciesPage}" />
+                <!-- OPEN-12 F8: what the server, BepInEx and game logs say went wrong, and with which mod. -->
+                <ui:NavigationViewItem
+                    Content="{loc:Str Nav_Diagnose}"
+                    Icon="{ui:SymbolIcon DocumentSearch24}"
+                    NavigationCacheMode="Required"
+                    TargetPageType="{x:Type views:DiagnosePage}" />
                 <!-- After Dependencies: both answer questions about the mods already on disk,
                      and this is the more occasional of the two.
 

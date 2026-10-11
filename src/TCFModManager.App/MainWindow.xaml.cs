@@ -52,6 +52,9 @@ public partial class MainWindow : FluentWindow
             // configured just leaves the Server Map item out of the sidebar, so nothing here is
             // worth holding the window open for.
             _ = AppServices.ServerMap.ConnectOnStartupAsync();
+
+            // Closes the game when the server stops, if that is ticked on the Play page.
+            Services.GameCloser.Start();
         };
 
         //

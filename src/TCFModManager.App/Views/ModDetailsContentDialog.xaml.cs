@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using TCFModManager.App.Services;
 using TCFModManager.App.ViewModels;
 using TCFModManager.Core.Models;
 using Wpf.Ui.Controls;
@@ -36,6 +37,25 @@ public partial class ModDetailsContentDialog : ContentDialog
         // Fire-and-forget: the section is collapsed until it has something to show, so the dialog
         // opens at once whether or not this mod has addons.
         _ = _addons.LoadAsync(_mod.Id, _mod.Name, request.InstalledVersion);
+
+        _comments = new ModCommentsView(CommentsHost, CommentsOff, CommentsFallback);
+        Unloaded += (_, _) => _comments.Dispose();
+    }
+
+    private readonly ModCommentsView _comments;
+
+    private string? CommentsUrl => string.IsNullOrWhiteSpace(_mod.DetailUrl) ? null : _mod.DetailUrl + "#comments";
+
+    // The web view starts the first time Comments is picked, never just for opening the details.
+    private async void Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (!ReferenceEquals(e.OriginalSource, Tabs)) return;
+        if (Tabs.SelectedItem == CommentsTab && CommentsUrl is { } url) await _comments.ShowAsync(url);
+    }
+
+    private void OpenCommentsInBrowser_Click(object sender, RoutedEventArgs e)
+    {
+        if (CommentsUrl is { } url) MarkupActions.OpenInBrowser(url);
     }
 #pragma warning restore CS0618
 

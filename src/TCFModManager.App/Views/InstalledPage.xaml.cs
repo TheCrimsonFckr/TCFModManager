@@ -230,6 +230,13 @@ public partial class InstalledPage : Page
         e.Handled = true;
     }
 
+    // Endless (OPEN-12 A8): the next cards once the list is scrolled to within a screen of its end.
+    private void CardsScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+    {
+        if (e.ExtentHeight <= 0 || e.VerticalOffset + e.ViewportHeight * 2 < e.ExtentHeight) return;
+        (DataContext as ViewModels.InstalledViewModel)?.LoadMore();
+    }
+
     private void ResultsItems_SizeChanged(object sender, SizeChangedEventArgs e)
     {
         ViewModel.UpdateLayoutForWidth(e.NewSize.Width);

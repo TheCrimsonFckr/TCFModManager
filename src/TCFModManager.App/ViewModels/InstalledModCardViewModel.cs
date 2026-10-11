@@ -163,6 +163,21 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // name the mod declares for itself, otherwise the folder/package Name.
     public string DisplayTitle => MatchedModName ?? DeclaredName ?? Name;
 
+    //
+    // The hover preview (OPEN-12 A6, App.xaml ModHoverPreview): the catalog listing's picture and
+    // teaser when this mod is matched to one, looked up only when the preview opens.
+    //
+    private Mod? CatalogListing => ModId is { } id && !IsAddon
+        ? AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == id)
+        : null;
+
+    public string? PreviewThumbnail => CatalogListing?.Thumbnail;
+    public string PreviewTitle => DisplayTitle;
+    public string? PreviewAuthor => Author;
+    public string? PreviewTeaser => CatalogListing?.Teaser is { Length: > 0 } teaser ? teaser : null;
+    public int? PreviewDownloads => CatalogListing?.Downloads;
+    public string? PreviewSpt => null;
+
     // The raw installed folder/package name, shown as a secondary line under DisplayTitle only
     // when the title came from somewhere else and differs from the folder name.
     public string? FolderNameIfDifferent =>

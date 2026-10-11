@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace TCFModManager.Core.Services;
 
@@ -88,7 +89,9 @@ public sealed record SptLaunchResult
 // It also STOPS and RESTARTS one. Every stop is scoped to ONE target of THIS install and is asked
 // for explicitly.
 //
-public static class SptLaunchService
+// The game itself (as opposed to its launcher) is in SptLaunchService.Game.cs.
+//
+public static partial class SptLaunchService
 {
     // Beside the server exe, in whichever folder that turned out to be.
     private static readonly string[] ClientLauncherCandidates =
@@ -173,7 +176,7 @@ public static class SptLaunchService
     }
 
     public static SptLaunchResult Launch(
-        string? installPath, SptLaunchTarget target, string? headlessExePath = null)
+        string? installPath, SptLaunchTarget target, string? headlessExePath = null, bool hidden = false)
     {
         var info = Describe(installPath, target, headlessExePath);
 
@@ -190,6 +193,21 @@ public static class SptLaunchService
         try
         {
             //
+            // hidden: the SERVER with no console window (the other targets are windows people use,
+            // and ignore it). Its log is still written to user/logs, which the Play page shows.
+            //
+            // Never while a stop has this app ignoring Ctrl+C (see Interrupt): a process started then
+            // would inherit that, and could not be asked to stop with it later.
+            //
+            lock (Consoles)
+            {
+                if (hidden && target == SptLaunchTarget.Server)
+                {
+                    StartHidden(info.ExePath!);
+                    return new SptLaunchResult { Info = info, Started = true };
+                }
+
+            //
             // UseShellExecute starts it as the shell would - detached, so closing this app does not
             // take the server down with it, and with the console window SPT.Server draws.
             //
@@ -204,11 +222,38 @@ public static class SptLaunchService
             });
 
             return new SptLaunchResult { Info = info, Started = true };
+            }
         }
         catch (Exception ex)
         {
             return new SptLaunchResult { Info = info, Problem = SptLaunchProblem.StartFailed, Error = ex };
         }
+    }
+
+    //
+    // The server with no window: a console of its own that is never shown (CREATE_NO_WINDOW), so its
+    // console calls work as they always do and Ctrl+C still reaches it (see Interrupt). Nothing is
+    // read from it - SPT writes its own log file.
+    //
+    // Its input is an empty pipe, closed at once. When SPT cannot start (its port is taken, a mod
+    // fails validation) it says "Press any key to exit" and waits for a key; with no window nobody
+    // could press one, and the server would sit there invisibly for ever. With no input it finds
+    // none and exits, and the Play page says it stopped before it was ready.
+    //
+    // Not tied to this app: closing the app leaves the server running, as a visible one does.
+    //
+    private static void StartHidden(string exePath)
+    {
+        using var process = Process.Start(new ProcessStartInfo
+        {
+            FileName = exePath,
+            WorkingDirectory = Path.GetDirectoryName(exePath),
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            RedirectStandardInput = true,
+        }) ?? throw new InvalidOperationException("the server process did not start");
+
+        process.StandardInput.Close();
     }
 
     //
@@ -223,43 +268,8 @@ public static class SptLaunchService
     // Refused when the target is not running. A restart that quietly becomes a start is how somebody
     // ends up with a second server they did not know they had.
     //
-    //
-    // Stops this target and leaves it down. The same scoping and the same close-then-kill as a
-    // restart, and refused the same way when there is nothing running.
-    //
-    public static SptLaunchResult Stop(
-        string? installPath, SptLaunchTarget target, string? headlessExePath = null)
-    {
-        var info = Describe(installPath, target, headlessExePath);
-
-        if (info.Problem != SptLaunchProblem.None)
-        {
-            return new SptLaunchResult { Info = info, Problem = info.Problem };
-        }
-
-        if (!info.IsRunning)
-        {
-            return new SptLaunchResult { Info = info, Problem = SptLaunchProblem.NotRunning };
-        }
-
-        int stopped;
-
-        try
-        {
-            stopped = StopProcesses(info);
-        }
-        catch (Exception ex)
-        {
-            return new SptLaunchResult { Info = info, Problem = SptLaunchProblem.StopFailed, Error = ex };
-        }
-
-        return stopped == 0
-            ? new SptLaunchResult { Info = info, Problem = SptLaunchProblem.StopFailed }
-            : new SptLaunchResult { Info = info, Stopped = stopped };
-    }
-
     public static SptLaunchResult Restart(
-        string? installPath, SptLaunchTarget target, string? headlessExePath = null)
+        string? installPath, SptLaunchTarget target, string? headlessExePath = null, bool hidden = false)
     {
         var info = Describe(installPath, target, headlessExePath);
 
@@ -296,9 +306,44 @@ public static class SptLaunchService
         //
         Thread.Sleep(StopSettleDelay);
 
-        var result = Launch(installPath, target, headlessExePath);
+        var result = Launch(installPath, target, headlessExePath, hidden);
 
         return result with { Stopped = stopped };
+    }
+
+    //
+    // Stops this target and leaves it down. The same scoping and the same close-then-kill as a
+    // restart, and refused the same way when there is nothing running.
+    //
+    public static SptLaunchResult Stop(
+        string? installPath, SptLaunchTarget target, string? headlessExePath = null)
+    {
+        var info = Describe(installPath, target, headlessExePath);
+
+        if (info.Problem != SptLaunchProblem.None)
+        {
+            return new SptLaunchResult { Info = info, Problem = info.Problem };
+        }
+
+        if (!info.IsRunning)
+        {
+            return new SptLaunchResult { Info = info, Problem = SptLaunchProblem.NotRunning };
+        }
+
+        int stopped;
+
+        try
+        {
+            stopped = StopProcesses(info);
+        }
+        catch (Exception ex)
+        {
+            return new SptLaunchResult { Info = info, Problem = SptLaunchProblem.StopFailed, Error = ex };
+        }
+
+        return stopped == 0
+            ? new SptLaunchResult { Info = info, Problem = SptLaunchProblem.StopFailed }
+            : new SptLaunchResult { Info = info, Stopped = stopped };
     }
 
     private static readonly TimeSpan StopSettleDelay = TimeSpan.FromMilliseconds(750);
@@ -316,20 +361,42 @@ public static class SptLaunchService
     // NOT the process tree. Killing the tree would take a headless manager's game client with it,
     // which is a decision this method has not been asked to make.
     //
-    private static int StopProcesses(SptLaunchTargetInfo info)
+    private static int StopProcesses(SptLaunchTargetInfo info) => StopAll(ProcessesFor(info), CloseGrace);
+
+    private static int StopAll(IEnumerable<Process> processes, TimeSpan grace)
     {
         var stopped = 0;
 
-        foreach (var process in ProcessesFor(info))
+        foreach (var process in processes)
         {
+            var name = "a process";
+
             try
             {
                 if (process.HasExited) continue;
+                name = $"{process.ProcessName} (pid {process.Id})";
 
-                if (!process.CloseMainWindow() || !process.WaitForExit((int)CloseGrace.TotalMilliseconds))
+                //
+                // A window to close when it has one; with none (started hidden, or hosted in Windows
+                // Terminal), Ctrl+C - which SPT answers by shutting down properly. Killed only when
+                // neither worked in time. Every step is logged, so a stop that "did nothing" can be
+                // told apart afterwards - asked and gone, killed, or still there.
+                //
+                var hasWindow = process.MainWindowHandle != IntPtr.Zero;
+                var asked = hasWindow ? process.CloseMainWindow() : Interrupt(process);
+                AppLog.Info("Launch", $"{name}: {(asked ? (hasWindow ? "asked its window to close" : "sent Ctrl+C") : "couldn't be asked to close")}");
+
+                if (asked && process.WaitForExit((int)grace.TotalMilliseconds))
                 {
+                    AppLog.Info("Launch", $"{name} closed");
+                }
+                else
+                {
+                    AppLog.Info("Launch", asked ? $"{name} still running after {grace.TotalSeconds:0} s; killing it" : $"killing {name}");
                     process.Kill();
-                    process.WaitForExit((int)CloseGrace.TotalMilliseconds);
+                    AppLog.Info("Launch", process.WaitForExit((int)CloseGrace.TotalMilliseconds)
+                        ? $"{name} killed"
+                        : $"{name} still running {CloseGrace.TotalSeconds:0} s after being killed");
                 }
 
                 if (!process.HasExited) continue;
@@ -341,7 +408,7 @@ public static class SptLaunchService
                 // A process this app may not touch, or one that exited while being asked. Neither is
                 // a reason to abandon the others; a stop that took nothing down is reported by the
                 // count, and the caller turns that into StopFailed.
-                AppLog.Debug("Launch", $"could not stop {process.ProcessName}: {ex.Message}");
+                AppLog.Warn("Launch", $"could not stop {name}: {ex.GetType().Name}: {ex.Message}");
             }
             finally
             {
@@ -350,6 +417,68 @@ public static class SptLaunchService
         }
 
         return stopped;
+    }
+
+    //
+    // Ctrl+C to a console process with no window: this app joins its console for a moment, sends the
+    // event, and leaves - ignoring the event itself meanwhile, since everything on that console gets
+    // it. The ignore is lifted straight after: it is inherited by processes started meanwhile (Launch
+    // waits for it), and a server started with it set could not be asked to stop.
+    //
+    // False when it could not be sent (not Windows, the process has no console, this app has one of
+    // its own): the caller then kills it.
+    //
+    private static bool Interrupt(Process process)
+    {
+        if (!OperatingSystem.IsWindows()) return false;
+
+        // A process has one console at a time: one stop at a time joins one.
+        lock (Consoles)
+        {
+            if (!NativeConsole.SetConsoleCtrlHandler(IntPtr.Zero, true)) return false;
+
+            try
+            {
+                if (!NativeConsole.AttachConsole((uint)process.Id)) return false;
+
+                var sent = NativeConsole.GenerateConsoleCtrlEvent(NativeConsole.CtrlCEvent, 0);
+                NativeConsole.FreeConsole();
+
+                // Long enough for the event to have been handed out (it goes to each process on the
+                // console on a thread of its own); the caller waits for the process to go.
+                if (sent) Thread.Sleep(InterruptSettle);
+                return sent;
+            }
+            finally
+            {
+                NativeConsole.SetConsoleCtrlHandler(IntPtr.Zero, false);
+            }
+        }
+    }
+
+    private static readonly Lock Consoles = new();
+
+    private static readonly TimeSpan InterruptSettle = TimeSpan.FromMilliseconds(500);
+
+    private static class NativeConsole
+    {
+        public const uint CtrlCEvent = 0;
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool AttachConsole(uint processId);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool FreeConsole();
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetConsoleCtrlHandler(IntPtr handler, [MarshalAs(UnmanagedType.Bool)] bool add);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GenerateConsoleCtrlEvent(uint ctrlEvent, uint processGroupId);
     }
 
     //

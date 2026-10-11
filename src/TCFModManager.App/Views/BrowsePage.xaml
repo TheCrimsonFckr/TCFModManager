@@ -26,6 +26,7 @@
     Title="{loc:Str Nav_Browse}"
     Loaded="BrowsePage_Loaded">
     <Page.Resources>
+        <converters:PageSizeLabelConverter x:Key="PageSizeLabel" />
         <!-- One width for every filter in the filter row, so a wrapped row lines up in columns. -->
 
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
@@ -116,7 +117,7 @@
             <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding PageSizeOptions}" SelectedItem="{Binding PageSize}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding StringFormat={loc:Str Common_PageSizeFormat}}" />
+                        <TextBlock Text="{Binding Converter={StaticResource PageSizeLabel}}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -398,6 +399,7 @@
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ItemsSource="{Binding Results}"
             SelectionChanged="ResultsListBox_SelectionChanged"
+            ScrollViewer.ScrollChanged="ResultsListBox_ScrollChanged"
             SizeChanged="ResultsListBox_SizeChanged">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -430,7 +432,11 @@
                     <ui:Card
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
-                        ClipToBounds="True">
+                        ClipToBounds="True"
+                        ToolTip="{StaticResource ModHoverPreview}"
+                        ToolTipService.InitialShowDelay="600"
+                        ToolTipService.ShowDuration="60000"
+                        ToolTipService.Placement="Right">
                         <!-- Fills the card. The right-hand column is a gutter the status icon and
                              install button live in, so neither can overlap the title or badges. -->
                         <Grid>
@@ -784,7 +790,8 @@
             Grid.Column="1"
             Orientation="Horizontal"
             HorizontalAlignment="Center"
-            Margin="0,8,0,0">
+            Margin="0,8,0,0"
+            Visibility="{Binding IsEndless, Converter={StaticResource FalseToVisible}}">
             <ui:Button
                 Content="{loc:Str Common_Previous}"
                 Command="{Binding PreviousPageCommand}" />

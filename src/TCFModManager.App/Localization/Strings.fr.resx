@@ -6871,4 +6871,631 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
   <data name="Common_RestoreDefaultsToolTip" xml:space="preserve">
     <value>Remet les filtres, le tri et le nombre par page à ce que vous avez enregistré en dernier comme réglage par défaut de cette page. Si rien n'est enregistré, fait comme « Réinitialiser les filtres ».</value>
   </data>
+  <data name="Play_ServerDescriptionHidden" xml:space="preserve">
+    <value>Démarre le serveur de cette installation sans fenêtre (réglé dans les Options) - ce qu'il fait s'affiche dans le journal du serveur ci-dessous. Il continue de tourner si vous fermez cette application. Redémarrer l'arrête puis le relance - après une configuration modifiée ou un mod serveur ajouté - et Arrêter l'éteint proprement jusqu'à ce que vous le relanciez.</value>
+  </data>
+  <data name="Play_WaitingForServer" xml:space="preserve">
+    <value>Démarrage du serveur - le lanceur s'ouvrira dès que le serveur sera prêt.</value>
+  </data>
+  <data name="Play_WaitingForServerOnly" xml:space="preserve">
+    <value>Démarrage du serveur...</value>
+  </data>
+  <data name="Play_ServerIsUp" xml:space="preserve">
+    <value>Le serveur est prêt.</value>
+  </data>
+  <data name="Play_ServerNotUpFormat" xml:space="preserve">
+    <value>Le serveur n'a pas commencé à écouter sur le port {0} en trois minutes, le lanceur n'a donc pas été ouvert. Ouvrez-le vous-même quand le serveur sera prêt.</value>
+  </data>
+  <data name="Play_ServerNotUpOnlyFormat" xml:space="preserve">
+    <value>Le serveur tourne mais n'écoute toujours pas sur le port {0} après trois minutes. Le journal du serveur peut indiquer pourquoi.</value>
+  </data>
+  <data name="Play_ServerPortTakenFormat" xml:space="preserve">
+    <value>Quelque chose écoutait déjà sur le port {0} avant le démarrage du serveur, impossible donc de savoir quand il est prêt. Ouvrez le lanceur vous-même quand le serveur sera prêt.</value>
+  </data>
+  <data name="Play_ServerStoppedStarting" xml:space="preserve">
+    <value>Le serveur s'est fermé avant d'être prêt, le lanceur n'a donc pas été ouvert. Le journal du serveur indique pourquoi.</value>
+  </data>
+  <data name="Play_ServerStoppedStartingOnly" xml:space="preserve">
+    <value>Le serveur s'est fermé avant d'être prêt. Le journal du serveur indique pourquoi.</value>
+  </data>
+  <data name="Play_ServerLog" xml:space="preserve">
+    <value>Journal du serveur</value>
+  </data>
+  <data name="Play_ServerLogNone" xml:space="preserve">
+    <value>Le serveur n'a pas encore écrit de journal ici - il le fera une fois démarré.</value>
+  </data>
+  <data name="Play_ServerLogOpenFolder" xml:space="preserve">
+    <value>Ouvrir le dossier des journaux</value>
+  </data>
+  <data name="Play_CloseGame" xml:space="preserve">
+    <value>Fermer le jeu</value>
+  </data>
+  <data name="Play_CloseGameToolTip" xml:space="preserve">
+    <value>Fermer Escape From Tarkov d'ici. Seulement le jeu de cette installation - un jeu lancé depuis un autre dossier n'est pas touché.</value>
+  </data>
+  <data name="Play_CloseGameWarning" xml:space="preserve">
+    <value>Tout ce qui est en jeu dans un raid en cours est perdu. Fermer le jeu ?</value>
+  </data>
+  <data name="Play_CloseGameConfirm" xml:space="preserve">
+    <value>Fermer le jeu</value>
+  </data>
+  <data name="Play_CloseGameWithServer" xml:space="preserve">
+    <value>Fermer le jeu quand le serveur s'arrête</value>
+  </data>
+  <data name="Play_CloseGameWithServerToolTip" xml:space="preserve">
+    <value>Quand le serveur de cette installation s'arrête - via Arrêter, sa propre fenêtre fermée, ou un plantage - le jeu est fermé aussi, car il ne peut rien sauvegarder sans le serveur. Arrêter ferme d'abord le jeu, tant que le serveur peut encore lui répondre. Un redémarrage depuis cette page ne compte pas.</value>
+  </data>
+  <data name="Play_GameClosed" xml:space="preserve">
+    <value>Le jeu a été fermé.</value>
+  </data>
+  <data name="Play_GameNotRunning" xml:space="preserve">
+    <value>Le jeu n'est pas lancé.</value>
+  </data>
+  <data name="Play_GameClosedWithServer" xml:space="preserve">
+    <value>Le serveur s'est arrêté, le jeu a donc été fermé.</value>
+  </data>
+  <data name="Play_StoppedAfterGameFormat" xml:space="preserve">
+    <value>{0} arrêté. Le jeu a été fermé d'abord, comme coché sur la carte du lanceur.</value>
+  </data>
+  <data name="Options_StartingSptHeader" xml:space="preserve">
+    <value>Démarrage de SPT</value>
+  </data>
+  <data name="Options_StartingSptHint" xml:space="preserve">
+    <value>Comment Démarrer le serveur, sur la page Jouer, lance le serveur, et ce qui suit.</value>
+  </data>
+  <data name="Options_StartLauncherOn" xml:space="preserve">
+    <value>Ouvrir le lanceur dès que le serveur est prêt</value>
+  </data>
+  <data name="Options_StartLauncherOff" xml:space="preserve">
+    <value>Ouvrir le lanceur vous-même</value>
+  </data>
+  <data name="Options_StartLauncherNote" xml:space="preserve">
+    <value>Prêt signifie qu'il écoute sur son port (celui de son http.json, et 6969) - c'est là que le lanceur peut l'atteindre. Un serveur très moddé a trois minutes.</value>
+  </data>
+  <data name="Options_HideServerOn" xml:space="preserve">
+    <value>Lancer le serveur sans sa fenêtre</value>
+  </data>
+  <data name="Options_HideServerOff" xml:space="preserve">
+    <value>Afficher la fenêtre du serveur</value>
+  </data>
+  <data name="Options_HideServerNote" xml:space="preserve">
+    <value>Sans sa fenêtre, le journal du serveur s'affiche sur la page Jouer et Arrêter, là-bas, le ferme proprement. Il continue de tourner si vous fermez cette application - arrêtez-le depuis la page Jouer.</value>
+  </data>
+  <data name="Play_ToolsHeader" xml:space="preserve">
+    <value>Outils des mods</value>
+  </data>
+  <data name="Play_ToolsDescription" xml:space="preserve">
+    <value>Les programmes installés par vos mods - chaque .exe qu'un mod a placé dans le dossier SPT, d'après ce que cette application a installé et les dossiers des mods installés à la main. Un outil dont le mod est désactivé est grisé. Masquez ce qui n'est pas fait pour être ouvert ; vous pourrez toujours le réafficher.</value>
+  </data>
+  <data name="Play_ToolFromFormat" xml:space="preserve">
+    <value>de {0}</value>
+  </data>
+  <data name="Play_ToolOpen" xml:space="preserve">
+    <value>Ouvrir</value>
+  </data>
+  <data name="Play_ToolOpenToolTip" xml:space="preserve">
+    <value>Lancer cet outil depuis son propre dossier</value>
+  </data>
+  <data name="Play_ToolFolderToolTip" xml:space="preserve">
+    <value>Ouvrir le dossier du mod</value>
+  </data>
+  <data name="Play_ToolHide" xml:space="preserve">
+    <value>Masquer</value>
+  </data>
+  <data name="Play_ToolHideToolTip" xml:space="preserve">
+    <value>Le retirer de la page Jouer. Le lien sous la liste permet de le réafficher.</value>
+  </data>
+  <data name="Play_ToolUnhide" xml:space="preserve">
+    <value>Afficher sur Jouer</value>
+  </data>
+  <data name="Play_ToolsShowHidden_one" xml:space="preserve">
+    <value>Afficher {0} outil masqué</value>
+  </data>
+  <data name="Play_ToolsShowHidden_other" xml:space="preserve">
+    <value>Afficher {0} outils masqués</value>
+  </data>
+  <data name="Play_ToolsHideHidden" xml:space="preserve">
+    <value>Les masquer à nouveau</value>
+  </data>
+  <data name="Play_ToolNeedsServerRunning" xml:space="preserve">
+    <value>Nécessite que le serveur tourne.</value>
+  </data>
+  <data name="Play_ToolNeedsServerRunningDown" xml:space="preserve">
+    <value>Nécessite que le serveur tourne - ce n'est pas le cas.</value>
+  </data>
+  <data name="Play_ToolNeedsServerStopped" xml:space="preserve">
+    <value>À utiliser serveur arrêté - les changements s'appliquent à son prochain démarrage.</value>
+  </data>
+  <data name="Play_ToolNeedsServerStoppedUp" xml:space="preserve">
+    <value>Le serveur tourne - arrêtez-le d'abord. Les changements s'appliquent à son prochain démarrage.</value>
+  </data>
+  <data name="Play_ToolModDisabledFormat" xml:space="preserve">
+    <value>{0} est désactivé, cet outil ne peut donc pas être ouvert.</value>
+  </data>
+  <data name="Play_ToolOpenedFormat" xml:space="preserve">
+    <value>{0} ouvert.</value>
+  </data>
+  <data name="Play_ToolOpenFailedFormat" xml:space="preserve">
+    <value>Impossible d'ouvrir {0} : {1}</value>
+  </data>
+  <data name="Profiles_ReasonWipe" xml:space="preserve">
+    <value>Avant de réinitialiser un profil</value>
+  </data>
+  <data name="Profiles_ReasonProfileDelete" xml:space="preserve">
+    <value>Avant de supprimer un profil</value>
+  </data>
+  <data name="Play_DirectHeader" xml:space="preserve">
+    <value>Jouer (expérimental)</value>
+  </data>
+  <data name="Play_DirectSummary" xml:space="preserve">
+    <value>Choisissez un profil et appuyez sur Jouer - le serveur démarre tout seul s'il ne tourne pas, et le lanceur SPT ne s'ouvre jamais.</value>
+  </data>
+  <data name="Play_DirectDescription" xml:space="preserve">
+    <value>Jouer démarre le serveur si besoin, l'attend, effectue les vérifications, le patch et les bundles du lanceur SPT, puis lance le jeu avec ce profil. Réinitialiser, Nouveau profil, Supprimer et Vider le cache sont sous ... à côté de Jouer. Désactivez-le dans les Options pour n'utiliser que le lanceur SPT.</value>
+  </data>
+  <data name="Play_DirectPlay" xml:space="preserve">
+    <value>JOUER</value>
+  </data>
+  <data name="Play_DirectPlayToolTip" xml:space="preserve">
+    <value>Démarrer le serveur si besoin, puis le jeu avec ce profil.</value>
+  </data>
+  <data name="Play_DirectProfileToolTip" xml:space="preserve">
+    <value>Le profil avec lequel le jeu démarre. Les profils sont lus dans votre dossier SPT, ils apparaissent donc avant que le serveur tourne.</value>
+  </data>
+  <data name="Play_DirectMoreToolTip" xml:space="preserve">
+    <value>Réinitialiser, nouveau profil, supprimer, vider le cache, lanceur SPT</value>
+  </data>
+  <data name="Play_DirectNoProfiles" xml:space="preserve">
+    <value>Aucun profil pour l'instant - créez-en un avec Nouveau profil sous ...</value>
+  </data>
+  <data name="Play_DirectUnavailableFormat" xml:space="preserve">
+    <value>Cette installation est SPT {0}. Le jeu ne peut être lancé d'ici qu'à partir de SPT 4.1.3, dans la 4.1 - le lanceur de SPT 4.0 vérifie la possession du jeu, et cette application ne le remplace pas - utilisez donc le lanceur ci-dessous.</value>
+  </data>
+  <data name="Play_DirectUntestedFormat" xml:space="preserve">
+    <value>SPT {0} est plus récent que la version {1} avec laquelle cela a été vérifié. Si le jeu ne démarre pas, utilisez le lanceur SPT ci-dessous.</value>
+  </data>
+  <data name="Play_WipeArmedFormat" xml:space="preserve">
+    <value>Le prochain Jouer recommence {0} avec un nouveau personnage - sa progression est effacée. Une copie de vos profils est conservée d'abord.</value>
+  </data>
+  <data name="Play_ProfileDetailFormat" xml:space="preserve">
+    <value>Niveau {0} · {1} · {2}</value>
+  </data>
+  <data name="Play_ProfileNewFormat" xml:space="preserve">
+    <value>{0} · nouveau personnage · {1}</value>
+  </data>
+  <data name="Play_DirectStartingServer" xml:space="preserve">
+    <value>Démarrage du serveur...</value>
+  </data>
+  <data name="Play_DirectWaitingForServerFormat" xml:space="preserve">
+    <value>En attente du chargement du serveur... {0} s</value>
+  </data>
+  <data name="Play_DirectServerStopped" xml:space="preserve">
+    <value>Le serveur s'est arrêté avant d'être prêt - son journal indique pourquoi.</value>
+  </data>
+  <data name="Play_DirectServerTimeoutFormat" xml:space="preserve">
+    <value>Le serveur à l'adresse {0} n'a pas répondu en 3 minutes. Son journal peut indiquer pourquoi.</value>
+  </data>
+  <data name="Play_DirectServerUnreachableFormat" xml:space="preserve">
+    <value>Le serveur n'a pas répondu : {0}</value>
+  </data>
+  <data name="Play_DirectStageChecking" xml:space="preserve">
+    <value>Vérification que le serveur et spt-core.dll sont de la même version de SPT...</value>
+  </data>
+  <data name="Play_DirectStageCleaning" xml:space="preserve">
+    <value>Nettoyage du dossier du jeu...</value>
+  </data>
+  <data name="Play_DirectStageWiping" xml:space="preserve">
+    <value>Réinitialisation du profil...</value>
+  </data>
+  <data name="Play_DirectStageCache" xml:space="preserve">
+    <value>Vidage du cache du jeu...</value>
+  </data>
+  <data name="Play_DirectStagePatching" xml:space="preserve">
+    <value>Application du patch de jeu de SPT...</value>
+  </data>
+  <data name="Play_DirectStageBundlesFormat" xml:space="preserve">
+    <value>Récupération des bundles des mods : {0} sur {1} ({2:N0} sur {3:N0} Mo)...</value>
+  </data>
+  <data name="Play_DirectStageStarting" xml:space="preserve">
+    <value>Lancement du jeu...</value>
+  </data>
+  <data name="Play_DirectStartingGameFormat" xml:space="preserve">
+    <value>Lancement du jeu en tant que {0}...</value>
+  </data>
+  <data name="Play_DirectPlayingFormat" xml:space="preserve">
+    <value>En jeu en tant que {0}.</value>
+  </data>
+  <data name="Play_DirectGameNotSeen" xml:space="preserve">
+    <value>Le jeu a été lancé mais n'est pas encore apparu. Si rien ne s'affiche, consultez BepInEx\LogOutput.log ou essayez le lanceur SPT.</value>
+  </data>
+  <data name="Play_DirectCancelled" xml:space="preserve">
+    <value>Interrompu.</value>
+  </data>
+  <data name="Play_DirectErrorFormat" xml:space="preserve">
+    <value>Jouer interrompu : {0}</value>
+  </data>
+  <data name="Play_DirectFailed" xml:space="preserve">
+    <value>Le jeu n'a pas pu être lancé.</value>
+  </data>
+  <data name="Play_DirectNoGame" xml:space="preserve">
+    <value>EscapeFromTarkov.exe n'est pas dans votre dossier SPT.</value>
+  </data>
+  <data name="Play_DirectNoCoreDll" xml:space="preserve">
+    <value>BepInEx\plugins\spt\spt-core.dll est absent - les fichiers client de SPT ne sont pas tous là. Réinstallez SPT.</value>
+  </data>
+  <data name="Play_DirectVersionMismatchFormat" xml:space="preserve">
+    <value>Le serveur est en SPT {0} mais spt-core.dll est en {1}, le jeu ne fonctionnerait donc pas. Réinstallez SPT pour que les deux correspondent.</value>
+  </data>
+  <data name="Play_DirectNoSuchProfile" xml:space="preserve">
+    <value>Le serveur n'a plus ce profil. Choisissez-en un autre.</value>
+  </data>
+  <data name="Play_DirectWipeRefused" xml:space="preserve">
+    <value>Le serveur a refusé la réinitialisation - sa configuration ne l'autorise pas. Rien n'a été lancé.</value>
+  </data>
+  <data name="Play_DirectProfileInvalid" xml:space="preserve">
+    <value>SPT ne charge pas ce profil : il contient des objets, un marchand ou des vêtements d'un mod qui n'est plus installé. Le réinitialiser n'aide pas - SPT n'enregistre jamais la réinitialisation d'un profil qu'il ne charge pas. Remettez le mod, restaurez une sauvegarde de profil (Options) ou créez un nouveau profil. Ou gardez le profil : mettez removeModItemsFromProfile et removeInvalidTradersFromProfile à true dans SPT_Data\configs\core.json et redémarrez le serveur - SPT retire alors lui-même ce qui manque. Rien n'a été lancé.</value>
+  </data>
+  <data name="Play_DirectPatchFailedFormat" xml:space="preserve">
+    <value>Le patch de jeu de SPT n'a pas pu être appliqué ({0}) : {1}. Rien n'a été lancé ; le lanceur SPT aurait le même problème - réinstaller SPT le règle généralement.</value>
+  </data>
+  <data name="Play_DirectBundlesFailedFormat" xml:space="preserve">
+    <value>Des bundles de mods n'ont pas pu être téléchargés depuis le serveur ({0}, par exemple {1}). Rien n'a été lancé.</value>
+  </data>
+  <data name="Play_DirectStartFailedFormat" xml:space="preserve">
+    <value>Le jeu n'a pas pu être lancé : {0}</value>
+  </data>
+  <data name="Play_DirectBackupFailed" xml:space="preserve">
+    <value>Impossible de faire une copie de vos profils, rien n'a donc été modifié. Le journal de l'application indique pourquoi.</value>
+  </data>
+  <data name="Play_DirectWipe" xml:space="preserve">
+    <value>Réinitialiser ce profil au prochain Jouer</value>
+  </data>
+  <data name="Play_DirectWipeCancel" xml:space="preserve">
+    <value>Ne pas réinitialiser au prochain Jouer</value>
+  </data>
+  <data name="Play_DirectWipeToolTip" xml:space="preserve">
+    <value>Le prochain Jouer recommence ce profil avec un nouveau personnage, comme la réinitialisation du lanceur SPT. Une copie de vos profils est conservée d'abord.</value>
+  </data>
+  <data name="Play_DirectNewProfile" xml:space="preserve">
+    <value>Nouveau profil...</value>
+  </data>
+  <data name="Play_DirectNewProfileToolTip" xml:space="preserve">
+    <value>Créer un profil sur le serveur - un nom et une édition de départ. Démarre le serveur s'il ne tourne pas.</value>
+  </data>
+  <data name="Play_DirectNewProfileHeader" xml:space="preserve">
+    <value>Nouveau profil</value>
+  </data>
+  <data name="Play_DirectNewProfileName" xml:space="preserve">
+    <value>Nom du profil</value>
+  </data>
+  <data name="Play_DirectCreateProfile" xml:space="preserve">
+    <value>Créer</value>
+  </data>
+  <data name="Play_DirectProfileCreatedFormat" xml:space="preserve">
+    <value>Profil {0} créé. Le jeu crée son personnage la première fois que vous y jouez.</value>
+  </data>
+  <data name="Play_DirectProfileNotCreatedFormat" xml:space="preserve">
+    <value>Le serveur n'a pas créé {0} - ce nom est peut-être déjà pris.</value>
+  </data>
+  <data name="Play_DirectDeleteProfile" xml:space="preserve">
+    <value>Supprimer ce profil...</value>
+  </data>
+  <data name="Play_DirectDeleteProfileToolTip" xml:space="preserve">
+    <value>Retirer le profil du serveur. Une copie de vos profils est conservée d'abord (Options, sauvegardes des profils SPT).</value>
+  </data>
+  <data name="Play_DirectDeleteWarningFormat" xml:space="preserve">
+    <value>Supprimer {0} ? Son personnage et sa progression disparaissent du serveur. Une copie de vos profils est conservée d'abord, et peut être remise dans les Options.</value>
+  </data>
+  <data name="Play_DirectDeleteConfirm" xml:space="preserve">
+    <value>Supprimer le profil</value>
+  </data>
+  <data name="Play_DirectDeleteWhileRunning" xml:space="preserve">
+    <value>Fermez le jeu avant de supprimer un profil.</value>
+  </data>
+  <data name="Play_DirectProfileDeletedFormat" xml:space="preserve">
+    <value>{0} a été supprimé. Une copie de vos profils se trouve dans Options, sauvegardes des profils SPT.</value>
+  </data>
+  <data name="Play_DirectProfileNotDeletedFormat" xml:space="preserve">
+    <value>Le serveur n'a pas supprimé {0}.</value>
+  </data>
+  <data name="Play_DirectClearCache" xml:space="preserve">
+    <value>Vider le cache du jeu</value>
+  </data>
+  <data name="Play_DirectClearCacheToolTip" xml:space="preserve">
+    <value>Supprimer le dossier user\sptappdata du serveur, comme Vider le cache du lanceur SPT. Il est recréé au prochain démarrage.</value>
+  </data>
+  <data name="Play_DirectCacheCleared" xml:space="preserve">
+    <value>Le cache du jeu a été vidé.</value>
+  </data>
+  <data name="Play_DirectCacheWhileRunning" xml:space="preserve">
+    <value>Fermez le jeu avant de vider son cache.</value>
+  </data>
+  <data name="Play_DirectOpenLauncher" xml:space="preserve">
+    <value>Ouvrir plutôt le lanceur SPT</value>
+  </data>
+  <data name="Play_DirectOpenLauncherToolTip" xml:space="preserve">
+    <value>Lancer le jeu de la façon habituelle, depuis le lanceur de SPT.</value>
+  </data>
+  <data name="Play_DirectSettings" xml:space="preserve">
+    <value>Paramètres...</value>
+  </data>
+  <data name="Options_DirectLaunchHeader" xml:space="preserve">
+    <value>Lancer le jeu depuis cette application (expérimental)</value>
+  </data>
+  <data name="Options_DirectLaunchSummary" xml:space="preserve">
+    <value>Ajoute à la page Jouer une carte qui démarre le serveur et le jeu elle-même - sans fenêtre du lanceur SPT. Désactivé par défaut.</value>
+  </data>
+  <data name="Options_DirectLaunchDescription" xml:space="preserve">
+    <value>Jouer fait ce que fait le lanceur SPT quand vous appuyez sur Démarrer : démarre le serveur s'il ne tourne pas et l'attend, vérifie que le serveur et spt-core.dll sont de la même version de SPT, nettoie les mêmes fichiers, applique le patch de jeu de SPT, récupère les bundles de mods manquants et lance le jeu avec le profil choisi. Les profils se créent, se réinitialisent et se suppriment depuis le menu ... de la carte. Les réglages du lanceur SPT (fichiers épargnés, Vider le cache au lancement) sont respectés. Les journaux des dernières sessions de jeu sont conservés pour Diagnostiquer les journaux.</value>
+  </data>
+  <data name="Options_DirectLaunchOn" xml:space="preserve">
+    <value>Lancer le jeu d'ici</value>
+  </data>
+  <data name="Options_DirectLaunchOff" xml:space="preserve">
+    <value>Utiliser le lanceur SPT</value>
+  </data>
+  <data name="Options_DirectLaunchWarningTitle" xml:space="preserve">
+    <value>Pas fait par l'équipe SPT</value>
+  </data>
+  <data name="Options_DirectLaunchWarning" xml:space="preserve">
+    <value>Cela reproduit ce que fait le lanceur de SPT 4.1, lu dans son code source - ce n'est ni fait ni pris en charge par l'équipe SPT. Une future mise à jour de SPT peut changer la façon de lancer le jeu ; la carte revient alors au lanceur SPT pour les versions qu'elle ne connaît pas. Si le jeu ne démarre pas ou se comporte bizarrement, désactivez ceci, utilisez le lanceur SPT, et précisez qu'il a été lancé depuis cette application quand vous demandez de l'aide. SPT 4.0 n'est pas pris en charge : son lanceur vérifie la possession du jeu, et cette application ne le remplace pas.</value>
+  </data>
+  <data name="Options_DirectLaunchSupportedFormat" xml:space="preserve">
+    <value>Cette installation est SPT {0} : la carte lance le jeu d'ici.</value>
+  </data>
+  <data name="Options_DirectLaunchUntestedFormat" xml:space="preserve">
+    <value>Cette installation est SPT {0}, plus récente que la version {1} avec laquelle cela a été vérifié. La carte lance toujours le jeu d'ici, mais en cas d'échec, utilisez le lanceur SPT.</value>
+  </data>
+  <data name="Options_DirectLaunchUnsupportedFormat" xml:space="preserve">
+    <value>Cette installation est SPT {0} : seules les versions 4.1.3 et suivantes de la 4.1 peuvent être lancées d'ici, la carte vous renvoie donc au lanceur SPT.</value>
+  </data>
+  <data name="Options_DirectLaunchNoInstall" xml:space="preserve">
+    <value>Définissez d'abord votre dossier SPT.</value>
+  </data>
+  <data name="Options_MinimizeWhilePlayingOn" xml:space="preserve">
+    <value>Réduire cette application une fois le jeu lancé</value>
+  </data>
+  <data name="Options_MinimizeWhilePlayingOff" xml:space="preserve">
+    <value>Laisser cette application ouverte au lancement du jeu</value>
+  </data>
+  <data name="Nav_Diagnose" xml:space="preserve">
+    <value>Diagnostiquer les journaux</value>
+  </data>
+  <data name="Diagnose_Description" xml:space="preserve">
+    <value>Lit la dernière exécution du serveur, le journal BepInEx de la dernière session de jeu et le journal d'erreurs du jeu, et indique ce qui ne va pas et de quel mod cela vient.</value>
+  </data>
+  <data name="Diagnose_CopyReport" xml:space="preserve">
+    <value>Copier un rapport pour de l'aide</value>
+  </data>
+  <data name="Diagnose_CopyReportToolTip" xml:space="preserve">
+    <value>Copie ce qui a été trouvé et les lignes de journal correspondantes. Votre nom d'utilisateur et votre dossier Windows, les identifiants de profils et d'objets et les adresses des autres joueurs sont retirés.</value>
+  </data>
+  <data name="Diagnose_Refresh" xml:space="preserve">
+    <value>Relire les journaux</value>
+  </data>
+  <data name="Diagnose_Reading" xml:space="preserve">
+    <value>Lecture des journaux...</value>
+  </data>
+  <data name="Diagnose_NoInstall" xml:space="preserve">
+    <value>Définissez d'abord votre dossier SPT dans les Options.</value>
+  </data>
+  <data name="Diagnose_NothingFound" xml:space="preserve">
+    <value>Rien d'anormal trouvé dans ces journaux.</value>
+  </data>
+  <data name="Diagnose_Found_one" xml:space="preserve">
+    <value>{0} élément trouvé.</value>
+  </data>
+  <data name="Diagnose_Found_other" xml:space="preserve">
+    <value>{0} éléments trouvés.</value>
+  </data>
+  <data name="Diagnose_ServerRunFormat" xml:space="preserve">
+    <value>Journal du serveur : {0}, depuis son dernier démarrage à {1}.</value>
+  </data>
+  <data name="Diagnose_ServerLogNone" xml:space="preserve">
+    <value>Journal du serveur : aucun trouvé - le serveur n'a pas encore été lancé.</value>
+  </data>
+  <data name="Diagnose_BepInExFormat" xml:space="preserve">
+    <value>Jeu : BepInEx\LogOutput.log, du dernier lancement du jeu.</value>
+  </data>
+  <data name="Diagnose_BepInExNone" xml:space="preserve">
+    <value>Jeu : pas de journal BepInEx - le jeu n'a pas encore été lancé avec BepInEx.</value>
+  </data>
+  <data name="Diagnose_GameErrorsFormat" xml:space="preserve">
+    <value>Erreurs du jeu : {0}.</value>
+  </data>
+  <data name="Diagnose_LauncherClears" xml:space="preserve">
+    <value>Le lanceur SPT supprime le dossier Logs du jeu à chaque lancement, il n'y a donc ici que les journaux de la dernière session.</value>
+  </data>
+  <data name="Diagnose_OtherErrors_one" xml:space="preserve">
+    <value>{0} autre erreur dans les journaux n'est pas connue de cette page - elle figure dans le rapport copié.</value>
+  </data>
+  <data name="Diagnose_OtherErrors_other" xml:space="preserve">
+    <value>{0} autres erreurs dans les journaux ne sont pas connues de cette page - elles figurent dans le rapport copié.</value>
+  </data>
+  <data name="Diagnose_ModFormat" xml:space="preserve">
+    <value>Mod : {0}</value>
+  </data>
+  <data name="Diagnose_ModsFormat" xml:space="preserve">
+    <value>Mods : {0}</value>
+  </data>
+  <data name="Diagnose_CountFormat" xml:space="preserve">
+    <value>{0} fois</value>
+  </data>
+  <data name="Diagnose_LineFormat" xml:space="preserve">
+    <value>{0}, ligne {1}</value>
+  </data>
+  <data name="Diagnose_ShowMod" xml:space="preserve">
+    <value>Afficher dans Installés</value>
+  </data>
+  <data name="Diagnose_OpenFolder" xml:space="preserve">
+    <value>Ouvrir son dossier</value>
+  </data>
+  <data name="Diagnose_OpenLog" xml:space="preserve">
+    <value>Ouvrir le journal</value>
+  </data>
+  <data name="Diagnose_GoToPlay" xml:space="preserve">
+    <value>Aller à Jouer</value>
+  </data>
+  <data name="Diagnose_ProfileBackups" xml:space="preserve">
+    <value>Sauvegardes des profils</value>
+  </data>
+  <data name="Diagnose_Copied" xml:space="preserve">
+    <value>Copié. Collez-le là où vous demandez de l'aide.</value>
+  </data>
+  <data name="Diagnose_FromModCode" xml:space="preserve">
+    <value>L'erreur vient du code de ce mod. Cherchez une mise à jour, ou envoyez le rapport copié à son auteur.</value>
+  </data>
+  <data name="Diagnose_ReportHeader" xml:space="preserve">
+    <value>Rapport de journaux - {0}, SPT {1}</value>
+  </data>
+  <data name="Diagnose_ReportServerFormat" xml:space="preserve">
+    <value>Journal du serveur : {0} (dernière exécution démarrée {1})</value>
+  </data>
+  <data name="Diagnose_ReportGameFormat" xml:space="preserve">
+    <value>Journal BepInEx : {0} ; erreurs du jeu : {1}</value>
+  </data>
+  <data name="Diagnose_ReportOtherFormat" xml:space="preserve">
+    <value>Autres erreurs ({0}) :</value>
+  </data>
+  <data name="Diagnose_Title_ProfileInvalid" xml:space="preserve">
+    <value>Un profil ne se charge pas</value>
+  </data>
+  <data name="Diagnose_Title_ProfileClothingMissing" xml:space="preserve">
+    <value>Un profil porte des vêtements d'un mod absent</value>
+  </data>
+  <data name="Diagnose_Title_ProfileItemMissing" xml:space="preserve">
+    <value>Un profil possède un objet qu'aucun mod n'ajoute</value>
+  </data>
+  <data name="Diagnose_Title_ProfileTraderMissing" xml:space="preserve">
+    <value>Un profil connaît un marchand qu'aucun mod n'ajoute</value>
+  </data>
+  <data name="Diagnose_Title_RaidResultsLost" xml:space="preserve">
+    <value>Les résultats du raid n'ont pas été enregistrés</value>
+  </data>
+  <data name="Diagnose_Title_PortInUse" xml:space="preserve">
+    <value>Le serveur n'a pas pu démarrer</value>
+  </data>
+  <data name="Diagnose_Title_PluginMissingDependency" xml:space="preserve">
+    <value>Un mod ne s'est pas chargé : il lui manque quelque chose</value>
+  </data>
+  <data name="Diagnose_Title_PluginIncompatible" xml:space="preserve">
+    <value>Un mod ne s'est pas chargé : il est incompatible avec un autre</value>
+  </data>
+  <data name="Diagnose_Title_PluginDependencyNotLoaded" xml:space="preserve">
+    <value>Un mod ne s'est pas chargé : un mod dont il a besoin ne s'est pas chargé</value>
+  </data>
+  <data name="Diagnose_Title_PluginDuplicate" xml:space="preserve">
+    <value>Un mod est installé deux fois</value>
+  </data>
+  <data name="Diagnose_Title_PluginLoadError" xml:space="preserve">
+    <value>Un mod n'a pas pu se charger</value>
+  </data>
+  <data name="Diagnose_Title_ServerModNotLoaded" xml:space="preserve">
+    <value>Un mod serveur ne tourne pas</value>
+  </data>
+  <data name="Diagnose_Title_ModLoaderProblem" xml:space="preserve">
+    <value>Le chargeur de mods de SPT a signalé un problème</value>
+  </data>
+  <data name="Diagnose_Title_RequestFailed" xml:space="preserve">
+    <value>Une erreur du serveur en répondant au jeu</value>
+  </data>
+  <data name="Diagnose_Title_ScheduledTaskFailed" xml:space="preserve">
+    <value>Une tâche du serveur échoue sans cesse</value>
+  </data>
+  <data name="Diagnose_Title_ModReportedError" xml:space="preserve">
+    <value>Un mod a signalé une erreur</value>
+  </data>
+  <data name="Diagnose_Title_BundleClash" xml:space="preserve">
+    <value>Deux mods fournissent le même bundle</value>
+  </data>
+  <data name="Diagnose_Title_BundleMissingDependency" xml:space="preserve">
+    <value>Un bundle a besoin de fichiers absents</value>
+  </data>
+  <data name="Diagnose_Title_PluginLoggedErrors" xml:space="preserve">
+    <value>Un mod a journalisé des erreurs dans le jeu</value>
+  </data>
+  <data name="Diagnose_Body_ProfileInvalid" xml:space="preserve">
+    <value>SPT a marqué le profil {0} comme invalide et ne le charge pas - le réinitialiser n'aide pas, car SPT n'enregistre pas les changements d'un profil qu'il ne charge pas. Remettez le mod dont il contient les objets, le marchand ou les vêtements, restaurez une sauvegarde de profil ou créez un nouveau profil. Ou gardez le profil : mettez removeModItemsFromProfile et removeInvalidTradersFromProfile à true dans SPT_Data\configs\core.json du serveur et redémarrez-le - SPT retire alors lui-même ce qui manque.</value>
+  </data>
+  <data name="Diagnose_Body_ProfileClothingMissing" xml:space="preserve">
+    <value>Un profil a des vêtements (id {0}) qu'aucun mod installé n'ajoute. Selon SPT, cela arrive après la suppression d'un mod de vêtements. Remettez le mod de vêtements, ou restaurez une sauvegarde de profil.</value>
+  </data>
+  <data name="Diagnose_Body_ProfileItemMissing" xml:space="preserve">
+    <value>Un profil contient un objet (id {0}) qu'aucun mod installé n'ajoute, SPT ne le charge donc pas - le réinitialiser n'aide pas, car SPT n'enregistre pas les changements d'un profil qu'il ne charge pas. Remettez le mod qui ajoute l'objet, restaurez une sauvegarde de profil ou créez un nouveau profil. Ou gardez le profil : mettez removeModItemsFromProfile et removeInvalidTradersFromProfile à true dans SPT_Data\configs\core.json du serveur et redémarrez-le.</value>
+  </data>
+  <data name="Diagnose_Body_ProfileTraderMissing" xml:space="preserve">
+    <value>Un profil a commercé avec un marchand (id {0}) qu'aucun mod installé n'ajoute, SPT ne le charge donc pas - le réinitialiser n'aide pas, car SPT n'enregistre pas les changements d'un profil qu'il ne charge pas. Remettez le mod qui ajoute le marchand, restaurez une sauvegarde de profil ou créez un nouveau profil. Ou gardez le profil : mettez removeModItemsFromProfile et removeInvalidTradersFromProfile à true dans SPT_Data\configs\core.json du serveur et redémarrez-le.</value>
+  </data>
+  <data name="Diagnose_Body_RaidResultsLost" xml:space="preserve">
+    <value>À la fin d'un raid, le jeu a envoyé une valeur {0} que le serveur ne connaît pas, il n'a donc pas pu lire les résultats et le raid n'a pas été enregistré. Le plus probable : un mod qui étend {0} est chargé dans le jeu mais pas sa partie serveur - par exemple son prepatch dans user\patchers manque.</value>
+  </data>
+  <data name="Diagnose_Body_PortInUse" xml:space="preserve">
+    <value>{0} est déjà utilisé - le plus souvent par un serveur qui tourne encore. Arrêtez-le depuis la page Jouer, ou fermez l'autre programme.</value>
+  </data>
+  <data name="Diagnose_Body_PluginMissingDependency" xml:space="preserve">
+    <value>BepInEx n'a pas chargé {0} : il a besoin de {1}, qui n'est pas installé ou est trop ancien.</value>
+  </data>
+  <data name="Diagnose_Body_PluginIncompatible" xml:space="preserve">
+    <value>BepInEx n'a pas chargé {0} parce que {1} est installé. Désactivez l'un des deux.</value>
+  </data>
+  <data name="Diagnose_Body_PluginDependencyNotLoaded" xml:space="preserve">
+    <value>BepInEx a ignoré {0} parce qu'un mod dont il a besoin ne s'est pas chargé. Réglez d'abord celui-là.</value>
+  </data>
+  <data name="Diagnose_Body_PluginDuplicate" xml:space="preserve">
+    <value>BepInEx a ignoré {0} parce qu'une copie plus récente est installée. Supprimez l'ancienne copie.</value>
+  </data>
+  <data name="Diagnose_Body_PluginLoadError" xml:space="preserve">
+    <value>BepInEx n'a pas pu charger {0} : {1}</value>
+  </data>
+  <data name="Diagnose_Body_ServerModNotLoaded" xml:space="preserve">
+    <value>Il est installé et activé, mais le dernier démarrage du serveur ne l'a pas listé parmi les mods chargés. Le journal du serveur autour de ce démarrage peut indiquer pourquoi. Si vous l'avez ajouté depuis, redémarrez le serveur.</value>
+  </data>
+  <data name="Diagnose_Body_RequestFailedFormat" xml:space="preserve">
+    <value>Le serveur a rencontré une erreur en traitant {0} : {1}</value>
+  </data>
+  <data name="Diagnose_Body_ScheduledTaskFailedFormat" xml:space="preserve">
+    <value>{0} a échoué : {1}</value>
+  </data>
+  <data name="Diagnose_Body_BundleClash" xml:space="preserve">
+    <value>Plus d'un mod fournit {0}, et SPT n'a pu en ajouter qu'un - la copie de l'autre mod n'est pas utilisée.</value>
+  </data>
+  <data name="Diagnose_Body_BundleMissingDependency" xml:space="preserve">
+    <value>Le jeu n'a pas pu charger entièrement {0} : il dépend de bundles qui ne sont pas installés. Réinstaller le mod peut régler cela ; sinon, prévenez son auteur.</value>
+  </data>
+  <data name="Help_Diagnose_Read_Title" xml:space="preserve">
+    <value>Découvrir pourquoi quelque chose ne marche pas</value>
+  </data>
+  <data name="Help_Diagnose_Read_Step1" xml:space="preserve">
+    <value>Ouvrez {0} dans la barre latérale. La page lit d'elle-même la dernière exécution du serveur et les journaux de la dernière session de jeu.</value>
+  </data>
+  <data name="Help_Diagnose_Read_Step2" xml:space="preserve">
+    <value>Chaque carte dit en termes simples ce qui n'a pas marché, de quel mod cela vient quand le journal le nomme, et la ligne de journal d'où c'est tiré. {0} vous mène à ce mod.</value>
+  </data>
+  <data name="Help_Diagnose_Read_Step3" xml:space="preserve">
+    <value>Après un changement, relancez le serveur ou le jeu, puis appuyez sur {0} : les journaux ne disent que ce qui s'est passé lors de la dernière exécution.</value>
+  </data>
+  <data name="Help_Diagnose_Read_Note" xml:space="preserve">
+    <value>{0} copie ce qui a été trouvé pour demander de l'aide ailleurs, sans votre nom d'utilisateur Windows, vos dossiers, les identifiants ni les adresses des autres joueurs. Rien sur cette page ne modifie un fichier.</value>
+  </data>
+  <data name="Help_Diagnose_Read_Keywords" xml:space="preserve">
+    <value>journal journaux log erreur erreurs plantage cassé marche pas diagnostic problème bepinex serveur lanceur rapport aide</value>
+  </data>
+  <data name="Common_PageSizeEndless" xml:space="preserve">
+    <value>Sans fin</value>
+  </data>
+  <data name="ModDetails_DetailsTab" xml:space="preserve">
+    <value>Détails</value>
+  </data>
+  <data name="ModDetails_CommentsTab" xml:space="preserve">
+    <value>Commentaires</value>
+  </data>
+  <data name="ModDetails_CommentsNone" xml:space="preserve">
+    <value>Ce mod n'a pas de section de commentaires sur sp-mod.</value>
+  </data>
+  <data name="ModDetails_CommentsNoWebView" xml:space="preserve">
+    <value>Les commentaires s'affichent ici avec le runtime WebView2 de Microsoft, absent de ce PC. Ouvrez-les plutôt dans votre navigateur.</value>
+  </data>
+  <data name="ModDetails_CommentsOpen" xml:space="preserve">
+    <value>Ouvrir les commentaires sur sp-mod</value>
+  </data>
 </root>
