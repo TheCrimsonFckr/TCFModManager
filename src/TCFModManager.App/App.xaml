@@ -723,59 +723,56 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0,1">
-                                    <!-- The name applies the preset; the tick says the page is set up as it. -->
-                                    <DockPanel Visibility="{Binding IsRenaming, Converter={StaticResource PresetFalseToVis}}">
-                                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                                            <ui:Button
-                                                Padding="4"
-                                                Appearance="Transparent"
-                                                ToolTip="{loc:Str Filter_PresetUpdateToolTip}"
-                                                Command="{Binding DataContext.Presets.UpdateCommand, ElementName=PresetsRoot}"
-                                                CommandParameter="{Binding}">
-                                                <ui:SymbolIcon Symbol="Save24" FontSize="14" />
-                                            </ui:Button>
-                                            <ui:Button
-                                                Padding="4"
-                                                Appearance="Transparent"
-                                                ToolTip="{loc:Str Filter_PresetRename}"
-                                                Command="{Binding DataContext.Presets.StartRenameCommand, ElementName=PresetsRoot}"
-                                                CommandParameter="{Binding}">
-                                                <ui:SymbolIcon Symbol="Rename24" FontSize="14" />
-                                            </ui:Button>
-                                            <ui:Button
-                                                Padding="4"
-                                                Appearance="Transparent"
-                                                ToolTip="{loc:Str Filter_PresetDelete}"
-                                                Command="{Binding DataContext.Presets.DeleteCommand, ElementName=PresetsRoot}"
-                                                CommandParameter="{Binding}">
-                                                <ui:SymbolIcon Symbol="Delete24" FontSize="14" />
-                                            </ui:Button>
+                                    <!-- The name applies the preset; the tick says the page is set up as it. Saving
+                                         over it, renaming and deleting are on its right-click menu. Tag carries the
+                                         page's Presets to the menu, which sits outside this tree. -->
+                                    <ui:Button
+                                        Padding="6,4"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Left"
+                                        Appearance="Transparent"
+                                        Tag="{Binding DataContext.Presets, ElementName=PresetsRoot}"
+                                        ToolTip="{Binding ToolTip}"
+                                        ToolTipService.ShowDuration="20000"
+                                        Command="{Binding DataContext.Presets.ApplyCommand, ElementName=PresetsRoot}"
+                                        CommandParameter="{Binding}"
+                                        Visibility="{Binding IsRenaming, Converter={StaticResource PresetFalseToVis}}">
+                                        <ui:Button.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem
+                                                    Header="{loc:Str Filter_PresetUpdate}"
+                                                    ToolTip="{loc:Str Filter_PresetUpdateToolTip}"
+                                                    Icon="{ui:SymbolIcon Save24}"
+                                                    Command="{Binding PlacementTarget.Tag.UpdateCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                    CommandParameter="{Binding}" />
+                                                <MenuItem
+                                                    Header="{loc:Str Filter_PresetRename}"
+                                                    Icon="{ui:SymbolIcon Rename24}"
+                                                    Command="{Binding PlacementTarget.Tag.StartRenameCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                    CommandParameter="{Binding}" />
+                                                <Separator />
+                                                <MenuItem
+                                                    Header="{loc:Str Filter_PresetDelete}"
+                                                    Icon="{ui:SymbolIcon Delete24}"
+                                                    Command="{Binding PlacementTarget.Tag.DeleteCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                    CommandParameter="{Binding}" />
+                                            </ContextMenu>
+                                        </ui:Button.ContextMenu>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Grid Width="18">
+                                                <ui:SymbolIcon
+                                                    Symbol="Checkmark16"
+                                                    FontSize="14"
+                                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                                    Visibility="{Binding IsActive, Converter={StaticResource PresetBoolToVis}}" />
+                                            </Grid>
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                TextTrimming="CharacterEllipsis"
+                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                Text="{Binding Name}" />
                                         </StackPanel>
-                                        <ui:Button
-                                            Padding="6,4"
-                                            HorizontalAlignment="Stretch"
-                                            HorizontalContentAlignment="Left"
-                                            Appearance="Transparent"
-                                            ToolTip="{loc:Str Filter_PresetApplyToolTip}"
-                                            Command="{Binding DataContext.Presets.ApplyCommand, ElementName=PresetsRoot}"
-                                            CommandParameter="{Binding}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <Grid Width="18">
-                                                    <ui:SymbolIcon
-                                                        Symbol="Checkmark16"
-                                                        FontSize="14"
-                                                        Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                                                        ToolTip="{loc:Str Filter_PresetActiveToolTip}"
-                                                        Visibility="{Binding IsActive, Converter={StaticResource PresetBoolToVis}}" />
-                                                </Grid>
-                                                <TextBlock
-                                                    VerticalAlignment="Center"
-                                                    TextTrimming="CharacterEllipsis"
-                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                    Text="{Binding Name}" />
-                                            </StackPanel>
-                                        </ui:Button>
-                                    </DockPanel>
+                                    </ui:Button>
 
                                     <!-- Renaming, in place: Enter keeps it, Esc puts it back. -->
                                     <DockPanel Visibility="{Binding IsRenaming, Converter={StaticResource PresetBoolToVis}}">
@@ -814,8 +811,12 @@
                         <ui:Button
                             DockPanel.Dock="Right"
                             Margin="6,0,0,0"
-                            Content="{loc:Str Filter_PresetSave}"
-                            Command="{Binding Presets.SaveCommand}" />
+                            Padding="8,6"
+                            ToolTip="{loc:Str Filter_PresetSaveToolTip}"
+                            ToolTipService.ShowOnDisabled="True"
+                            Command="{Binding Presets.SaveCommand}">
+                            <ui:SymbolIcon Symbol="Save24" FontSize="16" />
+                        </ui:Button>
                         <ui:TextBox
                             PlaceholderText="{loc:Str Filter_PresetNamePlaceholder}"
                             Text="{Binding Presets.NewName, UpdateSourceTrigger=PropertyChanged}">

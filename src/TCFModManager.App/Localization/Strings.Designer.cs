@@ -2476,8 +2476,6 @@ internal static class Strings
     internal static string Filter_PresetsHint => LocalizationService.Get("Filter_PresetsHint");
     internal static string Filter_PresetNamePlaceholder => LocalizationService.Get("Filter_PresetNamePlaceholder");
     internal static string Filter_PresetSave => LocalizationService.Get("Filter_PresetSave");
-    internal static string Filter_PresetApplyToolTip => LocalizationService.Get("Filter_PresetApplyToolTip");
-    internal static string Filter_PresetActiveToolTip => LocalizationService.Get("Filter_PresetActiveToolTip");
     internal static string Filter_PresetUpdateToolTip => LocalizationService.Get("Filter_PresetUpdateToolTip");
     internal static string Filter_PresetRename => LocalizationService.Get("Filter_PresetRename");
     internal static string Filter_PresetDelete => LocalizationService.Get("Filter_PresetDelete");
@@ -2498,4 +2496,8 @@ internal static class Strings
     internal static string Help_Browse_Presets_Step3 => LocalizationService.Get("Help_Browse_Presets_Step3");
     internal static string Help_Browse_Presets_Note => LocalizationService.Get("Help_Browse_Presets_Note");
     internal static string Help_Browse_Presets_Keywords => LocalizationService.Get("Help_Browse_Presets_Keywords");
+    internal static string Filter_PresetUpdate => LocalizationService.Get("Filter_PresetUpdate");
+    internal static string Filter_PresetSaveToolTip => LocalizationService.Get("Filter_PresetSaveToolTip");
+    internal static string Filter_PresetRowToolTipFormat => LocalizationService.Get("Filter_PresetRowToolTipFormat");
+    internal static string Filter_PresetRowActiveToolTipFormat => LocalizationService.Get("Filter_PresetRowActiveToolTipFormat");
 }

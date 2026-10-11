@@ -9072,14 +9072,8 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
   <data name="Filter_PresetSave" xml:space="preserve">
     <value>Save as preset</value>
   </data>
-  <data name="Filter_PresetApplyToolTip" xml:space="preserve">
-    <value>Set the page up as this preset</value>
-  </data>
-  <data name="Filter_PresetActiveToolTip" xml:space="preserve">
-    <value>The page is set up exactly as this preset</value>
-  </data>
   <data name="Filter_PresetUpdateToolTip" xml:space="preserve">
-    <value>Save the page as it is now over this preset</value>
+    <value>Replace what this preset holds with the page as it is now - its name and place in the list stay.</value>
   </data>
   <data name="Filter_PresetRename" xml:space="preserve">
     <value>Rename</value>
@@ -9130,14 +9124,14 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <value>Save filters you use often as a preset</value>
   </data>
   <data name="Help_Browse_Presets_Step1" xml:space="preserve">
-    <value>Set the page up the way you want, open {0}, then {1} at the top. Type a name and press {2}.</value>
-    <comment>{0} Filters button, {1} section, {2} button.</comment>
+    <value>Set the page up the way you want, open {0}, then {1} at the top. Type a name and press the save button beside it ({2}), or Enter.</value>
+    <comment>{0} Filters button, {1} section, {2} the save button's name.</comment>
   </data>
   <data name="Help_Browse_Presets_Step2" xml:space="preserve">
     <value>Click a preset's name to set the page up as it: every filter, the sort, page size, search text and pinned filters - and on Installed, the view. The one the page matches right now is ticked.</value>
   </data>
   <data name="Help_Browse_Presets_Step3" xml:space="preserve">
-    <value>Beside each preset: save the page as it is now over it, rename it, or delete it. Pin the section to switch presets from the row under the search bar.</value>
+    <value>Right-click a preset to save the current filters to it, rename it or delete it. Pin the section to switch presets from the row under the search bar.</value>
   </data>
   <data name="Help_Browse_Presets_Note" xml:space="preserve">
     <value>Presets are separate from {0}: applying one changes the page now, never what it opens at.</value>
@@ -9145,5 +9139,21 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
   </data>
   <data name="Help_Browse_Presets_Keywords" xml:space="preserve">
     <value>preset presets saved filters filter set save filters switch named</value>
+  </data>
+  <data name="Filter_PresetUpdate" xml:space="preserve">
+    <value>Save current filters to this preset</value>
+  </data>
+  <data name="Filter_PresetSaveToolTip" xml:space="preserve">
+    <value>Save as preset - keeps this page's filters, sort, page size, search and pinned filters under the name typed beside it. Enter does the same.</value>
+  </data>
+  <data name="Filter_PresetRowToolTipFormat" xml:space="preserve">
+    <value>{0}
+Click to set the page up as this preset. Right-click to save the current filters to it, rename it or delete it.</value>
+    <comment>{0} is a preset name.</comment>
+  </data>
+  <data name="Filter_PresetRowActiveToolTipFormat" xml:space="preserve">
+    <value>{0} - the page is set up exactly as this preset.
+Right-click to save the current filters to it, rename it or delete it.</value>
+    <comment>{0} is a preset name.</comment>
   </data>
 </root>

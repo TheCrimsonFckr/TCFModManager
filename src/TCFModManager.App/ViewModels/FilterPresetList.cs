@@ -17,7 +17,13 @@ public sealed partial class FilterPresetRow(IFilterPreset preset) : ObservableOb
 
     // The page is set up exactly as this preset right now.
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ToolTip))]
     private bool _isActive;
+
+    // What clicking does and what's on the right-click menu, and whether the page already matches.
+    public string ToolTip => IsActive
+        ? LocalizationService.Text(Strings.Filter_PresetRowActiveToolTipFormat, Name)
+        : LocalizationService.Text(Strings.Filter_PresetRowToolTipFormat, Name);
 
     [ObservableProperty]
     private bool _isRenaming;
@@ -25,7 +31,11 @@ public sealed partial class FilterPresetRow(IFilterPreset preset) : ObservableOb
     [ObservableProperty]
     private string _renameText = "";
 
-    public void NameChanged() => OnPropertyChanged(nameof(Name));
+    public void NameChanged()
+    {
+        OnPropertyChanged(nameof(Name));
+        OnPropertyChanged(nameof(ToolTip));
+    }
 }
 
 //

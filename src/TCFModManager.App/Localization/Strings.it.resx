@@ -7540,14 +7540,8 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
   <data name="Filter_PresetSave" xml:space="preserve">
     <value>Salva come preimpostazione</value>
   </data>
-  <data name="Filter_PresetApplyToolTip" xml:space="preserve">
-    <value>Imposta la pagina come questa preimpostazione</value>
-  </data>
-  <data name="Filter_PresetActiveToolTip" xml:space="preserve">
-    <value>La pagina è impostata esattamente come questa preimpostazione</value>
-  </data>
   <data name="Filter_PresetUpdateToolTip" xml:space="preserve">
-    <value>Salva la pagina com'è ora al posto di questa preimpostazione</value>
+    <value>Sostituisce il contenuto di questa preimpostazione con la pagina com'è ora - il nome e la posizione nella lista restano.</value>
   </data>
   <data name="Filter_PresetRename" xml:space="preserve">
     <value>Rinomina</value>
@@ -7592,18 +7586,32 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
     <value>Salvare come preimpostazione i filtri che usi spesso</value>
   </data>
   <data name="Help_Browse_Presets_Step1" xml:space="preserve">
-    <value>Imposta la pagina come vuoi, apri {0}, poi {1} in alto. Scrivi un nome e premi {2}.</value>
+    <value>Imposta la pagina come vuoi, apri {0}, poi {1} in alto. Scrivi un nome e premi il pulsante di salvataggio accanto ({2}) o Invio.</value>
   </data>
   <data name="Help_Browse_Presets_Step2" xml:space="preserve">
     <value>Fai clic sul nome di una preimpostazione per impostare la pagina così: tutti i filtri, l'ordinamento, la dimensione della pagina, il testo cercato e i filtri fissati - e in Installati, la vista. Quella che corrisponde alla pagina in questo momento è spuntata.</value>
   </data>
   <data name="Help_Browse_Presets_Step3" xml:space="preserve">
-    <value>Accanto a ogni preimpostazione: salvarci sopra la pagina com'è ora, rinominarla o eliminarla. Fissa la sezione per cambiare preimpostazione dalla riga sotto la ricerca.</value>
+    <value>Fai clic destro su una preimpostazione per salvarci i filtri attuali, rinominarla o eliminarla. Fissa la sezione per cambiare preimpostazione dalla riga sotto la ricerca.</value>
   </data>
   <data name="Help_Browse_Presets_Note" xml:space="preserve">
     <value>Le preimpostazioni sono separate da {0}: applicarne una cambia la pagina ora, mai come si apre.</value>
   </data>
   <data name="Help_Browse_Presets_Keywords" xml:space="preserve">
     <value>preimpostazione preimpostazioni filtri salvati set di filtri salva cambia</value>
+  </data>
+  <data name="Filter_PresetUpdate" xml:space="preserve">
+    <value>Salva i filtri attuali in questa preimpostazione</value>
+  </data>
+  <data name="Filter_PresetSaveToolTip" xml:space="preserve">
+    <value>Salva come preimpostazione - conserva i filtri, l'ordinamento, la dimensione della pagina, la ricerca e i filtri fissati di questa pagina con il nome scritto accanto. Invio fa lo stesso.</value>
+  </data>
+  <data name="Filter_PresetRowToolTipFormat" xml:space="preserve">
+    <value>{0}
+Fai clic per impostare la pagina come questa preimpostazione. Clic destro per salvarci i filtri attuali, rinominarla o eliminarla.</value>
+  </data>
+  <data name="Filter_PresetRowActiveToolTipFormat" xml:space="preserve">
+    <value>{0} - la pagina è impostata esattamente come questa preimpostazione.
+Clic destro per salvarci i filtri attuali, rinominarla o eliminarla.</value>
   </data>
 </root>

@@ -7903,14 +7903,8 @@
   <data name="Filter_PresetSave" xml:space="preserve">
     <value>Сохранить набор</value>
   </data>
-  <data name="Filter_PresetApplyToolTip" xml:space="preserve">
-    <value>Настроить страницу по этому набору</value>
-  </data>
-  <data name="Filter_PresetActiveToolTip" xml:space="preserve">
-    <value>Страница настроена точно по этому набору</value>
-  </data>
   <data name="Filter_PresetUpdateToolTip" xml:space="preserve">
-    <value>Сохранить текущую настройку страницы в этот набор</value>
+    <value>Заменяет содержимое набора текущей настройкой страницы - имя и место в списке сохраняются.</value>
   </data>
   <data name="Filter_PresetRename" xml:space="preserve">
     <value>Переименовать</value>
@@ -7955,18 +7949,32 @@
     <value>Сохранить часто используемые фильтры как набор</value>
   </data>
   <data name="Help_Browse_Presets_Step1" xml:space="preserve">
-    <value>Настройте страницу как нужно, откройте {0}, затем {1} в самом верху. Введите имя и нажмите {2}.</value>
+    <value>Настройте страницу как нужно, откройте {0}, затем {1} в самом верху. Введите имя и нажмите кнопку сохранения рядом ({2}) или Enter.</value>
   </data>
   <data name="Help_Browse_Presets_Step2" xml:space="preserve">
     <value>Щёлкните имя набора, чтобы настроить страницу по нему: все фильтры, сортировка, размер страницы, текст поиска и закреплённые фильтры, а на Установленных - и вид. Набор, которому страница соответствует сейчас, отмечен галочкой.</value>
   </data>
   <data name="Help_Browse_Presets_Step3" xml:space="preserve">
-    <value>Рядом с каждым набором: сохранить в него текущую настройку, переименовать или удалить. Закрепите раздел, чтобы переключать наборы из строки под поиском.</value>
+    <value>Щёлкните набор правой кнопкой, чтобы сохранить в него текущие фильтры, переименовать или удалить его. Закрепите раздел, чтобы переключать наборы из строки под поиском.</value>
   </data>
   <data name="Help_Browse_Presets_Note" xml:space="preserve">
     <value>Наборы не связаны с {0}: применение набора меняет страницу сейчас, но не то, с чем она открывается.</value>
   </data>
   <data name="Help_Browse_Presets_Keywords" xml:space="preserve">
     <value>набор наборы сохранённые фильтры сохранить фильтры переключить</value>
+  </data>
+  <data name="Filter_PresetUpdate" xml:space="preserve">
+    <value>Сохранить текущие фильтры в этот набор</value>
+  </data>
+  <data name="Filter_PresetSaveToolTip" xml:space="preserve">
+    <value>Сохранить набор - сохраняет фильтры, сортировку, размер страницы, поиск и закреплённые фильтры этой страницы под введённым рядом именем. Enter делает то же самое.</value>
+  </data>
+  <data name="Filter_PresetRowToolTipFormat" xml:space="preserve">
+    <value>{0}
+Щёлкните, чтобы настроить страницу по этому набору. Правый щелчок - сохранить в него текущие фильтры, переименовать или удалить.</value>
+  </data>
+  <data name="Filter_PresetRowActiveToolTipFormat" xml:space="preserve">
+    <value>{0} - страница настроена точно по этому набору.
+Правый щелчок - сохранить в него текущие фильтры, переименовать или удалить.</value>
   </data>
 </root>
