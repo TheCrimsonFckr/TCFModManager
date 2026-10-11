@@ -84,6 +84,7 @@ public static class AppTheme
             {
                 RefreshWindowChrome();
                 PinPressedButtonForeground();
+                StrengthenLightButtonHover();
             };
             _subscribed = true;
         }
@@ -133,6 +134,7 @@ public static class AppTheme
 
         RefreshWindowChrome();
         PinPressedButtonForeground();
+        StrengthenLightButtonHover();
         HookButtonPressFeedback();
     }
 
@@ -183,6 +185,60 @@ public static class AppTheme
             AppLog.Debug("Theme",
                 $"pressed button foreground: resting={Describe(resting)}, was={Describe(before)}, "
                 + $"now={Describe(after)}");
+        }
+    }
+
+    //
+    // Makes a hovered button visibly change in the light theme.
+    //
+    // WPF-UI's light theme hovers a button by going from 70% white (ControlFillColorDefault) to 50%
+    // near-white (ControlFillColorSecondary). Over the light page behind it that is a shift of a
+    // couple of shades - Chris, 2026-10-11: "really hard to see that is highlighted". A transparent
+    // button (the icon-only ones) is worse: its hover is that same 50% near-white over a light
+    // surface, close to nothing at all.
+    //
+    // So in light, hover and press tint towards black instead: hover clearly darker, press a little
+    // lighter than hover, the way Windows' own press reads. Dark is left exactly as WPF-UI draws it -
+    // its hover (white rising over a dark surface) was never the problem - so the overrides are
+    // taken off again whenever the theme isn't light.
+    //
+    // The same lever as PinPressedButtonForeground: entries set straight on Application.Resources
+    // are found ahead of the theme dictionaries, and every template reaches these through
+    // DynamicResource. ui:Button (every Appearance but Primary, which has its own accent hover),
+    // the plain WPF Button and the ToggleButton all read them.
+    //
+    private static readonly string[] LightHoverKeys =
+        ["ButtonBackgroundPointerOver", "ToggleButtonBackgroundPointerOver"];
+
+    private static readonly string[] LightPressedKeys =
+        ["ButtonBackgroundPressed", "ToggleButtonBackgroundPressed"];
+
+    // The two numbers to turn: the black laid over the button on hover and while it is held.
+    private static readonly Color LightHover = Color.FromArgb(0x1A, 0, 0, 0);
+
+    private static readonly Color LightPressed = Color.FromArgb(0x0F, 0, 0, 0);
+
+    private static void StrengthenLightButtonHover()
+    {
+        if (Application.Current is not { } app) return;
+
+        var light = ApplicationThemeManager.GetAppTheme() == ApplicationTheme.Light;
+
+        foreach (var key in LightHoverKeys) Override(app, key, light ? LightHover : null);
+        foreach (var key in LightPressedKeys) Override(app, key, light ? LightPressed : null);
+    }
+
+    private static void Override(Application app, string key, Color? color)
+    {
+        if (color is { } c)
+        {
+            var brush = new SolidColorBrush(c);
+            brush.Freeze();
+            app.Resources[key] = brush;
+        }
+        else
+        {
+            app.Resources.Remove(key);
         }
     }
 
