@@ -1563,6 +1563,8 @@ internal static class Strings
     internal static string Help_Intro => LocalizationService.Get("Help_Intro");
     internal static string Help_OpenGuide => LocalizationService.Get("Help_OpenGuide");
     internal static string Help_OpenGuideToolTip => LocalizationService.Get("Help_OpenGuideToolTip");
+    internal static string Options_SearchPlaceholder => LocalizationService.Get("Options_SearchPlaceholder");
+    internal static string Options_SearchNoMatches => LocalizationService.Get("Options_SearchNoMatches");
     internal static string Help_SearchPlaceholder => LocalizationService.Get("Help_SearchPlaceholder");
     internal static string Help_NoMatches => LocalizationService.Get("Help_NoMatches");
     internal static string Help_StepNumberFormat => LocalizationService.Get("Help_StepNumberFormat");

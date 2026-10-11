@@ -7977,4 +7977,10 @@
     <value>{0} - страница настроена точно по этому набору.
 Правый щелчок - сохранить в него текущие фильтры, переименовать или удалить.</value>
   </data>
+  <data name="Options_SearchPlaceholder" xml:space="preserve">
+    <value>Поиск по настройкам</value>
+  </data>
+  <data name="Options_SearchNoMatches" xml:space="preserve">
+    <value>Нет подходящих настроек. Попробуйте меньше слов или другие слова.</value>
+  </data>
 </root>

@@ -9156,4 +9156,12 @@ Click to set the page up as this preset. Right-click to save the current filters
 Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>{0} is a preset name.</comment>
   </data>
+  <data name="Options_SearchPlaceholder" xml:space="preserve">
+    <value>Search settings</value>
+    <comment>Placeholder of the search box at the top of the Options page.</comment>
+  </data>
+  <data name="Options_SearchNoMatches" xml:space="preserve">
+    <value>No setting matches that. Try fewer or different words.</value>
+    <comment>Shown on the Options page when the search hides every setting.</comment>
+  </data>
 </root>

@@ -7614,4 +7614,10 @@ Klicken, um die Seite wie diese Vorlage einzustellen. Rechtsklick, um die aktuel
     <value>{0} - die Seite ist genau wie diese Vorlage eingestellt.
 Rechtsklick, um die aktuellen Filter darin zu speichern, sie umzubenennen oder zu löschen.</value>
   </data>
+  <data name="Options_SearchPlaceholder" xml:space="preserve">
+    <value>Einstellungen durchsuchen</value>
+  </data>
+  <data name="Options_SearchNoMatches" xml:space="preserve">
+    <value>Keine Einstellung passt dazu. Versuch weniger oder andere Wörter.</value>
+  </data>
 </root>

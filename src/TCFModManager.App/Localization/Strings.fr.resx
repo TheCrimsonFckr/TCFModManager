@@ -7614,4 +7614,10 @@ Cliquez pour configurer la page selon ce préréglage. Clic droit pour y enregis
     <value>{0} - la page est configurée exactement selon ce préréglage.
 Clic droit pour y enregistrer les filtres actuels, le renommer ou le supprimer.</value>
   </data>
+  <data name="Options_SearchPlaceholder" xml:space="preserve">
+    <value>Rechercher dans les paramètres</value>
+  </data>
+  <data name="Options_SearchNoMatches" xml:space="preserve">
+    <value>Aucun paramètre ne correspond. Essayez avec moins de mots ou d'autres mots.</value>
+  </data>
 </root>
