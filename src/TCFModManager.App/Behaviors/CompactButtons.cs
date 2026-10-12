@@ -12,8 +12,11 @@ namespace TCFModManager.App.Behaviors;
 // The labels are taken off rather than shrunk: each button's Content is set aside - the binding
 // itself when it is bound, so Pin's changing label keeps working - and put back once the row has
 // room for all of them again. Every button here already carries a tooltip naming what it does.
-// The width the labelled row needs is measured unconstrained and remembered, so it doesn't flick
-// between the two states at the edge.
+//
+// Checked after every layout pass rather than on size changes: the card clips the row without the
+// row's own size changing, so the first version, which measured the row on SizeChanged, never saw a
+// thing. Now it looks at where the buttons were actually put - one running past the edge, or the
+// buttons together wider than the room the card shows - which is what being cut off is.
 //
 public static class CompactButtons
 {
@@ -24,10 +27,6 @@ public static class CompactButtons
 
     public static void SetEnable(DependencyObject d, bool value) => d.SetValue(EnableProperty, value);
 
-    // Per panel: whether the labels are off, and the width the labelled row needed.
-    private static readonly DependencyProperty StateProperty = DependencyProperty.RegisterAttached(
-        "State", typeof(State), typeof(CompactButtons));
-
     // Per button: what its Content was while the label is off.
     private static readonly DependencyProperty SavedContentProperty = DependencyProperty.RegisterAttached(
         "SavedContent", typeof(object), typeof(CompactButtons));
@@ -35,6 +34,8 @@ public static class CompactButtons
     private sealed class State
     {
         public bool IsCompact;
+
+        // The width the labelled row needed when it was last too wide for its room.
         public double FullWidth;
     }
 
@@ -42,88 +43,33 @@ public static class CompactButtons
     {
         if (d is not Panel panel || e.NewValue is not true) return;
 
-        panel.SetValue(StateProperty, new State());
-        panel.SizeChanged += (_, _) => Update(panel);
-
-        //
-        // The row can be laid out wider than the card shows it - the card clips it, which is how
-        // Remove ended up cut off with the panel itself never getting narrower (Chris, 2026-10-12).
-        // So the room is measured against every ancestor up to the list, and their size changes are
-        // what trigger it.
-        //
-        var watched = new List<FrameworkElement>();
-        SizeChangedEventHandler onAncestor = (_, _) => Update(panel);
+        var state = new State();
+        EventHandler onLayout = (_, _) => Update(panel, state);
 
         panel.Loaded += (_, _) =>
         {
-            foreach (var a in Ancestors(panel))
-            {
-                a.SizeChanged += onAncestor;
-                watched.Add(a);
-            }
-
-            Update(panel);
+            panel.LayoutUpdated -= onLayout;
+            panel.LayoutUpdated += onLayout;
         };
-
-        panel.Unloaded += (_, _) =>
-        {
-            foreach (var a in watched) a.SizeChanged -= onAncestor;
-            watched.Clear();
-        };
+        panel.Unloaded += (_, _) => panel.LayoutUpdated -= onLayout;
     }
 
-    // The panel's ancestors up to (not including) the list it sits in, or a dozen levels.
-    private static IEnumerable<FrameworkElement> Ancestors(FrameworkElement panel)
+    private static void Update(Panel panel, State state)
     {
-        DependencyObject? current = panel;
-        for (var i = 0; i < 12; i++)
-        {
-            current = current is Visual ? VisualTreeHelper.GetParent(current) : null;
-            if (current is null or ItemsControl or Page or Window) yield break;
-            if (current is FrameworkElement fe) yield return fe;
-        }
-    }
+        if (!panel.IsLoaded || panel.ActualWidth <= 0) return;
 
-    // The width the row can actually be seen in: its own, or less where an ancestor clips it.
-    private static double Room(FrameworkElement panel)
-    {
-        var room = panel.ActualWidth;
-
-        foreach (var a in Ancestors(panel))
-        {
-            if (a.ActualWidth <= 0) continue;
-            try
-            {
-                var x = panel.TransformToAncestor(a).Transform(new Point(0, 0)).X;
-                room = Math.Min(room, a.ActualWidth - x);
-            }
-            catch (InvalidOperationException)
-            {
-                // Not connected yet - measured again on the next size change.
-            }
-        }
-
-        return room;
-    }
-
-    private static void Update(Panel panel)
-    {
-        if (panel.GetValue(StateProperty) is not State state || panel.ActualWidth <= 0) return;
+        var buttons = panel.Children.OfType<Wpf.Ui.Controls.Button>().Where(b => b.Visibility == Visibility.Visible).ToList();
+        if (buttons.Count == 0) return;
 
         var room = Room(panel);
 
-        var buttons = panel.Children.OfType<Wpf.Ui.Controls.Button>().Where(b => b.Visibility == Visibility.Visible).ToList();
-
         if (!state.IsCompact)
         {
-            state.FullWidth = buttons.Sum(b =>
-            {
-                b.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-                return b.DesiredSize.Width;
-            });
+            var needed = buttons.Sum(b => b.ActualWidth + b.Margin.Left + b.Margin.Right);
+            var overflowing = needed > room + 0.5 || buttons.Any(b => RightEdge(b, panel) > room + 0.5);
+            if (!overflowing) return;
 
-            if (state.FullWidth <= room) return;
-
+            state.FullWidth = needed;
             state.IsCompact = true;
             foreach (var button in buttons) Strip(button);
         }
@@ -132,6 +78,44 @@ public static class CompactButtons
             state.IsCompact = false;
             foreach (var button in panel.Children.OfType<Wpf.Ui.Controls.Button>()) Restore(button);
         }
+    }
+
+    private static double RightEdge(FrameworkElement button, FrameworkElement panel)
+    {
+        try
+        {
+            return button.TranslatePoint(new Point(button.ActualWidth, 0), panel).X;
+        }
+        catch (InvalidOperationException)
+        {
+            return 0;
+        }
+    }
+
+    // The width the row can actually be seen in: its own, or less where an ancestor clips it.
+    private static double Room(FrameworkElement panel)
+    {
+        var room = panel.ActualWidth;
+
+        DependencyObject? current = panel;
+        for (var i = 0; i < 12; i++)
+        {
+            current = current is Visual ? VisualTreeHelper.GetParent(current) : null;
+            if (current is null or ItemsControl or Page or Window) break;
+            if (current is not FrameworkElement { ActualWidth: > 0 } a) continue;
+
+            try
+            {
+                var x = panel.TransformToAncestor(a).Transform(new Point(0, 0)).X;
+                room = Math.Min(room, a.ActualWidth - x);
+            }
+            catch (InvalidOperationException)
+            {
+                // Not connected yet - looked at again on the next layout pass.
+            }
+        }
+
+        return room;
     }
 
     private static void Strip(Wpf.Ui.Controls.Button button)
