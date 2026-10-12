@@ -281,8 +281,9 @@
 
                 <!-- Remove is docked right, away from the two safe actions, so the destructive one
                      is never where the mouse already is. LastChildFill is off: this row is two
-                     docked groups, not a filled remainder. -->
-                <DockPanel Grid.Row="1" LastChildFill="False" Margin="0,12,0,0" VerticalAlignment="Bottom">
+                     docked groups, not a filled remainder. CompactButtons drops the labels to icons
+                     when the card is too narrow for all of them. -->
+                <DockPanel Grid.Row="1" LastChildFill="False" Margin="0,12,0,0" VerticalAlignment="Bottom" behaviors:CompactButtons.Enable="True">
                     <ui:Button
                         DockPanel.Dock="Left"
                         Content="{loc:Str Installed_DetailsAndVersions}"

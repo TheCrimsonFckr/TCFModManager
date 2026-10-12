@@ -33,8 +33,9 @@ public sealed record SptFit(
 
 //
 // OPEN-13: judges an installed mod's version against the installed SPT. First source that answers
-// wins: sp-mod's "not for this SPT", the catalog release's range, sp-mod's "up to date", then the
-// range a 4.x server mod declares. Null when nothing answers - say nothing.
+// wins: sp-mod's "not for this SPT" (unless the release's own range covers this SPT - see Judge),
+// the catalog release's range, sp-mod's "up to date", then the range a 4.x server mod declares.
+// Null when nothing answers - say nothing.
 //
 public static class InstalledSptFit
 {
@@ -53,8 +54,14 @@ public static class InstalledSptFit
         var catalogFits = SptVersionMatcher.IsSatisfiedBy(installed?.SptVersionConstraint, sptVersion);
         var declaredFits = SptVersionMatcher.IsSatisfiedBy(declaredConstraint, sptVersion);
 
+        //
+        // sp-mod's "not for this SPT" reads a bare "4.1.3" as that patch only, where this app (and its
+        // Browse tick) reads it as 4.1.3 and later on the 4.1 line - Chris's BossNotifier 1.2.1 on
+        // 4.1.6, 2026-10-12. When the release's own range already covers this SPT the catalog
+        // decides, so Installed never says "not for this SPT" about a mod Browse calls compatible.
+        //
         (bool Fits, SptFitSource Source)? verdict =
-            spMod == true ? (false, SptFitSource.SpMod)
+            spMod == true && catalogFits != true ? (false, SptFitSource.SpMod)
             : catalogFits is { } c ? (c, SptFitSource.Catalog)
             : spMod == false ? (true, SptFitSource.SpMod)
             : declaredFits is { } d ? (d, SptFitSource.Files)

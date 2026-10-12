@@ -40,6 +40,18 @@ public class InstalledSptFitTests
     }
 
     [Fact]
+    public void SpModsExactPatchReading_YieldsToTheReleasesOwnRange()
+    {
+        // BossNotifier 1.2.1 lists a bare "4.1.3"; sp-mod calls it not for 4.1.6, Browse calls it fine.
+        List<ModVersionSummary> boss = [new() { Version = "1.2.1", SptVersionConstraint = "4.1.3" }];
+
+        var fit = InstalledSptFit.Judge("1.2.1", "4.1.6", boss, true, null)!;
+
+        Assert.True(fit.Fits);
+        Assert.Equal(SptFitSource.Catalog, fit.Source);
+    }
+
+    [Fact]
     public void NothingPublishedForThisSpt_HasNoFittingVersion()
     {
         var fit = InstalledSptFit.Judge("3.0.6", "3.11.4", CommonLib, true, null)!;
