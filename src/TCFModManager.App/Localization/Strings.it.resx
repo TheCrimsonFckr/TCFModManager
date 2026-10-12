@@ -7753,4 +7753,10 @@ Passare comunque?</value>
   <data name="Installed_SptDismissAllQuestion_other" xml:space="preserve">
     <value>Non avvisare più che {0} mod non sono per SPT {1}? Ogni avviso torna se cambia la mod o SPT.</value>
   </data>
+  <data name="Installed_SptShowAll" xml:space="preserve">
+    <value>Mostra tutti gli avvisi</value>
+  </data>
+  <data name="Installed_SptShowAllToolTip" xml:space="preserve">
+    <value>Mostra di nuovo tutti gli avvisi di versione che hai ignorato per le mod installate.</value>
+  </data>
 </root>

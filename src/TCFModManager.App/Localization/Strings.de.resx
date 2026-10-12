@@ -7753,4 +7753,10 @@ Trotzdem wechseln?</value>
   <data name="Installed_SptDismissAllQuestion_other" xml:space="preserve">
     <value>Nicht mehr warnen, dass {0} Mods nicht für SPT {1} sind? Jede Warnung kommt zurück, wenn sich die Mod oder SPT ändert.</value>
   </data>
+  <data name="Installed_SptShowAll" xml:space="preserve">
+    <value>Alle Warnungen anzeigen</value>
+  </data>
+  <data name="Installed_SptShowAllToolTip" xml:space="preserve">
+    <value>Alle Versionswarnungen wieder anzeigen, die du bei den jetzt installierten Mods ausgeblendet hast.</value>
+  </data>
 </root>

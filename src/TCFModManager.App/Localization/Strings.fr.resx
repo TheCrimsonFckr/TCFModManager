@@ -7753,4 +7753,10 @@ Passer quand même à cette version ?</value>
   <data name="Installed_SptDismissAllQuestion_other" xml:space="preserve">
     <value>Ne plus avertir que {0} mods ne sont pas pour SPT {1} ? Chaque avertissement revient si le mod ou SPT change.</value>
   </data>
+  <data name="Installed_SptShowAll" xml:space="preserve">
+    <value>Afficher tous les avertissements</value>
+  </data>
+  <data name="Installed_SptShowAllToolTip" xml:space="preserve">
+    <value>Réafficher tous les avertissements de version que vous avez ignorés pour les mods installés.</value>
+  </data>
 </root>

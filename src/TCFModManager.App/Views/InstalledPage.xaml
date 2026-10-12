@@ -247,7 +247,7 @@
                         Visibility="{Binding CanDismissSptWarning, Converter={StaticResource BoolToVis}}"
                         Command="{Binding DataContext.DismissSptWarningCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                         CommandParameter="{Binding}" />
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding SptDismissedNote, Converter={StaticResource NullToCollapsed}}">
+                    <WrapPanel Visibility="{Binding SptDismissedNote, Converter={StaticResource NullToCollapsed}}">
                         <TextBlock
                             VerticalAlignment="Center"
                             TextWrapping="Wrap"
@@ -262,7 +262,7 @@
                             ToolTip="{loc:Str Installed_SptUndismissToolTip}"
                             Command="{Binding DataContext.RestoreSptWarningCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                             CommandParameter="{Binding}" />
-                    </StackPanel>
+                    </WrapPanel>
 
                     <TextBlock
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
@@ -518,6 +518,17 @@
                 ToolTip="{loc:Str Installed_UndoRemovalToolTip}"
                 Visibility="{Binding UndoRemovalLabel, Converter={StaticResource NullToCollapsed}}"
                 Click="UndoRemoval_Click" />
+
+            <!-- OPEN-13: every dismissed version warning back at once. Shown while any are dismissed. -->
+            <ui:Button
+                DockPanel.Dock="Right"
+                Margin="0,0,8,0"
+                Appearance="Transparent"
+                Icon="{ui:SymbolIcon Eye20}"
+                Content="{loc:Str Installed_SptShowAll}"
+                ToolTip="{loc:Str Installed_SptShowAllToolTip}"
+                Command="{Binding ShowAllSptWarningsCommand}"
+                Visibility="{Binding HasDismissedSptWarnings, Converter={StaticResource BoolToVis}}" />
 
             <!-- OPEN-13: Dismiss all of the warnings the link beside it counts, after asking. -->
             <ui:Button

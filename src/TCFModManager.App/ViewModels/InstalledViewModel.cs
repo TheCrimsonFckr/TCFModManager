@@ -1203,6 +1203,8 @@ public partial class InstalledViewModel : LocalizedViewModel
             NotForSptLabel = notForSpt == 0 ? null
                 : Strings.Installed_NotForSptCount(notForSpt, notForSpt, AppServices.SptEnvironment.InstalledVersion);
             _notForSptKeys = cards.Where(c => !c.IsDisabled && c.IsNotForThisSpt).Select(c => c.SptWarningKey).ToList();
+            _dismissedSptKeys = cards.Where(c => c.HasSptWarning && c.IsSptWarningDismissed).Select(c => c.SptWarningKey).ToList();
+            HasDismissedSptWarnings = _dismissedSptKeys.Count > 0;
             if (conflicts.Count > 0)
             {
                 AppLog.Info("Conflicts", string.Join("; ", conflicts.Select(c =>
@@ -2571,6 +2573,23 @@ public partial class InstalledViewModel : LocalizedViewModel
 
         AppServices.DismissedSptWarnings.Restore(card.SptWarningKey);
         AppLog.Info("Installed", $"restored the SPT warning for {card.DisplayTitle} {card.InstalledVersion}");
+        await ScanCommand.ExecuteAsync(null);
+    }
+
+    // The dismissed warnings on the mods installed now - Show all warnings brings these back.
+    private List<string> _dismissedSptKeys = [];
+
+    [ObservableProperty]
+    private bool _hasDismissedSptWarnings;
+
+    [RelayCommand]
+    private async Task ShowAllSptWarningsAsync()
+    {
+        var keys = _dismissedSptKeys;
+        if (keys.Count == 0) return;
+
+        foreach (var key in keys) AppServices.DismissedSptWarnings.Restore(key);
+        AppLog.Info("Installed", $"restored {keys.Count} SPT warnings");
         await ScanCommand.ExecuteAsync(null);
     }
 

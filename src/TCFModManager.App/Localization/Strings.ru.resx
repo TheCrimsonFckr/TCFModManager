@@ -8128,4 +8128,10 @@
   <data name="Installed_SptDismissAllQuestion_other" xml:space="preserve">
     <value>Больше не предупреждать, что {0} мода не для SPT {1}? Предупреждения вернутся, если изменится мод или SPT.</value>
   </data>
+  <data name="Installed_SptShowAll" xml:space="preserve">
+    <value>Показать все предупреждения</value>
+  </data>
+  <data name="Installed_SptShowAllToolTip" xml:space="preserve">
+    <value>Вернуть все скрытые вами предупреждения о версиях для установленных сейчас модов.</value>
+  </data>
 </root>

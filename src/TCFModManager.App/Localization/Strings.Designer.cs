@@ -2545,4 +2545,6 @@ internal static class Strings
     internal static string Installed_SptDismissAllTitle => LocalizationService.Get("Installed_SptDismissAllTitle");
     internal static string Installed_SptDismissAllQuestion(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_SptDismissAllQuestion", count, values);
+    internal static string Installed_SptShowAll => LocalizationService.Get("Installed_SptShowAll");
+    internal static string Installed_SptShowAllToolTip => LocalizationService.Get("Installed_SptShowAllToolTip");
 }

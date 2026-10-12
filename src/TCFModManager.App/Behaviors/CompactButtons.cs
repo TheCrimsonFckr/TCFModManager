@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace TCFModManager.App.Behaviors;
 
@@ -43,12 +44,73 @@ public static class CompactButtons
 
         panel.SetValue(StateProperty, new State());
         panel.SizeChanged += (_, _) => Update(panel);
-        panel.Loaded += (_, _) => Update(panel);
+
+        //
+        // The row can be laid out wider than the card shows it - the card clips it, which is how
+        // Remove ended up cut off with the panel itself never getting narrower (Chris, 2026-10-12).
+        // So the room is measured against every ancestor up to the list, and their size changes are
+        // what trigger it.
+        //
+        var watched = new List<FrameworkElement>();
+        SizeChangedEventHandler onAncestor = (_, _) => Update(panel);
+
+        panel.Loaded += (_, _) =>
+        {
+            foreach (var a in Ancestors(panel))
+            {
+                a.SizeChanged += onAncestor;
+                watched.Add(a);
+            }
+
+            Update(panel);
+        };
+
+        panel.Unloaded += (_, _) =>
+        {
+            foreach (var a in watched) a.SizeChanged -= onAncestor;
+            watched.Clear();
+        };
+    }
+
+    // The panel's ancestors up to (not including) the list it sits in, or a dozen levels.
+    private static IEnumerable<FrameworkElement> Ancestors(FrameworkElement panel)
+    {
+        DependencyObject? current = panel;
+        for (var i = 0; i < 12; i++)
+        {
+            current = current is Visual ? VisualTreeHelper.GetParent(current) : null;
+            if (current is null or ItemsControl or Page or Window) yield break;
+            if (current is FrameworkElement fe) yield return fe;
+        }
+    }
+
+    // The width the row can actually be seen in: its own, or less where an ancestor clips it.
+    private static double Room(FrameworkElement panel)
+    {
+        var room = panel.ActualWidth;
+
+        foreach (var a in Ancestors(panel))
+        {
+            if (a.ActualWidth <= 0) continue;
+            try
+            {
+                var x = panel.TransformToAncestor(a).Transform(new Point(0, 0)).X;
+                room = Math.Min(room, a.ActualWidth - x);
+            }
+            catch (InvalidOperationException)
+            {
+                // Not connected yet - measured again on the next size change.
+            }
+        }
+
+        return room;
     }
 
     private static void Update(Panel panel)
     {
         if (panel.GetValue(StateProperty) is not State state || panel.ActualWidth <= 0) return;
+
+        var room = Room(panel);
 
         var buttons = panel.Children.OfType<Wpf.Ui.Controls.Button>().Where(b => b.Visibility == Visibility.Visible).ToList();
 
@@ -60,12 +122,12 @@ public static class CompactButtons
                 return b.DesiredSize.Width;
             });
 
-            if (state.FullWidth <= panel.ActualWidth) return;
+            if (state.FullWidth <= room) return;
 
             state.IsCompact = true;
             foreach (var button in buttons) Strip(button);
         }
-        else if (panel.ActualWidth >= state.FullWidth + 8)
+        else if (room >= state.FullWidth + 8)
         {
             state.IsCompact = false;
             foreach (var button in panel.Children.OfType<Wpf.Ui.Controls.Button>()) Restore(button);

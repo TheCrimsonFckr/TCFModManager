@@ -9316,4 +9316,10 @@ Switch anyway?</value>
   <data name="Installed_SptDismissAllQuestion_other" xml:space="preserve">
     <value>Stop warning that {0} mods aren't for SPT {1}? Each warning comes back if that mod or SPT changes.</value>
   </data>
+  <data name="Installed_SptShowAll" xml:space="preserve">
+    <value>Show all warnings</value>
+  </data>
+  <data name="Installed_SptShowAllToolTip" xml:space="preserve">
+    <value>Bring back every version warning you dismissed on the mods installed now.</value>
+  </data>
 </root>
