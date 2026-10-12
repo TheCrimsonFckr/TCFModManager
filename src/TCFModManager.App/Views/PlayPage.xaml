@@ -14,6 +14,7 @@
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
         <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
         <converters:InverseBooleanConverter x:Key="Inverse" />
+        <converters:ViewportFillConverter x:Key="ViewportFill" />
     </Page.Resources>
     <StackPanel Margin="16">
 
@@ -273,10 +274,11 @@
                             BorderThickness="1"
                             BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
                             Background="{x:Static behaviors:ConsoleLog.Background}">
-                            <!-- Style cleared: the themed one repaints the box on focus, and a console doesn't. -->
+                            <!-- Style cleared: the themed one repaints the box on focus, and a console doesn't.
+                             As tall as the window shows, less room for the header and the folder button. -->
                             <RichTextBox
                                 Style="{x:Null}"
-                                Height="520"
+                                Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=ScrollViewer}, Converter={StaticResource ViewportFill}, ConverterParameter=170, FallbackValue=520}"
                                 Padding="0"
                                 BorderThickness="0"
                                 Background="Transparent"
