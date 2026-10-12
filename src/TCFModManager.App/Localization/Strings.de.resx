@@ -2655,9 +2655,6 @@ Abbrechen  -  nichts entfernen</value>
   <data name="ModLists_CaptureHeader" xml:space="preserve">
     <value>Speichern, was gerade installiert ist</value>
   </data>
-  <data name="ModLists_CloseSptBeforeApply" xml:space="preserve">
-    <value>Schließe SPT vor dem Anwenden - einen Mod zu deaktivieren geht nicht, während er läuft.</value>
-  </data>
   <data name="ModLists_CountAlreadyRightFormat" xml:space="preserve">
     <value>{0} bereits richtig</value>
   </data>

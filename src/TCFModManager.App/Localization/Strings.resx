@@ -2008,9 +2008,6 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="ModLists_Captured_other" xml:space="preserve">
     <value>Captured {0} enabled mods as "{1}".</value>
   </data>
-  <data name="ModLists_CloseSptBeforeApply" xml:space="preserve">
-    <value>Close SPT before applying - disabling a mod can't happen while it's running.</value>
-  </data>
   <data name="ModLists_PreviewedFormat" xml:space="preserve">
     <value>Previewed "{0}".</value>
   </data>

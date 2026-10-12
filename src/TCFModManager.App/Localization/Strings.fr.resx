@@ -2655,9 +2655,6 @@ Annuler  -  ne rien supprimer</value>
   <data name="ModLists_CaptureHeader" xml:space="preserve">
     <value>Enregistrer ce qui est installé</value>
   </data>
-  <data name="ModLists_CloseSptBeforeApply" xml:space="preserve">
-    <value>Fermez SPT avant d'appliquer - un mod ne peut pas être désactivé pendant qu'il tourne.</value>
-  </data>
   <data name="ModLists_CountAlreadyRightFormat" xml:space="preserve">
     <value>{0} déjà conformes</value>
   </data>

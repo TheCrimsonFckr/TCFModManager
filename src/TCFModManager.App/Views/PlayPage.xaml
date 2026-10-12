@@ -14,9 +14,8 @@
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
         <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
         <converters:InverseBooleanConverter x:Key="Inverse" />
-        <converters:ViewportFillConverter x:Key="ViewportFill" />
     </Page.Resources>
-    <StackPanel Margin="16">
+    <StackPanel x:Name="Root" Margin="16">
 
         <!-- OPEN-23 R4: SPT would load no server mods. Shown only then, and never a gate. -->
         <ui:Card
@@ -161,7 +160,7 @@
             </StackPanel>
         </ui:Card>
 
-        <ui:Card Padding="16" VerticalAlignment="Top">
+        <ui:Card x:Name="ServerCard" Padding="16" VerticalAlignment="Top">
             <StackPanel>
                 <TextBlock
                     Text="{loc:Str Play_ServerHeader}"
@@ -275,10 +274,11 @@
                             BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
                             Background="{x:Static behaviors:ConsoleLog.Background}">
                             <!-- Style cleared: the themed one repaints the box on focus, and a console doesn't.
-                             As tall as the window shows, less room for the header and the folder button. -->
+                             Height is set in code: down to the bottom of the window (FitServerLog). -->
                             <RichTextBox
+                                x:Name="ServerLog"
                                 Style="{x:Null}"
-                                Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=ScrollViewer}, Converter={StaticResource ViewportFill}, ConverterParameter=170, FallbackValue=520}"
+                                Height="300"
                                 Padding="0"
                                 BorderThickness="0"
                                 Background="Transparent"

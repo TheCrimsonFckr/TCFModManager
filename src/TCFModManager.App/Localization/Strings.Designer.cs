@@ -574,7 +574,6 @@ internal static class Strings
     internal static string ModLists_NameFirst => LocalizationService.Get("ModLists_NameFirst");
     internal static string ModLists_Captured(int count, params object?[] values) =>
         LocalizationService.Plural("ModLists_Captured", count, values);
-    internal static string ModLists_CloseSptBeforeApply => LocalizationService.Get("ModLists_CloseSptBeforeApply");
     internal static string ModLists_PreviewedFormat => LocalizationService.Get("ModLists_PreviewedFormat");
     internal static string ModLists_PinnedFormat => LocalizationService.Get("ModLists_PinnedFormat");
     internal static string ModLists_UnpinnedFormat => LocalizationService.Get("ModLists_UnpinnedFormat");

@@ -1102,10 +1102,20 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         ApplyCommand.NotifyCanExecuteChanged();
         NotifyPlanWording();
-        StatusMessage = plan.RequiresGameClosed
-            ? Strings.ModLists_CloseSptBeforeApply
+        StatusMessage = ApplyBlockers(preview) is { Count: > 0 } blockers
+            ? ModInstallProblems.InstallInUse(blockers, ModInstallAction.ApplyList)
             : Text(Strings.ModLists_PreviewedFormat, preview.List.Name);
     }
+
+    //
+    // What the apply would be refused over right now - the same check ModListApplier makes before
+    // it moves anything: only a plan that enables or disables a mod, and only while SPT is running
+    // from this install.
+    //
+    private static IReadOnlyList<string> ApplyBlockers(ModListPreview preview) =>
+        preview.Plan.Enable.Any() || preview.Plan.Disable.Any()
+            ? ModInstallService.RunningBlockers(preview.Install.InstallPath)
+            : [];
 
     private IEnumerable<ModListActionRowViewModel> Rows(ModListPlan plan)
     {
@@ -1299,7 +1309,7 @@ public partial class ModListsViewModel : LocalizedViewModel
             }
 
             ShowPlan(replanned);
-            if (replanned.Plan.RequiresGameClosed) return;
+            if (ApplyBlockers(replanned).Count > 0) return;
 
             StatusMessage = row.CanPin
                 ? Text(Strings.ModLists_PinnedFormat, row.Name)

@@ -2817,9 +2817,6 @@
   <data name="ModLists_CaptureHeader" xml:space="preserve">
     <value>Сохранить то, что установлено сейчас</value>
   </data>
-  <data name="ModLists_CloseSptBeforeApply" xml:space="preserve">
-    <value>Закройте SPT перед применением - отключить мод, пока он запущен, нельзя.</value>
-  </data>
   <data name="ModLists_CountAlreadyRightFormat" xml:space="preserve">
     <value>{0} уже в порядке</value>
   </data>
