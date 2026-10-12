@@ -156,6 +156,13 @@ public partial class PlayViewModel : LocalizedViewModel
     [ObservableProperty]
     private string? _installWideWarning;
 
+    // OPEN-13 R4: "3 mods aren't for SPT 4.1.6" - a note before launching, never a gate.
+    [ObservableProperty]
+    private string? _notForSptWarning;
+
+    [RelayCommand]
+    private static void ShowNotForSpt() => AppNavigation.ShowInstalledNotForSpt();
+
     // Rechecked whenever the page opens - the install alone, no network.
     public async Task RefreshConflictsAsync()
     {
@@ -164,6 +171,7 @@ public partial class PlayViewModel : LocalizedViewModel
         {
             ConflictWarning = null;
             InstallWideWarning = null;
+            NotForSptWarning = null;
             return;
         }
 
@@ -173,11 +181,16 @@ public partial class PlayViewModel : LocalizedViewModel
             ConflictWarning = conflicts.Count == 0 ? null : Strings.Installed_ConflictCount(conflicts.Count, conflicts.Count);
             InstallWideWarning = DependencyVersions.InstallWideText(
                 DependencyVersions.Solve(cards, AppServices.SptEnvironment.InstalledVersion), forPlayPage: true);
+
+            var notForSpt = cards.Count(c => !c.IsDisabled && c.IsNotForThisSpt);
+            NotForSptWarning = notForSpt == 0 ? null
+                : Strings.Installed_NotForSptCount(notForSpt, notForSpt, AppServices.SptEnvironment.InstalledVersion);
         }
         catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException)
         {
             ConflictWarning = null;
             InstallWideWarning = null;
+            NotForSptWarning = null;
         }
     }
 

@@ -42,6 +42,31 @@
             </StackPanel>
         </ui:Card>
 
+        <!-- OPEN-13 R4: installed mods not for this SPT (or for Fika). A note, never a gate. -->
+        <ui:Card
+            Padding="16"
+            VerticalAlignment="Top"
+            Margin="0,0,0,16"
+            Visibility="{Binding NotForSptWarning, Converter={StaticResource NullToCollapsed}}">
+            <StackPanel>
+                <ui:Button
+                    Padding="0"
+                    HorizontalContentAlignment="Left"
+                    Appearance="Transparent"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                    Icon="{ui:SymbolIcon Warning20}"
+                    Command="{Binding ShowNotForSptCommand}">
+                    <TextBlock TextWrapping="Wrap" Text="{Binding NotForSptWarning}" />
+                </ui:Button>
+                <TextBlock
+                    Margin="0,4,0,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="{loc:Str Play_NotForSptHint}" />
+            </StackPanel>
+        </ui:Card>
+
         <!-- Conflicts in this install (OPEN-11 R4): shown only when there are any, and never a gate. -->
         <ui:Card
             Padding="16"

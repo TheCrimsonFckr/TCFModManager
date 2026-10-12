@@ -2523,4 +2523,16 @@ internal static class Strings
     internal static string ModLists_DepsAddToListToolTip => LocalizationService.Get("ModLists_DepsAddToListToolTip");
     internal static string ModLists_DepsUnreachable => LocalizationService.Get("ModLists_DepsUnreachable");
     internal static string ModLists_DepsNoVersionFormat => LocalizationService.Get("ModLists_DepsNoVersionFormat");
+    internal static string Installed_SptNotForFormat => LocalizationService.Get("Installed_SptNotForFormat");
+    internal static string Installed_SptNotForPlainFormat => LocalizationService.Get("Installed_SptNotForPlainFormat");
+    internal static string Installed_SptNewerFitsFormat => LocalizationService.Get("Installed_SptNewerFitsFormat");
+    internal static string Installed_SptOlderFitsFormat => LocalizationService.Get("Installed_SptOlderFitsFormat");
+    internal static string Installed_SptNoneFits => LocalizationService.Get("Installed_SptNoneFits");
+    internal static string Installed_SptDeclaredDisagreesFormat => LocalizationService.Get("Installed_SptDeclaredDisagreesFormat");
+    internal static string Installed_FikaIncompatibleFormat => LocalizationService.Get("Installed_FikaIncompatibleFormat");
+    internal static string Filter_NotForThisSpt => LocalizationService.Get("Filter_NotForThisSpt");
+    internal static string Filter_NotForThisSptToolTip => LocalizationService.Get("Filter_NotForThisSptToolTip");
+    internal static string Play_NotForSptHint => LocalizationService.Get("Play_NotForSptHint");
+    internal static string Installed_NotForSptCount(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_NotForSptCount", count, values);
 }

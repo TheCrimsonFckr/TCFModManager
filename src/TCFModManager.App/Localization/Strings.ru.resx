@@ -8050,4 +8050,46 @@
   <data name="ModLists_DepsNoVersionFormat" xml:space="preserve">
     <value>Также нужны, но для этой версии SPT ничего не опубликовано: {0}</value>
   </data>
+  <data name="Installed_SptNotForFormat" xml:space="preserve">
+    <value>Ваша версия для SPT {0}, а не {1}.</value>
+  </data>
+  <data name="Installed_SptNotForPlainFormat" xml:space="preserve">
+    <value>Ваша версия не для SPT {0}.</value>
+  </data>
+  <data name="Installed_SptNewerFitsFormat" xml:space="preserve">
+    <value>Версия {0} на ней работает.</value>
+  </data>
+  <data name="Installed_SptOlderFitsFormat" xml:space="preserve">
+    <value>На ней работает версия {0} - выберите её в разделе «Сведения и версии».</value>
+  </data>
+  <data name="Installed_SptNoneFits" xml:space="preserve">
+    <value>Для неё пока ничего не опубликовано.</value>
+  </data>
+  <data name="Installed_SptDeclaredDisagreesFormat" xml:space="preserve">
+    <value>В файлах самого мода указано SPT {0}.</value>
+  </data>
+  <data name="Installed_FikaIncompatibleFormat" xml:space="preserve">
+    <value>sp-mod отмечает версию {0} как несовместимую с Fika, а эта установка использует Fika.</value>
+  </data>
+  <data name="Filter_NotForThisSpt" xml:space="preserve">
+    <value>Не для этой SPT</value>
+  </data>
+  <data name="Filter_NotForThisSptToolTip" xml:space="preserve">
+    <value>Только моды, установленная версия которых не предназначена для вашей SPT, а если используется Fika - и те, что sp-mod отмечает как несовместимые с Fika.</value>
+  </data>
+  <data name="Installed_NotForSptCount_one" xml:space="preserve">
+    <value>{0} мод не для SPT {1}</value>
+  </data>
+  <data name="Installed_NotForSptCount_few" xml:space="preserve">
+    <value>{0} мода не для SPT {1}</value>
+  </data>
+  <data name="Installed_NotForSptCount_many" xml:space="preserve">
+    <value>{0} модов не для SPT {1}</value>
+  </data>
+  <data name="Installed_NotForSptCount_other" xml:space="preserve">
+    <value>{0} мода не для SPT {1}</value>
+  </data>
+  <data name="Play_NotForSptHint" xml:space="preserve">
+    <value>Они могут не загрузиться. На странице «Установленные» показан каждый, с версией для вашей SPT, если такая есть.</value>
+  </data>
 </root>

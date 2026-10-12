@@ -158,6 +158,9 @@ public partial class InstalledViewModel : LocalizedViewModel
         new(ModAttributeFilter.HasConflicts,
             nameof(Strings.Filter_HasConflicts),
             nameof(Strings.Filter_HasConflictsToolTip)),
+        new(ModAttributeFilter.NotForThisSpt,
+            nameof(Strings.Filter_NotForThisSpt),
+            nameof(Strings.Filter_NotForThisSptToolTip)),
         new(ModAttributeFilter.InstalledRecently, nameof(Strings.Filter_InstalledRecently)),
     ];
 
@@ -578,6 +581,14 @@ public partial class InstalledViewModel : LocalizedViewModel
         AppNavigation.ShowUpdatesRequested += (_, _) =>
         {
             if (AppNavigation.TakeShowUpdates()) SelectedUpdateFilter = UpdatesAvailableFilter();
+        };
+
+        // OPEN-13: Play's "not for this SPT" note opens this page filtered to those mods.
+        if (AppNavigation.TakeShowNotForSpt()) ShowNotForSpt();
+
+        AppNavigation.ShowNotForSptRequested += (_, _) =>
+        {
+            if (AppNavigation.TakeShowNotForSpt()) ShowNotForSpt();
         };
 
         // Diagnose logs' Show the mod: the page searched for that mod's name.
@@ -1188,6 +1199,9 @@ public partial class InstalledViewModel : LocalizedViewModel
             ModConflicts.Apply(cards, conflicts);
             DependencyVersions.Apply(DependencyVersions.Solve(cards, AppServices.SptEnvironment.InstalledVersion));
             ConflictCountLabel = conflicts.Count == 0 ? null : Strings.Installed_ConflictCount(conflicts.Count, conflicts.Count);
+            var notForSpt = cards.Count(c => !c.IsDisabled && c.IsNotForThisSpt);
+            NotForSptLabel = notForSpt == 0 ? null
+                : Strings.Installed_NotForSptCount(notForSpt, notForSpt, AppServices.SptEnvironment.InstalledVersion);
             if (conflicts.Count > 0)
             {
                 AppLog.Info("Conflicts", string.Join("; ", conflicts.Select(c =>
@@ -2528,6 +2542,17 @@ public partial class InstalledViewModel : LocalizedViewModel
     [RelayCommand]
     private static void ShowConflicts() => AppNavigation.Navigate(typeof(DependenciesPage));
 
+    // OPEN-13 D5: "3 mods aren't for SPT 4.1.6" on the status line, or null when none.
+    [ObservableProperty]
+    private string? _notForSptLabel;
+
+    // The status-line link: ticks Not for this SPT so only those mods show.
+    [RelayCommand]
+    private void ShowNotForSpt()
+    {
+        foreach (var option in AttributeOptions.Where(o => o.Value == ModAttributeFilter.NotForThisSpt)) option.IsSelected = true;
+    }
+
     // The Undo button's text, or null to hide it. One removal held: "Undo removing <mod>", which
     // undoes it on click. Several: "Undo a removal (n)", which opens HeldRemovals to pick from.
     [ObservableProperty]
@@ -2717,6 +2742,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             .Where(m => !IsOn(ModAttributeFilter.HasAddons) || m.HasAddons)
             .Where(m => !IsOn(ModAttributeFilter.DownloadedNotConfirmed) || m.HasPendingDownload)
             .Where(m => !IsOn(ModAttributeFilter.HasConflicts) || m.HasConflicts)
+            .Where(m => !IsOn(ModAttributeFilter.NotForThisSpt) || m.IsNotForThisSpt)
             .Where(m => !IsOn(ModAttributeFilter.InstalledRecently)
                 || (m.InstalledAt is { } at && at >= recentSince));
 

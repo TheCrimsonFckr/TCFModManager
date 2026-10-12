@@ -187,7 +187,7 @@ internal sealed class UpdateWatcher
 
         // An update that would break another installed mod is no update (OPEN-12 F11): set before the
         // cards are rebuilt below, so no toast announces one.
-        var heldChanged = AppServices.HeldBack.Set(answer?.HeldBack ?? [], sptVersion);
+        var heldChanged = AppServices.HeldBack.Set(answer?.HeldBack ?? [], sptVersion, answer?.NotForSpt, answer?.UpToDate);
 
         var patched = false;
         if (refetch.Count > 0) patched |= AppServices.ModCache.Patch(await _checker.FetchModsAsync(refetch, ct));

@@ -32,6 +32,10 @@ public enum ModAttributeFilter
     // Only mods in a conflict (OPEN-11). Installed only.
     HasConflicts,
 
+    // Only mods whose installed version isn't for this SPT, or that sp-mod marks as not working with
+    // Fika where Fika runs (OPEN-13 D5). Installed only.
+    NotForThisSpt,
+
     // Only mods installed in the last 7 days. Mods with no known install date are left out.
     // Installed only.
     InstalledRecently,

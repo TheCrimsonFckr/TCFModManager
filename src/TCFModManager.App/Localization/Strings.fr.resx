@@ -7687,4 +7687,40 @@ Passer quand même à cette version ?</value>
   <data name="ModLists_DepsNoVersionFormat" xml:space="preserve">
     <value>Également nécessaires, mais rien n'est publié pour ce SPT : {0}</value>
   </data>
+  <data name="Installed_SptNotForFormat" xml:space="preserve">
+    <value>Votre version est prévue pour SPT {0}, pas {1}.</value>
+  </data>
+  <data name="Installed_SptNotForPlainFormat" xml:space="preserve">
+    <value>Votre version n'est pas prévue pour SPT {0}.</value>
+  </data>
+  <data name="Installed_SptNewerFitsFormat" xml:space="preserve">
+    <value>La {0} fonctionne dessus.</value>
+  </data>
+  <data name="Installed_SptOlderFitsFormat" xml:space="preserve">
+    <value>La {0} fonctionne dessus - choisissez-la dans Détails et versions.</value>
+  </data>
+  <data name="Installed_SptNoneFits" xml:space="preserve">
+    <value>Rien de publié n'y fonctionne encore.</value>
+  </data>
+  <data name="Installed_SptDeclaredDisagreesFormat" xml:space="preserve">
+    <value>Les fichiers du mod indiquent SPT {0}.</value>
+  </data>
+  <data name="Installed_FikaIncompatibleFormat" xml:space="preserve">
+    <value>sp-mod indique que la {0} ne fonctionne pas avec Fika, que cette installation utilise.</value>
+  </data>
+  <data name="Filter_NotForThisSpt" xml:space="preserve">
+    <value>Pas pour ce SPT</value>
+  </data>
+  <data name="Filter_NotForThisSptToolTip" xml:space="preserve">
+    <value>Seulement les mods dont la version installée n'est pas prévue pour votre SPT - et, si Fika est utilisé, ceux que sp-mod indique comme ne fonctionnant pas avec Fika.</value>
+  </data>
+  <data name="Installed_NotForSptCount_one" xml:space="preserve">
+    <value>{0} mod n'est pas pour SPT {1}</value>
+  </data>
+  <data name="Installed_NotForSptCount_other" xml:space="preserve">
+    <value>{0} mods ne sont pas pour SPT {1}</value>
+  </data>
+  <data name="Play_NotForSptHint" xml:space="preserve">
+    <value>Ils risquent de ne pas se charger. Installés les affiche un par un, avec la version qui fonctionne sur votre SPT quand il y en a une.</value>
+  </data>
 </root>

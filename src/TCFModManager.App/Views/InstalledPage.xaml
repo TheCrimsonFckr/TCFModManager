@@ -229,6 +229,13 @@
                         Text="{Binding HeldBackNote}"
                         Visibility="{Binding HeldBackNote, Converter={StaticResource NullToCollapsed}}" />
 
+                    <!-- OPEN-13: the installed version isn't for this SPT, or not for Fika where Fika runs. -->
+                    <TextBlock
+                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                        TextWrapping="Wrap"
+                        Text="{Binding SptNote}"
+                        Visibility="{Binding SptNote, Converter={StaticResource NullToCollapsed}}" />
+
                     <TextBlock
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         TextWrapping="Wrap"
@@ -482,6 +489,17 @@
                 ToolTip="{loc:Str Installed_UndoRemovalToolTip}"
                 Visibility="{Binding UndoRemovalLabel, Converter={StaticResource NullToCollapsed}}"
                 Click="UndoRemoval_Click" />
+
+            <!-- OPEN-13: "N mods aren't for SPT x", a link to the Not for this SPT filter. -->
+            <ui:Button
+                DockPanel.Dock="Right"
+                Margin="0,0,8,0"
+                Appearance="Transparent"
+                Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                Icon="{ui:SymbolIcon Warning20}"
+                Content="{Binding NotForSptLabel}"
+                Command="{Binding ShowNotForSptCommand}"
+                Visibility="{Binding NotForSptLabel, Converter={StaticResource NullToCollapsed}}" />
 
             <!-- "N conflicts - see Dependencies and Conflicts" (OPEN-11), shown only when there are any. -->
             <ui:Button

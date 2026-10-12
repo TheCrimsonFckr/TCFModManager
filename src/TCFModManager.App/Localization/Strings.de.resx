@@ -7687,4 +7687,40 @@ Trotzdem wechseln?</value>
   <data name="ModLists_DepsNoVersionFormat" xml:space="preserve">
     <value>Wird auch gebraucht, aber für dieses SPT ist nichts veröffentlicht: {0}</value>
   </data>
+  <data name="Installed_SptNotForFormat" xml:space="preserve">
+    <value>Deine Version ist für SPT {0}, nicht für {1}.</value>
+  </data>
+  <data name="Installed_SptNotForPlainFormat" xml:space="preserve">
+    <value>Deine Version ist nicht für SPT {0}.</value>
+  </data>
+  <data name="Installed_SptNewerFitsFormat" xml:space="preserve">
+    <value>{0} läuft darauf.</value>
+  </data>
+  <data name="Installed_SptOlderFitsFormat" xml:space="preserve">
+    <value>{0} läuft darauf - wähle sie unter Details und Versionen.</value>
+  </data>
+  <data name="Installed_SptNoneFits" xml:space="preserve">
+    <value>Noch ist nichts dafür veröffentlicht.</value>
+  </data>
+  <data name="Installed_SptDeclaredDisagreesFormat" xml:space="preserve">
+    <value>Die Dateien der Mod selbst sagen SPT {0}.</value>
+  </data>
+  <data name="Installed_FikaIncompatibleFormat" xml:space="preserve">
+    <value>sp-mod kennzeichnet {0} als nicht mit Fika funktionierend, und diese Installation nutzt Fika.</value>
+  </data>
+  <data name="Filter_NotForThisSpt" xml:space="preserve">
+    <value>Nicht für dieses SPT</value>
+  </data>
+  <data name="Filter_NotForThisSptToolTip" xml:space="preserve">
+    <value>Nur Mods, deren installierte Version nicht für dein SPT gemacht ist - und, wo Fika läuft, solche, die sp-mod als nicht mit Fika funktionierend kennzeichnet.</value>
+  </data>
+  <data name="Installed_NotForSptCount_one" xml:space="preserve">
+    <value>{0} Mod ist nicht für SPT {1}</value>
+  </data>
+  <data name="Installed_NotForSptCount_other" xml:space="preserve">
+    <value>{0} Mods sind nicht für SPT {1}</value>
+  </data>
+  <data name="Play_NotForSptHint" xml:space="preserve">
+    <value>Sie laden möglicherweise nicht. Installiert zeigt jede einzelne, mit der Version, die auf deinem SPT läuft, falls es eine gibt.</value>
+  </data>
 </root>

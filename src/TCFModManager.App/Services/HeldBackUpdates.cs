@@ -24,6 +24,12 @@ public sealed class HeldBackUpdates
     // Swapped whole, never changed in place, so BuildFrom can read it from a background thread.
     private IReadOnlyDictionary<int, HeldBackUpdate> _held = new Dictionary<int, HeldBackUpdate>();
 
+    // OPEN-13: the mods sp-mod said the installed version isn't for this SPT, and the ones it said are
+    // up to date on it. Swapped whole with the rest.
+    private IReadOnlySet<int> _notForSpt = new HashSet<int>();
+
+    private IReadOnlySet<int> _upToDate = new HashSet<int>();
+
     // The SPT version the answer is for; an answer for another SPT holds nothing back.
     private string? _sptVersion;
 
@@ -41,6 +47,18 @@ public sealed class HeldBackUpdates
             ? held
             : null;
 
+    //
+    // OPEN-13: what sp-mod said about the installed version of this mod on this SPT - true when it
+    // isn't for it, false when it is (up to date), null when it said neither or the answer is for
+    // another SPT.
+    //
+    public bool? NotForSpt(int? modId, string? sptVersion) =>
+        modId is not { } id || !string.Equals(sptVersion, _sptVersion, StringComparison.OrdinalIgnoreCase)
+            ? null
+            : _notForSpt.Contains(id) ? true
+            : _upToDate.Contains(id) ? false
+            : null;
+
     // Every update held back on this SPT - empty for an answer about another SPT. OPEN-23 reads the
     // blockers' ranges from it.
     public IReadOnlyCollection<HeldBackUpdate> All(string? sptVersion) =>
@@ -52,15 +70,22 @@ public sealed class HeldBackUpdates
     // Takes an answer an update check already has (UpdateWatcher). Returns whether it changed what is
     // held back, and raises Changed when it did.
     //
-    public bool Set(IEnumerable<HeldBackUpdate> heldBack, string sptVersion)
+    public bool Set(IEnumerable<HeldBackUpdate> heldBack, string sptVersion,
+        IEnumerable<int>? notForSpt = null, IEnumerable<int>? upToDate = null)
     {
         var next = heldBack.GroupBy(h => h.ModId).ToDictionary(g => g.Key, g => g.First());
+        var nextNotFor = (notForSpt ?? []).ToHashSet();
+        var nextUpToDate = (upToDate ?? []).ToHashSet();
 
         var same = string.Equals(sptVersion, _sptVersion, StringComparison.OrdinalIgnoreCase)
             && next.Count == _held.Count
-            && next.All(n => _held.TryGetValue(n.Key, out var old) && Same(old, n.Value));
+            && next.All(n => _held.TryGetValue(n.Key, out var old) && Same(old, n.Value))
+            && nextNotFor.SetEquals(_notForSpt)
+            && nextUpToDate.SetEquals(_upToDate);
 
         _held = next;
+        _notForSpt = nextNotFor;
+        _upToDate = nextUpToDate;
         _sptVersion = sptVersion;
 
         if (same) return false;
@@ -85,7 +110,7 @@ public sealed class HeldBackUpdates
             var answer = installed.Count == 0 ? null : await _checker.FindUpdatedModsAsync(installed, sptVersion);
             if (request != _request) return;
 
-            Set(answer?.HeldBack ?? [], sptVersion);
+            Set(answer?.HeldBack ?? [], sptVersion, answer?.NotForSpt, answer?.UpToDate);
         }
         catch (Exception ex)
         {

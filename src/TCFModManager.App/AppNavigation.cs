@@ -135,6 +135,28 @@ internal static class AppNavigation
         _navigation?.Navigate(typeof(ModListsPage));
     }
 
+    //
+    // OPEN-13: Installed with only the mods that aren't for this SPT showing - from Play's note. Held
+    // like the update request: a page built by the Navigate reads it, one on screen hears the event.
+    //
+    private static bool _showNotForSptPending;
+
+    public static event EventHandler? ShowNotForSptRequested;
+
+    public static void ShowInstalledNotForSpt()
+    {
+        _showNotForSptPending = true;
+        ShowNotForSptRequested?.Invoke(null, EventArgs.Empty);
+        _navigation?.Navigate(typeof(InstalledPage));
+    }
+
+    public static bool TakeShowNotForSpt()
+    {
+        var pending = _showNotForSptPending;
+        _showNotForSptPending = false;
+        return pending;
+    }
+
     // Consumed by the Mod lists page when it loads: the list to review, once per request.
     public static Guid? TakeReviewList()
     {

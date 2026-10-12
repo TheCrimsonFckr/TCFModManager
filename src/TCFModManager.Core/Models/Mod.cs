@@ -55,4 +55,8 @@ public sealed class ModVersionSummary
     public string? SptVersionConstraint { get; set; }
     public int? Downloads { get; set; }
     public DateTimeOffset? PublishedAt { get; set; }
+
+    // sp-mod's fika_compatibility for this release: "compatible", "incompatible" or "unknown". Null
+    // in a catalog cache written before OPEN-13 - read as unknown.
+    public string? FikaCompatibility { get; set; }
 }

@@ -42,6 +42,8 @@ public sealed class UpdateCheckService(SpModApiClient api)
         var updated = new List<int>();
         var answered = new HashSet<int>();
         var heldBack = new List<HeldBackUpdate>();
+        var notForSpt = new List<int>();
+        var upToDate = new List<int>();
 
         foreach (var chunk in ModsQueryChunks(installed))
         {
@@ -55,6 +57,8 @@ public sealed class UpdateCheckService(SpModApiClient api)
             heldBack.AddRange(result.BlockedUpdates.Select(HeldBackUpdate.From).OfType<HeldBackUpdate>());
             answered.UnionWith(result.UpToDate.Select(u => u.ModId));
             answered.UnionWith(result.IncompatibleWithSpt.Select(u => u.ModId));
+            upToDate.AddRange(result.UpToDate.Select(u => u.ModId));
+            notForSpt.AddRange(result.IncompatibleWithSpt.Select(u => u.ModId));
         }
 
         var asked = installed.Where(m => !string.IsNullOrWhiteSpace(m.Version)).Select(m => m.ModId);
@@ -64,6 +68,8 @@ public sealed class UpdateCheckService(SpModApiClient api)
             [.. asked.Distinct().Where(id => !answered.Contains(id))])
         {
             HeldBack = [.. heldBack.DistinctBy(h => h.ModId)],
+            NotForSpt = [.. notForSpt.Distinct()],
+            UpToDate = [.. upToDate.Distinct()],
         };
     }
 
@@ -144,6 +150,15 @@ public sealed record InstalledUpdateCheck(IReadOnlyList<int> Updated, IReadOnlyL
 {
     // Updates sp-mod holds back because they would break another installed mod (OPEN-12 F11).
     public IReadOnlyList<HeldBackUpdate> HeldBack { get; init; } = [];
+
+    //
+    // OPEN-13: the installed version isn't for this SPT ("incompatible_with_spt"), and the installed
+    // version is for it and is the newest that is ("up_to_date"). Mods in neither list - an update is
+    // on offer - say nothing about the installed version itself.
+    //
+    public IReadOnlyList<int> NotForSpt { get; init; } = [];
+
+    public IReadOnlyList<int> UpToDate { get; init; } = [];
 
     public IReadOnlyList<int> ToRefetch => [.. Updated.Concat(NotRecognised).Distinct()];
 }

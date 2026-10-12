@@ -7687,4 +7687,40 @@ Passare comunque?</value>
   <data name="ModLists_DepsNoVersionFormat" xml:space="preserve">
     <value>Servono anche, ma per questo SPT non è pubblicato nulla: {0}</value>
   </data>
+  <data name="Installed_SptNotForFormat" xml:space="preserve">
+    <value>La tua versione è per SPT {0}, non per {1}.</value>
+  </data>
+  <data name="Installed_SptNotForPlainFormat" xml:space="preserve">
+    <value>La tua versione non è per SPT {0}.</value>
+  </data>
+  <data name="Installed_SptNewerFitsFormat" xml:space="preserve">
+    <value>La {0} funziona su questa.</value>
+  </data>
+  <data name="Installed_SptOlderFitsFormat" xml:space="preserve">
+    <value>La {0} funziona su questa - sceglila in Dettagli e versioni.</value>
+  </data>
+  <data name="Installed_SptNoneFits" xml:space="preserve">
+    <value>Non è ancora stato pubblicato nulla che funzioni su questa.</value>
+  </data>
+  <data name="Installed_SptDeclaredDisagreesFormat" xml:space="preserve">
+    <value>I file della mod indicano SPT {0}.</value>
+  </data>
+  <data name="Installed_FikaIncompatibleFormat" xml:space="preserve">
+    <value>sp-mod segna la {0} come non funzionante con Fika, che questa installazione usa.</value>
+  </data>
+  <data name="Filter_NotForThisSpt" xml:space="preserve">
+    <value>Non per questo SPT</value>
+  </data>
+  <data name="Filter_NotForThisSptToolTip" xml:space="preserve">
+    <value>Solo le mod la cui versione installata non è fatta per il tuo SPT - e, dove c'è Fika, quelle che sp-mod segna come non funzionanti con Fika.</value>
+  </data>
+  <data name="Installed_NotForSptCount_one" xml:space="preserve">
+    <value>{0} mod non è per SPT {1}</value>
+  </data>
+  <data name="Installed_NotForSptCount_other" xml:space="preserve">
+    <value>{0} mod non sono per SPT {1}</value>
+  </data>
+  <data name="Play_NotForSptHint" xml:space="preserve">
+    <value>Potrebbero non caricarsi. Installati le mostra una per una, con la versione che funziona sul tuo SPT quando c'è.</value>
+  </data>
 </root>
