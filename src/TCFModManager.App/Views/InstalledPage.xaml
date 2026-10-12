@@ -309,9 +309,9 @@
 
                 <!-- Remove is docked right, away from the two safe actions, so the destructive one
                      is never where the mouse already is. LastChildFill is off: this row is two
-                     docked groups, not a filled remainder. CompactButtons drops the labels to icons
-                     when the card is too narrow for all of them. -->
-                <DockPanel Grid.Row="1" LastChildFill="False" Margin="0,12,0,0" VerticalAlignment="Bottom" behaviors:CompactButtons.Enable="True">
+                     docked groups, not a filled remainder. Pin and Remove are icons only, so the row
+                     fits a narrow card; their tooltips say what they do. -->
+                <DockPanel Grid.Row="1" LastChildFill="False" Margin="0,12,0,0" VerticalAlignment="Bottom">
                     <ui:Button
                         DockPanel.Dock="Left"
                         Content="{loc:Str Installed_DetailsAndVersions}"
@@ -344,7 +344,6 @@
                     <ui:Button
                         DockPanel.Dock="Left"
                         Margin="8,0,0,0"
-                        Content="{Binding PinLabel}"
                         Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                         CommandParameter="{Binding}"
                         ToolTip="{Binding PinTooltip}">
@@ -357,7 +356,6 @@
                         DockPanel.Dock="Right"
                         Margin="8,0,0,0"
                         Foreground="{DynamicResource SystemFillColorCriticalBrush}"
-                        Content="{loc:Str Installed_Remove}"
                         Icon="{ui:SymbolIcon Delete24}"
                         Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                         CommandParameter="{Binding}"
