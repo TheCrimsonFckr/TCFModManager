@@ -123,7 +123,6 @@ public static class ConsoleLog
             Foreground = Text,
             FontFamily = box.FontFamily,
             FontSize = box.FontSize,
-            PageWidth = 4000,
         };
 
         box.Dispatcher.BeginInvoke(() =>

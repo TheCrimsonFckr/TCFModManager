@@ -276,7 +276,7 @@
                             <!-- Style cleared: the themed one repaints the box on focus, and a console doesn't. -->
                             <RichTextBox
                                 Style="{x:Null}"
-                                Height="300"
+                                Height="520"
                                 Padding="0"
                                 BorderThickness="0"
                                 Background="Transparent"
@@ -286,7 +286,7 @@
                                 IsReadOnlyCaretVisible="False"
                                 FontFamily="Cascadia Mono, Consolas"
                                 FontSize="12"
-                                HorizontalScrollBarVisibility="Auto"
+                                HorizontalScrollBarVisibility="Disabled"
                                 VerticalScrollBarVisibility="Auto"
                                 behaviors:ConsoleLog.Lines="{Binding ServerLogLines}" />
                         </Border>
