@@ -964,9 +964,8 @@ public partial class ModListsViewModel : LocalizedViewModel
         PlanSummary = null;
         VersionWarning = null;
         DownloadOnlyNotice = null;
-        _applyBlockers = [];
+        SetApplyBlockers([]);
         UpdateBlockerWatch();
-        ApplyCommand.NotifyCanExecuteChanged();
         NotifyPlanWording();
     }
 
@@ -1103,8 +1102,7 @@ public partial class ModListsViewModel : LocalizedViewModel
             ? Strings.ModLists_DownloadOnlyNotice(downloads)
             : null;
 
-        _applyBlockers = ApplyBlockers(preview);
-        ApplyCommand.NotifyCanExecuteChanged();
+        SetApplyBlockers(ApplyBlockers(preview));
         NotifyPlanWording();
         StatusMessage = PlanStatus(preview);
         UpdateBlockerWatch();
@@ -1124,9 +1122,40 @@ public partial class ModListsViewModel : LocalizedViewModel
         return touchesInstall ? ModInstallService.RunningBlockers(preview.Install.InstallPath) : [];
     }
 
-    private string PlanStatus(ModListPreview preview) => _applyBlockers.Count > 0
-        ? ModInstallProblems.InstallInUse(_applyBlockers, ModInstallAction.ApplyList)
-        : Text(Strings.ModLists_PreviewedFormat, preview.List.Name);
+    private static string PlanStatus(ModListPreview preview) => Text(Strings.ModLists_PreviewedFormat, preview.List.Name);
+
+    //
+    // Said in a warning bar beside the greyed-out Apply, naming the game or the server in words
+    // rather than by executable - "close SPT.Server.exe" read as "close the game" to people who had
+    // already closed it. One whole sentence per case so each translates as a sentence.
+    //
+    public string? ApplyBlockedWarning
+    {
+        get
+        {
+            if (_applyBlockers.Count == 0) return null;
+
+            var game = _applyBlockers.Any(b => b.StartsWith("EscapeFromTarkov", StringComparison.OrdinalIgnoreCase));
+            var server = _applyBlockers.Any(b => !b.StartsWith("EscapeFromTarkov", StringComparison.OrdinalIgnoreCase));
+
+            return (game, server) switch
+            {
+                (true, true) => Strings.ModLists_ApplyBlockedBoth,
+                (true, false) => Strings.ModLists_ApplyBlockedGame,
+                _ => Strings.ModLists_ApplyBlockedServer,
+            };
+        }
+    }
+
+    public bool IsApplyBlocked => _applyBlockers.Count > 0;
+
+    private void SetApplyBlockers(IReadOnlyList<string> blockers)
+    {
+        _applyBlockers = blockers;
+        ApplyCommand.NotifyCanExecuteChanged();
+        OnPropertyChanged(nameof(ApplyBlockedWarning));
+        OnPropertyChanged(nameof(IsApplyBlocked));
+    }
 
     //
     // Apply stays greyed out while SPT runs from the install, and comes back by itself once it is
@@ -1187,12 +1216,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         // Replaced or cleared while the look-up ran, or nothing changed: leave it alone.
         if (!ReferenceEquals(preview, _preview) || IsBusy || now.SequenceEqual(_applyBlockers)) return;
 
-        var wasShowingBlockers = StatusMessage == PlanStatus(preview);
-
-        _applyBlockers = now;
-        ApplyCommand.NotifyCanExecuteChanged();
-
-        if (wasShowingBlockers || now.Count > 0) StatusMessage = PlanStatus(preview);
+        SetApplyBlockers(now);
     }
 
     private IEnumerable<ModListActionRowViewModel> Rows(ModListPlan plan)
@@ -1387,7 +1411,6 @@ public partial class ModListsViewModel : LocalizedViewModel
             }
 
             ShowPlan(replanned);
-            if (_applyBlockers.Count > 0) return;
 
             StatusMessage = row.CanPin
                 ? Text(Strings.ModLists_PinnedFormat, row.Name)
@@ -1414,7 +1437,7 @@ public partial class ModListsViewModel : LocalizedViewModel
             // stays up with Apply greyed out until it is closed again.
             if (result.Stopped == ModListStop.InstallInUse && result.Moves.Count == 0)
             {
-                _applyBlockers = result.Running;
+                SetApplyBlockers(result.Running);
                 StatusMessage = PlanStatus(preview);
                 return;
             }

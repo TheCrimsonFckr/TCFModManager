@@ -6712,6 +6712,15 @@
   <data name="ModLists_StepHintApply" xml:space="preserve">
     <value>Пока ничего не изменилось. Проверьте план ниже и примените его - или вернитесь к модам.</value>
   </data>
+  <data name="ModLists_ApplyBlockedGame" xml:space="preserve">
+    <value>Закройте игру, чтобы применить этот список. Пока Escape from Tarkov запущена, моды изменить нельзя - кнопка «Применить» станет доступна, как только игра будет закрыта.</value>
+  </data>
+  <data name="ModLists_ApplyBlockedServer" xml:space="preserve">
+    <value>Остановите сервер SPT, чтобы применить этот список - кнопкой «Остановить» на странице «Играть» или закрыв окно его консоли. Пока сервер работает, моды изменить нельзя - кнопка «Применить» станет доступна, как только он будет остановлен.</value>
+  </data>
+  <data name="ModLists_ApplyBlockedBoth" xml:space="preserve">
+    <value>Закройте игру и остановите сервер SPT, чтобы применить этот список. Пока хоть что-то из них запущено, моды изменить нельзя - кнопка «Применить» станет доступна, как только оба будут закрыты.</value>
+  </data>
   <data name="ModLists_EntrySptBadgeFormat" xml:space="preserve">
     <value>SPT {0}</value>
   </data>

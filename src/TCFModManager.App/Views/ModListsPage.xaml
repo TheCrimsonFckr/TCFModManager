@@ -583,6 +583,15 @@
             </StackPanel>
 
             <StackPanel Grid.Row="2">
+                <!-- Apply is greyed out while the game or server runs from the install; this says
+                     which one to close. Goes away by itself once it is. -->
+                <ui:InfoBar
+                    Margin="0,16,0,0"
+                    Severity="Warning"
+                    IsClosable="False"
+                    IsOpen="{Binding IsApplyBlocked, Mode=OneWay}"
+                    Message="{Binding ApplyBlockedWarning}" />
+
                 <ui:InfoBar
                     Margin="0,16,0,0"
                     Severity="Warning"

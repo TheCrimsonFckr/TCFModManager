@@ -7666,6 +7666,18 @@ See Dependencies and Conflicts.</value>
     <value>Nothing has changed yet. Check the plan below, then apply it - or go back to the mods.</value>
     <comment>Mod lists page, under the Apply button while a plan is showing.</comment>
   </data>
+  <data name="ModLists_ApplyBlockedGame" xml:space="preserve">
+    <value>Close the game to apply this list. Mods can't be changed while Escape from Tarkov is running - Apply comes back as soon as it's closed.</value>
+    <comment>Mod lists page, warning while a previewed plan can't be applied because the game is running. Apply is the button above it.</comment>
+  </data>
+  <data name="ModLists_ApplyBlockedServer" xml:space="preserve">
+    <value>Stop the SPT server to apply this list - use Stop on the Play page or close its console window. Mods can't be changed while the server is running - Apply comes back as soon as it's stopped.</value>
+    <comment>Mod lists page, warning while a previewed plan can't be applied because the SPT server is running.</comment>
+  </data>
+  <data name="ModLists_ApplyBlockedBoth" xml:space="preserve">
+    <value>Close the game and stop the SPT server to apply this list. Mods can't be changed while either is running - Apply comes back as soon as both are closed.</value>
+    <comment>Mod lists page, warning while a previewed plan can't be applied because both the game and the SPT server are running.</comment>
+  </data>
   <data name="ModLists_EntrySptBadgeFormat" xml:space="preserve">
     <value>SPT {0}</value>
     <comment>Badge on a mod list entry: the SPT releases its version is for. {0} is a version or a range of versions; SPT is the platform's name and stays as it is.</comment>

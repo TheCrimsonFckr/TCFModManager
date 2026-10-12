@@ -6367,6 +6367,15 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="ModLists_StepHintApply" xml:space="preserve">
     <value>Noch hat sich nichts geändert. Prüfe den Plan unten und wende ihn dann an - oder geh zurück zu den Mods.</value>
   </data>
+  <data name="ModLists_ApplyBlockedGame" xml:space="preserve">
+    <value>Schließe das Spiel, um diese Liste anzuwenden. Solange Escape from Tarkov läuft, können keine Mods geändert werden - Anwenden ist wieder verfügbar, sobald es geschlossen ist.</value>
+  </data>
+  <data name="ModLists_ApplyBlockedServer" xml:space="preserve">
+    <value>Stoppe den SPT-Server, um diese Liste anzuwenden - mit Stoppen auf der Seite Spielen oder indem du sein Konsolenfenster schließt. Solange der Server läuft, können keine Mods geändert werden - Anwenden ist wieder verfügbar, sobald er gestoppt ist.</value>
+  </data>
+  <data name="ModLists_ApplyBlockedBoth" xml:space="preserve">
+    <value>Schließe das Spiel und stoppe den SPT-Server, um diese Liste anzuwenden. Solange eines davon läuft, können keine Mods geändert werden - Anwenden ist wieder verfügbar, sobald beide geschlossen sind.</value>
+  </data>
   <data name="ModLists_EntrySptBadgeFormat" xml:space="preserve">
     <value>SPT {0}</value>
   </data>
