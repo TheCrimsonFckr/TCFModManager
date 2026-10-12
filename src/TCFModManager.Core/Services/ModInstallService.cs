@@ -903,6 +903,10 @@ public sealed class ModInstallService(
         if (record.InstallPath is not { } stamped) return;
         if (string.Equals(stamped, InstallStamp.Of(installPath), StringComparison.OrdinalIgnoreCase)) return;
 
+        // The install it names is gone - moved or renamed to this one (AdoptMovedInstall, which the
+        // App runs at start, re-stamps it on disk; this lets it through before the next start).
+        if (!Directory.Exists(stamped) && InstallStamp.AppIsInside(installPath)) return;
+
         AppLog.Warn("Remove", $"{record.Name}: its record belongs to {stamped}, not {installPath}; refused");
         throw new ModInstallException(ModInstallFailure.RecordFromAnotherInstall)
         {

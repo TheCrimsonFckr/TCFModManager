@@ -67,9 +67,10 @@ public sealed class InstalledModRecord
 
     //
     // The SPT install this record was made in, as a full path - removal refuses anywhere else (D17).
-    // Null on records written before v1.19.0 until they are stamped.
+    // Null on records written before v1.19.0 until they are stamped. Settable so a moved or renamed
+    // install can be re-stamped (ModInstallManifestService.AdoptMovedInstall).
     //
-    public string? InstallPath { get; init; }
+    public string? InstallPath { get; set; }
 
     // Files this install placed over that no record owned, with where the originals were kept (D22).
     public List<OverwrittenFile> Overwrote { get; init; } = [];

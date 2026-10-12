@@ -83,7 +83,11 @@ public partial class App : Application
         // An install the app was stopped in the middle of last time is recorded as partly installed
         // before any page reads the records, so its card says so (OPEN-12 F1, see InstallJournal).
         if (!string.IsNullOrWhiteSpace(pruneInstall))
+        {
+            // Records from before the install folder was moved or renamed belong to it still.
+            AppServices.InstallManifest.AdoptMovedInstall(pruneInstall);
             AppServices.ModInstall.RecoverInterruptedInstalls(pruneInstall);
+        }
 
         // Removed mods whose time is up under Keep removed mods are deleted from the install's holding
         // folder (D27) - off the UI thread, since a large held mod takes a moment to delete.

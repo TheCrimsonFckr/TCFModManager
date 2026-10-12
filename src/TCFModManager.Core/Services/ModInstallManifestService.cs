@@ -37,6 +37,44 @@ public sealed class ModInstallManifestService
         }
     }
 
+    //
+    // An install moved or renamed (Chris, 2026-10-12: "G:\Single Player Tarkov 4.1" became "...4.1
+    // Server") leaves every record stamped with a path that no longer exists, and removal and update
+    // then refuse them all as belonging to another install (D17). A record is re-stamped to this
+    // install when the path it names is gone and either this app sits inside this install - so its
+    // records can only have been made here - or every file it placed is here. A stamped path that
+    // still exists is another install and is never touched. Returns how many records moved.
+    //
+    public int AdoptMovedInstall(string installPath)
+    {
+        if (string.IsNullOrWhiteSpace(installPath) || !Directory.Exists(installPath)) return 0;
+
+        var current = InstallStamp.Of(installPath);
+        var appInside = InstallStamp.AppIsInside(installPath);
+        var manifest = Load();
+        var moved = new List<string>();
+
+        foreach (var record in manifest.Mods)
+        {
+            if (record.InstallPath is not { } stamped) continue;
+            if (string.Equals(stamped, current, StringComparison.OrdinalIgnoreCase)) continue;
+            if (Directory.Exists(stamped)) continue;
+
+            var filesHere = record.Files.Count > 0
+                && record.Files.All(f => File.Exists(Path.Combine(installPath, f.Replace('/', Path.DirectorySeparatorChar))));
+            if (!appInside && !filesHere) continue;
+
+            moved.Add($"{record.Name} ({stamped})");
+            record.InstallPath = current;
+        }
+
+        if (moved.Count == 0) return 0;
+
+        Save(manifest);
+        AppLog.Info("Install", $"re-stamped {moved.Count} records to {current}, their install having moved: {string.Join(", ", moved)}");
+        return moved.Count;
+    }
+
     public void Save(ModInstallManifest manifest)
     {
         var json = JsonSerializer.Serialize(manifest, new JsonSerializerOptions { WriteIndented = true });
