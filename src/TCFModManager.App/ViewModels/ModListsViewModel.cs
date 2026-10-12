@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Data;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
@@ -963,6 +964,8 @@ public partial class ModListsViewModel : LocalizedViewModel
         PlanSummary = null;
         VersionWarning = null;
         DownloadOnlyNotice = null;
+        _applyBlockers = [];
+        UpdateBlockerWatch();
         ApplyCommand.NotifyCanExecuteChanged();
         NotifyPlanWording();
     }
@@ -1100,22 +1103,97 @@ public partial class ModListsViewModel : LocalizedViewModel
             ? Strings.ModLists_DownloadOnlyNotice(downloads)
             : null;
 
+        _applyBlockers = ApplyBlockers(preview);
         ApplyCommand.NotifyCanExecuteChanged();
         NotifyPlanWording();
-        StatusMessage = ApplyBlockers(preview) is { Count: > 0 } blockers
-            ? ModInstallProblems.InstallInUse(blockers, ModInstallAction.ApplyList)
-            : Text(Strings.ModLists_PreviewedFormat, preview.List.Name);
+        StatusMessage = PlanStatus(preview);
+        UpdateBlockerWatch();
     }
 
     //
-    // What the apply would be refused over right now - the same check ModListApplier makes before
-    // it moves anything: only a plan that enables or disables a mod, and only while SPT is running
-    // from this install.
+    // What the apply would be refused over right now: a plan that enables, disables, installs or
+    // updates a mod in the install, while SPT is running from it. A download-only list never touches
+    // the install, so only its moves count.
     //
-    private static IReadOnlyList<string> ApplyBlockers(ModListPreview preview) =>
-        preview.Plan.Enable.Any() || preview.Plan.Disable.Any()
-            ? ModInstallService.RunningBlockers(preview.Install.InstallPath)
-            : [];
+    private static IReadOnlyList<string> ApplyBlockers(ModListPreview preview)
+    {
+        var plan = preview.Plan;
+        var touchesInstall = plan.Enable.Any() || plan.Disable.Any()
+            || (!ModListDownloadMode.For(preview.List).DownloadOnly && (plan.Install.Any() || plan.Update.Any()));
+
+        return touchesInstall ? ModInstallService.RunningBlockers(preview.Install.InstallPath) : [];
+    }
+
+    private string PlanStatus(ModListPreview preview) => _applyBlockers.Count > 0
+        ? ModInstallProblems.InstallInUse(_applyBlockers, ModInstallAction.ApplyList)
+        : Text(Strings.ModLists_PreviewedFormat, preview.List.Name);
+
+    //
+    // Apply stays greyed out while SPT runs from the install, and comes back by itself once it is
+    // closed - the server and game are started and stopped outside this page, so a poll is the only
+    // way to notice. Runs only while a plan is showing and the page is on screen.
+    //
+    private IReadOnlyList<string> _applyBlockers = [];
+    private DispatcherTimer? _blockerWatch;
+    private bool _pageShown;
+    private bool _checkingBlockers;
+
+    public void PageShown()
+    {
+        _pageShown = true;
+        if (_preview is not null) _ = CheckBlockersAsync();
+        UpdateBlockerWatch();
+    }
+
+    public void PageHidden()
+    {
+        _pageShown = false;
+        UpdateBlockerWatch();
+    }
+
+    private void UpdateBlockerWatch()
+    {
+        if (_pageShown && _preview is not null)
+        {
+            if (_blockerWatch is null)
+            {
+                _blockerWatch = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
+                _blockerWatch.Tick += (_, _) => _ = CheckBlockersAsync();
+            }
+
+            _blockerWatch.Start();
+        }
+        else
+        {
+            _blockerWatch?.Stop();
+        }
+    }
+
+    private async Task CheckBlockersAsync()
+    {
+        if (_checkingBlockers || IsBusy || _preview is not { } preview) return;
+
+        IReadOnlyList<string> now;
+        _checkingBlockers = true;
+        try
+        {
+            now = await Task.Run(() => ApplyBlockers(preview));
+        }
+        finally
+        {
+            _checkingBlockers = false;
+        }
+
+        // Replaced or cleared while the look-up ran, or nothing changed: leave it alone.
+        if (!ReferenceEquals(preview, _preview) || IsBusy || now.SequenceEqual(_applyBlockers)) return;
+
+        var wasShowingBlockers = StatusMessage == PlanStatus(preview);
+
+        _applyBlockers = now;
+        ApplyCommand.NotifyCanExecuteChanged();
+
+        if (wasShowingBlockers || now.Count > 0) StatusMessage = PlanStatus(preview);
+    }
 
     private IEnumerable<ModListActionRowViewModel> Rows(ModListPlan plan)
     {
@@ -1309,7 +1387,7 @@ public partial class ModListsViewModel : LocalizedViewModel
             }
 
             ShowPlan(replanned);
-            if (ApplyBlockers(replanned).Count > 0) return;
+            if (_applyBlockers.Count > 0) return;
 
             StatusMessage = row.CanPin
                 ? Text(Strings.ModLists_PinnedFormat, row.Name)
@@ -1317,7 +1395,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         });
     }
 
-    private bool CanApply => !IsBusy && _preview is not null && !HasUnsavedChanges;
+    private bool CanApply => !IsBusy && _preview is not null && !HasUnsavedChanges && _applyBlockers.Count == 0;
 
     //
     // Applies the previewed plan. The preview is reused rather than rebuilt, so what runs is what
@@ -1331,6 +1409,15 @@ public partial class ModListsViewModel : LocalizedViewModel
         await RunAsync(async () =>
         {
             var result = await _service.ApplyAsync(preview, ModListPrompts.Default);
+
+            // SPT started between the last check and the click: nothing was changed, so the plan
+            // stays up with Apply greyed out until it is closed again.
+            if (result.Stopped == ModListStop.InstallInUse && result.Moves.Count == 0)
+            {
+                _applyBlockers = result.Running;
+                StatusMessage = PlanStatus(preview);
+                return;
+            }
 
             if (result.Completed)
             {

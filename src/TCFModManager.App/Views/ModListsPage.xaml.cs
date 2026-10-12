@@ -22,6 +22,11 @@ public partial class ModListsPage : Page
         // scroll, so hovering the name box would otherwise swallow it. Same fix as ConfigsPage.
         //
         AddHandler(PreviewMouseWheelEvent, new MouseWheelEventHandler(Page_PreviewMouseWheel), handledEventsToo: true);
+
+        // The page is kept alive between visits, so the running-SPT watch is stopped when it goes
+        // off screen rather than left polling behind every other page.
+        Loaded += (_, _) => ViewModel.PageShown();
+        Unloaded += (_, _) => ViewModel.PageHidden();
     }
 
     private async void ModListsPage_Loaded(object sender, RoutedEventArgs e)
