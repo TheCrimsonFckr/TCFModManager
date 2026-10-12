@@ -65,8 +65,14 @@ public static class CompactButtons
 
         if (!state.IsCompact)
         {
-            var needed = buttons.Sum(b => b.ActualWidth + b.Margin.Left + b.Margin.Right);
-            var overflowing = needed > room + 0.5 || buttons.Any(b => RightEdge(b, panel) > room + 0.5);
+            //
+            // A squeezed button doesn't stick out: the panel hands it less width and it shrinks,
+            // clipping its own label ("Rem"). So what is measured is each label against the width
+            // its text needs - any label narrower than its text means the row doesn't fit.
+            //
+            var shortBy = buttons.Sum(Shortfall);
+            var needed = buttons.Sum(b => b.ActualWidth + b.Margin.Left + b.Margin.Right) + shortBy;
+            var overflowing = shortBy > 0.5 || needed > room + 0.5 || buttons.Any(b => RightEdge(b, panel) > room + 0.5);
             if (!overflowing) return;
 
             state.FullWidth = needed;
@@ -78,6 +84,38 @@ public static class CompactButtons
             state.IsCompact = false;
             foreach (var button in panel.Children.OfType<Wpf.Ui.Controls.Button>()) Restore(button);
         }
+    }
+
+    // How much narrower the button's label was laid out than its text needs; 0 when it fits.
+    private static double Shortfall(Wpf.Ui.Controls.Button button)
+    {
+        // The label lives in the template's ContentPresenter; the icon beside it is text too (a glyph),
+        // so the search starts there rather than at the button.
+        if (button.Template?.FindName("ContentPresenter", button) is not DependencyObject presenter) return 0;
+        if (FindLabel(presenter) is not { Text.Length: > 0 } label) return 0;
+
+        var text = new FormattedText(
+            label.Text,
+            System.Globalization.CultureInfo.CurrentUICulture,
+            label.FlowDirection,
+            new Typeface(label.FontFamily, label.FontStyle, label.FontWeight, label.FontStretch),
+            label.FontSize,
+            Brushes.Black,
+            VisualTreeHelper.GetDpi(label).PixelsPerDip);
+
+        return Math.Max(0, text.WidthIncludingTrailingWhitespace - label.ActualWidth);
+    }
+
+    private static TextBlock? FindLabel(DependencyObject root)
+    {
+        for (var i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
+        {
+            var child = VisualTreeHelper.GetChild(root, i);
+            if (child is TextBlock { Visibility: Visibility.Visible } tb && !string.IsNullOrEmpty(tb.Text)) return tb;
+            if (FindLabel(child) is { } found) return found;
+        }
+
+        return null;
     }
 
     private static double RightEdge(FrameworkElement button, FrameworkElement panel)
