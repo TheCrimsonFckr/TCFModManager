@@ -7723,4 +7723,34 @@ Passare comunque?</value>
   <data name="Play_NotForSptHint" xml:space="preserve">
     <value>Potrebbero non caricarsi. Installati le mostra una per una, con la versione che funziona sul tuo SPT quando c'è.</value>
   </data>
+  <data name="Installed_SptDismiss" xml:space="preserve">
+    <value>Ignora</value>
+  </data>
+  <data name="Installed_SptDismissToolTip" xml:space="preserve">
+    <value>A me funziona - non avvisare più per questa versione su questo SPT. L'avviso torna se cambia la mod o SPT.</value>
+  </data>
+  <data name="Installed_SptDismissedFormat" xml:space="preserve">
+    <value>Hai segnato la {0} come funzionante su SPT {1}.</value>
+  </data>
+  <data name="Installed_SptUndismiss" xml:space="preserve">
+    <value>Avvisa di nuovo</value>
+  </data>
+  <data name="Installed_SptUndismissToolTip" xml:space="preserve">
+    <value>Mostra di nuovo l'avviso di versione per questa mod.</value>
+  </data>
+  <data name="Installed_SptDismissAll" xml:space="preserve">
+    <value>Ignora tutti</value>
+  </data>
+  <data name="Installed_SptDismissAllToolTip" xml:space="preserve">
+    <value>Non avvisare più per nessuna delle mod contate qui. Ogni avviso torna se cambia la mod o SPT.</value>
+  </data>
+  <data name="Installed_SptDismissAllTitle" xml:space="preserve">
+    <value>Ignora gli avvisi di versione</value>
+  </data>
+  <data name="Installed_SptDismissAllQuestion_one" xml:space="preserve">
+    <value>Non avvisare più che {0} mod non è per SPT {1}? L'avviso torna se cambia la mod o SPT.</value>
+  </data>
+  <data name="Installed_SptDismissAllQuestion_other" xml:space="preserve">
+    <value>Non avvisare più che {0} mod non sono per SPT {1}? Ogni avviso torna se cambia la mod o SPT.</value>
+  </data>
 </root>

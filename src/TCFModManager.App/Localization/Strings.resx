@@ -9284,4 +9284,36 @@ Switch anyway?</value>
   <data name="Play_NotForSptHint" xml:space="preserve">
     <value>They may not load. Installed shows each one, with the version that runs on your SPT where there is one.</value>
   </data>
+  <data name="Installed_SptDismiss" xml:space="preserve">
+    <value>Dismiss</value>
+  </data>
+  <data name="Installed_SptDismissToolTip" xml:space="preserve">
+    <value>It works for me - stop warning about this version on this SPT. The warning comes back if the mod or SPT changes.</value>
+  </data>
+  <data name="Installed_SptDismissedFormat" xml:space="preserve">
+    <value>You marked {0} as working on SPT {1}.</value>
+    <comment>{0} the installed mod version, {1} the installed SPT version.</comment>
+  </data>
+  <data name="Installed_SptUndismiss" xml:space="preserve">
+    <value>Warn again</value>
+  </data>
+  <data name="Installed_SptUndismissToolTip" xml:space="preserve">
+    <value>Show the version warning on this mod again.</value>
+  </data>
+  <data name="Installed_SptDismissAll" xml:space="preserve">
+    <value>Dismiss all</value>
+  </data>
+  <data name="Installed_SptDismissAllToolTip" xml:space="preserve">
+    <value>Stop warning about every mod counted here. Each warning comes back if that mod or SPT changes.</value>
+  </data>
+  <data name="Installed_SptDismissAllTitle" xml:space="preserve">
+    <value>Dismiss version warnings</value>
+  </data>
+  <data name="Installed_SptDismissAllQuestion_one" xml:space="preserve">
+    <value>Stop warning that {0} mod isn't for SPT {1}? It comes back if that mod or SPT changes.</value>
+    <comment>{0} a count, {1} the installed SPT version.</comment>
+  </data>
+  <data name="Installed_SptDismissAllQuestion_other" xml:space="preserve">
+    <value>Stop warning that {0} mods aren't for SPT {1}? Each warning comes back if that mod or SPT changes.</value>
+  </data>
 </root>

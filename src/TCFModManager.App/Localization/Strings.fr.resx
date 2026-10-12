@@ -7723,4 +7723,34 @@ Passer quand même à cette version ?</value>
   <data name="Play_NotForSptHint" xml:space="preserve">
     <value>Ils risquent de ne pas se charger. Installés les affiche un par un, avec la version qui fonctionne sur votre SPT quand il y en a une.</value>
   </data>
+  <data name="Installed_SptDismiss" xml:space="preserve">
+    <value>Ignorer</value>
+  </data>
+  <data name="Installed_SptDismissToolTip" xml:space="preserve">
+    <value>Ça fonctionne chez moi - ne plus avertir pour cette version sur ce SPT. L'avertissement revient si le mod ou SPT change.</value>
+  </data>
+  <data name="Installed_SptDismissedFormat" xml:space="preserve">
+    <value>Vous avez indiqué que la {0} fonctionne sur SPT {1}.</value>
+  </data>
+  <data name="Installed_SptUndismiss" xml:space="preserve">
+    <value>Avertir de nouveau</value>
+  </data>
+  <data name="Installed_SptUndismissToolTip" xml:space="preserve">
+    <value>Afficher de nouveau l'avertissement de version pour ce mod.</value>
+  </data>
+  <data name="Installed_SptDismissAll" xml:space="preserve">
+    <value>Tout ignorer</value>
+  </data>
+  <data name="Installed_SptDismissAllToolTip" xml:space="preserve">
+    <value>Ne plus avertir pour aucun des mods comptés ici. Chaque avertissement revient si le mod ou SPT change.</value>
+  </data>
+  <data name="Installed_SptDismissAllTitle" xml:space="preserve">
+    <value>Ignorer les avertissements de version</value>
+  </data>
+  <data name="Installed_SptDismissAllQuestion_one" xml:space="preserve">
+    <value>Ne plus avertir que {0} mod n'est pas pour SPT {1} ? L'avertissement revient si ce mod ou SPT change.</value>
+  </data>
+  <data name="Installed_SptDismissAllQuestion_other" xml:space="preserve">
+    <value>Ne plus avertir que {0} mods ne sont pas pour SPT {1} ? Chaque avertissement revient si le mod ou SPT change.</value>
+  </data>
 </root>

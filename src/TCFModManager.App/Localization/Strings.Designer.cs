@@ -2535,4 +2535,14 @@ internal static class Strings
     internal static string Play_NotForSptHint => LocalizationService.Get("Play_NotForSptHint");
     internal static string Installed_NotForSptCount(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_NotForSptCount", count, values);
+    internal static string Installed_SptDismiss => LocalizationService.Get("Installed_SptDismiss");
+    internal static string Installed_SptDismissToolTip => LocalizationService.Get("Installed_SptDismissToolTip");
+    internal static string Installed_SptDismissedFormat => LocalizationService.Get("Installed_SptDismissedFormat");
+    internal static string Installed_SptUndismiss => LocalizationService.Get("Installed_SptUndismiss");
+    internal static string Installed_SptUndismissToolTip => LocalizationService.Get("Installed_SptUndismissToolTip");
+    internal static string Installed_SptDismissAll => LocalizationService.Get("Installed_SptDismissAll");
+    internal static string Installed_SptDismissAllToolTip => LocalizationService.Get("Installed_SptDismissAllToolTip");
+    internal static string Installed_SptDismissAllTitle => LocalizationService.Get("Installed_SptDismissAllTitle");
+    internal static string Installed_SptDismissAllQuestion(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_SptDismissAllQuestion", count, values);
 }

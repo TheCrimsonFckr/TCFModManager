@@ -229,12 +229,40 @@
                         Text="{Binding HeldBackNote}"
                         Visibility="{Binding HeldBackNote, Converter={StaticResource NullToCollapsed}}" />
 
-                    <!-- OPEN-13: the installed version isn't for this SPT, or not for Fika where Fika runs. -->
+                    <!-- OPEN-13: the installed version isn't for this SPT, or not for Fika where Fika runs.
+                         Dismiss when it works anyway; dismissed, a quiet line with Warn again. -->
                     <TextBlock
                         Foreground="{DynamicResource SystemFillColorCautionBrush}"
                         TextWrapping="Wrap"
                         Text="{Binding SptNote}"
                         Visibility="{Binding SptNote, Converter={StaticResource NullToCollapsed}}" />
+                    <ui:Button
+                        Margin="0,2,0,2"
+                        Padding="8,2"
+                        Appearance="Transparent"
+                        Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                        Icon="{ui:SymbolIcon EyeOff24}"
+                        Content="{loc:Str Installed_SptDismiss}"
+                        ToolTip="{loc:Str Installed_SptDismissToolTip}"
+                        Visibility="{Binding CanDismissSptWarning, Converter={StaticResource BoolToVis}}"
+                        Command="{Binding DataContext.DismissSptWarningCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                        CommandParameter="{Binding}" />
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding SptDismissedNote, Converter={StaticResource NullToCollapsed}}">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            TextWrapping="Wrap"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{Binding SptDismissedNote}" />
+                        <ui:Button
+                            Margin="6,0,0,0"
+                            Padding="8,2"
+                            Appearance="Transparent"
+                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                            Content="{loc:Str Installed_SptUndismiss}"
+                            ToolTip="{loc:Str Installed_SptUndismissToolTip}"
+                            Command="{Binding DataContext.RestoreSptWarningCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                            CommandParameter="{Binding}" />
+                    </StackPanel>
 
                     <TextBlock
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
@@ -490,6 +518,17 @@
                 ToolTip="{loc:Str Installed_UndoRemovalToolTip}"
                 Visibility="{Binding UndoRemovalLabel, Converter={StaticResource NullToCollapsed}}"
                 Click="UndoRemoval_Click" />
+
+            <!-- OPEN-13: Dismiss all of the warnings the link beside it counts, after asking. -->
+            <ui:Button
+                DockPanel.Dock="Right"
+                Margin="0,0,8,0"
+                Appearance="Transparent"
+                Icon="{ui:SymbolIcon EyeOff20}"
+                Content="{loc:Str Installed_SptDismissAll}"
+                ToolTip="{loc:Str Installed_SptDismissAllToolTip}"
+                Command="{Binding DismissAllSptWarningsCommand}"
+                Visibility="{Binding NotForSptLabel, Converter={StaticResource NullToCollapsed}}" />
 
             <!-- OPEN-13: "N mods aren't for SPT x", a link to the Not for this SPT filter. -->
             <ui:Button

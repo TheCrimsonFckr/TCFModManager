@@ -130,8 +130,25 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // R5: Fika runs on this install and sp-mod marks the installed release as not working with it.
     public bool IsFikaIncompatible { get; init; }
 
-    // The Not for this SPT filter (D5) - either reason.
-    public bool IsNotForThisSpt => SptFit is { Fits: false } || IsFikaIncompatible;
+    // Either reason to warn, whether or not the user dismissed it.
+    public bool HasSptWarning => SptFit is { Fits: false } || IsFikaIncompatible;
+
+    //
+    // The user said this version works on this SPT after all (Chris, 2026-10-12) - per mod, installed
+    // version and SPT, so the warning comes back when either changes. SptWarningKey is the stored key.
+    //
+    public bool IsSptWarningDismissed { get; init; }
+
+    public string SptWarningKey { get; init; } = "";
+
+    public bool CanDismissSptWarning => HasSptWarning && !IsSptWarningDismissed;
+
+    public string? SptDismissedNote => HasSptWarning && IsSptWarningDismissed
+        ? Text(Strings.Installed_SptDismissedFormat, InstalledVersion, InstalledSptVersion)
+        : null;
+
+    // The Not for this SPT filter (D5) - either reason, unless dismissed.
+    public bool IsNotForThisSpt => HasSptWarning && !IsSptWarningDismissed;
 
     //
     // The opened card's compatibility line, and the tooltip's when the version isn't for this SPT:
@@ -144,7 +161,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         {
             var parts = new List<string>();
 
-            if (SptFit is { Fits: false } fit)
+            if (SptFit is { Fits: false } fit && !IsSptWarningDismissed)
             {
                 parts.Add(fit.ForConstraint is { } range
                     ? Text(Strings.Installed_SptNotForFormat, SptVersionRangeFormatter.Format(range) ?? range, InstalledSptVersion)
@@ -160,7 +177,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             if (SptFit is { DeclaredDisagrees: true, DeclaredConstraint: { } declared })
                 parts.Add(Text(Strings.Installed_SptDeclaredDisagreesFormat, SptVersionRangeFormatter.Format(declared) ?? declared));
 
-            if (IsFikaIncompatible) parts.Add(Text(Strings.Installed_FikaIncompatibleFormat, InstalledVersion));
+            if (IsFikaIncompatible && !IsSptWarningDismissed) parts.Add(Text(Strings.Installed_FikaIncompatibleFormat, InstalledVersion));
 
             return parts.Count == 0 ? null : string.Join(" ", parts);
         }
@@ -577,7 +594,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         ? ModStatus.Disabled
         : HasConflicts
             ? ModStatus.Conflict
-            : SptFit is { Fits: false } && UpdateAvailable != true
+            : SptFit is { Fits: false } && !IsSptWarningDismissed && UpdateAvailable != true
                 ? ModStatus.NoCompatibleVersion
             : UpdateAvailable switch
         {
@@ -598,7 +615,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         IncompleteSummary
         ?? JoinConflicts()
         ?? DownloadSummary
-        ?? (SptFit is { Fits: false } ? SptNote : null)
+        ?? (SptFit is { Fits: false } && !IsSptWarningDismissed ? SptNote : null)
         ?? (UpdateAvailable == true ? null : HeldBackNote)
         ?? (HasDuplicateFolders
             ? Strings.Installed_StatusDuplicate
@@ -684,6 +701,9 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         // OPEN-13 R5: Fika-incompatible releases are only worth saying anything about where Fika runs.
         var fikaPresent = FikaInstall.IsPresent(scannedGroups.SelectMany(g => g.Entries));
 
+        // Read once for the whole scan rather than per card.
+        var dismissedSpt = AppServices.DismissedSptWarnings.Load();
+
         //
         // A record belongs to the card holding the folders it placed. A second copy of the same mod
         // installed by hand ("SomeMod - Copy") resolves to the same catalog listing, and taking the
@@ -707,7 +727,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
                     ? found
                     : null;
 
-                return BuildCard(g.Entries, g.Match, installedSptVersion, record, addonsByParent, fikaPresent);
+                return BuildCard(g.Entries, g.Match, installedSptVersion, record, addonsByParent, fikaPresent, dismissedSpt);
             })
             .ToList();
 
@@ -1340,7 +1360,8 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         string? installedSptVersion,
         InstalledModRecord? record,
         IReadOnlyDictionary<int, int> addonsByParent,
-        bool fikaPresent = false)
+        bool fikaPresent = false,
+        IReadOnlySet<string>? dismissedSpt = null)
     {
         // The plugin half speaks for the client side wherever there's a choice - it's the one with
         // the mod's real name, version and GUID on it, where a patcher is a support file whose
@@ -1466,9 +1487,15 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         var fikaIncompatible = fikaPresent && !versionUndetermined
             && FikaInstall.IsIncompatible(InstalledSptFit.Release(installedVersion, match?.Versions)?.FikaCompatibility);
 
+        var sptWarningKey = DismissedSptWarningStore.Key(
+            match?.Id.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? (client?.Name ?? server!.Name),
+            installedVersion, installedSptVersion);
+
         return new InstalledModCardViewModel
         {
             SptFit = sptFit,
+            SptWarningKey = sptWarningKey,
+            IsSptWarningDismissed = dismissedSpt?.Contains(sptWarningKey) == true,
             InstalledSptVersion = installedSptVersion,
             IsFikaIncompatible = fikaIncompatible,
             // Client's folder/package name wins when client and server disagree.

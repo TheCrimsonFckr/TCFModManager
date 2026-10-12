@@ -28,6 +28,9 @@ internal static class AppServices
     // Declared before anything that builds Installed cards, which read it.
     public static HeldBackUpdates HeldBack { get; } = new();
 
+    // "Not for this SPT" warnings the user dismissed (OPEN-13 follow-up).
+    public static DismissedSptWarningStore DismissedSptWarnings { get; } = new();
+
     // The authors the user follows (OPEN-12 A4). Before Browse, which reads it as it is built.
     public static FollowedAuthors Followed { get; } = new();
 

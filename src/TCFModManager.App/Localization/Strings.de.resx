@@ -7723,4 +7723,34 @@ Trotzdem wechseln?</value>
   <data name="Play_NotForSptHint" xml:space="preserve">
     <value>Sie laden möglicherweise nicht. Installiert zeigt jede einzelne, mit der Version, die auf deinem SPT läuft, falls es eine gibt.</value>
   </data>
+  <data name="Installed_SptDismiss" xml:space="preserve">
+    <value>Ausblenden</value>
+  </data>
+  <data name="Installed_SptDismissToolTip" xml:space="preserve">
+    <value>Bei mir läuft es - nicht mehr vor dieser Version auf diesem SPT warnen. Die Warnung kommt zurück, wenn sich die Mod oder SPT ändert.</value>
+  </data>
+  <data name="Installed_SptDismissedFormat" xml:space="preserve">
+    <value>Du hast {0} als auf SPT {1} funktionierend markiert.</value>
+  </data>
+  <data name="Installed_SptUndismiss" xml:space="preserve">
+    <value>Wieder warnen</value>
+  </data>
+  <data name="Installed_SptUndismissToolTip" xml:space="preserve">
+    <value>Die Versionswarnung bei dieser Mod wieder anzeigen.</value>
+  </data>
+  <data name="Installed_SptDismissAll" xml:space="preserve">
+    <value>Alle ausblenden</value>
+  </data>
+  <data name="Installed_SptDismissAllToolTip" xml:space="preserve">
+    <value>Bei keiner der hier gezählten Mods mehr warnen. Jede Warnung kommt zurück, wenn sich die Mod oder SPT ändert.</value>
+  </data>
+  <data name="Installed_SptDismissAllTitle" xml:space="preserve">
+    <value>Versionswarnungen ausblenden</value>
+  </data>
+  <data name="Installed_SptDismissAllQuestion_one" xml:space="preserve">
+    <value>Nicht mehr warnen, dass {0} Mod nicht für SPT {1} ist? Die Warnung kommt zurück, wenn sich die Mod oder SPT ändert.</value>
+  </data>
+  <data name="Installed_SptDismissAllQuestion_other" xml:space="preserve">
+    <value>Nicht mehr warnen, dass {0} Mods nicht für SPT {1} sind? Jede Warnung kommt zurück, wenn sich die Mod oder SPT ändert.</value>
+  </data>
 </root>

@@ -8092,4 +8092,40 @@
   <data name="Play_NotForSptHint" xml:space="preserve">
     <value>Они могут не загрузиться. На странице «Установленные» показан каждый, с версией для вашей SPT, если такая есть.</value>
   </data>
+  <data name="Installed_SptDismiss" xml:space="preserve">
+    <value>Скрыть</value>
+  </data>
+  <data name="Installed_SptDismissToolTip" xml:space="preserve">
+    <value>У меня работает - больше не предупреждать об этой версии на этой SPT. Предупреждение вернётся, если изменится мод или SPT.</value>
+  </data>
+  <data name="Installed_SptDismissedFormat" xml:space="preserve">
+    <value>Вы отметили версию {0} как рабочую на SPT {1}.</value>
+  </data>
+  <data name="Installed_SptUndismiss" xml:space="preserve">
+    <value>Снова предупреждать</value>
+  </data>
+  <data name="Installed_SptUndismissToolTip" xml:space="preserve">
+    <value>Снова показывать предупреждение о версии для этого мода.</value>
+  </data>
+  <data name="Installed_SptDismissAll" xml:space="preserve">
+    <value>Скрыть все</value>
+  </data>
+  <data name="Installed_SptDismissAllToolTip" xml:space="preserve">
+    <value>Больше не предупреждать ни об одном из подсчитанных здесь модов. Предупреждение вернётся, если изменится мод или SPT.</value>
+  </data>
+  <data name="Installed_SptDismissAllTitle" xml:space="preserve">
+    <value>Скрыть предупреждения о версиях</value>
+  </data>
+  <data name="Installed_SptDismissAllQuestion_one" xml:space="preserve">
+    <value>Больше не предупреждать, что {0} мод не для SPT {1}? Предупреждение вернётся, если изменится мод или SPT.</value>
+  </data>
+  <data name="Installed_SptDismissAllQuestion_few" xml:space="preserve">
+    <value>Больше не предупреждать, что {0} мода не для SPT {1}? Предупреждения вернутся, если изменится мод или SPT.</value>
+  </data>
+  <data name="Installed_SptDismissAllQuestion_many" xml:space="preserve">
+    <value>Больше не предупреждать, что {0} модов не для SPT {1}? Предупреждения вернутся, если изменится мод или SPT.</value>
+  </data>
+  <data name="Installed_SptDismissAllQuestion_other" xml:space="preserve">
+    <value>Больше не предупреждать, что {0} мода не для SPT {1}? Предупреждения вернутся, если изменится мод или SPT.</value>
+  </data>
 </root>

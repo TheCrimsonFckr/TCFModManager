@@ -1202,6 +1202,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             var notForSpt = cards.Count(c => !c.IsDisabled && c.IsNotForThisSpt);
             NotForSptLabel = notForSpt == 0 ? null
                 : Strings.Installed_NotForSptCount(notForSpt, notForSpt, AppServices.SptEnvironment.InstalledVersion);
+            _notForSptKeys = cards.Where(c => !c.IsDisabled && c.IsNotForThisSpt).Select(c => c.SptWarningKey).ToList();
             if (conflicts.Count > 0)
             {
                 AppLog.Info("Conflicts", string.Join("; ", conflicts.Select(c =>
@@ -2545,6 +2546,50 @@ public partial class InstalledViewModel : LocalizedViewModel
     // OPEN-13 D5: "3 mods aren't for SPT 4.1.6" on the status line, or null when none.
     [ObservableProperty]
     private string? _notForSptLabel;
+
+    // The keys of the warnings Dismiss all would hide - the enabled mods the status line counts.
+    private List<string> _notForSptKeys = [];
+
+    //
+    // "It works for me" on one card (Chris, 2026-10-12): the warning goes for this version on this
+    // SPT, and comes back when either changes. Rescans so the status, filter and count follow.
+    //
+    [RelayCommand]
+    private async Task DismissSptWarningAsync(InstalledModCardViewModel? card)
+    {
+        if (card is not { CanDismissSptWarning: true }) return;
+
+        AppServices.DismissedSptWarnings.Dismiss([card.SptWarningKey]);
+        AppLog.Info("Installed", $"dismissed the SPT warning for {card.DisplayTitle} {card.InstalledVersion}");
+        await ScanCommand.ExecuteAsync(null);
+    }
+
+    [RelayCommand]
+    private async Task RestoreSptWarningAsync(InstalledModCardViewModel? card)
+    {
+        if (card is not { IsSptWarningDismissed: true }) return;
+
+        AppServices.DismissedSptWarnings.Restore(card.SptWarningKey);
+        AppLog.Info("Installed", $"restored the SPT warning for {card.DisplayTitle} {card.InstalledVersion}");
+        await ScanCommand.ExecuteAsync(null);
+    }
+
+    // Dismiss all, after asking: every warning the status line counts.
+    [RelayCommand]
+    private async Task DismissAllSptWarningsAsync()
+    {
+        var keys = _notForSptKeys;
+        if (keys.Count == 0) return;
+
+        var question = Strings.Installed_SptDismissAllQuestion(keys.Count, keys.Count, AppServices.SptEnvironment.InstalledVersion);
+        if (System.Windows.MessageBox.Show(question, Strings.Installed_SptDismissAllTitle,
+                System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question, System.Windows.MessageBoxResult.No)
+            != System.Windows.MessageBoxResult.Yes) return;
+
+        AppServices.DismissedSptWarnings.Dismiss(keys);
+        AppLog.Info("Installed", $"dismissed {keys.Count} SPT warnings");
+        await ScanCommand.ExecuteAsync(null);
+    }
 
     // The status-line link: ticks Not for this SPT so only those mods show.
     [RelayCommand]
