@@ -425,67 +425,19 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,8">
-        <DockPanel LastChildFill="False">
-            <ui:Button
-                DockPanel.Dock="Right"
-                Content="{loc:Str Common_Rescan}"
-                Command="{Binding ScanCommand}" />
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,4">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <!-- Puts the last disable/enable back. A disable only moves folders, so undoing one is
-                 just moving them back - shown only while there's something to put back. -->
-            <ui:Button
-                DockPanel.Dock="Right"
-                Margin="0,0,8,0"
-                Content="{Binding UndoLabel}"
-                Icon="{ui:SymbolIcon ArrowUndo20}"
-                Command="{Binding UndoCommand}"
-                Visibility="{Binding CanUndo, Converter={StaticResource BoolToVis}}" />
-
-            <!-- Turns the list into a tick-list for acting on several mods at once - in all three
-                 views (OPEN-12 A1). Ctrl-click, Shift-click and Ctrl+A switch it on too. -->
-            <ui:Button
-                DockPanel.Dock="Right"
-                Margin="0,0,8,0"
-                Content="{loc:Str Installed_MultiSelect}"
-                Icon="{ui:SymbolIcon SelectAllOn24}"
-                ToolTip="{loc:Str Installed_MultiSelectToolTip}"
-                Appearance="{Binding SelectionMode, Converter={StaticResource BoolToAppearance}}"
-                Click="SelectMode_Click" />
-
-            <!-- Open/close everything the filters match, in whichever of the two expandable views
-                 is on screen. Group view has its own per-section collapse, so these hide there
-                 rather than sitting dead.
-
-                 Wrapped in a StackPanel rather than docked individually: in a DockPanel the
-                 first-declared Right element lands furthest right, so a pair docked separately
-                 would read collapse-then-expand. -->
-            <StackPanel
-                DockPanel.Dock="Right"
-                Orientation="Horizontal"
-                Margin="0,0,8,0"
-                VerticalAlignment="Center"
-                Visibility="{Binding ShowExpanders, Converter={StaticResource BoolToVis}}">
-                <ui:Button
-                    Padding="10,7"
-                    Icon="{ui:SymbolIcon ChevronDoubleDown20}"
-                    ToolTip="{loc:Str Installed_ExpandAllToolTip}"
-                    Appearance="{Binding AllExpanded, Converter={StaticResource BoolToAppearance}}"
-                    Command="{Binding ExpandAllCommand}" />
-                <ui:Button
-                    Margin="8,0,0,0"
-                    Padding="10,7"
-                    Icon="{ui:SymbolIcon ChevronDoubleUp20}"
-                    ToolTip="{loc:Str Installed_CollapseAllToolTip}"
-                    Appearance="{Binding AllCollapsed, Converter={StaticResource BoolToAppearance}}"
-                    Command="{Binding CollapseAllCommand}" />
-            </StackPanel>
 
             <!-- Cards/Groups view switcher - deliberately the first, most prominent thing on the
                  page rather than a small toggle buried among the filter row's other switches.
                  Whichever mode is active shows tinted with the theme accent (Appearance="Primary"
                  via BoolToAppearance); the other stays Secondary. -->
-            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,20,0">
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,0,20,4">
                 <ui:Button
                     Padding="12,7"
                     FontWeight="SemiBold"
@@ -513,63 +465,107 @@
                     Click="ListView_Click" />
             </StackPanel>
 
-            <!-- Undo a removal (D28) - shown while one is held. With several held, it opens a menu
-                of them to pick from (UndoRemoval_Click). Default padding, like Rescan and Undo beside it. -->
-            <ui:Button
-                DockPanel.Dock="Right"
-                Margin="0,0,8,0"
-                Icon="{ui:SymbolIcon ArrowUndo20}"
-                Content="{Binding UndoRemovalLabel}"
-                ToolTip="{loc:Str Installed_UndoRemovalToolTip}"
-                Visibility="{Binding UndoRemovalLabel, Converter={StaticResource NullToCollapsed}}"
-                Click="UndoRemoval_Click" />
+            <WrapPanel Grid.Column="1" HorizontalAlignment="Right">
+                <!-- "N conflicts - see Dependencies and Conflicts" (OPEN-11), shown only when there are any. -->
+                <ui:Button
+                    Margin="0,0,8,4"
+                    Appearance="Transparent"
+                    Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                    Icon="{ui:SymbolIcon ErrorCircle20}"
+                    Content="{Binding ConflictCountLabel}"
+                    Command="{Binding ShowConflictsCommand}"
+                    Visibility="{Binding ConflictCountLabel, Converter={StaticResource NullToCollapsed}}" />
 
-            <!-- OPEN-13: every dismissed version warning back at once. Shown while any are dismissed. -->
-            <ui:Button
-                DockPanel.Dock="Right"
-                Margin="0,0,8,0"
-                Appearance="Transparent"
-                Icon="{ui:SymbolIcon Eye20}"
-                Content="{loc:Str Installed_SptShowAll}"
-                ToolTip="{loc:Str Installed_SptShowAllToolTip}"
-                Command="{Binding ShowAllSptWarningsCommand}"
-                Visibility="{Binding HasDismissedSptWarnings, Converter={StaticResource BoolToVis}}" />
+                <!-- OPEN-13: "N mods aren't for SPT x", a link to the Not for this SPT filter. -->
+                <ui:Button
+                    Margin="0,0,8,4"
+                    Appearance="Transparent"
+                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                    Icon="{ui:SymbolIcon Warning20}"
+                    Content="{Binding NotForSptLabel}"
+                    Command="{Binding ShowNotForSptCommand}"
+                    Visibility="{Binding NotForSptLabel, Converter={StaticResource NullToCollapsed}}" />
 
-            <!-- OPEN-13: Dismiss all of the warnings the link beside it counts, after asking. -->
-            <ui:Button
-                DockPanel.Dock="Right"
-                Margin="0,0,8,0"
-                Appearance="Transparent"
-                Icon="{ui:SymbolIcon EyeOff20}"
-                Content="{loc:Str Installed_SptDismissAll}"
-                ToolTip="{loc:Str Installed_SptDismissAllToolTip}"
-                Command="{Binding DismissAllSptWarningsCommand}"
-                Visibility="{Binding NotForSptLabel, Converter={StaticResource NullToCollapsed}}" />
+                <!-- OPEN-13: Dismiss all of the warnings the link beside it counts, after asking. -->
+                <ui:Button
+                    Margin="0,0,8,4"
+                    Appearance="Transparent"
+                    Icon="{ui:SymbolIcon EyeOff20}"
+                    Content="{loc:Str Installed_SptDismissAll}"
+                    ToolTip="{loc:Str Installed_SptDismissAllToolTip}"
+                    Command="{Binding DismissAllSptWarningsCommand}"
+                    Visibility="{Binding NotForSptLabel, Converter={StaticResource NullToCollapsed}}" />
 
-            <!-- OPEN-13: "N mods aren't for SPT x", a link to the Not for this SPT filter. -->
-            <ui:Button
-                DockPanel.Dock="Right"
-                Margin="0,0,8,0"
-                Appearance="Transparent"
-                Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                Icon="{ui:SymbolIcon Warning20}"
-                Content="{Binding NotForSptLabel}"
-                Command="{Binding ShowNotForSptCommand}"
-                Visibility="{Binding NotForSptLabel, Converter={StaticResource NullToCollapsed}}" />
+                <!-- OPEN-13: every dismissed version warning back at once. Shown while any are dismissed. -->
+                <ui:Button
+                    Margin="0,0,8,4"
+                    Appearance="Transparent"
+                    Icon="{ui:SymbolIcon Eye20}"
+                    Content="{loc:Str Installed_SptShowAll}"
+                    ToolTip="{loc:Str Installed_SptShowAllToolTip}"
+                    Command="{Binding ShowAllSptWarningsCommand}"
+                    Visibility="{Binding HasDismissedSptWarnings, Converter={StaticResource BoolToVis}}" />
 
-            <!-- "N conflicts - see Dependencies and Conflicts" (OPEN-11), shown only when there are any. -->
-            <ui:Button
-                DockPanel.Dock="Right"
-                Margin="0,0,8,0"
-                Appearance="Transparent"
-                Foreground="{DynamicResource SystemFillColorCriticalBrush}"
-                Icon="{ui:SymbolIcon ErrorCircle20}"
-                Content="{Binding ConflictCountLabel}"
-                Command="{Binding ShowConflictsCommand}"
-                Visibility="{Binding ConflictCountLabel, Converter={StaticResource NullToCollapsed}}" />
-        </DockPanel>
+                <!-- Undo a removal (D28) - shown while one is held. With several held, it opens a menu
+                    of them to pick from (UndoRemoval_Click). Default padding, like Rescan and Undo beside it. -->
+                <ui:Button
+                    Margin="0,0,8,4"
+                    Icon="{ui:SymbolIcon ArrowUndo20}"
+                    Content="{Binding UndoRemovalLabel}"
+                    ToolTip="{loc:Str Installed_UndoRemovalToolTip}"
+                    Visibility="{Binding UndoRemovalLabel, Converter={StaticResource NullToCollapsed}}"
+                    Click="UndoRemoval_Click" />
+
+                <!-- Open/close everything the filters match, in whichever of the two expandable views
+                     is on screen. Group view has its own per-section collapse, so these hide there
+                     rather than sitting dead. Kept as one pair so they never wrap apart. -->
+                <StackPanel
+                    Orientation="Horizontal"
+                    Margin="0,0,8,4"
+                    VerticalAlignment="Center"
+                    Visibility="{Binding ShowExpanders, Converter={StaticResource BoolToVis}}">
+                    <ui:Button
+                        Padding="10,7"
+                        Icon="{ui:SymbolIcon ChevronDoubleDown20}"
+                        ToolTip="{loc:Str Installed_ExpandAllToolTip}"
+                        Appearance="{Binding AllExpanded, Converter={StaticResource BoolToAppearance}}"
+                        Command="{Binding ExpandAllCommand}" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Padding="10,7"
+                        Icon="{ui:SymbolIcon ChevronDoubleUp20}"
+                        ToolTip="{loc:Str Installed_CollapseAllToolTip}"
+                        Appearance="{Binding AllCollapsed, Converter={StaticResource BoolToAppearance}}"
+                        Command="{Binding CollapseAllCommand}" />
+                </StackPanel>
+
+                <!-- Turns the list into a tick-list for acting on several mods at once - in all three
+                     views (OPEN-12 A1). Ctrl-click, Shift-click and Ctrl+A switch it on too. -->
+                <ui:Button
+                    Margin="0,0,8,4"
+                    Content="{loc:Str Installed_MultiSelect}"
+                    Icon="{ui:SymbolIcon SelectAllOn24}"
+                    ToolTip="{loc:Str Installed_MultiSelectToolTip}"
+                    Appearance="{Binding SelectionMode, Converter={StaticResource BoolToAppearance}}"
+                    Click="SelectMode_Click" />
+
+                <!-- Puts the last disable/enable back. A disable only moves folders, so undoing one is
+                     just moving them back - shown only while there's something to put back. -->
+                <ui:Button
+                    Margin="0,0,8,4"
+                    Content="{Binding UndoLabel}"
+                    Icon="{ui:SymbolIcon ArrowUndo20}"
+                    Command="{Binding UndoCommand}"
+                    Visibility="{Binding CanUndo, Converter={StaticResource BoolToVis}}" />
+
+                <ui:Button
+                    Margin="0,0,0,4"
+                    Content="{loc:Str Common_Rescan}"
+                    Command="{Binding ScanCommand}" />
+            </WrapPanel>
+        </Grid>
         <TextBlock
-            Margin="0,8,0,0"
+            Margin="0,4,0,4"
             TextWrapping="Wrap"
             Foreground="{DynamicResource TextFillColorSecondaryBrush}"
             Text="{Binding StatusMessage}"
