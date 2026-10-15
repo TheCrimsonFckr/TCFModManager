@@ -34,7 +34,7 @@ public static class ModConflicts
         return Task.Run(() =>
         {
             var cards = InstalledModCardViewModel.BuildFrom(
-                InstalledModScanner.Scan(installPath), catalog, sptVersion, records, addons);
+                InstalledScan.Run(installPath, catalog, records), catalog, sptVersion, records, addons);
             return (cards, Find(cards));
         });
     }
