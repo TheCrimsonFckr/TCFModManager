@@ -214,6 +214,20 @@ public class SharedFolderActionsTests : IDisposable
         Assert.Equal(owner.Name, tool.ModName);
     }
 
+    [Fact]
+    public void DisablingTheCommonLib_ReachesStanceOverhaul_AsAHardDependent()
+    {
+        var mods = Scan();
+        var lib = Assert.Single(mods, m => m.ShareOwnerModId == 3135);
+        var graph = ModDependencyGraph.Build(mods);
+
+        var link = Assert.Single(graph.DisableImpact([lib]));
+
+        Assert.Equal(3136, link.Dependent.ShareOwnerModId);
+        Assert.False(link.IsSoft);
+        Assert.Empty(graph.DisableImpact([Stance()]));
+    }
+
     private InstalledMod Stance() => Assert.Single(Scan(), m => m.ShareOwnerModId == 3136 && !m.IsDisabled);
 
     private List<InstalledMod> Scan(ModOwnership? owners = null) =>
