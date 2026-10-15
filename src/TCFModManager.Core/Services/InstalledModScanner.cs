@@ -9,7 +9,7 @@ namespace TCFModManager.Core.Services;
 // (user/mods) mods, plus the ".disabled" sibling of each of those containers - a disabled mod is
 // still installed and still listed, it just isn't loaded by SPT.
 //
-public static class InstalledModScanner
+public static partial class InstalledModScanner
 {
     // Folder/DLL names that are core SPT client files rather than an installed mod.
     private static readonly HashSet<string> CoreSptEntries = new(StringComparer.OrdinalIgnoreCase)
@@ -51,7 +51,9 @@ public static class InstalledModScanner
         !string.IsNullOrWhiteSpace(name)
         && (CoreSptEntries.Contains(name) || NonModPatcherEntries.Contains(name));
 
-    public static List<InstalledMod> Scan(string? installPath)
+    public static List<InstalledMod> Scan(string? installPath) => Scan(installPath, ModOwnership.None);
+
+    public static List<InstalledMod> Scan(string? installPath, ModOwnership owners)
     {
         var results = new List<InstalledMod>();
         if (string.IsNullOrWhiteSpace(installPath) || !Directory.Exists(installPath)) return results;
@@ -59,8 +61,7 @@ public static class InstalledModScanner
         foreach (var container in DisabledModPaths.ClientContainers(installPath))
         {
             var isPatcher = DisabledModPaths.IsPatcherContainer(container);
-            ScanClientFolder(container, results, disabled: false, isPatcher);
-            ScanClientFolder(DisabledModPaths.Disabled(container), results, disabled: true, isPatcher);
+            ScanClientContainer(installPath, container, results, isPatcher, owners);
         }
 
         // Checks all three known server-content layouts; whichever exists is scanned.
@@ -81,59 +82,121 @@ public static class InstalledModScanner
     // read exactly the same way, they just get flagged so the card layer can fold one back into
     // the mod it belongs to instead of showing it as a mod in its own right.
     //
-    private static void ScanClientFolder(string root, List<InstalledMod> results, bool disabled, bool isPatcher)
+    private static void ScanClientContainer(
+        string installPath, string container, List<InstalledMod> results, bool isPatcher, ModOwnership owners)
     {
-        if (!Directory.Exists(root)) return;
+        var disabledContainer = DisabledModPaths.Disabled(container);
+        var live = new List<InstalledMod>();
+        var off = new List<InstalledMod>();
+
+        var liveDirs = DirectoriesIn(container);
+        var offDirs = DirectoriesIn(disabledContainer);
+        var names = liveDirs.Keys.Concat(offDirs.Keys.Where(n => !liveDirs.ContainsKey(n))).ToList();
+        var taken = new HashSet<string>(names, StringComparer.OrdinalIgnoreCase);
+        foreach (var loose in LooseDlls(container).Concat(LooseDlls(disabledContainer)))
+            taken.Add(Path.GetFileNameWithoutExtension(loose));
+
+        foreach (var name in names)
+        {
+            if (string.IsNullOrWhiteSpace(name) || IsCoreEntry(name, isPatcher)) continue;
+
+            var liveDir = liveDirs.GetValueOrDefault(name);
+            var offDir = offDirs.GetValueOrDefault(name);
+            var livePlugins = liveDir is null ? [] : ReadPlugins(liveDir);
+            var offPlugins = offDir is null ? [] : ReadPlugins(offDir);
+
+            var shares = owners.IsEmpty
+                ? null
+                : SplitShared(installPath, container, name, liveDir, offDir, livePlugins, offPlugins, isPatcher, owners, taken);
+
+            if (shares is not null)
+            {
+                live.AddRange(shares.Where(s => !s.IsDisabled));
+                off.AddRange(shares.Where(s => s.IsDisabled));
+                continue;
+            }
+
+            if (liveDir is not null) live.Add(FolderEntry(liveDir, name, disabled: false, isPatcher, livePlugins));
+            if (offDir is not null) off.Add(FolderEntry(offDir, name, disabled: true, isPatcher, offPlugins));
+        }
+
+        AddLooseDlls(container, live, disabled: false, isPatcher);
+        AddLooseDlls(disabledContainer, off, disabled: true, isPatcher);
+
+        results.AddRange(live);
+        results.AddRange(off);
+    }
+
+    private static Dictionary<string, string> DirectoriesIn(string root)
+    {
+        var dirs = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        if (!Directory.Exists(root)) return dirs;
 
         foreach (var dir in Directory.EnumerateDirectories(root))
         {
             var name = Path.GetFileName(dir);
-            if (string.IsNullOrWhiteSpace(name) || IsCoreEntry(name, isPatcher)) continue;
-
-            // Prefer a DLL whose name matches the folder; otherwise take the first DLL found.
-            var dlls = Directory.EnumerateFiles(dir, "*.dll", SearchOption.TopDirectoryOnly).ToList();
-            var dll = dlls.FirstOrDefault(d => string.Equals(Path.GetFileNameWithoutExtension(d), name, StringComparison.OrdinalIgnoreCase))
-                ?? dlls.FirstOrDefault();
-
-            // Check every DLL in the folder for the [BepInPlugin] attribute; it isn't necessarily
-            // on the same DLL used for versioning. Dependencies are collected across all of them.
-            var metadata = dlls.Select(d => (Dll: d, Declared: ModAssemblyMetadata.ReadPlugin(d))).ToList();
-
-            // Every GUID the folder registers, kept alongside the first. A mod shipping an API or
-            // config-UI assembly next to its own plugin registers one per DLL, and each of those
-            // has its own config file named after it.
-            var guids = metadata
-                .Select(m => m.Declared.Guid)
-                .Where(g => !string.IsNullOrWhiteSpace(g))
-                .Select(g => g!)
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToList();
-
-            // The version comes from the DLL chosen for versioning when it is a plugin itself, then
-            // from the plugin that stands for the mod's identity.
-            var primary = metadata.FirstOrDefault(m => m.Dll == dll && m.Declared.Guid is not null).Declared
-                ?? metadata.FirstOrDefault(m => m.Declared.Guid is not null && m.Declared.Guid == guids.FirstOrDefault()).Declared;
-            var fileVersion = dll is null ? null : TryGetFileVersion(dll);
-
-            results.Add(new InstalledMod
-            {
-                Name = name,
-                Version = primary?.Version ?? fileVersion,
-                FileVersion = fileVersion,
-                DeclaredName = primary?.Name,
-                Guid = guids.FirstOrDefault(),
-                Guids = guids,
-                Target = InstalledModTarget.Client,
-                IsPatcher = isPatcher,
-                FolderPath = dir,
-                InstalledAt = TryGetCreationTime(dir),
-                IsDisabled = disabled,
-                Dependencies = MergeDependencies(metadata.SelectMany(m => m.Declared.Dependencies)),
-                Assemblies = disabled ? [] : ListAssemblies(dir),
-            });
+            if (!string.IsNullOrWhiteSpace(name)) dirs.TryAdd(name, dir);
         }
 
-        foreach (var dll in Directory.EnumerateFiles(root, "*.dll", SearchOption.TopDirectoryOnly))
+        return dirs;
+    }
+
+    private static IEnumerable<string> LooseDlls(string root) =>
+        Directory.Exists(root) ? Directory.EnumerateFiles(root, "*.dll", SearchOption.TopDirectoryOnly) : [];
+
+    private static List<(string Dll, DeclaredMetadata Declared)> ReadPlugins(string dir) =>
+        [.. Directory.EnumerateFiles(dir, "*.dll", SearchOption.TopDirectoryOnly)
+            .Select(d => (Dll: d, Declared: ModAssemblyMetadata.ReadPlugin(d)))];
+
+    private static InstalledMod FolderEntry(
+        string dir,
+        string name,
+        bool disabled,
+        bool isPatcher,
+        List<(string Dll, DeclaredMetadata Declared)> metadata)
+    {
+        // Prefer a DLL whose name matches the folder; otherwise take the first DLL found.
+        var dlls = metadata.Select(m => m.Dll).ToList();
+        var dll = dlls.FirstOrDefault(d => string.Equals(Path.GetFileNameWithoutExtension(d), name, StringComparison.OrdinalIgnoreCase))
+            ?? dlls.FirstOrDefault();
+
+        // Every GUID the folder registers, kept alongside the first. A mod shipping an API or
+        // config-UI assembly next to its own plugin registers one per DLL, and each of those
+        // has its own config file named after it.
+        var guids = metadata
+            .Select(m => m.Declared.Guid)
+            .Where(g => !string.IsNullOrWhiteSpace(g))
+            .Select(g => g!)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        // The version comes from the DLL chosen for versioning when it is a plugin itself, then
+        // from the plugin that stands for the mod's identity.
+        var primary = metadata.FirstOrDefault(m => m.Dll == dll && m.Declared.Guid is not null).Declared
+            ?? metadata.FirstOrDefault(m => m.Declared.Guid is not null && m.Declared.Guid == guids.FirstOrDefault()).Declared;
+        var fileVersion = dll is null ? null : TryGetFileVersion(dll);
+
+        return new InstalledMod
+        {
+            Name = name,
+            Version = primary?.Version ?? fileVersion,
+            FileVersion = fileVersion,
+            DeclaredName = primary?.Name,
+            Guid = guids.FirstOrDefault(),
+            Guids = guids,
+            Target = InstalledModTarget.Client,
+            IsPatcher = isPatcher,
+            FolderPath = dir,
+            InstalledAt = TryGetCreationTime(dir),
+            IsDisabled = disabled,
+            Dependencies = MergeDependencies(metadata.SelectMany(m => m.Declared.Dependencies)),
+            Assemblies = disabled ? [] : ListAssemblies(dir),
+        };
+    }
+
+    private static void AddLooseDlls(string root, List<InstalledMod> results, bool disabled, bool isPatcher)
+    {
+        foreach (var dll in LooseDlls(root))
         {
             var name = Path.GetFileNameWithoutExtension(dll);
             if (IsCoreEntry(name, isPatcher)) continue;

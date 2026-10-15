@@ -116,4 +116,15 @@ public sealed class InstalledMod
     // can't conflict, and a server mod's DLLs are loaded by SPT one mod at a time.
     //
     public IReadOnlyList<ModAssembly> Assemblies { get; init; } = [];
+
+    //
+    // Set only when this entry is one of several mods sharing one folder (OPEN-28): the files it
+    // owns, relative to FolderPath, forward-slash separated. Null means it owns the whole folder.
+    //
+    public IReadOnlyList<string>? OwnedFiles { get; init; }
+
+    // The sp-mod mod id that owns a share, when an install record or a plugin GUID settled it.
+    public int? ShareOwnerModId { get; init; }
+
+    public bool IsShare => OwnedFiles is not null;
 }
