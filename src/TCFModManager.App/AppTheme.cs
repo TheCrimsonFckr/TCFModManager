@@ -347,12 +347,12 @@ public static class AppTheme
 
         // Clone rather than rebuild from the colour: Opacity is a Brush property, so this dims a
         // gradient or an image brush exactly as well as the SolidColorBrush every button actually
-        // has, and needs no special case for either. Frozen because it is written once and only
-        // read after that - and because an unfrozen brush assigned to a control keeps a change
-        // subscription alive that this has no use for.
-        var held = resting.Clone();
+        // has, and needs no special case for either. CloneCurrentValue snapshots the colour the
+        // brush shows right now: a themed brush whose Color is a DynamicResource cannot be frozen,
+        // but a snapshot of it can. Frozen because it is written once and only read after that.
+        var held = resting.CloneCurrentValue();
         held.Opacity = resting.Opacity * PressedForegroundDim;
-        held.Freeze();
+        if (held.CanFreeze) held.Freeze();
 
         button.SetValue(HoldingForegroundProperty, true);
         button.Foreground = held;

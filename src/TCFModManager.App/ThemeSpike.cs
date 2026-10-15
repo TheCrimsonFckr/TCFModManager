@@ -19,6 +19,7 @@ internal static class ThemeSpike
         "ApplicationBackgroundBrush", "TextFillColorPrimaryBrush", "TextFillColorSecondaryBrush",
         "CardBackgroundFillColorDefaultBrush", "ButtonBackground", "ControlStrokeColorDefaultBrush",
         "SystemFillColorCautionBrush", "AccentFillColorDefaultBrush", "BadgeBackground",
+        "RowHoverBrush", "SelectedRowStroke", "PaletteLightBlueBrush",
     ];
 
     private sealed record Preset(ApplicationTheme Base, Color? Accent, Dictionary<string, Color> Colors);
@@ -113,7 +114,11 @@ internal static class ThemeSpike
                 ApplicationThemeManager.Apply(preset.Base, Wpf.Ui.Controls.WindowBackdropType.None);
             }
 
-            if (preset.Accent is { } accent) ApplicationAccentColorManager.Apply(accent, preset.Base);
+            if (preset.Accent is { } accent)
+            {
+                var toward = preset.Base == ApplicationTheme.Dark ? Colors.White : Colors.Black;
+                ApplicationAccentColorManager.Apply(accent, Mix(accent, toward, 0.15), Mix(accent, toward, 0.30), Mix(accent, toward, 0.45));
+            }
 
             MergeShadow(app, preset.Base);
 
@@ -129,13 +134,25 @@ internal static class ThemeSpike
             ApplyRadius(app);
             ApplyFont(app);
 
+            app.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, () =>
+            {
+                foreach (Window window in app.Windows)
+                {
+                    window.SetResourceReference(Control.BackgroundProperty, "ApplicationBackgroundBrush");
+                }
+
+                AppLog.Info(Area, $"deferred: window background {Describe(app.MainWindow?.Background)}, "
+                    + $"RowHoverBrush {Describe(app.TryFindResource("RowHoverBrush"))}, "
+                    + $"SystemAccentColor {app.TryFindResource("SystemAccentColor")}");
+            });
+
             AppLog.Info(Area, $"applied '{name}' on {preset.Base}, {preset.Colors.Count} colours, merged: "
                 + string.Join(" | ", app.Resources.MergedDictionaries.Select(d => d.Source?.ToString() ?? "(inline)")));
             foreach (var key in Probes)
             {
                 AppLog.Info(Area, $"  {key} = {Describe(app.TryFindResource(key))}");
             }
-            AppLog.Info(Area, $"  SystemAccentColor = {app.TryFindResource("SystemAccentColor")}");
+            AppLog.Info(Area, $"  SystemAccentColor = {app.TryFindResource("SystemAccentColor")}, primary {app.TryFindResource("SystemAccentColorPrimary")}, secondary {app.TryFindResource("SystemAccentColorSecondary")}, tertiary {app.TryFindResource("SystemAccentColorTertiary")}");
             AppLog.Info(Area, $"  ControlCornerRadius = {app.TryFindResource("ControlCornerRadius")}");
         }
         catch (Exception ex)
@@ -196,12 +213,17 @@ internal static class ThemeSpike
     private static void Bind(FrameworkElement element) =>
         element.SetResourceReference(Control.FontFamilyProperty, FontKey);
 
+    private static Color Mix(Color a, Color b, double t) => Color.FromRgb(
+        (byte)Math.Round(a.R + (b.R - a.R) * t),
+        (byte)Math.Round(a.G + (b.G - a.G) * t),
+        (byte)Math.Round(a.B + (b.B - a.B) * t));
+
     private static Color C(string hex) => (Color)ColorConverter.ConvertFromString(hex);
 
     private static string Describe(object? value) => value switch
     {
         null => "missing",
-        SolidColorBrush b => $"{b.Color} (frozen={b.IsFrozen})",
+        SolidColorBrush b => $"{b.Color} op={b.Opacity} (frozen={b.IsFrozen}, hash={b.GetHashCode():X})",
         _ => value.GetType().Name,
     };
 }
