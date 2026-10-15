@@ -134,14 +134,26 @@ public sealed class LogModLocator
         names[key] = names.TryGetValue(key, out var other) && !SameMod(other, mod) ? null : mod;
     }
 
+    // A folder several mods share (OPEN-28) holds more than one mod, so the name has to match too.
     private static bool SameMod(DiagnosedMod? a, DiagnosedMod b) =>
-        a is not null && string.Equals(a.FolderPath, b.FolderPath, StringComparison.OrdinalIgnoreCase);
+        a is not null
+        && string.Equals(a.FolderPath, b.FolderPath, StringComparison.OrdinalIgnoreCase)
+        && string.Equals(a.Name, b.Name, StringComparison.OrdinalIgnoreCase);
 
     private static bool IsFramework(string ns) =>
         FrameworkPrefixes.Any(p => ns == p || ns.StartsWith(p + ".", StringComparison.Ordinal));
 
     private static IEnumerable<string> DllsOf(InstalledMod mod)
     {
+        if (mod.OwnedFiles is { } owned)
+        {
+            return owned
+                .Where(f => f.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
+                .Select(f => Path.Combine(mod.FolderPath, f.Replace('/', Path.DirectorySeparatorChar)))
+                .Where(File.Exists)
+                .ToList();
+        }
+
         if (File.Exists(mod.FolderPath)) return mod.FolderPath.EndsWith(".dll", StringComparison.OrdinalIgnoreCase) ? [mod.FolderPath] : [];
 
         try

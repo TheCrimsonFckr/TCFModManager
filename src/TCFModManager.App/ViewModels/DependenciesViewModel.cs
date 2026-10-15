@@ -288,7 +288,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
             // Before anything that needs the network, so conflicts show even when the lookup fails.
             await RefreshConflictsAsync();
 
-            var scanned = await Task.Run(() => InstalledModScanner.Scan(installPath));
+            var scanned = await Task.Run(() => InstalledScan.Run(installPath));
             var installed = InstalledModCardViewModel.BuildFrom(
                 scanned, AppServices.ModCache.AllMods, sptVersion, AppServices.InstallManifest.Load().Mods,
                 AppServices.Addons.AllAddons);

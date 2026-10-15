@@ -182,6 +182,17 @@ public class SharedFolderActionsTests : IDisposable
         Assert.NotEqual(ModFootprintAnalyzer.StampFor([stance]), ModFootprintAnalyzer.StampFor([lib]));
     }
 
+    [Fact]
+    public void LogLocator_TracesEachSharesGuid_ToThatShare()
+    {
+        var locator = LogModLocator.Build(Scan());
+
+        Assert.Equal("Realism", locator.ByName(StanceGuid)?.Name);
+        Assert.Equal("spt-realism-common-lib", locator.ByName(LibGuid)?.Name);
+        Assert.Equal("Realism", locator.ByName("Fontaine-SPTStanceOverhaul")?.Name);
+        Assert.Equal(2, locator.All.Count);
+    }
+
     private InstalledMod Stance() => Assert.Single(Scan(), m => m.ShareOwnerModId == 3136 && !m.IsDisabled);
 
     private List<InstalledMod> Scan(ModOwnership? owners = null) =>

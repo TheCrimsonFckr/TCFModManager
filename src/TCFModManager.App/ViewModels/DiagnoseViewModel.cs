@@ -154,7 +154,7 @@ public sealed partial class DiagnoseViewModel : LocalizedViewModel
             var clock = Stopwatch.StartNew();
             _last = await Task.Run(() =>
             {
-                var mods = LogModLocator.Build(InstalledModScanner.Scan(installPath));
+                var mods = LogModLocator.Build(InstalledScan.Run(installPath));
                 return LogDiagnoser.Diagnose(LogFiles.Find(installPath), mods);
             });
 
