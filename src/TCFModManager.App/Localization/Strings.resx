@@ -3205,6 +3205,14 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
     <value>Addon</value>
     <comment>Shown in place of Installed_AddonForFormat when the parent mod's name is not known.</comment>
   </data>
+  <data name="Installed_SharedFolderFormat" xml:space="preserve">
+    <value>Installed in the {0} folder</value>
+    <comment>On the card of a mod that installs into a folder other mods also use. {0} is the folder's name, e.g. Realism.</comment>
+  </data>
+  <data name="Installed_SharedFolderWithFormat" xml:space="preserve">
+    <value>Installed in the {0} folder, shared with {1}</value>
+    <comment>As Installed_SharedFolderFormat, naming the other mods in that folder. {0} is the folder's name, {1} the other mods' names joined with Common_ListSeparator.</comment>
+  </data>
   <data name="Installed_IncompleteMissing_one" xml:space="preserve">
     <value>Files missing - {0} isn't on disk. Reinstall it from Details and versions.</value>
     <comment>{0} is a folder name. Details and versions is the button named by Installed_DetailsAndVersions - translate both the same way. See the Many form; these become one plural key in S5.</comment>

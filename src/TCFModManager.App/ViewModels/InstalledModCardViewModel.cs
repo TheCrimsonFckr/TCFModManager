@@ -471,6 +471,14 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     public IReadOnlyList<string> SharedWith { get; private set; } = [];
 
+    // The card's "Installed in the Realism folder, shared with ..." line, or null for a mod with
+    // folders of its own.
+    public string? SharedFolderLine => SharedFolderName is null
+        ? null
+        : SharedWith.Count == 0
+            ? Text(Strings.Installed_SharedFolderFormat, SharedFolderName)
+            : Text(Strings.Installed_SharedFolderWithFormat, SharedFolderName, string.Join(Strings.Common_ListSeparator, SharedWith));
+
     //
     // The mod lists that name this mod, filled in after a scan by InstalledViewModel (the card
     // itself knows nothing about lists). One badge each, so a glance at the card says which sets

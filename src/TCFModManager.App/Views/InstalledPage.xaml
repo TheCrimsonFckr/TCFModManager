@@ -159,6 +159,12 @@
                     <TextBlock
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         TextWrapping="Wrap"
+                        Text="{Binding SharedFolderLine, Mode=OneWay}"
+                        Visibility="{Binding SharedFolderLine, Converter={StaticResource NullToCollapsed}}" />
+
+                    <TextBlock
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                        TextWrapping="Wrap"
                         Text="{Binding FolderNameIfDifferent, Mode=OneWay, StringFormat={loc:Str Installed_DetailInstalledAsFormat}}"
                         Visibility="{Binding FolderNameIfDifferent, Converter={StaticResource NullToCollapsed}}" />
 
@@ -1117,6 +1123,14 @@
                                             TextTrimming="CharacterEllipsis"
                                             Text="{Binding AddonSubtitle}"
                                             Visibility="{Binding AddonSubtitle, Converter={StaticResource NullToCollapsed}}" />
+
+                                        <TextBlock
+                                            FontSize="11"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            TextTrimming="CharacterEllipsis"
+                                            Text="{Binding SharedFolderLine, Mode=OneWay}"
+                                            ToolTip="{Binding SharedFolderLine, Mode=OneWay}"
+                                            Visibility="{Binding SharedFolderLine, Converter={StaticResource NullToCollapsed}}" />
 
                                         <ContentPresenter
                                             ContentTemplate="{StaticResource ModListBadges}"

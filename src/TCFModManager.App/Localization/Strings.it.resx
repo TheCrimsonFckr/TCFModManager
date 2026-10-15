@@ -1722,6 +1722,12 @@ Installare comunque?</value>
   <data name="Installed_AddonForFormat" xml:space="preserve">
     <value>Addon per {0}</value>
   </data>
+  <data name="Installed_SharedFolderFormat" xml:space="preserve">
+    <value>Installato nella cartella {0}</value>
+  </data>
+  <data name="Installed_SharedFolderWithFormat" xml:space="preserve">
+    <value>Installato nella cartella {0}, condivisa con {1}</value>
+  </data>
   <data name="Installed_CardDisableToolTip" xml:space="preserve">
     <value>Disattiva - lo sposta in una cartella .disabled, senza eliminare nulla</value>
   </data>
