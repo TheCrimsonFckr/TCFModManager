@@ -124,7 +124,7 @@ public sealed class ModListService
 
         var candidates = await Task.Run(() =>
         {
-            var found = InstalledModScanner.Scan(installPath);
+            var found = InstalledScan.Run(installPath, catalog, records);
 
             var cards = InstalledModCardViewModel.BuildFrom(
                 found, catalog, sptVersion, records, AppServices.Addons.AllAddons);
