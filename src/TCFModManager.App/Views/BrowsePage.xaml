@@ -486,7 +486,7 @@
                                          click, so the card doesn't open its details as well. -->
                                     <TextBlock
                                         FontSize="11"
-                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                         TextTrimming="CharacterEllipsis"
                                         Visibility="{Binding Author, Converter={StaticResource NullToCollapsed}}">
                                         <Hyperlink
@@ -500,12 +500,12 @@
                                     <TextBlock
                                         Text="{Binding Guid}"
                                         FontSize="11"
-                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                         TextTrimming="CharacterEllipsis" />
                                     <TextBlock
                                         Text="{Binding Downloads, Mode=OneWay, StringFormat={loc:Str Common_DownloadsFormat}}"
                                         FontSize="11"
-                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                         TextTrimming="CharacterEllipsis" />
                                     <!-- Collapsed rather than shown as "0 endorsements": the feature
                                          is new enough that almost every mod is on zero, and an empty
@@ -514,7 +514,7 @@
                                     <TextBlock
                                         Text="{Binding Endorsements, Mode=OneWay, StringFormat={loc:Str Browse_EndorsementsFormat}}"
                                         FontSize="11"
-                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                         TextTrimming="CharacterEllipsis"
                                         Visibility="{Binding Endorsements, Converter={StaticResource NullToCollapsed}}" />
                                     <!-- Runs rather than separate TextBlocks because the SPT segment
