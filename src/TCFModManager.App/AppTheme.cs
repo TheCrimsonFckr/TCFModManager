@@ -85,6 +85,7 @@ public static class AppTheme
                 RefreshWindowChrome();
                 PinPressedButtonForeground();
                 StrengthenLightButtonHover();
+                ThemeSpike.ApplyIfRequested();
             };
             _subscribed = true;
         }
@@ -136,6 +137,7 @@ public static class AppTheme
         PinPressedButtonForeground();
         StrengthenLightButtonHover();
         HookButtonPressFeedback();
+        ThemeSpike.ApplyIfRequested();
     }
 
     //
