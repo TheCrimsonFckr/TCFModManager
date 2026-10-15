@@ -902,6 +902,8 @@ internal static class Strings
     internal static string Installed_LatestNotFound => LocalizationService.Get("Installed_LatestNotFound");
     internal static string Installed_AddonForFormat => LocalizationService.Get("Installed_AddonForFormat");
     internal static string Installed_Addon => LocalizationService.Get("Installed_Addon");
+    internal static string Installed_SharedFolderFormat => LocalizationService.Get("Installed_SharedFolderFormat");
+    internal static string Installed_SharedFolderWithFormat => LocalizationService.Get("Installed_SharedFolderWithFormat");
     internal static string Installed_IncompleteMissing(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_IncompleteMissing", count, values);
     internal static string Installed_IncompletePartial => LocalizationService.Get("Installed_IncompletePartial");
@@ -2534,9 +2536,9 @@ internal static class Strings
     internal static string Installed_FikaIncompatibleFormat => LocalizationService.Get("Installed_FikaIncompatibleFormat");
     internal static string Filter_NotForThisSpt => LocalizationService.Get("Filter_NotForThisSpt");
     internal static string Filter_NotForThisSptToolTip => LocalizationService.Get("Filter_NotForThisSptToolTip");
-    internal static string Play_NotForSptHint => LocalizationService.Get("Play_NotForSptHint");
     internal static string Installed_NotForSptCount(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_NotForSptCount", count, values);
+    internal static string Play_NotForSptHint => LocalizationService.Get("Play_NotForSptHint");
     internal static string Installed_SptDismiss => LocalizationService.Get("Installed_SptDismiss");
     internal static string Installed_SptDismissToolTip => LocalizationService.Get("Installed_SptDismissToolTip");
     internal static string Installed_SptDismissedFormat => LocalizationService.Get("Installed_SptDismissedFormat");
