@@ -425,7 +425,7 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
             // starts from is the same one the Installed page runs - neither belongs on the UI thread.
             var entries = await Task.Run(() =>
             {
-                var installed = InstalledModScanner.Scan(installPath);
+                var installed = InstalledScan.Run(installPath);
                 return ModConfigDiscovery.Find(installPath, installed, _options.Effective());
             });
 
