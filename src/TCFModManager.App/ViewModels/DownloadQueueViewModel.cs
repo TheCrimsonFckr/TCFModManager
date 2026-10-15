@@ -666,7 +666,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             return known.Runs;
         }
 
-        var runs = await Task.Run(() => FikaInstall.IsPresent(InstalledModScanner.Scan(installPath)));
+        var runs = await Task.Run(() => FikaInstall.IsPresent(InstalledScan.Run(installPath)));
         _fika = (installPath, runs, DateTime.UtcNow);
         return runs;
     }
@@ -838,7 +838,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
         // Fresh disk scan each time so it reflects whatever was just installed in this same batch.
         await AppServices.ModCache.EnsureLoadedAsync();
-        var scanned = await Task.Run(() => InstalledModScanner.Scan(installPath));
+        var scanned = await Task.Run(() => InstalledScan.Run(installPath));
         var installedMatches = InstalledModCardViewModel.BuildFrom(
             scanned, AppServices.ModCache.AllMods, sptVersion, AppServices.InstallManifest.Load().Mods,
             AppServices.Addons.AllAddons);
