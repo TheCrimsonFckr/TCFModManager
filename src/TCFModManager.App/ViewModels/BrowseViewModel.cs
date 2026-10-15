@@ -975,7 +975,7 @@ public partial class BrowseViewModel : LocalizedViewModel
         // thing left holding the window blank while Browse loaded.
         var matched = await Task.Run(() =>
         {
-            var scanned = InstalledModScanner.Scan(installPath);
+            var scanned = InstalledScan.Run(installPath, catalog, records);
 
             // The manifest is passed even though Browse ignores IsAppManaged: it's what lets an
             // app-installed mod resolve to its exact catalog listing rather than a folder-name guess.
