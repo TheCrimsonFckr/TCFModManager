@@ -44,7 +44,7 @@ public sealed class ModFootprintService
 
         return await Task.Run(() =>
         {
-            var found = InstalledModScanner.Scan(installPath);
+            var found = InstalledScan.Run(installPath, catalog, records);
 
             var cards = InstalledModCardViewModel.BuildFrom(
                 found, catalog, sptVersion, records, AppServices.Addons.AllAddons);
@@ -61,7 +61,7 @@ public sealed class ModFootprintService
                 // there is nothing here to measure that the parent's own row doesn't already cover.
                 if (entries.Count == 0) continue;
 
-                var key = ModFootprintAnalyzer.KeyFor(entries[0].FolderPath);
+                var key = ModFootprintAnalyzer.KeyFor(entries[0]);
                 var stamp = ModFootprintAnalyzer.StampFor(entries);
                 cached.TryGetValue(key, out var previous);
 

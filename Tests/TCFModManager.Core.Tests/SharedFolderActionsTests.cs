@@ -165,6 +165,23 @@ public class SharedFolderActionsTests : IDisposable
         Assert.False(Directory.Exists(_live));
     }
 
+    [Fact]
+    public void Footprint_OfAShare_CountsOnlyItsFiles_UnderItsOwnKey()
+    {
+        var mods = Scan();
+        var stance = Assert.Single(mods, m => m.ShareOwnerModId == 3136);
+        var lib = Assert.Single(mods, m => m.ShareOwnerModId == 3135);
+
+        var stanceFootprint = ModFootprintAnalyzer.Analyze([stance]);
+        var libFootprint = ModFootprintAnalyzer.Analyze([lib]);
+
+        Assert.Equal(2, stanceFootprint.FileCount);
+        Assert.Equal(1, libFootprint.FileCount);
+        Assert.Equal(1, libFootprint.AssemblyCount);
+        Assert.NotEqual(stanceFootprint.FolderKey, libFootprint.FolderKey);
+        Assert.NotEqual(ModFootprintAnalyzer.StampFor([stance]), ModFootprintAnalyzer.StampFor([lib]));
+    }
+
     private InstalledMod Stance() => Assert.Single(Scan(), m => m.ShareOwnerModId == 3136 && !m.IsDisabled);
 
     private List<InstalledMod> Scan(ModOwnership? owners = null) =>

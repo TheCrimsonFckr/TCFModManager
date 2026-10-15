@@ -112,12 +112,12 @@ public static class ModFootprintAnalyzer
             // in is the only thing that decides where its cost can land, so it is decided here
             // rather than assumed later.
             var side = entry.Target == InstalledModTarget.Server ? totals.Server : totals.Client;
-            WalkPath(entry.FolderPath, totals, side);
+            WalkFiles(FilesOf(entry), totals, side);
         }
 
         return new ModFootprint
         {
-            FolderKey = KeyFor(entries[0].FolderPath),
+            FolderKey = KeyFor(entries[0]),
             TotalBytes = totals.TotalBytes,
             FileCount = totals.FileCount,
             AssemblyCount = totals.AssemblyCount,
@@ -150,6 +150,11 @@ public static class ModFootprintAnalyzer
     // The cache key for a mod folder - see ModFootprint.FolderKey for why it is lowercased here.
     public static string KeyFor(string folderPath) => folderPath.ToLowerInvariant();
 
+    // The cache key for a scanned entry: its folder, plus its name for one of several mods sharing
+    // that folder (OPEN-28), which would otherwise share - and overwrite - one key.
+    public static string KeyFor(InstalledMod entry) =>
+        entry.IsShare ? KeyFor(entry.FolderPath + "|" + entry.Name) : KeyFor(entry.FolderPath);
+
     //
     // The two vocabularies this analyzer recognises, exposed so they can be asserted directly.
     // Everything below reads assembly metadata, which a test can only exercise by shipping a real
@@ -176,7 +181,7 @@ public static class ModFootprintAnalyzer
 
         foreach (var entry in entries)
         {
-            foreach (var file in EnumerateFiles(entry.FolderPath))
+            foreach (var file in FilesOf(entry))
             {
                 try
                 {
@@ -229,9 +234,9 @@ public static class ModFootprintAnalyzer
         public readonly Side Server = new();
     }
 
-    private static void WalkPath(string path, Totals totals, Side side)
+    private static void WalkFiles(IEnumerable<string> files, Totals totals, Side side)
     {
-        foreach (var file in EnumerateFiles(path))
+        foreach (var file in files)
         {
             long length;
             try
@@ -261,6 +266,14 @@ public static class ModFootprintAnalyzer
             }
         }
     }
+
+    // An entry's files: only the ones it owns when it shares its folder, otherwise the whole folder.
+    private static IEnumerable<string> FilesOf(InstalledMod entry) =>
+        entry.OwnedFiles is { } owned
+            ? owned
+                .Select(f => Path.Combine(entry.FolderPath, f.Replace('/', Path.DirectorySeparatorChar)))
+                .Where(File.Exists)
+            : EnumerateFiles(entry.FolderPath);
 
     // Files under a folder, or the single file itself when the scanner recorded a loose DLL.
     private static IEnumerable<string> EnumerateFiles(string path)
