@@ -1151,7 +1151,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             // made navigating to this page hang.
             var (scanned, cards, dependencies, downloads, conflicts, fingerprint) = await Task.Run(() =>
             {
-                var found = InstalledModScanner.Scan(installPath);
+                var found = InstalledScan.Run(installPath, catalog, installRecords);
 
                 var built = InstalledModCardViewModel.BuildFrom(found, catalog, sptVersion, installRecords, addons)
                     .OrderBy(m => m.Name, StringComparer.OrdinalIgnoreCase)
@@ -1522,7 +1522,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             var configs = ModInstallService.FindLegacyConfigs(installPath, paths!);
             if (ConfirmRemoval(
                     mod.Name,
-                    WithProfileWarning(mod, Text(Strings.Installed_RemoveLegacyBodyFormat, string.Join("\n", paths))),
+                    WithProfileWarning(mod, Text(Strings.Installed_RemoveLegacyBodyFormat, string.Join("\n", HandRemovalShown(mod, paths.Select(p => p!))))),
                     configs.Count) is not { } configAction)
             {
                 return;
@@ -1539,8 +1539,7 @@ public partial class InstalledViewModel : LocalizedViewModel
                     ? ModInstallService.KeepLegacyConfigs(installPath, configs, mod.Name)
                     : new KeptConfigs(0, null);
 
-                var held = AppServices.ModInstall.RemoveHandInstalled(
-                    [.. paths.Select(p => p!)], installPath, mod.Name, kept.Folder);
+                var held = RemoveByHand(mod, [.. paths.Select(p => p!)], installPath, kept.Folder);
 
                 // A manually-confirmed version record would otherwise dangle, pointing at a mod
                 // that's no longer on disk.
@@ -2168,13 +2167,56 @@ public partial class InstalledViewModel : LocalizedViewModel
             ? ModInstallService.KeepLegacyConfigs(installPath, configs, mod.Name)
             : new KeptConfigs(0, null);
 
-        AppServices.ModInstall.RemoveHandInstalled(paths, installPath, mod.Name, kept.Folder);
+        RemoveByHand(mod, paths, installPath, kept.Folder);
 
         if (mod.IsManualOverride && mod.ModId is { } overriddenModId)
             AppServices.InstallManifest.ClearManualVersion(overriddenModId, mod.IsAddon);
 
         return true;
     }
+
+    //
+    // A hand-installed mod sharing a folder with others (OPEN-28 R6) gives up only its own files;
+    // any folder of its own goes whole, as before. Kept configs travel with the first removal only.
+    //
+    private static string? RemoveByHand(
+        InstalledModCardViewModel mod, IReadOnlyList<string> paths, string installPath, string? configsFolder)
+    {
+        var shares = mod.Entries.Where(e => e.IsShare).ToList();
+        if (shares.Count == 0)
+            return AppServices.ModInstall.RemoveHandInstalled(paths, installPath, mod.Name, configsFolder);
+
+        string? held = null;
+
+        foreach (var share in shares)
+        {
+            held = AppServices.ModInstall.RemoveHandInstalledShare(share, installPath, mod.Name, configsFolder) ?? held;
+            configsFolder = null;
+        }
+
+        var rest = paths.Where(p => !shares.Any(s => IsSamePath(s.FolderPath, p))).ToList();
+        if (rest.Count > 0)
+            held = AppServices.ModInstall.RemoveHandInstalled(rest, installPath, mod.Name, configsFolder) ?? held;
+
+        return held;
+    }
+
+    // What a hand removal will take, as the confirmation lists it: a shared folder's own files rather
+    // than the folder they sit in.
+    private static IEnumerable<string> HandRemovalShown(InstalledModCardViewModel mod, IEnumerable<string> paths)
+    {
+        var shares = mod.Entries.Where(e => e.IsShare).ToList();
+
+        return shares
+            .SelectMany(s => s.OwnedFiles!.Select(f => Path.Combine(s.FolderPath, f.Replace('/', Path.DirectorySeparatorChar))))
+            .Concat(paths.Where(p => !shares.Any(s => IsSamePath(s.FolderPath, p))));
+    }
+
+    private static bool IsSamePath(string a, string b) =>
+        string.Equals(
+            Path.TrimEndingDirectorySeparator(Path.GetFullPath(a)),
+            Path.TrimEndingDirectorySeparator(Path.GetFullPath(b)),
+            StringComparison.OrdinalIgnoreCase);
 
     // ---- OPEN-12 A5: the right-click menu's actions that have no command of their own ------------
 
