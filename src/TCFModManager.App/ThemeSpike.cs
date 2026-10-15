@@ -76,6 +76,27 @@ internal static class ThemeSpike
             ["CardStrokeColorDefault"] = C("#80FFFFFF"),
             ["DividerStrokeColorDefault"] = C("#80FFFFFF"),
         }),
+        ["steam"] = new(ApplicationTheme.Dark, C("#66C0F4"), new()
+        {
+            ["ApplicationBackgroundColor"] = C("#FF171D25"),
+            ["SolidBackgroundFillColorBase"] = C("#171D25"),
+            ["SolidBackgroundFillColorSecondary"] = C("#13171D"),
+            ["SolidBackgroundFillColorTertiary"] = C("#1B2838"),
+            ["SolidBackgroundFillColorQuarternary"] = C("#213042"),
+            ["SolidBackgroundFillColorBaseAlt"] = C("#0E1218"),
+            ["LayerFillColorDefault"] = C("#4C2A475E"),
+            ["AcrylicBackgroundFillColorDefault"] = C("#22303F"),
+            ["CardBackgroundFillColorDefault"] = C("#732A475E"),
+            ["CardBackgroundFillColorSecondary"] = C("#4C2A475E"),
+            ["TextFillColorPrimary"] = C("#E6EEF4"),
+            ["TextFillColorSecondary"] = C("#C7D5E0"),
+            ["TextFillColorTertiary"] = C("#8F98A0"),
+            ["ControlStrokeColorDefault"] = C("#1A66C0F4"),
+            ["DividerStrokeColorDefault"] = C("#2066C0F4"),
+            ["SystemFillColorSuccess"] = C("#A4D007"),
+            ["SystemFillColorCaution"] = C("#E5B143"),
+            ["SystemFillColorCritical"] = C("#E06A65"),
+        }),
         ["soft"] = new(ApplicationTheme.Dark, C("#7AA2D6"), new()
         {
             ["ApplicationBackgroundColor"] = C("#FF2A2C30"),
