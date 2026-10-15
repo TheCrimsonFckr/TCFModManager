@@ -19,9 +19,12 @@ public sealed class ModListMatch
     private readonly Dictionary<string, int> _byGuid = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, int> _byFolder = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, int> _byName = new(StringComparer.OrdinalIgnoreCase);
+    private readonly IReadOnlyList<ModListCandidate> _candidates;
 
     public ModListMatch(IReadOnlyList<ModListCandidate> candidates)
     {
+        _candidates = candidates;
+
         for (var index = 0; index < candidates.Count; index++)
         {
             var candidate = candidates[index];
@@ -52,9 +55,17 @@ public sealed class ModListMatch
             return guidMatch;
 
         foreach (var folder in entry.Folders.Where(f => !string.IsNullOrWhiteSpace(f)))
-            if (_byFolder.TryGetValue(folder.Trim(), out var folderMatch))
+            if (_byFolder.TryGetValue(folder.Trim(), out var folderMatch) && MayBe(entry, folderMatch))
                 return folderMatch;
 
-        return _byName.TryGetValue(entry.Name.Trim(), out var nameMatch) ? nameMatch : -1;
+        return _byName.TryGetValue(entry.Name.Trim(), out var nameMatch) && MayBe(entry, nameMatch) ? nameMatch : -1;
     }
+
+    //
+    // The folder and name tiers are guesses, and a guess never overrules two mod ids that disagree:
+    // a list entry for SPT Realism Mod must not take the mod installed in a folder called Realism when
+    // that mod is a different listing (OPEN-28). Either side without an id is still matched as before.
+    //
+    private bool MayBe(ModListEntry entry, int index) =>
+        entry.ModId is null || _candidates[index].ModId is null;
 }

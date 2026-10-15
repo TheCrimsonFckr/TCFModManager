@@ -51,6 +51,32 @@ public class ModListRefreshTests
         };
 
     [Fact]
+    public void Match_DoesNotTakeAFolderNameMatch_FromADifferentListing()
+    {
+        var match = new ModListMatch([Installed("SPT Stance Overhaul", modId: 3136, folders: "realism")]);
+
+        Assert.Equal(-1, match.IndexOf(Entry("SPT Realism Mod", modId: 416, folders: "realism")));
+    }
+
+    [Fact]
+    public void Match_StillTakesAFolderNameMatch_WhenEitherSideHasNoModId()
+    {
+        var match = new ModListMatch([Installed("Hand Mod", folders: "handmod")]);
+
+        Assert.Equal(0, match.IndexOf(Entry("Hand Mod listed", modId: 99, folders: "handmod")));
+        Assert.Equal(0, new ModListMatch([Installed("Listed", modId: 5, folders: "listed")])
+            .IndexOf(Entry("Listed by hand", folders: "listed")));
+    }
+
+    [Fact]
+    public void Match_DoesNotTakeANameMatch_FromADifferentListing()
+    {
+        var match = new ModListMatch([Installed("Same Name", modId: 1)]);
+
+        Assert.Equal(-1, match.IndexOf(Entry("Same Name", modId: 2)));
+    }
+
+    [Fact]
     public void PicksUpTheVersionInstalledNow()
     {
         var result = ModListRefresh.Build(
