@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -230,9 +231,10 @@ public static class HtmlText
         // middle of a Segoe UI dialog.
         //
         // Font comes from the host so the changelog matches whatever it is sitting in, rather than
-        // being pinned to a font of its own here.
+        // being pinned to a font of its own here. Bound rather than copied: a dialog fills its
+        // document before it joins the window, when the host still has the system default.
         //
-        document.FontFamily = host.FontFamily;
+        document.SetBinding(FlowDocument.FontFamilyProperty, new Binding(nameof(Control.FontFamily)) { Source = host });
         document.FontSize = host.FontSize;
         document.TextAlignment = TextAlignment.Left;
 
