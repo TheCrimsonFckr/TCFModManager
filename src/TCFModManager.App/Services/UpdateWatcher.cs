@@ -163,7 +163,7 @@ internal sealed class UpdateWatcher
 
         var records = AppServices.InstallManifest.Load().Mods;
 
-        var scanned = await Task.Run(() => InstalledModScanner.Scan(installPath), ct);
+        var scanned = await Task.Run(() => InstalledScan.Run(installPath, AppServices.ModCache.AllMods, records), ct);
         var cards = await BuildCardsAsync(scanned, sptVersion, records, ct);
 
         // Only matched mods with a version can be asked about. Addons aren't covered by the
