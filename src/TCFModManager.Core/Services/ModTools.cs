@@ -115,7 +115,7 @@ public static class ModTools
         {
             if (!Directory.Exists(mod.FolderPath)) continue;
 
-            foreach (var full in ExesIn(mod.FolderPath))
+            foreach (var full in mod.IsShare ? OwnedExes(mod) : ExesIn(mod.FolderPath))
             {
                 var key = KeyFor(Path.GetRelativePath(installPath, full).Replace('\\', '/'));
                 if (!seen.Add(key)) continue;
@@ -189,6 +189,15 @@ public static class ModTools
 
         return null;
     }
+
+    // A mod sharing its folder (OPEN-28) answers only for the .exe files it owns.
+    private static IEnumerable<string> OwnedExes(InstalledMod mod) =>
+        (mod.OwnedFiles ?? [])
+            .Where(f => f.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+            .Select(f => Path.Combine(mod.FolderPath, f.Replace('/', Path.DirectorySeparatorChar)))
+            .Where(File.Exists)
+            .Take(MaxPerMod)
+            .ToList();
 
     private static IEnumerable<string> ExesIn(string folder)
     {

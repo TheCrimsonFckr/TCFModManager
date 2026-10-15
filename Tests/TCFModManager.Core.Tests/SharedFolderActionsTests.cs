@@ -193,6 +193,27 @@ public class SharedFolderActionsTests : IDisposable
         Assert.Equal(2, locator.All.Count);
     }
 
+    [Fact]
+    public void ModTools_OfAHandInstalledShare_IsListedUnderTheShareThatOwnsIt()
+    {
+        new ModMetadataFixture(Kind.Plain).Constructor(_ => { })
+            .Plugin("com.example.tooled", "Tooled", "1.0.0")
+            .Write(_live, "Tooled.dll");
+        File.WriteAllText(Path.Combine(_live, "Tooled.exe"), "exe");
+
+        var scanned = InstalledModScanner.Scan(_install, new ModOwnership([],
+        [
+            new KeyValuePair<string, int>(StanceGuid, 3136),
+            new KeyValuePair<string, int>(LibGuid, 3135),
+            new KeyValuePair<string, int>("com.example.tooled", 77),
+        ]));
+        var owner = Assert.Single(scanned, m => m.OwnedFiles?.Contains("Tooled.exe") == true);
+
+        var tool = Assert.Single(ModTools.Find(_install, [], scanned, []));
+
+        Assert.Equal(owner.Name, tool.ModName);
+    }
+
     private InstalledMod Stance() => Assert.Single(Scan(), m => m.ShareOwnerModId == 3136 && !m.IsDisabled);
 
     private List<InstalledMod> Scan(ModOwnership? owners = null) =>

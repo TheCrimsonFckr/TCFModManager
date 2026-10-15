@@ -131,7 +131,7 @@ public partial class PlayViewModel
             try
             {
                 found = await Task.Run(() => ModTools.Find(
-                    installPath, AppServices.InstallManifest.Load().Mods, InstalledModScanner.Scan(installPath), hidden));
+                    installPath, AppServices.InstallManifest.Load().Mods, InstalledScan.Run(installPath), hidden));
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
