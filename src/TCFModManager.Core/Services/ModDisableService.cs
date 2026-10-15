@@ -60,6 +60,12 @@ public static class ModDisableService
                 continue;
             }
 
+            if (mod.IsShare)
+            {
+                MoveShare(mod, destination, moved, failed);
+                continue;
+            }
+
             if (Exists(destination))
             {
                 failed.Add(new ModDisableFailure(
@@ -106,7 +112,10 @@ public static class ModDisableService
             }
 
             if (TryMove(move.To, move.From, name, failed))
+            {
                 moved.Add(new ModMove(move.To, move.From));
+                if (File.Exists(move.From)) TidyUpToContainer(move.To);
+            }
         }
 
         foreach (var move in moved) TryRemoveEmptyDisabledContainer(Path.GetDirectoryName(move.From));
@@ -129,7 +138,9 @@ public static class ModDisableService
             if (DisabledModPaths.Counterpart(enabled.FolderPath) is not { } counterpart) continue;
 
             var disabled = all.FirstOrDefault(m =>
-                m.IsDisabled && string.Equals(m.FolderPath, counterpart, StringComparison.OrdinalIgnoreCase));
+                m.IsDisabled
+                && string.Equals(m.FolderPath, counterpart, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(m.Name, enabled.Name, StringComparison.OrdinalIgnoreCase));
 
             if (disabled is not null) pairs.Add(new ModDuplicatePair(enabled, disabled));
         }
@@ -156,17 +167,31 @@ public static class ModDisableService
 
         var setAside = SetAsidePath(installPath, discard.FolderPath, timestamp);
 
-        if (!TryMove(discard.FolderPath, setAside, discard.Name, failed))
-            return new ModDisableOutcome(moved, failed);
+        if (discard.IsShare)
+        {
+            if (!MoveShare(discard, setAside, moved, failed)) return new ModDisableOutcome(moved, failed);
+        }
+        else
+        {
+            if (!TryMove(discard.FolderPath, setAside, discard.Name, failed))
+                return new ModDisableOutcome(moved, failed);
 
-        moved.Add(new ModMove(discard.FolderPath, setAside));
+            moved.Add(new ModMove(discard.FolderPath, setAside));
+        }
+
         TryHide(Path.Combine(installPath, DuplicatesFolderName));
 
         // Keeping the disabled copy means moving it into the container the discarded one just left.
         if (!keepEnabled && DisabledModPaths.Counterpart(keep.FolderPath) is { } destination)
         {
-            if (TryMove(keep.FolderPath, destination, keep.Name, failed))
+            if (keep.IsShare)
+            {
+                MoveShare(keep, destination, moved, failed);
+            }
+            else if (TryMove(keep.FolderPath, destination, keep.Name, failed))
+            {
                 moved.Add(new ModMove(keep.FolderPath, destination));
+            }
         }
 
         AppLog.Info("Disable", $"resolved duplicate {keep.Name}; set aside {setAside}");
@@ -232,6 +257,81 @@ public static class ModDisableService
     }
 
     private static bool Exists(string path) => Directory.Exists(path) || File.Exists(path);
+
+    //
+    // Moves only the files a share owns (OPEN-28) into the same places under destinationFolder, all or
+    // nothing: a file already at a destination refuses the whole share, and a move that fails part way
+    // puts back the ones already moved.
+    //
+    private static bool MoveShare(InstalledMod mod, string destinationFolder, List<ModMove> moved, List<ModDisableFailure> failed)
+    {
+        var files = (mod.OwnedFiles ?? [])
+            .Select(f => f.Replace('/', Path.DirectorySeparatorChar))
+            .Select(f => new ModMove(Path.Combine(mod.FolderPath, f), Path.Combine(destinationFolder, f)))
+            .Where(m => File.Exists(m.From))
+            .ToList();
+
+        if (files.FirstOrDefault(m => Exists(m.To)) is { } clash)
+        {
+            failed.Add(new ModDisableFailure(mod.Name, $"something is already at {clash.To} - remove or rename it first"));
+            return false;
+        }
+
+        var done = new List<ModMove>();
+
+        foreach (var file in files)
+        {
+            if (TryMove(file.From, file.To, mod.Name, failed))
+            {
+                done.Add(file);
+                continue;
+            }
+
+            for (var i = done.Count - 1; i >= 0; i--)
+            {
+                if (TryMove(done[i].To, done[i].From, mod.Name, failed)) TidyUpToContainer(done[i].To);
+            }
+
+            return false;
+        }
+
+        foreach (var file in done) TidyUpToContainer(file.From);
+        moved.AddRange(done);
+        return true;
+    }
+
+    //
+    // After a file has moved out of a mod folder: removes the folders it leaves empty, from the file's
+    // own folder up to the mod folder, and an emptied .disabled container. Folders still holding
+    // another mod's files are kept.
+    //
+    private static void TidyUpToContainer(string movedFrom)
+    {
+        var dir = Path.GetDirectoryName(movedFrom);
+
+        while (dir is not null && !IsContainer(dir))
+        {
+            try
+            {
+                if (!Directory.Exists(dir) || Directory.EnumerateFileSystemEntries(dir).Any()) return;
+                Directory.Delete(dir);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                return;
+            }
+
+            dir = Path.GetDirectoryName(dir);
+        }
+
+        TryRemoveEmptyDisabledContainer(dir);
+    }
+
+    private static bool IsContainer(string dir)
+    {
+        var path = DisabledModPaths.ToRelative(dir).TrimEnd('/');
+        return DisabledModPaths.TryFindRelativeContainer(path, out var container, out _) && container.Length == path.Length;
+    }
 
     // A ".disabled" container left behind with nothing in it is removed, so an install with no
     // disabled mods doesn't keep the folders around.

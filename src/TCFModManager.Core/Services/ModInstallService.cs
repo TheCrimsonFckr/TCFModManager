@@ -1051,22 +1051,7 @@ public sealed class ModInstallService(
                 NoteFoldersToTidy(installPath, Path.Combine(fullFolder, "_"), touchedDirectories);
         }
 
-        foreach (var dir in touchedDirectories.OrderByDescending(d => d.Length))
-        {
-            try
-            {
-                if (Directory.Exists(dir)
-                    && InstallPathGuard.MayRemoveEmptyFolder(installPath, dir)
-                    && !Directory.EnumerateFileSystemEntries(dir).Any())
-                {
-                    Directory.Delete(dir);
-                }
-            }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-            {
-                // Directory that won't delete is left alone.
-            }
-        }
+        TidyEmptyFolders(installPath, touchedDirectories);
 
         // On a real removal, the mod's folders that had to stay because they hold files it didn't
         // install - said in the result and marked on the leftover's card, never taken.
@@ -1166,6 +1151,26 @@ public sealed class ModInstallService(
         }
     }
 
+    private static void TidyEmptyFolders(string installPath, HashSet<string> touchedDirectories)
+    {
+        foreach (var dir in touchedDirectories.OrderByDescending(d => d.Length))
+        {
+            try
+            {
+                if (Directory.Exists(dir)
+                    && InstallPathGuard.MayRemoveEmptyFolder(installPath, dir)
+                    && !Directory.EnumerateFileSystemEntries(dir).Any())
+                {
+                    Directory.Delete(dir);
+                }
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                // Directory that won't delete is left alone.
+            }
+        }
+    }
+
     private static void NoteFoldersToTidy(string installPath, string fullPath, HashSet<string> touched)
     {
         // Only a mod's own folder and what's below it are ever tidied away (D14).
@@ -1221,6 +1226,74 @@ public sealed class ModInstallService(
             session.Note(relative, RemovalOutcome.Moved);
         }
 
+        return _removed.Finish(session);
+    }
+
+    //
+    // Removes one mod installed by hand from a folder it shares with others (OPEN-28 R6): only the
+    // files the share owns move to the holding folder, the folder and every other mod's files stay.
+    // A whole-folder entry goes through RemoveHandInstalled as before.
+    //
+    public string? RemoveHandInstalledShare(
+        InstalledMod share, string installPath, string modName, string? configsFolder = null)
+    {
+        if (share.OwnedFiles is not { } owned)
+            return RemoveHandInstalled([share.FolderPath], installPath, modName, configsFolder);
+
+        if (string.IsNullOrWhiteSpace(installPath))
+            throw new ModInstallException(ModInstallFailure.NoInstallFolder);
+
+        EnsureInstallNotInUse(ModInstallAction.Remove, installPath);
+        RecoverInterruptedInstalls(installPath);
+
+        if (InstallPathGuard.CheckModFolder(installPath, share.FolderPath) is { } folderRefusal)
+        {
+            AppLog.Warn("Remove", $"refused to remove {share.FolderPath} ({folderRefusal})");
+            throw new ModInstallException(ModInstallFailure.RemovalRefused) { Folder = share.FolderPath, Refusal = folderRefusal };
+        }
+
+        var root = Path.GetFullPath(installPath);
+        var folder = Path.GetFullPath(share.FolderPath);
+        var files = new List<(string Full, string Relative)>();
+
+        foreach (var file in owned)
+        {
+            var full = Path.GetFullPath(Path.Combine(folder, file.Replace('/', Path.DirectorySeparatorChar)));
+            var relative = Path.GetRelativePath(root, full).Replace('\\', '/');
+
+            var refusal = full.StartsWith(folder + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)
+                ? InstallPathGuard.CheckRecordedPath(installPath, relative, out _)
+                : PathRefusal.NotAModFolder;
+
+            if (refusal is not null)
+            {
+                AppLog.Warn("Remove", $"refused to remove {full} ({refusal})");
+                throw new ModInstallException(ModInstallFailure.RemovalRefused) { Folder = full, Refusal = refusal };
+            }
+
+            files.Add((full, relative));
+        }
+
+        profileBackups?.BackupIfChanged(installPath, ProfileBackups.BeforeRemove);
+
+        var session = RemovedMods.Begin(installPath, modName, RemovalKind.HandInstalled, record: null);
+        session.Log.ConfigsKeptFolder = configsFolder;
+        var touched = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var (full, relative) in files)
+        {
+            if (!File.Exists(full))
+            {
+                session.Note(relative, RemovalOutcome.AlreadyGone);
+                continue;
+            }
+
+            session.MoveFileIn(full, relative);
+            session.Note(relative, RemovalOutcome.Moved);
+            NoteFoldersToTidy(installPath, full, touched);
+        }
+
+        TidyEmptyFolders(installPath, touched);
         return _removed.Finish(session);
     }
 
