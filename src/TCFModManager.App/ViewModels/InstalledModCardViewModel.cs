@@ -464,6 +464,14 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     public IReadOnlyList<InstalledMod> Entries { get; init; } = [];
 
     //
+    // OPEN-28: the folder this mod shares with other mods (the folder's own name, "Realism"), and the
+    // display titles of those other mods. Null and empty for a mod with folders of its own.
+    //
+    public string? SharedFolderName { get; private set; }
+
+    public IReadOnlyList<string> SharedWith { get; private set; } = [];
+
+    //
     // The mod lists that name this mod, filled in after a scan by InstalledViewModel (the card
     // itself knows nothing about lists). One badge each, so a glance at the card says which sets
     // it belongs to - and therefore which list switches won't cost a download.
@@ -684,6 +692,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         var groups = MergeRecordFolders(
                 resolved.Where(g => !claimed.Contains(g.Key)).ToList(),
                 recordsByFolder,
+                recordsByModId,
                 index)
             .Select(g => (g.Entries, g.Match))
             .ToList();
@@ -730,6 +739,8 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
                 return BuildCard(g.Entries, g.Match, installedSptVersion, record, addonsByParent, fikaPresent, dismissedSpt);
             })
             .ToList();
+
+        NoteSharedFolders(cards);
 
         if (addonFolders.Count == 0) return cards;
 
@@ -952,10 +963,15 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         CatalogIndex index,
         Dictionary<string, InstalledModRecord> recordsByFolder)
     {
+        // A mod sharing its folder (OPEN-28) was already identified by the scan, from the record that
+        // placed its files or its plugin's GUID. The folder's records belong to its neighbours.
+        if (entries.Select(m => m.ShareOwnerModId).FirstOrDefault(id => id is not null) is { } owner)
+            return index.ById.GetValueOrDefault(owner);
+
         // This app placed the folder, so the catalog listing is already known exactly. Everything
         // below is inference for mods installed by hand, which is where a folder like "EpicsAIO"
         // can't be talked into matching a listing called "Epic's All in One".
-        if (recordsByFolder.TryGetValue(folderName, out var record))
+        if (!entries.Any(m => m.IsShare) && recordsByFolder.TryGetValue(folderName, out var record))
         {
             var fromRecord = index.ById.GetValueOrDefault(record.ModId)
                 ?? (string.IsNullOrWhiteSpace(record.Guid) ? null : index.ByGuid.GetValueOrDefault(record.Guid));
@@ -1086,13 +1102,14 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     private static List<(string Key, List<InstalledMod> Entries, Mod? Match)> MergeRecordFolders(
         List<(string Key, List<InstalledMod> Entries, Mod? Match)> groups,
         Dictionary<string, InstalledModRecord> recordsByFolder,
+        Dictionary<int, InstalledModRecord> recordsByModId,
         CatalogIndex index)
     {
         var byRecord = new Dictionary<int, List<int>>();
 
         for (var i = 0; i < groups.Count; i++)
         {
-            if (!recordsByFolder.TryGetValue(groups[i].Key, out var record)) continue;
+            if (RecordOf(groups[i].Entries, groups[i].Key, recordsByFolder, recordsByModId) is not { } record) continue;
             if (SpeaksForAnotherMod(groups[i], record, index)) continue;
 
             if (!byRecord.TryGetValue(record.ModId, out var members)) byRecord[record.ModId] = members = [];
@@ -1107,7 +1124,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
         foreach (var members in joins)
         {
-            var record = recordsByFolder[groups[members[0]].Key];
+            var record = RecordOf(groups[members[0]].Entries, groups[members[0]].Key, recordsByFolder, recordsByModId)!;
             var ordered = members
                 .OrderBy(i => CarriesRecordGuid(groups[i].Entries, record) ? 0 : 1)
                 .ThenBy(i => PlacementRank(groups[i].Key, record))
@@ -1130,6 +1147,54 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         }
 
         return results;
+    }
+
+    // The record a name-group belongs to: a shared folder's mod by the owner the scan found, any
+    // other group by the folder its record placed.
+    private static InstalledModRecord? RecordOf(
+        List<InstalledMod> entries,
+        string key,
+        Dictionary<string, InstalledModRecord> recordsByFolder,
+        Dictionary<int, InstalledModRecord> recordsByModId)
+    {
+        if (entries.Any(m => m.IsShare))
+        {
+            return entries.Select(m => m.ShareOwnerModId).FirstOrDefault(id => id is not null) is { } owner
+                ? recordsByModId.GetValueOrDefault(owner)
+                : null;
+        }
+
+        return recordsByFolder.GetValueOrDefault(key);
+    }
+
+    //
+    // Fills SharedFolderName and SharedWith on every card holding a share of a folder (OPEN-28), from
+    // the other cards holding shares of the same folder - live or .disabled, it is one folder.
+    //
+    private static void NoteSharedFolders(List<InstalledModCardViewModel> cards)
+    {
+        var byFolder = cards
+            .SelectMany(c => c.Entries.Where(e => e.IsShare).Select(e => (Card: c, Folder: LiveFolderOf(e.FolderPath))))
+            .GroupBy(x => x.Folder, StringComparer.OrdinalIgnoreCase);
+
+        foreach (var folder in byFolder)
+        {
+            var members = folder.Select(x => x.Card).Distinct().ToList();
+
+            foreach (var card in members)
+            {
+                card.SharedFolderName = Path.GetFileName(folder.Key);
+                card.SharedWith = [.. members.Where(m => m != card).Select(m => m.DisplayTitle)];
+            }
+        }
+    }
+
+    private static string LiveFolderOf(string folderPath)
+    {
+        var trimmed = Path.TrimEndingDirectorySeparator(folderPath);
+        return DisabledModPaths.IsModDisabled(trimmed) && DisabledModPaths.Counterpart(trimmed) is { } live
+            ? live
+            : trimmed;
     }
 
     //
@@ -1548,8 +1613,10 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     //
     private static bool HoldsRecordFolder(List<InstalledMod> entries, InstalledModRecord record)
     {
+        if (entries.Any(e => e.ShareOwnerModId == record.ModId)) return true;
+
         var folders = InstalledModFolders.Resolve(record).ToHashSet(StringComparer.OrdinalIgnoreCase);
-        return entries.SelectMany(FolderNamesOf).Any(folders.Contains);
+        return entries.Where(e => !e.IsShare).SelectMany(FolderNamesOf).Any(folders.Contains);
     }
 
     private static IEnumerable<string> FolderNamesOf(InstalledMod entry)
