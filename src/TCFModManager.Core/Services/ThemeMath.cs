@@ -69,6 +69,20 @@ public static class ThemeMath
         return (lighter + 0.05) / (darker + 0.05);
     }
 
+    public static ThemeColor ReadableAgainst(ThemeColor fill, ThemeColor text, double minimum)
+    {
+        var solid = CompositeOver(fill, Black);
+        var away = RelativeLuminance(text) > 0.5 ? Black : White;
+
+        for (var step = 0; step <= 12; step++)
+        {
+            var candidate = Mix(solid, away, step * 0.05);
+            if (ContrastRatio(text, candidate) >= minimum) return candidate;
+        }
+
+        return Mix(solid, away, 0.6);
+    }
+
     public static ThemeColor PreferredTextOn(ThemeColor fill) =>
         ContrastRatio(Black, fill) >= ContrastRatio(White, fill) ? Black : White;
 

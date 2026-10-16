@@ -70,6 +70,33 @@ public class ThemeMathTests
     }
 
     [Fact]
+    public void ReadableAgainst_LeavesAFillThatAlreadyReadsAlone()
+    {
+        var fill = ThemeColor.Parse("#0F1924");
+
+        Assert.Equal(fill, ThemeMath.ReadableAgainst(fill, ThemeMath.White, 3.0));
+    }
+
+    [Fact]
+    public void ReadableAgainst_DarkensABrightFillUnderWhiteText()
+    {
+        var fill = ThemeColor.Parse("#E5B143");
+
+        var readable = ThemeMath.ReadableAgainst(fill, ThemeMath.White, 3.0);
+
+        Assert.True(ThemeMath.ContrastRatio(ThemeMath.White, readable) >= 3.0);
+        Assert.True(ThemeMath.RelativeLuminance(readable) < ThemeMath.RelativeLuminance(fill));
+    }
+
+    [Fact]
+    public void ReadableAgainst_LightensADarkFillUnderBlackText()
+    {
+        var readable = ThemeMath.ReadableAgainst(ThemeColor.Parse("#1A3045"), ThemeMath.Black, 4.5);
+
+        Assert.True(ThemeMath.ContrastRatio(ThemeMath.Black, readable) >= 4.5);
+    }
+
+    [Fact]
     public void Resolve_FillsGapsFromTheBase()
     {
         var theme = new ThemeDefinition

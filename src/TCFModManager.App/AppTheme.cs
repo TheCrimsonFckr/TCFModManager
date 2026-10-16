@@ -62,11 +62,21 @@ public static class AppTheme
 
     public static ThemePreference Stored => Settings.Load().Theme;
 
+    public static string? StoredThemeId => Settings.Load().ThemeId;
+
+    private static bool _applyingCustom;
+
     //
     // Applies the stored preference. Called from App.OnStartup, before the main window exists, so
     // the window is painted in the right theme rather than being repainted a moment after it opens.
     //
-    public static void ApplyStored() => ApplyOnly(Stored);
+    public static void ApplyStored()
+    {
+        var settings = Settings.Load();
+
+        if (ThemeCatalog.Resolve(settings.ThemeId) is { } theme) ApplyCustom(theme);
+        else ApplyOnly(settings.Theme);
+    }
 
     //
     // Hooks the main window up: repaints its chrome on every theme change, and starts following
@@ -82,15 +92,17 @@ public static class AppTheme
             // the chrome too.
             ApplicationThemeManager.Changed += (_, _) =>
             {
+                if (ThemeApplier.Active is { } active && !_applyingCustom) ThemeApplier.Apply(active);
                 RefreshWindowChrome();
                 PinPressedButtonForeground();
                 StrengthenLightButtonHover();
-                ThemeSpike.ApplyIfRequested();
             };
             _subscribed = true;
         }
 
-        if (Stored == ThemePreference.FollowSystem) StartFollowing(window);
+        if (Stored == ThemePreference.FollowSystem && ThemeApplier.Active is null) StartFollowing(window);
+
+        if (Application.Current is { } app) ThemeApplier.ReferenceWindowBackgrounds(app);
     }
 
     // Applies a newly chosen preference, saves it, and starts or stops following Windows to match.
@@ -100,6 +112,7 @@ public static class AppTheme
 
         var settings = Settings.Load();
         settings.Theme = preference;
+        settings.ThemeId = null;
         Settings.Save(settings);
 
         if (preference == ThemePreference.FollowSystem)
@@ -116,8 +129,44 @@ public static class AppTheme
         AppLog.Info("Theme", $"set to {preference}");
     }
 
+    public static bool SetCustom(string id)
+    {
+        if (ThemeCatalog.Resolve(id) is not { } theme) return false;
+
+        StopFollowing();
+        ApplyCustom(theme);
+
+        var settings = Settings.Load();
+        settings.ThemeId = theme.Id;
+        Settings.Save(settings);
+
+        AppLog.Info("Theme", $"set to {theme.Id}");
+        return true;
+    }
+
+    private static void ApplyCustom(ThemeDefinition theme)
+    {
+        _applyingCustom = true;
+        try
+        {
+            ApplicationThemeManager.Apply(theme.Base == ThemeBase.Light ? ApplicationTheme.Light : ApplicationTheme.Dark);
+            ThemeApplier.Apply(theme);
+        }
+        finally
+        {
+            _applyingCustom = false;
+        }
+
+        RefreshWindowChrome();
+        PinPressedButtonForeground();
+        StrengthenLightButtonHover();
+        HookButtonPressFeedback();
+    }
+
     private static void ApplyOnly(ThemePreference preference)
     {
+        ThemeApplier.Clear();
+
         switch (preference)
         {
             case ThemePreference.Light:
@@ -137,7 +186,6 @@ public static class AppTheme
         PinPressedButtonForeground();
         StrengthenLightButtonHover();
         HookButtonPressFeedback();
-        ThemeSpike.ApplyIfRequested();
     }
 
     //
@@ -410,6 +458,8 @@ public static class AppTheme
     //
     private static void RefreshWindowChrome()
     {
+        if (Application.Current is { } current) ThemeApplier.ReferenceWindowBackgrounds(current);
+
         // Absent at startup, when ApplyStored runs before any window exists. Nothing to do then:
         // FluentWindow reads the current theme itself as it is created.
         if (Application.Current?.MainWindow is not FluentWindow window) return;

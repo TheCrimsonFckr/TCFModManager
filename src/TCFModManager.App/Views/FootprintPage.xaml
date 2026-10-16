@@ -32,11 +32,11 @@
             light. A severity palette here would be the grade this page deliberately does not give
             - see the footprint notes on why the levels exist in code and are never shown.
         -->
-        <SolidColorBrush x:Key="FootprintCpuTint" Color="#3B82F6" Opacity="0.22" />
-        <SolidColorBrush x:Key="FootprintGpuTint" Color="#8B5CF6" Opacity="0.22" />
-        <SolidColorBrush x:Key="FootprintMemoryTint" Color="#14B8A6" Opacity="0.22" />
-        <SolidColorBrush x:Key="FootprintStartupTint" Color="#16A34A" Opacity="0.22" />
-        <SolidColorBrush x:Key="FootprintDiskTint" Color="#D97706" Opacity="0.22" />
+        <SolidColorBrush x:Key="FootprintCpuTint" Color="{DynamicResource FootprintCpuColor}" Opacity="0.22" />
+        <SolidColorBrush x:Key="FootprintGpuTint" Color="{DynamicResource FootprintGpuColor}" Opacity="0.22" />
+        <SolidColorBrush x:Key="FootprintMemoryTint" Color="{DynamicResource FootprintMemoryColor}" Opacity="0.22" />
+        <SolidColorBrush x:Key="FootprintStartupTint" Color="{DynamicResource FootprintStartupColor}" Opacity="0.22" />
+        <SolidColorBrush x:Key="FootprintDiskTint" Color="{DynamicResource FootprintDiskColor}" Opacity="0.22" />
 
         <!--
             Client and Server on their own name a side and no resource, so they get no hue - but
@@ -45,7 +45,7 @@
             than as a deliberate neutral. Grey at the same strength as the colours says "a chip,
             naming no particular resource", which is what they mean.
         -->
-        <SolidColorBrush x:Key="FootprintNeutralTint" Color="#6B7280" Opacity="0.22" />
+        <SolidColorBrush x:Key="FootprintNeutralTint" Color="{DynamicResource FootprintNeutralColor}" Opacity="0.22" />
 
         <!--
             Appearance is Primary on every chip on purpose. Badge's own template sets the Border's
