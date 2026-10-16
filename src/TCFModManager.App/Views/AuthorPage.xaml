@@ -28,7 +28,7 @@
             <!-- The cover, when the author has one, behind the header. -->
             <Border
                 Height="150"
-                CornerRadius="8"
+                CornerRadius="{DynamicResource OverlayCornerRadius}"
                 ClipToBounds="True"
                 Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
                 Visibility="{Binding CoverUrl, Converter={StaticResource NullToCollapsed}}">
@@ -152,7 +152,7 @@
                                         Margin="0,4,0,0"
                                         Padding="8,2"
                                         HorizontalAlignment="Right"
-                                        CornerRadius="3"
+                                        CornerRadius="{DynamicResource SmallCornerRadius}"
                                         Background="{DynamicResource SystemFillColorSuccessBackgroundBrush}"
                                         Visibility="{Binding IsInstalled, Converter={StaticResource BoolToVis}}">
                                         <TextBlock
