@@ -223,7 +223,7 @@
                             <Border
                                 Margin="0,8,0,0"
                                 Padding="12"
-                                CornerRadius="6"
+                                CornerRadius="{DynamicResource ControlCornerRadius}"
                                 Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -250,7 +250,7 @@
                                             <Border
                                                 Margin="8,0,0,0"
                                                 Padding="8,3"
-                                                CornerRadius="4"
+                                                CornerRadius="{DynamicResource ControlCornerRadius}"
                                                 VerticalAlignment="Center"
                                                 Background="{DynamicResource ControlFillColorSecondaryBrush}"
                                                 Visibility="{Binding IsYou, Converter={StaticResource BoolToVisibility}}">
