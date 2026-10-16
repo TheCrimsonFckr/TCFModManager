@@ -411,7 +411,7 @@
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <!-- Cards slide to a new row or column as the column count changes (OPEN-26). -->
-                    <controls:GlideUniformGrid Columns="{Binding Columns}" />
+                    <controls:GlideUniformGrid Columns="{Binding Columns}" VerticalAlignment="Top" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemContainerStyle>

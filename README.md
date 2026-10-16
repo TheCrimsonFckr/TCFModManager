@@ -2,7 +2,7 @@
 
 ![Browse screen](https://github.com/TheCrimsonFckr/TCFModManager/blob/main/assets/browse.png "Browse screen")
 
-It also keeps **mod lists** - save the set you run, switch between sets, send one to a friend, or follow the list a server publishes and know what you are missing before you launch. Plus a config editor, a start button for the server and the launcher, and an optional page that reads what each installed mod actually ships.
+It also keeps **mod lists** - save the set you run, switch between sets, send one to a friend, or follow the list a server publishes and know what you are missing before you launch. Plus a config editor, a **Profile** page with your raid record, money and level like the SPT launcher's, a **Server** page that starts and watches the server, a log reader that names the mod behind a crash, themes, and an optional page that reads what each installed mod actually ships.
 
 ## The full guide is on the wiki
 **[github.com/TheCrimsonFckr/TCFModManager/wiki](https://github.com/TheCrimsonFckr/TCFModManager/wiki)** - every page of the app, mod lists, configs, Monitor mode, update notifications, the Server Map, limitations and troubleshooting. This page only covers getting it installed.
@@ -36,29 +36,13 @@ The version is read from the server executable - `SPT.Server.exe`, or the older 
 Once it's set up, the app keeps itself up to date from this page. On launch it checks for a newer release and shows a banner and a badge on **App update** in the sidebar; you're asked to open this page before anything is downloaded. Your settings, install history and kept configs survive an update.
 
 ## Planning
-Coming next, in no particular order - the [Planning page](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Planning) on the wiki has the full list, including everything already done.
+Nothing new is lined up right now - ideas are welcome on the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues). The [Planning page](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Planning) on the wiki lists everything done so far. The latest:
 
-- Never left half-installed - an install that is interrupted is finished or undone the next time the app runs - *Planned*
-- Profile backups - your SPT profiles are backed up before any install, update, remove or list apply - *Planned*
-- Held-back updates - an update that would break another mod is flagged and left out of updating everything - *Planned*
-- Fika warnings - a version not marked for Fika on a Fika install, and a remove that may change your profile - *Planned*
-- Faster downloads - up to three at once, with retry and resume - *Planned*
-- Diagnose logs - reads the server, BepInEx and game logs, names the mod at fault, and builds a report with private details taken out - *Planned*
-- SPT upgrade check - pick a newer SPT and see which of your mods are ready for it - *Planned*
-- Mod tools - launch the programs a mod ships from the Play page - *Planned*
-- Server without its window - the server log live on the Play page, and the server closed along with the game - *Planned*
-- Direct launch - start the game from the Play page without SPT's launcher (experimental, off by default) - *Planned*
-- Mod descriptions shown in full - tabs, tables and GIFs as sp-mod shows them - *Planned*
-- Filter by date, and search mod descriptions as well as titles - *Planned*
-- Select several mods on Installed and update, enable, disable or remove them together - *Planned*
-- An Update button on each card - *Planned*
-- A Versions tab with Switch to this version - *Planned*
-- Author pages, and following an author - *Planned*
-- A right-click menu on every mod - *Planned*
-- Quick view - hover a mod for a preview - *Planned*
-- A downloads bar - *Planned*
-- Page size options, including endless scrolling - *Planned*
-- Mod comments in the app - *Planned*
+- Profile stats - the SPT launcher's profile page in the app: raid record, money and level progress, on a new Profile page beside the Server page
+- Themes - five built-in looks (Tarkov, OLED black, High contrast, Soft, Steam) and an editor to make and share your own
+- Installed versions checked against your SPT (and Fika)
+- Dependencies on Apply - a list's preview offers the mods its mods need that the list doesn't name
+- Version conflicts - switch to the version that suits the most mods, or disable the one asking
 
 ## Reporting a problem
 Use the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues) - bugs, wording, translations, feature requests or questions. Attach `Data\logs\tcfmm-<date>.log`, ideally after adding the `verbose` marker file and reproducing the problem. The [wiki](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Troubleshooting) covers the common ones first.
