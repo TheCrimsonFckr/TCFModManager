@@ -121,7 +121,7 @@ public partial class PlayViewModel
         {
             IsClosingGame = false;
             Refresh();
-            _poll.Start();
+            ResumePolling();
         }
     }
 }

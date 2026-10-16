@@ -744,7 +744,7 @@ A mod list records which mods to install and enable. Applying one downloads what
   </data>
   <data name="Common_Cancel" xml:space="preserve">
     <value>Cancel</value>
-    <comment>Dismisses a confirmation on the Play page, and cancels a download on the Downloads page.</comment>
+    <comment>Dismisses a confirmation on the Profile and Server pages, and cancels a download on the Downloads page.</comment>
   </data>
   <data name="ModUpdate_CurrentlyInstalledFormat" xml:space="preserve">
     <value>Currently installed: {0}</value>
@@ -1069,8 +1069,12 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="MainWindow_SeeWhatsNew" xml:space="preserve">
     <value>See what's new</value>
   </data>
-  <data name="Nav_Play" xml:space="preserve">
-    <value>Play</value>
+  <data name="Nav_Profile" xml:space="preserve">
+    <value>Profile</value>
+    <comment>Sidebar item.</comment>
+  </data>
+  <data name="Nav_Server" xml:space="preserve">
+    <value>Server</value>
     <comment>Sidebar item.</comment>
   </data>
   <data name="Nav_Browse" xml:space="preserve">
@@ -4379,11 +4383,11 @@ You can turn it back on at any time.</value>
   </data>
   <data name="Play_RoleHeadless" xml:space="preserve">
     <value>Set up as a dedicated headless: a mod list from a server arrives without the mods only a player would need.</value>
-    <comment>Shown on the Play page when this machine runs a headless client but nobody plays on it.</comment>
+    <comment>Shown on the Server page when this machine runs a headless client but nobody plays on it.</comment>
   </data>
   <data name="Play_RolePlaysAndHosts" xml:space="preserve">
     <value>Set up as a machine that both plays and hosts, so a served mod list arrives whole.</value>
-    <comment>Shown on the Play page when this machine both plays and runs a headless client.</comment>
+    <comment>Shown on the Server page when this machine both plays and runs a headless client.</comment>
   </data>
   <data name="Play_StartedFormat" xml:space="preserve">
     <value>Started {0}.</value>
@@ -4616,7 +4620,7 @@ See Dependencies and Conflicts.</value>
   </data>
   <data name="Play_InstallWideFormat" xml:space="preserve">
     <value>SPT will load no server mods: {0}. Open Dependencies and Conflicts to fix it.</value>
-    <comment>Play page warning. {0} is a list of Dependencies_InstallWidePieceFormat.</comment>
+    <comment>Profile page warning. {0} is a list of Dependencies_InstallWidePieceFormat.</comment>
   </data>
   <data name="Play_InstallWideHint" xml:space="preserve">
     <value>You can still launch, but the server will start without any mods.</value>
@@ -6299,7 +6303,7 @@ This was written to:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Play_Start_Step3" xml:space="preserve">
-    <value>Press {0}, pick your profile and start the game.</value>
+    <value>Open {0}, press {1}, pick your profile and start the game.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Play_Start_Note" xml:space="preserve">
@@ -7481,7 +7485,7 @@ See Dependencies and Conflicts.</value>
   </data>
   <data name="Play_ConflictsHint" xml:space="preserve">
     <value>Some mods may not load. You can still launch.</value>
-    <comment>Under the conflict count on the Play page.</comment>
+    <comment>Under the conflict count on the Profile page.</comment>
   </data>
   <data name="Conflicts_KeepBlockedFormat" xml:space="preserve">
     <value>{0} also has files that aren't duplicated, and it was installed with this app, so it can only be removed whole - those files would go too. Remove it from the Installed page instead, where Remove shows everything it takes.</value>
@@ -7954,7 +7958,7 @@ See Dependencies and Conflicts.</value>
     <comment>Mod lists page, warning while a previewed plan can't be applied because the game is running. Apply is the button above it.</comment>
   </data>
   <data name="ModLists_ApplyBlockedServer" xml:space="preserve">
-    <value>Stop the SPT server to apply this list - use Stop on the Play page or close its console window. Mods can't be changed while the server is running - Apply comes back as soon as it's stopped.</value>
+    <value>Stop the SPT server to apply this list - use Stop on the Server page or close its console window. Mods can't be changed while the server is running - Apply comes back as soon as it's stopped.</value>
     <comment>Mod lists page, warning while a previewed plan can't be applied because the SPT server is running.</comment>
   </data>
   <data name="ModLists_ApplyBlockedBoth" xml:space="preserve">
@@ -8662,7 +8666,7 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <value>Starting SPT</value>
   </data>
   <data name="Options_StartingSptHint" xml:space="preserve">
-    <value>How Start server on the Play page runs the server, and what follows it.</value>
+    <value>How Start server on the Server page runs the server, and what follows it.</value>
   </data>
   <data name="Options_StartLauncherOn" xml:space="preserve">
     <value>Open the launcher once the server is up</value>
@@ -8680,7 +8684,7 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <value>Show the server window</value>
   </data>
   <data name="Options_HideServerNote" xml:space="preserve">
-    <value>Without its window, the server's log is shown on the Play page and Stop there closes it properly. It keeps running if you close this app - stop it from the Play page.</value>
+    <value>Without its window, the server's log is shown on the Server page and Stop there closes it properly. It keeps running if you close this app - stop it from the Server page.</value>
   </data>
   <data name="Play_ToolsHeader" xml:space="preserve">
     <value>Mod tools</value>
@@ -8705,10 +8709,10 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <value>Hide</value>
   </data>
   <data name="Play_ToolHideToolTip" xml:space="preserve">
-    <value>Take this off the Play page. It can be shown again from the link under the list.</value>
+    <value>Take this off the Server page. It can be shown again from the link under the list.</value>
   </data>
   <data name="Play_ToolUnhide" xml:space="preserve">
-    <value>Show on Play</value>
+    <value>Show on Server</value>
   </data>
   <data name="Play_ToolsShowHidden_one" xml:space="preserve">
     <value>Show {0} hidden tool</value>
@@ -8802,6 +8806,10 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
   </data>
   <data name="Play_DirectServerStopped" xml:space="preserve">
     <value>The server stopped before it was ready - its log says why.</value>
+  </data>
+  <data name="Play_DirectShowServerLog" xml:space="preserve">
+    <value>Show server log</value>
+    <comment>Button on the Play card when the server it started stopped or timed out; opens the Server page with the log.</comment>
   </data>
   <data name="Play_DirectServerTimeoutFormat" xml:space="preserve">
     <value>The server at {0} didn't answer within 3 minutes. Its log may say why.</value>
@@ -8969,7 +8977,7 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <value>Start the game from this app (experimental)</value>
   </data>
   <data name="Options_DirectLaunchSummary" xml:space="preserve">
-    <value>Adds a Play card to the Play page that starts the server and the game itself - no SPT launcher window. Off by default.</value>
+    <value>Adds a Play card to the Profile page that starts the server and the game itself - no SPT launcher window. Off by default.</value>
   </data>
   <data name="Options_DirectLaunchDescription" xml:space="preserve">
     <value>Play does what the SPT launcher does when you press its Start: starts the server if it isn't running and waits for it, checks the server and spt-core.dll are the same SPT version, cleans up the same files, applies SPT's game patch, fetches any missing mod bundles, and starts the game with the profile you picked. Profiles can be made, wiped and deleted from the Play card's ... menu. The SPT launcher's own settings (files it leaves alone, Clear cache on launch) are followed. The last game sessions' logs are kept for Diagnose logs.</value>
@@ -9108,7 +9116,7 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <comment>Button on a finding.</comment>
   </data>
   <data name="Diagnose_GoToPlay" xml:space="preserve">
-    <value>Go to Play</value>
+    <value>Go to Server</value>
     <comment>Button on the port-in-use finding.</comment>
   </data>
   <data name="Diagnose_ProfileBackups" xml:space="preserve">
@@ -9236,7 +9244,7 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <comment>Diagnose logs finding. {0} a type name, e.g. SkillTypes.</comment>
   </data>
   <data name="Diagnose_Body_PortInUse" xml:space="preserve">
-    <value>Something is already using {0} - most often a server that is still running. Stop it from the Play page, or close the other program.</value>
+    <value>Something is already using {0} - most often a server that is still running. Stop it from the Server page, or close the other program.</value>
     <comment>Diagnose logs finding. {0} address:port.</comment>
   </data>
   <data name="Diagnose_Body_PluginMissingDependency" xml:space="preserve">
@@ -9338,13 +9346,13 @@ Removing them can leave a profile SPT won't load. A copy of your profiles from j
     <value>Leave it running</value>
   </data>
   <data name="ServerRunning_Opening" xml:space="preserve">
-    <value>This install's SPT server was already running when the app opened - left running last time, or started some other way. The Play page shows its log and can stop it.</value>
+    <value>This install's SPT server was already running when the app opened - left running last time, or started some other way. The Server page shows its log and can stop it.</value>
   </data>
   <data name="ServerRunning_Stop" xml:space="preserve">
     <value>Stop it</value>
   </data>
   <data name="ServerRunning_ShowPlay" xml:space="preserve">
-    <value>Go to Play</value>
+    <value>Go to Server</value>
   </data>
   <data name="ServerRunning_LeaveRunning" xml:space="preserve">
     <value>Leave it running</value>
@@ -9567,7 +9575,7 @@ Switch anyway?</value>
   </data>
   <data name="Installed_NotForSptCount_one" xml:space="preserve">
     <value>{0} mod isn't for SPT {1}</value>
-    <comment>{0} a count, {1} the installed SPT version. A link on the Installed status line and Play page.</comment>
+    <comment>{0} a count, {1} the installed SPT version. A link on the Installed status line and Profile page.</comment>
   </data>
   <data name="Installed_NotForSptCount_other" xml:space="preserve">
     <value>{0} mods aren't for SPT {1}</value>

@@ -3357,8 +3357,11 @@ Fai un backup del profilo prima di continuare, se ci tieni.</value>
   <data name="Nav_Options" xml:space="preserve">
     <value>Opzioni</value>
   </data>
-  <data name="Nav_Play" xml:space="preserve">
-    <value>Gioca</value>
+  <data name="Nav_Profile" xml:space="preserve">
+    <value>Profilo</value>
+  </data>
+  <data name="Nav_Server" xml:space="preserve">
+    <value>Server</value>
   </data>
   <data name="Nav_ServerMap" xml:space="preserve">
     <value>Mappa server</value>
@@ -5332,7 +5335,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Sotto {0}, premi {1} e aspetta che la sua finestra della console abbia finito di avviarsi.</value>
   </data>
   <data name="Help_Play_Start_Step3" xml:space="preserve">
-    <value>Premi {0}, scegli il tuo profilo e avvia il gioco.</value>
+    <value>Apri {0}, premi {1}, scegli il tuo profilo e avvia il gioco.</value>
   </data>
   <data name="Help_Play_Start_Note" xml:space="preserve">
     <value>Il server resta in esecuzione se chiudi questa app. Chiudi la sua finestra quando hai finito.</value>
@@ -6650,7 +6653,7 @@ Vedi Dipendenze e conflitti.</value>
     <value>Chiudi il gioco per applicare questa lista. Le mod non possono essere modificate mentre Escape from Tarkov è in esecuzione - Applica torna disponibile appena viene chiuso.</value>
   </data>
   <data name="ModLists_ApplyBlockedServer" xml:space="preserve">
-    <value>Arresta il server SPT per applicare questa lista - usa Arresta nella pagina Gioca o chiudi la sua finestra della console. Le mod non possono essere modificate mentre il server è in esecuzione - Applica torna disponibile appena viene arrestato.</value>
+    <value>Arresta il server SPT per applicare questa lista - usa Arresta nella pagina Server o chiudi la sua finestra della console. Le mod non possono essere modificate mentre il server è in esecuzione - Applica torna disponibile appena viene arrestato.</value>
   </data>
   <data name="ModLists_ApplyBlockedBoth" xml:space="preserve">
     <value>Chiudi il gioco e arresta il server SPT per applicare questa lista. Le mod non possono essere modificate mentre uno dei due è in esecuzione - Applica torna disponibile appena sono chiusi entrambi.</value>
@@ -7226,7 +7229,7 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
     <value>Avvio di SPT</value>
   </data>
   <data name="Options_StartingSptHint" xml:space="preserve">
-    <value>Come Avvia server nella pagina Gioca esegue il server, e cosa viene dopo.</value>
+    <value>Come Avvia server nella pagina Server esegue il server, e cosa viene dopo.</value>
   </data>
   <data name="Options_StartLauncherOn" xml:space="preserve">
     <value>Apri il launcher appena il server è pronto</value>
@@ -7244,7 +7247,7 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
     <value>Mostra la finestra del server</value>
   </data>
   <data name="Options_HideServerNote" xml:space="preserve">
-    <value>Senza finestra, il log del server compare nella pagina Gioca e Arresta lì lo chiude correttamente. Continua a funzionare se chiudi questa app - fermalo dalla pagina Gioca.</value>
+    <value>Senza finestra, il log del server compare nella pagina Server e Arresta lì lo chiude correttamente. Continua a funzionare se chiudi questa app - fermalo dalla pagina Server.</value>
   </data>
   <data name="Play_ToolsHeader" xml:space="preserve">
     <value>Strumenti dei mod</value>
@@ -7268,10 +7271,10 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
     <value>Nascondi</value>
   </data>
   <data name="Play_ToolHideToolTip" xml:space="preserve">
-    <value>Toglilo dalla pagina Gioca. Puoi mostrarlo di nuovo dal link sotto l'elenco.</value>
+    <value>Toglilo dalla pagina Server. Puoi mostrarlo di nuovo dal link sotto l'elenco.</value>
   </data>
   <data name="Play_ToolUnhide" xml:space="preserve">
-    <value>Mostra in Gioca</value>
+    <value>Mostra in Server</value>
   </data>
   <data name="Play_ToolsShowHidden_one" xml:space="preserve">
     <value>Mostra {0} strumento nascosto</value>
@@ -7356,6 +7359,9 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
   </data>
   <data name="Play_DirectServerStopped" xml:space="preserve">
     <value>Il server si è fermato prima di essere pronto - il suo log dice perché.</value>
+  </data>
+  <data name="Play_DirectShowServerLog" xml:space="preserve">
+    <value>Mostra il log del server</value>
   </data>
   <data name="Play_DirectServerTimeoutFormat" xml:space="preserve">
     <value>Il server a {0} non ha risposto entro 3 minuti. Il suo log potrebbe dire perché.</value>
@@ -7508,7 +7514,7 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
     <value>Avvia il gioco da questa app (sperimentale)</value>
   </data>
   <data name="Options_DirectLaunchSummary" xml:space="preserve">
-    <value>Aggiunge alla pagina Gioca una scheda che avvia da sé il server e il gioco - senza finestra del launcher di SPT. Disattivato di default.</value>
+    <value>Aggiunge alla pagina Profilo una scheda che avvia da sé il server e il gioco - senza finestra del launcher di SPT. Disattivato di default.</value>
   </data>
   <data name="Options_DirectLaunchDescription" xml:space="preserve">
     <value>Gioca fa ciò che fa il launcher di SPT quando premi Avvia: avvia il server se non è in esecuzione e lo aspetta, verifica che il server e spt-core.dll siano della stessa versione di SPT, pulisce gli stessi file, applica la patch di gioco di SPT, scarica i bundle dei mod mancanti e avvia il gioco con il profilo scelto. I profili si creano, azzerano ed eliminano dal menu ... della scheda. Le impostazioni del launcher di SPT (file esclusi, Svuota cache all'avvio) vengono rispettate. I log delle ultime sessioni di gioco vengono conservati per Diagnostica log.</value>
@@ -7619,7 +7625,7 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
     <value>Apri il log</value>
   </data>
   <data name="Diagnose_GoToPlay" xml:space="preserve">
-    <value>Vai a Gioca</value>
+    <value>Vai a Server</value>
   </data>
   <data name="Diagnose_ProfileBackups" xml:space="preserve">
     <value>Backup dei profili</value>
@@ -7715,7 +7721,7 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
     <value>Alla fine di un raid il gioco ha inviato un valore {0} che il server non conosce, quindi non ha potuto leggere i risultati e il raid non è stato salvato. Molto probabilmente un mod che estende {0} è caricato nel gioco ma la sua parte server no - per esempio manca il suo prepatch in user\patchers.</value>
   </data>
   <data name="Diagnose_Body_PortInUse" xml:space="preserve">
-    <value>{0} è già in uso - di solito da un server ancora in esecuzione. Fermalo dalla pagina Gioca o chiudi l'altro programma.</value>
+    <value>{0} è già in uso - di solito da un server ancora in esecuzione. Fermalo dalla pagina Server o chiudi l'altro programma.</value>
   </data>
   <data name="Diagnose_Body_PluginMissingDependency" xml:space="preserve">
     <value>BepInEx non ha caricato {0}: richiede {1}, che non è installato o è troppo vecchio.</value>
@@ -7799,13 +7805,13 @@ Rimuoverle può lasciare un profilo che SPT non carica. Una copia dei tuoi profi
     <value>Lascialo acceso</value>
   </data>
   <data name="ServerRunning_Opening" xml:space="preserve">
-    <value>Il server SPT di questa installazione era già in esecuzione all'apertura dell'app - lasciato acceso l'ultima volta o avviato in altro modo. La pagina Gioca mostra il suo log e può fermarlo.</value>
+    <value>Il server SPT di questa installazione era già in esecuzione all'apertura dell'app - lasciato acceso l'ultima volta o avviato in altro modo. La pagina Server mostra il suo log e può fermarlo.</value>
   </data>
   <data name="ServerRunning_Stop" xml:space="preserve">
     <value>Fermalo</value>
   </data>
   <data name="ServerRunning_ShowPlay" xml:space="preserve">
-    <value>Vai a Gioca</value>
+    <value>Vai a Server</value>
   </data>
   <data name="ServerRunning_LeaveRunning" xml:space="preserve">
     <value>Lascialo acceso</value>

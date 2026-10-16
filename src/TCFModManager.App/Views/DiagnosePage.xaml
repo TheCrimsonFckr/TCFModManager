@@ -133,7 +133,7 @@
                                         <ui:Button
                                             Margin="0,0,8,0"
                                             Content="{loc:Str Diagnose_GoToPlay}"
-                                            Icon="{ui:SymbolIcon Play24}"
+                                            Icon="{ui:SymbolIcon Server24}"
                                             Visibility="{Binding IsAboutPort, Converter={StaticResource BoolToVisibility}}"
                                             Command="{Binding DataContext.GoToPlayCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}" />
                                         <ui:Button

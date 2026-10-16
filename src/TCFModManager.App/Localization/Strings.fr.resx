@@ -3357,8 +3357,11 @@ Sauvegardez votre profil avant de continuer si vous y tenez.</value>
   <data name="Nav_Options" xml:space="preserve">
     <value>Options</value>
   </data>
-  <data name="Nav_Play" xml:space="preserve">
-    <value>Jouer</value>
+  <data name="Nav_Profile" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="Nav_Server" xml:space="preserve">
+    <value>Serveur</value>
   </data>
   <data name="Nav_ServerMap" xml:space="preserve">
     <value>Carte du serveur</value>
@@ -5332,7 +5335,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Sous {0}, cliquez sur {1} et attendez que sa fenêtre de console ait fini de démarrer.</value>
   </data>
   <data name="Help_Play_Start_Step3" xml:space="preserve">
-    <value>Cliquez sur {0}, choisissez votre profil et lancez le jeu.</value>
+    <value>Ouvrez {0}, cliquez sur {1}, choisissez votre profil et lancez le jeu.</value>
   </data>
   <data name="Help_Play_Start_Note" xml:space="preserve">
     <value>Le serveur continue de tourner si vous fermez cette application. Fermez sa propre fenêtre quand vous avez fini.</value>
@@ -6650,7 +6653,7 @@ Voir Dépendances et conflits.</value>
     <value>Fermez le jeu pour appliquer cette liste. Les mods ne peuvent pas être modifiés tant qu'Escape from Tarkov est lancé - Appliquer redevient disponible dès qu'il est fermé.</value>
   </data>
   <data name="ModLists_ApplyBlockedServer" xml:space="preserve">
-    <value>Arrêtez le serveur SPT pour appliquer cette liste - avec Arrêter sur la page Jouer ou en fermant sa fenêtre de console. Les mods ne peuvent pas être modifiés tant que le serveur tourne - Appliquer redevient disponible dès qu'il est arrêté.</value>
+    <value>Arrêtez le serveur SPT pour appliquer cette liste - avec Arrêter sur la page Serveur ou en fermant sa fenêtre de console. Les mods ne peuvent pas être modifiés tant que le serveur tourne - Appliquer redevient disponible dès qu'il est arrêté.</value>
   </data>
   <data name="ModLists_ApplyBlockedBoth" xml:space="preserve">
     <value>Fermez le jeu et arrêtez le serveur SPT pour appliquer cette liste. Les mods ne peuvent pas être modifiés tant que l'un des deux tourne - Appliquer redevient disponible dès que les deux sont fermés.</value>
@@ -7226,7 +7229,7 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
     <value>Démarrage de SPT</value>
   </data>
   <data name="Options_StartingSptHint" xml:space="preserve">
-    <value>Comment Démarrer le serveur, sur la page Jouer, lance le serveur, et ce qui suit.</value>
+    <value>Comment Démarrer le serveur, sur la page Serveur, lance le serveur, et ce qui suit.</value>
   </data>
   <data name="Options_StartLauncherOn" xml:space="preserve">
     <value>Ouvrir le lanceur dès que le serveur est prêt</value>
@@ -7244,7 +7247,7 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
     <value>Afficher la fenêtre du serveur</value>
   </data>
   <data name="Options_HideServerNote" xml:space="preserve">
-    <value>Sans sa fenêtre, le journal du serveur s'affiche sur la page Jouer et Arrêter, là-bas, le ferme proprement. Il continue de tourner si vous fermez cette application - arrêtez-le depuis la page Jouer.</value>
+    <value>Sans sa fenêtre, le journal du serveur s'affiche sur la page Serveur et Arrêter, là-bas, le ferme proprement. Il continue de tourner si vous fermez cette application - arrêtez-le depuis la page Serveur.</value>
   </data>
   <data name="Play_ToolsHeader" xml:space="preserve">
     <value>Outils des mods</value>
@@ -7268,10 +7271,10 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
     <value>Masquer</value>
   </data>
   <data name="Play_ToolHideToolTip" xml:space="preserve">
-    <value>Le retirer de la page Jouer. Le lien sous la liste permet de le réafficher.</value>
+    <value>Le retirer de la page Serveur. Le lien sous la liste permet de le réafficher.</value>
   </data>
   <data name="Play_ToolUnhide" xml:space="preserve">
-    <value>Afficher sur Jouer</value>
+    <value>Afficher sur Serveur</value>
   </data>
   <data name="Play_ToolsShowHidden_one" xml:space="preserve">
     <value>Afficher {0} outil masqué</value>
@@ -7356,6 +7359,9 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
   </data>
   <data name="Play_DirectServerStopped" xml:space="preserve">
     <value>Le serveur s'est arrêté avant d'être prêt - son journal indique pourquoi.</value>
+  </data>
+  <data name="Play_DirectShowServerLog" xml:space="preserve">
+    <value>Afficher le journal du serveur</value>
   </data>
   <data name="Play_DirectServerTimeoutFormat" xml:space="preserve">
     <value>Le serveur à l'adresse {0} n'a pas répondu en 3 minutes. Son journal peut indiquer pourquoi.</value>
@@ -7508,7 +7514,7 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
     <value>Lancer le jeu depuis cette application (expérimental)</value>
   </data>
   <data name="Options_DirectLaunchSummary" xml:space="preserve">
-    <value>Ajoute à la page Jouer une carte qui démarre le serveur et le jeu elle-même - sans fenêtre du lanceur SPT. Désactivé par défaut.</value>
+    <value>Ajoute à la page Profil une carte qui démarre le serveur et le jeu elle-même - sans fenêtre du lanceur SPT. Désactivé par défaut.</value>
   </data>
   <data name="Options_DirectLaunchDescription" xml:space="preserve">
     <value>Jouer fait ce que fait le lanceur SPT quand vous appuyez sur Démarrer : démarre le serveur s'il ne tourne pas et l'attend, vérifie que le serveur et spt-core.dll sont de la même version de SPT, nettoie les mêmes fichiers, applique le patch de jeu de SPT, récupère les bundles de mods manquants et lance le jeu avec le profil choisi. Les profils se créent, se réinitialisent et se suppriment depuis le menu ... de la carte. Les réglages du lanceur SPT (fichiers épargnés, Vider le cache au lancement) sont respectés. Les journaux des dernières sessions de jeu sont conservés pour Diagnostiquer les journaux.</value>
@@ -7619,7 +7625,7 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
     <value>Ouvrir le journal</value>
   </data>
   <data name="Diagnose_GoToPlay" xml:space="preserve">
-    <value>Aller à Jouer</value>
+    <value>Aller à Serveur</value>
   </data>
   <data name="Diagnose_ProfileBackups" xml:space="preserve">
     <value>Sauvegardes des profils</value>
@@ -7715,7 +7721,7 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
     <value>À la fin d'un raid, le jeu a envoyé une valeur {0} que le serveur ne connaît pas, il n'a donc pas pu lire les résultats et le raid n'a pas été enregistré. Le plus probable : un mod qui étend {0} est chargé dans le jeu mais pas sa partie serveur - par exemple son prepatch dans user\patchers manque.</value>
   </data>
   <data name="Diagnose_Body_PortInUse" xml:space="preserve">
-    <value>{0} est déjà utilisé - le plus souvent par un serveur qui tourne encore. Arrêtez-le depuis la page Jouer, ou fermez l'autre programme.</value>
+    <value>{0} est déjà utilisé - le plus souvent par un serveur qui tourne encore. Arrêtez-le depuis la page Serveur, ou fermez l'autre programme.</value>
   </data>
   <data name="Diagnose_Body_PluginMissingDependency" xml:space="preserve">
     <value>BepInEx n'a pas chargé {0} : il a besoin de {1}, qui n'est pas installé ou est trop ancien.</value>
@@ -7799,13 +7805,13 @@ Les supprimer peut laisser un profil que SPT ne chargera pas. Une copie de vos p
     <value>Le laisser tourner</value>
   </data>
   <data name="ServerRunning_Opening" xml:space="preserve">
-    <value>Le serveur SPT de cette installation tournait déjà à l'ouverture de l'application - laissé tourner la dernière fois, ou démarré autrement. La page Jouer affiche son journal et peut l'arrêter.</value>
+    <value>Le serveur SPT de cette installation tournait déjà à l'ouverture de l'application - laissé tourner la dernière fois, ou démarré autrement. La page Serveur affiche son journal et peut l'arrêter.</value>
   </data>
   <data name="ServerRunning_Stop" xml:space="preserve">
     <value>L'arrêter</value>
   </data>
   <data name="ServerRunning_ShowPlay" xml:space="preserve">
-    <value>Aller à Jouer</value>
+    <value>Aller à Serveur</value>
   </data>
   <data name="ServerRunning_LeaveRunning" xml:space="preserve">
     <value>Le laisser tourner</value>

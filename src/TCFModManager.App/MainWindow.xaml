@@ -134,10 +134,15 @@
                 <!-- First: the last thing you do before playing, and the one item on the list that
                      is an action rather than a view of the install. -->
                 <ui:NavigationViewItem
-                    Content="{loc:Str Nav_Play}"
-                    Icon="{ui:SymbolIcon Play24}"
+                    Content="{loc:Str Nav_Profile}"
+                    Icon="{ui:SymbolIcon Person24}"
                     NavigationCacheMode="Required"
-                    TargetPageType="{x:Type views:PlayPage}" />
+                    TargetPageType="{x:Type views:ProfilePage}" />
+                <ui:NavigationViewItem
+                    Content="{loc:Str Nav_Server}"
+                    Icon="{ui:SymbolIcon Server24}"
+                    NavigationCacheMode="Required"
+                    TargetPageType="{x:Type views:ServerPage}" />
                 <ui:NavigationViewItem
                     Content="{loc:Str Nav_Browse}"
                     Icon="{ui:SymbolIcon Apps24}"

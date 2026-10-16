@@ -40,23 +40,26 @@ internal static class HelpCatalog
                 .WithPage(typeof(OptionsPage)),
         ]),
 
-        new("play", () => Strings.Nav_Play, SymbolRegular.Play24, typeof(PlayPage),
+        new("profile", () => Strings.Nav_Profile, SymbolRegular.Person24, typeof(ProfilePage),
         [
-            Topic("play.start", () => Strings.Help_Play_Start_Title,
-                Step(() => Strings.Help_Play_Start_Step1, () => Strings.Nav_Play),
-                Step(() => Strings.Help_Play_Start_Step2,
-                    () => Strings.Play_ServerHeader, () => Strings.Play_StartServer),
-                Step(() => Strings.Help_Play_Start_Step3, () => Strings.Play_OpenLauncher))
-                .WithNote(() => Strings.Help_Play_Start_Note)
-                .WithKeywords(() => Strings.Help_Play_Start_Keywords),
-
-            Topic("play.check", () => Strings.Help_Play_Check_Title,
-                Step(() => Strings.Help_Play_Check_Step1, () => Strings.Nav_Play),
+            Topic("profile.check", () => Strings.Help_Play_Check_Title,
+                Step(() => Strings.Help_Play_Check_Step1, () => Strings.Nav_Profile),
                 Step(() => Strings.Help_Play_Check_Step2, () => Strings.Play_CheckAgain),
                 Step(() => Strings.Help_Play_Check_Step3,
                     () => Strings.Common_ReviewAndInstall, () => Strings.ModLists_Apply))
                 .WithNote(() => Strings.Help_Play_Check_Note)
                 .WithKeywords(() => Strings.Help_Play_Check_Keywords),
+        ]),
+
+        new("server", () => Strings.Nav_Server, SymbolRegular.Server24, typeof(ServerPage),
+        [
+            Topic("server.start", () => Strings.Help_Play_Start_Title,
+                Step(() => Strings.Help_Play_Start_Step1, () => Strings.Nav_Server),
+                Step(() => Strings.Help_Play_Start_Step2,
+                    () => Strings.Play_ServerHeader, () => Strings.Play_StartServer),
+                Step(() => Strings.Help_Play_Start_Step3, () => Strings.Nav_Profile, () => Strings.Play_OpenLauncher))
+                .WithNote(() => Strings.Help_Play_Start_Note)
+                .WithKeywords(() => Strings.Help_Play_Start_Keywords),
         ]),
 
         new("browse", () => Strings.Nav_Browse, SymbolRegular.Apps24, typeof(BrowsePage),
@@ -356,7 +359,7 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Dependencies_Spot_Step1,
                     () => Strings.Nav_Installed, () => Strings.Nav_Dependencies),
                 Step(() => Strings.Help_Dependencies_Spot_Step2, () => Strings.Filter_HasConflicts),
-                Step(() => Strings.Help_Dependencies_Spot_Step3, () => Strings.Nav_Play))
+                Step(() => Strings.Help_Dependencies_Spot_Step3, () => Strings.Nav_Profile))
                 .WithKeywords(() => Strings.Help_Dependencies_Spot_Keywords)
                 .WithPage(typeof(InstalledPage)),
 
@@ -616,7 +619,8 @@ internal static class HelpCatalog
     // The sidebar name of a page Open can go to, so the button reads "Open Installed" in any language.
     public static string PageName(Type page) => page.Name switch
     {
-        nameof(PlayPage) => Strings.Nav_Play,
+        nameof(ProfilePage) => Strings.Nav_Profile,
+        nameof(ServerPage) => Strings.Nav_Server,
         nameof(BrowsePage) => Strings.Nav_Browse,
         nameof(InstalledPage) => Strings.Nav_Installed,
         nameof(ModListsPage) => Strings.Nav_ModLists,

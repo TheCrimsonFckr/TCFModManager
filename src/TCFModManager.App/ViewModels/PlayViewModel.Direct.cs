@@ -78,6 +78,9 @@ public partial class PlayViewModel
     [ObservableProperty]
     private bool _playStatusIsError;
 
+    [ObservableProperty]
+    private bool _offerServerLog;
+
     // 0-100 while bundles download; null shows the bar running.
     [ObservableProperty]
     private double? _playProgress;
@@ -264,6 +267,13 @@ public partial class PlayViewModel
         }
     }
 
+    [RelayCommand]
+    private void ShowServerLogOnServer()
+    {
+        ShowServerLog = true;
+        AppNavigation.Navigate(typeof(Views.ServerPage));
+    }
+
     private bool CanCancelPlay() => IsPlaying;
 
     [RelayCommand(CanExecute = nameof(CanCancelPlay))]
@@ -315,6 +325,7 @@ public partial class PlayViewModel
     //
     private async Task<bool> EnsureServerAsync(SptLauncherApi api, string? installPath, CancellationToken ct)
     {
+        OfferServerLog = false;
         if (await PingAsync(api, ct)) return true;
 
         if (!SptLaunchService.Describe(installPath, SptLaunchTarget.Server).IsRunning)
@@ -343,13 +354,13 @@ public partial class PlayViewModel
                 && !SptLaunchService.Describe(installPath, SptLaunchTarget.Server).IsRunning)
             {
                 Fail(Strings.Play_DirectServerStopped);
-                ShowServerLog = true;
+                OfferServerLog = true;
                 return false;
             }
         }
 
         Fail(Text(Strings.Play_DirectServerTimeoutFormat, api.Address));
-        ShowServerLog = true;
+        OfferServerLog = true;
         return false;
     }
 

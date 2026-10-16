@@ -102,6 +102,10 @@ internal static class AppServices
     //
     public static PreLaunchCheckViewModel PreLaunchCheck { get; } = new();
 
+    private static PlayViewModel? _play;
+
+    public static PlayViewModel Play => _play ??= new();
+
     // Every mod list this install holds, and which one it is currently following.
     public static ModListStore ModLists { get; } = new();
 

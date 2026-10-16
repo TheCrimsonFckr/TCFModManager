@@ -305,7 +305,8 @@ internal static class Strings
     internal static string AppUpdate_WhatsNew => LocalizationService.Get("AppUpdate_WhatsNew");
     internal static string MainWindow_NoInstallTitle => LocalizationService.Get("MainWindow_NoInstallTitle");
     internal static string MainWindow_SeeWhatsNew => LocalizationService.Get("MainWindow_SeeWhatsNew");
-    internal static string Nav_Play => LocalizationService.Get("Nav_Play");
+    internal static string Nav_Profile => LocalizationService.Get("Nav_Profile");
+    internal static string Nav_Server => LocalizationService.Get("Nav_Server");
     internal static string Nav_Browse => LocalizationService.Get("Nav_Browse");
     internal static string Nav_Installed => LocalizationService.Get("Nav_Installed");
     internal static string Nav_ModLists => LocalizationService.Get("Nav_ModLists");
@@ -2415,6 +2416,7 @@ internal static class Strings
     internal static string Play_DirectStartingServer => LocalizationService.Get("Play_DirectStartingServer");
     internal static string Play_DirectWaitingForServerFormat => LocalizationService.Get("Play_DirectWaitingForServerFormat");
     internal static string Play_DirectServerStopped => LocalizationService.Get("Play_DirectServerStopped");
+    internal static string Play_DirectShowServerLog => LocalizationService.Get("Play_DirectShowServerLog");
     internal static string Play_DirectServerTimeoutFormat => LocalizationService.Get("Play_DirectServerTimeoutFormat");
     internal static string Play_DirectServerUnreachableFormat => LocalizationService.Get("Play_DirectServerUnreachableFormat");
     internal static string Play_DirectStageChecking => LocalizationService.Get("Play_DirectStageChecking");

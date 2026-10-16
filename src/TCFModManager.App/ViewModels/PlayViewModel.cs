@@ -10,8 +10,9 @@ using TCFModManager.Core.Services;
 namespace TCFModManager.App.ViewModels;
 
 //
-// The Play page: start this install's server, its launcher, and - on a headless setup - its Fika
-// headless launcher, and say which of them is already up.
+// The Profile and Server pages, one instance shared by both (AppServices.Play): start this install's
+// server, its launcher, and - on a headless setup - its Fika headless launcher, and say which of them
+// is already up.
 //
 // The server and the headless can also be RESTARTED, one at a time and never as a side effect of
 // each other, and the server can be STOPPED. The server can run without its window (Options), with
@@ -312,15 +313,25 @@ public partial class PlayViewModel : LocalizedViewModel
     //
     public bool NeedsRoleAnswer => Headless?.Exists == true && !RunsHeadlessClient;
 
-    // Called by the page, so the poll only runs while it is the visible page.
+    private int _pollUsers;
+
+    // Called by each page that shows this, so the poll only runs while one of them is on screen.
     public void StartPolling()
     {
         Refresh();
-        _poll.Start();
+        if (_pollUsers++ == 0) _poll.Start();
         _ = RefreshToolsAsync();
     }
 
-    public void StopPolling() => _poll.Stop();
+    public void StopPolling()
+    {
+        if (_pollUsers > 0 && --_pollUsers == 0) _poll.Stop();
+    }
+
+    private void ResumePolling()
+    {
+        if (_pollUsers > 0) _poll.Start();
+    }
 
     [RelayCommand]
     private void Refresh()
@@ -543,7 +554,7 @@ public partial class PlayViewModel : LocalizedViewModel
         {
             IsBusy = false;
             Refresh();
-            _poll.Start();
+            ResumePolling();
         }
     }
 
@@ -601,7 +612,7 @@ public partial class PlayViewModel : LocalizedViewModel
             IsBusy = false;
             GameCloser.EndHold();
             Refresh();
-            _poll.Start();
+            ResumePolling();
         }
 
         // With no window, the log is where it says how the restart went, and a start that fails is

@@ -3537,8 +3537,11 @@
   <data name="Nav_Options" xml:space="preserve">
     <value>Параметры</value>
   </data>
-  <data name="Nav_Play" xml:space="preserve">
-    <value>Играть</value>
+  <data name="Nav_Profile" xml:space="preserve">
+    <value>Профиль</value>
+  </data>
+  <data name="Nav_Server" xml:space="preserve">
+    <value>Сервер</value>
   </data>
   <data name="Nav_ServerMap" xml:space="preserve">
     <value>Карта сервера</value>
@@ -5620,7 +5623,7 @@
     <value>В разделе {0} нажмите {1} и дождитесь, пока его окно консоли закончит запуск.</value>
   </data>
   <data name="Help_Play_Start_Step3" xml:space="preserve">
-    <value>Нажмите {0}, выберите профиль и запустите игру.</value>
+    <value>Откройте {0}, нажмите {1}, выберите профиль и запустите игру.</value>
   </data>
   <data name="Help_Play_Start_Note" xml:space="preserve">
     <value>Сервер продолжает работать, если закрыть это приложение. Закройте его собственное окно, когда закончите.</value>
@@ -6995,7 +6998,7 @@
     <value>Закройте игру, чтобы применить этот список. Пока Escape from Tarkov запущена, моды изменить нельзя - кнопка «Применить» станет доступна, как только игра будет закрыта.</value>
   </data>
   <data name="ModLists_ApplyBlockedServer" xml:space="preserve">
-    <value>Остановите сервер SPT, чтобы применить этот список - кнопкой «Остановить» на странице «Играть» или закрыв окно его консоли. Пока сервер работает, моды изменить нельзя - кнопка «Применить» станет доступна, как только он будет остановлен.</value>
+    <value>Остановите сервер SPT, чтобы применить этот список - кнопкой «Остановить» на странице «Сервер» или закрыв окно его консоли. Пока сервер работает, моды изменить нельзя - кнопка «Применить» станет доступна, как только он будет остановлен.</value>
   </data>
   <data name="ModLists_ApplyBlockedBoth" xml:space="preserve">
     <value>Закройте игру и остановите сервер SPT, чтобы применить этот список. Пока хоть что-то из них запущено, моды изменить нельзя - кнопка «Применить» станет доступна, как только оба будут закрыты.</value>
@@ -7571,7 +7574,7 @@
     <value>Запуск SPT</value>
   </data>
   <data name="Options_StartingSptHint" xml:space="preserve">
-    <value>Как кнопка Запустить сервер на странице Играть запускает сервер и что происходит после.</value>
+    <value>Как кнопка Запустить сервер на странице Сервер запускает сервер и что происходит после.</value>
   </data>
   <data name="Options_StartLauncherOn" xml:space="preserve">
     <value>Открывать лаунчер, когда сервер готов</value>
@@ -7589,7 +7592,7 @@
     <value>Показывать окно сервера</value>
   </data>
   <data name="Options_HideServerNote" xml:space="preserve">
-    <value>Без окна журнал сервера показывается на странице Играть, а кнопка Остановить там корректно его выключает. Сервер продолжает работать после закрытия приложения - останавливайте его на странице Играть.</value>
+    <value>Без окна журнал сервера показывается на странице Сервер, а кнопка Остановить там корректно его выключает. Сервер продолжает работать после закрытия приложения - останавливайте его на странице Сервер.</value>
   </data>
   <data name="Play_ToolsHeader" xml:space="preserve">
     <value>Инструменты модов</value>
@@ -7613,10 +7616,10 @@
     <value>Скрыть</value>
   </data>
   <data name="Play_ToolHideToolTip" xml:space="preserve">
-    <value>Убрать со страницы Играть. Вернуть можно по ссылке под списком.</value>
+    <value>Убрать со страницы Сервер. Вернуть можно по ссылке под списком.</value>
   </data>
   <data name="Play_ToolUnhide" xml:space="preserve">
-    <value>Показывать на Играть</value>
+    <value>Показывать на Сервер</value>
   </data>
   <data name="Play_ToolsShowHidden_one" xml:space="preserve">
     <value>Показать {0} скрытый инструмент</value>
@@ -7707,6 +7710,9 @@
   </data>
   <data name="Play_DirectServerStopped" xml:space="preserve">
     <value>Сервер остановился, не успев запуститься, - причина в его журнале.</value>
+  </data>
+  <data name="Play_DirectShowServerLog" xml:space="preserve">
+    <value>Показать журнал сервера</value>
   </data>
   <data name="Play_DirectServerTimeoutFormat" xml:space="preserve">
     <value>Сервер по адресу {0} не ответил за 3 минуты. Причина может быть в его журнале.</value>
@@ -7859,7 +7865,7 @@
     <value>Запуск игры из этого приложения (экспериментально)</value>
   </data>
   <data name="Options_DirectLaunchSummary" xml:space="preserve">
-    <value>Добавляет на страницу Играть карточку, которая сама запускает сервер и игру - без окна лаунчера SPT. По умолчанию выключено.</value>
+    <value>Добавляет на страницу Профиль карточку, которая сама запускает сервер и игру - без окна лаунчера SPT. По умолчанию выключено.</value>
   </data>
   <data name="Options_DirectLaunchDescription" xml:space="preserve">
     <value>Играть делает то же, что лаунчер SPT по кнопке Старт: запускает сервер, если он не запущен, и ждёт его, проверяет, что сервер и spt-core.dll одной версии SPT, удаляет те же файлы, применяет игровой патч SPT, скачивает недостающие бандлы модов и запускает игру с выбранным профилем. Профили создаются, сбрасываются и удаляются из меню ... карточки. Собственные настройки лаунчера SPT (исключённые файлы, очистка кэша при запуске) соблюдаются. Журналы последних игровых сессий сохраняются для диагностики журналов.</value>
@@ -7982,7 +7988,7 @@
     <value>Открыть журнал</value>
   </data>
   <data name="Diagnose_GoToPlay" xml:space="preserve">
-    <value>Перейти в Играть</value>
+    <value>Перейти в Сервер</value>
   </data>
   <data name="Diagnose_ProfileBackups" xml:space="preserve">
     <value>Резервные копии профилей</value>
@@ -8078,7 +8084,7 @@
     <value>В конце рейда игра отправила значение {0}, которого сервер не знает, поэтому он не смог прочитать результаты и рейд не сохранён. Скорее всего, мод, расширяющий {0}, загружен в игре, а его серверная часть - нет: например, нет его препатча в user\patchers.</value>
   </data>
   <data name="Diagnose_Body_PortInUse" xml:space="preserve">
-    <value>{0} уже занят - чаще всего ещё работающим сервером. Остановите его на странице Играть или закройте другую программу.</value>
+    <value>{0} уже занят - чаще всего ещё работающим сервером. Остановите его на странице Сервер или закройте другую программу.</value>
   </data>
   <data name="Diagnose_Body_PluginMissingDependency" xml:space="preserve">
     <value>BepInEx не загрузил {0}: ему нужен {1}, который не установлен или слишком старый.</value>
@@ -8162,13 +8168,13 @@
     <value>Оставить работать</value>
   </data>
   <data name="ServerRunning_Opening" xml:space="preserve">
-    <value>Сервер SPT этой установки уже работал при открытии приложения - оставлен в прошлый раз или запущен иначе. На странице Играть виден его журнал, там же его можно остановить.</value>
+    <value>Сервер SPT этой установки уже работал при открытии приложения - оставлен в прошлый раз или запущен иначе. На странице Сервер виден его журнал, там же его можно остановить.</value>
   </data>
   <data name="ServerRunning_Stop" xml:space="preserve">
     <value>Остановить</value>
   </data>
   <data name="ServerRunning_ShowPlay" xml:space="preserve">
-    <value>Перейти в Играть</value>
+    <value>Перейти в Сервер</value>
   </data>
   <data name="ServerRunning_LeaveRunning" xml:space="preserve">
     <value>Оставить работать</value>

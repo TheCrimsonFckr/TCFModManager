@@ -117,7 +117,7 @@ public partial class MainWindow : FluentWindow
         switch (ServerStillRunningWindow.Ask(closing: false, server.ExePath ?? "", hidden))
         {
             case ServerRunningChoice.ShowPlay:
-                AppNavigation.Navigate(typeof(PlayPage));
+                AppNavigation.Navigate(typeof(ServerPage));
                 break;
 
             case ServerRunningChoice.Stop:

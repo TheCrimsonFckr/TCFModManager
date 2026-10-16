@@ -219,7 +219,7 @@ public sealed partial class DiagnoseViewModel : LocalizedViewModel
     }
 
     [RelayCommand]
-    private void GoToPlay() => AppNavigation.Navigate(typeof(PlayPage));
+    private void GoToPlay() => AppNavigation.Navigate(typeof(ServerPage));
 
     [RelayCommand]
     private void OpenProfileBackups() => AppNavigation.Navigate(typeof(OptionsPage));
