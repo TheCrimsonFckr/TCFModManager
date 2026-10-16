@@ -3769,6 +3769,231 @@
   <data name="Options_ThemeSteam" xml:space="preserve">
     <value>Steam</value>
   </data>
+  <data name="Options_ThemeCustomise" xml:space="preserve">
+    <value>Настроить</value>
+  </data>
+  <data name="Options_ThemeCustomiseToolTip" xml:space="preserve">
+    <value>Создать свою тему или изменить сохранённую.</value>
+  </data>
+  <data name="ThemeEditor_Title" xml:space="preserve">
+    <value>Настройка темы</value>
+  </data>
+  <data name="ThemeEditor_StartFrom" xml:space="preserve">
+    <value>Основа</value>
+  </data>
+  <data name="ThemeEditor_Name" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="ThemeEditor_Base" xml:space="preserve">
+    <value>Базовая тема</value>
+  </data>
+  <data name="ThemeEditor_NewName" xml:space="preserve">
+    <value>Моя тема</value>
+  </data>
+  <data name="ThemeEditor_CopyNameFormat" xml:space="preserve">
+    <value>{0} (копия)</value>
+  </data>
+  <data name="ThemeEditor_AccentWindows" xml:space="preserve">
+    <value>Цвет акцента Windows</value>
+  </data>
+  <data name="ThemeEditor_SectionAccent" xml:space="preserve">
+    <value>Акцент</value>
+  </data>
+  <data name="ThemeEditor_SectionSurfaces" xml:space="preserve">
+    <value>Поверхности</value>
+  </data>
+  <data name="ThemeEditor_SectionText" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="ThemeEditor_SectionStatus" xml:space="preserve">
+    <value>Цвета состояний</value>
+  </data>
+  <data name="ThemeEditor_SectionFootprint" xml:space="preserve">
+    <value>Нагрузка модов</value>
+  </data>
+  <data name="ThemeEditor_SectionShape" xml:space="preserve">
+    <value>Форма и шрифт</value>
+  </data>
+  <data name="ThemeEditor_ColourAccent" xml:space="preserve">
+    <value>Акцент</value>
+  </data>
+  <data name="ThemeEditor_ColourBackground" xml:space="preserve">
+    <value>Окно</value>
+  </data>
+  <data name="ThemeEditor_ColourPage" xml:space="preserve">
+    <value>Страница</value>
+  </data>
+  <data name="ThemeEditor_ColourSurface" xml:space="preserve">
+    <value>Карточки</value>
+  </data>
+  <data name="ThemeEditor_ColourSurfaceSecondary" xml:space="preserve">
+    <value>Вложенные карточки</value>
+  </data>
+  <data name="ThemeEditor_ColourFlyout" xml:space="preserve">
+    <value>Меню и подсказки</value>
+  </data>
+  <data name="ThemeEditor_ColourStroke" xml:space="preserve">
+    <value>Границы</value>
+  </data>
+  <data name="ThemeEditor_ColourDivider" xml:space="preserve">
+    <value>Разделители</value>
+  </data>
+  <data name="ThemeEditor_ColourTextPrimary" xml:space="preserve">
+    <value>Основной текст</value>
+  </data>
+  <data name="ThemeEditor_ColourTextSecondary" xml:space="preserve">
+    <value>Второстепенный текст</value>
+  </data>
+  <data name="ThemeEditor_ColourTextTertiary" xml:space="preserve">
+    <value>Бледный текст</value>
+  </data>
+  <data name="ThemeEditor_ColourTextDisabled" xml:space="preserve">
+    <value>Неактивный текст</value>
+  </data>
+  <data name="ThemeEditor_ColourSuccess" xml:space="preserve">
+    <value>Успех</value>
+  </data>
+  <data name="ThemeEditor_ColourCaution" xml:space="preserve">
+    <value>Предупреждение</value>
+  </data>
+  <data name="ThemeEditor_ColourCritical" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="ThemeEditor_ColourAttention" xml:space="preserve">
+    <value>Информация</value>
+  </data>
+  <data name="ThemeEditor_ColourFootprintCpu" xml:space="preserve">
+    <value>ЦП</value>
+  </data>
+  <data name="ThemeEditor_ColourFootprintGpu" xml:space="preserve">
+    <value>ГП</value>
+  </data>
+  <data name="ThemeEditor_ColourFootprintMemory" xml:space="preserve">
+    <value>Память</value>
+  </data>
+  <data name="ThemeEditor_ColourFootprintStartup" xml:space="preserve">
+    <value>Запуск</value>
+  </data>
+  <data name="ThemeEditor_ColourFootprintDisk" xml:space="preserve">
+    <value>Диск</value>
+  </data>
+  <data name="ThemeEditor_ColourFootprintNeutral" xml:space="preserve">
+    <value>Прочее</value>
+  </data>
+  <data name="ThemeEditor_SwatchToolTip" xml:space="preserve">
+    <value>Выбрать цвет</value>
+  </data>
+  <data name="ThemeEditor_HexToolTip" xml:space="preserve">
+    <value>#RRGGBB или #AARRGGBB для прозрачности. Оставь пустым, чтобы использовать показанный базовый цвет.</value>
+  </data>
+  <data name="ThemeEditor_ResetToolTip" xml:space="preserve">
+    <value>Использовать базовый цвет</value>
+  </data>
+  <data name="ThemeEditor_InvalidColour" xml:space="preserve">
+    <value>Это не цвет - используй #RRGGBB или #AARRGGBB.</value>
+  </data>
+  <data name="ThemeEditor_Corners" xml:space="preserve">
+    <value>Углы</value>
+  </data>
+  <data name="ThemeEditor_CornersDefault" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="ThemeEditor_CornersSquare" xml:space="preserve">
+    <value>Прямые</value>
+  </data>
+  <data name="ThemeEditor_CornersRound" xml:space="preserve">
+    <value>Скруглённые</value>
+  </data>
+  <data name="ThemeEditor_Font" xml:space="preserve">
+    <value>Шрифт</value>
+  </data>
+  <data name="ThemeEditor_FontDefault" xml:space="preserve">
+    <value>По умолчанию (Segoe UI)</value>
+  </data>
+  <data name="ThemeEditor_ProblemNameMissing" xml:space="preserve">
+    <value>Дай теме название.</value>
+  </data>
+  <data name="ThemeEditor_ProblemNameTooLongFormat" xml:space="preserve">
+    <value>Название может содержать не более {0} символов.</value>
+  </data>
+  <data name="ThemeEditor_ProblemFontTooLongFormat" xml:space="preserve">
+    <value>Название шрифта может содержать не более {0} символов.</value>
+  </data>
+  <data name="ThemeEditor_ProblemRadiusFormat" xml:space="preserve">
+    <value>Скругление углов не может превышать {0}.</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastPrimaryFormat" xml:space="preserve">
+    <value>Основной текст плохо читается на карточках ({0}:1 - нужно {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastSecondaryFormat" xml:space="preserve">
+    <value>Второстепенный текст плохо читается на карточках ({0}:1 - нужно {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastTertiaryFormat" xml:space="preserve">
+    <value>Бледный текст слишком бледный на карточках ({0}:1 - нужно {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ImportNotATheme" xml:space="preserve">
+    <value>Этот файл не является темой.</value>
+  </data>
+  <data name="ThemeEditor_ImportNewer" xml:space="preserve">
+    <value>Эта тема создана в более новой версии TCF Mod Manager - обнови приложение, чтобы её использовать.</value>
+  </data>
+  <data name="ThemeEditor_ImportUnreadable" xml:space="preserve">
+    <value>Не удалось прочитать файл как тему.</value>
+  </data>
+  <data name="ThemeFile_TypeName" xml:space="preserve">
+    <value>Тема TCF</value>
+  </data>
+  <data name="ThemeEditor_SavedFormat" xml:space="preserve">
+    <value>Тема "{0}" сохранена и применена.</value>
+  </data>
+  <data name="ThemeEditor_DeleteTitle" xml:space="preserve">
+    <value>Удалить тему</value>
+  </data>
+  <data name="ThemeEditor_DeleteConfirmFormat" xml:space="preserve">
+    <value>Удалить "{0}"? Это нельзя отменить - сначала экспортируй, если тема может пригодиться.</value>
+  </data>
+  <data name="ThemeEditor_DeletedFormat" xml:space="preserve">
+    <value>Тема "{0}" удалена.</value>
+  </data>
+  <data name="ThemeEditor_ExportDialogTitle" xml:space="preserve">
+    <value>Экспорт темы</value>
+  </data>
+  <data name="ThemeEditor_ExportedFormat" xml:space="preserve">
+    <value>Тема "{0}" экспортирована - отправь файл любому, кто пользуется этим приложением.</value>
+  </data>
+  <data name="ThemeEditor_ExportFailedFormat" xml:space="preserve">
+    <value>Не удалось экспортировать тему - {0}</value>
+  </data>
+  <data name="ThemeEditor_ImportDialogTitle" xml:space="preserve">
+    <value>Импорт темы</value>
+  </data>
+  <data name="ThemeEditor_ImportedFormat" xml:space="preserve">
+    <value>Тема "{0}" импортирована.</value>
+  </data>
+  <data name="ThemeEditor_ImportReplacedFormat" xml:space="preserve">
+    <value>Тема "{0}" обновлена из файла.</value>
+  </data>
+  <data name="ThemeEditor_UnsavedTitle" xml:space="preserve">
+    <value>Несохранённая тема</value>
+  </data>
+  <data name="ThemeEditor_UnsavedFormat" xml:space="preserve">
+    <value>Сохранить изменения в "{0}"?</value>
+  </data>
+  <data name="ThemeEditor_DiscardFormat" xml:space="preserve">
+    <value>Отменить изменения в "{0}"?</value>
+  </data>
+  <data name="ThemeEditor_Import" xml:space="preserve">
+    <value>Импорт</value>
+  </data>
+  <data name="ThemeEditor_Export" xml:space="preserve">
+    <value>Экспорт</value>
+  </data>
+  <data name="ThemeEditor_Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="ThemeEditor_Revert" xml:space="preserve">
+    <value>Отменить изменения</value>
+  </data>
   <data name="Options_ThemeFollowSystem" xml:space="preserve">
     <value>Как в системе</value>
   </data>

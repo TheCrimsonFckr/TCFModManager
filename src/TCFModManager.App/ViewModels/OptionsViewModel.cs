@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -20,6 +21,8 @@ public partial class OptionsViewModel : LocalizedViewModel
     // page doesn't count as choosing a theme.
     private readonly bool _loaded;
 
+    private bool _refreshingThemes;
+
     // Every write does its own Load first, so this never fights the other things that save settings.
     private readonly SettingsService _settings = new();
 
@@ -36,7 +39,7 @@ public partial class OptionsViewModel : LocalizedViewModel
     [ObservableProperty]
     private string? _installPathInput;
 
-    public IReadOnlyList<ThemeOptionItem> ThemeOptions { get; } =
+    public ObservableCollection<ThemeOptionItem> ThemeOptions { get; } =
     [
         new(nameof(Strings.Options_ThemeFollowSystem), ThemePreference.FollowSystem),
         new(nameof(Strings.Options_ThemeLight), ThemePreference.Light),
@@ -334,11 +337,7 @@ public partial class OptionsViewModel : LocalizedViewModel
     {
         InstallPathInput = SptEnvironment.InstallPath;
 
-        var stored = AppTheme.Stored;
-        var storedThemeId = AppTheme.StoredThemeId;
-        _selectedTheme = ThemeOptions.FirstOrDefault(t => t.ThemeId is not null && string.Equals(t.ThemeId, storedThemeId, StringComparison.OrdinalIgnoreCase))
-            ?? ThemeOptions.FirstOrDefault(t => t.ThemeId is null && t.Value == stored)
-            ?? ThemeOptions[0];
+        _selectedTheme = StoredThemeOption();
 
         // A stored tag this build has no resources for selects System default, which is what the
         // app is doing anyway - AppLanguage falls back to the same place.
@@ -386,10 +385,40 @@ public partial class OptionsViewModel : LocalizedViewModel
 
     partial void OnSelectedThemeChanged(ThemeOptionItem value)
     {
-        if (!_loaded) return;
+        if (!_loaded || _refreshingThemes || value is null) return;
 
         if (value.ThemeId is { } id) AppTheme.SetCustom(id);
         else AppTheme.Set(value.Value);
+    }
+
+    private ThemeOptionItem StoredThemeOption()
+    {
+        var stored = AppTheme.Stored;
+        var storedThemeId = AppTheme.StoredThemeId;
+
+        return ThemeOptions.FirstOrDefault(t => t.ThemeId is not null && string.Equals(t.ThemeId, storedThemeId, StringComparison.OrdinalIgnoreCase))
+            ?? ThemeOptions.FirstOrDefault(t => t.ThemeId is null && t.Value == stored)
+            ?? ThemeOptions[0];
+    }
+
+    [RelayCommand]
+    private void CustomiseTheme()
+    {
+        ThemeEditorWindow.Open();
+
+        _refreshingThemes = true;
+        try
+        {
+            var savedStart = 3 + BuiltInThemes.All.Count;
+            while (ThemeOptions.Count > savedStart) ThemeOptions.RemoveAt(ThemeOptions.Count - 1);
+            foreach (var saved in new ThemeStore().LoadAll()) ThemeOptions.Add(ThemeOptionItem.Saved(saved.Name, saved.Id));
+
+            SelectedTheme = StoredThemeOption();
+        }
+        finally
+        {
+            _refreshingThemes = false;
+        }
     }
 
     //

@@ -2433,6 +2433,231 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="Options_ThemeSteam" xml:space="preserve">
     <value>Steam</value>
   </data>
+  <data name="Options_ThemeCustomise" xml:space="preserve">
+    <value>Customise</value>
+  </data>
+  <data name="Options_ThemeCustomiseToolTip" xml:space="preserve">
+    <value>Make your own theme, or change a saved one.</value>
+  </data>
+  <data name="ThemeEditor_Title" xml:space="preserve">
+    <value>Customise theme</value>
+  </data>
+  <data name="ThemeEditor_StartFrom" xml:space="preserve">
+    <value>Start from</value>
+  </data>
+  <data name="ThemeEditor_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ThemeEditor_Base" xml:space="preserve">
+    <value>Base</value>
+  </data>
+  <data name="ThemeEditor_NewName" xml:space="preserve">
+    <value>My theme</value>
+  </data>
+  <data name="ThemeEditor_CopyNameFormat" xml:space="preserve">
+    <value>{0} (copy)</value>
+  </data>
+  <data name="ThemeEditor_AccentWindows" xml:space="preserve">
+    <value>Windows accent</value>
+  </data>
+  <data name="ThemeEditor_SectionAccent" xml:space="preserve">
+    <value>Accent</value>
+  </data>
+  <data name="ThemeEditor_SectionSurfaces" xml:space="preserve">
+    <value>Surfaces</value>
+  </data>
+  <data name="ThemeEditor_SectionText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="ThemeEditor_SectionStatus" xml:space="preserve">
+    <value>Status colours</value>
+  </data>
+  <data name="ThemeEditor_SectionFootprint" xml:space="preserve">
+    <value>Mod footprint</value>
+  </data>
+  <data name="ThemeEditor_SectionShape" xml:space="preserve">
+    <value>Shape and font</value>
+  </data>
+  <data name="ThemeEditor_ColourAccent" xml:space="preserve">
+    <value>Accent</value>
+  </data>
+  <data name="ThemeEditor_ColourBackground" xml:space="preserve">
+    <value>Window</value>
+  </data>
+  <data name="ThemeEditor_ColourPage" xml:space="preserve">
+    <value>Page</value>
+  </data>
+  <data name="ThemeEditor_ColourSurface" xml:space="preserve">
+    <value>Cards</value>
+  </data>
+  <data name="ThemeEditor_ColourSurfaceSecondary" xml:space="preserve">
+    <value>Inner cards</value>
+  </data>
+  <data name="ThemeEditor_ColourFlyout" xml:space="preserve">
+    <value>Menus and tooltips</value>
+  </data>
+  <data name="ThemeEditor_ColourStroke" xml:space="preserve">
+    <value>Borders</value>
+  </data>
+  <data name="ThemeEditor_ColourDivider" xml:space="preserve">
+    <value>Dividers</value>
+  </data>
+  <data name="ThemeEditor_ColourTextPrimary" xml:space="preserve">
+    <value>Main text</value>
+  </data>
+  <data name="ThemeEditor_ColourTextSecondary" xml:space="preserve">
+    <value>Secondary text</value>
+  </data>
+  <data name="ThemeEditor_ColourTextTertiary" xml:space="preserve">
+    <value>Faint text</value>
+  </data>
+  <data name="ThemeEditor_ColourTextDisabled" xml:space="preserve">
+    <value>Disabled text</value>
+  </data>
+  <data name="ThemeEditor_ColourSuccess" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="ThemeEditor_ColourCaution" xml:space="preserve">
+    <value>Caution</value>
+  </data>
+  <data name="ThemeEditor_ColourCritical" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ThemeEditor_ColourAttention" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="ThemeEditor_ColourFootprintCpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="ThemeEditor_ColourFootprintGpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="ThemeEditor_ColourFootprintMemory" xml:space="preserve">
+    <value>Memory</value>
+  </data>
+  <data name="ThemeEditor_ColourFootprintStartup" xml:space="preserve">
+    <value>Start-up</value>
+  </data>
+  <data name="ThemeEditor_ColourFootprintDisk" xml:space="preserve">
+    <value>Disk</value>
+  </data>
+  <data name="ThemeEditor_ColourFootprintNeutral" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="ThemeEditor_SwatchToolTip" xml:space="preserve">
+    <value>Pick a colour</value>
+  </data>
+  <data name="ThemeEditor_HexToolTip" xml:space="preserve">
+    <value>#RRGGBB, or #AARRGGBB to make it see-through. Leave it empty to use the base colour shown.</value>
+  </data>
+  <data name="ThemeEditor_ResetToolTip" xml:space="preserve">
+    <value>Use the base colour</value>
+  </data>
+  <data name="ThemeEditor_InvalidColour" xml:space="preserve">
+    <value>Not a colour - use #RRGGBB or #AARRGGBB.</value>
+  </data>
+  <data name="ThemeEditor_Corners" xml:space="preserve">
+    <value>Corners</value>
+  </data>
+  <data name="ThemeEditor_CornersDefault" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="ThemeEditor_CornersSquare" xml:space="preserve">
+    <value>Square</value>
+  </data>
+  <data name="ThemeEditor_CornersRound" xml:space="preserve">
+    <value>Round</value>
+  </data>
+  <data name="ThemeEditor_Font" xml:space="preserve">
+    <value>Font</value>
+  </data>
+  <data name="ThemeEditor_FontDefault" xml:space="preserve">
+    <value>Default (Segoe UI)</value>
+  </data>
+  <data name="ThemeEditor_ProblemNameMissing" xml:space="preserve">
+    <value>Give the theme a name.</value>
+  </data>
+  <data name="ThemeEditor_ProblemNameTooLongFormat" xml:space="preserve">
+    <value>The name can be {0} characters at most.</value>
+  </data>
+  <data name="ThemeEditor_ProblemFontTooLongFormat" xml:space="preserve">
+    <value>The font name can be {0} characters at most.</value>
+  </data>
+  <data name="ThemeEditor_ProblemRadiusFormat" xml:space="preserve">
+    <value>Corners can be rounded by {0} at most.</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastPrimaryFormat" xml:space="preserve">
+    <value>Main text is hard to read on cards ({0}:1 - aim for {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastSecondaryFormat" xml:space="preserve">
+    <value>Secondary text is hard to read on cards ({0}:1 - aim for {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastTertiaryFormat" xml:space="preserve">
+    <value>Faint text is too faint on cards ({0}:1 - aim for {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ImportNotATheme" xml:space="preserve">
+    <value>That file isn't a theme.</value>
+  </data>
+  <data name="ThemeEditor_ImportNewer" xml:space="preserve">
+    <value>That theme was made by a newer version of TCF Mod Manager - update the app to use it.</value>
+  </data>
+  <data name="ThemeEditor_ImportUnreadable" xml:space="preserve">
+    <value>That file couldn't be read as a theme.</value>
+  </data>
+  <data name="ThemeFile_TypeName" xml:space="preserve">
+    <value>TCF theme</value>
+  </data>
+  <data name="ThemeEditor_SavedFormat" xml:space="preserve">
+    <value>Saved "{0}" and switched to it.</value>
+  </data>
+  <data name="ThemeEditor_DeleteTitle" xml:space="preserve">
+    <value>Delete theme</value>
+  </data>
+  <data name="ThemeEditor_DeleteConfirmFormat" xml:space="preserve">
+    <value>Delete "{0}"? This can't be undone - export it first if you might want it back.</value>
+  </data>
+  <data name="ThemeEditor_DeletedFormat" xml:space="preserve">
+    <value>Deleted "{0}".</value>
+  </data>
+  <data name="ThemeEditor_ExportDialogTitle" xml:space="preserve">
+    <value>Export theme</value>
+  </data>
+  <data name="ThemeEditor_ExportedFormat" xml:space="preserve">
+    <value>Exported "{0}" - send that file to anyone running this app.</value>
+  </data>
+  <data name="ThemeEditor_ExportFailedFormat" xml:space="preserve">
+    <value>Couldn't export the theme - {0}</value>
+  </data>
+  <data name="ThemeEditor_ImportDialogTitle" xml:space="preserve">
+    <value>Import theme</value>
+  </data>
+  <data name="ThemeEditor_ImportedFormat" xml:space="preserve">
+    <value>Imported "{0}".</value>
+  </data>
+  <data name="ThemeEditor_ImportReplacedFormat" xml:space="preserve">
+    <value>Updated "{0}" from the file.</value>
+  </data>
+  <data name="ThemeEditor_UnsavedTitle" xml:space="preserve">
+    <value>Unsaved theme</value>
+  </data>
+  <data name="ThemeEditor_UnsavedFormat" xml:space="preserve">
+    <value>Save your changes to "{0}"?</value>
+  </data>
+  <data name="ThemeEditor_DiscardFormat" xml:space="preserve">
+    <value>Throw away your changes to "{0}"?</value>
+  </data>
+  <data name="ThemeEditor_Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="ThemeEditor_Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="ThemeEditor_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="ThemeEditor_Revert" xml:space="preserve">
+    <value>Revert</value>
+  </data>
   <data name="Options_WindowRemember" xml:space="preserve">
     <value>Remember the last size and position</value>
   </data>

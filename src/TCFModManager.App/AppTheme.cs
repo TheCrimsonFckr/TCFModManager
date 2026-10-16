@@ -144,6 +144,23 @@ public static class AppTheme
         return true;
     }
 
+    public static void Preview(ThemeDefinition theme)
+    {
+        StopFollowing();
+        ApplyCustom(theme);
+    }
+
+    public static void RestoreStored()
+    {
+        ApplyStored();
+
+        if (Stored == ThemePreference.FollowSystem && ThemeApplier.Active is null
+            && Application.Current?.MainWindow is { } window)
+        {
+            StartFollowing(window);
+        }
+    }
+
     private static void ApplyCustom(ThemeDefinition theme)
     {
         _applyingCustom = true;

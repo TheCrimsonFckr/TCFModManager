@@ -172,10 +172,18 @@
                     <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_AppearanceHint}" />
                 </StackPanel>
             </ui:CardControl.Header>
-            <ComboBox
-                MinWidth="200"
-                ItemsSource="{Binding ThemeOptions}"
-                SelectedItem="{Binding SelectedTheme}" />
+            <StackPanel Orientation="Horizontal">
+                <ComboBox
+                    MinWidth="200"
+                    ItemsSource="{Binding ThemeOptions}"
+                    SelectedItem="{Binding SelectedTheme}" />
+                <ui:Button
+                    Margin="8,0,0,0"
+                    Icon="{ui:SymbolIcon PaintBrush24}"
+                    Content="{loc:Str Options_ThemeCustomise}"
+                    ToolTip="{loc:Str Options_ThemeCustomiseToolTip}"
+                    Command="{Binding CustomiseThemeCommand}" />
+            </StackPanel>
         </ui:CardControl>
 
         <ui:CardControl
