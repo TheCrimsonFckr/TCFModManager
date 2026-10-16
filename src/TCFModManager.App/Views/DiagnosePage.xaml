@@ -99,7 +99,7 @@
                                     <Border
                                         Margin="28,8,0,0"
                                         Padding="8,6"
-                                        CornerRadius="3"
+                                        CornerRadius="{DynamicResource SmallCornerRadius}"
                                         Background="{DynamicResource ControlFillColorInputActiveBrush}">
                                         <StackPanel>
                                             <TextBlock
