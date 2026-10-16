@@ -634,7 +634,7 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Appearance</value>
   </data>
   <data name="Options_AppearanceDescription" xml:space="preserve">
-    <value>Follow system matches Windows and keeps matching it when you change it there. Light and Dark pin the app to one regardless.</value>
+    <value>Follow system matches Windows and keeps matching it when you change it there. Light, Dark and the other themes stay as they are whatever Windows does. Customise makes your own.</value>
     <comment>Follow system, Light and Dark are the three entries of the dropdown below - translate them the same way there.</comment>
   </data>
   <data name="Options_WindowHeader" xml:space="preserve">
@@ -5562,7 +5562,7 @@ This was written to:
     <value>The app's own text. Mod descriptions stay in their author's language.</value>
   </data>
   <data name="Options_AppearanceHint" xml:space="preserve">
-    <value>Light, dark, or follow Windows.</value>
+    <value>Light, dark, a built-in theme or your own.</value>
   </data>
   <data name="Options_WindowHint" xml:space="preserve">
     <value>How the window opens. F11 switches full screen on and off at any time.</value>
@@ -6758,11 +6758,19 @@ This was written to:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Options_Theme_Title" xml:space="preserve">
-    <value>Switch between light and dark</value>
+    <value>Change the theme</value>
     <comment>How-to title.</comment>
   </data>
   <data name="Help_Options_Theme_Step1" xml:space="preserve">
-    <value>In {0}, change {1} to {2}, {3} or {4}.</value>
+    <value>In {0}, pick a theme under {1}: {2}, {3}, {4}, one of the built-in themes, or one you made yourself.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Options_Theme_Step2" xml:space="preserve">
+    <value>To make your own, click {0}. Pick a theme to start from and change its colours, corners or font - the app shows each change as you make it. Give it a name and save it, and it joins the list.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Options_Theme_Note" xml:space="preserve">
+    <value>To share a theme, {0} saves it as a .tcftheme file. Whoever gets it clicks {1} and then {2}. If text gets hard to read, the editor says where, but it won't stop you saving.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Options_Role_Title" xml:space="preserve">
@@ -7119,7 +7127,7 @@ This was written to:
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
   <data name="Help_Options_Theme_Keywords" xml:space="preserve">
-    <value>dark mode, light mode, theme, colours, colors, appearance</value>
+    <value>dark mode, light mode, theme, colours, colors, appearance, custom theme, theme editor, OLED, black, high contrast, Tarkov, Steam, tcftheme, font, corners</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
   <data name="Help_Options_Role_Keywords" xml:space="preserve">

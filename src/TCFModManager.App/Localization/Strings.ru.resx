@@ -3544,7 +3544,7 @@
     <value>Карта сервера</value>
   </data>
   <data name="Options_AppearanceDescription" xml:space="preserve">
-    <value>«Как в системе» повторяет настройку Windows и продолжает следовать ей, когда вы меняете её там. «Светлая» и «Тёмная» закрепляют одну тему независимо от системы.</value>
+    <value>«Как в системе» повторяет настройку Windows и продолжает следовать ей, когда вы меняете её там. «Светлая», «Тёмная» и остальные темы не меняются, что бы ни делала Windows. «Настроить» создаёт свою.</value>
   </data>
   <data name="Options_AppearanceHeader" xml:space="preserve">
     <value>Внешний вид</value>
@@ -4921,7 +4921,7 @@
     <value>Текст самого приложения. Описания модов остаются на языке их автора.</value>
   </data>
   <data name="Options_AppearanceHint" xml:space="preserve">
-    <value>Светлая, тёмная или как в Windows.</value>
+    <value>Светлая, тёмная, встроенная тема или своя.</value>
   </data>
   <data name="Options_WindowHint" xml:space="preserve">
     <value>Как открывается окно. F11 в любой момент включает и выключает полноэкранный режим.</value>
@@ -5983,10 +5983,16 @@
     <value>Большинство переводов сделано машиной. Если что-то звучит неправильно, нажмите {0} вверху этой страницы и напишите, как должно быть.</value>
   </data>
   <data name="Help_Options_Theme_Title" xml:space="preserve">
-    <value>Переключиться между светлой и тёмной темой</value>
+    <value>Сменить тему</value>
   </data>
   <data name="Help_Options_Theme_Step1" xml:space="preserve">
-    <value>В разделе {0} переключите {1} на {2}, {3} или {4}.</value>
+    <value>В разделе {0} выберите тему в пункте {1}: {2}, {3}, {4}, одну из встроенных или созданную вами.</value>
+  </data>
+  <data name="Help_Options_Theme_Step2" xml:space="preserve">
+    <value>Чтобы создать свою, нажмите {0}. Выберите тему за основу и измените цвета, углы или шрифт - приложение сразу показывает каждое изменение. Дайте ей имя и сохраните, и она появится в списке.</value>
+  </data>
+  <data name="Help_Options_Theme_Note" xml:space="preserve">
+    <value>Чтобы поделиться темой, {0} сохраняет её в файл .tcftheme. Получатель нажимает {1}, а затем {2}. Если текст становится трудно читать, редактор покажет где, но сохранить не помешает.</value>
   </data>
   <data name="Help_Options_Role_Title" xml:space="preserve">
     <value>Сообщить приложению, что эта машина - headless Fika</value>
@@ -6277,7 +6283,7 @@
     <value>язык, перевод, русский, английский</value>
   </data>
   <data name="Help_Options_Theme_Keywords" xml:space="preserve">
-    <value>тёмная тема, светлая, тёмная, тема, цвета, оформление</value>
+    <value>тёмная тема, светлая, тёмная, тема, цвета, оформление, своя тема, редактор темы, OLED, чёрная, высокий контраст, Tarkov, Steam, tcftheme, шрифт, углы</value>
   </data>
   <data name="Help_Options_Role_Keywords" xml:space="preserve">
     <value>headless, Fika, выделенный, хост, без игрока</value>

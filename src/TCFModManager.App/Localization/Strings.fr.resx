@@ -3364,7 +3364,7 @@ Sauvegardez votre profil avant de continuer si vous y tenez.</value>
     <value>Carte du serveur</value>
   </data>
   <data name="Options_AppearanceDescription" xml:space="preserve">
-    <value>Suivre le système s'aligne sur Windows et continue de s'y aligner quand vous le changez là-bas. Clair et Sombre fixent l'application sur l'un des deux quoi qu'il arrive.</value>
+    <value>Suivre le système s'aligne sur Windows et continue de s'y aligner quand vous le changez là-bas. Clair, Sombre et les autres thèmes restent tels quels quoi que fasse Windows. Personnaliser crée le vôtre.</value>
   </data>
   <data name="Options_AppearanceHeader" xml:space="preserve">
     <value>Apparence</value>
@@ -4690,7 +4690,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Les textes de l'application. Les descriptions des mods restent dans la langue de leur auteur.</value>
   </data>
   <data name="Options_AppearanceHint" xml:space="preserve">
-    <value>Clair, sombre, ou comme Windows.</value>
+    <value>Clair, sombre, un thème intégré ou le vôtre.</value>
   </data>
   <data name="Options_WindowHint" xml:space="preserve">
     <value>Comment la fenêtre s'ouvre. F11 active ou quitte le plein écran à tout moment.</value>
@@ -5695,10 +5695,16 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>La plupart des traductions sont automatiques. Si quelque chose sonne faux, cliquez sur {0} en haut de cette page et dites ce qu'il faudrait écrire.</value>
   </data>
   <data name="Help_Options_Theme_Title" xml:space="preserve">
-    <value>Passer du clair au sombre</value>
+    <value>Changer de thème</value>
   </data>
   <data name="Help_Options_Theme_Step1" xml:space="preserve">
-    <value>Dans {0}, passez {1} sur {2}, {3} ou {4}.</value>
+    <value>Dans {0}, choisissez un thème sous {1} : {2}, {3}, {4}, l'un des thèmes intégrés ou un thème que vous avez créé.</value>
+  </data>
+  <data name="Help_Options_Theme_Step2" xml:space="preserve">
+    <value>Pour créer le vôtre, cliquez sur {0}. Choisissez un thème de départ et changez ses couleurs, ses coins ou sa police - l'application montre chaque changement aussitôt. Donnez-lui un nom et enregistrez-le : il rejoint la liste.</value>
+  </data>
+  <data name="Help_Options_Theme_Note" xml:space="preserve">
+    <value>Pour partager un thème, {0} l'enregistre dans un fichier .tcftheme. La personne qui le reçoit clique sur {1} puis sur {2}. Si un texte devient difficile à lire, l'éditeur indique où, sans vous empêcher d'enregistrer.</value>
   </data>
   <data name="Help_Options_Role_Title" xml:space="preserve">
     <value>Dire à l'application que cette machine est un headless Fika</value>
@@ -5989,7 +5995,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>langue, traduction, français, anglais</value>
   </data>
   <data name="Help_Options_Theme_Keywords" xml:space="preserve">
-    <value>mode sombre, clair, sombre, thème, couleurs, apparence</value>
+    <value>mode sombre, clair, sombre, thème, couleurs, apparence, thème personnalisé, éditeur de thème, OLED, noir, contraste élevé, Tarkov, Steam, tcftheme, police, coins</value>
   </data>
   <data name="Help_Options_Role_Keywords" xml:space="preserve">
     <value>headless, Fika, dédié, hôte, sans joueur</value>

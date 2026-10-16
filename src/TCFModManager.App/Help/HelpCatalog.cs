@@ -521,7 +521,10 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Options_Theme_Step1,
                     () => Strings.Nav_Options, () => Strings.Options_AppearanceHeader,
                     () => Strings.Options_ThemeFollowSystem, () => Strings.Options_ThemeLight,
-                    () => Strings.Options_ThemeDark))
+                    () => Strings.Options_ThemeDark),
+                Step(() => Strings.Help_Options_Theme_Step2, () => Strings.Options_ThemeCustomise))
+                .WithNote(() => Strings.Help_Options_Theme_Note,
+                    () => Strings.ThemeEditor_Export, () => Strings.Options_ThemeCustomise, () => Strings.ThemeEditor_Import)
                 .WithKeywords(() => Strings.Help_Options_Theme_Keywords),
 
             Topic("options.role", () => Strings.Help_Options_Role_Title,

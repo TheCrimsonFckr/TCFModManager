@@ -3364,7 +3364,7 @@ Sicher dein Profil, bevor du fortfährst, wenn es dir wichtig ist.</value>
     <value>Server-Map</value>
   </data>
   <data name="Options_AppearanceDescription" xml:space="preserve">
-    <value>System folgen richtet sich nach Windows und bleibt dabei, auch wenn du es dort änderst. Hell und Dunkel legen die App unabhängig davon auf eines fest.</value>
+    <value>System folgen richtet sich nach Windows und bleibt dabei, auch wenn du es dort änderst. Hell, Dunkel und die anderen Designs bleiben, egal was Windows macht. Mit Anpassen erstellst du ein eigenes.</value>
   </data>
   <data name="Options_AppearanceHeader" xml:space="preserve">
     <value>Darstellung</value>
@@ -4690,7 +4690,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Die Texte der App selbst. Mod-Beschreibungen bleiben in der Sprache ihres Autors.</value>
   </data>
   <data name="Options_AppearanceHint" xml:space="preserve">
-    <value>Hell, dunkel oder wie Windows.</value>
+    <value>Hell, dunkel, ein mitgeliefertes Design oder ein eigenes.</value>
   </data>
   <data name="Options_WindowHint" xml:space="preserve">
     <value>Wie sich das Fenster öffnet. F11 schaltet jederzeit in den Vollbildmodus und zurück.</value>
@@ -5695,10 +5695,16 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Die meisten Übersetzungen sind maschinell. Liest sich etwas falsch, klicke oben auf dieser Seite auf {0} und schreib, wie es heißen sollte.</value>
   </data>
   <data name="Help_Options_Theme_Title" xml:space="preserve">
-    <value>Zwischen hell und dunkel wechseln</value>
+    <value>Design ändern</value>
   </data>
   <data name="Help_Options_Theme_Step1" xml:space="preserve">
-    <value>Stell unter {0} {1} auf {2}, {3} oder {4}.</value>
+    <value>Wähl unter {0} bei {1} ein Design: {2}, {3}, {4}, eines der mitgelieferten Designs oder ein eigenes.</value>
+  </data>
+  <data name="Help_Options_Theme_Step2" xml:space="preserve">
+    <value>Für ein eigenes Design klick auf {0}. Wähl ein Design als Ausgangspunkt und ändere Farben, Ecken oder Schrift - die App zeigt jede Änderung sofort. Gib ihm einen Namen und speichere es, dann steht es in der Liste.</value>
+  </data>
+  <data name="Help_Options_Theme_Note" xml:space="preserve">
+    <value>Zum Teilen speichert {0} das Design als .tcftheme-Datei. Wer sie bekommt, klickt auf {1} und dann auf {2}. Wird Text schwer lesbar, sagt der Editor, wo - am Speichern hindert er dich nicht.</value>
   </data>
   <data name="Help_Options_Role_Title" xml:space="preserve">
     <value>Der App sagen, dass dieser Rechner ein Fika-Headless ist</value>
@@ -5989,7 +5995,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Sprache, Übersetzung, Deutsch, Englisch</value>
   </data>
   <data name="Help_Options_Theme_Keywords" xml:space="preserve">
-    <value>Dunkelmodus, hell, dunkel, Design, Farben, Darstellung</value>
+    <value>Dunkelmodus, hell, dunkel, Design, Farben, Darstellung, eigenes Design, Design-Editor, Theme, OLED, schwarz, hoher Kontrast, Tarkov, Steam, tcftheme, Schrift, Ecken</value>
   </data>
   <data name="Help_Options_Role_Keywords" xml:space="preserve">
     <value>Headless, Fika, dediziert, Host, kein Spieler</value>

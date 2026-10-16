@@ -3364,7 +3364,7 @@ Fai un backup del profilo prima di continuare, se ci tieni.</value>
     <value>Mappa server</value>
   </data>
   <data name="Options_AppearanceDescription" xml:space="preserve">
-    <value>Segui il sistema si adegua a Windows e continua a seguirlo quando lo cambi lì. Chiaro e Scuro fissano l'app su uno dei due a prescindere.</value>
+    <value>Segui il sistema si adegua a Windows e continua a seguirlo quando lo cambi lì. Chiaro, Scuro e gli altri temi restano così qualunque cosa faccia Windows. Personalizza ne crea uno tuo.</value>
   </data>
   <data name="Options_AppearanceHeader" xml:space="preserve">
     <value>Aspetto</value>
@@ -4690,7 +4690,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>I testi dell'app. Le descrizioni dei mod restano nella lingua del loro autore.</value>
   </data>
   <data name="Options_AppearanceHint" xml:space="preserve">
-    <value>Chiaro, scuro o come Windows.</value>
+    <value>Chiaro, scuro, un tema incluso o il tuo.</value>
   </data>
   <data name="Options_WindowHint" xml:space="preserve">
     <value>Come si apre la finestra. F11 attiva e disattiva lo schermo intero in qualsiasi momento.</value>
@@ -5695,10 +5695,16 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>La maggior parte delle traduzioni è automatica. Se qualcosa suona male, premi {0} in cima a questa pagina e scrivi come dovrebbe essere.</value>
   </data>
   <data name="Help_Options_Theme_Title" xml:space="preserve">
-    <value>Passare dal chiaro allo scuro</value>
+    <value>Cambiare tema</value>
   </data>
   <data name="Help_Options_Theme_Step1" xml:space="preserve">
-    <value>In {0}, cambia {1} in {2}, {3} o {4}.</value>
+    <value>In {0}, scegli un tema in {1}: {2}, {3}, {4}, uno dei temi inclusi o uno creato da te.</value>
+  </data>
+  <data name="Help_Options_Theme_Step2" xml:space="preserve">
+    <value>Per crearne uno tuo, fai clic su {0}. Scegli un tema di partenza e cambia colori, angoli o carattere - l'app mostra ogni modifica mentre la fai. Dagli un nome e salvalo: comparirà nell'elenco.</value>
+  </data>
+  <data name="Help_Options_Theme_Note" xml:space="preserve">
+    <value>Per condividere un tema, {0} lo salva in un file .tcftheme. Chi lo riceve fa clic su {1} e poi su {2}. Se un testo diventa difficile da leggere, l'editor indica dove, ma non ti impedisce di salvare.</value>
   </data>
   <data name="Help_Options_Role_Title" xml:space="preserve">
     <value>Dire all'app che questa macchina è un headless Fika</value>
@@ -5989,7 +5995,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>lingua, traduzione, italiano, inglese</value>
   </data>
   <data name="Help_Options_Theme_Keywords" xml:space="preserve">
-    <value>modalità scura, chiaro, scuro, tema, colori, aspetto</value>
+    <value>modalità scura, chiaro, scuro, tema, colori, aspetto, tema personalizzato, editor tema, OLED, nero, contrasto elevato, Tarkov, Steam, tcftheme, carattere, angoli</value>
   </data>
   <data name="Help_Options_Role_Keywords" xml:space="preserve">
     <value>headless, Fika, dedicato, host, nessun giocatore</value>
