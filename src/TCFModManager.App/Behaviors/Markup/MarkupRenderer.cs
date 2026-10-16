@@ -294,10 +294,10 @@ public sealed class MarkupRenderer
         {
             Padding = new Thickness(Px(16)),
             Margin = new Thickness(0, 4, 0, 0),
-            CornerRadius = new CornerRadius(4),
             Child = content,
         };
         box.SetResourceReference(Border.BackgroundProperty, TabContentBrush);
+        box.SetResourceReference(Border.CornerRadiusProperty, "ControlCornerRadius");
 
         // Each tab's document is built the first time it is shown and kept.
         var documents = new FlowDocument?[set.Tabs.Count];
