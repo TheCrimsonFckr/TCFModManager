@@ -356,7 +356,7 @@
                                         <Border
                                             Margin="0,0,6,4"
                                             Padding="8,2"
-                                            CornerRadius="3"
+                                            CornerRadius="{DynamicResource SmallCornerRadius}"
                                             ToolTip="{Binding ToolTip}"
                                             Background="{DynamicResource ControlFillColorSecondaryBrush}">
                                             <StackPanel Orientation="Horizontal">
