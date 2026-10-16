@@ -12,6 +12,12 @@ namespace TCFModManager.App;
 
 public partial class MainWindow : FluentWindow
 {
+    private void ApplyIcons()
+    {
+        Icon = AppIcons.ForWindow;
+        TitleBarIcon.Source = AppIcons.ForTitleBar;
+    }
+
     public MainWindow()
     {
         InitializeComponent();
@@ -23,6 +29,10 @@ public partial class MainWindow : FluentWindow
 
         // Cards snap rather than glide while the window is being resized by hand (OPEN-26).
         Motion.TrackWindowDrag(this);
+
+        ApplyIcons();
+        AppIcons.Watch();
+        AppIcons.Changed += (_, _) => ApplyIcons();
 
         // F1 is the title bar's "?" (Help R8). Preview, so a focused text box doesn't get it first.
         PreviewKeyDown += (_, e) =>

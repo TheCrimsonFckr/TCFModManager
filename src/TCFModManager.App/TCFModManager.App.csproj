@@ -70,6 +70,8 @@
 
   <ItemGroup>
     <Resource Include="Assets\AppIcon.ico" />
+    <Resource Include="Assets\AppIconBlack.ico" />
+    <Resource Include="Assets\AppIconWhite.ico" />
   </ItemGroup>
 
   <!--

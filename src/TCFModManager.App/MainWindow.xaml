@@ -7,7 +7,6 @@
     xmlns:views="clr-namespace:TCFModManager.App.Views"
     xmlns:app="clr-namespace:TCFModManager.App"
     Title="{Binding WindowTitle, Source={x:Static app:AppServices.SptEnvironment}}"
-    Icon="pack://application:,,,/Assets/AppIcon.ico"
     Height="980"
     Width="1720"
     MinHeight="480"
@@ -56,7 +55,7 @@
             HelpClicked="RootTitleBar_HelpClicked"
             Title="{Binding WindowTitle, Source={x:Static app:AppServices.SptEnvironment}}">
             <ui:TitleBar.Icon>
-                <ui:ImageIcon Source="pack://application:,,,/Assets/AppIcon.ico" />
+                <ui:ImageIcon x:Name="TitleBarIcon" />
             </ui:TitleBar.Icon>
         </ui:TitleBar>
 

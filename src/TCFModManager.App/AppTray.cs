@@ -65,6 +65,8 @@ internal static class AppTray
         {
             _icon ??= Build();
 
+            _icon.Icon = AppIcons.ForTray;
+
             // Rebuilt on every hide rather than once, so it's in whatever language the app is now in.
             _icon.TooltipText = Strings.Tray_ToolTip;
             _icon.Menu = BuildMenu();
@@ -131,6 +133,7 @@ internal static class AppTray
         // a single one, and a single click is what Windows 11's own tray icons answer to.
         //
         icon.LeftClick += OnIconClicked;
+        AppIcons.Changed += (_, _) => icon.Icon = AppIcons.ForTray;
 
         return icon;
     }
