@@ -323,7 +323,7 @@
                                                             Height="48"
                                                             Margin="0,0,10,0"
                                                             VerticalAlignment="Top"
-                                                            CornerRadius="4"
+                                                            CornerRadius="{DynamicResource ControlCornerRadius}"
                                                             ClipToBounds="True"
                                                             Background="{DynamicResource ControlFillColorSecondaryBrush}">
                                                             <Grid>
