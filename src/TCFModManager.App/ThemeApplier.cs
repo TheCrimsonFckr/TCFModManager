@@ -23,9 +23,10 @@ internal static class ThemeApplier
         ("SmallCornerRadius", 0.75),
     ];
 
+    private static readonly string[] AccentTintKeys = ["RowHoverBrush", "RowSelectedBrush", "SelectedRowStroke"];
+
     private static readonly HashSet<string> Written = new(StringComparer.Ordinal);
     private static ResourceDictionary? _shadow;
-    private static ThemeBase _shadowBase;
     private static bool _fontActive;
     private static bool _fontHooked;
 
@@ -36,7 +37,6 @@ internal static class ThemeApplier
         if (Application.Current is not { } app) return;
 
         RemoveWritten(app);
-        MergeShadow(app, theme.Base);
 
         var resolved = ThemeMath.Resolve(theme);
         var own = theme.Colors;
@@ -50,6 +50,9 @@ internal static class ThemeApplier
 
         ApplyRadius(app, theme.CornerRadius);
         ApplyFont(app, theme.FontFamily);
+
+        MergeShadow(app, theme.Base);
+        RefreshAccentTints(app, theme.Accent ?? theme.AccentShades?.Primary);
 
         Active = theme;
         ReferenceWindowBackgrounds(app);
@@ -68,6 +71,8 @@ internal static class ThemeApplier
             app.Resources.MergedDictionaries.Remove(_shadow);
             _shadow = null;
         }
+
+        RefreshAccentTints(app, null);
 
         if (_fontActive)
         {
@@ -226,14 +231,23 @@ internal static class ThemeApplier
 
     private static void MergeShadow(Application app, ThemeBase themeBase)
     {
-        if (_shadow is not null && _shadowBase == themeBase && app.Resources.MergedDictionaries.Contains(_shadow)) return;
+        var file = themeBase == ThemeBase.Light ? "Light" : "Dark";
+        var fresh = new ResourceDictionary { Source = new Uri($"pack://application:,,,/Themes/ThemeBrushes.{file}.xaml") };
 
         if (_shadow is not null) app.Resources.MergedDictionaries.Remove(_shadow);
+        app.Resources.MergedDictionaries.Add(fresh);
+        _shadow = fresh;
+    }
 
-        var file = themeBase == ThemeBase.Light ? "Light" : "Dark";
-        _shadow = new ResourceDictionary { Source = new Uri($"pack://application:,,,/Themes/ThemeBrushes.{file}.xaml") };
-        _shadowBase = themeBase;
-        app.Resources.MergedDictionaries.Add(_shadow);
+    private static void RefreshAccentTints(Application app, ThemeColor? accent)
+    {
+        foreach (var key in AccentTintKeys)
+        {
+            if (app.Resources[key] is not SolidColorBrush { IsFrozen: false } brush) continue;
+
+            if (accent is { } c) brush.Color = ToMedia(c.WithAlpha(0xFF));
+            else brush.SetValue(SolidColorBrush.ColorProperty, new DynamicResourceExtension("SystemAccentColor").ProvideValue(null));
+        }
     }
 
     private static void Write(Application app, ThemeColor? color, params string[] keys)
