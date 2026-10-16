@@ -8200,4 +8200,46 @@ Passer quand même à cette version ?</value>
   <data name="Browse_CopyFailed" xml:space="preserve">
     <value>Impossible de copier - autre chose occupe le presse-papiers.</value>
   </data>
+  <data name="Filter_IgnoredOnly" xml:space="preserve">
+    <value>Mods ignorés</value>
+  </data>
+  <data name="Filter_IgnoredOnlyToolTip" xml:space="preserve">
+    <value>Seulement les mods que vous ignorez. Ils sont masqués de la navigation quand ceci est décoché.</value>
+  </data>
+  <data name="Browse_MenuIgnore" xml:space="preserve">
+    <value>Ignorer</value>
+  </data>
+  <data name="Browse_MenuStopIgnoring" xml:space="preserve">
+    <value>Ne plus ignorer</value>
+  </data>
+  <data name="Browse_IgnoredFormat" xml:space="preserve">
+    <value>{0} est ignoré. Pour le revoir, ouvrez {1} et cochez {2}.</value>
+  </data>
+  <data name="Browse_UnignoredFormat" xml:space="preserve">
+    <value>{0} n'est plus ignoré.</value>
+  </data>
+  <data name="Ignored_Header" xml:space="preserve">
+    <value>Mods ignorés</value>
+  </data>
+  <data name="Ignored_SummaryFormat" xml:space="preserve">
+    <value>{0} ignoré(s) - masqués de la navigation, des pages d'auteur et des notifications de nouveaux mods</value>
+  </data>
+  <data name="Ignored_Empty" xml:space="preserve">
+    <value>Vous n'ignorez aucun mod. Faites un clic droit sur un mod dans la navigation et choisissez Ignorer pour le masquer.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Title" xml:space="preserve">
+    <value>Ignorer un mod</value>
+  </data>
+  <data name="Help_Browse_Ignore_Step1" xml:space="preserve">
+    <value>Dans {0}, faites un clic droit sur un mod que vous ne voulez plus voir et choisissez {1}. Il disparaît de {0}, de la page de son auteur et des notifications de nouveaux mods.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Step2" xml:space="preserve">
+    <value>Pour voir les mods ignorés, ouvrez {0} et cochez {1}. Faites un clic droit sur l'un d'eux et choisissez {2} pour le faire revenir.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Note" xml:space="preserve">
+    <value>Ignorer ne change que ce que vous parcourez : un mod installé que vous ignorez reste mis à jour et peut toujours être proposé comme dépendance. Tous les mods ignorés sont listés dans {0}, sous {1}.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Keywords" xml:space="preserve">
+    <value>ignorer, masquer, cacher, bloquer, liste noire, indésirable, mods masqués</value>
+  </data>
 </root>

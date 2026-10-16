@@ -249,7 +249,7 @@ internal sealed class UpdateWatcher
                 new ModsQuery { Sort = "-published_at", PerPage = NewModsLookback, Include = "category,versions" }, ct);
 
             var state = _store.Load();
-            var (fresh, announced) = NewModAnnouncer.Pick(newest.Data, followed, state.AnnouncedNewMods);
+            var (fresh, announced) = NewModAnnouncer.Pick(newest.Data, followed, state.AnnouncedNewMods, AppServices.Ignored.Ids);
             state.AnnouncedNewMods = announced;
             _store.Save(state);
 

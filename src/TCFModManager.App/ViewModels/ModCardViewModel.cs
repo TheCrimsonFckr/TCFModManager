@@ -88,6 +88,8 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
     // loaded. Outranks the update state - what's newer hardly matters while nothing loads it.
     public bool IsDisabled { get; private init; }
 
+    public bool IsIgnored => AppServices.Ignored.IsIgnored(Mod.Id);
+
     // The card's install status, using the same vocabulary and icons as the Installed and
     // Dependencies pages.
     public ModStatus Status => (IsInstalled, IsDisabled, UpdateAvailable) switch

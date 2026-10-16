@@ -218,6 +218,9 @@ public sealed class AppSettings
     // notifications of their new mods alongside update notifications (R7).
     public List<FollowedAuthor> FollowedAuthors { get; set; } = [];
 
+    // sp-mod listings left out of Browse, the Author page and new-mod notifications (OPEN-30).
+    public List<IgnoredMod> IgnoredMods { get; set; } = [];
+
     //
     // Server Map. Always present in settings.json so the shape is obvious to anyone hand-editing
     // it, even on an install that never turns the page on.

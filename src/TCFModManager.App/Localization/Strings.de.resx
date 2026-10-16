@@ -8200,4 +8200,46 @@ Trotzdem wechseln?</value>
   <data name="Browse_CopyFailed" xml:space="preserve">
     <value>Kopieren nicht möglich - etwas anderes belegt gerade die Zwischenablage.</value>
   </data>
+  <data name="Filter_IgnoredOnly" xml:space="preserve">
+    <value>Ignorierte Mods</value>
+  </data>
+  <data name="Filter_IgnoredOnlyToolTip" xml:space="preserve">
+    <value>Nur die Mods, die du ignorierst. Ist das aus, sind sie im Durchsuchen ausgeblendet.</value>
+  </data>
+  <data name="Browse_MenuIgnore" xml:space="preserve">
+    <value>Ignorieren</value>
+  </data>
+  <data name="Browse_MenuStopIgnoring" xml:space="preserve">
+    <value>Nicht mehr ignorieren</value>
+  </data>
+  <data name="Browse_IgnoredFormat" xml:space="preserve">
+    <value>{0} wird ignoriert. Um den Mod wieder zu sehen, öffne {1} und hake {2} an.</value>
+  </data>
+  <data name="Browse_UnignoredFormat" xml:space="preserve">
+    <value>{0} wird nicht mehr ignoriert.</value>
+  </data>
+  <data name="Ignored_Header" xml:space="preserve">
+    <value>Ignorierte Mods</value>
+  </data>
+  <data name="Ignored_SummaryFormat" xml:space="preserve">
+    <value>{0} ignoriert - ausgeblendet im Durchsuchen, auf Autorenseiten und bei Benachrichtigungen über neue Mods</value>
+  </data>
+  <data name="Ignored_Empty" xml:space="preserve">
+    <value>Du ignorierst noch keine Mods. Klicke im Durchsuchen mit der rechten Maustaste auf einen Mod und wähle Ignorieren, um ihn auszublenden.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Title" xml:space="preserve">
+    <value>Einen Mod ignorieren</value>
+  </data>
+  <data name="Help_Browse_Ignore_Step1" xml:space="preserve">
+    <value>Klicke unter {0} mit der rechten Maustaste auf einen Mod, den du nie sehen willst, und wähle {1}. Er verschwindet aus {0}, von der Seite seines Autors und aus den Benachrichtigungen über neue Mods.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Step2" xml:space="preserve">
+    <value>Um deine ignorierten Mods zu sehen, öffne {0} und hake {1} an. Klicke mit der rechten Maustaste auf einen und wähle {2}, um ihn zurückzuholen.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Note" xml:space="preserve">
+    <value>Ignorieren ändert nur, was du durchsuchst: Ein installierter Mod, den du ignorierst, wird weiter aktualisiert und kann weiter als Abhängigkeit angeboten werden. Alle ignorierten Mods stehen unter {0} bei {1}.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Keywords" xml:space="preserve">
+    <value>ignorieren, ausblenden, verstecken, blockieren, Blacklist, unerwünscht, ausgeblendete Mods</value>
+  </data>
 </root>

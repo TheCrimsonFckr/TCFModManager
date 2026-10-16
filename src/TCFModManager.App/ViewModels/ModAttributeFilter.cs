@@ -42,6 +42,9 @@ public enum ModAttributeFilter
 
     // Only mods by an author the user follows, as owner or co-author (OPEN-12 A4, R23). Browse only.
     ByFollowedAuthors,
+
+    // Only the mods the user ignored, which are otherwise always hidden (OPEN-30). Browse only.
+    IgnoredOnly,
 }
 
 //

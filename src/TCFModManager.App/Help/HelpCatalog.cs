@@ -132,6 +132,13 @@ internal static class HelpCatalog
                 .WithNote(() => Strings.Help_Browse_Follow_Note, () => Strings.Nav_Options, () => Strings.Followed_Header)
                 .WithKeywords(() => Strings.Help_Browse_Follow_Keywords),
 
+            Topic("browse.ignore", () => Strings.Help_Browse_Ignore_Title,
+                Step(() => Strings.Help_Browse_Ignore_Step1, () => Strings.Nav_Browse, () => Strings.Browse_MenuIgnore),
+                Step(() => Strings.Help_Browse_Ignore_Step2,
+                    () => Strings.Filter_More, () => Strings.Filter_IgnoredOnly, () => Strings.Browse_MenuStopIgnoring))
+                .WithNote(() => Strings.Help_Browse_Ignore_Note, () => Strings.Nav_Options, () => Strings.Ignored_Header)
+                .WithKeywords(() => Strings.Help_Browse_Ignore_Keywords),
+
             Topic("browse.details", () => Strings.Help_Browse_Details_Title,
                 Step(() => Strings.Help_Browse_Details_Step1, () => Strings.Nav_Browse, () => Strings.Nav_Installed),
                 Step(() => Strings.Help_Browse_Details_Step2))

@@ -118,6 +118,7 @@ public partial class BrowseViewModel : LocalizedViewModel
         {
             if (IsOn(ModAttributeFilter.ByFollowedAuthors)) AutoApplyFilter();
         };
+        AppServices.Ignored.Changed += (_, _) => ShowIgnoredChange();
 
         // The addon catalog usually settles after the first page has already rendered, so the
         // "N addons" badges are redrawn once it does rather than waiting for a page change.
@@ -402,6 +403,9 @@ public partial class BrowseViewModel : LocalizedViewModel
         new(ModAttributeFilter.ByFollowedAuthors,
             nameof(Strings.Filter_ByFollowedAuthors),
             nameof(Strings.Filter_ByFollowedAuthorsToolTip)),
+        new(ModAttributeFilter.IgnoredOnly,
+            nameof(Strings.Filter_IgnoredOnly),
+            nameof(Strings.Filter_IgnoredOnlyToolTip)),
     ];
 
     //
@@ -1018,6 +1022,15 @@ public partial class BrowseViewModel : LocalizedViewModel
         if (page > 1) GoToPage(page);
     }
 
+    private void ShowIgnoredChange()
+    {
+        if (!HasLoadedResults) return;
+
+        var page = CurrentPage;
+        ApplyFilter();
+        if (page > 1) GoToPage(page);
+    }
+
     // Re-reads the pins for the cards on screen, for a pin made on another page since.
     public void RefreshPins()
     {
@@ -1104,6 +1117,7 @@ public partial class BrowseViewModel : LocalizedViewModel
             .Where(m => !IsOn(ModAttributeFilter.HasAddons) || AppServices.Addons.CountFor(m.Id) > 0)
             .Where(m => !IsOn(ModAttributeFilter.HideInstalled) || FindInstalledMatch(m) is null)
             .Where(m => !IsOn(ModAttributeFilter.ByFollowedAuthors) || AppServices.Followed.IsByFollowed(m))
+            .Where(m => IsOn(ModAttributeFilter.IgnoredOnly) == AppServices.Ignored.IsIgnored(m.Id))
             // Only mods already known to have dependencies. A mod nobody has looked at yet is not
             // claimed either way, so it drops out of this filter rather than being asserted clean.
             .Where(m => !IsOn(ModAttributeFilter.HasDependencies)
@@ -1402,6 +1416,22 @@ public partial class BrowseViewModel : LocalizedViewModel
     private void MenuOpenModPage(ModCardViewModel? card)
     {
         if (card?.Mod.DetailUrl is { Length: > 0 } url) MarkupActions.OpenInBrowser(url);
+    }
+
+    [RelayCommand]
+    private void MenuIgnore(ModCardViewModel? card)
+    {
+        if (card is null) return;
+        AppServices.Ignored.Set(card.Mod.Id, card.Mod.Name, ignore: true);
+        StatusMessage = Text(Strings.Browse_IgnoredFormat, card.Mod.Name, Strings.Filter_More, Strings.Filter_IgnoredOnly);
+    }
+
+    [RelayCommand]
+    private void MenuStopIgnoring(ModCardViewModel? card)
+    {
+        if (card is null) return;
+        AppServices.Ignored.Set(card.Mod.Id, card.Mod.Name, ignore: false);
+        StatusMessage = Text(Strings.Browse_UnignoredFormat, card.Mod.Name);
     }
 
     [RelayCommand]

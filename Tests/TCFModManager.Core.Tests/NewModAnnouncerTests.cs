@@ -52,6 +52,18 @@ public class NewModAnnouncerTests
     }
 
     [Fact]
+    public void An_ignored_mod_is_not_news_and_stays_quiet_once_unignored()
+    {
+        var mod = ModBy(6, 7, Followed.AddDays(1));
+
+        var ignored = NewModAnnouncer.Pick([mod], [Alice], [], new HashSet<int> { 6 });
+        Assert.Empty(ignored.New);
+
+        var unignored = NewModAnnouncer.Pick([mod], [Alice], ignored.Announced);
+        Assert.Empty(unignored.New);
+    }
+
+    [Fact]
     public void Nothing_is_news_with_nobody_followed()
     {
         Assert.Empty(NewModAnnouncer.Pick([ModBy(5, 7, Followed.AddDays(1))], [], []).New);

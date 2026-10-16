@@ -7,6 +7,29 @@ namespace TCFModManager.Core.Tests;
 public class AppSettingsTests
 {
     [Fact]
+    public void IgnoredMods_AreEmptyWhenTheFileHasNeverHeardOfThem()
+    {
+        var settings = JsonSerializer.Deserialize<AppSettings>("""{ "SptInstallPath": "C:\\SPT" }""");
+
+        Assert.NotNull(settings);
+        Assert.Empty(settings!.IgnoredMods);
+    }
+
+    [Fact]
+    public void IgnoredMods_SurviveARoundTrip()
+    {
+        var at = new DateTimeOffset(2026, 10, 16, 14, 0, 0, TimeSpan.Zero);
+        var written = new AppSettings { IgnoredMods = [new IgnoredMod { Id = 42, Name = "Some Mod", IgnoredAt = at }] };
+
+        var read = JsonSerializer.Deserialize<AppSettings>(JsonSerializer.Serialize(written))!;
+
+        var only = Assert.Single(read.IgnoredMods);
+        Assert.Equal(42, only.Id);
+        Assert.Equal("Some Mod", only.Name);
+        Assert.Equal(at, only.IgnoredAt);
+    }
+
+    [Fact]
     public void Theme_FollowsWindowsWhenTheFileHasNeverHeardOfIt()
     {
         // A settings file written before the setting existed has no Theme key, and those installs

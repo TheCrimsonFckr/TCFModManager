@@ -504,6 +504,19 @@
                                     Command="{Binding MenuCopyGuidCommand, Source={x:Static app:AppServices.Browse}}"
                                     CommandParameter="{Binding}"
                                     Visibility="{Binding Guid, Converter={StaticResource NullToCollapsed}}" />
+                                <Separator />
+                                <MenuItem
+                                    Header="{loc:Str Browse_MenuIgnore}"
+                                    Icon="{ui:SymbolIcon EyeOff24}"
+                                    Command="{Binding MenuIgnoreCommand, Source={x:Static app:AppServices.Browse}}"
+                                    CommandParameter="{Binding}"
+                                    Visibility="{Binding IsIgnored, Converter={StaticResource FalseToVisible}}" />
+                                <MenuItem
+                                    Header="{loc:Str Browse_MenuStopIgnoring}"
+                                    Icon="{ui:SymbolIcon Eye24}"
+                                    Command="{Binding MenuStopIgnoringCommand, Source={x:Static app:AppServices.Browse}}"
+                                    CommandParameter="{Binding}"
+                                    Visibility="{Binding IsIgnored, Converter={StaticResource TrueToVisible}}" />
                             </ContextMenu>
                         </ui:Card.ContextMenu>
                         <!-- Fills the card. The right-hand column is a gutter the status icon and

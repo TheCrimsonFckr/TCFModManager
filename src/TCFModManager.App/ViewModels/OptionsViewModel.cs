@@ -140,6 +140,9 @@ public partial class OptionsViewModel : LocalizedViewModel
     // The authors the user follows (OPEN-12 A4) - see FollowedAuthorsViewModel.
     public FollowedAuthorsViewModel Followed { get; } = new();
 
+    // The mods the user ignored (OPEN-30) - see IgnoredModsViewModel.
+    public IgnoredModsViewModel Ignored { get; } = new();
+
     // Also run each time the Options page opens: removals and Undo on the Installed page change it.
     public void RefreshRemovedModsSize()
     {

@@ -428,6 +428,60 @@
             </StackPanel>
         </ui:CardExpander>
 
+        <!-- The mods the user ignored (OPEN-30): open each one's page, or stop ignoring it. -->
+        <ui:CardExpander
+            Style="{StaticResource SettingExpander}"
+            Icon="{ui:SymbolIcon EyeOff24}"
+            DataContext="{Binding Ignored}">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Ignored_Header}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{Binding Summary}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
+
+            <StackPanel>
+                <TextBlock
+                    Style="{StaticResource SettingNote}"
+                    Text="{loc:Str Ignored_Empty}"
+                    Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibility}}" />
+
+                <ItemsControl ItemsSource="{Binding Mods}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding Name}" />
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                        Text="{Binding Detail}"
+                                        Visibility="{Binding Detail, Converter={StaticResource NullToCollapsed}}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <ui:Button
+                                        Margin="8,0,0,0"
+                                        Content="{loc:Str Common_ViewModPage}"
+                                        Command="{Binding DataContext.OpenCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"
+                                        Visibility="{Binding HasUrl, Converter={StaticResource BoolToVisibility}}" />
+                                    <ui:Button
+                                        Margin="8,0,0,0"
+                                        Content="{loc:Str Browse_MenuStopIgnoring}"
+                                        Command="{Binding DataContext.StopIgnoringCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}" />
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ui:CardExpander>
+
         <!-- Copies of the SPT profiles taken before the app changes the install (OPEN-12 F4). -->
         <ui:CardExpander
             Style="{StaticResource SettingExpander}"

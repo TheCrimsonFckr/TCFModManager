@@ -19,7 +19,8 @@ public static class NewModAnnouncer
     public static (IReadOnlyList<NewModCandidate> New, List<int> Announced) Pick(
         IEnumerable<Mod> recent,
         IReadOnlyList<FollowedAuthor> followed,
-        IReadOnlyList<int> announced)
+        IReadOnlyList<int> announced,
+        IReadOnlySet<int>? ignored = null)
     {
         var seen = new HashSet<int>(announced);
         var kept = new List<int>(announced);
@@ -41,9 +42,11 @@ public static class NewModAnnouncer
                 .FirstOrDefault(x => x.Follow is not null && published >= x.Follow.FollowedAt);
             if (author.Follow is null) continue;
 
-            fresh.Add(new NewModCandidate(mod.Id, mod.Name ?? string.Empty, author.Owner.Id, author.Owner.Name ?? author.Follow.Name));
             seen.Add(mod.Id);
             kept.Add(mod.Id);
+            if (ignored?.Contains(mod.Id) == true) continue;
+
+            fresh.Add(new NewModCandidate(mod.Id, mod.Name ?? string.Empty, author.Owner.Id, author.Owner.Name ?? author.Follow.Name));
         }
 
         if (kept.Count > Remembered) kept.RemoveRange(0, kept.Count - Remembered);

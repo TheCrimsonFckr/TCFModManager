@@ -34,6 +34,9 @@ internal static class AppServices
     // The authors the user follows (OPEN-12 A4). Before Browse, which reads it as it is built.
     public static FollowedAuthors Followed { get; } = new();
 
+    // The sp-mod listings the user ignored (OPEN-30). Before Browse, which reads it as it is built.
+    public static IgnoredMods Ignored { get; } = new();
+
     // Copies of the SPT profiles, taken before the app changes the install (OPEN-12 F4).
     public static ProfileBackups ProfileBackups { get; } = new();
 

@@ -125,6 +125,7 @@ public sealed partial class AuthorViewModel : LocalizedViewModel
 
         var mods = AppServices.ModCache.AllMods
             .Where(m => NewModAnnouncer.IsBy(m, authorId))
+            .Where(m => !AppServices.Ignored.IsIgnored(m.Id))
             .OrderByDescending(m => m.PublishedAt ?? m.CreatedAt ?? DateTimeOffset.MinValue)
             .ToList();
 

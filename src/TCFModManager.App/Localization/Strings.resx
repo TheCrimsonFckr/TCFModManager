@@ -9809,4 +9809,58 @@ Switch anyway?</value>
     <value>Couldn't copy - something else is holding the clipboard.</value>
     <comment>Status line when another program has the clipboard locked.</comment>
   </data>
+  <data name="Filter_IgnoredOnly" xml:space="preserve">
+    <value>Ignored mods</value>
+    <comment>Tick box under Show only on Browse (OPEN-30). Also the Options section's name is Ignored_Header.</comment>
+  </data>
+  <data name="Filter_IgnoredOnlyToolTip" xml:space="preserve">
+    <value>Only the mods you ignored. They are hidden from Browse whenever this is off.</value>
+    <comment>Tooltip on the Ignored mods tick box.</comment>
+  </data>
+  <data name="Browse_MenuIgnore" xml:space="preserve">
+    <value>Ignore</value>
+    <comment>Right-click menu item on a Browse card: hides the mod from Browse from now on.</comment>
+  </data>
+  <data name="Browse_MenuStopIgnoring" xml:space="preserve">
+    <value>Stop ignoring</value>
+    <comment>Right-click menu item on an ignored Browse card, and the button beside each mod in Options &gt; Ignored mods.</comment>
+  </data>
+  <data name="Browse_IgnoredFormat" xml:space="preserve">
+    <value>Ignored {0}. To see it again, open {1} and tick {2}.</value>
+    <comment>Status line after Ignore. {0} is the mod's name, {1} the Filters button, {2} the Ignored mods tick box.</comment>
+  </data>
+  <data name="Browse_UnignoredFormat" xml:space="preserve">
+    <value>Stopped ignoring {0}.</value>
+    <comment>Status line after Stop ignoring. {0} is the mod's name.</comment>
+  </data>
+  <data name="Ignored_Header" xml:space="preserve">
+    <value>Ignored mods</value>
+    <comment>Options section (OPEN-30).</comment>
+  </data>
+  <data name="Ignored_SummaryFormat" xml:space="preserve">
+    <value>{0} ignored - hidden from Browse, author pages and new-mod notifications</value>
+    <comment>{0} is how many mods are ignored.</comment>
+  </data>
+  <data name="Ignored_Empty" xml:space="preserve">
+    <value>You haven't ignored any mods. Right-click a mod on Browse and pick Ignore to hide it.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Title" xml:space="preserve">
+    <value>Ignore a mod</value>
+  </data>
+  <data name="Help_Browse_Ignore_Step1" xml:space="preserve">
+    <value>On {0}, right-click a mod you never want to see and pick {1}. It leaves {0}, its author's page and new-mod notifications.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Ignore_Step2" xml:space="preserve">
+    <value>To see the mods you ignored, open {0} and tick {1}. Right-click one and pick {2} to bring it back.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Ignore_Note" xml:space="preserve">
+    <value>Ignoring only changes what you browse: an installed mod you ignore still updates and can still be offered as a dependency. Every ignored mod is listed in {0} under {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_Ignore_Keywords" xml:space="preserve">
+    <value>ignore, hide, block, blacklist, unwanted, unignore, hidden mods</value>
+    <comment>Comma-separated words the Help search also matches this topic on.</comment>
+  </data>
 </root>

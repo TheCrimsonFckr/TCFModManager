@@ -8575,4 +8575,46 @@
   <data name="Browse_CopyFailed" xml:space="preserve">
     <value>Не удалось скопировать - буфер обмена занят чем-то другим.</value>
   </data>
+  <data name="Filter_IgnoredOnly" xml:space="preserve">
+    <value>Скрытые моды</value>
+  </data>
+  <data name="Filter_IgnoredOnlyToolTip" xml:space="preserve">
+    <value>Только моды, которые вы скрыли. Когда это выключено, они не показываются в обзоре.</value>
+  </data>
+  <data name="Browse_MenuIgnore" xml:space="preserve">
+    <value>Скрыть</value>
+  </data>
+  <data name="Browse_MenuStopIgnoring" xml:space="preserve">
+    <value>Больше не скрывать</value>
+  </data>
+  <data name="Browse_IgnoredFormat" xml:space="preserve">
+    <value>{0} скрыт. Чтобы снова увидеть его, откройте {1} и отметьте {2}.</value>
+  </data>
+  <data name="Browse_UnignoredFormat" xml:space="preserve">
+    <value>{0} больше не скрыт.</value>
+  </data>
+  <data name="Ignored_Header" xml:space="preserve">
+    <value>Скрытые моды</value>
+  </data>
+  <data name="Ignored_SummaryFormat" xml:space="preserve">
+    <value>Скрыто: {0} - не показываются в обзоре, на страницах авторов и в уведомлениях о новых модах</value>
+  </data>
+  <data name="Ignored_Empty" xml:space="preserve">
+    <value>Вы пока не скрыли ни одного мода. Нажмите правой кнопкой на мод в обзоре и выберите «Скрыть».</value>
+  </data>
+  <data name="Help_Browse_Ignore_Title" xml:space="preserve">
+    <value>Скрыть мод</value>
+  </data>
+  <data name="Help_Browse_Ignore_Step1" xml:space="preserve">
+    <value>В разделе {0} нажмите правой кнопкой на мод, который не хотите видеть, и выберите {1}. Он пропадёт из {0}, со страницы автора и из уведомлений о новых модах.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Step2" xml:space="preserve">
+    <value>Чтобы увидеть скрытые моды, откройте {0} и отметьте {1}. Нажмите правой кнопкой на мод и выберите {2}, чтобы вернуть его.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Note" xml:space="preserve">
+    <value>Скрытие меняет только то, что вы просматриваете: установленный мод, который вы скрыли, по-прежнему обновляется и может предлагаться как зависимость. Все скрытые моды перечислены в {0}, в разделе {1}.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Keywords" xml:space="preserve">
+    <value>скрыть, игнорировать, спрятать, блокировать, чёрный список, ненужные, скрытые моды</value>
+  </data>
 </root>

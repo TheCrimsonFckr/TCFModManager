@@ -8200,4 +8200,46 @@ Passare comunque?</value>
   <data name="Browse_CopyFailed" xml:space="preserve">
     <value>Impossibile copiare - qualcos'altro sta occupando gli appunti.</value>
   </data>
+  <data name="Filter_IgnoredOnly" xml:space="preserve">
+    <value>Mod ignorati</value>
+  </data>
+  <data name="Filter_IgnoredOnlyToolTip" xml:space="preserve">
+    <value>Solo i mod che ignori. Quando è spento sono nascosti da Sfoglia.</value>
+  </data>
+  <data name="Browse_MenuIgnore" xml:space="preserve">
+    <value>Ignora</value>
+  </data>
+  <data name="Browse_MenuStopIgnoring" xml:space="preserve">
+    <value>Non ignorare più</value>
+  </data>
+  <data name="Browse_IgnoredFormat" xml:space="preserve">
+    <value>{0} viene ignorato. Per rivederlo, apri {1} e spunta {2}.</value>
+  </data>
+  <data name="Browse_UnignoredFormat" xml:space="preserve">
+    <value>{0} non viene più ignorato.</value>
+  </data>
+  <data name="Ignored_Header" xml:space="preserve">
+    <value>Mod ignorati</value>
+  </data>
+  <data name="Ignored_SummaryFormat" xml:space="preserve">
+    <value>{0} ignorati - nascosti da Sfoglia, dalle pagine degli autori e dalle notifiche dei nuovi mod</value>
+  </data>
+  <data name="Ignored_Empty" xml:space="preserve">
+    <value>Non stai ignorando nessun mod. Fai clic destro su un mod in Sfoglia e scegli Ignora per nasconderlo.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Title" xml:space="preserve">
+    <value>Ignorare un mod</value>
+  </data>
+  <data name="Help_Browse_Ignore_Step1" xml:space="preserve">
+    <value>In {0}, fai clic destro su un mod che non vuoi più vedere e scegli {1}. Sparisce da {0}, dalla pagina del suo autore e dalle notifiche dei nuovi mod.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Step2" xml:space="preserve">
+    <value>Per vedere i mod che ignori, apri {0} e spunta {1}. Fai clic destro su uno e scegli {2} per riaverlo.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Note" xml:space="preserve">
+    <value>Ignorare cambia solo ciò che sfogli: un mod installato che ignori continua ad aggiornarsi e può ancora essere proposto come dipendenza. Tutti i mod ignorati sono elencati in {0}, sotto {1}.</value>
+  </data>
+  <data name="Help_Browse_Ignore_Keywords" xml:space="preserve">
+    <value>ignora, nascondi, blocca, blacklist, indesiderato, mod nascosti</value>
+  </data>
 </root>
