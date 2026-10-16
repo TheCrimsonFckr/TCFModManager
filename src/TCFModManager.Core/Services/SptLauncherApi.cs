@@ -238,6 +238,18 @@ public sealed record SptMiniProfile
     [JsonPropertyName("currlvl")]
     public int Level { get; init; }
 
+    [JsonPropertyName("currexp")]
+    public long CurrentExperience { get; init; }
+
+    [JsonPropertyName("prevexp")]
+    public long? PreviousExperience { get; init; }
+
+    [JsonPropertyName("nextlvl")]
+    public long? NextLevelExperience { get; init; }
+
+    [JsonPropertyName("maxlvl")]
+    public int? MaxLevel { get; init; }
+
     [JsonPropertyName("profileId")]
     public string ProfileId { get; init; } = "";
 

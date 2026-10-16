@@ -13,7 +13,9 @@ namespace TCFModManager.Core.Services;
 //
 public static class SptLocalProfiles
 {
-    private static readonly Dictionary<string, (DateTime Written, long Length, SptMiniProfile? Profile)> Cache = new(StringComparer.OrdinalIgnoreCase);
+    private sealed record Entry(DateTime Written, long Length, SptMiniProfile? Profile, SptProfileStats? Stats);
+
+    private static readonly Dictionary<string, Entry> Cache = new(StringComparer.OrdinalIgnoreCase);
     private static readonly Lock Gate = new();
 
     public static IReadOnlyList<SptMiniProfile> Read(string? installPath)
@@ -34,22 +36,45 @@ public static class SptLocalProfiles
 
         foreach (var file in files)
         {
-            if (ReadOne(file) is { } profile) found.Add(profile);
+            if (ReadEntry(file)?.Profile is { } profile) found.Add(profile);
         }
 
         return [.. found.OrderBy(p => p.Nickname.Length == 0 ? p.Username : p.Nickname, StringComparer.OrdinalIgnoreCase)];
     }
 
-    private static SptMiniProfile? ReadOne(string file)
+    /// <summary>The launcher's profile-page figures for one profile, or null when its file can't be
+    /// read. A file caught half-written keeps the figures last read from it.</summary>
+    public static SptProfileStats? ReadStats(string? installPath, string profileId)
+    {
+        if (ProfileBackups.ProfilesFolder(installPath) is not { } folder || profileId.Length == 0) return null;
+
+        var named = Path.Combine(folder, profileId + ".json");
+        if (File.Exists(named) && ReadEntry(named)?.Stats is { } stats && stats.ProfileId == profileId) return stats;
+
+        try
+        {
+            return Directory.EnumerateFiles(folder, "*.json", SearchOption.TopDirectoryOnly)
+                .Select(ReadEntry)
+                .FirstOrDefault(e => e?.Stats?.ProfileId == profileId)?.Stats;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.Debug("ProfileStats", $"couldn't list {folder}: {ex.Message}");
+            return null;
+        }
+    }
+
+    private static Entry? ReadEntry(string file)
     {
         FileInfo info;
+        Entry? last;
         try
         {
             info = new FileInfo(file);
             lock (Gate)
             {
-                if (Cache.TryGetValue(file, out var hit) && hit.Written == info.LastWriteTimeUtc && hit.Length == info.Length)
-                    return hit.Profile;
+                if (Cache.TryGetValue(file, out last) && last.Written == info.LastWriteTimeUtc && last.Length == info.Length)
+                    return last;
             }
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -57,23 +82,27 @@ public static class SptLocalProfiles
             return null;
         }
 
-        var profile = Parse(file);
-        lock (Gate) Cache[file] = (info.LastWriteTimeUtc, info.Length, profile);
-        return profile;
+        var (profile, stats) = Parse(file);
+        if (profile is null && last?.Profile is not null) return last;
+
+        var entry = new Entry(info.LastWriteTimeUtc, info.Length, profile, stats);
+        lock (Gate) Cache[file] = entry;
+        return entry;
     }
 
-    internal static SptMiniProfile? Parse(string file)
+    internal static (SptMiniProfile? Profile, SptProfileStats? Stats) Parse(string file)
     {
         try
         {
             using var stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
             using var doc = JsonDocument.Parse(stream);
-            return FromJson(doc.RootElement);
+            var profile = FromJson(doc.RootElement);
+            return (profile, profile is null ? null : SptProfileStats.FromJson(doc.RootElement));
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException)
         {
             AppLog.Debug("DirectLaunch", $"couldn't read profile {file}: {ex.Message}");
-            return null;
+            return (null, null);
         }
     }
 
