@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Threading;
 using TCFModManager.App.Behaviors;
 using TCFModManager.App.ViewModels;
@@ -65,6 +66,11 @@ public partial class BrowsePage : Page
 
         // Clears the selection so clicking the same card again reopens the overlay.
         listBox.SelectedItem = null;
+    }
+
+    private void ResultsListBox_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        e.Handled = true;
     }
 
     // Endless (OPEN-12 A8): the next cards once the list is scrolled to within a screen of its end.

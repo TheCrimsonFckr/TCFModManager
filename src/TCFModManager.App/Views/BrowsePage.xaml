@@ -406,6 +406,7 @@
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ItemsSource="{Binding Results}"
             SelectionChanged="ResultsListBox_SelectionChanged"
+            PreviewMouseRightButtonDown="ResultsListBox_PreviewMouseRightButtonDown"
             ScrollViewer.ScrollChanged="ResultsListBox_ScrollChanged"
             SizeChanged="ResultsListBox_SizeChanged">
             <ListBox.ItemsPanel>
@@ -454,6 +455,57 @@
                         ToolTipService.BetweenShowDelay="0"
                         ToolTipService.ShowDuration="60000"
                         ToolTipService.Placement="Right">
+                        <ui:Card.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem
+                                    Header="{loc:Str Browse_MenuDetails}"
+                                    Icon="{ui:SymbolIcon Info24}"
+                                    Command="{Binding MenuDetailsCommand, Source={x:Static app:AppServices.Browse}}"
+                                    CommandParameter="{Binding}" />
+                                <Separator />
+                                <MenuItem
+                                    Header="{loc:Str Browse_MenuInstall}"
+                                    Icon="{ui:SymbolIcon ArrowDownload24}"
+                                    Command="{Binding MenuInstallCommand, Source={x:Static app:AppServices.Browse}}"
+                                    CommandParameter="{Binding}"
+                                    Visibility="{Binding IsInstalled, Converter={StaticResource FalseToVisible}}" />
+                                <MenuItem
+                                    Header="{loc:Str Browse_MenuReinstall}"
+                                    Icon="{ui:SymbolIcon ArrowClockwise24}"
+                                    Command="{Binding MenuInstallCommand, Source={x:Static app:AppServices.Browse}}"
+                                    CommandParameter="{Binding}"
+                                    Visibility="{Binding IsInstalled, Converter={StaticResource TrueToVisible}}" />
+                                <MenuItem
+                                    Header="{loc:Str Browse_MenuDownloadOnly}"
+                                    Icon="{ui:SymbolIcon DocumentSave24}"
+                                    Command="{Binding MenuDownloadOnlyCommand, Source={x:Static app:AppServices.Browse}}"
+                                    CommandParameter="{Binding}" />
+                                <Separator />
+                                <MenuItem
+                                    Header="{loc:Str Common_ViewModPage}"
+                                    Icon="{ui:SymbolIcon Open24}"
+                                    Command="{Binding MenuOpenModPageCommand, Source={x:Static app:AppServices.Browse}}"
+                                    CommandParameter="{Binding}" />
+                                <MenuItem
+                                    Header="{loc:Str Browse_MenuAuthor}"
+                                    Icon="{ui:SymbolIcon Person24}"
+                                    Command="{Binding OpenAuthorCommand, Source={x:Static app:AppServices.Browse}}"
+                                    CommandParameter="{Binding}"
+                                    Visibility="{Binding Author, Converter={StaticResource NullToCollapsed}}" />
+                                <Separator />
+                                <MenuItem
+                                    Header="{loc:Str Browse_MenuCopyLink}"
+                                    Icon="{ui:SymbolIcon Link24}"
+                                    Command="{Binding MenuCopyLinkCommand, Source={x:Static app:AppServices.Browse}}"
+                                    CommandParameter="{Binding}" />
+                                <MenuItem
+                                    Header="{loc:Str Browse_MenuCopyGuid}"
+                                    Icon="{ui:SymbolIcon Copy24}"
+                                    Command="{Binding MenuCopyGuidCommand, Source={x:Static app:AppServices.Browse}}"
+                                    CommandParameter="{Binding}"
+                                    Visibility="{Binding Guid, Converter={StaticResource NullToCollapsed}}" />
+                            </ContextMenu>
+                        </ui:Card.ContextMenu>
                         <!-- Fills the card. The right-hand column is a gutter the status icon and
                              install button live in, so neither can overlap the title or badges. -->
                         <Grid>

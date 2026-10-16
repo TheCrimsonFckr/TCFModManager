@@ -9769,4 +9769,44 @@ Switch anyway?</value>
     <value>stats, raids, kd, k/d, survival rate, kills, money, roubles, level, exp, experience, launcher profile</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
+  <data name="Browse_MenuDetails" xml:space="preserve">
+    <value>Details and versions</value>
+    <comment>Right-click menu item on a Browse card: opens the mod's details overlay.</comment>
+  </data>
+  <data name="Browse_MenuInstall" xml:space="preserve">
+    <value>Install</value>
+    <comment>Right-click menu item on a Browse card for a mod that isn't installed. Always installs, whatever Monitor mode is set to.</comment>
+  </data>
+  <data name="Browse_MenuReinstall" xml:space="preserve">
+    <value>Reinstall</value>
+    <comment>Right-click menu item on a Browse card for an installed mod: downloads and installs it again.</comment>
+  </data>
+  <data name="Browse_MenuDownloadOnly" xml:space="preserve">
+    <value>Download only</value>
+    <comment>Right-click menu item on a Browse card: saves the mod to the download folder without installing it, whatever Monitor mode is set to.</comment>
+  </data>
+  <data name="Browse_MenuAuthor" xml:space="preserve">
+    <value>View author's page</value>
+    <comment>Right-click menu item on a Browse card: opens the author's page inside the app.</comment>
+  </data>
+  <data name="Browse_MenuCopyLink" xml:space="preserve">
+    <value>Copy mod page link</value>
+    <comment>Right-click menu item on a Browse card: copies the mod's sp-mod page address.</comment>
+  </data>
+  <data name="Browse_MenuCopyGuid" xml:space="preserve">
+    <value>Copy GUID</value>
+    <comment>Right-click menu item on a Browse card: copies the mod's GUID. GUID is a technical term and stays as it is.</comment>
+  </data>
+  <data name="Browse_LinkCopiedFormat" xml:space="preserve">
+    <value>Copied the link to {0}'s page.</value>
+    <comment>Status line after Copy mod page link. {0} is the mod's name.</comment>
+  </data>
+  <data name="Browse_GuidCopiedFormat" xml:space="preserve">
+    <value>Copied {0}'s GUID.</value>
+    <comment>Status line after Copy GUID. {0} is the mod's name.</comment>
+  </data>
+  <data name="Browse_CopyFailed" xml:space="preserve">
+    <value>Couldn't copy - something else is holding the clipboard.</value>
+    <comment>Status line when another program has the clipboard locked.</comment>
+  </data>
 </root>

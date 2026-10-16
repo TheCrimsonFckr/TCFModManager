@@ -8170,4 +8170,34 @@ Passer quand même à cette version ?</value>
   <data name="Help_Profile_Stats_Keywords" xml:space="preserve">
     <value>statistiques, raids, kd, k/d, taux de survie, éliminations, argent, roubles, niveau, exp, expérience, profil du lanceur</value>
   </data>
+  <data name="Browse_MenuDetails" xml:space="preserve">
+    <value>Détails et versions</value>
+  </data>
+  <data name="Browse_MenuInstall" xml:space="preserve">
+    <value>Installer</value>
+  </data>
+  <data name="Browse_MenuReinstall" xml:space="preserve">
+    <value>Réinstaller</value>
+  </data>
+  <data name="Browse_MenuDownloadOnly" xml:space="preserve">
+    <value>Télécharger seulement</value>
+  </data>
+  <data name="Browse_MenuAuthor" xml:space="preserve">
+    <value>Ouvrir la page de l'auteur</value>
+  </data>
+  <data name="Browse_MenuCopyLink" xml:space="preserve">
+    <value>Copier le lien de la page du mod</value>
+  </data>
+  <data name="Browse_MenuCopyGuid" xml:space="preserve">
+    <value>Copier le GUID</value>
+  </data>
+  <data name="Browse_LinkCopiedFormat" xml:space="preserve">
+    <value>Lien de la page de {0} copié.</value>
+  </data>
+  <data name="Browse_GuidCopiedFormat" xml:space="preserve">
+    <value>GUID de {0} copié.</value>
+  </data>
+  <data name="Browse_CopyFailed" xml:space="preserve">
+    <value>Impossible de copier - autre chose occupe le presse-papiers.</value>
+  </data>
 </root>

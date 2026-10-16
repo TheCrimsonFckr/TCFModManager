@@ -8170,4 +8170,34 @@ Passare comunque?</value>
   <data name="Help_Profile_Stats_Keywords" xml:space="preserve">
     <value>statistiche, raid, kd, k/d, sopravvivenza, uccisioni, soldi, rubli, livello, exp, esperienza, profilo launcher</value>
   </data>
+  <data name="Browse_MenuDetails" xml:space="preserve">
+    <value>Dettagli e versioni</value>
+  </data>
+  <data name="Browse_MenuInstall" xml:space="preserve">
+    <value>Installa</value>
+  </data>
+  <data name="Browse_MenuReinstall" xml:space="preserve">
+    <value>Reinstalla</value>
+  </data>
+  <data name="Browse_MenuDownloadOnly" xml:space="preserve">
+    <value>Solo download</value>
+  </data>
+  <data name="Browse_MenuAuthor" xml:space="preserve">
+    <value>Apri la pagina dell'autore</value>
+  </data>
+  <data name="Browse_MenuCopyLink" xml:space="preserve">
+    <value>Copia il link della pagina del mod</value>
+  </data>
+  <data name="Browse_MenuCopyGuid" xml:space="preserve">
+    <value>Copia GUID</value>
+  </data>
+  <data name="Browse_LinkCopiedFormat" xml:space="preserve">
+    <value>Link alla pagina di {0} copiato.</value>
+  </data>
+  <data name="Browse_GuidCopiedFormat" xml:space="preserve">
+    <value>GUID di {0} copiato.</value>
+  </data>
+  <data name="Browse_CopyFailed" xml:space="preserve">
+    <value>Impossibile copiare - qualcos'altro sta occupando gli appunti.</value>
+  </data>
 </root>

@@ -8170,4 +8170,34 @@ Trotzdem wechseln?</value>
   <data name="Help_Profile_Stats_Keywords" xml:space="preserve">
     <value>Statistik, Raids, kd, k/d, Überlebensrate, Kills, Geld, Rubel, Level, EXP, Erfahrung, Launcher-Profil</value>
   </data>
+  <data name="Browse_MenuDetails" xml:space="preserve">
+    <value>Details und Versionen</value>
+  </data>
+  <data name="Browse_MenuInstall" xml:space="preserve">
+    <value>Installieren</value>
+  </data>
+  <data name="Browse_MenuReinstall" xml:space="preserve">
+    <value>Neu installieren</value>
+  </data>
+  <data name="Browse_MenuDownloadOnly" xml:space="preserve">
+    <value>Nur herunterladen</value>
+  </data>
+  <data name="Browse_MenuAuthor" xml:space="preserve">
+    <value>Seite des Autors öffnen</value>
+  </data>
+  <data name="Browse_MenuCopyLink" xml:space="preserve">
+    <value>Link zur Mod-Seite kopieren</value>
+  </data>
+  <data name="Browse_MenuCopyGuid" xml:space="preserve">
+    <value>GUID kopieren</value>
+  </data>
+  <data name="Browse_LinkCopiedFormat" xml:space="preserve">
+    <value>Link zur Seite von {0} kopiert.</value>
+  </data>
+  <data name="Browse_GuidCopiedFormat" xml:space="preserve">
+    <value>GUID von {0} kopiert.</value>
+  </data>
+  <data name="Browse_CopyFailed" xml:space="preserve">
+    <value>Kopieren nicht möglich - etwas anderes belegt gerade die Zwischenablage.</value>
+  </data>
 </root>

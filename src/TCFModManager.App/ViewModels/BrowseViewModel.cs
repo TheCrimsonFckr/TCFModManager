@@ -1364,21 +1364,72 @@ public partial class BrowseViewModel : LocalizedViewModel
     /// Install never waits on a network call. Gated on ReadModPageConfirmationWindow first; declining
     /// leaves the card alone.</summary>
     [RelayCommand]
-    private void Install(ModCardViewModel? card) => QueueForDownload(card, DownloadAction.Install, alternate: false);
+    private void Install(ModCardViewModel? card) =>
+        QueueForDownload(card, DownloadAction.Install, AppServices.ModPageGate.DownloadOnlyFor(alternate: false));
 
     // The small button beside Install: the opposite of Monitor mode's setting, for this one mod.
     [RelayCommand]
-    private void InstallAlternate(ModCardViewModel? card) => QueueForDownload(card, DownloadAction.Install, alternate: true);
+    private void InstallAlternate(ModCardViewModel? card) =>
+        QueueForDownload(card, DownloadAction.Install, AppServices.ModPageGate.DownloadOnlyFor(alternate: true));
 
     /// <summary>Re-queues an already-installed mod's currently displayed version - the same pick
     /// Install would make - for a fresh download and reinstall. Shown on the card in Install's place
     /// once a mod is installed, e.g. to recover from corrupted or hand-edited files.</summary>
     [RelayCommand]
-    private void Redownload(ModCardViewModel? card) => QueueForDownload(card, DownloadAction.Redownload, alternate: false);
+    private void Redownload(ModCardViewModel? card) =>
+        QueueForDownload(card, DownloadAction.Redownload, AppServices.ModPageGate.DownloadOnlyFor(alternate: false));
 
     [RelayCommand]
     private void RedownloadAlternate(ModCardViewModel? card) =>
-        QueueForDownload(card, DownloadAction.Redownload, alternate: true);
+        QueueForDownload(card, DownloadAction.Redownload, AppServices.ModPageGate.DownloadOnlyFor(alternate: true));
+
+    [RelayCommand]
+    private void MenuInstall(ModCardViewModel? card) => QueueForDownload(card, MenuAction(card), downloadOnly: false);
+
+    [RelayCommand]
+    private void MenuDownloadOnly(ModCardViewModel? card) => QueueForDownload(card, MenuAction(card), downloadOnly: true);
+
+    private static DownloadAction MenuAction(ModCardViewModel? card) =>
+        card?.IsInstalled == true ? DownloadAction.Redownload : DownloadAction.Install;
+
+    [RelayCommand]
+    private async Task MenuDetailsAsync(ModCardViewModel? card)
+    {
+        if (card is not null) await LoadDetailsAsync(card.Mod);
+    }
+
+    [RelayCommand]
+    private void MenuOpenModPage(ModCardViewModel? card)
+    {
+        if (card?.Mod.DetailUrl is { Length: > 0 } url) MarkupActions.OpenInBrowser(url);
+    }
+
+    [RelayCommand]
+    private void MenuCopyLink(ModCardViewModel? card)
+    {
+        if (card?.Mod.DetailUrl is { Length: > 0 } url)
+            CopyToClipboard(url, Text(Strings.Browse_LinkCopiedFormat, card.Mod.Name));
+    }
+
+    [RelayCommand]
+    private void MenuCopyGuid(ModCardViewModel? card)
+    {
+        if (card?.Guid is { Length: > 0 } guid)
+            CopyToClipboard(guid, Text(Strings.Browse_GuidCopiedFormat, card.Mod.Name));
+    }
+
+    private void CopyToClipboard(string text, string copiedMessage)
+    {
+        try
+        {
+            System.Windows.Clipboard.SetText(text);
+            StatusMessage = copiedMessage;
+        }
+        catch (Exception ex) when (ex is System.Runtime.InteropServices.COMException or InvalidOperationException)
+        {
+            StatusMessage = Strings.Browse_CopyFailed;
+        }
+    }
 
     // Which of the two buttons asked, rather than the word one of them is labelled with: the
     // cancellation message is a whole sentence per action, not a verb dropped into a shared one.
@@ -1388,7 +1439,7 @@ public partial class BrowseViewModel : LocalizedViewModel
         Redownload,
     }
 
-    private void QueueForDownload(ModCardViewModel? card, DownloadAction action, bool alternate)
+    private void QueueForDownload(ModCardViewModel? card, DownloadAction action, bool downloadOnly)
     {
         if (card is null) return;
 
@@ -1400,7 +1451,6 @@ public partial class BrowseViewModel : LocalizedViewModel
         }
 
         var mod = card.Mod;
-        var downloadOnly = AppServices.ModPageGate.DownloadOnlyFor(alternate);
 
         // Same rule as the Installed page: a disabled mod's install record points at folders it no
         // longer occupies, so reinstalling over it would place files where nothing loads them and

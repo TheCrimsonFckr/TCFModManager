@@ -8545,4 +8545,34 @@
   <data name="Help_Profile_Stats_Keywords" xml:space="preserve">
     <value>статистика, рейды, кд, k/d, выживаемость, убийства, деньги, рубли, уровень, опыт, профиль лаунчера</value>
   </data>
+  <data name="Browse_MenuDetails" xml:space="preserve">
+    <value>Сведения и версии</value>
+  </data>
+  <data name="Browse_MenuInstall" xml:space="preserve">
+    <value>Установить</value>
+  </data>
+  <data name="Browse_MenuReinstall" xml:space="preserve">
+    <value>Переустановить</value>
+  </data>
+  <data name="Browse_MenuDownloadOnly" xml:space="preserve">
+    <value>Только скачать</value>
+  </data>
+  <data name="Browse_MenuAuthor" xml:space="preserve">
+    <value>Открыть страницу автора</value>
+  </data>
+  <data name="Browse_MenuCopyLink" xml:space="preserve">
+    <value>Копировать ссылку на страницу мода</value>
+  </data>
+  <data name="Browse_MenuCopyGuid" xml:space="preserve">
+    <value>Копировать GUID</value>
+  </data>
+  <data name="Browse_LinkCopiedFormat" xml:space="preserve">
+    <value>Ссылка на страницу {0} скопирована.</value>
+  </data>
+  <data name="Browse_GuidCopiedFormat" xml:space="preserve">
+    <value>GUID {0} скопирован.</value>
+  </data>
+  <data name="Browse_CopyFailed" xml:space="preserve">
+    <value>Не удалось скопировать - буфер обмена занят чем-то другим.</value>
+  </data>
 </root>
