@@ -268,7 +268,7 @@
                         <!-- Drawn as a console: dark whatever the theme, lines coloured by level
                              (Behaviors/ConsoleLog). Selectable, so lines can be copied. -->
                         <Border
-                            CornerRadius="4"
+                            CornerRadius="{DynamicResource ControlCornerRadius}"
                             Padding="8,6"
                             BorderThickness="1"
                             BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
@@ -440,7 +440,7 @@
                     <Border
                         Margin="0,0,0,8"
                         Padding="12"
-                        CornerRadius="4"
+                        CornerRadius="{DynamicResource ControlCornerRadius}"
                         Background="{DynamicResource ControlFillColorDefaultBrush}"
                         Visibility="{Binding ShowNewProfile, Converter={StaticResource BoolToVisibility}}">
                         <StackPanel>
@@ -598,7 +598,7 @@
                                 x:Name="ToolRow"
                                 Margin="0,0,0,6"
                                 Padding="10,8"
-                                CornerRadius="4"
+                                CornerRadius="{DynamicResource ControlCornerRadius}"
                                 Background="{DynamicResource ControlFillColorDefaultBrush}">
                                 <DockPanel>
                                     <!-- Open, the folder, and Hide (or Show on Play while it is hidden). -->
