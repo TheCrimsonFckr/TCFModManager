@@ -8152,4 +8152,22 @@ Trotzdem wechseln?</value>
   <data name="Profile_LifetimeYearsFormat" xml:space="preserve">
     <value>{0} J. {1} T.</value>
   </data>
+  <data name="Help_Profile_Stats_Title" xml:space="preserve">
+    <value>Meine Raid-Bilanz, mein Geld und mein Level sehen</value>
+  </data>
+  <data name="Help_Profile_Stats_Step1" xml:space="preserve">
+    <value>Öffne {0} und wähle das Profil unter {1}.</value>
+  </data>
+  <data name="Help_Profile_Stats_Step2" xml:space="preserve">
+    <value>Wechsle zwischen {0}, {1} und {2} für die Raid-Werte.</value>
+  </data>
+  <data name="Help_Profile_Stats_Step3" xml:space="preserve">
+    <value>Fahre über die Level-Zeile, um zu sehen, ob die Werte vom laufenden Server oder aus den Dateien von SPT stammen.</value>
+  </data>
+  <data name="Help_Profile_Stats_Note" xml:space="preserve">
+    <value>Hier wird nichts an deinem Profil geändert - es wird nur gelesen.</value>
+  </data>
+  <data name="Help_Profile_Stats_Keywords" xml:space="preserve">
+    <value>Statistik, Raids, kd, k/d, Überlebensrate, Kills, Geld, Rubel, Level, EXP, Erfahrung, Launcher-Profil</value>
+  </data>
 </root>

@@ -9747,4 +9747,26 @@ Switch anyway?</value>
     <value>{0}y {1}d</value>
     <comment>{0} years, {1} days.</comment>
   </data>
+  <data name="Help_Profile_Stats_Title" xml:space="preserve">
+    <value>See my raid record, money and level</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_Profile_Stats_Step1" xml:space="preserve">
+    <value>Open {0} and pick the profile under {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Profile_Stats_Step2" xml:space="preserve">
+    <value>Switch between {0}, {1} and {2} for the raid figures.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Profile_Stats_Step3" xml:space="preserve">
+    <value>Hover the level row to see whether its figures came from the running server or from SPT's files.</value>
+  </data>
+  <data name="Help_Profile_Stats_Note" xml:space="preserve">
+    <value>Nothing here changes your profile - it is only read.</value>
+  </data>
+  <data name="Help_Profile_Stats_Keywords" xml:space="preserve">
+    <value>stats, raids, kd, k/d, survival rate, kills, money, roubles, level, exp, experience, launcher profile</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
 </root>

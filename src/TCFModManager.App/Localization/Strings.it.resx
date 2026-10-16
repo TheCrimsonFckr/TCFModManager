@@ -8152,4 +8152,22 @@ Passare comunque?</value>
   <data name="Profile_LifetimeYearsFormat" xml:space="preserve">
     <value>{0} a {1} g</value>
   </data>
+  <data name="Help_Profile_Stats_Title" xml:space="preserve">
+    <value>Vedere il mio storico dei raid, i soldi e il livello</value>
+  </data>
+  <data name="Help_Profile_Stats_Step1" xml:space="preserve">
+    <value>Apri {0} e scegli il profilo sotto {1}.</value>
+  </data>
+  <data name="Help_Profile_Stats_Step2" xml:space="preserve">
+    <value>Passa tra {0}, {1} e {2} per i dati dei raid.</value>
+  </data>
+  <data name="Help_Profile_Stats_Step3" xml:space="preserve">
+    <value>Passa sopra la riga del livello per vedere se i dati vengono dal server in esecuzione o dai file di SPT.</value>
+  </data>
+  <data name="Help_Profile_Stats_Note" xml:space="preserve">
+    <value>Qui nulla modifica il tuo profilo - viene solo letto.</value>
+  </data>
+  <data name="Help_Profile_Stats_Keywords" xml:space="preserve">
+    <value>statistiche, raid, kd, k/d, sopravvivenza, uccisioni, soldi, rubli, livello, exp, esperienza, profilo launcher</value>
+  </data>
 </root>

@@ -1751,6 +1751,12 @@ internal static class Strings
     internal static string Help_Play_Start_Step2 => LocalizationService.Get("Help_Play_Start_Step2");
     internal static string Help_Play_Start_Step3 => LocalizationService.Get("Help_Play_Start_Step3");
     internal static string Help_Play_Start_Note => LocalizationService.Get("Help_Play_Start_Note");
+    internal static string Help_Profile_Stats_Title => LocalizationService.Get("Help_Profile_Stats_Title");
+    internal static string Help_Profile_Stats_Step1 => LocalizationService.Get("Help_Profile_Stats_Step1");
+    internal static string Help_Profile_Stats_Step2 => LocalizationService.Get("Help_Profile_Stats_Step2");
+    internal static string Help_Profile_Stats_Step3 => LocalizationService.Get("Help_Profile_Stats_Step3");
+    internal static string Help_Profile_Stats_Note => LocalizationService.Get("Help_Profile_Stats_Note");
+    internal static string Help_Profile_Stats_Keywords => LocalizationService.Get("Help_Profile_Stats_Keywords");
     internal static string Help_Play_Check_Title => LocalizationService.Get("Help_Play_Check_Title");
     internal static string Help_Play_Check_Step1 => LocalizationService.Get("Help_Play_Check_Step1");
     internal static string Help_Play_Check_Step2 => LocalizationService.Get("Help_Play_Check_Step2");

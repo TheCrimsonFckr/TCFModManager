@@ -42,6 +42,14 @@ internal static class HelpCatalog
 
         new("profile", () => Strings.Nav_Profile, SymbolRegular.Person24, typeof(ProfilePage),
         [
+            Topic("profile.stats", () => Strings.Help_Profile_Stats_Title,
+                Step(() => Strings.Help_Profile_Stats_Step1, () => Strings.Nav_Profile, () => Strings.Profile_StatsHeader),
+                Step(() => Strings.Help_Profile_Stats_Step2,
+                    () => Strings.Profile_TabOverall, () => Strings.Profile_TabPmc, () => Strings.Profile_TabScav),
+                Step(() => Strings.Help_Profile_Stats_Step3))
+                .WithNote(() => Strings.Help_Profile_Stats_Note)
+                .WithKeywords(() => Strings.Help_Profile_Stats_Keywords),
+
             Topic("profile.check", () => Strings.Help_Play_Check_Title,
                 Step(() => Strings.Help_Play_Check_Step1, () => Strings.Nav_Profile),
                 Step(() => Strings.Help_Play_Check_Step2, () => Strings.Play_CheckAgain),

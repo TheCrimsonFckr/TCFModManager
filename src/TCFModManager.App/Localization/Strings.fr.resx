@@ -8152,4 +8152,22 @@ Passer quand même à cette version ?</value>
   <data name="Profile_LifetimeYearsFormat" xml:space="preserve">
     <value>{0} a {1} j</value>
   </data>
+  <data name="Help_Profile_Stats_Title" xml:space="preserve">
+    <value>Voir mon bilan de raids, mon argent et mon niveau</value>
+  </data>
+  <data name="Help_Profile_Stats_Step1" xml:space="preserve">
+    <value>Ouvrez {0} et choisissez le profil sous {1}.</value>
+  </data>
+  <data name="Help_Profile_Stats_Step2" xml:space="preserve">
+    <value>Passez de {0} à {1} et {2} pour les chiffres des raids.</value>
+  </data>
+  <data name="Help_Profile_Stats_Step3" xml:space="preserve">
+    <value>Survolez la ligne du niveau pour savoir si ses chiffres viennent du serveur en cours d'exécution ou des fichiers de SPT.</value>
+  </data>
+  <data name="Help_Profile_Stats_Note" xml:space="preserve">
+    <value>Rien ici ne modifie votre profil - il est seulement lu.</value>
+  </data>
+  <data name="Help_Profile_Stats_Keywords" xml:space="preserve">
+    <value>statistiques, raids, kd, k/d, taux de survie, éliminations, argent, roubles, niveau, exp, expérience, profil du lanceur</value>
+  </data>
 </root>
