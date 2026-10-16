@@ -15,7 +15,13 @@ internal static class ThemeApplier
     private const double BadgeTextContrast = 3.0;
     private const double StatusBackgroundMix = 0.18;
 
-    private static readonly string[] RadiusKeys = ["ControlCornerRadius", "OverlayCornerRadius", "PopupCornerRadius"];
+    private static readonly (string Key, double Scale)[] RadiusKeys =
+    [
+        ("ControlCornerRadius", 1),
+        ("OverlayCornerRadius", 2),
+        ("PopupCornerRadius", 2),
+        ("SmallCornerRadius", 0.75),
+    ];
 
     private static readonly HashSet<string> Written = new(StringComparer.Ordinal);
     private static ResourceDictionary? _shadow;
@@ -175,9 +181,9 @@ internal static class ThemeApplier
     {
         if (radius is not { } r) return;
 
-        foreach (var key in RadiusKeys)
+        foreach (var (key, scale) in RadiusKeys)
         {
-            app.Resources[key] = new CornerRadius(key == "ControlCornerRadius" ? r : r * 2);
+            app.Resources[key] = new CornerRadius(r * scale);
             Written.Add(key);
         }
     }

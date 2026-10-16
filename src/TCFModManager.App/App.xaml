@@ -32,6 +32,8 @@
                 each row: a local Background="..." on a Border outranks a style trigger, and the
                 hover would silently do nothing.
             -->
+            <CornerRadius x:Key="SmallCornerRadius">3</CornerRadius>
+
             <Color x:Key="FootprintCpuColor">#3B82F6</Color>
             <Color x:Key="FootprintGpuColor">#8B5CF6</Color>
             <Color x:Key="FootprintMemoryColor">#14B8A6</Color>
@@ -61,7 +63,7 @@
             <!-- A row that sits on a card-coloured surface: group-view mod rows. -->
             <Style x:Key="ClickableCardRow" TargetType="Border">
                 <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorSecondaryBrush}" />
-                <Setter Property="CornerRadius" Value="4" />
+                <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
                 <Setter Property="Cursor" Value="Hand" />
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
@@ -78,7 +80,7 @@
             -->
             <Style x:Key="DisabledBadge" TargetType="Border">
                 <Setter Property="Padding" Value="8,2" />
-                <Setter Property="CornerRadius" Value="3" />
+                <Setter Property="CornerRadius" Value="{DynamicResource SmallCornerRadius}" />
                 <Setter Property="Background" Value="{DynamicResource SystemFillColorCriticalBackgroundBrush}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource SystemFillColorCriticalBrush}" />
                 <Setter Property="BorderThickness" Value="1" />
@@ -116,7 +118,7 @@
             -->
             <Style x:Key="HoverRow" TargetType="Border">
                 <Setter Property="Background" Value="Transparent" />
-                <Setter Property="CornerRadius" Value="4" />
+                <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
@@ -501,7 +503,7 @@
                 <Setter Property="Height" Value="28" />
                 <Setter Property="Margin" Value="0,0,6,6" />
                 <Setter Property="Padding" Value="10,0,3,0" />
-                <Setter Property="CornerRadius" Value="4" />
+                <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
                 <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
                 <Setter Property="BorderThickness" Value="1" />
@@ -519,7 +521,7 @@
                                 x:Name="Face"
                                 Padding="4"
                                 Background="Transparent"
-                                CornerRadius="3">
+                                CornerRadius="{DynamicResource SmallCornerRadius}">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Border>
                             <ControlTemplate.Triggers>
@@ -588,7 +590,7 @@
                                                     x:Name="Face"
                                                     Padding="4,7,30,7"
                                                     Background="Transparent"
-                                                    CornerRadius="4">
+                                                    CornerRadius="{DynamicResource ControlCornerRadius}">
                                                     <Grid>
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="Auto" />
@@ -907,7 +909,7 @@
                  its selected state, since its container's chrome is turned off. -->
             <Style x:Key="ClickableRow" TargetType="Border">
                 <Setter Property="Background" Value="Transparent" />
-                <Setter Property="CornerRadius" Value="4" />
+                <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
                 <Setter Property="Cursor" Value="Hand" />
 
                 <!-- The border is always there and transparent until the row is selected, so
