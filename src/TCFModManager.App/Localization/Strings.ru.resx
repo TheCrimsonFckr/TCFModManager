@@ -3754,6 +3754,21 @@
   <data name="Options_ThemeDark" xml:space="preserve">
     <value>Тёмная</value>
   </data>
+  <data name="Options_ThemeTarkov" xml:space="preserve">
+    <value>Тарков</value>
+  </data>
+  <data name="Options_ThemeOled" xml:space="preserve">
+    <value>Чёрная OLED</value>
+  </data>
+  <data name="Options_ThemeHighContrast" xml:space="preserve">
+    <value>Высокий контраст</value>
+  </data>
+  <data name="Options_ThemeSoft" xml:space="preserve">
+    <value>Мягкая</value>
+  </data>
+  <data name="Options_ThemeSteam" xml:space="preserve">
+    <value>Steam</value>
+  </data>
   <data name="Options_ThemeFollowSystem" xml:space="preserve">
     <value>Как в системе</value>
   </data>

@@ -696,6 +696,11 @@ internal static class Strings
     internal static string Options_ThemeFollowSystem => LocalizationService.Get("Options_ThemeFollowSystem");
     internal static string Options_ThemeLight => LocalizationService.Get("Options_ThemeLight");
     internal static string Options_ThemeDark => LocalizationService.Get("Options_ThemeDark");
+    internal static string Options_ThemeTarkov => LocalizationService.Get("Options_ThemeTarkov");
+    internal static string Options_ThemeOled => LocalizationService.Get("Options_ThemeOled");
+    internal static string Options_ThemeHighContrast => LocalizationService.Get("Options_ThemeHighContrast");
+    internal static string Options_ThemeSoft => LocalizationService.Get("Options_ThemeSoft");
+    internal static string Options_ThemeSteam => LocalizationService.Get("Options_ThemeSteam");
     internal static string Options_WindowRemember => LocalizationService.Get("Options_WindowRemember");
     internal static string Options_WindowMaximised => LocalizationService.Get("Options_WindowMaximised");
     internal static string Options_WindowCustom => LocalizationService.Get("Options_WindowCustom");

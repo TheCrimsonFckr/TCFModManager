@@ -2418,6 +2418,21 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="Options_ThemeDark" xml:space="preserve">
     <value>Dark</value>
   </data>
+  <data name="Options_ThemeTarkov" xml:space="preserve">
+    <value>Tarkov</value>
+  </data>
+  <data name="Options_ThemeOled" xml:space="preserve">
+    <value>OLED black</value>
+  </data>
+  <data name="Options_ThemeHighContrast" xml:space="preserve">
+    <value>High contrast</value>
+  </data>
+  <data name="Options_ThemeSoft" xml:space="preserve">
+    <value>Soft</value>
+  </data>
+  <data name="Options_ThemeSteam" xml:space="preserve">
+    <value>Steam</value>
+  </data>
   <data name="Options_WindowRemember" xml:space="preserve">
     <value>Remember the last size and position</value>
   </data>

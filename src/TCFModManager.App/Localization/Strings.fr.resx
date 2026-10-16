@@ -3574,6 +3574,21 @@ Vous pouvez le réactiver à tout moment.</value>
   <data name="Options_ThemeDark" xml:space="preserve">
     <value>Sombre</value>
   </data>
+  <data name="Options_ThemeTarkov" xml:space="preserve">
+    <value>Tarkov</value>
+  </data>
+  <data name="Options_ThemeOled" xml:space="preserve">
+    <value>Noir OLED</value>
+  </data>
+  <data name="Options_ThemeHighContrast" xml:space="preserve">
+    <value>Contraste élevé</value>
+  </data>
+  <data name="Options_ThemeSoft" xml:space="preserve">
+    <value>Doux</value>
+  </data>
+  <data name="Options_ThemeSteam" xml:space="preserve">
+    <value>Steam</value>
+  </data>
   <data name="Options_ThemeFollowSystem" xml:space="preserve">
     <value>Suivre le système</value>
   </data>

@@ -3574,6 +3574,21 @@ Du kannst es jederzeit wieder einschalten.</value>
   <data name="Options_ThemeDark" xml:space="preserve">
     <value>Dunkel</value>
   </data>
+  <data name="Options_ThemeTarkov" xml:space="preserve">
+    <value>Tarkov</value>
+  </data>
+  <data name="Options_ThemeOled" xml:space="preserve">
+    <value>OLED-Schwarz</value>
+  </data>
+  <data name="Options_ThemeHighContrast" xml:space="preserve">
+    <value>Hoher Kontrast</value>
+  </data>
+  <data name="Options_ThemeSoft" xml:space="preserve">
+    <value>Sanft</value>
+  </data>
+  <data name="Options_ThemeSteam" xml:space="preserve">
+    <value>Steam</value>
+  </data>
   <data name="Options_ThemeFollowSystem" xml:space="preserve">
     <value>Dem System folgen</value>
   </data>

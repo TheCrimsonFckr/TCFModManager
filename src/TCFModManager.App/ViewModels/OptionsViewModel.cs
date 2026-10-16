@@ -41,6 +41,8 @@ public partial class OptionsViewModel : LocalizedViewModel
         new(nameof(Strings.Options_ThemeFollowSystem), ThemePreference.FollowSystem),
         new(nameof(Strings.Options_ThemeLight), ThemePreference.Light),
         new(nameof(Strings.Options_ThemeDark), ThemePreference.Dark),
+        .. BuiltInThemes.All.Select(t => ThemeOptionItem.Preset(BuiltInThemes.NameKey(t.Id), t.Id)),
+        .. new ThemeStore().LoadAll().Select(t => ThemeOptionItem.Saved(t.Name, t.Id)),
     ];
 
     // Applied and saved the moment it changes - there is nothing here to confirm, and watching the
@@ -333,7 +335,10 @@ public partial class OptionsViewModel : LocalizedViewModel
         InstallPathInput = SptEnvironment.InstallPath;
 
         var stored = AppTheme.Stored;
-        _selectedTheme = ThemeOptions.FirstOrDefault(t => t.Value == stored) ?? ThemeOptions[^1];
+        var storedThemeId = AppTheme.StoredThemeId;
+        _selectedTheme = ThemeOptions.FirstOrDefault(t => t.ThemeId is not null && string.Equals(t.ThemeId, storedThemeId, StringComparison.OrdinalIgnoreCase))
+            ?? ThemeOptions.FirstOrDefault(t => t.ThemeId is null && t.Value == stored)
+            ?? ThemeOptions[0];
 
         // A stored tag this build has no resources for selects System default, which is what the
         // app is doing anyway - AppLanguage falls back to the same place.
@@ -383,7 +388,8 @@ public partial class OptionsViewModel : LocalizedViewModel
     {
         if (!_loaded) return;
 
-        AppTheme.Set(value.Value);
+        if (value.ThemeId is { } id) AppTheme.SetCustom(id);
+        else AppTheme.Set(value.Value);
     }
 
     //

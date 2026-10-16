@@ -1,3 +1,4 @@
+using TCFModManager.App.Localization;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -109,6 +110,16 @@ internal static class BuiltInThemes
             },
         },
     ];
+
+    public static string NameKey(string id) => id switch
+    {
+        TarkovId => nameof(Strings.Options_ThemeTarkov),
+        OledId => nameof(Strings.Options_ThemeOled),
+        HighContrastId => nameof(Strings.Options_ThemeHighContrast),
+        SoftId => nameof(Strings.Options_ThemeSoft),
+        SteamId => nameof(Strings.Options_ThemeSteam),
+        _ => throw new ArgumentOutOfRangeException(nameof(id), id, null),
+    };
 
     public static ThemeDefinition? Find(string? id) =>
         id is null ? null : All.FirstOrDefault(t => string.Equals(t.Id, id, StringComparison.OrdinalIgnoreCase));
