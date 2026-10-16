@@ -192,7 +192,7 @@
                         <!-- The version-numbering key, spelled out so the summary above lands even
                              for someone who's never thought about what the three numbers mean. -->
                         <Border
-                            CornerRadius="4"
+                            CornerRadius="{DynamicResource ControlCornerRadius}"
                             Padding="12"
                             Margin="0,0,0,12"
                             Background="{DynamicResource ControlFillColorSecondaryBrush}">
