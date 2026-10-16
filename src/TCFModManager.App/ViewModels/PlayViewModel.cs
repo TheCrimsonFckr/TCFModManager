@@ -357,6 +357,7 @@ public partial class PlayViewModel : LocalizedViewModel
 
         RefreshGame(installPath, settings);
         RefreshDirect(installPath, settings);
+        RefreshStats(installPath);
         UpdateToolStates();
     }
 

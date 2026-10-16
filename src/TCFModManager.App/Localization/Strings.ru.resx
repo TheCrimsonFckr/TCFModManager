@@ -8425,4 +8425,106 @@
   <data name="Installed_SptShowAllToolTip" xml:space="preserve">
     <value>Вернуть все скрытые вами предупреждения о версиях для установленных сейчас модов.</value>
   </data>
+  <data name="Profile_StatsHeader" xml:space="preserve">
+    <value>Статистика профиля</value>
+  </data>
+  <data name="Profile_StatsPickerToolTip" xml:space="preserve">
+    <value>Профиль, чьи показатели отображаются.</value>
+  </data>
+  <data name="Profile_NewCharacter" xml:space="preserve">
+    <value>Персонажа ещё нет - игра создаст его при первом запуске этого профиля.</value>
+  </data>
+  <data name="Profile_StatsUnreadable" xml:space="preserve">
+    <value>Не удалось прочитать файл этого профиля.</value>
+  </data>
+  <data name="Profile_CopyIdToolTip" xml:space="preserve">
+    <value>Копировать ID профиля</value>
+  </data>
+  <data name="Profile_Gp" xml:space="preserve">
+    <value>GP</value>
+  </data>
+  <data name="Profile_LevelFormat" xml:space="preserve">
+    <value>Уровень {0}</value>
+  </data>
+  <data name="Profile_ExperienceFormat" xml:space="preserve">
+    <value>{0:N0} опыта</value>
+  </data>
+  <data name="Profile_ToNextFormat" xml:space="preserve">
+    <value>{0:N0} опыта до уровня {1}</value>
+  </data>
+  <data name="Profile_MaxLevel" xml:space="preserve">
+    <value>Достигнут максимальный уровень</value>
+  </data>
+  <data name="Profile_LevelFromServerToolTip" xml:space="preserve">
+    <value>Данные запущенного сервера - изменённая модом таблица уровней учитывается.</value>
+  </data>
+  <data name="Profile_LevelFromFileToolTip" xml:space="preserve">
+    <value>По таблице уровней SPT на диске. Изменённая модом таблица видна здесь, только пока сервер запущен.</value>
+  </data>
+  <data name="Profile_TabOverall" xml:space="preserve">
+    <value>Всего</value>
+  </data>
+  <data name="Profile_TabPmc" xml:space="preserve">
+    <value>ЧВК</value>
+  </data>
+  <data name="Profile_TabScav" xml:space="preserve">
+    <value>Дикий</value>
+  </data>
+  <data name="Profile_StatRaids" xml:space="preserve">
+    <value>Рейды</value>
+  </data>
+  <data name="Profile_StatSurvived" xml:space="preserve">
+    <value>Выжил</value>
+  </data>
+  <data name="Profile_StatKia" xml:space="preserve">
+    <value>Убит</value>
+  </data>
+  <data name="Profile_StatRunThrough" xml:space="preserve">
+    <value>Пробежка</value>
+  </data>
+  <data name="Profile_StatAwol" xml:space="preserve">
+    <value>Покинул</value>
+  </data>
+  <data name="Profile_StatMia" xml:space="preserve">
+    <value>Пропал без вести</value>
+  </data>
+  <data name="Profile_StatKills" xml:space="preserve">
+    <value>Убийства</value>
+  </data>
+  <data name="Profile_StatKd" xml:space="preserve">
+    <value>У/С</value>
+  </data>
+  <data name="Profile_StatSurvivalRate" xml:space="preserve">
+    <value>Выживаемость</value>
+  </data>
+  <data name="Profile_StatLeaveRate" xml:space="preserve">
+    <value>Доля выходов</value>
+  </data>
+  <data name="Profile_StatAverageLife" xml:space="preserve">
+    <value>Средняя продолжительность жизни</value>
+  </data>
+  <data name="Profile_StatSurvivalStreak" xml:space="preserve">
+    <value>Лучшая серия выживаний</value>
+  </data>
+  <data name="Profile_StatTimeInRaid" xml:space="preserve">
+    <value>Время в рейдах</value>
+  </data>
+  <data name="Profile_StatAccountAge" xml:space="preserve">
+    <value>Возраст аккаунта</value>
+  </data>
+  <data name="Profile_NoValue" xml:space="preserve">
+    <value>-</value>
+  </data>
+  <data name="Profile_PercentFormat" xml:space="preserve">
+    <value>{0}%</value>
+  </data>
+  <data name="Profile_LifetimeHoursFormat" xml:space="preserve">
+    <value>{0} ч {1:00} мин</value>
+  </data>
+  <data name="Profile_LifetimeDaysFormat" xml:space="preserve">
+    <value>{0} дн.</value>
+  </data>
+  <data name="Profile_LifetimeYearsFormat" xml:space="preserve">
+    <value>{0} г. {1} дн.</value>
+  </data>
 </root>

@@ -8050,4 +8050,106 @@ Trotzdem wechseln?</value>
   <data name="Installed_SptShowAllToolTip" xml:space="preserve">
     <value>Alle Versionswarnungen wieder anzeigen, die du bei den jetzt installierten Mods ausgeblendet hast.</value>
   </data>
+  <data name="Profile_StatsHeader" xml:space="preserve">
+    <value>Profilstatistik</value>
+  </data>
+  <data name="Profile_StatsPickerToolTip" xml:space="preserve">
+    <value>Das Profil, dessen Werte angezeigt werden.</value>
+  </data>
+  <data name="Profile_NewCharacter" xml:space="preserve">
+    <value>Noch kein Charakter - das Spiel erstellt ihn, wenn dieses Profil zum ersten Mal spielt.</value>
+  </data>
+  <data name="Profile_StatsUnreadable" xml:space="preserve">
+    <value>Die Datei dieses Profils konnte nicht gelesen werden.</value>
+  </data>
+  <data name="Profile_CopyIdToolTip" xml:space="preserve">
+    <value>Profil-ID kopieren</value>
+  </data>
+  <data name="Profile_Gp" xml:space="preserve">
+    <value>GP</value>
+  </data>
+  <data name="Profile_LevelFormat" xml:space="preserve">
+    <value>Level {0}</value>
+  </data>
+  <data name="Profile_ExperienceFormat" xml:space="preserve">
+    <value>{0:N0} EXP</value>
+  </data>
+  <data name="Profile_ToNextFormat" xml:space="preserve">
+    <value>{0:N0} EXP bis Level {1}</value>
+  </data>
+  <data name="Profile_MaxLevel" xml:space="preserve">
+    <value>Höchstes Level erreicht</value>
+  </data>
+  <data name="Profile_LevelFromServerToolTip" xml:space="preserve">
+    <value>Vom laufenden Server, also zählt auch eine von einem Mod geänderte Level-Tabelle.</value>
+  </data>
+  <data name="Profile_LevelFromFileToolTip" xml:space="preserve">
+    <value>Aus der Level-Tabelle von SPT auf der Festplatte. Eine von einem Mod geänderte Tabelle zeigt sich hier nur, solange der Server läuft.</value>
+  </data>
+  <data name="Profile_TabOverall" xml:space="preserve">
+    <value>Gesamt</value>
+  </data>
+  <data name="Profile_TabPmc" xml:space="preserve">
+    <value>PMC</value>
+  </data>
+  <data name="Profile_TabScav" xml:space="preserve">
+    <value>Scav</value>
+  </data>
+  <data name="Profile_StatRaids" xml:space="preserve">
+    <value>Raids</value>
+  </data>
+  <data name="Profile_StatSurvived" xml:space="preserve">
+    <value>Überlebt</value>
+  </data>
+  <data name="Profile_StatKia" xml:space="preserve">
+    <value>Gefallen</value>
+  </data>
+  <data name="Profile_StatRunThrough" xml:space="preserve">
+    <value>Durchgelaufen</value>
+  </data>
+  <data name="Profile_StatAwol" xml:space="preserve">
+    <value>Verlassen</value>
+  </data>
+  <data name="Profile_StatMia" xml:space="preserve">
+    <value>Vermisst</value>
+  </data>
+  <data name="Profile_StatKills" xml:space="preserve">
+    <value>Kills</value>
+  </data>
+  <data name="Profile_StatKd" xml:space="preserve">
+    <value>K/D</value>
+  </data>
+  <data name="Profile_StatSurvivalRate" xml:space="preserve">
+    <value>Überlebensrate</value>
+  </data>
+  <data name="Profile_StatLeaveRate" xml:space="preserve">
+    <value>Verlassensrate</value>
+  </data>
+  <data name="Profile_StatAverageLife" xml:space="preserve">
+    <value>Durchschnittliche Lebensdauer</value>
+  </data>
+  <data name="Profile_StatSurvivalStreak" xml:space="preserve">
+    <value>Längste Überlebensserie</value>
+  </data>
+  <data name="Profile_StatTimeInRaid" xml:space="preserve">
+    <value>Zeit im Raid</value>
+  </data>
+  <data name="Profile_StatAccountAge" xml:space="preserve">
+    <value>Kontoalter</value>
+  </data>
+  <data name="Profile_NoValue" xml:space="preserve">
+    <value>-</value>
+  </data>
+  <data name="Profile_PercentFormat" xml:space="preserve">
+    <value>{0} %</value>
+  </data>
+  <data name="Profile_LifetimeHoursFormat" xml:space="preserve">
+    <value>{0} Std. {1:00} Min.</value>
+  </data>
+  <data name="Profile_LifetimeDaysFormat" xml:space="preserve">
+    <value>{0} T.</value>
+  </data>
+  <data name="Profile_LifetimeYearsFormat" xml:space="preserve">
+    <value>{0} J. {1} T.</value>
+  </data>
 </root>

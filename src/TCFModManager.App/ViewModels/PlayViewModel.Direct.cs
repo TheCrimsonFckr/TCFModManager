@@ -117,7 +117,10 @@ public partial class PlayViewModel
     {
         WipeNextStart = false;
         ConfirmingDeleteProfile = false;
-        if (_readingProfile || value is null) return;
+        if (_readingProfile) return;
+
+        RefreshStats(AppServices.SptEnvironment.InstallPath);
+        if (value is null) return;
 
         var settings = new SettingsService().Load();
         if (settings.DirectLaunchProfileId == value.Profile.ProfileId) return;
@@ -143,8 +146,6 @@ public partial class PlayViewModel
         DirectLaunchUntested = IsDirectLaunchOn && support == DirectLaunchSupport.NewerUntested
             ? Text(Strings.Play_DirectUntestedFormat, AppServices.SptEnvironment.InstalledVersion, SptDirectLaunch.TestedUpTo)
             : null;
-
-        if (!IsDirectLaunchOn) return;
 
         var found = SptLocalProfiles.Read(installPath).Select(p => new PlayProfileItem(p)).ToList();
         if (found.Count == Profiles.Count && found.Zip(Profiles).All(pair => pair.First.SameAs(pair.Second))) return;

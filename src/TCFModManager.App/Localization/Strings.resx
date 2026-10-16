@@ -9622,4 +9622,129 @@ Switch anyway?</value>
   <data name="Installed_SptShowAllToolTip" xml:space="preserve">
     <value>Bring back every version warning you dismissed on the mods installed now.</value>
   </data>
+  <data name="Profile_StatsHeader" xml:space="preserve">
+    <value>Profile stats</value>
+    <comment>Card header on the Profile page.</comment>
+  </data>
+  <data name="Profile_StatsPickerToolTip" xml:space="preserve">
+    <value>The profile whose figures are shown.</value>
+  </data>
+  <data name="Profile_NewCharacter" xml:space="preserve">
+    <value>No character yet - the game makes one the first time this profile plays.</value>
+  </data>
+  <data name="Profile_StatsUnreadable" xml:space="preserve">
+    <value>This profile's file couldn't be read.</value>
+  </data>
+  <data name="Profile_CopyIdToolTip" xml:space="preserve">
+    <value>Copy the profile ID</value>
+  </data>
+  <data name="Profile_Gp" xml:space="preserve">
+    <value>GP</value>
+    <comment>The GP coin currency, beside its amount.</comment>
+  </data>
+  <data name="Profile_LevelFormat" xml:space="preserve">
+    <value>Level {0}</value>
+    <comment>{0} is the level number.</comment>
+  </data>
+  <data name="Profile_ExperienceFormat" xml:space="preserve">
+    <value>{0:N0} EXP</value>
+    <comment>{0} is the profile's total experience.</comment>
+  </data>
+  <data name="Profile_ToNextFormat" xml:space="preserve">
+    <value>{0:N0} EXP to level {1}</value>
+    <comment>{0} is the experience still needed, {1} the next level.</comment>
+  </data>
+  <data name="Profile_MaxLevel" xml:space="preserve">
+    <value>Highest level reached</value>
+  </data>
+  <data name="Profile_LevelFromServerToolTip" xml:space="preserve">
+    <value>From the running server, so a level table changed by a mod counts.</value>
+  </data>
+  <data name="Profile_LevelFromFileToolTip" xml:space="preserve">
+    <value>From SPT's level table on disk. A mod that changes the table only shows here while the server is running.</value>
+  </data>
+  <data name="Profile_TabOverall" xml:space="preserve">
+    <value>Overall</value>
+    <comment>Tab: PMC and Scav together.</comment>
+  </data>
+  <data name="Profile_TabPmc" xml:space="preserve">
+    <value>PMC</value>
+    <comment>Tab: the PMC character.</comment>
+  </data>
+  <data name="Profile_TabScav" xml:space="preserve">
+    <value>Scav</value>
+    <comment>Tab: the Scav character.</comment>
+  </data>
+  <data name="Profile_StatRaids" xml:space="preserve">
+    <value>Raids</value>
+  </data>
+  <data name="Profile_StatSurvived" xml:space="preserve">
+    <value>Survived</value>
+  </data>
+  <data name="Profile_StatKia" xml:space="preserve">
+    <value>KIA</value>
+    <comment>Killed in action.</comment>
+  </data>
+  <data name="Profile_StatRunThrough" xml:space="preserve">
+    <value>Run through</value>
+    <comment>EFT's 'run through' exit: out too fast to count as survived.</comment>
+  </data>
+  <data name="Profile_StatAwol" xml:space="preserve">
+    <value>AWOL</value>
+    <comment>Left the raid.</comment>
+  </data>
+  <data name="Profile_StatMia" xml:space="preserve">
+    <value>MIA</value>
+    <comment>Missing in action: ran out of raid time.</comment>
+  </data>
+  <data name="Profile_StatKills" xml:space="preserve">
+    <value>Kills</value>
+  </data>
+  <data name="Profile_StatKd" xml:space="preserve">
+    <value>K/D</value>
+    <comment>Kills per death.</comment>
+  </data>
+  <data name="Profile_StatSurvivalRate" xml:space="preserve">
+    <value>Survival rate</value>
+  </data>
+  <data name="Profile_StatLeaveRate" xml:space="preserve">
+    <value>Leave rate</value>
+    <comment>Share of raids left (AWOL).</comment>
+  </data>
+  <data name="Profile_StatAverageLife" xml:space="preserve">
+    <value>Average life span</value>
+    <comment>Average time per raid.</comment>
+  </data>
+  <data name="Profile_StatSurvivalStreak" xml:space="preserve">
+    <value>Best survival streak</value>
+    <comment>The longest run of survived raids.</comment>
+  </data>
+  <data name="Profile_StatTimeInRaid" xml:space="preserve">
+    <value>Time in raid</value>
+    <comment>Total time spent in raids.</comment>
+  </data>
+  <data name="Profile_StatAccountAge" xml:space="preserve">
+    <value>Account age</value>
+    <comment>How long ago the profile was created.</comment>
+  </data>
+  <data name="Profile_NoValue" xml:space="preserve">
+    <value>-</value>
+    <comment>Shown where a figure has nothing to show yet.</comment>
+  </data>
+  <data name="Profile_PercentFormat" xml:space="preserve">
+    <value>{0}%</value>
+    <comment>{0} is a whole percentage.</comment>
+  </data>
+  <data name="Profile_LifetimeHoursFormat" xml:space="preserve">
+    <value>{0}h {1:00}m</value>
+    <comment>{0} hours, {1} minutes.</comment>
+  </data>
+  <data name="Profile_LifetimeDaysFormat" xml:space="preserve">
+    <value>{0}d</value>
+    <comment>{0} days.</comment>
+  </data>
+  <data name="Profile_LifetimeYearsFormat" xml:space="preserve">
+    <value>{0}y {1}d</value>
+    <comment>{0} years, {1} days.</comment>
+  </data>
 </root>

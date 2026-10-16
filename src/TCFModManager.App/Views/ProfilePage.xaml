@@ -12,6 +12,23 @@
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
         <converters:InverseBooleanConverter x:Key="Inverse" />
+        <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
+        <ItemsPanelTemplate x:Key="StatCells">
+            <WrapPanel />
+        </ItemsPanelTemplate>
+        <DataTemplate x:Key="StatCell">
+            <Border
+                Width="170"
+                Margin="0,8,8,0"
+                Padding="10,8"
+                CornerRadius="{DynamicResource ControlCornerRadius}"
+                Background="{DynamicResource ControlFillColorDefaultBrush}">
+                <StackPanel>
+                    <TextBlock FontSize="12" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Label}" ToolTip="{Binding Label}" />
+                    <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding Value}" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
     </Page.Resources>
     <StackPanel x:Name="Root" Margin="16">
 
@@ -352,6 +369,170 @@
                                 Command="{Binding CancelDeleteProfileCommand}" />
                         </StackPanel>
                     </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </ui:Card>
+
+        <!-- OPEN-27: the picked profile, as SPT's launcher shows it on its profile page. -->
+        <ui:Card
+            Padding="16"
+            VerticalAlignment="Top"
+            Margin="0,0,0,16"
+            Visibility="{Binding HasProfileStatsCard, Converter={StaticResource BoolToVisibility}}">
+            <StackPanel>
+                <TextBlock
+                    Text="{loc:Str Profile_StatsHeader}"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Margin="0,0,0,8" />
+
+                <ComboBox
+                    MinWidth="320"
+                    Margin="0,0,0,12"
+                    HorizontalAlignment="Left"
+                    ItemsSource="{Binding Profiles}"
+                    SelectedItem="{Binding SelectedProfile}"
+                    ToolTip="{loc:Str Profile_StatsPickerToolTip}"
+                    Visibility="{Binding IsDirectLaunchOn, Converter={StaticResource FalseToVisible}}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock FontWeight="SemiBold" Text="{Binding Title}" />
+                                <TextBlock FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding Detail}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="{loc:Str Profile_NewCharacter}"
+                    Visibility="{Binding ProfileIsNew, Converter={StaticResource BoolToVisibility}}" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                    Text="{loc:Str Profile_StatsUnreadable}"
+                    Visibility="{Binding StatsUnreadable, Converter={StaticResource BoolToVisibility}}" />
+
+                <StackPanel Visibility="{Binding ProfileStats, Converter={StaticResource NullToCollapsed}}">
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel>
+                            <TextBlock
+                                FontSize="20"
+                                FontWeight="SemiBold"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{Binding ProfileStats.Name}" />
+                            <TextBlock
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                Text="{Binding ProfileStats.Detail}" />
+                            <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontFamily="Cascadia Mono, Consolas"
+                                    FontSize="12"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{Binding ProfileStats.ProfileId}" />
+                                <ui:Button
+                                    Margin="4,0,0,0"
+                                    Padding="6,3"
+                                    Appearance="Transparent"
+                                    ToolTip="{loc:Str Profile_CopyIdToolTip}"
+                                    Command="{Binding CopyProfileIdCommand}">
+                                    <ui:Button.Style>
+                                        <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
+                                            <Setter Property="Icon" Value="{ui:SymbolIcon Copy24}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ProfileIdCopied}" Value="True">
+                                                    <Setter Property="Icon" Value="{ui:SymbolIcon Checkmark24}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ui:Button.Style>
+                                </ui:Button>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <Grid Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Top">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Margin="0,0,8,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="₽" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" FontWeight="SemiBold" Text="{Binding ProfileStats.Roubles}" />
+                            <TextBlock Grid.Row="1" Margin="0,0,8,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="$" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" FontWeight="SemiBold" Text="{Binding ProfileStats.Dollars}" />
+                            <TextBlock Grid.Row="2" Margin="0,0,8,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="€" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" FontWeight="SemiBold" Text="{Binding ProfileStats.Euros}" />
+                            <TextBlock Grid.Row="3" Margin="0,0,8,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{loc:Str Profile_Gp}" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" FontWeight="SemiBold" Text="{Binding ProfileStats.Gp}" />
+                        </Grid>
+                    </Grid>
+
+                    <StackPanel Margin="0,0,0,12" Background="Transparent" ToolTip="{Binding ProfileStats.LevelSourceToolTip}">
+                        <DockPanel>
+                            <TextBlock
+                                DockPanel.Dock="Left"
+                                VerticalAlignment="Center"
+                                FontWeight="SemiBold"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{Binding ProfileStats.LevelText}" />
+                            <TextBlock
+                                DockPanel.Dock="Right"
+                                VerticalAlignment="Center"
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                Text="{Binding ProfileStats.ToNextText}"
+                                Visibility="{Binding ProfileStats.HasProgress, Converter={StaticResource BoolToVisibility}}" />
+                            <ProgressBar
+                                Height="6"
+                                Margin="12,0"
+                                VerticalAlignment="Center"
+                                Minimum="0"
+                                Maximum="100"
+                                Value="{Binding ProfileStats.LevelPercent, Mode=OneWay}"
+                                Visibility="{Binding ProfileStats.HasProgress, Converter={StaticResource BoolToVisibility}}" />
+                        </DockPanel>
+                        <TextBlock
+                            Margin="0,2,0,0"
+                            FontSize="12"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{Binding ProfileStats.ExperienceText}" />
+                    </StackPanel>
+
+                    <TabControl SelectedIndex="{Binding StatsTab}">
+                        <TabItem Header="{loc:Str Profile_TabOverall}">
+                            <ItemsControl
+                                Focusable="False"
+                                ItemsSource="{Binding ProfileStats.OverallRows}"
+                                ItemsPanel="{StaticResource StatCells}"
+                                ItemTemplate="{StaticResource StatCell}" />
+                        </TabItem>
+                        <TabItem Header="{loc:Str Profile_TabPmc}">
+                            <ItemsControl
+                                Focusable="False"
+                                ItemsSource="{Binding ProfileStats.PmcRows}"
+                                ItemsPanel="{StaticResource StatCells}"
+                                ItemTemplate="{StaticResource StatCell}" />
+                        </TabItem>
+                        <TabItem Header="{loc:Str Profile_TabScav}">
+                            <ItemsControl
+                                Focusable="False"
+                                ItemsSource="{Binding ProfileStats.ScavRows}"
+                                ItemsPanel="{StaticResource StatCells}"
+                                ItemTemplate="{StaticResource StatCell}" />
+                        </TabItem>
+                    </TabControl>
                 </StackPanel>
             </StackPanel>
         </ui:Card>
