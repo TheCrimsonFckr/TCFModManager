@@ -123,6 +123,8 @@ public sealed class AppSettings
     [JsonConverter(typeof(JsonStringEnumConverter<ThemePreference>))]
     public ThemePreference Theme { get; set; } = ThemePreference.FollowSystem;
 
+    public string? ThemeId { get; set; }
+
     //
     // Which language the app's own text is read in, as a BCP-47 tag - "ru", "de", "pt-BR".
     //

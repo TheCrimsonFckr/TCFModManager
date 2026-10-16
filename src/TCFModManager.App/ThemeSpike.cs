@@ -244,7 +244,7 @@ internal static class ThemeSpike
     private static string Describe(object? value) => value switch
     {
         null => "missing",
-        SolidColorBrush b => $"{b.Color} op={b.Opacity} (frozen={b.IsFrozen}, hash={b.GetHashCode():X})",
+        SolidColorBrush b => $"{b.Color}/{b.Opacity}/{b.IsFrozen}/{b.GetHashCode():X}",
         _ => value.GetType().Name,
     };
 }
