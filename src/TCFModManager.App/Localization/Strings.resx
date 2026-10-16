@@ -2586,14 +2586,41 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="ThemeEditor_ProblemRadiusFormat" xml:space="preserve">
     <value>Corners can be rounded by {0} at most.</value>
   </data>
-  <data name="ThemeEditor_ProblemContrastPrimaryFormat" xml:space="preserve">
+  <data name="ThemeEditor_ProblemContrastPrimaryWindowFormat" xml:space="preserve">
+    <value>Main text is hard to read on the window ({0}:1 - aim for {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastPrimaryPageFormat" xml:space="preserve">
+    <value>Main text is hard to read on the page ({0}:1 - aim for {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastPrimaryCardsFormat" xml:space="preserve">
     <value>Main text is hard to read on cards ({0}:1 - aim for {1}:1).</value>
   </data>
-  <data name="ThemeEditor_ProblemContrastSecondaryFormat" xml:space="preserve">
+  <data name="ThemeEditor_ProblemContrastPrimaryMenusFormat" xml:space="preserve">
+    <value>Main text is hard to read in menus and tooltips ({0}:1 - aim for {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastSecondaryWindowFormat" xml:space="preserve">
+    <value>Secondary text is hard to read on the window ({0}:1 - aim for {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastSecondaryPageFormat" xml:space="preserve">
+    <value>Secondary text is hard to read on the page ({0}:1 - aim for {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastSecondaryCardsFormat" xml:space="preserve">
     <value>Secondary text is hard to read on cards ({0}:1 - aim for {1}:1).</value>
   </data>
-  <data name="ThemeEditor_ProblemContrastTertiaryFormat" xml:space="preserve">
+  <data name="ThemeEditor_ProblemContrastSecondaryMenusFormat" xml:space="preserve">
+    <value>Secondary text is hard to read in menus and tooltips ({0}:1 - aim for {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastTertiaryWindowFormat" xml:space="preserve">
+    <value>Faint text is too faint on the window ({0}:1 - aim for {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastTertiaryPageFormat" xml:space="preserve">
+    <value>Faint text is too faint on the page ({0}:1 - aim for {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastTertiaryCardsFormat" xml:space="preserve">
     <value>Faint text is too faint on cards ({0}:1 - aim for {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastTertiaryMenusFormat" xml:space="preserve">
+    <value>Faint text is too faint in menus and tooltips ({0}:1 - aim for {1}:1).</value>
   </data>
   <data name="ThemeEditor_ImportNotATheme" xml:space="preserve">
     <value>That file isn't a theme.</value>

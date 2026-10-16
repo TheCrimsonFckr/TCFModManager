@@ -3742,14 +3742,41 @@ Vous pouvez le réactiver à tout moment.</value>
   <data name="ThemeEditor_ProblemRadiusFormat" xml:space="preserve">
     <value>L'arrondi des coins ne peut pas dépasser {0}.</value>
   </data>
-  <data name="ThemeEditor_ProblemContrastPrimaryFormat" xml:space="preserve">
+  <data name="ThemeEditor_ProblemContrastPrimaryWindowFormat" xml:space="preserve">
+    <value>Le texte principal est difficile à lire sur la fenêtre ({0}:1 - vise {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastPrimaryPageFormat" xml:space="preserve">
+    <value>Le texte principal est difficile à lire sur la page ({0}:1 - vise {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastPrimaryCardsFormat" xml:space="preserve">
     <value>Le texte principal est difficile à lire sur les cartes ({0}:1 - vise {1}:1).</value>
   </data>
-  <data name="ThemeEditor_ProblemContrastSecondaryFormat" xml:space="preserve">
+  <data name="ThemeEditor_ProblemContrastPrimaryMenusFormat" xml:space="preserve">
+    <value>Le texte principal est difficile à lire dans les menus et infobulles ({0}:1 - vise {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastSecondaryWindowFormat" xml:space="preserve">
+    <value>Le texte secondaire est difficile à lire sur la fenêtre ({0}:1 - vise {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastSecondaryPageFormat" xml:space="preserve">
+    <value>Le texte secondaire est difficile à lire sur la page ({0}:1 - vise {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastSecondaryCardsFormat" xml:space="preserve">
     <value>Le texte secondaire est difficile à lire sur les cartes ({0}:1 - vise {1}:1).</value>
   </data>
-  <data name="ThemeEditor_ProblemContrastTertiaryFormat" xml:space="preserve">
+  <data name="ThemeEditor_ProblemContrastSecondaryMenusFormat" xml:space="preserve">
+    <value>Le texte secondaire est difficile à lire dans les menus et infobulles ({0}:1 - vise {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastTertiaryWindowFormat" xml:space="preserve">
+    <value>Le texte atténué est trop pâle sur la fenêtre ({0}:1 - vise {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastTertiaryPageFormat" xml:space="preserve">
+    <value>Le texte atténué est trop pâle sur la page ({0}:1 - vise {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastTertiaryCardsFormat" xml:space="preserve">
     <value>Le texte atténué est trop pâle sur les cartes ({0}:1 - vise {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastTertiaryMenusFormat" xml:space="preserve">
+    <value>Le texte atténué est trop pâle dans les menus et infobulles ({0}:1 - vise {1}:1).</value>
   </data>
   <data name="ThemeEditor_ImportNotATheme" xml:space="preserve">
     <value>Ce fichier n'est pas un thème.</value>

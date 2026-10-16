@@ -79,6 +79,36 @@ public class ThemeRulesTests
     }
 
     [Fact]
+    public void LowContrast_OnThePageIsCaughtWhenCardsAreFine()
+    {
+        var theme = Named("Beige page");
+        theme.Colors = new ThemeColors
+        {
+            Background = ThemeColor.Parse("#171D25"),
+            Page = ThemeColor.Parse("#D9D4C3"),
+            Surface = ThemeColor.Parse("#1A3045"),
+            TextPrimary = ThemeColor.Parse("#F1F2F4"),
+        };
+
+        var check = Assert.Single(ThemeRules.Check(theme), c => c.Problem == ThemeProblem.LowContrastPrimaryText);
+        Assert.Equal(ThemeSurface.Page, check.Surface);
+        Assert.True(check.Ratio < 1.5);
+    }
+
+    [Fact]
+    public void LowContrast_ReportsTheWorstSurface()
+    {
+        var theme = Named("Pale menus");
+        theme.Colors = new ThemeColors
+        {
+            Flyout = ThemeColor.Parse("#E0E0E0"),
+        };
+
+        var check = Assert.Single(ThemeRules.Check(theme), c => c.Problem == ThemeProblem.LowContrastPrimaryText);
+        Assert.Equal(ThemeSurface.Menus, check.Surface);
+    }
+
+    [Fact]
     public void Normalise_TrimsAndEmptiesBlankFont()
     {
         var theme = new ThemeDefinition { Name = "  Steam  ", FontFamily = "   " };

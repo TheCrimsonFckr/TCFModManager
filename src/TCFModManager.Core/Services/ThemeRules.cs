@@ -13,7 +13,15 @@ public enum ThemeProblem
     LowContrastTertiaryText,
 }
 
-public sealed record ThemeCheck(ThemeProblem Problem, double? Ratio = null)
+public enum ThemeSurface
+{
+    Window,
+    Page,
+    Cards,
+    Menus,
+}
+
+public sealed record ThemeCheck(ThemeProblem Problem, double? Ratio = null, ThemeSurface? Surface = null)
 {
     public bool BlocksSave => Problem is ThemeProblem.NameMissing
         or ThemeProblem.NameTooLong
@@ -52,11 +60,11 @@ public static class ThemeRules
         }
 
         var resolved = ThemeMath.Resolve(theme);
-        var card = ThemeMath.CardColor(resolved);
+        var surfaces = Surfaces(resolved);
 
-        AddContrast(checks, resolved.TextPrimary!.Value, card, MinBodyTextContrast, ThemeProblem.LowContrastPrimaryText);
-        AddContrast(checks, resolved.TextSecondary!.Value, card, MinBodyTextContrast, ThemeProblem.LowContrastSecondaryText);
-        AddContrast(checks, resolved.TextTertiary!.Value, card, MinTertiaryTextContrast, ThemeProblem.LowContrastTertiaryText);
+        AddContrast(checks, resolved.TextPrimary!.Value, surfaces, MinBodyTextContrast, ThemeProblem.LowContrastPrimaryText);
+        AddContrast(checks, resolved.TextSecondary!.Value, surfaces, MinBodyTextContrast, ThemeProblem.LowContrastSecondaryText);
+        AddContrast(checks, resolved.TextTertiary!.Value, surfaces, MinTertiaryTextContrast, ThemeProblem.LowContrastTertiaryText);
 
         return checks;
     }
@@ -71,9 +79,26 @@ public static class ThemeRules
         theme.Colors ??= new ThemeColors();
     }
 
-    private static void AddContrast(List<ThemeCheck> checks, ThemeColor text, ThemeColor surface, double minimum, ThemeProblem problem)
+    public static IReadOnlyList<(ThemeSurface Surface, ThemeColor Color)> Surfaces(ThemeColors resolved)
     {
-        var ratio = ThemeMath.ContrastRatio(text, surface);
-        if (ratio < minimum) checks.Add(new(problem, Math.Round(ratio, 2)));
+        var window = resolved.Background!.Value.WithAlpha(0xFF);
+        var page = ThemeMath.CompositeOver(resolved.Page!.Value, window);
+
+        return
+        [
+            (ThemeSurface.Window, window),
+            (ThemeSurface.Page, page),
+            (ThemeSurface.Cards, ThemeMath.CompositeOver(resolved.Surface!.Value, page)),
+            (ThemeSurface.Menus, ThemeMath.CompositeOver(resolved.Flyout!.Value, window)),
+        ];
+    }
+
+    private static void AddContrast(List<ThemeCheck> checks, ThemeColor text, IReadOnlyList<(ThemeSurface Surface, ThemeColor Color)> surfaces, double minimum, ThemeProblem problem)
+    {
+        var worst = surfaces
+            .Select(s => (s.Surface, Ratio: ThemeMath.ContrastRatio(text, s.Color)))
+            .MinBy(s => s.Ratio);
+
+        if (worst.Ratio < minimum) checks.Add(new(problem, Math.Round(worst.Ratio, 2), worst.Surface));
     }
 }

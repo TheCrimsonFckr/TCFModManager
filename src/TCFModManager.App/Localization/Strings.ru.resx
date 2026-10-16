@@ -3922,14 +3922,41 @@
   <data name="ThemeEditor_ProblemRadiusFormat" xml:space="preserve">
     <value>Скругление углов не может превышать {0}.</value>
   </data>
-  <data name="ThemeEditor_ProblemContrastPrimaryFormat" xml:space="preserve">
+  <data name="ThemeEditor_ProblemContrastPrimaryWindowFormat" xml:space="preserve">
+    <value>Основной текст плохо читается на фоне окна ({0}:1 - нужно {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastPrimaryPageFormat" xml:space="preserve">
+    <value>Основной текст плохо читается на странице ({0}:1 - нужно {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastPrimaryCardsFormat" xml:space="preserve">
     <value>Основной текст плохо читается на карточках ({0}:1 - нужно {1}:1).</value>
   </data>
-  <data name="ThemeEditor_ProblemContrastSecondaryFormat" xml:space="preserve">
+  <data name="ThemeEditor_ProblemContrastPrimaryMenusFormat" xml:space="preserve">
+    <value>Основной текст плохо читается в меню и подсказках ({0}:1 - нужно {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastSecondaryWindowFormat" xml:space="preserve">
+    <value>Второстепенный текст плохо читается на фоне окна ({0}:1 - нужно {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastSecondaryPageFormat" xml:space="preserve">
+    <value>Второстепенный текст плохо читается на странице ({0}:1 - нужно {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastSecondaryCardsFormat" xml:space="preserve">
     <value>Второстепенный текст плохо читается на карточках ({0}:1 - нужно {1}:1).</value>
   </data>
-  <data name="ThemeEditor_ProblemContrastTertiaryFormat" xml:space="preserve">
+  <data name="ThemeEditor_ProblemContrastSecondaryMenusFormat" xml:space="preserve">
+    <value>Второстепенный текст плохо читается в меню и подсказках ({0}:1 - нужно {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastTertiaryWindowFormat" xml:space="preserve">
+    <value>Бледный текст слишком бледный на фоне окна ({0}:1 - нужно {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastTertiaryPageFormat" xml:space="preserve">
+    <value>Бледный текст слишком бледный на странице ({0}:1 - нужно {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastTertiaryCardsFormat" xml:space="preserve">
     <value>Бледный текст слишком бледный на карточках ({0}:1 - нужно {1}:1).</value>
+  </data>
+  <data name="ThemeEditor_ProblemContrastTertiaryMenusFormat" xml:space="preserve">
+    <value>Бледный текст слишком бледный в меню и подсказках ({0}:1 - нужно {1}:1).</value>
   </data>
   <data name="ThemeEditor_ImportNotATheme" xml:space="preserve">
     <value>Этот файл не является темой.</value>
