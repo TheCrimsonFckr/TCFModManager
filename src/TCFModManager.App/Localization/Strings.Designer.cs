@@ -2694,4 +2694,18 @@ internal static class Strings
     internal static string Browse_LinkCopiedFormat => LocalizationService.Get("Browse_LinkCopiedFormat");
     internal static string Browse_GuidCopiedFormat => LocalizationService.Get("Browse_GuidCopiedFormat");
     internal static string Browse_CopyFailed => LocalizationService.Get("Browse_CopyFailed");
+    internal static string Filter_IgnoredOnly => LocalizationService.Get("Filter_IgnoredOnly");
+    internal static string Filter_IgnoredOnlyToolTip => LocalizationService.Get("Filter_IgnoredOnlyToolTip");
+    internal static string Browse_MenuIgnore => LocalizationService.Get("Browse_MenuIgnore");
+    internal static string Browse_MenuStopIgnoring => LocalizationService.Get("Browse_MenuStopIgnoring");
+    internal static string Browse_IgnoredFormat => LocalizationService.Get("Browse_IgnoredFormat");
+    internal static string Browse_UnignoredFormat => LocalizationService.Get("Browse_UnignoredFormat");
+    internal static string Ignored_Header => LocalizationService.Get("Ignored_Header");
+    internal static string Ignored_SummaryFormat => LocalizationService.Get("Ignored_SummaryFormat");
+    internal static string Ignored_Empty => LocalizationService.Get("Ignored_Empty");
+    internal static string Help_Browse_Ignore_Title => LocalizationService.Get("Help_Browse_Ignore_Title");
+    internal static string Help_Browse_Ignore_Step1 => LocalizationService.Get("Help_Browse_Ignore_Step1");
+    internal static string Help_Browse_Ignore_Step2 => LocalizationService.Get("Help_Browse_Ignore_Step2");
+    internal static string Help_Browse_Ignore_Note => LocalizationService.Get("Help_Browse_Ignore_Note");
+    internal static string Help_Browse_Ignore_Keywords => LocalizationService.Get("Help_Browse_Ignore_Keywords");
 }
