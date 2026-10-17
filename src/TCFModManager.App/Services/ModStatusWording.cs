@@ -24,7 +24,6 @@ public static class ModStatusWording
         ModStatus.Unknown => Strings.ModStatus_Unknown,
         ModStatus.Disabled => Strings.ModStatus_Disabled,
         ModStatus.TooNew => Strings.ModStatus_TooNew,
-        ModStatus.Unchecked => Strings.ModStatus_Unchecked,
         _ => Strings.ModStatus_Conflict,
     };
 }

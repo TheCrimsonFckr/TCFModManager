@@ -8680,10 +8680,4 @@
   <data name="Help_Installed_Addons_Keywords" xml:space="preserve">
     <value>аддон, дополнение, удалить аддон, деинсталлировать аддон, стереть аддон, отключить аддон, основной мод, наклейки, пресеты</value>
   </data>
-  <data name="ModStatus_Unchecked" xml:space="preserve">
-    <value>Установлен - не удалось проверить, подходит ли он к тому, что ему нужно</value>
-  </data>
-  <data name="Installed_DetailParentSptRangeFormat" xml:space="preserve">
-    <value>Его требование к {0} ({1}) похоже на версию SPT, поэтому оно не сверялось с вашим {0} {2}.</value>
-  </data>
 </root>

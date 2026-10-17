@@ -368,8 +368,6 @@ internal static class Strings
     internal static string ModStatus_Unknown => LocalizationService.Get("ModStatus_Unknown");
     internal static string ModStatus_Disabled => LocalizationService.Get("ModStatus_Disabled");
     internal static string ModStatus_TooNew => LocalizationService.Get("ModStatus_TooNew");
-    internal static string ModStatus_Unchecked => LocalizationService.Get("ModStatus_Unchecked");
-    internal static string Installed_DetailParentSptRangeFormat => LocalizationService.Get("Installed_DetailParentSptRangeFormat");
     internal static string ModStatus_Conflict => LocalizationService.Get("ModStatus_Conflict");
     internal static string ModListFile_TypeName => LocalizationService.Get("ModListFile_TypeName");
     internal static string ModListFile_AllFiles => LocalizationService.Get("ModListFile_AllFiles");

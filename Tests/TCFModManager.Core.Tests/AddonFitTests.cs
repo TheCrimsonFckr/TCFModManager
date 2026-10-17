@@ -15,10 +15,11 @@ public class AddonFitTests
         Assert.False(AddonFit.Check("^3.0.0", "2.1.1", "4.1.6"));
 
     [Fact]
-    public void AnSptRangeInTheParentBox_CantBeChecked()
+    public void AnSptRangeInTheParentBox_Fits_AsSpModReadsIt()
     {
-        // ORBIT - Fika Addon 1.1.0, live on sp-mod 2026-10-17: needs ORBIT "~4.1.6", ORBIT is 2.1.1.
-        Assert.Null(AddonFit.Check("~4.1.6", "2.1.1", "4.1.6"));
+        // ORBIT - Fika Addon 1.1.0, live on sp-mod 2026-10-17: needs ORBIT "~4.1.6", ORBIT is 2.1.1,
+        // and sp-mod's page lists it as compatible with ORBIT 2.1.0 and 2.1.1.
+        Assert.True(AddonFit.Check("~4.1.6", "2.1.1", "4.1.6"));
     }
 
     [Fact]
