@@ -17,11 +17,11 @@ public static class NewestFittingVersion
                 || SptVersionMatcher.IsSatisfiedBy(v.SptVersionConstraint, sptVersion) == true);
 
     // An addon: the newest its parent's version satisfies. A version with no readable constraint
-    // isn't ruled out, and with the parent's version unknown, simply the newest.
-    public static AddonVersion? ForParent(IEnumerable<AddonVersion> versions, string? parentVersion) =>
+    // isn't ruled out (AddonFit), and with the parent's version unknown, simply the newest.
+    public static AddonVersion? ForParent(IEnumerable<AddonVersion> versions, string? parentVersion, string? sptVersion = null) =>
         Newest(versions, v => v.PublishedAt, v => v.Version)
             .FirstOrDefault(v => string.IsNullOrWhiteSpace(parentVersion)
-                || ModVersionMatcher.IsSatisfiedBy(v.ModVersionConstraint, parentVersion) != false);
+                || AddonFit.Check(v.ModVersionConstraint, parentVersion, sptVersion) != false);
 
     private static IEnumerable<T> Newest<T>(
         IEnumerable<T> versions, Func<T, DateTimeOffset?> published, Func<T, string?> version) =>

@@ -675,7 +675,7 @@ public sealed class ModListService
                 // version that's gone is.
                 //
                 if (exact.Version is not null && action.IsAddon && !string.IsNullOrWhiteSpace(parentVersion)
-                    && ModVersionMatcher.IsSatisfiedBy(exact.ParentConstraint, parentVersion) == false)
+                    && AddonFit.Check(exact.ParentConstraint, parentVersion, sptVersion) == false)
                 {
                     var (fits, _) = await NewestAsync(id, action.IsAddon, sptVersion, parentVersion, ct);
                     var parentName = AppServices.Addons.ById(modId)?.ModId is { } pid
@@ -775,7 +775,7 @@ public sealed class ModListService
 
         var addons = await AppServices.SpModApi.GetAddonVersionsAsync(
             id, new AddonVersionsQuery { Sort = "-published_at", PerPage = NewestLookupSize }, ct);
-        return (NewestFittingVersion.ForParent(addons.Data, parentVersion) is { } fit ? AsModVersion(fit) : null, addons.Data.Count > 0);
+        return (NewestFittingVersion.ForParent(addons.Data, parentVersion, sptVersion) is { } fit ? AsModVersion(fit) : null, addons.Data.Count > 0);
     }
 
     // Enough of the newest versions to reach back past a run of releases for a newer SPT.

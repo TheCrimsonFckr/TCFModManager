@@ -318,7 +318,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
                     },
                     IsInstalled = _mod.InstalledVersion is not null
                         && string.Equals(v.Version, _mod.InstalledVersion, StringComparison.OrdinalIgnoreCase),
-                    IsCompatible = ModVersionMatcher.IsSatisfiedBy(v.ModVersionConstraint, parentVersion),
+                    IsCompatible = AddonFit.Check(v.ModVersionConstraint, parentVersion, AppServices.SptEnvironment.InstalledVersion),
                     ParentRequirement = Text(
                         Strings.ModUpdate_ParentRequirementFormat,
                         parentName,

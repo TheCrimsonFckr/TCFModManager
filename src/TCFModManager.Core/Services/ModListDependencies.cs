@@ -112,7 +112,7 @@ public static class ModListDependencies
                     .ThenByDescending(v => v.Version, Comparer<string?>.Create((a, b) => ModVersionComparer.Compare(a, b) ?? 0))
                     .ToList();
 
-                var pick = forSpt.FirstOrDefault(v => w.Value.Constraints.All(c => ModVersionMatcher.IsSatisfiedBy(c, v.Version) != false))
+                var pick = forSpt.FirstOrDefault(v => w.Value.Constraints.All(c => AddonFit.Check(c, v.Version, sptVersion) != false))
                     ?? forSpt.FirstOrDefault();
 
                 return new SpModDependency(

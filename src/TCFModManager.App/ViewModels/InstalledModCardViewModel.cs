@@ -206,7 +206,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     public string LatestPublishedText => (LatestPublishedVersion, ModId, HasPlugin || HasServer) switch
     {
         ({ } version, _, _) => version,
-        (null, _, _) when IsAddon => Strings.Installed_LatestAddonUnlisted,
+        (null, _, _) when IsAddon => IsAddonListed ? Strings.Common_Unknown : Strings.Installed_LatestAddonUnlisted,
         (null, not null, _) => Strings.Common_Unknown,
         (null, null, false) when HasPatcher => Strings.Installed_LatestPatcherNotListed,
         _ => Strings.Installed_LatestNotFound,
@@ -347,6 +347,9 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // ordinary unmatched card, exactly as a hand-installed mod that matches nothing does.
     //
     public bool IsAddon { get; init; }
+
+    // True for an addon still listed on sp-mod.com, whether or not any of its versions fits.
+    public bool IsAddonListed { get; init; }
 
     // The name of the mod this addon attaches to. Null for a mod, or when the parent isn't in the
     // cached catalog.
@@ -797,7 +800,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
                 ? catalog.FirstOrDefault(m => m.Id == id)?.Name ?? parent?.DisplayTitle
                 : parent?.DisplayTitle;
 
-            return BuildAddonCard(g.Entries, addon, g.Record, parent, parentName);
+            return BuildAddonCard(g.Entries, addon, g.Record, parent, parentName, installedSptVersion);
         }));
 
         NoteSharedFolders(cards);
@@ -814,7 +817,8 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         Addon? addon,
         InstalledModRecord record,
         InstalledModCardViewModel? parent,
-        string? parentName)
+        string? parentName,
+        string? installedSptVersion)
     {
         var plugin = entries.FirstOrDefault(m => m is { Target: InstalledModTarget.Client, IsPatcher: false });
         var patcher = entries.FirstOrDefault(m => m is { Target: InstalledModTarget.Client, IsPatcher: true });
@@ -832,7 +836,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             .ToList();
 
         var latest = versions.FirstOrDefault(v =>
-            ModVersionMatcher.IsSatisfiedBy(v.ModVersionConstraint, parentVersion) == true);
+            AddonFit.Check(v.ModVersionConstraint, parentVersion, installedSptVersion) != false);
 
         (string Key, object?[] Values)? detail = null;
         if (latest is null && versions.Count > 0)
@@ -880,6 +884,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             FolderPath = client?.FolderPath ?? server!.FolderPath,
             ModId = record.ModId,
             IsAddon = true,
+            IsAddonListed = addon is not null,
             ParentModName = parentName,
             ParentModId = addon?.ModId,
             ParentInstalledVersion = parentVersion,

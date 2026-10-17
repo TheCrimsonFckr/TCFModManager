@@ -81,7 +81,7 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
                 IsLatest = i == 0,
                 IsInstalled = InstalledVersion is not null
                     && string.Equals(v.Version, InstalledVersion, StringComparison.OrdinalIgnoreCase),
-                IsCompatible = ModVersionMatcher.IsSatisfiedBy(v.ModVersionConstraint, parentInstalledVersion),
+                IsCompatible = AddonFit.Check(v.ModVersionConstraint, parentInstalledVersion, AppServices.SptEnvironment.InstalledVersion),
             })
             .ToList();
 
