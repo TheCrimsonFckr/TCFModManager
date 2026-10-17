@@ -8254,4 +8254,16 @@ Passare comunque?</value>
   <data name="Installed_RemovedAddonsFormat" xml:space="preserve">
     <value>Anche i suoi addon sono stati rimossi: {0}.</value>
   </data>
+  <data name="Installed_ImpactAddonForFormat" xml:space="preserve">
+    <value>addon per {0}</value>
+  </data>
+  <data name="Installed_ImpactDisabledWithFormat" xml:space="preserve">
+    <value>disattivato con {0}</value>
+  </data>
+  <data name="Disable_ImpactEnableAddons_one" xml:space="preserve">
+    <value>Un addon è stato disattivato insieme a questo.</value>
+  </data>
+  <data name="Disable_ImpactEnableAddons_other" xml:space="preserve">
+    <value>{0} addon sono stati disattivati insieme a questo.</value>
+  </data>
 </root>

@@ -8629,4 +8629,19 @@
   <data name="Installed_RemovedAddonsFormat" xml:space="preserve">
     <value>Вместе с ним удалены его аддоны: {0}.</value>
   </data>
+  <data name="Installed_ImpactAddonForFormat" xml:space="preserve">
+    <value>аддон для {0}</value>
+  </data>
+  <data name="Installed_ImpactDisabledWithFormat" xml:space="preserve">
+    <value>отключён вместе с {0}</value>
+  </data>
+  <data name="Disable_ImpactEnableAddons_few" xml:space="preserve">
+    <value>{0} аддона были отключены вместе с ним.</value>
+  </data>
+  <data name="Disable_ImpactEnableAddons_many" xml:space="preserve">
+    <value>{0} аддонов были отключены вместе с ним.</value>
+  </data>
+  <data name="Disable_ImpactEnableAddons_one" xml:space="preserve">
+    <value>{0} аддон был отключён вместе с ним.</value>
+  </data>
 </root>

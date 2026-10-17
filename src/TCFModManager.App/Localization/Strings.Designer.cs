@@ -869,6 +869,8 @@ internal static class Strings
     internal static string Installed_EnabledCount(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_EnabledCount", count, values);
     internal static string Installed_ImpactNeedsFormat => LocalizationService.Get("Installed_ImpactNeedsFormat");
+    internal static string Installed_ImpactAddonForFormat => LocalizationService.Get("Installed_ImpactAddonForFormat");
+    internal static string Installed_ImpactDisabledWithFormat => LocalizationService.Get("Installed_ImpactDisabledWithFormat");
     internal static string Installed_ImpactOptionallyUsesFormat => LocalizationService.Get("Installed_ImpactOptionallyUsesFormat");
     internal static string Installed_ImpactNeededByFormat => LocalizationService.Get("Installed_ImpactNeededByFormat");
     internal static string Installed_ImpactOptionallyUsedByFormat => LocalizationService.Get("Installed_ImpactOptionallyUsedByFormat");
@@ -1391,6 +1393,8 @@ internal static class Strings
         LocalizationService.Plural("Disable_ImpactDisable", count, values);
     internal static string Disable_ImpactEnable(int count, params object?[] values) =>
         LocalizationService.Plural("Disable_ImpactEnable", count, values);
+    internal static string Disable_ImpactEnableAddons(int count, params object?[] values) =>
+        LocalizationService.Plural("Disable_ImpactEnableAddons", count, values);
     internal static string Disable_SelectedFormat => LocalizationService.Get("Disable_SelectedFormat");
     internal static string Disable_HeadingAffected => LocalizationService.Get("Disable_HeadingAffected");
     internal static string Disable_HeadingStillDisabled => LocalizationService.Get("Disable_HeadingStillDisabled");

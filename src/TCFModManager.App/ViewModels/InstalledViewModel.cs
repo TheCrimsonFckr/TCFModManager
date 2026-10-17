@@ -2407,7 +2407,10 @@ public partial class InstalledViewModel : LocalizedViewModel
             return null;
         }
 
+        var picked = targets.ToList();
         var affected = AffectedCards(targets, disable);
+        var addonRows = AddonRows(targets, disable, affected);
+        affected.AddRange(addonRows.Select(a => (a.Card, a.Detail, IsSoft: false)));
 
         if (confirm && affected.Count > 0)
         {
@@ -2415,7 +2418,11 @@ public partial class InstalledViewModel : LocalizedViewModel
                 .Select(a => new ModDisableImpactRow(a.Card.DisplayTitle, a.Detail, a.IsSoft))
                 .ToList();
 
-            switch (ModDisableConfirmationWindow.Confirm(disable, targets.Select(t => t.DisplayTitle).ToList(), rows))
+            var summary = !disable && addonRows.Count == affected.Count
+                ? Strings.Disable_ImpactEnableAddons(addonRows.Count)
+                : null;
+
+            switch (ModDisableConfirmationWindow.Confirm(disable, targets.Select(t => t.DisplayTitle).ToList(), rows, summary))
             {
                 case ModDisableChoice.Cancel:
                     return null;
@@ -2451,6 +2458,8 @@ public partial class InstalledViewModel : LocalizedViewModel
         {
             IsBusy = false;
         }
+
+        MarkAddonsDisabledWithParent(picked, targets, disable);
 
         var moves = (carryOver ?? []).Concat(outcome.Moved).ToList();
         SetLastMoves(moves, label ?? DescribeTargets(targets, disable));
@@ -2503,6 +2512,70 @@ public partial class InstalledViewModel : LocalizedViewModel
         }
 
         return results;
+    }
+
+    //
+    // OPEN-31 R3/R5: the addons of the mods being disabled that would stay enabled, or, when enabling,
+    // the addons that were disabled together with them. Mods already listed are left out.
+    //
+    private List<(InstalledModCardViewModel Card, string Detail)> AddonRows(
+        IReadOnlyList<InstalledModCardViewModel> targets,
+        bool disable,
+        IReadOnlyList<(InstalledModCardViewModel Card, string Detail, bool IsSoft)> already)
+    {
+        var parents = targets.Where(t => !t.IsAddon && t.ModId is not null).ToList();
+        if (parents.Count == 0) return [];
+
+        HashSet<int> flagged = disable
+            ? []
+            : AppServices.InstallManifest.Load().Mods
+                .Where(r => r is { IsAddon: true, DisabledWithParent: true })
+                .Select(r => r.ModId)
+                .ToHashSet();
+
+        var seen = new HashSet<InstalledModCardViewModel>(targets.Concat(already.Select(a => a.Card)));
+        var rows = new List<(InstalledModCardViewModel, string)>();
+
+        foreach (var parent in parents)
+        {
+            foreach (var addon in AddonCardsOf(parent))
+            {
+                var offered = disable
+                    ? !addon.IsDisabled
+                    : addon.IsDisabled && addon.ModId is { } id && flagged.Contains(id);
+
+                if (!offered || !seen.Add(addon)) continue;
+
+                rows.Add((addon, Text(
+                    disable ? Strings.Installed_ImpactAddonForFormat : Strings.Installed_ImpactDisabledWithFormat,
+                    parent.DisplayTitle)));
+            }
+        }
+
+        return rows;
+    }
+
+    //
+    // Records which addons went with their parent (OPEN-31 R5): those a disable carried along because
+    // their parent was picked. An addon disabled or enabled in its own right is cleared.
+    //
+    private static void MarkAddonsDisabledWithParent(
+        IReadOnlyList<InstalledModCardViewModel> picked, IReadOnlyList<InstalledModCardViewModel> moved, bool disable)
+    {
+        var addons = moved.Where(c => c is { IsAddon: true, ModId: not null }).ToList();
+        if (addons.Count == 0) return;
+
+        if (!disable)
+        {
+            AppServices.InstallManifest.SetDisabledWithParent(addons.Select(a => a.ModId!.Value), false);
+            return;
+        }
+
+        var parentIds = picked.Where(c => c is { IsAddon: false, ModId: not null }).Select(c => c.ModId!.Value).ToHashSet();
+        var carried = addons.Where(a => !picked.Contains(a) && a.ParentModId is { } p && parentIds.Contains(p)).ToList();
+
+        AppServices.InstallManifest.SetDisabledWithParent(carried.Select(a => a.ModId!.Value), true);
+        AppServices.InstallManifest.SetDisabledWithParent(addons.Except(carried).Select(a => a.ModId!.Value), false);
     }
 
     private void SetLastMoves(List<ModMove> moves, (string Key, object? Arg)? label)

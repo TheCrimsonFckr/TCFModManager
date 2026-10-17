@@ -8254,4 +8254,16 @@ Passer quand même à cette version ?</value>
   <data name="Installed_RemovedAddonsFormat" xml:space="preserve">
     <value>Ses addons ont été supprimés avec lui : {0}.</value>
   </data>
+  <data name="Installed_ImpactAddonForFormat" xml:space="preserve">
+    <value>addon pour {0}</value>
+  </data>
+  <data name="Installed_ImpactDisabledWithFormat" xml:space="preserve">
+    <value>désactivé avec {0}</value>
+  </data>
+  <data name="Disable_ImpactEnableAddons_one" xml:space="preserve">
+    <value>{0} addon a été désactivé avec lui.</value>
+  </data>
+  <data name="Disable_ImpactEnableAddons_other" xml:space="preserve">
+    <value>{0} addons ont été désactivés avec lui.</value>
+  </data>
 </root>

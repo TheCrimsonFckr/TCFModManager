@@ -8254,4 +8254,16 @@ Trotzdem wechseln?</value>
   <data name="Installed_RemovedAddonsFormat" xml:space="preserve">
     <value>Seine Addons wurden mit entfernt: {0}.</value>
   </data>
+  <data name="Installed_ImpactAddonForFormat" xml:space="preserve">
+    <value>Addon für {0}</value>
+  </data>
+  <data name="Installed_ImpactDisabledWithFormat" xml:space="preserve">
+    <value>mit {0} deaktiviert</value>
+  </data>
+  <data name="Disable_ImpactEnableAddons_one" xml:space="preserve">
+    <value>1 Addon wurde zusammen mit ihm deaktiviert.</value>
+  </data>
+  <data name="Disable_ImpactEnableAddons_other" xml:space="preserve">
+    <value>{0} Addons wurden zusammen mit ihm deaktiviert.</value>
+  </data>
 </root>

@@ -9879,4 +9879,19 @@ Switch anyway?</value>
     <value>Its addons went with it: {0}.</value>
     <comment>Added to the status line after removing a mod together with its addons. {0} is the addons' names joined with Common_ListSeparator.</comment>
   </data>
+  <data name="Installed_ImpactAddonForFormat" xml:space="preserve">
+    <value>addon for {0}</value>
+    <comment>Why a mod's addon is listed when disabling the mod (OPEN-31 R3). Lower case, like Installed_ImpactNeedsFormat. {0} is the mod's name.</comment>
+  </data>
+  <data name="Installed_ImpactDisabledWithFormat" xml:space="preserve">
+    <value>disabled with {0}</value>
+    <comment>Why an addon is listed when enabling its mod (OPEN-31 R5). Lower case, like Installed_ImpactNeedsFormat. {0} is the mod's name.</comment>
+  </data>
+  <data name="Disable_ImpactEnableAddons_one" xml:space="preserve">
+    <value>1 addon was disabled along with it.</value>
+    <comment>Summary when the only things listed on enabling a mod are addons disabled together with it (OPEN-31 R5).</comment>
+  </data>
+  <data name="Disable_ImpactEnableAddons_other" xml:space="preserve">
+    <value>{0} addons were disabled along with it.</value>
+  </data>
 </root>

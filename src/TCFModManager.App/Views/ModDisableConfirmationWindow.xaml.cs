@@ -44,7 +44,8 @@ public partial class ModDisableConfirmationWindow : FluentWindow
     private static string Text(string format, params object?[] values) =>
         LocalizationService.Text(format, values);
 
-    private ModDisableConfirmationWindow(bool disabling, IReadOnlyList<string> targets, IReadOnlyList<ModDisableImpactRow> impact)
+    private ModDisableConfirmationWindow(
+        bool disabling, IReadOnlyList<string> targets, IReadOnlyList<ModDisableImpactRow> impact, string? summary)
     {
         InitializeComponent();
 
@@ -57,9 +58,9 @@ public partial class ModDisableConfirmationWindow : FluentWindow
                 disabling ? Strings.Disable_TitleDisableCountFormat : Strings.Disable_TitleEnableCountFormat,
                 targets.Count);
 
-        SummaryText.Text = disabling
+        SummaryText.Text = summary ?? (disabling
             ? Strings.Disable_ImpactDisable(impact.Count)
-            : Strings.Disable_ImpactEnable(impact.Count);
+            : Strings.Disable_ImpactEnable(impact.Count));
 
         TargetsText.Text = targets.Count == 1
             ? Text(Strings.Disable_SelectedFormat, targets[0])
@@ -86,11 +87,13 @@ public partial class ModDisableConfirmationWindow : FluentWindow
 
     //
     // Shows the warning and returns what to do. <paramref name="targets"/> are the mods the user
-    // picked; <paramref name="impact"/> is everything else this reaches.
+    // picked; <paramref name="impact"/> is everything else this reaches. <paramref name="summary"/>
+    // replaces the line above the list when the default doesn't describe it.
     //
-    public static ModDisableChoice Confirm(bool disabling, IReadOnlyList<string> targets, IReadOnlyList<ModDisableImpactRow> impact)
+    public static ModDisableChoice Confirm(
+        bool disabling, IReadOnlyList<string> targets, IReadOnlyList<ModDisableImpactRow> impact, string? summary = null)
     {
-        var window = new ModDisableConfirmationWindow(disabling, targets, impact);
+        var window = new ModDisableConfirmationWindow(disabling, targets, impact, summary);
         window.ShowDialog();
         return window.Choice;
     }
