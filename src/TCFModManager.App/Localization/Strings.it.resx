@@ -8284,4 +8284,22 @@ Passare comunque?</value>
   <data name="ModListVersionChange_IntroMixed" xml:space="preserve">
     <value>Alcuni di questi mod non sono più su sp-mod.com alla versione indicata da questa lista, e alcuni sono addon la cui versione elencata non va con la versione del loro mod che questa lista lascia. Spunta quelli da installare invece alla versione compatibile più recente - tutto ciò che resta senza spunta viene saltato.</value>
   </data>
+  <data name="Help_Installed_Addons_Title" xml:space="preserve">
+    <value>Rimuovere o disattivare un mod con i suoi addon</value>
+  </data>
+  <data name="Help_Installed_Addons_Step1" xml:space="preserve">
+    <value>In {0}, ogni addon installato ha una scheda tutta sua, con sotto il nome il mod a cui appartiene.</value>
+  </data>
+  <data name="Help_Installed_Addons_Step2" xml:space="preserve">
+    <value>Per rimuovere un mod e i suoi addon, premi {0} sulla scheda del mod e rispondi Sì quando ti chiede dei suoi addon.</value>
+  </data>
+  <data name="Help_Installed_Addons_Step3" xml:space="preserve">
+    <value>Per disattivarli insieme, disattiva il mod e scegli {0}. Riattivando il mod più tardi ti vengono riproposti gli stessi addon.</value>
+  </data>
+  <data name="Help_Installed_Addons_Note" xml:space="preserve">
+    <value>Un solo Annulla rimette a posto un mod e gli addon rimossi con lui. Rimuovere o disattivare un addon da solo non tocca il suo mod.</value>
+  </data>
+  <data name="Help_Installed_Addons_Keywords" xml:space="preserve">
+    <value>addon, add-on, rimuovere addon, disinstallare addon, eliminare addon, disattivare addon, mod principale, adesivi, preset</value>
+  </data>
 </root>

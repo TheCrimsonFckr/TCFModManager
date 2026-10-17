@@ -8662,4 +8662,22 @@
   <data name="ModListVersionChange_IntroMixed" xml:space="preserve">
     <value>Некоторых из этих модов больше нет на sp-mod.com в версии, указанной в списке, а некоторые - аддоны, чья указанная версия не подходит к версии их мода, которую оставляет этот список. Отметьте те, что нужно установить в новейшей подходящей версии, - неотмеченные будут пропущены.</value>
   </data>
+  <data name="Help_Installed_Addons_Title" xml:space="preserve">
+    <value>Удалить или отключить мод вместе с его аддонами</value>
+  </data>
+  <data name="Help_Installed_Addons_Step1" xml:space="preserve">
+    <value>На странице {0} у каждого установленного аддона своя карточка, а под его названием указан мод, к которому он относится.</value>
+  </data>
+  <data name="Help_Installed_Addons_Step2" xml:space="preserve">
+    <value>Чтобы удалить мод и его аддоны, нажмите {0} на карточке мода и ответьте «Да», когда спросят о его аддонах.</value>
+  </data>
+  <data name="Help_Installed_Addons_Step3" xml:space="preserve">
+    <value>Чтобы отключить их вместе, отключите мод и выберите {0}. Когда вы потом включите мод, вам снова предложат те же аддоны.</value>
+  </data>
+  <data name="Help_Installed_Addons_Note" xml:space="preserve">
+    <value>Одна отмена возвращает мод вместе с удалёнными с ним аддонами. Удаление или отключение одного аддона не затрагивает его мод.</value>
+  </data>
+  <data name="Help_Installed_Addons_Keywords" xml:space="preserve">
+    <value>аддон, дополнение, удалить аддон, деинсталлировать аддон, стереть аддон, отключить аддон, основной мод, наклейки, пресеты</value>
+  </data>
 </root>

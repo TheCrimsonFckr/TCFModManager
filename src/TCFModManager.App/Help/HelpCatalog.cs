@@ -202,6 +202,13 @@ internal static class HelpCatalog
                 .WithNote(() => Strings.Help_Installed_Disable_Note)
                 .WithKeywords(() => Strings.Help_Installed_Disable_Keywords),
 
+            Topic("installed.addons", () => Strings.Help_Installed_Addons_Title,
+                Step(() => Strings.Help_Installed_Addons_Step1, () => Strings.Nav_Installed),
+                Step(() => Strings.Help_Installed_Addons_Step2, () => Strings.Installed_Remove),
+                Step(() => Strings.Help_Installed_Addons_Step3, () => Strings.Disable_CascadeDisable))
+                .WithNote(() => Strings.Help_Installed_Addons_Note)
+                .WithKeywords(() => Strings.Help_Installed_Addons_Keywords),
+
             Topic("installed.disablemany", () => Strings.Help_Installed_DisableMany_Title,
                 Step(() => Strings.Help_Installed_DisableMany_Step1,
                     () => Strings.Nav_Installed, () => Strings.Installed_MultiSelect),

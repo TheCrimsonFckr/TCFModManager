@@ -8284,4 +8284,22 @@ Passer quand même à cette version ?</value>
   <data name="ModListVersionChange_IntroMixed" xml:space="preserve">
     <value>Certains de ces mods ne sont plus sur sp-mod.com dans la version indiquée par cette liste, et certains sont des addons dont la version listée ne convient pas à la version de leur mod que cette liste laisse. Cochez ceux à installer plutôt dans la version compatible la plus récente - tout ce qui reste décoché est ignoré.</value>
   </data>
+  <data name="Help_Installed_Addons_Title" xml:space="preserve">
+    <value>Supprimer ou désactiver un mod avec ses addons</value>
+  </data>
+  <data name="Help_Installed_Addons_Step1" xml:space="preserve">
+    <value>Dans {0}, chaque addon installé a sa propre carte, avec le mod auquel il appartient sous son nom.</value>
+  </data>
+  <data name="Help_Installed_Addons_Step2" xml:space="preserve">
+    <value>Pour supprimer un mod et ses addons, appuyez sur {0} sur la carte du mod et répondez Oui quand on vous demande pour ses addons.</value>
+  </data>
+  <data name="Help_Installed_Addons_Step3" xml:space="preserve">
+    <value>Pour les désactiver ensemble, désactivez le mod et choisissez {0}. Réactiver le mod plus tard vous propose les mêmes addons.</value>
+  </data>
+  <data name="Help_Installed_Addons_Note" xml:space="preserve">
+    <value>Une seule annulation remet en place un mod et les addons supprimés avec lui. Supprimer ou désactiver un addon seul ne touche pas à son mod.</value>
+  </data>
+  <data name="Help_Installed_Addons_Keywords" xml:space="preserve">
+    <value>addon, add-on, supprimer addon, désinstaller addon, effacer addon, désactiver addon, mod parent, stickers, presets</value>
+  </data>
 </root>

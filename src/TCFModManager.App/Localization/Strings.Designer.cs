@@ -828,6 +828,12 @@ internal static class Strings
     internal static string ModLists_VersionChangeTitleParentFormat => LocalizationService.Get("ModLists_VersionChangeTitleParentFormat");
     internal static string ModListVersionChange_IntroAddons => LocalizationService.Get("ModListVersionChange_IntroAddons");
     internal static string ModListVersionChange_IntroMixed => LocalizationService.Get("ModListVersionChange_IntroMixed");
+    internal static string Help_Installed_Addons_Title => LocalizationService.Get("Help_Installed_Addons_Title");
+    internal static string Help_Installed_Addons_Step1 => LocalizationService.Get("Help_Installed_Addons_Step1");
+    internal static string Help_Installed_Addons_Step2 => LocalizationService.Get("Help_Installed_Addons_Step2");
+    internal static string Help_Installed_Addons_Step3 => LocalizationService.Get("Help_Installed_Addons_Step3");
+    internal static string Help_Installed_Addons_Note => LocalizationService.Get("Help_Installed_Addons_Note");
+    internal static string Help_Installed_Addons_Keywords => LocalizationService.Get("Help_Installed_Addons_Keywords");
     internal static string Installed_RemoveConfigs(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_RemoveConfigs", count, values);
     internal static string Installed_RemoveConfigsChoicesFormat => LocalizationService.Get("Installed_RemoveConfigsChoicesFormat");

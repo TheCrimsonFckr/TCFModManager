@@ -9918,4 +9918,27 @@ Switch anyway?</value>
     <value>Some of these mods aren't on sp-mod.com at the version this list names any more, and some are addons whose listed version doesn't fit the version of their mod this list leaves. Tick the ones you want installed at the newest version that fits instead - anything left unticked is skipped.</value>
     <comment>Shown above the rows instead of ModListVersionChange_Intro when there are rows of both kinds.</comment>
   </data>
+  <data name="Help_Installed_Addons_Title" xml:space="preserve">
+    <value>Remove or disable a mod with its addons</value>
+    <comment>How-to title (OPEN-31). An addon is extra content published for one mod.</comment>
+  </data>
+  <data name="Help_Installed_Addons_Step1" xml:space="preserve">
+    <value>On {0}, every addon you installed has a card of its own, with the mod it's for under its name.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Addons_Step2" xml:space="preserve">
+    <value>To remove a mod and its addons, press {0} on the mod's card and answer Yes when asked about its addons.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Addons_Step3" xml:space="preserve">
+    <value>To disable them together, disable the mod and choose {0}. Enabling the mod later offers the same addons back.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_Addons_Note" xml:space="preserve">
+    <value>One Undo puts a mod and the addons removed with it back together. Removing or disabling an addon on its own leaves its mod alone.</value>
+  </data>
+  <data name="Help_Installed_Addons_Keywords" xml:space="preserve">
+    <value>addon, add-on, remove addon, uninstall addon, delete addon, disable addon, parent mod, stickers, presets</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
 </root>
