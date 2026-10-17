@@ -8302,4 +8302,10 @@ Passare comunque?</value>
   <data name="Help_Installed_Addons_Keywords" xml:space="preserve">
     <value>addon, add-on, rimuovere addon, disinstallare addon, eliminare addon, disattivare addon, mod principale, adesivi, preset</value>
   </data>
+  <data name="ModStatus_Unchecked" xml:space="preserve">
+    <value>Installato - impossibile verificare se va con ciò di cui ha bisogno</value>
+  </data>
+  <data name="Installed_DetailParentSptRangeFormat" xml:space="preserve">
+    <value>Il suo requisito per {0} ({1}) sembra una versione di SPT, quindi non è stato verificato con il tuo {0} {2}.</value>
+  </data>
 </root>

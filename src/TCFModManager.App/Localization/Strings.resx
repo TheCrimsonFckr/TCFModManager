@@ -9941,4 +9941,12 @@ Switch anyway?</value>
     <value>addon, add-on, remove addon, uninstall addon, delete addon, disable addon, parent mod, stickers, presets</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
+  <data name="ModStatus_Unchecked" xml:space="preserve">
+    <value>Installed - couldn't check whether it fits what it needs</value>
+    <comment>Status tooltip for a mod that is installed but whose requirement couldn't be checked (OPEN-31) - an addon whose requirement for its mod reads as an SPT version.</comment>
+  </data>
+  <data name="Installed_DetailParentSptRangeFormat" xml:space="preserve">
+    <value>Its {0} requirement ({1}) looks like an SPT version, so it wasn't checked against your {0} {2}.</value>
+    <comment>On an addon's opened card when its requirement for its mod looks like an SPT version (OPEN-31). {0} is the mod's name, {1} the requirement as written (e.g. ~4.1.6), {2} the mod's installed version.</comment>
+  </data>
 </root>

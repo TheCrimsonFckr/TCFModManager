@@ -8302,4 +8302,10 @@ Passer quand même à cette version ?</value>
   <data name="Help_Installed_Addons_Keywords" xml:space="preserve">
     <value>addon, add-on, supprimer addon, désinstaller addon, effacer addon, désactiver addon, mod parent, stickers, presets</value>
   </data>
+  <data name="ModStatus_Unchecked" xml:space="preserve">
+    <value>Installé - impossible de vérifier s'il convient à ce dont il a besoin</value>
+  </data>
+  <data name="Installed_DetailParentSptRangeFormat" xml:space="preserve">
+    <value>Son exigence pour {0} ({1}) ressemble à une version de SPT, elle n'a donc pas été vérifiée par rapport à votre {0} {2}.</value>
+  </data>
 </root>

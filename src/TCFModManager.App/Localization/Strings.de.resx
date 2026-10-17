@@ -8302,4 +8302,10 @@ Trotzdem wechseln?</value>
   <data name="Help_Installed_Addons_Keywords" xml:space="preserve">
     <value>Addon, Add-on, Addon entfernen, Addon deinstallieren, Addon löschen, Addon deaktivieren, Hauptmod, Sticker, Presets</value>
   </data>
+  <data name="ModStatus_Unchecked" xml:space="preserve">
+    <value>Installiert - konnte nicht prüfen, ob es zu dem passt, was es braucht</value>
+  </data>
+  <data name="Installed_DetailParentSptRangeFormat" xml:space="preserve">
+    <value>Seine Anforderung an {0} ({1}) sieht wie eine SPT-Version aus und wurde daher nicht mit deinem {0} {2} abgeglichen.</value>
+  </data>
 </root>

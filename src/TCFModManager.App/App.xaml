@@ -161,6 +161,9 @@
                     <DataTrigger Binding="{Binding Status}" Value="Conflict">
                         <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
                     </DataTrigger>
+                    <DataTrigger Binding="{Binding Status}" Value="Unchecked">
+                        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
+                    </DataTrigger>
                 </Style.Triggers>
             </Style>
 

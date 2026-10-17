@@ -351,6 +351,10 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // True for an addon still listed on sp-mod.com, whether or not any of its versions fits.
     public bool IsAddonListed { get; init; }
 
+    // True for an addon whose installed version's requirement for its mod reads as an SPT version,
+    // so whether it fits couldn't be checked (OPEN-31, AddonFit). The opened card says why.
+    public bool IsFitUnchecked { get; init; }
+
     // The name of the mod this addon attaches to. Null for a mod, or when the parent isn't in the
     // cached catalog.
     public string? ParentModName { get; init; }
@@ -619,6 +623,8 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             ? ModStatus.Conflict
             : SptFit is { Fits: false } && !IsSptWarningDismissed && UpdateAvailable != true
                 ? ModStatus.NoCompatibleVersion
+            : IsFitUnchecked && UpdateAvailable != true
+                ? ModStatus.Unchecked
             : UpdateAvailable switch
         {
             true => ModStatus.UpdateAvailable,
@@ -640,6 +646,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         ?? DownloadSummary
         ?? (SptFit is { Fits: false } && !IsSptWarningDismissed ? SptNote : null)
         ?? (UpdateAvailable == true ? null : HeldBackNote)
+        ?? (IsFitUnchecked && UpdateAvailable != true ? InstalledVersionDetail : null)
         ?? (HasDuplicateFolders
             ? Strings.Installed_StatusDuplicate
             : IsMixedState
@@ -840,6 +847,12 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         var latest = versions.FirstOrDefault(v =>
             AddonFit.Accepts(v.ModVersionConstraint, parentVersion, installedSptVersion));
 
+        var installedListing = versions.FirstOrDefault(v =>
+            (record.VersionId is { } id && v.Id == id)
+            || string.Equals(v.Version, installedVersion, StringComparison.OrdinalIgnoreCase));
+        var fitUnchecked = installedListing is not null
+            && AddonFit.IsSptRangeInParentBox(installedListing.ModVersionConstraint, parentVersion, installedSptVersion);
+
         (string Key, object?[] Values)? detail = null;
         if (latest is null && versions.Count > 0)
         {
@@ -856,6 +869,11 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
                     [newest.Version, parentName, newest.ModVersionConstraint, parentVersion]),
             };
         }
+        else if (fitUnchecked)
+        {
+            detail = (nameof(Strings.Installed_DetailParentSptRangeFormat),
+                [parentName ?? Strings.Addon_ParentFallback, installedListing!.ModVersionConstraint, parentVersion]);
+        }
         else if (fileVersion is not null && !VersionsAreEquivalent(record.Version, fileVersion))
         {
             detail = (nameof(Strings.Installed_DetailFilesReportFormat), [fileVersion]);
@@ -866,6 +884,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             Name = client?.Name ?? server!.Name,
             InstalledVersion = installedVersion,
             VersionDetail = detail,
+            IsFitUnchecked = fitUnchecked,
             IsVersionManuallyConfirmed = !record.IsAppManaged,
             InstalledAt = InstallDate(record, client, server),
             HasClient = client is not null,
