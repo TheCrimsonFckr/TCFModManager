@@ -1064,12 +1064,31 @@
                                             ToolTip="{Binding DisableToggleTooltip}">
                                             <ui:SymbolIcon Symbol="{Binding DisableToggleGlyph}" FontSize="16" />
                                         </ui:Button>
+
+                                        <!-- OPEN-12 A2: one click queues this mod's update. -->
+                                        <ui:Button
+                                            Margin="0,2,10,0"
+                                            Padding="0"
+                                            MinWidth="0"
+                                            MinHeight="0"
+                                            Width="30"
+                                            Height="30"
+                                            HorizontalAlignment="Center"
+                                            Appearance="Transparent"
+                                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                            Visibility="{Binding CanQuickUpdate, Converter={StaticResource BoolToVis}}"
+                                            Command="{Binding DataContext.UpdateOneCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                            CommandParameter="{Binding}"
+                                            ToolTip="{Binding QuickUpdateToolTip}">
+                                            <ui:SymbolIcon Symbol="ArrowDownload24" FontSize="16" />
+                                        </ui:Button>
                                     </StackPanel>
 
                                     <!-- MinHeight: every collapsed card the same size whichever of
                                          the optional lines it has - addon, list chips, and the row
-                                         of group, disabled, update and pin. One number to tune if a
-                                         line is added or removed. -->
+                                         of group, disabled and pin. One number to tune if a
+                                         line is added or removed. It also clears the status, toggle
+                                         and update stack beside it. -->
                                     <StackPanel Grid.Column="2" VerticalAlignment="Top" MinHeight="92">
                                         <TextBlock
                                             FontWeight="SemiBold"
@@ -1125,24 +1144,6 @@
                                                 Visibility="{Binding IsDisabled, Converter={StaticResource BoolToVis}}">
                                                 <TextBlock Style="{StaticResource DisabledBadgeText}" Text="{loc:Str Installed_DisabledTag}" />
                                             </Border>
-
-                                            <!-- OPEN-12 A2: one click queues this mod's update. -->
-                                            <ui:Button
-                                                Margin="4,0,0,0"
-                                                Padding="0"
-                                                MinWidth="0"
-                                                MinHeight="0"
-                                                Width="22"
-                                                Height="22"
-                                                VerticalAlignment="Center"
-                                                Appearance="Transparent"
-                                                Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                                                Visibility="{Binding CanQuickUpdate, Converter={StaticResource BoolToVis}}"
-                                                Command="{Binding DataContext.UpdateOneCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                                                CommandParameter="{Binding}"
-                                                ToolTip="{Binding QuickUpdateToolTip}">
-                                                <ui:SymbolIcon Symbol="ArrowDownload24" FontSize="14" />
-                                            </ui:Button>
 
                                             <ui:SymbolIcon
                                                 Symbol="Pin24"
