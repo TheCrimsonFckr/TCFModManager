@@ -1,4 +1,4 @@
-**TCF Mod Manager** is a Windows desktop app for finding, installing and keeping track of your SPT mods, built directly against the sp-mod catalog you're reading this on. Browse the full mod list, filter it down to what actually works on your SPT version, install with dependencies resolved for you, turn mods on and off without deleting anything, and see at a glance what's out of date.
+**TCF Mod Manager** is a Windows desktop app for finding, installing and keeping track of your SPT mods, built directly against the sp-mod catalog you're reading this on. Browse the full mod list, filter it down to what actually works on your SPT version, install with dependencies resolved for you, turn mods on and off without deleting anything, and see at a glance what's out of date. Addons get a card of their own and can be removed or disabled together with their mod.
 
 ![Browse screen](https://github.com/TheCrimsonFckr/TCFModManager/blob/main/assets/browse.png "Browse screen")
 
@@ -38,11 +38,11 @@ Once it's set up, the app keeps itself up to date from this page. On launch it c
 ## Planning
 Nothing new is lined up right now - ideas are welcome on the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues). The [Planning page](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Planning) on the wiki lists everything done so far. The latest:
 
+- Addons - every installed addon gets its own card, and removing or disabling a mod can take its addons with it; mod lists offer an addon's missing mod and catch addon versions that won't fit
 - Profile stats - the SPT launcher's profile page in the app: raid record, money and level progress, on a new Profile page beside the Server page
 - Themes - five built-in looks (Tarkov, OLED black, High contrast, Soft, Steam) and an editor to make and share your own
+- Ignore mods - hide listings you never want to see from Browse, author pages and new-mod notifications
 - Installed versions checked against your SPT (and Fika)
-- Dependencies on Apply - a list's preview offers the mods its mods need that the list doesn't name
-- Version conflicts - switch to the version that suits the most mods, or disable the one asking
 
 ## Reporting a problem
 Use the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues) - bugs, wording, translations, feature requests or questions. Attach `Data\logs\tcfmm-<date>.log`, ideally after adding the `verbose` marker file and reproducing the problem. The [wiki](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Troubleshooting) covers the common ones first.
