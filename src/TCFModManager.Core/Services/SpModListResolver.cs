@@ -191,8 +191,10 @@ public sealed record SpModRetarget(
 // A mod something on the list needs that the list doesn't have.
 //
 // NeededBy names what requires it, the entry's name for a direct dependency and the dependency's
-// own name further down. IsParent marks a mod that is an addon's parent: sp-mod reports an
-// addon's parent among its dependencies, and the import window shows those separately (R4).
+// own name further down. IsParent marks a mod that is an addon's parent, shown separately (R4).
+// sp-mod's addon dependencies never include the parent itself (checked live 2026-10-17), so a
+// parent only comes back here when it is also a real dependency; ModListDependencies.MissingParents
+// and the import window's page data supply the rest.
 //
 public sealed record SpModDependency(
     int ModId,

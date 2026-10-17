@@ -31,6 +31,7 @@
             Grid.Row="1"
             Margin="24,12,24,24">
             <TextBlock
+                x:Name="IntroText"
                 TextWrapping="Wrap"
                 Margin="0,0,0,16"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"

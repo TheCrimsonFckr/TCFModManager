@@ -8272,4 +8272,16 @@ Passer quand même à cette version ?</value>
   <data name="Installed_RemoveSelectedAddonsFormat" xml:space="preserve">
     <value>Les mods sélectionnés ont des addons installés : {0}. Les supprimer aussi ? Oui les supprime avec leurs mods ; Non supprime seulement votre sélection.</value>
   </data>
+  <data name="ModLists_VersionChangeParentRowFormat" xml:space="preserve">
+    <value>{0} demandée, incompatible avec {1} {2} - la plus récente compatible est {3}</value>
+  </data>
+  <data name="ModLists_VersionChangeTitleParentFormat" xml:space="preserve">
+    <value>La version de {0} ne convient pas à son mod</value>
+  </data>
+  <data name="ModListVersionChange_IntroAddons" xml:space="preserve">
+    <value>Les versions listées de ces addons ne conviennent pas à la version de leur mod que cette liste laisse. Cochez ceux à installer plutôt dans la version compatible la plus récente - tout ce qui reste décoché est ignoré.</value>
+  </data>
+  <data name="ModListVersionChange_IntroMixed" xml:space="preserve">
+    <value>Certains de ces mods ne sont plus sur sp-mod.com dans la version indiquée par cette liste, et certains sont des addons dont la version listée ne convient pas à la version de leur mod que cette liste laisse. Cochez ceux à installer plutôt dans la version compatible la plus récente - tout ce qui reste décoché est ignoré.</value>
+  </data>
 </root>

@@ -9902,4 +9902,20 @@ Switch anyway?</value>
     <value>The mods you selected have addons installed: {0}. Remove them as well? Yes removes them with their mods; No removes only what you selected.</value>
     <comment>Asked by Remove selected when selected mods have addons that weren't selected (OPEN-31 R2), in a Yes/No/Cancel box. {0} is the addons' names joined with Common_ListSeparator.</comment>
   </data>
+  <data name="ModLists_VersionChangeParentRowFormat" xml:space="preserve">
+    <value>Wanted {0}, which doesn't fit {1} {2} - newest that fits is {3}</value>
+    <comment>A row for an addon whose listed version doesn't fit its mod (OPEN-31 F2). {0} is the listed version, {1} the mod's name, {2} the version of the mod the apply leaves, {3} the newest addon version that fits it.</comment>
+  </data>
+  <data name="ModLists_VersionChangeTitleParentFormat" xml:space="preserve">
+    <value>{0}'s version doesn't fit its mod</value>
+    <comment>Window title when the only row is such an addon. {0} is the addon's name.</comment>
+  </data>
+  <data name="ModListVersionChange_IntroAddons" xml:space="preserve">
+    <value>These addons' listed versions don't fit the version of their mod this list leaves. Tick the ones you want installed at the newest version that fits instead - anything left unticked is skipped.</value>
+    <comment>Shown above the rows instead of ModListVersionChange_Intro when every row is such an addon.</comment>
+  </data>
+  <data name="ModListVersionChange_IntroMixed" xml:space="preserve">
+    <value>Some of these mods aren't on sp-mod.com at the version this list names any more, and some are addons whose listed version doesn't fit the version of their mod this list leaves. Tick the ones you want installed at the newest version that fits instead - anything left unticked is skipped.</value>
+    <comment>Shown above the rows instead of ModListVersionChange_Intro when there are rows of both kinds.</comment>
+  </data>
 </root>

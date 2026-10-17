@@ -71,6 +71,64 @@ public static class ModListDependencies
     }
 
     //
+    // OPEN-31 F1: the parent mod of each addon on the list that the list doesn't name and that isn't
+    // already reported missing - sp-mod's addon dependencies never include the parent. Each is offered
+    // at the newest version for sptVersion that the listed addon versions accept, or failing that the
+    // newest for sptVersion; with none for sptVersion it comes back with no version, like any other
+    // dependency that can't be added. Whether it is installed is for Offer to decide.
+    //
+    public static IReadOnlyList<SpModDependency> MissingParents(
+        IReadOnlyList<ModListEntry> entries,
+        IReadOnlyDictionary<int, Addon> addons,
+        IReadOnlyDictionary<int, Mod> catalog,
+        string? sptVersion,
+        IReadOnlySet<int> alreadyMissing)
+    {
+        var onList = entries.Where(e => e is { IsAddon: false, ModId: not null }).Select(e => e.ModId!.Value).ToHashSet();
+        var wanted = new Dictionary<int, (List<string> NeededBy, List<string> Constraints)>();
+
+        foreach (var entry in entries.Where(e => e is { IsAddon: true, ModId: not null }))
+        {
+            if (!addons.TryGetValue(entry.ModId!.Value, out var addon) || addon.ModId is not { } parent) continue;
+            if (onList.Contains(parent) || alreadyMissing.Contains(parent)) continue;
+
+            if (!wanted.TryGetValue(parent, out var need)) wanted[parent] = need = ([], []);
+            need.NeededBy.Add(entry.Name);
+
+            var listed = (addon.Versions ?? []).FirstOrDefault(v =>
+                (entry.VersionId is { } id && v.Id == id)
+                || (!string.IsNullOrWhiteSpace(entry.Version) && string.Equals(v.Version, entry.Version, StringComparison.OrdinalIgnoreCase)));
+            if (listed?.ModVersionConstraint is { Length: > 0 } constraint) need.Constraints.Add(constraint);
+        }
+
+        return
+        [
+            .. wanted.Select(w =>
+            {
+                var mod = catalog.GetValueOrDefault(w.Key);
+                var forSpt = (mod?.Versions ?? [])
+                    .Where(v => string.IsNullOrWhiteSpace(sptVersion) || SptVersionMatcher.IsSatisfiedBy(v.SptVersionConstraint, sptVersion) == true)
+                    .OrderByDescending(v => v.PublishedAt ?? DateTimeOffset.MinValue)
+                    .ThenByDescending(v => v.Version, Comparer<string?>.Create((a, b) => ModVersionComparer.Compare(a, b) ?? 0))
+                    .ToList();
+
+                var pick = forSpt.FirstOrDefault(v => w.Value.Constraints.All(c => ModVersionMatcher.IsSatisfiedBy(c, v.Version) != false))
+                    ?? forSpt.FirstOrDefault();
+
+                return new SpModDependency(
+                    w.Key,
+                    string.IsNullOrWhiteSpace(mod?.Name) ? $"mod {w.Key}" : mod!.Name!,
+                    pick?.Version,
+                    pick?.Id,
+                    [.. w.Value.NeededBy.Distinct(StringComparer.OrdinalIgnoreCase)],
+                    IsParent: true,
+                    Conflict: false);
+            })
+            .OrderBy(d => d.Name, StringComparer.OrdinalIgnoreCase),
+        ];
+    }
+
+    //
     // The entries to ask sp-mod about: everything on the list that applies to this machine and can be
     // asked about (a mod id and a version).
     //

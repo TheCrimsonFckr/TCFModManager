@@ -235,13 +235,14 @@ public sealed class ModListService
         if (install.SptVersion is not { Length: > 0 } spt) return ModListDependencyCheck.Failed(Strings.ModLists_DepsUnreachable);
 
         var entries = ModListDependencies.Askable(list, MachineScope);
-        if (entries.Count == 0) return new ModListDependencyCheck([], [], new HashSet<int>(), null);
 
         SpModDependencies answer;
         try
         {
-            answer = await SpModListResolver.MissingDependenciesAsync(
-                entries, new Dictionary<int, int>(), spt, new SpModListApi(AppServices.SpModApi));
+            answer = entries.Count == 0
+                ? new SpModDependencies(spt, [], [])
+                : await SpModListResolver.MissingDependenciesAsync(
+                    entries, new Dictionary<int, int>(), spt, new SpModListApi(AppServices.SpModApi));
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or SpModApiException)
         {
@@ -254,6 +255,15 @@ public sealed class ModListService
             AppLog.Warn("ModLists", $"dependency check for '{list.Name}' failed: {answer.Failure} {answer.Detail}");
             return ModListDependencyCheck.Failed(Strings.ModLists_DepsUnreachable);
         }
+
+        var parents = ModListDependencies.MissingParents(
+            [.. list.EntriesApplyingTo(MachineScope)],
+            AppServices.Addons.AllAddons.GroupBy(a => a.Id).ToDictionary(g => g.Key, g => g.First()),
+            AppServices.ModCache.AllMods.GroupBy(m => m.Id).ToDictionary(g => g.Key, g => g.First()),
+            spt,
+            answer.Missing.Select(d => d.ModId).ToHashSet());
+
+        if (parents.Count > 0) answer = answer with { Missing = [.. parents, .. answer.Missing] };
 
         var (offers, noVersion) = ModListDependencies.Offer(answer, install.Candidates, planWithout);
         AppLog.Info("ModLists", $"dependency check for '{list.Name}': {offers.Count} offered, {noVersion.Count} with no version for SPT {spt}");
@@ -655,12 +665,34 @@ public sealed class ModListService
 
                 var published = await VersionsAsync(id, action.IsAddon, wanted, ct);
 
-                var exact = published.FirstOrDefault(v => action.VersionId is not null && v.Id == action.VersionId)
-                    ?? published.FirstOrDefault(v => string.Equals(v.Version?.Trim(), wanted, StringComparison.OrdinalIgnoreCase));
+                var exact = published.FirstOrDefault(v => action.VersionId is not null && v.Version.Id == action.VersionId);
+                if (exact.Version is null)
+                    exact = published.FirstOrDefault(v => string.Equals(v.Version.Version?.Trim(), wanted, StringComparison.OrdinalIgnoreCase));
 
-                if (exact is not null)
+                //
+                // OPEN-31 F2: an addon pinned at a version its parent - at the version this apply
+                // leaves it - doesn't accept is offered the newest one that does, the same way a
+                // version that's gone is.
+                //
+                if (exact.Version is not null && action.IsAddon && !string.IsNullOrWhiteSpace(parentVersion)
+                    && ModVersionMatcher.IsSatisfiedBy(exact.ParentConstraint, parentVersion) == false)
                 {
-                    ready.Add(new ModListDownload(action, target, exact, IsSubstitute: false));
+                    var (fits, _) = await NewestAsync(id, action.IsAddon, sptVersion, parentVersion, ct);
+                    var parentName = AppServices.Addons.ById(modId)?.ModId is { } pid
+                        ? catalog.GetValueOrDefault(pid)?.Name
+                        : null;
+
+                    if (fits is null)
+                        unavailable.Add(new ModListFetchFailure(action.Name, NoFitReason(true, sptVersion, parentVersion)));
+                    else
+                        changes.Add(new ModListVersionChange(action, target, wanted, fits, parentName ?? Strings.Addon_ParentFallback, parentVersion));
+
+                    continue;
+                }
+
+                if (exact.Version is not null)
+                {
+                    ready.Add(new ModListDownload(action, target, exact.Version, IsSubstitute: false));
                     continue;
                 }
 
@@ -699,7 +731,7 @@ public sealed class ModListService
     private static bool IsUnmatchableFilter(SpModApiException ex) =>
         ex.StatusCode == HttpStatusCode.BadRequest;
 
-    private static async Task<IReadOnlyList<ModVersion>> VersionsAsync(
+    private static async Task<IReadOnlyList<(ModVersion Version, string? ParentConstraint)>> VersionsAsync(
         string id, bool isAddon, string wanted, CancellationToken ct)
     {
         try
@@ -712,19 +744,19 @@ public sealed class ModListService
         }
     }
 
-    private static async Task<IReadOnlyList<ModVersion>> PublishedAsync(
+    private static async Task<IReadOnlyList<(ModVersion Version, string? ParentConstraint)>> PublishedAsync(
         string id, bool isAddon, string wanted, CancellationToken ct)
     {
         if (!isAddon)
         {
             var mods = await AppServices.SpModApi.GetModVersionsAsync(
                 id, new ModVersionsQuery { FilterVersion = wanted, PerPage = 5 }, ct);
-            return mods.Data;
+            return [.. mods.Data.Select(v => (v, (string?)null))];
         }
 
         var addons = await AppServices.SpModApi.GetAddonVersionsAsync(
             id, new AddonVersionsQuery { FilterVersion = wanted, PerPage = 5 }, ct);
-        return [.. addons.Data.Select(AsModVersion)];
+        return [.. addons.Data.Select(v => (AsModVersion(v), v.ModVersionConstraint))];
     }
 
     //

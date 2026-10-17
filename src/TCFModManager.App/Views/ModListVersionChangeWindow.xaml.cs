@@ -12,8 +12,14 @@ public sealed class ModListVersionChangeRow(ModListVersionChange change)
 
     public string Name { get; } = change.Target.Name;
 
-    public string Detail { get; } =
-        LocalizationService.Text(
+    public string Detail { get; } = change.DoesNotFitParent
+        ? LocalizationService.Text(
+            Strings.ModLists_VersionChangeParentRowFormat,
+            change.Wanted,
+            change.ParentName,
+            change.ParentVersion,
+            change.Available.Version ?? Strings.Common_Unknown)
+        : LocalizationService.Text(
             Strings.ModLists_VersionChangeRowFormat,
             change.Wanted,
             change.Available.Version ?? Strings.Common_Unknown);
@@ -44,8 +50,14 @@ public partial class ModListVersionChangeWindow : FluentWindow
         InitializeComponent();
 
         WindowTitleBar.Title = Title = _rows.Count == 1
-            ? Text(Strings.ModLists_VersionChangeTitleNamedFormat, _rows[0].Name)
+            ? Text(
+                changes[0].DoesNotFitParent ? Strings.ModLists_VersionChangeTitleParentFormat : Strings.ModLists_VersionChangeTitleNamedFormat,
+                _rows[0].Name)
             : Text(Strings.ModLists_VersionChangeTitleCountFormat, _rows.Count);
+
+        var misfits = changes.Count(c => c.DoesNotFitParent);
+        if (misfits > 0)
+            IntroText.Text = misfits == changes.Count ? Strings.ModListVersionChange_IntroAddons : Strings.ModListVersionChange_IntroMixed;
 
         ChangesList.ItemsSource = _rows;
 

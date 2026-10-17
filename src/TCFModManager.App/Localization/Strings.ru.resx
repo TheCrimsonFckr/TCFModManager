@@ -8650,4 +8650,16 @@
   <data name="Installed_RemoveSelectedAddonsFormat" xml:space="preserve">
     <value>У выбранных модов установлены аддоны: {0}. Удалить и их? «Да» удалит их вместе с модами; «Нет» удалит только выбранное.</value>
   </data>
+  <data name="ModLists_VersionChangeParentRowFormat" xml:space="preserve">
+    <value>Нужна {0}, но она не подходит к {1} {2} - новейшая подходящая: {3}</value>
+  </data>
+  <data name="ModLists_VersionChangeTitleParentFormat" xml:space="preserve">
+    <value>Версия {0} не подходит к его моду</value>
+  </data>
+  <data name="ModListVersionChange_IntroAddons" xml:space="preserve">
+    <value>Указанные версии этих аддонов не подходят к версии их мода, которую оставляет этот список. Отметьте те, что нужно установить в новейшей подходящей версии, - неотмеченные будут пропущены.</value>
+  </data>
+  <data name="ModListVersionChange_IntroMixed" xml:space="preserve">
+    <value>Некоторых из этих модов больше нет на sp-mod.com в версии, указанной в списке, а некоторые - аддоны, чья указанная версия не подходит к версии их мода, которую оставляет этот список. Отметьте те, что нужно установить в новейшей подходящей версии, - неотмеченные будут пропущены.</value>
+  </data>
 </root>

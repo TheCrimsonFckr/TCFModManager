@@ -9,7 +9,18 @@ namespace TCFModManager.App.Services;
 public sealed record ModListDownload(ModListAction Action, InstallTarget Target, ModVersion Version, bool IsSubstitute);
 
 // A fetch whose list-named version is no longer published, and the newest one that is.
-public sealed record ModListVersionChange(ModListAction Action, InstallTarget Target, string Wanted, ModVersion Available);
+public sealed record ModListVersionChange(
+    ModListAction Action,
+    InstallTarget Target,
+    string Wanted,
+    ModVersion Available,
+    string? ParentName = null,
+    string? ParentVersion = null)
+{
+    // OPEN-31 F2: the wanted version is still published, but doesn't fit the version of its parent
+    // mod the apply leaves.
+    public bool DoesNotFitParent => ParentVersion is not null;
+}
 
 //
 // Every fetch in a plan, sorted into what can be queued as-is, what would need a different version

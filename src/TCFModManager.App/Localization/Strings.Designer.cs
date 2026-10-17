@@ -824,6 +824,10 @@ internal static class Strings
     internal static string Installed_RemovedAddonsFormat => LocalizationService.Get("Installed_RemovedAddonsFormat");
     internal static string Installed_RemovalBatchFormat => LocalizationService.Get("Installed_RemovalBatchFormat");
     internal static string Installed_RemoveSelectedAddonsFormat => LocalizationService.Get("Installed_RemoveSelectedAddonsFormat");
+    internal static string ModLists_VersionChangeParentRowFormat => LocalizationService.Get("ModLists_VersionChangeParentRowFormat");
+    internal static string ModLists_VersionChangeTitleParentFormat => LocalizationService.Get("ModLists_VersionChangeTitleParentFormat");
+    internal static string ModListVersionChange_IntroAddons => LocalizationService.Get("ModListVersionChange_IntroAddons");
+    internal static string ModListVersionChange_IntroMixed => LocalizationService.Get("ModListVersionChange_IntroMixed");
     internal static string Installed_RemoveConfigs(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_RemoveConfigs", count, values);
     internal static string Installed_RemoveConfigsChoicesFormat => LocalizationService.Get("Installed_RemoveConfigsChoicesFormat");

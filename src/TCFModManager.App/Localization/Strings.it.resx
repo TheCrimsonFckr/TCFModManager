@@ -8272,4 +8272,16 @@ Passare comunque?</value>
   <data name="Installed_RemoveSelectedAddonsFormat" xml:space="preserve">
     <value>I mod selezionati hanno degli addon installati: {0}. Rimuovere anche quelli? Sì li rimuove insieme ai loro mod; No rimuove solo ciò che hai selezionato.</value>
   </data>
+  <data name="ModLists_VersionChangeParentRowFormat" xml:space="preserve">
+    <value>Richiesta {0}, che non va con {1} {2} - la più recente compatibile è {3}</value>
+  </data>
+  <data name="ModLists_VersionChangeTitleParentFormat" xml:space="preserve">
+    <value>La versione di {0} non va con il suo mod</value>
+  </data>
+  <data name="ModListVersionChange_IntroAddons" xml:space="preserve">
+    <value>Le versioni elencate di questi addon non vanno con la versione del loro mod che questa lista lascia. Spunta quelli da installare invece alla versione compatibile più recente - tutto ciò che resta senza spunta viene saltato.</value>
+  </data>
+  <data name="ModListVersionChange_IntroMixed" xml:space="preserve">
+    <value>Alcuni di questi mod non sono più su sp-mod.com alla versione indicata da questa lista, e alcuni sono addon la cui versione elencata non va con la versione del loro mod che questa lista lascia. Spunta quelli da installare invece alla versione compatibile più recente - tutto ciò che resta senza spunta viene saltato.</value>
+  </data>
 </root>
