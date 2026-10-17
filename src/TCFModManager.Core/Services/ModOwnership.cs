@@ -14,12 +14,9 @@ public sealed class ModOwnership
     private readonly Dictionary<string, List<InstalledModRecord>> _byFolder = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, int> _listingsByGuid = new(StringComparer.OrdinalIgnoreCase);
 
-    public ModOwnership(
-        IEnumerable<InstalledModRecord> records,
-        IEnumerable<KeyValuePair<string, int>>? listingsByGuid = null,
-        bool includeAddons = false)
+    public ModOwnership(IEnumerable<InstalledModRecord> records, IEnumerable<KeyValuePair<string, int>>? listingsByGuid = null)
     {
-        foreach (var record in records.Where(r => (includeAddons || !r.IsAddon) && r.IsAppManaged).OrderBy(r => r.InstalledAt))
+        foreach (var record in records.Where(r => r.IsAppManaged).OrderBy(r => r.InstalledAt))
         {
             foreach (var file in record.Files)
             {

@@ -1136,6 +1136,18 @@ public partial class InstalledViewModel : LocalizedViewModel
                 catalogUnavailable = true;
             }
 
+            // Addon records written before slugs were stored (OPEN-31 R4).
+            if (AppServices.Addons.AllAddons.Count > 0)
+            {
+                var slugs = AppServices.Addons.AllAddons
+                    .Where(a => !string.IsNullOrWhiteSpace(a.Slug))
+                    .GroupBy(a => a.Id)
+                    .ToDictionary(g => g.Key, g => g.First().Slug);
+
+                var filled = AppServices.InstallManifest.FillAddonSlugs(id => slugs.GetValueOrDefault(id));
+                if (filled > 0) AppLog.Info("Installed", $"filled in the slug of {filled} addon record(s)");
+            }
+
             // What this app itself installed, and which folders it placed - identifies those mods
             // exactly instead of inferring them from folder names.
             var installRecords = AppServices.InstallManifest.Load().Mods;

@@ -352,6 +352,10 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // cached catalog.
     public string? ParentModName { get; init; }
 
+    // The sp-mod id of the mod this addon attaches to. Null for a mod, or when the addon isn't in the
+    // cached catalog.
+    public int? ParentModId { get; init; }
+
     // The parent mod's installed version - what every one of this addon's version constraints is
     // measured against. Null for a mod, or when the parent isn't installed.
     public string? ParentInstalledVersion { get; init; }
@@ -659,6 +663,20 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         var addonRecords = (installRecords ?? []).Where(r => r.IsAddon).ToList();
         var modRecords = (installRecords ?? []).Where(r => !r.IsAddon).ToList();
         var addonRecordsByFolder = IndexByFolder(addonRecords);
+        var addonRecordsById = addonRecords
+            .GroupBy(r => r.ModId)
+            .ToDictionary(g => g.Key, g => g.First());
+
+        //
+        // OPEN-31: an addon's share of its parent's folder was already identified by the scan, from
+        // the record that placed its files, so it goes straight to an addon card and never near the
+        // catalog matching below.
+        //
+        var all = scanned.ToList();
+        var addonShares = all
+            .Where(m => m is { ShareOwnerIsAddon: true, ShareOwnerModId: { } id } && addonRecordsById.ContainsKey(id))
+            .ToList();
+        var modEntries = addonShares.Count == 0 ? all : all.Except(addonShares).ToList();
 
         var recordsByFolder = IndexByFolder(modRecords);
         var recordsByModId = modRecords
@@ -670,7 +688,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         // against a 3000-entry catalog re-normalizes and re-tokenizes 360,000 catalog entries.
         var index = CatalogIndex.Build(catalog);
 
-        var scannedGroups = scanned
+        var scannedGroups = modEntries
             .GroupBy(m => m.Name, StringComparer.OrdinalIgnoreCase)
             .Select(g => (Key: g.Key, Entries: g.ToList()))
             .ToList();
@@ -748,9 +766,20 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             })
             .ToList();
 
-        NoteSharedFolders(cards);
+        var addonGroups = addonFolders
+            .Select(g => (Record: addonRecordsByFolder[g.Key], g.Entries))
+            .Concat(addonShares
+                .GroupBy(m => m.ShareOwnerModId!.Value)
+                .Select(g => (Record: addonRecordsById[g.Key], Entries: g.ToList())))
+            .GroupBy(x => x.Record.ModId)
+            .Select(g => (g.First().Record, Entries: g.SelectMany(x => x.Entries).ToList()))
+            .ToList();
 
-        if (addonFolders.Count == 0) return cards;
+        if (addonGroups.Count == 0)
+        {
+            NoteSharedFolders(cards);
+            return cards;
+        }
 
         // Addon cards come last because an addon's update state is measured against its parent
         // mod's installed version, which the cards built above are what report.
@@ -760,21 +789,18 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             .GroupBy(c => c.ModId!.Value)
             .ToDictionary(g => g.Key, g => g.First());
 
-        cards.AddRange(addonFolders
-            .GroupBy(g => addonRecordsByFolder[g.Key].ModId)
-            .Select(g =>
-            {
-                var record = addonRecordsByFolder[g.First().Key];
-                var addon = addonsById.GetValueOrDefault(record.ModId);
-                var parent = addon?.ModId is { } parentId ? parentVersionsById.GetValueOrDefault(parentId) : null;
-                var parentName = addon?.ModId is { } id
-                    ? catalog.FirstOrDefault(m => m.Id == id)?.Name ?? parent?.DisplayTitle
-                    : parent?.DisplayTitle;
+        cards.AddRange(addonGroups.Select(g =>
+        {
+            var addon = addonsById.GetValueOrDefault(g.Record.ModId);
+            var parent = addon?.ModId is { } parentId ? parentVersionsById.GetValueOrDefault(parentId) : null;
+            var parentName = addon?.ModId is { } id
+                ? catalog.FirstOrDefault(m => m.Id == id)?.Name ?? parent?.DisplayTitle
+                : parent?.DisplayTitle;
 
-                return BuildAddonCard(
-                    g.SelectMany(x => x.Entries).ToList(), addon, record, parent, parentName);
-            }));
+            return BuildAddonCard(g.Entries, addon, g.Record, parent, parentName);
+        }));
 
+        NoteSharedFolders(cards);
         return cards;
     }
 
@@ -855,6 +881,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             ModId = record.ModId,
             IsAddon = true,
             ParentModName = parentName,
+            ParentModId = addon?.ModId,
             ParentInstalledVersion = parentVersion,
             IsAppManaged = record.IsAppManaged,
             IsManualOverride = !record.IsAppManaged,
@@ -973,7 +1000,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     {
         // A mod sharing its folder (OPEN-28) was already identified by the scan, from the record that
         // placed its files or its plugin's GUID. The folder's records belong to its neighbours.
-        if (entries.Select(m => m.ShareOwnerModId).FirstOrDefault(id => id is not null) is { } owner)
+        if (entries.Where(m => !m.ShareOwnerIsAddon).Select(m => m.ShareOwnerModId).FirstOrDefault(id => id is not null) is { } owner)
             return index.ById.GetValueOrDefault(owner);
 
         // This app placed the folder, so the catalog listing is already known exactly. Everything
@@ -1167,7 +1194,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     {
         if (entries.Any(m => m.IsShare))
         {
-            return entries.Select(m => m.ShareOwnerModId).FirstOrDefault(id => id is not null) is { } owner
+            return entries.Where(m => !m.ShareOwnerIsAddon).Select(m => m.ShareOwnerModId).FirstOrDefault(id => id is not null) is { } owner
                 ? recordsByModId.GetValueOrDefault(owner)
                 : null;
         }
@@ -1191,6 +1218,10 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
             foreach (var card in members)
             {
+                if (!card.IsAddon && card.ModId is { } id && members.Count > 1
+                    && members.All(m => m == card || (m.IsAddon && m.ParentModId == id)))
+                    continue;
+
                 card.SharedFolderName = Path.GetFileName(folder.Key);
                 card.SharedWith = [.. members.Where(m => m != card).Select(m => m.DisplayTitle)];
             }
@@ -1621,7 +1652,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     //
     private static bool HoldsRecordFolder(List<InstalledMod> entries, InstalledModRecord record)
     {
-        if (entries.Any(e => e.ShareOwnerModId == record.ModId)) return true;
+        if (entries.Any(e => e.ShareOwnerModId == record.ModId && e.ShareOwnerIsAddon == record.IsAddon)) return true;
 
         var folders = InstalledModFolders.Resolve(record).ToHashSet(StringComparer.OrdinalIgnoreCase);
         return entries.Where(e => !e.IsShare).SelectMany(FolderNamesOf).Any(folders.Contains);

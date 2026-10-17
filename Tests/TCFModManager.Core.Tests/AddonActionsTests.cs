@@ -204,7 +204,7 @@ public class AddonActionsTests : IDisposable
     private static int? ParentOf(int addonId) => addonId is PrideId or EssentialId ? CamoId : null;
 
     private List<InstalledMod> Scan() =>
-        InstalledModScanner.Scan(_install, new ModOwnership(_manifest.Load().Mods, includeAddons: true));
+        InstalledModScanner.Scan(_install, new ModOwnership(_manifest.Load().Mods));
 
     private string[] Write(params string[] relatives)
     {

@@ -158,12 +158,18 @@ public class AddonSharesTests : IDisposable
     }
 
     [Fact]
-    public void AddonsLeftOutOfOwnership_TheFolderIsOneEntry_AsBefore()
+    public void HandConfirmedAddonRecord_OwnsNothing_TheFolderIsOneEntry()
     {
         WriteCamo(_camo);
         var pride = WritePride(_camo);
+        var confirmed = PrideRecord([]);
+        var manual = new InstalledModRecord
+        {
+            ModId = confirmed.ModId, IsAddon = true, Name = confirmed.Name, Version = "1.0.0",
+            InstalledAt = Day(2), IsAppManaged = false, Folders = [Folder],
+        };
 
-        var mod = Assert.Single(InstalledModScanner.Scan(_installRoot, new ModOwnership([CamoRecord(), PrideRecord(pride)])));
+        var mod = Assert.Single(Scan(CamoRecord(), manual));
 
         Assert.Equal(Folder, mod.Name);
         Assert.False(mod.IsShare);
@@ -321,10 +327,10 @@ public class AddonSharesTests : IDisposable
             InstallPath = InstallStamp.Of(_installRoot),
         };
 
-    private static ModOwnership Owners(params InstalledModRecord[] records) => new(records, includeAddons: true);
+    private static ModOwnership Owners(params InstalledModRecord[] records) => new(records);
 
     private static ModOwnership Owners(InstalledModRecord[] records, params (string Guid, int Id)[] listings) =>
-        new(records, listings.Select(l => new KeyValuePair<string, int>(l.Guid, l.Id)), includeAddons: true);
+        new(records, listings.Select(l => new KeyValuePair<string, int>(l.Guid, l.Id)));
 
     private static DateTimeOffset Day(int day) => new(2026, 10, day, 8, 0, 0, TimeSpan.Zero);
 }
