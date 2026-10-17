@@ -818,22 +818,6 @@ internal static class Strings
     internal static string Installed_RemoveFailedFormat => LocalizationService.Get("Installed_RemoveFailedFormat");
     internal static string Installed_RemoveDisableHint => LocalizationService.Get("Installed_RemoveDisableHint");
     internal static string Installed_RemoveTitleFormat => LocalizationService.Get("Installed_RemoveTitleFormat");
-    internal static string Installed_RemoveAddonsListFormat => LocalizationService.Get("Installed_RemoveAddonsListFormat");
-    internal static string Installed_RemoveAddonsQuestionFormat => LocalizationService.Get("Installed_RemoveAddonsQuestionFormat");
-    internal static string Installed_RemoveAddonsDisabledFormat => LocalizationService.Get("Installed_RemoveAddonsDisabledFormat");
-    internal static string Installed_RemovedAddonsFormat => LocalizationService.Get("Installed_RemovedAddonsFormat");
-    internal static string Installed_RemovalBatchFormat => LocalizationService.Get("Installed_RemovalBatchFormat");
-    internal static string Installed_RemoveSelectedAddonsFormat => LocalizationService.Get("Installed_RemoveSelectedAddonsFormat");
-    internal static string ModLists_VersionChangeParentRowFormat => LocalizationService.Get("ModLists_VersionChangeParentRowFormat");
-    internal static string ModLists_VersionChangeTitleParentFormat => LocalizationService.Get("ModLists_VersionChangeTitleParentFormat");
-    internal static string ModListVersionChange_IntroAddons => LocalizationService.Get("ModListVersionChange_IntroAddons");
-    internal static string ModListVersionChange_IntroMixed => LocalizationService.Get("ModListVersionChange_IntroMixed");
-    internal static string Help_Installed_Addons_Title => LocalizationService.Get("Help_Installed_Addons_Title");
-    internal static string Help_Installed_Addons_Step1 => LocalizationService.Get("Help_Installed_Addons_Step1");
-    internal static string Help_Installed_Addons_Step2 => LocalizationService.Get("Help_Installed_Addons_Step2");
-    internal static string Help_Installed_Addons_Step3 => LocalizationService.Get("Help_Installed_Addons_Step3");
-    internal static string Help_Installed_Addons_Note => LocalizationService.Get("Help_Installed_Addons_Note");
-    internal static string Help_Installed_Addons_Keywords => LocalizationService.Get("Help_Installed_Addons_Keywords");
     internal static string Installed_RemoveConfigs(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_RemoveConfigs", count, values);
     internal static string Installed_RemoveConfigsChoicesFormat => LocalizationService.Get("Installed_RemoveConfigsChoicesFormat");
@@ -881,8 +865,6 @@ internal static class Strings
     internal static string Installed_EnabledCount(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_EnabledCount", count, values);
     internal static string Installed_ImpactNeedsFormat => LocalizationService.Get("Installed_ImpactNeedsFormat");
-    internal static string Installed_ImpactAddonForFormat => LocalizationService.Get("Installed_ImpactAddonForFormat");
-    internal static string Installed_ImpactDisabledWithFormat => LocalizationService.Get("Installed_ImpactDisabledWithFormat");
     internal static string Installed_ImpactOptionallyUsesFormat => LocalizationService.Get("Installed_ImpactOptionallyUsesFormat");
     internal static string Installed_ImpactNeededByFormat => LocalizationService.Get("Installed_ImpactNeededByFormat");
     internal static string Installed_ImpactOptionallyUsedByFormat => LocalizationService.Get("Installed_ImpactOptionallyUsedByFormat");
@@ -1405,8 +1387,6 @@ internal static class Strings
         LocalizationService.Plural("Disable_ImpactDisable", count, values);
     internal static string Disable_ImpactEnable(int count, params object?[] values) =>
         LocalizationService.Plural("Disable_ImpactEnable", count, values);
-    internal static string Disable_ImpactEnableAddons(int count, params object?[] values) =>
-        LocalizationService.Plural("Disable_ImpactEnableAddons", count, values);
     internal static string Disable_SelectedFormat => LocalizationService.Get("Disable_SelectedFormat");
     internal static string Disable_HeadingAffected => LocalizationService.Get("Disable_HeadingAffected");
     internal static string Disable_HeadingStillDisabled => LocalizationService.Get("Disable_HeadingStillDisabled");
@@ -2728,4 +2708,24 @@ internal static class Strings
     internal static string Help_Browse_Ignore_Step2 => LocalizationService.Get("Help_Browse_Ignore_Step2");
     internal static string Help_Browse_Ignore_Note => LocalizationService.Get("Help_Browse_Ignore_Note");
     internal static string Help_Browse_Ignore_Keywords => LocalizationService.Get("Help_Browse_Ignore_Keywords");
+    internal static string Installed_RemoveAddonsListFormat => LocalizationService.Get("Installed_RemoveAddonsListFormat");
+    internal static string Installed_RemoveAddonsQuestionFormat => LocalizationService.Get("Installed_RemoveAddonsQuestionFormat");
+    internal static string Installed_RemoveAddonsDisabledFormat => LocalizationService.Get("Installed_RemoveAddonsDisabledFormat");
+    internal static string Installed_RemovedAddonsFormat => LocalizationService.Get("Installed_RemovedAddonsFormat");
+    internal static string Installed_ImpactAddonForFormat => LocalizationService.Get("Installed_ImpactAddonForFormat");
+    internal static string Installed_ImpactDisabledWithFormat => LocalizationService.Get("Installed_ImpactDisabledWithFormat");
+    internal static string Disable_ImpactEnableAddons(int count, params object?[] values) =>
+        LocalizationService.Plural("Disable_ImpactEnableAddons", count, values);
+    internal static string Installed_RemovalBatchFormat => LocalizationService.Get("Installed_RemovalBatchFormat");
+    internal static string Installed_RemoveSelectedAddonsFormat => LocalizationService.Get("Installed_RemoveSelectedAddonsFormat");
+    internal static string ModLists_VersionChangeParentRowFormat => LocalizationService.Get("ModLists_VersionChangeParentRowFormat");
+    internal static string ModLists_VersionChangeTitleParentFormat => LocalizationService.Get("ModLists_VersionChangeTitleParentFormat");
+    internal static string ModListVersionChange_IntroAddons => LocalizationService.Get("ModListVersionChange_IntroAddons");
+    internal static string ModListVersionChange_IntroMixed => LocalizationService.Get("ModListVersionChange_IntroMixed");
+    internal static string Help_Installed_Addons_Title => LocalizationService.Get("Help_Installed_Addons_Title");
+    internal static string Help_Installed_Addons_Step1 => LocalizationService.Get("Help_Installed_Addons_Step1");
+    internal static string Help_Installed_Addons_Step2 => LocalizationService.Get("Help_Installed_Addons_Step2");
+    internal static string Help_Installed_Addons_Step3 => LocalizationService.Get("Help_Installed_Addons_Step3");
+    internal static string Help_Installed_Addons_Note => LocalizationService.Get("Help_Installed_Addons_Note");
+    internal static string Help_Installed_Addons_Keywords => LocalizationService.Get("Help_Installed_Addons_Keywords");
 }
