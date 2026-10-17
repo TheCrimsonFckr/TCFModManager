@@ -20,17 +20,23 @@ public static class ModListCandidates
     //
     // The cards, plus any addon the manifest knows about that no card covers.
     //
-    // An addon usually installs into its parent mod's folder, so the scanner sees one folder and
-    // the Installed page shows one card - the parent's. Without this, a list would silently leave
-    // those addons out, which is the whole thing lists carrying addons was meant to avoid. They go
-    // in as install/update-only: there is no folder of their own to move, so nothing can disable
-    // one on its own, and disabling the parent takes it with it regardless.
+    // An addon has a card of its own (OPEN-31), its share of the parent's folder included, so it is
+    // a candidate like any mod and can be disabled on its own. One with no card has none of its
+    // files left to find: it stays on the list as install/update-only, with nothing to move, and
+    // goes to the machines its parent goes to.
     //
     public static List<ModListCandidate> From(
         IEnumerable<InstalledModCardViewModel> cards,
-        IReadOnlyList<InstalledModRecord> records)
+        IReadOnlyList<InstalledModRecord> records,
+        Func<int, int?>? parentOf = null)
     {
         var candidates = From(cards);
+        parentOf ??= id => AppServices.Addons.ById(id)?.ModId;
+
+        var scopeByMod = candidates
+            .Where(c => c is { IsAddon: false, ModId: not null })
+            .GroupBy(c => c.ModId!.Value)
+            .ToDictionary(g => g.Key, g => g.First().Scope);
 
         var covered = candidates
             .Where(c => c is { IsAddon: true, ModId: not null })
@@ -41,6 +47,9 @@ public static class ModListCandidates
         {
             candidates.Add(new ModListCandidate
             {
+                Scope = parentOf(record.ModId) is { } parent && scopeByMod.TryGetValue(parent, out var scope)
+                    ? scope
+                    : ModListEntryScope.Everyone,
                 Name = record.Name,
                 ModId = record.ModId,
                 IsAddon = true,
