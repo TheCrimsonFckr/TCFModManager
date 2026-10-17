@@ -2832,21 +2832,43 @@ public partial class InstalledViewModel : LocalizedViewModel
     private void RefreshUndo()
     {
         var installPath = AppServices.SptEnvironment.InstallPath;
-        var held = string.IsNullOrWhiteSpace(installPath) ? [] : RemovedMods.Undoable(installPath);
+        var held = string.IsNullOrWhiteSpace(installPath) ? [] : HeldGroups(installPath);
 
         HeldRemovals =
         [
             .. held.Select(h => new HeldRemovalItem(
-                h.Folder, Text(Strings.Installed_UndoRemovalItemFormat, h.Log.ModName, WhenLabel(h.Log.RemovedAt)))),
+                h.Folder, Text(Strings.Installed_UndoRemovalItemFormat, h.Name, WhenLabel(h.RemovedAt)))),
         ];
 
         UndoRemovalLabel = held.Count switch
         {
             0 => null,
-            1 => Text(Strings.Installed_UndoRemovalFormat, held[0].Log.ModName),
+            1 => Text(Strings.Installed_UndoRemovalFormat, held[0].Name),
             var count => Text(Strings.Installed_UndoRemovalPickFormat, count),
         };
     }
+
+    //
+    // The held removals as Undo offers them: one entry per batch (OPEN-31 R2, a mod and its addons,
+    // named after the mod and keyed on its removal), one per removal otherwise. Newest first.
+    //
+    private static List<(string Folder, string Name, DateTimeOffset RemovedAt)> HeldGroups(string installPath) =>
+    [
+        .. RemovedMods.Undoable(installPath)
+            .GroupBy(h => h.Log.BatchId ?? h.Folder)
+            .Select(g =>
+            {
+                var lead = g.FirstOrDefault(h => h.Log.IsBatchLead);
+                if (lead.Folder is null) lead = g.First();
+
+                var name = lead.Log.BatchId is not null && g.Count() > 1
+                    ? Text(Strings.Installed_RemovalBatchFormat, lead.Log.BatchLead ?? lead.Log.ModName)
+                    : lead.Log.ModName;
+
+                return (lead.Folder, name, RemovedAt: g.Max(h => h.Log.RemovedAt));
+            })
+            .OrderByDescending(h => h.RemovedAt),
+    ];
 
     private static string WhenLabel(DateTimeOffset at) =>
         at.ToLocalTime().ToString("g", System.Globalization.CultureInfo.CurrentCulture);
@@ -2900,7 +2922,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath)) return;
 
-        var undoable = RemovedMods.Undoable(installPath);
+        var undoable = HeldGroups(installPath);
         var picked = folder is null
             ? (undoable.Count == 1 ? undoable[0] : default)
             : undoable.FirstOrDefault(u => string.Equals(u.Folder, folder, StringComparison.OrdinalIgnoreCase));
@@ -2923,8 +2945,8 @@ public partial class InstalledViewModel : LocalizedViewModel
             StatusMessage = !result.Ran
                 ? Strings.Installed_UndoNothing
                 : result.Blocked.Count == 0
-                    ? Text(Strings.Installed_UndoneFormat, latest.Log.ModName)
-                    : Strings.Installed_UndoneBlocked(result.Blocked.Count, result.Blocked.Count, latest.Log.ModName, latest.Folder);
+                    ? Text(Strings.Installed_UndoneFormat, latest.Name)
+                    : Strings.Installed_UndoneBlocked(result.Blocked.Count, result.Blocked.Count, latest.Name, latest.Folder);
 
             ModRemoved?.Invoke(this, EventArgs.Empty);
         }
@@ -2934,7 +2956,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            StatusMessage = Text(Strings.Installed_RemoveFailedFormat, latest.Log.ModName, ex.Message);
+            StatusMessage = Text(Strings.Installed_RemoveFailedFormat, latest.Name, ex.Message);
         }
         finally
         {

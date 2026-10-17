@@ -8644,4 +8644,7 @@
   <data name="Disable_ImpactEnableAddons_one" xml:space="preserve">
     <value>{0} аддон был отключён вместе с ним.</value>
   </data>
+  <data name="Installed_RemovalBatchFormat" xml:space="preserve">
+    <value>{0} и его аддоны</value>
+  </data>
 </root>

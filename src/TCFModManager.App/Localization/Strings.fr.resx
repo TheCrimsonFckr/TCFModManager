@@ -8266,4 +8266,7 @@ Passer quand même à cette version ?</value>
   <data name="Disable_ImpactEnableAddons_other" xml:space="preserve">
     <value>{0} addons ont été désactivés avec lui.</value>
   </data>
+  <data name="Installed_RemovalBatchFormat" xml:space="preserve">
+    <value>{0} et ses addons</value>
+  </data>
 </root>

@@ -8266,4 +8266,7 @@ Passare comunque?</value>
   <data name="Disable_ImpactEnableAddons_other" xml:space="preserve">
     <value>{0} addon sono stati disattivati insieme a questo.</value>
   </data>
+  <data name="Installed_RemovalBatchFormat" xml:space="preserve">
+    <value>{0} e i suoi addon</value>
+  </data>
 </root>

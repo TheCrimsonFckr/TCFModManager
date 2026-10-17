@@ -9894,4 +9894,8 @@ Switch anyway?</value>
   <data name="Disable_ImpactEnableAddons_other" xml:space="preserve">
     <value>{0} addons were disabled along with it.</value>
   </data>
+  <data name="Installed_RemovalBatchFormat" xml:space="preserve">
+    <value>{0} and its addons</value>
+    <comment>Names a removal of a mod made together with its addons (OPEN-31 R2), in the Undo menu and button. {0} is the mod's name.</comment>
+  </data>
 </root>
