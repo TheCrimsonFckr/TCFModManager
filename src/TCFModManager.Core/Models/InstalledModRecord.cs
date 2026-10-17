@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace TCFModManager.Core.Models;
 
 // A mod this app knows the installed version of - either because it installed it itself (IsAppManaged,
@@ -80,6 +82,10 @@ public sealed class InstalledModRecord
     // install root, forward-slash separated. A removal takes them while they are still empty.
     //
     public List<string> EmptyFolders { get; init; } = [];
+
+    // The addon's sp-mod slug at install time, which keys its share of a folder (OPEN-31). Null for a mod.
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Slug { get; set; }
 
     public FileFingerprint? FingerprintFor(string path) =>
         Fingerprints.FirstOrDefault(f => string.Equals(f.Path, path, StringComparison.OrdinalIgnoreCase));

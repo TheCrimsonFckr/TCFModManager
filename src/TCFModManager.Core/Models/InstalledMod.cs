@@ -126,5 +126,8 @@ public sealed class InstalledMod
     // The sp-mod mod id that owns a share, when an install record or a plugin GUID settled it.
     public int? ShareOwnerModId { get; init; }
 
+    // True when ShareOwnerModId is an addon id - a separate sequence from mod ids (OPEN-31).
+    public bool ShareOwnerIsAddon { get; init; }
+
     public bool IsShare => OwnedFiles is not null;
 }

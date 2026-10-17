@@ -187,6 +187,7 @@ public sealed class InstallJournal
                 Incomplete = true,
                 InstallPath = entry.InstallPath,
                 Overwrote = entry.Overwrote,
+                Slug = record?.Slug,
             };
 
             manifest.Mods.RemoveAll(m => m.ModId == entry.ModId && m.IsAddon == entry.IsAddon);

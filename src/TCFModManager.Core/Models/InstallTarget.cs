@@ -11,7 +11,8 @@ public sealed record InstallTarget(
     string Name,
     string? Guid,
     string? Thumbnail,
-    string? DetailUrl)
+    string? DetailUrl,
+    string? Slug = null)
 {
     public static InstallTarget For(Mod mod) => new(
         mod.Id,
@@ -28,7 +29,8 @@ public sealed record InstallTarget(
         addon.Name ?? $"Addon {addon.Id}",
         Guid: null,
         addon.Thumbnail,
-        addon.DetailUrl);
+        addon.DetailUrl,
+        addon.Slug);
 
     // True when this target and a manifest record describe the same thing.
     public bool Matches(InstalledModRecord record) => record.ModId == Id && record.IsAddon == IsAddon;

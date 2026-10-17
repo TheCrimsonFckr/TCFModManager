@@ -45,6 +45,27 @@ public sealed class ModInstallManifestService
     // records can only have been made here - or every file it placed is here. A stamped path that
     // still exists is another install and is never touched. Returns how many records moved.
     //
+    //
+    // Fills in the slug of every addon record written before slugs were stored (OPEN-31), from
+    // slugFor(addonId). Saves only when something changed; returns how many records it filled.
+    //
+    public int FillAddonSlugs(Func<int, string?> slugFor)
+    {
+        var manifest = Load();
+        var filled = 0;
+
+        foreach (var record in manifest.Mods.Where(r => r.IsAddon && string.IsNullOrWhiteSpace(r.Slug)))
+        {
+            if (slugFor(record.ModId) is not { Length: > 0 } slug) continue;
+
+            record.Slug = slug.Trim();
+            filled++;
+        }
+
+        if (filled > 0) Save(manifest);
+        return filled;
+    }
+
     public int AdoptMovedInstall(string installPath)
     {
         if (string.IsNullOrWhiteSpace(installPath) || !Directory.Exists(installPath)) return 0;
@@ -112,6 +133,7 @@ public sealed class ModInstallManifestService
             Fingerprints = existing?.Fingerprints ?? [],
             InstallPath = existing?.InstallPath,
             Overwrote = existing?.Overwrote ?? [],
+            Slug = existing?.Slug,
         };
 
         manifest.Mods.RemoveAll(m => m.ModId == modId && m.IsAddon == isAddon);
@@ -185,6 +207,7 @@ public sealed class ModInstallManifestService
             Fingerprints = fingerprints,
             InstallPath = string.IsNullOrWhiteSpace(installPath) ? existing.InstallPath : InstallStamp.Of(installPath),
             Overwrote = existing.Overwrote,
+            Slug = existing.Slug,
         };
 
         manifest.Mods.RemoveAll(m => m.ModId == download.ModId && m.IsAddon == download.IsAddon);

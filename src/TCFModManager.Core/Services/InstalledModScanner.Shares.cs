@@ -15,6 +15,7 @@ public static partial class InstalledModScanner
     private sealed class Share
     {
         public int? ModId { get; init; }
+        public bool IsAddon { get; init; }
         public InstalledModRecord? Record { get; set; }
         public string? Guid { get; set; }
         public List<ShareFile> Files { get; } = [];
@@ -35,10 +36,10 @@ public static partial class InstalledModScanner
         HashSet<string> taken)
     {
         var records = owners.RecordsIn(installPath, RelativeTo(installPath, Path.Combine(container, name)));
-        var recordIds = records.Select(r => r.ModId).ToHashSet();
+        var recordIds = records.Select(r => (r.ModId, r.IsAddon)).ToHashSet();
         var plugins = livePlugins.Concat(offPlugins).ToDictionary(p => p.Dll, p => p.Declared, StringComparer.OrdinalIgnoreCase);
 
-        var claimed = new HashSet<int>(recordIds);
+        var claimed = new HashSet<(int, bool)>(recordIds);
         var byGuidOnly = false;
         var unclaimedPlugin = false;
 
@@ -48,8 +49,8 @@ public static partial class InstalledModScanner
 
             if (owners.ListingFor(declared.Guid) is { } listing)
             {
-                claimed.Add(listing);
-                if (!recordIds.Contains(listing)) byGuidOnly = true;
+                claimed.Add((listing, false));
+                if (!recordIds.Contains((listing, false))) byGuidOnly = true;
             }
             else if (declared.Guid is not null)
             {
@@ -64,7 +65,7 @@ public static partial class InstalledModScanner
         if (liveDir is not null) files.AddRange(FilesIn(liveDir, disabled: false, plugins));
         if (offDir is not null) files.AddRange(FilesIn(offDir, disabled: true, plugins));
 
-        var shares = new Dictionary<int, Share>();
+        var shares = new Dictionary<(int, bool), Share>();
         var unclaimed = unclaimedHasShare ? new Share() : null;
         var leftovers = new List<ShareFile>();
 
@@ -72,11 +73,11 @@ public static partial class InstalledModScanner
         {
             if (owners.RecordFor(installPath, RelativeTo(installPath, file.FullPath)) is { } record)
             {
-                ShareFor(record.ModId, record, record.Guid).Files.Add(file);
+                ShareFor(record.ModId, record.IsAddon, record, record.Guid).Files.Add(file);
             }
             else if (file.Plugin?.Guid is { } guid && owners.ListingFor(guid) is { } listing)
             {
-                ShareFor(listing, records.FirstOrDefault(r => r.ModId == listing), guid).Files.Add(file);
+                ShareFor(listing, false, records.FirstOrDefault(r => r is { IsAddon: false } && r.ModId == listing), guid).Files.Add(file);
             }
             else if (unclaimed is not null && file.Plugin?.Guid is not null)
             {
@@ -90,6 +91,7 @@ public static partial class InstalledModScanner
 
         var found = shares.Values.Where(s => s.Files.Count > 0).ToList();
         if (unclaimed is { Files.Count: > 0 }) found.Add(unclaimed);
+        else if (leftovers.Count > 0 && found.All(s => s.IsAddon)) found.Add(unclaimed = new Share());
         if (found.Count < 2) return null;
 
         foreach (var share in found)
@@ -101,16 +103,21 @@ public static partial class InstalledModScanner
         }
 
         var ordered = found
-            .OrderBy(s => s.Placed)
+            .OrderBy(s => s.IsAddon)
+            .ThenBy(s => s.Placed)
             .ThenBy(s => Path.GetFileName(PrimaryDll(s, name)?.FullPath) ?? "", StringComparer.Ordinal)
             .ToList();
 
-        (unclaimed is { Files.Count: > 0 } ? unclaimed : ordered[0]).Files.AddRange(leftovers);
+        (unclaimed is not null && found.Contains(unclaimed) ? unclaimed : ordered[0]).Files.AddRange(leftovers);
 
-        ordered[0].Name = name;
-        foreach (var share in ordered.Skip(1))
+        var host = ordered.FirstOrDefault(s => !s.IsAddon);
+        if (host is not null) host.Name = name;
+
+        foreach (var share in ordered.Where(s => s != host))
         {
-            var stem = Path.GetFileNameWithoutExtension((PrimaryDll(share, name) ?? share.Files[0]).FullPath);
+            var stem = share.IsAddon
+                ? AddonKey(share)
+                : Path.GetFileNameWithoutExtension((PrimaryDll(share, name) ?? share.Files[0]).FullPath);
             share.Name = taken.Contains(stem) ? $"{name}.{stem}" : stem;
             taken.Add(share.Name);
         }
@@ -130,9 +137,10 @@ public static partial class InstalledModScanner
 
         return results;
 
-        Share ShareFor(int modId, InstalledModRecord? record, string? guid)
+        Share ShareFor(int modId, bool isAddon, InstalledModRecord? record, string? guid)
         {
-            if (!shares.TryGetValue(modId, out var share)) shares[modId] = share = new Share { ModId = modId };
+            if (!shares.TryGetValue((modId, isAddon), out var share))
+                shares[(modId, isAddon)] = share = new Share { ModId = modId, IsAddon = isAddon };
             share.Record ??= record;
             share.Guid ??= guid;
             return share;
@@ -185,8 +193,12 @@ public static partial class InstalledModScanner
                     .Select(f => Describe(f.FullPath, f.Relative))],
             OwnedFiles = [.. side.Select(f => f.Relative).Order(StringComparer.Ordinal)],
             ShareOwnerModId = share.ModId,
+            ShareOwnerIsAddon = share.IsAddon,
         };
     }
+
+    private static string AddonKey(Share share) =>
+        share.Record?.Slug is { Length: > 0 } slug ? slug.Trim().ToLowerInvariant() : $"addon-{share.ModId}";
 
     private static ShareFile? PrimaryDll(Share share, string folderName, IEnumerable<ShareFile>? within = null)
     {

@@ -14,9 +14,12 @@ public sealed class ModOwnership
     private readonly Dictionary<string, List<InstalledModRecord>> _byFolder = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, int> _listingsByGuid = new(StringComparer.OrdinalIgnoreCase);
 
-    public ModOwnership(IEnumerable<InstalledModRecord> records, IEnumerable<KeyValuePair<string, int>>? listingsByGuid = null)
+    public ModOwnership(
+        IEnumerable<InstalledModRecord> records,
+        IEnumerable<KeyValuePair<string, int>>? listingsByGuid = null,
+        bool includeAddons = false)
     {
-        foreach (var record in records.Where(r => !r.IsAddon && r.IsAppManaged).OrderBy(r => r.InstalledAt))
+        foreach (var record in records.Where(r => (includeAddons || !r.IsAddon) && r.IsAppManaged).OrderBy(r => r.InstalledAt))
         {
             foreach (var file in record.Files)
             {
@@ -46,7 +49,7 @@ public sealed class ModOwnership
     // folder's path relative to the install root ("BepInEx/plugins/Realism").
     public IReadOnlyList<InstalledModRecord> RecordsIn(string installPath, string relativeFolder) =>
         _byFolder.TryGetValue(DisabledModPaths.ToEnabledRelativePath(relativeFolder), out var records)
-            ? [.. records.Where(r => BelongsTo(r, installPath)).DistinctBy(r => r.ModId)]
+            ? [.. records.Where(r => BelongsTo(r, installPath)).DistinctBy(r => (r.ModId, r.IsAddon))]
             : [];
 
     public int? ListingFor(string? guid) =>

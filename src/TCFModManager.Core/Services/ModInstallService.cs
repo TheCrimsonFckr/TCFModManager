@@ -655,6 +655,8 @@ public sealed class ModInstallService(
         List<FileFingerprint> fingerprints,
         List<string>? emptyFolders = null)
     {
+        var current = manifestService.Load();
+
         var record = new InstalledModRecord
         {
             ModId = target.Id,
@@ -671,9 +673,9 @@ public sealed class ModInstallService(
             InstallPath = InstallStamp.Of(installPath),
             Overwrote = overwrote,
             EmptyFolders = emptyFolders ?? [],
+            Slug = target.IsAddon ? target.Slug ?? current.Mods.FirstOrDefault(target.Matches)?.Slug : null,
         };
 
-        var current = manifestService.Load();
         current.Mods.RemoveAll(target.Matches);
         current.Mods.Add(record);
         manifestService.Save(current);
