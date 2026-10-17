@@ -99,6 +99,43 @@ public sealed class ModGroupStore
         Save(data);
     }
 
+    //
+    // Puts each addon seen for the first time into its parent's group (OPEN-31 R6). Saves only when a
+    // new addon was seen; returns how many were.
+    //
+    public int SeedAddons(IEnumerable<(string Addon, string Parent)> addons)
+    {
+        var data = Load();
+        var seen = Seed(data, addons);
+        if (seen > 0) Save(data);
+        return seen;
+    }
+
+    public static int Seed(ModGroupData data, IEnumerable<(string Addon, string Parent)> addons)
+    {
+        var seeded = new HashSet<string>(data.SeededAddons, StringComparer.OrdinalIgnoreCase);
+        var groups = data.Groups.Select(g => g.Id).ToHashSet();
+        var seen = 0;
+
+        foreach (var (addon, parent) in addons)
+        {
+            var key = KeyFor(addon);
+            if (!seeded.Add(key)) continue;
+
+            data.SeededAddons.Add(key);
+            seen++;
+
+            if (!data.Assignments.ContainsKey(key)
+                && data.Assignments.TryGetValue(KeyFor(parent), out var group)
+                && groups.Contains(group))
+            {
+                data.Assignments[key] = group;
+            }
+        }
+
+        return seen;
+    }
+
     // Assigns modName to groupId, or clears its assignment (back to Ungrouped) when groupId is null.
     public void AssignMod(string modName, Guid? groupId)
     {

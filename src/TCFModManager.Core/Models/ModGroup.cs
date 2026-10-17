@@ -19,4 +19,8 @@ public sealed class ModGroupData
     // no entry here is ungrouped. Keyed by name rather than ModId since plenty of installed mods
     // never match a sp-mod.com catalog listing and so never get one.
     public Dictionary<string, Guid> Assignments { get; init; } = [];
+
+    // Addon keys already given their starting group (OPEN-31 R6), so each is placed once and any
+    // later move, Ungrouped included, sticks.
+    public List<string> SeededAddons { get; init; } = [];
 }

@@ -1239,6 +1239,7 @@ public partial class InstalledViewModel : LocalizedViewModel
                 foreach (var entry in card.Entries) _cardByEntry[entry] = card;
             }
 
+            SeedAddonGroups();
             RefreshGroups();
 
             // A rescan replaces every card; the ticks were carried over by key above, the anchor is not.
@@ -3167,6 +3168,22 @@ public partial class InstalledViewModel : LocalizedViewModel
     // filter and the store can't drift apart. The current filter selection is carried across by
     // value rather than by instance, since the dropdown's items are replaced each time.
     //
+    // OPEN-31 R6: an addon card seen for the first time starts in its parent's group.
+    private void SeedAddonGroups()
+    {
+        var parents = _all
+            .Where(c => c is { IsAddon: false, ModId: not null })
+            .GroupBy(c => c.ModId!.Value)
+            .ToDictionary(g => g.Key, g => g.First());
+
+        var pairs = _all
+            .Where(c => c.IsAddon && c.ParentModId is { } p && parents.ContainsKey(p))
+            .Select(c => (c.Name, parents[c.ParentModId!.Value].Name))
+            .ToList();
+
+        if (pairs.Count > 0) AppServices.ModGroups.SeedAddons(pairs);
+    }
+
     private void RefreshGroups()
     {
         var data = AppServices.ModGroups.Load();
