@@ -8242,4 +8242,16 @@ Passare comunque?</value>
   <data name="Help_Browse_Ignore_Keywords" xml:space="preserve">
     <value>ignora, nascondi, blocca, blacklist, indesiderato, mod nascosti</value>
   </data>
+  <data name="Installed_RemoveAddonsListFormat" xml:space="preserve">
+    <value>{0} ha degli addon installati nella sua cartella: {1}.</value>
+  </data>
+  <data name="Installed_RemoveAddonsQuestionFormat" xml:space="preserve">
+    <value>Rimuovere anche quelli? Sì li rimuove insieme a {0}. No rimuove solo {0} e lascia i suoi addon dove sono.</value>
+  </data>
+  <data name="Installed_RemoveAddonsDisabledFormat" xml:space="preserve">
+    <value>Disattivati, quindi lasciati al loro posto: {0}.</value>
+  </data>
+  <data name="Installed_RemovedAddonsFormat" xml:space="preserve">
+    <value>Anche i suoi addon sono stati rimossi: {0}.</value>
+  </data>
 </root>

@@ -9863,4 +9863,20 @@ Switch anyway?</value>
     <value>ignore, hide, block, blacklist, unwanted, unignore, hidden mods</value>
     <comment>Comma-separated words the Help search also matches this topic on.</comment>
   </data>
+  <data name="Installed_RemoveAddonsListFormat" xml:space="preserve">
+    <value>{0} has addons installed in its folder: {1}.</value>
+    <comment>Asked before removing a mod whose addons are installed (OPEN-31 R2). {0} is the mod's name, {1} the addons' names joined with Common_ListSeparator.</comment>
+  </data>
+  <data name="Installed_RemoveAddonsQuestionFormat" xml:space="preserve">
+    <value>Remove them too? Yes removes them with {0}. No removes {0} only and leaves its addons where they are.</value>
+    <comment>Follows Installed_RemoveAddonsListFormat in a Yes/No/Cancel box. {0} is the mod's name. Yes and No are the box's own buttons.</comment>
+  </data>
+  <data name="Installed_RemoveAddonsDisabledFormat" xml:space="preserve">
+    <value>Disabled, so left in place: {0}.</value>
+    <comment>Added to the same box when some of the mod's addons are disabled. {0} is their names joined with Common_ListSeparator.</comment>
+  </data>
+  <data name="Installed_RemovedAddonsFormat" xml:space="preserve">
+    <value>Its addons went with it: {0}.</value>
+    <comment>Added to the status line after removing a mod together with its addons. {0} is the addons' names joined with Common_ListSeparator.</comment>
+  </data>
 </root>

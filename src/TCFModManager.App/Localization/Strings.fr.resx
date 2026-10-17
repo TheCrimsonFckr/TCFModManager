@@ -8242,4 +8242,16 @@ Passer quand même à cette version ?</value>
   <data name="Help_Browse_Ignore_Keywords" xml:space="preserve">
     <value>ignorer, masquer, cacher, bloquer, liste noire, indésirable, mods masqués</value>
   </data>
+  <data name="Installed_RemoveAddonsListFormat" xml:space="preserve">
+    <value>{0} a des addons installés dans son dossier : {1}.</value>
+  </data>
+  <data name="Installed_RemoveAddonsQuestionFormat" xml:space="preserve">
+    <value>Les supprimer aussi ? Oui les supprime avec {0}. Non supprime seulement {0} et laisse ses addons en place.</value>
+  </data>
+  <data name="Installed_RemoveAddonsDisabledFormat" xml:space="preserve">
+    <value>Désactivés, donc laissés en place : {0}.</value>
+  </data>
+  <data name="Installed_RemovedAddonsFormat" xml:space="preserve">
+    <value>Ses addons ont été supprimés avec lui : {0}.</value>
+  </data>
 </root>

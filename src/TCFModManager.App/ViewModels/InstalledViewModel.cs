@@ -1453,6 +1453,9 @@ public partial class InstalledViewModel : LocalizedViewModel
             return;
         }
 
+        if (AskRemoveAddons(mod) is not { } addons) return;
+        var batch = addons.Count > 0 ? RemovalBatch.For(mod.Name) : null;
+
         if (mod.IsAppManaged && mod.ModId is { } modId)
         {
             var manifest = AppServices.InstallManifest.Load();
@@ -1493,8 +1496,10 @@ public partial class InstalledViewModel : LocalizedViewModel
             IsBusy = true;
             try
             {
-                var result = await AppServices.ModInstall.UninstallAsync(installPath, record, configAction);
-                StatusMessage = DescribeRemoval(mod.Name, result.FailedFiles.Count, result.ConfigsKept, result.ConfigsFolder, result);
+                var removedAddons = await RemoveAddonsAsync(addons, installPath, batch);
+                var result = await AppServices.ModInstall.UninstallAsync(installPath, record, configAction, batch: batch);
+                StatusMessage = WithRemovedAddons(
+                    DescribeRemoval(mod.Name, result.FailedFiles.Count, result.ConfigsKept, result.ConfigsFolder, result), removedAddons);
                 ModRemoved?.Invoke(this, EventArgs.Empty);
             }
             catch (ModInstallException ex)
@@ -1551,14 +1556,16 @@ public partial class InstalledViewModel : LocalizedViewModel
                     ? ModInstallService.KeepLegacyConfigs(installPath, configs, mod.Name)
                     : new KeptConfigs(0, null);
 
-                var held = RemoveByHand(mod, [.. paths.Select(p => p!)], installPath, kept.Folder);
+                var removedAddons = await RemoveAddonsAsync(addons, installPath, batch);
+                var held = RemoveByHand(mod, [.. paths.Select(p => p!)], installPath, kept.Folder, batch);
 
                 // A manually-confirmed version record would otherwise dangle, pointing at a mod
                 // that's no longer on disk.
                 if (mod.IsManualOverride && mod.ModId is { } overriddenModId)
                     AppServices.InstallManifest.ClearManualVersion(overriddenModId, mod.IsAddon);
 
-                StatusMessage = DescribeRemoval(mod.Name, failedFiles: 0, kept.Count, kept.Folder, held: held is not null);
+                StatusMessage = WithRemovedAddons(
+                    DescribeRemoval(mod.Name, failedFiles: 0, kept.Count, kept.Folder, held: held is not null), removedAddons);
                 ModRemoved?.Invoke(this, EventArgs.Empty);
             }
             catch (ModInstallException ex)
@@ -2192,26 +2199,95 @@ public partial class InstalledViewModel : LocalizedViewModel
     // any folder of its own goes whole, as before. Kept configs travel with the first removal only.
     //
     private static string? RemoveByHand(
-        InstalledModCardViewModel mod, IReadOnlyList<string> paths, string installPath, string? configsFolder)
+        InstalledModCardViewModel mod, IReadOnlyList<string> paths, string installPath, string? configsFolder,
+        RemovalBatch? batch = null)
     {
         var shares = mod.Entries.Where(e => e.IsShare).ToList();
         if (shares.Count == 0)
-            return AppServices.ModInstall.RemoveHandInstalled(paths, installPath, mod.Name, configsFolder);
+            return AppServices.ModInstall.RemoveHandInstalled(paths, installPath, mod.Name, configsFolder, batch);
 
         string? held = null;
 
         foreach (var share in shares)
         {
-            held = AppServices.ModInstall.RemoveHandInstalledShare(share, installPath, mod.Name, configsFolder) ?? held;
+            held = AppServices.ModInstall.RemoveHandInstalledShare(share, installPath, mod.Name, configsFolder, batch) ?? held;
             configsFolder = null;
         }
 
         var rest = paths.Where(p => !shares.Any(s => IsSamePath(s.FolderPath, p))).ToList();
         if (rest.Count > 0)
-            held = AppServices.ModInstall.RemoveHandInstalled(rest, installPath, mod.Name, configsFolder) ?? held;
+            held = AppServices.ModInstall.RemoveHandInstalled(rest, installPath, mod.Name, configsFolder, batch) ?? held;
 
         return held;
     }
+
+    // The addon cards whose parent is this mod's card (OPEN-31).
+    private List<InstalledModCardViewModel> AddonCardsOf(InstalledModCardViewModel mod) =>
+        mod is { IsAddon: false, ModId: { } id }
+            ? [.. _all.Where(c => c.IsAddon && c.ParentModId == id).OrderBy(c => c.DisplayTitle, StringComparer.OrdinalIgnoreCase)]
+            : [];
+
+    //
+    // OPEN-31 R2: asks whether a mod's installed addons go with it, Yes by default. Returns the
+    // install records of the addons to remove (empty when there are none or the answer is No), or
+    // null when the user cancelled. A disabled addon is named but stays.
+    //
+    private List<InstalledModRecord>? AskRemoveAddons(InstalledModCardViewModel mod)
+    {
+        var cards = AddonCardsOf(mod);
+        var live = cards.Where(c => !c.IsDisabled).ToList();
+        if (live.Count == 0) return [];
+
+        var off = cards.Where(c => c.IsDisabled).ToList();
+        var parts = new List<string>
+        {
+            Text(Strings.Installed_RemoveAddonsListFormat, mod.DisplayTitle, Names(live)),
+            Text(Strings.Installed_RemoveAddonsQuestionFormat, mod.DisplayTitle),
+        };
+        if (off.Count > 0) parts.Add(Text(Strings.Installed_RemoveAddonsDisabledFormat, Names(off)));
+
+        var answer = MessageBox.Show(
+            string.Join("\n\n", parts),
+            Text(Strings.Installed_RemoveTitleFormat, mod.DisplayTitle),
+            MessageBoxButton.YesNoCancel,
+            MessageBoxImage.Question,
+            MessageBoxResult.Yes);
+
+        if (answer is not (MessageBoxResult.Yes or MessageBoxResult.No)) return null;
+        if (answer == MessageBoxResult.No) return [];
+
+        var manifest = AppServices.InstallManifest.Load();
+        return
+        [
+            .. live
+                .Select(c => c.ModId is { } id ? manifest.Find(id, isAddon: true) : null)
+                .OfType<InstalledModRecord>()
+                .Where(r => r.IsAppManaged),
+        ];
+
+        static string Names(IEnumerable<InstalledModCardViewModel> cards) =>
+            string.Join(Strings.Common_ListSeparator, cards.Select(c => c.DisplayTitle));
+    }
+
+    // Removes a mod's addons ahead of the mod itself, in the same batch. Returns the names removed.
+    private static async Task<List<string>> RemoveAddonsAsync(
+        IReadOnlyList<InstalledModRecord> addons, string installPath, RemovalBatch? batch)
+    {
+        var removed = new List<string>();
+
+        foreach (var addon in addons)
+        {
+            await AppServices.ModInstall.UninstallAsync(installPath, addon, ConfigAction.Keep, batch: batch);
+            removed.Add(addon.Name);
+        }
+
+        return removed;
+    }
+
+    private static string WithRemovedAddons(string status, IReadOnlyList<string> removed) =>
+        removed.Count == 0
+            ? status
+            : Sentences(status, Text(Strings.Installed_RemovedAddonsFormat, string.Join(Strings.Common_ListSeparator, removed)));
 
     // What a hand removal will take, as the confirmation lists it: a shared folder's own files rather
     // than the folder they sit in.
@@ -2769,7 +2845,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         try
         {
             // Off the UI thread: putting back a large mod copies a lot of files.
-            var result = await Task.Run(() => AppServices.ModInstall.UndoRemoval(installPath, latest.Folder));
+            var result = await Task.Run(() => AppServices.ModInstall.UndoRemovalBatch(installPath, latest.Folder));
 
             StatusMessage = !result.Ran
                 ? Strings.Installed_UndoNothing

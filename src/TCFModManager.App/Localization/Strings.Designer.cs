@@ -818,6 +818,10 @@ internal static class Strings
     internal static string Installed_RemoveFailedFormat => LocalizationService.Get("Installed_RemoveFailedFormat");
     internal static string Installed_RemoveDisableHint => LocalizationService.Get("Installed_RemoveDisableHint");
     internal static string Installed_RemoveTitleFormat => LocalizationService.Get("Installed_RemoveTitleFormat");
+    internal static string Installed_RemoveAddonsListFormat => LocalizationService.Get("Installed_RemoveAddonsListFormat");
+    internal static string Installed_RemoveAddonsQuestionFormat => LocalizationService.Get("Installed_RemoveAddonsQuestionFormat");
+    internal static string Installed_RemoveAddonsDisabledFormat => LocalizationService.Get("Installed_RemoveAddonsDisabledFormat");
+    internal static string Installed_RemovedAddonsFormat => LocalizationService.Get("Installed_RemovedAddonsFormat");
     internal static string Installed_RemoveConfigs(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_RemoveConfigs", count, values);
     internal static string Installed_RemoveConfigsChoicesFormat => LocalizationService.Get("Installed_RemoveConfigsChoicesFormat");

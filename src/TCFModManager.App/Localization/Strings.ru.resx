@@ -8617,4 +8617,16 @@
   <data name="Help_Browse_Ignore_Keywords" xml:space="preserve">
     <value>скрыть, игнорировать, спрятать, блокировать, чёрный список, ненужные, скрытые моды</value>
   </data>
+  <data name="Installed_RemoveAddonsListFormat" xml:space="preserve">
+    <value>У {0} в папке установлены аддоны: {1}.</value>
+  </data>
+  <data name="Installed_RemoveAddonsQuestionFormat" xml:space="preserve">
+    <value>Удалить и их? «Да» удалит их вместе с {0}. «Нет» удалит только {0} и оставит аддоны на месте.</value>
+  </data>
+  <data name="Installed_RemoveAddonsDisabledFormat" xml:space="preserve">
+    <value>Отключены, поэтому оставлены на месте: {0}.</value>
+  </data>
+  <data name="Installed_RemovedAddonsFormat" xml:space="preserve">
+    <value>Вместе с ним удалены его аддоны: {0}.</value>
+  </data>
 </root>
