@@ -10,14 +10,22 @@ namespace TCFModManager.Core.Services;
 //
 public static class AddonFit
 {
-    public static bool? Check(string? constraint, string? parentVersion, string? sptVersion)
-    {
-        var fit = ModVersionMatcher.IsSatisfiedBy(constraint, parentVersion);
+    public static bool? Check(string? constraint, string? parentVersion, string? sptVersion) =>
+        IsSptRangeInParentBox(constraint, parentVersion, sptVersion)
+            ? null
+            : ModVersionMatcher.IsSatisfiedBy(constraint, parentVersion);
 
-        return fit == false
-            && !string.IsNullOrWhiteSpace(sptVersion)
-            && SptVersionMatcher.IsSatisfiedBy(constraint, sptVersion) == true
-                ? null
-                : fit;
-    }
+    //
+    // For the places that only take a version that fits (the addon card's update, the sp-mod list
+    // import's version update): a requirement the parent satisfies, or an SPT range in the parent box.
+    // A requirement that can't be read at all still isn't taken there.
+    //
+    public static bool Accepts(string? constraint, string? parentVersion, string? sptVersion) =>
+        ModVersionMatcher.IsSatisfiedBy(constraint, parentVersion) == true
+        || IsSptRangeInParentBox(constraint, parentVersion, sptVersion);
+
+    public static bool IsSptRangeInParentBox(string? constraint, string? parentVersion, string? sptVersion) =>
+        ModVersionMatcher.IsSatisfiedBy(constraint, parentVersion) == false
+        && !string.IsNullOrWhiteSpace(sptVersion)
+        && SptVersionMatcher.IsSatisfiedBy(constraint, sptVersion) == true;
 }

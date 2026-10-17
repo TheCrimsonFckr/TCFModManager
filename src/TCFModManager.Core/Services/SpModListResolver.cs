@@ -355,7 +355,7 @@ public static class SpModListResolver
                 }
                 else
                 {
-                    rows[i] = Row(e, Newest(candidates, c => AddonFit.Check(c.Constraint, parentVersion, targetSpt) != false));
+                    rows[i] = Row(e, Newest(candidates, c => AddonFit.Accepts(c.Constraint, parentVersion, targetSpt)));
                 }
 
                 progress?.Report(new SpModResolveProgress(++done, total));

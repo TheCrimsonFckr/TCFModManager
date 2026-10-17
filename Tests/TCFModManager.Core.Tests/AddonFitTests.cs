@@ -30,6 +30,16 @@ public class AddonFitTests
         Assert.Null(AddonFit.Check("not a range", "2.1.1", "4.1.6"));
 
     [Fact]
+    public void Accepts_TakesAFitAndAnSptRangeInTheParentBox_ButNotAnUnreadableRequirement()
+    {
+        Assert.True(AddonFit.Accepts("^2.0.0", "2.1.1", "4.1.6"));
+        Assert.True(AddonFit.Accepts("~4.1.6", "2.1.1", "4.1.6"));
+        Assert.False(AddonFit.Accepts("not a range", "2.1.1", "4.1.6"));
+        Assert.False(AddonFit.Accepts(null, "2.1.1", "4.1.6"));
+        Assert.False(AddonFit.Accepts("^3.0.0", "2.1.1", "4.1.6"));
+    }
+
+    [Fact]
     public void NewestForParent_TakesAVersionWithAnSptRangeInTheParentBox()
     {
         AddonVersion[] versions =

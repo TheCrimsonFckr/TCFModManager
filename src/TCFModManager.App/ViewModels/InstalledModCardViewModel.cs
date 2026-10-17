@@ -829,14 +829,16 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         var installedVersion = record.Version ?? fileVersion;
 
         // Only versions the installed parent mod actually satisfies count as an update: an addon
-        // built for the next release of its parent isn't something this install can use yet.
+        // built for the next release of its parent isn't something this install can use yet. The
+        // one exception is an SPT range typed into the parent box (AddonFit), which can't be checked
+        // and would otherwise leave the addon with nothing that fits.
         var parentVersion = parent?.InstalledVersion;
         var versions = (addon?.Versions ?? [])
             .OrderByDescending(v => v.PublishedAt ?? DateTimeOffset.MinValue)
             .ToList();
 
         var latest = versions.FirstOrDefault(v =>
-            AddonFit.Check(v.ModVersionConstraint, parentVersion, installedSptVersion) != false);
+            AddonFit.Accepts(v.ModVersionConstraint, parentVersion, installedSptVersion));
 
         (string Key, object?[] Values)? detail = null;
         if (latest is null && versions.Count > 0)
