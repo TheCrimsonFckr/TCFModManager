@@ -66,6 +66,28 @@ public sealed class ModInstallManifestService
         return filled;
     }
 
+    //
+    // Marks or clears the addon records disabled together with their parent (OPEN-31 R5). Saves only
+    // when something changed; returns how many records changed.
+    //
+    public int SetDisabledWithParent(IEnumerable<int> addonIds, bool value)
+    {
+        var ids = addonIds.ToHashSet();
+        if (ids.Count == 0) return 0;
+
+        var manifest = Load();
+        var changed = 0;
+
+        foreach (var record in manifest.Mods.Where(r => r.IsAddon && ids.Contains(r.ModId) && r.DisabledWithParent != value))
+        {
+            record.DisabledWithParent = value;
+            changed++;
+        }
+
+        if (changed > 0) Save(manifest);
+        return changed;
+    }
+
     public int AdoptMovedInstall(string installPath)
     {
         if (string.IsNullOrWhiteSpace(installPath) || !Directory.Exists(installPath)) return 0;

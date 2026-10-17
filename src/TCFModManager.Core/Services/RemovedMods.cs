@@ -101,6 +101,21 @@ public sealed class RemovalLog
 
     // True once Undo has put this removal back.
     public bool Undone { get; set; }
+
+    // Set when this removal was one of several made together (OPEN-31 R2: a mod and its addons), so
+    // Undo puts them all back as one. BatchLead names the mod the others went with.
+    public string? BatchId { get; init; }
+
+    public string? BatchLead { get; init; }
+
+    [JsonIgnore]
+    public bool IsBatchLead => BatchId is not null && string.Equals(BatchLead, ModName, StringComparison.Ordinal);
+}
+
+// Removals made together and undone together: a mod and the addons removed with it (OPEN-31 R2).
+public sealed record RemovalBatch(string Id, string Lead)
+{
+    public static RemovalBatch For(string lead) => new(System.Guid.NewGuid().ToString("N"), lead);
 }
 
 //
@@ -128,7 +143,8 @@ public sealed class RemovedMods(Func<RemovedModsRetention>? retention = null)
     public static string Root(string installPath) => Path.Combine(installPath, FolderName);
 
     // Starts a removal: makes its folder and returns it. Nothing has moved yet.
-    public static RemovalSession Begin(string installPath, string modName, RemovalKind kind, InstalledModRecord? record)
+    public static RemovalSession Begin(
+        string installPath, string modName, RemovalKind kind, InstalledModRecord? record, RemovalBatch? batch = null)
     {
         var root = Root(installPath);
         Directory.CreateDirectory(root);
@@ -149,6 +165,8 @@ public sealed class RemovedMods(Func<RemovedModsRetention>? retention = null)
             RemovedAt = stamp,
             InstallPath = InstallStamp.Of(installPath),
             Record = record,
+            BatchId = batch?.Id,
+            BatchLead = batch?.Lead,
         });
     }
 
@@ -206,6 +224,27 @@ public sealed class RemovedMods(Func<RemovedModsRetention>? retention = null)
                 r.Log.Kind != RemovalKind.ReplacedByUpdate
                 && !r.Log.Undone
                 && string.Equals(StampOrNull(r.Log.InstallPath), stamp, StringComparison.OrdinalIgnoreCase)),
+        ];
+    }
+
+    //
+    // The undoable removal held in folder, together with every other removal made in the same batch,
+    // the lead first - what one Undo puts back. Empty when folder's removal can't be undone.
+    //
+    public static List<(string Folder, RemovalLog Log)> BatchOf(string installPath, string folder)
+    {
+        var undoable = Undoable(installPath);
+        var picked = undoable.FirstOrDefault(u => string.Equals(u.Folder, folder, StringComparison.OrdinalIgnoreCase));
+
+        if (picked.Folder is null) return [];
+        if (picked.Log.BatchId is not { } batch) return [picked];
+
+        return
+        [
+            .. undoable
+                .Where(u => u.Log.BatchId == batch)
+                .OrderByDescending(u => u.Log.IsBatchLead)
+                .ThenBy(u => u.Log.RemovedAt),
         ];
     }
 

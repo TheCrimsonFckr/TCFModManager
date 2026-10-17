@@ -858,7 +858,8 @@ public sealed class ModInstallService(
         string installPath,
         InstalledModRecord record,
         ConfigAction configs = ConfigAction.Keep,
-        CancellationToken ct = default)
+        CancellationToken ct = default,
+        RemovalBatch? batch = null)
     {
         EnsureInstallNotInUse(ModInstallAction.Remove, installPath);
         EnsureRecordBelongsHere(record, installPath);
@@ -867,7 +868,7 @@ public sealed class ModInstallService(
         // The SPT profiles as they were before the removal (OPEN-12 F4).
         profileBackups?.BackupIfChanged(installPath, ProfileBackups.BeforeRemove);
 
-        var result = RemoveRecordedFiles(installPath, record, configs, null, null, RemovalKind.AppInstalled, ct);
+        var result = RemoveRecordedFiles(installPath, record, configs, null, null, RemovalKind.AppInstalled, ct, batch);
 
         // A mod that is gone has no shipped copies worth keeping. An update does not come through
         // here, which is why this is safe to do unconditionally - see InstallAsync.
@@ -933,7 +934,8 @@ public sealed class ModInstallService(
         IReadOnlySet<string>? keep,
         IReadOnlySet<string>? incoming,
         RemovalKind kind,
-        CancellationToken ct)
+        CancellationToken ct,
+        RemovalBatch? batch = null)
     {
         var failed = new List<string>();
         var refused = new List<string>();
@@ -975,7 +977,7 @@ public sealed class ModInstallService(
             .SelectMany(m => m.Files)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-        var session = RemovedMods.Begin(installPath, record.Name, kind, record);
+        var session = RemovedMods.Begin(installPath, record.Name, kind, record, batch);
         session.Log.ConfigsKeptFolder = kept.Folder;
 
         foreach (var relative in record.Files)
@@ -1190,7 +1192,7 @@ public sealed class ModInstallService(
     // where KeepLegacyConfigs put the mod's configs, if it did, so Undo can bring them back too.
     //
     public string? RemoveHandInstalled(
-        IReadOnlyList<string> paths, string installPath, string modName, string? configsFolder = null)
+        IReadOnlyList<string> paths, string installPath, string modName, string? configsFolder = null, RemovalBatch? batch = null)
     {
         if (string.IsNullOrWhiteSpace(installPath))
             throw new ModInstallException(ModInstallFailure.NoInstallFolder);
@@ -1209,7 +1211,7 @@ public sealed class ModInstallService(
 
         profileBackups?.BackupIfChanged(installPath, ProfileBackups.BeforeRemove);
 
-        var session = RemovedMods.Begin(installPath, modName, RemovalKind.HandInstalled, record: null);
+        var session = RemovedMods.Begin(installPath, modName, RemovalKind.HandInstalled, record: null, batch);
         session.Log.ConfigsKeptFolder = configsFolder;
 
         foreach (var path in paths)
@@ -1237,10 +1239,10 @@ public sealed class ModInstallService(
     // A whole-folder entry goes through RemoveHandInstalled as before.
     //
     public string? RemoveHandInstalledShare(
-        InstalledMod share, string installPath, string modName, string? configsFolder = null)
+        InstalledMod share, string installPath, string modName, string? configsFolder = null, RemovalBatch? batch = null)
     {
         if (share.OwnedFiles is not { } owned)
-            return RemoveHandInstalled([share.FolderPath], installPath, modName, configsFolder);
+            return RemoveHandInstalled([share.FolderPath], installPath, modName, configsFolder, batch);
 
         if (string.IsNullOrWhiteSpace(installPath))
             throw new ModInstallException(ModInstallFailure.NoInstallFolder);
@@ -1278,7 +1280,7 @@ public sealed class ModInstallService(
 
         profileBackups?.BackupIfChanged(installPath, ProfileBackups.BeforeRemove);
 
-        var session = RemovedMods.Begin(installPath, modName, RemovalKind.HandInstalled, record: null);
+        var session = RemovedMods.Begin(installPath, modName, RemovalKind.HandInstalled, record: null, batch);
         session.Log.ConfigsKeptFolder = configsFolder;
         var touched = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -1305,6 +1307,30 @@ public sealed class ModInstallService(
     // restored. A path something else now occupies is never overwritten - it is reported and its copy
     // stays in the holding folder, which is then kept rather than deleted.
     //
+    //
+    // Undo for a removal made as part of a batch (OPEN-31 R2): puts back folder's removal and every
+    // other removal in its batch, the lead first. A removal outside any batch is undone on its own.
+    //
+    public UndoResult UndoRemovalBatch(string installPath, string folder)
+    {
+        var batch = RemovedMods.BatchOf(installPath, folder);
+        if (batch.Count == 0) return UndoRemoval(installPath, folder);
+
+        var ran = false;
+        var putBack = 0;
+        var blocked = new List<string>();
+
+        foreach (var (held, _) in batch)
+        {
+            var result = UndoRemoval(installPath, held);
+            ran |= result.Ran;
+            putBack += result.PutBack;
+            blocked.AddRange(result.Blocked);
+        }
+
+        return new UndoResult(ran, putBack, blocked);
+    }
+
     public UndoResult UndoRemoval(string installPath, string folder)
     {
         EnsureInstallNotInUse(ModInstallAction.Undo, installPath);

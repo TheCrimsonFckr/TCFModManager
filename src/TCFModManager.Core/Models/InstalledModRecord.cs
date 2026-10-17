@@ -87,6 +87,11 @@ public sealed class InstalledModRecord
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Slug { get; set; }
 
+    // True while this addon is disabled because its parent was disabled with it (OPEN-31 R5), so
+    // enabling the parent can offer exactly those back.
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public bool DisabledWithParent { get; set; }
+
     public FileFingerprint? FingerprintFor(string path) =>
         Fingerprints.FirstOrDefault(f => string.Equals(f.Path, path, StringComparison.OrdinalIgnoreCase));
 }
