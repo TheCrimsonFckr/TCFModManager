@@ -8647,4 +8647,7 @@
   <data name="Installed_RemovalBatchFormat" xml:space="preserve">
     <value>{0} и его аддоны</value>
   </data>
+  <data name="Installed_RemoveSelectedAddonsFormat" xml:space="preserve">
+    <value>У выбранных модов установлены аддоны: {0}. Удалить и их? «Да» удалит их вместе с модами; «Нет» удалит только выбранное.</value>
+  </data>
 </root>

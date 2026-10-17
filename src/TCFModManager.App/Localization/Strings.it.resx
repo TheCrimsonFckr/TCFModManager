@@ -8269,4 +8269,7 @@ Passare comunque?</value>
   <data name="Installed_RemovalBatchFormat" xml:space="preserve">
     <value>{0} e i suoi addon</value>
   </data>
+  <data name="Installed_RemoveSelectedAddonsFormat" xml:space="preserve">
+    <value>I mod selezionati hanno degli addon installati: {0}. Rimuovere anche quelli? Sì li rimuove insieme ai loro mod; No rimuove solo ciò che hai selezionato.</value>
+  </data>
 </root>

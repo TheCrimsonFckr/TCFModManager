@@ -2081,6 +2081,30 @@ public partial class InstalledViewModel : LocalizedViewModel
             return;
         }
 
+        var unselectedAddons = targets
+            .SelectMany(AddonCardsOf)
+            .Where(a => !a.IsDisabled && !selected.Contains(a))
+            .Distinct()
+            .ToList();
+
+        if (unselectedAddons.Count > 0)
+        {
+            var answer = MessageBox.Show(
+                Text(Strings.Installed_RemoveSelectedAddonsFormat, string.Join(Strings.Common_ListSeparator, unselectedAddons.Select(a => a.DisplayTitle))),
+                Strings.Installed_RemoveSelectedTitle,
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Question,
+                MessageBoxResult.Yes);
+
+            if (answer is not (MessageBoxResult.Yes or MessageBoxResult.No))
+            {
+                StatusMessage = Strings.Installed_RemoveSelectedCancelled;
+                return;
+            }
+
+            if (answer == MessageBoxResult.Yes) targets.AddRange(unselectedAddons);
+        }
+
         var body = new List<string> { Text(Strings.Installed_RemoveSelectedBodyFormat, string.Join("\n", targets.Select(t => t.DisplayTitle)), AppPaths.LegacyConfigsDirectory) };
 
         var profileMods = targets.Where(ChangesProfile).Select(t => t.DisplayTitle).ToList();
@@ -2104,11 +2128,11 @@ public partial class InstalledViewModel : LocalizedViewModel
         {
             var manifest = AppServices.InstallManifest.Load();
 
-            foreach (var mod in targets)
+            foreach (var (mod, batch) in RemovalOrder(targets))
             {
                 try
                 {
-                    if (await RemoveOneQuietlyAsync(mod, installPath, manifest)) removed++;
+                    if (await RemoveOneQuietlyAsync(mod, installPath, manifest, batch)) removed++;
                     else failed.Add(mod.DisplayTitle);
                 }
                 catch (ModInstallException ex)
@@ -2119,7 +2143,7 @@ public partial class InstalledViewModel : LocalizedViewModel
                     // SPT started part way through: nothing after this would go either.
                     if (ex.Reason == ModInstallFailure.InstallInUse)
                     {
-                        failed.AddRange(targets.SkipWhile(t => t != mod).Skip(1).Select(t => t.DisplayTitle));
+                        failed.AddRange(RemovalOrder(targets).Select(o => o.Card).SkipWhile(t => t != mod).Skip(1).Select(t => t.DisplayTitle));
                         break;
                     }
                 }
@@ -2150,7 +2174,8 @@ public partial class InstalledViewModel : LocalizedViewModel
     // either way. False when there was nothing it could act on (no record, no folder, a refused
     // folder); throws what the single removal would have shown.
     //
-    private async Task<bool> RemoveOneQuietlyAsync(InstalledModCardViewModel mod, string installPath, ModInstallManifest manifest)
+    private async Task<bool> RemoveOneQuietlyAsync(
+        InstalledModCardViewModel mod, string installPath, ModInstallManifest manifest, RemovalBatch? batch = null)
     {
         if (mod.IsAppManaged && mod.ModId is { } modId)
         {
@@ -2160,7 +2185,7 @@ public partial class InstalledViewModel : LocalizedViewModel
                 return false;
             }
 
-            var result = await AppServices.ModInstall.UninstallAsync(installPath, record, ConfigAction.Keep);
+            var result = await AppServices.ModInstall.UninstallAsync(installPath, record, ConfigAction.Keep, batch: batch);
             return result.FailedFiles.Count == 0;
         }
 
@@ -2186,12 +2211,39 @@ public partial class InstalledViewModel : LocalizedViewModel
             ? ModInstallService.KeepLegacyConfigs(installPath, configs, mod.Name)
             : new KeptConfigs(0, null);
 
-        RemoveByHand(mod, paths, installPath, kept.Folder);
+        RemoveByHand(mod, paths, installPath, kept.Folder, batch);
 
         if (mod.IsManualOverride && mod.ModId is { } overriddenModId)
             AppServices.InstallManifest.ClearManualVersion(overriddenModId, mod.IsAddon);
 
         return true;
+    }
+
+    //
+    // The order a Remove selected goes in (OPEN-31 R2): each mod after its own addons, all in one
+    // batch so one Undo puts them back together; anything else alone, in the order given.
+    //
+    private static List<(InstalledModCardViewModel Card, RemovalBatch? Batch)> RemovalOrder(
+        IReadOnlyList<InstalledModCardViewModel> targets)
+    {
+        var order = new List<(InstalledModCardViewModel, RemovalBatch?)>();
+        var placed = new HashSet<InstalledModCardViewModel>();
+
+        foreach (var parent in targets.Where(t => t is { IsAddon: false, ModId: not null }))
+        {
+            var addons = targets.Where(t => t.IsAddon && t.ParentModId == parent.ModId && !placed.Contains(t)).ToList();
+            if (addons.Count == 0) continue;
+
+            var batch = RemovalBatch.For(parent.Name);
+            foreach (var addon in addons) order.Add((addon, batch));
+            order.Add((parent, batch));
+
+            placed.UnionWith(addons);
+            placed.Add(parent);
+        }
+
+        order.AddRange(targets.Where(t => !placed.Contains(t)).Select(t => (t, (RemovalBatch?)null)));
+        return order;
     }
 
     //
@@ -2407,7 +2459,6 @@ public partial class InstalledViewModel : LocalizedViewModel
             return null;
         }
 
-        var picked = targets.ToList();
         var affected = AffectedCards(targets, disable);
         var addonRows = AddonRows(targets, disable, affected);
         affected.AddRange(addonRows.Select(a => (a.Card, a.Detail, IsSoft: false)));
@@ -2459,7 +2510,7 @@ public partial class InstalledViewModel : LocalizedViewModel
             IsBusy = false;
         }
 
-        MarkAddonsDisabledWithParent(picked, targets, disable);
+        MarkAddonsDisabledWithParent(targets, disable);
 
         var moves = (carryOver ?? []).Concat(outcome.Moved).ToList();
         SetLastMoves(moves, label ?? DescribeTargets(targets, disable));
@@ -2556,11 +2607,10 @@ public partial class InstalledViewModel : LocalizedViewModel
     }
 
     //
-    // Records which addons went with their parent (OPEN-31 R5): those a disable carried along because
-    // their parent was picked. An addon disabled or enabled in its own right is cleared.
+    // Records which addons went with their parent (OPEN-31 R5): those disabled in the same action as
+    // their parent, picked or carried along. An addon disabled or enabled without it is cleared.
     //
-    private static void MarkAddonsDisabledWithParent(
-        IReadOnlyList<InstalledModCardViewModel> picked, IReadOnlyList<InstalledModCardViewModel> moved, bool disable)
+    private static void MarkAddonsDisabledWithParent(IReadOnlyList<InstalledModCardViewModel> moved, bool disable)
     {
         var addons = moved.Where(c => c is { IsAddon: true, ModId: not null }).ToList();
         if (addons.Count == 0) return;
@@ -2571,8 +2621,8 @@ public partial class InstalledViewModel : LocalizedViewModel
             return;
         }
 
-        var parentIds = picked.Where(c => c is { IsAddon: false, ModId: not null }).Select(c => c.ModId!.Value).ToHashSet();
-        var carried = addons.Where(a => !picked.Contains(a) && a.ParentModId is { } p && parentIds.Contains(p)).ToList();
+        var parentIds = moved.Where(c => c is { IsAddon: false, ModId: not null }).Select(c => c.ModId!.Value).ToHashSet();
+        var carried = addons.Where(a => a.ParentModId is { } p && parentIds.Contains(p)).ToList();
 
         AppServices.InstallManifest.SetDisabledWithParent(carried.Select(a => a.ModId!.Value), true);
         AppServices.InstallManifest.SetDisabledWithParent(addons.Except(carried).Select(a => a.ModId!.Value), false);

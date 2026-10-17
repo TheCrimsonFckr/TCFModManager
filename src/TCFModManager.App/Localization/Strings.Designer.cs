@@ -823,6 +823,7 @@ internal static class Strings
     internal static string Installed_RemoveAddonsDisabledFormat => LocalizationService.Get("Installed_RemoveAddonsDisabledFormat");
     internal static string Installed_RemovedAddonsFormat => LocalizationService.Get("Installed_RemovedAddonsFormat");
     internal static string Installed_RemovalBatchFormat => LocalizationService.Get("Installed_RemovalBatchFormat");
+    internal static string Installed_RemoveSelectedAddonsFormat => LocalizationService.Get("Installed_RemoveSelectedAddonsFormat");
     internal static string Installed_RemoveConfigs(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_RemoveConfigs", count, values);
     internal static string Installed_RemoveConfigsChoicesFormat => LocalizationService.Get("Installed_RemoveConfigsChoicesFormat");

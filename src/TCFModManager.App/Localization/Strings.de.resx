@@ -8269,4 +8269,7 @@ Trotzdem wechseln?</value>
   <data name="Installed_RemovalBatchFormat" xml:space="preserve">
     <value>{0} und seine Addons</value>
   </data>
+  <data name="Installed_RemoveSelectedAddonsFormat" xml:space="preserve">
+    <value>Die ausgewählten Mods haben installierte Addons: {0}. Auch diese entfernen? Ja entfernt sie mit ihren Mods; Nein entfernt nur deine Auswahl.</value>
+  </data>
 </root>

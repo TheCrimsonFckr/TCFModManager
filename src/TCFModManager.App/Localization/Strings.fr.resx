@@ -8269,4 +8269,7 @@ Passer quand même à cette version ?</value>
   <data name="Installed_RemovalBatchFormat" xml:space="preserve">
     <value>{0} et ses addons</value>
   </data>
+  <data name="Installed_RemoveSelectedAddonsFormat" xml:space="preserve">
+    <value>Les mods sélectionnés ont des addons installés : {0}. Les supprimer aussi ? Oui les supprime avec leurs mods ; Non supprime seulement votre sélection.</value>
+  </data>
 </root>

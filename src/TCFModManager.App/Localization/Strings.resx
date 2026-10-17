@@ -9898,4 +9898,8 @@ Switch anyway?</value>
     <value>{0} and its addons</value>
     <comment>Names a removal of a mod made together with its addons (OPEN-31 R2), in the Undo menu and button. {0} is the mod's name.</comment>
   </data>
+  <data name="Installed_RemoveSelectedAddonsFormat" xml:space="preserve">
+    <value>The mods you selected have addons installed: {0}. Remove them as well? Yes removes them with their mods; No removes only what you selected.</value>
+    <comment>Asked by Remove selected when selected mods have addons that weren't selected (OPEN-31 R2), in a Yes/No/Cancel box. {0} is the addons' names joined with Common_ListSeparator.</comment>
+  </data>
 </root>
