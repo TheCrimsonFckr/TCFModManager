@@ -84,6 +84,18 @@ public sealed record ModListAddOption
 
     // The catalog listing's author, for telling two mods with similar names apart.
     public string? Author { get; init; }
+
+    public DateTimeOffset? InstalledAt { get; init; }
+
+    public Guid? GroupId { get; init; }
+
+    public int? CategoryId { get; init; }
+
+    public int? Downloads { get; init; }
+
+    public DateTimeOffset? UpdatedAt { get; init; }
+
+    public bool FitsInstalledSpt { get; init; } = true;
 }
 
 // What the picker can offer, split by where it came from.
@@ -922,6 +934,7 @@ public sealed class ModListService
         var versions = CatalogVersions();
         var addonVersions = CatalogAddonVersions();
         var options = new List<ModListAddOption>();
+        var groups = AppServices.ModGroups.Load().Assignments;
 
         foreach (var candidate in install.Candidates)
         {
@@ -937,6 +950,11 @@ public sealed class ModListService
                 Entry = entry,
                 IsDisabled = candidate.IsDisabled,
                 IsInstalled = true,
+                InstalledAt = candidate.InstalledAt,
+                GroupId = candidate.Folders
+                    .Select(ModGroupStore.KeyFor)
+                    .Select(key => groups.TryGetValue(key, out var id) ? id : (Guid?)null)
+                    .FirstOrDefault(id => id is not null),
             });
         }
 
@@ -956,6 +974,7 @@ public sealed class ModListService
     private static List<ModListAddOption> CatalogOptions(IReadOnlyList<ModListAddOption> installed)
     {
         var options = new List<ModListAddOption>();
+        var line = InstalledSptLine();
 
         foreach (var mod in AppServices.ModCache.AllMods)
         {
@@ -969,10 +988,35 @@ public sealed class ModListService
                 Entry = entry,
                 IsInstalled = installed.Any(o => ModListEntries.SameMod(o.Entry, entry)),
                 Author = mod.Owner?.Name,
+                CategoryId = mod.CategoryId ?? mod.Category?.Id,
+                Downloads = mod.Downloads,
+                UpdatedAt = mod.UpdatedAt,
+                FitsInstalledSpt = FitsLine(mod, line),
             });
         }
 
         return options;
+    }
+
+    public static (int Major, int Minor)? InstalledSptLine()
+    {
+        var parts = AppServices.SptEnvironment.InstalledVersion?.Split('.') ?? [];
+
+        return parts.Length >= 2 && int.TryParse(parts[0], out var major) && int.TryParse(parts[1], out var minor)
+            ? (major, minor)
+            : null;
+    }
+
+    private static bool FitsLine(Mod mod, (int Major, int Minor)? line)
+    {
+        if (line is not { } wanted) return true;
+
+        var readable = (mod.Versions ?? [])
+            .Select(v => v.SptVersionConstraint)
+            .Where(c => SptVersionRange.TryParse(c, out _))
+            .ToList();
+
+        return readable.Count == 0 || readable.Any(c => SptVersionRange.IntersectsReleaseLine(c, wanted.Major, wanted.Minor));
     }
 
     //

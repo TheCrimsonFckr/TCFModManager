@@ -55,6 +55,7 @@ public static class ModListCandidates
                 IsAddon = true,
                 Version = record.Version,
                 CanBeDisabled = false,
+                InstalledAt = record.InstalledAt,
 
                 // Deliberately no folders: the ones this record names are its parent's, and putting
                 // them on the addon would let a list entry match the parent by folder name when the
@@ -120,6 +121,7 @@ public static class ModListCandidates
         IsIncomplete = card.IsIncompleteInstall,
         Folders = FoldersOf(card),
         Entries = card.Entries,
+        InstalledAt = card.InstalledAt,
     };
 
     private static List<string> FoldersOf(InstalledModCardViewModel card)

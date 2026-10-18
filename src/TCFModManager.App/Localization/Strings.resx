@@ -425,6 +425,23 @@
   <data name="ModLists_NewListToolTip" xml:space="preserve">
     <value>Make a list from what's installed, or bring one in</value>
   </data>
+  <data name="ModListAdd_SortRecentlyInstalled" xml:space="preserve">
+    <value>Recently installed or updated</value>
+    <comment>Sort in the Add mods window: installed mods, newest install or update first.</comment>
+  </data>
+  <data name="ModListAdd_HideOnList" xml:space="preserve">
+    <value>Hide mods already on this list</value>
+  </data>
+  <data name="ModListAdd_ShowDisabled" xml:space="preserve">
+    <value>Show disabled mods</value>
+  </data>
+  <data name="ModListAdd_ForSptFormat" xml:space="preserve">
+    <value>Only mods for SPT {0}</value>
+    <comment>{0} is the installed SPT release line, such as 4.1.</comment>
+  </data>
+  <data name="ModListAdd_GroupToolTip" xml:space="preserve">
+    <value>Show only the mods in one of your groups from the Installed page</value>
+  </data>
   <data name="ModLists_NewEmpty" xml:space="preserve">
     <value>Empty list…</value>
   </data>

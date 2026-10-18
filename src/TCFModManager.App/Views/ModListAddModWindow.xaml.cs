@@ -31,6 +31,8 @@ public sealed partial class ModListAddRow : LocalizedViewModel
 
     public string Name => Option.Entry.Name;
 
+    public bool IsOnList => !CanChoose;
+
     public bool Matches(string query) =>
         Name.Contains(query, StringComparison.OrdinalIgnoreCase)
         || (Option.Author?.Contains(query, StringComparison.OrdinalIgnoreCase) ?? false);
@@ -63,6 +65,18 @@ public partial class ModListAddModWindow : FluentWindow
     // that records a tick doesn't treat that restore as the user ticking things.
     private bool _syncing;
 
+    private bool _ready;
+
+    public sealed record Choice(string Label, object? Value);
+
+    private enum Sort
+    {
+        Name,
+        RecentlyInstalled,
+        MostDownloaded,
+        RecentlyUpdated,
+    }
+
     private ModListAddModWindow(string listName, IReadOnlyList<ModListEntry> current, ModListAddOptions options)
     {
         _installed = [.. options.Installed.Select(o => Row(o, current, fromCatalog: false))];
@@ -77,6 +91,33 @@ public partial class ModListAddModWindow : FluentWindow
             Strings.ModLists_AddSourceCatalogFormat, _catalog.Count);
 
         // The catalog is the only source worth opening on when there was no install to read.
+        GroupBox.ItemsSource = GroupChoices();
+        GroupBox.SelectedIndex = 0;
+
+        CategoryBox.ItemsSource = CategoryChoices();
+        CategoryBox.SelectedIndex = 0;
+
+        InstalledSortBox.ItemsSource = new List<Choice>
+        {
+            new(Strings.ModLists_SortNameAscending, Sort.Name),
+            new(Strings.ModListAdd_SortRecentlyInstalled, Sort.RecentlyInstalled),
+        };
+        InstalledSortBox.SelectedIndex = 0;
+
+        CatalogSortBox.ItemsSource = new List<Choice>
+        {
+            new(Strings.Sort_BrowseMostDownloaded, Sort.MostDownloaded),
+            new(Strings.Sort_BrowseLastUpdated, Sort.RecentlyUpdated),
+            new(Strings.ModLists_SortNameAscending, Sort.Name),
+        };
+        CatalogSortBox.SelectedIndex = 0;
+
+        if (ModListService.InstalledSptLine() is { } line)
+            ForMySptBox.Content = Text(Strings.ModListAdd_ForSptFormat, $"{line.Major}.{line.Minor}");
+        else
+            ForMySptBox.IsChecked = false;
+
+        _ready = true;
         _showingCatalog = _installed.Count == 0;
         ShowSource();
 
@@ -175,6 +216,14 @@ public partial class ModListAddModWindow : FluentWindow
 
     private void ShowSource()
     {
+        GroupBox.Visibility = InstalledSortBox.Visibility = ShowDisabledBox.Visibility =
+            _showingCatalog ? Visibility.Collapsed : Visibility.Visible;
+        CategoryBox.Visibility = CatalogSortBox.Visibility =
+            _showingCatalog ? Visibility.Visible : Visibility.Collapsed;
+        ForMySptBox.Visibility = _showingCatalog && ModListService.InstalledSptLine() is not null
+            ? Visibility.Visible
+            : Visibility.Collapsed;
+
         InstalledSourceButton.Appearance = _showingCatalog ? ControlAppearance.Secondary : ControlAppearance.Primary;
         CatalogSourceButton.Appearance = _showingCatalog ? ControlAppearance.Primary : ControlAppearance.Secondary;
 
@@ -187,6 +236,64 @@ public partial class ModListAddModWindow : FluentWindow
 
     private void SearchBox_TextChanged(object sender, TextChangedEventArgs e) => Render();
 
+    private void Filter_Changed(object sender, RoutedEventArgs e) => Render();
+
+    private List<Choice> GroupChoices()
+    {
+        var groups = AppServices.ModGroups.Load().Groups.OrderBy(g => g.SortOrder).ToList();
+        var used = _installed.Select(r => r.Option.GroupId).ToHashSet();
+
+        return
+        [
+            new(Strings.Filter_AllGroups, null),
+            .. groups.Where(g => used.Contains(g.Id)).Select(g => new Choice(g.Name, g.Id)),
+            new(Strings.Filter_Ungrouped, Guid.Empty),
+        ];
+    }
+
+    private static List<Choice> CategoryChoices() =>
+    [
+        new(Strings.Filter_AllCategories, null),
+        .. AppServices.ModCache.AllMods
+            .Select(m => m.Category)
+            .Where(c => c is { Title.Length: > 0 })
+            .GroupBy(c => c!.Id)
+            .Select(g => g.First()!)
+            .OrderBy(c => c.Title, StringComparer.CurrentCultureIgnoreCase)
+            .Select(c => new Choice(c.Title!, c.Id)),
+    ];
+
+    private IEnumerable<ModListAddRow> Filtered(IEnumerable<ModListAddRow> rows)
+    {
+        if (HideOnListBox.IsChecked == true) rows = rows.Where(r => !r.IsOnList);
+
+        if (!_showingCatalog)
+        {
+            if (ShowDisabledBox.IsChecked != true) rows = rows.Where(r => !r.Option.IsDisabled);
+
+            if (GroupBox.SelectedItem is Choice { Value: Guid group })
+                rows = group == Guid.Empty
+                    ? rows.Where(r => r.Option.GroupId is null)
+                    : rows.Where(r => r.Option.GroupId == group);
+
+            return (InstalledSortBox.SelectedItem as Choice)?.Value is Sort.RecentlyInstalled
+                ? rows.OrderByDescending(r => r.Option.InstalledAt ?? DateTimeOffset.MinValue).ThenBy(r => r.Name, StringComparer.CurrentCultureIgnoreCase)
+                : rows.OrderBy(r => r.Name, StringComparer.CurrentCultureIgnoreCase);
+        }
+
+        if (CategoryBox.SelectedItem is Choice { Value: int category })
+            rows = rows.Where(r => r.Option.CategoryId == category);
+
+        if (ForMySptBox.IsChecked == true) rows = rows.Where(r => r.Option.FitsInstalledSpt);
+
+        return (CatalogSortBox.SelectedItem as Choice)?.Value switch
+        {
+            Sort.RecentlyUpdated => rows.OrderByDescending(r => r.Option.UpdatedAt ?? DateTimeOffset.MinValue),
+            Sort.Name => rows.OrderBy(r => r.Name, StringComparer.CurrentCultureIgnoreCase),
+            _ => rows.OrderByDescending(r => r.Option.Downloads ?? 0),
+        };
+    }
+
     //
     // Rebuilds the visible slice, then puts the ticks back on whatever survived into it. Both
     // halves matter: a tick made under one search has to still be there after another.
@@ -195,12 +302,12 @@ public partial class ModListAddModWindow : FluentWindow
     {
         // The search box raises TextChanged as the XAML is loaded, before the rest of the window
         // exists. AddButton is the last element this method touches, so it is the one to check.
-        if (RowsBox is null || AddButton is null) return;
+        if (!_ready || RowsBox is null || AddButton is null) return;
 
         var query = SearchBox.Text.Trim();
         var source = _showingCatalog ? _catalog : _installed;
 
-        List<ModListAddRow> matched = query.Length == 0 ? source : [.. source.Where(r => r.Matches(query))];
+        List<ModListAddRow> matched = [.. Filtered(query.Length == 0 ? source : source.Where(r => r.Matches(query)))];
         var shown = matched.Count > MaxRows ? matched.Take(MaxRows).ToList() : matched;
 
         _syncing = true;

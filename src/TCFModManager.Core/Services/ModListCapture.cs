@@ -67,6 +67,8 @@ public sealed record ModListCandidate
     // an apply needs it, because a client+server mod has to move as one thing.
     //
     public IReadOnlyList<InstalledMod> Entries { get; init; } = [];
+
+    public DateTimeOffset? InstalledAt { get; init; }
 }
 
 //

@@ -93,6 +93,62 @@
                 PlaceholderText="{loc:Str ModListAdd_SearchPlaceholder}"
                 TextChanged="SearchBox_TextChanged" />
 
+            <WrapPanel Margin="0,10,0,0">
+                <ComboBox
+                    x:Name="GroupBox"
+                    MinWidth="180"
+                    Margin="0,0,8,6"
+                    DisplayMemberPath="Label"
+                    ToolTip="{loc:Str ModListAdd_GroupToolTip}"
+                    SelectionChanged="Filter_Changed" />
+
+                <ComboBox
+                    x:Name="CategoryBox"
+                    MinWidth="180"
+                    Margin="0,0,8,6"
+                    DisplayMemberPath="Label"
+                    SelectionChanged="Filter_Changed" />
+
+                <ComboBox
+                    x:Name="InstalledSortBox"
+                    MinWidth="200"
+                    Margin="0,0,8,6"
+                    DisplayMemberPath="Label"
+                    SelectionChanged="Filter_Changed" />
+
+                <ComboBox
+                    x:Name="CatalogSortBox"
+                    MinWidth="200"
+                    Margin="0,0,8,6"
+                    DisplayMemberPath="Label"
+                    SelectionChanged="Filter_Changed" />
+            </WrapPanel>
+
+            <WrapPanel>
+                <CheckBox
+                    x:Name="HideOnListBox"
+                    Margin="0,0,16,0"
+                    IsChecked="True"
+                    Content="{loc:Str ModListAdd_HideOnList}"
+                    Checked="Filter_Changed"
+                    Unchecked="Filter_Changed" />
+
+                <CheckBox
+                    x:Name="ShowDisabledBox"
+                    Margin="0,0,16,0"
+                    IsChecked="True"
+                    Content="{loc:Str ModListAdd_ShowDisabled}"
+                    Checked="Filter_Changed"
+                    Unchecked="Filter_Changed" />
+
+                <CheckBox
+                    x:Name="ForMySptBox"
+                    Margin="0,0,16,0"
+                    IsChecked="True"
+                    Checked="Filter_Changed"
+                    Unchecked="Filter_Changed" />
+            </WrapPanel>
+
             <TextBlock
                 x:Name="SourceNote"
                 TextWrapping="Wrap"
