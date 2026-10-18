@@ -2814,6 +2814,42 @@
   <data name="ModLists_NewListToolTip" xml:space="preserve">
     <value>Создать список из установленного или загрузить готовый</value>
   </data>
+  <data name="ModListAdd_SortRecentlyInstalled" xml:space="preserve">
+    <value>Недавно установленные или обновлённые</value>
+  </data>
+  <data name="ModListAdd_HideOnList" xml:space="preserve">
+    <value>Скрыть моды, которые уже в списке</value>
+  </data>
+  <data name="ModListAdd_ShowDisabled" xml:space="preserve">
+    <value>Показывать отключённые моды</value>
+  </data>
+  <data name="ModListAdd_ForSptFormat" xml:space="preserve">
+    <value>Только моды для SPT {0}</value>
+  </data>
+  <data name="ModListAdd_GroupToolTip" xml:space="preserve">
+    <value>Показать только моды из одной из ваших групп на странице «Установленные»</value>
+  </data>
+  <data name="ModLists_ViewCompact" xml:space="preserve">
+    <value>Компактно</value>
+  </data>
+  <data name="ModLists_NewEmpty" xml:space="preserve">
+    <value>Пустой список…</value>
+  </data>
+  <data name="ModLists_NewEmptyToolTip" xml:space="preserve">
+    <value>Создать пустой список и добавить моды самому</value>
+  </data>
+  <data name="ModLists_EmptyHeader" xml:space="preserve">
+    <value>Новый пустой список</value>
+  </data>
+  <data name="ModLists_EmptyDescription" xml:space="preserve">
+    <value>Назовите список, затем заполните его через «Добавить моды». Ничего не устанавливается и не меняется, пока вы его не примените.</value>
+  </data>
+  <data name="ModLists_Create" xml:space="preserve">
+    <value>Создать</value>
+  </data>
+  <data name="ModLists_CreatedEmptyFormat" xml:space="preserve">
+    <value>Список «{0}» создан - он пуст. Нажмите «Добавить моды», чтобы заполнить его.</value>
+  </data>
   <data name="ModLists_NewFromInstalled" xml:space="preserve">
     <value>Из установленного…</value>
   </data>
@@ -3036,7 +3072,7 @@
     <value>Название списка</value>
   </data>
   <data name="ModLists_NoEntries" xml:space="preserve">
-    <value>В этом списке пока нет модов. Добавьте их или запишите то, что у вас установлено, как новый список.</value>
+    <value>Этот список пуст. Нажмите «Добавить моды», чтобы заполнить его.</value>
   </data>
   <data name="ModLists_NoMatches" xml:space="preserve">
     <value>В этом списке нет совпадений. Всё осталось на месте - расширьте поиск или фильтр области, чтобы это увидеть.</value>

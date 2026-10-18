@@ -2655,6 +2655,42 @@ Annuler  -  ne rien supprimer</value>
   <data name="ModLists_NewListToolTip" xml:space="preserve">
     <value>Créer une liste à partir de ce qui est installé, ou en importer une</value>
   </data>
+  <data name="ModListAdd_SortRecentlyInstalled" xml:space="preserve">
+    <value>Installés ou mis à jour récemment</value>
+  </data>
+  <data name="ModListAdd_HideOnList" xml:space="preserve">
+    <value>Masquer les mods déjà dans cette liste</value>
+  </data>
+  <data name="ModListAdd_ShowDisabled" xml:space="preserve">
+    <value>Afficher les mods désactivés</value>
+  </data>
+  <data name="ModListAdd_ForSptFormat" xml:space="preserve">
+    <value>Seulement les mods pour SPT {0}</value>
+  </data>
+  <data name="ModListAdd_GroupToolTip" xml:space="preserve">
+    <value>N'afficher que les mods de l'un de vos groupes de la page Installés</value>
+  </data>
+  <data name="ModLists_ViewCompact" xml:space="preserve">
+    <value>Compact</value>
+  </data>
+  <data name="ModLists_NewEmpty" xml:space="preserve">
+    <value>Liste vide…</value>
+  </data>
+  <data name="ModLists_NewEmptyToolTip" xml:space="preserve">
+    <value>Commencer une liste vide et y ajouter vous-même des mods</value>
+  </data>
+  <data name="ModLists_EmptyHeader" xml:space="preserve">
+    <value>Nouvelle liste vide</value>
+  </data>
+  <data name="ModLists_EmptyDescription" xml:space="preserve">
+    <value>Nommez la liste, puis remplissez-la avec Ajouter des mods. Rien n'est installé ni modifié tant que vous ne l'appliquez pas.</value>
+  </data>
+  <data name="ModLists_Create" xml:space="preserve">
+    <value>Créer</value>
+  </data>
+  <data name="ModLists_CreatedEmptyFormat" xml:space="preserve">
+    <value>« {0} » créée - elle est vide. Cliquez sur Ajouter des mods pour la remplir.</value>
+  </data>
   <data name="ModLists_NewFromInstalled" xml:space="preserve">
     <value>À partir de ce qui est installé…</value>
   </data>
@@ -2871,7 +2907,7 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
     <value>Nom de la liste</value>
   </data>
   <data name="ModLists_NoEntries" xml:space="preserve">
-    <value>Cette liste ne nomme encore aucun mod. Ajoutez-en, ou capturez ce que vous avez installé comme nouvelle liste.</value>
+    <value>Cette liste est vide. Cliquez sur Ajouter des mods pour la remplir.</value>
   </data>
   <data name="ModLists_NoMatches" xml:space="preserve">
     <value>Rien ne correspond dans cette liste. Tout est toujours là - élargissez la recherche ou le filtre de portée pour le voir.</value>
