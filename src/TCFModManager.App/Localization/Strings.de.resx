@@ -2825,9 +2825,6 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="ModLists_FromServerToolTip" xml:space="preserve">
     <value>Ein Server hat dir diese Liste übergeben. Sie bleibt genau so, wie dieser Server sie geschrieben hat - mach eine Kopie, um ihren Inhalt zu ändern.</value>
   </data>
-  <data name="ModLists_Import" xml:space="preserve">
-    <value>Importieren</value>
-  </data>
   <data name="ModLists_ImportDialogTitle" xml:space="preserve">
     <value>Eine geteilte Modliste öffnen</value>
   </data>

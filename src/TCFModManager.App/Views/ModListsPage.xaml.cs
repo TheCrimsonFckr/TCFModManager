@@ -31,11 +31,12 @@ public partial class ModListsPage : Page
         Unloaded += (_, _) => ViewModel.PageHidden();
     }
 
-    private void ListMenuButton_Click(object sender, RoutedEventArgs e)
+    private void OpenMenu_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not FrameworkElement { ContextMenu: { } menu } button) return;
 
         menu.DataContext = button.DataContext;
+        menu.MinWidth = button.ActualWidth;
         menu.PlacementTarget = button;
         menu.Placement = PlacementMode.Bottom;
         menu.IsOpen = true;

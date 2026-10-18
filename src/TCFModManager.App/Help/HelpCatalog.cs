@@ -249,7 +249,7 @@ internal static class HelpCatalog
             Topic("modlists.capture", () => Strings.Help_ModLists_Capture_Title,
                 Step(() => Strings.Help_ModLists_Capture_Step1, () => Strings.Nav_ModLists),
                 Step(() => Strings.Help_ModLists_Capture_Step2,
-                    () => Strings.ModLists_CaptureHeader, () => Strings.ModLists_Capture))
+                    () => Strings.ModLists_NewList, () => Strings.ModLists_NewFromInstalled))
                 .WithNote(() => Strings.Help_ModLists_Capture_Note)
                 .WithKeywords(() => Strings.Help_ModLists_Capture_Keywords),
 
@@ -280,7 +280,7 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_ModLists_Share_Step1,
                     () => Strings.Nav_ModLists, () => Strings.ModLists_Export),
                 Step(() => Strings.Help_ModLists_Share_Step2,
-                    () => Strings.ModLists_Import, () => Strings.Nav_ModLists),
+                    () => Strings.ModLists_ImportFile, () => Strings.Nav_ModLists),
                 Step(() => Strings.Help_ModLists_Share_Step3,
                     () => Strings.ModLists_Preview, () => Strings.ModLists_Apply))
                 .WithNote(() => Strings.Help_ModLists_Share_Note)
@@ -447,7 +447,7 @@ internal static class HelpCatalog
 
             Topic("servermap.publish", () => Strings.Help_ServerMap_Publish_Title,
                 Step(() => Strings.Help_ServerMap_Publish_Step1,
-                    () => Strings.Nav_ModLists, () => Strings.ModLists_Capture),
+                    () => Strings.Nav_ModLists, () => Strings.ModLists_NewFromInstalled),
                 Step(() => Strings.Help_ServerMap_Publish_Step2),
                 Step(() => Strings.Help_ServerMap_Publish_Step3,
                     () => Strings.Common_Save, () => Strings.ModLists_Publish))

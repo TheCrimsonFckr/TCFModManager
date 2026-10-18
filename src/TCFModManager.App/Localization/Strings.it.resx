@@ -2825,9 +2825,6 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="ModLists_FromServerToolTip" xml:space="preserve">
     <value>Un server ti ha passato questa lista. Resta esattamente come l'ha scritta quel server - fanne una copia per cambiarne il contenuto.</value>
   </data>
-  <data name="ModLists_Import" xml:space="preserve">
-    <value>Importa</value>
-  </data>
   <data name="ModLists_ImportDialogTitle" xml:space="preserve">
     <value>Apri una lista mod condivisa</value>
   </data>

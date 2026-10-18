@@ -2990,9 +2990,6 @@
   <data name="ModLists_FromServerToolTip" xml:space="preserve">
     <value>Этот список передал вам сервер. Он остаётся ровно таким, каким его составил сервер - сделайте копию, чтобы менять его состав.</value>
   </data>
-  <data name="ModLists_Import" xml:space="preserve">
-    <value>Импорт</value>
-  </data>
   <data name="ModLists_ImportDialogTitle" xml:space="preserve">
     <value>Открыть присланный список модов</value>
   </data>

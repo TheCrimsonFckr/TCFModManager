@@ -186,57 +186,35 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <ui:Card Grid.Row="0" Padding="16">
-                <StackPanel>
-                    <TextBlock
-                        FontWeight="SemiBold"
-                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                        Text="{loc:Str ModLists_CaptureHeader}" />
-
-                    <TextBlock
-                        TextWrapping="Wrap"
-                        Margin="0,4,0,12"
-                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                        Text="{loc:Str ModLists_CaptureDescription}" />
-
-                    <ui:TextBox
-                        PlaceholderText="{loc:Str ModLists_NamePlaceholder}"
-                        Text="{Binding NewListName, UpdateSourceTrigger=PropertyChanged}" />
-
-                    <Grid Margin="0,12,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <ui:Button
-                            Grid.Column="0"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Center"
-                            Appearance="Primary"
+            <ui:Button
+                Grid.Row="0"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                Appearance="Primary"
+                Icon="{ui:SymbolIcon Add24}"
+                Content="{loc:Str ModLists_NewList}"
+                ToolTip="{loc:Str ModLists_NewListToolTip}"
+                Click="OpenMenu_Click">
+                <ui:Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem
+                            Header="{loc:Str ModLists_NewFromInstalled}"
                             Icon="{ui:SymbolIcon AppsList24}"
-                            Content="{loc:Str ModLists_Capture}"
-                            Command="{Binding CaptureCommand}" />
-
-                        <ui:Button
-                            Grid.Column="1"
-                            Margin="10,0,0,0"
-                            ToolTip="{loc:Str ModLists_ImportToolTip}"
+                            ToolTip="{loc:Str ModLists_CaptureDescription}"
+                            Command="{Binding CaptureNewCommand}" />
+                        <MenuItem
+                            Header="{loc:Str ModLists_ImportFile}"
                             Icon="{ui:SymbolIcon ArrowImport24}"
-                            Content="{loc:Str ModLists_Import}"
+                            ToolTip="{loc:Str ModLists_ImportToolTip}"
                             Command="{Binding ImportCommand}" />
-                    </Grid>
-
-                    <ui:Button
-                        Margin="0,10,0,0"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center"
-                        ToolTip="{loc:Str ModLists_ImportFromSpModToolTip}"
-                        Icon="{ui:SymbolIcon Globe24}"
-                        Content="{loc:Str ModLists_ImportFromSpMod}"
-                        Command="{Binding ImportFromSpModCommand}" />
-                </StackPanel>
-            </ui:Card>
+                        <MenuItem
+                            Header="{loc:Str ModLists_ImportFromSpMod}"
+                            Icon="{ui:SymbolIcon Globe24}"
+                            ToolTip="{loc:Str ModLists_ImportFromSpModToolTip}"
+                            Command="{Binding ImportFromSpModCommand}" />
+                    </ContextMenu>
+                </ui:Button.ContextMenu>
+            </ui:Button>
 
             <TextBlock
                 Grid.Row="1"
@@ -565,7 +543,7 @@
                         Appearance="Secondary"
                         Icon="{ui:SymbolIcon MoreHorizontal24}"
                         ToolTip="{loc:Str ModLists_MoreActionsToolTip}"
-                        Click="ListMenuButton_Click">
+                        Click="OpenMenu_Click">
                         <ui:Button.ContextMenu>
                             <ContextMenu>
                                 <MenuItem

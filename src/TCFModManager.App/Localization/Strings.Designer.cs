@@ -107,7 +107,10 @@ internal static class Strings
     internal static string ModLists_CaptureDescription => LocalizationService.Get("ModLists_CaptureDescription");
     internal static string ModLists_NamePlaceholder => LocalizationService.Get("ModLists_NamePlaceholder");
     internal static string ModLists_Capture => LocalizationService.Get("ModLists_Capture");
-    internal static string ModLists_Import => LocalizationService.Get("ModLists_Import");
+    internal static string ModLists_NewList => LocalizationService.Get("ModLists_NewList");
+    internal static string ModLists_NewListToolTip => LocalizationService.Get("ModLists_NewListToolTip");
+    internal static string ModLists_NewFromInstalled => LocalizationService.Get("ModLists_NewFromInstalled");
+    internal static string ModLists_ImportFile => LocalizationService.Get("ModLists_ImportFile");
     internal static string ModLists_ImportToolTip => LocalizationService.Get("ModLists_ImportToolTip");
     internal static string ModLists_SavedHeader => LocalizationService.Get("ModLists_SavedHeader");
     internal static string ModLists_SavedEmpty => LocalizationService.Get("ModLists_SavedEmpty");

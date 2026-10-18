@@ -418,8 +418,18 @@
     <value>Capture</value>
     <comment>Button label - makes a list out of what is installed now.</comment>
   </data>
-  <data name="ModLists_Import" xml:space="preserve">
-    <value>Import</value>
+  <data name="ModLists_NewList" xml:space="preserve">
+    <value>New list</value>
+    <comment>Button at the top of the saved lists; opens a menu of ModLists_NewFromInstalled, ModLists_ImportFile and ModLists_ImportFromSpMod. Help text says "press New list" - translate it the same way.</comment>
+  </data>
+  <data name="ModLists_NewListToolTip" xml:space="preserve">
+    <value>Make a list from what's installed, or bring one in</value>
+  </data>
+  <data name="ModLists_NewFromInstalled" xml:space="preserve">
+    <value>From what’s installed…</value>
+  </data>
+  <data name="ModLists_ImportFile" xml:space="preserve">
+    <value>Import a file…</value>
   </data>
   <data name="ModLists_ImportToolTip" xml:space="preserve">
     <value>Open a mod list someone shared with you</value>
@@ -6205,7 +6215,7 @@ This was written to:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_ModLists_Capture_Step2" xml:space="preserve">
-    <value>Under {0}, type a name and press {1}.</value>
+    <value>Press {0}, choose {1} and give the list a name.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_ModLists_Capture_Note" xml:space="preserve">
@@ -6271,7 +6281,7 @@ This was written to:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_ModLists_Share_Step2" xml:space="preserve">
-    <value>Send the file however you like. Your friend presses {0} on {1} and picks it.</value>
+    <value>Send the file however you like. Your friend chooses {0} under New list on {1} and picks it.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_ModLists_Share_Step3" xml:space="preserve">
@@ -6537,14 +6547,14 @@ This was written to:
     <comment>How-to title. For the person running the server.</comment>
   </data>
   <data name="Help_ServerMap_Publish_Step1" xml:space="preserve">
-    <value>On the machine the server runs on, open {0}, type a name and press {1}.</value>
+    <value>On the machine the server runs on, open {0}, press New list, choose {1} and give the list a name.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_ServerMap_Publish_Step2" xml:space="preserve">
     <value>Take off anything the players don't need. Each row's scope button says which machines it's for.</value>
   </data>
   <data name="Help_ServerMap_Publish_Step3" xml:space="preserve">
-    <value>Press {0}, then {1}.</value>
+    <value>Press {0}, then {1} from the ⋯ menu.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_ServerMap_Publish_Note" xml:space="preserve">
@@ -7861,7 +7871,7 @@ See Dependencies and Conflicts.</value>
     <comment>How-to title.</comment>
   </data>
   <data name="Help_ModLists_SpMod_Step1" xml:space="preserve">
-    <value>On {0}, press {1}.</value>
+    <value>On {0}, press New list and choose {1}.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_ModLists_SpMod_Step2" xml:space="preserve">

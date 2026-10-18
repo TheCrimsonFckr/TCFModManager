@@ -1116,6 +1116,15 @@ public partial class ModListsViewModel : LocalizedViewModel
         if (active is not null && Selected?.Id == active.Id) StatusMessage = Text(Strings.ModLists_FollowingFormat, active.Name);
     }
 
+    [RelayCommand]
+    private async Task CaptureNewAsync()
+    {
+        if (ModListNameWindow.Ask() is not { } name) return;
+
+        NewListName = name;
+        await CaptureAsync();
+    }
+
     // Saves what's installed right now as a new list.
     [RelayCommand]
     private async Task CaptureAsync()
