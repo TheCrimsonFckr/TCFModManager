@@ -54,6 +54,20 @@ public class HeadlessAdviceScopesTests
             Assert.Null(HeadlessAdviceScopes.Suggest(verdict, scope));
     }
 
+    [Theory]
+    [InlineData(HeadlessVerdict.Avoid, Client | Headless, true)]
+    [InlineData(HeadlessVerdict.Avoid, Everyone, true)]
+    [InlineData(HeadlessVerdict.Avoid, Headless, true)]
+    [InlineData(HeadlessVerdict.Avoid, Client, false)]
+    [InlineData(HeadlessVerdict.Avoid, Server, false)]
+    [InlineData(HeadlessVerdict.Needs, Client, true)]
+    [InlineData(HeadlessVerdict.Needs, Client | Server, true)]
+    [InlineData(HeadlessVerdict.Needs, Client | Headless, false)]
+    [InlineData(HeadlessVerdict.Mentions, Everyone, false)]
+    [InlineData(HeadlessVerdict.None, Client, false)]
+    public void NeedsAttention_IsAKeepOffStillReachingTheHeadlessOrANeedsSkippingIt(HeadlessVerdict verdict, ModListEntryScope scope, bool expected) =>
+        Assert.Equal(expected, HeadlessAdviceScopes.NeedsAttention(verdict, scope));
+
     [Fact]
     public void AnAddon_UsesItsOwnAdviceFirst()
     {

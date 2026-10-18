@@ -16,6 +16,8 @@ internal static class AppServices
     // to releases that actually shipped rather than the boundaries constraints are written with.
     public static SptReleaseCatalog SptCatalog { get; } = new(SpModApi);
 
+    public static HeadlessAdviceService HeadlessAdvice { get; } = new(SpModApi);
+
     public static ModDownloadService Downloads { get; } = new();
 
     public static ModInstallManifestService InstallManifest { get; } = new();

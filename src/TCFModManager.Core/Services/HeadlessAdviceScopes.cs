@@ -19,6 +19,12 @@ public static class HeadlessAdviceScopes
     public static bool IsWarning(HeadlessVerdict verdict, ModListEntryScope scope) =>
         verdict == HeadlessVerdict.Needs && Suggest(verdict, scope) is not null;
 
+    public static bool KeepsOff(HeadlessVerdict verdict, ModListEntryScope scope) =>
+        verdict == HeadlessVerdict.Avoid && scope.HasFlag(ModListEntryScope.Headless);
+
+    public static bool NeedsAttention(HeadlessVerdict verdict, ModListEntryScope scope) =>
+        KeepsOff(verdict, scope) || IsWarning(verdict, scope);
+
     public static HeadlessAdviceForEntry? ForAddon(HeadlessAdvice? own, HeadlessAdvice? parent)
     {
         if (own is null) return null;

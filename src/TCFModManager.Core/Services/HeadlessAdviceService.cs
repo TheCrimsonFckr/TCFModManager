@@ -17,6 +17,7 @@ public sealed class HeadlessAdviceService
     private readonly TimeSpan _pause;
     private readonly Func<DateTimeOffset> _now;
     private readonly SemaphoreSlim _gate = new(1, 1);
+    private readonly Lock _cacheLock = new();
     private Dictionary<string, HeadlessAdviceStore.Cached>? _cache;
 
     public HeadlessAdviceService(
@@ -33,16 +34,11 @@ public sealed class HeadlessAdviceService
 
     public HeadlessAdvice? Known(HeadlessSubject subject)
     {
-        _gate.Wait();
-        try
+        lock (_cacheLock)
         {
             return Cache().TryGetValue(subject.Key, out var cached) && cached.ReaderVersion == HeadlessAdviceReader.Version
                 ? cached.Advice
                 : null;
-        }
-        finally
-        {
-            _gate.Release();
         }
     }
 
@@ -57,20 +53,23 @@ public sealed class HeadlessAdviceService
         await _gate.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            var cache = Cache();
             var stale = new List<HeadlessSubject>();
+            var fresh = new List<(HeadlessSubject Subject, HeadlessAdvice Advice)>();
 
-            foreach (var subject in wanted)
+            lock (_cacheLock)
             {
-                if (cache.TryGetValue(subject.Key, out var cached) && IsFresh(cached, subject))
+                var cache = Cache();
+                foreach (var subject in wanted)
                 {
-                    resolved[subject] = cached.Advice;
-                    progress?.Report(new(subject, cached.Advice, FromCache: true));
+                    if (cache.TryGetValue(subject.Key, out var cached) && IsFresh(cached, subject)) fresh.Add((subject, cached.Advice));
+                    else stale.Add(subject);
                 }
-                else
-                {
-                    stale.Add(subject);
-                }
+            }
+
+            foreach (var (subject, advice) in fresh)
+            {
+                resolved[subject] = advice;
+                progress?.Report(new(subject, advice, FromCache: true));
             }
 
             var changed = false;
@@ -84,7 +83,7 @@ public sealed class HeadlessAdviceService
                     var subject = stale[i];
                     if (await FetchAsync(subject, ct).ConfigureAwait(false) is not { } fetched) continue;
 
-                    cache[subject.Key] = fetched;
+                    lock (_cacheLock) Cache()[subject.Key] = fetched;
                     changed = true;
                     resolved[subject] = fetched.Advice;
                     progress?.Report(new(subject, fetched.Advice, FromCache: false));
@@ -92,7 +91,12 @@ public sealed class HeadlessAdviceService
             }
             finally
             {
-                if (changed) _store.Save(cache);
+                if (changed)
+                {
+                    Dictionary<string, HeadlessAdviceStore.Cached> snapshot;
+                    lock (_cacheLock) snapshot = new(Cache(), StringComparer.OrdinalIgnoreCase);
+                    _store.Save(snapshot);
+                }
             }
 
             if (stale.Count > 0)

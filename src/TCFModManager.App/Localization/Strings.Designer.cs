@@ -527,6 +527,16 @@ internal static class Strings
     internal static string ModLists_ScopeHeadlessOnly => LocalizationService.Get("ModLists_ScopeHeadlessOnly");
     internal static string ModLists_ScopeServerOnly => LocalizationService.Get("ModLists_ScopeServerOnly");
     internal static string ModLists_ScopeFilterAll => LocalizationService.Get("ModLists_ScopeFilterAll");
+    internal static string ModLists_ScopeFilterAdvice => LocalizationService.Get("ModLists_ScopeFilterAdvice");
+    internal static string ModLists_AdviceKeepOffFormat => LocalizationService.Get("ModLists_AdviceKeepOffFormat");
+    internal static string ModLists_AdviceNeedsWarningFormat => LocalizationService.Get("ModLists_AdviceNeedsWarningFormat");
+    internal static string ModLists_AdviceNeedsBadge => LocalizationService.Get("ModLists_AdviceNeedsBadge");
+    internal static string ModLists_AdviceSetScopeFormat => LocalizationService.Get("ModLists_AdviceSetScopeFormat");
+    internal static string ModLists_AdviceSetScopeToolTip => LocalizationService.Get("ModLists_AdviceSetScopeToolTip");
+    internal static string ModLists_AdviceQuotesFormat => LocalizationService.Get("ModLists_AdviceQuotesFormat");
+    internal static string ModLists_AdviceFound(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_AdviceFound", count, values);
+    internal static string ModLists_StatusThenAdviceFormat => LocalizationService.Get("ModLists_StatusThenAdviceFormat");
     internal static string ModLists_SortNameAscending => LocalizationService.Get("ModLists_SortNameAscending");
     internal static string ModLists_SortNameDescending => LocalizationService.Get("ModLists_SortNameDescending");
     internal static string ModLists_EntryAddon => LocalizationService.Get("ModLists_EntryAddon");

@@ -175,6 +175,36 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
 
     // For Browse's "Has dependencies" badge, which looks it up once per mod and remembers it.
     public Mod? Mod { get; init; }
+
+    public HeadlessAdvice? Advice { get; init; }
+
+    public ModListEntryScope? AdviceScope { get; init; }
+
+    public bool AdviceKeepsOff => Advice is { } advice && HeadlessAdviceScopes.KeepsOff(advice.Verdict, Entry.EffectiveScope);
+
+    public bool AdviceIsWarning => Advice is { } advice && HeadlessAdviceScopes.IsWarning(advice.Verdict, Entry.EffectiveScope);
+
+    public bool NeedsAttention => AdviceKeepsOff || AdviceIsWarning;
+
+    public bool HasAdviceAction => AdviceScope is not null;
+
+    public string? AdviceHint =>
+        AdviceKeepsOff ? LocalizationService.Text(Strings.ModLists_AdviceKeepOffFormat, FirstQuote)
+        : AdviceIsWarning ? LocalizationService.Text(Strings.ModLists_AdviceNeedsWarningFormat, FirstQuote)
+        : null;
+
+    public string? AdviceBadge =>
+        Advice?.Verdict == HeadlessVerdict.Needs && !AdviceIsWarning ? Strings.ModLists_AdviceNeedsBadge : null;
+
+    public string? AdviceActionLabel => AdviceScope is { } scope
+        ? LocalizationService.Text(Strings.ModLists_AdviceSetScopeFormat, ModListScopes.Label(scope))
+        : null;
+
+    public string? AdviceToolTip => Advice is { Quotes.Count: > 0 } advice
+        ? LocalizationService.Text(Strings.ModLists_AdviceQuotesFormat, string.Join(Environment.NewLine, advice.Quotes))
+        : null;
+
+    private string FirstQuote => Advice?.Quotes.FirstOrDefault() ?? string.Empty;
 }
 
 //
@@ -241,9 +271,11 @@ public static class ModListScopes
 }
 
 // One choice in the contents panel's scope filter. A null Scope means "don't filter on it".
-public sealed class ModListScopeFilter(string key, ModListEntryScope? scope) : LocalizedViewModel
+public sealed class ModListScopeFilter(string key, ModListEntryScope? scope, bool adviceOnly = false) : LocalizedViewModel
 {
     public ModListEntryScope? Scope { get; } = scope;
+
+    public bool AdviceOnly { get; } = adviceOnly;
 
     // Read on every get rather than captured, so choosing a language relabels the dropdown without
     // rebuilding it - which would drop the selection and reset the filter.
@@ -322,6 +354,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         new(ModListScopes.Key(ModListEntryScope.Client)!, ModListEntryScope.Client),
         new(ModListScopes.Key(ModListEntryScope.Headless)!, ModListEntryScope.Headless),
         new(ModListScopes.Key(ModListEntryScope.Server)!, ModListEntryScope.Server),
+        new(nameof(Strings.ModLists_ScopeFilterAdvice), null, adviceOnly: true),
     ];
 
     public IReadOnlyList<ModListEntrySort> EntrySorts { get; } =
@@ -378,6 +411,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         if (item is not ModListEntryRowViewModel row) return false;
 
         if (ScopeFilter?.Scope is { } scope && row.Entry.EffectiveScope != scope) return false;
+        if (ScopeFilter?.AdviceOnly == true && !row.NeedsAttention) return false;
 
         var search = EntrySearch?.Trim();
         if (string.IsNullOrEmpty(search)) return true;
@@ -417,6 +451,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     //
     [NotifyCanExecuteChangedFor(nameof(PublishCommand))]
     [NotifyCanExecuteChangedFor(nameof(CycleScopeCommand))]
+    [NotifyCanExecuteChangedFor(nameof(TakeAdviceCommand))]
     [NotifyCanExecuteChangedFor(nameof(RefreshVersionsCommand))]
     private ModListRowViewModel? _selected;
 
@@ -651,7 +686,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     public int VisibleEntryCount => EntriesView.Cast<object>().Count();
 
     public bool IsFiltered =>
-        ScopeFilter?.Scope is not null || !string.IsNullOrWhiteSpace(EntrySearch);
+        ScopeFilter?.Scope is not null || ScopeFilter?.AdviceOnly == true || !string.IsNullOrWhiteSpace(EntrySearch);
 
     // A list with entries, a filter on, and nothing matching it. Its own state because the advice
     // is different: nothing is wrong, and the fix is to widen the filter rather than add mods.
@@ -747,6 +782,8 @@ public partial class ModListsViewModel : LocalizedViewModel
         // Whatever was in the buffer is gone; the panel now shows the file again.
         UnsavedCount = 0;
         Notify();
+
+        LoadAdvice();
     }
 
     //
@@ -789,6 +826,8 @@ public partial class ModListsViewModel : LocalizedViewModel
         };
         if (entry.ModId is not { } modId) return row;
 
+        if (!entry.IsAddon) row = WithAdvice(row, modId);
+
         var url = SpModListImport.PageFor(entry.IsAddon, modId);
 
         if (entry.IsAddon)
@@ -816,6 +855,99 @@ public partial class ModListsViewModel : LocalizedViewModel
     }
 
     private Dictionary<int, Mod> _mods = [];
+
+    private static ModListEntryRowViewModel WithAdvice(ModListEntryRowViewModel row, int modId)
+    {
+        if (AppServices.HeadlessAdvice.Known(HeadlessSubject.ForMod(modId)) is not { Verdict: not HeadlessVerdict.None } advice) return row;
+
+        return row with
+        {
+            Advice = advice,
+            AdviceScope = HeadlessAdviceScopes.Suggest(advice.Verdict, row.Entry.EffectiveScope),
+        };
+    }
+
+    private CancellationTokenSource? _adviceCancel;
+
+    private Guid? _announceAdviceFor;
+
+    private string? _announceAfter;
+
+    private void LoadAdvice()
+    {
+        _adviceCancel?.Cancel();
+        _adviceCancel = null;
+
+        if (Selected is not { } list) return;
+
+        var subjects = Entries
+            .Select(e => e.Entry)
+            .Where(e => e is { ModId: not null, IsAddon: false })
+            .Select(e => HeadlessSubject.ForMod(e.ModId!.Value, _mods.TryGetValue(e.ModId!.Value, out var mod) ? mod.UpdatedAt : null))
+            .ToList();
+
+        if (subjects.Count == 0) return;
+
+        var cancel = _adviceCancel = new CancellationTokenSource();
+        _ = LoadAdviceAsync(list.Id, subjects, cancel);
+    }
+
+    private async Task LoadAdviceAsync(Guid listId, List<HeadlessSubject> subjects, CancellationTokenSource cancel)
+    {
+        await Task.Yield();
+
+        var progress = new Progress<HeadlessAdviceResolved>(resolved =>
+        {
+            if (!cancel.IsCancellationRequested && !resolved.FromCache) ShowAdvice(resolved.Subject.Id);
+        });
+
+        IReadOnlyDictionary<HeadlessSubject, HeadlessAdvice> resolved;
+        try
+        {
+            resolved = await AppServices.HeadlessAdvice.ResolveAsync(subjects, progress, cancel.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            return;
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("ModLists", $"couldn't load headless advice: {ex.Message}");
+            return;
+        }
+
+        if (cancel.IsCancellationRequested || Selected?.Id != listId || _announceAdviceFor != listId) return;
+        _announceAdviceFor = null;
+
+        var byId = resolved.ToDictionary(r => r.Key.Id, r => r.Value);
+        var count = Entries.Count(e => e.Entry is { ModId: { } id, IsAddon: false }
+            && byId.TryGetValue(id, out var advice)
+            && HeadlessAdviceScopes.NeedsAttention(advice.Verdict, e.Entry.EffectiveScope));
+
+        if (count > 0 && StatusMessage == _announceAfter)
+            StatusMessage = Text(Strings.ModLists_StatusThenAdviceFormat, StatusMessage, Strings.ModLists_AdviceFound(count));
+    }
+
+    private void ShowAdvice(int modId)
+    {
+        var changed = false;
+
+        for (var i = 0; i < Entries.Count; i++)
+        {
+            if (Entries[i].Entry is not { IsAddon: false } entry || entry.ModId != modId) continue;
+
+            var rebuilt = Row(entry);
+            if (SameAdvice(rebuilt.Advice, Entries[i].Advice)) continue;
+
+            Entries[i] = rebuilt;
+            changed = true;
+        }
+
+        if (changed) Notify();
+    }
+
+    private static bool SameAdvice(HeadlessAdvice? a, HeadlessAdvice? b) =>
+        a?.Verdict == b?.Verdict && (a?.Quotes ?? []).SequenceEqual(b?.Quotes ?? []);
 
     private static string? CardFacts(string? author, int? downloads)
     {
@@ -1022,9 +1154,11 @@ public partial class ModListsViewModel : LocalizedViewModel
             }
 
             NewListName = string.Empty;
+            _announceAdviceFor = captured.Id;
             Refresh(captured.Id);
             StatusMessage = Strings.ModLists_Captured(
                 captured.Entries.Count, captured.Entries.Count, captured.Name);
+            _announceAfter = StatusMessage;
         });
     }
 
@@ -1634,12 +1768,21 @@ public partial class ModListsViewModel : LocalizedViewModel
     [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
     private void CycleScope(ModListEntryRowViewModel? entry)
     {
-        if (Selected is null || entry is null) return;
+        if (entry is not null) SetScope(entry, ModListScopes.Next(entry.Entry.EffectiveScope));
+    }
+
+    [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
+    private void TakeAdvice(ModListEntryRowViewModel? entry)
+    {
+        if (entry?.AdviceScope is { } scope) SetScope(entry, scope);
+    }
+
+    private void SetScope(ModListEntryRowViewModel entry, ModListEntryScope next)
+    {
+        if (Selected is null) return;
 
         var index = Entries.IndexOf(entry);
         if (index < 0) return;
-
-        var next = ModListScopes.Next(entry.Entry.EffectiveScope);
 
         // ModListEntry is a class with init-only properties, not a record, so this is a rebuild
         // rather than a `with`. Every field is carried across deliberately - a missed one here

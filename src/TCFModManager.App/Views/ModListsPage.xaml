@@ -975,6 +975,14 @@
                                                         Content="{loc:Str Browse_BadgeHasDependencies}"
                                                         Visibility="Collapsed"
                                                         behaviors:DependencyBadgeLoader.Mod="{Binding Mod}" />
+                                                    <ui:Badge
+                                                        Margin="0,0,6,2"
+                                                        Appearance="Info"
+                                                        FontSize="11"
+                                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                        Content="{Binding AdviceBadge}"
+                                                        ToolTip="{Binding AdviceToolTip}"
+                                                        Visibility="{Binding AdviceBadge, Converter={StaticResource NullToCollapsed}}" />
                                                 </WrapPanel>
 
                                                 <TextBlock
@@ -982,7 +990,42 @@
                                                     FontSize="12"
                                                     Margin="0,3,0,0"
                                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                    ToolTip="{Binding AdviceToolTip}"
                                                     Text="{Binding Detail}" />
+
+                                                <Grid
+                                                    Margin="0,6,0,0"
+                                                    Visibility="{Binding AdviceHint, Converter={StaticResource NullToCollapsed}}">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBlock
+                                                        Grid.Column="0"
+                                                        TextWrapping="Wrap"
+                                                        FontSize="12"
+                                                        VerticalAlignment="Center"
+                                                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                                                        ToolTip="{Binding AdviceToolTip}"
+                                                        Text="{Binding AdviceHint}" />
+
+                                                    <Grid
+                                                        Grid.Column="1"
+                                                        Margin="8,0,0,0"
+                                                        VerticalAlignment="Center"
+                                                        Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
+                                                        <ui:Button
+                                                            Padding="8,3"
+                                                            FontSize="12"
+                                                            Appearance="Secondary"
+                                                            Content="{Binding AdviceActionLabel}"
+                                                            ToolTip="{loc:Str ModLists_AdviceSetScopeToolTip}"
+                                                            Visibility="{Binding HasAdviceAction, Converter={StaticResource BoolToVis}}"
+                                                            Command="{Binding DataContext.TakeAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                            CommandParameter="{Binding}" />
+                                                    </Grid>
+                                                </Grid>
                                             </StackPanel>
 
                                                 <ui:Button
