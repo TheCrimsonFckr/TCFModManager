@@ -2649,6 +2649,18 @@ Annuler  -  ne rien supprimer</value>
   <data name="ModLists_Capture" xml:space="preserve">
     <value>Capturer</value>
   </data>
+  <data name="ModLists_NewList" xml:space="preserve">
+    <value>Nouvelle liste</value>
+  </data>
+  <data name="ModLists_NewListToolTip" xml:space="preserve">
+    <value>Créer une liste à partir de ce qui est installé, ou en importer une</value>
+  </data>
+  <data name="ModLists_NewFromInstalled" xml:space="preserve">
+    <value>À partir de ce qui est installé…</value>
+  </data>
+  <data name="ModLists_ImportFile" xml:space="preserve">
+    <value>Importer un fichier…</value>
+  </data>
   <data name="ModLists_Captured_one" xml:space="preserve">
     <value>{0} mod activé capturé dans « {1} ».</value>
   </data>
@@ -2945,6 +2957,12 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   <data name="ModLists_Rename" xml:space="preserve">
     <value>Renommer</value>
   </data>
+  <data name="ModLists_MoreActionsToolTip" xml:space="preserve">
+    <value>Plus d'actions pour cette liste - exporter, copier, publier, supprimer, etc.</value>
+  </data>
+  <data name="ModLists_CancelRenameToolTip" xml:space="preserve">
+    <value>Garder le nom actuel</value>
+  </data>
   <data name="ModLists_RenamedFormat" xml:space="preserve">
     <value>Renommée en « {0} ».</value>
   </data>
@@ -2965,6 +2983,9 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   </data>
   <data name="ModLists_SavedEmpty" xml:space="preserve">
     <value>Rien d'enregistré pour l'instant. Capturez ce que vous avez installé, ou importez une liste qu'on vous a envoyée.</value>
+  </data>
+  <data name="ModLists_FollowingBadge" xml:space="preserve">
+    <value>Suivie</value>
   </data>
   <data name="ModLists_SavedHeader" xml:space="preserve">
     <value>Listes enregistrées</value>
@@ -2992,6 +3013,37 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   </data>
   <data name="ModLists_ScopeFilterAll" xml:space="preserve">
     <value>Toutes les portées</value>
+  </data>
+  <data name="ModLists_ScopeFilterAdvice" xml:space="preserve">
+    <value>Conseils headless</value>
+  </data>
+  <data name="ModLists_AdviceKeepOffLabel" xml:space="preserve">
+    <value>Pas sur le headless</value>
+  </data>
+  <data name="ModLists_AdviceQuoteFormat" xml:space="preserve">
+    <value>« {0} »</value>
+  </data>
+  <data name="ModLists_AdviceNeedsBadge" xml:space="preserve">
+    <value>Requis sur le headless</value>
+  </data>
+  <data name="ModLists_AdviceSetScopeFormat" xml:space="preserve">
+    <value>Passer en {0}</value>
+  </data>
+  <data name="ModLists_AdviceSetScopeToolTip" xml:space="preserve">
+    <value>Modifie la portée de cette entrée comme le suggère sa page sp-mod. Enregistrez la liste pour conserver le changement.</value>
+  </data>
+  <data name="ModLists_AdviceQuotesFormat" xml:space="preserve">
+    <value>D'après sa page sp-mod :
+{0}</value>
+  </data>
+  <data name="ModLists_AdviceFound_one" xml:space="preserve">
+    <value>{0} mod de cette liste a un conseil headless sur sa page sp-mod - choisissez Conseils headless dans le filtre de portée pour le voir.</value>
+  </data>
+  <data name="ModLists_AdviceFound_other" xml:space="preserve">
+    <value>{0} mods de cette liste ont des conseils headless sur leur page sp-mod - choisissez Conseils headless dans le filtre de portée pour les voir.</value>
+  </data>
+  <data name="ModLists_StatusThenAdviceFormat" xml:space="preserve">
+    <value>{0} {1}</value>
   </data>
   <data name="ModLists_ScopeFilterToolTip" xml:space="preserve">
     <value>N'afficher que les entrées destinées à un type de machine. Serveur uniquement désigne les mods qu'un joueur n'a jamais à installer ; Client uniquement, ceux qu'un client headless Fika ignore.</value>
@@ -3051,7 +3103,7 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
     <value>Restauration impossible. {0}</value>
   </data>
   <data name="ModLists_UndoLabelFormat" xml:space="preserve">
-    <value>Restaurer « {0} »</value>
+    <value>Annuler la dernière application ({0})</value>
   </data>
   <data name="ModLists_UndoneFormat" xml:space="preserve">
     <value>Installation remise dans l'état d'avant la dernière application. {0} activés, {1} désactivés.</value>
@@ -5215,7 +5267,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Ouvrez {0}.</value>
   </data>
   <data name="Help_ModLists_Capture_Step2" xml:space="preserve">
-    <value>Sous {0}, tapez un nom et cliquez sur {1}.</value>
+    <value>Cliquez sur {0}, choisissez {1} et donnez un nom à la liste.</value>
   </data>
   <data name="Help_ModLists_Capture_Note" xml:space="preserve">
     <value>La liste enregistre chaque mod activé dans la version que vous avez. Rien ne change sur le disque.</value>
@@ -5266,7 +5318,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Choisissez la liste dans {0}, cliquez sur {1} et enregistrez le fichier.</value>
   </data>
   <data name="Help_ModLists_Share_Step2" xml:space="preserve">
-    <value>Envoyez le fichier comme vous voulez. Votre ami clique sur {0} dans {1} et le sélectionne.</value>
+    <value>Envoyez le fichier comme vous voulez. Votre ami choisit {0} sous Nouvelle liste dans {1} et le sélectionne.</value>
   </data>
   <data name="Help_ModLists_Share_Step3" xml:space="preserve">
     <value>Il clique sur {0}, puis sur {1}. Son application télécharge elle-même chaque mod depuis sp-mod.com.</value>
@@ -5476,13 +5528,13 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Publier ma liste de mods depuis mon serveur</value>
   </data>
   <data name="Help_ServerMap_Publish_Step1" xml:space="preserve">
-    <value>Sur la machine où tourne le serveur, ouvrez {0}, tapez un nom et cliquez sur {1}.</value>
+    <value>Sur la machine où tourne le serveur, ouvrez {0}, cliquez sur Nouvelle liste, choisissez {1} et donnez un nom à la liste.</value>
   </data>
   <data name="Help_ServerMap_Publish_Step2" xml:space="preserve">
     <value>Retirez ce dont les joueurs n'ont pas besoin. Le bouton de portée de chaque ligne indique pour quelles machines elle est.</value>
   </data>
   <data name="Help_ServerMap_Publish_Step3" xml:space="preserve">
-    <value>Cliquez sur {0}, puis sur {1}.</value>
+    <value>Cliquez sur {0}, puis sur {1} dans le menu ⋯.</value>
   </data>
   <data name="Help_ServerMap_Publish_Note" xml:space="preserve">
     <value>N'appliquez pas cette liste réduite sur la machine du serveur - elle désactiverait les mods du serveur lui-même. Gardez une liste complète pour le serveur et publiez la liste réduite.</value>
@@ -6536,7 +6588,7 @@ Voir Dépendances et conflits.</value>
     <value>Importer une liste depuis sp-mod</value>
   </data>
   <data name="Help_ModLists_SpMod_Step1" xml:space="preserve">
-    <value>Sur {0}, cliquez sur {1}.</value>
+    <value>Sur {0}, cliquez sur Nouvelle liste et choisissez {1}.</value>
   </data>
   <data name="Help_ModLists_SpMod_Step2" xml:space="preserve">
     <value>Collez l'adresse de la liste sur sp-mod et cliquez sur {0}. S'il vous faut encore en trouver une, {1} ouvre la page des listes de sp-mod.</value>

@@ -2808,6 +2808,18 @@
   <data name="ModLists_Capture" xml:space="preserve">
     <value>Записать</value>
   </data>
+  <data name="ModLists_NewList" xml:space="preserve">
+    <value>Новый список</value>
+  </data>
+  <data name="ModLists_NewListToolTip" xml:space="preserve">
+    <value>Создать список из установленного или загрузить готовый</value>
+  </data>
+  <data name="ModLists_NewFromInstalled" xml:space="preserve">
+    <value>Из установленного…</value>
+  </data>
+  <data name="ModLists_ImportFile" xml:space="preserve">
+    <value>Импорт из файла…</value>
+  </data>
   <data name="ModLists_Captured_few" xml:space="preserve">
     <value>{0} включённых мода сохранены как «{1}».</value>
   </data>
@@ -3113,6 +3125,12 @@
   <data name="ModLists_Rename" xml:space="preserve">
     <value>Переименовать</value>
   </data>
+  <data name="ModLists_MoreActionsToolTip" xml:space="preserve">
+    <value>Другие действия со списком - экспорт, копия, публикация, удаление и т. д.</value>
+  </data>
+  <data name="ModLists_CancelRenameToolTip" xml:space="preserve">
+    <value>Оставить текущее название</value>
+  </data>
   <data name="ModLists_RenamedFormat" xml:space="preserve">
     <value>Переименовано в «{0}».</value>
   </data>
@@ -3136,6 +3154,9 @@
   </data>
   <data name="ModLists_SavedEmpty" xml:space="preserve">
     <value>Пока ничего не сохранено. Запишите то, что у вас установлено, или импортируйте присланный вам список.</value>
+  </data>
+  <data name="ModLists_FollowingBadge" xml:space="preserve">
+    <value>Отслеживается</value>
   </data>
   <data name="ModLists_SavedHeader" xml:space="preserve">
     <value>Сохранённые списки</value>
@@ -3163,6 +3184,40 @@
   </data>
   <data name="ModLists_ScopeFilterAll" xml:space="preserve">
     <value>Все области</value>
+  </data>
+  <data name="ModLists_ScopeFilterAdvice" xml:space="preserve">
+    <value>Советы для headless</value>
+  </data>
+  <data name="ModLists_AdviceKeepOffLabel" xml:space="preserve">
+    <value>Не ставить на headless</value>
+  </data>
+  <data name="ModLists_AdviceQuoteFormat" xml:space="preserve">
+    <value>«{0}»</value>
+  </data>
+  <data name="ModLists_AdviceNeedsBadge" xml:space="preserve">
+    <value>Нужен headless</value>
+  </data>
+  <data name="ModLists_AdviceSetScopeFormat" xml:space="preserve">
+    <value>Сделать «{0}»</value>
+  </data>
+  <data name="ModLists_AdviceSetScopeToolTip" xml:space="preserve">
+    <value>Меняет область этой записи так, как советует её страница на sp-mod. Сохраните список, чтобы изменение осталось.</value>
+  </data>
+  <data name="ModLists_AdviceQuotesFormat" xml:space="preserve">
+    <value>Со страницы мода на sp-mod:
+{0}</value>
+  </data>
+  <data name="ModLists_AdviceFound_one" xml:space="preserve">
+    <value>У {0} мода в этом списке есть совет для headless на странице sp-mod - выберите «Советы для headless» в фильтре областей, чтобы увидеть его.</value>
+  </data>
+  <data name="ModLists_StatusThenAdviceFormat" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="ModLists_AdviceFound_few" xml:space="preserve">
+    <value>У {0} модов в этом списке есть советы для headless на их страницах sp-mod - выберите «Советы для headless» в фильтре областей, чтобы увидеть их.</value>
+  </data>
+  <data name="ModLists_AdviceFound_many" xml:space="preserve">
+    <value>У {0} модов в этом списке есть советы для headless на их страницах sp-mod - выберите «Советы для headless» в фильтре областей, чтобы увидеть их.</value>
   </data>
   <data name="ModLists_ScopeFilterToolTip" xml:space="preserve">
     <value>Показывать только записи, предназначенные для одного типа машин. «Только сервер» - моды, которые игроку никогда не предлагается устанавливать; «Только клиент» - те, что пропускает headless-клиент Fika.</value>
@@ -3222,7 +3277,7 @@
     <value>Не удалось вернуть. {0}</value>
   </data>
   <data name="ModLists_UndoLabelFormat" xml:space="preserve">
-    <value>Вернуть «{0}»</value>
+    <value>Отменить последнее применение ({0})</value>
   </data>
   <data name="ModLists_UndoneFormat" xml:space="preserve">
     <value>Установка возвращена к тому виду, какой был до последнего применения. {0} включено, {1} отключено.</value>
@@ -5503,7 +5558,7 @@
     <value>Откройте {0}.</value>
   </data>
   <data name="Help_ModLists_Capture_Step2" xml:space="preserve">
-    <value>В разделе {0} введите название и нажмите {1}.</value>
+    <value>Нажмите {0}, выберите {1} и введите название списка.</value>
   </data>
   <data name="Help_ModLists_Capture_Note" xml:space="preserve">
     <value>Список записывает каждый включённый мод с той версией, что у вас стоит. На диске ничего не меняется.</value>
@@ -5554,7 +5609,7 @@
     <value>Выберите список на странице {0}, нажмите {1} и сохраните файл.</value>
   </data>
   <data name="Help_ModLists_Share_Step2" xml:space="preserve">
-    <value>Отправьте файл как угодно. Друг нажимает {0} на странице {1} и выбирает его.</value>
+    <value>Отправьте файл как угодно. Друг выбирает {0} в меню «Новый список» на странице {1} и указывает его.</value>
   </data>
   <data name="Help_ModLists_Share_Step3" xml:space="preserve">
     <value>Затем он нажимает {0}, а потом {1}. Его приложение само скачивает каждый мод с sp-mod.com.</value>
@@ -5764,13 +5819,13 @@
     <value>Опубликовать мой список модов со своего сервера</value>
   </data>
   <data name="Help_ServerMap_Publish_Step1" xml:space="preserve">
-    <value>На машине, где работает сервер, откройте {0}, введите название и нажмите {1}.</value>
+    <value>На машине, где работает сервер, откройте {0}, нажмите «Новый список», выберите {1} и введите название списка.</value>
   </data>
   <data name="Help_ServerMap_Publish_Step2" xml:space="preserve">
     <value>Уберите всё, что не нужно игрокам. Кнопка области в каждой строке показывает, для каких машин она.</value>
   </data>
   <data name="Help_ServerMap_Publish_Step3" xml:space="preserve">
-    <value>Нажмите {0}, затем {1}.</value>
+    <value>Нажмите {0}, затем {1} в меню ⋯.</value>
   </data>
   <data name="Help_ServerMap_Publish_Note" xml:space="preserve">
     <value>Не применяйте этот урезанный список на машине сервера - он отключит собственные моды сервера. Держите полный список для сервера, а публикуйте урезанный.</value>
@@ -6875,7 +6930,7 @@
     <value>Импортировать список с sp-mod</value>
   </data>
   <data name="Help_ModLists_SpMod_Step1" xml:space="preserve">
-    <value>На странице {0} нажмите {1}.</value>
+    <value>На странице {0} нажмите «Новый список» и выберите {1}.</value>
   </data>
   <data name="Help_ModLists_SpMod_Step2" xml:space="preserve">
     <value>Вставьте адрес списка с sp-mod и нажмите {0}. Если список ещё нужно найти, {1} откроет страницу списков sp-mod.</value>
