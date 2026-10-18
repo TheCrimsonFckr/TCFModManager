@@ -1,0 +1,430 @@
+[
+  {
+    "id": 1973,
+    "name": "Event Auto Profile Backup",
+    "expected": "Mentions",
+    "html": "<li>Compatible with Fika\n<ul>\n<li>Creates separate backups for each profile</li>\n<li>Does not back up dedicated/headless profiles as they would just take up space unnecessarily.\n<ul>\n<li>v1.7.x (for 3.10) checks for dedicated_</li>\n<li>v1.8.x-v2.x (for 3.11-4.1) checks for headless_</li>\n\n</ul>\n</li>\n</ul>\n</li>\n</ul></div></div>\n"
+  },
+  {
+    "id": 2299,
+    "name": "Show Me The Money (Item Pricing)",
+    "expected": "Avoid",
+    "html": "<p>Practically none. If you can run SPT, you can run this.</p>\n<h4>If you use the FIKA headless client:</h4>\n<p>Splendid news: <strong>Do not install anything there.</strong> Seriously, don’t. It will only cause complications, headaches, and possibly the rising of ancient eldritch forces. Add this mod to your <code>Exclusions.json</code> if you use Corter’s Mod Sync.</p>\n<h4>Configuration</h4>"
+  },
+  {
+    "id": 1305,
+    "name": "Repair Max Durability",
+    "expected": "Avoid",
+    "html": "<p>Compatible with FIKA</p>\n<p>Headless: only install BepInEx plugin on playing clients, not the headless client. Install server mod normally</p>\n</div></div>\n\n<div id=\"tabset-1-panel-7\" class=\"tab-panel\"><div class=\"tab-title\">Rant</div>"
+  },
+  {
+    "id": 1431,
+    "name": "Dynamic Maps",
+    "expected": "Avoid",
+    "html": "\n<ol>\n\n<li>Do not install the Bepinex side of this mod on the Fika Headless client, it will not load.</li>\n<li>All clients should have it, but it is not required for all clients to have.</li>\n<li>The Fika Server must have the Dynamic Maps Server side of the mod installed.</li>"
+  },
+  {
+    "id": 1853,
+    "name": "StatTrack",
+    "expected": "Avoid",
+    "html": "\n<ol>\n\n<li>Do not install the Bepinex side of this mod on the Fika Headless client, it will not load.</li>\n<li>All clients should have it, but it is not required for all clients to have.</li>\n<li>The Fika Server must have the StatTrack Server side of the mod installed.</li>"
+  },
+  {
+    "id": 2101,
+    "name": "SPT Leaderboard",
+    "expected": "Avoid",
+    "html": "<p><strong>Non-Fika users (default SPT installation)</strong> - Drag and drop/replace the contents of the 7z archive.</p>\n<p><strong>Fika users who host the server</strong> - SPT Leaderboard Server mod must be installed. Client Mod still goes into your game folder where you launch your game and is not required to be installed on headless client if you use that.</p>\n<p><strong>Users who use ModSync</strong> - This would sync your secret tokens across the clients. We do not support this setup in any way and this may lead to unexpected errors in SPTLB Network including data loss.</p>\n<h3>Secret Token - what does it do, how to login into SPTLB Network and what you might wanna know</h3>\n\n<ul>\n\n<li><a target=\"_blank\" class=\"external-link\" href=\"https://sp-mod.com/mod/2326/project-fika\" rel=\"noreferrer noopener\">Project Fika</a> - Full support, including multiple player instances simultaneously online and playing using Headless client.</li>\n<li><a target=\"_blank\" class=\"external-link\" href=\"https://sp-mod.com/mod/2246/wtt-armory\" rel=\"noreferrer noopener\">WTT - Welcome To T∗∗∗∗∗</a> - Support for its custom achievements including but not limited to achievements page, player profiles, weapon icons and other metadata on modded weapons on both Meta, and player profile pages.</li>\n<li><a target=\"_blank\" class=\"external-link\" href=\"https://sp-mod.com/mod/1853/stattrack\" rel=\"noreferrer noopener\">StatTrack</a> - Full support. Includes custom tracking player loss of a weapon on the server, preventing from losing previous weapon stats. Will display all weapons on profile page, including player’s most used weapon, and record the statistics on Meta Page.</li>"
+  },
+  {
+    "id": 2427,
+    "name": "RUAF Come Home!",
+    "expected": "Needs",
+    "html": "<h2>Fika has been tested and is supported by both this and UNTAR Go Home, my other faction mod. Make sure this and all dependencies are correctly installed on the host, connecting players, and headless if you use that. Also make sure WTT Common Lib is updated to the latest version that supports Fika. When you do all that, things should work properly!</h2>\n<p>RUAF Come Home! adds RUAF as a proper faction to SPT. Encounter patrolling squads of soldiers. They have orders to shoot U∗∗∗ on sight, so be careful! If you’re a B∗∗∗, they’ll show you more tolerance, but keep your distance.</p>\n<h2>INSTALL INSTRUCTIONS</h2>\n<h3>Note for Fika</h3>\n<p>The client-side portion of this mod and its dependencies are required on all connecting clients, the host, and headless if you are using that. Make sure everyone has the plugin and patcher correctly installed before using on Fika.</p>\n<p>RUAF Come Home! requires BigBrain, MoreBotsAPI, and WTTCommonLib to run. Waypoint is not required currently but recommended. I also recommend SAIN for enhancing the combat behavior of the RUAF bots and for configuring their characteristics. There is also support for Couturier, using some clothes from that mod!</p>\n<h3>Note on uninstalling when using SAIN</h3>"
+  },
+  {
+    "id": 2342,
+    "name": "UNTAR Go Home!",
+    "expected": "Needs",
+    "html": "<h2>Fully uninstall the old version of this mod by deleting the mod’s folders/files before updating this mod.</h2>\n<h2>Fika has been tested and is supported by both this and RUAF Come Home, my other faction mod. Make sure this and all dependencies are correctly installed on the host, connecting players, and headless if you use that. Also make sure WTT Common Lib is updated to the latest version that supports Fika. When you do all that, things should work properly!</h2>\n<p>Yet they’re still here in T∗∗∗∗∗…</p>\n<p>UNTAR Go Home! adds UNTAR as a proper faction to SPT. Encounter roving patrols of peacekeepers. Their ROE states that they are only to shoot if threatened, so try not to piss them off!</p>\n<h4>Note for Fika</h4>\n<p>The client-side portion of this mod and its dependencies are required on all connecting clients, the host, and headless if you are using that. Make sure everyone has the plugin and patcher correctly installed before using on Fika.</p>\n<p>UNTAR Go Home! requires <a target=\"_blank\" class=\"external-link\" href=\"https://sp-mod.com/mod/902/bigbrain\" rel=\"noreferrer noopener\">BigBrain</a>, MoreBotsAPI, and WTT Common Lib to run.\n<a target=\"_blank\" class=\"external-link\" href=\"https://sp-mod.com/mod/827/waypoints-expanded-navmesh\" rel=\"noreferrer noopener\">Waypoint</a> is not required but recommended.\nI also recommend SAIN for enhancing the combat behavior of the UNTAR bots and for configuring their characteristics.\nThere’s now support for Couturier if you have that mod installed, adding new clothes (and later gear) to UNTAR bots!</p>\n<h3>Note on uninstalling when using SAIN</h3>"
+  },
+  {
+    "id": 2422,
+    "name": "Foldables",
+    "expected": "Needs",
+    "html": "<li><a target=\"_blank\" class=\"external-link\" href=\"https://sp-mod.com/mod/1342/ui-fixes\" rel=\"noreferrer noopener\">UIFixes</a> by <a target=\"_blank\" class=\"external-link\" href=\"https://sp-mod.com/user/46005/tyfon\" rel=\"noreferrer noopener\">Tyfon</a> MultiSelect interoperability: Fold/unfold multiple gear if it allows</li>\n<li>Fika: Must also be installed in the headless client. Players interacting with the same item is untested</li>\n<li>This should work with mods that add custom gear</li>\n\n</ul></div></div>\n"
+  },
+  {
+    "id": 2326,
+    "name": "Project Fika",
+    "expected": "Mentions",
+    "html": "<li>Quest progress sharing in raids</li>\n<li>Optional/Advanced Headless client to offload AI and gain performance (more info <a target=\"_blank\" class=\"external-link\" href=\"https://project-fika.gitbook.io/wiki/advanced-features/headless-client\" rel=\"noreferrer noopener\">here</a>)</li>\n<li>Network interpolation for smoother gameplay</li>\n<li>UPnP and NAT Punching</li>"
+  },
+  {
+    "id": 2441,
+    "name": "NARCONet - Mod Sync",
+    "expected": "Mentions",
+    "html": "<p>This is completely optional and can be skipped. It is provided as a speedup feature for people who want to avoid the restart on update.</p>\n<p>A Linux build is also present. I use it as an entry point injection in my fika headless docker image to pre-sync the mods before the game runs. This avoids a restart of the headless when a client mod is synced.</p>\n<h2>Docker server</h2>\n<p>When using the docker server you MUST provide new volumes for NarcoNet to find some BepInEx folder to use:</p>"
+  },
+  {
+    "id": 2426,
+    "name": "MoreBotsAPI",
+    "expected": "Needs",
+    "html": "<p>A client and server API that makes making custom bots a little less infuriating. Create a prepatch and server mod that implements this API and you’ll have the basis for introducing new bosses, factions, and any other custom bot you can think of (maybe, this is still T∗∗∗∗∗).</p>\n<h2>Fika compatible confirmed for version 1.1.0. Make sure you install properly on all clients, the host, and headless with the latest dependencies for any mod that implements this API.</h2>\n<h2>DISCLAIMER</h2>\n<p>This repo uses the CC BY-NC-SA 4.0 License. To implement this API in your own mod, please contact me first for permission. This API does a lot and has the potential to break other mods and people’s games when used incorrectly. In addition, overriding another mod’s WildSpawnType enum values or vanilla values will cause MANY problems and create a headache for everyone involved, trying to find out what exactly is going wrong for users. In addition, this will make it easier for me to track what WildSpawnType enums are being used so there’s no future conflicts.\n</p>"
+  },
+  {
+    "id": 2449,
+    "name": "Fika Headless Launcher",
+    "expected": "Mentions",
+    "html": "<div class=\"tab-content\"><p>This a neat and simple little Windows-based launcher that I decided to write because running three different files to play my game is a hassle. In the process of writing this tool I became a fluent German and overengineered the heck out of it, but what’s life without some bugfixing?</p>\n<p>It’s a very easy-to-use launch utility. It is however designed around Fika, so you will have to install Fika and its Headless plugin for this to work as intended.</p>\n\n<hr />\n<blockquote>\n\n<p>Use the Fika Installer to install Fika before using this launcher.</p>\n\n<ul>\n\n<li>❗️ <strong>You will have to complete the “Headless host” installation procedure.</strong></li>\n\n</ul>\n</blockquote></div></div>\n\n<div id=\"tabset-1-panel-2\" class=\"tab-panel\"><div class=\"tab-title\">Image gallery</div>\n\n<ul>\n\n<li>The SPT server, Headless client and Player client are all managed seamlessly without any user input!</li>\n\n</ul>\n</li>\n\n<li>\n<p>Customizable Player directory;</p>"
+  },
+  {
+    "id": 1895,
+    "name": "[SAIN] Twitch Players",
+    "expected": "Mentions",
+    "html": "\n<blockquote>\n\n<p>Disclaimer: Some of the settings won’t correspond to what you’re actually seeing in the game if you use Fika Project/Headless. Some might experience instant head-eyes, some won’t. I have no fix for this. This Preset is heavily FPS dependent. The worse performance you get (looking at you, Headless Client hosters), the worse is your experience. This Mod&amp;Preset is not made for everyone. You perfectly know what you’re subscribing for by installing this mod. Or about to.. Find out.</p>\n\n</blockquote></div></div>\n\n<div id=\"tabset-1-panel-2\" class=\"tab-panel\"><div class=\"tab-title\">Bots are too hard?</div>"
+  },
+  {
+    "id": 1342,
+    "name": "UI Fixes",
+    "expected": "Needs",
+    "html": "<h3><strong>Important Note for Fika users</strong></h3>\n<p>Several of the features of UI Fixes make changes to inventory operations that are sent between multiple clients. You <strong>MUST</strong> install the same version of UI Fixes on all clients, including the dedicated client if you’re using that. At raid start, certain settings that must be in sync will be synced from the host client to all other clients, and only the host can change those settings (and they can at any time during raid).</p>\n<p>If you don’t use Fika or don’t know what that is, don’t worry about it.</p>\n<h3>Uninstallation</h3>"
+  },
+  {
+    "id": 1782,
+    "name": "SPT-VR",
+    "expected": "Needs",
+    "note": "reader says Needs: advice about running a headless, not this mod - harmless, a badge only",
+    "html": "<li>In SteamVR settings, go into your t∗∗∗∗∗ video settings and set the resolution in there to 100-150%. This is one of the things that hurts performance the most, the lower the better. You need a lot of VRAM if you want to run this at a high resolution (keep in mind if you’re using an upscaler, this setting plays together with that)</li>\n<li>Learn how to use a headless Fika client, I don’t recommend running headless through your own PC but it can help performance, just make sure you have AT LEAST 64GB of ram. In reality, you should run a headless client on a separate PC on your network that has at least 32GB of ram and a decent CPU</li>\n<li>Install a bot spawner mod such as MOAR or ABPS, these are also big helps to performance because the main killer of performance in SPT is the AI. These mods are much better at managing spawns.</li>\n<li>Last thing I’d suggest which may not apply for many people, I disable my 4k monitor whenever I play which seems to help a bit.</li>\n<p>Minimum CPU - Really I can’t recommend anything other than the AMD X3D chips like the 5800x3d, 9800x3d, etc</p>\n<p>Minimum RAM: 32GB if you have a secondary headless PC, if you’re self hosting you should really have more than 32GB</p>\n<p>Minimum drive - SSD or NVMe SSD, preferably NVMe but this isn’t a big deal</p>\n<p>You may be able to get away with slightly lower specs but this is what I recommend to have an actual playable experience.</p>"
+  },
+  {
+    "id": 2144,
+    "name": "Skill Distribution",
+    "expected": "Avoid",
+    "html": "\n</ol>\n\n<p><strong>If you are using Fika, DON’T install this mod on headless client - it will cause crashes!</strong></p>\n<h3>Updating</h3>\n<p><em>Most</em> of updates don’t break anything so follow the same steps as in <strong>Fresh install</strong>. However this mod don’t have any kind of config protection, so before updating make sure to backup config file and apply your changes again after updating.</p>"
+  },
+  {
+    "id": 2383,
+    "name": "Skills Extended",
+    "expected": "Needs",
+    "html": "<p>Install the whole package: Skills Extended includes both client and server components.</p>\n<p><strong>Using Fika?</strong> Install the core package and matching <strong>Fika integration addon</strong> on the host and every player, including your headless host if you use one. Keep everyone’s core and addon versions matched, and update them together. Check the release requirements for the required SPT and Fika versions.</p>\n</div></div>\n\n<div id=\"tabset-1-panel-3\" class=\"tab-panel\"><div class=\"tab-title\">Config Editor</div>\n<p><strong>Leveling example:</strong> a global multiplier of 2× and an Endurance multiplier of 1.5× give 3× incoming Endurance gameplay XP. Weapon mastery has its own multiplier. Quest skill rewards and manual profile edits retain their stated values.</p>\n<p>Save changes, then restart your game client to load updated client settings. In Fika, restart all connected game clients, including the headless host when used.</p>\n<p>Use the <strong>F12 menu</strong> for local preferences such as minigame volume, lock-picking sensitivity, controls, and reduced motion.</p>\n</div></div>\n"
+  },
+  {
+    "id": 2518,
+    "name": "Animated Traders",
+    "expected": "Avoid",
+    "html": "<li>Peacekeeper and Ref are missing because B∗∗ never made models for them.</li>\n<li>Breaks when starting a raid on a headless FIKA instance</li>\n\n</ul>\n<hr />\n\n<p><img loading=\"lazy\" decoding=\"async\" src=\"https://i.ibb.co/8gSqjk0p/Screenshot-2025-12-28-233027.png\" alt=\"image\" /></p>"
+  },
+  {
+    "id": 2543,
+    "name": "BossNotifier ",
+    "expected": "Mentions",
+    "html": "<div id=\"tabset-1-panel-4\" class=\"tab-panel\"><div class=\"tab-title\">⚠️ Known Issues</div>\n<div class=\"tab-content\"><ul>\n<li>Multiplayer (Fika) sync is not currently supported - the previous sync addon has been pulled due to reliability issues (host extract problems, unreliable Headless sync). Singleplayer is fully functional. Will revisit multiplayer support once it can be properly tested.</li>\n\n</ul>\n<hr />\n\n<p><em>Found a bug? Report it in the comments!</em></p>"
+  },
+  {
+    "id": 2552,
+    "name": "No Version Label in Raid",
+    "expected": "Avoid",
+    "html": "<p>Like the name says, when in raid, the version label disappears and reappears when you return to the menu. It was created to minimize the chance of burn-in with OLED monitors.</p>\n<p>Installation:\nDrag and drop 7z contents in your root directory of SPT game.\nOnly install on player clients (not on headless)</p>"
+  },
+  {
+    "id": 2563,
+    "name": "LoadBundleFaster (Crc32 Patch)",
+    "expected": "Mentions",
+    "html": "<h3>Who is this for? (Important!)</h3>\n<p><strong>This mod is specifically designed for: Remote / Headless Server Users.</strong></p>\n<p>Due to <a target=\"_blank\" class=\"external-link\" href=\"https://github.com/sp-tarkov/modules/blob/master/project/SPT.Custom/Utils/BundleManager.cs\" rel=\"noreferrer noopener\">how</a> SPT handles file verification, you only need this mod if your Client connects to the Server using <strong>ANY IP address OTHER THAN <code>127.0.0.1</code> or <code>localhost</code>.</strong></p>\n<h4>Why? The Technical Reason</h4>"
+  },
+  {
+    "id": 2599,
+    "name": "LoadBundleEvenFaster",
+    "expected": "Mentions",
+    "html": "<div id=\"tabset-1-panel-3\" class=\"tab-panel\"><div class=\"tab-title\">Who is this for? (Target Audience)</div>\n<div class=\"tab-content\"><p><strong>This mod is specifically designed for: Remote / Headless Server Users.</strong> + Installed WTT-Armory/WTT-ContentBackport (Or any bundle-heavy mod)</p>\n\n<ul>\n\n<li>tldr: if u feel the “Loading Bundle” on client startup or\n[Info   :BundleManager] CACHE: Loading locally [SomeBundle].bundle on headless startup is taking too much time</li>\n\n</ul>\n\n<p>Just like the Crc32 Patch, this mod targets the file verification bottleneck that only occurs when connecting to a remote server.</p>"
+  },
+  {
+    "id": 1479,
+    "name": "Raid Review",
+    "expected": "Needs",
+    "html": "\n</ol>\n\n<p><strong>Fika</strong> is supported (regular hosted and headless), install on ONE\nmachine only:</p>\n\n<ul>\n\n<li><strong>Regular Fika</strong>: install on the <strong>host</strong>’s machine. The host records\neverything (all bots, all connected players); clients need nothing.</li>\n<li><strong>Fika headless</strong>: install on the <strong>headless client</strong> only. Small\ncaveat: the headless has no “main player”, so the raid type always\nshows PMC and connected players appear as PMCs in the\nleaderboard. Everything else works normally.</li>\n\n</ul></div></div>\n\n<div id=\"tabset-1-panel-9\" class=\"tab-panel\"><div class=\"tab-title\">Supported Mods</div>"
+  },
+  {
+    "id": 2618,
+    "name": "Tripwire Improvement",
+    "expected": "Needs",
+    "html": "<h1>Fika compatible</h1>\n<p><strong>All the host (Headless) and clients should install this mod, and using the same settings.</strong><br />\nYou can copy the configured BepInEx\\config\\ciallo.inftripwire.cfg to other client (headless) in the same path.<br />\n<strong>A bug in Fika (not caused by this mod)</strong>: If one defuses the tripwire, others will act strangely on it.</p>\n<p><img loading=\"lazy\" decoding=\"async\" src=\"https://i.imgur.com/ugg6wAW.png\" alt=\"Effectview\" />\n<img loading=\"lazy\" decoding=\"async\" src=\"https://i.imgur.com/U0NdAwE.png\" alt=\"Effectview\" /></p>\n<h2>How to install</h2>"
+  },
+  {
+    "id": 2629,
+    "name": "WATCHDOG - The Headless Client Operations Suite",
+    "expected": "Mentions",
+    "html": "<p><strong>WATCHDOG</strong> is a lightweight, set-and-forget utility built to manage and stabilize an <strong>SPTarkov + Project FIKA</strong> server environment.</p>\n<p>It monitors both the <strong>SPT Server executable</strong> and the <strong>FIKA Headless Client</strong>, fully automating startup, shutdown, crash recovery, and scheduled restarts according to your settings.</p>\n<p><strong>This tool is designed specifically for 24/7 dedicated servers running on a separate machine</strong> (second PC, mini-PC, old laptop, etc.).<br />\nIt is <strong>not</strong> intended for local single-PC setups, if you run everything on your main gaming PC, this program is overkill.</p>\n<h2>Installation</h2>\n<li>Set your <strong>Server Executable</strong> and <strong>HeadlessManager Executable</strong> paths.</li>\n<li>Configure the runtime settings:\n<ul>\n<li><strong>Headless Start Delay</strong> (seconds) — Recommended: 30–60 seconds (gives the server time to fully load, heavier mod load = more time needed).</li>\n<li><strong>Scheduled Restart Interval</strong> (hours) — Default 24. Heavily modded servers are recommended every 4–12 hours for stability and memory cleanup.</li>\n<li><strong>Monitor Check Interval</strong> (seconds) — How often the program checks process health (5–30 seconds recommended).</li>\n\n<ul>\n\n<li>Server, Headless, and Monitor status (green = running, red = stopped)</li>\n<li>Next Scheduled Restart time</li>\n\n</ul>\n\n<li>Click <strong>Start Monitor</strong> on the Dashboard.</li>\n<li>The server and headless client launch automatically.</li>\n<li>WATCHDOG keeps everything alive 24/7, auto-restarts on crashes, and performs scheduled restarts.</li>\n<li>If tray mode is enabled, it minimizes to the system tray. Right-click → <strong>Show</strong> to restore it.</li>"
+  },
+  {
+    "id": 2644,
+    "name": "Roaming Zombies",
+    "expected": "Needs",
+    "html": "<li>✅ <strong>Fika host</strong> — host drives AI for all players in session</li>\n<li>✅ <strong>Fika headless</strong> — install client DLL on the headless, zombies hunt every connected player</li>\n<li>✅ <strong>Acid’s Bot Placement System (ABPS)</strong> — horde re-injected after ABPS’s post-raid wipe, both mods coexist cleanly</li>\n<li>✅ <strong>SAIN</strong> — SAIN explicitly excludes infected bot types from its overrides, so they don’t fight</li>\n\n</ol>\n\n<p><strong>Fika-specific:</strong> install the client DLL on whichever machine drives bot AI — that’s the host in a host/client session, or the <strong>headless</strong> in a headless session. Player-only machines can still install it for the horde notification + alert sound.</p>\n<h2>Configuration</h2>\n<p>Edit <code>SPT/user/mods/ZombieHorde/config.json</code> to tune:</p>"
+  },
+  {
+    "id": 2642,
+    "name": "Vagabond",
+    "expected": "Needs",
+    "html": "<li>Extract and copy the <code>SPT\\user\\mods\\Vagabond</code> folder to <code>SPT\\user\\mods</code> and the <code>BepInEx\\plugins\\Vagabond</code> to <code>BepInEx\\plugins</code>.</li>\n<li>If you use <strong>Headless</strong> clients, you will need to add the client plugin to the headless spt client as well.</li>\n<li>Create a new profile, and it will get enrolled as a new Vagabond.</li>\n\n</ol></div></div>\n"
+  },
+  {
+    "id": 2637,
+    "name": "RZEssentials",
+    "expected": "Mentions",
+    "html": "<h3>💠 About</h3>\n<p>This mod has been extensively tested in multiplayer through a Fika headless server setup, with a small group of 3-4 people playing almost every evening. I can confidently say that 95% of the features work perfectly, at least the ones I personally use. If you run into bugs, don’t hesitate to report them.</p>\n<p>I built this for myself first and I’m posting it hoping it’ll be useful to others.</p>\n\n<hr />\n"
+  },
+  {
+    "id": 2663,
+    "name": "Sniper Bros",
+    "expected": "Mentions",
+    "html": "<p>Extract the mod into the main folder of your game install.</p>\n<p>FIKA/Headless:</p>\n<p>This mod only needs to be on the host. So if you use a headless it only needs to be there.</p>\n<p>Compatibility:</p>\n<p>Should work with everything.</p>"
+  },
+  {
+    "id": 2658,
+    "name": "Camo And Stickers",
+    "expected": "Mentions",
+    "html": "\n</ul>\n</li>\n\n<li>Fika Headless compatibility?\n<ul>\n<li>Headless client requires bundles folder and all dlls, but addons are not necessary. Keep in mind, camos on AI guns are randomly generated by host from available textures, which means if headless client has no textures, there won’t be camos on AI guns.</li>\n\n</ul>\n</li>\n\n<li>What mods have you used in the video?\n<ul>\n<li>Brighter Interiors</li>"
+  },
+  {
+    "id": 2669,
+    "name": "Weapon Build Master",
+    "expected": "Mentions",
+    "html": "\n</li>\n\n<li>\n<p><strong>Fika.Headless:</strong> Same as above… Well, considering this is a strictly client-side UI mod that doesn’t even operate during active raids, theoretically, no other mod should break it.</p>\n\n</li>\n</ul>\n\n<p><strong>How to Use</strong></p>"
+  },
+  {
+    "id": 2678,
+    "name": "Toxic Bullet",
+    "expected": "Needs",
+    "html": "\n<ul>\n\n<li>Install this mod on every client including headless.</li>\n<li>Make sure everyone has the same BulletBuffConfig.json file.</li>\n\n</ul></div></div>\n"
+  },
+  {
+    "id": 2701,
+    "name": "Friendly Mounting",
+    "expected": "Needs",
+    "html": "\n</li>\n\n<li>\n<p>Drag the BepInEx folder from the zip file into your SPT folder. <strong>Needs to be installed on the headless.</strong></p>\n\n</li>\n</ol>\n\n<p><img loading=\"lazy\" decoding=\"async\" src=\"https://i.imgur.com/afNPjAw.gif\" alt=\"\" /></p>"
+  },
+  {
+    "id": 2714,
+    "name": "Discord Raid Map",
+    "expected": "Needs",
+    "html": "<li>Choose your own font. Add <code>.ttf</code> or <code>.otf</code> files to <code>Assets\\Fonts</code>, restart the game, then choose one with <code>Map Text &gt; Map Text Font</code>. <code>Default</code> uses the built-in bitmap font.</li>\n<li>Rename the Discord message (eg: Headless 1 etc…)</li>\n<li>Change font sizes</li>\n<li>Marker images are loaded from <code>Assets\\Markers</code>. Replace <code>player.png</code>, <code>skull_enemy.png</code>, <code>skull_boss.png</code>, <code>airdrop.png</code>, <code>extract.png</code>, or <code>extract_requirements.png</code> to customize them.</li>\n<h1>FAQ</h1>\n<p>Q: What if I’m using a headless ?<br />\nA: The mod only sends the Discord message if the client is the host, so the mod can go everywhere and there’ll only be one message even if there are multiple players with the mod installed.<br />\nThis also means that the mod needs to be on the headless since it’s the host.</p>\n\n<hr />\n\n<h1>Thanks:</h1>"
+  },
+  {
+    "id": 2706,
+    "name": "ORBIT 2.0",
+    "expected": "Needs",
+    "html": "<p><strong>🗺️ Your raid, your rules</strong></p>\n<p>Every behaviour setting lives in a <strong>web UI</strong> on your SPT server\n(<code>/orbit</code>, one button away from the F12 menu), including headless setups.\nMost settings apply next raid; faction takeover and personality brain\nlist changes require a game restart.</p>\n<p><strong>Presets</strong> keep settings and zones together: save your own setups,\nswitch between addons, or export a complete preset to share. Editing\n<strong>Default</strong> or an addon creates a personal <strong>Custom</strong> copy. Your existing\n2.0 settings and zones migrate automatically.</p>\n<p>Addon presets are detected automatically. A zones-only addon preserves\nyour behaviour settings, and updates to the selected addon are picked\nup automatically. Personal copies keep their own tuning.</p>\n<div id=\"tabset-1-panel-7\" class=\"tab-panel\"><div class=\"tab-title\">Fika</div>\n<div class=\"tab-content\"><p><strong>Install ORBIT on ALL machines:</strong> the SPT server, the headless client if you use one, and every player’s PC.</p>\n\n<ol>\n\n<li>Follow <strong>Install &amp; Setup</strong> for the dependencies.</li>\n<p><strong>No need to separate client and server files.</strong> Server files simply stay unused on machines that aren’t running the SPT server.</p>\n<p>The Fika addon synchronises Ghost battle sounds so every player can hear them, including when bots run on a headless client.</p>\n<p>Settings are shared through the SPT server. Use <strong>F12 &gt; Open web config UI</strong>, or open <code>https://YOUR_SERVER_IP:6969/orbit</code> with your server’s address and port.</p>\n</div></div>\n"
+  },
+  {
+    "id": 2757,
+    "name": "ImmersiveRaidTime",
+    "expected": "Mentions",
+    "html": "<li><strong>Fika.Co-op:</strong> Unsure/Untested.</li>\n<li><strong>Fika.Headless:</strong> Unsure/Untested. Same as above.</li>\n\n</ul>\n\n<p><strong>I Need Translate!</strong></p>"
+  },
+  {
+    "id": 2755,
+    "name": "ModSec: Server Rule Enforcement",
+    "expected": "Mentions",
+    "html": "\n<ul>\n\n<li>Starting a raid with Fika Headless may cause issues/errors (06-25-2026)</li>\n\n</ul>\n\n<h2>Support</h2>"
+  },
+  {
+    "id": 2791,
+    "name": "Tylevo's Tactical Service Control",
+    "expected": "Mentions",
+    "html": "<p>To change how much fits, open <strong>UH-60 Services</strong> in the dashboard and adjust <strong>Cargo Grid Columns</strong> and <strong>Cargo Grid Rows</strong>. Columns support <strong>1–10</strong>, rows support <strong>1–30</strong>, and <strong>0</strong> keeps the native size for that dimension. Changes apply the next time the cargo screen opens. Larger items take up more cells, so this changes inventory space rather than setting a fixed item count. These settings are also available as <strong>GridWidth / GridHeight</strong> under <strong>priorityExfil</strong> in SIC’s native editor.</p>\n<p>Cargo Transfer is available in solo play and is implemented for a human Fika host sending their own items. Non-host clients and dedicated-headless requesters can’t use it yet. Current Fika multiplayer remains untested.</p>\n</div></div>\n\n<div id=\"tabset-1-panel-5\" class=\"tab-panel\"><div class=\"tab-title\">Configuration</div>\n<li>Cargo Transfer is currently limited to solo players and a human host requesting their own transfer.</li>\n<li>Dedicated-headless A-10 damage is experimental.</li>\n<li>Remote third-person phone animations aren’t included.</li>\n<li>The phone’s inventory inspect model still needs some polish.</li>"
+  },
+  {
+    "id": 2797,
+    "name": "AC's Ridable Vehicles",
+    "expected": "Needs",
+    "html": "<li><strong><code>RidableVehicles-vX.Y.Z.zip</code></strong> — the required main mod. Extract it into the SPT root\nfolder containing <code>EscapeFromTarkov.exe</code>. This is all single-player users need.</li>\n<li><strong><code>RidableVehicles-FikaAddon-vX.Y.Z.zip</code></strong> — optional Fika synchronization. Install it\non every player and headless host in the raid, alongside the exact same main-mod version.</li>\n\n</ol>\n\n<p>For Fika, verify <code>Fika &gt; SyncVehicles</code> in F12 on every machine. Fresh installs enable it by\ndefault; existing configuration files retain their previous value.</p>"
+  },
+  {
+    "id": 2784,
+    "name": "Auto IFF",
+    "expected": "Needs",
+    "html": "<li><strong>Friendly-only mode</strong> - instantly highlights friendly targets only, with no identification delay; hostile targets show no label - useful for preventing friendly fire in any raid type</li>\n<li><strong>Fika support</strong> - works in coop raids, including headless-hosted ones</li>\n<li><strong>Conflict detection</strong> - if the original LightsAutomaticIdentifier is also installed, AutoIFF disables itself and shows a warning in-game</li>\n\n</ul>\n<hr />\n"
+  },
+  {
+    "id": 2820,
+    "name": "Wedge",
+    "expected": "Needs",
+    "html": "<h3>Fika</h3>\n<p>The server mod goes with the SPT server. The client plugin and prepatcher go on whichever machine owns the raid, headless included.</p>\n</div></div>\n\n<div id=\"tabset-1-panel-3\" class=\"tab-panel\"><div class=\"tab-title\">Configuration</div>"
+  },
+  {
+    "id": 2821,
+    "name": "Raiders Vs Rogues",
+    "expected": "Needs",
+    "html": "<h3>Fika</h3>\n<p>The server mod goes with the SPT server, and the client plugin goes on whichever machine owns the raid, headless included. Everyone else needs nothing.</p>\n<p>Squad sizes assume the <strong>As Online</strong> bot amount setting.</p>\n</div></div>\n"
+  },
+  {
+    "id": 1109,
+    "name": "Questing Bots",
+    "expected": "Mentions",
+    "html": "<div class=\"tab-content\"><p><strong><a target=\"_blank\" class=\"external-link\" href=\"https://hub.sp-tarkov.com/files/file/1062-sain-2-0-solarint-s-ai-modifications-full-ai-combat-system-replacement/\" rel=\"noreferrer noopener\">SAIN</a> 4.5.0 or later and <a target=\"_blank\" class=\"external-link\" href=\"https://sp-mod.com/mod/812/looting-bots\" rel=\"noreferrer noopener\">Looting Bots</a> 1.8.0 or later are highly recommended!</strong></p>\n<p><strong>This mod may have a performance impact</strong>, but it should be minimal starting with the 1.0.0 release. If you notice performance problems, please try using the built-in AI limiter or use <a target=\"_blank\" class=\"external-link\" href=\"https://github.com/project-fika/Fika-Headless\" rel=\"noreferrer noopener\">Fika Headless</a>.</p>\n<p><strong>Installation Instructions</strong></p>\n\n<ol>\n"
+  },
+  {
+    "id": 2843,
+    "name": "Blackout",
+    "expected": "Mentions",
+    "html": "<div id=\"tabset-1-panel-4\" class=\"tab-panel\"><div class=\"tab-title\">Known Limitations / Bugs</div>\n<div class=\"tab-content\"><ul>\n<li>Some issues with fika headless maybe. Test it out of if there’s issues then report them to my discord thread.</li>\n\n</ul></div></div>\n\n<div id=\"tabset-1-panel-5\" class=\"tab-panel\"><div class=\"tab-title\">Support</div>"
+  },
+  {
+    "id": 2860,
+    "name": "Craft Queue",
+    "expected": "Mentions",
+    "html": "<li>Requires SPT 4.1.x. (For SPT 4.0.13, use version 1.2.2.)</li>\n<li><strong>Fika-compatible</strong> (tested): each player manages only their own queue, and the plugin is inert on a headless host.</li>\n<li>Compatible with <strong>Hideout In Progress</strong>. <strong>Not compatible with Hideout Automation’s production stacking</strong> - a second craft queue fighting over the same starts. Run only one of the two.</li>\n<li>Outside raids the queue only advances while EFT is running: crafts go through the game’s own transactions, which is what keeps stash and profile in sync. Crafts that finish with EFT closed are collected at the next start.</li>"
+  },
+  {
+    "id": 2589,
+    "name": "Mag Retention Reload",
+    "expected": "Needs",
+    "html": "<h2>🤝 Fika</h2>\n<p>When playing with <strong>Fika</strong>, every client in the raid, <strong>including the headless client</strong>, should run the same version of this mod, otherwise you will run into syncing issues.\nHosts can enforce this by adding the plugin GUID to <code>client.mods.required</code> in the Fika server config, so mismatched clients are rejected when joining instead of silently desyncing:</p>\n\n<pre><code>\"required\": [ \"de.tosox.magretentionreload\" ]\n</code></pre>\n<hr />\n\n<h2>📷 Preview</h2>"
+  },
+  {
+    "id": 2866,
+    "name": "MANIMAL'S ICEBREAKER BACKPORT",
+    "expected": "Mentions",
+    "html": "\n<ul>\n\n<li>Ensure that you have the ICEBREAKER FIKA SYNC addon installed. INSTALL IT EVERYWHERE. Client, server, headless, etc.</li>\n\n</ul>\n\n<p>Move the zipped files to your SPT installation as shown in the GIF below.</p>"
+  },
+  {
+    "id": 2935,
+    "name": "Advance Stash Search",
+    "expected": "Avoid",
+    "html": "<h2>Fika</h2>\n<p>For Fika you don’t need to install it on headless client. just install on your playing client.</p>"
+  },
+  {
+    "id": 2945,
+    "name": "TCF Mod Manager",
+    "expected": "Mentions",
+    "html": "\n<ul>\n\n<li><strong>Play</strong> starts the server, the launcher and a Fika headless, with a check before launch</li>\n<li><strong>Configs</strong> - edit client, server and BepInEx settings in the app, with your settings kept when a mod updates</li>\n<li><strong>Server Map</strong> (optional, with the Server Map mod on the server) - see what a server runs and get on the same list before you join</li>"
+  },
+  {
+    "id": 2950,
+    "name": "Corter-ModSync",
+    "expected": "Needs",
+    "note": "reader says Needs: a config comment - harmless, a badge only",
+    "html": "\n<blockquote>\n\n<p><strong>Configuration example from a running server with headless client:</strong></p>\n\n</blockquote>\n<pre><code>{\n    \"syncPaths\": [\n        \"../BepInEx/plugins\",\n        \"../BepInEx/patchers\",\n        \"../BepInEx/config\",\n\n        // DLSS 4.5 patcher\n        {\n            \"path\": \"../BepInEx/patchers/TarkovDLSS45\",\n            \"name\": \"(Optional) T∗∗∗∗∗ DLSS 4.5\",\n            \"enabled\": false,\n            \"headless\": false,\n            \"baseFiles\": [\n                \"../EscapeFromTarkov_Data/Plugins/x86_64/nvngx_dlss.dll\"\n            ]\n        },\n\n        // DynamicMaps\n        {\n            \"path\": \"../BepInEx/plugins/DynamicMaps\",\n            \"name\": \"(Optional) Dynamic Maps\",\n            \"enabled\": false,\n            \"headless\": false,\n            \"baseFiles\": [\n                \"../EscapeFromTarkov_Data/Managed/Unity.VectorGraphics.dll\",\n                \"../EscapeFromTarkov_Data/Managed/Unity.InternalAPIEngineBridge.003.dll\"\n            ]\n        },\n        \n        // Optional mods that players can opt into\n        {\n            \"path\": \"../BepInEx/plugins/PlayerEncumbranceBar\",\n            \"name\": \"(Optional) Player Encumbrance Bar\",\n            \"enabled\": false,\n            \"headless\": false\n        },\n        {\n            \"path\": \"../BepInEx/config/com.mpstark.PlayerEncumbranceBar.cfg\",\n            \"name\": \"(Optional) Player Encumbrance Bar - config\",\n            \"enabled\": false,\n            \"headless\": false\n        },\n        {\n            \"path\": \"../BepInEx/plugins/HollywoodGraphics\",\n            \"name\": \"(Optional) Hollywood Graphics\",\n            \"enabled\": false,\n            \"headless\": false\n        },\n        {\n            \"path\": \"../BepInEx/config/com.janky.hollywoodgraphics.cfg\",\n            \"name\": \"(Optional) Hollywood Graphics - config\",\n            \"enabled\": false,\n            \"headless\": false\n        },\n        {\n            \"path\": \"../BepInEx/plugins/NoInsurance.dll\",\n            \"name\": \"(Optional) No Insurance\",\n            \"enabled\": false,\n            \"headless\": false\n        },\n        {\n            \"path\": \"../BepInEx/plugins/RepairMaxDurabilityClient.dll\",\n            \"name\": \"(Optional) Repair Max Durability\",\n            \"enabled\": false,\n            \"headless\": false\n        }\n    ],\n\n    \"exclusions\": [\n        \"../BepInEx/plugins/spt\",\n        \"../BepInEx/patchers/spt-prepatch.dll\",\n        \"../BepInEx/config/BepInEx.cfg\",\n        \"../BepInEx/config/com.bepis.bepinex.configurationmanager.cfg\",\n\n        // Fika headless DLL\n        \"../BepInEx/plugins/Fika/Fika.Headless.dll\",\n\n        // Raid-Review DLL\n        \"../BepInEx/plugins/RAID_REVIEW.dll\",\n\n        // Universal per-file opt-out — drop a `.nosync` or `.nosync.txt` file\n        // next to any mod folder/file to skip it\n        \"**/*.nosync\",\n        \"**/*.nosync.txt\",\n\n        // Git repo metadata — some mods are GitHub-only and may contain files\n        // that aren't needed at runtime.\n        \"**/.git\"\n    ],\n\n    \"headlessIncludes\": [\n        // Fika (Core + Headless.dll both live in this folder) and ModSync\n        \"../BepInEx/plugins/Fika\",\n        \"../BepInEx/plugins/Corter-ModSync\",\n\n        // Bot AI + behavior\n        \"../BepInEx/plugins/SAIN\",\n        \"../BepInEx/plugins/DrakiaXYZ-BigBrain.dll\",   // required on ALL clients IF BlackDiv is installed- not only headless\n        \"../BepInEx/plugins/DrakiaXYZ-Waypoints\",\n        \"../BepInEx/plugins/ORBIT\",\n        \"../BepInEx/plugins/MoreBotsAPI\",   // required on ALL clients - not only headless\n        \"../BepInEx/plugins/acidphantasm-botplacementsystem\",\n        \"../BepInEx/plugins/Parmesan.dll\",\n\n        // Bot gameplay tweaks\n        \"../BepInEx/plugins/DontShootTheBus.dll\",\n        \"../BepInEx/plugins/NerfBotGrenades.dll\",\n        \"../BepInEx/plugins/Shibdib.SniperBros.dll\",\n\n        // Misc gameplay + raid content\n        \"../BepInEx/plugins/acidphantasm-temporaryfixes\",\n        \"../BepInEx/plugins/BlackDiv\",\n        \"../BepInEx/plugins/MergeConsumables\",\n        \"../BepInEx/plugins/RUAFComeHome\",\n        \"../BepInEx/plugins/tacticaltoaster-untargohome\",\n        \"../BepInEx/plugins/Terkoiz.FlareEventNotifier.dll\",\n        \"../BepInEx/plugins/UseItemsFromAnywhere.dll\",\n        \"../BepInEx/plugins/Tetris.DeHazardifier.dll\",\n\n        // Bundle / CRC loader helpers (raid load path)\n        \"../BepInEx/plugins/s8_SPT_LoadBundleEvenFaster\",\n        \"../BepInEx/plugins/s8_SPT_PatchCRC32\",\n\n        // Networking / interop libs\n        \"../BepInEx/plugins/RAID_REVIEW.dll\",   // only required on headless, bypasses exclusions\n        \"../BepInEx/plugins/Tyfon.UIFixes.dll\",\n        \"../BepInEx/plugins/Tyfon.UIFixes.Net.dll\",\n\n        // Worn cosmetics visible to other players in raid\n        \"../BepInEx/plugins/7Bpencil.WeaponCamoAndStickers\",\n        \"../BepInEx/plugins/acidphantasm-armbandsforall\",\n\n        // Additional maps / map content\n        \"../BepInEx/plugins/Blackout\",\n        \"../BepInEx/plugins/CSGas\",\n        \"../BepInEx/plugins/ManimalIcebreaker\",\n        \"../BepInEx/plugins/tarkin-ladders\",\n        \"../BepInEx/plugins/Wedge\",\n        \n        // WTT content libs\n        \"../BepInEx/plugins/WTT-ArmoryClient\",\n        \"../BepInEx/plugins/WTT-ClientCommonLib\",\n        \"../BepInEx/plugins/WTT-ContentBackportClient\",\n        \"../BepInEx/plugins/WTT-PackNStrap\",\n        \"../BepInEx/patchers/FixPluginTypesSerialization.dll\"\n    ],\n\n    \"managedIncludes\": [   // only required for the 'lazy-way' config\n        // DynamicMaps example — remove or replace with your own mod's files:\n        //\"../Managed/Unity.InternalAPIEngineBridge.003.dll\",\n        //\"../Managed/Unity.VectorGraphics.dll\",\n        //\"../Plugins/x86_64/nvngx_dlss.dll\"\n    ],\n    \n    \"headlessManagedIncludes\": [\n    ]\n}\n</code></pre></div></div>\n\n<div id=\"tabset-1-panel-5\" class=\"tab-panel\"><div class=\"tab-title\">Known Issues</div>\n<div class=\"tab-content\"><ul>\n<li>\n<p>Headless or custom clients may need to manually install the .NET 9.0 runtime if not using the standard launcher.</p>\n\n</li>\n\n<li>\n<p>Ensure all local firewalls allow port communication between the ModSync updater and the server to avoid download timeouts.</p>"
+  },
+  {
+    "id": 2948,
+    "name": "Airburst",
+    "expected": "Needs",
+    "html": "<li>Dependencies: <a target=\"_blank\" class=\"external-link\" href=\"https://sp-mod.com/mod/2310/wtt-commonlib\" rel=\"noreferrer noopener\">WTT-ServerCommonLib</a> is required. <a target=\"_blank\" class=\"external-link\" href=\"https://sp-mod.com/mod/2735/scoperangefinder\" rel=\"noreferrer noopener\">ScopeRangefinder</a> is optional - with it installed, locks and bursts use its meter-exact live measurement and zeroing instead of the 50 m sight zeroing steps.</li>\n<li><strong>Fika (co-op): experimental.</strong> Tested with a headless host and one client: the XM1166 burst point is synchronised between peers. Raids with several clients are not tested yet. Every player and the headless host need the identical Airburst build, and the host should add <code>com.maschine.Airburst</code> to Fika’s <code>client.mods.required</code>.</li>\n\n</ul>\n\n<h2>Example video is coming soon™</h2>"
+  },
+  {
+    "id": 2955,
+    "name": "Quick Sell",
+    "expected": "Avoid",
+    "html": "<p>Requires <strong>SPT 4.1.3</strong>. UI Fixes 6.0.0+ is optional for multi-select selling. The server component is recommended for flea prices in raid.</p>\n<h2>Fika Headless</h2>\n<p>Install the QuickSell client plugin on <strong>playing PCs only</strong>. <strong>Do not install <code>QuickSell.dll</code> in <code>BepInEx\\plugins</code> on the headless PC.</strong> If your SPT server runs on that PC, keep the server component in <code>SPT_Runtime\\user\\mods\\QuickSell\\</code>.</p>\n<h2>Configuration</h2>\n<p>QuickSell settings are in the <strong>F12 menu</strong>. Tier colours are in <code>BepInEx\\plugins\\QuickSell\\config.json</code>.</p>"
+  },
+  {
+    "id": 2957,
+    "name": "MIA-Lounge",
+    "expected": "Mentions",
+    "html": "<p>MIA Lounge puts a small arcade on your SPT server. Open a page in a browser, pick your\nprofile, and play something against a bot or against whoever else is dead right now.\nWinnings are real: XP and roubles, paid into your profile through your in-game messages.</p>\n<p>It is a server mod only. Only the server needs it, the same as a headless. Nobody else installs anything</p>\n\n<hr />\n\n<h2>How it works</h2>\n<li><strong>English and German</strong>, switchable per person, remembered per browser.</li>\n<li><strong>Sensible profile list.</strong> Your Fika headless and characters that have never been in a\nraid are filtered out, so the picker is the handful of people who could actually be sitting\ndead right now.</li>\n<li><strong>Works on a phone.</strong> because why not lol nothing special but cant wait for that to be stolen from my repo and a new mod adding something mobile exclusive or some shit</li>\n\n</ul>\n\n<td><code>false</code></td>\n<td>List every profile, headless and never-played included</td>\n\n</tr>\n\n<tr>\n<td><code>hiddenProfiles</code></td>"
+  },
+  {
+    "id": 2958,
+    "name": "Vanguard",
+    "expected": "Mentions",
+    "html": "\n<hr />\n\n<h3>Standalone, Fika &amp; Headless</h3>\n<p>Vanguard has validated execution paths for <strong>standalone SPT</strong>, <strong>Fika Host</strong> and <strong>Fika dedicated Headless</strong>.</p>\n<p>Fika is required only for Fika topologies. Operator state and squad behavior use the appropriate authoritative execution path for the selected topology.</p>\n\n<hr />\n<blockquote>\n\n<li><strong>Fika Host</strong></li>\n<li><strong>Fika dedicated Headless</strong></li>\n\n</ol>\n\n<p>Fika is required only for Fika topologies.</p>\n<p>The distributed Headless configuration has historically received the deepest validation.</p>\n<p>The release-specific dependency table defines the exact versions supported by the shipping build.</p>\n\n<hr />\n\n<p><strong>Fika Core / Fika Server — SPECIFIC</strong><br />\nRequired when playing Vanguard through a Fika topology. It is not required for standalone SPT.</p>\n<p><strong>Fika Headless — SPECIFIC</strong><br />\nRequired only when using a dedicated Fika Headless instance.</p>\n\n<hr />\n\n<h3>MoreBotsAPI role allocation</h3>\n<div class=\"tab-content\"><p>Vanguard includes an in-raid <strong>Tactical Editor</strong> for creating tactical zones and Operator positioning slots directly inside EFT.</p>\n<p><strong>Works on Standalone SPT, Fika Host and Fika dedicated Headless.</strong></p>\n<h3>Quick start</h3>\n\n<ol>\n\n<p>When the editor is closed and <strong>automatic authored zone occupancy</strong> is enabled, Vanguard reloads the saved map in raid. When the player owner enters one of those zones, Vanguard activates that authored zone automatically.</p>\n<p>In a Fika dedicated-Headless topology, the authoring snapshot carries the player’s <strong>profile ID</strong>. The Headless authority then resolves only the Operators attached to that owner profile before assigning authored slots.</p>\n<p>This keeps tactical placement owner-scoped in multiplayer: one player’s active authored zone cannot steer another player’s Operators.</p>\n<p>There is no separate manual Headless reconciliation command. Authoring changes are synchronized through the live transport while the editor is open, and saved-zone occupancy is republished automatically when the editor is closed and the owner enters an authored zone.</p>\n<h4>Storage note</h4>\n<p>Owner scoping describes <strong>runtime authority</strong>. The current saved authoring file itself remains local to each game installation and map under:</p>\n<li>If you use Fika, install the Fika versions listed for the release.</li>\n<li>Stop SPT, EFT and any Fika Headless process before copying files.</li>\n\n</ol>\n\n<p>The public Vanguard archive is intended to be installed from the <strong>SPT root</strong> rather than by manually distributing individual Vanguard binaries.</p>\n\n</ol>\n<hr />\n\n<h3>Fika dedicated Headless</h3>\n\n<ol>\n\n<li>Install the required SPT/AI dependency stack.</li>\n<li>Install the release-compatible Fika Core/Server stack.</li>\n<li>Install the compatible Fika Headless package on the dedicated Headless instance.</li>\n<li>Deploy Vanguard to the server/client/Headless locations specified by the release package.</li>\n<li>Start the server and Headless environment, then join with the player client.</li>\n<li>Confirm Vanguard Operator runtime/HUD state is available in raid.</li>\n\n</ol></div></div>\n\n<li>Support tactical assignments, opportunistic sustainment and future player-issued squad orders</li>\n<li>Maintain persistence and runtime authority across <strong>Standalone SPT</strong>, <strong>Fika Host</strong> and <strong>Fika dedicated Headless</strong></li>\n<li>Provide the stable foundation required by future Vanguard systems</li>\n\n</ul>\n\n<li>Check the published compatibility information and any player-visible Known Issues.</li>\n<li>Note whether you are using standalone SPT, Fika Host or Fika dedicated Headless.</li>\n<li>Identify other mods that can control allied PMCs, squads, spawning, navigation or AI behavior.</li>\n\n</ul>\n<hr />\n\n\n</ol>\n<hr />\n\n<h3>Required logs — Fika dedicated Headless</h3>\n<p>Attach:</p>\n\n<ol>\n\n<li>The player client’s <code>&lt;SPT&gt;\\BepInEx\\LogOutput.log</code>.</li>\n<li>The dedicated Headless instance’s <code>&lt;Headless SPT&gt;\\BepInEx\\LogOutput.log</code>.</li>\n<li>The current <code>&lt;SPT Server&gt;\\user\\logs\\spt\\spt*.log</code>.</li>\n<li><code>&lt;SPT Server&gt;\\user\\vanguard\\operators\\vanguard-server.log</code>.</li>\n\n</ol>\n\n<p>Because the player-client and Headless files have the same filename, label the two <code>LogOutput.log</code> files clearly when attaching them.</p>\n<p>Controller-status files, Raid Review data and other extended diagnostics are <strong>not required for the initial report</strong> unless support specifically asks for them.</p>\n\n<hr />\n"
+  },
+  {
+    "id": 2971,
+    "name": "Universal Co-op Exfil",
+    "expected": "Mentions",
+    "html": "<p><strong>NOTE:</strong> This mod does not disable Fence rep and rewards for using the co-op extract. Use a mod like <a target=\"_blank\" class=\"external-link\" href=\"https://sp-mod.com/mod/236/server-value-modifier-svm\" rel=\"noreferrer noopener\">SVM</a> to do that.</p>\n<p><em>This mod is untested with Fika headless</em><br />\nSpecial thanks to my friend who I dragged into debugging for hours.</p>\n<p>Installation &amp; Quick Start</p>\n\n<ol>\n"
+  },
+  {
+    "id": 3011,
+    "name": "Show Me The Money (Item Pricing) (4.1.x)",
+    "expected": "Avoid",
+    "html": "<p>Practically none. If you can run SPT, you can run this.</p>\n<h4>If you use the FIKA headless client:</h4>\n<p>Splendid news: <strong>Do not install anything there.</strong> Seriously, don’t. It will only cause complications, headaches, and possibly the rising of ancient eldritch forces. Add this mod to your <code>Exclusions.json</code> if you use Corter’s Mod Sync.</p>\n<h4>Configuration</h4>"
+  },
+  {
+    "id": 3040,
+    "name": "Map Variants",
+    "expected": "Mentions",
+    "html": "<li>Whoever starts the raid chooses, and the server records it.</li>\n<li>A <strong>Fika headless</strong> asks the server what it is serving, so a headless can host either version.</li>\n<li>A <strong>joining client</strong> does the same, so it follows the host rather than its own settings.</li>\n<li>A <strong>transit</strong> is decided by the first player into the zone, and everyone who joins is told what\nthey joined rather than being asked again. Only the map the transit actually leads to is offered.</li>"
+  },
+  {
+    "id": 3041,
+    "name": "Factory Classic",
+    "expected": "Needs",
+    "html": "<li>Bots that patrol properly. The scene’s loot clusters predate two fields the game’s AI bake now\nneeds, so every bot used to stand where it spawned until a fight started. Both are derived at load.</li>\n<li>Player scav raids and Fika headless hosting.</li>\n\n</ul>\n\n<h3>Requires Map Variants</h3>\n<li>Map Variants</li>\n<li>Fika is optional and supported, headless hosting included</li>\n\n</ul>\n"
+  },
+  {
+    "id": 3061,
+    "name": "Extra Special Slots",
+    "expected": "Mentions",
+    "html": "<li>Compatible with Fika</li>\n<li>Fika Headless safety guard</li>\n<li>Server-side configuration for Special Slot 4 ownership</li>\n\n</ul>\n\n<p>If TSC is selected, TSC keeps control of Special Slot 4.</p>\n<h2>Fika / Headless</h2>\n<p>Fully compatible with Fika.</p>\n<p>On Fika Headless, the client plugin detects the headless environment and disables all UI patches automatically.</p>\n<p>The server-side part continues to run normally.</p>\n<h2>Installation</h2>\n<p><code>SPT_Runtime/user/mods/ExtraSpecialSlots/</code></p>\n<p>For a dedicated Fika Headless installation, only the server-side mod is required.</p>\n\n<hr />\n\n<h3>Support / Donations</h3>"
+  },
+  {
+    "id": 3097,
+    "name": "DynamicMaps Extended",
+    "expected": "Mentions",
+    "html": "<p>Extended installs into its own folder and does not replace DynamicMaps files or Fika player synchronisation.</p>\n<p><strong>Fika Headless is detected, and the client/UI addon disables itself automatically.</strong></p>\n</div></div>\n\n<div id=\"tabset-1-panel-2\" class=\"tab-panel\"><div class=\"tab-title\">FACTIONS</div>"
+  },
+  {
+    "id": 2173,
+    "name": "VRAM Cleaner",
+    "expected": "Avoid",
+    "html": "<li>Move Bepinex folder into your SPT folder</li>\n<li><strong>Don’t</strong> install onto a fika headless client</li>\n\n</ol>\n\n<p>Support me on ko-fi <a target=\"_blank\" class=\"external-link\" href=\"https://ko-fi.com/matsix\" rel=\"noreferrer noopener\">https://ko-fi.com/matsix</a></p>"
+  },
+  {
+    "id": 3105,
+    "name": "SOMF - SitOnMyFace",
+    "expected": "Mentions",
+    "html": "<p>Built for SPT 4.1.6.</p>\n<p>Tested with Fika 2.4.x and a Fika headless dedicated client.</p>\n<p>Server-side only.</p>"
+  },
+  {
+    "id": 3134,
+    "name": "Keymaster",
+    "expected": "Mentions",
+    "html": "<div class=\"tab-content\"><ul>\n<li>Every player needs the client half.</li>\n<li>Headless safe.</li>\n<li>Map variants and backports: each learns its own key list, and uses the base map’s list until it has one.</li>\n<li>Keys stored in slot-based keychains (one slot per key) are left where you put them; grid key tools and docs cases\nin the stash are searched.</li>"
+  },
+  {
+    "id": 3141,
+    "name": "BackpackGunSlot",
+    "expected": "Mentions",
+    "html": "<li><strong>Fully configurable:</strong> your own tiers, per-backpack overrides, or <code>allowAnyGun</code> to let\nevery pack take everything</li>\n<li><strong>Fika ready:</strong> works with friends and headless,</li>\n\n</ul>\n\n<h2>Default tiers</h2>"
+  },
+  {
+    "id": 3139,
+    "name": "Don't Collect My Garbage",
+    "expected": "Avoid",
+    "html": "<p><em>But</em>, if you have sufficient RAM headroom, you may be able to run your whole raid without this additional garbage collection, and enjoy a few less stutters.</p>\n<p><strong>This is working well on my setup, which is FIKA headless + graphical client on the same host with 64GB RAM; this mod on the graphical client (only, it’s useless on the headless).</strong></p>\n<h2>Why NOT</h2>\n<p>Guess what happens if you run out of memory and the game can’t GC? Yeah, bye raid.\nIt’s not a good trade-off for a few less 50ms frames.</p>\n<p>You probably shouldn’t be using this if you don’t know how to install it.</p>\n<p>FIKA: only install on graphical clients, it is useless on the headless, where I’m sure FIKA has its own GC shenanigans, in addition to its automatic restart after every raid.</p>"
+  },
+  {
+    "id": 2235,
+    "name": "Sharper Tushonka Better Life",
+    "expected": "None",
+    "html": "<h1>Hey! This is <strong>NOT A MOD</strong>. This is a ReShade preset, meaning this is compatible with all versions of SPT/EFT.</h1>\n<p>Drag and drop the contents of the <code>SharperTarkovBetterLife.7z</code> file into your root game folder so that <code>dxgi.dll</code> is in the same directory as <code>EscapeFromTarkov.exe</code>.</p>\n<p>If you wish to uninstall, delete the files that are added by this preset.</p>\n<p>You do not need any mods such as <a target=\"_blank\" class=\"external-link\" href=\"https://sp-mod.com/mod/592/amandss-graphics\" rel=\"noreferrer noopener\">Amand’s Graphics</a> to use this preset, However, it is highly recommended. I wouldn’t recommend using any other methods of sharpening such as any present in EFT’s settings and so on. This doesn’t reduce performance unless you are GPU bottlenecked.</p>"
+  },
+  {
+    "id": 2207,
+    "name": "Fast Sell In Flea",
+    "expected": "None",
+    "html": "<div class=\"tabset\"><div id=\"tabset-1-panel-1\" class=\"tab-panel\"><div class=\"tab-title\">Description</div>\n<div class=\"tab-content\"><h3>Mod for those who are tired of every time to enter the price offer to sell an item.</h3>\n</div></div>\n\n<div id=\"tabset-1-panel-2\" class=\"tab-panel\"><div class=\"tab-title\">Specially when there are many items….</div>"
+  },
+  {
+    "id": 1486,
+    "name": "Silly Cat Trader Icons",
+    "expected": "None",
+    "html": "<p>===================================================</p>\n<p>Make sure to go into the launcher and clear temp files!</p>\n<p>Replaces all vanilla trader’s icons</p>\n<p>Replaces the following modded trader’s icons:</p>"
+  },
+  {
+    "id": 2153,
+    "name": "Expanded Task Text (ETT)",
+    "expected": "None",
+    "html": "<div class=\"tabset\"><div id=\"tabset-1-panel-1\" class=\"tab-panel\"><div class=\"tab-title\">Features and Usage</div>\n<div class=\"tab-content\"><h3>Features</h3>\n<p>Adds extra information to tasks.</p>\n\n<ul>\n"
+  },
+  {
+    "id": 0,
+    "name": "empty",
+    "expected": "None",
+    "html": ""
+  }
+]
