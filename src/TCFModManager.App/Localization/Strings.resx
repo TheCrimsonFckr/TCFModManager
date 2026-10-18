@@ -1859,17 +1859,17 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>Headless advice</value>
     <comment>Scope filter entry: the rows whose sp-mod page says to keep the mod off a Fika headless while this entry still sends it there, or says the headless needs it while this entry skips the headless.</comment>
   </data>
-  <data name="ModLists_AdviceKeepOffFormat" xml:space="preserve">
-    <value>Its sp-mod page says to keep it off a Fika headless: “{0}”</value>
-    <comment>{0} is the mod author's own sentence from the sp-mod page, quoted as written - it is not translated.</comment>
+  <data name="ModLists_AdviceKeepOffLabel" xml:space="preserve">
+    <value>Keep off headless</value>
+    <comment>Short label before a quote from the mod's sp-mod page saying not to install it on a Fika headless client, while this entry still sends it there. Same for ModLists_AdviceNeedsBadge when the page says the headless needs it but this entry skips the headless.</comment>
   </data>
-  <data name="ModLists_AdviceNeedsWarningFormat" xml:space="preserve">
-    <value>Its sp-mod page says a Fika headless needs it, but this entry skips the headless: “{0}”</value>
-    <comment>{0} is the mod author's own sentence from the sp-mod page, quoted as written - it is not translated.</comment>
+  <data name="ModLists_AdviceQuoteFormat" xml:space="preserve">
+    <value>“{0}”</value>
+    <comment>{0} is the mod author's own sentence from the sp-mod page, quoted as written - it is not translated. Change only the quotation marks.</comment>
   </data>
   <data name="ModLists_AdviceNeedsBadge" xml:space="preserve">
     <value>Headless needs it</value>
-    <comment>Badge: the mod's sp-mod page says a Fika headless needs this mod, and this entry already sends it there. Its tooltip quotes the page.</comment>
+    <comment>The mod's sp-mod page says a Fika headless needs this mod. A badge when this entry already sends it there; a label before the quote when this entry skips the headless. Its tooltip quotes the page.</comment>
   </data>
   <data name="ModLists_AdviceSetScopeFormat" xml:space="preserve">
     <value>Make it {0}</value>

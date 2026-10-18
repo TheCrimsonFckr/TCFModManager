@@ -188,10 +188,12 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
 
     public bool HasAdviceAction => AdviceScope is not null;
 
-    public string? AdviceHint =>
-        AdviceKeepsOff ? LocalizationService.Text(Strings.ModLists_AdviceKeepOffFormat, FirstQuote)
-        : AdviceIsWarning ? LocalizationService.Text(Strings.ModLists_AdviceNeedsWarningFormat, FirstQuote)
+    public string? AdviceLabel =>
+        AdviceKeepsOff ? Strings.ModLists_AdviceKeepOffLabel
+        : AdviceIsWarning ? Strings.ModLists_AdviceNeedsBadge
         : null;
+
+    public string? AdviceQuote => AdviceLabel is null ? null : LocalizationService.Text(Strings.ModLists_AdviceQuoteFormat, FirstQuote);
 
     public string? AdviceBadge =>
         Advice?.Verdict == HeadlessVerdict.Needs && !AdviceIsWarning ? Strings.ModLists_AdviceNeedsBadge : null;

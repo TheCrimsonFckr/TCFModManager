@@ -892,6 +892,7 @@
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
 
                                             <!--
@@ -993,39 +994,22 @@
                                                     ToolTip="{Binding AdviceToolTip}"
                                                     Text="{Binding Detail}" />
 
-                                                <Grid
-                                                    Margin="0,6,0,0"
-                                                    Visibility="{Binding AdviceHint, Converter={StaticResource NullToCollapsed}}">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*" />
-                                                        <ColumnDefinition Width="Auto" />
-                                                    </Grid.ColumnDefinitions>
-
+                                                <DockPanel
+                                                    Margin="0,4,0,0"
+                                                    ToolTip="{Binding AdviceToolTip}"
+                                                    Visibility="{Binding AdviceLabel, Converter={StaticResource NullToCollapsed}}">
                                                     <TextBlock
-                                                        Grid.Column="0"
-                                                        TextWrapping="Wrap"
+                                                        DockPanel.Dock="Left"
+                                                        Margin="0,0,6,0"
                                                         FontSize="12"
-                                                        VerticalAlignment="Center"
                                                         Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                                                        ToolTip="{Binding AdviceToolTip}"
-                                                        Text="{Binding AdviceHint}" />
-
-                                                    <Grid
-                                                        Grid.Column="1"
-                                                        Margin="8,0,0,0"
-                                                        VerticalAlignment="Center"
-                                                        Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
-                                                        <ui:Button
-                                                            Padding="8,3"
-                                                            FontSize="12"
-                                                            Appearance="Secondary"
-                                                            Content="{Binding AdviceActionLabel}"
-                                                            ToolTip="{loc:Str ModLists_AdviceSetScopeToolTip}"
-                                                            Visibility="{Binding HasAdviceAction, Converter={StaticResource BoolToVis}}"
-                                                            Command="{Binding DataContext.TakeAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                                            CommandParameter="{Binding}" />
-                                                    </Grid>
-                                                </Grid>
+                                                        Text="{Binding AdviceLabel}" />
+                                                    <TextBlock
+                                                        FontSize="12"
+                                                        TextTrimming="CharacterEllipsis"
+                                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                        Text="{Binding AdviceQuote}" />
+                                                </DockPanel>
                                             </StackPanel>
 
                                                 <ui:Button
@@ -1043,8 +1027,24 @@
                                             <!-- On every row, every state. This is a value you
                                                  cycle, so an unlabelled row would read as "not set"
                                                  rather than "everyone". -->
-                                            <Border
+                                            <Grid
                                                 Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                Margin="0,0,8,0"
+                                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
+                                                <ui:Button
+                                                    Padding="8,3"
+                                                    FontSize="11"
+                                                    Appearance="Secondary"
+                                                    Content="{Binding AdviceActionLabel}"
+                                                    ToolTip="{loc:Str ModLists_AdviceSetScopeToolTip}"
+                                                    Visibility="{Binding HasAdviceAction, Converter={StaticResource BoolToVis}}"
+                                                    Command="{Binding DataContext.TakeAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                    CommandParameter="{Binding}" />
+                                            </Grid>
+
+                                            <Border
+                                                Grid.Column="2"
                                                 VerticalAlignment="Center"
                                                 Margin="0,0,8,0"
                                                 Padding="8,3"
@@ -1058,7 +1058,7 @@
                                             </Border>
 
                                             <ui:Button
-                                                Grid.Column="2"
+                                                Grid.Column="3"
                                                 VerticalAlignment="Center"
                                                 Margin="0,0,8,0"
                                                 Padding="8,4"
@@ -1070,7 +1070,7 @@
                                                 CommandParameter="{Binding}" />
 
                                             <ui:Button
-                                                Grid.Column="3"
+                                                Grid.Column="4"
                                                 VerticalAlignment="Center"
                                                 Margin="0,0,4,0"
                                                 Padding="8,4"

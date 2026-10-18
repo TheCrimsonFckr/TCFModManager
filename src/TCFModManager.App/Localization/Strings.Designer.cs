@@ -528,8 +528,8 @@ internal static class Strings
     internal static string ModLists_ScopeServerOnly => LocalizationService.Get("ModLists_ScopeServerOnly");
     internal static string ModLists_ScopeFilterAll => LocalizationService.Get("ModLists_ScopeFilterAll");
     internal static string ModLists_ScopeFilterAdvice => LocalizationService.Get("ModLists_ScopeFilterAdvice");
-    internal static string ModLists_AdviceKeepOffFormat => LocalizationService.Get("ModLists_AdviceKeepOffFormat");
-    internal static string ModLists_AdviceNeedsWarningFormat => LocalizationService.Get("ModLists_AdviceNeedsWarningFormat");
+    internal static string ModLists_AdviceKeepOffLabel => LocalizationService.Get("ModLists_AdviceKeepOffLabel");
+    internal static string ModLists_AdviceQuoteFormat => LocalizationService.Get("ModLists_AdviceQuoteFormat");
     internal static string ModLists_AdviceNeedsBadge => LocalizationService.Get("ModLists_AdviceNeedsBadge");
     internal static string ModLists_AdviceSetScopeFormat => LocalizationService.Get("ModLists_AdviceSetScopeFormat");
     internal static string ModLists_AdviceSetScopeToolTip => LocalizationService.Get("ModLists_AdviceSetScopeToolTip");
