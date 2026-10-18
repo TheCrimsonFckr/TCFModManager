@@ -29,6 +29,7 @@ internal static class ThemeApplier
     private static ResourceDictionary? _shadow;
     private static bool _fontActive;
     private static bool _fontHooked;
+    private static bool _backgroundHooked;
 
     public static ThemeDefinition? Active { get; private set; }
 
@@ -87,6 +88,17 @@ internal static class ThemeApplier
     public static void ReferenceWindowBackgrounds(Application app)
     {
         if (Active is null) return;
+
+        if (!_backgroundHooked)
+        {
+            _backgroundHooked = true;
+            EventManager.RegisterClassHandler(typeof(Window), FrameworkElement.LoadedEvent,
+                new RoutedEventHandler((s, _) =>
+                {
+                    if (Active is not null && s is Window window)
+                        window.SetResourceReference(Control.BackgroundProperty, "ApplicationBackgroundBrush");
+                }), true);
+        }
 
         app.Dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
         {
