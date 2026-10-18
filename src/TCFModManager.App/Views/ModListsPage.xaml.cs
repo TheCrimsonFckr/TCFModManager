@@ -1,7 +1,9 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Threading;
 using TCFModManager.App.ViewModels;
 using TCFModManager.Core.Services;
 
@@ -27,6 +29,27 @@ public partial class ModListsPage : Page
         // off screen rather than left polling behind every other page.
         Loaded += (_, _) => ViewModel.PageShown();
         Unloaded += (_, _) => ViewModel.PageHidden();
+    }
+
+    private void ListMenuButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not FrameworkElement { ContextMenu: { } menu } button) return;
+
+        menu.DataContext = button.DataContext;
+        menu.PlacementTarget = button;
+        menu.Placement = PlacementMode.Bottom;
+        menu.IsOpen = true;
+    }
+
+    private void RenameBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (e.NewValue is not true || sender is not TextBox box) return;
+
+        box.Dispatcher.BeginInvoke(() =>
+        {
+            box.Focus();
+            box.SelectAll();
+        }, DispatcherPriority.Input);
     }
 
     private async void ModListsPage_Loaded(object sender, RoutedEventArgs e)

@@ -454,6 +454,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     [NotifyCanExecuteChangedFor(nameof(PublishCommand))]
     [NotifyCanExecuteChangedFor(nameof(CycleScopeCommand))]
     [NotifyCanExecuteChangedFor(nameof(TakeAdviceCommand))]
+    [NotifyCanExecuteChangedFor(nameof(StartRenameCommand))]
     [NotifyCanExecuteChangedFor(nameof(RefreshVersionsCommand))]
     private ModListRowViewModel? _selected;
 
@@ -464,7 +465,13 @@ public partial class ModListsViewModel : LocalizedViewModel
     private string _editName = string.Empty;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasStatus))]
     private string _statusMessage = Strings.ModLists_NoneFollowed;
+
+    public bool HasStatus => IsBusy || !string.IsNullOrWhiteSpace(StatusMessage);
+
+    [ObservableProperty]
+    private bool _isRenaming;
 
     //
     // The one undo point: how the install stood before the last apply. Null when nothing has been
@@ -562,6 +569,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     [NotifyCanExecuteChangedFor(nameof(RefreshFromServerCommand))]
     [NotifyCanExecuteChangedFor(nameof(ImportFromSpModCommand))]
     [NotifyCanExecuteChangedFor(nameof(RefreshFromSpModCommand))]
+    [NotifyPropertyChangedFor(nameof(HasStatus))]
     private bool _isBusy;
 
     public bool HasSelection => Selected is not null;
@@ -725,6 +733,8 @@ public partial class ModListsViewModel : LocalizedViewModel
         var dropped = UnsavedCount;
 
         EditName = value?.Name ?? string.Empty;
+        IsRenaming = false;
+        StatusMessage = string.Empty;
 
         //
         // The search is about one list's contents, so it does not follow you to the next one -
@@ -1131,7 +1141,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         ShowEntries();
 
         var active = Lists.FirstOrDefault(l => l.IsActive);
-        if (active is not null) StatusMessage = Text(Strings.ModLists_FollowingFormat, active.Name);
+        if (active is not null && Selected?.Id == active.Id) StatusMessage = Text(Strings.ModLists_FollowingFormat, active.Name);
     }
 
     // Saves what's installed right now as a new list.
@@ -2006,6 +2016,8 @@ public partial class ModListsViewModel : LocalizedViewModel
     [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
     private void Rename()
     {
+        IsRenaming = false;
+
         if (Selected is not { } row) return;
 
         var name = EditName.Trim();
@@ -2014,6 +2026,22 @@ public partial class ModListsViewModel : LocalizedViewModel
         AppServices.ModLists.Rename(row.Id, name);
         Refresh(row.Id);
         StatusMessage = Text(Strings.ModLists_RenamedFormat, name);
+    }
+
+    [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
+    private void StartRename()
+    {
+        if (Selected is not { } row) return;
+
+        EditName = row.Name;
+        IsRenaming = true;
+    }
+
+    [RelayCommand]
+    private void CancelRename()
+    {
+        EditName = Selected?.Name ?? string.Empty;
+        IsRenaming = false;
     }
 
     [RelayCommand(CanExecute = nameof(HasSelection))]

@@ -462,6 +462,12 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="ModLists_Rename" xml:space="preserve">
     <value>Rename</value>
   </data>
+  <data name="ModLists_MoreActionsToolTip" xml:space="preserve">
+    <value>More for this list - export, copy, publish, delete and so on</value>
+  </data>
+  <data name="ModLists_CancelRenameToolTip" xml:space="preserve">
+    <value>Keep the current name</value>
+  </data>
   <data name="ModLists_RenameToolTip" xml:space="preserve">
     <value>Rename this list</value>
   </data>
@@ -2035,7 +2041,7 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>No mod list is being followed.</value>
   </data>
   <data name="ModLists_UndoLabelFormat" xml:space="preserve">
-    <value>Undo "{0}"</value>
+    <value>Undo last apply ({0})</value>
     <comment>Button label. {0} is a list name the user typed.</comment>
   </data>
   <data name="ModLists_FollowingFormat" xml:space="preserve">

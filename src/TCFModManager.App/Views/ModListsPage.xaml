@@ -412,43 +412,105 @@
                 Visibility="{Binding HasSelection, Converter={StaticResource FalseToVisible}}"
                 Text="{loc:Str ModLists_EmptyState}" />
 
-            <!-- Header: the name, then the two things you actually do, then the quieter rest. -->
-            <StackPanel
+            <Grid
                 Grid.Row="0"
                 Visibility="{Binding HasSelection, Converter={StaticResource BoolToVis}}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-                    <ui:TextBox
-                        Grid.Column="0"
-                        FontSize="16"
-                        IsEnabled="{Binding SelectionIsEditable}"
-                        Text="{Binding EditName, UpdateSourceTrigger=PropertyChanged}" />
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Visibility="{Binding IsRenaming, Converter={StaticResource FalseToVisible}}">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="20"
+                            FontWeight="SemiBold"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                            Text="{Binding Selected.Name}" />
 
+                        <ui:Button
+                            Margin="8,0,0,0"
+                            Padding="6"
+                            VerticalAlignment="Center"
+                            Appearance="Transparent"
+                            Icon="{ui:SymbolIcon Edit24}"
+                            ToolTip="{loc:Str ModLists_RenameToolTip}"
+                            Visibility="{Binding SelectionIsEditable, Converter={StaticResource BoolToVis}}"
+                            Command="{Binding StartRenameCommand}" />
+                    </StackPanel>
+
+                    <Grid
+                        MaxWidth="560"
+                        HorizontalAlignment="Left"
+                        Visibility="{Binding IsRenaming, Converter={StaticResource BoolToVis}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ui:TextBox
+                            x:Name="RenameBox"
+                            Grid.Column="0"
+                            MinWidth="320"
+                            FontSize="16"
+                            IsVisibleChanged="RenameBox_IsVisibleChanged"
+                            Text="{Binding EditName, UpdateSourceTrigger=PropertyChanged}">
+                            <ui:TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding RenameCommand}" />
+                                <KeyBinding Key="Escape" Command="{Binding CancelRenameCommand}" />
+                            </ui:TextBox.InputBindings>
+                        </ui:TextBox>
+
+                        <ui:Button
+                            Grid.Column="1"
+                            Margin="8,0,0,0"
+                            Appearance="Primary"
+                            Icon="{ui:SymbolIcon Checkmark24}"
+                            Content="{loc:Str ModLists_Rename}"
+                            ToolTip="{loc:Str ModLists_RenameToolTip}"
+                            Command="{Binding RenameCommand}" />
+
+                        <ui:Button
+                            Grid.Column="2"
+                            Margin="8,0,0,0"
+                            Appearance="Transparent"
+                            Icon="{ui:SymbolIcon Dismiss24}"
+                            ToolTip="{loc:Str ModLists_CancelRenameToolTip}"
+                            Command="{Binding CancelRenameCommand}" />
+                    </Grid>
+
+                    <TextBlock
+                        Margin="2,6,0,0"
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                        Text="{Binding SelectionDetail}" />
+
+                    <TextBlock
+                        Margin="2,4,0,0"
+                        FontSize="12"
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                        Text="{Binding StepHint}" />
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="16,0,0,0"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
                     <ui:Button
-                        Grid.Column="1"
-                        Margin="10,0,0,0"
-                        ToolTip="{loc:Str ModLists_RenameToolTip}"
-                        Icon="{ui:SymbolIcon Rename24}"
-                        Content="{loc:Str ModLists_Rename}"
-                        Command="{Binding RenameCommand}" />
-                </Grid>
+                        Margin="0,0,8,0"
+                        Appearance="Transparent"
+                        Icon="{ui:SymbolIcon ArrowLeft24}"
+                        Content="{loc:Str ModLists_BackToMods}"
+                        ToolTip="{loc:Str ModLists_BackToModsToolTip}"
+                        Visibility="{Binding HasPlan, Converter={StaticResource BoolToVis}}"
+                        Command="{Binding ClosePlanCommand}" />
 
-                <TextBlock
-                    Margin="2,10,0,0"
-                    TextWrapping="Wrap"
-                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                    Text="{Binding SelectionDetail}" />
-
-                <!--
-                    Preview, then Apply, in one place: only the next step is ever shown. Preview until a
-                    plan is showing, then Apply in the same spot, worded as what it will do; the line
-                    under it says which step it is on. See ModListsViewModel.StepIsApply.
-                -->
-                <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
                     <ui:Button
                         MinWidth="140"
                         HorizontalContentAlignment="Center"
@@ -469,96 +531,67 @@
                         Visibility="{Binding StepIsApply, Converter={StaticResource BoolToVis}}"
                         Command="{Binding ApplyCommand}" />
 
-                    <!-- Only while a plan is showing: the plan sits in the same cell as the list's
-                         own contents, so this is how you get back to them. -->
                     <ui:Button
-                        Margin="10,0,0,0"
-                        Appearance="Transparent"
-                        Icon="{ui:SymbolIcon ArrowLeft24}"
-                        Content="{loc:Str ModLists_BackToMods}"
-                        ToolTip="{loc:Str ModLists_BackToModsToolTip}"
-                        Visibility="{Binding HasPlan, Converter={StaticResource BoolToVis}}"
-                        Command="{Binding ClosePlanCommand}" />
+                        Margin="8,0,0,0"
+                        Appearance="Secondary"
+                        Icon="{ui:SymbolIcon MoreHorizontal24}"
+                        ToolTip="{loc:Str ModLists_MoreActionsToolTip}"
+                        Click="ListMenuButton_Click">
+                        <ui:Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem
+                                    Header="{loc:Str ModLists_Export}"
+                                    Icon="{ui:SymbolIcon ArrowExportLtr24}"
+                                    ToolTip="{loc:Str ModLists_ExportToolTip}"
+                                    Command="{Binding ExportCommand}" />
+                                <MenuItem
+                                    Header="{loc:Str ModLists_MakeCopy}"
+                                    Icon="{ui:SymbolIcon Branch24}"
+                                    ToolTip="{loc:Str ModLists_MakeCopyToolTip}"
+                                    Visibility="{Binding SelectionIsImported, Converter={StaticResource BoolToVis}}"
+                                    Command="{Binding ForkCommand}" />
+                                <MenuItem
+                                    Header="{loc:Str ModLists_Publish}"
+                                    Icon="{ui:SymbolIcon ArrowUpload24}"
+                                    ToolTip="{loc:Str ModLists_PublishToolTip}"
+                                    Visibility="{Binding SelectionIsEditable, Converter={StaticResource BoolToVis}}"
+                                    Command="{Binding PublishCommand}" />
+                                <MenuItem
+                                    Header="{loc:Str ModLists_RefreshFromServer}"
+                                    Icon="{ui:SymbolIcon ArrowSync24}"
+                                    ToolTip="{loc:Str ModLists_RefreshFromServerToolTip}"
+                                    Visibility="{Binding SelectionIsFromServer, Converter={StaticResource BoolToVis}}"
+                                    Command="{Binding RefreshFromServerCommand}" />
+                                <MenuItem
+                                    Header="{loc:Str ModLists_RefreshFromSpMod}"
+                                    Icon="{ui:SymbolIcon ArrowSync24}"
+                                    ToolTip="{loc:Str ModLists_RefreshFromSpModToolTip}"
+                                    Visibility="{Binding SelectionIsFromSpMod, Converter={StaticResource BoolToVis}}"
+                                    Command="{Binding RefreshFromSpModCommand}" />
+                                <MenuItem
+                                    Header="{loc:Str ModLists_OpenOnSpMod}"
+                                    Icon="{ui:SymbolIcon Open24}"
+                                    ToolTip="{loc:Str ModLists_OpenOnSpModToolTip}"
+                                    Visibility="{Binding SelectionIsFromSpMod, Converter={StaticResource BoolToVis}}"
+                                    Command="{Binding OpenOnSpModCommand}" />
+                                <MenuItem
+                                    Header="{loc:Str ModLists_StopFollowing}"
+                                    Icon="{ui:SymbolIcon ArrowUndo24}"
+                                    ToolTip="{loc:Str ModLists_StopFollowingToolTip}"
+                                    Visibility="{Binding SelectionIsActive, Converter={StaticResource BoolToVis}}"
+                                    Command="{Binding StopFollowingCommand}" />
+                                <Separator />
+                                <MenuItem
+                                    Header="{loc:Str ModLists_Delete}"
+                                    Icon="{ui:SymbolIcon Delete24}"
+                                    Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                                    ToolTip="{loc:Str ModLists_DeleteToolTip}"
+                                    Command="{Binding DeleteCommand}" />
+                            </ContextMenu>
+                        </ui:Button.ContextMenu>
+                    </ui:Button>
                 </StackPanel>
-
-                <TextBlock
-                    Margin="2,6,0,0"
-                    FontSize="12"
-                    TextWrapping="Wrap"
-                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                    Visibility="{Binding HasSelection, Converter={StaticResource BoolToVis}}"
-                    Text="{Binding StepHint}" />
-
-                <Separator
-                    Margin="0,16,0,0"
-                    Background="{DynamicResource DividerStrokeColorDefaultBrush}" />
-
-                <!-- A WrapPanel: an sp-mod list shows five of these, and fixed labels can't shorten.
-                     Gaps sit on each button's trailing edge so a wrapped row starts flush. -->
-                <WrapPanel Margin="0,12,0,0">
-                    <ui:Button
-                        Margin="0,0,8,4"
-                        Appearance="Transparent"
-                        Icon="{ui:SymbolIcon ArrowExportLtr24}"
-                        Content="{loc:Str ModLists_Export}"
-                        ToolTip="{loc:Str ModLists_ExportToolTip}"
-                        Command="{Binding ExportCommand}" />
-
-                    <!-- Only a served list has anywhere to be refreshed FROM, so it is the only
-                         one that shows this. -->
-                    <ui:Button
-                        Margin="0,0,8,4"
-                        Appearance="Transparent"
-                        Icon="{ui:SymbolIcon ArrowSync24}"
-                        Content="{loc:Str ModLists_RefreshFromServer}"
-                        ToolTip="{loc:Str ModLists_RefreshFromServerToolTip}"
-                        Visibility="{Binding SelectionIsFromServer, Converter={StaticResource BoolToVis}}"
-                        Command="{Binding RefreshFromServerCommand}" />
-
-                    <ui:Button
-                        Margin="0,0,8,4"
-                        Appearance="Transparent"
-                        Icon="{ui:SymbolIcon ArrowSync24}"
-                        Content="{loc:Str ModLists_RefreshFromSpMod}"
-                        ToolTip="{loc:Str ModLists_RefreshFromSpModToolTip}"
-                        Visibility="{Binding SelectionIsFromSpMod, Converter={StaticResource BoolToVis}}"
-                        Command="{Binding RefreshFromSpModCommand}" />
-
-                    <ui:Button
-                        Margin="0,0,8,4"
-                        Appearance="Transparent"
-                        Icon="{ui:SymbolIcon Open24}"
-                        Content="{loc:Str ModLists_OpenOnSpMod}"
-                        ToolTip="{loc:Str ModLists_OpenOnSpModToolTip}"
-                        Visibility="{Binding SelectionIsFromSpMod, Converter={StaticResource BoolToVis}}"
-                        Command="{Binding OpenOnSpModCommand}" />
-
-                    <ui:Button
-                        Margin="0,0,8,4"
-                        Appearance="Transparent"
-                        Icon="{ui:SymbolIcon Branch24}"
-                        Content="{loc:Str ModLists_MakeCopy}"
-                        ToolTip="{loc:Str ModLists_MakeCopyToolTip}"
-                        Visibility="{Binding SelectionIsImported, Converter={StaticResource BoolToVis}}"
-                        Command="{Binding ForkCommand}" />
-
-                    <ui:Button
-                        Margin="0,0,8,4"
-                        Appearance="Transparent"
-                        Icon="{ui:SymbolIcon ArrowUndo24}"
-                        Content="{loc:Str ModLists_StopFollowing}"
-                        ToolTip="{loc:Str ModLists_StopFollowingToolTip}"
-                        Visibility="{Binding SelectionIsActive, Converter={StaticResource BoolToVis}}"
-                        Command="{Binding StopFollowingCommand}" />
-
-                    <ui:Button
-                        Margin="0,0,8,4"
-                        Appearance="Transparent"
-                        Content="{loc:Str ModLists_Delete}"
-                        ToolTip="{loc:Str ModLists_DeleteToolTip}"
-                        Command="{Binding DeleteCommand}" />
-                </WrapPanel>
-            </StackPanel>
+            </Grid>
 
             <!-- What just happened, directly under the buttons that cause it rather than in a
                  footer at the far end of the page. It answers "did that touch my install?", so it
@@ -566,7 +599,8 @@
             <StackPanel
                 Grid.Row="1"
                 Orientation="Horizontal"
-                Margin="2,14,0,0">
+                Margin="2,14,0,0"
+                Visibility="{Binding HasStatus, Converter={StaticResource BoolToVis}}">
                 <ui:ProgressRing
                     Width="16"
                     Height="16"
@@ -769,33 +803,6 @@
                                 ToolTip="{loc:Str ModLists_RefreshVersionsToolTip}"
                                 Command="{Binding RefreshVersionsCommand}" />
 
-                            <ui:Button
-                                Margin="8,0,0,0"
-                                Appearance="Primary"
-                                Icon="{ui:SymbolIcon Save24}"
-                                Content="{loc:Str Common_Save}"
-                                ToolTip="{loc:Str ModLists_SaveToolTip}"
-                                Visibility="{Binding HasUnsavedChanges, Converter={StaticResource BoolToVis}}"
-                                Command="{Binding SaveCommand}" />
-
-                            <ui:Button
-                                Margin="8,0,0,0"
-                                Appearance="Transparent"
-                                Icon="{ui:SymbolIcon ArrowUndo24}"
-                                Content="{loc:Str ModLists_Discard}"
-                                ToolTip="{loc:Str ModLists_DiscardToolTip}"
-                                Visibility="{Binding HasUnsavedChanges, Converter={StaticResource BoolToVis}}"
-                                Command="{Binding DiscardCommand}" />
-
-                            <!-- One step rather than export-then-copy: the app knows where the
-                                 server's config folder is, and a file the operator has to move by
-                                 hand is one that ends up in the wrong place. -->
-                            <ui:Button
-                                Margin="8,0,0,0"
-                                Icon="{ui:SymbolIcon ArrowUpload24}"
-                                Content="{loc:Str ModLists_Publish}"
-                                ToolTip="{loc:Str ModLists_PublishToolTip}"
-                                Command="{Binding PublishCommand}" />
                         </StackPanel>
                     </Grid>
 
@@ -807,16 +814,45 @@
                             Visibility="{Binding SelectionIsImported, Converter={StaticResource BoolToVis}}"
                             Text="{loc:Str ModLists_ImportedNotice}" />
 
-                        <!-- Preview and Apply are disabled until this is gone: they work off the
-                             saved list, and running them against something the panel no longer
-                             agrees with is the one confusing state this page can get into. -->
-                        <TextBlock
-                            TextWrapping="Wrap"
-                            Margin="10,0,10,8"
-                            FontWeight="SemiBold"
-                            Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                            Visibility="{Binding HasUnsavedChanges, Converter={StaticResource BoolToVis}}"
-                            Text="{Binding UnsavedLabel, Mode=OneWay}" />
+                        <Border
+                            Margin="6,0,6,8"
+                            Padding="12,8"
+                            CornerRadius="{DynamicResource ControlCornerRadius}"
+                            Background="{DynamicResource SystemFillColorCautionBackgroundBrush}"
+                            Visibility="{Binding HasUnsavedChanges, Converter={StaticResource BoolToVis}}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    TextWrapping="Wrap"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                    Text="{Binding UnsavedLabel, Mode=OneWay}" />
+
+                                <ui:Button
+                                    Grid.Column="1"
+                                    Margin="12,0,0,0"
+                                    Appearance="Primary"
+                                    Icon="{ui:SymbolIcon Save24}"
+                                    Content="{loc:Str Common_Save}"
+                                    ToolTip="{loc:Str ModLists_SaveToolTip}"
+                                    Command="{Binding SaveCommand}" />
+
+                                <ui:Button
+                                    Grid.Column="2"
+                                    Margin="8,0,0,0"
+                                    Appearance="Transparent"
+                                    Icon="{ui:SymbolIcon ArrowUndo24}"
+                                    Content="{loc:Str ModLists_Discard}"
+                                    ToolTip="{loc:Str ModLists_DiscardToolTip}"
+                                    Command="{Binding DiscardCommand}" />
+                            </Grid>
+                        </Border>
                     </StackPanel>
 
                     <!-- Only once there is something to filter. A search box over an empty list
