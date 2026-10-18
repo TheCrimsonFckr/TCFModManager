@@ -430,6 +430,10 @@
   <data name="ModLists_SavedEmpty" xml:space="preserve">
     <value>Nothing saved yet. Capture what you have installed, or import a list someone sent you.</value>
   </data>
+  <data name="ModLists_FollowingBadge" xml:space="preserve">
+    <value>Following</value>
+    <comment>Badge on a saved list this install follows. Same meaning as ModLists_FollowingToolTip.</comment>
+  </data>
   <data name="ModLists_ServingBadge" xml:space="preserve">
     <value>Serving</value>
     <comment>Badge on the list this machine serves to clients. Short: it sits in a small chip.</comment>
@@ -7977,10 +7981,6 @@ See Dependencies and Conflicts.</value>
   <data name="SpModImport_NoMatches" xml:space="preserve">
     <value>Nothing on the list matches.</value>
     <comment>In the sp-mod import window. Shown when the search and filter hide every row.</comment>
-  </data>
-  <data name="ModLists_StepHintPreview" xml:space="preserve">
-    <value>Preview first. It shows what applying this list would install, update, enable and set aside, before anything changes.</value>
-    <comment>Mod lists page, under the Preview button while no plan is showing. Preview and Apply share one spot: Apply appears there once a plan is showing.</comment>
   </data>
   <data name="ModLists_StepHintApply" xml:space="preserve">
     <value>Nothing has changed yet. Check the plan below, then apply it - or go back to the mods.</value>

@@ -550,7 +550,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     //
     public bool StepIsApply => _preview is not null;
 
-    public string StepHint => StepIsApply ? Strings.ModLists_StepHintApply : Strings.ModLists_StepHintPreview;
+    public string? StepHint => StepIsApply ? Strings.ModLists_StepHintApply : null;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanRevert))]

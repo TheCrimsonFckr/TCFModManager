@@ -6631,9 +6631,6 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="SpModImport_NoMatches" xml:space="preserve">
     <value>Nichts auf der Liste passt.</value>
   </data>
-  <data name="ModLists_StepHintPreview" xml:space="preserve">
-    <value>Zuerst die Vorschau. Sie zeigt, was das Anwenden dieser Liste installieren, aktualisieren, aktivieren und beiseitelegen würde, bevor sich etwas ändert.</value>
-  </data>
   <data name="ModLists_StepHintApply" xml:space="preserve">
     <value>Noch hat sich nichts geändert. Prüfe den Plan unten und wende ihn dann an - oder geh zurück zu den Mods.</value>
   </data>

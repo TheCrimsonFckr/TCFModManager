@@ -313,19 +313,19 @@
                                             Margin="0,0,6,0"
                                             CornerRadius="{DynamicResource ControlCornerRadius}"
                                             ToolTip="{loc:Str ModLists_ServingToolTip}"
-                                            Background="{DynamicResource SystemFillColorCriticalBackgroundBrush}"
+                                            Background="{DynamicResource SystemFillColorAttentionBackgroundBrush}"
                                             Visibility="{Binding IsPublished, Converter={StaticResource BoolToVis}}">
                                             <StackPanel Orientation="Horizontal">
                                                 <ui:SymbolIcon
                                                     Symbol="ArrowUpload24"
                                                     FontSize="14"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+                                                    Foreground="{DynamicResource SystemFillColorAttentionBrush}" />
                                                 <TextBlock
                                                     Margin="5,0,0,0"
                                                     FontSize="11"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                                                    Foreground="{DynamicResource SystemFillColorAttentionBrush}"
                                                     Text="{loc:Str ModLists_ServingBadge}" />
                                             </StackPanel>
                                         </Border>
@@ -355,20 +355,48 @@
                                             </StackPanel>
                                         </Border>
 
-                                        <ui:SymbolIcon
+                                        <Border
+                                            Padding="8,3"
                                             Margin="0,0,6,0"
-                                            VerticalAlignment="Center"
+                                            CornerRadius="{DynamicResource ControlCornerRadius}"
                                             ToolTip="{loc:Str ModLists_FollowingServerToolTip}"
-                                            Foreground="{DynamicResource SystemFillColorSuccessBrush}"
-                                            Symbol="CheckmarkCircle24"
-                                            Visibility="{Binding IsActiveServer, Converter={StaticResource BoolToVis}}" />
-
-                                        <ui:SymbolIcon
-                                            VerticalAlignment="Center"
+                                            Background="{DynamicResource SystemFillColorSuccessBackgroundBrush}"
+                                            Visibility="{Binding IsActiveServer, Converter={StaticResource BoolToVis}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <ui:SymbolIcon
+                                                    Symbol="CheckmarkCircle24"
+                                                    FontSize="14"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource SystemFillColorSuccessBrush}" />
+                                                <TextBlock
+                                                    Margin="5,0,0,0"
+                                                    FontSize="11"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource SystemFillColorSuccessBrush}"
+                                                    Text="{loc:Str ModLists_FollowingBadge}" />
+                                            </StackPanel>
+                                        </Border>
+                                        <Border
+                                            Padding="8,3"
+                                            Margin="0,0,6,0"
+                                            CornerRadius="{DynamicResource ControlCornerRadius}"
                                             ToolTip="{loc:Str ModLists_FollowingToolTip}"
-                                            Foreground="{DynamicResource SystemFillColorSuccessBrush}"
-                                            Symbol="CheckmarkCircle24"
-                                            Visibility="{Binding IsActive, Converter={StaticResource BoolToVis}}" />
+                                            Background="{DynamicResource SystemFillColorSuccessBackgroundBrush}"
+                                            Visibility="{Binding IsActive, Converter={StaticResource BoolToVis}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <ui:SymbolIcon
+                                                    Symbol="CheckmarkCircle24"
+                                                    FontSize="14"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource SystemFillColorSuccessBrush}" />
+                                                <TextBlock
+                                                    Margin="5,0,0,0"
+                                                    FontSize="11"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource SystemFillColorSuccessBrush}"
+                                                    Text="{loc:Str ModLists_FollowingBadge}" />
+                                            </StackPanel>
+                                        </Border>
                                     </StackPanel>
                                 </Grid>
                                 </Border>
@@ -494,6 +522,7 @@
                         FontSize="12"
                         TextWrapping="Wrap"
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                        Visibility="{Binding StepHint, Converter={StaticResource NullToCollapsed}}"
                         Text="{Binding StepHint}" />
                 </StackPanel>
 
@@ -767,52 +796,20 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0" Margin="10,8,6,8">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock
-                            Grid.Column="0"
-                            VerticalAlignment="Center"
-                            TextWrapping="Wrap"
-                            FontWeight="SemiBold"
-                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Text="{Binding EntriesHeader}" />
-
-                        <!-- Add and remove change what is on screen; Save writes it to the list;
-                             Apply is the only thing on this page that touches the game folder. Save
-                             and Discard appear only when there is something to save. -->
-                        <StackPanel
-                            Grid.Column="1"
-                            Orientation="Horizontal"
-                            Visibility="{Binding SelectionIsEditable, Converter={StaticResource BoolToVis}}">
+                    <StackPanel Grid.Row="0" Margin="0,6,0,0">
+                        <ui:InfoBar
+                            Margin="6,0,6,8"
+                            Severity="Informational"
+                            IsClosable="False"
+                            IsOpen="{Binding SelectionIsImported, Mode=OneWay}"
+                            Message="{loc:Str ModLists_ImportedNotice}">
                             <ui:Button
-                                Icon="{ui:SymbolIcon Add24}"
-                                Content="{loc:Str ModLists_AddMods}"
-                                ToolTip="{loc:Str ModLists_AddModsToolTip}"
-                                Command="{Binding AddModsCommand}" />
-
-                            <!-- The one-button replacement for taking a mod off the list and adding
-                                 it back to pick up its new version. -->
-                            <ui:Button
-                                Margin="8,0,0,0"
-                                Icon="{ui:SymbolIcon ArrowSync24}"
-                                Content="{loc:Str ModLists_RefreshVersions}"
-                                ToolTip="{loc:Str ModLists_RefreshVersionsToolTip}"
-                                Command="{Binding RefreshVersionsCommand}" />
-
-                        </StackPanel>
-                    </Grid>
-
-                    <StackPanel Grid.Row="1">
-                        <TextBlock
-                            TextWrapping="Wrap"
-                            Margin="10,0,10,8"
-                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Visibility="{Binding SelectionIsImported, Converter={StaticResource BoolToVis}}"
-                            Text="{loc:Str ModLists_ImportedNotice}" />
+                                Margin="0,0,0,4"
+                                Icon="{ui:SymbolIcon Branch24}"
+                                Content="{loc:Str ModLists_MakeCopy}"
+                                ToolTip="{loc:Str ModLists_MakeCopyToolTip}"
+                                Command="{Binding ForkCommand}" />
+                        </ui:InfoBar>
 
                         <Border
                             Margin="6,0,6,8"
@@ -855,10 +852,44 @@
                         </Border>
                     </StackPanel>
 
+                    <Grid Grid.Row="2" Margin="10,0,10,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel
+                            Grid.Column="0"
+                            Orientation="Horizontal"
+                            Visibility="{Binding SelectionIsEditable, Converter={StaticResource BoolToVis}}">
+                            <ui:Button
+                                Icon="{ui:SymbolIcon Add24}"
+                                Content="{loc:Str ModLists_AddMods}"
+                                ToolTip="{loc:Str ModLists_AddModsToolTip}"
+                                Command="{Binding AddModsCommand}" />
+
+                            <ui:Button
+                                Margin="8,0,0,0"
+                                Icon="{ui:SymbolIcon ArrowSync24}"
+                                Content="{loc:Str ModLists_RefreshVersions}"
+                                ToolTip="{loc:Str ModLists_RefreshVersionsToolTip}"
+                                Command="{Binding RefreshVersionsCommand}" />
+                        </StackPanel>
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="12,0,0,0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            TextWrapping="Wrap"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                            Text="{Binding EntriesHeader}" />
+                    </Grid>
+
                     <!-- Only once there is something to filter. A search box over an empty list
                          is furniture. -->
                     <Grid
-                        Grid.Row="2"
+                        Grid.Row="1"
                         Margin="10,0,10,8"
                         Visibility="{Binding HasEntries, Converter={StaticResource BoolToVis}}">
                         <Grid.ColumnDefinitions>

@@ -111,6 +111,7 @@ internal static class Strings
     internal static string ModLists_ImportToolTip => LocalizationService.Get("ModLists_ImportToolTip");
     internal static string ModLists_SavedHeader => LocalizationService.Get("ModLists_SavedHeader");
     internal static string ModLists_SavedEmpty => LocalizationService.Get("ModLists_SavedEmpty");
+    internal static string ModLists_FollowingBadge => LocalizationService.Get("ModLists_FollowingBadge");
     internal static string ModLists_ServingBadge => LocalizationService.Get("ModLists_ServingBadge");
     internal static string ModLists_ServingToolTip => LocalizationService.Get("ModLists_ServingToolTip");
     internal static string ModLists_FromServerBadge => LocalizationService.Get("ModLists_FromServerBadge");
@@ -2189,7 +2190,6 @@ internal static class Strings
     internal static string SpModImport_CollapseAllToolTip => LocalizationService.Get("SpModImport_CollapseAllToolTip");
     internal static string SpModImport_SectionToggleToolTip => LocalizationService.Get("SpModImport_SectionToggleToolTip");
     internal static string SpModImport_NoMatches => LocalizationService.Get("SpModImport_NoMatches");
-    internal static string ModLists_StepHintPreview => LocalizationService.Get("ModLists_StepHintPreview");
     internal static string ModLists_StepHintApply => LocalizationService.Get("ModLists_StepHintApply");
     internal static string ModLists_ApplyBlockedGame => LocalizationService.Get("ModLists_ApplyBlockedGame");
     internal static string ModLists_ApplyBlockedServer => LocalizationService.Get("ModLists_ApplyBlockedServer");
