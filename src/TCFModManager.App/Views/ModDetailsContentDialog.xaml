@@ -122,7 +122,7 @@
         </TabItem>
 
         <TabItem x:Name="CommentsTab" Header="{loc:Str ModDetails_CommentsTab}">
-            <Grid Margin="0,8,0,0">
+            <Grid Height="494" Margin="0,8,0,0">
                 <Border x:Name="CommentsHost" />
                 <TextBlock
                     x:Name="CommentsOff"

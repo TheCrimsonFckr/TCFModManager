@@ -61,6 +61,7 @@ internal sealed class ModCommentsView(Border host, FrameworkElement none, Framew
         if (_view.CoreWebView2 is { } web && !string.Equals(_requested, url, StringComparison.OrdinalIgnoreCase))
         {
             _requested = url;
+            AppLog.Debug("Comments", $"opening {url} in a {host.ActualWidth:0}x{host.ActualHeight:0} view");
             web.Navigate(url);
         }
     }
@@ -90,7 +91,9 @@ internal sealed class ModCommentsView(Border host, FrameworkElement none, Framew
             {
                 // A mod with no comments section (its author turned them off): said, rather than
                 // showing the whole mod page under a Comments tab.
-                if (await core.ExecuteScriptAsync(CommentsOnlyScript) == "\"none\"") Show(none);
+                var trimmed = await core.ExecuteScriptAsync(CommentsOnlyScript);
+                AppLog.Debug("Comments", $"{core.Source}: {trimmed}");
+                if (trimmed == "\"none\"") Show(none);
             }
             catch (Exception ex) when (ex is InvalidOperationException or System.Runtime.InteropServices.COMException)
             {
