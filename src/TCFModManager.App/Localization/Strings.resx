@@ -1945,6 +1945,22 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
 {0}</value>
     <comment>Tooltip. {0} is one or more of the mod author's own sentences, one per line, quoted as written - they are not translated.</comment>
   </data>
+  <data name="ModLists_AdviceKeep" xml:space="preserve">
+    <value>Keep</value>
+    <comment>Button beside a "Keep off headless" hint: leave the mod where it is and stop showing the hint on this list.</comment>
+  </data>
+  <data name="ModLists_AdviceKeepToolTip" xml:space="preserve">
+    <value>Leave it on the headless and stop showing this hint on this list. It comes back if the mod's sp-mod page changes its advice.</value>
+  </data>
+  <data name="ModLists_AdviceKeptFormat" xml:space="preserve">
+    <value>Kept {0} as it is - this list won't show that hint again unless its sp-mod page changes its advice.</value>
+    <comment>{0} is a mod name.</comment>
+  </data>
+  <data name="ModLists_AdviceParentQuotesFormat" xml:space="preserve">
+    <value>From its mod's sp-mod page (the addon's own page says nothing about a headless):
+{0}</value>
+    <comment>Tooltip on an addon entry. {0} is one or more sentences from the parent mod's sp-mod page, quoted as written - they are not translated.</comment>
+  </data>
   <data name="ModLists_AdviceFound_one" xml:space="preserve">
     <value>1 mod on this list has headless advice from its sp-mod page - choose Headless advice in the scope filter to see it.</value>
     <comment>Said after a capture. "Headless advice" is ModLists_ScopeFilterAdvice - translate it the same way.</comment>

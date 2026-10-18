@@ -190,7 +190,11 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
 
     public ModListEntryScope? AdviceScope { get; init; }
 
-    public bool AdviceKeepsOff => Advice is { } advice && HeadlessAdviceScopes.KeepsOff(advice.Verdict, Entry.EffectiveScope);
+    public bool AdviceFromParent { get; init; }
+
+    public bool AdviceKept { get; init; }
+
+    public bool AdviceKeepsOff => !AdviceKept && Advice is { } advice && HeadlessAdviceScopes.KeepsOff(advice.Verdict, Entry.EffectiveScope);
 
     public bool AdviceIsWarning => Advice is { } advice && HeadlessAdviceScopes.IsWarning(advice.Verdict, Entry.EffectiveScope);
 
@@ -213,7 +217,9 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
         : null;
 
     public string? AdviceToolTip => Advice is { Quotes.Count: > 0 } advice
-        ? LocalizationService.Text(Strings.ModLists_AdviceQuotesFormat, string.Join(Environment.NewLine, advice.Quotes))
+        ? LocalizationService.Text(
+            AdviceFromParent ? Strings.ModLists_AdviceParentQuotesFormat : Strings.ModLists_AdviceQuotesFormat,
+            string.Join(Environment.NewLine, advice.Quotes))
         : null;
 
     private string FirstQuote => Advice?.Quotes.FirstOrDefault() ?? string.Empty;
@@ -452,6 +458,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     //
     [NotifyCanExecuteChangedFor(nameof(PublishCommand))]
     [NotifyCanExecuteChangedFor(nameof(TakeAdviceCommand))]
+    [NotifyCanExecuteChangedFor(nameof(KeepAdviceCommand))]
     [NotifyCanExecuteChangedFor(nameof(StartRenameCommand))]
     [NotifyCanExecuteChangedFor(nameof(RefreshVersionsCommand))]
     private ModListRowViewModel? _selected;
@@ -801,6 +808,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         Entries.Clear();
 
         _titles = CatalogTitles();
+        _keptKeys = _kept.Load();
         _mods = AppServices.ModCache.AllMods.GroupBy(m => m.Id).ToDictionary(g => g.Key, g => g.First());
         RefreshPinLookup();
 
@@ -856,7 +864,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         };
         if (entry.ModId is not { } modId) return row;
 
-        if (!entry.IsAddon) row = WithAdvice(row, modId);
+        row = WithAdvice(row, AppServices.HeadlessAdvice.Known);
 
         var url = SpModListImport.PageFor(entry.IsAddon, modId);
 
@@ -889,14 +897,41 @@ public partial class ModListsViewModel : LocalizedViewModel
 
     private Dictionary<int, Mod> _mods = [];
 
-    private static ModListEntryRowViewModel WithAdvice(ModListEntryRowViewModel row, int modId)
+    private readonly HeadlessAdviceDismissals _kept = new();
+
+    private HashSet<string> _keptKeys = [];
+
+    private static int? ParentOf(int addonId) => AppServices.Addons.ById(addonId)?.ModId;
+
+    private static HeadlessSubject? SubjectOf(ModListEntry entry) => entry.ModId is not { } id
+        ? null
+        : entry.IsAddon ? HeadlessSubject.ForAddon(id) : HeadlessSubject.ForMod(id);
+
+    private static HeadlessAdviceForEntry? AdviceFor(ModListEntry entry, Func<HeadlessSubject, HeadlessAdvice?> known)
     {
-        if (AppServices.HeadlessAdvice.Known(HeadlessSubject.ForMod(modId)) is not { Verdict: not HeadlessVerdict.None } advice) return row;
+        if (entry.ModId is not { } id) return null;
+
+        if (!entry.IsAddon) return known(HeadlessSubject.ForMod(id)) is { } own ? new(own, FromParent: false) : null;
+
+        var parent = ParentOf(id) is { } parentId ? known(HeadlessSubject.ForMod(parentId)) : null;
+        return HeadlessAdviceScopes.ForAddon(known(HeadlessSubject.ForAddon(id)), parent);
+    }
+
+    private ModListEntryRowViewModel WithAdvice(ModListEntryRowViewModel row, Func<HeadlessSubject, HeadlessAdvice?> known)
+    {
+        if (AdviceFor(row.Entry, known) is not { Advice.Verdict: not HeadlessVerdict.None } found) return row;
+
+        var kept = found.Advice.Verdict == HeadlessVerdict.Avoid
+            && Selected is { } list
+            && SubjectOf(row.Entry) is { } subject
+            && _keptKeys.Contains(HeadlessAdviceDismissals.Key(list.Id, subject, found.Advice.Verdict));
 
         return row with
         {
-            Advice = advice,
-            AdviceScope = HeadlessAdviceScopes.Suggest(advice.Verdict, row.Entry.EffectiveScope),
+            Advice = found.Advice,
+            AdviceFromParent = found.FromParent,
+            AdviceKept = kept,
+            AdviceScope = kept ? null : HeadlessAdviceScopes.Suggest(found.Advice.Verdict, row.Entry.EffectiveScope),
         };
     }
 
@@ -913,11 +948,22 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         if (Selected is not { } list) return;
 
-        var subjects = Entries
-            .Select(e => e.Entry)
-            .Where(e => e is { ModId: not null, IsAddon: false })
-            .Select(e => HeadlessSubject.ForMod(e.ModId!.Value, _mods.TryGetValue(e.ModId!.Value, out var mod) ? mod.UpdatedAt : null))
-            .ToList();
+        var subjects = new List<HeadlessSubject>();
+        foreach (var entry in Entries.Select(e => e.Entry))
+        {
+            if (entry.ModId is not { } id) continue;
+
+            if (!entry.IsAddon)
+            {
+                subjects.Add(HeadlessSubject.ForMod(id, _mods.TryGetValue(id, out var mod) ? mod.UpdatedAt : null));
+                continue;
+            }
+
+            var addon = AppServices.Addons.ById(id);
+            subjects.Add(HeadlessSubject.ForAddon(id, addon?.UpdatedAt));
+            if (addon?.ModId is { } parent)
+                subjects.Add(HeadlessSubject.ForMod(parent, _mods.TryGetValue(parent, out var parentMod) ? parentMod.UpdatedAt : null));
+        }
 
         if (subjects.Count == 0) return;
 
@@ -931,7 +977,7 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         var progress = new Progress<HeadlessAdviceResolved>(resolved =>
         {
-            if (!cancel.IsCancellationRequested && !resolved.FromCache) ShowAdvice(resolved.Subject.Id);
+            if (!cancel.IsCancellationRequested && !resolved.FromCache) ShowAdvice(resolved.Subject);
         });
 
         IReadOnlyDictionary<HeadlessSubject, HeadlessAdvice> resolved;
@@ -952,31 +998,55 @@ public partial class ModListsViewModel : LocalizedViewModel
         if (cancel.IsCancellationRequested || Selected?.Id != listId || _announceAdviceFor != listId) return;
         _announceAdviceFor = null;
 
-        var byId = resolved.ToDictionary(r => r.Key.Id, r => r.Value);
-        var count = Entries.Count(e => e.Entry is { ModId: { } id, IsAddon: false }
-            && byId.TryGetValue(id, out var advice)
-            && HeadlessAdviceScopes.NeedsAttention(advice.Verdict, e.Entry.EffectiveScope));
+        var byKey = resolved.ToDictionary(r => r.Key.Key, r => r.Value, StringComparer.OrdinalIgnoreCase);
+        HeadlessAdvice? Known(HeadlessSubject subject) =>
+            byKey.TryGetValue(subject.Key, out var advice) ? advice : AppServices.HeadlessAdvice.Known(subject);
+
+        var count = Entries.Count(e => WithAdvice(e, Known).NeedsAttention);
 
         if (count > 0 && StatusMessage == _announceAfter)
             StatusMessage = Text(Strings.ModLists_StatusThenAdviceFormat, StatusMessage, Strings.ModLists_AdviceFound(count));
     }
 
-    private void ShowAdvice(int modId)
+    private void ShowAdvice(HeadlessSubject subject)
     {
         var changed = false;
 
         for (var i = 0; i < Entries.Count; i++)
         {
-            if (Entries[i].Entry is not { IsAddon: false } entry || entry.ModId != modId) continue;
+            var entry = Entries[i].Entry;
+            if (entry.ModId is not { } id) continue;
+
+            var affected = subject.Kind == HeadlessSubjectKind.Addon
+                ? entry.IsAddon && id == subject.Id
+                : entry.IsAddon ? ParentOf(id) == subject.Id : id == subject.Id;
+            if (!affected) continue;
 
             var rebuilt = Row(entry);
-            if (SameAdvice(rebuilt.Advice, Entries[i].Advice)) continue;
+            if (SameAdvice(rebuilt.Advice, Entries[i].Advice) && rebuilt.AdviceFromParent == Entries[i].AdviceFromParent) continue;
 
             Entries[i] = rebuilt;
             changed = true;
         }
 
         if (changed) Notify();
+    }
+
+    [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
+    private void KeepAdvice(ModListEntryRowViewModel? entry)
+    {
+        if (Selected is not { } list || entry is not { AdviceKeepsOff: true, Advice: { } advice }) return;
+        if (SubjectOf(entry.Entry) is not { } subject) return;
+
+        var key = HeadlessAdviceDismissals.Key(list.Id, subject, advice.Verdict);
+        _kept.Keep(key);
+        _keptKeys.Add(key);
+
+        var index = Entries.IndexOf(entry);
+        if (index >= 0) Entries[index] = Row(entry.Entry);
+        Notify();
+
+        StatusMessage = Text(Strings.ModLists_AdviceKeptFormat, entry.Name);
     }
 
     private static bool SameAdvice(HeadlessAdvice? a, HeadlessAdvice? b) =>

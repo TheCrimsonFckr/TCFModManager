@@ -552,6 +552,10 @@ internal static class Strings
     internal static string ModLists_AdviceSetScopeFormat => LocalizationService.Get("ModLists_AdviceSetScopeFormat");
     internal static string ModLists_AdviceSetScopeToolTip => LocalizationService.Get("ModLists_AdviceSetScopeToolTip");
     internal static string ModLists_AdviceQuotesFormat => LocalizationService.Get("ModLists_AdviceQuotesFormat");
+    internal static string ModLists_AdviceKeep => LocalizationService.Get("ModLists_AdviceKeep");
+    internal static string ModLists_AdviceKeepToolTip => LocalizationService.Get("ModLists_AdviceKeepToolTip");
+    internal static string ModLists_AdviceKeptFormat => LocalizationService.Get("ModLists_AdviceKeptFormat");
+    internal static string ModLists_AdviceParentQuotesFormat => LocalizationService.Get("ModLists_AdviceParentQuotesFormat");
     internal static string ModLists_AdviceFound(int count, params object?[] values) =>
         LocalizationService.Plural("ModLists_AdviceFound", count, values);
     internal static string ModLists_StatusThenAdviceFormat => LocalizationService.Get("ModLists_StatusThenAdviceFormat");

@@ -3072,6 +3072,19 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
     <value>Von seiner sp-mod-Seite:
 {0}</value>
   </data>
+  <data name="ModLists_AdviceKeep" xml:space="preserve">
+    <value>Behalten</value>
+  </data>
+  <data name="ModLists_AdviceKeepToolTip" xml:space="preserve">
+    <value>Lässt den Mod auf dem Headless und blendet diesen Hinweis für diese Liste aus. Er kommt zurück, wenn die sp-mod-Seite des Mods ihre Empfehlung ändert.</value>
+  </data>
+  <data name="ModLists_AdviceKeptFormat" xml:space="preserve">
+    <value>{0} bleibt, wie er ist - diese Liste zeigt den Hinweis nicht mehr, außer die sp-mod-Seite ändert ihre Empfehlung.</value>
+  </data>
+  <data name="ModLists_AdviceParentQuotesFormat" xml:space="preserve">
+    <value>Von der sp-mod-Seite seines Mods (die eigene Seite des Addons sagt nichts über Headless):
+{0}</value>
+  </data>
   <data name="ModLists_AdviceFound_one" xml:space="preserve">
     <value>1 Mod auf dieser Liste hat einen Headless-Hinweis von seiner sp-mod-Seite - wähle Headless-Hinweise im Bereichsfilter, um ihn zu sehen.</value>
   </data>

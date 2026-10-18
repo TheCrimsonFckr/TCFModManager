@@ -307,15 +307,27 @@
                         VerticalAlignment="Center"
                         Margin="0,0,8,0"
                         Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
-                        <ui:Button
-                            Padding="8,3"
-                            FontSize="11"
-                            Appearance="Secondary"
-                            Content="{Binding AdviceActionLabel}"
-                            ToolTip="{loc:Str ModLists_AdviceSetScopeToolTip}"
-                            Visibility="{Binding HasAdviceAction, Converter={StaticResource BoolToVis}}"
-                            Command="{Binding DataContext.TakeAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                            CommandParameter="{Binding}" />
+                        <StackPanel Orientation="Horizontal">
+                            <ui:Button
+                                Margin="0,0,6,0"
+                                Padding="8,3"
+                                FontSize="11"
+                                Appearance="Transparent"
+                                Content="{loc:Str ModLists_AdviceKeep}"
+                                ToolTip="{loc:Str ModLists_AdviceKeepToolTip}"
+                                Visibility="{Binding AdviceKeepsOff, Converter={StaticResource BoolToVis}}"
+                                Command="{Binding DataContext.KeepAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                CommandParameter="{Binding}" />
+                            <ui:Button
+                                Padding="8,3"
+                                FontSize="11"
+                                Appearance="Secondary"
+                                Content="{Binding AdviceActionLabel}"
+                                ToolTip="{loc:Str ModLists_AdviceSetScopeToolTip}"
+                                Visibility="{Binding HasAdviceAction, Converter={StaticResource BoolToVis}}"
+                                Command="{Binding DataContext.TakeAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                CommandParameter="{Binding}" />
+                        </StackPanel>
                     </Grid>
 
                     <ComboBox
@@ -522,15 +534,27 @@
                                 HorizontalAlignment="Right"
                                 Margin="0,0,0,6"
                                 Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
-                                <ui:Button
-                                    Padding="8,3"
-                                    FontSize="11"
-                                    Appearance="Secondary"
-                                    Content="{Binding AdviceActionLabel}"
-                                    ToolTip="{loc:Str ModLists_AdviceSetScopeToolTip}"
-                                    Visibility="{Binding HasAdviceAction, Converter={StaticResource BoolToVis}}"
-                                    Command="{Binding DataContext.TakeAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                    CommandParameter="{Binding}" />
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:Button
+                                        Margin="0,0,6,0"
+                                        Padding="8,3"
+                                        FontSize="11"
+                                        Appearance="Transparent"
+                                        Content="{loc:Str ModLists_AdviceKeep}"
+                                        ToolTip="{loc:Str ModLists_AdviceKeepToolTip}"
+                                        Visibility="{Binding AdviceKeepsOff, Converter={StaticResource BoolToVis}}"
+                                        Command="{Binding DataContext.KeepAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}" />
+                                    <ui:Button
+                                        Padding="8,3"
+                                        FontSize="11"
+                                        Appearance="Secondary"
+                                        Content="{Binding AdviceActionLabel}"
+                                        ToolTip="{loc:Str ModLists_AdviceSetScopeToolTip}"
+                                        Visibility="{Binding HasAdviceAction, Converter={StaticResource BoolToVis}}"
+                                        Command="{Binding DataContext.TakeAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}" />
+                                </StackPanel>
                             </Grid>
 
                             <ComboBox

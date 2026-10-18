@@ -3072,6 +3072,19 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
     <value>Dalla sua pagina sp-mod:
 {0}</value>
   </data>
+  <data name="ModLists_AdviceKeep" xml:space="preserve">
+    <value>Mantieni</value>
+  </data>
+  <data name="ModLists_AdviceKeepToolTip" xml:space="preserve">
+    <value>Lo lascia sul headless e non mostra più questo consiglio per questa lista. Ritorna se la pagina sp-mod del mod cambia consiglio.</value>
+  </data>
+  <data name="ModLists_AdviceKeptFormat" xml:space="preserve">
+    <value>{0} resta così com'è - questa lista non mostrerà più quel consiglio, a meno che la sua pagina sp-mod non lo cambi.</value>
+  </data>
+  <data name="ModLists_AdviceParentQuotesFormat" xml:space="preserve">
+    <value>Dalla pagina sp-mod del suo mod (la pagina dell'addon non dice nulla sul headless):
+{0}</value>
+  </data>
   <data name="ModLists_AdviceFound_one" xml:space="preserve">
     <value>1 mod di questa lista ha un consiglio headless dalla sua pagina sp-mod - scegli Consigli headless nel filtro ambito per vederlo.</value>
   </data>

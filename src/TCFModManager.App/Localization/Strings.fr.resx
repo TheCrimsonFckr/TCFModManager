@@ -3072,6 +3072,19 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
     <value>D'après sa page sp-mod :
 {0}</value>
   </data>
+  <data name="ModLists_AdviceKeep" xml:space="preserve">
+    <value>Garder</value>
+  </data>
+  <data name="ModLists_AdviceKeepToolTip" xml:space="preserve">
+    <value>Le laisse sur le headless et n'affiche plus ce conseil pour cette liste. Il revient si la page sp-mod du mod change de conseil.</value>
+  </data>
+  <data name="ModLists_AdviceKeptFormat" xml:space="preserve">
+    <value>{0} reste tel quel - cette liste n'affichera plus ce conseil, sauf si sa page sp-mod change de conseil.</value>
+  </data>
+  <data name="ModLists_AdviceParentQuotesFormat" xml:space="preserve">
+    <value>D'après la page sp-mod de son mod (la page de l'addon ne dit rien du headless) :
+{0}</value>
+  </data>
   <data name="ModLists_AdviceFound_one" xml:space="preserve">
     <value>{0} mod de cette liste a un conseil headless sur sa page sp-mod - choisissez Conseils headless dans le filtre de portée pour le voir.</value>
   </data>
