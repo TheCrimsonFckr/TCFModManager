@@ -542,10 +542,6 @@ internal static class Strings
     internal static string ModLists_SortNameAscending => LocalizationService.Get("ModLists_SortNameAscending");
     internal static string ModLists_SortNameDescending => LocalizationService.Get("ModLists_SortNameDescending");
     internal static string ModLists_EntryAddon => LocalizationService.Get("ModLists_EntryAddon");
-    internal static string ModLists_EntryServerOnly => LocalizationService.Get("ModLists_EntryServerOnly");
-    internal static string ModLists_EntryClientOnly => LocalizationService.Get("ModLists_EntryClientOnly");
-    internal static string ModLists_EntryHeadlessOnly => LocalizationService.Get("ModLists_EntryHeadlessOnly");
-    internal static string ModLists_EntryServerAndClients => LocalizationService.Get("ModLists_EntryServerAndClients");
     internal static string ModLists_EntryInstalledAsFormat => LocalizationService.Get("ModLists_EntryInstalledAsFormat");
     internal static string ModLists_EntryNotOnForge => LocalizationService.Get("ModLists_EntryNotOnForge");
     internal static string ModLists_EntryVersionFormat => LocalizationService.Get("ModLists_EntryVersionFormat");

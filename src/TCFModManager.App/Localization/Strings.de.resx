@@ -2762,12 +2762,6 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="ModLists_EntryAddon" xml:space="preserve">
     <value>Addon</value>
   </data>
-  <data name="ModLists_EntryClientOnly" xml:space="preserve">
-    <value>nur Spieler - ein Headless überspringt ihn</value>
-  </data>
-  <data name="ModLists_EntryHeadlessOnly" xml:space="preserve">
-    <value>nur Headless - Spieler überspringen ihn</value>
-  </data>
   <data name="ModLists_EntryInstalledAsFormat" xml:space="preserve">
     <value>installiert als {0}</value>
   </data>
@@ -2782,12 +2776,6 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   </data>
   <data name="ModLists_EntrySearchToolTip" xml:space="preserve">
     <value>Findet den Namen des Mods, den Namen, den die Liste gespeichert hat, und die Ordner, in die er installiert wird.</value>
-  </data>
-  <data name="ModLists_EntryServerAndClients" xml:space="preserve">
-    <value>Server und Spieler - ein Headless überspringt ihn</value>
-  </data>
-  <data name="ModLists_EntryServerOnly" xml:space="preserve">
-    <value>nur Server - Spieler überspringen ihn</value>
   </data>
   <data name="ModLists_EntrySortToolTip" xml:space="preserve">
     <value>Sortiert nach dem Namen, der in der Zeile steht.</value>

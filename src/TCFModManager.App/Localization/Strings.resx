@@ -1911,18 +1911,6 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>addon</value>
     <comment>One fact on a list entry's line.</comment>
   </data>
-  <data name="ModLists_EntryServerOnly" xml:space="preserve">
-    <value>server only - players skip it</value>
-  </data>
-  <data name="ModLists_EntryClientOnly" xml:space="preserve">
-    <value>players only - a headless skips it</value>
-  </data>
-  <data name="ModLists_EntryHeadlessOnly" xml:space="preserve">
-    <value>headless only - players skip it</value>
-  </data>
-  <data name="ModLists_EntryServerAndClients" xml:space="preserve">
-    <value>server and players - a headless skips it</value>
-  </data>
   <data name="ModLists_EntryInstalledAsFormat" xml:space="preserve">
     <value>installed as {0}</value>
     <comment>{0} is one or more folder names, which are not translated.</comment>

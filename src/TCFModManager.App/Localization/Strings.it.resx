@@ -2762,12 +2762,6 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="ModLists_EntryAddon" xml:space="preserve">
     <value>addon</value>
   </data>
-  <data name="ModLists_EntryClientOnly" xml:space="preserve">
-    <value>solo giocatori - un headless lo salta</value>
-  </data>
-  <data name="ModLists_EntryHeadlessOnly" xml:space="preserve">
-    <value>solo headless - i giocatori lo saltano</value>
-  </data>
   <data name="ModLists_EntryInstalledAsFormat" xml:space="preserve">
     <value>installato come {0}</value>
   </data>
@@ -2782,12 +2776,6 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   </data>
   <data name="ModLists_EntrySearchToolTip" xml:space="preserve">
     <value>Cerca nel nome del mod, nel nome memorizzato dalla lista e nelle cartelle in cui viene installato.</value>
-  </data>
-  <data name="ModLists_EntryServerAndClients" xml:space="preserve">
-    <value>server e giocatori - un headless lo salta</value>
-  </data>
-  <data name="ModLists_EntryServerOnly" xml:space="preserve">
-    <value>solo server - i giocatori lo saltano</value>
   </data>
   <data name="ModLists_EntrySortToolTip" xml:space="preserve">
     <value>Ordinate per il nome mostrato sulla riga.</value>

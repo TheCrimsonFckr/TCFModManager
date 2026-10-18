@@ -2927,12 +2927,6 @@
   <data name="ModLists_EntryAddon" xml:space="preserve">
     <value>аддон</value>
   </data>
-  <data name="ModLists_EntryClientOnly" xml:space="preserve">
-    <value>только игроки - headless его пропускает</value>
-  </data>
-  <data name="ModLists_EntryHeadlessOnly" xml:space="preserve">
-    <value>только headless - игроки его пропускают</value>
-  </data>
   <data name="ModLists_EntryInstalledAsFormat" xml:space="preserve">
     <value>установлен как {0}</value>
   </data>
@@ -2947,12 +2941,6 @@
   </data>
   <data name="ModLists_EntrySearchToolTip" xml:space="preserve">
     <value>Ищет по названию мода, по названию, сохранённому в списке, и по папкам, в которые он устанавливается.</value>
-  </data>
-  <data name="ModLists_EntryServerAndClients" xml:space="preserve">
-    <value>сервер и игроки - headless его пропускает</value>
-  </data>
-  <data name="ModLists_EntryServerOnly" xml:space="preserve">
-    <value>только сервер - игроки его пропускают</value>
   </data>
   <data name="ModLists_EntrySortToolTip" xml:space="preserve">
     <value>Сортировка по названию, показанному в строке.</value>

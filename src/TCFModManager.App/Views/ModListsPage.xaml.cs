@@ -41,6 +41,15 @@ public partial class ModListsPage : Page
         menu.IsOpen = true;
     }
 
+    private void ScopeBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.RemovedItems.Count == 0 || e.AddedItems.Count == 0) return;
+        if (sender is not ComboBox { DataContext: ModListEntryRowViewModel row }) return;
+        if (e.AddedItems[0] is not ModListScopeFilter { Scope: { } scope }) return;
+
+        ViewModel.ChooseScope(row, scope);
+    }
+
     private void RenameBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
         if (e.NewValue is not true || sender is not TextBox box) return;

@@ -169,6 +169,8 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
 
     public string? Facts { get; init; }
 
+    public string Summary => string.IsNullOrEmpty(Facts) ? Detail : Facts + Strings.Common_FactSeparator + Detail;
+
     public string? SptBadge { get; init; }
 
     public string? Url { get; init; }
@@ -210,9 +212,9 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
 }
 
 //
-// The names the page puts on a scope, and the order the row button cycles them in.
+// The names the page puts on a scope.
 //
-// Kept in one place because the chip, the filter dropdown, the row's detail line and the message
+// Kept in one place because the row's scope dropdown, the filter dropdown and the message
 // after a change all have to agree - four spellings of "Client + Headless" is how a user ends up
 // unsure whether they are looking at the same setting.
 //
@@ -248,27 +250,6 @@ public static class ModListScopes
         ModListEntryScope.Headless => nameof(Strings.ModLists_ScopeHeadlessOnly),
         ModListEntryScope.Server => nameof(Strings.ModLists_ScopeServerOnly),
         _ => null,
-    };
-
-    //
-    // Where the button goes next.
-    //
-    // Ordered so the ONE change anybody makes often is one click: capture tags a plugin
-    // Client + Headless, and the whole point of the feature is saying "actually, players only" for
-    // the HUD mods. That step comes first. The full set leads into it for the same reason - a mod
-    // with both halves starts there and is pruned the same way.
-    //
-    // Server + Client sits at the far end for the opposite reason: it is the answer to a question
-    // most lists never ask - a mod both halves of the game need and the headless does not.
-    //
-    public static ModListEntryScope Next(ModListEntryScope scope) => scope switch
-    {
-        ModListEntryScope.Everyone => ClientsAndHeadless,
-        ClientsAndHeadless => ModListEntryScope.Client,
-        ModListEntryScope.Client => ModListEntryScope.Headless,
-        ModListEntryScope.Headless => ModListEntryScope.Server,
-        ModListEntryScope.Server => ServerAndClients,
-        _ => ModListEntryScope.Everyone,
     };
 }
 
@@ -357,6 +338,16 @@ public partial class ModListsViewModel : LocalizedViewModel
         new(ModListScopes.Key(ModListEntryScope.Headless)!, ModListEntryScope.Headless),
         new(ModListScopes.Key(ModListEntryScope.Server)!, ModListEntryScope.Server),
         new(nameof(Strings.ModLists_ScopeFilterAdvice), null, adviceOnly: true),
+    ];
+
+    public IReadOnlyList<ModListScopeFilter> ScopeChoices { get; } =
+    [
+        new(ModListScopes.Key(ModListEntryScope.Everyone)!, ModListEntryScope.Everyone),
+        new(ModListScopes.Key(ModListScopes.ClientsAndHeadless)!, ModListScopes.ClientsAndHeadless),
+        new(ModListScopes.Key(ModListEntryScope.Client)!, ModListEntryScope.Client),
+        new(ModListScopes.Key(ModListEntryScope.Headless)!, ModListEntryScope.Headless),
+        new(ModListScopes.Key(ModListEntryScope.Server)!, ModListEntryScope.Server),
+        new(ModListScopes.Key(ModListScopes.ServerAndClients)!, ModListScopes.ServerAndClients),
     ];
 
     public IReadOnlyList<ModListEntrySort> EntrySorts { get; } =
@@ -452,7 +443,6 @@ public partial class ModListsViewModel : LocalizedViewModel
     // That is exactly how Publish came out permanently greyed.
     //
     [NotifyCanExecuteChangedFor(nameof(PublishCommand))]
-    [NotifyCanExecuteChangedFor(nameof(CycleScopeCommand))]
     [NotifyCanExecuteChangedFor(nameof(TakeAdviceCommand))]
     [NotifyCanExecuteChangedFor(nameof(StartRenameCommand))]
     [NotifyCanExecuteChangedFor(nameof(RefreshVersionsCommand))]
@@ -1035,24 +1025,6 @@ public partial class ModListsViewModel : LocalizedViewModel
         var parts = new List<string>();
 
         if (entry.IsAddon) parts.Add(Strings.ModLists_EntryAddon);
-
-        //
-        // Said in the line rather than only as a chip, because this is the field that decides
-        // whether somebody else's machine acts on the entry at all.
-        //
-        //
-        // Only the scopes that mean somebody skips the entry are spelled out here. Everyone and
-        // Client + Headless are the two the chip already says and nobody has to think about; the
-        // rest change what a machine does, so they get a sentence.
-        //
-        if (entry.EffectiveScope == ModListEntryScope.Server)
-            parts.Add(Strings.ModLists_EntryServerOnly);
-        else if (entry.EffectiveScope == ModListEntryScope.Client)
-            parts.Add(Strings.ModLists_EntryClientOnly);
-        else if (entry.EffectiveScope == ModListEntryScope.Headless)
-            parts.Add(Strings.ModLists_EntryHeadlessOnly);
-        else if (entry.EffectiveScope == ModListScopes.ServerAndClients)
-            parts.Add(Strings.ModLists_EntryServerAndClients);
 
         //
         // The folders on disk this entry covers.
@@ -1767,20 +1739,9 @@ public partial class ModListsViewModel : LocalizedViewModel
         StatusMessage = Text(Strings.ModLists_RemovedEntryFormat, entry.Name, row.Name);
     }
 
-    //
-    // Moves one entry around the machines it is for.
-    //
-    // Capture infers this from where a mod's files land, which is right nearly always - this is for
-    // the exception, and there are now two kinds. The originals: the Server Map mod and fika-server
-    // sit in user\mods on the server, and a client told to install them is being sent on an errand
-    // it cannot complete. The new one: nothing on disk separates a bot overhaul from a HUD widget,
-    // so capture gives the headless every plugin and this is where the ones it does not need come
-    // back off.
-    //
-    [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
-    private void CycleScope(ModListEntryRowViewModel? entry)
+    public void ChooseScope(ModListEntryRowViewModel entry, ModListEntryScope scope)
     {
-        if (entry is not null) SetScope(entry, ModListScopes.Next(entry.Entry.EffectiveScope));
+        if (SelectionIsEditable && scope != entry.Entry.EffectiveScope) SetScope(entry, scope);
     }
 
     [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
