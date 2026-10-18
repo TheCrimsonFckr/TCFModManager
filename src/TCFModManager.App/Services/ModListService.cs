@@ -178,6 +178,10 @@ public sealed class ModListService
     //
     // Only ever narrows a list a SERVER served. Your own lists describe your own install.
     //
+    public ModList CreateEmpty(string name) =>
+        AppServices.ModLists.Add(ModListCapture.Build(
+            name, [], DateTimeOffset.UtcNow, sptVersion: AppServices.SptEnvironment.InstalledVersion));
+
     public static ModListEntryScope MachineScope =>
         InstallRole.ScopeFor(new SettingsService().Load().Roles);
 

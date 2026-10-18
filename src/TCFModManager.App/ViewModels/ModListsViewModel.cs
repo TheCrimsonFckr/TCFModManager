@@ -1117,9 +1117,19 @@ public partial class ModListsViewModel : LocalizedViewModel
     }
 
     [RelayCommand]
+    private void CreateEmpty()
+    {
+        if (ModListNameWindow.AskForEmpty() is not { } name) return;
+
+        var list = _service.CreateEmpty(name);
+        Refresh(list.Id);
+        StatusMessage = Text(Strings.ModLists_CreatedEmptyFormat, list.Name);
+    }
+
+    [RelayCommand]
     private async Task CaptureNewAsync()
     {
-        if (ModListNameWindow.Ask() is not { } name) return;
+        if (ModListNameWindow.AskForCapture() is not { } name) return;
 
         NewListName = name;
         await CaptureAsync();

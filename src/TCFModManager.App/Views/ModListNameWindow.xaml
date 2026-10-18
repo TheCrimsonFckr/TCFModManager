@@ -18,17 +18,17 @@
         </Grid.RowDefinitions>
 
         <ui:TitleBar
-            Grid.Row="0"
-            Title="{loc:Str ModLists_CaptureHeader}" />
+            x:Name="WindowTitleBar"
+            Grid.Row="0" />
 
         <StackPanel
             Grid.Row="1"
             Margin="24,12,24,24">
             <TextBlock
+                x:Name="DescriptionText"
                 Margin="0,0,0,12"
                 TextWrapping="Wrap"
-                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                Text="{loc:Str ModLists_CaptureDescription}" />
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
 
             <ui:TextBox
                 x:Name="NameBox"
@@ -49,8 +49,6 @@
                     IsDefault="True"
                     IsEnabled="False"
                     Appearance="Primary"
-                    Icon="{ui:SymbolIcon AppsList24}"
-                    Content="{loc:Str ModLists_Capture}"
                     Click="CaptureButton_Click" />
             </StackPanel>
         </StackPanel>

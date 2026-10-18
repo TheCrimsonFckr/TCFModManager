@@ -198,6 +198,11 @@
                 <ui:Button.ContextMenu>
                     <ContextMenu>
                         <MenuItem
+                            Header="{loc:Str ModLists_NewEmpty}"
+                            Icon="{ui:SymbolIcon DocumentAdd24}"
+                            ToolTip="{loc:Str ModLists_NewEmptyToolTip}"
+                            Command="{Binding CreateEmptyCommand}" />
+                        <MenuItem
                             Header="{loc:Str ModLists_NewFromInstalled}"
                             Icon="{ui:SymbolIcon AppsList24}"
                             ToolTip="{loc:Str ModLists_CaptureDescription}"
