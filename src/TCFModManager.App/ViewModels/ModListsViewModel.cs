@@ -169,6 +169,14 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
 
     public string? Facts { get; init; }
 
+    public string? Category { get; init; }
+
+    public string? Teaser { get; init; }
+
+    public string? CardFacts => string.IsNullOrEmpty(Category)
+        ? Facts
+        : string.IsNullOrEmpty(Facts) ? Category : Facts + Strings.Common_FactSeparator + Category;
+
     public string Summary => string.IsNullOrEmpty(Facts) ? Detail : Facts + Strings.Common_FactSeparator + Detail;
 
     public string? SptBadge { get; init; }
@@ -462,6 +470,26 @@ public partial class ModListsViewModel : LocalizedViewModel
 
     [ObservableProperty]
     private bool _isRenaming;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ShowCardRows))]
+    private bool _compactRows = new SettingsService().Load().ModListsCompactRows;
+
+    public bool ShowCardRows => !CompactRows;
+
+    partial void OnCompactRowsChanged(bool value)
+    {
+        var settings = new SettingsService();
+        var current = settings.Load();
+        current.ModListsCompactRows = value;
+        settings.Save(current);
+    }
+
+    [RelayCommand]
+    private void UseCardRows() => CompactRows = false;
+
+    [RelayCommand]
+    private void UseCompactRows() => CompactRows = true;
 
     //
     // The one undo point: how the install stood before the last apply. Null when nothing has been
@@ -838,6 +866,7 @@ public partial class ModListsViewModel : LocalizedViewModel
                 ? row with
                 {
                     Thumbnail = addon.Thumbnail,
+                    Teaser = addon.Teaser,
                     Facts = CardFacts(addon.Owner?.Name, addon.Downloads),
                     Url = addon.DetailUrl ?? url,
                 }
@@ -849,6 +878,8 @@ public partial class ModListsViewModel : LocalizedViewModel
         return row with
         {
             Thumbnail = mod.Thumbnail,
+            Teaser = mod.Teaser,
+            Category = mod.Category?.Title,
             Facts = CardFacts(mod.Owner?.Name, mod.Downloads),
             SptBadge = SptBadgeFor(mod, entry),
             Url = mod.DetailUrl ?? url,

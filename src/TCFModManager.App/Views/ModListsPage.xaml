@@ -162,6 +162,406 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <converters:BoolToButtonAppearanceConverter x:Key="BoolToAppearance" />
+
+        <Style x:Key="EntryCard" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorSecondaryBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource RowHoverBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <DataTemplate x:Key="EntryCompactTemplate">
+            <Border Style="{StaticResource HoverRow}" Padding="10,6">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="40" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0" Margin="0,0,12,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border
+                            Grid.Column="0"
+                            Width="32"
+                            Height="32"
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            CornerRadius="{DynamicResource ControlCornerRadius}"
+                            ClipToBounds="True"
+                            Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                            Visibility="{Binding Entry.ModId, Converter={StaticResource NullToCollapsed}}">
+                            <Grid>
+                                <ui:SymbolIcon
+                                    Symbol="{Binding PlaceholderSymbol}"
+                                    FontSize="16"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                                <Image
+                                    Stretch="UniformToFill"
+                                    behaviors:ThumbnailLoader.Source="{Binding Thumbnail}" />
+                            </Grid>
+                        </Border>
+
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <DockPanel LastChildFill="False">
+                                <ui:SymbolIcon
+                                    DockPanel.Dock="Left"
+                                    Symbol="Pin24"
+                                    FontSize="14"
+                                    Margin="0,0,6,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                    ToolTip="{loc:Str Common_PinnedToolTip}"
+                                    Visibility="{Binding IsPinnedHere, Converter={StaticResource BoolToVis}}" />
+
+                                <TextBlock
+                                    DockPanel.Dock="Left"
+                                    VerticalAlignment="Center"
+                                    TextTrimming="CharacterEllipsis"
+                                    FontWeight="SemiBold"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                    Text="{Binding Name}" />
+
+                                <ui:Button
+                                    DockPanel.Dock="Left"
+                                    Margin="4,-4,0,-4"
+                                    Padding="4,2"
+                                    VerticalAlignment="Center"
+                                    Appearance="Transparent"
+                                    Icon="{ui:SymbolIcon Open24, FontSize=14}"
+                                    ToolTip="{loc:Str ModLists_OpenEntryPageToolTip}"
+                                    Visibility="{Binding Url, Converter={StaticResource NullToCollapsed}}"
+                                    Click="OpenEntryPage_Click" />
+                            </DockPanel>
+
+                            <DockPanel Margin="0,3,0,0">
+                                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                                    <ui:Badge
+                                        Margin="0,0,6,0"
+                                        Appearance="Info"
+                                        FontSize="11"
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                        Content="{Binding SptBadge}"
+                                        Visibility="{Binding SptBadge, Converter={StaticResource NullToCollapsed}}" />
+                                    <ui:Badge
+                                        Margin="0,0,6,0"
+                                        Appearance="Caution"
+                                        FontSize="11"
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                        Content="{loc:Str Browse_BadgeHasDependencies}"
+                                        Visibility="Collapsed"
+                                        behaviors:DependencyBadgeLoader.Mod="{Binding Mod}" />
+                                    <ui:Badge
+                                        Margin="0,0,6,0"
+                                        Appearance="Info"
+                                        FontSize="11"
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                        Content="{Binding AdviceBadge}"
+                                        ToolTip="{Binding AdviceToolTip}"
+                                        Visibility="{Binding AdviceBadge, Converter={StaticResource NullToCollapsed}}" />
+                                </StackPanel>
+
+                                <TextBlock
+                                    Margin="2,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="11"
+                                    TextTrimming="CharacterEllipsis"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    ToolTip="{Binding Summary}"
+                                    Text="{Binding Summary}" />
+                            </DockPanel>
+
+                            <DockPanel
+                                Margin="0,2,0,0"
+                                ToolTip="{Binding AdviceToolTip}"
+                                Visibility="{Binding AdviceLabel, Converter={StaticResource NullToCollapsed}}">
+                                <TextBlock
+                                    DockPanel.Dock="Left"
+                                    Margin="0,0,6,0"
+                                    FontSize="11"
+                                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                                    Text="{Binding AdviceLabel}" />
+                                <TextBlock
+                                    FontSize="11"
+                                    TextTrimming="CharacterEllipsis"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{Binding AdviceQuote}" />
+                            </DockPanel>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Margin="0,0,8,0"
+                        Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
+                        <ui:Button
+                            Padding="8,3"
+                            FontSize="11"
+                            Appearance="Secondary"
+                            Content="{Binding AdviceActionLabel}"
+                            ToolTip="{loc:Str ModLists_AdviceSetScopeToolTip}"
+                            Visibility="{Binding HasAdviceAction, Converter={StaticResource BoolToVis}}"
+                            Command="{Binding DataContext.TakeAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                            CommandParameter="{Binding}" />
+                    </Grid>
+
+                    <ComboBox
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        DisplayMemberPath="Label"
+                        SelectedValuePath="Scope"
+                        ToolTip="{loc:Str ModLists_ScopeToolTip}"
+                        ItemsSource="{Binding DataContext.ScopeChoices, RelativeSource={RelativeSource AncestorType=Page}}"
+                        SelectedValue="{Binding Entry.EffectiveScope, Mode=OneWay}"
+                        Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"
+                        SelectionChanged="ScopeBox_SelectionChanged" />
+
+                    <Border
+                        Grid.Column="2"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Padding="8,3"
+                        CornerRadius="{DynamicResource ControlCornerRadius}"
+                        Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                        ToolTip="{Binding ScopeToolTip}"
+                        Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource FalseToVisible}}">
+                        <TextBlock
+                            FontSize="11"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                            Text="{Binding ScopeLabel}" />
+                    </Border>
+
+                    <ui:Button
+                        Grid.Column="3"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Padding="8,4"
+                        Appearance="Transparent"
+                        Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                        Icon="{ui:SymbolIcon Dismiss24}"
+                        ToolTip="{loc:Str ModLists_RemoveEntryToolTip}"
+                        Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"
+                        Command="{Binding DataContext.RemoveEntryCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                        CommandParameter="{Binding}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="EntryCardTemplate">
+            <Border Style="{StaticResource EntryCard}" Margin="0,0,0,6" Padding="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="230" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border
+                        Grid.Column="0"
+                        Width="104"
+                        Height="104"
+                        VerticalAlignment="Top"
+                        CornerRadius="{DynamicResource ControlCornerRadius}"
+                        ClipToBounds="True"
+                        Background="{DynamicResource ControlFillColorSecondaryBrush}">
+                        <Grid>
+                            <ui:SymbolIcon
+                                Symbol="{Binding PlaceholderSymbol}"
+                                FontSize="32"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                            <Image
+                                Stretch="UniformToFill"
+                                behaviors:ThumbnailLoader.Source="{Binding Thumbnail}" />
+                        </Grid>
+                    </Border>
+
+                    <StackPanel Grid.Column="1" Margin="14,0,12,0">
+                        <DockPanel LastChildFill="False">
+                            <ui:SymbolIcon
+                                DockPanel.Dock="Left"
+                                Symbol="Pin24"
+                                FontSize="16"
+                                Margin="0,0,6,0"
+                                VerticalAlignment="Center"
+                                Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                ToolTip="{loc:Str Common_PinnedToolTip}"
+                                Visibility="{Binding IsPinnedHere, Converter={StaticResource BoolToVis}}" />
+
+                            <TextBlock
+                                DockPanel.Dock="Left"
+                                VerticalAlignment="Center"
+                                FontSize="17"
+                                FontWeight="SemiBold"
+                                TextTrimming="CharacterEllipsis"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{Binding Name}" />
+
+                            <ui:Button
+                                DockPanel.Dock="Left"
+                                Margin="4,-2,0,-2"
+                                Padding="4,2"
+                                VerticalAlignment="Center"
+                                Appearance="Transparent"
+                                Icon="{ui:SymbolIcon Open24, FontSize=14}"
+                                ToolTip="{loc:Str ModLists_OpenEntryPageToolTip}"
+                                Visibility="{Binding Url, Converter={StaticResource NullToCollapsed}}"
+                                Click="OpenEntryPage_Click" />
+                        </DockPanel>
+
+                        <TextBlock
+                            Margin="0,2,0,0"
+                            FontSize="12"
+                            TextTrimming="CharacterEllipsis"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Visibility="{Binding CardFacts, Converter={StaticResource NullToCollapsed}}"
+                            Text="{Binding CardFacts}" />
+
+                        <TextBlock
+                            Margin="0,6,0,0"
+                            MaxHeight="34"
+                            FontSize="12"
+                            TextWrapping="Wrap"
+                            TextTrimming="CharacterEllipsis"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                            ToolTip="{Binding Teaser}"
+                            Visibility="{Binding Teaser, Converter={StaticResource NullToCollapsed}}"
+                            Text="{Binding Teaser}" />
+
+                        <WrapPanel Margin="0,8,0,0">
+                            <ui:Badge
+                                Margin="0,0,6,2"
+                                Appearance="Info"
+                                FontSize="11"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Content="{Binding SptBadge}"
+                                Visibility="{Binding SptBadge, Converter={StaticResource NullToCollapsed}}" />
+                            <ui:Badge
+                                Margin="0,0,6,2"
+                                Appearance="Caution"
+                                FontSize="11"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Content="{loc:Str Browse_BadgeHasDependencies}"
+                                Visibility="Collapsed"
+                                behaviors:DependencyBadgeLoader.Mod="{Binding Mod}" />
+                            <ui:Badge
+                                Margin="0,0,6,2"
+                                Appearance="Info"
+                                FontSize="11"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Content="{Binding AdviceBadge}"
+                                ToolTip="{Binding AdviceToolTip}"
+                                Visibility="{Binding AdviceBadge, Converter={StaticResource NullToCollapsed}}" />
+                        </WrapPanel>
+
+                        <DockPanel
+                            Margin="0,4,0,0"
+                            ToolTip="{Binding AdviceToolTip}"
+                            Visibility="{Binding AdviceLabel, Converter={StaticResource NullToCollapsed}}">
+                            <TextBlock
+                                DockPanel.Dock="Left"
+                                Margin="0,0,6,0"
+                                FontSize="12"
+                                Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                                Text="{Binding AdviceLabel}" />
+                            <TextBlock
+                                FontSize="12"
+                                TextTrimming="CharacterEllipsis"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="{Binding AdviceQuote}" />
+                        </DockPanel>
+                    </StackPanel>
+
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <DockPanel Grid.Row="0">
+                            <ui:Button
+                                DockPanel.Dock="Right"
+                                Margin="6,-4,-4,0"
+                                Padding="6,3"
+                                VerticalAlignment="Top"
+                                Appearance="Transparent"
+                                Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                                Icon="{ui:SymbolIcon Dismiss24, FontSize=14}"
+                                ToolTip="{loc:Str ModLists_RemoveEntryToolTip}"
+                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"
+                                Command="{Binding DataContext.RemoveEntryCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                CommandParameter="{Binding}" />
+
+                            <TextBlock
+                                MaxHeight="30"
+                                FontSize="11"
+                                TextAlignment="Right"
+                                TextWrapping="Wrap"
+                                TextTrimming="CharacterEllipsis"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                ToolTip="{Binding Detail}"
+                                Text="{Binding Detail}" />
+                        </DockPanel>
+
+                        <StackPanel Grid.Row="2" HorizontalAlignment="Right">
+                            <Grid
+                                HorizontalAlignment="Right"
+                                Margin="0,0,0,6"
+                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
+                                <ui:Button
+                                    Padding="8,3"
+                                    FontSize="11"
+                                    Appearance="Secondary"
+                                    Content="{Binding AdviceActionLabel}"
+                                    ToolTip="{loc:Str ModLists_AdviceSetScopeToolTip}"
+                                    Visibility="{Binding HasAdviceAction, Converter={StaticResource BoolToVis}}"
+                                    Command="{Binding DataContext.TakeAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                    CommandParameter="{Binding}" />
+                            </Grid>
+
+                            <ComboBox
+                                Width="200"
+                                HorizontalAlignment="Right"
+                                FontSize="12"
+                                DisplayMemberPath="Label"
+                                SelectedValuePath="Scope"
+                                ToolTip="{loc:Str ModLists_ScopeToolTip}"
+                                ItemsSource="{Binding DataContext.ScopeChoices, RelativeSource={RelativeSource AncestorType=Page}}"
+                                SelectedValue="{Binding Entry.EffectiveScope, Mode=OneWay}"
+                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"
+                                SelectionChanged="ScopeBox_SelectionChanged" />
+
+                            <Border
+                                HorizontalAlignment="Right"
+                                Padding="8,3"
+                                CornerRadius="{DynamicResource ControlCornerRadius}"
+                                Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                ToolTip="{Binding ScopeToolTip}"
+                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource FalseToVisible}}">
+                                <TextBlock
+                                    FontSize="11"
+                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                    Text="{Binding ScopeLabel}" />
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid
@@ -859,14 +1259,32 @@
                                 Command="{Binding RefreshVersionsCommand}" />
                         </StackPanel>
 
-                        <TextBlock
+                        <StackPanel
                             Grid.Column="1"
                             Margin="12,0,0,0"
                             HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            TextWrapping="Wrap"
-                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                            Text="{Binding EntriesHeader}" />
+                            Orientation="Horizontal">
+                            <TextBlock
+                                Margin="0,0,12,0"
+                                VerticalAlignment="Center"
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                Text="{Binding EntriesHeader}" />
+
+                            <ui:Button
+                                Padding="8,4"
+                                Icon="{ui:SymbolIcon Apps24}"
+                                Content="{loc:Str Installed_ViewCards}"
+                                Appearance="{Binding ShowCardRows, Converter={StaticResource BoolToAppearance}}"
+                                Command="{Binding UseCardRowsCommand}" />
+
+                            <ui:Button
+                                Margin="6,0,0,0"
+                                Padding="8,4"
+                                Icon="{ui:SymbolIcon TextBulletListSquare24}"
+                                Content="{loc:Str ModLists_ViewCompact}"
+                                Appearance="{Binding CompactRows, Converter={StaticResource BoolToAppearance}}"
+                                Command="{Binding UseCompactRowsCommand}" />
+                        </StackPanel>
                     </Grid>
 
                     <!-- Only once there is something to filter. A search box over an empty list
@@ -933,191 +1351,6 @@
                             ItemContainerStyle="{StaticResource ReadOnlyContainer}"
                             ItemsSource="{Binding EntriesView}"
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Style="{StaticResource HoverRow}" Padding="10,6">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="200" />
-                                                <ColumnDefinition Width="40" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <Grid Grid.Column="0" Margin="0,0,12,0">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition Width="*" />
-                                                </Grid.ColumnDefinitions>
-
-                                                <Border
-                                                    Grid.Column="0"
-                                                    Width="32"
-                                                    Height="32"
-                                                    Margin="0,0,10,0"
-                                                    VerticalAlignment="Center"
-                                                    CornerRadius="{DynamicResource ControlCornerRadius}"
-                                                    ClipToBounds="True"
-                                                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                                    Visibility="{Binding Entry.ModId, Converter={StaticResource NullToCollapsed}}">
-                                                    <Grid>
-                                                        <ui:SymbolIcon
-                                                            Symbol="{Binding PlaceholderSymbol}"
-                                                            FontSize="16"
-                                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-                                                        <Image
-                                                            Stretch="UniformToFill"
-                                                            behaviors:ThumbnailLoader.Source="{Binding Thumbnail}" />
-                                                    </Grid>
-                                                </Border>
-
-                                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                                    <DockPanel LastChildFill="False">
-                                                        <ui:SymbolIcon
-                                                            DockPanel.Dock="Left"
-                                                            Symbol="Pin24"
-                                                            FontSize="14"
-                                                            Margin="0,0,6,0"
-                                                            VerticalAlignment="Center"
-                                                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                                                            ToolTip="{loc:Str Common_PinnedToolTip}"
-                                                            Visibility="{Binding IsPinnedHere, Converter={StaticResource BoolToVis}}" />
-
-                                                        <TextBlock
-                                                            DockPanel.Dock="Left"
-                                                            VerticalAlignment="Center"
-                                                            TextTrimming="CharacterEllipsis"
-                                                            FontWeight="SemiBold"
-                                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                            Text="{Binding Name}" />
-
-                                                        <ui:Button
-                                                            DockPanel.Dock="Left"
-                                                            Margin="4,-4,0,-4"
-                                                            Padding="4,2"
-                                                            VerticalAlignment="Center"
-                                                            Appearance="Transparent"
-                                                            Icon="{ui:SymbolIcon Open24, FontSize=14}"
-                                                            ToolTip="{loc:Str ModLists_OpenEntryPageToolTip}"
-                                                            Visibility="{Binding Url, Converter={StaticResource NullToCollapsed}}"
-                                                            Click="OpenEntryPage_Click" />
-                                                    </DockPanel>
-
-                                                    <DockPanel Margin="0,3,0,0">
-                                                        <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
-                                                            <ui:Badge
-                                                                Margin="0,0,6,0"
-                                                                Appearance="Info"
-                                                                FontSize="11"
-                                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                                Content="{Binding SptBadge}"
-                                                                Visibility="{Binding SptBadge, Converter={StaticResource NullToCollapsed}}" />
-                                                            <ui:Badge
-                                                                Margin="0,0,6,0"
-                                                                Appearance="Caution"
-                                                                FontSize="11"
-                                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                                Content="{loc:Str Browse_BadgeHasDependencies}"
-                                                                Visibility="Collapsed"
-                                                                behaviors:DependencyBadgeLoader.Mod="{Binding Mod}" />
-                                                            <ui:Badge
-                                                                Margin="0,0,6,0"
-                                                                Appearance="Info"
-                                                                FontSize="11"
-                                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                                Content="{Binding AdviceBadge}"
-                                                                ToolTip="{Binding AdviceToolTip}"
-                                                                Visibility="{Binding AdviceBadge, Converter={StaticResource NullToCollapsed}}" />
-                                                        </StackPanel>
-
-                                                        <TextBlock
-                                                            Margin="2,0,0,0"
-                                                            VerticalAlignment="Center"
-                                                            FontSize="11"
-                                                            TextTrimming="CharacterEllipsis"
-                                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                                            ToolTip="{Binding Summary}"
-                                                            Text="{Binding Summary}" />
-                                                    </DockPanel>
-
-                                                    <DockPanel
-                                                        Margin="0,2,0,0"
-                                                        ToolTip="{Binding AdviceToolTip}"
-                                                        Visibility="{Binding AdviceLabel, Converter={StaticResource NullToCollapsed}}">
-                                                        <TextBlock
-                                                            DockPanel.Dock="Left"
-                                                            Margin="0,0,6,0"
-                                                            FontSize="11"
-                                                            Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                                                            Text="{Binding AdviceLabel}" />
-                                                        <TextBlock
-                                                            FontSize="11"
-                                                            TextTrimming="CharacterEllipsis"
-                                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                                            Text="{Binding AdviceQuote}" />
-                                                    </DockPanel>
-                                                </StackPanel>
-                                            </Grid>
-
-                                            <Grid
-                                                Grid.Column="1"
-                                                VerticalAlignment="Center"
-                                                Margin="0,0,8,0"
-                                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
-                                                <ui:Button
-                                                    Padding="8,3"
-                                                    FontSize="11"
-                                                    Appearance="Secondary"
-                                                    Content="{Binding AdviceActionLabel}"
-                                                    ToolTip="{loc:Str ModLists_AdviceSetScopeToolTip}"
-                                                    Visibility="{Binding HasAdviceAction, Converter={StaticResource BoolToVis}}"
-                                                    Command="{Binding DataContext.TakeAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                                    CommandParameter="{Binding}" />
-                                            </Grid>
-
-                                            <ComboBox
-                                                Grid.Column="2"
-                                                VerticalAlignment="Center"
-                                                FontSize="12"
-                                                DisplayMemberPath="Label"
-                                                SelectedValuePath="Scope"
-                                                ToolTip="{loc:Str ModLists_ScopeToolTip}"
-                                                ItemsSource="{Binding DataContext.ScopeChoices, RelativeSource={RelativeSource AncestorType=Page}}"
-                                                SelectedValue="{Binding Entry.EffectiveScope, Mode=OneWay}"
-                                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"
-                                                SelectionChanged="ScopeBox_SelectionChanged" />
-
-                                            <Border
-                                                Grid.Column="2"
-                                                HorizontalAlignment="Right"
-                                                VerticalAlignment="Center"
-                                                Padding="8,3"
-                                                CornerRadius="{DynamicResource ControlCornerRadius}"
-                                                Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                                ToolTip="{Binding ScopeToolTip}"
-                                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource FalseToVisible}}">
-                                                <TextBlock
-                                                    FontSize="11"
-                                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                    Text="{Binding ScopeLabel}" />
-                                            </Border>
-
-                                            <ui:Button
-                                                Grid.Column="3"
-                                                HorizontalAlignment="Right"
-                                                VerticalAlignment="Center"
-                                                Padding="8,4"
-                                                Appearance="Transparent"
-                                                Foreground="{DynamicResource SystemFillColorCriticalBrush}"
-                                                Icon="{ui:SymbolIcon Dismiss24}"
-                                                ToolTip="{loc:Str ModLists_RemoveEntryToolTip}"
-                                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"
-                                                Command="{Binding DataContext.RemoveEntryCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                                CommandParameter="{Binding}" />
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
                         </ListBox>
                     </Grid>
                 </Grid>

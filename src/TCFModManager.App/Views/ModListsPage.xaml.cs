@@ -27,9 +27,18 @@ public partial class ModListsPage : Page
 
         // The page is kept alive between visits, so the running-SPT watch is stopped when it goes
         // off screen rather than left polling behind every other page.
+        ApplyRowTemplate();
+        ViewModel.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(ModListsViewModel.CompactRows)) ApplyRowTemplate();
+        };
+
         Loaded += (_, _) => ViewModel.PageShown();
         Unloaded += (_, _) => ViewModel.PageHidden();
     }
+
+    private void ApplyRowTemplate() =>
+        EntriesBox.ItemTemplate = (DataTemplate)FindResource(ViewModel.CompactRows ? "EntryCompactTemplate" : "EntryCardTemplate");
 
     private void OpenMenu_Click(object sender, RoutedEventArgs e)
     {

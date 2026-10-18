@@ -442,6 +442,10 @@
   <data name="ModListAdd_GroupToolTip" xml:space="preserve">
     <value>Show only the mods in one of your groups from the Installed page</value>
   </data>
+  <data name="ModLists_ViewCompact" xml:space="preserve">
+    <value>Compact</value>
+    <comment>Button beside "Cards" above a list's mods: one short row per mod instead of a card.</comment>
+  </data>
   <data name="ModLists_NewEmpty" xml:space="preserve">
     <value>Empty list…</value>
   </data>

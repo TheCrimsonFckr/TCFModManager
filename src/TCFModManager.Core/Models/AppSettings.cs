@@ -176,6 +176,8 @@ public sealed class AppSettings
     //
     public bool ShowModListBadges { get; set; } = true;
 
+    public bool ModListsCompactRows { get; set; }
+
     //
     // Where the main window opens and how big. Always present, the same as ServerMap below, and
     // never null for the same reason: this file is offered for hand-editing, so a "Window": null
