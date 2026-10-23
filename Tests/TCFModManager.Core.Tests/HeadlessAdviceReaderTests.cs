@@ -16,14 +16,16 @@ public class HeadlessAdviceReaderTests
         public string Html { get; set; } = "";
     }
 
+    private static readonly JsonSerializerOptions SampleOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        Converters = { new System.Text.Json.Serialization.JsonStringEnumConverter() },
+    };
+
     private static readonly Lazy<List<Sample>> Samples = new(() =>
         JsonSerializer.Deserialize<List<Sample>>(
             File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "HeadlessAdvice", "descriptions.json")),
-            new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                Converters = { new System.Text.Json.Serialization.JsonStringEnumConverter() },
-            })!);
+            SampleOptions)!);
 
     [Fact]
     public void EverySampledDescriptionReadsAsRecorded()

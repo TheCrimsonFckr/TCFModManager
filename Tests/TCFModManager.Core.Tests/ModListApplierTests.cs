@@ -74,7 +74,7 @@ public class ModListApplierTests : IDisposable
         public List<ModListAction> Asked { get; } = [];
         public Action? WhileFetching { get; init; }
 
-        public Task<ModListFetchOutcome> InvokeAsync(IReadOnlyList<ModListAction> fetches, CancellationToken ct)
+        public Task<ModListFetchOutcome> InvokeAsync(IReadOnlyList<ModListAction> fetches, CancellationToken _)
         {
             Calls++;
             Asked.AddRange(fetches);

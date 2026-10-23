@@ -329,7 +329,7 @@ public class ServerMapReportingTests
         var path = Path.Combine(Path.GetTempPath(), $"tcfmm-settings-{Guid.NewGuid():N}.json");
         try
         {
-            File.WriteAllText(path, JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true }));
+            File.WriteAllText(path, JsonSerializer.Serialize(settings, JsonFileOptions.Indented));
             var back = JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(path))!;
 
             Assert.Equal(id, back.ServerMap.ClientId);
