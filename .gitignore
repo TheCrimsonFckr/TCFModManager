@@ -20,6 +20,7 @@ publish/
 release-notes*.md
 *design.md
 *followups*.md
+BUILD-ORDER.md
 
 
 # Test output
