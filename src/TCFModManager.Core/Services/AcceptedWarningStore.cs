@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 namespace TCFModManager.Core.Services;
 
 //
@@ -11,11 +9,11 @@ public sealed class AcceptedWarningStore
 {
     private const int SchemaVersion = 1;
 
-    private readonly string _filePath;
+    private readonly JsonFile<Stored> _file;
 
     public AcceptedWarningStore() : this(Path.Combine(AppPaths.DataDirectory, "accepted_dependency_warnings.json")) { }
 
-    public AcceptedWarningStore(string filePath) => _filePath = filePath;
+    public AcceptedWarningStore(string filePath) => _file = new JsonFile<Stored>(filePath);
 
     private sealed class Stored
     {
@@ -28,14 +26,12 @@ public sealed class AcceptedWarningStore
 
     public HashSet<string> Load()
     {
-        if (!File.Exists(_filePath)) return [];
-
         try
         {
-            var data = JsonSerializer.Deserialize<Stored>(File.ReadAllText(_filePath));
+            var data = _file.Read();
             return data is null || data.SchemaVersion != SchemaVersion ? [] : [.. data.Accepted];
         }
-        catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             return [];
         }
@@ -54,11 +50,11 @@ public sealed class AcceptedWarningStore
     {
         try
         {
-            SafeFile.WriteText(_filePath, JsonSerializer.Serialize(new Stored
+            _file.Write(new Stored
             {
                 SchemaVersion = SchemaVersion,
                 Accepted = [.. accepted.Order(StringComparer.Ordinal)],
-            }));
+            });
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {

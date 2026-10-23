@@ -27,4 +27,23 @@ public class DismissedSptWarningStoreTests
             File.Delete(path);
         }
     }
+
+    [Fact]
+    public void Load_IsEmptyForACorruptFile_AndKeepsItAside()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"dismissed-{Guid.NewGuid():N}.json");
+        try
+        {
+            File.WriteAllText(path, "{ not json");
+            Assert.Empty(new DismissedSptWarningStore(path).Load());
+
+            var damaged = Assert.Single(Directory.EnumerateFiles(Path.GetTempPath(), Path.GetFileName(path) + ".damaged-*"));
+            Assert.Equal("{ not json", File.ReadAllText(damaged));
+        }
+        finally
+        {
+            File.Delete(path);
+            foreach (var copy in Directory.EnumerateFiles(Path.GetTempPath(), Path.GetFileName(path) + ".damaged-*")) File.Delete(copy);
+        }
+    }
 }

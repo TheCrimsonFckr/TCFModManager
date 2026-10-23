@@ -1,4 +1,3 @@
-using System.Text.Json;
 using TCFModManager.Core.Models;
 
 namespace TCFModManager.Core.Services;
@@ -7,11 +6,11 @@ public sealed class HeadlessAdviceDismissals
 {
     private const int SchemaVersion = 1;
 
-    private readonly string _filePath;
+    private readonly JsonFile<Stored> _file;
 
     public HeadlessAdviceDismissals() : this(Path.Combine(AppPaths.DataDirectory, "headless_advice_kept.json")) { }
 
-    public HeadlessAdviceDismissals(string filePath) => _filePath = filePath;
+    public HeadlessAdviceDismissals(string filePath) => _file = new JsonFile<Stored>(filePath);
 
     private sealed class Stored
     {
@@ -24,14 +23,12 @@ public sealed class HeadlessAdviceDismissals
 
     public HashSet<string> Load()
     {
-        if (!File.Exists(_filePath)) return [];
-
         try
         {
-            var data = JsonSerializer.Deserialize<Stored>(File.ReadAllText(_filePath));
+            var data = _file.Read();
             return data is null || data.SchemaVersion != SchemaVersion ? [] : [.. data.Kept];
         }
-        catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             return [];
         }
@@ -47,14 +44,11 @@ public sealed class HeadlessAdviceDismissals
     {
         try
         {
-            var directory = Path.GetDirectoryName(_filePath);
-            if (!string.IsNullOrEmpty(directory)) Directory.CreateDirectory(directory);
-
-            SafeFile.WriteText(_filePath, JsonSerializer.Serialize(new Stored
+            _file.Write(new Stored
             {
                 SchemaVersion = SchemaVersion,
                 Kept = [.. kept.Order(StringComparer.Ordinal)],
-            }));
+            });
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
