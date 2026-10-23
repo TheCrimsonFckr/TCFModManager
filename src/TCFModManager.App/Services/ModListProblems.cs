@@ -1,4 +1,3 @@
-using System.Globalization;
 using TCFModManager.App.Localization;
 using TCFModManager.Core.Services;
 

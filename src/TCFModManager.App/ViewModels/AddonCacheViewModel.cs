@@ -1,6 +1,5 @@
 using System.Net.Http;
 using System.Windows;
-using CommunityToolkit.Mvvm.ComponentModel;
 using TCFModManager.App.Localization;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;

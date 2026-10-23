@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
-using TCFModManager.Core.ServerMap;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;

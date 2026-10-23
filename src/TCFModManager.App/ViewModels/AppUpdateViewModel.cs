@@ -1,5 +1,4 @@
 using System.Net.Http;
-using System.Windows;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;

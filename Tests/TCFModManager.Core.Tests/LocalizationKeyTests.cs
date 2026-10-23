@@ -1,7 +1,6 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using TCFModManager.Core.Services;
 using Xunit;
 
 namespace TCFModManager.Core.Tests;

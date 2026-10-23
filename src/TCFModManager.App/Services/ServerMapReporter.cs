@@ -1,5 +1,4 @@
 using System.IO;
-using TCFModManager.Core.Models;
 using TCFModManager.Core.ServerMap;
 using TCFModManager.Core.Services;
 

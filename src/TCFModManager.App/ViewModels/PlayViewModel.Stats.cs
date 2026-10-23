@@ -2,7 +2,6 @@ using System.Net.Http;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using TCFModManager.App.Services;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;

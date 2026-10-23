@@ -1,5 +1,4 @@
 using System.Globalization;
-using CommunityToolkit.Mvvm.ComponentModel;
 using TCFModManager.App.Localization;
 
 namespace TCFModManager.App.ViewModels;

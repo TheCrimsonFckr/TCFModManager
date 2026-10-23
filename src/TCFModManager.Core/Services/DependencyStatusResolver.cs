@@ -1,5 +1,3 @@
-using TCFModManager.Core.Models;
-
 namespace TCFModManager.Core.Services;
 
 // Decides a dependency's status, and how severe it is relative to others.
