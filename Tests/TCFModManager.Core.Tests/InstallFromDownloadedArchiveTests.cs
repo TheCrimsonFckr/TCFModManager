@@ -64,4 +64,22 @@ public class InstallFromDownloadedArchiveTests : IDisposable
         Assert.Equal(Path.Combine(_install, ".tcfmm-work"), Path.GetDirectoryName(path));
         Assert.StartsWith("queue-", Path.GetFileName(path));
     }
+
+    [Fact]
+    public void The_scratch_folder_is_removed_only_when_empty()
+    {
+        var work = Path.Combine(_install, ".tcfmm-work");
+        var waiting = QueueArchives.NewPath(_install);
+        File.WriteAllText(waiting, "archive");
+
+        ModInstallService.RemoveWorkFolderIfEmpty(_install);
+        Assert.True(File.Exists(waiting));
+
+        File.Delete(waiting);
+        ModInstallService.RemoveWorkFolderIfEmpty(_install);
+        Assert.False(Directory.Exists(work));
+
+        ModInstallService.RemoveWorkFolderIfEmpty(_install);
+        ModInstallService.RemoveWorkFolderIfEmpty(null);
+    }
 }

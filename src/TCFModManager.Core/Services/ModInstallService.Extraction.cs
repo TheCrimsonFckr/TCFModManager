@@ -79,6 +79,15 @@ public sealed partial class ModInstallService
         catch (UnauthorizedAccessException) { }
     }
 
+    public static void RemoveWorkFolderIfEmpty(string? installPath)
+    {
+        if (string.IsNullOrWhiteSpace(installPath)) return;
+
+        try { Directory.Delete(Path.Combine(installPath, WorkFolderName), recursive: false); }
+        catch (IOException) { }
+        catch (UnauthorizedAccessException) { }
+    }
+
     // Extracts every file entry in the archive at <paramref name="archivePath"/> into
     // <paramref name="extractDir"/>. Zip archives go through System.IO.Compression; every other
     // format goes through SharpCompress's forward-only reader. Zip-slip protection: any entry whose

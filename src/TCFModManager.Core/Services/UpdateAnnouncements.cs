@@ -129,7 +129,7 @@ public sealed class UpdateNotificationStore
 
     public UpdateNotificationStore(string? filePath = null) =>
         _file = new JsonFile<UpdateNotificationState>(
-            filePath ?? Path.Combine(AppPaths.DataDirectory, "update_notifications.json"), JsonFileOptions.Indented, keepBackups: true);
+            filePath ?? Path.Combine(AppPaths.DataDirectory, "update_notifications.json"), JsonFileOptions.Indented);
 
     public UpdateNotificationState Load()
     {

@@ -185,6 +185,7 @@ public partial class App : Application
         AppTray.Dispose();
         UpdateToasts.RemoveMessages();
         DependencyBadgeLoader.Flush();
+        ModInstallService.RemoveWorkFolderIfEmpty(AppServices.SptEnvironment.InstallPath);
         AppLog.Info("App", "Shutting down");
         AppLog.Flush();
         base.OnExit(e);

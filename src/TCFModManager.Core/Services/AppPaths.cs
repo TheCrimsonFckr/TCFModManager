@@ -7,7 +7,7 @@ namespace TCFModManager.Core.Services;
 public static class AppPaths
 {
     private static readonly string DataDir = ResolveDirectory("Data");
-    private static readonly string StagingDir = ResolveDirectory("Staging");
+    private static readonly string StagingDir = Path.Combine(AppContext.BaseDirectory, "Staging");
 
     public static string DataDirectory => DataDir;
 
