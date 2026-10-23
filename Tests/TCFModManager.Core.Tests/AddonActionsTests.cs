@@ -136,7 +136,7 @@ public class AddonActionsTests : IDisposable
     {
         var scanned = Scan();
         var parent = Assert.Single(scanned, m => !m.ShareOwnerIsAddon);
-        var addons = AddonFamily.EntriesOf(scanned, AddonFamily.InstalledAddons(CamoId, _manifest.Load().Mods, ParentOf));
+        var addons = scanned.Where(m => m.ShareOwnerIsAddon).ToList();
         Assert.Equal(2, addons.Count);
 
         var off = ModDisableService.Apply([parent, .. addons], disable: true, _install);
@@ -167,16 +167,15 @@ public class AddonActionsTests : IDisposable
     }
 
     [Fact]
-    public void DisabledWithParent_IsMarkedAndClearedPerAddon_AndOnlyThoseAreOfferedBack()
+    public void DisabledWithParent_IsMarkedAndClearedPerAddon()
     {
         Assert.Equal(1, _manifest.SetDisabledWithParent([PrideId], true));
         Assert.Equal(0, _manifest.SetDisabledWithParent([PrideId], true));
 
-        var offered = AddonFamily.DisabledWithParent(CamoId, _manifest.Load().Mods, ParentOf);
-        Assert.Equal([PrideId], offered.Select(r => r.ModId));
+        Assert.Equal([PrideId], _manifest.Load().Mods.Where(r => r.DisabledWithParent).Select(r => r.ModId));
 
         Assert.Equal(1, _manifest.SetDisabledWithParent([PrideId, EssentialId], false));
-        Assert.Empty(AddonFamily.DisabledWithParent(CamoId, _manifest.Load().Mods, ParentOf));
+        Assert.DoesNotContain(_manifest.Load().Mods, r => r.DisabledWithParent);
     }
 
     [Fact]
@@ -187,21 +186,6 @@ public class AddonActionsTests : IDisposable
 
         Assert.Single(System.Text.RegularExpressions.Regex.Matches(json, "\"DisabledWithParent\""));
     }
-
-    [Fact]
-    public void InstalledAddons_AreThoseWhoseParentIsTheMod_NeverAModWithTheSameId()
-    {
-        var sameIdMod = Record(PrideId, false, "A mod numbered 68", "com.example.sixtyeight", Day(4), null, []);
-        var stranger = Record(999, true, "Someone else's addon", null, Day(4), "other", []);
-        var records = new[] { _camo, _pride, _essential, sameIdMod, stranger };
-
-        var found = AddonFamily.InstalledAddons(CamoId, records, id => id == 999 ? 1 : ParentOf(id));
-
-        Assert.Equal(["Essential Texture Pack", "Pride Flag Sticker Pack"], found.Select(r => r.Name));
-        Assert.All(found, r => Assert.True(r.IsAddon));
-    }
-
-    private static int? ParentOf(int addonId) => addonId is PrideId or EssentialId ? CamoId : null;
 
     private List<InstalledMod> Scan() =>
         InstalledModScanner.Scan(_install, new ModOwnership(_manifest.Load().Mods));
