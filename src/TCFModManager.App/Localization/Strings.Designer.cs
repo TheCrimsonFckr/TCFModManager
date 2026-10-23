@@ -866,15 +866,13 @@ internal static class Strings
     internal static string Installed_NoUpdatesReasonsFormat => LocalizationService.Get("Installed_NoUpdatesReasonsFormat");
     internal static string Installed_ReasonDisabled(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_ReasonDisabled", count, values);
-    internal static string Installed_ReasonAddon(int count, params object?[] values) =>
-        LocalizationService.Plural("Installed_ReasonAddon", count, values);
     internal static string Installed_SkippedFormat => LocalizationService.Get("Installed_SkippedFormat");
     internal static string Installed_SkippedUpToDate(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_SkippedUpToDate", count, values);
     internal static string Installed_SkippedDisabled(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_SkippedDisabled", count, values);
-    internal static string Installed_SkippedAddon(int count, params object?[] values) =>
-        LocalizationService.Plural("Installed_SkippedAddon", count, values);
+    internal static string Installed_SkippedAddonNoFit(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_SkippedAddonNoFit", count, values);
     internal static string Installed_SkippedNotFound(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_SkippedNotFound", count, values);
     internal static string Installed_Undone(int count, params object?[] values) =>

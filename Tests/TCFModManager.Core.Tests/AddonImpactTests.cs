@@ -82,11 +82,22 @@ public class AddonImpactTests
     [Fact]
     public async Task AModUpgradeWhoseFittingAddonIsOlder_IsNeedsChange_ToTheOlderVersion()
     {
-        var result = await AddonImpact.AssessAsync(7, Listing(Essential), "1.1.1", "1.19.0", "4.1.6", new FakeLookup().Get);
+        var listing = Listing(V(2, "1.1.0", "~1.17.0", 0), V(1, "1.0.0", "^1.4.0", 30));
+
+        var result = await AddonImpact.AssessAsync(7, listing, "1.1.0", "1.19.0", "4.1.6", new FakeLookup().Get);
 
         Assert.Equal(AddonImpactVerdict.NeedsChange, result.Verdict);
-        Assert.Equal("1.1.0", result.Target?.Version);
+        Assert.Equal("1.0.0", result.Target?.Version);
         Assert.True(result.TargetIsOlder);
+    }
+
+    [Fact]
+    public async Task ATwoPartTilde_ReachesTheNextMajor_AsSpModReadsIt()
+    {
+        // sp-mod lists Essential Texture Pack 1.1.1 ("~1.17") as compatible with Camo And Stickers 1.17.0 to 1.19.0.
+        var result = await AddonImpact.AssessAsync(7, Listing(Essential), "1.1.1", "1.19.0", "4.1.6", new FakeLookup().Get);
+
+        Assert.Equal(AddonImpactVerdict.Unaffected, result.Verdict);
     }
 
     [Fact]
@@ -216,7 +227,7 @@ public class AddonImpactTests
         var listing = Listing(V(302, "1.1.0", "~4.1.6", 0), V(259, "1.0.0", "~2.0", 30));
 
         var unaffected = await AddonImpact.AssessAsync(7, listing, "1.1.0", "2.1.1", "4.1.6", new FakeLookup().Get);
-        var change = await AddonImpact.AssessAsync(7, listing, "1.0.0", "2.1.1", "4.1.6", new FakeLookup().Get);
+        var change = await AddonImpact.AssessAsync(7, listing, "1.0.0", "3.0.0", "4.1.6", new FakeLookup().Get);
 
         Assert.Equal(AddonImpactVerdict.Unaffected, unaffected.Verdict);
         Assert.Equal(AddonImpactVerdict.NeedsChange, change.Verdict);

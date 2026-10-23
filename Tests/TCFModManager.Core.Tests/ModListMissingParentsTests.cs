@@ -16,7 +16,7 @@ public class ModListMissingParentsTests
             Versions =
             [
                 new AddonVersionSummary { Id = 91, Version = "1.1.0", ModVersionConstraint = "^1.4.0" },
-                new AddonVersionSummary { Id = 92, Version = "1.1.1", ModVersionConstraint = "~1.17" },
+                new AddonVersionSummary { Id = 92, Version = "1.1.1", ModVersionConstraint = "~1.17.0" },
             ],
         },
         [68] = new Addon { Id = 68, Name = "Pride Flag Sticker Pack", ModId = CamoId, Versions = [new AddonVersionSummary { Id = 130, Version = "1.0.0", ModVersionConstraint = "~1" }] },

@@ -99,12 +99,9 @@ public static partial class SptVersionRange
                 case "~":
                     RaiseMin(ref min, ref minExclusive, value, exclusive: false);
 
-                    // "~4.1.3" and "~4.1" both stop at the next minor, but "~4" - a major with no
-                    // minor written after it - means the whole major line and stops at the next
-                    // major. Same rule npm's semver uses, and the difference is not academic: TCF
-                    // Mod Manager's own sp-mod listing is published as "~4", so reading it as the
-                    // 4.0 line only made this app look incompatible with SPT 4.1 in its own Browse.
-                    LowerMax(ref maxExclusive, wildcardCeiling ?? (components <= 1 ? NextMajor(value) : NextMinor(value)));
+                    // As sp-mod reads it (Composer): "~4.1.3" stops at the next minor, "~4.1" and
+                    // "~4" at the next major. sp-mod's SPT filter lists a "~4.0" release for 4.1.6.
+                    LowerMax(ref maxExclusive, wildcardCeiling ?? (components <= 2 ? NextMajor(value) : NextMinor(value)));
                     break;
                 case ">=":
                     RaiseMin(ref min, ref minExclusive, value, exclusive: false);

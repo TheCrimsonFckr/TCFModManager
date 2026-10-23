@@ -51,6 +51,7 @@ public class AddonFitTests
 
         Assert.Equal("1.1.0", NewestFittingVersion.ForParent(versions, "2.1.1", "4.1.6")?.Version);
         Assert.Equal("1.0.0", NewestFittingVersion.ForParent(versions, "2.0.4")?.Version);
-        Assert.Null(NewestFittingVersion.ForParent(versions, "2.1.1"));
+        Assert.Equal("1.0.0", NewestFittingVersion.ForParent(versions, "2.1.1")?.Version);
+        Assert.Null(NewestFittingVersion.ForParent(versions, "3.0.0"));
     }
 }

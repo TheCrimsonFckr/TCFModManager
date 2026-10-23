@@ -10,10 +10,10 @@ public class SptVersionRangeFormatterTests
     [InlineData("^4.0.13", "4.0.13 - 4.x")]
     [InlineData("^4.0", "4.x")]
     [InlineData("^3.11.0 <4.0.0", "3.11 - 3.x")]
-    // Tilde: at least this version, below the next minor.
+    // Tilde: at least this version, below the next minor - or the next major when no patch is written.
     [InlineData("~4.1.1", "4.1.1 - 4.1.x")]
-    [InlineData("~4.0", "4.0.x")]
-    [InlineData("~3.9", "3.9.x")]
+    [InlineData("~4.0", "4.x")]
+    [InlineData("~3.9", "3.9 - 3.x")]
     // Intersected clauses.
     [InlineData("^4.0.13 <4.1.0", "4.0.13 - 4.0.x")]
     [InlineData("^4.0 <4.1.0", "4.0.x")]

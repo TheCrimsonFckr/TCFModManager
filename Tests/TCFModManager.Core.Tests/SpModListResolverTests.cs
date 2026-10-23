@@ -196,7 +196,20 @@ public class SpModListResolverTests
     [Fact]
     public async Task AddonConstraintsAreReadLiterally()
     {
-        // "~2.0" against parent 2.1.1 is a real case on sp-mod: Live-Like ORBIT and ORBIT 2.1.1.
+        var api = new FakeApi();
+        api.Recent[2706] = [V(21, "2.1.1", "~4.1.6")];
+        api.Addons[135] = [V(30, "1.3.0", "~2.0.0")];
+
+        var result = await SpModListResolver.RetargetAsync(
+            [Mod(2706, "2.1.1"), Addon(135, "1.3.0")], new Dictionary<int, int> { [135] = 2706 }, "4.1.6", api);
+
+        Assert.Equal(SpModRetargetOutcome.NoVersion, result.Rows[1].Outcome);
+    }
+
+    [Fact]
+    public async Task ATwoPartTilde_ReachesTheNextMajor_AsSpModReadsIt()
+    {
+        // Live-Like ORBIT "~2.0" with ORBIT 2.1.1, live on sp-mod.
         var api = new FakeApi();
         api.Recent[2706] = [V(21, "2.1.1", "~4.1.6")];
         api.Addons[135] = [V(30, "1.3.0", "~2.0")];
@@ -204,7 +217,7 @@ public class SpModListResolverTests
         var result = await SpModListResolver.RetargetAsync(
             [Mod(2706, "2.1.1"), Addon(135, "1.3.0")], new Dictionary<int, int> { [135] = 2706 }, "4.1.6", api);
 
-        Assert.Equal(SpModRetargetOutcome.NoVersion, result.Rows[1].Outcome);
+        Assert.Equal(SpModRetargetOutcome.Unchanged, result.Rows[1].Outcome);
     }
 
     [Fact]

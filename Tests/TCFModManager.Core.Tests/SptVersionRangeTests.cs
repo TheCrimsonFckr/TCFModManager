@@ -179,9 +179,14 @@ public class SptVersionRangeTests
     [InlineData("4", "4.1.3", true)]
     [InlineData("4", "3.11.4", false)]
     [InlineData("4", "5.0.0", false)]
-    // A minor written out still confines it to that line, which is the whole point of the distinction.
+    // A tilde on major.minor reaches the next major, as sp-mod reads it: its SPT filter lists a
+    // "~4.0"-only release for 4.1.6 and leaves a "~3.11"-only one out. A patch written out keeps
+    // the tilde on its line, and a bare major.minor stays on its line.
     [InlineData("~4.0", "4.0.13", true)]
-    [InlineData("~4.0", "4.1.3", false)]
+    [InlineData("~4.0", "4.1.3", true)]
+    [InlineData("~4.0", "5.0.0", false)]
+    [InlineData("~3.11", "4.0.13", false)]
+    [InlineData("~4.0.0", "4.1.3", false)]
     [InlineData("4.0", "4.0.13", true)]
     [InlineData("4.0", "4.1.3", false)]
     // An explicit upper bound still wins over the wider tilde - this is the constraint on
