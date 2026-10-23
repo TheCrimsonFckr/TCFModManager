@@ -152,13 +152,7 @@ public static class SptInstallationService
     public static bool TryFindServerExe(string installPath, out string exePath) =>
         TryFindNamedServerExe(installPath, out exePath) || TryFindServerExeByWildcard(installPath, out exePath);
 
-    //
-    // The two halves are separately callable because SptRootResolver walks a chain of directories
-    // and has to exhaust every named candidate across all of them before trying a wildcard
-    // anywhere - otherwise a stray *Server*.exe near the top of the tree beats the real
-    // SPT.Server.exe further down.
-    //
-    public static bool TryFindNamedServerExe(string installPath, out string exePath)
+    private static bool TryFindNamedServerExe(string installPath, out string exePath)
     {
         exePath = "";
 
@@ -176,7 +170,7 @@ public static class SptInstallationService
     }
 
     // Fallback for layouts that don't match any named candidate.
-    public static bool TryFindServerExeByWildcard(string installPath, out string exePath)
+    private static bool TryFindServerExeByWildcard(string installPath, out string exePath)
     {
         exePath = "";
 

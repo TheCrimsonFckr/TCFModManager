@@ -163,30 +163,6 @@ public static class ServerMapProblems
     };
 
     //
-    // What a server says it publishes, before anything is fetched.
-    //
-    // Four whole phrases rather than one built from a name, a revision and an optional size: the
-    // brackets, the order and the commas inside them are not the same in every language, and a
-    // piece like ", 3 mods" cannot be placed by anybody translating it on its own.
-    //
-    public static string DescribePublished(ServerHello hello)
-    {
-        if (!hello.HasList) return Strings.ServerMap_PublishesNothing;
-
-        var revision = hello.ListRevision?.ToString(CultureInfo.CurrentCulture) ?? Strings.Common_Unknown;
-        var named = !string.IsNullOrWhiteSpace(hello.ListName);
-
-        return (named, hello.ListEntryCount) switch
-        {
-            (true, { } count) =>
-                Strings.ServerMap_PublishedNamed(count, hello.ListName, revision, count),
-            (true, null) => Format(Strings.ServerMap_PublishedNamedFormat, hello.ListName, revision),
-            (false, { } count) => Strings.ServerMap_PublishedUnnamed(count, revision, count),
-            _ => Format(Strings.ServerMap_PublishedUnnamedFormat, revision),
-        };
-    }
-
-    //
     // How the pin is described in Options. Deliberately says what it is FOR: on its own, a hex
     // string in a settings page means nothing to anyone.
     //

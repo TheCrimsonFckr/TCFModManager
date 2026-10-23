@@ -1929,7 +1929,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         }
 
         var queued = Strings.Installed_UpdateQueued(resolved.Count);
-        var summary = queued + DescribeSkipped(selected, resolved.Count, unmatched);
+        var summary = queued + DescribeSkipped(selected, unmatched);
         StatusMessage = leftOut.Length == 0 ? summary : Sentences(summary, leftOut);
 
         AppLog.Info("Installed", $"queued {resolved.Count} update(s) from a selection of {selected.Count}");
@@ -1960,7 +1960,6 @@ public partial class InstalledViewModel : LocalizedViewModel
 
     private static string DescribeSkipped(
         IReadOnlyList<InstalledModCardViewModel> selected,
-        int queued,
         IReadOnlyList<string> unmatched)
     {
         var parts = new List<string>();

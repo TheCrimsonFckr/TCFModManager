@@ -4310,27 +4310,6 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="ServerMap_PublishedListHeader" xml:space="preserve">
     <value>Veröffentlichte Modliste</value>
   </data>
-  <data name="ServerMap_PublishedNamed_one" xml:space="preserve">
-    <value>"{0}" (Revision {1}, 1 Mod)</value>
-  </data>
-  <data name="ServerMap_PublishedNamed_other" xml:space="preserve">
-    <value>"{0}" (Revision {1}, {2} Mods)</value>
-  </data>
-  <data name="ServerMap_PublishedNamedFormat" xml:space="preserve">
-    <value>"{0}" (Revision {1})</value>
-  </data>
-  <data name="ServerMap_PublishedUnnamed_one" xml:space="preserve">
-    <value>Eine Modliste (Revision {0}, 1 Mod)</value>
-  </data>
-  <data name="ServerMap_PublishedUnnamed_other" xml:space="preserve">
-    <value>Eine Modliste (Revision {0}, {1} Mods)</value>
-  </data>
-  <data name="ServerMap_PublishedUnnamedFormat" xml:space="preserve">
-    <value>Eine Modliste (Revision {0})</value>
-  </data>
-  <data name="ServerMap_PublishesNothing" xml:space="preserve">
-    <value>Dieser Server veröffentlicht keine Modliste.</value>
-  </data>
   <data name="ServerMap_ReachFailedFormat" xml:space="preserve">
     <value>{0}:{1} konnte nicht erreicht werden: {2}</value>
   </data>

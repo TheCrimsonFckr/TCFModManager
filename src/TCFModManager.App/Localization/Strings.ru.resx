@@ -4514,33 +4514,6 @@
   <data name="ServerMap_PublishedListHeader" xml:space="preserve">
     <value>Опубликованный список модов</value>
   </data>
-  <data name="ServerMap_PublishedNamed_few" xml:space="preserve">
-    <value>«{0}» (ревизия {1}, {2} мода)</value>
-  </data>
-  <data name="ServerMap_PublishedNamed_many" xml:space="preserve">
-    <value>«{0}» (ревизия {1}, {2} модов)</value>
-  </data>
-  <data name="ServerMap_PublishedNamed_one" xml:space="preserve">
-    <value>«{0}» (ревизия {1}, {2} мод)</value>
-  </data>
-  <data name="ServerMap_PublishedNamedFormat" xml:space="preserve">
-    <value>«{0}» (ревизия {1})</value>
-  </data>
-  <data name="ServerMap_PublishedUnnamed_few" xml:space="preserve">
-    <value>Список модов (ревизия {0}, {1} мода)</value>
-  </data>
-  <data name="ServerMap_PublishedUnnamed_many" xml:space="preserve">
-    <value>Список модов (ревизия {0}, {1} модов)</value>
-  </data>
-  <data name="ServerMap_PublishedUnnamed_one" xml:space="preserve">
-    <value>Список модов (ревизия {0}, {1} мод)</value>
-  </data>
-  <data name="ServerMap_PublishedUnnamedFormat" xml:space="preserve">
-    <value>Список модов (ревизия {0})</value>
-  </data>
-  <data name="ServerMap_PublishesNothing" xml:space="preserve">
-    <value>Этот сервер не публикует список модов.</value>
-  </data>
   <data name="ServerMap_ReachFailedFormat" xml:space="preserve">
     <value>Не удалось связаться с {0}:{1}: {2}</value>
   </data>

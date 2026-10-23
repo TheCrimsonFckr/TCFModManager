@@ -36,8 +36,6 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     // own, and its id would otherwise be read as a mod id - so the section stays empty for one.
     public AddonsSectionViewModel Addons { get; } = new();
 
-    public string ModTitle => _mod.DisplayTitle;
-
     //
     // What an update would do with this mod's own config files, read-only - the moment it matters is
     // the moment somebody is about to press Update. Only for a mod with a server half: a client mod's

@@ -518,13 +518,6 @@ internal static class Strings
     internal static string ServerMap_KeyNeeded => LocalizationService.Get("ServerMap_KeyNeeded");
     internal static string ServerMap_KeyOptional => LocalizationService.Get("ServerMap_KeyOptional");
     internal static string ServerMap_KeyHeld => LocalizationService.Get("ServerMap_KeyHeld");
-    internal static string ServerMap_PublishesNothing => LocalizationService.Get("ServerMap_PublishesNothing");
-    internal static string ServerMap_PublishedNamedFormat => LocalizationService.Get("ServerMap_PublishedNamedFormat");
-    internal static string ServerMap_PublishedNamed(int count, params object?[] values) =>
-        LocalizationService.Plural("ServerMap_PublishedNamed", count, values);
-    internal static string ServerMap_PublishedUnnamedFormat => LocalizationService.Get("ServerMap_PublishedUnnamedFormat");
-    internal static string ServerMap_PublishedUnnamed(int count, params object?[] values) =>
-        LocalizationService.Plural("ServerMap_PublishedUnnamed", count, values);
     internal static string ServerMap_NoThumbprint => LocalizationService.Get("ServerMap_NoThumbprint");
     internal static string ServerMap_NoPinRecorded => LocalizationService.Get("ServerMap_NoPinRecorded");
     internal static string ServerMap_PinRecordedFormat => LocalizationService.Get("ServerMap_PinRecordedFormat");

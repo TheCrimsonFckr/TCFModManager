@@ -4310,27 +4310,6 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="ServerMap_PublishedListHeader" xml:space="preserve">
     <value>Liste de mods publiée</value>
   </data>
-  <data name="ServerMap_PublishedNamed_one" xml:space="preserve">
-    <value>« {0} » (révision {1}, {2} mod)</value>
-  </data>
-  <data name="ServerMap_PublishedNamed_other" xml:space="preserve">
-    <value>« {0} » (révision {1}, {2} mods)</value>
-  </data>
-  <data name="ServerMap_PublishedNamedFormat" xml:space="preserve">
-    <value>« {0} » (révision {1})</value>
-  </data>
-  <data name="ServerMap_PublishedUnnamed_one" xml:space="preserve">
-    <value>Une liste de mods (révision {0}, {1} mod)</value>
-  </data>
-  <data name="ServerMap_PublishedUnnamed_other" xml:space="preserve">
-    <value>Une liste de mods (révision {0}, {1} mods)</value>
-  </data>
-  <data name="ServerMap_PublishedUnnamedFormat" xml:space="preserve">
-    <value>Une liste de mods (révision {0})</value>
-  </data>
-  <data name="ServerMap_PublishesNothing" xml:space="preserve">
-    <value>Ce serveur ne publie pas de liste de mods.</value>
-  </data>
   <data name="ServerMap_ReachFailedFormat" xml:space="preserve">
     <value>Impossible de joindre {0}:{1} : {2}</value>
   </data>

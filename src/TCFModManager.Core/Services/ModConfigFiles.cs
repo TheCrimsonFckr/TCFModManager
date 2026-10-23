@@ -281,8 +281,6 @@ public static class ModConfigFiles
         }
     }
 
-    private static string ToNative(string relative) => relative.Replace('/', Path.DirectorySeparatorChar);
-
     //
     // Config files inside a mod folder on disk, as install-relative paths. Used by the
     // hand-installed removal path, where there's no record to read a file list from.

@@ -44,7 +44,7 @@ internal static class ThemeApplier
 
         ApplyAccent(theme);
         WriteSeeds(app, own, resolved);
-        WriteStatusBrushes(app, theme, own, resolved);
+        WriteStatusBrushes(app, theme, own);
         WriteFootprint(app, own);
 
         foreach (var (key, color) in theme.Overrides) WriteColor(app, key, color);
@@ -166,7 +166,7 @@ internal static class ThemeApplier
         WriteColor(app, key + "Background", ThemeMath.Mix(page, c.WithAlpha(0xFF), StatusBackgroundMix));
     }
 
-    private static void WriteStatusBrushes(Application app, ThemeDefinition theme, ThemeColors own, ThemeColors resolved)
+    private static void WriteStatusBrushes(Application app, ThemeDefinition theme, ThemeColors own)
     {
         if (own.Attention is { } attention) WriteBrush(app, "SystemFillColorAttentionBrush", attention);
 

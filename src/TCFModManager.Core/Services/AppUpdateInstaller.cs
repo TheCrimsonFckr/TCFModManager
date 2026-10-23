@@ -277,8 +277,6 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
         }
     }
 
-    public static bool HasStagedUpdate => File.Exists(Path.Combine(PayloadDirectory, ExeName));
-
     //
     // The release zip roots its contents under a "TCFModManager\" folder, but this looks for the
     // exe rather than for that name: a release packaged flat, or under a differently-named folder,

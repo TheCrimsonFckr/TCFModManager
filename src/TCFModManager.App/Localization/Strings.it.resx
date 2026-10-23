@@ -4310,27 +4310,6 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="ServerMap_PublishedListHeader" xml:space="preserve">
     <value>Lista mod pubblicata</value>
   </data>
-  <data name="ServerMap_PublishedNamed_one" xml:space="preserve">
-    <value>"{0}" (revisione {1}, 1 mod)</value>
-  </data>
-  <data name="ServerMap_PublishedNamed_other" xml:space="preserve">
-    <value>"{0}" (revisione {1}, {2} mod)</value>
-  </data>
-  <data name="ServerMap_PublishedNamedFormat" xml:space="preserve">
-    <value>"{0}" (revisione {1})</value>
-  </data>
-  <data name="ServerMap_PublishedUnnamed_one" xml:space="preserve">
-    <value>Una lista mod (revisione {0}, 1 mod)</value>
-  </data>
-  <data name="ServerMap_PublishedUnnamed_other" xml:space="preserve">
-    <value>Una lista mod (revisione {0}, {1} mod)</value>
-  </data>
-  <data name="ServerMap_PublishedUnnamedFormat" xml:space="preserve">
-    <value>Una lista mod (revisione {0})</value>
-  </data>
-  <data name="ServerMap_PublishesNothing" xml:space="preserve">
-    <value>Questo server non pubblica una lista mod.</value>
-  </data>
   <data name="ServerMap_ReachFailedFormat" xml:space="preserve">
     <value>Impossibile raggiungere {0}:{1}: {2}</value>
   </data>

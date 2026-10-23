@@ -28,9 +28,6 @@ public sealed record ConfigUpdateReport
     public string? ArchiveFolder { get; init; }
 
     public List<ConfigFileOutcome> Files { get; init; } = [];
-
-    // True when at least one file lost something the user had there - what the App leads with.
-    public bool AnyReplaced => Files.Any(f => f.Kind == ConfigOutcomeKind.Replaced);
 }
 
 public sealed record ConfigFileOutcome

@@ -178,7 +178,7 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
             Mod = mod,
             SptVersionConstraint = shown?.SptVersionConstraint,
             SptVersionDisplay = BuildDisplay(constraints, shown?.SptVersionConstraint, selectedLines, releases, compatible),
-            SptVersionTooltip = BuildTooltip(shown, newest, installedSptVersion, isOlder, constraints, releases, alternateNote),
+            SptVersionTooltip = BuildTooltip(shown, newest, installedSptVersion, isOlder, releases, alternateNote),
             DisplayReleaseVersion = shown?.Version,
             IsCompatibleWithInstalledSpt = compatible,
             IsOlderCompatibleVersion = isOlder,
@@ -289,7 +289,6 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
         ModVersionSummary? newest,
         string? installedSptVersion,
         bool isOlder,
-        List<string?> constraints,
         IReadOnlyList<SptRelease>? releases,
         string? alternateNote)
     {
