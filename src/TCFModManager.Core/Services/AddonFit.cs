@@ -1,3 +1,5 @@
+using TCFModManager.Core.Models;
+
 namespace TCFModManager.Core.Services;
 
 //
@@ -20,6 +22,19 @@ public static class AddonFit
     //
     public static bool Accepts(string? constraint, string? parentVersion, string? sptVersion) =>
         Check(constraint, parentVersion, sptVersion) == true;
+
+    //
+    // OPEN-32 D9: the newest published release of the parent, newer than the installed one and not
+    // ruled out for this SPT, that the addon's requirement accepts. Null when there is none.
+    //
+    public static ModVersionSummary? ParentUpdateUnlocking(
+        string? constraint, string? parentVersion, string? sptVersion, IEnumerable<ModVersionSummary>? parentVersions) =>
+        string.IsNullOrWhiteSpace(parentVersion)
+            ? null
+            : NewestFittingVersion.Newest(parentVersions ?? [], v => v.PublishedAt, v => v.Version)
+                .FirstOrDefault(v => ModVersionComparer.IsUpdateAvailable(parentVersion, v.Version) == true
+                    && (string.IsNullOrWhiteSpace(sptVersion) || SptVersionMatcher.IsSatisfiedBy(v.SptVersionConstraint, sptVersion) != false)
+                    && Accepts(constraint, v.Version, sptVersion));
 
     public static bool IsSptRangeInParentBox(string? constraint, string? parentVersion, string? sptVersion) =>
         ModVersionMatcher.IsSatisfiedBy(constraint, parentVersion) == false

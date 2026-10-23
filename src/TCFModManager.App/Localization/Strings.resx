@@ -10094,4 +10094,12 @@ Switch anyway?</value>
     <value>{0} {1}</value>
     <comment>One addon in AddonImpact_QueuedFormat. {0} is its name, {1} the version queued.</comment>
   </data>
+  <data name="Addon_ParentUpdateUnlocksFormat" xml:space="preserve">
+    <value>Updating {0} to {1} makes it available.</value>
+    <comment>Under Addon_NeedsParentFormat when a published update of the parent mod would let this addon version install (OPEN-32 D9). {0} is the parent mod's name, {1} that update's version.</comment>
+  </data>
+  <data name="Installed_DetailAddonDoesntFitFormat" xml:space="preserve">
+    <value>{0} doesn't fit {1} {2} - {3} does</value>
+    <comment>On an addon's Installed card when its installed version doesn't fit its mod's installed version but another version does (OPEN-32 D10). {0} the addon's installed version, {1} the mod's name, {2} the mod's installed version, {3} the addon version that fits (can be older).</comment>
+  </data>
 </root>

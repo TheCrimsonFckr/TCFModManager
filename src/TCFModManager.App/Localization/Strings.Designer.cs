@@ -2746,4 +2746,25 @@ internal static class Strings
     internal static string Help_Installed_Addons_Step3 => LocalizationService.Get("Help_Installed_Addons_Step3");
     internal static string Help_Installed_Addons_Note => LocalizationService.Get("Help_Installed_Addons_Note");
     internal static string Help_Installed_Addons_Keywords => LocalizationService.Get("Help_Installed_Addons_Keywords");
+    internal static string AddonImpact_Title => LocalizationService.Get("AddonImpact_Title");
+    internal static string AddonImpact_ChangeList => LocalizationService.Get("AddonImpact_ChangeList");
+    internal static string AddonImpact_NoVersionList => LocalizationService.Get("AddonImpact_NoVersionList");
+    internal static string AddonImpact_ChangeQuestion => LocalizationService.Get("AddonImpact_ChangeQuestion");
+    internal static string AddonImpact_NoVersionQuestion => LocalizationService.Get("AddonImpact_NoVersionQuestion");
+    internal static string AddonImpact_ChangeLineFormat => LocalizationService.Get("AddonImpact_ChangeLineFormat");
+    internal static string AddonImpact_NoVersionLineFormat => LocalizationService.Get("AddonImpact_NoVersionLineFormat");
+    internal static string AddonImpact_HeadingFormat => LocalizationService.Get("AddonImpact_HeadingFormat");
+    internal static string AddonImpact_Checking => LocalizationService.Get("AddonImpact_Checking");
+    internal static string AddonImpact_Fits => LocalizationService.Get("AddonImpact_Fits");
+    internal static string AddonImpact_ChangeFormat => LocalizationService.Get("AddonImpact_ChangeFormat");
+    internal static string AddonImpact_NoVersion => LocalizationService.Get("AddonImpact_NoVersion");
+    internal static string AddonImpact_UnknownDetached => LocalizationService.Get("AddonImpact_UnknownDetached");
+    internal static string AddonImpact_UnknownInstalledVersion => LocalizationService.Get("AddonImpact_UnknownInstalledVersion");
+    internal static string AddonImpact_UnknownNotPublished => LocalizationService.Get("AddonImpact_UnknownNotPublished");
+    internal static string AddonImpact_UnknownRequirement => LocalizationService.Get("AddonImpact_UnknownRequirement");
+    internal static string AddonImpact_UnknownLookupFailed => LocalizationService.Get("AddonImpact_UnknownLookupFailed");
+    internal static string AddonImpact_UnknownNotListed => LocalizationService.Get("AddonImpact_UnknownNotListed");
+    internal static string AddonImpact_Cancelled => LocalizationService.Get("AddonImpact_Cancelled");
+    internal static string AddonImpact_QueuedFormat => LocalizationService.Get("AddonImpact_QueuedFormat");
+    internal static string AddonImpact_QueuedItemFormat => LocalizationService.Get("AddonImpact_QueuedItemFormat");
 }

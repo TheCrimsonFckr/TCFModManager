@@ -198,6 +198,11 @@ public sealed partial class InstalledModCardViewModel
         var latest = versions.FirstOrDefault(v =>
             AddonFit.Accepts(v.ModVersionConstraint, parentVersion, installedSptVersion));
 
+        var installedFits = parentVersion is not null
+            && versions.FirstOrDefault(v => string.Equals(v.Version, installedVersion, StringComparison.OrdinalIgnoreCase)) is { } installedRelease
+                ? AddonFit.Check(installedRelease.ModVersionConstraint, parentVersion, installedSptVersion)
+                : null;
+
         (string Key, object?[] Values)? detail = null;
         if (latest is null && versions.Count > 0)
         {
@@ -213,6 +218,10 @@ public sealed partial class InstalledModCardViewModel
                     nameof(Strings.Installed_DetailParentConstraintFormat),
                     [newest.Version, parentName, newest.ModVersionConstraint, parentVersion]),
             };
+        }
+        else if (installedFits == false && latest is not null && parentName is not null)
+        {
+            detail = (nameof(Strings.Installed_DetailAddonDoesntFitFormat), [installedVersion, parentName, parentVersion, latest.Version]);
         }
         else if (fileVersion is not null && !VersionsAreEquivalent(record.Version, fileVersion))
         {

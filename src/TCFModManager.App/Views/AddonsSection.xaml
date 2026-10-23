@@ -139,6 +139,13 @@
                                     Visibility="{Binding HasBlockedReason, Converter={StaticResource TrueToVisible}}" />
 
                                 <TextBlock
+                                    Margin="0,2,0,0"
+                                    TextWrapping="Wrap"
+                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                    Text="{Binding ParentUpdateHint}"
+                                    Visibility="{Binding HasParentUpdateHint, Converter={StaticResource TrueToVisible}}" />
+
+                                <TextBlock
                                     Margin="0,6,0,0"
                                     TextWrapping="Wrap"
                                     Foreground="{DynamicResource SystemFillColorCautionBrush}"

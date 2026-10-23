@@ -38,12 +38,13 @@ public sealed partial class AddonsSectionViewModel : LocalizedViewModel
         await AppServices.Addons.EnsureLoadedAsync();
 
         var records = AppServices.InstallManifest.Load().Mods;
+        var parentVersions = AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == parentModId)?.Versions;
 
         Addons.Clear();
         foreach (var addon in AppServices.Addons.ForMod(parentModId))
         {
             var record = records.FirstOrDefault(r => r.IsAddon && r.ModId == addon.Id);
-            Addons.Add(new AddonRowViewModel(addon, parentModName, parentInstalledVersion, record));
+            Addons.Add(new AddonRowViewModel(addon, parentModName, parentInstalledVersion, record, parentVersions));
         }
 
         ParentNotice = Addons.Count > 0 && string.IsNullOrWhiteSpace(parentInstalledVersion)

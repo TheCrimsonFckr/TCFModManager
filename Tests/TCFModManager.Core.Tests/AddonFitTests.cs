@@ -54,4 +54,32 @@ public class AddonFitTests
         Assert.Equal("1.0.0", NewestFittingVersion.ForParent(versions, "2.1.1")?.Version);
         Assert.Null(NewestFittingVersion.ForParent(versions, "3.0.0"));
     }
+
+    private static ModVersionSummary Parent(string version, string spt, int day) =>
+        new() { Version = version, SptVersionConstraint = spt, PublishedAt = new DateTimeOffset(2026, 10, day, 0, 0, 0, TimeSpan.Zero) };
+
+    [Fact]
+    public void ParentUpdateUnlocking_TakesTheNewestParentUpdateForThisSptThatTheAddonAccepts()
+    {
+        ModVersionSummary[] parent =
+        [
+            Parent("2.1.0", "~4.2.0", 20),
+            Parent("2.0.1", "~4.1.0", 15),
+            Parent("2.0.0", "~4.1.0", 10),
+            Parent("1.4.2", "~4.1.0", 1),
+        ];
+
+        Assert.Equal("2.0.1", AddonFit.ParentUpdateUnlocking("^2.0.0", "1.4.2", "4.1.6", parent)?.Version);
+    }
+
+    [Fact]
+    public void ParentUpdateUnlocking_IsNullWhenNoNewerParentFits()
+    {
+        ModVersionSummary[] parent = [Parent("1.5.0", "~4.1.0", 15), Parent("1.4.2", "~4.1.0", 1)];
+
+        Assert.Null(AddonFit.ParentUpdateUnlocking("^2.0.0", "1.4.2", "4.1.6", parent));
+        Assert.Null(AddonFit.ParentUpdateUnlocking("^1.0.0", "1.5.0", "4.1.6", parent));
+        Assert.Null(AddonFit.ParentUpdateUnlocking("^2.0.0", null, "4.1.6", parent));
+        Assert.Null(AddonFit.ParentUpdateUnlocking("not a range", "1.4.2", "4.1.6", parent));
+    }
 }

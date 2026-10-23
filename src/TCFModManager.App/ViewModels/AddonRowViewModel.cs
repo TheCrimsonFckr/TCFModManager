@@ -58,16 +58,19 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
     private readonly Addon _addon;
     private readonly string? _parentName;
     private readonly string? _parentVersion;
+    private readonly IReadOnlyList<ModVersionSummary>? _parentVersions;
 
     public AddonRowViewModel(
         Addon addon,
         string? parentName,
         string? parentInstalledVersion,
-        InstalledModRecord? installRecord)
+        InstalledModRecord? installRecord,
+        IReadOnlyList<ModVersionSummary>? parentVersions = null)
     {
         _addon = addon;
         _parentName = parentName;
         _parentVersion = parentInstalledVersion;
+        _parentVersions = parentVersions;
         InstalledVersion = installRecord?.Version;
 
         var ordered = (addon.Versions ?? [])
@@ -126,6 +129,8 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(CanInstall))]
     [NotifyPropertyChangedFor(nameof(BlockedReason))]
     [NotifyPropertyChangedFor(nameof(HasBlockedReason))]
+    [NotifyPropertyChangedFor(nameof(ParentUpdateHint))]
+    [NotifyPropertyChangedFor(nameof(HasParentUpdateHint))]
     [NotifyPropertyChangedFor(nameof(CompatibilityNote))]
     [NotifyPropertyChangedFor(nameof(HasCompatibilityNote))]
     [NotifyPropertyChangedFor(nameof(ActionLabel))]
@@ -188,6 +193,16 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
     }
 
     public bool HasBlockedReason => BlockedReason is not null;
+
+    // OPEN-32 D9: under a version blocked by the parent's version, the parent update that would allow it.
+    public string? ParentUpdateHint =>
+        SelectedVersion is { IsCompatible: false } selected
+        && AddonFit.ParentUpdateUnlocking(
+            selected.Raw.ModVersionConstraint, _parentVersion, AppServices.SptEnvironment.InstalledVersion, _parentVersions) is { Version: { } version }
+            ? Text(Strings.Addon_ParentUpdateUnlocksFormat, _parentName ?? Strings.Addon_ParentFallback, version)
+            : null;
+
+    public bool HasParentUpdateHint => ParentUpdateHint is not null;
 
     // Shown when the version can be installed but the fit couldn't be confirmed - an addon whose
     // constraint this app can't parse, against a parent whose version is known.
