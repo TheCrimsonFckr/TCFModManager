@@ -14,8 +14,6 @@ namespace TCFModManager.Core.Services;
 //
 public sealed class ModListStore
 {
-    private readonly string _filePath;
-
     private static readonly JsonSerializerOptions Options = new()
     {
         WriteIndented = true,
@@ -29,55 +27,44 @@ public sealed class ModListStore
     //
     public const int SchemaVersion = 1;
 
-    public ModListStore(string? filePath = null)
-    {
-        _filePath = filePath ?? Path.Combine(AppPaths.DataDirectory, "mod_lists.json");
-    }
+    private readonly JsonFile<ModListData> _file;
 
-    public string FilePath => _filePath;
+    public ModListStore(string? filePath = null) =>
+        _file = new JsonFile<ModListData>(
+            filePath ?? Path.Combine(AppPaths.DataDirectory, "mod_lists.json"), Options, keepBackups: true);
+
+    public string FilePath => _file.FilePath;
 
     public ModListData Load()
     {
-        if (!File.Exists(_filePath)) return new ModListData { SchemaVersion = SchemaVersion };
+        if (_file.Read() is not { } data) return new ModListData { SchemaVersion = SchemaVersion };
 
-        try
+        var storedVersion = data.SchemaVersion;
+
+        data = Normalise(data);
+
+        //
+        // Written back on the spot, unlike the snapshot tidy-up above it, because the headless
+        // widening is NOT idempotent: it turns Client into Client|Headless, and Client is also
+        // exactly what an operator picks when they mean "players only, not the headless".
+        // Re-running it on every load would undo that choice every time the app started. The
+        // version stamp is what makes it run once and never again.
+        //
+        // A failed write is not a failed load - the data in hand is right either way, and the
+        // migration simply gets another go next time.
+        //
+        if (storedVersion < SchemaVersion)
         {
-            var json = File.ReadAllText(_filePath);
-            var data = JsonSerializer.Deserialize<ModListData>(json, Options) ?? new ModListData();
-
-            var storedVersion = data.SchemaVersion;
-
-            data = Normalise(data);
-
-            //
-            // Written back on the spot, unlike the snapshot tidy-up above it, because the headless
-            // widening is NOT idempotent: it turns Client into Client|Headless, and Client is also
-            // exactly what an operator picks when they mean "players only, not the headless".
-            // Re-running it on every load would undo that choice every time the app started. The
-            // version stamp is what makes it run once and never again.
-            //
-            // A failed write is not a failed load - the data in hand is right either way, and the
-            // migration simply gets another go next time.
-            //
-            if (storedVersion < SchemaVersion)
+            try
             {
-                try
-                {
-                    Save(data);
-                }
-                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-                {
-                }
+                Save(data);
             }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+            }
+        }
 
-            return data;
-        }
-        catch (JsonException)
-        {
-            // Kept aside first: the next save would otherwise write an empty list set over every list.
-            SafeFile.PreserveDamaged(_filePath);
-            return new ModListData { SchemaVersion = SchemaVersion };
-        }
+        return data;
     }
 
     //
@@ -148,8 +135,7 @@ public sealed class ModListStore
     {
         data.SchemaVersion = SchemaVersion;
 
-        Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
-        SafeFile.WriteText(_filePath, JsonSerializer.Serialize(data, Options), keepBackups: true);
+        _file.Write(data);
     }
 
     public ModList? Find(Guid id) => Load().Lists.FirstOrDefault(l => l.Id == id);

@@ -14,11 +14,11 @@ public sealed class HeadlessAdviceStore
         Converters = { new JsonStringEnumConverter() },
     };
 
-    private readonly string _filePath;
+    private readonly JsonFile<Stored> _file;
 
     public HeadlessAdviceStore() : this(Path.Combine(AppPaths.DataDirectory, "headless_advice.json")) { }
 
-    public HeadlessAdviceStore(string filePath) => _filePath = filePath;
+    public HeadlessAdviceStore(string filePath) => _file = new JsonFile<Stored>(filePath, Json, preserveDamaged: false);
 
     public sealed class Cached
     {
@@ -40,16 +40,14 @@ public sealed class HeadlessAdviceStore
 
     public Dictionary<string, Cached> Load()
     {
-        if (!File.Exists(_filePath)) return new(StringComparer.OrdinalIgnoreCase);
-
         try
         {
-            var data = JsonSerializer.Deserialize<Stored>(File.ReadAllText(_filePath), Json);
+            var data = _file.Read();
             return data is null || data.SchemaVersion != SchemaVersion
                 ? new(StringComparer.OrdinalIgnoreCase)
                 : new(data.Entries, StringComparer.OrdinalIgnoreCase);
         }
-        catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             return new(StringComparer.OrdinalIgnoreCase);
         }
@@ -59,16 +57,13 @@ public sealed class HeadlessAdviceStore
     {
         try
         {
-            var directory = Path.GetDirectoryName(_filePath);
-            if (!string.IsNullOrEmpty(directory)) Directory.CreateDirectory(directory);
-
-            SafeFile.WriteText(_filePath, JsonSerializer.Serialize(new Stored
+            _file.Write(new Stored
             {
                 SchemaVersion = SchemaVersion,
                 Entries = entries
                     .OrderBy(e => e.Key, StringComparer.Ordinal)
                     .ToDictionary(e => e.Key, e => e.Value, StringComparer.OrdinalIgnoreCase),
-            }, Json));
+            });
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
