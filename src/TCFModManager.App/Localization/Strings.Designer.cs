@@ -2769,4 +2769,14 @@ internal static class Strings
     internal static string AddonImpact_QueuedItemFormat => LocalizationService.Get("AddonImpact_QueuedItemFormat");
     internal static string Addon_ParentUpdateUnlocksFormat => LocalizationService.Get("Addon_ParentUpdateUnlocksFormat");
     internal static string Installed_DetailAddonDoesntFitFormat => LocalizationService.Get("Installed_DetailAddonDoesntFitFormat");
+    internal static string AddonImpact_NoVersionDisableList => LocalizationService.Get("AddonImpact_NoVersionDisableList");
+    internal static string AddonFit_DisabledFormat => LocalizationService.Get("AddonFit_DisabledFormat");
+    internal static string AddonFit_ReEnableTitle => LocalizationService.Get("AddonFit_ReEnableTitle");
+    internal static string AddonFit_ReEnableList => LocalizationService.Get("AddonFit_ReEnableList");
+    internal static string AddonFit_ReEnableQuestion => LocalizationService.Get("AddonFit_ReEnableQuestion");
+    internal static string Installed_AddonNoFitToolTipFormat => LocalizationService.Get("Installed_AddonNoFitToolTipFormat");
+    internal static string Filter_HasInstalledAddons => LocalizationService.Get("Filter_HasInstalledAddons");
+    internal static string Filter_HasInstalledAddonsToolTip => LocalizationService.Get("Filter_HasInstalledAddonsToolTip");
+    internal static string Installed_ShowFamilyFormat => LocalizationService.Get("Installed_ShowFamilyFormat");
+    internal static string Installed_FamilyPillFormat => LocalizationService.Get("Installed_FamilyPillFormat");
 }

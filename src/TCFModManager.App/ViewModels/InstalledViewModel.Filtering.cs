@@ -14,6 +14,12 @@ public partial class InstalledViewModel
 
         var recentSince = DateTimeOffset.Now.AddDays(-RecentDays);
 
+        var installedMods = _all.Where(c => c is { IsAddon: false, ModId: not null }).Select(c => c.ModId!.Value).ToHashSet();
+        var parentsWithAddons = _all
+            .Where(c => c is { IsAddon: true, ParentModId: { } parent } && installedMods.Contains(parent))
+            .Select(c => c.ParentModId!.Value)
+            .ToHashSet();
+
         var matched = _all
             .Where(m => SelectedUpdateFilter.Value switch
             {
@@ -43,7 +49,10 @@ public partial class InstalledViewModel
             .Where(m => !IsOn(ModAttributeFilter.HasConflicts) || m.HasConflicts)
             .Where(m => !IsOn(ModAttributeFilter.NotForThisSpt) || m.IsNotForThisSpt)
             .Where(m => !IsOn(ModAttributeFilter.InstalledRecently)
-                || (m.InstalledAt is { } at && at >= recentSince));
+                || (m.InstalledAt is { } at && at >= recentSince))
+            .Where(m => !IsOn(ModAttributeFilter.HasInstalledAddons)
+                || (FamilyOf(m) is { } family && parentsWithAddons.Contains(family)))
+            .Where(m => _family is not { } focus || FamilyOf(m) == focus.ModId);
 
         _filtered = SortMods(matched, SelectedSortOption.Value).ToList();
 

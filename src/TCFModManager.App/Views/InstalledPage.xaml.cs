@@ -204,6 +204,7 @@ public partial class InstalledPage : Page
             if (mod.CanQuickUpdate) Add(mod.QuickUpdateToolTip, "ArrowDownload24", ViewModel.UpdateOneCommand, mod);
             Add(mod.DisableToggleTooltip, mod.DisableToggleGlyph, ViewModel.ToggleDisableCommand, mod);
             Add(mod.PinLabel, mod.PinGlyph, ViewModel.TogglePinCommand, mod);
+            if (ViewModel.FamilyMenuLabel(mod) is { } family) Add(family, "PuzzlePiece24", ViewModel.ShowFamilyCommand, mod);
 
             if (mod.ClientFolderLink is not null || mod.ServerFolderLink is not null || InstalledViewModel.ModPageUrl(mod) is not null)
                 menu.Items.Add(new Separator());

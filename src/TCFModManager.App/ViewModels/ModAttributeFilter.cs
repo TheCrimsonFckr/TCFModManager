@@ -45,6 +45,9 @@ public enum ModAttributeFilter
 
     // Only the mods the user ignored, which are otherwise always hidden (OPEN-30). Browse only.
     IgnoredOnly,
+
+    // Only mods with at least one addon installed, and those addons. Installed only.
+    HasInstalledAddons,
 }
 
 //

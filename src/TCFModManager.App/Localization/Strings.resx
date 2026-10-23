@@ -10126,4 +10126,20 @@ Switch anyway?</value>
     <value>Doesn't fit {0} {1}</value>
     <comment>Status tooltip on an addon card whose installed version doesn't fit its mod (OPEN-32 D11). {0} is the mod's name, {1} its installed version.</comment>
   </data>
+  <data name="Filter_HasInstalledAddons" xml:space="preserve">
+    <value>Has installed addons</value>
+    <comment>Installed page Show filter: mods with at least one addon installed, shown with those addons.</comment>
+  </data>
+  <data name="Filter_HasInstalledAddonsToolTip" xml:space="preserve">
+    <value>Only mods with addons installed, together with those addons.</value>
+    <comment>Tooltip for Filter_HasInstalledAddons.</comment>
+  </data>
+  <data name="Installed_ShowFamilyFormat" xml:space="preserve">
+    <value>Show {0} and its addons</value>
+    <comment>Right-click entry on a mod with installed addons, or on one of those addons. {0} is the mod's name.</comment>
+  </data>
+  <data name="Installed_FamilyPillFormat" xml:space="preserve">
+    <value>Showing {0} and its addons</value>
+    <comment>Pill above the Installed results while that view is on; its x turns it off. {0} is the mod's name.</comment>
+  </data>
 </root>

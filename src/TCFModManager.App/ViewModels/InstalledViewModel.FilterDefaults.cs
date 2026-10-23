@@ -131,6 +131,8 @@ public partial class InstalledViewModel
         _clearingToAppDefaults = !toSaved;
         try
         {
+            _family = null;
+
             // A preset brings its own search text; a hand-edited one with none leaves the box alone.
             if (preset is null) SearchText = string.Empty;
             else if (preset.Search is { } search) SearchText = search;

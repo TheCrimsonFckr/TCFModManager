@@ -84,6 +84,9 @@ public partial class InstalledViewModel
             nameof(Strings.Filter_NotForThisSpt),
             nameof(Strings.Filter_NotForThisSptToolTip)),
         new(ModAttributeFilter.InstalledRecently, nameof(Strings.Filter_InstalledRecently)),
+        new(ModAttributeFilter.HasInstalledAddons,
+            nameof(Strings.Filter_HasInstalledAddons),
+            nameof(Strings.Filter_HasInstalledAddonsToolTip)),
     ];
 
     //
@@ -107,7 +110,8 @@ public partial class InstalledViewModel
         + (SelectedUpdateFilter.Value != UpdateFilter.All ? 1 : 0)
         + (SelectedEnabledFilter.Value != EnabledFilter.All ? 1 : 0)
         + (SelectedCategory.Title is not null ? 1 : 0)
-        + (SelectedGroupFilter.AllGroups ? 0 : 1);
+        + (SelectedGroupFilter.AllGroups ? 0 : 1)
+        + (_family is null ? 0 : 1);
 
     //
     // The filters narrowing the list, as pills above the results - see ActiveFilterPill. Rebuilt
@@ -192,6 +196,9 @@ public partial class InstalledViewModel
         if (!SelectedGroupFilter.AllGroups)
             ActiveFilters.Add(new(Pill(Strings.Filter_SectionGroup, SelectedGroupFilter),
                 () => SelectedGroupFilter = GroupFilterOptions.FirstOrDefault(o => o.AllGroups) ?? GroupFilterItem.All));
+
+        if (_family is { } family)
+            ActiveFilters.Add(new(Text(Strings.Installed_FamilyPillFormat, family.Name), () => SetFamily(null)));
 
         OnPropertyChanged(nameof(HasActiveFilters));
     }
