@@ -1360,7 +1360,8 @@ public partial class BrowseViewModel : LocalizedViewModel
         return (major, minor, $"{major}.{minor}");
     }
 
-    private static readonly Regex MajorMinorPattern = new(@"(\d+)\.(\d+)", RegexOptions.Compiled);
+    [GeneratedRegex(@"(\d+)\.(\d+)")]
+    private static partial Regex MajorMinorPattern { get; }
 
     private static bool Matches(string? haystack, string needle) =>
         haystack?.Contains(needle, StringComparison.OrdinalIgnoreCase) ?? false;

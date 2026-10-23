@@ -45,11 +45,10 @@ public readonly record struct SptVersionBounds(Version? Min, bool MinExclusive, 
 // the window of versions they allow, and answers questions about that window. Handles the
 // documented operators plus wildcard forms ("4.0.*", "4.x"), which the Forge does publish.
 // 
-public static class SptVersionRange
+public static partial class SptVersionRange
 {
-    private static readonly Regex ClausePattern = new(
-        @"^\s*(\^|~|>=|<=|>|<|=)?\s*([0-9]+(?:\.(?:[0-9]+|\*|[xX])){0,3}|\*)\s*$",
-        RegexOptions.Compiled);
+    [GeneratedRegex(@"^\s*(\^|~|>=|<=|>|<|=)?\s*([0-9]+(?:\.(?:[0-9]+|\*|[xX])){0,3}|\*)\s*$")]
+    private static partial Regex ClausePattern { get; }
 
     // Parses every clause and intersects them. False when the constraint is missing or has
     // a clause this doesn't understand.

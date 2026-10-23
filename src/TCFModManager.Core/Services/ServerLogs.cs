@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace TCFModManager.Core.Services;
 
@@ -11,7 +12,7 @@ namespace TCFModManager.Core.Services;
 // business and have changed between SPT versions, so none is assumed - except that the launcher's
 // own log, when it writes one there, is not the server's.
 //
-public static class ServerLogs
+public static partial class ServerLogs
 {
     private static readonly string[] Extensions = [".log", ".txt"];
 
@@ -73,7 +74,8 @@ public static class ServerLogs
 
     // Colour codes a console would draw, shown as text here - taken out.
     private static string StripAnsi(string line) =>
-        line.Contains('\u001b')
-            ? System.Text.RegularExpressions.Regex.Replace(line, "\u001b\\[[0-9;]*[A-Za-z]", "")
-            : line;
+        line.Contains('\u001b') ? AnsiEscape.Replace(line, "") : line;
+
+    [GeneratedRegex("\u001b\\[[0-9;]*[A-Za-z]")]
+    private static partial Regex AnsiEscape { get; }
 }

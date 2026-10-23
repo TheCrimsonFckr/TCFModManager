@@ -13,7 +13,7 @@ namespace TCFModManager.Core.Services;
 // SPT_Data/Server/configs before), and SPT's default 6969 is always watched too - Fika can move the
 // binding at runtime without touching http.json (see ServerMapEndpoint).
 //
-public static class SptServerReadiness
+public static partial class SptServerReadiness
 {
     public const int DefaultPort = 6969;
 
@@ -67,12 +67,15 @@ public static class SptServerReadiness
         catch (JsonException)
         {
             // Hand-edited into something that is not quite JSON: a plain "port": 1234 still reads.
-            var match = Regex.Match(json, "\"port\"\\s*:\\s*(\\d{1,5})");
+            var match = PortSetting.Match(json);
             return match.Success && int.TryParse(match.Groups[1].Value, out var value) && value is > 0 and <= 65535
                 ? value
                 : null;
         }
     }
+
+    [GeneratedRegex("\"port\"\\s*:\\s*(\\d{1,5})")]
+    private static partial Regex PortSetting { get; }
 
     /// <summary>True once anything on this PC listens on one of these ports.</summary>
     public static bool IsListening(IReadOnlySet<int> ports)

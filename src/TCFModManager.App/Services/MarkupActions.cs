@@ -9,11 +9,11 @@ namespace TCFModManager.App.Services;
 // the browser - a link, a picture full size, a video on YouTube. SSPTMM opens pictures and videos in
 // a viewer of its own (WebView2), which this app does not carry (R19).
 //
-public static class MarkupActions
+public static partial class MarkupActions
 {
     // Hosts whose links are the picture itself rather than a page about it.
-    private static readonly Regex PictureLink = new(
-        @"\.(png|jpe?g|gif|webp|bmp)(\?|#|$)|^https?://i\.imgur\.com/", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    [GeneratedRegex(@"\.(png|jpe?g|gif|webp|bmp)(\?|#|$)|^https?://i\.imgur\.com/", RegexOptions.IgnoreCase)]
+    private static partial Regex PictureLink { get; }
 
     public static void OpenLink(string url) => OpenInBrowser(url);
 

@@ -1417,9 +1417,8 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // "SomeMod-Patcher", "SomeModPrepatch". Only stripped from the end, and only used to look for an
     // exact match on what's left.
     //
-    private static readonly Regex PatcherNameSuffix = new(
-        @"[\s._-]*(preloader|prepatcher|prepatch|patchers|patcher|patch)$",
-        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+    [GeneratedRegex(@"[\s._-]*(preloader|prepatcher|prepatch|patchers|patcher|patch)$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    private static partial Regex PatcherNameSuffix { get; }
 
     // Joins a client-only name-group to a server-only name-group when they're the only two that
     // independently resolved to the same catalog Mod. Groups that already have both targets, matched
@@ -1725,8 +1724,8 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     // Matches a trailing "-client"/"-server"/"_client"/"_server" (or no separator) on a folder name,
     // stripped before matching since it isn't part of the mod's actual identity.
-    private static readonly Regex TrailingTargetSuffix =
-        new(@"[-_]?(client|server)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    [GeneratedRegex(@"[-_]?(client|server)$", RegexOptions.IgnoreCase)]
+    private static partial Regex TrailingTargetSuffix { get; }
 
     private static string Normalize(string s) =>
         new(s.Where(char.IsLetterOrDigit).Select(char.ToLowerInvariant).ToArray());
@@ -1735,9 +1734,11 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // below, so a folder name with no separator between words still tokenizes correctly. Two rules:
     // 1. lower/digit -> upper ("ServerMod" -> "Server Mod").
     // 2. upper -> upper+lower ("CSGasServer" -> "CS Gas Server").
-    private static readonly Regex CamelCaseBoundary =
-        new(@"(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", RegexOptions.Compiled);
-    private static readonly Regex NonAlphanumericRun = new(@"[^a-zA-Z0-9]+", RegexOptions.Compiled);
+    [GeneratedRegex(@"(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])")]
+    private static partial Regex CamelCaseBoundary { get; }
+
+    [GeneratedRegex(@"[^a-zA-Z0-9]+")]
+    private static partial Regex NonAlphanumericRun { get; }
 
     // Words that describe how a mod is packaged, not what it actually is - stripped from both sides
     // of OnlyFuzzyMatch's token comparison.
@@ -1748,7 +1749,8 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     // Matches the first "-", "_", or "." in a folder name - used by OnlyFuzzyMatch to retry with a
     // probable author-name prefix dropped off (the "Author-ModName" convention).
-    private static readonly Regex FirstSeparator = new(@"[-_.]", RegexOptions.Compiled);
+    [GeneratedRegex(@"[-_.]")]
+    private static partial Regex FirstSeparator { get; }
 
     private static HashSet<string> SignificantTokens(string s)
     {

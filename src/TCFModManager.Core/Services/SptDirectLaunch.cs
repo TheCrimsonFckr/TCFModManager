@@ -130,7 +130,7 @@ public sealed record DirectLaunchOptions
 //     it was rather than half written.
 //   - The server's address comes from its http.json, where the launcher assumes 127.0.0.1:6969.
 //
-public sealed class SptDirectLaunch(string gameRoot, string serverRoot, SptLauncherApi api)
+public sealed partial class SptDirectLaunch(string gameRoot, string serverRoot, SptLauncherApi api)
 {
     public const string TestedUpTo = "4.1.6";
 
@@ -221,10 +221,13 @@ public sealed class SptDirectLaunch(string gameRoot, string serverRoot, SptLaunc
         }
         catch (JsonException)
         {
-            var match = Regex.Match(json, "\"ip\"\\s*:\\s*\"([^\"]*)\"");
+            var match = IpSetting.Match(json);
             return match.Success ? match.Groups[1].Value.Trim() : null;
         }
     }
+
+    [GeneratedRegex("\"ip\"\\s*:\\s*\"([^\"]*)\"")]
+    private static partial Regex IpSetting { get; }
 
     /// <summary>The game's arguments, exactly as the launcher writes them.</summary>
     public static string GameArguments(string profileId, string address) =>

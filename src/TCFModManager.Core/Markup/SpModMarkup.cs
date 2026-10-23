@@ -27,7 +27,7 @@ namespace TCFModManager.Core.Markup;
 // sp-mod list import - rather than adding HtmlAgilityPack. AngleSharp hands text over already
 // decoded, so nothing here decodes entities a second time.
 //
-public static class SpModMarkup
+public static partial class SpModMarkup
 {
     public static MarkupDocument Parse(string? html)
     {
@@ -196,10 +196,12 @@ public static class SpModMarkup
         return found;
     }
 
-    private static readonly Regex Whitespace = new(@"\s+", RegexOptions.Compiled);
+    [GeneratedRegex(@"\s+")]
+    private static partial Regex Whitespace { get; }
 
     // YouTube's own id alphabet; anything else in data-video-id is not trusted into a URL.
-    private static readonly Regex VideoId = new("^[A-Za-z0-9_-]{6,20}$", RegexOptions.Compiled);
+    [GeneratedRegex("^[A-Za-z0-9_-]{6,20}$")]
+    private static partial Regex VideoId { get; }
 
     private sealed class Reader
     {
