@@ -507,7 +507,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
         }
 
         AppServices.DownloadQueue.Enqueue(
-            InstallTarget.For(mod), version, installPath, () => ResolveVersionLinkAsync(mod, version),
+            InstallTarget.For(mod), version, installPath, () => _spModApi.FindModVersionAsync(mod.Id.ToString(), version),
             downloadOnly: AppServices.ModPageGate.DownloadOnlyFor(false));
 
         row.IsQueued = true;
@@ -556,7 +556,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
         }
 
         AppServices.DownloadQueue.Enqueue(
-            InstallTarget.For(mod), version, installPath, () => ResolveVersionLinkAsync(mod, version),
+            InstallTarget.For(mod), version, installPath, () => _spModApi.FindModVersionAsync(mod.Id.ToString(), version),
             downloadOnly: AppServices.ModPageGate.DownloadOnlyFor(false));
 
         StatusMessage = Text(Strings.Dependencies_QueuedFormat, report.DependencyName, version);
@@ -673,22 +673,11 @@ public partial class DependenciesViewModel : LocalizedViewModel
 
         // checkDependencies stays on: a dependency can have dependencies of its own.
         AppServices.DownloadQueue.Enqueue(
-            InstallTarget.For(mod), version, installPath, () => ResolveVersionLinkAsync(mod, version),
+            InstallTarget.For(mod), version, installPath, () => _spModApi.FindModVersionAsync(mod.Id.ToString(), version),
             downloadOnly: AppServices.ModPageGate.DownloadOnlyFor(alternate));
 
         row.IsQueued = true;
         StatusMessage = Text(Strings.Dependencies_QueuedFormat, row.Name, version);
-    }
-
-    // Resolves the full ModVersion (with its download link) for exactly one version string,
-    // lazily, so queueing never waits on a network call.
-    private async Task<ModVersion?> ResolveVersionLinkAsync(Mod mod, string version)
-    {
-        var versions = await _spModApi.GetModVersionsAsync(
-            mod.Id.ToString(), new ModVersionsQuery { FilterVersion = version, PerPage = 5 });
-
-        return versions.Data.FirstOrDefault(v => string.Equals(v.Version, version, StringComparison.OrdinalIgnoreCase))
-               ?? versions.Data.FirstOrDefault();
     }
 
     // The endpoint wants a version that matches a published one exactly. The manifest holds

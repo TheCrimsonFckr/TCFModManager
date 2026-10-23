@@ -10,7 +10,6 @@ using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
-using TCFModManager.Core.SpModApi;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -1924,7 +1923,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         foreach (var (_, mod, version) in resolved)
         {
             AppServices.DownloadQueue.Enqueue(
-                InstallTarget.For(mod), version, installPath, () => ResolveVersionLinkAsync(mod, version),
+                InstallTarget.For(mod), version, installPath, () => AppServices.SpModApi.FindModVersionAsync(mod.Id.ToString(), version),
                 downloadOnly: downloadOnly);
         }
 
@@ -1976,15 +1975,6 @@ public partial class InstalledViewModel : LocalizedViewModel
         return parts.Count == 0
             ? string.Empty
             : Text(Strings.Installed_SkippedFormat, string.Join(Strings.Common_ListSeparator, parts));
-    }
-
-    // Twin of BrowseViewModel's resolver. Duplicated rather than shared: pulling it out would mean
-    // editing a file this change otherwise doesn't touch, for four lines.
-    private static async Task<ModVersion?> ResolveVersionLinkAsync(Mod mod, string version)
-    {
-        var versions = await AppServices.SpModApi.GetModVersionsAsync(
-            mod.Id.ToString(), new ModVersionsQuery { FilterVersion = version, PerPage = 5 });
-        return versions.Data.FirstOrDefault(v => v.Version == version) ?? versions.Data.FirstOrDefault();
     }
 
     //

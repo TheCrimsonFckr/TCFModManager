@@ -48,6 +48,15 @@ public sealed class SpModApiClient : IDisposable
     public Task<PagedResult<ModVersion>> GetModVersionsAsync(string modId, ModVersionsQuery? query = null, CancellationToken ct = default) =>
         GetPagedAsync<ModVersion>($"/api/v0/mod/{Uri.EscapeDataString(modId)}/versions", query, ct);
 
+    public async Task<ModVersion?> FindModVersionAsync(string modId, string version, CancellationToken ct = default)
+    {
+        var page = await GetModVersionsAsync(modId, new ModVersionsQuery { FilterVersion = version, PerPage = 5 }, ct).ConfigureAwait(false);
+
+        return page.Data.FirstOrDefault(v => string.Equals(v.Version, version, StringComparison.Ordinal))
+               ?? page.Data.FirstOrDefault(v => string.Equals(v.Version, version, StringComparison.OrdinalIgnoreCase))
+               ?? page.Data.FirstOrDefault();
+    }
+
     // Checks a set of installed mods for updates against a target SPT version.
     // <param name="mods">Comma-separated identifier:version pairs, e.g. "5:1.2.0,com.example.mod:2.0.5".</param>
     // <param name="sptVersion">Target SPT version; must match a published version exactly.</param>

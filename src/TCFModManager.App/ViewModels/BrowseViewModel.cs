@@ -1525,18 +1525,9 @@ public partial class BrowseViewModel : LocalizedViewModel
 
         var chosenVersion = chosen.Version;
         AppServices.DownloadQueue.Enqueue(
-            InstallTarget.For(mod), chosenVersion, installPath, () => ResolveVersionLinkAsync(mod, chosenVersion),
+            InstallTarget.For(mod), chosenVersion, installPath, () => _spModApi.FindModVersionAsync(mod.Id.ToString(), chosenVersion),
             downloadOnly: downloadOnly);
         StatusMessage = Text(Strings.Browse_QueuedFormat, mod.Name, chosenVersion);
-    }
-
-    /// <summary>Resolves the full ModVersion (with its download Link) for exactly one version string.
-    /// Called lazily from the queue so queueing itself never waits on a network call.</summary>
-    private async Task<ModVersion?> ResolveVersionLinkAsync(Mod mod, string version)
-    {
-        var versions = await _spModApi.GetModVersionsAsync(
-            mod.Id.ToString(), new ModVersionsQuery { FilterVersion = version, PerPage = 5 });
-        return versions.Data.FirstOrDefault(v => v.Version == version) ?? versions.Data.FirstOrDefault();
     }
 
     public async Task LoadDetailsAsync(Mod mod)

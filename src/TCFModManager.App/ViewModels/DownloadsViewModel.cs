@@ -60,11 +60,7 @@ public partial class DownloadsViewModel : LocalizedViewModel
         StatusMessage = null;
         try
         {
-            var versions = await _spModApi.GetModVersionsAsync(
-                ModId.Trim(),
-                new ModVersionsQuery { FilterVersion = Version.Trim(), PerPage = 5 });
-
-            var match = versions.Data.FirstOrDefault(v => v.Version == Version.Trim()) ?? versions.Data.FirstOrDefault();
+            var match = await _spModApi.FindModVersionAsync(ModId.Trim(), Version.Trim());
             if (match?.Link is null)
             {
                 StatusMessage = Strings.Downloads_VersionNotFound;

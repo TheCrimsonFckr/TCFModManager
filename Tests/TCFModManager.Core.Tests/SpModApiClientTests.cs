@@ -138,6 +138,66 @@ public class SpModApiClientTests
         Assert.Equal(0, result.Meta?.Total);
     }
 
+    private static string VersionsPage(params string[] versions) =>
+        "{\"success\":true,\"data\":["
+        + string.Join(",", versions.Select((v, i) => $"{{\"id\":{i + 1},\"version\":\"{v}\",\"link\":\"https://example.test/{i + 1}.zip\"}}"))
+        + "],\"links\":{},\"meta\":{}}";
+
+    [Fact]
+    public async Task FindModVersionAsync_AsksForThatVersionOnly()
+    {
+        var handler = new FakeHttpMessageHandler(HttpStatusCode.OK, VersionsPage("1.2.0"));
+        using var client = CreateClient(handler);
+
+        await client.FindModVersionAsync("31", "1.2.0");
+
+        Assert.Equal("/api/v0/mod/31/versions", handler.LastRequestUri!.AbsolutePath);
+        Assert.Contains("filter%5Bversion%5D=1.2.0", handler.LastRequestUri.Query);
+        Assert.Contains("per_page=5", handler.LastRequestUri.Query);
+    }
+
+    [Fact]
+    public async Task FindModVersionAsync_PrefersTheExactSpelling()
+    {
+        var handler = new FakeHttpMessageHandler(HttpStatusCode.OK, VersionsPage("1.0.0-Beta", "1.0.0-beta"));
+        using var client = CreateClient(handler);
+
+        var found = await client.FindModVersionAsync("31", "1.0.0-beta");
+
+        Assert.Equal("1.0.0-beta", found?.Version);
+    }
+
+    [Fact]
+    public async Task FindModVersionAsync_FallsBackToADifferentCase()
+    {
+        var handler = new FakeHttpMessageHandler(HttpStatusCode.OK, VersionsPage("2.0.0", "1.0.0-Beta"));
+        using var client = CreateClient(handler);
+
+        var found = await client.FindModVersionAsync("31", "1.0.0-beta");
+
+        Assert.Equal("1.0.0-Beta", found?.Version);
+    }
+
+    [Fact]
+    public async Task FindModVersionAsync_FallsBackToTheFirstResult()
+    {
+        var handler = new FakeHttpMessageHandler(HttpStatusCode.OK, VersionsPage("1.2.0.0", "1.2.1"));
+        using var client = CreateClient(handler);
+
+        var found = await client.FindModVersionAsync("31", "1.2.0");
+
+        Assert.Equal("1.2.0.0", found?.Version);
+    }
+
+    [Fact]
+    public async Task FindModVersionAsync_ReturnsNullWhenNothingMatches()
+    {
+        var handler = new FakeHttpMessageHandler(HttpStatusCode.OK, VersionsPage());
+        using var client = CreateClient(handler);
+
+        Assert.Null(await client.FindModVersionAsync("31", "9.9.9"));
+    }
+
     [Fact]
     public async Task GetModDependenciesAsync_KeyedByExactQueriedPair()
     {
