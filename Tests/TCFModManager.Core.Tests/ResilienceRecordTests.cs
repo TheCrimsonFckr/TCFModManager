@@ -167,6 +167,21 @@ public class ResilienceRecordTests : IDisposable
     }
 
     [Fact]
+    public void Manifest_AFileThatCannotBeReadThrowsRatherThanReadingAsEmpty()
+    {
+        var service = new ModInstallManifestService(P("installed-mods.json"));
+        service.Save(new ModInstallManifest { Mods = [Record(1)] });
+
+        using (new FileStream(P("installed-mods.json"), FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+        {
+            Assert.ThrowsAny<IOException>(() => service.Load());
+        }
+
+        Assert.Single(service.Load().Mods);
+        Assert.Empty(Directory.GetFiles(_root, "installed-mods.json.damaged-*"));
+    }
+
+    [Fact]
     public void Manifest_SavesKeepABackupOfTheLastGoodFile()
     {
         var service = new ModInstallManifestService(P("installed-mods.json"));

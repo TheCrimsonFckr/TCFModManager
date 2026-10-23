@@ -1,4 +1,3 @@
-using System.Text.Json;
 using TCFModManager.Core.Models;
 
 namespace TCFModManager.Core.Services;
@@ -126,35 +125,25 @@ public static class UpdateAnnouncer
 //
 public sealed class UpdateNotificationStore
 {
-    private readonly string _filePath;
+    private readonly JsonFile<UpdateNotificationState> _file;
 
-    public UpdateNotificationStore(string? filePath = null)
-    {
-        // Optional path for testability, matching ModListStore's accepted deviation.
-        _filePath = filePath ?? Path.Combine(AppPaths.DataDirectory, "update_notifications.json");
-    }
+    public UpdateNotificationStore(string? filePath = null) =>
+        _file = new JsonFile<UpdateNotificationState>(
+            filePath ?? Path.Combine(AppPaths.DataDirectory, "update_notifications.json"), JsonFileOptions.Indented, keepBackups: true);
 
     public UpdateNotificationState Load()
     {
-        if (!File.Exists(_filePath)) return new UpdateNotificationState();
-
         try
         {
-            return JsonSerializer.Deserialize<UpdateNotificationState>(File.ReadAllText(_filePath))
-                ?? new UpdateNotificationState();
+            return _file.Read() ?? new UpdateNotificationState();
         }
-        catch (Exception ex) when (ex is JsonException or IOException)
+        catch (IOException)
         {
-            if (ex is JsonException) SafeFile.PreserveDamaged(_filePath);
             return new UpdateNotificationState();
         }
     }
 
-    public void Save(UpdateNotificationState state)
-    {
-        var json = JsonSerializer.Serialize(state, new JsonSerializerOptions { WriteIndented = true });
-        SafeFile.WriteText(_filePath, json, keepBackups: true);
-    }
+    public void Save(UpdateNotificationState state) => _file.Write(state);
 
     //
     // Called when the feature is switched on. The versions already announced are kept (switching

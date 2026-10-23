@@ -1,4 +1,3 @@
-using System.Text.Json;
 using TCFModManager.Core.Models;
 
 namespace TCFModManager.Core.Services;
@@ -9,33 +8,16 @@ namespace TCFModManager.Core.Services;
 // 
 public sealed class ModInstallManifestService
 {
-    private readonly string _filePath;
+    private readonly JsonFile<ModInstallManifest> _file;
 
-    public ModInstallManifestService(string? filePath = null)
-    {
-        // Optional path for testability, matching ModListStore's accepted deviation.
-        _filePath = filePath ?? Path.Combine(AppPaths.DataDirectory, "installed-mods.json");
-    }
+    public ModInstallManifestService(string? filePath = null) =>
+        _file = new JsonFile<ModInstallManifest>(
+            filePath ?? Path.Combine(AppPaths.DataDirectory, "installed-mods.json"), JsonFileOptions.Indented, keepBackups: true);
 
     // Where the manifest lives - the install journal keeps its notes beside it (InstallJournal.Beside).
-    public string FilePath => _filePath;
+    public string FilePath => _file.FilePath;
 
-    public ModInstallManifest Load()
-    {
-        if (!File.Exists(_filePath)) return new ModInstallManifest();
-
-        try
-        {
-            var json = File.ReadAllText(_filePath);
-            return JsonSerializer.Deserialize<ModInstallManifest>(json) ?? new ModInstallManifest();
-        }
-        catch (JsonException)
-        {
-            // Kept aside before the next save writes an empty manifest over it (D18).
-            SafeFile.PreserveDamaged(_filePath);
-            return new ModInstallManifest();
-        }
-    }
+    public ModInstallManifest Load() => _file.Read() ?? new ModInstallManifest();
 
     //
     // An install moved or renamed (Chris, 2026-10-12: "G:\Single Player Tarkov 4.1" became "...4.1
@@ -118,11 +100,7 @@ public sealed class ModInstallManifestService
         return moved.Count;
     }
 
-    public void Save(ModInstallManifest manifest)
-    {
-        var json = JsonSerializer.Serialize(manifest, new JsonSerializerOptions { WriteIndented = true });
-        SafeFile.WriteText(_filePath, json, keepBackups: true);
-    }
+    public void Save(ModInstallManifest manifest) => _file.Write(manifest);
 
     //
     // Creates or updates a manually-confirmed installed version for a matched mod - the Installed

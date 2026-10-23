@@ -1,4 +1,3 @@
-using System.Text.Json;
 using TCFModManager.Core.Models;
 
 namespace TCFModManager.Core.Services;
@@ -13,7 +12,8 @@ public sealed class AddonCacheStore
     // A mismatched version is treated as "no cache".
     private const int SchemaVersion = 1;
 
-    private readonly string _filePath = Path.Combine(AppPaths.DataDirectory, "addon_cache.json");
+    private readonly JsonFile<CachedAddons> _file =
+        new(Path.Combine(AppPaths.DataDirectory, "addon_cache.json"), JsonFileOptions.Indented, preserveDamaged: false);
 
     public sealed class CachedAddons
     {
@@ -24,19 +24,9 @@ public sealed class AddonCacheStore
 
     public CachedAddons? Load()
     {
-        if (!File.Exists(_filePath)) return null;
-
-        try
-        {
-            var data = JsonSerializer.Deserialize<CachedAddons>(File.ReadAllText(_filePath));
-            if (data is null || data.SchemaVersion != SchemaVersion || data.Addons.Count == 0) return null;
-            return data;
-        }
-        catch (JsonException)
-        {
-            // Corrupt or incompatible cache file - fall back to a live fetch.
-            return null;
-        }
+        var data = _file.Read();
+        if (data is null || data.SchemaVersion != SchemaVersion || data.Addons.Count == 0) return null;
+        return data;
     }
 
     public void Save(IReadOnlyList<Addon> addons)
@@ -50,8 +40,7 @@ public sealed class AddonCacheStore
                 Addons = addons.ToList(),
             };
 
-            Directory.CreateDirectory(AppPaths.DataDirectory);
-            SafeFile.WriteText(_filePath, JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+            _file.Write(data);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
