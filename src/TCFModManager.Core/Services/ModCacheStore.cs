@@ -1,4 +1,3 @@
-using System.Text.Json;
 using TCFModManager.Core.Models;
 
 namespace TCFModManager.Core.Services;
@@ -17,14 +16,8 @@ public sealed class ModCacheStore
     //    endorsements and the "Most endorsed" sort would look broken rather than empty.
     private const int SchemaVersion = 2;
 
-    private readonly string _filePath;
-
-    public ModCacheStore()
-    {
-        // Stored in the Data\ folder next to the exe; not migrated from the legacy
-        // %LocalAppData% location since this file is a rebuildable cache.
-        _filePath = Path.Combine(AppPaths.DataDirectory, "mod_cache.json");
-    }
+    private readonly JsonFile<CachedCatalog> _file =
+        new(Path.Combine(AppPaths.DataDirectory, "mod_cache.json"), preserveDamaged: false);
 
     public sealed class CachedCatalog
     {
@@ -35,20 +28,9 @@ public sealed class ModCacheStore
 
     public CachedCatalog? Load()
     {
-        if (!File.Exists(_filePath)) return null;
-
-        try
-        {
-            var json = File.ReadAllText(_filePath);
-            var data = JsonSerializer.Deserialize<CachedCatalog>(json);
-            if (data is null || data.SchemaVersion != SchemaVersion || data.Mods.Count == 0) return null;
-            return data;
-        }
-        catch (JsonException)
-        {
-            // Corrupt or incompatible cache file - fall back to a live fetch.
-            return null;
-        }
+        var data = _file.Read();
+        if (data is null || data.SchemaVersion != SchemaVersion || data.Mods.Count == 0) return null;
+        return data;
     }
 
     public void Save(IReadOnlyList<Mod> mods)
@@ -61,7 +43,7 @@ public sealed class ModCacheStore
                 FetchedAt = DateTimeOffset.UtcNow,
                 Mods = mods.ToList(),
             };
-            SafeFile.WriteText(_filePath, JsonSerializer.Serialize(data));
+            _file.Write(data);
         }
         catch (IOException)
         {

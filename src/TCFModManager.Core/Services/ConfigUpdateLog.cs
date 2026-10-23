@@ -15,28 +15,25 @@ public sealed class ConfigUpdateLog(string? filePath = null)
 {
     private const int Keep = 50;
 
-    private readonly string _filePath = filePath ?? Path.Combine(AppPaths.DataDirectory, "config_updates.json");
-
     private static readonly JsonSerializerOptions Options = new()
     {
         WriteIndented = true,
         Converters = { new JsonStringEnumConverter() },
     };
 
-    public string FilePath => _filePath;
+    private readonly JsonFile<ConfigUpdateHistory> _file =
+        new(filePath ?? Path.Combine(AppPaths.DataDirectory, "config_updates.json"), Options, keepBackups: true);
+
+    public string FilePath => _file.FilePath;
 
     public ConfigUpdateHistory Load()
     {
-        if (!File.Exists(_filePath)) return new ConfigUpdateHistory();
-
         try
         {
-            return JsonSerializer.Deserialize<ConfigUpdateHistory>(File.ReadAllText(_filePath), Options)
-                ?? new ConfigUpdateHistory();
+            return _file.Read() ?? new ConfigUpdateHistory();
         }
-        catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            if (ex is JsonException) SafeFile.PreserveDamaged(_filePath);
             return new ConfigUpdateHistory();
         }
     }
@@ -53,8 +50,7 @@ public sealed class ConfigUpdateLog(string? filePath = null)
             history.Reports.Insert(0, report);
             if (history.Reports.Count > Keep) history.Reports.RemoveRange(Keep, history.Reports.Count - Keep);
 
-            Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
-            SafeFile.WriteText(_filePath, JsonSerializer.Serialize(history, Options), keepBackups: true);
+            _file.Write(history);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {

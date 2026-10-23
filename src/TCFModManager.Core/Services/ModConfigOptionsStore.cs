@@ -26,8 +26,6 @@ public enum ModConfigPolicy
 //
 public sealed class ModConfigOptionsStore(string? filePath = null)
 {
-    private readonly string _filePath = filePath ?? Path.Combine(AppPaths.DataDirectory, "mod_configs.json");
-
     private static readonly JsonSerializerOptions Options = new()
     {
         WriteIndented = true,
@@ -35,7 +33,10 @@ public sealed class ModConfigOptionsStore(string? filePath = null)
         Converters = { new JsonStringEnumConverter() },
     };
 
-    public string FilePath => _filePath;
+    private readonly JsonFile<Dictionary<string, ModConfigOptions>> _file =
+        new(filePath ?? Path.Combine(AppPaths.DataDirectory, "mod_configs.json"), Options, keepBackups: true);
+
+    public string FilePath => _file.FilePath;
 
     public static string KeyFor(string folderName) => folderName.Trim().ToLowerInvariant();
 
@@ -58,23 +59,15 @@ public sealed class ModConfigOptionsStore(string? filePath = null)
 
     public Dictionary<string, ModConfigOptions> Load()
     {
-        if (!File.Exists(_filePath)) return new Dictionary<string, ModConfigOptions>(StringComparer.OrdinalIgnoreCase);
-
         try
         {
-            var read = JsonSerializer.Deserialize<Dictionary<string, ModConfigOptions>>(
-                File.ReadAllText(_filePath), Options);
-
-            return read is null
-                ? new Dictionary<string, ModConfigOptions>(StringComparer.OrdinalIgnoreCase)
-                : new Dictionary<string, ModConfigOptions>(read, StringComparer.OrdinalIgnoreCase);
+            return _file.Read() is { } read
+                ? new Dictionary<string, ModConfigOptions>(read, StringComparer.OrdinalIgnoreCase)
+                : new Dictionary<string, ModConfigOptions>(StringComparer.OrdinalIgnoreCase);
         }
-        catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            // A hand-edited file that no longer parses means every mod is back on the default, which
-            // is what it was before anybody set anything.
-            AppLog.Warn("Configs", $"couldn't read {_filePath}: {ex.Message}");
-            if (ex is JsonException) SafeFile.PreserveDamaged(_filePath);
+            AppLog.Warn("Configs", $"couldn't read {_file.FilePath}: {ex.Message}");
             return new Dictionary<string, ModConfigOptions>(StringComparer.OrdinalIgnoreCase);
         }
     }
@@ -157,12 +150,11 @@ public sealed class ModConfigOptionsStore(string? filePath = null)
     {
         try
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(_filePath)!);
-            SafeFile.WriteText(_filePath, JsonSerializer.Serialize(options, Options), keepBackups: true);
+            _file.Write(options);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            AppLog.Warn("Configs", $"couldn't write {_filePath}: {ex.Message}");
+            AppLog.Warn("Configs", $"couldn't write {_file.FilePath}: {ex.Message}");
         }
     }
 }
