@@ -3010,14 +3010,6 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
     <value>{0} disabled (enable them first)</value>
     <comment>One reason in Installed_NoUpdatesReasonsFormat. {0} is how many.</comment>
   </data>
-  <data name="Installed_ReasonAddon_one" xml:space="preserve">
-    <value>1 addon, which updates from its parent mod</value>
-    <comment>One reason in Installed_NoUpdatesReasonsFormat.</comment>
-  </data>
-  <data name="Installed_ReasonAddon_other" xml:space="preserve">
-    <value>{0} addons, which update from their parent mod</value>
-    <comment>One reason in Installed_NoUpdatesReasonsFormat. {0} is how many.</comment>
-  </data>
   <data name="Installed_SkippedFormat" xml:space="preserve">
     <value> Skipped {0}.</value>
     <comment>Follows the queued sentence on the same line, which is why it starts with a space. {0} is one or more counts, joined by Common_ListSeparator.</comment>
@@ -3038,13 +3030,13 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
     <value>{0} disabled</value>
     <comment>One count in Installed_SkippedFormat.</comment>
   </data>
-  <data name="Installed_SkippedAddon_one" xml:space="preserve">
-    <value>1 addon - update that from its parent mod</value>
-    <comment>One count in Installed_SkippedFormat.</comment>
+  <data name="Installed_SkippedAddonNoFit_one" xml:space="preserve">
+    <value>1 addon with no newer version for its mod's new version</value>
+    <comment>One count in Installed_SkippedFormat (OPEN-32 D2): an addon updated together with its mod, where no newer addon version fits the version the mod is being updated to.</comment>
   </data>
-  <data name="Installed_SkippedAddon_other" xml:space="preserve">
-    <value>{0} addons - update those from their parent mod</value>
-    <comment>One count in Installed_SkippedFormat.</comment>
+  <data name="Installed_SkippedAddonNoFit_other" xml:space="preserve">
+    <value>{0} addons with no newer version for their mod's new version</value>
+    <comment>One count in Installed_SkippedFormat. {0} is how many.</comment>
   </data>
   <data name="Installed_SkippedNotFound_one" xml:space="preserve">
     <value>1 not found in the catalog</value>

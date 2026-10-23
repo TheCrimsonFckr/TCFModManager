@@ -17,7 +17,7 @@ public partial class InstalledViewModel
     private bool HasUpdatableSelection() => SelectedCards().Any(IsUpdatable);
 
     private static bool IsUpdatable(InstalledModCardViewModel card) =>
-        card is { UpdateAvailable: true, IsDisabled: false, IsAddon: false, ModId: not null }
+        card is { UpdateAvailable: true, IsDisabled: false, ModId: not null }
         && card.LatestPublishedVersion is not null;
 
     //
@@ -37,6 +37,15 @@ public partial class InstalledViewModel
     {
         if (mod is not null) UpdateCards([mod]);
     }
+
+    private sealed record UpdateTarget(
+        InstalledModCardViewModel Card,
+        InstallTarget Target,
+        string Version,
+        string? DetailUrl,
+        Func<Task<ModVersion?>> Resolve,
+        long? TotalBytes = null,
+        int? QueueBehindModId = null);
 
     private void UpdateCards(List<InstalledModCardViewModel> selected)
     {
@@ -60,7 +69,7 @@ public partial class InstalledViewModel
         var resolved = new List<(InstalledModCardViewModel Card, Mod Mod, string Version)>();
         var unmatched = new List<string>();
 
-        foreach (var card in targets)
+        foreach (var card in targets.Where(c => !c.IsAddon))
         {
             var match = AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == card.ModId);
             // The card's own target: below a release sp-mod holds back, it is the newest one that
@@ -71,29 +80,6 @@ public partial class InstalledViewModel
 
             if (match is null || version is null) unmatched.Add(card.DisplayTitle);
             else resolved.Add((card, match, version));
-        }
-
-        if (resolved.Count == 0)
-        {
-            StatusMessage = Text(Strings.Installed_UpdateNotInCatalogFormat, TextLists.Join(unmatched));
-            return;
-        }
-
-        //
-        // One warning covering every hand-installed mod in the batch, for the same reason the
-        // single-mod path warns at all: there is no record of which files the current version
-        // placed, so the new one goes on top of it.
-        //
-        // Follows Monitor mode's setting. A download places nothing, so the warning below is moot.
-        var downloadOnly = AppServices.ModPageGate.DownloadOnlyFor(alternate: false);
-
-        var handInstalled = resolved.Where(r => !r.Card.IsAppManaged).Select(r => r.Card.DisplayTitle).ToList();
-        if (!downloadOnly && handInstalled.Count > 0 && !Confirm(
-                Strings.Installed_UpdateHandInstalledTitle(handInstalled.Count),
-                Text(Strings.Installed_UpdateHandInstalledBodyFormat, TextLists.Join(handInstalled))))
-        {
-            StatusMessage = Strings.Installed_UpdateCancelled;
-            return;
         }
 
         //
@@ -117,35 +103,135 @@ public partial class InstalledViewModel
                 Strings.Install_IncompatibleLeftOutFormat,
                 AppServices.SptEnvironment.InstalledVersion,
                 TextLists.Join([.. incompatible.Select(r => r.Card.DisplayTitle)]));
+        }
 
-            if (resolved.Count == 0)
+        var updates = resolved
+            .Select(r => new UpdateTarget(
+                r.Card,
+                InstallTarget.For(r.Mod),
+                r.Version,
+                r.Mod.DetailUrl,
+                () => AppServices.SpModApi.FindModVersionAsync(r.Mod.Id.ToString(), r.Version)))
+            .ToList();
+
+        //
+        // OPEN-32 D2: an addon whose mod is updated in the same batch takes the newest version that
+        // fits the version its mod is going to, and queues behind it.
+        //
+        var modTargets = resolved.ToDictionary(r => r.Mod.Id, r => r.Version);
+        var noFit = 0;
+
+        foreach (var card in targets.Where(c => c.IsAddon))
+        {
+            var addon = AppServices.Addons.ById(card.ModId!.Value);
+            var withMod = card.ParentModId is { } parentId && modTargets.ContainsKey(parentId);
+
+            var version = withMod
+                ? NewestAddonUpdate(addon, card.InstalledVersion, modTargets[card.ParentModId!.Value])
+                : addon?.Versions?.FirstOrDefault(v => string.Equals(
+                    v.Version, card.UpdateVersion ?? card.LatestPublishedVersion, StringComparison.OrdinalIgnoreCase));
+
+            if (addon is null || (version is null && !withMod) || version is { Link: null })
             {
-                StatusMessage = leftOut;
-                return;
+                unmatched.Add(card.DisplayTitle);
+                continue;
             }
+
+            if (version is null)
+            {
+                noFit++;
+                continue;
+            }
+
+            var download = new ModVersion
+            {
+                Id = version.Id,
+                Version = version.Version,
+                Description = version.Description,
+                Link = version.Link,
+                ContentLength = version.ContentLength,
+            };
+
+            updates.Add(new UpdateTarget(
+                card,
+                InstallTarget.For(addon),
+                version.Version!,
+                addon.DetailUrl,
+                () => Task.FromResult<ModVersion?>(download),
+                version.ContentLength,
+                withMod ? card.ParentModId : null));
+        }
+
+        if (updates.Count == 0)
+        {
+            var nothing = unmatched.Count > 0
+                ? Text(Strings.Installed_UpdateNotInCatalogFormat, TextLists.Join(unmatched))
+                : DescribeSkipped(selected, unmatched, noFit).Trim();
+            StatusMessage = (leftOut.Length, nothing.Length) switch
+            {
+                (0, _) => nothing,
+                (_, 0) => leftOut,
+                _ => Sentences(leftOut, nothing),
+            };
+            return;
+        }
+
+        //
+        // One warning covering every hand-installed mod in the batch, for the same reason the
+        // single-mod path warns at all: there is no record of which files the current version
+        // placed, so the new one goes on top of it.
+        //
+        // Follows Monitor mode's setting. A download places nothing, so the warning below is moot.
+        var downloadOnly = AppServices.ModPageGate.DownloadOnlyFor(alternate: false);
+
+        var handInstalled = updates.Where(u => !u.Card.IsAppManaged).Select(u => u.Card.DisplayTitle).ToList();
+        if (!downloadOnly && handInstalled.Count > 0 && !Confirm(
+                Strings.Installed_UpdateHandInstalledTitle(handInstalled.Count),
+                Text(Strings.Installed_UpdateHandInstalledBodyFormat, TextLists.Join(handInstalled))))
+        {
+            StatusMessage = Strings.Installed_UpdateCancelled;
+            return;
         }
 
         // The same gate a single install goes through, asked once for the batch. ConfirmAll honours
         // the Options switch that turns the gate off.
-        var links = resolved.Select(r => new ModPageLink(r.Card.DisplayTitle, r.Mod.DetailUrl)).ToList();
+        var links = updates.Select(u => new ModPageLink(u.Card.DisplayTitle, u.DetailUrl)).ToList();
         if (!ReadModPageConfirmationWindow.ConfirmAll(links))
         {
             StatusMessage = Strings.Installed_UpdateCancelledUnread;
             return;
         }
 
-        foreach (var (_, mod, version) in resolved)
+        var queuedMods = new Dictionary<int, DownloadQueueItemViewModel>();
+
+        foreach (var update in updates)
         {
-            AppServices.DownloadQueue.Enqueue(
-                InstallTarget.For(mod), version, installPath, () => AppServices.SpModApi.FindModVersionAsync(mod.Id.ToString(), version),
+            var item = AppServices.DownloadQueue.Enqueue(
+                update.Target, update.Version, installPath, update.Resolve,
+                dependencyOf: update.QueueBehindModId is { } modId ? queuedMods[modId] : null,
+                totalBytes: update.TotalBytes,
                 downloadOnly: downloadOnly);
+
+            if (!update.Target.IsAddon) queuedMods[update.Target.Id] = item;
         }
 
-        var queued = Strings.Installed_UpdateQueued(resolved.Count);
-        var summary = queued + DescribeSkipped(selected, unmatched);
+        var queued = Strings.Installed_UpdateQueued(updates.Count);
+        var summary = queued + DescribeSkipped(selected, unmatched, noFit);
         StatusMessage = leftOut.Length == 0 ? summary : Sentences(summary, leftOut);
 
-        AppLog.Info("Installed", $"queued {resolved.Count} update(s) from a selection of {selected.Count}");
+        AppLog.Info("Installed", $"queued {updates.Count} update(s) from a selection of {selected.Count}");
+    }
+
+    // As the addon card picks its update (BuildAddonCard), against the version its mod is going to.
+    private static AddonVersionSummary? NewestAddonUpdate(Addon? addon, string? installedVersion, string modVersion)
+    {
+        var newest = (addon?.Versions ?? [])
+            .OrderByDescending(v => v.PublishedAt ?? DateTimeOffset.MinValue)
+            .FirstOrDefault(v => AddonFit.Accepts(v.ModVersionConstraint, modVersion, AppServices.SptEnvironment.InstalledVersion));
+
+        return newest is not null && ModVersionComparer.IsUpdateAvailable(installedVersion, newest.Version) == true
+            ? newest
+            : null;
     }
 
     //
@@ -157,12 +243,10 @@ public partial class InstalledViewModel
         if (selected.Count == 0) return Strings.Installed_NothingSelected;
 
         var disabled = selected.Count(c => c is { UpdateAvailable: true, IsDisabled: true });
-        var addons = selected.Count(c => c is { UpdateAvailable: true, IsAddon: true });
 
         var reasons = new List<string>();
 
         if (disabled > 0) reasons.Add(Strings.Installed_ReasonDisabled(disabled));
-        if (addons > 0) reasons.Add(Strings.Installed_ReasonAddon(addons));
 
         return reasons.Count == 0
             ? Strings.Installed_NoUpdatesAvailable
@@ -173,17 +257,17 @@ public partial class InstalledViewModel
 
     private static string DescribeSkipped(
         IReadOnlyList<InstalledModCardViewModel> selected,
-        IReadOnlyList<string> unmatched)
+        IReadOnlyList<string> unmatched,
+        int addonsWithNoFit)
     {
         var parts = new List<string>();
 
         var disabled = selected.Count(c => c is { UpdateAvailable: true, IsDisabled: true });
-        var addons = selected.Count(c => c is { UpdateAvailable: true, IsAddon: true });
         var noUpdate = selected.Count(c => c.UpdateAvailable != true);
 
         if (noUpdate > 0) parts.Add(Strings.Installed_SkippedUpToDate(noUpdate));
         if (disabled > 0) parts.Add(Strings.Installed_SkippedDisabled(disabled));
-        if (addons > 0) parts.Add(Strings.Installed_SkippedAddon(addons));
+        if (addonsWithNoFit > 0) parts.Add(Strings.Installed_SkippedAddonNoFit(addonsWithNoFit));
         if (unmatched.Count > 0) parts.Add(Strings.Installed_SkippedNotFound(unmatched.Count));
 
         return parts.Count == 0

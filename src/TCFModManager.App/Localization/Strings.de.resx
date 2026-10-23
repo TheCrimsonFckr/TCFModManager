@@ -2009,12 +2009,6 @@ Die Kopie, die du nicht behältst, wird in einen versteckten Ordner .tcfmm-dupli
   <data name="Installed_PinToolTip" xml:space="preserve">
     <value>Heft diesen Mod an, damit keine Modliste, die du anwendest, ihn je beiseitelegt. Für HUD- und Komfort-Mods, die du behalten willst, egal auf welche Liste du wechselst.</value>
   </data>
-  <data name="Installed_ReasonAddon_one" xml:space="preserve">
-    <value>1 Addon, das über seinen übergeordneten Mod aktualisiert wird</value>
-  </data>
-  <data name="Installed_ReasonAddon_other" xml:space="preserve">
-    <value>{0} Addons, die über ihren übergeordneten Mod aktualisiert werden</value>
-  </data>
   <data name="Installed_ReasonDisabled_one" xml:space="preserve">
     <value>1 deaktiviert (aktiviere ihn zuerst)</value>
   </data>
@@ -2099,12 +2093,6 @@ Abbrechen  -  nichts entfernen</value>
   </data>
   <data name="Installed_ServerFolder" xml:space="preserve">
     <value>Server-Ordner</value>
-  </data>
-  <data name="Installed_SkippedAddon_one" xml:space="preserve">
-    <value>1 Addon - aktualisiere es über seinen übergeordneten Mod</value>
-  </data>
-  <data name="Installed_SkippedAddon_other" xml:space="preserve">
-    <value>{0} Addons - aktualisiere sie über ihren übergeordneten Mod</value>
   </data>
   <data name="Installed_SkippedDisabled_one" xml:space="preserve">
     <value>1 deaktiviert</value>

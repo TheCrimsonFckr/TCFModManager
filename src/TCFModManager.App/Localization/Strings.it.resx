@@ -2009,12 +2009,6 @@ La copia che non conservi viene spostata in una cartella nascosta .tcfmm-duplica
   <data name="Installed_PinToolTip" xml:space="preserve">
     <value>Fissa questo mod, così nessuna lista mod che applichi potrà metterlo da parte. Per i mod HUD e di comodità che vuoi tenere qualunque lista tu scelga.</value>
   </data>
-  <data name="Installed_ReasonAddon_one" xml:space="preserve">
-    <value>1 addon, che si aggiorna dal suo mod principale</value>
-  </data>
-  <data name="Installed_ReasonAddon_other" xml:space="preserve">
-    <value>{0} addon, che si aggiornano dal loro mod principale</value>
-  </data>
   <data name="Installed_ReasonDisabled_one" xml:space="preserve">
     <value>1 disattivato (attivalo prima)</value>
   </data>
@@ -2099,12 +2093,6 @@ Annulla  -  non rimuove nulla</value>
   </data>
   <data name="Installed_ServerFolder" xml:space="preserve">
     <value>Cartella server</value>
-  </data>
-  <data name="Installed_SkippedAddon_one" xml:space="preserve">
-    <value>1 addon - aggiornalo dal suo mod principale</value>
-  </data>
-  <data name="Installed_SkippedAddon_other" xml:space="preserve">
-    <value>{0} addon - aggiornali dal loro mod principale</value>
   </data>
   <data name="Installed_SkippedDisabled_one" xml:space="preserve">
     <value>1 disattivato</value>

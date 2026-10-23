@@ -2108,15 +2108,6 @@
   <data name="Installed_PinToolTip" xml:space="preserve">
     <value>Закрепите этот мод, чтобы ни один применённый список модов его не отложил. Для HUD и модов для удобства, которые нужны вам при любом списке.</value>
   </data>
-  <data name="Installed_ReasonAddon_few" xml:space="preserve">
-    <value>{0} аддона, которые обновляются из родительского мода</value>
-  </data>
-  <data name="Installed_ReasonAddon_many" xml:space="preserve">
-    <value>{0} аддонов, которые обновляются из родительского мода</value>
-  </data>
-  <data name="Installed_ReasonAddon_one" xml:space="preserve">
-    <value>{0} аддон, который обновляется из родительского мода</value>
-  </data>
   <data name="Installed_ReasonDisabled_few" xml:space="preserve">
     <value>{0} отключено (сначала включите их)</value>
   </data>
@@ -2213,15 +2204,6 @@
   </data>
   <data name="Installed_ServerFolder" xml:space="preserve">
     <value>Папка сервера</value>
-  </data>
-  <data name="Installed_SkippedAddon_few" xml:space="preserve">
-    <value>{0} аддона - обновляйте их из родительского мода</value>
-  </data>
-  <data name="Installed_SkippedAddon_many" xml:space="preserve">
-    <value>{0} аддонов - обновляйте их из родительского мода</value>
-  </data>
-  <data name="Installed_SkippedAddon_one" xml:space="preserve">
-    <value>{0} аддон - обновляйте его из родительского мода</value>
   </data>
   <data name="Installed_SkippedDisabled_few" xml:space="preserve">
     <value>{0} отключено</value>

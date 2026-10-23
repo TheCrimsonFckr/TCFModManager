@@ -2009,12 +2009,6 @@ La copie que vous ne gardez pas est déplacée dans un dossier caché .tcfmm-dup
   <data name="Installed_PinToolTip" xml:space="preserve">
     <value>Épinglez ce mod pour qu'aucune liste de mods que vous appliquez ne le mette de côté. Pour les mods d'interface et de confort que vous voulez garder quelle que soit la liste choisie.</value>
   </data>
-  <data name="Installed_ReasonAddon_one" xml:space="preserve">
-    <value>{0} addon, qui se met à jour depuis son mod parent</value>
-  </data>
-  <data name="Installed_ReasonAddon_other" xml:space="preserve">
-    <value>{0} addons, qui se mettent à jour depuis leur mod parent</value>
-  </data>
   <data name="Installed_ReasonDisabled_one" xml:space="preserve">
     <value>{0} désactivé (activez-le d'abord)</value>
   </data>
@@ -2099,12 +2093,6 @@ Annuler  -  ne rien supprimer</value>
   </data>
   <data name="Installed_ServerFolder" xml:space="preserve">
     <value>Dossier serveur</value>
-  </data>
-  <data name="Installed_SkippedAddon_one" xml:space="preserve">
-    <value>{0} addon - mettez-le à jour depuis son mod parent</value>
-  </data>
-  <data name="Installed_SkippedAddon_other" xml:space="preserve">
-    <value>{0} addons - mettez-les à jour depuis leur mod parent</value>
   </data>
   <data name="Installed_SkippedDisabled_one" xml:space="preserve">
     <value>{0} désactivé</value>
