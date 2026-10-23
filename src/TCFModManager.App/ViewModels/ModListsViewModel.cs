@@ -747,10 +747,6 @@ public partial class ModListsViewModel : LocalizedViewModel
         }
     }
 
-    private static string Mods(int count) => count == 1
-        ? Strings.ModLists_DetailOneMod
-        : Text(Strings.ModLists_DetailModsFormat, count);
-
     public string UnsavedLabel => Strings.ModLists_Unsaved(UnsavedCount);
 
     partial void OnSelectedChanged(ModListRowViewModel? value)
