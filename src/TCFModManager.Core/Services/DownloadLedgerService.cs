@@ -1,4 +1,3 @@
-using System.Text.Json;
 using TCFModManager.Core.Models;
 
 namespace TCFModManager.Core.Services;
@@ -14,35 +13,15 @@ namespace TCFModManager.Core.Services;
 //
 public sealed class DownloadLedgerService
 {
-    private readonly string _filePath;
+    private readonly JsonFile<DownloadLedger> _file;
 
-    public DownloadLedgerService(string? filePath = null)
-    {
-        // Optional path for testability, matching ModListStore's accepted deviation.
-        _filePath = filePath ?? Path.Combine(AppPaths.DataDirectory, "downloads.json");
-    }
+    public DownloadLedgerService(string? filePath = null) =>
+        _file = new JsonFile<DownloadLedger>(
+            filePath ?? Path.Combine(AppPaths.DataDirectory, "downloads.json"), JsonFileOptions.Indented, keepBackups: true);
 
-    public DownloadLedger Load()
-    {
-        if (!File.Exists(_filePath)) return new DownloadLedger();
+    public DownloadLedger Load() => _file.Read() ?? new DownloadLedger();
 
-        try
-        {
-            var json = File.ReadAllText(_filePath);
-            return JsonSerializer.Deserialize<DownloadLedger>(json) ?? new DownloadLedger();
-        }
-        catch (JsonException)
-        {
-            SafeFile.PreserveDamaged(_filePath);
-            return new DownloadLedger();
-        }
-    }
-
-    public void Save(DownloadLedger ledger)
-    {
-        var json = JsonSerializer.Serialize(ledger, new JsonSerializerOptions { WriteIndented = true });
-        SafeFile.WriteText(_filePath, json, keepBackups: true);
-    }
+    public void Save(DownloadLedger ledger) => _file.Write(ledger);
 
     // Adds a download, replacing any earlier entry for the same mod or addon.
     public void Record(DownloadedModRecord record)

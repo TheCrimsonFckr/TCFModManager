@@ -1,4 +1,3 @@
-using System.Text.Json;
 using TCFModManager.Core.Models;
 
 namespace TCFModManager.Core.Services;
@@ -11,29 +10,12 @@ namespace TCFModManager.Core.Services;
 //
 public sealed class ModGroupStore
 {
-    private readonly string _filePath = Path.Combine(AppPaths.DataDirectory, "mod_groups.json");
+    private readonly JsonFile<ModGroupData> _file =
+        new(Path.Combine(AppPaths.DataDirectory, "mod_groups.json"), JsonFileOptions.Indented, keepBackups: true);
 
-    public ModGroupData Load()
-    {
-        if (!File.Exists(_filePath)) return new ModGroupData();
+    public ModGroupData Load() => _file.Read() ?? new ModGroupData();
 
-        try
-        {
-            var json = File.ReadAllText(_filePath);
-            return JsonSerializer.Deserialize<ModGroupData>(json) ?? new ModGroupData();
-        }
-        catch (JsonException)
-        {
-            SafeFile.PreserveDamaged(_filePath);
-            return new ModGroupData();
-        }
-    }
-
-    public void Save(ModGroupData data)
-    {
-        var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-        SafeFile.WriteText(_filePath, json, keepBackups: true);
-    }
+    public void Save(ModGroupData data) => _file.Write(data);
 
     // The key an installed mod is tracked under - InstalledModCardViewModel.Name, lowercased so
     // lookups don't care about case.

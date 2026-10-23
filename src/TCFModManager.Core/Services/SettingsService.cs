@@ -1,4 +1,3 @@
-using System.Text.Json;
 using TCFModManager.Core.Models;
 
 namespace TCFModManager.Core.Services;
@@ -8,28 +7,10 @@ namespace TCFModManager.Core.Services;
 // 
 public sealed class SettingsService
 {
-    private readonly string _filePath = Path.Combine(AppPaths.DataDirectory, "settings.json");
+    private readonly JsonFile<AppSettings> _file =
+        new(Path.Combine(AppPaths.DataDirectory, "settings.json"), JsonFileOptions.Indented, keepBackups: true);
 
-    public AppSettings Load()
-    {
-        if (!File.Exists(_filePath)) return new AppSettings();
+    public AppSettings Load() => _file.Read() ?? new AppSettings();
 
-        try
-        {
-            var json = File.ReadAllText(_filePath);
-            return JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
-        }
-        catch (JsonException)
-        {
-            // Corrupt or hand-edited settings file - kept aside, then fall back to defaults.
-            SafeFile.PreserveDamaged(_filePath);
-            return new AppSettings();
-        }
-    }
-
-    public void Save(AppSettings settings)
-    {
-        var json = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
-        SafeFile.WriteText(_filePath, json, keepBackups: true);
-    }
+    public void Save(AppSettings settings) => _file.Write(settings);
 }
