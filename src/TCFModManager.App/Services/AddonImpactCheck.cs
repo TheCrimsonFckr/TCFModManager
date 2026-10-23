@@ -79,8 +79,10 @@ public sealed class AddonImpactCheck
     // D6/D7: asked once, only when something is affected. Any addon with a version to change to
     // gives Update both / Mod only / Cancel (Yes / No / Cancel); only addons with no fitting version
     // give Update anyway / Cancel, No by default. Nothing affected answers UpdateBoth without asking.
+    // willInstall: the update installs rather than only downloads, so addons with no fitting version
+    // are disabled once it lands (D11) and the box says so.
     //
-    public static AddonImpactAnswer Ask(IReadOnlyList<AddonImpactItem> items)
+    public static AddonImpactAnswer Ask(IReadOnlyList<AddonImpactItem> items, bool willInstall)
     {
         var change = items.Where(i => i.Result.Verdict == AddonImpactVerdict.NeedsChange).ToList();
         var none = items.Where(i => i.Result.Verdict == AddonImpactVerdict.NoCompatibleVersion).ToList();
@@ -91,7 +93,8 @@ public sealed class AddonImpactCheck
         if (change.Count > 0)
             parts.Add(Strings.AddonImpact_ChangeList + "\n" + string.Join("\n", change.Select(ChangeLine)));
         if (none.Count > 0)
-            parts.Add(Strings.AddonImpact_NoVersionList + "\n" + string.Join("\n", none.Select(NoVersionLine)));
+            parts.Add((willInstall ? Strings.AddonImpact_NoVersionDisableList : Strings.AddonImpact_NoVersionList)
+                + "\n" + string.Join("\n", none.Select(NoVersionLine)));
 
         if (change.Count > 0)
         {

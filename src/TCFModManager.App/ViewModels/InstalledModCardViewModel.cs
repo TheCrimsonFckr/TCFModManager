@@ -361,6 +361,13 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // measured against. Null for a mod, or when the parent isn't installed.
     public string? ParentInstalledVersion { get; init; }
 
+    // Whether this addon's installed version fits its mod's installed version: null when it can't be
+    // told (no parent installed, or the installed release isn't in the cached listing).
+    public bool? FitsParent { get; init; }
+
+    // OPEN-32 D11: the installed version doesn't fit its mod - shown as "nothing fits" rather than "?".
+    public bool DoesntFitParent { get; init; }
+
     // The card's "Addon for X" line, or null for an ordinary mod.
     public string? AddonSubtitle => IsAddon
         ? ParentModName is not null ? Text(Strings.Installed_AddonForFormat, ParentModName) : Strings.Installed_Addon
@@ -615,6 +622,8 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         ? ModStatus.Disabled
         : HasConflicts
             ? ModStatus.Conflict
+            : IsAddon && DoesntFitParent
+                ? ModStatus.NoCompatibleVersion
             : SptFit is { Fits: false } && !IsSptWarningDismissed && UpdateAvailable != true
                 ? ModStatus.NoCompatibleVersion
             : UpdateAvailable switch
@@ -636,6 +645,9 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         IncompleteSummary
         ?? JoinConflicts()
         ?? DownloadSummary
+        ?? (IsAddon && DoesntFitParent && !IsDisabled
+            ? Text(Strings.Installed_AddonNoFitToolTipFormat, ParentModName, ParentInstalledVersion)
+            : null)
         ?? (SptFit is { Fits: false } && !IsSptWarningDismissed ? SptNote : null)
         ?? (UpdateAvailable == true ? null : HeldBackNote)
         ?? (HasDuplicateFolders

@@ -179,6 +179,18 @@ public class AddonActionsTests : IDisposable
     }
 
     [Fact]
+    public void DisabledForFit_IsMarkedAndClearedPerAddon_AndLeftOutWhileFalse()
+    {
+        Assert.Equal(1, _manifest.SetDisabledForFit([PrideId], true));
+        Assert.Equal(0, _manifest.SetDisabledForFit([PrideId], true));
+        Assert.Equal([PrideId], _manifest.Load().Mods.Where(r => r.DisabledForFit).Select(r => r.ModId));
+        Assert.DoesNotContain(_manifest.Load().Mods, r => r.DisabledWithParent);
+
+        Assert.Equal(1, _manifest.SetDisabledForFit([PrideId, EssentialId], false));
+        Assert.DoesNotContain("\"DisabledForFit\"", File.ReadAllText(_manifest.FilePath));
+    }
+
+    [Fact]
     public void DisabledWithParent_IsLeftOutOfTheManifestWhileFalse()
     {
         _manifest.SetDisabledWithParent([PrideId], true);

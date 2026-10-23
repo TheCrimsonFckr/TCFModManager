@@ -78,6 +78,8 @@ public partial class InstalledViewModel
                 AppLog.Debug("Installed", "a queued install finished - rescanning");
                 await ScanCommand.ExecuteAsync(null);
             }
+
+            await FollowUpAddonFitAsync();
         }
         finally
         {

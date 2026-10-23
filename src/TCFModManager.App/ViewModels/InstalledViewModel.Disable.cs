@@ -345,6 +345,8 @@ public partial class InstalledViewModel
         var addons = moved.Where(c => c is { IsAddon: true, ModId: not null }).ToList();
         if (addons.Count == 0) return;
 
+        AppServices.InstallManifest.SetDisabledForFit(addons.Select(a => a.ModId!.Value), false);
+
         if (!disable)
         {
             AppServices.InstallManifest.SetDisabledWithParent(addons.Select(a => a.ModId!.Value), false);

@@ -52,7 +52,15 @@ public sealed class ModInstallManifestService
     // Marks or clears the addon records disabled together with their parent (OPEN-31 R5). Saves only
     // when something changed; returns how many records changed.
     //
-    public int SetDisabledWithParent(IEnumerable<int> addonIds, bool value)
+    public int SetDisabledWithParent(IEnumerable<int> addonIds, bool value) =>
+        SetAddonFlag(addonIds, value, r => r.DisabledWithParent, (r, v) => r.DisabledWithParent = v);
+
+    // The same for addons disabled because no version of them fit their mod's new version (OPEN-32 D11).
+    public int SetDisabledForFit(IEnumerable<int> addonIds, bool value) =>
+        SetAddonFlag(addonIds, value, r => r.DisabledForFit, (r, v) => r.DisabledForFit = v);
+
+    private int SetAddonFlag(
+        IEnumerable<int> addonIds, bool value, Func<InstalledModRecord, bool> get, Action<InstalledModRecord, bool> set)
     {
         var ids = addonIds.ToHashSet();
         if (ids.Count == 0) return 0;
@@ -60,9 +68,9 @@ public sealed class ModInstallManifestService
         var manifest = Load();
         var changed = 0;
 
-        foreach (var record in manifest.Mods.Where(r => r.IsAddon && ids.Contains(r.ModId) && r.DisabledWithParent != value))
+        foreach (var record in manifest.Mods.Where(r => r.IsAddon && ids.Contains(r.ModId) && get(r) != value))
         {
-            record.DisabledWithParent = value;
+            set(record, value);
             changed++;
         }
 

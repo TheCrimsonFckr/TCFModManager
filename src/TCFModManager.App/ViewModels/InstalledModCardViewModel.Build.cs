@@ -257,6 +257,8 @@ public sealed partial class InstalledModCardViewModel
             ParentModName = parentName,
             ParentModId = addon?.ModId,
             ParentInstalledVersion = parentVersion,
+            FitsParent = installedFits,
+            DoesntFitParent = installedFits == false || (latest is null && versions.Count > 0 && parentVersion is not null),
             IsAppManaged = record.IsAppManaged,
             IsManualOverride = !record.IsAppManaged,
             Entries = entries,

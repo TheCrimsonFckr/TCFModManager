@@ -1,3 +1,4 @@
+using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
@@ -184,7 +185,10 @@ public partial class InstalledViewModel
             StatusMessage = null;
         }
 
-        switch (AddonImpactCheck.Ask(impacts))
+        // Follows Monitor mode's setting. A download places nothing, so the warning below is moot.
+        var downloadOnly = AppServices.ModPageGate.DownloadOnlyFor(alternate: false);
+
+        switch (AddonImpactCheck.Ask(impacts, willInstall: !downloadOnly))
         {
             case AddonImpactAnswer.Cancel:
                 StatusMessage = Strings.AddonImpact_Cancelled;
@@ -228,9 +232,6 @@ public partial class InstalledViewModel
         // single-mod path warns at all: there is no record of which files the current version
         // placed, so the new one goes on top of it.
         //
-        // Follows Monitor mode's setting. A download places nothing, so the warning below is moot.
-        var downloadOnly = AppServices.ModPageGate.DownloadOnlyFor(alternate: false);
-
         var handInstalled = updates.Where(u => !u.Card.IsAppManaged).Select(u => u.Card.DisplayTitle).ToList();
         if (!downloadOnly && handInstalled.Count > 0 && !Confirm(
                 Strings.Installed_UpdateHandInstalledTitle(handInstalled.Count),
@@ -248,6 +249,8 @@ public partial class InstalledViewModel
             StatusMessage = Strings.Installed_UpdateCancelledUnread;
             return;
         }
+
+        if (!downloadOnly) AppServices.AddonFollowUps.DisableAfterUpdate(impacts);
 
         var queuedMods = new Dictionary<int, DownloadQueueItemViewModel>();
 
@@ -267,6 +270,46 @@ public partial class InstalledViewModel
         StatusMessage = leftOut.Length == 0 ? summary : Sentences(summary, leftOut);
 
         AppLog.Info("Installed", $"queued {updates.Count} update(s) from a selection of {selected.Count}");
+    }
+
+    //
+    // OPEN-32 D11, after an install's rescan: disables the addons left with no fitting version by the
+    // update that just landed, then offers back any disabled that way that fit their mod again.
+    //
+    private async Task FollowUpAddonFitAsync()
+    {
+        var due = AppServices.AddonFollowUps.TakeDue(
+            modId => _all.FirstOrDefault(c => c is { IsAddon: false } && c.ModId == modId)?.InstalledVersion);
+        var dueIds = due.Select(d => d.AddonId).ToHashSet();
+
+        var toDisable = _all.Where(c => c is { IsAddon: true, IsDisabled: false, ModId: { } id } && dueIds.Contains(id)).ToList();
+        if (toDisable.Count > 0 && await ApplyDisableAsync(toDisable, disable: true, confirm: false) is not null)
+        {
+            AppServices.InstallManifest.SetDisabledForFit(toDisable.Select(c => c.ModId!.Value), true);
+            StatusMessage = Text(Strings.AddonFit_DisabledFormat, TextLists.Join([.. toDisable.Select(c => c.DisplayTitle)]));
+        }
+
+        var flagged = AppServices.InstallManifest.Load().Mods
+            .Where(r => r is { IsAddon: true, DisabledForFit: true })
+            .Select(r => r.ModId)
+            .ToHashSet();
+        if (flagged.Count == 0) return;
+
+        var fitting = _all.Where(c => c is { IsAddon: true, IsDisabled: true, FitsParent: true, ModId: { } id } && flagged.Contains(id)).ToList();
+        if (fitting.Count == 0) return;
+
+        var lines = fitting.Select(c => Text(
+            Strings.AddonImpact_NoVersionLineFormat, c.DisplayTitle, c.InstalledVersion, c.ParentModName, c.ParentInstalledVersion));
+
+        var answer = MessageBox.Show(
+            Strings.AddonFit_ReEnableList + "\n" + string.Join("\n", lines) + "\n\n" + Strings.AddonFit_ReEnableQuestion,
+            Strings.AddonFit_ReEnableTitle,
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question,
+            MessageBoxResult.Yes);
+
+        AppServices.InstallManifest.SetDisabledForFit(fitting.Select(c => c.ModId!.Value), false);
+        if (answer == MessageBoxResult.Yes) await ApplyDisableAsync(fitting, disable: false, confirm: false);
     }
 
     // As the addon card picks its update (BuildAddonCard), against the version its mod is going to.

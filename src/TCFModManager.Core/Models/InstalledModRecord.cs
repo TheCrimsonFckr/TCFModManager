@@ -92,6 +92,11 @@ public sealed class InstalledModRecord
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public bool DisabledWithParent { get; set; }
 
+    // True while this addon is disabled because no version of it fit its mod's new version (OPEN-32
+    // D11), so a later version change it fits can offer it back.
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public bool DisabledForFit { get; set; }
+
     public FileFingerprint? FingerprintFor(string path) =>
         Fingerprints.FirstOrDefault(f => string.Equals(f.Path, path, StringComparison.OrdinalIgnoreCase));
 }

@@ -68,6 +68,8 @@ internal static class AppServices
     // Shared with MainWindow to render the Installed page's per-mod update dialog at the window level.
     public static ModUpdateOverlayViewModel ModUpdateOverlay { get; } = new();
 
+    public static AddonFitFollowUp AddonFollowUps { get; } = new();
+
     // Shared between Options and Browse for the detected SPT install/version.
     public static SptEnvironmentViewModel SptEnvironment { get; } = new();
 
