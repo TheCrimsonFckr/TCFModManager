@@ -27,9 +27,70 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     private Mod? _catalogMod;
     private Addon? _catalogAddon;
 
-    public ModUpdateDialogViewModel(InstalledModCardViewModel mod)
+    public ModUpdateDialogViewModel(InstalledModCardViewModel mod, IReadOnlyList<InstalledModCardViewModel> addonCards)
     {
         _mod = mod;
+        _addonCards = addonCards;
+    }
+
+    private readonly IReadOnlyList<InstalledModCardViewModel> _addonCards;
+
+    //
+    // OPEN-32 D5: the mod's installed addons against the SELECTED version, rechecked as it changes.
+    //
+    private readonly AddonImpactCheck _impactCheck = new();
+    private List<InstalledAddon> _installedAddons = [];
+    private CancellationTokenSource? _impactCts;
+    private Task<List<AddonImpactItem>>? _impactTask;
+    private string? _impactVersion;
+
+    public ObservableCollection<AddonImpactRowViewModel> AddonImpacts { get; } = [];
+
+    public bool ShowAddonImpacts => !_mod.IsAddon && _installedAddons.Count > 0 && SelectedVersion is not null;
+
+    public string AddonImpactHeading => Text(Strings.AddonImpact_HeadingFormat, SelectedVersion?.VersionText);
+
+    [ObservableProperty]
+    private bool _isCheckingAddons;
+
+    private string ModName => _catalogMod?.Name ?? _mod.DisplayTitle;
+
+    partial void OnSelectedVersionChanged(ModVersionRowViewModel? value) => _ = RefreshAddonImpactsAsync();
+
+    private Task<List<AddonImpactItem>> ImpactsFor(string version)
+    {
+        if (_impactTask is not null && _impactVersion == version) return _impactTask;
+
+        _impactCts?.Cancel();
+        _impactCts = new CancellationTokenSource();
+        _impactVersion = version;
+        _impactTask = _impactCheck.AssessAsync(_installedAddons, _mod.ModId ?? 0, ModName, version, _impactCts.Token);
+        return _impactTask;
+    }
+
+    private async Task RefreshAddonImpactsAsync()
+    {
+        OnPropertyChanged(nameof(ShowAddonImpacts));
+        OnPropertyChanged(nameof(AddonImpactHeading));
+        AddonImpacts.Clear();
+
+        if (!ShowAddonImpacts || SelectedVersion?.Raw.Version is not { } version) return;
+
+        IsCheckingAddons = true;
+        var task = ImpactsFor(version);
+        try
+        {
+            var items = await task;
+            if (!ReferenceEquals(task, _impactTask)) return;
+
+            foreach (var item in items) AddonImpacts.Add(new AddonImpactRowViewModel(item));
+        }
+        catch (OperationCanceledException)
+        {
+            return;
+        }
+
+        IsCheckingAddons = false;
     }
 
     // The addons published for this mod, shown under its version list. An addon has none of its
@@ -219,6 +280,9 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
         StatusMessage = null;
         try
         {
+            await AppServices.Addons.EnsureLoadedAsync();
+            _installedAddons = AddonImpactCheck.From(_addonCards);
+
             var installedSptVersion = AppServices.SptEnvironment.InstalledVersion;
             var result = await _spModApi.GetModVersionsAsync(
                 modId.ToString(),
@@ -346,25 +410,23 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
 
     // Queues the currently selected version for download and install.
     [RelayCommand(CanExecute = nameof(CanUpdate))]
-    private void Update() => EnqueueSelectedVersion(ModUpdateAction.Update, alternate: false);
+    private Task UpdateAsync() => EnqueueSelectedVersionAsync(ModUpdateAction.Update, alternate: false);
 
     // Re-queues the currently selected version (defaulting to whatever's already installed, when
     // there's no newer one) for a fresh download and reinstall. Shown in Update's place once the
     // mod is up to date, e.g. to recover from corrupted or hand-edited files.
     [RelayCommand(CanExecute = nameof(CanUpdate))]
-    private void Redownload() => EnqueueSelectedVersion(ModUpdateAction.Redownload, alternate: false);
+    private Task RedownloadAsync() => EnqueueSelectedVersionAsync(ModUpdateAction.Redownload, alternate: false);
 
     //
     // The small button beside whichever of Update / Downgrade / Redownload is showing: the same
     // action, the opposite way round from Monitor mode's setting, for this one mod.
     //
     [RelayCommand(CanExecute = nameof(CanUpdate))]
-    private void Alternate()
-    {
-        if (ShowDowngradeButton) Downgrade(alternate: true);
-        else EnqueueSelectedVersion(
-            ShowUpdateButton ? ModUpdateAction.Update : ModUpdateAction.Redownload, alternate: true);
-    }
+    private Task AlternateAsync() =>
+        ShowDowngradeButton
+            ? DowngradeWithAsync(alternate: true)
+            : EnqueueSelectedVersionAsync(ShowUpdateButton ? ModUpdateAction.Update : ModUpdateAction.Redownload, alternate: true);
 
     //
     // Installs an older version over a newer one. Confirmed first, and separately from the
@@ -373,9 +435,9 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     // written and the older one may not understand.
     //
     [RelayCommand(CanExecute = nameof(CanUpdate))]
-    private void Downgrade() => Downgrade(alternate: false);
+    private Task DowngradeAsync() => DowngradeWithAsync(alternate: false);
 
-    private void Downgrade(bool alternate)
+    private async Task DowngradeWithAsync(bool alternate)
     {
         if (SelectedVersion is not { } selected) return;
 
@@ -390,7 +452,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
             return;
         }
 
-        EnqueueSelectedVersion(ModUpdateAction.Downgrade, alternate);
+        await EnqueueSelectedVersionAsync(ModUpdateAction.Downgrade, alternate);
     }
 
     //
@@ -417,9 +479,9 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     //
     public bool MadeChanges { get; private set; }
 
-    private void EnqueueSelectedVersion(ModUpdateAction action, bool alternate)
+    private async Task EnqueueSelectedVersionAsync(ModUpdateAction action, bool alternate)
     {
-        if (SelectedVersion is null) return;
+        if (SelectedVersion is not { } selectedVersion) return;
 
         var downloadOnly = AppServices.ModPageGate.DownloadOnlyFor(alternate);
 
@@ -438,6 +500,31 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
         {
             StatusMessage = Text(Strings.ModUpdate_NotInCatalogFormat, _mod.DisplayTitle);
             return;
+        }
+
+        // OPEN-32 D6: asked only when an installed addon wouldn't fit the version being installed.
+        List<AddonImpactItem> addonChanges = [];
+        if (ShowAddonImpacts && selectedVersion.Raw.Version is { } version)
+        {
+            List<AddonImpactItem> impacts;
+            try
+            {
+                impacts = await ImpactsFor(version);
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
+
+            switch (AddonImpactCheck.Ask(impacts))
+            {
+                case AddonImpactAnswer.Cancel:
+                    StatusMessage = Strings.AddonImpact_Cancelled;
+                    return;
+                case AddonImpactAnswer.UpdateBoth:
+                    addonChanges = [.. impacts.Where(i => AddonImpactCheck.Download(i) is not null)];
+                    break;
+            }
         }
 
         // The hand-installed warning is about this app placing files over ones it has no record of.
@@ -461,8 +548,17 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
             return;
         }
 
-        // Require the mod's page to be confirmed as read before installing.
-        if (!ReadModPageConfirmationWindow.Confirm(_mod.DisplayTitle, ModPageUrl))
+        // Require the mod's page to be confirmed as read before installing - and the page of every
+        // addon changed with it.
+        var read = addonChanges.Count == 0
+            ? ReadModPageConfirmationWindow.Confirm(_mod.DisplayTitle, ModPageUrl)
+            : ReadModPageConfirmationWindow.ConfirmAll(
+            [
+                new ModPageLink(_mod.DisplayTitle, ModPageUrl),
+                .. addonChanges.Select(i => new ModPageLink(i.Addon.Name, i.Addon.Listing?.DetailUrl)),
+            ]);
+
+        if (!read)
         {
             StatusMessage = Text(
                 action switch
@@ -475,12 +571,27 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
             return;
         }
 
-        var selectedVersion = SelectedVersion;
-        AppServices.DownloadQueue.Enqueue(
+        var item = AppServices.DownloadQueue.Enqueue(
             target, selectedVersion.VersionText, installPath, () => Task.FromResult<ModVersion?>(selectedVersion.Raw),
             totalBytes: selectedVersion.Raw.ContentLength,
             downloadOnly: downloadOnly);
-        StatusMessage = Text(Strings.ModUpdate_QueuedFormat, _mod.DisplayTitle, selectedVersion.VersionText);
+
+        var queuedAddons = new List<string>();
+        foreach (var change in addonChanges)
+        {
+            if (change.Addon.Listing is not { } listing || AddonImpactCheck.Download(change) is not { } download) continue;
+
+            AppServices.DownloadQueue.Enqueue(
+                InstallTarget.For(listing), download.Version ?? string.Empty, installPath, () => Task.FromResult<ModVersion?>(download),
+                dependencyOf: item,
+                totalBytes: download.ContentLength);
+            queuedAddons.Add(Text(Strings.AddonImpact_QueuedItemFormat, change.Addon.Name, download.Version));
+        }
+
+        var queued = Text(Strings.ModUpdate_QueuedFormat, _mod.DisplayTitle, selectedVersion.VersionText);
+        StatusMessage = queuedAddons.Count == 0
+            ? queued
+            : queued + " " + Text(Strings.AddonImpact_QueuedFormat, TextLists.Join(queuedAddons));
         MadeChanges = true;
     }
 

@@ -157,14 +157,70 @@
 
         <!-- What an update would do with this mod's own configs. Read-only here - it is set on the
              Configs page - and shown next to Update because that is the moment it matters. -->
-        <TextBlock
-            Grid.Row="2"
-            Margin="0,0,0,8"
-            TextWrapping="Wrap"
-            FontSize="12"
-            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-            Text="{Binding ConfigPolicyNote}"
-            Visibility="{Binding ConfigPolicyNote, Converter={StaticResource NullToCollapsed}}" />
+        <StackPanel Grid.Row="2">
+            <TextBlock
+                Margin="0,0,0,8"
+                TextWrapping="Wrap"
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="{Binding ConfigPolicyNote}"
+                Visibility="{Binding ConfigPolicyNote, Converter={StaticResource NullToCollapsed}}" />
+
+            <!-- OPEN-32 D5: the installed addons against the version selected below. -->
+            <Border
+                Margin="0,0,0,8"
+                Padding="10,8"
+                CornerRadius="4"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                Visibility="{Binding ShowAddonImpacts, Converter={StaticResource TrueToVisible}}">
+                <StackPanel>
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        Text="{Binding AddonImpactHeading}" />
+                    <TextBlock
+                        Margin="0,4,0,0"
+                        FontSize="12"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="{loc:Str AddonImpact_Checking}"
+                        Visibility="{Binding IsCheckingAddons, Converter={StaticResource TrueToVisible}}" />
+                    <ItemsControl Margin="0,4,0,0" ItemsSource="{Binding AddonImpacts}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,2,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        TextTrimming="CharacterEllipsis"
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                                        <Run Text="{Binding Name, Mode=OneWay}" />
+                                        <Run Text="{Binding InstalledVersion, Mode=OneWay}" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                                    </TextBlock>
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Margin="12,0,0,0"
+                                        Text="{Binding Verdict}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsWarning}" Value="True">
+                                                        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </StackPanel>
 
         <!-- Free-typed version override, for a version that isn't in the cached list below. -->
         <DockPanel Grid.Row="3" Margin="0,0,0,8" Visibility="{Binding CanManageVersion, Converter={StaticResource TrueToVisible}}">

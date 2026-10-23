@@ -20,7 +20,7 @@ public partial class InstalledViewModel
         // Only when the dialog actually did something. A rescan re-reads the whole install and
         // replaces every card, which visibly rebuilds the page - not something opening a mod to
         // read its changelog should cause.
-        if (await show(mod)) await ScanAsync();
+        if (await show(mod, AddonCardsOf(mod))) await ScanAsync();
     }
 
     //

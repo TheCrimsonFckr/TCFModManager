@@ -28,15 +28,13 @@ public partial class InstalledViewModel
     // gate off globally, which is strictly worse for them than one demanding prompt.
     //
     [RelayCommand(CanExecute = nameof(HasUpdatableSelection))]
-    private void UpdateSelected() => UpdateCards(SelectedCards());
+    private Task UpdateSelectedAsync() => UpdateCardsAsync(SelectedCards());
 
     // OPEN-12 A2: the Update button on one card or List row, and the right-click menu's Update - the
     // same path as Update selected, for one mod.
     [RelayCommand]
-    private void UpdateOne(InstalledModCardViewModel? mod)
-    {
-        if (mod is not null) UpdateCards([mod]);
-    }
+    private Task UpdateOneAsync(InstalledModCardViewModel? mod) =>
+        mod is null ? Task.CompletedTask : UpdateCardsAsync([mod]);
 
     private sealed record UpdateTarget(
         InstalledModCardViewModel Card,
@@ -47,7 +45,7 @@ public partial class InstalledViewModel
         long? TotalBytes = null,
         int? QueueBehindModId = null);
 
-    private void UpdateCards(List<InstalledModCardViewModel> selected)
+    private async Task UpdateCardsAsync(List<InstalledModCardViewModel> selected)
     {
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath))
@@ -119,7 +117,7 @@ public partial class InstalledViewModel
         // fits the version its mod is going to, and queues behind it.
         //
         var modTargets = resolved.ToDictionary(r => r.Mod.Id, r => r.Version);
-        var noFit = 0;
+        var noFitIds = new HashSet<int>();
 
         foreach (var card in targets.Where(c => c.IsAddon))
         {
@@ -139,7 +137,7 @@ public partial class InstalledViewModel
 
             if (version is null)
             {
-                noFit++;
+                noFitIds.Add(card.ModId!.Value);
                 continue;
             }
 
@@ -161,6 +159,55 @@ public partial class InstalledViewModel
                 version.ContentLength,
                 withMod ? card.ParentModId : null));
         }
+
+        //
+        // OPEN-32 D7: every installed addon of a mod being updated, against the version that mod is
+        // going to - asked about once for the whole batch. Addons already updating with it are left out.
+        //
+        var addonsInBatch = updates.Where(u => u.Target.IsAddon).Select(u => u.Target.Id).ToHashSet();
+        var addonCards = new Dictionary<int, InstalledModCardViewModel>();
+        var impacts = new List<AddonImpactItem>();
+
+        if (resolved.Count > 0)
+        {
+            StatusMessage = Strings.AddonImpact_Checking;
+            var check = new AddonImpactCheck();
+
+            foreach (var (card, mod, version) in resolved)
+            {
+                var cards = AddonCardsOf(card).Where(c => c.ModId is { } id && !addonsInBatch.Contains(id)).ToList();
+                foreach (var addonCard in cards) addonCards[addonCard.ModId!.Value] = addonCard;
+
+                impacts.AddRange(await check.AssessAsync(AddonImpactCheck.From(cards), mod.Id, mod.Name ?? card.DisplayTitle, version));
+            }
+
+            StatusMessage = null;
+        }
+
+        switch (AddonImpactCheck.Ask(impacts))
+        {
+            case AddonImpactAnswer.Cancel:
+                StatusMessage = Strings.AddonImpact_Cancelled;
+                return;
+            case AddonImpactAnswer.UpdateBoth:
+                foreach (var impact in impacts)
+                {
+                    if (impact.Addon.Listing is not { } listing || AddonImpactCheck.Download(impact) is not { } download) continue;
+
+                    updates.Add(new UpdateTarget(
+                        addonCards[impact.Addon.AddonId],
+                        InstallTarget.For(listing),
+                        download.Version ?? string.Empty,
+                        listing.DetailUrl,
+                        () => Task.FromResult<ModVersion?>(download),
+                        download.ContentLength,
+                        impact.ModId));
+                }
+
+                break;
+        }
+
+        var noFit = noFitIds.Count(id => !impacts.Any(i => i.IsAffected && i.Addon.AddonId == id));
 
         if (updates.Count == 0)
         {

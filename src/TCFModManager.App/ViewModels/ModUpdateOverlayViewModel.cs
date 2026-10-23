@@ -5,6 +5,6 @@ public sealed class ModUpdateOverlayViewModel
 {
     // Set by MainWindow. Constructs and shows the update dialog for the given card, returning once
     // it's closed - true when the dialog changed something the Installed page would need to rescan
-    // for, false when it was only read.
-    public Func<InstalledModCardViewModel, Task<bool>>? ShowAsync { get; set; }
+    // for, false when it was only read. The second argument is the card's installed addon cards.
+    public Func<InstalledModCardViewModel, IReadOnlyList<InstalledModCardViewModel>, Task<bool>>? ShowAsync { get; set; }
 }

@@ -10010,4 +10010,88 @@ Switch anyway?</value>
     <value>addon, add-on, remove addon, uninstall addon, delete addon, disable addon, parent mod, stickers, presets</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
+  <data name="AddonImpact_Title" xml:space="preserve">
+    <value>Addons affected by this update</value>
+    <comment>Title of the box asked before a mod update that leaves installed addons not fitting (OPEN-32 D6).</comment>
+  </data>
+  <data name="AddonImpact_ChangeList" xml:space="preserve">
+    <value>These addons don't fit the new version, but another version of each does:</value>
+    <comment>Heads a list of AddonImpact_ChangeLineFormat lines in the box.</comment>
+  </data>
+  <data name="AddonImpact_NoVersionList" xml:space="preserve">
+    <value>These addons have no version for the new version and may stop working. They stay installed:</value>
+    <comment>Heads a list of AddonImpact_NoVersionLineFormat lines in the box.</comment>
+  </data>
+  <data name="AddonImpact_ChangeQuestion" xml:space="preserve">
+    <value>Change them too? Yes updates the mod and changes these addons to versions that fit. No updates the mod only.</value>
+    <comment>Ends the box when some addons can change version. Yes/No/Cancel box; Yes and No are the box's own buttons.</comment>
+  </data>
+  <data name="AddonImpact_NoVersionQuestion" xml:space="preserve">
+    <value>Update anyway?</value>
+    <comment>Ends the box when no listed addon has a fitting version. Yes/No box, No by default.</comment>
+  </data>
+  <data name="AddonImpact_ChangeLineFormat" xml:space="preserve">
+    <value>{0} {1} → {2} (for {3} {4})</value>
+    <comment>One addon in the box. {0} addon name, {1} its installed version, {2} the version it changes to (can be older), {3} the mod's name, {4} the version the mod is going to.</comment>
+  </data>
+  <data name="AddonImpact_NoVersionLineFormat" xml:space="preserve">
+    <value>{0} {1} (for {2} {3})</value>
+    <comment>One addon in the box. {0} addon name, {1} its installed version, {2} the mod's name, {3} the version the mod is going to.</comment>
+  </data>
+  <data name="AddonImpact_HeadingFormat" xml:space="preserve">
+    <value>Your addons with {0}</value>
+    <comment>Heading of the update dialog's panel listing installed addons against the selected version (OPEN-32 D5). {0} is the selected version.</comment>
+  </data>
+  <data name="AddonImpact_Checking" xml:space="preserve">
+    <value>Checking your addons…</value>
+    <comment>Shown while installed addons are checked against a version.</comment>
+  </data>
+  <data name="AddonImpact_Fits" xml:space="preserve">
+    <value>Fits</value>
+    <comment>An installed addon fits the selected version.</comment>
+  </data>
+  <data name="AddonImpact_ChangeFormat" xml:space="preserve">
+    <value>Doesn't fit - {0} does</value>
+    <comment>An installed addon doesn't fit the selected version but another of its versions does. {0} is that version.</comment>
+  </data>
+  <data name="AddonImpact_NoVersion" xml:space="preserve">
+    <value>No version fits - it may stop working</value>
+    <comment>No version of an installed addon fits the selected version.</comment>
+  </data>
+  <data name="AddonImpact_UnknownDetached" xml:space="preserve">
+    <value>Couldn't check - detached from its mod on sp-mod</value>
+    <comment>An installed addon couldn't be checked: sp-mod lists it as detached.</comment>
+  </data>
+  <data name="AddonImpact_UnknownInstalledVersion" xml:space="preserve">
+    <value>Couldn't check - the installed version isn't known</value>
+    <comment>An installed addon couldn't be checked: its installed version is unknown.</comment>
+  </data>
+  <data name="AddonImpact_UnknownNotPublished" xml:space="preserve">
+    <value>Couldn't check - the installed version is no longer on sp-mod</value>
+    <comment>An installed addon couldn't be checked: its installed version is no longer published.</comment>
+  </data>
+  <data name="AddonImpact_UnknownRequirement" xml:space="preserve">
+    <value>Couldn't check - its requirement can't be read</value>
+    <comment>An installed addon couldn't be checked: its mod-version requirement can't be read.</comment>
+  </data>
+  <data name="AddonImpact_UnknownLookupFailed" xml:space="preserve">
+    <value>Couldn't check - sp-mod didn't answer</value>
+    <comment>An installed addon couldn't be checked: fetching its versions from sp-mod failed.</comment>
+  </data>
+  <data name="AddonImpact_UnknownNotListed" xml:space="preserve">
+    <value>Couldn't check - no longer listed on sp-mod</value>
+    <comment>An installed addon couldn't be checked: sp-mod no longer lists it.</comment>
+  </data>
+  <data name="AddonImpact_Cancelled" xml:space="preserve">
+    <value>Cancelled - nothing was queued.</value>
+    <comment>Status after Cancel in the addons box.</comment>
+  </data>
+  <data name="AddonImpact_QueuedFormat" xml:space="preserve">
+    <value>Also queued: {0}.</value>
+    <comment>Follows the queued sentence when Update both queued addons. {0} is each addon's name and version, joined with TextLists.</comment>
+  </data>
+  <data name="AddonImpact_QueuedItemFormat" xml:space="preserve">
+    <value>{0} {1}</value>
+    <comment>One addon in AddonImpact_QueuedFormat. {0} is its name, {1} the version queued.</comment>
+  </data>
 </root>
