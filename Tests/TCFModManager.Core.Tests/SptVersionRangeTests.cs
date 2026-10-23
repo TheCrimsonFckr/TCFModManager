@@ -233,4 +233,32 @@ public class SptVersionRangeTests
     public void IntersectsReleaseLine_AgreesWithBareAndTildeMajors(
         string constraint, int major, int minor, bool expected) =>
         Assert.Equal(expected, SptVersionRange.IntersectsReleaseLine(constraint, major, minor));
+
+    [Theory]
+    // Forms live on sp-mod that the clause pattern alone doesn't read. EMR Texture Pack 1.0.2 asks
+    // for Camo And Stickers ">= 1.0.1, < 2.0.0".
+    [InlineData(">= 1.0.1, < 2.0.0", "1.18.0", true)]
+    [InlineData(">= 1.0.1, < 2.0.0", "2.0.0", false)]
+    [InlineData(">= 1.0.1 <=1.0.2", "1.0.2", true)]
+    [InlineData(">= 1.0.1 <=1.0.2", "1.0.3", false)]
+    [InlineData("3.11.0 - 3.11.3", "3.11.3", true)]
+    [InlineData("3.11.0 - 3.11.3", "3.11.4", false)]
+    [InlineData("3.7.1 - 4.1.3", "4.0.13", true)]
+    [InlineData("==1.9.0", "1.9.0", true)]
+    [InlineData("==1.9.0", "1.9.1", false)]
+    [InlineData("v1.19.0 ", "1.19.0", true)]
+    [InlineData(">=1.17.0-beta", "1.17.0", true)]
+    [InlineData("1.1.3+1", "1.1.3", true)]
+    [InlineData(">=1.1.0+1,<=1.1.2", "1.1.2", true)]
+    [InlineData(">=1.1.0+1,<=1.1.2", "1.1.3", false)]
+    [InlineData("~1.", "1.19.0", true)]
+    [InlineData("~1.", "2.0.0", false)]
+    [InlineData("1.", "1.19.0", true)]
+    [InlineData("~4.1. > 4.1.1", "4.1.6", true)]
+    [InlineData("~4.1. > 4.1.1", "4.1.1", false)]
+    public void Allows_ReadsTheLooserFormsSpModAccepts(string constraint, string version, bool expected)
+    {
+        Assert.True(SptVersionRange.TryParse(constraint, out var bounds));
+        Assert.Equal(expected, bounds.Allows(SptVersionMatcher.ParseVersion(version)!));
+    }
 }

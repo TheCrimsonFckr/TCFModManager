@@ -50,6 +50,15 @@ public static partial class SptVersionRange
     [GeneratedRegex(@"^\s*(\^|~|>=|<=|>|<|=)?\s*([0-9]+(?:\.(?:[0-9]+|\*|[xX])){0,3}|\*)\s*$")]
     private static partial Regex ClausePattern { get; }
 
+    [GeneratedRegex(@"(\S+)\s+-\s+(\S+)")]
+    private static partial Regex HyphenRange { get; }
+
+    [GeneratedRegex(@"(\^|~|>=|<=|==|>|<|=)\s+")]
+    private static partial Regex OperatorGap { get; }
+
+    [GeneratedRegex(@"^(\^|~|>=|<=|==|>|<|=)?")]
+    private static partial Regex OperatorPrefix { get; }
+
     // Parses every clause and intersects them. False when the constraint is missing or has
     // a clause this doesn't understand.
     public static bool TryParse(string? constraint, out SptVersionBounds bounds)
@@ -62,7 +71,7 @@ public static partial class SptVersionRange
         Version? exact = null;
         var minExclusive = false;
 
-        var clauses = constraint.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries);
+        var clauses = Clauses(constraint);
         if (clauses.Length == 0) return false;
 
         foreach (var clause in clauses)
@@ -226,6 +235,33 @@ public static partial class SptVersionRange
     // written - the Version can't say, since it zero-fills "4" into 4.0.0.0 - and is what tells
     // "~4" (all of SPT 4) apart from "~4.0" (the 4.0 line).
     // 
+    //
+    // The looser forms sp-mod accepts, rewritten into the ones the clause pattern reads: a space
+    // after an operator (">= 1.0.1, < 2.0.0"), a hyphen range ("3.11.0 - 3.11.3"), "==", a leading
+    // "v", a pre-release or build suffix ("1.1.3+1") and a trailing dot ("~1.").
+    //
+    private static string[] Clauses(string constraint)
+    {
+        var text = HyphenRange.Replace(constraint.Trim(), ">=$1 <=$2");
+        text = OperatorGap.Replace(text, "$1");
+
+        return [.. text
+            .Split([' ', ','], StringSplitOptions.RemoveEmptyEntries)
+            .Select(NormalizeClause)
+            .Where(c => c.Length > 0)];
+    }
+
+    private static string NormalizeClause(string clause)
+    {
+        var op = OperatorPrefix.Match(clause).Value;
+        var operand = clause[op.Length..].TrimStart('v', 'V');
+
+        var suffix = operand.IndexOfAny(['-', '+']);
+        if (suffix > 0) operand = operand[..suffix];
+
+        return (op == "==" ? "=" : op) + operand.TrimEnd('.');
+    }
+
     private static bool TryParseOperand(string raw, out Version value, out Version? wildcardCeiling, out int components)
     {
         value = new Version(0, 0, 0, 0);
