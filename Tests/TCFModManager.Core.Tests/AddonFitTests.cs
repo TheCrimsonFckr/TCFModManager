@@ -55,6 +55,17 @@ public class AddonFitTests
         Assert.Null(NewestFittingVersion.ForParent(versions, "3.0.0"));
     }
 
+    [Theory]
+    // sp-mod lists ak15 stickerpack 1.0.0 ("1") as compatible with Camo And Stickers 1.0.0 only.
+    [InlineData("1", "1.0.0", true)]
+    [InlineData("1", "1.19.0", false)]
+    [InlineData("~1", "1.19.0", true)]
+    [InlineData("1.*", "1.19.0", true)]
+    [InlineData("1.16.0", "1.16.0", true)]
+    [InlineData("1.16.0", "1.16.1", false)]
+    public void ABareModVersionIsThatReleaseOnly(string constraint, string parentVersion, bool expected) =>
+        Assert.Equal(expected, AddonFit.Check(constraint, parentVersion, "4.1.6"));
+
     private static ModVersionSummary Parent(string version, string spt, int day) =>
         new() { Version = version, SptVersionConstraint = spt, PublishedAt = new DateTimeOffset(2026, 10, day, 0, 0, 0, TimeSpan.Zero) };
 

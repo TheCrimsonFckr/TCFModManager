@@ -61,7 +61,15 @@ public static partial class SptVersionRange
 
     // Parses every clause and intersects them. False when the constraint is missing or has
     // a clause this doesn't understand.
-    public static bool TryParse(string? constraint, out SptVersionBounds bounds)
+    public static bool TryParse(string? constraint, out SptVersionBounds bounds) =>
+        TryParse(constraint, bareMajorIsExact: false, out bounds);
+
+    //
+    // bareMajorIsExact: a mod's requirement on another mod, where sp-mod reads a bare "1" as exactly
+    // 1.0.0 (ak15 stickerpack 1.0.0 lists only Camo And Stickers 1.0.0). An SPT range keeps reading
+    // "4" as all of SPT 4.
+    //
+    public static bool TryParse(string? constraint, bool bareMajorIsExact, out SptVersionBounds bounds)
     {
         bounds = default;
         if (string.IsNullOrWhiteSpace(constraint)) return false;
@@ -129,7 +137,7 @@ public static partial class SptVersionRange
                     // "4.x" does - it is not the 4.0 line. Handled as a range rather than an exact
                     // match, because SptVersionBounds.Contains reads an exact as "this major.minor
                     // line", which is the right answer for "4.0.13" and the wrong one for "4".
-                    if (components <= 1)
+                    if (components <= 1 && !bareMajorIsExact)
                     {
                         RaiseMin(ref min, ref minExclusive, value, exclusive: false);
                         LowerMax(ref maxExclusive, NextMajor(value));

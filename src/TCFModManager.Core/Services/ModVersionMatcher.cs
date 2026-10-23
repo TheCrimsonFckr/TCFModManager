@@ -23,6 +23,6 @@ public static class ModVersionMatcher
         var version = SptVersionMatcher.ParseVersion(modVersion);
         if (version is null) return null;
 
-        return SptVersionRange.TryParse(constraint, out var bounds) ? bounds.Allows(version) : null;
+        return SptVersionRange.TryParse(constraint, bareMajorIsExact: true, out var bounds) ? bounds.Allows(version) : null;
     }
 }
