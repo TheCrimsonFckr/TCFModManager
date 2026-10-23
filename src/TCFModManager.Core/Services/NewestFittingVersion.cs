@@ -23,7 +23,7 @@ public static class NewestFittingVersion
             .FirstOrDefault(v => string.IsNullOrWhiteSpace(parentVersion)
                 || AddonFit.Check(v.ModVersionConstraint, parentVersion, sptVersion) != false);
 
-    private static IEnumerable<T> Newest<T>(
+    internal static IEnumerable<T> Newest<T>(
         IEnumerable<T> versions, Func<T, DateTimeOffset?> published, Func<T, string?> version) =>
         versions
             .OrderByDescending(v => published(v) ?? DateTimeOffset.MinValue)
