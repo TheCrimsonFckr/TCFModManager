@@ -1,4 +1,3 @@
-using System.Text.Json;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.SpModApi;
 
@@ -17,7 +16,8 @@ public sealed class SptReleaseCatalog(SpModApiClient api)
     // Refetched when the cached copy is older than this; the list changes only when SPT ships.
     private static readonly TimeSpan MaxAge = TimeSpan.FromDays(1);
 
-    private readonly string _filePath = Path.Combine(AppPaths.DataDirectory, "spt_versions.json");
+    private readonly JsonFile<CachedReleases> _file =
+        new(Path.Combine(AppPaths.DataDirectory, "spt_versions.json"), preserveDamaged: false);
 
     private List<SptRelease> _releases = [];
 
@@ -96,15 +96,13 @@ public sealed class SptReleaseCatalog(SpModApiClient api)
 
     private CachedReleases? LoadFromDisk()
     {
-        if (!File.Exists(_filePath)) return null;
-
         try
         {
-            var data = JsonSerializer.Deserialize<CachedReleases>(File.ReadAllText(_filePath));
+            var data = _file.Read();
             if (data is null || data.SchemaVersion != SchemaVersion || data.Versions.Count == 0) return null;
             return data;
         }
-        catch (Exception ex) when (ex is JsonException or IOException)
+        catch (IOException)
         {
             return null;
         }
@@ -120,7 +118,7 @@ public sealed class SptReleaseCatalog(SpModApiClient api)
                 FetchedAt = DateTimeOffset.UtcNow,
                 Versions = releases.Select(r => r.Label).ToList(),
             };
-            SafeFile.WriteText(_filePath, JsonSerializer.Serialize(data));
+            _file.Write(data);
         }
         catch (IOException)
         {

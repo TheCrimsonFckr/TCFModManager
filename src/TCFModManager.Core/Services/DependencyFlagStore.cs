@@ -1,4 +1,3 @@
-using System.Text.Json;
 
 namespace TCFModManager.Core.Services;
 
@@ -11,14 +10,8 @@ public sealed class DependencyFlagStore
     // Bump if Entry's shape changes in a way that makes an old file unsafe to trust.
     private const int SchemaVersion = 1;
 
-    private readonly string _filePath;
-
-    public DependencyFlagStore()
-    {
-        // Stored in the Data\ folder next to the exe, alongside mod_cache.json; not migrated from
-        // the legacy %LocalAppData% location since this file is a rebuildable cache.
-        _filePath = Path.Combine(AppPaths.DataDirectory, "dependency_flags.json");
-    }
+    private readonly JsonFile<CachedFlags> _file =
+        new(Path.Combine(AppPaths.DataDirectory, "dependency_flags.json"), preserveDamaged: false);
 
     // One mod's cached answer. CheckedAt is compared against the mod's own UpdatedAt to
     // decide whether the answer still holds.
@@ -37,18 +30,14 @@ public sealed class DependencyFlagStore
     // Reads the cached flags, or an empty dictionary when there's no usable file.
     public Dictionary<int, Entry> Load()
     {
-        if (!File.Exists(_filePath)) return [];
-
         try
         {
-            var json = File.ReadAllText(_filePath);
-            var data = JsonSerializer.Deserialize<CachedFlags>(json);
+            var data = _file.Read();
             if (data is null || data.SchemaVersion != SchemaVersion) return [];
             return data.Flags;
         }
-        catch (Exception ex) when (ex is JsonException or IOException)
+        catch (IOException)
         {
-            // Corrupt, incompatible, or unreadable - start over rather than fail the page.
             return [];
         }
     }
@@ -62,7 +51,7 @@ public sealed class DependencyFlagStore
                 SchemaVersion = SchemaVersion,
                 Flags = flags.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
             };
-            SafeFile.WriteText(_filePath, JsonSerializer.Serialize(data));
+            _file.Write(data);
         }
         catch (IOException)
         {

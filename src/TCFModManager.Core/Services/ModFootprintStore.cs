@@ -1,4 +1,3 @@
-using System.Text.Json;
 using TCFModManager.Core.Models;
 
 namespace TCFModManager.Core.Services;
@@ -16,13 +15,11 @@ public sealed class ModFootprintStore
     // and an old file would silently produce a new answer.
     private const int SchemaVersion = 4;
 
-    private readonly string _filePath;
+    private readonly JsonFile<CachedFootprints> _file;
 
-    public ModFootprintStore(string? filePath = null)
-    {
-        // Optional path for testability, matching ModListStore's accepted deviation.
-        _filePath = filePath ?? Path.Combine(AppPaths.DataDirectory, "mod_footprints.json");
-    }
+    public ModFootprintStore(string? filePath = null) =>
+        _file = new JsonFile<CachedFootprints>(
+            filePath ?? Path.Combine(AppPaths.DataDirectory, "mod_footprints.json"), preserveDamaged: false);
 
     private sealed class CachedFootprints
     {
@@ -33,18 +30,14 @@ public sealed class ModFootprintStore
     // Cached footprints by folder key, or an empty dictionary when there's no usable file.
     public Dictionary<string, ModFootprint> Load()
     {
-        if (!File.Exists(_filePath)) return [];
-
         try
         {
-            var json = File.ReadAllText(_filePath);
-            var data = JsonSerializer.Deserialize<CachedFootprints>(json);
+            var data = _file.Read();
             if (data is null || data.SchemaVersion != SchemaVersion) return [];
             return data.Footprints;
         }
-        catch (Exception ex) when (ex is JsonException or IOException)
+        catch (IOException)
         {
-            // Corrupt, incompatible, or unreadable - re-analysing is cheap and always correct.
             return [];
         }
     }
@@ -58,7 +51,7 @@ public sealed class ModFootprintStore
                 SchemaVersion = SchemaVersion,
                 Footprints = footprints.ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
             };
-            SafeFile.WriteText(_filePath, JsonSerializer.Serialize(data));
+            _file.Write(data);
         }
         catch (IOException)
         {
