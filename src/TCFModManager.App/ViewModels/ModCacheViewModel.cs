@@ -59,7 +59,7 @@ public partial class ModCacheViewModel : LocalizedViewModel
             var mods = await _cacheService.FetchAllAsync(progress, ct);
             AppLog.Debug("Catalog", $"RefreshAsync: live fetch done, {mods.Count} mods");
             AllMods = mods;
-            _ = Task.Run(() => _store.Save(mods));
+            _ = Task.Run(() => _store.Save(mods), CancellationToken.None);
 
             // Replace the memoized task so future EnsureLoadedAsync calls see this fresh fetch.
             _loadTask = Task.FromResult(mods);
@@ -170,7 +170,7 @@ public partial class ModCacheViewModel : LocalizedViewModel
             AllMods = mods;
 
             // Save off the UI thread.
-            _ = Task.Run(() => _store.Save(mods));
+            _ = Task.Run(() => _store.Save(mods), CancellationToken.None);
 
             return mods;
         }

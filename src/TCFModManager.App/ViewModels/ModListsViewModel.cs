@@ -1320,7 +1320,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         Count(plan.Keep.Count(), Strings.ModLists_CountAlreadyRightFormat);
         Count(plan.Manual.Count(), Strings.ModLists_CountToFetchFormat);
 
-        PlanSummary = plan.IsNoOp && plan.Manual.Count() == 0
+        PlanSummary = plan.IsNoOp && !plan.Manual.Any()
             ? Strings.ModLists_PlanNoOp
             : string.Join(Strings.Common_ListSeparator, counts) + ".";
 
