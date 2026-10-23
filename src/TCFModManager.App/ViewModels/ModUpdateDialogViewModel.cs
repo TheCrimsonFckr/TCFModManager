@@ -502,6 +502,16 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
             return;
         }
 
+        if (!_mod.IsAddon
+            && SptCompatibility.IsIncompatible(selectedVersion.Raw.SptVersionConstraint)
+            && !SptCompatibility.ConfirmAnyway(
+                [SptCompatibility.Line(_mod.DisplayTitle, selectedVersion.Raw.Version, selectedVersion.Raw.SptVersionConstraint)],
+                batch: false))
+        {
+            StatusMessage = Text(Strings.Install_IncompatibleNotInstalledFormat, _mod.DisplayTitle, AppServices.SptEnvironment.InstalledVersion);
+            return;
+        }
+
         // OPEN-32 D6: asked only when an installed addon wouldn't fit the version being installed.
         List<AddonImpactItem> addonChanges = [];
         if (ShowAddonImpacts && selectedVersion.Raw.Version is { } version)

@@ -2767,4 +2767,6 @@ internal static class Strings
     internal static string AddonImpact_Cancelled => LocalizationService.Get("AddonImpact_Cancelled");
     internal static string AddonImpact_QueuedFormat => LocalizationService.Get("AddonImpact_QueuedFormat");
     internal static string AddonImpact_QueuedItemFormat => LocalizationService.Get("AddonImpact_QueuedItemFormat");
+    internal static string Addon_ParentUpdateUnlocksFormat => LocalizationService.Get("Addon_ParentUpdateUnlocksFormat");
+    internal static string Installed_DetailAddonDoesntFitFormat => LocalizationService.Get("Installed_DetailAddonDoesntFitFormat");
 }
