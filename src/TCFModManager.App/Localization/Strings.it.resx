@@ -8352,4 +8352,109 @@ Passare comunque?</value>
   <data name="Help_Installed_Addons_Keywords" xml:space="preserve">
     <value>addon, add-on, rimuovere addon, disinstallare addon, eliminare addon, disattivare addon, mod principale, adesivi, preset</value>
   </data>
+  <data name="Installed_SkippedAddonNoFit_one" xml:space="preserve">
+    <value>1 addon senza una versione più recente per la nuova versione del suo mod</value>
+  </data>
+  <data name="Installed_SkippedAddonNoFit_other" xml:space="preserve">
+    <value>{0} addon senza una versione più recente per la nuova versione del loro mod</value>
+  </data>
+  <data name="AddonImpact_Title" xml:space="preserve">
+    <value>Addon interessati da questo aggiornamento</value>
+  </data>
+  <data name="AddonImpact_ChangeList" xml:space="preserve">
+    <value>Questi addon non sono adatti alla nuova versione, ma un'altra versione di ciascuno lo è:</value>
+  </data>
+  <data name="AddonImpact_NoVersionList" xml:space="preserve">
+    <value>Questi addon non hanno una versione per la nuova versione e potrebbero smettere di funzionare. Restano installati:</value>
+  </data>
+  <data name="AddonImpact_ChangeQuestion" xml:space="preserve">
+    <value>Cambiare anche quelli? Sì aggiorna il mod e porta questi addon a versioni adatte. No aggiorna solo il mod.</value>
+  </data>
+  <data name="AddonImpact_NoVersionQuestion" xml:space="preserve">
+    <value>Aggiornare comunque?</value>
+  </data>
+  <data name="AddonImpact_ChangeLineFormat" xml:space="preserve">
+    <value>{0} {1} → {2} (per {3} {4})</value>
+  </data>
+  <data name="AddonImpact_NoVersionLineFormat" xml:space="preserve">
+    <value>{0} {1} (per {2} {3})</value>
+  </data>
+  <data name="AddonImpact_HeadingFormat" xml:space="preserve">
+    <value>I tuoi addon con {0}</value>
+  </data>
+  <data name="AddonImpact_Checking" xml:space="preserve">
+    <value>Controllo dei tuoi addon…</value>
+  </data>
+  <data name="AddonImpact_Fits" xml:space="preserve">
+    <value>Adatto</value>
+  </data>
+  <data name="AddonImpact_ChangeFormat" xml:space="preserve">
+    <value>Non adatto - {0} lo è</value>
+  </data>
+  <data name="AddonImpact_NoVersion" xml:space="preserve">
+    <value>Nessuna versione adatta - potrebbe smettere di funzionare</value>
+  </data>
+  <data name="AddonImpact_UnknownDetached" xml:space="preserve">
+    <value>Impossibile controllare - staccato dal suo mod su sp-mod</value>
+  </data>
+  <data name="AddonImpact_UnknownInstalledVersion" xml:space="preserve">
+    <value>Impossibile controllare - la versione installata non è nota</value>
+  </data>
+  <data name="AddonImpact_UnknownNotPublished" xml:space="preserve">
+    <value>Impossibile controllare - la versione installata non è più su sp-mod</value>
+  </data>
+  <data name="AddonImpact_UnknownRequirement" xml:space="preserve">
+    <value>Impossibile controllare - il suo requisito non è leggibile</value>
+  </data>
+  <data name="AddonImpact_UnknownLookupFailed" xml:space="preserve">
+    <value>Impossibile controllare - sp-mod non ha risposto</value>
+  </data>
+  <data name="AddonImpact_UnknownNotListed" xml:space="preserve">
+    <value>Impossibile controllare - non è più elencato su sp-mod</value>
+  </data>
+  <data name="AddonImpact_Cancelled" xml:space="preserve">
+    <value>Annullato - nulla è stato messo in coda.</value>
+  </data>
+  <data name="AddonImpact_QueuedFormat" xml:space="preserve">
+    <value>Messi in coda anche: {0}.</value>
+  </data>
+  <data name="AddonImpact_QueuedItemFormat" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="Addon_ParentUpdateUnlocksFormat" xml:space="preserve">
+    <value>Aggiornare {0} alla versione {1} lo rende disponibile.</value>
+  </data>
+  <data name="Installed_DetailAddonDoesntFitFormat" xml:space="preserve">
+    <value>{0} non è adatto a {1} {2} - {3} lo è</value>
+  </data>
+  <data name="AddonImpact_NoVersionDisableList" xml:space="preserve">
+    <value>Questi addon non hanno una versione per la nuova versione. Verranno disattivati una volta installata - puoi riattivarli dalla loro scheda:</value>
+  </data>
+  <data name="AddonFit_DisabledFormat" xml:space="preserve">
+    <value>{0} disattivato - nessuna versione è adatta alla nuova versione del suo mod.</value>
+  </data>
+  <data name="AddonFit_ReEnableTitle" xml:space="preserve">
+    <value>Addon di nuovo adatti</value>
+  </data>
+  <data name="AddonFit_ReEnableList" xml:space="preserve">
+    <value>Questi addon erano stati disattivati perché non erano adatti al loro mod, e ora lo sono di nuovo:</value>
+  </data>
+  <data name="AddonFit_ReEnableQuestion" xml:space="preserve">
+    <value>Riattivarli?</value>
+  </data>
+  <data name="Installed_AddonNoFitToolTipFormat" xml:space="preserve">
+    <value>Non adatto a {0} {1}</value>
+  </data>
+  <data name="Filter_HasInstalledAddons" xml:space="preserve">
+    <value>Con addon installati</value>
+  </data>
+  <data name="Filter_HasInstalledAddonsToolTip" xml:space="preserve">
+    <value>Solo i mod con addon installati, insieme a quegli addon.</value>
+  </data>
+  <data name="Installed_ShowFamilyFormat" xml:space="preserve">
+    <value>Mostra {0} e i suoi addon</value>
+  </data>
+  <data name="Installed_FamilyPillFormat" xml:space="preserve">
+    <value>Visualizzati {0} e i suoi addon</value>
+  </data>
 </root>
