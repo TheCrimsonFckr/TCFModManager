@@ -8721,4 +8721,112 @@
   <data name="Help_Installed_Addons_Keywords" xml:space="preserve">
     <value>аддон, дополнение, удалить аддон, деинсталлировать аддон, стереть аддон, отключить аддон, основной мод, наклейки, пресеты</value>
   </data>
+  <data name="Installed_SkippedAddonNoFit_one" xml:space="preserve">
+    <value>{0} аддон без более новой версии для новой версии своего мода</value>
+  </data>
+  <data name="Installed_SkippedAddonNoFit_few" xml:space="preserve">
+    <value>{0} аддона без более новой версии для новой версии своего мода</value>
+  </data>
+  <data name="Installed_SkippedAddonNoFit_many" xml:space="preserve">
+    <value>{0} аддонов без более новой версии для новой версии своего мода</value>
+  </data>
+  <data name="AddonImpact_Title" xml:space="preserve">
+    <value>Аддоны, затронутые этим обновлением</value>
+  </data>
+  <data name="AddonImpact_ChangeList" xml:space="preserve">
+    <value>Эти аддоны не подходят к новой версии, но другая версия каждого из них подходит:</value>
+  </data>
+  <data name="AddonImpact_NoVersionList" xml:space="preserve">
+    <value>У этих аддонов нет версии для новой версии, и они могут перестать работать. Они останутся установленными:</value>
+  </data>
+  <data name="AddonImpact_ChangeQuestion" xml:space="preserve">
+    <value>Сменить и их? «Да» обновит мод и переведёт эти аддоны на подходящие версии. «Нет» обновит только мод.</value>
+  </data>
+  <data name="AddonImpact_NoVersionQuestion" xml:space="preserve">
+    <value>Всё равно обновить?</value>
+  </data>
+  <data name="AddonImpact_ChangeLineFormat" xml:space="preserve">
+    <value>{0} {1} → {2} (для {3} {4})</value>
+  </data>
+  <data name="AddonImpact_NoVersionLineFormat" xml:space="preserve">
+    <value>{0} {1} (для {2} {3})</value>
+  </data>
+  <data name="AddonImpact_HeadingFormat" xml:space="preserve">
+    <value>Ваши аддоны с {0}</value>
+  </data>
+  <data name="AddonImpact_Checking" xml:space="preserve">
+    <value>Проверка ваших аддонов…</value>
+  </data>
+  <data name="AddonImpact_Fits" xml:space="preserve">
+    <value>Подходит</value>
+  </data>
+  <data name="AddonImpact_ChangeFormat" xml:space="preserve">
+    <value>Не подходит - подходит {0}</value>
+  </data>
+  <data name="AddonImpact_NoVersion" xml:space="preserve">
+    <value>Ни одна версия не подходит - может перестать работать</value>
+  </data>
+  <data name="AddonImpact_UnknownDetached" xml:space="preserve">
+    <value>Не удалось проверить - на sp-mod отделён от своего мода</value>
+  </data>
+  <data name="AddonImpact_UnknownInstalledVersion" xml:space="preserve">
+    <value>Не удалось проверить - установленная версия неизвестна</value>
+  </data>
+  <data name="AddonImpact_UnknownNotPublished" xml:space="preserve">
+    <value>Не удалось проверить - установленной версии больше нет на sp-mod</value>
+  </data>
+  <data name="AddonImpact_UnknownRequirement" xml:space="preserve">
+    <value>Не удалось проверить - его требование не читается</value>
+  </data>
+  <data name="AddonImpact_UnknownLookupFailed" xml:space="preserve">
+    <value>Не удалось проверить - sp-mod не ответил</value>
+  </data>
+  <data name="AddonImpact_UnknownNotListed" xml:space="preserve">
+    <value>Не удалось проверить - больше не представлен на sp-mod</value>
+  </data>
+  <data name="AddonImpact_Cancelled" xml:space="preserve">
+    <value>Отменено - ничего не добавлено в очередь.</value>
+  </data>
+  <data name="AddonImpact_QueuedFormat" xml:space="preserve">
+    <value>Также добавлены в очередь: {0}.</value>
+  </data>
+  <data name="AddonImpact_QueuedItemFormat" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="Addon_ParentUpdateUnlocksFormat" xml:space="preserve">
+    <value>Обновление {0} до {1} сделает его доступным.</value>
+  </data>
+  <data name="Installed_DetailAddonDoesntFitFormat" xml:space="preserve">
+    <value>{0} не подходит к {1} {2} - подходит {3}</value>
+  </data>
+  <data name="AddonImpact_NoVersionDisableList" xml:space="preserve">
+    <value>У этих аддонов нет версии для новой версии. Они будут отключены после её установки - включить их снова можно на их карточке:</value>
+  </data>
+  <data name="AddonFit_DisabledFormat" xml:space="preserve">
+    <value>Отключено: {0} - ни одна версия не подходит к новой версии мода.</value>
+  </data>
+  <data name="AddonFit_ReEnableTitle" xml:space="preserve">
+    <value>Аддоны снова подходят</value>
+  </data>
+  <data name="AddonFit_ReEnableList" xml:space="preserve">
+    <value>Эти аддоны были отключены, потому что не подходили к своему моду, а теперь снова подходят:</value>
+  </data>
+  <data name="AddonFit_ReEnableQuestion" xml:space="preserve">
+    <value>Включить их снова?</value>
+  </data>
+  <data name="Installed_AddonNoFitToolTipFormat" xml:space="preserve">
+    <value>Не подходит к {0} {1}</value>
+  </data>
+  <data name="Filter_HasInstalledAddons" xml:space="preserve">
+    <value>С установленными аддонами</value>
+  </data>
+  <data name="Filter_HasInstalledAddonsToolTip" xml:space="preserve">
+    <value>Только моды с установленными аддонами, вместе с этими аддонами.</value>
+  </data>
+  <data name="Installed_ShowFamilyFormat" xml:space="preserve">
+    <value>Показать {0} и его аддоны</value>
+  </data>
+  <data name="Installed_FamilyPillFormat" xml:space="preserve">
+    <value>Показаны {0} и его аддоны</value>
+  </data>
 </root>
