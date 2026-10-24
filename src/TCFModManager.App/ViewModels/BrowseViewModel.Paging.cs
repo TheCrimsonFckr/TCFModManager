@@ -100,7 +100,8 @@ public partial class BrowseViewModel
             var card = ModCardViewModel.From(
                 mod, installedVersion, installed, _selectedLines, AppServices.SptCatalog.Releases,
                 AppServices.Addons.CountFor(mod.Id),
-                installed is null ? null : ModListPlanner.PinKeys(ModListCandidates.From(installed)));
+                installed is null ? null : ModListPlanner.PinKeys(ModListCandidates.From(installed)),
+                _addonMatchesByMod.GetValueOrDefault(mod.Id));
 
             card.RefreshPin(pins);
             cards.Add(card);

@@ -582,6 +582,14 @@
                                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                         TextTrimming="CharacterEllipsis"
                                         Visibility="{Binding Endorsements, Converter={StaticResource NullToCollapsed}}" />
+                                    <!-- OPEN-36 D1: the addons the search matched, while searching. -->
+                                    <TextBlock
+                                        Text="{Binding MatchedAddonsText}"
+                                        FontSize="11"
+                                        Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                        TextTrimming="CharacterEllipsis"
+                                        ToolTip="{Binding MatchedAddonsText}"
+                                        Visibility="{Binding MatchedAddonsText, Converter={StaticResource NullToCollapsed}}" />
                                     <!-- Runs rather than separate TextBlocks because the SPT segment
                                          is colored by compatibility with the installed version while
                                          the rest isn't, and the whole line has to trim as one when

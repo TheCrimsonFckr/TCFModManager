@@ -19,6 +19,9 @@ public partial class BrowseViewModel : LocalizedViewModel
     private readonly SpModApiClient _spModApi;
     private List<Mod> _filtered = [];
 
+    // OPEN-36: the addons the current search matched, by the mod they belong to.
+    private Dictionary<int, IReadOnlyList<Addon>> _addonMatchesByMod = [];
+
     /// <summary>The SPT release lines ticked in the version filter, kept so each card can describe
     /// what the mod supports on exactly those lines.</summary>
     private List<(int Major, int Minor)> _selectedLines = [];
@@ -120,7 +123,9 @@ public partial class BrowseViewModel : LocalizedViewModel
         // "N addons" badges are redrawn once it does rather than waiting for a page change.
         AppServices.Addons.AddonsChanged += (_, _) =>
         {
-            if (HasLoadedResults) GoToPage(CurrentPage);
+            if (!HasLoadedResults) return;
+            if (SearchText.Trim().Length > 0) ApplyFilter();
+            GoToPage(CurrentPage);
         };
 
         // Last, so every filter the dropdown labels read is in place.

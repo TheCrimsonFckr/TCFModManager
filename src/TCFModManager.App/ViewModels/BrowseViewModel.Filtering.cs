@@ -32,6 +32,15 @@ public partial class BrowseViewModel
         var (updatedFrom, updatedUntil) = DateRangeFilter.Window(SelectedUpdatedRange.Value, DateTime.Today, UpdatedFrom, UpdatedUntil);
         var sptForDates = AppServices.SptEnvironment.InstalledVersion;
 
+        // OPEN-36 D1/D7: a mod also matches when one of its addons does. Its other filters still
+        // apply to it, so a hidden mod doesn't come back through its addons (D5).
+        var addonMatches = AddonSearch.Match(AppServices.Addons.AllAddons, query, titleOnly);
+        _addonMatchesByMod = addonMatches
+            .Where(a => a.IsDetached != true && a.ModId is not null)
+            .GroupBy(a => a.ModId!.Value)
+            .ToDictionary(g => g.Key, g => (IReadOnlyList<Addon>)[.. g]);
+        var byAddon = _addonMatchesByMod;
+
         var matched = AppServices.ModCache.AllMods
             // This app's own sp-mod.com listing is hidden here rather than dropped from the cached
             // catalog, which the self-updater still needs to be able to read. It just has no
@@ -39,9 +48,9 @@ public partial class BrowseViewModel
             // mod, and installing it from here would drop a second copy of the manager into
             // BepInEx\plugins where SPT would try to load it.
             .Where(m => !string.Equals(m.Id.ToString(), SelfMod.ModId, StringComparison.Ordinal))
-            .Where(m => authorQuery is not null
+            .Where(m => byAddon.ContainsKey(m.Id) || (authorQuery is not null
                 ? MatchesAuthor(m, authorQuery)
-                : query.Length == 0 || Matches(m.Name, query) || Matches(m.Slug, query) || (!titleOnly && Matches(m.Teaser, query)))
+                : query.Length == 0 || Matches(m.Name, query) || Matches(m.Slug, query) || (!titleOnly && Matches(m.Teaser, query))))
             // OPEN-12 F19. Published is when the listing first went up; Updated is when it last had
             // a release, the same date the Last updated sort uses.
             .Where(m => DateRangeFilter.Contains(m.PublishedAt ?? m.CreatedAt, publishedFrom, publishedUntil))

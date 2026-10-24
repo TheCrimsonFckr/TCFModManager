@@ -119,6 +119,9 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
 
     public string AddonBadgeText => Strings.Browse_AddonBadge(AddonCount);
 
+    // OPEN-36 D1: why a mod is in the results when it's one of its addons the search matched.
+    public string? MatchedAddonsText { get; private init; }
+
     // 
     // Builds a card. <paramref name="selectedLines"/> is the SPT release lines currently ticked in
     // Browse's filter; the card's SPT text describes what the mod supports on exactly those lines,
@@ -132,7 +135,8 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
         IReadOnlyList<(int Major, int Minor)>? selectedLines = null,
         IReadOnlyList<SptRelease>? releases = null,
         int addonCount = 0,
-        IReadOnlyList<string>? pinKeys = null)
+        IReadOnlyList<string>? pinKeys = null,
+        IReadOnlyList<Addon>? matchedAddons = null)
     {
         var newest = LatestVersion(mod);
         var shown = PickDisplayVersion(mod, installedSptVersion) ?? newest;
@@ -188,6 +192,13 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
             UpdateAvailable = installedMatch?.UpdateAvailable,
             AddonCount = addonCount,
             PinKeys = pinKeys ?? [],
+            MatchedAddonsText = matchedAddons switch
+            {
+                null or [] => null,
+                [var one] => LocalizationService.Text(Strings.Browse_AddonMatchFormat, one.Name),
+                var many => LocalizationService.Text(
+                    Strings.Browse_AddonsMatchFormat, TextLists.Join([.. many.Select(a => a.Name ?? string.Empty)])),
+            },
         };
     }
 

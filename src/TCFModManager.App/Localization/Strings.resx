@@ -10180,4 +10180,12 @@ Switch anyway?</value>
     <value>addon, add-on, show addons, find addons, which addons, parent mod, family</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
+  <data name="Browse_AddonMatchFormat" xml:space="preserve">
+    <value>Addon: {0}</value>
+    <comment>On a Browse card while searching, when one of the mod's addons matched the search (OPEN-36). {0} is the addon's name.</comment>
+  </data>
+  <data name="Browse_AddonsMatchFormat" xml:space="preserve">
+    <value>Addons: {0}</value>
+    <comment>As Browse_AddonMatchFormat, for several matched addons. {0} is their names joined with TextLists.</comment>
+  </data>
 </root>
