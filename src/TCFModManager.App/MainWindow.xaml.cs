@@ -104,6 +104,9 @@ public partial class MainWindow : FluentWindow
         AppServices.ModDetailsOverlay.Requested += async (_, request) =>
             await new ModDetailsContentDialog(RootContentDialogPresenter, request).ShowAsync();
 
+        AppServices.ModDetailsOverlay.AddonRequested += async (_, request) =>
+            await new AddonDetailsContentDialog(RootContentDialogPresenter, request).ShowAsync();
+
         // Constructs and shows the mod update dialog, awaitable so callers know when it closes.
         AppServices.ModUpdateOverlay.ShowAsync = async (mod, addonCards) =>
         {

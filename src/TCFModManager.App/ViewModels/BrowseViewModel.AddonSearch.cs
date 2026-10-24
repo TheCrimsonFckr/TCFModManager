@@ -56,15 +56,16 @@ public partial class BrowseViewModel
         OnPropertyChanged(nameof(AddonMatchesMore));
     }
 
-    // D3: the mod's details opened on this addon; D6: a detached addon's own sp-mod page.
+    // D3 (Chris, 2026-10-24): the addon on its own, from the cached listing - no fetch, no mod
+    // dialog to draw. D6: a detached addon's own sp-mod page.
     [RelayCommand]
-    private async Task OpenAddonMatchAsync(AddonSearchRowViewModel? row)
+    private void OpenAddonMatch(AddonSearchRowViewModel? row)
     {
         if (row is null) return;
 
         if (row.Parent is { } parent)
         {
-            await LoadDetailsAsync(parent, row.Addon.Id);
+            AppServices.ModDetailsOverlay.ShowAddon(row.Addon, parent, FindInstalledMatch(parent)?.InstalledVersion);
             return;
         }
 

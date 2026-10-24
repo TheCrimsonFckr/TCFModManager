@@ -2794,4 +2794,6 @@ internal static class Strings
     internal static string Browse_AddonMatchesHeadingFormat => LocalizationService.Get("Browse_AddonMatchesHeadingFormat");
     internal static string Browse_AddonForFormat => LocalizationService.Get("Browse_AddonForFormat");
     internal static string Browse_AddonDetached => LocalizationService.Get("Browse_AddonDetached");
+    internal static string Browse_AddonMatchesMoreFormat => LocalizationService.Get("Browse_AddonMatchesMoreFormat");
+    internal static string AddonDetails_OpenModFormat => LocalizationService.Get("AddonDetails_OpenModFormat");
 }

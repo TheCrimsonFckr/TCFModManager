@@ -6,7 +6,8 @@
     xmlns:app="clr-namespace:TCFModManager.App"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
-    xmlns:loc="clr-namespace:TCFModManager.App.Localization">
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:views="clr-namespace:TCFModManager.App.Views">
     <!--
         The Addons section of a mod's details dialog. DataContext is an AddonsSectionViewModel,
         set by whichever dialog hosts this. The whole control collapses when the mod has no addons,
@@ -42,134 +43,10 @@
             Text="{Binding ParentNotice}"
             Visibility="{Binding HasParentNotice, Converter={StaticResource TrueToVisible}}" />
 
-        <ItemsControl x:Name="AddonsList" Margin="0,8,0,0" ItemsSource="{Binding Addons}">
+        <ItemsControl Margin="0,8,0,0" ItemsSource="{Binding Addons}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border Padding="8" Margin="0,0,0,4" BorderThickness="1" BorderBrush="Transparent">
-                        <Border.Style>
-                            <Style TargetType="Border" BasedOn="{StaticResource HoverRow}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsSearchMatch}" Value="True">
-                                        <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <Image
-                                Grid.Column="0"
-                                Width="40"
-                                Height="40"
-                                Margin="0,0,10,0"
-                                VerticalAlignment="Top"
-                                Stretch="UniformToFill"
-                                behaviors:ThumbnailLoader.Source="{Binding Thumbnail}"
-                                Visibility="{Binding Thumbnail, Converter={StaticResource NullToCollapsed}}" />
-
-                            <StackPanel Grid.Column="1">
-                                <TextBlock
-                                    FontWeight="SemiBold"
-                                    TextWrapping="Wrap"
-                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                    Text="{Binding Name}" />
-
-                                <TextBlock
-                                    Margin="0,2,0,0"
-                                    TextWrapping="Wrap"
-                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                    Text="{Binding Teaser}"
-                                    Visibility="{Binding Teaser, Converter={StaticResource NullToCollapsed}}" />
-
-                                <TextBlock
-                                    Margin="0,2,0,0"
-                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                    Text="{Binding DownloadsText}" />
-
-                                <TextBlock
-                                    Margin="0,2,0,0"
-                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                    Text="{Binding FlagsSummary}"
-                                    Visibility="{Binding FlagsSummary, Converter={StaticResource NullToCollapsed}}" />
-
-                                <TextBlock
-                                    Margin="0,2,0,0"
-                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                    Text="{Binding InstalledVersion, StringFormat={loc:Str Addons_InstalledFormat}}"
-                                    Visibility="{Binding IsInstalled, Converter={StaticResource TrueToVisible}}" />
-
-                                <!-- The picker stays enabled even when nothing is installable, so the
-                                     row can explain which version would fit rather than going blank. -->
-                                <DockPanel Margin="0,6,0,0">
-                                    <ui:Button
-                                        DockPanel.Dock="Right"
-                                        Margin="8,0,0,0"
-                                        Content="{Binding ActionLabel}"
-                                        Command="{Binding InstallCommand}"
-                                        ToolTip="{Binding InstallToolTip, Source={x:Static app:AppServices.ModPageGate}}" />
-                                    <!-- Does the opposite of Monitor mode's setting, for this one addon. -->
-                                    <ui:Button
-                                        DockPanel.Dock="Right"
-                                        Margin="8,0,0,0"
-                                        Padding="6"
-                                        Appearance="Transparent"
-                                        Command="{Binding InstallAlternateCommand}"
-                                        ToolTip="{Binding AlternateToolTip, Source={x:Static app:AppServices.ModPageGate}}">
-                                        <ui:Button.Icon>
-                                            <ui:SymbolIcon Symbol="{Binding AlternateSymbol, Source={x:Static app:AppServices.ModPageGate}}" />
-                                        </ui:Button.Icon>
-                                    </ui:Button>
-                                    <ui:Button
-                                        DockPanel.Dock="Right"
-                                        Margin="8,0,0,0"
-                                        Padding="8,6"
-                                        HorizontalAlignment="Left"
-                                        Icon="{ui:SymbolIcon Open24}"
-                                        Command="{Binding OpenAddonPageCommand}"
-                                        ToolTip="{loc:Str Addons_OpenPage}"
-                                        Visibility="{Binding DetailUrl, Converter={StaticResource NullToCollapsed}}" />
-                                    <ComboBox
-                                        MinWidth="150"
-                                        HorizontalAlignment="Left"
-                                        DisplayMemberPath="Label"
-                                        ItemsSource="{Binding Versions}"
-                                        SelectedItem="{Binding SelectedVersion}" />
-                                </DockPanel>
-
-                                <TextBlock
-                                    Margin="0,6,0,0"
-                                    TextWrapping="Wrap"
-                                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                                    Text="{Binding BlockedReason}"
-                                    Visibility="{Binding HasBlockedReason, Converter={StaticResource TrueToVisible}}" />
-
-                                <TextBlock
-                                    Margin="0,2,0,0"
-                                    TextWrapping="Wrap"
-                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                    Text="{Binding ParentUpdateHint}"
-                                    Visibility="{Binding HasParentUpdateHint, Converter={StaticResource TrueToVisible}}" />
-
-                                <TextBlock
-                                    Margin="0,6,0,0"
-                                    TextWrapping="Wrap"
-                                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                                    Text="{Binding CompatibilityNote}"
-                                    Visibility="{Binding HasCompatibilityNote, Converter={StaticResource TrueToVisible}}" />
-
-                                <TextBlock
-                                    Margin="0,6,0,0"
-                                    TextWrapping="Wrap"
-                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                    Text="{Binding StatusMessage}"
-                                    Visibility="{Binding HasStatusMessage, Converter={StaticResource TrueToVisible}}" />
-                            </StackPanel>
-                        </Grid>
-                    </Border>
+                    <views:AddonRowView />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

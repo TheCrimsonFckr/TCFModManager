@@ -10204,4 +10204,8 @@ Switch anyway?</value>
     <value>{0} more - keep typing to narrow the search.</value>
     <comment>Above the Addons strip when the search matched more addons than it shows. {0} is how many aren't shown.</comment>
   </data>
+  <data name="AddonDetails_OpenModFormat" xml:space="preserve">
+    <value>Open {0}</value>
+    <comment>Button in the single-addon window opened from Browse's Addons strip (OPEN-36): opens the addon's mod. {0} is the mod's name.</comment>
+  </data>
 </root>
