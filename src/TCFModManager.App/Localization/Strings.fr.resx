@@ -8457,4 +8457,34 @@ Passer quand même à cette version ?</value>
   <data name="Installed_FamilyPillFormat" xml:space="preserve">
     <value>Affichage de {0} et ses addons</value>
   </data>
+  <data name="Help_Installed_AddonUpdate_Title" xml:space="preserve">
+    <value>Mettre à jour un mod qui a des addons</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step1" xml:space="preserve">
+    <value>Dans {0}, cliquez sur la carte du mod et choisissez la version voulue. Sous les boutons, chaque addon installé pour ce mod indique s'il convient à cette version.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step2" xml:space="preserve">
+    <value>Appuyez sur {0}. Si un addon ne convient pas, Oui le passe aussi à une version qui convient, et Non met à jour le mod seulement.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step3" xml:space="preserve">
+    <value>Un addon sans version pour la nouvelle est désactivé une fois la mise à jour installée. Si le mod revient plus tard à une version qui lui convient, on vous propose de le réactiver.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Note" xml:space="preserve">
+    <value>{0} et le bouton de mise à jour d'une carte posent la même question, une seule fois pour toute la sélection.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Keywords" xml:space="preserve">
+    <value>addon, add-on, mettre à jour addon, addon incompatible, addon cassé après mise à jour, addon ne convient pas, mod parent</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Title" xml:space="preserve">
+    <value>Voir un mod avec ses addons</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Step1" xml:space="preserve">
+    <value>Dans {0}, ouvrez {1}, puis cochez {2} sous {3} pour voir chaque mod qui a des addons installés, avec ces addons.</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Step2" xml:space="preserve">
+    <value>Pour un seul mod, faites un clic droit sur lui ou sur l'un de ses addons et choisissez de l'afficher avec ses addons. Le X du filtre au-dessus de la liste réaffiche tout.</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Keywords" xml:space="preserve">
+    <value>addon, add-on, afficher addons, trouver addons, quels addons, mod parent, famille</value>
+  </data>
 </root>

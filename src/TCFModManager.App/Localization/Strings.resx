@@ -10142,4 +10142,42 @@ Switch anyway?</value>
     <value>Showing {0} and its addons</value>
     <comment>Pill above the Installed results while that view is on; its x turns it off. {0} is the mod's name.</comment>
   </data>
+  <data name="Help_Installed_AddonUpdate_Title" xml:space="preserve">
+    <value>Update a mod that has addons</value>
+    <comment>How-to title (OPEN-32). An addon is extra content published for one mod.</comment>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step1" xml:space="preserve">
+    <value>On {0}, click the mod's card and pick the version you want. Under the buttons, each addon you have installed for it says whether it fits that version.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step2" xml:space="preserve">
+    <value>Press {0}. If an addon won't fit, Yes also changes it to a version that does, and No updates the mod only.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step3" xml:space="preserve">
+    <value>An addon with no version for the new one is disabled once the update has installed. If the mod later goes back to a version it fits, you're asked whether to enable it again.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Note" xml:space="preserve">
+    <value>{0} and a card's update button ask the same, once for everything selected.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Keywords" xml:space="preserve">
+    <value>addon, add-on, update addon, addon doesn't fit, addon broken after update, incompatible addon, parent mod</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Installed_AddonFamily_Title" xml:space="preserve">
+    <value>See a mod together with its addons</value>
+    <comment>How-to title (OPEN-32).</comment>
+  </data>
+  <data name="Help_Installed_AddonFamily_Step1" xml:space="preserve">
+    <value>On {0}, open {1}, then tick {2} under {3} to see every mod with addons installed, together with those addons.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Installed_AddonFamily_Step2" xml:space="preserve">
+    <value>For one mod only, right-click it or one of its addons and choose to show it and its addons. The pill above the list puts everything back.</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Keywords" xml:space="preserve">
+    <value>addon, add-on, show addons, find addons, which addons, parent mod, family</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
 </root>

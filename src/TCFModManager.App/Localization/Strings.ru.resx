@@ -8829,4 +8829,34 @@
   <data name="Installed_FamilyPillFormat" xml:space="preserve">
     <value>Показаны {0} и его аддоны</value>
   </data>
+  <data name="Help_Installed_AddonUpdate_Title" xml:space="preserve">
+    <value>Обновить мод, у которого есть аддоны</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step1" xml:space="preserve">
+    <value>На странице {0} нажмите на карточку мода и выберите нужную версию. Под кнопками для каждого установленного к нему аддона указано, подходит ли он к этой версии.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step2" xml:space="preserve">
+    <value>Нажмите {0}. Если аддон не подходит, «Да» также переведёт его на подходящую версию, а «Нет» обновит только мод.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step3" xml:space="preserve">
+    <value>Аддон без версии для новой версии будет отключён после установки обновления. Если позже мод вернётся к версии, к которой он подходит, вам предложат включить его снова.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Note" xml:space="preserve">
+    <value>{0} и кнопка обновления на карточке спрашивают то же самое, один раз для всего выбранного.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Keywords" xml:space="preserve">
+    <value>аддон, addon, обновить аддон, аддон не подходит, аддон сломался после обновления, несовместимый аддон, родительский мод</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Title" xml:space="preserve">
+    <value>Посмотреть мод вместе с его аддонами</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Step1" xml:space="preserve">
+    <value>На странице {0} откройте {1} и отметьте {2} в разделе {3}, чтобы увидеть все моды с установленными аддонами вместе с этими аддонами.</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Step2" xml:space="preserve">
+    <value>Только для одного мода: щёлкните правой кнопкой по нему или по одному из его аддонов и выберите показ мода с его аддонами. Крестик фильтра над списком снова покажет всё.</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Keywords" xml:space="preserve">
+    <value>аддон, addon, показать аддоны, найти аддоны, какие аддоны, родительский мод, семейство</value>
+  </data>
 </root>

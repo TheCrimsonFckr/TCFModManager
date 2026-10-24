@@ -8457,4 +8457,34 @@ Passare comunque?</value>
   <data name="Installed_FamilyPillFormat" xml:space="preserve">
     <value>Visualizzati {0} e i suoi addon</value>
   </data>
+  <data name="Help_Installed_AddonUpdate_Title" xml:space="preserve">
+    <value>Aggiornare un mod che ha degli addon</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step1" xml:space="preserve">
+    <value>In {0}, clicca sulla scheda del mod e scegli la versione che vuoi. Sotto i pulsanti, ogni addon installato per quel mod dice se è adatto a quella versione.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step2" xml:space="preserve">
+    <value>Premi {0}. Se un addon non è adatto, Sì lo porta anche a una versione adatta, e No aggiorna solo il mod.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step3" xml:space="preserve">
+    <value>Un addon senza una versione per quella nuova viene disattivato una volta installato l'aggiornamento. Se in seguito il mod torna a una versione adatta, ti viene chiesto se riattivarlo.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Note" xml:space="preserve">
+    <value>{0} e il pulsante di aggiornamento di una scheda chiedono la stessa cosa, una volta sola per tutta la selezione.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Keywords" xml:space="preserve">
+    <value>addon, add-on, aggiornare addon, addon non adatto, addon rotto dopo aggiornamento, addon incompatibile, mod principale</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Title" xml:space="preserve">
+    <value>Vedere un mod insieme ai suoi addon</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Step1" xml:space="preserve">
+    <value>In {0}, apri {1} e spunta {2} sotto {3} per vedere ogni mod con addon installati, insieme a quegli addon.</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Step2" xml:space="preserve">
+    <value>Per un solo mod, fai clic destro su di esso o su uno dei suoi addon e scegli di mostrarlo con i suoi addon. La X del filtro sopra l'elenco mostra di nuovo tutto.</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Keywords" xml:space="preserve">
+    <value>addon, add-on, mostrare addon, trovare addon, quali addon, mod principale, famiglia</value>
+  </data>
 </root>

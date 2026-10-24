@@ -8457,4 +8457,34 @@ Trotzdem wechseln?</value>
   <data name="Installed_FamilyPillFormat" xml:space="preserve">
     <value>{0} und seine Addons werden angezeigt</value>
   </data>
+  <data name="Help_Installed_AddonUpdate_Title" xml:space="preserve">
+    <value>Einen Mod mit Addons aktualisieren</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step1" xml:space="preserve">
+    <value>Klicke unter {0} auf die Karte des Mods und wähle die gewünschte Version. Unter den Schaltflächen steht bei jedem dafür installierten Addon, ob es zu dieser Version passt.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step2" xml:space="preserve">
+    <value>Drücke {0}. Passt ein Addon nicht, wechselt Ja es zusätzlich auf eine passende Version, und Nein aktualisiert nur den Mod.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step3" xml:space="preserve">
+    <value>Ein Addon ohne Version für die neue wird deaktiviert, sobald das Update installiert ist. Geht der Mod später auf eine Version zurück, zu der es passt, wirst du gefragt, ob es wieder aktiviert werden soll.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Note" xml:space="preserve">
+    <value>{0} und die Update-Schaltfläche einer Karte fragen dasselbe, einmal für alles Ausgewählte.</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Keywords" xml:space="preserve">
+    <value>Addon, Add-on, Addon aktualisieren, Addon passt nicht, Addon nach Update kaputt, inkompatibles Addon, Hauptmod</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Title" xml:space="preserve">
+    <value>Einen Mod zusammen mit seinen Addons sehen</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Step1" xml:space="preserve">
+    <value>Öffne unter {0} {1} und hake unter {3} {2} an, um jeden Mod mit installierten Addons zusammen mit diesen Addons zu sehen.</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Step2" xml:space="preserve">
+    <value>Nur für einen Mod: Klicke ihn oder eines seiner Addons mit der rechten Maustaste an und lass ihn mit seinen Addons anzeigen. Das X am Filter über der Liste zeigt wieder alles an.</value>
+  </data>
+  <data name="Help_Installed_AddonFamily_Keywords" xml:space="preserve">
+    <value>Addon, Add-on, Addons anzeigen, Addons finden, welche Addons, Hauptmod, zusammen</value>
+  </data>
 </root>

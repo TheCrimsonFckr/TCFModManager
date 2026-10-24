@@ -209,6 +209,20 @@ internal static class HelpCatalog
                 .WithNote(() => Strings.Help_Installed_Addons_Note)
                 .WithKeywords(() => Strings.Help_Installed_Addons_Keywords),
 
+            Topic("installed.addonupdate", () => Strings.Help_Installed_AddonUpdate_Title,
+                Step(() => Strings.Help_Installed_AddonUpdate_Step1, () => Strings.Nav_Installed),
+                Step(() => Strings.Help_Installed_AddonUpdate_Step2, () => Strings.ModUpdate_Update),
+                Step(() => Strings.Help_Installed_AddonUpdate_Step3))
+                .WithNote(() => Strings.Help_Installed_AddonUpdate_Note, () => Strings.Installed_UpdateSelected)
+                .WithKeywords(() => Strings.Help_Installed_AddonUpdate_Keywords),
+
+            Topic("installed.addonfamily", () => Strings.Help_Installed_AddonFamily_Title,
+                Step(() => Strings.Help_Installed_AddonFamily_Step1,
+                    () => Strings.Nav_Installed, () => Strings.Filter_More, () => Strings.Filter_HasInstalledAddons,
+                    () => Strings.Filter_ShowHeader),
+                Step(() => Strings.Help_Installed_AddonFamily_Step2))
+                .WithKeywords(() => Strings.Help_Installed_AddonFamily_Keywords),
+
             Topic("installed.disablemany", () => Strings.Help_Installed_DisableMany_Title,
                 Step(() => Strings.Help_Installed_DisableMany_Step1,
                     () => Strings.Nav_Installed, () => Strings.Installed_MultiSelect),
