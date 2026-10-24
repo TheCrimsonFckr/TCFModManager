@@ -11,7 +11,27 @@ public partial class BrowseViewModel
     // OnXxxChanged below doesn't run its own ApplyFilter.
     private bool _suppressAutoApplyFilter;
 
-    partial void OnSearchTextChanged(string value) => AutoApplyFilter();
+    //
+    // Typing re-filters once it pauses rather than on every key: each pass rebuilds the page of
+    // cards and the Addons strip, which a fast typist could otherwise queue up a dozen of.
+    //
+    private System.Windows.Threading.DispatcherTimer? _searchDelay;
+
+    partial void OnSearchTextChanged(string value)
+    {
+        if (_searchDelay is null)
+        {
+            _searchDelay = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
+            _searchDelay.Tick += (_, _) =>
+            {
+                _searchDelay.Stop();
+                AutoApplyFilter();
+            };
+        }
+
+        _searchDelay.Stop();
+        _searchDelay.Start();
+    }
 
     partial void OnSelectedSortOptionChanged(SortOptionItem value) => AutoApplyFilter();
 

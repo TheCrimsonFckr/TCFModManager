@@ -10200,4 +10200,8 @@ Switch anyway?</value>
     <value>Detached addon - opens its sp-mod page</value>
     <comment>Under an addon's name in that strip when sp-mod no longer ties it to a mod.</comment>
   </data>
+  <data name="Browse_AddonMatchesMoreFormat" xml:space="preserve">
+    <value>{0} more - keep typing to narrow the search.</value>
+    <comment>Above the Addons strip when the search matched more addons than it shows. {0} is how many aren't shown.</comment>
+  </data>
 </root>

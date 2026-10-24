@@ -400,6 +400,13 @@
                 Header="{Binding AddonMatchesHeading}"
                 IsExpanded="{Binding AddonMatchesExpanded}"
                 Visibility="{Binding HasAddonMatches, Converter={StaticResource TrueToVisible}}">
+                <StackPanel>
+                <TextBlock
+                    Margin="0,0,0,6"
+                    FontSize="12"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="{Binding AddonMatchesMore}"
+                    Visibility="{Binding AddonMatchesMore, Converter={StaticResource NullToCollapsed}}" />
                 <ScrollViewer MaxHeight="150" VerticalScrollBarVisibility="Auto">
                     <ItemsControl Focusable="False" ItemsSource="{Binding AddonMatches}">
                         <ItemsControl.ItemsPanel>
@@ -448,6 +455,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
+                </StackPanel>
             </ui:CardExpander>
         </StackPanel>
 
