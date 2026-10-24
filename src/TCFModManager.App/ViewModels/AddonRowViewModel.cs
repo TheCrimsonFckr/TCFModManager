@@ -143,6 +143,10 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(HasStatusMessage))]
     private string? _statusMessage;
 
+    // The addon a Browse search opened its mod's dialog on (OPEN-36 D3), drawn with an accent edge.
+    [ObservableProperty]
+    private bool _isSearchMatch;
+
     public bool HasStatusMessage => StatusMessage is not null;
 
     // Install / Update / Redownload, following the same wording the mod path uses. An addon that

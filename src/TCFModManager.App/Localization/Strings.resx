@@ -10188,4 +10188,16 @@ Switch anyway?</value>
     <value>Addons: {0}</value>
     <comment>As Browse_AddonMatchFormat, for several matched addons. {0} is their names joined with TextLists.</comment>
   </data>
+  <data name="Browse_AddonMatchesHeadingFormat" xml:space="preserve">
+    <value>Addons ({0})</value>
+    <comment>Heading of the strip above the Browse results listing addons the search matched (OPEN-36). {0} is how many.</comment>
+  </data>
+  <data name="Browse_AddonForFormat" xml:space="preserve">
+    <value>Addon for: {0}</value>
+    <comment>Under an addon's name in that strip. {0} is its mod's name.</comment>
+  </data>
+  <data name="Browse_AddonDetached" xml:space="preserve">
+    <value>Detached addon - opens its sp-mod page</value>
+    <comment>Under an addon's name in that strip when sp-mod no longer ties it to a mod.</comment>
+  </data>
 </root>

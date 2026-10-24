@@ -393,6 +393,62 @@
                     Command="{Binding ClearFiltersCommand}"
                     Style="{StaticResource FilterPillButton}" />
             </DockPanel>
+
+            <!-- OPEN-36 D2: the addons the search matched, only while searching. -->
+            <ui:CardExpander
+                Margin="0,0,0,8"
+                Header="{Binding AddonMatchesHeading}"
+                IsExpanded="{Binding AddonMatchesExpanded}"
+                Visibility="{Binding HasAddonMatches, Converter={StaticResource TrueToVisible}}">
+                <ScrollViewer MaxHeight="150" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl Focusable="False" ItemsSource="{Binding AddonMatches}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <ui:Button
+                                    Width="260"
+                                    Margin="0,0,6,6"
+                                    Padding="6"
+                                    HorizontalContentAlignment="Left"
+                                    Appearance="Transparent"
+                                    Command="{Binding DataContext.OpenAddonMatchCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                    CommandParameter="{Binding}"
+                                    ToolTip="{Binding Subtitle}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image
+                                            Width="32"
+                                            Height="32"
+                                            Margin="0,0,8,0"
+                                            Stretch="UniformToFill"
+                                            behaviors:ThumbnailLoader.Source="{Binding Thumbnail}"
+                                            Visibility="{Binding Thumbnail, Converter={StaticResource NullToCollapsed}}" />
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock
+                                                FontWeight="SemiBold"
+                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                TextTrimming="CharacterEllipsis"
+                                                Text="{Binding Name}" />
+                                            <TextBlock
+                                                FontSize="11"
+                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                TextTrimming="CharacterEllipsis"
+                                                Text="{Binding Subtitle}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </ui:Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </ui:CardExpander>
         </StackPanel>
 
         <!-- Results grid; column count is set from code-behind based on width. -->

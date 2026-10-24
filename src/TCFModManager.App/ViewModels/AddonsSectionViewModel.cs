@@ -18,6 +18,9 @@ public sealed partial class AddonsSectionViewModel : LocalizedViewModel
 
     public bool HasAddons => Addons.Count > 0;
 
+    // OPEN-36 D3: raised once the addon a Browse search opened the dialog on is in the list.
+    public event EventHandler<AddonRowViewModel>? FocusRequested;
+
     public string Heading => Text(Strings.Addon_HeadingFormat, Addons.Count);
 
     // Shown above the list when the parent isn't installed, so every disabled button on it has one
@@ -33,7 +36,7 @@ public sealed partial class AddonsSectionViewModel : LocalizedViewModel
     // addon version's constraint is measured against; null means the parent isn't installed, which
     // is shown once at the top rather than per row.
     // 
-    public async Task LoadAsync(int parentModId, string? parentModName, string? parentInstalledVersion)
+    public async Task LoadAsync(int parentModId, string? parentModName, string? parentInstalledVersion, int? focusAddonId = null)
     {
         await AppServices.Addons.EnsureLoadedAsync();
 
@@ -55,5 +58,11 @@ public sealed partial class AddonsSectionViewModel : LocalizedViewModel
 
         OnPropertyChanged(nameof(HasAddons));
         OnPropertyChanged(nameof(Heading));
+
+        if (focusAddonId is { } focus && Addons.FirstOrDefault(a => a.AddonId == focus) is { } row)
+        {
+            row.IsSearchMatch = true;
+            FocusRequested?.Invoke(this, row);
+        }
     }
 }

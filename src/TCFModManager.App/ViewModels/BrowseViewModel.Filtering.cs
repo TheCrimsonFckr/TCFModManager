@@ -94,6 +94,8 @@ public partial class BrowseViewModel
             // recently, while an update for an SPT line this install isn't on doesn't count as new.
             _ => matched.OrderByDescending(m => NewestReleaseDate(m, installedSptVersion)).ToList(),
         };
+        RebuildAddonMatches(addonMatches);
+
         AppLog.Debug("Browse", $"ApplyFilter: filter/sort took {sw.ElapsedMilliseconds}ms over {AppServices.ModCache.AllMods.Count} cached mods, {_filtered.Count} matched");
 
         // A fresh search always jumps back to page 1 of the new result set - for Endless, its first step.

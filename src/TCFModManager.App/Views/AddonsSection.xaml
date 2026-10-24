@@ -42,10 +42,19 @@
             Text="{Binding ParentNotice}"
             Visibility="{Binding HasParentNotice, Converter={StaticResource TrueToVisible}}" />
 
-        <ItemsControl Margin="0,8,0,0" ItemsSource="{Binding Addons}">
+        <ItemsControl x:Name="AddonsList" Margin="0,8,0,0" ItemsSource="{Binding Addons}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border Style="{StaticResource HoverRow}" Padding="8" Margin="0,0,0,4">
+                    <Border Padding="8" Margin="0,0,0,4" BorderThickness="1" BorderBrush="Transparent">
+                        <Border.Style>
+                            <Style TargetType="Border" BasedOn="{StaticResource HoverRow}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSearchMatch}" Value="True">
+                                        <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />

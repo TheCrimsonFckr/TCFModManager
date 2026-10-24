@@ -175,14 +175,14 @@ public partial class BrowseViewModel
         StatusMessage = Text(Strings.Browse_QueuedFormat, mod.Name, chosenVersion);
     }
 
-    public async Task LoadDetailsAsync(Mod mod)
+    public async Task LoadDetailsAsync(Mod mod, int? focusAddonId = null)
     {
         try
         {
             var details = await _spModApi.GetModAsync(mod.Id.ToString(), include: "versions,license,category");
 
             // The installed version is what this mod's addons check their own constraints against.
-            AppServices.ModDetailsOverlay.Show(details, FindInstalledMatch(mod)?.InstalledVersion);
+            AppServices.ModDetailsOverlay.Show(details, FindInstalledMatch(mod)?.InstalledVersion, focusAddonId);
         }
         catch (SpModApiException ex)
         {

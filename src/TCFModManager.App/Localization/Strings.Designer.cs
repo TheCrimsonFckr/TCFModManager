@@ -2779,4 +2779,19 @@ internal static class Strings
     internal static string Filter_HasInstalledAddonsToolTip => LocalizationService.Get("Filter_HasInstalledAddonsToolTip");
     internal static string Installed_ShowFamilyFormat => LocalizationService.Get("Installed_ShowFamilyFormat");
     internal static string Installed_FamilyPillFormat => LocalizationService.Get("Installed_FamilyPillFormat");
+    internal static string Help_Installed_AddonUpdate_Title => LocalizationService.Get("Help_Installed_AddonUpdate_Title");
+    internal static string Help_Installed_AddonUpdate_Step1 => LocalizationService.Get("Help_Installed_AddonUpdate_Step1");
+    internal static string Help_Installed_AddonUpdate_Step2 => LocalizationService.Get("Help_Installed_AddonUpdate_Step2");
+    internal static string Help_Installed_AddonUpdate_Step3 => LocalizationService.Get("Help_Installed_AddonUpdate_Step3");
+    internal static string Help_Installed_AddonUpdate_Note => LocalizationService.Get("Help_Installed_AddonUpdate_Note");
+    internal static string Help_Installed_AddonUpdate_Keywords => LocalizationService.Get("Help_Installed_AddonUpdate_Keywords");
+    internal static string Help_Installed_AddonFamily_Title => LocalizationService.Get("Help_Installed_AddonFamily_Title");
+    internal static string Help_Installed_AddonFamily_Step1 => LocalizationService.Get("Help_Installed_AddonFamily_Step1");
+    internal static string Help_Installed_AddonFamily_Step2 => LocalizationService.Get("Help_Installed_AddonFamily_Step2");
+    internal static string Help_Installed_AddonFamily_Keywords => LocalizationService.Get("Help_Installed_AddonFamily_Keywords");
+    internal static string Browse_AddonMatchFormat => LocalizationService.Get("Browse_AddonMatchFormat");
+    internal static string Browse_AddonsMatchFormat => LocalizationService.Get("Browse_AddonsMatchFormat");
+    internal static string Browse_AddonMatchesHeadingFormat => LocalizationService.Get("Browse_AddonMatchesHeadingFormat");
+    internal static string Browse_AddonForFormat => LocalizationService.Get("Browse_AddonForFormat");
+    internal static string Browse_AddonDetached => LocalizationService.Get("Browse_AddonDetached");
 }

@@ -36,7 +36,7 @@ public partial class ModDetailsContentDialog : ContentDialog
 
         // Fire-and-forget: the section is collapsed until it has something to show, so the dialog
         // opens at once whether or not this mod has addons.
-        _ = _addons.LoadAsync(_mod.Id, _mod.Name, request.InstalledVersion);
+        _ = _addons.LoadAsync(_mod.Id, _mod.Name, request.InstalledVersion, request.FocusAddonId);
 
         _comments = new ModCommentsView(CommentsHost, CommentsOff, CommentsFallback);
         Unloaded += (_, _) => _comments.Dispose();
