@@ -8487,4 +8487,46 @@ Passare comunque?</value>
   <data name="Help_Installed_AddonFamily_Keywords" xml:space="preserve">
     <value>addon, add-on, mostrare addon, trovare addon, quali addon, mod principale, famiglia</value>
   </data>
+  <data name="Browse_AddonMatchFormat" xml:space="preserve">
+    <value>Addon: {0}</value>
+  </data>
+  <data name="Browse_AddonsMatchFormat" xml:space="preserve">
+    <value>Addon: {0}</value>
+  </data>
+  <data name="Browse_AddonMatchesHeadingFormat" xml:space="preserve">
+    <value>Addon ({0})</value>
+  </data>
+  <data name="Browse_AddonForFormat" xml:space="preserve">
+    <value>Addon per: {0}</value>
+  </data>
+  <data name="Browse_AddonDetached" xml:space="preserve">
+    <value>Addon staccato - apre la sua pagina su sp-mod</value>
+  </data>
+  <data name="Browse_AddonMatchesMoreFormat" xml:space="preserve">
+    <value>Altri {0} - continua a scrivere per restringere la ricerca.</value>
+  </data>
+  <data name="AddonDetails_OpenModFormat" xml:space="preserve">
+    <value>Apri {0}</value>
+  </data>
+  <data name="Browse_AddonMatchesToggle" xml:space="preserve">
+    <value>Addon trovati</value>
+  </data>
+  <data name="Browse_AddonMatchesToggleToolTip" xml:space="preserve">
+    <value>Mostra gli addon che corrispondono alla ricerca in una barra sopra i risultati. I mod con addon corrispondenti sono elencati comunque.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Title" xml:space="preserve">
+    <value>Trovare un addon dal nome</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Step1" xml:space="preserve">
+    <value>In {0}, scrivi il nome dell'addon nella ricerca. Il suo mod compare nei risultati, con l'addon indicato sulla scheda.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Step2" xml:space="preserve">
+    <value>Apri la barra Addon sopra i risultati e clicca sull'addon per vederne le versioni e installarlo.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Note" xml:space="preserve">
+    <value>{0} accanto alla ricerca nasconde la barra Addon. I mod con addon corrispondenti restano elencati.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Keywords" xml:space="preserve">
+    <value>addon, add-on, trovare addon, cercare addon, nome addon, pacchetto adesivi, preset</value>
+  </data>
 </root>

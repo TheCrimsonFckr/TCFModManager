@@ -8859,4 +8859,46 @@
   <data name="Help_Installed_AddonFamily_Keywords" xml:space="preserve">
     <value>аддон, addon, показать аддоны, найти аддоны, какие аддоны, родительский мод, семейство</value>
   </data>
+  <data name="Browse_AddonMatchFormat" xml:space="preserve">
+    <value>Аддон: {0}</value>
+  </data>
+  <data name="Browse_AddonsMatchFormat" xml:space="preserve">
+    <value>Аддоны: {0}</value>
+  </data>
+  <data name="Browse_AddonMatchesHeadingFormat" xml:space="preserve">
+    <value>Аддоны ({0})</value>
+  </data>
+  <data name="Browse_AddonForFormat" xml:space="preserve">
+    <value>Аддон для: {0}</value>
+  </data>
+  <data name="Browse_AddonDetached" xml:space="preserve">
+    <value>Отделённый аддон - откроет свою страницу на sp-mod</value>
+  </data>
+  <data name="Browse_AddonMatchesMoreFormat" xml:space="preserve">
+    <value>Ещё {0} - продолжайте вводить, чтобы сузить поиск.</value>
+  </data>
+  <data name="AddonDetails_OpenModFormat" xml:space="preserve">
+    <value>Открыть {0}</value>
+  </data>
+  <data name="Browse_AddonMatchesToggle" xml:space="preserve">
+    <value>Найденные аддоны</value>
+  </data>
+  <data name="Browse_AddonMatchesToggleToolTip" xml:space="preserve">
+    <value>Показывает аддоны, подходящие под поиск, на панели над результатами. Моды с подходящими аддонами показываются в любом случае.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Title" xml:space="preserve">
+    <value>Найти аддон по названию</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Step1" xml:space="preserve">
+    <value>На странице {0} введите название аддона в поиск. Его мод появится в результатах, а на карточке будет указан аддон.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Step2" xml:space="preserve">
+    <value>Откройте панель «Аддоны» над результатами и нажмите на аддон, чтобы увидеть его версии и установить его.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Note" xml:space="preserve">
+    <value>{0} рядом с поиском скрывает панель «Аддоны». Моды с подходящими аддонами по-прежнему показываются.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Keywords" xml:space="preserve">
+    <value>аддон, addon, найти аддон, поиск аддона, название аддона, набор наклеек, пресет</value>
+  </data>
 </root>

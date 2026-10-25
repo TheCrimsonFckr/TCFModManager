@@ -8487,4 +8487,46 @@ Passer quand même à cette version ?</value>
   <data name="Help_Installed_AddonFamily_Keywords" xml:space="preserve">
     <value>addon, add-on, afficher addons, trouver addons, quels addons, mod parent, famille</value>
   </data>
+  <data name="Browse_AddonMatchFormat" xml:space="preserve">
+    <value>Addon : {0}</value>
+  </data>
+  <data name="Browse_AddonsMatchFormat" xml:space="preserve">
+    <value>Addons : {0}</value>
+  </data>
+  <data name="Browse_AddonMatchesHeadingFormat" xml:space="preserve">
+    <value>Addons ({0})</value>
+  </data>
+  <data name="Browse_AddonForFormat" xml:space="preserve">
+    <value>Addon pour : {0}</value>
+  </data>
+  <data name="Browse_AddonDetached" xml:space="preserve">
+    <value>Addon détaché - ouvre sa page sp-mod</value>
+  </data>
+  <data name="Browse_AddonMatchesMoreFormat" xml:space="preserve">
+    <value>{0} de plus - continuez à taper pour affiner la recherche.</value>
+  </data>
+  <data name="AddonDetails_OpenModFormat" xml:space="preserve">
+    <value>Ouvrir {0}</value>
+  </data>
+  <data name="Browse_AddonMatchesToggle" xml:space="preserve">
+    <value>Addons trouvés</value>
+  </data>
+  <data name="Browse_AddonMatchesToggleToolTip" xml:space="preserve">
+    <value>Affiche les addons qui correspondent à votre recherche dans une barre au-dessus des résultats. Les mods dont des addons correspondent sont listés dans tous les cas.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Title" xml:space="preserve">
+    <value>Trouver un addon par son nom</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Step1" xml:space="preserve">
+    <value>Dans {0}, tapez le nom de l'addon dans la recherche. Son mod apparaît dans les résultats, avec l'addon nommé sur sa carte.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Step2" xml:space="preserve">
+    <value>Ouvrez la barre Addons au-dessus des résultats et cliquez sur l'addon pour voir ses versions et l'installer.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Note" xml:space="preserve">
+    <value>{0} à côté de la recherche masque la barre Addons. Les mods dont des addons correspondent restent listés.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Keywords" xml:space="preserve">
+    <value>addon, add-on, trouver addon, chercher addon, nom d'addon, pack d'autocollants, preset</value>
+  </data>
 </root>

@@ -10216,4 +10216,23 @@ Switch anyway?</value>
     <value>Show the addons your search matches in a bar above the results. Mods whose addons match are listed either way.</value>
     <comment>Tooltip on Browse_AddonMatchesToggle.</comment>
   </data>
+  <data name="Help_Browse_AddonSearch_Title" xml:space="preserve">
+    <value>Find an addon by its name</value>
+    <comment>How-to title (OPEN-36). An addon is extra content published for one mod.</comment>
+  </data>
+  <data name="Help_Browse_AddonSearch_Step1" xml:space="preserve">
+    <value>On {0}, type the addon's name in the search box. Its mod shows in the results, with the addon named on its card.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_AddonSearch_Step2" xml:space="preserve">
+    <value>Open the Addons bar above the results and click the addon to see its versions and install it.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Note" xml:space="preserve">
+    <value>{0} beside the search box turns the Addons bar off. Mods whose addons match are still listed.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_AddonSearch_Keywords" xml:space="preserve">
+    <value>addon, add-on, find addon, search addon, addon name, sticker pack, preset</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
 </root>

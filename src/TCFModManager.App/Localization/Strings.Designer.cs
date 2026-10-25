@@ -2796,4 +2796,11 @@ internal static class Strings
     internal static string Browse_AddonDetached => LocalizationService.Get("Browse_AddonDetached");
     internal static string Browse_AddonMatchesMoreFormat => LocalizationService.Get("Browse_AddonMatchesMoreFormat");
     internal static string AddonDetails_OpenModFormat => LocalizationService.Get("AddonDetails_OpenModFormat");
+    internal static string Browse_AddonMatchesToggle => LocalizationService.Get("Browse_AddonMatchesToggle");
+    internal static string Browse_AddonMatchesToggleToolTip => LocalizationService.Get("Browse_AddonMatchesToggleToolTip");
+    internal static string Help_Browse_AddonSearch_Title => LocalizationService.Get("Help_Browse_AddonSearch_Title");
+    internal static string Help_Browse_AddonSearch_Step1 => LocalizationService.Get("Help_Browse_AddonSearch_Step1");
+    internal static string Help_Browse_AddonSearch_Step2 => LocalizationService.Get("Help_Browse_AddonSearch_Step2");
+    internal static string Help_Browse_AddonSearch_Note => LocalizationService.Get("Help_Browse_AddonSearch_Note");
+    internal static string Help_Browse_AddonSearch_Keywords => LocalizationService.Get("Help_Browse_AddonSearch_Keywords");
 }

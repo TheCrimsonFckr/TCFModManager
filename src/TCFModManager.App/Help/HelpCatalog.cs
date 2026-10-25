@@ -159,6 +159,12 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Browse_Addon_Step3))
                 .WithNote(() => Strings.Help_Browse_Addon_Note)
                 .WithKeywords(() => Strings.Help_Browse_Addon_Keywords),
+
+            Topic("browse.addonsearch", () => Strings.Help_Browse_AddonSearch_Title,
+                Step(() => Strings.Help_Browse_AddonSearch_Step1, () => Strings.Nav_Browse),
+                Step(() => Strings.Help_Browse_AddonSearch_Step2))
+                .WithNote(() => Strings.Help_Browse_AddonSearch_Note, () => Strings.Browse_AddonMatchesToggle)
+                .WithKeywords(() => Strings.Help_Browse_AddonSearch_Keywords),
         ]),
 
         new("installed", () => Strings.Nav_Installed, SymbolRegular.CheckmarkCircle24, typeof(InstalledPage),

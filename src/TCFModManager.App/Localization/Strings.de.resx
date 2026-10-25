@@ -8487,4 +8487,46 @@ Trotzdem wechseln?</value>
   <data name="Help_Installed_AddonFamily_Keywords" xml:space="preserve">
     <value>Addon, Add-on, Addons anzeigen, Addons finden, welche Addons, Hauptmod, zusammen</value>
   </data>
+  <data name="Browse_AddonMatchFormat" xml:space="preserve">
+    <value>Addon: {0}</value>
+  </data>
+  <data name="Browse_AddonsMatchFormat" xml:space="preserve">
+    <value>Addons: {0}</value>
+  </data>
+  <data name="Browse_AddonMatchesHeadingFormat" xml:space="preserve">
+    <value>Addons ({0})</value>
+  </data>
+  <data name="Browse_AddonForFormat" xml:space="preserve">
+    <value>Addon für: {0}</value>
+  </data>
+  <data name="Browse_AddonDetached" xml:space="preserve">
+    <value>Losgelöstes Addon - öffnet seine sp-mod-Seite</value>
+  </data>
+  <data name="Browse_AddonMatchesMoreFormat" xml:space="preserve">
+    <value>{0} weitere - tippe weiter, um die Suche einzugrenzen.</value>
+  </data>
+  <data name="AddonDetails_OpenModFormat" xml:space="preserve">
+    <value>{0} öffnen</value>
+  </data>
+  <data name="Browse_AddonMatchesToggle" xml:space="preserve">
+    <value>Addon-Treffer</value>
+  </data>
+  <data name="Browse_AddonMatchesToggleToolTip" xml:space="preserve">
+    <value>Zeigt die Addons, die zu deiner Suche passen, in einer Leiste über den Ergebnissen. Mods, deren Addons passen, werden so oder so angezeigt.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Title" xml:space="preserve">
+    <value>Ein Addon über seinen Namen finden</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Step1" xml:space="preserve">
+    <value>Gib unter {0} den Namen des Addons ins Suchfeld ein. Sein Mod erscheint in den Ergebnissen, und das Addon steht auf seiner Karte.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Step2" xml:space="preserve">
+    <value>Öffne die Addons-Leiste über den Ergebnissen und klicke auf das Addon, um seine Versionen zu sehen und es zu installieren.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Note" xml:space="preserve">
+    <value>{0} neben dem Suchfeld schaltet die Addons-Leiste ab. Mods, deren Addons passen, werden weiterhin angezeigt.</value>
+  </data>
+  <data name="Help_Browse_AddonSearch_Keywords" xml:space="preserve">
+    <value>Addon, Add-on, Addon finden, Addon suchen, Addon-Name, Stickerpaket, Preset</value>
+  </data>
 </root>
