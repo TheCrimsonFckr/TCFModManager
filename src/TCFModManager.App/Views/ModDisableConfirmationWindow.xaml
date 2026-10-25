@@ -21,6 +21,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <ui:TitleBar
@@ -30,7 +31,7 @@
 
         <StackPanel
             Grid.Row="1"
-            Margin="24,12,24,24">
+            Margin="24,12,24,0">
             <TextBlock
                 x:Name="SummaryText"
                 TextWrapping="Wrap"
@@ -88,23 +89,26 @@
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Margin="0,12,0,0"
                 Text="{loc:Str ModDisable_Note}" />
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
-                <ui:Button
-                    Margin="0,0,8,0"
-                    Content="{loc:Str Common_Cancel}"
-                    Click="CancelButton_Click" />
-
-                <ui:Button
-                    x:Name="ProceedOnlyButton"
-                    Margin="0,0,8,0"
-                    Click="ProceedOnlyButton_Click" />
-
-                <ui:Button
-                    x:Name="CascadeButton"
-                    Appearance="Primary"
-                    Click="CascadeButton_Click" />
-            </StackPanel>
         </StackPanel>
+
+        <WrapPanel Grid.Row="2" Style="{StaticResource DialogButtonBar}">
+            <ui:Button
+                Style="{StaticResource DialogButton}"
+                IsCancel="True"
+                Content="{loc:Str Common_Cancel}"
+                Click="CancelButton_Click" />
+
+            <ui:Button
+                x:Name="ProceedOnlyButton"
+                Style="{StaticResource DialogButton}"
+                Click="ProceedOnlyButton_Click" />
+
+            <ui:Button
+                x:Name="CascadeButton"
+                Style="{StaticResource DialogButton}"
+                Appearance="Primary"
+                IsDefault="True"
+                Click="CascadeButton_Click" />
+        </WrapPanel>
     </Grid>
 </ui:FluentWindow>
