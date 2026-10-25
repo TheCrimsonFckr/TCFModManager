@@ -160,6 +160,12 @@ internal static class HelpCatalog
                 .WithNote(() => Strings.Help_Browse_Addon_Note)
                 .WithKeywords(() => Strings.Help_Browse_Addon_Keywords),
 
+            Topic("browse.addonanyway", () => Strings.Help_Browse_AddonAnyway_Title,
+                Step(() => Strings.Help_Browse_AddonAnyway_Step1),
+                Step(() => Strings.Help_Browse_AddonAnyway_Step2, () => Strings.Addon_ActionInstallAnyway))
+                .WithNote(() => Strings.Help_Browse_AddonAnyway_Note)
+                .WithKeywords(() => Strings.Help_Browse_AddonAnyway_Keywords),
+
             Topic("browse.addonsearch", () => Strings.Help_Browse_AddonSearch_Title,
                 Step(() => Strings.Help_Browse_AddonSearch_Step1, () => Strings.Nav_Browse),
                 Step(() => Strings.Help_Browse_AddonSearch_Step2))

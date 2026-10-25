@@ -2809,4 +2809,9 @@ internal static class Strings
     internal static string Addon_InstallAnywayTitle => LocalizationService.Get("Addon_InstallAnywayTitle");
     internal static string Addon_InstallAnywayFormat => LocalizationService.Get("Addon_InstallAnywayFormat");
     internal static string Installed_AddonInstalledAnywayToolTipFormat => LocalizationService.Get("Installed_AddonInstalledAnywayToolTipFormat");
+    internal static string Help_Browse_AddonAnyway_Title => LocalizationService.Get("Help_Browse_AddonAnyway_Title");
+    internal static string Help_Browse_AddonAnyway_Step1 => LocalizationService.Get("Help_Browse_AddonAnyway_Step1");
+    internal static string Help_Browse_AddonAnyway_Step2 => LocalizationService.Get("Help_Browse_AddonAnyway_Step2");
+    internal static string Help_Browse_AddonAnyway_Note => LocalizationService.Get("Help_Browse_AddonAnyway_Note");
+    internal static string Help_Browse_AddonAnyway_Keywords => LocalizationService.Get("Help_Browse_AddonAnyway_Keywords");
 }

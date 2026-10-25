@@ -10261,4 +10261,22 @@ It may not work with your version. Install it anyway?</value>
     <value>Installed anyway - its author doesn't list {0} {1}</value>
     <comment>Status tooltip on an addon's Installed card when it was installed anyway (OPEN-37). {0} is the mod's name, {1} the mod version installed.</comment>
   </data>
+  <data name="Help_Browse_AddonAnyway_Title" xml:space="preserve">
+    <value>Install an addon its author hasn't marked for your mod version</value>
+    <comment>How-to title (OPEN-37). An addon is extra content published for one mod; its author lists which versions of the mod it works with.</comment>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Step1" xml:space="preserve">
+    <value>Open the mod and find the addon. A version that doesn't list the mod version you have says what it needs and what you have.</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Step2" xml:space="preserve">
+    <value>Press {0} under it and confirm. It installs as usual.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Note" xml:space="preserve">
+    <value>Its card on Installed says Installed anyway. When a version that fits your mod is published, it's offered as an update.</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Keywords" xml:space="preserve">
+    <value>addon, add-on, install anyway, force install, override, not compatible, outdated addon, needs older version, blocked addon</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
 </root>
