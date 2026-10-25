@@ -3,6 +3,7 @@ using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -196,11 +197,13 @@ public partial class InstalledViewModel
             : Strings.Installed_DeleteGroup(
                 section.Items.Count, section.Name, section.Items.Count);
 
-        if (MessageBox.Show(
-                message,
-                Strings.Installed_DeleteGroupTitle,
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning) != MessageBoxResult.Yes)
+        if (AskWindow.Show(new AskRequest
+            {
+                Title = Strings.Installed_DeleteGroupTitle,
+                Lead = message,
+                First = Strings.Installed_DeleteGroupButton,
+                Danger = AskChoice.First,
+            }) != AskChoice.First)
         {
             return;
         }

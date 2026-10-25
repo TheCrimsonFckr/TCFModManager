@@ -196,17 +196,20 @@ public partial class DependenciesViewModel : LocalizedViewModel
         var others = keep.Removals;
         if (others.Count == 0) return;
 
-        var lines = string.Join("\n", others.SelectMany(o =>
+        var lines = others.SelectMany(o =>
             (o.Card.IsAppManaged ? o.Card.Entries.Where(e => !e.IsDisabled) : o.Entries).Select(e =>
-                Text(Strings.Conflicts_KeepLineFormat, o.Card.DisplayTitle, Path.GetRelativePath(installPath, e.FolderPath)))));
+                Text(Strings.Conflicts_KeepItemFormat, o.Card.DisplayTitle, Path.GetRelativePath(installPath, e.FolderPath))));
 
-        var answer = System.Windows.MessageBox.Show(
-            Text(Strings.Conflicts_KeepConfirmFormat, keep.ModName, keep.Location, lines, InstalledViewModel.HeldSentence()),
-            Strings.Conflicts_KeepConfirmTitle,
-            System.Windows.MessageBoxButton.YesNo,
-            System.Windows.MessageBoxImage.Warning,
-            System.Windows.MessageBoxResult.No);
-        if (answer != System.Windows.MessageBoxResult.Yes) return;
+        var answer = AskWindow.Show(new AskRequest
+        {
+            Title = Text(Strings.Conflicts_KeepOneTitleFormat, keep.ModName),
+            Lead = Text(Strings.Conflicts_KeepLeadFormat, keep.Location),
+            Sections = [new(Strings.Conflicts_KeepRemovedHeading, [.. lines])],
+            Detail = [InstalledViewModel.HeldSentence()],
+            First = Strings.Conflicts_KeepButton,
+            Default = AskChoice.Cancel,
+        });
+        if (answer != AskChoice.First) return;
 
         IsBusy = true;
         var removed = new List<string>();
@@ -527,15 +530,17 @@ public partial class DependenciesViewModel : LocalizedViewModel
         {
             var lines = report.Report.BestFitBreaks
                 .Select(b => report.Rows.FirstOrDefault(r => ReferenceEquals(r.Requirement, b)) is { } row
-                    ? Text(Strings.Dependencies_BestFitBreakLineFormat, row.Name, row.Detail)
-                    : Text(Strings.Dependencies_BestFitBreakLineFormat, b.Dependent.Name, b.Range));
+                    ? Text(Strings.Dependencies_BestFitBreakItemFormat, row.Name, row.Detail)
+                    : Text(Strings.Dependencies_BestFitBreakItemFormat, b.Dependent.Name, b.Range));
 
-            var question = Text(Strings.Dependencies_BestFitQuestionFormat, report.DependencyName, version,
-                string.Join(Environment.NewLine, lines));
-
-            if (System.Windows.MessageBox.Show(question, Text(Strings.Dependencies_BestFitTitleFormat, report.DependencyName, version),
-                    System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Warning, System.Windows.MessageBoxResult.No)
-                != System.Windows.MessageBoxResult.Yes)
+            if (AskWindow.Show(new AskRequest
+                {
+                    Title = Text(Strings.Dependencies_BestFitTitleFormat, report.DependencyName, version),
+                    Lead = Text(Strings.Dependencies_BestFitLeadFormat, report.DependencyName, version),
+                    Sections = [new(Strings.Dependencies_BestFitBreaksHeading, [.. lines])],
+                    First = Strings.Dependencies_SwitchButton,
+                    Default = AskChoice.Cancel,
+                }) != AskChoice.First)
             {
                 StatusMessage = Text(Strings.Dependencies_BestFitCancelledFormat, report.DependencyName);
                 return;

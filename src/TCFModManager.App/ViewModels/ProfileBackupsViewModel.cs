@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
@@ -135,11 +136,13 @@ public sealed partial class ProfileBackupsViewModel : LocalizedViewModel
             return;
         }
 
-        if (MessageBox.Show(
-                LocalizationService.Text(Strings.Profiles_RestoreConfirmFormat, row.When, row.Why),
-                Strings.Profiles_RestoreTitle,
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question) != MessageBoxResult.Yes) return;
+        if (AskWindow.Show(new AskRequest
+            {
+                Title = Strings.Profiles_RestoreQuestionTitle,
+                Lead = LocalizationService.Text(Strings.Profiles_RestoreLeadFormat, row.When, row.Why),
+                Detail = [Strings.Profiles_RestoreDetail],
+                First = Strings.Profiles_Restore,
+            }) != AskChoice.First) return;
 
         IsBusy = true;
         try

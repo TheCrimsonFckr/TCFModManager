@@ -235,11 +235,15 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
         if (SelectedVersion is not { } selected) return;
 
         var parent = _parentName ?? Strings.Addon_ParentFallback;
-        var question = Text(
-            Strings.Addon_InstallAnywayFormat, Name, selected.VersionText, parent, selected.Raw.ModVersionConstraint, _parentVersion);
 
-        if (MessageBox.Show(question, Strings.Addon_InstallAnywayTitle, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No)
-            != MessageBoxResult.Yes)
+        if (AskWindow.Show(new AskRequest
+            {
+                Title = Text(Strings.Addon_InstallAnywayTitleFormat, Name),
+                Lead = Text(Strings.Addon_MadeForFormat, Name, selected.VersionText, parent, selected.Raw.ModVersionConstraint, _parentVersion),
+                Detail = [Strings.Addon_MayNotWork],
+                First = Strings.Addon_InstallAnywayButton,
+                Default = AskChoice.Cancel,
+            }) != AskChoice.First)
         {
             return;
         }

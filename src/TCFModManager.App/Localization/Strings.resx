@@ -2725,8 +2725,9 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="ThemeEditor_DeleteTitle" xml:space="preserve">
     <value>Delete theme</value>
   </data>
-  <data name="ThemeEditor_DeleteConfirmFormat" xml:space="preserve">
-    <value>Delete "{0}"? This can't be undone - export it first if you might want it back.</value>
+  <data name="ThemeEditor_DeleteLeadFormat" xml:space="preserve">
+    <value>Delete "{0}"? You can't undo this. Export it first if you might want it back.</value>
+    <comment>The window asked before deleting a theme. {0} the theme.</comment>
   </data>
   <data name="ThemeEditor_DeletedFormat" xml:space="preserve">
     <value>Deleted "{0}".</value>
@@ -2755,8 +2756,21 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="ThemeEditor_UnsavedFormat" xml:space="preserve">
     <value>Save your changes to "{0}"?</value>
   </data>
-  <data name="ThemeEditor_DiscardFormat" xml:space="preserve">
-    <value>Throw away your changes to "{0}"?</value>
+  <data name="ThemeEditor_DiscardChangesFormat" xml:space="preserve">
+    <value>Discard your changes to "{0}"?</value>
+    <comment>the theme editor window asked about unsaved changes, before loading another theme. {0} the theme.</comment>
+  </data>
+  <data name="ThemeEditor_DiscardButton" xml:space="preserve">
+    <value>Discard changes</value>
+    <comment>Button in the theme editor window asked about unsaved changes.</comment>
+  </data>
+  <data name="ThemeEditor_KeepEditing" xml:space="preserve">
+    <value>Keep editing</value>
+    <comment>Button in the theme editor window asked about unsaved changes: stay on this theme. The default.</comment>
+  </data>
+  <data name="ThemeEditor_DontSave" xml:space="preserve">
+    <value>Don't save</value>
+    <comment>Button in the theme editor window asked about unsaved changes on close: close without saving.</comment>
   </data>
   <data name="ThemeEditor_Import" xml:space="preserve">
     <value>Import</value>
@@ -3022,21 +3036,33 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>Couldn't open that folder.</value>
     <comment>Shown when Windows refused to open a folder in Explorer. Used by the Installed and Configs pages.</comment>
   </data>
-  <data name="Installed_DuplicateBodyFormat" xml:space="preserve">
-    <value>{0} is in both an enabled and a disabled folder:
-
-{1}
-
-Yes  -  keep the enabled copy
-No  -  keep the disabled copy, and enable it
-Cancel  -  leave it as it is
-
-The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your SPT install, not deleted.</value>
-    <comment>{0} is a mod name, {1} the folder paths one per line. Yes/No/Cancel are the Windows button captions and follow the operating system's language, so keep them as they appear there. .tcfmm-duplicates is a folder name and stays as it is.</comment>
+  <data name="Installed_DuplicateTwiceTitleFormat" xml:space="preserve">
+    <value>{0} is installed twice</value>
+    <comment>Title of the window asked before sorting out a mod that is in both an enabled and a disabled folder. {0} the mod.</comment>
   </data>
-  <data name="Installed_DuplicateTitleFormat" xml:space="preserve">
-    <value>Sort out {0}?</value>
-    <comment>{0} is a mod name. Dialog title.</comment>
+  <data name="Installed_DuplicateLeadFormat" xml:space="preserve">
+    <value>{0} is in an enabled folder and a disabled folder. Pick the copy to keep.</value>
+    <comment>First line of the window asked before sorting out a mod that is in both an enabled and a disabled folder. {0} the mod.</comment>
+  </data>
+  <data name="Installed_DuplicateEnabledHeading" xml:space="preserve">
+    <value>Enabled copy:</value>
+    <comment>Heads the enabled folder in the window asked before sorting out a mod that is in both an enabled and a disabled folder.</comment>
+  </data>
+  <data name="Installed_DuplicateDisabledHeading" xml:space="preserve">
+    <value>Disabled copy:</value>
+    <comment>Heads the disabled folder in the window asked before sorting out a mod that is in both an enabled and a disabled folder.</comment>
+  </data>
+  <data name="Installed_DuplicateMovedNote" xml:space="preserve">
+    <value>The other copy is moved to a hidden .tcfmm-duplicates folder in your SPT install. It isn't deleted.</value>
+    <comment>Under the folders in the window asked before sorting out a mod that is in both an enabled and a disabled folder. .tcfmm-duplicates is a folder name: keep it as it is.</comment>
+  </data>
+  <data name="Installed_KeepEnabledCopy" xml:space="preserve">
+    <value>Keep the enabled copy</value>
+    <comment>Button in the window asked before sorting out a mod that is in both an enabled and a disabled folder. The default.</comment>
+  </data>
+  <data name="Installed_KeepDisabledCopy" xml:space="preserve">
+    <value>Keep the disabled copy</value>
+    <comment>Button in the window asked before sorting out a mod that is in both an enabled and a disabled folder: keep the disabled copy and enable it.</comment>
   </data>
   <data name="Installed_DuplicateKeptEnabledFormat" xml:space="preserve">
     <value>Sorted out {0} - kept the enabled copy, the other is in .tcfmm-duplicates in your SPT install.</value>
@@ -3221,6 +3247,10 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
   <data name="Installed_DeleteGroupTitle" xml:space="preserve">
     <value>Delete group?</value>
     <comment>Dialog title.</comment>
+  </data>
+  <data name="Installed_DeleteGroupButton" xml:space="preserve">
+    <value>Delete group</value>
+    <comment>Button in the window asked before deleting a group.</comment>
   </data>
   <data name="Footprint_AreaClient" xml:space="preserve">
     <value>Client</value>
@@ -3812,6 +3842,14 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
     <value>Unsaved changes</value>
     <comment>Dialog title.</comment>
   </data>
+  <data name="Configs_DiscardButton" xml:space="preserve">
+    <value>Discard changes</value>
+    <comment>Button in the Configs window asked before leaving a file with unsaved changes.</comment>
+  </data>
+  <data name="Configs_KeepEditing" xml:space="preserve">
+    <value>Keep editing</value>
+    <comment>The other button in that window: stay on the file.</comment>
+  </data>
   <data name="Configs_NoneFound" xml:space="preserve">
     <value>No mod configs found. Plenty of plugins only write one the first time the game runs.</value>
   </data>
@@ -3835,15 +3873,21 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
     <value>{0} wasn't saved: a backup of it couldn't be made first ({1}). Nothing was changed - free some space or check the app's Data folder can be written to, then save again.</value>
     <comment>{0} is a config file name, {1} the operating system's reason.</comment>
   </data>
-  <data name="Configs_ChangedOnDiskFormat" xml:space="preserve">
-    <value>{0} has changed on disk since you opened it here.
-
-Yes  -  overwrite it with what's in the editor
-No  -  reload it and lose your changes
-Cancel  -  leave everything as it is
-
-Whichever you pick, the version currently on disk is copied into {1} first.</value>
-    <comment>{0} is a file name, {1} a folder path. Yes/No/Cancel are the Windows button captions and follow the operating system's language, so keep them as they appear there.</comment>
+  <data name="Configs_ChangedOnDiskLeadFormat" xml:space="preserve">
+    <value>Something else changed {0} after you opened it here.</value>
+    <comment>First line of the Configs window asked when the open file was changed by something else. {0} the file name.</comment>
+  </data>
+  <data name="Configs_ChangedOnDiskBackup" xml:space="preserve">
+    <value>Whichever you pick, the file on disk is backed up first.</value>
+    <comment>Under that line in the Configs window asked when the open file was changed by something else. The backup folder is shown below it.</comment>
+  </data>
+  <data name="Configs_SaveOverIt" xml:space="preserve">
+    <value>Save my changes over it</value>
+    <comment>Button in the Configs window asked when the open file was changed by something else.</comment>
+  </data>
+  <data name="Configs_ReloadLoseChanges" xml:space="preserve">
+    <value>Reload and lose my changes</value>
+    <comment>Button in the Configs window asked when the open file was changed by something else.</comment>
   </data>
   <data name="Configs_ChangedOnDiskTitle" xml:space="preserve">
     <value>File changed on disk</value>
@@ -4034,13 +4078,25 @@ Whichever you pick, the version currently on disk is copied into {1} first.</val
     <value>Cleared the manual override for {0} - it'll go back to auto-detecting from the files on disk.</value>
     <comment>{0} is a mod name.</comment>
   </data>
-  <data name="Options_SkipGateBody" xml:space="preserve">
-    <value>A mod's page is where its author puts install steps, requirements, known conflicts and warnings. Some mods won't work if you skip that, and this app has no way of telling you which ones.
-
-Turn this off and mods are downloaded and installed straight away, without showing you any of it. Knowing what a mod needs becomes yours to keep track of.
-
-You can turn it back on at any time.</value>
-    <comment>Shown when turning off the read-the-mod-page gate. Deliberately blunt - it is the one thing standing between someone and installing a mod whose page says it needs something this app cannot see.</comment>
+  <data name="Options_SkipGateLead" xml:space="preserve">
+    <value>Mods will install straight away, without showing you their pages.</value>
+    <comment>First line of the window asked before turning off the read-the-mod-page step in Options.</comment>
+  </data>
+  <data name="Options_SkipGateWhy" xml:space="preserve">
+    <value>A mod's page has its install steps, requirements, conflicts and warnings. Some mods won't work if you miss these. This app can't tell you which ones.</value>
+    <comment>Under that line in the window asked before turning off the read-the-mod-page step in Options.</comment>
+  </data>
+  <data name="Options_SkipGateUndo" xml:space="preserve">
+    <value>You can turn this back on at any time.</value>
+    <comment>Last line of the window asked before turning off the read-the-mod-page step in Options.</comment>
+  </data>
+  <data name="Options_SkipGateKeepAsking" xml:space="preserve">
+    <value>Keep asking</value>
+    <comment>Button in the window asked before turning off the read-the-mod-page step in Options: leave the step on. The default.</comment>
+  </data>
+  <data name="Options_SkipGateStopAsking" xml:space="preserve">
+    <value>Stop asking</value>
+    <comment>Button in the window asked before turning off the read-the-mod-page step in Options: turn the step off.</comment>
   </data>
   <data name="Options_SkipGateTitle" xml:space="preserve">
     <value>Stop asking me to read mod pages?</value>
@@ -4833,13 +4889,17 @@ See Dependencies and Conflicts.</value>
     <value>This would stop other mods loading</value>
     <comment>Message box title.</comment>
   </data>
-  <data name="Downloads_BreaksFormat" xml:space="preserve">
-    <value>Installing {0} {1} would stop these mods loading - their own files ask for another version:
-
-{2}
-
-Install anyway?</value>
-    <comment>Message box before installing. {0} mod, {1} version, {2} one Downloads_BreaksLineFormat per line.</comment>
+  <data name="Downloads_BreaksLeadFormat" xml:space="preserve">
+    <value>If you install {0} {1}, these mods will stop loading:</value>
+    <comment>First line of the window asked before installing a version that would stop other mods loading. {0} the mod, {1} the version. A list of Downloads_BreaksLineFormat lines follows.</comment>
+  </data>
+  <data name="Downloads_BreaksDetailFormat" xml:space="preserve">
+    <value>Each of them needs a different version of {0}.</value>
+    <comment>Under the list in the window asked before installing a version that would stop other mods loading. {0} the mod.</comment>
+  </data>
+  <data name="Downloads_InstallAnyway" xml:space="preserve">
+    <value>Install anyway</value>
+    <comment>Button in the windows asked before an install that would stop other mods loading, or that sp-mod marks as not for Fika. Cancel is the default.</comment>
   </data>
   <data name="Downloads_BreaksLineFormat" xml:space="preserve">
     <value>{0}: {1}</value>
@@ -5418,14 +5478,14 @@ Install anyway?</value>
     <value>TCF Mod Manager - Unexpected Error</value>
     <comment>Title of the dialog shown when the app hits an error it cannot handle. TCF Mod Manager is the app's name and stays as it is.</comment>
   </data>
-  <data name="App_CrashBodyFormat" xml:space="preserve">
-    <value>Something went wrong and wasn't handled:
+  <data name="App_CrashMessageFormat" xml:space="preserve">
+    <value>Something went wrong. The app will try to carry on.
 
 {0}
 
-This was written to:
+The details are in the log:
 {1}</value>
-    <comment>{0} is the error itself, which arrives in English from .NET; {1} is the path to the log file.</comment>
+    <comment>The crash box. {0} the error message, {1} the log file.</comment>
   </data>
   <data name="Options_MonitorDescription" xml:space="preserve">
     <value>Choose whether this app installs mods for you, or only downloads them so you can install them yourself. Browsing, update checks and dependencies keep working either way. Whichever you pick, every install button has a small button beside it that does the other one, for that mod alone.</value>
@@ -7429,9 +7489,17 @@ This was written to:
     <value>Clear removed mods</value>
     <comment>Title of the confirmation before clearing.</comment>
   </data>
-  <data name="Options_RemovedModsClearConfirmFormat" xml:space="preserve">
-    <value>Delete every removed mod kept in {1} ({0})? Nothing removed so far can be undone after this.</value>
-    <comment>Confirmation before clearing. {0} is a size, {1} the SPT folder.</comment>
+  <data name="Options_ClearRemovedLeadFormat" xml:space="preserve">
+    <value>This deletes every removed mod kept in {1}, freeing {0}.</value>
+    <comment>First line of the window asked before Clear removed mods in Options. {0} a size such as 120 MB, {1} the SPT install folder.</comment>
+  </data>
+  <data name="Options_ClearRemovedNoUndo" xml:space="preserve">
+    <value>After this, you can't undo any removal you've made so far.</value>
+    <comment>Under that line in the window asked before Clear removed mods in Options.</comment>
+  </data>
+  <data name="Options_ClearRemovedButton" xml:space="preserve">
+    <value>Delete them</value>
+    <comment>Button in the window asked before Clear removed mods in Options. Cancel is the default.</comment>
   </data>
   <data name="Options_RemovedModsClearedFormat" xml:space="preserve">
     <value>Removed mods cleared - {0} freed.</value>
@@ -7533,25 +7601,37 @@ This was written to:
     <value>Its folder {1} was left in place: it holds {0} files the mod didn't install.</value>
     <comment>{0} is a count, {1} a folder. Part of the message after a removal.</comment>
   </data>
-  <data name="Install_IncompatibleTitle" xml:space="preserve">
-    <value>Not made for your SPT version</value>
-    <comment>Title of the question asked before installing a version that doesn't support the installed SPT.</comment>
+  <data name="Install_NotMadeForTitleFormat" xml:space="preserve">
+    <value>Not made for SPT {0}</value>
+    <comment>Title of the window asked before installing a version that is not made for the installed SPT. {0} the installed SPT version.</comment>
   </data>
-  <data name="Install_IncompatibleOneFormat" xml:space="preserve">
-    <value>No version of this mod on sp-mod.com supports SPT {0}. The newest is:
-
-{1}
-
-Install it anyway? SPT may refuse to load it.</value>
-    <comment>{0} is the installed SPT version, {1} one Install_IncompatibleLineFormat line.</comment>
+  <data name="Install_NotMadeForOneFormat" xml:space="preserve">
+    <value>No version of this mod is made for SPT {0}. The newest version is:</value>
+    <comment>First line of the window asked before installing a version that is not made for the installed SPT, for one mod. One Install_IncompatibleLineFormat line follows.</comment>
   </data>
-  <data name="Install_IncompatibleBatchFormat" xml:space="preserve">
-    <value>These don't support SPT {0}:
-
-{1}
-
-Install them anyway? SPT may refuse to load them. No installs the rest without them.</value>
-    <comment>{0} is the installed SPT version, {1} one Install_IncompatibleLineFormat line per mod.</comment>
+  <data name="Install_NotMadeForBatchFormat" xml:space="preserve">
+    <value>These mods aren't made for SPT {0}:</value>
+    <comment>First line of the window asked before installing a version that is not made for the installed SPT, for several mods. A list follows.</comment>
+  </data>
+  <data name="Install_MayNotLoadOne" xml:space="preserve">
+    <value>SPT may not load it.</value>
+    <comment>Under the line in the window asked before installing a version that is not made for the installed SPT, for one mod.</comment>
+  </data>
+  <data name="Install_MayNotLoadMany" xml:space="preserve">
+    <value>SPT may not load them.</value>
+    <comment>Under the list in the window asked before installing a version that is not made for the installed SPT, for several mods.</comment>
+  </data>
+  <data name="Install_InstallAnyway" xml:space="preserve">
+    <value>Install anyway</value>
+    <comment>Button in the window asked before installing a version that is not made for the installed SPT, for one mod. Cancel is the default.</comment>
+  </data>
+  <data name="Install_SkipThese" xml:space="preserve">
+    <value>Skip these mods</value>
+    <comment>Button in the window asked before installing a version that is not made for the installed SPT, for several mods: install the rest without them. The default.</comment>
+  </data>
+  <data name="Install_InstallThemAnyway" xml:space="preserve">
+    <value>Install them anyway</value>
+    <comment>Button in the window asked before installing a version that is not made for the installed SPT, for several mods: install them too.</comment>
   </data>
   <data name="Install_IncompatibleLineFormat" xml:space="preserve">
     <value>{0} {1} - needs SPT {2}</value>
@@ -7638,21 +7718,25 @@ See Dependencies and Conflicts.</value>
     <value>Keep this copy and remove the others. They go where removed mods go, so Undo on the Installed page can put them back.</value>
     <comment>Tooltip on Keep this one.</comment>
   </data>
-  <data name="Conflicts_KeepConfirmTitle" xml:space="preserve">
-    <value>Keep one copy</value>
-    <comment>Title of the question before keeping one copy.</comment>
+  <data name="Conflicts_KeepOneTitleFormat" xml:space="preserve">
+    <value>Keep one copy of {0}?</value>
+    <comment>Title of the window asked before Keep this one on the Dependencies and Conflicts page. {0} the mod.</comment>
   </data>
-  <data name="Conflicts_KeepConfirmFormat" xml:space="preserve">
-    <value>Keep {0} in {1}, and remove:
-
-{2}
-
-{3}</value>
-    <comment>{0} mod name, {1} its folder, {2} one line per mod that will be removed, {3} how long removed files are kept.</comment>
+  <data name="Conflicts_KeepLeadFormat" xml:space="preserve">
+    <value>This keeps the copy in {0}.</value>
+    <comment>First line of the window asked before Keep this one on the Dependencies and Conflicts page. {0} a folder.</comment>
   </data>
-  <data name="Conflicts_KeepLineFormat" xml:space="preserve">
-    <value>{0} - {1}</value>
-    <comment>One mod in the Keep one copy question. {0} mod name, {1} folder.</comment>
+  <data name="Conflicts_KeepRemovedHeading" xml:space="preserve">
+    <value>These copies will be removed:</value>
+    <comment>Heads the list in the window asked before Keep this one on the Dependencies and Conflicts page.</comment>
+  </data>
+  <data name="Conflicts_KeepItemFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+    <comment>One copy in that list. {0} the mod, {1} its folder.</comment>
+  </data>
+  <data name="Conflicts_KeepButton" xml:space="preserve">
+    <value>Keep this copy</value>
+    <comment>Button in the window asked before Keep this one on the Dependencies and Conflicts page. Cancel is the default.</comment>
   </data>
   <data name="Conflicts_KeptFormat" xml:space="preserve">
     <value>Kept {0}. Removed {1} - Undo on the Installed page puts it back.</value>
@@ -8189,7 +8273,7 @@ See Dependencies and Conflicts.</value>
     <comment>Under a copy: {0} how many files, {1} its size.</comment>
   </data>
   <data name="Profiles_Restore" xml:space="preserve">
-    <value>Put back</value>
+    <value>Restore</value>
     <comment>Button on a copy: restore it.</comment>
   </data>
   <data name="Profiles_BackUpNow" xml:space="preserve">
@@ -8236,15 +8320,17 @@ See Dependencies and Conflicts.</value>
     <value>That didn't work: {0}</value>
     <comment>A backup or restore failed. {0} is the reason.</comment>
   </data>
-  <data name="Profiles_RestoreTitle" xml:space="preserve">
-    <value>Put profiles back</value>
-    <comment>Title of the restore question.</comment>
+  <data name="Profiles_RestoreQuestionTitle" xml:space="preserve">
+    <value>Restore profiles?</value>
+    <comment>Title of the window asked before restoring SPT profiles from a backup.</comment>
   </data>
-  <data name="Profiles_RestoreConfirmFormat" xml:space="preserve">
-    <value>Put back the profiles as they were on {0} ({1})?
-
-What is in them now is copied first, so this can be undone the same way. Profiles made since then are left as they are.</value>
-    <comment>{0} when the copy was taken, {1} why.</comment>
+  <data name="Profiles_RestoreLeadFormat" xml:space="preserve">
+    <value>Your profiles go back to how they were on {0} ({1}).</value>
+    <comment>First line of the window asked before restoring SPT profiles from a backup. {0} a date and time, {1} why the backup was made.</comment>
+  </data>
+  <data name="Profiles_RestoreDetail" xml:space="preserve">
+    <value>Your current profiles are backed up first, so you can undo this. Profiles made after that date aren't changed.</value>
+    <comment>Under that line in the window asked before restoring SPT profiles from a backup.</comment>
   </data>
   <data name="Profiles_RestoredFormat" xml:space="preserve">
     <value>The profiles from {0} have been put back. What was there before is at the top of the list.</value>
@@ -8270,21 +8356,21 @@ What is in them now is copied first, so this can be undone the same way. Profile
     <value>Update to {0} held back by sp-mod.</value>
     <comment>sp-mod holds the update back without naming a reason. {0} is the version.</comment>
   </data>
-  <data name="Downloads_FikaIncompatibleTitle" xml:space="preserve">
-    <value>Not for Fika</value>
-    <comment>Title of the question before installing a version sp-mod marks as not working with Fika, on an install that runs Fika (OPEN-12 F17).</comment>
+  <data name="Downloads_NotForFikaTitle" xml:space="preserve">
+    <value>Not made for Fika</value>
+    <comment>Title of the window asked before installing a mod sp-mod marks as not working with Fika, when Fika is installed.</comment>
   </data>
-  <data name="Downloads_FikaIncompatibleFormat" xml:space="preserve">
-    <value>Fika is installed here, and sp-mod marks {0} {1} as not working with Fika. Installed anyway, it may break co-op raids or stop Fika from loading.
-
-Install it anyway?</value>
-    <comment>{0} is the mod, {1} the version.</comment>
+  <data name="Downloads_FikaLeadFormat" xml:space="preserve">
+    <value>sp-mod says {0} {1} doesn't work with Fika, and Fika is installed here.</value>
+    <comment>First line of the window asked before installing a mod sp-mod marks as not working with Fika, when Fika is installed. {0} the mod, {1} the version.</comment>
   </data>
-  <data name="Downloads_FikaIncompatibleDownloadFormat" xml:space="preserve">
-    <value>Fika is installed here, and sp-mod marks {0} {1} as not working with Fika. Once installed, it may break co-op raids or stop Fika from loading.
-
-Download it anyway?</value>
-    <comment>As Downloads_FikaIncompatibleFormat, for Monitor mode, where the archive is only saved. {0} is the mod, {1} the version.</comment>
+  <data name="Downloads_FikaDetail" xml:space="preserve">
+    <value>It may break co-op raids or stop Fika loading.</value>
+    <comment>Under that line in the window asked before installing a mod sp-mod marks as not working with Fika, when Fika is installed.</comment>
+  </data>
+  <data name="Downloads_DownloadAnyway" xml:space="preserve">
+    <value>Download anyway</value>
+    <comment>Button in the window asked before installing a mod sp-mod marks as not working with Fika, when Fika is installed when it only downloads. Cancel is the default.</comment>
   </data>
   <data name="Downloads_FikaDeclinedFormat" xml:space="preserve">
     <value>{0} {1} left out - sp-mod marks it as not working with Fika.</value>
@@ -9545,9 +9631,9 @@ Download it anyway?</value>
   <data name="Filter_PresetDeleteTitle" xml:space="preserve">
     <value>Delete filter preset</value>
   </data>
-  <data name="Filter_PresetDeleteQuestionFormat" xml:space="preserve">
-    <value>Delete the filter preset "{0}"? The page stays as it is.</value>
-    <comment>{0} is a preset name.</comment>
+  <data name="Filter_PresetDeleteLeadFormat" xml:space="preserve">
+    <value>Delete the filter preset "{0}"? Your current filters stay as they are.</value>
+    <comment>The window asked before deleting a filter preset. {0} its name.</comment>
   </data>
   <data name="Filter_PresetReplaceTitle" xml:space="preserve">
     <value>Replace filter preset</value>
@@ -9555,6 +9641,10 @@ Download it anyway?</value>
   <data name="Filter_PresetReplaceQuestionFormat" xml:space="preserve">
     <value>There's already a filter preset called "{0}". Replace it with the page as it is now?</value>
     <comment>{0} is a preset name.</comment>
+  </data>
+  <data name="Filter_PresetReplaceButton" xml:space="preserve">
+    <value>Replace</value>
+    <comment>Button in the window asked before replacing a filter preset of the same name.</comment>
   </data>
   <data name="Filter_PresetNameTaken" xml:space="preserve">
     <value>Another filter preset already has that name.</value>
@@ -9632,17 +9722,21 @@ Right-click to save the current filters to it, rename it or delete it.</value>
   <data name="Dependencies_BestFitTitleFormat" xml:space="preserve">
     <value>Switch {0} to {1}?</value>
   </data>
-  <data name="Dependencies_BestFitQuestionFormat" xml:space="preserve">
-    <value>Version {1} of {0} lets more of your mods load, but these would stop loading:
-
-{2}
-
-Switch anyway?</value>
-    <comment>{0} dependency name, {1} version, {2} one line per mod it would break (Dependencies_BestFitBreakLineFormat).</comment>
+  <data name="Dependencies_BestFitLeadFormat" xml:space="preserve">
+    <value>Version {1} of {0} lets more of your mods load.</value>
+    <comment>First line of the window asked before switching a dependency to the version that lets the most mods load. {0} the dependency, {1} the version.</comment>
   </data>
-  <data name="Dependencies_BestFitBreakLineFormat" xml:space="preserve">
-    <value>• {0} - {1}</value>
-    <comment>{0} mod name and version, {1} what it needs.</comment>
+  <data name="Dependencies_BestFitBreaksHeading" xml:space="preserve">
+    <value>These would stop loading:</value>
+    <comment>Heads the list in the window asked before switching a dependency to the version that lets the most mods load.</comment>
+  </data>
+  <data name="Dependencies_BestFitBreakItemFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+    <comment>One mod in that list. {0} the mod, {1} what it needs.</comment>
+  </data>
+  <data name="Dependencies_SwitchButton" xml:space="preserve">
+    <value>Switch</value>
+    <comment>Button in the window asked before switching a dependency to the version that lets the most mods load. Cancel is the default.</comment>
   </data>
   <data name="Dependencies_BestFitCancelledFormat" xml:space="preserve">
     <value>Left {0} as it is.</value>
@@ -9767,15 +9861,25 @@ Switch anyway?</value>
   <data name="Installed_SptDismissAllToolTip" xml:space="preserve">
     <value>Stop warning about every mod counted here. Each warning comes back if that mod or SPT changes.</value>
   </data>
-  <data name="Installed_SptDismissAllTitle" xml:space="preserve">
-    <value>Dismiss version warnings</value>
+  <data name="Installed_SptDismissTitle" xml:space="preserve">
+    <value>Dismiss version warnings?</value>
+    <comment>Title of the window asked before Dismiss all on the SPT version warnings. "Dismiss all" is the button that opens it.</comment>
   </data>
-  <data name="Installed_SptDismissAllQuestion_one" xml:space="preserve">
-    <value>Stop warning that {0} mod isn't for SPT {1}? It comes back if that mod or SPT changes.</value>
-    <comment>{0} a count, {1} the installed SPT version.</comment>
+  <data name="Installed_SptDismissLead_one" xml:space="preserve">
+    <value>Stop showing the "not for SPT {1}" warning on {0} mod?</value>
+    <comment>First line of the window asked before Dismiss all on the SPT version warnings. {0} how many mods, {1} the SPT version.</comment>
   </data>
-  <data name="Installed_SptDismissAllQuestion_other" xml:space="preserve">
-    <value>Stop warning that {0} mods aren't for SPT {1}? Each warning comes back if that mod or SPT changes.</value>
+  <data name="Installed_SptDismissLead_other" xml:space="preserve">
+    <value>Stop showing the "not for SPT {1}" warning on {0} mods?</value>
+    <comment>First line of the window asked before Dismiss all on the SPT version warnings. {0} how many mods, {1} the SPT version.</comment>
+  </data>
+  <data name="Installed_SptDismissComesBack" xml:space="preserve">
+    <value>A warning comes back if its mod or SPT is updated.</value>
+    <comment>Under that line in the window asked before Dismiss all on the SPT version warnings.</comment>
+  </data>
+  <data name="Installed_SptDismissButton" xml:space="preserve">
+    <value>Dismiss warnings</value>
+    <comment>Button in the window asked before Dismiss all on the SPT version warnings. Cancel is the default.</comment>
   </data>
   <data name="Installed_SptShowAll" xml:space="preserve">
     <value>Show all warnings</value>
@@ -10371,15 +10475,21 @@ Switch anyway?</value>
     <value>Authors don't always update an addon's list of mod versions. Install it if you know it works with yours.</value>
     <comment>Tooltip on the Install anyway button (OPEN-37).</comment>
   </data>
-  <data name="Addon_InstallAnywayTitle" xml:space="preserve">
-    <value>Install anyway?</value>
-    <comment>Title of the question asked before installing an addon version its author doesn't list for the installed mod version (OPEN-37).</comment>
+  <data name="Addon_InstallAnywayTitleFormat" xml:space="preserve">
+    <value>Install {0} anyway?</value>
+    <comment>Title of the window asked before installing an addon whose author has not listed the installed version of its mod. {0} the addon.</comment>
   </data>
-  <data name="Addon_InstallAnywayFormat" xml:space="preserve">
-    <value>{0} {1} lists {2} {3}. You have {2} {4}.
-
-It may not work with your version. Install it anyway?</value>
-    <comment>{0} is the addon's name, {1} its version, {2} the mod's name, {3} the mod version the addon lists, {4} the mod version installed.</comment>
+  <data name="Addon_MadeForFormat" xml:space="preserve">
+    <value>{0} {1} is made for {2} {3}. You have {2} {4}.</value>
+    <comment>First line of the window asked before installing an addon whose author has not listed the installed version of its mod. {0} the addon, {1} its version, {2} its mod, {3} the mod versions the addon is made for, {4} the installed mod version.</comment>
+  </data>
+  <data name="Addon_MayNotWork" xml:space="preserve">
+    <value>It may not work with your version.</value>
+    <comment>Under that line in the window asked before installing an addon whose author has not listed the installed version of its mod.</comment>
+  </data>
+  <data name="Addon_InstallAnywayButton" xml:space="preserve">
+    <value>Install anyway</value>
+    <comment>Button in the window asked before installing an addon whose author has not listed the installed version of its mod. Cancel is the default.</comment>
   </data>
   <data name="Installed_AddonInstalledAnywayToolTipFormat" xml:space="preserve">
     <value>Installed anyway - its author doesn't list {0} {1}</value>

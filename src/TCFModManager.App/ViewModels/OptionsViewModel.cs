@@ -161,14 +161,17 @@ public partial class OptionsViewModel : LocalizedViewModel
 
         var size = DownloadQueueItemViewModel.SizeLabel(RemovedModsBytes);
 
-        var answer = MessageBox.Show(
-            Text(Strings.Options_RemovedModsClearConfirmFormat, size, installPath),
-            Strings.Options_RemovedModsClearTitle,
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning,
-            MessageBoxResult.No);
+        var answer = AskWindow.Show(new AskRequest
+        {
+            Title = Strings.Options_RemovedModsClearTitle,
+            Lead = Text(Strings.Options_ClearRemovedLeadFormat, size, installPath),
+            Detail = [Strings.Options_ClearRemovedNoUndo],
+            First = Strings.Options_ClearRemovedButton,
+            Danger = AskChoice.First,
+            Default = AskChoice.Cancel,
+        });
 
-        if (answer != MessageBoxResult.Yes) return;
+        if (answer != AskChoice.First) return;
 
         RemovedMods.Clear(installPath);
         RefreshRemovedModsSize();
@@ -640,12 +643,15 @@ public partial class OptionsViewModel : LocalizedViewModel
     // which mods those are.
     //
     private static bool ConfirmSkip() =>
-        MessageBox.Show(
-            Strings.Options_SkipGateBody,
-            Strings.Options_SkipGateTitle,
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning,
-            MessageBoxResult.No) == MessageBoxResult.Yes;
+        AskWindow.Show(new AskRequest
+        {
+            Title = Strings.Options_SkipGateTitle,
+            Lead = Strings.Options_SkipGateLead,
+            Detail = [Strings.Options_SkipGateWhy, Strings.Options_SkipGateUndo],
+            First = Strings.Options_SkipGateKeepAsking,
+            Second = Strings.Options_SkipGateStopAsking,
+            Cancel = null,
+        }) == AskChoice.Second;
 
     partial void OnSelectedWindowStartupChanged(WindowStartupItem value)
     {

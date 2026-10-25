@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 using Wpf.Ui.Appearance;
@@ -568,14 +569,16 @@ public sealed partial class ThemeEditorViewModel : LocalizedViewModel
     [RelayCommand(CanExecute = nameof(CanDelete))]
     private void Delete()
     {
-        var answer = MessageBox.Show(
-            Text(Strings.ThemeEditor_DeleteConfirmFormat, _working.Name),
-            Strings.ThemeEditor_DeleteTitle,
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning,
-            MessageBoxResult.No);
+        var answer = AskWindow.Show(new AskRequest
+        {
+            Title = Strings.ThemeEditor_DeleteTitle,
+            Lead = Text(Strings.ThemeEditor_DeleteLeadFormat, _working.Name),
+            First = Strings.ThemeEditor_Delete,
+            Danger = AskChoice.First,
+            Default = AskChoice.Cancel,
+        });
 
-        if (answer != MessageBoxResult.Yes) return;
+        if (answer != AskChoice.First) return;
 
         var id = _working.Id;
         var name = _working.Name;
@@ -655,19 +658,21 @@ public sealed partial class ThemeEditorViewModel : LocalizedViewModel
     {
         if (!IsDirty) return true;
 
-        var answer = MessageBox.Show(
-            Text(Strings.ThemeEditor_UnsavedFormat, _working.Name),
-            Strings.ThemeEditor_UnsavedTitle,
-            MessageBoxButton.YesNoCancel,
-            MessageBoxImage.Question,
-            MessageBoxResult.Cancel);
+        var answer = AskWindow.Show(new AskRequest
+        {
+            Title = Strings.ThemeEditor_UnsavedTitle,
+            Lead = Text(Strings.ThemeEditor_UnsavedFormat, _working.Name),
+            First = Strings.Common_Save,
+            Second = Strings.ThemeEditor_DontSave,
+            Default = AskChoice.Cancel,
+        });
 
         switch (answer)
         {
-            case MessageBoxResult.Yes when CanSave:
+            case AskChoice.First when CanSave:
                 Save();
                 return true;
-            case MessageBoxResult.No:
+            case AskChoice.Second:
                 return true;
             default:
                 return false;
@@ -681,12 +686,14 @@ public sealed partial class ThemeEditorViewModel : LocalizedViewModel
     }
 
     private bool ConfirmDiscard() =>
-        MessageBox.Show(
-            Text(Strings.ThemeEditor_DiscardFormat, _working.Name),
-            Strings.ThemeEditor_UnsavedTitle,
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Question,
-            MessageBoxResult.No) == MessageBoxResult.Yes;
+        AskWindow.Show(new AskRequest
+        {
+            Title = Strings.ThemeEditor_UnsavedTitle,
+            Lead = Text(Strings.ThemeEditor_DiscardChangesFormat, _working.Name),
+            First = Strings.ThemeEditor_DiscardButton,
+            Cancel = Strings.ThemeEditor_KeepEditing,
+            Default = AskChoice.Cancel,
+        }) == AskChoice.First;
 
     private static string SuggestedFileName(string name)
     {

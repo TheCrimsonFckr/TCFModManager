@@ -73,17 +73,23 @@ public partial class InstalledViewModel
         }
 
         var pairs = mod.DuplicateFolders;
-        var folders = string.Join("\n", pairs.SelectMany(p => new[] { p.Enabled.FolderPath, p.Disabled.FolderPath }));
+        var answer = AskWindow.Show(new AskRequest
+        {
+            Title = Text(Strings.Installed_DuplicateTwiceTitleFormat, mod.DisplayTitle),
+            Lead = Text(Strings.Installed_DuplicateLeadFormat, mod.DisplayTitle),
+            Sections =
+            [
+                new(Strings.Installed_DuplicateEnabledHeading, [.. pairs.Select(p => p.Enabled.FolderPath)]),
+                new(Strings.Installed_DuplicateDisabledHeading, [.. pairs.Select(p => p.Disabled.FolderPath)]),
+            ],
+            Detail = [Strings.Installed_DuplicateMovedNote],
+            First = Strings.Installed_KeepEnabledCopy,
+            Second = Strings.Installed_KeepDisabledCopy,
+        });
 
-        var answer = MessageBox.Show(
-            Text(Strings.Installed_DuplicateBodyFormat, mod.DisplayTitle, folders),
-            Text(Strings.Installed_DuplicateTitleFormat, mod.DisplayTitle),
-            MessageBoxButton.YesNoCancel,
-            MessageBoxImage.Warning);
+        if (answer == AskChoice.Cancel) return;
 
-        if (answer is not (MessageBoxResult.Yes or MessageBoxResult.No)) return;
-
-        var keepEnabled = answer == MessageBoxResult.Yes;
+        var keepEnabled = answer == AskChoice.First;
         var moves = new List<ModMove>();
         var failed = new List<ModDisableFailure>();
 

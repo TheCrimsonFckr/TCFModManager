@@ -1,5 +1,5 @@
-using System.Windows;
 using TCFModManager.App.Localization;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.Services;
@@ -33,16 +33,18 @@ public static class SptCompatibility
     {
         if (lines.Count == 0) return true;
 
-        var body = LocalizationService.Text(
-            batch ? Strings.Install_IncompatibleBatchFormat : Strings.Install_IncompatibleOneFormat,
-            AppServices.SptEnvironment.InstalledVersion,
-            string.Join("\n", lines));
+        var spt = AppServices.SptEnvironment.InstalledVersion;
 
-        return MessageBox.Show(
-            body,
-            Strings.Install_IncompatibleTitle,
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning,
-            MessageBoxResult.No) == MessageBoxResult.Yes;
+        return AskWindow.Show(new AskRequest
+        {
+            Title = LocalizationService.Text(Strings.Install_NotMadeForTitleFormat, spt),
+            Lead = LocalizationService.Text(batch ? Strings.Install_NotMadeForBatchFormat : Strings.Install_NotMadeForOneFormat, spt),
+            Sections = [new(null, lines)],
+            Detail = [batch ? Strings.Install_MayNotLoadMany : Strings.Install_MayNotLoadOne],
+            First = batch ? Strings.Install_SkipThese : Strings.Install_InstallAnyway,
+            Second = batch ? Strings.Install_InstallThemAnyway : null,
+            Cancel = batch ? null : Strings.Common_Cancel,
+            Default = batch ? AskChoice.First : AskChoice.Cancel,
+        }) == (batch ? AskChoice.Second : AskChoice.First);
     }
 }

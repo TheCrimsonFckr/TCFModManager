@@ -70,10 +70,14 @@ public partial class InstalledViewModel
         var keys = _notForSptKeys;
         if (keys.Count == 0) return;
 
-        var question = Strings.Installed_SptDismissAllQuestion(keys.Count, keys.Count, AppServices.SptEnvironment.InstalledVersion);
-        if (System.Windows.MessageBox.Show(question, Strings.Installed_SptDismissAllTitle,
-                System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question, System.Windows.MessageBoxResult.No)
-            != System.Windows.MessageBoxResult.Yes) return;
+        if (AskWindow.Show(new AskRequest
+            {
+                Title = Strings.Installed_SptDismissTitle,
+                Lead = Strings.Installed_SptDismissLead(keys.Count, keys.Count, AppServices.SptEnvironment.InstalledVersion),
+                Detail = [Strings.Installed_SptDismissComesBack],
+                First = Strings.Installed_SptDismissButton,
+                Default = AskChoice.Cancel,
+            }) != AskChoice.First) return;
 
         AppServices.DismissedSptWarnings.Dismiss(keys);
         AppLog.Info("Installed", $"dismissed {keys.Count} SPT warnings");

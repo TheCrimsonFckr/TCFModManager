@@ -3,6 +3,7 @@ using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -114,7 +115,7 @@ public sealed partial class FilterPresetList<T> : ObservableObject where T : cla
         var list = _list(settings);
 
         if (FilterPresetRules.Find(list, name) is { } existing
-            && !Ask(Strings.Filter_PresetReplaceTitle, LocalizationService.Text(Strings.Filter_PresetReplaceQuestionFormat, existing.Name)))
+            && !Ask(Strings.Filter_PresetReplaceTitle, LocalizationService.Text(Strings.Filter_PresetReplaceQuestionFormat, existing.Name), Strings.Filter_PresetReplaceButton))
         {
             return;
         }
@@ -201,7 +202,7 @@ public sealed partial class FilterPresetList<T> : ObservableObject where T : cla
     private void Delete(FilterPresetRow? row)
     {
         if (row is null) return;
-        if (!Ask(Strings.Filter_PresetDeleteTitle, LocalizationService.Text(Strings.Filter_PresetDeleteQuestionFormat, row.Name))) return;
+        if (!Ask(Strings.Filter_PresetDeleteTitle, LocalizationService.Text(Strings.Filter_PresetDeleteLeadFormat, row.Name), Strings.Filter_PresetDelete, danger: true)) return;
 
         var settings = Load(out var service);
         _list(settings).RemoveAll(p => p.Id == row.Preset.Id);
@@ -226,6 +227,12 @@ public sealed partial class FilterPresetList<T> : ObservableObject where T : cla
         return service.Load();
     }
 
-    private static bool Ask(string title, string question) =>
-        MessageBox.Show(question, title, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
+    private static bool Ask(string title, string question, string button, bool danger = false) =>
+        AskWindow.Show(new AskRequest
+        {
+            Title = title,
+            Lead = question,
+            First = button,
+            Danger = danger ? AskChoice.First : null,
+        }) == AskChoice.First;
 }

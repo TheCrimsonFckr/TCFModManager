@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -374,11 +375,13 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
         // Moving away from an edited file would drop the edit silently, so it is offered back first.
         if (IsDirty && _loadedEntry is not null && !ReferenceEquals(_loadedEntry, value))
         {
-            var keep = MessageBox.Show(
-                Text(Strings.Configs_DiscardFormat, _loadedEntry.FileName),
-                Strings.Configs_DiscardTitle,
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question) == MessageBoxResult.No;
+            var keep = AskWindow.Show(new AskRequest
+            {
+                Title = Strings.Configs_DiscardTitle,
+                Lead = Text(Strings.Configs_DiscardFormat, _loadedEntry.FileName),
+                First = Strings.Configs_DiscardButton,
+                Cancel = Strings.Configs_KeepEditing,
+            }) != AskChoice.First;
 
             if (keep)
             {
@@ -589,22 +592,24 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
     //
     private void HandleChangedOnDisk(ConfigEntryViewModel entry)
     {
-        var answer = MessageBox.Show(
-            Text(
-                Strings.Configs_ChangedOnDiskFormat,
-                entry.FileName,
-                ModConfigStore.BackupDisplayPath),
-            Strings.Configs_ChangedOnDiskTitle,
-            MessageBoxButton.YesNoCancel,
-            MessageBoxImage.Warning);
+        var answer = AskWindow.Show(new AskRequest
+        {
+            Title = Strings.Configs_ChangedOnDiskTitle,
+            Lead = Text(Strings.Configs_ChangedOnDiskLeadFormat, entry.FileName),
+            Detail = [Strings.Configs_ChangedOnDiskBackup],
+            Footnote = ModConfigStore.BackupDisplayPath,
+            First = Strings.Configs_SaveOverIt,
+            Second = Strings.Configs_ReloadLoseChanges,
+            Default = AskChoice.Cancel,
+        });
 
         switch (answer)
         {
-            case MessageBoxResult.Yes:
+            case AskChoice.First:
                 SaveInternal(overwriteChangesOnDisk: true);
                 break;
 
-            case MessageBoxResult.No:
+            case AskChoice.Second:
                 // Copied aside before it is thrown away, so a reload can't lose anything either.
                 var installPath = AppServices.SptEnvironment.InstallPath;
                 if (!string.IsNullOrWhiteSpace(installPath))

@@ -200,7 +200,7 @@ public partial class App : Application
         // throwing, so even a failure inside the language stack leaves a readable dialog.
         //
         MessageBox.Show(
-            LocalizationService.Text(Strings.App_CrashBodyFormat, e.Exception, AppLog.CurrentFile),
+            LocalizationService.Text(Strings.App_CrashMessageFormat, e.Exception.Message, AppLog.CurrentFile),
             Strings.App_CrashTitle,
             MessageBoxButton.OK,
             MessageBoxImage.Error);

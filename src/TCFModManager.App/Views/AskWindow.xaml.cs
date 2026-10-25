@@ -72,7 +72,7 @@ public partial class AskWindow : FluentWindow
         Wire(SecondButton, request.Second, AskChoice.Second, request);
         Wire(CancelButton, request.Cancel, AskChoice.Cancel, request);
 
-        var owner = Application.Current?.MainWindow;
+        var owner = Application.Current?.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive) ?? Application.Current?.MainWindow;
         Owner = owner is { IsVisible: true } ? owner : null;
         WindowStartupLocation = Owner is not null ? WindowStartupLocation.CenterOwner : WindowStartupLocation.CenterScreen;
 

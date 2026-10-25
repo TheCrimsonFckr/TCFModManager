@@ -708,23 +708,27 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
                 }))
             .Distinct();
 
-        return System.Windows.MessageBox.Show(
-            Text(Strings.Downloads_BreaksFormat, item.ModName, newVersion, string.Join("\n", lines)),
-            Strings.Downloads_BreaksTitle,
-            System.Windows.MessageBoxButton.YesNo,
-            System.Windows.MessageBoxImage.Warning,
-            System.Windows.MessageBoxResult.No) == System.Windows.MessageBoxResult.Yes;
+        return AskWindow.Show(new AskRequest
+        {
+            Title = Strings.Downloads_BreaksTitle,
+            Lead = Text(Strings.Downloads_BreaksLeadFormat, item.ModName, newVersion),
+            Sections = [new(null, [.. lines])],
+            Detail = [Text(Strings.Downloads_BreaksDetailFormat, item.ModName)],
+            First = Strings.Downloads_InstallAnyway,
+            Default = AskChoice.Cancel,
+        }) == AskChoice.First;
     }
 
     // Defaults to No, like the SPT question (SptCompatibility).
     private static bool ConfirmNotForFika(DownloadQueueItemViewModel item) =>
-        System.Windows.MessageBox.Show(
-            Text(item.DownloadOnly ? Strings.Downloads_FikaIncompatibleDownloadFormat : Strings.Downloads_FikaIncompatibleFormat,
-                item.ModName, item.VersionLabel),
-            Strings.Downloads_FikaIncompatibleTitle,
-            System.Windows.MessageBoxButton.YesNo,
-            System.Windows.MessageBoxImage.Warning,
-            System.Windows.MessageBoxResult.No) == System.Windows.MessageBoxResult.Yes;
+        AskWindow.Show(new AskRequest
+        {
+            Title = Strings.Downloads_NotForFikaTitle,
+            Lead = Text(Strings.Downloads_FikaLeadFormat, item.ModName, item.VersionLabel),
+            Detail = [Strings.Downloads_FikaDetail],
+            First = item.DownloadOnly ? Strings.Downloads_DownloadAnyway : Strings.Downloads_InstallAnyway,
+            Default = AskChoice.Cancel,
+        }) == AskChoice.First;
 
     private static void Fail(DownloadQueueItemViewModel item, string message, Exception? ex = null, bool unexpected = false)
     {
