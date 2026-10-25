@@ -7,7 +7,6 @@ Everything lives next to the exe:
 | `Data\mod_cache.json` | Cached catalog |
 | `Data\spt_versions.json` | Cached SPT release list, refetched daily |
 | `Data\dependency_flags.json` | Per-mod "has dependencies" answers, re-checked when a mod publishes |
-| `Data\accepted_dependency_warnings.json` | sp-mod version warnings you accepted on Dependencies and Conflicts, per pair of versions |
 | `Data\mod_groups.json` | Your groups, and which mod is in which |
 | `Data\mod_lists.json` | Your mod lists, which ones you follow, your pinned mods, and the single undo point |
 | `Data\downloads.json` | Monitor mode: each archive saved for you to install, what it would place, and whether you've confirmed it |
@@ -19,10 +18,15 @@ Everything lives next to the exe:
 | `Staging\` | Default destination for manually downloaded archives |
 | `Data\LegacyConfigs\` | Config files kept from removed and updated mods, one timestamped folder each |
 | `Data\ProfileBackups\` | Copies of your SPT profiles taken before mods change, one folder per SPT install, the last 10 kept - see **Options, SPT profile backups** |
+| `Data\GameLogs\` | The last few game sessions' `Logs\log_*` folders, kept when the game is started from the Play card, for Diagnose logs |
+| `Data\WebView2\` | The comments tab's browser profile - your sp-mod sign-in there |
 | `Data\install-journal\` | A note for an install in progress, gone once it finishes; one left over means the app was stopped part way, and that mod is shown as partly installed |
 | `Data\overwritten\` | Files an install replaced that weren't another installed mod's, kept to put back when that mod is removed |
 | `Data\ConfigBaselines\` | A copy of the config files each mod version shipped, which is what lets an update tell your changes from the author's |
+| `Data\accepted_dependency_warnings.json` | Amber dependency warnings you accepted on Dependencies and Conflicts - per pair of versions |
+| `Data\dismissed_spt_warnings.json` | "Not for this SPT" warnings you dismissed on Installed - per mod, version and SPT |
 | `Data\mod_configs.json` | Your per-mod choice of what an update does with that mod's configs, and any unusual places it keeps them |
+| `Data\themes\` | Your own themes, one file each - see [Themes](Themes) |
 | `Data\ServerMap\` | On a server: the shared key (`servermap-key.txt`), the list it publishes, and the map's machines (`clients.json`) |
 | `.tcfmm-update\` | Hidden. Only exists while an app update is downloading, or if one failed; cleaned up on the next launch |
 

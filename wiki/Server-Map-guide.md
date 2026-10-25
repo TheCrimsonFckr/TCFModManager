@@ -15,7 +15,7 @@ Two halves, and they are separate installs:
 - It never reports anything about your install without asking. Connecting asks the server who it
   is. Your machine only appears on the server's map after you press **Share**, and only on that
   server - switch it off in Options and it leaves the map straight away.
-- It never blocks you playing. The check on the Play page says what it found and leaves the launch
+- It never blocks you playing. The check on the Profile page says what it found and leaves the launch
   buttons working.
 
 Client and server must be on the same SPT line a 4.1 client cannot join a 4.0.13 server, and that

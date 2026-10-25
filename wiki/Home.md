@@ -15,7 +15,8 @@ The released build is entirely self-contained.
 ## The guide
 
 - [Install](Install)
-- [Play](Play)
+- [Profile](Profile)
+- [Server](Server)
 - [Browse](Browse)
 - [Installed](Installed)
 - [Disabling mods](Disabling-mods)

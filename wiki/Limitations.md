@@ -4,6 +4,7 @@
 - **A mod's version is only as good as what it declares.** Some authors forget to update it, and some mods work theirs out while the game runs, which the app can't read - those fall back to the DLL's file version. Either way, **Confirm as installed** puts it right.
 - **Conflicts are found from files, not from what mods do in game.** Two mods changing the same thing - the same item, trader or setting - can't be told from their files, so they don't show as a conflict.
 - **A listing can number its releases differently from the mod it installs.** A helper mod declaring 0.0.7 on a listing whose releases are 4.x shows an update that never clears. Confirm as installed ends it.
+- **Mods sharing a folder are told apart best when this app installed them.** For mods installed by hand, a plugin is matched by the ID it declares, and anything else in the folder, such as configs, data files or tools, goes to the mod that was there first. A mod with no ID on sp-mod, like SPT Realism Mod, can only be told apart when the app installed it or the others in its folder.
 
 ## Installing
 - **Archives have to be packaged normally** - a `BepInEx\`, `user\`, `SPT\` or `SPT_Runtime\` folder at the top, optionally inside one wrapper folder. A `plugins\` or `patchers\` folder without `BepInEx\` around it is placed under `BepInEx\`. Anything else is refused with a message telling you to install it by hand, rather than being scattered into your install.
@@ -20,8 +21,10 @@
 - **Update, Redownload and Remove don't work on a disabled mod** - enable it first.
 
 ## Versions and compatibility
-- **Compatibility is judged from a mod's most recent releases**, not its whole history. A mod whose newest releases target a later SPT than yours reads as incompatible even if an older release of it would work - check the mod's page in that case.
+- **On Browse, compatibility is judged from a mod's most recent releases**, not its whole history. A mod whose newest releases target a later SPT than yours reads as incompatible even if an older release of it would work - check the mod's page in that case. On Installed, the version you actually have is checked against your SPT.
+- **Fika compatibility is only what the author set on sp-mod.** Most releases say *unknown*, and those are never flagged.
 - **Some version constraints can't be read.** Those mods show "SPT version unknown" and aren't filtered out, on the grounds that hiding something that might work is worse than showing it.
+- **An addon whose mod requirement matches your SPT version counts as fitting.** It's read as an SPT version typed in the wrong box, as sp-mod reads it. A real requirement that happens to share your SPT's number would count as fitting too.
 - **Beta and pre-release version numbers** aren't compared precisely, so an update may not be flagged for a mod you're running a pre-release of.
 - **The catalog only covers SPT 3.10 and newer.** On older SPT, most of what you could install won't be listed.
 - **"Installed" dates** come from the folder's creation date, so a mod updated in place still shows when you first installed it.
@@ -30,7 +33,7 @@
 - **A list records mods and versions, never files.** Anything it names has to be gettable from sp-mod for the receiver to install it; mods that aren't are listed by name so they can be fetched by hand.
 - **Scope only narrows a list a server served you.** Your own lists apply whole on the machine that owns them - which is why a server box wants its own list as well as the one it publishes.
 - **There is one undo point**, replaced by each apply and cleared by using it. It puts mods back where they were; it is not a history.
-- **An addon that ships inside its parent's folder can be installed and updated by a list, but not set aside by one** - there is no folder of its own to move. Disabling the parent takes it along.
+- **An addon is only recognised if this app installed it.** Addons have no ID of their own in their files, so one copied in by hand is shown as part of its mod's folder, or as a folder nothing matched, rather than as an addon.
 - **A list you edited but never applied exports under its old revision number**, since a revision counts an apply. Apply before sharing if you want the receiver's copy to read as newer.
 - **An sp-mod list is read from its web page**, because sp-mod has no API for lists yet. If sp-mod changes that page, the import says the list may be incomplete rather than guessing.
 - **An sp-mod list's versions are the ones its page showed on the day you imported it.** Refresh from sp-mod picks up newer ones.

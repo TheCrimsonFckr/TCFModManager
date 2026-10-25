@@ -4,6 +4,10 @@ Disabling moves the mod into a `.disabled` copy of the folder SPT loads it from 
 
 Its own files travel with it, server configs included, and client settings in `BepInEx\config` are never touched - so switching a mod off and back on again loses no settings.
 
+A mod that shares its folder with other mods (see [Installed](Installed#mods-that-share-a-folder)) moves only its own files. The other mods in the folder stay where they are.
+
+**Addons.** Disabling a mod lists its enabled addons as well; **Disable these too** moves them with it. Enabling the mod later lists the addons that went with it - *disabled with* the mod - and **Enable these too** brings them back. An addon you disabled on its own is never offered. See [Addons](Addons#installed-addons).
+
 **How to disable something**
 
 - One mod, from its card, its List row, or its row in Groups view

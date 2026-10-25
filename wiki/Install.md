@@ -8,7 +8,7 @@
 1. Download `TCF-ModManager-<version>.zip` from [its sp-mod page](https://sp-mod.com/mod/2945/tcf-mod-manager).
 2. Extract it into your SPT folder as `<SPT root>\TCFModManager\` - a sibling of `BepInEx\` and `user\`.
 3. Run `TCFModManager.exe`.
-4. Open **Options**, point it at your SPT install folder - the top one, with `EscapeFromTarkov.exe` and `BepInEx\` in it - and hit Save. The detected server version appears underneath - everything else keys off that.
+4. Open **Options**, point it at your SPT install folder - the top one, with `EscapeFromTarkov.exe` and `BepInEx\` in it - and hit Save. The detected server version appears underneath - everything else keys off that. To find any other setting later, type in the search box at the top of Options.
 
 > [!WARNING]
 > This is **not** a mod. Don't extract it into `BepInEx\plugins` or `user\mods`. It's a standalone application that manages that folder for you. Anywhere on disk works, really - it just needs to be told where SPT lives.

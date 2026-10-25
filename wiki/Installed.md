@@ -7,10 +7,15 @@ Clicking any mod opens a dialog with:
 - the full version history, with changelogs rendered from the mod page's own rich text
 - a link to the mod page
 - an **Update** button when an update applies, or **Redownload** when it doesn't
+- for a mod with addons installed, how each of them fits the version you pick - see [Addons](Addons#updating-a-mod-that-has-addons)
+
+Picking a version that isn't for your SPT asks before installing it, the same as Browse.
 
 Mods can be removed from here too.
 
 **An update that would break another mod isn't offered.** sp-mod knows which versions of a mod each of your other mods accepts, and holds back a release that one of them can't take - CommonLib 3.0.6, say, while Black and Blue needs a 2.0.x. The card then says so ("Update to 3.0.6 held back: Black and Blue needs up to 2.0.31") and isn't counted as an update - not in the update filter, not by **Update selected**, not in a notification. When an older release that every one of those mods accepts is still newer than yours, that one is offered instead. You can still pick the held release in the dialog; it shows the same note.
+
+**A version that isn't for your SPT is called out.** Upgrade SPT in place and every mod used to look fine. Now a mod whose installed version is made for another SPT says so on its card - "Your version is for SPT 4.0.x, not 4.1.6. 3.0.6 runs on it." When a newer release runs on your SPT it shows as an update. When none does - or only an older one, which is named but never offered as an update - it gets the grey "nothing fits" status, so **Update selected** never downgrades anything. The answer comes from sp-mod first, then the release's listed SPT range, then the range a server mod declares in its own files; when sp-mod and the files disagree, sp-mod decides and the card names both. Where Fika is installed, a mod sp-mod marks as not working with Fika says that too. **Show - Not for this SPT** lists them, and the status line counts them with a link to that filter. Plenty of mods work on a newer SPT than they list: **Dismiss** on the card, or **Dismiss all** on the status line, stops the warning for that version on that SPT - it comes back if the mod or SPT changes, and **Warn again** on the card, or **Show all warnings** on the status line, brings it back sooner.
 
 ## Mods you installed by hand
 A mod this app installed is known exactly - its listing and version come from the install record. For one you installed yourself, the app reads what the mod says about itself: a client plugin's ID, name and version, and on SPT 4 a server mod's ID, name, version and the other server mods it needs. The ID matches it to its listing on sp-mod, whatever you named the folder. When nothing on sp-mod matches, the card is titled with the name the mod gives itself, with the folder shown as **Installed as**.
@@ -20,17 +25,19 @@ If a mod says it is a different version from the one you know you have, **Confir
 ## Three ways to look at the list
 The buttons at the top of the page switch between them. They all show the same filtered, sorted mods - only the layout changes.
 
-- **Cards** - the paginated grid.
+- **Cards** - the paginated grid, up to 64 a page, or **Endless** - no pages, more cards load as you scroll down. Resting the mouse on a card shows the same preview as Browse.
 - **Groups** - your own MO2-style separators. Make a group, drag mods into it, collapse the ones you're not working on, and enable, disable or invert a whole group in one click. Drag a mod to the top edge of the window and the list scrolls for you.
 - **List** - one row per mod, scrolling continuously. Open a row for everything the app knows about that mod: its GUID, installed and published versions, install date, group, content flags, whether this app installed it or you did by hand, and the exact folders it occupies.
 
+Installed has the same **Filter presets** section at the top of its Filters panel as [Browse](Browse); here a preset also keeps which view you were in. A preset naming a group you've since deleted shows all groups and says so.
+
 ## Acting on several mods at once
-Turn on **Multi select**, or just Ctrl-click a mod - in any of the three views. Shift-click ticks every mod between the last one you clicked and this one, and Ctrl+A ticks everything the filters match; Esc clears it. Ticked mods carry an accent edge, and the bar above the list acts on all of them: **Update selected**, **Enable selected**, **Disable selected** and **Remove selected**. Remove selected asks once for the lot, keeps their config files, and names any mod sp-mod warns may have changed your profile.
+Turn on **Multi select**, or just Ctrl-click a mod - in any of the three views. Shift-click ticks every mod between the last one you clicked and this one, and Ctrl+A ticks everything the filters match; Esc clears it. Ticked mods carry an accent edge, and the bar above the list acts on all of them: **Update selected**, **Enable selected**, **Disable selected** and **Remove selected**. Remove selected asks once for the lot, keeps their config files, and names any mod sp-mod warns may have changed your profile. If a selected mod has addons you didn't tick, it asks first whether those go too.
 
 ## Updating and the right-click menu
-A mod with an update shows an **Update** button on its card and its List row - one click queues it. Right-click any mod for the same actions its card has: details and versions, update, enable or disable, pin, open its folders, its sp-mod page, and remove. Right-click one of several ticked mods and the menu acts on all of them.
+A mod with an update shows an **Update** button on its card and its List row - one click queues it. Right-click any mod for the same actions its card has: details and versions, update, enable or disable, pin, open its folders, its sp-mod page, and remove. A mod with addons installed, and each of those addons, also has **Show <mod> and its addons**, which narrows the page to that family. Right-click one of several ticked mods and the menu acts on all of them.
 
-Sort by name, author, group or install date - **Last installed (newest)** puts what you've just installed at the top. To see only those, tick **Installed in the last 7 days** under **Show only**. Every filter and sort applies to all three views.
+Sort by name, author, group or install date - **Last installed (newest)** puts what you've just installed at the top. To see only those, tick **Installed in the last 7 days** under **Show only**. **Has installed addons** there lists every mod with addons installed, together with those addons. Every filter and sort applies to all three views.
 
 Search sits in the row above the list. Everything else is in the **Filters and view options** panel down the left - update status, enabled or disabled, the **Show only** tick boxes, category, group, sort, how the groups are ordered (Groups view) and page size (Cards view), with **Save as default** and **Clear filters**. Each is a section you open like a group, and all start closed. **Clear filters** puts everything back to the app's own settings, even when you've saved defaults for the page; **Restore my defaults** puts back what you saved. The button says how many filters are narrowing the list, and the panel's X or the button again closes it. On a wide window the panel takes its own column and the mods move over; on a narrow one it lies over them and a click elsewhere closes it.
 
@@ -50,6 +57,19 @@ A BepInEx patcher belongs to a mod rather than being one, so a patcher folder is
 
 Two things in `BepInEx\patchers` are deliberately left out, the same way core SPT plugins are: SPT's own preloader patcher, and general BepInEx utilities that mods bundle alongside themselves (currently FixPluginTypesSerialization). Neither is published on sp-mod, and neither is yours to manage from here.
 
+## Mods that share a folder
+Some mods install into another mod's folder. SPT Stance Overhaul and SPT Realism Common Lib, for example, both go into `BepInEx\plugins\Realism`. Each one still gets its own card, with its own version, updates and dependencies, and a line under its name saying where it lives: *Installed in the Realism folder, shared with SPT Realism Common Lib*.
+
+The app works out which files are whose from what it installed, and for mods you installed by hand, from the ID each plugin declares. Everything you do to one of them touches only its files:
+
+- **Disable** moves just that mod's files into `plugins.disabled`. If another mod in the folder needs it, you're asked whether to disable that one too.
+- **Remove** takes only that mod's files. The folder and the other mods stay.
+- **Update** replaces only that mod's files.
+
+The first mod to arrive keeps the folder's name for groups and pins. Later arrivals are named after their DLL, such as `spt-stance-overhaul`, so a mod already in your groups isn't renamed when another one moves in.
+
+Addons that install into their mod's folder get their own card the same way, with *Addon for* and the mod under their name. The mod's card doesn't repeat the shared-folder line for its own addons. Removing or disabling the mod asks whether to take its addons along - see [Addons](Addons#installed-addons).
+
 > [!WARNING]
 > Mods installed with this app have every file they placed recorded, which is what makes a clean uninstall possible. Anything you installed by hand beforehand has no such record, so removing it takes its whole folder rather than a known file list.
 
@@ -66,4 +86,4 @@ A mod whose sp-mod page warns that it may make permanent changes to your profile
 A removal only takes what is provably the mod's. It leaves a file that changed since it was installed, a file another installed mod also uses, and anything belonging to SPT, BepInEx or the game - and it puts back any file the mod had replaced when it went in. The result line says what was left and why. If the mod's folder has to stay because it holds files the mod didn't install - a note you added, say - the result says so, and that folder's card is marked as left behind by the removal.
 
 ## Your SPT profiles are backed up
-Before the app installs, updates, removes, disables or enables mods, or applies a mod list, it copies your SPT profiles (`user\profiles`) - whenever they have changed since the last copy, so a list of twenty mods takes one copy, not twenty. Removing a mod can leave a profile holding items SPT no longer knows, and then it won't load; putting back a copy from before brings your character back. The copies are under **Options, SPT profile backups**: **Put back** on any of them (with SPT closed), **Back up now** for one of your own, and **Open folder**. The last 10 are kept. SPT's own backups inside the profiles folder are left out.
+Before the app installs, updates, removes, disables or enables mods, or applies a mod list, it copies your SPT profiles (`user\profiles`) - whenever they have changed since the last copy, so a list of twenty mods takes one copy, not twenty. Removing a mod can leave a profile holding items SPT no longer knows, and then it won't load; putting back a copy from before brings your character back. The copies are under **Options, SPT profile backups**: **Restore** on any of them (with SPT closed), **Back up now** for one of your own, and **Open folder**. The last 10 are kept. SPT's own backups inside the profiles folder are left out.

@@ -4,6 +4,12 @@ Options needs your SPT install root - the folder with `EscapeFromTarkov.exe` and
 ## Mods went into `SPT\SPT\...` or `SPT\BepInEx\...`
 The install folder was set to the server folder - `SPT\` on 4.0, `SPT_Runtime\` on 4.1 - instead of the install root, so everything installed went one level too deep. Before v1.13.2 Options accepted that without complaint; from v1.13.2 the setting is moved up to the install root by itself the next time the app starts. Mods that already went into the wrong place stay there: look inside the server folder for a stray `BepInEx\` or a second `SPT\` / `SPT_Runtime\` / `user\` folder, and move what is in them into the real `BepInEx\plugins` at the install root and your server's `user\mods` - or delete them and install those mods again.
 
+## Remove or Update says the mod "was made in another SPT install"
+The app only touches files it placed in the install it placed them in. If you renamed or moved your SPT folder after installing mods, their records still name the old folder; from v1.22.0-beta the app notices the old folder is gone and moves the records to the new one when it starts. If the old folder still exists, it really is another install - switch Options to it to remove or update the mod there.
+
+## I upgraded SPT and mods say "not for this SPT"
+The versions you have were made for the SPT you had. Installed now says so per mod: an update arrow where a newer release runs on your SPT, or "nothing fits" where none does yet - wait for the author, or roll SPT back. **Show - Not for this SPT** lists them all. Before upgrading next time, **Moving to a newer SPT** on Dependencies and Conflicts says which mods would come with you.
+
 ## A mod I know exists shows "nothing compatible"
 The mod has no version published for your SPT release line. That's a statement about the mod page, not about your install - check the mod's own versions list.
 

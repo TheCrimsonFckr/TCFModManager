@@ -9,7 +9,7 @@ An optional page - **off by default**, turned on in Options - that connects to a
 
 **Connecting fetches the list for you** and saves it as a read-only mod list, marked as coming from that server; it is fetched again on its own whenever the server's revision moves. **Fetch again** asks for it even when the revision hasn't moved, for a copy you have edited or deleted.
 
-Saving is not applying. From there it is an ordinary list - preview it on the Mod lists page, apply it, keep your own alongside it - and the Play page's check compares against it before you launch.
+Saving is not applying. From there it is an ordinary list - preview it on the Mod lists page, apply it, keep your own alongside it - and the Profile page's check compares against it before you launch.
 
 **The map** lists every machine that shares itself with the server, the server first and yours marked *This machine*: whether each is in game, has the app open or was last seen some time ago, and whether it has what the server's list asks for - named, with versions, in the usual status colours. When your own card is behind, **Review and install** takes you to the fix. Only machines running this app appear, and the map needs the Server Map mod 0.2.0 on the server.
 

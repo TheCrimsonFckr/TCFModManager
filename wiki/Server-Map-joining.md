@@ -81,7 +81,7 @@ the list actually lives.
 
 ## Install what the server expects?
 
-The quick way: when you are behind, press **Review and install** on the Play page's check or on
+The quick way: when you are behind, press **Review and install** on the Profile page's check or on
 your own card on the Server map page. It opens the server's list with the preview already done.
 
 Or by hand, like any other list:
@@ -113,7 +113,7 @@ author chose. The server says what you need, not what you may not have.
 
 ## Check I am ready before I play?
 
-Open the **Play** page. It checks automatically, and **Check again** re-runs it.
+Open the **Profile** page. It checks automatically, and **Check again** re-runs it.
 
 | What it says | What it means |
 |---|---|

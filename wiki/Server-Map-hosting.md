@@ -121,10 +121,10 @@ The server picks the change up on its own. **It does not need restarting.**
 
 ## Publish a mod list to my server?
 
-1. Get the server's install the way you want it, then on **Mod lists** press **Capture** to make a
-   list of what is there. (Or pick an existing list.)
+1. Get the server's install the way you want it, then on **Mod lists** press **New list** and choose
+   **From what's installed…** to make a list of what is there. (Or pick an existing list.)
 2. Check the scopes see the next question. This is the step people skip and regret.
-3. With the list selected, press **Publish to this server**.
+3. With the list selected, open its **⋯** menu and choose **Publish to this server**.
 
 That writes the list into `TCFModManager\Data\ServerMap\` on this machine. Nothing is installed,
 enabled or disabled; no files on the game folder change.
@@ -132,7 +132,7 @@ enabled or disabled; no files on the game folder change.
 The list is re-read whenever its file changes, so **publishing again takes effect without
 restarting the server**.
 
-The published list gets a red **Serving** badge on the Mod lists page, so among a dozen personal
+The published list gets a blue **Serving** badge on the Mod lists page, so among a dozen personal
 lists you can see which one other people are being handed.
 
 > [!WARNING]
@@ -170,9 +170,9 @@ A **Server only** entry is not fetched by a player, not counted as missing, and 
 their "you are behind" list.
 
 Scope is worked out for you when you capture a list, from where the mod's files actually live. To
-change one: select the list, find the row, and press the **scope button** to cycle it. The full set
-leads into **Client + Headless** first, because taking a HUD mod off the headless is the edit
-anybody actually makes. Then **Save**, then **Publish to this server** again.
+change one: select the list, find the row, and pick from its **scope dropdown**. If the mod's sp-mod
+page says it doesn't belong on a headless, the row says so and offers the change - see
+[Headless advice](Mod-lists#headless-advice). Then **Save**, then **Publish to this server** again.
 
 The **scope filter** above the list matches one exactly, which is the question you have while tidying
 one: what have I already pruned, and what is still carrying the capture default?
@@ -211,7 +211,7 @@ replaces the original, so hosting and playing on one machine does not turn your 
 
 **Publishing moves the revision when what you published has changed.** That number is what tells
 connected players their copy is stale: they see "the server is publishing revision 4; you have
-revision 3" on their Play page. Republishing an unchanged list changes nothing, so the number still
+revision 3" on their Profile page. Republishing an unchanged list changes nothing, so the number still
 means something when it does move.
 
 If somebody's copy looks stale anyway, they can press **Refresh from server** on the list itself,
