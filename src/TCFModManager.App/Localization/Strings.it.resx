@@ -8529,4 +8529,51 @@ Passare comunque?</value>
   <data name="Help_Browse_AddonSearch_Keywords" xml:space="preserve">
     <value>addon, add-on, trovare addon, cercare addon, nome addon, pacchetto adesivi, preset</value>
   </data>
+  <data name="ModStatus_InstalledAnyway" xml:space="preserve">
+    <value>Installato comunque - il suo autore non indica questa versione del suo mod</value>
+  </data>
+  <data name="Addon_ActionInstallAnyway" xml:space="preserve">
+    <value>Installa comunque</value>
+  </data>
+  <data name="Addon_InstallAnywayToolTip" xml:space="preserve">
+    <value>Gli autori non sempre aggiornano l'elenco delle versioni del mod di un addon. Installalo se sai che funziona con la tua.</value>
+  </data>
+  <data name="Addon_InstallAnywayTitle" xml:space="preserve">
+    <value>Installare comunque?</value>
+  </data>
+  <data name="Addon_InstallAnywayFormat" xml:space="preserve">
+    <value>{0} {1} indica {2} {3}. Tu hai {2} {4}.
+
+Potrebbe non funzionare con la tua versione. Installarlo comunque?</value>
+  </data>
+  <data name="Installed_AddonInstalledAnywayToolTipFormat" xml:space="preserve">
+    <value>Installato comunque - il suo autore non indica {0} {1}</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Title" xml:space="preserve">
+    <value>Installare un addon che il suo autore non ha indicato per la tua versione del mod</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Step1" xml:space="preserve">
+    <value>Apri il mod e trova l'addon. Una versione che non indica la tua versione del mod dice cosa richiede e cosa hai.</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Step2" xml:space="preserve">
+    <value>Premi {0} sotto di essa e conferma. Si installa come al solito.</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Note" xml:space="preserve">
+    <value>La sua scheda in Installati mostra Installato comunque. Quando viene pubblicata una versione adatta al tuo mod, viene proposta come aggiornamento. Se aggiorni il mod e nessuna versione è adatta neanche alla nuova, ti viene chiesto se tenerlo.</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Keywords" xml:space="preserve">
+    <value>addon, add-on, installa comunque, forzare, ignorare, non compatibile, addon obsoleto, versione precedente, addon bloccato</value>
+  </data>
+  <data name="AddonImpact_Overridden" xml:space="preserve">
+    <value>Installato comunque - nessuna versione è adatta neanche a questa</value>
+  </data>
+  <data name="AddonImpact_OverriddenList" xml:space="preserve">
+    <value>Hai installato comunque questi addon, e nessuna delle loro versioni indica neanche la nuova versione:</value>
+  </data>
+  <data name="AddonImpact_OverriddenQuestion" xml:space="preserve">
+    <value>Lasciarli attivi? No li disattiva una volta installato l'aggiornamento.</value>
+  </data>
+  <data name="ModLists_EntryInstalledAnyway" xml:space="preserve">
+    <value>installato comunque</value>
+  </data>
 </root>

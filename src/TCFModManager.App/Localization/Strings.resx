@@ -10273,7 +10273,7 @@ It may not work with your version. Install it anyway?</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Browse_AddonAnyway_Note" xml:space="preserve">
-    <value>Its card on Installed says Installed anyway. When a version that fits your mod is published, it's offered as an update.</value>
+    <value>Its card on Installed says Installed anyway. When a version that fits your mod is published, it's offered as an update. If you update the mod and nothing fits the new version either, you're asked whether to keep it.</value>
   </data>
   <data name="Help_Browse_AddonAnyway_Keywords" xml:space="preserve">
     <value>addon, add-on, install anyway, force install, override, not compatible, outdated addon, needs older version, blocked addon</value>

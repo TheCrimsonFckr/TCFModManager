@@ -8529,4 +8529,51 @@ Trotzdem wechseln?</value>
   <data name="Help_Browse_AddonSearch_Keywords" xml:space="preserve">
     <value>Addon, Add-on, Addon finden, Addon suchen, Addon-Name, Stickerpaket, Preset</value>
   </data>
+  <data name="ModStatus_InstalledAnyway" xml:space="preserve">
+    <value>Trotzdem installiert - sein Autor führt diese Version seines Mods nicht auf</value>
+  </data>
+  <data name="Addon_ActionInstallAnyway" xml:space="preserve">
+    <value>Trotzdem installieren</value>
+  </data>
+  <data name="Addon_InstallAnywayToolTip" xml:space="preserve">
+    <value>Autoren aktualisieren die Liste der Mod-Versionen eines Addons nicht immer. Installiere es, wenn du weißt, dass es mit deiner funktioniert.</value>
+  </data>
+  <data name="Addon_InstallAnywayTitle" xml:space="preserve">
+    <value>Trotzdem installieren?</value>
+  </data>
+  <data name="Addon_InstallAnywayFormat" xml:space="preserve">
+    <value>{0} {1} führt {2} {3} auf. Du hast {2} {4}.
+
+Es funktioniert mit deiner Version möglicherweise nicht. Trotzdem installieren?</value>
+  </data>
+  <data name="Installed_AddonInstalledAnywayToolTipFormat" xml:space="preserve">
+    <value>Trotzdem installiert - sein Autor führt {0} {1} nicht auf</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Title" xml:space="preserve">
+    <value>Ein Addon installieren, das sein Autor nicht für deine Mod-Version freigegeben hat</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Step1" xml:space="preserve">
+    <value>Öffne den Mod und such das Addon. Eine Version, die deine Mod-Version nicht aufführt, sagt, was sie braucht und was du hast.</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Step2" xml:space="preserve">
+    <value>Klick darunter auf {0} und bestätige. Es wird wie gewohnt installiert.</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Note" xml:space="preserve">
+    <value>Seine Karte unter Installiert zeigt Trotzdem installiert. Erscheint eine Version, die zu deinem Mod passt, wird sie als Update angeboten. Aktualisierst du den Mod und auch für die neue Version passt nichts, wirst du gefragt, ob du es behalten willst.</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Keywords" xml:space="preserve">
+    <value>addon, add-on, trotzdem installieren, erzwingen, überschreiben, nicht kompatibel, veraltetes addon, braucht ältere version, blockiertes addon</value>
+  </data>
+  <data name="AddonImpact_Overridden" xml:space="preserve">
+    <value>Trotzdem installiert - auch für diese passt keine Version</value>
+  </data>
+  <data name="AddonImpact_OverriddenList" xml:space="preserve">
+    <value>Diese Addons hast du trotzdem installiert, und auch jetzt führt keine ihrer Versionen die neue Version auf:</value>
+  </data>
+  <data name="AddonImpact_OverriddenQuestion" xml:space="preserve">
+    <value>Aktiviert lassen? Nein deaktiviert sie, sobald das Update installiert ist.</value>
+  </data>
+  <data name="ModLists_EntryInstalledAnyway" xml:space="preserve">
+    <value>trotzdem installiert</value>
+  </data>
 </root>

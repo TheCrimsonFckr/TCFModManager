@@ -8901,4 +8901,51 @@
   <data name="Help_Browse_AddonSearch_Keywords" xml:space="preserve">
     <value>аддон, addon, найти аддон, поиск аддона, название аддона, набор наклеек, пресет</value>
   </data>
+  <data name="ModStatus_InstalledAnyway" xml:space="preserve">
+    <value>Установлен принудительно - автор не указывает эту версию его мода</value>
+  </data>
+  <data name="Addon_ActionInstallAnyway" xml:space="preserve">
+    <value>Всё равно установить</value>
+  </data>
+  <data name="Addon_InstallAnywayToolTip" xml:space="preserve">
+    <value>Авторы не всегда обновляют список версий мода у аддона. Установите его, если знаете, что он работает с вашей.</value>
+  </data>
+  <data name="Addon_InstallAnywayTitle" xml:space="preserve">
+    <value>Всё равно установить?</value>
+  </data>
+  <data name="Addon_InstallAnywayFormat" xml:space="preserve">
+    <value>{0} {1} указывает {2} {3}. У вас {2} {4}.
+
+С вашей версией он может не работать. Всё равно установить?</value>
+  </data>
+  <data name="Installed_AddonInstalledAnywayToolTipFormat" xml:space="preserve">
+    <value>Установлен принудительно - автор не указывает {0} {1}</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Title" xml:space="preserve">
+    <value>Установить аддон, который автор не указал для вашей версии мода</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Step1" xml:space="preserve">
+    <value>Откройте мод и найдите аддон. Версия, которая не указывает вашу версию мода, пишет, что ей нужно и что у вас.</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Step2" xml:space="preserve">
+    <value>Нажмите {0} под ней и подтвердите. Он установится как обычно.</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Note" xml:space="preserve">
+    <value>Его карточка в разделе Установленные показывает Установлен принудительно. Когда выйдет версия, подходящая к вашему моду, её предложат как обновление. Если вы обновите мод и к новой версии тоже ничего не подойдёт, вас спросят, оставить ли его.</value>
+  </data>
+  <data name="Help_Browse_AddonAnyway_Keywords" xml:space="preserve">
+    <value>аддон, addon, всё равно установить, принудительно, форсировать, несовместим, устаревший аддон, старая версия, заблокированный аддон</value>
+  </data>
+  <data name="AddonImpact_Overridden" xml:space="preserve">
+    <value>Установлен принудительно - к этой версии тоже ничего не подходит</value>
+  </data>
+  <data name="AddonImpact_OverriddenList" xml:space="preserve">
+    <value>Эти аддоны вы установили принудительно, и для новой версии у них тоже нет подходящей версии:</value>
+  </data>
+  <data name="AddonImpact_OverriddenQuestion" xml:space="preserve">
+    <value>Оставить их включёнными? «Нет» отключит их после установки обновления.</value>
+  </data>
+  <data name="ModLists_EntryInstalledAnyway" xml:space="preserve">
+    <value>установлен принудительно</value>
+  </data>
 </root>
