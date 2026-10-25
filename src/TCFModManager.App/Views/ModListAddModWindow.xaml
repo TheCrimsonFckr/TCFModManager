@@ -229,10 +229,9 @@
             </Grid>
         </ui:Card>
 
-        <Grid Grid.Row="3" Margin="24,16,24,24">
+        <Grid Grid.Row="3" Margin="24,8,24,24">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
@@ -241,27 +240,25 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 TextWrapping="Wrap"
-                Margin="2,0,12,0"
+                Margin="2,8,12,0"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Text="{loc:Str ModListAdd_NothingPicked}" />
 
-            <ui:Button
-                Grid.Column="1"
-                MinWidth="100"
-                HorizontalContentAlignment="Center"
-                Content="{loc:Str Common_Cancel}"
-                Click="CancelButton_Click" />
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                <ui:Button
+                    Style="{StaticResource DialogButton}"
+                    IsCancel="True"
+                    Content="{loc:Str Common_Cancel}"
+                    Click="CancelButton_Click" />
 
-            <ui:Button
-                x:Name="AddButton"
-                Grid.Column="2"
-                MinWidth="130"
-                Margin="10,0,0,0"
-                HorizontalContentAlignment="Center"
-                Appearance="Primary"
-                IsEnabled="False"
-                Content="{loc:Str ModListAdd_Add}"
-                Click="AddButton_Click" />
+                <ui:Button
+                    x:Name="AddButton"
+                    Style="{StaticResource DialogButton}"
+                    Appearance="Primary"
+                    IsEnabled="False"
+                    Content="{loc:Str ModListAdd_Add}"
+                    Click="AddButton_Click" />
+            </StackPanel>
         </Grid>
     </Grid>
 </ui:FluentWindow>
