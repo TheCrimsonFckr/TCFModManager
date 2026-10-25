@@ -35,6 +35,25 @@
             Margin="24,12,24,0"
             VerticalScrollBarVisibility="Auto">
             <StackPanel>
+                <Grid x:Name="WarningRow" Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ui:SymbolIcon
+                        Grid.Column="0"
+                        Margin="0,0,10,0"
+                        VerticalAlignment="Top"
+                        FontSize="20"
+                        Symbol="Warning24"
+                        Foreground="{DynamicResource SystemFillColorCautionBrush}" />
+                    <TextBlock
+                        x:Name="WarningText"
+                        Grid.Column="1"
+                        Style="{StaticResource AskText}"
+                        FontWeight="SemiBold" />
+                </Grid>
+
                 <TextBlock
                     x:Name="LeadText"
                     Style="{StaticResource AskText}"
@@ -44,10 +63,17 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type local:AskSection}">
                             <StackPanel Margin="0,0,0,12">
-                                <TextBlock
-                                    Style="{StaticResource AskText}"
-                                    FontWeight="SemiBold"
-                                    Text="{Binding Heading}" />
+                                <TextBlock FontWeight="SemiBold" Text="{Binding Heading}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource AskText}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Heading}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                                 <ItemsControl
                                     Margin="8,4,0,0"
                                     Focusable="False"

@@ -8340,9 +8340,6 @@ Passare comunque?</value>
   <data name="Help_Installed_Addons_Step1" xml:space="preserve">
     <value>In {0}, ogni addon installato ha una scheda tutta sua, con sotto il nome il mod a cui appartiene.</value>
   </data>
-  <data name="Help_Installed_Addons_Step2" xml:space="preserve">
-    <value>Per rimuovere un mod e i suoi addon, premi {0} sulla scheda del mod e rispondi Sì quando ti chiede dei suoi addon.</value>
-  </data>
   <data name="Help_Installed_Addons_Step3" xml:space="preserve">
     <value>Per disattivarli insieme, disattiva il mod e scegli {0}. Riattivando il mod più tardi ti vengono riproposti gli stessi addon.</value>
   </data>

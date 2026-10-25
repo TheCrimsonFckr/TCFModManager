@@ -12,7 +12,7 @@ public enum AskChoice
     Cancel,
 }
 
-public sealed record AskSection(string Heading, IReadOnlyList<string> Items)
+public sealed record AskSection(string? Heading, IReadOnlyList<string> Items)
 {
     private const int MaxShown = 10;
 
@@ -25,6 +25,8 @@ public sealed record AskSection(string Heading, IReadOnlyList<string> Items)
 public sealed class AskRequest
 {
     public required string Title { get; init; }
+
+    public string? Warning { get; init; }
 
     public required string Lead { get; init; }
 
@@ -56,6 +58,10 @@ public partial class AskWindow : FluentWindow
         Title = request.Title;
         WindowTitleBar.Title = request.Title;
         LeadText.Text = request.Lead;
+
+        if (string.IsNullOrEmpty(request.Warning)) WarningRow.Visibility = Visibility.Collapsed;
+        else WarningText.Text = request.Warning;
+
         SectionList.ItemsSource = request.Sections;
         DetailList.ItemsSource = request.Detail;
 

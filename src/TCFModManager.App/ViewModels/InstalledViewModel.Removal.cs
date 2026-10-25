@@ -3,6 +3,7 @@ using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -64,11 +65,11 @@ public partial class InstalledViewModel
             // doesn't sit inside this install either, nothing proves it belongs here - so the install
             // is named before anything happens.
             //
-            var body = record.InstallPath is null && !InstallStamp.AppIsInside(installPath)
-                ? Sentences(Strings.Installed_RemoveAppManagedBody, Text(Strings.Installed_RemoveUnstampedFormat, installPath))
-                : Strings.Installed_RemoveAppManagedBody;
+            var detail = new List<string> { Strings.Installed_RemoveAppKeeps };
+            if (record.InstallPath is null && !InstallStamp.AppIsInside(installPath))
+                detail.Add(Text(Strings.Installed_RemoveNoInstallStampFormat, installPath));
 
-            if (ConfirmRemoval(mod.Name, WithProfileWarning(mod, body), configs.Count)
+            if (ConfirmRemoval(mod, Text(Strings.Installed_RemoveAppLeadFormat, mod.Name), [], detail, configs.Count)
                 is not { } configAction)
             {
                 return;
@@ -119,8 +120,10 @@ public partial class InstalledViewModel
 
             var configs = ModInstallService.FindLegacyConfigs(installPath, paths!);
             if (ConfirmRemoval(
-                    mod.Name,
-                    WithProfileWarning(mod, Text(Strings.Installed_RemoveLegacyBodyFormat, string.Join("\n", HandRemovalShown(mod, paths.Select(p => p!))))),
+                    mod,
+                    Text(Strings.Installed_RemoveHandLeadFormat, mod.Name),
+                    [new(null, [.. HandRemovalShown(mod, paths.Select(p => p!))])],
+                    [],
                     configs.Count) is not { } configAction)
             {
                 return;
@@ -202,32 +205,47 @@ public partial class InstalledViewModel
 
         if (unselectedAddons.Count > 0)
         {
-            var answer = MessageBox.Show(
-                Text(Strings.Installed_RemoveSelectedAddonsFormat, string.Join(Strings.Common_ListSeparator, unselectedAddons.Select(a => a.DisplayTitle))),
-                Strings.Installed_RemoveSelectedTitle,
-                MessageBoxButton.YesNoCancel,
-                MessageBoxImage.Question,
-                MessageBoxResult.Yes);
+            var answer = AskWindow.Show(new AskRequest
+            {
+                Title = Strings.Installed_RemoveSelectedAddonsTitle,
+                Lead = Strings.Installed_RemoveSelectedAddonsLead,
+                Sections = [new(null, [.. unselectedAddons.Select(a => a.DisplayTitle)])],
+                First = Strings.Installed_RemoveAddonsToo,
+                Second = Strings.Installed_RemoveSelectedOnly,
+            });
 
-            if (answer is not (MessageBoxResult.Yes or MessageBoxResult.No))
+            if (answer == AskChoice.Cancel)
             {
                 StatusMessage = Strings.Installed_RemoveSelectedCancelled;
                 return;
             }
 
-            if (answer == MessageBoxResult.Yes) targets.AddRange(unselectedAddons);
+            if (answer == AskChoice.First) targets.AddRange(unselectedAddons);
         }
 
-        var body = new List<string> { Text(Strings.Installed_RemoveSelectedBodyFormat, string.Join("\n", targets.Select(t => t.DisplayTitle)), AppPaths.LegacyConfigsDirectory) };
-
         var profileMods = targets.Where(ChangesProfile).Select(t => t.DisplayTitle).ToList();
-        if (profileMods.Count > 0) body.Insert(0, Text(Strings.Installed_RemoveSelectedProfileFormat, string.Join("\n", profileMods)));
 
-        if (leftDisabled.Count > 0) body.Add(Text(Strings.Installed_RemoveSelectedLeavesDisabledFormat, TextLists.Join(leftDisabled)));
+        var sections = new List<AskSection> { new(null, [.. targets.Select(t => t.DisplayTitle)]) };
+        if (profileMods.Count > 0) sections.Add(new(Strings.Installed_RemoveSelectedProfileHeading, profileMods));
+        if (leftDisabled.Count > 0) sections.Add(new(Strings.Installed_RemoveSelectedDisabledHeading, leftDisabled));
 
-        body.Add(HeldSentence());
+        var detail = new List<string>();
+        if (profileMods.Count > 0) detail.Add(Strings.Installed_ProfileUndoMany);
+        detail.Add(HeldSentence());
 
-        if (!Confirm(Strings.Installed_RemoveSelectedTitle, string.Join("\n\n", body)))
+        var confirmed = AskWindow.Show(new AskRequest
+        {
+            Title = Strings.Installed_RemoveSelectedTitle,
+            Warning = profileMods.Count > 0 ? Strings.Installed_RemoveSelectedProfileWarning : null,
+            Lead = Strings.Installed_RemoveSelectedLead,
+            Sections = sections,
+            Detail = detail,
+            Footnote = Text(Strings.Installed_RemoveSelectedConfigsKeptFormat, AppPaths.LegacyConfigsDirectory),
+            First = Strings.Installed_Remove,
+            Danger = AskChoice.First,
+        }) == AskChoice.First;
+
+        if (!confirmed)
         {
             StatusMessage = Strings.Installed_RemoveSelectedCancelled;
             return;
@@ -404,22 +422,21 @@ public partial class InstalledViewModel
         if (live.Count == 0) return [];
 
         var off = cards.Where(c => c.IsDisabled).ToList();
-        var parts = new List<string>
+
+        var sections = new List<AskSection> { new(null, Names(live)) };
+        if (off.Count > 0) sections.Add(new(Strings.Installed_RemoveAddonsDisabledHeading, Names(off)));
+
+        var answer = AskWindow.Show(new AskRequest
         {
-            Text(Strings.Installed_RemoveAddonsListFormat, mod.DisplayTitle, Names(live)),
-            Text(Strings.Installed_RemoveAddonsQuestionFormat, mod.DisplayTitle),
-        };
-        if (off.Count > 0) parts.Add(Text(Strings.Installed_RemoveAddonsDisabledFormat, Names(off)));
+            Title = Text(Strings.Installed_RemoveTitleFormat, mod.DisplayTitle),
+            Lead = Text(Strings.Installed_RemoveAddonsLeadFormat, mod.DisplayTitle),
+            Sections = sections,
+            First = Strings.Installed_RemoveAddonsToo,
+            Second = Strings.Installed_RemoveModOnly,
+        });
 
-        var answer = MessageBox.Show(
-            string.Join("\n\n", parts),
-            Text(Strings.Installed_RemoveTitleFormat, mod.DisplayTitle),
-            MessageBoxButton.YesNoCancel,
-            MessageBoxImage.Question,
-            MessageBoxResult.Yes);
-
-        if (answer is not (MessageBoxResult.Yes or MessageBoxResult.No)) return null;
-        if (answer == MessageBoxResult.No) return [];
+        if (answer == AskChoice.Cancel) return null;
+        if (answer == AskChoice.Second) return [];
 
         var manifest = AppServices.InstallManifest.Load();
         return
@@ -430,8 +447,7 @@ public partial class InstalledViewModel
                 .Where(r => r.IsAppManaged),
         ];
 
-        static string Names(IEnumerable<InstalledModCardViewModel> cards) =>
-            string.Join(Strings.Common_ListSeparator, cards.Select(c => c.DisplayTitle));
+        static List<string> Names(IEnumerable<InstalledModCardViewModel> cards) => [.. cards.Select(c => c.DisplayTitle)];
     }
 
     // Removes a mod's addons ahead of the mod itself, in the same batch. Returns the names removed.
@@ -477,11 +493,6 @@ public partial class InstalledViewModel
     // Extended) says so first in its removal question. Read from the cached catalog; an addon (no such
     // field) or a mod not in the catalog is never flagged.
     //
-    private static string WithProfileWarning(InstalledModCardViewModel mod, string message) =>
-        ChangesProfile(mod)
-            ? string.Join("\n\n", Text(Strings.Installed_RemoveProfileWarningFormat, mod.DisplayTitle), message)
-            : message;
-
     private static bool ChangesProfile(InstalledModCardViewModel mod) =>
         !mod.IsAddon
         && mod.ModId is { } id
@@ -491,32 +502,37 @@ public partial class InstalledViewModel
         MessageBox.Show(message, title, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;
 
     /// <summary>Confirms a removal and, when the mod has config files of its own, asks what should happen to
-    /// them in the same prompt. Returns null when the user backed out.</summary>
-    private static ConfigAction? ConfirmRemoval(string modName, string message, int configCount)
+    /// them in the same window. Returns null when the user backed out.</summary>
+    private static ConfigAction? ConfirmRemoval(
+        InstalledModCardViewModel mod, string lead, IReadOnlyList<AskSection> sections, IReadOnlyList<string> detail, int configCount)
     {
-        // Most people reaching for Remove are troubleshooting, where disabling does the job without
-        // deleting anything - worth saying at the point they're about to delete. Then how long the
-        // removed files are kept, which is what decides whether it can be undone.
-        message = $"{message}\n\n{HeldSentence()}\n\n{Strings.Installed_RemoveDisableHint}";
+        var profile = ChangesProfile(mod);
+        var hasConfigs = configCount > 0;
 
-        var title = Text(Strings.Installed_RemoveTitleFormat, modName);
+        var lines = new List<string>();
+        if (profile) lines.Add(Strings.Installed_ProfileUndoOne);
+        lines.AddRange(detail);
+        if (hasConfigs) lines.Add(Strings.Installed_RemoveConfigCount(configCount, mod.Name, configCount));
+        lines.Add(HeldSentence());
+        lines.Add(Strings.Installed_RemoveDisableTip);
 
-        if (configCount == 0) return Confirm(title, message) ? ConfigAction.Keep : null;
-
-        var configs = Strings.Installed_RemoveConfigs(configCount, modName, configCount);
-
-        var choices = Text(Strings.Installed_RemoveConfigsChoicesFormat, AppPaths.LegacyConfigsDirectory);
-
-        var answer = MessageBox.Show(
-            $"{message}\n\n{configs}\n\n{choices}",
-            title,
-            MessageBoxButton.YesNoCancel,
-            MessageBoxImage.Warning);
+        var answer = AskWindow.Show(new AskRequest
+        {
+            Title = Text(Strings.Installed_RemoveTitleFormat, mod.Name),
+            Warning = profile ? Text(Strings.Installed_ProfileWarningFormat, mod.DisplayTitle) : null,
+            Lead = lead,
+            Sections = sections,
+            Detail = lines,
+            Footnote = hasConfigs ? Text(Strings.Installed_RemoveConfigsGoFormat, AppPaths.LegacyConfigsDirectory) : null,
+            First = hasConfigs ? Strings.Installed_RemoveKeepConfigs : Strings.Installed_Remove,
+            Second = hasConfigs ? Strings.Installed_RemoveEverything : null,
+            Danger = hasConfigs ? AskChoice.Second : AskChoice.First,
+        });
 
         return answer switch
         {
-            MessageBoxResult.Yes => ConfigAction.Keep,
-            MessageBoxResult.No => ConfigAction.Delete,
+            AskChoice.First => ConfigAction.Keep,
+            AskChoice.Second => ConfigAction.Delete,
             _ => null,
         };
     }
@@ -567,8 +583,8 @@ public partial class InstalledViewModel
     //
     internal static string HeldSentence() => new SettingsService().Load().RemovedModsRetention switch
     {
-        RemovedModsRetention.DeleteStraightAway => Strings.Installed_RemoveNotHeld,
-        RemovedModsRetention.UntilCleared => Strings.Installed_RemoveHeldUntilCleared,
-        var days => Text(Strings.Installed_RemoveHeldFormat, OptionsViewModel.RetentionLabel(days)),
+        RemovedModsRetention.DeleteStraightAway => Strings.Installed_RemoveNoUndo,
+        RemovedModsRetention.UntilCleared => Strings.Installed_RemoveUndoUntilCleared,
+        var days => Text(Strings.Installed_RemoveUndoForFormat, OptionsViewModel.RetentionLabel(days)),
     };
 }

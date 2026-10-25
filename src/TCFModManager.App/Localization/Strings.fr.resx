@@ -8340,9 +8340,6 @@ Passer quand même à cette version ?</value>
   <data name="Help_Installed_Addons_Step1" xml:space="preserve">
     <value>Dans {0}, chaque addon installé a sa propre carte, avec le mod auquel il appartient sous son nom.</value>
   </data>
-  <data name="Help_Installed_Addons_Step2" xml:space="preserve">
-    <value>Pour supprimer un mod et ses addons, appuyez sur {0} sur la carte du mod et répondez Oui quand on vous demande pour ses addons.</value>
-  </data>
   <data name="Help_Installed_Addons_Step3" xml:space="preserve">
     <value>Pour les désactiver ensemble, désactivez le mod et choisissez {0}. Réactiver le mod plus tard vous propose les mêmes addons.</value>
   </data>

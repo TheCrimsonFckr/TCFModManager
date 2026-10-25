@@ -2870,45 +2870,129 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>Couldn't find an install record for {0} - it may have already been removed.</value>
     <comment>{0} is a mod name.</comment>
   </data>
-  <data name="Installed_RemoveAppManagedBody" xml:space="preserve">
-    <value>This removes exactly the files this app installed for it and puts back any file it replaced. Files that changed since it was installed, or that another mod also uses, are left where they are.</value>
-    <comment>First paragraph of the Remove prompt for a mod this app installed.</comment>
-  </data>
   <data name="Installed_RemoveNoFolderFormat" xml:space="preserve">
     <value>Couldn't find {0}'s folder to remove.</value>
     <comment>{0} is a mod name.</comment>
-  </data>
-  <data name="Installed_RemoveLegacyBodyFormat" xml:space="preserve">
-    <value>This mod wasn't installed through this app, so its whole folder is removed rather than just the files it placed:
-
-{0}</value>
-    <comment>{0} is one or more folder paths, one per line.</comment>
   </data>
   <data name="Installed_RemoveFailedFormat" xml:space="preserve">
     <value>Couldn't remove {0}: {1}</value>
     <comment>{0} is a mod name, {1} the operating system's reason.</comment>
   </data>
-  <data name="Installed_RemoveDisableHint" xml:space="preserve">
-    <value>To take it out of the game without deleting it, use Disable instead.</value>
-    <comment>Last paragraph of every Remove prompt.</comment>
-  </data>
   <data name="Installed_RemoveTitleFormat" xml:space="preserve">
     <value>Remove {0}?</value>
     <comment>{0} is a mod name. Dialog title.</comment>
   </data>
-  <data name="Installed_RemoveConfigs_one" xml:space="preserve">
-    <value>{0} has 1 config or settings file of its own:</value>
-    <comment>{0} is a mod name. See the Many form; these become one plural key in S5.</comment>
+  <data name="Installed_RemoveAppLeadFormat" xml:space="preserve">
+    <value>This removes the files this app installed for {0}.</value>
+    <comment>First line of the window asked before removing one mod, for a mod this app installed. {0} the mod.</comment>
   </data>
-  <data name="Installed_RemoveConfigs_other" xml:space="preserve">
-    <value>{0} has {1} config or settings files of its own:</value>
-    <comment>{0} is a mod name, {1} how many files.</comment>
+  <data name="Installed_RemoveAppKeeps" xml:space="preserve">
+    <value>Files it replaced are put back. Files you changed, or that another mod also uses, stay where they are.</value>
+    <comment>Under that first line in the window asked before removing one mod.</comment>
   </data>
-  <data name="Installed_RemoveConfigsChoicesFormat" xml:space="preserve">
-    <value>Yes  -  keep them, moved to {0}
-No  -  remove them along with the rest of the mod
-Cancel  -  don't remove anything</value>
-    <comment>What the three dialog buttons do. {0} is a folder path. Yes/No/Cancel are the Windows button captions and follow the operating system's language, so keep them as they appear there.</comment>
+  <data name="Installed_RemoveNoInstallStampFormat" xml:space="preserve">
+    <value>This app didn't record which SPT install this mod went into. It will be removed from {0}.</value>
+    <comment>In the window asked before removing one mod when the install record is older than v1.19.0 (D17). {0} the SPT install folder.</comment>
+  </data>
+  <data name="Installed_RemoveHandLeadFormat" xml:space="preserve">
+    <value>This app didn't install {0}, so it removes all of this:</value>
+    <comment>First line of the window asked before removing one mod, for a mod this app did not install. A list of folders and files follows. {0} the mod.</comment>
+  </data>
+  <data name="Installed_ProfileWarningFormat" xml:space="preserve">
+    <value>sp-mod says {0} may change your profile for good. Removing it could stop SPT loading that profile.</value>
+    <comment>Warning at the top of the window asked before removing one mod for a mod sp-mod marks as changing the profile (OPEN-12 F17). {0} the mod.</comment>
+  </data>
+  <data name="Installed_ProfileUndoOne" xml:space="preserve">
+    <value>If that happens, Undo puts the mod back. A copy of your profiles from just before is in Options, under SPT profile backups.</value>
+    <comment>Follows Installed_ProfileWarningFormat. "SPT profile backups" is the name of a section in Options.</comment>
+  </data>
+  <data name="Installed_RemoveConfigCount_one" xml:space="preserve">
+    <value>{0} has 1 config file of its own.</value>
+    <comment>In the window asked before removing one mod, above its buttons. {0} the mod.</comment>
+  </data>
+  <data name="Installed_RemoveConfigCount_other" xml:space="preserve">
+    <value>{0} has {1} config files of its own.</value>
+    <comment>In the window asked before removing one mod, above its buttons. {0} the mod, {1} how many.</comment>
+  </data>
+  <data name="Installed_RemoveConfigsGoFormat" xml:space="preserve">
+    <value>Kept config files go to {0}.</value>
+    <comment>Small print in the window asked before removing one mod when the mod has config files. {0} a folder.</comment>
+  </data>
+  <data name="Installed_RemoveKeepConfigs" xml:space="preserve">
+    <value>Remove, keep configs</value>
+    <comment>Button in the window asked before removing one mod: remove the mod and keep its config files. The default.</comment>
+  </data>
+  <data name="Installed_RemoveEverything" xml:space="preserve">
+    <value>Remove everything</value>
+    <comment>Button in the window asked before removing one mod: remove the mod and its config files.</comment>
+  </data>
+  <data name="Installed_RemoveUndoForFormat" xml:space="preserve">
+    <value>You can undo this for {0}.</value>
+    <comment>In every removal window: how long Undo works, from the Keep removed mods setting. {0} a length of time such as "7 days".</comment>
+  </data>
+  <data name="Installed_RemoveUndoUntilCleared" xml:space="preserve">
+    <value>You can undo this until you clear removed mods in Options.</value>
+    <comment>The same line when removed mods are kept until cleared.</comment>
+  </data>
+  <data name="Installed_RemoveNoUndo" xml:space="preserve">
+    <value>Removed files are deleted straight away, so you can't undo this. You can change that in Options, under Keep removed mods.</value>
+    <comment>The same line when removed mods are not kept. "Keep removed mods" is the name of a setting in Options.</comment>
+  </data>
+  <data name="Installed_RemoveDisableTip" xml:space="preserve">
+    <value>To stop a mod loading without deleting it, use Disable instead.</value>
+    <comment>Last line of the window asked before removing one mod. "Disable" is the button on the mod's card.</comment>
+  </data>
+  <data name="Installed_RemoveAddonsLeadFormat" xml:space="preserve">
+    <value>{0} has these addons in its folder:</value>
+    <comment>First line of the window asked before removing a mod that has addons. A list follows. {0} the mod.</comment>
+  </data>
+  <data name="Installed_RemoveAddonsDisabledHeading" xml:space="preserve">
+    <value>These are disabled, so they stay:</value>
+    <comment>Heads the list of that mod's disabled addons, which are never removed with it.</comment>
+  </data>
+  <data name="Installed_RemoveAddonsToo" xml:space="preserve">
+    <value>Remove addons too</value>
+    <comment>Button: remove the addons along with the mod (or the selected mods). The default.</comment>
+  </data>
+  <data name="Installed_RemoveModOnly" xml:space="preserve">
+    <value>Remove the mod only</value>
+    <comment>Button: remove the mod and leave its addons where they are.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedLead" xml:space="preserve">
+    <value>These mods will be removed:</value>
+    <comment>First line of the window asked before Remove selected. A list follows.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedProfileWarning" xml:space="preserve">
+    <value>Some of these mods may change your profile for good. Removing them could stop SPT loading that profile.</value>
+    <comment>Warning at the top of the window asked before Remove selected when sp-mod marks any of them as changing the profile.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedProfileHeading" xml:space="preserve">
+    <value>sp-mod says these may change your profile:</value>
+    <comment>Heads the list of those mods in the window asked before Remove selected.</comment>
+  </data>
+  <data name="Installed_ProfileUndoMany" xml:space="preserve">
+    <value>If that happens, Undo puts the mods back. A copy of your profiles from just before is in Options, under SPT profile backups.</value>
+    <comment>Plural of Installed_ProfileUndoOne, in Remove selected.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedDisabledHeading" xml:space="preserve">
+    <value>These are disabled and won't be removed. Enable them first if you want them gone:</value>
+    <comment>Heads the list of selected mods the window asked before Remove selected leaves out because they are disabled.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedConfigsKeptFormat" xml:space="preserve">
+    <value>Their config files are kept in {0}.</value>
+    <comment>Small print in the window asked before Remove selected. {0} a folder.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedAddonsTitle" xml:space="preserve">
+    <value>Remove their addons too?</value>
+    <comment>Title of the window asked before Remove selected when the selected mods have addons that are not selected.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedAddonsLead" xml:space="preserve">
+    <value>Some of the mods you selected have addons you didn't select:</value>
+    <comment>First line of that window. A list of the addons follows.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedOnly" xml:space="preserve">
+    <value>Only what I selected</value>
+    <comment>Button: remove only the selected mods, not their other addons.</comment>
   </data>
   <data name="Installed_RemovedFormat" xml:space="preserve">
     <value>Removed {0}.</value>
@@ -7255,22 +7339,6 @@ This was written to:
     <value>There's nothing to undo - the removed files have been cleared.</value>
     <comment>Shown when Undo is pressed but the removal can no longer be undone.</comment>
   </data>
-  <data name="Installed_RemoveHeldFormat" xml:space="preserve">
-    <value>Removed files are kept in the install for {0}, so you can undo it.</value>
-    <comment>Part of the removal confirmation. {0} is one of the Keep removed mods choices, e.g. '14 days'.</comment>
-  </data>
-  <data name="Installed_RemoveHeldUntilCleared" xml:space="preserve">
-    <value>Removed files are kept in the install until you clear them in Options, so you can undo it.</value>
-    <comment>Part of the removal confirmation.</comment>
-  </data>
-  <data name="Installed_RemoveNotHeld" xml:space="preserve">
-    <value>Removed files are deleted straight away (Options, Keep removed mods), so this can't be undone.</value>
-    <comment>Part of the removal confirmation when the Keep removed mods setting is Delete straight away.</comment>
-  </data>
-  <data name="Installed_RemoveUnstampedFormat" xml:space="preserve">
-    <value>This app's record of it doesn't say which SPT install it was made in. It will be removed from {0}.</value>
-    <comment>Part of the removal confirmation for a mod installed before v1.19.0 when the app isn't inside the SPT folder. {0} is the SPT folder.</comment>
-  </data>
   <data name="Options_RemovedModsHeader" xml:space="preserve">
     <value>Keep removed mods</value>
     <comment>Options setting title.</comment>
@@ -8176,10 +8244,6 @@ Download it anyway?</value>
     <value>{0} {1} left out - sp-mod marks it as not working with Fika.</value>
     <comment>Downloads card after No to the Fika question. {0} is the mod, {1} the version.</comment>
   </data>
-  <data name="Installed_RemoveProfileWarningFormat" xml:space="preserve">
-    <value>sp-mod marks {0} as a mod that may make permanent changes to your profile, and may not be removable without starting a new profile. Removing it can leave a profile SPT won't load. If that happens, Undo puts the mod back, and a copy of your profiles from just before it went is under Options, SPT profile backups.</value>
-    <comment>At the top of the removal question for a mod whose sp-mod page shows the profile notice (OPEN-12 F17). {0} is the mod. Undo is the Installed page's undo-removal button; the last part names the Options card (Profiles_Header) - translate both the same way.</comment>
-  </data>
   <data name="Downloads_WaitingToDownload" xml:space="preserve">
     <value>Waiting for a free download slot</value>
     <comment>Card status while up to three other downloads run (OPEN-12 F7).</comment>
@@ -8231,24 +8295,6 @@ Download it anyway?</value>
   <data name="Installed_RemoveSelectedTitle" xml:space="preserve">
     <value>Remove the selected mods?</value>
     <comment>Title of the one question Remove selected asks.</comment>
-  </data>
-  <data name="Installed_RemoveSelectedBodyFormat" xml:space="preserve">
-    <value>These mods will be removed:
-{0}
-
-Their config files are kept in {1}.</value>
-    <comment>{0} is the mods, one per line. {1} is the folder configs are kept in.</comment>
-  </data>
-  <data name="Installed_RemoveSelectedProfileFormat" xml:space="preserve">
-    <value>sp-mod marks these as mods that may make permanent changes to your profile, and may not be removable without starting a new profile:
-{0}
-
-Removing them can leave a profile SPT won't load. A copy of your profiles from just before is under Options, SPT profile backups.</value>
-    <comment>At the top of the Remove selected question when some selected mods carry sp-mod's profile notice (OPEN-12 F17). {0} is those mods, one per line.</comment>
-  </data>
-  <data name="Installed_RemoveSelectedLeavesDisabledFormat" xml:space="preserve">
-    <value>Left out because they're disabled - enable them first to remove them: {0}.</value>
-    <comment>In the Remove selected question. {0} is the disabled mods, joined.</comment>
   </data>
   <data name="Installed_RemoveSelectedAllDisabledFormat" xml:space="preserve">
     <value>Nothing removed - the selected mods are disabled. Enable them first to remove them: {0}.</value>
@@ -9932,18 +9978,6 @@ Switch anyway?</value>
     <value>ignore, hide, block, blacklist, unwanted, unignore, hidden mods</value>
     <comment>Comma-separated words the Help search also matches this topic on.</comment>
   </data>
-  <data name="Installed_RemoveAddonsListFormat" xml:space="preserve">
-    <value>{0} has addons installed in its folder: {1}.</value>
-    <comment>Asked before removing a mod whose addons are installed (OPEN-31 R2). {0} is the mod's name, {1} the addons' names joined with Common_ListSeparator.</comment>
-  </data>
-  <data name="Installed_RemoveAddonsQuestionFormat" xml:space="preserve">
-    <value>Remove them too? Yes removes them with {0}. No removes {0} only and leaves its addons where they are.</value>
-    <comment>Follows Installed_RemoveAddonsListFormat in a Yes/No/Cancel box. {0} is the mod's name. Yes and No are the box's own buttons.</comment>
-  </data>
-  <data name="Installed_RemoveAddonsDisabledFormat" xml:space="preserve">
-    <value>Disabled, so left in place: {0}.</value>
-    <comment>Added to the same box when some of the mod's addons are disabled. {0} is their names joined with Common_ListSeparator.</comment>
-  </data>
   <data name="Installed_RemovedAddonsFormat" xml:space="preserve">
     <value>Its addons went with it: {0}.</value>
     <comment>Added to the status line after removing a mod together with its addons. {0} is the addons' names joined with Common_ListSeparator.</comment>
@@ -9966,10 +10000,6 @@ Switch anyway?</value>
   <data name="Installed_RemovalBatchFormat" xml:space="preserve">
     <value>{0} and its addons</value>
     <comment>Names a removal of a mod made together with its addons (OPEN-31 R2), in the Undo menu and button. {0} is the mod's name.</comment>
-  </data>
-  <data name="Installed_RemoveSelectedAddonsFormat" xml:space="preserve">
-    <value>The mods you selected have addons installed: {0}. Remove them as well? Yes removes them with their mods; No removes only what you selected.</value>
-    <comment>Asked by Remove selected when selected mods have addons that weren't selected (OPEN-31 R2), in a Yes/No/Cancel box. {0} is the addons' names joined with Common_ListSeparator.</comment>
   </data>
   <data name="ModLists_VersionChangeParentRowFormat" xml:space="preserve">
     <value>Wanted {0}, which doesn't fit {1} {2} - newest that fits is {3}</value>
@@ -9996,7 +10026,7 @@ Switch anyway?</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Installed_Addons_Step2" xml:space="preserve">
-    <value>To remove a mod and its addons, press {0} on the mod's card and answer Yes when asked about its addons.</value>
+    <value>To remove a mod and its addons, press {0} on the mod's card, then {1}.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Installed_Addons_Step3" xml:space="preserve">

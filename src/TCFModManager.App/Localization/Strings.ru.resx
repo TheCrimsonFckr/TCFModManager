@@ -8709,9 +8709,6 @@
   <data name="Help_Installed_Addons_Step1" xml:space="preserve">
     <value>На странице {0} у каждого установленного аддона своя карточка, а под его названием указан мод, к которому он относится.</value>
   </data>
-  <data name="Help_Installed_Addons_Step2" xml:space="preserve">
-    <value>Чтобы удалить мод и его аддоны, нажмите {0} на карточке мода и ответьте «Да», когда спросят о его аддонах.</value>
-  </data>
   <data name="Help_Installed_Addons_Step3" xml:space="preserve">
     <value>Чтобы отключить их вместе, отключите мод и выберите {0}. Когда вы потом включите мод, вам снова предложат те же аддоны.</value>
   </data>

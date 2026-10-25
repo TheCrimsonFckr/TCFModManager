@@ -8340,9 +8340,6 @@ Trotzdem wechseln?</value>
   <data name="Help_Installed_Addons_Step1" xml:space="preserve">
     <value>Unter {0} hat jedes installierte Addon eine eigene Karte, mit dem Mod, zu dem es gehört, unter seinem Namen.</value>
   </data>
-  <data name="Help_Installed_Addons_Step2" xml:space="preserve">
-    <value>Um einen Mod und seine Addons zu entfernen, klicke auf der Karte des Mods auf {0} und antworte mit Ja, wenn nach seinen Addons gefragt wird.</value>
-  </data>
   <data name="Help_Installed_Addons_Step3" xml:space="preserve">
     <value>Um sie zusammen zu deaktivieren, deaktiviere den Mod und wähle {0}. Wenn du den Mod später aktivierst, werden dir dieselben Addons wieder angeboten.</value>
   </data>
