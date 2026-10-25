@@ -20,6 +20,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <ui:TitleBar
@@ -29,7 +30,7 @@
 
         <StackPanel
             Grid.Row="1"
-            Margin="24,12,24,24">
+            Margin="24,12,24,0">
             <TextBlock
                 x:Name="IntroText"
                 TextWrapping="Wrap"
@@ -37,7 +38,7 @@
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Text="{loc:Str ModListVersionChange_Intro}" />
 
-            <ItemsControl x:Name="ChangesList">
+            <ItemsControl x:Name="ChangesList" Margin="0,0,0,-8">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <ui:Card Margin="0,0,0,8" Padding="12,10">
@@ -70,30 +71,21 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-
-            <Grid Margin="0,8,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <ui:Button
-                    Grid.Column="0"
-                    Margin="0,0,6,0"
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Center"
-                    Content="{loc:Str Common_Cancel}"
-                    Click="CancelButton_Click" />
-
-                <ui:Button
-                    Grid.Column="1"
-                    Margin="6,0,0,0"
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Center"
-                    Appearance="Primary"
-                    Content="{loc:Str Common_Continue}"
-                    Click="ContinueButton_Click" />
-            </Grid>
         </StackPanel>
+
+        <WrapPanel Grid.Row="2" Style="{StaticResource DialogButtonBar}">
+            <ui:Button
+                Style="{StaticResource DialogButton}"
+                IsCancel="True"
+                Content="{loc:Str Common_Cancel}"
+                Click="CancelButton_Click" />
+
+            <ui:Button
+                Style="{StaticResource DialogButton}"
+                Appearance="Primary"
+                IsDefault="True"
+                Content="{loc:Str Common_Continue}"
+                Click="ContinueButton_Click" />
+        </WrapPanel>
     </Grid>
 </ui:FluentWindow>
