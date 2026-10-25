@@ -15,6 +15,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <ui:TitleBar
@@ -23,7 +24,7 @@
 
         <StackPanel
             Grid.Row="1"
-            Margin="24,12,24,24">
+            Margin="24,12,24,0">
             <TextBlock
                 x:Name="DescriptionText"
                 Margin="0,0,0,12"
@@ -34,23 +35,21 @@
                 x:Name="NameBox"
                 PlaceholderText="{loc:Str ModLists_NamePlaceholder}"
                 TextChanged="NameBox_TextChanged" />
-
-            <StackPanel
-                Margin="0,16,0,0"
-                Orientation="Horizontal"
-                HorizontalAlignment="Right">
-                <ui:Button
-                    Margin="0,0,8,0"
-                    IsCancel="True"
-                    Content="{loc:Str Common_Cancel}" />
-
-                <ui:Button
-                    x:Name="CaptureButton"
-                    IsDefault="True"
-                    IsEnabled="False"
-                    Appearance="Primary"
-                    Click="CaptureButton_Click" />
-            </StackPanel>
         </StackPanel>
+
+        <WrapPanel Grid.Row="2" Style="{StaticResource DialogButtonBar}">
+            <ui:Button
+                Style="{StaticResource DialogButton}"
+                IsCancel="True"
+                Content="{loc:Str Common_Cancel}" />
+
+            <ui:Button
+                x:Name="CaptureButton"
+                Style="{StaticResource DialogButton}"
+                IsDefault="True"
+                IsEnabled="False"
+                Appearance="Primary"
+                Click="CaptureButton_Click" />
+        </WrapPanel>
     </Grid>
 </ui:FluentWindow>
