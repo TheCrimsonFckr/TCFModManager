@@ -8463,9 +8463,6 @@ Passare comunque?</value>
   <data name="Help_Installed_AddonUpdate_Step1" xml:space="preserve">
     <value>In {0}, clicca sulla scheda del mod e scegli la versione che vuoi. Sotto i pulsanti, ogni addon installato per quel mod dice se è adatto a quella versione.</value>
   </data>
-  <data name="Help_Installed_AddonUpdate_Step2" xml:space="preserve">
-    <value>Premi {0}. Se un addon non è adatto, Sì lo porta anche a una versione adatta, e No aggiorna solo il mod.</value>
-  </data>
   <data name="Help_Installed_AddonUpdate_Step3" xml:space="preserve">
     <value>Un addon senza una versione per quella nuova viene disattivato una volta installato l'aggiornamento. Se in seguito il mod torna a una versione adatta, ti viene chiesto se riattivarlo.</value>
   </data>

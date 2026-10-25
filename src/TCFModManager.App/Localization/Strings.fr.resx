@@ -8463,9 +8463,6 @@ Passer quand même à cette version ?</value>
   <data name="Help_Installed_AddonUpdate_Step1" xml:space="preserve">
     <value>Dans {0}, cliquez sur la carte du mod et choisissez la version voulue. Sous les boutons, chaque addon installé pour ce mod indique s'il convient à cette version.</value>
   </data>
-  <data name="Help_Installed_AddonUpdate_Step2" xml:space="preserve">
-    <value>Appuyez sur {0}. Si un addon ne convient pas, Oui le passe aussi à une version qui convient, et Non met à jour le mod seulement.</value>
-  </data>
   <data name="Help_Installed_AddonUpdate_Step3" xml:space="preserve">
     <value>Un addon sans version pour la nouvelle est désactivé une fois la mise à jour installée. Si le mod revient plus tard à une version qui lui convient, on vous propose de le réactiver.</value>
   </data>

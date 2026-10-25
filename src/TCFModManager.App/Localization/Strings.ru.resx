@@ -8835,9 +8835,6 @@
   <data name="Help_Installed_AddonUpdate_Step1" xml:space="preserve">
     <value>На странице {0} нажмите на карточку мода и выберите нужную версию. Под кнопками для каждого установленного к нему аддона указано, подходит ли он к этой версии.</value>
   </data>
-  <data name="Help_Installed_AddonUpdate_Step2" xml:space="preserve">
-    <value>Нажмите {0}. Если аддон не подходит, «Да» также переведёт его на подходящую версию, а «Нет» обновит только мод.</value>
-  </data>
   <data name="Help_Installed_AddonUpdate_Step3" xml:space="preserve">
     <value>Аддон без версии для новой версии будет отключён после установки обновления. Если позже мод вернётся к версии, к которой он подходит, вам предложат включить его снова.</value>
   </data>

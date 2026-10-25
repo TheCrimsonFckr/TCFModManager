@@ -1,6 +1,6 @@
-using System.Windows;
 using TCFModManager.App.Localization;
 using TCFModManager.App.ViewModels;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 using TCFModManager.Core.SpModApi;
@@ -78,10 +78,10 @@ public sealed class AddonImpactCheck
 
     //
     // D6/D7: asked once, only when something is affected. Any addon with a version to change to
-    // gives Update both / Mod only / Cancel (Yes / No / Cancel); only addons with no fitting version
-    // give Update anyway / Cancel, No by default. Nothing affected answers UpdateBoth without asking.
+    // gives Update both / Mod only / Cancel; only addons with no fitting version give Update anyway /
+    // Cancel, Cancel by default. Nothing affected answers UpdateBoth without asking.
     // willInstall: the update installs rather than only downloads, so addons with no fitting version
-    // are disabled once it lands (D11) and the box says so.
+    // are disabled once it lands (D11) and the window says so.
     //
     public static AddonImpactAnswer Ask(IReadOnlyList<AddonImpactItem> items, bool willInstall)
     {
@@ -90,57 +90,67 @@ public sealed class AddonImpactCheck
 
         if (change.Count == 0 && none.Count == 0) return AddonImpactAnswer.UpdateBoth;
 
-        var parts = new List<string>();
-        if (change.Count > 0)
-            parts.Add(Strings.AddonImpact_ChangeList + "\n" + string.Join("\n", change.Select(ChangeLine)));
-        if (none.Count > 0)
-            parts.Add((willInstall ? Strings.AddonImpact_NoVersionDisableList : Strings.AddonImpact_NoVersionList)
-                + "\n" + string.Join("\n", none.Select(NoVersionLine)));
+        var sections = new List<AskSection>();
+        if (change.Count > 0) sections.Add(new(Strings.AddonImpact_ChangeHeading, [.. change.Select(ChangeLine)]));
+        if (none.Count > 0) sections.Add(new(Strings.AddonImpact_NoVersionHeading, [.. none.Select(NoVersionLine)]));
+
+        string[] detail = none.Count == 0
+            ? []
+            : [willInstall ? Strings.AddonImpact_NoVersionDisabled : Strings.AddonImpact_NoVersionStays];
 
         if (change.Count > 0)
         {
-            parts.Add(Strings.AddonImpact_ChangeQuestion);
-
-            return MessageBox.Show(
-                    string.Join("\n\n", parts),
-                    Strings.AddonImpact_Title,
-                    MessageBoxButton.YesNoCancel,
-                    MessageBoxImage.Question,
-                    MessageBoxResult.Yes) switch
+            return AskWindow.Show(new AskRequest
                 {
-                    MessageBoxResult.Yes => AddonImpactAnswer.UpdateBoth,
-                    MessageBoxResult.No => AddonImpactAnswer.ModOnly,
+                    Title = Strings.AddonImpact_NeedChangeTitle,
+                    Lead = Strings.AddonImpact_Lead,
+                    Sections = sections,
+                    Detail = detail,
+                    First = Strings.AddonImpact_UpdateBoth,
+                    Second = Strings.AddonImpact_ModOnly,
+                    Default = AskChoice.First,
+                }) switch
+                {
+                    AskChoice.First => AddonImpactAnswer.UpdateBoth,
+                    AskChoice.Second => AddonImpactAnswer.ModOnly,
                     _ => AddonImpactAnswer.Cancel,
                 };
         }
 
-        parts.Add(Strings.AddonImpact_NoVersionQuestion);
-
-        return MessageBox.Show(
-                string.Join("\n\n", parts),
-                Strings.AddonImpact_Title,
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning,
-                MessageBoxResult.No) == MessageBoxResult.Yes
+        return AskWindow.Show(new AskRequest
+            {
+                Title = Strings.AddonImpact_MayStopTitle,
+                Lead = Strings.AddonImpact_Lead,
+                Sections = sections,
+                Detail = detail,
+                First = Strings.AddonImpact_UpdateAnyway,
+                Default = AskChoice.Cancel,
+            }) == AskChoice.First
             ? AddonImpactAnswer.ModOnly
             : AddonImpactAnswer.Cancel;
     }
 
     //
     // OPEN-37 D4: addons installed anyway that no version fits the new one either are asked about on
-    // their own, after Ask - Keep (Yes, the default) or disable them once the update has installed.
-    // True means disable. Nothing is disabled when the update only downloads, so nothing is asked.
+    // their own, after Ask - Keep (the default, and what closing the window means) or disable them
+    // once the update has installed. True means disable. Nothing is disabled when the update only
+    // downloads, so nothing is asked.
     //
     public static bool AskOverridden(IReadOnlyList<AddonImpactItem> items, bool willInstall)
     {
         var overridden = items.Where(i => i.Result.Verdict == AddonImpactVerdict.Overridden).ToList();
         if (!willInstall || overridden.Count == 0) return false;
 
-        var body = Strings.AddonImpact_OverriddenList + "\n" + string.Join("\n", overridden.Select(NoVersionLine))
-            + "\n\n" + Strings.AddonImpact_OverriddenQuestion;
-
-        return MessageBox.Show(body, Strings.AddonImpact_Title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes)
-            == MessageBoxResult.No;
+        return AskWindow.Show(new AskRequest
+        {
+            Title = Strings.AddonImpact_OverriddenTitle,
+            Lead = Strings.AddonImpact_OverriddenLead,
+            Sections = [new(Strings.AddonImpact_OverriddenHeading, [.. overridden.Select(NoVersionLine)])],
+            First = Strings.AddonImpact_KeepEnabled,
+            Second = Strings.AddonImpact_DisableAfter,
+            Cancel = null,
+            Default = AskChoice.First,
+        }) == AskChoice.Second;
     }
 
     // What Update both queues for one addon: the version it changes to, ready for the download queue.

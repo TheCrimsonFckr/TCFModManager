@@ -8463,9 +8463,6 @@ Trotzdem wechseln?</value>
   <data name="Help_Installed_AddonUpdate_Step1" xml:space="preserve">
     <value>Klicke unter {0} auf die Karte des Mods und wähle die gewünschte Version. Unter den Schaltflächen steht bei jedem dafür installierten Addon, ob es zu dieser Version passt.</value>
   </data>
-  <data name="Help_Installed_AddonUpdate_Step2" xml:space="preserve">
-    <value>Drücke {0}. Passt ein Addon nicht, wechselt Ja es zusätzlich auf eine passende Version, und Nein aktualisiert nur den Mod.</value>
-  </data>
   <data name="Help_Installed_AddonUpdate_Step3" xml:space="preserve">
     <value>Ein Addon ohne Version für die neue wird deaktiviert, sobald das Update installiert ist. Geht der Mod später auf eine Version zurück, zu der es passt, wirst du gefragt, ob es wieder aktiviert werden soll.</value>
   </data>

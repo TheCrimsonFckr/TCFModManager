@@ -223,7 +223,7 @@ internal static class HelpCatalog
 
             Topic("installed.addonupdate", () => Strings.Help_Installed_AddonUpdate_Title,
                 Step(() => Strings.Help_Installed_AddonUpdate_Step1, () => Strings.Nav_Installed),
-                Step(() => Strings.Help_Installed_AddonUpdate_Step2, () => Strings.ModUpdate_Update),
+                Step(() => Strings.Help_Installed_AddonUpdate_Step2, () => Strings.ModUpdate_Update, () => Strings.AddonImpact_UpdateBoth, () => Strings.AddonImpact_ModOnly),
                 Step(() => Strings.Help_Installed_AddonUpdate_Step3))
                 .WithNote(() => Strings.Help_Installed_AddonUpdate_Note, () => Strings.Installed_UpdateSelected)
                 .WithKeywords(() => Strings.Help_Installed_AddonUpdate_Keywords),

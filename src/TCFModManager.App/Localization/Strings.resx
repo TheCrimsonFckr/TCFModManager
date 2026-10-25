@@ -10010,25 +10010,73 @@ Switch anyway?</value>
     <value>addon, add-on, remove addon, uninstall addon, delete addon, disable addon, parent mod, stickers, presets</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
-  <data name="AddonImpact_Title" xml:space="preserve">
-    <value>Addons affected by this update</value>
-    <comment>Title of the box asked before a mod update that leaves installed addons not fitting (OPEN-32 D6).</comment>
+  <data name="Ask_More_one" xml:space="preserve">
+    <value>and 1 more</value>
+    <comment>Last line of a long list in a question window, standing in for the names not shown.</comment>
   </data>
-  <data name="AddonImpact_ChangeList" xml:space="preserve">
-    <value>These addons don't fit the new version, but another version of each does:</value>
-    <comment>Heads a list of AddonImpact_ChangeLineFormat lines in the box.</comment>
+  <data name="Ask_More_other" xml:space="preserve">
+    <value>and {0} more</value>
+    <comment>Last line of a long list in a question window, standing in for the names not shown. {0} how many.</comment>
   </data>
-  <data name="AddonImpact_NoVersionList" xml:space="preserve">
-    <value>These addons have no version for the new version and may stop working. They stay installed:</value>
-    <comment>Heads a list of AddonImpact_NoVersionLineFormat lines in the box.</comment>
+  <data name="AddonImpact_NeedChangeTitle" xml:space="preserve">
+    <value>Some addons need a different version</value>
+    <comment>Title of the window asked before a mod update when some installed addons can change to a version that works with it (OPEN-32 D6).</comment>
   </data>
-  <data name="AddonImpact_ChangeQuestion" xml:space="preserve">
-    <value>Change them too? Yes updates the mod and changes these addons to versions that fit. No updates the mod only.</value>
-    <comment>Ends the box when some addons can change version. Yes/No/Cancel box; Yes and No are the box's own buttons.</comment>
+  <data name="AddonImpact_MayStopTitle" xml:space="preserve">
+    <value>Some addons may stop working</value>
+    <comment>Title of the same window when no affected addon has a version that works with the update.</comment>
   </data>
-  <data name="AddonImpact_NoVersionQuestion" xml:space="preserve">
-    <value>Update anyway?</value>
-    <comment>Ends the box when no listed addon has a fitting version. Yes/No box, No by default.</comment>
+  <data name="AddonImpact_Lead" xml:space="preserve">
+    <value>Updating this mod affects some of its addons.</value>
+    <comment>First line of that window, above the lists of addons.</comment>
+  </data>
+  <data name="AddonImpact_ChangeHeading" xml:space="preserve">
+    <value>These have a version made for the new mod version:</value>
+    <comment>Heads a list of AddonImpact_ChangeLineFormat lines - addons that can change to a version that works with the update.</comment>
+  </data>
+  <data name="AddonImpact_NoVersionHeading" xml:space="preserve">
+    <value>These have no version made for it yet:</value>
+    <comment>Heads a list of AddonImpact_NoVersionLineFormat lines - addons with no version that works with the update. "It" is the new mod version in the heading above.</comment>
+  </data>
+  <data name="AddonImpact_NoVersionDisabled" xml:space="preserve">
+    <value>They will be disabled after the update. You can enable them again from their card.</value>
+    <comment>Under the no-version list when the update installs (OPEN-32 D11).</comment>
+  </data>
+  <data name="AddonImpact_NoVersionStays" xml:space="preserve">
+    <value>They stay installed, but may stop working.</value>
+    <comment>Under the no-version list when the update only downloads.</comment>
+  </data>
+  <data name="AddonImpact_UpdateBoth" xml:space="preserve">
+    <value>Update mod and addons</value>
+    <comment>Button: update the mod and change the listed addons to versions that work with it. The default.</comment>
+  </data>
+  <data name="AddonImpact_ModOnly" xml:space="preserve">
+    <value>Update mod only</value>
+    <comment>Button: update the mod and leave its addons as they are.</comment>
+  </data>
+  <data name="AddonImpact_UpdateAnyway" xml:space="preserve">
+    <value>Update anyway</value>
+    <comment>Button when no affected addon has a working version. Cancel is the default.</comment>
+  </data>
+  <data name="AddonImpact_OverriddenTitle" xml:space="preserve">
+    <value>Keep these addons enabled?</value>
+    <comment>Title of the window asked before an update about addons the user installed anyway (OPEN-37 D4).</comment>
+  </data>
+  <data name="AddonImpact_OverriddenLead" xml:space="preserve">
+    <value>You chose to install these addons anyway.</value>
+    <comment>First line of that window.</comment>
+  </data>
+  <data name="AddonImpact_OverriddenHeading" xml:space="preserve">
+    <value>None of their versions are made for the new mod version:</value>
+    <comment>Heads a list of AddonImpact_NoVersionLineFormat lines in that window.</comment>
+  </data>
+  <data name="AddonImpact_KeepEnabled" xml:space="preserve">
+    <value>Keep enabled</value>
+    <comment>Button: leave the addons enabled after the update. The default, and what closing the window does.</comment>
+  </data>
+  <data name="AddonImpact_DisableAfter" xml:space="preserve">
+    <value>Disable after the update</value>
+    <comment>Button: disable the addons once the update has installed.</comment>
   </data>
   <data name="AddonImpact_ChangeLineFormat" xml:space="preserve">
     <value>{0} {1} → {2} (for {3} {4})</value>
@@ -10102,10 +10150,6 @@ Switch anyway?</value>
     <value>{0} doesn't fit {1} {2} - {3} does</value>
     <comment>On an addon's Installed card when its installed version doesn't fit its mod's installed version but another version does (OPEN-32 D10). {0} the addon's installed version, {1} the mod's name, {2} the mod's installed version, {3} the addon version that fits (can be older).</comment>
   </data>
-  <data name="AddonImpact_NoVersionDisableList" xml:space="preserve">
-    <value>These addons have no version for the new version. They will be disabled once it's installed - you can turn them back on from their card:</value>
-    <comment>Heads the list of addons with no fitting version when the update installs (OPEN-32 D11); they are disabled after it lands.</comment>
-  </data>
   <data name="AddonFit_DisabledFormat" xml:space="preserve">
     <value>Disabled {0} - no version fits its mod's new version.</value>
     <comment>Status after an update landed and its addons with no fitting version were disabled (OPEN-32 D11). {0} is their names joined with TextLists.</comment>
@@ -10151,7 +10195,7 @@ Switch anyway?</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Installed_AddonUpdate_Step2" xml:space="preserve">
-    <value>Press {0}. If an addon won't fit, Yes also changes it to a version that does, and No updates the mod only.</value>
+    <value>Press {0}. If an addon needs a different version, pick {1} to change it too, or {2} to leave it as it is.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Installed_AddonUpdate_Step3" xml:space="preserve">
@@ -10282,14 +10326,6 @@ It may not work with your version. Install it anyway?</value>
   <data name="AddonImpact_Overridden" xml:space="preserve">
     <value>Installed anyway - no version fits this one either</value>
     <comment>In the update dialog, for an addon the user installed anyway when no version of it fits the selected mod version either (OPEN-37).</comment>
-  </data>
-  <data name="AddonImpact_OverriddenList" xml:space="preserve">
-    <value>You installed these addons anyway, and no version of them lists the new version either:</value>
-    <comment>Heads a list of AddonImpact_NoVersionLineFormat lines in the box asked before an update (OPEN-37 D4).</comment>
-  </data>
-  <data name="AddonImpact_OverriddenQuestion" xml:space="preserve">
-    <value>Keep them enabled? No disables them once the update has installed.</value>
-    <comment>Ends that box. Yes keeps them (the default), No disables them after the update lands.</comment>
   </data>
   <data name="ModLists_EntryInstalledAnyway" xml:space="preserve">
     <value>installed anyway</value>
