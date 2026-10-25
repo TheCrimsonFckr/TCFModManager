@@ -161,8 +161,7 @@ public partial class BrowseViewModel
         // the card says so in red, and installing it is asked about rather than done silently.
         if (SptCompatibility.IsIncompatible(chosen.SptVersionConstraint)
             && !SptCompatibility.ConfirmAnyway(
-                [SptCompatibility.Line(mod.Name ?? Strings.Browse_ThisMod, chosen.Version, chosen.SptVersionConstraint)],
-                batch: false))
+                [SptCompatibility.Line(mod.Name ?? Strings.Browse_ThisMod, chosen.Version, chosen.SptVersionConstraint)]))
         {
             StatusMessage = Text(Strings.Install_IncompatibleNotInstalledFormat, mod.Name, installedSptVersion);
             return;

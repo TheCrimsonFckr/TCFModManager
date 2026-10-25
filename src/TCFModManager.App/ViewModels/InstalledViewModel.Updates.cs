@@ -82,8 +82,8 @@ public partial class InstalledViewModel
 
         //
         // Any update whose version doesn't support the installed SPT - PickDisplayVersion falls back
-        // to the newest when none does - is asked about once for the batch. No leaves those out and
-        // updates the rest.
+        // to the newest when none does - is asked about once for the batch. Skipping leaves those out
+        // and updates the rest; Cancel updates nothing.
         //
         var incompatible = resolved
             .Select(r => (r.Card, Version: r.Mod.Versions?.FirstOrDefault(v => v.Version == r.Version)))
@@ -91,9 +91,16 @@ public partial class InstalledViewModel
             .ToList();
 
         var leftOut = string.Empty;
-        if (incompatible.Count > 0 && !SptCompatibility.ConfirmAnyway(
-                [.. incompatible.Select(r => SptCompatibility.Line(r.Card.DisplayTitle, r.Version!.Version, r.Version.SptVersionConstraint))],
-                batch: true))
+        var answer = SptCompatibility.AskBatch(
+            [.. incompatible.Select(r => SptCompatibility.Line(r.Card.DisplayTitle, r.Version!.Version, r.Version.SptVersionConstraint))]);
+
+        if (answer == IncompatibleAnswer.Cancel)
+        {
+            StatusMessage = Strings.Installed_UpdateCancelled;
+            return;
+        }
+
+        if (answer == IncompatibleAnswer.SkipThese)
         {
             var dropped = incompatible.Select(r => r.Card).ToHashSet();
             resolved.RemoveAll(r => dropped.Contains(r.Card));

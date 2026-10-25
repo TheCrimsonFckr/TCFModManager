@@ -467,10 +467,16 @@ public sealed class ModListService
 
         //
         // Versions that don't support the installed SPT are asked about once for the batch, like a
-        // single install. No leaves those out, each named as a failure, and fetches the rest.
+        // single install. Skipping leaves those out, each named as a failure, and fetches the rest;
+        // Cancel stops the batch like declining the mod pages does.
         //
         var incompatible = downloads.Where(d => SptCompatibility.IsIncompatible(d.Version.SptVersionConstraint)).ToList();
-        if (incompatible.Count > 0 && !prompts.InstallIncompatible(incompatible))
+        var answer = incompatible.Count > 0 ? prompts.InstallIncompatible(incompatible) : IncompatibleAnswer.InstallAll;
+
+        if (answer == IncompatibleAnswer.Cancel)
+            return new ModListFetchOutcome([], failed, Cancelled: true);
+
+        if (answer == IncompatibleAnswer.SkipThese)
         {
             foreach (var d in incompatible)
             {

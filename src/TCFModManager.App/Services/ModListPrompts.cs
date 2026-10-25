@@ -41,7 +41,7 @@ public sealed record ModListResolution(
 public sealed record ModListPrompts(
     Func<IReadOnlyList<ModListVersionChange>, IReadOnlyList<ModListVersionChange>> ApproveVersionChanges,
     Func<IReadOnlyList<ModListDownload>, bool> ConfirmModPages,
-    Func<IReadOnlyList<ModListDownload>, bool> InstallIncompatible)
+    Func<IReadOnlyList<ModListDownload>, IncompatibleAnswer> InstallIncompatible)
 {
     //
     // What an apply does when it has nobody to ask: substitute nothing, download nothing.
@@ -49,13 +49,12 @@ public sealed record ModListPrompts(
     // Fail-closed on purpose. This app has never placed a file without asking, and a service with
     // no UI wired to it is exactly the case where a silent yes would go unnoticed.
     //
-    public static ModListPrompts Reject { get; } = new(_ => [], _ => false, _ => false);
+    public static ModListPrompts Reject { get; } = new(_ => [], _ => false, _ => IncompatibleAnswer.SkipThese);
 
     public static ModListPrompts Default { get; } = new(
         ModListVersionChangeWindow.Approve,
         downloads => ReadModPageConfirmationWindow.ConfirmAll(
             [.. downloads.Select(d => new ModPageLink(d.Target.Name, d.Target.DetailUrl))]),
-        downloads => SptCompatibility.ConfirmAnyway(
-            [.. downloads.Select(d => SptCompatibility.Line(d.Target.Name, d.Version.Version, d.Version.SptVersionConstraint))],
-            batch: true));
+        downloads => SptCompatibility.AskBatch(
+            [.. downloads.Select(d => SptCompatibility.Line(d.Target.Name, d.Version.Version, d.Version.SptVersionConstraint))]));
 }

@@ -507,8 +507,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
         if (!_mod.IsAddon
             && SptCompatibility.IsIncompatible(selectedVersion.Raw.SptVersionConstraint)
             && !SptCompatibility.ConfirmAnyway(
-                [SptCompatibility.Line(_mod.DisplayTitle, selectedVersion.Raw.Version, selectedVersion.Raw.SptVersionConstraint)],
-                batch: false))
+                [SptCompatibility.Line(_mod.DisplayTitle, selectedVersion.Raw.Version, selectedVersion.Raw.SptVersionConstraint)]))
         {
             StatusMessage = Text(Strings.Install_IncompatibleNotInstalledFormat, _mod.DisplayTitle, AppServices.SptEnvironment.InstalledVersion);
             return;
