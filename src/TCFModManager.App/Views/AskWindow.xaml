@@ -56,13 +56,12 @@
 
                 <TextBlock
                     x:Name="LeadText"
-                    Style="{StaticResource AskText}"
-                    Margin="0,0,0,12" />
+                    Style="{StaticResource AskText}" />
 
                 <ItemsControl x:Name="SectionList" Focusable="False">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type local:AskSection}">
-                            <StackPanel Margin="0,0,0,12">
+                            <StackPanel Margin="0,12,0,0">
                                 <TextBlock FontWeight="SemiBold" Text="{Binding Heading}">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock" BasedOn="{StaticResource AskText}">
@@ -110,7 +109,7 @@
                         <DataTemplate>
                             <TextBlock
                                 Style="{StaticResource AskText}"
-                                Margin="0,0,0,12"
+                                Margin="0,12,0,0"
                                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                 Text="{Binding}" />
                         </DataTemplate>
@@ -122,17 +121,14 @@
                     FontSize="11"
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                    Margin="0,0,0,12" />
+                    Margin="0,12,0,0" />
             </StackPanel>
         </ScrollViewer>
 
-        <WrapPanel
-            Grid.Row="2"
-            Margin="24,8,16,24"
-            HorizontalAlignment="Right">
-            <ui:Button x:Name="CancelButton" Margin="0,0,8,0" />
-            <ui:Button x:Name="SecondButton" Margin="0,0,8,0" />
-            <ui:Button x:Name="FirstButton" Margin="0,0,8,0" />
+        <WrapPanel Grid.Row="2" Style="{StaticResource DialogButtonBar}">
+            <ui:Button x:Name="CancelButton" Style="{StaticResource DialogButton}" />
+            <ui:Button x:Name="SecondButton" Style="{StaticResource DialogButton}" />
+            <ui:Button x:Name="FirstButton" Style="{StaticResource DialogButton}" />
         </WrapPanel>
     </Grid>
 </ui:FluentWindow>
