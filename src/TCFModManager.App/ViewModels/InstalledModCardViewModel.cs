@@ -368,6 +368,11 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // OPEN-32 D11: the installed version doesn't fit its mod - shown as "nothing fits" rather than "?".
     public bool DoesntFitParent { get; init; }
 
+    // OPEN-37 D3: installed anyway, though its listed range doesn't include its mod's version.
+    public bool IsFitOverridden { get; init; }
+
+    private bool IsInstalledAnyway => IsAddon && DoesntFitParent && IsFitOverridden;
+
     // The card's "Addon for X" line, or null for an ordinary mod.
     public string? AddonSubtitle => IsAddon
         ? ParentModName is not null ? Text(Strings.Installed_AddonForFormat, ParentModName) : Strings.Installed_Addon
@@ -622,7 +627,9 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         ? ModStatus.Disabled
         : HasConflicts
             ? ModStatus.Conflict
-            : IsAddon && DoesntFitParent
+            : IsInstalledAnyway && UpdateAvailable != true
+                ? ModStatus.InstalledAnyway
+            : IsAddon && DoesntFitParent && !IsFitOverridden
                 ? ModStatus.NoCompatibleVersion
             : SptFit is { Fits: false } && !IsSptWarningDismissed && UpdateAvailable != true
                 ? ModStatus.NoCompatibleVersion
@@ -645,6 +652,9 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         IncompleteSummary
         ?? JoinConflicts()
         ?? DownloadSummary
+        ?? (IsInstalledAnyway && !IsDisabled
+            ? Text(Strings.Installed_AddonInstalledAnywayToolTipFormat, ParentModName ?? Strings.Addon_ParentFallback, ParentInstalledVersion)
+            : null)
         ?? (IsAddon && DoesntFitParent && !IsDisabled
             ? Text(Strings.Installed_AddonNoFitToolTipFormat, ParentModName, ParentInstalledVersion)
             : null)

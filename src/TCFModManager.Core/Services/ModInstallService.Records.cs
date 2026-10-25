@@ -36,6 +36,7 @@ public sealed partial class ModInstallService
             Overwrote = overwrote,
             EmptyFolders = emptyFolders ?? [],
             Slug = target.IsAddon ? target.Slug ?? current.Mods.FirstOrDefault(target.Matches)?.Slug : null,
+            FitOverride = target.IsAddon && !string.IsNullOrWhiteSpace(target.FitOverride) ? target.FitOverride.Trim() : null,
         };
 
         current.Mods.RemoveAll(target.Matches);

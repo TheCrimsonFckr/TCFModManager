@@ -259,6 +259,7 @@ public sealed partial class InstalledModCardViewModel
             ParentInstalledVersion = parentVersion,
             FitsParent = installedFits,
             DoesntFitParent = installedFits == false || (latest is null && versions.Count > 0 && parentVersion is not null),
+            IsFitOverridden = record.FitOverride is not null,
             IsAppManaged = record.IsAppManaged,
             IsManualOverride = !record.IsAppManaged,
             Entries = entries,

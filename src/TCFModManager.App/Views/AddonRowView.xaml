@@ -110,6 +110,14 @@
                     Text="{Binding BlockedReason}"
                     Visibility="{Binding HasBlockedReason, Converter={StaticResource TrueToVisible}}" />
 
+                <ui:Button
+                    Margin="0,6,0,0"
+                    HorizontalAlignment="Left"
+                    Content="{loc:Str Addon_ActionInstallAnyway}"
+                    Command="{Binding InstallAnywayCommand}"
+                    ToolTip="{loc:Str Addon_InstallAnywayToolTip}"
+                    Visibility="{Binding CanInstallAnyway, Converter={StaticResource TrueToVisible}}" />
+
                 <TextBlock
                     Margin="0,2,0,0"
                     TextWrapping="Wrap"

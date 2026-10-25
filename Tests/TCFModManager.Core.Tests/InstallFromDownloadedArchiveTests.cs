@@ -57,6 +57,41 @@ public class InstallFromDownloadedArchiveTests : IDisposable
     }
 
     [Fact]
+    public async Task An_addon_installed_anyway_records_the_mod_version_and_a_normal_install_clears_it()
+    {
+        var archive = Path.Combine(_root, "addon.bin");
+        File.WriteAllBytes(archive, ArchiveFileTests.Zip(("BepInEx/plugins/Mod/addon.dll", "the addon")));
+
+        var manifest = new ModInstallManifestService(Path.Combine(_root, "installed-mods.json"));
+        var service = new ModInstallService(new ModDownloadService(new HttpClient(new NoDownloads())), manifest);
+        var addon = new InstallTarget(_id, true, "Addon", null, null, null);
+
+        await service.InstallAsync(addon with { FitOverride = "1.1.3" }, new ModVersion { Id = 1, Version = "1.0.0" }, _install, downloadedArchive: archive);
+        Assert.Equal("1.1.3", manifest.Load().Find(_id, isAddon: true)?.FitOverride);
+
+        await service.InstallAsync(addon, new ModVersion { Id = 2, Version = "1.1.0" }, _install, downloadedArchive: archive);
+        Assert.Null(manifest.Load().Find(_id, isAddon: true)?.FitOverride);
+    }
+
+    [Fact]
+    public async Task A_mod_never_records_a_fit_override()
+    {
+        var archive = Path.Combine(_root, "mod.bin");
+        File.WriteAllBytes(archive, ArchiveFileTests.Zip(("BepInEx/plugins/Mod/mod.dll", "the mod")));
+
+        var manifest = new ModInstallManifestService(Path.Combine(_root, "installed-mods.json"));
+        var service = new ModInstallService(new ModDownloadService(new HttpClient(new NoDownloads())), manifest);
+
+        await service.InstallAsync(
+            new InstallTarget(_id, false, "Test", null, null, null, FitOverride: "1.1.3"),
+            new ModVersion { Id = 1, Version = "1.0.0" },
+            _install,
+            downloadedArchive: archive);
+
+        Assert.Null(manifest.Load().Find(_id, isAddon: false)?.FitOverride);
+    }
+
+    [Fact]
     public void Queue_archives_sit_in_the_install_scratch_folder()
     {
         var path = QueueArchives.NewPath(_install);

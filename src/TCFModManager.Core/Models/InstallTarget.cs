@@ -12,7 +12,8 @@ public sealed record InstallTarget(
     string? Guid,
     string? Thumbnail,
     string? DetailUrl,
-    string? Slug = null)
+    string? Slug = null,
+    string? FitOverride = null)
 {
     public static InstallTarget For(Mod mod) => new(
         mod.Id,
@@ -31,6 +32,8 @@ public sealed record InstallTarget(
         addon.Thumbnail,
         addon.DetailUrl,
         addon.Slug);
+
+    // FitOverride: for an addon installed anyway (OPEN-37), the mod version it goes against; written to its record.
 
     // True when this target and a manifest record describe the same thing.
     public bool Matches(InstalledModRecord record) => record.ModId == Id && record.IsAddon == IsAddon;

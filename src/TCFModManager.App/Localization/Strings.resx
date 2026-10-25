@@ -10235,4 +10235,30 @@ Switch anyway?</value>
     <value>addon, add-on, find addon, search addon, addon name, sticker pack, preset</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
+  <data name="ModStatus_InstalledAnyway" xml:space="preserve">
+    <value>Installed anyway - its author doesn't list this version of its mod</value>
+    <comment>Status of an addon the user installed even though the addon's author doesn't list the installed version of the mod it belongs to (OPEN-37).</comment>
+  </data>
+  <data name="Addon_ActionInstallAnyway" xml:space="preserve">
+    <value>Install anyway</value>
+    <comment>Button under an addon version blocked because the installed mod's version isn't one its author lists (OPEN-37).</comment>
+  </data>
+  <data name="Addon_InstallAnywayToolTip" xml:space="preserve">
+    <value>Authors don't always update an addon's list of mod versions. Install it if you know it works with yours.</value>
+    <comment>Tooltip on the Install anyway button (OPEN-37).</comment>
+  </data>
+  <data name="Addon_InstallAnywayTitle" xml:space="preserve">
+    <value>Install anyway?</value>
+    <comment>Title of the question asked before installing an addon version its author doesn't list for the installed mod version (OPEN-37).</comment>
+  </data>
+  <data name="Addon_InstallAnywayFormat" xml:space="preserve">
+    <value>{0} {1} lists {2} {3}. You have {2} {4}.
+
+It may not work with your version. Install it anyway?</value>
+    <comment>{0} is the addon's name, {1} its version, {2} the mod's name, {3} the mod version the addon lists, {4} the mod version installed.</comment>
+  </data>
+  <data name="Installed_AddonInstalledAnywayToolTipFormat" xml:space="preserve">
+    <value>Installed anyway - its author doesn't list {0} {1}</value>
+    <comment>Status tooltip on an addon's Installed card when it was installed anyway (OPEN-37). {0} is the mod's name, {1} the mod version installed.</comment>
+  </data>
 </root>

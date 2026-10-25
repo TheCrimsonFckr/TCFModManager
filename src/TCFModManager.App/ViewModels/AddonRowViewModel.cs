@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
@@ -127,6 +128,7 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanInstall))]
+    [NotifyPropertyChangedFor(nameof(CanInstallAnyway))]
     [NotifyPropertyChangedFor(nameof(BlockedReason))]
     [NotifyPropertyChangedFor(nameof(HasBlockedReason))]
     [NotifyPropertyChangedFor(nameof(ParentUpdateHint))]
@@ -137,6 +139,7 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(ActionIcon))]
     [NotifyCanExecuteChangedFor(nameof(InstallCommand))]
     [NotifyCanExecuteChangedFor(nameof(InstallAlternateCommand))]
+    [NotifyCanExecuteChangedFor(nameof(InstallAnywayCommand))]
     private AddonVersionOption? _selectedVersion;
 
     [ObservableProperty]
@@ -165,6 +168,10 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
     // through with a note rather than blocked - the same way an unparsable SPT constraint is.
     // 
     public bool CanInstall => SelectedVersion is { IsCompatible: not false, Raw.Link: not null }
+        && !string.IsNullOrWhiteSpace(_parentVersion);
+
+    // OPEN-37 D1: blocked only because the installed mod's version isn't in this version's listed range.
+    public bool CanInstallAnyway => SelectedVersion is { IsCompatible: false, Raw.Link: not null }
         && !string.IsNullOrWhiteSpace(_parentVersion);
 
     public string? BlockedReason
@@ -222,7 +229,25 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
     [RelayCommand(CanExecute = nameof(CanInstall))]
     private void InstallAlternate() => Queue(alternate: true);
 
-    private void Queue(bool alternate)
+    [RelayCommand(CanExecute = nameof(CanInstallAnyway))]
+    private void InstallAnyway()
+    {
+        if (SelectedVersion is not { } selected) return;
+
+        var parent = _parentName ?? Strings.Addon_ParentFallback;
+        var question = Text(
+            Strings.Addon_InstallAnywayFormat, Name, selected.VersionText, parent, selected.Raw.ModVersionConstraint, _parentVersion);
+
+        if (MessageBox.Show(question, Strings.Addon_InstallAnywayTitle, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No)
+            != MessageBoxResult.Yes)
+        {
+            return;
+        }
+
+        Queue(alternate: false, overrideFit: true);
+    }
+
+    private void Queue(bool alternate, bool overrideFit = false)
     {
         if (SelectedVersion is not { Raw.Link: not null } selected) return;
 
@@ -251,8 +276,10 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
             ContentLength = selected.Raw.ContentLength,
         };
 
+        var target = overrideFit ? InstallTarget.For(_addon) with { FitOverride = _parentVersion } : InstallTarget.For(_addon);
+
         AppServices.DownloadQueue.Enqueue(
-            InstallTarget.For(_addon),
+            target,
             selected.VersionText,
             installPath,
             () => Task.FromResult<ModVersion?>(version),

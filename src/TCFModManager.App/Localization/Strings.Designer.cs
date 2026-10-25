@@ -2803,4 +2803,10 @@ internal static class Strings
     internal static string Help_Browse_AddonSearch_Step2 => LocalizationService.Get("Help_Browse_AddonSearch_Step2");
     internal static string Help_Browse_AddonSearch_Note => LocalizationService.Get("Help_Browse_AddonSearch_Note");
     internal static string Help_Browse_AddonSearch_Keywords => LocalizationService.Get("Help_Browse_AddonSearch_Keywords");
+    internal static string ModStatus_InstalledAnyway => LocalizationService.Get("ModStatus_InstalledAnyway");
+    internal static string Addon_ActionInstallAnyway => LocalizationService.Get("Addon_ActionInstallAnyway");
+    internal static string Addon_InstallAnywayToolTip => LocalizationService.Get("Addon_InstallAnywayToolTip");
+    internal static string Addon_InstallAnywayTitle => LocalizationService.Get("Addon_InstallAnywayTitle");
+    internal static string Addon_InstallAnywayFormat => LocalizationService.Get("Addon_InstallAnywayFormat");
+    internal static string Installed_AddonInstalledAnywayToolTipFormat => LocalizationService.Get("Installed_AddonInstalledAnywayToolTipFormat");
 }
