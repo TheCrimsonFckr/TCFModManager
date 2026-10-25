@@ -17,11 +17,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <ui:TitleBar x:Name="WindowTitleBar" Grid.Row="0" Title="{loc:Str ServerRunning_Title}" />
 
-        <StackPanel Grid.Row="1" Margin="24,12,24,24">
+        <StackPanel Grid.Row="1" Margin="24,12,24,0">
             <TextBlock
                 x:Name="MessageText"
                 TextWrapping="Wrap"
@@ -31,26 +32,28 @@
                 x:Name="PathText"
                 FontSize="11"
                 TextWrapping="Wrap"
-                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                Margin="0,0,0,20" />
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <ui:Button
-                    x:Name="CancelButton"
-                    Margin="0,0,8,0"
-                    Content="{loc:Str Common_Cancel}"
-                    Click="Cancel_Click" />
-                <ui:Button
-                    x:Name="StopButton"
-                    Margin="0,0,8,0"
-                    Appearance="Danger"
-                    Icon="{ui:SymbolIcon Stop24}"
-                    Click="Stop_Click" />
-                <ui:Button
-                    x:Name="LeaveButton"
-                    Appearance="Primary"
-                    Click="Leave_Click" />
-            </StackPanel>
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
         </StackPanel>
+
+        <WrapPanel Grid.Row="2" Style="{StaticResource DialogButtonBar}">
+            <ui:Button
+                x:Name="CancelButton"
+                Style="{StaticResource DialogButton}"
+                IsCancel="True"
+                Content="{loc:Str Common_Cancel}"
+                Click="Cancel_Click" />
+            <ui:Button
+                x:Name="StopButton"
+                Style="{StaticResource DialogButton}"
+                Appearance="Danger"
+                Icon="{ui:SymbolIcon Stop24}"
+                Click="Stop_Click" />
+            <ui:Button
+                x:Name="LeaveButton"
+                Style="{StaticResource DialogButton}"
+                Appearance="Primary"
+                IsDefault="True"
+                Click="Leave_Click" />
+        </WrapPanel>
     </Grid>
 </ui:FluentWindow>

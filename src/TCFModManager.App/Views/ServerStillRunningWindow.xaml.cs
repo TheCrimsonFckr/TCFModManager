@@ -34,7 +34,11 @@ public partial class ServerStillRunningWindow : FluentWindow
         InitializeComponent();
 
         // Quitting from the tray, or the app ending some other way, can't be called off.
-        if (closing && !canCancel) CancelButton.Visibility = Visibility.Collapsed;
+        if (closing && !canCancel)
+        {
+            CancelButton.Visibility = Visibility.Collapsed;
+            CancelButton.IsCancel = false;
+        }
 
         PathText.Text = serverPath;
 
