@@ -145,14 +145,6 @@
   <data name="Api_UnreachableFormat" xml:space="preserve">
     <value>sp-mod.com nicht erreichbar: {0}</value>
   </data>
-  <data name="App_CrashBodyFormat" xml:space="preserve">
-    <value>Etwas ist schiefgelaufen und wurde nicht abgefangen:
-
-{0}
-
-Das wurde hier hingeschrieben:
-{1}</value>
-  </data>
   <data name="App_CrashTitle" xml:space="preserve">
     <value>TCF Mod Manager - Unerwarteter Fehler</value>
   </data>
@@ -620,15 +612,6 @@ Das wurde hier hingeschrieben:
   </data>
   <data name="Configs_AuthoredFilesToolTip" xml:space="preserve">
     <value>Ein Ordner in diesem Mod mit Dateien, die du geschrieben hast - zum Beispiel Presets. Ein Update lässt ihn genau so, wie er ist, und beim Entfernen des Mods bleibt er erhalten.</value>
-  </data>
-  <data name="Configs_ChangedOnDiskFormat" xml:space="preserve">
-    <value>{0} wurde auf der Festplatte geändert, seit du die Datei hier geöffnet hast.
-
-Ja  -  mit dem überschreiben, was im Editor steht
-Nein  -  neu laden und deine Änderungen verlieren
-Abbrechen  -  alles so lassen, wie es ist
-
-Was du auch wählst: Die Version, die gerade auf der Festplatte liegt, wird zuerst nach {1} kopiert.</value>
   </data>
   <data name="Configs_ChangedOnDiskTitle" xml:space="preserve">
     <value>Datei auf der Festplatte geändert</value>
@@ -1150,13 +1133,6 @@ Siehe Abhängigkeiten und Konflikte.</value>
   </data>
   <data name="Downloads_BreaksTitle" xml:space="preserve">
     <value>Andere Mods würden nicht mehr laden</value>
-  </data>
-  <data name="Downloads_BreaksFormat" xml:space="preserve">
-    <value>Die Installation von {0} {1} würde verhindern, dass diese Mods laden - ihre eigenen Dateien verlangen eine andere Version:
-
-{2}
-
-Trotzdem installieren?</value>
   </data>
   <data name="Downloads_BreaksLineFormat" xml:space="preserve">
     <value>{0}: {1}</value>
@@ -1839,25 +1815,11 @@ Trotzdem installieren?</value>
   <data name="Installed_DisableSelected" xml:space="preserve">
     <value>Auswahl deaktivieren</value>
   </data>
-  <data name="Installed_DuplicateBodyFormat" xml:space="preserve">
-    <value>{0} liegt sowohl in einem aktivierten als auch in einem deaktivierten Ordner:
-
-{1}
-
-Ja  -  die aktivierte Kopie behalten
-Nein  -  die deaktivierte Kopie behalten und aktivieren
-Abbrechen  -  alles so lassen
-
-Die Kopie, die du nicht behältst, wird in einen versteckten Ordner .tcfmm-duplicates in deiner SPT-Installation verschoben, nicht gelöscht.</value>
-  </data>
   <data name="Installed_DuplicateKeptDisabledFormat" xml:space="preserve">
     <value>{0} bereinigt - die deaktivierte Kopie wurde behalten, die andere liegt in .tcfmm-duplicates in deiner SPT-Installation.</value>
   </data>
   <data name="Installed_DuplicateKeptEnabledFormat" xml:space="preserve">
     <value>{0} bereinigt - die aktivierte Kopie wurde behalten, die andere liegt in .tcfmm-duplicates in deiner SPT-Installation.</value>
-  </data>
-  <data name="Installed_DuplicateTitleFormat" xml:space="preserve">
-    <value>{0} bereinigen?</value>
   </data>
   <data name="Installed_EnabledCount_one" xml:space="preserve">
     <value>1 Mod aktiviert.</value>
@@ -2018,20 +1980,6 @@ Die Kopie, die du nicht behältst, wird in einen versteckten Ordner .tcfmm-dupli
   <data name="Installed_Remove" xml:space="preserve">
     <value>Entfernen</value>
   </data>
-  <data name="Installed_RemoveAppManagedBody" xml:space="preserve">
-    <value>Das entfernt genau die Dateien, die diese App dafür installiert hat, und legt jede Datei zurück, die er ersetzt hat. Dateien, die sich seit der Installation geändert haben oder die auch ein anderer Mod nutzt, bleiben, wo sie sind.</value>
-  </data>
-  <data name="Installed_RemoveConfigs_one" xml:space="preserve">
-    <value>{0} hat 1 eigene Konfigurations- oder Einstellungsdatei:</value>
-  </data>
-  <data name="Installed_RemoveConfigs_other" xml:space="preserve">
-    <value>{0} hat {1} eigene Konfigurations- oder Einstellungsdateien:</value>
-  </data>
-  <data name="Installed_RemoveConfigsChoicesFormat" xml:space="preserve">
-    <value>Ja  -  behalten, verschoben nach {0}
-Nein  -  zusammen mit dem Rest des Mods löschen
-Abbrechen  -  nichts entfernen</value>
-  </data>
   <data name="Installed_RemovedConfigsKept_one" xml:space="preserve">
     <value>1 Konfigurationsdatei in {1} behalten.</value>
   </data>
@@ -2050,16 +1998,8 @@ Abbrechen  -  nichts entfernen</value>
   <data name="Installed_RemoveDisabledFirstFormat" xml:space="preserve">
     <value>{0} ist deaktiviert - aktiviere ihn, bevor du ihn entfernst.</value>
   </data>
-  <data name="Installed_RemoveDisableHint" xml:space="preserve">
-    <value>Wenn du ihn aus dem Spiel nehmen willst, ohne ihn zu löschen, nutze stattdessen Deaktivieren.</value>
-  </data>
   <data name="Installed_RemoveFailedFormat" xml:space="preserve">
     <value>{0} konnte nicht entfernt werden: {1}</value>
-  </data>
-  <data name="Installed_RemoveLegacyBodyFormat" xml:space="preserve">
-    <value>Dieser Mod wurde nicht über diese App installiert, daher wird sein ganzer Ordner entfernt statt nur der Dateien, die er abgelegt hat:
-
-{0}</value>
   </data>
   <data name="Installed_RemoveNoFolderFormat" xml:space="preserve">
     <value>Der Ordner von {0} wurde zum Entfernen nicht gefunden.</value>
@@ -2208,15 +2148,6 @@ Abbrechen  -  nichts entfernen</value>
   <data name="Installed_UpdateFilterToolTip" xml:space="preserve">
     <value>Danach filtern, ob ein Update verfügbar ist</value>
   </data>
-  <data name="Installed_UpdateHandInstalledBodyFormat" xml:space="preserve">
-    <value>{0} wurde nicht über diese App installiert, deshalb gibt es keinen Eintrag darüber, welche Dateien die aktuelle Version genau abgelegt hat. Beim Aktualisieren werden die Dateien der neuen Version über das Vorhandene gelegt, statt die alte Version vorher sauber zu entfernen - es können also Reste der alten Version übrig bleiben.</value>
-  </data>
-  <data name="Installed_UpdateHandInstalledTitle_one" xml:space="preserve">
-    <value>Einen von Hand installierten Mod aktualisieren?</value>
-  </data>
-  <data name="Installed_UpdateHandInstalledTitle_other" xml:space="preserve">
-    <value>{0} von Hand installierte Mods aktualisieren?</value>
-  </data>
   <data name="Installed_UpdateNotInCatalogFormat" xml:space="preserve">
     <value>{0} wurde im zwischengespeicherten Katalog nicht gefunden - versuch es mit Neu einlesen.</value>
   </data>
@@ -2250,14 +2181,8 @@ Abbrechen  -  nichts entfernen</value>
   <data name="InstallRole_AskLater" xml:space="preserve">
     <value>Später fragen</value>
   </data>
-  <data name="InstallRole_Explanation" xml:space="preserve">
-    <value>Ein Headless-Client hostet Raids, ohne dass jemand darauf spielt. Er braucht also die Mods, die bestimmen, wie ein Raid abläuft - Bots, Items, Orte - und keinen von denen, die einem Spieler etwas anzeigen. Wenn klar ist, was diese Maschine ist, kommt die Modliste eines Servers auf das zugeschnitten an, was sie wirklich braucht.</value>
-  </data>
   <data name="InstallRole_Intro" xml:space="preserve">
     <value>Diese Installation hat einen Fika Headless-Launcher, den es nur auf einem Setup gibt, das einen Headless-Client betreibt.</value>
-  </data>
-  <data name="InstallRole_Note" xml:space="preserve">
-    <value>Du kannst das später unter Optionen ändern, und es betrifft nie eine eigene Modliste - nur die, die dir ein Server gibt.</value>
   </data>
   <data name="InstallRole_OnlyHosts" xml:space="preserve">
     <value>Nein, sie hostet nur</value>
@@ -2306,9 +2231,6 @@ Abbrechen  -  nichts entfernen</value>
   </data>
   <data name="ModDetails_LicenseFormat" xml:space="preserve">
     <value>Lizenz: {0}</value>
-  </data>
-  <data name="ModDisable_Note" xml:space="preserve">
-    <value>So oder so wird nichts gelöscht - deaktivierte Mods behalten ihre eigenen Dateien und Konfigurationen und kommen unverändert zurück, wenn du sie wieder aktivierst.</value>
   </data>
   <data name="ModDisable_Title" xml:space="preserve">
     <value>Abhängigkeiten prüfen</value>
@@ -3163,9 +3085,6 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="ModLists_VersionChangeEntryFormat" xml:space="preserve">
     <value>{0} {1} -&gt; {2}</value>
   </data>
-  <data name="ModLists_VersionChangeRowFormat" xml:space="preserve">
-    <value>Gewünscht {0} - neueste veröffentlichte ist {1}</value>
-  </data>
   <data name="ModLists_VersionChangeTitleCountFormat" xml:space="preserve">
     <value>{0} Versionen sind nicht mehr veröffentlicht</value>
   </data>
@@ -3186,9 +3105,6 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   </data>
   <data name="ModLists_VersionWarningFormat" xml:space="preserve">
     <value>Diese Liste wurde unter SPT {0} erstellt und du nutzt {1}. Versionen, die für das eine festgelegt sind, funktionieren nicht immer auf dem anderen.</value>
-  </data>
-  <data name="ModListVersionChange_Intro" xml:space="preserve">
-    <value>Diese Mods gibt es auf sp-mod.com nicht mehr in der Version, die diese Liste nennt. Hake die an, die du stattdessen in der neuesten Version installieren willst - alles ohne Haken wird übersprungen.</value>
   </data>
   <data name="ModListVersionChange_Title" xml:space="preserve">
     <value>Einige Versionen sind nicht mehr veröffentlicht</value>
@@ -3274,13 +3190,6 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="ModUpdate_Downgrade" xml:space="preserve">
     <value>Downgrade</value>
   </data>
-  <data name="ModUpdate_DowngradeBodyFormat" xml:space="preserve">
-    <value>Du hast {0} installiert, und das hier ersetzt es durch {1}.
-
-Die Dateien zu ersetzen ist der einfache Teil. Was diese App nicht rückgängig machen kann, ist alles, was die neuere Version schon geschrieben hat - ihre eigenen Konfigurationsdateien und alle Änderungen an deinem SPT-Profil. Ein älterer Build liest das vielleicht nicht zurück, und manche Mods ändern ihr Datenformat zwischen Versionen, sodass ein Profil zurückbleiben kann, das die ältere Version nicht mehr lädt.
-
-Sicher dein Profil, bevor du fortfährst, wenn es dir wichtig ist.</value>
-  </data>
   <data name="ModUpdate_DowngradeCancelled" xml:space="preserve">
     <value>Herabstufung abgebrochen.</value>
   </data>
@@ -3293,20 +3202,11 @@ Sicher dein Profil, bevor du fortfährst, wenn es dir wichtig ist.</value>
   <data name="ModUpdate_DowngradeToolTip" xml:space="preserve">
     <value>Installiert diese ältere Version anstelle der, die du hast. Fragt vorher nach - ein älterer Build liest vielleicht keine Konfigurations- oder Profildaten, die der neuere geschrieben hat.</value>
   </data>
-  <data name="ModUpdate_HandInstalledDowngradeBody" xml:space="preserve">
-    <value>Dieser Mod wurde nicht über diese App installiert, es ist also nicht festgehalten, welche Dateien seine aktuelle Version genau abgelegt hat - beim Herabstufen werden die Dateien der gewählten Version über das Vorhandene gelegt, statt die alte Version zuerst sauber zu entfernen. Es können Reste der alten Version zurückbleiben.</value>
-  </data>
   <data name="ModUpdate_HandInstalledDowngradeTitleFormat" xml:space="preserve">
     <value>{0} herabstufen?</value>
   </data>
-  <data name="ModUpdate_HandInstalledRedownloadBody" xml:space="preserve">
-    <value>Dieser Mod wurde nicht über diese App installiert, es ist also nicht festgehalten, welche Dateien seine aktuelle Version genau abgelegt hat - beim erneuten Herunterladen werden die Dateien der gewählten Version über das Vorhandene gelegt, statt die alte Version zuerst sauber zu entfernen. Es können Reste der alten Version zurückbleiben.</value>
-  </data>
   <data name="ModUpdate_HandInstalledRedownloadTitleFormat" xml:space="preserve">
     <value>{0} neu herunterladen?</value>
-  </data>
-  <data name="ModUpdate_HandInstalledUpdateBody" xml:space="preserve">
-    <value>Dieser Mod wurde nicht über diese App installiert, es ist also nicht festgehalten, welche Dateien seine aktuelle Version genau abgelegt hat - beim Aktualisieren werden die Dateien der gewählten Version über das Vorhandene gelegt, statt die alte Version zuerst sauber zu entfernen. Es können Reste der alten Version zurückbleiben.</value>
   </data>
   <data name="ModUpdate_HandInstalledUpdateTitleFormat" xml:space="preserve">
     <value>{0} aktualisieren?</value>
@@ -3638,13 +3538,6 @@ Sicher dein Profil, bevor du fortfährst, wenn es dir wichtig ist.</value>
   <data name="Options_SizeBy" xml:space="preserve">
     <value>x</value>
   </data>
-  <data name="Options_SkipGateBody" xml:space="preserve">
-    <value>Auf der Seite eines Mods schreibt der Autor die Installationsschritte, Voraussetzungen, bekannten Konflikte und Warnungen hin. Manche Mods funktionieren nicht, wenn du das überspringst, und diese App kann dir nicht sagen, welche.
-
-Schalte das aus, und Mods werden sofort heruntergeladen und installiert, ohne dass du etwas davon zu sehen bekommst. Zu wissen, was ein Mod braucht, wird dann deine Sache.
-
-Du kannst es jederzeit wieder einschalten.</value>
-  </data>
   <data name="Options_SkipGateTitle" xml:space="preserve">
     <value>Nicht mehr nach dem Lesen von Mod-Seiten fragen?</value>
   </data>
@@ -3873,9 +3766,6 @@ Du kannst es jederzeit wieder einschalten.</value>
   <data name="ThemeEditor_DeleteTitle" xml:space="preserve">
     <value>Theme löschen</value>
   </data>
-  <data name="ThemeEditor_DeleteConfirmFormat" xml:space="preserve">
-    <value>"{0}" löschen? Das lässt sich nicht rückgängig machen - exportiere es vorher, falls du es noch brauchst.</value>
-  </data>
   <data name="ThemeEditor_DeletedFormat" xml:space="preserve">
     <value>"{0}" gelöscht.</value>
   </data>
@@ -3902,9 +3792,6 @@ Du kannst es jederzeit wieder einschalten.</value>
   </data>
   <data name="ThemeEditor_UnsavedFormat" xml:space="preserve">
     <value>Änderungen an "{0}" speichern?</value>
-  </data>
-  <data name="ThemeEditor_DiscardFormat" xml:space="preserve">
-    <value>Änderungen an "{0}" verwerfen?</value>
   </data>
   <data name="ThemeEditor_Import" xml:space="preserve">
     <value>Importieren</value>
@@ -4113,9 +4000,6 @@ Du kannst es jederzeit wieder einschalten.</value>
   <data name="ReadModPage_AllOpenedFormat" xml:space="preserve">
     <value>Alle {0} Seiten geöffnet.</value>
   </data>
-  <data name="ReadModPage_BatchNote" xml:space="preserve">
-    <value>Genauso wie beim manuellen Installieren von sp-mod.com - auf den Seiten dieser Mods stehen die Installationsschritte, Voraussetzungen und Warnungen ihrer Autoren. Öffne sie ein paar auf einmal, oder überspring sie und reih alle ein.</value>
-  </data>
   <data name="ReadModPage_ButtonNoPage" xml:space="preserve">
     <value>Keine Seite vorhanden</value>
   </data>
@@ -4125,9 +4009,6 @@ Du kannst es jederzeit wieder einschalten.</value>
   <data name="ReadModPage_ButtonOpened" xml:space="preserve">
     <value>Geöffnet</value>
   </data>
-  <data name="ReadModPage_Intro" xml:space="preserve">
-    <value>Genau wie beim manuellen Installieren von sp-mod.com - öffne unten die Seite jedes Mods, bevor das hier eingereiht wird.</value>
-  </data>
   <data name="ReadModPage_OpenLast_one" xml:space="preserve">
     <value>Letzte Seite öffnen</value>
   </data>
@@ -4136,9 +4017,6 @@ Du kannst es jederzeit wieder einschalten.</value>
   </data>
   <data name="ReadModPage_OpenNextFormat" xml:space="preserve">
     <value>Nächste {0} Seiten öffnen</value>
-  </data>
-  <data name="ReadModPage_ProgressFormat" xml:space="preserve">
-    <value>{0} von {1} geöffnet - {2} übrig.</value>
   </data>
   <data name="ReadModPage_SkipOpening" xml:space="preserve">
     <value>Öffnen überspringen</value>
@@ -4519,9 +4397,6 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   </data>
   <data name="DownloadConfirm_RowDetailFormat" xml:space="preserve">
     <value>Version {0}, aus {1}</value>
-  </data>
-  <data name="DownloadConfirm_Note" xml:space="preserve">
-    <value>Entferne den Haken bei allen, die nicht stimmen - danach wird erst wieder gefragt, wenn du eine neuere Version herunterlädst. Einen Mod als installiert zu markieren, ändert nichts auf der Festplatte.</value>
   </data>
   <data name="DownloadConfirm_NotNow" xml:space="preserve">
     <value>Nicht jetzt</value>
@@ -6089,18 +5964,6 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="Installed_UndoNothing" xml:space="preserve">
     <value>Es gibt nichts rückgängig zu machen - die entfernten Dateien wurden gelöscht.</value>
   </data>
-  <data name="Installed_RemoveHeldFormat" xml:space="preserve">
-    <value>Entfernte Dateien bleiben {0} in der Installation, du kannst es also rückgängig machen.</value>
-  </data>
-  <data name="Installed_RemoveHeldUntilCleared" xml:space="preserve">
-    <value>Entfernte Dateien bleiben in der Installation, bis du sie in den Optionen löschst, du kannst es also rückgängig machen.</value>
-  </data>
-  <data name="Installed_RemoveNotHeld" xml:space="preserve">
-    <value>Entfernte Dateien werden sofort gelöscht (Optionen, Entfernte Mods behalten), das lässt sich also nicht rückgängig machen.</value>
-  </data>
-  <data name="Installed_RemoveUnstampedFormat" xml:space="preserve">
-    <value>Der Eintrag dieser App dazu sagt nicht, in welcher SPT-Installation er angelegt wurde. Er wird aus {0} entfernt.</value>
-  </data>
   <data name="Options_RemovedModsHeader" xml:space="preserve">
     <value>Entfernte Mods behalten</value>
   </data>
@@ -6133,9 +5996,6 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   </data>
   <data name="Options_RemovedModsClearTitle" xml:space="preserve">
     <value>Entfernte Mods löschen</value>
-  </data>
-  <data name="Options_RemovedModsClearConfirmFormat" xml:space="preserve">
-    <value>Alle in {1} aufbewahrten entfernten Mods löschen ({0})? Danach lässt sich keine bisherige Entfernung mehr rückgängig machen.</value>
   </data>
   <data name="Options_RemovedModsClearedFormat" xml:space="preserve">
     <value>Entfernte Mods gelöscht - {0} freigegeben.</value>
@@ -6212,23 +6072,6 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="Installed_RemovedFolderLeft_other" xml:space="preserve">
     <value>Sein Ordner {1} wurde nicht entfernt: Er enthält {0} Dateien, die der Mod nicht installiert hat.</value>
   </data>
-  <data name="Install_IncompatibleTitle" xml:space="preserve">
-    <value>Nicht für deine SPT-Version gemacht</value>
-  </data>
-  <data name="Install_IncompatibleOneFormat" xml:space="preserve">
-    <value>Keine Version dieses Mods auf sp-mod.com unterstützt SPT {0}. Die neueste ist:
-
-{1}
-
-Trotzdem installieren? SPT lädt ihn möglicherweise nicht.</value>
-  </data>
-  <data name="Install_IncompatibleBatchFormat" xml:space="preserve">
-    <value>Diese unterstützen SPT {0} nicht:
-
-{1}
-
-Trotzdem installieren? SPT lädt sie möglicherweise nicht. Mit Nein wird der Rest ohne sie installiert.</value>
-  </data>
   <data name="Install_IncompatibleLineFormat" xml:space="preserve">
     <value>{0} {1} - braucht SPT {2}</value>
   </data>
@@ -6292,19 +6135,6 @@ Siehe Abhängigkeiten und Konflikte.</value>
   </data>
   <data name="Conflicts_KeepThisToolTip" xml:space="preserve">
     <value>Diese Kopie behalten und die anderen entfernen. Sie landen dort, wo entfernte Mods landen, sodass Rückgängig auf der Seite Installiert sie zurückholen kann.</value>
-  </data>
-  <data name="Conflicts_KeepConfirmTitle" xml:space="preserve">
-    <value>Eine Kopie behalten</value>
-  </data>
-  <data name="Conflicts_KeepConfirmFormat" xml:space="preserve">
-    <value>{0} in {1} behalten und entfernen:
-
-{2}
-
-{3}</value>
-  </data>
-  <data name="Conflicts_KeepLineFormat" xml:space="preserve">
-    <value>{0} - {1}</value>
   </data>
   <data name="Conflicts_KeptFormat" xml:space="preserve">
     <value>{0} behalten. {1} entfernt - Rückgängig auf der Seite Installiert holt es zurück.</value>
@@ -6774,14 +6604,6 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Profiles_FailedFormat" xml:space="preserve">
     <value>Das hat nicht geklappt: {0}</value>
   </data>
-  <data name="Profiles_RestoreTitle" xml:space="preserve">
-    <value>Profile zurückspielen</value>
-  </data>
-  <data name="Profiles_RestoreConfirmFormat" xml:space="preserve">
-    <value>Die Profile so zurückspielen, wie sie am {0} waren ({1})?
-
-Der jetzige Stand wird zuerst kopiert, das lässt sich also auf demselben Weg rückgängig machen. Seitdem angelegte Profile bleiben, wie sie sind.</value>
-  </data>
   <data name="Profiles_RestoredFormat" xml:space="preserve">
     <value>Die Profile vom {0} wurden zurückgespielt. Der vorherige Stand steht oben in der Liste.</value>
   </data>
@@ -6800,24 +6622,8 @@ Der jetzige Stand wird zuerst kopiert, das lässt sich also auf demselben Weg r�
   <data name="Installed_HeldBackPlainFormat" xml:space="preserve">
     <value>Update auf {0} von sp-mod zurückgehalten.</value>
   </data>
-  <data name="Downloads_FikaIncompatibleTitle" xml:space="preserve">
-    <value>Nicht für Fika</value>
-  </data>
-  <data name="Downloads_FikaIncompatibleFormat" xml:space="preserve">
-    <value>Fika ist hier installiert, und sp-mod kennzeichnet {0} {1} als nicht mit Fika funktionierend. Trotzdem installiert, kann es Koop-Raids kaputt machen oder Fika am Laden hindern.
-
-Trotzdem installieren?</value>
-  </data>
-  <data name="Downloads_FikaIncompatibleDownloadFormat" xml:space="preserve">
-    <value>Fika ist hier installiert, und sp-mod kennzeichnet {0} {1} als nicht mit Fika funktionierend. Einmal installiert, kann es Koop-Raids kaputt machen oder Fika am Laden hindern.
-
-Trotzdem herunterladen?</value>
-  </data>
   <data name="Downloads_FikaDeclinedFormat" xml:space="preserve">
     <value>{0} {1} ausgelassen - sp-mod kennzeichnet es als nicht mit Fika funktionierend.</value>
-  </data>
-  <data name="Installed_RemoveProfileWarningFormat" xml:space="preserve">
-    <value>sp-mod kennzeichnet {0} als Mod, der dauerhafte Änderungen an deinem Profil vornehmen kann und sich eventuell nicht ohne neues Profil entfernen lässt. Das Entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Passiert das, holt Rückgängig den Mod zurück, und eine Kopie deiner Profile von kurz davor liegt unter Optionen, SPT-Profil-Sicherungen.</value>
   </data>
   <data name="Downloads_WaitingToDownload" xml:space="preserve">
     <value>Wartet auf einen freien Download-Platz</value>
@@ -6857,21 +6663,6 @@ Trotzdem herunterladen?</value>
   </data>
   <data name="Installed_RemoveSelectedTitle" xml:space="preserve">
     <value>Ausgewählte Mods entfernen?</value>
-  </data>
-  <data name="Installed_RemoveSelectedBodyFormat" xml:space="preserve">
-    <value>Diese Mods werden entfernt:
-{0}
-
-Ihre Konfigurationsdateien werden in {1} behalten.</value>
-  </data>
-  <data name="Installed_RemoveSelectedProfileFormat" xml:space="preserve">
-    <value>sp-mod kennzeichnet diese als Mods, die dauerhafte Änderungen an deinem Profil vornehmen können und sich eventuell nicht ohne neues Profil entfernen lassen:
-{0}
-
-Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie deiner Profile von kurz davor liegt unter Optionen, SPT-Profil-Sicherungen.</value>
-  </data>
-  <data name="Installed_RemoveSelectedLeavesDisabledFormat" xml:space="preserve">
-    <value>Ausgelassen, weil sie deaktiviert sind - zum Entfernen zuerst aktivieren: {0}.</value>
   </data>
   <data name="Installed_RemoveSelectedAllDisabledFormat" xml:space="preserve">
     <value>Nichts entfernt - die ausgewählten Mods sind deaktiviert. Zum Entfernen zuerst aktivieren: {0}.</value>
@@ -7842,20 +7633,11 @@ Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie d
   <data name="ServerRunning_Title" xml:space="preserve">
     <value>Der SPT-Server läuft</value>
   </data>
-  <data name="ServerRunning_Closing" xml:space="preserve">
-    <value>Der SPT-Server dieser Installation läuft noch. Er läuft weiter, wenn diese App geschlossen wird - jetzt stoppen oder für später laufen lassen?</value>
-  </data>
-  <data name="ServerRunning_ClosingHidden" xml:space="preserve">
-    <value>Der SPT-Server dieser Installation läuft noch, ohne eigenes Fenster - sobald diese App geschlossen ist, zeigt nichts mehr an, dass er läuft. Jetzt stoppen oder laufen lassen?</value>
-  </data>
   <data name="ServerRunning_StopAndClose" xml:space="preserve">
     <value>Stoppen und schließen</value>
   </data>
   <data name="ServerRunning_LeaveAndClose" xml:space="preserve">
     <value>Laufen lassen</value>
-  </data>
-  <data name="ServerRunning_Opening" xml:space="preserve">
-    <value>Der SPT-Server dieser Installation lief schon, als die App geöffnet wurde - beim letzten Mal laufen gelassen oder anders gestartet. Die Server-Seite zeigt sein Log und kann ihn stoppen.</value>
   </data>
   <data name="ServerRunning_Stop" xml:space="preserve">
     <value>Stoppen</value>
@@ -7892,9 +7674,6 @@ Sie zu entfernen kann ein Profil hinterlassen, das SPT nicht lädt. Eine Kopie d
   </data>
   <data name="Filter_PresetDeleteTitle" xml:space="preserve">
     <value>Filtervorlage löschen</value>
-  </data>
-  <data name="Filter_PresetDeleteQuestionFormat" xml:space="preserve">
-    <value>Filtervorlage „{0}“ löschen? Die Seite bleibt, wie sie ist.</value>
   </data>
   <data name="Filter_PresetReplaceTitle" xml:space="preserve">
     <value>Filtervorlage ersetzen</value>
@@ -7966,16 +7745,6 @@ Rechtsklick, um die aktuellen Filter darin zu speichern, sie umzubenennen oder z
   </data>
   <data name="Dependencies_BestFitTitleFormat" xml:space="preserve">
     <value>{0} auf {1} wechseln?</value>
-  </data>
-  <data name="Dependencies_BestFitQuestionFormat" xml:space="preserve">
-    <value>Mit Version {1} von {0} laden mehr deiner Mods, aber diese würden nicht mehr laden:
-
-{2}
-
-Trotzdem wechseln?</value>
-  </data>
-  <data name="Dependencies_BestFitBreakLineFormat" xml:space="preserve">
-    <value>• {0} - {1}</value>
   </data>
   <data name="Dependencies_BestFitCancelledFormat" xml:space="preserve">
     <value>{0} bleibt, wie es ist.</value>
@@ -8084,15 +7853,6 @@ Trotzdem wechseln?</value>
   </data>
   <data name="Installed_SptDismissAllToolTip" xml:space="preserve">
     <value>Bei keiner der hier gezählten Mods mehr warnen. Jede Warnung kommt zurück, wenn sich die Mod oder SPT ändert.</value>
-  </data>
-  <data name="Installed_SptDismissAllTitle" xml:space="preserve">
-    <value>Versionswarnungen ausblenden</value>
-  </data>
-  <data name="Installed_SptDismissAllQuestion_one" xml:space="preserve">
-    <value>Nicht mehr warnen, dass {0} Mod nicht für SPT {1} ist? Die Warnung kommt zurück, wenn sich die Mod oder SPT ändert.</value>
-  </data>
-  <data name="Installed_SptDismissAllQuestion_other" xml:space="preserve">
-    <value>Nicht mehr warnen, dass {0} Mods nicht für SPT {1} sind? Jede Warnung kommt zurück, wenn sich die Mod oder SPT ändert.</value>
   </data>
   <data name="Installed_SptShowAll" xml:space="preserve">
     <value>Alle Warnungen anzeigen</value>
@@ -8292,15 +8052,6 @@ Trotzdem wechseln?</value>
   <data name="Help_Browse_Ignore_Keywords" xml:space="preserve">
     <value>ignorieren, ausblenden, verstecken, blockieren, Blacklist, unerwünscht, ausgeblendete Mods</value>
   </data>
-  <data name="Installed_RemoveAddonsListFormat" xml:space="preserve">
-    <value>{0} hat Addons in seinem Ordner installiert: {1}.</value>
-  </data>
-  <data name="Installed_RemoveAddonsQuestionFormat" xml:space="preserve">
-    <value>Auch entfernen? Ja entfernt sie zusammen mit {0}. Nein entfernt nur {0} und lässt seine Addons, wo sie sind.</value>
-  </data>
-  <data name="Installed_RemoveAddonsDisabledFormat" xml:space="preserve">
-    <value>Deaktiviert und daher nicht entfernt: {0}.</value>
-  </data>
   <data name="Installed_RemovedAddonsFormat" xml:space="preserve">
     <value>Seine Addons wurden mit entfernt: {0}.</value>
   </data>
@@ -8318,21 +8069,6 @@ Trotzdem wechseln?</value>
   </data>
   <data name="Installed_RemovalBatchFormat" xml:space="preserve">
     <value>{0} und seine Addons</value>
-  </data>
-  <data name="Installed_RemoveSelectedAddonsFormat" xml:space="preserve">
-    <value>Die ausgewählten Mods haben installierte Addons: {0}. Auch diese entfernen? Ja entfernt sie mit ihren Mods; Nein entfernt nur deine Auswahl.</value>
-  </data>
-  <data name="ModLists_VersionChangeParentRowFormat" xml:space="preserve">
-    <value>{0} gewünscht, passt aber nicht zu {1} {2} - neueste passende ist {3}</value>
-  </data>
-  <data name="ModLists_VersionChangeTitleParentFormat" xml:space="preserve">
-    <value>Die Version von {0} passt nicht zu seinem Mod</value>
-  </data>
-  <data name="ModListVersionChange_IntroAddons" xml:space="preserve">
-    <value>Die gelisteten Versionen dieser Addons passen nicht zu der Version ihres Mods, die diese Liste hinterlässt. Hake die an, die stattdessen in der neuesten passenden Version installiert werden sollen - alles ohne Haken wird übersprungen.</value>
-  </data>
-  <data name="ModListVersionChange_IntroMixed" xml:space="preserve">
-    <value>Einige dieser Mods gibt es auf sp-mod.com nicht mehr in der Version, die diese Liste nennt, und einige sind Addons, deren gelistete Version nicht zu der Version ihres Mods passt, die diese Liste hinterlässt. Hake die an, die stattdessen in der neuesten passenden Version installiert werden sollen - alles ohne Haken wird übersprungen.</value>
   </data>
   <data name="Help_Installed_Addons_Title" xml:space="preserve">
     <value>Einen Mod mit seinen Addons entfernen oder deaktivieren</value>
@@ -8354,21 +8090,6 @@ Trotzdem wechseln?</value>
   </data>
   <data name="Installed_SkippedAddonNoFit_other" xml:space="preserve">
     <value>{0} Addons ohne neuere Version für die neue Version ihres Mods</value>
-  </data>
-  <data name="AddonImpact_Title" xml:space="preserve">
-    <value>Von diesem Update betroffene Addons</value>
-  </data>
-  <data name="AddonImpact_ChangeList" xml:space="preserve">
-    <value>Diese Addons passen nicht zur neuen Version, aber jeweils eine andere Version von ihnen schon:</value>
-  </data>
-  <data name="AddonImpact_NoVersionList" xml:space="preserve">
-    <value>Für diese Addons gibt es keine Version für die neue Version, und sie funktionieren möglicherweise nicht mehr. Sie bleiben installiert:</value>
-  </data>
-  <data name="AddonImpact_ChangeQuestion" xml:space="preserve">
-    <value>Auch diese wechseln? Ja aktualisiert den Mod und wechselt diese Addons auf passende Versionen. Nein aktualisiert nur den Mod.</value>
-  </data>
-  <data name="AddonImpact_NoVersionQuestion" xml:space="preserve">
-    <value>Trotzdem aktualisieren?</value>
   </data>
   <data name="AddonImpact_ChangeLineFormat" xml:space="preserve">
     <value>{0} {1} → {2} (für {3} {4})</value>
@@ -8424,20 +8145,8 @@ Trotzdem wechseln?</value>
   <data name="Installed_DetailAddonDoesntFitFormat" xml:space="preserve">
     <value>{0} passt nicht zu {1} {2} - {3} passt</value>
   </data>
-  <data name="AddonImpact_NoVersionDisableList" xml:space="preserve">
-    <value>Für diese Addons gibt es keine Version für die neue Version. Sie werden deaktiviert, sobald sie installiert ist - du kannst sie auf ihrer Karte wieder aktivieren:</value>
-  </data>
   <data name="AddonFit_DisabledFormat" xml:space="preserve">
     <value>{0} deaktiviert - keine Version passt zur neuen Version des Mods.</value>
-  </data>
-  <data name="AddonFit_ReEnableTitle" xml:space="preserve">
-    <value>Addons passen wieder</value>
-  </data>
-  <data name="AddonFit_ReEnableList" xml:space="preserve">
-    <value>Diese Addons wurden deaktiviert, weil sie nicht zu ihrem Mod passten, und passen jetzt wieder:</value>
-  </data>
-  <data name="AddonFit_ReEnableQuestion" xml:space="preserve">
-    <value>Wieder aktivieren?</value>
   </data>
   <data name="Installed_AddonNoFitToolTipFormat" xml:space="preserve">
     <value>Passt nicht zu {0} {1}</value>
@@ -8532,14 +8241,6 @@ Trotzdem wechseln?</value>
   <data name="Addon_InstallAnywayToolTip" xml:space="preserve">
     <value>Autoren aktualisieren die Liste der Mod-Versionen eines Addons nicht immer. Installiere es, wenn du weißt, dass es mit deiner funktioniert.</value>
   </data>
-  <data name="Addon_InstallAnywayTitle" xml:space="preserve">
-    <value>Trotzdem installieren?</value>
-  </data>
-  <data name="Addon_InstallAnywayFormat" xml:space="preserve">
-    <value>{0} {1} führt {2} {3} auf. Du hast {2} {4}.
-
-Es funktioniert mit deiner Version möglicherweise nicht. Trotzdem installieren?</value>
-  </data>
   <data name="Installed_AddonInstalledAnywayToolTipFormat" xml:space="preserve">
     <value>Trotzdem installiert - sein Autor führt {0} {1} nicht auf</value>
   </data>
@@ -8561,13 +8262,462 @@ Es funktioniert mit deiner Version möglicherweise nicht. Trotzdem installieren?
   <data name="AddonImpact_Overridden" xml:space="preserve">
     <value>Trotzdem installiert - auch für diese passt keine Version</value>
   </data>
-  <data name="AddonImpact_OverriddenList" xml:space="preserve">
-    <value>Diese Addons hast du trotzdem installiert, und auch jetzt führt keine ihrer Versionen die neue Version auf:</value>
-  </data>
-  <data name="AddonImpact_OverriddenQuestion" xml:space="preserve">
-    <value>Aktiviert lassen? Nein deaktiviert sie, sobald das Update installiert ist.</value>
-  </data>
   <data name="ModLists_EntryInstalledAnyway" xml:space="preserve">
     <value>trotzdem installiert</value>
+  </data>
+  <data name="InstallRole_WhatHeadlessNeeds" xml:space="preserve">
+    <value>Ein Headless-Client hostet Raids, ohne dass jemand darauf spielt. Er braucht die Mods, die ändern, wie ein Raid abläuft, zum Beispiel Bots, Gegenstände und Orte. Mods, die nur ändern, was ein Spieler sieht, braucht er nicht. Wenn die App weiß, was für eine Maschine das ist, kann ein Server ihr nur die Mods schicken, die sie braucht.</value>
+  </data>
+  <data name="InstallRole_ChangeLater" xml:space="preserve">
+    <value>Du kannst das später in den Optionen ändern. Es betrifft nur Modlisten, die dir ein Server schickt, nie deine eigenen.</value>
+  </data>
+  <data name="ReadModPage_OpenFirst" xml:space="preserve">
+    <value>Öffne die Seite jedes Mods unten, bevor er in die Warteschlange kommt. Auf der Seite stehen die Installationsschritte und Warnungen, genau wie bei einer Installation von Hand von sp-mod.com.</value>
+  </data>
+  <data name="ModListVersionChange_Lead" xml:space="preserve">
+    <value>Einige davon lassen sich nicht in der Version installieren, die diese Liste nennt. Hake die an, die stattdessen in der neuesten passenden Version installiert werden sollen. Alles ohne Haken wird übersprungen.</value>
+  </data>
+  <data name="ModDisable_NothingDeleted" xml:space="preserve">
+    <value>Es wird nichts gelöscht. Ein deaktivierter Mod behält seine Dateien und Konfigurationen und kommt unverändert zurück, wenn du ihn aktivierst.</value>
+  </data>
+  <data name="ThemeEditor_DeleteLeadFormat" xml:space="preserve">
+    <value>„{0}“ löschen? Das lässt sich nicht rückgängig machen. Exportiere es vorher, falls du es wiederhaben möchtest.</value>
+  </data>
+  <data name="ThemeEditor_DiscardChangesFormat" xml:space="preserve">
+    <value>Deine Änderungen an „{0}“ verwerfen?</value>
+  </data>
+  <data name="ThemeEditor_DiscardButton" xml:space="preserve">
+    <value>Änderungen verwerfen</value>
+  </data>
+  <data name="ThemeEditor_KeepEditing" xml:space="preserve">
+    <value>Weiter bearbeiten</value>
+  </data>
+  <data name="ThemeEditor_DontSave" xml:space="preserve">
+    <value>Nicht speichern</value>
+  </data>
+  <data name="Installed_RemoveAppLeadFormat" xml:space="preserve">
+    <value>Damit werden die Dateien entfernt, die diese App für {0} installiert hat.</value>
+  </data>
+  <data name="Installed_RemoveAppKeeps" xml:space="preserve">
+    <value>Ersetzte Dateien werden zurückgelegt. Dateien, die du geändert hast oder die ein anderer Mod auch nutzt, bleiben, wo sie sind.</value>
+  </data>
+  <data name="Installed_RemoveNoInstallStampFormat" xml:space="preserve">
+    <value>Diese App hat nicht festgehalten, in welche SPT-Installation dieser Mod kam. Er wird aus {0} entfernt.</value>
+  </data>
+  <data name="Installed_RemoveHandLeadFormat" xml:space="preserve">
+    <value>Diese App hat {0} nicht installiert, daher wird all das entfernt:</value>
+  </data>
+  <data name="Installed_ProfileWarningFormat" xml:space="preserve">
+    <value>Laut sp-mod kann {0} dein Profil dauerhaft verändern. Wenn du ihn entfernst, lädt SPT dieses Profil vielleicht nicht mehr.</value>
+  </data>
+  <data name="Installed_ProfileUndoOne" xml:space="preserve">
+    <value>Falls das passiert, legt Rückgängig den Mod zurück. Eine Kopie deiner Profile von kurz davor findest du in den Optionen unter SPT-Profil-Sicherungen.</value>
+  </data>
+  <data name="Installed_RemoveConfigCount_one" xml:space="preserve">
+    <value>{0} hat 1 eigene Konfigurationsdatei.</value>
+  </data>
+  <data name="Installed_RemoveConfigCount_other" xml:space="preserve">
+    <value>{0} hat {1} eigene Konfigurationsdateien.</value>
+  </data>
+  <data name="Installed_RemoveConfigsGoFormat" xml:space="preserve">
+    <value>Behaltene Konfigurationsdateien kommen nach {0}.</value>
+  </data>
+  <data name="Installed_RemoveKeepConfigs" xml:space="preserve">
+    <value>Entfernen, Konfigurationen behalten</value>
+  </data>
+  <data name="Installed_RemoveEverything" xml:space="preserve">
+    <value>Alles entfernen</value>
+  </data>
+  <data name="Installed_RemoveUndoForFormat" xml:space="preserve">
+    <value>Du kannst das {0} lang rückgängig machen.</value>
+  </data>
+  <data name="Installed_RemoveUndoUntilCleared" xml:space="preserve">
+    <value>Du kannst das rückgängig machen, bis du entfernte Mods in den Optionen leerst.</value>
+  </data>
+  <data name="Installed_RemoveNoUndo" xml:space="preserve">
+    <value>Entfernte Dateien werden sofort gelöscht, daher lässt sich das nicht rückgängig machen. Das kannst du in den Optionen unter Entfernte Mods behalten ändern.</value>
+  </data>
+  <data name="Installed_RemoveDisableTip" xml:space="preserve">
+    <value>Um einen Mod nicht mehr zu laden, ohne ihn zu löschen, nutze stattdessen Deaktivieren.</value>
+  </data>
+  <data name="Installed_RemoveAddonsLeadFormat" xml:space="preserve">
+    <value>{0} hat diese Addons in seinem Ordner:</value>
+  </data>
+  <data name="Installed_RemoveAddonsDisabledHeading" xml:space="preserve">
+    <value>Diese sind deaktiviert und bleiben:</value>
+  </data>
+  <data name="Installed_RemoveAddonsToo" xml:space="preserve">
+    <value>Addons auch entfernen</value>
+  </data>
+  <data name="Installed_RemoveModOnly" xml:space="preserve">
+    <value>Nur den Mod entfernen</value>
+  </data>
+  <data name="Installed_RemoveSelectedLead" xml:space="preserve">
+    <value>Diese Mods werden entfernt:</value>
+  </data>
+  <data name="Installed_RemoveSelectedProfileWarning" xml:space="preserve">
+    <value>Einige dieser Mods können dein Profil dauerhaft verändern. Wenn du sie entfernst, lädt SPT dieses Profil vielleicht nicht mehr.</value>
+  </data>
+  <data name="Installed_RemoveSelectedProfileHeading" xml:space="preserve">
+    <value>Laut sp-mod können diese dein Profil verändern:</value>
+  </data>
+  <data name="Installed_ProfileUndoMany" xml:space="preserve">
+    <value>Falls das passiert, legt Rückgängig die Mods zurück. Eine Kopie deiner Profile von kurz davor findest du in den Optionen unter SPT-Profil-Sicherungen.</value>
+  </data>
+  <data name="Installed_RemoveSelectedDisabledHeading" xml:space="preserve">
+    <value>Diese sind deaktiviert und werden nicht entfernt. Aktiviere sie zuerst, wenn sie weg sollen:</value>
+  </data>
+  <data name="Installed_RemoveSelectedConfigsKeptFormat" xml:space="preserve">
+    <value>Ihre Konfigurationsdateien werden in {0} behalten.</value>
+  </data>
+  <data name="Installed_RemoveSelectedAddonsTitle" xml:space="preserve">
+    <value>Ihre Addons auch entfernen?</value>
+  </data>
+  <data name="Installed_RemoveSelectedAddonsLead" xml:space="preserve">
+    <value>Einige der ausgewählten Mods haben Addons, die du nicht ausgewählt hast:</value>
+  </data>
+  <data name="Installed_RemoveSelectedOnly" xml:space="preserve">
+    <value>Nur das Ausgewählte</value>
+  </data>
+  <data name="Installed_DuplicateTwiceTitleFormat" xml:space="preserve">
+    <value>{0} ist doppelt installiert</value>
+  </data>
+  <data name="Installed_DuplicateLeadFormat" xml:space="preserve">
+    <value>{0} liegt in einem aktivierten und einem deaktivierten Ordner. Wähle die Kopie, die bleiben soll.</value>
+  </data>
+  <data name="Installed_DuplicateEnabledHeading" xml:space="preserve">
+    <value>Aktivierte Kopie:</value>
+  </data>
+  <data name="Installed_DuplicateDisabledHeading" xml:space="preserve">
+    <value>Deaktivierte Kopie:</value>
+  </data>
+  <data name="Installed_DuplicateMovedNote" xml:space="preserve">
+    <value>Die andere Kopie wird in einen versteckten Ordner .tcfmm-duplicates in deiner SPT-Installation verschoben. Sie wird nicht gelöscht.</value>
+  </data>
+  <data name="Installed_KeepEnabledCopy" xml:space="preserve">
+    <value>Aktivierte Kopie behalten</value>
+  </data>
+  <data name="Installed_KeepDisabledCopy" xml:space="preserve">
+    <value>Deaktivierte Kopie behalten</value>
+  </data>
+  <data name="Installed_UpdateNotOursTitle_one" xml:space="preserve">
+    <value>Einen Mod aktualisieren, den diese App nicht installiert hat?</value>
+  </data>
+  <data name="Installed_UpdateNotOursTitle_other" xml:space="preserve">
+    <value>{0} Mods aktualisieren, die diese App nicht installiert hat?</value>
+  </data>
+  <data name="Installed_UpdateNotOursLead_one" xml:space="preserve">
+    <value>Dieser Mod wurde nicht mit dieser App installiert:</value>
+  </data>
+  <data name="Installed_UpdateNotOursLead_other" xml:space="preserve">
+    <value>Diese Mods wurden nicht mit dieser App installiert:</value>
+  </data>
+  <data name="Installed_UpdateNotOursDetail_one" xml:space="preserve">
+    <value>Die App weiß nicht, welche Dateien seine alte Version hinzugefügt hat. Die neuen Dateien kommen über die alten, daher können alte Dateien übrig bleiben.</value>
+  </data>
+  <data name="Installed_UpdateNotOursDetail_other" xml:space="preserve">
+    <value>Die App weiß nicht, welche Dateien ihre alten Versionen hinzugefügt haben. Die neuen Dateien kommen über die alten, daher können alte Dateien übrig bleiben.</value>
+  </data>
+  <data name="Installed_UpdateAnyway" xml:space="preserve">
+    <value>Trotzdem aktualisieren</value>
+  </data>
+  <data name="Installed_DeleteGroupButton" xml:space="preserve">
+    <value>Gruppe löschen</value>
+  </data>
+  <data name="Configs_DiscardButton" xml:space="preserve">
+    <value>Änderungen verwerfen</value>
+  </data>
+  <data name="Configs_KeepEditing" xml:space="preserve">
+    <value>Weiter bearbeiten</value>
+  </data>
+  <data name="Configs_ChangedOnDiskLeadFormat" xml:space="preserve">
+    <value>Etwas anderes hat {0} geändert, nachdem du die Datei hier geöffnet hast.</value>
+  </data>
+  <data name="Configs_ChangedOnDiskBackup" xml:space="preserve">
+    <value>Egal, was du wählst, die Datei auf der Festplatte wird vorher gesichert.</value>
+  </data>
+  <data name="Configs_SaveOverIt" xml:space="preserve">
+    <value>Meine Änderungen darüber speichern</value>
+  </data>
+  <data name="Configs_ReloadLoseChanges" xml:space="preserve">
+    <value>Neu laden, meine Änderungen verwerfen</value>
+  </data>
+  <data name="ModUpdate_DowngradeBackUp" xml:space="preserve">
+    <value>Sichere zuerst dein Profil, wenn es dir wichtig ist.</value>
+  </data>
+  <data name="ModUpdate_DowngradeLeadFormat" xml:space="preserve">
+    <value>Damit wird {0} durch {1} ersetzt.</value>
+  </data>
+  <data name="ModUpdate_DowngradeCantUndoHeading" xml:space="preserve">
+    <value>Die Dateien zu tauschen ist einfach. Was die neuere Version schon geändert hat, kann die App nicht rückgängig machen:</value>
+  </data>
+  <data name="ModUpdate_DowngradeItemConfigs" xml:space="preserve">
+    <value>ihre eigenen Konfigurationsdateien</value>
+  </data>
+  <data name="ModUpdate_DowngradeItemProfile" xml:space="preserve">
+    <value>dein SPT-Profil</value>
+  </data>
+  <data name="ModUpdate_DowngradeMayNotLoad" xml:space="preserve">
+    <value>Eine ältere Version kann diese vielleicht nicht lesen. Dann lädt dein Profil womöglich nicht mehr.</value>
+  </data>
+  <data name="ModUpdate_DowngradeButton" xml:space="preserve">
+    <value>Herabstufen</value>
+  </data>
+  <data name="ModUpdate_NotOursLeadFormat" xml:space="preserve">
+    <value>Diese App hat {0} nicht installiert und weiß daher nicht, welche Dateien die alte Version hinzugefügt hat.</value>
+  </data>
+  <data name="ModUpdate_NotOursDetail" xml:space="preserve">
+    <value>Die neuen Dateien kommen über die alten. Alte Dateien können übrig bleiben.</value>
+  </data>
+  <data name="ModUpdate_UpdateAnyway" xml:space="preserve">
+    <value>Trotzdem aktualisieren</value>
+  </data>
+  <data name="ModUpdate_RedownloadAnyway" xml:space="preserve">
+    <value>Trotzdem neu herunterladen</value>
+  </data>
+  <data name="ModUpdate_DowngradeAnyway" xml:space="preserve">
+    <value>Trotzdem herabstufen</value>
+  </data>
+  <data name="Options_SkipGateLead" xml:space="preserve">
+    <value>Mods werden sofort installiert, ohne dir ihre Seiten zu zeigen.</value>
+  </data>
+  <data name="Options_SkipGateWhy" xml:space="preserve">
+    <value>Auf der Seite eines Mods stehen Installationsschritte, Voraussetzungen, Konflikte und Warnungen. Manche Mods funktionieren nicht, wenn du das verpasst. Welche das sind, kann diese App nicht sagen.</value>
+  </data>
+  <data name="Options_SkipGateUndo" xml:space="preserve">
+    <value>Du kannst das jederzeit wieder einschalten.</value>
+  </data>
+  <data name="Options_SkipGateKeepAsking" xml:space="preserve">
+    <value>Weiter fragen</value>
+  </data>
+  <data name="Options_SkipGateStopAsking" xml:space="preserve">
+    <value>Nicht mehr fragen</value>
+  </data>
+  <data name="Downloads_BreaksLeadFormat" xml:space="preserve">
+    <value>Wenn du {0} {1} installierst, laden diese Mods nicht mehr:</value>
+  </data>
+  <data name="Downloads_BreaksDetailFormat" xml:space="preserve">
+    <value>Jeder davon braucht eine andere Version von {0}.</value>
+  </data>
+  <data name="Downloads_InstallAnyway" xml:space="preserve">
+    <value>Trotzdem installieren</value>
+  </data>
+  <data name="ReadModPage_BatchLead" xml:space="preserve">
+    <value>Auf der Seite jedes Mods stehen Installationsschritte, Voraussetzungen und Warnungen. Öffne sie nach und nach oder überspringe sie und reihe alle ein.</value>
+  </data>
+  <data name="ReadModPage_ProgressText" xml:space="preserve">
+    <value>{0} von {1} geöffnet. Noch {2}.</value>
+  </data>
+  <data name="ModLists_VersionChangeNewestFormat" xml:space="preserve">
+    <value>Gewünscht {0}. Neueste veröffentlichte: {1}</value>
+  </data>
+  <data name="App_CrashMessageFormat" xml:space="preserve">
+    <value>Etwas ist schiefgelaufen. Die App versucht weiterzulaufen.
+
+{0}
+
+Die Details stehen im Log:
+{1}</value>
+  </data>
+  <data name="DownloadConfirm_UntickNote" xml:space="preserve">
+    <value>Entferne den Haken bei allen, die nicht stimmen. Danach wirst du erst wieder gefragt, wenn du eine neuere Version herunterlädst. Einen Mod als installiert zu markieren ändert keine Dateien.</value>
+  </data>
+  <data name="Options_ClearRemovedLeadFormat" xml:space="preserve">
+    <value>Damit wird jeder entfernte Mod in {1} gelöscht. Das gibt {0} frei.</value>
+  </data>
+  <data name="Options_ClearRemovedNoUndo" xml:space="preserve">
+    <value>Danach kannst du keine bisherige Entfernung mehr rückgängig machen.</value>
+  </data>
+  <data name="Options_ClearRemovedButton" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Install_NotMadeForTitleFormat" xml:space="preserve">
+    <value>Nicht für SPT {0} gemacht</value>
+  </data>
+  <data name="Install_NotMadeForOneFormat" xml:space="preserve">
+    <value>Keine Version dieses Mods ist für SPT {0} gemacht. Die neueste Version ist:</value>
+  </data>
+  <data name="Install_NotMadeForBatchFormat" xml:space="preserve">
+    <value>Diese Mods sind nicht für SPT {0} gemacht:</value>
+  </data>
+  <data name="Install_MayNotLoadOne" xml:space="preserve">
+    <value>SPT lädt ihn vielleicht nicht.</value>
+  </data>
+  <data name="Install_MayNotLoadMany" xml:space="preserve">
+    <value>SPT lädt sie vielleicht nicht.</value>
+  </data>
+  <data name="Install_InstallAnyway" xml:space="preserve">
+    <value>Trotzdem installieren</value>
+  </data>
+  <data name="Install_SkipThese" xml:space="preserve">
+    <value>Diese Mods überspringen</value>
+  </data>
+  <data name="Install_InstallThemAnyway" xml:space="preserve">
+    <value>Trotzdem alle installieren</value>
+  </data>
+  <data name="Conflicts_KeepOneTitleFormat" xml:space="preserve">
+    <value>Eine Kopie von {0} behalten?</value>
+  </data>
+  <data name="Conflicts_KeepLeadFormat" xml:space="preserve">
+    <value>Damit bleibt die Kopie in {0}.</value>
+  </data>
+  <data name="Conflicts_KeepRemovedHeading" xml:space="preserve">
+    <value>Diese Kopien werden entfernt:</value>
+  </data>
+  <data name="Conflicts_KeepItemFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Conflicts_KeepButton" xml:space="preserve">
+    <value>Diese Kopie behalten</value>
+  </data>
+  <data name="Profiles_RestoreQuestionTitle" xml:space="preserve">
+    <value>Profile zurückspielen?</value>
+  </data>
+  <data name="Profiles_RestoreLeadFormat" xml:space="preserve">
+    <value>Deine Profile werden auf den Stand vom {0} ({1}) zurückgesetzt.</value>
+  </data>
+  <data name="Profiles_RestoreDetail" xml:space="preserve">
+    <value>Deine aktuellen Profile werden vorher gesichert, du kannst das also rückgängig machen. Profile, die nach diesem Datum entstanden sind, bleiben unverändert.</value>
+  </data>
+  <data name="Downloads_NotForFikaTitle" xml:space="preserve">
+    <value>Nicht für Fika gemacht</value>
+  </data>
+  <data name="Downloads_FikaLeadFormat" xml:space="preserve">
+    <value>Laut sp-mod funktioniert {0} {1} nicht mit Fika, und Fika ist hier installiert.</value>
+  </data>
+  <data name="Downloads_FikaDetail" xml:space="preserve">
+    <value>Er kann Koop-Raids stören oder verhindern, dass Fika lädt.</value>
+  </data>
+  <data name="Downloads_DownloadAnyway" xml:space="preserve">
+    <value>Trotzdem herunterladen</value>
+  </data>
+  <data name="ServerRunning_ClosingAsk" xml:space="preserve">
+    <value>Der SPT-Server dieser Installation läuft noch. Er läuft weiter, wenn diese App geschlossen wird. Jetzt beenden oder weiterlaufen lassen?</value>
+  </data>
+  <data name="ServerRunning_ClosingHiddenAsk" xml:space="preserve">
+    <value>Der SPT-Server dieser Installation läuft noch. Er hat kein Fenster, daher zeigt nach dem Schließen dieser App nichts mehr an, dass er läuft. Jetzt beenden oder weiterlaufen lassen?</value>
+  </data>
+  <data name="ServerRunning_AlreadyRunning" xml:space="preserve">
+    <value>Der SPT-Server dieser Installation lief schon, als die App geöffnet wurde. Vielleicht lief er vom letzten Mal weiter oder wurde anders gestartet. Die Seite Server zeigt sein Log und kann ihn beenden.</value>
+  </data>
+  <data name="Filter_PresetDeleteLeadFormat" xml:space="preserve">
+    <value>Die Filtervorlage „{0}“ löschen? Deine aktuellen Filter bleiben, wie sie sind.</value>
+  </data>
+  <data name="Filter_PresetReplaceButton" xml:space="preserve">
+    <value>Ersetzen</value>
+  </data>
+  <data name="Dependencies_BestFitLeadFormat" xml:space="preserve">
+    <value>Mit Version {1} von {0} laden mehr deiner Mods.</value>
+  </data>
+  <data name="Dependencies_BestFitBreaksHeading" xml:space="preserve">
+    <value>Diese würden nicht mehr laden:</value>
+  </data>
+  <data name="Dependencies_BestFitBreakItemFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Dependencies_SwitchButton" xml:space="preserve">
+    <value>Wechseln</value>
+  </data>
+  <data name="Installed_SptDismissTitle" xml:space="preserve">
+    <value>Versionswarnungen ausblenden?</value>
+  </data>
+  <data name="Installed_SptDismissLead_one" xml:space="preserve">
+    <value>Die Warnung „nicht für SPT {1}“ bei {0} Mod nicht mehr zeigen?</value>
+  </data>
+  <data name="Installed_SptDismissLead_other" xml:space="preserve">
+    <value>Die Warnung „nicht für SPT {1}“ bei {0} Mods nicht mehr zeigen?</value>
+  </data>
+  <data name="Installed_SptDismissComesBack" xml:space="preserve">
+    <value>Eine Warnung kommt zurück, wenn ihr Mod oder SPT aktualisiert wird.</value>
+  </data>
+  <data name="Installed_SptDismissButton" xml:space="preserve">
+    <value>Warnungen ausblenden</value>
+  </data>
+  <data name="ModLists_VersionChangeNoFitRowFormat" xml:space="preserve">
+    <value>Gewünscht {0}, nicht für {1} {2} gemacht. Neueste passende: {3}</value>
+  </data>
+  <data name="ModLists_VersionChangeNoFitTitleFormat" xml:space="preserve">
+    <value>{0}: die gelistete Version passt nicht zu ihrem Mod</value>
+  </data>
+  <data name="Help_Installed_Addons_Step2" xml:space="preserve">
+    <value>Um einen Mod mit seinen Addons zu entfernen, drücke {0} auf der Karte des Mods und dann {1}.</value>
+  </data>
+  <data name="Ask_More_one" xml:space="preserve">
+    <value>und {0} weiterer</value>
+  </data>
+  <data name="Ask_More_other" xml:space="preserve">
+    <value>und {0} weitere</value>
+  </data>
+  <data name="AddonImpact_NeedChangeTitle" xml:space="preserve">
+    <value>Einige Addons brauchen eine andere Version</value>
+  </data>
+  <data name="AddonImpact_MayStopTitle" xml:space="preserve">
+    <value>Einige Addons funktionieren vielleicht nicht mehr</value>
+  </data>
+  <data name="AddonImpact_Lead" xml:space="preserve">
+    <value>Das Update dieses Mods betrifft einige seiner Addons.</value>
+  </data>
+  <data name="AddonImpact_ChangeHeading" xml:space="preserve">
+    <value>Für diese gibt es eine Version für die neue Mod-Version:</value>
+  </data>
+  <data name="AddonImpact_NoVersionHeading" xml:space="preserve">
+    <value>Für diese gibt es noch keine passende Version:</value>
+  </data>
+  <data name="AddonImpact_NoVersionDisabled" xml:space="preserve">
+    <value>Sie werden nach dem Update deaktiviert. Du kannst sie auf ihrer Karte wieder aktivieren.</value>
+  </data>
+  <data name="AddonImpact_NoVersionStays" xml:space="preserve">
+    <value>Sie bleiben installiert, funktionieren aber vielleicht nicht mehr.</value>
+  </data>
+  <data name="AddonImpact_UpdateBoth" xml:space="preserve">
+    <value>Mod und Addons aktualisieren</value>
+  </data>
+  <data name="AddonImpact_ModOnly" xml:space="preserve">
+    <value>Nur den Mod aktualisieren</value>
+  </data>
+  <data name="AddonImpact_UpdateAnyway" xml:space="preserve">
+    <value>Trotzdem aktualisieren</value>
+  </data>
+  <data name="AddonImpact_OverriddenTitle" xml:space="preserve">
+    <value>Diese Addons aktiviert lassen?</value>
+  </data>
+  <data name="AddonImpact_OverriddenLead" xml:space="preserve">
+    <value>Du hast diese Addons trotzdem installiert.</value>
+  </data>
+  <data name="AddonImpact_OverriddenHeading" xml:space="preserve">
+    <value>Keine ihrer Versionen ist für die neue Mod-Version gemacht:</value>
+  </data>
+  <data name="AddonImpact_KeepEnabled" xml:space="preserve">
+    <value>Aktiviert lassen</value>
+  </data>
+  <data name="AddonImpact_DisableAfter" xml:space="preserve">
+    <value>Nach dem Update deaktivieren</value>
+  </data>
+  <data name="AddonFit_EnableAgainTitle" xml:space="preserve">
+    <value>Diese Addons wieder aktivieren?</value>
+  </data>
+  <data name="AddonFit_EnableAgainLead" xml:space="preserve">
+    <value>Diese Addons wurden deaktiviert, weil sie nicht zur Version ihres Mods passten. Jetzt passen sie wieder.</value>
+  </data>
+  <data name="AddonFit_EnableThem" xml:space="preserve">
+    <value>Aktivieren</value>
+  </data>
+  <data name="AddonFit_LeaveDisabled" xml:space="preserve">
+    <value>Deaktiviert lassen</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step2" xml:space="preserve">
+    <value>Drücke {0}. Wenn ein Addon eine andere Version braucht, wähle {1}, um es mit zu ändern, oder {2}, um es so zu lassen.</value>
+  </data>
+  <data name="Addon_InstallAnywayTitleFormat" xml:space="preserve">
+    <value>{0} trotzdem installieren?</value>
+  </data>
+  <data name="Addon_MadeForFormat" xml:space="preserve">
+    <value>{0} {1} ist für {2} {3} gemacht. Du hast {2} {4}.</value>
+  </data>
+  <data name="Addon_MayNotWork" xml:space="preserve">
+    <value>Es funktioniert vielleicht nicht mit deiner Version.</value>
+  </data>
+  <data name="Addon_InstallAnywayButton" xml:space="preserve">
+    <value>Trotzdem installieren</value>
   </data>
 </root>

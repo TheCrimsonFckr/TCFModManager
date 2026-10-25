@@ -145,14 +145,6 @@
   <data name="Api_UnreachableFormat" xml:space="preserve">
     <value>Не удалось связаться с sp-mod.com: {0}</value>
   </data>
-  <data name="App_CrashBodyFormat" xml:space="preserve">
-    <value>Что-то пошло не так и не было обработано:
-
-{0}
-
-Записано в:
-{1}</value>
-  </data>
   <data name="App_CrashTitle" xml:space="preserve">
     <value>TCF Mod Manager - Непредвиденная ошибка</value>
   </data>
@@ -626,15 +618,6 @@
   </data>
   <data name="Configs_AuthoredFilesToolTip" xml:space="preserve">
     <value>Папка внутри этого мода с файлами, которые написали вы, - например, с пресетами. Обновление оставляет её ровно как есть, а при удалении мода она сохраняется.</value>
-  </data>
-  <data name="Configs_ChangedOnDiskFormat" xml:space="preserve">
-    <value>Файл {0} изменился на диске с тех пор, как вы открыли его здесь.
-
-Да  -  перезаписать его тем, что в редакторе
-Нет  -  перезагрузить его и потерять ваши изменения
-Отмена  -  оставить всё как есть
-
-Что бы вы ни выбрали, версия, которая сейчас на диске, сначала копируется в {1}.</value>
   </data>
   <data name="Configs_ChangedOnDiskTitle" xml:space="preserve">
     <value>Файл изменился на диске</value>
@@ -1174,13 +1157,6 @@
   </data>
   <data name="Downloads_BreaksTitle" xml:space="preserve">
     <value>Другие моды перестанут загружаться</value>
-  </data>
-  <data name="Downloads_BreaksFormat" xml:space="preserve">
-    <value>Установка {0} {1} не даст этим модам загрузиться - их собственные файлы требуют другую версию:
-
-{2}
-
-Установить всё равно?</value>
   </data>
   <data name="Downloads_BreaksLineFormat" xml:space="preserve">
     <value>{0}: {1}</value>
@@ -1929,25 +1905,11 @@
   <data name="Installed_DisableSelected" xml:space="preserve">
     <value>Отключить выбранные</value>
   </data>
-  <data name="Installed_DuplicateBodyFormat" xml:space="preserve">
-    <value>{0} находится и во включённой, и в отключённой папке:
-
-{1}
-
-Да  -  оставить включённую копию
-Нет  -  оставить отключённую копию и включить её
-Отмена  -  оставить как есть
-
-Копия, которую вы не оставите, будет перемещена в скрытую папку .tcfmm-duplicates в вашей установке SPT, а не удалена.</value>
-  </data>
   <data name="Installed_DuplicateKeptDisabledFormat" xml:space="preserve">
     <value>Дубликат {0} разобран - оставлена отключённая копия, вторая лежит в .tcfmm-duplicates в вашей установке SPT.</value>
   </data>
   <data name="Installed_DuplicateKeptEnabledFormat" xml:space="preserve">
     <value>Дубликат {0} разобран - оставлена включённая копия, вторая лежит в .tcfmm-duplicates в вашей установке SPT.</value>
-  </data>
-  <data name="Installed_DuplicateTitleFormat" xml:space="preserve">
-    <value>Разобрать дубликат {0}?</value>
   </data>
   <data name="Installed_EnabledCount_few" xml:space="preserve">
     <value>Включено {0} мода.</value>
@@ -2120,23 +2082,6 @@
   <data name="Installed_Remove" xml:space="preserve">
     <value>Удалить</value>
   </data>
-  <data name="Installed_RemoveAppManagedBody" xml:space="preserve">
-    <value>Это удаляет ровно те файлы, которые это приложение установило для него, и возвращает все файлы, которые он заменил. Файлы, изменённые после установки или используемые другим модом, остаются на месте.</value>
-  </data>
-  <data name="Installed_RemoveConfigs_few" xml:space="preserve">
-    <value>У мода {0} есть {1} собственных файла конфигурации или настроек:</value>
-  </data>
-  <data name="Installed_RemoveConfigs_many" xml:space="preserve">
-    <value>У мода {0} есть {1} собственных файлов конфигурации или настроек:</value>
-  </data>
-  <data name="Installed_RemoveConfigs_one" xml:space="preserve">
-    <value>У мода {0} есть {1} собственный файл конфигурации или настроек:</value>
-  </data>
-  <data name="Installed_RemoveConfigsChoicesFormat" xml:space="preserve">
-    <value>Да  -  сохранить их, переместив в {0}
-Нет  -  удалить их вместе с остальным модом
-Отмена  -  ничего не удалять</value>
-  </data>
   <data name="Installed_RemovedConfigsKept_few" xml:space="preserve">
     <value>{0} файла конфигурации оставлены в {1}.</value>
   </data>
@@ -2161,16 +2106,8 @@
   <data name="Installed_RemoveDisabledFirstFormat" xml:space="preserve">
     <value>{0} отключён - включите его перед удалением.</value>
   </data>
-  <data name="Installed_RemoveDisableHint" xml:space="preserve">
-    <value>Чтобы убрать его из игры, не удаляя, используйте «Отключить».</value>
-  </data>
   <data name="Installed_RemoveFailedFormat" xml:space="preserve">
     <value>Не удалось удалить {0}: {1}</value>
-  </data>
-  <data name="Installed_RemoveLegacyBodyFormat" xml:space="preserve">
-    <value>Этот мод установлен не через это приложение, поэтому удаляется вся его папка, а не только размещённые им файлы:
-
-{0}</value>
   </data>
   <data name="Installed_RemoveNoFolderFormat" xml:space="preserve">
     <value>Не удалось найти папку мода {0} для удаления.</value>
@@ -2331,18 +2268,6 @@
   <data name="Installed_UpdateFilterToolTip" xml:space="preserve">
     <value>Фильтр по наличию обновления</value>
   </data>
-  <data name="Installed_UpdateHandInstalledBodyFormat" xml:space="preserve">
-    <value>{0} - установка выполнена не через это приложение, поэтому нет записи о том, какие именно файлы разместила текущая версия. При обновлении файлы новой версии будут установлены поверх имеющихся, без чистого удаления старой версии, поэтому от неё могут остаться лишние файлы.</value>
-  </data>
-  <data name="Installed_UpdateHandInstalledTitle_few" xml:space="preserve">
-    <value>Обновить {0} мода, установленных вручную?</value>
-  </data>
-  <data name="Installed_UpdateHandInstalledTitle_many" xml:space="preserve">
-    <value>Обновить {0} модов, установленных вручную?</value>
-  </data>
-  <data name="Installed_UpdateHandInstalledTitle_one" xml:space="preserve">
-    <value>Обновить {0} мод, установленный вручную?</value>
-  </data>
   <data name="Installed_UpdateNotInCatalogFormat" xml:space="preserve">
     <value>Не удалось найти {0} в кэше каталога - попробуйте Пересканировать.</value>
   </data>
@@ -2379,14 +2304,8 @@
   <data name="InstallRole_AskLater" xml:space="preserve">
     <value>Спросить позже</value>
   </data>
-  <data name="InstallRole_Explanation" xml:space="preserve">
-    <value>Headless-клиент хостит рейды, но на нём никто не играет, поэтому ему нужны моды, определяющие ход рейда - боты, предметы, локации, - и не нужны те, что рисуют что-то игроку. Если приложение знает, чем является эта машина, список модов от сервера приходит урезанным до того, что ей действительно нужно.</value>
-  </data>
   <data name="InstallRole_Intro" xml:space="preserve">
     <value>В этой установке есть headless-лаунчер Fika, который появляется только там, где работает headless-клиент.</value>
-  </data>
-  <data name="InstallRole_Note" xml:space="preserve">
-    <value>Это можно изменить позже на странице Параметры, и на ваши собственные списки модов это никогда не влияет - только на те, что выдаёт сервер.</value>
   </data>
   <data name="InstallRole_OnlyHosts" xml:space="preserve">
     <value>Нет, она только хостит</value>
@@ -2435,9 +2354,6 @@
   </data>
   <data name="ModDetails_LicenseFormat" xml:space="preserve">
     <value>Лицензия: {0}</value>
-  </data>
-  <data name="ModDisable_Note" xml:space="preserve">
-    <value>В любом случае ничего не удаляется - отключённые моды сохраняют свои файлы и конфигурации и возвращаются нетронутыми при повторном включении.</value>
   </data>
   <data name="ModDisable_Title" xml:space="preserve">
     <value>Проверьте зависимости</value>
@@ -3334,9 +3250,6 @@
   <data name="ModLists_VersionChangeEntryFormat" xml:space="preserve">
     <value>{0} {1} -&gt; {2}</value>
   </data>
-  <data name="ModLists_VersionChangeRowFormat" xml:space="preserve">
-    <value>Требовалась {0} - новейшая опубликованная {1}</value>
-  </data>
   <data name="ModLists_VersionChangeTitleCountFormat" xml:space="preserve">
     <value>Версии больше не публикуются: {0}</value>
   </data>
@@ -3360,9 +3273,6 @@
   </data>
   <data name="ModLists_VersionWarningFormat" xml:space="preserve">
     <value>Этот список составлен на SPT {0}, а у вас {1}. Версии, зафиксированные для одной, не всегда работают на другой.</value>
-  </data>
-  <data name="ModListVersionChange_Intro" xml:space="preserve">
-    <value>Этих модов больше нет на sp-mod.com в той версии, которую называет список. Отметьте те, которые нужно установить вместо этого в самой новой версии, - неотмеченные будут пропущены.</value>
   </data>
   <data name="ModListVersionChange_Title" xml:space="preserve">
     <value>Некоторые версии больше не опубликованы</value>
@@ -3448,13 +3358,6 @@
   <data name="ModUpdate_Downgrade" xml:space="preserve">
     <value>Понизить версию</value>
   </data>
-  <data name="ModUpdate_DowngradeBodyFormat" xml:space="preserve">
-    <value>Сейчас установлено: {0}. Вместо этого будет установлено {1}.
-
-Заменить файлы - простая половина дела. Приложение не может отменить то, что более новая версия уже записала: её собственные файлы конфигурации и любые изменения, внесённые ею в ваш профиль SPT. Старая сборка может их не прочитать, а некоторые моды меняют формат данных между версиями, из-за чего старая версия может отказаться загружать профиль.
-
-Если профиль вам дорог, сделайте его резервную копию перед продолжением.</value>
-  </data>
   <data name="ModUpdate_DowngradeCancelled" xml:space="preserve">
     <value>Откат отменён.</value>
   </data>
@@ -3467,20 +3370,11 @@
   <data name="ModUpdate_DowngradeToolTip" xml:space="preserve">
     <value>Установить эту старую версию вместо имеющейся. Сначала спросит - старая сборка может не прочитать конфигурацию или данные профиля, записанные более новой.</value>
   </data>
-  <data name="ModUpdate_HandInstalledDowngradeBody" xml:space="preserve">
-    <value>Этот мод устанавливался не через приложение, поэтому нет записи о том, какие именно файлы разместила его текущая версия - при откате файлы выбранной версии ставятся поверх того, что уже есть, а не после чистого удаления старой версии. От старой версии могут остаться лишние файлы.</value>
-  </data>
   <data name="ModUpdate_HandInstalledDowngradeTitleFormat" xml:space="preserve">
     <value>Откатить {0}?</value>
   </data>
-  <data name="ModUpdate_HandInstalledRedownloadBody" xml:space="preserve">
-    <value>Этот мод устанавливался не через приложение, поэтому нет записи о том, какие именно файлы разместила его текущая версия - при повторной загрузке файлы выбранной версии ставятся поверх того, что уже есть, а не после чистого удаления старой версии. От старой версии могут остаться лишние файлы.</value>
-  </data>
   <data name="ModUpdate_HandInstalledRedownloadTitleFormat" xml:space="preserve">
     <value>Скачать {0} заново?</value>
-  </data>
-  <data name="ModUpdate_HandInstalledUpdateBody" xml:space="preserve">
-    <value>Этот мод устанавливался не через приложение, поэтому нет записи о том, какие именно файлы разместила его текущая версия - при обновлении файлы выбранной версии ставятся поверх того, что уже есть, а не после чистого удаления старой версии. От старой версии могут остаться лишние файлы.</value>
   </data>
   <data name="ModUpdate_HandInstalledUpdateTitleFormat" xml:space="preserve">
     <value>Обновить {0}?</value>
@@ -3815,13 +3709,6 @@
   <data name="Options_SizeBy" xml:space="preserve">
     <value>×</value>
   </data>
-  <data name="Options_SkipGateBody" xml:space="preserve">
-    <value>На странице мода автор пишет порядок установки, требования, известные конфликты и предупреждения. Некоторые моды не заработают, если это пропустить, и приложение никак не может подсказать, какие именно.
-
-Если это отключить, моды будут скачиваться и устанавливаться сразу, ничего вам не показывая. Следить за тем, что нужно каждому моду, придётся вам самим.
-
-Включить обратно можно в любой момент.</value>
-  </data>
   <data name="Options_SkipGateTitle" xml:space="preserve">
     <value>Больше не предлагать читать страницы модов?</value>
   </data>
@@ -4050,9 +3937,6 @@
   <data name="ThemeEditor_DeleteTitle" xml:space="preserve">
     <value>Удалить тему</value>
   </data>
-  <data name="ThemeEditor_DeleteConfirmFormat" xml:space="preserve">
-    <value>Удалить "{0}"? Это нельзя отменить - сначала экспортируй, если тема может пригодиться.</value>
-  </data>
   <data name="ThemeEditor_DeletedFormat" xml:space="preserve">
     <value>Тема "{0}" удалена.</value>
   </data>
@@ -4079,9 +3963,6 @@
   </data>
   <data name="ThemeEditor_UnsavedFormat" xml:space="preserve">
     <value>Сохранить изменения в "{0}"?</value>
-  </data>
-  <data name="ThemeEditor_DiscardFormat" xml:space="preserve">
-    <value>Отменить изменения в "{0}"?</value>
   </data>
   <data name="ThemeEditor_Import" xml:space="preserve">
     <value>Импорт</value>
@@ -4299,9 +4180,6 @@
   <data name="ReadModPage_AllOpenedFormat" xml:space="preserve">
     <value>Открыты все страницы: {0}.</value>
   </data>
-  <data name="ReadModPage_BatchNote" xml:space="preserve">
-    <value>То же самое, что установка вручную с sp-mod.com - на страницах этих модов авторы размещают порядок установки, требования и предупреждения. Открывайте их по несколько за раз или пропустите и поставьте всё в очередь.</value>
-  </data>
   <data name="ReadModPage_ButtonNoPage" xml:space="preserve">
     <value>Страницы нет</value>
   </data>
@@ -4310,9 +4188,6 @@
   </data>
   <data name="ReadModPage_ButtonOpened" xml:space="preserve">
     <value>Открыта</value>
-  </data>
-  <data name="ReadModPage_Intro" xml:space="preserve">
-    <value>Так же, как при ручной установке с sp-mod.com, - откройте страницу каждого мода ниже, прежде чем это попадёт в очередь.</value>
   </data>
   <data name="ReadModPage_OpenLast_few" xml:space="preserve">
     <value>Открыть последние страницы: {0}</value>
@@ -4325,9 +4200,6 @@
   </data>
   <data name="ReadModPage_OpenNextFormat" xml:space="preserve">
     <value>Открыть следующие страницы: {0}</value>
-  </data>
-  <data name="ReadModPage_ProgressFormat" xml:space="preserve">
-    <value>Открыто {0} из {1} - осталось {2}.</value>
   </data>
   <data name="ReadModPage_SkipOpening" xml:space="preserve">
     <value>Не открывать их</value>
@@ -4720,9 +4592,6 @@
   </data>
   <data name="DownloadConfirm_RowDetailFormat" xml:space="preserve">
     <value>Версия {0}, из {1}</value>
-  </data>
-  <data name="DownloadConfirm_Note" xml:space="preserve">
-    <value>Снимите отметку с тех, что указаны неверно, - о них не спросят снова, пока вы не скачаете более новую версию. Отметка мода как установленного ничего не меняет на диске.</value>
   </data>
   <data name="DownloadConfirm_NotNow" xml:space="preserve">
     <value>Не сейчас</value>
@@ -6368,18 +6237,6 @@
   <data name="Installed_UndoNothing" xml:space="preserve">
     <value>Отменять нечего - удалённые файлы уже стёрты.</value>
   </data>
-  <data name="Installed_RemoveHeldFormat" xml:space="preserve">
-    <value>Удалённые файлы хранятся в установке {0}, так что это можно отменить.</value>
-  </data>
-  <data name="Installed_RemoveHeldUntilCleared" xml:space="preserve">
-    <value>Удалённые файлы хранятся в установке, пока вы не очистите их в «Параметрах», так что это можно отменить.</value>
-  </data>
-  <data name="Installed_RemoveNotHeld" xml:space="preserve">
-    <value>Удалённые файлы стираются сразу (Параметры, Хранить удалённые моды), так что это нельзя отменить.</value>
-  </data>
-  <data name="Installed_RemoveUnstampedFormat" xml:space="preserve">
-    <value>Запись приложения о нём не указывает, в какой установке SPT она сделана. Он будет удалён из {0}.</value>
-  </data>
   <data name="Options_RemovedModsHeader" xml:space="preserve">
     <value>Хранить удалённые моды</value>
   </data>
@@ -6412,9 +6269,6 @@
   </data>
   <data name="Options_RemovedModsClearTitle" xml:space="preserve">
     <value>Очистить удалённые моды</value>
-  </data>
-  <data name="Options_RemovedModsClearConfirmFormat" xml:space="preserve">
-    <value>Стереть все удалённые моды, хранящиеся в {1} ({0})? После этого ни одно сделанное удаление нельзя будет отменить.</value>
   </data>
   <data name="Options_RemovedModsClearedFormat" xml:space="preserve">
     <value>Удалённые моды очищены - освобождено {0}.</value>
@@ -6521,23 +6375,6 @@
   <data name="Installed_RemovedFolderLeft_many" xml:space="preserve">
     <value>Его папка {1} оставлена: в ней {0} файлов, которые мод не устанавливал.</value>
   </data>
-  <data name="Install_IncompatibleTitle" xml:space="preserve">
-    <value>Не для вашей версии SPT</value>
-  </data>
-  <data name="Install_IncompatibleOneFormat" xml:space="preserve">
-    <value>Ни одна версия этого мода на sp-mod.com не поддерживает SPT {0}. Самая новая:
-
-{1}
-
-Всё равно установить? SPT может отказаться его загружать.</value>
-  </data>
-  <data name="Install_IncompatibleBatchFormat" xml:space="preserve">
-    <value>Эти моды не поддерживают SPT {0}:
-
-{1}
-
-Всё равно установить? SPT может отказаться их загружать. «Нет» установит остальные без них.</value>
-  </data>
   <data name="Install_IncompatibleLineFormat" xml:space="preserve">
     <value>{0} {1} - нужна SPT {2}</value>
   </data>
@@ -6604,19 +6441,6 @@
   </data>
   <data name="Conflicts_KeepThisToolTip" xml:space="preserve">
     <value>Оставить эту копию и удалить остальные. Они попадут туда же, куда удалённые моды, и «Отменить» на странице «Установленные» сможет их вернуть.</value>
-  </data>
-  <data name="Conflicts_KeepConfirmTitle" xml:space="preserve">
-    <value>Оставить одну копию</value>
-  </data>
-  <data name="Conflicts_KeepConfirmFormat" xml:space="preserve">
-    <value>Оставить {0} в {1} и удалить:
-
-{2}
-
-{3}</value>
-  </data>
-  <data name="Conflicts_KeepLineFormat" xml:space="preserve">
-    <value>{0} - {1}</value>
   </data>
   <data name="Conflicts_KeptFormat" xml:space="preserve">
     <value>{0} оставлен. {1} удалён - «Отменить» на странице «Установленные» вернёт его.</value>
@@ -7110,14 +6934,6 @@
   <data name="Profiles_FailedFormat" xml:space="preserve">
     <value>Не получилось: {0}</value>
   </data>
-  <data name="Profiles_RestoreTitle" xml:space="preserve">
-    <value>Вернуть профили</value>
-  </data>
-  <data name="Profiles_RestoreConfirmFormat" xml:space="preserve">
-    <value>Вернуть профили в состояние на {0} ({1})?
-
-Текущее содержимое сначала копируется, так что это можно отменить тем же способом. Профили, созданные с тех пор, остаются как есть.</value>
-  </data>
   <data name="Profiles_RestoredFormat" xml:space="preserve">
     <value>Профили от {0} возвращены. То, что было до этого, - вверху списка.</value>
   </data>
@@ -7136,24 +6952,8 @@
   <data name="Installed_HeldBackPlainFormat" xml:space="preserve">
     <value>Обновление до {0} задержано sp-mod.</value>
   </data>
-  <data name="Downloads_FikaIncompatibleTitle" xml:space="preserve">
-    <value>Не для Fika</value>
-  </data>
-  <data name="Downloads_FikaIncompatibleFormat" xml:space="preserve">
-    <value>Здесь установлен Fika, а sp-mod отмечает {0} {1} как несовместимый с Fika. Если всё же установить, он может сломать совместные рейды или не дать Fika загрузиться.
-
-Всё равно установить?</value>
-  </data>
-  <data name="Downloads_FikaIncompatibleDownloadFormat" xml:space="preserve">
-    <value>Здесь установлен Fika, а sp-mod отмечает {0} {1} как несовместимый с Fika. После установки он может сломать совместные рейды или не дать Fika загрузиться.
-
-Всё равно скачать?</value>
-  </data>
   <data name="Downloads_FikaDeclinedFormat" xml:space="preserve">
     <value>{0} {1} пропущен - sp-mod отмечает его как несовместимый с Fika.</value>
-  </data>
-  <data name="Installed_RemoveProfileWarningFormat" xml:space="preserve">
-    <value>sp-mod отмечает {0} как мод, который может навсегда изменить ваш профиль и который, возможно, нельзя удалить без создания нового профиля. Его удаление может оставить профиль, который SPT не загрузит. Если так случится, «Вернуть» вернёт мод, а копия ваших профилей перед удалением есть в Параметрах, в разделе «Резервные копии профилей SPT».</value>
   </data>
   <data name="Downloads_WaitingToDownload" xml:space="preserve">
     <value>Ожидание свободного слота загрузки</value>
@@ -7193,21 +6993,6 @@
   </data>
   <data name="Installed_RemoveSelectedTitle" xml:space="preserve">
     <value>Удалить выбранные моды?</value>
-  </data>
-  <data name="Installed_RemoveSelectedBodyFormat" xml:space="preserve">
-    <value>Эти моды будут удалены:
-{0}
-
-Их файлы настроек сохраняются в {1}.</value>
-  </data>
-  <data name="Installed_RemoveSelectedProfileFormat" xml:space="preserve">
-    <value>sp-mod отмечает эти моды как способные навсегда изменить ваш профиль и, возможно, неудаляемые без создания нового профиля:
-{0}
-
-Их удаление может оставить профиль, который SPT не загрузит. Копия ваших профилей перед этим есть в Параметрах, в разделе «Резервные копии профилей SPT».</value>
-  </data>
-  <data name="Installed_RemoveSelectedLeavesDisabledFormat" xml:space="preserve">
-    <value>Пропущены, потому что отключены - сначала включите их, чтобы удалить: {0}.</value>
   </data>
   <data name="Installed_RemoveSelectedAllDisabledFormat" xml:space="preserve">
     <value>Ничего не удалено - выбранные моды отключены. Сначала включите их, чтобы удалить: {0}.</value>
@@ -8196,20 +7981,11 @@
   <data name="ServerRunning_Title" xml:space="preserve">
     <value>Сервер SPT запущен</value>
   </data>
-  <data name="ServerRunning_Closing" xml:space="preserve">
-    <value>Сервер SPT этой установки всё ещё работает. Он продолжит работать после закрытия приложения - остановить его сейчас или оставить?</value>
-  </data>
-  <data name="ServerRunning_ClosingHidden" xml:space="preserve">
-    <value>Сервер SPT этой установки всё ещё работает, и у него нет своего окна - после закрытия приложения ничто на экране не покажет, что он запущен. Остановить его сейчас или оставить?</value>
-  </data>
   <data name="ServerRunning_StopAndClose" xml:space="preserve">
     <value>Остановить и закрыть</value>
   </data>
   <data name="ServerRunning_LeaveAndClose" xml:space="preserve">
     <value>Оставить работать</value>
-  </data>
-  <data name="ServerRunning_Opening" xml:space="preserve">
-    <value>Сервер SPT этой установки уже работал при открытии приложения - оставлен в прошлый раз или запущен иначе. На странице Сервер виден его журнал, там же его можно остановить.</value>
   </data>
   <data name="ServerRunning_Stop" xml:space="preserve">
     <value>Остановить</value>
@@ -8246,9 +8022,6 @@
   </data>
   <data name="Filter_PresetDeleteTitle" xml:space="preserve">
     <value>Удалить набор фильтров</value>
-  </data>
-  <data name="Filter_PresetDeleteQuestionFormat" xml:space="preserve">
-    <value>Удалить набор фильтров «{0}»? Страница останется как есть.</value>
   </data>
   <data name="Filter_PresetReplaceTitle" xml:space="preserve">
     <value>Заменить набор фильтров</value>
@@ -8320,16 +8093,6 @@
   </data>
   <data name="Dependencies_BestFitTitleFormat" xml:space="preserve">
     <value>Переключить {0} на {1}?</value>
-  </data>
-  <data name="Dependencies_BestFitQuestionFormat" xml:space="preserve">
-    <value>С версией {1} мода {0} загрузится больше ваших модов, но эти перестанут загружаться:
-
-{2}
-
-Всё равно переключить?</value>
-  </data>
-  <data name="Dependencies_BestFitBreakLineFormat" xml:space="preserve">
-    <value>• {0} - {1}</value>
   </data>
   <data name="Dependencies_BestFitCancelledFormat" xml:space="preserve">
     <value>{0} оставлен как есть.</value>
@@ -8444,21 +8207,6 @@
   </data>
   <data name="Installed_SptDismissAllToolTip" xml:space="preserve">
     <value>Больше не предупреждать ни об одном из подсчитанных здесь модов. Предупреждение вернётся, если изменится мод или SPT.</value>
-  </data>
-  <data name="Installed_SptDismissAllTitle" xml:space="preserve">
-    <value>Скрыть предупреждения о версиях</value>
-  </data>
-  <data name="Installed_SptDismissAllQuestion_one" xml:space="preserve">
-    <value>Больше не предупреждать, что {0} мод не для SPT {1}? Предупреждение вернётся, если изменится мод или SPT.</value>
-  </data>
-  <data name="Installed_SptDismissAllQuestion_few" xml:space="preserve">
-    <value>Больше не предупреждать, что {0} мода не для SPT {1}? Предупреждения вернутся, если изменится мод или SPT.</value>
-  </data>
-  <data name="Installed_SptDismissAllQuestion_many" xml:space="preserve">
-    <value>Больше не предупреждать, что {0} модов не для SPT {1}? Предупреждения вернутся, если изменится мод или SPT.</value>
-  </data>
-  <data name="Installed_SptDismissAllQuestion_other" xml:space="preserve">
-    <value>Больше не предупреждать, что {0} мода не для SPT {1}? Предупреждения вернутся, если изменится мод или SPT.</value>
   </data>
   <data name="Installed_SptShowAll" xml:space="preserve">
     <value>Показать все предупреждения</value>
@@ -8658,15 +8406,6 @@
   <data name="Help_Browse_Ignore_Keywords" xml:space="preserve">
     <value>скрыть, игнорировать, спрятать, блокировать, чёрный список, ненужные, скрытые моды</value>
   </data>
-  <data name="Installed_RemoveAddonsListFormat" xml:space="preserve">
-    <value>У {0} в папке установлены аддоны: {1}.</value>
-  </data>
-  <data name="Installed_RemoveAddonsQuestionFormat" xml:space="preserve">
-    <value>Удалить и их? «Да» удалит их вместе с {0}. «Нет» удалит только {0} и оставит аддоны на месте.</value>
-  </data>
-  <data name="Installed_RemoveAddonsDisabledFormat" xml:space="preserve">
-    <value>Отключены, поэтому оставлены на месте: {0}.</value>
-  </data>
   <data name="Installed_RemovedAddonsFormat" xml:space="preserve">
     <value>Вместе с ним удалены его аддоны: {0}.</value>
   </data>
@@ -8687,21 +8426,6 @@
   </data>
   <data name="Installed_RemovalBatchFormat" xml:space="preserve">
     <value>{0} и его аддоны</value>
-  </data>
-  <data name="Installed_RemoveSelectedAddonsFormat" xml:space="preserve">
-    <value>У выбранных модов установлены аддоны: {0}. Удалить и их? «Да» удалит их вместе с модами; «Нет» удалит только выбранное.</value>
-  </data>
-  <data name="ModLists_VersionChangeParentRowFormat" xml:space="preserve">
-    <value>Нужна {0}, но она не подходит к {1} {2} - новейшая подходящая: {3}</value>
-  </data>
-  <data name="ModLists_VersionChangeTitleParentFormat" xml:space="preserve">
-    <value>Версия {0} не подходит к его моду</value>
-  </data>
-  <data name="ModListVersionChange_IntroAddons" xml:space="preserve">
-    <value>Указанные версии этих аддонов не подходят к версии их мода, которую оставляет этот список. Отметьте те, что нужно установить в новейшей подходящей версии, - неотмеченные будут пропущены.</value>
-  </data>
-  <data name="ModListVersionChange_IntroMixed" xml:space="preserve">
-    <value>Некоторых из этих модов больше нет на sp-mod.com в версии, указанной в списке, а некоторые - аддоны, чья указанная версия не подходит к версии их мода, которую оставляет этот список. Отметьте те, что нужно установить в новейшей подходящей версии, - неотмеченные будут пропущены.</value>
   </data>
   <data name="Help_Installed_Addons_Title" xml:space="preserve">
     <value>Удалить или отключить мод вместе с его аддонами</value>
@@ -8726,21 +8450,6 @@
   </data>
   <data name="Installed_SkippedAddonNoFit_many" xml:space="preserve">
     <value>{0} аддонов без более новой версии для новой версии своего мода</value>
-  </data>
-  <data name="AddonImpact_Title" xml:space="preserve">
-    <value>Аддоны, затронутые этим обновлением</value>
-  </data>
-  <data name="AddonImpact_ChangeList" xml:space="preserve">
-    <value>Эти аддоны не подходят к новой версии, но другая версия каждого из них подходит:</value>
-  </data>
-  <data name="AddonImpact_NoVersionList" xml:space="preserve">
-    <value>У этих аддонов нет версии для новой версии, и они могут перестать работать. Они останутся установленными:</value>
-  </data>
-  <data name="AddonImpact_ChangeQuestion" xml:space="preserve">
-    <value>Сменить и их? «Да» обновит мод и переведёт эти аддоны на подходящие версии. «Нет» обновит только мод.</value>
-  </data>
-  <data name="AddonImpact_NoVersionQuestion" xml:space="preserve">
-    <value>Всё равно обновить?</value>
   </data>
   <data name="AddonImpact_ChangeLineFormat" xml:space="preserve">
     <value>{0} {1} → {2} (для {3} {4})</value>
@@ -8796,20 +8505,8 @@
   <data name="Installed_DetailAddonDoesntFitFormat" xml:space="preserve">
     <value>{0} не подходит к {1} {2} - подходит {3}</value>
   </data>
-  <data name="AddonImpact_NoVersionDisableList" xml:space="preserve">
-    <value>У этих аддонов нет версии для новой версии. Они будут отключены после её установки - включить их снова можно на их карточке:</value>
-  </data>
   <data name="AddonFit_DisabledFormat" xml:space="preserve">
     <value>Отключено: {0} - ни одна версия не подходит к новой версии мода.</value>
-  </data>
-  <data name="AddonFit_ReEnableTitle" xml:space="preserve">
-    <value>Аддоны снова подходят</value>
-  </data>
-  <data name="AddonFit_ReEnableList" xml:space="preserve">
-    <value>Эти аддоны были отключены, потому что не подходили к своему моду, а теперь снова подходят:</value>
-  </data>
-  <data name="AddonFit_ReEnableQuestion" xml:space="preserve">
-    <value>Включить их снова?</value>
   </data>
   <data name="Installed_AddonNoFitToolTipFormat" xml:space="preserve">
     <value>Не подходит к {0} {1}</value>
@@ -8904,14 +8601,6 @@
   <data name="Addon_InstallAnywayToolTip" xml:space="preserve">
     <value>Авторы не всегда обновляют список версий мода у аддона. Установите его, если знаете, что он работает с вашей.</value>
   </data>
-  <data name="Addon_InstallAnywayTitle" xml:space="preserve">
-    <value>Всё равно установить?</value>
-  </data>
-  <data name="Addon_InstallAnywayFormat" xml:space="preserve">
-    <value>{0} {1} указывает {2} {3}. У вас {2} {4}.
-
-С вашей версией он может не работать. Всё равно установить?</value>
-  </data>
   <data name="Installed_AddonInstalledAnywayToolTipFormat" xml:space="preserve">
     <value>Установлен принудительно - автор не указывает {0} {1}</value>
   </data>
@@ -8933,13 +8622,480 @@
   <data name="AddonImpact_Overridden" xml:space="preserve">
     <value>Установлен принудительно - к этой версии тоже ничего не подходит</value>
   </data>
-  <data name="AddonImpact_OverriddenList" xml:space="preserve">
-    <value>Эти аддоны вы установили принудительно, и для новой версии у них тоже нет подходящей версии:</value>
-  </data>
-  <data name="AddonImpact_OverriddenQuestion" xml:space="preserve">
-    <value>Оставить их включёнными? «Нет» отключит их после установки обновления.</value>
-  </data>
   <data name="ModLists_EntryInstalledAnyway" xml:space="preserve">
     <value>установлен принудительно</value>
+  </data>
+  <data name="InstallRole_WhatHeadlessNeeds" xml:space="preserve">
+    <value>Headless-клиент проводит рейды, на нём никто не играет. Ему нужны моды, которые меняют ход рейда, например боты, предметы и локации. Моды, которые меняют только то, что видит игрок, ему не нужны. Если приложение знает, что это за машина, сервер сможет присылать ей только нужные моды.</value>
+  </data>
+  <data name="InstallRole_ChangeLater" xml:space="preserve">
+    <value>Это можно изменить позже в параметрах. Это касается только списков модов, которые присылает сервер, а не ваших собственных.</value>
+  </data>
+  <data name="ReadModPage_OpenFirst" xml:space="preserve">
+    <value>Откройте страницу каждого мода ниже, прежде чем он встанет в очередь. На странице мода есть шаги установки и предупреждения, как при установке вручную с sp-mod.com.</value>
+  </data>
+  <data name="ModListVersionChange_Lead" xml:space="preserve">
+    <value>Некоторые из них нельзя установить в версии, указанной в этом списке. Отметьте те, которые нужно установить в самой новой подходящей версии. Всё неотмеченное будет пропущено.</value>
+  </data>
+  <data name="ModDisable_NothingDeleted" xml:space="preserve">
+    <value>Ничего не удаляется. Отключённый мод сохраняет свои файлы и настройки и возвращается в прежнем виде, когда вы его включаете.</value>
+  </data>
+  <data name="ThemeEditor_DeleteLeadFormat" xml:space="preserve">
+    <value>Удалить «{0}»? Это нельзя отменить. Сначала экспортируйте тему, если она может понадобиться.</value>
+  </data>
+  <data name="ThemeEditor_DiscardChangesFormat" xml:space="preserve">
+    <value>Отбросить изменения в «{0}»?</value>
+  </data>
+  <data name="ThemeEditor_DiscardButton" xml:space="preserve">
+    <value>Отбросить изменения</value>
+  </data>
+  <data name="ThemeEditor_KeepEditing" xml:space="preserve">
+    <value>Продолжить правку</value>
+  </data>
+  <data name="ThemeEditor_DontSave" xml:space="preserve">
+    <value>Не сохранять</value>
+  </data>
+  <data name="Installed_RemoveAppLeadFormat" xml:space="preserve">
+    <value>Будут удалены файлы, которые это приложение установило для {0}.</value>
+  </data>
+  <data name="Installed_RemoveAppKeeps" xml:space="preserve">
+    <value>Заменённые им файлы вернутся на место. Файлы, которые вы изменили или которые использует другой мод, останутся на месте.</value>
+  </data>
+  <data name="Installed_RemoveNoInstallStampFormat" xml:space="preserve">
+    <value>Приложение не записало, в какую установку SPT попал этот мод. Он будет удалён из {0}.</value>
+  </data>
+  <data name="Installed_RemoveHandLeadFormat" xml:space="preserve">
+    <value>{0} установлен не этим приложением, поэтому будет удалено всё это:</value>
+  </data>
+  <data name="Installed_ProfileWarningFormat" xml:space="preserve">
+    <value>По данным sp-mod, {0} может навсегда изменить ваш профиль. После удаления SPT может не загрузить этот профиль.</value>
+  </data>
+  <data name="Installed_ProfileUndoOne" xml:space="preserve">
+    <value>Если так случится, «Вернуть» вернёт мод на место. Копия ваших профилей прямо перед этим есть в параметрах, в разделе «Резервные копии профилей SPT».</value>
+  </data>
+  <data name="Installed_RemoveConfigCount_one" xml:space="preserve">
+    <value>У {0} {1} собственный файл настроек.</value>
+  </data>
+  <data name="Installed_RemoveConfigCount_few" xml:space="preserve">
+    <value>У {0} {1} собственных файла настроек.</value>
+  </data>
+  <data name="Installed_RemoveConfigCount_many" xml:space="preserve">
+    <value>У {0} {1} собственных файлов настроек.</value>
+  </data>
+  <data name="Installed_RemoveConfigsGoFormat" xml:space="preserve">
+    <value>Сохранённые файлы настроек попадут в {0}.</value>
+  </data>
+  <data name="Installed_RemoveKeepConfigs" xml:space="preserve">
+    <value>Удалить, сохранить настройки</value>
+  </data>
+  <data name="Installed_RemoveEverything" xml:space="preserve">
+    <value>Удалить всё</value>
+  </data>
+  <data name="Installed_RemoveUndoForFormat" xml:space="preserve">
+    <value>Это можно отменить в течение: {0}.</value>
+  </data>
+  <data name="Installed_RemoveUndoUntilCleared" xml:space="preserve">
+    <value>Это можно отменить, пока вы не очистите удалённые моды в параметрах.</value>
+  </data>
+  <data name="Installed_RemoveNoUndo" xml:space="preserve">
+    <value>Удалённые файлы стираются сразу, поэтому это нельзя отменить. Это можно изменить в параметрах, в разделе «Хранить удалённые моды».</value>
+  </data>
+  <data name="Installed_RemoveDisableTip" xml:space="preserve">
+    <value>Чтобы мод перестал загружаться без удаления, используйте «Отключить».</value>
+  </data>
+  <data name="Installed_RemoveAddonsLeadFormat" xml:space="preserve">
+    <value>В папке {0} есть эти аддоны:</value>
+  </data>
+  <data name="Installed_RemoveAddonsDisabledHeading" xml:space="preserve">
+    <value>Эти отключены и останутся:</value>
+  </data>
+  <data name="Installed_RemoveAddonsToo" xml:space="preserve">
+    <value>Удалить и аддоны</value>
+  </data>
+  <data name="Installed_RemoveModOnly" xml:space="preserve">
+    <value>Удалить только мод</value>
+  </data>
+  <data name="Installed_RemoveSelectedLead" xml:space="preserve">
+    <value>Эти моды будут удалены:</value>
+  </data>
+  <data name="Installed_RemoveSelectedProfileWarning" xml:space="preserve">
+    <value>Некоторые из этих модов могут навсегда изменить ваш профиль. После их удаления SPT может не загрузить этот профиль.</value>
+  </data>
+  <data name="Installed_RemoveSelectedProfileHeading" xml:space="preserve">
+    <value>По данным sp-mod, эти могут изменить ваш профиль:</value>
+  </data>
+  <data name="Installed_ProfileUndoMany" xml:space="preserve">
+    <value>Если так случится, «Вернуть» вернёт моды на место. Копия ваших профилей прямо перед этим есть в параметрах, в разделе «Резервные копии профилей SPT».</value>
+  </data>
+  <data name="Installed_RemoveSelectedDisabledHeading" xml:space="preserve">
+    <value>Эти отключены и не будут удалены. Сначала включите их, если хотите удалить:</value>
+  </data>
+  <data name="Installed_RemoveSelectedConfigsKeptFormat" xml:space="preserve">
+    <value>Их файлы настроек сохраняются в {0}.</value>
+  </data>
+  <data name="Installed_RemoveSelectedAddonsTitle" xml:space="preserve">
+    <value>Удалить и их аддоны?</value>
+  </data>
+  <data name="Installed_RemoveSelectedAddonsLead" xml:space="preserve">
+    <value>У некоторых выбранных модов есть аддоны, которые вы не выбрали:</value>
+  </data>
+  <data name="Installed_RemoveSelectedOnly" xml:space="preserve">
+    <value>Только выбранное</value>
+  </data>
+  <data name="Installed_DuplicateTwiceTitleFormat" xml:space="preserve">
+    <value>{0} установлен дважды</value>
+  </data>
+  <data name="Installed_DuplicateLeadFormat" xml:space="preserve">
+    <value>{0} есть и во включённой, и в отключённой папке. Выберите, какую копию оставить.</value>
+  </data>
+  <data name="Installed_DuplicateEnabledHeading" xml:space="preserve">
+    <value>Включённая копия:</value>
+  </data>
+  <data name="Installed_DuplicateDisabledHeading" xml:space="preserve">
+    <value>Отключённая копия:</value>
+  </data>
+  <data name="Installed_DuplicateMovedNote" xml:space="preserve">
+    <value>Другая копия переносится в скрытую папку .tcfmm-duplicates в вашей установке SPT. Она не удаляется.</value>
+  </data>
+  <data name="Installed_KeepEnabledCopy" xml:space="preserve">
+    <value>Оставить включённую копию</value>
+  </data>
+  <data name="Installed_KeepDisabledCopy" xml:space="preserve">
+    <value>Оставить отключённую копию</value>
+  </data>
+  <data name="Installed_UpdateNotOursTitle_one" xml:space="preserve">
+    <value>Обновить {0} мод, установленный не этим приложением?</value>
+  </data>
+  <data name="Installed_UpdateNotOursTitle_few" xml:space="preserve">
+    <value>Обновить {0} мода, установленных не этим приложением?</value>
+  </data>
+  <data name="Installed_UpdateNotOursTitle_many" xml:space="preserve">
+    <value>Обновить {0} модов, установленных не этим приложением?</value>
+  </data>
+  <data name="Installed_UpdateNotOursLead_one" xml:space="preserve">
+    <value>Установлено не этим приложением:</value>
+  </data>
+  <data name="Installed_UpdateNotOursLead_few" xml:space="preserve">
+    <value>Установлено не этим приложением:</value>
+  </data>
+  <data name="Installed_UpdateNotOursLead_many" xml:space="preserve">
+    <value>Установлено не этим приложением:</value>
+  </data>
+  <data name="Installed_UpdateNotOursDetail_one" xml:space="preserve">
+    <value>Приложение не знает, какие файлы добавила старая версия. Новые файлы ложатся поверх старых, поэтому часть старых файлов может остаться.</value>
+  </data>
+  <data name="Installed_UpdateNotOursDetail_few" xml:space="preserve">
+    <value>Приложение не знает, какие файлы добавили старые версии. Новые файлы ложатся поверх старых, поэтому часть старых файлов может остаться.</value>
+  </data>
+  <data name="Installed_UpdateNotOursDetail_many" xml:space="preserve">
+    <value>Приложение не знает, какие файлы добавили старые версии. Новые файлы ложатся поверх старых, поэтому часть старых файлов может остаться.</value>
+  </data>
+  <data name="Installed_UpdateAnyway" xml:space="preserve">
+    <value>Всё равно обновить</value>
+  </data>
+  <data name="Installed_DeleteGroupButton" xml:space="preserve">
+    <value>Удалить группу</value>
+  </data>
+  <data name="Configs_DiscardButton" xml:space="preserve">
+    <value>Отбросить изменения</value>
+  </data>
+  <data name="Configs_KeepEditing" xml:space="preserve">
+    <value>Продолжить правку</value>
+  </data>
+  <data name="Configs_ChangedOnDiskLeadFormat" xml:space="preserve">
+    <value>Что-то другое изменило {0} после того, как вы открыли его здесь.</value>
+  </data>
+  <data name="Configs_ChangedOnDiskBackup" xml:space="preserve">
+    <value>Что бы вы ни выбрали, файл на диске сначала сохраняется в резервную копию.</value>
+  </data>
+  <data name="Configs_SaveOverIt" xml:space="preserve">
+    <value>Сохранить мои изменения поверх</value>
+  </data>
+  <data name="Configs_ReloadLoseChanges" xml:space="preserve">
+    <value>Перезагрузить, потеряв изменения</value>
+  </data>
+  <data name="ModUpdate_DowngradeBackUp" xml:space="preserve">
+    <value>Сначала сделайте резервную копию профиля, если он вам важен.</value>
+  </data>
+  <data name="ModUpdate_DowngradeLeadFormat" xml:space="preserve">
+    <value>Это заменит {0} на {1}.</value>
+  </data>
+  <data name="ModUpdate_DowngradeCantUndoHeading" xml:space="preserve">
+    <value>Заменить файлы просто. Но приложение не может отменить то, что новая версия уже изменила:</value>
+  </data>
+  <data name="ModUpdate_DowngradeItemConfigs" xml:space="preserve">
+    <value>её собственные файлы настроек</value>
+  </data>
+  <data name="ModUpdate_DowngradeItemProfile" xml:space="preserve">
+    <value>ваш профиль SPT</value>
+  </data>
+  <data name="ModUpdate_DowngradeMayNotLoad" xml:space="preserve">
+    <value>Старая версия может не суметь их прочитать. Тогда ваш профиль может не загрузиться.</value>
+  </data>
+  <data name="ModUpdate_DowngradeButton" xml:space="preserve">
+    <value>Откатить</value>
+  </data>
+  <data name="ModUpdate_NotOursLeadFormat" xml:space="preserve">
+    <value>{0} установлен не этим приложением, поэтому оно не знает, какие файлы добавила старая версия.</value>
+  </data>
+  <data name="ModUpdate_NotOursDetail" xml:space="preserve">
+    <value>Новые файлы ложатся поверх старых. Часть старых файлов может остаться.</value>
+  </data>
+  <data name="ModUpdate_UpdateAnyway" xml:space="preserve">
+    <value>Всё равно обновить</value>
+  </data>
+  <data name="ModUpdate_RedownloadAnyway" xml:space="preserve">
+    <value>Всё равно скачать заново</value>
+  </data>
+  <data name="ModUpdate_DowngradeAnyway" xml:space="preserve">
+    <value>Всё равно откатить</value>
+  </data>
+  <data name="Options_SkipGateLead" xml:space="preserve">
+    <value>Моды будут устанавливаться сразу, без показа их страниц.</value>
+  </data>
+  <data name="Options_SkipGateWhy" xml:space="preserve">
+    <value>На странице мода есть шаги установки, требования, конфликты и предупреждения. Некоторые моды не заработают, если вы это пропустите. Приложение не может сказать, какие именно.</value>
+  </data>
+  <data name="Options_SkipGateUndo" xml:space="preserve">
+    <value>Это можно снова включить в любой момент.</value>
+  </data>
+  <data name="Options_SkipGateKeepAsking" xml:space="preserve">
+    <value>Продолжать спрашивать</value>
+  </data>
+  <data name="Options_SkipGateStopAsking" xml:space="preserve">
+    <value>Больше не спрашивать</value>
+  </data>
+  <data name="Downloads_BreaksLeadFormat" xml:space="preserve">
+    <value>Если установить {0} {1}, эти моды перестанут загружаться:</value>
+  </data>
+  <data name="Downloads_BreaksDetailFormat" xml:space="preserve">
+    <value>Каждому из них нужна другая версия {0}.</value>
+  </data>
+  <data name="Downloads_InstallAnyway" xml:space="preserve">
+    <value>Всё равно установить</value>
+  </data>
+  <data name="ReadModPage_BatchLead" xml:space="preserve">
+    <value>На странице каждого мода есть шаги установки, требования и предупреждения. Открывайте их по несколько за раз или пропустите и поставьте все в очередь.</value>
+  </data>
+  <data name="ReadModPage_ProgressText" xml:space="preserve">
+    <value>Открыто {0} из {1}. Осталось {2}.</value>
+  </data>
+  <data name="ModLists_VersionChangeNewestFormat" xml:space="preserve">
+    <value>Нужна {0}. Новейшая опубликованная: {1}</value>
+  </data>
+  <data name="App_CrashMessageFormat" xml:space="preserve">
+    <value>Что-то пошло не так. Приложение попробует продолжить работу.
+
+{0}
+
+Подробности в журнале:
+{1}</value>
+  </data>
+  <data name="DownloadConfirm_UntickNote" xml:space="preserve">
+    <value>Снимите отметку с неверных. О них не спросят снова, пока вы не скачаете более новую версию. Отметка мода как установленного не меняет никаких файлов.</value>
+  </data>
+  <data name="Options_ClearRemovedLeadFormat" xml:space="preserve">
+    <value>Будут стёрты все удалённые моды, хранящиеся в {1}. Освободится {0}.</value>
+  </data>
+  <data name="Options_ClearRemovedNoUndo" xml:space="preserve">
+    <value>После этого нельзя будет отменить ни одно удаление, сделанное до сих пор.</value>
+  </data>
+  <data name="Options_ClearRemovedButton" xml:space="preserve">
+    <value>Стереть их</value>
+  </data>
+  <data name="Install_NotMadeForTitleFormat" xml:space="preserve">
+    <value>Не для SPT {0}</value>
+  </data>
+  <data name="Install_NotMadeForOneFormat" xml:space="preserve">
+    <value>Ни одна версия этого мода не сделана для SPT {0}. Самая новая версия:</value>
+  </data>
+  <data name="Install_NotMadeForBatchFormat" xml:space="preserve">
+    <value>Эти моды сделаны не для SPT {0}:</value>
+  </data>
+  <data name="Install_MayNotLoadOne" xml:space="preserve">
+    <value>SPT может его не загрузить.</value>
+  </data>
+  <data name="Install_MayNotLoadMany" xml:space="preserve">
+    <value>SPT может их не загрузить.</value>
+  </data>
+  <data name="Install_InstallAnyway" xml:space="preserve">
+    <value>Всё равно установить</value>
+  </data>
+  <data name="Install_SkipThese" xml:space="preserve">
+    <value>Пропустить эти моды</value>
+  </data>
+  <data name="Install_InstallThemAnyway" xml:space="preserve">
+    <value>Всё равно установить их</value>
+  </data>
+  <data name="Conflicts_KeepOneTitleFormat" xml:space="preserve">
+    <value>Оставить одну копию {0}?</value>
+  </data>
+  <data name="Conflicts_KeepLeadFormat" xml:space="preserve">
+    <value>Останется копия в {0}.</value>
+  </data>
+  <data name="Conflicts_KeepRemovedHeading" xml:space="preserve">
+    <value>Эти копии будут удалены:</value>
+  </data>
+  <data name="Conflicts_KeepItemFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Conflicts_KeepButton" xml:space="preserve">
+    <value>Оставить эту копию</value>
+  </data>
+  <data name="Profiles_RestoreQuestionTitle" xml:space="preserve">
+    <value>Вернуть профили?</value>
+  </data>
+  <data name="Profiles_RestoreLeadFormat" xml:space="preserve">
+    <value>Ваши профили вернутся к состоянию на {0} ({1}).</value>
+  </data>
+  <data name="Profiles_RestoreDetail" xml:space="preserve">
+    <value>Текущие профили сначала сохраняются, так что это можно отменить. Профили, созданные после этой даты, не меняются.</value>
+  </data>
+  <data name="Downloads_NotForFikaTitle" xml:space="preserve">
+    <value>Не для Fika</value>
+  </data>
+  <data name="Downloads_FikaLeadFormat" xml:space="preserve">
+    <value>По данным sp-mod, {0} {1} не работает с Fika, а Fika здесь установлена.</value>
+  </data>
+  <data name="Downloads_FikaDetail" xml:space="preserve">
+    <value>Он может сломать кооперативные рейды или помешать загрузке Fika.</value>
+  </data>
+  <data name="Downloads_DownloadAnyway" xml:space="preserve">
+    <value>Всё равно скачать</value>
+  </data>
+  <data name="ServerRunning_ClosingAsk" xml:space="preserve">
+    <value>Сервер SPT этой установки всё ещё работает. Он продолжит работать после закрытия приложения. Остановить его сейчас или оставить работать?</value>
+  </data>
+  <data name="ServerRunning_ClosingHiddenAsk" xml:space="preserve">
+    <value>Сервер SPT этой установки всё ещё работает. У него нет окна, поэтому после закрытия приложения ничто на экране не покажет, что он запущен. Остановить его сейчас или оставить работать?</value>
+  </data>
+  <data name="ServerRunning_AlreadyRunning" xml:space="preserve">
+    <value>Сервер SPT этой установки уже работал, когда приложение открылось. Возможно, его оставили работать в прошлый раз или запустили другим способом. Страница «Сервер» показывает его журнал и может его остановить.</value>
+  </data>
+  <data name="Filter_PresetDeleteLeadFormat" xml:space="preserve">
+    <value>Удалить набор фильтров «{0}»? Текущие фильтры останутся как есть.</value>
+  </data>
+  <data name="Filter_PresetReplaceButton" xml:space="preserve">
+    <value>Заменить</value>
+  </data>
+  <data name="Dependencies_BestFitLeadFormat" xml:space="preserve">
+    <value>С версией {1} мода {0} загрузится больше ваших модов.</value>
+  </data>
+  <data name="Dependencies_BestFitBreaksHeading" xml:space="preserve">
+    <value>Эти перестанут загружаться:</value>
+  </data>
+  <data name="Dependencies_BestFitBreakItemFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Dependencies_SwitchButton" xml:space="preserve">
+    <value>Переключить</value>
+  </data>
+  <data name="Installed_SptDismissTitle" xml:space="preserve">
+    <value>Скрыть предупреждения о версии?</value>
+  </data>
+  <data name="Installed_SptDismissLead_one" xml:space="preserve">
+    <value>Больше не показывать предупреждение «не для SPT {1}» для {0} мода?</value>
+  </data>
+  <data name="Installed_SptDismissLead_few" xml:space="preserve">
+    <value>Больше не показывать предупреждение «не для SPT {1}» для {0} модов?</value>
+  </data>
+  <data name="Installed_SptDismissLead_many" xml:space="preserve">
+    <value>Больше не показывать предупреждение «не для SPT {1}» для {0} модов?</value>
+  </data>
+  <data name="Installed_SptDismissComesBack" xml:space="preserve">
+    <value>Предупреждение вернётся, если его мод или SPT обновится.</value>
+  </data>
+  <data name="Installed_SptDismissButton" xml:space="preserve">
+    <value>Скрыть предупреждения</value>
+  </data>
+  <data name="ModLists_VersionChangeNoFitRowFormat" xml:space="preserve">
+    <value>Нужна {0}, но она не для {1} {2}. Новейшая подходящая: {3}</value>
+  </data>
+  <data name="ModLists_VersionChangeNoFitTitleFormat" xml:space="preserve">
+    <value>{0}: указанная версия не подходит к своему моду</value>
+  </data>
+  <data name="Help_Installed_Addons_Step2" xml:space="preserve">
+    <value>Чтобы удалить мод вместе с аддонами, нажмите {0} на карточке мода, затем {1}.</value>
+  </data>
+  <data name="Ask_More_one" xml:space="preserve">
+    <value>и ещё {0}</value>
+  </data>
+  <data name="Ask_More_few" xml:space="preserve">
+    <value>и ещё {0}</value>
+  </data>
+  <data name="Ask_More_many" xml:space="preserve">
+    <value>и ещё {0}</value>
+  </data>
+  <data name="AddonImpact_NeedChangeTitle" xml:space="preserve">
+    <value>Некоторым аддонам нужна другая версия</value>
+  </data>
+  <data name="AddonImpact_MayStopTitle" xml:space="preserve">
+    <value>Некоторые аддоны могут перестать работать</value>
+  </data>
+  <data name="AddonImpact_Lead" xml:space="preserve">
+    <value>Обновление этого мода затрагивает некоторые его аддоны.</value>
+  </data>
+  <data name="AddonImpact_ChangeHeading" xml:space="preserve">
+    <value>Для этих есть версия под новую версию мода:</value>
+  </data>
+  <data name="AddonImpact_NoVersionHeading" xml:space="preserve">
+    <value>Для этих пока нет версии под неё:</value>
+  </data>
+  <data name="AddonImpact_NoVersionDisabled" xml:space="preserve">
+    <value>Они будут отключены после обновления. Их можно снова включить на их карточке.</value>
+  </data>
+  <data name="AddonImpact_NoVersionStays" xml:space="preserve">
+    <value>Они останутся установленными, но могут перестать работать.</value>
+  </data>
+  <data name="AddonImpact_UpdateBoth" xml:space="preserve">
+    <value>Обновить мод и аддоны</value>
+  </data>
+  <data name="AddonImpact_ModOnly" xml:space="preserve">
+    <value>Обновить только мод</value>
+  </data>
+  <data name="AddonImpact_UpdateAnyway" xml:space="preserve">
+    <value>Всё равно обновить</value>
+  </data>
+  <data name="AddonImpact_OverriddenTitle" xml:space="preserve">
+    <value>Оставить эти аддоны включёнными?</value>
+  </data>
+  <data name="AddonImpact_OverriddenLead" xml:space="preserve">
+    <value>Вы установили эти аддоны принудительно.</value>
+  </data>
+  <data name="AddonImpact_OverriddenHeading" xml:space="preserve">
+    <value>Ни одна их версия не сделана для новой версии мода:</value>
+  </data>
+  <data name="AddonImpact_KeepEnabled" xml:space="preserve">
+    <value>Оставить включёнными</value>
+  </data>
+  <data name="AddonImpact_DisableAfter" xml:space="preserve">
+    <value>Отключить после обновления</value>
+  </data>
+  <data name="AddonFit_EnableAgainTitle" xml:space="preserve">
+    <value>Снова включить эти аддоны?</value>
+  </data>
+  <data name="AddonFit_EnableAgainLead" xml:space="preserve">
+    <value>Эти аддоны были отключены, потому что не работали с версией своего мода. Теперь они снова с ней работают.</value>
+  </data>
+  <data name="AddonFit_EnableThem" xml:space="preserve">
+    <value>Включить</value>
+  </data>
+  <data name="AddonFit_LeaveDisabled" xml:space="preserve">
+    <value>Оставить отключёнными</value>
+  </data>
+  <data name="Help_Installed_AddonUpdate_Step2" xml:space="preserve">
+    <value>Нажмите {0}. Если аддону нужна другая версия, выберите {1}, чтобы заменить и его, или {2}, чтобы оставить как есть.</value>
+  </data>
+  <data name="Addon_InstallAnywayTitleFormat" xml:space="preserve">
+    <value>Всё равно установить {0}?</value>
+  </data>
+  <data name="Addon_MadeForFormat" xml:space="preserve">
+    <value>{0} {1} сделан для {2} {3}. У вас {2} {4}.</value>
+  </data>
+  <data name="Addon_MayNotWork" xml:space="preserve">
+    <value>Он может не работать с вашей версией.</value>
+  </data>
+  <data name="Addon_InstallAnywayButton" xml:space="preserve">
+    <value>Всё равно установить</value>
   </data>
 </root>
