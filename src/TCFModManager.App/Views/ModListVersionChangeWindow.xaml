@@ -38,39 +38,41 @@
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Text="{loc:Str ModListVersionChange_Intro}" />
 
-            <ItemsControl x:Name="ChangesList" Margin="0,0,0,-8">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <ui:Card Margin="0,0,0,8" Padding="12,10">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
+            <ScrollViewer MaxHeight="320" VerticalScrollBarVisibility="Auto">
+                <ItemsControl x:Name="ChangesList" Margin="0,0,0,-8">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ui:Card Margin="0,0,0,8" Padding="12,10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
 
-                                <CheckBox
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Margin="0,0,12,0"
-                                    IsChecked="{Binding IsAccepted, Mode=TwoWay}" />
+                                    <CheckBox
+                                        Grid.Column="0"
+                                        VerticalAlignment="Center"
+                                        Margin="0,0,12,0"
+                                        IsChecked="{Binding IsAccepted, Mode=TwoWay}" />
 
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock
-                                        TextWrapping="Wrap"
-                                        FontWeight="SemiBold"
-                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                        Text="{Binding Name}" />
-                                    <TextBlock
-                                        TextWrapping="Wrap"
-                                        Margin="0,3,0,0"
-                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                        Text="{Binding Detail}" />
-                                </StackPanel>
-                            </Grid>
-                        </ui:Card>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock
+                                            TextWrapping="Wrap"
+                                            FontWeight="SemiBold"
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                            Text="{Binding Name}" />
+                                        <TextBlock
+                                            TextWrapping="Wrap"
+                                            Margin="0,3,0,0"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            Text="{Binding Detail}" />
+                                    </StackPanel>
+                                </Grid>
+                            </ui:Card>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </StackPanel>
 
         <WrapPanel Grid.Row="2" Style="{StaticResource DialogButtonBar}">
