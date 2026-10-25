@@ -351,6 +351,7 @@ public partial class ModListsViewModel
                 IsAddon = installed.IsAddon,
                 Version = installed.Version,
                 Folders = [.. installed.Folders],
+                FitOverride = installed.IsAddon && installed.FitOverride,
             }
             : null);
 

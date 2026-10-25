@@ -515,6 +515,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
         // OPEN-32 D6: asked only when an installed addon wouldn't fit the version being installed.
         List<AddonImpactItem> addonChanges = [];
         List<AddonImpactItem> addonsWithNoFit = [];
+        var disableOverridden = false;
         if (ShowAddonImpacts && selectedVersion.Raw.Version is { } version)
         {
             List<AddonImpactItem> impacts;
@@ -538,6 +539,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
             }
 
             addonsWithNoFit = impacts;
+            disableOverridden = AddonImpactCheck.AskOverridden(impacts, willInstall: !downloadOnly);
         }
 
         // The hand-installed warning is about this app placing files over ones it has no record of.
@@ -584,7 +586,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
             return;
         }
 
-        if (!downloadOnly) AppServices.AddonFollowUps.DisableAfterUpdate(addonsWithNoFit);
+        if (!downloadOnly) AppServices.AddonFollowUps.DisableAfterUpdate(addonsWithNoFit, disableOverridden);
 
         var item = AppServices.DownloadQueue.Enqueue(
             target, selectedVersion.VersionText, installPath, () => Task.FromResult<ModVersion?>(selectedVersion.Raw),

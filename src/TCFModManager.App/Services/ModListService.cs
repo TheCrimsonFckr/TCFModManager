@@ -693,6 +693,12 @@ public sealed class ModListService
                 if (exact.Version is not null && action.IsAddon && !string.IsNullOrWhiteSpace(parentVersion)
                     && AddonFit.Check(exact.ParentConstraint, parentVersion, sptVersion) == false)
                 {
+                    if (action.Entry?.FitOverride == true)
+                    {
+                        ready.Add(new ModListDownload(action, target with { FitOverride = parentVersion }, exact.Version, IsSubstitute: false));
+                        continue;
+                    }
+
                     var (fits, _) = await NewestAsync(id, action.IsAddon, sptVersion, parentVersion, ct);
                     var parentName = AppServices.Addons.ById(modId)?.ModId is { } pid
                         ? catalog.GetValueOrDefault(pid)?.Name

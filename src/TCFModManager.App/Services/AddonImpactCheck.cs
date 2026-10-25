@@ -7,11 +7,11 @@ using TCFModManager.Core.SpModApi;
 
 namespace TCFModManager.App.Services;
 
-public sealed record InstalledAddon(int AddonId, string Name, string? InstalledVersion, Addon? Listing);
+public sealed record InstalledAddon(int AddonId, string Name, string? InstalledVersion, Addon? Listing, bool Overridden = false);
 
 public sealed record AddonImpactItem(InstalledAddon Addon, int ModId, string ModName, string ModVersion, AddonImpactResult Result)
 {
-    public bool IsAffected => Result.Verdict is AddonImpactVerdict.NeedsChange or AddonImpactVerdict.NoCompatibleVersion;
+    public bool IsAffected => Result.Verdict is AddonImpactVerdict.NeedsChange or AddonImpactVerdict.NoCompatibleVersion or AddonImpactVerdict.Overridden;
 }
 
 public enum AddonImpactAnswer
@@ -35,7 +35,8 @@ public sealed class AddonImpactCheck
     [
         .. addonCards
             .Where(c => c is { IsAddon: true, IsDisabled: false, ModId: not null })
-            .Select(c => new InstalledAddon(c.ModId!.Value, c.DisplayTitle, c.InstalledVersion, AppServices.Addons.ById(c.ModId.Value))),
+            .Select(c => new InstalledAddon(
+                c.ModId!.Value, c.DisplayTitle, c.InstalledVersion, AppServices.Addons.ById(c.ModId.Value), c.IsFitOverridden)),
     ];
 
     public async Task<List<AddonImpactItem>> AssessAsync(
@@ -47,7 +48,7 @@ public sealed class AddonImpactCheck
         foreach (var addon in addons)
         {
             var result = await AddonImpact.AssessAsync(
-                addon.AddonId, addon.Listing, addon.InstalledVersion, modVersion, spt, PublishedAsync, ct);
+                addon.AddonId, addon.Listing, addon.InstalledVersion, modVersion, spt, PublishedAsync, ct, addon.Overridden);
             items.Add(new AddonImpactItem(addon, modId, modName, modVersion, result));
         }
 
@@ -125,6 +126,23 @@ public sealed class AddonImpactCheck
             : AddonImpactAnswer.Cancel;
     }
 
+    //
+    // OPEN-37 D4: addons installed anyway that no version fits the new one either are asked about on
+    // their own, after Ask - Keep (Yes, the default) or disable them once the update has installed.
+    // True means disable. Nothing is disabled when the update only downloads, so nothing is asked.
+    //
+    public static bool AskOverridden(IReadOnlyList<AddonImpactItem> items, bool willInstall)
+    {
+        var overridden = items.Where(i => i.Result.Verdict == AddonImpactVerdict.Overridden).ToList();
+        if (!willInstall || overridden.Count == 0) return false;
+
+        var body = Strings.AddonImpact_OverriddenList + "\n" + string.Join("\n", overridden.Select(NoVersionLine))
+            + "\n\n" + Strings.AddonImpact_OverriddenQuestion;
+
+        return MessageBox.Show(body, Strings.AddonImpact_Title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes)
+            == MessageBoxResult.No;
+    }
+
     // What Update both queues for one addon: the version it changes to, ready for the download queue.
     public static ModVersion? Download(AddonImpactItem item) =>
         item.Result is { Verdict: AddonImpactVerdict.NeedsChange, Target: { Link: not null } target }
@@ -143,6 +161,7 @@ public sealed class AddonImpactCheck
         { Verdict: AddonImpactVerdict.Unaffected } => Strings.AddonImpact_Fits,
         { Verdict: AddonImpactVerdict.NeedsChange, Target.Version: var target } => Text(Strings.AddonImpact_ChangeFormat, target),
         { Verdict: AddonImpactVerdict.NoCompatibleVersion } => Strings.AddonImpact_NoVersion,
+        { Verdict: AddonImpactVerdict.Overridden } => Strings.AddonImpact_Overridden,
         _ => result.UnknownReason switch
         {
             AddonImpactUnknownReason.Detached => Strings.AddonImpact_UnknownDetached,

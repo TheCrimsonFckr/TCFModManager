@@ -211,6 +211,8 @@ public partial class InstalledViewModel
                 break;
         }
 
+        var disableOverridden = AddonImpactCheck.AskOverridden(impacts, willInstall: !downloadOnly);
+
         var noFit = noFitIds.Count(id => !impacts.Any(i => i.IsAffected && i.Addon.AddonId == id));
 
         if (updates.Count == 0)
@@ -250,7 +252,7 @@ public partial class InstalledViewModel
             return;
         }
 
-        if (!downloadOnly) AppServices.AddonFollowUps.DisableAfterUpdate(impacts);
+        if (!downloadOnly) AppServices.AddonFollowUps.DisableAfterUpdate(impacts, disableOverridden);
 
         var queuedMods = new Dictionary<int, DownloadQueueItemViewModel>();
 
@@ -280,7 +282,8 @@ public partial class InstalledViewModel
     {
         var due = AppServices.AddonFollowUps.TakeDue(
             modId => _all.FirstOrDefault(c => c is { IsAddon: false } && c.ModId == modId)?.InstalledVersion);
-        var dueIds = due.Select(d => d.AddonId).ToHashSet();
+        foreach (var kept in due.Where(d => d.Keep)) AppServices.InstallManifest.SetFitOverride(kept.AddonId, kept.ModVersion);
+        var dueIds = due.Where(d => !d.Keep).Select(d => d.AddonId).ToHashSet();
 
         var toDisable = _all.Where(c => c is { IsAddon: true, IsDisabled: false, ModId: { } id } && dueIds.Contains(id)).ToList();
         if (toDisable.Count > 0 && await ApplyDisableAsync(toDisable, disable: true, confirm: false) is not null)

@@ -339,6 +339,7 @@ public partial class ModListsViewModel
         var parts = new List<string>();
 
         if (entry.IsAddon) parts.Add(Strings.ModLists_EntryAddon);
+        if (entry is { IsAddon: true, FitOverride: true }) parts.Add(Strings.ModLists_EntryInstalledAnyway);
 
         //
         // The folders on disk this entry covers.

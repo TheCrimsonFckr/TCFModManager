@@ -106,6 +106,7 @@ public partial class ModListsViewModel
             Version = source.Version,
             Guid = source.Guid,
             Folders = [.. source.Folders],
+            FitOverride = source.FitOverride,
 
             // Cycling back round to Everyone stores null - see ModListEntry.Scope - so the entry
             // ends up exactly as it was before anyone touched it, rather than carrying a value that

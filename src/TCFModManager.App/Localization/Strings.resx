@@ -10279,4 +10279,20 @@ It may not work with your version. Install it anyway?</value>
     <value>addon, add-on, install anyway, force install, override, not compatible, outdated addon, needs older version, blocked addon</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
+  <data name="AddonImpact_Overridden" xml:space="preserve">
+    <value>Installed anyway - no version fits this one either</value>
+    <comment>In the update dialog, for an addon the user installed anyway when no version of it fits the selected mod version either (OPEN-37).</comment>
+  </data>
+  <data name="AddonImpact_OverriddenList" xml:space="preserve">
+    <value>You installed these addons anyway, and no version of them lists the new version either:</value>
+    <comment>Heads a list of AddonImpact_NoVersionLineFormat lines in the box asked before an update (OPEN-37 D4).</comment>
+  </data>
+  <data name="AddonImpact_OverriddenQuestion" xml:space="preserve">
+    <value>Keep them enabled? No disables them once the update has installed.</value>
+    <comment>Ends that box. Yes keeps them (the default), No disables them after the update lands.</comment>
+  </data>
+  <data name="ModLists_EntryInstalledAnyway" xml:space="preserve">
+    <value>installed anyway</value>
+    <comment>One fact on a list entry's line: an addon installed even though its author doesn't list the mod version it goes with (OPEN-37). Applying the list installs it the same way.</comment>
+  </data>
 </root>

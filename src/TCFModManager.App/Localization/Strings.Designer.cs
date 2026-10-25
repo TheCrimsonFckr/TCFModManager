@@ -2814,4 +2814,8 @@ internal static class Strings
     internal static string Help_Browse_AddonAnyway_Step2 => LocalizationService.Get("Help_Browse_AddonAnyway_Step2");
     internal static string Help_Browse_AddonAnyway_Note => LocalizationService.Get("Help_Browse_AddonAnyway_Note");
     internal static string Help_Browse_AddonAnyway_Keywords => LocalizationService.Get("Help_Browse_AddonAnyway_Keywords");
+    internal static string AddonImpact_Overridden => LocalizationService.Get("AddonImpact_Overridden");
+    internal static string AddonImpact_OverriddenList => LocalizationService.Get("AddonImpact_OverriddenList");
+    internal static string AddonImpact_OverriddenQuestion => LocalizationService.Get("AddonImpact_OverriddenQuestion");
+    internal static string ModLists_EntryInstalledAnyway => LocalizationService.Get("ModLists_EntryInstalledAnyway");
 }

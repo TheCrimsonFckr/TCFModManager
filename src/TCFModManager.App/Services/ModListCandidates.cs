@@ -56,6 +56,7 @@ public static class ModListCandidates
                 Version = record.Version,
                 CanBeDisabled = false,
                 InstalledAt = record.InstalledAt,
+                FitOverride = record.FitOverride is not null,
 
                 // Deliberately no folders: the ones this record names are its parent's, and putting
                 // them on the addon would let a list entry match the parent by folder name when the
@@ -115,6 +116,7 @@ public static class ModListCandidates
         Version = card.InstalledVersion,
         Guid = card.Guid,
         IsDisabled = card.IsDisabled,
+        FitOverride = card.IsAddon && card.IsFitOverridden,
 
         // A half-installed mod reports the version it was installed as, so without this the planner
         // reads it as satisfied and the missing half never comes back.
