@@ -10208,4 +10208,12 @@ Switch anyway?</value>
     <value>Open {0}</value>
     <comment>Button in the single-addon window opened from Browse's Addons strip (OPEN-36): opens the addon's mod. {0} is the mod's name.</comment>
   </data>
+  <data name="Browse_AddonMatchesToggle" xml:space="preserve">
+    <value>Addon matches</value>
+    <comment>Switch beside Browse's search: whether the bar of addons a search matches is shown (OPEN-36).</comment>
+  </data>
+  <data name="Browse_AddonMatchesToggleToolTip" xml:space="preserve">
+    <value>Show the addons your search matches in a bar above the results. Mods whose addons match are listed either way.</value>
+    <comment>Tooltip on Browse_AddonMatchesToggle.</comment>
+  </data>
 </root>

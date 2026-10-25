@@ -178,6 +178,9 @@ public sealed class AppSettings
 
     public bool ModListsCompactRows { get; set; }
 
+    // Whether Browse shows the addons a search matches in a bar above the results (OPEN-36).
+    public bool ShowAddonMatches { get; set; } = true;
+
     //
     // Where the main window opens and how big. Always present, the same as ServerMap below, and
     // never null for the same reason: this file is offered for hand-editing, so a "Window": null

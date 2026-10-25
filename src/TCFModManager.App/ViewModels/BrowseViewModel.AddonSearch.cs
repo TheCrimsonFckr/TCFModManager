@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -18,12 +19,27 @@ public partial class BrowseViewModel
     [ObservableProperty]
     private IReadOnlyList<AddonSearchRowViewModel> _addonMatches = [];
 
+    // Collapsed until opened, every search (Chris, 2026-10-24).
     [ObservableProperty]
-    private bool _addonMatchesExpanded = true;
+    private bool _addonMatchesExpanded;
+
+    // The bar can be turned off altogether; remembered between sessions, and not a filter, so Clear
+    // filters leaves it alone. Matching addons still bring their mods into the results.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasAddonMatches))]
+    private bool _showAddonMatches;
+
+    partial void OnShowAddonMatchesChanged(bool value)
+    {
+        var settings = new SettingsService();
+        var current = settings.Load();
+        current.ShowAddonMatches = value;
+        settings.Save(current);
+    }
 
     private int _addonMatchCount;
 
-    public bool HasAddonMatches => _addonMatchCount > 0;
+    public bool HasAddonMatches => ShowAddonMatches && _addonMatchCount > 0;
 
     public string AddonMatchesHeading => Text(Strings.Browse_AddonMatchesHeadingFormat, _addonMatchCount);
 

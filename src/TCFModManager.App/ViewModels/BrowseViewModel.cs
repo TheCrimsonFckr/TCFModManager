@@ -47,6 +47,7 @@ public partial class BrowseViewModel : LocalizedViewModel
 
         var settings = new SettingsService().Load();
         _defaults = settings.BrowseDefaults;
+        _showAddonMatches = settings.ShowAddonMatches;
 
         //
         // Backing fields rather than the properties: this is the page opening at its default, not

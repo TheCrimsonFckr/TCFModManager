@@ -150,6 +150,17 @@
                     Content="{loc:Str Browse_RefreshCache}"
                     Command="{Binding RefreshCacheCommand}" />
 
+                <!-- A display preference, like Installed's list badges: whether the Addons bar shows. -->
+                <ui:ToggleSwitch
+                    DockPanel.Dock="Right"
+                    Margin="0,0,12,0"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    ToolTip="{loc:Str Browse_AddonMatchesToggleToolTip}"
+                    IsChecked="{Binding ShowAddonMatches}"
+                    OnContent="{loc:Str Browse_AddonMatchesToggle}"
+                    OffContent="{loc:Str Browse_AddonMatchesToggle}" />
+
                 <WrapPanel>
                     <ui:TextBox
                         Width="320"
