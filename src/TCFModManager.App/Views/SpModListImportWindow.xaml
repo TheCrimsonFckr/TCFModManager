@@ -452,38 +452,34 @@
             </ui:Card>
         </Grid>
 
-        <Grid Grid.Row="2" Margin="24,16,24,24">
+        <Grid Grid.Row="2" Margin="24,8,24,24">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <TextBlock
                 x:Name="SummaryText"
                 Grid.Column="0"
-                Margin="2,0,12,0"
+                Margin="2,8,12,0"
                 VerticalAlignment="Center"
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
 
-            <ui:Button
-                Grid.Column="1"
-                MinWidth="100"
-                HorizontalContentAlignment="Center"
-                Content="{loc:Str Common_Cancel}"
-                Click="CancelButton_Click" />
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                <ui:Button
+                    Style="{StaticResource DialogButton}"
+                    Content="{loc:Str Common_Cancel}"
+                    Click="CancelButton_Click" />
 
-            <ui:Button
-                x:Name="PrimaryButton"
-                Grid.Column="2"
-                MinWidth="130"
-                Margin="10,0,0,0"
-                HorizontalContentAlignment="Center"
-                Appearance="Primary"
-                IsEnabled="False"
-                Content="{loc:Str SpModImport_Read}"
-                Click="PrimaryButton_Click" />
+                <ui:Button
+                    x:Name="PrimaryButton"
+                    Style="{StaticResource DialogButton}"
+                    Appearance="Primary"
+                    IsEnabled="False"
+                    Content="{loc:Str SpModImport_Read}"
+                    Click="PrimaryButton_Click" />
+            </StackPanel>
         </Grid>
     </Grid>
 </ui:FluentWindow>
