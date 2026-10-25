@@ -59,6 +59,19 @@ public sealed class ModInstallManifestService
     public int SetDisabledForFit(IEnumerable<int> addonIds, bool value) =>
         SetAddonFlag(addonIds, value, r => r.DisabledForFit, (r, v) => r.DisabledForFit = v);
 
+    // OPEN-37 D2: records, moves or (null) clears the mod version an addon was installed anyway against.
+    public bool SetFitOverride(int addonId, string? modVersion)
+    {
+        var value = string.IsNullOrWhiteSpace(modVersion) ? null : modVersion.Trim();
+        var manifest = Load();
+
+        if (manifest.Find(addonId, isAddon: true) is not { } record || record.FitOverride == value) return false;
+
+        record.FitOverride = value;
+        Save(manifest);
+        return true;
+    }
+
     private int SetAddonFlag(
         IEnumerable<int> addonIds, bool value, Func<InstalledModRecord, bool> get, Action<InstalledModRecord, bool> set)
     {

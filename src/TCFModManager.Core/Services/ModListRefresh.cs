@@ -74,7 +74,8 @@ public static class ModListRefresh
 
             var same = string.Equals(entry.Version?.Trim(), version, StringComparison.OrdinalIgnoreCase)
                 && entry.VersionId == versionId
-                && folders.SequenceEqual(entry.Folders, StringComparer.OrdinalIgnoreCase);
+                && folders.SequenceEqual(entry.Folders, StringComparer.OrdinalIgnoreCase)
+                && entry.FitOverride == (entry.IsAddon && candidate.FitOverride);
 
             if (same)
             {
@@ -100,6 +101,7 @@ public static class ModListRefresh
                     : entry.Guid,
 
                 Scope = entry.Scope,
+                FitOverride = entry.IsAddon && candidate.FitOverride,
                 Folders = folders,
             });
 

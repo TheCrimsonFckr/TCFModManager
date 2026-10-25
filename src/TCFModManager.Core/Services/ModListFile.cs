@@ -270,6 +270,7 @@ public static class ModListFile
             Version = entry.Version,
             Guid = entry.Guid,
             Folders = entry.Folders,
+            FitOverride = entry.FitOverride,
             Scope = ModListEntryScope.Client | ModListEntryScope.Headless,
         };
     }

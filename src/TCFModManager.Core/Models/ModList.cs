@@ -119,6 +119,11 @@ public sealed class ModListEntry
     // InstalledModScanner reports. What an unresolved entry is matched on locally.
     public List<string> Folders { get; init; } = [];
 
+    // An addon installed anyway at a version whose listed range doesn't include its mod's (OPEN-37 D5):
+    // applying the list installs that version regardless.
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public bool FitOverride { get; init; }
+
     //
     // Which machines this entry is for, or null for "every machine" - which is almost always, so
     // scope still costs nothing in a list that does not use it.

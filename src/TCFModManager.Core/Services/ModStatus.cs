@@ -31,6 +31,9 @@ public enum ModStatus
     // On disk, but newer than the newest version that fits what needs it (and this SPT) - most often
     // a major version past what the mod depending on it was made for.
     TooNew,
+
+    // An addon installed anyway, though its listed range doesn't include its mod's version (OPEN-37).
+    InstalledAnyway,
 }
 
 // The icon for a <see cref="ModStatus"/>, kept in one place so the pages can't drift apart.
@@ -47,6 +50,7 @@ public static class ModStatusDisplay
         ModStatus.Unknown => "QuestionCircle24",
         ModStatus.Disabled => "PlugDisconnected24",
         ModStatus.TooNew => "Warning24",
+        ModStatus.InstalledAnyway => "Warning24",
         _ => "ErrorCircle24",
     };
 }

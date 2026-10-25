@@ -38,6 +38,9 @@ public sealed record ModListCandidate
     // The mod folder names on disk this card covers - both halves of a client+server mod.
     public IReadOnlyList<string> Folders { get; init; } = [];
 
+    // An addon installed anyway (OPEN-37), carried onto its list entry.
+    public bool FitOverride { get; init; }
+
     //
     // Which machines a list entry built from this card is for, from where the mod's files actually
     // land: BepInEx\plugins is a client mod, user\mods is a server one, and a card covering both
@@ -154,6 +157,7 @@ public static class ModListCapture
                 // every machine says nothing about scope at all, and a list that does not use the
                 // feature is byte-identical to one written before it existed.
                 Scope = candidate.Scope,
+                FitOverride = candidate.IsAddon && candidate.FitOverride,
                 Folders = [.. candidate.Folders
                     .Where(f => !string.IsNullOrWhiteSpace(f))
                     .Select(f => f.Trim().ToLowerInvariant())

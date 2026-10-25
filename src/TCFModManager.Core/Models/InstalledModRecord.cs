@@ -97,6 +97,11 @@ public sealed class InstalledModRecord
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public bool DisabledForFit { get; set; }
 
+    // The mod version this addon was installed anyway against, when its listed range didn't include it
+    // (OPEN-37 D2). Null when it was installed normally.
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? FitOverride { get; set; }
+
     public FileFingerprint? FingerprintFor(string path) =>
         Fingerprints.FirstOrDefault(f => string.Equals(f.Path, path, StringComparison.OrdinalIgnoreCase));
 }

@@ -98,7 +98,7 @@ public static class ModListDependencies
             var listed = (addon.Versions ?? []).FirstOrDefault(v =>
                 (entry.VersionId is { } id && v.Id == id)
                 || (!string.IsNullOrWhiteSpace(entry.Version) && string.Equals(v.Version, entry.Version, StringComparison.OrdinalIgnoreCase)));
-            if (listed?.ModVersionConstraint is { Length: > 0 } constraint) need.Constraints.Add(constraint);
+            if (!entry.FitOverride && listed?.ModVersionConstraint is { Length: > 0 } constraint) need.Constraints.Add(constraint);
         }
 
         return

@@ -9,6 +9,7 @@ public enum AddonImpactVerdict
     NeedsChange,
     NoCompatibleVersion,
     Unknown,
+    Overridden,
 }
 
 public enum AddonImpactUnknownReason
@@ -39,7 +40,8 @@ public delegate Task<IReadOnlyList<AddonVersion>> AddonVersionsLookup(int addonI
 //
 // Judges an installed addon against the version its mod is about to be. The cached listing is tried
 // first; when it can't settle the answer (the installed version isn't among its latest versions, or
-// none of them fits) every published version is looked up through lookup.
+// none of them fits) every published version is looked up through lookup. An addon installed anyway
+// (overridden) that nothing fits is Overridden rather than NoCompatibleVersion (OPEN-37 D4).
 //
 public static class AddonImpact
 {
@@ -50,7 +52,8 @@ public static class AddonImpact
         string targetModVersion,
         string? sptVersion,
         AddonVersionsLookup lookup,
-        CancellationToken ct = default)
+        CancellationToken ct = default,
+        bool overridden = false)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(targetModVersion);
 
@@ -59,7 +62,7 @@ public static class AddonImpact
         if (string.IsNullOrWhiteSpace(installedVersion))
             return Unknown(addonId, installedVersion, AddonImpactUnknownReason.InstalledVersionUnknown);
 
-        if (Judge(addonId, installedVersion, listing.Versions ?? [], targetModVersion, sptVersion, complete: false) is { } cached)
+        if (Judge(addonId, installedVersion, listing.Versions ?? [], targetModVersion, sptVersion, complete: false, overridden) is { } cached)
             return cached;
 
         IReadOnlyList<AddonVersion> published;
@@ -74,7 +77,7 @@ public static class AddonImpact
             return Unknown(addonId, installedVersion, AddonImpactUnknownReason.LookupFailed);
         }
 
-        return Judge(addonId, installedVersion, [.. published.Select(Summary)], targetModVersion, sptVersion, complete: true)!;
+        return Judge(addonId, installedVersion, [.. published.Select(Summary)], targetModVersion, sptVersion, complete: true, overridden)!;
     }
 
     private static AddonImpactResult? Judge(
@@ -83,7 +86,8 @@ public static class AddonImpact
         IReadOnlyList<AddonVersionSummary> versions,
         string targetModVersion,
         string? sptVersion,
-        bool complete)
+        bool complete,
+        bool overridden)
     {
         var installed = versions.FirstOrDefault(v => SameVersion(v.Version, installedVersion));
         if (installed is null)
@@ -108,7 +112,9 @@ public static class AddonImpact
                 fitting,
                 TargetIsOlder: ModVersionComparer.Compare(fitting.Version, installedVersion) < 0);
 
-        return complete ? new(addonId, installedVersion, AddonImpactVerdict.NoCompatibleVersion) : null;
+        return complete
+            ? new(addonId, installedVersion, overridden ? AddonImpactVerdict.Overridden : AddonImpactVerdict.NoCompatibleVersion)
+            : null;
     }
 
     private static bool SameVersion(string? a, string b) =>
