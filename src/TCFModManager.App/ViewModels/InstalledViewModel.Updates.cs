@@ -1,4 +1,3 @@
-using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
@@ -235,9 +234,14 @@ public partial class InstalledViewModel
         // placed, so the new one goes on top of it.
         //
         var handInstalled = updates.Where(u => !u.Card.IsAppManaged).Select(u => u.Card.DisplayTitle).ToList();
-        if (!downloadOnly && handInstalled.Count > 0 && !Confirm(
-                Strings.Installed_UpdateHandInstalledTitle(handInstalled.Count),
-                Text(Strings.Installed_UpdateHandInstalledBodyFormat, TextLists.Join(handInstalled))))
+        if (!downloadOnly && handInstalled.Count > 0 && AskWindow.Show(new AskRequest
+            {
+                Title = Strings.Installed_UpdateNotOursTitle(handInstalled.Count, handInstalled.Count),
+                Lead = Strings.Installed_UpdateNotOursLead(handInstalled.Count),
+                Sections = [new(null, handInstalled)],
+                Detail = [Strings.Installed_UpdateNotOursDetail(handInstalled.Count)],
+                First = Strings.Installed_UpdateAnyway,
+            }) != AskChoice.First)
         {
             StatusMessage = Strings.Installed_UpdateCancelled;
             return;
@@ -304,15 +308,18 @@ public partial class InstalledViewModel
         var lines = fitting.Select(c => Text(
             Strings.AddonImpact_NoVersionLineFormat, c.DisplayTitle, c.InstalledVersion, c.ParentModName, c.ParentInstalledVersion));
 
-        var answer = MessageBox.Show(
-            Strings.AddonFit_ReEnableList + "\n" + string.Join("\n", lines) + "\n\n" + Strings.AddonFit_ReEnableQuestion,
-            Strings.AddonFit_ReEnableTitle,
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Question,
-            MessageBoxResult.Yes);
+        var answer = AskWindow.Show(new AskRequest
+        {
+            Title = Strings.AddonFit_EnableAgainTitle,
+            Lead = Strings.AddonFit_EnableAgainLead,
+            Sections = [new(null, [.. lines])],
+            First = Strings.AddonFit_EnableThem,
+            Second = Strings.AddonFit_LeaveDisabled,
+            Cancel = null,
+        });
 
         AppServices.InstallManifest.SetDisabledForFit(fitting.Select(c => c.ModId!.Value), false);
-        if (answer == MessageBoxResult.Yes) await ApplyDisableAsync(fitting, disable: false, confirm: false);
+        if (answer == AskChoice.First) await ApplyDisableAsync(fitting, disable: false, confirm: false);
     }
 
     // As the addon card picks its update (BuildAddonCard), against the version its mod is going to.

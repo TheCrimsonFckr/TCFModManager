@@ -1,5 +1,4 @@
 using System.IO;
-using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
@@ -497,9 +496,6 @@ public partial class InstalledViewModel
         !mod.IsAddon
         && mod.ModId is { } id
         && AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == id) is { ShowsProfileBindingNotice: true };
-
-    private static bool Confirm(string title, string message) =>
-        MessageBox.Show(message, title, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;
 
     /// <summary>Confirms a removal and, when the mod has config files of its own, asks what should happen to
     /// them in the same window. Returns null when the user backed out.</summary>

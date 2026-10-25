@@ -3050,17 +3050,33 @@ The copy you don't keep is moved into a hidden .tcfmm-duplicates folder in your 
     <value>Couldn't find {0} in the cached catalog - try Rescan.</value>
     <comment>{0} is one or more mod names, joined by Common_ListSeparator and Common_ListPairFormat.</comment>
   </data>
-  <data name="Installed_UpdateHandInstalledTitle_one" xml:space="preserve">
-    <value>Update a hand-installed mod?</value>
-    <comment>Dialog title. See the Many form; these become one plural key in S5.</comment>
+  <data name="Installed_UpdateNotOursTitle_one" xml:space="preserve">
+    <value>Update a mod this app didn't install?</value>
+    <comment>Title of the window asked before Update selected when some of the mods were not installed by this app.</comment>
   </data>
-  <data name="Installed_UpdateHandInstalledTitle_other" xml:space="preserve">
-    <value>Update {0} hand-installed mods?</value>
-    <comment>{0} is how many mods in the selection were not installed through this app.</comment>
+  <data name="Installed_UpdateNotOursTitle_other" xml:space="preserve">
+    <value>Update {0} mods this app didn't install?</value>
+    <comment>Title of the window asked before Update selected when some of the mods were not installed by this app. {0} how many.</comment>
   </data>
-  <data name="Installed_UpdateHandInstalledBodyFormat" xml:space="preserve">
-    <value>{0} wasn't installed through this app, so there's no record of exactly which files the current version placed. Updating installs the new version's files on top of what's already there rather than cleanly removing the old version first, so you may end up with leftover files from the old version.</value>
-    <comment>{0} is one or more mod names, joined by Common_ListSeparator and Common_ListPairFormat.</comment>
+  <data name="Installed_UpdateNotOursLead_one" xml:space="preserve">
+    <value>This mod wasn't installed by this app:</value>
+    <comment>First line of the window asked before Update selected when some of the mods were not installed by this app. Its name follows.</comment>
+  </data>
+  <data name="Installed_UpdateNotOursLead_other" xml:space="preserve">
+    <value>These mods weren't installed by this app:</value>
+    <comment>First line of the window asked before Update selected when some of the mods were not installed by this app. A list of names follows.</comment>
+  </data>
+  <data name="Installed_UpdateNotOursDetail_one" xml:space="preserve">
+    <value>The app doesn't know which files its old version added. The new files go on top of the old ones, so some old files may be left behind.</value>
+    <comment>Under the name in the window asked before Update selected when some of the mods were not installed by this app.</comment>
+  </data>
+  <data name="Installed_UpdateNotOursDetail_other" xml:space="preserve">
+    <value>The app doesn't know which files their old versions added. The new files go on top of the old ones, so some old files may be left behind.</value>
+    <comment>Under the list in the window asked before Update selected when some of the mods were not installed by this app.</comment>
+  </data>
+  <data name="Installed_UpdateAnyway" xml:space="preserve">
+    <value>Update anyway</value>
+    <comment>Button in the window asked before Update selected when some of the mods were not installed by this app. Cancel sits beside it.</comment>
   </data>
   <data name="Installed_UpdateCancelled" xml:space="preserve">
     <value>Update cancelled.</value>
@@ -10184,17 +10200,21 @@ Switch anyway?</value>
     <value>Disabled {0} - no version fits its mod's new version.</value>
     <comment>Status after an update landed and its addons with no fitting version were disabled (OPEN-32 D11). {0} is their names joined with TextLists.</comment>
   </data>
-  <data name="AddonFit_ReEnableTitle" xml:space="preserve">
-    <value>Addons fit again</value>
-    <comment>Title of the box offering back addons that were disabled for not fitting their mod (OPEN-32 D11).</comment>
+  <data name="AddonFit_EnableAgainTitle" xml:space="preserve">
+    <value>Enable these addons again?</value>
+    <comment>Title of the window that offers back addons disabled because they did not work with their mod's version (OPEN-32 D11).</comment>
   </data>
-  <data name="AddonFit_ReEnableList" xml:space="preserve">
-    <value>These addons were disabled because they didn't fit their mod, and fit it again now:</value>
-    <comment>Heads a list of AddonImpact_NoVersionLineFormat lines in the re-enable box.</comment>
+  <data name="AddonFit_EnableAgainLead" xml:space="preserve">
+    <value>These addons were disabled because they didn't work with their mod's version. They work with it again now.</value>
+    <comment>First line of the window that offers back addons disabled because they did not work with their mod's version (OPEN-32 D11). A list of AddonImpact_NoVersionLineFormat lines follows.</comment>
   </data>
-  <data name="AddonFit_ReEnableQuestion" xml:space="preserve">
-    <value>Enable them again?</value>
-    <comment>Ends the re-enable box. Yes/No, Yes by default.</comment>
+  <data name="AddonFit_EnableThem" xml:space="preserve">
+    <value>Enable them</value>
+    <comment>Button in the window that offers back addons disabled because they did not work with their mod's version (OPEN-32 D11): enable the listed addons. The default.</comment>
+  </data>
+  <data name="AddonFit_LeaveDisabled" xml:space="preserve">
+    <value>Leave disabled</value>
+    <comment>Button in the window that offers back addons disabled because they did not work with their mod's version (OPEN-32 D11): leave them disabled. Closing the window does the same. Either way, they are not offered again.</comment>
   </data>
   <data name="Installed_AddonNoFitToolTipFormat" xml:space="preserve">
     <value>Doesn't fit {0} {1}</value>
