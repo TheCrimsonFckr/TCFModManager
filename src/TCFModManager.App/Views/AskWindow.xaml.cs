@@ -54,6 +54,7 @@ public partial class AskWindow : FluentWindow
     private AskWindow(AskRequest request)
     {
         InitializeComponent();
+        DialogFit.Attach(this);
 
         Title = request.Title;
         WindowTitleBar.Title = request.Title;
