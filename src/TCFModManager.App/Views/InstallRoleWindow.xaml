@@ -24,6 +24,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <ui:TitleBar
@@ -33,7 +34,7 @@
 
         <StackPanel
             Grid.Row="1"
-            Margin="24,12,24,24">
+            Margin="24,12,24,0">
             <TextBlock
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
@@ -64,33 +65,35 @@
                 FontSize="11"
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                Margin="0,0,0,16"
                 Text="{loc:Str InstallRole_Note}" />
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <ui:Button
-                    Margin="0,0,8,0"
-                    Content="{loc:Str InstallRole_AskLater}"
-                    Click="LaterButton_Click" />
-
-                <ui:Button
-                    Margin="0,0,8,0"
-                    Content="{loc:Str InstallRole_OnlyHosts}"
-                    ToolTip="{loc:Str InstallRole_OnlyHostsToolTip}"
-                    Click="HostsOnlyButton_Click" />
-
-                <!--
-                    Primary on the answer that keeps everything, not on the one the launcher hints
-                    at. Emphasis is also what Enter picks, and of the two ways to be wrong here, a
-                    machine that quietly stops installing player mods is the one somebody has to
-                    debug.
-                -->
-                <ui:Button
-                    Appearance="Primary"
-                    Content="{loc:Str InstallRole_PlaysToo}"
-                    ToolTip="{loc:Str InstallRole_PlaysTooToolTip}"
-                    Click="PlaysHereButton_Click" />
-            </StackPanel>
         </StackPanel>
+
+        <WrapPanel Grid.Row="2" Style="{StaticResource DialogButtonBar}">
+            <ui:Button
+                Style="{StaticResource DialogButton}"
+                IsCancel="True"
+                Content="{loc:Str InstallRole_AskLater}"
+                Click="LaterButton_Click" />
+
+            <ui:Button
+                Style="{StaticResource DialogButton}"
+                Content="{loc:Str InstallRole_OnlyHosts}"
+                ToolTip="{loc:Str InstallRole_OnlyHostsToolTip}"
+                Click="HostsOnlyButton_Click" />
+
+            <!--
+                Primary on the answer that keeps everything, not on the one the launcher hints
+                at. Emphasis is also what Enter picks, and of the two ways to be wrong here, a
+                machine that quietly stops installing player mods is the one somebody has to
+                debug.
+            -->
+            <ui:Button
+                Style="{StaticResource DialogButton}"
+                Appearance="Primary"
+                IsDefault="True"
+                Content="{loc:Str InstallRole_PlaysToo}"
+                ToolTip="{loc:Str InstallRole_PlaysTooToolTip}"
+                Click="PlaysHereButton_Click" />
+        </WrapPanel>
     </Grid>
 </ui:FluentWindow>
