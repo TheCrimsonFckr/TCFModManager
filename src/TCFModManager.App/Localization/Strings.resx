@@ -1195,15 +1195,16 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="InstallRole_Intro" xml:space="preserve">
     <value>This install has a Fika headless launcher, which only appears on a setup that runs a headless client.</value>
   </data>
-  <data name="InstallRole_Explanation" xml:space="preserve">
-    <value>A headless client hosts raids without anybody playing on it, so it needs the mods that decide how a raid goes - bots, items, locations - and none of the ones that draw things at a player. Knowing which this machine is lets a server's mod list arrive trimmed to what it actually needs.</value>
+  <data name="InstallRole_WhatHeadlessNeeds" xml:space="preserve">
+    <value>A headless client hosts raids with nobody playing on it. It needs the mods that change how a raid plays, like bots, items and locations. It doesn't need mods that only change what a player sees. Telling the app which this machine is lets a server send it only the mods it needs.</value>
+    <comment>In the window asked when an install has a Fika headless launcher.</comment>
   </data>
   <data name="InstallRole_Question" xml:space="preserve">
     <value>Does anyone play the game on this machine?</value>
   </data>
-  <data name="InstallRole_Note" xml:space="preserve">
-    <value>You can change this later under Options, and it never affects a mod list of your own - only the ones a server hands you.</value>
-    <comment>Options is the page name, as in the sidebar.</comment>
+  <data name="InstallRole_ChangeLater" xml:space="preserve">
+    <value>You can change this later in Options. It only affects mod lists a server sends you, never your own.</value>
+    <comment>Small print in that window.</comment>
   </data>
   <data name="InstallRole_AskLater" xml:space="preserve">
     <value>Ask me later</value>
@@ -1240,8 +1241,9 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="ReadModPage_Title" xml:space="preserve">
     <value>Read the mod page first</value>
   </data>
-  <data name="ReadModPage_Intro" xml:space="preserve">
-    <value>Same as installing manually from sp-mod.com - open each mod's page below before this gets queued.</value>
+  <data name="ReadModPage_OpenFirst" xml:space="preserve">
+    <value>Open each mod's page below before it's queued. A mod's page has its install steps and warnings, the same as when you install from sp-mod.com by hand.</value>
+    <comment>First line of the read-the-mod-page window.</comment>
   </data>
   <data name="ReadModPage_SkipOpening" xml:space="preserve">
     <value>Skip opening them</value>
@@ -1275,8 +1277,9 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="ModListVersionChange_Title" xml:space="preserve">
     <value>Some versions are no longer published</value>
   </data>
-  <data name="ModListVersionChange_Intro" xml:space="preserve">
-    <value>These mods aren't on sp-mod.com at the version this list names any more. Tick the ones you want installed at the newest version instead - anything left unticked is skipped.</value>
+  <data name="ModListVersionChange_Lead" xml:space="preserve">
+    <value>Some of these can't be installed at the version this list names. Tick the ones to install at the newest version that works instead. Anything you leave unticked is skipped.</value>
+    <comment>First line of the window asked when a mod list names versions that are no longer published or no longer fit their mod.</comment>
   </data>
   <data name="DataFiles_Title" xml:space="preserve">
     <value>Data files</value>
@@ -1295,8 +1298,9 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="ModDisable_Title" xml:space="preserve">
     <value>Check dependencies</value>
   </data>
-  <data name="ModDisable_Note" xml:space="preserve">
-    <value>Nothing is deleted either way - disabled mods keep their own files and configs, and move back untouched when re-enabled.</value>
+  <data name="ModDisable_NothingDeleted" xml:space="preserve">
+    <value>Nothing is deleted. A disabled mod keeps its files and configs, and comes back as it was when you enable it.</value>
+    <comment>Last line of the window asked before a disable or enable that affects other mods.</comment>
   </data>
   <data name="Configs_DisclaimerTitle" xml:space="preserve">
     <value>Edit at your own discretion</value>
@@ -5334,8 +5338,9 @@ See Dependencies and Conflicts.</value>
     <value>Read {0} mod pages first</value>
     <comment>Window title. {0} is how many mods.</comment>
   </data>
-  <data name="ReadModPage_BatchNote" xml:space="preserve">
-    <value>Same as installing manually from sp-mod.com - these mods' pages are where their authors put install steps, requirements and warnings. Open them a few at a time, or skip them and queue the lot.</value>
+  <data name="ReadModPage_BatchLead" xml:space="preserve">
+    <value>Each mod's page has its install steps, requirements and warnings. Open them a few at a time, or skip them and queue them all.</value>
+    <comment>First line of the read-the-mod-page window for a long batch.</comment>
   </data>
   <data name="ReadModPage_OpenNextFormat" xml:space="preserve">
     <value>Open next {0} pages</value>
@@ -5361,13 +5366,13 @@ See Dependencies and Conflicts.</value>
     <value>All {0} pages opened.</value>
     <comment>{0} is how many pages there were.</comment>
   </data>
-  <data name="ReadModPage_ProgressFormat" xml:space="preserve">
-    <value>{0} of {1} opened - {2} to go.</value>
-    <comment>{0} is how many are opened, {1} how many there are, {2} how many are left.</comment>
+  <data name="ReadModPage_ProgressText" xml:space="preserve">
+    <value>{0} of {1} opened. {2} to go.</value>
+    <comment>Progress in the read-the-mod-page window for a long batch. {0} opened, {1} in all, {2} left.</comment>
   </data>
-  <data name="ModLists_VersionChangeRowFormat" xml:space="preserve">
-    <value>Wanted {0} - newest published is {1}</value>
-    <comment>One row in the version-change prompt. {0} is the version the list asked for, {1} what is published now or Common_Unknown.</comment>
+  <data name="ModLists_VersionChangeNewestFormat" xml:space="preserve">
+    <value>Wanted {0}. Newest published: {1}</value>
+    <comment>One mod in that window. {0} the version the list names, {1} the newest published.</comment>
   </data>
   <data name="ModLists_VersionChangeTitleNamedFormat" xml:space="preserve">
     <value>{0}'s version is no longer published</value>
@@ -5569,8 +5574,9 @@ The details are in the log:
     <value>Version {0}, from {1}</value>
     <comment>{0} is a version, {1} the name of the downloaded file.</comment>
   </data>
-  <data name="DownloadConfirm_Note" xml:space="preserve">
-    <value>Untick any that aren't right - they won't be asked about again until you download a newer version. Marking a mod installed changes nothing on disk.</value>
+  <data name="DownloadConfirm_UntickNote" xml:space="preserve">
+    <value>Untick any that are wrong. You won't be asked about them again until you download a newer version. Marking a mod installed doesn't change any files.</value>
+    <comment>Under the list in the downloaded-mods-now-installed window.</comment>
   </data>
   <data name="DownloadConfirm_NotNow" xml:space="preserve">
     <value>Not now</value>
@@ -9580,11 +9586,13 @@ See Dependencies and Conflicts.</value>
   <data name="ServerRunning_Title" xml:space="preserve">
     <value>The SPT server is running</value>
   </data>
-  <data name="ServerRunning_Closing" xml:space="preserve">
-    <value>This install's SPT server is still running. It keeps running after this app closes - stop it now, or leave it for later?</value>
+  <data name="ServerRunning_ClosingAsk" xml:space="preserve">
+    <value>This install's SPT server is still running. It keeps running after this app closes. Stop it now, or leave it running?</value>
+    <comment>Asked as the app closes with the server running.</comment>
   </data>
-  <data name="ServerRunning_ClosingHidden" xml:space="preserve">
-    <value>This install's SPT server is still running, with no window of its own - once this app closes, nothing on screen will show it is up. Stop it now, or leave it running?</value>
+  <data name="ServerRunning_ClosingHiddenAsk" xml:space="preserve">
+    <value>This install's SPT server is still running. It has no window, so once this app closes nothing on screen shows it's running. Stop it now, or leave it running?</value>
+    <comment>Asked as the app closes with the server running in the background.</comment>
   </data>
   <data name="ServerRunning_StopAndClose" xml:space="preserve">
     <value>Stop it and close</value>
@@ -9592,8 +9600,9 @@ See Dependencies and Conflicts.</value>
   <data name="ServerRunning_LeaveAndClose" xml:space="preserve">
     <value>Leave it running</value>
   </data>
-  <data name="ServerRunning_Opening" xml:space="preserve">
-    <value>This install's SPT server was already running when the app opened - left running last time, or started some other way. The Server page shows its log and can stop it.</value>
+  <data name="ServerRunning_AlreadyRunning" xml:space="preserve">
+    <value>This install's SPT server was already running when the app opened. It may have been left running last time, or started some other way. The Server page shows its log and can stop it.</value>
+    <comment>Said as the app opens on a server that is already running. "Server" is the name of a page.</comment>
   </data>
   <data name="ServerRunning_Stop" xml:space="preserve">
     <value>Stop it</value>
@@ -10151,21 +10160,13 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>{0} and its addons</value>
     <comment>Names a removal of a mod made together with its addons (OPEN-31 R2), in the Undo menu and button. {0} is the mod's name.</comment>
   </data>
-  <data name="ModLists_VersionChangeParentRowFormat" xml:space="preserve">
-    <value>Wanted {0}, which doesn't fit {1} {2} - newest that fits is {3}</value>
-    <comment>A row for an addon whose listed version doesn't fit its mod (OPEN-31 F2). {0} is the listed version, {1} the mod's name, {2} the version of the mod the apply leaves, {3} the newest addon version that fits it.</comment>
+  <data name="ModLists_VersionChangeNoFitRowFormat" xml:space="preserve">
+    <value>Wanted {0}, not made for {1} {2}. Newest that is: {3}</value>
+    <comment>One addon in that window. {0} the version the list names, {1} its mod, {2} the mod version, {3} the newest addon version made for it.</comment>
   </data>
-  <data name="ModLists_VersionChangeTitleParentFormat" xml:space="preserve">
-    <value>{0}'s version doesn't fit its mod</value>
-    <comment>Window title when the only row is such an addon. {0} is the addon's name.</comment>
-  </data>
-  <data name="ModListVersionChange_IntroAddons" xml:space="preserve">
-    <value>These addons' listed versions don't fit the version of their mod this list leaves. Tick the ones you want installed at the newest version that fits instead - anything left unticked is skipped.</value>
-    <comment>Shown above the rows instead of ModListVersionChange_Intro when every row is such an addon.</comment>
-  </data>
-  <data name="ModListVersionChange_IntroMixed" xml:space="preserve">
-    <value>Some of these mods aren't on sp-mod.com at the version this list names any more, and some are addons whose listed version doesn't fit the version of their mod this list leaves. Tick the ones you want installed at the newest version that fits instead - anything left unticked is skipped.</value>
-    <comment>Shown above the rows instead of ModListVersionChange_Intro when there are rows of both kinds.</comment>
+  <data name="ModLists_VersionChangeNoFitTitleFormat" xml:space="preserve">
+    <value>{0}: the listed version doesn't match its mod</value>
+    <comment>Title of that window for one addon. {0} the addon.</comment>
   </data>
   <data name="Help_Installed_Addons_Title" xml:space="preserve">
     <value>Remove or disable a mod with its addons</value>

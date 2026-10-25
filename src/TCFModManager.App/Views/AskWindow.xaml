@@ -12,10 +12,7 @@
     TextOptions.TextFormattingMode="Display"
     TextOptions.TextRenderingMode="ClearType">
     <ui:FluentWindow.Resources>
-        <Style x:Key="AskText" TargetType="TextBlock">
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="LineHeight" Value="21" />
-            <Setter Property="LineStackingStrategy" Value="BlockLineHeight" />
+        <Style x:Key="AskText" TargetType="TextBlock" BasedOn="{StaticResource DialogText}">
             <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
         </Style>
     </ui:FluentWindow.Resources>

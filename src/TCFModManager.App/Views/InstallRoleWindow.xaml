@@ -36,6 +36,7 @@
             Grid.Row="1"
             Margin="24,12,24,0">
             <TextBlock
+                Style="{StaticResource DialogText}"
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 Margin="0,0,0,8"
@@ -49,12 +50,14 @@
                 Margin="0,0,0,16" />
 
             <TextBlock
+                Style="{StaticResource DialogText}"
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Margin="0,0,0,16"
-                Text="{loc:Str InstallRole_Explanation}" />
+                Text="{loc:Str InstallRole_WhatHeadlessNeeds}" />
 
             <TextBlock
+                Style="{StaticResource DialogText}"
                 FontWeight="SemiBold"
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
@@ -65,7 +68,7 @@
                 FontSize="11"
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                Text="{loc:Str InstallRole_Note}" />
+                Text="{loc:Str InstallRole_ChangeLater}" />
         </StackPanel>
 
         <WrapPanel Grid.Row="2" Style="{StaticResource DialogButtonBar}">

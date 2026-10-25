@@ -33,11 +33,13 @@
             Grid.Row="1"
             Margin="24,12,24,0">
             <TextBlock
+                Style="{StaticResource DialogText}"
                 x:Name="SummaryText"
                 TextWrapping="Wrap"
                 Margin="0,0,0,4" />
 
             <TextBlock
+                Style="{StaticResource DialogText}"
                 x:Name="TargetsText"
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
@@ -85,10 +87,11 @@
             </ScrollViewer>
 
             <TextBlock
+                Style="{StaticResource DialogText}"
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Margin="0,12,0,0"
-                Text="{loc:Str ModDisable_Note}" />
+                Text="{loc:Str ModDisable_NothingDeleted}" />
         </StackPanel>
 
         <WrapPanel Grid.Row="2" Style="{StaticResource DialogButtonBar}">

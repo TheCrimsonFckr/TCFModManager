@@ -85,7 +85,7 @@ public partial class ReadModPageConfirmationWindow : FluentWindow
         {
             BatchBar.Visibility = Visibility.Visible;
             IntroText.Text =
-                Strings.ReadModPage_BatchNote;
+                Strings.ReadModPage_BatchLead;
         }
 
         UpdateContinueEnabled();
@@ -147,7 +147,7 @@ public partial class ReadModPageConfirmationWindow : FluentWindow
             : remaining == 0
                 ? Text(Strings.ReadModPage_AllOpenedFormat, _links.Count)
                 : Text(
-                    Strings.ReadModPage_ProgressFormat,
+                    Strings.ReadModPage_ProgressText,
                     _links.Count - remaining,
                     _links.Count,
                     remaining);

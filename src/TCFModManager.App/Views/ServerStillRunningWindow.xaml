@@ -24,6 +24,7 @@
 
         <StackPanel Grid.Row="1" Margin="24,12,24,0">
             <TextBlock
+                Style="{StaticResource DialogText}"
                 x:Name="MessageText"
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"

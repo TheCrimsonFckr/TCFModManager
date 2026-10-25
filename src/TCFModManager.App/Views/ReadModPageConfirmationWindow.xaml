@@ -32,15 +32,17 @@
             Grid.Row="1"
             Margin="24,12,24,0">
             <TextBlock
+                Style="{StaticResource DialogText}"
                 x:Name="IntroText"
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Margin="0,0,0,16"
-                Text="{loc:Str ReadModPage_Intro}" />
+                Text="{loc:Str ReadModPage_OpenFirst}" />
 
             <!-- Shown only for a batch too long to open a page at a time. -->
             <StackPanel x:Name="BatchBar" Margin="0,0,0,16" Visibility="Collapsed">
                 <TextBlock
+                    Style="{StaticResource DialogText}"
                     x:Name="BatchProgress"
                     TextWrapping="Wrap"
                     Margin="0,0,0,8"

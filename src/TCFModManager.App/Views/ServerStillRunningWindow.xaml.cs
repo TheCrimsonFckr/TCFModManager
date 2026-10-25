@@ -44,13 +44,13 @@ public partial class ServerStillRunningWindow : FluentWindow
 
         if (closing)
         {
-            MessageText.Text = hidden ? Strings.ServerRunning_ClosingHidden : Strings.ServerRunning_Closing;
+            MessageText.Text = hidden ? Strings.ServerRunning_ClosingHiddenAsk : Strings.ServerRunning_ClosingAsk;
             StopButton.Content = Strings.ServerRunning_StopAndClose;
             LeaveButton.Content = Strings.ServerRunning_LeaveAndClose;
         }
         else
         {
-            MessageText.Text = Strings.ServerRunning_Opening;
+            MessageText.Text = Strings.ServerRunning_AlreadyRunning;
             StopButton.Content = Strings.ServerRunning_Stop;
             LeaveButton.Content = Strings.ServerRunning_ShowPlay;
             CancelButton.Content = Strings.ServerRunning_LeaveRunning;
