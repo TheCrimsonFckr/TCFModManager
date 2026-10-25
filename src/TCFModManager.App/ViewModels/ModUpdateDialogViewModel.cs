@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net.Http;
-using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
@@ -441,12 +440,15 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     {
         if (SelectedVersion is not { } selected) return;
 
-        if (!Confirm(
-                Text(Strings.ModUpdate_DowngradeTitleFormat, _mod.DisplayTitle, selected.VersionText),
-                Text(
-                    Strings.ModUpdate_DowngradeBodyFormat,
-                    InstalledVersionText ?? Strings.ModUpdate_ANewerVersion,
-                    selected.VersionText)))
+        if (AskWindow.Show(new AskRequest
+            {
+                Title = Text(Strings.ModUpdate_DowngradeTitleFormat, _mod.DisplayTitle, selected.VersionText),
+                Warning = Strings.ModUpdate_DowngradeBackUp,
+                Lead = Text(Strings.ModUpdate_DowngradeLeadFormat, InstalledVersionText ?? Strings.ModUpdate_ANewerVersion, selected.VersionText),
+                Sections = [new(Strings.ModUpdate_DowngradeCantUndoHeading, [Strings.ModUpdate_DowngradeItemConfigs, Strings.ModUpdate_DowngradeItemProfile])],
+                Detail = [Strings.ModUpdate_DowngradeMayNotLoad],
+                First = Strings.ModUpdate_DowngradeButton,
+            }) != AskChoice.First)
         {
             StatusMessage = Strings.ModUpdate_DowngradeCancelled;
             return;
@@ -544,8 +546,9 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
 
         // The hand-installed warning is about this app placing files over ones it has no record of.
         // A download places nothing, so there is nothing to warn about.
-        if (!downloadOnly && !_mod.IsAppManaged && !Confirm(
-                Text(
+        if (!downloadOnly && !_mod.IsAppManaged && AskWindow.Show(new AskRequest
+            {
+                Title = Text(
                     action switch
                     {
                         ModUpdateAction.Redownload => Strings.ModUpdate_HandInstalledRedownloadTitleFormat,
@@ -553,12 +556,15 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
                         _ => Strings.ModUpdate_HandInstalledUpdateTitleFormat,
                     },
                     _mod.DisplayTitle),
-                action switch
+                Lead = Text(Strings.ModUpdate_NotOursLeadFormat, _mod.DisplayTitle),
+                Detail = [Strings.ModUpdate_NotOursDetail],
+                First = action switch
                 {
-                    ModUpdateAction.Redownload => Strings.ModUpdate_HandInstalledRedownloadBody,
-                    ModUpdateAction.Downgrade => Strings.ModUpdate_HandInstalledDowngradeBody,
-                    _ => Strings.ModUpdate_HandInstalledUpdateBody,
-                }))
+                    ModUpdateAction.Redownload => Strings.ModUpdate_RedownloadAnyway,
+                    ModUpdateAction.Downgrade => Strings.ModUpdate_DowngradeAnyway,
+                    _ => Strings.ModUpdate_UpdateAnyway,
+                },
+            }) != AskChoice.First)
         {
             return;
         }
@@ -611,9 +617,6 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
             : queued + " " + Text(Strings.AddonImpact_QueuedFormat, TextLists.Join(queuedAddons));
         MadeChanges = true;
     }
-
-    private static bool Confirm(string title, string message) =>
-        MessageBox.Show(message, title, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;
 
     // Opens ModPageUrl in the OS's default browser.
     [RelayCommand]

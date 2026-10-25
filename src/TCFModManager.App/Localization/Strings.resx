@@ -3935,13 +3935,53 @@ Whichever you pick, the version currently on disk is copied into {1} first.</val
     <value>Downgrade {0} to {1}?</value>
     <comment>{0} is a mod name, {1} the version being installed. Dialog title.</comment>
   </data>
-  <data name="ModUpdate_DowngradeBodyFormat" xml:space="preserve">
-    <value>You have {0} installed, and this will replace it with {1}.
-
-Replacing the files is the easy half. What this app cannot undo is anything the newer version has already written - its own config files, and any changes it made to your SPT profile. An older build may not read those back, and some mods change their data format between versions, which can leave a profile the older version refuses to load.
-
-Back up your profile before continuing if it matters to you.</value>
-    <comment>{0} is the installed version, {1} the older version being installed over it.</comment>
+  <data name="ModUpdate_DowngradeBackUp" xml:space="preserve">
+    <value>Back up your profile first if it matters to you.</value>
+    <comment>Warning at the top of the window asked before a downgrade.</comment>
+  </data>
+  <data name="ModUpdate_DowngradeLeadFormat" xml:space="preserve">
+    <value>This replaces {0} with {1}.</value>
+    <comment>First line of the window asked before a downgrade. {0} the installed version (or ModUpdate_ANewerVersion), {1} the older version.</comment>
+  </data>
+  <data name="ModUpdate_DowngradeCantUndoHeading" xml:space="preserve">
+    <value>Swapping the files is easy. The app can't undo what the newer version has already changed:</value>
+    <comment>Heads a two-item list in the window asked before a downgrade.</comment>
+  </data>
+  <data name="ModUpdate_DowngradeItemConfigs" xml:space="preserve">
+    <value>its own config files</value>
+    <comment>First item of that list in the window asked before a downgrade.</comment>
+  </data>
+  <data name="ModUpdate_DowngradeItemProfile" xml:space="preserve">
+    <value>your SPT profile</value>
+    <comment>Second item of that list in the window asked before a downgrade.</comment>
+  </data>
+  <data name="ModUpdate_DowngradeMayNotLoad" xml:space="preserve">
+    <value>An older version may not be able to read these. Your profile might then fail to load.</value>
+    <comment>Under that list in the window asked before a downgrade.</comment>
+  </data>
+  <data name="ModUpdate_DowngradeButton" xml:space="preserve">
+    <value>Downgrade</value>
+    <comment>Button in the window asked before a downgrade. Cancel sits beside it.</comment>
+  </data>
+  <data name="ModUpdate_NotOursLeadFormat" xml:space="preserve">
+    <value>This app didn't install {0}, so it doesn't know which files the old version added.</value>
+    <comment>First line of the window asked before updating, redownloading or downgrading a mod this app did not install. {0} the mod.</comment>
+  </data>
+  <data name="ModUpdate_NotOursDetail" xml:space="preserve">
+    <value>The new files go on top of the old ones. Some old files may be left behind.</value>
+    <comment>Under that line in the window asked before updating, redownloading or downgrading a mod this app did not install.</comment>
+  </data>
+  <data name="ModUpdate_UpdateAnyway" xml:space="preserve">
+    <value>Update anyway</value>
+    <comment>Button in the window asked before updating, redownloading or downgrading a mod this app did not install, for an update.</comment>
+  </data>
+  <data name="ModUpdate_RedownloadAnyway" xml:space="preserve">
+    <value>Redownload anyway</value>
+    <comment>Button in the window asked before updating, redownloading or downgrading a mod this app did not install, for a redownload.</comment>
+  </data>
+  <data name="ModUpdate_DowngradeAnyway" xml:space="preserve">
+    <value>Downgrade anyway</value>
+    <comment>Button in the window asked before updating, redownloading or downgrading a mod this app did not install, for a downgrade.</comment>
   </data>
   <data name="ModUpdate_ANewerVersion" xml:space="preserve">
     <value>a newer version</value>
@@ -3965,16 +4005,6 @@ Back up your profile before continuing if it matters to you.</value>
   <data name="ModUpdate_HandInstalledDowngradeTitleFormat" xml:space="preserve">
     <value>Downgrade {0}?</value>
     <comment>{0} is a mod name. Dialog title.</comment>
-  </data>
-  <data name="ModUpdate_HandInstalledUpdateBody" xml:space="preserve">
-    <value>This mod wasn't installed through this app, so there's no record of exactly which files its current version placed - updating installs the selected version's files on top of what's already there rather than cleanly removing the old version first. You may end up with leftover files from the old version.</value>
-    <comment>One whole paragraph per action rather than one with the verb dropped into it. The app used to build "updating" from the button's label by English spelling rules, which no other language follows.</comment>
-  </data>
-  <data name="ModUpdate_HandInstalledRedownloadBody" xml:space="preserve">
-    <value>This mod wasn't installed through this app, so there's no record of exactly which files its current version placed - redownloading installs the selected version's files on top of what's already there rather than cleanly removing the old version first. You may end up with leftover files from the old version.</value>
-  </data>
-  <data name="ModUpdate_HandInstalledDowngradeBody" xml:space="preserve">
-    <value>This mod wasn't installed through this app, so there's no record of exactly which files its current version placed - downgrading installs the selected version's files on top of what's already there rather than cleanly removing the old version first. You may end up with leftover files from the old version.</value>
   </data>
   <data name="ModUpdate_UpdateCancelledFormat" xml:space="preserve">
     <value>Update cancelled - {0}'s page wasn't confirmed as read.</value>
