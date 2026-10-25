@@ -34,6 +34,7 @@ public partial class InstallRoleWindow : FluentWindow
     private InstallRoleWindow(string launcherPath)
     {
         InitializeComponent();
+        DialogFit.Attach(this);
 
         LauncherText.Text = LocalizationService.Text(
             Strings.Options_HeadlessFoundFormat, launcherPath);

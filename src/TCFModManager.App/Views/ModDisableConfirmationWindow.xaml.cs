@@ -48,6 +48,7 @@ public partial class ModDisableConfirmationWindow : FluentWindow
         bool disabling, IReadOnlyList<string> targets, IReadOnlyList<ModDisableImpactRow> impact, string? summary)
     {
         InitializeComponent();
+        DialogFit.Attach(this);
 
         // One whole title per action and count rather than a verb and a noun phrase concatenated.
         WindowTitleBar.Title = Title = targets.Count == 1

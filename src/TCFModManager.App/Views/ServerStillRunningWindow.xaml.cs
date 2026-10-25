@@ -32,6 +32,7 @@ public partial class ServerStillRunningWindow : FluentWindow
     {
         _closing = closing;
         InitializeComponent();
+        DialogFit.Attach(this);
 
         // Quitting from the tray, or the app ending some other way, can't be called off.
         if (closing && !canCancel)

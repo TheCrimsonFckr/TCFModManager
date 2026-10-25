@@ -21,6 +21,7 @@ public partial class CreditsWindow : FluentWindow
     private CreditsWindow(Window? owner)
     {
         InitializeComponent();
+        DialogFit.Attach(this);
 
         Title = Strings.Credits_Title;
         Owner = owner;

@@ -48,6 +48,7 @@ public partial class ModListVersionChangeWindow : FluentWindow
     {
         _rows = [.. changes.Select(c => new ModListVersionChangeRow(c))];
         InitializeComponent();
+        DialogFit.Attach(this);
 
         WindowTitleBar.Title = Title = _rows.Count == 1
             ? Text(

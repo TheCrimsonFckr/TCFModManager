@@ -19,14 +19,16 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <ui:TitleBar
             x:Name="WindowTitleBar"
             Grid.Row="0"
-            Title="{loc:Str DownloadConfirm_Title}" />
+            Title="{loc:Str DownloadConfirm_Title}"
+            ShowMinimize="False"
+            ShowMaximize="False" />
 
         <StackPanel
             Grid.Row="1"

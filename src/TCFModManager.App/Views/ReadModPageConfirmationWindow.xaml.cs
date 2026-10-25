@@ -70,6 +70,7 @@ public partial class ReadModPageConfirmationWindow : FluentWindow
     {
         _links = links.ToList();
         InitializeComponent();
+        DialogFit.Attach(this);
 
         WindowTitleBar.Title = Title = _links.Count == 1
             ? Text(Strings.ReadModPage_TitleNamedFormat, _links[0].Name)

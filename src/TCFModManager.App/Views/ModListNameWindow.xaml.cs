@@ -10,6 +10,7 @@ public partial class ModListNameWindow : FluentWindow
     private ModListNameWindow(string title, string description, string confirm, SymbolRegular icon)
     {
         InitializeComponent();
+        DialogFit.Attach(this);
 
         WindowTitleBar.Title = title;
         DescriptionText.Text = description;

@@ -32,6 +32,7 @@ public partial class DownloadConfirmWindow : FluentWindow
     private DownloadConfirmWindow(IReadOnlyList<DownloadedModRecord> downloads)
     {
         InitializeComponent();
+        DialogFit.Attach(this);
 
         _rows = [.. downloads.Select(d => new DownloadConfirmRow(d))];
 
