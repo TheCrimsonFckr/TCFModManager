@@ -8720,4 +8720,22 @@ Les détails sont dans le journal :
   <data name="Addon_InstallAnywayButton" xml:space="preserve">
     <value>Installer quand même</value>
   </data>
+  <data name="Filter_NotFikaCompatible" xml:space="preserve">
+    <value>Non compatible Fika</value>
+  </data>
+  <data name="Filter_FikaUnknown" xml:space="preserve">
+    <value>Compatibilité Fika inconnue</value>
+  </data>
+  <data name="Filter_NotFikaCompatibleBrowseToolTip" xml:space="preserve">
+    <value>Uniquement les mods dont la version affichée ne fonctionne pas avec Fika selon sp-mod.</value>
+  </data>
+  <data name="Filter_NotFikaCompatibleInstalledToolTip" xml:space="preserve">
+    <value>Uniquement les mods dont la version installée ne fonctionne pas avec Fika selon sp-mod.</value>
+  </data>
+  <data name="Filter_FikaUnknownBrowseToolTip" xml:space="preserve">
+    <value>Uniquement les mods pour lesquels sp-mod n'indique pas si la version affichée fonctionne avec Fika.</value>
+  </data>
+  <data name="Filter_FikaUnknownInstalledToolTip" xml:space="preserve">
+    <value>Uniquement les mods pour lesquels sp-mod n'indique pas si votre version installée fonctionne avec Fika.</value>
+  </data>
 </root>

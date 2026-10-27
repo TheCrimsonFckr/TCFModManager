@@ -42,6 +42,8 @@ public partial class InstalledViewModel
             .Where(m => SelectedCategory.Title is not { } category
                 || string.Equals(m.CategoryTag, category, StringComparison.OrdinalIgnoreCase))
             .Where(m => !IsOn(ModAttributeFilter.FikaCompatible) || m.IsFikaCompatible)
+            .Where(m => !IsOn(ModAttributeFilter.NotFikaCompatible) || m.IsReleaseFikaIncompatible)
+            .Where(m => !IsOn(ModAttributeFilter.FikaUnknown) || m.IsReleaseFikaUnknown)
             .Where(m => !IsOn(ModAttributeFilter.HideAds) || !m.ContainsAds)
             .Where(m => !IsOn(ModAttributeFilter.HasDependencies) || m.HasDependencies)
             .Where(m => !IsOn(ModAttributeFilter.HasAddons) || m.HasAddons)

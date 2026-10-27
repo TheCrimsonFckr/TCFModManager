@@ -168,7 +168,10 @@ public partial class BrowseViewModel
     //
     public ObservableCollection<ModAttributeOption> AttributeOptions { get; } =
     [
-        .. ModAttributeOption.Standard(nameof(Strings.Filter_HasDependenciesBrowseToolTip)),
+        .. ModAttributeOption.Standard(
+            nameof(Strings.Filter_HasDependenciesBrowseToolTip),
+            nameof(Strings.Filter_NotFikaCompatibleBrowseToolTip),
+            nameof(Strings.Filter_FikaUnknownBrowseToolTip)),
         new(ModAttributeFilter.HideInstalled,
             nameof(Strings.Filter_HideInstalled),
             nameof(Strings.Filter_HideInstalledToolTip)),

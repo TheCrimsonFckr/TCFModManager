@@ -48,6 +48,13 @@ public enum ModAttributeFilter
 
     // Only mods with at least one addon installed, and those addons. Installed only.
     HasInstalledAddons,
+
+    // Only mods whose release sp-mod marks as not working with Fika: the installed version on
+    // Installed, the release the card shows on Browse.
+    NotFikaCompatible,
+
+    // Only mods whose release sp-mod gives no Fika answer for, same release as NotFikaCompatible.
+    FikaUnknown,
 }
 
 //
@@ -82,9 +89,12 @@ public partial class ModAttributeOption(ModAttributeFilter value, string key, st
     // everything installed, while Browse answers from whatever has been looked up so far. So the
     // caller states that one rather than this list pretending they are the same.
     //
-    public static ObservableCollection<ModAttributeOption> Standard(string dependenciesToolTipKey) =>
+    public static ObservableCollection<ModAttributeOption> Standard(
+        string dependenciesToolTipKey, string notFikaCompatibleToolTipKey, string fikaUnknownToolTipKey) =>
     [
         new(ModAttributeFilter.FikaCompatible, nameof(Strings.Filter_FikaOnly)),
+        new(ModAttributeFilter.NotFikaCompatible, nameof(Strings.Filter_NotFikaCompatible), notFikaCompatibleToolTipKey),
+        new(ModAttributeFilter.FikaUnknown, nameof(Strings.Filter_FikaUnknown), fikaUnknownToolTipKey),
         new(ModAttributeFilter.HideAds, nameof(Strings.Filter_HideAds)),
         new(ModAttributeFilter.HasDependencies, nameof(Strings.Filter_HasDependencies), dependenciesToolTipKey),
         new(ModAttributeFilter.HasAddons, nameof(Strings.Filter_HasAddons), nameof(Strings.Filter_HasAddonsToolTip)),

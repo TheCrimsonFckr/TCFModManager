@@ -423,8 +423,10 @@ public sealed partial class InstalledModCardViewModel
             : InstalledSptFit.Judge(installedVersion, installedSptVersion, match?.Versions,
                 AppServices.HeldBack.NotForSpt(match?.Id, installedSptVersion), server?.SptVersion);
 
-        var fikaIncompatible = fikaPresent && !versionUndetermined
-            && FikaInstall.IsIncompatible(InstalledSptFit.Release(installedVersion, match?.Versions)?.FikaCompatibility);
+        var installedReleaseFika = versionUndetermined
+            ? null
+            : InstalledSptFit.Release(installedVersion, match?.Versions)?.FikaCompatibility;
+        var fikaIncompatible = fikaPresent && FikaInstall.IsIncompatible(installedReleaseFika);
 
         var sptWarningKey = DismissedSptWarningStore.Key(
             match?.Id.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? (client?.Name ?? server!.Name),
@@ -437,6 +439,8 @@ public sealed partial class InstalledModCardViewModel
             IsSptWarningDismissed = dismissedSpt?.Contains(sptWarningKey) == true,
             InstalledSptVersion = installedSptVersion,
             IsFikaIncompatible = fikaIncompatible,
+            IsReleaseFikaIncompatible = FikaInstall.IsIncompatible(installedReleaseFika),
+            IsReleaseFikaUnknown = match is not null && FikaInstall.IsUnknown(installedReleaseFika),
             // Client's folder/package name wins when client and server disagree.
             Name = client?.Name ?? server!.Name,
             InstalledVersion = installedVersion,

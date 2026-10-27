@@ -2886,4 +2886,10 @@ internal static class Strings
     internal static string Help_Browse_AddonAnyway_Keywords => LocalizationService.Get("Help_Browse_AddonAnyway_Keywords");
     internal static string AddonImpact_Overridden => LocalizationService.Get("AddonImpact_Overridden");
     internal static string ModLists_EntryInstalledAnyway => LocalizationService.Get("ModLists_EntryInstalledAnyway");
+    internal static string Filter_NotFikaCompatible => LocalizationService.Get("Filter_NotFikaCompatible");
+    internal static string Filter_FikaUnknown => LocalizationService.Get("Filter_FikaUnknown");
+    internal static string Filter_NotFikaCompatibleBrowseToolTip => LocalizationService.Get("Filter_NotFikaCompatibleBrowseToolTip");
+    internal static string Filter_NotFikaCompatibleInstalledToolTip => LocalizationService.Get("Filter_NotFikaCompatibleInstalledToolTip");
+    internal static string Filter_FikaUnknownBrowseToolTip => LocalizationService.Get("Filter_FikaUnknownBrowseToolTip");
+    internal static string Filter_FikaUnknownInstalledToolTip => LocalizationService.Get("Filter_FikaUnknownInstalledToolTip");
 }

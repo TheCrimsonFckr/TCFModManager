@@ -8720,4 +8720,22 @@ Die Details stehen im Log:
   <data name="Addon_InstallAnywayButton" xml:space="preserve">
     <value>Trotzdem installieren</value>
   </data>
+  <data name="Filter_NotFikaCompatible" xml:space="preserve">
+    <value>Nicht Fika-kompatibel</value>
+  </data>
+  <data name="Filter_FikaUnknown" xml:space="preserve">
+    <value>Fika-Kompatibilität unbekannt</value>
+  </data>
+  <data name="Filter_NotFikaCompatibleBrowseToolTip" xml:space="preserve">
+    <value>Nur Mods, deren angezeigte Version laut sp-mod nicht mit Fika funktioniert.</value>
+  </data>
+  <data name="Filter_NotFikaCompatibleInstalledToolTip" xml:space="preserve">
+    <value>Nur Mods, deren installierte Version laut sp-mod nicht mit Fika funktioniert.</value>
+  </data>
+  <data name="Filter_FikaUnknownBrowseToolTip" xml:space="preserve">
+    <value>Nur Mods, bei denen sp-mod nicht angibt, ob die angezeigte Version mit Fika funktioniert.</value>
+  </data>
+  <data name="Filter_FikaUnknownInstalledToolTip" xml:space="preserve">
+    <value>Nur Mods, bei denen sp-mod nicht angibt, ob deine installierte Version mit Fika funktioniert.</value>
+  </data>
 </root>

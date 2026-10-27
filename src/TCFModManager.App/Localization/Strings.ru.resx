@@ -9098,4 +9098,22 @@
   <data name="Addon_InstallAnywayButton" xml:space="preserve">
     <value>Всё равно установить</value>
   </data>
+  <data name="Filter_NotFikaCompatible" xml:space="preserve">
+    <value>Несовместимые с Fika</value>
+  </data>
+  <data name="Filter_FikaUnknown" xml:space="preserve">
+    <value>Совместимость с Fika неизвестна</value>
+  </data>
+  <data name="Filter_NotFikaCompatibleBrowseToolTip" xml:space="preserve">
+    <value>Только моды, чья показанная версия, по данным sp-mod, не работает с Fika.</value>
+  </data>
+  <data name="Filter_NotFikaCompatibleInstalledToolTip" xml:space="preserve">
+    <value>Только моды, чья установленная версия, по данным sp-mod, не работает с Fika.</value>
+  </data>
+  <data name="Filter_FikaUnknownBrowseToolTip" xml:space="preserve">
+    <value>Только моды, для показанной версии которых sp-mod не указывает, работает ли она с Fika.</value>
+  </data>
+  <data name="Filter_FikaUnknownInstalledToolTip" xml:space="preserve">
+    <value>Только моды, для установленной версии которых sp-mod не указывает, работает ли она с Fika.</value>
+  </data>
 </root>

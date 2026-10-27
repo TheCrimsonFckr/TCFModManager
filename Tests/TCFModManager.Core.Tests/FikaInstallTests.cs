@@ -52,4 +52,14 @@ public class FikaInstallTests
     [InlineData(null, false)]
     public void Only_a_version_marked_incompatible_is_asked_about(string? value, bool expected) =>
         Assert.Equal(expected, FikaInstall.IsIncompatible(value));
+
+    [Theory]
+    [InlineData("compatible", false)]
+    [InlineData(" Compatible ", false)]
+    [InlineData("incompatible", false)]
+    [InlineData("unknown", true)]
+    [InlineData("", true)]
+    [InlineData(null, true)]
+    public void A_version_with_no_answer_either_way_is_unknown(string? value, bool expected) =>
+        Assert.Equal(expected, FikaInstall.IsUnknown(value));
 }

@@ -15,6 +15,8 @@ public static class FikaInstall
     // sp-mod's fika_compatibility for a version that doesn't work with Fika.
     public const string Incompatible = "incompatible";
 
+    public const string Compatible = "compatible";
+
     public static bool IsPresent(IEnumerable<InstalledMod> scanned) =>
         scanned.Any(m => !m.IsDisabled
             && (m.AllGuids.Any(g => g.StartsWith(GuidPrefix, StringComparison.OrdinalIgnoreCase))
@@ -22,6 +24,12 @@ public static class FikaInstall
 
     public static bool IsIncompatible(string? fikaCompatibility) =>
         string.Equals(fikaCompatibility?.Trim(), Incompatible, StringComparison.OrdinalIgnoreCase);
+
+    public static bool IsCompatible(string? fikaCompatibility) =>
+        string.Equals(fikaCompatibility?.Trim(), Compatible, StringComparison.OrdinalIgnoreCase);
+
+    public static bool IsUnknown(string? fikaCompatibility) =>
+        !IsCompatible(fikaCompatibility) && !IsIncompatible(fikaCompatibility);
 
     private static bool IsFikaServerFolder(string name) =>
         name.StartsWith("fika", StringComparison.OrdinalIgnoreCase)

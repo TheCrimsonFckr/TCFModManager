@@ -73,7 +73,10 @@ public partial class InstalledViewModel
     // Plus one of Installed's own: Monitor mode downloads that are on disk but unconfirmed (R8).
     public ObservableCollection<ModAttributeOption> AttributeOptions { get; } =
     [
-        .. ModAttributeOption.Standard(nameof(Strings.Filter_HasDependenciesInstalledToolTip)),
+        .. ModAttributeOption.Standard(
+            nameof(Strings.Filter_HasDependenciesInstalledToolTip),
+            nameof(Strings.Filter_NotFikaCompatibleInstalledToolTip),
+            nameof(Strings.Filter_FikaUnknownInstalledToolTip)),
         new(ModAttributeFilter.DownloadedNotConfirmed,
             nameof(Strings.Filter_DownloadedNotConfirmed),
             nameof(Strings.Filter_DownloadedNotConfirmedToolTip)),

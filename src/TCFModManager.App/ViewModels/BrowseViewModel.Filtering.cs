@@ -65,6 +65,10 @@ public partial class BrowseViewModel
             .Where(m => SelectedCategory.Title is not { } category
                 || string.Equals(m.Category?.Title, category, StringComparison.OrdinalIgnoreCase))
             .Where(m => !IsOn(ModAttributeFilter.FikaCompatible) || m.FikaCompatibility == true)
+            .Where(m => !IsOn(ModAttributeFilter.NotFikaCompatible)
+                || FikaInstall.IsIncompatible(ModCardViewModel.PickDisplayVersion(m, sptForDates)?.FikaCompatibility))
+            .Where(m => !IsOn(ModAttributeFilter.FikaUnknown)
+                || FikaInstall.IsUnknown(ModCardViewModel.PickDisplayVersion(m, sptForDates)?.FikaCompatibility))
             .Where(m => !IsOn(ModAttributeFilter.HideAds) || m.ContainsAds != true)
             .Where(m => !IsOn(ModAttributeFilter.HasAddons) || AppServices.Addons.CountFor(m.Id) > 0)
             .Where(m => !IsOn(ModAttributeFilter.HideInstalled) || FindInstalledMatch(m) is null)

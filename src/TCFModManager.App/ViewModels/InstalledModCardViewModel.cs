@@ -128,6 +128,12 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // R5: Fika runs on this install and sp-mod marks the installed release as not working with it.
     public bool IsFikaIncompatible { get; init; }
 
+    // sp-mod marks the installed release as not working with Fika, whether or not Fika runs here.
+    public bool IsReleaseFikaIncompatible { get; init; }
+
+    // Matched on sp-mod, but the installed release has no Fika answer there.
+    public bool IsReleaseFikaUnknown { get; init; }
+
     // Either reason to warn, whether or not the user dismissed it.
     public bool HasSptWarning => SptFit is { Fits: false } || IsFikaIncompatible;
 

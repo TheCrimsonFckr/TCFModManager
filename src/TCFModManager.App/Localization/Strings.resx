@@ -10522,4 +10522,28 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>installed anyway</value>
     <comment>One fact on a list entry's line: an addon installed even though its author doesn't list the mod version it goes with (OPEN-37). Applying the list installs it the same way.</comment>
   </data>
+  <data name="Filter_NotFikaCompatible" xml:space="preserve">
+    <value>Not Fika compatible</value>
+    <comment>Tick box under Show on Browse and Installed. Fika is a mod's name and stays as it is.</comment>
+  </data>
+  <data name="Filter_FikaUnknown" xml:space="preserve">
+    <value>Fika compatibility unknown</value>
+    <comment>Tick box under Show on Browse and Installed: sp-mod gives no Fika answer for the release. Fika is a mod's name and stays as it is.</comment>
+  </data>
+  <data name="Filter_NotFikaCompatibleBrowseToolTip" xml:space="preserve">
+    <value>Only mods where sp-mod marks the release shown as not working with Fika.</value>
+    <comment>On Browse, where the release is the one the card shows.</comment>
+  </data>
+  <data name="Filter_NotFikaCompatibleInstalledToolTip" xml:space="preserve">
+    <value>Only mods where sp-mod marks your installed version as not working with Fika.</value>
+    <comment>On Installed, where the release is the installed version.</comment>
+  </data>
+  <data name="Filter_FikaUnknownBrowseToolTip" xml:space="preserve">
+    <value>Only mods where sp-mod doesn't say whether the release shown works with Fika.</value>
+    <comment>On Browse, where the release is the one the card shows.</comment>
+  </data>
+  <data name="Filter_FikaUnknownInstalledToolTip" xml:space="preserve">
+    <value>Only mods where sp-mod doesn't say whether your installed version works with Fika.</value>
+    <comment>On Installed, where the release is the installed version.</comment>
+  </data>
 </root>
