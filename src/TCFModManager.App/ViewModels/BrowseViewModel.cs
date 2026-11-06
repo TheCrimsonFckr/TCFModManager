@@ -91,6 +91,8 @@ public partial class BrowseViewModel : LocalizedViewModel
         // Held-back updates (OPEN-12 F11) change which installed mods show an update, the same way.
         AppServices.HeldBack.Changed += async (_, _) => await RefreshAfterUpdateCheckAsync();
 
+        AppServices.ModCache.CatalogChanged += async (_, _) => await RefreshAfterUpdateCheckAsync();
+
         // Before the subscription below, so applying a saved default doesn't count as a change.
         SavedFilterDefaults.ApplyAttributes(AttributeOptions, _defaults?.Attributes);
 

@@ -165,6 +165,12 @@ public partial class InstalledViewModel : LocalizedViewModel
             await ScanCommand.ExecuteAsync(null);
         };
 
+        AppServices.ModCache.CatalogChanged += async (_, _) =>
+        {
+            if (!_hasScanned || ScanCommand.IsRunning) return;
+            await ScanCommand.ExecuteAsync(null);
+        };
+
         // A queued install or update finished (Chris, 2026-10-07): the cards were built before it.
         AppServices.DownloadQueue.ItemInstalled += async (_, _) => await RescanAfterInstallAsync();
 

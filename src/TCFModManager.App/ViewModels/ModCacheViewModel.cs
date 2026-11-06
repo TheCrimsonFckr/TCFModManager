@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using TCFModManager.App.Localization;
 using TCFModManager.Core.SpModApi;
@@ -186,20 +187,41 @@ public partial class ModCacheViewModel : LocalizedViewModel
         try
         {
             var fresh = await _cacheService.FetchAllAsync(null, ct).ConfigureAwait(false);
+            var changed = !SameListings(AllMods, fresh);
             AllMods = fresh;
+            _loadTask = Task.FromResult(fresh);
             _store.Save(fresh);
+
+            AppLog.Info("Catalog", $"background refresh: {fresh.Count} mods, {(changed ? "changed since the disk cache" : "unchanged")}");
+            if (changed) RaiseCatalogChanged();
         }
         catch (OperationCanceledException)
         {
             // Cancelled or shutting down.
         }
-        catch (SpModApiException)
+        catch (SpModApiException ex)
         {
-            // Best-effort refresh; ignore API errors.
+            AppLog.Warn("Catalog", $"background refresh failed, keeping the disk cache: {ex.Message}");
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
-            // Best-effort refresh; ignore network errors.
+            AppLog.Warn("Catalog", $"background refresh failed, keeping the disk cache: {ex.Message}");
         }
     }
+
+    private static bool SameListings(IReadOnlyList<Mod> current, IReadOnlyList<Mod> fresh) =>
+        current.Count == fresh.Count
+        && current.Zip(fresh).All(p => p.First.Id == p.Second.Id && ReleasesOf(p.First) == ReleasesOf(p.Second));
+
+    private void RaiseCatalogChanged()
+    {
+        if (CatalogChanged is null) return;
+
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher is null || dispatcher.CheckAccess()) CatalogChanged.Invoke(this, EventArgs.Empty);
+        else dispatcher.BeginInvoke(() => CatalogChanged?.Invoke(this, EventArgs.Empty));
+    }
+
+    // Raised on the UI thread when the background refresh at launch replaces the disk-cached catalog with a different one.
+    public event EventHandler? CatalogChanged;
 }

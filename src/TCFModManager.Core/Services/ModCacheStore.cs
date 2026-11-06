@@ -30,6 +30,7 @@ public sealed class ModCacheStore
     {
         var data = _file.Read();
         if (data is null || data.SchemaVersion != SchemaVersion || data.Mods.Count == 0) return null;
+        data.Mods = data.Mods.DistinctBy(m => m.Id).ToList();
         return data;
     }
 

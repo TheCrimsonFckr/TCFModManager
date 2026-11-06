@@ -121,19 +121,22 @@ public partial class AddonCacheViewModel : LocalizedViewModel
         {
             var fresh = await _cacheService.FetchAllAsync(null, ct).ConfigureAwait(false);
             Publish(fresh);
+            _loadTask = Task.FromResult(fresh);
             _store.Save(fresh);
+
+            AppLog.Info("Addons", $"background refresh: {fresh.Count} addons");
         }
         catch (OperationCanceledException)
         {
             // Cancelled or shutting down.
         }
-        catch (SpModApiException)
+        catch (SpModApiException ex)
         {
-            // Best-effort refresh; ignore API errors.
+            AppLog.Warn("Addons", $"background refresh failed, keeping the disk cache: {ex.Message}");
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
-            // Best-effort refresh; ignore network errors.
+            AppLog.Warn("Addons", $"background refresh failed, keeping the disk cache: {ex.Message}");
         }
     }
 

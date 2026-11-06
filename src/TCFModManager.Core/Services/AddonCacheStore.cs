@@ -26,6 +26,7 @@ public sealed class AddonCacheStore
     {
         var data = _file.Read();
         if (data is null || data.SchemaVersion != SchemaVersion || data.Addons.Count == 0) return null;
+        data.Addons = data.Addons.DistinctBy(a => a.Id).ToList();
         return data;
     }
 

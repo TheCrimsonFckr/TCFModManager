@@ -16,6 +16,7 @@ public sealed class ModCacheService(SpModApiClient spModApi)
         CancellationToken ct = default)
     {
         var all = new List<Mod>();
+        var seen = new HashSet<int>();
         var page = 1;
         var dropped = 0;
 
@@ -45,8 +46,9 @@ public sealed class ModCacheService(SpModApiClient spModApi)
                 continue;
             }
 
-            var kept = result.Data.Where(StillRunsOnASupportedRelease).ToList();
-            dropped += result.Data.Count - kept.Count;
+            var fresh = result.Data.Where(m => seen.Add(m.Id)).ToList();
+            var kept = fresh.Where(StillRunsOnASupportedRelease).ToList();
+            dropped += fresh.Count - kept.Count;
             all.AddRange(kept);
             progress?.Report((all.Count, result.Meta?.Total));
 

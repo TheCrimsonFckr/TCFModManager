@@ -16,6 +16,7 @@ public sealed class AddonCacheService(SpModApiClient spModApi)
         CancellationToken ct = default)
     {
         var all = new List<Addon>();
+        var seen = new HashSet<int>();
         var page = 1;
 
         while (true)
@@ -43,7 +44,7 @@ public sealed class AddonCacheService(SpModApiClient spModApi)
                 continue;
             }
 
-            all.AddRange(result.Data);
+            all.AddRange(result.Data.Where(a => seen.Add(a.Id)));
             progress?.Report((all.Count, result.Meta?.Total));
 
             var isLastPage = result.Data.Count < PageSize
