@@ -32,7 +32,7 @@ public sealed class AddonCacheService(SpModApiClient spModApi)
                         // Each addon's latest versions carry the download link, size and the
                         // parent-mod constraint, so the whole install path works off this one fetch.
                         Include = "versions",
-                        Sort = "-downloads",
+                        Sort = "created_at",
                         Page = page,
                         PerPage = PageSize,
                     },

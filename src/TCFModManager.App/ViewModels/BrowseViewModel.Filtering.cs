@@ -85,7 +85,10 @@ public partial class BrowseViewModel
         {
             ModSortOrder.LastUpdated => matched.OrderByDescending(m => LastUpdatedDate(m, installedSptVersion)).ToList(),
             ModSortOrder.MostDownloaded => matched.OrderByDescending(m => m.Downloads ?? 0).ToList(),
-            ModSortOrder.MostFavourited => matched.OrderByDescending(m => m.FavouritesCount ?? 0).ToList(),
+            ModSortOrder.MostFavourited => matched
+                .OrderByDescending(m => m.FavouritesCount ?? 0)
+                .ThenByDescending(m => m.Downloads ?? 0)
+                .ToList(),
             // Endorsements are new enough that only a few dozen mods have any at all and the counts
             // are in the low tens, so the overwhelming majority tie on 0. Downloads break the tie to
             // keep that long tail in a sensible order instead of an arbitrary one.

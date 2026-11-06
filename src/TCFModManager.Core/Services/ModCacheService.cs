@@ -33,7 +33,7 @@ public sealed class ModCacheService(SpModApiClient spModApi)
                         // "versions" ensures each cached mod carries its latest version's SPT
                         // constraint/release number, used by Browse cards and the version filter.
                         Include = "category,versions",
-                        Sort = "-downloads",
+                        Sort = "created_at",
                         Page = page,
                         PerPage = PageSize,
                     },
