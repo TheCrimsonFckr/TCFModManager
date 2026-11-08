@@ -1,4 +1,4 @@
-Everything you do just before a raid, on one page: what's wrong with the install, which profile you're playing, and the way into the game. It is the first page in the sidebar. The server itself has its own page - see [Server](Server).
+Everything you do just before a raid, on one page: what's wrong with the install, which profile you're playing, and the way into the game. It is the first page in the sidebar. The server itself has its own page - see [Server](Server) - unless **Show the server on the Profile page** is on in Options, when its cards are here instead: Server after Before you join, Fika headless after the Game launcher, and Mod tools at the bottom, with the server log a fixed height.
 
 ## Warnings
 Cards at the top appear only when there's something to say: a server mod whose dependency is missing (SPT then loads **no server mods at all**), installed mods that aren't for this SPT version, and mods that conflict. Each links to where you can fix it. None of them stops you launching.

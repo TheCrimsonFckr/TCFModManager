@@ -40,6 +40,7 @@
 - Themes - five built-in looks (Tarkov, OLED black, High contrast, Soft, Steam) and an editor to make and share your own - *Completed*
 - Ignore mods - hide listings you never want to see from Browse, author pages and new-mod notifications - *Completed*
 - Profile stats - the SPT launcher's profile page in the app: raid record, money and level progress for the picked profile, on a new Profile page beside the Server page - *Completed*
+- Server and Profile on one page - with the server in its own window, the Server page's cards can sit on Profile - *Completed*
 - Addons - every installed addon gets its own card, removing or disabling a mod can take its addons with it, and mod lists offer an addon's missing mod and catch addon versions that won't fit - *Completed*
 
 ## Planned

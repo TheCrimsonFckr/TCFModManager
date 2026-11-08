@@ -11,9 +11,10 @@ This install's SPT server, the programs your mods ship, and - on a headless setu
 The server keeps running without the app. If this install's server is still up when you close the app - or quit it from the tray - you're asked: **Stop it and close**, **Leave it running**, or **Cancel**. If the app opens on a server that's already running (left up last time, or started some other way), it says so and offers **Go to Server**, **Stop it** or **Leave it running**. Nothing is asked when the app closes for its own update, or when Windows signs out.
 
 ## Starting SPT (Options)
-**Options - Starting SPT** has two switches:
+**Options - Starting SPT** has these switches:
 - **Open the launcher once the server is up** - after Start server, the page waits until the server is listening on its port (from its `http.json`, and 6969) and then opens the launcher. A heavily modded server gets three minutes.
 - **Run the server without its window** - no console window; the server log on this page shows what it is doing, and Stop closes it properly. It still keeps running if you close the app.
+- **Show the server on the Profile page** - only while the server runs in its own window. This page's cards move onto [Profile](Profile) and Server leaves the sidebar; anything that would open this page opens Profile at the server card instead. Running the server without its window brings the page back.
 
 > [!NOTE]
 > The Fika headless client can be restarted but not stopped from here - close its own window if you want it down.
