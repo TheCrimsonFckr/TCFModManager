@@ -45,4 +45,5 @@
 
 ## Planned
 
-- Nothing new lined up right now - ideas are welcome on the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues)
+- Linux - the Windows build running under Wine or Proton, in the same prefix as your SPT game, with the fixes it needs there and a Linux page here on setting it up - *Planned*
+- More ideas are welcome on the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues)
