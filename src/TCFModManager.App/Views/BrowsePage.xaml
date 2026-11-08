@@ -505,7 +505,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">
-                                <Border Background="{TemplateBinding Background}">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="{DynamicResource ControlCornerRadius}">
                                     <ContentPresenter />
                                 </Border>
                             </ControlTemplate>
