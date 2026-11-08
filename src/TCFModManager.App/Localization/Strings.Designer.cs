@@ -2302,6 +2302,16 @@ internal static class Strings
     internal static string Downloads_WaitingToDownload => LocalizationService.Get("Downloads_WaitingToDownload");
     internal static string Downloads_WaitingToInstall => LocalizationService.Get("Downloads_WaitingToInstall");
     internal static string Downloads_RetryingFormat => LocalizationService.Get("Downloads_RetryingFormat");
+    internal static string Downloads_RetryingServerSpModFormat => LocalizationService.Get("Downloads_RetryingServerSpModFormat");
+    internal static string Downloads_RetryingServerHostFormat => LocalizationService.Get("Downloads_RetryingServerHostFormat");
+    internal static string Downloads_HeldSpModFormat => LocalizationService.Get("Downloads_HeldSpModFormat");
+    internal static string Downloads_HeldHostFormat => LocalizationService.Get("Downloads_HeldHostFormat");
+    internal static string Downloads_ServerTimeoutSpModFormat => LocalizationService.Get("Downloads_ServerTimeoutSpModFormat");
+    internal static string Downloads_ServerTimeoutHostFormat => LocalizationService.Get("Downloads_ServerTimeoutHostFormat");
+    internal static string Downloads_ServerBusySpModFormat => LocalizationService.Get("Downloads_ServerBusySpModFormat");
+    internal static string Downloads_ServerBusyHostFormat => LocalizationService.Get("Downloads_ServerBusyHostFormat");
+    internal static string Downloads_ServerErrorSpModFormat => LocalizationService.Get("Downloads_ServerErrorSpModFormat");
+    internal static string Downloads_ServerErrorHostFormat => LocalizationService.Get("Downloads_ServerErrorHostFormat");
     internal static string Downloads_BarDownloading => LocalizationService.Get("Downloads_BarDownloading");
     internal static string Downloads_BarInstalling => LocalizationService.Get("Downloads_BarInstalling");
     internal static string Downloads_BarFinished => LocalizationService.Get("Downloads_BarFinished");

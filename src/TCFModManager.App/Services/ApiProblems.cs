@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Net.Http;
 using TCFModManager.App.Localization;
+using TCFModManager.Core.Services;
 using TCFModManager.Core.SpModApi;
 
 namespace TCFModManager.App.Services;
@@ -33,6 +34,8 @@ public static class ApiProblems
             limited.RetryAfter?.TotalSeconds ?? 30),
 
         SpModApiException => string.Format(CultureInfo.CurrentCulture, Strings.Api_ErrorFormat, ex.Message),
+
+        DownloadHttpException { IsServerSide: true } download => DownloadProblems.Failed(download),
 
         HttpRequestException => string.Format(CultureInfo.CurrentCulture, Strings.Api_NetworkErrorFormat, ex.Message),
 

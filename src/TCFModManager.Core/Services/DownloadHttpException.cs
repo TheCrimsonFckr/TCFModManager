@@ -40,7 +40,7 @@ public sealed class DownloadHttpException(string message, HttpStatusCode status,
         return new DownloadHttpException(message, response.StatusCode, response.RequestMessage?.RequestUri?.Host, retryAfter);
     }
 
-    private static bool IsSpModHost(string? host) =>
+    public static bool IsSpModHost(string? host) =>
         host is not null
         && (host.Equals("sp-mod.com", StringComparison.OrdinalIgnoreCase)
             || host.EndsWith(".sp-mod.com", StringComparison.OrdinalIgnoreCase));

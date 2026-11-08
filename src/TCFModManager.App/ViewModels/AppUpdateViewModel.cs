@@ -286,7 +286,10 @@ public partial class AppUpdateViewModel : LocalizedViewModel
                     : Strings.AppUpdate_Unpacking;
             });
 
-            await _installer.PrepareAsync(update, progress, _installCts.Token).ConfigureAwait(true);
+            var retrying = new Progress<DownloadRetry>(retry =>
+                InstallStatus = DownloadProblems.Waiting(retry) ?? Text(Strings.AppUpdate_DownloadingFormat, update.LatestVersion));
+
+            await _installer.PrepareAsync(update, progress, _installCts.Token, retrying).ConfigureAwait(true);
 
             InstallStatus = Strings.AppUpdate_Restarting;
             AppUpdateInstaller.LaunchApplyScript();

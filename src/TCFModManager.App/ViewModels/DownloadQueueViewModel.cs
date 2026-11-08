@@ -499,16 +499,10 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         {
             if (token != item.Token || item.IsFinished) return;
 
-            switch (retry.State)
-            {
-                case DownloadRetryState.Retrying:
-                    AppLog.Info("Downloads", $"{item.ModName} {item.VersionLabel}: attempt {retry.Attempt} failed ({retry.Cause}, {retry.Host}) - trying again in {retry.Wait.TotalSeconds:F0}s");
-                    item.StatusMessage = Text(Strings.Downloads_RetryingFormat, retry.Wait.TotalSeconds);
-                    break;
-                case DownloadRetryState.Resumed:
-                    item.StatusMessage = working;
-                    break;
-            }
+            if (retry.State == DownloadRetryState.Retrying)
+                AppLog.Info("Downloads", $"{item.ModName} {item.VersionLabel}: attempt {retry.Attempt} failed ({retry.Cause}, {retry.Host}) - trying again in {retry.Wait.TotalSeconds:F0}s");
+
+            item.StatusMessage = DownloadProblems.Waiting(retry) ?? working;
         });
 
     // Stage 3.
@@ -614,6 +608,9 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
                 item.Status = DownloadQueueItemStatus.Cancelled;
                 item.Progress = 0;
                 item.StatusMessage = Text(Strings.Downloads_CancelledItemFormat, item.ModName, item.VersionLabel);
+                break;
+            case SpModApiException { StatusCode: var status } and not SpModApiRateLimitedException when DownloadRetryPolicy.IsServerSide(status):
+                Fail(item, DownloadProblems.Failed(status, spMod: true, host: null), ex);
                 break;
             case SpModApiException or HttpRequestException or HttpIOException:
                 Fail(item, ApiProblems.Describe(ex), ex);

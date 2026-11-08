@@ -8394,6 +8394,46 @@ See Dependencies and Conflicts.</value>
     <value>The connection dropped - trying again in {0:0} s</value>
     <comment>Card status between download attempts; the next one carries on where this one stopped when it can. {0} is seconds.</comment>
   </data>
+  <data name="Downloads_RetryingServerSpModFormat" xml:space="preserve">
+    <value>sp-mod isn't responding - trying again in {0:0} s</value>
+    <comment>Card status between attempts after sp-mod answered with a server error. {0} is seconds.</comment>
+  </data>
+  <data name="Downloads_RetryingServerHostFormat" xml:space="preserve">
+    <value>{1} isn't responding - trying again in {0:0} s</value>
+    <comment>Card status between attempts after a file host answered with a server error. {0} is seconds, {1} is the host name (github.com).</comment>
+  </data>
+  <data name="Downloads_HeldSpModFormat" xml:space="preserve">
+    <value>sp-mod isn't responding - waiting {0:0} s before trying</value>
+    <comment>Card status while a download waits because another download just got a server error from sp-mod. {0} is seconds.</comment>
+  </data>
+  <data name="Downloads_HeldHostFormat" xml:space="preserve">
+    <value>{1} isn't responding - waiting {0:0} s before trying</value>
+    <comment>As Downloads_HeldSpModFormat, for a file host. {0} is seconds, {1} is the host name.</comment>
+  </data>
+  <data name="Downloads_ServerTimeoutSpModFormat" xml:space="preserve">
+    <value>sp-mod didn't answer in time ({0}). That's on their side - try again in a few minutes.</value>
+    <comment>A download failed: sp-mod timed out (504, 408). {0} is the HTTP status code.</comment>
+  </data>
+  <data name="Downloads_ServerTimeoutHostFormat" xml:space="preserve">
+    <value>The file host ({1}) didn't answer in time ({0}). That's on their side - try again in a few minutes.</value>
+    <comment>A download failed: the file host an sp-mod link points at timed out. {0} is the HTTP status code, {1} is the host name.</comment>
+  </data>
+  <data name="Downloads_ServerBusySpModFormat" xml:space="preserve">
+    <value>sp-mod isn't taking requests right now ({0}). Wait a few minutes and try again.</value>
+    <comment>A download failed: sp-mod is refusing for now (429, 503). {0} is the HTTP status code.</comment>
+  </data>
+  <data name="Downloads_ServerBusyHostFormat" xml:space="preserve">
+    <value>The file host ({1}) isn't taking requests right now ({0}). Wait a few minutes and try again.</value>
+    <comment>As Downloads_ServerBusySpModFormat, for a file host. {0} is the HTTP status code, {1} is the host name.</comment>
+  </data>
+  <data name="Downloads_ServerErrorSpModFormat" xml:space="preserve">
+    <value>sp-mod ran into a problem ({0}). That's on their side - try again in a few minutes.</value>
+    <comment>A download failed: any other server error from sp-mod (500, 502...). {0} is the HTTP status code.</comment>
+  </data>
+  <data name="Downloads_ServerErrorHostFormat" xml:space="preserve">
+    <value>The file host ({1}) ran into a problem ({0}). That's on their side - try again in a few minutes.</value>
+    <comment>As Downloads_ServerErrorSpModFormat, for a file host. {0} is the HTTP status code, {1} is the host name.</comment>
+  </data>
   <data name="Downloads_BarDownloading" xml:space="preserve">
     <value>Downloading</value>
     <comment>Title of the downloads bar along the bottom of the window (OPEN-12 A7) while the queue is downloading.</comment>

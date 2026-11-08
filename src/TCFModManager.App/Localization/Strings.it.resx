@@ -6634,6 +6634,36 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Downloads_RetryingFormat" xml:space="preserve">
     <value>Connessione interrotta - nuovo tentativo tra {0:0} s</value>
   </data>
+  <data name="Downloads_RetryingServerSpModFormat" xml:space="preserve">
+    <value>sp-mod non risponde - nuovo tentativo tra {0:0} s</value>
+  </data>
+  <data name="Downloads_RetryingServerHostFormat" xml:space="preserve">
+    <value>{1} non risponde - nuovo tentativo tra {0:0} s</value>
+  </data>
+  <data name="Downloads_HeldSpModFormat" xml:space="preserve">
+    <value>sp-mod non risponde - attesa di {0:0} s prima di riprovare</value>
+  </data>
+  <data name="Downloads_HeldHostFormat" xml:space="preserve">
+    <value>{1} non risponde - attesa di {0:0} s prima di riprovare</value>
+  </data>
+  <data name="Downloads_ServerTimeoutSpModFormat" xml:space="preserve">
+    <value>sp-mod non ha risposto in tempo ({0}). Il problema è da parte loro - riprova tra qualche minuto.</value>
+  </data>
+  <data name="Downloads_ServerTimeoutHostFormat" xml:space="preserve">
+    <value>L'host del file ({1}) non ha risposto in tempo ({0}). Il problema è da parte sua - riprova tra qualche minuto.</value>
+  </data>
+  <data name="Downloads_ServerBusySpModFormat" xml:space="preserve">
+    <value>sp-mod non accetta richieste al momento ({0}). Attendi qualche minuto e riprova.</value>
+  </data>
+  <data name="Downloads_ServerBusyHostFormat" xml:space="preserve">
+    <value>L'host del file ({1}) non accetta richieste al momento ({0}). Attendi qualche minuto e riprova.</value>
+  </data>
+  <data name="Downloads_ServerErrorSpModFormat" xml:space="preserve">
+    <value>sp-mod ha avuto un problema ({0}). Il problema è da parte loro - riprova tra qualche minuto.</value>
+  </data>
+  <data name="Downloads_ServerErrorHostFormat" xml:space="preserve">
+    <value>L'host del file ({1}) ha avuto un problema ({0}). Il problema è da parte sua - riprova tra qualche minuto.</value>
+  </data>
   <data name="Downloads_BarDownloading" xml:space="preserve">
     <value>Download in corso</value>
   </data>

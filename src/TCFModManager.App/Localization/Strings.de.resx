@@ -6634,6 +6634,36 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Downloads_RetryingFormat" xml:space="preserve">
     <value>Verbindung abgebrochen - neuer Versuch in {0:0} s</value>
   </data>
+  <data name="Downloads_RetryingServerSpModFormat" xml:space="preserve">
+    <value>sp-mod antwortet nicht - neuer Versuch in {0:0} s</value>
+  </data>
+  <data name="Downloads_RetryingServerHostFormat" xml:space="preserve">
+    <value>{1} antwortet nicht - neuer Versuch in {0:0} s</value>
+  </data>
+  <data name="Downloads_HeldSpModFormat" xml:space="preserve">
+    <value>sp-mod antwortet nicht - warte {0:0} s vor dem nächsten Versuch</value>
+  </data>
+  <data name="Downloads_HeldHostFormat" xml:space="preserve">
+    <value>{1} antwortet nicht - warte {0:0} s vor dem nächsten Versuch</value>
+  </data>
+  <data name="Downloads_ServerTimeoutSpModFormat" xml:space="preserve">
+    <value>sp-mod hat nicht rechtzeitig geantwortet ({0}). Das Problem liegt bei sp-mod - versuch es in ein paar Minuten erneut.</value>
+  </data>
+  <data name="Downloads_ServerTimeoutHostFormat" xml:space="preserve">
+    <value>Der Datei-Host ({1}) hat nicht rechtzeitig geantwortet ({0}). Das Problem liegt bei ihm - versuch es in ein paar Minuten erneut.</value>
+  </data>
+  <data name="Downloads_ServerBusySpModFormat" xml:space="preserve">
+    <value>sp-mod nimmt gerade keine Anfragen an ({0}). Warte ein paar Minuten und versuch es erneut.</value>
+  </data>
+  <data name="Downloads_ServerBusyHostFormat" xml:space="preserve">
+    <value>Der Datei-Host ({1}) nimmt gerade keine Anfragen an ({0}). Warte ein paar Minuten und versuch es erneut.</value>
+  </data>
+  <data name="Downloads_ServerErrorSpModFormat" xml:space="preserve">
+    <value>Bei sp-mod ist ein Fehler aufgetreten ({0}). Das Problem liegt bei sp-mod - versuch es in ein paar Minuten erneut.</value>
+  </data>
+  <data name="Downloads_ServerErrorHostFormat" xml:space="preserve">
+    <value>Beim Datei-Host ({1}) ist ein Fehler aufgetreten ({0}). Das Problem liegt bei ihm - versuch es in ein paar Minuten erneut.</value>
+  </data>
   <data name="Downloads_BarDownloading" xml:space="preserve">
     <value>Wird heruntergeladen</value>
   </data>

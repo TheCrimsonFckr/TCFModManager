@@ -6634,6 +6634,36 @@ Voir Dépendances et conflits.</value>
   <data name="Downloads_RetryingFormat" xml:space="preserve">
     <value>La connexion a été coupée - nouvel essai dans {0:0} s</value>
   </data>
+  <data name="Downloads_RetryingServerSpModFormat" xml:space="preserve">
+    <value>sp-mod ne répond pas - nouvel essai dans {0:0} s</value>
+  </data>
+  <data name="Downloads_RetryingServerHostFormat" xml:space="preserve">
+    <value>{1} ne répond pas - nouvel essai dans {0:0} s</value>
+  </data>
+  <data name="Downloads_HeldSpModFormat" xml:space="preserve">
+    <value>sp-mod ne répond pas - attente de {0:0} s avant d'essayer</value>
+  </data>
+  <data name="Downloads_HeldHostFormat" xml:space="preserve">
+    <value>{1} ne répond pas - attente de {0:0} s avant d'essayer</value>
+  </data>
+  <data name="Downloads_ServerTimeoutSpModFormat" xml:space="preserve">
+    <value>sp-mod n'a pas répondu à temps ({0}). Le problème vient de leur côté - réessayez dans quelques minutes.</value>
+  </data>
+  <data name="Downloads_ServerTimeoutHostFormat" xml:space="preserve">
+    <value>L'hébergeur du fichier ({1}) n'a pas répondu à temps ({0}). Le problème vient de son côté - réessayez dans quelques minutes.</value>
+  </data>
+  <data name="Downloads_ServerBusySpModFormat" xml:space="preserve">
+    <value>sp-mod n'accepte pas de requêtes pour le moment ({0}). Attendez quelques minutes et réessayez.</value>
+  </data>
+  <data name="Downloads_ServerBusyHostFormat" xml:space="preserve">
+    <value>L'hébergeur du fichier ({1}) n'accepte pas de requêtes pour le moment ({0}). Attendez quelques minutes et réessayez.</value>
+  </data>
+  <data name="Downloads_ServerErrorSpModFormat" xml:space="preserve">
+    <value>sp-mod a rencontré un problème ({0}). Le problème vient de leur côté - réessayez dans quelques minutes.</value>
+  </data>
+  <data name="Downloads_ServerErrorHostFormat" xml:space="preserve">
+    <value>L'hébergeur du fichier ({1}) a rencontré un problème ({0}). Le problème vient de son côté - réessayez dans quelques minutes.</value>
+  </data>
   <data name="Downloads_BarDownloading" xml:space="preserve">
     <value>Téléchargement</value>
   </data>

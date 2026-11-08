@@ -6964,6 +6964,36 @@
   <data name="Downloads_RetryingFormat" xml:space="preserve">
     <value>Соединение прервано - повтор через {0:0} с</value>
   </data>
+  <data name="Downloads_RetryingServerSpModFormat" xml:space="preserve">
+    <value>sp-mod не отвечает - повтор через {0:0} с</value>
+  </data>
+  <data name="Downloads_RetryingServerHostFormat" xml:space="preserve">
+    <value>{1} не отвечает - повтор через {0:0} с</value>
+  </data>
+  <data name="Downloads_HeldSpModFormat" xml:space="preserve">
+    <value>sp-mod не отвечает - ожидание {0:0} с перед попыткой</value>
+  </data>
+  <data name="Downloads_HeldHostFormat" xml:space="preserve">
+    <value>{1} не отвечает - ожидание {0:0} с перед попыткой</value>
+  </data>
+  <data name="Downloads_ServerTimeoutSpModFormat" xml:space="preserve">
+    <value>sp-mod не ответил вовремя ({0}). Проблема на их стороне - повторите через несколько минут.</value>
+  </data>
+  <data name="Downloads_ServerTimeoutHostFormat" xml:space="preserve">
+    <value>Хостинг файла ({1}) не ответил вовремя ({0}). Проблема на его стороне - повторите через несколько минут.</value>
+  </data>
+  <data name="Downloads_ServerBusySpModFormat" xml:space="preserve">
+    <value>sp-mod сейчас не принимает запросы ({0}). Подождите несколько минут и повторите.</value>
+  </data>
+  <data name="Downloads_ServerBusyHostFormat" xml:space="preserve">
+    <value>Хостинг файла ({1}) сейчас не принимает запросы ({0}). Подождите несколько минут и повторите.</value>
+  </data>
+  <data name="Downloads_ServerErrorSpModFormat" xml:space="preserve">
+    <value>На стороне sp-mod произошла ошибка ({0}). Повторите через несколько минут.</value>
+  </data>
+  <data name="Downloads_ServerErrorHostFormat" xml:space="preserve">
+    <value>На стороне хостинга файла ({1}) произошла ошибка ({0}). Повторите через несколько минут.</value>
+  </data>
   <data name="Downloads_BarDownloading" xml:space="preserve">
     <value>Загрузка</value>
   </data>
