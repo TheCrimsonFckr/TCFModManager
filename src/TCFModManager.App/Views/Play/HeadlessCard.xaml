@@ -1,0 +1,115 @@
+<UserControl
+    x:Class="TCFModManager.App.Views.Play.HeadlessCard"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+    xmlns:app="clr-namespace:TCFModManager.App"
+    xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors">
+    <UserControl.Resources>
+        <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    </UserControl.Resources>
+    <!-- Only an install running a headless client has this launcher - or has been told in
+         Options that it is one - so the card is off the page entirely on every other one
+         rather than showing a dead button. -->
+    <ui:Card
+        Padding="16"
+        VerticalAlignment="Top"
+        Margin="0,16,0,0"
+        Visibility="{Binding HasHeadless, Converter={StaticResource BoolToVisibility}}">
+        <StackPanel>
+            <TextBlock
+                Text="{loc:Str Play_HeadlessHeader}"
+                FontWeight="SemiBold"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                Margin="0,0,0,4" />
+            <TextBlock
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                Margin="0,0,0,8"
+                Text="{loc:Str Play_HeadlessDescription}" />
+
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <ui:Button
+                    Content="{loc:Str Play_OpenHeadless}"
+                    Icon="{ui:SymbolIcon Play24}"
+                    IsEnabled="{Binding CanStartHeadless}"
+                    Command="{Binding StartHeadlessCommand}" />
+                <ui:Button
+                    Margin="8,0,0,0"
+                    Content="{loc:Str Play_Restart}"
+                    Icon="{ui:SymbolIcon ArrowSync24}"
+                    ToolTip="{loc:Str Play_RestartHeadlessToolTip}"
+                    Command="{Binding AskRestartHeadlessCommand}" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Margin="12,0,0,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="{Binding HeadlessState}" />
+            </StackPanel>
+
+            <StackPanel
+                Margin="0,0,0,8"
+                Visibility="{Binding ConfirmingHeadlessRestart, Converter={StaticResource BoolToVisibility}}">
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Margin="0,0,0,8"
+                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                    Text="{loc:Str Play_RestartHeadlessWarning}" />
+                <StackPanel Orientation="Horizontal">
+                    <ui:Button
+                        Appearance="Danger"
+                        Content="{loc:Str Play_RestartHeadlessConfirm}"
+                        Icon="{ui:SymbolIcon ArrowSync24}"
+                        Command="{Binding ConfirmRestartCommand}" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Appearance="Transparent"
+                        Content="{loc:Str Common_Cancel}"
+                        Command="{Binding CancelRestartCommand}" />
+                </StackPanel>
+            </StackPanel>
+
+            <TextBlock
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="{Binding HeadlessPath}" />
+
+            <!-- What Options has been told this machine is, since that is what decides which
+                 mods a served list brings here. Blank, and so zero height, on an install that
+                 has not said. -->
+            <TextBlock
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                Margin="0,8,0,0"
+                Text="{Binding RoleSummary}" />
+
+            <!--
+                The launcher is here but nobody has answered the question, so a served list is
+                being filtered as though this were an ordinary player.
+                The setup prompt fires when the install folder is set, which somebody who set
+                theirs months ago will never do again - this is how they find out there is
+                something to answer.
+            -->
+            <ui:InfoBar
+                Margin="0,12,0,0"
+                IsOpen="True"
+                IsClosable="False"
+                Severity="Informational"
+                Title="{loc:Str Play_RoleNoticeTitle}"
+                Message="{loc:Str Play_RoleNoticeMessage}"
+                Visibility="{Binding NeedsRoleAnswer, Converter={StaticResource BoolToVisibility}}" />
+            <!-- The answer to the notice above, in Help (Help S5). -->
+            <ui:Button
+                Margin="0,8,0,0"
+                HorizontalAlignment="Left"
+                Content="{loc:Str Help_ShowMeHow}"
+                Icon="{ui:SymbolIcon BookQuestionMark24}"
+                Click="RoleShowMeHow_Click"
+                Visibility="{Binding NeedsRoleAnswer, Converter={StaticResource BoolToVisibility}}" />
+        </StackPanel>
+    </ui:Card>
+</UserControl>

@@ -1,4 +1,3 @@
-using System.Windows;
 using System.Windows.Controls;
 using TCFModManager.App.ViewModels;
 
@@ -18,7 +17,4 @@ public partial class ServerPage : Page
         Loaded += (_, _) => ViewModel.StartPolling();
         Unloaded += (_, _) => ViewModel.StopPolling();
     }
-
-    private void RoleShowMeHow_Click(object sender, RoutedEventArgs e) =>
-        AppNavigation.ShowHelp("options", "options.role");
 }
