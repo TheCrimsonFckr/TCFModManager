@@ -96,6 +96,9 @@ internal static class AppServices
     // read one answer - see FootprintGateViewModel.
     public static FootprintGateViewModel FootprintGate { get; } = new();
 
+    // Whether the Server page's cards are on the Profile page (OPEN-42) - see ServerPageGateViewModel.
+    public static ServerPageGateViewModel ServerPageGate { get; } = new();
+
     //
     // The Server Map connection: where the server is, whether it answered, and what it said.
     // Shared so the sidebar item, the Options section and the page read one connection rather than

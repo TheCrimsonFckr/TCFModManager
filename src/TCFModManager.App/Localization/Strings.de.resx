@@ -7120,6 +7120,15 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Options_HideServerNote" xml:space="preserve">
     <value>Ohne Fenster wird das Server-Log auf der Server-Seite angezeigt, und Stoppen dort fährt ihn sauber herunter. Er läuft weiter, wenn du diese App schließt - stoppe ihn auf der Server-Seite.</value>
   </data>
+  <data name="Options_ServerOnProfileOn" xml:space="preserve">
+    <value>Server auf der Profilseite anzeigen</value>
+  </data>
+  <data name="Options_ServerOnProfileOff" xml:space="preserve">
+    <value>Server auf eigener Seite lassen</value>
+  </data>
+  <data name="Options_ServerOnProfileNote" xml:space="preserve">
+    <value>Solange das Serverfenster angezeigt wird, kommen die Karten der Seite Server auf die Seite Profil, und Server verschwindet aus der Seitenleiste.</value>
+  </data>
   <data name="Play_ToolsHeader" xml:space="preserve">
     <value>Mod-Werkzeuge</value>
   </data>

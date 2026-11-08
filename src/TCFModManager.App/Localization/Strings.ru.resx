@@ -7450,6 +7450,15 @@
   <data name="Options_HideServerNote" xml:space="preserve">
     <value>Без окна журнал сервера показывается на странице Сервер, а кнопка Остановить там корректно его выключает. Сервер продолжает работать после закрытия приложения - останавливайте его на странице Сервер.</value>
   </data>
+  <data name="Options_ServerOnProfileOn" xml:space="preserve">
+    <value>Показывать сервер на странице «Профиль»</value>
+  </data>
+  <data name="Options_ServerOnProfileOff" xml:space="preserve">
+    <value>Оставить сервер на отдельной странице</value>
+  </data>
+  <data name="Options_ServerOnProfileNote" xml:space="preserve">
+    <value>Пока окно сервера показывается, карточки страницы «Сервер» переходят на страницу «Профиль», а «Сервер» исчезает из боковой панели.</value>
+  </data>
   <data name="Play_ToolsHeader" xml:space="preserve">
     <value>Инструменты модов</value>
   </data>

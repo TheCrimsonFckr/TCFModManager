@@ -356,6 +356,7 @@ public partial class OptionsViewModel : LocalizedViewModel
         _showModFootprintPage = settings.ShowModFootprintPage;
         _startLauncherAfterServer = settings.StartLauncherAfterServer;
         _hideServerWindow = settings.HideServerWindow;
+        _showServerOnProfile = settings.ShowServerOnProfile;
         _directLaunch = settings.DirectLaunch;
         _minimizeWhilePlaying = settings.MinimizeWhilePlaying;
 
@@ -510,7 +511,25 @@ public partial class OptionsViewModel : LocalizedViewModel
         settings.HideServerWindow = value;
         _settings.Save(settings);
 
+        AppServices.ServerPageGate.Refresh();
+
         AppLog.Info("Launch", value ? "the server starts without a window" : "the server starts in its window");
+    }
+
+    [ObservableProperty]
+    private bool _showServerOnProfile;
+
+    partial void OnShowServerOnProfileChanged(bool value)
+    {
+        if (!_loaded) return;
+
+        var settings = _settings.Load();
+        settings.ShowServerOnProfile = value;
+        _settings.Save(settings);
+
+        AppServices.ServerPageGate.Refresh();
+
+        AppLog.Info("Launch", value ? "server cards on the Profile page" : "server cards on the Server page");
     }
 
     partial void OnSelectedInstallModeChanged(InstallModeItem value)

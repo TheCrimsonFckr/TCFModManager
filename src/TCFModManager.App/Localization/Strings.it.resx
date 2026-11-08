@@ -7120,6 +7120,15 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Options_HideServerNote" xml:space="preserve">
     <value>Senza finestra, il log del server compare nella pagina Server e Arresta lì lo chiude correttamente. Continua a funzionare se chiudi questa app - fermalo dalla pagina Server.</value>
   </data>
+  <data name="Options_ServerOnProfileOn" xml:space="preserve">
+    <value>Mostra il server nella pagina Profilo</value>
+  </data>
+  <data name="Options_ServerOnProfileOff" xml:space="preserve">
+    <value>Tieni il server nella sua pagina</value>
+  </data>
+  <data name="Options_ServerOnProfileNote" xml:space="preserve">
+    <value>Finché la finestra del server è visibile, le schede della pagina Server passano nella pagina Profilo e Server esce dalla barra laterale.</value>
+  </data>
   <data name="Play_ToolsHeader" xml:space="preserve">
     <value>Strumenti dei mod</value>
   </data>

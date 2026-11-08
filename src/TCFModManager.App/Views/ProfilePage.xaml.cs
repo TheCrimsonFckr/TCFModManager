@@ -28,5 +28,22 @@ public partial class ProfilePage : Page
         };
 
         Unloaded += (_, _) => ViewModel.StopPolling();
+
+        AppServices.ServerPageGate.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(ServerPageGateViewModel.IsServerOnProfile)) Arrange();
+        };
+        Arrange();
+    }
+
+    // OPEN-42 Q3: with the server cards here, the order they are used in.
+    private void Arrange()
+    {
+        UIElement[] cards = AppServices.ServerPageGate.IsServerOnProfile
+            ? [Warnings, BeforeYouJoin, Server, DirectPlay, Launcher, Headless, Stats, Tools, Message]
+            : [Warnings, BeforeYouJoin, DirectPlay, Stats, Launcher, Message];
+
+        Root.Children.Clear();
+        foreach (var card in cards) Root.Children.Add(card);
     }
 }

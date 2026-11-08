@@ -64,6 +64,12 @@ public sealed class AppSettings
     public bool HideServerWindow { get; set; }
 
     //
+    // Whether the Server page's cards sit on the Profile page instead (OPEN-42). Only applies while
+    // the server runs in its own window; the setting is kept while it doesn't.
+    //
+    public bool ShowServerOnProfile { get; set; }
+
+    //
     // Close the game when this install's SPT server stops - by Stop server, from its own window, or
     // a crash (the App's GameCloser). Off unless ticked on the Play page.
     //

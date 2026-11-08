@@ -2464,6 +2464,9 @@ internal static class Strings
     internal static string Options_HideServerOn => LocalizationService.Get("Options_HideServerOn");
     internal static string Options_HideServerOff => LocalizationService.Get("Options_HideServerOff");
     internal static string Options_HideServerNote => LocalizationService.Get("Options_HideServerNote");
+    internal static string Options_ServerOnProfileOn => LocalizationService.Get("Options_ServerOnProfileOn");
+    internal static string Options_ServerOnProfileOff => LocalizationService.Get("Options_ServerOnProfileOff");
+    internal static string Options_ServerOnProfileNote => LocalizationService.Get("Options_ServerOnProfileNote");
     internal static string Play_ToolsHeader => LocalizationService.Get("Play_ToolsHeader");
     internal static string Play_ToolsDescription => LocalizationService.Get("Play_ToolsDescription");
     internal static string Play_ToolFromFormat => LocalizationService.Get("Play_ToolFromFormat");

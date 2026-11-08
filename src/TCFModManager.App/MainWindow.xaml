@@ -141,7 +141,9 @@
                     Content="{loc:Str Nav_Server}"
                     Icon="{ui:SymbolIcon Server24}"
                     NavigationCacheMode="Required"
-                    TargetPageType="{x:Type views:ServerPage}" />
+                    TargetPageType="{x:Type views:ServerPage}"
+                    DataContext="{x:Static app:AppServices.ServerPageGate}"
+                    Visibility="{Binding IsServerPageShown, Converter={StaticResource BoolToVis}}" />
                 <ui:NavigationViewItem
                     Content="{loc:Str Nav_Browse}"
                     Icon="{ui:SymbolIcon Apps24}"

@@ -12,6 +12,16 @@ public partial class ServerCard : UserControl
 
     private ScrollViewer? _pageScroll;
 
+    public static readonly DependencyProperty FillsWindowProperty = DependencyProperty.Register(
+        nameof(FillsWindow), typeof(bool), typeof(ServerCard), new PropertyMetadata(true));
+
+    // True: the log reaches down to the bottom of the window. False: it stays MinServerLogHeight tall.
+    public bool FillsWindow
+    {
+        get => (bool)GetValue(FillsWindowProperty);
+        set => SetValue(FillsWindowProperty, value);
+    }
+
     public ServerCard()
     {
         InitializeComponent();
@@ -34,9 +44,15 @@ public partial class ServerCard : UserControl
     //
     private void FitServerLog(object? sender, EventArgs e)
     {
+        if (!FillsWindow)
+        {
+            if (Math.Abs(ServerLog.Height - MinServerLogHeight) > 1) ServerLog.Height = MinServerLogHeight;
+            return;
+        }
+
         if (_pageScroll is null || !ServerLog.IsVisible || _pageScroll.ViewportHeight <= 0) return;
 
-        var bottomMargin = (Parent as FrameworkElement)?.Margin.Bottom ?? 0;
+        var bottomMargin = Card.Margin.Bottom + ((Parent as FrameworkElement)?.Margin.Bottom ?? 0);
         var top = ServerLog.TranslatePoint(new Point(0, 0), _pageScroll).Y + _pageScroll.VerticalOffset;
         var below = Card.TranslatePoint(new Point(0, Card.ActualHeight), ServerLog).Y - ServerLog.ActualHeight;
         var height = Math.Max(MinServerLogHeight, _pageScroll.ViewportHeight - top - below - bottomMargin);

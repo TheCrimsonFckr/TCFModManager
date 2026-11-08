@@ -838,6 +838,17 @@
                     Style="{StaticResource SettingNote}"
                     Margin="0,6,0,0"
                     Text="{loc:Str Options_HideServerNote}" />
+                <StackPanel Margin="0,12,0,0" Visibility="{Binding HideServerWindow, Converter={StaticResource FalseToVisible}}">
+                    <ui:ToggleSwitch
+                        HorizontalAlignment="Left"
+                        IsChecked="{Binding ShowServerOnProfile}"
+                        OnContent="{loc:Str Options_ServerOnProfileOn}"
+                        OffContent="{loc:Str Options_ServerOnProfileOff}" />
+                    <TextBlock
+                        Style="{StaticResource SettingNote}"
+                        Margin="0,6,0,0"
+                        Text="{loc:Str Options_ServerOnProfileNote}" />
+                </StackPanel>
             </StackPanel>
         </ui:CardExpander>
 

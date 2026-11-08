@@ -8979,6 +8979,18 @@ See Dependencies and Conflicts.</value>
   <data name="Options_HideServerNote" xml:space="preserve">
     <value>Without its window, the server's log is shown on the Server page and Stop there closes it properly. It keeps running if you close this app - stop it from the Server page.</value>
   </data>
+  <data name="Options_ServerOnProfileOn" xml:space="preserve">
+    <value>Show the server on the Profile page</value>
+    <comment>Options - Starting SPT, shown while the server window is set to show: the switch's label when on (OPEN-42).</comment>
+  </data>
+  <data name="Options_ServerOnProfileOff" xml:space="preserve">
+    <value>Keep the server on its own page</value>
+    <comment>The same switch's label when off.</comment>
+  </data>
+  <data name="Options_ServerOnProfileNote" xml:space="preserve">
+    <value>With the server's own window showing, the Server page's cards join the Profile page and Server leaves the sidebar.</value>
+    <comment>Note under that switch.</comment>
+  </data>
   <data name="Play_ToolsHeader" xml:space="preserve">
     <value>Mod tools</value>
   </data>

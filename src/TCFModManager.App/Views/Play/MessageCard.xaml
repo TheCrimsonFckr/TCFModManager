@@ -10,7 +10,7 @@
     <ui:Card
         Padding="16"
         VerticalAlignment="Top"
-        Margin="0,16,0,0"
+        Margin="0,0,0,16"
         Visibility="{Binding HasMessage, Converter={StaticResource BoolToVisibility}}">
         <TextBlock
             TextWrapping="Wrap"

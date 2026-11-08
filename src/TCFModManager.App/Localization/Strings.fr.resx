@@ -7120,6 +7120,15 @@ Voir Dépendances et conflits.</value>
   <data name="Options_HideServerNote" xml:space="preserve">
     <value>Sans sa fenêtre, le journal du serveur s'affiche sur la page Serveur et Arrêter, là-bas, le ferme proprement. Il continue de tourner si vous fermez cette application - arrêtez-le depuis la page Serveur.</value>
   </data>
+  <data name="Options_ServerOnProfileOn" xml:space="preserve">
+    <value>Afficher le serveur sur la page Profil</value>
+  </data>
+  <data name="Options_ServerOnProfileOff" xml:space="preserve">
+    <value>Garder le serveur sur sa propre page</value>
+  </data>
+  <data name="Options_ServerOnProfileNote" xml:space="preserve">
+    <value>Tant que la fenêtre du serveur s'affiche, les cartes de la page Serveur rejoignent la page Profil et Serveur quitte la barre latérale.</value>
+  </data>
   <data name="Play_ToolsHeader" xml:space="preserve">
     <value>Outils des mods</value>
   </data>

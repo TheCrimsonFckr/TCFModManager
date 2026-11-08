@@ -5,7 +5,7 @@
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:play="clr-namespace:TCFModManager.App.Views.Play"
     Title="{loc:Str Nav_Server}">
-    <StackPanel x:Name="Root" Margin="16">
+    <StackPanel x:Name="Root" Margin="16,16,16,0">
 
         <play:ServerCard />
 
