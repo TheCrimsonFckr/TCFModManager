@@ -16,6 +16,9 @@ The mod has no version published for your SPT release line. That's a statement a
 ## Downloads suddenly stall or fail
 The sp-mod API is rate limited at the edge (roughly 40 requests per 10 seconds, 200 per minute). Heavy browsing can hit it. Give it a minute and retry; nothing is cached as a wrong answer in the meantime.
 
+## A download fails with 502, 503 or 504
+That's the server, not your connection: sp-mod, or the site the mod's file is hosted on (often github.com), didn't answer in time or turned the request away. The card says which. The app has already tried again for about a minute before showing it. Give it a few minutes, then **Retry** - or **Retry failed** for a whole list. If it keeps happening for one mod only, try the download button on its sp-mod page: if that fails too, it's the file host.
+
 ## A mod I installed by hand isn't listed under Installed
 It isn't in `BepInEx\plugins`, `BepInEx\patchers` or one of the `user\mods` layouts - see Limitations for the folder shapes that aren't scanned. A mod that *is* listed but shows as not found on sp-mod is there, just unmatched.
 
