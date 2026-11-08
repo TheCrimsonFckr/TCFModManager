@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Diagnostics;
 
 namespace TCFModManager.Core.Services;
@@ -9,6 +10,11 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
 {
     private readonly HttpClient _http = httpClient ?? new HttpClient();
     private readonly bool _ownsHttpClient = httpClient is null;
+
+    // Per host: no download asks it again before this time, after one of them got a server error.
+    private readonly ConcurrentDictionary<string, DateTimeOffset> _cooldowns = new(StringComparer.OrdinalIgnoreCase);
+
+    public DownloadRetryPolicy RetryPolicy { get; set; } = DownloadRetryPolicy.Default;
 
     //
     // How often progress is reported, regardless of how fast the bytes arrive.
@@ -31,6 +37,102 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
     /// <summary>Beside a partial download: what identifies the file it is part of (the server's ETag
     /// or Last-Modified), so a resumed download is only ever joined to the same file.</summary>
     public static string ValidatorPathFor(string partPath) => partPath + ".validator";
+
+    //
+    // DownloadAsync, tried again under RetryPolicy. <paramref name="retrying"/> hears each wait and
+    // each restart. With <paramref name="resumable"/>, later attempts carry on from where the last one
+    // broke off; the caller removes ValidatorPathFor(destinationPath) if it gives up.
+    //
+    public async Task<DownloadResponse> DownloadRetryingAsync(
+        string downloadUrl,
+        string destinationPath,
+        IProgress<double>? progress = null,
+        IProgress<DownloadRetry>? retrying = null,
+        CancellationToken ct = default,
+        bool resumable = false)
+    {
+        var policy = RetryPolicy;
+        var requestedHost = Uri.TryCreate(downloadUrl, UriKind.Absolute, out var uri) ? uri.Host : null;
+        string? answeredHost = null;
+        var connectionRetries = 0;
+        var serverRetries = 0;
+
+        for (var attempt = 1; ; attempt++)
+        {
+            await WaitOutCooldownAsync(requestedHost, answeredHost, retrying, attempt, ct).ConfigureAwait(false);
+
+            try
+            {
+                return await DownloadAsync(downloadUrl, destinationPath, progress, ct,
+                    resume: resumable && attempt > 1, resumable: resumable).ConfigureAwait(false);
+            }
+            catch (Exception ex) when (DownloadRetryPolicy.Classify(ex, ct) is { } cause)
+            {
+                var host = (ex as DownloadHttpException)?.Host ?? requestedHost;
+                TimeSpan wait;
+
+                if (cause == DownloadRetryCause.Server)
+                {
+                    if (serverRetries >= policy.ServerDelays.Count) throw;
+                    wait = ex is DownloadHttpException { RetryAfter: { } retryAfter }
+                        ? (retryAfter < policy.MaxRetryAfter ? retryAfter : policy.MaxRetryAfter)
+                        : policy.ServerDelays[serverRetries];
+                    serverRetries++;
+                    answeredHost = host;
+                    if (host is not null) Hold(host, DateTimeOffset.UtcNow + wait);
+                }
+                else
+                {
+                    if (connectionRetries >= policy.ConnectionDelays.Count) throw;
+                    wait = policy.ConnectionDelays[connectionRetries++];
+                }
+
+                AppLog.Info("Downloads",
+                    $"{Path.GetFileName(destinationPath)}: attempt {attempt} failed ({cause}, {host ?? "unknown host"}): {ex.Message} - trying again in {wait.TotalSeconds:F0}s");
+                retrying?.Report(new DownloadRetry(DownloadRetryState.Retrying, cause, host, wait, attempt));
+
+                await Task.Delay(wait, ct).ConfigureAwait(false);
+                retrying?.Report(new DownloadRetry(DownloadRetryState.Resumed, cause, host, TimeSpan.Zero, attempt + 1));
+            }
+        }
+    }
+
+    private void Hold(string host, DateTimeOffset until) =>
+        _cooldowns.AddOrUpdate(host, until, (_, current) => current > until ? current : until);
+
+    private async Task WaitOutCooldownAsync(string? requestedHost, string? answeredHost, IProgress<DownloadRetry>? retrying, int attempt, CancellationToken ct)
+    {
+        var held = false;
+
+        while (true)
+        {
+            var (host, remaining) = Remaining(requestedHost, answeredHost);
+            if (remaining <= TimeSpan.Zero) break;
+
+            if (!held && remaining >= TimeSpan.FromSeconds(1))
+            {
+                held = true;
+                AppLog.Info("Downloads", $"waiting {remaining.TotalSeconds:F0}s before asking {host} again");
+                retrying?.Report(new DownloadRetry(DownloadRetryState.Held, DownloadRetryCause.Server, host, remaining, attempt));
+            }
+
+            await Task.Delay(remaining, ct).ConfigureAwait(false);
+        }
+
+        if (held) retrying?.Report(new DownloadRetry(DownloadRetryState.Resumed, DownloadRetryCause.Server, requestedHost, TimeSpan.Zero, attempt));
+    }
+
+    private (string? Host, TimeSpan Remaining) Remaining(params string?[] hosts)
+    {
+        var now = DateTimeOffset.UtcNow;
+        (string? Host, TimeSpan Remaining) longest = (null, TimeSpan.Zero);
+
+        foreach (var host in hosts)
+            if (host is not null && _cooldowns.TryGetValue(host, out var until) && until - now > longest.Remaining)
+                longest = (host, until - now);
+
+        return longest;
+    }
 
     // Downloads <paramref name="downloadUrl"/> to <paramref name="destinationPath"/>,
     // reporting fractional progress (0.0-1.0) when a Content-Length header is available. Returns the

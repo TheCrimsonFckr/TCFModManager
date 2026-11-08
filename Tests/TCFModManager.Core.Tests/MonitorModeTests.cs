@@ -545,7 +545,10 @@ public class ModArchiveServiceTests : IDisposable
     }
 
     private ModArchiveService Service(byte[] body, string? fileName = null, long? claimedLength = null) =>
-        new(new ModDownloadService(new HttpClient(new ArchiveHandler(body, fileName, claimedLength))), _ledger);
+        new(new ModDownloadService(new HttpClient(new ArchiveHandler(body, fileName, claimedLength)))
+        {
+            RetryPolicy = new([TimeSpan.Zero, TimeSpan.Zero], [TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero], TimeSpan.Zero),
+        }, _ledger);
 
     private static readonly InstallTarget Target = new(7, false, "Foo", "com.foo", null, null);
 

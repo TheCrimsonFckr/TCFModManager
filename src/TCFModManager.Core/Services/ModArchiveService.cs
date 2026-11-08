@@ -33,7 +33,8 @@ public sealed class ModArchiveService(ModDownloadService downloadService, Downlo
         string? installPath,
         string? subfolder = null,
         IProgress<double>? downloadProgress = null,
-        CancellationToken ct = default)
+        CancellationToken ct = default,
+        IProgress<DownloadRetry>? retrying = null)
     {
         if (string.IsNullOrWhiteSpace(version.Link))
             throw new ModInstallException(ModInstallFailure.NoDownloadLink)
@@ -59,7 +60,7 @@ public sealed class ModArchiveService(ModDownloadService downloadService, Downlo
         try
         {
             var response = await downloadService
-                .DownloadAsync(version.Link, partPath, downloadProgress, ct)
+                .DownloadRetryingAsync(version.Link, partPath, downloadProgress, retrying, ct)
                 .ConfigureAwait(false);
 
             var fileName = DownloadFolders.FileNameFor(

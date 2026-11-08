@@ -146,7 +146,8 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
     public async Task PrepareAsync(
         AppUpdateInfo update,
         IProgress<double>? progress = null,
-        CancellationToken ct = default)
+        CancellationToken ct = default,
+        IProgress<DownloadRetry>? retrying = null)
     {
         if (string.IsNullOrWhiteSpace(update.DownloadUrl))
             throw new AppUpdateException(AppUpdateFailure.NoDownloadFile) { Version = update.LatestVersion };
@@ -167,7 +168,7 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
 
         try
         {
-            await downloads.DownloadAsync(update.DownloadUrl!, zipPath, downloadProgress, ct).ConfigureAwait(false);
+            await downloads.DownloadRetryingAsync(update.DownloadUrl!, zipPath, downloadProgress, retrying, ct).ConfigureAwait(false);
         }
         catch (ModInstallException ex) when (ex.Reason == ModInstallFailure.DownloadIncomplete)
         {

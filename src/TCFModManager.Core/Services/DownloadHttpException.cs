@@ -18,7 +18,7 @@ public sealed class DownloadHttpException(string message, HttpStatusCode status,
     // From the Retry-After header, as a delta or a date; never negative.
     public TimeSpan? RetryAfter { get; } = retryAfter;
 
-    public bool IsServerSide => (int)Status >= 500 || Status is HttpStatusCode.RequestTimeout or HttpStatusCode.TooManyRequests;
+    public bool IsServerSide => DownloadRetryPolicy.IsServerSide(Status);
 
     public static DownloadHttpException From(HttpResponseMessage response)
     {

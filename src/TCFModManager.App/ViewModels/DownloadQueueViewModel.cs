@@ -290,10 +290,6 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
     private const int MaxDownloads = 3;
     private readonly SemaphoreSlim _downloadSlots = new(MaxDownloads);
 
-    // A download that fails in a way that can pass (the connection dropped, the host busy) is tried
-    // again after these waits - resuming, not starting over, when the server allows it.
-    private static readonly TimeSpan[] RetryDelays = [TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(6)];
-
     private readonly Channel<InstallTurn> _installs = Channel.CreateUnbounded<InstallTurn>();
 
     //
@@ -464,27 +460,13 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             slot = true;
 
             var progress = new Progress<double>(p => item.Progress = p);
+            var downloading = ModInstallWording.Describe(
+                new ModInstallProgress(ModInstallStage.Downloading, item.ModName, version.Version));
 
-            for (var attempt = 0; ; attempt++)
-            {
-                item.StatusMessage = ModInstallWording.Describe(
-                    new ModInstallProgress(ModInstallStage.Downloading, item.ModName, version.Version));
-                try
-                {
-                    // A second attempt carries on from where the first broke off, when it can.
-                    await AppServices.Downloads.DownloadAsync(version.Link!, part, progress, token,
-                        resume: attempt > 0, resumable: true);
-                    File.Move(part, path, overwrite: true);
-                    break;
-                }
-                catch (Exception ex) when (attempt < RetryDelays.Length && IsPassing(ex, token))
-                {
-                    var wait = RetryDelays[attempt];
-                    AppLog.Info("Downloads", $"{item.ModName} {item.VersionLabel}: {ex.Message} - trying again in {wait.TotalSeconds:F0}s");
-                    item.StatusMessage = Text(Strings.Downloads_RetryingFormat, wait.TotalSeconds);
-                    await Task.Delay(wait, token);
-                }
-            }
+            item.StatusMessage = downloading;
+            await AppServices.Downloads.DownloadRetryingAsync(version.Link!, part, progress,
+                Retrying(item, token, downloading), token, resumable: true);
+            File.Move(part, path, overwrite: true);
         }
         catch (Exception ex)
         {
@@ -511,21 +493,23 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         return path;
     }
 
-    //
-    // A failure that may not happen again: the connection dropped, reset or timed out, the host was
-    // busy or failing (5xx, 408, 429), or the file arrived short. Not one that will happen again the
-    // same way - a refusal (403, 404), a name that does not resolve, a certificate, a full disk.
-    //
-    private static bool IsPassing(Exception ex, CancellationToken token) => ex switch
-    {
-        _ when token.IsCancellationRequested => false,
-        HttpRequestException { StatusCode: { } code } => (int)code >= 500 || (int)code is 408 or 429,
-        HttpRequestException { HttpRequestError: HttpRequestError.ConnectionError or HttpRequestError.ResponseEnded or HttpRequestError.Unknown } => true,
-        HttpIOException => true,
-        ModInstallException { Reason: ModInstallFailure.DownloadIncomplete } => true,
-        TaskCanceledException => true,
-        _ => false,
-    };
+    // The card's line while a download waits to try again, and back to <paramref name="working"/> once it does.
+    private static Progress<DownloadRetry> Retrying(DownloadQueueItemViewModel item, CancellationToken token, string working) =>
+        new(retry =>
+        {
+            if (token != item.Token || item.IsFinished) return;
+
+            switch (retry.State)
+            {
+                case DownloadRetryState.Retrying:
+                    AppLog.Info("Downloads", $"{item.ModName} {item.VersionLabel}: attempt {retry.Attempt} failed ({retry.Cause}, {retry.Host}) - trying again in {retry.Wait.TotalSeconds:F0}s");
+                    item.StatusMessage = Text(Strings.Downloads_RetryingFormat, retry.Wait.TotalSeconds);
+                    break;
+                case DownloadRetryState.Resumed:
+                    item.StatusMessage = working;
+                    break;
+            }
+        });
 
     // Stage 3.
     private async Task InstallTurnAsync(InstallTurn turn)
@@ -770,12 +754,14 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         var folder = DownloadFolders.Resolve(new SettingsService().Load().Monitor.DownloadFolder);
 
         item.Status = DownloadQueueItemStatus.Downloading;
-        item.StatusMessage = Text(Strings.Downloads_SavingToFormat, folder);
+        var saving = Text(Strings.Downloads_SavingToFormat, folder);
+        item.StatusMessage = saving;
 
         var downloadProgress = new Progress<double>(p => item.Progress = p);
 
         var result = await AppServices.ModArchive.SaveArchiveAsync(
-            item.Target, version, folder, item.InstallPath, item.DownloadSubfolder, downloadProgress, token);
+            item.Target, version, folder, item.InstallPath, item.DownloadSubfolder, downloadProgress, token,
+            Retrying(item, token, saving));
 
         if (token != item.Token || item.IsFinished) return;
 

@@ -82,14 +82,14 @@ public class ModDownloadServiceTests : IDisposable
     {
         public override int Read(byte[] buffer, int offset, int count)
         {
-            if (breakAfter is { } limit && Position >= limit) throw new IOException("connection reset");
+            if (breakAfter is { } limit && Position >= limit) throw new IOException("connection reset", new System.Net.Sockets.SocketException((int)System.Net.Sockets.SocketError.ConnectionReset));
             if (breakAfter is { } cap) count = (int)Math.Min(count, cap - Position);
             return base.Read(buffer, offset, count);
         }
 
         public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken ct = default)
         {
-            if (breakAfter is { } limit && Position >= limit) throw new IOException("connection reset");
+            if (breakAfter is { } limit && Position >= limit) throw new IOException("connection reset", new System.Net.Sockets.SocketException((int)System.Net.Sockets.SocketError.ConnectionReset));
             if (breakAfter is { } cap) buffer = buffer[..(int)Math.Min(buffer.Length, cap - Position)];
             return base.ReadAsync(buffer, ct);
         }
@@ -128,6 +128,52 @@ public class ModDownloadServiceTests : IDisposable
             return Task.FromResult(response);
         }
     }
+
+    // Answers each path with its queued statuses in turn, then with the file.
+    private sealed class Scripted(byte[] file, Dictionary<string, Queue<HttpStatusCode>> script) : HttpMessageHandler
+    {
+        public RetryConditionHeaderValue? RetryAfter { get; set; }
+
+        public List<(string Path, DateTimeOffset At)> Requests { get; } = [];
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
+        {
+            var path = request.RequestUri!.AbsolutePath;
+            lock (Requests) Requests.Add((path, DateTimeOffset.UtcNow));
+
+            HttpStatusCode? status = null;
+            lock (script)
+                if (script.TryGetValue(path, out var queue) && queue.Count > 0) status = queue.Dequeue();
+
+            var response = status is { } failed
+                ? new HttpResponseMessage(failed) { Content = new ByteArrayContent([]) }
+                : new HttpResponseMessage(HttpStatusCode.OK) { Content = new ByteArrayContent(file) };
+            response.RequestMessage = request;
+            if (status is not null) response.Headers.RetryAfter = RetryAfter;
+            return Task.FromResult(response);
+        }
+    }
+
+    private sealed class Heard<T> : IProgress<T>
+    {
+        public List<T> Items { get; } = [];
+
+        public Action<T>? OnReport { get; set; }
+
+        public void Report(T value)
+        {
+            lock (Items) Items.Add(value);
+            OnReport?.Invoke(value);
+        }
+    }
+
+    private static DownloadRetryPolicy Quick(int serverMs = 10) => new(
+        [TimeSpan.FromMilliseconds(10), TimeSpan.FromMilliseconds(10)],
+        [TimeSpan.FromMilliseconds(serverMs), TimeSpan.FromMilliseconds(serverMs), TimeSpan.FromMilliseconds(serverMs)],
+        TimeSpan.FromMilliseconds(50));
+
+    private static Dictionary<string, Queue<HttpStatusCode>> Script(string path, params HttpStatusCode[] statuses) =>
+        new() { [path] = new Queue<HttpStatusCode>(statuses) };
 
     private string Part => Path.Combine(_root, "mod.part");
 
@@ -305,6 +351,121 @@ public class ModDownloadServiceTests : IDisposable
 
         Assert.False(failure.IsServerSide);
         Assert.True(failure.IsSpMod);
+    }
+
+    [Fact]
+    public async Task AServerError_IsTriedAgain_AndSaysSo()
+    {
+        var server = new Scripted(_file, Script("/a", HttpStatusCode.GatewayTimeout));
+        using var service = new ModDownloadService(new HttpClient(server)) { RetryPolicy = Quick() };
+        var heard = new Heard<DownloadRetry>();
+
+        await service.DownloadRetryingAsync("https://sp-mod.com/a", Part, retrying: heard);
+
+        Assert.Equal(_file, File.ReadAllBytes(Part));
+        Assert.Equal(2, server.Requests.Count);
+        Assert.Equal(
+            [DownloadRetryState.Retrying, DownloadRetryState.Resumed],
+            heard.Items.Select(r => r.State));
+        Assert.Equal(DownloadRetryCause.Server, heard.Items[0].Cause);
+        Assert.Equal("sp-mod.com", heard.Items[0].Host);
+        Assert.Equal(1, heard.Items[0].Attempt);
+    }
+
+    [Fact]
+    public async Task ServerErrors_GiveUpOnceTheServerScheduleIsUsedUp()
+    {
+        var server = new Scripted(_file, Script("/a", Enumerable.Repeat(HttpStatusCode.ServiceUnavailable, 10).ToArray()));
+        using var service = new ModDownloadService(new HttpClient(server)) { RetryPolicy = Quick() };
+
+        var failure = await Assert.ThrowsAsync<DownloadHttpException>(() => service.DownloadRetryingAsync("https://sp-mod.com/a", Part));
+
+        Assert.Equal(HttpStatusCode.ServiceUnavailable, failure.Status);
+        Assert.Equal(4, server.Requests.Count);
+    }
+
+    [Fact]
+    public async Task ARefusal_IsNotTriedAgain()
+    {
+        var server = new Scripted(_file, Script("/a", HttpStatusCode.NotFound));
+        using var service = new ModDownloadService(new HttpClient(server)) { RetryPolicy = Quick() };
+
+        await Assert.ThrowsAsync<DownloadHttpException>(() => service.DownloadRetryingAsync("https://sp-mod.com/a", Part));
+
+        Assert.Single(server.Requests);
+    }
+
+    [Fact]
+    public async Task RetryAfter_ReplacesTheWait_UpToTheCap()
+    {
+        var server = new Scripted(_file, Script("/a", HttpStatusCode.TooManyRequests))
+        {
+            RetryAfter = new RetryConditionHeaderValue(TimeSpan.FromSeconds(30)),
+        };
+        using var service = new ModDownloadService(new HttpClient(server)) { RetryPolicy = Quick() };
+        var heard = new Heard<DownloadRetry>();
+
+        await service.DownloadRetryingAsync("https://sp-mod.com/a", Part, retrying: heard);
+
+        Assert.Equal(TimeSpan.FromMilliseconds(50), heard.Items[0].Wait);
+    }
+
+    [Fact]
+    public async Task ABrokenConnection_IsTriedAgainOnTheConnectionSchedule_AndResumes()
+    {
+        var server = new Server(_file) { BreakAfter = 70_000 };
+        using var service = new ModDownloadService(new HttpClient(server)) { RetryPolicy = Quick() };
+        var heard = new Heard<DownloadRetry>();
+
+        await service.DownloadRetryingAsync("http://x/mod.zip", Part, retrying: heard, resumable: true);
+
+        Assert.Equal(_file, File.ReadAllBytes(Part));
+        Assert.Equal(DownloadRetryCause.Connection, heard.Items[0].Cause);
+        Assert.Equal(70_000, server.Requests[^1].Headers.Range!.Ranges.Single().From);
+    }
+
+    [Fact]
+    public async Task AServerErrorOnOneDownload_HoldsTheOthersForTheSameHost()
+    {
+        var server = new Scripted(_file, Script("/a", HttpStatusCode.GatewayTimeout));
+        using var service = new ModDownloadService(new HttpClient(server)) { RetryPolicy = Quick(serverMs: 1500) };
+        var failed = new TaskCompletionSource();
+        var first = new Heard<DownloadRetry>
+        {
+            OnReport = r => { if (r.State == DownloadRetryState.Retrying) failed.TrySetResult(); },
+        };
+        var second = new Heard<DownloadRetry>();
+
+        var a = service.DownloadRetryingAsync("https://sp-mod.com/a", Path.Combine(_root, "a.part"), retrying: first);
+        await failed.Task;
+        var b = service.DownloadRetryingAsync("https://sp-mod.com/b", Path.Combine(_root, "b.part"), retrying: second);
+        await Task.WhenAll(a, b);
+
+        var held = Assert.Single(second.Items, r => r.State == DownloadRetryState.Held);
+        Assert.Equal("sp-mod.com", held.Host);
+        Assert.Equal(DownloadRetryState.Resumed, second.Items[^1].State);
+        var asked = server.Requests.Single(r => r.Path == "/b").At;
+        Assert.True(asked >= server.Requests.First(r => r.Path == "/a").At + TimeSpan.FromMilliseconds(1400));
+    }
+
+    [Fact]
+    public async Task AnotherHost_IsNotHeld()
+    {
+        var server = new Scripted(_file, Script("/a", HttpStatusCode.GatewayTimeout));
+        using var service = new ModDownloadService(new HttpClient(server)) { RetryPolicy = Quick(serverMs: 1500) };
+        var failed = new TaskCompletionSource();
+        var first = new Heard<DownloadRetry>
+        {
+            OnReport = r => { if (r.State == DownloadRetryState.Retrying) failed.TrySetResult(); },
+        };
+        var second = new Heard<DownloadRetry>();
+
+        var a = service.DownloadRetryingAsync("https://sp-mod.com/a", Path.Combine(_root, "a.part"), retrying: first);
+        await failed.Task;
+        await service.DownloadRetryingAsync("https://github.com/b", Path.Combine(_root, "b.part"), retrying: second);
+        await a;
+
+        Assert.Empty(second.Items);
     }
 
     [Fact]
