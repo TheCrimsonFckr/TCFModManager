@@ -1,0 +1,162 @@
+<UserControl
+    x:Class="TCFModManager.App.Views.Play.ServerCard"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+    xmlns:app="clr-namespace:TCFModManager.App"
+    xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors">
+    <UserControl.Resources>
+        <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    </UserControl.Resources>
+    <ui:Card x:Name="Card" Padding="16" VerticalAlignment="Top">
+        <StackPanel>
+            <TextBlock
+                Text="{loc:Str Play_ServerHeader}"
+                FontWeight="SemiBold"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                Margin="0,0,0,4" />
+            <TextBlock
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                Margin="0,0,0,8"
+                Text="{Binding ServerDescription}" />
+
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <ui:Button
+                    Appearance="Primary"
+                    Content="{loc:Str Play_StartServer}"
+                    Icon="{ui:SymbolIcon Play24}"
+                    IsEnabled="{Binding CanStartServer}"
+                    Command="{Binding StartServerCommand}" />
+                <ui:Button
+                    Margin="8,0,0,0"
+                    Content="{loc:Str Play_Restart}"
+                    Icon="{ui:SymbolIcon ArrowSync24}"
+                    ToolTip="{loc:Str Play_RestartServerToolTip}"
+                    Command="{Binding AskRestartServerCommand}" />
+                <ui:Button
+                    Margin="8,0,0,0"
+                    Content="{loc:Str Play_Stop}"
+                    Icon="{ui:SymbolIcon Stop24}"
+                    ToolTip="{loc:Str Play_StopServerToolTip}"
+                    Command="{Binding AskStopServerCommand}" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Margin="12,0,0,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="{Binding ServerState}" />
+                <ProgressBar
+                    Width="60"
+                    Height="4"
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center"
+                    IsIndeterminate="True"
+                    Visibility="{Binding IsWaitingForServer, Converter={StaticResource BoolToVisibility}}" />
+            </StackPanel>
+
+            <!-- Asked on the card, not in a dialog: the warning is about the thing the card is
+                 describing. Asked at all because a raid in progress does not survive it. -->
+            <StackPanel
+                Margin="0,0,0,8"
+                Visibility="{Binding ConfirmingServerRestart, Converter={StaticResource BoolToVisibility}}">
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Margin="0,0,0,8"
+                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                    Text="{loc:Str Play_RestartServerWarning}" />
+                <StackPanel Orientation="Horizontal">
+                    <ui:Button
+                        Appearance="Danger"
+                        Content="{loc:Str Play_RestartServerConfirm}"
+                        Icon="{ui:SymbolIcon ArrowSync24}"
+                        Command="{Binding ConfirmRestartCommand}" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Appearance="Transparent"
+                        Content="{loc:Str Common_Cancel}"
+                        Command="{Binding CancelRestartCommand}" />
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel
+                Margin="0,0,0,8"
+                Visibility="{Binding ConfirmingServerStop, Converter={StaticResource BoolToVisibility}}">
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Margin="0,0,0,8"
+                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                    Text="{loc:Str Play_StopServerWarning}" />
+                <StackPanel Orientation="Horizontal">
+                    <ui:Button
+                        Appearance="Danger"
+                        Content="{loc:Str Play_StopServerConfirm}"
+                        Icon="{ui:SymbolIcon Stop24}"
+                        Command="{Binding ConfirmStopCommand}" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Appearance="Transparent"
+                        Content="{loc:Str Common_Cancel}"
+                        Command="{Binding CancelStopCommand}" />
+                </StackPanel>
+            </StackPanel>
+
+            <TextBlock
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="{Binding ServerPath}" />
+
+            <!-- The server's own log file, read on the poll while this is open (ServerLogs).
+                 Opens by itself when the server runs without its window. -->
+            <Expander
+                Margin="0,12,0,0"
+                Header="{loc:Str Play_ServerLog}"
+                IsExpanded="{Binding ShowServerLog}">
+                <StackPanel Margin="0,8,0,0">
+                    <!-- Drawn as a console: dark whatever the theme, lines coloured by level
+                         (Behaviors/ConsoleLog). Selectable, so lines can be copied. -->
+                    <Border
+                        CornerRadius="{DynamicResource ControlCornerRadius}"
+                        Padding="8,6"
+                        BorderThickness="1"
+                        BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                        Background="{x:Static behaviors:ConsoleLog.Background}">
+                        <!-- Style cleared: the themed one repaints the box on focus, and a console doesn't.
+                         Height is set in code: down to the bottom of the window (FitServerLog). -->
+                        <RichTextBox
+                            x:Name="ServerLog"
+                            Style="{x:Null}"
+                            Height="300"
+                            Padding="0"
+                            BorderThickness="0"
+                            Background="Transparent"
+                            Foreground="#CCCCCC"
+                            CaretBrush="Transparent"
+                            IsReadOnly="True"
+                            IsReadOnlyCaretVisible="False"
+                            FontFamily="Cascadia Mono, Consolas"
+                            FontSize="12"
+                            HorizontalScrollBarVisibility="Disabled"
+                            VerticalScrollBarVisibility="Auto"
+                            behaviors:ConsoleLog.Lines="{Binding ServerLogLines}" />
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <ui:Button
+                            Content="{loc:Str Play_ServerLogOpenFolder}"
+                            Icon="{ui:SymbolIcon FolderOpen24}"
+                            Command="{Binding OpenServerLogFolderCommand}" />
+                        <TextBlock
+                            Margin="12,0,0,0"
+                            VerticalAlignment="Center"
+                            TextTrimming="CharacterEllipsis"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{Binding ServerLogPath}" />
+                    </StackPanel>
+                </StackPanel>
+            </Expander>
+        </StackPanel>
+    </ui:Card>
+</UserControl>
