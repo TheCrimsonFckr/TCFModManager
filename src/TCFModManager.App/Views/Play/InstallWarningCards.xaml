@@ -1,0 +1,85 @@
+<UserControl
+    x:Class="TCFModManager.App.Views.Play.InstallWarningCards"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:converters="clr-namespace:TCFModManager.App.Converters">
+    <UserControl.Resources>
+        <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
+    </UserControl.Resources>
+    <StackPanel>
+        <!-- OPEN-23 R4: SPT would load no server mods. Shown only then, and never a gate. -->
+        <ui:Card
+            Padding="16"
+            VerticalAlignment="Top"
+            Margin="0,0,0,16"
+            Visibility="{Binding InstallWideWarning, Converter={StaticResource NullToCollapsed}}">
+            <StackPanel>
+                <ui:Button
+                    Padding="0"
+                    HorizontalContentAlignment="Left"
+                    Appearance="Transparent"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                    Icon="{ui:SymbolIcon ErrorCircle20}"
+                    Command="{Binding ShowConflictsCommand}">
+                    <TextBlock TextWrapping="Wrap" Text="{Binding InstallWideWarning}" />
+                </ui:Button>
+                <TextBlock
+                    Margin="0,4,0,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="{loc:Str Play_InstallWideHint}" />
+            </StackPanel>
+        </ui:Card>
+
+        <!-- OPEN-13 R4: installed mods not for this SPT (or for Fika). A note, never a gate. -->
+        <ui:Card
+            Padding="16"
+            VerticalAlignment="Top"
+            Margin="0,0,0,16"
+            Visibility="{Binding NotForSptWarning, Converter={StaticResource NullToCollapsed}}">
+            <StackPanel>
+                <ui:Button
+                    Padding="0"
+                    HorizontalContentAlignment="Left"
+                    Appearance="Transparent"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                    Icon="{ui:SymbolIcon Warning20}"
+                    Command="{Binding ShowNotForSptCommand}">
+                    <TextBlock TextWrapping="Wrap" Text="{Binding NotForSptWarning}" />
+                </ui:Button>
+                <TextBlock
+                    Margin="0,4,0,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="{loc:Str Play_NotForSptHint}" />
+            </StackPanel>
+        </ui:Card>
+
+        <!-- Conflicts in this install (OPEN-11 R4): shown only when there are any, and never a gate. -->
+        <ui:Card
+            Padding="16"
+            VerticalAlignment="Top"
+            Margin="0,0,0,16"
+            Visibility="{Binding ConflictWarning, Converter={StaticResource NullToCollapsed}}">
+            <StackPanel>
+                <ui:Button
+                    Padding="0"
+                    Appearance="Transparent"
+                    FontWeight="SemiBold"
+                    Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                    Icon="{ui:SymbolIcon ErrorCircle20}"
+                    Content="{Binding ConflictWarning}"
+                    Command="{Binding ShowConflictsCommand}" />
+                <TextBlock
+                    Margin="0,4,0,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Text="{loc:Str Play_ConflictsHint}" />
+            </StackPanel>
+        </ui:Card>
+    </StackPanel>
+</UserControl>
