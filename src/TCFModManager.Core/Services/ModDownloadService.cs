@@ -102,7 +102,13 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
         using var _ = response;
         var range = response.Content.Headers.ContentRange;
 
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var failure = DownloadHttpException.From(response);
+            AppLog.Info("Downloads", $"{Path.GetFileName(destinationPath)}: {(int)failure.Status} {response.ReasonPhrase} from {failure.Host ?? "an unknown host"}"
+                + (failure.RetryAfter is { } wait ? $", Retry-After {wait.TotalSeconds:F0}s" : ""));
+            throw failure;
+        }
 
         var offeredName = OfferedFileName(response);
 

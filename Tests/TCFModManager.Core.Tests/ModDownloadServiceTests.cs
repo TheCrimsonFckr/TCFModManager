@@ -115,6 +115,20 @@ public class ModDownloadServiceTests : IDisposable
         }
     }
 
+    private sealed class Failing(HttpStatusCode status, string? answeredFrom = null, RetryConditionHeaderValue? retryAfter = null) : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
+        {
+            var response = new HttpResponseMessage(status)
+            {
+                Content = new ByteArrayContent([]),
+                RequestMessage = answeredFrom is null ? request : new HttpRequestMessage(HttpMethod.Get, answeredFrom),
+            };
+            response.Headers.RetryAfter = retryAfter;
+            return Task.FromResult(response);
+        }
+    }
+
     private string Part => Path.Combine(_root, "mod.part");
 
     [Fact]
@@ -235,6 +249,62 @@ public class ModDownloadServiceTests : IDisposable
         await service.DownloadAsync("http://x/mod.zip", Part, resume: true, resumable: true);
 
         Assert.Equal(_file, File.ReadAllBytes(Part));
+    }
+
+    [Fact]
+    public async Task AServerError_SaysWhichHostSentIt()
+    {
+        using var service = new ModDownloadService(new HttpClient(new Failing(HttpStatusCode.GatewayTimeout)));
+
+        var failure = await Assert.ThrowsAsync<DownloadHttpException>(
+            () => service.DownloadAsync("https://sp-mod.com/mod/download/3261/pbt/1.0.0", Part, resumable: true));
+
+        Assert.Equal(HttpStatusCode.GatewayTimeout, failure.Status);
+        Assert.Equal(HttpStatusCode.GatewayTimeout, failure.StatusCode);
+        Assert.Equal("sp-mod.com", failure.Host);
+        Assert.True(failure.IsSpMod);
+        Assert.True(failure.IsServerSide);
+        Assert.Null(failure.RetryAfter);
+        Assert.False(File.Exists(Part));
+    }
+
+    [Fact]
+    public async Task AServerErrorAfterARedirect_NamesTheFileHost_NotSpMod()
+    {
+        var handler = new Failing(HttpStatusCode.BadGateway, "https://release-assets.githubusercontent.com/asset?sig=secret");
+        using var service = new ModDownloadService(new HttpClient(handler));
+
+        var failure = await Assert.ThrowsAsync<DownloadHttpException>(
+            () => service.DownloadAsync("https://sp-mod.com/mod/download/3261/pbt/1.0.0", Part));
+
+        Assert.Equal("release-assets.githubusercontent.com", failure.Host);
+        Assert.False(failure.IsSpMod);
+    }
+
+    [Fact]
+    public async Task RetryAfter_IsCarried_AsADeltaOrADate()
+    {
+        using var delta = new ModDownloadService(new HttpClient(
+            new Failing(HttpStatusCode.ServiceUnavailable, retryAfter: new RetryConditionHeaderValue(TimeSpan.FromSeconds(30)))));
+        var fromDelta = await Assert.ThrowsAsync<DownloadHttpException>(() => delta.DownloadAsync("https://sp-mod.com/x", Part));
+        Assert.Equal(TimeSpan.FromSeconds(30), fromDelta.RetryAfter);
+
+        using var past = new ModDownloadService(new HttpClient(
+            new Failing(HttpStatusCode.TooManyRequests, retryAfter: new RetryConditionHeaderValue(DateTimeOffset.UtcNow.AddMinutes(-5)))));
+        var fromPast = await Assert.ThrowsAsync<DownloadHttpException>(() => past.DownloadAsync("https://sp-mod.com/x", Part));
+        Assert.Equal(TimeSpan.Zero, fromPast.RetryAfter);
+        Assert.True(fromPast.IsServerSide);
+    }
+
+    [Fact]
+    public async Task ARefusal_IsNotServerSide()
+    {
+        using var service = new ModDownloadService(new HttpClient(new Failing(HttpStatusCode.NotFound)));
+
+        var failure = await Assert.ThrowsAsync<DownloadHttpException>(() => service.DownloadAsync("https://files.sp-mod.com/x", Part));
+
+        Assert.False(failure.IsServerSide);
+        Assert.True(failure.IsSpMod);
     }
 
     [Fact]
