@@ -7,6 +7,7 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
+    xmlns:play="clr-namespace:TCFModManager.App.Views.Play"
     Title="{loc:Str Nav_Server}">
     <Page.Resources>
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
@@ -385,16 +386,7 @@
             </StackPanel>
         </ui:Card>
 
-        <ui:Card
-            Padding="16"
-            VerticalAlignment="Top"
-            Margin="0,16,0,0"
-            Visibility="{Binding HasMessage, Converter={StaticResource BoolToVisibility}}">
-            <TextBlock
-                TextWrapping="Wrap"
-                Style="{StaticResource ErrorText}"
-                Text="{Binding Message}" />
-        </ui:Card>
+        <play:MessageCard />
 
     </StackPanel>
 </Page>
