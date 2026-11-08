@@ -2,19 +2,9 @@
     x:Class="TCFModManager.App.Views.ProfilePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
-    xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
-    xmlns:app="clr-namespace:TCFModManager.App"
-    xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:play="clr-namespace:TCFModManager.App.Views.Play"
     Title="{loc:Str Nav_Profile}">
-    <Page.Resources>
-        <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
-        <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
-        <converters:InverseBooleanConverter x:Key="Inverse" />
-        <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
-    </Page.Resources>
     <StackPanel x:Name="Root" Margin="16">
 
         <play:InstallWarningCards />
@@ -25,76 +15,7 @@
 
         <play:ProfileStatsCard />
 
-        <ui:Card Padding="16" VerticalAlignment="Top">
-            <StackPanel>
-                <TextBlock
-                    Text="{loc:Str Play_LauncherHeader}"
-                    FontWeight="SemiBold"
-                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    Margin="0,0,0,4" />
-                <TextBlock
-                    TextWrapping="Wrap"
-                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                    Margin="0,0,0,8"
-                    Text="{loc:Str Play_LauncherDescription}" />
-
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                    <ui:Button
-                        Appearance="Primary"
-                        Content="{loc:Str Play_OpenLauncher}"
-                        Icon="{ui:SymbolIcon Play24}"
-                        IsEnabled="{Binding CanStartClient}"
-                        Command="{Binding StartClientCommand}" />
-                    <ui:Button
-                        Margin="8,0,0,0"
-                        Content="{loc:Str Play_CloseGame}"
-                        Icon="{ui:SymbolIcon Dismiss24}"
-                        ToolTip="{loc:Str Play_CloseGameToolTip}"
-                        IsEnabled="{Binding CanCloseGame}"
-                        Command="{Binding AskCloseGameCommand}" />
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        Margin="12,0,0,0"
-                        TextWrapping="Wrap"
-                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                        Text="{Binding ClientState}" />
-                </StackPanel>
-
-                <StackPanel
-                    Margin="0,0,0,8"
-                    Visibility="{Binding ConfirmingCloseGame, Converter={StaticResource BoolToVisibility}}">
-                    <TextBlock
-                        TextWrapping="Wrap"
-                        Margin="0,0,0,8"
-                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                        Text="{loc:Str Play_CloseGameWarning}" />
-                    <StackPanel Orientation="Horizontal">
-                        <ui:Button
-                            Appearance="Danger"
-                            Content="{loc:Str Play_CloseGameConfirm}"
-                            Icon="{ui:SymbolIcon Dismiss24}"
-                            Command="{Binding ConfirmCloseGameCommand}" />
-                        <ui:Button
-                            Margin="8,0,0,0"
-                            Appearance="Transparent"
-                            Content="{loc:Str Common_Cancel}"
-                            Command="{Binding CancelCloseGameCommand}" />
-                    </StackPanel>
-                </StackPanel>
-
-                <TextBlock
-                    TextWrapping="Wrap"
-                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                    Text="{Binding ClientPath}" />
-
-                <CheckBox
-                    Margin="0,8,0,0"
-                    Content="{loc:Str Play_CloseGameWithServer}"
-                    ToolTip="{loc:Str Play_CloseGameWithServerToolTip}"
-                    ToolTipService.ShowDuration="20000"
-                    IsChecked="{Binding CloseGameWithServer}" />
-            </StackPanel>
-        </ui:Card>
+        <play:GameLauncherCard />
 
         <play:MessageCard />
 
