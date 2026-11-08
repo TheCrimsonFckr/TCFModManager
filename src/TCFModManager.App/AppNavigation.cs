@@ -77,8 +77,41 @@ internal static class AppNavigation
         ShowHelp(HelpCatalog.SectionIdFor(_currentPage));
     }
 
-    // Any page by type - the Open button on a Help topic.
-    public static void Navigate(Type page) => _navigation?.Navigate(page);
+    // Any page by type - the Open button on a Help topic. The Server page goes through ShowServer.
+    public static void Navigate(Type page)
+    {
+        if (page == typeof(ServerPage)) ShowServer();
+        else _navigation?.Navigate(page);
+    }
+
+    //
+    // OPEN-42: the server card, wherever it is - the Server page, or the Profile page scrolled to it
+    // while the Server page's cards are there. Held like the other requests: a Profile page built by
+    // the Navigate reads it as it loads, one already on screen hears ServerRequested.
+    //
+    private static bool _showServerPending;
+
+    public static event EventHandler? ServerRequested;
+
+    public static void ShowServer()
+    {
+        if (!AppServices.ServerPageGate.IsServerOnProfile)
+        {
+            _navigation?.Navigate(typeof(ServerPage));
+            return;
+        }
+
+        _showServerPending = true;
+        ServerRequested?.Invoke(null, EventArgs.Empty);
+        _navigation?.Navigate(typeof(ProfilePage));
+    }
+
+    public static bool TakeShowServer()
+    {
+        var pending = _showServerPending;
+        _showServerPending = false;
+        return pending;
+    }
 
     //
     // Completes once the sidebar's page transition has had time to finish. A page that refreshes on

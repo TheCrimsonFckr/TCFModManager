@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using TCFModManager.App.ViewModels;
 
 namespace TCFModManager.App.Views;
@@ -25,6 +26,13 @@ public partial class ProfilePage : Page
             //
             _ = AppServices.PreLaunchCheck.CheckAsync();
             _ = ViewModel.RefreshConflictsAsync();
+
+            if (AppNavigation.TakeShowServer()) ScrollToServer();
+        };
+
+        AppNavigation.ServerRequested += (_, _) =>
+        {
+            if (IsLoaded && AppNavigation.TakeShowServer()) ScrollToServer();
         };
 
         Unloaded += (_, _) => ViewModel.StopPolling();
@@ -35,6 +43,10 @@ public partial class ProfilePage : Page
         };
         Arrange();
     }
+
+    // After layout, so a server log just opened by Show server log is counted in the card's height.
+    private void ScrollToServer() =>
+        Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, () => Server.BringIntoView());
 
     // OPEN-42 Q3: with the server cards here, the order they are used in.
     private void Arrange()
