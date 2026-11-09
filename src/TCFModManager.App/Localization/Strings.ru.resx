@@ -4054,6 +4054,15 @@
   <data name="Play_OpenLauncher" xml:space="preserve">
     <value>Открыть лаунчер</value>
   </data>
+  <data name="QuickPlay_Title" xml:space="preserve">
+    <value>Быстрая игра</value>
+  </data>
+  <data name="QuickPlay_PlayAsFormat" xml:space="preserve">
+    <value>Играть за {0}</value>
+  </data>
+  <data name="QuickPlay_ServerAndLauncher" xml:space="preserve">
+    <value>Запустить сервер и лаунчер</value>
+  </data>
   <data name="Play_Restart" xml:space="preserve">
     <value>Перезапустить</value>
   </data>

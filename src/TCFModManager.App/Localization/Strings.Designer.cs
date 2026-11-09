@@ -262,6 +262,9 @@ internal static class Strings
     internal static string Play_LauncherHeader => LocalizationService.Get("Play_LauncherHeader");
     internal static string Play_LauncherDescription => LocalizationService.Get("Play_LauncherDescription");
     internal static string Play_OpenLauncher => LocalizationService.Get("Play_OpenLauncher");
+    internal static string QuickPlay_Title => LocalizationService.Get("QuickPlay_Title");
+    internal static string QuickPlay_PlayAsFormat => LocalizationService.Get("QuickPlay_PlayAsFormat");
+    internal static string QuickPlay_ServerAndLauncher => LocalizationService.Get("QuickPlay_ServerAndLauncher");
     internal static string Play_HeadlessHeader => LocalizationService.Get("Play_HeadlessHeader");
     internal static string Play_HeadlessDescription => LocalizationService.Get("Play_HeadlessDescription");
     internal static string Play_OpenHeadless => LocalizationService.Get("Play_OpenHeadless");

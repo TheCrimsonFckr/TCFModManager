@@ -129,7 +129,7 @@ public partial class PlayViewModel
     }
 
     // From Refresh: whether the card is the direct one, and the profiles on disk.
-    private void RefreshDirect(string? installPath, AppSettings settings)
+    private void RefreshDirect(string? installPath, AppSettings settings, bool readProfiles = true)
     {
         var support = SptDirectLaunch.Support(AppServices.SptEnvironment.InstalledVersion);
         IsDirectLaunchEnabled = settings.DirectLaunch;
@@ -146,6 +146,8 @@ public partial class PlayViewModel
         DirectLaunchUntested = IsDirectLaunchOn && support == DirectLaunchSupport.NewerUntested
             ? Text(Strings.Play_DirectUntestedFormat, AppServices.SptEnvironment.InstalledVersion, SptDirectLaunch.TestedUpTo)
             : null;
+
+        if (!readProfiles) return;
 
         var found = SptLocalProfiles.Read(installPath).Select(p => new PlayProfileItem(p)).ToList();
         if (found.Count == Profiles.Count && found.Zip(Profiles).All(pair => pair.First.SameAs(pair.Second))) return;

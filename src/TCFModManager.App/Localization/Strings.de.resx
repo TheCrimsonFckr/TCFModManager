@@ -3883,6 +3883,15 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="Play_OpenLauncher" xml:space="preserve">
     <value>Launcher öffnen</value>
   </data>
+  <data name="QuickPlay_Title" xml:space="preserve">
+    <value>Schnellstart</value>
+  </data>
+  <data name="QuickPlay_PlayAsFormat" xml:space="preserve">
+    <value>Als {0} spielen</value>
+  </data>
+  <data name="QuickPlay_ServerAndLauncher" xml:space="preserve">
+    <value>Server und Launcher starten</value>
+  </data>
   <data name="Play_Restart" xml:space="preserve">
     <value>Neu starten</value>
   </data>

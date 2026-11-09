@@ -926,6 +926,18 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="Play_OpenLauncher" xml:space="preserve">
     <value>Open launcher</value>
   </data>
+  <data name="QuickPlay_Title" xml:space="preserve">
+    <value>Quick play</value>
+    <comment>The quick play button in the sidebar and the tray (OPEN-43): starts the server and the game from anywhere.</comment>
+  </data>
+  <data name="QuickPlay_PlayAsFormat" xml:space="preserve">
+    <value>Play as {0}</value>
+    <comment>Quick play's second line when it starts the game itself. {0} is the profile's name.</comment>
+  </data>
+  <data name="QuickPlay_ServerAndLauncher" xml:space="preserve">
+    <value>Start server and launcher</value>
+    <comment>Quick play's second line when it starts the server and then the SPT launcher, which picks the profile itself.</comment>
+  </data>
   <data name="Play_HeadlessHeader" xml:space="preserve">
     <value>Fika headless client</value>
     <comment>Fika is a mod's name and stays as it is.</comment>

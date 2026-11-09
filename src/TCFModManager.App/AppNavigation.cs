@@ -114,6 +114,31 @@ internal static class AppNavigation
     }
 
     //
+    // OPEN-43: a quick play that failed away from the Profile page - Profile, at the card that says why.
+    // Held the same way as ShowServer.
+    //
+    private static bool _showPlayProblemPending;
+
+    public static event EventHandler? PlayProblemRequested;
+
+    public static void ShowPlayProblem()
+    {
+        _showPlayProblemPending = true;
+        PlayProblemRequested?.Invoke(null, EventArgs.Empty);
+
+        if (Application.Current?.MainWindow is { } window) WindowActivation.BringForward(window);
+
+        _navigation?.Navigate(typeof(ProfilePage));
+    }
+
+    public static bool TakeShowPlayProblem()
+    {
+        var pending = _showPlayProblemPending;
+        _showPlayProblemPending = false;
+        return pending;
+    }
+
+    //
     // Completes once the sidebar's page transition has had time to finish. A page that refreshes on
     // every visit awaits this first, so its refresh lands on a page that has stopped moving instead
     // of stalling the animation. The transition starts before the page's Loaded, so waiting the

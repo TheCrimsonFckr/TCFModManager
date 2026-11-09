@@ -364,19 +364,25 @@ public partial class PlayViewModel : LocalizedViewModel
     [RelayCommand]
     private async Task StartServerAsync()
     {
+        var settings = new SettingsService().Load();
+
+        // Not when the Play card starts the game itself - the SPT launcher is what that replaces.
+        var openLauncher = settings.StartLauncherAfterServer && !IsDirectLaunchOn && Client is { CanLaunch: true };
+
+        await StartServerAndWaitAsync(settings, openLauncher);
+    }
+
+    private async Task StartServerAndWaitAsync(AppSettings settings, bool openLauncher)
+    {
         var ports = SptServerReadiness.PortsFor(Server?.ExePath);
         _portsBeforeStart = ports.Where(p => !SptServerReadiness.IsListening(new HashSet<int> { p })).ToHashSet();
 
-        var settings = new SettingsService().Load();
         Start(SptLaunchTarget.Server, settings.HideServerWindow);
 
         if (HasError) return;
 
         // With no window, the log below is where the server says what it is doing.
         if (settings.HideServerWindow) ShowServerLog = true;
-
-        // Not when the Play card starts the game itself - the SPT launcher is what that replaces.
-        var openLauncher = settings.StartLauncherAfterServer && !IsDirectLaunchOn && Client is { CanLaunch: true };
 
         // Watched for without the launcher too when it has no window: otherwise a server that gives
         // up on starting would just be gone, with nothing said.

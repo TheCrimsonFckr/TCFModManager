@@ -28,6 +28,12 @@ public partial class ProfilePage : Page
             _ = ViewModel.RefreshConflictsAsync();
 
             if (AppNavigation.TakeShowServer()) ScrollToServer();
+            if (AppNavigation.TakeShowPlayProblem()) ScrollToPlayProblem();
+        };
+
+        AppNavigation.PlayProblemRequested += (_, _) =>
+        {
+            if (IsLoaded && AppNavigation.TakeShowPlayProblem()) ScrollToPlayProblem();
         };
 
         AppNavigation.ServerRequested += (_, _) =>
@@ -47,6 +53,11 @@ public partial class ProfilePage : Page
     // After layout, so a server log just opened by Show server log is counted in the card's height.
     private void ScrollToServer() =>
         Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, () => Server.BringIntoView());
+
+    // The Play card says why PLAY stopped; the message card says why the server or launcher didn't start.
+    private void ScrollToPlayProblem() =>
+        Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, () =>
+            (ViewModel.QuickPlaysDirect ? (FrameworkElement)DirectPlay : Message).BringIntoView());
 
     // OPEN-42 Q3: with the server cards here, the order they are used in.
     private void Arrange()
