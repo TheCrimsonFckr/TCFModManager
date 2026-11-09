@@ -4581,6 +4581,9 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Tray_ToolTip" xml:space="preserve">
     <value>TCF Mod Manager - controlla gli aggiornamenti dei mod</value>
   </data>
+  <data name="Tray_ToolTipPlain" xml:space="preserve">
+    <value>TCF Mod Manager</value>
+  </data>
   <data name="Tray_Open" xml:space="preserve">
     <value>Apri</value>
   </data>

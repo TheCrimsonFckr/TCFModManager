@@ -18,7 +18,7 @@ Off until you switch it on. With it on, the app asks sp-mod every so often wheth
 When a check finds something, the Installed page and Browse's status dots pick up the new version without a refresh.
 
 ## Keeping it running in the tray
-Closing the window normally quits the app, and the checks stop with it. Under the notifications switch, turn on **Closing the window keeps the app running in the tray** and closing hides the window instead, leaving the app's icon in the notification area by the clock. The first time it happens, a notification says so. The switch is only available while notifications are on.
+Closing the window normally quits the app, and the checks stop with it. Under the notifications switch, turn on **Closing the window keeps the app running in the tray** and closing hides the window instead, leaving the app's icon in the notification area by the clock. The first time it happens, a notification says so. The switch is only available while notifications are on. The icon itself is there whenever the app is running, switch or not, so **Quick play** is always a right-click away.
 
 - **Click the icon** to open the window again.
 - **Right-click it** for **Open**, **Check for updates now** and **Quit**. While this is on, Quit is how you actually close the app.

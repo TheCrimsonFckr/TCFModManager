@@ -55,6 +55,7 @@ public partial class MainWindow : FluentWindow
             // otherwise. Attached first, so a click landing from here on navigates by itself.
             AppNavigation.Attach(RootNavigationView);
             AppServices.Play.StartQuickPolling();
+            AppTray.ShowIcon();
             RootNavigationView.Navigate(AppNavigation.StartOnInstalled ? typeof(InstalledPage) : typeof(BrowsePage));
 
             // Fire-and-forget: whether a newer build of this app exists on sp-mod.com has no
@@ -74,8 +75,8 @@ public partial class MainWindow : FluentWindow
         };
 
         //
-        // Running in the tray (§8a): with the setting on, closing hides the window instead, and the
-        // tray icon goes as soon as the window is back, however it came back.
+        // Running in the tray (§8a): with the setting on, closing hides the window instead. The tray
+        // icon is there throughout (OPEN-43).
         //
         Closing += (_, e) =>
         {

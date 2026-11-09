@@ -5793,6 +5793,10 @@ The details are in the log:
     <value>TCF Mod Manager - checking for mod updates</value>
     <comment>Shown when the mouse rests on the tray icon. Keep it short: Windows cuts it off at 127 characters.</comment>
   </data>
+  <data name="Tray_ToolTipPlain" xml:space="preserve">
+    <value>TCF Mod Manager</value>
+    <comment>The tray icon's tooltip while update notifications are off (OPEN-43). The app's name.</comment>
+  </data>
   <data name="Tray_Open" xml:space="preserve">
     <value>Open</value>
     <comment>Tray icon menu: shows the window.</comment>

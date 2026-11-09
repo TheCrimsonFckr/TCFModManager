@@ -9,12 +9,12 @@ using Wpf.Ui.Tray.Controls;
 namespace TCFModManager.App;
 
 //
-// Running in the tray (§8a, R9): with the setting on, closing the window hides it and leaves an
-// icon in the notification area, so update checks carry on.
+// Running in the tray (§8a, R9): with the setting on, closing the window hides it and leaves the app
+// in the notification area, so update checks carry on.
 //
-// The icon exists only while the window is hidden (D9). It is made in code rather than placed in
-// MainWindow's XAML because WPF-UI's NotifyIcon registers itself the first time it renders - in the
-// window, that would put it in the tray from launch.
+// The icon is there for as long as the app runs (OPEN-43, replacing D9's "only while hidden"), so its
+// menu's Quick play is always a right-click away. It is made in code rather than placed in
+// MainWindow's XAML because WPF-UI's NotifyIcon registers itself the first time it renders.
 //
 // Its menu is Open, Check for updates now and Quit (D10). Quit is the only way out while the
 // setting is on, so it is also what everything else that ends the app goes through (Quit below).
@@ -57,36 +57,22 @@ internal static class AppTray
     public static bool HidesOnClose() =>
         !IsQuitting && new SettingsService().Load().UpdateNotifications.KeepsRunningInTray;
 
+    // Once the main window is up. A failure here only costs the icon; the window is on screen.
+    public static void ShowIcon()
+    {
+        if (EnsureIcon()) AppLog.Info("Tray", "icon in the tray");
+    }
+
     public static void HideToTray(Window window)
     {
         window.Hide();
 
-        try
+        //
+        // A window hidden with no icon to bring it back would leave the app running where nobody can
+        // reach it but a second launch of the exe. Better to leave the window where it was.
+        //
+        if (!EnsureIcon())
         {
-            _icon ??= Build();
-
-            _icon.Icon = AppIcons.ForTray;
-
-            // Rebuilt on every hide rather than once, so it's in whatever language the app is now in.
-            _icon.TooltipText = Strings.Tray_ToolTip;
-            _icon.Menu = BuildMenu();
-            _icon.Register();
-        }
-        catch (Exception ex)
-        {
-            //
-            // A window hidden with no icon to bring it back would leave the app running where nobody
-            // can reach it but a second launch of the exe. Better to leave the window where it was.
-            //
-            AppLog.Error("Tray", "couldn't put the icon in the tray - showing the window again", ex);
-            window.Show();
-            return;
-        }
-
-        // Register reports failure by leaving this false rather than by throwing. Same way out as above.
-        if (!_icon.IsRegistered)
-        {
-            AppLog.Error("Tray", "the shell refused the tray icon - showing the window again");
             window.Show();
             return;
         }
@@ -97,14 +83,52 @@ internal static class AppTray
 
     //
     // Called whenever the window becomes visible, however that happened - the menu, a click on the
-    // icon or on a notification, or launching the exe again (D11).
+    // icon or on a notification, or launching the exe again (D11). The icon stays.
     //
-    public static void OnWindowShown()
-    {
-        if (_icon?.IsRegistered != true) return;
+    public static void OnWindowShown() => AppLog.Info("Tray", "window shown again");
 
-        _icon.Unregister();
-        AppLog.Info("Tray", "window shown again");
+    //
+    // Registers the icon if it isn't already. The tooltip and menu are rebuilt every time, and again
+    // when the language changes, so they are never left in the previous one.
+    //
+    private static bool EnsureIcon()
+    {
+        try
+        {
+            if (_icon is null)
+            {
+                _icon = Build();
+                AppLanguage.Changed += (_, _) => Relabel();
+            }
+
+            _icon.Icon = AppIcons.ForTray;
+            Relabel();
+            if (!_icon.IsRegistered) _icon.Register();
+        }
+        catch (Exception ex)
+        {
+            AppLog.Error("Tray", "couldn't put the icon in the tray", ex);
+            return false;
+        }
+
+        // Register reports failure by leaving this false rather than by throwing.
+        if (!_icon.IsRegistered)
+        {
+            AppLog.Error("Tray", "the shell refused the tray icon");
+            return false;
+        }
+
+        return true;
+    }
+
+    private static void Relabel()
+    {
+        if (_icon is null) return;
+
+        _icon.TooltipText = new SettingsService().Load().UpdateNotifications.Enabled
+            ? Strings.Tray_ToolTip
+            : Strings.Tray_ToolTipPlain;
+        _icon.Menu = BuildMenu();
     }
 
     public static void Open()

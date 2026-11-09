@@ -4581,6 +4581,9 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="Tray_ToolTip" xml:space="preserve">
     <value>TCF Mod Manager - vérifie les mises à jour de mods</value>
   </data>
+  <data name="Tray_ToolTipPlain" xml:space="preserve">
+    <value>TCF Mod Manager</value>
+  </data>
   <data name="Tray_Open" xml:space="preserve">
     <value>Ouvrir</value>
   </data>

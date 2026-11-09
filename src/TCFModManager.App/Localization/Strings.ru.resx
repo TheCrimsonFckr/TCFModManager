@@ -4797,6 +4797,9 @@
   <data name="Tray_ToolTip" xml:space="preserve">
     <value>TCF Mod Manager - проверка обновлений модов</value>
   </data>
+  <data name="Tray_ToolTipPlain" xml:space="preserve">
+    <value>TCF Mod Manager</value>
+  </data>
   <data name="Tray_Open" xml:space="preserve">
     <value>Открыть</value>
   </data>

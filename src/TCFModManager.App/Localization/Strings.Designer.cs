@@ -1595,6 +1595,7 @@ internal static class Strings
     internal static string Options_TrayOff => LocalizationService.Get("Options_TrayOff");
     internal static string Options_TrayToolTip => LocalizationService.Get("Options_TrayToolTip");
     internal static string Tray_ToolTip => LocalizationService.Get("Tray_ToolTip");
+    internal static string Tray_ToolTipPlain => LocalizationService.Get("Tray_ToolTipPlain");
     internal static string Tray_Open => LocalizationService.Get("Tray_Open");
     internal static string Tray_CheckNow => LocalizationService.Get("Tray_CheckNow");
     internal static string Tray_Quit => LocalizationService.Get("Tray_Quit");

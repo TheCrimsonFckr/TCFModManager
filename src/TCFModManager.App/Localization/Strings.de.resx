@@ -4581,6 +4581,9 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="Tray_ToolTip" xml:space="preserve">
     <value>TCF Mod Manager - prüft auf Mod-Updates</value>
   </data>
+  <data name="Tray_ToolTipPlain" xml:space="preserve">
+    <value>TCF Mod Manager</value>
+  </data>
   <data name="Tray_Open" xml:space="preserve">
     <value>Öffnen</value>
   </data>
