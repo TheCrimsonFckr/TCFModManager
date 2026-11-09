@@ -54,6 +54,7 @@ public partial class MainWindow : FluentWindow
             // Installed when this launch came from clicking an update notification (§6), Browse
             // otherwise. Attached first, so a click landing from here on navigates by itself.
             AppNavigation.Attach(RootNavigationView);
+            AppServices.Play.StartQuickPolling();
             RootNavigationView.Navigate(AppNavigation.StartOnInstalled ? typeof(InstalledPage) : typeof(BrowsePage));
 
             // Fire-and-forget: whether a newer build of this app exists on sp-mod.com has no

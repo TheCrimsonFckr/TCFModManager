@@ -220,6 +220,22 @@
                     TargetPageType="{x:Type views:DownloadsPage}" />
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>
+                <!-- OPEN-43 Quick play: a button, not a page - no TargetPageType, so a click runs the
+                     command and navigates nowhere. -->
+                <ui:NavigationViewItem
+                    Icon="{ui:SymbolIcon Play24}"
+                    DataContext="{x:Static app:AppServices.Play}"
+                    Command="{Binding QuickPlayCommand}"
+                    ToolTip="{Binding QuickPlayLine}">
+                    <StackPanel>
+                        <TextBlock Text="{loc:Str QuickPlay_Title}" />
+                        <TextBlock
+                            FontSize="11"
+                            TextTrimming="CharacterEllipsis"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                            Text="{Binding QuickPlayLine}" />
+                    </StackPanel>
+                </ui:NavigationViewItem>
                 <!-- The badge only appears when there's actually an update, and its colour matches
                      the banner's: informational for a bug fix, success for a feature release,
                      attention for a major one - or caution when only the Server Map mod is behind. DataContext is set explicitly because an InfoBadge

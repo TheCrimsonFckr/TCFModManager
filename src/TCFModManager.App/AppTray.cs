@@ -146,6 +146,13 @@ internal static class AppTray
         var open = new MenuItem { Header = Strings.Tray_Open, FontWeight = FontWeights.SemiBold };
         open.Click += (_, _) => Open();
 
+        var quickLine = new TextBlock { FontSize = 11, Opacity = 0.7 };
+        var quick = new MenuItem
+        {
+            Header = new StackPanel { Children = { new TextBlock { Text = Strings.QuickPlay_Title }, quickLine } },
+            Command = AppServices.Play.QuickPlayCommand,
+        };
+
         var check = new MenuItem { Header = Strings.Tray_CheckNow };
         check.Click += async (_, _) => await CheckNowAsync();
 
@@ -157,7 +164,9 @@ internal static class AppTray
         };
 
         var menu = new ContextMenu();
+        menu.Opened += (_, _) => quickLine.Text = AppServices.Play.QuickPlayLine;
         menu.Items.Add(open);
+        menu.Items.Add(quick);
         menu.Items.Add(check);
         menu.Items.Add(new Separator());
         menu.Items.Add(quit);

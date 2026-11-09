@@ -36,6 +36,9 @@ public partial class PlayViewModel
     // What a quick play is doing, for a button away from the Play card. Null when it is not running.
     public string? QuickPlayStatus => IsPlaying ? PlayStatus : IsWaitingForServer ? Message : null;
 
+    // The button's second line: what it is doing, or what pressing it will do.
+    public string QuickPlayLine => QuickPlayStatus ?? QuickPlayLabel;
+
     //
     // Called once by whatever shows the button. Keeps the state the button reads current while no
     // page that shows this is on screen - the server, the launcher and the game only, with the
@@ -48,7 +51,7 @@ public partial class PlayViewModel
 
         _quickPoll.Tick += (_, _) =>
         {
-            if (_pollUsers == 0) RefreshQuick(readProfiles: false);
+            if (_pollUsers == 0) RefreshQuick(readProfiles: Profiles.Count == 0);
         };
 
         RefreshQuick(readProfiles: true);
@@ -99,6 +102,7 @@ public partial class PlayViewModel
         base.OnPropertyChanged(new PropertyChangedEventArgs(nameof(QuickPlayLabel)));
         base.OnPropertyChanged(new PropertyChangedEventArgs(nameof(CanQuickPlay)));
         base.OnPropertyChanged(new PropertyChangedEventArgs(nameof(QuickPlayStatus)));
+        base.OnPropertyChanged(new PropertyChangedEventArgs(nameof(QuickPlayLine)));
         QuickPlayCommand.NotifyCanExecuteChanged();
     }
 }
