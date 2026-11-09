@@ -24,6 +24,11 @@ Pick the profile in the card's own picker, or in the Play card's when that's swi
 - **Open launcher** opens `SPT.Launcher.exe`, where you pick a profile and start the game. Start the server first; the launcher has nothing to log in to without one.
 - **Close game** closes Escape From Tarkov, after asking. Tick **Close the game when the server stops** and the game goes whenever this install's server stops - **Stop**, its window closed, or a crash. Stop then closes the game first, while the server can still answer it; a restart from the Server page doesn't count.
 
+## Quick play
+**Quick play**, at the bottom of the sidebar and in the tray icon's menu, starts everything from wherever you are. With **Play from the app** (below) switched on it plays as your last profile - the one last picked on the Play card, or the SPT launcher's last login - starting the server first if it isn't up. Without it, it starts the server and then the SPT launcher, which logs into its own last profile. Its second line says which, and what it is doing once pressed; if something stops it, this page opens at the reason. It is greyed out while the game is running or a start is already under way.
+
+**Options - Starting SPT - Create desktop shortcut** puts a *TCF Mod Manager - Quick play* shortcut on your desktop that does the same: it opens the app on this page if it isn't running, or tells the running one to play. Make it again if you move the app's folder.
+
 ## Play from the app (experimental)
 **Options - Start the game from this app** (off by default) adds a **Play** card: pick a profile and press **PLAY**. It starts the server if it isn't running, waits for it, does what the SPT launcher does - checks the server and `spt-core.dll` are the same SPT version, cleans up the same files, applies SPT's game patch, fetches missing mod bundles - and starts the game, with no SPT launcher window. If the server stops or doesn't come up in time, **Show server log** opens the Server page with its log. The **...** beside PLAY has wipe on next start, new profile, delete profile (a copy of your profiles is kept first), clear cache, and the SPT launcher. The SPT launcher's own settings (files it leaves alone, Clear cache on launch) are followed.
 

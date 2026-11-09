@@ -14,6 +14,7 @@ The server keeps running without the app. If this install's server is still up w
 **Options - Starting SPT** has these switches:
 - **Open the launcher once the server is up** - after Start server, the page waits until the server is listening on its port (from its `http.json`, and 6969) and then opens the launcher. A heavily modded server gets three minutes.
 - **Run the server without its window** - no console window; the server log on this page shows what it is doing, and Stop closes it properly. It still keeps running if you close the app.
+- **Create desktop shortcut** - a Quick play shortcut on your desktop; see [Profile](Profile#quick-play).
 - **Show the server on the Profile page** - only while the server runs in its own window. This page's cards move onto [Profile](Profile) and Server leaves the sidebar; anything that would open this page opens Profile at the server card instead. Running the server without its window brings the page back.
 
 > [!NOTE]
