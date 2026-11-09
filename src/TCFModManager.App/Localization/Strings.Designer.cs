@@ -1982,6 +1982,12 @@ internal static class Strings
     internal static string Help_Start_Version_Keywords => LocalizationService.Get("Help_Start_Version_Keywords");
     internal static string Help_Play_Start_Keywords => LocalizationService.Get("Help_Play_Start_Keywords");
     internal static string Help_Play_Check_Keywords => LocalizationService.Get("Help_Play_Check_Keywords");
+    internal static string Help_QuickPlay_Title => LocalizationService.Get("Help_QuickPlay_Title");
+    internal static string Help_QuickPlay_Step1 => LocalizationService.Get("Help_QuickPlay_Step1");
+    internal static string Help_QuickPlay_Step2 => LocalizationService.Get("Help_QuickPlay_Step2");
+    internal static string Help_QuickPlay_Step3 => LocalizationService.Get("Help_QuickPlay_Step3");
+    internal static string Help_QuickPlay_Note => LocalizationService.Get("Help_QuickPlay_Note");
+    internal static string Help_QuickPlay_Keywords => LocalizationService.Get("Help_QuickPlay_Keywords");
     internal static string Help_Browse_Compatible_Keywords => LocalizationService.Get("Help_Browse_Compatible_Keywords");
     internal static string Help_Browse_Install_Keywords => LocalizationService.Get("Help_Browse_Install_Keywords");
     internal static string Help_Browse_Author_Keywords => LocalizationService.Get("Help_Browse_Author_Keywords");

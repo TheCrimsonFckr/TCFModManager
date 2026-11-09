@@ -6015,6 +6015,24 @@
   <data name="Help_Play_Check_Keywords" xml:space="preserve">
     <value>недостающие моды, зайти, перед рейдом, сравнить, список сервера</value>
   </data>
+  <data name="Help_QuickPlay_Title" xml:space="preserve">
+    <value>Играть в один клик</value>
+  </data>
+  <data name="Help_QuickPlay_Step1" xml:space="preserve">
+    <value>Нажмите {0} внизу боковой панели или в меню значка в трее.</value>
+  </data>
+  <data name="Help_QuickPlay_Step2" xml:space="preserve">
+    <value>Вторая строка говорит, что произойдёт - игра за ваш последний профиль или запуск сервера, а затем лаунчера SPT - и что происходит после нажатия. Если что-то помешает, откроется страница «Профиль» с причиной.</value>
+  </data>
+  <data name="Help_QuickPlay_Step3" xml:space="preserve">
+    <value>Чтобы создать ярлык на рабочем столе, который делает то же самое, откройте {0}, затем {1} и нажмите {2}.</value>
+  </data>
+  <data name="Help_QuickPlay_Note" xml:space="preserve">
+    <value>Чтобы играть за профиль, в настройках должен быть включён запуск игры из этого приложения. Без этого лаунчер SPT входит в свой последний профиль.</value>
+  </data>
+  <data name="Help_QuickPlay_Keywords" xml:space="preserve">
+    <value>быстрая игра, быстрый запуск, один клик, ярлык, рабочий стол, трей, последний профиль, запуск игры</value>
+  </data>
   <data name="Help_Browse_Compatible_Keywords" xml:space="preserve">
     <value>совместимый, работает с, фильтр, версия SPT</value>
   </data>

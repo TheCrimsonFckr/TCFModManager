@@ -19,7 +19,7 @@ internal static class DesktopShortcut
     // Writes or replaces the shortcut and returns its path. Throws what the shell or the disk threw.
     public static string CreateQuickPlay()
     {
-        var exe = Environment.ProcessPath ?? throw new InvalidOperationException("The app's own path is unknown.");
+        var exe = Environment.ProcessPath ?? Path.Combine(AppContext.BaseDirectory, "TCFModManager.exe");
         var name = string.Concat(Strings.QuickPlay_ShortcutName.Split(Path.GetInvalidFileNameChars()));
         var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), name + ".lnk");
 

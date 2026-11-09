@@ -7178,6 +7178,28 @@ The details are in the log:
     <value>missing mods, join, before raid, compare, server list</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
+  <data name="Help_QuickPlay_Title" xml:space="preserve">
+    <value>Play in one click</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_QuickPlay_Step1" xml:space="preserve">
+    <value>Press {0} at the bottom of the sidebar, or in the tray icon's menu.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_QuickPlay_Step2" xml:space="preserve">
+    <value>Its second line says what it will do - play as your last profile, or start the server and then the SPT launcher - and what it's doing once pressed. If something stops it, the Profile page opens at the reason.</value>
+  </data>
+  <data name="Help_QuickPlay_Step3" xml:space="preserve">
+    <value>For a desktop shortcut that does the same, open {0}, then {1}, and press {2}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_QuickPlay_Note" xml:space="preserve">
+    <value>Playing as a profile needs Start the game from this app switched on in Options. Without it, the SPT launcher logs into its own last profile.</value>
+  </data>
+  <data name="Help_QuickPlay_Keywords" xml:space="preserve">
+    <value>quick play, quick launch, one click, shortcut, desktop, tray, last profile, start game</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
   <data name="Help_Browse_Compatible_Keywords" xml:space="preserve">
     <value>compatible, works with, filter, SPT version, supported</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>

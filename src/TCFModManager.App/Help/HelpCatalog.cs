@@ -57,6 +57,14 @@ internal static class HelpCatalog
                     () => Strings.Common_ReviewAndInstall, () => Strings.ModLists_Apply))
                 .WithNote(() => Strings.Help_Play_Check_Note)
                 .WithKeywords(() => Strings.Help_Play_Check_Keywords),
+
+            Topic("profile.quickplay", () => Strings.Help_QuickPlay_Title,
+                Step(() => Strings.Help_QuickPlay_Step1, () => Strings.QuickPlay_Title),
+                Step(() => Strings.Help_QuickPlay_Step2),
+                Step(() => Strings.Help_QuickPlay_Step3,
+                    () => Strings.Nav_Options, () => Strings.Options_StartingSptHeader, () => Strings.Options_QuickShortcutButton))
+                .WithNote(() => Strings.Help_QuickPlay_Note)
+                .WithKeywords(() => Strings.Help_QuickPlay_Keywords),
         ]),
 
         new("server", () => Strings.Nav_Server, SymbolRegular.Server24, typeof(ServerPage),

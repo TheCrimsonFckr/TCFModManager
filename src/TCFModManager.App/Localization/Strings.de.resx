@@ -5742,6 +5742,24 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="Help_Play_Check_Keywords" xml:space="preserve">
     <value>fehlende Mods, beitreten, vor dem Raid, vergleichen, Serverliste</value>
   </data>
+  <data name="Help_QuickPlay_Title" xml:space="preserve">
+    <value>Mit einem Klick spielen</value>
+  </data>
+  <data name="Help_QuickPlay_Step1" xml:space="preserve">
+    <value>Drücke {0} unten in der Seitenleiste oder im Menü des Tray-Symbols.</value>
+  </data>
+  <data name="Help_QuickPlay_Step2" xml:space="preserve">
+    <value>Die zweite Zeile sagt, was es tun wird - mit deinem letzten Profil spielen oder den Server und dann den SPT-Launcher starten - und was es gerade tut. Wenn etwas dazwischenkommt, öffnet sich die Seite Profil beim Grund.</value>
+  </data>
+  <data name="Help_QuickPlay_Step3" xml:space="preserve">
+    <value>Für eine Desktop-Verknüpfung, die dasselbe tut, öffne {0}, dann {1}, und drücke {2}.</value>
+  </data>
+  <data name="Help_QuickPlay_Note" xml:space="preserve">
+    <value>Mit einem Profil zu spielen braucht die Option Spiel aus dieser App starten. Ohne sie meldet sich der SPT-Launcher mit seinem eigenen letzten Profil an.</value>
+  </data>
+  <data name="Help_QuickPlay_Keywords" xml:space="preserve">
+    <value>schnellstart, schnell starten, ein klick, verknüpfung, desktop, tray, letztes profil, spiel starten</value>
+  </data>
   <data name="Help_Browse_Compatible_Keywords" xml:space="preserve">
     <value>kompatibel, funktioniert mit, filtern, SPT-Version, unterstützt</value>
   </data>

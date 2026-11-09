@@ -5742,6 +5742,24 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="Help_Play_Check_Keywords" xml:space="preserve">
     <value>mods manquants, rejoindre, avant le raid, comparer, liste du serveur</value>
   </data>
+  <data name="Help_QuickPlay_Title" xml:space="preserve">
+    <value>Jouer en un clic</value>
+  </data>
+  <data name="Help_QuickPlay_Step1" xml:space="preserve">
+    <value>Appuyez sur {0} en bas de la barre latérale, ou dans le menu de l'icône de la zone de notification.</value>
+  </data>
+  <data name="Help_QuickPlay_Step2" xml:space="preserve">
+    <value>Sa deuxième ligne indique ce qu'il va faire - jouer avec votre dernier profil, ou démarrer le serveur puis le launcher SPT - et ce qu'il fait une fois lancé. Si quelque chose l'arrête, la page Profil s'ouvre sur la raison.</value>
+  </data>
+  <data name="Help_QuickPlay_Step3" xml:space="preserve">
+    <value>Pour un raccourci sur le bureau qui fait la même chose, ouvrez {0}, puis {1}, et appuyez sur {2}.</value>
+  </data>
+  <data name="Help_QuickPlay_Note" xml:space="preserve">
+    <value>Jouer avec un profil nécessite l'option Lancer le jeu depuis cette application. Sans elle, le launcher SPT se connecte avec son propre dernier profil.</value>
+  </data>
+  <data name="Help_QuickPlay_Keywords" xml:space="preserve">
+    <value>jeu rapide, lancement rapide, un clic, raccourci, bureau, zone de notification, dernier profil, lancer le jeu</value>
+  </data>
   <data name="Help_Browse_Compatible_Keywords" xml:space="preserve">
     <value>compatible, fonctionne avec, filtrer, version SPT</value>
   </data>
