@@ -25,6 +25,10 @@ internal static class SingleInstance
 
     private static RegisteredWaitHandle? _showWait;
 
+    private static EventWaitHandle? _quickPlaySignal;
+
+    private static RegisteredWaitHandle? _quickPlayWait;
+
     //
     // True for the first copy, which goes on to start normally and calls onShowRequested (on a
     // thread-pool thread) each time another launch asks for the window. False for any later copy,
@@ -32,7 +36,9 @@ internal static class SingleInstance
     //
     // Fails open: if the mutex can't be made at all, the app starts rather than refusing to.
     //
-    public static bool Claim(Action onShowRequested)
+    // quickPlay: this launch came from the Quick play shortcut (OPEN-43). A later copy passes that on
+    // as its own signal, and the first copy calls onQuickPlayRequested instead of onShowRequested.
+    public static bool Claim(Action onShowRequested, Action onQuickPlayRequested, bool quickPlay)
     {
         var key = KeyFor(AppContext.BaseDirectory);
 
@@ -40,6 +46,7 @@ internal static class SingleInstance
         {
             _mutex = new Mutex(initiallyOwned: true, $@"Local\TCFModManager-{key}", out var createdNew);
             _showSignal = new EventWaitHandle(false, EventResetMode.AutoReset, $@"Local\TCFModManager-{key}-show");
+            _quickPlaySignal = new EventWaitHandle(false, EventResetMode.AutoReset, $@"Local\TCFModManager-{key}-quickplay");
 
             if (!createdNew)
             {
@@ -47,14 +54,18 @@ internal static class SingleInstance
                 // foreground. Handing that on is what lets the running copy's window actually come
                 // to the front instead of flashing on the taskbar.
                 AllowSetForegroundWindow(AsfwAny);
-                _showSignal.Set();
+                (quickPlay ? _quickPlaySignal : _showSignal).Set();
 
-                AppLog.Info("App", "already running from this folder - asked it to show its window and exiting");
+                AppLog.Info("App", quickPlay
+                    ? "already running from this folder - asked it to quick play and exiting"
+                    : "already running from this folder - asked it to show its window and exiting");
                 return false;
             }
 
             _showWait = ThreadPool.RegisterWaitForSingleObject(
                 _showSignal, (_, _) => onShowRequested(), null, Timeout.Infinite, executeOnlyOnce: false);
+            _quickPlayWait = ThreadPool.RegisterWaitForSingleObject(
+                _quickPlaySignal, (_, _) => onQuickPlayRequested(), null, Timeout.Infinite, executeOnlyOnce: false);
 
             return true;
         }

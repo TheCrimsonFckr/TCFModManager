@@ -7138,6 +7138,24 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Options_ServerOnProfileNote" xml:space="preserve">
     <value>Solange das Serverfenster angezeigt wird, kommen die Karten der Seite Server auf die Seite Profil, und Server verschwindet aus der Seitenleiste.</value>
   </data>
+  <data name="Options_QuickShortcutButton" xml:space="preserve">
+    <value>Desktop-Verknüpfung erstellen</value>
+  </data>
+  <data name="Options_QuickShortcutNote" xml:space="preserve">
+    <value>Eine Schnellstart-Verknüpfung: Sie öffnet diese App, falls sie nicht läuft, und startet dann den Server und dein letztes Profil. Erstelle sie neu, wenn du den Ordner der App verschiebst.</value>
+  </data>
+  <data name="Options_QuickShortcutDoneFormat" xml:space="preserve">
+    <value>Verknüpfung erstellt: {0}</value>
+  </data>
+  <data name="Options_QuickShortcutFailedFormat" xml:space="preserve">
+    <value>Verknüpfung konnte nicht erstellt werden: {0}</value>
+  </data>
+  <data name="QuickPlay_ShortcutName" xml:space="preserve">
+    <value>TCF Mod Manager - Schnellstart</value>
+  </data>
+  <data name="QuickPlay_ShortcutDescription" xml:space="preserve">
+    <value>Startet den SPT-Server und dein letztes Profil</value>
+  </data>
   <data name="Play_ToolsHeader" xml:space="preserve">
     <value>Mod-Werkzeuge</value>
   </data>

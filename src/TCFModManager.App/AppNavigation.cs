@@ -1,5 +1,6 @@
 using System.Windows;
 using TCFModManager.App.Help;
+using TCFModManager.Core.Services;
 using TCFModManager.App.Views;
 using Wpf.Ui.Animations;
 using Wpf.Ui.Controls;
@@ -129,6 +130,29 @@ internal static class AppNavigation
         if (Application.Current?.MainWindow is { } window) WindowActivation.BringForward(window);
 
         _navigation?.Navigate(typeof(ProfilePage));
+    }
+
+    //
+    // OPEN-43: the desktop shortcut - this launch's, or a later one's passed on by SingleInstance. The
+    // window comes forward on Profile (Q8) and Quick play runs, if it can.
+    //
+    public static void QuickPlayFromShortcut()
+    {
+        if (Application.Current?.MainWindow is { } window) WindowActivation.BringForward(window);
+        _navigation?.Navigate(typeof(ProfilePage));
+
+        var play = AppServices.Play;
+        play.RefreshCommand.Execute(null);
+
+        if (play.QuickPlayCommand.CanExecute(null))
+        {
+            AppLog.Info("Launch", "quick play from the desktop shortcut");
+            play.QuickPlayCommand.Execute(null);
+        }
+        else
+        {
+            AppLog.Info("Launch", "quick play from the desktop shortcut: nothing to start (no server, already playing, or the game is running)");
+        }
     }
 
     public static bool TakeShowPlayProblem()

@@ -9003,6 +9003,30 @@ See Dependencies and Conflicts.</value>
     <value>With the server's own window showing, the Server page's cards join the Profile page and Server leaves the sidebar.</value>
     <comment>Note under that switch.</comment>
   </data>
+  <data name="Options_QuickShortcutButton" xml:space="preserve">
+    <value>Create desktop shortcut</value>
+    <comment>Options - Starting SPT: the button that writes the Quick play shortcut on the desktop (OPEN-43).</comment>
+  </data>
+  <data name="Options_QuickShortcutNote" xml:space="preserve">
+    <value>A Quick play shortcut: it opens this app if it isn't running, then starts the server and your last profile. Make it again if you move this app's folder.</value>
+    <comment>Note under that button.</comment>
+  </data>
+  <data name="Options_QuickShortcutDoneFormat" xml:space="preserve">
+    <value>Shortcut made: {0}</value>
+    <comment>Said under the button when the shortcut was written. {0} is its full path.</comment>
+  </data>
+  <data name="Options_QuickShortcutFailedFormat" xml:space="preserve">
+    <value>Couldn't make the shortcut: {0}</value>
+    <comment>Said under the button when it wasn't. {0} is the reason Windows gave.</comment>
+  </data>
+  <data name="QuickPlay_ShortcutName" xml:space="preserve">
+    <value>TCF Mod Manager - Quick play</value>
+    <comment>The shortcut's file name on the desktop. Keep it short; characters a file name can't hold are removed.</comment>
+  </data>
+  <data name="QuickPlay_ShortcutDescription" xml:space="preserve">
+    <value>Starts the SPT server and your last profile</value>
+    <comment>The shortcut's tooltip in Explorer.</comment>
+  </data>
   <data name="Play_ToolsHeader" xml:space="preserve">
     <value>Mod tools</value>
   </data>

@@ -26,7 +26,12 @@ public partial class App : Application
         // The window is created at the end of this method rather than through StartupUri, which
         // would open it even for a copy that is on its way out.
         //
-        if (!SingleInstance.Claim(() => Dispatcher.BeginInvoke(ShowMainWindow)))
+        var quickPlay = DesktopShortcut.IsQuickPlay(e.Args);
+
+        if (!SingleInstance.Claim(
+                () => Dispatcher.BeginInvoke(ShowMainWindow),
+                () => Dispatcher.BeginInvoke(AppNavigation.QuickPlayFromShortcut),
+                quickPlay))
         {
             _secondCopy = true;
             AppLog.Flush();
@@ -131,6 +136,9 @@ public partial class App : Application
         var window = new MainWindow();
         MainWindow = window;
         window.Show();
+
+        // After the window's Loaded, which attaches the navigation and opens the start page.
+        if (quickPlay) Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, AppNavigation.QuickPlayFromShortcut);
 
         // The first check is one interval from now, never at launch (R2). A no-op while it's off.
         AppServices.UpdateWatcher.Start();

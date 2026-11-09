@@ -7138,6 +7138,24 @@ Voir Dépendances et conflits.</value>
   <data name="Options_ServerOnProfileNote" xml:space="preserve">
     <value>Tant que la fenêtre du serveur s'affiche, les cartes de la page Serveur rejoignent la page Profil et Serveur quitte la barre latérale.</value>
   </data>
+  <data name="Options_QuickShortcutButton" xml:space="preserve">
+    <value>Créer un raccourci sur le bureau</value>
+  </data>
+  <data name="Options_QuickShortcutNote" xml:space="preserve">
+    <value>Un raccourci Jeu rapide : il ouvre cette application si elle n'est pas lancée, puis démarre le serveur et votre dernier profil. Recréez-le si vous déplacez le dossier de l'application.</value>
+  </data>
+  <data name="Options_QuickShortcutDoneFormat" xml:space="preserve">
+    <value>Raccourci créé : {0}</value>
+  </data>
+  <data name="Options_QuickShortcutFailedFormat" xml:space="preserve">
+    <value>Impossible de créer le raccourci : {0}</value>
+  </data>
+  <data name="QuickPlay_ShortcutName" xml:space="preserve">
+    <value>TCF Mod Manager - Jeu rapide</value>
+  </data>
+  <data name="QuickPlay_ShortcutDescription" xml:space="preserve">
+    <value>Démarre le serveur SPT et votre dernier profil</value>
+  </data>
   <data name="Play_ToolsHeader" xml:space="preserve">
     <value>Outils des mods</value>
   </data>

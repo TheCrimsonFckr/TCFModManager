@@ -2470,6 +2470,12 @@ internal static class Strings
     internal static string Options_ServerOnProfileOn => LocalizationService.Get("Options_ServerOnProfileOn");
     internal static string Options_ServerOnProfileOff => LocalizationService.Get("Options_ServerOnProfileOff");
     internal static string Options_ServerOnProfileNote => LocalizationService.Get("Options_ServerOnProfileNote");
+    internal static string Options_QuickShortcutButton => LocalizationService.Get("Options_QuickShortcutButton");
+    internal static string Options_QuickShortcutNote => LocalizationService.Get("Options_QuickShortcutNote");
+    internal static string Options_QuickShortcutDoneFormat => LocalizationService.Get("Options_QuickShortcutDoneFormat");
+    internal static string Options_QuickShortcutFailedFormat => LocalizationService.Get("Options_QuickShortcutFailedFormat");
+    internal static string QuickPlay_ShortcutName => LocalizationService.Get("QuickPlay_ShortcutName");
+    internal static string QuickPlay_ShortcutDescription => LocalizationService.Get("QuickPlay_ShortcutDescription");
     internal static string Play_ToolsHeader => LocalizationService.Get("Play_ToolsHeader");
     internal static string Play_ToolsDescription => LocalizationService.Get("Play_ToolsDescription");
     internal static string Play_ToolFromFormat => LocalizationService.Get("Play_ToolFromFormat");

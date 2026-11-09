@@ -7468,6 +7468,24 @@
   <data name="Options_ServerOnProfileNote" xml:space="preserve">
     <value>Пока окно сервера показывается, карточки страницы «Сервер» переходят на страницу «Профиль», а «Сервер» исчезает из боковой панели.</value>
   </data>
+  <data name="Options_QuickShortcutButton" xml:space="preserve">
+    <value>Создать ярлык на рабочем столе</value>
+  </data>
+  <data name="Options_QuickShortcutNote" xml:space="preserve">
+    <value>Ярлык быстрой игры: открывает это приложение, если оно не запущено, затем запускает сервер и ваш последний профиль. Создайте его заново, если переместите папку приложения.</value>
+  </data>
+  <data name="Options_QuickShortcutDoneFormat" xml:space="preserve">
+    <value>Ярлык создан: {0}</value>
+  </data>
+  <data name="Options_QuickShortcutFailedFormat" xml:space="preserve">
+    <value>Не удалось создать ярлык: {0}</value>
+  </data>
+  <data name="QuickPlay_ShortcutName" xml:space="preserve">
+    <value>TCF Mod Manager - Быстрая игра</value>
+  </data>
+  <data name="QuickPlay_ShortcutDescription" xml:space="preserve">
+    <value>Запускает сервер SPT и ваш последний профиль</value>
+  </data>
   <data name="Play_ToolsHeader" xml:space="preserve">
     <value>Инструменты модов</value>
   </data>

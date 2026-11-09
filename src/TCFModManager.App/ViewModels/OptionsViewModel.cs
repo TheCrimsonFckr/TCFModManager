@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -518,6 +519,31 @@ public partial class OptionsViewModel : LocalizedViewModel
 
     [ObservableProperty]
     private bool _showServerOnProfile;
+
+    // What Create desktop shortcut did, said under the button.
+    [ObservableProperty]
+    private string? _quickShortcutStatus;
+
+    [ObservableProperty]
+    private bool _quickShortcutFailed;
+
+    [RelayCommand]
+    private void CreateQuickShortcut()
+    {
+        try
+        {
+            var path = DesktopShortcut.CreateQuickPlay();
+            QuickShortcutFailed = false;
+            QuickShortcutStatus = Text(Strings.Options_QuickShortcutDoneFormat, path);
+            AppLog.Info("Launch", $"quick play shortcut written to {path}");
+        }
+        catch (Exception ex) when (ex is COMException or IOException or UnauthorizedAccessException or InvalidOperationException)
+        {
+            QuickShortcutFailed = true;
+            QuickShortcutStatus = Text(Strings.Options_QuickShortcutFailedFormat, ex.Message);
+            AppLog.Warn("Launch", $"couldn't write the quick play shortcut: {ex.Message}");
+        }
+    }
 
     partial void OnShowServerOnProfileChanged(bool value)
     {

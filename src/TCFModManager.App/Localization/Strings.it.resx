@@ -7138,6 +7138,24 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Options_ServerOnProfileNote" xml:space="preserve">
     <value>Finché la finestra del server è visibile, le schede della pagina Server passano nella pagina Profilo e Server esce dalla barra laterale.</value>
   </data>
+  <data name="Options_QuickShortcutButton" xml:space="preserve">
+    <value>Crea collegamento sul desktop</value>
+  </data>
+  <data name="Options_QuickShortcutNote" xml:space="preserve">
+    <value>Un collegamento Gioco rapido: apre questa app se non è in esecuzione, poi avvia il server e il tuo ultimo profilo. Ricrealo se sposti la cartella dell'app.</value>
+  </data>
+  <data name="Options_QuickShortcutDoneFormat" xml:space="preserve">
+    <value>Collegamento creato: {0}</value>
+  </data>
+  <data name="Options_QuickShortcutFailedFormat" xml:space="preserve">
+    <value>Impossibile creare il collegamento: {0}</value>
+  </data>
+  <data name="QuickPlay_ShortcutName" xml:space="preserve">
+    <value>TCF Mod Manager - Gioco rapido</value>
+  </data>
+  <data name="QuickPlay_ShortcutDescription" xml:space="preserve">
+    <value>Avvia il server SPT e il tuo ultimo profilo</value>
+  </data>
   <data name="Play_ToolsHeader" xml:space="preserve">
     <value>Strumenti dei mod</value>
   </data>
