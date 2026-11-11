@@ -5592,6 +5592,66 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="ReportProblem_UploadBadResponseFormat" xml:space="preserve">
     <value>codepaste.sp-mod.com a envoyé une réponse que cette application ne comprend pas. Le journal est à la place dans le texte copié. ({0})</value>
   </data>
+  <data name="ReportProblem_Title" xml:space="preserve">
+    <value>Signaler un problème</value>
+  </data>
+  <data name="ReportProblem_Lead" xml:space="preserve">
+    <value>Rien n'est envoyé tant que vous ne le décidez pas. Vérifiez le texte ci-dessous avant de le partager.</value>
+  </data>
+  <data name="ReportProblem_StepsHeading" xml:space="preserve">
+    <value>Pour le signaler sur sp-mod :</value>
+  </data>
+  <data name="ReportProblem_Step1Format" xml:space="preserve">
+    <value>Choisissez Bug et réglez Affected version sur v{0}.</value>
+  </data>
+  <data name="ReportProblem_Step2" xml:space="preserve">
+    <value>Copiez le titre ci-dessous et collez-le dans Title.</value>
+  </data>
+  <data name="ReportProblem_Step2Own" xml:space="preserve">
+    <value>Donnez-lui un titre court dans Title.</value>
+  </data>
+  <data name="ReportProblem_Step3" xml:space="preserve">
+    <value>Cliquez dans Description, appuyez sur Ctrl+A, puis Ctrl+V. Complétez ensuite les étapes et ce que vous attendiez.</value>
+  </data>
+  <data name="ReportProblem_TitleLabel" xml:space="preserve">
+    <value>Titre</value>
+  </data>
+  <data name="ReportProblem_CopyTitleToolTip" xml:space="preserve">
+    <value>Copier le titre</value>
+  </data>
+  <data name="ReportProblem_IncludeMods" xml:space="preserve">
+    <value>Inclure mes mods installés</value>
+  </data>
+  <data name="ReportProblem_IncludeModsToolTip" xml:space="preserve">
+    <value>Ajoute le nom, la version et l'identifiant sp-mod de chaque mod installé, et s'il est désactivé.</value>
+  </data>
+  <data name="ReportProblem_CodepasteNote" xml:space="preserve">
+    <value>Le bouton « Ouvrir l'onglet Issues » envoie le journal sur codepaste.sp-mod.com. Il est chiffré. Toute personne ayant le lien peut le lire. Il est supprimé après 3 mois.</value>
+  </data>
+  <data name="ReportProblem_Copy" xml:space="preserve">
+    <value>Copier</value>
+  </data>
+  <data name="ReportProblem_CopyToolTip" xml:space="preserve">
+    <value>Copie le rapport avec le journal, pour le Discord ou ailleurs. Rien n'est envoyé.</value>
+  </data>
+  <data name="ReportProblem_OpenIssues" xml:space="preserve">
+    <value>Ouvrir l'onglet Issues</value>
+  </data>
+  <data name="ReportProblem_OpenIssuesToolTip" xml:space="preserve">
+    <value>Envoie le journal, copie le rapport et ouvre l'onglet Issues sur la page sp-mod de cette application.</value>
+  </data>
+  <data name="ReportProblem_Uploading" xml:space="preserve">
+    <value>Envoi du journal...</value>
+  </data>
+  <data name="ReportProblem_Copied" xml:space="preserve">
+    <value>Copié.</value>
+  </data>
+  <data name="ReportProblem_TitleCopied" xml:space="preserve">
+    <value>Titre copié.</value>
+  </data>
+  <data name="ReportProblem_Opened" xml:space="preserve">
+    <value>Copié. Dans l'onglet Issues, collez-le dans Description.</value>
+  </data>
   <data name="Help_OpenPageFormat" xml:space="preserve">
     <value>Ouvrir {0}</value>
   </data>

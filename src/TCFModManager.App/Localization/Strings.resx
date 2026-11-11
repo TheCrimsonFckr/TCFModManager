@@ -6991,6 +6991,86 @@ The details are in the log:
     <value>codepaste.sp-mod.com sent an answer this app doesn't understand. The log is in the copied text instead. ({0})</value>
     <comment>Report a problem window. {0} is the HTTP status, for example HTTP 502.</comment>
   </data>
+  <data name="ReportProblem_Title" xml:space="preserve">
+    <value>Report a problem</value>
+    <comment>Title of the window that builds a problem report. Same words as Help_ReportProblem.</comment>
+  </data>
+  <data name="ReportProblem_Lead" xml:space="preserve">
+    <value>Nothing is sent until you choose to. Check the text below before you share it.</value>
+    <comment>First line of the Report a problem window.</comment>
+  </data>
+  <data name="ReportProblem_StepsHeading" xml:space="preserve">
+    <value>To report it on sp-mod:</value>
+    <comment>Heading above the three numbered steps.</comment>
+  </data>
+  <data name="ReportProblem_Step1Format" xml:space="preserve">
+    <value>Choose Bug, and set Affected version to v{0}.</value>
+    <comment>Step 1. Bug and Affected version are labels on sp-mod's issue form, which is in English - keep them in English. {0} is this app's version, for example 1.28.0-beta.</comment>
+  </data>
+  <data name="ReportProblem_Step2" xml:space="preserve">
+    <value>Copy the title below and paste it into Title.</value>
+    <comment>Step 2, when the report names an error. Title is a label on sp-mod's issue form, which is in English - keep it in English.</comment>
+  </data>
+  <data name="ReportProblem_Step2Own" xml:space="preserve">
+    <value>Give it a short title in Title.</value>
+    <comment>Step 2, when opened from Help with no error to name. Title is a label on sp-mod's issue form, which is in English - keep it in English.</comment>
+  </data>
+  <data name="ReportProblem_Step3" xml:space="preserve">
+    <value>Click in Description, press Ctrl+A, then Ctrl+V. Then fill in the steps and what you expected.</value>
+    <comment>Step 3. Description is a label on sp-mod's issue form, which is in English - keep it in English. Use your keyboard's name for Ctrl.</comment>
+  </data>
+  <data name="ReportProblem_TitleLabel" xml:space="preserve">
+    <value>Title</value>
+    <comment>Label beside the suggested issue title.</comment>
+  </data>
+  <data name="ReportProblem_CopyTitleToolTip" xml:space="preserve">
+    <value>Copy the title</value>
+    <comment>Tooltip on the copy button beside the title.</comment>
+  </data>
+  <data name="ReportProblem_IncludeMods" xml:space="preserve">
+    <value>Include my installed mods</value>
+    <comment>Tick box. Off by default.</comment>
+  </data>
+  <data name="ReportProblem_IncludeModsToolTip" xml:space="preserve">
+    <value>Adds the name, version and sp-mod id of each installed mod, and whether it is disabled.</value>
+    <comment>Tooltip on ReportProblem_IncludeMods.</comment>
+  </data>
+  <data name="ReportProblem_CodepasteNote" xml:space="preserve">
+    <value>The Open Issues tab button uploads the log to codepaste.sp-mod.com. It is encrypted. Anyone with the link can read it. It is deleted after 3 months.</value>
+    <comment>Open Issues tab is ReportProblem_OpenIssues - use the same words. codepaste.sp-mod.com is a site name and stays as it is.</comment>
+  </data>
+  <data name="ReportProblem_Copy" xml:space="preserve">
+    <value>Copy</value>
+    <comment>Button. Copies the report with the log in it.</comment>
+  </data>
+  <data name="ReportProblem_CopyToolTip" xml:space="preserve">
+    <value>Copies the report with the log in it, for the Discord or anywhere else. Nothing is uploaded.</value>
+    <comment>Tooltip on ReportProblem_Copy.</comment>
+  </data>
+  <data name="ReportProblem_OpenIssues" xml:space="preserve">
+    <value>Open Issues tab</value>
+    <comment>Main button. Issues is the name of the tab on sp-mod - keep it in English.</comment>
+  </data>
+  <data name="ReportProblem_OpenIssuesToolTip" xml:space="preserve">
+    <value>Uploads the log, copies the report and opens the Issues tab on this app's sp-mod page.</value>
+    <comment>Tooltip on ReportProblem_OpenIssues.</comment>
+  </data>
+  <data name="ReportProblem_Uploading" xml:space="preserve">
+    <value>Uploading the log...</value>
+    <comment>Status line while the log uploads.</comment>
+  </data>
+  <data name="ReportProblem_Copied" xml:space="preserve">
+    <value>Copied.</value>
+    <comment>Status line after Copy.</comment>
+  </data>
+  <data name="ReportProblem_TitleCopied" xml:space="preserve">
+    <value>Title copied.</value>
+    <comment>Status line after copying the title.</comment>
+  </data>
+  <data name="ReportProblem_Opened" xml:space="preserve">
+    <value>Copied. On the Issues tab, paste it into Description.</value>
+    <comment>Status line after Open Issues tab. Description is a label on sp-mod's issue form, which is in English - keep it in English.</comment>
+  </data>
   <data name="Help_OpenPageFormat" xml:space="preserve">
     <value>Open {0}</value>
     <comment>Button under a how-to that goes to the page its steps are on. {0} is the page's sidebar name.</comment>

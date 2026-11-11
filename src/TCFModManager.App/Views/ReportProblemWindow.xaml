@@ -1,0 +1,149 @@
+<ui:FluentWindow
+    x:Class="TCFModManager.App.Views.ReportProblemWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    Title="{loc:Str ReportProblem_Title}"
+    Width="760"
+    SizeToContent="Height"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    ExtendsContentIntoTitleBar="True"
+    TextOptions.TextFormattingMode="Display"
+    TextOptions.TextRenderingMode="ClearType">
+    <ui:FluentWindow.Resources>
+        <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
+        <BooleanToVisibilityConverter x:Key="BoolToVisible" />
+        <Style x:Key="ReportText" TargetType="TextBlock" BasedOn="{StaticResource DialogText}">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        </Style>
+        <Style x:Key="StepNumber" TargetType="TextBlock" BasedOn="{StaticResource ReportText}">
+            <Setter Property="Margin" Value="0,0,8,0" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+        </Style>
+    </ui:FluentWindow.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar
+            Grid.Row="0"
+            Title="{loc:Str ReportProblem_Title}"
+            ShowMinimize="False"
+            ShowMaximize="False" />
+
+        <StackPanel Grid.Row="1" Margin="24,12,24,0">
+            <TextBlock Style="{StaticResource ReportText}" Text="{loc:Str ReportProblem_Lead}" />
+
+            <TextBlock
+                Margin="0,12,0,4"
+                Style="{StaticResource ReportText}"
+                FontWeight="SemiBold"
+                Text="{loc:Str ReportProblem_StepsHeading}" />
+            <Grid Margin="8,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource StepNumber}" Text="1." />
+                <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource ReportText}" Text="{Binding StepOne}" />
+                <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource StepNumber}" Text="2." />
+                <TextBlock Grid.Row="1" Grid.Column="1" Style="{StaticResource ReportText}" Text="{Binding StepTwo}" />
+                <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource StepNumber}" Text="3." />
+                <TextBlock Grid.Row="2" Grid.Column="1" Style="{StaticResource ReportText}" Text="{loc:Str ReportProblem_Step3}" />
+            </Grid>
+
+            <Grid Margin="0,16,0,0" Visibility="{Binding HasTitle, Converter={StaticResource BoolToVisible}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Grid.Column="0"
+                    Margin="0,0,12,0"
+                    VerticalAlignment="Center"
+                    FontWeight="SemiBold"
+                    Text="{loc:Str ReportProblem_TitleLabel}" />
+                <TextBox
+                    Grid.Column="1"
+                    IsReadOnly="True"
+                    Text="{Binding ReportTitle, Mode=OneWay}" />
+                <ui:Button
+                    Grid.Column="2"
+                    Margin="8,0,0,0"
+                    Icon="{ui:SymbolIcon Copy24}"
+                    Command="{Binding CopyTitleCommand}"
+                    ToolTip="{loc:Str ReportProblem_CopyTitleToolTip}" />
+            </Grid>
+
+            <CheckBox
+                Margin="0,12,0,0"
+                Content="{loc:Str ReportProblem_IncludeMods}"
+                IsChecked="{Binding IncludeMods}"
+                ToolTip="{loc:Str ReportProblem_IncludeModsToolTip}" />
+
+            <Border
+                Margin="0,8,0,0"
+                Height="300"
+                BorderThickness="1"
+                BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}">
+                <TextBox
+                    IsReadOnly="True"
+                    Text="{Binding Text, Mode=OneWay}"
+                    FontFamily="Consolas"
+                    TextWrapping="NoWrap"
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Auto"
+                    BorderThickness="0" />
+            </Border>
+
+            <TextBlock
+                Margin="0,12,0,0"
+                Style="{StaticResource DialogText}"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                Text="{loc:Str ReportProblem_CodepasteNote}" />
+
+            <TextBlock
+                Margin="0,8,0,0"
+                TextWrapping="Wrap"
+                LineHeight="21"
+                LineStackingStrategy="BlockLineHeight"
+                Style="{StaticResource ErrorText}"
+                Text="{Binding StatusMessage}"
+                Visibility="{Binding StatusMessage, Converter={StaticResource NullToCollapsed}}" />
+        </StackPanel>
+
+        <WrapPanel Grid.Row="2" Style="{StaticResource DialogButtonBar}">
+            <ui:Button
+                Style="{StaticResource DialogButton}"
+                Content="{loc:Str Common_Close}"
+                Click="OnClose" />
+            <ui:Button
+                Style="{StaticResource DialogButton}"
+                Content="{loc:Str ReportProblem_Copy}"
+                Icon="{ui:SymbolIcon Copy24}"
+                Command="{Binding CopyReportCommand}"
+                ToolTip="{loc:Str ReportProblem_CopyToolTip}" />
+            <ui:Button
+                Style="{StaticResource DialogButton}"
+                Appearance="Primary"
+                IsDefault="True"
+                Content="{loc:Str ReportProblem_OpenIssues}"
+                Icon="{ui:SymbolIcon Open24}"
+                Command="{Binding OpenIssuesCommand}"
+                ToolTip="{loc:Str ReportProblem_OpenIssuesToolTip}" />
+        </WrapPanel>
+    </Grid>
+</ui:FluentWindow>

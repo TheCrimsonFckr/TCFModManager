@@ -5592,6 +5592,66 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="ReportProblem_UploadBadResponseFormat" xml:space="preserve">
     <value>codepaste.sp-mod.com ha inviato una risposta che questa app non capisce. Il log è invece nel testo copiato. ({0})</value>
   </data>
+  <data name="ReportProblem_Title" xml:space="preserve">
+    <value>Segnala un problema</value>
+  </data>
+  <data name="ReportProblem_Lead" xml:space="preserve">
+    <value>Non viene inviato nulla finché non lo decidi tu. Controlla il testo qui sotto prima di condividerlo.</value>
+  </data>
+  <data name="ReportProblem_StepsHeading" xml:space="preserve">
+    <value>Per segnalarlo su sp-mod:</value>
+  </data>
+  <data name="ReportProblem_Step1Format" xml:space="preserve">
+    <value>Scegli Bug e imposta Affected version su v{0}.</value>
+  </data>
+  <data name="ReportProblem_Step2" xml:space="preserve">
+    <value>Copia il titolo qui sotto e incollalo in Title.</value>
+  </data>
+  <data name="ReportProblem_Step2Own" xml:space="preserve">
+    <value>Dagli un titolo breve in Title.</value>
+  </data>
+  <data name="ReportProblem_Step3" xml:space="preserve">
+    <value>Fai clic in Description, premi Ctrl+A e poi Ctrl+V. Poi aggiungi i passaggi e cosa ti aspettavi.</value>
+  </data>
+  <data name="ReportProblem_TitleLabel" xml:space="preserve">
+    <value>Titolo</value>
+  </data>
+  <data name="ReportProblem_CopyTitleToolTip" xml:space="preserve">
+    <value>Copia il titolo</value>
+  </data>
+  <data name="ReportProblem_IncludeMods" xml:space="preserve">
+    <value>Includi i miei mod installati</value>
+  </data>
+  <data name="ReportProblem_IncludeModsToolTip" xml:space="preserve">
+    <value>Aggiunge nome, versione e ID sp-mod di ogni mod installato, e se è disattivato.</value>
+  </data>
+  <data name="ReportProblem_CodepasteNote" xml:space="preserve">
+    <value>Il pulsante «Apri la scheda Issues» carica il log su codepaste.sp-mod.com. È cifrato. Chiunque abbia il link può leggerlo. Viene eliminato dopo 3 mesi.</value>
+  </data>
+  <data name="ReportProblem_Copy" xml:space="preserve">
+    <value>Copia</value>
+  </data>
+  <data name="ReportProblem_CopyToolTip" xml:space="preserve">
+    <value>Copia il report con il log, per il Discord o altrove. Non viene caricato nulla.</value>
+  </data>
+  <data name="ReportProblem_OpenIssues" xml:space="preserve">
+    <value>Apri la scheda Issues</value>
+  </data>
+  <data name="ReportProblem_OpenIssuesToolTip" xml:space="preserve">
+    <value>Carica il log, copia il report e apre la scheda Issues sulla pagina sp-mod di questa app.</value>
+  </data>
+  <data name="ReportProblem_Uploading" xml:space="preserve">
+    <value>Caricamento del log...</value>
+  </data>
+  <data name="ReportProblem_Copied" xml:space="preserve">
+    <value>Copiato.</value>
+  </data>
+  <data name="ReportProblem_TitleCopied" xml:space="preserve">
+    <value>Titolo copiato.</value>
+  </data>
+  <data name="ReportProblem_Opened" xml:space="preserve">
+    <value>Copiato. Nella scheda Issues, incollalo in Description.</value>
+  </data>
   <data name="Help_OpenPageFormat" xml:space="preserve">
     <value>Apri {0}</value>
   </data>

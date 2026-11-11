@@ -5592,6 +5592,66 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="ReportProblem_UploadBadResponseFormat" xml:space="preserve">
     <value>codepaste.sp-mod.com hat eine Antwort geschickt, die diese App nicht versteht. Das Log steht stattdessen im kopierten Text. ({0})</value>
   </data>
+  <data name="ReportProblem_Title" xml:space="preserve">
+    <value>Problem melden</value>
+  </data>
+  <data name="ReportProblem_Lead" xml:space="preserve">
+    <value>Es wird nichts gesendet, bis du es willst. Prüfe den Text unten, bevor du ihn teilst.</value>
+  </data>
+  <data name="ReportProblem_StepsHeading" xml:space="preserve">
+    <value>So meldest du es auf sp-mod:</value>
+  </data>
+  <data name="ReportProblem_Step1Format" xml:space="preserve">
+    <value>Wähle Bug und setze Affected version auf v{0}.</value>
+  </data>
+  <data name="ReportProblem_Step2" xml:space="preserve">
+    <value>Kopiere den Titel unten und füge ihn bei Title ein.</value>
+  </data>
+  <data name="ReportProblem_Step2Own" xml:space="preserve">
+    <value>Gib bei Title einen kurzen Titel ein.</value>
+  </data>
+  <data name="ReportProblem_Step3" xml:space="preserve">
+    <value>Klicke in Description, drücke Strg+A und dann Strg+V. Ergänze dann die Schritte und was du erwartet hast.</value>
+  </data>
+  <data name="ReportProblem_TitleLabel" xml:space="preserve">
+    <value>Titel</value>
+  </data>
+  <data name="ReportProblem_CopyTitleToolTip" xml:space="preserve">
+    <value>Titel kopieren</value>
+  </data>
+  <data name="ReportProblem_IncludeMods" xml:space="preserve">
+    <value>Meine installierten Mods mitschicken</value>
+  </data>
+  <data name="ReportProblem_IncludeModsToolTip" xml:space="preserve">
+    <value>Fügt Name, Version und sp-mod-ID jedes installierten Mods hinzu und ob er deaktiviert ist.</value>
+  </data>
+  <data name="ReportProblem_CodepasteNote" xml:space="preserve">
+    <value>Die Schaltfläche „Issues-Tab öffnen“ lädt das Log auf codepaste.sp-mod.com hoch. Es ist verschlüsselt. Jeder mit dem Link kann es lesen. Es wird nach 3 Monaten gelöscht.</value>
+  </data>
+  <data name="ReportProblem_Copy" xml:space="preserve">
+    <value>Kopieren</value>
+  </data>
+  <data name="ReportProblem_CopyToolTip" xml:space="preserve">
+    <value>Kopiert den Bericht mit dem Log darin, für den Discord oder anderswo. Es wird nichts hochgeladen.</value>
+  </data>
+  <data name="ReportProblem_OpenIssues" xml:space="preserve">
+    <value>Issues-Tab öffnen</value>
+  </data>
+  <data name="ReportProblem_OpenIssuesToolTip" xml:space="preserve">
+    <value>Lädt das Log hoch, kopiert den Bericht und öffnet den Issues-Tab auf der sp-mod-Seite dieser App.</value>
+  </data>
+  <data name="ReportProblem_Uploading" xml:space="preserve">
+    <value>Log wird hochgeladen...</value>
+  </data>
+  <data name="ReportProblem_Copied" xml:space="preserve">
+    <value>Kopiert.</value>
+  </data>
+  <data name="ReportProblem_TitleCopied" xml:space="preserve">
+    <value>Titel kopiert.</value>
+  </data>
+  <data name="ReportProblem_Opened" xml:space="preserve">
+    <value>Kopiert. Füge es im Issues-Tab bei Description ein.</value>
+  </data>
   <data name="Help_OpenPageFormat" xml:space="preserve">
     <value>{0} öffnen</value>
   </data>
