@@ -125,7 +125,9 @@
                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                         Text="{loc:Str Play_StopServerDelayLabel}" />
                     <ui:NumberBox
-                        Width="140"
+                        Width="120"
+                        MaxLength="4"
+                        ClearButtonEnabled="False"
                         Minimum="0"
                         Maximum="{Binding StopServerMaxSeconds, Mode=OneTime}"
                         SmallChange="5"
