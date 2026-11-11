@@ -5580,6 +5580,18 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="Help_ReportProblemToolTip" xml:space="preserve">
     <value>Öffnet den Issues-Tab auf der sp-mod.com-Seite dieser App, wo du dem Autor sagen kannst, was schiefging. Er ist auf Englisch.</value>
   </data>
+  <data name="ReportProblem_UploadNetworkFormat" xml:space="preserve">
+    <value>codepaste.sp-mod.com war nicht erreichbar. Das Log steht stattdessen im kopierten Text. ({0})</value>
+  </data>
+  <data name="ReportProblem_UploadRejectedFormat" xml:space="preserve">
+    <value>codepaste.sp-mod.com hat das Log abgelehnt. Das Log steht stattdessen im kopierten Text. ({0})</value>
+  </data>
+  <data name="ReportProblem_UploadRejected" xml:space="preserve">
+    <value>codepaste.sp-mod.com hat das Log abgelehnt. Das Log steht stattdessen im kopierten Text.</value>
+  </data>
+  <data name="ReportProblem_UploadBadResponseFormat" xml:space="preserve">
+    <value>codepaste.sp-mod.com hat eine Antwort geschickt, die diese App nicht versteht. Das Log steht stattdessen im kopierten Text. ({0})</value>
+  </data>
   <data name="Help_OpenPageFormat" xml:space="preserve">
     <value>{0} öffnen</value>
   </data>

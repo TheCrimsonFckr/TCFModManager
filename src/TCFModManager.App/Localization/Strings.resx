@@ -6975,6 +6975,22 @@ The details are in the log:
     <value>Opens the issues tab on this app's sp-mod.com page, where you can tell the author what went wrong. It is in English.</value>
     <comment>Tooltip on Help_ReportProblem.</comment>
   </data>
+  <data name="ReportProblem_UploadNetworkFormat" xml:space="preserve">
+    <value>Couldn't reach codepaste.sp-mod.com. The log is in the copied text instead. ({0})</value>
+    <comment>Report a problem window, after Open Issues tab. {0} is the message from Windows or .NET, in the system's language. codepaste.sp-mod.com is a site name and stays as it is.</comment>
+  </data>
+  <data name="ReportProblem_UploadRejectedFormat" xml:space="preserve">
+    <value>codepaste.sp-mod.com refused the log. The log is in the copied text instead. ({0})</value>
+    <comment>Report a problem window. {0} is the site's own message, in English.</comment>
+  </data>
+  <data name="ReportProblem_UploadRejected" xml:space="preserve">
+    <value>codepaste.sp-mod.com refused the log. The log is in the copied text instead.</value>
+    <comment>Report a problem window. As ReportProblem_UploadRejectedFormat, when the site gave no message.</comment>
+  </data>
+  <data name="ReportProblem_UploadBadResponseFormat" xml:space="preserve">
+    <value>codepaste.sp-mod.com sent an answer this app doesn't understand. The log is in the copied text instead. ({0})</value>
+    <comment>Report a problem window. {0} is the HTTP status, for example HTTP 502.</comment>
+  </data>
   <data name="Help_OpenPageFormat" xml:space="preserve">
     <value>Open {0}</value>
     <comment>Button under a how-to that goes to the page its steps are on. {0} is the page's sidebar name.</comment>

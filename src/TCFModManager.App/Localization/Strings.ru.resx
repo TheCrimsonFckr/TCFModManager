@@ -5853,6 +5853,18 @@
   <data name="Help_ReportProblemToolTip" xml:space="preserve">
     <value>Открывает вкладку обращений на странице этого приложения на sp-mod.com, где можно рассказать автору, что пошло не так. Она на английском.</value>
   </data>
+  <data name="ReportProblem_UploadNetworkFormat" xml:space="preserve">
+    <value>Не удалось связаться с codepaste.sp-mod.com. Журнал вместо этого включён в скопированный текст. ({0})</value>
+  </data>
+  <data name="ReportProblem_UploadRejectedFormat" xml:space="preserve">
+    <value>codepaste.sp-mod.com отклонил журнал. Журнал вместо этого включён в скопированный текст. ({0})</value>
+  </data>
+  <data name="ReportProblem_UploadRejected" xml:space="preserve">
+    <value>codepaste.sp-mod.com отклонил журнал. Журнал вместо этого включён в скопированный текст.</value>
+  </data>
+  <data name="ReportProblem_UploadBadResponseFormat" xml:space="preserve">
+    <value>codepaste.sp-mod.com прислал ответ, который это приложение не понимает. Журнал вместо этого включён в скопированный текст. ({0})</value>
+  </data>
   <data name="Help_OpenPageFormat" xml:space="preserve">
     <value>Открыть: {0}</value>
   </data>

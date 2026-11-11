@@ -5580,6 +5580,18 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="Help_ReportProblemToolTip" xml:space="preserve">
     <value>Ouvre l'onglet des tickets sur la page sp-mod.com de cette application, où vous pouvez dire à l'auteur ce qui n'a pas marché. Il est en anglais.</value>
   </data>
+  <data name="ReportProblem_UploadNetworkFormat" xml:space="preserve">
+    <value>Impossible de joindre codepaste.sp-mod.com. Le journal est à la place dans le texte copié. ({0})</value>
+  </data>
+  <data name="ReportProblem_UploadRejectedFormat" xml:space="preserve">
+    <value>codepaste.sp-mod.com a refusé le journal. Le journal est à la place dans le texte copié. ({0})</value>
+  </data>
+  <data name="ReportProblem_UploadRejected" xml:space="preserve">
+    <value>codepaste.sp-mod.com a refusé le journal. Le journal est à la place dans le texte copié.</value>
+  </data>
+  <data name="ReportProblem_UploadBadResponseFormat" xml:space="preserve">
+    <value>codepaste.sp-mod.com a envoyé une réponse que cette application ne comprend pas. Le journal est à la place dans le texte copié. ({0})</value>
+  </data>
   <data name="Help_OpenPageFormat" xml:space="preserve">
     <value>Ouvrir {0}</value>
   </data>

@@ -5580,6 +5580,18 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Help_ReportProblemToolTip" xml:space="preserve">
     <value>Apre la scheda delle segnalazioni sulla pagina sp-mod.com di questa app, dove puoi dire all'autore cosa è andato storto. È in inglese.</value>
   </data>
+  <data name="ReportProblem_UploadNetworkFormat" xml:space="preserve">
+    <value>Impossibile raggiungere codepaste.sp-mod.com. Il log è invece nel testo copiato. ({0})</value>
+  </data>
+  <data name="ReportProblem_UploadRejectedFormat" xml:space="preserve">
+    <value>codepaste.sp-mod.com ha rifiutato il log. Il log è invece nel testo copiato. ({0})</value>
+  </data>
+  <data name="ReportProblem_UploadRejected" xml:space="preserve">
+    <value>codepaste.sp-mod.com ha rifiutato il log. Il log è invece nel testo copiato.</value>
+  </data>
+  <data name="ReportProblem_UploadBadResponseFormat" xml:space="preserve">
+    <value>codepaste.sp-mod.com ha inviato una risposta che questa app non capisce. Il log è invece nel testo copiato. ({0})</value>
+  </data>
   <data name="Help_OpenPageFormat" xml:space="preserve">
     <value>Apri {0}</value>
   </data>
