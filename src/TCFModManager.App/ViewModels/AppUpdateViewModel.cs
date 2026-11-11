@@ -80,7 +80,13 @@ public partial class AppUpdateViewModel : LocalizedViewModel
     private string? _installStatus;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanReportInstallFailure))]
+    [NotifyCanExecuteChangedFor(nameof(ReportInstallFailureCommand))]
     private string? _installError;
+
+    private Exception? _installFailure;
+
+    public bool CanReportInstallFailure => _installFailure is not null && InstallError is not null;
 
     // Drives the banner in MainWindow. Two-way bound to the InfoBar, so the user closing it is a
     // dismissal - see OnIsBannerOpenChanged.
@@ -269,6 +275,7 @@ public partial class AppUpdateViewModel : LocalizedViewModel
         _installCts = new CancellationTokenSource();
 
         IsInstalling = true;
+        _installFailure = null;
         InstallError = null;
         InstallProgress = 0;
         InstallStatus = Text(Strings.AppUpdate_DownloadingFormat, update.LatestVersion);
@@ -303,12 +310,14 @@ public partial class AppUpdateViewModel : LocalizedViewModel
         {
             AppUpdateInstaller.ClearWorkingFiles();
             InstallStatus = null;
+            _installFailure = null;
             InstallError = Strings.AppUpdate_Cancelled;
         }
         catch (AppUpdateException ex)
         {
             AppUpdateInstaller.ClearWorkingFiles();
             InstallStatus = null;
+            _installFailure = ex;
             InstallError = AppUpdateProblems.Describe(ex);
 
             // The reason and the sentence both go in: the reason is what a log is searched for, the
@@ -319,6 +328,7 @@ public partial class AppUpdateViewModel : LocalizedViewModel
         {
             AppUpdateInstaller.ClearWorkingFiles();
             InstallStatus = null;
+            _installFailure = ex;
             InstallError = AppUpdateProblems.Unexpected(ex);
             AppLog.Error("AppUpdate", "update failed", ex);
         }
@@ -327,6 +337,10 @@ public partial class AppUpdateViewModel : LocalizedViewModel
             IsInstalling = false;
         }
     }
+
+    [RelayCommand(CanExecute = nameof(CanReportInstallFailure))]
+    private void ReportInstallFailure() =>
+        ReportProblemWindow.Open(ProblemFacts.Context(ProblemSource.AppUpdate, _installFailure, InstallError));
 
     private bool CanCancelInstall() => IsInstalling;
 

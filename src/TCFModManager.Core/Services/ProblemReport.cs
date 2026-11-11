@@ -178,6 +178,8 @@ public sealed record ProblemReport
             text.Append("Reason: ModListStop.").Append(stop).Append('\n');
             Value(text, "Running", Join(context.ListResult.Running));
             if (stop == ModListStop.FetchFailed) Value(text, "FailedFetches", context.ListResult.FailedFetches);
+            foreach (var failed in context.ListResult.Fetched.Failed)
+                text.Append("  Failed: ").Append(failed.ModName).Append(" - ").Append(failed.Reason).Append('\n');
             if (context.ListResult.Refusal is { } refusal) Reason(text, refusal, "  ");
         }
 

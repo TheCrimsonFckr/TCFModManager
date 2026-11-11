@@ -1278,10 +1278,10 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Downloads_RetryToolTip" xml:space="preserve">
     <value>Stellt das hier wieder ans Ende der Warteschlange und versucht es erneut. Sonst wird nichts neu heruntergeladen.</value>
   </data>
-  <data name="Downloads_Details" xml:space="preserve">
+  <data name="Common_Details" xml:space="preserve">
     <value>Details</value>
   </data>
-  <data name="Downloads_DetailsToolTip" xml:space="preserve">
+  <data name="Common_DetailsToolTip" xml:space="preserve">
     <value>Zeigt, was schiefging, bereit zum Melden auf sp-mod.</value>
   </data>
   <data name="Downloads_StatDownloaded" xml:space="preserve">

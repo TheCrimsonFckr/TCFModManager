@@ -107,11 +107,20 @@ public sealed class ProblemReportTests
         {
             Source = ProblemSource.ModList,
             Setup = Setup,
-            ListResult = ListResult(ModListStop.FetchFailed) with { FailedFetches = 2 },
+            ListResult = ListResult(ModListStop.FetchFailed) with
+            {
+                FailedFetches = 2,
+                Fetched = new ModListFetchOutcome(
+                    [],
+                    [new ModListFetchFailure("Foo", "Server error 504."), new ModListFetchFailure("Bar", "No file to download.")],
+                    false),
+            },
         });
 
         Assert.Equal("Mod list apply stopped: FetchFailed", report.Title);
-        Assert.Equal("Reason: ModListStop.FetchFailed\n  FailedFetches: 2\n", report.Details);
+        Assert.Equal(
+            "Reason: ModListStop.FetchFailed\n  FailedFetches: 2\n  Failed: Foo - Server error 504.\n  Failed: Bar - No file to download.\n",
+            report.Details);
     }
 
     [Fact]

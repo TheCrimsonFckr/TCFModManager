@@ -1050,6 +1050,16 @@
                     TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     Text="{Binding StatusMessage}" />
+
+                <ui:Button
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center"
+                    Appearance="Secondary"
+                    Icon="{ui:SymbolIcon Bug24}"
+                    Content="{loc:Str Common_Details}"
+                    ToolTip="{loc:Str Common_DetailsToolTip}"
+                    Command="{Binding ReportApplyCommand}"
+                    Visibility="{Binding CanReportApply, Converter={StaticResource BoolToVis}}" />
             </StackPanel>
 
             <StackPanel Grid.Row="2">

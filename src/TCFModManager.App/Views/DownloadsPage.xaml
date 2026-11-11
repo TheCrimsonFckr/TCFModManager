@@ -286,8 +286,8 @@
                                         HorizontalAlignment="Right"
                                         Appearance="Secondary"
                                         Icon="{ui:SymbolIcon Bug24}"
-                                        Content="{loc:Str Downloads_Details}"
-                                        ToolTip="{loc:Str Downloads_DetailsToolTip}"
+                                        Content="{loc:Str Common_Details}"
+                                        ToolTip="{loc:Str Common_DetailsToolTip}"
                                         Command="{Binding DetailsCommand}"
                                         Visibility="{Binding CanReport, Converter={StaticResource BoolToVisibility}}" />
 

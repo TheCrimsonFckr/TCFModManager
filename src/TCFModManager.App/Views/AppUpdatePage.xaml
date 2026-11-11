@@ -275,6 +275,16 @@
                             Title="{loc:Str AppUpdate_NotAppliedTitle}"
                             Message="{Binding InstallError}"
                             Visibility="{Binding InstallError, Converter={StaticResource NullToCollapsed}}" />
+
+                        <ui:Button
+                            Margin="0,8,0,0"
+                            HorizontalAlignment="Left"
+                            Appearance="Secondary"
+                            Icon="{ui:SymbolIcon Bug24}"
+                            Content="{loc:Str Common_Details}"
+                            ToolTip="{loc:Str Common_DetailsToolTip}"
+                            Command="{Binding ReportInstallFailureCommand}"
+                            Visibility="{Binding CanReportInstallFailure, Converter={StaticResource BoolToVis}}" />
                     </StackPanel>
                 </ui:Card>
 

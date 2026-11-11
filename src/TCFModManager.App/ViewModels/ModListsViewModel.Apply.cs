@@ -2,6 +2,7 @@ using System.IO;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
@@ -99,7 +100,32 @@ public partial class ModListsViewModel
 
             ClearPlan();
             Refresh(preview.List.Id);
+
+            if (result.Stopped is ModListStop.FetchFailed or ModListStop.MovesRefused) SetStoppedApply(result);
         });
+    }
+
+    private ModListApplyResult? _stoppedApply;
+
+    public bool CanReportApply => _stoppedApply is not null;
+
+    partial void OnStatusMessageChanged(string value) => SetStoppedApply(null);
+
+    private void SetStoppedApply(ModListApplyResult? result)
+    {
+        if (ReferenceEquals(_stoppedApply, result)) return;
+
+        _stoppedApply = result;
+        OnPropertyChanged(nameof(CanReportApply));
+        ReportApplyCommand.NotifyCanExecuteChanged();
+    }
+
+    [RelayCommand(CanExecute = nameof(CanReportApply))]
+    private void ReportApply()
+    {
+        if (_stoppedApply is not { } result) return;
+
+        ReportProblemWindow.Open(ProblemFacts.Context(ProblemSource.ModList, shown: StatusMessage, listResult: result));
     }
 
     private static string Completed(ModListApplyResult result, ModListDownloadMode mode)
