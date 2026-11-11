@@ -1987,7 +1987,6 @@ internal static class Strings
     internal static string Help_StopWithGame_Title => LocalizationService.Get("Help_StopWithGame_Title");
     internal static string Help_StopWithGame_Step1 => LocalizationService.Get("Help_StopWithGame_Step1");
     internal static string Help_StopWithGame_Step2 => LocalizationService.Get("Help_StopWithGame_Step2");
-    internal static string Help_StopWithGame_Step3 => LocalizationService.Get("Help_StopWithGame_Step3");
     internal static string Help_StopWithGame_Note => LocalizationService.Get("Help_StopWithGame_Note");
     internal static string Help_StopWithGame_Keywords => LocalizationService.Get("Help_StopWithGame_Keywords");
     internal static string Help_QuickPlay_Title => LocalizationService.Get("Help_QuickPlay_Title");
@@ -2472,11 +2471,7 @@ internal static class Strings
     internal static string Play_GameClosed => LocalizationService.Get("Play_GameClosed");
     internal static string Play_GameNotRunning => LocalizationService.Get("Play_GameNotRunning");
     internal static string Play_GameClosedWithServer => LocalizationService.Get("Play_GameClosedWithServer");
-    internal static string Play_StopServerWithGame => LocalizationService.Get("Play_StopServerWithGame");
-    internal static string Play_StopServerWithGameToolTip => LocalizationService.Get("Play_StopServerWithGameToolTip");
-    internal static string Play_StopServerDelayLabel => LocalizationService.Get("Play_StopServerDelayLabel");
-    internal static string Play_StopServerIgnoresHeadless => LocalizationService.Get("Play_StopServerIgnoresHeadless");
-    internal static string Play_StopServerIgnoresHeadlessToolTip => LocalizationService.Get("Play_StopServerIgnoresHeadlessToolTip");
+    internal static string Options_StopServerDelayLabel => LocalizationService.Get("Options_StopServerDelayLabel");
     internal static string Options_StopServerIgnoresHeadlessOn => LocalizationService.Get("Options_StopServerIgnoresHeadlessOn");
     internal static string Options_StopServerIgnoresHeadlessOff => LocalizationService.Get("Options_StopServerIgnoresHeadlessOff");
     internal static string Play_ServerStopCountdownFormat => LocalizationService.Get("Play_ServerStopCountdownFormat");
