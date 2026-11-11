@@ -121,7 +121,11 @@ public partial class App : Application
 
         // Catches anything thrown off the UI thread, which the dispatcher handler never sees.
         AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+        {
             AppLog.Error("App", "Unhandled exception", args.ExceptionObject as Exception);
+            AppLog.Flush();
+            CrashFile.Write(args.ExceptionObject as Exception, DateTimeOffset.Now);
+        };
 
         TaskScheduler.UnobservedTaskException += (_, args) =>
         {
@@ -140,6 +144,9 @@ public partial class App : Application
         MainWindow = window;
         window.Show();
 
+        if (CrashFile.Take() is { } lastCrash)
+            Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, () => OfferLastCrash(lastCrash));
+
         // After the window's Loaded, which attaches the navigation and opens the start page.
         if (quickPlay) Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, AppNavigation.QuickPlayFromShortcut);
 
@@ -148,6 +155,20 @@ public partial class App : Application
 
         // A no-op unless the page is on and the user agreed to report to this server (D9).
         AppServices.ServerMapReporter.Start();
+    }
+
+    private static void OfferLastCrash(LastCrash crash)
+    {
+        try
+        {
+            ReportProblemWindow.Open(
+                ProblemFacts.Context(ProblemSource.PreviousCrash, exceptionText: crash.Text),
+                crash.At);
+        }
+        catch (Exception ex)
+        {
+            AppLog.Error("App", "Couldn't offer the last crash's report", ex);
+        }
     }
 
     // Another launch of the exe from this folder asked for the window.

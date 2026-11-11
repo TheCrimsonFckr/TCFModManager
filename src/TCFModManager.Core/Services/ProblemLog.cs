@@ -17,7 +17,13 @@ public static class ProblemLog
         return ReadLatestSession(AppLog.Directory, DateTime.Now);
     }
 
-    public static string? ReadLatestSession(string directory, DateTime now, int maxLines = MaxLines)
+    public static string? ReadPreviousSession()
+    {
+        AppLog.Flush();
+        return ReadLatestSession(AppLog.Directory, DateTime.Now, sessionsBack: 1);
+    }
+
+    public static string? ReadLatestSession(string directory, DateTime now, int maxLines = MaxLines, int sessionsBack = 0)
     {
         List<string> files;
         try
@@ -32,15 +38,32 @@ public static class ProblemLog
             return null;
         }
 
-        var session = new List<string>();
+        var wanted = sessionsBack + 1;
+        var lines = new List<string>();
         foreach (var file in files)
         {
-            var lines = ReadLines(file);
-            if (lines is null) continue;
+            var read = ReadLines(file);
+            if (read is null) continue;
 
-            var start = LastHeader(lines);
-            session.InsertRange(0, start >= 0 ? lines.Skip(start) : lines);
-            if (start >= 0) break;
+            lines.InsertRange(0, read);
+            if (Headers(lines).Count >= wanted) break;
+        }
+
+        var headers = Headers(lines);
+        List<string> session;
+        if (headers.Count >= wanted)
+        {
+            var start = headers[^wanted];
+            var end = sessionsBack == 0 ? lines.Count : headers[^sessionsBack];
+            session = lines.GetRange(start, end - start);
+        }
+        else if (sessionsBack == 0)
+        {
+            session = lines;
+        }
+        else
+        {
+            return null;
         }
 
         while (session.Count > 0 && string.IsNullOrWhiteSpace(session[0])) session.RemoveAt(0);
@@ -77,14 +100,15 @@ public static class ProblemLog
         return 0;
     }
 
-    private static int LastHeader(IReadOnlyList<string> lines)
+    private static List<int> Headers(IReadOnlyList<string> lines)
     {
-        for (var i = lines.Count - 2; i >= 0; i--)
+        var headers = new List<int>();
+        for (var i = 0; i < lines.Count - 1; i++)
         {
-            if (IsHeaderAt(lines, i)) return i;
+            if (IsHeaderAt(lines, i)) headers.Add(i);
         }
 
-        return -1;
+        return headers;
     }
 
     private static bool IsHeaderAt(IReadOnlyList<string> lines, int index) =>

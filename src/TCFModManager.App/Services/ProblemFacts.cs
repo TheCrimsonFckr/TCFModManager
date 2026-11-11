@@ -26,7 +26,10 @@ public static class ProblemFacts
             ExceptionText = exceptionText,
             ListResult = listResult,
             Shown = shown,
-            Log = Try<string?>("log", ProblemLog.ReadCurrentSession, null),
+            Log = Try<string?>(
+                "log",
+                source == ProblemSource.PreviousCrash ? ProblemLog.ReadPreviousSession : ProblemLog.ReadCurrentSession,
+                null),
             Redaction = Redaction(settings),
         };
     }

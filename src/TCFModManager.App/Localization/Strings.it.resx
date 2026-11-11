@@ -5598,6 +5598,9 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="ReportProblem_CrashWarning" xml:space="preserve">
     <value>Qualcosa è andato storto. L'app proverà a continuare.</value>
   </data>
+  <data name="ReportProblem_PreviousCrashWarningFormat" xml:space="preserve">
+    <value>TCF Mod Manager si è chiuso in modo inatteso l'ultima volta ({0}).</value>
+  </data>
   <data name="ReportProblem_Lead" xml:space="preserve">
     <value>Non viene inviato nulla finché non lo decidi tu. Controlla il testo qui sotto prima di condividerlo.</value>
   </data>

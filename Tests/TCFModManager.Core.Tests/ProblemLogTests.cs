@@ -123,6 +123,39 @@ public sealed class ProblemLogTests : IDisposable
     }
 
     [Fact]
+    public void The_previous_session_ends_where_the_current_one_starts()
+    {
+        Write(Today, Header("2026-11-11 09:00:00"), ["INFO first session", "ERROR it crashed"], Header("2026-11-11 20:00:00"), ["INFO second session"]);
+
+        var log = ProblemLog.ReadLatestSession(_dir, Today, sessionsBack: 1)!;
+
+        Assert.StartsWith(Ruler + "\nTCF Mod Manager 1.28.0-beta started 2026-11-11 09:00:00\n", log);
+        Assert.EndsWith("INFO first session\nERROR it crashed", log);
+        Assert.DoesNotContain("second session", log);
+    }
+
+    [Fact]
+    public void The_previous_session_can_be_in_an_earlier_file()
+    {
+        Write(Today.AddDays(-2), Header("2026-11-09 22:00:00"), ["INFO crashed session"]);
+        Write(Today, Header("2026-11-11 08:00:00"), ["INFO this session"]);
+
+        var log = ProblemLog.ReadLatestSession(_dir, Today, sessionsBack: 1)!;
+
+        Assert.Contains("started 2026-11-09 22:00:00", log);
+        Assert.EndsWith("INFO crashed session", log);
+        Assert.DoesNotContain("this session", log);
+    }
+
+    [Fact]
+    public void Without_a_previous_session_there_is_no_previous_log()
+    {
+        Write(Today, ["INFO no header"], Header("2026-11-11 08:00:00"), ["INFO this session"]);
+
+        Assert.Null(ProblemLog.ReadLatestSession(_dir, Today, sessionsBack: 1));
+    }
+
+    [Fact]
     public void No_folder_or_no_files_means_no_log()
     {
         Assert.Null(ProblemLog.ReadLatestSession(Path.Combine(_dir, "missing"), Today));

@@ -43,6 +43,17 @@ public partial class MainWindow : FluentWindow
             e.Handled = true;
         };
 
+        // TEMPORARY, ADDED IN v1.28.0 - DELETE WHEN THE APP LEAVES BETA. Test crashes for the problem
+        // report (OPEN-15): Ctrl+Shift+F12 throws on the UI thread, Ctrl+Shift+F11 off it, which ends
+        // the app and offers the report on the next start.
+        PreviewKeyDown += (_, e) =>
+        {
+            if (Keyboard.Modifiers != (ModifierKeys.Control | ModifierKeys.Shift)) return;
+
+            if (e.Key == Key.F12) throw new InvalidOperationException("TestCrashUiThread");
+            if (e.Key == Key.F11) new Thread(() => throw new InvalidOperationException("TestCrashOffUiThread")).Start();
+        };
+
         Loaded += (_, _) =>
         {
             HelpButtonToolTip();

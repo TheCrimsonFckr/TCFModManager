@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -15,14 +16,16 @@ public sealed partial class ReportProblemViewModel : LocalizedViewModel
     private static readonly TimeSpan UploadTimeout = TimeSpan.FromSeconds(30);
 
     private readonly ProblemContext _context;
+    private readonly DateTimeOffset _crashedAt;
     private IReadOnlyList<ProblemMod>? _mods;
     private ProblemReport _report;
     private string? _link;
     private string? _linkFor;
 
-    public ReportProblemViewModel(ProblemContext context)
+    public ReportProblemViewModel(ProblemContext context, DateTimeOffset? crashedAt = null)
     {
         _context = context;
+        _crashedAt = crashedAt ?? DateTimeOffset.Now;
         _report = ProblemReport.Build(context);
     }
 
@@ -39,11 +42,24 @@ public sealed partial class ReportProblemViewModel : LocalizedViewModel
     [ObservableProperty]
     private bool _hasError;
 
-    public string WindowTitle => _context.Source == ProblemSource.Crash ? Strings.App_CrashTitle : Strings.ReportProblem_Title;
+    public string WindowTitle =>
+        _context.Source is ProblemSource.Crash or ProblemSource.PreviousCrash ? Strings.App_CrashTitle : Strings.ReportProblem_Title;
 
-    public string? Warning => _context.Source == ProblemSource.Crash ? Strings.ReportProblem_CrashWarning : null;
+    public string? Warning => _context.Source switch
+    {
+        ProblemSource.Crash => Strings.ReportProblem_CrashWarning,
+        ProblemSource.PreviousCrash => LocalizationService.Text(
+            Strings.ReportProblem_PreviousCrashWarningFormat,
+            _crashedAt.LocalDateTime.ToString("g", CultureInfo.CurrentCulture)),
+        _ => null,
+    };
 
-    public string? WarningDetail => _context.Source == ProblemSource.Crash ? _context.Exception?.Message : null;
+    public string? WarningDetail => _context.Source switch
+    {
+        ProblemSource.Crash => _context.Exception?.Message,
+        ProblemSource.PreviousCrash => MessageLine(_context.ExceptionText),
+        _ => null,
+    };
 
     public string ReportTitle => _report.Title;
 
@@ -112,6 +128,15 @@ public sealed partial class ReportProblemViewModel : LocalizedViewModel
         {
             IsUploading = false;
         }
+    }
+
+    private static string? MessageLine(string? exceptionText)
+    {
+        var first = exceptionText?.TrimStart().Split('\n', 2)[0].Trim();
+        if (string.IsNullOrEmpty(first)) return null;
+
+        var colon = first.IndexOf(": ", StringComparison.Ordinal);
+        return colon >= 0 ? first[(colon + 2)..] : first;
     }
 
     private bool Copy(string text, string done)

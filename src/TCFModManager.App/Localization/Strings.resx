@@ -6999,6 +6999,10 @@ The details are in the log:
     <value>Something went wrong. The app will try to carry on.</value>
     <comment>Warning line at the top of the Report a problem window when it opens for an unexpected error. Same words as the first line of App_CrashMessageFormat.</comment>
   </data>
+  <data name="ReportProblem_PreviousCrashWarningFormat" xml:space="preserve">
+    <value>TCF Mod Manager closed unexpectedly last time ({0}).</value>
+    <comment>Warning line at the top of the Report a problem window, offered once on the start after a crash. {0} is the date and time of the crash, in the user's regional format. TCF Mod Manager is the app's name and stays as it is.</comment>
+  </data>
   <data name="ReportProblem_Lead" xml:space="preserve">
     <value>Nothing is sent until you choose to. Check the text below before you share it.</value>
     <comment>First line of the Report a problem window.</comment>

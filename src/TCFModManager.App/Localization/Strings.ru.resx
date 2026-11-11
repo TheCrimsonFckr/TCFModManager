@@ -5871,6 +5871,9 @@
   <data name="ReportProblem_CrashWarning" xml:space="preserve">
     <value>Что-то пошло не так. Приложение попробует продолжить работу.</value>
   </data>
+  <data name="ReportProblem_PreviousCrashWarningFormat" xml:space="preserve">
+    <value>В прошлый раз TCF Mod Manager неожиданно закрылся ({0}).</value>
+  </data>
   <data name="ReportProblem_Lead" xml:space="preserve">
     <value>Ничего не отправляется, пока вы сами не решите. Проверьте текст ниже, прежде чем делиться им.</value>
   </data>

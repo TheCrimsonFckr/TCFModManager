@@ -5598,6 +5598,9 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="ReportProblem_CrashWarning" xml:space="preserve">
     <value>Etwas ist schiefgelaufen. Die App versucht weiterzulaufen.</value>
   </data>
+  <data name="ReportProblem_PreviousCrashWarningFormat" xml:space="preserve">
+    <value>TCF Mod Manager wurde beim letzten Mal unerwartet beendet ({0}).</value>
+  </data>
   <data name="ReportProblem_Lead" xml:space="preserve">
     <value>Es wird nichts gesendet, bis du es willst. Prüfe den Text unten, bevor du ihn teilst.</value>
   </data>
