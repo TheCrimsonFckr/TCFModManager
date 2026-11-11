@@ -44,7 +44,7 @@ public sealed record ProblemSetup
     public bool ServerMapConnected { get; init; }
 }
 
-public sealed record ProblemMod(string Name, string? Version, string? ModId, bool Disabled);
+public sealed record ProblemMod(string Name, string? Version, string? ModId, bool Disabled, bool IsAddon = false);
 
 public sealed record ProblemContext
 {
@@ -267,7 +267,7 @@ public sealed record ProblemReport
             {
                 text.Append("  ").Append(mod.Name);
                 if (mod.Version is { Length: > 0 }) text.Append(' ').Append(mod.Version);
-                if (mod.ModId is { Length: > 0 }) text.Append(" (sp-mod ").Append(mod.ModId).Append(')');
+                if (mod.ModId is { Length: > 0 }) text.Append(mod.IsAddon ? " (sp-mod addon " : " (sp-mod ").Append(mod.ModId).Append(')');
                 if (mod.Disabled) text.Append(" disabled");
                 text.Append('\n');
             }

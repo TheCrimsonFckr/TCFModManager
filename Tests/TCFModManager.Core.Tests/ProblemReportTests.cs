@@ -235,10 +235,10 @@ public sealed class ProblemReportTests
         {
             Source = ProblemSource.Help,
             Setup = Setup,
-            InstalledMods = [new ProblemMod("Foo", "1.0.0", "12", false), new ProblemMod("Bar", null, null, true)],
+            InstalledMods = [new ProblemMod("Foo", "1.0.0", "12", false), new ProblemMod("Bar", null, null, true), new ProblemMod("Foo Extra", "0.3.0", "77", false, IsAddon: true)],
         }).LogsText;
 
-        Assert.Contains("Installed mods (2)\n  Foo 1.0.0 (sp-mod 12)\n  Bar disabled\n", logs);
+        Assert.Contains("Installed mods (3)\n  Foo 1.0.0 (sp-mod 12)\n  Bar disabled\n  Foo Extra 0.3.0 (sp-mod addon 77)\n", logs);
     }
 
     [Fact]
