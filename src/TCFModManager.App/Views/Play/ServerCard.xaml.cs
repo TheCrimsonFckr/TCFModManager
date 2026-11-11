@@ -28,7 +28,8 @@ public partial class ServerCard : UserControl
 
         Loaded += (_, _) =>
         {
-            _pageScroll ??= FindPageScroll();
+            _pageScroll = FindPageScroll();
+            LayoutUpdated -= FitServerLog;
             LayoutUpdated += FitServerLog;
         };
 
@@ -40,7 +41,7 @@ public partial class ServerCard : UserControl
     // button and the card's edge still on screen. Measured rather than a fixed allowance, because
     // the window is resizable.
     // Measured in content coordinates, so scrolling the page does not change it. Never under
-    // MinServerLogHeight; when that happens the page scrolls as before.
+    // MinServerLogHeight unless the window is shorter than that; then the page scrolls as before.
     //
     private void FitServerLog(object? sender, EventArgs e)
     {
@@ -50,14 +51,17 @@ public partial class ServerCard : UserControl
             return;
         }
 
+        if (_pageScroll is null || !_pageScroll.IsAncestorOf(ServerLog)) _pageScroll = FindPageScroll();
         if (_pageScroll is null || !ServerLog.IsVisible || _pageScroll.ViewportHeight <= 0) return;
 
         var bottomMargin = Card.Margin.Bottom + ((Parent as FrameworkElement)?.Margin.Bottom ?? 0);
         var top = ServerLog.TranslatePoint(new Point(0, 0), _pageScroll).Y + _pageScroll.VerticalOffset;
         var below = Card.TranslatePoint(new Point(0, Card.ActualHeight), ServerLog).Y - ServerLog.ActualHeight;
-        var height = Math.Max(MinServerLogHeight, _pageScroll.ViewportHeight - top - below - bottomMargin);
+        var fit = _pageScroll.ViewportHeight - top - below - bottomMargin;
+        var most = _pageScroll.ViewportHeight - below - bottomMargin;
+        var height = Math.Min(most, Math.Max(MinServerLogHeight, fit));
 
-        if (Math.Abs(height - ServerLog.Height) > 1)
+        if (height > 0 && Math.Abs(height - ServerLog.Height) > 1)
             ServerLog.Height = height;
     }
 
