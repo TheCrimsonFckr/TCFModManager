@@ -46,9 +46,6 @@ public static class ServerStopper
     /// <summary>Raised on the UI thread after the server was stopped, with the line for the Play page.</summary>
     public static event EventHandler<GameClosedEventArgs>? Stopped;
 
-    /// <summary>Raised when the switch or the delay is changed, so every page showing them can re-read.</summary>
-    public static event EventHandler? SettingChanged;
-
     public static int Clamp(int seconds) => Math.Clamp(seconds, 0, MaxSeconds);
 
     // Called once the main window has loaded.
@@ -72,8 +69,6 @@ public static class ServerStopper
         Reset();
         if (enabled) Timer.Start();
         else Timer.Stop();
-
-        SettingChanged?.Invoke(null, EventArgs.Empty);
     }
 
     public static void SetIgnoresHeadless(bool ignores)
@@ -85,8 +80,6 @@ public static class ServerStopper
         settings.StopServerIgnoresHeadless = ignores;
         service.Save(settings);
         AppLog.Info("Launch", ignores ? "the server stop after the game no longer waits for the headless" : "the server stop after the game waits for the headless");
-
-        SettingChanged?.Invoke(null, EventArgs.Empty);
     }
 
     public static void SetSeconds(int seconds)
@@ -99,8 +92,6 @@ public static class ServerStopper
 
         settings.StopServerAfterGameSeconds = seconds;
         service.Save(settings);
-
-        SettingChanged?.Invoke(null, EventArgs.Empty);
     }
 
     /// <summary>Keep it running: calls off this countdown. The next time the game closes counts again.</summary>

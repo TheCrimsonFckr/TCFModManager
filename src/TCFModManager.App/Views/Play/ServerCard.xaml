@@ -145,43 +145,6 @@
                     Command="{Binding KeepServerRunningCommand}" />
             </StackPanel>
 
-            <!-- OPEN-45: the same setting as Options - Starting SPT (ServerStopper). -->
-            <WrapPanel Margin="0,4,0,0">
-                <CheckBox
-                    VerticalAlignment="Center"
-                    Margin="0,0,16,0"
-                    Content="{loc:Str Play_StopServerWithGame}"
-                    ToolTip="{loc:Str Play_StopServerWithGameToolTip}"
-                    ToolTipService.ShowDuration="20000"
-                    IsChecked="{Binding StopServerWithGame}" />
-                <StackPanel Orientation="Horizontal" IsEnabled="{Binding StopServerWithGame}">
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        Margin="0,0,8,0"
-                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                        Text="{loc:Str Play_StopServerDelayLabel}" />
-                    <ui:NumberBox
-                        Width="120"
-                        MaxLength="4"
-                        ClearButtonEnabled="False"
-                        Minimum="0"
-                        Maximum="{Binding StopServerMaxSeconds, Mode=OneTime}"
-                        SmallChange="5"
-                        LargeChange="60"
-                        MaxDecimalPlaces="0"
-                        SpinButtonPlacementMode="Inline"
-                        Value="{Binding StopServerDelay, Mode=TwoWay}" />
-                </StackPanel>
-            </WrapPanel>
-            <CheckBox
-                Margin="0,8,0,0"
-                Content="{loc:Str Play_StopServerIgnoresHeadless}"
-                ToolTip="{loc:Str Play_StopServerIgnoresHeadlessToolTip}"
-                ToolTipService.ShowDuration="20000"
-                IsChecked="{Binding StopServerIgnoresHeadless}"
-                IsEnabled="{Binding StopServerWithGame}"
-                Visibility="{Binding HasHeadless, Converter={StaticResource BoolToVisibility}}" />
-
             <!-- The server's own log file, read on the poll while this is open (ServerLogs).
                  Opens by itself when the server runs without its window. -->
             <Expander

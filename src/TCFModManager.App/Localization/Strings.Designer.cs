@@ -251,6 +251,7 @@ internal static class Strings
     internal static string Play_ServerHeader => LocalizationService.Get("Play_ServerHeader");
     internal static string Play_ServerDescription => LocalizationService.Get("Play_ServerDescription");
     internal static string Play_StartServer => LocalizationService.Get("Play_StartServer");
+    internal static string Play_ServerRunning => LocalizationService.Get("Play_ServerRunning");
     internal static string Play_Restart => LocalizationService.Get("Play_Restart");
     internal static string Play_RestartServerToolTip => LocalizationService.Get("Play_RestartServerToolTip");
     internal static string Play_RestartServerWarning => LocalizationService.Get("Play_RestartServerWarning");

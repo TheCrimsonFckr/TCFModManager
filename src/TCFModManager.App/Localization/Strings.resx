@@ -7191,15 +7191,11 @@ The details are in the log:
     <comment>How-to title.</comment>
   </data>
   <data name="Help_StopWithGame_Step1" xml:space="preserve">
-    <value>On {0}, on the {1} card, tick {2} and set how many seconds to wait.</value>
+    <value>Open {0}, then {1}, switch on {2} and set how many seconds to wait.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_StopWithGame_Step2" xml:space="preserve">
     <value>When the game closes, the card counts down. Press {0} to keep the server up this time.</value>
-    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
-  </data>
-  <data name="Help_StopWithGame_Step3" xml:space="preserve">
-    <value>The same switch is in {0}, under {1}.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_StopWithGame_Note" xml:space="preserve">
@@ -9017,23 +9013,9 @@ See Dependencies and Conflicts.</value>
   <data name="Play_GameClosedWithServer" xml:space="preserve">
     <value>The server stopped, so the game was closed.</value>
   </data>
-  <data name="Play_StopServerWithGame" xml:space="preserve">
-    <value>Stop the server when the game closes</value>
-    <comment>Server card tick box (OPEN-45). Same setting as Options - Starting SPT.</comment>
-  </data>
-  <data name="Play_StopServerWithGameToolTip" xml:space="preserve">
-    <value>When the game from this install closes and stays closed for the wait you set, this install's server is stopped the way Stop does it, so your profile is saved. The game coming back first cancels it. While this install's Fika headless client runs, the server waits until that closes too, unless Don't wait for the headless client is ticked. It stops for everyone connected to it.</value>
-  </data>
-  <data name="Play_StopServerDelayLabel" xml:space="preserve">
+  <data name="Options_StopServerDelayLabel" xml:space="preserve">
     <value>Wait (seconds)</value>
-    <comment>Beside the number box holding how many seconds to wait after the game closes.</comment>
-  </data>
-  <data name="Play_StopServerIgnoresHeadless" xml:space="preserve">
-    <value>Don't wait for the headless client</value>
-    <comment>Server card tick box under Stop the server when the game closes; only on installs with a Fika headless (OPEN-45).</comment>
-  </data>
-  <data name="Play_StopServerIgnoresHeadlessToolTip" xml:space="preserve">
-    <value>Stop the server after the wait even while this install's Fika headless client is running. The headless is left as it is, and a raid in progress on it is lost.</value>
+    <comment>Options - Starting SPT: beside the number box holding how many seconds to wait after the game closes.</comment>
   </data>
   <data name="Options_StopServerIgnoresHeadlessOn" xml:space="preserve">
     <value>Don't wait for the headless client</value>
@@ -9070,7 +9052,7 @@ See Dependencies and Conflicts.</value>
     <value>Leave the server running when the game closes</value>
   </data>
   <data name="Options_StopServerWithGameNote" xml:space="preserve">
-    <value>Same as the tick box on the server card. The game coming back during the wait cancels it, and the server waits for this install's Fika headless client to close unless told not to. It stops for everyone connected to it.</value>
+    <value>The server card counts down with Keep it running. The game coming back during the wait cancels it, and the server waits for this install's Fika headless client to close unless told not to. It stops for everyone connected to it.</value>
   </data>
   <data name="Play_StoppedAfterGameFormat" xml:space="preserve">
     <value>Stopped {0}. The game was closed first, as ticked on the launcher card.</value>

@@ -5,13 +5,12 @@ using TCFModManager.Core.Models;
 namespace TCFModManager.App.ViewModels;
 
 //
-// OPEN-45 in Options - Starting SPT: the same switch and delay as the server card (ServerStopper).
+// OPEN-45 in Options - Starting SPT: stop the server after the game closes (ServerStopper). The
+// server card shows the countdown.
 //
 public partial class OptionsViewModel
 {
     private bool _readingServerStop;
-
-    private bool _serverStopHooked;
 
     [ObservableProperty]
     private bool _stopServerWithGame;
@@ -27,15 +26,7 @@ public partial class OptionsViewModel
 
     public double StopServerMaxSeconds => ServerStopper.MaxSeconds;
 
-    private void HookServerStop(AppSettings settings)
-    {
-        ReadServerStop(settings);
-
-        if (_serverStopHooked) return;
-        _serverStopHooked = true;
-
-        ServerStopper.SettingChanged += (_, _) => ReadServerStop(_settings.Load());
-    }
+    private void HookServerStop(AppSettings settings) => ReadServerStop(settings);
 
     private void ReadServerStop(AppSettings settings)
     {

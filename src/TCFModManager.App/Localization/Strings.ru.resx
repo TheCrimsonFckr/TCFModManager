@@ -6025,13 +6025,10 @@
     <value>Останавливать сервер, когда игра закрывается</value>
   </data>
   <data name="Help_StopWithGame_Step1" xml:space="preserve">
-    <value>На странице {0} на карточке {1} отметьте {2} и задайте, сколько секунд ждать.</value>
+    <value>Откройте {0}, затем {1}, включите {2} и задайте, сколько секунд ждать.</value>
   </data>
   <data name="Help_StopWithGame_Step2" xml:space="preserve">
     <value>Когда игра закрывается, на карточке идёт обратный отсчёт. Нажмите {0}, чтобы в этот раз сервер продолжил работать.</value>
-  </data>
-  <data name="Help_StopWithGame_Step3" xml:space="preserve">
-    <value>Тот же переключатель есть в {0}, в разделе {1}.</value>
   </data>
   <data name="Help_StopWithGame_Note" xml:space="preserve">
     <value>Если игра снова запустится во время ожидания, остановка отменяется, а пока работает headless-клиент Fika этой установки, сервер ждёт, если не отметить {0}. Сервер останавливается для всех, кто к нему подключён.</value>
@@ -7474,20 +7471,8 @@
   <data name="Play_GameClosedWithServer" xml:space="preserve">
     <value>Сервер остановлен, поэтому игра закрыта.</value>
   </data>
-  <data name="Play_StopServerWithGame" xml:space="preserve">
-    <value>Останавливать сервер, когда игра закрывается</value>
-  </data>
-  <data name="Play_StopServerWithGameToolTip" xml:space="preserve">
-    <value>Когда игра этой установки закрывается и остаётся закрытой в течение заданного ожидания, сервер этой установки останавливается так же, как кнопкой Остановить, чтобы профиль сохранился. Если игра снова запустится раньше, остановка отменяется. Пока работает headless-клиент Fika этой установки, сервер ждёт, пока закроется и он, если не отмечено «Не ждать headless-клиент». Сервер останавливается для всех, кто к нему подключён.</value>
-  </data>
-  <data name="Play_StopServerDelayLabel" xml:space="preserve">
+  <data name="Options_StopServerDelayLabel" xml:space="preserve">
     <value>Ожидание (секунды)</value>
-  </data>
-  <data name="Play_StopServerIgnoresHeadless" xml:space="preserve">
-    <value>Не ждать headless-клиент</value>
-  </data>
-  <data name="Play_StopServerIgnoresHeadlessToolTip" xml:space="preserve">
-    <value>Останавливать сервер после ожидания, даже если работает headless-клиент Fika этой установки. Headless-клиент остаётся как есть, а идущий на нём рейд будет потерян.</value>
   </data>
   <data name="Options_StopServerIgnoresHeadlessOn" xml:space="preserve">
     <value>Не ждать headless-клиент</value>
@@ -7520,7 +7505,7 @@
     <value>Оставлять сервер работать, когда игра закрывается</value>
   </data>
   <data name="Options_StopServerWithGameNote" xml:space="preserve">
-    <value>То же, что флажок на карточке сервера. Если игра снова запустится во время ожидания, остановка отменяется, а сервер ждёт, пока закроется headless-клиент Fika этой установки, если не указано иное. Сервер останавливается для всех, кто к нему подключён.</value>
+    <value>На карточке сервера идёт обратный отсчёт с кнопкой «Оставить работать». Если игра снова запустится во время ожидания, остановка отменяется, а сервер ждёт, пока закроется headless-клиент Fika этой установки, если не указано иное. Сервер останавливается для всех, кто к нему подключён.</value>
   </data>
   <data name="Play_StoppedAfterGameFormat" xml:space="preserve">
     <value>{0} остановлен. Сначала была закрыта игра, как отмечено на карточке лаунчера.</value>

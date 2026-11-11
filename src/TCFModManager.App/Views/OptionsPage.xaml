@@ -849,7 +849,7 @@
                         Margin="0,6,0,0"
                         Text="{loc:Str Options_ServerOnProfileNote}" />
                 </StackPanel>
-                <!-- OPEN-45: the same setting as the server card's tick box (ServerStopper). -->
+                <!-- OPEN-45: stop the server after the game closes (ServerStopper). -->
                 <ui:ToggleSwitch
                     Margin="0,12,0,0"
                     HorizontalAlignment="Left"
@@ -863,7 +863,7 @@
                     <TextBlock
                         VerticalAlignment="Center"
                         Margin="0,0,8,0"
-                        Text="{loc:Str Play_StopServerDelayLabel}" />
+                        Text="{loc:Str Options_StopServerDelayLabel}" />
                     <ui:NumberBox
                         Width="120"
                         MaxLength="4"
