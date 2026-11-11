@@ -5,6 +5,7 @@ using System.Windows.Threading;
 using TCFModManager.App.Behaviors;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
+using TCFModManager.App.Views;
 using TCFModManager.Core.ServerMap;
 using TCFModManager.Core.Services;
 
@@ -14,6 +15,8 @@ public partial class App : Application
 {
     // Set when another copy is already running from this folder, so this one leaves no trace.
     private bool _secondCopy;
+
+    private bool _reportingCrash;
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -203,6 +206,25 @@ public partial class App : Application
     private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
         AppLog.Error("App", "Unhandled UI exception", e.Exception);
+        e.Handled = true;
+
+        if (!_reportingCrash)
+        {
+            _reportingCrash = true;
+            try
+            {
+                ReportProblemWindow.Open(ProblemFacts.Context(ProblemSource.Crash, e.Exception));
+                return;
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error("App", "Couldn't show the problem report", ex);
+            }
+            finally
+            {
+                _reportingCrash = false;
+            }
+        }
 
         //
         // Keyed like everything else, and safe to be: Get falls back to the key itself rather than
@@ -213,7 +235,5 @@ public partial class App : Application
             Strings.App_CrashTitle,
             MessageBoxButton.OK,
             MessageBoxImage.Error);
-
-        e.Handled = true;
     }
 }

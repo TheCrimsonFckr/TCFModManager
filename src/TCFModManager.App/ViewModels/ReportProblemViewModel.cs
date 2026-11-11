@@ -39,6 +39,12 @@ public sealed partial class ReportProblemViewModel : LocalizedViewModel
     [ObservableProperty]
     private bool _hasError;
 
+    public string WindowTitle => _context.Source == ProblemSource.Crash ? Strings.App_CrashTitle : Strings.ReportProblem_Title;
+
+    public string? Warning => _context.Source == ProblemSource.Crash ? Strings.ReportProblem_CrashWarning : null;
+
+    public string? WarningDetail => _context.Source == ProblemSource.Crash ? _context.Exception?.Message : null;
+
     public string ReportTitle => _report.Title;
 
     public bool HasTitle => _report.Title.Length > 0;

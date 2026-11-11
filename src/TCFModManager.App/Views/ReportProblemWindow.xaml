@@ -5,7 +5,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
-    Title="{loc:Str ReportProblem_Title}"
+    Title="{Binding WindowTitle}"
     Width="760"
     SizeToContent="Height"
     ResizeMode="NoResize"
@@ -34,11 +34,33 @@
 
         <ui:TitleBar
             Grid.Row="0"
-            Title="{loc:Str ReportProblem_Title}"
+            Title="{Binding WindowTitle}"
             ShowMinimize="False"
             ShowMaximize="False" />
 
         <StackPanel Grid.Row="1" Margin="24,12,24,0">
+            <Grid Margin="0,0,0,12" Visibility="{Binding Warning, Converter={StaticResource NullToCollapsed}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <ui:SymbolIcon
+                    Grid.Column="0"
+                    Margin="0,0,10,0"
+                    VerticalAlignment="Top"
+                    FontSize="20"
+                    Symbol="Warning24"
+                    Foreground="{DynamicResource SystemFillColorCautionBrush}" />
+                <StackPanel Grid.Column="1">
+                    <TextBlock Style="{StaticResource ReportText}" FontWeight="SemiBold" Text="{Binding Warning}" />
+                    <TextBlock
+                        Style="{StaticResource ReportText}"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="{Binding WarningDetail}"
+                        Visibility="{Binding WarningDetail, Converter={StaticResource NullToCollapsed}}" />
+                </StackPanel>
+            </Grid>
+
             <TextBlock Style="{StaticResource ReportText}" Text="{loc:Str ReportProblem_Lead}" />
 
             <TextBlock

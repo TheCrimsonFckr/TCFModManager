@@ -6995,6 +6995,10 @@ The details are in the log:
     <value>Report a problem</value>
     <comment>Title of the window that builds a problem report. Same words as Help_ReportProblem.</comment>
   </data>
+  <data name="ReportProblem_CrashWarning" xml:space="preserve">
+    <value>Something went wrong. The app will try to carry on.</value>
+    <comment>Warning line at the top of the Report a problem window when it opens for an unexpected error. Same words as the first line of App_CrashMessageFormat.</comment>
+  </data>
   <data name="ReportProblem_Lead" xml:space="preserve">
     <value>Nothing is sent until you choose to. Check the text below before you share it.</value>
     <comment>First line of the Report a problem window.</comment>

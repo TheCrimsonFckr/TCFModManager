@@ -5595,6 +5595,9 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="ReportProblem_Title" xml:space="preserve">
     <value>Signaler un problème</value>
   </data>
+  <data name="ReportProblem_CrashWarning" xml:space="preserve">
+    <value>Une erreur s'est produite. L'application va essayer de continuer.</value>
+  </data>
   <data name="ReportProblem_Lead" xml:space="preserve">
     <value>Rien n'est envoyé tant que vous ne le décidez pas. Vérifiez le texte ci-dessous avant de le partager.</value>
   </data>

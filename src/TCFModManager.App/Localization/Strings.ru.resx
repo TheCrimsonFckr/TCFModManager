@@ -5868,6 +5868,9 @@
   <data name="ReportProblem_Title" xml:space="preserve">
     <value>Сообщить о проблеме</value>
   </data>
+  <data name="ReportProblem_CrashWarning" xml:space="preserve">
+    <value>Что-то пошло не так. Приложение попробует продолжить работу.</value>
+  </data>
   <data name="ReportProblem_Lead" xml:space="preserve">
     <value>Ничего не отправляется, пока вы сами не решите. Проверьте текст ниже, прежде чем делиться им.</value>
   </data>
