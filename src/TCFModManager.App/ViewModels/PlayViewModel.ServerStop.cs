@@ -25,6 +25,9 @@ public partial class PlayViewModel
     private double? _stopServerDelay = ServerStopper.DefaultSeconds;
 
     [ObservableProperty]
+    private bool _stopServerIgnoresHeadless;
+
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasServerStopCountdown))]
     private string? _serverStopCountdown;
 
@@ -50,6 +53,7 @@ public partial class PlayViewModel
         _readingServerStopSetting = true;
         StopServerWithGame = settings.StopServerWithGame;
         StopServerDelay = ServerStopper.Clamp(settings.StopServerAfterGameSeconds);
+        StopServerIgnoresHeadless = settings.StopServerIgnoresHeadless;
         _readingServerStopSetting = false;
 
         UpdateServerStopCountdown();
@@ -76,6 +80,11 @@ public partial class PlayViewModel
     partial void OnStopServerWithGameChanged(bool value)
     {
         if (!_readingServerStopSetting) ServerStopper.SetEnabled(value);
+    }
+
+    partial void OnStopServerIgnoresHeadlessChanged(bool value)
+    {
+        if (!_readingServerStopSetting) ServerStopper.SetIgnoresHeadless(value);
     }
 
     partial void OnStopServerDelayChanged(double? value)

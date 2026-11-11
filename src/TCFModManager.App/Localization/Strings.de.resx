@@ -5758,7 +5758,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Derselbe Schalter ist in {0} unter {1}.</value>
   </data>
   <data name="Help_StopWithGame_Note" xml:space="preserve">
-    <value>Startet das Spiel während der Wartezeit wieder, wird abgebrochen, und solange der Fika Headless-Client dieser Installation läuft, wartet der Server. Er stoppt für alle, die mit ihm verbunden sind.</value>
+    <value>Startet das Spiel während der Wartezeit wieder, wird abgebrochen, und solange der Fika Headless-Client dieser Installation läuft, wartet der Server, außer du hakst {0} an. Er stoppt für alle, die mit ihm verbunden sind.</value>
   </data>
   <data name="Help_StopWithGame_Keywords" xml:space="preserve">
     <value>server stoppen, server beenden, herunterfahren, nach dem spiel, automatisch, timer, verzögerung, spiel geschlossen</value>
@@ -7145,10 +7145,22 @@ Siehe Abhängigkeiten und Konflikte.</value>
     <value>Server stoppen, wenn das Spiel geschlossen wird</value>
   </data>
   <data name="Play_StopServerWithGameToolTip" xml:space="preserve">
-    <value>Wird das Spiel aus dieser Installation geschlossen und bleibt es für die eingestellte Wartezeit geschlossen, wird der Server dieser Installation wie mit Stoppen beendet, damit dein Profil gespeichert wird. Startet das Spiel vorher wieder, wird abgebrochen. Solange der Fika Headless-Client dieser Installation läuft, wartet der Server, bis auch er geschlossen ist. Er stoppt für alle, die mit ihm verbunden sind.</value>
+    <value>Wird das Spiel aus dieser Installation geschlossen und bleibt es für die eingestellte Wartezeit geschlossen, wird der Server dieser Installation wie mit Stoppen beendet, damit dein Profil gespeichert wird. Startet das Spiel vorher wieder, wird abgebrochen. Solange der Fika Headless-Client dieser Installation läuft, wartet der Server, bis auch er geschlossen ist, außer Nicht auf den Headless-Client warten ist angehakt. Er stoppt für alle, die mit ihm verbunden sind.</value>
   </data>
   <data name="Play_StopServerDelayLabel" xml:space="preserve">
     <value>Warten (Sekunden)</value>
+  </data>
+  <data name="Play_StopServerIgnoresHeadless" xml:space="preserve">
+    <value>Nicht auf den Headless-Client warten</value>
+  </data>
+  <data name="Play_StopServerIgnoresHeadlessToolTip" xml:space="preserve">
+    <value>Den Server nach der Wartezeit auch dann stoppen, wenn der Fika Headless-Client dieser Installation läuft. Der Headless-Client bleibt, wie er ist, und ein laufender Raid darauf geht verloren.</value>
+  </data>
+  <data name="Options_StopServerIgnoresHeadlessOn" xml:space="preserve">
+    <value>Nicht auf den Headless-Client warten</value>
+  </data>
+  <data name="Options_StopServerIgnoresHeadlessOff" xml:space="preserve">
+    <value>Warten, bis der Headless-Client geschlossen ist</value>
   </data>
   <data name="Play_ServerStopCountdownFormat" xml:space="preserve">
     <value>Das Spiel wurde geschlossen. Der Server stoppt in {0} s.</value>
@@ -7175,7 +7187,7 @@ Siehe Abhängigkeiten und Konflikte.</value>
     <value>Server weiterlaufen lassen, wenn das Spiel geschlossen wird</value>
   </data>
   <data name="Options_StopServerWithGameNote" xml:space="preserve">
-    <value>Wie das Kästchen auf der Server-Karte. Startet das Spiel während der Wartezeit wieder, wird abgebrochen, und der Server wartet, bis der Fika Headless-Client dieser Installation geschlossen ist. Er stoppt für alle, die mit ihm verbunden sind.</value>
+    <value>Wie das Kästchen auf der Server-Karte. Startet das Spiel während der Wartezeit wieder, wird abgebrochen, und der Server wartet, bis der Fika Headless-Client dieser Installation geschlossen ist, sofern nicht anders eingestellt. Er stoppt für alle, die mit ihm verbunden sind.</value>
   </data>
   <data name="Play_StoppedAfterGameFormat" xml:space="preserve">
     <value>{0} gestoppt. Das Spiel wurde vorher geschlossen, wie auf der Launcher-Karte angehakt.</value>

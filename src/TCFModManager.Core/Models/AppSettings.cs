@@ -84,6 +84,10 @@ public sealed class AppSettings
 
     public int StopServerAfterGameSeconds { get; set; } = 60;
 
+    // OPEN-45: stop the server after the wait even while this install's Fika headless runs, leaving
+    // the headless as it is. Off: the wait starts once the headless is down too.
+    public bool StopServerIgnoresHeadless { get; set; }
+
     // Mod tools hidden from the Play page, by ModTool.Key (the .exe's install-relative path,
     // lowercased). See ModTools.
     public List<string> HiddenModTools { get; set; } = [];

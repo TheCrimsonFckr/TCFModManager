@@ -874,6 +874,14 @@
                         SpinButtonPlacementMode="Inline"
                         Value="{Binding StopServerDelay, Mode=TwoWay}" />
                 </StackPanel>
+                <ui:ToggleSwitch
+                    Margin="0,8,0,0"
+                    HorizontalAlignment="Left"
+                    IsChecked="{Binding StopServerIgnoresHeadless}"
+                    IsEnabled="{Binding StopServerWithGame}"
+                    Visibility="{Binding ShowStopServerHeadlessOverride, Converter={StaticResource BoolToVisibility}}"
+                    OnContent="{loc:Str Options_StopServerIgnoresHeadlessOn}"
+                    OffContent="{loc:Str Options_StopServerIgnoresHeadlessOff}" />
                 <TextBlock
                     Style="{StaticResource SettingNote}"
                     Margin="0,6,0,0"

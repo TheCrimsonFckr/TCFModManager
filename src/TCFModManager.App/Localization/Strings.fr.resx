@@ -5758,7 +5758,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Le même réglage se trouve dans {0}, sous {1}.</value>
   </data>
   <data name="Help_StopWithGame_Note" xml:space="preserve">
-    <value>Si le jeu revient pendant l'attente, c'est annulé, et le serveur attend tant que le client headless Fika de cette installation tourne. Il s'arrête pour tous ceux qui y sont connectés.</value>
+    <value>Si le jeu revient pendant l'attente, c'est annulé, et le serveur attend tant que le client headless Fika de cette installation tourne, sauf si vous cochez {0}. Il s'arrête pour tous ceux qui y sont connectés.</value>
   </data>
   <data name="Help_StopWithGame_Keywords" xml:space="preserve">
     <value>arrêter serveur, fermer serveur, éteindre, après le jeu, automatique, minuteur, délai, jeu fermé</value>
@@ -7145,10 +7145,22 @@ Voir Dépendances et conflits.</value>
     <value>Arrêter le serveur quand le jeu se ferme</value>
   </data>
   <data name="Play_StopServerWithGameToolTip" xml:space="preserve">
-    <value>Quand le jeu de cette installation se ferme et reste fermé pendant l'attente choisie, le serveur de cette installation est arrêté comme avec Arrêter, pour que votre profil soit sauvegardé. Si le jeu revient avant, c'est annulé. Tant que le client headless Fika de cette installation tourne, le serveur attend qu'il se ferme aussi. Il s'arrête pour tous ceux qui y sont connectés.</value>
+    <value>Quand le jeu de cette installation se ferme et reste fermé pendant l'attente choisie, le serveur de cette installation est arrêté comme avec Arrêter, pour que votre profil soit sauvegardé. Si le jeu revient avant, c'est annulé. Tant que le client headless Fika de cette installation tourne, le serveur attend qu'il se ferme aussi, sauf si Ne pas attendre le client headless est coché. Il s'arrête pour tous ceux qui y sont connectés.</value>
   </data>
   <data name="Play_StopServerDelayLabel" xml:space="preserve">
     <value>Attente (secondes)</value>
+  </data>
+  <data name="Play_StopServerIgnoresHeadless" xml:space="preserve">
+    <value>Ne pas attendre le client headless</value>
+  </data>
+  <data name="Play_StopServerIgnoresHeadlessToolTip" xml:space="preserve">
+    <value>Arrêter le serveur après l'attente même si le client headless Fika de cette installation tourne. Le headless est laissé tel quel, et un raid en cours dessus est perdu.</value>
+  </data>
+  <data name="Options_StopServerIgnoresHeadlessOn" xml:space="preserve">
+    <value>Ne pas attendre le client headless</value>
+  </data>
+  <data name="Options_StopServerIgnoresHeadlessOff" xml:space="preserve">
+    <value>Attendre que le client headless se ferme</value>
   </data>
   <data name="Play_ServerStopCountdownFormat" xml:space="preserve">
     <value>Le jeu s'est fermé. Le serveur s'arrête dans {0} s.</value>
@@ -7175,7 +7187,7 @@ Voir Dépendances et conflits.</value>
     <value>Laisser le serveur tourner quand le jeu se ferme</value>
   </data>
   <data name="Options_StopServerWithGameNote" xml:space="preserve">
-    <value>Identique à la case de la carte du serveur. Si le jeu revient pendant l'attente, c'est annulé, et le serveur attend que le client headless Fika de cette installation se ferme. Il s'arrête pour tous ceux qui y sont connectés.</value>
+    <value>Identique à la case de la carte du serveur. Si le jeu revient pendant l'attente, c'est annulé, et le serveur attend que le client headless Fika de cette installation se ferme, sauf indication contraire. Il s'arrête pour tous ceux qui y sont connectés.</value>
   </data>
   <data name="Play_StoppedAfterGameFormat" xml:space="preserve">
     <value>{0} arrêté. Le jeu a été fermé d'abord, comme coché sur la carte du lanceur.</value>

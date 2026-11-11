@@ -307,11 +307,13 @@ public partial class OptionsViewModel : LocalizedViewModel
     private bool _playsHere = true;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ShowStopServerHeadlessOverride))]
     private bool _runsHeadlessClient;
 
     // Whether a Fika headless launcher is actually there. Drives the hint under the switches - a
     // machine with no launcher that claims to run a headless is worth mentioning, not preventing.
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ShowStopServerHeadlessOverride))]
     private bool _hasHeadlessLauncher;
 
     //

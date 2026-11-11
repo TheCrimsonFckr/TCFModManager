@@ -19,6 +19,12 @@ public partial class OptionsViewModel
     [ObservableProperty]
     private double? _stopServerDelay = ServerStopper.DefaultSeconds;
 
+    [ObservableProperty]
+    private bool _stopServerIgnoresHeadless;
+
+    // Only on an install with a headless, by the Play page's HasHeadless rule.
+    public bool ShowStopServerHeadlessOverride => HasHeadlessLauncher || RunsHeadlessClient;
+
     public double StopServerMaxSeconds => ServerStopper.MaxSeconds;
 
     private void HookServerStop(AppSettings settings)
@@ -36,12 +42,18 @@ public partial class OptionsViewModel
         _readingServerStop = true;
         StopServerWithGame = settings.StopServerWithGame;
         StopServerDelay = ServerStopper.Clamp(settings.StopServerAfterGameSeconds);
+        StopServerIgnoresHeadless = settings.StopServerIgnoresHeadless;
         _readingServerStop = false;
     }
 
     partial void OnStopServerWithGameChanged(bool value)
     {
         if (!_readingServerStop) ServerStopper.SetEnabled(value);
+    }
+
+    partial void OnStopServerIgnoresHeadlessChanged(bool value)
+    {
+        if (!_readingServerStop) ServerStopper.SetIgnoresHeadless(value);
     }
 
     partial void OnStopServerDelayChanged(double? value)

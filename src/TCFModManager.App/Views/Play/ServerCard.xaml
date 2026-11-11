@@ -135,6 +135,14 @@
                         Value="{Binding StopServerDelay, Mode=TwoWay}" />
                 </StackPanel>
             </WrapPanel>
+            <CheckBox
+                Margin="0,8,0,0"
+                Content="{loc:Str Play_StopServerIgnoresHeadless}"
+                ToolTip="{loc:Str Play_StopServerIgnoresHeadlessToolTip}"
+                ToolTipService.ShowDuration="20000"
+                IsChecked="{Binding StopServerIgnoresHeadless}"
+                IsEnabled="{Binding StopServerWithGame}"
+                Visibility="{Binding HasHeadless, Converter={StaticResource BoolToVisibility}}" />
 
             <WrapPanel
                 Margin="0,8,0,0"

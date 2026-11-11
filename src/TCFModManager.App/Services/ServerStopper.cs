@@ -14,7 +14,8 @@ namespace TCFModManager.App.Services;
 // second apart. The countdown is called off when the game is seen again, the server goes down some
 // other way, the install changes, the switch is turned off, or Keep it running is pressed. While
 // this install's Fika headless runs, the countdown doesn't start; it starts in full once the headless
-// is down.
+// is down - unless AppSettings.StopServerIgnoresHeadless, when the server alone is stopped and the
+// headless left as it is.
 //
 public static class ServerStopper
 {
@@ -71,6 +72,19 @@ public static class ServerStopper
         Reset();
         if (enabled) Timer.Start();
         else Timer.Stop();
+
+        SettingChanged?.Invoke(null, EventArgs.Empty);
+    }
+
+    public static void SetIgnoresHeadless(bool ignores)
+    {
+        var service = new SettingsService();
+        var settings = service.Load();
+        if (settings.StopServerIgnoresHeadless == ignores) return;
+
+        settings.StopServerIgnoresHeadless = ignores;
+        service.Save(settings);
+        AppLog.Info("Launch", ignores ? "the server stop after the game no longer waits for the headless" : "the server stop after the game waits for the headless");
 
         SettingChanged?.Invoke(null, EventArgs.Empty);
     }
@@ -178,7 +192,7 @@ public static class ServerStopper
 
         if (++_downChecks < DownChecksToCount) return;
 
-        if (headlessUp)
+        if (headlessUp && !settings.StopServerIgnoresHeadless)
         {
             if (!WaitingForHeadless)
             {
