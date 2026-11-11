@@ -61,6 +61,26 @@ public class ProfileStatsTests : IDisposable
         { "Key": ["LongestWinStreak", "Pmc"], "Value": 2 }
         """;
 
+    private const string RealPmc = """
+        { "Key": ["TriggerVisited", "Sandbox_1_MedicalArea_exploration"], "Value": 4 },
+        { "Key": ["Triggers"], "Value": 7 },
+        { "Key": ["CurrentWinStreak", "Pmc"], "Value": 1 },
+        { "Key": ["Sessions", "Pmc"], "Value": 4 },
+        { "Key": ["ExitStatus", "Survived", "Pmc"], "Value": 2 },
+        { "Key": ["LifeTime", "Pmc"], "Value": 2902 },
+        { "Key": ["Exp", "ExpHeal"], "Value": 112 },
+        { "Key": ["Exp", "ExpExitStatus"], "Value": 600 },
+        { "Key": ["Kills"], "Value": 2 },
+        { "Key": ["Deaths"], "Value": 2 },
+        { "Key": ["KilledPmc"], "Value": 1 },
+        { "Key": ["KilledWithSmg"], "Value": 2 },
+        { "Key": ["Money", "RUB"], "Value": 21535 },
+        { "Key": ["ExpKill"], "Value": 359 },
+        { "Key": ["LongestWinStreak", "Pmc"], "Value": 1 },
+        { "Key": ["ExitStatus", "Killed", "Pmc"], "Value": 2 },
+        { "Key": ["LongestKillStreak"], "Value": 2 }
+        """;
+
     private SptProfileStats Stats() => Assert.IsType<SptProfileStats>(SptLocalProfiles.ReadStats(_game, Id));
 
     [Fact]
@@ -95,6 +115,25 @@ public class ProfileStatsTests : IDisposable
         Assert.Equal(10, pmc.LeaveRatePercent);
         Assert.Equal(TimeSpan.FromMinutes(10), pmc.AverageLife);
         Assert.Equal(TimeSpan.FromSeconds(6000), pmc.Online);
+    }
+
+    [Fact]
+    public void A_played_profile_reads_as_the_launcher_shows_it()
+    {
+        Write(ProfileFile, Profile(RealPmc, inGame: 1713));
+
+        var stats = Stats();
+        var pmc = stats.Pmc;
+
+        Assert.Equal((4L, 2L, 2L, 0L, 0L, 0L), (pmc.Raids, pmc.Survived, pmc.Killed, pmc.RunThrough, pmc.Awol, pmc.Mia));
+        Assert.Equal((2L, 2L, 1L), (pmc.Kills, pmc.Deaths, pmc.LongestWinStreak));
+        Assert.Equal(1, pmc.KillDeathRatio);
+        Assert.Equal(50, pmc.SurvivalRatePercent);
+        Assert.Equal(0, pmc.LeaveRatePercent);
+        Assert.Equal(TimeSpan.FromSeconds(428.25), pmc.AverageLife);
+        Assert.Equal(0, stats.Scav.Raids);
+        Assert.Equal(4, stats.Overall.Raids);
+        Assert.Equal(1, stats.Overall.LongestWinStreak);
     }
 
     [Fact]
@@ -195,6 +234,15 @@ public class ProfileStatsTests : IDisposable
         Assert.Equal((1000L, 4017L, 2017L), (progress.LevelStart, progress.NextLevelStart, progress.ToNextLevel));
         Assert.Equal(1000d / 3017, progress.Fraction, 6);
         Assert.False(progress.IsMaxLevel);
+    }
+
+    [Fact]
+    public void A_played_profile_has_its_progress_through_the_level()
+    {
+        var progress = new SptLevelTable([0, 1000, 3017, 4415, 5824, 7221, 8546]).Progress(5, 14367);
+
+        Assert.Equal((14256L, 21477L, 7110L), (progress.LevelStart, progress.NextLevelStart, progress.ToNextLevel));
+        Assert.Equal(111d / 7221, progress.Fraction, 6);
     }
 
     [Fact]
