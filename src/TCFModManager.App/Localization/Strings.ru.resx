@@ -5851,7 +5851,7 @@
     <value>Сообщить о проблеме</value>
   </data>
   <data name="Help_ReportProblemToolTip" xml:space="preserve">
-    <value>Открывает вкладку обращений на странице этого приложения на sp-mod.com, где можно рассказать автору, что пошло не так. Она на английском.</value>
+    <value>Собирает отчёт с вашими версиями и журналом приложения, без личных данных. Вы проверяете его и отправляете на вкладку Issues на странице этого приложения на sp-mod. Вкладка на английском.</value>
   </data>
   <data name="ReportProblem_UploadNetworkFormat" xml:space="preserve">
     <value>Не удалось связаться с codepaste.sp-mod.com. Журнал вместо этого включён в скопированный текст. ({0})</value>

@@ -5578,7 +5578,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Signaler un problème</value>
   </data>
   <data name="Help_ReportProblemToolTip" xml:space="preserve">
-    <value>Ouvre l'onglet des tickets sur la page sp-mod.com de cette application, où vous pouvez dire à l'auteur ce qui n'a pas marché. Il est en anglais.</value>
+    <value>Prépare un rapport avec vos versions et le journal de l'application, sans vos informations personnelles. Vous le vérifiez, puis vous l'envoyez dans l'onglet Issues de la page sp-mod de cette application. Cet onglet est en anglais.</value>
   </data>
   <data name="ReportProblem_UploadNetworkFormat" xml:space="preserve">
     <value>Impossible de joindre codepaste.sp-mod.com. Le journal est à la place dans le texte copié. ({0})</value>

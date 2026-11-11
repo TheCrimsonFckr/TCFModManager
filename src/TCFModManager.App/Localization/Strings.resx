@@ -6969,10 +6969,10 @@ The details are in the log:
   </data>
   <data name="Help_ReportProblem" xml:space="preserve">
     <value>Report a problem</value>
-    <comment>Button at the top of the Help page; opens the issues tab of the app's page on sp-mod.com.</comment>
+    <comment>Button at the top of the Help page; opens the Report a problem window.</comment>
   </data>
   <data name="Help_ReportProblemToolTip" xml:space="preserve">
-    <value>Opens the issues tab on this app's sp-mod.com page, where you can tell the author what went wrong. It is in English.</value>
+    <value>Builds a report with your versions and the app's log, with personal details taken out. You check it, then send it to the Issues tab on this app's sp-mod page. That tab is in English.</value>
     <comment>Tooltip on Help_ReportProblem.</comment>
   </data>
   <data name="ReportProblem_UploadNetworkFormat" xml:space="preserve">

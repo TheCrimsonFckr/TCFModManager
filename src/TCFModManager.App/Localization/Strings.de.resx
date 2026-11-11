@@ -5578,7 +5578,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Problem melden</value>
   </data>
   <data name="Help_ReportProblemToolTip" xml:space="preserve">
-    <value>Öffnet den Issues-Tab auf der sp-mod.com-Seite dieser App, wo du dem Autor sagen kannst, was schiefging. Er ist auf Englisch.</value>
+    <value>Erstellt einen Bericht mit deinen Versionen und dem Log der App, ohne persönliche Angaben. Du prüfst ihn und schickst ihn dann an den Issues-Tab auf der sp-mod-Seite dieser App. Der Tab ist auf Englisch.</value>
   </data>
   <data name="ReportProblem_UploadNetworkFormat" xml:space="preserve">
     <value>codepaste.sp-mod.com war nicht erreichbar. Das Log steht stattdessen im kopierten Text. ({0})</value>

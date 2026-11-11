@@ -5,6 +5,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Help;
 using TCFModManager.App.Localization;
+using TCFModManager.App.Services;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Services;
 using Wpf.Ui.Controls;
 
@@ -161,7 +163,7 @@ public partial class HelpViewModel : LocalizedViewModel
     }
 
     [RelayCommand]
-    private void ReportProblem() => OpenUrl(HelpCatalog.IssuesUrl);
+    private void ReportProblem() => ReportProblemWindow.Open(ProblemFacts.Context(ProblemSource.Help));
 }
 
 public partial class HelpSectionViewModel : LocalizedViewModel

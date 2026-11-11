@@ -5578,7 +5578,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Segnala un problema</value>
   </data>
   <data name="Help_ReportProblemToolTip" xml:space="preserve">
-    <value>Apre la scheda delle segnalazioni sulla pagina sp-mod.com di questa app, dove puoi dire all'autore cosa è andato storto. È in inglese.</value>
+    <value>Prepara un report con le tue versioni e il log dell'app, senza i tuoi dati personali. Lo controlli e poi lo invii alla scheda Issues sulla pagina sp-mod di questa app. La scheda è in inglese.</value>
   </data>
   <data name="ReportProblem_UploadNetworkFormat" xml:space="preserve">
     <value>Impossibile raggiungere codepaste.sp-mod.com. Il log è invece nel testo copiato. ({0})</value>
