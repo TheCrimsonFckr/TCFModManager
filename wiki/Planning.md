@@ -31,6 +31,7 @@
 - Server without its window - the server log live on the Server page, and the game closed along with the server - *Completed*
 - Direct launch - start the game from the Profile page without SPT's launcher (experimental, off by default, SPT 4.1.3 and later) - *Completed*
 - Diagnose logs - reads the server, BepInEx and game logs, names the mod at fault, and builds a report with private details taken out - *Completed*
+- Report a problem - one button builds a report for the Issues tab with your versions and the app's log, personal details taken out; also from Details beside a failure and after an unexpected error - *Completed*
 - Quick view - hover a mod for a preview - *Completed*
 - Page size options, including endless scrolling - *Completed*
 - Mod comments in the app - *Completed*

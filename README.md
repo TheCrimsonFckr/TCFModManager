@@ -45,7 +45,7 @@ Nothing new is lined up right now - ideas are welcome on the [Issues tab](https:
 - Installed versions checked against your SPT (and Fika)
 
 ## Reporting a problem
-Use the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues) - bugs, wording, translations, feature requests or questions. Attach `Data\logs\tcfmm-<date>.log`, ideally after adding the `verbose` marker file and reproducing the problem. The [wiki](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Troubleshooting) covers the common ones first.
+Use the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues) - bugs, wording, translations, feature requests or questions. In the app, **Help - Report a problem** (or **Details** beside a failure) builds the report for you with your versions and the log, personal details taken out. The [wiki](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Reporting-issues) says what it holds and where the log goes; [Troubleshooting](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Troubleshooting) covers the common problems first.
 
 ## Disclaimer
 I use AI to help write this mod, everything is initially written by myself (I'm a developer by profession), then passed though Claude (Fable model) for refinements and to highlight any additional changes the LLM thinks are worth making. Absolutely everything is reviewed and tested by myself before I commit anything. This is done because I simply do not have enough time in day to make full refinements and multiple passes myself. If you are not comfortable using an application that uses AI as a tool then please do not download it.

@@ -15,6 +15,7 @@ Everything lives next to the exe:
 | `Data\mod_footprints.json` | Cached footprint readings, only if that page is on |
 | `Data\config-backups\` | One timestamped folder per config save, laid out like your install |
 | `Data\logs\tcfmm-<date>.log` | Daily log |
+| `Data\logs\last-crash.txt` | Left by a crash the app couldn't show. Offered as a report on the next start, then removed |
 | `Staging\` | Default destination for manually downloaded archives |
 | `Data\LegacyConfigs\` | Config files kept from removed and updated mods, one timestamped folder each |
 | `Data\ProfileBackups\` | Copies of your SPT profiles taken before mods change, one folder per SPT install, the last 10 kept - see **Options, SPT profile backups** |

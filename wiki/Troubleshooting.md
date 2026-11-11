@@ -53,4 +53,4 @@ It is reading as an ordinary player. **Options - What this machine is** says whe
 First make sure a check has actually run: press **Check now** in **Options - Update notifications** and read the line under it. The first check after switching on only notes what's already there, so it never shows one. A check is also skipped while downloads are running, while no SPT install is set, and while sp-mod can't be reached - the log's `Updates` lines say which. If checks are finding updates and still nothing appears, Windows is holding them back: check **Windows Settings - System - Notifications** allows TCF Mod Manager, and that Do not disturb is off.
 
 ## Reporting a bug
-Grab `Data\logs\tcfmm-<date>.log` - ideally after adding the `verbose` marker file and reproducing the problem - and open an issue on the new [issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues).
+Use **Help - Report a problem**, or **Details** beside the failure. It builds the report with your versions and the log, personal details taken out, ready for the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues). See [Reporting issues](Reporting-issues).
