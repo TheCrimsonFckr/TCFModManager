@@ -77,6 +77,15 @@ public sealed class ProblemReportTests
     }
 
     [Fact]
+    public void A_download_that_failed_with_only_a_sentence_is_titled_plainly()
+    {
+        var report = Build(ProblemSource.Download, shown: "Foo 1.2.3 has no file to download.");
+
+        Assert.Equal("Install failed", report.Title);
+        Assert.Null(report.Details);
+    }
+
+    [Fact]
     public void An_app_update_failure_names_its_reason()
     {
         var report = Build(ProblemSource.AppUpdate, new AppUpdateException(AppUpdateFailure.NotEnoughFreeSpace)

@@ -713,6 +713,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
     private static void Fail(DownloadQueueItemViewModel item, string message, Exception? ex = null, bool unexpected = false)
     {
+        item.Failure = ex;
         item.Status = DownloadQueueItemStatus.Failed;
         item.StatusMessage = message;
 

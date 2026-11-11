@@ -1278,6 +1278,12 @@ Voir Dépendances et conflits.</value>
   <data name="Downloads_RetryToolTip" xml:space="preserve">
     <value>Remettre celui-ci en fin de file et réessayer. Rien d'autre n'est retéléchargé.</value>
   </data>
+  <data name="Downloads_Details" xml:space="preserve">
+    <value>Détails</value>
+  </data>
+  <data name="Downloads_DetailsToolTip" xml:space="preserve">
+    <value>Montre ce qui n'a pas marché, prêt à être signalé sur sp-mod.</value>
+  </data>
   <data name="Downloads_StatDownloaded" xml:space="preserve">
     <value>Téléchargé</value>
   </data>

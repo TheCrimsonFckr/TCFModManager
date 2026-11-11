@@ -280,6 +280,17 @@
                                         Command="{Binding RetryCommand}"
                                         Visibility="{Binding CanRetry, Converter={StaticResource BoolToVisibility}}" />
 
+                                    <ui:Button
+                                        Margin="0,8,0,0"
+                                        Padding="10,4"
+                                        HorizontalAlignment="Right"
+                                        Appearance="Secondary"
+                                        Icon="{ui:SymbolIcon Bug24}"
+                                        Content="{loc:Str Downloads_Details}"
+                                        ToolTip="{loc:Str Downloads_DetailsToolTip}"
+                                        Command="{Binding DetailsCommand}"
+                                        Visibility="{Binding CanReport, Converter={StaticResource BoolToVisibility}}" />
+
                                     <!-- A download-only item's archive, once saved (Monitor mode). -->
                                     <ui:Button
                                         Margin="0,8,0,0"

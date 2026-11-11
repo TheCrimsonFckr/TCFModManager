@@ -135,15 +135,17 @@ public sealed record ProblemReport
     private static string TitleText(ProblemContext context) => context.Source switch
     {
         ProblemSource.Help => "",
-        ProblemSource.Crash => $"Unhandled exception: {TypeName(context)}",
-        ProblemSource.PreviousCrash => $"Closed unexpectedly: {TypeName(context)}",
-        ProblemSource.Download => $"Install failed: {ReasonName(context.Exception) ?? TypeName(context)}",
-        ProblemSource.AppUpdate => $"App update failed: {ReasonName(context.Exception) ?? TypeName(context)}",
+        ProblemSource.Crash => Titled("Unhandled exception", TypeName(context) ?? "unknown"),
+        ProblemSource.PreviousCrash => Titled("Closed unexpectedly", TypeName(context) ?? "unknown"),
+        ProblemSource.Download => Titled("Install failed", ReasonName(context.Exception) ?? TypeName(context)),
+        ProblemSource.AppUpdate => Titled("App update failed", ReasonName(context.Exception) ?? TypeName(context)),
         ProblemSource.ModList => context.ListResult?.Stopped is { } stop
-            ? $"Mod list apply stopped: {stop}"
-            : $"Mod list apply failed: {TypeName(context)}",
+            ? Titled("Mod list apply stopped", stop.ToString())
+            : Titled("Mod list apply failed", TypeName(context)),
         _ => context.Source.ToString(),
     };
+
+    private static string Titled(string what, string? detail) => detail is null ? what : $"{what}: {detail}";
 
     private static string? ReasonName(Exception? exception) => exception switch
     {
@@ -152,7 +154,7 @@ public sealed record ProblemReport
         _ => null,
     };
 
-    private static string TypeName(ProblemContext context)
+    private static string? TypeName(ProblemContext context)
     {
         if (context.Exception is { } exception) return exception.GetType().Name;
 
@@ -161,7 +163,7 @@ public sealed record ProblemReport
         var type = (colon >= 0 ? first[..colon] : first).Trim();
         var dot = type.LastIndexOf('.');
         type = dot >= 0 ? type[(dot + 1)..] : type;
-        return type.Length > 0 && !type.Contains(' ') ? type : "unknown";
+        return type.Length > 0 && !type.Contains(' ') ? type : null;
     }
 
     private static string VersionsText(ProblemSetup setup) =>

@@ -1933,6 +1933,8 @@ internal static class Strings
     internal static string ReportProblem_UploadRejected => LocalizationService.Get("ReportProblem_UploadRejected");
     internal static string ReportProblem_UploadBadResponseFormat => LocalizationService.Get("ReportProblem_UploadBadResponseFormat");
     internal static string ReportProblem_Title => LocalizationService.Get("ReportProblem_Title");
+    internal static string ReportProblem_CrashWarning => LocalizationService.Get("ReportProblem_CrashWarning");
+    internal static string ReportProblem_PreviousCrashWarningFormat => LocalizationService.Get("ReportProblem_PreviousCrashWarningFormat");
     internal static string ReportProblem_Lead => LocalizationService.Get("ReportProblem_Lead");
     internal static string ReportProblem_StepsHeading => LocalizationService.Get("ReportProblem_StepsHeading");
     internal static string ReportProblem_Step1Format => LocalizationService.Get("ReportProblem_Step1Format");

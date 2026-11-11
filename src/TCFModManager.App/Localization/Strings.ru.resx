@@ -1311,6 +1311,12 @@
   <data name="Downloads_RetryToolTip" xml:space="preserve">
     <value>Вернуть это в конец очереди и попробовать снова. Ничего другого заново не скачивается.</value>
   </data>
+  <data name="Downloads_Details" xml:space="preserve">
+    <value>Подробности</value>
+  </data>
+  <data name="Downloads_DetailsToolTip" xml:space="preserve">
+    <value>Показывает, что пошло не так, в виде отчёта для sp-mod.</value>
+  </data>
   <data name="Downloads_StatDownloaded" xml:space="preserve">
     <value>Скачано</value>
   </data>

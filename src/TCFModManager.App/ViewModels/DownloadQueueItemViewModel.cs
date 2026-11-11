@@ -2,6 +2,8 @@ using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
+using TCFModManager.App.Services;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -70,7 +72,12 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(CancelCommand))]
     [NotifyCanExecuteChangedFor(nameof(RetryCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DetailsCommand))]
     private DownloadQueueItemStatus _status = DownloadQueueItemStatus.Pending;
+
+    internal Exception? Failure { get; set; }
+
+    public bool CanReport => Status == DownloadQueueItemStatus.Failed;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(TransferredValue))]
@@ -332,6 +339,7 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
 
         Progress = 0;
         SavedPath = null;
+        Failure = null;
         Status = DownloadQueueItemStatus.Pending;
         StatusMessage = Strings.Downloads_WaitingInQueue;
 
@@ -382,6 +390,10 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
         }
     }
 
+    [RelayCommand(CanExecute = nameof(CanReport))]
+    private void Details() =>
+        ReportProblemWindow.Open(ProblemFacts.Context(ProblemSource.Download, Failure, StatusMessage));
+
     internal Task<ModVersion?> ResolveVersionAsync() => _resolveVersion();
 
     internal void AddDependency(DownloadQueueItemViewModel item) => _dependencies.Add(item);
@@ -431,6 +443,7 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
         OnPropertyChanged(nameof(StatusLabel));
         OnPropertyChanged(nameof(CanCancel));
         OnPropertyChanged(nameof(CanRetry));
+        OnPropertyChanged(nameof(CanReport));
         OnPropertyChanged(nameof(IsFinished));
     }
 }

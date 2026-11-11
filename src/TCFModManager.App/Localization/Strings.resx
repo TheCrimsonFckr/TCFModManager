@@ -1075,6 +1075,14 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="Downloads_RetryToolTip" xml:space="preserve">
     <value>Put this back on the end of the queue and try again. Nothing else is re-downloaded.</value>
   </data>
+  <data name="Downloads_Details" xml:space="preserve">
+    <value>Details</value>
+    <comment>Button on a failed download's card. Opens the Report a problem window for that failure.</comment>
+  </data>
+  <data name="Downloads_DetailsToolTip" xml:space="preserve">
+    <value>Shows what went wrong, ready to report on sp-mod.</value>
+    <comment>Tooltip on Downloads_Details.</comment>
+  </data>
   <data name="Common_Continue" xml:space="preserve">
     <value>Continue</value>
     <comment>Confirms a dialog and carries on. Used by the mod-page and version-change windows.</comment>
