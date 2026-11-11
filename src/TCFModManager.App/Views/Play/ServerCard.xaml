@@ -109,6 +109,48 @@
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                 Text="{Binding ServerPath}" />
 
+            <!-- OPEN-45: the same setting as Options - Starting SPT (ServerStopper). -->
+            <WrapPanel Margin="0,8,0,0">
+                <CheckBox
+                    VerticalAlignment="Center"
+                    Margin="0,0,16,0"
+                    Content="{loc:Str Play_StopServerWithGame}"
+                    ToolTip="{loc:Str Play_StopServerWithGameToolTip}"
+                    ToolTipService.ShowDuration="20000"
+                    IsChecked="{Binding StopServerWithGame}" />
+                <StackPanel Orientation="Horizontal" IsEnabled="{Binding StopServerWithGame}">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Margin="0,0,8,0"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="{loc:Str Play_StopServerDelayLabel}" />
+                    <ui:NumberBox
+                        Width="140"
+                        Minimum="0"
+                        Maximum="{Binding StopServerMaxSeconds, Mode=OneTime}"
+                        SmallChange="5"
+                        LargeChange="60"
+                        MaxDecimalPlaces="0"
+                        SpinButtonPlacementMode="Inline"
+                        Value="{Binding StopServerDelay, Mode=TwoWay}" />
+                </StackPanel>
+            </WrapPanel>
+
+            <WrapPanel
+                Margin="0,8,0,0"
+                Visibility="{Binding HasServerStopCountdown, Converter={StaticResource BoolToVisibility}}">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Margin="0,0,12,0"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                    Text="{Binding ServerStopCountdown}" />
+                <ui:Button
+                    Content="{loc:Str Play_KeepServerRunning}"
+                    Icon="{ui:SymbolIcon Play24}"
+                    Command="{Binding KeepServerRunningCommand}" />
+            </WrapPanel>
+
             <!-- The server's own log file, read on the poll while this is open (ServerLogs).
                  Opens by itself when the server runs without its window. -->
             <Expander

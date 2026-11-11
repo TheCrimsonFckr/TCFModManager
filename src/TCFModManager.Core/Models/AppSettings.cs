@@ -75,6 +75,15 @@ public sealed class AppSettings
     //
     public bool CloseGameWithServer { get; set; }
 
+    //
+    // OPEN-45: stop this install's SPT server once the game has been closed for
+    // StopServerAfterGameSeconds (the App's ServerStopper). Off unless switched on, on the server card
+    // or in Options.
+    //
+    public bool StopServerWithGame { get; set; }
+
+    public int StopServerAfterGameSeconds { get; set; } = 60;
+
     // Mod tools hidden from the Play page, by ModTool.Key (the .exe's install-relative path,
     // lowercased). See ModTools.
     public List<string> HiddenModTools { get; set; } = [];

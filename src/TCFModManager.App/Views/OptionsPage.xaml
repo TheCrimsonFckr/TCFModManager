@@ -849,6 +849,35 @@
                         Margin="0,6,0,0"
                         Text="{loc:Str Options_ServerOnProfileNote}" />
                 </StackPanel>
+                <!-- OPEN-45: the same setting as the server card's tick box (ServerStopper). -->
+                <ui:ToggleSwitch
+                    Margin="0,12,0,0"
+                    HorizontalAlignment="Left"
+                    IsChecked="{Binding StopServerWithGame}"
+                    OnContent="{loc:Str Options_StopServerWithGameOn}"
+                    OffContent="{loc:Str Options_StopServerWithGameOff}" />
+                <StackPanel
+                    Margin="0,8,0,0"
+                    Orientation="Horizontal"
+                    IsEnabled="{Binding StopServerWithGame}">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Margin="0,0,8,0"
+                        Text="{loc:Str Play_StopServerDelayLabel}" />
+                    <ui:NumberBox
+                        Width="140"
+                        Minimum="0"
+                        Maximum="{Binding StopServerMaxSeconds, Mode=OneTime}"
+                        SmallChange="5"
+                        LargeChange="60"
+                        MaxDecimalPlaces="0"
+                        SpinButtonPlacementMode="Inline"
+                        Value="{Binding StopServerDelay, Mode=TwoWay}" />
+                </StackPanel>
+                <TextBlock
+                    Style="{StaticResource SettingNote}"
+                    Margin="0,6,0,0"
+                    Text="{loc:Str Options_StopServerWithGameNote}" />
                 <ui:Button
                     Margin="0,12,0,0"
                     Icon="{ui:SymbolIcon Play24}"

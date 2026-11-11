@@ -76,6 +76,14 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Play_Start_Step3, () => Strings.Nav_Profile, () => Strings.Play_OpenLauncher))
                 .WithNote(() => Strings.Help_Play_Start_Note)
                 .WithKeywords(() => Strings.Help_Play_Start_Keywords),
+
+            Topic("server.stopwithgame", () => Strings.Help_StopWithGame_Title,
+                Step(() => Strings.Help_StopWithGame_Step1,
+                    () => Strings.Nav_Server, () => Strings.Play_ServerHeader, () => Strings.Play_StopServerWithGame),
+                Step(() => Strings.Help_StopWithGame_Step2, () => Strings.Play_KeepServerRunning),
+                Step(() => Strings.Help_StopWithGame_Step3, () => Strings.Nav_Options, () => Strings.Options_StartingSptHeader))
+                .WithNote(() => Strings.Help_StopWithGame_Note)
+                .WithKeywords(() => Strings.Help_StopWithGame_Keywords),
         ]),
 
         new("browse", () => Strings.Nav_Browse, SymbolRegular.Apps24, typeof(BrowsePage),

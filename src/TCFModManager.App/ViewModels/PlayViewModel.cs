@@ -356,6 +356,7 @@ public partial class PlayViewModel : LocalizedViewModel
         if (ShowServerLog) UpdateServerLog(installPath);
 
         RefreshGame(installPath, settings);
+        RefreshServerStop(settings);
         RefreshDirect(installPath, settings);
         RefreshStats(installPath);
         UpdateToolStates();

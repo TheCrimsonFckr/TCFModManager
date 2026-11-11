@@ -5745,6 +5745,24 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Help_Play_Check_Keywords" xml:space="preserve">
     <value>mod mancanti, entrare, prima del raid, confrontare, lista del server</value>
   </data>
+  <data name="Help_StopWithGame_Title" xml:space="preserve">
+    <value>Arrestare il server quando il gioco si chiude</value>
+  </data>
+  <data name="Help_StopWithGame_Step1" xml:space="preserve">
+    <value>In {0}, nella scheda {1}, spunta {2} e imposta quanti secondi attendere.</value>
+  </data>
+  <data name="Help_StopWithGame_Step2" xml:space="preserve">
+    <value>Quando il gioco si chiude, la scheda fa il conto alla rovescia. Premi {0} per tenere attivo il server questa volta.</value>
+  </data>
+  <data name="Help_StopWithGame_Step3" xml:space="preserve">
+    <value>Lo stesso interruttore è in {0}, sotto {1}.</value>
+  </data>
+  <data name="Help_StopWithGame_Note" xml:space="preserve">
+    <value>Se il gioco riparte durante l'attesa si annulla, e il server aspetta finché il client headless Fika di questa installazione è in esecuzione. Si ferma per tutti quelli che vi sono collegati.</value>
+  </data>
+  <data name="Help_StopWithGame_Keywords" xml:space="preserve">
+    <value>arresta server, chiudi server, spegni, dopo il gioco, automatico, timer, ritardo, gioco chiuso</value>
+  </data>
   <data name="Help_QuickPlay_Title" xml:space="preserve">
     <value>Gioca con un clic</value>
   </data>
@@ -7122,6 +7140,42 @@ Vedi Dipendenze e conflitti.</value>
   </data>
   <data name="Play_GameClosedWithServer" xml:space="preserve">
     <value>Il server si è fermato, quindi il gioco è stato chiuso.</value>
+  </data>
+  <data name="Play_StopServerWithGame" xml:space="preserve">
+    <value>Arresta il server quando il gioco si chiude</value>
+  </data>
+  <data name="Play_StopServerWithGameToolTip" xml:space="preserve">
+    <value>Quando il gioco di questa installazione si chiude e resta chiuso per l'attesa impostata, il server di questa installazione viene fermato come con Arresta, così il tuo profilo viene salvato. Se il gioco riparte prima, si annulla. Finché il client headless Fika di questa installazione è in esecuzione, il server aspetta che si chiuda anche quello. Si ferma per tutti quelli che vi sono collegati.</value>
+  </data>
+  <data name="Play_StopServerDelayLabel" xml:space="preserve">
+    <value>Attesa (secondi)</value>
+  </data>
+  <data name="Play_ServerStopCountdownFormat" xml:space="preserve">
+    <value>Il gioco si è chiuso. Il server si ferma tra {0} s.</value>
+  </data>
+  <data name="Play_ServerStopWaitsForHeadless" xml:space="preserve">
+    <value>Il gioco si è chiuso. Il server si fermerà quando anche il client headless sarà chiuso.</value>
+  </data>
+  <data name="Play_KeepServerRunning" xml:space="preserve">
+    <value>Lascialo attivo</value>
+  </data>
+  <data name="Play_ServerStoppedAfterGame" xml:space="preserve">
+    <value>Il gioco si è chiuso, quindi il server è stato fermato.</value>
+  </data>
+  <data name="ServerStopToast_Title" xml:space="preserve">
+    <value>Server SPT</value>
+  </data>
+  <data name="ServerStopToast_CountdownFormat" xml:space="preserve">
+    <value>Il gioco si è chiuso. Il server si ferma tra {0} secondi.</value>
+  </data>
+  <data name="Options_StopServerWithGameOn" xml:space="preserve">
+    <value>Arresta il server quando il gioco si chiude</value>
+  </data>
+  <data name="Options_StopServerWithGameOff" xml:space="preserve">
+    <value>Lascia attivo il server quando il gioco si chiude</value>
+  </data>
+  <data name="Options_StopServerWithGameNote" xml:space="preserve">
+    <value>Come la casella sulla scheda del server. Se il gioco riparte durante l'attesa si annulla, e il server aspetta che il client headless Fika di questa installazione si chiuda. Si ferma per tutti quelli che vi sono collegati.</value>
   </data>
   <data name="Play_StoppedAfterGameFormat" xml:space="preserve">
     <value>{0} arrestato. Il gioco è stato chiuso prima, come spuntato sulla scheda del launcher.</value>

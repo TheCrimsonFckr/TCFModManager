@@ -5745,6 +5745,24 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="Help_Play_Check_Keywords" xml:space="preserve">
     <value>mods manquants, rejoindre, avant le raid, comparer, liste du serveur</value>
   </data>
+  <data name="Help_StopWithGame_Title" xml:space="preserve">
+    <value>Arrêter le serveur quand le jeu se ferme</value>
+  </data>
+  <data name="Help_StopWithGame_Step1" xml:space="preserve">
+    <value>Sur {0}, dans la carte {1}, cochez {2} et choisissez combien de secondes attendre.</value>
+  </data>
+  <data name="Help_StopWithGame_Step2" xml:space="preserve">
+    <value>Quand le jeu se ferme, la carte fait un compte à rebours. Appuyez sur {0} pour garder le serveur cette fois.</value>
+  </data>
+  <data name="Help_StopWithGame_Step3" xml:space="preserve">
+    <value>Le même réglage se trouve dans {0}, sous {1}.</value>
+  </data>
+  <data name="Help_StopWithGame_Note" xml:space="preserve">
+    <value>Si le jeu revient pendant l'attente, c'est annulé, et le serveur attend tant que le client headless Fika de cette installation tourne. Il s'arrête pour tous ceux qui y sont connectés.</value>
+  </data>
+  <data name="Help_StopWithGame_Keywords" xml:space="preserve">
+    <value>arrêter serveur, fermer serveur, éteindre, après le jeu, automatique, minuteur, délai, jeu fermé</value>
+  </data>
   <data name="Help_QuickPlay_Title" xml:space="preserve">
     <value>Jouer en un clic</value>
   </data>
@@ -7122,6 +7140,42 @@ Voir Dépendances et conflits.</value>
   </data>
   <data name="Play_GameClosedWithServer" xml:space="preserve">
     <value>Le serveur s'est arrêté, le jeu a donc été fermé.</value>
+  </data>
+  <data name="Play_StopServerWithGame" xml:space="preserve">
+    <value>Arrêter le serveur quand le jeu se ferme</value>
+  </data>
+  <data name="Play_StopServerWithGameToolTip" xml:space="preserve">
+    <value>Quand le jeu de cette installation se ferme et reste fermé pendant l'attente choisie, le serveur de cette installation est arrêté comme avec Arrêter, pour que votre profil soit sauvegardé. Si le jeu revient avant, c'est annulé. Tant que le client headless Fika de cette installation tourne, le serveur attend qu'il se ferme aussi. Il s'arrête pour tous ceux qui y sont connectés.</value>
+  </data>
+  <data name="Play_StopServerDelayLabel" xml:space="preserve">
+    <value>Attente (secondes)</value>
+  </data>
+  <data name="Play_ServerStopCountdownFormat" xml:space="preserve">
+    <value>Le jeu s'est fermé. Le serveur s'arrête dans {0} s.</value>
+  </data>
+  <data name="Play_ServerStopWaitsForHeadless" xml:space="preserve">
+    <value>Le jeu s'est fermé. Le serveur s'arrêtera une fois le client headless fermé aussi.</value>
+  </data>
+  <data name="Play_KeepServerRunning" xml:space="preserve">
+    <value>Le laisser tourner</value>
+  </data>
+  <data name="Play_ServerStoppedAfterGame" xml:space="preserve">
+    <value>Le jeu s'est fermé, le serveur a donc été arrêté.</value>
+  </data>
+  <data name="ServerStopToast_Title" xml:space="preserve">
+    <value>Serveur SPT</value>
+  </data>
+  <data name="ServerStopToast_CountdownFormat" xml:space="preserve">
+    <value>Le jeu s'est fermé. Le serveur s'arrête dans {0} secondes.</value>
+  </data>
+  <data name="Options_StopServerWithGameOn" xml:space="preserve">
+    <value>Arrêter le serveur quand le jeu se ferme</value>
+  </data>
+  <data name="Options_StopServerWithGameOff" xml:space="preserve">
+    <value>Laisser le serveur tourner quand le jeu se ferme</value>
+  </data>
+  <data name="Options_StopServerWithGameNote" xml:space="preserve">
+    <value>Identique à la case de la carte du serveur. Si le jeu revient pendant l'attente, c'est annulé, et le serveur attend que le client headless Fika de cette installation se ferme. Il s'arrête pour tous ceux qui y sont connectés.</value>
   </data>
   <data name="Play_StoppedAfterGameFormat" xml:space="preserve">
     <value>{0} arrêté. Le jeu a été fermé d'abord, comme coché sur la carte du lanceur.</value>

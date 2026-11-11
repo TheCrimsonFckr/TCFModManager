@@ -37,6 +37,11 @@ internal static class UpdateToasts
     private const string ActionArgument = "action";
     private const string OpenAction = "open";
 
+    // OPEN-45: Keep it running on the server-stop countdown. Its own key, since the button also
+    // carries the toast's action=open.
+    private const string ServerArgument = "server";
+    private const string KeepServer = "keep";
+
     // The plain messages' group, cleared on exit. Each message kind has its own tag, so a new one
     // replaces the last of its kind.
     private const string MessageGroup = "tcfmm-app";
@@ -192,6 +197,51 @@ internal static class UpdateToasts
         }
     }
 
+    //
+    // OPEN-45: the server-stop countdown, with Keep it running. A plain message, so it is cleared on
+    // exit like the others; clicked anywhere else it shows the window.
+    //
+    public static void ShowServerStopCountdown(string tag, string title, string body, string keepRunning)
+    {
+        try
+        {
+            Listen();
+
+            new ToastContentBuilder()
+                .AddArgument(ActionArgument, OpenAction)
+                .AddText(title)
+                .AddText(body)
+                .AddButton(new ToastButton()
+                    .SetContent(keepRunning)
+                    .AddArgument(ServerArgument, KeepServer)
+                    .SetBackgroundActivation())
+                .Show(toast =>
+                {
+                    toast.Tag = tag;
+                    toast.Group = MessageGroup;
+                });
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("Launch", $"couldn't show the notification: {ex.Message}");
+        }
+    }
+
+    // Takes one plain message back out of the Notification Centre.
+    public static void RemoveMessage(string tag)
+    {
+        if (!_listening) return;
+
+        try
+        {
+            ToastNotificationManagerCompat.History.Remove(tag, MessageGroup);
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("Updates", $"couldn't clear a notification: {ex.Message}");
+        }
+    }
+
     // On exit: takes the plain messages back out of the Notification Centre (see the top).
     public static void RemoveMessages()
     {
@@ -222,6 +272,10 @@ internal static class UpdateToasts
         {
             AppLog.Info("Authors", "notification clicked - opening Browse on followed authors");
             dispatcher?.BeginInvoke(AppNavigation.ShowFollowedInBrowse);
+        }
+        else if (args.TryGetValue(ServerArgument, out var server) && server == KeepServer)
+        {
+            dispatcher?.BeginInvoke(ServerStopper.KeepRunning);
         }
         else if (args.TryGetValue(ActionArgument, out var action) && action == OpenAction)
         {

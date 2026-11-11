@@ -70,6 +70,9 @@ public partial class MainWindow : FluentWindow
             // Closes the game when the server stops, if that is ticked on the Play page.
             Services.GameCloser.Start();
 
+            // Stops the server once the game has closed, if that is switched on (OPEN-45).
+            Services.ServerStopper.Start();
+
             // A server already up as the app opens - left running last time, perhaps with no window.
             _ = SayServerAlreadyRunningAsync();
         };

@@ -7182,6 +7182,29 @@ The details are in the log:
     <value>missing mods, join, before raid, compare, server list</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
+  <data name="Help_StopWithGame_Title" xml:space="preserve">
+    <value>Stop the server when the game closes</value>
+    <comment>How-to title.</comment>
+  </data>
+  <data name="Help_StopWithGame_Step1" xml:space="preserve">
+    <value>On {0}, on the {1} card, tick {2} and set how many seconds to wait.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_StopWithGame_Step2" xml:space="preserve">
+    <value>When the game closes, the card counts down. Press {0} to keep the server up this time.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_StopWithGame_Step3" xml:space="preserve">
+    <value>The same switch is in {0}, under {1}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_StopWithGame_Note" xml:space="preserve">
+    <value>The game coming back during the wait cancels it, and the server waits while this install's Fika headless client runs. It stops for everyone connected to it.</value>
+  </data>
+  <data name="Help_StopWithGame_Keywords" xml:space="preserve">
+    <value>stop server, close server, shut down, after game, auto stop, timer, delay, game closed</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
   <data name="Help_QuickPlay_Title" xml:space="preserve">
     <value>Play in one click</value>
     <comment>How-to title.</comment>
@@ -8988,6 +9011,48 @@ See Dependencies and Conflicts.</value>
   </data>
   <data name="Play_GameClosedWithServer" xml:space="preserve">
     <value>The server stopped, so the game was closed.</value>
+  </data>
+  <data name="Play_StopServerWithGame" xml:space="preserve">
+    <value>Stop the server when the game closes</value>
+    <comment>Server card tick box (OPEN-45). Same setting as Options - Starting SPT.</comment>
+  </data>
+  <data name="Play_StopServerWithGameToolTip" xml:space="preserve">
+    <value>When the game from this install closes and stays closed for the wait you set, this install's server is stopped the way Stop does it, so your profile is saved. The game coming back first cancels it. While this install's Fika headless client runs, the server waits until that closes too. It stops for everyone connected to it.</value>
+  </data>
+  <data name="Play_StopServerDelayLabel" xml:space="preserve">
+    <value>Wait (seconds)</value>
+    <comment>Beside the number box holding how many seconds to wait after the game closes.</comment>
+  </data>
+  <data name="Play_ServerStopCountdownFormat" xml:space="preserve">
+    <value>The game closed. The server stops in {0} s.</value>
+    <comment>Server card, counting down each second. {0} is a number of seconds.</comment>
+  </data>
+  <data name="Play_ServerStopWaitsForHeadless" xml:space="preserve">
+    <value>The game closed. The server stops once the headless client has closed too.</value>
+  </data>
+  <data name="Play_KeepServerRunning" xml:space="preserve">
+    <value>Keep it running</value>
+    <comment>Button on that line and on the notification: calls off this stop.</comment>
+  </data>
+  <data name="Play_ServerStoppedAfterGame" xml:space="preserve">
+    <value>The game closed, so the server was stopped.</value>
+  </data>
+  <data name="ServerStopToast_Title" xml:space="preserve">
+    <value>SPT server</value>
+    <comment>Title of the Windows notification about stopping the server.</comment>
+  </data>
+  <data name="ServerStopToast_CountdownFormat" xml:space="preserve">
+    <value>The game closed. The server stops in {0} seconds.</value>
+    <comment>Notification body. {0} is a number of seconds; the notification doesn't count down.</comment>
+  </data>
+  <data name="Options_StopServerWithGameOn" xml:space="preserve">
+    <value>Stop the server when the game closes</value>
+  </data>
+  <data name="Options_StopServerWithGameOff" xml:space="preserve">
+    <value>Leave the server running when the game closes</value>
+  </data>
+  <data name="Options_StopServerWithGameNote" xml:space="preserve">
+    <value>Same as the tick box on the server card. The game coming back during the wait cancels it, and the server waits for this install's Fika headless client to close. It stops for everyone connected to it.</value>
   </data>
   <data name="Play_StoppedAfterGameFormat" xml:space="preserve">
     <value>Stopped {0}. The game was closed first, as ticked on the launcher card.</value>

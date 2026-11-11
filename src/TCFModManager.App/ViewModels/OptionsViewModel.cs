@@ -387,6 +387,7 @@ public partial class OptionsViewModel : LocalizedViewModel
         RefreshPageDefaultDescriptions(settings);
         RefreshInstallRole(settings);
         HookDirectLaunch();
+        HookServerStop(settings);
 
         _loaded = true;
     }
