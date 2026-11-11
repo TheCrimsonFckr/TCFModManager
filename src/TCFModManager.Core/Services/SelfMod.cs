@@ -25,4 +25,6 @@ public static class SelfMod
 
     // The full guide. The wiki is the one place it is kept; the sp-mod page only covers installing.
     public const string WikiUrl = "https://github.com/TheCrimsonFckr/TCFModManager/wiki";
+
+    public const string CodePasteUrl = "https://codepaste.sp-mod.com/";
 }
