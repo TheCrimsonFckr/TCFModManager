@@ -4126,6 +4126,9 @@
   <data name="Play_StartServer" xml:space="preserve">
     <value>Запустить сервер</value>
   </data>
+  <data name="Play_ServerRunning" xml:space="preserve">
+    <value>Сервер запущен</value>
+  </data>
   <data name="PreLaunch_Behind" xml:space="preserve">
     <value>Ваша установка не соответствует этому серверу</value>
   </data>

@@ -32,6 +32,8 @@ public partial class PlayViewModel : LocalizedViewModel
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ServerState))]
+    [NotifyPropertyChangedFor(nameof(StartServerLabel))]
+    [NotifyPropertyChangedFor(nameof(IsServerRunning))]
     [NotifyPropertyChangedFor(nameof(ServerPath))]
     [NotifyPropertyChangedFor(nameof(CanStartServer))]
     [NotifyPropertyChangedFor(nameof(CanRestartServer))]
@@ -211,13 +213,20 @@ public partial class PlayViewModel : LocalizedViewModel
 
     public bool HasMessage => !string.IsNullOrEmpty(Message);
 
-    public string ServerState => Server is null ? "" : SptLaunchProblems.DescribeState(Server);
+    // Only what stops the server being started; running or not is said by the Start server button.
+    public string ServerState => Server is { Problem: SptLaunchProblem.NoInstallFolder or SptLaunchProblem.ExeNotFound }
+        ? SptLaunchProblems.DescribeState(Server)
+        : "";
+
+    public bool IsServerRunning => Server?.IsRunning == true;
+
+    public string StartServerLabel => IsServerRunning ? Strings.Play_ServerRunning : Strings.Play_StartServer;
 
     public string ClientState => Client is null ? "" : SptLaunchProblems.DescribeState(Client);
 
     public string HeadlessState => Headless is null ? "" : SptLaunchProblems.DescribeState(Headless);
 
-    public string ServerPath => Server?.ExePath ?? "";
+    public string? ServerPath => string.IsNullOrEmpty(Server?.ExePath) ? null : Server.ExePath;
 
     public string ClientPath => Client?.ExePath ?? "";
 

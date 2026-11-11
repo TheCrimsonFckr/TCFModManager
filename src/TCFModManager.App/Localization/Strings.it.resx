@@ -3955,6 +3955,9 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="Play_StartServer" xml:space="preserve">
     <value>Avvia server</value>
   </data>
+  <data name="Play_ServerRunning" xml:space="preserve">
+    <value>Server avviato</value>
+  </data>
   <data name="PreLaunch_Behind" xml:space="preserve">
     <value>La tua installazione non corrisponde a questo server</value>
   </data>

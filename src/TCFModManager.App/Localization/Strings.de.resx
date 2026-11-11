@@ -3955,6 +3955,9 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="Play_StartServer" xml:space="preserve">
     <value>Server starten</value>
   </data>
+  <data name="Play_ServerRunning" xml:space="preserve">
+    <value>Server läuft</value>
+  </data>
   <data name="PreLaunch_Behind" xml:space="preserve">
     <value>Deine Installation passt nicht zu diesem Server</value>
   </data>

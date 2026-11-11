@@ -888,6 +888,10 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="Play_StartServer" xml:space="preserve">
     <value>Start server</value>
   </data>
+  <data name="Play_ServerRunning" xml:space="preserve">
+    <value>Server running</value>
+    <comment>The Start server button while this install's server is up (disabled then).</comment>
+  </data>
   <data name="Play_Restart" xml:space="preserve">
     <value>Restart</value>
     <comment>One button label used twice on this page: restarting the server, and restarting the headless launcher.</comment>

@@ -27,10 +27,22 @@
             <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                 <ui:Button
                     Appearance="Primary"
-                    Content="{loc:Str Play_StartServer}"
-                    Icon="{ui:SymbolIcon Play24}"
+                    Content="{Binding StartServerLabel}"
+                    ToolTip="{Binding ServerPath}"
+                    ToolTipService.ShowOnDisabled="True"
                     IsEnabled="{Binding CanStartServer}"
-                    Command="{Binding StartServerCommand}" />
+                    Command="{Binding StartServerCommand}">
+                    <ui:Button.Style>
+                        <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
+                            <Setter Property="Icon" Value="{ui:SymbolIcon Play24}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsServerRunning}" Value="True">
+                                    <Setter Property="Icon" Value="{ui:SymbolIcon CheckmarkCircle24}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:Button.Style>
+                </ui:Button>
                 <ui:Button
                     Margin="8,0,0,0"
                     Content="{loc:Str Play_Restart}"
@@ -133,13 +145,8 @@
                     Command="{Binding KeepServerRunningCommand}" />
             </StackPanel>
 
-            <TextBlock
-                TextWrapping="Wrap"
-                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                Text="{Binding ServerPath}" />
-
             <!-- OPEN-45: the same setting as Options - Starting SPT (ServerStopper). -->
-            <WrapPanel Margin="0,12,0,0">
+            <WrapPanel Margin="0,4,0,0">
                 <CheckBox
                     VerticalAlignment="Center"
                     Margin="0,0,16,0"

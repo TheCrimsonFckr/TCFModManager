@@ -3955,6 +3955,9 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   <data name="Play_StartServer" xml:space="preserve">
     <value>Démarrer le serveur</value>
   </data>
+  <data name="Play_ServerRunning" xml:space="preserve">
+    <value>Serveur lancé</value>
+  </data>
   <data name="PreLaunch_Behind" xml:space="preserve">
     <value>Votre installation ne correspond pas à ce serveur</value>
   </data>
