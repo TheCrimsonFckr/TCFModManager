@@ -3,6 +3,7 @@
 ### **The guide**
 
 ### - [Install](Install)
+### - [Linux (Wine / Proton)](Linux)
 ### - [Profile](Profile)
 ### - [Server](Server)
 ### - [Browse](Browse)

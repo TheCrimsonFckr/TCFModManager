@@ -62,6 +62,9 @@
 - **Only machines running this app appear on the map.** A player who installs by hand is invisible to it.
 - **A server's certificate is pinned on first connect.** If it changes you are asked before anything else happens, because that is also what an interception would look like.
 
+## Linux
+- **Under Wine or Proton, update notifications and the tray aren't available**, the Comments tab opens sp-mod instead, and a native Linux SPT server isn't seen. See [Linux](Linux).
+
 ## Scope
 - **One SPT install at a time.** The record of what's installed belongs to the app, not to the install it points at, so pointing Options at a second SPT folder will carry the first one's records across. Use a separate copy of the app per install.
 - **The catalog refreshes once per session** in the background. Mods published while the app is open won't appear until you press Refresh cache or restart - except the mods you have installed, which update notifications re-read on every check while they're on.

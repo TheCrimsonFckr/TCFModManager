@@ -44,8 +44,8 @@
 - Server and Profile on one page - with the server in its own window, the Server page's cards can sit on Profile - *Completed*
 - Quick play - the server and your last profile in one click, from the sidebar, the tray or a desktop shortcut - *Completed*
 - Addons - every installed addon gets its own card, removing or disabling a mod can take its addons with it, and mod lists offer an addon's missing mod and catch addon versions that won't fit - *Completed*
+- Linux - the Windows build running under Wine or Proton, in the same prefix as your SPT game - see [Linux](Linux) - *Completed*
 
 ## Planned
 
-- Linux - the Windows build running under Wine or Proton, in the same prefix as your SPT game, with the fixes it needs there and a Linux page here on setting it up - *Planned*
 - More ideas are welcome on the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues)

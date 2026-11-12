@@ -1,6 +1,6 @@
 **You need**
 
-- Windows
+- Windows - or Linux with Wine or Proton, see [Linux](Linux)
 - An SPT install
 
 **Steps**
