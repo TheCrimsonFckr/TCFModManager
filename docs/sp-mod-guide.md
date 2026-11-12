@@ -1,11 +1,39 @@
-**TCF Mod Manager** is a Windows desktop app for finding, installing and keeping track of your SPT mods, built directly against the sp-mod catalog you're reading this on. Browse the full mod list, filter it down to what actually works on your SPT version, install with dependencies resolved for you, turn mods on and off without deleting anything, and see at a glance what's out of date.
+**TCF Mod Manager** is a desktop app for Windows - and for Linux under Wine or Proton - for finding, installing and keeping track of your SPT mods, built directly against the sp-mod catalog. Browse the full mod list, filter it down to what actually works on your SPT version, install with dependencies resolved for you, turn mods on and off without deleting anything, and see at a glance what's out of date.
+
+![Browse screen](https://raw.githubusercontent.com/TheCrimsonFckr/TCFModManager/refs/heads/main/assets/browse.png)
 
 It also keeps **mod lists** - save the set you run, switch between sets, send one to a friend, or follow the list a server publishes and know what you are missing before you launch. Plus a config editor, a start button for the server and the launcher, and an optional page that reads what each installed mod actually ships.
 
 ## The full guide is on the wiki
-**[github.com/TheCrimsonFckr/TCFModManager/wiki](https://github.com/TheCrimsonFckr/TCFModManager/wiki)** - every page of the app, mod lists, configs, Monitor mode, update notifications, the Server Map, limitations and troubleshooting. This page covers what it does and getting it installed.
+**[github.com/TheCrimsonFckr/TCFModManager/wiki](https://github.com/TheCrimsonFckr/TCFModManager/wiki)** - every page of the app, mod lists, configs, Monitor mode, update notifications, the Server Map, limitations and troubleshooting. This page only covers getting it installed.
 
 Inside the app, the **Help** page in the sidebar has short step-by-step answers for every page, in your language. Press **?** in the title bar or **F1** to open it at the page you're on, and **Open the full guide** takes you to the wiki.
+
+# {.tabset}
+
+## Install
+**You need**
+
+- Windows, or Linux with Wine 10+ / Proton 10+ (see **On Linux** below)
+- An SPT install
+
+The released build is entirely self-contained - nothing else to install.
+
+**Steps**
+
+1. Download `TCF-ModManager-<version>.zip` from this page.
+2. Extract it into your SPT folder as `<SPT root>\TCFModManager\` - a sibling of `BepInEx\` and `user\`.
+3. Run `TCFModManager.exe`.
+4. Open **Options**, point it at your SPT install folder - the top one, with `EscapeFromTarkov.exe` and `BepInEx\` in it - and hit Save. The detected server version appears underneath - everything else keys off that.
+
+#### warning
+This is **not** a mod. Don't extract it into `BepInEx\plugins` or `user\mods`. It's a standalone application that manages that folder for you. Anywhere on disk works, really - it just needs to be told where SPT lives. Keep it out of `Program Files`, where Windows won't let it update itself.
+
+#### On Linux
+Run it under Wine or Proton in the **same prefix as your SPT game** - in its own prefix it can't see the game or server running. Point Options at the install as the prefix sees it (`Z:\home\you\...` or the prefix's `C:\...`). Update notifications and the tray are hidden there. Tested on Wine 10 and 11; **Proton hasn't been tested yet** - please report how it goes. Coming from a version before 1.28.0 under Wine? Extract the new one over it by hand once. Setup steps are on the wiki's [Linux page](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Linux).
+
+#### If the SPT version doesn't detect
+The version is read from the server executable - `SPT.Server.exe`, or the older `Aki.Server.exe` - at the install root or under `SPT\` / `SPT_Runtime\`. Point Options at the install root, the folder with `EscapeFromTarkov.exe` in it, not at the server folder or any other subfolder. If you do pick `SPT\` or `SPT_Runtime\` itself, the app moves the setting up to the folder above it.
 
 ## Features
 **Finding and installing**
@@ -35,7 +63,8 @@ Inside the app, the **Help** page in the sidebar has short step-by-step answers 
 
 **Playing**
 
-- **Play** starts the server, the launcher and a Fika headless, with a check before launch
+- **Play** starts the server, the launcher and a Fika headless, with a check before launch - or **Quick play** does the server and your last profile in one click, from the sidebar or a desktop shortcut
+- **Stop the server when the game closes**, after a countdown you choose
 - **Configs** - edit client, server and BepInEx settings in the app, with your settings kept when a mod updates
 - **Server Map** (optional, with the Server Map mod on the server) - see what a server runs and get on the same list before you join
 
@@ -52,40 +81,24 @@ Inside the app, the **Help** page in the sidebar has short step-by-step answers 
 - **Update notifications** - told when a mod you have gets a new release, even from the tray
 - **Mod footprint** (optional) - what each installed mod's files contain, read from disk without running anything
 - **Help** built in, with step-by-step answers for every page
+- **Report a problem** - builds a bug report with your versions and the log, personal details taken out, ready for the Issues tab
+- Runs on **Linux** under Wine or Proton
 - English, Deutsch, Français, Italiano and Русский
-- Keeps itself up to date from this page
-
-## Install
-**You need**
-
-- Windows
-- An SPT install
-
-The released build is entirely self-contained - nothing else to install.
-
-**Steps**
-
-1. Download `TCF-ModManager-<version>.zip` from this page.
-2. Extract it into your SPT folder as `<SPT root>\TCFModManager\` - a sibling of `BepInEx\` and `user\`.
-3. Run `TCFModManager.exe`.
-4. Open **Options**, point it at your SPT install folder - the top one, with `EscapeFromTarkov.exe` and `BepInEx\` in it - and hit Save. The detected server version appears underneath - everything else keys off that.
-
-#### warning
-This is **not** a mod. Don't extract it into `BepInEx\plugins` or `user\mods`. It's a standalone application that manages that folder for you. Anywhere on disk works, really - it just needs to be told where SPT lives. Keep it out of `Program Files`, where Windows won't let it update itself.
-
-#### If the SPT version doesn't detect
-The version is read from the server executable - `SPT.Server.exe`, or the older `Aki.Server.exe` - at the install root or under `SPT\` / `SPT_Runtime\`. Point Options at the install root, the folder with `EscapeFromTarkov.exe` in it, not at the server folder or any other subfolder. If you do pick `SPT\` or `SPT_Runtime\` itself, the app moves the setting up to the folder above it.
-
-## Updating
-Once it's set up, the app keeps itself up to date from this page. On launch it checks for a newer release and shows a banner and a badge on **App update** in the sidebar; you're asked to open this page before anything is downloaded. Your settings, install history and kept configs survive an update.
+- **Self Updating** - Once it's set up, the app keeps itself up to date from this page. On launch it checks for a newer release and shows a banner and a badge on **App update** in the sidebar; you're asked to open this page before anything is downloaded. Your settings, install history and kept configs survive an update.
 
 ## Planning
-Coming next, in no particular order - the [Planning page](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Planning) on the wiki has the full list, including everything already done.
 
-- Nothing new lined up right now - ideas are welcome on the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues)
+- Proton - confirming it on a real Proton / Steam Deck setup. Linux under Wine shipped in 1.28.0; Proton testers welcome
 
-## Reporting a problem
-Use the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues) - bugs, wording, translations, feature requests or questions. Attach `Data\logs\tcfmm-<date>.log`, ideally after adding the `verbose` marker file and reproducing the problem. The [wiki](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Troubleshooting) covers the common ones first.
+Ideas are welcome on the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues).
+The [Planning page](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Planning) on the wiki has a full list of historical plans and changes. 
+
+## Issues
+### I will not respond to issues raised in the comments.
+Use the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues) - bugs, wording, translations, feature requests or questions. The easiest way is **Help - Report a problem** in the app (or **Details** beside a failure): it builds the report with the log attached for you. Otherwise attach `Data\logs\tcfmm-<date>.log`, ideally after adding the `verbose` marker file and reproducing the problem. The [wiki](https://github.com/TheCrimsonFckr/TCFModManager/wiki/Troubleshooting) covers the common ones first.
+
 
 ## Disclaimer
 I use AI to help write this mod, everything is initially written by myself (I'm a developer by profession), then passed though Claude (Fable model) for refinements and to highlight any additional changes the LLM thinks are worth making. Absolutely everything is reviewed and tested by myself before I commit anything. This is done because I simply do not have enough time in day to make full refinements and multiple passes myself. If you are not comfortable using an application that uses AI as a tool then please do not download it.
+
+{.endtabset}
