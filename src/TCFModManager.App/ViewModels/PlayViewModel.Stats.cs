@@ -29,9 +29,15 @@ public partial class PlayViewModel
     [ObservableProperty]
     private bool _profileIdCopied;
 
-    public bool HasProfileStatsCard => Profiles.Count > 0;
+    public bool HasProfileStatsCard => Profiles.Count > 0 || (CanPlayRemote && !IsDirectLaunchOn);
+
+    // The switch on this card instead of the Play card's, while the Play card isn't in use.
+    public bool ShowsRemoteSwitchOnStats => CanPlayRemote && !IsDirectLaunchOn;
+
+    public string? StatsRemoteProblem => ShowsRemoteSwitchOnStats ? RemoteProblem : null;
 
     private SptProfileStats? _shownStats;
+    private SptMiniProfile? _shownRemote;
     private SptLevelProgress? _shownProgress;
     private string _shownLanguage = "";
     private IReadOnlyDictionary<string, SptMiniProfile> _serverProfiles = new Dictionary<string, SptMiniProfile>();
@@ -42,6 +48,8 @@ public partial class PlayViewModel
     private void RefreshStats(string? installPath)
     {
         OnPropertyChanged(nameof(HasProfileStatsCard));
+        OnPropertyChanged(nameof(ShowsRemoteSwitchOnStats));
+        OnPropertyChanged(nameof(StatsRemoteProblem));
 
         if (SelectedProfile is not { } item)
         {
@@ -55,6 +63,13 @@ public partial class PlayViewModel
         if (ProfileIsNew)
         {
             ShowStats(null, null, false, "");
+            StatsUnreadable = false;
+            return;
+        }
+
+        if (IsRemotePlay)
+        {
+            ShowRemoteStats(item);
             StatsUnreadable = false;
             return;
         }
@@ -80,7 +95,21 @@ public partial class PlayViewModel
         _shownStats = stats;
         _shownProgress = progress;
         _shownLanguage = language;
+        _shownRemote = null;
         ProfileStats = stats is null ? null : ProfileStatsView.Build(stats, fallbackName, progress, levelFromServer);
+    }
+
+    // Playing on the Server Map server: its own profile list carries the level and EXP, nothing more.
+    private void ShowRemoteStats(PlayProfileItem item)
+    {
+        var language = System.Globalization.CultureInfo.CurrentUICulture.Name;
+        if (item.Profile == _shownRemote && language == _shownLanguage && ProfileStats is not null) return;
+
+        _shownRemote = item.Profile;
+        _shownStats = null;
+        _shownProgress = null;
+        _shownLanguage = language;
+        ProfileStats = ProfileStatsView.FromServer(item.Profile, item.Title, SptLevelProgress.FromServer(item.Profile));
     }
 
     private async Task AskServerForProfilesAsync()

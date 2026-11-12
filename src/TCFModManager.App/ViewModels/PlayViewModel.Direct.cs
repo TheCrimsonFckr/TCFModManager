@@ -39,7 +39,42 @@ public partial class PlayViewModel
 {
     public ObservableCollection<PlayProfileItem> Profiles { get; } = [];
 
-    public bool HasNoProfiles => IsDirectLaunchOn && Profiles.Count == 0;
+    public bool HasNoProfiles => IsDirectLaunchOn && Profiles.Count == 0 && RemoteProblem is null;
+
+    // Server Map has a server set, so Play can use it instead of this install's own.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(RemoteSwitchText))]
+    private bool _canPlayRemote;
+
+    // The switch: on plays on the Server Map server, off on this install's own.
+    [ObservableProperty]
+    private bool _playOnRemote;
+
+    // The switch is on and there is a Server Map server to use.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(WipeWarning))]
+    [NotifyPropertyChangedFor(nameof(DeleteProfileWarning))]
+    [NotifyPropertyChangedFor(nameof(PlaySummary))]
+    private bool _isRemotePlay;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(RemoteSwitchText))]
+    [NotifyPropertyChangedFor(nameof(PlaySummary))]
+    private string? _remoteAddress;
+
+    // Why the Server Map server's profiles couldn't be listed.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasNoProfiles))]
+    [NotifyPropertyChangedFor(nameof(StatsRemoteProblem))]
+    private string? _remoteProblem;
+
+    public string RemoteSwitchText => Text(Strings.Play_RemoteSwitchFormat, RemoteAddress);
+
+    public string PlaySummary => IsRemotePlay ? Text(Strings.Play_RemoteSummaryFormat, RemoteAddress) : Strings.Play_DirectSummary;
+
+    private bool _settingRemote;
+    private DateTime _remoteProfilesAt;
+    private bool _readingRemote;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanPlay))]
@@ -91,7 +126,7 @@ public partial class PlayViewModel
     private bool _wipeNextStart;
 
     public string? WipeWarning => WipeNextStart && SelectedProfile is { } p
-        ? LocalizationService.Text(Strings.Play_WipeArmedFormat, p.Title)
+        ? LocalizationService.Text(IsRemotePlay ? Strings.Play_RemoteWipeArmedFormat : Strings.Play_WipeArmedFormat, p.Title)
         : null;
 
     public bool CanPlay => IsDirectLaunchOn && !IsPlaying && SelectedProfile is not null && !IsGameRunning && Server?.Exists == true;
@@ -123,15 +158,68 @@ public partial class PlayViewModel
         if (value is null) return;
 
         var settings = new SettingsService().Load();
-        if (settings.DirectLaunchProfileId == value.Profile.ProfileId) return;
-        settings.DirectLaunchProfileId = value.Profile.ProfileId;
+        var id = value.Profile.ProfileId;
+        if (IsRemotePlay)
+        {
+            if (settings.RemotePlayProfileId == id) return;
+            settings.RemotePlayProfileId = id;
+        }
+        else
+        {
+            if (settings.DirectLaunchProfileId == id) return;
+            settings.DirectLaunchProfileId = id;
+        }
+
         new SettingsService().Save(settings);
+    }
+
+    partial void OnPlayOnRemoteChanged(bool value)
+    {
+        if (_settingRemote) return;
+
+        var settings = new SettingsService().Load();
+        if (settings.PlayOnServerMapHost == value) return;
+        settings.PlayOnServerMapHost = value;
+        new SettingsService().Save(settings);
+        AppLog.Info("DirectLaunch", value ? $"playing on the Server Map server {RemoteAddress}" : "playing on this install's server");
+
+        ConfirmingDeleteProfile = false;
+        ShowNewProfile = false;
+        PlayStatus = null;
+        Refresh();
     }
 
     // From Refresh: whether the card is the direct one, and the profiles on disk.
     private void RefreshDirect(string? installPath, AppSettings settings, bool readProfiles = true)
     {
         var support = SptDirectLaunch.Support(AppServices.SptEnvironment.InstalledVersion);
+
+        var map = settings.ServerMap;
+        CanPlayRemote = map.IsConfigured;
+        RemoteAddress = map.IsConfigured ? SptLauncherApi.AddressOf(map.Host!, map.Port) : null;
+        _settingRemote = true;
+        PlayOnRemote = settings.PlayOnServerMapHost;
+        _settingRemote = false;
+
+        var remote = settings.PlayOnServerMapHost && map.IsConfigured;
+        if (remote != IsRemotePlay)
+        {
+            IsRemotePlay = remote;
+            RemoteProblem = null;
+            WipeNextStart = false;
+            _remoteProfilesAt = default;
+            _readingProfile = true;
+            try
+            {
+                Profiles.Clear();
+                SelectedProfile = null;
+            }
+            finally
+            {
+                _readingProfile = false;
+            }
+        }
+
         IsDirectLaunchEnabled = settings.DirectLaunch;
         IsDirectLaunchOn = settings.DirectLaunch && support != DirectLaunchSupport.Unsupported && Server?.Exists == true;
 
@@ -149,10 +237,21 @@ public partial class PlayViewModel
 
         if (!readProfiles) return;
 
-        var found = SptLocalProfiles.Read(installPath).Select(p => new PlayProfileItem(p)).ToList();
+        if (remote)
+        {
+            _ = ReadRemoteProfilesAsync(force: false);
+            return;
+        }
+
+        ApplyProfiles(SptLocalProfiles.Read(installPath), () => settings.DirectLaunchProfileId ?? LauncherPreferredProfile(installPath));
+    }
+
+    private void ApplyProfiles(IReadOnlyList<SptMiniProfile> profiles, Func<string?> preferred)
+    {
+        var found = profiles.Select(p => new PlayProfileItem(p)).ToList();
         if (found.Count == Profiles.Count && found.Zip(Profiles).All(pair => pair.First.SameAs(pair.Second))) return;
 
-        var keep = SelectedProfile?.Profile.ProfileId ?? settings.DirectLaunchProfileId ?? LauncherPreferredProfile(installPath);
+        var keep = SelectedProfile?.Profile.ProfileId ?? preferred();
 
         _readingProfile = true;
         try
@@ -167,6 +266,57 @@ public partial class PlayViewModel
             OnPropertyChanged(nameof(HasNoProfiles));
         }
     }
+
+    // The Server Map server's profiles, asked for at most every 15 seconds unless forced.
+    private async Task ReadRemoteProfilesAsync(bool force)
+    {
+        if (!force && (_readingRemote || DateTime.UtcNow - _remoteProfilesAt < ServerProfilesEvery)) return;
+
+        if (RemoteApi() is not { } api)
+        {
+            RemoteProblem = Strings.Play_RemoteNotPinned;
+            return;
+        }
+
+        _readingRemote = true;
+        _remoteProfilesAt = DateTime.UtcNow;
+        try
+        {
+            using (api)
+            {
+                var profiles = await api.ProfilesAsync();
+                if (!IsRemotePlay) return;
+
+                RemoteProblem = null;
+                var listed = profiles
+                    .Where(p => p.ProfileId.Length > 0 && p.Username.Length > 0)
+                    .OrderBy(p => p.Nickname.Length == 0 ? p.Username : p.Nickname, StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+                ApplyProfiles(listed, () => new SettingsService().Load().RemotePlayProfileId);
+                RefreshStats(AppServices.SptEnvironment.InstallPath);
+            }
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or System.Text.Json.JsonException or InvalidDataException)
+        {
+            AppLog.Debug("DirectLaunch", $"the Server Map server didn't list its profiles: {ex.Message}");
+            if (IsRemotePlay) RemoteProblem = Text(Strings.Play_RemoteUnreachableFormat, RemoteAddress);
+        }
+        finally
+        {
+            _readingRemote = false;
+        }
+    }
+
+    // Null when Server Map has no server, or hasn't checked its certificate yet.
+    private static SptLauncherApi? RemoteApi()
+    {
+        var map = new SettingsService().Load().ServerMap;
+        if (!map.IsConfigured || string.IsNullOrWhiteSpace(map.PinnedThumbprint)) return null;
+        return SptLauncherApi.Pinned(SptLauncherApi.AddressOf(map.Host!, map.Port), map.PinnedThumbprint);
+    }
+
+    private SptLauncherApi? PlayApi(string serverExe) =>
+        IsRemotePlay ? RemoteApi() : new SptLauncherApi(SptDirectLaunch.ServerAddress(serverExe));
 
     private static string? LauncherPreferredProfile(string? installPath) =>
         ServerRootOf(installPath) is { } root ? SptLauncherSettings.Read(root).PreferredProfileId : null;
@@ -198,12 +348,17 @@ public partial class PlayViewModel
 
         try
         {
-            using var api = new SptLauncherApi(SptDirectLaunch.ServerAddress(serverExe));
+            using var api = PlayApi(serverExe);
+            if (api is null)
+            {
+                Fail(Strings.Play_RemoteNotPinned);
+                return;
+            }
 
             if (!await EnsureServerAsync(api, installPath, cts.Token)) return;
 
             var wipe = WipeNextStart;
-            if (wipe && !AppServices.ProfileBackups.EnsureBackupBefore(installPath!, ProfileBackups.BeforeWipe))
+            if (wipe && !IsRemotePlay && !AppServices.ProfileBackups.EnsureBackupBefore(installPath!, ProfileBackups.BeforeWipe))
             {
                 Fail(Strings.Play_DirectBackupFailed);
                 return;
@@ -330,6 +485,12 @@ public partial class PlayViewModel
     {
         OfferServerLog = false;
         if (await PingAsync(api, ct)) return true;
+
+        if (IsRemotePlay)
+        {
+            Fail(Text(Strings.Play_RemoteUnreachableFormat, api.Address));
+            return false;
+        }
 
         if (!SptLaunchService.Describe(installPath, SptLaunchTarget.Server).IsRunning)
         {
@@ -459,8 +620,8 @@ public partial class PlayViewModel
 
             ShowNewProfile = false;
             Refresh();
-            var made = SptLocalProfiles.Read(AppServices.SptEnvironment.InstallPath).FirstOrDefault(p => p.Username == name);
-            if (made is not null) SelectedProfile = Profiles.FirstOrDefault(p => p.Profile.ProfileId == made.ProfileId) ?? SelectedProfile;
+            if (IsRemotePlay) await ReadRemoteProfilesAsync(force: true);
+            SelectedProfile = Profiles.FirstOrDefault(p => p.Profile.Username == name) ?? SelectedProfile;
             PlayStatusIsError = false;
             PlayStatus = Text(Strings.Play_DirectProfileCreatedFormat, name);
         });
@@ -473,7 +634,9 @@ public partial class PlayViewModel
     [ObservableProperty]
     private bool _confirmingDeleteProfile;
 
-    public string? DeleteProfileWarning => SelectedProfile is { } p ? Text(Strings.Play_DirectDeleteWarningFormat, p.Title) : null;
+    public string? DeleteProfileWarning => SelectedProfile is { } p
+        ? Text(IsRemotePlay ? Strings.Play_RemoteDeleteWarningFormat : Strings.Play_DirectDeleteWarningFormat, p.Title)
+        : null;
 
     [RelayCommand]
     private void AskDeleteProfile()
@@ -502,7 +665,7 @@ public partial class PlayViewModel
 
         await WithServerAsync(async (api, ct) =>
         {
-            if (!AppServices.ProfileBackups.EnsureBackupBefore(AppServices.SptEnvironment.InstallPath!, ProfileBackups.BeforeProfileDelete))
+            if (!IsRemotePlay && !AppServices.ProfileBackups.EnsureBackupBefore(AppServices.SptEnvironment.InstallPath!, ProfileBackups.BeforeProfileDelete))
             {
                 Fail(Strings.Play_DirectBackupFailed);
                 return;
@@ -514,8 +677,11 @@ public partial class PlayViewModel
                 return;
             }
 
-            AppLog.Info("DirectLaunch", $"profile {item.Profile.Username} deleted (a copy was kept)");
+            AppLog.Info("DirectLaunch", IsRemotePlay
+                ? $"profile {item.Profile.Username} deleted on {api.Address}"
+                : $"profile {item.Profile.Username} deleted (a copy was kept)");
             Refresh();
+            if (IsRemotePlay) await ReadRemoteProfilesAsync(force: true);
             PlayStatusIsError = false;
             PlayStatus = Text(Strings.Play_DirectProfileDeletedFormat, item.Title);
         });
@@ -531,7 +697,13 @@ public partial class PlayViewModel
         var cts = _playCts = new CancellationTokenSource();
         try
         {
-            using var api = new SptLauncherApi(SptDirectLaunch.ServerAddress(exe));
+            using var api = PlayApi(exe);
+            if (api is null)
+            {
+                Fail(Strings.Play_RemoteNotPinned);
+                return;
+            }
+
             if (!await EnsureServerAsync(api, AppServices.SptEnvironment.InstallPath, cts.Token)) return;
             PlayStatus = null;
             await action(api, cts.Token);

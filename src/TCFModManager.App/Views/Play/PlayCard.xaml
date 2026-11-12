@@ -42,7 +42,24 @@
                     Margin="0,0,0,10"
                     ToolTip="{loc:Str Play_DirectDescription}"
                     ToolTipService.ShowDuration="30000"
-                    Text="{loc:Str Play_DirectSummary}" />
+                    Text="{Binding PlaySummary}" />
+
+                <ui:ToggleSwitch
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Left"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    ToolTip="{loc:Str Play_RemoteSwitchToolTip}"
+                    IsChecked="{Binding PlayOnRemote}"
+                    IsEnabled="{Binding IsPlaying, Converter={StaticResource Inverse}}"
+                    OnContent="{Binding RemoteSwitchText}"
+                    OffContent="{Binding RemoteSwitchText}"
+                    Visibility="{Binding CanPlayRemote, Converter={StaticResource BoolToVisibility}}" />
+                <TextBlock
+                    Margin="0,0,0,10"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                    Text="{Binding RemoteProblem}"
+                    Visibility="{Binding RemoteProblem, Converter={StaticResource NullToCollapsed}}" />
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                     <ComboBox

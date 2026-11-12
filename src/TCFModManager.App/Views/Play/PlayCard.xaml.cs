@@ -29,7 +29,7 @@ public partial class PlayCard : UserControl
         menu.Items.Add(new MenuItem
         {
             Header = vm.WipeNextStart ? Strings.Play_DirectWipeCancel : Strings.Play_DirectWipe,
-            ToolTip = Strings.Play_DirectWipeToolTip,
+            ToolTip = vm.IsRemotePlay ? Strings.Play_RemoteWipeToolTip : Strings.Play_DirectWipeToolTip,
             Command = vm.ToggleWipeCommand,
             IsEnabled = vm.SelectedProfile is not null && !vm.IsPlaying,
         });
@@ -43,7 +43,7 @@ public partial class PlayCard : UserControl
         menu.Items.Add(new MenuItem
         {
             Header = Strings.Play_DirectDeleteProfile,
-            ToolTip = Strings.Play_DirectDeleteProfileToolTip,
+            ToolTip = vm.IsRemotePlay ? Strings.Play_RemoteDeleteProfileToolTip : Strings.Play_DirectDeleteProfileToolTip,
             Command = vm.AskDeleteProfileCommand,
             IsEnabled = vm.SelectedProfile is not null && !vm.IsPlaying && !vm.IsGameRunning,
         });

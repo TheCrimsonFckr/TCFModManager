@@ -39,8 +39,36 @@ public sealed class ProfileStatsView
         ScavRows = Rows(stats.Scav, lifetime);
     }
 
+    private ProfileStatsView(SptMiniProfile profile, string name, SptLevelProgress? progress)
+    {
+        ProfileId = profile.ProfileId;
+        Name = name;
+        Detail = Text(Strings.Play_ProfileDetailFormat, profile.Level, profile.Side.ToUpperInvariant(), profile.Edition);
+        Roubles = Dollars = Euros = Gp = "";
+
+        LevelText = Text(Strings.Profile_LevelFormat, profile.Level);
+        ExperienceText = Text(Strings.Profile_ExperienceFormat, profile.CurrentExperience);
+        HasProgress = progress is not null;
+        if (progress is not null)
+        {
+            ToNextText = progress.IsMaxLevel ? Strings.Profile_MaxLevel : Text(Strings.Profile_ToNextFormat, progress.ToNextLevel, progress.Level + 1);
+            LevelPercent = progress.Fraction * 100;
+            LevelSourceToolTip = Strings.Profile_LevelFromServerToolTip;
+        }
+
+        HasRecord = false;
+        OverallRows = PmcRows = ScavRows = [];
+    }
+
     public static ProfileStatsView Build(SptProfileStats stats, string fallbackName, SptLevelProgress? progress, bool levelFromServer) =>
         new(stats, fallbackName, progress, levelFromServer, DateTimeOffset.UtcNow);
+
+    /// <summary>A profile on another machine's server: name, level and EXP only.</summary>
+    public static ProfileStatsView FromServer(SptMiniProfile profile, string name, SptLevelProgress? progress) =>
+        new(profile, name, progress);
+
+    // False for a profile on another machine's server: no money, no raid record.
+    public bool HasRecord { get; } = true;
 
     public string ProfileId { get; }
 

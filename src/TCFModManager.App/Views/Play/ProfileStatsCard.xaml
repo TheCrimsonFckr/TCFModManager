@@ -42,6 +42,22 @@
                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 Margin="0,0,0,8" />
 
+            <ui:ToggleSwitch
+                Margin="0,0,0,10"
+                HorizontalAlignment="Left"
+                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                ToolTip="{loc:Str Play_RemoteSwitchToolTip}"
+                IsChecked="{Binding PlayOnRemote}"
+                OnContent="{Binding RemoteSwitchText}"
+                OffContent="{Binding RemoteSwitchText}"
+                Visibility="{Binding ShowsRemoteSwitchOnStats, Converter={StaticResource BoolToVisibility}}" />
+            <TextBlock
+                Margin="0,0,0,10"
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                Text="{Binding StatsRemoteProblem}"
+                Visibility="{Binding StatsRemoteProblem, Converter={StaticResource NullToCollapsed}}" />
+
             <ComboBox
                 MinWidth="320"
                 Margin="0,0,0,12"
@@ -70,6 +86,12 @@
                 Foreground="{DynamicResource SystemFillColorCautionBrush}"
                 Text="{loc:Str Profile_StatsUnreadable}"
                 Visibility="{Binding StatsUnreadable, Converter={StaticResource BoolToVisibility}}" />
+            <TextBlock
+                Margin="0,0,0,8"
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                Text="{loc:Str Profile_RemoteOnlyLevel}"
+                Visibility="{Binding ProfileStats.HasRecord, Converter={StaticResource FalseToVisible}, FallbackValue=Collapsed}" />
 
             <StackPanel Visibility="{Binding ProfileStats, Converter={StaticResource NullToCollapsed}}">
                 <Grid Margin="0,0,0,12">
@@ -114,7 +136,7 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <Grid Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Top">
+                    <Grid Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Top" Visibility="{Binding ProfileStats.HasRecord, Converter={StaticResource BoolToVisibility}}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
@@ -166,7 +188,7 @@
                         Text="{Binding ProfileStats.ExperienceText}" />
                 </StackPanel>
 
-                <TabControl SelectedIndex="{Binding StatsTab}">
+                <TabControl SelectedIndex="{Binding StatsTab}" Visibility="{Binding ProfileStats.HasRecord, Converter={StaticResource BoolToVisibility}}">
                     <TabItem Header="{loc:Str Profile_TabOverall}">
                         <ItemsControl
                             Focusable="False"

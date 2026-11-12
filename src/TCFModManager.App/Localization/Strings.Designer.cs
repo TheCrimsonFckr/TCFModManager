@@ -2563,6 +2563,15 @@ internal static class Strings
     internal static string Play_DirectNoProfiles => LocalizationService.Get("Play_DirectNoProfiles");
     internal static string Play_DirectUnavailableFormat => LocalizationService.Get("Play_DirectUnavailableFormat");
     internal static string Play_DirectUntestedFormat => LocalizationService.Get("Play_DirectUntestedFormat");
+    internal static string Play_RemoteSwitchFormat => LocalizationService.Get("Play_RemoteSwitchFormat");
+    internal static string Play_RemoteSwitchToolTip => LocalizationService.Get("Play_RemoteSwitchToolTip");
+    internal static string Play_RemoteSummaryFormat => LocalizationService.Get("Play_RemoteSummaryFormat");
+    internal static string Play_RemoteNotPinned => LocalizationService.Get("Play_RemoteNotPinned");
+    internal static string Play_RemoteUnreachableFormat => LocalizationService.Get("Play_RemoteUnreachableFormat");
+    internal static string Play_RemoteWipeArmedFormat => LocalizationService.Get("Play_RemoteWipeArmedFormat");
+    internal static string Play_RemoteWipeToolTip => LocalizationService.Get("Play_RemoteWipeToolTip");
+    internal static string Play_RemoteDeleteProfileToolTip => LocalizationService.Get("Play_RemoteDeleteProfileToolTip");
+    internal static string Play_RemoteDeleteWarningFormat => LocalizationService.Get("Play_RemoteDeleteWarningFormat");
     internal static string Play_WipeArmedFormat => LocalizationService.Get("Play_WipeArmedFormat");
     internal static string Play_ProfileDetailFormat => LocalizationService.Get("Play_ProfileDetailFormat");
     internal static string Play_ProfileNewFormat => LocalizationService.Get("Play_ProfileNewFormat");
@@ -2806,6 +2815,7 @@ internal static class Strings
     internal static string Profile_StatsPickerToolTip => LocalizationService.Get("Profile_StatsPickerToolTip");
     internal static string Profile_NewCharacter => LocalizationService.Get("Profile_NewCharacter");
     internal static string Profile_StatsUnreadable => LocalizationService.Get("Profile_StatsUnreadable");
+    internal static string Profile_RemoteOnlyLevel => LocalizationService.Get("Profile_RemoteOnlyLevel");
     internal static string Profile_CopyIdToolTip => LocalizationService.Get("Profile_CopyIdToolTip");
     internal static string Profile_Gp => LocalizationService.Get("Profile_Gp");
     internal static string Profile_LevelFormat => LocalizationService.Get("Profile_LevelFormat");

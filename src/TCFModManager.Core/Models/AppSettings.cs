@@ -103,6 +103,12 @@ public sealed class AppSettings
     // last started, else the first.
     public string? DirectLaunchProfileId { get; set; }
 
+    // Play and the profile list use the Server Map server (ServerMap.Host) instead of this install's own.
+    public bool PlayOnServerMapHost { get; set; }
+
+    // The profile Play starts on the Server Map server (its profile id).
+    public string? RemotePlayProfileId { get; set; }
+
     // Minimise this app once the game has started from it, as SPT's launcher does by default.
     public bool MinimizeWhilePlaying { get; set; } = true;
 

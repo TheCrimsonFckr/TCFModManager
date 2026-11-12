@@ -9340,6 +9340,38 @@ See Dependencies and Conflicts.</value>
     <value>SPT {0} is newer than the {1} this was checked against. If the game doesn't start, use the SPT launcher below.</value>
     <comment>{0} and {1} are SPT versions.</comment>
   </data>
+  <data name="Play_RemoteSwitchFormat" xml:space="preserve">
+    <value>Play on the connected server ({0})</value>
+    <comment>{0} is the server's address, host:port.</comment>
+  </data>
+  <data name="Play_RemoteSwitchToolTip" xml:space="preserve">
+    <value>On: the profiles and Play use the server set on the Server map page. Off: this PC's own server.</value>
+  </data>
+  <data name="Play_RemoteSummaryFormat" xml:space="preserve">
+    <value>Pick a profile and press Play - the game joins {0}, and the SPT launcher never opens.</value>
+    <comment>{0} is the server's address, host:port.</comment>
+  </data>
+  <data name="Play_RemoteNotPinned" xml:space="preserve">
+    <value>This app hasn't checked the connected server's certificate yet. Open the Server map page once, then try again.</value>
+  </data>
+  <data name="Play_RemoteUnreachableFormat" xml:space="preserve">
+    <value>{0} didn't answer. Check that the server is running and this PC can reach it.</value>
+    <comment>{0} is the server's address, host:port.</comment>
+  </data>
+  <data name="Play_RemoteWipeArmedFormat" xml:space="preserve">
+    <value>The next Play starts {0} over with a new character - its progress is wiped. The profile is on another machine, so no copy is kept here.</value>
+    <comment>{0} is a profile name.</comment>
+  </data>
+  <data name="Play_RemoteWipeToolTip" xml:space="preserve">
+    <value>The next Play starts this profile over with a new character, as the SPT launcher's wipe does. The profile is on another machine, so no copy is kept here.</value>
+  </data>
+  <data name="Play_RemoteDeleteProfileToolTip" xml:space="preserve">
+    <value>Remove the profile from the connected server, as the SPT launcher does. No copy is kept here.</value>
+  </data>
+  <data name="Play_RemoteDeleteWarningFormat" xml:space="preserve">
+    <value>Delete {0}? Its character and progress go from the connected server. The profile is on another machine, so no copy is kept here.</value>
+    <comment>{0} is a profile name.</comment>
+  </data>
   <data name="Play_WipeArmedFormat" xml:space="preserve">
     <value>The next Play starts {0} over with a new character - its progress is wiped. A copy of your profiles is kept first.</value>
     <comment>{0} is a profile name.</comment>
@@ -10210,6 +10242,9 @@ Right-click to save the current filters to it, rename it or delete it.</value>
   </data>
   <data name="Profile_StatsUnreadable" xml:space="preserve">
     <value>This profile's file couldn't be read.</value>
+  </data>
+  <data name="Profile_RemoteOnlyLevel" xml:space="preserve">
+    <value>This profile is on the connected server. Only its level and EXP come over the network - its money and raid record stay there.</value>
   </data>
   <data name="Profile_CopyIdToolTip" xml:space="preserve">
     <value>Copy the profile ID</value>

@@ -5,6 +5,7 @@ using System.Net.Security;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using TCFModManager.Core.ServerMap;
 
 namespace TCFModManager.Core.Services;
 
@@ -15,8 +16,8 @@ namespace TCFModManager.Core.Services;
 // Read from SPT 4.1.6's sources (SP-Tushonka/launcher SPTushonka.Core: HttpHelper, SessionHelper,
 // Urls; SP-Tushonka/server-csharp LauncherV2StaticRouter, LauncherV2Callbacks):
 //   - HTTPS to the server's ip:port. The server's certificate is its own self-signed one; SPT's
-//     launcher accepts any certificate. This accepts one only from an address on this PC - the
-//     server it starts is local, and nothing here is ever pointed elsewhere.
+//     launcher accepts any certificate. This accepts one from an address on this PC, or from a
+//     server on another machine only when it is the certificate Server Map pinned for it (Pinned).
 //   - Every JSON body, both ways, is zlib-wrapped (the launcher's SimpleZlib); bundle files are not.
 //   - Answers are { "Response": ... } (plus "Profiles" after register, remove and wipe), the
 //     profile objects in them lower-case ("username", "profileId"...).
@@ -92,6 +93,28 @@ public sealed class SptLauncherApi : IDisposable
             }
         },
     };
+
+    /// <summary>A server on another machine, trusted only when it presents the pinned certificate.</summary>
+    public static SptLauncherApi Pinned(string address, string pinnedThumbprint) =>
+        new(address, new SocketsHttpHandler
+        {
+            UseProxy = false,
+            UseCookies = false,
+            SslOptions = new SslClientAuthenticationOptions
+            {
+                RemoteCertificateValidationCallback = (_, certificate, _, _) =>
+                    certificate is not null
+                    && ServerCertificatePin.Decide(pinnedThumbprint, certificate.GetCertHashString(System.Security.Cryptography.HashAlgorithmName.SHA256)) == PinVerdict.Match,
+            },
+        });
+
+    /// <summary>"host:port", an IPv6 literal bracketed.</summary>
+    public static string AddressOf(string host, int port)
+    {
+        host = host.Trim();
+        if (host.Contains(':') && !host.StartsWith('[')) host = $"[{host}]";
+        return $"{host}:{port}";
+    }
 
     /// <summary>True for a loopback address or one of this PC's own.</summary>
     public static bool IsThisMachine(IPAddress address)
