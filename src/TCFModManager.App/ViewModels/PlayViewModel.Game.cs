@@ -101,7 +101,7 @@ public partial class PlayViewModel
 
         ConfirmingCloseGame = false;
         IsClosingGame = true;
-        _poll.Stop();
+        HoldPolling();
 
         try
         {

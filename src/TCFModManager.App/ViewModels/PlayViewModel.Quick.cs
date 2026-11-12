@@ -51,7 +51,7 @@ public partial class PlayViewModel
 
         _quickPoll.Tick += (_, _) =>
         {
-            if (_pollUsers == 0) RefreshQuick(readProfiles: Profiles.Count == 0);
+            if (_pollUsers == 0 || _windowAway) RefreshQuick(readProfiles: Profiles.Count == 0);
         };
 
         RefreshQuick(readProfiles: true);

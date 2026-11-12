@@ -16,7 +16,7 @@ public partial class ProfilePage : Page
 
         Loaded += (_, _) =>
         {
-            ViewModel.StartPolling();
+            ViewModel.StartPolling(showsProfiles: true);
 
             //
             // Fire-and-forget, and deliberately not part of the poll: the check reads the whole
@@ -41,7 +41,7 @@ public partial class ProfilePage : Page
             if (IsLoaded && AppNavigation.TakeShowServer()) ScrollToServer();
         };
 
-        Unloaded += (_, _) => ViewModel.StopPolling();
+        Unloaded += (_, _) => ViewModel.StopPolling(showsProfiles: true);
 
         AppServices.ServerPageGate.PropertyChanged += (_, e) =>
         {

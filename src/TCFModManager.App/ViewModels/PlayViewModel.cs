@@ -323,23 +323,54 @@ public partial class PlayViewModel : LocalizedViewModel
     public bool NeedsRoleAnswer => Headless?.Exists == true && !RunsHeadlessClient;
 
     private int _pollUsers;
+    private int _profileUsers;
+    private bool _windowAway;
+    private bool _pollHeld;
 
     // Called by each page that shows this, so the poll only runs while one of them is on screen.
-    public void StartPolling()
+    public void StartPolling(bool showsProfiles = false)
     {
+        if (showsProfiles && _profileUsers++ == 0) ForgetProfileReads();
         Refresh();
-        if (_pollUsers++ == 0) _poll.Start();
+        if (_pollUsers++ == 0 && !_windowAway && !_pollHeld) _poll.Start();
         _ = RefreshToolsAsync();
     }
 
-    public void StopPolling()
+    public void StopPolling(bool showsProfiles = false)
     {
+        if (showsProfiles && _profileUsers > 0) _profileUsers--;
         if (_pollUsers > 0 && --_pollUsers == 0) _poll.Stop();
+    }
+
+    // The main window minimised or hidden to the tray.
+    public void SetWindowAway(bool away)
+    {
+        if (away == _windowAway) return;
+        _windowAway = away;
+
+        if (away)
+        {
+            _poll.Stop();
+            return;
+        }
+
+        ForgetProfileReads();
+        if (_pollUsers == 0) return;
+
+        Refresh();
+        if (!_pollHeld) _poll.Start();
+    }
+
+    private void HoldPolling()
+    {
+        _pollHeld = true;
+        _poll.Stop();
     }
 
     private void ResumePolling()
     {
-        if (_pollUsers > 0) _poll.Start();
+        _pollHeld = false;
+        if (_pollUsers > 0 && !_windowAway) _poll.Start();
     }
 
     [RelayCommand]
@@ -544,7 +575,7 @@ public partial class PlayViewModel : LocalizedViewModel
         ConfirmingServerStop = false;
         _launcherWait?.Cancel();
         IsBusy = true;
-        _poll.Stop();
+        HoldPolling();
 
         try
         {
@@ -598,7 +629,7 @@ public partial class PlayViewModel : LocalizedViewModel
 
         // The poll would otherwise redraw the card mid-stop and offer a Start for the gap between
         // the process going and the new one appearing.
-        _poll.Stop();
+        HoldPolling();
 
         try
         {

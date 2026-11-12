@@ -150,6 +150,8 @@ public partial class PlayViewModel
         PlayCommand.NotifyCanExecuteChanged();
         if (value || IsPlaying) return;
 
+        ForgetProfileReads();
+
         // The game has gone: "Playing as ..." no longer holds, and the window comes back if Play hid it.
         if (!PlayStatusIsError) PlayStatus = null;
         if (_stateBeforeGame is { } before && Application.Current?.MainWindow is { WindowState: WindowState.Minimized } window)
@@ -250,7 +252,7 @@ public partial class PlayViewModel
 
         if (remote)
         {
-            _ = ReadRemoteProfilesAsync(force: false);
+            if (ProfilesOnScreen || Profiles.Count == 0) _ = ReadRemoteProfilesAsync(force: false);
             return;
         }
 
@@ -278,7 +280,7 @@ public partial class PlayViewModel
         }
     }
 
-    // The Server Map server's profiles, asked for at most every 15 seconds unless forced.
+    // The Server Map server's profiles, asked for at most every 60 seconds unless forced.
     private async Task ReadRemoteProfilesAsync(bool force)
     {
         if (!force && (_readingRemote || DateTime.UtcNow - _remoteProfilesAt < ServerProfilesEvery)) return;

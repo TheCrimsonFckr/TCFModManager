@@ -14,7 +14,7 @@ namespace TCFModManager.App.ViewModels;
 //
 public partial class PlayViewModel
 {
-    private static readonly TimeSpan ServerProfilesEvery = TimeSpan.FromSeconds(15);
+    private static readonly TimeSpan ServerProfilesEvery = TimeSpan.FromSeconds(60);
 
     [ObservableProperty]
     private ProfileStatsView? _profileStats;
@@ -58,6 +58,15 @@ public partial class PlayViewModel
     private DateTime _serverProfilesAt;
     private bool _askingServer;
 
+    private bool ProfilesOnScreen => _profileUsers > 0 && !_windowAway;
+
+    private void ForgetProfileReads()
+    {
+        _serverProfilesAt = default;
+        _remoteProfilesAt = default;
+        _remoteStatsAt.Clear();
+    }
+
     // From Refresh, and when the picked profile changes.
     private void RefreshStats(string? installPath)
     {
@@ -86,7 +95,7 @@ public partial class PlayViewModel
         {
             ShowRemoteStats(item);
             StatsUnreadable = false;
-            _ = AskRemoteForStatsAsync(item.Profile.ProfileId);
+            if (ProfilesOnScreen) _ = AskRemoteForStatsAsync(item.Profile.ProfileId);
             return;
         }
 
@@ -98,7 +107,9 @@ public partial class PlayViewModel
         ShowStats(stats, progress, fromServer is not null, item.Title);
 
         if (Server?.IsRunning == true)
-            _ = AskServerForProfilesAsync();
+        {
+            if (ProfilesOnScreen) _ = AskServerForProfilesAsync();
+        }
         else if (_serverProfiles.Count > 0)
             _serverProfiles = new Dictionary<string, SptMiniProfile>();
     }

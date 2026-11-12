@@ -114,7 +114,10 @@ public partial class MainWindow : FluentWindow
         IsVisibleChanged += (_, _) =>
         {
             if (IsVisible) AppTray.OnWindowShown();
+            TellPlayWhetherAway();
         };
+
+        StateChanged += (_, _) => TellPlayWhetherAway();
 
         // Constructs and shows the mod details dialog when requested.
         AppServices.ModDetailsOverlay.Requested += async (_, request) =>
@@ -131,6 +134,9 @@ public partial class MainWindow : FluentWindow
             return dialog.ViewModel.MadeChanges;
         };
     }
+
+    private void TellPlayWhetherAway() =>
+        AppServices.Play.SetWindowAway(!IsVisible || WindowState == WindowState.Minimized);
 
     private static async Task SayServerAlreadyRunningAsync()
     {
