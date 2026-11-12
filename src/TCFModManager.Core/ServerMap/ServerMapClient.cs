@@ -32,6 +32,12 @@ public sealed class ServerMapClient : IDisposable
 
     public const string ProfilePath = "/tcfservermap/profile";
 
+    public const string ProfilesPath = "/tcfservermap/profiles";
+
+    public const string ClaimPath = "/tcfservermap/claim";
+
+    public const string OwnersCapability = "owners";
+
     public const string ClientHeaderName = "X-ServerMap-Client";
 
     public const string MapCapability = "map";
@@ -351,12 +357,12 @@ public sealed class ServerMapClient : IDisposable
     // One SPT profile as the server saved it, read into the launcher's profile-page figures. "since"
     // is the Written of the copy already held: an unchanged profile comes back without its body.
     //
-    public async Task<ServerMapProfileResult> ProfileAsync(string profileId, long? since,
+    public async Task<ServerMapProfileResult> ProfileAsync(string profileId, long? since, string? clientId = null,
         CancellationToken cancellationToken = default)
     {
         var path = $"{ProfilePath}?id={Uri.EscapeDataString(profileId)}" + (since is { } held ? $"&since={held}" : "");
 
-        var (problem, status, body, error) = await SendAsync(HttpMethod.Get, path, null, null, cancellationToken)
+        var (problem, status, body, error) = await SendAsync(HttpMethod.Get, path, null, clientId, cancellationToken)
             .ConfigureAwait(false);
 
         if (problem != ServerMapProblem.None)
@@ -376,6 +382,9 @@ public sealed class ServerMapClient : IDisposable
             var root = document.RootElement;
 
             long? written = root.TryGetProperty("written", out var w) && w.ValueKind == JsonValueKind.Number ? w.GetInt64() : null;
+
+            if (root.TryGetProperty("hidden", out var hidden) && hidden.ValueKind == JsonValueKind.True)
+                return new ServerMapProfileResult { Endpoint = _endpoint, State = ServerMapProfileState.Hidden, StatusCode = status };
 
             if (root.TryGetProperty("busy", out var busy) && busy.ValueKind == JsonValueKind.True)
                 return new ServerMapProfileResult { Endpoint = _endpoint, State = ServerMapProfileState.Busy, StatusCode = status };
@@ -398,6 +407,100 @@ public sealed class ServerMapClient : IDisposable
         catch (JsonException ex)
         {
             return new ServerMapProfileResult { Endpoint = _endpoint, Problem = ServerMapProblem.Failed, StatusCode = status, Error = ex };
+        }
+    }
+
+    //
+    // The host's profile rules for this machine, and the profiles it made. A Server Map without the
+    // route comes back as ProfileUnsupported: an older mod, which has no rules.
+    //
+    public async Task<ServerMapProfileRulesResult> ProfileRulesAsync(string clientId, CancellationToken cancellationToken = default)
+    {
+        var (problem, status, body, error) = await SendAsync(HttpMethod.Get, ProfilesPath, null, clientId, cancellationToken)
+            .ConfigureAwait(false);
+
+        if (problem != ServerMapProblem.None)
+        {
+            return new ServerMapProfileRulesResult
+            {
+                Endpoint = _endpoint,
+                Problem = problem == ServerMapProblem.MapUnsupported ? ServerMapProblem.ProfileUnsupported : problem,
+                StatusCode = status,
+                Error = error,
+            };
+        }
+
+        try
+        {
+            using var document = JsonDocument.Parse(body!);
+            var root = document.RootElement;
+
+            var owned = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            if (root.TryGetProperty("owned", out var list) && list.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var id in list.EnumerateArray())
+                    if (id.ValueKind == JsonValueKind.String && id.GetString() is { Length: > 0 } text) owned.Add(text);
+            }
+
+            return new ServerMapProfileRulesResult
+            {
+                Endpoint = _endpoint,
+                StatusCode = status,
+                Rules = new ServerMapProfileRules
+                {
+                    HideOtherProfiles = root.TryGetProperty("hideOtherProfiles", out var hide) && hide.ValueKind == JsonValueKind.True,
+                    ProtectOtherProfiles = root.TryGetProperty("protectOtherProfiles", out var protect) && protect.ValueKind == JsonValueKind.True,
+                    Owned = owned,
+                },
+            };
+        }
+        catch (JsonException ex)
+        {
+            return new ServerMapProfileRulesResult { Endpoint = _endpoint, Problem = ServerMapProblem.Failed, StatusCode = status, Error = ex };
+        }
+    }
+
+    // Tells the server this machine made the profile, so it is this machine's under the host's rules.
+    public async Task<ServerMapClaimResult> ClaimAsync(string clientId, string profileId, CancellationToken cancellationToken = default)
+    {
+        var (problem, status, body, error) = await SendAsync(HttpMethod.Post, ClaimPath,
+            JsonSerializer.Serialize(new { clientId, profileId }), clientId, cancellationToken).ConfigureAwait(false);
+
+        if (problem != ServerMapProblem.None)
+        {
+            return new ServerMapClaimResult
+            {
+                Endpoint = _endpoint,
+                Problem = problem == ServerMapProblem.MapUnsupported ? ServerMapProblem.ProfileUnsupported : problem,
+                StatusCode = status,
+                Error = error,
+            };
+        }
+
+        try
+        {
+            using var document = JsonDocument.Parse(body!);
+            var root = document.RootElement;
+            var claimed = root.TryGetProperty("claimed", out var c) && c.ValueKind == JsonValueKind.True;
+            var reason = root.TryGetProperty("reason", out var r) && r.ValueKind == JsonValueKind.String ? r.GetString() : null;
+
+            return new ServerMapClaimResult
+            {
+                Endpoint = _endpoint,
+                StatusCode = status,
+                Claimed = claimed,
+                Refusal = claimed ? ServerMapClaimRefusal.None : reason switch
+                {
+                    "ownedByAnother" => ServerMapClaimRefusal.OwnedByAnother,
+                    "noSuchProfile" => ServerMapClaimRefusal.NoSuchProfile,
+                    "tooOld" => ServerMapClaimRefusal.TooOld,
+                    _ => ServerMapClaimRefusal.NotSaved,
+                },
+            };
+        }
+        catch (JsonException ex)
+        {
+            return new ServerMapClaimResult { Endpoint = _endpoint, Problem = ServerMapProblem.Failed, StatusCode = status, Error = ex };
         }
     }
 

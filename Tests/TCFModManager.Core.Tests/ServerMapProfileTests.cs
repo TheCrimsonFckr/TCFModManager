@@ -79,6 +79,56 @@ public class ServerMapProfileTests
         Assert.Equal(ServerMapProblem.ProfileUnsupported, (await client.ProfileAsync("6ac8acae28793133fcefe63e", null)).Problem);
     }
 
+    [Fact]
+    public async Task AHiddenProfileIsAnAnswerWithNoFigures()
+    {
+        using var client = Client(HttpStatusCode.OK, """{"protocol":1,"profileId":"6ac8acae28793133fcefe63e","hidden":true,"profile":null}""");
+
+        var result = await client.ProfileAsync("6ac8acae28793133fcefe63e", null, "11111111-1111-1111-1111-111111111111");
+
+        Assert.True(result.Succeeded);
+        Assert.Equal(ServerMapProfileState.Hidden, result.State);
+        Assert.Null(result.Stats);
+    }
+
+    [Fact]
+    public async Task TheHostsRulesAndThisMachinesProfilesAreRead()
+    {
+        using var client = Client(HttpStatusCode.OK,
+            """{"protocol":1,"hideOtherProfiles":true,"protectOtherProfiles":false,"owned":["6ac8acae28793133fcefe63e"]}""");
+
+        var result = await client.ProfileRulesAsync("11111111-1111-1111-1111-111111111111");
+
+        Assert.True(result.Succeeded);
+        Assert.True(result.Rules!.HideOtherProfiles);
+        Assert.False(result.Rules.ProtectOtherProfiles);
+        Assert.True(result.Rules.Owns("6AC8ACAE28793133FCEFE63E"));
+        Assert.False(result.Rules.Owns("6abee519842869498c34024b"));
+    }
+
+    [Fact]
+    public async Task AServerMapWithoutRulesIsAnOlderMod()
+    {
+        using var client = Client(HttpStatusCode.NotFound, """{"protocol":1,"error":"No route '/profiles'."}""");
+
+        Assert.Equal(ServerMapProblem.ProfileUnsupported, (await client.ProfileRulesAsync("11111111-1111-1111-1111-111111111111")).Problem);
+    }
+
+    [Theory]
+    [InlineData("""{"protocol":1,"claimed":true,"reason":null}""", true, ServerMapClaimRefusal.None)]
+    [InlineData("""{"protocol":1,"claimed":false,"reason":"tooOld"}""", false, ServerMapClaimRefusal.TooOld)]
+    [InlineData("""{"protocol":1,"claimed":false,"reason":"ownedByAnother"}""", false, ServerMapClaimRefusal.OwnedByAnother)]
+    public async Task AClaimSaysWhetherItTook(string body, bool claimed, ServerMapClaimRefusal refusal)
+    {
+        using var client = Client(HttpStatusCode.OK, body);
+
+        var result = await client.ClaimAsync("11111111-1111-1111-1111-111111111111", "6ac8acae28793133fcefe63e");
+
+        Assert.True(result.Succeeded);
+        Assert.Equal(claimed, result.Claimed);
+        Assert.Equal(refusal, result.Refusal);
+    }
+
     private sealed class Canned(HttpStatusCode status, string body, List<string>? asked) : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)

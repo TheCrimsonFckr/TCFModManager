@@ -16,6 +16,63 @@ public enum ServerMapProfileState
 
     // The server caught the file mid-save. Worth asking again shortly.
     Busy,
+
+    // The host hides profiles other machines made, and this machine didn't make it.
+    Hidden,
+}
+
+// The host's profile rules as they apply to this machine, and the profiles it made (/profiles).
+public sealed record ServerMapProfileRules
+{
+    public bool HideOtherProfiles { get; init; }
+
+    public bool ProtectOtherProfiles { get; init; }
+
+    public IReadOnlySet<string> Owned { get; init; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+    public bool Owns(string profileId) => Owned.Contains(profileId);
+}
+
+public sealed record ServerMapProfileRulesResult
+{
+    public required ServerMapEndpoint Endpoint { get; init; }
+
+    public ServerMapProfileRules? Rules { get; init; }
+
+    public ServerMapProblem Problem { get; init; }
+
+    public int? StatusCode { get; init; }
+
+    public Exception? Error { get; init; }
+
+    public bool Succeeded => Problem == ServerMapProblem.None;
+}
+
+// Why /claim turned a claim down.
+public enum ServerMapClaimRefusal
+{
+    None,
+    OwnedByAnother,
+    NoSuchProfile,
+    TooOld,
+    NotSaved,
+}
+
+public sealed record ServerMapClaimResult
+{
+    public required ServerMapEndpoint Endpoint { get; init; }
+
+    public bool Claimed { get; init; }
+
+    public ServerMapClaimRefusal Refusal { get; init; }
+
+    public ServerMapProblem Problem { get; init; }
+
+    public int? StatusCode { get; init; }
+
+    public Exception? Error { get; init; }
+
+    public bool Succeeded => Problem == ServerMapProblem.None;
 }
 
 public sealed record ServerMapProfileResult

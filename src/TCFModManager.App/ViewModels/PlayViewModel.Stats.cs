@@ -167,7 +167,7 @@ public partial class PlayViewModel
         try
         {
             var since = _remoteStats.TryGetValue(profileId, out var held) ? held.Written : null;
-            var result = await client.ProfileAsync(profileId, since);
+            var result = await client.ProfileAsync(profileId, since, RemoteClientId());
             if (!IsRemotePlay) return;
 
             if (!result.Succeeded)
@@ -185,7 +185,7 @@ public partial class PlayViewModel
                     case ServerMapProfileState.Found:
                         _remoteStats[profileId] = (result.Stats!, result.Written);
                         break;
-                    case ServerMapProfileState.Missing:
+                    case ServerMapProfileState.Missing or ServerMapProfileState.Hidden:
                         _remoteStats.Remove(profileId);
                         break;
                     case ServerMapProfileState.Busy:

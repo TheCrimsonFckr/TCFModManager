@@ -31,7 +31,7 @@ public partial class PlayCard : UserControl
             Header = vm.WipeNextStart ? Strings.Play_DirectWipeCancel : Strings.Play_DirectWipe,
             ToolTip = vm.IsRemotePlay ? Strings.Play_RemoteWipeToolTip : Strings.Play_DirectWipeToolTip,
             Command = vm.ToggleWipeCommand,
-            IsEnabled = vm.SelectedProfile is not null && !vm.IsPlaying,
+            IsEnabled = vm.SelectedProfile is not null && !vm.IsPlaying && (vm.WipeNextStart || !vm.SelectedProfileIsProtected),
         });
         menu.Items.Add(new MenuItem
         {
@@ -45,7 +45,7 @@ public partial class PlayCard : UserControl
             Header = Strings.Play_DirectDeleteProfile,
             ToolTip = vm.IsRemotePlay ? Strings.Play_RemoteDeleteProfileToolTip : Strings.Play_DirectDeleteProfileToolTip,
             Command = vm.AskDeleteProfileCommand,
-            IsEnabled = vm.SelectedProfile is not null && !vm.IsPlaying && !vm.IsGameRunning,
+            IsEnabled = vm.SelectedProfile is not null && !vm.IsPlaying && !vm.IsGameRunning && !vm.SelectedProfileIsProtected,
         });
 
         menu.Items.Add(new Separator());

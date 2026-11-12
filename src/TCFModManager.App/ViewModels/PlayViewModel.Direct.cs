@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
+using TCFModManager.Core.ServerMap;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
@@ -76,9 +77,17 @@ public partial class PlayViewModel
     private DateTime _remoteProfilesAt;
     private bool _readingRemote;
 
+    // The connected server's profile rules for this machine. Null: none (or a mod too old to have any).
+    private ServerMapProfileRules? _remoteRules;
+
+    // The host doesn't let other machines delete or wipe this profile, and this machine didn't make it.
+    public bool SelectedProfileIsProtected =>
+        IsRemotePlay && SelectedProfile is { } p && _remoteRules is { ProtectOtherProfiles: true } rules && !rules.Owns(p.Profile.ProfileId);
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanPlay))]
     [NotifyPropertyChangedFor(nameof(WipeWarning))]
+    [NotifyPropertyChangedFor(nameof(SelectedProfileIsProtected))]
     [NotifyCanExecuteChangedFor(nameof(PlayCommand))]
     private PlayProfileItem? _selectedProfile;
 
@@ -206,6 +215,7 @@ public partial class PlayViewModel
         {
             IsRemotePlay = remote;
             RemoteProblem = null;
+            _remoteRules = null;
             ClearRemoteStats();
             WipeNextStart = false;
             _remoteProfilesAt = default;
@@ -288,9 +298,14 @@ public partial class PlayViewModel
                 var profiles = await api.ProfilesAsync();
                 if (!IsRemotePlay) return;
 
+                await ReadRemoteRulesAsync();
+                if (!IsRemotePlay) return;
+
                 RemoteProblem = null;
+                var hideOthers = _remoteRules is { HideOtherProfiles: true };
                 var listed = profiles
                     .Where(p => p.ProfileId.Length > 0 && p.Username.Length > 0)
+                    .Where(p => !hideOthers || _remoteRules!.Owns(p.ProfileId))
                     .OrderBy(p => p.Nickname.Length == 0 ? p.Username : p.Nickname, StringComparer.OrdinalIgnoreCase)
                     .ToList();
                 ApplyProfiles(listed, () => new SettingsService().Load().RemotePlayProfileId);
@@ -306,6 +321,59 @@ public partial class PlayViewModel
         {
             _readingRemote = false;
         }
+    }
+
+    private async Task ReadRemoteRulesAsync()
+    {
+        using var client = RemoteMapClient();
+        if (client is null)
+        {
+            _remoteRules = null;
+        }
+        else
+        {
+            var result = await client.ProfileRulesAsync(RemoteClientId());
+            if (result.Succeeded) _remoteRules = result.Rules;
+            else if (result.Problem == ServerMapProblem.ProfileUnsupported) _remoteRules = null;
+            else AppLog.Debug("DirectLaunch", $"the Server Map server didn't send its profile rules: {result.Problem} {result.Error?.Message}");
+        }
+
+        OnPropertyChanged(nameof(SelectedProfileIsProtected));
+    }
+
+    // True when the new profile is this machine's, or the server has no profile rules to need it.
+    private async Task<bool> ClaimNewProfileAsync(SptLauncherApi api, string username, CancellationToken ct)
+    {
+        using var client = RemoteMapClient();
+        if (client is null) return true;
+
+        var made = (await api.ProfilesAsync(ct)).FirstOrDefault(p => string.Equals(p.Username, username, StringComparison.Ordinal));
+        if (made is null || made.ProfileId.Length == 0) return false;
+
+        var result = await client.ClaimAsync(RemoteClientId(), made.ProfileId, ct);
+        if (result.Succeeded && result.Claimed) return true;
+        if (result.Problem == ServerMapProblem.ProfileUnsupported) return true;
+
+        AppLog.Warn("DirectLaunch", $"couldn't claim {username} on the Server Map server: {result.Problem} {result.Refusal} {result.Error?.Message}");
+        return false;
+    }
+
+    private static ServerMapClient? RemoteMapClient()
+    {
+        var map = new SettingsService().Load().ServerMap;
+        if (!map.IsConfigured || string.IsNullOrWhiteSpace(map.PinnedThumbprint)) return null;
+        return ServerMapClient.TryCreate(map.ToEndpoint());
+    }
+
+    // This machine's Server Map identity, made the first time it is needed.
+    private static string RemoteClientId()
+    {
+        var service = new SettingsService();
+        var settings = service.Load();
+        var before = settings.ServerMap.ClientId;
+        var id = ServerMapReporting.EnsureClientId(settings.ServerMap);
+        if (before != id) service.Save(settings);
+        return id;
     }
 
     // Null when Server Map has no server, or hasn't checked its certificate yet.
@@ -549,6 +617,12 @@ public partial class PlayViewModel
     private void ToggleWipe()
     {
         if (SelectedProfile is null) return;
+        if (!WipeNextStart && SelectedProfileIsProtected)
+        {
+            Fail(Strings.Play_RemoteProtected);
+            return;
+        }
+
         WipeNextStart = !WipeNextStart;
     }
 
@@ -619,12 +693,14 @@ public partial class PlayViewModel
                 return;
             }
 
+            var claimed = !IsRemotePlay || await ClaimNewProfileAsync(api, name, ct);
+
             ShowNewProfile = false;
             Refresh();
             if (IsRemotePlay) await ReadRemoteProfilesAsync(force: true);
             SelectedProfile = Profiles.FirstOrDefault(p => p.Profile.Username == name) ?? SelectedProfile;
-            PlayStatusIsError = false;
-            PlayStatus = Text(Strings.Play_DirectProfileCreatedFormat, name);
+            PlayStatusIsError = !claimed;
+            PlayStatus = Text(claimed ? Strings.Play_DirectProfileCreatedFormat : Strings.Play_RemoteNotClaimedFormat, name);
         });
     }
 
@@ -645,6 +721,12 @@ public partial class PlayViewModel
         if (SelectedProfile is null || IsPlaying) return;
         ShowNewProfile = false;
         PlayStatus = null;
+        if (SelectedProfileIsProtected)
+        {
+            Fail(Strings.Play_RemoteProtected);
+            return;
+        }
+
         OnPropertyChanged(nameof(DeleteProfileWarning));
         ConfirmingDeleteProfile = true;
     }
@@ -657,6 +739,12 @@ public partial class PlayViewModel
     {
         if (!ConfirmingDeleteProfile || SelectedProfile is not { } item) return;
         ConfirmingDeleteProfile = false;
+
+        if (SelectedProfileIsProtected)
+        {
+            Fail(Strings.Play_RemoteProtected);
+            return;
+        }
 
         if (IsGameRunning)
         {

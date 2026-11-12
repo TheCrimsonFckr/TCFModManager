@@ -5948,6 +5948,28 @@ The details are in the log:
   <data name="ServerMap_RefreshMap" xml:space="preserve">
     <value>Refresh</value>
   </data>
+  <data name="ServerMap_OwnersHeader" xml:space="preserve">
+    <value>Who owns each profile</value>
+  </data>
+  <data name="ServerMap_OwnersDescription" xml:space="preserve">
+    <value>A profile made in TCF Mod Manager on another machine belongs to that machine. Give the others to a machine here. This matters when Options hides or protects other machines' profiles.</value>
+  </data>
+  <data name="ServerMap_OwnersNone" xml:space="preserve">
+    <value>No profiles on this server yet.</value>
+  </data>
+  <data name="ServerMap_OwnerNobody" xml:space="preserve">
+    <value>Nobody - only this machine</value>
+  </data>
+  <data name="ServerMap_OwnerUnknownFormat" xml:space="preserve">
+    <value>A machine no longer on the map ({0})</value>
+    <comment>{0} is the start of the machine's id.</comment>
+  </data>
+  <data name="ServerMap_OwnerFailed" xml:space="preserve">
+    <value>Couldn't save who owns that profile.</value>
+  </data>
+  <data name="ServerMap_OwnerToolTip" xml:space="preserve">
+    <value>The machine this profile belongs to.</value>
+  </data>
   <data name="ServerMap_RefreshMapToolTip" xml:space="preserve">
     <value>Ask the server again who reports to it. The page also does this every minute while it is open.</value>
   </data>
@@ -6181,6 +6203,21 @@ The details are in the log:
   </data>
   <data name="Options_ServerMapLanOnlyHint" xml:space="preserve">
     <value>Refuses every Server Map request from outside this machine's network - players connecting over the internet no longer see your list or the map. Tailscale peers still count as local. Takes effect straight away; needs the Server Map mod 0.2.0 or later, stub included.</value>
+  </data>
+  <data name="Options_ServerMapHideOtherProfiles" xml:space="preserve">
+    <value>Hide other machines' profiles</value>
+  </data>
+  <data name="Options_ServerMapHideOtherProfilesHint" xml:space="preserve">
+    <value>Players on other machines see only the profiles they made in TCF Mod Manager. Give older profiles to a machine on the Server map page. SPT's own launcher still shows every profile.</value>
+  </data>
+  <data name="Options_ServerMapProtectOtherProfiles" xml:space="preserve">
+    <value>Stop other machines deleting profiles</value>
+  </data>
+  <data name="Options_ServerMapProtectOtherProfilesHint" xml:space="preserve">
+    <value>TCF Mod Manager on other machines can only delete or wipe profiles that machine made. SPT's own launcher isn't stopped.</value>
+  </data>
+  <data name="Options_ServerMapProfileRulesFailed" xml:space="preserve">
+    <value>Couldn't save that setting to this server's servermap.json.</value>
   </data>
   <data name="Options_ServerMapLanOnlyFailed" xml:space="preserve">
     <value>Couldn't save that setting - see the log.</value>
@@ -9364,6 +9401,13 @@ See Dependencies and Conflicts.</value>
   </data>
   <data name="Play_RemoteWipeToolTip" xml:space="preserve">
     <value>The next Play starts this profile over with a new character, as the SPT launcher's wipe does. The profile is on another machine, so no copy is kept here.</value>
+  </data>
+  <data name="Play_RemoteProtected" xml:space="preserve">
+    <value>The server's host doesn't let other machines delete or wipe this profile. It wasn't made on this machine.</value>
+  </data>
+  <data name="Play_RemoteNotClaimedFormat" xml:space="preserve">
+    <value>Made {0}, but the server didn't record it as this machine's, so it may not show here. Ask the host to give it to you on their Server map page.</value>
+    <comment>{0} is a profile name.</comment>
   </data>
   <data name="Play_RemoteNewProfileToolTip" xml:space="preserve">
     <value>Make a profile on the connected server - a name and a starting edition.</value>

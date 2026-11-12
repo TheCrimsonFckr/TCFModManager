@@ -13,6 +13,7 @@
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
         <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
+        <converters:InverseBooleanConverter x:Key="Inverse" />
         <ItemsPanelTemplate x:Key="StatCells">
             <WrapPanel />
         </ItemsPanelTemplate>
@@ -90,7 +91,8 @@
                         Content="{loc:Str Play_DirectDeleteProfile}"
                         Icon="{ui:SymbolIcon Delete24}"
                         ToolTip="{loc:Str Play_RemoteDeleteProfileToolTip}"
-                        Command="{Binding AskDeleteProfileCommand}" />
+                        Command="{Binding AskDeleteProfileCommand}"
+                        IsEnabled="{Binding SelectedProfileIsProtected, Converter={StaticResource Inverse}}" />
                 </StackPanel>
                 <TextBlock
                     Margin="0,0,0,8"

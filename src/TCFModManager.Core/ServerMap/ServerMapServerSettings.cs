@@ -18,20 +18,28 @@ public static class ServerMapServerSettings
 
     public const string LanOnlyProperty = "lanOnly";
 
+    public const string HideOtherProfilesProperty = "hideOtherProfiles";
+
+    public const string ProtectOtherProfilesProperty = "protectOtherProfiles";
+
     // Null when this machine runs no Server Map server.
     public static string? PathFor(string? sptInstallPath, string? appDirectory = null) =>
         ServerMapKeyFile.TryFind(sptInstallPath, out var key, appDirectory)
             ? Path.Combine(Path.GetDirectoryName(key)!, FileName)
             : null;
 
-    public static bool ReadLanOnly(string path)
+    public static bool ReadLanOnly(string path) => ReadSwitch(path, LanOnlyProperty);
+
+    public static bool TryWriteLanOnly(string path, bool lanOnly) => TryWriteSwitch(path, LanOnlyProperty, lanOnly);
+
+    public static bool ReadSwitch(string path, string property)
     {
         try
         {
             if (!File.Exists(path)) return false;
 
             return JsonNode.Parse(File.ReadAllText(path)) is JsonObject root
-                && root.FirstOrDefault(p => string.Equals(p.Key, LanOnlyProperty, StringComparison.OrdinalIgnoreCase))
+                && root.FirstOrDefault(p => string.Equals(p.Key, property, StringComparison.OrdinalIgnoreCase))
                     .Value is JsonValue value
                 && value.TryGetValue<bool>(out var on)
                 && on;
@@ -42,7 +50,7 @@ public static class ServerMapServerSettings
         }
     }
 
-    public static bool TryWriteLanOnly(string path, bool lanOnly)
+    public static bool TryWriteSwitch(string path, string property, bool on)
     {
         try
         {
@@ -60,16 +68,16 @@ public static class ServerMapServerSettings
             }
 
             foreach (var key in root.Select(p => p.Key)
-                         .Where(k => string.Equals(k, LanOnlyProperty, StringComparison.OrdinalIgnoreCase)).ToList())
+                         .Where(k => string.Equals(k, property, StringComparison.OrdinalIgnoreCase)).ToList())
                 root.Remove(key);
 
-            root[LanOnlyProperty] = lanOnly;
+            root[property] = on;
 
             var temp = path + ".tmp";
             File.WriteAllText(temp, root.ToJsonString(new JsonSerializerOptions { WriteIndented = true }));
             File.Move(temp, path, overwrite: true);
 
-            AppLog.Info("ServerMap", lanOnly ? "LAN-only switched on" : "LAN-only switched off");
+            AppLog.Info("ServerMap", $"{property} switched {(on ? "on" : "off")}");
             return true;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)

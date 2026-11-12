@@ -1643,6 +1643,13 @@ internal static class Strings
     internal static string ServerMap_MapUnsupported => LocalizationService.Get("ServerMap_MapUnsupported");
     internal static string ServerMap_MapUnavailable => LocalizationService.Get("ServerMap_MapUnavailable");
     internal static string ServerMap_RefreshMap => LocalizationService.Get("ServerMap_RefreshMap");
+    internal static string ServerMap_OwnersHeader => LocalizationService.Get("ServerMap_OwnersHeader");
+    internal static string ServerMap_OwnersDescription => LocalizationService.Get("ServerMap_OwnersDescription");
+    internal static string ServerMap_OwnersNone => LocalizationService.Get("ServerMap_OwnersNone");
+    internal static string ServerMap_OwnerNobody => LocalizationService.Get("ServerMap_OwnerNobody");
+    internal static string ServerMap_OwnerUnknownFormat => LocalizationService.Get("ServerMap_OwnerUnknownFormat");
+    internal static string ServerMap_OwnerFailed => LocalizationService.Get("ServerMap_OwnerFailed");
+    internal static string ServerMap_OwnerToolTip => LocalizationService.Get("ServerMap_OwnerToolTip");
     internal static string ServerMap_RefreshMapToolTip => LocalizationService.Get("ServerMap_RefreshMapToolTip");
     internal static string ServerMap_ThisMachine => LocalizationService.Get("ServerMap_ThisMachine");
     internal static string ServerMap_RoleServer => LocalizationService.Get("ServerMap_RoleServer");
@@ -1721,6 +1728,11 @@ internal static class Strings
     internal static string ServerMap_LanOnly => LocalizationService.Get("ServerMap_LanOnly");
     internal static string Options_ServerMapLanOnly => LocalizationService.Get("Options_ServerMapLanOnly");
     internal static string Options_ServerMapLanOnlyHint => LocalizationService.Get("Options_ServerMapLanOnlyHint");
+    internal static string Options_ServerMapHideOtherProfiles => LocalizationService.Get("Options_ServerMapHideOtherProfiles");
+    internal static string Options_ServerMapHideOtherProfilesHint => LocalizationService.Get("Options_ServerMapHideOtherProfilesHint");
+    internal static string Options_ServerMapProtectOtherProfiles => LocalizationService.Get("Options_ServerMapProtectOtherProfiles");
+    internal static string Options_ServerMapProtectOtherProfilesHint => LocalizationService.Get("Options_ServerMapProtectOtherProfilesHint");
+    internal static string Options_ServerMapProfileRulesFailed => LocalizationService.Get("Options_ServerMapProfileRulesFailed");
     internal static string Options_ServerMapLanOnlyFailed => LocalizationService.Get("Options_ServerMapLanOnlyFailed");
     internal static string AppUpdate_ServerMapHeader => LocalizationService.Get("AppUpdate_ServerMapHeader");
     internal static string AppUpdate_ServerMapLocalLabel => LocalizationService.Get("AppUpdate_ServerMapLocalLabel");
@@ -2570,6 +2582,8 @@ internal static class Strings
     internal static string Play_RemoteUnreachableFormat => LocalizationService.Get("Play_RemoteUnreachableFormat");
     internal static string Play_RemoteWipeArmedFormat => LocalizationService.Get("Play_RemoteWipeArmedFormat");
     internal static string Play_RemoteWipeToolTip => LocalizationService.Get("Play_RemoteWipeToolTip");
+    internal static string Play_RemoteProtected => LocalizationService.Get("Play_RemoteProtected");
+    internal static string Play_RemoteNotClaimedFormat => LocalizationService.Get("Play_RemoteNotClaimedFormat");
     internal static string Play_RemoteNewProfileToolTip => LocalizationService.Get("Play_RemoteNewProfileToolTip");
     internal static string Play_RemoteDeleteProfileToolTip => LocalizationService.Get("Play_RemoteDeleteProfileToolTip");
     internal static string Play_RemoteDeleteWarningFormat => LocalizationService.Get("Play_RemoteDeleteWarningFormat");

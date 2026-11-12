@@ -55,6 +55,9 @@ public sealed partial class ServerMapGateViewModel
         _loadingLanOnly = true;
         ServerLanOnly = path is not null && ServerMapServerSettings.ReadLanOnly(path);
         _loadingLanOnly = false;
+
+        RefreshProfileRules(path);
+        RefreshProfileOwners(sptInstallPath);
     }
 
     partial void OnServerLanOnlyChanged(bool value)

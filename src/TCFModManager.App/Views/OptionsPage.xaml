@@ -1093,6 +1093,39 @@
                                 Style="{StaticResource RowSwitch}"
                                 IsChecked="{Binding ServerLanOnly, Mode=TwoWay}" />
                         </Grid>
+                        <!-- Profile rules for other machines, read by TCF Mod Manager on those machines. -->
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapHideOtherProfiles}" />
+                                <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapHideOtherProfilesHint}" />
+                            </StackPanel>
+                            <ui:ToggleSwitch
+                                Grid.Column="1"
+                                Margin="14,0,0,0"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource RowSwitch}"
+                                IsChecked="{Binding ServerHideOtherProfiles, Mode=TwoWay}" />
+                        </Grid>
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapProtectOtherProfiles}" />
+                                <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapProtectOtherProfilesHint}" />
+                            </StackPanel>
+                            <ui:ToggleSwitch
+                                Grid.Column="1"
+                                Margin="14,0,0,0"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource RowSwitch}"
+                                IsChecked="{Binding ServerProtectOtherProfiles, Mode=TwoWay}" />
+                        </Grid>
 
                         <TextBlock
                             Style="{StaticResource SettingHint}"
