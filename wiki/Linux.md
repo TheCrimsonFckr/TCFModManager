@@ -7,6 +7,9 @@ TCF Mod Manager is a Windows app, but it runs on Linux under **Wine** or **Proto
 - **Wine 10 or newer**, or **Proton 10 / GE-Proton10 or newer**. Wine 9 and Proton 9 don't start the release build.
 - SPT already working in that prefix.
 
+> [!NOTE]
+> Tested on Wine 10 and Wine 11. **Proton and GE-Proton haven't been tested yet** - if you run it under Proton, please report how it went on the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues).
+
 ## Install
 1. Extract `TCF-ModManager-<version>.zip` into your SPT folder as `<SPT root>\TCFModManager\`, as on Windows - see [Install](Install).
 2. Start `TCFModManager.exe` in the game's prefix. Any of these work:
