@@ -273,6 +273,7 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
     public static void ApplyInProcess()
     {
         VerifyPayload();
+        LoadReferencedAssemblies();
 
         var placed = new List<string>();
         var movedAside = new List<(string Target, string Aside)>();
@@ -349,6 +350,33 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
         catch (Exception ex) when (ex is ArgumentException or InvalidOperationException or System.ComponentModel.Win32Exception)
         {
         }
+    }
+
+    private static void LoadReferencedAssemblies()
+    {
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var pending = new Queue<System.Reflection.Assembly>(AppDomain.CurrentDomain.GetAssemblies());
+        foreach (var assembly in pending) seen.Add(assembly.GetName().Name ?? string.Empty);
+
+        var failed = 0;
+        while (pending.Count > 0)
+        {
+            foreach (var reference in pending.Dequeue().GetReferencedAssemblies())
+            {
+                if (reference.Name is null || !seen.Add(reference.Name)) continue;
+
+                try
+                {
+                    pending.Enqueue(System.Reflection.Assembly.Load(reference));
+                }
+                catch (Exception ex) when (ex is FileNotFoundException or FileLoadException or BadImageFormatException)
+                {
+                    failed++;
+                }
+            }
+        }
+
+        AppLog.Info("AppUpdate", $"{AppDomain.CurrentDomain.GetAssemblies().Length} assemblies loaded before the swap ({failed} not found)");
     }
 
     private static void RollBack(List<string> placed, List<(string Target, string Aside)> movedAside)

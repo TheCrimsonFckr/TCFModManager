@@ -15,6 +15,9 @@ TCF Mod Manager is a Windows app, but it runs on Linux under **Wine** or **Proto
    - umu / Lutris / Bottles / Heroic: run the exe inside the same prefix the game uses.
 3. In **Options**, set the SPT install folder as the prefix sees it - `Z:\home\you\...` for a folder on your Linux drive, or the prefix's own `C:\...` path.
 
+> [!NOTE]
+> Coming from a version older than 1.28.0-beta under Wine? Its built-in update can't run there - close the app and extract 1.28.0-beta over it by hand. From 1.28.0-beta on, App updates work.
+
 ## What works
 Browsing, installing, updating, disabling, mod lists, configs, the Play page and Server, and [App updates](App-updates). Links open in your Linux browser.
 

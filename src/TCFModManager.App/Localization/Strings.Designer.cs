@@ -457,6 +457,8 @@ internal static class Strings
     internal static string AppUpdate_StagedTooSmallSizedFormat => LocalizationService.Get("AppUpdate_StagedTooSmallSizedFormat");
     internal static string AppUpdate_StagedTooSmallFormat => LocalizationService.Get("AppUpdate_StagedTooSmallFormat");
     internal static string AppUpdate_UpdaterWouldNotStartFormat => LocalizationService.Get("AppUpdate_UpdaterWouldNotStartFormat");
+    internal static string AppUpdate_SwapFailedFormat => LocalizationService.Get("AppUpdate_SwapFailedFormat");
+    internal static string AppUpdate_RestartFailed => LocalizationService.Get("AppUpdate_RestartFailed");
     internal static string AppUpdate_FolderNotWritableFormat => LocalizationService.Get("AppUpdate_FolderNotWritableFormat");
     internal static string AppUpdate_NoSpaceSizedFormat => LocalizationService.Get("AppUpdate_NoSpaceSizedFormat");
     internal static string AppUpdate_NoSpaceFormat => LocalizationService.Get("AppUpdate_NoSpaceFormat");
@@ -1572,6 +1574,7 @@ internal static class Strings
     internal static string Options_UpdateInterval6Hours => LocalizationService.Get("Options_UpdateInterval6Hours");
     internal static string Options_UpdateInterval12Hours => LocalizationService.Get("Options_UpdateInterval12Hours");
     internal static string Options_UpdateNotificationsNote => LocalizationService.Get("Options_UpdateNotificationsNote");
+    internal static string Options_UpdateNotificationsWine => LocalizationService.Get("Options_UpdateNotificationsWine");
     internal static string UpdateToast_Title(int count, params object?[] values) =>
         LocalizationService.Plural("UpdateToast_Title", count, values);
     internal static string UpdateToast_ItemFormat => LocalizationService.Get("UpdateToast_ItemFormat");
