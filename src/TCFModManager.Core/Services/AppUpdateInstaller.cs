@@ -42,6 +42,13 @@ public enum AppUpdateFailure
 
     // Carries DriveName, RequiredBytes, AvailableBytes.
     NotEnoughFreeSpace,
+
+    // Under Wine: the staged build couldn't be copied over the running one. Everything already
+    // copied was put back. Carries Folder - the staged payload, left for a copy by hand.
+    SwapFailed,
+
+    // Under Wine: the new build is in place but wouldn't start. Carries Folder - the app folder.
+    RestartFailed,
 }
 
 //
@@ -93,6 +100,8 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
     private const string ScriptName = "apply-update.ps1";
     private const string LogName = "apply-update.log";
     private const string PayloadFolderName = "payload";
+    private const string ReplacedFolderName = "replaced";
+    private const string AfterUpdateArgument = "--after-update";
 
     // Hidden, and a sibling of Data\/Staging\ rather than a temp folder, so the swap never has to
     // cross a volume boundary and the whole app folder stays self-contained.
@@ -101,6 +110,8 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
     private static string AppDirectory => AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar);
 
     private static string PayloadDirectory => Path.Combine(UpdateDirectory, PayloadFolderName);
+
+    private static string ReplacedDirectory => Path.Combine(UpdateDirectory, ReplacedFolderName);
 
     //
     // Called once at startup. Reports the outcome of a previous update attempt into the app's own
@@ -124,6 +135,7 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
             }
 
             if (Directory.Exists(PayloadDirectory)) Directory.Delete(PayloadDirectory, recursive: true);
+            if (Directory.Exists(ReplacedDirectory)) Directory.Delete(ReplacedDirectory, recursive: true);
             foreach (var zip in Directory.EnumerateFiles(UpdateDirectory, "*.zip")) File.Delete(zip);
 
             // The script itself is usually still locked by the PowerShell process that relaunched
@@ -255,6 +267,114 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
         catch (Exception ex)
         {
             throw new AppUpdateException(AppUpdateFailure.UpdaterWouldNotStart, ex) { Folder = PayloadDirectory };
+        }
+    }
+
+    public static void ApplyInProcess()
+    {
+        VerifyPayload();
+
+        var placed = new List<string>();
+        var movedAside = new List<(string Target, string Aside)>();
+
+        AppLog.Info("AppUpdate", $"swapping in the staged build in-process from {PayloadDirectory}");
+
+        try
+        {
+            foreach (var source in Directory.EnumerateFiles(PayloadDirectory, "*", SearchOption.AllDirectories))
+            {
+                var relative = Path.GetRelativePath(PayloadDirectory, source);
+                var target = Path.Combine(AppDirectory, relative);
+                Directory.CreateDirectory(Path.GetDirectoryName(target)!);
+
+                if (File.Exists(target))
+                {
+                    var aside = Path.Combine(ReplacedDirectory, relative);
+                    Directory.CreateDirectory(Path.GetDirectoryName(aside)!);
+                    if (File.Exists(aside)) File.Delete(aside);
+                    File.Move(target, aside);
+                    movedAside.Add((target, aside));
+                }
+
+                placed.Add(target);
+                File.Copy(source, target);
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.Warn("AppUpdate", $"in-process swap failed, putting the previous build back: {ex.Message}");
+            RollBack(placed, movedAside);
+            throw new AppUpdateException(AppUpdateFailure.SwapFailed, ex) { Folder = PayloadDirectory };
+        }
+
+        AppLog.Info("AppUpdate", $"swapped in {placed.Count} file(s), {movedAside.Count} replaced");
+    }
+
+    public static void StartUpdatedApp()
+    {
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = Path.Combine(AppDirectory, ExeName),
+            UseShellExecute = false,
+            WorkingDirectory = AppDirectory,
+        };
+        startInfo.ArgumentList.Add(AfterUpdateArgument);
+        startInfo.ArgumentList.Add(Environment.ProcessId.ToString(CultureInfo.InvariantCulture));
+
+        AppLog.Info("AppUpdate", "starting the new build");
+        AppLog.Flush();
+
+        try
+        {
+            Process.Start(startInfo);
+        }
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or IOException or InvalidOperationException)
+        {
+            throw new AppUpdateException(AppUpdateFailure.RestartFailed, ex) { Folder = AppDirectory };
+        }
+    }
+
+    public static void WaitForPreviousCopy(IReadOnlyList<string> args)
+    {
+        var index = args.ToList().FindIndex(a => string.Equals(a, AfterUpdateArgument, StringComparison.OrdinalIgnoreCase));
+        if (index < 0 || index + 1 >= args.Count) return;
+        if (!int.TryParse(args[index + 1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var processId)) return;
+
+        try
+        {
+            using var previous = Process.GetProcessById(processId);
+            if (!previous.WaitForExit(TimeSpan.FromSeconds(60)))
+                AppLog.Warn("AppUpdate", $"the previous build (PID {processId}) is still running after 60s");
+        }
+        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException or System.ComponentModel.Win32Exception)
+        {
+        }
+    }
+
+    private static void RollBack(List<string> placed, List<(string Target, string Aside)> movedAside)
+    {
+        foreach (var target in Enumerable.Reverse(placed))
+        {
+            try
+            {
+                if (File.Exists(target)) File.Delete(target);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                AppLog.Warn("AppUpdate", $"couldn't remove {target} while rolling back: {ex.Message}");
+            }
+        }
+
+        foreach (var (target, aside) in Enumerable.Reverse(movedAside))
+        {
+            try
+            {
+                File.Move(aside, target, overwrite: true);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                AppLog.Error("AppUpdate", $"couldn't put {target} back from {aside}: {ex.Message}");
+            }
         }
     }
 

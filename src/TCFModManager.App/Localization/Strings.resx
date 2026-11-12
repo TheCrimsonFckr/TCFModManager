@@ -1610,6 +1610,13 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Couldn't start the updater script. The new version is downloaded and unpacked in {0} - close the app and copy what's in there over this folder to finish by hand.</value>
     <comment>{0} is a folder path.</comment>
   </data>
+  <data name="AppUpdate_SwapFailedFormat" xml:space="preserve">
+    <value>Couldn't copy the new version over this one, so nothing was changed. The new version is unpacked in {0} - close the app and copy what's in there over this folder to finish by hand.</value>
+    <comment>{0} is a folder path.</comment>
+  </data>
+  <data name="AppUpdate_RestartFailed" xml:space="preserve">
+    <value>The new version is in place but didn't start. Close the app and start it again.</value>
+  </data>
   <data name="AppUpdate_FolderNotWritableFormat" xml:space="preserve">
     <value>This app can't write to its own folder ({0}), so it can't update itself in place. Move it somewhere outside Program Files, or download the new version from the mod page and replace it by hand.</value>
     <comment>{0} is a folder path. Program Files is a Windows folder - use whatever Windows calls it in your language.</comment>
@@ -5712,6 +5719,10 @@ The details are in the log:
   <data name="Options_UpdateNotificationsNote" xml:space="preserve">
     <value>The first check runs one interval after the app starts, and checks stop when the app quits - closing the window quits it, unless it's kept in the tray. No notifications? Check that TCF Mod Manager is allowed to show them in Windows Settings &gt; System &gt; Notifications.</value>
     <comment>Windows Settings &gt; System &gt; Notifications is the path in Windows; use the names Windows itself shows in your language.</comment>
+  </data>
+  <data name="Options_UpdateNotificationsWine" xml:space="preserve">
+    <value>Not available under Wine. The Installed page still shows mod updates.</value>
+    <comment>Wine is the program that runs Windows apps on Linux; keep the name.</comment>
   </data>
   <data name="UpdateToast_Title_one" xml:space="preserve">
     <value>Mod update available</value>

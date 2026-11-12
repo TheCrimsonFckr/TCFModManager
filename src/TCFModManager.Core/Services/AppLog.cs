@@ -85,6 +85,8 @@ public static class AppLog
             .AppendLine($"Data folder: {AppPaths.DataDirectory}")
             .AppendLine($"Log level: {MinimumLevel} (create a file named \"verbose\" here for Debug)");
 
+        if (WineHost.Description is { } wine) header.AppendLine(wine);
+
         if (!string.IsNullOrWhiteSpace(extraContext)) header.AppendLine(extraContext);
 
         header.Append("========================================================");

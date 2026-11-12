@@ -295,6 +295,12 @@
   <data name="AppUpdate_UpdaterWouldNotStartFormat" xml:space="preserve">
     <value>Impossible de démarrer le script de mise à jour. La nouvelle version est téléchargée et décompressée dans {0} - fermez l'application et copiez ce qui s'y trouve par-dessus ce dossier pour terminer à la main.</value>
   </data>
+  <data name="AppUpdate_SwapFailedFormat" xml:space="preserve">
+    <value>Impossible de copier la nouvelle version par-dessus celle-ci, rien n'a donc été modifié. La nouvelle version est décompressée dans {0} - fermez l'application et copiez ce qui s'y trouve par-dessus ce dossier pour terminer à la main.</value>
+  </data>
+  <data name="AppUpdate_RestartFailed" xml:space="preserve">
+    <value>La nouvelle version est en place mais n'a pas démarré. Fermez l'application et relancez-la.</value>
+  </data>
   <data name="AppUpdate_UpToDate" xml:space="preserve">
     <value>Vous avez la dernière version publiée sur sp-mod.com.</value>
   </data>
@@ -4511,6 +4517,9 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   </data>
   <data name="Options_UpdateNotificationsNote" xml:space="preserve">
     <value>La première vérification a lieu un intervalle après le démarrage de l'application, et les vérifications s'arrêtent quand elle quitte - fermer la fenêtre la quitte, sauf si elle reste dans la zone de notification. Pas de notifications ? Vérifiez que TCF Mod Manager a le droit d'en afficher dans Paramètres Windows &gt; Système &gt; Notifications.</value>
+  </data>
+  <data name="Options_UpdateNotificationsWine" xml:space="preserve">
+    <value>Non disponible sous Wine. La page Installés affiche toujours les mises à jour des mods.</value>
   </data>
   <data name="UpdateToast_Title_one" xml:space="preserve">
     <value>Mise à jour de mod disponible</value>

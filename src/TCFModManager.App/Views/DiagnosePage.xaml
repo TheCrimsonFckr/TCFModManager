@@ -107,7 +107,7 @@
                                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                 Text="{Binding WhereText}" />
                                             <TextBlock
-                                                FontFamily="Consolas"
+                                                FontFamily="Consolas, DejaVu Sans Mono, Liberation Mono, Tahoma"
                                                 FontSize="11"
                                                 TextWrapping="Wrap"
                                                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"

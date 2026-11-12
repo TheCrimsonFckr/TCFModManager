@@ -112,7 +112,7 @@
                 <ui:TextBox
                     x:Name="HexBox"
                     Grid.Column="2"
-                    FontFamily="Consolas, Cascadia Mono"
+                    FontFamily="Consolas, Cascadia Mono, DejaVu Sans Mono, Liberation Mono, Tahoma"
                     PlaceholderText="{Binding Placeholder}"
                     Text="{Binding Hex, UpdateSourceTrigger=PropertyChanged}"
                     ToolTip="{loc:Str ThemeEditor_HexToolTip}" />

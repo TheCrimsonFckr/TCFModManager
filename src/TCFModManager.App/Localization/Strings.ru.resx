@@ -295,6 +295,12 @@
   <data name="AppUpdate_UpdaterWouldNotStartFormat" xml:space="preserve">
     <value>Не удалось запустить скрипт обновления. Новая версия скачана и распакована в {0} - закройте приложение и скопируйте содержимое этой папки поверх текущей, чтобы завершить вручную.</value>
   </data>
+  <data name="AppUpdate_SwapFailedFormat" xml:space="preserve">
+    <value>Не удалось скопировать новую версию поверх текущей, поэтому ничего не изменено. Новая версия распакована в {0} - закройте приложение и скопируйте содержимое этой папки поверх текущей, чтобы завершить вручную.</value>
+  </data>
+  <data name="AppUpdate_RestartFailed" xml:space="preserve">
+    <value>Новая версия установлена, но не запустилась. Закройте приложение и запустите его снова.</value>
+  </data>
   <data name="AppUpdate_UpToDate" xml:space="preserve">
     <value>У вас самая новая версия из опубликованных на sp-mod.com.</value>
   </data>
@@ -4715,6 +4721,9 @@
   </data>
   <data name="Options_UpdateNotificationsNote" xml:space="preserve">
     <value>Первая проверка проходит через один интервал после запуска приложения, а при выходе из приложения проверки прекращаются - закрытие окна завершает приложение, если оно не оставлено в области уведомлений. Нет уведомлений? Проверьте, что TCF Mod Manager разрешено их показывать в разделе Параметры Windows &gt; Система &gt; Уведомления.</value>
+  </data>
+  <data name="Options_UpdateNotificationsWine" xml:space="preserve">
+    <value>Недоступно под Wine. Страница «Установленные» по-прежнему показывает обновления модов.</value>
   </data>
   <data name="UpdateToast_Title_one" xml:space="preserve">
     <value>Доступно {0} обновление мода</value>

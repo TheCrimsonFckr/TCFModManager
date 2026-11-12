@@ -558,10 +558,23 @@
         <!-- ─── Updates ─── -->
         <TextBlock Style="{StaticResource SectionHeader}" Text="{loc:Str Options_SectionUpdates}" />
 
+        <ui:CardControl
+            Style="{StaticResource SettingRow}"
+            Icon="{ui:SymbolIcon Alert24}"
+            Visibility="{Binding RunsUnderWine, Converter={StaticResource BoolToVisibility}}">
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_UpdateNotificationsHeader}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_UpdateNotificationsWine}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+        </ui:CardControl>
+
         <!-- Apart from Monitor mode (R3): it works the same whichever mode the install buttons are in. -->
         <ui:CardExpander
             Style="{StaticResource SettingExpander}"
-            Icon="{ui:SymbolIcon Alert24}">
+            Icon="{ui:SymbolIcon Alert24}"
+            Visibility="{Binding RunsUnderWine, Converter={StaticResource FalseToVisible}}">
             <ui:CardExpander.Header>
                 <Grid ToolTip="{loc:Str Options_UpdateNotificationsDescription}" ToolTipService.ShowDuration="30000">
                     <Grid.ColumnDefinitions>

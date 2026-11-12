@@ -29,6 +29,8 @@ public partial class App : Application
         // The window is created at the end of this method rather than through StartupUri, which
         // would open it even for a copy that is on its way out.
         //
+        AppUpdateInstaller.WaitForPreviousCopy(e.Args);
+
         var quickPlay = DesktopShortcut.IsQuickPlay(e.Args);
 
         if (!SingleInstance.Claim(

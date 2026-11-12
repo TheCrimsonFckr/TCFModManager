@@ -75,7 +75,7 @@
                     BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}">
                     <ui:TextBox
                         Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
-                        FontFamily="Consolas"
+                        FontFamily="Consolas, DejaVu Sans Mono, Liberation Mono, Tahoma"
                         AcceptsReturn="True"
                         AcceptsTab="True"
                         TextWrapping="NoWrap"

@@ -49,7 +49,7 @@ internal sealed class UpdateWatcher
         Stop();
 
         var settings = _settings.Load().UpdateNotifications;
-        if (!settings.Enabled) return;
+        if (!settings.Enabled || WineHost.IsWine) return;
 
         var interval = settings.Interval.ToTimeSpan();
         _loop = new CancellationTokenSource();

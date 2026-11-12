@@ -173,7 +173,7 @@
                             CaretBrush="Transparent"
                             IsReadOnly="True"
                             IsReadOnlyCaretVisible="False"
-                            FontFamily="Cascadia Mono, Consolas"
+                            FontFamily="Cascadia Mono, Consolas, DejaVu Sans Mono, Liberation Mono, Tahoma"
                             FontSize="12"
                             HorizontalScrollBarVisibility="Disabled"
                             VerticalScrollBarVisibility="Auto"

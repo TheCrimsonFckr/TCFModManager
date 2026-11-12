@@ -33,6 +33,8 @@ public sealed record ProblemSetup
 
     public Version WindowsVersion { get; init; } = Environment.OSVersion.Version;
 
+    public string? Wine { get; init; } = WineHost.Description;
+
     public bool Is64Bit { get; init; } = Environment.Is64BitOperatingSystem;
 
     public string Runtime { get; init; } = RuntimeInformation.FrameworkDescription;
@@ -167,7 +169,7 @@ public sealed record ProblemReport
     }
 
     private static string VersionsText(ProblemSetup setup) =>
-        $"{SelfMod.Name} {setup.AppVersion} · SPT {setup.SptVersion ?? "not found"} · Windows {WindowsText(setup.WindowsVersion)}";
+        $"{SelfMod.Name} {setup.AppVersion} · SPT {setup.SptVersion ?? "not found"} · Windows {WindowsText(setup.WindowsVersion)}{(setup.Wine is { Length: > 0 } wine ? $" · {wine}" : "")}";
 
     private static string DetailsText(ProblemContext context)
     {
@@ -256,6 +258,7 @@ public sealed record ProblemReport
 
         text.Append("Windows\n");
         Value(text, "Version", WindowsText(setup.WindowsVersion));
+        Value(text, "Wine", setup.Wine);
         Value(text, "64-bit", YesNo(setup.Is64Bit));
         Value(text, ".NET", setup.Runtime);
 

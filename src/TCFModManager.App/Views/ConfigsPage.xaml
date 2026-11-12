@@ -426,7 +426,7 @@
                         Grid.Row="2"
                         AcceptsReturn="True"
                         AcceptsTab="True"
-                        FontFamily="Consolas, Cascadia Mono, Courier New"
+                        FontFamily="Consolas, Cascadia Mono, Courier New, DejaVu Sans Mono, Liberation Mono, Tahoma"
                         FontSize="13"
                         TextWrapping="NoWrap"
                         VerticalScrollBarVisibility="Auto"

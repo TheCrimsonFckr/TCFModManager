@@ -12,6 +12,7 @@ namespace TCFModManager.App;
 internal static class ThemeApplier
 {
     private const string FontKey = "AppThemeFontFamily";
+    private const string FontFallbacks = "Segoe UI, DejaVu Sans, Noto Sans, Tahoma";
     private const double BadgeTextContrast = 3.0;
     private const double StatusBackgroundMix = 0.18;
 
@@ -83,6 +84,11 @@ internal static class ThemeApplier
 
         Active = null;
         AppLog.Info("Theme", "custom theme cleared");
+    }
+
+    public static void ApplyBaseFont()
+    {
+        if (Application.Current is { } app && WineHost.IsWine) ApplyFont(app, null);
     }
 
     public static void ReferenceWindowBackgrounds(Application app)
@@ -207,6 +213,8 @@ internal static class ThemeApplier
 
     private static void ApplyFont(Application app, string? family)
     {
+        if (string.IsNullOrWhiteSpace(family) && WineHost.IsWine) family = FontFallbacks;
+
         if (string.IsNullOrWhiteSpace(family))
         {
             if (_fontActive)
@@ -218,7 +226,7 @@ internal static class ThemeApplier
             return;
         }
 
-        app.Resources[FontKey] = new FontFamily(family);
+        app.Resources[FontKey] = new FontFamily(family == FontFallbacks ? family : string.Join(", ", family, FontFallbacks));
         Written.Add(FontKey);
         _fontActive = true;
 

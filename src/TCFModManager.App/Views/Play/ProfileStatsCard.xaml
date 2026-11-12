@@ -90,7 +90,7 @@
                         <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                             <TextBlock
                                 VerticalAlignment="Center"
-                                FontFamily="Cascadia Mono, Consolas"
+                                FontFamily="Cascadia Mono, Consolas, DejaVu Sans Mono, Liberation Mono, Tahoma"
                                 FontSize="12"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 Text="{Binding ProfileStats.ProfileId}" />

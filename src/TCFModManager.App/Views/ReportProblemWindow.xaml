@@ -124,7 +124,7 @@
                 <TextBox
                     IsReadOnly="True"
                     Text="{Binding Text, Mode=OneWay}"
-                    FontFamily="Consolas"
+                    FontFamily="Consolas, DejaVu Sans Mono, Liberation Mono, Tahoma"
                     TextWrapping="NoWrap"
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Auto"

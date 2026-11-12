@@ -295,6 +295,12 @@
   <data name="AppUpdate_UpdaterWouldNotStartFormat" xml:space="preserve">
     <value>Impossibile avviare lo script di aggiornamento. La nuova versione è stata scaricata e decompressa in {0} - chiudi l'app e copia quello che c'è lì dentro sopra questa cartella per finire a mano.</value>
   </data>
+  <data name="AppUpdate_SwapFailedFormat" xml:space="preserve">
+    <value>Impossibile copiare la nuova versione sopra questa, quindi non è stato cambiato nulla. La nuova versione è decompressa in {0} - chiudi l'app e copia quello che c'è lì dentro sopra questa cartella per finire a mano.</value>
+  </data>
+  <data name="AppUpdate_RestartFailed" xml:space="preserve">
+    <value>La nuova versione è al suo posto ma non si è avviata. Chiudi l'app e avviala di nuovo.</value>
+  </data>
   <data name="AppUpdate_UpToDate" xml:space="preserve">
     <value>Hai la versione più recente pubblicata su sp-mod.com.</value>
   </data>
@@ -4511,6 +4517,9 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   </data>
   <data name="Options_UpdateNotificationsNote" xml:space="preserve">
     <value>Il primo controllo avviene un intervallo dopo l'avvio dell'app, e i controlli si fermano quando l'app si chiude - chiudere la finestra la chiude, a meno che non resti nell'area di notifica. Nessuna notifica? Verifica che TCF Mod Manager possa mostrarle in Impostazioni di Windows &gt; Sistema &gt; Notifiche.</value>
+  </data>
+  <data name="Options_UpdateNotificationsWine" xml:space="preserve">
+    <value>Non disponibile con Wine. La pagina Installati mostra comunque gli aggiornamenti delle mod.</value>
   </data>
   <data name="UpdateToast_Title_one" xml:space="preserve">
     <value>Aggiornamento mod disponibile</value>

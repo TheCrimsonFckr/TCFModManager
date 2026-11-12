@@ -53,6 +53,13 @@ public static class AppUpdateProblems
             Strings.AppUpdate_UpdaterWouldNotStartFormat,
             problem.Folder),
 
+        AppUpdateFailure.SwapFailed => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.AppUpdate_SwapFailedFormat,
+            problem.Folder),
+
+        AppUpdateFailure.RestartFailed => Strings.AppUpdate_RestartFailed,
+
         AppUpdateFailure.AppFolderNotWritable => string.Format(
             CultureInfo.CurrentCulture,
             Strings.AppUpdate_FolderNotWritableFormat,

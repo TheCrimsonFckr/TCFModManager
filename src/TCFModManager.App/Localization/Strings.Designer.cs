@@ -305,8 +305,8 @@ internal static class Strings
     internal static string Downloads_CancelToolTip => LocalizationService.Get("Downloads_CancelToolTip");
     internal static string Downloads_Retry => LocalizationService.Get("Downloads_Retry");
     internal static string Downloads_RetryToolTip => LocalizationService.Get("Downloads_RetryToolTip");
-    internal static string Downloads_Details => LocalizationService.Get("Downloads_Details");
-    internal static string Downloads_DetailsToolTip => LocalizationService.Get("Downloads_DetailsToolTip");
+    internal static string Common_Details => LocalizationService.Get("Common_Details");
+    internal static string Common_DetailsToolTip => LocalizationService.Get("Common_DetailsToolTip");
     internal static string Common_Continue => LocalizationService.Get("Common_Continue");
     internal static string AppUpdate_InfoTitle => LocalizationService.Get("AppUpdate_InfoTitle");
     internal static string AppUpdate_VersionHeader => LocalizationService.Get("AppUpdate_VersionHeader");

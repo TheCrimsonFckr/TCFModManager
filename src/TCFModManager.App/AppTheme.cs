@@ -183,6 +183,7 @@ public static class AppTheme
     private static void ApplyOnly(ThemePreference preference)
     {
         ThemeApplier.Clear();
+        ThemeApplier.ApplyBaseFont();
 
         switch (preference)
         {

@@ -73,6 +73,7 @@ internal static class UpdateToasts
     // Also called when the feature is switched on, so a notification raised this session is heard.
     public static void Listen()
     {
+        if (WineHost.IsWine) return;
         if (_listening) return;
 
         try
@@ -90,6 +91,7 @@ internal static class UpdateToasts
 
     public static void Show(IReadOnlyList<UpdateCandidate> updates)
     {
+        if (WineHost.IsWine) return;
         if (updates.Count == 0) return;
 
         try
@@ -123,6 +125,7 @@ internal static class UpdateToasts
     //
     public static void ShowNewMods(IReadOnlyList<NewModCandidate> mods)
     {
+        if (WineHost.IsWine) return;
         if (mods.Count == 0) return;
 
         try
@@ -177,6 +180,7 @@ internal static class UpdateToasts
     //
     public static void ShowMessage(string tag, string title, string body)
     {
+        if (WineHost.IsWine) return;
         try
         {
             Listen();
@@ -203,6 +207,7 @@ internal static class UpdateToasts
     //
     public static void ShowServerStopCountdown(string tag, string title, string body, string keepRunning)
     {
+        if (WineHost.IsWine) return;
         try
         {
             Listen();

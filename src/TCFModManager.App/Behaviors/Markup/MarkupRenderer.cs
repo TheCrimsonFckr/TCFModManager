@@ -34,8 +34,8 @@ public sealed class MarkupRenderer
     private const string TabChosenBarBrush = "AccentFillColorDefaultBrush";
     private const string TabContentBrush = "CardBackgroundFillColorSecondaryBrush";
 
-    // Cascadia Mono, then Consolas, then Courier New.
-    private static readonly FontFamily Monospace = new("Cascadia Mono, Consolas, Courier New");
+    // Cascadia Mono, then Consolas, then Courier New, then the monospace fonts a Wine prefix has.
+    private static readonly FontFamily Monospace = new("Cascadia Mono, Consolas, Courier New, DejaVu Sans Mono, Liberation Mono, Tahoma");
 
     private readonly double _scale;
     private readonly double _base;

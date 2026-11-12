@@ -299,7 +299,15 @@ public partial class AppUpdateViewModel : LocalizedViewModel
             await _installer.PrepareAsync(update, progress, _installCts.Token, retrying).ConfigureAwait(true);
 
             InstallStatus = Strings.AppUpdate_Restarting;
-            AppUpdateInstaller.LaunchApplyScript();
+            if (WineHost.IsWine)
+            {
+                AppUpdateInstaller.ApplyInProcess();
+                AppUpdateInstaller.StartUpdatedApp();
+            }
+            else
+            {
+                AppUpdateInstaller.LaunchApplyScript();
+            }
 
             // The script is already waiting on this process. Shutdown (rather than Environment.Exit)
             // so App.OnExit still runs and the log is flushed before the swap happens. Through the
@@ -315,7 +323,8 @@ public partial class AppUpdateViewModel : LocalizedViewModel
         }
         catch (AppUpdateException ex)
         {
-            AppUpdateInstaller.ClearWorkingFiles();
+            if (ex.Reason is not (AppUpdateFailure.SwapFailed or AppUpdateFailure.UpdaterWouldNotStart))
+                AppUpdateInstaller.ClearWorkingFiles();
             InstallStatus = null;
             _installFailure = ex;
             InstallError = AppUpdateProblems.Describe(ex);

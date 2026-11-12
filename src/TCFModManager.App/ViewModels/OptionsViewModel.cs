@@ -223,6 +223,8 @@ public partial class OptionsViewModel : LocalizedViewModel
     [NotifyCanExecuteChangedFor(nameof(CheckUpdatesNowCommand))]
     private bool _updateNotificationsEnabled;
 
+    public bool RunsUnderWine { get; } = WineHost.IsWine;
+
     // Closing the window hides it to the tray instead (§8a). Greyed out while notifications are off,
     // and ignored then too (D8) - see UpdateNotificationSettings.KeepsRunningInTray.
     [ObservableProperty]

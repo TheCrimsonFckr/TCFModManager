@@ -55,11 +55,13 @@ internal static class AppTray
 
     // Read at the moment the window is closed, so the switch in Options applies straight away.
     public static bool HidesOnClose() =>
-        !IsQuitting && new SettingsService().Load().UpdateNotifications.KeepsRunningInTray;
+        !IsQuitting && !WineHost.IsWine && new SettingsService().Load().UpdateNotifications.KeepsRunningInTray;
 
     // Once the main window is up. A failure here only costs the icon; the window is on screen.
     public static void ShowIcon()
     {
+        if (WineHost.IsWine) return;
+
         if (EnsureIcon()) AppLog.Info("Tray", "icon in the tray");
     }
 
