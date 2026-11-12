@@ -9365,6 +9365,9 @@ See Dependencies and Conflicts.</value>
   <data name="Play_RemoteWipeToolTip" xml:space="preserve">
     <value>The next Play starts this profile over with a new character, as the SPT launcher's wipe does. The profile is on another machine, so no copy is kept here.</value>
   </data>
+  <data name="Play_RemoteNewProfileToolTip" xml:space="preserve">
+    <value>Make a profile on the connected server - a name and a starting edition.</value>
+  </data>
   <data name="Play_RemoteDeleteProfileToolTip" xml:space="preserve">
     <value>Remove the profile from the connected server, as the SPT launcher does. No copy is kept here.</value>
   </data>
@@ -10243,8 +10246,11 @@ Right-click to save the current filters to it, rename it or delete it.</value>
   <data name="Profile_StatsUnreadable" xml:space="preserve">
     <value>This profile's file couldn't be read.</value>
   </data>
-  <data name="Profile_RemoteOnlyLevel" xml:space="preserve">
-    <value>This profile is on the connected server. Only its level and EXP come over the network - its money and raid record stay there.</value>
+  <data name="Profile_RemoteStatsOldMod" xml:space="preserve">
+    <value>Money and raid record need a newer Server Map mod on the connected server. Ask whoever runs it to update.</value>
+  </data>
+  <data name="Profile_RemoteStatsUnavailable" xml:space="preserve">
+    <value>Money and raid record couldn't be read from the connected server just now. Trying again shortly.</value>
   </data>
   <data name="Profile_CopyIdToolTip" xml:space="preserve">
     <value>Copy the profile ID</value>

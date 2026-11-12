@@ -206,6 +206,7 @@ public partial class PlayViewModel
         {
             IsRemotePlay = remote;
             RemoteProblem = null;
+            ClearRemoteStats();
             WipeNextStart = false;
             _remoteProfilesAt = default;
             _readingProfile = true;
@@ -690,14 +691,15 @@ public partial class PlayViewModel
     // Runs an action against the server, starting it first when it is down.
     private async Task WithServerAsync(Func<SptLauncherApi, CancellationToken, Task> action)
     {
-        if (Server?.ExePath is not { } exe) return;
+        var exe = Server?.ExePath;
+        if (exe is null && !IsRemotePlay) return;
 
         IsPlaying = true;
         PlayStatusIsError = false;
         var cts = _playCts = new CancellationTokenSource();
         try
         {
-            using var api = PlayApi(exe);
+            using var api = PlayApi(exe ?? "");
             if (api is null)
             {
                 Fail(Strings.Play_RemoteNotPinned);

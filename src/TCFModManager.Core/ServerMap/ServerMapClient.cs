@@ -30,6 +30,8 @@ public sealed class ServerMapClient : IDisposable
 
     public const string ClientsPath = "/tcfservermap/clients";
 
+    public const string ProfilePath = "/tcfservermap/profile";
+
     public const string ClientHeaderName = "X-ServerMap-Client";
 
     public const string MapCapability = "map";
@@ -342,6 +344,60 @@ public sealed class ServerMapClient : IDisposable
             {
                 Endpoint = _endpoint, Problem = ServerMapProblem.Failed, StatusCode = status, Error = ex,
             };
+        }
+    }
+
+    //
+    // One SPT profile as the server saved it, read into the launcher's profile-page figures. "since"
+    // is the Written of the copy already held: an unchanged profile comes back without its body.
+    //
+    public async Task<ServerMapProfileResult> ProfileAsync(string profileId, long? since,
+        CancellationToken cancellationToken = default)
+    {
+        var path = $"{ProfilePath}?id={Uri.EscapeDataString(profileId)}" + (since is { } held ? $"&since={held}" : "");
+
+        var (problem, status, body, error) = await SendAsync(HttpMethod.Get, path, null, null, cancellationToken)
+            .ConfigureAwait(false);
+
+        if (problem != ServerMapProblem.None)
+        {
+            return new ServerMapProfileResult
+            {
+                Endpoint = _endpoint,
+                Problem = problem == ServerMapProblem.MapUnsupported ? ServerMapProblem.ProfileUnsupported : problem,
+                StatusCode = status,
+                Error = error,
+            };
+        }
+
+        try
+        {
+            using var document = JsonDocument.Parse(body!);
+            var root = document.RootElement;
+
+            long? written = root.TryGetProperty("written", out var w) && w.ValueKind == JsonValueKind.Number ? w.GetInt64() : null;
+
+            if (root.TryGetProperty("busy", out var busy) && busy.ValueKind == JsonValueKind.True)
+                return new ServerMapProfileResult { Endpoint = _endpoint, State = ServerMapProfileState.Busy, StatusCode = status };
+
+            if (root.TryGetProperty("unchanged", out var unchanged) && unchanged.ValueKind == JsonValueKind.True)
+                return new ServerMapProfileResult { Endpoint = _endpoint, State = ServerMapProfileState.Unchanged, Written = written, StatusCode = status };
+
+            if (!root.TryGetProperty("profile", out var profile) || profile.ValueKind != JsonValueKind.Object)
+                return new ServerMapProfileResult { Endpoint = _endpoint, State = ServerMapProfileState.Missing, StatusCode = status };
+
+            var stats = SptProfileStats.FromJson(profile);
+            if (stats is null)
+                return new ServerMapProfileResult { Endpoint = _endpoint, State = ServerMapProfileState.Missing, StatusCode = status };
+
+            return new ServerMapProfileResult
+            {
+                Endpoint = _endpoint, State = ServerMapProfileState.Found, Stats = stats, Written = written, StatusCode = status,
+            };
+        }
+        catch (JsonException ex)
+        {
+            return new ServerMapProfileResult { Endpoint = _endpoint, Problem = ServerMapProblem.Failed, StatusCode = status, Error = ex };
         }
     }
 

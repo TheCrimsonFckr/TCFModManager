@@ -2,6 +2,8 @@ using System.Net.Http;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Localization;
+using TCFModManager.Core.ServerMap;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
@@ -29,6 +31,10 @@ public partial class PlayViewModel
     [ObservableProperty]
     private bool _profileIdCopied;
 
+    // Why a profile on the Server Map server shows its level only. Null when its full figures are shown.
+    [ObservableProperty]
+    private string? _remoteStatsNote;
+
     public bool HasProfileStatsCard => Profiles.Count > 0 || (CanPlayRemote && !IsDirectLaunchOn);
 
     // The switch on this card instead of the Play card's, while the Play card isn't in use.
@@ -36,8 +42,16 @@ public partial class PlayViewModel
 
     public string? StatsRemoteProblem => ShowsRemoteSwitchOnStats ? RemoteProblem : null;
 
+    // New and Delete on this card: the profiles are the connected server's and the Play card isn't in use.
+    public bool ShowsRemoteProfileTools => ShowsRemoteSwitchOnStats && IsRemotePlay;
+
     private SptProfileStats? _shownStats;
     private SptMiniProfile? _shownRemote;
+    private SptProfileStats? _shownRemoteFull;
+    private readonly Dictionary<string, (SptProfileStats Stats, long? Written)> _remoteStats = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, DateTime> _remoteStatsAt = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, string?> _remoteNotes = new(StringComparer.Ordinal);
+    private bool _askingRemoteStats;
     private SptLevelProgress? _shownProgress;
     private string _shownLanguage = "";
     private IReadOnlyDictionary<string, SptMiniProfile> _serverProfiles = new Dictionary<string, SptMiniProfile>();
@@ -50,6 +64,7 @@ public partial class PlayViewModel
         OnPropertyChanged(nameof(HasProfileStatsCard));
         OnPropertyChanged(nameof(ShowsRemoteSwitchOnStats));
         OnPropertyChanged(nameof(StatsRemoteProblem));
+        OnPropertyChanged(nameof(ShowsRemoteProfileTools));
 
         if (SelectedProfile is not { } item)
         {
@@ -71,6 +86,7 @@ public partial class PlayViewModel
         {
             ShowRemoteStats(item);
             StatsUnreadable = false;
+            _ = AskRemoteForStatsAsync(item.Profile.ProfileId);
             return;
         }
 
@@ -96,20 +112,94 @@ public partial class PlayViewModel
         _shownProgress = progress;
         _shownLanguage = language;
         _shownRemote = null;
+        _shownRemoteFull = null;
+        RemoteStatsNote = null;
         ProfileStats = stats is null ? null : ProfileStatsView.Build(stats, fallbackName, progress, levelFromServer);
     }
 
-    // Playing on the Server Map server: its own profile list carries the level and EXP, nothing more.
+    //
+    // A profile on the Server Map server: the level and EXP from its launcher list, and the money and
+    // raid record from the Server Map mod's /profile once they have arrived.
+    //
     private void ShowRemoteStats(PlayProfileItem item)
     {
+        var id = item.Profile.ProfileId;
+        var full = _remoteStats.TryGetValue(id, out var held) ? held.Stats : null;
+        RemoteStatsNote = full is null && _remoteNotes.TryGetValue(id, out var note) ? note : null;
+
         var language = System.Globalization.CultureInfo.CurrentUICulture.Name;
-        if (item.Profile == _shownRemote && language == _shownLanguage && ProfileStats is not null) return;
+        if (item.Profile == _shownRemote && full == _shownRemoteFull && language == _shownLanguage && ProfileStats is not null) return;
 
         _shownRemote = item.Profile;
+        _shownRemoteFull = full;
         _shownStats = null;
         _shownProgress = null;
         _shownLanguage = language;
-        ProfileStats = ProfileStatsView.FromServer(item.Profile, item.Title, SptLevelProgress.FromServer(item.Profile));
+
+        var progress = SptLevelProgress.FromServer(item.Profile);
+        ProfileStats = full is null
+            ? ProfileStatsView.FromServer(item.Profile, item.Title, progress)
+            : ProfileStatsView.Build(full, item.Title, progress, levelFromServer: progress is not null);
+    }
+
+    private void ClearRemoteStats()
+    {
+        _remoteStats.Clear();
+        _remoteStatsAt.Clear();
+        _remoteNotes.Clear();
+        _shownRemoteFull = null;
+        RemoteStatsNote = null;
+    }
+
+    private async Task AskRemoteForStatsAsync(string profileId)
+    {
+        if (_askingRemoteStats) return;
+        if (_remoteStatsAt.TryGetValue(profileId, out var at) && DateTime.UtcNow - at < ServerProfilesEvery) return;
+
+        var map = new SettingsService().Load().ServerMap;
+        if (!map.IsConfigured || string.IsNullOrWhiteSpace(map.PinnedThumbprint)) return;
+
+        using var client = ServerMapClient.TryCreate(map.ToEndpoint());
+        if (client is null) return;
+
+        _askingRemoteStats = true;
+        _remoteStatsAt[profileId] = DateTime.UtcNow;
+        try
+        {
+            var since = _remoteStats.TryGetValue(profileId, out var held) ? held.Written : null;
+            var result = await client.ProfileAsync(profileId, since);
+            if (!IsRemotePlay) return;
+
+            if (!result.Succeeded)
+            {
+                AppLog.Debug("ProfileStats", $"the Server Map server didn't send profile {profileId}: {result.Problem} {result.Error?.Message}");
+                _remoteNotes[profileId] = result.Problem == ServerMapProblem.ProfileUnsupported
+                    ? Strings.Profile_RemoteStatsOldMod
+                    : Strings.Profile_RemoteStatsUnavailable;
+            }
+            else
+            {
+                _remoteNotes.Remove(profileId);
+                switch (result.State)
+                {
+                    case ServerMapProfileState.Found:
+                        _remoteStats[profileId] = (result.Stats!, result.Written);
+                        break;
+                    case ServerMapProfileState.Missing:
+                        _remoteStats.Remove(profileId);
+                        break;
+                    case ServerMapProfileState.Busy:
+                        _remoteStatsAt.Remove(profileId);
+                        break;
+                }
+            }
+
+            RefreshStats(AppServices.SptEnvironment.InstallPath);
+        }
+        finally
+        {
+            _askingRemoteStats = false;
+        }
     }
 
     private async Task AskServerForProfilesAsync()

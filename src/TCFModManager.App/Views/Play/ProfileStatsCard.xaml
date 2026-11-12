@@ -7,7 +7,8 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:app="clr-namespace:TCFModManager.App"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
-    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors">
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
+    xmlns:local="clr-namespace:TCFModManager.App.Views.Play">
     <UserControl.Resources>
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
@@ -76,6 +77,40 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
+            <!-- On the connected server without the Play card: its profiles are made and deleted here. -->
+            <StackPanel Margin="0,0,0,12" Visibility="{Binding ShowsRemoteProfileTools, Converter={StaticResource BoolToVisibility}}">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <ui:Button
+                        Content="{loc:Str Play_DirectNewProfile}"
+                        Icon="{ui:SymbolIcon PersonAdd24}"
+                        ToolTip="{loc:Str Play_RemoteNewProfileToolTip}"
+                        Command="{Binding NewProfileCommand}" />
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Content="{loc:Str Play_DirectDeleteProfile}"
+                        Icon="{ui:SymbolIcon Delete24}"
+                        ToolTip="{loc:Str Play_RemoteDeleteProfileToolTip}"
+                        Command="{Binding AskDeleteProfileCommand}" />
+                </StackPanel>
+                <TextBlock
+                    Margin="0,0,0,8"
+                    TextWrapping="Wrap"
+                    Text="{Binding PlayStatus}"
+                    Visibility="{Binding PlayStatus, Converter={StaticResource NullToCollapsed}}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PlayStatusIsError}" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <local:ProfileEditPanels />
+            </StackPanel>
+
             <TextBlock
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
@@ -90,8 +125,8 @@
                 Margin="0,0,0,8"
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                Text="{loc:Str Profile_RemoteOnlyLevel}"
-                Visibility="{Binding ProfileStats.HasRecord, Converter={StaticResource FalseToVisible}, FallbackValue=Collapsed}" />
+                Text="{Binding RemoteStatsNote}"
+                Visibility="{Binding RemoteStatsNote, Converter={StaticResource NullToCollapsed}}" />
 
             <StackPanel Visibility="{Binding ProfileStats, Converter={StaticResource NullToCollapsed}}">
                 <Grid Margin="0,0,0,12">

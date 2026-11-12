@@ -54,6 +54,9 @@ public enum ServerMapProblem
     //
     MapUnsupported,
 
+    // /profile only: a Server Map older than the route. Worth saying as "update the server mod".
+    ProfileUnsupported,
+
     //
     // The server answers its own network only (LAN-only), and this machine is outside it. Said
     // outright rather than as "no server map here": the address is right and the mod is there, and

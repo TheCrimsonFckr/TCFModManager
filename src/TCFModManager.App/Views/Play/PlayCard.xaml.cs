@@ -36,7 +36,7 @@ public partial class PlayCard : UserControl
         menu.Items.Add(new MenuItem
         {
             Header = Strings.Play_DirectNewProfile,
-            ToolTip = Strings.Play_DirectNewProfileToolTip,
+            ToolTip = vm.IsRemotePlay ? Strings.Play_RemoteNewProfileToolTip : Strings.Play_DirectNewProfileToolTip,
             Command = vm.NewProfileCommand,
             IsEnabled = !vm.IsPlaying,
         });
