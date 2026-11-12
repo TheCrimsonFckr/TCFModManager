@@ -5,7 +5,8 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
-    xmlns:loc="clr-namespace:TCFModManager.App.Localization">
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:app="clr-namespace:TCFModManager.App">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -440,6 +441,7 @@
                     <!-- The whole picture, never cropped: wide ones fill the width, tall or square
                          ones are centred on a dark band at most 240 high. -->
                     <Border
+                        Height="{x:Static app:WineLayout.HoverPreviewPictureHeight}"
                         Background="#FF141414"
                         Visibility="{Binding PreviewThumbnail, Converter={StaticResource PreviewNullToCollapsed}}">
                         <Image
