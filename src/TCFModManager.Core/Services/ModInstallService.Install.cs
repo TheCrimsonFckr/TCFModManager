@@ -49,6 +49,7 @@ public sealed partial class ModInstallService
         var archivePath = downloadedArchive ?? Path.Combine(workDir, "download.bin");
         var extractDir = Path.Combine(workDir, "extracted");
         InstallJournalEntry? journalEntry = null;
+        IReadOnlyList<string> clientHalfAside = [];
 
         try
         {
@@ -246,6 +247,13 @@ public sealed partial class ModInstallService
 
             var timestamp = DateTimeOffset.UtcNow;
 
+            //
+            // OPEN-46 Q6: a previous version whose client half is set aside is brought back first, so
+            // the update replaces it rather than placing a second, live copy, and the new client half
+            // is set aside again once the install is done.
+            //
+            if (existing is not null) clientHalfAside = BringBackClientHalf(installPath, existing, target, version);
+
             var pending = _configs.Prepare(
                 installPath, existing, placements.Select(p => p.Forward), target.Name, timestamp);
 
@@ -414,6 +422,8 @@ public sealed partial class ModInstallService
             _journal.Delete(journalEntry);
             AppLog.Debug("Install", $"fingerprinted {record.Fingerprints.Count} file(s) in {fingerprintClock.ElapsedMilliseconds}ms");
 
+            if (clientHalfAside.Count > 0) SetClientHalfAsideAgain(installPath, placedFiles, target, version);
+
             status?.Report(new ModInstallProgress(ModInstallStage.Done));
             if (keptSettings.Count > 0)
                 AppLog.Info("Install", $"{target.Name} {version.Version}: kept the settings already in {string.Join(", ", keptSettings)}");
@@ -427,11 +437,13 @@ public sealed partial class ModInstallService
         catch (OperationCanceledException)
         {
             AppLog.Info("Install", $"{target.Name} {version.Version} cancelled");
+            if (journalEntry is null && clientHalfAside.Count > 0) SetClientHalfAsideAgain(installPath, clientHalfAside, target, version);
             throw;
         }
         catch (Exception ex)
         {
             AppLog.Error("Install", $"{target.Name} {version.Version} failed", ex);
+            if (journalEntry is null && clientHalfAside.Count > 0) SetClientHalfAsideAgain(installPath, clientHalfAside, target, version);
             throw;
         }
         finally
@@ -439,6 +451,40 @@ public sealed partial class ModInstallService
             if (journalEntry is not null) _journal.Release(journalEntry);
             TryDeleteDirectory(workDir);
         }
+    }
+
+    private static IReadOnlyList<string> BringBackClientHalf(
+        string installPath, InstalledModRecord existing, InstallTarget target, ModVersion version)
+    {
+        var parked = ModDisableService.ParkedClientFiles(installPath, existing);
+        if (parked.Count == 0) return [];
+
+        var back = ModDisableService.MoveFiles(installPath, parked, disable: false, target.Name);
+
+        if (back.Failed.Count > 0)
+        {
+            AppLog.Warn("Install",
+                $"{target.Name} {version.Version}: couldn't bring back the client half set aside before updating " +
+                $"({string.Join("; ", back.Failed.Select(f => f.Reason))}); updating without setting it aside again");
+            return [];
+        }
+
+        AppLog.Info("Install", $"{target.Name} {version.Version}: client half was set aside; brought back {back.Moved.Count} file(s) to update it");
+        return parked;
+    }
+
+    private static void SetClientHalfAsideAgain(
+        string installPath, IEnumerable<string> files, InstallTarget target, ModVersion version)
+    {
+        var aside = ModDisableService.MoveFiles(
+            installPath, files.Where(ModDisableService.IsClientFile), disable: true, target.Name);
+
+        if (aside.Failed.Count > 0)
+            AppLog.Warn("Install",
+                $"{target.Name} {version.Version}: couldn't set the client half aside again " +
+                $"({string.Join("; ", aside.Failed.Select(f => f.Reason))}); it is live");
+        else
+            AppLog.Info("Install", $"{target.Name} {version.Version}: set the client half aside again ({aside.Moved.Count} file(s))");
     }
 
     //

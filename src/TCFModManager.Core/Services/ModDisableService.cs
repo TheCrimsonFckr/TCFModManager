@@ -199,6 +199,90 @@ public static class ModDisableService
         return new ModDisableOutcome(moved, failed);
     }
 
+    //
+    // The client files a record placed, install-relative, when every one of them sits in its
+    // ".disabled" place - the client half set aside as a whole (OPEN-46). Empty when any client file
+    // is live, or the record placed none.
+    //
+    public static IReadOnlyList<string> ParkedClientFiles(string installPath, InstalledModRecord record)
+    {
+        var parked = new List<string>();
+
+        foreach (var file in record.Files.Where(IsClientFile))
+        {
+            if (File.Exists(FullPath(installPath, file))) return [];
+
+            if (DisabledModPaths.TryGetRelativeCounterpart(file, out var aside) && File.Exists(FullPath(installPath, aside)))
+                parked.Add(file);
+        }
+
+        return parked;
+    }
+
+    // True for an install-relative path in a live client container - BepInEx\plugins or BepInEx\patchers.
+    public static bool IsClientFile(string relativePath) =>
+        DisabledModPaths.TryFindRelativeContainer(relativePath, out var container, out var disabled)
+        && !disabled
+        && !container.EndsWith("user/mods", StringComparison.OrdinalIgnoreCase);
+
+    //
+    // Moves install-relative files, given in their live form, into their ".disabled" place or back,
+    // all or nothing: a file already at a destination refuses the lot, and a move that fails part
+    // way puts back the ones already moved. A file not at its source is skipped.
+    //
+    public static ModDisableOutcome MoveFiles(
+        string installPath, IEnumerable<string> liveRelativeFiles, bool disable, string modName)
+    {
+        var moves = new List<ModMove>();
+
+        foreach (var file in liveRelativeFiles.Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            if (!DisabledModPaths.TryGetRelativeCounterpart(file, out var aside)) continue;
+
+            var live = FullPath(installPath, file);
+            var parked = FullPath(installPath, aside);
+            var move = disable ? new ModMove(live, parked) : new ModMove(parked, live);
+
+            if (File.Exists(move.From)) moves.Add(move);
+        }
+
+        var moved = new List<ModMove>();
+        var failed = new List<ModDisableFailure>();
+
+        if (moves.Count == 0) return ModDisableOutcome.Empty;
+
+        if (moves.FirstOrDefault(m => Exists(m.To)) is { } clash)
+        {
+            failed.Add(new ModDisableFailure(modName, $"something is already at {clash.To} - remove or rename it first"));
+            return new ModDisableOutcome(moved, failed);
+        }
+
+        foreach (var move in moves)
+        {
+            if (TryMove(move.From, move.To, modName, failed))
+            {
+                moved.Add(move);
+                continue;
+            }
+
+            for (var i = moved.Count - 1; i >= 0; i--)
+            {
+                if (TryMove(moved[i].To, moved[i].From, modName, failed)) TidyUpToContainer(moved[i].To);
+            }
+
+            return new ModDisableOutcome([], failed);
+        }
+
+        foreach (var move in moved) TidyUpToContainer(move.From);
+
+        AppLog.Info("Disable", $"{modName}: {(disable ? "set aside" : "brought back")} {moved.Count} client file(s)");
+
+        return new ModDisableOutcome(moved, failed);
+    }
+
+    private static string FullPath(string installPath, string relativePath) =>
+        Path.Combine(installPath, relativePath.Replace('/', Path.DirectorySeparatorChar));
+
     // "<install>\.tcfmm-duplicates\20260824-121500_plugins_SomeMod" - the timestamp and container
     // keep two rounds of the same duplicate apart.
     private static string SetAsidePath(string installPath, string modPath, DateTimeOffset timestamp)
