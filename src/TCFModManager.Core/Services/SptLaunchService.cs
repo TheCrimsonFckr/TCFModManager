@@ -143,8 +143,11 @@ public static partial class SptLaunchService
     // does not read settings, and a service that quietly consulted them would be one the tests
     // could not put in a known state.
     //
+    // sparesWindowless: for the Client target, a game with no visible Unity window - a Fika headless
+    // client - does not count as running (see SptLaunchService.Game).
+    //
     public static SptLaunchTargetInfo Describe(
-        string? installPath, SptLaunchTarget target, string? headlessExePath = null)
+        string? installPath, SptLaunchTarget target, string? headlessExePath = null, bool sparesWindowless = false)
     {
         if (string.IsNullOrWhiteSpace(installPath) || !Directory.Exists(installPath))
         {
@@ -171,14 +174,15 @@ public static partial class SptLaunchService
             InstallPath = installPath,
             ExePath = exePath,
             ProcessName = processName,
-            IsRunning = IsRunning(target, processName, exePath, installPath),
+            IsRunning = IsRunning(target, processName, exePath, installPath, sparesWindowless),
         };
     }
 
     public static SptLaunchResult Launch(
-        string? installPath, SptLaunchTarget target, string? headlessExePath = null, bool hidden = false)
+        string? installPath, SptLaunchTarget target, string? headlessExePath = null, bool hidden = false,
+        bool sparesWindowless = false)
     {
-        var info = Describe(installPath, target, headlessExePath);
+        var info = Describe(installPath, target, headlessExePath, sparesWindowless);
 
         if (info.Problem != SptLaunchProblem.None)
         {
@@ -677,7 +681,8 @@ public static partial class SptLaunchService
     // Start, and then fail to Stop it, since Stop only ever touches this install's processes. One
     // whose path can't be read still counts: this can't tell it is someone else's.
     //
-    private static bool IsRunning(SptLaunchTarget target, string processName, string? exePath, string? installPath)
+    private static bool IsRunning(
+        SptLaunchTarget target, string processName, string? exePath, string? installPath, bool sparesWindowless)
     {
         //
         // The headless launcher is checked by its own name only. A headless client runs
@@ -703,7 +708,12 @@ public static partial class SptLaunchService
 
             try
             {
-                if (found.Any(p => RunsFrom(p, exePath, installPath) != false)) return true;
+                var needsWindow = sparesWindowless
+                    && target == SptLaunchTarget.Client
+                    && string.Equals(name, GameProcessName, StringComparison.OrdinalIgnoreCase);
+
+                if (found.Any(p => RunsFrom(p, exePath, installPath) != false && (!needsWindow || HasWindow(p))))
+                    return true;
             }
             finally
             {

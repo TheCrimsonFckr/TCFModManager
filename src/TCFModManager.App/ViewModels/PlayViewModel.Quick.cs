@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
+using TCFModManager.App.Services;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
@@ -64,7 +65,8 @@ public partial class PlayViewModel
         var settings = new SettingsService().Load();
 
         Server = SptLaunchService.Describe(installPath, SptLaunchTarget.Server);
-        Client = SptLaunchService.Describe(installPath, SptLaunchTarget.Client);
+        Client = SptLaunchService.Describe(
+            installPath, SptLaunchTarget.Client, sparesWindowless: GameCloser.SparesWindowless(settings, installPath));
 
         RefreshGame(installPath, settings);
         RefreshDirect(installPath, settings, readProfiles);

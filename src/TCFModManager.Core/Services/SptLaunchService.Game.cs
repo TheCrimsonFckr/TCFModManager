@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace TCFModManager.Core.Services;
 
@@ -10,10 +11,9 @@ namespace TCFModManager.Core.Services;
 // Only a game running from THIS install is touched, by the same rule Stop uses (IsThisInstall): a
 // process whose path cannot be read is left alone.
 //
-// sparesWindowless: a Fika headless client is also EscapeFromTarkov.exe, started with no window, and
-// may run from the same install. When this machine runs one, only a game with a window - the one a
-// person is playing - is closed. (Whether a headless client from the same folder ever has a window is
-// not known here; with a window it would be closed too.)
+// sparesWindowless: a Fika headless client is also EscapeFromTarkov.exe and may run from the same
+// install. When this machine runs one, only a game with a visible Unity window - the one a person is
+// playing - counts. A headless client's console window does not.
 //
 public static partial class SptLaunchService
 {
@@ -115,11 +115,53 @@ public static partial class SptLaunchService
     {
         try
         {
-            return !process.HasExited && process.MainWindowHandle != IntPtr.Zero;
+            return !process.HasExited && HasVisibleGameWindow(process.Id);
         }
-        catch (Exception ex) when (ex is Win32Exception or InvalidOperationException or NotSupportedException)
+        catch (Exception ex) when (ex is Win32Exception or InvalidOperationException or NotSupportedException
+                                       or DllNotFoundException or EntryPointNotFoundException)
         {
             return false;
         }
     }
+
+    private const string UnityWindowClass = "UnityWndClass";
+
+    private static bool HasVisibleGameWindow(int processId)
+    {
+        var found = false;
+        var name = new char[64];
+
+        EnumWindows((handle, _) =>
+        {
+            if (!IsWindowVisible(handle)) return true;
+
+            GetWindowThreadProcessId(handle, out var owner);
+            if (owner != (uint)processId) return true;
+
+            var length = GetClassName(handle, name, name.Length);
+            if (length <= 0 || !UnityWindowClass.AsSpan().SequenceEqual(name.AsSpan(0, length))) return true;
+
+            found = true;
+            return false;
+        }, IntPtr.Zero);
+
+        return found;
+    }
+
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private delegate bool EnumWindowsProc(IntPtr handle, IntPtr parameter);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool EnumWindows(EnumWindowsProc callback, IntPtr parameter);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool IsWindowVisible(IntPtr handle);
+
+    [DllImport("user32.dll")]
+    private static extern uint GetWindowThreadProcessId(IntPtr handle, out uint processId);
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    private static extern int GetClassName(IntPtr handle, [Out] char[] className, int maxCount);
 }

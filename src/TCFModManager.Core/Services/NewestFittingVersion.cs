@@ -4,7 +4,7 @@ namespace TCFModManager.Core.Services;
 
 //
 // The newest published version a mod list entry should get when it names no version, or when the
-// version it names is gone: newest by publish date among the ones that fit. Null when versions were
+// version it names is gone: newest by version number among the ones that fit. Null when versions were
 // published but none fits, so the caller can say why rather than install one that won't load.
 //
 public static class NewestFittingVersion
@@ -23,9 +23,17 @@ public static class NewestFittingVersion
             .FirstOrDefault(v => string.IsNullOrWhiteSpace(parentVersion)
                 || AddonFit.Check(v.ModVersionConstraint, parentVersion, sptVersion) != false);
 
-    internal static IEnumerable<T> Newest<T>(
+    // Newest version number first; publish date only orders versions with the same number or none
+    // that can be read, which go last.
+    public static IEnumerable<T> Newest<T>(
         IEnumerable<T> versions, Func<T, DateTimeOffset?> published, Func<T, string?> version) =>
         versions
-            .OrderByDescending(v => published(v) ?? DateTimeOffset.MinValue)
-            .ThenByDescending(v => version(v), Comparer<string?>.Create((a, b) => ModVersionComparer.Compare(a, b) ?? 0));
+            .OrderByDescending(v => Readable(version(v)))
+            .ThenByDescending(v => version(v), ByVersion)
+            .ThenByDescending(v => published(v) ?? DateTimeOffset.MinValue);
+
+    private static readonly Comparer<string?> ByVersion =
+        Comparer<string?>.Create((a, b) => ModVersionComparer.Compare(a, b) ?? 0);
+
+    private static bool Readable(string? version) => ModVersionComparer.Compare(version, version) is not null;
 }

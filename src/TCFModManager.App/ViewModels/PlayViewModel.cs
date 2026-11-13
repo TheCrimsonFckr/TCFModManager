@@ -383,7 +383,8 @@ public partial class PlayViewModel : LocalizedViewModel
         var settings = new SettingsService().Load();
 
         Server = SptLaunchService.Describe(installPath, SptLaunchTarget.Server);
-        Client = SptLaunchService.Describe(installPath, SptLaunchTarget.Client);
+        Client = SptLaunchService.Describe(
+            installPath, SptLaunchTarget.Client, sparesWindowless: GameCloser.SparesWindowless(settings, installPath));
         Headless = SptLaunchService.Describe(
             installPath, SptLaunchTarget.Headless, settings.HeadlessLauncherPath);
 
@@ -446,6 +447,7 @@ public partial class PlayViewModel : LocalizedViewModel
         try
         {
             var installPath = AppServices.SptEnvironment.InstallPath;
+            var spares = GameCloser.SparesWindowless(new SettingsService().Load(), installPath);
             var ports = _portsBeforeStart ?? SptServerReadiness.PortsFor(Server?.ExePath);
             var portList = string.Join(", ", SptServerReadiness.PortsFor(Server?.ExePath).Order());
 
@@ -465,7 +467,8 @@ public partial class PlayViewModel : LocalizedViewModel
             bool StillWanted() =>
                 DateTime.UtcNow - started < TimeSpan.FromSeconds(15)
                 || (SptLaunchService.Describe(installPath, SptLaunchTarget.Server).IsRunning
-                    && (!openLauncher || !SptLaunchService.Describe(installPath, SptLaunchTarget.Client).IsRunning));
+                    && (!openLauncher || !SptLaunchService.Describe(
+                        installPath, SptLaunchTarget.Client, sparesWindowless: spares).IsRunning));
 
             bool up;
             try
@@ -531,8 +534,11 @@ public partial class PlayViewModel : LocalizedViewModel
 
     private void Start(SptLaunchTarget target, bool hidden = false)
     {
-        var result = SptLaunchService.Launch(
-            AppServices.SptEnvironment.InstallPath, target, HeadlessOverride(), hidden);
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        var spares = target == SptLaunchTarget.Client
+            && GameCloser.SparesWindowless(new SettingsService().Load(), installPath);
+
+        var result = SptLaunchService.Launch(installPath, target, HeadlessOverride(), hidden, spares);
 
         HasError = !result.Started;
         Message = result.Started

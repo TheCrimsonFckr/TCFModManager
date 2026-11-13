@@ -53,4 +53,16 @@ public class NewestFittingVersionTests
     [Fact]
     public void ForParent_TakesTheNewest_WhenTheParentsVersionIsUnknown() =>
         Assert.Equal("2.0.0", NewestFittingVersion.ForParent([Addon("1.0.0", "^1.0.0", 1), Addon("2.0.0", "^2.0.0", 2)], null)?.Version);
+
+    [Fact]
+    public void ForSpt_AnOlderVersionRepublishedLater_IsNotTheNewest() =>
+        Assert.Equal("2.0.7", NewestFittingVersion.ForSpt([Mod("2.0.7", "~4.1.6", 1), Mod("2.0.6", "~4.1.6", 2)], "4.1.6")?.Version);
+
+    [Fact]
+    public void ForParent_AnOlderVersionRepublishedLater_IsNotTheNewest() =>
+        Assert.Equal("1.1.0", NewestFittingVersion.ForParent([Addon("1.1.0", "^1.0.0", 1), Addon("1.0.0", "^1.0.0", 2)], "1.4.0")?.Version);
+
+    [Fact]
+    public void Newest_PutsUnreadableVersionsLast() =>
+        Assert.Equal(new[] { "1.0.0", "latest" }, NewestFittingVersion.Newest([Mod("latest", "~4.1.6", 9), Mod("1.0.0", "~4.1.6", 1)], v => v.PublishedAt, v => v.Version).Select(v => v.Version));
 }
