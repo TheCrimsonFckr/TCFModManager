@@ -50,6 +50,12 @@ public sealed record ModListApplyOptions
     // who keeps a dedicated server on one drive and the install they play on another.
     //
     public string? InstallPath { get; init; }
+
+    //
+    // Reads the install again after the fetch, so a mod installed or updated for its server half
+    // only (OPEN-46) can have its new client half set aside. Null leaves fetched client halves live.
+    //
+    public Func<Task<IReadOnlyList<ModListCandidate>>>? Rescan { get; init; }
 }
 //
 // Why an apply stopped before it finished.
@@ -84,6 +90,8 @@ public sealed record ModListApplyResult
     public ModList? Snapshot { get; init; }
 
     public required ModDisableOutcome Enabled { get; init; }
+
+    // Mods disabled, and client halves set aside on a dedicated headless (OPEN-46).
     public required ModDisableOutcome Disabled { get; init; }
     public required ModListFetchOutcome Fetched { get; init; }
 
@@ -120,9 +128,10 @@ public sealed record ModListApplyResult
 //   2. snapshot what's here now, before anything changes
 //   3. enable   - a mod that also needs updating has to be back in its live container first
 //   4. fetch    - installs, updates, and those pending updates
-//   5. disable  - last, and only if every fetch worked
+//   5. set aside the client halves a dedicated headless keeps off (OPEN-46), whatever the fetch did
+//   6. disable  - last, and only if every fetch worked
 //
-// Step 5 running last is the safety property: a failed download leaves the install as it was plus
+// Step 6 running last is the safety property: a failed download leaves the install as it was plus
 // whatever did arrive, rather than a half-built set with the old one already torn down.
 //
 public static class ModListApplier
@@ -142,7 +151,7 @@ public static class ModListApplier
         var enables = plan.Enable.ToList();
         var disables = plan.Disable.ToList();
 
-        if ((enables.Count > 0 || disables.Count > 0)
+        if ((enables.Count > 0 || disables.Count > 0 || plan.SetAsideClientHalf.Any())
             && ModInstallService.RunningBlockers(options.InstallPath) is { Count: > 0 } blockers)
         {
             return Stopped(plan, manual, null, ModListStop.InstallInUse, running: blockers);
@@ -166,7 +175,7 @@ public static class ModListApplier
         {
             try
             {
-                enabled = ModDisableService.Apply(Entries(enables), disable: false, options.InstallPath);
+                enabled = ModDisableService.Apply(EnableEntries(enables), disable: false, options.InstallPath);
             }
             //
             // ModInstallException, not InvalidOperationException: EnsureInstallNotInUse threw the
@@ -186,7 +195,13 @@ public static class ModListApplier
             ? ModListFetchOutcome.Empty
             : await fetch(fetches, ct).ConfigureAwait(false);
 
-        if (!fetched.Succeeded)
+        ModDisableOutcome setAside;
+
+        try
+        {
+            setAside = await SetClientHalvesAsideAsync(plan, fetched, options).ConfigureAwait(false);
+        }
+        catch (ModInstallException ex)
         {
             return new ModListApplyResult
             {
@@ -194,6 +209,21 @@ public static class ModListApplier
                 Snapshot = snapshot,
                 Enabled = enabled,
                 Disabled = ModDisableOutcome.Empty,
+                Fetched = fetched,
+                Manual = manual,
+                Stopped = ModListStop.MovesRefused,
+                Refusal = ex,
+            };
+        }
+
+        if (!fetched.Succeeded)
+        {
+            return new ModListApplyResult
+            {
+                ListId = plan.ListId,
+                Snapshot = snapshot,
+                Enabled = enabled,
+                Disabled = setAside,
                 Fetched = fetched,
                 Manual = manual,
                 Stopped = fetched.Cancelled ? ModListStop.FetchCancelled : ModListStop.FetchFailed,
@@ -216,7 +246,7 @@ public static class ModListApplier
                     ListId = plan.ListId,
                     Snapshot = snapshot,
                     Enabled = enabled,
-                    Disabled = ModDisableOutcome.Empty,
+                    Disabled = setAside,
                     Fetched = fetched,
                     Manual = manual,
                     Stopped = ModListStop.MovesRefused,
@@ -230,7 +260,8 @@ public static class ModListApplier
             ListId = plan.ListId,
             Snapshot = snapshot,
             Enabled = enabled,
-            Disabled = disabled,
+            Disabled = new ModDisableOutcome(
+                [.. setAside.Moved, .. disabled.Moved], [.. setAside.Failed, .. disabled.Failed]),
             Fetched = fetched,
             Manual = manual,
         };
@@ -258,6 +289,42 @@ public static class ModListApplier
 
     private static IEnumerable<InstalledMod> Entries(IEnumerable<ModListAction> actions) =>
         actions.SelectMany(a => a.Installed?.Entries ?? []);
+
+    // An Enable for a mod a dedicated headless takes for its server half brings back that half only.
+    private static IEnumerable<InstalledMod> EnableEntries(IEnumerable<ModListAction> actions) =>
+        actions.SelectMany(a => (a.Installed?.Entries ?? [])
+            .Where(e => !a.SetsClientHalfAside || e.Target == InstalledModTarget.Server));
+
+    //
+    // OPEN-46: the live client halves of mods this machine takes for their server half only - the
+    // installed ones the plan names, and the ones the fetch just put in, read again from disk.
+    //
+    private static async Task<ModDisableOutcome> SetClientHalvesAsideAsync(
+        ModListPlan plan, ModListFetchOutcome fetched, ModListApplyOptions options)
+    {
+        var halves = plan.SetAsideClientHalf.SelectMany(a => LiveClientHalf(a.Installed)).ToList();
+
+        var arrived = fetched.Fetched.Where(a => a.SetsClientHalfAside && a.Entry is not null).ToList();
+
+        if (arrived.Count > 0 && options.Rescan is not null)
+        {
+            var fresh = await options.Rescan().ConfigureAwait(false);
+            var match = new ModListMatch(fresh);
+
+            foreach (var action in arrived)
+            {
+                var found = match.IndexOf(action.Entry!);
+                if (found >= 0) halves.AddRange(LiveClientHalf(fresh[found]));
+            }
+        }
+
+        return halves.Count == 0
+            ? ModDisableOutcome.Empty
+            : ModDisableService.Apply(halves, disable: true, options.InstallPath);
+    }
+
+    private static IEnumerable<InstalledMod> LiveClientHalf(ModListCandidate? candidate) =>
+        (candidate?.Entries ?? []).Where(e => e.Target == InstalledModTarget.Client && !e.IsDisabled);
 
     private static ModListApplyResult Stopped(
         ModListPlan plan,

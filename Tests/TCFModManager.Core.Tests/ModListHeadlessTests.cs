@@ -116,20 +116,30 @@ public class ModListHeadlessTests
     }
 
     //
-    // A skipped entry still claims its installed mod, or the Exclusive sweep would offer to disable
-    // a mod purely because this machine was not the one meant to install it. Doubly important here:
-    // a headless box may well have a HUD mod sitting in its plugins folder from before it was a
-    // headless box.
+    // OPEN-46 Q4: on a dedicated headless a served list sets aside what it scopes off this machine,
+    // and only that - a mod it does not name is still never touched.
     //
     [Fact]
-    public void AServedListNeverDisablesWhatItSkipped()
+    public void AServedListOnADedicatedHeadlessSetsAsideOnlyWhatItScopedOff()
     {
         var plan = ModListPlanner.Build(
             Served(),
-            [Installed("Tyfon.UIFixes"), Installed("SAIN")],
+            [Installed("Tyfon.UIFixes"), Installed("SAIN"), Installed("A sound pack")],
             machine: Dedicated);
 
-        Assert.DoesNotContain(plan.Actions, a => a.Kind == ModListActionKind.Disable);
+        Assert.Equal(["Tyfon.UIFixes"], plan.Disable.Select(a => a.Name));
+    }
+
+    // A player still never has anything disabled by a served list.
+    [Fact]
+    public void AServedListNeverDisablesAnythingOnAPlayer()
+    {
+        var plan = ModListPlanner.Build(
+            Served(),
+            [Installed("fika-server"), Installed("HeadlessTweaks"), Installed("A sound pack")],
+            machine: Player);
+
+        Assert.Empty(plan.Disable);
     }
 
     //
@@ -183,18 +193,21 @@ public class ModListHeadlessTests
     // ModList.ScopeApplies. Get that wrong and the option is decoration: the headless takes it
     // anyway and the author is never heard.
     //
+    //
+    // OPEN-46 Q1: a dedicated headless now takes it, and only for its server half.
+    //
     [Fact]
-    public void ServerAndClientSkipsAHeadless()
+    public void ServerAndClientReachesADedicatedHeadlessForItsServerHalfOnly()
     {
         var served = List(
             ModListOrigin.Server,
             Entry("SPT-Realism", ModListEntryScope.Server | ModListEntryScope.Client));
 
-        Assert.Contains(ModListPlanner.Build(served, [], machine: Player).Actions,
-            a => a.Name == "SPT-Realism");
+        var player = Assert.Single(ModListPlanner.Build(served, [], machine: Player).Actions);
+        Assert.False(player.SetsClientHalfAside);
 
-        Assert.DoesNotContain(ModListPlanner.Build(served, [], machine: Dedicated).Actions,
-            a => a.Name == "SPT-Realism");
+        var headless = Assert.Single(ModListPlanner.Build(served, [], machine: Dedicated).Actions);
+        Assert.True(headless.SetsClientHalfAside);
 
         // Somebody plays on this one, so it takes it as a player - hosting as well changes nothing.
         Assert.Contains(ModListPlanner.Build(served, [], machine: PlaysAndHosts).Actions,
@@ -202,14 +215,21 @@ public class ModListHeadlessTests
     }
 
     //
-    // The exception is exactly one shape: the server ALONE. Stated as its own assertion because it
-    // is the whole hinge - widen it by a flag and Server + Client stops meaning anything.
+    // A headless somebody also plays at still takes the server through Server alone only; a
+    // dedicated one takes anything naming the server, setting the client half aside when the
+    // headless is not named.
     //
     [Fact]
-    public void OnlyServerAloneReachesAHeadlessThroughTheServerFlag()
+    public void TheServerFlagReachesAHeadlessAsOPEN46Ruled()
     {
         Assert.True(ModList.ScopeApplies(ModListEntryScope.Server, Dedicated));
-        Assert.False(ModList.ScopeApplies(ModListEntryScope.Server | ModListEntryScope.Client, Dedicated));
+        Assert.True(ModList.ScopeApplies(ModListEntryScope.Server | ModListEntryScope.Client, Dedicated));
+        Assert.False(ModList.ScopeApplies(ModListEntryScope.Client, Dedicated));
+
+        Assert.True(ModList.SetsClientHalfAside(ModListEntryScope.Server | ModListEntryScope.Client, Dedicated));
+        Assert.False(ModList.SetsClientHalfAside(ModListEntryScope.Everyone, Dedicated));
+        Assert.False(ModList.SetsClientHalfAside(ModListEntryScope.Server | ModListEntryScope.Client, PlaysAndHosts));
+        Assert.False(ModList.SetsClientHalfAside(ModListEntryScope.Server | ModListEntryScope.Client, Player));
 
         // And a player is untouched by the rule in both directions.
         Assert.False(ModList.ScopeApplies(ModListEntryScope.Server, Player));

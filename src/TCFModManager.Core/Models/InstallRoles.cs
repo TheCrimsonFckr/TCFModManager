@@ -60,4 +60,8 @@ public static class InstallRole
     //
     public static bool IsDedicatedHeadless(InstallRoles roles) =>
         roles.HasFlag(InstallRoles.Headless) && !roles.HasFlag(InstallRoles.Player);
+
+    // The same question asked of a machine scope: a headless with no player.
+    public static bool IsDedicatedHeadless(ModListEntryScope machine) =>
+        machine.HasFlag(ModListEntryScope.Headless) && !machine.HasFlag(ModListEntryScope.Client);
 }

@@ -183,7 +183,7 @@ public partial class ModListsViewModel
         Count(plan.Install.Count(), Strings.ModLists_CountToInstallFormat);
         Count(plan.Update.Count(), Strings.ModLists_CountToUpdateFormat);
         Count(plan.Enable.Count(), Strings.ModLists_CountToEnableFormat);
-        Count(plan.Disable.Count(), Strings.ModLists_CountToDisableFormat);
+        Count(plan.Disable.Count() + plan.SetAsideClientHalf.Count(), Strings.ModLists_CountToDisableFormat);
         Count(plan.Pinned.Count(), Strings.ModLists_CountPinnedFormat);
         Count(plan.Keep.Count(), Strings.ModLists_CountAlreadyRightFormat);
         Count(plan.Manual.Count(), Strings.ModLists_CountToFetchFormat);
@@ -218,7 +218,7 @@ public partial class ModListsViewModel
     private static IReadOnlyList<string> ApplyBlockers(ModListPreview preview)
     {
         var plan = preview.Plan;
-        var touchesInstall = plan.Enable.Any() || plan.Disable.Any()
+        var touchesInstall = plan.Enable.Any() || plan.Disable.Any() || plan.SetAsideClientHalf.Any()
             || (!ModListDownloadMode.For(preview.List).DownloadOnly && (plan.Install.Any() || plan.Update.Any()));
 
         return touchesInstall ? ModInstallService.RunningBlockers(preview.Install.InstallPath) : [];
@@ -391,7 +391,8 @@ public partial class ModListsViewModel
         ModListActionKind.Enable when action.NeedsUpdateAfterEnable && !action.IsRepair =>
             (Text(Strings.ModLists_StatusDisabledMovingFormat, VersionMove(action)), "Disabled", DisabledGlyph),
         ModListActionKind.Enable => (Strings.ModLists_StatusDisabled, "Disabled", DisabledGlyph),
-        ModListActionKind.Disable => (Strings.ModLists_StatusWillDisable, "Neutral", DisabledGlyph),
+        ModListActionKind.Disable or ModListActionKind.SetAsideClientHalf =>
+            (Strings.ModLists_StatusWillDisable, "Neutral", DisabledGlyph),
         ModListActionKind.Pinned => (Strings.ModLists_StatusPinned, "Neutral", "Pin24"),
         ModListActionKind.Manual =>
             (Strings.ModLists_StatusGetByHand, "Neutral", ModStatusDisplay.Glyph(ModStatus.NoCompatibleVersion)),
@@ -417,7 +418,7 @@ public partial class ModListsViewModel
             (plan.Enable.Count(), n => Strings.ModLists_ChipDisabled(n), "Disabled", DisabledGlyph),
             (plan.Manual.Count(), n => Strings.ModLists_ChipGetByHand(n), "Neutral",
                 ModStatusDisplay.Glyph(ModStatus.NoCompatibleVersion)),
-            (plan.Disable.Count(), n => Strings.ModLists_ChipWillDisable(n), "Neutral", DisabledGlyph),
+            (plan.Disable.Count() + plan.SetAsideClientHalf.Count(), n => Strings.ModLists_ChipWillDisable(n), "Neutral", DisabledGlyph),
             (plan.Pinned.Count(), n => Strings.ModLists_ChipPinned(n), "Neutral", "Pin24"),
             (plan.Keep.Count(), n => Strings.ModLists_ChipAlreadyRight(n), "Good", ModStatusDisplay.Glyph(ModStatus.Installed)),
         ];
@@ -434,7 +435,7 @@ public partial class ModListsViewModel
         ModListActionKind.Enable => action.NeedsUpdateAfterEnable
             ? action.IsRepair ? Strings.ModLists_ActionEnableReinstall : Strings.ModLists_ActionEnableUpdate
             : Strings.ModLists_ActionEnable,
-        ModListActionKind.Disable => Strings.ModLists_ActionDisable,
+        ModListActionKind.Disable or ModListActionKind.SetAsideClientHalf => Strings.ModLists_ActionDisable,
         ModListActionKind.Pinned => Strings.ModLists_ActionPinned,
         ModListActionKind.Manual => Strings.ModLists_ActionManual,
         _ => Strings.ModLists_ActionUnchanged,
@@ -468,7 +469,7 @@ public partial class ModListsViewModel
             && action.InstalledVersion is not null && action.TargetVersion != action.InstalledVersion =>
             Text(Strings.ModLists_ActionVersionChangeFormat, action.InstalledVersion, action.TargetVersion),
 
-        ModListActionKind.Disable => Strings.ModLists_ActionNotOnList,
+        ModListActionKind.Disable when action.Entry is null => Strings.ModLists_ActionNotOnList,
         ModListActionKind.Pinned => Strings.ModLists_ActionPinnedDetail,
         ModListActionKind.Manual => Strings.ModLists_ActionManualDetail,
         _ => action.InstalledVersion is null
@@ -481,7 +482,7 @@ public partial class ModListsViewModel
         ModListActionKind.Install => 0,
         ModListActionKind.Update => 1,
         ModListActionKind.Enable => 2,
-        ModListActionKind.Disable => 3,
+        ModListActionKind.Disable or ModListActionKind.SetAsideClientHalf => 3,
         ModListActionKind.Pinned => 4,
         ModListActionKind.Manual => 5,
         _ => 6,

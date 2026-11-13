@@ -25,6 +25,10 @@ public enum ModListActionKind
 
     // Not on the list and would have been disabled, but the user pinned it against that.
     Pinned,
+
+    // On the list, installed and at the right version, with a client half a dedicated headless has
+    // to set aside (OPEN-46).
+    SetAsideClientHalf,
 }
 
 // One mod's line in a plan.
@@ -83,6 +87,12 @@ public sealed record ModListAction
 
     public IReadOnlyList<string> NeededBy { get; init; } = [];
 
+    //
+    // OPEN-46: the mod is a dedicated headless's for its server half only, so whatever this action
+    // does, its client half ends up set aside.
+    //
+    public bool SetsClientHalfAside { get; init; }
+
     // True for anything this action will fetch from The Forge.
     public bool IsFetch =>
         Kind is ModListActionKind.Install or ModListActionKind.Update || NeedsUpdateAfterEnable;
@@ -110,6 +120,7 @@ public sealed class ModListPlan
     public IEnumerable<ModListAction> Manual => Of(ModListActionKind.Manual);
     public IEnumerable<ModListAction> Keep => Of(ModListActionKind.Keep);
     public IEnumerable<ModListAction> Pinned => Of(ModListActionKind.Pinned);
+    public IEnumerable<ModListAction> SetAsideClientHalf => Of(ModListActionKind.SetAsideClientHalf);
 
     // Fetches that couldn't be pinned to a version id and need a live lookup first.
     public IEnumerable<ModListAction> NeedingVersionLookup => Actions.Where(a => a.NeedsVersionLookup);
@@ -126,7 +137,7 @@ public sealed class ModListPlan
     // container fails while the game is running. Enabling doesn't hit that - nothing has the
     // disabled copy open - it just doesn't take effect until the client restarts.
     //
-    public bool RequiresGameClosed => Disable.Any();
+    public bool RequiresGameClosed => Disable.Any() || SetAsideClientHalf.Any();
 
     private IEnumerable<ModListAction> Of(ModListActionKind kind) => Actions.Where(a => a.Kind == kind);
 }
@@ -151,7 +162,7 @@ public static class ModListPlanner
     //
     // machine is what this install actually is, from InstallRole.ScopeFor - Client for an ordinary
     // player, Headless for a box running a Fika headless client, both for one that does each.
-    // It only ever narrows a SERVED list; your own lists describe your own install and apply whole.
+    // It narrows a SERVED list, and on a dedicated headless your own lists too (OPEN-46).
     //
     // Defaulted to Client so every existing caller and test keeps the behaviour it had, and so the
     // one value that is wrong in the dangerous direction - a headless quietly planned as a player,
@@ -168,6 +179,7 @@ public static class ModListPlanner
         var serverProtected = Protecting(alsoRequiredBy, machine);
 
         var applying = list.EntriesApplyingTo(machine).ToList();
+        var dedicated = InstallRole.IsDedicatedHeadless(machine);
 
         var candidates = installed.ToList();
         var actions = new List<ModListAction>();
@@ -187,15 +199,44 @@ public static class ModListPlanner
         {
             var found = match.IndexOf(entry);
             if (found >= 0) matched[found] = true;
-            actions.Add(ActionFor(entry, found >= 0 ? candidates[found] : null));
+
+            var action = ActionFor(entry, found >= 0 ? candidates[found] : null);
+            if (ModList.SetsClientHalfAside(entry.EffectiveScope, machine)) action = WithClientHalfAside(action);
+
+            actions.Add(action);
         }
 
+        //
         // Skipped entries still claim their installed mod, so the Exclusive sweep does not offer to
         // disable something purely because this machine was not the one meant to install it.
+        //
+        // On a dedicated headless a skipped entry that is installed and enabled is set aside instead
+        // (OPEN-46 Q3/Q4) - the list names it and keeps it off this machine. Mods missing from the
+        // list are still left to the sweep, which a served list never runs.
+        //
         foreach (var entry in list.Entries.Except(applying))
         {
             var found = match.IndexOf(entry);
-            if (found >= 0) matched[found] = true;
+            if (found < 0) continue;
+
+            matched[found] = true;
+
+            var candidate = candidates[found];
+            if (!dedicated || candidate.IsDisabled || !candidate.CanBeDisabled) continue;
+            if (IsPinned(candidate, serverProtected)) continue;
+
+            actions.Add(new ModListAction
+            {
+                Kind = IsPinned(candidate, neverAutoDisable)
+                    ? ModListActionKind.Pinned
+                    : ModListActionKind.Disable,
+                Name = entry.Name,
+                Entry = entry,
+                Installed = candidate,
+                ModId = candidate.ModId,
+                IsAddon = candidate.IsAddon,
+                InstalledVersion = candidate.Version,
+            });
         }
 
         //
@@ -250,6 +291,14 @@ public static class ModListPlanner
             Actions = actions,
         };
     }
+
+    private static ModListAction WithClientHalfAside(ModListAction action) =>
+        action.Kind == ModListActionKind.Keep && action.Installed is { } installed && HasLiveClientHalf(installed)
+            ? action with { Kind = ModListActionKind.SetAsideClientHalf, SetsClientHalfAside = true }
+            : action with { SetsClientHalfAside = true };
+
+    public static bool HasLiveClientHalf(ModListCandidate candidate) =>
+        candidate.Entries.Any(e => e.Target == InstalledModTarget.Client && !e.IsDisabled);
 
     private static ModListAction DependencyAction(ModListDependencyPick pick, ModListCandidate? installed)
     {
