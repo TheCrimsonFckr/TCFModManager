@@ -229,18 +229,16 @@ public sealed partial class ModCardViewModel : LocalizedViewModel
     // compatible release older than that window won't be found.
     public static ModVersionSummary? PickDisplayVersion(Mod mod, string? installedSptVersion)
     {
-        var candidates = (mod.Versions ?? [])
-            .OrderByDescending(v => v.PublishedAt ?? DateTimeOffset.MinValue)
+        var candidates = NewestFittingVersion.Newest(mod.Versions ?? [], v => v.PublishedAt, v => v.Version)
             .ToList();
 
         return candidates.FirstOrDefault(v => SptVersionMatcher.IsSatisfiedBy(v.SptVersionConstraint, installedSptVersion) == true)
             ?? candidates.FirstOrDefault();
     }
 
-    // Returns the mod's most recently published version.
-    public static ModVersionSummary? LatestVersion(Mod mod) => mod.Versions?
-        .OrderByDescending(v => v.PublishedAt ?? DateTimeOffset.MinValue)
-        .FirstOrDefault();
+    // Returns the mod's newest version.
+    public static ModVersionSummary? LatestVersion(Mod mod) =>
+        NewestFittingVersion.Newest(mod.Versions ?? [], v => v.PublishedAt, v => v.Version).FirstOrDefault();
 
     private static string BuildDisplay(
         List<string?> constraints,

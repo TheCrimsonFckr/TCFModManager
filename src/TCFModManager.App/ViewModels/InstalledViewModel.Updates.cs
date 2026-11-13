@@ -332,8 +332,7 @@ public partial class InstalledViewModel
     // As the addon card picks its update (BuildAddonCard), against the version its mod is going to.
     private static AddonVersionSummary? NewestAddonUpdate(Addon? addon, string? installedVersion, string modVersion)
     {
-        var newest = (addon?.Versions ?? [])
-            .OrderByDescending(v => v.PublishedAt ?? DateTimeOffset.MinValue)
+        var newest = NewestFittingVersion.Newest(addon?.Versions ?? [], v => v.PublishedAt, v => v.Version)
             .FirstOrDefault(v => AddonFit.Accepts(v.ModVersionConstraint, modVersion, AppServices.SptEnvironment.InstalledVersion));
 
         return newest is not null && ModVersionComparer.IsUpdateAvailable(installedVersion, newest.Version) == true

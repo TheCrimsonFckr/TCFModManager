@@ -285,7 +285,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
             var installedSptVersion = AppServices.SptEnvironment.InstalledVersion;
             var result = await _spModApi.GetModVersionsAsync(
                 modId.ToString(),
-                new ModVersionsQuery { Sort = "-published_at", PerPage = 20 });
+                new ModVersionsQuery { Sort = "-version", PerPage = 20 });
 
             _allVersions.Clear();
             foreach (var v in result.Data)
@@ -358,8 +358,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
             var parentVersion = _mod.ParentInstalledVersion;
             var parentName = _mod.ParentModName ?? Strings.ModUpdate_ParentFallback;
 
-            var ordered = (_catalogAddon.Versions ?? [])
-                .OrderByDescending(v => v.PublishedAt ?? DateTimeOffset.MinValue)
+            var ordered = NewestFittingVersion.Newest(_catalogAddon.Versions ?? [], v => v.PublishedAt, v => v.Version)
                 .ToList();
 
             _allVersions.Clear();

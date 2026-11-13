@@ -191,8 +191,7 @@ public sealed partial class InstalledModCardViewModel
         // built for the next release of its parent isn't something this install can use yet.
         // AddonFit also counts an SPT range typed into the parent box, as sp-mod does.
         var parentVersion = parent?.InstalledVersion;
-        var versions = (addon?.Versions ?? [])
-            .OrderByDescending(v => v.PublishedAt ?? DateTimeOffset.MinValue)
+        var versions = NewestFittingVersion.Newest(addon?.Versions ?? [], v => v.PublishedAt, v => v.Version)
             .ToList();
 
         var latest = versions.FirstOrDefault(v =>

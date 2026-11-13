@@ -18,12 +18,12 @@ public static class HeldBackVersions
     public static HeldBackResolution Resolve(
         HeldBackUpdate held, IEnumerable<ModVersionSummary> versions, string? sptVersion)
     {
-        var candidates = versions
-            .Where(v => !string.IsNullOrWhiteSpace(v.Version) && !held.Holds(v.Version))
-            .Where(v => string.IsNullOrWhiteSpace(sptVersion)
-                || SptVersionMatcher.IsSatisfiedBy(v.SptVersionConstraint, sptVersion) == true)
-            .OrderByDescending(v => v.PublishedAt ?? DateTimeOffset.MinValue)
-            .ThenByDescending(v => v.Version, Comparer<string?>.Create((a, b) => ModVersionComparer.Compare(a, b) ?? 0))
+        var candidates = NewestFittingVersion.Newest(
+                versions
+                    .Where(v => !string.IsNullOrWhiteSpace(v.Version) && !held.Holds(v.Version))
+                    .Where(v => string.IsNullOrWhiteSpace(sptVersion)
+                        || SptVersionMatcher.IsSatisfiedBy(v.SptVersionConstraint, sptVersion) == true),
+                v => v.PublishedAt, v => v.Version)
             .ToList();
 
         var perBlocker = held.Blockers

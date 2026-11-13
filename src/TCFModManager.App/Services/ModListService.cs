@@ -802,12 +802,12 @@ public sealed class ModListService
         if (!isAddon)
         {
             var mods = await AppServices.SpModApi.GetModVersionsAsync(
-                id, new ModVersionsQuery { Sort = "-published_at", PerPage = NewestLookupSize }, ct);
+                id, new ModVersionsQuery { Sort = "-version", PerPage = NewestLookupSize }, ct);
             return (NewestFittingVersion.ForSpt(mods.Data, sptVersion), mods.Data.Count > 0);
         }
 
         var addons = await AppServices.SpModApi.GetAddonVersionsAsync(
-            id, new AddonVersionsQuery { Sort = "-published_at", PerPage = NewestLookupSize }, ct);
+            id, new AddonVersionsQuery { Sort = "-version", PerPage = NewestLookupSize }, ct);
         return (NewestFittingVersion.ForParent(addons.Data, parentVersion, sptVersion) is { } fit ? AsModVersion(fit) : null, addons.Data.Count > 0);
     }
 

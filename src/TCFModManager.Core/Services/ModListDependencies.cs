@@ -106,10 +106,10 @@ public static class ModListDependencies
             .. wanted.Select(w =>
             {
                 var mod = catalog.GetValueOrDefault(w.Key);
-                var forSpt = (mod?.Versions ?? [])
-                    .Where(v => string.IsNullOrWhiteSpace(sptVersion) || SptVersionMatcher.IsSatisfiedBy(v.SptVersionConstraint, sptVersion) == true)
-                    .OrderByDescending(v => v.PublishedAt ?? DateTimeOffset.MinValue)
-                    .ThenByDescending(v => v.Version, Comparer<string?>.Create((a, b) => ModVersionComparer.Compare(a, b) ?? 0))
+                var forSpt = NewestFittingVersion.Newest(
+                        (mod?.Versions ?? [])
+                            .Where(v => string.IsNullOrWhiteSpace(sptVersion) || SptVersionMatcher.IsSatisfiedBy(v.SptVersionConstraint, sptVersion) == true),
+                        v => v.PublishedAt, v => v.Version)
                     .ToList();
 
                 var pick = forSpt.FirstOrDefault(v => w.Value.Constraints.All(c => AddonFit.Check(c, v.Version, sptVersion) != false))

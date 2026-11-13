@@ -74,8 +74,7 @@ public sealed partial class AddonRowViewModel : LocalizedViewModel
         _parentVersions = parentVersions;
         InstalledVersion = installRecord?.Version;
 
-        var ordered = (addon.Versions ?? [])
-            .OrderByDescending(v => v.PublishedAt ?? DateTimeOffset.MinValue)
+        var ordered = NewestFittingVersion.Newest(addon.Versions ?? [], v => v.PublishedAt, v => v.Version)
             .ToList();
 
         Versions = ordered
