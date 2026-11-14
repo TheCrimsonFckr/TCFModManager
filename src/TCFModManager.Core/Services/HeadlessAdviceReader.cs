@@ -6,7 +6,7 @@ namespace TCFModManager.Core.Services;
 
 public static partial class HeadlessAdviceReader
 {
-    public const int Version = 1;
+    public const int Version = 2;
 
     private const RegexOptions Loose = RegexOptions.IgnoreCase | RegexOptions.CultureInvariant;
 
@@ -59,6 +59,13 @@ public static partial class HeadlessAdviceReader
         Loose)]
     private static partial Regex PutOn();
 
+    // OPEN-44 R9: "headless: only the (fika) sync" and "only the sync on the headless".
+    [GeneratedRegex(
+        @"(\b" + Hl + @"\b" + Any + @"{0,40}\b(only|just)\b" + Any + @"{0,30}\bsync\b)"
+        + @"|(\b(only|just)\b" + Any + @"{0,30}\bsync\b" + Any + @"{0,40}\b" + Hl + @"\b)",
+        Loose)]
+    private static partial Regex OnlySync();
+
     public static HeadlessAdvice Read(string? descriptionHtml)
     {
         if (string.IsNullOrWhiteSpace(descriptionHtml)) return HeadlessAdvice.Nothing;
@@ -66,18 +73,24 @@ public static partial class HeadlessAdviceReader
         var avoid = new List<string>();
         var needs = new List<string>();
         var all = new List<string>();
+        var onlyThis = false;
 
         foreach (var unit in Units(Sentences(descriptionHtml)))
         {
             all.Add(unit);
 
             if (Hedging().IsMatch(unit) || Harmless().IsMatch(unit)) continue;
-            if (KeepOff().IsMatch(unit)) avoid.Add(unit);
+            if (OnlySync().IsMatch(unit))
+            {
+                needs.Add(unit);
+                onlyThis = true;
+            }
+            else if (KeepOff().IsMatch(unit)) avoid.Add(unit);
             else if (PutOn().IsMatch(unit) && !Negation().IsMatch(unit)) needs.Add(unit);
         }
 
         if (avoid.Count > 0 && needs.Count == 0) return new(HeadlessVerdict.Avoid, Distinct(avoid));
-        if (needs.Count > 0 && avoid.Count == 0) return new(HeadlessVerdict.Needs, Distinct(needs));
+        if (needs.Count > 0 && avoid.Count == 0) return new(HeadlessVerdict.Needs, Distinct(needs)) { OnlyThis = onlyThis };
         if (all.Count > 0) return new(HeadlessVerdict.Mentions, Distinct(all));
         return HeadlessAdvice.Nothing;
     }

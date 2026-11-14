@@ -137,6 +137,7 @@ public sealed class HeadlessAdviceService
                     CheckedAt = _now(),
                     Verdict = advice.Verdict,
                     Quotes = [.. advice.Quotes],
+                    OnlyThis = advice.OnlyThis,
                 };
             }
             catch (SpModApiRateLimitedException ex) when (attempt < RateLimitRetries)

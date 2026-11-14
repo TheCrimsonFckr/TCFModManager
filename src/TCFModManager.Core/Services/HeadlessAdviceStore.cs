@@ -27,9 +27,10 @@ public sealed class HeadlessAdviceStore
         public DateTimeOffset CheckedAt { get; set; }
         public HeadlessVerdict Verdict { get; set; }
         public List<string> Quotes { get; set; } = [];
+        public bool OnlyThis { get; set; }
 
         [JsonIgnore]
-        public HeadlessAdvice Advice => Verdict == HeadlessVerdict.None ? HeadlessAdvice.Nothing : new(Verdict, Quotes);
+        public HeadlessAdvice Advice => Verdict == HeadlessVerdict.None ? HeadlessAdvice.Nothing : new(Verdict, Quotes) { OnlyThis = OnlyThis };
     }
 
     private sealed class Stored

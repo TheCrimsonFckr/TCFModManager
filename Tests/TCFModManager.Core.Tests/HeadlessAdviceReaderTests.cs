@@ -96,6 +96,30 @@ public class HeadlessAdviceReaderTests
         Assert.Equal(HeadlessVerdict.Avoid, advice.Verdict);
     }
 
+    // OPEN-44 R9: the shape Stance Overhaul Fika Sync uses. Needs, and only this.
+    [Fact]
+    public void HeadlessWantsOnlyTheSync_IsNeedsAndOnlyThis()
+    {
+        var advice = HeadlessAdviceReader.Read("<p>Headless client : ONLY FIKA SYNC</p><p>Player client : everything</p>");
+
+        Assert.Equal(HeadlessVerdict.Needs, advice.Verdict);
+        Assert.True(advice.OnlyThis);
+
+        var prose = HeadlessAdviceReader.Read("<p>On the headless you only need the sync addon, nothing else from this mod.</p>");
+
+        Assert.Equal(HeadlessVerdict.Needs, prose.Verdict);
+        Assert.True(prose.OnlyThis);
+    }
+
+    [Fact]
+    public void AnOrdinaryNeeds_IsNotOnlyThis()
+    {
+        var advice = HeadlessAdviceReader.Read("<p>Install this on every client including the headless.</p>");
+
+        Assert.Equal(HeadlessVerdict.Needs, advice.Verdict);
+        Assert.False(advice.OnlyThis);
+    }
+
     [Fact]
     public void SayingBothThings_IsOnlyAMention()
     {

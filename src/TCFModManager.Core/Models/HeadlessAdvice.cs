@@ -11,6 +11,9 @@ public enum HeadlessVerdict
 public sealed record HeadlessAdvice(HeadlessVerdict Verdict, IReadOnlyList<string> Quotes)
 {
     public static readonly HeadlessAdvice Nothing = new(HeadlessVerdict.None, []);
+
+    // OPEN-44 R9: Needs, and the page says the headless wants only this (a sync addon's "ONLY FIKA SYNC").
+    public bool OnlyThis { get; init; }
 }
 
 public enum HeadlessSubjectKind
