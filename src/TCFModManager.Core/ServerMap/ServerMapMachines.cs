@@ -244,11 +244,13 @@ public static class ServerMapMachines
     //
     public static ModListEntryScope ScopeFor(bool hosts, bool plays, bool headless)
     {
-        var scope = plays || !headless ? ModListEntryScope.Client : ModListEntryScope.Headless;
+        ModListEntryScope scope = 0;
 
         if (hosts) scope |= ModListEntryScope.Server;
+        if (plays) scope |= ModListEntryScope.Client;
+        else if (headless) scope |= ModListEntryScope.Headless;
 
-        return scope;
+        return scope == 0 ? ModListEntryScope.Client : scope;
     }
 
     public static ModListEntryScope ScopeFor(MapMachine machine) =>
