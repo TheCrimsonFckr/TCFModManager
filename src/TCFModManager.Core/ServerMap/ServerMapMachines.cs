@@ -238,18 +238,17 @@ public static class ServerMapMachines
 
     //
     // What the published list asks of a machine with these roles. A host takes the entries scoped to
-    // the server, a player the client ones, a headless the headless ones, and a machine doing several
-    // takes the union. A machine that claims none is read as a player, as InstallRole does.
+    // the server, a player the client ones, a headless the headless ones, and a host that also plays
+    // or hosts a headless takes the union. A machine that claims none is read as a player, and one
+    // that claims to play AND run a headless is read as a player, both as InstallRole does.
     //
     public static ModListEntryScope ScopeFor(bool hosts, bool plays, bool headless)
     {
-        ModListEntryScope scope = 0;
+        var scope = plays || !headless ? ModListEntryScope.Client : ModListEntryScope.Headless;
 
-        if (plays) scope |= ModListEntryScope.Client;
-        if (headless) scope |= ModListEntryScope.Headless;
         if (hosts) scope |= ModListEntryScope.Server;
 
-        return scope == 0 ? ModListEntryScope.Client : scope;
+        return scope;
     }
 
     public static ModListEntryScope ScopeFor(MapMachine machine) =>

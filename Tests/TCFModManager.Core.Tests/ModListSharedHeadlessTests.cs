@@ -242,7 +242,7 @@ public class ModListSharedHeadlessTests : IDisposable
     }
 
     [Fact]
-    public void AMachineThatPlaysAndHostsIsUnchanged()
+    public void AMachineClaimingToPlayAndHostIsPlannedAsAPlayer()
     {
         var list = List(ModListOrigin.Server, Entry("DynamicMaps", ServerAndClient), Entry("HUD", ModListEntryScope.Client));
 
@@ -250,6 +250,58 @@ public class ModListSharedHeadlessTests : IDisposable
 
         Assert.All(plan.Actions, a => Assert.Equal(ModListActionKind.Keep, a.Kind));
         Assert.All(plan.Actions, a => Assert.False(a.SetsClientHalfAside));
+    }
+
+    //
+    // OPEN-44 Q11: a served list names a mod and scopes it off the players. A player who has it gets
+    // its client half set aside - and only that half, because the server half may be running the
+    // player's own local server, which the list has no say over. An entry with no client half on
+    // this machine is left alone; a mod the list never names is never touched.
+    //
+    [Fact]
+    public void AServedEntryScopedOffAPlayerSetsAsideItsClientHalfOnly()
+    {
+        var list = List(
+            ModListOrigin.Server,
+            Entry("Bots", ModListEntryScope.Server | ModListEntryScope.Headless),
+            Entry("fika-server", ModListEntryScope.Server),
+            Entry("HeadlessTweaks", ModListEntryScope.Headless));
+
+        var serverOnly = new ModListCandidate
+        {
+            Name = "fika-server",
+            Version = "1.0.0",
+            Folders = ["fika-server"],
+            Entries = [Half(InstalledModTarget.Server, "fika-server", disabled: false)],
+        };
+
+        var plan = ModListPlanner.Build(
+            list,
+            [TwoHalves("Bots"), serverOnly, ClientOnly("HeadlessTweaks"), ClientOnly("A sound pack")],
+            machine: Player);
+
+        var bots = Only(plan, "Bots");
+        Assert.Equal(ModListActionKind.SetAsideClientHalf, bots.Kind);
+        Assert.True(bots.SetsClientHalfAside);
+
+        var tweaks = Only(plan, "HeadlessTweaks");
+        Assert.Equal(ModListActionKind.SetAsideClientHalf, tweaks.Kind);
+
+        Assert.DoesNotContain(plan.Actions, a => a.Name == "fika-server");
+        Assert.DoesNotContain(plan.Actions, a => a.Name == "A sound pack");
+        Assert.Empty(plan.Disable);
+    }
+
+    // The same entry already set aside, or pinned on this install, asks for nothing.
+    [Fact]
+    public void AServedEntryScopedOffAPlayerLeavesASetAsideOrPinnedHalfAlone()
+    {
+        var list = List(ModListOrigin.Server, Entry("Bots", ModListEntryScope.Server | ModListEntryScope.Headless));
+
+        Assert.Empty(ModListPlanner.Build(list, [TwoHalves("Bots", clientAside: true)], machine: Player).Actions);
+
+        var pinned = Only(ModListPlanner.Build(list, [TwoHalves("Bots")], neverAutoDisable: new HashSet<string> { "bots" }, machine: Player), "Bots");
+        Assert.Equal(ModListActionKind.Pinned, pinned.Kind);
     }
 
     //

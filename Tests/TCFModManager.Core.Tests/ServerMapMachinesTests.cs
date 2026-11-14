@@ -206,7 +206,9 @@ public class ServerMapStandingTests
     [InlineData(false, false, true, ModListEntryScope.Headless)]
     [InlineData(true, false, false, ModListEntryScope.Server)]
     [InlineData(true, true, false, ModListEntryScope.Server | ModListEntryScope.Client)]
-    [InlineData(true, true, true, ModListEntryScope.Everyone)]
+    [InlineData(false, true, true, ModListEntryScope.Client)]
+    [InlineData(true, false, true, ModListEntryScope.Server | ModListEntryScope.Headless)]
+    [InlineData(true, true, true, ModListEntryScope.Server | ModListEntryScope.Client)]
     public void RolesBecomeAScope(bool hosts, bool plays, bool headless, ModListEntryScope expected) =>
         Assert.Equal(expected, ServerMapMachines.ScopeFor(hosts, plays, headless));
 }

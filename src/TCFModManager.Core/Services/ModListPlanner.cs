@@ -161,7 +161,7 @@ public static class ModListPlanner
     //
     //
     // machine is what this install actually is, from InstallRole.ScopeFor - Client for an ordinary
-    // player, Headless for a box running a Fika headless client, both for one that does each.
+    // player, Headless for a box running a Fika headless client.
     // It narrows a SERVED list, and on a dedicated headless your own lists too (OPEN-46).
     //
     // Defaulted to Client so every existing caller and test keeps the behaviour it had, and so the
@@ -210,9 +210,13 @@ public static class ModListPlanner
         // Skipped entries still claim their installed mod, so the Exclusive sweep does not offer to
         // disable something purely because this machine was not the one meant to install it.
         //
-        // On a dedicated headless a skipped entry that is installed and enabled is set aside instead
-        // (OPEN-46 Q3/Q4) - the list names it and keeps it off this machine. Mods missing from the
-        // list are still left to the sweep, which a served list never runs.
+        // A skipped entry that is installed and enabled is set aside instead - the list names it and
+        // keeps it off this machine. On a dedicated headless the whole mod goes (OPEN-46 Q3/Q4: what
+        // is skipped there is Client only). On a player only the client half goes (OPEN-44 Q11): what
+        // is skipped there names the server, and the server half may be running the player's own
+        // local server, which the list has no say over. Mods missing from the list are still left to
+        // the sweep, which a served list never runs: the server says where the mods it names go, not
+        // what else you may have.
         //
         foreach (var entry in list.Entries.Except(applying))
         {
@@ -222,14 +226,16 @@ public static class ModListPlanner
             matched[found] = true;
 
             var candidate = candidates[found];
-            if (!dedicated || candidate.IsDisabled || !candidate.CanBeDisabled) continue;
+            if (candidate.IsDisabled || !candidate.CanBeDisabled) continue;
+            if (!dedicated && !HasLiveClientHalf(candidate)) continue;
             if (IsPinned(candidate, serverProtected)) continue;
 
             actions.Add(new ModListAction
             {
-                Kind = IsPinned(candidate, neverAutoDisable)
-                    ? ModListActionKind.Pinned
-                    : ModListActionKind.Disable,
+                Kind = IsPinned(candidate, neverAutoDisable) ? ModListActionKind.Pinned
+                    : dedicated ? ModListActionKind.Disable
+                    : ModListActionKind.SetAsideClientHalf,
+                SetsClientHalfAside = !dedicated && !IsPinned(candidate, neverAutoDisable),
                 Name = entry.Name,
                 Entry = entry,
                 Installed = candidate,

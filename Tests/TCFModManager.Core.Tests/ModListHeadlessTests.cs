@@ -108,11 +108,17 @@ public class ModListHeadlessTests
         Assert.DoesNotContain("HeadlessTweaks", names);
     }
 
-    // A machine somebody plays on that also hosts is both roles at once, not a third mode.
+    //
+    // OPEN-44 Q12: a Fika headless is a copy of the install in its own folder, so one install is never
+    // a player's and a headless's at once. Both switches on reads as a player - the reading that keeps
+    // the player's mods - and Options says why.
+    //
     [Fact]
-    public void AMachineThatPlaysAndHostsTakesTheLot()
+    public void AMachineClaimingToPlayAndHostIsAPlayer()
     {
-        Assert.Equal(5, ModListPlanner.Build(Served(), [], machine: PlaysAndHosts).Actions.Count);
+        var names = ModListPlanner.Build(Served(), [], machine: PlaysAndHosts).Actions.Select(a => a.Name).ToList();
+
+        Assert.Equal(["SAIN", "Waypoints", "Tyfon.UIFixes"], names);
     }
 
     //
@@ -130,7 +136,8 @@ public class ModListHeadlessTests
         Assert.Equal(["Tyfon.UIFixes"], plan.Disable.Select(a => a.Name));
     }
 
-    // A player still never has anything disabled by a served list.
+    // A player still never has a whole mod disabled by a served list - OPEN-44 Q11 sets client halves
+    // aside, and these candidates have none. See ModListSharedHeadlessTests for the halves.
     [Fact]
     public void AServedListNeverDisablesAnythingOnAPlayer()
     {
@@ -177,7 +184,7 @@ public class ModListHeadlessTests
     {
         Assert.Equal(ModListEntryScope.Client, Player);
         Assert.Equal(ModListEntryScope.Headless, Dedicated);
-        Assert.Equal(ClientsAndHeadless, PlaysAndHosts);
+        Assert.Equal(ModListEntryScope.Client, PlaysAndHosts);
 
         Assert.True(InstallRole.IsDedicatedHeadless(InstallRoles.Headless));
         Assert.False(InstallRole.IsDedicatedHeadless(InstallRoles.Player | InstallRoles.Headless));
@@ -209,7 +216,7 @@ public class ModListHeadlessTests
         var headless = Assert.Single(ModListPlanner.Build(served, [], machine: Dedicated).Actions);
         Assert.True(headless.SetsClientHalfAside);
 
-        // Somebody plays on this one, so it takes it as a player - hosting as well changes nothing.
+        // Somebody plays on this one, so it is a player - claiming to host as well changes nothing.
         Assert.Contains(ModListPlanner.Build(served, [], machine: PlaysAndHosts).Actions,
             a => a.Name == "SPT-Realism");
     }

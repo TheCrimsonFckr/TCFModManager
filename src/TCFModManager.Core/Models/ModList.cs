@@ -245,7 +245,7 @@ public sealed class ModList
     // narrowed like a served one. A list a SERVER handed you is always narrowed to this machine.
     //
     // Pass what InstallRoles.ScopeFor gives for this install: Client for an ordinary player,
-    // Headless for a headless box, both together for a machine that plays and hosts.
+    // Headless for a headless box.
     //
     public IEnumerable<ModListEntry> EntriesApplyingTo(ModListEntryScope machine) =>
         Origin == ModListOrigin.Server || InstallRole.IsDedicatedHeadless(machine)

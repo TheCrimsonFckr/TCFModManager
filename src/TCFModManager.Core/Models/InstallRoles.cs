@@ -42,17 +42,14 @@ public static class InstallRole
     // None reads as Player. An install that has never been asked is overwhelmingly someone's own
     // game, and guessing headless would strip the client mods off a machine that wanted them.
     //
-    public static ModListEntryScope ScopeFor(InstallRoles roles)
-    {
-        if (roles == InstallRoles.None) return ModListEntryScope.Client;
-
-        ModListEntryScope scope = 0;
-
-        if (roles.HasFlag(InstallRoles.Player)) scope |= ModListEntryScope.Client;
-        if (roles.HasFlag(InstallRoles.Headless)) scope |= ModListEntryScope.Headless;
-
-        return scope;
-    }
+    // Player + Headless also reads as Player (OPEN-44 Q12). A Fika headless is a copy of the install
+    // in its own folder, so one install is never both; both switches on is a misconfiguration the
+    // Options page points out, and the safe reading of it is the one that keeps the player's mods.
+    //
+    public static ModListEntryScope ScopeFor(InstallRoles roles) =>
+        roles.HasFlag(InstallRoles.Headless) && !roles.HasFlag(InstallRoles.Player)
+            ? ModListEntryScope.Headless
+            : ModListEntryScope.Client;
 
     //
     // Nobody plays here and something else does - the case the whole feature exists for, and the
