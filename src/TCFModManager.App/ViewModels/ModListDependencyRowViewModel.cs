@@ -8,7 +8,7 @@ namespace TCFModManager.App.ViewModels;
 // OPEN-22: one mod the list's mods need that the list doesn't name, on the preview - ticked to go
 // with the apply. Unticking it replans (the owner listens for the change).
 //
-public sealed partial class ModListDependencyRowViewModel(ModListDependencyOffer offer, bool ticked, Action changed)
+public sealed partial class ModListDependencyRowViewModel(ModListDependencyOffer offer, bool ticked, Action changed, bool onListElsewhere = false)
     : ObservableObject
 {
     private static string Text(string format, params object?[] values) => LocalizationService.Text(format, values);
@@ -19,7 +19,10 @@ public sealed partial class ModListDependencyRowViewModel(ModListDependencyOffer
 
     public string Name => Offer.Dependency.Name;
 
-    public string Detail => Text(Strings.ModLists_DepsNeededByFormat,
+    // OPEN-44 Q13 (a): the list names it, for other machines.
+    public bool OnListElsewhere { get; } = onListElsewhere;
+
+    public string Detail => Text(OnListElsewhere ? Strings.ModLists_DepsElsewhereFormat : Strings.ModLists_DepsNeededByFormat,
         string.Join(Strings.Common_ListSeparator, Offer.Dependency.NeededBy));
 
     public string Need => Offer.Need switch

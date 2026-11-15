@@ -1312,6 +1312,7 @@ internal static class Strings
     internal static string PreLaunch_Manual(int count, params object?[] values) =>
         LocalizationService.Plural("PreLaunch_Manual", count, values);
     internal static string PreLaunch_ComparedFormat => LocalizationService.Get("PreLaunch_ComparedFormat");
+    internal static string PreLaunch_HeadlessScopeNote => LocalizationService.Get("PreLaunch_HeadlessScopeNote");
     internal static string Browse_AddonBadge(int count, params object?[] values) =>
         LocalizationService.Plural("Browse_AddonBadge", count, values);
     internal static string Browse_OlderVersionNoteFormat => LocalizationService.Get("Browse_OlderVersionNoteFormat");
@@ -1693,6 +1694,7 @@ internal static class Strings
         LocalizationService.Plural("ServerMap_LastSeenDays", count, values);
     internal static string ServerMap_StandingNoList => LocalizationService.Get("ServerMap_StandingNoList");
     internal static string ServerMap_StandingUnreadable => LocalizationService.Get("ServerMap_StandingUnreadable");
+    internal static string ServerMap_HeadlessScopeNote => LocalizationService.Get("ServerMap_HeadlessScopeNote");
     internal static string ServerMap_StandingNotReported => LocalizationService.Get("ServerMap_StandingNotReported");
     internal static string ServerMap_StandingUpToDate(int count, params object?[] values) =>
         LocalizationService.Plural("ServerMap_StandingUpToDate", count, values);
@@ -2832,6 +2834,7 @@ internal static class Strings
     internal static string ModLists_DepsHeader => LocalizationService.Get("ModLists_DepsHeader");
     internal static string ModLists_DepsHint => LocalizationService.Get("ModLists_DepsHint");
     internal static string ModLists_DepsNeededByFormat => LocalizationService.Get("ModLists_DepsNeededByFormat");
+    internal static string ModLists_DepsElsewhereFormat => LocalizationService.Get("ModLists_DepsElsewhereFormat");
     internal static string ModLists_DepsNeedInstallFormat => LocalizationService.Get("ModLists_DepsNeedInstallFormat");
     internal static string ModLists_DepsNeedEnable => LocalizationService.Get("ModLists_DepsNeedEnable");
     internal static string ModLists_DepsNeedKeep => LocalizationService.Get("ModLists_DepsNeedKeep");

@@ -4702,6 +4702,9 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>Compared against "{0}": {1}. Apply the list on the Mod lists page to sort it, or join anyway - nothing here stops you.</value>
     <comment>{0} is the list's name, {1} one or two parts joined by Common_ListPairFormat. Mod lists is the page named by Nav_ModLists.</comment>
   </data>
+  <data name="PreLaunch_HeadlessScopeNote" xml:space="preserve">
+    <value>This headless doesn't run the server, so it is checked against what the list names for it - mods those need are added when you preview the list.</value>
+  </data>
   <data name="Browse_AddonBadge_one" xml:space="preserve">
     <value>1 addon</value>
     <comment>How many addons a mod has. See the Many form; these become one plural key in S5.</comment>
@@ -6110,6 +6113,9 @@ The details are in the log:
   </data>
   <data name="ServerMap_StandingUnreadable" xml:space="preserve">
     <value>Sent a mod list this version of the app can't read. Updating TCF Mod Manager here should fix it.</value>
+  </data>
+  <data name="ServerMap_HeadlessScopeNote" xml:space="preserve">
+    <value>Checked against what the list names for a headless - mods those need show when that machine previews the list.</value>
   </data>
   <data name="ServerMap_StandingNotReported" xml:space="preserve">
     <value>Hasn't sent its mod list yet.</value>
@@ -10273,11 +10279,14 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Heading of the preview card listing mods the list's mods need but the list doesn't name.</comment>
   </data>
   <data name="ModLists_DepsHint" xml:space="preserve">
-    <value>Mods on this list need these, but the list doesn't name them. Ticked ones are installed or enabled with the list, and kept on if the list would set them aside.</value>
+    <value>Mods this machine takes from the list need these, and the list doesn't install them here. Ticked ones are installed or enabled with the list, and kept on if the list would set them aside.</value>
   </data>
   <data name="ModLists_DepsNeededByFormat" xml:space="preserve">
     <value>Needed by {0}</value>
     <comment>{0} the mods that need it, joined by Common_ListSeparator.</comment>
+  </data>
+  <data name="ModLists_DepsElsewhereFormat" xml:space="preserve">
+    <value>Needed here by {0} - the list puts it on other machines</value>
   </data>
   <data name="ModLists_DepsNeedInstallFormat" xml:space="preserve">
     <value>Install {0}</value>

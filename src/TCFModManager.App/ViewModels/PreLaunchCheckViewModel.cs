@@ -224,8 +224,8 @@ public sealed partial class PreLaunchCheckViewModel : LocalizedViewModel
                 //
                 var expected = held.EntriesApplyingTo(ModListService.MachineScope).Count();
 
-                Message = Strings.PreLaunch_Matches(
-                    expected, held.Name, held.Revision, expected);
+                Message = WithScopeNote(Strings.PreLaunch_Matches(
+                    expected, held.Name, held.Revision, expected));
             }
 
             return;
@@ -241,7 +241,7 @@ public sealed partial class PreLaunchCheckViewModel : LocalizedViewModel
 
         if (!keepMessage)
         {
-            Message = Text(Strings.PreLaunch_ComparedFormat, held.Name, TextLists.Join(parts));
+            Message = WithScopeNote(Text(Strings.PreLaunch_ComparedFormat, held.Name, TextLists.Join(parts)));
         }
 
         // Named rather than counted. "Three mods behind" is not something anyone can act on; the
@@ -249,5 +249,14 @@ public sealed partial class PreLaunchCheckViewModel : LocalizedViewModel
         Outstanding = string.Join(
             Strings.Common_ListSeparator,
             behind.Concat(manual).Select(ModListActionWording.Named).Order(StringComparer.OrdinalIgnoreCase));
+    }
+
+    // OPEN-44 Q13 (b): a headless that does not host is checked by scope; dependencies wait for a preview.
+    private static string WithScopeNote(string message)
+    {
+        var machine = ModListService.MachineScope;
+        return InstallRole.IsDedicatedHeadless(machine) && !machine.HasFlag(ModListEntryScope.Server)
+            ? message + " " + Strings.PreLaunch_HeadlessScopeNote
+            : message;
     }
 }

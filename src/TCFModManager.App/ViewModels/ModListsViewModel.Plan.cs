@@ -134,7 +134,11 @@ public partial class ModListsViewModel
         _dependencyOffers = check?.Offers;
         DependencyRows.Clear();
         foreach (var offer in check?.Offers ?? [])
-            DependencyRows.Add(new ModListDependencyRowViewModel(offer, !check!.Unticked.Contains(offer.Dependency.ModId), ReplanDependencies));
+            DependencyRows.Add(new ModListDependencyRowViewModel(
+                offer,
+                !check!.Unticked.Contains(offer.Dependency.ModId),
+                ReplanDependencies,
+                preview.List.Entries.Any(e => e is { IsAddon: false } && e.ModId == offer.Dependency.ModId)));
 
         if (check is not null && !check.AddToList && AddDependenciesToList)
         {

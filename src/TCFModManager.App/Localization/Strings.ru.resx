@@ -4258,6 +4258,9 @@
   <data name="PreLaunch_ComparedFormat" xml:space="preserve">
     <value>Сравнение со списком «{0}»: {1}. Примените список на странице Списки модов, чтобы всё исправить, или подключайтесь так - ничто вас не останавливает.</value>
   </data>
+  <data name="PreLaunch_HeadlessScopeNote" xml:space="preserve">
+    <value>Этот headless не запускает сервер, поэтому сравнивается с тем, что список указывает для него, - моды, нужные этим, добавляются при предпросмотре списка.</value>
+  </data>
   <data name="PreLaunch_ListMoved" xml:space="preserve">
     <value>Список модов этого сервера изменился</value>
   </data>
@@ -5096,6 +5099,9 @@
   </data>
   <data name="ServerMap_StandingUnreadable" xml:space="preserve">
     <value>Прислала список модов, который эта версия приложения не может прочитать. Обновление TCF Mod Manager здесь должно это исправить.</value>
+  </data>
+  <data name="ServerMap_HeadlessScopeNote" xml:space="preserve">
+    <value>Сравнено с тем, что список указывает для headless, - моды, нужные этим, видны, когда эта машина открывает предпросмотр списка.</value>
   </data>
   <data name="ServerMap_StandingNotReported" xml:space="preserve">
     <value>Ещё не прислала свой список модов.</value>
@@ -8482,10 +8488,13 @@
     <value>Также нужны</value>
   </data>
   <data name="ModLists_DepsHint" xml:space="preserve">
-    <value>Они нужны модам из этого списка, но в самом списке их нет. Отмеченные будут установлены или включены вместе со списком и останутся включёнными, даже если список отключил бы их.</value>
+    <value>Этим модам, которые машина берёт из списка, нужны эти, а список не ставит их сюда. Отмеченные устанавливаются или включаются вместе со списком и остаются включены, если список отложил бы их.</value>
   </data>
   <data name="ModLists_DepsNeededByFormat" xml:space="preserve">
     <value>Нужен для: {0}</value>
+  </data>
+  <data name="ModLists_DepsElsewhereFormat" xml:space="preserve">
+    <value>Нужен здесь для {0} - список ставит его на другие машины</value>
   </data>
   <data name="ModLists_DepsNeedInstallFormat" xml:space="preserve">
     <value>Установить {0}</value>

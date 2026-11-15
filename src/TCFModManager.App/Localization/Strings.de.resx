@@ -4078,6 +4078,9 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="PreLaunch_ComparedFormat" xml:space="preserve">
     <value>Verglichen mit "{0}": {1}. Nutz Anwenden auf der Seite Modlisten, um das zu ordnen, oder tritt trotzdem bei - nichts hier hält dich auf.</value>
   </data>
+  <data name="PreLaunch_HeadlessScopeNote" xml:space="preserve">
+    <value>Dieser Headless betreibt den Server nicht, also wird er mit dem verglichen, was die Liste für ihn nennt - Mods, die diese brauchen, kommen in der Vorschau der Liste dazu.</value>
+  </data>
   <data name="PreLaunch_ListMoved" xml:space="preserve">
     <value>Die Modliste dieses Servers hat sich geändert</value>
   </data>
@@ -4865,6 +4868,9 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   </data>
   <data name="ServerMap_StandingUnreadable" xml:space="preserve">
     <value>Hat eine Modliste gesendet, die diese Version der App nicht lesen kann. Ein Update von TCF Mod Manager hier sollte das beheben.</value>
+  </data>
+  <data name="ServerMap_HeadlessScopeNote" xml:space="preserve">
+    <value>Verglichen mit dem, was die Liste für einen Headless nennt - Mods, die diese brauchen, zeigen sich, wenn dieser Rechner die Liste in der Vorschau öffnet.</value>
   </data>
   <data name="ServerMap_StandingNotReported" xml:space="preserve">
     <value>Hat seine Modliste noch nicht gesendet.</value>
@@ -8122,10 +8128,13 @@ Rechtsklick, um die aktuellen Filter darin zu speichern, sie umzubenennen oder z
     <value>Wird auch gebraucht</value>
   </data>
   <data name="ModLists_DepsHint" xml:space="preserve">
-    <value>Mods auf dieser Liste brauchen diese, aber die Liste nennt sie nicht. Angehakte werden mit der Liste installiert oder aktiviert und bleiben an, falls die Liste sie sonst beiseitelegen würde.</value>
+    <value>Mods, die dieser Rechner von der Liste bekommt, brauchen diese, und die Liste installiert sie hier nicht. Angehakte werden mit der Liste installiert oder aktiviert und bleiben an, falls die Liste sie beiseitelegen würde.</value>
   </data>
   <data name="ModLists_DepsNeededByFormat" xml:space="preserve">
     <value>Gebraucht von {0}</value>
+  </data>
+  <data name="ModLists_DepsElsewhereFormat" xml:space="preserve">
+    <value>Hier gebraucht von {0} - die Liste setzt ihn auf andere Rechner</value>
   </data>
   <data name="ModLists_DepsNeedInstallFormat" xml:space="preserve">
     <value>{0} installieren</value>

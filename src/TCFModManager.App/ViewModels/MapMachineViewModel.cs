@@ -114,15 +114,18 @@ public sealed class MapMachineViewModel : LocalizedViewModel
             if (_machine.InventoryUnreadable) return Strings.ServerMap_StandingUnreadable;
             if (_standing is null) return Strings.ServerMap_StandingNotReported;
 
-            if (_standing.UpToDate) return Strings.ServerMap_StandingUpToDate(_standing.Expected, _standing.Expected, _list.Name);
-
             var parts = new List<string>();
+
+            if (_standing.UpToDate) parts.Add(Strings.ServerMap_StandingUpToDate(_standing.Expected, _standing.Expected, _list.Name));
 
             if (_standing.Behind.Count > 0)
                 parts.Add(Strings.ServerMap_StandingBehind(_standing.Behind.Count, _standing.Behind.Count, Names(_standing.Behind)));
 
             if (_standing.Manual.Count > 0)
                 parts.Add(Strings.ServerMap_StandingManual(_standing.Manual.Count, _standing.Manual.Count, Names(_standing.Manual)));
+
+            // OPEN-44 Q13 (b): a headless that does not host is checked by scope only.
+            if (_machine is { Headless: true, Plays: false, Hosts: false }) parts.Add(Strings.ServerMap_HeadlessScopeNote);
 
             return string.Join(Environment.NewLine, parts);
         }

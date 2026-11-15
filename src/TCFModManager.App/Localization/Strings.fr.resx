@@ -4078,6 +4078,9 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   <data name="PreLaunch_ComparedFormat" xml:space="preserve">
     <value>Comparé à « {0} » : {1}. Appliquez la liste sur la page Listes de mods pour y remédier, ou rejoignez quand même - rien ici ne vous en empêche.</value>
   </data>
+  <data name="PreLaunch_HeadlessScopeNote" xml:space="preserve">
+    <value>Ce headless ne fait pas tourner le serveur, il est donc comparé à ce que la liste nomme pour lui - les mods dont ceux-ci ont besoin s'ajoutent quand vous prévisualisez la liste.</value>
+  </data>
   <data name="PreLaunch_ListMoved" xml:space="preserve">
     <value>La liste de mods de ce serveur a changé</value>
   </data>
@@ -4865,6 +4868,9 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   </data>
   <data name="ServerMap_StandingUnreadable" xml:space="preserve">
     <value>A envoyé une liste de mods que cette version de l'application ne sait pas lire. Mettre à jour TCF Mod Manager ici devrait régler le problème.</value>
+  </data>
+  <data name="ServerMap_HeadlessScopeNote" xml:space="preserve">
+    <value>Comparé à ce que la liste nomme pour un headless - les mods dont ceux-ci ont besoin apparaissent quand cette machine prévisualise la liste.</value>
   </data>
   <data name="ServerMap_StandingNotReported" xml:space="preserve">
     <value>N'a pas encore envoyé sa liste de mods.</value>
@@ -8122,10 +8128,13 @@ Clic droit pour y enregistrer les filtres actuels, le renommer ou le supprimer.<
     <value>Également nécessaires</value>
   </data>
   <data name="ModLists_DepsHint" xml:space="preserve">
-    <value>Des mods de cette liste en ont besoin, mais la liste ne les cite pas. Ceux qui sont cochés sont installés ou activés avec la liste, et restent actifs si la liste devait les mettre de côté.</value>
+    <value>Les mods que cette machine prend de la liste en ont besoin, et la liste ne les installe pas ici. Ceux qui sont cochés sont installés ou activés avec la liste, et restent actifs si la liste les mettait de côté.</value>
   </data>
   <data name="ModLists_DepsNeededByFormat" xml:space="preserve">
     <value>Requis par {0}</value>
+  </data>
+  <data name="ModLists_DepsElsewhereFormat" xml:space="preserve">
+    <value>Nécessaire ici pour {0} - la liste le place sur d'autres machines</value>
   </data>
   <data name="ModLists_DepsNeedInstallFormat" xml:space="preserve">
     <value>Installer la {0}</value>
