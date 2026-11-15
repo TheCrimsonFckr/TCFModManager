@@ -3012,7 +3012,55 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
     <value>Toutes les portées</value>
   </data>
   <data name="ModLists_ScopeFilterAdvice" xml:space="preserve">
-    <value>Conseils headless</value>
+    <value>Où il va</value>
+  </data>
+  <data name="ModLists_PlaceLabel" xml:space="preserve">
+    <value>Où il va :</value>
+  </data>
+  <data name="ModLists_PlaceSyncAddonFormat" xml:space="preserve">
+    <value>A un addon de synchro Fika sur sp-mod : {0}</value>
+  </data>
+  <data name="ModLists_PlaceFikaAddonFormat" xml:space="preserve">
+    <value>A un addon Fika sur sp-mod : {0}</value>
+  </data>
+  <data name="ModLists_PlaceAddonWiderFormat" xml:space="preserve">
+    <value>{0} va sur des machines que ce mod n'atteint pas</value>
+  </data>
+  <data name="ModLists_PlaceDependencyFormat" xml:space="preserve">
+    <value>{0} a besoin de ce mod sur chaque machine où il se charge</value>
+  </data>
+  <data name="ModLists_PlaceLibrary" xml:space="preserve">
+    <value>Rien de ce qui a besoin de ce mod ne va sur le headless</value>
+  </data>
+  <data name="ModLists_PlaceNothingToLoad" xml:space="preserve">
+    <value>Ce mod n'a rien à charger sur certaines des machines où il est envoyé</value>
+  </data>
+  <data name="ModLists_PlaceBotsItems" xml:space="preserve">
+    <value>Les bots peuvent apparaître avec les objets de ce mod, et le headless fait tourner les bots</value>
+  </data>
+  <data name="ModLists_PlaceAdviceNamesFormat" xml:space="preserve">
+    <value>Page de {0} : « {1} »</value>
+  </data>
+  <data name="ModLists_PlaceOnlySyncFormat" xml:space="preserve">
+    <value>La page de {0} dit que le headless n'a besoin que de la synchro</value>
+  </data>
+  <data name="ModLists_PlaceAddFormat" xml:space="preserve">
+    <value>L'ajouter ({0})</value>
+  </data>
+  <data name="ModLists_PlaceSetScopeFormat" xml:space="preserve">
+    <value>Mettre sur {0}</value>
+  </data>
+  <data name="ModLists_PlaceNarrowAddonFormat" xml:space="preserve">
+    <value>Mettre l'addon sur {0}</value>
+  </data>
+  <data name="ModLists_PlaceMoreFormat" xml:space="preserve">
+    <value>Aussi : {0}</value>
+  </data>
+  <data name="ModLists_PlaceKeepToolTip" xml:space="preserve">
+    <value>Masquer cette ligne sur cette liste. Rien ne change pour le mod.</value>
+  </data>
+  <data name="ModLists_PlaceKeptFormat" xml:space="preserve">
+    <value>Ligne « Où il va » masquée pour {0} sur cette liste.</value>
   </data>
   <data name="ModLists_AdviceKeepOffLabel" xml:space="preserve">
     <value>Pas sur le headless</value>
@@ -3047,10 +3095,10 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
 {0}</value>
   </data>
   <data name="ModLists_AdviceFound_one" xml:space="preserve">
-    <value>{0} mod de cette liste a un conseil headless sur sa page sp-mod - choisissez Conseils headless dans le filtre de portée pour le voir.</value>
+    <value>{0} mod de cette liste a un conseil headless sur sa page sp-mod - choisissez « Où il va » dans le filtre de portée pour le voir.</value>
   </data>
   <data name="ModLists_AdviceFound_other" xml:space="preserve">
-    <value>{0} mods de cette liste ont des conseils headless sur leur page sp-mod - choisissez Conseils headless dans le filtre de portée pour les voir.</value>
+    <value>{0} mods de cette liste ont des conseils headless sur leur page sp-mod - choisissez « Où il va » dans le filtre de portée pour les voir.</value>
   </data>
   <data name="ModLists_StatusThenAdviceFormat" xml:space="preserve">
     <value>{0} {1}</value>

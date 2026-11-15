@@ -53,6 +53,7 @@ public partial class ModListsViewModel
 
             Notify();
             UnsavedCount += added;
+            UpdatePlacement();
 
             StatusMessage = Strings.ModLists_Added(added, added, row.Name);
         });
@@ -70,6 +71,7 @@ public partial class ModListsViewModel
 
         UnsavedCount++;
         Notify();
+        UpdatePlacement();
 
         StatusMessage = Text(Strings.ModLists_RemovedEntryFormat, entry.Name, row.Name);
     }
@@ -118,6 +120,7 @@ public partial class ModListsViewModel
         // The scope filter may no longer match this row, so the counts move even though the list
         // did not.
         Notify();
+        UpdatePlacement();
 
         StatusMessage = next switch
         {
@@ -186,6 +189,7 @@ public partial class ModListsViewModel
 
             UnsavedCount += result.Changed.Count;
             Notify();
+            UpdatePlacement();
 
             // Named rather than counted: "12 versions updated" is not something anybody can check,
             // and the whole point of the button is to be able to see what it decided.

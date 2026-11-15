@@ -3177,7 +3177,55 @@
     <value>Все области</value>
   </data>
   <data name="ModLists_ScopeFilterAdvice" xml:space="preserve">
-    <value>Советы для headless</value>
+    <value>Куда ставить</value>
+  </data>
+  <data name="ModLists_PlaceLabel" xml:space="preserve">
+    <value>Куда ставить:</value>
+  </data>
+  <data name="ModLists_PlaceSyncAddonFormat" xml:space="preserve">
+    <value>Есть аддон синхронизации Fika на sp-mod: {0}</value>
+  </data>
+  <data name="ModLists_PlaceFikaAddonFormat" xml:space="preserve">
+    <value>Есть аддон Fika на sp-mod: {0}</value>
+  </data>
+  <data name="ModLists_PlaceAddonWiderFormat" xml:space="preserve">
+    <value>{0} идёт на машины, куда этот мод не попадает</value>
+  </data>
+  <data name="ModLists_PlaceDependencyFormat" xml:space="preserve">
+    <value>{0} нужен этот мод на каждой машине, где он загружается</value>
+  </data>
+  <data name="ModLists_PlaceLibrary" xml:space="preserve">
+    <value>Ничего из того, чему нужен этот мод, не идёт на headless</value>
+  </data>
+  <data name="ModLists_PlaceNothingToLoad" xml:space="preserve">
+    <value>Этому моду нечего загружать на некоторых машинах, куда он отправляется</value>
+  </data>
+  <data name="ModLists_PlaceBotsItems" xml:space="preserve">
+    <value>Боты могут появляться с предметами этого мода, а ботами управляет headless</value>
+  </data>
+  <data name="ModLists_PlaceAdviceNamesFormat" xml:space="preserve">
+    <value>Страница {0}: «{1}»</value>
+  </data>
+  <data name="ModLists_PlaceOnlySyncFormat" xml:space="preserve">
+    <value>Страница {0} говорит, что headless нужна только синхронизация</value>
+  </data>
+  <data name="ModLists_PlaceAddFormat" xml:space="preserve">
+    <value>Добавить ({0})</value>
+  </data>
+  <data name="ModLists_PlaceSetScopeFormat" xml:space="preserve">
+    <value>Поставить {0}</value>
+  </data>
+  <data name="ModLists_PlaceNarrowAddonFormat" xml:space="preserve">
+    <value>Поставить аддону {0}</value>
+  </data>
+  <data name="ModLists_PlaceMoreFormat" xml:space="preserve">
+    <value>Также: {0}</value>
+  </data>
+  <data name="ModLists_PlaceKeepToolTip" xml:space="preserve">
+    <value>Скрыть эту строку в этом списке. С модом ничего не меняется.</value>
+  </data>
+  <data name="ModLists_PlaceKeptFormat" xml:space="preserve">
+    <value>Строка «Куда ставить» для {0} скрыта в этом списке.</value>
   </data>
   <data name="ModLists_AdviceKeepOffLabel" xml:space="preserve">
     <value>Не ставить на headless</value>
@@ -3212,16 +3260,16 @@
 {0}</value>
   </data>
   <data name="ModLists_AdviceFound_one" xml:space="preserve">
-    <value>У {0} мода в этом списке есть совет для headless на странице sp-mod - выберите «Советы для headless» в фильтре областей, чтобы увидеть его.</value>
+    <value>У {0} мода в этом списке есть совет для headless на странице sp-mod - выберите «Куда ставить» в фильтре областей, чтобы увидеть его.</value>
   </data>
   <data name="ModLists_StatusThenAdviceFormat" xml:space="preserve">
     <value>{0} {1}</value>
   </data>
   <data name="ModLists_AdviceFound_few" xml:space="preserve">
-    <value>У {0} модов в этом списке есть советы для headless на их страницах sp-mod - выберите «Советы для headless» в фильтре областей, чтобы увидеть их.</value>
+    <value>У {0} модов в этом списке есть советы для headless на их страницах sp-mod - выберите «Куда ставить» в фильтре областей, чтобы увидеть их.</value>
   </data>
   <data name="ModLists_AdviceFound_many" xml:space="preserve">
-    <value>У {0} модов в этом списке есть советы для headless на их страницах sp-mod - выберите «Советы для headless» в фильтре областей, чтобы увидеть их.</value>
+    <value>У {0} модов в этом списке есть советы для headless на их страницах sp-mod - выберите «Куда ставить» в фильтре областей, чтобы увидеть их.</value>
   </data>
   <data name="ModLists_ScopeFilterToolTip" xml:space="preserve">
     <value>Показывать только записи, предназначенные для одного типа машин. «Только сервер» - моды, которые игроку никогда не предлагается устанавливать; «Только клиент» - те, что пропускает headless-клиент Fika.</value>

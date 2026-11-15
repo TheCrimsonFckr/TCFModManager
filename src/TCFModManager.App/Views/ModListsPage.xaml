@@ -312,6 +312,67 @@
                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                     Text="{Binding AdviceQuote}" />
                             </DockPanel>
+
+                            <!-- OPEN-44 S2: where this mod should go, the most severe finding first. -->
+                            <DockPanel
+                                Margin="0,2,0,0"
+                                ToolTip="{Binding PlacementToolTip}"
+                                Visibility="{Binding PlacementLine, Converter={StaticResource NullToCollapsed}}">
+                                <StackPanel
+                                    DockPanel.Dock="Right"
+                                    Margin="8,-3,0,-3"
+                                    Orientation="Horizontal"
+                                    Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
+                                    <ui:Button
+                                        Margin="0,0,6,0"
+                                        Padding="8,2"
+                                        FontSize="11"
+                                        Appearance="Transparent"
+                                        Content="{loc:Str ModLists_AdviceKeep}"
+                                        ToolTip="{loc:Str ModLists_PlaceKeepToolTip}"
+                                        Command="{Binding DataContext.KeepPlacementCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}" />
+                                    <ui:Button
+                                        Margin="0,0,6,0"
+                                        Padding="8,2"
+                                        FontSize="11"
+                                        Appearance="Transparent"
+                                        Content="{Binding PlacementAltLabel}"
+                                        Visibility="{Binding PlacementAltLabel, Converter={StaticResource NullToCollapsed}}"
+                                        Command="{Binding DataContext.TakePlacementAlternativeCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}" />
+                                    <ui:Button
+                                        Padding="8,2"
+                                        FontSize="11"
+                                        Appearance="Secondary"
+                                        Content="{Binding PlacementActionLabel}"
+                                        Visibility="{Binding PlacementActionLabel, Converter={StaticResource NullToCollapsed}}"
+                                        Command="{Binding DataContext.TakePlacementCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}" />
+                                </StackPanel>
+                                <TextBlock
+                                    DockPanel.Dock="Left"
+                                    Margin="0,0,6,0"
+                                    FontSize="11"
+                                    Text="{loc:Str ModLists_PlaceLabel}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding PlacementIsWarning}" Value="True">
+                                                    <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="11"
+                                    TextTrimming="CharacterEllipsis"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                    Text="{Binding PlacementLine}" />
+                            </DockPanel>
                         </StackPanel>
                     </Grid>
 
@@ -507,6 +568,67 @@
                                 TextTrimming="CharacterEllipsis"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 Text="{Binding AdviceQuote}" />
+                        </DockPanel>
+
+                        <!-- OPEN-44 S2: where this mod should go, the most severe finding first. -->
+                        <DockPanel
+                            Margin="0,4,0,0"
+                            ToolTip="{Binding PlacementToolTip}"
+                            Visibility="{Binding PlacementLine, Converter={StaticResource NullToCollapsed}}">
+                            <StackPanel
+                                DockPanel.Dock="Right"
+                                Margin="8,-3,0,-3"
+                                Orientation="Horizontal"
+                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
+                                <ui:Button
+                                    Margin="0,0,6,0"
+                                    Padding="8,2"
+                                    FontSize="11"
+                                    Appearance="Transparent"
+                                    Content="{loc:Str ModLists_AdviceKeep}"
+                                    ToolTip="{loc:Str ModLists_PlaceKeepToolTip}"
+                                    Command="{Binding DataContext.KeepPlacementCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                    CommandParameter="{Binding}" />
+                                <ui:Button
+                                    Margin="0,0,6,0"
+                                    Padding="8,2"
+                                    FontSize="11"
+                                    Appearance="Transparent"
+                                    Content="{Binding PlacementAltLabel}"
+                                    Visibility="{Binding PlacementAltLabel, Converter={StaticResource NullToCollapsed}}"
+                                    Command="{Binding DataContext.TakePlacementAlternativeCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                    CommandParameter="{Binding}" />
+                                <ui:Button
+                                    Padding="8,2"
+                                    FontSize="11"
+                                    Appearance="Secondary"
+                                    Content="{Binding PlacementActionLabel}"
+                                    Visibility="{Binding PlacementActionLabel, Converter={StaticResource NullToCollapsed}}"
+                                    Command="{Binding DataContext.TakePlacementCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                    CommandParameter="{Binding}" />
+                            </StackPanel>
+                            <TextBlock
+                                DockPanel.Dock="Left"
+                                Margin="0,0,6,0"
+                                FontSize="12"
+                                Text="{loc:Str ModLists_PlaceLabel}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding PlacementIsWarning}" Value="True">
+                                                <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                TextTrimming="CharacterEllipsis"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="{Binding PlacementLine}" />
                         </DockPanel>
                     </StackPanel>
 

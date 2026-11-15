@@ -146,6 +146,21 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
 
     public bool HasStanding => Status is not null;
 
+    // OPEN-44 S2: the most severe "Where it goes" finding, its line, and the rest in the tooltip.
+    public PlacementFinding? Placement { get; init; }
+
+    public bool HasPlacement => Placement is not null;
+
+    public bool PlacementIsWarning => Placement?.Severity == PlacementSeverity.Warning;
+
+    public string? PlacementLine { get; init; }
+
+    public string? PlacementToolTip { get; init; }
+
+    public string? PlacementActionLabel { get; init; }
+
+    public string? PlacementAltLabel { get; init; }
+
     //
     // Shown on every row, including Everyone.
     //
@@ -379,6 +394,9 @@ public partial class ModListsViewModel : LocalizedViewModel
     [NotifyCanExecuteChangedFor(nameof(StartRenameCommand))]
     [NotifyCanExecuteChangedFor(nameof(RefreshVersionsCommand))]
     [NotifyCanExecuteChangedFor(nameof(RefreshBehindCommand))]
+    [NotifyCanExecuteChangedFor(nameof(TakePlacementCommand))]
+    [NotifyCanExecuteChangedFor(nameof(TakePlacementAlternativeCommand))]
+    [NotifyCanExecuteChangedFor(nameof(KeepPlacementCommand))]
     private ModListRowViewModel? _selected;
 
     [ObservableProperty]

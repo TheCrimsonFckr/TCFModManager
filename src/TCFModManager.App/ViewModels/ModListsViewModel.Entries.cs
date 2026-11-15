@@ -92,7 +92,7 @@ public partial class ModListsViewModel
         if (item is not ModListEntryRowViewModel row) return false;
 
         if (ScopeFilter?.Scope is { } scope && row.Entry.EffectiveScope != scope) return false;
-        if (ScopeFilter?.AdviceOnly == true && !row.NeedsAttention) return false;
+        if (ScopeFilter?.AdviceOnly == true && !row.NeedsAttention && !row.HasPlacement) return false;
 
         var search = EntrySearch?.Trim();
         if (string.IsNullOrEmpty(search)) return true;
@@ -156,6 +156,7 @@ public partial class ModListsViewModel
         Notify();
 
         LoadAdvice();
+        UpdatePlacement();
 
         if (Selected is { IsFollowed: false } shown && _standingList is null) _ = StandAsync(shown.List);
     }
@@ -180,6 +181,7 @@ public partial class ModListsViewModel
     {
         _standingList = preview?.List;
         _standingPlan = preview?.Plan;
+        if (preview is not null) UsePlacementInstall(preview.Install);
         _standing = new(ReferenceEqualityComparer.Instance);
 
         foreach (var action in preview?.Plan.Actions ?? [])
@@ -194,8 +196,12 @@ public partial class ModListsViewModel
         if (!ReferenceEquals(Selected?.List, preview.List)) return;
 
         SetStanding(preview);
+        RecomputePlacement();
 
         for (var i = 0; i < Entries.Count; i++) Entries[i] = Row(Entries[i].Entry);
+
+        Notify();
+        LoadPlacementDependencies();
     }
 
     private async Task StandAsync(ModList list)
@@ -256,7 +262,7 @@ public partial class ModListsViewModel
     // What the entry stores, unless the catalog knows the mod under a better name. An unresolved
     // entry, an addon the cache hasn't loaded and an empty catalog all fall back to the stored name.
     //
-    private ModListEntryRowViewModel Row(ModListEntry entry) => WithStanding(RowOf(entry));
+    private ModListEntryRowViewModel Row(ModListEntry entry) => WithStanding(WithPlacement(RowOf(entry)));
 
     private ModListEntryRowViewModel RowOf(ModListEntry entry)
     {

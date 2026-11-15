@@ -94,6 +94,44 @@ public static partial class ModListPlacement
 {
     private const ModListEntryScope Loaders = ModListEntryScope.Client | ModListEntryScope.Headless;
 
+    // Q2 (c): a server half that depends on WTT-CommonLib ships items.
+    public const int WttCommonLibModId = 2310;
+
+    // Null when the scan found no half for it.
+    public static PlacementHalves? HalvesOf(ModListCandidate candidate, bool dependsOnCommonLib = false)
+    {
+        if (candidate.Entries.Count == 0) return null;
+
+        var servers = candidate.Entries.Where(e => e.Target == InstalledModTarget.Server).ToList();
+
+        return new PlacementHalves(
+            candidate.Entries.Any(e => e.Target == InstalledModTarget.Client),
+            servers.Count > 0,
+            servers.Count > 0 && (dependsOnCommonLib || servers.Any(s => ShipsItemFolders(s.FolderPath))));
+    }
+
+    // Q2 (b) as checked 2026-11-15: a folder named CustomItems, or ending in Items, directly under db\ or Resources\.
+    public static bool ShipsItemFolders(string serverFolder)
+    {
+        try
+        {
+            foreach (var under in Directory.Exists(serverFolder) ? Directory.EnumerateDirectories(serverFolder) : [])
+            {
+                var name = Path.GetFileName(under);
+                if (!name.Equals("db", StringComparison.OrdinalIgnoreCase) && !name.Equals("Resources", StringComparison.OrdinalIgnoreCase)) continue;
+
+                if (Directory.EnumerateDirectories(under).Any(d => Path.GetFileName(d).EndsWith("Items", StringComparison.OrdinalIgnoreCase)))
+                    return true;
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.Warn("ModLists", $"couldn't look for item folders in {serverFolder}: {ex.Message}");
+        }
+
+        return false;
+    }
+
     [GeneratedRegex(@"\bsync\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
     private static partial Regex Sync();
 

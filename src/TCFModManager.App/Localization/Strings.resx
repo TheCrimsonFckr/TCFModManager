@@ -1956,8 +1956,56 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <comment>The neutral entry in the scope filter - no filtering.</comment>
   </data>
   <data name="ModLists_ScopeFilterAdvice" xml:space="preserve">
-    <value>Headless advice</value>
-    <comment>Scope filter entry: the rows whose sp-mod page says to keep the mod off a Fika headless while this entry still sends it there, or says the headless needs it while this entry skips the headless.</comment>
+    <value>Where it goes</value>
+    <comment>Scope filter entry (OPEN-44: Where it goes): the rows with a placement line, and the rows whose sp-mod page says to keep the mod off a Fika headless while this entry still sends it there, or says the headless needs it while this entry skips the headless.</comment>
+  </data>
+  <data name="ModLists_PlaceLabel" xml:space="preserve">
+    <value>Where it goes:</value>
+  </data>
+  <data name="ModLists_PlaceSyncAddonFormat" xml:space="preserve">
+    <value>Has a Fika sync addon on sp-mod: {0}</value>
+  </data>
+  <data name="ModLists_PlaceFikaAddonFormat" xml:space="preserve">
+    <value>Has a Fika addon on sp-mod: {0}</value>
+  </data>
+  <data name="ModLists_PlaceAddonWiderFormat" xml:space="preserve">
+    <value>{0} goes to machines this mod doesn't reach</value>
+  </data>
+  <data name="ModLists_PlaceDependencyFormat" xml:space="preserve">
+    <value>{0} needs this mod on every machine it loads on</value>
+  </data>
+  <data name="ModLists_PlaceLibrary" xml:space="preserve">
+    <value>Nothing that needs this mod goes to the headless</value>
+  </data>
+  <data name="ModLists_PlaceNothingToLoad" xml:space="preserve">
+    <value>This mod has nothing to load on some of the machines it is sent to</value>
+  </data>
+  <data name="ModLists_PlaceBotsItems" xml:space="preserve">
+    <value>Bots can spawn with this mod's items, and the headless runs the bots</value>
+  </data>
+  <data name="ModLists_PlaceAdviceNamesFormat" xml:space="preserve">
+    <value>{0}'s page: "{1}"</value>
+  </data>
+  <data name="ModLists_PlaceOnlySyncFormat" xml:space="preserve">
+    <value>{0}'s page says the headless needs only the sync</value>
+  </data>
+  <data name="ModLists_PlaceAddFormat" xml:space="preserve">
+    <value>Add it ({0})</value>
+  </data>
+  <data name="ModLists_PlaceSetScopeFormat" xml:space="preserve">
+    <value>Set to {0}</value>
+  </data>
+  <data name="ModLists_PlaceNarrowAddonFormat" xml:space="preserve">
+    <value>Set the addon to {0}</value>
+  </data>
+  <data name="ModLists_PlaceMoreFormat" xml:space="preserve">
+    <value>Also: {0}</value>
+  </data>
+  <data name="ModLists_PlaceKeepToolTip" xml:space="preserve">
+    <value>Hide this line on this list. Nothing about the mod changes.</value>
+  </data>
+  <data name="ModLists_PlaceKeptFormat" xml:space="preserve">
+    <value>Hid the "Where it goes" line for {0} on this list.</value>
   </data>
   <data name="ModLists_AdviceKeepOffLabel" xml:space="preserve">
     <value>Keep off headless</value>
@@ -2000,11 +2048,11 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <comment>Tooltip on an addon entry. {0} is one or more sentences from the parent mod's sp-mod page, quoted as written - they are not translated.</comment>
   </data>
   <data name="ModLists_AdviceFound_one" xml:space="preserve">
-    <value>1 mod on this list has headless advice from its sp-mod page - choose Headless advice in the scope filter to see it.</value>
-    <comment>Said after a capture. "Headless advice" is ModLists_ScopeFilterAdvice - translate it the same way.</comment>
+    <value>1 mod on this list has headless advice from its sp-mod page - choose Where it goes in the scope filter to see it.</value>
+    <comment>Said after a capture. "Where it goes" is ModLists_ScopeFilterAdvice - translate it the same way.</comment>
   </data>
   <data name="ModLists_AdviceFound_other" xml:space="preserve">
-    <value>{0} mods on this list have headless advice from their sp-mod pages - choose Headless advice in the scope filter to see them.</value>
+    <value>{0} mods on this list have headless advice from their sp-mod pages - choose Where it goes in the scope filter to see them.</value>
   </data>
   <data name="ModLists_StatusThenAdviceFormat" xml:space="preserve">
     <value>{0} {1}</value>

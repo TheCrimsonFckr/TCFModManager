@@ -386,4 +386,46 @@ public class ModListPlacementTests
         Assert.Equal(PlacementRule.SyncAddonAvailable, finding.Rule);
         Assert.Equal(ClientAndHeadless, finding.AddonScope);
     }
+
+    [Fact]
+    public void Halves_ItemFoldersUnderDbOrResourcesShipItems()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "tcf-placement-" + Guid.NewGuid().ToString("N"));
+        try
+        {
+            var armory = Path.Combine(root, "armory");
+            var sound = Path.Combine(root, "sound");
+            var dwv = Path.Combine(root, "dwv");
+            var skills = Path.Combine(root, "skills");
+            Directory.CreateDirectory(Path.Combine(armory, "db", "CustomItems"));
+            Directory.CreateDirectory(Path.Combine(sound, "bundles"));
+            Directory.CreateDirectory(Path.Combine(dwv, "db", "02_Items"));
+            Directory.CreateDirectory(Path.Combine(skills, "Resources", "Items"));
+
+            Assert.True(ModListPlacement.ShipsItemFolders(armory));
+            Assert.False(ModListPlacement.ShipsItemFolders(sound));
+            Assert.True(ModListPlacement.ShipsItemFolders(dwv));
+            Assert.True(ModListPlacement.ShipsItemFolders(skills));
+            Assert.False(ModListPlacement.ShipsItemFolders(Path.Combine(root, "missing")));
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
+    [Fact]
+    public void Halves_ReadFromTheScanAndCommonLibCountsAsItems()
+    {
+        static InstalledMod Half(InstalledModTarget target) =>
+            new() { Name = "x", Target = target, FolderPath = Path.Combine(Path.GetTempPath(), "tcf-none-" + Guid.NewGuid().ToString("N")) };
+
+        var both = new ModListCandidate { Name = "Both", Entries = [Half(InstalledModTarget.Client), Half(InstalledModTarget.Server)] };
+        var clientOnly = new ModListCandidate { Name = "Client", Entries = [Half(InstalledModTarget.Client)] };
+
+        Assert.Equal(new PlacementHalves(true, true, false), ModListPlacement.HalvesOf(both));
+        Assert.Equal(new PlacementHalves(true, true, true), ModListPlacement.HalvesOf(both, dependsOnCommonLib: true));
+        Assert.Equal(new PlacementHalves(true, false, false), ModListPlacement.HalvesOf(clientOnly, dependsOnCommonLib: true));
+        Assert.Null(ModListPlacement.HalvesOf(new ModListCandidate { Name = "Unseen" }));
+    }
 }

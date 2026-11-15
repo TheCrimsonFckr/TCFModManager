@@ -415,6 +415,61 @@ public static class SpModListResolver
     private static string CoreVersion(string version) => version.Split('+', 2)[0].Split('-', 2)[0];
 
     //
+    // OPEN-44 R3: the mods each entry depends on directly, at its version and sptVersion. An entry
+    // sp-mod has no answer for is left out. Failures are thrown to the caller.
+    //
+    public static async Task<IReadOnlyDictionary<ModListEntry, IReadOnlyList<int>>> DirectDependenciesAsync(
+        IReadOnlyList<ModListEntry> entries,
+        string sptVersion,
+        ISpModListApi api,
+        CancellationToken ct = default)
+    {
+        var result = new Dictionary<ModListEntry, IReadOnlyList<int>>(ReferenceEqualityComparer.Instance);
+        var askable = entries.Where(e => e.ModId is not null && !string.IsNullOrWhiteSpace(e.Version)).ToList();
+
+        var batches = askable.Where(e => !e.IsAddon).Chunk(DependencyBatch).Select(b => (Addons: false, Entries: b))
+            .Concat(askable.Where(e => e.IsAddon).Chunk(DependencyBatch).Select(b => (Addons: true, Entries: b)));
+
+        foreach (var (isAddons, batch) in batches)
+        {
+            var missed = await AskAsync(batch, isAddons, e => e.Version!).ConfigureAwait(false);
+
+            var retry = missed.Where(e => CoreVersion(e.Version!) != e.Version).ToArray();
+            if (retry.Length > 0) await AskAsync(retry, isAddons, e => CoreVersion(e.Version!)).ConfigureAwait(false);
+        }
+
+        return result;
+
+        async Task<List<ModListEntry>> AskAsync(IReadOnlyList<ModListEntry> batch, bool isAddons, Func<ModListEntry, string> version)
+        {
+            var keys = batch
+                .GroupBy(e => $"{e.ModId}:{version(e)}")
+                .ToDictionary(g => g.Key, g => g.ToList());
+            var pairs = string.Join(",", keys.Keys);
+
+            var answer = isAddons
+                ? await api.AddonDependenciesAsync(pairs, sptVersion, ct).ConfigureAwait(false)
+                : await api.ModDependenciesAsync(pairs, sptVersion, ct).ConfigureAwait(false);
+
+            var missed = new List<ModListEntry>();
+
+            foreach (var (key, group) in keys)
+            {
+                if (!answer.TryGetValue(key, out var nodes))
+                {
+                    missed.AddRange(group);
+                    continue;
+                }
+
+                IReadOnlyList<int> direct = [.. nodes.Select(n => n.Id).Distinct()];
+                foreach (var entry in group) result[entry] = direct;
+            }
+
+            return missed;
+        }
+    }
+
+    //
     // The mods the list's entries need that the list doesn't name, resolved against sptVersion.
     //
     // sp-mod resolves the whole tree, so one request covers dependencies of dependencies. An entry

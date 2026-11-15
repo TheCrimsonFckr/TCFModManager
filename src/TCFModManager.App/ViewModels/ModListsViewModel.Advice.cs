@@ -102,6 +102,8 @@ public partial class ModListsViewModel
         }
 
         if (changed) Notify();
+
+        UpdatePlacement();
     }
 
     [RelayCommand(CanExecute = nameof(SelectionIsEditable))]

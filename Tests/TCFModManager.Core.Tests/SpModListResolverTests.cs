@@ -572,4 +572,22 @@ public class SpModListResolverTests
         Assert.Equal(2, handler.Requests.Count);
         Assert.True(versions.ContainsKey(791));
     }
+
+    [Fact]
+    public async Task DirectDependenciesAreTheTopOfEachTreeAndRetryWithoutTheSuffix()
+    {
+        var api = new FakeApi();
+        api.ModTrees["2706:2.1.1"] = [Node(791, "4.5.1", Node(902, "1.5.0")), Node(827, "1.9.0")];
+        api.ModTrees["100:1.0.0"] = [Node(2310, "3.0.8")];
+
+        var orbit = Mod(2706, "2.1.1", "ORBIT");
+        var suffixed = Mod(100, "1.0.0+spt4.1", "Suffixed");
+        var unknown = Mod(5, "9.9.9", "Unknown");
+
+        var result = await SpModListResolver.DirectDependenciesAsync([orbit, suffixed, unknown], "4.1.6", api);
+
+        Assert.Equal([791, 827], result[orbit]);
+        Assert.Equal([2310], result[suffixed]);
+        Assert.False(result.ContainsKey(unknown));
+    }
 }

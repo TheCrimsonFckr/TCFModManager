@@ -21,6 +21,10 @@ public sealed class HeadlessAdviceDismissals
     public static string Key(Guid listId, HeadlessSubject subject, HeadlessVerdict verdict) =>
         $"{listId:N}|{subject.Key}|{verdict}".ToLowerInvariant();
 
+    // OPEN-44: a placement line kept for one entry on one list.
+    public static string Key(Guid listId, ModListEntry entry, PlacementRule rule) =>
+        $"{listId:N}|placement|{(entry.IsAddon ? "addon" : "mod")}:{entry.ModId?.ToString() ?? entry.Name.Trim()}|{rule}".ToLowerInvariant();
+
     public HashSet<string> Load()
     {
         try
