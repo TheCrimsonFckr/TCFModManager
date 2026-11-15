@@ -68,6 +68,20 @@ public class ModListMissingParentsTests
         Assert.Empty(Missing([Addon(68, "1.0.0", 130)], alreadyMissing: [CamoId]));
     }
 
+    // OPEN-44 R10 (Q7): the headless gets the sync addon, the list keeps its parent on the players.
+    // The parent is placed, not missing, so the headless is not offered it.
+    [Fact]
+    public void AParentTheListScopesOffThisMachine_IsPlacedNotMissing()
+    {
+        var camoOnPlayersOnly = new ModListEntry { Name = "Camo And Stickers", ModId = CamoId, Version = "1.19.0", Scope = ModListEntryScope.Client };
+        var syncHere = Addon(68, "1.0.0", 130);
+
+        Assert.Empty(ModListDependencies.MissingParents([syncHere], Addons, Catalog, "4.1.6", new HashSet<int>(), placed: [camoOnPlayersOnly, syncHere]));
+
+        // A list that never names the parent still has it missing.
+        Assert.Single(ModListDependencies.MissingParents([syncHere], Addons, Catalog, "4.1.6", new HashSet<int>(), placed: [syncHere]));
+    }
+
     [Fact]
     public void AModWithTheAddonsId_IsNotMistakenForTheAddon()
     {

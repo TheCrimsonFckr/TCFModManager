@@ -150,6 +150,26 @@ public class ServerMapStandingTests
         Assert.Equal(["Extra HUD"], standing.Extras.Select(m => m.Name));
     }
 
+    // OPEN-44 R8 (L8): a mod on the list, scoped off the headless, still enabled there - its own line,
+    // not an Extra and not Behind. A player's report carries no halves, so nothing is set aside there
+    // until S3 adds them.
+    [Fact]
+    public void ADedicatedHeadlessListsTheScopedOffModsItStillHasEnabled()
+    {
+        var standing = ServerMapMachines.StandingOf(Published(ModListOrigin.Server),
+            Machine(headless: true, mods: [Has("SAIN", 1, "3.0.0"), Has("HeadlessTweaks", 4, "1.0.0"), Has("fika-server", 3, "1.0.0"), Has("UIFixes", 2, "2.0.0")]))!;
+
+        var off = Assert.Single(standing.ScopedOff);
+        Assert.Equal("UIFixes", off.Name);
+        Assert.Equal(ModListActionKind.Disable, off.Kind);
+        Assert.Empty(standing.Extras);
+        Assert.True(standing.UpToDate);
+
+        var disabledAlready = ServerMapMachines.StandingOf(Published(ModListOrigin.Server),
+            Machine(headless: true, mods: [Has("UIFixes", 2, "2.0.0", disabled: true)]))!;
+        Assert.Empty(disabledAlready.ScopedOff);
+    }
+
     [Fact]
     public void AHostThatDoesNotPlayOwesOnlyTheServerEntries()
     {
