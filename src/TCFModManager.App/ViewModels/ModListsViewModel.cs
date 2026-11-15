@@ -66,7 +66,81 @@ public sealed partial class ModListRowViewModel(
     private static string Text(string format, params object?[] values) =>
         LocalizationService.Text(format, values);
 
+    // The row's line under the name: the count, and where it came from when it isn't one of yours.
     public string Detail
+    {
+        get
+        {
+            var parts = new List<string>
+            {
+                List.Entries.Count == 1
+                    ? Strings.ModLists_DetailOneMod
+                    : Text(Strings.ModLists_DetailModsFormat, List.Entries.Count),
+            };
+
+            if (List.IsSnapshot) parts.Add(Strings.ModLists_DetailSnapshot);
+
+            if (List.Origin != ModListOrigin.Local) parts.Add(Origin);
+
+            return string.Join(Strings.Common_FactSeparator, parts);
+        }
+    }
+
+    public string RowToolTip => IsActiveServer
+        ? FullDetail + Environment.NewLine + Strings.ModLists_FollowingServerToolTip
+        : FullDetail;
+
+    // The Saved lists sections (OPEN-44): what a list is to this install, in the order they're shown.
+    public int SectionOrder =>
+        IsPublished ? 0 : IsActive || IsActiveServer ? 1 : List.Origin switch
+        {
+            ModListOrigin.Local => 2,
+            ModListOrigin.Imported => 3,
+            _ => 4,
+        };
+
+    public string SectionLabel => SectionOrder switch
+    {
+        0 => Strings.ModLists_ServingBadge,
+        1 => Strings.ModLists_FollowingBadge,
+        2 => Strings.ModLists_SectionOwn,
+        3 => Strings.ModLists_SectionImported,
+        _ => Strings.ModLists_FromServerBadge,
+    };
+
+    public string? SectionToolTip => SectionOrder switch
+    {
+        0 => Strings.ModLists_ServingToolTip,
+        1 => Strings.ModLists_FollowingToolTip,
+        4 => Strings.ModLists_FromServerToolTip,
+        _ => null,
+    };
+
+    public DateTimeOffset UpdatedAt => List.UpdatedAt;
+
+    // Why this list needs a look, one reason per line, from the last time it was checked here.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasAttention))]
+    private string? _attention;
+
+    public bool HasAttention => Attention is not null;
+
+    private string Origin => List.Origin switch
+    {
+        ModListOrigin.Imported when List.SpModSource is not null => List.Source is null
+            ? Strings.ModLists_DetailFromSpMod
+            : Text(Strings.ModLists_DetailFromSpModFormat, List.Source),
+        ModListOrigin.Imported => List.Source is null
+            ? Strings.ModLists_DetailImported
+            : Text(Strings.ModLists_DetailFromFormat, List.Source),
+        ModListOrigin.Server => List.Source is null
+            ? Strings.ModLists_DetailFromServer
+            : Text(Strings.ModLists_DetailFromFormat, List.Source),
+        _ => Strings.ModLists_DetailMadeHere,
+    };
+
+    // Everything about the list, for the header and the row's tooltip.
+    public string FullDetail
     {
         get
         {
@@ -86,19 +160,7 @@ public sealed partial class ModListRowViewModel(
 
             if (IsPublished) parts.Add(Strings.ModLists_DetailPublished);
 
-            parts.Add(List.Origin switch
-            {
-                ModListOrigin.Imported when List.SpModSource is not null => List.Source is null
-                    ? Strings.ModLists_DetailFromSpMod
-                    : Text(Strings.ModLists_DetailFromSpModFormat, List.Source),
-                ModListOrigin.Imported => List.Source is null
-                    ? Strings.ModLists_DetailImported
-                    : Text(Strings.ModLists_DetailFromFormat, List.Source),
-                ModListOrigin.Server => List.Source is null
-                    ? Strings.ModLists_DetailFromServer
-                    : Text(Strings.ModLists_DetailFromFormat, List.Source),
-                _ => Strings.ModLists_DetailMadeHere,
-            });
+            parts.Add(Origin);
 
             if (List.Revision > 1) parts.Add(Text(Strings.ModLists_DetailRevisionFormat, List.Revision));
 
@@ -536,7 +598,7 @@ public partial class ModListsViewModel : LocalizedViewModel
 
     // The same one-line summary the left-hand row shows, repeated under the name so the detail
     // pane says what it is without the eye having to go back to the list.
-    public string SelectionDetail => Selected?.Detail ?? string.Empty;
+    public string SelectionDetail => Selected?.FullDetail ?? string.Empty;
 
     public bool HasLists => Lists.Count > 0;
 
@@ -677,7 +739,10 @@ public partial class ModListsViewModel : LocalizedViewModel
                 data.ActiveListId == list.Id,
                 data.ActiveServerListId == list.Id,
                 data.PublishedListId == list.Id,
-                hosts && list.IsEditable && data.PublishedListId == list.Id));
+                hosts && list.IsEditable && data.PublishedListId == list.Id)
+            {
+                Attention = AttentionAtRefresh(list, data.PublishedListId == list.Id),
+            });
 
         OnPropertyChanged(nameof(HasLists));
 

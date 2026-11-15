@@ -48,6 +48,7 @@ public partial class ModListsViewModel
         if (changed) Notify();
 
         LoadPlacementDependencies();
+        UpdateAttention();
     }
 
     private void RecomputePlacement()

@@ -822,12 +822,26 @@
                         BorderThickness="0"
                         Background="Transparent"
                         ItemContainerStyle="{StaticResource BareContainer}"
-                        ItemsSource="{Binding Lists}"
+                        ItemsSource="{Binding ListsView}"
                         SelectedItem="{Binding Selected, Mode=TwoWay}"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Margin="2,10,0,4"
+                                            FontSize="12"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            ToolTip="{Binding Items[0].SectionToolTip}"
+                                            Text="{Binding Name}" />
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                            </GroupStyle>
+                        </ListBox.GroupStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Border Style="{StaticResource ListCardRow}">
+                                <Border Style="{StaticResource ListCardRow}" ToolTip="{Binding RowToolTip}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
@@ -849,105 +863,15 @@
                                             Text="{Binding Detail}" />
                                     </StackPanel>
 
-                                    <!-- Three separate things, deliberately not one badge: the list
-                                         you follow, the list a server hands you (followed at the
-                                         same time), and the list THIS machine serves to others. -->
-                                    <StackPanel
+                                    <Ellipse
                                         Grid.Column="1"
-                                        Orientation="Horizontal"
+                                        Width="9"
+                                        Height="9"
+                                        Margin="10,0,2,0"
                                         VerticalAlignment="Center"
-                                        Margin="10,0,0,0">
-
-                                        <Border
-                                            Padding="8,3"
-                                            Margin="0,0,6,0"
-                                            CornerRadius="{DynamicResource ControlCornerRadius}"
-                                            ToolTip="{loc:Str ModLists_ServingToolTip}"
-                                            Background="{DynamicResource SystemFillColorAttentionBackgroundBrush}"
-                                            Visibility="{Binding IsPublished, Converter={StaticResource BoolToVis}}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <ui:SymbolIcon
-                                                    Symbol="ArrowUpload24"
-                                                    FontSize="14"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource SystemFillColorAttentionBrush}" />
-                                                <TextBlock
-                                                    Margin="5,0,0,0"
-                                                    FontSize="11"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource SystemFillColorAttentionBrush}"
-                                                    Text="{loc:Str ModLists_ServingBadge}" />
-                                            </StackPanel>
-                                        </Border>
-
-                                        <!-- On origin, not on being followed: the list you fetched
-                                             and have not applied yet is the one you most need to
-                                             tell apart from your own. -->
-                                        <Border
-                                            Padding="8,3"
-                                            Margin="0,0,6,0"
-                                            CornerRadius="{DynamicResource ControlCornerRadius}"
-                                            ToolTip="{loc:Str ModLists_FromServerToolTip}"
-                                            Background="{DynamicResource SystemFillColorCriticalBackgroundBrush}"
-                                            Visibility="{Binding IsFromServer, Converter={StaticResource BoolToVis}}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <ui:SymbolIcon
-                                                    Symbol="CloudArrowDown24"
-                                                    FontSize="14"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
-                                                <TextBlock
-                                                    Margin="5,0,0,0"
-                                                    FontSize="11"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource SystemFillColorCriticalBrush}"
-                                                    Text="{loc:Str ModLists_FromServerBadge}" />
-                                            </StackPanel>
-                                        </Border>
-
-                                        <Border
-                                            Padding="8,3"
-                                            Margin="0,0,6,0"
-                                            CornerRadius="{DynamicResource ControlCornerRadius}"
-                                            ToolTip="{loc:Str ModLists_FollowingServerToolTip}"
-                                            Background="{DynamicResource SystemFillColorSuccessBackgroundBrush}"
-                                            Visibility="{Binding IsActiveServer, Converter={StaticResource BoolToVis}}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <ui:SymbolIcon
-                                                    Symbol="CheckmarkCircle24"
-                                                    FontSize="14"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource SystemFillColorSuccessBrush}" />
-                                                <TextBlock
-                                                    Margin="5,0,0,0"
-                                                    FontSize="11"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource SystemFillColorSuccessBrush}"
-                                                    Text="{loc:Str ModLists_FollowingBadge}" />
-                                            </StackPanel>
-                                        </Border>
-                                        <Border
-                                            Padding="8,3"
-                                            Margin="0,0,6,0"
-                                            CornerRadius="{DynamicResource ControlCornerRadius}"
-                                            ToolTip="{loc:Str ModLists_FollowingToolTip}"
-                                            Background="{DynamicResource SystemFillColorSuccessBackgroundBrush}"
-                                            Visibility="{Binding IsActive, Converter={StaticResource BoolToVis}}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <ui:SymbolIcon
-                                                    Symbol="CheckmarkCircle24"
-                                                    FontSize="14"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource SystemFillColorSuccessBrush}" />
-                                                <TextBlock
-                                                    Margin="5,0,0,0"
-                                                    FontSize="11"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource SystemFillColorSuccessBrush}"
-                                                    Text="{loc:Str ModLists_FollowingBadge}" />
-                                            </StackPanel>
-                                        </Border>
-                                    </StackPanel>
+                                        Fill="{DynamicResource SystemFillColorCautionBrush}"
+                                        ToolTip="{Binding Attention}"
+                                        Visibility="{Binding HasAttention, Converter={StaticResource BoolToVis}}" />
                                 </Grid>
                                 </Border>
                             </DataTemplate>

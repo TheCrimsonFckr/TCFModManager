@@ -218,6 +218,7 @@ public partial class ModListsViewModel
 
         Notify();
         LoadPlacementDependencies();
+        UpdateAttention();
     }
 
     private async Task StandAsync(ModList list)

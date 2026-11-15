@@ -2948,6 +2948,24 @@
   <data name="ModLists_FollowingToolTip" xml:space="preserve">
     <value>Эта установка следует этому списку</value>
   </data>
+  <data name="ModLists_SectionOwn" xml:space="preserve">
+    <value>Ваши списки</value>
+  </data>
+  <data name="ModLists_SectionImported" xml:space="preserve">
+    <value>Импортированные</value>
+  </data>
+  <data name="ModLists_AttentionChangedSinceServed" xml:space="preserve">
+    <value>Изменён после раздачи</value>
+  </data>
+  <data name="ModLists_AttentionNewerHere" xml:space="preserve">
+    <value>Некоторые моды на этой установке новее, чем в списке</value>
+  </data>
+  <data name="ModLists_AttentionWarnings" xml:space="preserve">
+    <value>В «Куда ставить» есть предупреждения</value>
+  </data>
+  <data name="ModLists_AttentionNotMatching" xml:space="preserve">
+    <value>Эта установка ему ещё не соответствует</value>
+  </data>
   <data name="ModLists_ForkedFormat" xml:space="preserve">
     <value>Создан «{0}» - оригинал не тронут.</value>
   </data>
@@ -3359,7 +3377,7 @@
     <value>Раздаётся</value>
   </data>
   <data name="ModLists_ServingToolTip" xml:space="preserve">
-    <value>Этот компьютер раздаёт этот список клиентам, которые к нему подключаются. Изменение и сохранение списка сразу обновляет то, что они видят.</value>
+    <value>Эта машина раздаёт этот список машинам на Server Map. Предпросмотр, затем Раздать, чтобы отправить им изменения.</value>
   </data>
   <data name="ModLists_ShowingFormat" xml:space="preserve">
     <value>Показано то, что указано в «{0}».</value>

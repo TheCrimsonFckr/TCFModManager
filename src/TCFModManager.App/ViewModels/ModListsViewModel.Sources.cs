@@ -101,6 +101,7 @@ public partial class ModListsViewModel
         _unpublishedSince = Selected is { IsPublished: true } row ? UnpublishedSince(row.List) : null;
         OnPropertyChanged(nameof(UnpublishedNotice));
         OnPropertyChanged(nameof(HasUnpublishedChanges));
+        UpdateAttention();
     }
 
     // The copy the Server Map serves and when it was written, or null when there is none to read.

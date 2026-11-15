@@ -133,6 +133,12 @@ internal static class Strings
     internal static string ModLists_FromServerToolTip => LocalizationService.Get("ModLists_FromServerToolTip");
     internal static string ModLists_FollowingServerToolTip => LocalizationService.Get("ModLists_FollowingServerToolTip");
     internal static string ModLists_FollowingToolTip => LocalizationService.Get("ModLists_FollowingToolTip");
+    internal static string ModLists_SectionOwn => LocalizationService.Get("ModLists_SectionOwn");
+    internal static string ModLists_SectionImported => LocalizationService.Get("ModLists_SectionImported");
+    internal static string ModLists_AttentionChangedSinceServed => LocalizationService.Get("ModLists_AttentionChangedSinceServed");
+    internal static string ModLists_AttentionNewerHere => LocalizationService.Get("ModLists_AttentionNewerHere");
+    internal static string ModLists_AttentionWarnings => LocalizationService.Get("ModLists_AttentionWarnings");
+    internal static string ModLists_AttentionNotMatching => LocalizationService.Get("ModLists_AttentionNotMatching");
     internal static string ModLists_UndoToolTip => LocalizationService.Get("ModLists_UndoToolTip");
     internal static string ModLists_EmptyState => LocalizationService.Get("ModLists_EmptyState");
     internal static string ModLists_Rename => LocalizationService.Get("ModLists_Rename");

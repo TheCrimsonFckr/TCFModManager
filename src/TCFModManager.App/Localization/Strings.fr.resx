@@ -2795,6 +2795,24 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   <data name="ModLists_FollowingToolTip" xml:space="preserve">
     <value>Cette installation suit cette liste</value>
   </data>
+  <data name="ModLists_SectionOwn" xml:space="preserve">
+    <value>Vos listes</value>
+  </data>
+  <data name="ModLists_SectionImported" xml:space="preserve">
+    <value>Importées</value>
+  </data>
+  <data name="ModLists_AttentionChangedSinceServed" xml:space="preserve">
+    <value>Modifiée depuis qu'elle a été servie</value>
+  </data>
+  <data name="ModLists_AttentionNewerHere" xml:space="preserve">
+    <value>Certains mods sont plus récents sur cette installation que sur la liste</value>
+  </data>
+  <data name="ModLists_AttentionWarnings" xml:space="preserve">
+    <value>Où il va a des avertissements</value>
+  </data>
+  <data name="ModLists_AttentionNotMatching" xml:space="preserve">
+    <value>Cette installation ne lui correspond pas encore</value>
+  </data>
   <data name="ModLists_ForkedFormat" xml:space="preserve">
     <value>« {0} » créée - l'originale est intacte.</value>
   </data>
@@ -3191,7 +3209,7 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
     <value>Diffusée</value>
   </data>
   <data name="ModLists_ServingToolTip" xml:space="preserve">
-    <value>Cette machine diffuse cette liste aux clients qui s'y connectent. La modifier et l'enregistrer republie ce qu'ils voient.</value>
+    <value>Cette machine sert cette liste aux machines de la Server Map. Aperçu, puis Servir, pour leur envoyer vos modifications.</value>
   </data>
   <data name="ModLists_ShowingFormat" xml:space="preserve">
     <value>Affichage de ce que nomme « {0} ».</value>

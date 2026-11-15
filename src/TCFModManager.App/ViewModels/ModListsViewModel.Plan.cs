@@ -70,6 +70,7 @@ public partial class ModListsViewModel
         _behind = count > 0 ? (count, Selected?.IsPublished == true) : null;
         OnPropertyChanged(nameof(BehindNotice));
         OnPropertyChanged(nameof(HasBehindNotice));
+        UpdateAttention();
     }
 
     private void NotifyPlanWording()

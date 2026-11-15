@@ -491,7 +491,7 @@
     <comment>Badge on the list this machine serves to clients. Short: it sits in a small chip.</comment>
   </data>
   <data name="ModLists_ServingToolTip" xml:space="preserve">
-    <value>This machine serves this list to clients that connect to it. Editing and saving it republishes what they see.</value>
+    <value>This machine serves this list to the machines on the Server Map. Preview, then Serve, to send them your changes.</value>
   </data>
   <data name="ModLists_FromServerBadge" xml:space="preserve">
     <value>From server</value>
@@ -505,6 +505,24 @@
   </data>
   <data name="ModLists_FollowingToolTip" xml:space="preserve">
     <value>This install is following this list</value>
+  </data>
+  <data name="ModLists_SectionOwn" xml:space="preserve">
+    <value>Your lists</value>
+  </data>
+  <data name="ModLists_SectionImported" xml:space="preserve">
+    <value>Imported</value>
+  </data>
+  <data name="ModLists_AttentionChangedSinceServed" xml:space="preserve">
+    <value>Changed since it was served</value>
+  </data>
+  <data name="ModLists_AttentionNewerHere" xml:space="preserve">
+    <value>Some mods are newer on this install than on the list</value>
+  </data>
+  <data name="ModLists_AttentionWarnings" xml:space="preserve">
+    <value>Where it goes has warnings</value>
+  </data>
+  <data name="ModLists_AttentionNotMatching" xml:space="preserve">
+    <value>This install doesn't match it yet</value>
   </data>
   <data name="ModLists_UndoToolTip" xml:space="preserve">
     <value>Puts every mod back the way it was before that list was applied. Usually just moves mods - nothing to download.</value>

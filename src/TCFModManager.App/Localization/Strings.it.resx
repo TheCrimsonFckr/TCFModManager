@@ -2795,6 +2795,24 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="ModLists_FollowingToolTip" xml:space="preserve">
     <value>Questa installazione segue questa lista</value>
   </data>
+  <data name="ModLists_SectionOwn" xml:space="preserve">
+    <value>Le tue liste</value>
+  </data>
+  <data name="ModLists_SectionImported" xml:space="preserve">
+    <value>Importate</value>
+  </data>
+  <data name="ModLists_AttentionChangedSinceServed" xml:space="preserve">
+    <value>Modificata da quando è stata servita</value>
+  </data>
+  <data name="ModLists_AttentionNewerHere" xml:space="preserve">
+    <value>Alcune mod sono più recenti su questa installazione che sulla lista</value>
+  </data>
+  <data name="ModLists_AttentionWarnings" xml:space="preserve">
+    <value>Dove va ha degli avvisi</value>
+  </data>
+  <data name="ModLists_AttentionNotMatching" xml:space="preserve">
+    <value>Questa installazione non le corrisponde ancora</value>
+  </data>
   <data name="ModLists_ForkedFormat" xml:space="preserve">
     <value>"{0}" creata - l'originale non è stata toccata.</value>
   </data>
@@ -3191,7 +3209,7 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
     <value>Distribuita</value>
   </data>
   <data name="ModLists_ServingToolTip" xml:space="preserve">
-    <value>Questa macchina distribuisce questa lista ai client che si connettono. Modificarla e salvarla ripubblica ciò che vedono.</value>
+    <value>Questa macchina serve questa lista alle macchine sulla Server Map. Anteprima, poi Servi, per inviare loro le modifiche.</value>
   </data>
   <data name="ModLists_ShowingFormat" xml:space="preserve">
     <value>Ecco cosa contiene "{0}".</value>

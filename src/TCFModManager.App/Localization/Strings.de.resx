@@ -2795,6 +2795,24 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="ModLists_FollowingToolTip" xml:space="preserve">
     <value>Diese Installation folgt dieser Liste</value>
   </data>
+  <data name="ModLists_SectionOwn" xml:space="preserve">
+    <value>Deine Listen</value>
+  </data>
+  <data name="ModLists_SectionImported" xml:space="preserve">
+    <value>Importiert</value>
+  </data>
+  <data name="ModLists_AttentionChangedSinceServed" xml:space="preserve">
+    <value>Geändert, seit sie bereitgestellt wurde</value>
+  </data>
+  <data name="ModLists_AttentionNewerHere" xml:space="preserve">
+    <value>Einige Mods sind auf dieser Installation neuer als auf der Liste</value>
+  </data>
+  <data name="ModLists_AttentionWarnings" xml:space="preserve">
+    <value>Wo es hingehört hat Warnungen</value>
+  </data>
+  <data name="ModLists_AttentionNotMatching" xml:space="preserve">
+    <value>Diese Installation entspricht ihr noch nicht</value>
+  </data>
   <data name="ModLists_ForkedFormat" xml:space="preserve">
     <value>"{0}" erstellt - das Original bleibt unangetastet.</value>
   </data>
@@ -3191,7 +3209,7 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
     <value>Bereitgestellt</value>
   </data>
   <data name="ModLists_ServingToolTip" xml:space="preserve">
-    <value>Dieser Rechner stellt diese Liste den Clients bereit, die sich mit ihm verbinden. Bearbeiten und Speichern veröffentlicht neu, was sie zu sehen bekommen.</value>
+    <value>Dieser Rechner stellt diese Liste den Rechnern auf der Server Map bereit. Vorschau, dann Bereitstellen, um ihnen deine Änderungen zu schicken.</value>
   </data>
   <data name="ModLists_ShowingFormat" xml:space="preserve">
     <value>Zeigt, was "{0}" nennt.</value>
