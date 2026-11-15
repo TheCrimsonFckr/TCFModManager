@@ -2783,6 +2783,9 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="ModLists_FetchFailureFormat" xml:space="preserve">
     <value>{0}: {1}</value>
   </data>
+  <data name="ModLists_RefusedTitle" xml:space="preserve">
+    <value>Non è stato installato nulla</value>
+  </data>
   <data name="ModLists_FollowingFormat" xml:space="preserve">
     <value>Stai seguendo "{0}".</value>
   </data>

@@ -2936,6 +2936,9 @@
   <data name="ModLists_FetchFailureFormat" xml:space="preserve">
     <value>{0}: {1}</value>
   </data>
+  <data name="ModLists_RefusedTitle" xml:space="preserve">
+    <value>Ничего не установлено</value>
+  </data>
   <data name="ModLists_FollowingFormat" xml:space="preserve">
     <value>Следуете «{0}».</value>
   </data>

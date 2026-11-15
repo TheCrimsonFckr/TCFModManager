@@ -2783,6 +2783,9 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   <data name="ModLists_FetchFailureFormat" xml:space="preserve">
     <value>{0} : {1}</value>
   </data>
+  <data name="ModLists_RefusedTitle" xml:space="preserve">
+    <value>Rien n'a été installé</value>
+  </data>
   <data name="ModLists_FollowingFormat" xml:space="preserve">
     <value>Suivi de « {0} ».</value>
   </data>

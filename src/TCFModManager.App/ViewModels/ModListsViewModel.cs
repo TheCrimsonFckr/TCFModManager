@@ -614,6 +614,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     {
         _preview = null;
         UpToDate = null;
+        RefusedNotice = null;
         SetBehind(null);
         PlanRows.Clear();
         DependencyRows.Clear();

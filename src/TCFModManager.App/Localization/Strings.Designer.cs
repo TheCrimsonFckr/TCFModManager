@@ -644,6 +644,7 @@ internal static class Strings
     internal static string ModLists_PutBack(int count, params object?[] values) =>
         LocalizationService.Plural("ModLists_PutBack", count, values);
     internal static string ModLists_FetchFailureFormat => LocalizationService.Get("ModLists_FetchFailureFormat");
+    internal static string ModLists_RefusedTitle => LocalizationService.Get("ModLists_RefusedTitle");
     internal static string ModLists_NothingToUndo => LocalizationService.Get("ModLists_NothingToUndo");
     internal static string ModLists_UndoneFormat => LocalizationService.Get("ModLists_UndoneFormat");
     internal static string ModLists_UndoFailedFormat => LocalizationService.Get("ModLists_UndoFailedFormat");

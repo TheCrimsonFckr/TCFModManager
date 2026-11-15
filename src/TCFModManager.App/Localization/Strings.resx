@@ -2266,6 +2266,9 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>{0}: {1}</value>
     <comment>{0} is a mod name, {1} the reason it could not be downloaded. Several of these are joined by Common_ClauseSeparator.</comment>
   </data>
+  <data name="ModLists_RefusedTitle" xml:space="preserve">
+    <value>Nothing was installed</value>
+  </data>
   <data name="ModLists_NothingToUndo" xml:space="preserve">
     <value>Nothing to undo.</value>
   </data>

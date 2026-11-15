@@ -2783,6 +2783,9 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="ModLists_FetchFailureFormat" xml:space="preserve">
     <value>{0}: {1}</value>
   </data>
+  <data name="ModLists_RefusedTitle" xml:space="preserve">
+    <value>Es wurde nichts installiert</value>
+  </data>
   <data name="ModLists_FollowingFormat" xml:space="preserve">
     <value>Folgt "{0}".</value>
   </data>

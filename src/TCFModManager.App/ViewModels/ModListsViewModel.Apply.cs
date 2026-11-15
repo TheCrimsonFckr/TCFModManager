@@ -1,4 +1,5 @@
 using System.IO;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
@@ -57,6 +58,8 @@ public partial class ModListsViewModel
     {
         if (_preview is not { } preview) return;
 
+        RefusedNotice = null;
+
         await RunAsync(async () =>
         {
             var result = await _service.ApplyAsync(preview, ModListPrompts.Default);
@@ -96,6 +99,16 @@ public partial class ModListsViewModel
                 _ => " " + Strings.ModLists_PutBack(undone),
             };
 
+            // OPEN-44 R11: nothing fetched - the plan stays up with each reason on it.
+            if (result is { Stopped: ModListStop.FetchFailed, Fetched: { Fetched.Count: 0, Cancelled: false } })
+            {
+                StatusMessage = ModListProblems.Describe(result) + putBack;
+                RefusedNotice = string.Join(Environment.NewLine, result.Fetched.Failed.Select(f =>
+                    Text(Strings.ModLists_FetchFailureFormat, f.ModName, f.Reason)));
+                SetStoppedApply(result);
+                return;
+            }
+
             StatusMessage = ModListProblems.Describe(result) + putBack + FailureDetail(result);
 
             ClearPlan();
@@ -106,6 +119,13 @@ public partial class ModListsViewModel
     }
 
     private ModListApplyResult? _stoppedApply;
+
+    // OPEN-44 R11: each mod an apply couldn't fetch and why, when it fetched none of them.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasRefusedNotice))]
+    private string? _refusedNotice;
+
+    public bool HasRefusedNotice => RefusedNotice is not null;
 
     public bool CanReportApply => _stoppedApply is not null;
 

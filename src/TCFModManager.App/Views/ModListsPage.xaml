@@ -1243,6 +1243,15 @@
                     IsOpen="{Binding HasVersionWarning, Mode=OneWay}"
                     Message="{Binding VersionWarning}" />
 
+                <!-- OPEN-44 R11: the apply fetched nothing; each mod and why, on the plan it was pressed from. -->
+                <ui:InfoBar
+                    Margin="0,16,0,0"
+                    Severity="Error"
+                    IsClosable="False"
+                    Title="{loc:Str ModLists_RefusedTitle}"
+                    IsOpen="{Binding HasRefusedNotice, Mode=OneWay}"
+                    Message="{Binding RefusedNotice}" />
+
                 <!-- OPEN-44 R7: the published list has changed since the Map's copy was written. -->
                 <ui:InfoBar
                     Margin="0,16,0,0"
