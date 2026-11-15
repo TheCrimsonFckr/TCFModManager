@@ -2900,6 +2900,12 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   <data name="ModLists_PublishToolTip" xml:space="preserve">
     <value>Écrit cette liste dans le dossier de configuration du mod Server Map sur cette machine, pour que le serveur la diffuse aux clients connectés. Rien n'est installé ni modifié sur le disque.</value>
   </data>
+  <data name="ModLists_PublishAgain" xml:space="preserve">
+    <value>Publier à nouveau</value>
+  </data>
+  <data name="ModLists_UnpublishedFormat" xml:space="preserve">
+    <value>Cette liste a changé depuis sa publication le {0}. Les machines de la Map reçoivent encore cette version - publiez à nouveau pour leur envoyer les modifications.</value>
+  </data>
   <data name="ModLists_PutBack_one" xml:space="preserve">
     <value>{0} mod a été remis dans son état d'origine.</value>
   </data>

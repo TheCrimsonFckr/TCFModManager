@@ -167,6 +167,8 @@ internal static class Strings
     internal static string ModLists_DiscardToolTip => LocalizationService.Get("ModLists_DiscardToolTip");
     internal static string ModLists_Publish => LocalizationService.Get("ModLists_Publish");
     internal static string ModLists_PublishToolTip => LocalizationService.Get("ModLists_PublishToolTip");
+    internal static string ModLists_PublishAgain => LocalizationService.Get("ModLists_PublishAgain");
+    internal static string ModLists_UnpublishedFormat => LocalizationService.Get("ModLists_UnpublishedFormat");
     internal static string ModLists_ImportedNotice => LocalizationService.Get("ModLists_ImportedNotice");
     internal static string ModLists_EntrySearchPlaceholder => LocalizationService.Get("ModLists_EntrySearchPlaceholder");
     internal static string ModLists_EntrySearchToolTip => LocalizationService.Get("ModLists_EntrySearchToolTip");

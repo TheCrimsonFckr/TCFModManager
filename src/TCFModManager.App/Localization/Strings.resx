@@ -623,6 +623,12 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="ModLists_PublishToolTip" xml:space="preserve">
     <value>Writes this list into the Server Map mod's config folder on this machine, so the server serves it to connected clients. Nothing is installed or changed on disk.</value>
   </data>
+  <data name="ModLists_PublishAgain" xml:space="preserve">
+    <value>Publish again</value>
+  </data>
+  <data name="ModLists_UnpublishedFormat" xml:space="preserve">
+    <value>This list has changed since it was published on {0}. Machines on the Map still get that version - publish again to send them the changes.</value>
+  </data>
   <data name="ModLists_ImportedNotice" xml:space="preserve">
     <value>This list came from someone else, so it stays exactly as they wrote it. Make a copy to change what's on it.</value>
   </data>

@@ -537,6 +537,8 @@ public partial class ModListsViewModel : LocalizedViewModel
         OnPropertyChanged(nameof(PreviewLabel));
         OnPropertyChanged(nameof(PreviewToolTip));
 
+        UpdateUnpublished();
+
         if (value is { IsFollowed: true }) _ = PlanFollowedAsync(value.Id);
 
         // Switching lists drops whatever was not saved. Said out loud rather than silently - nothing
@@ -570,6 +572,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         if (_preview is { } preview) ShowPlan(preview);
         if (UpToDate is not null) UpToDate = Strings.ModLists_PlanNoOp;
         OnPropertyChanged(nameof(BehindNotice));
+        OnPropertyChanged(nameof(UnpublishedNotice));
 
         OnPropertyChanged(nameof(PreviewLabel));
         OnPropertyChanged(nameof(PreviewToolTip));

@@ -2900,6 +2900,12 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="ModLists_PublishToolTip" xml:space="preserve">
     <value>Schreibt diese Liste in den Konfigurationsordner des Mods Server Map auf diesem Rechner, damit der Server sie an verbundene Clients ausliefert. Es wird nichts installiert und nichts auf der Festplatte geändert.</value>
   </data>
+  <data name="ModLists_PublishAgain" xml:space="preserve">
+    <value>Erneut veröffentlichen</value>
+  </data>
+  <data name="ModLists_UnpublishedFormat" xml:space="preserve">
+    <value>Diese Liste wurde geändert, seit sie am {0} veröffentlicht wurde. Rechner auf der Map bekommen noch diese Version - erneut veröffentlichen, um ihnen die Änderungen zu schicken.</value>
+  </data>
   <data name="ModLists_PutBack_one" xml:space="preserve">
     <value>1 Mod wurde wieder in den alten Zustand versetzt.</value>
   </data>

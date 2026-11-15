@@ -3053,6 +3053,12 @@
   <data name="ModLists_PublishToolTip" xml:space="preserve">
     <value>Записывает этот список в папку конфигурации мода Server Map на этом компьютере, чтобы сервер раздавал его подключённым клиентам. Ничего не устанавливается и на диске не меняется.</value>
   </data>
+  <data name="ModLists_PublishAgain" xml:space="preserve">
+    <value>Опубликовать снова</value>
+  </data>
+  <data name="ModLists_UnpublishedFormat" xml:space="preserve">
+    <value>Этот список изменился после публикации {0}. Машины на Map всё ещё получают ту версию - опубликуйте снова, чтобы отправить им изменения.</value>
+  </data>
   <data name="ModLists_PutBack_few" xml:space="preserve">
     <value>{0} мода возвращены в прежнее состояние.</value>
   </data>

@@ -2900,6 +2900,12 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="ModLists_PublishToolTip" xml:space="preserve">
     <value>Scrive questa lista nella cartella di configurazione del mod Server Map su questa macchina, così il server la distribuisce ai client connessi. Niente viene installato o modificato sul disco.</value>
   </data>
+  <data name="ModLists_PublishAgain" xml:space="preserve">
+    <value>Pubblica di nuovo</value>
+  </data>
+  <data name="ModLists_UnpublishedFormat" xml:space="preserve">
+    <value>Questa lista è cambiata da quando è stata pubblicata il {0}. Le macchine sulla Map ricevono ancora quella versione - pubblica di nuovo per inviare loro le modifiche.</value>
+  </data>
   <data name="ModLists_PutBack_one" xml:space="preserve">
     <value>Un mod è stato rimesso com'era.</value>
   </data>

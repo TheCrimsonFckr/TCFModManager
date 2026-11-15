@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
@@ -85,6 +86,42 @@ public partial class ModListsViewModel
 
     // Matches PublishedModList.PreferredFileName on the server side.
     private const string PublishedFileName = "published.tcfmodlist";
+
+    // OPEN-44 R7: when the copy the Map serves was written, while the published list has changed since.
+    private DateTimeOffset? _unpublishedSince;
+
+    public string? UnpublishedNotice => _unpublishedSince is { } since
+        ? Text(Strings.ModLists_UnpublishedFormat, since.ToLocalTime().ToString("g", CultureInfo.CurrentCulture))
+        : null;
+
+    public bool HasUnpublishedChanges => _unpublishedSince is not null;
+
+    private void UpdateUnpublished()
+    {
+        _unpublishedSince = Selected is { IsPublished: true } row ? UnpublishedSince(row.List) : null;
+        OnPropertyChanged(nameof(UnpublishedNotice));
+        OnPropertyChanged(nameof(HasUnpublishedChanges));
+    }
+
+    private static DateTimeOffset? UnpublishedSince(ModList list)
+    {
+        if (!ServerMapConfigFolder.TryFind(new SettingsService().Load().SptInstallPath, out var directory)) return null;
+
+        var path = Path.Combine(directory, PublishedFileName);
+
+        try
+        {
+            if (!File.Exists(path)) return null;
+            if (!ModListPublication.NeedsNewRevision(list, ModListFile.Load(path).List)) return null;
+
+            return new DateTimeOffset(File.GetLastWriteTimeUtc(path), TimeSpan.Zero);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.Warn("ServerMap", $"couldn't read the published list at {path}: {ex.Message}");
+            return null;
+        }
+    }
 
     //
     // Asks the server for its list again, whether or not the revision has moved.
