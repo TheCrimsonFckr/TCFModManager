@@ -2005,16 +2005,28 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>Has a Fika addon on sp-mod: {0}</value>
   </data>
   <data name="ModLists_PlaceAddonWiderFormat" xml:space="preserve">
-    <value>{0} goes to machines this mod doesn't reach</value>
+    <value>{0} also goes to {1}, where this mod doesn't - the addon won't load there without it</value>
   </data>
   <data name="ModLists_PlaceDependencyFormat" xml:space="preserve">
-    <value>{0} needs this mod on every machine it loads on</value>
+    <value>{0} loads on {1} too and needs this mod there</value>
   </data>
   <data name="ModLists_PlaceLibrary" xml:space="preserve">
     <value>Nothing that needs this mod goes to the headless</value>
   </data>
   <data name="ModLists_PlaceNothingToLoad" xml:space="preserve">
-    <value>This mod has nothing to load on some of the machines it is sent to</value>
+    <value>Only has a client half, but it is sent only to the server</value>
+  </data>
+  <data name="ModLists_PlaceServerOnlyFormat" xml:space="preserve">
+    <value>Only has a server half, but it is also sent to {0} - nothing loads it there</value>
+  </data>
+  <data name="ModLists_PlaceMachinePlayers" xml:space="preserve">
+    <value>players</value>
+  </data>
+  <data name="ModLists_PlaceMachineHeadless" xml:space="preserve">
+    <value>the headless</value>
+  </data>
+  <data name="ModLists_PlaceMachineServer" xml:space="preserve">
+    <value>the server</value>
   </data>
   <data name="ModLists_PlaceBotsItems" xml:space="preserve">
     <value>Bots can spawn with this mod's items, and the headless runs the bots</value>

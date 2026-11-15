@@ -3228,16 +3228,28 @@
     <value>Есть аддон Fika на sp-mod: {0}</value>
   </data>
   <data name="ModLists_PlaceAddonWiderFormat" xml:space="preserve">
-    <value>{0} идёт на машины, куда этот мод не попадает</value>
+    <value>{0} также идёт на {1}, куда этот мод не идёт, - без него аддон там не загрузится</value>
   </data>
   <data name="ModLists_PlaceDependencyFormat" xml:space="preserve">
-    <value>{0} нужен этот мод на каждой машине, где он загружается</value>
+    <value>{0} загружается и на {1}, и там ему нужен этот мод</value>
   </data>
   <data name="ModLists_PlaceLibrary" xml:space="preserve">
     <value>Ничего из того, чему нужен этот мод, не идёт на headless</value>
   </data>
   <data name="ModLists_PlaceNothingToLoad" xml:space="preserve">
-    <value>Этому моду нечего загружать на некоторых машинах, куда он отправляется</value>
+    <value>Есть только клиентская часть, но он отправляется только на сервер</value>
+  </data>
+  <data name="ModLists_PlaceServerOnlyFormat" xml:space="preserve">
+    <value>Есть только серверная часть, но он отправляется и на {0} - там его ничто не загружает</value>
+  </data>
+  <data name="ModLists_PlaceMachinePlayers" xml:space="preserve">
+    <value>игроков</value>
+  </data>
+  <data name="ModLists_PlaceMachineHeadless" xml:space="preserve">
+    <value>headless</value>
+  </data>
+  <data name="ModLists_PlaceMachineServer" xml:space="preserve">
+    <value>сервер</value>
   </data>
   <data name="ModLists_PlaceBotsItems" xml:space="preserve">
     <value>Боты могут появляться с предметами этого мода, а ботами управляет headless</value>

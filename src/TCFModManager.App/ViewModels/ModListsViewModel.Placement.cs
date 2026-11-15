@@ -186,15 +186,30 @@ public partial class ModListsViewModel
     {
         PlacementRule.SyncAddonAvailable => Text(Strings.ModLists_PlaceSyncAddonFormat, finding.Addon?.Name ?? string.Empty),
         PlacementRule.FikaAddonAvailable => Text(Strings.ModLists_PlaceFikaAddonFormat, finding.Addon?.Name ?? string.Empty),
-        PlacementRule.AddonWiderThanParent => Text(Strings.ModLists_PlaceAddonWiderFormat, NameOf(finding.Other)),
-        PlacementRule.DependencyUncovered => Text(Strings.ModLists_PlaceDependencyFormat, NameOf(finding.Other)),
+        PlacementRule.AddonWiderThanParent => Text(Strings.ModLists_PlaceAddonWiderFormat, NameOf(finding.Other), Machines(Added(finding))),
+        PlacementRule.DependencyUncovered => Text(Strings.ModLists_PlaceDependencyFormat, NameOf(finding.Other), Machines(Added(finding))),
         PlacementRule.LibraryCanLeaveHeadless => Strings.ModLists_PlaceLibrary,
-        PlacementRule.NothingToLoad => Strings.ModLists_PlaceNothingToLoad,
+        PlacementRule.NothingToLoad => finding.SuggestedScope == ModListEntryScope.Server
+            ? Text(Strings.ModLists_PlaceServerOnlyFormat, Machines(finding.Entry.EffectiveScope & ~ModListEntryScope.Server))
+            : Strings.ModLists_PlaceNothingToLoad,
         PlacementRule.BotsCarryItems => Strings.ModLists_PlaceBotsItems,
         PlacementRule.AdviceNamesEntry => Text(Strings.ModLists_PlaceAdviceNamesFormat, NameOf(finding.Other), finding.Quote ?? string.Empty),
         PlacementRule.OnlyTheSync => Text(Strings.ModLists_PlaceOnlySyncFormat, NameOf(finding.Other)),
         _ => string.Empty,
     };
+
+    // The machines a suggested scope adds to the entry's own.
+    private static ModListEntryScope Added(PlacementFinding finding) =>
+        (finding.SuggestedScope ?? finding.Entry.EffectiveScope) & ~finding.Entry.EffectiveScope;
+
+    private static string Machines(ModListEntryScope scope)
+    {
+        var names = new List<string>();
+        if (scope.HasFlag(ModListEntryScope.Server)) names.Add(Strings.ModLists_PlaceMachineServer);
+        if (scope.HasFlag(ModListEntryScope.Client)) names.Add(Strings.ModLists_PlaceMachinePlayers);
+        if (scope.HasFlag(ModListEntryScope.Headless)) names.Add(Strings.ModLists_PlaceMachineHeadless);
+        return TextLists.Join(names);
+    }
 
     private string NameOf(ModListEntry? entry) => entry is null
         ? string.Empty

@@ -428,4 +428,19 @@ public class ModListPlacementTests
         Assert.Equal(new PlacementHalves(true, false, false), ModListPlacement.HalvesOf(clientOnly, dependsOnCommonLib: true));
         Assert.Null(ModListPlacement.HalvesOf(new ModListCandidate { Name = "Unseen" }));
     }
+
+    // Brainiac Collectibles is server-only; its Weekend Collections addon has a client plugin of its own.
+    [Fact]
+    public void R2_AServerOnlyModsAddonGoingToClientsIsNotWiderThanIt()
+    {
+        var parent = Mod(3138, "Brainiac Collectibles", ModListEntryScope.Server, "maestro-brainiaccollectibles");
+        var addon = AddonEntry(162, "Brainiac Weekend Collections", ServerAndClient, "brainiac-weekendcollections");
+
+        Assert.DoesNotContain(ModListPlacement.Check(new PlacementFacts
+        {
+            Entries = [parent, addon],
+            Addons = [Addon(162, 3138, "Brainiac Weekend Collections", "Three collections for WeekendDrops")],
+            Halves = new Dictionary<ModListEntry, PlacementHalves> { [parent] = new(false, true), [addon] = new(true, true) },
+        }), f => f.Rule == PlacementRule.AddonWiderThanParent);
+    }
 }

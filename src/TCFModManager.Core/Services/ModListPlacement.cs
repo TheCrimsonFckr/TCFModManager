@@ -209,6 +209,8 @@ public static partial class ModListPlacement
             if (!mods.TryGetValue(addon.ModId!.Value, out var parent)) continue;
             if (facts.Advice.TryGetValue(entry, out var advice) && advice.OnlyThis) continue;
 
+            if (facts.Halves.TryGetValue(parent, out var parentHalves) && !parentHalves.HasClient) continue;
+
             var reach = entry.EffectiveScope & Loaders;
             var missing = reach & ~parent.EffectiveScope;
             if (missing == 0) continue;

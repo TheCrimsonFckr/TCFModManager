@@ -3063,16 +3063,28 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
     <value>Hat ein Fika-Addon auf sp-mod: {0}</value>
   </data>
   <data name="ModLists_PlaceAddonWiderFormat" xml:space="preserve">
-    <value>{0} geht an Rechner, die dieser Mod nicht erreicht</value>
+    <value>{0} geht auch an {1}, wohin dieser Mod nicht geht - dort lädt das Addon ohne ihn nicht</value>
   </data>
   <data name="ModLists_PlaceDependencyFormat" xml:space="preserve">
-    <value>{0} braucht diesen Mod auf jedem Rechner, auf dem es lädt</value>
+    <value>{0} lädt auch auf {1} und braucht diesen Mod dort</value>
   </data>
   <data name="ModLists_PlaceLibrary" xml:space="preserve">
     <value>Nichts, was diesen Mod braucht, geht an den Headless</value>
   </data>
   <data name="ModLists_PlaceNothingToLoad" xml:space="preserve">
-    <value>Dieser Mod hat auf einigen Rechnern, an die er geht, nichts zu laden</value>
+    <value>Hat nur einen Client-Teil, geht aber nur an den Server</value>
+  </data>
+  <data name="ModLists_PlaceServerOnlyFormat" xml:space="preserve">
+    <value>Hat nur einen Server-Teil, geht aber auch an {0} - dort lädt ihn nichts</value>
+  </data>
+  <data name="ModLists_PlaceMachinePlayers" xml:space="preserve">
+    <value>Spieler</value>
+  </data>
+  <data name="ModLists_PlaceMachineHeadless" xml:space="preserve">
+    <value>den Headless</value>
+  </data>
+  <data name="ModLists_PlaceMachineServer" xml:space="preserve">
+    <value>den Server</value>
   </data>
   <data name="ModLists_PlaceBotsItems" xml:space="preserve">
     <value>Bots können mit Items dieses Mods spawnen, und der Headless steuert die Bots</value>

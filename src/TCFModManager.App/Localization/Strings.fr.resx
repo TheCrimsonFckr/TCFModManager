@@ -3063,16 +3063,28 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
     <value>A un addon Fika sur sp-mod : {0}</value>
   </data>
   <data name="ModLists_PlaceAddonWiderFormat" xml:space="preserve">
-    <value>{0} va sur des machines que ce mod n'atteint pas</value>
+    <value>{0} va aussi sur {1}, où ce mod ne va pas - l'addon ne s'y chargera pas sans lui</value>
   </data>
   <data name="ModLists_PlaceDependencyFormat" xml:space="preserve">
-    <value>{0} a besoin de ce mod sur chaque machine où il se charge</value>
+    <value>{0} se charge aussi sur {1} et a besoin de ce mod là-bas</value>
   </data>
   <data name="ModLists_PlaceLibrary" xml:space="preserve">
     <value>Rien de ce qui a besoin de ce mod ne va sur le headless</value>
   </data>
   <data name="ModLists_PlaceNothingToLoad" xml:space="preserve">
-    <value>Ce mod n'a rien à charger sur certaines des machines où il est envoyé</value>
+    <value>N'a qu'une partie client, mais n'est envoyé qu'au serveur</value>
+  </data>
+  <data name="ModLists_PlaceServerOnlyFormat" xml:space="preserve">
+    <value>N'a qu'une partie serveur, mais est aussi envoyé à {0} - rien ne le charge là-bas</value>
+  </data>
+  <data name="ModLists_PlaceMachinePlayers" xml:space="preserve">
+    <value>les joueurs</value>
+  </data>
+  <data name="ModLists_PlaceMachineHeadless" xml:space="preserve">
+    <value>le headless</value>
+  </data>
+  <data name="ModLists_PlaceMachineServer" xml:space="preserve">
+    <value>le serveur</value>
   </data>
   <data name="ModLists_PlaceBotsItems" xml:space="preserve">
     <value>Les bots peuvent apparaître avec les objets de ce mod, et le headless fait tourner les bots</value>

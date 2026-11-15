@@ -571,6 +571,10 @@ internal static class Strings
     internal static string ModLists_PlaceDependencyFormat => LocalizationService.Get("ModLists_PlaceDependencyFormat");
     internal static string ModLists_PlaceLibrary => LocalizationService.Get("ModLists_PlaceLibrary");
     internal static string ModLists_PlaceNothingToLoad => LocalizationService.Get("ModLists_PlaceNothingToLoad");
+    internal static string ModLists_PlaceServerOnlyFormat => LocalizationService.Get("ModLists_PlaceServerOnlyFormat");
+    internal static string ModLists_PlaceMachinePlayers => LocalizationService.Get("ModLists_PlaceMachinePlayers");
+    internal static string ModLists_PlaceMachineHeadless => LocalizationService.Get("ModLists_PlaceMachineHeadless");
+    internal static string ModLists_PlaceMachineServer => LocalizationService.Get("ModLists_PlaceMachineServer");
     internal static string ModLists_PlaceBotsItems => LocalizationService.Get("ModLists_PlaceBotsItems");
     internal static string ModLists_PlaceAdviceNamesFormat => LocalizationService.Get("ModLists_PlaceAdviceNamesFormat");
     internal static string ModLists_PlaceOnlySyncFormat => LocalizationService.Get("ModLists_PlaceOnlySyncFormat");
