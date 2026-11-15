@@ -1,6 +1,8 @@
 using System.ComponentModel;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using TCFModManager.App.Localization;
+using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -142,6 +144,8 @@ public partial class ModListsViewModel
         _mods = AppServices.ModCache.AllMods.GroupBy(m => m.Id).ToDictionary(g => g.Key, g => g.First());
         RefreshPinLookup();
 
+        if (!ReferenceEquals(Selected?.List, _standingList)) SetStanding(null);
+
         if (Selected is { } row)
         {
             foreach (var entry in ModListEntries.Sorted(row.List.Entries)) Entries.Add(Row(entry));
@@ -152,6 +156,76 @@ public partial class ModListsViewModel
         Notify();
 
         LoadAdvice();
+
+        if (Selected is { IsFollowed: false } shown && _standingList is null) _ = StandAsync(shown.List);
+    }
+
+    // ---- OPEN-44 P7: where this install stands against each entry --------------------------------
+
+    private ModList? _standingList;
+
+    private ModListPlan? _standingPlan;
+
+    private ModList? _standingPending;
+
+    private Dictionary<ModListEntry, ModListAction> _standing = new(ReferenceEqualityComparer.Instance);
+
+    public string? StandingLine => ShowContents && UpToDate is null && _standingPlan is { } plan
+        ? plan.IsNoOp && !plan.Manual.Any() && !plan.Behind.Any()
+            ? Strings.ModLists_PlanNoOp
+            : Text(Strings.ModLists_StandingFormat, PlanCounts(plan))
+        : null;
+
+    private void SetStanding(ModListPreview? preview)
+    {
+        _standingList = preview?.List;
+        _standingPlan = preview?.Plan;
+        _standing = new(ReferenceEqualityComparer.Instance);
+
+        foreach (var action in preview?.Plan.Actions ?? [])
+            if (action is { Entry: { } entry, IsDependency: false }) _standing.TryAdd(entry, action);
+
+        OnPropertyChanged(nameof(StandingLine));
+    }
+
+    // A preview of the shown list - its own, or the plan's - puts each entry's standing on its row.
+    private void ApplyStanding(ModListPreview preview)
+    {
+        if (!ReferenceEquals(Selected?.List, preview.List)) return;
+
+        SetStanding(preview);
+
+        for (var i = 0; i < Entries.Count; i++) Entries[i] = Row(Entries[i].Entry);
+    }
+
+    private async Task StandAsync(ModList list)
+    {
+        if (ReferenceEquals(_standingPending, list)) return;
+        _standingPending = list;
+
+        try
+        {
+            await Dispatcher.Yield(DispatcherPriority.Background);
+            if (!ReferenceEquals(Selected?.List, list)) return;
+
+            if (await _service.PreviewAsync(list) is { } preview) ApplyStanding(preview);
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("ModLists", $"couldn't check \"{list.Name}\" against this install: {ex.Message}");
+        }
+        finally
+        {
+            if (ReferenceEquals(_standingPending, list)) _standingPending = null;
+        }
+    }
+
+    private ModListEntryRowViewModel WithStanding(ModListEntryRowViewModel row)
+    {
+        if (!_standing.TryGetValue(row.Entry, out var action)) return row;
+
+        var (status, tone, icon) = StatusOf(action);
+        return row with { Status = status, Tone = tone, Icon = icon, StandingKind = Label(action) };
     }
 
     //
@@ -182,7 +256,9 @@ public partial class ModListsViewModel
     // What the entry stores, unless the catalog knows the mod under a better name. An unresolved
     // entry, an addon the cache hasn't loaded and an empty catalog all fall back to the stored name.
     //
-    private ModListEntryRowViewModel Row(ModListEntry entry)
+    private ModListEntryRowViewModel Row(ModListEntry entry) => WithStanding(RowOf(entry));
+
+    private ModListEntryRowViewModel RowOf(ModListEntry entry)
     {
         var name = entry.ModId is { } id && _titles.TryGetValue((id, entry.IsAddon), out var title)
             ? title

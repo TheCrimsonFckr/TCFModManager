@@ -135,6 +135,17 @@ public sealed record PlanChip(string Text, string Tone, string Icon);
 // One mod on the selected list, as the contents panel shows it.
 public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, string Detail, bool IsPinnedHere = false)
 {
+    // OPEN-44 P7: where this install stands against the entry, worded and coloured as the plan row is.
+    public string? Status { get; init; }
+
+    public string? Tone { get; init; }
+
+    public string? Icon { get; init; }
+
+    public string? StandingKind { get; init; }
+
+    public bool HasStanding => Status is not null;
+
     //
     // Shown on every row, including Everyone.
     //
@@ -418,10 +429,12 @@ public partial class ModListsViewModel : LocalizedViewModel
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasPlan))]
     [NotifyPropertyChangedFor(nameof(ShowContents))]
+    [NotifyPropertyChangedFor(nameof(StandingLine))]
     private string? _planSummary;
 
     // OPEN-44 P7: a followed list that already matches this install says so here instead of a plan.
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StandingLine))]
     private string? _upToDate;
 
     // How many adds and removes are waiting to be saved. Zero means what is on screen is what is
@@ -573,6 +586,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         if (UpToDate is not null) UpToDate = Strings.ModLists_PlanNoOp;
         OnPropertyChanged(nameof(BehindNotice));
         OnPropertyChanged(nameof(UnpublishedNotice));
+        OnPropertyChanged(nameof(StandingLine));
 
         OnPropertyChanged(nameof(PreviewLabel));
         OnPropertyChanged(nameof(PreviewToolTip));

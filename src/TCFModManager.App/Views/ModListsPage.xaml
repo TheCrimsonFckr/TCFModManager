@@ -216,6 +216,19 @@
 
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                             <DockPanel LastChildFill="False">
+                                <!-- OPEN-44 P7: where this install stands against the entry. -->
+                                <Border
+                                    DockPanel.Dock="Right"
+                                    Margin="8,0,0,0"
+                                    Style="{StaticResource ToneBadge}"
+                                    ToolTip="{Binding StandingKind}"
+                                    Visibility="{Binding HasStanding, Converter={StaticResource BoolToVis}}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:SymbolIcon Style="{StaticResource ToneIcon}" />
+                                        <TextBlock Style="{StaticResource ToneBadgeText}" VerticalAlignment="Center" Text="{Binding Status}" />
+                                    </StackPanel>
+                                </Border>
+
                                 <ui:SymbolIcon
                                     DockPanel.Dock="Left"
                                     Symbol="Pin24"
@@ -530,6 +543,19 @@
                         </DockPanel>
 
                         <StackPanel Grid.Row="2" HorizontalAlignment="Right">
+                            <!-- OPEN-44 P7: where this install stands against the entry. -->
+                            <Border
+                                HorizontalAlignment="Right"
+                                Margin="0,0,0,6"
+                                Style="{StaticResource ToneBadge}"
+                                ToolTip="{Binding StandingKind}"
+                                Visibility="{Binding HasStanding, Converter={StaticResource BoolToVis}}">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:SymbolIcon Style="{StaticResource ToneIcon}" />
+                                    <TextBlock Style="{StaticResource ToneBadgeText}" VerticalAlignment="Center" Text="{Binding Status}" />
+                                </StackPanel>
+                            </Border>
+
                             <Grid
                                 HorizontalAlignment="Right"
                                 Margin="0,0,0,6"
@@ -939,6 +965,14 @@
                         Foreground="{DynamicResource SystemFillColorSuccessBrush}"
                         Visibility="{Binding UpToDate, Converter={StaticResource NullToCollapsed}}"
                         Text="{Binding UpToDate}" />
+
+                    <TextBlock
+                        Margin="2,4,0,0"
+                        FontSize="12"
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Visibility="{Binding StandingLine, Converter={StaticResource NullToCollapsed}}"
+                        Text="{Binding StandingLine}" />
                 </StackPanel>
 
                 <StackPanel

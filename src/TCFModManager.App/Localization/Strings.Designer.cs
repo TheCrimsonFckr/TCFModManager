@@ -604,6 +604,7 @@ internal static class Strings
     internal static string ModLists_CountAlreadyRightFormat => LocalizationService.Get("ModLists_CountAlreadyRightFormat");
     internal static string ModLists_CountToFetchFormat => LocalizationService.Get("ModLists_CountToFetchFormat");
     internal static string ModLists_PlanNoOp => LocalizationService.Get("ModLists_PlanNoOp");
+    internal static string ModLists_StandingFormat => LocalizationService.Get("ModLists_StandingFormat");
     internal static string ModLists_VersionWarningFormat => LocalizationService.Get("ModLists_VersionWarningFormat");
     internal static string Common_ClauseSeparator => LocalizationService.Get("Common_ClauseSeparator");
     internal static string ModLists_NoneFollowed => LocalizationService.Get("ModLists_NoneFollowed");

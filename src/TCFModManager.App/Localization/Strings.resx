@@ -2136,6 +2136,9 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="ModLists_PlanNoOp" xml:space="preserve">
     <value>This install already matches the list - nothing to do.</value>
   </data>
+  <data name="ModLists_StandingFormat" xml:space="preserve">
+    <value>Against this install: {0}</value>
+  </data>
   <data name="ModLists_VersionWarningFormat" xml:space="preserve">
     <value>This list was made on SPT {0} and you're running {1}. Versions locked for one won't always work on the other.</value>
     <comment>{0} and {1} are SPT version numbers.</comment>

@@ -2873,6 +2873,9 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="ModLists_PlanNoOp" xml:space="preserve">
     <value>Diese Installation entspricht der Liste bereits - nichts zu tun.</value>
   </data>
+  <data name="ModLists_StandingFormat" xml:space="preserve">
+    <value>Gegenüber dieser Installation: {0}</value>
+  </data>
   <data name="ModLists_CheckAgain" xml:space="preserve">
     <value>Erneut prüfen</value>
   </data>

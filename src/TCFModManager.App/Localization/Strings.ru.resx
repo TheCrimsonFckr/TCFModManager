@@ -3026,6 +3026,9 @@
   <data name="ModLists_PlanNoOp" xml:space="preserve">
     <value>Эта установка уже соответствует списку - делать нечего.</value>
   </data>
+  <data name="ModLists_StandingFormat" xml:space="preserve">
+    <value>По сравнению с этой установкой: {0}</value>
+  </data>
   <data name="ModLists_CheckAgain" xml:space="preserve">
     <value>Проверить снова</value>
   </data>

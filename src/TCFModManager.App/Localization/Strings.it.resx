@@ -2873,6 +2873,9 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="ModLists_PlanNoOp" xml:space="preserve">
     <value>Questa installazione corrisponde già alla lista - non c'è nulla da fare.</value>
   </data>
+  <data name="ModLists_StandingFormat" xml:space="preserve">
+    <value>Rispetto a questa installazione: {0}</value>
+  </data>
   <data name="ModLists_CheckAgain" xml:space="preserve">
     <value>Controlla di nuovo</value>
   </data>

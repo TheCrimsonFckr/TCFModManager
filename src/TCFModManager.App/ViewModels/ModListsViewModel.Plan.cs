@@ -205,6 +205,7 @@ public partial class ModListsViewModel
 
             if (row.IsFollowed && preview.Plan.IsNoOp && !preview.Plan.Manual.Any())
             {
+                ApplyStanding(preview);
                 ClearPlan();
                 SetBehind(preview.Plan);
                 UpToDate = HasBehindNotice ? null : Strings.ModLists_PlanNoOp;
@@ -217,6 +218,7 @@ public partial class ModListsViewModel
 
     private void ShowPlan(ModListPreview preview)
     {
+        ApplyStanding(preview);
         _preview = preview;
         PlanRows.Clear();
 
@@ -229,22 +231,9 @@ public partial class ModListsViewModel
         PlanChips.Clear();
         foreach (var chip in Chips(plan)) PlanChips.Add(chip);
 
-        var counts = new List<string>();
-        void Count(int n, string format) { if (n > 0) counts.Add(Text(format, n)); }
-
-        Count(plan.Install.Count(), Strings.ModLists_CountToInstallFormat);
-        Count(plan.Update.Count(a => !a.IsDowngrade), Strings.ModLists_CountToUpdateFormat);
-        Count(plan.Update.Count(a => a.IsDowngrade), Strings.ModLists_CountToDowngradeFormat);
-        Count(plan.Enable.Count(), Strings.ModLists_CountToEnableFormat);
-        Count(plan.Disable.Count(), Strings.ModLists_CountToDisableFormat);
-        Count(plan.Pinned.Count(), Strings.ModLists_CountPinnedFormat);
-        Count(plan.Behind.Count(a => a.Kind == ModListActionKind.Keep), Strings.ModLists_CountNewerHereFormat);
-        Count(plan.Keep.Count(a => !a.ListIsBehind), Strings.ModLists_CountAlreadyRightFormat);
-        Count(plan.Manual.Count(), Strings.ModLists_CountToFetchFormat);
-
         PlanSummary = plan.IsNoOp && !plan.Manual.Any()
             ? Strings.ModLists_PlanNoOp
-            : string.Join(Strings.Common_ListSeparator, counts) + ".";
+            : PlanCounts(plan);
 
         VersionWarning = preview.List.SptVersion is { } captured
             && preview.Install.SptVersion is { } current
@@ -263,6 +252,25 @@ public partial class ModListsViewModel
         NotifyPlanWording();
         StatusMessage = PlanStatus(preview);
         UpdateBlockerWatch();
+    }
+
+    // "1 to install, 2 to update, 40 correct." - the plan's summary, and the contents' standing line (P7).
+    private static string PlanCounts(ModListPlan plan)
+    {
+        var counts = new List<string>();
+        void Count(int n, string format) { if (n > 0) counts.Add(Text(format, n)); }
+
+        Count(plan.Install.Count(), Strings.ModLists_CountToInstallFormat);
+        Count(plan.Update.Count(a => !a.IsDowngrade), Strings.ModLists_CountToUpdateFormat);
+        Count(plan.Update.Count(a => a.IsDowngrade), Strings.ModLists_CountToDowngradeFormat);
+        Count(plan.Enable.Count(), Strings.ModLists_CountToEnableFormat);
+        Count(plan.Disable.Count(), Strings.ModLists_CountToDisableFormat);
+        Count(plan.Pinned.Count(), Strings.ModLists_CountPinnedFormat);
+        Count(plan.Behind.Count(a => a.Kind == ModListActionKind.Keep), Strings.ModLists_CountNewerHereFormat);
+        Count(plan.Keep.Count(a => !a.ListIsBehind), Strings.ModLists_CountAlreadyRightFormat);
+        Count(plan.Manual.Count(), Strings.ModLists_CountToFetchFormat);
+
+        return string.Join(Strings.Common_ListSeparator, counts) + ".";
     }
 
     //
