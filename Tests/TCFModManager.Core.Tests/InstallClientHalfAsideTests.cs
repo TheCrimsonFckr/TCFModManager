@@ -5,8 +5,8 @@ using Xunit;
 namespace TCFModManager.Core.Tests;
 
 //
-// OPEN-46 Q6: updating a mod whose client half is set aside brings it back, updates it, and sets it
-// aside again - one copy, still aside.
+// OPEN-46 Q6, made whole by OPEN-44 Q14: updating a mod whose client half an earlier build set aside
+// brings it back and updates it - one copy, whole.
 //
 public class InstallClientHalfAsideTests : IDisposable
 {
@@ -61,7 +61,7 @@ public class InstallClientHalfAsideTests : IDisposable
     }
 
     [Fact]
-    public async Task AnUpdateKeepsAClientHalfThatWasSetAsideAside()
+    public async Task AnUpdateBringsASetAsideClientHalfBackWhole()
     {
         var first = await InstallAsync("1.0.0");
 
@@ -71,11 +71,11 @@ public class InstallClientHalfAsideTests : IDisposable
 
         var second = await InstallAsync("1.1.0");
 
-        Assert.False(File.Exists(LiveClient));
-        Assert.Equal("client 1.1.0", File.ReadAllText(AsideClient));
+        Assert.Equal("client 1.1.0", File.ReadAllText(LiveClient));
+        Assert.False(File.Exists(AsideClient));
         Assert.Equal("server 1.1.0", File.ReadAllText(LiveServer));
         Assert.Contains("BepInEx/plugins/DynamicMaps/DynamicMaps.dll", second.Files);
-        Assert.Equal(["BepInEx/plugins/DynamicMaps/DynamicMaps.dll"], ModDisableService.ParkedClientFiles(_install, second));
+        Assert.Empty(ModDisableService.ParkedClientFiles(_install, second));
     }
 
     [Fact]

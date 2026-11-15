@@ -248,9 +248,10 @@ public sealed partial class ModInstallService
             var timestamp = DateTimeOffset.UtcNow;
 
             //
-            // OPEN-46 Q6: a previous version whose client half is set aside is brought back first, so
-            // the update replaces it rather than placing a second, live copy, and the new client half
-            // is set aside again once the install is done.
+            // A previous version whose client half an earlier build set aside (OPEN-46 Q6) is brought
+            // back first, so the update replaces it rather than placing a second, live copy. It stays
+            // back: a mod is updated whole (OPEN-44 Q14). Only a failed install sets it aside again,
+            // leaving the install as it was.
             //
             if (existing is not null) clientHalfAside = BringBackClientHalf(installPath, existing, target, version);
 
@@ -421,8 +422,6 @@ public sealed partial class ModInstallService
                 KeepSettingsPrints(Fingerprint(installPath, placedFiles), pending, existing), emptyFolders);
             _journal.Delete(journalEntry);
             AppLog.Debug("Install", $"fingerprinted {record.Fingerprints.Count} file(s) in {fingerprintClock.ElapsedMilliseconds}ms");
-
-            if (clientHalfAside.Count > 0) SetClientHalfAsideAgain(installPath, placedFiles, target, version);
 
             status?.Report(new ModInstallProgress(ModInstallStage.Done));
             if (keptSettings.Count > 0)

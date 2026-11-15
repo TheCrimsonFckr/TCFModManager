@@ -257,12 +257,11 @@ public class ModListHeadlessTests
     }
 
     //
-    // A headless somebody also plays at still takes the server through Server alone only; a
-    // dedicated one takes anything naming the server, setting the client half aside when the
-    // headless is not named.
+    // A dedicated headless that hosts takes anything naming the server, whole (OPEN-46, OPEN-44
+    // Q14); one that does not host takes only what names the headless (Q13).
     //
     [Fact]
-    public void TheServerFlagReachesAHeadlessAsOPEN46Ruled()
+    public void TheServerFlagReachesOnlyAHostingHeadless()
     {
         Assert.True(ModList.ScopeApplies(ModListEntryScope.Server, HostingHeadless));
         Assert.True(ModList.ScopeApplies(ModListEntryScope.Server | ModListEntryScope.Client, HostingHeadless));

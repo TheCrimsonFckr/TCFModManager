@@ -368,7 +368,6 @@ public sealed class ModListService
                 SnapshotAddonVersions = CatalogAddonVersions(),
                 SptVersion = preview.Install.SptVersion,
                 InstallPath = preview.Install.InstallPath,
-                Rescan = RescanAsync,
             },
             ct: ct);
 
@@ -454,7 +453,6 @@ public sealed class ModListService
             {
                 SptVersion = preview.Install.SptVersion,
                 InstallPath = preview.Install.InstallPath,
-                Rescan = RescanAsync,
             },
             ct: ct);
 
@@ -466,9 +464,6 @@ public sealed class ModListService
 
         return result;
     }
-
-    private async Task<IReadOnlyList<ModListCandidate>> RescanAsync() =>
-        (await ReadInstallAsync())?.Candidates ?? [];
 
     // How the install stood before the last apply, or null when nothing has been applied yet.
     public ModList? PendingRevert() => AppServices.ModLists.GetSnapshot();

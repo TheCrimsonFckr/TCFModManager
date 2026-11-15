@@ -25,10 +25,6 @@ public enum ModListActionKind
 
     // Not on the list and would have been disabled, but the user pinned it against that.
     Pinned,
-
-    // On the list, installed and at the right version, with a client half a dedicated headless has
-    // to set aside (OPEN-46).
-    SetAsideClientHalf,
 }
 
 // One mod's line in a plan.
@@ -87,12 +83,6 @@ public sealed record ModListAction
 
     public IReadOnlyList<string> NeededBy { get; init; } = [];
 
-    //
-    // OPEN-46: the mod is a dedicated headless's for its server half only, so whatever this action
-    // does, its client half ends up set aside.
-    //
-    public bool SetsClientHalfAside { get; init; }
-
     // True for anything this action will fetch from The Forge.
     public bool IsFetch =>
         Kind is ModListActionKind.Install or ModListActionKind.Update || NeedsUpdateAfterEnable;
@@ -120,7 +110,6 @@ public sealed class ModListPlan
     public IEnumerable<ModListAction> Manual => Of(ModListActionKind.Manual);
     public IEnumerable<ModListAction> Keep => Of(ModListActionKind.Keep);
     public IEnumerable<ModListAction> Pinned => Of(ModListActionKind.Pinned);
-    public IEnumerable<ModListAction> SetAsideClientHalf => Of(ModListActionKind.SetAsideClientHalf);
 
     // Fetches that couldn't be pinned to a version id and need a live lookup first.
     public IEnumerable<ModListAction> NeedingVersionLookup => Actions.Where(a => a.NeedsVersionLookup);
@@ -137,7 +126,7 @@ public sealed class ModListPlan
     // container fails while the game is running. Enabling doesn't hit that - nothing has the
     // disabled copy open - it just doesn't take effect until the client restarts.
     //
-    public bool RequiresGameClosed => Disable.Any() || SetAsideClientHalf.Any();
+    public bool RequiresGameClosed => Disable.Any();
 
     private IEnumerable<ModListAction> Of(ModListActionKind kind) => Actions.Where(a => a.Kind == kind);
 }
@@ -161,7 +150,7 @@ public static class ModListPlanner
     //
     //
     // machine is what this install actually is, from InstallRole.ScopeFor - Client for an ordinary
-    // player, Headless for a box running a Fika headless client.
+    // player, Headless for a box running a Fika headless client, plus Server when it hosts.
     // It narrows a SERVED list, and on a dedicated headless your own lists too (OPEN-46).
     //
     // Defaulted to Client so every existing caller and test keeps the behaviour it had, and so the
