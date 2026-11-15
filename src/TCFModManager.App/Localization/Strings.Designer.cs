@@ -1704,6 +1704,8 @@ internal static class Strings
         LocalizationService.Plural("ServerMap_StandingManual", count, values);
     internal static string ServerMap_Extras(int count, params object?[] values) =>
         LocalizationService.Plural("ServerMap_Extras", count, values);
+    internal static string ServerMap_ScopedOff(int count, params object?[] values) =>
+        LocalizationService.Plural("ServerMap_ScopedOff", count, values);
     internal static string ServerMap_InstalledCount(int count, params object?[] values) =>
         LocalizationService.Plural("ServerMap_InstalledCount", count, values);
     internal static string ServerMap_ModDisabledFormat => LocalizationService.Get("ServerMap_ModDisabledFormat");

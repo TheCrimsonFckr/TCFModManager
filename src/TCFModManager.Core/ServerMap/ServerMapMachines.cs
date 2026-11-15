@@ -33,6 +33,11 @@ public sealed class ReportedMod
 
     // Folder names only, never paths. They are a list-match key for mods the catalog never matched.
     public List<string> Folders { get; set; } = [];
+
+    // OPEN-44 Q4: which halves are on disk. Null from a build that didn't send them - unknown.
+    public bool? HasClient { get; set; }
+
+    public bool? HasServer { get; set; }
 }
 
 //
@@ -198,6 +203,8 @@ public static class ServerMapMachines
                 Guid = string.IsNullOrWhiteSpace(c.Guid) ? null : c.Guid.Trim(),
                 Disabled = c.IsDisabled,
                 Incomplete = c.IsIncomplete,
+                HasClient = c.Entries.Count == 0 ? null : c.Entries.Any(e => e.Target == InstalledModTarget.Client),
+                HasServer = c.Entries.Count == 0 ? null : c.Entries.Any(e => e.Target == InstalledModTarget.Server),
                 Folders = c.Folders
                     .Where(f => !string.IsNullOrWhiteSpace(f))
                     .Select(f => LastSegment(f.Trim().TrimEnd('\\', '/')))
@@ -237,8 +244,31 @@ public static class ServerMapMachines
                 IsDisabled = m.Disabled,
                 IsIncomplete = m.Incomplete,
                 Folders = m.Folders,
+                Entries = HalvesOf(m),
             })
             .ToList();
+
+    // The reported halves as scan entries, so the planner reads them as it reads a local scan.
+    private static List<InstalledMod> HalvesOf(ReportedMod mod)
+    {
+        var halves = new List<InstalledMod>();
+
+        if (mod.HasClient == true)
+            halves.Add(new InstalledMod { Name = mod.Name, Target = InstalledModTarget.Client, FolderPath = "", IsDisabled = mod.Disabled });
+        if (mod.HasServer == true)
+            halves.Add(new InstalledMod { Name = mod.Name, Target = InstalledModTarget.Server, FolderPath = "", IsDisabled = mod.Disabled });
+
+        return halves;
+    }
+
+    // OPEN-44 Q4: mods the host has enabled with a server half and no client half - met on the server.
+    public static IReadOnlySet<int> ServerOnlyOnHost(IEnumerable<MapMachine> machines) =>
+        machines
+            .Where(m => m.Hosts)
+            .SelectMany(m => m.Mods ?? [])
+            .Where(m => m is { IsAddon: false, ModId: not null, Disabled: false, HasServer: true, HasClient: false })
+            .Select(m => m.ModId!.Value)
+            .ToHashSet();
 
     //
     // What the published list asks of a machine with these roles. A host takes the entries scoped to

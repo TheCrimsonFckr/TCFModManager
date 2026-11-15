@@ -153,6 +153,36 @@ public class ServerMapStandingTests
     // OPEN-44 R8 (L8): a mod on the list, scoped off the headless, still enabled there - its own line,
     // not an Extra and not Behind. A player's report carries no halves, so nothing is set aside there
     // until S3 adds them.
+    // OPEN-44 Q4: a player that reports its halves shows a client mod the list keeps off it; one that doesn't stays quiet.
+    [Fact]
+    public void APlayerThatReportsHalvesListsTheScopedOffClientModsItStillHasEnabled()
+    {
+        var withHalves = new ReportedMod { Name = "HeadlessTweaks", ModId = 4, Version = "1.0.0", Folders = ["headlesstweaks"], HasClient = true, HasServer = false };
+        var withoutHalves = new ReportedMod { Name = "HeadlessTweaks", ModId = 4, Version = "1.0.0", Folders = ["headlesstweaks"] };
+        var serverOnly = new ReportedMod { Name = "fika-server", ModId = 3, Version = "1.0.0", Folders = ["fika-server"], HasClient = false, HasServer = true };
+
+        var reported = ServerMapMachines.StandingOf(Published(ModListOrigin.Server), Machine(plays: true, mods: [withHalves, serverOnly]))!;
+        var older = ServerMapMachines.StandingOf(Published(ModListOrigin.Server), Machine(plays: true, mods: [withoutHalves]))!;
+
+        Assert.Equal("HeadlessTweaks", Assert.Single(reported.ScopedOff).Name);
+        Assert.Empty(older.ScopedOff);
+    }
+
+    [Fact]
+    public void TheHostsServerOnlyModsAreTheOnesItHasEnabledWithNoClientHalf()
+    {
+        var host = Machine(hosts: true, mods:
+        [
+            new ReportedMod { Name = "APBS", ModId = 10, HasClient = false, HasServer = true },
+            new ReportedMod { Name = "SAIN", ModId = 1, HasClient = true, HasServer = false },
+            new ReportedMod { Name = "Old", ModId = 11, HasClient = false, HasServer = true, Disabled = true },
+            new ReportedMod { Name = "Unknown", ModId = 12 },
+        ]);
+        var player = Machine(plays: true, mods: [new ReportedMod { Name = "Elsewhere", ModId = 13, HasClient = false, HasServer = true }]);
+
+        Assert.Equal([10], ServerMapMachines.ServerOnlyOnHost([host, player]));
+    }
+
     [Fact]
     public void ADedicatedHeadlessListsTheScopedOffModsItStillHasEnabled()
     {

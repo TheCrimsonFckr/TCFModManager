@@ -112,4 +112,24 @@ public class ModListDependenciesTests
 
         Assert.Equal(["CommonLib", "Shared", "WTT Armory"], entries.Select(e => e.Name).Order());
     }
+
+    // OPEN-44 Q4 / L6: APBS on the host meets PBT's dependency; what only APBS needs goes with it.
+    [Fact]
+    public void ADependencyTheHostMeetsServerSideIsNotMissing()
+    {
+        static SpModDependency Dep(int id, string name, params string[] neededBy) =>
+            new(id, name, "1.0.0", id * 10, neededBy, IsParent: false, Conflict: false);
+
+        var missing = new[]
+        {
+            Dep(10, "APBS", "PBT"),
+            Dep(20, "APBS Lib", "APBS"),
+            Dep(30, "Shared Lib", "APBS", "Other Mod"),
+            Dep(40, "Unrelated", "Other Mod"),
+        };
+
+        var kept = ModListDependencies.WithoutMetOnHost(missing, new HashSet<int> { 10 });
+
+        Assert.Equal(["Shared Lib", "Unrelated"], kept.Select(d => d.Name));
+    }
 }

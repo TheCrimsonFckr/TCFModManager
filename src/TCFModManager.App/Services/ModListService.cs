@@ -163,6 +163,27 @@ public sealed class ModListService
         return ModListRefresh.Build(entries, install.Candidates, CatalogVersions(), CatalogAddonVersions(), onlyNewer);
     }
 
+    // OPEN-44 Q4: the server-only mods the Server Map host reports enabled. Empty when it can't be asked.
+    private static async Task<IReadOnlySet<int>> ServerOnlyOnHostAsync()
+    {
+        var map = new SettingsService().Load().ServerMap;
+        if (string.IsNullOrWhiteSpace(map.Host)) return new HashSet<int>();
+
+        try
+        {
+            using var client = ServerMapClient.TryCreate(map.ToEndpoint());
+            if (client is null) return new HashSet<int>();
+
+            var result = await client.ClientsAsync(map.ClientId);
+            return result.Succeeded ? ServerMapMachines.ServerOnlyOnHost(result.Machines) : new HashSet<int>();
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or IOException)
+        {
+            AppLog.Warn("ModLists", $"couldn't read the Server Map host's mods: {ex.Message}");
+            return new HashSet<int>();
+        }
+    }
+
     // OPEN-44 Q10 (b): on a dedicated headless, the entries of the lists it follows (its own active list, the served one).
     private static IReadOnlyList<ModListEntry>? FollowedOnDedicatedHeadless()
     {
@@ -321,6 +342,18 @@ public sealed class ModListService
         {
             AppLog.Warn("ModLists", $"dependency check for '{list.Name}' failed: {answer.Failure} {answer.Detail}");
             return ModListDependencyCheck.Failed(Strings.ModLists_DepsUnreachable);
+        }
+
+        if (list.Origin == ModListOrigin.Server && answer.Missing.Count > 0)
+        {
+            var metOnHost = await ServerOnlyOnHostAsync();
+            var kept = ModListDependencies.WithoutMetOnHost(answer.Missing, metOnHost);
+
+            if (kept.Count != answer.Missing.Count)
+            {
+                AppLog.Info("ModLists", $"dependency check for '{list.Name}': {answer.Missing.Count - kept.Count} met by server-only mods on the host");
+                answer = answer with { Missing = kept };
+            }
         }
 
         var parents = ModListDependencies.MissingParents(

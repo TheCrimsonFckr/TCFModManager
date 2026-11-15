@@ -6144,6 +6144,12 @@ The details are in the log:
   <data name="ServerMap_Extras_other" xml:space="preserve">
     <value>{0} mods not on the list: {1}</value>
   </data>
+  <data name="ServerMap_ScopedOff_one" xml:space="preserve">
+    <value>Still has 1 mod on that the list keeps off this machine: {1}</value>
+  </data>
+  <data name="ServerMap_ScopedOff_other" xml:space="preserve">
+    <value>Still has {0} mods on that the list keeps off this machine: {1}</value>
+  </data>
   <data name="ServerMap_InstalledCount_one" xml:space="preserve">
     <value>1 mod installed</value>
   </data>
