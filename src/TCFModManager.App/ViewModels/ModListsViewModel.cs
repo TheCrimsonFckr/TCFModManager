@@ -212,6 +212,19 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
 
     public bool HasStanding => Status is not null;
 
+    public bool GoesToServer => Entry.EffectiveScope.HasFlag(ModListEntryScope.Server);
+
+    public bool GoesToClient => Entry.EffectiveScope.HasFlag(ModListEntryScope.Client);
+
+    public bool GoesToHeadless => Entry.EffectiveScope.HasFlag(ModListEntryScope.Headless);
+
+    // The last machine ticked can't be unticked: an entry always goes somewhere.
+    public bool CanUntickServer => Entry.EffectiveScope != ModListEntryScope.Server;
+
+    public bool CanUntickClient => Entry.EffectiveScope != ModListEntryScope.Client;
+
+    public bool CanUntickHeadless => Entry.EffectiveScope != ModListEntryScope.Headless;
+
     // Newest first for Last added; entries from before AddedAt was recorded sort last.
     public DateTimeOffset AddedSortKey => Entry.AddedAt ?? DateTimeOffset.MinValue;
 
@@ -338,6 +351,8 @@ public static class ModListScopes
 
     public const ModListEntryScope ServerAndClients = ModListEntryScope.Server | ModListEntryScope.Client;
 
+    public const ModListEntryScope ServerAndHeadless = ModListEntryScope.Server | ModListEntryScope.Headless;
+
     //
     // Named as the machines they reach, in one order - server, client, headless - rather than as
     // "everyone" and a set of exceptions to it. Every label is then read the same way: what is in
@@ -363,22 +378,9 @@ public static class ModListScopes
         ModListEntryScope.Client => nameof(Strings.ModLists_ScopeClientOnly),
         ModListEntryScope.Headless => nameof(Strings.ModLists_ScopeHeadlessOnly),
         ModListEntryScope.Server => nameof(Strings.ModLists_ScopeServerOnly),
+        ServerAndHeadless => nameof(Strings.ModLists_ScopeServerAndHeadless),
         _ => null,
     };
-}
-
-// One choice in the contents panel's scope filter. A null Scope means "don't filter on it".
-public sealed class ModListScopeFilter(string key, ModListEntryScope? scope, bool adviceOnly = false) : LocalizedViewModel
-{
-    public ModListEntryScope? Scope { get; } = scope;
-
-    public bool AdviceOnly { get; } = adviceOnly;
-
-    // Read on every get rather than captured, so choosing a language relabels the dropdown without
-    // rebuilding it - which would drop the selection and reset the filter.
-    public string Label => LocalizationService.Get(key);
-
-    public override string ToString() => Label;
 }
 
 public enum ModListEntrySortKind
@@ -440,7 +442,6 @@ public partial class ModListsViewModel : LocalizedViewModel
         EntriesView = new CollectionViewSource { Source = Entries }.View;
         EntriesView.Filter = Matches;
 
-        _scopeFilter = ScopeFilters[0];
         _entrySort = EntrySorts[0];
 
         ApplySort();

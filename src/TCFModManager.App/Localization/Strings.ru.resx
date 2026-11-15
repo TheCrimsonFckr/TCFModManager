@@ -3230,9 +3230,6 @@
   <data name="ModLists_ScopeEveryoneFormat" xml:space="preserve">
     <value>«{0}» теперь применяется на всех машинах.</value>
   </data>
-  <data name="ModLists_ScopeFilterAll" xml:space="preserve">
-    <value>Все области</value>
-  </data>
   <data name="ModLists_ScopeFilterAdvice" xml:space="preserve">
     <value>Куда ставить</value>
   </data>
@@ -3347,7 +3344,7 @@
     <value>У {0} модов в этом списке есть советы для headless на их страницах sp-mod - выберите «Куда ставить» в фильтре областей, чтобы увидеть их.</value>
   </data>
   <data name="ModLists_ScopeFilterToolTip" xml:space="preserve">
-    <value>Показывать только записи, предназначенные для одного типа машин. «Только сервер» - моды, которые игроку никогда не предлагается устанавливать; «Только клиент» - те, что пропускает headless-клиент Fika.</value>
+    <value>Показывать записи, которые идут на любую из отмеченных машин. Без отметок показываются все.</value>
   </data>
   <data name="ModLists_ScopeHeadlessOnly" xml:space="preserve">
     <value>Только headless</value>
@@ -3357,6 +3354,24 @@
   </data>
   <data name="ModLists_ScopeServerAndClients" xml:space="preserve">
     <value>Сервер + Клиент</value>
+  </data>
+  <data name="ModLists_ScopeServerAndHeadless" xml:space="preserve">
+    <value>Сервер + Headless</value>
+  </data>
+  <data name="ModLists_ScopeServerAndHeadlessFormat" xml:space="preserve">
+    <value>«{0}» теперь идёт на сервер и headless - игроки, применяющие этот список, его пропускают.</value>
+  </data>
+  <data name="ModLists_ScopeTickServer" xml:space="preserve">
+    <value>Сервер</value>
+  </data>
+  <data name="ModLists_ScopeTickClient" xml:space="preserve">
+    <value>Клиент</value>
+  </data>
+  <data name="ModLists_ScopeTickHeadless" xml:space="preserve">
+    <value>Headless</value>
+  </data>
+  <data name="ModLists_AdviceFilterToolTip" xml:space="preserve">
+    <value>Показывать только записи с подсказкой «Куда ставить» или для headless.</value>
   </data>
   <data name="ModLists_ScopeServerAndClientsFormat" xml:space="preserve">
     <value>«{0}» теперь идёт серверу и игрокам - headless-клиент его пропустит.</value>

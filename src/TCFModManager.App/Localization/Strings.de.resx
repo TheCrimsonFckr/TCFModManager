@@ -3065,9 +3065,6 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="ModLists_ScopeEveryoneFormat" xml:space="preserve">
     <value>"{0}" gilt jetzt für jeden Rechner.</value>
   </data>
-  <data name="ModLists_ScopeFilterAll" xml:space="preserve">
-    <value>Alle Bereiche</value>
-  </data>
   <data name="ModLists_ScopeFilterAdvice" xml:space="preserve">
     <value>Wo es hingehört</value>
   </data>
@@ -3179,7 +3176,7 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
     <value>{0} {1}</value>
   </data>
   <data name="ModLists_ScopeFilterToolTip" xml:space="preserve">
-    <value>Zeigt nur die Einträge, die für eine Art von Rechner gedacht sind. Nur Server sind die Mods, die ein Spieler nie installieren soll; Nur Client sind die, die ein Fika-Headless-Client überspringt.</value>
+    <value>Die Einträge zeigen, die an einen der markierten Rechner gehen. Ohne Markierung werden alle gezeigt.</value>
   </data>
   <data name="ModLists_ScopeHeadlessOnly" xml:space="preserve">
     <value>Nur Headless</value>
@@ -3189,6 +3186,24 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   </data>
   <data name="ModLists_ScopeServerAndClients" xml:space="preserve">
     <value>Server + Client</value>
+  </data>
+  <data name="ModLists_ScopeServerAndHeadless" xml:space="preserve">
+    <value>Server + Headless</value>
+  </data>
+  <data name="ModLists_ScopeServerAndHeadlessFormat" xml:space="preserve">
+    <value>"{0}" geht jetzt an den Server und den Headless - Spieler, die diese Liste anwenden, überspringen ihn.</value>
+  </data>
+  <data name="ModLists_ScopeTickServer" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="ModLists_ScopeTickClient" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="ModLists_ScopeTickHeadless" xml:space="preserve">
+    <value>Headless</value>
+  </data>
+  <data name="ModLists_AdviceFilterToolTip" xml:space="preserve">
+    <value>Nur die Einträge mit einem Hinweis zu Wo es hingehört oder zum Headless zeigen.</value>
   </data>
   <data name="ModLists_ScopeServerAndClientsFormat" xml:space="preserve">
     <value>"{0}" geht jetzt an den Server und an Spieler - ein Headless-Client überspringt ihn.</value>

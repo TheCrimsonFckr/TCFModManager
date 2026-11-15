@@ -16,27 +16,31 @@ public partial class ModListsViewModel
     // still carrying the capture default. "Everything a headless takes" is a different question and
     // the pre-launch check is what answers it.
     //
-    public IReadOnlyList<ModListScopeFilter> ScopeFilters { get; } =
-    [
-        new(nameof(Strings.ModLists_ScopeFilterAll), null),
-        new(ModListScopes.Key(ModListEntryScope.Everyone)!, ModListEntryScope.Everyone),
-        new(ModListScopes.Key(ModListScopes.ServerAndClients)!, ModListScopes.ServerAndClients),
-        new(ModListScopes.Key(ModListScopes.ClientsAndHeadless)!, ModListScopes.ClientsAndHeadless),
-        new(ModListScopes.Key(ModListEntryScope.Client)!, ModListEntryScope.Client),
-        new(ModListScopes.Key(ModListEntryScope.Headless)!, ModListEntryScope.Headless),
-        new(ModListScopes.Key(ModListEntryScope.Server)!, ModListEntryScope.Server),
-        new(nameof(Strings.ModLists_ScopeFilterAdvice), null, adviceOnly: true),
-    ];
+    // The machines ticked in the filter: an entry shows when it goes to any of them. None ticked shows all.
+    [ObservableProperty]
+    private bool _showServer;
 
-    public IReadOnlyList<ModListScopeFilter> ScopeChoices { get; } =
-    [
-        new(ModListScopes.Key(ModListEntryScope.Everyone)!, ModListEntryScope.Everyone),
-        new(ModListScopes.Key(ModListScopes.ClientsAndHeadless)!, ModListScopes.ClientsAndHeadless),
-        new(ModListScopes.Key(ModListEntryScope.Client)!, ModListEntryScope.Client),
-        new(ModListScopes.Key(ModListEntryScope.Headless)!, ModListEntryScope.Headless),
-        new(ModListScopes.Key(ModListEntryScope.Server)!, ModListEntryScope.Server),
-        new(ModListScopes.Key(ModListScopes.ServerAndClients)!, ModListScopes.ServerAndClients),
-    ];
+    [ObservableProperty]
+    private bool _showClient;
+
+    [ObservableProperty]
+    private bool _showHeadless;
+
+    [ObservableProperty]
+    private bool _showAdviceOnly;
+
+    private ModListEntryScope ShownScopes =>
+        (ShowServer ? ModListEntryScope.Server : 0)
+        | (ShowClient ? ModListEntryScope.Client : 0)
+        | (ShowHeadless ? ModListEntryScope.Headless : 0);
+
+    partial void OnShowServerChanged(bool value) => RefreshView();
+
+    partial void OnShowClientChanged(bool value) => RefreshView();
+
+    partial void OnShowHeadlessChanged(bool value) => RefreshView();
+
+    partial void OnShowAdviceOnlyChanged(bool value) => RefreshView();
 
     public IReadOnlyList<ModListEntrySort> EntrySorts { get; } =
     [
@@ -47,15 +51,10 @@ public partial class ModListsViewModel
     ];
 
     [ObservableProperty]
-    private ModListScopeFilter _scopeFilter;
-
-    [ObservableProperty]
     private ModListEntrySort _entrySort;
 
     [ObservableProperty]
     private string _entrySearch = "";
-
-    partial void OnScopeFilterChanged(ModListScopeFilter value) => RefreshView();
 
     partial void OnEntrySearchChanged(string value) => RefreshView();
 
@@ -107,8 +106,8 @@ public partial class ModListsViewModel
     {
         if (item is not ModListEntryRowViewModel row) return false;
 
-        if (ScopeFilter?.Scope is { } scope && row.Entry.EffectiveScope != scope) return false;
-        if (ScopeFilter?.AdviceOnly == true && !row.NeedsAttention && !row.HasPlacement) return false;
+        if (ShownScopes is not 0 and var shown && (row.Entry.EffectiveScope & shown) == 0) return false;
+        if (ShowAdviceOnly && !row.NeedsAttention && !row.HasPlacement) return false;
 
         var search = EntrySearch?.Trim();
         if (string.IsNullOrEmpty(search)) return true;
@@ -125,7 +124,7 @@ public partial class ModListsViewModel
     public int VisibleEntryCount => EntriesView.Cast<object>().Count();
 
     public bool IsFiltered =>
-        ScopeFilter?.Scope is not null || ScopeFilter?.AdviceOnly == true || !string.IsNullOrWhiteSpace(EntrySearch);
+        ShownScopes != 0 || ShowAdviceOnly || !string.IsNullOrWhiteSpace(EntrySearch);
 
     // A list with entries, a filter on, and nothing matching it. Its own state because the advice
     // is different: nothing is wrong, and the fix is to widen the filter rather than add mods.

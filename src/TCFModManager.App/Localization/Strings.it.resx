@@ -3065,9 +3065,6 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="ModLists_ScopeEveryoneFormat" xml:space="preserve">
     <value>"{0}" ora vale per tutte le macchine.</value>
   </data>
-  <data name="ModLists_ScopeFilterAll" xml:space="preserve">
-    <value>Tutti gli ambiti</value>
-  </data>
   <data name="ModLists_ScopeFilterAdvice" xml:space="preserve">
     <value>Dove va</value>
   </data>
@@ -3179,7 +3176,7 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
     <value>{0} {1}</value>
   </data>
   <data name="ModLists_ScopeFilterToolTip" xml:space="preserve">
-    <value>Mostra solo le voci destinate a un tipo di macchina. Solo server sono i mod che a un giocatore non viene mai chiesto di installare; Solo client sono quelli che un client headless Fika salta.</value>
+    <value>Mostra le voci che vanno a una qualsiasi delle macchine selezionate. Nessuna selezione le mostra tutte.</value>
   </data>
   <data name="ModLists_ScopeHeadlessOnly" xml:space="preserve">
     <value>Solo headless</value>
@@ -3189,6 +3186,24 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   </data>
   <data name="ModLists_ScopeServerAndClients" xml:space="preserve">
     <value>Server + Client</value>
+  </data>
+  <data name="ModLists_ScopeServerAndHeadless" xml:space="preserve">
+    <value>Server + Headless</value>
+  </data>
+  <data name="ModLists_ScopeServerAndHeadlessFormat" xml:space="preserve">
+    <value>"{0}" ora va al server e al headless - i giocatori che applicano questa lista lo saltano.</value>
+  </data>
+  <data name="ModLists_ScopeTickServer" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="ModLists_ScopeTickClient" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="ModLists_ScopeTickHeadless" xml:space="preserve">
+    <value>Headless</value>
+  </data>
+  <data name="ModLists_AdviceFilterToolTip" xml:space="preserve">
+    <value>Mostra solo le voci con un suggerimento Dove va o per il headless.</value>
   </data>
   <data name="ModLists_ScopeServerAndClientsFormat" xml:space="preserve">
     <value>"{0}" ora va al server e ai giocatori - un client headless lo salterà.</value>

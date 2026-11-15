@@ -693,7 +693,7 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Matches the mod's name, the name the list stored, and the folders it installs into.</value>
   </data>
   <data name="ModLists_ScopeFilterToolTip" xml:space="preserve">
-    <value>Show only the entries meant for one kind of machine. Server only are the mods a player is never asked to install; Client only are the ones a Fika headless client skips.</value>
+    <value>Show the entries that go to any machine ticked. Nothing ticked shows them all.</value>
   </data>
   <data name="ModLists_EntrySortToolTip" xml:space="preserve">
     <value>Ordered by the name shown on the row.</value>
@@ -1993,6 +1993,24 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="ModLists_ScopeServerAndClients" xml:space="preserve">
     <value>Server + Client</value>
   </data>
+  <data name="ModLists_ScopeServerAndHeadless" xml:space="preserve">
+    <value>Server + Headless</value>
+  </data>
+  <data name="ModLists_ScopeServerAndHeadlessFormat" xml:space="preserve">
+    <value>"{0}" now goes to the server and the headless - players applying this list skip it.</value>
+  </data>
+  <data name="ModLists_ScopeTickServer" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="ModLists_ScopeTickClient" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="ModLists_ScopeTickHeadless" xml:space="preserve">
+    <value>Headless</value>
+  </data>
+  <data name="ModLists_AdviceFilterToolTip" xml:space="preserve">
+    <value>Show only the entries with a Where it goes or headless suggestion.</value>
+  </data>
   <data name="ModLists_ScopeClientsAndHeadless" xml:space="preserve">
     <value>Client + Headless</value>
   </data>
@@ -2004,10 +2022,6 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   </data>
   <data name="ModLists_ScopeServerOnly" xml:space="preserve">
     <value>Server only</value>
-  </data>
-  <data name="ModLists_ScopeFilterAll" xml:space="preserve">
-    <value>All scopes</value>
-    <comment>The neutral entry in the scope filter - no filtering.</comment>
   </data>
   <data name="ModLists_ScopeFilterAdvice" xml:space="preserve">
     <value>Where it goes</value>

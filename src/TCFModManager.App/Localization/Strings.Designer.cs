@@ -564,11 +564,16 @@ internal static class Strings
     internal static string ModLists_DetailRevisionFormat => LocalizationService.Get("ModLists_DetailRevisionFormat");
     internal static string ModLists_ScopeEveryone => LocalizationService.Get("ModLists_ScopeEveryone");
     internal static string ModLists_ScopeServerAndClients => LocalizationService.Get("ModLists_ScopeServerAndClients");
+    internal static string ModLists_ScopeServerAndHeadless => LocalizationService.Get("ModLists_ScopeServerAndHeadless");
+    internal static string ModLists_ScopeServerAndHeadlessFormat => LocalizationService.Get("ModLists_ScopeServerAndHeadlessFormat");
+    internal static string ModLists_ScopeTickServer => LocalizationService.Get("ModLists_ScopeTickServer");
+    internal static string ModLists_ScopeTickClient => LocalizationService.Get("ModLists_ScopeTickClient");
+    internal static string ModLists_ScopeTickHeadless => LocalizationService.Get("ModLists_ScopeTickHeadless");
+    internal static string ModLists_AdviceFilterToolTip => LocalizationService.Get("ModLists_AdviceFilterToolTip");
     internal static string ModLists_ScopeClientsAndHeadless => LocalizationService.Get("ModLists_ScopeClientsAndHeadless");
     internal static string ModLists_ScopeClientOnly => LocalizationService.Get("ModLists_ScopeClientOnly");
     internal static string ModLists_ScopeHeadlessOnly => LocalizationService.Get("ModLists_ScopeHeadlessOnly");
     internal static string ModLists_ScopeServerOnly => LocalizationService.Get("ModLists_ScopeServerOnly");
-    internal static string ModLists_ScopeFilterAll => LocalizationService.Get("ModLists_ScopeFilterAll");
     internal static string ModLists_ScopeFilterAdvice => LocalizationService.Get("ModLists_ScopeFilterAdvice");
     internal static string ModLists_PlaceLabel => LocalizationService.Get("ModLists_PlaceLabel");
     internal static string ModLists_PlaceSyncAddonFormat => LocalizationService.Get("ModLists_PlaceSyncAddonFormat");

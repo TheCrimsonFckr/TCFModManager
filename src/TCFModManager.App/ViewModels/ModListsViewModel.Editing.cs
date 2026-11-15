@@ -76,9 +76,10 @@ public partial class ModListsViewModel
         StatusMessage = Text(Strings.ModLists_RemovedEntryFormat, entry.Name, row.Name);
     }
 
-    public void ChooseScope(ModListEntryRowViewModel entry, ModListEntryScope scope)
+    public void ToggleScope(ModListEntryRowViewModel entry, ModListEntryScope machine)
     {
-        if (SelectionIsEditable && scope != entry.Entry.EffectiveScope) SetScope(entry, scope);
+        var next = entry.Entry.EffectiveScope ^ machine;
+        if (SelectionIsEditable && next != 0) SetScope(entry, next);
     }
 
     [RelayCommand(CanExecute = nameof(SelectionIsEditable))]
@@ -135,6 +136,8 @@ public partial class ModListsViewModel
                 Text(Strings.ModLists_ScopeHeadlessOnlyFormat, entry.Name),
             ModListScopes.ServerAndClients =>
                 Text(Strings.ModLists_ScopeServerAndClientsFormat, entry.Name),
+            ModListScopes.ServerAndHeadless =>
+                Text(Strings.ModLists_ScopeServerAndHeadlessFormat, entry.Name),
             _ => Text(Strings.ModLists_ScopeEveryoneFormat, entry.Name),
         };
     }

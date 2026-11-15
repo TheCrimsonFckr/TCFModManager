@@ -5,6 +5,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
 using TCFModManager.App.ViewModels;
+using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.Views;
@@ -51,13 +52,11 @@ public partial class ModListsPage : Page
         menu.IsOpen = true;
     }
 
-    private void ScopeBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void ScopeTick_Click(object sender, RoutedEventArgs e)
     {
-        if (e.RemovedItems.Count == 0 || e.AddedItems.Count == 0) return;
-        if (sender is not ComboBox { DataContext: ModListEntryRowViewModel row }) return;
-        if (e.AddedItems[0] is not ModListScopeFilter { Scope: { } scope }) return;
+        if (sender is not FrameworkElement { DataContext: ModListEntryRowViewModel row, Tag: ModListEntryScope machine }) return;
 
-        ViewModel.ChooseScope(row, scope);
+        ViewModel.ToggleScope(row, machine);
     }
 
     private void RenameBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)

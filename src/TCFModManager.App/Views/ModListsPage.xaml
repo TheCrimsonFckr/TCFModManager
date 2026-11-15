@@ -13,6 +13,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    xmlns:core="clr-namespace:TCFModManager.Core.Models;assembly=TCFModManager.Core"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     Title="{loc:Str Nav_ModLists}"
@@ -401,17 +402,40 @@
                         </StackPanel>
                     </Grid>
 
-                    <ComboBox
+                    <StackPanel
                         Grid.Column="2"
                         VerticalAlignment="Center"
-                        FontSize="12"
-                        DisplayMemberPath="Label"
-                        SelectedValuePath="Scope"
+                        Orientation="Horizontal"
                         ToolTip="{loc:Str ModLists_ScopeToolTip}"
-                        ItemsSource="{Binding DataContext.ScopeChoices, RelativeSource={RelativeSource AncestorType=Page}}"
-                        SelectedValue="{Binding Entry.EffectiveScope, Mode=OneWay}"
-                        Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"
-                        SelectionChanged="ScopeBox_SelectionChanged" />
+                                            Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
+                        <ToggleButton
+                            Margin="4,0,0,0"
+                            Padding="8,2"
+                            FontSize="11"
+                            Tag="{x:Static core:ModListEntryScope.Server}"
+                            Content="{loc:Str ModLists_ScopeTickServer}"
+                            IsChecked="{Binding GoesToServer, Mode=OneWay}"
+                            IsEnabled="{Binding CanUntickServer}"
+                            Click="ScopeTick_Click" />
+                        <ToggleButton
+                            Margin="4,0,0,0"
+                            Padding="8,2"
+                            FontSize="11"
+                            Tag="{x:Static core:ModListEntryScope.Client}"
+                            Content="{loc:Str ModLists_ScopeTickClient}"
+                            IsChecked="{Binding GoesToClient, Mode=OneWay}"
+                            IsEnabled="{Binding CanUntickClient}"
+                            Click="ScopeTick_Click" />
+                        <ToggleButton
+                            Margin="4,0,0,0"
+                            Padding="8,2"
+                            FontSize="11"
+                            Tag="{x:Static core:ModListEntryScope.Headless}"
+                            Content="{loc:Str ModLists_ScopeTickHeadless}"
+                            IsChecked="{Binding GoesToHeadless, Mode=OneWay}"
+                            IsEnabled="{Binding CanUntickHeadless}"
+                            Click="ScopeTick_Click" />
+                    </StackPanel>
 
                     <Border
                         Grid.Column="2"
@@ -700,17 +724,39 @@
                                 </StackPanel>
                             </Border>
 
-                            <ComboBox
-                                Width="200"
+                            <StackPanel
                                 HorizontalAlignment="Right"
-                                FontSize="12"
-                                DisplayMemberPath="Label"
-                                SelectedValuePath="Scope"
+                                Orientation="Horizontal"
                                 ToolTip="{loc:Str ModLists_ScopeToolTip}"
-                                ItemsSource="{Binding DataContext.ScopeChoices, RelativeSource={RelativeSource AncestorType=Page}}"
-                                SelectedValue="{Binding Entry.EffectiveScope, Mode=OneWay}"
-                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}"
-                                SelectionChanged="ScopeBox_SelectionChanged" />
+                                                            Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
+                                <ToggleButton
+                                    Margin="4,0,0,0"
+                                    Padding="8,2"
+                                    FontSize="11"
+                                    Tag="{x:Static core:ModListEntryScope.Server}"
+                                    Content="{loc:Str ModLists_ScopeTickServer}"
+                                    IsChecked="{Binding GoesToServer, Mode=OneWay}"
+                                    IsEnabled="{Binding CanUntickServer}"
+                                    Click="ScopeTick_Click" />
+                                <ToggleButton
+                                    Margin="4,0,0,0"
+                                    Padding="8,2"
+                                    FontSize="11"
+                                    Tag="{x:Static core:ModListEntryScope.Client}"
+                                    Content="{loc:Str ModLists_ScopeTickClient}"
+                                    IsChecked="{Binding GoesToClient, Mode=OneWay}"
+                                    IsEnabled="{Binding CanUntickClient}"
+                                    Click="ScopeTick_Click" />
+                                <ToggleButton
+                                    Margin="4,0,0,0"
+                                    Padding="8,2"
+                                    FontSize="11"
+                                    Tag="{x:Static core:ModListEntryScope.Headless}"
+                                    Content="{loc:Str ModLists_ScopeTickHeadless}"
+                                    IsChecked="{Binding GoesToHeadless, Mode=OneWay}"
+                                    IsEnabled="{Binding CanUntickHeadless}"
+                                    Click="ScopeTick_Click" />
+                            </StackPanel>
 
                             <Border
                                 HorizontalAlignment="Right"
@@ -1510,8 +1556,11 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
                         <ui:TextBox
                             Grid.Column="0"
@@ -1520,17 +1569,27 @@
                             ToolTip="{loc:Str ModLists_EntrySearchToolTip}"
                             Text="{Binding EntrySearch, UpdateSourceTrigger=PropertyChanged}" />
 
-                        <ComboBox
-                            Grid.Column="1"
-                            MinWidth="176"
-                            Margin="8,0,0,0"
-                            DisplayMemberPath="Label"
-                            ToolTip="{loc:Str ModLists_ScopeFilterToolTip}"
-                            ItemsSource="{Binding ScopeFilters}"
-                            SelectedItem="{Binding ScopeFilter}" />
+                        <StackPanel
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            Margin="0,8,0,0"
+                            Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" ToolTip="{loc:Str ModLists_ScopeFilterToolTip}">
+                                <ToggleButton Padding="10,3" FontSize="12" Content="{loc:Str ModLists_ScopeTickServer}" IsChecked="{Binding ShowServer}" />
+                                <ToggleButton Margin="4,0,0,0" Padding="10,3" FontSize="12" Content="{loc:Str ModLists_ScopeTickClient}" IsChecked="{Binding ShowClient}" />
+                                <ToggleButton Margin="4,0,0,0" Padding="10,3" FontSize="12" Content="{loc:Str ModLists_ScopeTickHeadless}" IsChecked="{Binding ShowHeadless}" />
+                            </StackPanel>
+                            <ToggleButton
+                                Margin="12,0,0,0"
+                                Padding="10,3"
+                                FontSize="12"
+                                ToolTip="{loc:Str ModLists_AdviceFilterToolTip}"
+                                Content="{loc:Str ModLists_ScopeFilterAdvice}"
+                                IsChecked="{Binding ShowAdviceOnly}" />
+                        </StackPanel>
 
                         <ComboBox
-                            Grid.Column="2"
+                            Grid.Column="1"
                             MinWidth="130"
                             Margin="8,0,0,0"
                             DisplayMemberPath="Label"
