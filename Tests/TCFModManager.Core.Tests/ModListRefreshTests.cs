@@ -77,6 +77,19 @@ public class ModListRefreshTests
     }
 
     [Fact]
+    public void OnlyNewer_TakesTheNewerInstallsAndLeavesWantedUpdatesAsWritten()
+    {
+        var result = ModListRefresh.Build(
+            [Entry("SAIN", 2426, "3.1.0"), Entry("Waypoints", 1119, "1.8.0")],
+            [Installed("SAIN", 2426, "3.2.0"), Installed("Waypoints", 1119, "1.7.0")],
+            onlyNewer: true);
+
+        Assert.Equal("3.2.0", result.Entries[0].Version);
+        Assert.Equal("1.8.0", result.Entries[1].Version);
+        Assert.Equal("SAIN", Assert.Single(result.Changed).Name);
+    }
+
+    [Fact]
     public void PicksUpTheVersionInstalledNow()
     {
         var result = ModListRefresh.Build(

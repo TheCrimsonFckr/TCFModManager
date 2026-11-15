@@ -593,6 +593,21 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="ModLists_RefreshVersionsToolTip" xml:space="preserve">
     <value>Reads the version of every mod on this list that is installed here, and updates the list to match. Scope is left alone, and mods you don't have are left as written. Nothing is downloaded or installed - Save keeps the changes.</value>
   </data>
+  <data name="ModLists_RefreshBehindToolTip" xml:space="preserve">
+    <value>Puts the version installed here on the list, for the mods that are newer here only. Mods the list wants updated stay as written. Nothing is downloaded - Save keeps the changes.</value>
+  </data>
+  <data name="ModLists_ListBehind_one" xml:space="preserve">
+    <value>1 mod is newer here than on this list, so the list is behind. Apply leaves it as it is. Refresh versions puts the newer version on the list - then Save.</value>
+  </data>
+  <data name="ModLists_ListBehind_other" xml:space="preserve">
+    <value>{0} mods are newer here than on this list, so the list is behind. Apply leaves them as they are. Refresh versions puts the newer versions on the list - then Save.</value>
+  </data>
+  <data name="ModLists_ListBehindPublished_one" xml:space="preserve">
+    <value>1 mod is newer here than on this list, so the list is behind. Apply leaves it as it is. Refresh versions puts the newer version on the list - then Save and publish again.</value>
+  </data>
+  <data name="ModLists_ListBehindPublished_other" xml:space="preserve">
+    <value>{0} mods are newer here than on this list, so the list is behind. Apply leaves them as they are. Refresh versions puts the newer versions on the list - then Save and publish again.</value>
+  </data>
   <data name="ModLists_SaveToolTip" xml:space="preserve">
     <value>Write these changes to the list. Nothing is installed, enabled or disabled - Apply does that.</value>
   </data>
@@ -2072,6 +2087,9 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>{0} to {1}</value>
     <comment>Two version numbers - the one installed and the one the list names.</comment>
   </data>
+  <data name="ModLists_ActionListBehindFormat" xml:space="preserve">
+    <value>{0} here, the list has {1}</value>
+  </data>
   <data name="ModLists_ActionNotOnList" xml:space="preserve">
     <value>not on this list</value>
   </data>
@@ -2087,6 +2105,12 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   </data>
   <data name="ModLists_CountToUpdateFormat" xml:space="preserve">
     <value>{0} to update</value>
+  </data>
+  <data name="ModLists_CountToDowngradeFormat" xml:space="preserve">
+    <value>{0} to downgrade</value>
+  </data>
+  <data name="ModLists_CountNewerHereFormat" xml:space="preserve">
+    <value>{0} newer here</value>
   </data>
   <data name="ModLists_CountToEnableFormat" xml:space="preserve">
     <value>{0} to enable</value>
@@ -6114,6 +6138,12 @@ The details are in the log:
   <data name="ModLists_ApplyUpdate_other" xml:space="preserve">
     <value>Update {0} mods</value>
   </data>
+  <data name="ModLists_ApplyDowngrade_one" xml:space="preserve">
+    <value>Downgrade 1 mod</value>
+  </data>
+  <data name="ModLists_ApplyDowngrade_other" xml:space="preserve">
+    <value>Downgrade {0} mods</value>
+  </data>
   <data name="ModLists_ApplyDownload_one" xml:space="preserve">
     <value>Download 1 mod</value>
   </data>
@@ -6122,6 +6152,15 @@ The details are in the log:
   </data>
   <data name="ModLists_ApplyInstallUpdateFormat" xml:space="preserve">
     <value>Install {0}, update {1}</value>
+  </data>
+  <data name="ModLists_ApplyInstallDowngradeFormat" xml:space="preserve">
+    <value>Install {0}, downgrade {1}</value>
+  </data>
+  <data name="ModLists_ApplyUpdateDowngradeFormat" xml:space="preserve">
+    <value>Update {0}, downgrade {1}</value>
+  </data>
+  <data name="ModLists_ApplyInstallUpdateDowngradeFormat" xml:space="preserve">
+    <value>Install {0}, update {1}, downgrade {2}</value>
   </data>
   <data name="ModLists_ChangeVersionPairFormat" xml:space="preserve">
     <value>{0} ({1} → {2})</value>
@@ -6150,6 +6189,9 @@ The details are in the log:
   <data name="ModLists_StatusAlreadyRight" xml:space="preserve">
     <value>Correct</value>
   </data>
+  <data name="ModLists_StatusNewerHere" xml:space="preserve">
+    <value>Newer here</value>
+  </data>
   <data name="ModLists_StatusVersionFormat" xml:space="preserve">
     <value>{0} → {1}</value>
   </data>
@@ -6164,6 +6206,12 @@ The details are in the log:
   </data>
   <data name="ModLists_ChipDifferentVersion_other" xml:space="preserve">
     <value>{0} incorrect versions</value>
+  </data>
+  <data name="ModLists_ChipNewerHere_one" xml:space="preserve">
+    <value>{0} newer here</value>
+  </data>
+  <data name="ModLists_ChipNewerHere_other" xml:space="preserve">
+    <value>{0} newer here</value>
   </data>
   <data name="ModLists_ChipHalfInstalled_one" xml:space="preserve">
     <value>{0} half installed</value>

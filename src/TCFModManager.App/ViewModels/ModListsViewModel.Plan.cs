@@ -32,17 +32,43 @@ public partial class ModListsViewModel
 
             var plan = preview.Plan;
             var installs = plan.Install.Count();
-            var updates = plan.Update.Count() + plan.Enable.Count(a => a.NeedsUpdateAfterEnable);
+            var moves = plan.Update.Concat(plan.Enable.Where(a => a.NeedsUpdateAfterEnable)).ToList();
+            var downgrades = moves.Count(a => a.IsDowngrade);
+            var updates = moves.Count - downgrades;
 
-            if (installs + updates == 0) return Strings.ModLists_Apply;
+            if (installs + moves.Count == 0) return Strings.ModLists_Apply;
 
             if (ModListDownloadMode.For(preview.List).DownloadOnly)
-                return Strings.ModLists_ApplyDownload(installs + updates);
+                return Strings.ModLists_ApplyDownload(installs + moves.Count);
 
-            if (installs > 0 && updates > 0) return Text(Strings.ModLists_ApplyInstallUpdateFormat, installs, updates);
-
-            return installs > 0 ? Strings.ModLists_ApplyInstall(installs) : Strings.ModLists_ApplyUpdate(updates);
+            return (installs > 0, updates > 0, downgrades > 0) switch
+            {
+                (true, true, true) => Text(Strings.ModLists_ApplyInstallUpdateDowngradeFormat, installs, updates, downgrades),
+                (true, true, false) => Text(Strings.ModLists_ApplyInstallUpdateFormat, installs, updates),
+                (true, false, true) => Text(Strings.ModLists_ApplyInstallDowngradeFormat, installs, downgrades),
+                (false, true, true) => Text(Strings.ModLists_ApplyUpdateDowngradeFormat, updates, downgrades),
+                (true, false, false) => Strings.ModLists_ApplyInstall(installs),
+                (false, true, false) => Strings.ModLists_ApplyUpdate(updates),
+                _ => Strings.ModLists_ApplyDowngrade(downgrades),
+            };
         }
+    }
+
+    // OPEN-44 P8: mods installed newer here than on an own list this install follows.
+    private (int Count, bool Published)? _behind;
+
+    public string? BehindNotice => _behind is { } behind
+        ? behind.Published ? Strings.ModLists_ListBehindPublished(behind.Count) : Strings.ModLists_ListBehind(behind.Count)
+        : null;
+
+    public bool HasBehindNotice => _behind is not null;
+
+    private void SetBehind(ModListPlan? plan)
+    {
+        var count = plan?.Behind.Count() ?? 0;
+        _behind = count > 0 ? (count, Selected?.IsPublished == true) : null;
+        OnPropertyChanged(nameof(BehindNotice));
+        OnPropertyChanged(nameof(HasBehindNotice));
     }
 
     private void NotifyPlanWording()
@@ -180,7 +206,8 @@ public partial class ModListsViewModel
             if (row.IsFollowed && preview.Plan.IsNoOp && !preview.Plan.Manual.Any())
             {
                 ClearPlan();
-                UpToDate = Strings.ModLists_PlanNoOp;
+                SetBehind(preview.Plan);
+                UpToDate = HasBehindNotice ? null : Strings.ModLists_PlanNoOp;
                 return;
             }
 
@@ -206,11 +233,13 @@ public partial class ModListsViewModel
         void Count(int n, string format) { if (n > 0) counts.Add(Text(format, n)); }
 
         Count(plan.Install.Count(), Strings.ModLists_CountToInstallFormat);
-        Count(plan.Update.Count(), Strings.ModLists_CountToUpdateFormat);
+        Count(plan.Update.Count(a => !a.IsDowngrade), Strings.ModLists_CountToUpdateFormat);
+        Count(plan.Update.Count(a => a.IsDowngrade), Strings.ModLists_CountToDowngradeFormat);
         Count(plan.Enable.Count(), Strings.ModLists_CountToEnableFormat);
         Count(plan.Disable.Count(), Strings.ModLists_CountToDisableFormat);
         Count(plan.Pinned.Count(), Strings.ModLists_CountPinnedFormat);
-        Count(plan.Keep.Count(), Strings.ModLists_CountAlreadyRightFormat);
+        Count(plan.Behind.Count(a => a.Kind == ModListActionKind.Keep), Strings.ModLists_CountNewerHereFormat);
+        Count(plan.Keep.Count(a => !a.ListIsBehind), Strings.ModLists_CountAlreadyRightFormat);
         Count(plan.Manual.Count(), Strings.ModLists_CountToFetchFormat);
 
         PlanSummary = plan.IsNoOp && !plan.Manual.Any()
@@ -229,6 +258,7 @@ public partial class ModListsViewModel
             ? Strings.ModLists_DownloadOnlyNotice(downloads)
             : null;
 
+        SetBehind(plan);
         SetApplyBlockers(ApplyBlockers(preview));
         NotifyPlanWording();
         StatusMessage = PlanStatus(preview);
@@ -390,7 +420,7 @@ public partial class ModListsViewModel
             Label(action),
             name,
             Detail(action),
-            Order(action.Kind),
+            Order(action),
             action,
             entry is null ? string.Empty : EntryDetail(entry, name),
             action.Entry is { } listed
@@ -420,6 +450,7 @@ public partial class ModListsViewModel
         ModListActionKind.Pinned => (Strings.ModLists_StatusPinned, "Neutral", "Pin24"),
         ModListActionKind.Manual =>
             (Strings.ModLists_StatusGetByHand, "Neutral", ModStatusDisplay.Glyph(ModStatus.NoCompatibleVersion)),
+        _ when action.ListIsBehind => (Strings.ModLists_StatusNewerHere, "Warn", ModStatusDisplay.Glyph(ModStatus.Installed)),
         _ => (Strings.ModLists_StatusAlreadyRight, "Good", ModStatusDisplay.Glyph(ModStatus.Installed)),
     };
 
@@ -432,6 +463,7 @@ public partial class ModListsViewModel
     private static IEnumerable<PlanChip> Chips(ModListPlan plan)
     {
         var repairs = plan.Update.Count(a => a.IsRepair);
+        var behind = plan.Behind.Count(a => a.Kind == ModListActionKind.Keep);
 
         (int Count, Func<int, string> Text, string Tone, string Icon)[] chips =
         [
@@ -439,12 +471,13 @@ public partial class ModListsViewModel
             (plan.Update.Count() - repairs, n => Strings.ModLists_ChipDifferentVersion(n), "Warn",
                 ModStatusDisplay.Glyph(ModStatus.UpdateAvailable)),
             (repairs, n => Strings.ModLists_ChipHalfInstalled(n), "Warn", "ErrorCircle24"),
+            (behind, n => Strings.ModLists_ChipNewerHere(n), "Warn", ModStatusDisplay.Glyph(ModStatus.Installed)),
             (plan.Enable.Count(), n => Strings.ModLists_ChipDisabled(n), "Disabled", DisabledGlyph),
             (plan.Manual.Count(), n => Strings.ModLists_ChipGetByHand(n), "Neutral",
                 ModStatusDisplay.Glyph(ModStatus.NoCompatibleVersion)),
             (plan.Disable.Count(), n => Strings.ModLists_ChipWillDisable(n), "Neutral", DisabledGlyph),
             (plan.Pinned.Count(), n => Strings.ModLists_ChipPinned(n), "Neutral", "Pin24"),
-            (plan.Keep.Count(), n => Strings.ModLists_ChipAlreadyRight(n), "Good", ModStatusDisplay.Glyph(ModStatus.Installed)),
+            (plan.Keep.Count() - behind, n => Strings.ModLists_ChipAlreadyRight(n), "Good", ModStatusDisplay.Glyph(ModStatus.Installed)),
         ];
 
         return chips.Where(c => c.Count > 0).Select(c => new PlanChip(c.Text(c.Count), c.Tone, c.Icon));
@@ -482,6 +515,9 @@ public partial class ModListsViewModel
 
     private static string DetailFor(ModListAction action) => action.Kind switch
     {
+        _ when action.ListIsBehind =>
+            Text(Strings.ModLists_ActionListBehindFormat, action.InstalledVersion, action.TargetVersion),
+
         ModListActionKind.Install => action.TargetVersion is null
             ? Strings.ModLists_ActionNewestPublished
             : Text(Strings.ModLists_ActionVersionFormat, action.TargetVersion),
@@ -501,7 +537,7 @@ public partial class ModListsViewModel
             : Text(Strings.ModLists_ActionVersionFormat, action.InstalledVersion),
     };
 
-    private static int Order(ModListActionKind kind) => kind switch
+    private static int Order(ModListAction action) => action.Kind switch
     {
         ModListActionKind.Install => 0,
         ModListActionKind.Update => 1,
@@ -509,7 +545,8 @@ public partial class ModListsViewModel
         ModListActionKind.Disable => 3,
         ModListActionKind.Pinned => 4,
         ModListActionKind.Manual => 5,
-        _ => 6,
+        _ when action.ListIsBehind => 6,
+        _ => 7,
     };
 
     // Keeps the panel in the order a stored list holds - by name, the order capture writes.

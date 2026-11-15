@@ -155,13 +155,18 @@ public sealed class ModListService
     // NOT stored - the caller puts them in the edit buffer, so a refresh is reviewed and saved like
     // any other edit rather than rewriting a list behind the user's back.
     //
-    public async Task<ModListRefreshResult?> RefreshVersionsAsync(IEnumerable<ModListEntry> entries)
+    public async Task<ModListRefreshResult?> RefreshVersionsAsync(IEnumerable<ModListEntry> entries, bool onlyNewer = false)
     {
         var install = await ReadInstallAsync();
         if (install is null) return null;
 
-        return ModListRefresh.Build(entries, install.Candidates, CatalogVersions(), CatalogAddonVersions());
+        return ModListRefresh.Build(entries, install.Candidates, CatalogVersions(), CatalogAddonVersions(), onlyNewer);
     }
+
+    // OPEN-44 P8: an own list this install follows - its active list, or the one it publishes.
+    public static bool KeepsNewer(ModList list) =>
+        list.IsEditable
+        && (AppServices.ModLists.GetActive()?.Id == list.Id || AppServices.ModLists.GetPublished()?.Id == list.Id);
 
     // Captures what's installed now as a new list and stores it.
     public async Task<ModList?> CaptureAsync(string name, bool includeDisabled = false)
@@ -257,7 +262,7 @@ public sealed class ModListService
 
         return new ModListPreview(
             list,
-            ModListPlanner.Build(list, install.Candidates, AppServices.ModLists.GetPins(), serverList, machine, check?.Picks, AlsoTakes(list, machine)),
+            ModListPlanner.Build(list, install.Candidates, AppServices.ModLists.GetPins(), serverList, machine, check?.Picks, AlsoTakes(list, machine), KeepsNewer(list)),
             install)
         {
             Dependencies = check,

@@ -60,6 +60,9 @@ public sealed record ModListAction
     // backwards. Worth showing differently in a diff; not an error.
     public bool IsDowngrade { get; init; }
 
+    // OPEN-44 P8: installed newer here than on an own list this install follows. Left as it is.
+    public bool ListIsBehind { get; init; }
+
     //
     // Set on an Enable whose installed version isn't the one the list names. The move has to
     // happen first - a mod can't be updated while it sits in a .disabled container - so both
@@ -110,6 +113,7 @@ public sealed class ModListPlan
     public IEnumerable<ModListAction> Manual => Of(ModListActionKind.Manual);
     public IEnumerable<ModListAction> Keep => Of(ModListActionKind.Keep);
     public IEnumerable<ModListAction> Pinned => Of(ModListActionKind.Pinned);
+    public IEnumerable<ModListAction> Behind => Actions.Where(a => a.ListIsBehind);
 
     // Fetches that couldn't be pinned to a version id and need a live lookup first.
     public IEnumerable<ModListAction> NeedingVersionLookup => Actions.Where(a => a.NeedsVersionLookup);
@@ -164,7 +168,8 @@ public static class ModListPlanner
         ModList? alsoRequiredBy = null,
         ModListEntryScope machine = ModListEntryScope.Client,
         IReadOnlyList<ModListDependencyPick>? dependencies = null,
-        IReadOnlySet<int>? alsoTakes = null)
+        IReadOnlySet<int>? alsoTakes = null,
+        bool keepNewer = false)
     {
         var serverProtected = Protecting(alsoRequiredBy, machine);
 
@@ -190,7 +195,7 @@ public static class ModListPlanner
             var found = match.IndexOf(entry);
             if (found >= 0) matched[found] = true;
 
-            actions.Add(ActionFor(entry, found >= 0 ? candidates[found] : null));
+            actions.Add(ActionFor(entry, found >= 0 ? candidates[found] : null, keepNewer));
         }
 
         //
@@ -309,7 +314,7 @@ public static class ModListPlanner
         };
     }
 
-    private static ModListAction ActionFor(ModListEntry entry, ModListCandidate? installed)
+    private static ModListAction ActionFor(ModListEntry entry, ModListCandidate? installed, bool keepNewer = false)
     {
         if (installed is null)
         {
@@ -339,10 +344,11 @@ public static class ModListPlanner
         // Update fetching the same version - a reinstall, which is what puts the missing half back.
         //
         var repair = sameVersion && installed.IsIncomplete;
+        var behind = keepNewer && !installed.IsIncomplete && IsOlder(entry.Version, installed.Version);
 
         var kind = installed.IsDisabled || IsSplit(installed)
             ? ModListActionKind.Enable
-            : sameVersion && !installed.IsIncomplete
+            : (sameVersion && !installed.IsIncomplete) || behind
                 ? ModListActionKind.Keep
                 : ModListActionKind.Update;
 
@@ -357,9 +363,10 @@ public static class ModListPlanner
             VersionId = entry.VersionId,
             TargetVersion = entry.Version,
             InstalledVersion = installed.Version,
-            IsDowngrade = kind != ModListActionKind.Keep && IsOlder(entry.Version, installed.Version),
+            IsDowngrade = kind != ModListActionKind.Keep && !behind && IsOlder(entry.Version, installed.Version),
+            ListIsBehind = behind,
             IsRepair = repair,
-            NeedsUpdateAfterEnable = kind == ModListActionKind.Enable && (!sameVersion || installed.IsIncomplete),
+            NeedsUpdateAfterEnable = kind == ModListActionKind.Enable && !behind && (!sameVersion || installed.IsIncomplete),
         };
     }
 
@@ -421,7 +428,7 @@ public static class ModListPlanner
             && a.Value.CompareTo(b.Value) == 0;
     }
 
-    private static bool IsOlder(string? target, string? installed) =>
+    internal static bool IsOlder(string? target, string? installed) =>
         SemanticVersion.TryParse(target, out var a)
         && SemanticVersion.TryParse(installed, out var b)
         && a.Value.CompareTo(b.Value) < 0;

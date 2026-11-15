@@ -2436,6 +2436,9 @@ Voir Dépendances et conflits.</value>
   <data name="ModLists_ActionVersionChangeFormat" xml:space="preserve">
     <value>{0} vers {1}</value>
   </data>
+  <data name="ModLists_ActionListBehindFormat" xml:space="preserve">
+    <value>{0} ici, la liste a {1}</value>
+  </data>
   <data name="ModLists_ActionVersionFormat" xml:space="preserve">
     <value>version {0}</value>
   </data>
@@ -2660,6 +2663,12 @@ Voir Dépendances et conflits.</value>
   </data>
   <data name="ModLists_CountToUpdateFormat" xml:space="preserve">
     <value>{0} à mettre à jour</value>
+  </data>
+  <data name="ModLists_CountToDowngradeFormat" xml:space="preserve">
+    <value>{0} à rétrograder</value>
+  </data>
+  <data name="ModLists_CountNewerHereFormat" xml:space="preserve">
+    <value>{0} plus récent(s) ici</value>
   </data>
   <data name="ModLists_Delete" xml:space="preserve">
     <value>Supprimer</value>
@@ -2911,6 +2920,21 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   </data>
   <data name="ModLists_RefreshVersionsToolTip" xml:space="preserve">
     <value>Lit la version de chaque mod de cette liste installé ici, et met la liste à jour en conséquence. La portée n'est pas touchée, et les mods que vous n'avez pas restent tels quels. Rien n'est téléchargé ni installé - Enregistrer conserve les modifications.</value>
+  </data>
+  <data name="ModLists_RefreshBehindToolTip" xml:space="preserve">
+    <value>Met sur la liste la version installée ici, uniquement pour les mods plus récents ici. Les mods que la liste veut mettre à jour restent tels quels. Rien n'est téléchargé - Enregistrer conserve les modifications.</value>
+  </data>
+  <data name="ModLists_ListBehind_one" xml:space="preserve">
+    <value>{0} mod est plus récent ici que sur cette liste : la liste est en retard. Appliquer le laisse tel quel. Actualiser les versions met la version plus récente sur la liste - puis Enregistrer.</value>
+  </data>
+  <data name="ModLists_ListBehind_other" xml:space="preserve">
+    <value>{0} mods sont plus récents ici que sur cette liste : la liste est en retard. Appliquer les laisse tels quels. Actualiser les versions met les versions plus récentes sur la liste - puis Enregistrer.</value>
+  </data>
+  <data name="ModLists_ListBehindPublished_one" xml:space="preserve">
+    <value>{0} mod est plus récent ici que sur cette liste : la liste est en retard. Appliquer le laisse tel quel. Actualiser les versions met la version plus récente sur la liste - puis Enregistrer et publier à nouveau.</value>
+  </data>
+  <data name="ModLists_ListBehindPublished_other" xml:space="preserve">
+    <value>{0} mods sont plus récents ici que sur cette liste : la liste est en retard. Appliquer les laisse tels quels. Actualiser les versions met les versions plus récentes sur la liste - puis Enregistrer et publier à nouveau.</value>
   </data>
   <data name="ModLists_RemovedEntryFormat" xml:space="preserve">
     <value>« {0} » retiré de « {1} ». Cliquez sur Enregistrer pour l'inscrire dans la liste - dans tous les cas, le mod reste installé et activé.</value>
@@ -4869,6 +4893,12 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="ModLists_ApplyUpdate_other" xml:space="preserve">
     <value>Mettre à jour {0} mods</value>
   </data>
+  <data name="ModLists_ApplyDowngrade_one" xml:space="preserve">
+    <value>Rétrograder {0} mod</value>
+  </data>
+  <data name="ModLists_ApplyDowngrade_other" xml:space="preserve">
+    <value>Rétrograder {0} mods</value>
+  </data>
   <data name="ModLists_ApplyDownload_one" xml:space="preserve">
     <value>Télécharger {0} mod</value>
   </data>
@@ -4877,6 +4907,15 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   </data>
   <data name="ModLists_ApplyInstallUpdateFormat" xml:space="preserve">
     <value>Installer {0}, mettre à jour {1}</value>
+  </data>
+  <data name="ModLists_ApplyInstallDowngradeFormat" xml:space="preserve">
+    <value>Installer {0}, rétrograder {1}</value>
+  </data>
+  <data name="ModLists_ApplyUpdateDowngradeFormat" xml:space="preserve">
+    <value>Mettre à jour {0}, rétrograder {1}</value>
+  </data>
+  <data name="ModLists_ApplyInstallUpdateDowngradeFormat" xml:space="preserve">
+    <value>Installer {0}, mettre à jour {1}, rétrograder {2}</value>
   </data>
   <data name="ModLists_ChangeVersionPairFormat" xml:space="preserve">
     <value>{0} ({1} → {2})</value>
@@ -4905,6 +4944,9 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="ModLists_StatusAlreadyRight" xml:space="preserve">
     <value>Correct</value>
   </data>
+  <data name="ModLists_StatusNewerHere" xml:space="preserve">
+    <value>Plus récent ici</value>
+  </data>
   <data name="ModLists_StatusVersionFormat" xml:space="preserve">
     <value>{0} → {1}</value>
   </data>
@@ -4919,6 +4961,12 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   </data>
   <data name="ModLists_ChipDifferentVersion_other" xml:space="preserve">
     <value>{0} versions incorrectes</value>
+  </data>
+  <data name="ModLists_ChipNewerHere_one" xml:space="preserve">
+    <value>{0} plus récent ici</value>
+  </data>
+  <data name="ModLists_ChipNewerHere_other" xml:space="preserve">
+    <value>{0} plus récents ici</value>
   </data>
   <data name="ModLists_ChipHalfInstalled_one" xml:space="preserve">
     <value>{0} installé à moitié</value>

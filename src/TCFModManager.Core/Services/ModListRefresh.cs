@@ -40,7 +40,8 @@ public static class ModListRefresh
         IEnumerable<ModListEntry> entries,
         IEnumerable<ModListCandidate> installed,
         ModListCapture.VersionLookup? versions = null,
-        ModListCapture.AddonVersionLookup? addonVersions = null)
+        ModListCapture.AddonVersionLookup? addonVersions = null,
+        bool onlyNewer = false)
     {
         var candidates = installed.ToList();
         var match = new ModListMatch(candidates);
@@ -62,6 +63,12 @@ public static class ModListRefresh
 
             var candidate = candidates[found];
             var version = string.IsNullOrWhiteSpace(candidate.Version) ? null : candidate.Version.Trim();
+
+            if (onlyNewer && !ModListPlanner.IsOlder(entry.Version, version))
+            {
+                refreshed.Add(entry);
+                continue;
+            }
 
             //
             // A disabled mod's version is still the version this install holds, so it refreshes like

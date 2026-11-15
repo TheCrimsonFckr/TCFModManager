@@ -147,7 +147,17 @@ public partial class ModListsViewModel
     // unsaved, so Save is still the thing that commits them and Discard still throws them away.
     //
     [RelayCommand(CanExecute = nameof(CanEditList))]
-    private async Task RefreshVersionsAsync()
+    private Task RefreshVersionsAsync() => RefreshVersionsCoreAsync(onlyNewer: false);
+
+    // OPEN-44 P8: only the mods installed newer here, from the list-is-behind bar. Puts the contents back in view.
+    [RelayCommand(CanExecute = nameof(CanEditList))]
+    private Task RefreshBehindAsync()
+    {
+        ClearPlan();
+        return RefreshVersionsCoreAsync(onlyNewer: true);
+    }
+
+    private async Task RefreshVersionsCoreAsync(bool onlyNewer)
     {
         if (Selected is not { } row) return;
 
@@ -155,7 +165,7 @@ public partial class ModListsViewModel
 
         try
         {
-            var result = await _service.RefreshVersionsAsync(Entries.Select(e => e.Entry));
+            var result = await _service.RefreshVersionsAsync(Entries.Select(e => e.Entry), onlyNewer);
 
             if (result is null)
             {

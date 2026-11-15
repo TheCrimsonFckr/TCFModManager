@@ -367,6 +367,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     [NotifyCanExecuteChangedFor(nameof(KeepAdviceCommand))]
     [NotifyCanExecuteChangedFor(nameof(StartRenameCommand))]
     [NotifyCanExecuteChangedFor(nameof(RefreshVersionsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RefreshBehindCommand))]
     private ModListRowViewModel? _selected;
 
     [ObservableProperty]
@@ -568,6 +569,7 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         if (_preview is { } preview) ShowPlan(preview);
         if (UpToDate is not null) UpToDate = Strings.ModLists_PlanNoOp;
+        OnPropertyChanged(nameof(BehindNotice));
 
         OnPropertyChanged(nameof(PreviewLabel));
         OnPropertyChanged(nameof(PreviewToolTip));
@@ -577,6 +579,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     {
         _preview = null;
         UpToDate = null;
+        SetBehind(null);
         PlanRows.Clear();
         DependencyRows.Clear();
         _dependencyOffers = null;

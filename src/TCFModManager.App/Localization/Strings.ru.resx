@@ -2562,6 +2562,9 @@
   <data name="ModLists_ActionVersionChangeFormat" xml:space="preserve">
     <value>{0} -&gt; {1}</value>
   </data>
+  <data name="ModLists_ActionListBehindFormat" xml:space="preserve">
+    <value>{0} здесь, в списке {1}</value>
+  </data>
   <data name="ModLists_ActionVersionFormat" xml:space="preserve">
     <value>версия {0}</value>
   </data>
@@ -2810,6 +2813,12 @@
   </data>
   <data name="ModLists_CountToUpdateFormat" xml:space="preserve">
     <value>{0} к обновлению</value>
+  </data>
+  <data name="ModLists_CountToDowngradeFormat" xml:space="preserve">
+    <value>{0} к откату</value>
+  </data>
+  <data name="ModLists_CountNewerHereFormat" xml:space="preserve">
+    <value>{0} здесь новее</value>
   </data>
   <data name="ModLists_Delete" xml:space="preserve">
     <value>Удалить</value>
@@ -3067,6 +3076,27 @@
   </data>
   <data name="ModLists_RefreshVersionsToolTip" xml:space="preserve">
     <value>Считывает версию каждого мода из этого списка, установленного здесь, и приводит список в соответствие. Область применения не трогается, а моды, которых у вас нет, остаются как записаны. Ничего не скачивается и не устанавливается - изменения сохраняет Сохранить.</value>
+  </data>
+  <data name="ModLists_RefreshBehindToolTip" xml:space="preserve">
+    <value>Записывает в список версию, установленную здесь, только для модов, которые здесь новее. Моды, которые список хочет обновить, остаются как записаны. Ничего не скачивается - изменения сохраняет Сохранить.</value>
+  </data>
+  <data name="ModLists_ListBehind_one" xml:space="preserve">
+    <value>{0} мод здесь новее, чем в этом списке, - список отстаёт. Применить оставит его как есть. Перезагрузить версии запишет новую версию в список - затем Сохранить.</value>
+  </data>
+  <data name="ModLists_ListBehind_few" xml:space="preserve">
+    <value>{0} мода здесь новее, чем в этом списке, - список отстаёт. Применить оставит их как есть. Перезагрузить версии запишет новые версии в список - затем Сохранить.</value>
+  </data>
+  <data name="ModLists_ListBehind_many" xml:space="preserve">
+    <value>{0} модов здесь новее, чем в этом списке, - список отстаёт. Применить оставит их как есть. Перезагрузить версии запишет новые версии в список - затем Сохранить.</value>
+  </data>
+  <data name="ModLists_ListBehindPublished_one" xml:space="preserve">
+    <value>{0} мод здесь новее, чем в этом списке, - список отстаёт. Применить оставит его как есть. Перезагрузить версии запишет новую версию в список - затем Сохранить и опубликовать снова.</value>
+  </data>
+  <data name="ModLists_ListBehindPublished_few" xml:space="preserve">
+    <value>{0} мода здесь новее, чем в этом списке, - список отстаёт. Применить оставит их как есть. Перезагрузить версии запишет новые версии в список - затем Сохранить и опубликовать снова.</value>
+  </data>
+  <data name="ModLists_ListBehindPublished_many" xml:space="preserve">
+    <value>{0} модов здесь новее, чем в этом списке, - список отстаёт. Применить оставит их как есть. Перезагрузить версии запишет новые версии в список - затем Сохранить и опубликовать снова.</value>
   </data>
   <data name="ModLists_RemovedEntryFormat" xml:space="preserve">
     <value>«{0}» убран из «{1}». Сохраните, чтобы записать это в список - мод в любом случае остаётся установленным и включённым.</value>
@@ -5115,6 +5145,15 @@
   <data name="ModLists_ApplyUpdate_many" xml:space="preserve">
     <value>Обновить {0} модов</value>
   </data>
+  <data name="ModLists_ApplyDowngrade_one" xml:space="preserve">
+    <value>Откатить {0} мод</value>
+  </data>
+  <data name="ModLists_ApplyDowngrade_few" xml:space="preserve">
+    <value>Откатить {0} мода</value>
+  </data>
+  <data name="ModLists_ApplyDowngrade_many" xml:space="preserve">
+    <value>Откатить {0} модов</value>
+  </data>
   <data name="ModLists_ApplyDownload_one" xml:space="preserve">
     <value>Скачать {0} мод</value>
   </data>
@@ -5126,6 +5165,15 @@
   </data>
   <data name="ModLists_ApplyInstallUpdateFormat" xml:space="preserve">
     <value>Установить {0}, обновить {1}</value>
+  </data>
+  <data name="ModLists_ApplyInstallDowngradeFormat" xml:space="preserve">
+    <value>Установить {0}, откатить {1}</value>
+  </data>
+  <data name="ModLists_ApplyUpdateDowngradeFormat" xml:space="preserve">
+    <value>Обновить {0}, откатить {1}</value>
+  </data>
+  <data name="ModLists_ApplyInstallUpdateDowngradeFormat" xml:space="preserve">
+    <value>Установить {0}, обновить {1}, откатить {2}</value>
   </data>
   <data name="ModLists_ChangeVersionPairFormat" xml:space="preserve">
     <value>{0} ({1} → {2})</value>
@@ -5154,6 +5202,9 @@
   <data name="ModLists_StatusAlreadyRight" xml:space="preserve">
     <value>Верно</value>
   </data>
+  <data name="ModLists_StatusNewerHere" xml:space="preserve">
+    <value>Здесь новее</value>
+  </data>
   <data name="ModLists_StatusVersionFormat" xml:space="preserve">
     <value>{0} → {1}</value>
   </data>
@@ -5174,6 +5225,15 @@
   </data>
   <data name="ModLists_ChipDifferentVersion_many" xml:space="preserve">
     <value>{0} неверных версий</value>
+  </data>
+  <data name="ModLists_ChipNewerHere_one" xml:space="preserve">
+    <value>{0} здесь новее</value>
+  </data>
+  <data name="ModLists_ChipNewerHere_few" xml:space="preserve">
+    <value>{0} здесь новее</value>
+  </data>
+  <data name="ModLists_ChipNewerHere_many" xml:space="preserve">
+    <value>{0} здесь новее</value>
   </data>
   <data name="ModLists_ChipHalfInstalled_one" xml:space="preserve">
     <value>{0} установлен не полностью</value>

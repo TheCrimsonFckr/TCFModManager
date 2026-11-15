@@ -1087,6 +1087,21 @@
                     IsOpen="{Binding HasVersionWarning, Mode=OneWay}"
                     Message="{Binding VersionWarning}" />
 
+                <!-- OPEN-44 P8: an own followed list naming older versions than this install has. -->
+                <ui:InfoBar
+                    Margin="0,16,0,0"
+                    Severity="Warning"
+                    IsClosable="False"
+                    IsOpen="{Binding HasBehindNotice, Mode=OneWay}"
+                    Message="{Binding BehindNotice}">
+                    <ui:Button
+                        Margin="0,0,0,4"
+                        Icon="{ui:SymbolIcon ArrowSync24}"
+                        Content="{loc:Str ModLists_RefreshVersions}"
+                        ToolTip="{loc:Str ModLists_RefreshBehindToolTip}"
+                        Command="{Binding RefreshBehindCommand}" />
+                </ui:InfoBar>
+
                 <!-- Monitor mode: this apply downloads its installs and updates for the user to
                      install, and says so before anything runs. -->
                 <ui:InfoBar

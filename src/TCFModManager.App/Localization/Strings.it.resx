@@ -2436,6 +2436,9 @@ Vedi Dipendenze e conflitti.</value>
   <data name="ModLists_ActionVersionChangeFormat" xml:space="preserve">
     <value>da {0} a {1}</value>
   </data>
+  <data name="ModLists_ActionListBehindFormat" xml:space="preserve">
+    <value>{0} qui, la lista ha {1}</value>
+  </data>
   <data name="ModLists_ActionVersionFormat" xml:space="preserve">
     <value>versione {0}</value>
   </data>
@@ -2660,6 +2663,12 @@ Vedi Dipendenze e conflitti.</value>
   </data>
   <data name="ModLists_CountToUpdateFormat" xml:space="preserve">
     <value>{0} da aggiornare</value>
+  </data>
+  <data name="ModLists_CountToDowngradeFormat" xml:space="preserve">
+    <value>{0} da riportare indietro</value>
+  </data>
+  <data name="ModLists_CountNewerHereFormat" xml:space="preserve">
+    <value>{0} più recenti qui</value>
   </data>
   <data name="ModLists_Delete" xml:space="preserve">
     <value>Elimina</value>
@@ -2911,6 +2920,21 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   </data>
   <data name="ModLists_RefreshVersionsToolTip" xml:space="preserve">
     <value>Legge la versione di ogni mod di questa lista che è installato qui e aggiorna la lista di conseguenza. L'ambito resta invariato e i mod che non hai restano come sono scritti. Niente viene scaricato o installato - Salva conserva le modifiche.</value>
+  </data>
+  <data name="ModLists_RefreshBehindToolTip" xml:space="preserve">
+    <value>Mette nella lista la versione installata qui, solo per i mod più recenti qui. I mod che la lista vuole aggiornare restano come sono scritti. Niente viene scaricato - Salva conserva le modifiche.</value>
+  </data>
+  <data name="ModLists_ListBehind_one" xml:space="preserve">
+    <value>Un mod è più recente qui che in questa lista, quindi la lista è indietro. Applica lo lascia com'è. Ricarica versioni mette la versione più recente nella lista - poi Salva.</value>
+  </data>
+  <data name="ModLists_ListBehind_other" xml:space="preserve">
+    <value>{0} mod sono più recenti qui che in questa lista, quindi la lista è indietro. Applica li lascia come sono. Ricarica versioni mette le versioni più recenti nella lista - poi Salva.</value>
+  </data>
+  <data name="ModLists_ListBehindPublished_one" xml:space="preserve">
+    <value>Un mod è più recente qui che in questa lista, quindi la lista è indietro. Applica lo lascia com'è. Ricarica versioni mette la versione più recente nella lista - poi Salva e pubblica di nuovo.</value>
+  </data>
+  <data name="ModLists_ListBehindPublished_other" xml:space="preserve">
+    <value>{0} mod sono più recenti qui che in questa lista, quindi la lista è indietro. Applica li lascia come sono. Ricarica versioni mette le versioni più recenti nella lista - poi Salva e pubblica di nuovo.</value>
   </data>
   <data name="ModLists_RemovedEntryFormat" xml:space="preserve">
     <value>"{0}" tolto da "{1}". Salva per scriverlo nella lista - in ogni caso il mod resta installato e attivo.</value>
@@ -4869,6 +4893,12 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="ModLists_ApplyUpdate_other" xml:space="preserve">
     <value>Aggiorna {0} mod</value>
   </data>
+  <data name="ModLists_ApplyDowngrade_one" xml:space="preserve">
+    <value>Downgrade di un mod</value>
+  </data>
+  <data name="ModLists_ApplyDowngrade_other" xml:space="preserve">
+    <value>Downgrade di {0} mod</value>
+  </data>
   <data name="ModLists_ApplyDownload_one" xml:space="preserve">
     <value>Scarica un mod</value>
   </data>
@@ -4877,6 +4907,15 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   </data>
   <data name="ModLists_ApplyInstallUpdateFormat" xml:space="preserve">
     <value>Installa {0}, aggiorna {1}</value>
+  </data>
+  <data name="ModLists_ApplyInstallDowngradeFormat" xml:space="preserve">
+    <value>Installa {0}, downgrade {1}</value>
+  </data>
+  <data name="ModLists_ApplyUpdateDowngradeFormat" xml:space="preserve">
+    <value>Aggiorna {0}, downgrade {1}</value>
+  </data>
+  <data name="ModLists_ApplyInstallUpdateDowngradeFormat" xml:space="preserve">
+    <value>Installa {0}, aggiorna {1}, downgrade {2}</value>
   </data>
   <data name="ModLists_ChangeVersionPairFormat" xml:space="preserve">
     <value>{0} ({1} → {2})</value>
@@ -4905,6 +4944,9 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="ModLists_StatusAlreadyRight" xml:space="preserve">
     <value>Corretto</value>
   </data>
+  <data name="ModLists_StatusNewerHere" xml:space="preserve">
+    <value>Più recente qui</value>
+  </data>
   <data name="ModLists_StatusVersionFormat" xml:space="preserve">
     <value>{0} → {1}</value>
   </data>
@@ -4919,6 +4961,12 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   </data>
   <data name="ModLists_ChipDifferentVersion_other" xml:space="preserve">
     <value>{0} versioni errate</value>
+  </data>
+  <data name="ModLists_ChipNewerHere_one" xml:space="preserve">
+    <value>{0} più recente qui</value>
+  </data>
+  <data name="ModLists_ChipNewerHere_other" xml:space="preserve">
+    <value>{0} più recenti qui</value>
   </data>
   <data name="ModLists_ChipHalfInstalled_one" xml:space="preserve">
     <value>{0} installato a metà</value>

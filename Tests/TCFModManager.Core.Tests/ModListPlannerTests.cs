@@ -204,6 +204,62 @@ public class ModListPlannerTests
     }
 
     [Fact]
+    public void ANewerInstallOnAnOwnFollowedListIsKeptAndMarkedBehind()
+    {
+        var plan = ModListPlanner.Build(
+            Exclusive(Entry("SAIN", 2426, 54, "3.1.0"), Entry("Waypoints", 1119, 70, "1.8.0")),
+            [Installed("SAIN", 2426, "3.2.0"), Installed("Waypoints", 1119, "1.7.0")],
+            keepNewer: true);
+
+        var kept = Only(plan, ModListActionKind.Keep);
+        Assert.True(kept.ListIsBehind);
+        Assert.False(kept.IsDowngrade);
+        Assert.Same(kept, Assert.Single(plan.Behind));
+
+        var update = Only(plan, ModListActionKind.Update);
+        Assert.False(update.ListIsBehind);
+        Assert.Equal("1.8.0", update.TargetVersion);
+    }
+
+    [Fact]
+    public void ANewerInstallOnlyEverDowngradesWithoutKeepNewer()
+    {
+        var plan = ModListPlanner.Build(
+            Exclusive(Entry("SAIN", 2426, 54, "3.1.0")),
+            [Installed("SAIN", 2426, "3.2.0")]);
+
+        Assert.Empty(plan.Behind);
+        Assert.True(Only(plan, ModListActionKind.Update).IsDowngrade);
+    }
+
+    [Fact]
+    public void AListBehindOnlyByNewerInstallsIsANoOp()
+    {
+        var plan = ModListPlanner.Build(
+            Exclusive(Entry("SAIN", 2426, 54, "3.1.0")),
+            [Installed("SAIN", 2426, "3.2.0")],
+            keepNewer: true);
+
+        Assert.True(plan.IsNoOp);
+        Assert.False(plan.RequiresDownloads);
+    }
+
+    [Fact]
+    public void ADisabledNewerInstallOnAnOwnFollowedListIsEnabledWithoutTheDowngrade()
+    {
+        var plan = ModListPlanner.Build(
+            Exclusive(Entry("SAIN", 2426, 54, "3.1.0")),
+            [Installed("SAIN", 2426, "3.2.0", disabled: true)],
+            keepNewer: true);
+
+        var action = Only(plan, ModListActionKind.Enable);
+        Assert.True(action.ListIsBehind);
+        Assert.False(action.NeedsUpdateAfterEnable);
+        Assert.False(action.IsDowngrade);
+        Assert.False(plan.RequiresDownloads);
+    }
+
+    [Fact]
     public void ADisabledModOnTheListIsEnabled()
     {
         var plan = ModListPlanner.Build(

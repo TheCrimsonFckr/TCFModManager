@@ -2436,6 +2436,9 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="ModLists_ActionVersionChangeFormat" xml:space="preserve">
     <value>{0} auf {1}</value>
   </data>
+  <data name="ModLists_ActionListBehindFormat" xml:space="preserve">
+    <value>{0} hier, die Liste hat {1}</value>
+  </data>
   <data name="ModLists_ActionVersionFormat" xml:space="preserve">
     <value>Version {0}</value>
   </data>
@@ -2660,6 +2663,12 @@ Siehe Abhängigkeiten und Konflikte.</value>
   </data>
   <data name="ModLists_CountToUpdateFormat" xml:space="preserve">
     <value>{0} zu aktualisieren</value>
+  </data>
+  <data name="ModLists_CountToDowngradeFormat" xml:space="preserve">
+    <value>{0} zu downgraden</value>
+  </data>
+  <data name="ModLists_CountNewerHereFormat" xml:space="preserve">
+    <value>{0} hier neuer</value>
   </data>
   <data name="ModLists_Delete" xml:space="preserve">
     <value>Löschen</value>
@@ -2911,6 +2920,21 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   </data>
   <data name="ModLists_RefreshVersionsToolTip" xml:space="preserve">
     <value>Liest von jedem Mod auf dieser Liste, der hier installiert ist, die Version und passt die Liste daran an. Der Geltungsbereich bleibt unangetastet, und Mods, die du nicht hast, bleiben so stehen, wie sie geschrieben sind. Es wird nichts heruntergeladen oder installiert - Speichern behält die Änderungen.</value>
+  </data>
+  <data name="ModLists_RefreshBehindToolTip" xml:space="preserve">
+    <value>Übernimmt die hier installierte Version in die Liste, nur für die Mods, die hier neuer sind. Mods, die die Liste aktualisiert haben will, bleiben wie geschrieben. Es wird nichts heruntergeladen - Speichern behält die Änderungen.</value>
+  </data>
+  <data name="ModLists_ListBehind_one" xml:space="preserve">
+    <value>1 Mod ist hier neuer als auf dieser Liste, die Liste ist also veraltet. Anwenden lässt ihn, wie er ist. Versionen neu laden übernimmt die neuere Version in die Liste - dann Speichern.</value>
+  </data>
+  <data name="ModLists_ListBehind_other" xml:space="preserve">
+    <value>{0} Mods sind hier neuer als auf dieser Liste, die Liste ist also veraltet. Anwenden lässt sie, wie sie sind. Versionen neu laden übernimmt die neueren Versionen in die Liste - dann Speichern.</value>
+  </data>
+  <data name="ModLists_ListBehindPublished_one" xml:space="preserve">
+    <value>1 Mod ist hier neuer als auf dieser Liste, die Liste ist also veraltet. Anwenden lässt ihn, wie er ist. Versionen neu laden übernimmt die neuere Version in die Liste - dann Speichern und erneut veröffentlichen.</value>
+  </data>
+  <data name="ModLists_ListBehindPublished_other" xml:space="preserve">
+    <value>{0} Mods sind hier neuer als auf dieser Liste, die Liste ist also veraltet. Anwenden lässt sie, wie sie sind. Versionen neu laden übernimmt die neueren Versionen in die Liste - dann Speichern und erneut veröffentlichen.</value>
   </data>
   <data name="ModLists_RemovedEntryFormat" xml:space="preserve">
     <value>"{0}" von "{1}" heruntergenommen. Speichern schreibt das in die Liste - der Mod bleibt so oder so installiert und aktiviert.</value>
@@ -4869,6 +4893,12 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="ModLists_ApplyUpdate_other" xml:space="preserve">
     <value>{0} Mods aktualisieren</value>
   </data>
+  <data name="ModLists_ApplyDowngrade_one" xml:space="preserve">
+    <value>1 Mod downgraden</value>
+  </data>
+  <data name="ModLists_ApplyDowngrade_other" xml:space="preserve">
+    <value>{0} Mods downgraden</value>
+  </data>
   <data name="ModLists_ApplyDownload_one" xml:space="preserve">
     <value>1 Mod herunterladen</value>
   </data>
@@ -4877,6 +4907,15 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   </data>
   <data name="ModLists_ApplyInstallUpdateFormat" xml:space="preserve">
     <value>{0} installieren, {1} aktualisieren</value>
+  </data>
+  <data name="ModLists_ApplyInstallDowngradeFormat" xml:space="preserve">
+    <value>{0} installieren, {1} downgraden</value>
+  </data>
+  <data name="ModLists_ApplyUpdateDowngradeFormat" xml:space="preserve">
+    <value>{0} aktualisieren, {1} downgraden</value>
+  </data>
+  <data name="ModLists_ApplyInstallUpdateDowngradeFormat" xml:space="preserve">
+    <value>{0} installieren, {1} aktualisieren, {2} downgraden</value>
   </data>
   <data name="ModLists_ChangeVersionPairFormat" xml:space="preserve">
     <value>{0} ({1} → {2})</value>
@@ -4905,6 +4944,9 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="ModLists_StatusAlreadyRight" xml:space="preserve">
     <value>Korrekt</value>
   </data>
+  <data name="ModLists_StatusNewerHere" xml:space="preserve">
+    <value>Hier neuer</value>
+  </data>
   <data name="ModLists_StatusVersionFormat" xml:space="preserve">
     <value>{0} → {1}</value>
   </data>
@@ -4919,6 +4961,12 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   </data>
   <data name="ModLists_ChipDifferentVersion_other" xml:space="preserve">
     <value>{0} falsche Versionen</value>
+  </data>
+  <data name="ModLists_ChipNewerHere_one" xml:space="preserve">
+    <value>{0} hier neuer</value>
+  </data>
+  <data name="ModLists_ChipNewerHere_other" xml:space="preserve">
+    <value>{0} hier neuer</value>
   </data>
   <data name="ModLists_ChipHalfInstalled_one" xml:space="preserve">
     <value>{0} halb installiert</value>
