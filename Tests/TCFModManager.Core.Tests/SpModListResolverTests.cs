@@ -374,6 +374,22 @@ public class SpModListResolverTests
         Assert.Equal([51], result.Addable.Select(d => d.ModId));
     }
 
+    // OPEN-44 R10: the headless takes Stance Overhaul Fika Sync; the list keeps Stance Overhaul on the
+    // players. The parent is placed, so it is not missing here, and what IT needs (the common lib,
+    // FOV Fix) is not walked into either.
+    [Fact]
+    public async Task ADependencyTheListPlacesElsewhereIsNeitherMissingNorWalkedInto()
+    {
+        var api = new FakeApi();
+        api.AddonTrees["163:1.0.0"] = [Node(3136, "0.0.2", Node(3135, "0.0.2"), Node(701, "4.1.0"))];
+
+        var result = await SpModListResolver.MissingDependenciesAsync(
+            [Addon(163, "1.0.0")], NoParents, "4.1.6", api, placedElsewhere: new HashSet<int> { 3136 });
+
+        Assert.True(result.Succeeded);
+        Assert.Empty(result.Missing);
+    }
+
     [Fact]
     public async Task AnAddonsMissingParentIsMarkedAndListedFirst()
     {

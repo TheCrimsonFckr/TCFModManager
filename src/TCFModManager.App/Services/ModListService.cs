@@ -252,13 +252,23 @@ public sealed class ModListService
 
         var entries = ModListDependencies.Askable(list, MachineScope);
 
+        var applyingHere = list.EntriesApplyingTo(MachineScope)
+            .Where(e => e is { IsAddon: false, ModId: not null })
+            .Select(e => e.ModId!.Value)
+            .ToHashSet();
+        var placedElsewhere = list.Entries
+            .Where(e => e is { IsAddon: false, ModId: not null } && !applyingHere.Contains(e.ModId!.Value))
+            .Select(e => e.ModId!.Value)
+            .ToHashSet();
+
         SpModDependencies answer;
         try
         {
             answer = entries.Count == 0
                 ? new SpModDependencies(spt, [], [])
                 : await SpModListResolver.MissingDependenciesAsync(
-                    entries, new Dictionary<int, int>(), spt, new SpModListApi(AppServices.SpModApi));
+                    entries, new Dictionary<int, int>(), spt, new SpModListApi(AppServices.SpModApi),
+                    placedElsewhere: placedElsewhere);
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or SpModApiException)
         {

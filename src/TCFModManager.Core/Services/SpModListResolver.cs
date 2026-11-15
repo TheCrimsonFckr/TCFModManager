@@ -425,15 +425,19 @@ public static class SpModListResolver
     // parents (addon id to parent mod id) is only used to mark which missing mods are an addon's
     // parent, so the window can show those first (R4).
     //
+    // placedElsewhere (OPEN-44 R10): mods the list names at a scope that leaves this machine out.
+    // Neither missing here nor walked into - what they need, they need where they go.
     public static async Task<SpModDependencies> MissingDependenciesAsync(
         IReadOnlyList<ModListEntry> entries,
         IReadOnlyDictionary<int, int> parents,
         string sptVersion,
         ISpModListApi api,
         IProgress<SpModResolveProgress>? progress = null,
-        CancellationToken ct = default)
+        CancellationToken ct = default,
+        IReadOnlySet<int>? placedElsewhere = null)
     {
         var onList = new HashSet<int>(entries.Where(e => !e.IsAddon && e.ModId is not null).Select(e => e.ModId!.Value));
+        placedElsewhere ??= new HashSet<int>();
         var parentIds = new HashSet<int>(entries
             .Where(e => e.IsAddon && e.ModId is { } id && parents.ContainsKey(id))
             .Select(e => parents[e.ModId!.Value]));
@@ -534,6 +538,7 @@ public static class SpModListResolver
         {
             foreach (var node in nodes)
             {
+                if (placedElsewhere.Contains(node.Id)) continue;
                 if (!path.Add(node.Id)) continue;
 
                 if (!onList.Contains(node.Id))
