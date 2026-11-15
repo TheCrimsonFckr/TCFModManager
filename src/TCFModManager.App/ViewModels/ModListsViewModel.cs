@@ -150,6 +150,16 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
 
     public bool HasStanding => Status is not null;
 
+    // Newest first for Last added; entries from before AddedAt was recorded sort last.
+    public DateTimeOffset AddedSortKey => Entry.AddedAt ?? DateTimeOffset.MinValue;
+
+    // Needs attention: warnings, then hints, then a standing that isn't Correct, then the rest.
+    public int AttentionRank =>
+        Placement?.Severity == PlacementSeverity.Warning || AdviceIsWarning || AdviceKeepsOff ? 0
+        : Placement?.Severity == PlacementSeverity.Hint ? 1
+        : HasStanding && Tone != "Good" ? 2
+        : 3;
+
     // OPEN-44 S2: the most severe "Where it goes" finding, its line, and the rest in the tooltip.
     public PlacementFinding? Placement { get; init; }
 
@@ -309,10 +319,20 @@ public sealed class ModListScopeFilter(string key, ModListEntryScope? scope, boo
     public override string ToString() => Label;
 }
 
+public enum ModListEntrySortKind
+{
+    Name,
+    LastAdded,
+    Attention,
+}
+
 // One choice in the contents panel's sort.
-public sealed class ModListEntrySort(string key, ListSortDirection direction) : LocalizedViewModel
+public sealed class ModListEntrySort(string key, ListSortDirection direction, ModListEntrySortKind kind = ModListEntrySortKind.Name)
+    : LocalizedViewModel
 {
     public ListSortDirection Direction { get; } = direction;
+
+    public ModListEntrySortKind Kind { get; } = kind;
 
     public string Label => LocalizationService.Get(key);
 

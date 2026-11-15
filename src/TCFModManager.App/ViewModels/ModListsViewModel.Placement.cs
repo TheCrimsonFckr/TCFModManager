@@ -246,8 +246,8 @@ public partial class ModListsViewModel
         {
             if (Entries.Any(e => e.Entry is { IsAddon: true } added && added.ModId == addon.Id)) return;
 
-            Entries.Add(Row(ModListEntries.WithScope(
-                ModListEntries.ForCatalogMod(addon.Id, addon.Name ?? addon.Id.ToString(), isAddon: true), scope)));
+            Entries.Add(Row(ModListEntries.Added(ModListEntries.WithScope(
+                ModListEntries.ForCatalogMod(addon.Id, addon.Name ?? addon.Id.ToString(), isAddon: true), scope), DateTimeOffset.UtcNow)));
             UnsavedCount++;
             Notify();
             StatusMessage = Strings.ModLists_Added(1, 1, list.Name);

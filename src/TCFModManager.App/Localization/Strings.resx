@@ -2119,6 +2119,12 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="ModLists_SortNameDescending" xml:space="preserve">
     <value>Name Z-A</value>
   </data>
+  <data name="ModLists_SortLastAdded" xml:space="preserve">
+    <value>Last added</value>
+  </data>
+  <data name="ModLists_SortAttention" xml:space="preserve">
+    <value>Needs attention first</value>
+  </data>
   <data name="ModLists_EntryAddon" xml:space="preserve">
     <value>addon</value>
     <comment>One fact on a list entry's line.</comment>

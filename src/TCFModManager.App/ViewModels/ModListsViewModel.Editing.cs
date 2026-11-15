@@ -41,7 +41,7 @@ public partial class ModListsViewModel
             {
                 if (Entries.Any(e => ModListEntries.SameMod(e.Entry, entry))) continue;
 
-                Entries.Add(Row(entry));
+                Entries.Add(Row(ModListEntries.Added(entry, DateTimeOffset.UtcNow)));
                 added++;
             }
 
@@ -109,6 +109,7 @@ public partial class ModListsViewModel
             Guid = source.Guid,
             Folders = [.. source.Folders],
             FitOverride = source.FitOverride,
+            AddedAt = source.AddedAt,
 
             // Cycling back round to Everyone stores null - see ModListEntry.Scope - so the entry
             // ends up exactly as it was before anyone touched it, rather than carrying a value that

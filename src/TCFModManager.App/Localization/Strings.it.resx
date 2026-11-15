@@ -3205,6 +3205,12 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="ModLists_SortNameDescending" xml:space="preserve">
     <value>Nome Z-A</value>
   </data>
+  <data name="ModLists_SortLastAdded" xml:space="preserve">
+    <value>Aggiunte di recente</value>
+  </data>
+  <data name="ModLists_SortAttention" xml:space="preserve">
+    <value>Da sistemare prima</value>
+  </data>
   <data name="ModLists_StopFollowing" xml:space="preserve">
     <value>Smetti di seguire</value>
   </data>

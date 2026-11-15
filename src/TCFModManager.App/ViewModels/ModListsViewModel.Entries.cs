@@ -42,6 +42,8 @@ public partial class ModListsViewModel
     [
         new(nameof(Strings.ModLists_SortNameAscending), ListSortDirection.Ascending),
         new(nameof(Strings.ModLists_SortNameDescending), ListSortDirection.Descending),
+        new(nameof(Strings.ModLists_SortLastAdded), ListSortDirection.Descending, ModListEntrySortKind.LastAdded),
+        new(nameof(Strings.ModLists_SortAttention), ListSortDirection.Ascending, ModListEntrySortKind.Attention),
     ];
 
     [ObservableProperty]
@@ -73,7 +75,21 @@ public partial class ModListsViewModel
     private void ApplySort()
     {
         EntriesView.SortDescriptions.Clear();
-        EntriesView.SortDescriptions.Add(new SortDescription(nameof(ModListEntryRowViewModel.Name), EntrySort.Direction));
+
+        switch (EntrySort.Kind)
+        {
+            case ModListEntrySortKind.LastAdded:
+                EntriesView.SortDescriptions.Add(new SortDescription(nameof(ModListEntryRowViewModel.AddedSortKey), ListSortDirection.Descending));
+                EntriesView.SortDescriptions.Add(new SortDescription(nameof(ModListEntryRowViewModel.Name), ListSortDirection.Ascending));
+                break;
+            case ModListEntrySortKind.Attention:
+                EntriesView.SortDescriptions.Add(new SortDescription(nameof(ModListEntryRowViewModel.AttentionRank), ListSortDirection.Ascending));
+                EntriesView.SortDescriptions.Add(new SortDescription(nameof(ModListEntryRowViewModel.Name), ListSortDirection.Ascending));
+                break;
+            default:
+                EntriesView.SortDescriptions.Add(new SortDescription(nameof(ModListEntryRowViewModel.Name), EntrySort.Direction));
+                break;
+        }
     }
 
     private void RefreshView()

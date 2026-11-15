@@ -173,10 +173,11 @@ public static class ModListDependencies
     // What to store when the user asks for the ticked dependencies to be added to the list (Q1): the
     // list's entries plus those not already on it, sorted the way the page sorts.
     //
-    public static IReadOnlyList<ModListEntry> WithAdded(ModList list, IEnumerable<ModListDependencyPick> picks)
+    public static IReadOnlyList<ModListEntry> WithAdded(ModList list, IEnumerable<ModListDependencyPick> picks, DateTimeOffset? addedAt = null)
     {
         var onList = new HashSet<(int, bool)>(list.Entries.Where(e => e.ModId is not null).Select(e => (e.ModId!.Value, e.IsAddon)));
-        var added = picks.Select(p => p.Entry).Where(e => e.ModId is { } id && onList.Add((id, e.IsAddon)));
+        var added = picks.Select(p => p.Entry).Where(e => e.ModId is { } id && onList.Add((id, e.IsAddon)))
+            .Select(e => addedAt is { } at ? ModListEntries.Added(e, at) : e);
         return ModListEntries.Sorted(list.Entries.Concat(added));
     }
 }

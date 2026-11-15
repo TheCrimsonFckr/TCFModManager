@@ -3205,6 +3205,12 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   <data name="ModLists_SortNameDescending" xml:space="preserve">
     <value>Nom Z-A</value>
   </data>
+  <data name="ModLists_SortLastAdded" xml:space="preserve">
+    <value>Ajout le plus récent</value>
+  </data>
+  <data name="ModLists_SortAttention" xml:space="preserve">
+    <value>À traiter en premier</value>
+  </data>
   <data name="ModLists_StopFollowing" xml:space="preserve">
     <value>Ne plus suivre</value>
   </data>

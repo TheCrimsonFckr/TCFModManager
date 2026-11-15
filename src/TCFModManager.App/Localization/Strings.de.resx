@@ -3205,6 +3205,12 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="ModLists_SortNameDescending" xml:space="preserve">
     <value>Name Z-A</value>
   </data>
+  <data name="ModLists_SortLastAdded" xml:space="preserve">
+    <value>Zuletzt hinzugefügt</value>
+  </data>
+  <data name="ModLists_SortAttention" xml:space="preserve">
+    <value>Handlungsbedarf zuerst</value>
+  </data>
   <data name="ModLists_StopFollowing" xml:space="preserve">
     <value>Nicht mehr folgen</value>
   </data>

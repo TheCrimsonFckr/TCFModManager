@@ -124,6 +124,7 @@ public sealed class ModListStore
                     Guid = entry.Guid,
                     Folders = entry.Folders,
                     FitOverride = entry.FitOverride,
+                    AddedAt = entry.AddedAt,
                     Scope = ModListEntryScope.Client | ModListEntryScope.Headless,
                 };
             }

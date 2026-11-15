@@ -115,7 +115,7 @@ public static class ModListCapture
             UpdatedAt = timestamp,
         };
 
-        list.Entries.AddRange(BuildEntries(candidates, versions, includeDisabled, addonVersions, followed));
+        list.Entries.AddRange(BuildEntries(candidates, versions, includeDisabled, addonVersions, followed, timestamp));
         return list;
     }
 
@@ -125,7 +125,8 @@ public static class ModListCapture
         VersionLookup? versions = null,
         bool includeDisabled = false,
         AddonVersionLookup? addonVersions = null,
-        IReadOnlyList<ModListEntry>? followed = null)
+        IReadOnlyList<ModListEntry>? followed = null,
+        DateTimeOffset? addedAt = null)
     {
         var entries = new List<ModListEntry>();
         var all = candidates.ToList();
@@ -174,6 +175,7 @@ public static class ModListCapture
                 // feature is byte-identical to one written before it existed.
                 Scope = keptScope ? scope : candidate.Scope,
                 FitOverride = candidate.IsAddon && candidate.FitOverride,
+                AddedAt = candidate.InstalledAt ?? addedAt,
                 Folders = [.. candidate.Folders
                     .Where(f => !string.IsNullOrWhiteSpace(f))
                     .Select(f => f.Trim().ToLowerInvariant())

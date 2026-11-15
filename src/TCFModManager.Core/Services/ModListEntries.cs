@@ -63,6 +63,23 @@ public static class ModListEntries
         Version = source.Version,
         Guid = source.Guid,
         Folders = [.. source.Folders],
+        FitOverride = source.FitOverride,
+        AddedAt = source.AddedAt,
         Scope = scope,
+    };
+
+    // The same entry, stamped as put on the list at `at`.
+    public static ModListEntry Added(ModListEntry source, DateTimeOffset at) => new()
+    {
+        Name = source.Name,
+        ModId = source.ModId,
+        IsAddon = source.IsAddon,
+        VersionId = source.VersionId,
+        Version = source.Version,
+        Guid = source.Guid,
+        Folders = [.. source.Folders],
+        FitOverride = source.FitOverride,
+        AddedAt = at,
+        Scope = source.Scope,
     };
 }

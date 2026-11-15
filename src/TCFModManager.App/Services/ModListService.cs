@@ -441,7 +441,7 @@ public sealed class ModListService
             // Q1: the ticked dependencies written onto the list too, when asked - your own lists only.
             if (preview.Dependencies is { AddToList: true } deps && preview.List.IsEditable && deps.Picks.Count > 0)
             {
-                AppServices.ModLists.ReplaceEntries(preview.List.Id, ModListDependencies.WithAdded(preview.List, deps.Picks));
+                AppServices.ModLists.ReplaceEntries(preview.List.Id, ModListDependencies.WithAdded(preview.List, deps.Picks, DateTimeOffset.UtcNow));
                 AppLog.Info("ModLists", $"added {deps.Picks.Count} dependencies to '{preview.List.Name}'");
             }
 

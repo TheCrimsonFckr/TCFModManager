@@ -3373,6 +3373,12 @@
   <data name="ModLists_SortNameDescending" xml:space="preserve">
     <value>Название Я-А</value>
   </data>
+  <data name="ModLists_SortLastAdded" xml:space="preserve">
+    <value>Недавно добавленные</value>
+  </data>
+  <data name="ModLists_SortAttention" xml:space="preserve">
+    <value>Сначала требующие внимания</value>
+  </data>
   <data name="ModLists_StopFollowing" xml:space="preserve">
     <value>Перестать следовать</value>
   </data>

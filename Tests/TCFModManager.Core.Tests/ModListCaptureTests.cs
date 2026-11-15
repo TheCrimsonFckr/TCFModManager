@@ -183,4 +183,24 @@ public class ModListCaptureTests
         Assert.Equal(["Hj's UI", "SAIN"], list.Entries.Select(e => e.Name));
         Assert.Equal(ModListEntryScope.Client, list.Entries[0].Scope);
     }
+
+    [Fact]
+    public void CaptureStampsEachEntryWithItsInstallTimeOrTheCaptureTime()
+    {
+        var installed = new DateTimeOffset(2026, 11, 1, 9, 0, 0, TimeSpan.Zero);
+
+        var list = ModListCapture.Build(
+            "Stamped",
+            [
+                new ModListCandidate { Name = "Known", ModId = 1, InstalledAt = installed, Folders = ["known"] },
+                new ModListCandidate { Name = "Unknown", ModId = 2, Folders = ["unknown"] },
+            ],
+            Timestamp);
+
+        Assert.Equal(installed, list.Entries.Single(e => e.Name == "Known").AddedAt);
+        Assert.Equal(Timestamp, list.Entries.Single(e => e.Name == "Unknown").AddedAt);
+
+        var rescoped = ModListEntries.WithScope(list.Entries[0], ModListEntryScope.Client);
+        Assert.Equal(list.Entries[0].AddedAt, rescoped.AddedAt);
+    }
 }

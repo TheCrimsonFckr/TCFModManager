@@ -397,6 +397,7 @@ public static class SpModListResolver
             Guid = entry.Guid,
             Folders = entry.Folders,
             Scope = entry.Scope,
+            AddedAt = entry.AddedAt,
         };
 
         return new SpModRetargetRow(entry, to, SpModRetargetOutcome.Changed);

@@ -109,6 +109,7 @@ public static class ModListRefresh
 
                 Scope = entry.Scope,
                 FitOverride = entry.IsAddon && candidate.FitOverride,
+                AddedAt = entry.AddedAt,
                 Folders = folders,
             });
 

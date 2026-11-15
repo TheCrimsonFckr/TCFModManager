@@ -124,6 +124,11 @@ public sealed class ModListEntry
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public bool FitOverride { get; init; }
 
+    // When the entry was put on the list: the mod's install time for a capture, the moment for an add.
+    // Null on entries from before this was recorded. Not part of what a list says to a receiver.
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public DateTimeOffset? AddedAt { get; init; }
+
     //
     // Which machines this entry is for, or null for "every machine" - which is almost always, so
     // scope still costs nothing in a list that does not use it.
