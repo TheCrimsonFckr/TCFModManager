@@ -180,14 +180,15 @@ public class ServerMapStandingTests
         Assert.Equal(1, standing.Expected);
     }
 
+    // OPEN-44 Q13: a headless that does not host owes only what names it; one that hosts owes the server's too.
     [Fact]
-    public void AHeadlessOwesItsOwnEntriesAndTheServerOnes()
+    public void AHeadlessOwesItsOwnEntriesAndTheServerOnesOnlyWhenItHosts()
     {
-        var standing = ServerMapMachines.StandingOf(Published(ModListOrigin.Server), Machine(headless: true))!;
+        var remote = ServerMapMachines.StandingOf(Published(ModListOrigin.Server), Machine(headless: true))!;
+        var hosting = ServerMapMachines.StandingOf(Published(ModListOrigin.Server), Machine(hosts: true, headless: true))!;
 
-        Assert.Equal(
-            ["fika-server", "HeadlessTweaks", "SAIN"],
-            standing.Behind.Select(a => a.Name).Order());
+        Assert.Equal(["HeadlessTweaks", "SAIN"], remote.Behind.Select(a => a.Name).Order());
+        Assert.Equal(["fika-server", "HeadlessTweaks", "SAIN"], hosting.Behind.Select(a => a.Name).Order());
     }
 
     //

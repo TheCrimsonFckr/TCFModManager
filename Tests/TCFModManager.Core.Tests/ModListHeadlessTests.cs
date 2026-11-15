@@ -243,10 +243,10 @@ public class ModListHeadlessTests
             ModListOrigin.Server,
             Entry("SPT-Realism", ModListEntryScope.Server | ModListEntryScope.Client));
 
-        Assert.Equal(ModListActionKind.Install, Assert.Single(ModListPlanner.Build(served, [], machine: Player).Actions).Kind);
+        Assert.Equal("SPT-Realism", Assert.Single(ModListPlanner.Build(served, [], machine: Player).Actions).Name);
 
         // A hosting headless takes it whole (OPEN-44 Q14).
-        Assert.Equal(ModListActionKind.Install, Assert.Single(ModListPlanner.Build(served, [], machine: HostingHeadless).Actions).Kind);
+        Assert.Equal("SPT-Realism", Assert.Single(ModListPlanner.Build(served, [], machine: HostingHeadless).Actions).Name);
 
         // A headless that does not host has no server half to take it for (OPEN-44 Q13).
         Assert.Empty(ModListPlanner.Build(served, [], machine: Dedicated).Actions);
