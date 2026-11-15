@@ -6,7 +6,7 @@ namespace TCFModManager.Core.Tests;
 
 //
 // OPEN-46: a dedicated headless - one nobody plays at, often running from the server's own SPT
-// folder - takes a Server + Client mod for its server half and keeps Client only mods off, from a
+// folder - takes a Server + Client mod whole (OPEN-44 Q14) and keeps Client only mods off, from a
 // served list and from its own.
 //
 public class ModListSharedHeadlessTests : IDisposable
@@ -102,69 +102,55 @@ public class ModListSharedHeadlessTests : IDisposable
     // The planner.
     //
 
+    //
+    // OPEN-44 Q14 superseded OPEN-46's set-aside client half: a hosting headless takes a Server +
+    // Client mod whole, both halves live, because half a mod is a state nobody troubleshoots against.
+    //
+
     [Theory]
     [InlineData(ModListOrigin.Server)]
     [InlineData(ModListOrigin.Local)]
-    public void AServerAndClientModIsInstalledForItsServerHalf(ModListOrigin origin)
+    public void AServerAndClientModIsInstalledWhole(ModListOrigin origin)
     {
         var plan = ModListPlanner.Build(List(origin, Entry("DynamicMaps", ServerAndClient)), [], machine: Dedicated);
 
-        var action = Only(plan, "DynamicMaps");
-        Assert.Equal(ModListActionKind.Install, action.Kind);
-        Assert.True(action.SetsClientHalfAside);
+        Assert.Equal(ModListActionKind.Install, Only(plan, "DynamicMaps").Kind);
     }
 
     [Theory]
     [InlineData(ModListOrigin.Server)]
     [InlineData(ModListOrigin.Local)]
-    public void AnInstalledLiveClientHalfIsSetAside(ModListOrigin origin)
+    public void AnInstalledWholeModIsKept(ModListOrigin origin)
     {
         var plan = ModListPlanner.Build(
             List(origin, Entry("DynamicMaps", ServerAndClient)), [TwoHalves("DynamicMaps")], machine: Dedicated);
 
-        Assert.Equal(ModListActionKind.SetAsideClientHalf, Only(plan, "DynamicMaps").Kind);
-        Assert.True(plan.RequiresGameClosed);
-        Assert.False(plan.IsNoOp);
+        Assert.Equal(ModListActionKind.Keep, Only(plan, "DynamicMaps").Kind);
+        Assert.True(plan.IsNoOp);
     }
 
+    // What v1.29.0-beta and earlier left behind: client half set aside, server half live.
     [Fact]
-    public void AClientHalfAlreadySetAsideIsLeftAlone()
+    public void AModSplitByAnEarlierBuildIsEnabledWhole()
     {
         var plan = ModListPlanner.Build(
             List(ModListOrigin.Local, Entry("DynamicMaps", ServerAndClient)),
             [TwoHalves("DynamicMaps", clientAside: true)],
             machine: Dedicated);
 
-        var action = Only(plan, "DynamicMaps");
-        Assert.Equal(ModListActionKind.Keep, action.Kind);
-        Assert.True(action.SetsClientHalfAside);
-        Assert.True(plan.IsNoOp);
+        Assert.Equal(ModListActionKind.Enable, Only(plan, "DynamicMaps").Kind);
+        Assert.False(plan.IsNoOp);
     }
 
     [Fact]
-    public void ADisabledServerAndClientModIsEnabledForItsServerHalf()
+    public void ADisabledServerAndClientModIsEnabledWhole()
     {
         var plan = ModListPlanner.Build(
             List(ModListOrigin.Local, Entry("DynamicMaps", ServerAndClient)),
             [TwoHalves("DynamicMaps", clientAside: true, serverAside: true)],
             machine: Dedicated);
 
-        var action = Only(plan, "DynamicMaps");
-        Assert.Equal(ModListActionKind.Enable, action.Kind);
-        Assert.True(action.SetsClientHalfAside);
-    }
-
-    [Fact]
-    public void AnUpdateCarriesTheFlag()
-    {
-        var plan = ModListPlanner.Build(
-            List(ModListOrigin.Local, Entry("DynamicMaps", ServerAndClient, version: "1.3.0")),
-            [TwoHalves("DynamicMaps", version: "1.2.1")],
-            machine: Dedicated);
-
-        var action = Only(plan, "DynamicMaps");
-        Assert.Equal(ModListActionKind.Update, action.Kind);
-        Assert.True(action.SetsClientHalfAside);
+        Assert.Equal(ModListActionKind.Enable, Only(plan, "DynamicMaps").Kind);
     }
 
     [Theory]
@@ -226,9 +212,7 @@ public class ModListSharedHeadlessTests : IDisposable
 
         Assert.Equal(ModListActionKind.Keep, Only(plan, "fika-server").Kind);
 
-        var sain = Only(plan, "SAIN");
-        Assert.Equal(ModListActionKind.Keep, sain.Kind);
-        Assert.False(sain.SetsClientHalfAside);
+        Assert.Equal(ModListActionKind.Keep, Only(plan, "SAIN").Kind);
     }
 
     [Fact]
@@ -239,7 +223,6 @@ public class ModListSharedHeadlessTests : IDisposable
         var plan = ModListPlanner.Build(list, [TwoHalves("DynamicMaps"), ClientOnly("HUD")], machine: Player);
 
         Assert.All(plan.Actions, a => Assert.Equal(ModListActionKind.Keep, a.Kind));
-        Assert.All(plan.Actions, a => Assert.False(a.SetsClientHalfAside));
     }
 
     [Fact]
@@ -250,17 +233,16 @@ public class ModListSharedHeadlessTests : IDisposable
         var plan = ModListPlanner.Build(list, [TwoHalves("DynamicMaps"), ClientOnly("HUD")], machine: PlaysAndHosts);
 
         Assert.All(plan.Actions, a => Assert.Equal(ModListActionKind.Keep, a.Kind));
-        Assert.All(plan.Actions, a => Assert.False(a.SetsClientHalfAside));
     }
 
     //
-    // OPEN-44 Q11: a served list names a mod and scopes it off the players. A player who has it gets
-    // its client half set aside - and only that half, because the server half may be running the
-    // player's own local server, which the list has no say over. An entry with no client half on
-    // this machine is left alone; a mod the list never names is never touched.
+    // OPEN-44 Q11, made whole by Q14: a served list names a mod and scopes it off the players. A
+    // player who has it enabled gets the whole mod disabled - if it has a client half. A server-only
+    // one is inert on a client and may be its own solo server, so it is left alone, and a mod the
+    // list never names is never touched.
     //
     [Fact]
-    public void AServedEntryScopedOffAPlayerSetsAsideItsClientHalfOnly()
+    public void AServedEntryScopedOffAPlayerIsDisabledWhole()
     {
         var list = List(
             ModListOrigin.Server,
@@ -281,25 +263,20 @@ public class ModListSharedHeadlessTests : IDisposable
             [TwoHalves("Bots"), serverOnly, ClientOnly("HeadlessTweaks"), ClientOnly("A sound pack")],
             machine: Player);
 
-        var bots = Only(plan, "Bots");
-        Assert.Equal(ModListActionKind.SetAsideClientHalf, bots.Kind);
-        Assert.True(bots.SetsClientHalfAside);
-
-        var tweaks = Only(plan, "HeadlessTweaks");
-        Assert.Equal(ModListActionKind.SetAsideClientHalf, tweaks.Kind);
-
+        Assert.Equal(["Bots", "HeadlessTweaks"], plan.Disable.Select(a => a.Name).Order(StringComparer.Ordinal));
         Assert.DoesNotContain(plan.Actions, a => a.Name == "fika-server");
         Assert.DoesNotContain(plan.Actions, a => a.Name == "A sound pack");
-        Assert.Empty(plan.Disable);
     }
 
-    // The same entry already set aside, or pinned on this install, asks for nothing.
+    // Already disabled asks for nothing; a split one is disabled the rest of the way; pinned stays pinned.
     [Fact]
-    public void AServedEntryScopedOffAPlayerLeavesASetAsideOrPinnedHalfAlone()
+    public void AServedEntryScopedOffAPlayerLeavesADisabledOrPinnedModAlone()
     {
         var list = List(ModListOrigin.Server, Entry("Bots", ModListEntryScope.Server | ModListEntryScope.Headless));
 
-        Assert.Empty(ModListPlanner.Build(list, [TwoHalves("Bots", clientAside: true)], machine: Player).Actions);
+        Assert.Empty(ModListPlanner.Build(list, [TwoHalves("Bots", clientAside: true, serverAside: true)], machine: Player).Actions);
+
+        Assert.Equal(ModListActionKind.Disable, Only(ModListPlanner.Build(list, [TwoHalves("Bots", clientAside: true)], machine: Player), "Bots").Kind);
 
         var pinned = Only(ModListPlanner.Build(list, [TwoHalves("Bots")], neverAutoDisable: new HashSet<string> { "bots" }, machine: Player), "Bots");
         Assert.Equal(ModListActionKind.Pinned, pinned.Kind);
@@ -313,86 +290,38 @@ public class ModListSharedHeadlessTests : IDisposable
         Task.FromResult(new ModListFetchOutcome(fetches, [], false));
 
     [Fact]
-    public async Task SettingAsideMovesTheClientHalfAndLeavesTheServerHalf()
+    public async Task ASplitModIsEnabledWholeOnApply()
     {
-        var mod = TwoHalves("DynamicMaps");
+        var mod = TwoHalves("DynamicMaps", clientAside: true);
         var plan = ModListPlanner.Build(List(ModListOrigin.Local, Entry("DynamicMaps", ServerAndClient)), [mod], machine: Dedicated);
 
         var result = await ModListApplier.ApplyAsync(plan, [mod], NoFetch, new ModListApplyOptions { InstallPath = _install });
 
         Assert.True(result.Completed);
-        Assert.Single(result.Disabled.Moved);
-        Assert.False(Directory.Exists(Folder(InstalledModTarget.Client, "DynamicMaps", false)));
-        Assert.True(Directory.Exists(Folder(InstalledModTarget.Client, "DynamicMaps", true)));
-        Assert.True(Directory.Exists(Folder(InstalledModTarget.Server, "DynamicMaps", false)));
-
-        ModDisableService.Revert(result.Moves, _install);
         Assert.True(Directory.Exists(Folder(InstalledModTarget.Client, "DynamicMaps", false)));
+        Assert.True(Directory.Exists(Folder(InstalledModTarget.Server, "DynamicMaps", false)));
+        Assert.False(Directory.Exists(Folder(InstalledModTarget.Client, "DynamicMaps", true)));
     }
 
     [Fact]
-    public async Task AFreshInstallHasItsClientHalfSetAsideFromTheRescan()
+    public async Task AFreshInstallIsLeftWhole()
     {
         var plan = ModListPlanner.Build(List(ModListOrigin.Server, Entry("DynamicMaps", ServerAndClient)), [], machine: Dedicated);
 
-        var rescans = 0;
         var result = await ModListApplier.ApplyAsync(
             plan,
             [],
-            NoFetch,
-            new ModListApplyOptions
+            (fetches, _) =>
             {
-                InstallPath = _install,
-                Rescan = () =>
-                {
-                    rescans++;
-                    return Task.FromResult<IReadOnlyList<ModListCandidate>>([TwoHalves("DynamicMaps")]);
-                },
-            });
-
-        Assert.Equal(1, rescans);
-        Assert.Single(result.Disabled.Moved);
-        Assert.True(Directory.Exists(Folder(InstalledModTarget.Client, "DynamicMaps", true)));
-        Assert.True(Directory.Exists(Folder(InstalledModTarget.Server, "DynamicMaps", false)));
-    }
-
-    [Fact]
-    public async Task AFetchThatFailsStillSetsAsideWhatArrived()
-    {
-        var plan = ModListPlanner.Build(
-            List(ModListOrigin.Server, Entry("DynamicMaps", ServerAndClient), Entry("Other", ServerAndClient)),
-            [],
-            machine: Dedicated);
-
-        var result = await ModListApplier.ApplyAsync(
-            plan,
-            [],
-            (fetches, _) => Task.FromResult(new ModListFetchOutcome(
-                [.. fetches.Where(f => f.Name == "DynamicMaps")],
-                [new ModListFetchFailure("Other", "gone")],
-                false)),
-            new ModListApplyOptions
-            {
-                InstallPath = _install,
-                Rescan = () => Task.FromResult<IReadOnlyList<ModListCandidate>>([TwoHalves("DynamicMaps")]),
-            });
-
-        Assert.Equal(ModListStop.FetchFailed, result.Stopped);
-        Assert.True(Directory.Exists(Folder(InstalledModTarget.Client, "DynamicMaps", true)));
-    }
-
-    [Fact]
-    public async Task EnablingForTheServerHalfLeavesTheClientHalfAside()
-    {
-        var mod = TwoHalves("DynamicMaps", clientAside: true, serverAside: true);
-        var plan = ModListPlanner.Build(List(ModListOrigin.Local, Entry("DynamicMaps", ServerAndClient)), [mod], machine: Dedicated);
-
-        var result = await ModListApplier.ApplyAsync(plan, [mod], NoFetch, new ModListApplyOptions { InstallPath = _install });
+                TwoHalves("DynamicMaps");
+                return Task.FromResult(new ModListFetchOutcome(fetches, [], false));
+            },
+            new ModListApplyOptions { InstallPath = _install });
 
         Assert.True(result.Completed);
+        Assert.Empty(result.Disabled.Moved);
+        Assert.True(Directory.Exists(Folder(InstalledModTarget.Client, "DynamicMaps", false)));
         Assert.True(Directory.Exists(Folder(InstalledModTarget.Server, "DynamicMaps", false)));
-        Assert.True(Directory.Exists(Folder(InstalledModTarget.Client, "DynamicMaps", true)));
-        Assert.False(Directory.Exists(Folder(InstalledModTarget.Client, "DynamicMaps", false)));
     }
 
     [Fact]

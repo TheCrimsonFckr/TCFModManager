@@ -201,23 +201,18 @@ public static class ModListPlanner
             var found = match.IndexOf(entry);
             if (found >= 0) matched[found] = true;
 
-            var action = ActionFor(entry, found >= 0 ? candidates[found] : null);
-            if (ModList.SetsClientHalfAside(entry.EffectiveScope, machine)) action = WithClientHalfAside(action);
-
-            actions.Add(action);
+            actions.Add(ActionFor(entry, found >= 0 ? candidates[found] : null));
         }
 
         //
         // Skipped entries still claim their installed mod, so the Exclusive sweep does not offer to
         // disable something purely because this machine was not the one meant to install it.
         //
-        // A skipped entry that is installed and enabled is set aside instead - the list names it and
-        // keeps it off this machine. On a dedicated headless the whole mod goes (OPEN-46 Q3/Q4: what
-        // is skipped there is Client only). On a player only the client half goes (OPEN-44 Q11): what
-        // is skipped there names the server, and the server half may be running the player's own
-        // local server, which the list has no say over. Mods missing from the list are still left to
-        // the sweep, which a served list never runs: the server says where the mods it names go, not
-        // what else you may have.
+        // A skipped entry that is installed and enabled is disabled instead - the list names it and
+        // keeps it off this machine (OPEN-46 Q3/Q4, OPEN-44 Q11), whole (Q14). On a player only a mod
+        // with a client half: a server-only one is inert on a client and may be its own solo server.
+        // Mods missing from the list are still left to the sweep, which a served list never runs:
+        // the server says where the mods it names go, not what else you may have.
         //
         foreach (var entry in list.Entries.Except(applying))
         {
@@ -228,15 +223,12 @@ public static class ModListPlanner
 
             var candidate = candidates[found];
             if (candidate.IsDisabled || !candidate.CanBeDisabled) continue;
-            if (!dedicated && !HasLiveClientHalf(candidate)) continue;
+            if (!dedicated && !candidate.Entries.Any(e => e.Target == InstalledModTarget.Client)) continue;
             if (IsPinned(candidate, serverProtected)) continue;
 
             actions.Add(new ModListAction
             {
-                Kind = IsPinned(candidate, neverAutoDisable) ? ModListActionKind.Pinned
-                    : dedicated ? ModListActionKind.Disable
-                    : ModListActionKind.SetAsideClientHalf,
-                SetsClientHalfAside = !dedicated && !IsPinned(candidate, neverAutoDisable),
+                Kind = IsPinned(candidate, neverAutoDisable) ? ModListActionKind.Pinned : ModListActionKind.Disable,
                 Name = entry.Name,
                 Entry = entry,
                 Installed = candidate,
@@ -299,13 +291,9 @@ public static class ModListPlanner
         };
     }
 
-    private static ModListAction WithClientHalfAside(ModListAction action) =>
-        action.Kind == ModListActionKind.Keep && action.Installed is { } installed && HasLiveClientHalf(installed)
-            ? action with { Kind = ModListActionKind.SetAsideClientHalf, SetsClientHalfAside = true }
-            : action with { SetsClientHalfAside = true };
-
-    public static bool HasLiveClientHalf(ModListCandidate candidate) =>
-        candidate.Entries.Any(e => e.Target == InstalledModTarget.Client && !e.IsDisabled);
+    // One half in .disabled and one live (OPEN-44 Q14): a split the list heals by enabling the whole mod.
+    private static bool IsSplit(ModListCandidate candidate) =>
+        candidate.Entries.Any(e => e.IsDisabled) && candidate.Entries.Any(e => !e.IsDisabled);
 
     private static ModListAction DependencyAction(ModListDependencyPick pick, ModListCandidate? installed)
     {
@@ -363,7 +351,7 @@ public static class ModListPlanner
         //
         var repair = sameVersion && installed.IsIncomplete;
 
-        var kind = installed.IsDisabled
+        var kind = installed.IsDisabled || IsSplit(installed)
             ? ModListActionKind.Enable
             : sameVersion && !installed.IsIncomplete
                 ? ModListActionKind.Keep

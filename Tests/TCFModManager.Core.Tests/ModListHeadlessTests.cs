@@ -124,7 +124,6 @@ public class ModListHeadlessTests
             a => a.Name == "Shared Lib");
 
         Assert.Equal(ModListActionKind.Install, taken.Kind);
-        Assert.False(taken.SetsClientHalfAside);
     }
 
     // Nothing about the headless changes what a player does. This is the regression guard on the
@@ -169,10 +168,11 @@ public class ModListHeadlessTests
         Assert.Equal(["Tyfon.UIFixes"], plan.Disable.Select(a => a.Name));
     }
 
-    // A player still never has a whole mod disabled by a served list - OPEN-44 Q11 sets client halves
-    // aside, and these candidates have none. See ModListSharedHeadlessTests for the halves.
+    // A served list disables on a player only a mod it names, scopes off the player, and knows has a
+    // client half (OPEN-44 Q11, Q14). These candidates carry no halves, so nothing. See
+    // ModListSharedHeadlessTests for the halves.
     [Fact]
-    public void AServedListNeverDisablesAnythingOnAPlayer()
+    public void AServedListNeverDisablesAnythingOnAPlayerItCannotSeeAClientHalfOf()
     {
         var plan = ModListPlanner.Build(
             Served(),
@@ -243,11 +243,10 @@ public class ModListHeadlessTests
             ModListOrigin.Server,
             Entry("SPT-Realism", ModListEntryScope.Server | ModListEntryScope.Client));
 
-        var player = Assert.Single(ModListPlanner.Build(served, [], machine: Player).Actions);
-        Assert.False(player.SetsClientHalfAside);
+        Assert.Equal(ModListActionKind.Install, Assert.Single(ModListPlanner.Build(served, [], machine: Player).Actions).Kind);
 
-        var headless = Assert.Single(ModListPlanner.Build(served, [], machine: HostingHeadless).Actions);
-        Assert.True(headless.SetsClientHalfAside);
+        // A hosting headless takes it whole (OPEN-44 Q14).
+        Assert.Equal(ModListActionKind.Install, Assert.Single(ModListPlanner.Build(served, [], machine: HostingHeadless).Actions).Kind);
 
         // A headless that does not host has no server half to take it for (OPEN-44 Q13).
         Assert.Empty(ModListPlanner.Build(served, [], machine: Dedicated).Actions);
@@ -272,11 +271,6 @@ public class ModListHeadlessTests
         Assert.False(ModList.ScopeApplies(ModListEntryScope.Server, Dedicated));
         Assert.False(ModList.ScopeApplies(ModListEntryScope.Server | ModListEntryScope.Client, Dedicated));
 
-        Assert.True(ModList.SetsClientHalfAside(ModListEntryScope.Server | ModListEntryScope.Client, HostingHeadless));
-        Assert.False(ModList.SetsClientHalfAside(ModListEntryScope.Everyone, HostingHeadless));
-        Assert.False(ModList.SetsClientHalfAside(ModListEntryScope.Server | ModListEntryScope.Client, Dedicated));
-        Assert.False(ModList.SetsClientHalfAside(ModListEntryScope.Server | ModListEntryScope.Client, PlaysAndHosts));
-        Assert.False(ModList.SetsClientHalfAside(ModListEntryScope.Server | ModListEntryScope.Client, Player));
 
         // And a player is untouched by the rule in both directions.
         Assert.False(ModList.ScopeApplies(ModListEntryScope.Server, Player));
