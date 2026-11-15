@@ -139,25 +139,13 @@
             does. Margin and Padding live in the style, not on the Border, so the two triggers still
             win over the resting fill - a local value on the element would outrank them.
         -->
-        <Style x:Key="ScopeTick" TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
-            <Setter Property="ContentTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" Value="True">
-                                            <Setter Property="Foreground" Value="White" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
+        <Style x:Key="ScopeTickText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" Value="True">
+                    <Setter Property="Foreground" Value="White" />
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="ListCardRow" TargetType="Border">
@@ -429,33 +417,36 @@
                         Orientation="Horizontal"
                         ToolTip="{loc:Str ModLists_ScopeToolTip}"
                                             Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
-                        <ToggleButton Style="{StaticResource ScopeTick}"
+                        <ToggleButton
                             Margin="4,0,0,0"
                             Padding="8,2"
                             FontSize="11"
                             Tag="{x:Static core:ModListEntryScope.Server}"
-                            Content="{loc:Str ModLists_ScopeTickServer}"
                             IsChecked="{Binding GoesToServer, Mode=OneWay}"
                             IsEnabled="{Binding CanUntickServer}"
-                            Click="ScopeTick_Click" />
-                        <ToggleButton Style="{StaticResource ScopeTick}"
+                            Click="ScopeTick_Click">
+                            <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeTickServer}" />
+                        </ToggleButton>
+                        <ToggleButton
                             Margin="4,0,0,0"
                             Padding="8,2"
                             FontSize="11"
                             Tag="{x:Static core:ModListEntryScope.Client}"
-                            Content="{loc:Str ModLists_ScopeTickClient}"
                             IsChecked="{Binding GoesToClient, Mode=OneWay}"
                             IsEnabled="{Binding CanUntickClient}"
-                            Click="ScopeTick_Click" />
-                        <ToggleButton Style="{StaticResource ScopeTick}"
+                            Click="ScopeTick_Click">
+                            <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeTickClient}" />
+                        </ToggleButton>
+                        <ToggleButton
                             Margin="4,0,0,0"
                             Padding="8,2"
                             FontSize="11"
                             Tag="{x:Static core:ModListEntryScope.Headless}"
-                            Content="{loc:Str ModLists_ScopeTickHeadless}"
                             IsChecked="{Binding GoesToHeadless, Mode=OneWay}"
                             IsEnabled="{Binding CanUntickHeadless}"
-                            Click="ScopeTick_Click" />
+                            Click="ScopeTick_Click">
+                            <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeTickHeadless}" />
+                        </ToggleButton>
                     </StackPanel>
 
                     <Border
@@ -750,33 +741,36 @@
                                 Orientation="Horizontal"
                                 ToolTip="{loc:Str ModLists_ScopeToolTip}"
                                                             Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
-                                <ToggleButton Style="{StaticResource ScopeTick}"
+                                <ToggleButton
                                     Margin="4,0,0,0"
                                     Padding="8,2"
                                     FontSize="11"
                                     Tag="{x:Static core:ModListEntryScope.Server}"
-                                    Content="{loc:Str ModLists_ScopeTickServer}"
                                     IsChecked="{Binding GoesToServer, Mode=OneWay}"
                                     IsEnabled="{Binding CanUntickServer}"
-                                    Click="ScopeTick_Click" />
-                                <ToggleButton Style="{StaticResource ScopeTick}"
+                                    Click="ScopeTick_Click">
+                                    <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeTickServer}" />
+                                </ToggleButton>
+                                <ToggleButton
                                     Margin="4,0,0,0"
                                     Padding="8,2"
                                     FontSize="11"
                                     Tag="{x:Static core:ModListEntryScope.Client}"
-                                    Content="{loc:Str ModLists_ScopeTickClient}"
                                     IsChecked="{Binding GoesToClient, Mode=OneWay}"
                                     IsEnabled="{Binding CanUntickClient}"
-                                    Click="ScopeTick_Click" />
-                                <ToggleButton Style="{StaticResource ScopeTick}"
+                                    Click="ScopeTick_Click">
+                                    <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeTickClient}" />
+                                </ToggleButton>
+                                <ToggleButton
                                     Margin="4,0,0,0"
                                     Padding="8,2"
                                     FontSize="11"
                                     Tag="{x:Static core:ModListEntryScope.Headless}"
-                                    Content="{loc:Str ModLists_ScopeTickHeadless}"
                                     IsChecked="{Binding GoesToHeadless, Mode=OneWay}"
                                     IsEnabled="{Binding CanUntickHeadless}"
-                                    Click="ScopeTick_Click" />
+                                    Click="ScopeTick_Click">
+                                    <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeTickHeadless}" />
+                                </ToggleButton>
                             </StackPanel>
 
                             <Border
@@ -1596,17 +1590,24 @@
                             Margin="0,8,0,0"
                             Orientation="Horizontal">
                             <StackPanel Orientation="Horizontal" ToolTip="{loc:Str ModLists_ScopeFilterToolTip}">
-                                <ToggleButton Style="{StaticResource ScopeTick}" Padding="10,3" FontSize="12" Content="{loc:Str ModLists_ScopeTickServer}" IsChecked="{Binding ShowServer}" />
-                                <ToggleButton Style="{StaticResource ScopeTick}" Margin="4,0,0,0" Padding="10,3" FontSize="12" Content="{loc:Str ModLists_ScopeTickClient}" IsChecked="{Binding ShowClient}" />
-                                <ToggleButton Style="{StaticResource ScopeTick}" Margin="4,0,0,0" Padding="10,3" FontSize="12" Content="{loc:Str ModLists_ScopeTickHeadless}" IsChecked="{Binding ShowHeadless}" />
+                                <ToggleButton Padding="10,3" FontSize="12" IsChecked="{Binding ShowServer}">
+                                    <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeTickServer}" />
+                                </ToggleButton>
+                                <ToggleButton Margin="4,0,0,0" Padding="10,3" FontSize="12" IsChecked="{Binding ShowClient}">
+                                    <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeTickClient}" />
+                                </ToggleButton>
+                                <ToggleButton Margin="4,0,0,0" Padding="10,3" FontSize="12" IsChecked="{Binding ShowHeadless}">
+                                    <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeTickHeadless}" />
+                                </ToggleButton>
                             </StackPanel>
-                            <ToggleButton Style="{StaticResource ScopeTick}"
+                            <ToggleButton
                                 Margin="12,0,0,0"
                                 Padding="10,3"
                                 FontSize="12"
                                 ToolTip="{loc:Str ModLists_AdviceFilterToolTip}"
-                                Content="{loc:Str ModLists_ScopeFilterAdvice}"
-                                IsChecked="{Binding ShowAdviceOnly}" />
+                                IsChecked="{Binding ShowAdviceOnly}">
+                                <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeFilterAdvice}" />
+                            </ToggleButton>
                         </StackPanel>
 
                         <ComboBox
