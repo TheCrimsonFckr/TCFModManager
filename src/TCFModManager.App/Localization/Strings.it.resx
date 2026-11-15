@@ -3065,6 +3065,12 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="ModLists_PlaceAddonWiderFormat" xml:space="preserve">
     <value>{0} va anche su {1}, dove questa mod non va - lì l'addon non si carica senza di lei</value>
   </data>
+  <data name="ModLists_PlaceAddonWiderMaybeFormat" xml:space="preserve">
+    <value>{0} va anche su {1}, dove questa mod non va - lì l'addon potrebbe non caricarsi senza di lei</value>
+  </data>
+  <data name="ModLists_PlaceAddonAloneFormat" xml:space="preserve">
+    <value>{0} va su {1} senza questa mod - il suo plugin si carica da solo</value>
+  </data>
   <data name="ModLists_PlaceDependencyFormat" xml:space="preserve">
     <value>{0} si carica anche su {1} e lì ha bisogno di questa mod</value>
   </data>

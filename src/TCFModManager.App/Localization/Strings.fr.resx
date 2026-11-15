@@ -3065,6 +3065,12 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   <data name="ModLists_PlaceAddonWiderFormat" xml:space="preserve">
     <value>{0} va aussi sur {1}, où ce mod ne va pas - l'addon ne s'y chargera pas sans lui</value>
   </data>
+  <data name="ModLists_PlaceAddonWiderMaybeFormat" xml:space="preserve">
+    <value>{0} va aussi sur {1}, où ce mod ne va pas - l'addon risque de ne pas s'y charger sans lui</value>
+  </data>
+  <data name="ModLists_PlaceAddonAloneFormat" xml:space="preserve">
+    <value>{0} va sur {1} sans ce mod - son plugin se charge tout seul</value>
+  </data>
   <data name="ModLists_PlaceDependencyFormat" xml:space="preserve">
     <value>{0} se charge aussi sur {1} et a besoin de ce mod là-bas</value>
   </data>

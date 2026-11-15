@@ -3065,6 +3065,12 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="ModLists_PlaceAddonWiderFormat" xml:space="preserve">
     <value>{0} geht auch an {1}, wohin dieser Mod nicht geht - dort lädt das Addon ohne ihn nicht</value>
   </data>
+  <data name="ModLists_PlaceAddonWiderMaybeFormat" xml:space="preserve">
+    <value>{0} geht auch an {1}, wohin dieser Mod nicht geht - dort lädt das Addon ohne ihn vielleicht nicht</value>
+  </data>
+  <data name="ModLists_PlaceAddonAloneFormat" xml:space="preserve">
+    <value>{0} geht ohne diesen Mod an {1} - sein Plugin lädt auch allein</value>
+  </data>
   <data name="ModLists_PlaceDependencyFormat" xml:space="preserve">
     <value>{0} lädt auch auf {1} und braucht diesen Mod dort</value>
   </data>

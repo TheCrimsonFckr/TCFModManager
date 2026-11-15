@@ -568,6 +568,8 @@ internal static class Strings
     internal static string ModLists_PlaceSyncAddonFormat => LocalizationService.Get("ModLists_PlaceSyncAddonFormat");
     internal static string ModLists_PlaceFikaAddonFormat => LocalizationService.Get("ModLists_PlaceFikaAddonFormat");
     internal static string ModLists_PlaceAddonWiderFormat => LocalizationService.Get("ModLists_PlaceAddonWiderFormat");
+    internal static string ModLists_PlaceAddonWiderMaybeFormat => LocalizationService.Get("ModLists_PlaceAddonWiderMaybeFormat");
+    internal static string ModLists_PlaceAddonAloneFormat => LocalizationService.Get("ModLists_PlaceAddonAloneFormat");
     internal static string ModLists_PlaceDependencyFormat => LocalizationService.Get("ModLists_PlaceDependencyFormat");
     internal static string ModLists_PlaceLibrary => LocalizationService.Get("ModLists_PlaceLibrary");
     internal static string ModLists_PlaceNothingToLoad => LocalizationService.Get("ModLists_PlaceNothingToLoad");

@@ -81,10 +81,27 @@ public partial class ModListsViewModel
         }
 
         var halves = new Dictionary<ModListEntry, PlacementHalves>(ReferenceEqualityComparer.Instance);
+        var links = new Dictionary<ModListEntry, AddonParentLink>(ReferenceEqualityComparer.Instance);
 
         if (_placementInstall is { } install)
         {
             var match = new ModListMatch(install.Candidates);
+
+            foreach (var addon in entries.Where(e => e is { IsAddon: true, ModId: not null }))
+            {
+                var found = match.IndexOf(addon);
+                if (found < 0 || AppServices.Addons.ById(addon.ModId!.Value)?.ModId is not { } parentId) continue;
+
+                var guids = new List<string>();
+                foreach (var parent in entries.Where(e => e is { IsAddon: false } && e.ModId == parentId))
+                {
+                    if (parent.Guid is { } guid) guids.Add(guid);
+                    if (match.IndexOf(parent) is var at and >= 0)
+                        guids.AddRange(install.Candidates[at].Entries.SelectMany(m => m.AllGuids));
+                }
+
+                links[addon] = ModListPlacement.LinkOf(install.Candidates[found], guids);
+            }
 
             foreach (var entry in entries)
             {
@@ -124,6 +141,7 @@ public partial class ModListsViewModel
                 Dependencies = dependencies,
                 Advice = advice,
                 AddonAdvice = addonAdvice,
+                AddonLinks = links,
             })
             .Where(f => !_keptKeys.Contains(HeadlessAdviceDismissals.Key(listId, f.Entry, f.Rule)))];
     }
@@ -171,6 +189,7 @@ public partial class ModListsViewModel
                 : null,
             PlacementActionLabel = top switch
             {
+                { Rule: PlacementRule.AddonLoadsAlone } => null,
                 { Rule: PlacementRule.SyncAddonAvailable, AddonScope: { } scope } =>
                     Text(Strings.ModLists_PlaceAddFormat, ModListScopes.Label(scope)),
                 { SuggestedScope: { } scope } => Text(Strings.ModLists_PlaceSetScopeFormat, ModListScopes.Label(scope)),
@@ -186,7 +205,10 @@ public partial class ModListsViewModel
     {
         PlacementRule.SyncAddonAvailable => Text(Strings.ModLists_PlaceSyncAddonFormat, finding.Addon?.Name ?? string.Empty),
         PlacementRule.FikaAddonAvailable => Text(Strings.ModLists_PlaceFikaAddonFormat, finding.Addon?.Name ?? string.Empty),
-        PlacementRule.AddonWiderThanParent => Text(Strings.ModLists_PlaceAddonWiderFormat, NameOf(finding.Other), Machines(Added(finding))),
+        PlacementRule.AddonWiderThanParent => Text(
+            finding.ParentLink == AddonParentLink.Hard ? Strings.ModLists_PlaceAddonWiderFormat : Strings.ModLists_PlaceAddonWiderMaybeFormat,
+            NameOf(finding.Other), Machines(Added(finding))),
+        PlacementRule.AddonLoadsAlone => Text(Strings.ModLists_PlaceAddonAloneFormat, NameOf(finding.Other), Machines(Added(finding))),
         PlacementRule.DependencyUncovered => Text(Strings.ModLists_PlaceDependencyFormat, NameOf(finding.Other), Machines(Added(finding))),
         PlacementRule.LibraryCanLeaveHeadless => Strings.ModLists_PlaceLibrary,
         PlacementRule.NothingToLoad => finding.SuggestedScope == ModListEntryScope.Server

@@ -443,4 +443,44 @@ public class ModListPlacementTests
             Halves = new Dictionary<ModListEntry, PlacementHalves> { [parent] = new(false, true), [addon] = new(true, true) },
         }), f => f.Rule == PlacementRule.AddonWiderThanParent);
     }
+
+    // Q7 (b): an installed addon's own plugin says whether it needs its mod beside it.
+    [Fact]
+    public void R2_FollowsHowTheInstalledAddonDeclaresItsMod()
+    {
+        var parent = Mod(2814, "LMSP - Let Me Switch Plates", ModListEntryScope.Client, "lmsp");
+        var addon = AddonEntry(500, "LMSP Fika Fix", ClientAndHeadless, "lmsp-fikafix");
+
+        PlacementFinding Only(AddonParentLink link) => Assert.Single(ModListPlacement.Check(new PlacementFacts
+        {
+            Entries = [parent, addon],
+            Addons = [Addon(500, 2814, "LMSP Fika Fix", "Fixes LMSP for Fika")],
+            AddonLinks = new Dictionary<ModListEntry, AddonParentLink> { [addon] = link },
+        }));
+
+        Assert.Equal((PlacementRule.AddonWiderThanParent, PlacementSeverity.Warning), (Only(AddonParentLink.Hard).Rule, Only(AddonParentLink.Hard).Severity));
+        Assert.Equal(AddonParentLink.Unknown, Only(AddonParentLink.Unknown).ParentLink);
+        Assert.Equal((PlacementRule.AddonLoadsAlone, PlacementSeverity.Info), (Only(AddonParentLink.Soft).Rule, Only(AddonParentLink.Soft).Severity));
+        Assert.Equal(PlacementRule.AddonLoadsAlone, Only(AddonParentLink.None).Rule);
+    }
+
+    [Fact]
+    public void LinkOf_ReadsTheAddonPluginsBepInDependencyOnItsMod()
+    {
+        static ModListCandidate Plugin(params ModDependencyRef[] dependencies) => new()
+        {
+            Name = "Fix",
+            Entries = [new InstalledMod { Name = "Fix", Target = InstalledModTarget.Client, FolderPath = "", Dependencies = dependencies }],
+        };
+
+        string[] lmsp = ["com.nessu.lmsp"];
+
+        static ModDependencyRef Dep(string guid, bool soft) => new(guid, soft);
+
+        Assert.Equal(AddonParentLink.Hard, ModListPlacement.LinkOf(Plugin(Dep("com.fika.core", false), Dep("com.nessu.lmsp", false)), lmsp));
+        Assert.Equal(AddonParentLink.Soft, ModListPlacement.LinkOf(Plugin(Dep("COM.NESSU.LMSP", true)), lmsp));
+        Assert.Equal(AddonParentLink.None, ModListPlacement.LinkOf(Plugin(Dep("com.fika.core", false)), lmsp));
+        Assert.Equal(AddonParentLink.Unknown, ModListPlacement.LinkOf(new ModListCandidate { Name = "Not here" }, lmsp));
+        Assert.Equal(AddonParentLink.Unknown, ModListPlacement.LinkOf(Plugin(), []));
+    }
 }

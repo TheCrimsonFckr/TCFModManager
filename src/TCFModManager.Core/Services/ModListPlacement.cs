@@ -32,6 +32,18 @@ public enum PlacementRule
 
     // R9
     OnlyTheSync,
+
+    // R2, information only: the addon's own plugin loads without its mod (Q7 b).
+    AddonLoadsAlone,
+}
+
+// How an installed addon's plugin declares its mod. Unknown when the addon isn't installed here.
+public enum AddonParentLink
+{
+    Unknown,
+    Hard,
+    Soft,
+    None,
 }
 
 public enum PlacementSeverity
@@ -70,6 +82,9 @@ public sealed record PlacementFinding
 
     // R6
     public string? Quote { get; init; }
+
+    // R2
+    public AddonParentLink ParentLink { get; init; }
 }
 
 public sealed record PlacementFacts
@@ -88,6 +103,10 @@ public sealed record PlacementFacts
 
     // R1, by sp-mod addon id, for addons on no list.
     public IReadOnlyDictionary<int, HeadlessAdvice> AddonAdvice { get; init; } = new Dictionary<int, HeadlessAdvice>();
+
+    // R2, by addon entry. Absent means unknown.
+    public IReadOnlyDictionary<ModListEntry, AddonParentLink> AddonLinks { get; init; } =
+        new Dictionary<ModListEntry, AddonParentLink>();
 }
 
 public static partial class ModListPlacement
@@ -139,6 +158,20 @@ public static partial class ModListPlacement
     private static partial Regex Fika();
 
     public static bool LooksLikeSync(Addon addon) => Sync().IsMatch(Words(addon));
+
+    // Q7 (b): the addon's client plugins' BepInDependency on any of its mod's GUIDs.
+    public static AddonParentLink LinkOf(ModListCandidate addon, IEnumerable<string> parentGuids)
+    {
+        var plugins = addon.Entries.Where(e => e.Target == InstalledModTarget.Client).ToList();
+        var guids = parentGuids.Where(g => !string.IsNullOrWhiteSpace(g)).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        if (plugins.Count == 0 || guids.Count == 0) return AddonParentLink.Unknown;
+
+        var declared = plugins.SelectMany(p => p.Dependencies).Where(d => guids.Contains(d.Identifier)).ToList();
+
+        return declared.Count == 0 ? AddonParentLink.None
+            : declared.Any(d => !d.IsSoft) ? AddonParentLink.Hard
+            : AddonParentLink.Soft;
+    }
 
     public static bool MentionsFika(Addon addon) => Fika().IsMatch(Words(addon));
 
@@ -215,6 +248,22 @@ public static partial class ModListPlacement
             var missing = reach & ~parent.EffectiveScope;
             if (missing == 0) continue;
 
+            var link = facts.AddonLinks.GetValueOrDefault(entry, AddonParentLink.Unknown);
+
+            if (link is AddonParentLink.Soft or AddonParentLink.None)
+            {
+                findings.Add(new PlacementFinding
+                {
+                    Rule = PlacementRule.AddonLoadsAlone,
+                    Severity = PlacementSeverity.Info,
+                    Entry = parent,
+                    Other = entry,
+                    SuggestedScope = parent.EffectiveScope | missing,
+                    ParentLink = link,
+                });
+                continue;
+            }
+
             var sync = LooksLikeSync(addon);
 
             findings.Add(new PlacementFinding
@@ -225,6 +274,7 @@ public static partial class ModListPlacement
                 Other = entry,
                 SuggestedScope = parent.EffectiveScope | missing,
                 AlternativeScope = sync ? null : entry.EffectiveScope & ~missing,
+                ParentLink = link,
             });
         }
     }

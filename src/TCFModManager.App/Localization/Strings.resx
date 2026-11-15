@@ -2007,6 +2007,12 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="ModLists_PlaceAddonWiderFormat" xml:space="preserve">
     <value>{0} also goes to {1}, where this mod doesn't - the addon won't load there without it</value>
   </data>
+  <data name="ModLists_PlaceAddonWiderMaybeFormat" xml:space="preserve">
+    <value>{0} also goes to {1}, where this mod doesn't - the addon may not load there without it</value>
+  </data>
+  <data name="ModLists_PlaceAddonAloneFormat" xml:space="preserve">
+    <value>{0} goes to {1} without this mod - its plugin loads on its own</value>
+  </data>
   <data name="ModLists_PlaceDependencyFormat" xml:space="preserve">
     <value>{0} loads on {1} too and needs this mod there</value>
   </data>

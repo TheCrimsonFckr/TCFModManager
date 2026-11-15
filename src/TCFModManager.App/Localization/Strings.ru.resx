@@ -3230,6 +3230,12 @@
   <data name="ModLists_PlaceAddonWiderFormat" xml:space="preserve">
     <value>{0} также идёт на {1}, куда этот мод не идёт, - без него аддон там не загрузится</value>
   </data>
+  <data name="ModLists_PlaceAddonWiderMaybeFormat" xml:space="preserve">
+    <value>{0} также идёт на {1}, куда этот мод не идёт, - без него аддон там может не загрузиться</value>
+  </data>
+  <data name="ModLists_PlaceAddonAloneFormat" xml:space="preserve">
+    <value>{0} идёт на {1} без этого мода - его плагин загружается сам</value>
+  </data>
   <data name="ModLists_PlaceDependencyFormat" xml:space="preserve">
     <value>{0} загружается и на {1}, и там ему нужен этот мод</value>
   </data>
