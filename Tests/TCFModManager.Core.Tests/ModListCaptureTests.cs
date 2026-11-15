@@ -161,4 +161,26 @@ public class ModListCaptureTests
 
         Assert.True(list.IsSnapshot);
     }
+
+    [Fact]
+    public void ADisabledModTheFollowedListNamesIsCapturedAtThatListsScope()
+    {
+        var followed = new List<ModListEntry>
+        {
+            new() { Name = "Hj's UI", ModId = 40, Scope = ModListEntryScope.Client, Folders = ["hjs-ui"] },
+        };
+
+        var list = ModListCapture.Build(
+            "Headless box",
+            [
+                new ModListCandidate { Name = "SAIN", ModId = 1, Version = "3.0.0", Folders = ["sain"] },
+                new ModListCandidate { Name = "Hj's UI", ModId = 40, Version = "1.0.0", IsDisabled = true, Folders = ["hjs-ui"] },
+                new ModListCandidate { Name = "By hand", ModId = 41, Version = "1.0.0", IsDisabled = true, Folders = ["by-hand"] },
+            ],
+            DateTimeOffset.UnixEpoch,
+            followed: followed);
+
+        Assert.Equal(["Hj's UI", "SAIN"], list.Entries.Select(e => e.Name));
+        Assert.Equal(ModListEntryScope.Client, list.Entries[0].Scope);
+    }
 }

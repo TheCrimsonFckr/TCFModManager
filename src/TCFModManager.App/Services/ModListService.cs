@@ -163,6 +163,14 @@ public sealed class ModListService
         return ModListRefresh.Build(entries, install.Candidates, CatalogVersions(), CatalogAddonVersions(), onlyNewer);
     }
 
+    // OPEN-44 Q10 (b): on a dedicated headless, the entries of the lists it follows (its own active list, the served one).
+    private static IReadOnlyList<ModListEntry>? FollowedOnDedicatedHeadless()
+    {
+        if (!InstallRole.IsDedicatedHeadless(MachineScope)) return null;
+
+        return [.. (AppServices.ModLists.GetActive()?.Entries ?? []).Concat(AppServices.ModLists.GetActiveServer()?.Entries ?? [])];
+    }
+
     // OPEN-44 P8: an own list this install follows - its active list, or the one it publishes.
     public static bool KeepsNewer(ModList list) =>
         list.IsEditable
@@ -181,7 +189,8 @@ public sealed class ModListService
             CatalogVersions(),
             install.SptVersion,
             includeDisabled: includeDisabled,
-            addonVersions: CatalogAddonVersions());
+            addonVersions: CatalogAddonVersions(),
+            followed: FollowedOnDedicatedHeadless());
 
         return AppServices.ModLists.Add(list);
     }

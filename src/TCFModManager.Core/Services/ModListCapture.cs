@@ -100,7 +100,8 @@ public static class ModListCapture
         ModListPolicy policy = ModListPolicy.Exclusive,
         bool includeDisabled = false,
         bool isSnapshot = false,
-        AddonVersionLookup? addonVersions = null)
+        AddonVersionLookup? addonVersions = null,
+        IReadOnlyList<ModListEntry>? followed = null)
     {
         var list = new ModList
         {
@@ -114,7 +115,7 @@ public static class ModListCapture
             UpdatedAt = timestamp,
         };
 
-        list.Entries.AddRange(BuildEntries(candidates, versions, includeDisabled, addonVersions));
+        list.Entries.AddRange(BuildEntries(candidates, versions, includeDisabled, addonVersions, followed));
         return list;
     }
 
@@ -123,18 +124,33 @@ public static class ModListCapture
         IEnumerable<ModListCandidate> candidates,
         VersionLookup? versions = null,
         bool includeDisabled = false,
-        AddonVersionLookup? addonVersions = null)
+        AddonVersionLookup? addonVersions = null,
+        IReadOnlyList<ModListEntry>? followed = null)
     {
         var entries = new List<ModListEntry>();
+        var all = candidates.ToList();
+
+        // OPEN-44 Q10 (b): a disabled mod the followed list names is kept, at that list's scope.
+        var kept = new Dictionary<ModListCandidate, ModListEntryScope?>(ReferenceEqualityComparer.Instance);
+        if (followed is { Count: > 0 })
+        {
+            var match = new ModListMatch(all);
+            foreach (var entry in followed)
+            {
+                var found = match.IndexOf(entry);
+                if (found >= 0 && all[found].IsDisabled) kept.TryAdd(all[found], entry.Scope);
+            }
+        }
 
         // Keyed on the pair, not the id: an addon and a mod can share a number and are still two
         // different things to record.
         var seenModIds = new HashSet<(int Id, bool IsAddon)>();
         var seenNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        foreach (var candidate in candidates)
+        foreach (var candidate in all)
         {
-            if (candidate.IsDisabled && !includeDisabled) continue;
+            var keptScope = kept.TryGetValue(candidate, out var scope);
+            if (candidate.IsDisabled && !includeDisabled && !keptScope) continue;
 
             if (candidate.ModId is { } modId)
             {
@@ -156,7 +172,7 @@ public static class ModListCapture
                 // Everyone stores as null - see ModListEntry.Scope - so an entry that concerns
                 // every machine says nothing about scope at all, and a list that does not use the
                 // feature is byte-identical to one written before it existed.
-                Scope = candidate.Scope,
+                Scope = keptScope ? scope : candidate.Scope,
                 FitOverride = candidate.IsAddon && candidate.FitOverride,
                 Folders = [.. candidate.Folders
                     .Where(f => !string.IsNullOrWhiteSpace(f))
