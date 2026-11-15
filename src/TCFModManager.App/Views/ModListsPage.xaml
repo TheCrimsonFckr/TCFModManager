@@ -310,31 +310,6 @@
                                 Margin="0,2,0,0"
                                 ToolTip="{Binding AdviceToolTip}"
                                 Visibility="{Binding AdviceLabel, Converter={StaticResource NullToCollapsed}}">
-                                <StackPanel
-                                    DockPanel.Dock="Right"
-                                    Margin="8,-3,0,-3"
-                                    Orientation="Horizontal"
-                                    Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
-                                    <ui:Button
-                                        Margin="0,0,6,0"
-                                        Padding="8,2"
-                                        FontSize="11"
-                                        Appearance="Transparent"
-                                        Content="{loc:Str ModLists_AdviceKeep}"
-                                        ToolTip="{loc:Str ModLists_AdviceKeepToolTip}"
-                                        Visibility="{Binding AdviceKeepsOff, Converter={StaticResource BoolToVis}}"
-                                        Command="{Binding DataContext.KeepAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                        CommandParameter="{Binding}" />
-                                    <ui:Button
-                                        Padding="8,2"
-                                        FontSize="11"
-                                        Appearance="Secondary"
-                                        Content="{Binding AdviceActionLabel}"
-                                        ToolTip="{loc:Str ModLists_AdviceSetScopeToolTip}"
-                                        Visibility="{Binding HasAdviceAction, Converter={StaticResource BoolToVis}}"
-                                        Command="{Binding DataContext.TakeAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                        CommandParameter="{Binding}" />
-                                </StackPanel>
                                 <TextBlock
                                     DockPanel.Dock="Left"
                                     Margin="0,0,6,0"
@@ -353,38 +328,6 @@
                                 Margin="0,2,0,0"
                                 ToolTip="{Binding PlacementToolTip}"
                                 Visibility="{Binding PlacementLine, Converter={StaticResource NullToCollapsed}}">
-                                <StackPanel
-                                    DockPanel.Dock="Right"
-                                    Margin="8,-3,0,-3"
-                                    Orientation="Horizontal"
-                                    Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
-                                    <ui:Button
-                                        Margin="0,0,6,0"
-                                        Padding="8,2"
-                                        FontSize="11"
-                                        Appearance="Transparent"
-                                        Content="{loc:Str ModLists_AdviceKeep}"
-                                        ToolTip="{loc:Str ModLists_PlaceKeepToolTip}"
-                                        Command="{Binding DataContext.KeepPlacementCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                        CommandParameter="{Binding}" />
-                                    <ui:Button
-                                        Margin="0,0,6,0"
-                                        Padding="8,2"
-                                        FontSize="11"
-                                        Appearance="Transparent"
-                                        Content="{Binding PlacementAltLabel}"
-                                        Visibility="{Binding PlacementAltLabel, Converter={StaticResource NullToCollapsed}}"
-                                        Command="{Binding DataContext.TakePlacementAlternativeCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                        CommandParameter="{Binding}" />
-                                    <ui:Button
-                                        Padding="8,2"
-                                        FontSize="11"
-                                        Appearance="Secondary"
-                                        Content="{Binding PlacementActionLabel}"
-                                        Visibility="{Binding PlacementActionLabel, Converter={StaticResource NullToCollapsed}}"
-                                        Command="{Binding DataContext.TakePlacementCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                        CommandParameter="{Binding}" />
-                                </StackPanel>
                                 <TextBlock
                                     DockPanel.Dock="Left"
                                     Margin="0,0,6,0"
@@ -416,14 +359,62 @@
                         VerticalAlignment="Center"
                         Orientation="Horizontal"
                         ToolTip="{loc:Str ModLists_ScopeToolTip}"
-                                            Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
+                        Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
+                        <StackPanel Margin="0,0,6,0" Orientation="Horizontal" VerticalAlignment="Center" ToolTip="{Binding AdviceToolTip}" Visibility="{Binding AdviceLabel, Converter={StaticResource NullToCollapsed}}">
+                            <ui:Button
+                                Margin="0,0,6,0"
+                                Padding="8,2"
+                                FontSize="11"
+                                Appearance="Transparent"
+                                Content="{loc:Str ModLists_AdviceKeep}"
+                                ToolTip="{loc:Str ModLists_AdviceKeepToolTip}"
+                                Visibility="{Binding AdviceKeepsOff, Converter={StaticResource BoolToVis}}"
+                                Command="{Binding DataContext.KeepAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                CommandParameter="{Binding}" />
+                            <ui:Button
+                                Padding="8,2"
+                                FontSize="11"
+                                Appearance="Secondary"
+                                Content="{Binding AdviceActionLabel}"
+                                ToolTip="{loc:Str ModLists_AdviceSetScopeToolTip}"
+                                Visibility="{Binding HasAdviceAction, Converter={StaticResource BoolToVis}}"
+                                Command="{Binding DataContext.TakeAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                CommandParameter="{Binding}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,0,6,0" Orientation="Horizontal" VerticalAlignment="Center" ToolTip="{Binding PlacementToolTip}" Visibility="{Binding PlacementLine, Converter={StaticResource NullToCollapsed}}">
+                            <ui:Button
+                                Margin="0,0,6,0"
+                                Padding="8,2"
+                                FontSize="11"
+                                Appearance="Transparent"
+                                Content="{loc:Str ModLists_AdviceKeep}"
+                                ToolTip="{loc:Str ModLists_PlaceKeepToolTip}"
+                                Command="{Binding DataContext.KeepPlacementCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                CommandParameter="{Binding}" />
+                            <ui:Button
+                                Margin="0,0,6,0"
+                                Padding="8,2"
+                                FontSize="11"
+                                Appearance="Transparent"
+                                Content="{Binding PlacementAltLabel}"
+                                Visibility="{Binding PlacementAltLabel, Converter={StaticResource NullToCollapsed}}"
+                                Command="{Binding DataContext.TakePlacementAlternativeCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                CommandParameter="{Binding}" />
+                            <ui:Button
+                                Padding="8,2"
+                                FontSize="11"
+                                Appearance="Secondary"
+                                Content="{Binding PlacementActionLabel}"
+                                Visibility="{Binding PlacementActionLabel, Converter={StaticResource NullToCollapsed}}"
+                                Command="{Binding DataContext.TakePlacementCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                CommandParameter="{Binding}" />
+                        </StackPanel>
                         <ToggleButton
                             Margin="4,0,0,0"
                             Padding="8,2"
                             FontSize="11"
                             Tag="{x:Static core:ModListEntryScope.Server}"
                             IsChecked="{Binding GoesToServer, Mode=OneWay}"
-                            IsEnabled="{Binding CanUntickServer}"
                             Click="ScopeTick_Click">
                             <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeTickServer}" />
                         </ToggleButton>
@@ -433,7 +424,6 @@
                             FontSize="11"
                             Tag="{x:Static core:ModListEntryScope.Client}"
                             IsChecked="{Binding GoesToClient, Mode=OneWay}"
-                            IsEnabled="{Binding CanUntickClient}"
                             Click="ScopeTick_Click">
                             <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeTickClient}" />
                         </ToggleButton>
@@ -443,7 +433,6 @@
                             FontSize="11"
                             Tag="{x:Static core:ModListEntryScope.Headless}"
                             IsChecked="{Binding GoesToHeadless, Mode=OneWay}"
-                            IsEnabled="{Binding CanUntickHeadless}"
                             Click="ScopeTick_Click">
                             <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeTickHeadless}" />
                         </ToggleButton>
@@ -590,31 +579,6 @@
                             Margin="0,4,0,0"
                             ToolTip="{Binding AdviceToolTip}"
                             Visibility="{Binding AdviceLabel, Converter={StaticResource NullToCollapsed}}">
-                            <StackPanel
-                                DockPanel.Dock="Right"
-                                Margin="8,-3,0,-3"
-                                Orientation="Horizontal"
-                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
-                                <ui:Button
-                                    Margin="0,0,6,0"
-                                    Padding="8,2"
-                                    FontSize="11"
-                                    Appearance="Transparent"
-                                    Content="{loc:Str ModLists_AdviceKeep}"
-                                    ToolTip="{loc:Str ModLists_AdviceKeepToolTip}"
-                                    Visibility="{Binding AdviceKeepsOff, Converter={StaticResource BoolToVis}}"
-                                    Command="{Binding DataContext.KeepAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                    CommandParameter="{Binding}" />
-                                <ui:Button
-                                    Padding="8,2"
-                                    FontSize="11"
-                                    Appearance="Secondary"
-                                    Content="{Binding AdviceActionLabel}"
-                                    ToolTip="{loc:Str ModLists_AdviceSetScopeToolTip}"
-                                    Visibility="{Binding HasAdviceAction, Converter={StaticResource BoolToVis}}"
-                                    Command="{Binding DataContext.TakeAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                    CommandParameter="{Binding}" />
-                            </StackPanel>
                             <TextBlock
                                 DockPanel.Dock="Left"
                                 Margin="0,0,6,0"
@@ -633,38 +597,6 @@
                             Margin="0,4,0,0"
                             ToolTip="{Binding PlacementToolTip}"
                             Visibility="{Binding PlacementLine, Converter={StaticResource NullToCollapsed}}">
-                            <StackPanel
-                                DockPanel.Dock="Right"
-                                Margin="8,-3,0,-3"
-                                Orientation="Horizontal"
-                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
-                                <ui:Button
-                                    Margin="0,0,6,0"
-                                    Padding="8,2"
-                                    FontSize="11"
-                                    Appearance="Transparent"
-                                    Content="{loc:Str ModLists_AdviceKeep}"
-                                    ToolTip="{loc:Str ModLists_PlaceKeepToolTip}"
-                                    Command="{Binding DataContext.KeepPlacementCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                    CommandParameter="{Binding}" />
-                                <ui:Button
-                                    Margin="0,0,6,0"
-                                    Padding="8,2"
-                                    FontSize="11"
-                                    Appearance="Transparent"
-                                    Content="{Binding PlacementAltLabel}"
-                                    Visibility="{Binding PlacementAltLabel, Converter={StaticResource NullToCollapsed}}"
-                                    Command="{Binding DataContext.TakePlacementAlternativeCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                    CommandParameter="{Binding}" />
-                                <ui:Button
-                                    Padding="8,2"
-                                    FontSize="11"
-                                    Appearance="Secondary"
-                                    Content="{Binding PlacementActionLabel}"
-                                    Visibility="{Binding PlacementActionLabel, Converter={StaticResource NullToCollapsed}}"
-                                    Command="{Binding DataContext.TakePlacementCommand, RelativeSource={RelativeSource AncestorType=Page}}"
-                                    CommandParameter="{Binding}" />
-                            </StackPanel>
                             <TextBlock
                                 DockPanel.Dock="Left"
                                 Margin="0,0,6,0"
@@ -740,14 +672,62 @@
                                 HorizontalAlignment="Right"
                                 Orientation="Horizontal"
                                 ToolTip="{loc:Str ModLists_ScopeToolTip}"
-                                                            Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
+                                Visibility="{Binding DataContext.SelectionIsEditable, RelativeSource={RelativeSource AncestorType=Page}, Converter={StaticResource BoolToVis}}">
+                                <StackPanel Margin="0,0,6,0" Orientation="Horizontal" VerticalAlignment="Center" ToolTip="{Binding AdviceToolTip}" Visibility="{Binding AdviceLabel, Converter={StaticResource NullToCollapsed}}">
+                                    <ui:Button
+                                        Margin="0,0,6,0"
+                                        Padding="8,2"
+                                        FontSize="11"
+                                        Appearance="Transparent"
+                                        Content="{loc:Str ModLists_AdviceKeep}"
+                                        ToolTip="{loc:Str ModLists_AdviceKeepToolTip}"
+                                        Visibility="{Binding AdviceKeepsOff, Converter={StaticResource BoolToVis}}"
+                                        Command="{Binding DataContext.KeepAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}" />
+                                    <ui:Button
+                                        Padding="8,2"
+                                        FontSize="11"
+                                        Appearance="Secondary"
+                                        Content="{Binding AdviceActionLabel}"
+                                        ToolTip="{loc:Str ModLists_AdviceSetScopeToolTip}"
+                                        Visibility="{Binding HasAdviceAction, Converter={StaticResource BoolToVis}}"
+                                        Command="{Binding DataContext.TakeAdviceCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}" />
+                                </StackPanel>
+                                <StackPanel Margin="0,0,6,0" Orientation="Horizontal" VerticalAlignment="Center" ToolTip="{Binding PlacementToolTip}" Visibility="{Binding PlacementLine, Converter={StaticResource NullToCollapsed}}">
+                                    <ui:Button
+                                        Margin="0,0,6,0"
+                                        Padding="8,2"
+                                        FontSize="11"
+                                        Appearance="Transparent"
+                                        Content="{loc:Str ModLists_AdviceKeep}"
+                                        ToolTip="{loc:Str ModLists_PlaceKeepToolTip}"
+                                        Command="{Binding DataContext.KeepPlacementCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}" />
+                                    <ui:Button
+                                        Margin="0,0,6,0"
+                                        Padding="8,2"
+                                        FontSize="11"
+                                        Appearance="Transparent"
+                                        Content="{Binding PlacementAltLabel}"
+                                        Visibility="{Binding PlacementAltLabel, Converter={StaticResource NullToCollapsed}}"
+                                        Command="{Binding DataContext.TakePlacementAlternativeCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}" />
+                                    <ui:Button
+                                        Padding="8,2"
+                                        FontSize="11"
+                                        Appearance="Secondary"
+                                        Content="{Binding PlacementActionLabel}"
+                                        Visibility="{Binding PlacementActionLabel, Converter={StaticResource NullToCollapsed}}"
+                                        Command="{Binding DataContext.TakePlacementCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                        CommandParameter="{Binding}" />
+                                </StackPanel>
                                 <ToggleButton
                                     Margin="4,0,0,0"
                                     Padding="8,2"
                                     FontSize="11"
                                     Tag="{x:Static core:ModListEntryScope.Server}"
                                     IsChecked="{Binding GoesToServer, Mode=OneWay}"
-                                    IsEnabled="{Binding CanUntickServer}"
                                     Click="ScopeTick_Click">
                                     <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeTickServer}" />
                                 </ToggleButton>
@@ -757,7 +737,6 @@
                                     FontSize="11"
                                     Tag="{x:Static core:ModListEntryScope.Client}"
                                     IsChecked="{Binding GoesToClient, Mode=OneWay}"
-                                    IsEnabled="{Binding CanUntickClient}"
                                     Click="ScopeTick_Click">
                                     <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeTickClient}" />
                                 </ToggleButton>
@@ -767,7 +746,6 @@
                                     FontSize="11"
                                     Tag="{x:Static core:ModListEntryScope.Headless}"
                                     IsChecked="{Binding GoesToHeadless, Mode=OneWay}"
-                                    IsEnabled="{Binding CanUntickHeadless}"
                                     Click="ScopeTick_Click">
                                     <TextBlock Style="{StaticResource ScopeTickText}" Text="{loc:Str ModLists_ScopeTickHeadless}" />
                                 </ToggleButton>

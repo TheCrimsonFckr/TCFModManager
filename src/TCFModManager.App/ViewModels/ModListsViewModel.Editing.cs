@@ -76,10 +76,13 @@ public partial class ModListsViewModel
         StatusMessage = Text(Strings.ModLists_RemovedEntryFormat, entry.Name, row.Name);
     }
 
-    public void ToggleScope(ModListEntryRowViewModel entry, ModListEntryScope machine)
+    public bool ToggleScope(ModListEntryRowViewModel entry, ModListEntryScope machine)
     {
         var next = entry.Entry.EffectiveScope ^ machine;
-        if (SelectionIsEditable && next != 0) SetScope(entry, next);
+        if (!SelectionIsEditable || next == 0) return false;
+
+        SetScope(entry, next);
+        return true;
     }
 
     [RelayCommand(CanExecute = nameof(SelectionIsEditable))]

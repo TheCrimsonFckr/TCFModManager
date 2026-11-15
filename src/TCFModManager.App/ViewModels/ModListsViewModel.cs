@@ -218,13 +218,6 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
 
     public bool GoesToHeadless => Entry.EffectiveScope.HasFlag(ModListEntryScope.Headless);
 
-    // The last machine ticked can't be unticked: an entry always goes somewhere.
-    public bool CanUntickServer => Entry.EffectiveScope != ModListEntryScope.Server;
-
-    public bool CanUntickClient => Entry.EffectiveScope != ModListEntryScope.Client;
-
-    public bool CanUntickHeadless => Entry.EffectiveScope != ModListEntryScope.Headless;
-
     // Newest first for Last added; entries from before AddedAt was recorded sort last.
     public DateTimeOffset AddedSortKey => Entry.AddedAt ?? DateTimeOffset.MinValue;
 

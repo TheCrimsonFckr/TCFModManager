@@ -54,9 +54,10 @@ public partial class ModListsPage : Page
 
     private void ScopeTick_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is not FrameworkElement { DataContext: ModListEntryRowViewModel row, Tag: ModListEntryScope machine }) return;
+        if (sender is not ToggleButton { DataContext: ModListEntryRowViewModel row, Tag: ModListEntryScope machine } button) return;
 
-        ViewModel.ToggleScope(row, machine);
+        if (!ViewModel.ToggleScope(row, machine))
+            button.SetCurrentValue(ToggleButton.IsCheckedProperty, row.Entry.EffectiveScope.HasFlag(machine));
     }
 
     private void RenameBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
