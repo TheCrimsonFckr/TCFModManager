@@ -2909,6 +2909,42 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   <data name="ModLists_PublishAgain" xml:space="preserve">
     <value>Publier à nouveau</value>
   </data>
+  <data name="ModLists_Serve" xml:space="preserve">
+    <value>Servir</value>
+  </data>
+  <data name="ModLists_ServeToolTip" xml:space="preserve">
+    <value>Envoie cette liste aux machines de la Server Map. Rien ne change sur cette installation.</value>
+  </data>
+  <data name="ModLists_ServePreviewToolTip" xml:space="preserve">
+    <value>Montre ce que les machines de la Server Map recevront par rapport à ce que le serveur sert maintenant, et les mods plus récents ici que sur la liste. Rien n'est modifié.</value>
+  </data>
+  <data name="ModLists_PreviewAsPlayer" xml:space="preserve">
+    <value>Appliquer en tant que joueur</value>
+  </data>
+  <data name="ModLists_PreviewAsPlayerToolTip" xml:space="preserve">
+    <value>Planifie cette liste ici comme un joueur la reçoit - seulement ses mods de joueur. Elle ne met jamais de côté un mod que la liste ne nomme pas, et ne touche jamais aux mods du serveur.</value>
+  </data>
+  <data name="ModLists_ServedHereHint" xml:space="preserve">
+    <value>Servie depuis cette installation : Aperçu, puis Servir. Elle ne modifie jamais cette installation.</value>
+  </data>
+  <data name="ModLists_ServeNotServedYet" xml:space="preserve">
+    <value>Pas encore servie - Servir envoie tout.</value>
+  </data>
+  <data name="ModLists_ServeChangesFormat" xml:space="preserve">
+    <value>Modifiée depuis qu'elle a été servie le {0} :</value>
+  </data>
+  <data name="ModLists_ServeUpToDate" xml:space="preserve">
+    <value>Le serveur sert déjà cette liste telle quelle.</value>
+  </data>
+  <data name="ModLists_ServeAdded" xml:space="preserve">
+    <value>Ajouté</value>
+  </data>
+  <data name="ModLists_ServeRemoved" xml:space="preserve">
+    <value>Retiré</value>
+  </data>
+  <data name="ModLists_ServeScopeFormat" xml:space="preserve">
+    <value>{0} → {1}</value>
+  </data>
   <data name="ModLists_UnpublishedFormat" xml:space="preserve">
     <value>Cette liste a changé depuis sa publication le {0}. Les machines de la Map reçoivent encore cette version - publiez à nouveau pour leur envoyer les modifications.</value>
   </data>

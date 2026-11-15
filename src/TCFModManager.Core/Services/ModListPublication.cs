@@ -2,6 +2,23 @@ using TCFModManager.Core.Models;
 
 namespace TCFModManager.Core.Services;
 
+public enum ModListServeChangeKind
+{
+    Added,
+    Removed,
+    Version,
+    Scope,
+}
+
+// OPEN-44 Q18: one difference between a list and the copy the server serves.
+public sealed record ModListServeChange(
+    ModListServeChangeKind Kind,
+    ModListEntry Entry,
+    string? FromVersion = null,
+    string? ToVersion = null,
+    ModListEntryScope FromScope = ModListEntryScope.Everyone,
+    ModListEntryScope ToScope = ModListEntryScope.Everyone);
+
 //
 // Whether publishing a list is handing out something the server was not already serving.
 //
@@ -37,6 +54,34 @@ public static class ModListPublication
     // their own. Name is in: it is what a client sees the list called, and renaming the list a
     // server serves is a change worth carrying.
     //
+    // OPEN-44 Q18: what the machines on the Map would get that the served copy doesn't give them.
+    public static IReadOnlyList<ModListServeChange> Changes(ModList candidate, ModList published)
+    {
+        var changes = new List<ModListServeChange>();
+
+        foreach (var entry in candidate.Entries)
+        {
+            var served = published.Entries.FirstOrDefault(e => ModListEntries.SameMod(e, entry));
+
+            if (served is null)
+            {
+                changes.Add(new ModListServeChange(ModListServeChangeKind.Added, entry, ToVersion: entry.Version, ToScope: entry.EffectiveScope));
+                continue;
+            }
+
+            if (!Same(served.Version, entry.Version) || served.VersionId != entry.VersionId)
+                changes.Add(new ModListServeChange(ModListServeChangeKind.Version, entry, served.Version, entry.Version));
+
+            if (served.EffectiveScope != entry.EffectiveScope)
+                changes.Add(new ModListServeChange(ModListServeChangeKind.Scope, entry, FromScope: served.EffectiveScope, ToScope: entry.EffectiveScope));
+        }
+
+        foreach (var served in published.Entries.Where(s => !candidate.Entries.Any(e => ModListEntries.SameMod(e, s))))
+            changes.Add(new ModListServeChange(ModListServeChangeKind.Removed, served, FromVersion: served.Version, FromScope: served.EffectiveScope));
+
+        return changes;
+    }
+
     public static bool ContentsMatch(ModList a, ModList b)
     {
         if (a.Entries.Count != b.Entries.Count) return false;

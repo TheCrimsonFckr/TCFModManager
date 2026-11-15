@@ -63,9 +63,10 @@ public partial class ModListsViewModel
 
     public bool HasBehindNotice => _behind is not null;
 
-    private void SetBehind(ModListPlan? plan)
+    private void SetBehind(ModListPlan? plan) => SetBehindCount(plan?.Behind.Count() ?? 0);
+
+    private void SetBehindCount(int count)
     {
-        var count = plan?.Behind.Count() ?? 0;
         _behind = count > 0 ? (count, Selected?.IsPublished == true) : null;
         OnPropertyChanged(nameof(BehindNotice));
         OnPropertyChanged(nameof(HasBehindNotice));
@@ -73,6 +74,9 @@ public partial class ModListsViewModel
 
     private void NotifyPlanWording()
     {
+        OnPropertyChanged(nameof(ShowPreviewStep));
+        OnPropertyChanged(nameof(ShowServeStep));
+        OnPropertyChanged(nameof(ShowPreviewAsPlayer));
         OnPropertyChanged(nameof(ApplyLabel));
         OnPropertyChanged(nameof(StepHint));
         OnPropertyChanged(nameof(StepIsApply));
@@ -194,6 +198,12 @@ public partial class ModListsViewModel
     private async Task PreviewAsync()
     {
         if (Selected is not { } row) return;
+
+        if (row.IsServedHere)
+        {
+            await RunAsync(() => ServePreviewAsync(row));
+            return;
+        }
 
         await RunAsync(async () =>
         {

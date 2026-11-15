@@ -7,13 +7,14 @@ using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
+using TCFModManager.Core.ServerMap;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
 // One saved list in the left-hand list.
 public sealed partial class ModListRowViewModel(
-    ModList list, bool isActive, bool isActiveServer = false, bool isPublished = false)
+    ModList list, bool isActive, bool isActiveServer = false, bool isPublished = false, bool isServedHere = false)
     : LocalizedViewModel
 {
     public ModList List { get; } = list;
@@ -33,8 +34,11 @@ public sealed partial class ModListRowViewModel(
     //
     public bool IsActiveServer { get; } = isActiveServer;
 
-    // The lists this install follows open straight into their plan (OPEN-44 P7).
-    public bool IsFollowed => IsActive || IsActiveServer;
+    // OPEN-44 Q18: the list this install publishes, on the machine running its server - served, not applied.
+    public bool IsServedHere { get; } = isServedHere;
+
+    // The lists this install follows open straight into their plan (OPEN-44 P7) - never the one served from here.
+    public bool IsFollowed => (IsActive || IsActiveServer) && !IsServedHere;
 
     //
     // Came from a server, whether or not it is being followed.
@@ -397,6 +401,8 @@ public partial class ModListsViewModel : LocalizedViewModel
     [NotifyCanExecuteChangedFor(nameof(TakePlacementCommand))]
     [NotifyCanExecuteChangedFor(nameof(TakePlacementAlternativeCommand))]
     [NotifyCanExecuteChangedFor(nameof(KeepPlacementCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ServeCommand))]
+    [NotifyCanExecuteChangedFor(nameof(PreviewAsPlayerCommand))]
     private ModListRowViewModel? _selected;
 
     [ObservableProperty]
@@ -505,7 +511,8 @@ public partial class ModListsViewModel : LocalizedViewModel
 
     public string PreviewLabel => SelectionIsFollowed ? Strings.ModLists_CheckAgain : Strings.ModLists_Preview;
 
-    public string PreviewToolTip => SelectionIsFollowed ? Strings.ModLists_CheckAgainToolTip : Strings.ModLists_PreviewToolTip;
+    public string PreviewToolTip => SelectionIsServedHere ? Strings.ModLists_ServePreviewToolTip
+        : SelectionIsFollowed ? Strings.ModLists_CheckAgainToolTip : Strings.ModLists_PreviewToolTip;
 
     // The same one-line summary the left-hand row shows, repeated under the name so the detail
     // pane says what it is without the eye having to go back to the list.
@@ -567,6 +574,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         OnPropertyChanged(nameof(SelectionIsFollowed));
         OnPropertyChanged(nameof(PreviewLabel));
         OnPropertyChanged(nameof(PreviewToolTip));
+        NotifyServedHere();
 
         UpdateUnpublished();
 
@@ -615,6 +623,7 @@ public partial class ModListsViewModel : LocalizedViewModel
         _preview = null;
         UpToDate = null;
         RefusedNotice = null;
+        ClearServe();
         SetBehind(null);
         PlanRows.Clear();
         DependencyRows.Clear();
@@ -640,12 +649,15 @@ public partial class ModListsViewModel : LocalizedViewModel
 
         Lists.Clear();
 
+        var hosts = ServerMapReporting.HostsServerMap(AppServices.SptEnvironment.InstallPath);
+
         foreach (var list in data.Lists.OrderByDescending(l => l.UpdatedAt))
             Lists.Add(new ModListRowViewModel(
                 list,
                 data.ActiveListId == list.Id,
                 data.ActiveServerListId == list.Id,
-                data.PublishedListId == list.Id));
+                data.PublishedListId == list.Id,
+                hosts && list.IsEditable && data.PublishedListId == list.Id));
 
         OnPropertyChanged(nameof(HasLists));
 

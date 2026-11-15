@@ -3062,6 +3062,42 @@
   <data name="ModLists_PublishAgain" xml:space="preserve">
     <value>Опубликовать снова</value>
   </data>
+  <data name="ModLists_Serve" xml:space="preserve">
+    <value>Раздать</value>
+  </data>
+  <data name="ModLists_ServeToolTip" xml:space="preserve">
+    <value>Отправляет этот список машинам на Server Map. На этой установке ничего не меняется.</value>
+  </data>
+  <data name="ModLists_ServePreviewToolTip" xml:space="preserve">
+    <value>Показывает, что получат машины на Server Map по сравнению с тем, что сервер раздаёт сейчас, и какие моды здесь новее, чем в списке. Ничего не меняется.</value>
+  </data>
+  <data name="ModLists_PreviewAsPlayer" xml:space="preserve">
+    <value>Применить как игрок</value>
+  </data>
+  <data name="ModLists_PreviewAsPlayerToolTip" xml:space="preserve">
+    <value>Планирует здесь этот список так, как его получает игрок, - только моды для игрока. Никогда не откладывает мод, которого нет в списке, и никогда не трогает собственные моды сервера.</value>
+  </data>
+  <data name="ModLists_ServedHereHint" xml:space="preserve">
+    <value>Раздаётся с этой установки: Предпросмотр, затем Раздать. Эту установку он никогда не меняет.</value>
+  </data>
+  <data name="ModLists_ServeNotServedYet" xml:space="preserve">
+    <value>Ещё не раздан - Раздать отправит всё.</value>
+  </data>
+  <data name="ModLists_ServeChangesFormat" xml:space="preserve">
+    <value>Изменён после раздачи {0}:</value>
+  </data>
+  <data name="ModLists_ServeUpToDate" xml:space="preserve">
+    <value>Сервер уже раздаёт этот список в таком виде.</value>
+  </data>
+  <data name="ModLists_ServeAdded" xml:space="preserve">
+    <value>Добавлен</value>
+  </data>
+  <data name="ModLists_ServeRemoved" xml:space="preserve">
+    <value>Удалён</value>
+  </data>
+  <data name="ModLists_ServeScopeFormat" xml:space="preserve">
+    <value>{0} → {1}</value>
+  </data>
   <data name="ModLists_UnpublishedFormat" xml:space="preserve">
     <value>Этот список изменился после публикации {0}. Машины на Map всё ещё получают ту версию - опубликуйте снова, чтобы отправить им изменения.</value>
   </data>

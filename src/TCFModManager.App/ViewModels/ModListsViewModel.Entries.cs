@@ -214,7 +214,7 @@ public partial class ModListsViewModel
             await Dispatcher.Yield(DispatcherPriority.Background);
             if (!ReferenceEquals(Selected?.List, list)) return;
 
-            if (await _service.PreviewAsync(list) is { } preview) ApplyStanding(preview);
+            if (await _service.PreviewAsync(list, asPlayer: Selected?.IsServedHere == true) is { } preview) ApplyStanding(preview);
         }
         catch (Exception ex)
         {

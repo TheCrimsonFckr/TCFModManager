@@ -94,13 +94,32 @@ public partial class ModListsViewModel
         ? Text(Strings.ModLists_UnpublishedFormat, since.ToLocalTime().ToString("g", CultureInfo.CurrentCulture))
         : null;
 
-    public bool HasUnpublishedChanges => _unpublishedSince is not null;
+    public bool HasUnpublishedChanges => _unpublishedSince is not null && !SelectionIsServedHere;
 
     private void UpdateUnpublished()
     {
         _unpublishedSince = Selected is { IsPublished: true } row ? UnpublishedSince(row.List) : null;
         OnPropertyChanged(nameof(UnpublishedNotice));
         OnPropertyChanged(nameof(HasUnpublishedChanges));
+    }
+
+    // The copy the Server Map serves and when it was written, or null when there is none to read.
+    private static (ModList List, DateTimeOffset At)? ServedCopy()
+    {
+        if (!ServerMapConfigFolder.TryFind(new SettingsService().Load().SptInstallPath, out var directory)) return null;
+
+        var path = Path.Combine(directory, PublishedFileName);
+
+        try
+        {
+            if (!File.Exists(path) || ModListFile.Load(path).List is not { } list) return null;
+            return (list, new DateTimeOffset(File.GetLastWriteTimeUtc(path), TimeSpan.Zero));
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.Warn("ServerMap", $"couldn't read the published list at {path}: {ex.Message}");
+            return null;
+        }
     }
 
     private static DateTimeOffset? UnpublishedSince(ModList list)

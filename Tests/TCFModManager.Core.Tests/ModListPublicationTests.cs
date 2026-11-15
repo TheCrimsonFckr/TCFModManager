@@ -146,4 +146,26 @@ public class ModListPublicationTests
             List(Id, 1, Entry("SAIN", 791)),
             List(Id, 7, Entry("SAIN", 791))));
     }
+
+    // OPEN-44 Q18
+    [Fact]
+    public void Changes_NameWhatTheMachinesWouldGetThatTheServedCopyDoesNot()
+    {
+        static ModListEntry E(string name, int id, string version, ModListEntryScope? scope = null) =>
+            new() { Name = name, ModId = id, Version = version, Scope = scope };
+
+        var served = new ModList { Id = Guid.NewGuid(), Name = "L", CreatedAt = DateTimeOffset.UnixEpoch, UpdatedAt = DateTimeOffset.UnixEpoch };
+        served.Entries.AddRange([E("SAIN", 1, "3.0.0"), E("UIFixes", 2, "2.0.0"), E("Gone", 3, "1.0.0")]);
+
+        var now = new ModList { Id = served.Id, Name = "L", CreatedAt = DateTimeOffset.UnixEpoch, UpdatedAt = DateTimeOffset.UnixEpoch };
+        now.Entries.AddRange([E("SAIN", 1, "3.1.0"), E("UIFixes", 2, "2.0.0", ModListEntryScope.Client), E("New", 4, "1.0.0")]);
+
+        var changes = ModListPublication.Changes(now, served);
+
+        Assert.Equal(
+            ["SAIN:Version", "UIFixes:Scope", "New:Added", "Gone:Removed"],
+            changes.Select(c => $"{c.Entry.Name}:{c.Kind}"));
+        Assert.Equal(("3.0.0", "3.1.0"), (changes[0].FromVersion, changes[0].ToVersion));
+        Assert.Empty(ModListPublication.Changes(served, served));
+    }
 }

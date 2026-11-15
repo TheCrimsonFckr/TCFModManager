@@ -28,6 +28,9 @@ public sealed record ModListPreview(ModList List, ModListPlan Plan, ModListInsta
 {
     // OPEN-22: the dependencies the list's mods need that it doesn't name. Null when not asked.
     public ModListDependencyCheck? Dependencies { get; init; }
+
+    // OPEN-44 Q18 (e): the served list planned here the way a player receives it.
+    public bool AsPlayer { get; init; }
 }
 
 //
@@ -260,42 +263,55 @@ public sealed class ModListService
     // plans those in, all ticked - the Mod lists page asks; the pre-launch check, which only compares,
     // doesn't.
     //
-    public async Task<ModListPreview?> PreviewAsync(ModList list, bool withDependencies = false)
+    public async Task<ModListPreview?> PreviewAsync(ModList list, bool withDependencies = false, bool asPlayer = false)
     {
         var install = await ReadInstallAsync();
         if (install is null) return null;
 
-        var preview = Plan(list, install, null);
+        var preview = Plan(list, install, null, asPlayer);
         if (!withDependencies) return preview;
 
-        var check = await DependenciesAsync(list, install, preview.Plan);
-        return Plan(list, install, check);
+        var check = await DependenciesAsync(asPlayer ? ServerMapMachines.AsServed(list) : list, install, preview.Plan);
+        return Plan(list, install, check, asPlayer);
     }
+
+    // OPEN-44 Q18: the list this install publishes, on the machine that runs its server.
+    public static bool IsServedHere(ModList list) =>
+        list.IsEditable
+        && AppServices.ModLists.GetPublished()?.Id == list.Id
+        && ServerMapReporting.HostsServerMap(AppServices.SptEnvironment.InstallPath);
+
+    // OPEN-44 Q18 (b): entries the install holds newer than the list names.
+    public static ModListRefreshResult NewerHere(IEnumerable<ModListEntry> entries, ModListInstall install) =>
+        ModListRefresh.Build(entries, install.Candidates, CatalogVersions(), CatalogAddonVersions(), onlyNewer: true);
 
     //
     // The same preview planned again with other dependencies ticked, or the add-to-list choice
     // changed - no rescan and no second question to sp-mod, so the rows don't move under the user.
     //
     public static ModListPreview Replan(ModListPreview preview, ModListDependencyCheck check) =>
-        Plan(preview.List, preview.Install, check);
+        Plan(preview.List, preview.Install, check, preview.AsPlayer);
 
-    private static ModListPreview Plan(ModList list, ModListInstall install, ModListDependencyCheck? check)
+    private static ModListPreview Plan(ModList list, ModListInstall install, ModListDependencyCheck? check, bool asPlayer = false)
     {
         //
         // A personal list is planned knowing what the followed server also requires, so its
         // Exclusive sweep spares those mods. Passed as null when planning the server list itself -
         // it does not need protecting from its own plan, and a served list never disables anyway.
         //
-        var serverList = list.Origin == ModListOrigin.Server ? null : AppServices.ModLists.GetActiveServer();
+        var planned = asPlayer ? ServerMapMachines.AsServed(list) : list;
+        var serverList = planned.Origin == ModListOrigin.Server ? null : AppServices.ModLists.GetActiveServer();
 
         var machine = MachineScope;
 
         return new ModListPreview(
             list,
-            ModListPlanner.Build(list, install.Candidates, AppServices.ModLists.GetPins(), serverList, machine, check?.Picks, AlsoTakes(list, machine), KeepsNewer(list)),
+            ModListPlanner.Build(planned, install.Candidates, AppServices.ModLists.GetPins(), serverList, machine, check?.Picks,
+                AlsoTakes(planned, machine), asPlayer || KeepsNewer(list)),
             install)
         {
             Dependencies = check,
+            AsPlayer = asPlayer,
         };
     }
 
@@ -420,7 +436,7 @@ public sealed class ModListService
 
         if (result.Snapshot is not null) AppServices.ModLists.SetSnapshot(result.Snapshot);
 
-        if (result.Completed)
+        if (result.Completed && !preview.AsPlayer)
         {
             // Q1: the ticked dependencies written onto the list too, when asked - your own lists only.
             if (preview.Dependencies is { AddToList: true } deps && preview.List.IsEditable && deps.Picks.Count > 0)

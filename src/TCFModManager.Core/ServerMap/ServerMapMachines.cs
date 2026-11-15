@@ -348,7 +348,7 @@ public static class ServerMapMachines
     // operator's own, held Local, and a Local list applies whole - which would have every player
     // missing fika-server. Read as served, scope decides and nothing is swept.
     //
-    internal static ModList AsServed(ModList list) =>
+    public static ModList AsServed(ModList list) =>
         list.Origin == ModListOrigin.Server
             ? list
             : new ModList

@@ -30,7 +30,7 @@ public partial class ModListsViewModel
             // Dependencies already asked about are kept - planned again, not asked again.
             var replanned = preview.Dependencies is { } check
                 ? ModListService.Replan(preview, check)
-                : await _service.PreviewAsync(preview.List);
+                : await _service.PreviewAsync(preview.List, asPlayer: preview.AsPlayer);
 
             if (replanned is null)
             {

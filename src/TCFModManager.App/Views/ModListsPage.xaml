@@ -1084,6 +1084,14 @@
                         Margin="2,4,0,0"
                         FontSize="12"
                         TextWrapping="Wrap"
+                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                        Visibility="{Binding ServedHereHint, Converter={StaticResource NullToCollapsed}}"
+                        Text="{Binding ServedHereHint}" />
+
+                    <TextBlock
+                        Margin="2,4,0,0"
+                        FontSize="12"
+                        TextWrapping="Wrap"
                         Foreground="{DynamicResource SystemFillColorSuccessBrush}"
                         Visibility="{Binding UpToDate, Converter={StaticResource NullToCollapsed}}"
                         Text="{Binding UpToDate}" />
@@ -1118,8 +1126,28 @@
                         Icon="{ui:SymbolIcon Eye24}"
                         Content="{Binding PreviewLabel}"
                         ToolTip="{Binding PreviewToolTip}"
-                        Visibility="{Binding StepIsApply, Converter={StaticResource FalseToVisible}}"
+                        Visibility="{Binding ShowPreviewStep, Converter={StaticResource BoolToVis}}"
                         Command="{Binding PreviewCommand}" />
+
+                    <!-- OPEN-44 Q18: the list served from here is served, never applied whole. -->
+                    <ui:Button
+                        MinWidth="140"
+                        HorizontalContentAlignment="Center"
+                        Appearance="Primary"
+                        Icon="{ui:SymbolIcon ArrowUpload24}"
+                        Content="{loc:Str ModLists_Serve}"
+                        ToolTip="{loc:Str ModLists_ServeToolTip}"
+                        Visibility="{Binding ShowServeStep, Converter={StaticResource BoolToVis}}"
+                        Command="{Binding ServeCommand}" />
+
+                    <ui:Button
+                        Margin="8,0,0,0"
+                        Appearance="Secondary"
+                        Icon="{ui:SymbolIcon Play24}"
+                        Content="{loc:Str ModLists_PreviewAsPlayer}"
+                        ToolTip="{loc:Str ModLists_PreviewAsPlayerToolTip}"
+                        Visibility="{Binding ShowPreviewAsPlayer, Converter={StaticResource BoolToVis}}"
+                        Command="{Binding PreviewAsPlayerCommand}" />
 
                     <ui:Button
                         MinWidth="140"
@@ -1417,6 +1445,36 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Grid.Row="0" Margin="0,6,0,0">
+                        <!-- OPEN-44 Q18 (b): what the machines on the Map would get that the served copy doesn't. -->
+                        <ui:Card
+                            Margin="6,0,6,8"
+                            Padding="14,12"
+                            Visibility="{Binding HasServePreview, Converter={StaticResource BoolToVis}}">
+                            <StackPanel>
+                                <TextBlock
+                                    FontWeight="SemiBold"
+                                    TextWrapping="Wrap"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                    Text="{Binding ServeSummary}" />
+                                <ItemsControl Margin="0,6,0,0" ItemsSource="{Binding ServeRows}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <DockPanel Margin="0,3,0,0">
+                                                <Border DockPanel.Dock="Right" Style="{StaticResource ToneBadge}">
+                                                    <TextBlock Style="{StaticResource ToneBadgeText}" Text="{Binding Change}" />
+                                                </Border>
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                    Text="{Binding Name}" />
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </ui:Card>
+
                         <ui:InfoBar
                             Margin="6,0,6,8"
                             Severity="Informational"
