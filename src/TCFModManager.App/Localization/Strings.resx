@@ -673,7 +673,7 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>What this machine is</value>
   </data>
   <data name="Options_MachineRoleDescription" xml:space="preserve">
-    <value>A Fika headless client hosts raids without anybody playing on it, so it needs the mods that decide how a raid goes - bots, items, locations - and none of the ones that draw things at a player. Saying which this machine is lets a mod list a server hands you arrive trimmed to what this machine actually needs. It never changes a list of your own, and it never affects what you can install by hand.</value>
+    <value>A Fika headless client hosts raids without anybody playing on it, so it needs the mods that decide how a raid goes - bots, items, locations - and none of the ones that draw things at a player. Saying which this machine is lets mod lists arrive trimmed to what this machine actually needs: a list a server hands you on any machine, and your own lists too on a dedicated headless. It never affects what you can install by hand.</value>
     <comment>Fika is a mod's name and stays as it is.</comment>
   </data>
   <data name="Options_PlaysHereToolTip" xml:space="preserve">
@@ -4276,12 +4276,15 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <comment>Windows file-picker filter. Translate only the two descriptions - "Programs" and "All files". Everything else is machine-read: keep every | and the patterns between them exactly as they are, in the same order.</comment>
   </data>
   <data name="Options_RoleHeadless" xml:space="preserve">
-    <value>Dedicated headless. A mod list a server hands this machine arrives without the mods only a player would need - it still gets everything that decides how a raid goes.</value>
+    <value>Dedicated headless. Mod lists - a server's and your own - arrive without the mods only a player would need, and each mod is installed or disabled whole. If this install also runs the server, it takes the server's mods too; if not, it takes only what names the headless and what those mods need.</value>
     <comment>What this machine is, when it runs a headless client but nobody plays on it. A raid is a match in Escape from Tarkov.</comment>
   </data>
   <data name="Options_RolePlaysAndHosts" xml:space="preserve">
-    <value>Plays and hosts. A served list arrives whole, because both kinds of mod have somewhere to be useful here.</value>
-    <comment>What this machine is, when it both plays and runs a headless client.</comment>
+    <value>Both switches are on, so this install is planned as a player.</value>
+    <comment>What this machine is, when both switches are on - a setup Fika doesn't support, so it is treated as a player (OPEN-44 Q12).</comment>
+  </data>
+  <data name="Options_RoleConflict" xml:space="preserve">
+    <value>One install can't be a player and a headless at once. Fika runs a headless from its own copy of SPT, with its own TCFModManager - turn off the switch that doesn't fit this machine.</value>
   </data>
   <data name="Options_RoleNeither" xml:space="preserve">
     <value>Neither switch is on, so this reads as an ordinary player install - the same as leaving both alone. Turn one on rather than relying on that.</value>
@@ -6012,7 +6015,7 @@ The details are in the log:
     <value>Player</value>
   </data>
   <data name="Options_RoleSummaryPlaysAndHosts" xml:space="preserve">
-    <value>Player and Fika headless host</value>
+    <value>Both switches on - planned as a player</value>
   </data>
   <data name="Options_RoleSummaryHeadless" xml:space="preserve">
     <value>Dedicated Fika headless</value>
@@ -7353,7 +7356,7 @@ The details are in the log:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Options_Role_Note" xml:space="preserve">
-    <value>A server's mod list then arrives without the mods only a player needs. If the headless launcher isn't found by itself, point {0} at it.</value>
+    <value>Mod lists then arrive without the mods only a player needs. If the headless launcher isn't found by itself, point {0} at it.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Problems_Greyed_Title" xml:space="preserve">

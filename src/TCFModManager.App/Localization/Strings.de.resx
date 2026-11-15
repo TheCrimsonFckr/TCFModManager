@@ -3569,7 +3569,7 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
     <value>Systemstandard ({0})</value>
   </data>
   <data name="Options_MachineRoleDescription" xml:space="preserve">
-    <value>Ein Fika-Headless-Client hostet Raids, ohne dass jemand daran spielt, und braucht deshalb die Mods, die bestimmen, wie ein Raid abläuft - Bots, Items, Orte - und keinen von denen, die einem Spieler etwas anzeigen. Wenn du angibst, was dieser Rechner ist, kommt eine Modliste, die dir ein Server übergibt, schon auf das zugeschnitten an, was dieser Rechner wirklich braucht. Eine eigene Liste ändert das nie, und was du von Hand installieren kannst, ebenso wenig.</value>
+    <value>Ein Fika-Headless-Client hostet Raids, ohne dass jemand darauf spielt. Er braucht also die Mods, die bestimmen, wie ein Raid abläuft - Bots, Items, Orte - und keine, die einem Spieler etwas anzeigen. Wenn du angibst, was dieser Rechner ist, kommen Modlisten auf das zugeschnitten an, was er wirklich braucht: eine Liste, die dir ein Server gibt, auf jedem Rechner, und auf einem reinen Headless auch deine eigenen Listen. Was du von Hand installieren kannst, ändert das nie.</value>
   </data>
   <data name="Options_MachineRoleHeader" xml:space="preserve">
     <value>Was dieser Rechner ist</value>
@@ -3605,7 +3605,7 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
     <value>Port</value>
   </data>
   <data name="Options_RoleHeadless" xml:space="preserve">
-    <value>Reiner Headless. Eine Modliste, die ein Server an diese Maschine gibt, kommt ohne die Mods an, die nur ein Spieler braucht - alles, was über den Verlauf eines Raids entscheidet, kommt trotzdem mit.</value>
+    <value>Reiner Headless. Modlisten - die eines Servers und deine eigenen - kommen ohne die Mods an, die nur ein Spieler braucht, und jeder Mod wird ganz installiert oder ganz deaktiviert. Läuft auf dieser Installation auch der Server, nimmt sie auch die Server-Mods; sonst nur, was den Headless nennt, und was diese Mods brauchen.</value>
   </data>
   <data name="Options_RoleNeither" xml:space="preserve">
     <value>Kein Schalter ist an, also gilt das hier als ganz normale Spieler-Installation - dasselbe, als würdest du beide in Ruhe lassen. Schalte lieber einen ein, als dich darauf zu verlassen.</value>
@@ -3614,7 +3614,10 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
     <value>Eine ganz normale Spieler-Installation. Eine gelieferte Liste kommt an wie eh und je.</value>
   </data>
   <data name="Options_RolePlaysAndHosts" xml:space="preserve">
-    <value>Spielt und hostet. Eine gelieferte Liste kommt vollständig an, weil beide Arten von Mod hier etwas zu tun haben.</value>
+    <value>Beide Schalter sind an, also wird diese Installation wie ein Spieler behandelt.</value>
+  </data>
+  <data name="Options_RoleConflict" xml:space="preserve">
+    <value>Eine Installation kann nicht gleichzeitig Spieler und Headless sein. Fika betreibt einen Headless aus einer eigenen SPT-Kopie mit eigenem TCFModManager - schalte den Schalter aus, der nicht zu diesem Rechner passt.</value>
   </data>
   <data name="Options_ServerAddressPlaceholder" xml:space="preserve">
     <value>Serveradresse (z. B. 127.0.0.1)</value>
@@ -4789,7 +4792,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Spieler</value>
   </data>
   <data name="Options_RoleSummaryPlaysAndHosts" xml:space="preserve">
-    <value>Spieler und Fika-Headless-Host</value>
+    <value>Beide Schalter an - wie ein Spieler behandelt</value>
   </data>
   <data name="Options_RoleSummaryHeadless" xml:space="preserve">
     <value>Reiner Fika-Headless</value>
@@ -5869,7 +5872,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Stell die Einstellungen so, dass dort {0} und {1} steht.</value>
   </data>
   <data name="Help_Options_Role_Note" xml:space="preserve">
-    <value>Die Modliste eines Servers kommt dann ohne die Mods an, die nur ein Spieler braucht. Wird der Headless-Launcher nicht von selbst gefunden, zeig {0} darauf.</value>
+    <value>Modlisten kommen dann ohne die Mods an, die nur ein Spieler braucht. Wird der Headless-Launcher nicht von selbst gefunden, verweise {0} darauf.</value>
   </data>
   <data name="Help_Problems_Greyed_Title" xml:space="preserve">
     <value>Aktualisieren oder Entfernen ist ausgegraut</value>

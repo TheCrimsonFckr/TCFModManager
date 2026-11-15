@@ -1203,6 +1203,7 @@ internal static class Strings
     internal static string Options_HeadlessPickerFilter => LocalizationService.Get("Options_HeadlessPickerFilter");
     internal static string Options_RoleHeadless => LocalizationService.Get("Options_RoleHeadless");
     internal static string Options_RolePlaysAndHosts => LocalizationService.Get("Options_RolePlaysAndHosts");
+    internal static string Options_RoleConflict => LocalizationService.Get("Options_RoleConflict");
     internal static string Options_RoleNeither => LocalizationService.Get("Options_RoleNeither");
     internal static string Options_RolePlayer => LocalizationService.Get("Options_RolePlayer");
     internal static string Options_InstallPathPickerTitle => LocalizationService.Get("Options_InstallPathPickerTitle");

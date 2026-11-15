@@ -946,7 +946,12 @@ public partial class OptionsViewModel : LocalizedViewModel
             (false, false) => Strings.Options_RoleSummaryNeither,
             _ => Strings.Options_RoleSummaryPlayer,
         };
+
+        OnPropertyChanged(nameof(RolesConflict));
     }
+
+    // OPEN-44 Q12: player and headless on one install - planned as a player, said under the switches.
+    public bool RolesConflict => PlaysHere && RunsHeadlessClient;
 
     //
     // Puts the question once, when an install folder turns out to hold a headless launcher.

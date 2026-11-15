@@ -3569,7 +3569,7 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
     <value>Par défaut du système ({0})</value>
   </data>
   <data name="Options_MachineRoleDescription" xml:space="preserve">
-    <value>Un client headless Fika héberge des raids sans que personne n'y joue : il lui faut donc les mods qui décident du déroulement d'un raid - bots, objets, lieux - et aucun de ceux qui affichent quelque chose au joueur. Indiquer ce qu'est cette machine permet qu'une liste de mods transmise par un serveur arrive réduite à ce dont cette machine a vraiment besoin. Cela ne change jamais une liste qui vous appartient, et n'affecte jamais ce que vous pouvez installer à la main.</value>
+    <value>Un client headless Fika héberge des raids sans que personne n'y joue. Il a donc besoin des mods qui décident du déroulement d'un raid - bots, objets, lieux - et d'aucun de ceux qui affichent quelque chose à un joueur. Indiquer ce qu'est cette machine permet aux listes de mods d'arriver réduites à ce dont elle a vraiment besoin : une liste qu'un serveur vous donne, sur toute machine, et vos propres listes aussi sur un headless dédié. Cela ne change jamais ce que vous pouvez installer à la main.</value>
   </data>
   <data name="Options_MachineRoleHeader" xml:space="preserve">
     <value>Ce qu'est cette machine</value>
@@ -3605,7 +3605,7 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
     <value>Port</value>
   </data>
   <data name="Options_RoleHeadless" xml:space="preserve">
-    <value>Headless dédié. Une liste de mods qu'un serveur envoie à cette machine arrive sans les mods dont seul un joueur aurait besoin - elle reçoit quand même tout ce qui décide du déroulement d'un raid.</value>
+    <value>Headless dédié. Les listes de mods - celle d'un serveur et les vôtres - arrivent sans les mods dont seul un joueur a besoin, et chaque mod est installé ou désactivé en entier. Si cette installation fait aussi tourner le serveur, elle prend aussi les mods du serveur ; sinon, seulement ce qui nomme le headless et ce dont ces mods ont besoin.</value>
   </data>
   <data name="Options_RoleNeither" xml:space="preserve">
     <value>Aucun des deux interrupteurs n'est activé, donc cette machine passe pour une installation joueur ordinaire - comme si vous n'y touchiez pas. Activez-en un plutôt que de compter là-dessus.</value>
@@ -3614,7 +3614,10 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
     <value>Une installation joueur ordinaire. Une liste envoyée arrive comme elle l'a toujours fait.</value>
   </data>
   <data name="Options_RolePlaysAndHosts" xml:space="preserve">
-    <value>Joue et héberge. Une liste envoyée arrive entière, car les deux types de mods ont leur utilité ici.</value>
+    <value>Les deux interrupteurs sont activés, cette installation est donc traitée comme celle d'un joueur.</value>
+  </data>
+  <data name="Options_RoleConflict" xml:space="preserve">
+    <value>Une installation ne peut pas être à la fois celle d'un joueur et un headless. Fika fait tourner un headless depuis sa propre copie de SPT, avec son propre TCFModManager - désactivez l'interrupteur qui ne correspond pas à cette machine.</value>
   </data>
   <data name="Options_ServerAddressPlaceholder" xml:space="preserve">
     <value>Adresse du serveur (ex. 127.0.0.1)</value>
@@ -4789,7 +4792,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Joueur</value>
   </data>
   <data name="Options_RoleSummaryPlaysAndHosts" xml:space="preserve">
-    <value>Joueur et hôte headless Fika</value>
+    <value>Les deux activés - traité comme un joueur</value>
   </data>
   <data name="Options_RoleSummaryHeadless" xml:space="preserve">
     <value>Headless Fika dédié</value>
@@ -5869,7 +5872,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Réglez les options pour qu'elles affichent {0} et {1}.</value>
   </data>
   <data name="Help_Options_Role_Note" xml:space="preserve">
-    <value>La liste de mods d'un serveur arrive alors sans les mods dont seul un joueur a besoin. Si le launcher headless n'est pas trouvé tout seul, indiquez-le dans {0}.</value>
+    <value>Les listes de mods arrivent alors sans les mods dont seul un joueur a besoin. Si le lanceur headless n'est pas trouvé tout seul, indiquez-le dans {0}.</value>
   </data>
   <data name="Help_Problems_Greyed_Title" xml:space="preserve">
     <value>Mettre à jour ou Supprimer est grisé</value>
