@@ -27,7 +27,7 @@ public partial class ModListsViewModel
     private bool _showHeadless;
 
     [ObservableProperty]
-    private bool _showAdviceOnly;
+    private bool _showNeedsAttention;
 
     private ModListEntryScope ShownScopes =>
         (ShowServer ? ModListEntryScope.Server : 0)
@@ -40,7 +40,7 @@ public partial class ModListsViewModel
 
     partial void OnShowHeadlessChanged(bool value) => RefreshView();
 
-    partial void OnShowAdviceOnlyChanged(bool value) => RefreshView();
+    partial void OnShowNeedsAttentionChanged(bool value) => RefreshView();
 
     public IReadOnlyList<ModListEntrySort> EntrySorts { get; } =
     [
@@ -107,7 +107,7 @@ public partial class ModListsViewModel
         if (item is not ModListEntryRowViewModel row) return false;
 
         if (ShownScopes is not 0 and var shown && (row.Entry.EffectiveScope & shown) == 0) return false;
-        if (ShowAdviceOnly && !row.NeedsAttention && !row.HasPlacement) return false;
+        if (ShowNeedsAttention && !row.CallsForAttention) return false;
 
         var search = EntrySearch?.Trim();
         if (string.IsNullOrEmpty(search)) return true;
@@ -124,7 +124,7 @@ public partial class ModListsViewModel
     public int VisibleEntryCount => EntriesView.Cast<object>().Count();
 
     public bool IsFiltered =>
-        ShownScopes != 0 || ShowAdviceOnly || !string.IsNullOrWhiteSpace(EntrySearch);
+        ShownScopes != 0 || ShowNeedsAttention || !string.IsNullOrWhiteSpace(EntrySearch);
 
     // A list with entries, a filter on, and nothing matching it. Its own state because the advice
     // is different: nothing is wrong, and the fix is to widen the filter rather than add mods.

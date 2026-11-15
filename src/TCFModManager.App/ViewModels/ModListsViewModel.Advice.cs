@@ -119,6 +119,7 @@ public partial class ModListsViewModel
         var index = Entries.IndexOf(entry);
         if (index >= 0) Entries[index] = Row(entry.Entry);
         Notify();
+        UpdateAttention();
 
         StatusMessage = Text(Strings.ModLists_AdviceKeptFormat, entry.Name);
     }

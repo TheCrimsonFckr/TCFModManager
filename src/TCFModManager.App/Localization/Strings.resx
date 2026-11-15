@@ -519,7 +519,7 @@
     <value>Some mods are newer on this install than on the list</value>
   </data>
   <data name="ModLists_AttentionWarnings" xml:space="preserve">
-    <value>Where it goes has warnings</value>
+    <value>Some mods have warnings or hints</value>
   </data>
   <data name="ModLists_AttentionNotMatching" xml:space="preserve">
     <value>This install doesn't match it yet</value>
@@ -2008,8 +2008,8 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="ModLists_ScopeTickHeadless" xml:space="preserve">
     <value>Headless</value>
   </data>
-  <data name="ModLists_AdviceFilterToolTip" xml:space="preserve">
-    <value>Show only the entries with a Where it goes or headless suggestion.</value>
+  <data name="ModLists_FilterNeedsAttentionToolTip" xml:space="preserve">
+    <value>Show only the entries with a warning or a hint, or that aren't correct on this install.</value>
   </data>
   <data name="ModLists_ScopeClientsAndHeadless" xml:space="preserve">
     <value>Client + Headless</value>
@@ -2023,9 +2023,9 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="ModLists_ScopeServerOnly" xml:space="preserve">
     <value>Server only</value>
   </data>
-  <data name="ModLists_ScopeFilterAdvice" xml:space="preserve">
-    <value>Where it goes</value>
-    <comment>Scope filter entry (OPEN-44: Where it goes): the rows with a placement line, and the rows whose sp-mod page says to keep the mod off a Fika headless while this entry still sends it there, or says the headless needs it while this entry skips the headless.</comment>
+  <data name="ModLists_FilterNeedsAttention" xml:space="preserve">
+    <value>Needs attention</value>
+    <comment>Contents filter toggle: the rows with a warning or hint (Where it goes, headless advice) or that are not Correct on this install - the rows Needs attention first sorts to the top.</comment>
   </data>
   <data name="ModLists_PlaceLabel" xml:space="preserve">
     <value>Where it goes:</value>
@@ -2134,11 +2134,11 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <comment>Tooltip on an addon entry. {0} is one or more sentences from the parent mod's sp-mod page, quoted as written - they are not translated.</comment>
   </data>
   <data name="ModLists_AdviceFound_one" xml:space="preserve">
-    <value>1 mod on this list has headless advice from its sp-mod page - choose Where it goes in the scope filter to see it.</value>
-    <comment>Said after a capture. "Where it goes" is ModLists_ScopeFilterAdvice - translate it the same way.</comment>
+    <value>1 mod on this list has headless advice from its sp-mod page - switch on Needs attention above the list to see it.</value>
+    <comment>Said after a capture. "Needs attention" is ModLists_FilterNeedsAttention - translate it the same way.</comment>
   </data>
   <data name="ModLists_AdviceFound_other" xml:space="preserve">
-    <value>{0} mods on this list have headless advice from their sp-mod pages - choose Where it goes in the scope filter to see them.</value>
+    <value>{0} mods on this list have headless advice from their sp-mod pages - switch on Needs attention above the list to see them.</value>
   </data>
   <data name="ModLists_StatusThenAdviceFormat" xml:space="preserve">
     <value>{0} {1}</value>

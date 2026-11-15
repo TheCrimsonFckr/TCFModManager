@@ -2808,7 +2808,7 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
     <value>Einige Mods sind auf dieser Installation neuer als auf der Liste</value>
   </data>
   <data name="ModLists_AttentionWarnings" xml:space="preserve">
-    <value>Wo es hingehört hat Warnungen</value>
+    <value>Einige Mods haben Warnungen oder Hinweise</value>
   </data>
   <data name="ModLists_AttentionNotMatching" xml:space="preserve">
     <value>Diese Installation entspricht ihr noch nicht</value>
@@ -3065,8 +3065,8 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="ModLists_ScopeEveryoneFormat" xml:space="preserve">
     <value>"{0}" gilt jetzt für jeden Rechner.</value>
   </data>
-  <data name="ModLists_ScopeFilterAdvice" xml:space="preserve">
-    <value>Wo es hingehört</value>
+  <data name="ModLists_FilterNeedsAttention" xml:space="preserve">
+    <value>Handlungsbedarf</value>
   </data>
   <data name="ModLists_PlaceLabel" xml:space="preserve">
     <value>Wo es hingehört:</value>
@@ -3167,10 +3167,10 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
 {0}</value>
   </data>
   <data name="ModLists_AdviceFound_one" xml:space="preserve">
-    <value>1 Mod auf dieser Liste hat einen Headless-Hinweis von seiner sp-mod-Seite - wähle „Wo es hingehört“ im Bereichsfilter, um ihn zu sehen.</value>
+    <value>1 Mod auf dieser Liste hat einen Headless-Hinweis von seiner sp-mod-Seite - schalte „Handlungsbedarf“ über der Liste ein, um ihn zu sehen.</value>
   </data>
   <data name="ModLists_AdviceFound_other" xml:space="preserve">
-    <value>{0} Mods auf dieser Liste haben Headless-Hinweise von ihren sp-mod-Seiten - wähle „Wo es hingehört“ im Bereichsfilter, um sie zu sehen.</value>
+    <value>{0} Mods auf dieser Liste haben Headless-Hinweise von ihren sp-mod-Seiten - schalte „Handlungsbedarf“ über der Liste ein, um sie zu sehen.</value>
   </data>
   <data name="ModLists_StatusThenAdviceFormat" xml:space="preserve">
     <value>{0} {1}</value>
@@ -3202,8 +3202,8 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="ModLists_ScopeTickHeadless" xml:space="preserve">
     <value>Headless</value>
   </data>
-  <data name="ModLists_AdviceFilterToolTip" xml:space="preserve">
-    <value>Nur die Einträge mit einem Hinweis zu Wo es hingehört oder zum Headless zeigen.</value>
+  <data name="ModLists_FilterNeedsAttentionToolTip" xml:space="preserve">
+    <value>Nur die Einträge mit einer Warnung oder einem Hinweis zeigen, oder die auf dieser Installation nicht stimmen.</value>
   </data>
   <data name="ModLists_ScopeServerAndClientsFormat" xml:space="preserve">
     <value>"{0}" geht jetzt an den Server und an Spieler - ein Headless-Client überspringt ihn.</value>

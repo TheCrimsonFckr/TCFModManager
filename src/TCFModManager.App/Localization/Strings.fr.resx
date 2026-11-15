@@ -2808,7 +2808,7 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
     <value>Certains mods sont plus récents sur cette installation que sur la liste</value>
   </data>
   <data name="ModLists_AttentionWarnings" xml:space="preserve">
-    <value>Où il va a des avertissements</value>
+    <value>Certains mods ont des avertissements ou des suggestions</value>
   </data>
   <data name="ModLists_AttentionNotMatching" xml:space="preserve">
     <value>Cette installation ne lui correspond pas encore</value>
@@ -3065,8 +3065,8 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   <data name="ModLists_ScopeEveryoneFormat" xml:space="preserve">
     <value>« {0} » s'applique désormais à toutes les machines.</value>
   </data>
-  <data name="ModLists_ScopeFilterAdvice" xml:space="preserve">
-    <value>Où il va</value>
+  <data name="ModLists_FilterNeedsAttention" xml:space="preserve">
+    <value>À traiter</value>
   </data>
   <data name="ModLists_PlaceLabel" xml:space="preserve">
     <value>Où il va :</value>
@@ -3167,10 +3167,10 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
 {0}</value>
   </data>
   <data name="ModLists_AdviceFound_one" xml:space="preserve">
-    <value>{0} mod de cette liste a un conseil headless sur sa page sp-mod - choisissez « Où il va » dans le filtre de portée pour le voir.</value>
+    <value>{0} mod de cette liste a un conseil headless sur sa page sp-mod - activez « À traiter » au-dessus de la liste pour le voir.</value>
   </data>
   <data name="ModLists_AdviceFound_other" xml:space="preserve">
-    <value>{0} mods de cette liste ont des conseils headless sur leur page sp-mod - choisissez « Où il va » dans le filtre de portée pour les voir.</value>
+    <value>{0} mods de cette liste ont des conseils headless sur leur page sp-mod - activez « À traiter » au-dessus de la liste pour les voir.</value>
   </data>
   <data name="ModLists_StatusThenAdviceFormat" xml:space="preserve">
     <value>{0} {1}</value>
@@ -3202,8 +3202,8 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   <data name="ModLists_ScopeTickHeadless" xml:space="preserve">
     <value>Headless</value>
   </data>
-  <data name="ModLists_AdviceFilterToolTip" xml:space="preserve">
-    <value>Afficher uniquement les entrées avec une suggestion Où il va ou headless.</value>
+  <data name="ModLists_FilterNeedsAttentionToolTip" xml:space="preserve">
+    <value>Afficher uniquement les entrées avec un avertissement ou une suggestion, ou qui ne sont pas correctes sur cette installation.</value>
   </data>
   <data name="ModLists_ScopeServerAndClientsFormat" xml:space="preserve">
     <value>« {0} » va désormais au serveur et aux joueurs - un client headless l'ignorera.</value>

@@ -2961,7 +2961,7 @@
     <value>Некоторые моды на этой установке новее, чем в списке</value>
   </data>
   <data name="ModLists_AttentionWarnings" xml:space="preserve">
-    <value>В «Куда ставить» есть предупреждения</value>
+    <value>У некоторых модов есть предупреждения или подсказки</value>
   </data>
   <data name="ModLists_AttentionNotMatching" xml:space="preserve">
     <value>Эта установка ему ещё не соответствует</value>
@@ -3230,8 +3230,8 @@
   <data name="ModLists_ScopeEveryoneFormat" xml:space="preserve">
     <value>«{0}» теперь применяется на всех машинах.</value>
   </data>
-  <data name="ModLists_ScopeFilterAdvice" xml:space="preserve">
-    <value>Куда ставить</value>
+  <data name="ModLists_FilterNeedsAttention" xml:space="preserve">
+    <value>Требует внимания</value>
   </data>
   <data name="ModLists_PlaceLabel" xml:space="preserve">
     <value>Куда ставить:</value>
@@ -3332,16 +3332,16 @@
 {0}</value>
   </data>
   <data name="ModLists_AdviceFound_one" xml:space="preserve">
-    <value>У {0} мода в этом списке есть совет для headless на странице sp-mod - выберите «Куда ставить» в фильтре областей, чтобы увидеть его.</value>
+    <value>У {0} мода в этом списке есть совет для headless на странице sp-mod - включите «Требует внимания» над списком, чтобы увидеть его.</value>
   </data>
   <data name="ModLists_StatusThenAdviceFormat" xml:space="preserve">
     <value>{0} {1}</value>
   </data>
   <data name="ModLists_AdviceFound_few" xml:space="preserve">
-    <value>У {0} модов в этом списке есть советы для headless на их страницах sp-mod - выберите «Куда ставить» в фильтре областей, чтобы увидеть их.</value>
+    <value>У {0} модов в этом списке есть советы для headless на их страницах sp-mod - включите «Требует внимания» над списком, чтобы увидеть их.</value>
   </data>
   <data name="ModLists_AdviceFound_many" xml:space="preserve">
-    <value>У {0} модов в этом списке есть советы для headless на их страницах sp-mod - выберите «Куда ставить» в фильтре областей, чтобы увидеть их.</value>
+    <value>У {0} модов в этом списке есть советы для headless на их страницах sp-mod - включите «Требует внимания» над списком, чтобы увидеть их.</value>
   </data>
   <data name="ModLists_ScopeFilterToolTip" xml:space="preserve">
     <value>Показывать записи, которые идут на любую из отмеченных машин. Без отметок показываются все.</value>
@@ -3370,8 +3370,8 @@
   <data name="ModLists_ScopeTickHeadless" xml:space="preserve">
     <value>Headless</value>
   </data>
-  <data name="ModLists_AdviceFilterToolTip" xml:space="preserve">
-    <value>Показывать только записи с подсказкой «Куда ставить» или для headless.</value>
+  <data name="ModLists_FilterNeedsAttentionToolTip" xml:space="preserve">
+    <value>Показывать только записи с предупреждением или подсказкой, или которые не соответствуют этой установке.</value>
   </data>
   <data name="ModLists_ScopeServerAndClientsFormat" xml:space="preserve">
     <value>«{0}» теперь идёт серверу и игрокам - headless-клиент его пропустит.</value>

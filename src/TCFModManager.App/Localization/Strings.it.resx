@@ -2808,7 +2808,7 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
     <value>Alcune mod sono più recenti su questa installazione che sulla lista</value>
   </data>
   <data name="ModLists_AttentionWarnings" xml:space="preserve">
-    <value>Dove va ha degli avvisi</value>
+    <value>Alcune mod hanno avvisi o suggerimenti</value>
   </data>
   <data name="ModLists_AttentionNotMatching" xml:space="preserve">
     <value>Questa installazione non le corrisponde ancora</value>
@@ -3065,8 +3065,8 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="ModLists_ScopeEveryoneFormat" xml:space="preserve">
     <value>"{0}" ora vale per tutte le macchine.</value>
   </data>
-  <data name="ModLists_ScopeFilterAdvice" xml:space="preserve">
-    <value>Dove va</value>
+  <data name="ModLists_FilterNeedsAttention" xml:space="preserve">
+    <value>Da sistemare</value>
   </data>
   <data name="ModLists_PlaceLabel" xml:space="preserve">
     <value>Dove va:</value>
@@ -3167,10 +3167,10 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
 {0}</value>
   </data>
   <data name="ModLists_AdviceFound_one" xml:space="preserve">
-    <value>1 mod di questa lista ha un consiglio headless dalla sua pagina sp-mod - scegli «Dove va» nel filtro ambito per vederlo.</value>
+    <value>1 mod di questa lista ha un consiglio headless dalla sua pagina sp-mod - attiva «Da sistemare» sopra la lista per vederlo.</value>
   </data>
   <data name="ModLists_AdviceFound_other" xml:space="preserve">
-    <value>{0} mod di questa lista hanno consigli headless dalle loro pagine sp-mod - scegli «Dove va» nel filtro ambito per vederli.</value>
+    <value>{0} mod di questa lista hanno consigli headless dalle loro pagine sp-mod - attiva «Da sistemare» sopra la lista per vederli.</value>
   </data>
   <data name="ModLists_StatusThenAdviceFormat" xml:space="preserve">
     <value>{0} {1}</value>
@@ -3202,8 +3202,8 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="ModLists_ScopeTickHeadless" xml:space="preserve">
     <value>Headless</value>
   </data>
-  <data name="ModLists_AdviceFilterToolTip" xml:space="preserve">
-    <value>Mostra solo le voci con un suggerimento Dove va o per il headless.</value>
+  <data name="ModLists_FilterNeedsAttentionToolTip" xml:space="preserve">
+    <value>Mostra solo le voci con un avviso o un suggerimento, o che non sono corrette su questa installazione.</value>
   </data>
   <data name="ModLists_ScopeServerAndClientsFormat" xml:space="preserve">
     <value>"{0}" ora va al server e ai giocatori - un client headless lo salterà.</value>

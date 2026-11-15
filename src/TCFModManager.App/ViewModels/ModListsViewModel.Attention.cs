@@ -45,7 +45,7 @@ public partial class ModListsViewModel
 
         if (row.IsPublished && _unpublishedSince is not null) reasons.Add(Strings.ModLists_AttentionChangedSinceServed);
         if (_behind is not null) reasons.Add(Strings.ModLists_AttentionNewerHere);
-        if (_placement.Values.Any(f => f.Any(x => x.Severity == PlacementSeverity.Warning))) reasons.Add(Strings.ModLists_AttentionWarnings);
+        if (Entries.Any(e => e.AttentionRank < 2)) reasons.Add(Strings.ModLists_AttentionWarnings);
         if (row.IsFollowed && _standingPlan is { } plan && !(plan.IsNoOp && !plan.Manual.Any()))
             reasons.Add(Strings.ModLists_AttentionNotMatching);
 

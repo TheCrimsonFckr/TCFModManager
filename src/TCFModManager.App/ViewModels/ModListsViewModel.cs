@@ -228,6 +228,9 @@ public sealed record ModListEntryRowViewModel(ModListEntry Entry, string Name, s
         : HasStanding && Tone != "Good" ? 2
         : 3;
 
+    // What the Needs attention filter shows: everything the sort puts above the rest.
+    public bool CallsForAttention => AttentionRank < 3;
+
     // OPEN-44 S2: the most severe "Where it goes" finding, its line, and the rest in the tooltip.
     public PlacementFinding? Placement { get; init; }
 
