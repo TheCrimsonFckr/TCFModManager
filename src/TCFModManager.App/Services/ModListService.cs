@@ -277,7 +277,8 @@ public sealed class ModListService
             AppServices.Addons.AllAddons.GroupBy(a => a.Id).ToDictionary(g => g.Key, g => g.First()),
             AppServices.ModCache.AllMods.GroupBy(m => m.Id).ToDictionary(g => g.Key, g => g.First()),
             spt,
-            answer.Missing.Select(d => d.ModId).ToHashSet());
+            answer.Missing.Select(d => d.ModId).ToHashSet(),
+            list.Entries);
 
         if (parents.Count > 0) answer = answer with { Missing = [.. parents, .. answer.Missing] };
 
@@ -319,7 +320,7 @@ public sealed class ModListService
         var result = await ModListApplier.ApplyAsync(
             preview.Plan,
             preview.Install.Candidates,
-            (fetches, token) => FetchAsync(preview.Install, fetches, prompts, mode, token),
+            (fetches, token) => FetchAsync(preview.List, preview.Install, fetches, prompts, mode, token),
             new ModListApplyOptions
             {
                 // Named after the list being applied, not "Before X" - the snapshot is only ever
@@ -411,7 +412,7 @@ public sealed class ModListService
             preview.Plan,
             preview.Install.Candidates,
             (fetches, token) => FetchAsync(
-                preview.Install, fetches, prompts ?? ModListPrompts.Reject, ModListDownloadMode.For(snapshot), token),
+                snapshot, preview.Install, fetches, prompts ?? ModListPrompts.Reject, ModListDownloadMode.For(snapshot), token),
             new ModListApplyOptions
             {
                 SptVersion = preview.Install.SptVersion,
@@ -445,13 +446,14 @@ public sealed class ModListService
     // downloads are already running.
     //
     private async Task<ModListFetchOutcome> FetchAsync(
+        ModList list,
         ModListInstall install,
         IReadOnlyList<ModListAction> fetches,
         ModListPrompts prompts,
         ModListDownloadMode mode,
         CancellationToken ct)
     {
-        var resolution = await ResolveAsync(fetches, install.Candidates, ct);
+        var resolution = await ResolveAsync(list, fetches, install.Candidates, ct);
 
         var accepted = prompts.ApproveVersionChanges(resolution.Changes);
         var acceptedActions = accepted.Select(c => c.Action).ToHashSet();
@@ -572,6 +574,7 @@ public sealed class ModListService
     // list named a specific build, and quietly installing a different one is what desyncs a group.
     //
     private static async Task<ModListResolution> ResolveAsync(
+        ModList list,
         IReadOnlyList<ModListAction> fetches,
         IReadOnlyList<ModListCandidate> installed,
         CancellationToken ct)
@@ -593,6 +596,13 @@ public sealed class ModListService
 
         foreach (var action in fetches.Where(a => a is { IsAddon: false, ModId: not null }))
             parents.Add(action.ModId!.Value);
+
+        // OPEN-44 R10: a parent the list names, at whatever scope, is the operator's placement - an
+        // addon the list scopes to this machine installs here without it (Q7).
+        var placed = list.Entries
+            .Where(e => e is { IsAddon: false, ModId: not null })
+            .Select(e => e.ModId!.Value)
+            .ToHashSet();
 
         //
         // The version each parent will be at once this apply is done - the one the list names when it
@@ -633,7 +643,7 @@ public sealed class ModListService
                     continue;
                 }
 
-                if (addon.ModId is { } parentId && !parents.Contains(parentId))
+                if (addon.ModId is { } parentId && !parents.Contains(parentId) && !placed.Contains(parentId))
                 {
                     var parentName = catalog.GetValueOrDefault(parentId)?.Name
                         ?? Text(Strings.ModList_UnnamedModFormat, parentId);

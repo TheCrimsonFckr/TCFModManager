@@ -77,14 +77,18 @@ public static class ModListDependencies
     // newest for sptVersion; with none for sptVersion it comes back with no version, like any other
     // dependency that can't be added. Whether it is installed is for Offer to decide.
     //
+    // OPEN-44 R10: a parent the list names at any scope is placed, not missing - placed is the whole
+    // list, entries the part of it applying here.
     public static IReadOnlyList<SpModDependency> MissingParents(
         IReadOnlyList<ModListEntry> entries,
         IReadOnlyDictionary<int, Addon> addons,
         IReadOnlyDictionary<int, Mod> catalog,
         string? sptVersion,
-        IReadOnlySet<int> alreadyMissing)
+        IReadOnlySet<int> alreadyMissing,
+        IReadOnlyList<ModListEntry>? placed = null)
     {
-        var onList = entries.Where(e => e is { IsAddon: false, ModId: not null }).Select(e => e.ModId!.Value).ToHashSet();
+        var onList = (placed ?? entries).Concat(entries)
+            .Where(e => e is { IsAddon: false, ModId: not null }).Select(e => e.ModId!.Value).ToHashSet();
         var wanted = new Dictionary<int, (List<string> NeededBy, List<string> Constraints)>();
 
         foreach (var entry in entries.Where(e => e is { IsAddon: true, ModId: not null }))

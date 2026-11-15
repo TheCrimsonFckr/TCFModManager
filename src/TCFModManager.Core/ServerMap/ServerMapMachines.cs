@@ -162,6 +162,10 @@ public sealed record MachineStanding
 
     public required IReadOnlyList<ReportedMod> Extras { get; init; }
 
+    // OPEN-44 R8: mods on the list, scoped off this machine, that it has enabled - what its next
+    // Apply will set aside.
+    public required IReadOnlyList<ModListAction> ScopedOff { get; init; }
+
     // How many entries apply to this machine - the denominator for "N of M".
     public required int Expected { get; init; }
 
@@ -284,6 +288,10 @@ public static class ServerMapMachines
             .Where(a => a.Kind is ModListActionKind.Install or ModListActionKind.Update or ModListActionKind.Enable)
             .ToList();
 
+        var scopedOff = plan.Actions
+            .Where(a => a.Entry is not null && a.Kind is ModListActionKind.Disable or ModListActionKind.SetAsideClientHalf)
+            .ToList();
+
         var match = new ModListMatch(candidates);
         var claimed = new bool[candidates.Count];
 
@@ -300,6 +308,7 @@ public static class ServerMapMachines
             Behind = behind,
             Manual = plan.Manual.ToList(),
             Extras = extras,
+            ScopedOff = scopedOff,
             Expected = published.EntriesApplyingTo(scope).Count(),
         };
     }
