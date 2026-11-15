@@ -290,6 +290,16 @@
                                             Visibility="{Binding HasExtras, Converter={StaticResource BoolToVisibility}}"
                                             Text="{Binding ExtrasText}" />
 
+                                        <!-- OPEN-44 R8: on the list, kept off this machine, still enabled here. -->
+                                        <TextBlock
+                                            Margin="22,4,0,0"
+                                            TextWrapping="Wrap"
+                                            MaxWidth="640"
+                                            HorizontalAlignment="Left"
+                                            Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                                            Visibility="{Binding HasScopedOff, Converter={StaticResource BoolToVisibility}}"
+                                            Text="{Binding ScopedOffText}" />
+
                                         <ui:Button
                                             Margin="0,8,0,0"
                                             HorizontalAlignment="Left"

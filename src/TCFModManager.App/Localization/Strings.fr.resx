@@ -4899,6 +4899,12 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="ServerMap_Extras_other" xml:space="preserve">
     <value>{0} mods absents de la liste : {1}</value>
   </data>
+  <data name="ServerMap_ScopedOff_one" xml:space="preserve">
+    <value>A encore {0} mod actif que la liste écarte de cette machine : {1}</value>
+  </data>
+  <data name="ServerMap_ScopedOff_other" xml:space="preserve">
+    <value>A encore {0} mods actifs que la liste écarte de cette machine : {1}</value>
+  </data>
   <data name="ServerMap_InstalledCount_one" xml:space="preserve">
     <value>{0} mod installé</value>
   </data>

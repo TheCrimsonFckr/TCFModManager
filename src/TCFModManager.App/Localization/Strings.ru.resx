@@ -5142,6 +5142,15 @@
   <data name="ServerMap_Extras_many" xml:space="preserve">
     <value>{0} модов не из списка: {1}</value>
   </data>
+  <data name="ServerMap_ScopedOff_one" xml:space="preserve">
+    <value>Всё ещё включён {0} мод, который список держит вне этой машины: {1}</value>
+  </data>
+  <data name="ServerMap_ScopedOff_few" xml:space="preserve">
+    <value>Всё ещё включены {0} мода, которые список держит вне этой машины: {1}</value>
+  </data>
+  <data name="ServerMap_ScopedOff_many" xml:space="preserve">
+    <value>Всё ещё включены {0} модов, которые список держит вне этой машины: {1}</value>
+  </data>
   <data name="ServerMap_InstalledCount_one" xml:space="preserve">
     <value>Установлен {0} мод</value>
   </data>

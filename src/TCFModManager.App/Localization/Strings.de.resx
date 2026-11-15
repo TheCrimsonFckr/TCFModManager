@@ -4899,6 +4899,12 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
   <data name="ServerMap_Extras_other" xml:space="preserve">
     <value>{0} Mods nicht auf der Liste: {1}</value>
   </data>
+  <data name="ServerMap_ScopedOff_one" xml:space="preserve">
+    <value>Hat noch 1 Mod an, den die Liste von diesem Rechner fernhält: {1}</value>
+  </data>
+  <data name="ServerMap_ScopedOff_other" xml:space="preserve">
+    <value>Hat noch {0} Mods an, die die Liste von diesem Rechner fernhält: {1}</value>
+  </data>
   <data name="ServerMap_InstalledCount_one" xml:space="preserve">
     <value>1 Mod installiert</value>
   </data>

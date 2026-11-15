@@ -143,6 +143,13 @@ public sealed class MapMachineViewModel : LocalizedViewModel
 
     public bool HasExtras => _standing is { Extras.Count: > 0 };
 
+    // OPEN-44 R8: mods the list names and keeps off this machine that it still has enabled.
+    public bool HasScopedOff => _standing is { ScopedOff.Count: > 0 };
+
+    public string ScopedOffText => _standing is { ScopedOff.Count: > 0 } s
+        ? Strings.ServerMap_ScopedOff(s.ScopedOff.Count, s.ScopedOff.Count, Names(s.ScopedOff))
+        : "";
+
     public string ExtrasText => _standing is { Extras.Count: > 0 } s
         ? Strings.ServerMap_Extras(s.Extras.Count, s.Extras.Count,
             string.Join(Strings.Common_ListSeparator, s.Extras.Select(m => m.Name).Order(StringComparer.OrdinalIgnoreCase)))

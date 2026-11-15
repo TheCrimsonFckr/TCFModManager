@@ -4899,6 +4899,12 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="ServerMap_Extras_other" xml:space="preserve">
     <value>{0} mod non in lista: {1}</value>
   </data>
+  <data name="ServerMap_ScopedOff_one" xml:space="preserve">
+    <value>Ha ancora un mod attivo che la lista tiene lontano da questa macchina: {1}</value>
+  </data>
+  <data name="ServerMap_ScopedOff_other" xml:space="preserve">
+    <value>Ha ancora {0} mod attive che la lista tiene lontane da questa macchina: {1}</value>
+  </data>
   <data name="ServerMap_InstalledCount_one" xml:space="preserve">
     <value>Un mod installato</value>
   </data>

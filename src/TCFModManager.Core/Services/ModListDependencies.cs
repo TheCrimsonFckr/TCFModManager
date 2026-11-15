@@ -32,6 +32,36 @@ public sealed record ModListDependencyOffer(SpModDependency Dependency, ModListD
 public static class ModListDependencies
 {
     //
+    // OPEN-44 Q4: drops the dependencies the host already meets with a server-only mod, and anything
+    // missing only because one of those needs it.
+    //
+    public static IReadOnlyList<SpModDependency> WithoutMetOnHost(
+        IReadOnlyList<SpModDependency> missing, IReadOnlySet<int> serverOnlyOnHost)
+    {
+        if (serverOnlyOnHost.Count == 0) return missing;
+
+        var removed = new HashSet<string>(
+            missing.Where(d => serverOnlyOnHost.Contains(d.ModId)).Select(d => d.Name), StringComparer.OrdinalIgnoreCase);
+        var kept = missing.Where(d => !serverOnlyOnHost.Contains(d.ModId)).ToList();
+
+        for (var changed = true; changed;)
+        {
+            changed = false;
+
+            foreach (var dependency in kept.ToList())
+            {
+                if (dependency.IsParent || dependency.NeededBy.Count == 0 || !dependency.NeededBy.All(removed.Contains)) continue;
+
+                kept.Remove(dependency);
+                removed.Add(dependency.Name);
+                changed = true;
+            }
+        }
+
+        return kept;
+    }
+
+    //
     // Offers: a dependency not installed (Install), installed but disabled (Enable), or installed and
     // enabled but about to be set aside by the list's Exclusive sweep (KeepEnabled). One installed
     // and left alone needs nothing - at whatever version (Q3: the Dependencies page judges that).
