@@ -139,6 +139,8 @@ internal static class Strings
     internal static string ModLists_MoreActionsToolTip => LocalizationService.Get("ModLists_MoreActionsToolTip");
     internal static string ModLists_CancelRenameToolTip => LocalizationService.Get("ModLists_CancelRenameToolTip");
     internal static string ModLists_RenameToolTip => LocalizationService.Get("ModLists_RenameToolTip");
+    internal static string ModLists_CheckAgain => LocalizationService.Get("ModLists_CheckAgain");
+    internal static string ModLists_CheckAgainToolTip => LocalizationService.Get("ModLists_CheckAgainToolTip");
     internal static string ModLists_Preview => LocalizationService.Get("ModLists_Preview");
     internal static string ModLists_PreviewToolTip => LocalizationService.Get("ModLists_PreviewToolTip");
     internal static string ModLists_Apply => LocalizationService.Get("ModLists_Apply");

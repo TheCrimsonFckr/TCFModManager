@@ -931,6 +931,14 @@
                         Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                         Visibility="{Binding StepHint, Converter={StaticResource NullToCollapsed}}"
                         Text="{Binding StepHint}" />
+
+                    <TextBlock
+                        Margin="2,4,0,0"
+                        FontSize="12"
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource SystemFillColorSuccessBrush}"
+                        Visibility="{Binding UpToDate, Converter={StaticResource NullToCollapsed}}"
+                        Text="{Binding UpToDate}" />
                 </StackPanel>
 
                 <StackPanel
@@ -952,8 +960,8 @@
                         HorizontalContentAlignment="Center"
                         Appearance="Primary"
                         Icon="{ui:SymbolIcon Eye24}"
-                        Content="{loc:Str ModLists_Preview}"
-                        ToolTip="{loc:Str ModLists_PreviewToolTip}"
+                        Content="{Binding PreviewLabel}"
+                        ToolTip="{Binding PreviewToolTip}"
                         Visibility="{Binding StepIsApply, Converter={StaticResource FalseToVisible}}"
                         Command="{Binding PreviewCommand}" />
 

@@ -527,6 +527,12 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="ModLists_RenameToolTip" xml:space="preserve">
     <value>Rename this list</value>
   </data>
+  <data name="ModLists_CheckAgain" xml:space="preserve">
+    <value>Check again</value>
+  </data>
+  <data name="ModLists_CheckAgainToolTip" xml:space="preserve">
+    <value>Check this install against the list again.</value>
+  </data>
   <data name="ModLists_Preview" xml:space="preserve">
     <value>Preview</value>
   </data>

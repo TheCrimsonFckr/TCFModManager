@@ -33,6 +33,9 @@ public sealed partial class ModListRowViewModel(
     //
     public bool IsActiveServer { get; } = isActiveServer;
 
+    // The lists this install follows open straight into their plan (OPEN-44 P7).
+    public bool IsFollowed => IsActive || IsActiveServer;
+
     //
     // Came from a server, whether or not it is being followed.
     //
@@ -416,6 +419,10 @@ public partial class ModListsViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(ShowContents))]
     private string? _planSummary;
 
+    // OPEN-44 P7: a followed list that already matches this install says so here instead of a plan.
+    [ObservableProperty]
+    private string? _upToDate;
+
     // How many adds and removes are waiting to be saved. Zero means what is on screen is what is
     // in the file.
     [ObservableProperty]
@@ -461,6 +468,12 @@ public partial class ModListsViewModel : LocalizedViewModel
     public bool SelectionIsFromSpMod => Selected?.IsFromSpMod == true;
 
     public bool SelectionIsActive => Selected?.IsActive == true;
+
+    public bool SelectionIsFollowed => Selected?.IsFollowed == true;
+
+    public string PreviewLabel => SelectionIsFollowed ? Strings.ModLists_CheckAgain : Strings.ModLists_Preview;
+
+    public string PreviewToolTip => SelectionIsFollowed ? Strings.ModLists_CheckAgainToolTip : Strings.ModLists_PreviewToolTip;
 
     // The same one-line summary the left-hand row shows, repeated under the name so the detail
     // pane says what it is without the eye having to go back to the list.
@@ -519,6 +532,12 @@ public partial class ModListsViewModel : LocalizedViewModel
         ShowEntries();
         ClearPlan();
 
+        OnPropertyChanged(nameof(SelectionIsFollowed));
+        OnPropertyChanged(nameof(PreviewLabel));
+        OnPropertyChanged(nameof(PreviewToolTip));
+
+        if (value is { IsFollowed: true }) _ = PlanFollowedAsync(value.Id);
+
         // Switching lists drops whatever was not saved. Said out loud rather than silently - nothing
         // here is destructive, but work disappearing without a word is its own kind of bug.
         if (dropped > 0)
@@ -548,11 +567,16 @@ public partial class ModListsViewModel : LocalizedViewModel
         ShowEntries();
 
         if (_preview is { } preview) ShowPlan(preview);
+        if (UpToDate is not null) UpToDate = Strings.ModLists_PlanNoOp;
+
+        OnPropertyChanged(nameof(PreviewLabel));
+        OnPropertyChanged(nameof(PreviewToolTip));
     }
 
     private void ClearPlan()
     {
         _preview = null;
+        UpToDate = null;
         PlanRows.Clear();
         DependencyRows.Clear();
         _dependencyOffers = null;

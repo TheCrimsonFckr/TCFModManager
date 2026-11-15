@@ -2864,6 +2864,12 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   <data name="ModLists_PlanNoOp" xml:space="preserve">
     <value>Cette installation correspond déjà à la liste - rien à faire.</value>
   </data>
+  <data name="ModLists_CheckAgain" xml:space="preserve">
+    <value>Vérifier à nouveau</value>
+  </data>
+  <data name="ModLists_CheckAgainToolTip" xml:space="preserve">
+    <value>Comparer à nouveau cette installation à la liste.</value>
+  </data>
   <data name="ModLists_Preview" xml:space="preserve">
     <value>Aperçu</value>
   </data>

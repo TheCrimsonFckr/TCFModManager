@@ -143,7 +143,23 @@ public partial class ModListsViewModel
         await PreviewCommand.ExecuteAsync(null);
     }
 
+    //
+    // OPEN-44 P7: a list this install follows is planned the moment it is shown. Yielded first so the
+    // selection settles, and dropped if another list was picked in the meantime.
+    //
+    private async Task PlanFollowedAsync(Guid listId)
+    {
+        await Dispatcher.Yield(DispatcherPriority.Background);
+
+        if (Selected?.Id != listId || !PreviewCommand.CanExecute(null)) return;
+
+        await PreviewCommand.ExecuteAsync(null);
+    }
+
+    //
     // Works out what applying the selected list would do. Nothing moves and nothing downloads.
+    // A followed list that already matches stays on its contents with one line saying so (P7).
+    //
     [RelayCommand(CanExecute = nameof(CanUseStoredList))]
     private async Task PreviewAsync()
     {
@@ -153,9 +169,18 @@ public partial class ModListsViewModel
         {
             var preview = await _service.PreviewAsync(row.List, withDependencies: true);
 
+            if (Selected?.Id != row.Id) return;
+
             if (preview is null)
             {
                 StatusMessage = AppMessages.NoSptInstallFolder;
+                return;
+            }
+
+            if (row.IsFollowed && preview.Plan.IsNoOp && !preview.Plan.Manual.Any())
+            {
+                ClearPlan();
+                UpToDate = Strings.ModLists_PlanNoOp;
                 return;
             }
 
