@@ -136,8 +136,8 @@ public static class ModListDependencies
     // The entries to ask sp-mod about: everything on the list that applies to this machine and can be
     // asked about (a mod id and a version).
     //
-    public static IReadOnlyList<ModListEntry> Askable(ModList list, ModListEntryScope machine) =>
-        list.EntriesApplyingTo(machine).Where(e => e.ModId is not null && !string.IsNullOrWhiteSpace(e.Version)).ToList();
+    public static IReadOnlyList<ModListEntry> Askable(ModList list, ModListEntryScope machine, IReadOnlySet<int>? alsoTakes = null) =>
+        list.EntriesApplyingTo(machine, alsoTakes).Where(e => e.ModId is not null && !string.IsNullOrWhiteSpace(e.Version)).ToList();
 
     //
     // What to store when the user asks for the ticked dependencies to be added to the list (Q1): the

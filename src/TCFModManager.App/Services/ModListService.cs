@@ -6,6 +6,7 @@ using System.Windows;
 using TCFModManager.App.Localization;
 using TCFModManager.App.ViewModels;
 using TCFModManager.Core.Models;
+using TCFModManager.Core.ServerMap;
 using TCFModManager.Core.Services;
 using TCFModManager.Core.SpModApi;
 
@@ -194,8 +195,28 @@ public sealed class ModListService
         AppServices.ModLists.Add(ModListCapture.Build(
             name, [], DateTimeOffset.UtcNow, sptVersion: AppServices.SptEnvironment.InstalledVersion));
 
+    // OPEN-44 Q13: hosting rides on the scope as the Server flag, as the Map's ScopeFor does.
     public static ModListEntryScope MachineScope =>
-        InstallRole.ScopeFor(new SettingsService().Load().Roles);
+        InstallRole.ScopeFor(new SettingsService().Load().Roles)
+        | (ServerMapReporting.HostsServerMap(AppServices.SptEnvironment.InstallPath) ? ModListEntryScope.Server : 0);
+
+    // OPEN-44 Q13 (b): on a headless that does not host, the mods a served or narrowed list leaves
+    // out whose author's page says the headless needs them - from the advice cache, never fetched here.
+    private static IReadOnlySet<int>? AlsoTakes(ModList list, ModListEntryScope machine)
+    {
+        if (!InstallRole.IsDedicatedHeadless(machine) || machine.HasFlag(ModListEntryScope.Server)) return null;
+
+        var taken = new HashSet<int>();
+
+        foreach (var entry in list.Entries.Where(e => e is { IsAddon: false, ModId: not null }))
+        {
+            if (ModList.ScopeApplies(entry.EffectiveScope, machine)) continue;
+            if (AppServices.HeadlessAdvice.Known(HeadlessSubject.ForMod(entry.ModId!.Value))?.Verdict == HeadlessVerdict.Needs)
+                taken.Add(entry.ModId!.Value);
+        }
+
+        return taken.Count == 0 ? null : taken;
+    }
 
     //
     // Works out what applying this list would do. Nothing moves and nothing downloads.
@@ -232,9 +253,11 @@ public sealed class ModListService
         //
         var serverList = list.Origin == ModListOrigin.Server ? null : AppServices.ModLists.GetActiveServer();
 
+        var machine = MachineScope;
+
         return new ModListPreview(
             list,
-            ModListPlanner.Build(list, install.Candidates, AppServices.ModLists.GetPins(), serverList, MachineScope, check?.Picks),
+            ModListPlanner.Build(list, install.Candidates, AppServices.ModLists.GetPins(), serverList, machine, check?.Picks, AlsoTakes(list, machine)),
             install)
         {
             Dependencies = check,
@@ -250,9 +273,10 @@ public sealed class ModListService
     {
         if (install.SptVersion is not { Length: > 0 } spt) return ModListDependencyCheck.Failed(Strings.ModLists_DepsUnreachable);
 
-        var entries = ModListDependencies.Askable(list, MachineScope);
+        var machine = MachineScope;
+        var entries = ModListDependencies.Askable(list, machine, AlsoTakes(list, machine));
 
-        var applyingHere = list.EntriesApplyingTo(MachineScope)
+        var applyingHere = list.EntriesApplyingTo(machine, AlsoTakes(list, machine))
             .Where(e => e is { IsAddon: false, ModId: not null })
             .Select(e => e.ModId!.Value)
             .ToHashSet();
@@ -267,7 +291,10 @@ public sealed class ModListService
             answer = entries.Count == 0
                 ? new SpModDependencies(spt, [], [])
                 : await SpModListResolver.MissingDependenciesAsync(
-                    entries, new Dictionary<int, int>(), spt, new SpModListApi(AppServices.SpModApi),
+                    entries,
+                    AppServices.Addons.AllAddons.Where(a => a.ModId is not null).GroupBy(a => a.Id).ToDictionary(g => g.Key, g => g.First().ModId!.Value),
+                    spt,
+                    new SpModListApi(AppServices.SpModApi),
                     placedElsewhere: placedElsewhere);
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or SpModApiException)
@@ -283,7 +310,7 @@ public sealed class ModListService
         }
 
         var parents = ModListDependencies.MissingParents(
-            [.. list.EntriesApplyingTo(MachineScope)],
+            [.. list.EntriesApplyingTo(machine, AlsoTakes(list, machine))],
             AppServices.Addons.AllAddons.GroupBy(a => a.Id).ToDictionary(g => g.Key, g => g.First()),
             AppServices.ModCache.AllMods.GroupBy(m => m.Id).ToDictionary(g => g.Key, g => g.First()),
             spt,

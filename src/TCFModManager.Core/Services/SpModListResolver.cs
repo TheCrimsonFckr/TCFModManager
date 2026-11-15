@@ -425,8 +425,10 @@ public static class SpModListResolver
     // parents (addon id to parent mod id) is only used to mark which missing mods are an addon's
     // parent, so the window can show those first (R4).
     //
-    // placedElsewhere (OPEN-44 R10): mods the list names at a scope that leaves this machine out.
-    // Neither missing here nor walked into - what they need, they need where they go.
+    // placedElsewhere (OPEN-44 R10): mods the list names at a scope that leaves this machine out. An
+    // asked addon's parent among them is neither missing here nor walked into (Q7). Any other
+    // dependency among them is still reported, so a headless that does not host can be offered a
+    // Server + Client mod something it runs needs (Q13).
     public static async Task<SpModDependencies> MissingDependenciesAsync(
         IReadOnlyList<ModListEntry> entries,
         IReadOnlyDictionary<int, int> parents,
@@ -437,7 +439,9 @@ public static class SpModListResolver
         IReadOnlySet<int>? placedElsewhere = null)
     {
         var onList = new HashSet<int>(entries.Where(e => !e.IsAddon && e.ModId is not null).Select(e => e.ModId!.Value));
-        placedElsewhere ??= new HashSet<int>();
+        var skip = new HashSet<int>(entries
+            .Where(e => e.IsAddon && e.ModId is { } id && parents.TryGetValue(id, out var parent) && (placedElsewhere?.Contains(parent) ?? false))
+            .Select(e => parents[e.ModId!.Value]));
         var parentIds = new HashSet<int>(entries
             .Where(e => e.IsAddon && e.ModId is { } id && parents.ContainsKey(id))
             .Select(e => parents[e.ModId!.Value]));
@@ -538,7 +542,7 @@ public static class SpModListResolver
         {
             foreach (var node in nodes)
             {
-                if (placedElsewhere.Contains(node.Id)) continue;
+                if (skip.Contains(node.Id)) continue;
                 if (!path.Add(node.Id)) continue;
 
                 if (!onList.Contains(node.Id))

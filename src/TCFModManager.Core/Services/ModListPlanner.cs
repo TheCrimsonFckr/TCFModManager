@@ -174,11 +174,12 @@ public static class ModListPlanner
         IReadOnlySet<string>? neverAutoDisable = null,
         ModList? alsoRequiredBy = null,
         ModListEntryScope machine = ModListEntryScope.Client,
-        IReadOnlyList<ModListDependencyPick>? dependencies = null)
+        IReadOnlyList<ModListDependencyPick>? dependencies = null,
+        IReadOnlySet<int>? alsoTakes = null)
     {
         var serverProtected = Protecting(alsoRequiredBy, machine);
 
-        var applying = list.EntriesApplyingTo(machine).ToList();
+        var applying = list.EntriesApplyingTo(machine, alsoTakes).ToList();
         var dedicated = InstallRole.IsDedicatedHeadless(machine);
 
         var candidates = installed.ToList();

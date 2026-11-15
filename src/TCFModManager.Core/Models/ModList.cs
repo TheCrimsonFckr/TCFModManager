@@ -244,32 +244,34 @@ public sealed class ModList
     // A list of your own applies whole, except on a dedicated headless (OPEN-46), where it is
     // narrowed like a served one. A list a SERVER handed you is always narrowed to this machine.
     //
-    // Pass what InstallRoles.ScopeFor gives for this install: Client for an ordinary player,
-    // Headless for a headless box.
+    // Pass what InstallRoles.ScopeFor gives for this install - Client for an ordinary player,
+    // Headless for a headless box - plus Server when the install hosts the Server Map (OPEN-44 Q13).
     //
-    public IEnumerable<ModListEntry> EntriesApplyingTo(ModListEntryScope machine) =>
+    // alsoTakes (OPEN-44 Q13): mod ids a headless that does not host takes although their scope
+    // leaves it out - a dependency of something it runs, or a page that says the headless needs it.
+    //
+    public IEnumerable<ModListEntry> EntriesApplyingTo(ModListEntryScope machine, IReadOnlySet<int>? alsoTakes = null) =>
         Origin == ModListOrigin.Server || InstallRole.IsDedicatedHeadless(machine)
-            ? Entries.Where(e => ScopeApplies(e.EffectiveScope, machine))
+            ? Entries.Where(e => ScopeApplies(e.EffectiveScope, machine)
+                || (alsoTakes is not null && e is { IsAddon: false, ModId: { } id } && alsoTakes.Contains(id)))
             : Entries;
 
     //
-    // Whether an entry with this scope is a machine of this kind's to install.
-    //
-    // An overlap, plus two cases that reach a headless through the server flag: an entry scoped to
-    // the server alone reaches any headless box, and any entry naming the server reaches a dedicated
-    // headless (OPEN-46), which installs it and sets its client half aside - see SetsClientHalfAside.
+    // Whether an entry with this scope is a machine of this kind's to install: an overlap. A headless
+    // that hosts carries the Server flag, so an entry naming the server reaches it (OPEN-46) and its
+    // client half is set aside - see SetsClientHalfAside. One that does not host takes only what
+    // names the headless (OPEN-44 Q13).
     //
     public static bool ScopeApplies(ModListEntryScope entry, ModListEntryScope machine) =>
-        (entry & machine) != 0
-        || (entry == ModListEntryScope.Server && machine.HasFlag(ModListEntryScope.Headless))
-        || (entry.HasFlag(ModListEntryScope.Server) && InstallRole.IsDedicatedHeadless(machine));
+        (entry & machine) != 0;
 
     //
-    // An entry a dedicated headless takes for its server half only (OPEN-46): it names the server
-    // and not the headless, so it is installed whole and its client half is set aside.
+    // An entry a hosting dedicated headless takes for its server half only (OPEN-46): it names the
+    // server and not the headless, so it is installed whole and its client half is set aside.
     //
     public static bool SetsClientHalfAside(ModListEntryScope entry, ModListEntryScope machine) =>
         InstallRole.IsDedicatedHeadless(machine)
+        && machine.HasFlag(ModListEntryScope.Server)
         && entry.HasFlag(ModListEntryScope.Server)
         && !entry.HasFlag(ModListEntryScope.Headless);
 }

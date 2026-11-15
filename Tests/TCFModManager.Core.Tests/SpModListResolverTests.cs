@@ -384,10 +384,18 @@ public class SpModListResolverTests
         api.AddonTrees["163:1.0.0"] = [Node(3136, "0.0.2", Node(3135, "0.0.2"), Node(701, "4.1.0"))];
 
         var result = await SpModListResolver.MissingDependenciesAsync(
-            [Addon(163, "1.0.0")], NoParents, "4.1.6", api, placedElsewhere: new HashSet<int> { 3136 });
+            [Addon(163, "1.0.0")], new Dictionary<int, int> { [163] = 3136 }, "4.1.6", api, placedElsewhere: new HashSet<int> { 3136 });
 
         Assert.True(result.Succeeded);
         Assert.Empty(result.Missing);
+
+        // A plain dependency the list places elsewhere is still reported (OPEN-44 Q13 a): a remote
+        // headless can be offered a Server + Client mod that something it runs needs.
+        api.ModTrees["1:1.0.0"] = [Node(77, "2.0.0")];
+        var plain = await SpModListResolver.MissingDependenciesAsync(
+            [Mod(1, "1.0.0", "Bots")], NoParents, "4.1.6", api, placedElsewhere: new HashSet<int> { 77 });
+
+        Assert.Equal([77], plain.Missing.Select(d => d.ModId));
     }
 
     [Fact]

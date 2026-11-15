@@ -157,7 +157,7 @@ public class ServerMapStandingTests
     public void ADedicatedHeadlessListsTheScopedOffModsItStillHasEnabled()
     {
         var standing = ServerMapMachines.StandingOf(Published(ModListOrigin.Server),
-            Machine(headless: true, mods: [Has("SAIN", 1, "3.0.0"), Has("HeadlessTweaks", 4, "1.0.0"), Has("fika-server", 3, "1.0.0"), Has("UIFixes", 2, "2.0.0")]))!;
+            Machine(headless: true, mods: [Has("SAIN", 1, "3.0.0"), Has("HeadlessTweaks", 4, "1.0.0"), Has("UIFixes", 2, "2.0.0")]))!;
 
         var off = Assert.Single(standing.ScopedOff);
         Assert.Equal("UIFixes", off.Name);

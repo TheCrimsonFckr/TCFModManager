@@ -16,7 +16,8 @@ public class ModListSharedHeadlessTests : IDisposable
     private const ModListEntryScope ServerAndClient = ModListEntryScope.Server | ModListEntryScope.Client;
 
     private static readonly ModListEntryScope Player = InstallRole.ScopeFor(InstallRoles.Player);
-    private static readonly ModListEntryScope Dedicated = InstallRole.ScopeFor(InstallRoles.Headless);
+    // The shared-folder headless hosts, so it carries the Server flag (OPEN-44 Q13).
+    private static readonly ModListEntryScope Dedicated = InstallRole.ScopeFor(InstallRoles.Headless) | ModListEntryScope.Server;
     private static readonly ModListEntryScope PlaysAndHosts = InstallRole.ScopeFor(InstallRoles.Player | InstallRoles.Headless);
 
     private readonly string _install = Path.Combine(Path.GetTempPath(), "tcfmm-shared-headless-" + Guid.NewGuid().ToString("N"));

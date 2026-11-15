@@ -61,6 +61,10 @@ public class ModListHeadlessTests
 
     private static readonly ModListEntryScope Dedicated = InstallRole.ScopeFor(InstallRoles.Headless);
 
+    // A dedicated headless running from the server's own folder (CLOSED-46): the app adds Server
+    // when the install hosts the Server Map (OPEN-44 Q13).
+    private static readonly ModListEntryScope HostingHeadless = Dedicated | ModListEntryScope.Server;
+
     private static readonly ModListEntryScope PlaysAndHosts =
         InstallRole.ScopeFor(InstallRoles.Player | InstallRoles.Headless);
 
@@ -86,12 +90,41 @@ public class ModListHeadlessTests
     // both - would mean pulling an archive apart after it was staged, which is where unforeseen
     // problems live.
     //
+    //
+    // OPEN-44 Q13 narrowed it: only a headless that HOSTS - the one with a server beside it - takes
+    // them. A remote headless has no server running, so a server-only entry is dead weight there.
+    //
     [Fact]
-    public void AHeadlessBoxTakesTheServerModsToo()
+    public void AHeadlessBoxTakesTheServerModsOnlyWhenItHosts()
     {
         Assert.Contains(
+            ModListPlanner.Build(Served(), [], machine: HostingHeadless).Actions,
+            a => a.Name == "fika-server");
+
+        Assert.DoesNotContain(
             ModListPlanner.Build(Served(), [], machine: Dedicated).Actions,
             a => a.Name == "fika-server");
+    }
+
+    // OPEN-44 Q13 (a)/(b): a remote headless takes a mod its scope leaves out when told to - a
+    // dependency of something it runs, or a page that says the headless needs it - whole, nothing
+    // set aside.
+    [Fact]
+    public void ARemoteHeadlessTakesAModItWasToldItNeedsWhole()
+    {
+        var served = List(
+            ModListOrigin.Server,
+            Entry("SAIN", ClientsAndHeadless),
+            new ModListEntry { Name = "Shared Lib", ModId = 77, Scope = ModListEntryScope.Server | ModListEntryScope.Client, Folders = ["sharedlib"] });
+
+        Assert.DoesNotContain(ModListPlanner.Build(served, [], machine: Dedicated).Actions, a => a.Name == "Shared Lib");
+
+        var taken = Assert.Single(
+            ModListPlanner.Build(served, [], machine: Dedicated, alsoTakes: new HashSet<int> { 77 }).Actions,
+            a => a.Name == "Shared Lib");
+
+        Assert.Equal(ModListActionKind.Install, taken.Kind);
+        Assert.False(taken.SetsClientHalfAside);
     }
 
     // Nothing about the headless changes what a player does. This is the regression guard on the
@@ -213,8 +246,11 @@ public class ModListHeadlessTests
         var player = Assert.Single(ModListPlanner.Build(served, [], machine: Player).Actions);
         Assert.False(player.SetsClientHalfAside);
 
-        var headless = Assert.Single(ModListPlanner.Build(served, [], machine: Dedicated).Actions);
+        var headless = Assert.Single(ModListPlanner.Build(served, [], machine: HostingHeadless).Actions);
         Assert.True(headless.SetsClientHalfAside);
+
+        // A headless that does not host has no server half to take it for (OPEN-44 Q13).
+        Assert.Empty(ModListPlanner.Build(served, [], machine: Dedicated).Actions);
 
         // Somebody plays on this one, so it is a player - claiming to host as well changes nothing.
         Assert.Contains(ModListPlanner.Build(served, [], machine: PlaysAndHosts).Actions,
@@ -229,12 +265,16 @@ public class ModListHeadlessTests
     [Fact]
     public void TheServerFlagReachesAHeadlessAsOPEN46Ruled()
     {
-        Assert.True(ModList.ScopeApplies(ModListEntryScope.Server, Dedicated));
-        Assert.True(ModList.ScopeApplies(ModListEntryScope.Server | ModListEntryScope.Client, Dedicated));
-        Assert.False(ModList.ScopeApplies(ModListEntryScope.Client, Dedicated));
+        Assert.True(ModList.ScopeApplies(ModListEntryScope.Server, HostingHeadless));
+        Assert.True(ModList.ScopeApplies(ModListEntryScope.Server | ModListEntryScope.Client, HostingHeadless));
+        Assert.False(ModList.ScopeApplies(ModListEntryScope.Client, HostingHeadless));
 
-        Assert.True(ModList.SetsClientHalfAside(ModListEntryScope.Server | ModListEntryScope.Client, Dedicated));
-        Assert.False(ModList.SetsClientHalfAside(ModListEntryScope.Everyone, Dedicated));
+        Assert.False(ModList.ScopeApplies(ModListEntryScope.Server, Dedicated));
+        Assert.False(ModList.ScopeApplies(ModListEntryScope.Server | ModListEntryScope.Client, Dedicated));
+
+        Assert.True(ModList.SetsClientHalfAside(ModListEntryScope.Server | ModListEntryScope.Client, HostingHeadless));
+        Assert.False(ModList.SetsClientHalfAside(ModListEntryScope.Everyone, HostingHeadless));
+        Assert.False(ModList.SetsClientHalfAside(ModListEntryScope.Server | ModListEntryScope.Client, Dedicated));
         Assert.False(ModList.SetsClientHalfAside(ModListEntryScope.Server | ModListEntryScope.Client, PlaysAndHosts));
         Assert.False(ModList.SetsClientHalfAside(ModListEntryScope.Server | ModListEntryScope.Client, Player));
 
