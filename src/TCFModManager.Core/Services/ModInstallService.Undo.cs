@@ -54,7 +54,8 @@ public sealed partial class ModInstallService
         {
             foreach (var entry in log.Entries.Where(e => e.Outcome == RemovalOutcome.OriginalRestored))
             {
-                var original = removedRecord.Overwrote.FirstOrDefault(o => string.Equals(o.Path, entry.Path, StringComparison.OrdinalIgnoreCase));
+                var recordPath = DisabledModPaths.ToEnabledRelativePath(entry.Path);
+                var original = removedRecord.Overwrote.FirstOrDefault(o => string.Equals(o.Path, recordPath, StringComparison.OrdinalIgnoreCase));
                 if (original is null) continue;
 
                 if (InstallPathGuard.CheckRecordedPath(installPath, entry.Path, out var target) is null
@@ -75,6 +76,12 @@ public sealed partial class ModInstallService
             var target = Path.Combine(installPath, entry.Path.Replace('/', Path.DirectorySeparatorChar));
 
             if (!File.Exists(held) && !Directory.Exists(held)) { blocked.Add(entry.Path); continue; }
+
+            if (InstallPathGuard.ModFolderOf(entry.Path) is { } modFolder && DisabledModPaths.CounterpartOnDisk(installPath, modFolder))
+            {
+                blocked.Add(entry.Path);
+                continue;
+            }
 
             // A held file may go back into a new-file-only area (R17): it only left it because its
             // fingerprint proved it this app's, and it only goes back to a free path.
@@ -208,21 +215,22 @@ public sealed partial class ModInstallService
     // reported on their own, so a folder left only for those isn't counted here. Read-only; links are
     // not followed.
     //
-    private static List<FolderLeft> FoldersLeftBehind(string installPath, InstalledModRecord record)
+    private static List<FolderLeft> FoldersLeftBehind(string installPath, InstalledModRecord record, Func<string, string> onDiskOf)
     {
         var recorded = record.Files.ToHashSet(StringComparer.OrdinalIgnoreCase);
         var left = new List<FolderLeft>();
         var walk = new EnumerationOptions { RecurseSubdirectories = true, AttributesToSkip = FileAttributes.ReparsePoint };
 
-        foreach (var folder in record.Files.Select(InstallPathGuard.ModFolderOf).OfType<string>().Distinct(StringComparer.OrdinalIgnoreCase))
+        foreach (var recordFolder in record.Files.Select(InstallPathGuard.ModFolderOf).OfType<string>().Distinct(StringComparer.OrdinalIgnoreCase))
         {
+            var folder = onDiskOf(recordFolder);
             if (InstallPathGuard.CheckRecordedPath(installPath, folder, out var full) is not null || !Directory.Exists(full))
                 continue;
 
             try
             {
                 var foreign = Directory.EnumerateFiles(full, "*", walk)
-                    .Count(f => !recorded.Contains(Path.GetRelativePath(installPath, f).Replace('\\', '/')));
+                    .Count(f => !recorded.Contains(DisabledModPaths.ToEnabledRelativePath(Path.GetRelativePath(installPath, f))));
 
                 if (foreign > 0) left.Add(new FolderLeft(folder, foreign));
             }

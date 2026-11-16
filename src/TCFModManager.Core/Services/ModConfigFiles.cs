@@ -211,7 +211,7 @@ public static class ModConfigFiles
             {
                 if (ModConfigPaths.Normalise(relative) is not { } clean) continue;
 
-                if (InstallPathGuard.CheckRecordedPath(installPath, $"{prefix}/{clean}", out var folder) is { } refusal)
+                if (InstallPathGuard.CheckRecordedPath(installPath, DisabledModPaths.WhereNow(installPath, $"{prefix}/{clean}"), out var folder) is { } refusal)
                 {
                     AppLog.Warn("Configs", $"not reading {prefix}/{clean} ({refusal})");
                     continue;

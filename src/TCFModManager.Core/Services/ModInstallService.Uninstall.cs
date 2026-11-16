@@ -19,6 +19,7 @@ public sealed partial class ModInstallService
     {
         EnsureInstallNotInUse(ModInstallAction.Remove, installPath);
         EnsureRecordBelongsHere(record, installPath);
+        EnsureNotOnDiskTwice(record, installPath);
         RecoverInterruptedInstalls(installPath);
 
         // The SPT profiles as they were before the removal (OPEN-12 F4).
@@ -75,6 +76,24 @@ public sealed partial class ModInstallService
     }
 
     //
+    // Refuses a record with a mod folder that is both live and disabled (OPEN-49 Q2).
+    //
+    private static void EnsureNotOnDiskTwice(InstalledModRecord record, string installPath)
+    {
+        foreach (var folder in record.Files.Select(InstallPathGuard.ModFolderOf).OfType<string>().Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            if (!DisabledModPaths.IsOnDiskTwice(installPath, folder)) continue;
+
+            AppLog.Warn("Remove", $"{record.Name}: {folder} is both live and disabled; refused");
+            throw new ModInstallException(ModInstallFailure.RemovalDuplicate)
+            {
+                ModName = record.Name,
+                Folder = folder,
+            };
+        }
+    }
+
+    //
     // The removal itself, shared by Remove and the update path. For every recorded file, in order:
     // kept for the user (keep/preserve), refused by InstallPathGuard (D13), kept because another record
     // owns it (D9), already gone, kept because it changed since install (D21 - unless an update is about
@@ -104,6 +123,24 @@ public sealed partial class ModInstallService
         var options = _options.Effective();
 
         //
+        // A real removal acts on each recorded file where it sits now - live, or in its ".disabled"
+        // counterpart (OPEN-49) - resolved once before anything moves. Record keys stay in the enabled
+        // form; trail entries and held copies use the path on disk.
+        //
+        var resolved = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        if (kind == RemovalKind.AppInstalled)
+        {
+            foreach (var file in record.Files) resolved.TryAdd(file, DisabledModPaths.WhereNow(installPath, file));
+        }
+
+        Func<string, string> onDiskOf = kind == RemovalKind.AppInstalled
+            ? relative => resolved.TryGetValue(relative, out var found) ? found : DisabledModPaths.WhereNow(installPath, relative)
+            : relative => relative;
+
+        var disabledFolders = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var disabledContainers = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        //
         // A real removal rescues both a mod's settings and the documents the user wrote in it, and the
         // user-data half is read off disk rather than from the record: SVM's presets are written by its
         // own generator and appear in no file list, which is exactly the case worth rescuing.
@@ -113,7 +150,7 @@ public sealed partial class ModInstallService
         List<string> configFiles = configs == ConfigAction.Keep
             ?
             [
-                .. ModConfigFiles.InRecord(record, options),
+                .. ModConfigFiles.InRecord(record, options).Select(onDiskOf),
                 .. ModConfigFiles.UserDataOnDisk(installPath, record, options),
             ]
             : [];
@@ -146,26 +183,34 @@ public sealed partial class ModInstallService
                 continue;
             }
 
+            var onDisk = onDiskOf(relative);
+            if (!string.Equals(onDisk, relative, StringComparison.OrdinalIgnoreCase))
+            {
+                if (InstallPathGuard.ModFolderOf(relative) is { } recordFolder) disabledFolders.Add(recordFolder);
+                if (DisabledModPaths.TryFindRelativeContainer(onDisk, out var container, out var inDisabled) && inDisabled)
+                    disabledContainers.Add(container);
+            }
+
             // A file in a new-file-only area (R17) is taken only when its fingerprint proves it is the
             // copy this app placed; anything else there stays, as SPT's or the game's.
-            if (InstallPathGuard.CheckRecordedPath(installPath, relative, out var fullPath) is { } refusal
+            if (InstallPathGuard.CheckRecordedPath(installPath, onDisk, out var fullPath) is { } refusal
                 && !(refusal == PathRefusal.Protected && InstallPathGuard.ProvenPlacedFile(installPath, record, relative, out fullPath)))
             {
-                refused.Add(relative);
-                session.Note(relative, RemovalOutcome.Refused, refusal);
+                refused.Add(onDisk);
+                session.Note(onDisk, RemovalOutcome.Refused, refusal);
                 continue;
             }
 
             if (owned.Contains(relative))
             {
-                keptOwned.Add(relative);
-                session.Note(relative, RemovalOutcome.KeptOwnedByAnotherMod);
+                keptOwned.Add(onDisk);
+                session.Note(onDisk, RemovalOutcome.KeptOwnedByAnotherMod);
                 continue;
             }
 
             if (!File.Exists(fullPath))
             {
-                session.Note(relative, RemovalOutcome.AlreadyGone);
+                session.Note(onDisk, RemovalOutcome.AlreadyGone);
                 NoteFoldersToTidy(installPath, fullPath, touchedDirectories);
                 continue;
             }
@@ -174,29 +219,30 @@ public sealed partial class ModInstallService
                 && !print.Matches(fullPath)
                 && !(kind == RemovalKind.ReplacedByUpdate && incoming is not null && incoming.Contains(relative)))
             {
-                keptChanged.Add(relative);
-                session.Note(relative, RemovalOutcome.KeptChangedSinceInstall);
+                keptChanged.Add(onDisk);
+                session.Note(onDisk, RemovalOutcome.KeptChangedSinceInstall);
                 continue;
             }
 
             try
             {
-                session.MoveFileIn(fullPath, relative);
-                session.Note(relative, RemovalOutcome.Moved);
+                session.MoveFileIn(fullPath, onDisk);
+                session.Note(onDisk, RemovalOutcome.Moved);
                 moved++;
                 NoteFoldersToTidy(installPath, fullPath, touchedDirectories);
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
-                AppLog.Warn("Remove", $"{record.Name}: couldn't move {relative} out: {ex.Message}");
-                failed.Add(relative);
-                session.Note(relative, RemovalOutcome.Failed);
+                AppLog.Warn("Remove", $"{record.Name}: couldn't move {onDisk} out: {ex.Message}");
+                failed.Add(onDisk);
+                session.Note(onDisk, RemovalOutcome.Failed);
             }
         }
 
-        // On a real removal, what this mod replaced comes back. An update carries them forward instead.
+        // On a real removal, what this mod replaced comes back - on the side its mod folder sat on.
+        // An update carries them forward instead.
         if (kind == RemovalKind.AppInstalled)
-            restored = RestoreOriginals(installPath, record, session);
+            restored = RestoreOriginals(installPath, record, session, path => SideOf(path, disabledFolders));
 
         // The empty folders the archive shipped go too, while still empty and no other record lists
         // them. An update's own install creates them again.
@@ -207,15 +253,18 @@ public sealed partial class ModInstallService
 
         foreach (var folder in record.EmptyFolders.Where(f => !otherEmptyFolders.Contains(f)))
         {
-            if (InstallPathGuard.CheckRecordedPath(installPath, folder, out var fullFolder) is null)
+            if (InstallPathGuard.CheckRecordedPath(installPath, onDiskOf(folder), out var fullFolder) is null)
                 NoteFoldersToTidy(installPath, Path.Combine(fullFolder, "_"), touchedDirectories);
         }
 
         TidyEmptyFolders(installPath, touchedDirectories);
 
+        foreach (var container in disabledContainers)
+            ModDisableService.TryRemoveEmptyDisabledContainer(Path.Combine(installPath, container.Replace('/', Path.DirectorySeparatorChar)));
+
         // On a real removal, the mod's folders that had to stay because they hold files it didn't
         // install - said in the result and marked on the leftover's card, never taken.
-        var foldersLeft = kind == RemovalKind.ReplacedByUpdate ? [] : FoldersLeftBehind(installPath, record);
+        var foldersLeft = kind == RemovalKind.ReplacedByUpdate ? [] : FoldersLeftBehind(installPath, record, onDiskOf);
         session.Log.FoldersLeft = [.. foldersLeft.Select(f => f.Folder)];
 
         var manifest = manifestService.Load();
@@ -239,17 +288,19 @@ public sealed partial class ModInstallService
     // proven by its GUID (R16), and only where the path is free and passes the path checks. Every kept
     // copy then moves out of Data into the holding folder, so Undo has it and retention clears it.
     //
-    private static int RestoreOriginals(string installPath, InstalledModRecord record, RemovalSession session)
+    private static int RestoreOriginals(
+        string installPath, InstalledModRecord record, RemovalSession session, Func<string, string> placeOf)
     {
         var restored = 0;
 
         foreach (var original in record.Overwrote)
         {
             var backup = Path.Combine(AppPaths.DataDirectory, original.BackupPath.Replace('/', Path.DirectorySeparatorChar));
+            var place = placeOf(original.Path);
 
             if (!File.Exists(backup))
             {
-                session.Note(original.Path, RemovalOutcome.OriginalMissing);
+                session.Note(place, RemovalOutcome.OriginalMissing);
                 continue;
             }
 
@@ -257,15 +308,15 @@ public sealed partial class ModInstallService
             {
                 if (original.SameMod)
                 {
-                    session.Note(original.Path, RemovalOutcome.OriginalHeldSameMod);
+                    session.Note(place, RemovalOutcome.OriginalHeldSameMod);
                 }
-                else if (InstallPathGuard.CheckRecordedPath(installPath, original.Path, out var target) is { } refusal)
+                else if (InstallPathGuard.CheckRecordedPath(installPath, place, out var target) is { } refusal)
                 {
-                    session.Note(original.Path, RemovalOutcome.Refused, refusal);
+                    session.Note(place, RemovalOutcome.Refused, refusal);
                 }
                 else if (File.Exists(target))
                 {
-                    session.Note(original.Path, RemovalOutcome.OriginalNotRestoredOccupied);
+                    session.Note(place, RemovalOutcome.OriginalNotRestoredOccupied);
                 }
                 else
                 {
@@ -275,7 +326,7 @@ public sealed partial class ModInstallService
                     if (!new FileFingerprint(original.Path, original.Size, original.Sha256).Matches(target))
                         AppLog.Warn("Remove", $"{record.Name}: put back {original.Path}, but its kept copy no longer matches what was kept");
 
-                    session.Note(original.Path, RemovalOutcome.OriginalRestored);
+                    session.Note(place, RemovalOutcome.OriginalRestored);
                     restored++;
                 }
 
@@ -283,14 +334,22 @@ public sealed partial class ModInstallService
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
-                AppLog.Warn("Remove", $"{record.Name}: couldn't put back {original.Path}: {ex.Message}");
-                session.Note(original.Path, RemovalOutcome.Failed);
+                AppLog.Warn("Remove", $"{record.Name}: couldn't put back {place}: {ex.Message}");
+                session.Note(place, RemovalOutcome.Failed);
             }
         }
 
         TidyEmptyOriginalsFolders(record);
         return restored;
     }
+
+    // A recorded path moved to its ".disabled" counterpart when its mod folder was found disabled.
+    private static string SideOf(string recordPath, HashSet<string> disabledFolders) =>
+        InstallPathGuard.ModFolderOf(recordPath) is { } folder
+        && disabledFolders.Contains(folder)
+        && DisabledModPaths.TryGetRelativeCounterpart(recordPath, out var counterpart)
+            ? counterpart
+            : recordPath;
 
     // Removes the now-empty Data\overwritten\<mod>\<time>\... folders - only empty ones, only in there.
     private static void TidyEmptyOriginalsFolders(InstalledModRecord record)

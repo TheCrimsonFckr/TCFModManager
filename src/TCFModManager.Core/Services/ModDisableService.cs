@@ -419,7 +419,7 @@ public static class ModDisableService
 
     // A ".disabled" container left behind with nothing in it is removed, so an install with no
     // disabled mods doesn't keep the folders around.
-    private static void TryRemoveEmptyDisabledContainer(string? container)
+    internal static void TryRemoveEmptyDisabledContainer(string? container)
     {
         if (container is null || !DisabledModPaths.IsDisabled(container) || !Directory.Exists(container)) return;
 

@@ -201,4 +201,33 @@ public static class DisabledModPaths
         var target = IsDisabled(parent) ? Enabled(parent) : Disabled(parent);
         return Path.Combine(target, name);
     }
+
+    //
+    // Where a recorded, install-relative path is on disk now (OPEN-49): the path itself when something
+    // is there, else its counterpart in the container's other state when something is there, else the
+    // path unchanged. Records keep the enabled form; this only says where to act.
+    //
+    public static string WhereNow(string installPath, string relativePath)
+    {
+        var path = ToRelative(relativePath);
+        if (ExistsUnder(installPath, path)) return path;
+
+        return TryGetRelativeCounterpart(path, out var counterpart) && ExistsUnder(installPath, counterpart)
+            ? counterpart
+            : path;
+    }
+
+    // True when something sits at the path's counterpart in the container's other state.
+    public static bool CounterpartOnDisk(string installPath, string relativePath) =>
+        TryGetRelativeCounterpart(relativePath, out var counterpart) && ExistsUnder(installPath, counterpart);
+
+    // True when the path and its counterpart are both on disk - the duplicate the Installed page sorts out.
+    public static bool IsOnDiskTwice(string installPath, string relativePath) =>
+        ExistsUnder(installPath, ToRelative(relativePath)) && CounterpartOnDisk(installPath, relativePath);
+
+    private static bool ExistsUnder(string installPath, string relativePath)
+    {
+        var full = Path.Combine(installPath, relativePath.Replace('/', Path.DirectorySeparatorChar));
+        return File.Exists(full) || Directory.Exists(full);
+    }
 }

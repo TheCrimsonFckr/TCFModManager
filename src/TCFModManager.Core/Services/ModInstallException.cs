@@ -91,6 +91,11 @@ public enum ModInstallFailure
     // Carries ModName, Version, TotalFiles (how many were refused) and ArchiveEntry (the first of
     // them, install-relative).
     NothingToPlace,
+
+    // The mod is on disk twice, once in a mod container and once in its ".disabled" sibling - the
+    // duplicate the Installed page offers to sort out (OPEN-49). Refused before anything moves. Carries
+    // ModName and Folder (the install-relative mod folder, as the record names it).
+    RemovalDuplicate,
 }
 
 //
