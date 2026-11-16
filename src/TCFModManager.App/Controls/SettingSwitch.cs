@@ -65,6 +65,7 @@ public sealed class SettingSwitch : UserControl
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(0, 0, 12, 0),
         };
+        text.SetResourceReference(TextBlock.ForegroundProperty, "TextFillColorPrimaryBrush");
         text.SetBinding(TextBlock.TextProperty, new Binding($"[{key}]")
         {
             Source = LocalizationService.Instance,

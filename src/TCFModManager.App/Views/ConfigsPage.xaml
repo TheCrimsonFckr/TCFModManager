@@ -315,7 +315,7 @@
                     ItemsSource="{Binding SourceFilterOptions}"
                     SelectedItem="{Binding SelectedSourceFilter}" />
 
-                <StackPanel Grid.Row="2" Margin="0,0,12,4">
+                <StackPanel Grid.Row="2" Margin="0,0,0,4">
                     <ui:Button
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Left"
