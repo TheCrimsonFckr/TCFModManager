@@ -19,6 +19,9 @@ The sp-mod API is rate limited at the edge (roughly 40 requests per 10 seconds, 
 ## A download fails with 502, 503 or 504
 That's the server, not your connection: sp-mod, or the site the mod's file is hosted on (often github.com), didn't answer in time or turned the request away. The card says which. The app has already tried again for about a minute before showing it. Give it a few minutes, then **Retry** - or **Retry failed** for a whole list. If it keeps happening for one mod only, try the download button on its sp-mod page: if that fails too, it's the file host.
 
+## A download fails with 404 or 403
+The file host turned the download away. **404** (or 410) means the file for that version is gone - the author removed or replaced it. Check the mod for a newer version and install that. If there isn't one, tell the mod's author. **403** (or 401) means the host refused it - try again later, and tell the author if it keeps happening. The card names the host that answered.
+
 ## A mod I installed by hand isn't listed under Installed
 It isn't in `BepInEx\plugins`, `BepInEx\patchers` or one of the `user\mods` layouts - see Limitations for the folder shapes that aren't scanned. A mod that *is* listed but shows as not found on sp-mod is there, just unmatched.
 
