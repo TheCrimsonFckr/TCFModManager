@@ -50,6 +50,8 @@ public sealed class BepInExConfigFile
 
     public bool IsModified => _settings.Any(s => s.IsModified);
 
+    public int ChangedFromDefaultCount => _settings.Count(s => s.DiffersFromDefault);
+
     public static BepInExConfigFile Parse(string text)
     {
         var (lines, terminators) = SplitKeepingLineEndings(text);
@@ -378,6 +380,10 @@ public sealed class BepInExConfigSetting
     public bool HasRange => RangeMinimum is not null && RangeMaximum is not null;
 
     public bool IsBoolean => string.Equals(SettingType, "Boolean", StringComparison.OrdinalIgnoreCase);
+
+    public BepInExValueKind Kind => BepInExConfigValues.KindOf(this);
+
+    public bool DiffersFromDefault => BepInExConfigValues.DiffersFromDefault(this);
 
     public void ResetToDefault()
     {
