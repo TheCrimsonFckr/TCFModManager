@@ -11143,4 +11143,85 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Only mods where sp-mod doesn't say whether your installed version works with Fika.</value>
     <comment>On Installed, where the release is the installed version.</comment>
   </data>
+  <data name="Configs_ViewForm" xml:space="preserve">
+    <value>Form</value>
+  </data>
+  <data name="Configs_ViewRaw" xml:space="preserve">
+    <value>Raw</value>
+  </data>
+  <data name="Configs_ViewToolTip" xml:space="preserve">
+    <value>Form shows each setting with its own control. Raw shows the file as text.</value>
+  </data>
+  <data name="Configs_ShowAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Configs_ShowChangedFormat" xml:space="preserve">
+    <value>Changed ({0})</value>
+  </data>
+  <data name="Configs_SearchSettingsPlaceholder" xml:space="preserve">
+    <value>Search these settings</value>
+  </data>
+  <data name="Configs_ResetAll" xml:space="preserve">
+    <value>Reset all</value>
+  </data>
+  <data name="Configs_ResetAllToolTip" xml:space="preserve">
+    <value>Set every setting in this file back to its default. Nothing is saved until you press Save.</value>
+  </data>
+  <data name="Configs_CopyChanges" xml:space="preserve">
+    <value>Copy changes</value>
+  </data>
+  <data name="Configs_CopyChangesToolTip" xml:space="preserve">
+    <value>Copy the settings that differ from their defaults, as text.</value>
+  </data>
+  <data name="Configs_ChangesCopied" xml:space="preserve">
+    <value>Changed settings copied.</value>
+  </data>
+  <data name="Configs_ChangesCopyFailed" xml:space="preserve">
+    <value>Couldn't copy the changes - something else is holding the clipboard.</value>
+  </data>
+  <data name="Configs_CopyHeadingFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Configs_CopyLineFormat" xml:space="preserve">
+    <value>{0} = {1} (default: {2})</value>
+  </data>
+  <data name="Configs_NothingChanged" xml:space="preserve">
+    <value>Nothing here differs from its default.</value>
+  </data>
+  <data name="Configs_ResetSetting" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Configs_ResetSettingToolTipFormat" xml:space="preserve">
+    <value>Set back to the default: {0}</value>
+  </data>
+  <data name="Configs_EmptyValue" xml:space="preserve">
+    <value>(empty)</value>
+  </data>
+  <data name="Configs_NoSettingsMatch" xml:space="preserve">
+    <value>No settings match.</value>
+  </data>
+  <data name="Configs_FormNoSettings" xml:space="preserve">
+    <value>This file has no settings to show here. Use Raw to see it as text.</value>
+  </data>
+  <data name="Configs_PressAKey" xml:space="preserve">
+    <value>Press a key…</value>
+  </data>
+  <data name="Configs_KeyNotUsable" xml:space="preserve">
+    <value>That key can't be used. Try another.</value>
+  </data>
+  <data name="Configs_NoKey" xml:space="preserve">
+    <value>No key</value>
+  </data>
+  <data name="Configs_ShortcutToolTip" xml:space="preserve">
+    <value>Click, then press a key or a key combination. Esc cancels.</value>
+  </data>
+  <data name="Configs_ClearKeyToolTip" xml:space="preserve">
+    <value>Clear the key</value>
+  </data>
+  <data name="Configs_ColorToolTip" xml:space="preserve">
+    <value>The colour as hex: red, green, blue, then opacity (RRGGBBAA).</value>
+  </data>
+  <data name="Configs_ChangedBarToolTip" xml:space="preserve">
+    <value>Changed from its default</value>
+  </data>
 </root>

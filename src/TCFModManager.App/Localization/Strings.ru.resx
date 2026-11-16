@@ -9563,4 +9563,85 @@
   <data name="Filter_FikaUnknownInstalledToolTip" xml:space="preserve">
     <value>Только моды, для установленной версии которых sp-mod не указывает, работает ли она с Fika.</value>
   </data>
+  <data name="Configs_ViewForm" xml:space="preserve">
+    <value>Форма</value>
+  </data>
+  <data name="Configs_ViewRaw" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Configs_ViewToolTip" xml:space="preserve">
+    <value>Форма показывает каждую настройку со своим элементом управления. Текст показывает файл как текст.</value>
+  </data>
+  <data name="Configs_ShowAll" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="Configs_ShowChangedFormat" xml:space="preserve">
+    <value>Изменённые ({0})</value>
+  </data>
+  <data name="Configs_SearchSettingsPlaceholder" xml:space="preserve">
+    <value>Поиск по этим настройкам</value>
+  </data>
+  <data name="Configs_ResetAll" xml:space="preserve">
+    <value>Сбросить все</value>
+  </data>
+  <data name="Configs_ResetAllToolTip" xml:space="preserve">
+    <value>Возвращает каждую настройку в этом файле к значению по умолчанию. Ничего не сохраняется, пока вы не нажмёте «Сохранить».</value>
+  </data>
+  <data name="Configs_CopyChanges" xml:space="preserve">
+    <value>Копировать изменения</value>
+  </data>
+  <data name="Configs_CopyChangesToolTip" xml:space="preserve">
+    <value>Копирует текстом настройки, которые отличаются от значений по умолчанию.</value>
+  </data>
+  <data name="Configs_ChangesCopied" xml:space="preserve">
+    <value>Изменённые настройки скопированы.</value>
+  </data>
+  <data name="Configs_ChangesCopyFailed" xml:space="preserve">
+    <value>Не удалось скопировать изменения - буфер обмена занят чем-то другим.</value>
+  </data>
+  <data name="Configs_CopyHeadingFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Configs_CopyLineFormat" xml:space="preserve">
+    <value>{0} = {1} (по умолчанию: {2})</value>
+  </data>
+  <data name="Configs_NothingChanged" xml:space="preserve">
+    <value>Здесь ничего не отличается от значений по умолчанию.</value>
+  </data>
+  <data name="Configs_ResetSetting" xml:space="preserve">
+    <value>Сбросить</value>
+  </data>
+  <data name="Configs_ResetSettingToolTipFormat" xml:space="preserve">
+    <value>Вернуть значение по умолчанию: {0}</value>
+  </data>
+  <data name="Configs_EmptyValue" xml:space="preserve">
+    <value>(пусто)</value>
+  </data>
+  <data name="Configs_NoSettingsMatch" xml:space="preserve">
+    <value>Нет подходящих настроек.</value>
+  </data>
+  <data name="Configs_FormNoSettings" xml:space="preserve">
+    <value>В этом файле нет настроек, которые можно показать здесь. Выберите «Текст», чтобы увидеть его как текст.</value>
+  </data>
+  <data name="Configs_PressAKey" xml:space="preserve">
+    <value>Нажмите клавишу…</value>
+  </data>
+  <data name="Configs_KeyNotUsable" xml:space="preserve">
+    <value>Эту клавишу нельзя использовать. Попробуйте другую.</value>
+  </data>
+  <data name="Configs_NoKey" xml:space="preserve">
+    <value>Нет клавиши</value>
+  </data>
+  <data name="Configs_ShortcutToolTip" xml:space="preserve">
+    <value>Нажмите, затем нажмите клавишу или сочетание клавиш. Esc отменяет.</value>
+  </data>
+  <data name="Configs_ClearKeyToolTip" xml:space="preserve">
+    <value>Очистить клавишу</value>
+  </data>
+  <data name="Configs_ColorToolTip" xml:space="preserve">
+    <value>Цвет в шестнадцатеричном виде: красный, зелёный, синий, затем непрозрачность (RRGGBBAA).</value>
+  </data>
+  <data name="Configs_ChangedBarToolTip" xml:space="preserve">
+    <value>Изменено относительно значения по умолчанию</value>
+  </data>
 </root>

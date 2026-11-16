@@ -35,7 +35,11 @@ public partial class ConfigsPage : Page
         // corrections on InstalledPage - this is the same fix applied from the start.
         //
         AddHandler(PreviewMouseWheelEvent, new MouseWheelEventHandler(Page_PreviewMouseWheel), handledEventsToo: true);
+
+        ViewModel.Form.Rebuilt += (_, _) => FormScroll()?.ScrollToTop();
     }
+
+    private ScrollViewer? FormScroll() => FormList.Template?.FindName("FormScroll", FormList) as ScrollViewer;
 
     private async void ConfigsPage_Loaded(object sender, RoutedEventArgs e)
     {
@@ -50,17 +54,24 @@ public partial class ConfigsPage : Page
 
     //
     // Scrolls the file list from anywhere over the list column - including over the search box and
-    // the filter dropdown, which would otherwise eat the event.
-    //
-    // Deliberately scoped to that column: the editor on the right is a TextBox doing its own
-    // scrolling, and forwarding the wheel away from it would break scrolling the file being edited.
+    // the filter dropdown, which would otherwise eat the event - and the form from anywhere over it.
+    // The Raw editor is left alone: it is a TextBox doing its own scrolling.
     //
     private void Page_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         if (e.OriginalSource is not DependencyObject source) return;
-        if (!IsWithin(source, RailPanel)) return;
 
-        ListScrollViewer.ScrollToVerticalOffset(ListScrollViewer.VerticalOffset - e.Delta);
+        if (IsWithin(source, RailPanel))
+        {
+            ListScrollViewer.ScrollToVerticalOffset(ListScrollViewer.VerticalOffset - e.Delta);
+            e.Handled = true;
+            return;
+        }
+
+        if (!ViewModel.ShowFormView || !IsWithin(source, FormPanel)) return;
+        if (FormScroll() is not { ScrollableHeight: > 0 } form) return;
+
+        form.ScrollToVerticalOffset(form.VerticalOffset - e.Delta);
         e.Handled = true;
     }
 

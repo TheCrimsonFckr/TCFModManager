@@ -22,9 +22,9 @@ namespace TCFModManager.App.ViewModels;
 // mod, a server mod's sit inside its own folder and travel with it. See ModConfigDiscovery for how
 // each file is found and attributed.
 //
-// This is the raw-text stage: both formats are edited as text, with JSON checked before it is
-// written. The generated form for .cfg files comes next, on top of BepInExConfigFile, which already
-// parses everything it needs.
+// A .cfg file opens in a form built from BepInExConfigFile (OPEN-39), with the raw text one click
+// away. JSON is edited as text and checked before it is written. Either way EditorText is the one
+// copy of the file being edited: the form writes into it, and Save, Revert and the dirty check read it.
 //
 public sealed partial class ConfigsViewModel : LocalizedViewModel
 {
@@ -53,8 +53,26 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
     // choice doesn't read as making one.
     private bool _showingPolicy;
 
+    private bool _formWriting;
+
+    private bool _formStale = true;
+
     public ConfigsViewModel()
     {
+        Form = new ConfigFormViewModel(text =>
+        {
+            _formWriting = true;
+            EditorText = text;
+            _formWriting = false;
+        });
+
+        Form.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName != nameof(ConfigFormViewModel.ChangedCount)) return;
+            ResetAllCommand.NotifyCanExecuteChanged();
+            CopyChangesCommand.NotifyCanExecuteChanged();
+        };
+
         SourceFilterOptions =
         [
             new ConfigSourceFilterItem(nameof(Strings.Filter_ConfigAll), ConfigSourceFilter.All),
@@ -321,6 +339,71 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
 
     public bool HasSelection => SelectedEntry is not null;
 
+    public ConfigFormViewModel Form { get; }
+
+    [ObservableProperty]
+    private bool _showRaw;
+
+    public bool CanUseForm => SelectedEntry?.Entry.Format == ModConfigFormat.BepInExCfg && _loaded is not null;
+
+    public bool ShowFormView => CanUseForm && !ShowRaw;
+
+    public bool ShowRawView => !ShowFormView;
+
+    partial void OnShowRawChanged(bool value) => SyncForm();
+
+    [RelayCommand]
+    private void UseForm() => ShowRaw = false;
+
+    [RelayCommand]
+    private void UseRaw() => ShowRaw = true;
+
+    private void SyncForm()
+    {
+        OnPropertyChanged(nameof(CanUseForm));
+        OnPropertyChanged(nameof(ShowFormView));
+        OnPropertyChanged(nameof(ShowRawView));
+        ResetAllCommand.NotifyCanExecuteChanged();
+        CopyChangesCommand.NotifyCanExecuteChanged();
+
+        if (!CanUseForm)
+        {
+            Form.Clear();
+            _formStale = true;
+            return;
+        }
+
+        if (!ShowFormView || !_formStale) return;
+
+        Form.Load(EditorText);
+        _formStale = false;
+    }
+
+    private bool CanResetAll => ShowFormView && Form.HasChanges;
+
+    [RelayCommand(CanExecute = nameof(CanResetAll))]
+    private void ResetAll() => Form.ResetAll();
+
+    private bool CanCopyChanges => ShowFormView && Form.HasChanges;
+
+    [RelayCommand(CanExecute = nameof(CanCopyChanges))]
+    private void CopyChanges()
+    {
+        if (SelectedEntry is null) return;
+
+        var heading = Text(Strings.Configs_CopyHeadingFormat, SelectedEntry.Title, SelectedEntry.FileName);
+
+        try
+        {
+            Clipboard.SetText(Form.ChangesAsText(heading));
+            StatusMessage = Strings.Configs_ChangesCopied;
+        }
+        catch (Exception ex) when (ex is System.Runtime.InteropServices.COMException or InvalidOperationException)
+        {
+            StatusMessage = Strings.Configs_ChangesCopyFailed;
+        }
+    }
+
     // The editor's contents. Bound two-way, so every keystroke re-checks whether anything differs
     // from what was read off disk.
     [ObservableProperty]
@@ -364,6 +447,8 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
 
     partial void OnEditorTextChanged(string value)
     {
+        if (!_formWriting) _formStale = true;
+
         EditorError = null;
         IsDirty = _loaded is not null && !string.Equals(value, _loaded.Text, StringComparison.Ordinal);
     }
@@ -511,6 +596,8 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
             _loaded = null;
             EditorText = string.Empty;
             IsDirty = false;
+            _formStale = true;
+            SyncForm();
             return;
         }
 
@@ -528,6 +615,9 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
             IsDirty = false;
             EditorError = Text(Strings.Configs_FileReadFailedFormat, ex.Message);
         }
+
+        _formStale = true;
+        SyncForm();
     }
 
     private bool CanEdit => SelectedEntry is not null && _loaded is not null;
@@ -629,6 +719,8 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
         EditorText = _loaded.Text;
         IsDirty = false;
         EditorError = null;
+        _formStale = true;
+        SyncForm();
     }
 
     [RelayCommand(CanExecute = nameof(HasSelection))]

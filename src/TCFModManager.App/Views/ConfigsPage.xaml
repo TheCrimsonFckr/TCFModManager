@@ -13,6 +13,8 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:tcf="clr-namespace:TCFModManager.App.Controls"
+    xmlns:viewmodels="clr-namespace:TCFModManager.App.ViewModels"
     Title="{loc:Str Nav_Configs}"
     Loaded="ConfigsPage_Loaded"
     ScrollViewer.CanContentScroll="False">
@@ -20,6 +22,194 @@
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
         <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <converters:BoolToButtonAppearanceConverter x:Key="BoolToAppearance" />
+
+        <Style x:Key="FormCard" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1,0,1,0" />
+            <Setter Property="Padding" Value="16,0,16,0" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsLast}" Value="True">
+                    <Setter Property="BorderThickness" Value="1,0,1,1" />
+                    <Setter Property="CornerRadius" Value="0,0,6,6" />
+                    <Setter Property="Margin" Value="0,0,0,12" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <DataTemplate x:Key="BooleanValue">
+            <tcf:SettingSwitch IsChecked="{Binding IsOn}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="NumberValue">
+            <ui:NumberBox
+                Width="150"
+                SpinButtonPlacementMode="Compact"
+                ClearButtonEnabled="False"
+                SmallChange="{Binding Step, Mode=OneTime}"
+                MaxDecimalPlaces="{Binding DecimalPlaces, Mode=OneTime}"
+                Value="{Binding NumberValue}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="SliderValue">
+            <StackPanel Orientation="Horizontal">
+                <tcf:SettingSlider VerticalAlignment="Center" />
+                <ui:NumberBox
+                    Width="130"
+                    Margin="12,0,0,0"
+                    SpinButtonPlacementMode="Compact"
+                    ClearButtonEnabled="False"
+                    SmallChange="{Binding Step, Mode=OneTime}"
+                    MaxDecimalPlaces="{Binding DecimalPlaces, Mode=OneTime}"
+                    Value="{Binding NumberValue}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ChoiceValue">
+            <ComboBox
+                MinWidth="200"
+                ItemsSource="{Binding Choices, Mode=OneTime}"
+                SelectedItem="{Binding SelectedChoice}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="FlagsValue">
+            <ItemsControl MaxWidth="360" ItemsSource="{Binding Flags, Mode=OneTime}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Margin="0,0,12,0" IsChecked="{Binding IsChecked}">
+                            <TextBlock Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding Name}" />
+                        </CheckBox>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ColorValue">
+            <StackPanel Orientation="Horizontal">
+                <Border
+                    Width="30"
+                    Height="30"
+                    CornerRadius="4"
+                    BorderThickness="1"
+                    BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                    Background="{Binding Swatch}" />
+                <ui:TextBox
+                    Width="130"
+                    Margin="8,0,0,0"
+                    FontFamily="Consolas, Cascadia Mono, Courier New, DejaVu Sans Mono, Liberation Mono, Tahoma"
+                    MaxLength="9"
+                    ToolTip="{loc:Str Configs_ColorToolTip}"
+                    Text="{Binding ColorText, UpdateSourceTrigger=PropertyChanged}" />
+                <ui:SymbolIcon
+                    Margin="6,0,0,0"
+                    VerticalAlignment="Center"
+                    Symbol="ErrorCircle24"
+                    Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                    ToolTip="{loc:Str Configs_ColorToolTip}"
+                    Visibility="{Binding IsColorValid, Converter={StaticResource FalseToVisible}}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ShortcutValue">
+            <tcf:ShortcutBox Shortcut="{Binding ShortcutValue}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="TextValue">
+            <ui:TextBox Width="260" Text="{Binding TextValue, UpdateSourceTrigger=PropertyChanged}" />
+        </DataTemplate>
+
+        <tcf:ConfigValueTemplateSelector
+            x:Key="ConfigValueTemplates"
+            Boolean="{StaticResource BooleanValue}"
+            Number="{StaticResource NumberValue}"
+            Slider="{StaticResource SliderValue}"
+            Choice="{StaticResource ChoiceValue}"
+            Flags="{StaticResource FlagsValue}"
+            Color="{StaticResource ColorValue}"
+            Shortcut="{StaticResource ShortcutValue}"
+            Text="{StaticResource TextValue}" />
+
+        <DataTemplate DataType="{x:Type viewmodels:ConfigSectionItem}">
+            <Border
+                Padding="16,12,16,10"
+                CornerRadius="6,6,0,0"
+                BorderThickness="1,1,1,0"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+                <TextBlock
+                    FontWeight="SemiBold"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Text="{Binding Name}" />
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewmodels:ConfigSettingRow}">
+            <Border Style="{StaticResource FormCard}">
+                <Border
+                    Padding="0,10,0,10"
+                    BorderThickness="0,1,0,0"
+                    BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" MinWidth="120" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Rectangle
+                            Grid.Column="0"
+                            Width="3"
+                            Margin="0,0,10,0"
+                            RadiusX="1.5"
+                            RadiusY="1.5"
+                            Fill="{DynamicResource SelectedRowStroke}"
+                            ToolTip="{loc:Str Configs_ChangedBarToolTip}"
+                            Visibility="{Binding DiffersFromDefault, Converter={StaticResource BoolToVis}}" />
+
+                        <StackPanel Grid.Column="1" Margin="0,0,16,0" VerticalAlignment="Center">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{Binding Name, Mode=OneTime}" />
+                            <TextBlock
+                                Margin="0,2,0,0"
+                                FontSize="12"
+                                TextWrapping="Wrap"
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                Text="{Binding Description, Mode=OneTime}"
+                                Visibility="{Binding HasDescription, Mode=OneTime, Converter={StaticResource BoolToVis}}" />
+                        </StackPanel>
+
+                        <ui:Button
+                            Grid.Column="2"
+                            Margin="0,0,8,0"
+                            Padding="8,4"
+                            VerticalAlignment="Center"
+                            Appearance="Transparent"
+                            Content="{loc:Str Configs_ResetSetting}"
+                            ToolTip="{Binding ResetToolTip}"
+                            Command="{Binding ResetCommand}"
+                            Visibility="{Binding CanReset, Converter={StaticResource BoolToVis}}" />
+
+                        <ContentControl
+                            Grid.Column="3"
+                            VerticalAlignment="Center"
+                            Focusable="False"
+                            IsTabStop="False"
+                            Content="{Binding}"
+                            ContentTemplateSelector="{StaticResource ConfigValueTemplates}" />
+                    </Grid>
+                </Border>
+            </Border>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid
@@ -238,8 +428,7 @@
                 VerticalAlignment="Stretch"
                 Background="Transparent" />
 
-            <!-- The editor. Both formats are edited as text for now; the .cfg form goes here next,
-                 swapped in on Format, with this text box kept as the "Raw" view. -->
+            <!-- The editor: a form for a .cfg file, with the text box as its Raw view. -->
             <Grid Grid.Column="2" Margin="8,0,0,0">
                 <TextBlock
                     HorizontalAlignment="Center"
@@ -253,6 +442,7 @@
 
                 <Grid Visibility="{Binding HasSelection, Converter={StaticResource BoolToVis}}">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
@@ -422,8 +612,113 @@
                             Visibility="{Binding EditorError, Converter={StaticResource NullToCollapsed}}" />
                     </StackPanel>
 
-                    <TextBox
+                    <DockPanel
                         Grid.Row="2"
+                        Margin="0,0,0,8"
+                        Visibility="{Binding CanUseForm, Converter={StaticResource BoolToVis}}">
+                        <StackPanel
+                            DockPanel.Dock="Right"
+                            Margin="12,0,0,0"
+                            VerticalAlignment="Top"
+                            Orientation="Horizontal">
+                            <ui:Button
+                                Padding="10,6"
+                                Content="{loc:Str Configs_ViewForm}"
+                                Icon="{ui:SymbolIcon Form24}"
+                                ToolTip="{loc:Str Configs_ViewToolTip}"
+                                Appearance="{Binding ShowFormView, Converter={StaticResource BoolToAppearance}}"
+                                Command="{Binding UseFormCommand}" />
+                            <ui:Button
+                                Margin="6,0,0,0"
+                                Padding="10,6"
+                                Content="{loc:Str Configs_ViewRaw}"
+                                Icon="{ui:SymbolIcon Code24}"
+                                ToolTip="{loc:Str Configs_ViewToolTip}"
+                                Appearance="{Binding ShowRawView, Converter={StaticResource BoolToAppearance}}"
+                                Command="{Binding UseRawCommand}" />
+                        </StackPanel>
+
+                        <WrapPanel Visibility="{Binding ShowFormView, Converter={StaticResource BoolToVis}}">
+                            <ui:Button
+                                Margin="0,0,6,6"
+                                Padding="10,6"
+                                Content="{loc:Str Configs_ShowAll}"
+                                Appearance="{Binding Form.ShowAllSettings, Converter={StaticResource BoolToAppearance}}"
+                                Command="{Binding Form.ShowAllCommand}" />
+                            <ui:Button
+                                Margin="0,0,12,6"
+                                Padding="10,6"
+                                Content="{Binding Form.ChangedLabel}"
+                                Appearance="{Binding Form.ShowChangedOnly, Converter={StaticResource BoolToAppearance}}"
+                                Command="{Binding Form.ShowChangedCommand}" />
+                            <ui:TextBox
+                                Width="220"
+                                Margin="0,0,12,6"
+                                PlaceholderText="{loc:Str Configs_SearchSettingsPlaceholder}"
+                                Icon="{ui:SymbolIcon Search24}"
+                                Text="{Binding Form.SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                            <ui:Button
+                                Margin="0,0,6,6"
+                                Padding="10,6"
+                                Content="{loc:Str Configs_ResetAll}"
+                                Icon="{ui:SymbolIcon ArrowReset24}"
+                                ToolTip="{loc:Str Configs_ResetAllToolTip}"
+                                Command="{Binding ResetAllCommand}" />
+                            <ui:Button
+                                Margin="0,0,0,6"
+                                Padding="10,6"
+                                Content="{loc:Str Configs_CopyChanges}"
+                                Icon="{ui:SymbolIcon Copy24}"
+                                ToolTip="{loc:Str Configs_CopyChangesToolTip}"
+                                Command="{Binding CopyChangesCommand}" />
+                        </WrapPanel>
+                    </DockPanel>
+
+                    <Grid
+                        x:Name="FormPanel"
+                        Grid.Row="3"
+                        Background="Transparent"
+                        Visibility="{Binding ShowFormView, Converter={StaticResource BoolToVis}}">
+                        <TextBlock
+                            Margin="4,12,0,0"
+                            VerticalAlignment="Top"
+                            TextWrapping="Wrap"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="{Binding Form.EmptyMessage}"
+                            Visibility="{Binding Form.HasItems, Converter={StaticResource FalseToVisible}}" />
+
+                        <ItemsControl
+                            x:Name="FormList"
+                            Focusable="False"
+                            ItemsSource="{Binding Form.Items}"
+                            VirtualizingPanel.IsVirtualizing="True"
+                            VirtualizingPanel.VirtualizationMode="Standard"
+                            VirtualizingPanel.ScrollUnit="Pixel"
+                            ScrollViewer.CanContentScroll="True"
+                            Visibility="{Binding Form.HasItems, Converter={StaticResource BoolToVis}}">
+                            <ItemsControl.Template>
+                                <ControlTemplate TargetType="ItemsControl">
+                                    <ScrollViewer
+                                        x:Name="FormScroll"
+                                        Focusable="False"
+                                        CanContentScroll="True"
+                                        VerticalScrollBarVisibility="Auto"
+                                        HorizontalScrollBarVisibility="Disabled">
+                                        <ItemsPresenter Margin="0,0,12,0" />
+                                    </ScrollViewer>
+                                </ControlTemplate>
+                            </ItemsControl.Template>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </Grid>
+
+                    <TextBox
+                        Grid.Row="3"
+                        Visibility="{Binding ShowRawView, Converter={StaticResource BoolToVis}}"
                         AcceptsReturn="True"
                         AcceptsTab="True"
                         FontFamily="Consolas, Cascadia Mono, Courier New, DejaVu Sans Mono, Liberation Mono, Tahoma"
@@ -435,7 +730,7 @@
                         SpellCheck.IsEnabled="False"
                         Text="{Binding EditorText, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <DockPanel Grid.Row="3" Margin="0,8,0,0">
+                    <DockPanel Grid.Row="4" Margin="0,8,0,0">
                         <ui:Button
                             DockPanel.Dock="Right"
                             Appearance="Primary"

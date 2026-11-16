@@ -9176,4 +9176,85 @@ Les détails sont dans le journal :
   <data name="Filter_FikaUnknownInstalledToolTip" xml:space="preserve">
     <value>Uniquement les mods pour lesquels sp-mod n'indique pas si votre version installée fonctionne avec Fika.</value>
   </data>
+  <data name="Configs_ViewForm" xml:space="preserve">
+    <value>Formulaire</value>
+  </data>
+  <data name="Configs_ViewRaw" xml:space="preserve">
+    <value>Texte</value>
+  </data>
+  <data name="Configs_ViewToolTip" xml:space="preserve">
+    <value>Formulaire affiche chaque paramètre avec sa propre commande. Texte affiche le fichier tel quel.</value>
+  </data>
+  <data name="Configs_ShowAll" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="Configs_ShowChangedFormat" xml:space="preserve">
+    <value>Modifiés ({0})</value>
+  </data>
+  <data name="Configs_SearchSettingsPlaceholder" xml:space="preserve">
+    <value>Rechercher dans ces paramètres</value>
+  </data>
+  <data name="Configs_ResetAll" xml:space="preserve">
+    <value>Tout réinitialiser</value>
+  </data>
+  <data name="Configs_ResetAllToolTip" xml:space="preserve">
+    <value>Remet chaque paramètre de ce fichier à sa valeur par défaut. Rien n'est enregistré avant d'appuyer sur Enregistrer.</value>
+  </data>
+  <data name="Configs_CopyChanges" xml:space="preserve">
+    <value>Copier les modifications</value>
+  </data>
+  <data name="Configs_CopyChangesToolTip" xml:space="preserve">
+    <value>Copie, sous forme de texte, les paramètres qui diffèrent de leur valeur par défaut.</value>
+  </data>
+  <data name="Configs_ChangesCopied" xml:space="preserve">
+    <value>Paramètres modifiés copiés.</value>
+  </data>
+  <data name="Configs_ChangesCopyFailed" xml:space="preserve">
+    <value>Impossible de copier les modifications - le presse-papiers est utilisé par autre chose.</value>
+  </data>
+  <data name="Configs_CopyHeadingFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Configs_CopyLineFormat" xml:space="preserve">
+    <value>{0} = {1} (par défaut : {2})</value>
+  </data>
+  <data name="Configs_NothingChanged" xml:space="preserve">
+    <value>Rien ici ne diffère de sa valeur par défaut.</value>
+  </data>
+  <data name="Configs_ResetSetting" xml:space="preserve">
+    <value>Réinitialiser</value>
+  </data>
+  <data name="Configs_ResetSettingToolTipFormat" xml:space="preserve">
+    <value>Remettre la valeur par défaut : {0}</value>
+  </data>
+  <data name="Configs_EmptyValue" xml:space="preserve">
+    <value>(vide)</value>
+  </data>
+  <data name="Configs_NoSettingsMatch" xml:space="preserve">
+    <value>Aucun paramètre ne correspond.</value>
+  </data>
+  <data name="Configs_FormNoSettings" xml:space="preserve">
+    <value>Ce fichier n'a aucun paramètre à afficher ici. Utilisez Texte pour le voir tel quel.</value>
+  </data>
+  <data name="Configs_PressAKey" xml:space="preserve">
+    <value>Appuyez sur une touche…</value>
+  </data>
+  <data name="Configs_KeyNotUsable" xml:space="preserve">
+    <value>Cette touche ne peut pas être utilisée. Essayez-en une autre.</value>
+  </data>
+  <data name="Configs_NoKey" xml:space="preserve">
+    <value>Aucune touche</value>
+  </data>
+  <data name="Configs_ShortcutToolTip" xml:space="preserve">
+    <value>Cliquez, puis appuyez sur une touche ou une combinaison de touches. Échap annule.</value>
+  </data>
+  <data name="Configs_ClearKeyToolTip" xml:space="preserve">
+    <value>Effacer la touche</value>
+  </data>
+  <data name="Configs_ColorToolTip" xml:space="preserve">
+    <value>La couleur en hexadécimal : rouge, vert, bleu, puis opacité (RRGGBBAA).</value>
+  </data>
+  <data name="Configs_ChangedBarToolTip" xml:space="preserve">
+    <value>Modifié par rapport à la valeur par défaut</value>
+  </data>
 </root>
