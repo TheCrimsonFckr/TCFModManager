@@ -7,6 +7,7 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:tcf="clr-namespace:TCFModManager.App.Controls"
     Title="{loc:Str Nav_Options}">
     <!--
         Laid out like Windows Settings: a heading per section, one row per setting with its name and
@@ -53,14 +54,6 @@
 
         <Style x:Key="SettingExpander" TargetType="ui:CardExpander" BasedOn="{StaticResource {x:Type ui:CardExpander}}">
             <Setter Property="Margin" Value="0,0,0,4" />
-        </Style>
-
-        <!-- The switch sits at the left of a fixed-width box, so On and Off don't move it. -->
-        <Style x:Key="RowSwitch" TargetType="ui:ToggleSwitch" BasedOn="{StaticResource {x:Type ui:ToggleSwitch}}">
-            <Setter Property="MinWidth" Value="90" />
-            <Setter Property="ToolTipService.ShowDuration" Value="20000" />
-            <Setter Property="OnContent" Value="{loc:Str Common_On}" />
-            <Setter Property="OffContent" Value="{loc:Str Common_Off}" />
         </Style>
 
         <!-- A part inside an expander: separated from the one above by a divider. -->
@@ -302,12 +295,20 @@
                             ToolTip="{loc:Str Options_MonitorFolderResetToolTip}"
                             Command="{Binding ResetDownloadFolderCommand}" />
                     </Grid>
-                    <ui:ToggleSwitch
-                        Margin="0,10,0,0"
-                        HorizontalAlignment="Left"
-                        IsChecked="{Binding DownloadListSubfolders}"
-                        OnContent="{loc:Str Options_MonitorListSubfoldersTitle}"
-                        OffContent="{loc:Str Options_MonitorListSubfoldersTitle}" />
+                    <Grid Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_MonitorListSubfoldersTitle}" />
+                        </StackPanel>
+                        <tcf:SettingSwitch
+                            Grid.Column="1"
+                            Margin="14,0,0,0"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding DownloadListSubfolders}" />
+                    </Grid>
                 </StackPanel>
 
                 <Border Style="{StaticResource SubSetting}" Padding="0,12,0,0">
@@ -343,8 +344,7 @@
                 </StackPanel>
             </ui:CardControl.Header>
             <!-- On = ask first, so it writes the opposite of SkipModPageConfirmation. -->
-            <ui:ToggleSwitch
-                Style="{StaticResource RowSwitch}"
+            <tcf:SettingSwitch
                 ToolTip="{loc:Str Options_ModPagesToolTip}"
                 IsChecked="{Binding SkipModPageConfirmation, Converter={StaticResource Inverse}}" />
         </ui:CardControl>
@@ -585,11 +585,10 @@
                         <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_UpdateNotificationsHeader}" />
                         <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_UpdateNotificationsHint}" />
                     </StackPanel>
-                    <ui:ToggleSwitch
+                    <tcf:SettingSwitch
                         Grid.Column="1"
                         Margin="14,0,12,0"
                         VerticalAlignment="Center"
-                        Style="{StaticResource RowSwitch}"
                         IsChecked="{Binding UpdateNotificationsEnabled}" />
                 </Grid>
             </ui:CardExpander.Header>
@@ -597,15 +596,22 @@
             <!-- Greyed out rather than hidden while notifications are off (D8), so what switching them
                  on would do is readable first. -->
             <StackPanel>
-                <ui:ToggleSwitch
-                    Margin="0,0,0,12"
-                    HorizontalAlignment="Left"
-                    IsEnabled="{Binding UpdateNotificationsEnabled}"
-                    ToolTip="{loc:Str Options_TrayToolTip}"
-                    ToolTipService.ShowDuration="20000"
-                    IsChecked="{Binding KeepRunningInTray}"
-                    OnContent="{loc:Str Options_TrayTitle}"
-                    OffContent="{loc:Str Options_TrayTitle}" />
+                <Border Style="{StaticResource SubSetting}" BorderThickness="0" Padding="0,0,0,12">
+                    <Grid IsEnabled="{Binding UpdateNotificationsEnabled}" ToolTip="{loc:Str Options_TrayToolTip}" ToolTipService.ShowDuration="20000">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_TrayTitle}" />
+                        </StackPanel>
+                        <tcf:SettingSwitch
+                            Grid.Column="1"
+                            Margin="14,0,0,0"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding KeepRunningInTray}" />
+                    </Grid>
+                </Border>
 
                 <Border Style="{StaticResource SubSetting}">
                     <StackPanel>
@@ -664,8 +670,7 @@
                     <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_FootprintHint}" />
                 </StackPanel>
             </ui:CardControl.Header>
-            <ui:ToggleSwitch
-                Style="{StaticResource RowSwitch}"
+            <tcf:SettingSwitch
                 ToolTip="{loc:Str Options_FootprintToolTip}"
                 IsChecked="{Binding ShowModFootprintPage}" />
         </ui:CardControl>
@@ -680,8 +685,7 @@
                     <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapPageHint}" />
                 </StackPanel>
             </ui:CardControl.Header>
-            <ui:ToggleSwitch
-                Style="{StaticResource RowSwitch}"
+            <tcf:SettingSwitch
                 ToolTip="{loc:Str Options_ServerMapToolTip}"
                 IsChecked="{Binding ServerMap.IsPageEnabled}" />
         </ui:CardControl>
@@ -752,21 +756,36 @@
 
             <StackPanel>
                 <StackPanel Margin="0,0,0,12">
-                    <ui:ToggleSwitch
-                        HorizontalAlignment="Left"
-                        Margin="0,0,0,8"
-                        ToolTip="{loc:Str Options_PlaysHereToolTip}"
-                        ToolTipService.ShowDuration="20000"
-                        IsChecked="{Binding PlaysHere}"
-                        OnContent="{loc:Str Options_PlaysHereTitle}"
-                        OffContent="{loc:Str Options_PlaysHereTitle}" />
-                    <ui:ToggleSwitch
-                        HorizontalAlignment="Left"
-                        ToolTip="{loc:Str Options_HeadlessToolTip}"
-                        ToolTipService.ShowDuration="20000"
-                        IsChecked="{Binding RunsHeadlessClient}"
-                        OnContent="{loc:Str Options_HeadlessTitle}"
-                        OffContent="{loc:Str Options_HeadlessTitle}" />
+                    <Grid Margin="0,0,0,12" ToolTip="{loc:Str Options_PlaysHereToolTip}" ToolTipService.ShowDuration="20000">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_PlaysHereTitle}" />
+                        </StackPanel>
+                        <tcf:SettingSwitch
+                            Grid.Column="1"
+                            Margin="14,0,0,0"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding PlaysHere}" />
+                    </Grid>
+                    <Border Style="{StaticResource SubSetting}" Padding="0,12,0,0">
+                        <Grid ToolTip="{loc:Str Options_HeadlessToolTip}" ToolTipService.ShowDuration="20000">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_HeadlessTitle}" />
+                            </StackPanel>
+                            <tcf:SettingSwitch
+                                Grid.Column="1"
+                                Margin="14,0,0,0"
+                                VerticalAlignment="Center"
+                                IsChecked="{Binding RunsHeadlessClient}" />
+                        </Grid>
+                    </Border>
                     <TextBlock
                         Style="{StaticResource SettingHint}"
                         Margin="0,10,0,0"
@@ -840,98 +859,143 @@
             </ui:CardExpander.Header>
 
             <StackPanel>
-                <ui:ToggleSwitch
-                    HorizontalAlignment="Left"
-                    IsChecked="{Binding StartLauncherAfterServer}"
-                    OnContent="{loc:Str Options_StartLauncherTitle}"
-                    OffContent="{loc:Str Options_StartLauncherTitle}" />
-                <TextBlock
-                    Style="{StaticResource SettingNote}"
-                    Margin="0,6,0,12"
-                    Text="{loc:Str Options_StartLauncherNote}" />
-                <ui:ToggleSwitch
-                    HorizontalAlignment="Left"
-                    IsChecked="{Binding HideServerWindow}"
-                    OnContent="{loc:Str Options_HideServerTitle}"
-                    OffContent="{loc:Str Options_HideServerTitle}" />
-                <TextBlock
-                    Style="{StaticResource SettingNote}"
-                    Margin="0,6,0,0"
-                    Text="{loc:Str Options_HideServerNote}" />
-                <StackPanel Margin="0,12,0,0" Visibility="{Binding HideServerWindow, Converter={StaticResource FalseToVisible}}">
-                    <ui:ToggleSwitch
-                        HorizontalAlignment="Left"
-                        IsChecked="{Binding ShowServerOnProfile}"
-                        OnContent="{loc:Str Options_ServerOnProfileTitle}"
-                        OffContent="{loc:Str Options_ServerOnProfileTitle}" />
-                    <TextBlock
-                        Style="{StaticResource SettingNote}"
-                        Margin="0,6,0,0"
-                        Text="{loc:Str Options_ServerOnProfileNote}" />
-                </StackPanel>
+                <Border Style="{StaticResource SubSetting}" BorderThickness="0" Padding="0,0,0,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_StartLauncherTitle}" />
+                            <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_StartLauncherNote}" />
+                        </StackPanel>
+                        <tcf:SettingSwitch
+                            Grid.Column="1"
+                            Margin="14,0,0,0"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding StartLauncherAfterServer}" />
+                    </Grid>
+                </Border>
+                <Border Style="{StaticResource SubSetting}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_HideServerTitle}" />
+                            <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_HideServerNote}" />
+                        </StackPanel>
+                        <tcf:SettingSwitch
+                            Grid.Column="1"
+                            Margin="14,0,0,0"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding HideServerWindow}" />
+                    </Grid>
+                </Border>
+                <Border Style="{StaticResource SubSetting}" Visibility="{Binding HideServerWindow, Converter={StaticResource FalseToVisible}}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerOnProfileTitle}" />
+                            <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerOnProfileNote}" />
+                        </StackPanel>
+                        <tcf:SettingSwitch
+                            Grid.Column="1"
+                            Margin="14,0,0,0"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding ShowServerOnProfile}" />
+                    </Grid>
+                </Border>
                 <!-- OPEN-45: stop the server after the game closes (ServerStopper). -->
-                <ui:ToggleSwitch
-                    Margin="0,12,0,0"
-                    HorizontalAlignment="Left"
-                    IsChecked="{Binding StopServerWithGame}"
-                    OnContent="{loc:Str Options_StopServerWithGameTitle}"
-                    OffContent="{loc:Str Options_StopServerWithGameTitle}" />
-                <StackPanel
-                    Margin="0,8,0,0"
-                    Orientation="Horizontal"
-                    IsEnabled="{Binding StopServerWithGame}">
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        Margin="0,0,8,0"
-                        Text="{loc:Str Options_StopServerDelayLabel}" />
-                    <ui:NumberBox
-                        Width="120"
-                        MaxLength="4"
-                        ClearButtonEnabled="False"
-                        Minimum="0"
-                        Maximum="{Binding StopServerMaxSeconds, Mode=OneTime}"
-                        SmallChange="5"
-                        LargeChange="60"
-                        MaxDecimalPlaces="0"
-                        SpinButtonPlacementMode="Inline"
-                        Value="{Binding StopServerDelay, Mode=TwoWay}" />
-                </StackPanel>
-                <ui:ToggleSwitch
-                    Margin="0,8,0,0"
-                    HorizontalAlignment="Left"
-                    IsChecked="{Binding StopServerIgnoresHeadless}"
-                    IsEnabled="{Binding StopServerWithGame}"
-                    Visibility="{Binding ShowStopServerHeadlessOverride, Converter={StaticResource BoolToVisibility}}"
-                    OnContent="{loc:Str Options_StopServerIgnoresHeadlessTitle}"
-                    OffContent="{loc:Str Options_StopServerIgnoresHeadlessTitle}" />
-                <TextBlock
-                    Style="{StaticResource SettingNote}"
-                    Margin="0,6,0,0"
-                    Text="{loc:Str Options_StopServerWithGameNote}" />
-                <ui:Button
-                    Margin="0,12,0,0"
-                    Icon="{ui:SymbolIcon Play24}"
-                    Content="{loc:Str Options_QuickShortcutButton}"
-                    Command="{Binding CreateQuickShortcutCommand}" />
-                <TextBlock
-                    Style="{StaticResource SettingNote}"
-                    Margin="0,6,0,0"
-                    Text="{loc:Str Options_QuickShortcutNote}" />
-                <TextBlock
-                    Margin="0,6,0,0"
-                    TextWrapping="Wrap"
-                    Text="{Binding QuickShortcutStatus}"
-                    Visibility="{Binding QuickShortcutStatus, Converter={StaticResource NullToCollapsed}}">
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock" BasedOn="{StaticResource SettingNote}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding QuickShortcutFailed}" Value="True">
-                                    <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
+                <Border Style="{StaticResource SubSetting}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_StopServerWithGameTitle}" />
+                            <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_StopServerWithGameNote}" />
+                        </StackPanel>
+                        <tcf:SettingSwitch
+                            Grid.Column="1"
+                            Margin="14,0,0,0"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding StopServerWithGame}" />
+                    </Grid>
+                </Border>
+                <Border Style="{StaticResource SubSetting}" IsEnabled="{Binding StopServerWithGame}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Style="{StaticResource SettingTitle}"
+                            VerticalAlignment="Center"
+                            Text="{loc:Str Options_StopServerDelayLabel}" />
+                        <ui:NumberBox
+                            Grid.Column="1"
+                            Width="120"
+                            Margin="14,0,0,0"
+                            MaxLength="4"
+                            ClearButtonEnabled="False"
+                            Minimum="0"
+                            Maximum="{Binding StopServerMaxSeconds, Mode=OneTime}"
+                            SmallChange="5"
+                            LargeChange="60"
+                            MaxDecimalPlaces="0"
+                            SpinButtonPlacementMode="Inline"
+                            Value="{Binding StopServerDelay, Mode=TwoWay}" />
+                    </Grid>
+                </Border>
+                <Border Style="{StaticResource SubSetting}" IsEnabled="{Binding StopServerWithGame}" Visibility="{Binding ShowStopServerHeadlessOverride, Converter={StaticResource BoolToVisibility}}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_StopServerIgnoresHeadlessTitle}" />
+                        </StackPanel>
+                        <tcf:SettingSwitch
+                            Grid.Column="1"
+                            Margin="14,0,0,0"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding StopServerIgnoresHeadless}" />
+                    </Grid>
+                </Border>
+                <Border Style="{StaticResource SubSetting}" Padding="0,12,0,0">
+                    <StackPanel>
+                        <ui:Button
+                            Icon="{ui:SymbolIcon Play24}"
+                            Content="{loc:Str Options_QuickShortcutButton}"
+                            Command="{Binding CreateQuickShortcutCommand}" />
+                        <TextBlock
+                            Style="{StaticResource SettingNote}"
+                            Margin="0,6,0,0"
+                            Text="{loc:Str Options_QuickShortcutNote}" />
+                        <TextBlock
+                            Margin="0,6,0,0"
+                            TextWrapping="Wrap"
+                            Text="{Binding QuickShortcutStatus}"
+                            Visibility="{Binding QuickShortcutStatus, Converter={StaticResource NullToCollapsed}}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource SettingNote}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding QuickShortcutFailed}" Value="True">
+                                            <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </ui:CardExpander>
 
@@ -950,11 +1014,10 @@
                         <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_DirectLaunchHeader}" />
                         <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_DirectLaunchSummary}" />
                     </StackPanel>
-                    <ui:ToggleSwitch
+                    <tcf:SettingSwitch
                         Grid.Column="1"
                         Margin="14,0,12,0"
                         VerticalAlignment="Center"
-                        Style="{StaticResource RowSwitch}"
                         IsChecked="{Binding DirectLaunch}" />
                 </Grid>
             </ui:CardExpander.Header>
@@ -981,12 +1044,22 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <ui:ToggleSwitch
-                    HorizontalAlignment="Left"
-                    IsEnabled="{Binding DirectLaunch}"
-                    IsChecked="{Binding MinimizeWhilePlaying}"
-                    OnContent="{loc:Str Options_MinimizeWhilePlayingTitle}"
-                    OffContent="{loc:Str Options_MinimizeWhilePlayingTitle}" />
+                <Border Style="{StaticResource SubSetting}" IsEnabled="{Binding DirectLaunch}" Padding="0,12,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_MinimizeWhilePlayingTitle}" />
+                        </StackPanel>
+                        <tcf:SettingSwitch
+                            Grid.Column="1"
+                            Margin="14,0,0,0"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding MinimizeWhilePlaying}" />
+                    </Grid>
+                </Border>
             </StackPanel>
         </ui:CardExpander>
 
@@ -1100,11 +1173,10 @@
                                 <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapLanOnly}" />
                                 <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapLanOnlyHint}" />
                             </StackPanel>
-                            <ui:ToggleSwitch
+                            <tcf:SettingSwitch
                                 Grid.Column="1"
                                 Margin="14,0,0,0"
                                 VerticalAlignment="Center"
-                                Style="{StaticResource RowSwitch}"
                                 IsChecked="{Binding ServerLanOnly, Mode=TwoWay}" />
                         </Grid>
                         <!-- Profile rules for other machines, read by TCF Mod Manager on those machines. -->
@@ -1117,11 +1189,10 @@
                                 <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapHideOtherProfiles}" />
                                 <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapHideOtherProfilesHint}" />
                             </StackPanel>
-                            <ui:ToggleSwitch
+                            <tcf:SettingSwitch
                                 Grid.Column="1"
                                 Margin="14,0,0,0"
                                 VerticalAlignment="Center"
-                                Style="{StaticResource RowSwitch}"
                                 IsChecked="{Binding ServerHideOtherProfiles, Mode=TwoWay}" />
                         </Grid>
                         <Grid Margin="0,12,0,0">
@@ -1133,11 +1204,10 @@
                                 <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapProtectOtherProfiles}" />
                                 <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapProtectOtherProfilesHint}" />
                             </StackPanel>
-                            <ui:ToggleSwitch
+                            <tcf:SettingSwitch
                                 Grid.Column="1"
                                 Margin="14,0,0,0"
                                 VerticalAlignment="Center"
-                                Style="{StaticResource RowSwitch}"
                                 IsChecked="{Binding ServerProtectOtherProfiles, Mode=TwoWay}" />
                         </Grid>
 
@@ -1203,11 +1273,10 @@
                                 <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapReport}" />
                                 <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapReportHint}" />
                             </StackPanel>
-                            <ui:ToggleSwitch
+                            <tcf:SettingSwitch
                                 Grid.Column="1"
                                 Margin="14,0,0,0"
                                 VerticalAlignment="Center"
-                                Style="{StaticResource RowSwitch}"
                                 IsEnabled="{Binding CanChooseReporting}"
                                 IsChecked="{Binding ReportsToServer, Mode=TwoWay}" />
                         </Grid>
