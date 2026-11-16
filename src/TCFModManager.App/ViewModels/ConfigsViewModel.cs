@@ -46,6 +46,7 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
     public ConfigsViewModel()
     {
         Form = new ConfigFormViewModel();
+        UnsavedConfigEdits.Page = this;
         Form.FileEdited += (_, file) => OnFormEdited(file);
 
         SourceFilterOptions =

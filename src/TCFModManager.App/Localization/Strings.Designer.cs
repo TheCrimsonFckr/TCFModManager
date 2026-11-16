@@ -3115,4 +3115,7 @@ internal static class Strings
     internal static string Configs_RevertAll => LocalizationService.Get("Configs_RevertAll");
     internal static string Configs_RevertAllToolTip => LocalizationService.Get("Configs_RevertAllToolTip");
     internal static string Configs_UnsavedMarkerToolTip => LocalizationService.Get("Configs_UnsavedMarkerToolTip");
+    internal static string Configs_QuitUnsavedFormat => LocalizationService.Get("Configs_QuitUnsavedFormat");
+    internal static string Configs_SaveAllAndQuit => LocalizationService.Get("Configs_SaveAllAndQuit");
+    internal static string Configs_QuitWithoutSaving => LocalizationService.Get("Configs_QuitWithoutSaving");
 }

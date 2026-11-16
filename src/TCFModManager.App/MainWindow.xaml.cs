@@ -108,7 +108,7 @@ public partial class MainWindow : FluentWindow
         Closing += (_, e) =>
         {
             if (e.Cancel || AppTray.IsQuitting) return;
-            if (!ServerExitCheck.AllowExit()) e.Cancel = true;
+            if (!UnsavedConfigEdits.AllowExit() || !ServerExitCheck.AllowExit()) e.Cancel = true;
         };
 
         IsVisibleChanged += (_, _) =>

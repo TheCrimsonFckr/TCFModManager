@@ -62,6 +62,8 @@ public sealed partial class ConfigsViewModel
 
     public bool HasDirty => DirtyCount > 0;
 
+    internal IReadOnlyList<string> DirtyFileNames() => _open.Values.Where(f => f.IsDirty).Select(f => f.Entry.FileName).ToList();
+
     public string DirtyLabel => Text(Strings.Configs_UnsavedFilesFormat, DirtyCount);
 
     partial void OnSelectedModChanged(ConfigModRow? value)

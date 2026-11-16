@@ -200,26 +200,6 @@ public static class ModDisableService
     }
 
     //
-    // The client files a record placed, install-relative, when every one of them sits in its
-    // ".disabled" place - the client half set aside as a whole (OPEN-46). Empty when any client file
-    // is live, or the record placed none.
-    //
-    public static IReadOnlyList<string> ParkedClientFiles(string installPath, InstalledModRecord record)
-    {
-        var parked = new List<string>();
-
-        foreach (var file in record.Files.Where(IsClientFile))
-        {
-            if (File.Exists(FullPath(installPath, file))) return [];
-
-            if (DisabledModPaths.TryGetRelativeCounterpart(file, out var aside) && File.Exists(FullPath(installPath, aside)))
-                parked.Add(file);
-        }
-
-        return parked;
-    }
-
-    //
     // Moves install-relative mod folders (or loose files), given in their live form, into their
     // ".disabled" place or back, all or nothing: anything already at a destination refuses the lot, and
     // a move that fails part way puts back the ones already moved. One not at its source is skipped.

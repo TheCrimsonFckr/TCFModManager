@@ -67,7 +67,6 @@ public class InstallClientHalfAsideTests : IDisposable
 
         var aside = ModDisableService.MoveFiles(_install, first.Files.Where(ModDisableService.IsClientFile), disable: true, "Dynamic Maps");
         Assert.Single(aside.Moved);
-        Assert.Equal(["BepInEx/plugins/DynamicMaps/DynamicMaps.dll"], ModDisableService.ParkedClientFiles(_install, first));
 
         var second = await InstallAsync("1.1.0");
 
@@ -75,7 +74,6 @@ public class InstallClientHalfAsideTests : IDisposable
         Assert.False(File.Exists(AsideClient));
         Assert.Equal("server 1.1.0", File.ReadAllText(LiveServer));
         Assert.Contains("BepInEx/plugins/DynamicMaps/DynamicMaps.dll", second.Files);
-        Assert.Empty(ModDisableService.ParkedClientFiles(_install, second));
     }
 
     [Fact]
@@ -89,11 +87,8 @@ public class InstallClientHalfAsideTests : IDisposable
     }
 
     [Fact]
-    public async Task NothingIsAsideWhileAnyClientFileIsLive()
+    public void ClientFilesArePluginsAndPatchers()
     {
-        var record = await InstallAsync("1.0.0");
-
-        Assert.Empty(ModDisableService.ParkedClientFiles(_install, record));
         Assert.True(ModDisableService.IsClientFile("BepInEx/patchers/X.dll"));
         Assert.False(ModDisableService.IsClientFile("SPT/user/mods/DynamicMaps/server.dll"));
         Assert.False(ModDisableService.IsClientFile("BepInEx/config/x.cfg"));

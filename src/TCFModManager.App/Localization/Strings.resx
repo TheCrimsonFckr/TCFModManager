@@ -11296,4 +11296,13 @@ Right-click to save the current filters to it, rename it or delete it.</value>
   <data name="Configs_UnsavedMarkerToolTip" xml:space="preserve">
     <value>Unsaved changes</value>
   </data>
+  <data name="Configs_QuitUnsavedFormat" xml:space="preserve">
+    <value>These config files have changes that aren't saved yet: {0}.</value>
+  </data>
+  <data name="Configs_SaveAllAndQuit" xml:space="preserve">
+    <value>Save all and quit</value>
+  </data>
+  <data name="Configs_QuitWithoutSaving" xml:space="preserve">
+    <value>Quit without saving</value>
+  </data>
 </root>

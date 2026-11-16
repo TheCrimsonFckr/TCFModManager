@@ -9329,4 +9329,13 @@ I dettagli sono nel log:
   <data name="Configs_UnsavedMarkerToolTip" xml:space="preserve">
     <value>Modifiche non salvate</value>
   </data>
+  <data name="Configs_QuitUnsavedFormat" xml:space="preserve">
+    <value>Questi file di configurazione hanno modifiche non ancora salvate: {0}.</value>
+  </data>
+  <data name="Configs_SaveAllAndQuit" xml:space="preserve">
+    <value>Salva tutto ed esci</value>
+  </data>
+  <data name="Configs_QuitWithoutSaving" xml:space="preserve">
+    <value>Esci senza salvare</value>
+  </data>
 </root>

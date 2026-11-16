@@ -9329,4 +9329,13 @@ Les détails sont dans le journal :
   <data name="Configs_UnsavedMarkerToolTip" xml:space="preserve">
     <value>Modifications non enregistrées</value>
   </data>
+  <data name="Configs_QuitUnsavedFormat" xml:space="preserve">
+    <value>Ces fichiers de configuration ont des modifications pas encore enregistrées : {0}.</value>
+  </data>
+  <data name="Configs_SaveAllAndQuit" xml:space="preserve">
+    <value>Tout enregistrer et quitter</value>
+  </data>
+  <data name="Configs_QuitWithoutSaving" xml:space="preserve">
+    <value>Quitter sans enregistrer</value>
+  </data>
 </root>

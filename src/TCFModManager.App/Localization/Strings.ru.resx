@@ -9716,4 +9716,13 @@
   <data name="Configs_UnsavedMarkerToolTip" xml:space="preserve">
     <value>Несохранённые изменения</value>
   </data>
+  <data name="Configs_QuitUnsavedFormat" xml:space="preserve">
+    <value>В этих файлах конфигурации есть несохранённые изменения: {0}.</value>
+  </data>
+  <data name="Configs_SaveAllAndQuit" xml:space="preserve">
+    <value>Сохранить все и выйти</value>
+  </data>
+  <data name="Configs_QuitWithoutSaving" xml:space="preserve">
+    <value>Выйти без сохранения</value>
+  </data>
 </root>

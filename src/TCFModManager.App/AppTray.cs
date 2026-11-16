@@ -46,7 +46,7 @@ internal static class AppTray
     public static void Quit(bool askAboutServer = true)
     {
         // Asked here, before shutting down: once Shutdown has begun the window can't stop to ask.
-        if (askAboutServer && !ServerExitCheck.AllowExit()) return;
+        if (askAboutServer && (!UnsavedConfigEdits.AllowExit() || !ServerExitCheck.AllowExit())) return;
 
         IsQuitting = true;
         AsksAboutServer = askAboutServer;
