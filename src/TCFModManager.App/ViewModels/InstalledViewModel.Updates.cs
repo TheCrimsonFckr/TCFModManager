@@ -17,7 +17,7 @@ public partial class InstalledViewModel
     private bool HasUpdatableSelection() => SelectedCards().Any(IsUpdatable);
 
     private static bool IsUpdatable(InstalledModCardViewModel card) =>
-        card is { UpdateAvailable: true, IsDisabled: false, ModId: not null }
+        card is { UpdateAvailable: true, ModId: not null }
         && card.LatestPublishedVersion is not null;
 
     //
@@ -340,26 +340,9 @@ public partial class InstalledViewModel
             : null;
     }
 
-    //
-    // Why a selection that looked updatable produced nothing. Each reason is separate because they
-    // need different things done about them - enabling a mod, opening its parent, or a rescan.
-    //
-    private static string DescribeNothingToUpdate(IReadOnlyList<InstalledModCardViewModel> selected)
-    {
-        if (selected.Count == 0) return Strings.Installed_NothingSelected;
-
-        var disabled = selected.Count(c => c is { UpdateAvailable: true, IsDisabled: true });
-
-        var reasons = new List<string>();
-
-        if (disabled > 0) reasons.Add(Strings.Installed_ReasonDisabled(disabled));
-
-        return reasons.Count == 0
-            ? Strings.Installed_NoUpdatesAvailable
-            : Text(
-                Strings.Installed_NoUpdatesReasonsFormat,
-                string.Join(Strings.Common_ListSeparator, reasons));
-    }
+    // Why a selection that looked updatable produced nothing.
+    private static string DescribeNothingToUpdate(IReadOnlyList<InstalledModCardViewModel> selected) =>
+        selected.Count == 0 ? Strings.Installed_NothingSelected : Strings.Installed_NoUpdatesAvailable;
 
     private static string DescribeSkipped(
         IReadOnlyList<InstalledModCardViewModel> selected,
@@ -368,11 +351,9 @@ public partial class InstalledViewModel
     {
         var parts = new List<string>();
 
-        var disabled = selected.Count(c => c is { UpdateAvailable: true, IsDisabled: true });
         var noUpdate = selected.Count(c => c.UpdateAvailable != true);
 
         if (noUpdate > 0) parts.Add(Strings.Installed_SkippedUpToDate(noUpdate));
-        if (disabled > 0) parts.Add(Strings.Installed_SkippedDisabled(disabled));
         if (addonsWithNoFit > 0) parts.Add(Strings.Installed_SkippedAddonNoFit(addonsWithNoFit));
         if (unmatched.Count > 0) parts.Add(Strings.Installed_SkippedNotFound(unmatched.Count));
 

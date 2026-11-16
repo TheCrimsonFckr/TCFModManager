@@ -358,9 +358,6 @@
   <data name="Browse_DetailsUnexpectedFormat" xml:space="preserve">
     <value>Erreur inattendue lors du chargement des détails de {0} : {1}</value>
   </data>
-  <data name="Browse_DisabledFormat" xml:space="preserve">
-    <value>{0} est désactivé - activez-le sur la page Installés avant de le réinstaller.</value>
-  </data>
   <data name="Browse_EndorsementsFormat" xml:space="preserve">
     <value>{0:N0} recommandations</value>
   </data>
@@ -1260,6 +1257,12 @@ Voir Dépendances et conflits.</value>
   <data name="Downloads_InstalledFormat" xml:space="preserve">
     <value>{0} {1} installé.</value>
   </data>
+  <data name="Downloads_StillDisabled" xml:space="preserve">
+    <value>Toujours désactivé.</value>
+  </data>
+  <data name="Downloads_NotDisabledAgain" xml:space="preserve">
+    <value>Il était désactivé, mais n'a pas pu être désactivé à nouveau - il est maintenant activé.</value>
+  </data>
   <data name="Downloads_NoLinkFormat" xml:space="preserve">
     <value>Impossible de trouver un lien de téléchargement pour {0} {1}.</value>
   </data>
@@ -1971,9 +1974,6 @@ Voir Dépendances et conflits.</value>
   <data name="Installed_NoUpdatesAvailable" xml:space="preserve">
     <value>Aucun des mods sélectionnés n'a de mise à jour.</value>
   </data>
-  <data name="Installed_NoUpdatesReasonsFormat" xml:space="preserve">
-    <value>Aucun des mods sélectionnés ne peut être mis à jour ici : {0}.</value>
-  </data>
   <data name="Installed_Pin" xml:space="preserve">
     <value>Épingler</value>
   </data>
@@ -1982,12 +1982,6 @@ Voir Dépendances et conflits.</value>
   </data>
   <data name="Installed_PinToolTip" xml:space="preserve">
     <value>Épinglez ce mod pour qu'aucune liste de mods que vous appliquez ne le mette de côté. Pour les mods d'interface et de confort que vous voulez garder quelle que soit la liste choisie.</value>
-  </data>
-  <data name="Installed_ReasonDisabled_one" xml:space="preserve">
-    <value>{0} désactivé (activez-le d'abord)</value>
-  </data>
-  <data name="Installed_ReasonDisabled_other" xml:space="preserve">
-    <value>{0} désactivés (activez-les d'abord)</value>
   </data>
   <data name="Installed_Remove" xml:space="preserve">
     <value>Supprimer</value>
@@ -2046,12 +2040,6 @@ Voir Dépendances et conflits.</value>
   <data name="Installed_ServerFolder" xml:space="preserve">
     <value>Dossier serveur</value>
   </data>
-  <data name="Installed_SkippedDisabled_one" xml:space="preserve">
-    <value>{0} désactivé</value>
-  </data>
-  <data name="Installed_SkippedDisabled_other" xml:space="preserve">
-    <value>{0} désactivés</value>
-  </data>
   <data name="Installed_SkippedFormat" xml:space="preserve">
     <value> Ignorés : {0}.</value>
   </data>
@@ -2090,6 +2078,9 @@ Voir Dépendances et conflits.</value>
   </data>
   <data name="Installed_StatusUpdateFormat" xml:space="preserve">
     <value>Mise à jour disponible - {0}</value>
+  </data>
+  <data name="Installed_StatusDisabledUpdateFormat" xml:space="preserve">
+    <value>Désactivé - mise à jour disponible ({0})</value>
   </data>
   <data name="Installed_TargetClientOnly" xml:space="preserve">
     <value>Client uniquement</value>
@@ -2309,6 +2300,9 @@ Voir Dépendances et conflits.</value>
   </data>
   <data name="ModInstall_RemoveDuplicateFormat" xml:space="preserve">
     <value>{0} n'a pas été supprimé : il se trouve à la fois dans un dossier activé et dans un dossier désactivé ({1}). Utilisez d'abord « Régler » sur sa carte. Rien n'a été déplacé.</value>
+  </data>
+  <data name="ModInstall_UpdateDuplicateFormat" xml:space="preserve">
+    <value>{0} n'a pas été installé : il se trouve à la fois dans un dossier activé et dans un dossier désactivé ({1}). Utilisez d'abord « Régler » sur sa carte. Rien n'a été modifié.</value>
   </data>
   <data name="ModInstall_RemoveRefusedProtectedFormat" xml:space="preserve">
     <value>{0} n'a pas été supprimé : il appartient à SPT, à BepInEx ou au jeu. Rien n'a été effacé.</value>
@@ -3383,7 +3377,10 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
     <value>Actuellement installé : {0}</value>
   </data>
   <data name="ModUpdate_DisabledNoticeFormat" xml:space="preserve">
-    <value>{0} est désactivé. Activez-le sur la page Installés pour le mettre à jour ou le retélécharger.</value>
+    <value>{0} est désactivé et le reste ensuite.</value>
+  </data>
+  <data name="ModUpdate_PartDisabledNoticeFormat" xml:space="preserve">
+    <value>Une partie de {0} est désactivée. Ensuite, tout le mod est activé.</value>
   </data>
   <data name="ModUpdate_Downgrade" xml:space="preserve">
     <value>Rétrograder</value>

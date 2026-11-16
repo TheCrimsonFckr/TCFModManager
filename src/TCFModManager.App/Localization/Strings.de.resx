@@ -358,9 +358,6 @@
   <data name="Browse_DetailsUnexpectedFormat" xml:space="preserve">
     <value>Unerwarteter Fehler beim Laden der Details für {0}: {1}</value>
   </data>
-  <data name="Browse_DisabledFormat" xml:space="preserve">
-    <value>{0} ist deaktiviert - aktiviere ihn auf der Seite Installiert, bevor du ihn neu installierst.</value>
-  </data>
   <data name="Browse_EndorsementsFormat" xml:space="preserve">
     <value>{0:N0} Empfehlungen</value>
   </data>
@@ -1260,6 +1257,12 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Downloads_InstalledFormat" xml:space="preserve">
     <value>{0} {1} installiert.</value>
   </data>
+  <data name="Downloads_StillDisabled" xml:space="preserve">
+    <value>Bleibt deaktiviert.</value>
+  </data>
+  <data name="Downloads_NotDisabledAgain" xml:space="preserve">
+    <value>Er war deaktiviert, konnte aber nicht wieder deaktiviert werden - er ist jetzt aktiv.</value>
+  </data>
   <data name="Downloads_NoLinkFormat" xml:space="preserve">
     <value>Für {0} {1} wurde kein Download-Link gefunden.</value>
   </data>
@@ -1971,9 +1974,6 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Installed_NoUpdatesAvailable" xml:space="preserve">
     <value>Für keinen der ausgewählten Mods gibt es ein Update.</value>
   </data>
-  <data name="Installed_NoUpdatesReasonsFormat" xml:space="preserve">
-    <value>Keiner der ausgewählten Mods kann hier aktualisiert werden: {0}.</value>
-  </data>
   <data name="Installed_Pin" xml:space="preserve">
     <value>Anheften</value>
   </data>
@@ -1982,12 +1982,6 @@ Siehe Abhängigkeiten und Konflikte.</value>
   </data>
   <data name="Installed_PinToolTip" xml:space="preserve">
     <value>Heft diesen Mod an, damit keine Modliste, die du anwendest, ihn je beiseitelegt. Für HUD- und Komfort-Mods, die du behalten willst, egal auf welche Liste du wechselst.</value>
-  </data>
-  <data name="Installed_ReasonDisabled_one" xml:space="preserve">
-    <value>1 deaktiviert (aktiviere ihn zuerst)</value>
-  </data>
-  <data name="Installed_ReasonDisabled_other" xml:space="preserve">
-    <value>{0} deaktiviert (aktiviere sie zuerst)</value>
   </data>
   <data name="Installed_Remove" xml:space="preserve">
     <value>Entfernen</value>
@@ -2046,12 +2040,6 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Installed_ServerFolder" xml:space="preserve">
     <value>Server-Ordner</value>
   </data>
-  <data name="Installed_SkippedDisabled_one" xml:space="preserve">
-    <value>1 deaktiviert</value>
-  </data>
-  <data name="Installed_SkippedDisabled_other" xml:space="preserve">
-    <value>{0} deaktiviert</value>
-  </data>
   <data name="Installed_SkippedFormat" xml:space="preserve">
     <value> {0} übersprungen.</value>
   </data>
@@ -2090,6 +2078,9 @@ Siehe Abhängigkeiten und Konflikte.</value>
   </data>
   <data name="Installed_StatusUpdateFormat" xml:space="preserve">
     <value>Update verfügbar - {0}</value>
+  </data>
+  <data name="Installed_StatusDisabledUpdateFormat" xml:space="preserve">
+    <value>Deaktiviert - Update verfügbar ({0})</value>
   </data>
   <data name="Installed_TargetClientOnly" xml:space="preserve">
     <value>Nur Client</value>
@@ -2309,6 +2300,9 @@ Siehe Abhängigkeiten und Konflikte.</value>
   </data>
   <data name="ModInstall_RemoveDuplicateFormat" xml:space="preserve">
     <value>{0} wurde nicht entfernt: Er liegt sowohl in einem aktivierten als auch in einem deaktivierten Ordner ({1}). Nutze zuerst „Bereinigen“ auf seiner Karte. Es wurde nichts verschoben.</value>
+  </data>
+  <data name="ModInstall_UpdateDuplicateFormat" xml:space="preserve">
+    <value>{0} wurde nicht installiert: Er liegt sowohl in einem aktivierten als auch in einem deaktivierten Ordner ({1}). Nutze zuerst „Bereinigen“ auf seiner Karte. Es wurde nichts geändert.</value>
   </data>
   <data name="ModInstall_RemoveRefusedProtectedFormat" xml:space="preserve">
     <value>{0} wurde nicht entfernt: Es gehört zu SPT, BepInEx oder dem Spiel. Es wurde nichts gelöscht.</value>
@@ -3383,7 +3377,10 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
     <value>Aktuell installiert: {0}</value>
   </data>
   <data name="ModUpdate_DisabledNoticeFormat" xml:space="preserve">
-    <value>{0} ist deaktiviert. Aktivier ihn auf der Seite Installiert, um ihn zu aktualisieren oder neu herunterzuladen.</value>
+    <value>{0} ist deaktiviert und bleibt es danach auch.</value>
+  </data>
+  <data name="ModUpdate_PartDisabledNoticeFormat" xml:space="preserve">
+    <value>Ein Teil von {0} ist deaktiviert. Danach ist der ganze Mod aktiv.</value>
   </data>
   <data name="ModUpdate_Downgrade" xml:space="preserve">
     <value>Downgrade</value>

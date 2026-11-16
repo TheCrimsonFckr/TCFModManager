@@ -127,15 +127,6 @@ public partial class BrowseViewModel
 
         var mod = card.Mod;
 
-        // Same rule as the Installed page: a disabled mod's install record points at folders it no
-        // longer occupies, so reinstalling over it would place files where nothing loads them and
-        // leave the disabled copy behind as a duplicate. A download places nothing, so it is spared.
-        if (card.IsDisabled && !downloadOnly)
-        {
-            StatusMessage = Text(Strings.Browse_DisabledFormat, mod.Name);
-            return;
-        }
-
         if (!ReadModPageConfirmationWindow.Confirm(mod.Name ?? Strings.Browse_ThisMod, mod.DetailUrl))
         {
             StatusMessage = Text(

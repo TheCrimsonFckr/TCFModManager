@@ -189,11 +189,11 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     //
     // OPEN-12 A2: the Update button on the card header and List row - the same mods Update selected
-    // would update (InstalledViewModel.IsUpdatable): an enabled, catalogued mod or addon with an
-    // update (OPEN-32 D1).
+    // would update (InstalledViewModel.IsUpdatable): a catalogued mod or addon with an update
+    // (OPEN-32 D1), disabled or not (OPEN-50 Q2).
     //
     public bool CanQuickUpdate =>
-        UpdateAvailable == true && !IsDisabled && ModId is not null && LatestPublishedVersion is not null;
+        UpdateAvailable == true && ModId is not null && LatestPublishedVersion is not null;
 
     public string QuickUpdateToolTip => Text(Strings.Installed_UpdateOneToolTipFormat, UpdateVersion ?? LatestPublishedVersion);
 
@@ -670,8 +670,8 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             ? Strings.Installed_StatusDuplicate
             : IsMixedState
                 ? Strings.Installed_StatusMixed
-                : UpdateAvailable == true && !IsDisabled && (UpdateVersion ?? LatestPublishedVersion) is { } target
-                    ? Text(Strings.Installed_StatusUpdateFormat, target)
+                : UpdateAvailable == true && (UpdateVersion ?? LatestPublishedVersion) is { } target
+                    ? Text(IsDisabled ? Strings.Installed_StatusDisabledUpdateFormat : Strings.Installed_StatusUpdateFormat, target)
                     : ModStatusWording.Tooltip(Status));
 }
 

@@ -124,13 +124,14 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     public string? ModPageUrl => _mod.IsAddon ? _catalogAddon?.DetailUrl : _catalogMod?.DetailUrl;
 
     //
-    // A disabled mod's install record points at folders it no longer occupies, so updating or
-    // redownloading it would place files where nothing is loading them and leave the old copy
-    // behind in the ".disabled" folder. Both buttons are hidden until it's enabled again.
+    // OPEN-50: a disabled mod stays disabled after an update, redownload or downgrade; a half-disabled
+    // one comes out whole and on (Q4).
     //
-    public bool IsModDisabled => _mod.IsDisabled;
+    public bool ShowDisabledNotice => _mod.IsDisabled || _mod.IsMixedState;
 
-    public string DisabledNotice => Text(Strings.ModUpdate_DisabledNoticeFormat, _mod.DisplayTitle);
+    public string DisabledNotice => Text(
+        _mod.IsDisabled ? Strings.ModUpdate_DisabledNoticeFormat : Strings.ModUpdate_PartDisabledNoticeFormat,
+        _mod.DisplayTitle);
 
     //
     // Which button is shown is decided by the SELECTED version against the installed one, not by
@@ -141,7 +142,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     // said "Update" while installing a downgrade. The list has always let you choose any version -
     // only the wording was wrong.
     //
-    private bool CanAct => SelectedVersion is not null && !_mod.IsDisabled;
+    private bool CanAct => SelectedVersion is not null;
 
     public bool ShowUpdateButton =>
         CanAct && ModVersionComparer.IsUpdateAvailable(InstalledVersionText, SelectedVersion?.VersionText) == true;

@@ -584,9 +584,17 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             ? Strings.Downloads_KeptSettings(result.KeptSettings.Count, result.KeptSettings.Count)
             : null;
 
+        // OPEN-50: the mod was disabled before this install.
+        var disabled = result.SetAsideAgain switch
+        {
+            true => Strings.Downloads_StillDisabled,
+            false => Strings.Downloads_NotDisabledAgain,
+            null => null,
+        };
+
         item.StatusMessage = string.Join(
             Strings.Common_SentenceSeparator,
-            new[] { installed, configs, keptSpt, keptApp, keptSettings, keptOriginals }.Where(s => !string.IsNullOrEmpty(s)));
+            new[] { installed, disabled, configs, keptSpt, keptApp, keptSettings, keptOriginals }.Where(s => !string.IsNullOrEmpty(s)));
         var named = skipped.Concat(result.KeptSettings).ToList();
         item.StatusDetail = named.Count > 0
             ? string.Join(Environment.NewLine, new[] { item.StatusMessage, "" }.Concat(named))

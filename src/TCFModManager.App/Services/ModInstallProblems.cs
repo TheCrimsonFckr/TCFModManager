@@ -104,7 +104,7 @@ public static class ModInstallProblems
 
         ModInstallFailure.RemovalDuplicate => string.Format(
             CultureInfo.CurrentCulture,
-            Strings.ModInstall_RemoveDuplicateFormat,
+            problem.Action == ModInstallAction.Remove ? Strings.ModInstall_RemoveDuplicateFormat : Strings.ModInstall_UpdateDuplicateFormat,
             problem.ModName,
             problem.Folder?.Replace('/', '\\')),
 

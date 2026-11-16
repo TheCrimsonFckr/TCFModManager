@@ -80,7 +80,7 @@
                 TextWrapping="Wrap"
                 Foreground="{DynamicResource SystemFillColorCautionBrush}"
                 Text="{Binding DisabledNotice}"
-                Visibility="{Binding IsModDisabled, Converter={StaticResource TrueToVisible}}" />
+                Visibility="{Binding ShowDisabledNotice, Converter={StaticResource TrueToVisible}}" />
 
             <!-- The selected release would break another installed mod (OPEN-12 F11). Allowed, said. -->
             <TextBlock

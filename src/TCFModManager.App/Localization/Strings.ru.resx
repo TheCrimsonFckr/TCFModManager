@@ -364,9 +364,6 @@
   <data name="Browse_DetailsUnexpectedFormat" xml:space="preserve">
     <value>Непредвиденная ошибка при загрузке сведений о {0}: {1}</value>
   </data>
-  <data name="Browse_DisabledFormat" xml:space="preserve">
-    <value>{0} отключён - включите его на странице Установленные перед повторной установкой.</value>
-  </data>
   <data name="Browse_EndorsementsFormat" xml:space="preserve">
     <value>{0:N0} одобрений</value>
   </data>
@@ -1293,6 +1290,12 @@
   <data name="Downloads_InstalledFormat" xml:space="preserve">
     <value>{0} {1} установлен.</value>
   </data>
+  <data name="Downloads_StillDisabled" xml:space="preserve">
+    <value>По-прежнему отключён.</value>
+  </data>
+  <data name="Downloads_NotDisabledAgain" xml:space="preserve">
+    <value>Он был отключён, но отключить его снова не удалось - сейчас он включён.</value>
+  </data>
   <data name="Downloads_NoLinkFormat" xml:space="preserve">
     <value>Не удалось найти ссылку для загрузки {0} {1}.</value>
   </data>
@@ -2070,9 +2073,6 @@
   <data name="Installed_NoUpdatesAvailable" xml:space="preserve">
     <value>Ни для одного из выбранных модов нет обновления.</value>
   </data>
-  <data name="Installed_NoUpdatesReasonsFormat" xml:space="preserve">
-    <value>Ни один из выбранных модов нельзя обновить здесь: {0}.</value>
-  </data>
   <data name="Installed_Pin" xml:space="preserve">
     <value>Закрепить</value>
   </data>
@@ -2081,15 +2081,6 @@
   </data>
   <data name="Installed_PinToolTip" xml:space="preserve">
     <value>Закрепите этот мод, чтобы ни один применённый список модов его не отложил. Для HUD и модов для удобства, которые нужны вам при любом списке.</value>
-  </data>
-  <data name="Installed_ReasonDisabled_few" xml:space="preserve">
-    <value>{0} отключено (сначала включите их)</value>
-  </data>
-  <data name="Installed_ReasonDisabled_many" xml:space="preserve">
-    <value>{0} отключено (сначала включите их)</value>
-  </data>
-  <data name="Installed_ReasonDisabled_one" xml:space="preserve">
-    <value>{0} отключён (сначала включите его)</value>
   </data>
   <data name="Installed_Remove" xml:space="preserve">
     <value>Удалить</value>
@@ -2154,15 +2145,6 @@
   <data name="Installed_ServerFolder" xml:space="preserve">
     <value>Папка сервера</value>
   </data>
-  <data name="Installed_SkippedDisabled_few" xml:space="preserve">
-    <value>{0} отключено</value>
-  </data>
-  <data name="Installed_SkippedDisabled_many" xml:space="preserve">
-    <value>{0} отключено</value>
-  </data>
-  <data name="Installed_SkippedDisabled_one" xml:space="preserve">
-    <value>{0} отключён</value>
-  </data>
   <data name="Installed_SkippedFormat" xml:space="preserve">
     <value> Пропущено: {0}.</value>
   </data>
@@ -2207,6 +2189,9 @@
   </data>
   <data name="Installed_StatusUpdateFormat" xml:space="preserve">
     <value>Доступно обновление - {0}</value>
+  </data>
+  <data name="Installed_StatusDisabledUpdateFormat" xml:space="preserve">
+    <value>Отключён - доступно обновление ({0})</value>
   </data>
   <data name="Installed_TargetClientOnly" xml:space="preserve">
     <value>Только клиент</value>
@@ -2432,6 +2417,9 @@
   </data>
   <data name="ModInstall_RemoveDuplicateFormat" xml:space="preserve">
     <value>{0} не удалён: он лежит и во включённой, и в отключённой папке ({1}). Сначала нажмите «Устранить» на его карточке. Ничего не перемещено.</value>
+  </data>
+  <data name="ModInstall_UpdateDuplicateFormat" xml:space="preserve">
+    <value>{0} не установлен: он лежит и во включённой, и в отключённой папке ({1}). Сначала нажмите «Устранить» на его карточке. Ничего не изменено.</value>
   </data>
   <data name="ModInstall_RemoveRefusedProtectedFormat" xml:space="preserve">
     <value>{0} не удалён: он принадлежит SPT, BepInEx или игре. Ничего не удалено.</value>
@@ -3557,7 +3545,10 @@
     <value>Сейчас установлена: {0}</value>
   </data>
   <data name="ModUpdate_DisabledNoticeFormat" xml:space="preserve">
-    <value>{0} отключён. Включите его на странице Установленные, чтобы обновить или скачать заново.</value>
+    <value>{0} отключён и останется отключённым.</value>
+  </data>
+  <data name="ModUpdate_PartDisabledNoticeFormat" xml:space="preserve">
+    <value>Часть {0} отключена. После этого весь мод будет включён.</value>
   </data>
   <data name="ModUpdate_Downgrade" xml:space="preserve">
     <value>Понизить версию</value>

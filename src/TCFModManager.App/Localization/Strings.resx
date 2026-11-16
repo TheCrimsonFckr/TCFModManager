@@ -1611,6 +1611,10 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Didn't remove {0}: it is in both an enabled and a disabled folder ({1}). Use Sort out on its card first. Nothing was moved.</value>
     <comment>{0} is a mod name, {1} the mod's folder inside the SPT folder. Sort out is the button named by Installed_SortOut - translate both the same way.</comment>
   </data>
+  <data name="ModInstall_UpdateDuplicateFormat" xml:space="preserve">
+    <value>Didn't install {0}: it is in both an enabled and a disabled folder ({1}). Use Sort out on its card first. Nothing was changed.</value>
+    <comment>{0} is a mod name, {1} the mod's folder inside the SPT folder. Sort out is the button named by Installed_SortOut - translate both the same way.</comment>
+  </data>
   <data name="ModInstall_RemoveRefusedProtectedFormat" xml:space="preserve">
     <value>Didn't remove {0}: it belongs to SPT, BepInEx or the game. Nothing was deleted.</value>
     <comment>{0} is a folder or file path.</comment>
@@ -3353,18 +3357,6 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="Installed_NoUpdatesAvailable" xml:space="preserve">
     <value>None of the selected mods have an update.</value>
   </data>
-  <data name="Installed_NoUpdatesReasonsFormat" xml:space="preserve">
-    <value>None of the selected mods can be updated here: {0}.</value>
-    <comment>{0} is one or more reasons, joined by Common_ListSeparator.</comment>
-  </data>
-  <data name="Installed_ReasonDisabled_one" xml:space="preserve">
-    <value>1 disabled (enable it first)</value>
-    <comment>One reason in Installed_NoUpdatesReasonsFormat. See the Many form; these become one plural key in S5.</comment>
-  </data>
-  <data name="Installed_ReasonDisabled_other" xml:space="preserve">
-    <value>{0} disabled (enable them first)</value>
-    <comment>One reason in Installed_NoUpdatesReasonsFormat. {0} is how many.</comment>
-  </data>
   <data name="Installed_SkippedFormat" xml:space="preserve">
     <value> Skipped {0}.</value>
     <comment>Follows the queued sentence on the same line, which is why it starts with a space. {0} is one or more counts, joined by Common_ListSeparator.</comment>
@@ -3375,14 +3367,6 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   </data>
   <data name="Installed_SkippedUpToDate_other" xml:space="preserve">
     <value>{0} already up to date</value>
-    <comment>One count in Installed_SkippedFormat.</comment>
-  </data>
-  <data name="Installed_SkippedDisabled_one" xml:space="preserve">
-    <value>1 disabled</value>
-    <comment>One count in Installed_SkippedFormat.</comment>
-  </data>
-  <data name="Installed_SkippedDisabled_other" xml:space="preserve">
-    <value>{0} disabled</value>
     <comment>One count in Installed_SkippedFormat.</comment>
   </data>
   <data name="Installed_SkippedAddonNoFit_one" xml:space="preserve">
@@ -3822,10 +3806,6 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>this mod</value>
     <comment>Stands in for a mod whose name the catalog did not give. It appears where a mod name would, in the read-the-mod-page prompt.</comment>
   </data>
-  <data name="Browse_DisabledFormat" xml:space="preserve">
-    <value>{0} is disabled - enable it on the Installed page before reinstalling it.</value>
-    <comment>{0} is a mod name. Installed is the page name - translate it as in Nav_Installed.</comment>
-  </data>
   <data name="Browse_InstallCancelledFormat" xml:space="preserve">
     <value>Install cancelled - {0}'s page wasn't confirmed as read.</value>
     <comment>{0} is a mod name. One whole sentence per action rather than the verb dropped into one - see Browse_RedownloadCancelledFormat.</comment>
@@ -3969,6 +3949,10 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   </data>
   <data name="Installed_StatusUpdateFormat" xml:space="preserve">
     <value>Update available - {0}</value>
+    <comment>{0} is a version number.</comment>
+  </data>
+  <data name="Installed_StatusDisabledUpdateFormat" xml:space="preserve">
+    <value>Disabled - update available ({0})</value>
     <comment>{0} is a version number.</comment>
   </data>
   <data name="Installed_DetailParentMissingFormat" xml:space="preserve">
@@ -4162,8 +4146,12 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <comment>Shown before an update, when this mod's config policy is ConfigPolicy_Merge. Data\LegacyConfigs is a folder path and stays as it is.</comment>
   </data>
   <data name="ModUpdate_DisabledNoticeFormat" xml:space="preserve">
-    <value>{0} is disabled. Enable it on the Installed page to update or redownload it.</value>
-    <comment>{0} is a mod name. Installed is the page name - translate it as in Nav_Installed.</comment>
+    <value>{0} is disabled. It stays disabled after this.</value>
+    <comment>{0} is a mod name. Shown above the update, redownload and downgrade buttons.</comment>
+  </data>
+  <data name="ModUpdate_PartDisabledNoticeFormat" xml:space="preserve">
+    <value>Part of {0} is disabled. After this the whole mod is on.</value>
+    <comment>{0} is a mod name. Shown above the update, redownload and downgrade buttons.</comment>
   </data>
   <data name="ModUpdate_ShowingAllVersions" xml:space="preserve">
     <value>Showing every published version, including ones for other SPT releases.</value>
@@ -4602,6 +4590,14 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="Downloads_InstalledFormat" xml:space="preserve">
     <value>Installed {0} {1}.</value>
     <comment>{0} is a mod name, {1} its version.</comment>
+  </data>
+  <data name="Downloads_StillDisabled" xml:space="preserve">
+    <value>Still disabled.</value>
+    <comment>Follows Downloads_InstalledFormat when the mod was disabled before the update.</comment>
+  </data>
+  <data name="Downloads_NotDisabledAgain" xml:space="preserve">
+    <value>It was disabled, but couldn't be disabled again - it's on now.</value>
+    <comment>Follows Downloads_InstalledFormat.</comment>
   </data>
   <data name="Downloads_CancelledItemFormat" xml:space="preserve">
     <value>Cancelled {0} {1}.</value>

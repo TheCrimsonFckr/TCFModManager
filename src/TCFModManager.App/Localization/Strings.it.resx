@@ -358,9 +358,6 @@
   <data name="Browse_DetailsUnexpectedFormat" xml:space="preserve">
     <value>Errore imprevisto nel caricare i dettagli di {0}: {1}</value>
   </data>
-  <data name="Browse_DisabledFormat" xml:space="preserve">
-    <value>{0} è disattivato - attivalo nella pagina Installati prima di reinstallarlo.</value>
-  </data>
   <data name="Browse_EndorsementsFormat" xml:space="preserve">
     <value>{0:N0} consensi</value>
   </data>
@@ -1260,6 +1257,12 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Downloads_InstalledFormat" xml:space="preserve">
     <value>{0} {1} installato.</value>
   </data>
+  <data name="Downloads_StillDisabled" xml:space="preserve">
+    <value>Ancora disattivato.</value>
+  </data>
+  <data name="Downloads_NotDisabledAgain" xml:space="preserve">
+    <value>Era disattivato, ma non è stato possibile disattivarlo di nuovo - ora è attivo.</value>
+  </data>
   <data name="Downloads_NoLinkFormat" xml:space="preserve">
     <value>Impossibile trovare un link di download per {0} {1}.</value>
   </data>
@@ -1971,9 +1974,6 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Installed_NoUpdatesAvailable" xml:space="preserve">
     <value>Nessuno dei mod selezionati ha un aggiornamento.</value>
   </data>
-  <data name="Installed_NoUpdatesReasonsFormat" xml:space="preserve">
-    <value>Nessuno dei mod selezionati può essere aggiornato qui: {0}.</value>
-  </data>
   <data name="Installed_Pin" xml:space="preserve">
     <value>Fissa</value>
   </data>
@@ -1982,12 +1982,6 @@ Vedi Dipendenze e conflitti.</value>
   </data>
   <data name="Installed_PinToolTip" xml:space="preserve">
     <value>Fissa questo mod, così nessuna lista mod che applichi potrà metterlo da parte. Per i mod HUD e di comodità che vuoi tenere qualunque lista tu scelga.</value>
-  </data>
-  <data name="Installed_ReasonDisabled_one" xml:space="preserve">
-    <value>1 disattivato (attivalo prima)</value>
-  </data>
-  <data name="Installed_ReasonDisabled_other" xml:space="preserve">
-    <value>{0} disattivati (attivali prima)</value>
   </data>
   <data name="Installed_Remove" xml:space="preserve">
     <value>Rimuovi</value>
@@ -2046,12 +2040,6 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Installed_ServerFolder" xml:space="preserve">
     <value>Cartella server</value>
   </data>
-  <data name="Installed_SkippedDisabled_one" xml:space="preserve">
-    <value>1 disattivato</value>
-  </data>
-  <data name="Installed_SkippedDisabled_other" xml:space="preserve">
-    <value>{0} disattivati</value>
-  </data>
   <data name="Installed_SkippedFormat" xml:space="preserve">
     <value> Saltati: {0}.</value>
   </data>
@@ -2090,6 +2078,9 @@ Vedi Dipendenze e conflitti.</value>
   </data>
   <data name="Installed_StatusUpdateFormat" xml:space="preserve">
     <value>Aggiornamento disponibile - {0}</value>
+  </data>
+  <data name="Installed_StatusDisabledUpdateFormat" xml:space="preserve">
+    <value>Disattivato - aggiornamento disponibile ({0})</value>
   </data>
   <data name="Installed_TargetClientOnly" xml:space="preserve">
     <value>Solo client</value>
@@ -2309,6 +2300,9 @@ Vedi Dipendenze e conflitti.</value>
   </data>
   <data name="ModInstall_RemoveDuplicateFormat" xml:space="preserve">
     <value>{0} non è stato rimosso: è sia in una cartella attivata sia in una disattivata ({1}). Usa prima Risolvi sulla sua scheda. Non è stato spostato nulla.</value>
+  </data>
+  <data name="ModInstall_UpdateDuplicateFormat" xml:space="preserve">
+    <value>{0} non è stato installato: è sia in una cartella attivata sia in una disattivata ({1}). Usa prima Risolvi sulla sua scheda. Non è stato modificato nulla.</value>
   </data>
   <data name="ModInstall_RemoveRefusedProtectedFormat" xml:space="preserve">
     <value>{0} non è stato rimosso: appartiene a SPT, BepInEx o al gioco. Non è stato eliminato nulla.</value>
@@ -3383,7 +3377,10 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
     <value>Attualmente installata: {0}</value>
   </data>
   <data name="ModUpdate_DisabledNoticeFormat" xml:space="preserve">
-    <value>{0} è disattivato. Attivalo nella pagina Installati per aggiornarlo o riscaricarlo.</value>
+    <value>{0} è disattivato e lo resta anche dopo.</value>
+  </data>
+  <data name="ModUpdate_PartDisabledNoticeFormat" xml:space="preserve">
+    <value>Una parte di {0} è disattivata. Dopo, tutto il mod è attivo.</value>
   </data>
   <data name="ModUpdate_Downgrade" xml:space="preserve">
     <value>Downgrade</value>
