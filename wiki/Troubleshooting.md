@@ -22,8 +22,8 @@ That's the server, not your connection: sp-mod, or the site the mod's file is ho
 ## A mod I installed by hand isn't listed under Installed
 It isn't in `BepInEx\plugins`, `BepInEx\patchers` or one of the `user\mods` layouts - see Limitations for the folder shapes that aren't scanned. A mod that *is* listed but shows as not found on sp-mod is there, just unmatched.
 
-## The Update or Remove button is greyed out
-The mod is disabled. Enable it first - see [Disabling mods](Disabling-mods).
+## The Update button is greyed out
+The mod is disabled. Enable it first - see [Disabling mods](Disabling-mods). A disabled mod can still be removed.
 
 ## A mod I disabled is still loading in game
 Check it isn't installed twice. If the same mod sits in both the normal folder and the `.disabled` one, its card says so and offers **Sort out** to keep one copy and set the other aside.

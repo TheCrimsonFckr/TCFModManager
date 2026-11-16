@@ -49,7 +49,7 @@ public sealed partial class ModInstallService
         var archivePath = downloadedArchive ?? Path.Combine(workDir, "download.bin");
         var extractDir = Path.Combine(workDir, "extracted");
         InstallJournalEntry? journalEntry = null;
-        IReadOnlyList<string> clientHalfAside = [];
+        var broughtBack = BroughtBack.None;
 
         try
         {
@@ -137,7 +137,11 @@ public sealed partial class ModInstallService
             var manifest = manifestService.Load();
             var existing = manifest.Mods.FirstOrDefault(target.Matches);
 
-            if (existing is not null) EnsureRecordBelongsHere(existing, installPath);
+            if (existing is not null)
+            {
+                EnsureRecordBelongsHere(existing, installPath);
+                EnsureNotOnDiskTwice(existing, installPath, ModInstallAction.Install);
+            }
 
             //
             // Where each source file is going, worked out before anything is removed: the config
@@ -248,12 +252,19 @@ public sealed partial class ModInstallService
             var timestamp = DateTimeOffset.UtcNow;
 
             //
-            // A previous version whose client half an earlier build set aside (OPEN-46 Q6) is brought
-            // back first, so the update replaces it rather than placing a second, live copy. It stays
-            // back: a mod is updated whole (OPEN-44 Q14). Only a failed install sets it aside again,
-            // leaving the install as it was.
+            // A previous version with files in ".disabled" places is brought back first, so the update
+            // replaces it rather than placing a second, live copy (OPEN-46 Q6, OPEN-50). A half set
+            // aside stays back: a mod is updated whole (OPEN-44 Q14, OPEN-50 Q4). A mod that was wholly
+            // disabled is set aside again once the update is in. A failed install sets back what came
+            // back, leaving the install as it was.
             //
-            if (existing is not null) clientHalfAside = BringBackClientHalf(installPath, existing, target, version);
+            var liveBefore = placements
+                .Select(p => InstallPathGuard.ModFolderOf(p.Forward))
+                .OfType<string>()
+                .Where(f => Exists(Path.Combine(installPath, f.Replace('/', Path.DirectorySeparatorChar))))
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            if (existing is not null) broughtBack = BringBackDisabled(installPath, existing, target, version);
 
             var pending = _configs.Prepare(
                 installPath, existing, placements.Select(p => p.Forward), target.Name, timestamp);
@@ -423,6 +434,10 @@ public sealed partial class ModInstallService
             _journal.Delete(journalEntry);
             AppLog.Debug("Install", $"fingerprinted {record.Fingerprints.Count} file(s) in {fingerprintClock.ElapsedMilliseconds}ms");
 
+            bool? setAsideAgain = broughtBack.Whole
+                ? SetAsideAfterUpdate(installPath, record, broughtBack, liveBefore, target, version)
+                : null;
+
             status?.Report(new ModInstallProgress(ModInstallStage.Done));
             if (keptSettings.Count > 0)
                 AppLog.Info("Install", $"{target.Name} {version.Version}: kept the settings already in {string.Join(", ", keptSettings)}");
@@ -431,18 +446,19 @@ public sealed partial class ModInstallService
             {
                 OriginalsKept = overwrote.Count - (existing?.Overwrote.Count ?? 0),
                 KeptSettings = keptSettings,
+                SetAsideAgain = setAsideAgain,
             };
         }
         catch (OperationCanceledException)
         {
             AppLog.Info("Install", $"{target.Name} {version.Version} cancelled");
-            if (journalEntry is null && clientHalfAside.Count > 0) SetClientHalfAsideAgain(installPath, clientHalfAside, target, version);
+            if (journalEntry is null && broughtBack.Any) PutBackAside(installPath, broughtBack, target, version);
             throw;
         }
         catch (Exception ex)
         {
             AppLog.Error("Install", $"{target.Name} {version.Version} failed", ex);
-            if (journalEntry is null && clientHalfAside.Count > 0) SetClientHalfAsideAgain(installPath, clientHalfAside, target, version);
+            if (journalEntry is null && broughtBack.Any) PutBackAside(installPath, broughtBack, target, version);
             throw;
         }
         finally
@@ -452,39 +468,123 @@ public sealed partial class ModInstallService
         }
     }
 
-    private static IReadOnlyList<string> BringBackClientHalf(
+    //
+    // What an update brought back from ".disabled" places before it ran, in their live form: mod folders
+    // that were away whole, and files from folders that stayed live (a mod sharing its folder, OPEN-28).
+    // Whole is true when none of the record's files in a mod container was live.
+    //
+    private sealed record BroughtBack(IReadOnlyList<string> Folders, IReadOnlyList<string> Files, bool Whole)
+    {
+        public static BroughtBack None { get; } = new([], [], false);
+
+        public bool Any => Folders.Count > 0 || Files.Count > 0;
+    }
+
+    private static BroughtBack BringBackDisabled(
         string installPath, InstalledModRecord existing, InstallTarget target, ModVersion version)
     {
-        var parked = ModDisableService.ParkedClientFiles(installPath, existing);
-        if (parked.Count == 0) return [];
+        var parked = new List<string>();
+        var anyLive = false;
 
-        var back = ModDisableService.MoveFiles(installPath, parked, disable: false, target.Name);
-
-        if (back.Failed.Count > 0)
+        foreach (var file in existing.Files)
         {
-            AppLog.Warn("Install",
-                $"{target.Name} {version.Version}: couldn't bring back the client half set aside before updating " +
-                $"({string.Join("; ", back.Failed.Select(f => f.Reason))}); updating without setting it aside again");
-            return [];
+            if (!DisabledModPaths.TryGetRelativeCounterpart(file, out var aside) || DisabledModPaths.IsRelativePathDisabled(file))
+                continue;
+
+            if (File.Exists(Path.Combine(installPath, file.Replace('/', Path.DirectorySeparatorChar)))) anyLive = true;
+            else if (File.Exists(Path.Combine(installPath, aside.Replace('/', Path.DirectorySeparatorChar)))) parked.Add(file);
         }
 
-        AppLog.Info("Install", $"{target.Name} {version.Version}: client half was set aside; brought back {back.Moved.Count} file(s) to update it");
-        return parked;
-    }
+        if (parked.Count == 0) return BroughtBack.None;
 
-    private static void SetClientHalfAsideAgain(
-        string installPath, IEnumerable<string> files, InstallTarget target, ModVersion version)
-    {
-        var aside = ModDisableService.MoveFiles(
-            installPath, files.Where(ModDisableService.IsClientFile), disable: true, target.Name);
+        var folders = parked
+            .Select(InstallPathGuard.ModFolderOf)
+            .OfType<string>()
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Where(f => !Exists(Path.Combine(installPath, f.Replace('/', Path.DirectorySeparatorChar))))
+            .ToList();
 
-        if (aside.Failed.Count > 0)
+        var files = parked
+            .Where(f => InstallPathGuard.ModFolderOf(f) is not { } folder || !folders.Contains(folder, StringComparer.OrdinalIgnoreCase))
+            .ToList();
+
+        var backFolders = ModDisableService.MoveFolders(installPath, folders, disable: false, target.Name);
+        var backFiles = backFolders.Failed.Count == 0
+            ? ModDisableService.MoveFiles(installPath, files, disable: false, target.Name)
+            : ModDisableOutcome.Empty;
+
+        if (backFolders.Failed.Count > 0 || backFiles.Failed.Count > 0)
+        {
+            if (backFiles.Failed.Count > 0) ModDisableService.MoveFolders(installPath, folders, disable: true, target.Name);
+
             AppLog.Warn("Install",
-                $"{target.Name} {version.Version}: couldn't set the client half aside again " +
-                $"({string.Join("; ", aside.Failed.Select(f => f.Reason))}); it is live");
-        else
-            AppLog.Info("Install", $"{target.Name} {version.Version}: set the client half aside again ({aside.Moved.Count} file(s))");
+                $"{target.Name} {version.Version}: couldn't bring back what was in .disabled before updating " +
+                $"({string.Join("; ", backFolders.Failed.Concat(backFiles.Failed).Select(f => f.Reason))}); updating without it");
+            return BroughtBack.None;
+        }
+
+        AppLog.Info("Install",
+            $"{target.Name} {version.Version}: brought back {folders.Count} folder(s) and {files.Count} file(s) from .disabled to update " +
+            (anyLive ? "(part was live, so it stays back)" : "(it was disabled, so it is set aside again after)"));
+
+        return new BroughtBack(folders, files, Whole: !anyLive);
     }
+
+    private static void PutBackAside(string installPath, BroughtBack broughtBack, InstallTarget target, ModVersion version)
+    {
+        var folders = ModDisableService.MoveFolders(installPath, broughtBack.Folders, disable: true, target.Name);
+        var files = ModDisableService.MoveFiles(installPath, broughtBack.Files, disable: true, target.Name);
+
+        if (folders.Failed.Count > 0 || files.Failed.Count > 0)
+            AppLog.Warn("Install",
+                $"{target.Name} {version.Version}: couldn't set back aside what the update brought back " +
+                $"({string.Join("; ", folders.Failed.Concat(files.Failed).Select(f => f.Reason))}); it is live");
+        else
+            AppLog.Info("Install", $"{target.Name} {version.Version}: set back aside what the update brought back");
+    }
+
+    //
+    // A wholly disabled mod, once updated, goes back into ".disabled" places (OPEN-50): every mod folder
+    // that came back whole or that the update made, and the update's own files in folders that stayed
+    // live. True when all of it moved.
+    //
+    private static bool SetAsideAfterUpdate(
+        string installPath, InstalledModRecord record, BroughtBack broughtBack, IReadOnlySet<string> liveBefore,
+        InstallTarget target, ModVersion version)
+    {
+        var came = broughtBack.Folders.ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var folders = record.Files
+            .Select(InstallPathGuard.ModFolderOf)
+            .OfType<string>()
+            .Concat(broughtBack.Folders)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Where(f => DisabledModPaths.TryGetRelativeCounterpart(f, out _))
+            .Where(f => came.Contains(f) || !liveBefore.Contains(f))
+            .Where(f => Exists(Path.Combine(installPath, f.Replace('/', Path.DirectorySeparatorChar))))
+            .ToList();
+
+        var files = record.Files
+            .Where(f => DisabledModPaths.TryGetRelativeCounterpart(f, out _))
+            .Where(f => InstallPathGuard.ModFolderOf(f) is not { } folder || !folders.Contains(folder, StringComparer.OrdinalIgnoreCase))
+            .ToList();
+
+        var asideFolders = ModDisableService.MoveFolders(installPath, folders, disable: true, target.Name);
+        var asideFiles = ModDisableService.MoveFiles(installPath, files, disable: true, target.Name);
+
+        if (asideFolders.Failed.Count == 0 && asideFiles.Failed.Count == 0)
+        {
+            AppLog.Info("Install", $"{target.Name} {version.Version}: was disabled; set aside again");
+            return true;
+        }
+
+        AppLog.Warn("Install",
+            $"{target.Name} {version.Version}: was disabled, but couldn't set the update aside again " +
+            $"({string.Join("; ", asideFolders.Failed.Concat(asideFiles.Failed).Select(f => f.Reason))}); it is live");
+        return false;
+    }
+
+    private static bool Exists(string path) => File.Exists(path) || Directory.Exists(path);
 
     //
     // The folders an archive ships with nothing in them (SVM's Presets\, which its own tool refuses to

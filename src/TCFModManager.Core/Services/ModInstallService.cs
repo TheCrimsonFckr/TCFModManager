@@ -176,6 +176,10 @@ public sealed record ModInstallResult(
     // BepInEx\config files the archive ships that were already there, left as they are - the
     // user's plugin settings (see ConfigCarryOver.Prepare).
     public IReadOnlyList<string> KeptSettings { get; init; } = [];
+
+    // OPEN-50: null when the previous version wasn't wholly disabled; true when the update was set
+    // aside into ".disabled" again; false when it couldn't be, so it is live.
+    public bool? SetAsideAgain { get; init; }
 }
 
 // Result of ModInstallService.UninstallAsync. FailedFiles lists files that couldn't be

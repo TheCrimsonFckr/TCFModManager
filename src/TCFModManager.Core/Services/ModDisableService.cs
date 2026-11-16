@@ -219,6 +219,58 @@ public static class ModDisableService
         return parked;
     }
 
+    //
+    // Moves install-relative mod folders (or loose files), given in their live form, into their
+    // ".disabled" place or back, all or nothing: anything already at a destination refuses the lot, and
+    // a move that fails part way puts back the ones already moved. One not at its source is skipped.
+    //
+    public static ModDisableOutcome MoveFolders(
+        string installPath, IEnumerable<string> liveRelativeFolders, bool disable, string modName)
+    {
+        var moves = new List<ModMove>();
+
+        foreach (var folder in liveRelativeFolders.Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            if (!DisabledModPaths.TryGetRelativeCounterpart(folder, out var aside)) continue;
+
+            var live = FullPath(installPath, folder);
+            var parked = FullPath(installPath, aside);
+            var move = disable ? new ModMove(live, parked) : new ModMove(parked, live);
+
+            if (Exists(move.From)) moves.Add(move);
+        }
+
+        if (moves.Count == 0) return ModDisableOutcome.Empty;
+
+        var moved = new List<ModMove>();
+        var failed = new List<ModDisableFailure>();
+
+        if (moves.FirstOrDefault(m => Exists(m.To)) is { } clash)
+        {
+            failed.Add(new ModDisableFailure(modName, $"something is already at {clash.To} - remove or rename it first"));
+            return new ModDisableOutcome(moved, failed);
+        }
+
+        foreach (var move in moves)
+        {
+            if (TryMove(move.From, move.To, modName, failed))
+            {
+                moved.Add(move);
+                continue;
+            }
+
+            for (var i = moved.Count - 1; i >= 0; i--) TryMove(moved[i].To, moved[i].From, modName, failed);
+
+            return new ModDisableOutcome([], failed);
+        }
+
+        foreach (var move in moved) TryRemoveEmptyDisabledContainer(Path.GetDirectoryName(move.From));
+
+        AppLog.Info("Disable", $"{modName}: {(disable ? "set aside" : "brought back")} {moved.Count} folder(s)");
+
+        return new ModDisableOutcome(moved, failed);
+    }
+
     // True for an install-relative path in a live client container - BepInEx\plugins or BepInEx\patchers.
     public static bool IsClientFile(string relativePath) =>
         DisabledModPaths.TryFindRelativeContainer(relativePath, out var container, out var disabled)

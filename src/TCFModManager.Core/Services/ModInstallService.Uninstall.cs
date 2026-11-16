@@ -76,19 +76,23 @@ public sealed partial class ModInstallService
     }
 
     //
-    // Refuses a record with a mod folder that is both live and disabled (OPEN-49 Q2).
+    // Refuses a record with a file that is both live and disabled (OPEN-49 Q2). Checked per file: a
+    // mod sharing its folder (OPEN-28) can have its own files disabled while the folder stays live.
     //
-    private static void EnsureNotOnDiskTwice(InstalledModRecord record, string installPath)
+    private static void EnsureNotOnDiskTwice(
+        InstalledModRecord record, string installPath, ModInstallAction action = ModInstallAction.Remove)
     {
-        foreach (var folder in record.Files.Select(InstallPathGuard.ModFolderOf).OfType<string>().Distinct(StringComparer.OrdinalIgnoreCase))
+        foreach (var file in record.Files)
         {
-            if (!DisabledModPaths.IsOnDiskTwice(installPath, folder)) continue;
+            if (!DisabledModPaths.IsOnDiskTwice(installPath, file)) continue;
 
-            AppLog.Warn("Remove", $"{record.Name}: {folder} is both live and disabled; refused");
+            var folder = InstallPathGuard.ModFolderOf(file) ?? file;
+            AppLog.Warn(action == ModInstallAction.Remove ? "Remove" : "Install", $"{record.Name}: {folder} is both live and disabled; refused");
             throw new ModInstallException(ModInstallFailure.RemovalDuplicate)
             {
                 ModName = record.Name,
                 Folder = folder,
+                Action = action,
             };
         }
     }

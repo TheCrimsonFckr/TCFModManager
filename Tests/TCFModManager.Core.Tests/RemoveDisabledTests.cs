@@ -238,6 +238,41 @@ public class RemoveDisabledTests : IDisposable
         Assert.Equal("the user's", File.ReadAllText(Full("BepInEx/plugins.disabled/Mod/notes.txt")));
     }
 
+    [Fact]
+    public async Task Remove_AnAddonDisabledInsideItsLiveParentsFolder_IsNotTakenForADuplicate()
+    {
+        var parent = NewTarget();
+        var addon = NewTarget();
+        await Install(parent, ("BepInEx/plugins/Parent/parent.dll", "parent"));
+        await Install(addon, ("BepInEx/plugins/Parent/addon.dll", "addon"));
+        Write("BepInEx/plugins.disabled/Parent/addon.dll", "addon");
+        File.Delete(Full("BepInEx/plugins/Parent/addon.dll"));
+
+        var result = await Service().UninstallAsync(_install, RecordOf(addon), ConfigAction.Delete);
+
+        Assert.Equal(1, result.FilesDeleted);
+        Assert.Equal("addon", File.ReadAllText(Held(result.HoldingFolder!, "BepInEx/plugins.disabled/Parent/addon.dll")));
+        Assert.Equal("parent", File.ReadAllText(Full("BepInEx/plugins/Parent/parent.dll")));
+        Assert.False(Directory.Exists(Full("BepInEx/plugins.disabled")));
+    }
+
+    [Fact]
+    public async Task Remove_TheLiveParentOfAnAddonDisabledInItsFolder_LeavesTheAddon()
+    {
+        var parent = NewTarget();
+        var addon = NewTarget();
+        await Install(parent, ("BepInEx/plugins/Parent/parent.dll", "parent"));
+        await Install(addon, ("BepInEx/plugins/Parent/addon.dll", "addon"));
+        Write("BepInEx/plugins.disabled/Parent/addon.dll", "addon");
+        File.Delete(Full("BepInEx/plugins/Parent/addon.dll"));
+
+        var result = await Service().UninstallAsync(_install, RecordOf(parent), ConfigAction.Delete);
+
+        Assert.Equal(1, result.FilesDeleted);
+        Assert.False(File.Exists(Full("BepInEx/plugins/Parent/parent.dll")));
+        Assert.Equal("addon", File.ReadAllText(Full("BepInEx/plugins.disabled/Parent/addon.dll")));
+    }
+
     // --- Undo ----------------------------------------------------------------------------------
 
     [Fact]

@@ -26,7 +26,7 @@ Some authors put an SPT version where the mod's version belongs - ORBIT - Fika A
 ## Installed addons
 Every addon you install gets its own card on the Installed page, with *Addon for* and its mod under its name - including the usual kind that installs into its mod's own folder (a sticker pack in `BepInEx\plugins\7Bpencil.WeaponCamoAndStickers`, say). It updates, disables and removes like any mod, and touches only its own files. A new addon card starts in its mod's group.
 
-- **Removing a mod** asks whether to remove its addons too - **Remove addons too** (the default) or **Remove the mod only**. They go first, then the mod, and one **Undo** puts the lot back, listed as *Camo And Stickers and its addons*. A disabled addon is named and left in place.
+- **Removing a mod** asks whether to remove its addons too - **Remove addons too** (the default) or **Remove the mod only**. They go first, then the mod, and one **Undo** puts the lot back, listed as *Camo And Stickers and its addons*. Disabled addons go too.
 - **Disabling a mod** lists its addons with the mods that depend on it; **Disable these too** takes them along. Enabling the mod later offers back exactly the addons that went with it - not ones you'd turned off yourself.
 - **Multi select** works the same way, asking once for the whole selection.
 
@@ -45,7 +45,7 @@ To see your addons together: **Show only - Has installed addons** lists every mo
 > A mod list containing an addon needs this version of the app or newer to open. Sharing one with someone on an older build will tell them the file is too new - send them a list without addons, or ask them to update. Lists with no addons in them are unaffected.
 
 > [!WARNING]
-> **Update, Redownload and Remove are unavailable while a mod is disabled.** The record of what it installed points at folders it no longer occupies, so those actions would put files in the wrong place. Enable the mod first, then update it. Browse refuses a reinstall of a disabled mod for the same reason.
+> **Update and Redownload are unavailable while a mod is disabled.** The record of what it installed points at folders it no longer occupies, so those actions would put files in the wrong place. Enable the mod first, then update it. Browse refuses a reinstall of a disabled mod for the same reason. **Remove** works on a disabled mod.
 
 ## Updating a mod that has addons
 Updating, downgrading or redownloading a mod checks its installed addons against the version you pick. The update dialog lists them under **Your addons with 1.19.0** - *Fits*, *Doesn't fit - 1.1.0 does*, or *No version fits* - and rechecks as you pick another version.

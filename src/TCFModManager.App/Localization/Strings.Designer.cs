@@ -168,6 +168,10 @@ internal static class Strings
     internal static string ModLists_RefreshVersions => LocalizationService.Get("ModLists_RefreshVersions");
     internal static string ModLists_RefreshVersionsToolTip => LocalizationService.Get("ModLists_RefreshVersionsToolTip");
     internal static string ModLists_RefreshBehindToolTip => LocalizationService.Get("ModLists_RefreshBehindToolTip");
+    internal static string ModLists_ListBehind(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_ListBehind", count, values);
+    internal static string ModLists_ListBehindPublished(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLists_ListBehindPublished", count, values);
     internal static string ModLists_SaveToolTip => LocalizationService.Get("ModLists_SaveToolTip");
     internal static string ModLists_Discard => LocalizationService.Get("ModLists_Discard");
     internal static string ModLists_DiscardToolTip => LocalizationService.Get("ModLists_DiscardToolTip");
@@ -624,7 +628,6 @@ internal static class Strings
     internal static string ModLists_ActionInstall => LocalizationService.Get("ModLists_ActionInstall");
     internal static string ModLists_ActionReinstall => LocalizationService.Get("ModLists_ActionReinstall");
     internal static string ModLists_ActionDowngrade => LocalizationService.Get("ModLists_ActionDowngrade");
-    internal static string ModLists_ActionListBehindFormat => LocalizationService.Get("ModLists_ActionListBehindFormat");
     internal static string ModLists_ActionUpdate => LocalizationService.Get("ModLists_ActionUpdate");
     internal static string ModLists_ActionEnable => LocalizationService.Get("ModLists_ActionEnable");
     internal static string ModLists_ActionEnableReinstall => LocalizationService.Get("ModLists_ActionEnableReinstall");
@@ -639,6 +642,7 @@ internal static class Strings
     internal static string ModLists_ActionVersionFormat => LocalizationService.Get("ModLists_ActionVersionFormat");
     internal static string ModLists_ActionRepairFormat => LocalizationService.Get("ModLists_ActionRepairFormat");
     internal static string ModLists_ActionVersionChangeFormat => LocalizationService.Get("ModLists_ActionVersionChangeFormat");
+    internal static string ModLists_ActionListBehindFormat => LocalizationService.Get("ModLists_ActionListBehindFormat");
     internal static string ModLists_ActionNotOnList => LocalizationService.Get("ModLists_ActionNotOnList");
     internal static string ModLists_ActionPinnedDetail => LocalizationService.Get("ModLists_ActionPinnedDetail");
     internal static string ModLists_ActionManualDetail => LocalizationService.Get("ModLists_ActionManualDetail");
@@ -1786,10 +1790,6 @@ internal static class Strings
         LocalizationService.Plural("ModLists_ChipDifferentVersion", count, values);
     internal static string ModLists_ChipNewerHere(int count, params object?[] values) =>
         LocalizationService.Plural("ModLists_ChipNewerHere", count, values);
-    internal static string ModLists_ListBehind(int count, params object?[] values) =>
-        LocalizationService.Plural("ModLists_ListBehind", count, values);
-    internal static string ModLists_ListBehindPublished(int count, params object?[] values) =>
-        LocalizationService.Plural("ModLists_ListBehindPublished", count, values);
     internal static string ModLists_ChipHalfInstalled(int count, params object?[] values) =>
         LocalizationService.Plural("ModLists_ChipHalfInstalled", count, values);
     internal static string ModLists_ChipDisabled(int count, params object?[] values) =>
