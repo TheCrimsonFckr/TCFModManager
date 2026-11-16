@@ -6898,11 +6898,11 @@ The details are in the log:
     <comment>How-to title.</comment>
   </data>
   <data name="Help_Configs_Edit_Step1" xml:space="preserve">
-    <value>Open {0} and pick the mod's file from the list - the search box finds it by mod or file name.</value>
+    <value>Open {0} and pick the mod from the list - the search box finds it by mod or setting name.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Configs_Edit_Step2" xml:space="preserve">
-    <value>Edit the text on the right.</value>
+    <value>Change a setting in the form, or press {0} to edit the file as text.</value>
   </data>
   <data name="Help_Configs_Edit_Step3" xml:space="preserve">
     <value>Press {0}. Only the lines you changed are rewritten.</value>
@@ -6932,15 +6932,15 @@ The details are in the log:
     <comment>How-to title.</comment>
   </data>
   <data name="Help_Configs_Original_Step1" xml:space="preserve">
-    <value>On {0}, open the file marked {1} beside the mod's config - it holds the values the mod came with.</value>
+    <value>On {0}, open the mod. In the form, a setting that differs from its default has a bar beside it and {1} next to it.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Configs_Original_Step2" xml:space="preserve">
-    <value>Copy the value you want into the real config and press {0}.</value>
+    <value>Press {0}, then {1}.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Configs_Original_Note" xml:space="preserve">
-    <value>Not every mod ships one. Every save also keeps the previous file in Data\config-backups, in this app's folder.</value>
+    <value>That covers .cfg files. A server mod's JSON records no defaults: open the file marked {0} beside it, if the mod ships one, and copy the value across. Every save also keeps the previous file in Data\config-backups, in this app's folder.</value>
     <comment>Data\config-backups is a literal folder name.</comment>
   </data>
   <data name="Help_Configs_Leftover_Title" xml:space="preserve">
@@ -7680,7 +7680,7 @@ The details are in the log:
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
   <data name="Help_Configs_Edit_Keywords" xml:space="preserve">
-    <value>config, settings, options, cfg, json, edit, change</value>
+    <value>config, settings, options, cfg, json, edit, change, keybind, hotkey, form</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
   <data name="Help_Configs_Policy_Keywords" xml:space="preserve">

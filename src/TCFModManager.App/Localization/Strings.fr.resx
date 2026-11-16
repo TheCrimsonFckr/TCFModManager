@@ -5533,10 +5533,10 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Modifier les réglages d'un mod</value>
   </data>
   <data name="Help_Configs_Edit_Step1" xml:space="preserve">
-    <value>Ouvrez {0} et choisissez le fichier du mod dans la liste - la zone de recherche le trouve par nom de mod ou de fichier.</value>
+    <value>Ouvrez {0} et choisissez le mod dans la liste - la zone de recherche le trouve par nom de mod ou de réglage.</value>
   </data>
   <data name="Help_Configs_Edit_Step2" xml:space="preserve">
-    <value>Modifiez le texte à droite.</value>
+    <value>Modifiez un réglage dans le formulaire, ou cliquez sur {0} pour modifier le fichier en texte.</value>
   </data>
   <data name="Help_Configs_Edit_Step3" xml:space="preserve">
     <value>Cliquez sur {0}. Seules les lignes que vous avez modifiées sont réécrites.</value>
@@ -5560,13 +5560,13 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>Retrouver la valeur d'origine d'un réglage</value>
   </data>
   <data name="Help_Configs_Original_Step1" xml:space="preserve">
-    <value>Dans {0}, ouvrez le fichier marqué {1} à côté de la configuration du mod - il contient les valeurs d'origine du mod.</value>
+    <value>Dans {0}, ouvrez le mod. Dans le formulaire, un réglage qui diffère de sa valeur par défaut porte une barre et {1} à côté.</value>
   </data>
   <data name="Help_Configs_Original_Step2" xml:space="preserve">
-    <value>Copiez la valeur voulue dans la vraie configuration et cliquez sur {0}.</value>
+    <value>Cliquez sur {0}, puis sur {1}.</value>
   </data>
   <data name="Help_Configs_Original_Note" xml:space="preserve">
-    <value>Tous les mods n'en fournissent pas. Chaque enregistrement garde aussi le fichier précédent dans Data\config-backups, dans le dossier de l'application.</value>
+    <value>Cela vaut pour les fichiers .cfg. Le JSON d'un mod serveur n'enregistre aucune valeur par défaut : ouvrez le fichier marqué {0} à côté, si le mod en fournit un, et recopiez la valeur. Chaque enregistrement garde aussi le fichier précédent dans Data\config-backups, dans le dossier de l'application.</value>
   </data>
   <data name="Help_Configs_Leftover_Title" xml:space="preserve">
     <value>Retrouver les réglages laissés par un mod supprimé</value>
@@ -6142,7 +6142,7 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
     <value>annuler, revenir, restaurer</value>
   </data>
   <data name="Help_Configs_Edit_Keywords" xml:space="preserve">
-    <value>configuration, réglages, options, cfg, json, modifier</value>
+    <value>configuration, réglages, options, cfg, json, modifier, raccourci, touche, formulaire</value>
   </data>
   <data name="Help_Configs_Policy_Keywords" xml:space="preserve">
     <value>garder les réglages, mise à jour, fusionner, écraser</value>

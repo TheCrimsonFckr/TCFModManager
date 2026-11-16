@@ -5533,10 +5533,10 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Die Einstellungen eines Mods ändern</value>
   </data>
   <data name="Help_Configs_Edit_Step1" xml:space="preserve">
-    <value>Öffne {0} und wähle die Datei des Mods aus der Liste - das Suchfeld findet sie über den Mod- oder Dateinamen.</value>
+    <value>Öffne {0} und wähle den Mod aus der Liste - das Suchfeld findet ihn über den Mod- oder Einstellungsnamen.</value>
   </data>
   <data name="Help_Configs_Edit_Step2" xml:space="preserve">
-    <value>Bearbeite den Text rechts.</value>
+    <value>Ändere eine Einstellung im Formular oder drücke {0}, um die Datei als Text zu bearbeiten.</value>
   </data>
   <data name="Help_Configs_Edit_Step3" xml:space="preserve">
     <value>Klicke auf {0}. Nur die Zeilen, die du geändert hast, werden neu geschrieben.</value>
@@ -5560,13 +5560,13 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>Den ursprünglichen Wert einer Einstellung zurückholen</value>
   </data>
   <data name="Help_Configs_Original_Step1" xml:space="preserve">
-    <value>Öffne unter {0} die Datei, die neben der Konfiguration des Mods mit {1} markiert ist - sie enthält die Werte, mit denen der Mod kam.</value>
+    <value>Öffne unter {0} den Mod. Im Formular hat eine Einstellung, die vom Standardwert abweicht, einen Balken und daneben {1}.</value>
   </data>
   <data name="Help_Configs_Original_Step2" xml:space="preserve">
-    <value>Kopier den gewünschten Wert in die echte Konfiguration und klicke auf {0}.</value>
+    <value>Klicke auf {0}, dann auf {1}.</value>
   </data>
   <data name="Help_Configs_Original_Note" xml:space="preserve">
-    <value>Nicht jeder Mod liefert eine mit. Jedes Speichern legt außerdem die vorherige Datei in Data\config-backups im Ordner dieser App ab.</value>
+    <value>Das gilt für .cfg-Dateien. Die JSON eines Server-Mods enthält keine Standardwerte: Öffne die daneben mit {0} markierte Datei, falls der Mod eine mitliefert, und übernimm den Wert. Jedes Speichern legt außerdem die vorherige Datei in Data\config-backups im Ordner dieser App ab.</value>
   </data>
   <data name="Help_Configs_Leftover_Title" xml:space="preserve">
     <value>Einstellungen finden, die ein entfernter Mod zurückgelassen hat</value>
@@ -6142,7 +6142,7 @@ Das passiert ganz harmlos, wenn der Server neu aufgesetzt wurde oder du ihn übe
     <value>rückgängig, zurück, wiederherstellen</value>
   </data>
   <data name="Help_Configs_Edit_Keywords" xml:space="preserve">
-    <value>Konfiguration, Einstellungen, Optionen, cfg, json, bearbeiten</value>
+    <value>Konfiguration, Einstellungen, Optionen, cfg, json, bearbeiten, Tastenbelegung, Hotkey, Formular</value>
   </data>
   <data name="Help_Configs_Policy_Keywords" xml:space="preserve">
     <value>Einstellungen behalten, Update, zusammenführen, überschreiben</value>

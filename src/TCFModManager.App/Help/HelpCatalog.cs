@@ -364,7 +364,7 @@ internal static class HelpCatalog
         [
             Topic("configs.edit", () => Strings.Help_Configs_Edit_Title,
                 Step(() => Strings.Help_Configs_Edit_Step1, () => Strings.Nav_Configs),
-                Step(() => Strings.Help_Configs_Edit_Step2),
+                Step(() => Strings.Help_Configs_Edit_Step2, () => Strings.Configs_ViewRaw),
                 Step(() => Strings.Help_Configs_Edit_Step3, () => Strings.Common_Save))
                 .WithNote(() => Strings.Help_Configs_Edit_Note, () => Strings.Configs_Revert)
                 .WithKeywords(() => Strings.Help_Configs_Edit_Keywords),
@@ -379,9 +379,9 @@ internal static class HelpCatalog
 
             Topic("configs.original", () => Strings.Help_Configs_Original_Title,
                 Step(() => Strings.Help_Configs_Original_Step1,
-                    () => Strings.Nav_Configs, () => Strings.Configs_TagShippedDefault),
-                Step(() => Strings.Help_Configs_Original_Step2, () => Strings.Common_Save))
-                .WithNote(() => Strings.Help_Configs_Original_Note)
+                    () => Strings.Nav_Configs, () => Strings.Configs_ResetSetting),
+                Step(() => Strings.Help_Configs_Original_Step2, () => Strings.Configs_ResetSetting, () => Strings.Common_Save))
+                .WithNote(() => Strings.Help_Configs_Original_Note, () => Strings.Configs_TagShippedDefault)
                 .WithKeywords(() => Strings.Help_Configs_Original_Keywords),
 
             Topic("configs.leftover", () => Strings.Help_Configs_Leftover_Title,

@@ -5533,10 +5533,10 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Cambiare le impostazioni di un mod</value>
   </data>
   <data name="Help_Configs_Edit_Step1" xml:space="preserve">
-    <value>Apri {0} e scegli il file del mod dall'elenco - la casella di ricerca lo trova per nome del mod o del file.</value>
+    <value>Apri {0} e scegli il mod dall'elenco - la casella di ricerca lo trova per nome del mod o dell'impostazione.</value>
   </data>
   <data name="Help_Configs_Edit_Step2" xml:space="preserve">
-    <value>Modifica il testo a destra.</value>
+    <value>Cambia un'impostazione nel modulo, oppure premi {0} per modificare il file come testo.</value>
   </data>
   <data name="Help_Configs_Edit_Step3" xml:space="preserve">
     <value>Premi {0}. Vengono riscritte solo le righe che hai cambiato.</value>
@@ -5560,13 +5560,13 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Recuperare il valore originale di un'impostazione</value>
   </data>
   <data name="Help_Configs_Original_Step1" xml:space="preserve">
-    <value>In {0}, apri il file contrassegnato {1} accanto alla configurazione del mod - contiene i valori con cui è arrivato il mod.</value>
+    <value>In {0}, apri il mod. Nel modulo, un'impostazione diversa dal valore predefinito ha una barra accanto e {1} vicino.</value>
   </data>
   <data name="Help_Configs_Original_Step2" xml:space="preserve">
-    <value>Copia il valore che vuoi nella configurazione vera e premi {0}.</value>
+    <value>Premi {0}, poi {1}.</value>
   </data>
   <data name="Help_Configs_Original_Note" xml:space="preserve">
-    <value>Non tutti i mod ne forniscono uno. Ogni salvataggio tiene anche il file precedente in Data\config-backups, nella cartella di questa app.</value>
+    <value>Vale per i file .cfg. Il JSON di un mod server non registra valori predefiniti: apri il file contrassegnato {0} accanto, se il mod ne fornisce uno, e copia il valore. Ogni salvataggio tiene anche il file precedente in Data\config-backups, nella cartella di questa app.</value>
   </data>
   <data name="Help_Configs_Leftover_Title" xml:space="preserve">
     <value>Trovare le impostazioni lasciate da un mod rimosso</value>
@@ -6142,7 +6142,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>annullare, tornare indietro, ripristinare</value>
   </data>
   <data name="Help_Configs_Edit_Keywords" xml:space="preserve">
-    <value>configurazione, impostazioni, opzioni, cfg, json, modificare</value>
+    <value>configurazione, impostazioni, opzioni, cfg, json, modificare, scorciatoia, tasto, modulo</value>
   </data>
   <data name="Help_Configs_Policy_Keywords" xml:space="preserve">
     <value>tenere impostazioni, aggiornamento, unire, sovrascrivere</value>

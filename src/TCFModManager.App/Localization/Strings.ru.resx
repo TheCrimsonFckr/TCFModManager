@@ -5815,10 +5815,10 @@
     <value>Изменить настройки мода</value>
   </data>
   <data name="Help_Configs_Edit_Step1" xml:space="preserve">
-    <value>Откройте {0} и выберите файл мода в списке - поле поиска находит его по названию мода или файла.</value>
+    <value>Откройте {0} и выберите мод в списке - поле поиска находит его по названию мода или настройки.</value>
   </data>
   <data name="Help_Configs_Edit_Step2" xml:space="preserve">
-    <value>Отредактируйте текст справа.</value>
+    <value>Измените настройку в форме или нажмите {0}, чтобы редактировать файл как текст.</value>
   </data>
   <data name="Help_Configs_Edit_Step3" xml:space="preserve">
     <value>Нажмите {0}. Перезаписываются только изменённые строки.</value>
@@ -5842,13 +5842,13 @@
     <value>Вернуть исходное значение настройки</value>
   </data>
   <data name="Help_Configs_Original_Step1" xml:space="preserve">
-    <value>На странице {0} откройте файл с пометкой {1} рядом с конфигурацией мода - в нём значения, с которыми мод поставлялся.</value>
+    <value>На странице {0} откройте мод. В форме у настройки, отличающейся от значения по умолчанию, есть полоска и кнопка {1} рядом.</value>
   </data>
   <data name="Help_Configs_Original_Step2" xml:space="preserve">
-    <value>Скопируйте нужное значение в настоящую конфигурацию и нажмите {0}.</value>
+    <value>Нажмите {0}, затем {1}.</value>
   </data>
   <data name="Help_Configs_Original_Note" xml:space="preserve">
-    <value>Такой файл есть не у каждого мода. При каждом сохранении предыдущий файл также кладётся в Data\config-backups в папке приложения.</value>
+    <value>Это касается файлов .cfg. В JSON серверного мода значения по умолчанию не записаны: откройте рядом файл с пометкой {0}, если мод его поставляет, и перенесите значение. При каждом сохранении предыдущий файл также кладётся в Data\config-backups в папке приложения.</value>
   </data>
   <data name="Help_Configs_Leftover_Title" xml:space="preserve">
     <value>Найти настройки, оставшиеся от удалённого мода</value>
@@ -6424,7 +6424,7 @@
     <value>отменить, вернуть, восстановить</value>
   </data>
   <data name="Help_Configs_Edit_Keywords" xml:space="preserve">
-    <value>конфигурация, настройки, параметры, cfg, json, изменить</value>
+    <value>конфигурация, настройки, параметры, cfg, json, изменить, назначение клавиш, горячая клавиша, форма</value>
   </data>
   <data name="Help_Configs_Policy_Keywords" xml:space="preserve">
     <value>сохранить настройки, обновление, объединить, перезаписать</value>
