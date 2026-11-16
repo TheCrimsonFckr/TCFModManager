@@ -62,6 +62,22 @@
             <Setter Property="BorderBrush" Value="{DynamicResource DividerStrokeColorDefaultBrush}" />
             <Setter Property="Padding" Value="0,12,0,12" />
         </Style>
+
+        <!-- The first part inside an expander: no divider above it. -->
+        <Style x:Key="FirstSubSetting" TargetType="Border" BasedOn="{StaticResource SubSetting}">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0,0,0,12" />
+        </Style>
+
+        <!-- One item of a list inside an expander: a divider above every item but the first. -->
+        <Style x:Key="ListSubSetting" TargetType="Border" BasedOn="{StaticResource SubSetting}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Padding" Value="0,0,0,12" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
 
     <StackPanel x:Name="SettingsRoot" Margin="16,0,16,16">
@@ -265,37 +281,41 @@
             </ui:CardExpander.Header>
 
             <StackPanel>
-                <StackPanel Margin="0,0,0,12">
-                    <TextBlock
-                        Style="{StaticResource SettingTitle}"
-                        Text="{loc:Str Options_MonitorFolderHeader}"
-                        ToolTip="{loc:Str Options_MonitorFolderDescription}" />
-                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_MonitorFolderHint}" />
-                    <Grid Margin="0,8,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <ui:TextBox
-                            Grid.Column="0"
-                            PlaceholderText="{Binding DownloadFolderPlaceholder}"
-                            Text="{Binding DownloadFolderInput, UpdateSourceTrigger=LostFocus}" />
-                        <ui:Button
-                            Grid.Column="1"
-                            Margin="8,0,0,0"
-                            Content="{loc:Str Options_Browse}"
-                            Icon="{ui:SymbolIcon FolderOpen24}"
-                            Command="{Binding BrowseDownloadFolderCommand}" />
-                        <ui:Button
-                            Grid.Column="2"
-                            Margin="8,0,0,0"
-                            Appearance="Transparent"
-                            Content="{loc:Str Options_MonitorFolderReset}"
-                            ToolTip="{loc:Str Options_MonitorFolderResetToolTip}"
-                            Command="{Binding ResetDownloadFolderCommand}" />
-                    </Grid>
-                    <Grid Margin="0,12,0,0">
+                <Border Style="{StaticResource FirstSubSetting}">
+                    <StackPanel>
+                        <TextBlock
+                            Style="{StaticResource SettingTitle}"
+                            Text="{loc:Str Options_MonitorFolderHeader}"
+                            ToolTip="{loc:Str Options_MonitorFolderDescription}" />
+                        <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_MonitorFolderHint}" />
+                        <Grid Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <ui:TextBox
+                                Grid.Column="0"
+                                PlaceholderText="{Binding DownloadFolderPlaceholder}"
+                                Text="{Binding DownloadFolderInput, UpdateSourceTrigger=LostFocus}" />
+                            <ui:Button
+                                Grid.Column="1"
+                                Margin="8,0,0,0"
+                                Content="{loc:Str Options_Browse}"
+                                Icon="{ui:SymbolIcon FolderOpen24}"
+                                Command="{Binding BrowseDownloadFolderCommand}" />
+                            <ui:Button
+                                Grid.Column="2"
+                                Margin="8,0,0,0"
+                                Appearance="Transparent"
+                                Content="{loc:Str Options_MonitorFolderReset}"
+                                ToolTip="{loc:Str Options_MonitorFolderResetToolTip}"
+                                Command="{Binding ResetDownloadFolderCommand}" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource SubSetting}">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -309,9 +329,8 @@
                             VerticalAlignment="Center"
                             IsChecked="{Binding DownloadListSubfolders}" />
                     </Grid>
-                </StackPanel>
-
-                <Border Style="{StaticResource SubSetting}" Padding="0,12,0,0">
+                </Border>
+                <Border Style="{StaticResource SubSetting}">
                     <Grid ToolTip="{loc:Str Options_MonitorConfirmDescription}" ToolTipService.ShowDuration="30000">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -397,31 +416,33 @@
                 <ItemsControl ItemsSource="{Binding Authors}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="0,0,0,6">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <StackPanel VerticalAlignment="Center">
-                                    <TextBlock Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding Name}" />
-                                    <TextBlock
-                                        FontSize="12"
-                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                        Text="{Binding Detail}" />
-                                </StackPanel>
-                                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                    <ui:Button
-                                        Margin="8,0,0,0"
-                                        Content="{loc:Str Followed_Open}"
-                                        Command="{Binding DataContext.OpenCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                        CommandParameter="{Binding}" />
-                                    <ui:Button
-                                        Margin="8,0,0,0"
-                                        Content="{loc:Str Author_Unfollow}"
-                                        Command="{Binding DataContext.UnfollowCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                        CommandParameter="{Binding}" />
-                                </StackPanel>
-                            </Grid>
+                            <Border Style="{StaticResource ListSubSetting}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding Name}" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            Text="{Binding Detail}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <ui:Button
+                                            Margin="8,0,0,0"
+                                            Content="{loc:Str Followed_Open}"
+                                            Command="{Binding DataContext.OpenCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}" />
+                                        <ui:Button
+                                            Margin="8,0,0,0"
+                                            Content="{loc:Str Author_Unfollow}"
+                                            Command="{Binding DataContext.UnfollowCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -449,33 +470,35 @@
                 <ItemsControl ItemsSource="{Binding Mods}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="0,0,0,6">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <StackPanel VerticalAlignment="Center">
-                                    <TextBlock Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding Name}" />
-                                    <TextBlock
-                                        FontSize="12"
-                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                        Text="{Binding Detail}"
-                                        Visibility="{Binding Detail, Converter={StaticResource NullToCollapsed}}" />
-                                </StackPanel>
-                                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                    <ui:Button
-                                        Margin="8,0,0,0"
-                                        Content="{loc:Str Common_ViewModPage}"
-                                        Command="{Binding DataContext.OpenCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                        CommandParameter="{Binding}"
-                                        Visibility="{Binding HasUrl, Converter={StaticResource BoolToVisibility}}" />
-                                    <ui:Button
-                                        Margin="8,0,0,0"
-                                        Content="{loc:Str Browse_MenuStopIgnoring}"
-                                        Command="{Binding DataContext.StopIgnoringCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                        CommandParameter="{Binding}" />
-                                </StackPanel>
-                            </Grid>
+                            <Border Style="{StaticResource ListSubSetting}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding Name}" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            Text="{Binding Detail}"
+                                            Visibility="{Binding Detail, Converter={StaticResource NullToCollapsed}}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <ui:Button
+                                            Margin="8,0,0,0"
+                                            Content="{loc:Str Common_ViewModPage}"
+                                            Command="{Binding DataContext.OpenCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}"
+                                            Visibility="{Binding HasUrl, Converter={StaticResource BoolToVisibility}}" />
+                                        <ui:Button
+                                            Margin="8,0,0,0"
+                                            Content="{loc:Str Browse_MenuStopIgnoring}"
+                                            Command="{Binding DataContext.StopIgnoringCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -499,59 +522,65 @@
             <StackPanel>
                 <TextBlock
                     Style="{StaticResource SettingNote}"
-                    Margin="0,0,0,8"
+                    Margin="0,0,0,12"
                     Text="{loc:Str Profiles_Empty}"
                     Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVisibility}}" />
 
-                <ItemsControl ItemsSource="{Binding Backups}" Margin="0,0,0,8">
+                <ItemsControl ItemsSource="{Binding Backups}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="0,0,0,6">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="170" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                    Text="{Binding When}" />
-                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <Border Style="{StaticResource ListSubSetting}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="170" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
                                     <TextBlock
+                                        VerticalAlignment="Center"
                                         Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                        Text="{Binding Why}"
-                                        TextWrapping="Wrap" />
-                                    <TextBlock
-                                        FontSize="12"
-                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                        Text="{Binding Detail}" />
-                                </StackPanel>
-                                <ui:Button
-                                    Grid.Column="2"
-                                    Margin="8,0,0,0"
-                                    Content="{loc:Str Profiles_Restore}"
-                                    Command="{Binding DataContext.RestoreCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                    CommandParameter="{Binding}" />
-                            </Grid>
+                                        Text="{Binding When}" />
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                            Text="{Binding Why}"
+                                            TextWrapping="Wrap" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            Text="{Binding Detail}" />
+                                    </StackPanel>
+                                    <ui:Button
+                                        Grid.Column="2"
+                                        Margin="8,0,0,0"
+                                        Content="{loc:Str Profiles_Restore}"
+                                        Command="{Binding DataContext.RestoreCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}" />
+                                </Grid>
+                            </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <StackPanel Orientation="Horizontal">
-                    <ui:Button
-                        Content="{loc:Str Profiles_BackUpNow}"
-                        Command="{Binding BackUpNowCommand}" />
-                    <ui:Button
-                        Margin="8,0,0,0"
-                        Content="{loc:Str Profiles_OpenFolder}"
-                        Command="{Binding OpenFolderCommand}" />
-                </StackPanel>
+                <Border Style="{StaticResource SubSetting}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:Button
+                                Content="{loc:Str Profiles_BackUpNow}"
+                                Command="{Binding BackUpNowCommand}" />
+                            <ui:Button
+                                Margin="8,0,0,0"
+                                Content="{loc:Str Profiles_OpenFolder}"
+                                Command="{Binding OpenFolderCommand}" />
+                        </StackPanel>
 
-                <TextBlock
-                    Style="{StaticResource SettingHint}"
-                    Margin="0,8,0,0"
-                    Text="{Binding StatusMessage}"
-                    Visibility="{Binding StatusMessage, Converter={StaticResource NullToCollapsed}}" />
+                        <TextBlock
+                            Style="{StaticResource SettingHint}"
+                            Margin="0,8,0,0"
+                            Text="{Binding StatusMessage}"
+                            Visibility="{Binding StatusMessage, Converter={StaticResource NullToCollapsed}}" />
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </ui:CardExpander>
 
@@ -596,7 +625,7 @@
             <!-- Greyed out rather than hidden while notifications are off (D8), so what switching them
                  on would do is readable first. -->
             <StackPanel>
-                <Border Style="{StaticResource SubSetting}" BorderThickness="0" Padding="0,0,0,12">
+                <Border Style="{StaticResource FirstSubSetting}">
                     <Grid IsEnabled="{Binding UpdateNotificationsEnabled}" ToolTip="{loc:Str Options_TrayToolTip}" ToolTipService.ShowDuration="20000">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -651,9 +680,11 @@
                     </StackPanel>
                 </Border>
 
-                <TextBlock
-                    Style="{StaticResource SettingNote}"
-                    Text="{loc:Str Options_UpdateNotificationsNote}" />
+                <Border Style="{StaticResource SubSetting}">
+                    <TextBlock
+                        Style="{StaticResource SettingNote}"
+                        Text="{loc:Str Options_UpdateNotificationsNote}" />
+                </Border>
             </StackPanel>
         </ui:CardExpander>
 
@@ -701,22 +732,24 @@
             </ui:CardExpander.Header>
 
             <StackPanel>
-                <Grid Margin="0,0,0,12">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock
-                        Style="{StaticResource SettingHint}"
-                        VerticalAlignment="Center"
-                        Text="{Binding InstalledDefaultsDescription}" />
-                    <ui:Button
-                        Grid.Column="1"
-                        Margin="14,0,0,0"
-                        Content="{loc:Str Options_ClearInstalledDefault}"
-                        Command="{Binding ResetInstalledDefaultsCommand}" />
-                </Grid>
-                <Border Style="{StaticResource SubSetting}" Padding="0,12,0,0">
+                <Border Style="{StaticResource FirstSubSetting}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Style="{StaticResource SettingHint}"
+                            VerticalAlignment="Center"
+                            Text="{Binding InstalledDefaultsDescription}" />
+                        <ui:Button
+                            Grid.Column="1"
+                            Margin="14,0,0,0"
+                            Content="{loc:Str Options_ClearInstalledDefault}"
+                            Command="{Binding ResetInstalledDefaultsCommand}" />
+                    </Grid>
+                </Border>
+                <Border Style="{StaticResource SubSetting}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -755,8 +788,8 @@
             </ui:CardExpander.Header>
 
             <StackPanel>
-                <StackPanel Margin="0,0,0,12">
-                    <Grid Margin="0,0,0,12" ToolTip="{loc:Str Options_PlaysHereToolTip}" ToolTipService.ShowDuration="20000">
+                <Border Style="{StaticResource FirstSubSetting}">
+                    <Grid ToolTip="{loc:Str Options_PlaysHereToolTip}" ToolTipService.ShowDuration="20000">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -770,7 +803,9 @@
                             VerticalAlignment="Center"
                             IsChecked="{Binding PlaysHere}" />
                     </Grid>
-                    <Border Style="{StaticResource SubSetting}" Padding="0,12,0,0">
+                </Border>
+                <Border Style="{StaticResource SubSetting}">
+                    <StackPanel>
                         <Grid ToolTip="{loc:Str Options_HeadlessToolTip}" ToolTipService.ShowDuration="20000">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -785,25 +820,25 @@
                                 VerticalAlignment="Center"
                                 IsChecked="{Binding RunsHeadlessClient}" />
                         </Grid>
-                    </Border>
-                    <TextBlock
-                        Style="{StaticResource SettingHint}"
-                        Margin="0,10,0,0"
-                        Text="{Binding InstallRoleDescription}" />
-                    <!-- OPEN-44 Q12: one install is never a player and a headless at once. -->
-                    <ui:InfoBar
-                        Margin="0,10,0,0"
-                        Severity="Warning"
-                        IsClosable="False"
-                        IsOpen="{Binding RolesConflict, Mode=OneWay}"
-                        Message="{loc:Str Options_RoleConflict}" />
-                </StackPanel>
+                        <TextBlock
+                            Style="{StaticResource SettingHint}"
+                            Margin="0,8,0,0"
+                            Text="{Binding InstallRoleDescription}" />
+                        <!-- OPEN-44 Q12: one install is never a player and a headless at once. -->
+                        <ui:InfoBar
+                            Margin="0,8,0,0"
+                            Severity="Warning"
+                            IsClosable="False"
+                            IsOpen="{Binding RolesConflict, Mode=OneWay}"
+                            Message="{loc:Str Options_RoleConflict}" />
+                    </StackPanel>
+                </Border>
 
                 <!--
                     The way out of detection, which only ever looks at the top of the install folder
                     (see SptLaunchService), so a manager kept beside the SPT folder has to be named.
                 -->
-                <Border Style="{StaticResource SubSetting}" Padding="0,12,0,0">
+                <Border Style="{StaticResource SubSetting}">
                     <StackPanel>
                         <TextBlock
                             Style="{StaticResource SettingTitle}"
@@ -859,7 +894,7 @@
             </ui:CardExpander.Header>
 
             <StackPanel>
-                <Border Style="{StaticResource SubSetting}" BorderThickness="0" Padding="0,0,0,12">
+                <Border Style="{StaticResource FirstSubSetting}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -969,7 +1004,7 @@
                             IsChecked="{Binding StopServerIgnoresHeadless}" />
                     </Grid>
                 </Border>
-                <Border Style="{StaticResource SubSetting}" Padding="0,12,0,0">
+                <Border Style="{StaticResource SubSetting}">
                     <StackPanel>
                         <ui:Button
                             Icon="{ui:SymbolIcon Play24}"
@@ -1023,28 +1058,31 @@
             </ui:CardExpander.Header>
 
             <StackPanel>
-                <ui:InfoBar
-                    Margin="0,0,0,12"
-                    IsOpen="True"
-                    IsClosable="False"
-                    Severity="Warning"
-                    Title="{loc:Str Options_DirectLaunchWarningTitle}"
-                    Message="{loc:Str Options_DirectLaunchWarning}" />
-                <TextBlock
-                    Margin="0,0,0,12"
-                    TextWrapping="Wrap"
-                    Text="{Binding DirectLaunchSupportText}">
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock" BasedOn="{StaticResource SettingNote}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding DirectLaunchSupportIsCaution}" Value="True">
-                                    <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <Border Style="{StaticResource SubSetting}" IsEnabled="{Binding DirectLaunch}" Padding="0,12,0,0">
+                <Border Style="{StaticResource FirstSubSetting}">
+                    <StackPanel>
+                        <ui:InfoBar
+                            IsOpen="True"
+                            IsClosable="False"
+                            Severity="Warning"
+                            Title="{loc:Str Options_DirectLaunchWarningTitle}"
+                            Message="{loc:Str Options_DirectLaunchWarning}" />
+                        <TextBlock
+                            Margin="0,12,0,0"
+                            TextWrapping="Wrap"
+                            Text="{Binding DirectLaunchSupportText}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource SettingNote}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DirectLaunchSupportIsCaution}" Value="True">
+                                            <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource SubSetting}" IsEnabled="{Binding DirectLaunch}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -1084,61 +1122,94 @@
 
             <StackPanel DataContext="{Binding ServerMap}">
                 <!-- Hidden until the addon page URL is set, so a build without one never shows a dead link. -->
-                <StackPanel
-                    Margin="0,0,0,12"
+                <Border
+                    Style="{StaticResource FirstSubSetting}"
                     Visibility="{Binding HasAddonPage, Converter={StaticResource BoolToVisibility}}">
-                    <TextBlock
-                        Style="{StaticResource SettingHint}"
-                        Margin="0,0,0,8"
-                        Text="{loc:Str Options_ServerMapModNotice}" />
-                    <ui:Button
-                        HorizontalAlignment="Left"
-                        Content="{loc:Str Options_GetServerMapMod}"
-                        Icon="{ui:SymbolIcon Open24}"
-                        ToolTip="{loc:Str Options_GetServerMapModToolTip}"
-                        Command="{Binding OpenAddonPageCommand}" />
-                </StackPanel>
+                    <StackPanel>
+                        <TextBlock
+                            Style="{StaticResource SettingHint}"
+                            Margin="0,0,0,8"
+                            Text="{loc:Str Options_ServerMapModNotice}" />
+                        <ui:Button
+                            HorizontalAlignment="Left"
+                            Content="{loc:Str Options_GetServerMapMod}"
+                            Icon="{ui:SymbolIcon Open24}"
+                            ToolTip="{loc:Str Options_GetServerMapModToolTip}"
+                            Command="{Binding OpenAddonPageCommand}" />
+                    </StackPanel>
+                </Border>
 
-                <!-- The placeholder is a hint, not a default: Fika's own 127.0.0.1 is quietly wrong
-                     for anyone connecting to someone else's server. -->
-                <WrapPanel Margin="0,0,0,4">
-                    <ui:TextBox
-                        MinWidth="260"
-                        Margin="0,0,8,4"
-                        PlaceholderText="{loc:Str Options_ServerAddressPlaceholder}"
-                        Text="{Binding HostInput, UpdateSourceTrigger=PropertyChanged}" />
-                    <ui:TextBox
-                        MinWidth="90"
-                        Margin="0,0,8,4"
-                        PlaceholderText="{loc:Str Options_PortPlaceholder}"
-                        Text="{Binding PortInput, UpdateSourceTrigger=PropertyChanged}" />
-                    <ui:Button
-                        Margin="0,0,0,4"
-                        Content="{loc:Str Options_Connect}"
-                        Icon="{ui:SymbolIcon Connected20}"
-                        Command="{Binding ConnectCommand}" />
-                    <ProgressBar
-                        Width="80"
-                        Height="4"
-                        Margin="12,0,0,4"
-                        VerticalAlignment="Center"
-                        IsIndeterminate="True"
-                        Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" />
-                </WrapPanel>
+                <!-- The first block when there is no addon page to point at. -->
+                <Border>
+                    <Border.Style>
+                        <Style TargetType="Border" BasedOn="{StaticResource SubSetting}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasAddonPage}" Value="False">
+                                    <Setter Property="BorderThickness" Value="0" />
+                                    <Setter Property="Padding" Value="0,0,0,12" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <StackPanel>
+                        <!-- The placeholder is a hint, not a default: Fika's own 127.0.0.1 is quietly wrong
+                             for anyone connecting to someone else's server. -->
+                        <WrapPanel>
+                            <ui:TextBox
+                                MinWidth="260"
+                                Margin="0,0,8,4"
+                                PlaceholderText="{loc:Str Options_ServerAddressPlaceholder}"
+                                Text="{Binding HostInput, UpdateSourceTrigger=PropertyChanged}" />
+                            <ui:TextBox
+                                MinWidth="90"
+                                Margin="0,0,8,4"
+                                PlaceholderText="{loc:Str Options_PortPlaceholder}"
+                                Text="{Binding PortInput, UpdateSourceTrigger=PropertyChanged}" />
+                            <ui:Button
+                                Margin="0,0,0,4"
+                                Content="{loc:Str Options_Connect}"
+                                Icon="{ui:SymbolIcon Connected20}"
+                                Command="{Binding ConnectCommand}" />
+                            <ProgressBar
+                                Width="80"
+                                Height="4"
+                                Margin="12,0,0,4"
+                                VerticalAlignment="Center"
+                                IsIndeterminate="True"
+                                Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" />
+                        </WrapPanel>
 
-                <!-- A plain TextBox, not a PasswordBox: it gets copied between machines and pasted
-                     into chat, and hiding it only makes it harder to check. -->
-                <ui:TextBox
-                    MinWidth="260"
-                    HorizontalAlignment="Left"
-                    Margin="0,0,0,8"
-                    PlaceholderText="{loc:Str Options_SharedKeyPlaceholder}"
-                    Text="{Binding KeyInput, UpdateSourceTrigger=PropertyChanged}" />
+                        <!-- A plain TextBox, not a PasswordBox: it gets copied between machines and pasted
+                             into chat, and hiding it only makes it harder to check. -->
+                        <ui:TextBox
+                            MinWidth="260"
+                            HorizontalAlignment="Left"
+                            Margin="0,4,0,0"
+                            PlaceholderText="{loc:Str Options_SharedKeyPlaceholder}"
+                            Text="{Binding KeyInput, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock
+                            Style="{StaticResource SettingNote}"
+                            Margin="0,8,0,0"
+                            Text="{Binding KeyDescription}" />
 
-                <TextBlock
-                    Style="{StaticResource SettingNote}"
-                    Margin="0,0,0,8"
-                    Text="{Binding KeyDescription}" />
+                        <!-- ErrorText turns this red only when the last attempt actually failed. -->
+                        <TextBlock
+                            Margin="0,8,0,0"
+                            TextWrapping="Wrap"
+                            Style="{StaticResource ErrorText}"
+                            Text="{Binding StatusMessage}" />
+
+                        <!-- The one failure the user has to judge rather than just read. -->
+                        <ui:Button
+                            Margin="0,8,0,0"
+                            HorizontalAlignment="Left"
+                            Appearance="Caution"
+                            Content="{loc:Str Options_TrustCertificate}"
+                            Icon="{ui:SymbolIcon Certificate24}"
+                            Command="{Binding TrustNewCertificateCommand}"
+                            Visibility="{Binding HasCertificateChanged, Converter={StaticResource BoolToVisibility}}" />
+                    </StackPanel>
+                </Border>
 
                 <!-- Only on the machine running a server. Shown in full: it is there to be copied out. -->
                 <Border
@@ -1162,55 +1233,6 @@
                                 ToolTip="{loc:Str Options_GenerateKeyToolTip}"
                                 Command="{Binding NewLocalKeyCommand}" />
                         </WrapPanel>
-                        <!-- LAN-only, for this machine's own server. Beside the key because it is the
-                             other thing only the operator decides, and only here is there a server. -->
-                        <Grid Margin="0,12,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel>
-                                <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapLanOnly}" />
-                                <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapLanOnlyHint}" />
-                            </StackPanel>
-                            <tcf:SettingSwitch
-                                Grid.Column="1"
-                                Margin="14,0,0,0"
-                                VerticalAlignment="Center"
-                                IsChecked="{Binding ServerLanOnly, Mode=TwoWay}" />
-                        </Grid>
-                        <!-- Profile rules for other machines, read by TCF Mod Manager on those machines. -->
-                        <Grid Margin="0,12,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel>
-                                <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapHideOtherProfiles}" />
-                                <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapHideOtherProfilesHint}" />
-                            </StackPanel>
-                            <tcf:SettingSwitch
-                                Grid.Column="1"
-                                Margin="14,0,0,0"
-                                VerticalAlignment="Center"
-                                IsChecked="{Binding ServerHideOtherProfiles, Mode=TwoWay}" />
-                        </Grid>
-                        <Grid Margin="0,12,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel>
-                                <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapProtectOtherProfiles}" />
-                                <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapProtectOtherProfilesHint}" />
-                            </StackPanel>
-                            <tcf:SettingSwitch
-                                Grid.Column="1"
-                                Margin="14,0,0,0"
-                                VerticalAlignment="Center"
-                                IsChecked="{Binding ServerProtectOtherProfiles, Mode=TwoWay}" />
-                        </Grid>
-
                         <TextBlock
                             Style="{StaticResource SettingHint}"
                             Margin="0,8,0,0"
@@ -1219,23 +1241,69 @@
                     </StackPanel>
                 </Border>
 
-                <!-- ErrorText turns this red only when the last attempt actually failed. -->
-                <TextBlock
-                    TextWrapping="Wrap"
-                    Style="{StaticResource ErrorText}"
-                    Text="{Binding StatusMessage}" />
+                <!-- LAN-only, for this machine's own server. Beside the key because it is the other thing
+                     only the operator decides, and only here is there a server. -->
+                <Border
+                    Style="{StaticResource SubSetting}"
+                    Visibility="{Binding IsServerOwner, Converter={StaticResource BoolToVisibility}}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapLanOnly}" />
+                            <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapLanOnlyHint}" />
+                        </StackPanel>
+                        <tcf:SettingSwitch
+                            Grid.Column="1"
+                            Margin="14,0,0,0"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding ServerLanOnly, Mode=TwoWay}" />
+                    </Grid>
+                </Border>
 
-                <!-- The one failure the user has to judge rather than just read. -->
-                <ui:Button
-                    Margin="0,8,0,0"
-                    HorizontalAlignment="Left"
-                    Appearance="Caution"
-                    Content="{loc:Str Options_TrustCertificate}"
-                    Icon="{ui:SymbolIcon Certificate24}"
-                    Command="{Binding TrustNewCertificateCommand}"
-                    Visibility="{Binding HasCertificateChanged, Converter={StaticResource BoolToVisibility}}" />
+                <!-- Profile rules for other machines, read by TCF Mod Manager on those machines. -->
+                <Border
+                    Style="{StaticResource SubSetting}"
+                    Visibility="{Binding IsServerOwner, Converter={StaticResource BoolToVisibility}}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapHideOtherProfiles}" />
+                            <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapHideOtherProfilesHint}" />
+                        </StackPanel>
+                        <tcf:SettingSwitch
+                            Grid.Column="1"
+                            Margin="14,0,0,0"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding ServerHideOtherProfiles, Mode=TwoWay}" />
+                    </Grid>
+                </Border>
+                <Border
+                    Style="{StaticResource SubSetting}"
+                    Visibility="{Binding IsServerOwner, Converter={StaticResource BoolToVisibility}}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapProtectOtherProfiles}" />
+                            <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapProtectOtherProfilesHint}" />
+                        </StackPanel>
+                        <tcf:SettingSwitch
+                            Grid.Column="1"
+                            Margin="14,0,0,0"
+                            VerticalAlignment="Center"
+                            IsChecked="{Binding ServerProtectOtherProfiles, Mode=TwoWay}" />
+                    </Grid>
+                </Border>
 
-                <Border Style="{StaticResource SubSetting}" Margin="0,12,0,0" Padding="0,12,0,0">
+                <Border Style="{StaticResource SubSetting}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -1262,38 +1330,35 @@
                     has connected once, because the answer is keyed on the certificate that
                     connection records.
                 -->
-                <Border Style="{StaticResource SubSetting}" Margin="0,12,0,0">
+                <Border Style="{StaticResource SubSetting}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapReport}" />
+                            <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapReportHint}" />
+                        </StackPanel>
+                        <tcf:SettingSwitch
+                            Grid.Column="1"
+                            Margin="14,0,0,0"
+                            VerticalAlignment="Center"
+                            IsEnabled="{Binding CanChooseReporting}"
+                            IsChecked="{Binding ReportsToServer, Mode=TwoWay}" />
+                    </Grid>
+                </Border>
+                <Border Style="{StaticResource SubSetting}">
                     <StackPanel>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel>
-                                <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapReport}" />
-                                <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapReportHint}" />
-                            </StackPanel>
-                            <tcf:SettingSwitch
-                                Grid.Column="1"
-                                Margin="14,0,0,0"
-                                VerticalAlignment="Center"
-                                IsEnabled="{Binding CanChooseReporting}"
-                                IsChecked="{Binding ReportsToServer, Mode=TwoWay}" />
-                        </Grid>
-
-                        <TextBlock
-                            Style="{StaticResource SettingTitle}"
-                            Margin="0,12,0,0"
-                            Text="{loc:Str Options_ServerMapDisplayName}" />
+                        <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ServerMapDisplayName}" />
                         <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ServerMapDisplayNameHint}" />
                         <!-- Saved when the box loses focus, not on every keystroke. -->
                         <ui:TextBox
                             MinWidth="260"
                             HorizontalAlignment="Left"
-                            Margin="0,6,0,0"
+                            Margin="0,8,0,0"
                             PlaceholderText="{Binding DisplayNamePlaceholder}"
                             Text="{Binding DisplayNameInput, UpdateSourceTrigger=LostFocus}" />
-
                         <TextBlock
                             Style="{StaticResource SettingNote}"
                             Margin="0,8,0,0"
