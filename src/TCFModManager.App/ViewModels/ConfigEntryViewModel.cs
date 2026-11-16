@@ -21,11 +21,8 @@ public sealed class ConfigEntryViewModel
 
     //
     // The mod's folder/package name, or - for a file no mod owns - the file's own name without its
-    // extension, so the row doesn't read as the same string twice with the path underneath.
-    //
-    // The installed folder name is used deliberately rather than the catalog's prettier display
-    // name: matching every installed mod against the catalog is the expensive pass that made the
-    // Installed page hang, and the folder name is what the path underneath actually says.
+    // extension. The rail shows the sp-mod name where the mod has an Installed card (ConfigModRow);
+    // this is the fallback.
     //
     public string Title => Entry.ModName ?? Path.GetFileNameWithoutExtension(Entry.FileName);
 

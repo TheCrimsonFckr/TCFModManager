@@ -14,8 +14,8 @@ using TCFModManager.Core.Services;
 namespace TCFModManager.App.ViewModels;
 
 //
-// The Configs page: every config file the installed mods actually have, and an editor for the
-// selected one.
+// The Configs page: every config file the installed mods actually have, one rail row per mod, and an
+// editor for the selected file. Edits are held per file (ConfigOpenFile) until Save or Save all.
 //
 // The list is grouped by where a file lives, because that is the difference that matters to whoever
 // is editing it - a client mod's settings sit in the shared BepInEx\config folder and outlive the
@@ -33,18 +33,6 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
 
     private List<ConfigEntryViewModel> _all = [];
 
-    // The file as it was last read from disk. Carries the write time a save is checked against and
-    // the byte order mark to reproduce, and is what Revert and the dirty check compare with.
-    private ModConfigDocument? _loaded;
-
-    // The entry _loaded belongs to, which is not always SelectedEntry - the selection moves first
-    // and the load follows, and a discarded prompt puts the selection back.
-    private ConfigEntryViewModel? _loadedEntry;
-
-    // Guards the selection being put back after the user declines to discard their edits, so the
-    // change that restores it doesn't run the prompt a second time.
-    private bool _restoringSelection;
-
     // Per-mod update policy, and what recent updates did to each file.
     private readonly ModConfigOptionsStore _options = new();
     private readonly ConfigUpdateLog _updates = new();
@@ -53,25 +41,12 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
     // choice doesn't read as making one.
     private bool _showingPolicy;
 
-    private bool _formWriting;
-
     private bool _formStale = true;
 
     public ConfigsViewModel()
     {
-        Form = new ConfigFormViewModel(text =>
-        {
-            _formWriting = true;
-            EditorText = text;
-            _formWriting = false;
-        });
-
-        Form.PropertyChanged += (_, e) =>
-        {
-            if (e.PropertyName != nameof(ConfigFormViewModel.ChangedCount)) return;
-            ResetAllCommand.NotifyCanExecuteChanged();
-            CopyChangesCommand.NotifyCanExecuteChanged();
-        };
+        Form = new ConfigFormViewModel();
+        Form.FileEdited += (_, file) => OnFormEdited(file);
 
         SourceFilterOptions =
         [
@@ -311,7 +286,7 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
     // CollectionViewSource rather than it being handed over already nested, so the whole list stays
     // one ListBox with one selection - see ConfigSectionHeader.
     //
-    public ObservableCollection<ConfigEntryViewModel> Results { get; } = [];
+    public ObservableCollection<ConfigModRow> Results { get; } = [];
 
     public IReadOnlyList<ConfigSourceFilterItem> SourceFilterOptions { get; }
 
@@ -339,16 +314,22 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
 
     public bool HasSelection => SelectedEntry is not null;
 
+    public bool ShowEditor => ShowListView || (ShowModView && HasSelection);
+
+    public bool ShowEmptyState => ShowModView && !HasSelection;
+
     public ConfigFormViewModel Form { get; }
 
     [ObservableProperty]
     private bool _showRaw;
 
-    public bool CanUseForm => SelectedEntry?.Entry.Format == ModConfigFormat.BepInExCfg && _loaded is not null;
+    public bool CanUseForm => ShowModView && SelectedEntry?.Entry.Format == ModConfigFormat.BepInExCfg && _current is not null;
 
     public bool ShowFormView => CanUseForm && !ShowRaw;
 
-    public bool ShowRawView => !ShowFormView;
+    public bool ShowRawView => ShowModView && !ShowFormView;
+
+    public bool ShowFormList => ShowFormView || ShowListView;
 
     partial void OnShowRawChanged(bool value) => SyncForm();
 
@@ -363,8 +344,11 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
         OnPropertyChanged(nameof(CanUseForm));
         OnPropertyChanged(nameof(ShowFormView));
         OnPropertyChanged(nameof(ShowRawView));
-        ResetAllCommand.NotifyCanExecuteChanged();
-        CopyChangesCommand.NotifyCanExecuteChanged();
+        OnPropertyChanged(nameof(ShowFormList));
+        OnPropertyChanged(nameof(ShowToolbar));
+        NotifyActions();
+
+        if (!ShowModView) return;
 
         if (!CanUseForm)
         {
@@ -373,35 +357,10 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
             return;
         }
 
-        if (!ShowFormView || !_formStale) return;
+        if (!ShowFormView || !_formStale || _current is null) return;
 
-        Form.Load(EditorText);
+        Form.ShowFile(_current);
         _formStale = false;
-    }
-
-    private bool CanResetAll => ShowFormView && Form.HasChanges;
-
-    [RelayCommand(CanExecute = nameof(CanResetAll))]
-    private void ResetAll() => Form.ResetAll();
-
-    private bool CanCopyChanges => ShowFormView && Form.HasChanges;
-
-    [RelayCommand(CanExecute = nameof(CanCopyChanges))]
-    private void CopyChanges()
-    {
-        if (SelectedEntry is null) return;
-
-        var heading = Text(Strings.Configs_CopyHeadingFormat, SelectedEntry.Title, SelectedEntry.FileName);
-
-        try
-        {
-            Clipboard.SetText(Form.ChangesAsText(heading));
-            StatusMessage = Strings.Configs_ChangesCopied;
-        }
-        catch (Exception ex) when (ex is System.Runtime.InteropServices.COMException or InvalidOperationException)
-        {
-            StatusMessage = Strings.Configs_ChangesCopyFailed;
-        }
     }
 
     // The editor's contents. Bound two-way, so every keystroke re-checks whether anything differs
@@ -447,35 +406,21 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
 
     partial void OnEditorTextChanged(string value)
     {
-        if (!_formWriting) _formStale = true;
-
         EditorError = null;
-        IsDirty = _loaded is not null && !string.Equals(value, _loaded.Text, StringComparison.Ordinal);
+        if (_syncingEditor || _current is null) return;
+
+        _formStale = true;
+        _current.Text = value;
+        FileChanged(_current);
     }
 
     partial void OnSelectedEntryChanged(ConfigEntryViewModel? value)
     {
-        if (_restoringSelection) return;
+        OnPropertyChanged(nameof(ShowEditor));
+        OnPropertyChanged(nameof(ShowEmptyState));
 
-        // Moving away from an edited file would drop the edit silently, so it is offered back first.
-        if (IsDirty && _loadedEntry is not null && !ReferenceEquals(_loadedEntry, value))
-        {
-            var keep = AskWindow.Show(new AskRequest
-            {
-                Title = Strings.Configs_DiscardTitle,
-                Lead = Text(Strings.Configs_DiscardFormat, _loadedEntry.FileName),
-                First = Strings.Configs_DiscardButton,
-                Cancel = Strings.Configs_KeepEditing,
-            }) != AskChoice.First;
-
-            if (keep)
-            {
-                _restoringSelection = true;
-                SelectedEntry = _loadedEntry;
-                _restoringSelection = false;
-                return;
-            }
-        }
+        if (value is not null && SelectedMod is { } mod && mod.Files.Contains(value)) mod.LastFile = value;
+        MarkTabs();
 
         Load(value);
         ShowStoredPolicy(value);
@@ -509,21 +454,36 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
         IsBusy = true;
         try
         {
-            // Walking BepInEx\config and every server mod's folder is disk work, and the scan it
-            // starts from is the same one the Installed page runs - neither belongs on the UI thread.
-            var entries = await Task.Run(() =>
-            {
-                var installed = InstalledScan.Run(installPath);
-                return ModConfigDiscovery.Find(installPath, installed, _options.Effective());
-            });
-
-            // Read once for the whole list rather than per row - it is one small file.
+            var catalog = AppServices.ModCache.AllMods;
+            var addons = AppServices.Addons.AllAddons;
+            var records = AppServices.InstallManifest.Load().Mods;
+            var effective = _options.Effective();
             var history = _updates.Load().Reports;
 
-            _all = entries.Select(e => Row(e, history)).ToList();
+            var scan = await Task.Run(() =>
+            {
+                var installed = InstalledScan.Run(installPath);
+                var entries = ModConfigDiscovery.Find(installPath, installed, effective)
+                    .Select(e => Row(e, history))
+                    .ToList();
+                var cards = InstalledModCardViewModel.BuildFrom(installed, catalog, null, records, addons);
+
+                return (Entries: entries, Mods: ModRows(entries, cards), Files: ReadCfgFiles(entries));
+            });
+
+            var reopen = SelectedEntry?.FullPath;
+
+            _all = scan.Entries;
+            Adopt(scan.Files);
+            _mods = scan.Mods;
+            foreach (var mod in _mods) Recount(mod);
+            RecountTotals();
 
             ApplyFilter();
             RefreshRunningWarning();
+
+            if (ShowListView) ShowList();
+            else Reopen(reopen);
 
             var mods = _all
                 .Where(e => e.Entry.ModName is not null)
@@ -568,59 +528,51 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
     {
         var term = SearchText.Trim();
 
-        var filtered = _all
-            .Where(e => SelectedSourceFilter.Matches(e.Source))
-            .Where(e => term.Length == 0 || e.MatchesSearch(term))
-            .OrderBy(e => e.Section.Rank)
-            .ThenBy(e => e.Title, StringComparer.OrdinalIgnoreCase)
-            .ThenBy(e => e.Subtitle, StringComparer.OrdinalIgnoreCase)
+        var filtered = _mods
+            .Where(m => m.Files.Any(f => SelectedSourceFilter.Matches(f.Source)))
+            .Where(m => term.Length == 0 || m.MatchesName(term) || m.Files.Any(f => OpenedFile(f)?.HasSetting(term) == true))
+            .OrderBy(m => m.Section.Rank)
+            .ThenBy(m => m.Title, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
         Results.Clear();
-        foreach (var entry in filtered) Results.Add(entry);
+        foreach (var mod in filtered) Results.Add(mod);
 
         HasResults = filtered.Count > 0;
 
-        // A filter that hides the open file leaves the editor showing something the list no longer
-        // offers, so the selection goes with it.
-        if (SelectedEntry is not null && !filtered.Contains(SelectedEntry) && !IsDirty) SelectedEntry = null;
+        if (SelectedMod is not null && !filtered.Contains(SelectedMod) && !IsDirty)
+        {
+            SelectedMod = null;
+            SelectedEntry = null;
+        }
     }
 
     private void Load(ConfigEntryViewModel? entry)
     {
         EditorError = null;
-        _loadedEntry = entry;
+        _current = null;
 
-        if (entry is null)
+        if (entry is not null)
         {
-            _loaded = null;
-            EditorText = string.Empty;
-            IsDirty = false;
-            _formStale = true;
-            SyncForm();
-            return;
+            try
+            {
+                _current = Open(entry);
+                RefreshRunningWarning();
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                EditorError = Text(Strings.Configs_FileReadFailedFormat, ex.Message);
+            }
+
+            if (_current is not null) FileChanged(_current);
         }
 
-        try
-        {
-            _loaded = ModConfigStore.Load(entry.FullPath);
-            EditorText = _loaded.Text;
-            IsDirty = false;
-            RefreshRunningWarning();
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            _loaded = null;
-            EditorText = string.Empty;
-            IsDirty = false;
-            EditorError = Text(Strings.Configs_FileReadFailedFormat, ex.Message);
-        }
-
+        SetEditor(_current?.Text ?? string.Empty);
         _formStale = true;
         SyncForm();
     }
 
-    private bool CanEdit => SelectedEntry is not null && _loaded is not null;
+    private bool CanEdit => SelectedEntry is not null && _current is not null;
 
     private bool CanSave => CanEdit && IsDirty;
 
@@ -630,7 +582,7 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
     private void SaveInternal(bool overwriteChangesOnDisk)
     {
         var entry = SelectedEntry;
-        if (entry is null || _loaded is null) return;
+        if (entry is null || _current is null) return;
 
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath)) return;
@@ -640,16 +592,16 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
         var result = ModConfigStore.Save(
             installPath,
             entry.FullPath,
-            EditorText,
-            _loaded,
+            _current.Text,
+            _current.Loaded,
             DateTimeOffset.Now,
             overwriteChangesOnDisk);
 
         switch (result.Outcome)
         {
             case ModConfigSaveOutcome.Saved:
-                _loaded = result.Saved;
-                IsDirty = false;
+                _current.Saved(result.Saved!);
+                FileChanged(_current);
                 StatusMessage = result.BackupPath is null
                     ? Text(Strings.Configs_SavedFormat, entry.FileName)
                     : Text(
@@ -705,6 +657,7 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
                 if (!string.IsNullOrWhiteSpace(installPath))
                     ModConfigStore.Backup(installPath, entry.FullPath, DateTimeOffset.Now);
 
+                _current?.Revert();
                 Load(entry);
                 StatusMessage = Text(Strings.Configs_ReloadedFormat, entry.FileName);
                 break;
@@ -714,10 +667,11 @@ public sealed partial class ConfigsViewModel : LocalizedViewModel
     [RelayCommand(CanExecute = nameof(CanSave))]
     private void Revert()
     {
-        if (_loaded is null) return;
+        if (_current is null) return;
 
-        EditorText = _loaded.Text;
-        IsDirty = false;
+        _current.Revert();
+        SetEditor(_current.Text);
+        FileChanged(_current);
         EditorError = null;
         _formStale = true;
         SyncForm();

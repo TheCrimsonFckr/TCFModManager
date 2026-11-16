@@ -662,7 +662,7 @@
     <value>Редактируйте на своё усмотрение</value>
   </data>
   <data name="Configs_EmptyState" xml:space="preserve">
-    <value>Выберите файл конфигурации слева, чтобы отредактировать его.</value>
+    <value>Выберите мод слева, чтобы изменить его настройки.</value>
   </data>
   <data name="Configs_ExcludedFormat" xml:space="preserve">
     <value>{0} больше не считается одной из конфигураций мода {1}.</value>
@@ -767,7 +767,7 @@
     <value>Сохранено: {0}.</value>
   </data>
   <data name="Configs_SearchPlaceholder" xml:space="preserve">
-    <value>Поиск модов и файлов...</value>
+    <value>Поиск модов и настроек...</value>
   </data>
   <data name="Configs_SectionClient" xml:space="preserve">
     <value>Клиент</value>
@@ -9585,7 +9585,7 @@
     <value>Сбросить все</value>
   </data>
   <data name="Configs_ResetAllToolTip" xml:space="preserve">
-    <value>Возвращает каждую настройку в этом файле к значению по умолчанию. Ничего не сохраняется, пока вы не нажмёте «Сохранить».</value>
+    <value>Возвращает каждую изменённую настройку во всех модах к значению по умолчанию. Ничего не сохраняется, пока вы не нажмёте «Сохранить все».</value>
   </data>
   <data name="Configs_CopyChanges" xml:space="preserve">
     <value>Копировать изменения</value>
@@ -9643,5 +9643,77 @@
   </data>
   <data name="Configs_ChangedBarToolTip" xml:space="preserve">
     <value>Изменено относительно значения по умолчанию</value>
+  </data>
+  <data name="Configs_SharedKeysHeading" xml:space="preserve">
+    <value>Используются несколькими настройками</value>
+  </data>
+  <data name="Configs_SameKeyAsFormat" xml:space="preserve">
+    <value>Та же клавиша, что и у {0}</value>
+  </data>
+  <data name="Configs_NothingChangedAnywhere" xml:space="preserve">
+    <value>Ни одна настройка не отличается от значения по умолчанию.</value>
+  </data>
+  <data name="Configs_NoKeybinds" xml:space="preserve">
+    <value>Ни в одном файле .cfg нет назначенных клавиш.</value>
+  </data>
+  <data name="Configs_NotSavedChangedOnDiskFormat" xml:space="preserve">
+    <value>{0} (изменён на диске после чтения - откройте его и нажмите «Сохранить», чтобы выбрать, что делать)</value>
+  </data>
+  <data name="Configs_NotSavedInvalidFormat" xml:space="preserve">
+    <value>{0} (некорректен - откройте его, чтобы увидеть причину)</value>
+  </data>
+  <data name="Configs_NotSavedFailedFormat" xml:space="preserve">
+    <value>{0} (не удалось записать)</value>
+  </data>
+  <data name="Configs_SavedAllFormat" xml:space="preserve">
+    <value>Сохранено файлов: {0}. Перед этим для каждого создана резервная копия.</value>
+  </data>
+  <data name="Configs_SavedSomeFormat" xml:space="preserve">
+    <value>Сохранено файлов: {0}. Не сохранены: {1}.</value>
+  </data>
+  <data name="Configs_FooterFormat" xml:space="preserve">
+    <value>Моды: {0} · Настройки: {1} · Изменено: {2}</value>
+  </data>
+  <data name="Configs_ChangedViewTitle" xml:space="preserve">
+    <value>Изменённые настройки</value>
+  </data>
+  <data name="Configs_KeybindsViewTitle" xml:space="preserve">
+    <value>Назначения клавиш</value>
+  </data>
+  <data name="Configs_ChangedViewNote" xml:space="preserve">
+    <value>Все настройки, которые отличаются от значений по умолчанию, во всех файлах .cfg ваших модов.</value>
+  </data>
+  <data name="Configs_KeybindsViewNote" xml:space="preserve">
+    <value>Все назначения клавиш в файлах .cfg ваших модов. Клавиши, которые используются несколькими настройками, идут первыми - это может быть нормально, если моды используют их в разное время, например на карте и в рейде.</value>
+  </data>
+  <data name="Configs_ChangedViewFormat" xml:space="preserve">
+    <value>Изменённые настройки ({0})</value>
+  </data>
+  <data name="Configs_KeybindsViewFormat" xml:space="preserve">
+    <value>Назначения клавиш ({0})</value>
+  </data>
+  <data name="Configs_UnsavedFilesFormat" xml:space="preserve">
+    <value>Файлы с несохранёнными изменениями: {0}</value>
+  </data>
+  <data name="Configs_ResetMod" xml:space="preserve">
+    <value>Сбросить мод</value>
+  </data>
+  <data name="Configs_ResetModToolTip" xml:space="preserve">
+    <value>Возвращает каждую настройку в файлах .cfg этого мода к значению по умолчанию. Ничего не сохраняется, пока вы не нажмёте «Сохранить».</value>
+  </data>
+  <data name="Configs_SaveAll" xml:space="preserve">
+    <value>Сохранить все</value>
+  </data>
+  <data name="Configs_SaveAllToolTip" xml:space="preserve">
+    <value>Сохраняет все файлы с несохранёнными изменениями. Перед этим для каждого создаётся резервная копия.</value>
+  </data>
+  <data name="Configs_RevertAll" xml:space="preserve">
+    <value>Отменить все</value>
+  </data>
+  <data name="Configs_RevertAllToolTip" xml:space="preserve">
+    <value>Отменяет все несохранённые изменения во всех файлах.</value>
+  </data>
+  <data name="Configs_UnsavedMarkerToolTip" xml:space="preserve">
+    <value>Несохранённые изменения</value>
   </data>
 </root>

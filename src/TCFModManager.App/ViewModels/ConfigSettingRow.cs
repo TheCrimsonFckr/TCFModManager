@@ -12,10 +12,13 @@ public sealed partial class ConfigSettingRow : ConfigFormItem
 
     private string _colorText;
 
-    public ConfigSettingRow(ConfigFormViewModel form, BepInExConfigSetting setting)
+    public ConfigSettingRow(ConfigFormViewModel form, ConfigOpenFile file, BepInExConfigSetting setting, string? context = null, string? modTitle = null)
     {
         _form = form;
+        File = file;
         Setting = setting;
+        Context = context;
+        ModTitle = modTitle;
         Kind = setting.Kind;
         _colorText = setting.Value;
 
@@ -32,7 +35,21 @@ public sealed partial class ConfigSettingRow : ConfigFormItem
             && BepInExConfigValues.TryGetRange(setting, out _, out _);
     }
 
+    public ConfigOpenFile File { get; }
+
     public BepInExConfigSetting Setting { get; }
+
+    public string? Context { get; }
+
+    public bool HasContext => Context is not null;
+
+    public string? ModTitle { get; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasNote))]
+    private string? _note;
+
+    public bool HasNote => Note is not null;
 
     public BepInExValueKind Kind { get; }
 
@@ -158,15 +175,17 @@ public sealed partial class ConfigSettingRow : ConfigFormItem
         if (!Setting.HasDefault) return;
 
         Setting.ResetToDefault();
-        _form.Edited();
         Refresh();
+        _form.Edited(this);
     }
 
     internal static string Shown(string? value) => string.IsNullOrEmpty(value) ? Strings.Configs_EmptyValue : value;
 
     internal bool Matches(string term) =>
         Setting.Key.Contains(term, StringComparison.OrdinalIgnoreCase)
-        || Setting.Description.Contains(term, StringComparison.OrdinalIgnoreCase);
+        || Setting.Description.Contains(term, StringComparison.OrdinalIgnoreCase)
+        || Context?.Contains(term, StringComparison.OrdinalIgnoreCase) == true
+        || ModTitle?.Contains(term, StringComparison.OrdinalIgnoreCase) == true;
 
     internal void Refresh()
     {
@@ -196,7 +215,7 @@ public sealed partial class ConfigSettingRow : ConfigFormItem
 
         Setting.Value = value;
         if (refreshColorText) _colorText = value;
-        _form.Edited();
+        _form.Edited(this);
 
         OnPropertyChanged(nameof(DiffersFromDefault));
         OnPropertyChanged(nameof(CanReset));

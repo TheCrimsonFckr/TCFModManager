@@ -1037,13 +1037,13 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Restart the headless</value>
   </data>
   <data name="Configs_SearchPlaceholder" xml:space="preserve">
-    <value>Search mods and files...</value>
+    <value>Search mods and settings...</value>
   </data>
   <data name="Configs_NoMatches" xml:space="preserve">
     <value>Nothing matches. Note that plenty of plugins only write a config the first time the game runs.</value>
   </data>
   <data name="Configs_EmptyState" xml:space="preserve">
-    <value>Pick a config file on the left to edit it.</value>
+    <value>Pick a mod on the left to edit its settings.</value>
   </data>
   <data name="Configs_ShowInExplorerToolTip" xml:space="preserve">
     <value>Show this file in Explorer</value>
@@ -11165,7 +11165,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Reset all</value>
   </data>
   <data name="Configs_ResetAllToolTip" xml:space="preserve">
-    <value>Set every setting in this file back to its default. Nothing is saved until you press Save.</value>
+    <value>Set every changed setting, in every mod, back to its default. Nothing is saved until you press Save all.</value>
   </data>
   <data name="Configs_CopyChanges" xml:space="preserve">
     <value>Copy changes</value>
@@ -11223,5 +11223,77 @@ Right-click to save the current filters to it, rename it or delete it.</value>
   </data>
   <data name="Configs_ChangedBarToolTip" xml:space="preserve">
     <value>Changed from its default</value>
+  </data>
+  <data name="Configs_SharedKeysHeading" xml:space="preserve">
+    <value>Used by more than one setting</value>
+  </data>
+  <data name="Configs_SameKeyAsFormat" xml:space="preserve">
+    <value>Same key as {0}</value>
+  </data>
+  <data name="Configs_NothingChangedAnywhere" xml:space="preserve">
+    <value>No setting differs from its default.</value>
+  </data>
+  <data name="Configs_NoKeybinds" xml:space="preserve">
+    <value>No .cfg file has a keybind.</value>
+  </data>
+  <data name="Configs_NotSavedChangedOnDiskFormat" xml:space="preserve">
+    <value>{0} (changed on disk since it was read - open it and press Save to choose what happens)</value>
+  </data>
+  <data name="Configs_NotSavedInvalidFormat" xml:space="preserve">
+    <value>{0} (not valid - open it to see why)</value>
+  </data>
+  <data name="Configs_NotSavedFailedFormat" xml:space="preserve">
+    <value>{0} (couldn't be written)</value>
+  </data>
+  <data name="Configs_SavedAllFormat" xml:space="preserve">
+    <value>Files saved: {0}. Each was backed up first.</value>
+  </data>
+  <data name="Configs_SavedSomeFormat" xml:space="preserve">
+    <value>Files saved: {0}. Not saved: {1}.</value>
+  </data>
+  <data name="Configs_FooterFormat" xml:space="preserve">
+    <value>Mods: {0} · Settings: {1} · Changed: {2}</value>
+  </data>
+  <data name="Configs_ChangedViewTitle" xml:space="preserve">
+    <value>Changed settings</value>
+  </data>
+  <data name="Configs_KeybindsViewTitle" xml:space="preserve">
+    <value>Keybinds</value>
+  </data>
+  <data name="Configs_ChangedViewNote" xml:space="preserve">
+    <value>Every setting that differs from its default, across all your mods' .cfg files.</value>
+  </data>
+  <data name="Configs_KeybindsViewNote" xml:space="preserve">
+    <value>Every keybind in your mods' .cfg files. Keys used by more than one setting come first - that can still be fine when the mods use them at different times, such as on the map and in raid.</value>
+  </data>
+  <data name="Configs_ChangedViewFormat" xml:space="preserve">
+    <value>Changed settings ({0})</value>
+  </data>
+  <data name="Configs_KeybindsViewFormat" xml:space="preserve">
+    <value>Keybinds ({0})</value>
+  </data>
+  <data name="Configs_UnsavedFilesFormat" xml:space="preserve">
+    <value>Files with unsaved changes: {0}</value>
+  </data>
+  <data name="Configs_ResetMod" xml:space="preserve">
+    <value>Reset mod</value>
+  </data>
+  <data name="Configs_ResetModToolTip" xml:space="preserve">
+    <value>Set every setting in this mod's .cfg files back to its default. Nothing is saved until you press Save.</value>
+  </data>
+  <data name="Configs_SaveAll" xml:space="preserve">
+    <value>Save all</value>
+  </data>
+  <data name="Configs_SaveAllToolTip" xml:space="preserve">
+    <value>Save every file with unsaved changes. Each one is backed up first.</value>
+  </data>
+  <data name="Configs_RevertAll" xml:space="preserve">
+    <value>Revert all</value>
+  </data>
+  <data name="Configs_RevertAllToolTip" xml:space="preserve">
+    <value>Drop every unsaved change, in every file.</value>
+  </data>
+  <data name="Configs_UnsavedMarkerToolTip" xml:space="preserve">
+    <value>Unsaved changes</value>
   </data>
 </root>

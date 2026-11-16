@@ -25,7 +25,7 @@ public partial class ConfigsPage : Page
         // up because ItemsSource binds to the same collection.
         //
         var view = CollectionViewSource.GetDefaultView(ViewModel.Results);
-        view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(ConfigEntryViewModel.Section)));
+        view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(ConfigModRow.Section)));
 
         //
         // Registered on the Page with handledEventsToo rather than as a bubbling MouseWheel
@@ -68,7 +68,7 @@ public partial class ConfigsPage : Page
             return;
         }
 
-        if (!ViewModel.ShowFormView || !IsWithin(source, FormPanel)) return;
+        if (!ViewModel.ShowFormList || !IsWithin(source, FormPanel)) return;
         if (FormScroll() is not { ScrollableHeight: > 0 } form) return;
 
         form.ScrollToVerticalOffset(form.VerticalOffset - e.Delta);

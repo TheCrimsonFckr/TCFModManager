@@ -656,7 +656,7 @@
     <value>Modifica a tua discrezione</value>
   </data>
   <data name="Configs_EmptyState" xml:space="preserve">
-    <value>Scegli un file di configurazione a sinistra per modificarlo.</value>
+    <value>Scegli una mod a sinistra per modificarne le impostazioni.</value>
   </data>
   <data name="Configs_ExcludedFormat" xml:space="preserve">
     <value>{0} non è più trattato come una delle configurazioni di {1}.</value>
@@ -755,7 +755,7 @@
     <value>{0} salvato.</value>
   </data>
   <data name="Configs_SearchPlaceholder" xml:space="preserve">
-    <value>Cerca mod e file...</value>
+    <value>Cerca mod e impostazioni...</value>
   </data>
   <data name="Configs_SectionClient" xml:space="preserve">
     <value>Client</value>
@@ -9198,7 +9198,7 @@ I dettagli sono nel log:
     <value>Ripristina tutto</value>
   </data>
   <data name="Configs_ResetAllToolTip" xml:space="preserve">
-    <value>Riporta ogni impostazione di questo file al valore predefinito. Non viene salvato nulla finché non premi Salva.</value>
+    <value>Riporta ogni impostazione modificata, in tutte le mod, al valore predefinito. Non viene salvato nulla finché non premi Salva tutto.</value>
   </data>
   <data name="Configs_CopyChanges" xml:space="preserve">
     <value>Copia modifiche</value>
@@ -9256,5 +9256,77 @@ I dettagli sono nel log:
   </data>
   <data name="Configs_ChangedBarToolTip" xml:space="preserve">
     <value>Modificata rispetto al valore predefinito</value>
+  </data>
+  <data name="Configs_SharedKeysHeading" xml:space="preserve">
+    <value>Usati da più di un'impostazione</value>
+  </data>
+  <data name="Configs_SameKeyAsFormat" xml:space="preserve">
+    <value>Stesso tasto di {0}</value>
+  </data>
+  <data name="Configs_NothingChangedAnywhere" xml:space="preserve">
+    <value>Nessuna impostazione è diversa dal valore predefinito.</value>
+  </data>
+  <data name="Configs_NoKeybinds" xml:space="preserve">
+    <value>Nessun file .cfg ha una scorciatoia.</value>
+  </data>
+  <data name="Configs_NotSavedChangedOnDiskFormat" xml:space="preserve">
+    <value>{0} (modificato su disco dopo la lettura: aprilo e premi Salva per scegliere cosa fare)</value>
+  </data>
+  <data name="Configs_NotSavedInvalidFormat" xml:space="preserve">
+    <value>{0} (non valido: aprilo per vedere il motivo)</value>
+  </data>
+  <data name="Configs_NotSavedFailedFormat" xml:space="preserve">
+    <value>{0} (non è stato possibile scriverlo)</value>
+  </data>
+  <data name="Configs_SavedAllFormat" xml:space="preserve">
+    <value>File salvati: {0}. Di ognuno è stato fatto prima un backup.</value>
+  </data>
+  <data name="Configs_SavedSomeFormat" xml:space="preserve">
+    <value>File salvati: {0}. Non salvati: {1}.</value>
+  </data>
+  <data name="Configs_FooterFormat" xml:space="preserve">
+    <value>Mod: {0} · Impostazioni: {1} · Modificate: {2}</value>
+  </data>
+  <data name="Configs_ChangedViewTitle" xml:space="preserve">
+    <value>Impostazioni modificate</value>
+  </data>
+  <data name="Configs_KeybindsViewTitle" xml:space="preserve">
+    <value>Scorciatoie</value>
+  </data>
+  <data name="Configs_ChangedViewNote" xml:space="preserve">
+    <value>Ogni impostazione diversa dal valore predefinito, in tutti i file .cfg delle tue mod.</value>
+  </data>
+  <data name="Configs_KeybindsViewNote" xml:space="preserve">
+    <value>Ogni scorciatoia nei file .cfg delle tue mod. I tasti usati da più impostazioni sono in cima: può comunque andare bene se le mod li usano in momenti diversi, per esempio sulla mappa e in raid.</value>
+  </data>
+  <data name="Configs_ChangedViewFormat" xml:space="preserve">
+    <value>Impostazioni modificate ({0})</value>
+  </data>
+  <data name="Configs_KeybindsViewFormat" xml:space="preserve">
+    <value>Scorciatoie ({0})</value>
+  </data>
+  <data name="Configs_UnsavedFilesFormat" xml:space="preserve">
+    <value>File con modifiche non salvate: {0}</value>
+  </data>
+  <data name="Configs_ResetMod" xml:space="preserve">
+    <value>Ripristina mod</value>
+  </data>
+  <data name="Configs_ResetModToolTip" xml:space="preserve">
+    <value>Riporta ogni impostazione dei file .cfg di questa mod al valore predefinito. Non viene salvato nulla finché non premi Salva.</value>
+  </data>
+  <data name="Configs_SaveAll" xml:space="preserve">
+    <value>Salva tutto</value>
+  </data>
+  <data name="Configs_SaveAllToolTip" xml:space="preserve">
+    <value>Salva ogni file con modifiche non salvate. Di ognuno viene fatto prima un backup.</value>
+  </data>
+  <data name="Configs_RevertAll" xml:space="preserve">
+    <value>Annulla tutto</value>
+  </data>
+  <data name="Configs_RevertAllToolTip" xml:space="preserve">
+    <value>Scarta ogni modifica non salvata, in tutti i file.</value>
+  </data>
+  <data name="Configs_UnsavedMarkerToolTip" xml:space="preserve">
+    <value>Modifiche non salvate</value>
   </data>
 </root>

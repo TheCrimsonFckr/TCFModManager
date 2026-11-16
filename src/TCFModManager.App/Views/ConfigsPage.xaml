@@ -142,11 +142,24 @@
                 BorderThickness="1,1,1,0"
                 BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                 Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
-                <TextBlock
-                    FontWeight="SemiBold"
-                    TextWrapping="Wrap"
-                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    Text="{Binding Name}" />
+                <DockPanel>
+                    <ui:Button
+                        DockPanel.Dock="Right"
+                        Margin="8,-4,0,-4"
+                        Padding="8,4"
+                        Appearance="Transparent"
+                        Content="{loc:Str Configs_ResetMod}"
+                        Icon="{ui:SymbolIcon ArrowReset24}"
+                        ToolTip="{loc:Str Configs_ResetModToolTip}"
+                        Command="{Binding ResetCommand}"
+                        Visibility="{Binding CanReset, Converter={StaticResource BoolToVis}}" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontWeight="SemiBold"
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        Text="{Binding Name}" />
+                </DockPanel>
             </Border>
         </DataTemplate>
 
@@ -176,6 +189,13 @@
 
                         <StackPanel Grid.Column="1" Margin="0,0,16,0" VerticalAlignment="Center">
                             <TextBlock
+                                Margin="0,0,0,2"
+                                FontSize="11"
+                                TextWrapping="Wrap"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="{Binding Context, Mode=OneTime}"
+                                Visibility="{Binding HasContext, Mode=OneTime, Converter={StaticResource BoolToVis}}" />
+                            <TextBlock
                                 TextWrapping="Wrap"
                                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                 Text="{Binding Name, Mode=OneTime}" />
@@ -186,6 +206,13 @@
                                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                 Text="{Binding Description, Mode=OneTime}"
                                 Visibility="{Binding HasDescription, Mode=OneTime, Converter={StaticResource BoolToVis}}" />
+                            <TextBlock
+                                Margin="0,4,0,0"
+                                FontSize="12"
+                                TextWrapping="Wrap"
+                                Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                                Text="{Binding Note}"
+                                Visibility="{Binding HasNote, Converter={StaticResource BoolToVis}}" />
                         </StackPanel>
 
                         <ui:Button
@@ -269,7 +296,9 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <ui:TextBox
@@ -286,8 +315,28 @@
                     ItemsSource="{Binding SourceFilterOptions}"
                     SelectedItem="{Binding SelectedSourceFilter}" />
 
+                <StackPanel Grid.Row="2" Margin="0,0,12,4">
+                    <ui:Button
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Padding="10,6"
+                        Content="{Binding ChangedViewLabel}"
+                        Icon="{ui:SymbolIcon ArrowReset24}"
+                        Appearance="{Binding ShowChangedView, Converter={StaticResource BoolToAppearance}}"
+                        Command="{Binding OpenChangedViewCommand}" />
+                    <ui:Button
+                        Margin="0,6,0,0"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Padding="10,6"
+                        Content="{Binding KeybindsViewLabel}"
+                        Icon="{ui:SymbolIcon Keyboard24}"
+                        Appearance="{Binding ShowKeybindsView, Converter={StaticResource BoolToAppearance}}"
+                        Command="{Binding OpenKeybindsViewCommand}" />
+                </StackPanel>
+
                 <TextBlock
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Margin="4,12,0,0"
                     VerticalAlignment="Top"
                     TextWrapping="Wrap"
@@ -297,7 +346,7 @@
 
                 <ScrollViewer
                     x:Name="ListScrollViewer"
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Focusable="False"
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Disabled"
@@ -310,7 +359,7 @@
                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         ItemsSource="{Binding Results}"
-                        SelectedItem="{Binding SelectedEntry}"
+                        SelectedItem="{Binding SelectedMod}"
                         HorizontalContentAlignment="Stretch">
                         <!-- The row Border below draws the hover and the selection, so the item
                              itself contributes no padding, margin, fill or chrome of its own. -->
@@ -381,6 +430,7 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
                                     <ui:SymbolIcon
@@ -389,8 +439,7 @@
                                         VerticalAlignment="Center"
                                         FontSize="16"
                                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                        Symbol="{Binding Glyph}"
-                                        ToolTip="{Binding FormatLabel}" />
+                                        Symbol="{Binding Glyph}" />
 
                                     <StackPanel Grid.Column="1">
                                         <TextBlock
@@ -402,7 +451,7 @@
                                             FontSize="11"
                                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                             TextTrimming="CharacterEllipsis"
-                                            ToolTip="{Binding FullPath}"
+                                            ToolTip="{Binding Subtitle}"
                                             Text="{Binding Subtitle}" />
                                         <ui:Badge
                                             Margin="0,3,0,0"
@@ -413,12 +462,46 @@
                                             Content="{Binding Badge}"
                                             Visibility="{Binding Badge, Converter={StaticResource NullToCollapsed}}" />
                                     </StackPanel>
+
+                                    <StackPanel
+                                        Grid.Column="2"
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <Ellipse
+                                            Width="7"
+                                            Height="7"
+                                            Margin="0,0,6,0"
+                                            VerticalAlignment="Center"
+                                            Fill="{DynamicResource SelectedRowStroke}"
+                                            ToolTip="{loc:Str Configs_UnsavedMarkerToolTip}"
+                                            Visibility="{Binding IsDirty, Converter={StaticResource BoolToVis}}" />
+                                        <Border
+                                            Padding="6,1"
+                                            CornerRadius="8"
+                                            Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                            ToolTip="{loc:Str Configs_ChangedBarToolTip}"
+                                            Visibility="{Binding HasChanges, Converter={StaticResource BoolToVis}}">
+                                            <TextBlock
+                                                FontSize="11"
+                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                Text="{Binding ChangedCount}" />
+                                        </Border>
+                                    </StackPanel>
                                     </Grid>
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </ScrollViewer>
+
+                <TextBlock
+                    Grid.Row="4"
+                    Margin="4,8,12,0"
+                    FontSize="11"
+                    TextWrapping="Wrap"
+                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                    Text="{Binding Footer}" />
             </Grid>
 
             <GridSplitter
@@ -438,9 +521,9 @@
                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                     MaxWidth="380"
                     Text="{loc:Str Configs_EmptyState}"
-                    Visibility="{Binding HasSelection, Converter={StaticResource FalseToVisible}}" />
+                    Visibility="{Binding ShowEmptyState, Converter={StaticResource BoolToVis}}" />
 
-                <Grid Visibility="{Binding HasSelection, Converter={StaticResource BoolToVis}}">
+                <Grid Visibility="{Binding ShowEditor, Converter={StaticResource BoolToVis}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -449,7 +532,26 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <DockPanel Grid.Row="0" Margin="0,0,0,8">
+                    <StackPanel
+                        Grid.Row="0"
+                        Margin="0,0,0,8"
+                        Visibility="{Binding ShowListView, Converter={StaticResource BoolToVis}}">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                            Text="{Binding ListTitle}" />
+                        <TextBlock
+                            Margin="0,2,0,0"
+                            TextWrapping="Wrap"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                            Text="{Binding ListNote}" />
+                    </StackPanel>
+
+                    <DockPanel
+                        Grid.Row="0"
+                        Margin="0,0,0,8"
+                        Visibility="{Binding ShowModView, Converter={StaticResource BoolToVis}}">
                         <ui:Button
                             DockPanel.Dock="Right"
                             Padding="8,6"
@@ -470,16 +572,58 @@
                                 FontWeight="SemiBold"
                                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                 TextTrimming="CharacterEllipsis"
-                                Text="{Binding SelectedEntry.Title}" />
+                                Text="{Binding SelectedMod.Title}" />
+                            <TextBlock
+                                FontSize="12"
+                                TextTrimming="CharacterEllipsis"
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                Text="{Binding SelectedMod.Details}"
+                                Visibility="{Binding SelectedMod.HasDetails, Converter={StaticResource BoolToVis}}" />
                             <TextBlock
                                 FontSize="11"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 TextWrapping="Wrap"
                                 Text="{Binding SelectedEntry.Entry.DisplayPath}" />
+
+                            <ItemsControl
+                                Margin="0,8,0,0"
+                                ItemsSource="{Binding SelectedMod.Tabs}"
+                                Visibility="{Binding SelectedMod.HasTabs, Converter={StaticResource BoolToVis}}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <ui:Button
+                                            Margin="0,0,6,4"
+                                            Padding="10,5"
+                                            Appearance="{Binding IsSelected, Converter={StaticResource BoolToAppearance}}"
+                                            Command="{Binding DataContext.SelectFileCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                            CommandParameter="{Binding}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock VerticalAlignment="Center" Text="{Binding Label}" />
+                                                <Ellipse
+                                                    Width="6"
+                                                    Height="6"
+                                                    Margin="6,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Fill="{DynamicResource SelectedRowStroke}"
+                                                    ToolTip="{loc:Str Configs_UnsavedMarkerToolTip}"
+                                                    Visibility="{Binding IsDirty, Converter={StaticResource BoolToVis}}" />
+                                            </StackPanel>
+                                        </ui:Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </StackPanel>
                     </DockPanel>
 
-                    <StackPanel Grid.Row="1" Margin="0,0,0,8">
+                    <StackPanel
+                        Grid.Row="1"
+                        Margin="0,0,0,8"
+                        Visibility="{Binding ShowModView, Converter={StaticResource BoolToVis}}">
                         <!-- The one line that says what editing this file actually means - which
                              half of the install it belongs to, and what happens to it when the mod
                              is disabled or removed. -->
@@ -615,12 +759,13 @@
                     <DockPanel
                         Grid.Row="2"
                         Margin="0,0,0,8"
-                        Visibility="{Binding CanUseForm, Converter={StaticResource BoolToVis}}">
+                        Visibility="{Binding ShowToolbar, Converter={StaticResource BoolToVis}}">
                         <StackPanel
                             DockPanel.Dock="Right"
                             Margin="12,0,0,0"
                             VerticalAlignment="Top"
-                            Orientation="Horizontal">
+                            Orientation="Horizontal"
+                            Visibility="{Binding CanUseForm, Converter={StaticResource BoolToVis}}">
                             <ui:Button
                                 Padding="10,6"
                                 Content="{loc:Str Configs_ViewForm}"
@@ -638,19 +783,21 @@
                                 Command="{Binding UseRawCommand}" />
                         </StackPanel>
 
-                        <WrapPanel Visibility="{Binding ShowFormView, Converter={StaticResource BoolToVis}}">
-                            <ui:Button
-                                Margin="0,0,6,6"
-                                Padding="10,6"
-                                Content="{loc:Str Configs_ShowAll}"
-                                Appearance="{Binding Form.ShowAllSettings, Converter={StaticResource BoolToAppearance}}"
-                                Command="{Binding Form.ShowAllCommand}" />
-                            <ui:Button
-                                Margin="0,0,12,6"
-                                Padding="10,6"
-                                Content="{Binding Form.ChangedLabel}"
-                                Appearance="{Binding Form.ShowChangedOnly, Converter={StaticResource BoolToAppearance}}"
-                                Command="{Binding Form.ShowChangedCommand}" />
+                        <WrapPanel Visibility="{Binding ShowFormList, Converter={StaticResource BoolToVis}}">
+                            <StackPanel Orientation="Horizontal" Visibility="{Binding Form.IsFileMode, Converter={StaticResource BoolToVis}}">
+                                <ui:Button
+                                    Margin="0,0,6,6"
+                                    Padding="10,6"
+                                    Content="{loc:Str Configs_ShowAll}"
+                                    Appearance="{Binding Form.ShowAllSettings, Converter={StaticResource BoolToAppearance}}"
+                                    Command="{Binding Form.ShowAllCommand}" />
+                                <ui:Button
+                                    Margin="0,0,12,6"
+                                    Padding="10,6"
+                                    Content="{Binding Form.ChangedLabel}"
+                                    Appearance="{Binding Form.ShowChangedOnly, Converter={StaticResource BoolToAppearance}}"
+                                    Command="{Binding Form.ShowChangedCommand}" />
+                            </StackPanel>
                             <ui:TextBox
                                 Width="220"
                                 Margin="0,0,12,6"
@@ -660,17 +807,27 @@
                             <ui:Button
                                 Margin="0,0,6,6"
                                 Padding="10,6"
+                                Content="{loc:Str Configs_ResetMod}"
+                                Icon="{ui:SymbolIcon ArrowReset24}"
+                                ToolTip="{loc:Str Configs_ResetModToolTip}"
+                                Command="{Binding ResetModCommand}"
+                                Visibility="{Binding ShowModView, Converter={StaticResource BoolToVis}}" />
+                            <ui:Button
+                                Margin="0,0,6,6"
+                                Padding="10,6"
                                 Content="{loc:Str Configs_ResetAll}"
                                 Icon="{ui:SymbolIcon ArrowReset24}"
                                 ToolTip="{loc:Str Configs_ResetAllToolTip}"
-                                Command="{Binding ResetAllCommand}" />
+                                Command="{Binding ResetEverythingCommand}"
+                                Visibility="{Binding ShowChangedView, Converter={StaticResource BoolToVis}}" />
                             <ui:Button
                                 Margin="0,0,0,6"
                                 Padding="10,6"
                                 Content="{loc:Str Configs_CopyChanges}"
                                 Icon="{ui:SymbolIcon Copy24}"
                                 ToolTip="{loc:Str Configs_CopyChangesToolTip}"
-                                Command="{Binding CopyChangesCommand}" />
+                                Command="{Binding CopyChangesCommand}"
+                                Visibility="{Binding ShowKeybindsView, Converter={StaticResource FalseToVisible}}" />
                         </WrapPanel>
                     </DockPanel>
 
@@ -678,7 +835,7 @@
                         x:Name="FormPanel"
                         Grid.Row="3"
                         Background="Transparent"
-                        Visibility="{Binding ShowFormView, Converter={StaticResource BoolToVis}}">
+                        Visibility="{Binding ShowFormList, Converter={StaticResource BoolToVis}}">
                         <TextBlock
                             Margin="4,12,0,0"
                             VerticalAlignment="Top"
@@ -736,20 +893,43 @@
                             Appearance="Primary"
                             Content="{loc:Str Common_Save}"
                             Icon="{ui:SymbolIcon Save24}"
-                            Command="{Binding SaveCommand}" />
+                            Command="{Binding SaveCommand}"
+                            Visibility="{Binding ShowModView, Converter={StaticResource BoolToVis}}" />
                         <ui:Button
                             DockPanel.Dock="Right"
                             Margin="0,0,8,0"
                             Content="{loc:Str Configs_Revert}"
                             Icon="{ui:SymbolIcon ArrowUndo24}"
                             ToolTip="{loc:Str Configs_RevertToolTip}"
-                            Command="{Binding RevertCommand}" />
+                            Command="{Binding RevertCommand}"
+                            Visibility="{Binding ShowModView, Converter={StaticResource BoolToVis}}" />
+                        <ui:Button
+                            DockPanel.Dock="Right"
+                            Margin="0,0,8,0"
+                            Appearance="{Binding ShowListView, Converter={StaticResource BoolToAppearance}}"
+                            Content="{loc:Str Configs_SaveAll}"
+                            Icon="{ui:SymbolIcon SaveMultiple24}"
+                            ToolTip="{loc:Str Configs_SaveAllToolTip}"
+                            Command="{Binding SaveAllCommand}" />
+                        <ui:Button
+                            DockPanel.Dock="Right"
+                            Margin="0,0,8,0"
+                            Content="{loc:Str Configs_RevertAll}"
+                            Icon="{ui:SymbolIcon ArrowUndo24}"
+                            ToolTip="{loc:Str Configs_RevertAllToolTip}"
+                            Command="{Binding RevertAllCommand}" />
 
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                            Text="{loc:Str Configs_UnsavedChanges}"
-                            Visibility="{Binding IsDirty, Converter={StaticResource BoolToVis}}" />
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                Text="{loc:Str Configs_UnsavedChanges}"
+                                Visibility="{Binding IsDirty, Converter={StaticResource BoolToVis}}" />
+                            <TextBlock
+                                FontSize="11"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="{Binding DirtyLabel}"
+                                Visibility="{Binding HasDirty, Converter={StaticResource BoolToVis}}" />
+                        </StackPanel>
                     </DockPanel>
                 </Grid>
             </Grid>

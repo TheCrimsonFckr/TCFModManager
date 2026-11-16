@@ -656,7 +656,7 @@
     <value>Bearbeiten auf eigene Verantwortung</value>
   </data>
   <data name="Configs_EmptyState" xml:space="preserve">
-    <value>Wähle links eine Konfigurationsdatei aus, um sie zu bearbeiten.</value>
+    <value>Wähle links eine Mod aus, um ihre Einstellungen zu bearbeiten.</value>
   </data>
   <data name="Configs_ExcludedFormat" xml:space="preserve">
     <value>{0} gilt nicht mehr als eine der Konfigurationen von {1}.</value>
@@ -755,7 +755,7 @@
     <value>{0} gespeichert.</value>
   </data>
   <data name="Configs_SearchPlaceholder" xml:space="preserve">
-    <value>Mods und Dateien suchen...</value>
+    <value>Mods und Einstellungen durchsuchen...</value>
   </data>
   <data name="Configs_SectionClient" xml:space="preserve">
     <value>Client</value>
@@ -9198,7 +9198,7 @@ Die Details stehen im Log:
     <value>Alle zurücksetzen</value>
   </data>
   <data name="Configs_ResetAllToolTip" xml:space="preserve">
-    <value>Setzt jede Einstellung in dieser Datei auf ihren Standardwert zurück. Gespeichert wird erst, wenn du auf Speichern drückst.</value>
+    <value>Setzt jede geänderte Einstellung in jeder Mod auf ihren Standardwert zurück. Gespeichert wird erst, wenn du auf Alle speichern drückst.</value>
   </data>
   <data name="Configs_CopyChanges" xml:space="preserve">
     <value>Änderungen kopieren</value>
@@ -9256,5 +9256,77 @@ Die Details stehen im Log:
   </data>
   <data name="Configs_ChangedBarToolTip" xml:space="preserve">
     <value>Vom Standardwert geändert</value>
+  </data>
+  <data name="Configs_SharedKeysHeading" xml:space="preserve">
+    <value>Von mehr als einer Einstellung verwendet</value>
+  </data>
+  <data name="Configs_SameKeyAsFormat" xml:space="preserve">
+    <value>Gleiche Taste wie {0}</value>
+  </data>
+  <data name="Configs_NothingChangedAnywhere" xml:space="preserve">
+    <value>Keine Einstellung weicht von ihrem Standardwert ab.</value>
+  </data>
+  <data name="Configs_NoKeybinds" xml:space="preserve">
+    <value>Keine .cfg-Datei hat eine Tastenbelegung.</value>
+  </data>
+  <data name="Configs_NotSavedChangedOnDiskFormat" xml:space="preserve">
+    <value>{0} (wurde seit dem Einlesen auf der Festplatte geändert - öffne die Datei und drücke Speichern, um zu entscheiden, was passiert)</value>
+  </data>
+  <data name="Configs_NotSavedInvalidFormat" xml:space="preserve">
+    <value>{0} (ungültig - öffne die Datei, um den Grund zu sehen)</value>
+  </data>
+  <data name="Configs_NotSavedFailedFormat" xml:space="preserve">
+    <value>{0} (konnte nicht geschrieben werden)</value>
+  </data>
+  <data name="Configs_SavedAllFormat" xml:space="preserve">
+    <value>Gespeicherte Dateien: {0}. Von jeder wurde vorher eine Sicherung angelegt.</value>
+  </data>
+  <data name="Configs_SavedSomeFormat" xml:space="preserve">
+    <value>Gespeicherte Dateien: {0}. Nicht gespeichert: {1}.</value>
+  </data>
+  <data name="Configs_FooterFormat" xml:space="preserve">
+    <value>Mods: {0} · Einstellungen: {1} · Geändert: {2}</value>
+  </data>
+  <data name="Configs_ChangedViewTitle" xml:space="preserve">
+    <value>Geänderte Einstellungen</value>
+  </data>
+  <data name="Configs_KeybindsViewTitle" xml:space="preserve">
+    <value>Tastenbelegungen</value>
+  </data>
+  <data name="Configs_ChangedViewNote" xml:space="preserve">
+    <value>Jede Einstellung, die von ihrem Standardwert abweicht, aus den .cfg-Dateien all deiner Mods.</value>
+  </data>
+  <data name="Configs_KeybindsViewNote" xml:space="preserve">
+    <value>Jede Tastenbelegung in den .cfg-Dateien deiner Mods. Tasten, die mehr als eine Einstellung verwendet, stehen oben - das kann trotzdem passen, wenn die Mods sie zu unterschiedlichen Zeiten nutzen, etwa auf der Karte und im Raid.</value>
+  </data>
+  <data name="Configs_ChangedViewFormat" xml:space="preserve">
+    <value>Geänderte Einstellungen ({0})</value>
+  </data>
+  <data name="Configs_KeybindsViewFormat" xml:space="preserve">
+    <value>Tastenbelegungen ({0})</value>
+  </data>
+  <data name="Configs_UnsavedFilesFormat" xml:space="preserve">
+    <value>Dateien mit ungespeicherten Änderungen: {0}</value>
+  </data>
+  <data name="Configs_ResetMod" xml:space="preserve">
+    <value>Mod zurücksetzen</value>
+  </data>
+  <data name="Configs_ResetModToolTip" xml:space="preserve">
+    <value>Setzt jede Einstellung in den .cfg-Dateien dieser Mod auf ihren Standardwert zurück. Gespeichert wird erst, wenn du auf Speichern drückst.</value>
+  </data>
+  <data name="Configs_SaveAll" xml:space="preserve">
+    <value>Alle speichern</value>
+  </data>
+  <data name="Configs_SaveAllToolTip" xml:space="preserve">
+    <value>Speichert jede Datei mit ungespeicherten Änderungen. Von jeder wird vorher eine Sicherung angelegt.</value>
+  </data>
+  <data name="Configs_RevertAll" xml:space="preserve">
+    <value>Alle verwerfen</value>
+  </data>
+  <data name="Configs_RevertAllToolTip" xml:space="preserve">
+    <value>Verwirft jede ungespeicherte Änderung in jeder Datei.</value>
+  </data>
+  <data name="Configs_UnsavedMarkerToolTip" xml:space="preserve">
+    <value>Ungespeicherte Änderungen</value>
   </data>
 </root>

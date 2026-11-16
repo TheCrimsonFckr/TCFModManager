@@ -656,7 +656,7 @@
     <value>Modifiez en connaissance de cause</value>
   </data>
   <data name="Configs_EmptyState" xml:space="preserve">
-    <value>Choisissez un fichier de configuration à gauche pour le modifier.</value>
+    <value>Choisissez un mod à gauche pour modifier ses paramètres.</value>
   </data>
   <data name="Configs_ExcludedFormat" xml:space="preserve">
     <value>{0} n'est plus traité comme une des configurations de {1}.</value>
@@ -755,7 +755,7 @@
     <value>{0} enregistré.</value>
   </data>
   <data name="Configs_SearchPlaceholder" xml:space="preserve">
-    <value>Rechercher des mods et des fichiers...</value>
+    <value>Rechercher des mods et des paramètres...</value>
   </data>
   <data name="Configs_SectionClient" xml:space="preserve">
     <value>Client</value>
@@ -9198,7 +9198,7 @@ Les détails sont dans le journal :
     <value>Tout réinitialiser</value>
   </data>
   <data name="Configs_ResetAllToolTip" xml:space="preserve">
-    <value>Remet chaque paramètre de ce fichier à sa valeur par défaut. Rien n'est enregistré avant d'appuyer sur Enregistrer.</value>
+    <value>Remet chaque paramètre modifié, dans tous les mods, à sa valeur par défaut. Rien n'est enregistré avant d'appuyer sur Tout enregistrer.</value>
   </data>
   <data name="Configs_CopyChanges" xml:space="preserve">
     <value>Copier les modifications</value>
@@ -9256,5 +9256,77 @@ Les détails sont dans le journal :
   </data>
   <data name="Configs_ChangedBarToolTip" xml:space="preserve">
     <value>Modifié par rapport à la valeur par défaut</value>
+  </data>
+  <data name="Configs_SharedKeysHeading" xml:space="preserve">
+    <value>Utilisées par plusieurs paramètres</value>
+  </data>
+  <data name="Configs_SameKeyAsFormat" xml:space="preserve">
+    <value>Même touche que {0}</value>
+  </data>
+  <data name="Configs_NothingChangedAnywhere" xml:space="preserve">
+    <value>Aucun paramètre ne diffère de sa valeur par défaut.</value>
+  </data>
+  <data name="Configs_NoKeybinds" xml:space="preserve">
+    <value>Aucun fichier .cfg n'a de raccourci.</value>
+  </data>
+  <data name="Configs_NotSavedChangedOnDiskFormat" xml:space="preserve">
+    <value>{0} (modifié sur le disque depuis sa lecture - ouvrez-le et appuyez sur Enregistrer pour choisir quoi faire)</value>
+  </data>
+  <data name="Configs_NotSavedInvalidFormat" xml:space="preserve">
+    <value>{0} (non valide - ouvrez-le pour voir pourquoi)</value>
+  </data>
+  <data name="Configs_NotSavedFailedFormat" xml:space="preserve">
+    <value>{0} (n'a pas pu être écrit)</value>
+  </data>
+  <data name="Configs_SavedAllFormat" xml:space="preserve">
+    <value>Fichiers enregistrés : {0}. Chacun a d'abord été sauvegardé.</value>
+  </data>
+  <data name="Configs_SavedSomeFormat" xml:space="preserve">
+    <value>Fichiers enregistrés : {0}. Non enregistrés : {1}.</value>
+  </data>
+  <data name="Configs_FooterFormat" xml:space="preserve">
+    <value>Mods : {0} · Paramètres : {1} · Modifiés : {2}</value>
+  </data>
+  <data name="Configs_ChangedViewTitle" xml:space="preserve">
+    <value>Paramètres modifiés</value>
+  </data>
+  <data name="Configs_KeybindsViewTitle" xml:space="preserve">
+    <value>Raccourcis</value>
+  </data>
+  <data name="Configs_ChangedViewNote" xml:space="preserve">
+    <value>Chaque paramètre qui diffère de sa valeur par défaut, dans les fichiers .cfg de tous vos mods.</value>
+  </data>
+  <data name="Configs_KeybindsViewNote" xml:space="preserve">
+    <value>Chaque raccourci des fichiers .cfg de vos mods. Les touches utilisées par plusieurs paramètres sont en premier - cela peut quand même convenir si les mods s'en servent à des moments différents, par exemple sur la carte et en raid.</value>
+  </data>
+  <data name="Configs_ChangedViewFormat" xml:space="preserve">
+    <value>Paramètres modifiés ({0})</value>
+  </data>
+  <data name="Configs_KeybindsViewFormat" xml:space="preserve">
+    <value>Raccourcis ({0})</value>
+  </data>
+  <data name="Configs_UnsavedFilesFormat" xml:space="preserve">
+    <value>Fichiers avec des modifications non enregistrées : {0}</value>
+  </data>
+  <data name="Configs_ResetMod" xml:space="preserve">
+    <value>Réinitialiser le mod</value>
+  </data>
+  <data name="Configs_ResetModToolTip" xml:space="preserve">
+    <value>Remet chaque paramètre des fichiers .cfg de ce mod à sa valeur par défaut. Rien n'est enregistré avant d'appuyer sur Enregistrer.</value>
+  </data>
+  <data name="Configs_SaveAll" xml:space="preserve">
+    <value>Tout enregistrer</value>
+  </data>
+  <data name="Configs_SaveAllToolTip" xml:space="preserve">
+    <value>Enregistre chaque fichier ayant des modifications non enregistrées. Chacun est d'abord sauvegardé.</value>
+  </data>
+  <data name="Configs_RevertAll" xml:space="preserve">
+    <value>Tout annuler</value>
+  </data>
+  <data name="Configs_RevertAllToolTip" xml:space="preserve">
+    <value>Abandonne toutes les modifications non enregistrées, dans tous les fichiers.</value>
+  </data>
+  <data name="Configs_UnsavedMarkerToolTip" xml:space="preserve">
+    <value>Modifications non enregistrées</value>
   </data>
 </root>
