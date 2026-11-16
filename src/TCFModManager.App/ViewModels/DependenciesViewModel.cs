@@ -197,7 +197,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
         if (others.Count == 0) return;
 
         var lines = others.SelectMany(o =>
-            (o.Card.IsAppManaged ? o.Card.Entries.Where(e => !e.IsDisabled) : o.Entries).Select(e =>
+            (o.Card.IsAppManaged ? o.Card.Entries : o.Entries).Select(e =>
                 Text(Strings.Conflicts_KeepItemFormat, o.Card.DisplayTitle, Path.GetRelativePath(installPath, e.FolderPath))));
 
         var answer = AskWindow.Show(new AskRequest

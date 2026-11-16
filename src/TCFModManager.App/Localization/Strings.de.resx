@@ -2007,8 +2007,8 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Installed_RemovedFormat" xml:space="preserve">
     <value>{0} entfernt.</value>
   </data>
-  <data name="Installed_RemoveDisabledFirstFormat" xml:space="preserve">
-    <value>{0} ist deaktiviert - aktiviere ihn, bevor du ihn entfernst.</value>
+  <data name="Installed_RemoveTwiceFormat" xml:space="preserve">
+    <value>{0} liegt sowohl in einem aktivierten als auch in einem deaktivierten Ordner. Nutze zuerst „Bereinigen“ auf seiner Karte und entferne ihn dann.</value>
   </data>
   <data name="Installed_RemoveFailedFormat" xml:space="preserve">
     <value>{0} konnte nicht entfernt werden: {1}</value>
@@ -2306,6 +2306,9 @@ Siehe Abhängigkeiten und Konflikte.</value>
   </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>{0} wurde nicht entfernt: Es liegt nicht in deinem SPT-Ordner. Es wurde nichts gelöscht.</value>
+  </data>
+  <data name="ModInstall_RemoveDuplicateFormat" xml:space="preserve">
+    <value>{0} wurde nicht entfernt: Er liegt sowohl in einem aktivierten als auch in einem deaktivierten Ordner ({1}). Nutze zuerst „Bereinigen“ auf seiner Karte. Es wurde nichts verschoben.</value>
   </data>
   <data name="ModInstall_RemoveRefusedProtectedFormat" xml:space="preserve">
     <value>{0} wurde nicht entfernt: Es gehört zu SPT, BepInEx oder dem Spiel. Es wurde nichts gelöscht.</value>
@@ -7057,8 +7060,8 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Installed_RemoveSelectedTitle" xml:space="preserve">
     <value>Ausgewählte Mods entfernen?</value>
   </data>
-  <data name="Installed_RemoveSelectedAllDisabledFormat" xml:space="preserve">
-    <value>Nichts entfernt - die ausgewählten Mods sind deaktiviert. Zum Entfernen zuerst aktivieren: {0}.</value>
+  <data name="Installed_RemoveSelectedAllTwiceFormat" xml:space="preserve">
+    <value>Nichts entfernt - die ausgewählten Mods liegen jeweils sowohl in einem aktivierten als auch in einem deaktivierten Ordner. Nutze zuerst „Bereinigen“ auf ihren Karten: {0}.</value>
   </data>
   <data name="Installed_RemoveSelectedCancelled" xml:space="preserve">
     <value>Es wurde nichts entfernt.</value>
@@ -8802,8 +8805,14 @@ Rechtsklick, um die aktuellen Filter darin zu speichern, sie umzubenennen oder z
   <data name="Installed_RemoveAddonsLeadFormat" xml:space="preserve">
     <value>{0} hat diese Addons in seinem Ordner:</value>
   </data>
-  <data name="Installed_RemoveAddonsDisabledHeading" xml:space="preserve">
-    <value>Diese sind deaktiviert und bleiben:</value>
+  <data name="Installed_RemoveAddonsTwiceHeading" xml:space="preserve">
+    <value>Diese liegen sowohl in einem aktivierten als auch in einem deaktivierten Ordner und bleiben:</value>
+  </data>
+  <data name="Installed_RemoveDisabledNoteFormat" xml:space="preserve">
+    <value>{0} ist deaktiviert. Er wird von dort entfernt, wo er liegt, und Rückgängig holt ihn deaktiviert zurück.</value>
+  </data>
+  <data name="Installed_RemovePartDisabledNoteFormat" xml:space="preserve">
+    <value>Ein Teil von {0} ist deaktiviert. Dieser Teil wird von dort entfernt, wo er liegt, und Rückgängig holt ihn deaktiviert zurück.</value>
   </data>
   <data name="Installed_RemoveAddonsToo" xml:space="preserve">
     <value>Addons auch entfernen</value>
@@ -8823,8 +8832,8 @@ Rechtsklick, um die aktuellen Filter darin zu speichern, sie umzubenennen oder z
   <data name="Installed_ProfileUndoMany" xml:space="preserve">
     <value>Falls das passiert, legt Rückgängig die Mods zurück. Eine Kopie deiner Profile von kurz davor findest du in den Optionen unter SPT-Profil-Sicherungen.</value>
   </data>
-  <data name="Installed_RemoveSelectedDisabledHeading" xml:space="preserve">
-    <value>Diese sind deaktiviert und werden nicht entfernt. Aktiviere sie zuerst, wenn sie weg sollen:</value>
+  <data name="Installed_RemoveSelectedTwiceHeading" xml:space="preserve">
+    <value>Diese liegen sowohl in einem aktivierten als auch in einem deaktivierten Ordner und werden nicht entfernt. Nutze zuerst „Bereinigen“ auf ihren Karten:</value>
   </data>
   <data name="Installed_RemoveSelectedConfigsKeptFormat" xml:space="preserve">
     <value>Ihre Konfigurationsdateien werden in {0} behalten.</value>

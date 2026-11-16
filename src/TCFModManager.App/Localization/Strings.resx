@@ -1607,6 +1607,10 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Didn't remove {0}: it isn't inside your SPT folder. Nothing was deleted.</value>
     <comment>{0} is a folder or file path.</comment>
   </data>
+  <data name="ModInstall_RemoveDuplicateFormat" xml:space="preserve">
+    <value>Didn't remove {0}: it is in both an enabled and a disabled folder ({1}). Use Sort out on its card first. Nothing was moved.</value>
+    <comment>{0} is a mod name, {1} the mod's folder inside the SPT folder. Sort out is the button named by Installed_SortOut - translate both the same way.</comment>
+  </data>
   <data name="ModInstall_RemoveRefusedProtectedFormat" xml:space="preserve">
     <value>Didn't remove {0}: it belongs to SPT, BepInEx or the game. Nothing was deleted.</value>
     <comment>{0} is a folder or file path.</comment>
@@ -3093,9 +3097,9 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>{0} disabled.</value>
     <comment>{0} is how many of the installed mods are disabled.</comment>
   </data>
-  <data name="Installed_RemoveDisabledFirstFormat" xml:space="preserve">
-    <value>{0} is disabled - enable it before removing it.</value>
-    <comment>{0} is a mod name.</comment>
+  <data name="Installed_RemoveTwiceFormat" xml:space="preserve">
+    <value>{0} is in both an enabled and a disabled folder. Use Sort out on its card first, then remove it.</value>
+    <comment>Status line. {0} is a mod name. Sort out is the button named by Installed_SortOut - translate both the same way.</comment>
   </data>
   <data name="Installed_RemoveNoRecordFormat" xml:space="preserve">
     <value>Couldn't find an install record for {0} - it may have already been removed.</value>
@@ -3177,9 +3181,17 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>{0} has these addons in its folder:</value>
     <comment>First line of the window asked before removing a mod that has addons. A list follows. {0} the mod.</comment>
   </data>
-  <data name="Installed_RemoveAddonsDisabledHeading" xml:space="preserve">
-    <value>These are disabled, so they stay:</value>
-    <comment>Heads the list of that mod's disabled addons, which are never removed with it.</comment>
+  <data name="Installed_RemoveAddonsTwiceHeading" xml:space="preserve">
+    <value>These are in both an enabled and a disabled folder, so they stay:</value>
+    <comment>Heading in the remove-addons-too question, above the addons that stay.</comment>
+  </data>
+  <data name="Installed_RemoveDisabledNoteFormat" xml:space="preserve">
+    <value>{0} is disabled. It is removed from where it is, and Undo puts it back disabled.</value>
+    <comment>Line in the removal question for a disabled mod. {0} is a mod name.</comment>
+  </data>
+  <data name="Installed_RemovePartDisabledNoteFormat" xml:space="preserve">
+    <value>Part of {0} is disabled. That part is removed from where it is, and Undo puts it back disabled.</value>
+    <comment>Line in the removal question for a mod with one half disabled. {0} is a mod name.</comment>
   </data>
   <data name="Installed_RemoveAddonsToo" xml:space="preserve">
     <value>Remove addons too</value>
@@ -3205,9 +3217,9 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>If that happens, Undo puts the mods back. A copy of your profiles from just before is in Options, under SPT profile backups.</value>
     <comment>Plural of Installed_ProfileUndoOne, in Remove selected.</comment>
   </data>
-  <data name="Installed_RemoveSelectedDisabledHeading" xml:space="preserve">
-    <value>These are disabled and won't be removed. Enable them first if you want them gone:</value>
-    <comment>Heads the list of selected mods the window asked before Remove selected leaves out because they are disabled.</comment>
+  <data name="Installed_RemoveSelectedTwiceHeading" xml:space="preserve">
+    <value>These are in both an enabled and a disabled folder and won't be removed. Use Sort out on their cards first:</value>
+    <comment>Heading in the Remove selected question. Sort out is the button named by Installed_SortOut - translate both the same way.</comment>
   </data>
   <data name="Installed_RemoveSelectedConfigsKeptFormat" xml:space="preserve">
     <value>Their config files are kept in {0}.</value>
@@ -8917,9 +8929,9 @@ See Dependencies and Conflicts.</value>
     <value>Remove the selected mods?</value>
     <comment>Title of the one question Remove selected asks.</comment>
   </data>
-  <data name="Installed_RemoveSelectedAllDisabledFormat" xml:space="preserve">
-    <value>Nothing removed - the selected mods are disabled. Enable them first to remove them: {0}.</value>
-    <comment>Status line. {0} is the mods, joined.</comment>
+  <data name="Installed_RemoveSelectedAllTwiceFormat" xml:space="preserve">
+    <value>Nothing removed - the selected mods are each in both an enabled and a disabled folder. Use Sort out on their cards first: {0}.</value>
+    <comment>Status line. {0} is the mods, joined. Sort out is the button named by Installed_SortOut - translate both the same way.</comment>
   </data>
   <data name="Installed_RemoveSelectedCancelled" xml:space="preserve">
     <value>Nothing was removed.</value>

@@ -2007,8 +2007,8 @@ Voir Dépendances et conflits.</value>
   <data name="Installed_RemovedFormat" xml:space="preserve">
     <value>{0} supprimé.</value>
   </data>
-  <data name="Installed_RemoveDisabledFirstFormat" xml:space="preserve">
-    <value>{0} est désactivé - activez-le avant de le supprimer.</value>
+  <data name="Installed_RemoveTwiceFormat" xml:space="preserve">
+    <value>{0} se trouve à la fois dans un dossier activé et dans un dossier désactivé. Utilisez d'abord « Régler » sur sa carte, puis supprimez-le.</value>
   </data>
   <data name="Installed_RemoveFailedFormat" xml:space="preserve">
     <value>Impossible de supprimer {0} : {1}</value>
@@ -2306,6 +2306,9 @@ Voir Dépendances et conflits.</value>
   </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>{0} n'a pas été supprimé : il ne se trouve pas dans votre dossier SPT. Rien n'a été effacé.</value>
+  </data>
+  <data name="ModInstall_RemoveDuplicateFormat" xml:space="preserve">
+    <value>{0} n'a pas été supprimé : il se trouve à la fois dans un dossier activé et dans un dossier désactivé ({1}). Utilisez d'abord « Régler » sur sa carte. Rien n'a été déplacé.</value>
   </data>
   <data name="ModInstall_RemoveRefusedProtectedFormat" xml:space="preserve">
     <value>{0} n'a pas été supprimé : il appartient à SPT, à BepInEx ou au jeu. Rien n'a été effacé.</value>
@@ -7057,8 +7060,8 @@ Voir Dépendances et conflits.</value>
   <data name="Installed_RemoveSelectedTitle" xml:space="preserve">
     <value>Supprimer les mods sélectionnés ?</value>
   </data>
-  <data name="Installed_RemoveSelectedAllDisabledFormat" xml:space="preserve">
-    <value>Rien n'a été supprimé - les mods sélectionnés sont désactivés. Activez-les d'abord pour les supprimer : {0}.</value>
+  <data name="Installed_RemoveSelectedAllTwiceFormat" xml:space="preserve">
+    <value>Rien n'a été supprimé - les mods sélectionnés se trouvent chacun à la fois dans un dossier activé et dans un dossier désactivé. Utilisez d'abord « Régler » sur leurs cartes : {0}.</value>
   </data>
   <data name="Installed_RemoveSelectedCancelled" xml:space="preserve">
     <value>Rien n'a été supprimé.</value>
@@ -8802,8 +8805,14 @@ Clic droit pour y enregistrer les filtres actuels, le renommer ou le supprimer.<
   <data name="Installed_RemoveAddonsLeadFormat" xml:space="preserve">
     <value>{0} a ces addons dans son dossier :</value>
   </data>
-  <data name="Installed_RemoveAddonsDisabledHeading" xml:space="preserve">
-    <value>Ceux-ci sont désactivés et restent :</value>
+  <data name="Installed_RemoveAddonsTwiceHeading" xml:space="preserve">
+    <value>Ceux-ci se trouvent à la fois dans un dossier activé et dans un dossier désactivé et restent :</value>
+  </data>
+  <data name="Installed_RemoveDisabledNoteFormat" xml:space="preserve">
+    <value>{0} est désactivé. Il est supprimé de là où il se trouve, et Annuler le remet désactivé.</value>
+  </data>
+  <data name="Installed_RemovePartDisabledNoteFormat" xml:space="preserve">
+    <value>Une partie de {0} est désactivée. Cette partie est supprimée de là où elle se trouve, et Annuler la remet désactivée.</value>
   </data>
   <data name="Installed_RemoveAddonsToo" xml:space="preserve">
     <value>Supprimer aussi les addons</value>
@@ -8823,8 +8832,8 @@ Clic droit pour y enregistrer les filtres actuels, le renommer ou le supprimer.<
   <data name="Installed_ProfileUndoMany" xml:space="preserve">
     <value>Si cela arrive, Restaurer remet les mods en place. Une copie de vos profils juste avant se trouve dans les Options, sous Sauvegardes des profils SPT.</value>
   </data>
-  <data name="Installed_RemoveSelectedDisabledHeading" xml:space="preserve">
-    <value>Ceux-ci sont désactivés et ne seront pas supprimés. Activez-les d'abord si vous voulez les retirer :</value>
+  <data name="Installed_RemoveSelectedTwiceHeading" xml:space="preserve">
+    <value>Ceux-ci se trouvent à la fois dans un dossier activé et dans un dossier désactivé et ne seront pas supprimés. Utilisez d'abord « Régler » sur leurs cartes :</value>
   </data>
   <data name="Installed_RemoveSelectedConfigsKeptFormat" xml:space="preserve">
     <value>Leurs fichiers de configuration sont conservés dans {0}.</value>

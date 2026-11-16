@@ -2007,8 +2007,8 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Installed_RemovedFormat" xml:space="preserve">
     <value>{0} rimosso.</value>
   </data>
-  <data name="Installed_RemoveDisabledFirstFormat" xml:space="preserve">
-    <value>{0} è disattivato - attivalo prima di rimuoverlo.</value>
+  <data name="Installed_RemoveTwiceFormat" xml:space="preserve">
+    <value>{0} è sia in una cartella attivata sia in una disattivata. Usa prima Risolvi sulla sua scheda, poi rimuovilo.</value>
   </data>
   <data name="Installed_RemoveFailedFormat" xml:space="preserve">
     <value>Impossibile rimuovere {0}: {1}</value>
@@ -2306,6 +2306,9 @@ Vedi Dipendenze e conflitti.</value>
   </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>{0} non è stato rimosso: non si trova nella tua cartella di SPT. Non è stato eliminato nulla.</value>
+  </data>
+  <data name="ModInstall_RemoveDuplicateFormat" xml:space="preserve">
+    <value>{0} non è stato rimosso: è sia in una cartella attivata sia in una disattivata ({1}). Usa prima Risolvi sulla sua scheda. Non è stato spostato nulla.</value>
   </data>
   <data name="ModInstall_RemoveRefusedProtectedFormat" xml:space="preserve">
     <value>{0} non è stato rimosso: appartiene a SPT, BepInEx o al gioco. Non è stato eliminato nulla.</value>
@@ -7057,8 +7060,8 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Installed_RemoveSelectedTitle" xml:space="preserve">
     <value>Rimuovere le mod selezionate?</value>
   </data>
-  <data name="Installed_RemoveSelectedAllDisabledFormat" xml:space="preserve">
-    <value>Nulla rimosso - le mod selezionate sono disattivate. Attivale prima per rimuoverle: {0}.</value>
+  <data name="Installed_RemoveSelectedAllTwiceFormat" xml:space="preserve">
+    <value>Nulla rimosso - le mod selezionate sono ciascuna sia in una cartella attivata sia in una disattivata. Usa prima Risolvi sulle loro schede: {0}.</value>
   </data>
   <data name="Installed_RemoveSelectedCancelled" xml:space="preserve">
     <value>Non è stato rimosso nulla.</value>
@@ -8802,8 +8805,14 @@ Clic destro per salvarci i filtri attuali, rinominarla o eliminarla.</value>
   <data name="Installed_RemoveAddonsLeadFormat" xml:space="preserve">
     <value>{0} ha questi addon nella sua cartella:</value>
   </data>
-  <data name="Installed_RemoveAddonsDisabledHeading" xml:space="preserve">
-    <value>Questi sono disattivati e restano:</value>
+  <data name="Installed_RemoveAddonsTwiceHeading" xml:space="preserve">
+    <value>Questi sono sia in una cartella attivata sia in una disattivata e restano:</value>
+  </data>
+  <data name="Installed_RemoveDisabledNoteFormat" xml:space="preserve">
+    <value>{0} è disattivato. Viene rimosso da dove si trova, e Annulla lo rimette disattivato.</value>
+  </data>
+  <data name="Installed_RemovePartDisabledNoteFormat" xml:space="preserve">
+    <value>Una parte di {0} è disattivata. Quella parte viene rimossa da dove si trova, e Annulla la rimette disattivata.</value>
   </data>
   <data name="Installed_RemoveAddonsToo" xml:space="preserve">
     <value>Rimuovi anche gli addon</value>
@@ -8823,8 +8832,8 @@ Clic destro per salvarci i filtri attuali, rinominarla o eliminarla.</value>
   <data name="Installed_ProfileUndoMany" xml:space="preserve">
     <value>Se succede, Ripristina rimette a posto le mod. Una copia dei tuoi profili di poco prima è nelle Opzioni, in Backup dei profili SPT.</value>
   </data>
-  <data name="Installed_RemoveSelectedDisabledHeading" xml:space="preserve">
-    <value>Queste sono disattivate e non verranno rimosse. Attivale prima se vuoi toglierle:</value>
+  <data name="Installed_RemoveSelectedTwiceHeading" xml:space="preserve">
+    <value>Queste sono sia in una cartella attivata sia in una disattivata e non verranno rimosse. Usa prima Risolvi sulle loro schede:</value>
   </data>
   <data name="Installed_RemoveSelectedConfigsKeptFormat" xml:space="preserve">
     <value>I loro file di configurazione vengono conservati in {0}.</value>

@@ -102,6 +102,12 @@ public static class ModInstallProblems
             problem.TotalFiles,
             problem.ArchiveEntry),
 
+        ModInstallFailure.RemovalDuplicate => string.Format(
+            CultureInfo.CurrentCulture,
+            Strings.ModInstall_RemoveDuplicateFormat,
+            problem.ModName,
+            problem.Folder?.Replace('/', '\\')),
+
         _ => string.Format(CultureInfo.CurrentCulture, Strings.ModInstall_UnexpectedFormat, problem.Reason),
     };
 

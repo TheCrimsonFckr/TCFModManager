@@ -457,6 +457,7 @@ internal static class Strings
     internal static string ModInstall_RecordFromAnotherInstallFormat => LocalizationService.Get("ModInstall_RecordFromAnotherInstallFormat");
     internal static string ModInstall_NothingToPlaceFormat => LocalizationService.Get("ModInstall_NothingToPlaceFormat");
     internal static string ModInstall_RemoveRefusedOutsideFormat => LocalizationService.Get("ModInstall_RemoveRefusedOutsideFormat");
+    internal static string ModInstall_RemoveDuplicateFormat => LocalizationService.Get("ModInstall_RemoveDuplicateFormat");
     internal static string ModInstall_RemoveRefusedProtectedFormat => LocalizationService.Get("ModInstall_RemoveRefusedProtectedFormat");
     internal static string ModInstall_RemoveRefusedAppFolderFormat => LocalizationService.Get("ModInstall_RemoveRefusedAppFolderFormat");
     internal static string ModInstall_RemoveRefusedNotModFolderFormat => LocalizationService.Get("ModInstall_RemoveRefusedNotModFolderFormat");
@@ -899,7 +900,7 @@ internal static class Strings
         LocalizationService.Plural("Installed_CountShown", count, values);
     internal static string Installed_CountDisabled(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_CountDisabled", count, values);
-    internal static string Installed_RemoveDisabledFirstFormat => LocalizationService.Get("Installed_RemoveDisabledFirstFormat");
+    internal static string Installed_RemoveTwiceFormat => LocalizationService.Get("Installed_RemoveTwiceFormat");
     internal static string Installed_RemoveNoRecordFormat => LocalizationService.Get("Installed_RemoveNoRecordFormat");
     internal static string Installed_RemoveNoFolderFormat => LocalizationService.Get("Installed_RemoveNoFolderFormat");
     internal static string Installed_RemoveFailedFormat => LocalizationService.Get("Installed_RemoveFailedFormat");
@@ -920,14 +921,16 @@ internal static class Strings
     internal static string Installed_RemoveNoUndo => LocalizationService.Get("Installed_RemoveNoUndo");
     internal static string Installed_RemoveDisableTip => LocalizationService.Get("Installed_RemoveDisableTip");
     internal static string Installed_RemoveAddonsLeadFormat => LocalizationService.Get("Installed_RemoveAddonsLeadFormat");
-    internal static string Installed_RemoveAddonsDisabledHeading => LocalizationService.Get("Installed_RemoveAddonsDisabledHeading");
+    internal static string Installed_RemoveAddonsTwiceHeading => LocalizationService.Get("Installed_RemoveAddonsTwiceHeading");
+    internal static string Installed_RemoveDisabledNoteFormat => LocalizationService.Get("Installed_RemoveDisabledNoteFormat");
+    internal static string Installed_RemovePartDisabledNoteFormat => LocalizationService.Get("Installed_RemovePartDisabledNoteFormat");
     internal static string Installed_RemoveAddonsToo => LocalizationService.Get("Installed_RemoveAddonsToo");
     internal static string Installed_RemoveModOnly => LocalizationService.Get("Installed_RemoveModOnly");
     internal static string Installed_RemoveSelectedLead => LocalizationService.Get("Installed_RemoveSelectedLead");
     internal static string Installed_RemoveSelectedProfileWarning => LocalizationService.Get("Installed_RemoveSelectedProfileWarning");
     internal static string Installed_RemoveSelectedProfileHeading => LocalizationService.Get("Installed_RemoveSelectedProfileHeading");
     internal static string Installed_ProfileUndoMany => LocalizationService.Get("Installed_ProfileUndoMany");
-    internal static string Installed_RemoveSelectedDisabledHeading => LocalizationService.Get("Installed_RemoveSelectedDisabledHeading");
+    internal static string Installed_RemoveSelectedTwiceHeading => LocalizationService.Get("Installed_RemoveSelectedTwiceHeading");
     internal static string Installed_RemoveSelectedConfigsKeptFormat => LocalizationService.Get("Installed_RemoveSelectedConfigsKeptFormat");
     internal static string Installed_RemoveSelectedAddonsTitle => LocalizationService.Get("Installed_RemoveSelectedAddonsTitle");
     internal static string Installed_RemoveSelectedAddonsLead => LocalizationService.Get("Installed_RemoveSelectedAddonsLead");
@@ -2455,7 +2458,7 @@ internal static class Strings
     internal static string Installed_RemoveSelected => LocalizationService.Get("Installed_RemoveSelected");
     internal static string Installed_RemoveSelectedToolTip => LocalizationService.Get("Installed_RemoveSelectedToolTip");
     internal static string Installed_RemoveSelectedTitle => LocalizationService.Get("Installed_RemoveSelectedTitle");
-    internal static string Installed_RemoveSelectedAllDisabledFormat => LocalizationService.Get("Installed_RemoveSelectedAllDisabledFormat");
+    internal static string Installed_RemoveSelectedAllTwiceFormat => LocalizationService.Get("Installed_RemoveSelectedAllTwiceFormat");
     internal static string Installed_RemoveSelectedCancelled => LocalizationService.Get("Installed_RemoveSelectedCancelled");
     internal static string Installed_RemovedSelectedFormat => LocalizationService.Get("Installed_RemovedSelectedFormat");
     internal static string Installed_RemoveSelectedFailedFormat => LocalizationService.Get("Installed_RemoveSelectedFailedFormat");

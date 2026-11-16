@@ -25,12 +25,10 @@ public partial class InstalledViewModel
             return;
         }
 
-        // A disabled mod's install record still points at the folders it was installed into, which
-        // it no longer occupies - so removal would delete nothing and report success. Enabling it
-        // first puts those paths back where the record expects them.
-        if (mod.IsDisabled)
+        // OPEN-49 Q2: a mod on disk twice, once live and once disabled, is sorted out first.
+        if (mod.HasDuplicateFolders)
         {
-            StatusMessage = Text(Strings.Installed_RemoveDisabledFirstFormat, mod.DisplayTitle);
+            StatusMessage = Text(Strings.Installed_RemoveTwiceFormat, mod.DisplayTitle);
             return;
         }
 
@@ -173,8 +171,8 @@ public partial class InstalledViewModel
     // question per mod over a long selection trains people to stop reading. Their config files are
     // always kept (LegacyConfigs), the safe half of the single removal's choice, and every removal can
     // be undone from the holding folder as usual. Mods sp-mod marks as changing the profile are named
-    // in the question (OPEN-12 F17). A disabled mod is left out: its record points at folders it no
-    // longer occupies, the same reason a single removal asks to enable it first.
+    // in the question (OPEN-12 F17). A mod on disk twice, once live and once disabled, is left out
+    // and named (OPEN-49 Q2).
     //
     [RelayCommand(CanExecute = nameof(HasSelection))]
     private async Task RemoveSelectedAsync()
@@ -187,18 +185,18 @@ public partial class InstalledViewModel
         }
 
         var selected = SelectedCards();
-        var targets = selected.Where(m => !m.IsDisabled).ToList();
-        var leftDisabled = selected.Where(m => m.IsDisabled).Select(m => m.DisplayTitle).ToList();
+        var targets = selected.Where(m => !m.HasDuplicateFolders).ToList();
+        var leftTwice = selected.Where(m => m.HasDuplicateFolders).Select(m => m.DisplayTitle).ToList();
 
         if (targets.Count == 0)
         {
-            StatusMessage = Text(Strings.Installed_RemoveSelectedAllDisabledFormat, TextLists.Join(leftDisabled));
+            StatusMessage = Text(Strings.Installed_RemoveSelectedAllTwiceFormat, TextLists.Join(leftTwice));
             return;
         }
 
         var unselectedAddons = targets
             .SelectMany(AddonCardsOf)
-            .Where(a => !a.IsDisabled && !selected.Contains(a))
+            .Where(a => !a.HasDuplicateFolders && !selected.Contains(a))
             .Distinct()
             .ToList();
 
@@ -226,7 +224,7 @@ public partial class InstalledViewModel
 
         var sections = new List<AskSection> { new(null, [.. targets.Select(t => t.DisplayTitle)]) };
         if (profileMods.Count > 0) sections.Add(new(Strings.Installed_RemoveSelectedProfileHeading, profileMods));
-        if (leftDisabled.Count > 0) sections.Add(new(Strings.Installed_RemoveSelectedDisabledHeading, leftDisabled));
+        if (leftTwice.Count > 0) sections.Add(new(Strings.Installed_RemoveSelectedTwiceHeading, leftTwice));
 
         var detail = new List<string>();
         if (profileMods.Count > 0) detail.Add(Strings.Installed_ProfileUndoMany);
@@ -412,18 +410,19 @@ public partial class InstalledViewModel
     //
     // OPEN-31 R2: asks whether a mod's installed addons go with it, Yes by default. Returns the
     // install records of the addons to remove (empty when there are none or the answer is No), or
-    // null when the user cancelled. A disabled addon is named but stays.
+    // null when the user cancelled. Disabled addons go too (OPEN-49 Q4); one on disk twice is named
+    // but stays.
     //
     private List<InstalledModRecord>? AskRemoveAddons(InstalledModCardViewModel mod)
     {
         var cards = AddonCardsOf(mod);
-        var live = cards.Where(c => !c.IsDisabled).ToList();
+        var live = cards.Where(c => !c.HasDuplicateFolders).ToList();
         if (live.Count == 0) return [];
 
-        var off = cards.Where(c => c.IsDisabled).ToList();
+        var twice = cards.Where(c => c.HasDuplicateFolders).ToList();
 
         var sections = new List<AskSection> { new(null, Names(live)) };
-        if (off.Count > 0) sections.Add(new(Strings.Installed_RemoveAddonsDisabledHeading, Names(off)));
+        if (twice.Count > 0) sections.Add(new(Strings.Installed_RemoveAddonsTwiceHeading, Names(twice)));
 
         var answer = AskWindow.Show(new AskRequest
         {
@@ -509,8 +508,10 @@ public partial class InstalledViewModel
         if (profile) lines.Add(Strings.Installed_ProfileUndoOne);
         lines.AddRange(detail);
         if (hasConfigs) lines.Add(Strings.Installed_RemoveConfigCount(configCount, mod.Name, configCount));
+        if (mod.IsDisabled) lines.Add(Text(Strings.Installed_RemoveDisabledNoteFormat, mod.DisplayTitle));
+        else if (mod.IsMixedState) lines.Add(Text(Strings.Installed_RemovePartDisabledNoteFormat, mod.DisplayTitle));
         lines.Add(HeldSentence());
-        lines.Add(Strings.Installed_RemoveDisableTip);
+        if (!mod.IsDisabled) lines.Add(Strings.Installed_RemoveDisableTip);
 
         var answer = AskWindow.Show(new AskRequest
         {

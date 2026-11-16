@@ -2115,8 +2115,8 @@
   <data name="Installed_RemovedFormat" xml:space="preserve">
     <value>{0} удалён.</value>
   </data>
-  <data name="Installed_RemoveDisabledFirstFormat" xml:space="preserve">
-    <value>{0} отключён - включите его перед удалением.</value>
+  <data name="Installed_RemoveTwiceFormat" xml:space="preserve">
+    <value>{0} лежит и во включённой, и в отключённой папке. Сначала нажмите «Устранить» на его карточке, затем удалите его.</value>
   </data>
   <data name="Installed_RemoveFailedFormat" xml:space="preserve">
     <value>Не удалось удалить {0}: {1}</value>
@@ -2429,6 +2429,9 @@
   </data>
   <data name="ModInstall_RemoveRefusedOutsideFormat" xml:space="preserve">
     <value>{0} не удалён: он находится вне вашей папки SPT. Ничего не удалено.</value>
+  </data>
+  <data name="ModInstall_RemoveDuplicateFormat" xml:space="preserve">
+    <value>{0} не удалён: он лежит и во включённой, и в отключённой папке ({1}). Сначала нажмите «Устранить» на его карточке. Ничего не перемещено.</value>
   </data>
   <data name="ModInstall_RemoveRefusedProtectedFormat" xml:space="preserve">
     <value>{0} не удалён: он принадлежит SPT, BepInEx или игре. Ничего не удалено.</value>
@@ -7402,8 +7405,8 @@
   <data name="Installed_RemoveSelectedTitle" xml:space="preserve">
     <value>Удалить выбранные моды?</value>
   </data>
-  <data name="Installed_RemoveSelectedAllDisabledFormat" xml:space="preserve">
-    <value>Ничего не удалено - выбранные моды отключены. Сначала включите их, чтобы удалить: {0}.</value>
+  <data name="Installed_RemoveSelectedAllTwiceFormat" xml:space="preserve">
+    <value>Ничего не удалено - каждый из выбранных модов лежит и во включённой, и в отключённой папке. Сначала нажмите «Устранить» на их карточках: {0}.</value>
   </data>
   <data name="Installed_RemoveSelectedCancelled" xml:space="preserve">
     <value>Ничего не удалено.</value>
@@ -9180,8 +9183,14 @@
   <data name="Installed_RemoveAddonsLeadFormat" xml:space="preserve">
     <value>В папке {0} есть эти аддоны:</value>
   </data>
-  <data name="Installed_RemoveAddonsDisabledHeading" xml:space="preserve">
-    <value>Эти отключены и останутся:</value>
+  <data name="Installed_RemoveAddonsTwiceHeading" xml:space="preserve">
+    <value>Эти лежат и во включённой, и в отключённой папке и останутся:</value>
+  </data>
+  <data name="Installed_RemoveDisabledNoteFormat" xml:space="preserve">
+    <value>{0} отключён. Он удаляется оттуда, где лежит, а «Отменить» вернёт его отключённым.</value>
+  </data>
+  <data name="Installed_RemovePartDisabledNoteFormat" xml:space="preserve">
+    <value>Часть {0} отключена. Эта часть удаляется оттуда, где лежит, а «Отменить» вернёт её отключённой.</value>
   </data>
   <data name="Installed_RemoveAddonsToo" xml:space="preserve">
     <value>Удалить и аддоны</value>
@@ -9201,8 +9210,8 @@
   <data name="Installed_ProfileUndoMany" xml:space="preserve">
     <value>Если так случится, «Вернуть» вернёт моды на место. Копия ваших профилей прямо перед этим есть в параметрах, в разделе «Резервные копии профилей SPT».</value>
   </data>
-  <data name="Installed_RemoveSelectedDisabledHeading" xml:space="preserve">
-    <value>Эти отключены и не будут удалены. Сначала включите их, если хотите удалить:</value>
+  <data name="Installed_RemoveSelectedTwiceHeading" xml:space="preserve">
+    <value>Эти лежат и во включённой, и в отключённой папке и не будут удалены. Сначала нажмите «Устранить» на их карточках:</value>
   </data>
   <data name="Installed_RemoveSelectedConfigsKeptFormat" xml:space="preserve">
     <value>Их файлы настроек сохраняются в {0}.</value>
