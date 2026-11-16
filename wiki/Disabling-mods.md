@@ -20,7 +20,7 @@ Disabled mods stay in the list with a red **DISABLED** tag, and the enabled or d
 
 **Undo** puts the last change back.
 
-**Removing a disabled mod** doesn't need it enabled first. It goes from where it is, and Undo on a removal puts it back disabled. See [Installed](Installed#removing-a-mod-can-be-undone).
+**Updating or removing a disabled mod** doesn't need it enabled first. An update keeps it disabled. A removal takes it from where it is, and Undo puts it back disabled - see [Installed](Installed#removing-a-mod-can-be-undone). A mod with only part of it disabled comes out of an update whole and on.
 
 > [!NOTE]
 > Whether a mod is disabled is worked out purely from where it sits on disk. Move folders around by hand if you prefer - the app reads the result correctly on the next scan.

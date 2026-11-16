@@ -44,8 +44,8 @@ To see your addons together: **Show only - Has installed addons** lists every mo
 > [!WARNING]
 > A mod list containing an addon needs this version of the app or newer to open. Sharing one with someone on an older build will tell them the file is too new - send them a list without addons, or ask them to update. Lists with no addons in them are unaffected.
 
-> [!WARNING]
-> **Update and Redownload are unavailable while a mod is disabled.** The record of what it installed points at folders it no longer occupies, so those actions would put files in the wrong place. Enable the mod first, then update it. Browse refuses a reinstall of a disabled mod for the same reason. **Remove** works on a disabled mod.
+> [!NOTE]
+> **A disabled mod can be updated, redownloaded or removed as it is.** An update brings it back for as long as it takes, then sets it aside again, so it stays disabled. A mod with only part of it disabled comes out of an update whole and on.
 
 ## Updating a mod that has addons
 Updating, downgrading or redownloading a mod checks its installed addons against the version you pick. The update dialog lists them under **Your addons with 1.19.0** - *Fits*, *Doesn't fit - 1.1.0 does*, or *No version fits* - and rechecks as you pick another version.

@@ -18,7 +18,6 @@
 - **Groups follow folder names.** Renaming a mod's folder drops it out of its group - and out of anything you then disable by group. Drag it back into the group to fix it.
 - **Copies set aside by "Sort out" stay put.** They sit in `.tcfmm-duplicates` inside your SPT install until you delete them; nothing prunes that folder for you.
 - **Disabling doesn't reorder anything.** A server mod's `loadBefore` / `loadAfter` ordering relative to the mods still enabled is left to SPT.
-- **Update and Redownload don't work on a disabled mod** - enable it first.
 
 ## Versions and compatibility
 - **On Browse, compatibility is judged from a mod's most recent releases**, not its whole history. A mod whose newest releases target a later SPT than yours reads as incompatible even if an older release of it would work - check the mod's page in that case. On Installed, the version you actually have is checked against your SPT.
