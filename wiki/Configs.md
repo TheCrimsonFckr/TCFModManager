@@ -1,13 +1,31 @@
-Edit your mods' settings without leaving the app. The page finds every config file your installed mods create:
+Edit your mods' settings without leaving the app. The list on the left has one row per mod, under the name it has on sp-mod, grouped by where its settings live:
 
 - **Client** - the files in `BepInEx\config`, one per plugin.
 - **Server** - the files inside a server mod's own folder under `user\mods`.
 - **BepInEx** - BepInEx's own settings, which are not a mod's.
 - **Unclaimed** - a `BepInEx\config` file no installed plugin answers to. Almost always a mod you removed at some point, leaving its settings behind.
 
-Each row shows the mod and the file's path inside its folder, so the twenty mods that all ship a `config.json` are never mixed up. There is a search box and a filter to narrow it to one kind.
+A mod with both halves is one row, with a tab per file at the top. The number on a row is how many of its settings differ from their defaults, and a dot means it has unsaved edits. The search box finds mods, files and setting names - pick a mod found by a setting and its settings are already filtered to it.
 
 The two halves behave differently, and the page says so above the editor: **a client mod's settings live outside its folder**, so they survive disabling and removing it; **a server mod's settings live inside its folder** and travel with it.
+
+## The form
+A `.cfg` file opens as a form: one card per section, each setting with its description and a control that fits it - a switch, a slider, a dropdown, tick boxes, a colour, or a key to press. **Raw** shows the file as text, for anything the form can't.
+
+- A setting changed from its default has a bar beside it and **Reset** to put the default back. **Changed** shows only those.
+- **Reset mod** puts every setting in the mod back to its default; **Copy changes** copies the ones you changed, as text, for sharing.
+- To set a key, click it and press the key or combination. **Esc** cancels, **✕** clears it. A few keys BepInEx can't be sure of - the Windows keys, Print Screen, media keys - are refused.
+
+Server mods' JSON files are edited as text, as before.
+
+## Changed settings and Keybinds
+Two entries at the top of the list look across every mod at once:
+
+- **Changed settings** - every setting that differs from its default, grouped by mod, with Reset per mod and **Reset all**.
+- **Keybinds** - every key a mod uses. Keys used by more than one setting come first, each saying what else uses it. That can still be fine - two mods may use the same key on the map and in raid.
+
+## Saving
+Edits wait until you save, file by file. Moving to another mod keeps them. **Save** saves the file you're looking at; **Save all** saves every file with changes, each backed up first like any save, and **Revert all** drops them. A file that changed on disk in the meantime is left for you to open and save on its own. Closing the app drops unsaved edits, so save before you go.
 
 ## Editing is careful with your files
 - **Nothing is ever reformatted.** For a lot of mods the comments in the config file are the only documentation those settings have. Saving changes the lines you changed and leaves everything else exactly as it was.
