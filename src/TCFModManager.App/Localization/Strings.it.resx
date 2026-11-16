@@ -3583,11 +3583,8 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="Options_FootprintHeader" xml:space="preserve">
     <value>Pagina Impronta mod</value>
   </data>
-  <data name="Options_FootprintToolTipOff" xml:space="preserve">
+  <data name="Options_FootprintToolTip" xml:space="preserve">
     <value>Aggiunge una pagina che legge cosa contiene ogni mod installato e descrive quanta parte del gioco è in grado di toccare. Niente di quello che mostra è cronometrato o misurato, e un'impronta pesante non è lo stesso di un mod che ti costa frame.</value>
-  </data>
-  <data name="Options_FootprintToolTipOn" xml:space="preserve">
-    <value>La pagina Impronta mod è nella barra laterale. Ricorda che legge i file invece di misurare i tempi - quanto costa davvero un mod dipende dal tuo hardware, dalle tue impostazioni e dagli altri mod che usi, e niente di tutto questo le è visibile.</value>
   </data>
   <data name="Options_ForgetCertificate" xml:space="preserve">
     <value>Dimentica questo certificato</value>
@@ -3619,10 +3616,7 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="Options_HeadlessLauncherPlaceholder" xml:space="preserve">
     <value>Trovato automaticamente</value>
   </data>
-  <data name="Options_HeadlessOff" xml:space="preserve">
-    <value>Questa macchina non esegue un client headless</value>
-  </data>
-  <data name="Options_HeadlessOn" xml:space="preserve">
+  <data name="Options_HeadlessTitle" xml:space="preserve">
     <value>Questa macchina esegue un client headless Fika</value>
   </data>
   <data name="Options_HeadlessPickerFilter" xml:space="preserve">
@@ -3670,11 +3664,8 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="Options_ModPagesDescription" xml:space="preserve">
     <value>Prima di scaricare qualsiasi cosa, questa app ti chiede di aprire la pagina del mod - dove il suo autore mette i passaggi di installazione, i requisiti, i conflitti noti e gli avvisi. Disattivalo se preferisci andare dritto all'installazione. Gli aggiornamenti di questa app lo chiedono sempre, perché è su quella pagina che stanno le sue note di rilascio.</value>
   </data>
-  <data name="Options_ModPagesToolTipAsking" xml:space="preserve">
+  <data name="Options_ModPagesToolTip" xml:space="preserve">
     <value>La pagina di ogni mod si apre prima che venga scaricato qualcosa, così le sue note di rilascio e le istruzioni di installazione ti stanno davanti per prime.</value>
-  </data>
-  <data name="Options_ModPagesToolTipSkipping" xml:space="preserve">
-    <value>Stai saltando le note di rilascio di ogni mod. È consigliabile leggerle - sono lì che un autore dice cosa è cambiato, cosa serve a una versione e cosa rompe. Gli aggiornamenti di questa app chiedono comunque sempre.</value>
   </data>
   <data name="Options_NoHeadlessLauncherNotice" xml:space="preserve">
     <value>Nella cartella di installazione non è stato trovato nessun launcher headless Fika, quindi da qui non se ne avvia nessuno - indicalo qui sotto, oppure lascia stare: l'interruttore qui sopra decide comunque quali mod porta una lista distribuita.</value>
@@ -3685,10 +3676,7 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="Options_PageDefaultsHeader" xml:space="preserve">
     <value>Valori predefiniti delle pagine</value>
   </data>
-  <data name="Options_PlaysHereOff" xml:space="preserve">
-    <value>Nessuno gioca su questa macchina</value>
-  </data>
-  <data name="Options_PlaysHereOn" xml:space="preserve">
+  <data name="Options_PlaysHereTitle" xml:space="preserve">
     <value>Qualcuno gioca su questa macchina</value>
   </data>
   <data name="Options_PlaysHereToolTip" xml:space="preserve">
@@ -3724,11 +3712,8 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="Options_ServerMapModNotice" xml:space="preserve">
     <value>Gestisci un server? Il mod Server Map è un download a parte - prendilo dalla pagina del mod e installalo sulla macchina che esegue SPT. Ai giocatori che si collegano a quel server non serve altro che questo interruttore.</value>
   </data>
-  <data name="Options_ServerMapToolTipOff" xml:space="preserve">
+  <data name="Options_ServerMapToolTip" xml:space="preserve">
     <value>Aggiunge una pagina che si collega a un server SPT con il mod Server Map e mostra cosa esegue, così puoi confrontarlo con la tua installazione. Serve il mod sul server - installare questa app da sola non basta.</value>
-  </data>
-  <data name="Options_ServerMapToolTipOn" xml:space="preserve">
-    <value>La pagina Mappa server è nella barra laterale. Ha qualcosa da mostrare solo quando la punti su un server SPT il cui gestore ha installato il mod Server Map.</value>
   </data>
   <data name="Options_SharedKeyPlaceholder" xml:space="preserve">
     <value>Chiave condivisa (se il server ne richiede una)</value>
@@ -4665,11 +4650,8 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Installed_DownloadsConfirmed_other" xml:space="preserve">
     <value>{0} download segnati come installati.</value>
   </data>
-  <data name="Options_MonitorListSubfoldersOn" xml:space="preserve">
-    <value>I download di ogni lista di mod vanno in una cartella con il nome della lista</value>
-  </data>
-  <data name="Options_MonitorListSubfoldersOff" xml:space="preserve">
-    <value>I download delle liste di mod vanno direttamente nella cartella di download</value>
+  <data name="Options_MonitorListSubfoldersTitle" xml:space="preserve">
+    <value>Metti i download di ogni lista di mod in una cartella propria</value>
   </data>
   <data name="ModLists_AppliedDownloadOnlyFormat" xml:space="preserve">
     <value>Sono stati salvati in {0} perché tu li installi - non è stato installato nulla.</value>
@@ -4776,11 +4758,8 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
   <data name="Options_UpdateCheckTimeFormat" xml:space="preserve">
     <value>{0} ({1:t})</value>
   </data>
-  <data name="Options_TrayOn" xml:space="preserve">
-    <value>Chiudendo la finestra l'app resta attiva nell'area di notifica</value>
-  </data>
-  <data name="Options_TrayOff" xml:space="preserve">
-    <value>Chiudendo la finestra l'app si chiude</value>
+  <data name="Options_TrayTitle" xml:space="preserve">
+    <value>Resta attiva nell'area di notifica alla chiusura</value>
   </data>
   <data name="Options_TrayToolTip" xml:space="preserve">
     <value>Se è attivo, chiudere la finestra la nasconde e lascia un'icona nell'area di notifica, così i controlli continuano. Fai clic sull'icona per riaprire la finestra; clic destro per controllare subito o uscire. Disponibile solo con le notifiche di aggiornamento attive.</value>
@@ -5767,7 +5746,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Continuare a controllare con la finestra chiusa</value>
   </data>
   <data name="Help_Updates_Tray_Step1" xml:space="preserve">
-    <value>Apri {0} con la freccia sulla sua riga e attiva l'impostazione che mostra {1}.</value>
+    <value>Apri {0} con la freccia sulla sua riga e attiva {1}.</value>
   </data>
   <data name="Help_Updates_Tray_Step2" xml:space="preserve">
     <value>Chiudendo la finestra ora resta un'icona nell'area di notifica. Fai clic per riaprire l'app.</value>
@@ -5974,7 +5953,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>In {0}, sotto {1}, apri {2} con la freccia sulla sua riga.</value>
   </data>
   <data name="Help_Options_Role_Step2" xml:space="preserve">
-    <value>Imposta le opzioni in modo che mostrino {0} e {1}.</value>
+    <value>Disattiva {0} e attiva {1}.</value>
   </data>
   <data name="Help_Options_Role_Note" xml:space="preserve">
     <value>Le liste mod arrivano poi senza le mod che servono solo a un giocatore. Se il launcher headless non viene trovato da solo, indicalo in {0}.</value>
@@ -6073,7 +6052,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Quando il gioco si chiude, la scheda fa il conto alla rovescia. Premi {0} per tenere attivo il server questa volta.</value>
   </data>
   <data name="Help_StopWithGame_Note" xml:space="preserve">
-    <value>Se il gioco riparte durante l'attesa si annulla, e il server aspetta finché il client headless Fika di questa installazione è in esecuzione, a meno che tu non spunti {0}. Si ferma per tutti quelli che vi sono collegati.</value>
+    <value>Se il gioco riparte durante l'attesa si annulla, e il server aspetta finché il client headless Fika di questa installazione è in esecuzione, a meno che tu non attivi {0}. Si ferma per tutti quelli che vi sono collegati.</value>
   </data>
   <data name="Help_StopWithGame_Keywords" xml:space="preserve">
     <value>arresta server, chiudi server, spegni, dopo il gioco, automatico, timer, ritardo, gioco chiuso</value>
@@ -7477,11 +7456,8 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Options_StopServerDelayLabel" xml:space="preserve">
     <value>Attesa (secondi)</value>
   </data>
-  <data name="Options_StopServerIgnoresHeadlessOn" xml:space="preserve">
-    <value>Non aspettare il client headless</value>
-  </data>
-  <data name="Options_StopServerIgnoresHeadlessOff" xml:space="preserve">
-    <value>Aspetta che il client headless si chiuda</value>
+  <data name="Options_StopServerIgnoresHeadlessTitle" xml:space="preserve">
+    <value>Arresta senza aspettare il client headless</value>
   </data>
   <data name="Play_ServerStopCountdownFormat" xml:space="preserve">
     <value>Il gioco si è chiuso. Il server si ferma tra {0} s.</value>
@@ -7501,11 +7477,8 @@ Vedi Dipendenze e conflitti.</value>
   <data name="ServerStopToast_CountdownFormat" xml:space="preserve">
     <value>Il gioco si è chiuso. Il server si ferma tra {0} secondi.</value>
   </data>
-  <data name="Options_StopServerWithGameOn" xml:space="preserve">
+  <data name="Options_StopServerWithGameTitle" xml:space="preserve">
     <value>Arresta il server quando il gioco si chiude</value>
-  </data>
-  <data name="Options_StopServerWithGameOff" xml:space="preserve">
-    <value>Lascia attivo il server quando il gioco si chiude</value>
   </data>
   <data name="Options_StopServerWithGameNote" xml:space="preserve">
     <value>La scheda del server fa il conto alla rovescia con Lascialo attivo. Se il gioco riparte durante l'attesa si annulla, e il server aspetta che il client headless Fika di questa installazione si chiuda, salvo diversa impostazione. Si ferma per tutti quelli che vi sono collegati.</value>
@@ -7519,29 +7492,20 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Options_StartingSptHint" xml:space="preserve">
     <value>Come Avvia server nella pagina Server esegue il server, e cosa viene dopo.</value>
   </data>
-  <data name="Options_StartLauncherOn" xml:space="preserve">
+  <data name="Options_StartLauncherTitle" xml:space="preserve">
     <value>Apri il launcher appena il server è pronto</value>
-  </data>
-  <data name="Options_StartLauncherOff" xml:space="preserve">
-    <value>Apri il launcher da solo</value>
   </data>
   <data name="Options_StartLauncherNote" xml:space="preserve">
     <value>Pronto significa che ascolta sulla sua porta (quella del suo http.json, e la 6969) - solo allora il launcher può raggiungerlo. Un server con molti mod ha tre minuti.</value>
   </data>
-  <data name="Options_HideServerOn" xml:space="preserve">
-    <value>Esegui il server senza finestra</value>
-  </data>
-  <data name="Options_HideServerOff" xml:space="preserve">
-    <value>Mostra la finestra del server</value>
+  <data name="Options_HideServerTitle" xml:space="preserve">
+    <value>Nascondi la finestra del server</value>
   </data>
   <data name="Options_HideServerNote" xml:space="preserve">
     <value>Senza finestra, il log del server compare nella pagina Server e Arresta lì lo chiude correttamente. Continua a funzionare se chiudi questa app - fermalo dalla pagina Server.</value>
   </data>
-  <data name="Options_ServerOnProfileOn" xml:space="preserve">
+  <data name="Options_ServerOnProfileTitle" xml:space="preserve">
     <value>Mostra il server nella pagina Profilo</value>
-  </data>
-  <data name="Options_ServerOnProfileOff" xml:space="preserve">
-    <value>Tieni il server nella sua pagina</value>
   </data>
   <data name="Options_ServerOnProfileNote" xml:space="preserve">
     <value>Finché la finestra del server è visibile, le schede della pagina Server passano nella pagina Profilo e Server esce dalla barra laterale.</value>
@@ -7834,12 +7798,6 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Options_DirectLaunchDescription" xml:space="preserve">
     <value>Gioca fa ciò che fa il launcher di SPT quando premi Avvia: avvia il server se non è in esecuzione e lo aspetta, verifica che il server e spt-core.dll siano della stessa versione di SPT, pulisce gli stessi file, applica la patch di gioco di SPT, scarica i bundle dei mod mancanti e avvia il gioco con il profilo scelto. I profili si creano, azzerano ed eliminano dal menu ... della scheda. Le impostazioni del launcher di SPT (file esclusi, Svuota cache all'avvio) vengono rispettate. I log delle ultime sessioni di gioco vengono conservati per Diagnostica log.</value>
   </data>
-  <data name="Options_DirectLaunchOn" xml:space="preserve">
-    <value>Avvia il gioco da qui</value>
-  </data>
-  <data name="Options_DirectLaunchOff" xml:space="preserve">
-    <value>Usa il launcher di SPT</value>
-  </data>
   <data name="Options_DirectLaunchWarningTitle" xml:space="preserve">
     <value>Non fatto dal team di SPT</value>
   </data>
@@ -7858,11 +7816,8 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Options_DirectLaunchNoInstall" xml:space="preserve">
     <value>Imposta prima la tua cartella SPT.</value>
   </data>
-  <data name="Options_MinimizeWhilePlayingOn" xml:space="preserve">
-    <value>Riduci a icona questa app quando il gioco è avviato</value>
-  </data>
-  <data name="Options_MinimizeWhilePlayingOff" xml:space="preserve">
-    <value>Lascia aperta questa app all'avvio del gioco</value>
+  <data name="Options_MinimizeWhilePlayingTitle" xml:space="preserve">
+    <value>Riduci a icona questa app mentre il gioco è in esecuzione</value>
   </data>
   <data name="Nav_Diagnose" xml:space="preserve">
     <value>Diagnostica log</value>

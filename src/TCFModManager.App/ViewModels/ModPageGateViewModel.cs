@@ -27,7 +27,6 @@ public sealed partial class ModPageGateViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(InstallToolTip))]
     [NotifyPropertyChangedFor(nameof(RedownloadToolTip))]
     [NotifyPropertyChangedFor(nameof(UpdateToolTip))]
-    [NotifyPropertyChangedFor(nameof(SettingToolTip))]
     [NotifyPropertyChangedFor(nameof(AlternateToolTip))]
     private bool _isSkipping;
 
@@ -65,12 +64,6 @@ public sealed partial class ModPageGateViewModel : LocalizedViewModel
 
     // What a click on the main button does; the alternate button passes the opposite.
     public bool DownloadOnlyFor(bool alternate) => IsDownloadOnly != alternate;
-
-    // The Options page's own switch, kept here so there is one description of what the setting
-    // currently means rather than two that can drift apart.
-    public string SettingToolTip => IsSkipping
-        ? Strings.Options_ModPagesToolTipSkipping
-        : Strings.Options_ModPagesToolTipAsking;
 
     // Re-reads both settings. Called at startup and whenever the Options page changes either.
     public void Refresh()

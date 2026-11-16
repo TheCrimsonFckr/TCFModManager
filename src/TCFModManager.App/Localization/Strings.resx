@@ -733,22 +733,16 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="Options_PlaysHereToolTip" xml:space="preserve">
     <value>Turn this off for a dedicated headless box - one that hosts raids and that nobody sits at.</value>
   </data>
-  <data name="Options_PlaysHereOn" xml:space="preserve">
-    <value>Somebody plays on this machine</value>
-    <comment>Label on a switch, shown when it is on.</comment>
-  </data>
-  <data name="Options_PlaysHereOff" xml:space="preserve">
-    <value>Nobody plays on this machine</value>
-    <comment>Label on the same switch, shown when it is off.</comment>
+  <data name="Options_PlaysHereTitle" xml:space="preserve">
+    <value>Someone plays on this machine</value>
+    <comment>Title of a setting on Options, saying what On does. The switch beside it reads only On / Off.</comment>
   </data>
   <data name="Options_HeadlessToolTip" xml:space="preserve">
     <value>Detected from the Fika headless launcher in the install folder, and overridable here for a setup that starts its headless some other way.</value>
   </data>
-  <data name="Options_HeadlessOn" xml:space="preserve">
+  <data name="Options_HeadlessTitle" xml:space="preserve">
     <value>This machine runs a Fika headless client</value>
-  </data>
-  <data name="Options_HeadlessOff" xml:space="preserve">
-    <value>This machine does not run a headless client</value>
+    <comment>Title of a setting on Options, saying what On does. The switch beside it reads only On / Off.</comment>
   </data>
   <data name="Options_NoHeadlessLauncherNotice" xml:space="preserve">
     <value>No Fika headless launcher was found in the install folder, so nothing here starts one - name it below, or leave it and the switch above still decides which mods a served list brings.</value>
@@ -4400,13 +4394,9 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="ServerMap_KeyRotated" xml:space="preserve">
     <value>New key generated. Send it to anyone who connects to this server - the old one stopped working just now. The server picks it up on its own; it does not need restarting.</value>
   </data>
-  <data name="Options_ServerMapToolTipOn" xml:space="preserve">
-    <value>The Server map page is in the sidebar. It only has anything to show once you point it at an SPT server whose operator has installed the Server Map mod.</value>
-    <comment>On the Server map switch. Server map is the page named by Nav_ServerMap; Server Map is the mod's name and stays as it is.</comment>
-  </data>
-  <data name="Options_ServerMapToolTipOff" xml:space="preserve">
+  <data name="Options_ServerMapToolTip" xml:space="preserve">
     <value>Adds a page that connects to an SPT server running the Server Map mod and shows what it runs, so you can compare it against your own install. Needs the mod on the server - installing this app is not enough on its own.</value>
-    <comment>On the Server map switch, when the page is off.</comment>
+    <comment>On the Server map switch. Server map is the page named by Nav_ServerMap; Server Map is the mod's name and stays as it is.</comment>
   </data>
   <data name="ServerMap_ListSummary_one" xml:space="preserve">
     <value>{0} - revision {1}, 1 mod</value>
@@ -4464,21 +4454,13 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>Update this mod.</value>
     <comment>Tooltip on the Update button.</comment>
   </data>
-  <data name="Options_ModPagesToolTipSkipping" xml:space="preserve">
-    <value>You are skipping each mod's release notes. It is recommended you read them - they are where an author says what changed, what a version needs and what it breaks. This app's own updates always ask regardless.</value>
-    <comment>On the read-the-mod-page switch, when the gate is off.</comment>
-  </data>
-  <data name="Options_ModPagesToolTipAsking" xml:space="preserve">
+  <data name="Options_ModPagesToolTip" xml:space="preserve">
     <value>Each mod's page opens before anything downloads, so its release notes and install instructions are in front of you first.</value>
-    <comment>On the read-the-mod-page switch, when the gate is on.</comment>
+    <comment>On the read-the-mod-page switch.</comment>
   </data>
-  <data name="Options_FootprintToolTipOn" xml:space="preserve">
-    <value>The Mod footprint page is in the sidebar. Remember that it reads files rather than timing anything - what a mod actually costs depends on your hardware, your settings and the other mods you run, none of which it can see.</value>
-    <comment>On the Mod footprint switch. Mod footprint is the page named by Nav_Footprint.</comment>
-  </data>
-  <data name="Options_FootprintToolTipOff" xml:space="preserve">
+  <data name="Options_FootprintToolTip" xml:space="preserve">
     <value>Adds a page that reads what each installed mod ships and describes how much of the game it is positioned to touch. Nothing on it is timed or measured, and a heavy footprint is not the same as a mod that costs you frames.</value>
-    <comment>On the Mod footprint switch, when the page is off.</comment>
+    <comment>On the Mod footprint switch. Mod footprint is the page named by Nav_Footprint.</comment>
   </data>
   <data name="Common_SizeGbFormat" xml:space="preserve">
     <value>{0:0.#} GB</value>
@@ -5867,13 +5849,9 @@ The details are in the log:
     <value>Marked {0} downloads installed.</value>
     <comment>{0} is how many downloads were marked installed.</comment>
   </data>
-  <data name="Options_MonitorListSubfoldersOn" xml:space="preserve">
-    <value>Each mod list's downloads go in a folder named after the list</value>
-    <comment>Label on the switch when it is ON.</comment>
-  </data>
-  <data name="Options_MonitorListSubfoldersOff" xml:space="preserve">
-    <value>Mod list downloads go straight into the download folder</value>
-    <comment>Label on the same switch when it is OFF.</comment>
+  <data name="Options_MonitorListSubfoldersTitle" xml:space="preserve">
+    <value>Put each mod list's downloads in its own folder</value>
+    <comment>Title of a setting on Options, saying what On does. The switch beside it reads only On / Off.</comment>
   </data>
   <data name="ModLists_AppliedDownloadOnlyFormat" xml:space="preserve">
     <value>They were saved in {0} for you to install - nothing was installed.</value>
@@ -5997,13 +5975,9 @@ The details are in the log:
     <value>{0} ({1:t})</value>
     <comment>{0} is the result of the check, {1} the time it finished.</comment>
   </data>
-  <data name="Options_TrayOn" xml:space="preserve">
-    <value>Closing the window keeps the app running in the tray</value>
-    <comment>Label on the switch when it is ON. The tray is the Windows notification area by the clock.</comment>
-  </data>
-  <data name="Options_TrayOff" xml:space="preserve">
-    <value>Closing the window quits the app</value>
-    <comment>Label on the same switch when it is OFF.</comment>
+  <data name="Options_TrayTitle" xml:space="preserve">
+    <value>Keep running in the tray when closed</value>
+    <comment>Title of a setting on Options, saying what On does. The switch beside it reads only On / Off.</comment>
   </data>
   <data name="Options_TrayToolTip" xml:space="preserve">
     <value>With this on, closing the window hides it and leaves an icon in the notification area, so the checks carry on. Click the icon to open the window again; right-click it to check now or quit. Only available while update notifications are on.</value>
@@ -7195,7 +7169,7 @@ The details are in the log:
     <comment>How-to title.</comment>
   </data>
   <data name="Help_Updates_Tray_Step1" xml:space="preserve">
-    <value>Open {0} with the arrow on its row and switch on the setting that reads {1}.</value>
+    <value>Open {0} with the arrow on its row and switch on {1}.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Updates_Tray_Step2" xml:space="preserve">
@@ -7464,7 +7438,7 @@ The details are in the log:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Options_Role_Step2" xml:space="preserve">
-    <value>Switch the settings so they read {0} and {1}.</value>
+    <value>Switch off {0} and switch on {1}.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Options_Role_Note" xml:space="preserve">
@@ -7588,7 +7562,7 @@ The details are in the log:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_StopWithGame_Note" xml:space="preserve">
-    <value>The game coming back during the wait cancels it, and the server waits while this install's Fika headless client runs, unless you tick {0}. It stops for everyone connected to it.</value>
+    <value>The game coming back during the wait cancels it, and the server waits while this install's Fika headless client runs, unless you switch on {0}. It stops for everyone connected to it.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_StopWithGame_Keywords" xml:space="preserve">
@@ -9430,11 +9404,9 @@ See Dependencies and Conflicts.</value>
     <value>Wait (seconds)</value>
     <comment>Options - Starting SPT: beside the number box holding how many seconds to wait after the game closes.</comment>
   </data>
-  <data name="Options_StopServerIgnoresHeadlessOn" xml:space="preserve">
-    <value>Don't wait for the headless client</value>
-  </data>
-  <data name="Options_StopServerIgnoresHeadlessOff" xml:space="preserve">
-    <value>Wait for the headless client to close</value>
+  <data name="Options_StopServerIgnoresHeadlessTitle" xml:space="preserve">
+    <value>Stop without waiting for the headless client</value>
+    <comment>Title of a setting on Options, saying what On does. The switch beside it reads only On / Off.</comment>
   </data>
   <data name="Play_ServerStopCountdownFormat" xml:space="preserve">
     <value>The game closed. The server stops in {0} s.</value>
@@ -9458,11 +9430,9 @@ See Dependencies and Conflicts.</value>
     <value>The game closed. The server stops in {0} seconds.</value>
     <comment>Notification body. {0} is a number of seconds; the notification doesn't count down.</comment>
   </data>
-  <data name="Options_StopServerWithGameOn" xml:space="preserve">
+  <data name="Options_StopServerWithGameTitle" xml:space="preserve">
     <value>Stop the server when the game closes</value>
-  </data>
-  <data name="Options_StopServerWithGameOff" xml:space="preserve">
-    <value>Leave the server running when the game closes</value>
+    <comment>Title of a setting on Options, saying what On does. The switch beside it reads only On / Off.</comment>
   </data>
   <data name="Options_StopServerWithGameNote" xml:space="preserve">
     <value>The server card counts down with Keep it running. The game coming back during the wait cancels it, and the server waits for this install's Fika headless client to close unless told not to. It stops for everyone connected to it.</value>
@@ -9477,31 +9447,23 @@ See Dependencies and Conflicts.</value>
   <data name="Options_StartingSptHint" xml:space="preserve">
     <value>How Start server on the Server page runs the server, and what follows it.</value>
   </data>
-  <data name="Options_StartLauncherOn" xml:space="preserve">
+  <data name="Options_StartLauncherTitle" xml:space="preserve">
     <value>Open the launcher once the server is up</value>
-  </data>
-  <data name="Options_StartLauncherOff" xml:space="preserve">
-    <value>Open the launcher yourself</value>
+    <comment>Title of a setting on Options, saying what On does. The switch beside it reads only On / Off.</comment>
   </data>
   <data name="Options_StartLauncherNote" xml:space="preserve">
     <value>Up means listening on its port (from its http.json, and 6969), which is when the launcher can reach it. A heavily modded server gets three minutes.</value>
   </data>
-  <data name="Options_HideServerOn" xml:space="preserve">
-    <value>Run the server without its window</value>
-  </data>
-  <data name="Options_HideServerOff" xml:space="preserve">
-    <value>Show the server window</value>
+  <data name="Options_HideServerTitle" xml:space="preserve">
+    <value>Hide the server window</value>
+    <comment>Title of a setting on Options, saying what On does. The switch beside it reads only On / Off.</comment>
   </data>
   <data name="Options_HideServerNote" xml:space="preserve">
     <value>Without its window, the server's log is shown on the Server page and Stop there closes it properly. It keeps running if you close this app - stop it from the Server page.</value>
   </data>
-  <data name="Options_ServerOnProfileOn" xml:space="preserve">
+  <data name="Options_ServerOnProfileTitle" xml:space="preserve">
     <value>Show the server on the Profile page</value>
-    <comment>Options - Starting SPT, shown while the server window is set to show: the switch's label when on (OPEN-42).</comment>
-  </data>
-  <data name="Options_ServerOnProfileOff" xml:space="preserve">
-    <value>Keep the server on its own page</value>
-    <comment>The same switch's label when off.</comment>
+    <comment>Title of a setting on Options, saying what On does. The switch beside it reads only On / Off.</comment>
   </data>
   <data name="Options_ServerOnProfileNote" xml:space="preserve">
     <value>With the server's own window showing, the Server page's cards join the Profile page and Server leaves the sidebar.</value>
@@ -9869,12 +9831,6 @@ See Dependencies and Conflicts.</value>
   <data name="Options_DirectLaunchDescription" xml:space="preserve">
     <value>Play does what the SPT launcher does when you press its Start: starts the server if it isn't running and waits for it, checks the server and spt-core.dll are the same SPT version, cleans up the same files, applies SPT's game patch, fetches any missing mod bundles, and starts the game with the profile you picked. Profiles can be made, wiped and deleted from the Play card's ... menu. The SPT launcher's own settings (files it leaves alone, Clear cache on launch) are followed. The last game sessions' logs are kept for Diagnose logs.</value>
   </data>
-  <data name="Options_DirectLaunchOn" xml:space="preserve">
-    <value>Start the game from here</value>
-  </data>
-  <data name="Options_DirectLaunchOff" xml:space="preserve">
-    <value>Use the SPT launcher</value>
-  </data>
   <data name="Options_DirectLaunchWarningTitle" xml:space="preserve">
     <value>Not made by the SPT team</value>
   </data>
@@ -9896,11 +9852,9 @@ See Dependencies and Conflicts.</value>
   <data name="Options_DirectLaunchNoInstall" xml:space="preserve">
     <value>Set your SPT folder first.</value>
   </data>
-  <data name="Options_MinimizeWhilePlayingOn" xml:space="preserve">
-    <value>Minimise this app once the game is up</value>
-  </data>
-  <data name="Options_MinimizeWhilePlayingOff" xml:space="preserve">
-    <value>Leave this app open when the game starts</value>
+  <data name="Options_MinimizeWhilePlayingTitle" xml:space="preserve">
+    <value>Minimise this app while the game runs</value>
+    <comment>Title of a setting on Options, saying what On does. The switch beside it reads only On / Off.</comment>
   </data>
   <data name="Nav_Diagnose" xml:space="preserve">
     <value>Diagnose logs</value>

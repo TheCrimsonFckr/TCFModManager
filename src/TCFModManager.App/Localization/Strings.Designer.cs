@@ -207,11 +207,9 @@ internal static class Strings
     internal static string Options_MachineRoleHeader => LocalizationService.Get("Options_MachineRoleHeader");
     internal static string Options_MachineRoleDescription => LocalizationService.Get("Options_MachineRoleDescription");
     internal static string Options_PlaysHereToolTip => LocalizationService.Get("Options_PlaysHereToolTip");
-    internal static string Options_PlaysHereOn => LocalizationService.Get("Options_PlaysHereOn");
-    internal static string Options_PlaysHereOff => LocalizationService.Get("Options_PlaysHereOff");
+    internal static string Options_PlaysHereTitle => LocalizationService.Get("Options_PlaysHereTitle");
     internal static string Options_HeadlessToolTip => LocalizationService.Get("Options_HeadlessToolTip");
-    internal static string Options_HeadlessOn => LocalizationService.Get("Options_HeadlessOn");
-    internal static string Options_HeadlessOff => LocalizationService.Get("Options_HeadlessOff");
+    internal static string Options_HeadlessTitle => LocalizationService.Get("Options_HeadlessTitle");
     internal static string Options_NoHeadlessLauncherNotice => LocalizationService.Get("Options_NoHeadlessLauncherNotice");
     internal static string Options_HeadlessLauncherHeader => LocalizationService.Get("Options_HeadlessLauncherHeader");
     internal static string Options_HeadlessLauncherDescription => LocalizationService.Get("Options_HeadlessLauncherDescription");
@@ -1245,8 +1243,7 @@ internal static class Strings
     internal static string ServerMap_LocalKeyDescriptionFormat => LocalizationService.Get("ServerMap_LocalKeyDescriptionFormat");
     internal static string ServerMap_KeyRotateFailed => LocalizationService.Get("ServerMap_KeyRotateFailed");
     internal static string ServerMap_KeyRotated => LocalizationService.Get("ServerMap_KeyRotated");
-    internal static string Options_ServerMapToolTipOn => LocalizationService.Get("Options_ServerMapToolTipOn");
-    internal static string Options_ServerMapToolTipOff => LocalizationService.Get("Options_ServerMapToolTipOff");
+    internal static string Options_ServerMapToolTip => LocalizationService.Get("Options_ServerMapToolTip");
     internal static string ServerMap_ListSummary(int count, params object?[] values) =>
         LocalizationService.Plural("ServerMap_ListSummary", count, values);
     internal static string ServerMap_ListSummaryOneUnresolvedFormat => LocalizationService.Get("ServerMap_ListSummaryOneUnresolvedFormat");
@@ -1261,10 +1258,8 @@ internal static class Strings
     internal static string ModPageGate_Install => LocalizationService.Get("ModPageGate_Install");
     internal static string ModPageGate_Redownload => LocalizationService.Get("ModPageGate_Redownload");
     internal static string ModPageGate_Update => LocalizationService.Get("ModPageGate_Update");
-    internal static string Options_ModPagesToolTipSkipping => LocalizationService.Get("Options_ModPagesToolTipSkipping");
-    internal static string Options_ModPagesToolTipAsking => LocalizationService.Get("Options_ModPagesToolTipAsking");
-    internal static string Options_FootprintToolTipOn => LocalizationService.Get("Options_FootprintToolTipOn");
-    internal static string Options_FootprintToolTipOff => LocalizationService.Get("Options_FootprintToolTipOff");
+    internal static string Options_ModPagesToolTip => LocalizationService.Get("Options_ModPagesToolTip");
+    internal static string Options_FootprintToolTip => LocalizationService.Get("Options_FootprintToolTip");
     internal static string Common_SizeGbFormat => LocalizationService.Get("Common_SizeGbFormat");
     internal static string Common_SizeMbFormat => LocalizationService.Get("Common_SizeMbFormat");
     internal static string Common_SizeKbFormat => LocalizationService.Get("Common_SizeKbFormat");
@@ -1625,8 +1620,7 @@ internal static class Strings
         LocalizationService.Plural("DownloadConfirm_Summary", count, values);
     internal static string Installed_DownloadsConfirmed(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_DownloadsConfirmed", count, values);
-    internal static string Options_MonitorListSubfoldersOn => LocalizationService.Get("Options_MonitorListSubfoldersOn");
-    internal static string Options_MonitorListSubfoldersOff => LocalizationService.Get("Options_MonitorListSubfoldersOff");
+    internal static string Options_MonitorListSubfoldersTitle => LocalizationService.Get("Options_MonitorListSubfoldersTitle");
     internal static string ModLists_AppliedDownloadOnlyFormat => LocalizationService.Get("ModLists_AppliedDownloadOnlyFormat");
     internal static string ModLists_DownloadOnlyNotice(int count, params object?[] values) =>
         LocalizationService.Plural("ModLists_DownloadOnlyNotice", count, values);
@@ -1662,8 +1656,7 @@ internal static class Strings
     internal static string Options_UpdateCheckRateLimited => LocalizationService.Get("Options_UpdateCheckRateLimited");
     internal static string Options_UpdateCheckFailed => LocalizationService.Get("Options_UpdateCheckFailed");
     internal static string Options_UpdateCheckTimeFormat => LocalizationService.Get("Options_UpdateCheckTimeFormat");
-    internal static string Options_TrayOn => LocalizationService.Get("Options_TrayOn");
-    internal static string Options_TrayOff => LocalizationService.Get("Options_TrayOff");
+    internal static string Options_TrayTitle => LocalizationService.Get("Options_TrayTitle");
     internal static string Options_TrayToolTip => LocalizationService.Get("Options_TrayToolTip");
     internal static string Tray_ToolTip => LocalizationService.Get("Tray_ToolTip");
     internal static string Tray_ToolTipPlain => LocalizationService.Get("Tray_ToolTipPlain");
@@ -2597,28 +2590,23 @@ internal static class Strings
     internal static string Play_GameNotRunning => LocalizationService.Get("Play_GameNotRunning");
     internal static string Play_GameClosedWithServer => LocalizationService.Get("Play_GameClosedWithServer");
     internal static string Options_StopServerDelayLabel => LocalizationService.Get("Options_StopServerDelayLabel");
-    internal static string Options_StopServerIgnoresHeadlessOn => LocalizationService.Get("Options_StopServerIgnoresHeadlessOn");
-    internal static string Options_StopServerIgnoresHeadlessOff => LocalizationService.Get("Options_StopServerIgnoresHeadlessOff");
+    internal static string Options_StopServerIgnoresHeadlessTitle => LocalizationService.Get("Options_StopServerIgnoresHeadlessTitle");
     internal static string Play_ServerStopCountdownFormat => LocalizationService.Get("Play_ServerStopCountdownFormat");
     internal static string Play_ServerStopWaitsForHeadless => LocalizationService.Get("Play_ServerStopWaitsForHeadless");
     internal static string Play_KeepServerRunning => LocalizationService.Get("Play_KeepServerRunning");
     internal static string Play_ServerStoppedAfterGame => LocalizationService.Get("Play_ServerStoppedAfterGame");
     internal static string ServerStopToast_Title => LocalizationService.Get("ServerStopToast_Title");
     internal static string ServerStopToast_CountdownFormat => LocalizationService.Get("ServerStopToast_CountdownFormat");
-    internal static string Options_StopServerWithGameOn => LocalizationService.Get("Options_StopServerWithGameOn");
-    internal static string Options_StopServerWithGameOff => LocalizationService.Get("Options_StopServerWithGameOff");
+    internal static string Options_StopServerWithGameTitle => LocalizationService.Get("Options_StopServerWithGameTitle");
     internal static string Options_StopServerWithGameNote => LocalizationService.Get("Options_StopServerWithGameNote");
     internal static string Play_StoppedAfterGameFormat => LocalizationService.Get("Play_StoppedAfterGameFormat");
     internal static string Options_StartingSptHeader => LocalizationService.Get("Options_StartingSptHeader");
     internal static string Options_StartingSptHint => LocalizationService.Get("Options_StartingSptHint");
-    internal static string Options_StartLauncherOn => LocalizationService.Get("Options_StartLauncherOn");
-    internal static string Options_StartLauncherOff => LocalizationService.Get("Options_StartLauncherOff");
+    internal static string Options_StartLauncherTitle => LocalizationService.Get("Options_StartLauncherTitle");
     internal static string Options_StartLauncherNote => LocalizationService.Get("Options_StartLauncherNote");
-    internal static string Options_HideServerOn => LocalizationService.Get("Options_HideServerOn");
-    internal static string Options_HideServerOff => LocalizationService.Get("Options_HideServerOff");
+    internal static string Options_HideServerTitle => LocalizationService.Get("Options_HideServerTitle");
     internal static string Options_HideServerNote => LocalizationService.Get("Options_HideServerNote");
-    internal static string Options_ServerOnProfileOn => LocalizationService.Get("Options_ServerOnProfileOn");
-    internal static string Options_ServerOnProfileOff => LocalizationService.Get("Options_ServerOnProfileOff");
+    internal static string Options_ServerOnProfileTitle => LocalizationService.Get("Options_ServerOnProfileTitle");
     internal static string Options_ServerOnProfileNote => LocalizationService.Get("Options_ServerOnProfileNote");
     internal static string Options_QuickShortcutButton => LocalizationService.Get("Options_QuickShortcutButton");
     internal static string Options_QuickShortcutNote => LocalizationService.Get("Options_QuickShortcutNote");
@@ -2728,16 +2716,13 @@ internal static class Strings
     internal static string Options_DirectLaunchHeader => LocalizationService.Get("Options_DirectLaunchHeader");
     internal static string Options_DirectLaunchSummary => LocalizationService.Get("Options_DirectLaunchSummary");
     internal static string Options_DirectLaunchDescription => LocalizationService.Get("Options_DirectLaunchDescription");
-    internal static string Options_DirectLaunchOn => LocalizationService.Get("Options_DirectLaunchOn");
-    internal static string Options_DirectLaunchOff => LocalizationService.Get("Options_DirectLaunchOff");
     internal static string Options_DirectLaunchWarningTitle => LocalizationService.Get("Options_DirectLaunchWarningTitle");
     internal static string Options_DirectLaunchWarning => LocalizationService.Get("Options_DirectLaunchWarning");
     internal static string Options_DirectLaunchSupportedFormat => LocalizationService.Get("Options_DirectLaunchSupportedFormat");
     internal static string Options_DirectLaunchUntestedFormat => LocalizationService.Get("Options_DirectLaunchUntestedFormat");
     internal static string Options_DirectLaunchUnsupportedFormat => LocalizationService.Get("Options_DirectLaunchUnsupportedFormat");
     internal static string Options_DirectLaunchNoInstall => LocalizationService.Get("Options_DirectLaunchNoInstall");
-    internal static string Options_MinimizeWhilePlayingOn => LocalizationService.Get("Options_MinimizeWhilePlayingOn");
-    internal static string Options_MinimizeWhilePlayingOff => LocalizationService.Get("Options_MinimizeWhilePlayingOff");
+    internal static string Options_MinimizeWhilePlayingTitle => LocalizationService.Get("Options_MinimizeWhilePlayingTitle");
     internal static string Nav_Diagnose => LocalizationService.Get("Nav_Diagnose");
     internal static string Diagnose_Description => LocalizationService.Get("Diagnose_Description");
     internal static string Diagnose_CopyReport => LocalizationService.Get("Diagnose_CopyReport");

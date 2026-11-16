@@ -3754,11 +3754,8 @@
   <data name="Options_FootprintHeader" xml:space="preserve">
     <value>Страница следа модов</value>
   </data>
-  <data name="Options_FootprintToolTipOff" xml:space="preserve">
+  <data name="Options_FootprintToolTip" xml:space="preserve">
     <value>Добавляет страницу, которая читает, что поставляет каждый установленный мод, и описывает, какую часть игры он способен затронуть. Ничего на ней не замеряется, и большой след - не то же самое, что мод, который стоит вам кадров.</value>
-  </data>
-  <data name="Options_FootprintToolTipOn" xml:space="preserve">
-    <value>Страница След модов есть в боковом меню. Помните, что она читает файлы, а не замеряет время - во что мод обходится на самом деле, зависит от вашего железа, ваших настроек и других ваших модов, а этого она не видит.</value>
   </data>
   <data name="Options_ForgetCertificate" xml:space="preserve">
     <value>Забыть этот сертификат</value>
@@ -3790,10 +3787,7 @@
   <data name="Options_HeadlessLauncherPlaceholder" xml:space="preserve">
     <value>Находится автоматически</value>
   </data>
-  <data name="Options_HeadlessOff" xml:space="preserve">
-    <value>На этом компьютере нет headless-клиента</value>
-  </data>
-  <data name="Options_HeadlessOn" xml:space="preserve">
+  <data name="Options_HeadlessTitle" xml:space="preserve">
     <value>На этом компьютере работает headless-клиент Fika</value>
   </data>
   <data name="Options_HeadlessPickerFilter" xml:space="preserve">
@@ -3841,11 +3835,8 @@
   <data name="Options_ModPagesDescription" xml:space="preserve">
     <value>Перед любой загрузкой приложение предлагает открыть страницу мода - там автор размещает порядок установки, требования, известные конфликты и предупреждения. Отключите это, если предпочитаете сразу переходить к установке. Для обновлений самого приложения вопрос задаётся всегда, ведь на той странице находятся заметки о выпуске.</value>
   </data>
-  <data name="Options_ModPagesToolTipAsking" xml:space="preserve">
+  <data name="Options_ModPagesToolTip" xml:space="preserve">
     <value>Страница каждого мода открывается до начала загрузки, так что описание релиза и порядок установки оказываются перед вами первыми.</value>
-  </data>
-  <data name="Options_ModPagesToolTipSkipping" xml:space="preserve">
-    <value>Вы пропускаете описания релизов модов. Рекомендуем их читать - именно там автор пишет, что изменилось, что нужно версии и что она ломает. Об обновлениях самого приложения будут спрашивать в любом случае.</value>
   </data>
   <data name="Options_NoHeadlessLauncherNotice" xml:space="preserve">
     <value>Headless-лаунчер Fika в папке установки не найден, поэтому отсюда он не запускается - укажите его ниже или оставьте как есть: переключатель выше всё равно определяет, какие моды принесёт переданный сервером список.</value>
@@ -3856,10 +3847,7 @@
   <data name="Options_PageDefaultsHeader" xml:space="preserve">
     <value>Умолчания страниц</value>
   </data>
-  <data name="Options_PlaysHereOff" xml:space="preserve">
-    <value>На этом компьютере никто не играет</value>
-  </data>
-  <data name="Options_PlaysHereOn" xml:space="preserve">
+  <data name="Options_PlaysHereTitle" xml:space="preserve">
     <value>На этом компьютере кто-то играет</value>
   </data>
   <data name="Options_PlaysHereToolTip" xml:space="preserve">
@@ -3895,11 +3883,8 @@
   <data name="Options_ServerMapModNotice" xml:space="preserve">
     <value>Держите сервер? Мод Server Map скачивается отдельно - возьмите его на странице мода и установите на машину, где работает SPT. Игрокам, подключающимся к этому серверу, не нужно ничего, кроме этого переключателя.</value>
   </data>
-  <data name="Options_ServerMapToolTipOff" xml:space="preserve">
+  <data name="Options_ServerMapToolTip" xml:space="preserve">
     <value>Добавляет страницу, которая подключается к SPT-серверу с модом Server Map и показывает, что на нём запущено, чтобы вы могли сравнить это со своей установкой. Нужен мод на сервере - одного этого приложения недостаточно.</value>
-  </data>
-  <data name="Options_ServerMapToolTipOn" xml:space="preserve">
-    <value>Страница Карта сервера есть в боковом меню. Она покажет что-либо только после того, как вы укажете ей SPT-сервер, оператор которого установил мод Server Map.</value>
   </data>
   <data name="Options_SharedKeyPlaceholder" xml:space="preserve">
     <value>Общий ключ (если сервер его требует)</value>
@@ -4866,11 +4851,8 @@
   <data name="Installed_DownloadsConfirmed_many" xml:space="preserve">
     <value>{0} загрузок отмечены как установленные.</value>
   </data>
-  <data name="Options_MonitorListSubfoldersOn" xml:space="preserve">
-    <value>Загрузки каждого списка модов попадают в папку с именем списка</value>
-  </data>
-  <data name="Options_MonitorListSubfoldersOff" xml:space="preserve">
-    <value>Загрузки списков модов попадают прямо в папку загрузок</value>
+  <data name="Options_MonitorListSubfoldersTitle" xml:space="preserve">
+    <value>Складывать загрузки каждого списка модов в отдельную папку</value>
   </data>
   <data name="ModLists_AppliedDownloadOnlyFormat" xml:space="preserve">
     <value>Они сохранены в {0}, чтобы вы установили их сами, - ничего не установлено.</value>
@@ -4992,11 +4974,8 @@
   <data name="Options_UpdateCheckTimeFormat" xml:space="preserve">
     <value>{0} ({1:t})</value>
   </data>
-  <data name="Options_TrayOn" xml:space="preserve">
-    <value>При закрытии окна приложение продолжает работать в области уведомлений</value>
-  </data>
-  <data name="Options_TrayOff" xml:space="preserve">
-    <value>При закрытии окна приложение завершается</value>
+  <data name="Options_TrayTitle" xml:space="preserve">
+    <value>Работать в области уведомлений после закрытия</value>
   </data>
   <data name="Options_TrayToolTip" xml:space="preserve">
     <value>Если включено, закрытие окна скрывает его и оставляет значок в области уведомлений, чтобы проверки продолжались. Щёлкните значок, чтобы снова открыть окно; щёлкните правой кнопкой, чтобы проверить сейчас или выйти. Доступно, только пока включены уведомления об обновлениях.</value>
@@ -6049,7 +6028,7 @@
     <value>Продолжать проверку с закрытым окном</value>
   </data>
   <data name="Help_Updates_Tray_Step1" xml:space="preserve">
-    <value>Раскройте {0} стрелкой в строке и включите настройку с надписью {1}.</value>
+    <value>Раскройте {0} стрелкой в строке и включите {1}.</value>
   </data>
   <data name="Help_Updates_Tray_Step2" xml:space="preserve">
     <value>Теперь при закрытии окна в области уведомлений остаётся значок. Щёлкните его, чтобы снова открыть приложение.</value>
@@ -6256,7 +6235,7 @@
     <value>В разделе {0}, в группе {1}, раскройте {2} стрелкой в строке.</value>
   </data>
   <data name="Help_Options_Role_Step2" xml:space="preserve">
-    <value>Переключите настройки так, чтобы там было написано {0} и {1}.</value>
+    <value>Выключите {0} и включите {1}.</value>
   </data>
   <data name="Help_Options_Role_Note" xml:space="preserve">
     <value>Тогда списки модов приходят без модов, нужных только игроку. Если лаунчер headless не находится сам, укажите его в {0}.</value>
@@ -6355,7 +6334,7 @@
     <value>Когда игра закрывается, на карточке идёт обратный отсчёт. Нажмите {0}, чтобы в этот раз сервер продолжил работать.</value>
   </data>
   <data name="Help_StopWithGame_Note" xml:space="preserve">
-    <value>Если игра снова запустится во время ожидания, остановка отменяется, а пока работает headless-клиент Fika этой установки, сервер ждёт, если не отметить {0}. Сервер останавливается для всех, кто к нему подключён.</value>
+    <value>Если игра снова запустится во время ожидания, остановка отменяется, а пока работает headless-клиент Fika этой установки, сервер ждёт, если не включить {0}. Сервер останавливается для всех, кто к нему подключён.</value>
   </data>
   <data name="Help_StopWithGame_Keywords" xml:space="preserve">
     <value>остановить сервер, закрыть сервер, выключить, после игры, автоматически, таймер, задержка, игра закрыта</value>
@@ -7816,11 +7795,8 @@
   <data name="Options_StopServerDelayLabel" xml:space="preserve">
     <value>Ожидание (секунды)</value>
   </data>
-  <data name="Options_StopServerIgnoresHeadlessOn" xml:space="preserve">
-    <value>Не ждать headless-клиент</value>
-  </data>
-  <data name="Options_StopServerIgnoresHeadlessOff" xml:space="preserve">
-    <value>Ждать, пока закроется headless-клиент</value>
+  <data name="Options_StopServerIgnoresHeadlessTitle" xml:space="preserve">
+    <value>Останавливать, не дожидаясь headless-клиента</value>
   </data>
   <data name="Play_ServerStopCountdownFormat" xml:space="preserve">
     <value>Игра закрыта. Сервер остановится через {0} с.</value>
@@ -7840,11 +7816,8 @@
   <data name="ServerStopToast_CountdownFormat" xml:space="preserve">
     <value>Игра закрыта. Сервер остановится через {0} с.</value>
   </data>
-  <data name="Options_StopServerWithGameOn" xml:space="preserve">
+  <data name="Options_StopServerWithGameTitle" xml:space="preserve">
     <value>Останавливать сервер, когда игра закрывается</value>
-  </data>
-  <data name="Options_StopServerWithGameOff" xml:space="preserve">
-    <value>Оставлять сервер работать, когда игра закрывается</value>
   </data>
   <data name="Options_StopServerWithGameNote" xml:space="preserve">
     <value>На карточке сервера идёт обратный отсчёт с кнопкой «Оставить работать». Если игра снова запустится во время ожидания, остановка отменяется, а сервер ждёт, пока закроется headless-клиент Fika этой установки, если не указано иное. Сервер останавливается для всех, кто к нему подключён.</value>
@@ -7858,29 +7831,20 @@
   <data name="Options_StartingSptHint" xml:space="preserve">
     <value>Как кнопка Запустить сервер на странице Сервер запускает сервер и что происходит после.</value>
   </data>
-  <data name="Options_StartLauncherOn" xml:space="preserve">
+  <data name="Options_StartLauncherTitle" xml:space="preserve">
     <value>Открывать лаунчер, когда сервер готов</value>
-  </data>
-  <data name="Options_StartLauncherOff" xml:space="preserve">
-    <value>Открывать лаунчер вручную</value>
   </data>
   <data name="Options_StartLauncherNote" xml:space="preserve">
     <value>Готов - значит слушает свой порт (из его http.json, и 6969): только тогда лаунчер может к нему подключиться. Сильно модифицированному серверу даётся три минуты.</value>
   </data>
-  <data name="Options_HideServerOn" xml:space="preserve">
-    <value>Запускать сервер без окна</value>
-  </data>
-  <data name="Options_HideServerOff" xml:space="preserve">
-    <value>Показывать окно сервера</value>
+  <data name="Options_HideServerTitle" xml:space="preserve">
+    <value>Скрывать окно сервера</value>
   </data>
   <data name="Options_HideServerNote" xml:space="preserve">
     <value>Без окна журнал сервера показывается на странице Сервер, а кнопка Остановить там корректно его выключает. Сервер продолжает работать после закрытия приложения - останавливайте его на странице Сервер.</value>
   </data>
-  <data name="Options_ServerOnProfileOn" xml:space="preserve">
+  <data name="Options_ServerOnProfileTitle" xml:space="preserve">
     <value>Показывать сервер на странице «Профиль»</value>
-  </data>
-  <data name="Options_ServerOnProfileOff" xml:space="preserve">
-    <value>Оставить сервер на отдельной странице</value>
   </data>
   <data name="Options_ServerOnProfileNote" xml:space="preserve">
     <value>Пока окно сервера показывается, карточки страницы «Сервер» переходят на страницу «Профиль», а «Сервер» исчезает из боковой панели.</value>
@@ -8179,12 +8143,6 @@
   <data name="Options_DirectLaunchDescription" xml:space="preserve">
     <value>Играть делает то же, что лаунчер SPT по кнопке Старт: запускает сервер, если он не запущен, и ждёт его, проверяет, что сервер и spt-core.dll одной версии SPT, удаляет те же файлы, применяет игровой патч SPT, скачивает недостающие бандлы модов и запускает игру с выбранным профилем. Профили создаются, сбрасываются и удаляются из меню ... карточки. Собственные настройки лаунчера SPT (исключённые файлы, очистка кэша при запуске) соблюдаются. Журналы последних игровых сессий сохраняются для диагностики журналов.</value>
   </data>
-  <data name="Options_DirectLaunchOn" xml:space="preserve">
-    <value>Запускать игру отсюда</value>
-  </data>
-  <data name="Options_DirectLaunchOff" xml:space="preserve">
-    <value>Использовать лаунчер SPT</value>
-  </data>
   <data name="Options_DirectLaunchWarningTitle" xml:space="preserve">
     <value>Не от команды SPT</value>
   </data>
@@ -8203,11 +8161,8 @@
   <data name="Options_DirectLaunchNoInstall" xml:space="preserve">
     <value>Сначала укажите папку SPT.</value>
   </data>
-  <data name="Options_MinimizeWhilePlayingOn" xml:space="preserve">
-    <value>Сворачивать приложение после запуска игры</value>
-  </data>
-  <data name="Options_MinimizeWhilePlayingOff" xml:space="preserve">
-    <value>Не сворачивать приложение при запуске игры</value>
+  <data name="Options_MinimizeWhilePlayingTitle" xml:space="preserve">
+    <value>Сворачивать приложение, пока идёт игра</value>
   </data>
   <data name="Nav_Diagnose" xml:space="preserve">
     <value>Диагностика журналов</value>

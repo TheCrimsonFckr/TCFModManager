@@ -306,8 +306,8 @@
                         Margin="0,10,0,0"
                         HorizontalAlignment="Left"
                         IsChecked="{Binding DownloadListSubfolders}"
-                        OnContent="{loc:Str Options_MonitorListSubfoldersOn}"
-                        OffContent="{loc:Str Options_MonitorListSubfoldersOff}" />
+                        OnContent="{loc:Str Options_MonitorListSubfoldersTitle}"
+                        OffContent="{loc:Str Options_MonitorListSubfoldersTitle}" />
                 </StackPanel>
 
                 <Border Style="{StaticResource SubSetting}" Padding="0,12,0,0">
@@ -345,7 +345,7 @@
             <!-- On = ask first, so it writes the opposite of SkipModPageConfirmation. -->
             <ui:ToggleSwitch
                 Style="{StaticResource RowSwitch}"
-                ToolTip="{Binding ModPageGate.SettingToolTip}"
+                ToolTip="{loc:Str Options_ModPagesToolTip}"
                 IsChecked="{Binding SkipModPageConfirmation, Converter={StaticResource Inverse}}" />
         </ui:CardControl>
 
@@ -604,8 +604,8 @@
                     ToolTip="{loc:Str Options_TrayToolTip}"
                     ToolTipService.ShowDuration="20000"
                     IsChecked="{Binding KeepRunningInTray}"
-                    OnContent="{loc:Str Options_TrayOn}"
-                    OffContent="{loc:Str Options_TrayOff}" />
+                    OnContent="{loc:Str Options_TrayTitle}"
+                    OffContent="{loc:Str Options_TrayTitle}" />
 
                 <Border Style="{StaticResource SubSetting}">
                     <StackPanel>
@@ -666,7 +666,7 @@
             </ui:CardControl.Header>
             <ui:ToggleSwitch
                 Style="{StaticResource RowSwitch}"
-                ToolTip="{Binding FootprintGate.SettingToolTip}"
+                ToolTip="{loc:Str Options_FootprintToolTip}"
                 IsChecked="{Binding ShowModFootprintPage}" />
         </ui:CardControl>
 
@@ -682,7 +682,7 @@
             </ui:CardControl.Header>
             <ui:ToggleSwitch
                 Style="{StaticResource RowSwitch}"
-                ToolTip="{Binding ServerMap.SettingToolTip}"
+                ToolTip="{loc:Str Options_ServerMapToolTip}"
                 IsChecked="{Binding ServerMap.IsPageEnabled}" />
         </ui:CardControl>
 
@@ -758,15 +758,15 @@
                         ToolTip="{loc:Str Options_PlaysHereToolTip}"
                         ToolTipService.ShowDuration="20000"
                         IsChecked="{Binding PlaysHere}"
-                        OnContent="{loc:Str Options_PlaysHereOn}"
-                        OffContent="{loc:Str Options_PlaysHereOff}" />
+                        OnContent="{loc:Str Options_PlaysHereTitle}"
+                        OffContent="{loc:Str Options_PlaysHereTitle}" />
                     <ui:ToggleSwitch
                         HorizontalAlignment="Left"
                         ToolTip="{loc:Str Options_HeadlessToolTip}"
                         ToolTipService.ShowDuration="20000"
                         IsChecked="{Binding RunsHeadlessClient}"
-                        OnContent="{loc:Str Options_HeadlessOn}"
-                        OffContent="{loc:Str Options_HeadlessOff}" />
+                        OnContent="{loc:Str Options_HeadlessTitle}"
+                        OffContent="{loc:Str Options_HeadlessTitle}" />
                     <TextBlock
                         Style="{StaticResource SettingHint}"
                         Margin="0,10,0,0"
@@ -843,8 +843,8 @@
                 <ui:ToggleSwitch
                     HorizontalAlignment="Left"
                     IsChecked="{Binding StartLauncherAfterServer}"
-                    OnContent="{loc:Str Options_StartLauncherOn}"
-                    OffContent="{loc:Str Options_StartLauncherOff}" />
+                    OnContent="{loc:Str Options_StartLauncherTitle}"
+                    OffContent="{loc:Str Options_StartLauncherTitle}" />
                 <TextBlock
                     Style="{StaticResource SettingNote}"
                     Margin="0,6,0,12"
@@ -852,8 +852,8 @@
                 <ui:ToggleSwitch
                     HorizontalAlignment="Left"
                     IsChecked="{Binding HideServerWindow}"
-                    OnContent="{loc:Str Options_HideServerOn}"
-                    OffContent="{loc:Str Options_HideServerOff}" />
+                    OnContent="{loc:Str Options_HideServerTitle}"
+                    OffContent="{loc:Str Options_HideServerTitle}" />
                 <TextBlock
                     Style="{StaticResource SettingNote}"
                     Margin="0,6,0,0"
@@ -862,8 +862,8 @@
                     <ui:ToggleSwitch
                         HorizontalAlignment="Left"
                         IsChecked="{Binding ShowServerOnProfile}"
-                        OnContent="{loc:Str Options_ServerOnProfileOn}"
-                        OffContent="{loc:Str Options_ServerOnProfileOff}" />
+                        OnContent="{loc:Str Options_ServerOnProfileTitle}"
+                        OffContent="{loc:Str Options_ServerOnProfileTitle}" />
                     <TextBlock
                         Style="{StaticResource SettingNote}"
                         Margin="0,6,0,0"
@@ -874,8 +874,8 @@
                     Margin="0,12,0,0"
                     HorizontalAlignment="Left"
                     IsChecked="{Binding StopServerWithGame}"
-                    OnContent="{loc:Str Options_StopServerWithGameOn}"
-                    OffContent="{loc:Str Options_StopServerWithGameOff}" />
+                    OnContent="{loc:Str Options_StopServerWithGameTitle}"
+                    OffContent="{loc:Str Options_StopServerWithGameTitle}" />
                 <StackPanel
                     Margin="0,8,0,0"
                     Orientation="Horizontal"
@@ -902,8 +902,8 @@
                     IsChecked="{Binding StopServerIgnoresHeadless}"
                     IsEnabled="{Binding StopServerWithGame}"
                     Visibility="{Binding ShowStopServerHeadlessOverride, Converter={StaticResource BoolToVisibility}}"
-                    OnContent="{loc:Str Options_StopServerIgnoresHeadlessOn}"
-                    OffContent="{loc:Str Options_StopServerIgnoresHeadlessOff}" />
+                    OnContent="{loc:Str Options_StopServerIgnoresHeadlessTitle}"
+                    OffContent="{loc:Str Options_StopServerIgnoresHeadlessTitle}" />
                 <TextBlock
                     Style="{StaticResource SettingNote}"
                     Margin="0,6,0,0"
@@ -941,10 +941,22 @@
             Style="{StaticResource SettingExpander}"
             Icon="{ui:SymbolIcon Rocket24}">
             <ui:CardExpander.Header>
-                <StackPanel ToolTip="{loc:Str Options_DirectLaunchDescription}" ToolTipService.ShowDuration="30000">
-                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_DirectLaunchHeader}" />
-                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_DirectLaunchSummary}" />
-                </StackPanel>
+                <Grid ToolTip="{loc:Str Options_DirectLaunchDescription}" ToolTipService.ShowDuration="30000">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_DirectLaunchHeader}" />
+                        <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_DirectLaunchSummary}" />
+                    </StackPanel>
+                    <ui:ToggleSwitch
+                        Grid.Column="1"
+                        Margin="14,0,12,0"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource RowSwitch}"
+                        IsChecked="{Binding DirectLaunch}" />
+                </Grid>
             </ui:CardExpander.Header>
 
             <StackPanel>
@@ -955,13 +967,8 @@
                     Severity="Warning"
                     Title="{loc:Str Options_DirectLaunchWarningTitle}"
                     Message="{loc:Str Options_DirectLaunchWarning}" />
-                <ui:ToggleSwitch
-                    HorizontalAlignment="Left"
-                    IsChecked="{Binding DirectLaunch}"
-                    OnContent="{loc:Str Options_DirectLaunchOn}"
-                    OffContent="{loc:Str Options_DirectLaunchOff}" />
                 <TextBlock
-                    Margin="0,6,0,12"
+                    Margin="0,0,0,12"
                     TextWrapping="Wrap"
                     Text="{Binding DirectLaunchSupportText}">
                     <TextBlock.Style>
@@ -978,8 +985,8 @@
                     HorizontalAlignment="Left"
                     IsEnabled="{Binding DirectLaunch}"
                     IsChecked="{Binding MinimizeWhilePlaying}"
-                    OnContent="{loc:Str Options_MinimizeWhilePlayingOn}"
-                    OffContent="{loc:Str Options_MinimizeWhilePlayingOff}" />
+                    OnContent="{loc:Str Options_MinimizeWhilePlayingTitle}"
+                    OffContent="{loc:Str Options_MinimizeWhilePlayingTitle}" />
             </StackPanel>
         </ui:CardExpander>
 

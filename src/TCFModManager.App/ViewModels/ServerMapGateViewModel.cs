@@ -112,7 +112,6 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
     // appears and disappears on its own is one nobody can rely on finding.
     //
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(SettingToolTip))]
     private bool _isPageEnabled;
 
     // Suppresses the save while the constructor is putting the switch where the stored value already
@@ -283,14 +282,6 @@ public sealed partial class ServerMapGateViewModel : LocalizedViewModel
         KeyNotice = Strings.ServerMap_KeyRotated;
     }
 
-    //
-    // The switch's tooltip. Says what the page needs to be useful, because that is the part someone
-    // deciding whether to switch it on cannot tell from the name: the mod goes on the SERVER, and
-    // without it this page has nothing to show.
-    //
-    public string SettingToolTip => IsPageEnabled
-        ? Strings.Options_ServerMapToolTipOn
-        : Strings.Options_ServerMapToolTipOff;
 
     //
     // No confirmation either way. Nothing is at stake in showing or hiding a page, and turning it

@@ -79,9 +79,9 @@ internal static class HelpCatalog
 
             Topic("server.stopwithgame", () => Strings.Help_StopWithGame_Title,
                 Step(() => Strings.Help_StopWithGame_Step1,
-                    () => Strings.Nav_Options, () => Strings.Options_StartingSptHeader, () => Strings.Options_StopServerWithGameOn),
+                    () => Strings.Nav_Options, () => Strings.Options_StartingSptHeader, () => Strings.Options_StopServerWithGameTitle),
                 Step(() => Strings.Help_StopWithGame_Step2, () => Strings.Play_KeepServerRunning))
-                .WithNote(() => Strings.Help_StopWithGame_Note, () => Strings.Options_StopServerIgnoresHeadlessOn)
+                .WithNote(() => Strings.Help_StopWithGame_Note, () => Strings.Options_StopServerIgnoresHeadlessTitle)
                 .WithKeywords(() => Strings.Help_StopWithGame_Keywords),
         ]),
 
@@ -555,7 +555,7 @@ internal static class HelpCatalog
 
             Topic("updates.tray", () => Strings.Help_Updates_Tray_Title,
                 Step(() => Strings.Help_Updates_Tray_Step1,
-                    () => Strings.Options_UpdateNotificationsHeader, () => Strings.Options_TrayOff),
+                    () => Strings.Options_UpdateNotificationsHeader, () => Strings.Options_TrayTitle),
                 Step(() => Strings.Help_Updates_Tray_Step2),
                 Step(() => Strings.Help_Updates_Tray_Step3, () => Strings.Tray_Quit))
                 .WithKeywords(() => Strings.Help_Updates_Tray_Keywords)
@@ -598,7 +598,7 @@ internal static class HelpCatalog
                     () => Strings.Nav_Options, () => Strings.Options_SectionMultiplayer,
                     () => Strings.Options_MachineRoleHeader),
                 Step(() => Strings.Help_Options_Role_Step2,
-                    () => Strings.Options_PlaysHereOff, () => Strings.Options_HeadlessOn))
+                    () => Strings.Options_PlaysHereTitle, () => Strings.Options_HeadlessTitle))
                 .WithNote(() => Strings.Help_Options_Role_Note, () => Strings.Options_HeadlessLauncherHeader)
                 .WithKeywords(() => Strings.Help_Options_Role_Keywords),
         ]),
