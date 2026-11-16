@@ -25,7 +25,7 @@ Two entries at the top of the list look across every mod at once:
 - **Keybinds** - every key a mod uses. Keys used by more than one setting come first, each saying what else uses it. That can still be fine - two mods may use the same key on the map and in raid.
 
 ## Saving
-Edits wait until you save, file by file. Moving to another mod keeps them. **Save** saves the file you're looking at; **Save all** saves every file with changes, each backed up first like any save, and **Revert all** drops them. A file that changed on disk in the meantime is left for you to open and save on its own. Closing the app drops unsaved edits, so save before you go.
+Edits wait until you save, file by file. Moving to another mod keeps them. **Save** saves the file you're looking at; **Save all** saves every file with changes, each backed up first like any save, and **Revert all** drops them. A file that changed on disk in the meantime is left for you to open and save on its own. Quitting with unsaved edits asks first: save them all, quit without them, or stay.
 
 ## Editing is careful with your files
 - **Nothing is ever reformatted.** For a lot of mods the comments in the config file are the only documentation those settings have. Saving changes the lines you changed and leaves everything else exactly as it was.
