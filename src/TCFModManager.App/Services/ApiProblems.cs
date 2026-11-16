@@ -35,7 +35,7 @@ public static class ApiProblems
 
         SpModApiException => string.Format(CultureInfo.CurrentCulture, Strings.Api_ErrorFormat, ex.Message),
 
-        DownloadHttpException { IsServerSide: true } download => DownloadProblems.Failed(download),
+        DownloadHttpException download => DownloadProblems.Failed(download),
 
         HttpRequestException => string.Format(CultureInfo.CurrentCulture, Strings.Api_NetworkErrorFormat, ex.Message),
 

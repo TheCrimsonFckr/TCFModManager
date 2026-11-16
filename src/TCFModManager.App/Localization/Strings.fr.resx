@@ -7027,6 +7027,24 @@ Voir Dépendances et conflits.</value>
   <data name="Downloads_ServerErrorHostFormat" xml:space="preserve">
     <value>L'hébergeur du fichier ({1}) a rencontré un problème ({0}). Le problème vient de son côté - réessayez dans quelques minutes.</value>
   </data>
+  <data name="Downloads_GoneSpModFormat" xml:space="preserve">
+    <value>sp-mod n'a plus le fichier de cette version ({0}). Il a peut-être été retiré - cherchez une version plus récente.</value>
+  </data>
+  <data name="Downloads_GoneHostFormat" xml:space="preserve">
+    <value>Le fichier de cette version n'est plus sur {1} ({0}). L'auteur l'a peut-être retiré ou remplacé - cherchez une version plus récente.</value>
+  </data>
+  <data name="Downloads_RefusedSpModFormat" xml:space="preserve">
+    <value>sp-mod a refusé le téléchargement ({0}). Réessayez dans quelques minutes.</value>
+  </data>
+  <data name="Downloads_RefusedHostFormat" xml:space="preserve">
+    <value>{1} a refusé le téléchargement ({0}). Si cela se reproduit, prévenez l'auteur du mod.</value>
+  </data>
+  <data name="Downloads_TurnedDownSpModFormat" xml:space="preserve">
+    <value>sp-mod n'a pas accepté le téléchargement ({0}). Réessayez dans quelques minutes.</value>
+  </data>
+  <data name="Downloads_TurnedDownHostFormat" xml:space="preserve">
+    <value>{1} n'a pas accepté le téléchargement ({0}). Si cela se reproduit, prévenez l'auteur du mod.</value>
+  </data>
   <data name="Downloads_BarDownloading" xml:space="preserve">
     <value>Téléchargement</value>
   </data>

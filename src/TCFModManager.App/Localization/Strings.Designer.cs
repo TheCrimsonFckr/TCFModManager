@@ -2447,6 +2447,12 @@ internal static class Strings
     internal static string Downloads_ServerBusyHostFormat => LocalizationService.Get("Downloads_ServerBusyHostFormat");
     internal static string Downloads_ServerErrorSpModFormat => LocalizationService.Get("Downloads_ServerErrorSpModFormat");
     internal static string Downloads_ServerErrorHostFormat => LocalizationService.Get("Downloads_ServerErrorHostFormat");
+    internal static string Downloads_GoneSpModFormat => LocalizationService.Get("Downloads_GoneSpModFormat");
+    internal static string Downloads_GoneHostFormat => LocalizationService.Get("Downloads_GoneHostFormat");
+    internal static string Downloads_RefusedSpModFormat => LocalizationService.Get("Downloads_RefusedSpModFormat");
+    internal static string Downloads_RefusedHostFormat => LocalizationService.Get("Downloads_RefusedHostFormat");
+    internal static string Downloads_TurnedDownSpModFormat => LocalizationService.Get("Downloads_TurnedDownSpModFormat");
+    internal static string Downloads_TurnedDownHostFormat => LocalizationService.Get("Downloads_TurnedDownHostFormat");
     internal static string Downloads_BarDownloading => LocalizationService.Get("Downloads_BarDownloading");
     internal static string Downloads_BarInstalling => LocalizationService.Get("Downloads_BarInstalling");
     internal static string Downloads_BarFinished => LocalizationService.Get("Downloads_BarFinished");

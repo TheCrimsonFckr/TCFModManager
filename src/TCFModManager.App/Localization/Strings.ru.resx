@@ -7366,6 +7366,24 @@
   <data name="Downloads_ServerErrorHostFormat" xml:space="preserve">
     <value>На стороне хостинга файла ({1}) произошла ошибка ({0}). Повторите через несколько минут.</value>
   </data>
+  <data name="Downloads_GoneSpModFormat" xml:space="preserve">
+    <value>На sp-mod больше нет файла этой версии ({0}). Возможно, его удалили - проверьте, нет ли версии новее.</value>
+  </data>
+  <data name="Downloads_GoneHostFormat" xml:space="preserve">
+    <value>Файла этой версии больше нет на {1} ({0}). Возможно, автор удалил или заменил его - проверьте, нет ли версии новее.</value>
+  </data>
+  <data name="Downloads_RefusedSpModFormat" xml:space="preserve">
+    <value>sp-mod отказал в загрузке ({0}). Повторите через несколько минут.</value>
+  </data>
+  <data name="Downloads_RefusedHostFormat" xml:space="preserve">
+    <value>{1} отказал в загрузке ({0}). Если это повторяется, сообщите автору мода.</value>
+  </data>
+  <data name="Downloads_TurnedDownSpModFormat" xml:space="preserve">
+    <value>sp-mod не принял загрузку ({0}). Повторите через несколько минут.</value>
+  </data>
+  <data name="Downloads_TurnedDownHostFormat" xml:space="preserve">
+    <value>{1} не принял загрузку ({0}). Если это повторяется, сообщите автору мода.</value>
+  </data>
   <data name="Downloads_BarDownloading" xml:space="preserve">
     <value>Загрузка</value>
   </data>

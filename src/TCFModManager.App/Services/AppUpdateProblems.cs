@@ -87,7 +87,7 @@ public static class AppUpdateProblems
     // nobody anticipated, a permissions oddity. There is nothing specific to say, so this says the
     // one thing that is always true and always useful.
     //
-    public static string Unexpected(Exception problem) => problem is DownloadHttpException { IsServerSide: true } download
+    public static string Unexpected(Exception problem) => problem is DownloadHttpException download
         ? DownloadProblems.Failed(download)
         : string.Format(CultureInfo.CurrentCulture, Strings.AppUpdate_UnexpectedFormat, problem.Message);
 

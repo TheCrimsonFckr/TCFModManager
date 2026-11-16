@@ -7027,6 +7027,24 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Downloads_ServerErrorHostFormat" xml:space="preserve">
     <value>Beim Datei-Host ({1}) ist ein Fehler aufgetreten ({0}). Das Problem liegt bei ihm - versuch es in ein paar Minuten erneut.</value>
   </data>
+  <data name="Downloads_GoneSpModFormat" xml:space="preserve">
+    <value>sp-mod hat die Datei für diese Version nicht mehr ({0}). Sie wurde vielleicht entfernt - schau nach einer neueren Version.</value>
+  </data>
+  <data name="Downloads_GoneHostFormat" xml:space="preserve">
+    <value>Die Datei für diese Version liegt nicht mehr auf {1} ({0}). Der Autor hat sie vielleicht entfernt oder ersetzt - schau nach einer neueren Version.</value>
+  </data>
+  <data name="Downloads_RefusedSpModFormat" xml:space="preserve">
+    <value>sp-mod hat den Download abgelehnt ({0}). Versuch es in ein paar Minuten erneut.</value>
+  </data>
+  <data name="Downloads_RefusedHostFormat" xml:space="preserve">
+    <value>{1} hat den Download abgelehnt ({0}). Wenn das öfter passiert, sag dem Autor des Mods Bescheid.</value>
+  </data>
+  <data name="Downloads_TurnedDownSpModFormat" xml:space="preserve">
+    <value>sp-mod hat den Download nicht angenommen ({0}). Versuch es in ein paar Minuten erneut.</value>
+  </data>
+  <data name="Downloads_TurnedDownHostFormat" xml:space="preserve">
+    <value>{1} hat den Download nicht angenommen ({0}). Wenn das öfter passiert, sag dem Autor des Mods Bescheid.</value>
+  </data>
   <data name="Downloads_BarDownloading" xml:space="preserve">
     <value>Wird heruntergeladen</value>
   </data>

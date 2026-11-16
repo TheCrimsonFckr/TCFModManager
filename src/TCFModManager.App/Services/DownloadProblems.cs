@@ -6,7 +6,7 @@ using TCFModManager.Core.Services;
 namespace TCFModManager.App.Services;
 
 //
-// What the user is told when a download's server fails, and while a download waits to try again.
+// What the user is told when a download's server fails or refuses it, and while a download waits to try again.
 //
 public static class DownloadProblems
 {
@@ -21,6 +21,12 @@ public static class DownloadProblems
                 (Strings.Downloads_ServerTimeoutSpModFormat, Strings.Downloads_ServerTimeoutHostFormat),
             HttpStatusCode.TooManyRequests or HttpStatusCode.ServiceUnavailable =>
                 (Strings.Downloads_ServerBusySpModFormat, Strings.Downloads_ServerBusyHostFormat),
+            HttpStatusCode.NotFound or HttpStatusCode.Gone =>
+                (Strings.Downloads_GoneSpModFormat, Strings.Downloads_GoneHostFormat),
+            HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden =>
+                (Strings.Downloads_RefusedSpModFormat, Strings.Downloads_RefusedHostFormat),
+            _ when (int)status is >= 400 and < 500 =>
+                (Strings.Downloads_TurnedDownSpModFormat, Strings.Downloads_TurnedDownHostFormat),
             _ =>
                 (Strings.Downloads_ServerErrorSpModFormat, Strings.Downloads_ServerErrorHostFormat),
         };
