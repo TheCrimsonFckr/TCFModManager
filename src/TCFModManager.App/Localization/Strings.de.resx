@@ -9521,4 +9521,112 @@ Die Details stehen im Log:
   <data name="Play_ServerUpHeadlessStarted" xml:space="preserve">
     <value>Der Server läuft, und der Headless wurde gestartet.</value>
   </data>
+  <data name="GroupIcon_Rifle" xml:space="preserve">
+    <value>Gewehr</value>
+  </data>
+  <data name="GroupIcon_Pistol" xml:space="preserve">
+    <value>Pistole</value>
+  </data>
+  <data name="GroupIcon_Scope" xml:space="preserve">
+    <value>Zielfernrohr</value>
+  </data>
+  <data name="GroupIcon_Ammo" xml:space="preserve">
+    <value>Munition</value>
+  </data>
+  <data name="GroupIcon_Grenade" xml:space="preserve">
+    <value>Granate</value>
+  </data>
+  <data name="GroupIcon_Helmet" xml:space="preserve">
+    <value>Helm</value>
+  </data>
+  <data name="GroupIcon_Armor" xml:space="preserve">
+    <value>Schutzweste</value>
+  </data>
+  <data name="GroupIcon_Backpack" xml:space="preserve">
+    <value>Rucksack</value>
+  </data>
+  <data name="GroupIcon_Medkit" xml:space="preserve">
+    <value>Medizin</value>
+  </data>
+  <data name="GroupIcon_Map" xml:space="preserve">
+    <value>Karte</value>
+  </data>
+  <data name="GroupIcon_Compass" xml:space="preserve">
+    <value>Kompass</value>
+  </data>
+  <data name="GroupIcon_Skull" xml:space="preserve">
+    <value>Totenkopf</value>
+  </data>
+  <data name="GroupIcon_Bot" xml:space="preserve">
+    <value>Bots und KI</value>
+  </data>
+  <data name="GroupIcon_Trader" xml:space="preserve">
+    <value>Händler und Geld</value>
+  </data>
+  <data name="GroupIcon_Quest" xml:space="preserve">
+    <value>Quests</value>
+  </data>
+  <data name="GroupIcon_Knife" xml:space="preserve">
+    <value>Messer</value>
+  </data>
+  <data name="GroupIcon_Key" xml:space="preserve">
+    <value>Schlüssel</value>
+  </data>
+  <data name="GroupIcon_Door" xml:space="preserve">
+    <value>Ausgang</value>
+  </data>
+  <data name="GroupIcon_Hideout" xml:space="preserve">
+    <value>Unterschlupf</value>
+  </data>
+  <data name="GroupIcon_Gear" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="GroupIcon_Wrench" xml:space="preserve">
+    <value>Fixes und Werkzeuge</value>
+  </data>
+  <data name="GroupIcon_Eye" xml:space="preserve">
+    <value>Grafik</value>
+  </data>
+  <data name="GroupIcon_Audio" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="GroupIcon_Brush" xml:space="preserve">
+    <value>Oberfläche und Aussehen</value>
+  </data>
+  <data name="GroupIcon_Server" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="GroupIcon_Library" xml:space="preserve">
+    <value>Bibliotheken</value>
+  </data>
+  <data name="GroupIcon_Bolt" xml:space="preserve">
+    <value>Leistung</value>
+  </data>
+  <data name="GroupIcon_Shield" xml:space="preserve">
+    <value>Sicherheit</value>
+  </data>
+  <data name="GroupIcon_Star" xml:space="preserve">
+    <value>Favoriten</value>
+  </data>
+  <data name="GroupIcon_Flask" xml:space="preserve">
+    <value>Experimentell</value>
+  </data>
+  <data name="GroupIcon_Flag" xml:space="preserve">
+    <value>Flagge</value>
+  </data>
+  <data name="GroupIcon_TitleFormat" xml:space="preserve">
+    <value>Symbol für {0}</value>
+  </data>
+  <data name="GroupIcon_SearchPlaceholder" xml:space="preserve">
+    <value>Symbole suchen</value>
+  </data>
+  <data name="GroupIcon_NothingFound" xml:space="preserve">
+    <value>Kein Symbol passt dazu.</value>
+  </data>
+  <data name="GroupIcon_None" xml:space="preserve">
+    <value>Kein Symbol</value>
+  </data>
+  <data name="GroupIcon_PickToolTip" xml:space="preserve">
+    <value>Ein Symbol für diese Gruppe wählen</value>
+  </data>
 </root>

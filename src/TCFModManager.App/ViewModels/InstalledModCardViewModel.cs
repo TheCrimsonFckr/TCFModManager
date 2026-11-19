@@ -598,6 +598,13 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     public string GroupLabel => GroupName ?? Strings.Filter_Ungrouped;
 
+    // OPEN-57: the icon of the group this mod is in, or null.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasGroupIcon))]
+    private string? _groupIcon;
+
+    public bool HasGroupIcon => GroupIcon is not null;
+
     // OPEN-52 N3: the user's own line about this mod, keyed like its group.
     [ObservableProperty]
     private string? _note;

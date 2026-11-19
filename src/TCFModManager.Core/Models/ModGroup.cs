@@ -8,6 +8,9 @@ public sealed class ModGroup
     public required string Name { get; set; }
     public int SortOrder { get; set; }
     public bool IsCollapsed { get; set; }
+
+    // OPEN-57: the key of one of the app's own group icons, or null for none.
+    public string? Icon { get; set; }
 }
 
 // The full set of groups plus which installed mod belongs to which, persisted as one file.

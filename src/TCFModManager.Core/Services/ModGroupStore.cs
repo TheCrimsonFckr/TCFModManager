@@ -47,6 +47,16 @@ public sealed class ModGroupStore
         Save(data);
     }
 
+    public void SetIcon(Guid groupId, string? icon)
+    {
+        var data = Load();
+        var group = data.Groups.FirstOrDefault(g => g.Id == groupId);
+        if (group is null) return;
+
+        group.Icon = string.IsNullOrWhiteSpace(icon) ? null : icon;
+        Save(data);
+    }
+
     // Removes the group; any mod assigned to it falls back to Ungrouped.
     public void DeleteGroup(Guid groupId)
     {

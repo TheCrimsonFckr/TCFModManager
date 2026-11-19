@@ -28,6 +28,13 @@ public partial class ModGroupSectionViewModel : LocalizedViewModel
     // WPF-UI build in use, same convention as ModStatusDisplay.Glyph.
     public string ChevronGlyph => IsCollapsed ? "ChevronRight24" : "ChevronDown24";
 
+    // OPEN-57: the group's icon key, or null for none.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasIcon))]
+    private string? _icon;
+
+    public bool HasIcon => Icon is not null;
+
     // True while the header's name TextBox is shown in place of the TextBlock.
     [ObservableProperty]
     private bool _isEditing;
@@ -67,6 +74,7 @@ public partial class ModGroupSectionViewModel : LocalizedViewModel
         GroupId = group.Id,
         Name = group.Name,
         IsCollapsed = group.IsCollapsed,
+        Icon = Services.GroupIcons.Find(group.Icon)?.Key,
     };
 
     public static ModGroupSectionViewModel Ungrouped() => new()

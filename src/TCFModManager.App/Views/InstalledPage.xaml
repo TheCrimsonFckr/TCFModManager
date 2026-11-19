@@ -72,7 +72,16 @@
         </DataTemplate>
 
         <DataTemplate x:Key="FilterBody.Group">
-            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding GroupFilterOptions}" SelectedItem="{Binding SelectedGroupFilter}" />
+            <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding GroupFilterOptions}" SelectedItem="{Binding SelectedGroupFilter}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <controls:GroupIconView Width="14" Height="14" Margin="0,0,6,0" VerticalAlignment="Center" Key="{Binding Icon}" Visibility="{Binding HasIcon, Converter={StaticResource BoolToVis}}" />
+                            <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Label}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </DataTemplate>
 
         <DataTemplate x:Key="FilterBody.Sort">
@@ -1156,7 +1165,8 @@
                                                 Background="{DynamicResource ControlFillColorDefaultBrush}"
                                                 Visibility="{Binding IsGrouped, Converter={StaticResource BoolToVis}}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <ui:SymbolIcon Symbol="Folder24" FontSize="12" Margin="0,0,5,0" VerticalAlignment="Center" />
+                                                    <ui:SymbolIcon Symbol="Folder24" FontSize="12" Margin="0,0,5,0" VerticalAlignment="Center" Visibility="{Binding HasGroupIcon, Converter={StaticResource FalseToVisible}}" />
+                                                    <controls:GroupIconView Width="12" Height="12" Margin="0,0,5,0" VerticalAlignment="Center" Key="{Binding GroupIcon}" Visibility="{Binding HasGroupIcon, Converter={StaticResource BoolToVis}}" />
                                                     <TextBlock FontSize="11" Text="{Binding GroupName}" VerticalAlignment="Center" />
                                                 </StackPanel>
                                             </Border>
@@ -1258,7 +1268,32 @@
                                         <ui:SymbolIcon Symbol="{Binding ChevronGlyph}" FontSize="16" />
                                     </ui:Button>
 
-                                    <Grid Grid.Column="1" VerticalAlignment="Center">
+                                    <DockPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <!-- OPEN-57: the group's icon, and the way to pick one. -->
+                                    <ui:Button
+                                        DockPanel.Dock="Left"
+                                        Padding="4"
+                                        Margin="0,0,6,0"
+                                        Appearance="Transparent"
+                                        Visibility="{Binding IsRealGroup, Converter={StaticResource BoolToVis}}"
+                                        Command="{Binding DataContext.PickGroupIconCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip="{loc:Str GroupIcon_PickToolTip}">
+                                        <Grid>
+                                            <controls:GroupIconView
+                                                Width="18"
+                                                Height="18"
+                                                Key="{Binding Icon}"
+                                                Visibility="{Binding HasIcon, Converter={StaticResource BoolToVis}}" />
+                                            <ui:SymbolIcon
+                                                Symbol="ImageAdd24"
+                                                FontSize="16"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Visibility="{Binding HasIcon, Converter={StaticResource FalseToVisible}}" />
+                                        </Grid>
+                                    </ui:Button>
+
+                                    <Grid VerticalAlignment="Center">
                                         <TextBlock
                                             VerticalAlignment="Center"
                                             TextTrimming="CharacterEllipsis"
@@ -1276,6 +1311,7 @@
                                             KeyDown="RenameTextBox_KeyDown"
                                             LostFocus="RenameTextBox_LostFocus" />
                                     </Grid>
+                                    </DockPanel>
 
                                     <StackPanel
                                         Grid.Column="2"
@@ -1570,7 +1606,8 @@
                                             Background="{DynamicResource ControlFillColorDefaultBrush}"
                                             Visibility="{Binding IsGrouped, Converter={StaticResource BoolToVis}}">
                                             <StackPanel Orientation="Horizontal">
-                                                <ui:SymbolIcon Symbol="Folder24" FontSize="12" Margin="0,0,5,0" VerticalAlignment="Center" />
+                                                <ui:SymbolIcon Symbol="Folder24" FontSize="12" Margin="0,0,5,0" VerticalAlignment="Center" Visibility="{Binding HasGroupIcon, Converter={StaticResource FalseToVisible}}" />
+                                                <controls:GroupIconView Width="12" Height="12" Margin="0,0,5,0" VerticalAlignment="Center" Key="{Binding GroupIcon}" Visibility="{Binding HasGroupIcon, Converter={StaticResource BoolToVis}}" />
                                                 <TextBlock FontSize="11" Text="{Binding GroupName}" VerticalAlignment="Center" />
                                             </StackPanel>
                                         </Border>

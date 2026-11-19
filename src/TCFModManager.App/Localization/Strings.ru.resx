@@ -9914,4 +9914,112 @@
   <data name="Play_ServerUpHeadlessStarted" xml:space="preserve">
     <value>Сервер запущен, headless тоже запущен.</value>
   </data>
+  <data name="GroupIcon_Rifle" xml:space="preserve">
+    <value>Винтовка</value>
+  </data>
+  <data name="GroupIcon_Pistol" xml:space="preserve">
+    <value>Пистолет</value>
+  </data>
+  <data name="GroupIcon_Scope" xml:space="preserve">
+    <value>Прицел</value>
+  </data>
+  <data name="GroupIcon_Ammo" xml:space="preserve">
+    <value>Патроны</value>
+  </data>
+  <data name="GroupIcon_Grenade" xml:space="preserve">
+    <value>Граната</value>
+  </data>
+  <data name="GroupIcon_Helmet" xml:space="preserve">
+    <value>Шлем</value>
+  </data>
+  <data name="GroupIcon_Armor" xml:space="preserve">
+    <value>Броня</value>
+  </data>
+  <data name="GroupIcon_Backpack" xml:space="preserve">
+    <value>Рюкзак</value>
+  </data>
+  <data name="GroupIcon_Medkit" xml:space="preserve">
+    <value>Медицина</value>
+  </data>
+  <data name="GroupIcon_Map" xml:space="preserve">
+    <value>Карта</value>
+  </data>
+  <data name="GroupIcon_Compass" xml:space="preserve">
+    <value>Компас</value>
+  </data>
+  <data name="GroupIcon_Skull" xml:space="preserve">
+    <value>Череп</value>
+  </data>
+  <data name="GroupIcon_Bot" xml:space="preserve">
+    <value>Боты и ИИ</value>
+  </data>
+  <data name="GroupIcon_Trader" xml:space="preserve">
+    <value>Торговцы и деньги</value>
+  </data>
+  <data name="GroupIcon_Quest" xml:space="preserve">
+    <value>Квесты</value>
+  </data>
+  <data name="GroupIcon_Knife" xml:space="preserve">
+    <value>Нож</value>
+  </data>
+  <data name="GroupIcon_Key" xml:space="preserve">
+    <value>Ключ</value>
+  </data>
+  <data name="GroupIcon_Door" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="GroupIcon_Hideout" xml:space="preserve">
+    <value>Убежище</value>
+  </data>
+  <data name="GroupIcon_Gear" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="GroupIcon_Wrench" xml:space="preserve">
+    <value>Исправления и инструменты</value>
+  </data>
+  <data name="GroupIcon_Eye" xml:space="preserve">
+    <value>Графика</value>
+  </data>
+  <data name="GroupIcon_Audio" xml:space="preserve">
+    <value>Звук</value>
+  </data>
+  <data name="GroupIcon_Brush" xml:space="preserve">
+    <value>Интерфейс и вид</value>
+  </data>
+  <data name="GroupIcon_Server" xml:space="preserve">
+    <value>Сервер</value>
+  </data>
+  <data name="GroupIcon_Library" xml:space="preserve">
+    <value>Библиотеки</value>
+  </data>
+  <data name="GroupIcon_Bolt" xml:space="preserve">
+    <value>Производительность</value>
+  </data>
+  <data name="GroupIcon_Shield" xml:space="preserve">
+    <value>Безопасность</value>
+  </data>
+  <data name="GroupIcon_Star" xml:space="preserve">
+    <value>Избранное</value>
+  </data>
+  <data name="GroupIcon_Flask" xml:space="preserve">
+    <value>Экспериментальное</value>
+  </data>
+  <data name="GroupIcon_Flag" xml:space="preserve">
+    <value>Флаг</value>
+  </data>
+  <data name="GroupIcon_TitleFormat" xml:space="preserve">
+    <value>Значок для {0}</value>
+  </data>
+  <data name="GroupIcon_SearchPlaceholder" xml:space="preserve">
+    <value>Поиск значков</value>
+  </data>
+  <data name="GroupIcon_NothingFound" xml:space="preserve">
+    <value>Подходящих значков нет.</value>
+  </data>
+  <data name="GroupIcon_None" xml:space="preserve">
+    <value>Без значка</value>
+  </data>
+  <data name="GroupIcon_PickToolTip" xml:space="preserve">
+    <value>Выбрать значок для этой группы</value>
+  </data>
 </root>

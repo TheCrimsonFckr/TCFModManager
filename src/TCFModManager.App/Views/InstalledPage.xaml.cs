@@ -252,6 +252,9 @@ public partial class InstalledPage : Page
                 Header = group.Name,
                 IsCheckable = false,
                 IsChecked = targets.All(t => t.GroupId == group.Id),
+                Icon = Services.GroupIcons.Find(group.Icon) is { } icon
+                    ? new Controls.GroupIconView { Key = icon.Key, Width = 16, Height = 16 }
+                    : null,
             };
             var id = group.Id;
             item.Click += (_, _) => ViewModel.MoveModsToGroup(targets, id);

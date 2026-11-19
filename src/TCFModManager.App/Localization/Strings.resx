@@ -11549,4 +11549,148 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>The server is up, and the headless has been started.</value>
     <comment>Message after Start server with the tick box on.</comment>
   </data>
+  <data name="GroupIcon_Rifle" xml:space="preserve">
+    <value>Rifle</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Pistol" xml:space="preserve">
+    <value>Pistol</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Scope" xml:space="preserve">
+    <value>Scope</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Ammo" xml:space="preserve">
+    <value>Ammo</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Grenade" xml:space="preserve">
+    <value>Grenade</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Helmet" xml:space="preserve">
+    <value>Helmet</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Armor" xml:space="preserve">
+    <value>Armour</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Backpack" xml:space="preserve">
+    <value>Backpack</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Medkit" xml:space="preserve">
+    <value>Medical</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Map" xml:space="preserve">
+    <value>Map</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Compass" xml:space="preserve">
+    <value>Compass</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Skull" xml:space="preserve">
+    <value>Skull</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Bot" xml:space="preserve">
+    <value>Bots and AI</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Trader" xml:space="preserve">
+    <value>Traders and money</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Quest" xml:space="preserve">
+    <value>Quests</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Knife" xml:space="preserve">
+    <value>Knife</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Key" xml:space="preserve">
+    <value>Key</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Door" xml:space="preserve">
+    <value>Exit</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Hideout" xml:space="preserve">
+    <value>Hideout</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Gear" xml:space="preserve">
+    <value>Settings</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Wrench" xml:space="preserve">
+    <value>Fixes and tools</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Eye" xml:space="preserve">
+    <value>Visuals</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Audio" xml:space="preserve">
+    <value>Audio</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Brush" xml:space="preserve">
+    <value>Interface and looks</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Server" xml:space="preserve">
+    <value>Server</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Library" xml:space="preserve">
+    <value>Libraries</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Bolt" xml:space="preserve">
+    <value>Performance</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Shield" xml:space="preserve">
+    <value>Safety</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Star" xml:space="preserve">
+    <value>Favourites</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Flask" xml:space="preserve">
+    <value>Experimental</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_Flag" xml:space="preserve">
+    <value>Flag</value>
+    <comment>Name of a group icon, shown as its tooltip and matched by the icon search.</comment>
+  </data>
+  <data name="GroupIcon_TitleFormat" xml:space="preserve">
+    <value>Icon for {0}</value>
+    <comment>Group icon picker title. {0} is the group name.</comment>
+  </data>
+  <data name="GroupIcon_SearchPlaceholder" xml:space="preserve">
+    <value>Search icons</value>
+    <comment>Search box in the group icon picker.</comment>
+  </data>
+  <data name="GroupIcon_NothingFound" xml:space="preserve">
+    <value>No icon matches that.</value>
+    <comment>Group icon picker, when the search finds nothing.</comment>
+  </data>
+  <data name="GroupIcon_None" xml:space="preserve">
+    <value>No icon</value>
+    <comment>Group icon picker button: removes the group's icon.</comment>
+  </data>
+  <data name="GroupIcon_PickToolTip" xml:space="preserve">
+    <value>Pick an icon for this group</value>
+    <comment>Tooltip on the icon button in a group's header.</comment>
+  </data>
 </root>
