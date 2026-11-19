@@ -581,12 +581,23 @@
                     Command="{Binding ScanCommand}" />
             </WrapPanel>
         </Grid>
-        <TextBlock
+        <DockPanel
             Margin="0,4,0,4"
-            TextWrapping="Wrap"
-            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-            Text="{Binding StatusMessage}"
-            Visibility="{Binding StatusMessage, Converter={StaticResource NullToCollapsed}}" />
+            Visibility="{Binding StatusMessage, Converter={StaticResource NullToCollapsed}}">
+            <ui:ProgressRing
+                DockPanel.Dock="Left"
+                Width="16"
+                Height="16"
+                Margin="0,0,10,0"
+                VerticalAlignment="Center"
+                IsIndeterminate="True"
+                Visibility="{Binding IsCheckingProfiles, Converter={StaticResource BoolToVis}}" />
+            <TextBlock
+                VerticalAlignment="Center"
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                Text="{Binding StatusMessage}" />
+        </DockPanel>
         <TextBlock
             Margin="0,0,0,4"
             FontSize="12"

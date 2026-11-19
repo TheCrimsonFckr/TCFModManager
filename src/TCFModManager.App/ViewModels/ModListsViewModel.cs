@@ -497,6 +497,12 @@ public partial class ModListsViewModel : LocalizedViewModel
     public bool HasStatus => IsBusy || !string.IsNullOrWhiteSpace(StatusMessage);
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ShowsSpinner))]
+    private bool _isCheckingProfiles;
+
+    public bool ShowsSpinner => IsBusy || IsCheckingProfiles;
+
+    [ObservableProperty]
     private bool _isRenaming;
 
     [ObservableProperty]
@@ -571,6 +577,7 @@ public partial class ModListsViewModel : LocalizedViewModel
     [NotifyCanExecuteChangedFor(nameof(ImportFromSpModCommand))]
     [NotifyCanExecuteChangedFor(nameof(RefreshFromSpModCommand))]
     [NotifyPropertyChangedFor(nameof(HasStatus))]
+    [NotifyPropertyChangedFor(nameof(ShowsSpinner))]
     private bool _isBusy;
 
     public bool HasSelection => Selected is not null;

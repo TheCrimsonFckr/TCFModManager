@@ -84,6 +84,9 @@ public partial class InstalledViewModel : LocalizedViewModel
     [ObservableProperty]
     private string? _statusMessage;
 
+    [ObservableProperty]
+    private bool _isCheckingProfiles;
+
     // Named filter presets (OPEN-25), the first section of the Filters panel.
     public FilterPresetList<InstalledFilterPreset> Presets { get; }
 

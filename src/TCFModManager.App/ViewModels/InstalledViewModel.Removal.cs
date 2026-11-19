@@ -36,7 +36,9 @@ public partial class InstalledViewModel
         var batch = addons.Count > 0 ? RemovalBatch.For(mod.Name) : null;
 
         StatusMessage = Strings.ProfileItems_Checking;
+        IsCheckingProfiles = true;
         var losses = await ProfileItemsWarning.ForCardsAsync([mod]);
+        IsCheckingProfiles = false;
         StatusMessage = null;
 
         if (mod.IsAppManaged && mod.ModId is { } modId)
@@ -226,7 +228,9 @@ public partial class InstalledViewModel
         }
 
         StatusMessage = Strings.ProfileItems_Checking;
+        IsCheckingProfiles = true;
         var losses = await ProfileItemsWarning.ForCardsAsync(targets);
+        IsCheckingProfiles = false;
         StatusMessage = null;
 
         var holding = losses.Select(l => l.ModName).ToHashSet(StringComparer.Ordinal);

@@ -64,7 +64,9 @@ public partial class ModListsViewModel
         {
             var shown = StatusMessage;
             StatusMessage = Strings.ProfileItems_Checking;
+            IsCheckingProfiles = true;
             var losses = await ProfileItemsWarning.ForListAsync(preview.Install.InstallPath, preview.Plan.Disable);
+            IsCheckingProfiles = false;
             StatusMessage = shown;
             if (losses.Count > 0 && !ProfileItemsWarning.Confirm(losses, Strings.ProfileItems_ApplyAnyway)) return;
         }

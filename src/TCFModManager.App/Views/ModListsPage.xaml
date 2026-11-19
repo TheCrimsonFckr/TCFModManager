@@ -1193,7 +1193,7 @@
                     Margin="0,0,10,0"
                     VerticalAlignment="Center"
                     IsIndeterminate="True"
-                    Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}" />
+                    Visibility="{Binding ShowsSpinner, Converter={StaticResource BoolToVis}}" />
 
                 <TextBlock
                     VerticalAlignment="Center"

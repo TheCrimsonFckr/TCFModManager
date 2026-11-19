@@ -172,8 +172,10 @@ public partial class InstalledViewModel
     private async Task<bool> ConfirmProfilesAsync(IReadOnlyList<InstalledModCardViewModel> targets)
     {
         StatusMessage = Strings.ProfileItems_Checking;
+        IsCheckingProfiles = true;
         var losses = await ProfileItemsWarning.ForCardsAsync(targets);
         var adding = await ServerValuesWarning.AddingAsync(targets);
+        IsCheckingProfiles = false;
         StatusMessage = null;
 
         if (losses.Count > 0)
