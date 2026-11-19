@@ -282,6 +282,7 @@ public partial class InstalledViewModel
 
             SeedAddonGroups();
             RefreshGroups();
+            RefreshNotes();
 
             // A rescan replaces every card; the ticks were carried over by key above, the anchor is not.
             _selectionAnchor = null;

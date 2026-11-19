@@ -202,6 +202,14 @@ public sealed partial class InstalledModCardViewModel
                 ? AddonFit.Check(installedRelease.ModVersionConstraint, parentVersion, installedSptVersion)
                 : null;
 
+        var addonUpdate = ModVersionComparer.IsUpdateAvailable(installedVersion, latest?.Version);
+        string? skippedVersion = null;
+        if (addonUpdate == true && AppServices.SkippedUpdates.For(true, record.ModId) is { } skipped && SkippedUpdates.Covers(skipped, latest?.Version))
+        {
+            skippedVersion = latest!.Version;
+            addonUpdate = false;
+        }
+
         (string Key, object?[] Values)? detail = null;
         if (latest is null && versions.Count > 0)
         {
@@ -244,7 +252,8 @@ public sealed partial class InstalledModCardViewModel
             Author = addon?.Owner?.Name,
             AuthorId = addon?.Owner?.Id,
             ContainsAds = addon?.ContainsAds == true,
-            UpdateAvailable = ModVersionComparer.IsUpdateAvailable(installedVersion, latest?.Version),
+            UpdateAvailable = addonUpdate,
+            SkippedVersion = skippedVersion,
             ClientFolderPath = client?.FolderPath,
             ServerFolderPath = server?.FolderPath,
             ClientFolderName = client?.Name,
@@ -412,6 +421,14 @@ public sealed partial class InstalledModCardViewModel
             }
         }
 
+        string? skippedVersion = null;
+        if (updateVersion is not null && AppServices.SkippedUpdates.For(false, match?.Id) is { } skipped && SkippedUpdates.Covers(skipped, updateVersion))
+        {
+            skippedVersion = updateVersion;
+            updateAvailable = false;
+            updateVersion = null;
+        }
+
         //
         // OPEN-13: the installed version against this SPT - sp-mod's own answer first, then the catalog
         // release's range, then a 4.x server mod's declared range. Not judged when the version is a
@@ -454,6 +471,7 @@ public sealed partial class InstalledModCardViewModel
             LatestPublishedVersion = latestPublished,
             UpdateVersion = updateVersion,
             HeldBack = heldBack,
+            SkippedVersion = skippedVersion,
             LatestUpdatedAt = match?.UpdatedAt,
             MatchedModName = match?.Name,
             DeclaredName = match is null ? server?.DeclaredName ?? plugin?.DeclaredName : null,

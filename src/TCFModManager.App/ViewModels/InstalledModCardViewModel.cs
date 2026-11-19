@@ -117,6 +117,11 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     public string? HeldBackNote => HeldBack is { } held ? HeldBackUpdates.Describe(held) : null;
 
+    // OPEN-52 N1: the update the user chose to skip; not an update until a newer one is out.
+    public string? SkippedVersion { get; init; }
+
+    public string? SkippedNote => SkippedVersion is { } skipped ? Text(Strings.Installed_SkippedNoteFormat, skipped) : null;
+
     //
     // OPEN-13: whether the installed version is made for the installed SPT, and from where that is
     // known. Null when nothing could say. Built with the card.
@@ -593,6 +598,10 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     public string GroupLabel => GroupName ?? Strings.Filter_Ungrouped;
 
+    // OPEN-52 N3: the user's own line about this mod, keyed like its group.
+    [ObservableProperty]
+    private string? _note;
+
     public bool IsGrouped => GroupName is not null;
 
     // The catalog listing's content flags as one line, or null when it carries none of them.
@@ -666,6 +675,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
             : null)
         ?? (SptFit is { Fits: false } && !IsSptWarningDismissed ? SptNote : null)
         ?? (UpdateAvailable == true ? null : HeldBackNote)
+        ?? SkippedNote
         ?? (HasDuplicateFolders
             ? Strings.Installed_StatusDuplicate
             : IsMixedState

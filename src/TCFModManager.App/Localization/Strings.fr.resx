@@ -9338,4 +9338,187 @@ Les détails sont dans le journal :
   <data name="Configs_QuitWithoutSaving" xml:space="preserve">
     <value>Quitter sans enregistrer</value>
   </data>
+  <data name="Sort_EnabledFirst" xml:space="preserve">
+    <value>Activés d'abord</value>
+  </data>
+  <data name="Sort_DisabledFirst" xml:space="preserve">
+    <value>Désactivés d'abord</value>
+  </data>
+  <data name="Installed_LastReadFormat" xml:space="preserve">
+    <value>Versions lues sur sp-mod pour la dernière fois : {0}</value>
+  </data>
+  <data name="Installed_SkipUpdateFormat" xml:space="preserve">
+    <value>Ignorer cette mise à jour ({0})</value>
+  </data>
+  <data name="Installed_StopSkipping" xml:space="preserve">
+    <value>Ne plus ignorer</value>
+  </data>
+  <data name="Installed_SkippedNoteFormat" xml:space="preserve">
+    <value>La mise à jour vers {0} est ignorée. Une version plus récente apparaîtra de nouveau comme mise à jour.</value>
+  </data>
+  <data name="Installed_StoppedSkippingFormat" xml:space="preserve">
+    <value>Les mises à jour de {0} s'affichent de nouveau.</value>
+  </data>
+  <data name="Installed_SkipUpdateDoneFormat" xml:space="preserve">
+    <value>{1} est ignorée pour {0}.</value>
+  </data>
+  <data name="Installed_NoteAdd" xml:space="preserve">
+    <value>Ajouter une note...</value>
+  </data>
+  <data name="Installed_NoteEdit" xml:space="preserve">
+    <value>Modifier la note...</value>
+  </data>
+  <data name="Installed_NoteHeaderFormat" xml:space="preserve">
+    <value>Note sur {0}</value>
+  </data>
+  <data name="Installed_NoteDescription" xml:space="preserve">
+    <value>Une ligne à vous, affichée sous le nom du mod et trouvée par la recherche. Laissez vide pour supprimer la note.</value>
+  </data>
+  <data name="Installed_NotePlaceholder" xml:space="preserve">
+    <value>ex. : config à modifier</value>
+  </data>
+  <data name="Installed_NoteSavedFormat" xml:space="preserve">
+    <value>Note sur {0} enregistrée.</value>
+  </data>
+  <data name="Installed_NoteClearedFormat" xml:space="preserve">
+    <value>Note sur {0} supprimée.</value>
+  </data>
+  <data name="Installed_AddToGroup" xml:space="preserve">
+    <value>Ajouter au groupe</value>
+  </data>
+  <data name="Installed_NewGroupMenu" xml:space="preserve">
+    <value>Nouveau groupe...</value>
+  </data>
+  <data name="Installed_RemoveFromGroup" xml:space="preserve">
+    <value>Retirer du groupe</value>
+  </data>
+  <data name="Installed_NewGroupHeader" xml:space="preserve">
+    <value>Nouveau groupe</value>
+  </data>
+  <data name="Installed_NewGroupDescription" xml:space="preserve">
+    <value>Les mods vont dans ce groupe. Un nom déjà pris par un groupe les met dans ce groupe.</value>
+  </data>
+  <data name="Installed_NewGroupButton" xml:space="preserve">
+    <value>Ajouter au groupe</value>
+  </data>
+  <data name="Installed_MergeGroupTitle" xml:space="preserve">
+    <value>Fusionner les groupes ?</value>
+  </data>
+  <data name="Installed_MergeGroupLeadFormat" xml:space="preserve">
+    <value>Un groupe nommé {0} existe déjà. Y mettre ces mods ?</value>
+  </data>
+  <data name="Installed_MergeGroupButton" xml:space="preserve">
+    <value>Fusionner</value>
+  </data>
+  <data name="Installed_MergedGroupFormat" xml:space="preserve">
+    <value>Fusionné dans {0}.</value>
+  </data>
+  <data name="Downloads_Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="Downloads_Resume" xml:space="preserve">
+    <value>Reprendre</value>
+  </data>
+  <data name="Downloads_PauseToolTip" xml:space="preserve">
+    <value>Aucun nouveau téléchargement ne démarre avant Reprendre. Un téléchargement en cours se termine.</value>
+  </data>
+  <data name="Downloads_PausedWaiting" xml:space="preserve">
+    <value>En pause - attend Reprendre</value>
+  </data>
+  <data name="Downloads_BarPaused" xml:space="preserve">
+    <value>En pause</value>
+  </data>
+  <data name="Downloads_SpaceWarningFormat" xml:space="preserve">
+    <value>En pause : {0} n'a peut-être pas assez de place. La file a besoin d'environ {1} et {2} sont libres.</value>
+  </data>
+  <data name="Downloads_SpaceDownloadAnyway" xml:space="preserve">
+    <value>Télécharger quand même</value>
+  </data>
+  <data name="Help_Start_Keys_Title" xml:space="preserve">
+    <value>Utiliser les raccourcis clavier</value>
+  </data>
+  <data name="Help_Start_Keys_Step1" xml:space="preserve">
+    <value>Ctrl+F va dans le champ de recherche de la page, s'il y en a un.</value>
+  </data>
+  <data name="Help_Start_Keys_Step2" xml:space="preserve">
+    <value>F5 fait ce que fait le bouton {0} ou Actualiser de la page, s'il y en a un.</value>
+  </data>
+  <data name="Help_Start_Keys_Step3" xml:space="preserve">
+    <value>Avec un lien sp-mod copié, Ctrl+V hors d'un champ de texte ouvre ce mod ou cet addon. Un lien de Mod List ouvre l'import de liste. Glisser un lien depuis le navigateur sur la fenêtre fait de même.</value>
+  </data>
+  <data name="Help_Start_Keys_Step4" xml:space="preserve">
+    <value>F1 ouvre l'aide de la page en cours. Sur {0}, Ctrl+A sélectionne tous les mods affichés et Échap quitte la sélection multiple.</value>
+  </data>
+  <data name="Help_Start_Keys_Keywords" xml:space="preserve">
+    <value>clavier, raccourci, Ctrl+F, F5, coller un lien, Ctrl+V, glisser un lien</value>
+  </data>
+  <data name="Links_NotFoundTitle" xml:space="preserve">
+    <value>Introuvable</value>
+  </data>
+  <data name="Links_NotFoundLead" xml:space="preserve">
+    <value>Le mod ou l'addon de ce lien n'est pas dans le catalogue sp-mod ici. Il a peut-être été retiré, ou le catalogue ne l'a pas encore lu.</value>
+  </data>
+  <data name="Options_AnimationsHeader" xml:space="preserve">
+    <value>Animations</value>
+  </data>
+  <data name="Options_AnimationsHint" xml:space="preserve">
+    <value>Cartes qui glissent en place, pages qui apparaissent en fondu et cartes qui s'ouvrent. Suivre Windows utilise le réglage Effets d'animation de Windows.</value>
+  </data>
+  <data name="Options_AnimationsFollowWindows" xml:space="preserve">
+    <value>Suivre Windows</value>
+  </data>
+  <data name="Options_AnimationsOn" xml:space="preserve">
+    <value>Activées</value>
+  </data>
+  <data name="Options_AnimationsOff" xml:space="preserve">
+    <value>Désactivées</value>
+  </data>
+  <data name="Play_MissingNeeds_one" xml:space="preserve">
+    <value>{0} mod a besoin d'un mod qui n'est pas installé ou est désactivé</value>
+  </data>
+  <data name="Play_MissingNeeds_other" xml:space="preserve">
+    <value>{0} mods ont besoin d'un mod qui n'est pas installé ou est désactivé</value>
+  </data>
+  <data name="Play_MissingNeedsHint" xml:space="preserve">
+    <value>Leurs propres fichiers indiquent ce dont ils ont besoin. Ils risquent de ne pas se charger. Vous pouvez quand même lancer.</value>
+  </data>
+  <data name="ProfileFix_TurnOn" xml:space="preserve">
+    <value>Laisser SPT nettoyer le profil</value>
+  </data>
+  <data name="ProfileFix_ButtonToolTip" xml:space="preserve">
+    <value>Active removeModItemsFromProfile et removeInvalidTradersFromProfile dans le core.json du serveur, après confirmation.</value>
+  </data>
+  <data name="ProfileFix_Title" xml:space="preserve">
+    <value>Laisser SPT nettoyer le profil ?</value>
+  </data>
+  <data name="ProfileFix_Lead" xml:space="preserve">
+    <value>SPT peut retirer d'un profil, au démarrage du serveur, les objets, marchands et vêtements qu'aucun mod installé n'ajoute, au lieu de refuser le profil. Ces objets disparaissent définitivement. Ceci l'active pour tous les profils de ce serveur.</value>
+  </data>
+  <data name="ProfileFix_DetailFormat" xml:space="preserve">
+    <value>Modifie {0}. Le fichier tel qu'il est maintenant est gardé sous {1}. Redémarrez le serveur pour que cela prenne effet.</value>
+  </data>
+  <data name="ProfileFix_Done" xml:space="preserve">
+    <value>Le nettoyage de profil de SPT est activé. Redémarrez le serveur, puis réessayez le profil.</value>
+  </data>
+  <data name="ProfileFix_AlreadyOn" xml:space="preserve">
+    <value>Le nettoyage de profil de SPT est déjà activé. Si cela continue, redémarrez le serveur pour qu'il s'exécute.</value>
+  </data>
+  <data name="ProfileFix_NotChangeable" xml:space="preserve">
+    <value>core.json ne contient pas les deux réglages comme prévu, rien n'a donc été modifié. Mettez-les à true à la main.</value>
+  </data>
+  <data name="ProfileFix_Failed" xml:space="preserve">
+    <value>Impossible de modifier core.json - il est peut-être ouvert dans un autre programme ou en lecture seule. Le journal donne les détails.</value>
+  </data>
+  <data name="ProfileFix_NoCoreJson" xml:space="preserve">
+    <value>Impossible de trouver le core.json du serveur dans cette installation.</value>
+  </data>
+  <data name="Play_StartHeadlessWithServer" xml:space="preserve">
+    <value>Démarrer le headless avec le serveur</value>
+  </data>
+  <data name="Play_StartHeadlessWithServerToolTip" xml:space="preserve">
+    <value>Démarrer le serveur démarre aussi le headless une fois le serveur prêt, et Redémarrer sur le serveur redémarre aussi le headless.</value>
+  </data>
+  <data name="Play_ServerUpHeadlessStarted" xml:space="preserve">
+    <value>Le serveur est prêt et le headless a été démarré.</value>
+  </data>
 </root>

@@ -189,6 +189,8 @@ internal sealed class UpdateWatcher
         // cards are rebuilt below, so no toast announces one.
         var heldChanged = AppServices.HeldBack.Set(answer?.HeldBack ?? [], sptVersion, answer?.NotForSpt, answer?.UpToDate);
 
+        if (answer is not null) AppServices.ModCache.MarkRead();
+
         var patched = false;
         if (refetch.Count > 0) patched |= AppServices.ModCache.Patch(await _checker.FetchModsAsync(refetch, ct));
         if (addonIds.Count > 0) patched |= AppServices.Addons.Patch(await _checker.FetchAddonsAsync(addonIds, ct));

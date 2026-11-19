@@ -71,8 +71,27 @@ public partial class ModListsPage : Page
         }, DispatcherPriority.Input);
     }
 
+    private void ImportRequested(object? sender, EventArgs e)
+    {
+        if (!IsLoaded) return;
+        Dispatcher.BeginInvoke(() =>
+        {
+            if (AppNavigation.TakeImportLink() is { } link) ViewModel.ImportFromSpModLink(link);
+        });
+    }
+
     private async void ModListsPage_Loaded(object sender, RoutedEventArgs e)
     {
+        AppNavigation.ImportListRequested -= ImportRequested;
+        AppNavigation.ImportListRequested += ImportRequested;
+
+        if (AppNavigation.TakeImportLink() is { } link)
+        {
+            ViewModel.Refresh();
+            _ = Dispatcher.BeginInvoke(() => ViewModel.ImportFromSpModLink(link));
+            return;
+        }
+
         if (AppNavigation.TakeReviewList() is { } review)
         {
             await ViewModel.ReviewAsync(review);

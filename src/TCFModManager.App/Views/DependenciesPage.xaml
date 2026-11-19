@@ -11,6 +11,7 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     xmlns:app="clr-namespace:TCFModManager.App"
     Title="{loc:Str Nav_Dependencies}"
     Loaded="DependenciesPage_Loaded"
@@ -45,6 +46,7 @@
             <ui:Button
                 DockPanel.Dock="Right"
                 Content="{loc:Str Dependencies_Refresh}"
+                behaviors:PageKeys.Role="Refresh"
                 Icon="{ui:SymbolIcon ArrowSync24}"
                 Command="{Binding RefreshCommand}"
                 IsEnabled="{Binding IsNotBusy}" />

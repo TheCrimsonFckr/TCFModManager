@@ -239,6 +239,25 @@ internal static class AppNavigation
         return pending;
     }
 
+    // OPEN-52 N21: a sp-mod Mod List link pasted or dropped on the window, imported on Mod lists.
+    private static string? _importLinkPending;
+
+    public static event EventHandler? ImportListRequested;
+
+    public static void ImportListFromLink(string link)
+    {
+        _importLinkPending = link;
+        ImportListRequested?.Invoke(null, EventArgs.Empty);
+        _navigation?.Navigate(typeof(ModListsPage));
+    }
+
+    public static string? TakeImportLink()
+    {
+        var pending = _importLinkPending;
+        _importLinkPending = null;
+        return pending;
+    }
+
     // Consumed by the Mod lists page when it loads: the list to review, once per request.
     public static Guid? TakeReviewList()
     {

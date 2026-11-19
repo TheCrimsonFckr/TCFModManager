@@ -52,6 +52,8 @@ public partial class InstalledViewModel
         new(nameof(Strings.Sort_GroupDescending), ModSortOption.GroupDescending),
         new(nameof(Strings.Sort_InstalledNewest), ModSortOption.InstalledNewest),
         new(nameof(Strings.Sort_InstalledOldest), ModSortOption.InstalledOldest),
+        new(nameof(Strings.Sort_EnabledFirst), ModSortOption.EnabledFirst),
+        new(nameof(Strings.Sort_DisabledFirst), ModSortOption.DisabledFirst),
     ];
 
     [ObservableProperty]

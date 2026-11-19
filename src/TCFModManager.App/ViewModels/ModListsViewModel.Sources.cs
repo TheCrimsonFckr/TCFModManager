@@ -215,6 +215,11 @@ public partial class ModListsViewModel
     [RelayCommand(CanExecute = nameof(CanUseSpMod))]
     private void ImportFromSpMod() => StoreFromSpMod(SpModListImportWindow.Import());
 
+    public void ImportFromSpModLink(string link)
+    {
+        if (CanUseSpMod()) StoreFromSpMod(SpModListImportWindow.Import(link));
+    }
+
     [RelayCommand(CanExecute = nameof(CanRefreshFromSpMod))]
     private void RefreshFromSpMod()
     {

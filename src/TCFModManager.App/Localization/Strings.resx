@@ -11305,4 +11305,248 @@ Right-click to save the current filters to it, rename it or delete it.</value>
   <data name="Configs_QuitWithoutSaving" xml:space="preserve">
     <value>Quit without saving</value>
   </data>
+  <data name="Sort_EnabledFirst" xml:space="preserve">
+    <value>Enabled first</value>
+    <comment>Installed sort dropdown: enabled mods first, then disabled, each by name.</comment>
+  </data>
+  <data name="Sort_DisabledFirst" xml:space="preserve">
+    <value>Disabled first</value>
+    <comment>Installed sort dropdown: disabled mods first, then enabled, each by name.</comment>
+  </data>
+  <data name="Installed_LastReadFormat" xml:space="preserve">
+    <value>Versions last read from sp-mod: {0}</value>
+    <comment>Under the Installed toolbar. {0} is a time (today) or a date and time.</comment>
+  </data>
+  <data name="Installed_SkipUpdateFormat" xml:space="preserve">
+    <value>Skip this update ({0})</value>
+    <comment>Installed right-click menu. {0} is the version skipped.</comment>
+  </data>
+  <data name="Installed_StopSkipping" xml:space="preserve">
+    <value>Stop skipping</value>
+    <comment>Installed right-click menu, on a mod whose update was skipped.</comment>
+  </data>
+  <data name="Installed_SkippedNoteFormat" xml:space="preserve">
+    <value>Skipping the update to {0}. A newer release shows as an update again.</value>
+    <comment>Card note and tooltip. {0} is the version skipped.</comment>
+  </data>
+  <data name="Installed_StoppedSkippingFormat" xml:space="preserve">
+    <value>{0}'s updates show again.</value>
+    <comment>Status line after Stop skipping. {0} mod name.</comment>
+  </data>
+  <data name="Installed_SkipUpdateDoneFormat" xml:space="preserve">
+    <value>Skipping {1} for {0}.</value>
+    <comment>Status line after Skip this update. {0} mod name, {1} version.</comment>
+  </data>
+  <data name="Installed_NoteAdd" xml:space="preserve">
+    <value>Add a note...</value>
+    <comment>Installed right-click menu.</comment>
+  </data>
+  <data name="Installed_NoteEdit" xml:space="preserve">
+    <value>Edit note...</value>
+    <comment>Installed right-click menu, on a mod with a note.</comment>
+  </data>
+  <data name="Installed_NoteHeaderFormat" xml:space="preserve">
+    <value>Note on {0}</value>
+    <comment>Title of the note window. {0} is the mod name.</comment>
+  </data>
+  <data name="Installed_NoteDescription" xml:space="preserve">
+    <value>A line of your own, shown under the mod's name and found by search. Leave it empty to remove the note.</value>
+    <comment>Note window text.</comment>
+  </data>
+  <data name="Installed_NotePlaceholder" xml:space="preserve">
+    <value>e.g. needs a config change</value>
+    <comment>Placeholder in the note box.</comment>
+  </data>
+  <data name="Installed_NoteSavedFormat" xml:space="preserve">
+    <value>Saved the note on {0}.</value>
+    <comment>Status line. {0} mod name.</comment>
+  </data>
+  <data name="Installed_NoteClearedFormat" xml:space="preserve">
+    <value>Removed the note on {0}.</value>
+    <comment>Status line. {0} mod name.</comment>
+  </data>
+  <data name="Installed_AddToGroup" xml:space="preserve">
+    <value>Add to group</value>
+    <comment>Installed right-click submenu listing the groups.</comment>
+  </data>
+  <data name="Installed_NewGroupMenu" xml:space="preserve">
+    <value>New group...</value>
+    <comment>In the Add to group submenu.</comment>
+  </data>
+  <data name="Installed_RemoveFromGroup" xml:space="preserve">
+    <value>Remove from group</value>
+    <comment>In the Add to group submenu: back to Ungrouped.</comment>
+  </data>
+  <data name="Installed_NewGroupHeader" xml:space="preserve">
+    <value>New group</value>
+    <comment>Title of the window asking for a group name.</comment>
+  </data>
+  <data name="Installed_NewGroupDescription" xml:space="preserve">
+    <value>The mods go into this group. A name that is already a group's puts them in that group.</value>
+    <comment>Text of the new group window.</comment>
+  </data>
+  <data name="Installed_NewGroupButton" xml:space="preserve">
+    <value>Add to group</value>
+    <comment>Confirm button of the new group window.</comment>
+  </data>
+  <data name="Installed_MergeGroupTitle" xml:space="preserve">
+    <value>Merge the groups?</value>
+    <comment>Ask window title when a group is renamed to a name another group has.</comment>
+  </data>
+  <data name="Installed_MergeGroupLeadFormat" xml:space="preserve">
+    <value>There is already a group called {0}. Put these mods in it?</value>
+    <comment>{0} is the other group's name.</comment>
+  </data>
+  <data name="Installed_MergeGroupButton" xml:space="preserve">
+    <value>Merge</value>
+    <comment>Ask window button.</comment>
+  </data>
+  <data name="Installed_MergedGroupFormat" xml:space="preserve">
+    <value>Merged into {0}.</value>
+    <comment>Status line. {0} the group kept.</comment>
+  </data>
+  <data name="Downloads_Pause" xml:space="preserve">
+    <value>Pause</value>
+    <comment>Downloads page and bar: stop new downloads from starting.</comment>
+  </data>
+  <data name="Downloads_Resume" xml:space="preserve">
+    <value>Resume</value>
+    <comment>Downloads page and bar, while paused.</comment>
+  </data>
+  <data name="Downloads_PauseToolTip" xml:space="preserve">
+    <value>Nothing new starts downloading until Resume. A download under way finishes.</value>
+    <comment>Tooltip on Pause.</comment>
+  </data>
+  <data name="Downloads_PausedWaiting" xml:space="preserve">
+    <value>Paused - waits for Resume</value>
+    <comment>Status on a queued item while the queue is paused.</comment>
+  </data>
+  <data name="Downloads_BarPaused" xml:space="preserve">
+    <value>Paused</value>
+    <comment>Downloads bar title while the queue is paused.</comment>
+  </data>
+  <data name="Downloads_SpaceWarningFormat" xml:space="preserve">
+    <value>Paused: {0} may not have room. The queue needs about {1} and {2} is free.</value>
+    <comment>{0} drive, {1} space needed, {2} space free.</comment>
+  </data>
+  <data name="Downloads_SpaceDownloadAnyway" xml:space="preserve">
+    <value>Download anyway</value>
+    <comment>Button beside the free-space warning on the Downloads page: resumes the queue.</comment>
+  </data>
+  <data name="Help_Start_Keys_Title" xml:space="preserve">
+    <value>Use the keyboard shortcuts</value>
+    <comment>Help how-to title.</comment>
+  </data>
+  <data name="Help_Start_Keys_Step1" xml:space="preserve">
+    <value>Ctrl+F goes to the page's search box, where it has one.</value>
+    <comment>Help step.</comment>
+  </data>
+  <data name="Help_Start_Keys_Step2" xml:space="preserve">
+    <value>F5 does what the page's {0} or Refresh button does, where it has one.</value>
+    <comment>Help step.</comment>
+  </data>
+  <data name="Help_Start_Keys_Step3" xml:space="preserve">
+    <value>With a sp-mod link copied, Ctrl+V outside a text box opens that mod or addon. A Mod List link opens the list import. Dragging a link from your browser onto the window does the same.</value>
+    <comment>Help step.</comment>
+  </data>
+  <data name="Help_Start_Keys_Step4" xml:space="preserve">
+    <value>F1 opens Help for the page you are on. On {0}, Ctrl+A picks every mod shown and Esc leaves Multi select.</value>
+    <comment>Help step.</comment>
+  </data>
+  <data name="Help_Start_Keys_Keywords" xml:space="preserve">
+    <value>keyboard, shortcut, hotkey, Ctrl+F, F5, paste link, Ctrl+V, drag link</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Links_NotFoundTitle" xml:space="preserve">
+    <value>Not found</value>
+    <comment>Window after a pasted or dropped sp-mod link names a mod or addon the catalog doesn't have.</comment>
+  </data>
+  <data name="Links_NotFoundLead" xml:space="preserve">
+    <value>That link's mod or addon isn't in the sp-mod catalog here. It may have been removed, or the catalog may not have read it yet.</value>
+    <comment>Same window.</comment>
+  </data>
+  <data name="Options_AnimationsHeader" xml:space="preserve">
+    <value>Animations</value>
+    <comment>Options row.</comment>
+  </data>
+  <data name="Options_AnimationsHint" xml:space="preserve">
+    <value>Cards gliding into place, pages fading in and cards opening. Follow Windows uses Windows' Animation effects setting.</value>
+    <comment>Options row hint.</comment>
+  </data>
+  <data name="Options_AnimationsFollowWindows" xml:space="preserve">
+    <value>Follow Windows</value>
+    <comment>Animations dropdown.</comment>
+  </data>
+  <data name="Options_AnimationsOn" xml:space="preserve">
+    <value>On</value>
+    <comment>Animations dropdown.</comment>
+  </data>
+  <data name="Options_AnimationsOff" xml:space="preserve">
+    <value>Off</value>
+    <comment>Animations dropdown.</comment>
+  </data>
+  <data name="Play_MissingNeeds_one" xml:space="preserve">
+    <value>{0} mod needs a mod that isn't installed or is switched off</value>
+    <comment>Profile page warning. {0} a count. Click goes to Dependencies and Conflicts.</comment>
+  </data>
+  <data name="Play_MissingNeeds_other" xml:space="preserve">
+    <value>{0} mods need a mod that isn't installed or is switched off</value>
+    <comment>Profile page warning. {0} a count.</comment>
+  </data>
+  <data name="Play_MissingNeedsHint" xml:space="preserve">
+    <value>Their own files name what they need. They may not load. You can still launch.</value>
+    <comment>Under the missing-needs warning on the Profile page.</comment>
+  </data>
+  <data name="ProfileFix_TurnOn" xml:space="preserve">
+    <value>Let SPT clean the profile</value>
+    <comment>Button on a profile Diagnose card and on Play when SPT won't load a profile. Turns on removeModItemsFromProfile and removeInvalidTradersFromProfile in core.json.</comment>
+  </data>
+  <data name="ProfileFix_ButtonToolTip" xml:space="preserve">
+    <value>Turns on removeModItemsFromProfile and removeInvalidTradersFromProfile in the server's core.json, after asking.</value>
+    <comment>Tooltip on the button. The two names are SPT setting names - keep them as they are.</comment>
+  </data>
+  <data name="ProfileFix_Title" xml:space="preserve">
+    <value>Let SPT clean the profile?</value>
+    <comment>Ask window title.</comment>
+  </data>
+  <data name="ProfileFix_Lead" xml:space="preserve">
+    <value>SPT can take items, traders and clothing that no installed mod adds out of a profile when the server starts, instead of refusing the profile. Those items are gone for good. This turns that on for every profile on this server.</value>
+    <comment>Ask window text.</comment>
+  </data>
+  <data name="ProfileFix_DetailFormat" xml:space="preserve">
+    <value>Changes {0}. The file as it is now is kept as {1}. Restart the server for it to take effect.</value>
+    <comment>{0} core.json path, {1} the backup's path.</comment>
+  </data>
+  <data name="ProfileFix_Done" xml:space="preserve">
+    <value>SPT's profile clean-up is on. Restart the server, then try the profile again.</value>
+    <comment>After turning it on.</comment>
+  </data>
+  <data name="ProfileFix_AlreadyOn" xml:space="preserve">
+    <value>SPT's profile clean-up is already on. If this keeps happening, restart the server so it can run.</value>
+    <comment>Note on a profile Diagnose card when both settings are already true.</comment>
+  </data>
+  <data name="ProfileFix_NotChangeable" xml:space="preserve">
+    <value>core.json doesn't hold both settings the way this expects, so nothing was changed. Set them to true by hand.</value>
+    <comment>After a failed attempt.</comment>
+  </data>
+  <data name="ProfileFix_Failed" xml:space="preserve">
+    <value>Couldn't change core.json - it may be open in another program or read-only. The log has the details.</value>
+    <comment>After a failed write.</comment>
+  </data>
+  <data name="ProfileFix_NoCoreJson" xml:space="preserve">
+    <value>Couldn't find the server's core.json in this install.</value>
+    <comment>When there is no core.json.</comment>
+  </data>
+  <data name="Play_StartHeadlessWithServer" xml:space="preserve">
+    <value>Start the headless with the server</value>
+    <comment>Tick box on the headless card.</comment>
+  </data>
+  <data name="Play_StartHeadlessWithServerToolTip" xml:space="preserve">
+    <value>Start server also starts the headless once the server is up, and Restart on the server restarts the headless too.</value>
+    <comment>Tooltip on the tick box.</comment>
+  </data>
+  <data name="Play_ServerUpHeadlessStarted" xml:space="preserve">
+    <value>The server is up, and the headless has been started.</value>
+    <comment>Message after Start server with the tick box on.</comment>
+  </data>
 </root>

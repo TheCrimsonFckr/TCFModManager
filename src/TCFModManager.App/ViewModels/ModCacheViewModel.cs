@@ -24,6 +24,26 @@ public partial class ModCacheViewModel : LocalizedViewModel
     [ObservableProperty]
     private int _totalCount;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(LastReadLabel))]
+    private DateTimeOffset? _lastReadAt;
+
+    public string? LastReadLabel => LastReadAt is { } at
+        ? LocalizationService.Text(Strings.Installed_LastReadFormat, When(at.ToLocalTime()))
+        : null;
+
+    private static string When(DateTimeOffset at) =>
+        at.Date == DateTimeOffset.Now.Date ? at.ToString("t") : at.ToString("g");
+
+    public void MarkRead() => SetLastRead(DateTimeOffset.UtcNow);
+
+    private void SetLastRead(DateTimeOffset at)
+    {
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher is null || dispatcher.CheckAccess()) LastReadAt = at;
+        else dispatcher.BeginInvoke(() => LastReadAt = at);
+    }
+
     public IReadOnlyList<Mod> AllMods { get; private set; } = [];
 
     public bool IsLoaded => _loadTask?.IsCompletedSuccessfully == true;
@@ -60,6 +80,7 @@ public partial class ModCacheViewModel : LocalizedViewModel
             var mods = await _cacheService.FetchAllAsync(progress, ct);
             AppLog.Debug("Catalog", $"RefreshAsync: live fetch done, {mods.Count} mods");
             AllMods = mods;
+            MarkRead();
             _ = Task.Run(() => _store.Save(mods), CancellationToken.None);
 
             // Replace the memoized task so future EnsureLoadedAsync calls see this fresh fetch.
@@ -148,6 +169,7 @@ public partial class ModCacheViewModel : LocalizedViewModel
             // Use the disk cache immediately, then refresh in the background.
             AppLog.Debug("Catalog", $"LoadAsync: disk cache hit, {cached.Mods.Count} mods");
             AllMods = cached.Mods;
+            SetLastRead(cached.FetchedAt);
             _ = RefreshInBackgroundAsync(ct);
             return cached.Mods;
         }
@@ -169,6 +191,7 @@ public partial class ModCacheViewModel : LocalizedViewModel
             var mods = await _cacheService.FetchAllAsync(progress, ct);
             AppLog.Debug("Catalog", $"LoadAsync: live fetch done, {mods.Count} mods");
             AllMods = mods;
+            MarkRead();
 
             // Save off the UI thread.
             _ = Task.Run(() => _store.Save(mods), CancellationToken.None);
@@ -189,6 +212,7 @@ public partial class ModCacheViewModel : LocalizedViewModel
             var fresh = await _cacheService.FetchAllAsync(null, ct).ConfigureAwait(false);
             var changed = !SameListings(AllMods, fresh);
             AllMods = fresh;
+            MarkRead();
             _loadTask = Task.FromResult(fresh);
             _store.Save(fresh);
 

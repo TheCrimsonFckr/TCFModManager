@@ -16,9 +16,10 @@ namespace TCFModManager.App.ViewModels;
 /// <summary>One finding on the Diagnose logs page, worded.</summary>
 public sealed class LogFindingRow
 {
-    public LogFindingRow(LogFinding finding)
+    public LogFindingRow(LogFinding finding, SptProfileFixState profileFix = SptProfileFixState.NotFound)
     {
         Finding = finding;
+        ProfileFix = profileFix;
         (Title, Body) = Word(finding);
 
         var mods = finding.Mod is null ? [] : new[] { finding.Mod }.Concat(finding.Others).ToList();
@@ -65,6 +66,13 @@ public sealed class LogFindingRow
 
     public bool IsAboutProfile => Finding.Kind is LogFindingKind.ProfileInvalid or LogFindingKind.ProfileClothingMissing
         or LogFindingKind.ProfileItemMissing or LogFindingKind.ProfileTraderMissing;
+
+    // OPEN-52 N29: where SPT's own profile clean-up stands in this install's core.json.
+    public SptProfileFixState ProfileFix { get; }
+
+    public bool OfferProfileFix => IsAboutProfile && ProfileFix == SptProfileFixState.Off;
+
+    public string? ProfileFixNote => IsAboutProfile && ProfileFix == SptProfileFixState.On ? Strings.ProfileFix_AlreadyOn : null;
 
     private static string Arg(LogFinding f, int i) => i < f.Args.Count ? f.Args[i] : string.Empty;
 
@@ -177,7 +185,8 @@ public sealed partial class DiagnoseViewModel : LocalizedViewModel
     private void Show(LogDiagnosis diagnosis)
     {
         Findings.Clear();
-        foreach (var finding in diagnosis.Findings) Findings.Add(new LogFindingRow(finding));
+        var profileFix = ProfileFixActions.StateFor(AppServices.SptEnvironment.InstallPath);
+        foreach (var finding in diagnosis.Findings) Findings.Add(new LogFindingRow(finding, profileFix));
 
         StatusMessage = diagnosis.Findings.Count == 0
             ? Strings.Diagnose_NothingFound
@@ -222,6 +231,19 @@ public sealed partial class DiagnoseViewModel : LocalizedViewModel
 
     [RelayCommand]
     private void OpenProfileBackups() => AppNavigation.Navigate(typeof(OptionsPage));
+
+    [RelayCommand]
+    private void TurnOnProfileFixes()
+    {
+        if (ProfileFixActions.AskAndTurnOn(AppServices.SptEnvironment.InstallPath) is not { } said) return;
+
+        StatusMessage = said;
+        if (_last is not null)
+        {
+            Show(_last);
+            StatusMessage = said;
+        }
+    }
 
     private void Start(string program, string arguments)
     {

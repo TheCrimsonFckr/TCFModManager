@@ -1,8 +1,11 @@
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
+using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
 namespace TCFModManager.App;
 
@@ -33,7 +36,22 @@ internal static class Motion
 
     public static readonly IEasingFunction GlideEase = Freeze(new CubicEase { EasingMode = EasingMode.EaseOut });
 
+    private static AnimationPreference _preference = ReadPreference();
+
     private static bool _enabled = Read();
+
+    public static AnimationPreference Preference => _preference;
+
+    public static void SetPreference(AnimationPreference preference)
+    {
+        _preference = preference;
+
+        var settings = new SettingsService().Load();
+        settings.Animations = preference;
+        new SettingsService().Save(settings);
+
+        Refresh();
+    }
 
     public static bool Enabled => _enabled;
 
@@ -90,7 +108,11 @@ internal static class Motion
     private static void OnSystemParameterChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName != nameof(SystemParameters.ClientAreaAnimation)) return;
+        Refresh();
+    }
 
+    private static void Refresh()
+    {
         var now = Read();
         if (now == _enabled) return;
 
@@ -100,6 +122,9 @@ internal static class Motion
 
     private static bool Read()
     {
+        if (_preference == AnimationPreference.On) return true;
+        if (_preference == AnimationPreference.Off) return false;
+
         try
         {
             return SystemParameters.ClientAreaAnimation;
@@ -107,6 +132,18 @@ internal static class Motion
         catch
         {
             return true;
+        }
+    }
+
+    private static AnimationPreference ReadPreference()
+    {
+        try
+        {
+            return new SettingsService().Load().Animations;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return AnimationPreference.FollowWindows;
         }
     }
 

@@ -195,6 +195,7 @@ public partial class InstalledPage : Page
             Add(Strings.Installed_UpdateSelected, "ArrowDownload24", ViewModel.UpdateSelectedCommand);
             Add(Strings.Installed_EnableSelected, "PlugConnected24", ViewModel.EnableSelectedCommand);
             Add(Strings.Installed_DisableSelected, "PlugDisconnected24", ViewModel.DisableSelectedCommand);
+            menu.Items.Add(GroupMenu(mod));
             menu.Items.Add(new Separator());
             Add(Strings.Installed_RemoveSelected, "Delete24", ViewModel.RemoveSelectedCommand);
         }
@@ -202,9 +203,13 @@ public partial class InstalledPage : Page
         {
             Add(Strings.Installed_DetailsAndVersions, "Info24", ViewModel.ShowDetailsCommand, mod);
             if (mod.CanQuickUpdate) Add(mod.QuickUpdateToolTip, "ArrowDownload24", ViewModel.UpdateOneCommand, mod);
+            if (InstalledViewModel.SkipMenuLabel(mod) is { } skip) Add(skip, "ArrowForward24", ViewModel.SkipUpdateCommand, mod);
+            if (mod.SkippedVersion is not null) Add(Strings.Installed_StopSkipping, "ArrowReset24", ViewModel.StopSkippingCommand, mod);
             Add(mod.DisableToggleTooltip, mod.DisableToggleGlyph, ViewModel.ToggleDisableCommand, mod);
             Add(mod.PinLabel, mod.PinGlyph, ViewModel.TogglePinCommand, mod);
+            Add(mod.Note is null ? Strings.Installed_NoteAdd : Strings.Installed_NoteEdit, "Note24", ViewModel.EditNoteCommand, mod);
             if (ViewModel.FamilyMenuLabel(mod) is { } family) Add(family, "PuzzlePiece24", ViewModel.ShowFamilyCommand, mod);
+            menu.Items.Add(GroupMenu(mod));
 
             if (mod.ClientFolderLink is not null || mod.ServerFolderLink is not null || InstalledViewModel.ModPageUrl(mod) is not null)
                 menu.Items.Add(new Separator());
@@ -229,6 +234,48 @@ public partial class InstalledPage : Page
 
         menu.IsOpen = true;
         e.Handled = true;
+    }
+
+    private MenuItem GroupMenu(InstalledModCardViewModel mod)
+    {
+        var targets = ViewModel.GroupTargets(mod);
+        var root = new MenuItem
+        {
+            Header = Strings.Installed_AddToGroup,
+            Icon = new Wpf.Ui.Controls.SymbolIcon { Symbol = Wpf.Ui.Controls.SymbolRegular.Folder24 },
+        };
+
+        foreach (var group in ViewModel.GroupsForMenu())
+        {
+            var item = new MenuItem
+            {
+                Header = group.Name,
+                IsCheckable = false,
+                IsChecked = targets.All(t => t.GroupId == group.Id),
+            };
+            var id = group.Id;
+            item.Click += (_, _) => ViewModel.MoveModsToGroup(targets, id);
+            root.Items.Add(item);
+        }
+
+        if (root.Items.Count > 0) root.Items.Add(new Separator());
+
+        var create = new MenuItem
+        {
+            Header = Strings.Installed_NewGroupMenu,
+            Icon = new Wpf.Ui.Controls.SymbolIcon { Symbol = Wpf.Ui.Controls.SymbolRegular.FolderAdd24 },
+        };
+        create.Click += (_, _) => ViewModel.MoveModsToNewGroup(targets);
+        root.Items.Add(create);
+
+        if (targets.Any(t => t.IsGrouped))
+        {
+            var remove = new MenuItem { Header = Strings.Installed_RemoveFromGroup };
+            remove.Click += (_, _) => ViewModel.MoveModsToGroup(targets, null);
+            root.Items.Add(remove);
+        }
+
+        return root;
     }
 
     // Endless (OPEN-12 A8): the next cards once the list is scrolled to within a screen of its end.

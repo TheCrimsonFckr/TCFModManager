@@ -1,6 +1,9 @@
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using TCFModManager.App.Behaviors;
 using TCFModManager.App.Help;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
@@ -41,6 +44,41 @@ public partial class MainWindow : FluentWindow
 
             ShowHelp();
             e.Handled = true;
+        };
+
+        // OPEN-52 N20/N21: Ctrl+F, F5, and a sp-mod link pasted outside a text box.
+        PreviewKeyDown += (_, e) =>
+        {
+            if (RootContentDialogPresenter.Content is not null) return;
+
+            if (PageKeys.TryHandle(RootNavigationView, e))
+            {
+                e.Handled = true;
+                return;
+            }
+
+            if (e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control
+                && Keyboard.FocusedElement is not (TextBoxBase or System.Windows.Controls.PasswordBox or System.Windows.Controls.ComboBox)
+                && ClipboardText() is { } text
+                && SpModPageLink.Parse(text) is { } link)
+            {
+                e.Handled = true;
+                _ = OpenLinkAsync(link, text);
+            }
+        };
+
+        AllowDrop = true;
+        DragOver += (_, e) =>
+        {
+            if (e.Handled || DroppedLink(e.Data) is null) return;
+            e.Effects = DragDropEffects.Copy;
+            e.Handled = true;
+        };
+        Drop += (_, e) =>
+        {
+            if (e.Handled || DroppedLink(e.Data) is not { } dropped) return;
+            e.Handled = true;
+            _ = OpenLinkAsync(dropped.Link, dropped.Text);
         };
 
         // TEMPORARY, ADDED IN v1.28.0 - DELETE WHEN THE APP LEAVES BETA. Test crashes for the problem
@@ -133,6 +171,69 @@ public partial class MainWindow : FluentWindow
             await dialog.ShowAsync();
             return dialog.ViewModel.MadeChanges;
         };
+    }
+
+    private static string? ClipboardText()
+    {
+        try
+        {
+            return Clipboard.ContainsText() ? Clipboard.GetText() : null;
+        }
+        catch (System.Runtime.InteropServices.ExternalException)
+        {
+            return null;
+        }
+    }
+
+    private static (SpModLink Link, string Text)? DroppedLink(IDataObject data)
+    {
+        foreach (var format in new[] { "UniformResourceLocatorW", DataFormats.UnicodeText, DataFormats.Text })
+        {
+            if (!data.GetDataPresent(format)) continue;
+
+            var text = data.GetData(format) switch
+            {
+                string s => s,
+                System.IO.MemoryStream stream => System.Text.Encoding.Unicode.GetString(stream.ToArray()).TrimEnd('\0'),
+                _ => null,
+            };
+
+            if (text is not null && SpModPageLink.Parse(text) is { } link) return (link, text.Trim());
+        }
+
+        return null;
+    }
+
+    private async Task OpenLinkAsync(SpModLink link, string text)
+    {
+        AppLog.Info("Links", $"opening a sp-mod {link.Kind} link: {link.Id}");
+
+        if (link.Kind == SpModLinkKind.List)
+        {
+            AppNavigation.ImportListFromLink(text.Trim());
+            return;
+        }
+
+        bool found;
+        try
+        {
+            found = await AppServices.Browse.OpenFromLinkAsync(link.Kind == SpModLinkKind.Addon, link.Id);
+        }
+        catch (Exception ex) when (ex is System.Net.Http.HttpRequestException or Core.SpModApi.SpModApiException)
+        {
+            AppLog.Warn("Links", $"couldn't open the linked {link.Kind} {link.Id}: {ex.Message}");
+            found = false;
+        }
+
+        if (found) return;
+
+        AskWindow.Show(new AskRequest
+        {
+            Title = Strings.Links_NotFoundTitle,
+            Lead = Strings.Links_NotFoundLead,
+            First = Strings.Common_Close,
+            Cancel = null,
+        });
     }
 
     private void TellPlayWhetherAway() =>

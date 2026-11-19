@@ -412,6 +412,7 @@ public partial class PlayViewModel
         var cts = _playCts = new CancellationTokenSource();
         IsPlaying = true;
         PlayStatusIsError = false;
+        OfferProfileFix = false;
         PlayProgress = null;
         var gameStarted = false;
         ConfirmingDeleteProfile = false;
@@ -450,6 +451,9 @@ public partial class PlayViewModel
             if (!result.Started)
             {
                 Fail(DescribeProblem(result));
+                OfferProfileFix = result.Problem == DirectLaunchProblem.ProfileInvalid
+                    && !PlayOnRemote
+                    && ProfileFixActions.StateFor(installPath) == SptProfileFixState.Off;
                 return;
             }
 
@@ -507,6 +511,20 @@ public partial class PlayViewModel
 
     [RelayCommand(CanExecute = nameof(CanCancelPlay))]
     private void CancelPlay() => _playCts?.Cancel();
+
+    // OPEN-52 N29: Play stopped on a profile SPT won't load, and this install's clean-up is off.
+    [ObservableProperty]
+    private bool _offerProfileFix;
+
+    [RelayCommand]
+    private void TurnOnProfileFixes()
+    {
+        if (ProfileFixActions.AskAndTurnOn(AppServices.SptEnvironment.InstallPath) is not { } said) return;
+
+        OfferProfileFix = false;
+        PlayStatusIsError = false;
+        PlayStatus = said;
+    }
 
     private void Fail(string text)
     {

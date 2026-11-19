@@ -38,6 +38,14 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Start_Version_Step3, () => Strings.Common_Save))
                 .WithKeywords(() => Strings.Help_Start_Version_Keywords)
                 .WithPage(typeof(OptionsPage)),
+
+            // OPEN-52 N20/N21.
+            Topic("start.keys", () => Strings.Help_Start_Keys_Title,
+                Step(() => Strings.Help_Start_Keys_Step1),
+                Step(() => Strings.Help_Start_Keys_Step2, () => Strings.Common_Rescan),
+                Step(() => Strings.Help_Start_Keys_Step3),
+                Step(() => Strings.Help_Start_Keys_Step4, () => Strings.Nav_Installed))
+                .WithKeywords(() => Strings.Help_Start_Keys_Keywords),
         ]),
 
         new("profile", () => Strings.Nav_Profile, SymbolRegular.Person24, typeof(ProfilePage),

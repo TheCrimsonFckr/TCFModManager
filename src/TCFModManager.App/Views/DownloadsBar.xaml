@@ -35,6 +35,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="240" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <ui:SymbolIcon
@@ -68,6 +69,17 @@
                 Minimum="0"
                 Maximum="1"
                 Value="{Binding BarFraction, Mode=OneWay}" />
+
+            <ui:Button
+                Grid.Column="4"
+                Margin="12,0,0,0"
+                Padding="8,4"
+                VerticalAlignment="Center"
+                Cursor="Arrow"
+                ToolTip="{Binding PauseLabel}"
+                Command="{Binding TogglePauseCommand}">
+                <ui:SymbolIcon Symbol="{Binding PauseSymbol}" />
+            </ui:Button>
         </Grid>
     </Border>
 </UserControl>

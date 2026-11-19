@@ -7,6 +7,7 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     xmlns:tcf="clr-namespace:TCFModManager.App.Controls"
     Title="{loc:Str Nav_Options}">
     <!--
@@ -91,6 +92,7 @@
             x:Name="SettingsSearch"
             Margin="0,4,0,0"
             PlaceholderText="{loc:Str Options_SearchPlaceholder}"
+            behaviors:PageKeys.Role="Search"
             Icon="{ui:SymbolIcon Search24}"
             TextChanged="SettingsSearch_TextChanged"
             PreviewKeyDown="SettingsSearch_PreviewKeyDown" />
@@ -193,6 +195,21 @@
                     ToolTip="{loc:Str Options_ThemeCustomiseToolTip}"
                     Command="{Binding CustomiseThemeCommand}" />
             </StackPanel>
+        </ui:CardControl>
+
+        <ui:CardControl
+            Style="{StaticResource SettingRow}"
+            Icon="{ui:SymbolIcon Sparkle24}">
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_AnimationsHeader}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_AnimationsHint}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <ComboBox
+                MinWidth="200"
+                ItemsSource="{Binding AnimationOptions}"
+                SelectedItem="{Binding SelectedAnimation}" />
         </ui:CardControl>
 
         <ui:CardControl

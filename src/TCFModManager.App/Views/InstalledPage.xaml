@@ -19,6 +19,7 @@
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:viewmodels="clr-namespace:TCFModManager.App.ViewModels"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:app="clr-namespace:TCFModManager.App"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     xmlns:controls="clr-namespace:TCFModManager.App.Controls"
     Title="{loc:Str Nav_Installed}"
@@ -234,6 +235,12 @@
                         TextWrapping="Wrap"
                         Text="{Binding HeldBackNote}"
                         Visibility="{Binding HeldBackNote, Converter={StaticResource NullToCollapsed}}" />
+
+                    <TextBlock
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        TextWrapping="Wrap"
+                        Text="{Binding SkippedNote}"
+                        Visibility="{Binding SkippedNote, Converter={StaticResource NullToCollapsed}}" />
 
                     <!-- OPEN-13: the installed version isn't for this SPT, or not for Fika where Fika runs.
                          Dismiss when it works anyway; dismissed, a quiet line with Warn again. -->
@@ -561,6 +568,7 @@
                 <ui:Button
                     Margin="0,0,0,4"
                     Content="{loc:Str Common_Rescan}"
+                    behaviors:PageKeys.Role="Refresh"
                     Command="{Binding ScanCommand}" />
             </WrapPanel>
         </Grid>
@@ -570,6 +578,12 @@
             Foreground="{DynamicResource TextFillColorSecondaryBrush}"
             Text="{Binding StatusMessage}"
             Visibility="{Binding StatusMessage, Converter={StaticResource NullToCollapsed}}" />
+        <TextBlock
+            Margin="0,0,0,4"
+            FontSize="12"
+            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+            Text="{Binding LastReadLabel, Source={x:Static app:AppServices.ModCache}}"
+            Visibility="{Binding LastReadLabel, Source={x:Static app:AppServices.ModCache}, Converter={StaticResource NullToCollapsed}}" />
         </StackPanel>
 
         <!--
@@ -597,6 +611,7 @@
                         Margin="0,0,8,4"
                         VerticalAlignment="Center"
                         PlaceholderText="{loc:Str Common_SearchPlaceholder}"
+                        behaviors:PageKeys.Role="Search"
                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
 
                     <ToggleButton
@@ -1095,6 +1110,14 @@
                                             TextTrimming="CharacterEllipsis"
                                             Text="{Binding DisplayTitle}"
                                             ToolTip="{Binding DisplayTitle}" />
+                                        <TextBlock
+                                            FontSize="11"
+                                            FontStyle="Italic"
+                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                            TextTrimming="CharacterEllipsis"
+                                            Text="{Binding Note}"
+                                            ToolTip="{Binding Note}"
+                                            Visibility="{Binding Note, Converter={StaticResource NullToCollapsed}}" />
 
                                         <!-- The one line worth scanning: what you have, which
                                              halves it installs, and who wrote it. -->
@@ -1384,6 +1407,14 @@
                                                                 Text="{Binding DisplayTitle}" />
                                                             <TextBlock
                                                                 FontSize="11"
+                                                                FontStyle="Italic"
+                                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                                TextTrimming="CharacterEllipsis"
+                                                                Text="{Binding Note}"
+                                                                ToolTip="{Binding Note}"
+                                                                Visibility="{Binding Note, Converter={StaticResource NullToCollapsed}}" />
+                                                            <TextBlock
+                                                                FontSize="11"
                                                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                                 TextTrimming="CharacterEllipsis">
                                                                 <Run Text="{Binding InstalledVersion, TargetNullValue='unknown', Mode=OneWay}" />
@@ -1502,6 +1533,14 @@
                                             FontWeight="SemiBold"
                                             TextTrimming="CharacterEllipsis"
                                             Text="{Binding DisplayTitle}" />
+                                        <TextBlock
+                                            FontSize="11"
+                                            FontStyle="Italic"
+                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                            TextTrimming="CharacterEllipsis"
+                                            Text="{Binding Note}"
+                                            ToolTip="{Binding Note}"
+                                            Visibility="{Binding Note, Converter={StaticResource NullToCollapsed}}" />
                                         <TextBlock
                                             FontSize="11"
                                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"

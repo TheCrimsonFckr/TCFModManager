@@ -143,6 +143,13 @@
                         Icon="{ui:SymbolIcon Server24}"
                         Command="{Binding ShowServerLogOnServerCommand}"
                         Visibility="{Binding OfferServerLog, Converter={StaticResource BoolToVisibility}}" />
+                    <ui:Button
+                        Margin="0,8,0,0"
+                        Content="{loc:Str ProfileFix_TurnOn}"
+                        Icon="{ui:SymbolIcon Broom24}"
+                        ToolTip="{loc:Str ProfileFix_ButtonToolTip}"
+                        Command="{Binding TurnOnProfileFixesCommand}"
+                        Visibility="{Binding OfferProfileFix, Converter={StaticResource BoolToVisibility}}" />
                 </StackPanel>
 
                 <TextBlock

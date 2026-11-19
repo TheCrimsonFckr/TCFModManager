@@ -6,6 +6,7 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     Title="{loc:Str Nav_Diagnose}"
     Loaded="DiagnosePage_Loaded"
     ScrollViewer.CanContentScroll="False">
@@ -32,6 +33,7 @@
                     IsEnabled="{Binding IsNotBusy}" />
                 <ui:Button
                     Content="{loc:Str Diagnose_Refresh}"
+                    behaviors:PageKeys.Role="Refresh"
                     Icon="{ui:SymbolIcon ArrowSync24}"
                     Command="{Binding RefreshCommand}"
                     IsEnabled="{Binding IsNotBusy}" />
@@ -143,12 +145,25 @@
                                             Visibility="{Binding IsAboutProfile, Converter={StaticResource BoolToVisibility}}"
                                             Command="{Binding DataContext.OpenProfileBackupsCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}" />
                                         <ui:Button
+                                            Margin="0,0,8,0"
+                                            Content="{loc:Str ProfileFix_TurnOn}"
+                                            Icon="{ui:SymbolIcon Broom24}"
+                                            ToolTip="{loc:Str ProfileFix_ButtonToolTip}"
+                                            Visibility="{Binding OfferProfileFix, Converter={StaticResource BoolToVisibility}}"
+                                            Command="{Binding DataContext.TurnOnProfileFixesCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}" />
+                                        <ui:Button
                                             Appearance="Transparent"
                                             Content="{loc:Str Diagnose_OpenLog}"
                                             Icon="{ui:SymbolIcon DocumentText24}"
                                             Command="{Binding DataContext.OpenLogCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                                             CommandParameter="{Binding}" />
                                     </WrapPanel>
+                                    <TextBlock
+                                        Margin="0,6,0,0"
+                                        TextWrapping="Wrap"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding ProfileFixNote}"
+                                        Visibility="{Binding ProfileFixNote, Converter={StaticResource NullToCollapsed}}" />
                                 </StackPanel>
                             </ui:Card>
                             <DataTemplate.Triggers>

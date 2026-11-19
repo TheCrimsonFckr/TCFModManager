@@ -11,8 +11,14 @@ public sealed record ModDependencyLink(InstalledMod Dependent, InstalledMod Depe
 // catalog. Built locally so it covers hand-installed mods that never match an sp-mod.com listing,
 // and needs no network.
 //
+// OPEN-52 N28: a hard dependency nothing enabled on the mod's own side provides - not installed
+// (DisabledProvider null), or installed only in a disabled folder.
+public sealed record ModMissingDependency(string Identifier, InstalledMod? DisabledProvider);
+
 public sealed class ModDependencyGraph
 {
+    private readonly Dictionary<InstalledMod, List<ModMissingDependency>> _missing = [];
+
     private readonly Dictionary<InstalledMod, List<ModDependencyLink>> _dependents = [];
     private readonly Dictionary<InstalledMod, List<ModDependencyLink>> _dependencies = [];
     private readonly Dictionary<InstalledMod, List<string>> _unresolved = [];
@@ -41,13 +47,21 @@ public sealed class ModDependencyGraph
             }
         }
 
+        var serverUnknown = all.Any(m => !m.IsDisabled && IdentityUnknown(m));
+
         foreach (var mod in all)
         {
+            var own = Identifiers(mod).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
             foreach (var declared in mod.Dependencies)
             {
+                var mayBeMissing = !declared.IsSoft && !own.Contains(declared.Identifier)
+                    && !(mod.Target == InstalledModTarget.Server && serverUnknown);
+
                 if (!byIdentifier.TryGetValue(declared.Identifier, out var matches))
                 {
                     graph.AddUnresolved(mod, declared.Identifier);
+                    if (mayBeMissing) graph.AddMissing(mod, new ModMissingDependency(declared.Identifier, null));
                     continue;
                 }
 
@@ -59,8 +73,13 @@ public sealed class ModDependencyGraph
                 if (sameSide.Count == 0)
                 {
                     graph.AddUnresolved(mod, declared.Identifier);
+                    if (mayBeMissing) graph.AddMissing(mod, new ModMissingDependency(declared.Identifier, null));
                     continue;
                 }
+
+                var providers = sameSide.Where(m => !ReferenceEquals(m, mod)).ToList();
+                if (mayBeMissing && providers.Count > 0 && providers.All(m => m.IsDisabled))
+                    graph.AddMissing(mod, new ModMissingDependency(declared.Identifier, providers[0]));
 
                 foreach (var dependency in sameSide)
                 {
@@ -87,6 +106,27 @@ public sealed class ModDependencyGraph
     // Identifiers a mod declares that nothing installed provides.
     public IReadOnlyList<string> UnresolvedOf(InstalledMod mod) =>
         _unresolved.TryGetValue(mod, out var identifiers) ? identifiers : [];
+
+    public IReadOnlyList<ModMissingDependency> MissingOf(InstalledMod mod) =>
+        _missing.TryGetValue(mod, out var missing) ? missing : [];
+
+    private static readonly string[] SptOwnPrefixes = ["com.spt.", "com.sp-tarkov.", "com.aki."];
+
+    //
+    // What an enabled mod's enabled folders declare they cannot run without and the install does not
+    // provide. loadedPluginGuids (InstalledModScanner.LoadedPluginGuids) meets a plugin's needs too -
+    // SPT's own plugins and API DLLs kept in subfolders, which the scan leaves out.
+    //
+    public IReadOnlyList<ModMissingDependency> MissingFor(IEnumerable<InstalledMod> entries, IReadOnlySet<string> loadedPluginGuids) =>
+        entries
+            .Where(e => !e.IsDisabled)
+            .SelectMany(e => MissingOf(e).Select(m => (e.Target, Missing: m)))
+            .Where(x => !(x.Target == InstalledModTarget.Client && loadedPluginGuids.Contains(x.Missing.Identifier))
+                && !SptOwnPrefixes.Any(p => x.Missing.Identifier.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .Select(x => x.Missing)
+            .GroupBy(m => m.Identifier, StringComparer.OrdinalIgnoreCase)
+            .Select(g => g.First())
+            .ToList();
 
     //
     // Every currently-enabled mod that would lose a dependency if <paramref name="roots"/> were
@@ -159,6 +199,15 @@ public sealed class ModDependencyGraph
     {
         if (!map.TryGetValue(key, out var list)) map[key] = list = [];
         return list;
+    }
+
+    private static bool IdentityUnknown(InstalledMod mod) =>
+        mod.Target == InstalledModTarget.Server && mod.AllGuids.Count == 0 && (mod.FileVersion is not null || mod.Version is null);
+
+    private void AddMissing(InstalledMod mod, ModMissingDependency missing)
+    {
+        if (!_missing.TryGetValue(mod, out var list)) _missing[mod] = list = [];
+        if (!list.Any(m => string.Equals(m.Identifier, missing.Identifier, StringComparison.OrdinalIgnoreCase))) list.Add(missing);
     }
 
     private void AddUnresolved(InstalledMod mod, string identifier)

@@ -1558,6 +1558,7 @@
                         <ui:TextBox
                             Grid.Column="0"
                             PlaceholderText="{loc:Str ModLists_EntrySearchPlaceholder}"
+                            behaviors:PageKeys.Role="Search"
                             Icon="{ui:SymbolIcon Search24}"
                             ToolTip="{loc:Str ModLists_EntrySearchToolTip}"
                             Text="{Binding EntrySearch, UpdateSourceTrigger=PropertyChanged}" />

@@ -88,6 +88,10 @@ public sealed class AppSettings
     // the headless as it is. Off: the wait starts once the headless is down too.
     public bool StopServerIgnoresHeadless { get; set; }
 
+    // OPEN-52 N33: Start server also starts the Fika headless once the server is up, and Restart
+    // server restarts it too.
+    public bool StartHeadlessWithServer { get; set; }
+
     // Mod tools hidden from the Play page, by ModTool.Key (the .exe's install-relative path,
     // lowercased). See ModTools.
     public List<string> HiddenModTools { get; set; } = [];
@@ -149,6 +153,10 @@ public sealed class AppSettings
     public ThemePreference Theme { get; set; } = ThemePreference.FollowSystem;
 
     public string? ThemeId { get; set; }
+
+    // OPEN-52 N24: animations on, off, or as Windows' Animation effects setting says.
+    [JsonConverter(typeof(JsonStringEnumConverter<AnimationPreference>))]
+    public AnimationPreference Animations { get; set; } = AnimationPreference.FollowWindows;
 
     //
     // Which language the app's own text is read in, as a BCP-47 tag - "ru", "de", "pt-BR".
@@ -250,6 +258,9 @@ public sealed class AppSettings
 
     // sp-mod listings left out of Browse, the Author page and new-mod notifications (OPEN-30).
     public List<IgnoredMod> IgnoredMods { get; set; } = [];
+
+    // OPEN-52 N1: updates the user chose to skip, "mod:<id>" or "addon:<id>" to the version skipped.
+    public Dictionary<string, string> SkippedUpdates { get; set; } = [];
 
     //
     // Server Map. Always present in settings.json so the shape is obvious to anyone hand-editing

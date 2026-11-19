@@ -258,6 +258,22 @@ public partial class OptionsViewModel : LocalizedViewModel
     // dropdown - and applied to the window that is already open, so the setting does something now
     // rather than at the next launch.
     //
+    public IReadOnlyList<AnimationOptionItem> AnimationOptions { get; } =
+    [
+        new(nameof(Strings.Options_AnimationsFollowWindows), AnimationPreference.FollowWindows),
+        new(nameof(Strings.Options_AnimationsOn), AnimationPreference.On),
+        new(nameof(Strings.Options_AnimationsOff), AnimationPreference.Off),
+    ];
+
+    [ObservableProperty]
+    private AnimationOptionItem _selectedAnimation;
+
+    partial void OnSelectedAnimationChanged(AnimationOptionItem value)
+    {
+        if (!_loaded || value is null) return;
+        Motion.SetPreference(value.Value);
+    }
+
     public IReadOnlyList<WindowStartupItem> WindowStartupOptions { get; } =
     [
         new(nameof(Strings.Options_WindowRemember), WindowStartupMode.Remember),
@@ -385,6 +401,7 @@ public partial class OptionsViewModel : LocalizedViewModel
 
         _selectedWindowStartup = WindowStartupOptions.FirstOrDefault(o => o.Value == settings.Window.StartupMode)
             ?? WindowStartupOptions[0];
+        _selectedAnimation = AnimationOptions.FirstOrDefault(o => o.Value == settings.Animations) ?? AnimationOptions[0];
         _customWidthInput = FormatSize(settings.Window.CustomWidth);
         _customHeightInput = FormatSize(settings.Window.CustomHeight);
 

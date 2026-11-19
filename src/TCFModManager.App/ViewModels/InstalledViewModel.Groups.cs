@@ -174,6 +174,23 @@ public partial class InstalledViewModel
             return;
         }
 
+        if (AppServices.ModGroups.FindByName(name, except: section.GroupId) is { } existing)
+        {
+            if (AskWindow.Show(new AskRequest
+                {
+                    Title = Strings.Installed_MergeGroupTitle,
+                    Lead = Text(Strings.Installed_MergeGroupLeadFormat, existing.Name),
+                    First = Strings.Installed_MergeGroupButton,
+                }) == AskChoice.First)
+            {
+                AppServices.ModGroups.MergeGroup(section.GroupId!.Value, existing.Id);
+                StatusMessage = Text(Strings.Installed_MergedGroupFormat, existing.Name);
+            }
+
+            GroupsChanged();
+            return;
+        }
+
         AppServices.ModGroups.RenameGroup(section.GroupId!.Value, name);
         GroupsChanged();
     }
@@ -237,9 +254,28 @@ public partial class InstalledViewModel
 
     // Called by InstalledPage's drag-drop code-behind when a mod card is dropped on a section
     // (groupId null for the Ungrouped bucket).
-    public void MoveModToGroup(InstalledModCardViewModel mod, Guid? groupId)
+    public void MoveModToGroup(InstalledModCardViewModel mod, Guid? groupId) =>
+        MoveModsToGroup(GroupTargets(mod), groupId);
+
+    public IReadOnlyList<ModGroup> GroupsForMenu() =>
+        AppServices.ModGroups.Load().Groups.OrderBy(g => g.SortOrder).ToList();
+
+    public List<InstalledModCardViewModel> GroupTargets(InstalledModCardViewModel mod) =>
+        mod.IsSelected && SelectedCount > 1 ? SelectedCards() : [mod];
+
+    public void MoveModsToGroup(IReadOnlyList<InstalledModCardViewModel> mods, Guid? groupId)
     {
-        AppServices.ModGroups.AssignMod(mod.Name, groupId);
+        if (mods.Count == 0) return;
+
+        AppServices.ModGroups.AssignMods(mods.Select(m => m.Name), groupId);
         GroupsChanged();
+    }
+
+    public void MoveModsToNewGroup(IReadOnlyList<InstalledModCardViewModel> mods)
+    {
+        if (mods.Count == 0 || ModListNameWindow.AskForGroupName() is not { } name) return;
+
+        var group = AppServices.ModGroups.FindByName(name) ?? AppServices.ModGroups.AddGroup(name);
+        MoveModsToGroup(mods, group.Id);
     }
 }

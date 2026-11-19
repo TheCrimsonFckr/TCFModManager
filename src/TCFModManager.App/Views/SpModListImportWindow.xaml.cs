@@ -211,7 +211,7 @@ public partial class SpModListImportWindow : FluentWindow
 
     private SpModListUpdate? _result;
 
-    private SpModListImportWindow(ModList? stored)
+    private SpModListImportWindow(ModList? stored, string? link = null)
     {
         _stored = stored;
 
@@ -231,6 +231,11 @@ public partial class SpModListImportWindow : FluentWindow
                 LinkBox.Text = source.Url;
                 await ReadAsync(source.Url);
             }
+            else if (link is not null)
+            {
+                LinkBox.Text = link;
+                await ReadAsync(link);
+            }
             else
             {
                 ShowLink();
@@ -240,14 +245,14 @@ public partial class SpModListImportWindow : FluentWindow
     }
 
     // Imports a new list. Null when the window was closed without creating one.
-    public static SpModListUpdate? Import() => Run(null);
+    public static SpModListUpdate? Import(string? link = null) => Run(null, link);
 
     // Reads an imported list's page again and reviews the changes. Null when nothing was updated.
     public static SpModListUpdate? Refresh(ModList stored) => Run(stored);
 
-    private static SpModListUpdate? Run(ModList? stored)
+    private static SpModListUpdate? Run(ModList? stored, string? link = null)
     {
-        var window = new SpModListImportWindow(stored);
+        var window = new SpModListImportWindow(stored, link);
         return window.ShowDialog() == true ? window._result : null;
     }
 

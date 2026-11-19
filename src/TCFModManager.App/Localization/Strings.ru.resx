@@ -9725,4 +9725,193 @@
   <data name="Configs_QuitWithoutSaving" xml:space="preserve">
     <value>Выйти без сохранения</value>
   </data>
+  <data name="Sort_EnabledFirst" xml:space="preserve">
+    <value>Сначала включённые</value>
+  </data>
+  <data name="Sort_DisabledFirst" xml:space="preserve">
+    <value>Сначала выключенные</value>
+  </data>
+  <data name="Installed_LastReadFormat" xml:space="preserve">
+    <value>Версии последний раз прочитаны с sp-mod: {0}</value>
+  </data>
+  <data name="Installed_SkipUpdateFormat" xml:space="preserve">
+    <value>Пропустить это обновление ({0})</value>
+  </data>
+  <data name="Installed_StopSkipping" xml:space="preserve">
+    <value>Больше не пропускать</value>
+  </data>
+  <data name="Installed_SkippedNoteFormat" xml:space="preserve">
+    <value>Обновление до {0} пропущено. Более новая версия снова будет показана как обновление.</value>
+  </data>
+  <data name="Installed_StoppedSkippingFormat" xml:space="preserve">
+    <value>Обновления {0} снова показываются.</value>
+  </data>
+  <data name="Installed_SkipUpdateDoneFormat" xml:space="preserve">
+    <value>{1} для {0} пропускается.</value>
+  </data>
+  <data name="Installed_NoteAdd" xml:space="preserve">
+    <value>Добавить заметку...</value>
+  </data>
+  <data name="Installed_NoteEdit" xml:space="preserve">
+    <value>Изменить заметку...</value>
+  </data>
+  <data name="Installed_NoteHeaderFormat" xml:space="preserve">
+    <value>Заметка к {0}</value>
+  </data>
+  <data name="Installed_NoteDescription" xml:space="preserve">
+    <value>Своя строка: показывается под названием мода и находится поиском. Оставьте пустой, чтобы удалить заметку.</value>
+  </data>
+  <data name="Installed_NotePlaceholder" xml:space="preserve">
+    <value>напр. нужно поменять конфиг</value>
+  </data>
+  <data name="Installed_NoteSavedFormat" xml:space="preserve">
+    <value>Заметка к {0} сохранена.</value>
+  </data>
+  <data name="Installed_NoteClearedFormat" xml:space="preserve">
+    <value>Заметка к {0} удалена.</value>
+  </data>
+  <data name="Installed_AddToGroup" xml:space="preserve">
+    <value>Добавить в группу</value>
+  </data>
+  <data name="Installed_NewGroupMenu" xml:space="preserve">
+    <value>Новая группа...</value>
+  </data>
+  <data name="Installed_RemoveFromGroup" xml:space="preserve">
+    <value>Убрать из группы</value>
+  </data>
+  <data name="Installed_NewGroupHeader" xml:space="preserve">
+    <value>Новая группа</value>
+  </data>
+  <data name="Installed_NewGroupDescription" xml:space="preserve">
+    <value>Моды попадут в эту группу. Если группа с таким именем уже есть, они попадут в неё.</value>
+  </data>
+  <data name="Installed_NewGroupButton" xml:space="preserve">
+    <value>Добавить в группу</value>
+  </data>
+  <data name="Installed_MergeGroupTitle" xml:space="preserve">
+    <value>Объединить группы?</value>
+  </data>
+  <data name="Installed_MergeGroupLeadFormat" xml:space="preserve">
+    <value>Группа {0} уже есть. Перенести эти моды в неё?</value>
+  </data>
+  <data name="Installed_MergeGroupButton" xml:space="preserve">
+    <value>Объединить</value>
+  </data>
+  <data name="Installed_MergedGroupFormat" xml:space="preserve">
+    <value>Объединено с {0}.</value>
+  </data>
+  <data name="Downloads_Pause" xml:space="preserve">
+    <value>Пауза</value>
+  </data>
+  <data name="Downloads_Resume" xml:space="preserve">
+    <value>Продолжить</value>
+  </data>
+  <data name="Downloads_PauseToolTip" xml:space="preserve">
+    <value>Новые загрузки не начнутся, пока не нажмёте «Продолжить». Текущая загрузка завершится.</value>
+  </data>
+  <data name="Downloads_PausedWaiting" xml:space="preserve">
+    <value>Пауза - ждёт продолжения</value>
+  </data>
+  <data name="Downloads_BarPaused" xml:space="preserve">
+    <value>Пауза</value>
+  </data>
+  <data name="Downloads_SpaceWarningFormat" xml:space="preserve">
+    <value>Пауза: на {0} может не хватить места. Очереди нужно около {1}, свободно {2}.</value>
+  </data>
+  <data name="Downloads_SpaceDownloadAnyway" xml:space="preserve">
+    <value>Всё равно загрузить</value>
+  </data>
+  <data name="Help_Start_Keys_Title" xml:space="preserve">
+    <value>Сочетания клавиш</value>
+  </data>
+  <data name="Help_Start_Keys_Step1" xml:space="preserve">
+    <value>Ctrl+F переводит в поле поиска страницы, если оно есть.</value>
+  </data>
+  <data name="Help_Start_Keys_Step2" xml:space="preserve">
+    <value>F5 делает то же, что кнопка «{0}» или «Обновить» на странице, если она есть.</value>
+  </data>
+  <data name="Help_Start_Keys_Step3" xml:space="preserve">
+    <value>Если скопирована ссылка sp-mod, Ctrl+V вне текстового поля открывает этот мод или аддон. Ссылка на Mod List открывает импорт списка. Перетащить ссылку из браузера на окно - то же самое.</value>
+  </data>
+  <data name="Help_Start_Keys_Step4" xml:space="preserve">
+    <value>F1 открывает справку по текущей странице. На странице «{0}» Ctrl+A выбирает все показанные моды, а Esc выходит из множественного выбора.</value>
+  </data>
+  <data name="Help_Start_Keys_Keywords" xml:space="preserve">
+    <value>клавиатура, сочетание клавиш, горячие клавиши, Ctrl+F, F5, вставить ссылку, Ctrl+V, перетащить ссылку</value>
+  </data>
+  <data name="Links_NotFoundTitle" xml:space="preserve">
+    <value>Не найдено</value>
+  </data>
+  <data name="Links_NotFoundLead" xml:space="preserve">
+    <value>Мода или аддона по этой ссылке нет в каталоге sp-mod здесь. Возможно, он удалён или каталог ещё не прочитал его.</value>
+  </data>
+  <data name="Options_AnimationsHeader" xml:space="preserve">
+    <value>Анимации</value>
+  </data>
+  <data name="Options_AnimationsHint" xml:space="preserve">
+    <value>Карточки, плавно встающие на место, проявление страниц и раскрытие карточек. «Как в Windows» следует настройке Windows «Эффекты анимации».</value>
+  </data>
+  <data name="Options_AnimationsFollowWindows" xml:space="preserve">
+    <value>Как в Windows</value>
+  </data>
+  <data name="Options_AnimationsOn" xml:space="preserve">
+    <value>Включены</value>
+  </data>
+  <data name="Options_AnimationsOff" xml:space="preserve">
+    <value>Выключены</value>
+  </data>
+  <data name="Play_MissingNeeds_one" xml:space="preserve">
+    <value>{0} мод требует мод, который не установлен или выключен</value>
+  </data>
+  <data name="Play_MissingNeeds_few" xml:space="preserve">
+    <value>{0} мода требуют мод, который не установлен или выключен</value>
+  </data>
+  <data name="Play_MissingNeeds_many" xml:space="preserve">
+    <value>{0} модов требуют мод, который не установлен или выключен</value>
+  </data>
+  <data name="Play_MissingNeeds_other" xml:space="preserve">
+    <value>{0} мода требуют мод, который не установлен или выключен</value>
+  </data>
+  <data name="Play_MissingNeedsHint" xml:space="preserve">
+    <value>Их собственные файлы называют, что им нужно. Они могут не загрузиться. Запустить всё равно можно.</value>
+  </data>
+  <data name="ProfileFix_TurnOn" xml:space="preserve">
+    <value>Дать SPT очистить профиль</value>
+  </data>
+  <data name="ProfileFix_ButtonToolTip" xml:space="preserve">
+    <value>После подтверждения включает removeModItemsFromProfile и removeInvalidTradersFromProfile в core.json сервера.</value>
+  </data>
+  <data name="ProfileFix_Title" xml:space="preserve">
+    <value>Дать SPT очистить профиль?</value>
+  </data>
+  <data name="ProfileFix_Lead" xml:space="preserve">
+    <value>При запуске сервера SPT может удалить из профиля предметы, торговцев и одежду, которых не добавляет ни один установленный мод, вместо того чтобы отклонить профиль. Эти предметы пропадут навсегда. Это включается для всех профилей на этом сервере.</value>
+  </data>
+  <data name="ProfileFix_DetailFormat" xml:space="preserve">
+    <value>Меняет {0}. Файл в нынешнем виде сохраняется как {1}. Перезапустите сервер, чтобы изменения подействовали.</value>
+  </data>
+  <data name="ProfileFix_Done" xml:space="preserve">
+    <value>Очистка профилей SPT включена. Перезапустите сервер и попробуйте профиль снова.</value>
+  </data>
+  <data name="ProfileFix_AlreadyOn" xml:space="preserve">
+    <value>Очистка профилей SPT уже включена. Если это повторяется, перезапустите сервер, чтобы она сработала.</value>
+  </data>
+  <data name="ProfileFix_NotChangeable" xml:space="preserve">
+    <value>В core.json нет обеих настроек в ожидаемом виде, поэтому ничего не изменено. Установите их в true вручную.</value>
+  </data>
+  <data name="ProfileFix_Failed" xml:space="preserve">
+    <value>Не удалось изменить core.json - возможно, он открыт в другой программе или только для чтения. Подробности в журнале.</value>
+  </data>
+  <data name="ProfileFix_NoCoreJson" xml:space="preserve">
+    <value>Не удалось найти core.json сервера в этой установке.</value>
+  </data>
+  <data name="Play_StartHeadlessWithServer" xml:space="preserve">
+    <value>Запускать headless вместе с сервером</value>
+  </data>
+  <data name="Play_StartHeadlessWithServerToolTip" xml:space="preserve">
+    <value>«Запустить сервер» также запускает headless, когда сервер готов, а «Перезапустить» у сервера перезапускает и headless.</value>
+  </data>
+  <data name="Play_ServerUpHeadlessStarted" xml:space="preserve">
+    <value>Сервер запущен, headless тоже запущен.</value>
+  </data>
 </root>

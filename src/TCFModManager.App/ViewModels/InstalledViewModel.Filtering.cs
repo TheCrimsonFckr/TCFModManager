@@ -38,7 +38,7 @@ public partial class InstalledViewModel
                 || (SelectedGroupFilter.GroupId is { } groupId ? m.GroupId == groupId : !m.IsGrouped))
             .Where(m => authorQuery is not null
                 ? MatchesAuthor(m, authorQuery)
-                : query.Length == 0 || Matches(m.DisplayTitle, query) || Matches(m.Name, query))
+                : query.Length == 0 || Matches(m.DisplayTitle, query) || Matches(m.Name, query) || Matches(m.Note, query))
             .Where(m => SelectedCategory.Title is not { } category
                 || string.Equals(m.CategoryTag, category, StringComparison.OrdinalIgnoreCase))
             .Where(m => !IsOn(ModAttributeFilter.FikaCompatible) || m.IsFikaCompatible)
@@ -128,6 +128,12 @@ public partial class InstalledViewModel
             ModSortOption.GroupDescending => mods
                 .OrderBy(m => m.GroupName is null)
                 .ThenByDescending(m => m.GroupName, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(m => m.DisplayTitle, StringComparer.OrdinalIgnoreCase),
+            ModSortOption.EnabledFirst => mods
+                .OrderBy(m => m.IsDisabled)
+                .ThenBy(m => m.DisplayTitle, StringComparer.OrdinalIgnoreCase),
+            ModSortOption.DisabledFirst => mods
+                .OrderBy(m => !m.IsDisabled)
                 .ThenBy(m => m.DisplayTitle, StringComparer.OrdinalIgnoreCase),
             _ => mods,
         };

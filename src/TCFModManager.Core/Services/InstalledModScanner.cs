@@ -11,6 +11,34 @@ namespace TCFModManager.Core.Services;
 //
 public static partial class InstalledModScanner
 {
+    //
+    // OPEN-52 N28: every [BepInPlugin] GUID under BepInEx\plugins, however deep, SPT's own included -
+    // the scan reads mod folders' top level only and leaves SPT's folder out.
+    //
+    public static HashSet<string> LoadedPluginGuids(string? installPath)
+    {
+        var guids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        if (string.IsNullOrWhiteSpace(installPath)) return guids;
+
+        var plugins = Path.Combine(installPath, "BepInEx", "plugins");
+        if (!Directory.Exists(plugins)) return guids;
+
+        try
+        {
+            var everywhere = new EnumerationOptions { RecurseSubdirectories = true, IgnoreInaccessible = true };
+            foreach (var dll in Directory.EnumerateFiles(plugins, "*.dll", everywhere))
+            {
+                if (ModAssemblyMetadata.ReadPlugin(dll).Guid is { Length: > 0 } guid) guids.Add(guid);
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.Debug("Scan", $"couldn't read every plugin under {plugins}: {ex.Message}");
+        }
+
+        return guids;
+    }
+
     // Folder/DLL names that are core SPT client files rather than an installed mod.
     private static readonly HashSet<string> CoreSptEntries = new(StringComparer.OrdinalIgnoreCase)
     {

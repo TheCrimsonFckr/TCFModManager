@@ -5,6 +5,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Channels;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
 using TCFModManager.App.Services;
 using TCFModManager.App.Views;
@@ -57,6 +58,81 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
     private string _summaryEta = NoValue;
 
     private const string NoValue = "\u2014";
+
+    // OPEN-52 N14: nothing new starts downloading while paused; downloads under way finish.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PauseLabel))]
+    [NotifyPropertyChangedFor(nameof(PauseSymbol))]
+    private bool _isPaused;
+
+    public string PauseLabel => IsPaused ? Strings.Downloads_Resume : Strings.Downloads_Pause;
+
+    public string PauseSymbol => IsPaused ? "Play24" : "Pause24";
+
+    // OPEN-52 N15: the queue was paused before it started because the drive looks too full.
+    [ObservableProperty]
+    private string? _spaceWarning;
+
+    private bool _spaceChecked;
+
+    private TaskCompletionSource _resumed = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+    partial void OnIsPausedChanged(bool value) => UpdateSummary();
+
+    [RelayCommand]
+    private void TogglePause()
+    {
+        if (IsPaused) Resume();
+        else
+        {
+            IsPaused = true;
+            AppLog.Info("Downloads", "queue paused");
+        }
+    }
+
+    [RelayCommand]
+    private void DownloadAnyway()
+    {
+        AppLog.Info("Downloads", "free-space warning overridden");
+        Resume();
+    }
+
+    private void Resume()
+    {
+        SpaceWarning = null;
+        IsPaused = false;
+        var resumed = _resumed;
+        _resumed = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        resumed.TrySetResult();
+        AppLog.Info("Downloads", "queue resumed");
+    }
+
+    private async Task WaitToStartAsync(DownloadQueueItemViewModel item, CancellationToken token)
+    {
+        CheckSpaceOnce(item);
+
+        while (IsPaused)
+        {
+            item.StatusMessage = Strings.Downloads_PausedWaiting;
+            await _resumed.Task.WaitAsync(token);
+        }
+    }
+
+    private void CheckSpaceOnce(DownloadQueueItemViewModel item)
+    {
+        if (_spaceChecked) return;
+        _spaceChecked = true;
+
+        var bytes = Items.Where(i => !i.IsFinished && !i.DownloadOnly).Sum(i => i.TotalBytes ?? 0);
+        var folders = new[] { item.InstallPath, QueueArchives.Folder(item.InstallPath) };
+
+        if (FreeSpaceCheck.Find(bytes, folders) is not { } shortfall) return;
+
+        AppLog.Warn("Downloads", $"paused before starting: {shortfall.DriveName} has {shortfall.AvailableBytes} bytes free, the queue needs about {shortfall.RequiredBytes}");
+        SpaceWarning = Text(Strings.Downloads_SpaceWarningFormat, shortfall.DriveName,
+            DownloadQueueItemViewModel.SizeLabel(shortfall.RequiredBytes), DownloadQueueItemViewModel.SizeLabel(shortfall.AvailableBytes));
+        IsPaused = true;
+    }
 
     // ---- OPEN-12 A7: the downloads bar along the bottom of the window (Views/DownloadsBar) ----------
     //
@@ -211,7 +287,9 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
                 ?? unfinished.FirstOrDefault(i => i.Status == DownloadQueueItemStatus.Downloading && i.Progress < 1)
                 ?? unfinished[0];
 
-            BarTitle = installing is not null ? Strings.Downloads_BarInstalling : Strings.Downloads_BarDownloading;
+            BarTitle = IsPaused && installing is null
+                ? Strings.Downloads_BarPaused
+                : installing is not null ? Strings.Downloads_BarInstalling : Strings.Downloads_BarDownloading;
             BarDetail = Text(Strings.Downloads_BarDetailFormat, current.ModName, current.VersionLabel, done, total);
 
             // A download is most of an item's time; installing it is the rest.
@@ -224,6 +302,8 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
         // The queue has just emptied: say so for a moment, then step out of the way.
         _barBusy = false;
+        _spaceChecked = false;
+        SpaceWarning = null;
         BarTitle = Strings.Downloads_BarFinished;
         BarDetail = Items.Any(i => i.Status is DownloadQueueItemStatus.Failed)
             ? Strings.Downloads_BarSomeFailed
@@ -458,6 +538,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             item.StatusMessage = Strings.Downloads_WaitingToDownload;
             await _downloadSlots.WaitAsync(token);
             slot = true;
+            await WaitToStartAsync(item, token);
 
             var progress = new Progress<double>(p => item.Progress = p);
             var downloading = ModInstallWording.Describe(
@@ -742,6 +823,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         {
             await _downloadSlots.WaitAsync(token);
             slot = true;
+            await WaitToStartAsync(item, token);
 
             await SaveArchiveCoreAsync(item, version, token);
         }

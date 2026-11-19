@@ -51,6 +51,12 @@
                     Text="{Binding HeadlessState}" />
             </StackPanel>
 
+            <CheckBox
+                Margin="0,0,0,8"
+                Content="{loc:Str Play_StartHeadlessWithServer}"
+                ToolTip="{loc:Str Play_StartHeadlessWithServerToolTip}"
+                IsChecked="{Binding StartHeadlessWithServer}" />
+
             <StackPanel
                 Margin="0,0,0,8"
                 Visibility="{Binding ConfirmingHeadlessRestart, Converter={StaticResource BoolToVisibility}}">

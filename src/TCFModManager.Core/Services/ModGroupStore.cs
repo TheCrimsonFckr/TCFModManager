@@ -118,6 +118,38 @@ public sealed class ModGroupStore
         return seen;
     }
 
+    public void AssignMods(IEnumerable<string> modNames, Guid? groupId)
+    {
+        var data = Load();
+        foreach (var key in modNames.Select(KeyFor).Distinct())
+        {
+            if (groupId is null) data.Assignments.Remove(key);
+            else data.Assignments[key] = groupId.Value;
+        }
+
+        Save(data);
+    }
+
+    public ModGroup? FindByName(string name, Guid? except = null) =>
+        Load().Groups.FirstOrDefault(g => g.Id != except && string.Equals(g.Name.Trim(), name.Trim(), StringComparison.OrdinalIgnoreCase));
+
+    public static void Merge(ModGroupData data, Guid from, Guid into)
+    {
+        if (from == into || data.Groups.All(g => g.Id != into)) return;
+
+        foreach (var key in data.Assignments.Where(kvp => kvp.Value == from).Select(kvp => kvp.Key).ToList())
+            data.Assignments[key] = into;
+
+        data.Groups.RemoveAll(g => g.Id == from);
+    }
+
+    public void MergeGroup(Guid from, Guid into)
+    {
+        var data = Load();
+        Merge(data, from, into);
+        Save(data);
+    }
+
     // Assigns modName to groupId, or clears its assignment (back to Ungrouped) when groupId is null.
     public void AssignMod(string modName, Guid? groupId)
     {

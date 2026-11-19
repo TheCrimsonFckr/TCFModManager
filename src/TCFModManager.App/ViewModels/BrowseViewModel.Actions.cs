@@ -165,6 +165,32 @@ public partial class BrowseViewModel
         StatusMessage = Text(Strings.Browse_QueuedFormat, mod.Name, chosenVersion);
     }
 
+    // OPEN-52 N21: a mod or addon from a pasted or dropped sp-mod link. False when the catalog has no such listing.
+    public async Task<bool> OpenFromLinkAsync(bool isAddon, int id)
+    {
+        await AppServices.ModCache.EnsureLoadedAsync();
+
+        if (!isAddon)
+        {
+            if (AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == id) is not { } mod) return false;
+            await LoadDetailsAsync(mod);
+            return true;
+        }
+
+        await AppServices.Addons.EnsureLoadedAsync();
+        if (AppServices.Addons.AllAddons.FirstOrDefault(a => a.Id == id) is not { } addon) return false;
+
+        if (addon.ModId is { } parentId && AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == parentId) is { } parent)
+        {
+            AppServices.ModDetailsOverlay.ShowAddon(addon, parent, FindInstalledMatch(parent)?.InstalledVersion);
+            return true;
+        }
+
+        if (string.IsNullOrWhiteSpace(addon.DetailUrl)) return false;
+        MarkupActions.OpenInBrowser(addon.DetailUrl);
+        return true;
+    }
+
     public async Task LoadDetailsAsync(Mod mod)
     {
         try

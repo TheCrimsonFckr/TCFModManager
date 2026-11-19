@@ -11,6 +11,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     Title="{loc:Str Nav_Footprint}"
     Loaded="FootprintPage_Loaded"
@@ -101,6 +102,7 @@
                 Appearance="Primary"
                 Icon="{ui:SymbolIcon ArrowSync24}"
                 Content="{loc:Str Common_Rescan}"
+                behaviors:PageKeys.Role="Refresh"
                 IsEnabled="{Binding IsIdle}"
                 Command="{Binding RescanCommand}" />
 

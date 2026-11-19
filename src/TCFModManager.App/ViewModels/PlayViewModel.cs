@@ -135,6 +135,19 @@ public partial class PlayViewModel : LocalizedViewModel
 
     public string ServerDescription => HidesServerWindow ? Strings.Play_ServerDescriptionHidden : Strings.Play_ServerDescription;
 
+    [ObservableProperty]
+    private bool _startHeadlessWithServer;
+
+    partial void OnStartHeadlessWithServerChanged(bool value)
+    {
+        var settings = new SettingsService().Load();
+        if (settings.StartHeadlessWithServer == value) return;
+
+        settings.StartHeadlessWithServer = value;
+        new SettingsService().Save(settings);
+        AppLog.Info("Play", $"start the headless with the server: {(value ? "on" : "off")}");
+    }
+
     // Set while the page waits for the server to open its port.
     [ObservableProperty]
     private bool _isWaitingForServer;
@@ -163,6 +176,10 @@ public partial class PlayViewModel : LocalizedViewModel
     [ObservableProperty]
     private string? _notForSptWarning;
 
+    // OPEN-52 N28: enabled mods whose own files name a mod they need that isn't installed or is off.
+    [ObservableProperty]
+    private string? _missingNeedsWarning;
+
     [RelayCommand]
     private static void ShowNotForSpt() => AppNavigation.ShowInstalledNotForSpt();
 
@@ -175,6 +192,7 @@ public partial class PlayViewModel : LocalizedViewModel
             ConflictWarning = null;
             InstallWideWarning = null;
             NotForSptWarning = null;
+            MissingNeedsWarning = null;
             return;
         }
 
@@ -188,12 +206,23 @@ public partial class PlayViewModel : LocalizedViewModel
             var notForSpt = cards.Count(c => !c.IsDisabled && c.IsNotForThisSpt);
             NotForSptWarning = notForSpt == 0 ? null
                 : Strings.Installed_NotForSptCount(notForSpt, notForSpt, AppServices.SptEnvironment.InstalledVersion);
+
+            var needing = await Task.Run(() =>
+            {
+                var graph = ModDependencyGraph.Build(cards.SelectMany(c => c.Entries));
+                var loaded = InstalledModScanner.LoadedPluginGuids(installPath);
+                return cards.Where(c => !c.IsDisabled && graph.MissingFor(c.Entries, loaded).Count > 0).ToList();
+            });
+            if (needing.Count > 0)
+                AppLog.Info("Play", $"mods needing something missing or off: {string.Join(", ", needing.Select(c => c.Name))}");
+            MissingNeedsWarning = needing.Count == 0 ? null : Strings.Play_MissingNeeds(needing.Count, needing.Count);
         }
         catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException)
         {
             ConflictWarning = null;
             InstallWideWarning = null;
             NotForSptWarning = null;
+            MissingNeedsWarning = null;
         }
     }
 
@@ -393,6 +422,7 @@ public partial class PlayViewModel : LocalizedViewModel
         RunsHeadlessClient = roles.HasFlag(InstallRoles.Headless);
 
         HidesServerWindow = settings.HideServerWindow;
+        StartHeadlessWithServer = settings.StartHeadlessWithServer;
 
         if (ShowServerLog) UpdateServerLog(installPath);
 
@@ -426,9 +456,11 @@ public partial class PlayViewModel : LocalizedViewModel
         // With no window, the log below is where the server says what it is doing.
         if (settings.HideServerWindow) ShowServerLog = true;
 
+        var withHeadless = settings.StartHeadlessWithServer && Headless is { CanLaunch: true };
+
         // Watched for without the launcher too when it has no window: otherwise a server that gives
         // up on starting would just be gone, with nothing said.
-        if (openLauncher || settings.HideServerWindow) await WaitForServerAsync(openLauncher);
+        if (openLauncher || settings.HideServerWindow || withHeadless) await WaitForServerAsync(openLauncher, withHeadless);
     }
 
     //
@@ -436,7 +468,7 @@ public partial class PlayViewModel : LocalizedViewModel
     // modded server can take a while to load - and dropped if the server goes down or the launcher
     // is started some other way meanwhile.
     //
-    private async Task WaitForServerAsync(bool openLauncher)
+    private async Task WaitForServerAsync(bool openLauncher, bool startHeadless = false)
     {
         IsWaitingForServer = true;
         Message = openLauncher ? Strings.Play_WaitingForServer : Strings.Play_WaitingForServerOnly;
@@ -486,14 +518,27 @@ public partial class PlayViewModel : LocalizedViewModel
             Refresh();
             var waitedOn = string.Join(", ", ports.Order());
 
+            var headlessFailed = false;
+            var headlessStarted = false;
+            if (up && startHeadless && Headless is { CanLaunch: true })
+            {
+                Start(SptLaunchTarget.Headless);
+                headlessFailed = HasError;
+                headlessStarted = !HasError;
+            }
+
             if (up && openLauncher && Client is { CanLaunch: true })
             {
                 Start(SptLaunchTarget.Client);
             }
+            else if (up && headlessFailed)
+            {
+                // Start said why the headless didn't start.
+            }
             else if (up)
             {
                 HasError = false;
-                Message = Strings.Play_ServerIsUp;
+                Message = headlessStarted ? Strings.Play_ServerUpHeadlessStarted : Strings.Play_ServerIsUp;
             }
             else if (Server?.IsRunning != true)
             {
@@ -631,6 +676,7 @@ public partial class PlayViewModel : LocalizedViewModel
         // A wait for the server before the restart is about a process that is going.
         _launcherWait?.Cancel();
         var watchRestart = false;
+        var restartHeadless = false;
         IReadOnlySet<int>? portsAfterRestart = null;
 
         // The poll would otherwise redraw the card mid-stop and offer a Start for the gap between
@@ -641,10 +687,17 @@ public partial class PlayViewModel : LocalizedViewModel
         {
             var installPath = AppServices.SptEnvironment.InstallPath;
             var headless = HeadlessOverride();
-            var hidden = new SettingsService().Load().HideServerWindow;
+            var settings = new SettingsService().Load();
+            var hidden = settings.HideServerWindow;
 
             // The server being down for a restart is not it stopping (GameCloser).
             if (target == SptLaunchTarget.Server) GameCloser.HoldOff(TimeSpan.FromMinutes(1));
+
+            if (target == SptLaunchTarget.Server && settings.StartHeadlessWithServer && Headless is { IsRunning: true })
+            {
+                await Task.Run(() => SptLaunchService.Stop(installPath, SptLaunchTarget.Headless));
+                restartHeadless = true;
+            }
 
             var result = await Task.Run(() => SptLaunchService.Restart(installPath, target, headless, hidden));
 
@@ -653,7 +706,7 @@ public partial class PlayViewModel : LocalizedViewModel
                 ? Text(Strings.Play_RestartedFormat, result.Info.ProcessName)
                 : SptLaunchProblems.Describe(result);
 
-            watchRestart = result.Started && hidden && target == SptLaunchTarget.Server;
+            watchRestart = result.Started && (hidden || restartHeadless) && target == SptLaunchTarget.Server;
             if (watchRestart)
             {
                 portsAfterRestart = SptServerReadiness.PortsFor(Server?.ExePath)
@@ -673,9 +726,9 @@ public partial class PlayViewModel : LocalizedViewModel
         // reported rather than just gone.
         if (watchRestart)
         {
-            ShowServerLog = true;
+            if (new SettingsService().Load().HideServerWindow) ShowServerLog = true;
             _portsBeforeStart = portsAfterRestart;
-            await WaitForServerAsync(openLauncher: false);
+            await WaitForServerAsync(openLauncher: false, startHeadless: restartHeadless);
         }
     }
 

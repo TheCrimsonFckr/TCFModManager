@@ -37,7 +37,7 @@ public static class QueueArchives
         }
     }
 
-    private static string Folder(string installPath)
+    public static string Folder(string installPath)
     {
         try
         {

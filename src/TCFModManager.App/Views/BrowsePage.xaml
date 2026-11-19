@@ -148,6 +148,7 @@
                     DockPanel.Dock="Right"
                     VerticalAlignment="Top"
                     Content="{loc:Str Browse_RefreshCache}"
+                    behaviors:PageKeys.Role="Refresh"
                     Command="{Binding RefreshCacheCommand}" />
 
                 <!-- A display preference, like Installed's list badges: whether the Addons bar shows. -->
@@ -167,6 +168,7 @@
                         Margin="0,0,8,4"
                         VerticalAlignment="Center"
                         PlaceholderText="{loc:Str Common_SearchPlaceholder}"
+                        behaviors:PageKeys.Role="Search"
                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
 
                     <ToggleButton
