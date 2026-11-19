@@ -50,13 +50,15 @@ public sealed partial class InstalledModCardViewModel
         // against a 3000-entry catalog re-normalizes and re-tokenizes 360,000 catalog entries.
         var index = CatalogIndex.Build(catalog);
 
+        var links = AppServices.ModLinks.Effective(recordsByFolder.Keys.Concat(addonRecordsByFolder.Keys));
+
         var scannedGroups = modEntries
             .GroupBy(m => m.Name, StringComparer.OrdinalIgnoreCase)
             .Select(g => (Key: g.Key, Entries: g.ToList()))
             .ToList();
 
         var resolved = scannedGroups
-            .Select(g => (g.Key, g.Entries, Match: ResolveCatalogMatch(g.Key, g.Entries, index, recordsByFolder)))
+            .Select(g => (g.Key, g.Entries, Match: ResolveCatalogMatch(g.Key, g.Entries, index, recordsByFolder, links)))
             .ToList();
 
         //
@@ -75,7 +77,13 @@ public sealed partial class InstalledModCardViewModel
             .Select(g => (g.Key, g.Entries))
             .ToList();
 
-        var claimed = addonFolders.Select(g => g.Key).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var linkedAddonFolders = resolved
+            .Where(g => g.Match is null && !addonRecordsByFolder.ContainsKey(g.Key) && !g.Entries.Any(m => m.IsShare)
+                && links.TryGetValue(g.Key, out var link) && link.IsAddon)
+            .Select(g => (g.Key, g.Entries, Record: LinkedAddonRecord(links[g.Key].ModId, g.Key, addonCatalog)))
+            .ToList();
+
+        var claimed = addonFolders.Select(g => g.Key).Concat(linkedAddonFolders.Select(g => g.Key)).ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         var groups = MergeRecordFolders(
                 resolved.Where(g => !claimed.Contains(g.Key)).ToList(),
@@ -124,12 +132,16 @@ public sealed partial class InstalledModCardViewModel
                     ? found
                     : null;
 
-                return BuildCard(g.Entries, g.Match, installedSptVersion, record, addonsByParent, fikaPresent, dismissedSpt);
+                var card = BuildCard(g.Entries, g.Match, installedSptVersion, record, addonsByParent, fikaPresent, dismissedSpt);
+                card.IsLinked = record is null && g.Match is not null
+                    && g.Entries.Any(e => links.TryGetValue(e.Name, out var link) && !link.IsAddon && link.ModId == g.Match.Id);
+                return card;
             })
             .ToList();
 
         var addonGroups = addonFolders
             .Select(g => (Record: addonRecordsByFolder[g.Key], g.Entries))
+            .Concat(linkedAddonFolders.Select(g => (g.Record, g.Entries)))
             .Concat(addonShares
                 .GroupBy(m => m.ShareOwnerModId!.Value)
                 .Select(g => (Record: addonRecordsById[g.Key], Entries: g.ToList())))
@@ -159,12 +171,25 @@ public sealed partial class InstalledModCardViewModel
                 ? catalog.FirstOrDefault(m => m.Id == id)?.Name ?? parent?.DisplayTitle
                 : parent?.DisplayTitle;
 
-            return BuildAddonCard(g.Entries, addon, g.Record, parent, parentName, installedSptVersion);
+            return BuildAddonCard(g.Entries, addon, g.Record, parent, parentName, installedSptVersion,
+                linked: linkedAddonFolders.Any(l => ReferenceEquals(l.Record, g.Record)));
         }));
 
         NoteSharedFolders(cards);
         return cards;
     }
+
+    // Stands in for an install record on an addon folder linked by hand: no version, so the files' is shown.
+    private static InstalledModRecord LinkedAddonRecord(int addonId, string folder, IReadOnlyList<Addon>? addonCatalog) => new()
+    {
+        ModId = addonId,
+        IsAddon = true,
+        Name = addonCatalog?.FirstOrDefault(a => a.Id == addonId)?.Name ?? folder,
+        Version = string.Empty,
+        InstalledAt = DateTimeOffset.MinValue,
+        IsAppManaged = false,
+        Folders = [folder],
+    };
 
     //
     // One card for an addon this app installed. Everything it knows comes from the install record
@@ -177,7 +202,8 @@ public sealed partial class InstalledModCardViewModel
         InstalledModRecord record,
         InstalledModCardViewModel? parent,
         string? parentName,
-        string? installedSptVersion)
+        string? installedSptVersion,
+        bool linked = false)
     {
         var plugin = entries.FirstOrDefault(m => m is { Target: InstalledModTarget.Client, IsPatcher: false });
         var patcher = entries.FirstOrDefault(m => m is { Target: InstalledModTarget.Client, IsPatcher: true });
@@ -185,7 +211,7 @@ public sealed partial class InstalledModCardViewModel
         var server = entries.FirstOrDefault(m => m.Target == InstalledModTarget.Server);
 
         var fileVersion = client?.Version ?? server?.Version;
-        var installedVersion = record.Version ?? fileVersion;
+        var installedVersion = linked ? fileVersion : record.Version ?? fileVersion;
 
         // Only versions the installed parent mod actually satisfies count as an update: an addon
         // built for the next release of its parent isn't something this install can use yet.
@@ -230,7 +256,7 @@ public sealed partial class InstalledModCardViewModel
         {
             detail = (nameof(Strings.Installed_DetailAddonDoesntFitFormat), [installedVersion, parentName, parentVersion, latest.Version]);
         }
-        else if (fileVersion is not null && !VersionsAreEquivalent(record.Version, fileVersion))
+        else if (!linked && fileVersion is not null && !VersionsAreEquivalent(record.Version, fileVersion))
         {
             detail = (nameof(Strings.Installed_DetailFilesReportFormat), [fileVersion]);
         }
@@ -240,7 +266,7 @@ public sealed partial class InstalledModCardViewModel
             Name = client?.Name ?? server!.Name,
             InstalledVersion = installedVersion,
             VersionDetail = detail,
-            IsVersionManuallyConfirmed = !record.IsAppManaged,
+            IsVersionManuallyConfirmed = !linked && !record.IsAppManaged,
             InstalledAt = InstallDate(record, client, server),
             HasClient = client is not null,
             HasPlugin = plugin is not null,
@@ -269,7 +295,8 @@ public sealed partial class InstalledModCardViewModel
             DoesntFitParent = installedFits == false || (latest is null && versions.Count > 0 && parentVersion is not null),
             IsFitOverridden = record.FitOverride is not null,
             IsAppManaged = record.IsAppManaged,
-            IsManualOverride = !record.IsAppManaged,
+            IsManualOverride = !linked && !record.IsAppManaged,
+            IsLinked = linked,
             Entries = entries,
         };
     }

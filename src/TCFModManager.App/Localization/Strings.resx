@@ -11853,4 +11853,156 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>animations, motion, transitions, reduce motion, sliding, fading</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
+  <data name="ProfileItems_Checking" xml:space="preserve">
+    <value>Checking your profiles...</value>
+    <comment>Status line while profiles are read for items from mods about to go</comment>
+  </data>
+  <data name="ProfileItems_Title" xml:space="preserve">
+    <value>Your profiles use these mods</value>
+    <comment>Title of the warning when profiles hold items or traders from mods about to be removed or disabled</comment>
+  </data>
+  <data name="ProfileItems_Intro" xml:space="preserve">
+    <value>Some of your profiles hold things these mods add. Without the mod, SPT may not load that profile.</value>
+    <comment>Warning band text above the list of profiles</comment>
+  </data>
+  <data name="ProfileItems_Heading" xml:space="preserve">
+    <value>Profiles holding things from these mods:</value>
+    <comment>Section heading over lines like 'Main - Some Weapon Pack: 71 items'</comment>
+  </data>
+  <data name="ProfileItems_LineFormat" xml:space="preserve">
+    <value>{0} - {1}: {2}</value>
+    <comment>{0} profile name, {1} mod name, {2} counts such as '71 items, 1 trader'</comment>
+  </data>
+  <data name="ProfileItems_Items_one" xml:space="preserve">
+    <value>{0} item</value>
+    <comment>Count of items in a profile that a mod adds</comment>
+  </data>
+  <data name="ProfileItems_Items_other" xml:space="preserve">
+    <value>{0} items</value>
+    <comment>Count of items in a profile that a mod adds</comment>
+  </data>
+  <data name="ProfileItems_Traders_one" xml:space="preserve">
+    <value>{0} trader</value>
+    <comment>Count of traders in a profile that a mod adds</comment>
+  </data>
+  <data name="ProfileItems_Traders_other" xml:space="preserve">
+    <value>{0} traders</value>
+    <comment>Count of traders in a profile that a mod adds</comment>
+  </data>
+  <data name="ProfileItems_Outro" xml:space="preserve">
+    <value>If that happens, turn the mod back on. A copy of your profiles from just before is in Options, under SPT profile backups.</value>
+    <comment>Detail line under the profile warning</comment>
+  </data>
+  <data name="ProfileItems_DisableAnyway" xml:space="preserve">
+    <value>Disable anyway</value>
+    <comment>Button on the profile warning when disabling</comment>
+  </data>
+  <data name="ProfileItems_ApplyAnyway" xml:space="preserve">
+    <value>Apply anyway</value>
+    <comment>Button on the profile warning when applying a mod list</comment>
+  </data>
+  <data name="ProfileItems_Lead" xml:space="preserve">
+    <value>Do you still want to go ahead?</value>
+    <comment>Question on the profile warning before disabling mods or applying a mod list</comment>
+  </data>
+  <data name="Diagnose_Title_GameUnknownValue" xml:space="preserve">
+    <value>The game couldn't read the server's answer</value>
+    <comment>Diagnose logs card title: the game could not read an answer from the server, because of a value (a skill, say) it does not know.</comment>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueFormat" xml:space="preserve">
+    <value>The game stopped at {0}: the server sent the {1} value "{2}", which the game doesn't know.</value>
+    <comment>Card text, first sentence. {0}: the request, such as /client/game/profile/list; {1}: a type name, such as ESkillId; {2}: the value, such as SignalsIntelligence.</comment>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueOffFormat" xml:space="preserve">
+    <value>It comes from {0}, which is turned off while a profile still has it. Turn every part of {0} back on, or restore a profile from before that mod was used.</value>
+    <comment>Card text, second sentence, when the mod the value comes from is turned off. {0}: the mod's name.</comment>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueOnFormat" xml:space="preserve">
+    <value>It comes from {0}, whose game half isn't loaded: its plugin, or its prepatch in BepInEx\patchers, is missing or turned off.</value>
+    <comment>Card text, second sentence, when the mod the value comes from is on at the server. {0}: the mod's name. BepInEx\patchers is a folder; keep it.</comment>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueNoModFormat" xml:space="preserve">
+    <value>Most likely a mod that adds to {0} was removed or turned off while a profile still has what it added, or its game half isn't loaded.</value>
+    <comment>Card text, second sentence, when no mod could be named. {0}: a type name, such as ESkillId.</comment>
+  </data>
+  <data name="ServerValues_Title" xml:space="preserve">
+    <value>This mod adds to the server</value>
+    <comment>Title of the note before disabling a mod whose server half adds values of its own (an SPT 4.1 enum prepatch)</comment>
+  </data>
+  <data name="ServerValues_NoteFormat" xml:space="preserve">
+    <value>{0} adds values of its own to the server, such as skills. A profile that has them won't open in the game until it is turned on again.</value>
+    <comment>Note before disabling a mod that adds its own values to the server (a server prepatch). {0}: the mod's name, or several.</comment>
+  </data>
+  <data name="Installed_GoBackFormat" xml:space="preserve">
+    <value>Go back to {0}</value>
+    <comment>Right-click menu on an installed mod an update replaced. {0} is the version it had before.</comment>
+  </data>
+  <data name="Installed_GoBackUntilFormat" xml:space="preserve">
+    <value>Go back to {0} - kept until {1}</value>
+    <comment>Right-click menu on an installed mod an update replaced. {0} is the version it had before, {1} the date its copy is deleted (day and month).</comment>
+  </data>
+  <data name="Installed_GoBackTitleFormat" xml:space="preserve">
+    <value>Go back to {0}?</value>
+    <comment>Title of the question before going back. {0} is the earlier version.</comment>
+  </data>
+  <data name="Installed_GoBackLeadFormat" xml:space="preserve">
+    <value>{0} {1} is put back from the copy kept when it was updated to {2}. This works offline, even if the author has taken {1} down.</value>
+    <comment>Question before going back. {0} is the mod, {1} the earlier version, {2} the version installed now.</comment>
+  </data>
+  <data name="Installed_GoBackConfigs" xml:space="preserve">
+    <value>Config files go back to how they were before the update. Any setting you changed since the update is kept.</value>
+    <comment>Detail line in the question before going back.</comment>
+  </data>
+  <data name="Installed_GoBackForwardFormat" xml:space="preserve">
+    <value>{0} is kept the same way, so you can come back to it from this menu.</value>
+    <comment>Detail line in the question before going back. {0} is the version installed now.</comment>
+  </data>
+  <data name="Installed_GoBack" xml:space="preserve">
+    <value>Go back</value>
+    <comment>Button in the question before going back to an earlier version.</comment>
+  </data>
+  <data name="Installed_GoBackWaitForInstall" xml:space="preserve">
+    <value>An install is running on the Downloads page. Go back once it has finished.</value>
+    <comment>Status line when going back is asked for while the download queue installs something.</comment>
+  </data>
+  <data name="Installed_WentBackFormat" xml:space="preserve">
+    <value>{0} is back to {1}.</value>
+    <comment>Status line after going back. {0} is the mod, {1} the version.</comment>
+  </data>
+  <data name="Installed_WentBackBlockedFormat" xml:space="preserve">
+    <value>{0} is back to {1}, but something has taken the place of some of its files since. Those were not written over and stay in {2}.</value>
+    <comment>Status line after going back when some paths were taken. {2} is a folder.</comment>
+  </data>
+  <data name="ModLink_Menu" xml:space="preserve">
+    <value>Link to its sp-mod page...</value>
+    <comment>Right-click menu on an installed mod or addon nothing on sp-mod matched.</comment>
+  </data>
+  <data name="ModLink_HeaderFormat" xml:space="preserve">
+    <value>Link {0} to sp-mod</value>
+    <comment>Title of the window asking for a mod's sp-mod page. {0} is the mod's folder name.</comment>
+  </data>
+  <data name="ModLink_Description" xml:space="preserve">
+    <value>Paste the link of its mod or addon page on sp-mod. The card then takes that page's name, page and updates. Nothing on disk changes, and Clear override in its update window undoes it.</value>
+    <comment>Text in the window asking for a mod's sp-mod page.</comment>
+  </data>
+  <data name="ModLink_Placeholder" xml:space="preserve">
+    <value>https://sp-mod.com/mod/...</value>
+    <comment>Placeholder in the link box. Keep the address as it is.</comment>
+  </data>
+  <data name="ModLink_Button" xml:space="preserve">
+    <value>Link</value>
+    <comment>Button in the window asking for a mod's sp-mod page.</comment>
+  </data>
+  <data name="ModLink_NotAPage" xml:space="preserve">
+    <value>That isn't a link to a mod or addon page on sp-mod.</value>
+    <comment>Status line when the pasted link isn't a sp-mod mod or addon page.</comment>
+  </data>
+  <data name="ModLink_NotInCatalog" xml:space="preserve">
+    <value>That page isn't in the list read from sp-mod. Refresh Browse and try again.</value>
+    <comment>Status line when the linked mod or addon id isn't in the cached catalog.</comment>
+  </data>
+  <data name="ModLink_LinkedFormat" xml:space="preserve">
+    <value>{0} is linked to {1} on sp-mod.</value>
+    <comment>Status line after linking. {0} is the folder name, {1} the sp-mod listing's name.</comment>
+  </data>
 </root>

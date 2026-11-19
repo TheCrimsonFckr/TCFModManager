@@ -47,7 +47,6 @@ public sealed partial class ModInstallService
         }
 
         var blocked = new List<string>();
-        var back = 0;
 
         // 1. Originals this removal put back leave the install again - into the holding folder, never deleted.
         if (log.Record is { } removedRecord)
@@ -70,56 +69,7 @@ public sealed partial class ModInstallService
         }
 
         // 2. The mod's files and folders.
-        foreach (var entry in log.Entries.Where(e => e.Outcome == RemovalOutcome.Moved))
-        {
-            var held = Path.Combine(folder, RemovedMods.FilesFolder, entry.Path.Replace('/', Path.DirectorySeparatorChar));
-            var target = Path.Combine(installPath, entry.Path.Replace('/', Path.DirectorySeparatorChar));
-
-            if (!File.Exists(held) && !Directory.Exists(held)) { blocked.Add(entry.Path); continue; }
-
-            if (InstallPathGuard.ModFolderOf(entry.Path) is { } modFolder && DisabledModPaths.CounterpartOnDisk(installPath, modFolder))
-            {
-                blocked.Add(entry.Path);
-                continue;
-            }
-
-            // A held file may go back into a new-file-only area (R17): it only left it because its
-            // fingerprint proved it this app's, and it only goes back to a free path.
-            var check = File.Exists(held)
-                ? InstallPathGuard.CheckPlacedPath(installPath, entry.Path, out _)
-                : InstallPathGuard.CheckRecordedPath(installPath, entry.Path, out _);
-
-            //
-            // A held folder whose place has since been taken by a folder of the same name - the mod
-            // put back first, then a folder of leftovers removed after it - is merged file by file,
-            // each file only into a free path. Anything occupied stays held and is reported.
-            //
-            if (check is null && Directory.Exists(held) && Directory.Exists(target) && !InstallPathGuard.IsLink(target))
-            {
-                var merged = MergeHeldFolder(installPath, held, entry.Path, blocked);
-                if (merged > 0) back++;
-                continue;
-            }
-
-            if (check is not null || File.Exists(target) || Directory.Exists(target))
-            {
-                blocked.Add(entry.Path);
-                continue;
-            }
-
-            try
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(target)!);
-                if (Directory.Exists(held)) Directory.Move(held, target);
-                else File.Move(held, target, overwrite: false);
-                back++;
-            }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-            {
-                AppLog.Warn("Undo", $"couldn't put back {entry.Path}: {ex.Message}");
-                blocked.Add(entry.Path);
-            }
-        }
+        var back = PutBackMoved(installPath, folder, log, blocked);
 
         // 3. The copies of files it had replaced, back into Data where the record expects them.
         var originals = Path.Combine(folder, RemovedMods.OriginalsFolder);
@@ -173,6 +123,66 @@ public sealed partial class ModInstallService
         if (blocked.Count == 0) RemovedMods.DeleteHeld(installPath, folder);
 
         return new UndoResult(true, back, blocked);
+    }
+
+    // A removal's moved files and folders, back from the holding folder into free paths. Returns how
+    // many came back; the rest go in blocked. Shared by Undo and going back on an update.
+    private static int PutBackMoved(string installPath, string folder, RemovalLog log, List<string> blocked)
+    {
+        var back = 0;
+
+        foreach (var entry in log.Entries.Where(e => e.Outcome == RemovalOutcome.Moved))
+        {
+            var held = Path.Combine(folder, RemovedMods.FilesFolder, entry.Path.Replace('/', Path.DirectorySeparatorChar));
+            var target = Path.Combine(installPath, entry.Path.Replace('/', Path.DirectorySeparatorChar));
+
+            if (!File.Exists(held) && !Directory.Exists(held)) { blocked.Add(entry.Path); continue; }
+
+            if (InstallPathGuard.ModFolderOf(entry.Path) is { } modFolder && DisabledModPaths.CounterpartOnDisk(installPath, modFolder))
+            {
+                blocked.Add(entry.Path);
+                continue;
+            }
+
+            // A held file may go back into a new-file-only area (R17): it only left it because its
+            // fingerprint proved it this app's, and it only goes back to a free path.
+            var check = File.Exists(held)
+                ? InstallPathGuard.CheckPlacedPath(installPath, entry.Path, out _)
+                : InstallPathGuard.CheckRecordedPath(installPath, entry.Path, out _);
+
+            //
+            // A held folder whose place has since been taken by a folder of the same name - the mod
+            // put back first, then a folder of leftovers removed after it - is merged file by file,
+            // each file only into a free path. Anything occupied stays held and is reported.
+            //
+            if (check is null && Directory.Exists(held) && Directory.Exists(target) && !InstallPathGuard.IsLink(target))
+            {
+                var merged = MergeHeldFolder(installPath, held, entry.Path, blocked);
+                if (merged > 0) back++;
+                continue;
+            }
+
+            if (check is not null || File.Exists(target) || Directory.Exists(target))
+            {
+                blocked.Add(entry.Path);
+                continue;
+            }
+
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(target)!);
+                if (Directory.Exists(held)) Directory.Move(held, target);
+                else File.Move(held, target, overwrite: false);
+                back++;
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                AppLog.Warn("Undo", $"couldn't put back {entry.Path}: {ex.Message}");
+                blocked.Add(entry.Path);
+            }
+        }
+
+        return back;
     }
 
     // Moves each file of a held folder back to its place under an existing folder, only where that

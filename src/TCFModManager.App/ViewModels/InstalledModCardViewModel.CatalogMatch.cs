@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -85,7 +86,8 @@ public sealed partial class InstalledModCardViewModel
         string folderName,
         List<InstalledMod> entries,
         CatalogIndex index,
-        Dictionary<string, InstalledModRecord> recordsByFolder)
+        Dictionary<string, InstalledModRecord> recordsByFolder,
+        IReadOnlyDictionary<string, ModLink> links)
     {
         // A mod sharing its folder (OPEN-28) was already identified by the scan, from the record that
         // placed its files or its plugin's GUID. The folder's records belong to its neighbours.
@@ -100,6 +102,12 @@ public sealed partial class InstalledModCardViewModel
             var fromRecord = index.ById.GetValueOrDefault(record.ModId)
                 ?? (string.IsNullOrWhiteSpace(record.Guid) ? null : index.ByGuid.GetValueOrDefault(record.Guid));
             if (fromRecord is not null) return fromRecord;
+        }
+
+        if (!entries.Any(m => m.IsShare) && links.TryGetValue(folderName, out var link) && !link.IsAddon
+            && index.ById.GetValueOrDefault(link.ModId) is { } linked)
+        {
+            return linked;
         }
 
         // The real GUID the mod declares - a client DLL's [BepInPlugin], or an SPT 4.x server mod's

@@ -398,6 +398,12 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
 
     internal void AddDependency(DownloadQueueItemViewModel item) => _dependencies.Add(item);
 
+    // Missing dependencies this item pulled in, which install ahead of it.
+    internal List<DownloadQueueItemViewModel> InstallsFirst { get; } = [];
+
+    // The item this one was pulled in for, while it has still to take its install turn.
+    internal DownloadQueueItemViewModel? InstallsBefore { get; set; }
+
     // Cancels this item and every dependency queued on its behalf. A still-pending item is
     // marked Cancelled immediately; an in-flight one is signalled and settles when its worker
     // unwinds.

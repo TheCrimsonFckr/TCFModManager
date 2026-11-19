@@ -16,7 +16,8 @@ namespace TCFModManager.App.Services;
 public sealed record ModListInstall(
     string InstallPath,
     IReadOnlyList<ModListCandidate> Candidates,
-    string? SptVersion);
+    string? SptVersion,
+    IReadOnlyDictionary<string, IReadOnlySet<string>>? FolderNeeds = null);
 
 //
 // A list, what applying it would do, and the install both were worked out against.
@@ -138,17 +139,63 @@ public sealed class ModListService
         var catalog = AppServices.ModCache.AllMods;
         var sptVersion = AppServices.SptEnvironment.InstalledVersion;
 
-        var candidates = await Task.Run(() =>
+        var (candidates, needs) = await Task.Run(() =>
         {
             var found = InstalledScan.Run(installPath, catalog, records);
 
             var cards = InstalledModCardViewModel.BuildFrom(
                 found, catalog, sptVersion, records, AppServices.Addons.AllAddons);
 
-            return ModListCandidates.From(cards, records);
+            return (ModListCandidates.From(cards, records), FolderNeedsOf(found));
         });
 
-        return new ModListInstall(installPath, candidates, sptVersion);
+        return new ModListInstall(installPath, candidates, sptVersion, needs);
+    }
+
+    // Each installed mod folder's name, with the folder names of what it declares it needs.
+    private static Dictionary<string, IReadOnlySet<string>> FolderNeedsOf(IReadOnlyList<InstalledMod> found)
+    {
+        var graph = ModDependencyGraph.Build(found);
+        var needs = new Dictionary<string, IReadOnlySet<string>>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var mod in found)
+        {
+            var folders = graph.DependenciesOf(mod)
+                .Select(l => Path.GetFileName(l.Dependency.FolderPath))
+                .Where(f => !string.IsNullOrEmpty(f) && !f.Equals(Path.GetFileName(mod.FolderPath), StringComparison.OrdinalIgnoreCase))
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            if (folders.Count == 0) continue;
+
+            var name = Path.GetFileName(mod.FolderPath);
+            if (needs.TryGetValue(name, out var already)) folders.UnionWith(already);
+            needs[name] = folders;
+        }
+
+        return needs;
+    }
+
+    // Downloads put so each installs after what it needs among them: a dependency the plan added
+    // before what needs it, and an installed mod after the installed mods it declares.
+    private static List<ModListDownload> InDependencyOrder(IReadOnlyList<ModListDownload> downloads, ModListInstall install)
+    {
+        var folderNeeds = install.FolderNeeds ?? new Dictionary<string, IReadOnlySet<string>>();
+
+        IEnumerable<int> Needs(int i)
+        {
+            var action = downloads[i].Action;
+            var mine = action.Installed?.Folders ?? [];
+            var wanted = mine.SelectMany(f => folderNeeds.TryGetValue(f, out var n) ? n : Enumerable.Empty<string>()).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            for (var j = 0; j < downloads.Count; j++)
+            {
+                if (j == i) continue;
+                var other = downloads[j].Action;
+                if (other.IsDependency && other.NeededBy.Contains(action.Name, StringComparer.OrdinalIgnoreCase)) yield return j;
+                else if (wanted.Count > 0 && other.Installed?.Folders.Any(wanted.Contains) == true) yield return j;
+            }
+        }
+
+        return [.. DependencyOrdering.Order(downloads, Needs)];
     }
 
     //
@@ -599,7 +646,7 @@ public sealed class ModListService
         if (!prompts.ConfirmModPages(downloads))
             return new ModListFetchOutcome([], failed, Cancelled: true);
 
-        return await QueueAsync(install.InstallPath, downloads, failed, mode, ct);
+        return await QueueAsync(install.InstallPath, InDependencyOrder(downloads, install), failed, mode, ct);
     }
 
     //

@@ -3255,4 +3255,42 @@ internal static class Strings
     internal static string Help_Options_Animations_Step1 => LocalizationService.Get("Help_Options_Animations_Step1");
     internal static string Help_Options_Animations_Step2 => LocalizationService.Get("Help_Options_Animations_Step2");
     internal static string Help_Options_Animations_Keywords => LocalizationService.Get("Help_Options_Animations_Keywords");
+    internal static string ProfileItems_Checking => LocalizationService.Get("ProfileItems_Checking");
+    internal static string ProfileItems_Title => LocalizationService.Get("ProfileItems_Title");
+    internal static string ProfileItems_Intro => LocalizationService.Get("ProfileItems_Intro");
+    internal static string ProfileItems_Heading => LocalizationService.Get("ProfileItems_Heading");
+    internal static string ProfileItems_LineFormat => LocalizationService.Get("ProfileItems_LineFormat");
+    internal static string ProfileItems_Items(int count, params object?[] values) =>
+        LocalizationService.Plural("ProfileItems_Items", count, values);
+    internal static string ProfileItems_Traders(int count, params object?[] values) =>
+        LocalizationService.Plural("ProfileItems_Traders", count, values);
+    internal static string ProfileItems_Outro => LocalizationService.Get("ProfileItems_Outro");
+    internal static string ProfileItems_DisableAnyway => LocalizationService.Get("ProfileItems_DisableAnyway");
+    internal static string ProfileItems_ApplyAnyway => LocalizationService.Get("ProfileItems_ApplyAnyway");
+    internal static string ProfileItems_Lead => LocalizationService.Get("ProfileItems_Lead");
+    internal static string Diagnose_Title_GameUnknownValue => LocalizationService.Get("Diagnose_Title_GameUnknownValue");
+    internal static string Diagnose_Body_GameUnknownValueFormat => LocalizationService.Get("Diagnose_Body_GameUnknownValueFormat");
+    internal static string Diagnose_Body_GameUnknownValueOffFormat => LocalizationService.Get("Diagnose_Body_GameUnknownValueOffFormat");
+    internal static string Diagnose_Body_GameUnknownValueOnFormat => LocalizationService.Get("Diagnose_Body_GameUnknownValueOnFormat");
+    internal static string Diagnose_Body_GameUnknownValueNoModFormat => LocalizationService.Get("Diagnose_Body_GameUnknownValueNoModFormat");
+    internal static string ServerValues_Title => LocalizationService.Get("ServerValues_Title");
+    internal static string ServerValues_NoteFormat => LocalizationService.Get("ServerValues_NoteFormat");
+    internal static string Installed_GoBackFormat => LocalizationService.Get("Installed_GoBackFormat");
+    internal static string Installed_GoBackUntilFormat => LocalizationService.Get("Installed_GoBackUntilFormat");
+    internal static string Installed_GoBackTitleFormat => LocalizationService.Get("Installed_GoBackTitleFormat");
+    internal static string Installed_GoBackLeadFormat => LocalizationService.Get("Installed_GoBackLeadFormat");
+    internal static string Installed_GoBackConfigs => LocalizationService.Get("Installed_GoBackConfigs");
+    internal static string Installed_GoBackForwardFormat => LocalizationService.Get("Installed_GoBackForwardFormat");
+    internal static string Installed_GoBack => LocalizationService.Get("Installed_GoBack");
+    internal static string Installed_GoBackWaitForInstall => LocalizationService.Get("Installed_GoBackWaitForInstall");
+    internal static string Installed_WentBackFormat => LocalizationService.Get("Installed_WentBackFormat");
+    internal static string Installed_WentBackBlockedFormat => LocalizationService.Get("Installed_WentBackBlockedFormat");
+    internal static string ModLink_Menu => LocalizationService.Get("ModLink_Menu");
+    internal static string ModLink_HeaderFormat => LocalizationService.Get("ModLink_HeaderFormat");
+    internal static string ModLink_Description => LocalizationService.Get("ModLink_Description");
+    internal static string ModLink_Placeholder => LocalizationService.Get("ModLink_Placeholder");
+    internal static string ModLink_Button => LocalizationService.Get("ModLink_Button");
+    internal static string ModLink_NotAPage => LocalizationService.Get("ModLink_NotAPage");
+    internal static string ModLink_NotInCatalog => LocalizationService.Get("ModLink_NotInCatalog");
+    internal static string ModLink_LinkedFormat => LocalizationService.Get("ModLink_LinkedFormat");
 }

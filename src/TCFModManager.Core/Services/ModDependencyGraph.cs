@@ -103,6 +103,22 @@ public sealed class ModDependencyGraph
     public IReadOnlyList<ModDependencyLink> DependenciesOf(InstalledMod mod) =>
         _dependencies.TryGetValue(mod, out var links) ? links : [];
 
+    //
+    // <paramref name="items"/> put so each comes after what it needs among them, hard or soft - the
+    // order a batch of updates installs in. Otherwise they stay in the order given.
+    //
+    public IReadOnlyList<T> DependencyOrder<T>(IReadOnlyList<T> items, Func<T, IEnumerable<InstalledMod>> entries)
+    {
+        var owner = new Dictionary<InstalledMod, int>();
+        for (var i = 0; i < items.Count; i++)
+            foreach (var entry in entries(items[i])) owner.TryAdd(entry, i);
+
+        return DependencyOrdering.Order(items, i => entries(items[i])
+            .SelectMany(DependenciesOf)
+            .Select(link => owner.TryGetValue(link.Dependency, out var j) ? j : -1)
+            .Where(j => j >= 0));
+    }
+
     // Identifiers a mod declares that nothing installed provides.
     public IReadOnlyList<string> UnresolvedOf(InstalledMod mod) =>
         _unresolved.TryGetValue(mod, out var identifiers) ? identifiers : [];

@@ -9749,4 +9749,118 @@ I dettagli sono nel log:
   <data name="Help_Options_Animations_Keywords" xml:space="preserve">
     <value>animazioni, movimento, transizioni, riduci animazioni</value>
   </data>
+  <data name="ProfileItems_Checking" xml:space="preserve">
+    <value>Controllo dei profili in corso...</value>
+  </data>
+  <data name="ProfileItems_Title" xml:space="preserve">
+    <value>I tuoi profili usano queste mod</value>
+  </data>
+  <data name="ProfileItems_Intro" xml:space="preserve">
+    <value>Alcuni dei tuoi profili contengono elementi aggiunti da queste mod. Senza la mod, SPT potrebbe non caricare quel profilo.</value>
+  </data>
+  <data name="ProfileItems_Heading" xml:space="preserve">
+    <value>Profili con elementi di queste mod:</value>
+  </data>
+  <data name="ProfileItems_LineFormat" xml:space="preserve">
+    <value>{0} - {1}: {2}</value>
+  </data>
+  <data name="ProfileItems_Items_one" xml:space="preserve">
+    <value>{0} oggetto</value>
+  </data>
+  <data name="ProfileItems_Items_other" xml:space="preserve">
+    <value>{0} oggetti</value>
+  </data>
+  <data name="ProfileItems_Traders_one" xml:space="preserve">
+    <value>{0} commerciante</value>
+  </data>
+  <data name="ProfileItems_Traders_other" xml:space="preserve">
+    <value>{0} commercianti</value>
+  </data>
+  <data name="ProfileItems_Outro" xml:space="preserve">
+    <value>Se succede, riattiva la mod. Una copia dei tuoi profili di poco prima è nelle Opzioni, in Backup dei profili SPT.</value>
+  </data>
+  <data name="ProfileItems_DisableAnyway" xml:space="preserve">
+    <value>Disattiva comunque</value>
+  </data>
+  <data name="ProfileItems_ApplyAnyway" xml:space="preserve">
+    <value>Applica comunque</value>
+  </data>
+  <data name="ProfileItems_Lead" xml:space="preserve">
+    <value>Vuoi procedere comunque?</value>
+  </data>
+  <data name="Diagnose_Title_GameUnknownValue" xml:space="preserve">
+    <value>Il gioco non ha potuto leggere la risposta del server</value>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueFormat" xml:space="preserve">
+    <value>Il gioco si è fermato a {0}: il server ha inviato il valore {1} "{2}", che il gioco non conosce.</value>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueOffFormat" xml:space="preserve">
+    <value>Proviene da {0}, che è disattivata mentre un profilo lo contiene ancora. Riattiva tutte le parti di {0}, oppure ripristina un profilo precedente all'uso di quella mod.</value>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueOnFormat" xml:space="preserve">
+    <value>Proviene da {0}, la cui parte di gioco non è caricata: il suo plugin, o il suo prepatch in BepInEx\patchers, manca o è disattivato.</value>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueNoModFormat" xml:space="preserve">
+    <value>Molto probabilmente una mod che aggiunge a {0} è stata rimossa o disattivata mentre un profilo contiene ancora ciò che ha aggiunto, oppure la sua parte di gioco non è caricata.</value>
+  </data>
+  <data name="ServerValues_Title" xml:space="preserve">
+    <value>Questa mod aggiunge al server</value>
+  </data>
+  <data name="ServerValues_NoteFormat" xml:space="preserve">
+    <value>{0} aggiunge al server valori propri, ad esempio abilità. Un profilo che li contiene non si aprirà nel gioco finché la mod non viene riattivata.</value>
+  </data>
+  <data name="Installed_GoBackFormat" xml:space="preserve">
+    <value>Torna a {0}</value>
+  </data>
+  <data name="Installed_GoBackUntilFormat" xml:space="preserve">
+    <value>Torna a {0} - conservata fino al {1}</value>
+  </data>
+  <data name="Installed_GoBackTitleFormat" xml:space="preserve">
+    <value>Tornare a {0}?</value>
+  </data>
+  <data name="Installed_GoBackLeadFormat" xml:space="preserve">
+    <value>{0} {1} viene ripristinata dalla copia conservata quando è stata aggiornata a {2}. Funziona anche offline e anche se l'autore ha rimosso {1}.</value>
+  </data>
+  <data name="Installed_GoBackConfigs" xml:space="preserve">
+    <value>I file di configurazione tornano com'erano prima dell'aggiornamento. Le impostazioni cambiate dopo l'aggiornamento vengono mantenute.</value>
+  </data>
+  <data name="Installed_GoBackForwardFormat" xml:space="preserve">
+    <value>{0} viene conservata allo stesso modo, così puoi tornarci da questo menu.</value>
+  </data>
+  <data name="Installed_GoBack" xml:space="preserve">
+    <value>Torna indietro</value>
+  </data>
+  <data name="Installed_GoBackWaitForInstall" xml:space="preserve">
+    <value>Un'installazione è in corso nella pagina Download. Torna indietro quando è finita.</value>
+  </data>
+  <data name="Installed_WentBackFormat" xml:space="preserve">
+    <value>{0} è tornata a {1}.</value>
+  </data>
+  <data name="Installed_WentBackBlockedFormat" xml:space="preserve">
+    <value>{0} è tornata a {1}, ma nel frattempo qualcosa ha preso il posto di alcuni suoi file. Non sono stati sovrascritti e restano in {2}.</value>
+  </data>
+  <data name="ModLink_Menu" xml:space="preserve">
+    <value>Collega alla sua pagina sp-mod...</value>
+  </data>
+  <data name="ModLink_HeaderFormat" xml:space="preserve">
+    <value>Collega {0} a sp-mod</value>
+  </data>
+  <data name="ModLink_Description" xml:space="preserve">
+    <value>Incolla il link della sua pagina mod o addon su sp-mod. La scheda prende poi nome, pagina e aggiornamenti di quella pagina. Sul disco non cambia nulla, e Azzera forzatura nella finestra di aggiornamento lo annulla.</value>
+  </data>
+  <data name="ModLink_Placeholder" xml:space="preserve">
+    <value>https://sp-mod.com/mod/...</value>
+  </data>
+  <data name="ModLink_Button" xml:space="preserve">
+    <value>Collega</value>
+  </data>
+  <data name="ModLink_NotAPage" xml:space="preserve">
+    <value>Questo non è un link a una pagina mod o addon su sp-mod.</value>
+  </data>
+  <data name="ModLink_NotInCatalog" xml:space="preserve">
+    <value>Questa pagina non è nell'elenco letto da sp-mod. Aggiorna Sfoglia e riprova.</value>
+  </data>
+  <data name="ModLink_LinkedFormat" xml:space="preserve">
+    <value>{0} è collegata a {1} su sp-mod.</value>
+  </data>
 </root>

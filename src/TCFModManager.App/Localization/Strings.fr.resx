@@ -9749,4 +9749,118 @@ Les détails sont dans le journal :
   <data name="Help_Options_Animations_Keywords" xml:space="preserve">
     <value>animations, mouvement, transitions, réduire les animations</value>
   </data>
+  <data name="ProfileItems_Checking" xml:space="preserve">
+    <value>Vérification de vos profils...</value>
+  </data>
+  <data name="ProfileItems_Title" xml:space="preserve">
+    <value>Vos profils utilisent ces mods</value>
+  </data>
+  <data name="ProfileItems_Intro" xml:space="preserve">
+    <value>Certains de vos profils contiennent des éléments ajoutés par ces mods. Sans le mod, SPT risque de ne pas charger ce profil.</value>
+  </data>
+  <data name="ProfileItems_Heading" xml:space="preserve">
+    <value>Profils contenant des éléments de ces mods :</value>
+  </data>
+  <data name="ProfileItems_LineFormat" xml:space="preserve">
+    <value>{0} - {1} : {2}</value>
+  </data>
+  <data name="ProfileItems_Items_one" xml:space="preserve">
+    <value>{0} objet</value>
+  </data>
+  <data name="ProfileItems_Items_other" xml:space="preserve">
+    <value>{0} objets</value>
+  </data>
+  <data name="ProfileItems_Traders_one" xml:space="preserve">
+    <value>{0} marchand</value>
+  </data>
+  <data name="ProfileItems_Traders_other" xml:space="preserve">
+    <value>{0} marchands</value>
+  </data>
+  <data name="ProfileItems_Outro" xml:space="preserve">
+    <value>Si cela arrive, réactivez le mod. Une copie de vos profils juste avant se trouve dans les Options, sous Sauvegardes des profils SPT.</value>
+  </data>
+  <data name="ProfileItems_DisableAnyway" xml:space="preserve">
+    <value>Désactiver quand même</value>
+  </data>
+  <data name="ProfileItems_ApplyAnyway" xml:space="preserve">
+    <value>Appliquer quand même</value>
+  </data>
+  <data name="ProfileItems_Lead" xml:space="preserve">
+    <value>Voulez-vous quand même continuer ?</value>
+  </data>
+  <data name="Diagnose_Title_GameUnknownValue" xml:space="preserve">
+    <value>Le jeu n'a pas pu lire la réponse du serveur</value>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueFormat" xml:space="preserve">
+    <value>Le jeu s'est arrêté à {0} : le serveur a envoyé la valeur {1} « {2} », que le jeu ne connaît pas.</value>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueOffFormat" xml:space="preserve">
+    <value>Elle vient de {0}, qui est désactivé alors qu'un profil la contient encore. Réactivez toutes les parties de {0}, ou restaurez un profil d'avant l'utilisation de ce mod.</value>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueOnFormat" xml:space="preserve">
+    <value>Elle vient de {0}, dont la partie jeu n'est pas chargée : son plugin, ou son prepatch dans BepInEx\patchers, est absent ou désactivé.</value>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueNoModFormat" xml:space="preserve">
+    <value>Très probablement, un mod qui ajoute à {0} a été retiré ou désactivé alors qu'un profil contient encore ce qu'il a ajouté, ou sa partie jeu n'est pas chargée.</value>
+  </data>
+  <data name="ServerValues_Title" xml:space="preserve">
+    <value>Ce mod ajoute au serveur</value>
+  </data>
+  <data name="ServerValues_NoteFormat" xml:space="preserve">
+    <value>{0} ajoute ses propres valeurs au serveur, des compétences par exemple. Un profil qui les contient ne s'ouvrira pas dans le jeu tant que le mod n'est pas réactivé.</value>
+  </data>
+  <data name="Installed_GoBackFormat" xml:space="preserve">
+    <value>Revenir à {0}</value>
+  </data>
+  <data name="Installed_GoBackUntilFormat" xml:space="preserve">
+    <value>Revenir à {0} - conservée jusqu'au {1}</value>
+  </data>
+  <data name="Installed_GoBackTitleFormat" xml:space="preserve">
+    <value>Revenir à {0} ?</value>
+  </data>
+  <data name="Installed_GoBackLeadFormat" xml:space="preserve">
+    <value>{0} {1} est remis en place depuis la copie conservée lors de la mise à jour vers {2}. Cela fonctionne hors ligne, même si l'auteur a retiré {1}.</value>
+  </data>
+  <data name="Installed_GoBackConfigs" xml:space="preserve">
+    <value>Les fichiers de configuration reviennent à leur état d'avant la mise à jour. Les réglages modifiés depuis la mise à jour sont conservés.</value>
+  </data>
+  <data name="Installed_GoBackForwardFormat" xml:space="preserve">
+    <value>{0} est conservée de la même façon, pour pouvoir y revenir depuis ce menu.</value>
+  </data>
+  <data name="Installed_GoBack" xml:space="preserve">
+    <value>Revenir</value>
+  </data>
+  <data name="Installed_GoBackWaitForInstall" xml:space="preserve">
+    <value>Une installation est en cours sur la page Téléchargements. Revenez en arrière une fois qu'elle est terminée.</value>
+  </data>
+  <data name="Installed_WentBackFormat" xml:space="preserve">
+    <value>{0} est revenu à {1}.</value>
+  </data>
+  <data name="Installed_WentBackBlockedFormat" xml:space="preserve">
+    <value>{0} est revenu à {1}, mais quelque chose a pris la place de certains de ses fichiers depuis. Ils n'ont pas été écrasés et restent dans {2}.</value>
+  </data>
+  <data name="ModLink_Menu" xml:space="preserve">
+    <value>Lier à sa page sp-mod...</value>
+  </data>
+  <data name="ModLink_HeaderFormat" xml:space="preserve">
+    <value>Lier {0} à sp-mod</value>
+  </data>
+  <data name="ModLink_Description" xml:space="preserve">
+    <value>Collez le lien de sa page de mod ou d'addon sur sp-mod. La carte prend alors le nom, la page et les mises à jour de cette page. Rien ne change sur le disque, et Effacer la valeur forcée dans sa fenêtre de mise à jour l'annule.</value>
+  </data>
+  <data name="ModLink_Placeholder" xml:space="preserve">
+    <value>https://sp-mod.com/mod/...</value>
+  </data>
+  <data name="ModLink_Button" xml:space="preserve">
+    <value>Lier</value>
+  </data>
+  <data name="ModLink_NotAPage" xml:space="preserve">
+    <value>Ce n'est pas un lien vers une page de mod ou d'addon sur sp-mod.</value>
+  </data>
+  <data name="ModLink_NotInCatalog" xml:space="preserve">
+    <value>Cette page n'est pas dans la liste lue depuis sp-mod. Actualisez Parcourir et réessayez.</value>
+  </data>
+  <data name="ModLink_LinkedFormat" xml:space="preserve">
+    <value>{0} est lié à {1} sur sp-mod.</value>
+  </data>
 </root>

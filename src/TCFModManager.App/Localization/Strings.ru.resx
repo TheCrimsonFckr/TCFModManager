@@ -10142,4 +10142,130 @@
   <data name="Help_Options_Animations_Keywords" xml:space="preserve">
     <value>анимации, движение, переходы, уменьшить анимацию</value>
   </data>
+  <data name="ProfileItems_Checking" xml:space="preserve">
+    <value>Проверка профилей...</value>
+  </data>
+  <data name="ProfileItems_Title" xml:space="preserve">
+    <value>Ваши профили используют эти моды</value>
+  </data>
+  <data name="ProfileItems_Intro" xml:space="preserve">
+    <value>В некоторых ваших профилях есть то, что добавляют эти моды. Без мода SPT может не загрузить такой профиль.</value>
+  </data>
+  <data name="ProfileItems_Heading" xml:space="preserve">
+    <value>Профили с содержимым этих модов:</value>
+  </data>
+  <data name="ProfileItems_LineFormat" xml:space="preserve">
+    <value>{0} - {1}: {2}</value>
+  </data>
+  <data name="ProfileItems_Items_one" xml:space="preserve">
+    <value>{0} предмет</value>
+  </data>
+  <data name="ProfileItems_Items_few" xml:space="preserve">
+    <value>{0} предмета</value>
+  </data>
+  <data name="ProfileItems_Items_many" xml:space="preserve">
+    <value>{0} предметов</value>
+  </data>
+  <data name="ProfileItems_Items_other" xml:space="preserve">
+    <value>{0} предмета</value>
+  </data>
+  <data name="ProfileItems_Traders_one" xml:space="preserve">
+    <value>{0} торговец</value>
+  </data>
+  <data name="ProfileItems_Traders_few" xml:space="preserve">
+    <value>{0} торговца</value>
+  </data>
+  <data name="ProfileItems_Traders_many" xml:space="preserve">
+    <value>{0} торговцев</value>
+  </data>
+  <data name="ProfileItems_Traders_other" xml:space="preserve">
+    <value>{0} торговца</value>
+  </data>
+  <data name="ProfileItems_Outro" xml:space="preserve">
+    <value>Если так случится, включите мод снова. Копия ваших профилей прямо перед этим есть в параметрах, в разделе «Резервные копии профилей SPT».</value>
+  </data>
+  <data name="ProfileItems_DisableAnyway" xml:space="preserve">
+    <value>Всё равно отключить</value>
+  </data>
+  <data name="ProfileItems_ApplyAnyway" xml:space="preserve">
+    <value>Всё равно применить</value>
+  </data>
+  <data name="ProfileItems_Lead" xml:space="preserve">
+    <value>Всё равно продолжить?</value>
+  </data>
+  <data name="Diagnose_Title_GameUnknownValue" xml:space="preserve">
+    <value>Игра не смогла прочитать ответ сервера</value>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueFormat" xml:space="preserve">
+    <value>Игра остановилась на {0}: сервер прислал значение {1} «{2}», которого игра не знает.</value>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueOffFormat" xml:space="preserve">
+    <value>Оно принадлежит моду {0}, который выключен, а в профиле оно осталось. Снова включите все части {0} или восстановите профиль, сохранённый до этого мода.</value>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueOnFormat" xml:space="preserve">
+    <value>Оно принадлежит моду {0}, игровая часть которого не загружена: его плагин или препатч в BepInEx\patchers отсутствует или выключен.</value>
+  </data>
+  <data name="Diagnose_Body_GameUnknownValueNoModFormat" xml:space="preserve">
+    <value>Скорее всего, мод, дополняющий {0}, удалён или выключен, а в профиле осталось добавленное им, либо его игровая часть не загружена.</value>
+  </data>
+  <data name="ServerValues_Title" xml:space="preserve">
+    <value>Этот мод дополняет сервер</value>
+  </data>
+  <data name="ServerValues_NoteFormat" xml:space="preserve">
+    <value>{0} добавляет на сервер собственные значения, например навыки. Профиль, в котором они есть, не откроется в игре, пока мод снова не включён.</value>
+  </data>
+  <data name="Installed_GoBackFormat" xml:space="preserve">
+    <value>Вернуться к {0}</value>
+  </data>
+  <data name="Installed_GoBackUntilFormat" xml:space="preserve">
+    <value>Вернуться к {0} - хранится до {1}</value>
+  </data>
+  <data name="Installed_GoBackTitleFormat" xml:space="preserve">
+    <value>Вернуться к {0}?</value>
+  </data>
+  <data name="Installed_GoBackLeadFormat" xml:space="preserve">
+    <value>{0} {1} возвращается из копии, сохранённой при обновлении до {2}. Это работает без интернета, даже если автор удалил {1}.</value>
+  </data>
+  <data name="Installed_GoBackConfigs" xml:space="preserve">
+    <value>Файлы настроек возвращаются к состоянию до обновления. Настройки, изменённые после обновления, сохраняются.</value>
+  </data>
+  <data name="Installed_GoBackForwardFormat" xml:space="preserve">
+    <value>{0} сохраняется так же, поэтому к ней можно вернуться из этого меню.</value>
+  </data>
+  <data name="Installed_GoBack" xml:space="preserve">
+    <value>Вернуться</value>
+  </data>
+  <data name="Installed_GoBackWaitForInstall" xml:space="preserve">
+    <value>На странице загрузок идёт установка. Вернитесь к версии, когда она закончится.</value>
+  </data>
+  <data name="Installed_WentBackFormat" xml:space="preserve">
+    <value>{0} возвращён к {1}.</value>
+  </data>
+  <data name="Installed_WentBackBlockedFormat" xml:space="preserve">
+    <value>{0} возвращён к {1}, но место некоторых его файлов с тех пор заняло что-то другое. Они не перезаписаны и остаются в {2}.</value>
+  </data>
+  <data name="ModLink_Menu" xml:space="preserve">
+    <value>Связать со страницей на sp-mod...</value>
+  </data>
+  <data name="ModLink_HeaderFormat" xml:space="preserve">
+    <value>Связать {0} с sp-mod</value>
+  </data>
+  <data name="ModLink_Description" xml:space="preserve">
+    <value>Вставьте ссылку на страницу мода или аддона на sp-mod. Карточка получит название, страницу и обновления с неё. На диске ничего не меняется, а «Сбросить переопределение» в окне обновления отменяет связь.</value>
+  </data>
+  <data name="ModLink_Placeholder" xml:space="preserve">
+    <value>https://sp-mod.com/mod/...</value>
+  </data>
+  <data name="ModLink_Button" xml:space="preserve">
+    <value>Связать</value>
+  </data>
+  <data name="ModLink_NotAPage" xml:space="preserve">
+    <value>Это не ссылка на страницу мода или аддона на sp-mod.</value>
+  </data>
+  <data name="ModLink_NotInCatalog" xml:space="preserve">
+    <value>Этой страницы нет в списке, загруженном с sp-mod. Обновите «Обзор» и попробуйте снова.</value>
+  </data>
+  <data name="ModLink_LinkedFormat" xml:space="preserve">
+    <value>{0} связан с {1} на sp-mod.</value>
+  </data>
 </root>

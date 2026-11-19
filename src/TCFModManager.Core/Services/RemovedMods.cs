@@ -252,6 +252,70 @@ public sealed class RemovedMods(Func<RemovedModsRetention>? retention = null)
     public static (string Folder, RemovalLog Log)? LatestUndoable(string installPath) =>
         Undoable(installPath) is [var latest, ..] ? latest : null;
 
+    //
+    // The newest update of this mod in this install whose replaced version is still held, not yet
+    // gone back to, and not the version now installed - what "Go back to" puts back
+    // (ModInstallService.RevertUpdate). Asked each time a mod's right-click menu opens, so it goes by
+    // a few facts per held removal, remembered while its log is unchanged, and reads the whole log
+    // only for the match.
+    //
+    public static (string Folder, RemovalLog Log)? LatestReplaced(string installPath, int modId, bool isAddon, string currentVersion)
+    {
+        var root = Root(installPath);
+        if (!Directory.Exists(root)) return null;
+        var stamp = InstallStamp.Of(installPath);
+
+        var match = Directory.EnumerateDirectories(root)
+            .Select(folder => (Folder: folder, Brief: BriefOf(folder)))
+            .Where(h => h.Brief is { Kind: RemovalKind.ReplacedByUpdate, Undone: false, ModId: { } id } b
+                && id == modId && b.IsAddon == isAddon
+                && !string.Equals(b.Version, currentVersion, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(b.Stamp, stamp, StringComparison.OrdinalIgnoreCase))
+            .OrderByDescending(h => h.Brief!.RemovedAt)
+            .FirstOrDefault();
+
+        return match.Folder is not null && ReadLog(match.Folder) is { } log ? (match.Folder, log) : null;
+    }
+
+    private sealed record Brief(RemovalKind Kind, bool Undone, int? ModId, bool IsAddon, string? Version, string? Stamp, DateTimeOffset RemovedAt);
+
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, (DateTime Written, long Length, Brief? Brief)> Briefs =
+        new(StringComparer.OrdinalIgnoreCase);
+
+    private static Brief? BriefOf(string folder)
+    {
+        var path = Path.Combine(folder, LogName);
+        try
+        {
+            var info = new FileInfo(path);
+            if (!info.Exists) return null;
+            if (Briefs.TryGetValue(path, out var known) && known.Written == info.LastWriteTimeUtc && known.Length == info.Length)
+                return known.Brief;
+
+            var brief = ReadLog(folder) is { } log
+                ? new Brief(log.Kind, log.Undone, log.Record?.ModId, log.Record?.IsAddon ?? false, log.Record?.Version,
+                    StampOrNull(log.InstallPath), log.RemovedAt)
+                : null;
+            Briefs[path] = (info.LastWriteTimeUtc, info.Length, brief);
+            return brief;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return null;
+        }
+    }
+
+    // How long a held removal is kept; null for as long as the user keeps it.
+    public static TimeSpan? KeepFor(RemovedModsRetention retention) => retention switch
+    {
+        RemovedModsRetention.DeleteStraightAway => TimeSpan.Zero,
+        RemovedModsRetention.OneDay => TimeSpan.FromDays(1),
+        RemovedModsRetention.SevenDays => TimeSpan.FromDays(7),
+        RemovedModsRetention.FourteenDays => TimeSpan.FromDays(14),
+        RemovedModsRetention.ThirtyDays => TimeSpan.FromDays(30),
+        _ => null,
+    };
+
     private static string? StampOrNull(string path)
     {
         try { return InstallStamp.Of(path); }
@@ -264,17 +328,7 @@ public sealed class RemovedMods(Func<RemovedModsRetention>? retention = null)
     // Deletes held removals older than the retention (D27). Run at startup.
     public int Prune(string installPath, DateTimeOffset now)
     {
-        var age = _retention() switch
-        {
-            RemovedModsRetention.DeleteStraightAway => TimeSpan.Zero,
-            RemovedModsRetention.OneDay => TimeSpan.FromDays(1),
-            RemovedModsRetention.SevenDays => TimeSpan.FromDays(7),
-            RemovedModsRetention.FourteenDays => TimeSpan.FromDays(14),
-            RemovedModsRetention.ThirtyDays => TimeSpan.FromDays(30),
-            _ => (TimeSpan?)null,
-        };
-
-        if (age is not { } keepFor) return 0;
+        if (KeepFor(_retention()) is not { } keepFor) return 0;
 
         var deleted = 0;
 

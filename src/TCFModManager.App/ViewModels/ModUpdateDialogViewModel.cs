@@ -693,7 +693,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
         MadeChanges = true;
     }
 
-    private bool CanClearOverride() => _mod.IsManualOverride;
+    private bool CanClearOverride() => _mod.IsManualOverride || _mod.IsLinked;
 
     // Undoes a previous manual override, going back to auto-detecting the version from the files on
     // disk.
@@ -702,7 +702,8 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     {
         if (_mod.ModId is not { } modId) return;
 
-        AppServices.InstallManifest.ClearManualVersion(modId, _mod.IsAddon);
+        if (_mod.IsLinked) AppServices.ModLinks.Unlink(_mod.Entries.Select(e => e.Name));
+        if (_mod.IsManualOverride) AppServices.InstallManifest.ClearManualVersion(modId, _mod.IsAddon);
         MadeChanges = true;
         StatusMessage = Text(Strings.ModUpdate_ClearedOverrideFormat, _mod.DisplayTitle);
     }

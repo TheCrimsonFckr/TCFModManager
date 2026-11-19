@@ -361,7 +361,8 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
     //   2. Download - up to MaxDownloads at once, each retried after a dropped connection and
     //      resumed from where it broke off when the server allows it.
     //   3. Install - one at a time, in the order queued: installs write into the same folders,
-    //      so they never overlap, and a dependency queued behind its mod still lands behind it.
+    //      so they never overlap. A missing dependency an item pulls in installs ahead of it; an
+    //      addon queued behind its mod still lands behind it.
     //
     // So a mod list of forty downloads three at a time while the first ones install, where it used
     // to download and install one after another. Ported from SSPTMM's queue, without its archive
@@ -379,6 +380,29 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
     //
     private sealed record InstallTurn(DownloadQueueItemViewModel Item, CancellationToken Token, ModVersion Version, Task<string> Archive);
 
+    // Turns held back until the missing dependencies their item pulled in have taken theirs.
+    private readonly Dictionary<DownloadQueueItemViewModel, InstallTurn> _heldTurns = [];
+
+    private void TakeTurn(InstallTurn turn)
+    {
+        if (turn.Item.InstallsFirst.Any(d => d.InstallsBefore is not null))
+        {
+            _heldTurns[turn.Item] = turn;
+            return;
+        }
+
+        _installs.Writer.TryWrite(turn);
+    }
+
+    private void PreparedDependency(DownloadQueueItemViewModel item)
+    {
+        if (item.InstallsBefore is not { } waiting) return;
+        item.InstallsBefore = null;
+
+        if (waiting.InstallsFirst.Any(d => d.InstallsBefore is not null) || !_heldTurns.Remove(waiting, out var turn)) return;
+        _installs.Writer.TryWrite(turn);
+    }
+
     // Stage 1, for the whole session. Nothing that goes wrong with one item stops the queue.
     private async Task PrepareLoopAsync()
     {
@@ -392,6 +416,10 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             {
                 AppLog.Error("Downloads", $"preparing {item.ModName} failed", ex);
                 Settle(item, item.Token, ex);
+            }
+            finally
+            {
+                PreparedDependency(item);
             }
         }
     }
@@ -494,8 +522,8 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
                 }
             }
 
-            // Checked before this item's own download starts, so an accepted missing dependency
-            // lands right behind it in the queue.
+            // Checked before this item's own download starts; an accepted missing dependency
+            // installs ahead of it.
             if (item.CheckDependencies)
             {
                 item.StatusMessage = Strings.Downloads_CheckingDependencies;
@@ -517,7 +545,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
                 return;
             }
 
-            _installs.Writer.TryWrite(new InstallTurn(item, token, version, FetchArchiveAsync(item, version, token)));
+            TakeTurn(new InstallTurn(item, token, version, FetchArchiveAsync(item, version, token)));
         }
         catch (Exception ex)
         {
@@ -982,13 +1010,15 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
                 FikaCompatibility = dep.LatestCompatibleVersion.FikaCompatibility,
             };
 
-            Enqueue(
+            var dependency = Enqueue(
                 InstallTarget.For(depMod),
                 depVersion.Version ?? Strings.Common_Unknown,
                 installPath,
                 () => Task.FromResult<ModVersion?>(depVersion),
                 checkDependencies: false,
                 dependencyOf: item);
+            dependency.InstallsBefore = item;
+            item.InstallsFirst.Add(dependency);
         }
     }
 

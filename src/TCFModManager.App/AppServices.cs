@@ -29,6 +29,8 @@ internal static class AppServices
     // The user's notes on installed mods (OPEN-52 N3).
     public static ModNoteStore ModNotes { get; } = new();
 
+    public static ModLinkStore ModLinks { get; } = new();
+
     // The updates sp-mod holds back because they would break another installed mod (OPEN-12 F11).
     // Declared before anything that builds Installed cards, which read it.
     public static HeldBackUpdates HeldBack { get; } = new();

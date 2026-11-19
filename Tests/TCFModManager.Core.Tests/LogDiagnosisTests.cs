@@ -325,4 +325,50 @@ public sealed class LogDiagnosisTests : IDisposable
 
         Assert.Equal(LogFindingKind.RequestFailed, Assert.Single(found).Kind);
     }
+
+    [Fact]
+    public void A_value_the_game_does_not_know_is_traced_to_the_mod_whose_prepatch_adds_it()
+    {
+        var game = LogEntries.Parse(LogKind.GameErrors, "errors.log",
+        [
+            "2026-11-17 06:40:07.096 -05:00|0.16.9.5.40743|Error|backend|JSON parsing error in response to https://127.0.0.1:6969/client/game/profile/list",
+            "JSON parsing into EFT.ProfileDescriptor[] failed on response:",
+            "Error details: Error converting value \"SignalsIntelligence\" to type 'EFT.ESkillId'. Path '[0].Skills.Common[45].Id', line 1, position 33908.",
+            "2026-11-17 06:40:07.096 -05:00|0.16.9.5.40743|Error|Default|JSON parsing error in response to https://127.0.0.1:6969/client/game/profile/list: Error converting value \"SignalsIntelligence\" to type 'EFT.ESkillId'. Path '[0].Skills.Common[45].Id', line 1, position 33908.",
+            "  Inner Exception 1: Requested value 'SignalsIntelligence' was not found.",
+        ]);
+
+        var skills = Server("SkillsExtended", "com.cj.skillsextended", Path.Combine("mods.disabled", "SkillsExtended"));
+
+        var off = Assert.Single(Find([], Mods().WithAddedValue("SignalsIntelligence", skills, off: true), game: game));
+        Assert.Equal(LogFindingKind.GameUnknownValue, off.Kind);
+        Assert.Equal(LogSeverity.Critical, off.Severity);
+        Assert.Same(skills, off.Mod);
+        Assert.Equal(["/client/game/profile/list", "ESkillId", "SignalsIntelligence", "off"], off.Args);
+
+        Assert.Equal("on", Assert.Single(Find([], Mods().WithAddedValue("SignalsIntelligence", skills, off: false), game: game)).Args[3]);
+        var nobody = Assert.Single(Find([], game: game));
+        Assert.Null(nobody.Mod);
+        Assert.Equal(string.Empty, nobody.Args[3]);
+    }
+
+    [Fact]
+    public void Server_prepatches_are_read_from_the_patchers_folder_and_a_broken_file_is_skipped()
+    {
+        var skills = Path.Combine(_dir, "SPT", "user", "patchers", "com.cj.skillsextended");
+        var broken = Path.Combine(_dir, "SPT", "user", "patchers", "com.broken");
+        Directory.CreateDirectory(skills);
+        Directory.CreateDirectory(broken);
+        Directory.CreateDirectory(Path.Combine(_dir, "SPT", "user", "mods"));
+        File.WriteAllText(Path.Combine(skills, "EnumExtensions.json"), "["
+            + "{ \"enumType\": \"SPTarkov.Server.Core.Models.Enums.SkillTypes\", \"constantName\": \"Hacking\", \"constantValue\": 200 },"
+            + "{ \"enumType\": \"SPTarkov.Server.Core.Models.Enums.SkillTypes\", \"constantName\": \"SignalsIntelligence\", \"constantValue\": 201 }"
+            + "]");
+        File.WriteAllText(Path.Combine(broken, "x.json"), "{ not json");
+
+        Assert.Equal(
+            [("com.cj.skillsextended", "Hacking"), ("com.cj.skillsextended", "SignalsIntelligence")],
+            ServerPrepatches.Read(_dir));
+        Assert.Empty(ServerPrepatches.Read(Path.Combine(_dir, "nothing-here")));
+    }
 }

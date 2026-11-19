@@ -169,6 +169,19 @@ public partial class InstalledViewModel
     // about it, moves the folders, then rescans. Returns the moves it made so a caller running two
     // passes (InvertGroupAsync) can merge them into one undo step, or null when nothing happened.
     //
+    private async Task<bool> ConfirmProfilesAsync(IReadOnlyList<InstalledModCardViewModel> targets)
+    {
+        StatusMessage = Strings.ProfileItems_Checking;
+        var losses = await ProfileItemsWarning.ForCardsAsync(targets);
+        var adding = await ServerValuesWarning.AddingAsync(targets);
+        StatusMessage = null;
+
+        if (losses.Count > 0)
+            return ProfileItemsWarning.Confirm(losses, Strings.ProfileItems_DisableAnyway, ServerValuesWarning.Note(adding) is { } note ? [note] : null);
+
+        return adding.Count == 0 || ServerValuesWarning.Confirm(adding);
+    }
+
     private async Task<List<ModMove>?> ApplyDisableAsync(
         IReadOnlyList<InstalledModCardViewModel> cards,
         bool disable,
@@ -218,6 +231,8 @@ public partial class InstalledViewModel
                     break;
             }
         }
+
+        if (disable && confirm && !await ConfirmProfilesAsync(targets)) return null;
 
         var entries = targets.SelectMany(c => c.Entries).Where(e => e.IsDisabled != disable).ToList();
 

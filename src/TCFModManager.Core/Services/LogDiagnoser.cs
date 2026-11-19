@@ -61,6 +61,11 @@ public enum LogFindingKind
 
     /// <summary>A plugin logged errors in the game. Args: first message.</summary>
     PluginLoggedErrors,
+
+    /// <summary>The game could not read a server answer for a value it doesn't know (a mod's skill in a
+    /// profile, with the mod off). Args: the request, the type, the value, and "off" or "on" for the mod
+    /// the value comes from (empty when none could be named).</summary>
+    GameUnknownValue,
 }
 
 public enum LogSeverity
@@ -386,10 +391,23 @@ public static partial class LogDiagnoser
     [GeneratedRegex("^Bundle \"(?<bundle>[^\"]+)\" has dependency \"[^\"]+\" that was not found in manifest")]
     private static partial Regex BundleDependency();
 
+    [GeneratedRegex(@"^JSON parsing error in response to https?://[^/\s]+(?<route>/[^\s:]+): Error converting value ""(?<value>[^""]+)"" to type '(?<type>[\w.+]+)'")]
+    private static partial Regex GameUnknownValue();
+
     private static void CheckGame(IReadOnlyList<LogEntry> entries, LogModLocator mods, Findings found)
     {
         foreach (var entry in entries)
         {
+            if (GameUnknownValue().Match(entry.Message) is { Success: true } unknown)
+            {
+                var value = unknown.Groups["value"].Value;
+                var owner = mods.ByAddedValue(value);
+                found.Add(LogFindingKind.GameUnknownValue, LogSeverity.Critical, owner?.Mod,
+                    [unknown.Groups["route"].Value, ShortType(unknown.Groups["type"].Value), value, owner is null ? string.Empty : owner.Value.Off ? "off" : "on"],
+                    entry);
+                continue;
+            }
+
             if (BundleDependency().Match(entry.Message) is not { Success: true } m) continue;
 
             var bundle = m.Groups["bundle"].Value;

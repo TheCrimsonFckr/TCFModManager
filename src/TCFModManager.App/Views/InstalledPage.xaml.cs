@@ -205,10 +205,12 @@ public partial class InstalledPage : Page
             if (mod.CanQuickUpdate) Add(mod.QuickUpdateToolTip, "ArrowDownload24", ViewModel.UpdateOneCommand, mod);
             if (InstalledViewModel.SkipMenuLabel(mod) is { } skip) Add(skip, "ArrowForward24", ViewModel.SkipUpdateCommand, mod);
             if (mod.SkippedVersion is not null) Add(Strings.Installed_StopSkipping, "ArrowReset24", ViewModel.StopSkippingCommand, mod);
+            if (InstalledViewModel.GoBackMenuLabel(mod) is { } goBack) Add(goBack, "History24", ViewModel.GoBackCommand, mod);
             Add(mod.DisableToggleTooltip, mod.DisableToggleGlyph, ViewModel.ToggleDisableCommand, mod);
             Add(mod.PinLabel, mod.PinGlyph, ViewModel.TogglePinCommand, mod);
             Add(mod.Note is null ? Strings.Installed_NoteAdd : Strings.Installed_NoteEdit, "Note24", ViewModel.EditNoteCommand, mod);
             if (ViewModel.FamilyMenuLabel(mod) is { } family) Add(family, "PuzzlePiece24", ViewModel.ShowFamilyCommand, mod);
+            if (InstalledViewModel.CanLinkToPage(mod)) Add(Strings.ModLink_Menu, "Link24", ViewModel.LinkToPageCommand, mod);
             menu.Items.Add(GroupMenu(mod));
 
             if (mod.ClientFolderLink is not null || mod.ServerFolderLink is not null || InstalledViewModel.ModPageUrl(mod) is not null)

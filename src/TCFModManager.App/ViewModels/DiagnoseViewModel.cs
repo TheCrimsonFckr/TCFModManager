@@ -102,6 +102,13 @@ public sealed class LogFindingRow
             LogFindingKind.ModReportedError => (Strings.Diagnose_Title_ModReportedError, Arg(f, 0)),
             LogFindingKind.BundleClash => (Strings.Diagnose_Title_BundleClash, T(Strings.Diagnose_Body_BundleClash, Arg(f, 0))),
             LogFindingKind.BundleMissingDependency => (Strings.Diagnose_Title_BundleMissingDependency, T(Strings.Diagnose_Body_BundleMissingDependency, Arg(f, 0))),
+            LogFindingKind.GameUnknownValue => (Strings.Diagnose_Title_GameUnknownValue,
+                T(Strings.Diagnose_Body_GameUnknownValueFormat, Arg(f, 0), Arg(f, 1), Arg(f, 2)) + " " + (f.Mod, Arg(f, 3)) switch
+                {
+                    ({ } mod, "off") => T(Strings.Diagnose_Body_GameUnknownValueOffFormat, mod.DisplayName),
+                    ({ } mod, _) => T(Strings.Diagnose_Body_GameUnknownValueOnFormat, mod.DisplayName),
+                    _ => T(Strings.Diagnose_Body_GameUnknownValueNoModFormat, Arg(f, 1)),
+                }),
             _ => (Strings.Diagnose_Title_PluginLoggedErrors, Arg(f, 0)),
         };
     }
@@ -161,7 +168,7 @@ public sealed partial class DiagnoseViewModel : LocalizedViewModel
             var clock = Stopwatch.StartNew();
             _last = await Task.Run(() =>
             {
-                var mods = LogModLocator.Build(InstalledScan.Run(installPath));
+                var mods = LogModLocator.Build(InstalledScan.Run(installPath), installPath);
                 return LogDiagnoser.Diagnose(LogFiles.Find(installPath), mods);
             });
 

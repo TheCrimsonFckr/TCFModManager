@@ -38,17 +38,36 @@ public sealed class LogModLocator
     private readonly Dictionary<string, DiagnosedMod?> _byNamespace = new(StringComparer.Ordinal);
     private readonly List<DiagnosedMod> _serverMods = [];
     private readonly List<DiagnosedMod> _all = [];
+    private readonly Dictionary<string, (DiagnosedMod Mod, bool Off)> _byAddedValue = new(StringComparer.Ordinal);
 
     public IReadOnlyList<DiagnosedMod> ServerMods => _serverMods;
 
     public IReadOnlyList<DiagnosedMod> All => _all;
 
-    /// <summary>From the scan of the install: enabled mods only (a disabled one isn't loaded).</summary>
-    public static LogModLocator Build(IEnumerable<InstalledMod> scanned)
+    /// <summary>From the scan of the install: enabled mods only (a disabled one isn't loaded). With the
+    /// install's folder, the values its server prepatches add are traced too, to mods on or off.</summary>
+    public static LogModLocator Build(IEnumerable<InstalledMod> scanned, string? installPath = null)
     {
         var locator = new LogModLocator();
+        var everything = scanned.ToList();
 
-        foreach (var mod in scanned.Where(m => !m.IsDisabled))
+        if (installPath is { Length: > 0 })
+        {
+            foreach (var (guid, value) in ServerPrepatches.Read(installPath))
+            {
+                var owner = everything
+                    .Where(m => m.Target == InstalledModTarget.Server && m.AllGuids.Any(g => g.Equals(guid, StringComparison.OrdinalIgnoreCase)))
+                    .OrderBy(m => m.IsDisabled)
+                    .FirstOrDefault();
+                if (owner is null) continue;
+
+                locator._byAddedValue.TryAdd(value, (
+                    new DiagnosedMod(owner.Name, owner.DeclaredName ?? owner.Name, owner.FolderPath, owner.Target, owner.Guid) { InstalledAt = owner.InstalledAt },
+                    owner.IsDisabled));
+            }
+        }
+
+        foreach (var mod in everything.Where(m => !m.IsDisabled))
         {
             var found = new DiagnosedMod(mod.Name, mod.DeclaredName ?? mod.Name, mod.FolderPath, mod.Target, mod.Guid)
             {
@@ -106,6 +125,18 @@ public sealed class LogModLocator
         _byPlugin.TryGetValue(name.Trim(), out var plugin) ? plugin
         : _byServerName.TryGetValue(name.Trim(), out var server) ? server
         : null;
+
+    /// <summary>The server mod whose prepatch adds this value ("SignalsIntelligence"), and whether that
+    /// mod is turned off; null when no prepatch adds it or the folder is no installed mod's.</summary>
+    public (DiagnosedMod Mod, bool Off)? ByAddedValue(string value) =>
+        _byAddedValue.TryGetValue(value, out var found) ? found : null;
+
+    /// <summary>For tests: a value a mod's prepatch adds.</summary>
+    public LogModLocator WithAddedValue(string value, DiagnosedMod mod, bool off)
+    {
+        _byAddedValue[value] = (mod, off);
+        return this;
+    }
 
     /// <summary>The mod whose code a type or member name ("Roulette.Server.RouletteCallbacks.State") is in.</summary>
     public DiagnosedMod? ByCode(string qualifiedName)

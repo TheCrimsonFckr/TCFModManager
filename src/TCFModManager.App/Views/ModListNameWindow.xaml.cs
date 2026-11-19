@@ -45,6 +45,14 @@ public partial class ModListNameWindow : FluentWindow
         return window.ShowDialog() == true ? window.NameBox.Text.Trim() : null;
     }
 
+    public static string? AskForPageLink(string modName)
+    {
+        var window = new ModListNameWindow(
+            LocalizationService.Text(Strings.ModLink_HeaderFormat, modName), Strings.ModLink_Description,
+            Strings.ModLink_Button, SymbolRegular.Link24, placeholder: Strings.ModLink_Placeholder);
+        return window.ShowDialog() == true ? window.NameBox.Text.Trim() : null;
+    }
+
     public static string? AskForCapture() => Ask(
         Strings.ModLists_CaptureHeader, Strings.ModLists_CaptureDescription, Strings.ModLists_Capture, SymbolRegular.AppsList24);
 

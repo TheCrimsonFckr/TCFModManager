@@ -236,4 +236,35 @@ public class ModDependencyGraphTests
         Assert.Empty(graph.DependentsOf(serverOnly));
         Assert.Equal(["com.tyfon.uifixes"], graph.UnresolvedOf(clientConsumer));
     }
+
+    [Fact]
+    public void DependencyOrder_PutsWhatEachNeedsFirst_OtherwiseAsGiven()
+    {
+        var library = Client("Library", "com.a.library");
+        var middle = Client("Middle", "com.a.middle", false, new ModDependencyRef("com.a.library", IsSoft: false));
+        var top = Client("Top", "com.a.top", false, new ModDependencyRef("com.a.middle", IsSoft: true));
+        var alone = Client("Alone", "com.a.alone");
+        var graph = ModDependencyGraph.Build([library, middle, top, alone]);
+
+        var order = graph.DependencyOrder([top, alone, middle, library], m => [m]);
+
+        Assert.Equal(["Library", "Middle", "Top", "Alone"], order.Select(m => m.Name));
+    }
+
+    [Fact]
+    public void DependencyOrder_ACycleIsBrokenWhereItCloses()
+    {
+        var a = Client("A", "com.a.a", false, new ModDependencyRef("com.a.b", IsSoft: false));
+        var b = Client("B", "com.a.b", false, new ModDependencyRef("com.a.a", IsSoft: false));
+        var graph = ModDependencyGraph.Build([a, b]);
+
+        Assert.Equal(["B", "A"], graph.DependencyOrder([a, b], m => [m]).Select(m => m.Name));
+    }
+
+    [Fact]
+    public void DependencyOrdering_KeepsTheGivenOrderWithNothingNeeded()
+    {
+        Assert.Equal(["c", "a", "b"], DependencyOrdering.Order(["c", "a", "b"], _ => []));
+        Assert.Equal(["a", "c", "b"], DependencyOrdering.Order(["c", "a", "b"], i => i == 0 ? [1] : []));
+    }
 }

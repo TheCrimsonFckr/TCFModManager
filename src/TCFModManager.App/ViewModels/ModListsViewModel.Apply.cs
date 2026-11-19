@@ -60,6 +60,15 @@ public partial class ModListsViewModel
 
         RefusedNotice = null;
 
+        if (preview.Plan.Disable.Any())
+        {
+            var shown = StatusMessage;
+            StatusMessage = Strings.ProfileItems_Checking;
+            var losses = await ProfileItemsWarning.ForListAsync(preview.Install.InstallPath, preview.Plan.Disable);
+            StatusMessage = shown;
+            if (losses.Count > 0 && !ProfileItemsWarning.Confirm(losses, Strings.ProfileItems_ApplyAnyway)) return;
+        }
+
         await RunAsync(async () =>
         {
             var result = await _service.ApplyAsync(preview, ModListPrompts.Default);

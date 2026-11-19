@@ -489,4 +489,119 @@ public class ResilienceRemovalTests : IDisposable
         Assert.False(RemovedMods.DeleteHeld(_install, held));
         Assert.True(File.Exists(Path.Combine(elsewhere, "precious.txt")));
     }
+
+    [Fact]
+    public async Task RevertUpdate_PutsTheReplacedVersionBack_AndCanItselfBeGoneBackOn()
+    {
+        var target = NewTarget();
+        await Install(target, "1.0.0",
+            ("BepInEx/plugins/Mod/mod.dll", "v1"),
+            ("BepInEx/plugins/Mod/old.dll", "only in v1"));
+        await Install(target, "2.0.0",
+            ("BepInEx/plugins/Mod/mod.dll", "v2"),
+            ("BepInEx/plugins/Mod/new.dll", "only in v2"));
+
+        var held = RemovedMods.LatestReplaced(_install, target.Id, false, "2.0.0");
+        Assert.NotNull(held);
+        Assert.Equal("1.0.0", held.Value.Log.Record!.Version);
+
+        var back = Service().RevertUpdate(_install, RecordOf(target), held.Value.Folder);
+
+        Assert.True(back.Ran);
+        Assert.Empty(back.Blocked);
+        Assert.Equal("v1", File.ReadAllText(Full("BepInEx/plugins/Mod/mod.dll")));
+        Assert.Equal("only in v1", File.ReadAllText(Full("BepInEx/plugins/Mod/old.dll")));
+        Assert.False(File.Exists(Full("BepInEx/plugins/Mod/new.dll")));
+        Assert.Equal("1.0.0", RecordOf(target).Version);
+        Assert.False(Directory.Exists(held.Value.Folder));
+
+        var again = RemovedMods.LatestReplaced(_install, target.Id, false, "1.0.0");
+        Assert.NotNull(again);
+        Assert.Equal("2.0.0", again.Value.Log.Record!.Version);
+        Assert.Null(RemovedMods.LatestReplaced(_install, target.Id, false, "2.0.0"));
+
+        Assert.True(Service().RevertUpdate(_install, RecordOf(target), again.Value.Folder).Ran);
+        Assert.Equal("v2", File.ReadAllText(Full("BepInEx/plugins/Mod/mod.dll")));
+        Assert.Equal("only in v2", File.ReadAllText(Full("BepInEx/plugins/Mod/new.dll")));
+        Assert.False(File.Exists(Full("BepInEx/plugins/Mod/old.dll")));
+        Assert.Equal("2.0.0", RecordOf(target).Version);
+    }
+
+    [Fact]
+    public async Task RevertUpdate_RefusesARemovalAnotherModsOrAnotherInstalls()
+    {
+        var target = NewTarget();
+        var other = NewTarget();
+        await Install(target, "1.0.0", ("BepInEx/plugins/Mod/mod.dll", "v1"));
+        await Install(target, "2.0.0", ("BepInEx/plugins/Mod/mod.dll", "v2"));
+        await Install(other, "1.0.0", ("BepInEx/plugins/Other/o.dll", "other"));
+        var held = RemovedMods.LatestReplaced(_install, target.Id, false, "2.0.0")!.Value.Folder;
+
+        var removal = await Service().UninstallAsync(_install, RecordOf(other), ConfigAction.Delete);
+        Assert.False(Service().RevertUpdate(_install, RecordOf(target), removal.HoldingFolder!).Ran);
+
+        await Install(other, "1.0.0", ("BepInEx/plugins/Other/o.dll", "other"));
+        Assert.False(Service().RevertUpdate(_install, RecordOf(other), held).Ran);
+
+        Assert.Equal("v2", File.ReadAllText(Full("BepInEx/plugins/Mod/mod.dll")));
+    }
+
+    [Fact]
+    public async Task RevertUpdate_NeverOverwritesAPathTakenSince()
+    {
+        var target = NewTarget();
+        await Install(target, "1.0.0",
+            ("BepInEx/plugins/Mod/mod.dll", "v1"),
+            ("BepInEx/plugins/Mod/old.dll", "only in v1"));
+        await Install(target, "2.0.0", ("BepInEx/plugins/Mod/mod.dll", "v2"));
+        Write("BepInEx/plugins/Mod/old.dll", "the user's own");
+        var held = RemovedMods.LatestReplaced(_install, target.Id, false, "2.0.0")!.Value.Folder;
+
+        var back = Service().RevertUpdate(_install, RecordOf(target), held);
+
+        Assert.Equal(["BepInEx/plugins/Mod/old.dll"], back.Blocked);
+        Assert.Equal("the user's own", File.ReadAllText(Full("BepInEx/plugins/Mod/old.dll")));
+        Assert.Equal("v1", File.ReadAllText(Full("BepInEx/plugins/Mod/mod.dll")));
+        Assert.Equal("only in v1", File.ReadAllText(Held(held, "BepInEx/plugins/Mod/old.dll")));
+    }
+
+    [Fact]
+    public async Task RevertUpdate_LeavesSettingsTunedSinceTheUpdate()
+    {
+        var target = NewTarget();
+        await Install(target, "1.0.0",
+            ("BepInEx/plugins/Mod/mod.dll", "v1"),
+            ("BepInEx/config/com.test.mod.cfg", "v1 defaults"));
+        await Install(target, "2.0.0",
+            ("BepInEx/plugins/Mod/mod.dll", "v2"),
+            ("BepInEx/config/com.test.mod.cfg", "v2 defaults"));
+        Write("BepInEx/config/com.test.mod.cfg", "tuned in game");
+        var held = RemovedMods.LatestReplaced(_install, target.Id, false, "2.0.0")!.Value.Folder;
+
+        var back = Service().RevertUpdate(_install, RecordOf(target), held);
+
+        Assert.True(back.Ran);
+        Assert.Empty(back.Blocked);
+        Assert.Equal("v1", File.ReadAllText(Full("BepInEx/plugins/Mod/mod.dll")));
+        Assert.Equal("tuned in game", File.ReadAllText(Full("BepInEx/config/com.test.mod.cfg")));
+    }
+
+    [Fact]
+    public async Task RevertUpdate_PutsBackAFileOnlyTheNewerVersionReplaced()
+    {
+        var target = NewTarget();
+        await Install(target, "1.0.0", ("BepInEx/plugins/Mod/mod.dll", "v1"));
+        Write("BepInEx/plugins/Shared/lib.dll", "someone else's library");
+        await Install(target, "2.0.0",
+            ("BepInEx/plugins/Mod/mod.dll", "v2"),
+            ("BepInEx/plugins/Shared/lib.dll", "v2's copy"));
+        var held = RemovedMods.LatestReplaced(_install, target.Id, false, "2.0.0")!.Value.Folder;
+
+        var back = Service().RevertUpdate(_install, RecordOf(target), held);
+
+        Assert.True(back.Ran);
+        Assert.Equal("v1", File.ReadAllText(Full("BepInEx/plugins/Mod/mod.dll")));
+        Assert.Equal("someone else's library", File.ReadAllText(Full("BepInEx/plugins/Shared/lib.dll")));
+        Assert.Empty(RecordOf(target).Overwrote);
+    }
 }

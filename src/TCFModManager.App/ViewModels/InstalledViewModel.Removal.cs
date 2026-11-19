@@ -35,6 +35,10 @@ public partial class InstalledViewModel
         if (AskRemoveAddons(mod) is not { } addons) return;
         var batch = addons.Count > 0 ? RemovalBatch.For(mod.Name) : null;
 
+        StatusMessage = Strings.ProfileItems_Checking;
+        var losses = await ProfileItemsWarning.ForCardsAsync([mod]);
+        StatusMessage = null;
+
         if (mod.IsAppManaged && mod.ModId is { } modId)
         {
             var manifest = AppServices.InstallManifest.Load();
@@ -66,7 +70,7 @@ public partial class InstalledViewModel
             if (record.InstallPath is null && !InstallStamp.AppIsInside(installPath))
                 detail.Add(Text(Strings.Installed_RemoveNoInstallStampFormat, installPath));
 
-            if (ConfirmRemoval(mod, Text(Strings.Installed_RemoveAppLeadFormat, mod.Name), [], detail, configs.Count)
+            if (ConfirmRemoval(mod, Text(Strings.Installed_RemoveAppLeadFormat, mod.Name), [], detail, configs.Count, losses)
                 is not { } configAction)
             {
                 return;
@@ -121,7 +125,8 @@ public partial class InstalledViewModel
                     Text(Strings.Installed_RemoveHandLeadFormat, mod.Name),
                     [new(null, [.. HandRemovalShown(mod, paths.Select(p => p!))])],
                     [],
-                    configs.Count) is not { } configAction)
+                    configs.Count,
+                    losses) is not { } configAction)
             {
                 return;
             }
@@ -220,20 +225,27 @@ public partial class InstalledViewModel
             if (answer == AskChoice.First) targets.AddRange(unselectedAddons);
         }
 
-        var profileMods = targets.Where(ChangesProfile).Select(t => t.DisplayTitle).ToList();
+        StatusMessage = Strings.ProfileItems_Checking;
+        var losses = await ProfileItemsWarning.ForCardsAsync(targets);
+        StatusMessage = null;
+
+        var holding = losses.Select(l => l.ModName).ToHashSet(StringComparer.Ordinal);
+        var profileMods = targets.Where(t => !holding.Contains(t.DisplayTitle) && ChangesProfile(t)).Select(t => t.DisplayTitle).ToList();
 
         var sections = new List<AskSection> { new(null, [.. targets.Select(t => t.DisplayTitle)]) };
+        if (losses.Count > 0) sections.Add(new(Strings.ProfileItems_Heading, ProfileItemsWarning.Lines(losses)));
         if (profileMods.Count > 0) sections.Add(new(Strings.Installed_RemoveSelectedProfileHeading, profileMods));
         if (leftTwice.Count > 0) sections.Add(new(Strings.Installed_RemoveSelectedTwiceHeading, leftTwice));
 
         var detail = new List<string>();
-        if (profileMods.Count > 0) detail.Add(Strings.Installed_ProfileUndoMany);
+        if (profileMods.Count > 0 || losses.Count > 0) detail.Add(Strings.Installed_ProfileUndoMany);
         detail.Add(HeldSentence());
 
         var confirmed = AskWindow.Show(new AskRequest
         {
             Title = Strings.Installed_RemoveSelectedTitle,
-            Warning = profileMods.Count > 0 ? Strings.Installed_RemoveSelectedProfileWarning : null,
+            Warning = losses.Count > 0 ? Strings.ProfileItems_Intro
+                : profileMods.Count > 0 ? Strings.Installed_RemoveSelectedProfileWarning : null,
             Lead = Strings.Installed_RemoveSelectedLead,
             Sections = sections,
             Detail = detail,
@@ -499,9 +511,11 @@ public partial class InstalledViewModel
     /// <summary>Confirms a removal and, when the mod has config files of its own, asks what should happen to
     /// them in the same window. Returns null when the user backed out.</summary>
     private static ConfigAction? ConfirmRemoval(
-        InstalledModCardViewModel mod, string lead, IReadOnlyList<AskSection> sections, IReadOnlyList<string> detail, int configCount)
+        InstalledModCardViewModel mod, string lead, IReadOnlyList<AskSection> sections, IReadOnlyList<string> detail, int configCount,
+        IReadOnlyList<ProfileLoss> losses)
     {
-        var profile = ChangesProfile(mod);
+        var profile = losses.Count > 0 || ChangesProfile(mod);
+        if (losses.Count > 0) sections = [.. sections, new(Strings.ProfileItems_Heading, ProfileItemsWarning.Lines(losses))];
         var hasConfigs = configCount > 0;
 
         var lines = new List<string>();
@@ -516,7 +530,8 @@ public partial class InstalledViewModel
         var answer = AskWindow.Show(new AskRequest
         {
             Title = Text(Strings.Installed_RemoveTitleFormat, mod.Name),
-            Warning = profile ? Text(Strings.Installed_ProfileWarningFormat, mod.DisplayTitle) : null,
+            Warning = losses.Count > 0 ? Strings.ProfileItems_Intro
+                : profile ? Text(Strings.Installed_ProfileWarningFormat, mod.DisplayTitle) : null,
             Lead = lead,
             Sections = sections,
             Detail = lines,

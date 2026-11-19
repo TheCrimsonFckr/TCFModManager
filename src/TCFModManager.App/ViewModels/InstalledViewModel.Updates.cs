@@ -110,6 +110,8 @@ public partial class InstalledViewModel
                 TextLists.Join([.. incompatible.Select(r => r.Card.DisplayTitle)]));
         }
 
+        resolved = [.. _dependencies.DependencyOrder(resolved, r => r.Card.Entries)];
+
         var updates = resolved
             .Select(r => new UpdateTarget(
                 r.Card,
