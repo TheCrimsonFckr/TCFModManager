@@ -66,6 +66,12 @@ internal static class HelpCatalog
                 .WithNote(() => Strings.Help_Play_Check_Note)
                 .WithKeywords(() => Strings.Help_Play_Check_Keywords),
 
+            // OPEN-52 N28.
+            Topic("profile.needs", () => Strings.Help_Profile_Needs_Title,
+                Step(() => Strings.Help_Profile_Needs_Step1, () => Strings.Nav_Profile),
+                Step(() => Strings.Help_Profile_Needs_Step2, () => Strings.Nav_Dependencies))
+                .WithKeywords(() => Strings.Help_Profile_Needs_Keywords),
+
             Topic("profile.quickplay", () => Strings.Help_QuickPlay_Title,
                 Step(() => Strings.Help_QuickPlay_Step1, () => Strings.QuickPlay_Title),
                 Step(() => Strings.Help_QuickPlay_Step2),
@@ -91,6 +97,12 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_StopWithGame_Step2, () => Strings.Play_KeepServerRunning))
                 .WithNote(() => Strings.Help_StopWithGame_Note, () => Strings.Options_StopServerIgnoresHeadlessTitle)
                 .WithKeywords(() => Strings.Help_StopWithGame_Keywords),
+
+            // OPEN-52 N33.
+            Topic("server.headless", () => Strings.Help_Server_Headless_Title,
+                Step(() => Strings.Help_Server_Headless_Step1, () => Strings.Nav_Server, () => Strings.Play_StartHeadlessWithServer),
+                Step(() => Strings.Help_Server_Headless_Step2, () => Strings.Play_StartServer, () => Strings.Play_Restart))
+                .WithKeywords(() => Strings.Help_Server_Headless_Keywords),
         ]),
 
         new("browse", () => Strings.Nav_Browse, SymbolRegular.Apps24, typeof(BrowsePage),
@@ -214,6 +226,12 @@ internal static class HelpCatalog
                     () => Strings.Installed_MultiSelect, () => Strings.Installed_UpdateSelected)
                 .WithKeywords(() => Strings.Help_Installed_Update_Keywords),
 
+            // OPEN-52 N1.
+            Topic("installed.skip", () => Strings.Help_Installed_Skip_Title,
+                Step(() => Strings.Help_Installed_Skip_Step1, () => Strings.Nav_Installed),
+                Step(() => Strings.Help_Installed_Skip_Step2, () => Strings.Installed_StopSkipping, () => Strings.Installed_DetailsAndVersions))
+                .WithKeywords(() => Strings.Help_Installed_Skip_Keywords),
+
             Topic("installed.views", () => Strings.Help_Installed_Views_Title,
                 Step(() => Strings.Help_Installed_Views_Step1,
                     () => Strings.Nav_Installed, () => Strings.Installed_ViewCards,
@@ -229,6 +247,26 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Installed_Groups_Step3))
                 .WithNote(() => Strings.Help_Installed_Groups_Note)
                 .WithKeywords(() => Strings.Help_Installed_Groups_Keywords),
+
+            // OPEN-52 N13.
+            Topic("installed.groupmenu", () => Strings.Help_Installed_GroupMenu_Title,
+                Step(() => Strings.Help_Installed_GroupMenu_Step1, () => Strings.Nav_Installed, () => Strings.Installed_AddToGroup),
+                Step(() => Strings.Help_Installed_GroupMenu_Step2, () => Strings.Installed_NewGroupMenu, () => Strings.Installed_RemoveFromGroup))
+                .WithNote(() => Strings.Help_Installed_GroupMenu_Note)
+                .WithKeywords(() => Strings.Help_Installed_GroupMenu_Keywords),
+
+            // OPEN-57.
+            Topic("installed.groupicons", () => Strings.Help_Installed_GroupIcons_Title,
+                Step(() => Strings.Help_Installed_GroupIcons_Step1, () => Strings.Installed_ViewGroups, () => Strings.Nav_Installed),
+                Step(() => Strings.Help_Installed_GroupIcons_Step2, () => Strings.GroupIcon_None),
+                Step(() => Strings.Help_Installed_GroupIcons_Step3, () => Strings.Installed_AddToGroup))
+                .WithKeywords(() => Strings.Help_Installed_GroupIcons_Keywords),
+
+            // OPEN-52 N3.
+            Topic("installed.notes", () => Strings.Help_Installed_Notes_Title,
+                Step(() => Strings.Help_Installed_Notes_Step1, () => Strings.Nav_Installed, () => Strings.Installed_NoteAdd),
+                Step(() => Strings.Help_Installed_Notes_Step2))
+                .WithKeywords(() => Strings.Help_Installed_Notes_Keywords),
 
             Topic("installed.disable", () => Strings.Help_Installed_Disable_Title,
                 Step(() => Strings.Help_Installed_Disable_Step1, () => Strings.Nav_Installed),
@@ -451,6 +489,13 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Diagnose_Read_Step3, () => Strings.Diagnose_Refresh))
                 .WithNote(() => Strings.Help_Diagnose_Read_Note, () => Strings.Diagnose_CopyReport)
                 .WithKeywords(() => Strings.Help_Diagnose_Read_Keywords),
+
+            // OPEN-52 N29.
+            Topic("diagnose.profilefix", () => Strings.Help_Diagnose_ProfileFix_Title,
+                Step(() => Strings.Help_Diagnose_ProfileFix_Step1, () => Strings.Nav_Diagnose, () => Strings.ProfileFix_TurnOn, () => Strings.Play_DirectPlay),
+                Step(() => Strings.Help_Diagnose_ProfileFix_Step2))
+                .WithNote(() => Strings.Help_Diagnose_ProfileFix_Note)
+                .WithKeywords(() => Strings.Help_Diagnose_ProfileFix_Keywords),
         ]),
 
         new("footprint", () => Strings.Nav_Footprint, SymbolRegular.Scales24, typeof(FootprintPage),
@@ -519,6 +564,13 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Downloads_Where_Step1, () => Strings.Nav_Downloads),
                 Step(() => Strings.Help_Downloads_Where_Step2, () => Strings.Downloads_ShowInFolder))
                 .WithKeywords(() => Strings.Help_Downloads_Where_Keywords),
+
+            // OPEN-52 N14/N15.
+            Topic("downloads.pause", () => Strings.Help_Downloads_Pause_Title,
+                Step(() => Strings.Help_Downloads_Pause_Step1, () => Strings.Downloads_Pause, () => Strings.Nav_Downloads),
+                Step(() => Strings.Help_Downloads_Pause_Step2, () => Strings.Downloads_Resume))
+                .WithNote(() => Strings.Help_Downloads_Pause_Note, () => Strings.Downloads_SpaceDownloadAnyway)
+                .WithKeywords(() => Strings.Help_Downloads_Pause_Keywords),
         ]),
 
         new("monitor", () => Strings.Help_Monitor_Title, SymbolRegular.DocumentSave24, null,
@@ -600,6 +652,14 @@ internal static class HelpCatalog
                 .WithNote(() => Strings.Help_Options_Theme_Note,
                     () => Strings.ThemeEditor_Export, () => Strings.Options_ThemeCustomise, () => Strings.ThemeEditor_Import)
                 .WithKeywords(() => Strings.Help_Options_Theme_Keywords),
+
+            // OPEN-52 N24.
+            Topic("options.animations", () => Strings.Help_Options_Animations_Title,
+                Step(() => Strings.Help_Options_Animations_Step1,
+                    () => Strings.Nav_Options, () => Strings.Options_AppearanceHeader, () => Strings.Options_AnimationsHeader),
+                Step(() => Strings.Help_Options_Animations_Step2,
+                    () => Strings.Options_AnimationsFollowWindows, () => Strings.Options_AnimationsOn, () => Strings.Options_AnimationsOff))
+                .WithKeywords(() => Strings.Help_Options_Animations_Keywords),
 
             Topic("options.role", () => Strings.Help_Options_Role_Title,
                 Step(() => Strings.Help_Options_Role_Step1,

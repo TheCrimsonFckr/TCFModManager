@@ -10022,4 +10022,124 @@
   <data name="GroupIcon_PickToolTip" xml:space="preserve">
     <value>Выбрать значок для этой группы</value>
   </data>
+  <data name="Help_Installed_Skip_Title" xml:space="preserve">
+    <value>Пропустить ненужное обновление</value>
+  </data>
+  <data name="Help_Installed_Skip_Step1" xml:space="preserve">
+    <value>На странице «{0}» щёлкните правой кнопкой по моду с обновлением и выберите «Пропустить это обновление». Оно перестанет считаться обновлением - ни в фильтре, ни в «Обновить выбранные», ни в уведомлениях - пока не выйдет более новая версия.</value>
+  </data>
+  <data name="Help_Installed_Skip_Step2" xml:space="preserve">
+    <value>Чтобы передумать, снова щёлкните правой кнопкой и выберите «{0}». Пропущенную версию по-прежнему можно установить через «{1}».</value>
+  </data>
+  <data name="Help_Installed_Skip_Keywords" xml:space="preserve">
+    <value>пропустить обновление, игнорировать обновление, не обновлять, скрыть обновление</value>
+  </data>
+  <data name="Help_Installed_Notes_Title" xml:space="preserve">
+    <value>Добавить заметку к моду</value>
+  </data>
+  <data name="Help_Installed_Notes_Step1" xml:space="preserve">
+    <value>На странице «{0}» щёлкните правой кнопкой по моду и выберите «{1}».</value>
+  </data>
+  <data name="Help_Installed_Notes_Step2" xml:space="preserve">
+    <value>Напишите строку - она появится под названием мода во всех видах, и поиск её найдёт. Очистите поле, чтобы убрать заметку.</value>
+  </data>
+  <data name="Help_Installed_Notes_Keywords" xml:space="preserve">
+    <value>заметка, комментарий, пометка, напоминание</value>
+  </data>
+  <data name="Help_Installed_GroupMenu_Title" xml:space="preserve">
+    <value>Добавить моды в группу через контекстное меню</value>
+  </data>
+  <data name="Help_Installed_GroupMenu_Step1" xml:space="preserve">
+    <value>На странице «{0}» щёлкните правой кнопкой по моду - или по одному из нескольких отмеченных - и откройте «{1}».</value>
+  </data>
+  <data name="Help_Installed_GroupMenu_Step2" xml:space="preserve">
+    <value>Выберите группу или «{0}», чтобы создать новую. «{1}» возвращает их в «Без группы».</value>
+  </data>
+  <data name="Help_Installed_GroupMenu_Note" xml:space="preserve">
+    <value>Если перетащить один из нескольких отмеченных модов на группу, переместятся все. Если переименовать группу так же, как другую, будет предложено их объединить.</value>
+  </data>
+  <data name="Help_Installed_GroupMenu_Keywords" xml:space="preserve">
+    <value>добавить в группу, переместить в группу, новая группа, объединить группы</value>
+  </data>
+  <data name="Help_Installed_GroupIcons_Title" xml:space="preserve">
+    <value>Задать значок группе</value>
+  </data>
+  <data name="Help_Installed_GroupIcons_Step1" xml:space="preserve">
+    <value>В виде «{0}» на странице «{1}» нажмите маленькую кнопку с картинкой перед названием группы.</value>
+  </data>
+  <data name="Help_Installed_GroupIcons_Step2" xml:space="preserve">
+    <value>Выберите значок или найдите его по названию. «{0}» убирает его.</value>
+  </data>
+  <data name="Help_Installed_GroupIcons_Step3" xml:space="preserve">
+    <value>Значок показывается в заголовке группы, на метках группы у её модов, в фильтре «Группа» и в пункте «{0}» контекстного меню.</value>
+  </data>
+  <data name="Help_Installed_GroupIcons_Keywords" xml:space="preserve">
+    <value>значок группы, иконка группы, картинка группы</value>
+  </data>
+  <data name="Help_Downloads_Pause_Title" xml:space="preserve">
+    <value>Приостановить загрузки</value>
+  </data>
+  <data name="Help_Downloads_Pause_Step1" xml:space="preserve">
+    <value>Нажмите «{0}» на странице «{1}» или кнопку паузы на панели загрузок. Новые загрузки не начнутся; текущая завершится.</value>
+  </data>
+  <data name="Help_Downloads_Pause_Step2" xml:space="preserve">
+    <value>Нажмите «{0}», чтобы продолжить.</value>
+  </data>
+  <data name="Help_Downloads_Pause_Note" xml:space="preserve">
+    <value>Если при запуске очереди на диске SPT, похоже, мало места, она сама встаёт на паузу и говорит, сколько нужно. «{0}» продолжает всё равно.</value>
+  </data>
+  <data name="Help_Downloads_Pause_Keywords" xml:space="preserve">
+    <value>пауза, продолжить, остановить загрузки, свободное место, диск заполнен</value>
+  </data>
+  <data name="Help_Profile_Needs_Title" xml:space="preserve">
+    <value>Узнать, каким модам чего-то не хватает</value>
+  </data>
+  <data name="Help_Profile_Needs_Step1" xml:space="preserve">
+    <value>Карточка вверху страницы «{0}» считает включённые моды, которым нужен не установленный или выключенный мод - по тому, что указано в собственных файлах каждого мода.</value>
+  </data>
+  <data name="Help_Profile_Needs_Step2" xml:space="preserve">
+    <value>Нажмите её, чтобы открыть «{0}», и установите или включите недостающее. Запуску она никогда не мешает.</value>
+  </data>
+  <data name="Help_Profile_Needs_Keywords" xml:space="preserve">
+    <value>не хватает зависимости, нужен мод, требуемый мод, выключен</value>
+  </data>
+  <data name="Help_Server_Headless_Title" xml:space="preserve">
+    <value>Запускать headless вместе с сервером</value>
+  </data>
+  <data name="Help_Server_Headless_Step1" xml:space="preserve">
+    <value>На странице «{0}» отметьте «{1}» на карточке Fika headless.</value>
+  </data>
+  <data name="Help_Server_Headless_Step2" xml:space="preserve">
+    <value>«{0}» затем запускает headless, когда сервер готов, а «{1}» у сервера перезапускает и headless.</value>
+  </data>
+  <data name="Help_Server_Headless_Keywords" xml:space="preserve">
+    <value>headless, fika headless, запуск headless, автозапуск</value>
+  </data>
+  <data name="Help_Diagnose_ProfileFix_Title" xml:space="preserve">
+    <value>Починить профиль, который SPT не загружает</value>
+  </data>
+  <data name="Help_Diagnose_ProfileFix_Step1" xml:space="preserve">
+    <value>Если «{2}» останавливается, потому что SPT не загружает профиль, или «{0}» находит такой, нажмите «{1}».</value>
+  </data>
+  <data name="Help_Diagnose_ProfileFix_Step2" xml:space="preserve">
+    <value>Подтвердите и перезапустите сервер. SPT удалит из профиля предметы, торговцев и одежду, которых не добавляет ни один установленный мод - они пропадут навсегда.</value>
+  </data>
+  <data name="Help_Diagnose_ProfileFix_Note" xml:space="preserve">
+    <value>Включает собственные настройки SPT removeModItemsFromProfile и removeInvalidTradersFromProfile в core.json, а прежний файл сохраняет рядом как core.json.before-tcfmm.</value>
+  </data>
+  <data name="Help_Diagnose_ProfileFix_Keywords" xml:space="preserve">
+    <value>профиль не загружается, недействительный профиль, сломанный профиль, пропавшие предметы, core.json</value>
+  </data>
+  <data name="Help_Options_Animations_Title" xml:space="preserve">
+    <value>Включить или выключить анимации</value>
+  </data>
+  <data name="Help_Options_Animations_Step1" xml:space="preserve">
+    <value>В «{0}», в разделе «{1}», найдите «{2}».</value>
+  </data>
+  <data name="Help_Options_Animations_Step2" xml:space="preserve">
+    <value>Выберите «{0}», «{1}» или «{2}». «{0}» следует настройке Windows «Эффекты анимации».</value>
+  </data>
+  <data name="Help_Options_Animations_Keywords" xml:space="preserve">
+    <value>анимации, движение, переходы, уменьшить анимацию</value>
+  </data>
 </root>

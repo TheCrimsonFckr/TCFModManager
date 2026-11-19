@@ -9629,4 +9629,124 @@ Les détails sont dans le journal :
   <data name="GroupIcon_PickToolTip" xml:space="preserve">
     <value>Choisir une icône pour ce groupe</value>
   </data>
+  <data name="Help_Installed_Skip_Title" xml:space="preserve">
+    <value>Ignorer une mise à jour dont vous ne voulez pas</value>
+  </data>
+  <data name="Help_Installed_Skip_Step1" xml:space="preserve">
+    <value>Sur {0}, faites un clic droit sur un mod qui a une mise à jour et choisissez Ignorer cette mise à jour. Elle ne compte plus comme une mise à jour - ni dans le filtre, ni dans Mettre à jour la sélection, ni dans les notifications - jusqu'à la sortie d'une version plus récente.</value>
+  </data>
+  <data name="Help_Installed_Skip_Step2" xml:space="preserve">
+    <value>Pour changer d'avis, refaites un clic droit et choisissez {0}. Vous pouvez toujours installer la version ignorée depuis {1}.</value>
+  </data>
+  <data name="Help_Installed_Skip_Keywords" xml:space="preserve">
+    <value>ignorer mise à jour, sauter mise à jour, ne pas mettre à jour, masquer mise à jour</value>
+  </data>
+  <data name="Help_Installed_Notes_Title" xml:space="preserve">
+    <value>Ajouter une note à un mod</value>
+  </data>
+  <data name="Help_Installed_Notes_Step1" xml:space="preserve">
+    <value>Sur {0}, faites un clic droit sur un mod et choisissez {1}.</value>
+  </data>
+  <data name="Help_Installed_Notes_Step2" xml:space="preserve">
+    <value>Tapez une ligne - elle s'affiche sous le nom du mod dans chaque vue, et la recherche la trouve. Videz le champ pour retirer la note.</value>
+  </data>
+  <data name="Help_Installed_Notes_Keywords" xml:space="preserve">
+    <value>note, commentaire, mémo, rappel</value>
+  </data>
+  <data name="Help_Installed_GroupMenu_Title" xml:space="preserve">
+    <value>Mettre des mods dans un groupe depuis le clic droit</value>
+  </data>
+  <data name="Help_Installed_GroupMenu_Step1" xml:space="preserve">
+    <value>Sur {0}, faites un clic droit sur un mod - ou sur l'un de plusieurs mods cochés - et ouvrez {1}.</value>
+  </data>
+  <data name="Help_Installed_GroupMenu_Step2" xml:space="preserve">
+    <value>Choisissez un groupe, ou {0} pour en créer un. {1} les remet dans Sans groupe.</value>
+  </data>
+  <data name="Help_Installed_GroupMenu_Note" xml:space="preserve">
+    <value>Glisser l'un de plusieurs mods cochés sur un groupe les déplace tous. Renommer un groupe avec le nom d'un autre propose de fusionner les deux.</value>
+  </data>
+  <data name="Help_Installed_GroupMenu_Keywords" xml:space="preserve">
+    <value>ajouter au groupe, déplacer vers groupe, nouveau groupe, fusionner groupes</value>
+  </data>
+  <data name="Help_Installed_GroupIcons_Title" xml:space="preserve">
+    <value>Donner une icône à un groupe</value>
+  </data>
+  <data name="Help_Installed_GroupIcons_Step1" xml:space="preserve">
+    <value>Dans la vue {0} de {1}, cliquez sur le petit bouton image devant le nom d'un groupe.</value>
+  </data>
+  <data name="Help_Installed_GroupIcons_Step2" xml:space="preserve">
+    <value>Choisissez une icône, ou cherchez-la par son nom. {0} la retire.</value>
+  </data>
+  <data name="Help_Installed_GroupIcons_Step3" xml:space="preserve">
+    <value>L'icône apparaît dans l'en-tête du groupe, sur les pastilles de groupe de ses mods, dans le filtre Groupe et dans {0} du clic droit.</value>
+  </data>
+  <data name="Help_Installed_GroupIcons_Keywords" xml:space="preserve">
+    <value>icône de groupe, image de groupe, symbole</value>
+  </data>
+  <data name="Help_Downloads_Pause_Title" xml:space="preserve">
+    <value>Mettre les téléchargements en pause</value>
+  </data>
+  <data name="Help_Downloads_Pause_Step1" xml:space="preserve">
+    <value>Appuyez sur {0} dans {1}, ou sur le bouton pause de la barre des téléchargements. Aucun nouveau téléchargement ne démarre ; un téléchargement en cours se termine.</value>
+  </data>
+  <data name="Help_Downloads_Pause_Step2" xml:space="preserve">
+    <value>Appuyez sur {0} pour continuer.</value>
+  </data>
+  <data name="Help_Downloads_Pause_Note" xml:space="preserve">
+    <value>Si le disque de SPT semble trop plein au démarrage de la file, elle se met en pause seule et indique la place nécessaire. {0} continue quand même.</value>
+  </data>
+  <data name="Help_Downloads_Pause_Keywords" xml:space="preserve">
+    <value>pause, reprendre, arrêter téléchargements, espace libre, disque plein</value>
+  </data>
+  <data name="Help_Profile_Needs_Title" xml:space="preserve">
+    <value>Voir quels mods ont besoin de quelque chose de manquant</value>
+  </data>
+  <data name="Help_Profile_Needs_Step1" xml:space="preserve">
+    <value>Une carte en haut de {0} compte les mods activés qui ont besoin d'un mod non installé ou désactivé, d'après ce que les fichiers de chaque mod indiquent.</value>
+  </data>
+  <data name="Help_Profile_Needs_Step2" xml:space="preserve">
+    <value>Cliquez dessus pour ouvrir {0}, puis installez ou activez ce qui manque. Elle ne vous empêche jamais de lancer.</value>
+  </data>
+  <data name="Help_Profile_Needs_Keywords" xml:space="preserve">
+    <value>dépendance manquante, a besoin d'un mod, mod requis, désactivé</value>
+  </data>
+  <data name="Help_Server_Headless_Title" xml:space="preserve">
+    <value>Démarrer le headless avec le serveur</value>
+  </data>
+  <data name="Help_Server_Headless_Step1" xml:space="preserve">
+    <value>Sur {0}, cochez {1} sur la carte du headless Fika.</value>
+  </data>
+  <data name="Help_Server_Headless_Step2" xml:space="preserve">
+    <value>{0} démarre alors le headless une fois le serveur prêt, et {1} sur le serveur redémarre aussi le headless.</value>
+  </data>
+  <data name="Help_Server_Headless_Keywords" xml:space="preserve">
+    <value>headless, headless fika, démarrer headless, démarrage auto</value>
+  </data>
+  <data name="Help_Diagnose_ProfileFix_Title" xml:space="preserve">
+    <value>Réparer un profil que SPT refuse de charger</value>
+  </data>
+  <data name="Help_Diagnose_ProfileFix_Step1" xml:space="preserve">
+    <value>Quand {2} s'arrête parce que SPT refuse un profil, ou que {0} en trouve un, appuyez sur {1}.</value>
+  </data>
+  <data name="Help_Diagnose_ProfileFix_Step2" xml:space="preserve">
+    <value>Confirmez, puis redémarrez le serveur. SPT retire du profil les objets, marchands et vêtements qu'aucun mod installé n'ajoute - ils disparaissent définitivement.</value>
+  </data>
+  <data name="Help_Diagnose_ProfileFix_Note" xml:space="preserve">
+    <value>Cela active les réglages de SPT removeModItemsFromProfile et removeInvalidTradersFromProfile dans core.json, et garde l'ancien fichier à côté sous core.json.before-tcfmm.</value>
+  </data>
+  <data name="Help_Diagnose_ProfileFix_Keywords" xml:space="preserve">
+    <value>profil ne charge pas, profil invalide, profil cassé, objets manquants, core.json</value>
+  </data>
+  <data name="Help_Options_Animations_Title" xml:space="preserve">
+    <value>Activer ou désactiver les animations</value>
+  </data>
+  <data name="Help_Options_Animations_Step1" xml:space="preserve">
+    <value>Dans {0}, sous {1}, trouvez {2}.</value>
+  </data>
+  <data name="Help_Options_Animations_Step2" xml:space="preserve">
+    <value>Choisissez {0}, {1} ou {2}. {0} utilise le réglage Effets d'animation de Windows.</value>
+  </data>
+  <data name="Help_Options_Animations_Keywords" xml:space="preserve">
+    <value>animations, mouvement, transitions, réduire les animations</value>
+  </data>
 </root>
