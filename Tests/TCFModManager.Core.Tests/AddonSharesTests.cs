@@ -260,6 +260,32 @@ public class AddonSharesTests : IDisposable
         Assert.True(target.IsAddon);
     }
 
+    [Fact]
+    public void AddonLinkedByHand_InAHandInstalledParentsFolder_SplitsOutByItsFiles()
+    {
+        WriteCamo(_camo);
+        var pride = WritePride(_camo);
+        var linked = new InstalledModRecord
+        {
+            ModId = PrideId,
+            IsAddon = true,
+            Name = "Pride Flag Sticker Pack",
+            Slug = "pride-flag-sticker-pack",
+            Version = "",
+            InstalledAt = DateTimeOffset.MinValue,
+            IsAppManaged = false,
+            Files = [.. pride],
+        };
+
+        var mods = InstalledModScanner.Scan(_installRoot, new ModOwnership([], [new(CamoGuid, CamoId)], [linked]));
+
+        Assert.Equal(2, mods.Count);
+        Assert.Equal(Folder, Assert.Single(mods, m => !m.ShareOwnerIsAddon).Name);
+        var addon = Assert.Single(mods, m => m.ShareOwnerIsAddon);
+        Assert.Equal(PrideId, addon.ShareOwnerModId);
+        Assert.Equal(pride.Select(Relative).Order(StringComparer.Ordinal), addon.OwnedFiles);
+    }
+
     private List<InstalledMod> Scan(params InstalledModRecord[] records) =>
         InstalledModScanner.Scan(_installRoot, Owners(records));
 

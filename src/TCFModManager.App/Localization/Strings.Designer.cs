@@ -3293,4 +3293,19 @@ internal static class Strings
     internal static string ModLink_NotAPage => LocalizationService.Get("ModLink_NotAPage");
     internal static string ModLink_NotInCatalog => LocalizationService.Get("ModLink_NotInCatalog");
     internal static string ModLink_LinkedFormat => LocalizationService.Get("ModLink_LinkedFormat");
+    internal static string ModLink_AddonMenu => LocalizationService.Get("ModLink_AddonMenu");
+    internal static string ModLink_EditAddonFilesFormat => LocalizationService.Get("ModLink_EditAddonFilesFormat");
+    internal static string ModLink_AddonHeaderFormat => LocalizationService.Get("ModLink_AddonHeaderFormat");
+    internal static string ModLink_AddonDescription => LocalizationService.Get("ModLink_AddonDescription");
+    internal static string ModLink_AddonPlaceholder => LocalizationService.Get("ModLink_AddonPlaceholder");
+    internal static string ModLink_NotAnAddonPage => LocalizationService.Get("ModLink_NotAnAddonPage");
+    internal static string ModLink_NotThisModsAddonFormat => LocalizationService.Get("ModLink_NotThisModsAddonFormat");
+    internal static string ModLink_AddonUnlinkedFormat => LocalizationService.Get("ModLink_AddonUnlinkedFormat");
+    internal static string ModLink_AddonLinked(int count, params object?[] values) =>
+        LocalizationService.Plural("ModLink_AddonLinked", count, values);
+    internal static string AddonFiles_TitleFormat => LocalizationService.Get("AddonFiles_TitleFormat");
+    internal static string AddonFiles_DescriptionFormat => LocalizationService.Get("AddonFiles_DescriptionFormat");
+    internal static string AddonFiles_FilterPlaceholder => LocalizationService.Get("AddonFiles_FilterPlaceholder");
+    internal static string AddonFiles_Chosen(int count, params object?[] values) =>
+        LocalizationService.Plural("AddonFiles_Chosen", count, values);
 }

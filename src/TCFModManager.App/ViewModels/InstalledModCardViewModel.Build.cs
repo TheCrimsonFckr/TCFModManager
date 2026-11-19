@@ -1,5 +1,6 @@
 using System.IO;
 using TCFModManager.App.Localization;
+using TCFModManager.App.Services;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.Services;
 
@@ -29,6 +30,12 @@ public sealed partial class InstalledModCardViewModel
             .GroupBy(r => r.ModId)
             .ToDictionary(g => g.Key, g => g.First());
 
+        var links = AppServices.ModLinks.Effective(
+            IndexByFolder(modRecords).Keys.Concat(addonRecordsByFolder.Keys),
+            addonRecordsById.Keys);
+        var linkedFiles = LinkedAddons.Records(links, installRecords);
+        foreach (var linked in linkedFiles) addonRecordsById.TryAdd(linked.ModId, linked);
+
         //
         // OPEN-31: an addon's share of its parent's folder was already identified by the scan, from
         // the record that placed its files, so it goes straight to an addon card and never near the
@@ -50,15 +57,13 @@ public sealed partial class InstalledModCardViewModel
         // against a 3000-entry catalog re-normalizes and re-tokenizes 360,000 catalog entries.
         var index = CatalogIndex.Build(catalog);
 
-        var links = AppServices.ModLinks.Effective(recordsByFolder.Keys.Concat(addonRecordsByFolder.Keys));
-
         var scannedGroups = modEntries
             .GroupBy(m => m.Name, StringComparer.OrdinalIgnoreCase)
             .Select(g => (Key: g.Key, Entries: g.ToList()))
             .ToList();
 
         var resolved = scannedGroups
-            .Select(g => (g.Key, g.Entries, Match: ResolveCatalogMatch(g.Key, g.Entries, index, recordsByFolder, links)))
+            .Select(g => (g.Key, g.Entries, Match: ResolveCatalogMatch(g.Key, g.Entries, index, recordsByFolder, links.Folders)))
             .ToList();
 
         //
@@ -79,8 +84,8 @@ public sealed partial class InstalledModCardViewModel
 
         var linkedAddonFolders = resolved
             .Where(g => g.Match is null && !addonRecordsByFolder.ContainsKey(g.Key) && !g.Entries.Any(m => m.IsShare)
-                && links.TryGetValue(g.Key, out var link) && link.IsAddon)
-            .Select(g => (g.Key, g.Entries, Record: LinkedAddonRecord(links[g.Key].ModId, g.Key, addonCatalog)))
+                && links.Folders.TryGetValue(g.Key, out var link) && link.IsAddon)
+            .Select(g => (g.Key, g.Entries, Record: LinkedAddonRecord(links.Folders[g.Key].ModId, g.Key, addonCatalog)))
             .ToList();
 
         var claimed = addonFolders.Select(g => g.Key).Concat(linkedAddonFolders.Select(g => g.Key)).ToHashSet(StringComparer.OrdinalIgnoreCase);
@@ -134,7 +139,7 @@ public sealed partial class InstalledModCardViewModel
 
                 var card = BuildCard(g.Entries, g.Match, installedSptVersion, record, addonsByParent, fikaPresent, dismissedSpt);
                 card.IsLinked = record is null && g.Match is not null
-                    && g.Entries.Any(e => links.TryGetValue(e.Name, out var link) && !link.IsAddon && link.ModId == g.Match.Id);
+                    && g.Entries.Any(e => links.Folders.TryGetValue(e.Name, out var link) && !link.IsAddon && link.ModId == g.Match.Id);
                 return card;
             })
             .ToList();
@@ -172,7 +177,7 @@ public sealed partial class InstalledModCardViewModel
                 : parent?.DisplayTitle;
 
             return BuildAddonCard(g.Entries, addon, g.Record, parent, parentName, installedSptVersion,
-                linked: linkedAddonFolders.Any(l => ReferenceEquals(l.Record, g.Record)));
+                linked: linkedAddonFolders.Any(l => ReferenceEquals(l.Record, g.Record)) || linkedFiles.Contains(g.Record));
         }));
 
         NoteSharedFolders(cards);

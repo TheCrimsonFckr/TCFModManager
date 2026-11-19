@@ -10268,4 +10268,61 @@
   <data name="ModLink_LinkedFormat" xml:space="preserve">
     <value>{0} связан с {1} на sp-mod.</value>
   </data>
+  <data name="ModLink_AddonMenu" xml:space="preserve">
+    <value>Связать аддон в этой папке...</value>
+  </data>
+  <data name="ModLink_EditAddonFilesFormat" xml:space="preserve">
+    <value>Файлы {0}...</value>
+  </data>
+  <data name="ModLink_AddonHeaderFormat" xml:space="preserve">
+    <value>Связать аддон в {0}</value>
+  </data>
+  <data name="ModLink_AddonDescription" xml:space="preserve">
+    <value>Вставьте ссылку на страницу аддона на sp-mod. Затем выберите, какие файлы в папке этого мода относятся к аддону. На диске ничего не меняется.</value>
+  </data>
+  <data name="ModLink_AddonPlaceholder" xml:space="preserve">
+    <value>https://sp-mod.com/addon/...</value>
+  </data>
+  <data name="ModLink_NotAnAddonPage" xml:space="preserve">
+    <value>Это не ссылка на страницу аддона на sp-mod.</value>
+  </data>
+  <data name="ModLink_NotThisModsAddonFormat" xml:space="preserve">
+    <value>{0} - аддон для другого мода, а не для {1}.</value>
+  </data>
+  <data name="ModLink_AddonUnlinkedFormat" xml:space="preserve">
+    <value>{0} больше не связан ни с одним файлом.</value>
+  </data>
+  <data name="ModLink_AddonLinked_one" xml:space="preserve">
+    <value>{0} связан с {1} файлом в {2}.</value>
+  </data>
+  <data name="ModLink_AddonLinked_few" xml:space="preserve">
+    <value>{0} связан с {1} файлами в {2}.</value>
+  </data>
+  <data name="ModLink_AddonLinked_many" xml:space="preserve">
+    <value>{0} связан с {1} файлами в {2}.</value>
+  </data>
+  <data name="ModLink_AddonLinked_other" xml:space="preserve">
+    <value>{0} связан с {1} файлами в {2}.</value>
+  </data>
+  <data name="AddonFiles_TitleFormat" xml:space="preserve">
+    <value>Файлы {0}</value>
+  </data>
+  <data name="AddonFiles_DescriptionFormat" xml:space="preserve">
+    <value>Отметьте файлы в папке {1}, которые пришли с {0}. Файлы, установленные приложением, не показаны. Снимите все отметки, чтобы отвязать {0}.</value>
+  </data>
+  <data name="AddonFiles_FilterPlaceholder" xml:space="preserve">
+    <value>Фильтр файлов</value>
+  </data>
+  <data name="AddonFiles_Chosen_one" xml:space="preserve">
+    <value>Отмечен {0} файл</value>
+  </data>
+  <data name="AddonFiles_Chosen_few" xml:space="preserve">
+    <value>Отмечено {0} файла</value>
+  </data>
+  <data name="AddonFiles_Chosen_many" xml:space="preserve">
+    <value>Отмечено {0} файлов</value>
+  </data>
+  <data name="AddonFiles_Chosen_other" xml:space="preserve">
+    <value>Отмечено {0} файла</value>
+  </data>
 </root>

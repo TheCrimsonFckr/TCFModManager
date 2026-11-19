@@ -702,7 +702,11 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     {
         if (_mod.ModId is not { } modId) return;
 
-        if (_mod.IsLinked) AppServices.ModLinks.Unlink(_mod.Entries.Select(e => e.Name));
+        if (_mod.IsLinked)
+        {
+            AppServices.ModLinks.Unlink(_mod.Entries.Select(e => e.Name));
+            if (_mod.IsAddon) AppServices.ModLinks.UnlinkAddonFiles(modId);
+        }
         if (_mod.IsManualOverride) AppServices.InstallManifest.ClearManualVersion(modId, _mod.IsAddon);
         MadeChanges = true;
         StatusMessage = Text(Strings.ModUpdate_ClearedOverrideFormat, _mod.DisplayTitle);

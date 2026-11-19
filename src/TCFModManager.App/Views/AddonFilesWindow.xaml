@@ -1,0 +1,107 @@
+<ui:FluentWindow
+    x:Class="TCFModManager.App.Views.AddonFilesWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    Width="560"
+    SizeToContent="Height"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    ExtendsContentIntoTitleBar="True"
+    TextOptions.TextFormattingMode="Display"
+    TextOptions.TextRenderingMode="ClearType">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar
+            x:Name="WindowTitleBar"
+            Grid.Row="0"
+            ShowMinimize="False"
+            ShowMaximize="False" />
+
+        <StackPanel
+            Grid.Row="1"
+            Margin="24,12,24,0">
+            <TextBlock
+                x:Name="DescriptionText"
+                Margin="0,0,0,12"
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+
+            <ui:TextBox
+                x:Name="FilterBox"
+                Margin="0,0,0,8"
+                PlaceholderText="{loc:Str AddonFiles_FilterPlaceholder}"
+                TextChanged="FilterBox_TextChanged" />
+
+            <Border
+                BorderThickness="1"
+                CornerRadius="4"
+                BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}">
+                <ItemsControl
+                    x:Name="FileList"
+                    Height="320"
+                    Padding="8,4"
+                    VirtualizingStackPanel.IsVirtualizing="True"
+                    VirtualizingStackPanel.VirtualizationMode="Recycling"
+                    ScrollViewer.CanContentScroll="True">
+                    <ItemsControl.Template>
+                        <ControlTemplate TargetType="ItemsControl">
+                            <ScrollViewer
+                                Padding="{TemplateBinding Padding}"
+                                CanContentScroll="True"
+                                VerticalScrollBarVisibility="Auto"
+                                HorizontalScrollBarVisibility="Disabled">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox
+                                    Margin="0,2"
+                                    IsChecked="{Binding IsChosen, Mode=TwoWay}"
+                                    Checked="File_Toggled"
+                                    Unchecked="File_Toggled">
+                                    <TextBlock
+                                        TextWrapping="Wrap"
+                                        Text="{Binding Shown}" />
+                                </CheckBox>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+
+            <TextBlock
+                x:Name="CountText"
+                Margin="0,8,0,0"
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+        </StackPanel>
+
+        <WrapPanel Grid.Row="2" Style="{StaticResource DialogButtonBar}">
+            <ui:Button
+                Style="{StaticResource DialogButton}"
+                IsCancel="True"
+                Content="{loc:Str Common_Cancel}" />
+
+            <ui:Button
+                x:Name="SaveButton"
+                Style="{StaticResource DialogButton}"
+                IsDefault="True"
+                Appearance="Primary"
+                Content="{loc:Str Common_Save}"
+                Click="SaveButton_Click" />
+        </WrapPanel>
+    </Grid>
+</ui:FluentWindow>

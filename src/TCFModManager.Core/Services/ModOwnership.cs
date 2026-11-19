@@ -4,7 +4,8 @@ namespace TCFModManager.Core.Services;
 
 //
 // Who owns the files in a client mod folder, for splitting a folder several mods share (OPEN-28):
-// the app-managed install records, by the files they placed, and the sp-mod listings, by plugin GUID.
+// the app-managed install records, by the files they placed, the addons linked by hand to files
+// (ModLinkStore), and the sp-mod listings, by plugin GUID.
 //
 public sealed class ModOwnership
 {
@@ -14,9 +15,12 @@ public sealed class ModOwnership
     private readonly Dictionary<string, List<InstalledModRecord>> _byFolder = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, int> _listingsByGuid = new(StringComparer.OrdinalIgnoreCase);
 
-    public ModOwnership(IEnumerable<InstalledModRecord> records, IEnumerable<KeyValuePair<string, int>>? listingsByGuid = null)
+    public ModOwnership(
+        IEnumerable<InstalledModRecord> records,
+        IEnumerable<KeyValuePair<string, int>>? listingsByGuid = null,
+        IEnumerable<InstalledModRecord>? linked = null)
     {
-        foreach (var record in records.Where(r => r.IsAppManaged).OrderBy(r => r.InstalledAt))
+        foreach (var record in records.Where(r => r.IsAppManaged).OrderBy(r => r.InstalledAt).Concat(linked ?? []))
         {
             foreach (var file in record.Files)
             {

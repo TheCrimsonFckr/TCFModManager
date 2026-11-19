@@ -211,6 +211,9 @@ public partial class InstalledPage : Page
             Add(mod.Note is null ? Strings.Installed_NoteAdd : Strings.Installed_NoteEdit, "Note24", ViewModel.EditNoteCommand, mod);
             if (ViewModel.FamilyMenuLabel(mod) is { } family) Add(family, "PuzzlePiece24", ViewModel.ShowFamilyCommand, mod);
             if (InstalledViewModel.CanLinkToPage(mod)) Add(Strings.ModLink_Menu, "Link24", ViewModel.LinkToPageCommand, mod);
+            if (InstalledViewModel.CanLinkAddonFiles(mod)) Add(Strings.ModLink_AddonMenu, "Link24", ViewModel.LinkAddonFilesCommand, mod);
+            foreach (var (addonId, addonName) in InstalledViewModel.LinkedAddonsOf(mod))
+                Add(LocalizationService.Text(Strings.ModLink_EditAddonFilesFormat, addonName), "DocumentEdit24", ViewModel.EditAddonFilesCommand, (mod, addonId, addonName));
             menu.Items.Add(GroupMenu(mod));
 
             if (mod.ClientFolderLink is not null || mod.ServerFolderLink is not null || InstalledViewModel.ModPageUrl(mod) is not null)

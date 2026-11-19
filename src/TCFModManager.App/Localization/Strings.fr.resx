@@ -9863,4 +9863,49 @@ Les détails sont dans le journal :
   <data name="ModLink_LinkedFormat" xml:space="preserve">
     <value>{0} est lié à {1} sur sp-mod.</value>
   </data>
+  <data name="ModLink_AddonMenu" xml:space="preserve">
+    <value>Lier un addon de ce dossier...</value>
+  </data>
+  <data name="ModLink_EditAddonFilesFormat" xml:space="preserve">
+    <value>Fichiers de {0}...</value>
+  </data>
+  <data name="ModLink_AddonHeaderFormat" xml:space="preserve">
+    <value>Lier un addon dans {0}</value>
+  </data>
+  <data name="ModLink_AddonDescription" xml:space="preserve">
+    <value>Collez le lien de la page de l'addon sur sp-mod. Vous choisirez ensuite quels fichiers du dossier de ce mod sont ceux de l'addon. Rien ne change sur le disque.</value>
+  </data>
+  <data name="ModLink_AddonPlaceholder" xml:space="preserve">
+    <value>https://sp-mod.com/addon/...</value>
+  </data>
+  <data name="ModLink_NotAnAddonPage" xml:space="preserve">
+    <value>Ce n'est pas un lien vers une page d'addon sur sp-mod.</value>
+  </data>
+  <data name="ModLink_NotThisModsAddonFormat" xml:space="preserve">
+    <value>{0} est un addon d'un autre mod, pas de {1}.</value>
+  </data>
+  <data name="ModLink_AddonUnlinkedFormat" xml:space="preserve">
+    <value>{0} n'est plus lié à aucun fichier.</value>
+  </data>
+  <data name="ModLink_AddonLinked_one" xml:space="preserve">
+    <value>{0} est lié à 1 fichier dans {2}.</value>
+  </data>
+  <data name="ModLink_AddonLinked_other" xml:space="preserve">
+    <value>{0} est lié à {1} fichiers dans {2}.</value>
+  </data>
+  <data name="AddonFiles_TitleFormat" xml:space="preserve">
+    <value>Fichiers de {0}</value>
+  </data>
+  <data name="AddonFiles_DescriptionFormat" xml:space="preserve">
+    <value>Cochez les fichiers du dossier de {1} fournis avec {0}. Les fichiers installés par l'application ne sont pas listés. Décochez tout pour délier {0}.</value>
+  </data>
+  <data name="AddonFiles_FilterPlaceholder" xml:space="preserve">
+    <value>Filtrer les fichiers</value>
+  </data>
+  <data name="AddonFiles_Chosen_one" xml:space="preserve">
+    <value>1 fichier coché</value>
+  </data>
+  <data name="AddonFiles_Chosen_other" xml:space="preserve">
+    <value>{0} fichiers cochés</value>
+  </data>
 </root>

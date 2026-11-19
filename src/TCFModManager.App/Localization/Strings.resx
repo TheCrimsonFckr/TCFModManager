@@ -12005,4 +12005,64 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>{0} is linked to {1} on sp-mod.</value>
     <comment>Status line after linking. {0} is the folder name, {1} the sp-mod listing's name.</comment>
   </data>
+  <data name="ModLink_AddonMenu" xml:space="preserve">
+    <value>Link an addon in this folder...</value>
+    <comment>Right-click menu on an installed mod: tie an addon installed by hand into this mod's folder to its sp-mod page.</comment>
+  </data>
+  <data name="ModLink_EditAddonFilesFormat" xml:space="preserve">
+    <value>Files of {0}...</value>
+    <comment>Right-click menu on an installed mod: change which files are a linked addon's. {0} is the addon's name.</comment>
+  </data>
+  <data name="ModLink_AddonHeaderFormat" xml:space="preserve">
+    <value>Link an addon in {0}</value>
+    <comment>Title of the window asking for an addon's sp-mod page. {0} is the mod whose folder holds it.</comment>
+  </data>
+  <data name="ModLink_AddonDescription" xml:space="preserve">
+    <value>Paste the link of the addon's page on sp-mod. Then you pick which files in this mod's folder are the addon's. Nothing on disk changes.</value>
+    <comment>Text in the window asking for an addon's sp-mod page.</comment>
+  </data>
+  <data name="ModLink_AddonPlaceholder" xml:space="preserve">
+    <value>https://sp-mod.com/addon/...</value>
+    <comment>Placeholder in the addon link box. Keep the address as it is.</comment>
+  </data>
+  <data name="ModLink_NotAnAddonPage" xml:space="preserve">
+    <value>That isn't a link to an addon page on sp-mod.</value>
+    <comment>Status line when the pasted link isn't a sp-mod addon page.</comment>
+  </data>
+  <data name="ModLink_NotThisModsAddonFormat" xml:space="preserve">
+    <value>{0} is an addon for another mod, not {1}.</value>
+    <comment>Status line when the pasted addon belongs to a different mod. {0} the addon, {1} this mod.</comment>
+  </data>
+  <data name="ModLink_AddonUnlinkedFormat" xml:space="preserve">
+    <value>{0} is no longer linked to any files.</value>
+    <comment>Status line after saving the file list with nothing ticked. {0} the addon.</comment>
+  </data>
+  <data name="ModLink_AddonLinked_one" xml:space="preserve">
+    <value>{0} is linked to 1 file in {2}.</value>
+    <comment>Status line after linking an addon's files. {0} the addon, {1} the count, {2} the mod.</comment>
+  </data>
+  <data name="ModLink_AddonLinked_other" xml:space="preserve">
+    <value>{0} is linked to {1} files in {2}.</value>
+    <comment>Status line after linking an addon's files. {0} the addon, {1} the count, {2} the mod.</comment>
+  </data>
+  <data name="AddonFiles_TitleFormat" xml:space="preserve">
+    <value>Files of {0}</value>
+    <comment>Title of the window listing a mod folder's files to pick an addon's from. {0} the addon.</comment>
+  </data>
+  <data name="AddonFiles_DescriptionFormat" xml:space="preserve">
+    <value>Tick the files in {1}'s folder that came with {0}. Files the app installed are not listed. Untick everything to unlink {0}.</value>
+    <comment>Text in that window. {0} the addon, {1} the mod.</comment>
+  </data>
+  <data name="AddonFiles_FilterPlaceholder" xml:space="preserve">
+    <value>Filter files</value>
+    <comment>Placeholder in the box that filters the file list.</comment>
+  </data>
+  <data name="AddonFiles_Chosen_one" xml:space="preserve">
+    <value>1 file ticked</value>
+    <comment>Count under the file list.</comment>
+  </data>
+  <data name="AddonFiles_Chosen_other" xml:space="preserve">
+    <value>{0} files ticked</value>
+    <comment>Count under the file list.</comment>
+  </data>
 </root>

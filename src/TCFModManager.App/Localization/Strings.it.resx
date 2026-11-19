@@ -9863,4 +9863,49 @@ I dettagli sono nel log:
   <data name="ModLink_LinkedFormat" xml:space="preserve">
     <value>{0} è collegata a {1} su sp-mod.</value>
   </data>
+  <data name="ModLink_AddonMenu" xml:space="preserve">
+    <value>Collega un addon in questa cartella...</value>
+  </data>
+  <data name="ModLink_EditAddonFilesFormat" xml:space="preserve">
+    <value>File di {0}...</value>
+  </data>
+  <data name="ModLink_AddonHeaderFormat" xml:space="preserve">
+    <value>Collega un addon in {0}</value>
+  </data>
+  <data name="ModLink_AddonDescription" xml:space="preserve">
+    <value>Incolla il link della pagina dell'addon su sp-mod. Poi scegli quali file nella cartella di questa mod sono dell'addon. Sul disco non cambia nulla.</value>
+  </data>
+  <data name="ModLink_AddonPlaceholder" xml:space="preserve">
+    <value>https://sp-mod.com/addon/...</value>
+  </data>
+  <data name="ModLink_NotAnAddonPage" xml:space="preserve">
+    <value>Questo non è un link a una pagina addon su sp-mod.</value>
+  </data>
+  <data name="ModLink_NotThisModsAddonFormat" xml:space="preserve">
+    <value>{0} è un addon di un'altra mod, non di {1}.</value>
+  </data>
+  <data name="ModLink_AddonUnlinkedFormat" xml:space="preserve">
+    <value>{0} non è più collegato ad alcun file.</value>
+  </data>
+  <data name="ModLink_AddonLinked_one" xml:space="preserve">
+    <value>{0} è collegato a 1 file in {2}.</value>
+  </data>
+  <data name="ModLink_AddonLinked_other" xml:space="preserve">
+    <value>{0} è collegato a {1} file in {2}.</value>
+  </data>
+  <data name="AddonFiles_TitleFormat" xml:space="preserve">
+    <value>File di {0}</value>
+  </data>
+  <data name="AddonFiles_DescriptionFormat" xml:space="preserve">
+    <value>Spunta i file nella cartella di {1} arrivati con {0}. I file installati dall'app non sono elencati. Togli tutte le spunte per scollegare {0}.</value>
+  </data>
+  <data name="AddonFiles_FilterPlaceholder" xml:space="preserve">
+    <value>Filtra file</value>
+  </data>
+  <data name="AddonFiles_Chosen_one" xml:space="preserve">
+    <value>1 file spuntato</value>
+  </data>
+  <data name="AddonFiles_Chosen_other" xml:space="preserve">
+    <value>{0} file spuntati</value>
+  </data>
 </root>

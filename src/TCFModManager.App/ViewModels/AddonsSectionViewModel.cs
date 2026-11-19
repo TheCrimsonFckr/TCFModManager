@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using TCFModManager.App.Localization;
+using TCFModManager.App.Services;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -43,7 +44,7 @@ public sealed partial class AddonsSectionViewModel : LocalizedViewModel
         Addons.Clear();
         foreach (var addon in AppServices.Addons.ForMod(parentModId))
         {
-            var record = records.FirstOrDefault(r => r.IsAddon && r.ModId == addon.Id);
+            var record = records.FirstOrDefault(r => r.IsAddon && r.ModId == addon.Id) ?? LinkedAddons.ForAddonsList(addon.Id);
             Addons.Add(new AddonRowViewModel(addon, parentModName, parentInstalledVersion, record, parentVersions));
         }
 

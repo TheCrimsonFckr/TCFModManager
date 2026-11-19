@@ -21,5 +21,6 @@ public static class InstalledScan
             records ?? [],
             catalog
                 .Where(m => !string.IsNullOrWhiteSpace(m.Guid))
-                .Select(m => new KeyValuePair<string, int>(m.Guid!, m.Id)));
+                .Select(m => new KeyValuePair<string, int>(m.Guid!, m.Id)),
+            LinkedAddons.Records(AppServices.ModLinks.Load(), records));
 }
