@@ -56,8 +56,8 @@ public static class CrashSigns
             App: data[0]!.Trim(),
             FaultingModule: (data[3] ?? string.Empty).Trim(),
             ExceptionCode: "0x" + StripHex(data[6]).ToUpperInvariant(),
-            ProcessId: data.Count > 8 && ParseHex(data[8]) is { } pid and <= int.MaxValue ? (int)pid : null,
-            ProcessStartedUtc: data.Count > 9 && ParseHex(data[9]) is { } started and > 0 ? FromFileTime(started) : null,
+            ProcessId: data.Count > 8 && ParseNumber(data[8]) is { } pid and <= int.MaxValue ? (int)pid : null,
+            ProcessStartedUtc: data.Count > 9 && ParseNumber(data[9]) is { } started and > 0 ? FromFileTime(started) : null,
             AppPath: data.Count > 10 ? NullIfBlank(data[10]) : null,
             ModulePath: data.Count > 11 ? NullIfBlank(data[11]) : null,
             At: atUtc);
@@ -179,8 +179,14 @@ public static class CrashSigns
         return v.StartsWith("0x", StringComparison.OrdinalIgnoreCase) ? v[2..] : v;
     }
 
-    private static ulong? ParseHex(string? value) =>
-        ulong.TryParse(StripHex(value), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var n) ? n : null;
+    private static ulong? ParseNumber(string? value)
+    {
+        var v = (value ?? string.Empty).Trim();
+        if (v.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+            return ulong.TryParse(v[2..], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var hex) ? hex : null;
+
+        return ulong.TryParse(v, NumberStyles.None, CultureInfo.InvariantCulture, out var n) ? n : null;
+    }
 
     private static DateTime? FromFileTime(ulong value)
     {

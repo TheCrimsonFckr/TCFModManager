@@ -8,26 +8,29 @@ namespace TCFModManager.Core.Tests;
 public sealed class CrashSignsTests
 {
     private const string ServerExe = @"G:\Single Player Tarkov 4.1 Server\SPT_Runtime\SPT.Server.exe";
-    private static readonly DateTime Started = new(2026, 11, 9, 17, 50, 1, DateTimeKind.Utc);
+    private static readonly DateTime Started = DateTime.FromFileTimeUtc(134387203815162585);
     private static readonly DateTime CrashedAt = new(2026, 11, 9, 17, 53, 22, DateTimeKind.Utc);
 
+    // Get-WinEvent ... Id=1000 | % { $_.Properties.Value } on Chris's machine, 2026-11-20.
     private static readonly string?[] ApplicationError =
     [
-        "SPT.Server.exe", "4.1.6.0", "68e8a2f1", "KERNELBASE.dll", "10.0.26100.6899", "c6d0b7a4", "e0434352", "00000000000c7f8a",
-        "0x2a4c", "0x" + Started.ToFileTimeUtc().ToString("x16"), ServerExe, @"C:\WINDOWS\System32\KERNELBASE.dll",
-        "1b3c5d7e-0000-4000-8000-000000000001", "", "",
+        "SPT.Server.exe", "4.1.6.0", "6a890000", "KERNELBASE.dll", "10.0.26100.9711", "fb9071fb", "e0434352", "00000000000c408a",
+        "22136", "134387203815162585", ServerExe, @"C:\WINDOWS\System32\KERNELBASE.dll",
+        "9b18ad70-1b0a-475f-9e95-73802b4a1029", "", "",
     ];
 
     private const string DotNetRuntime =
         "Application: SPT.Server.exe\r\n" +
-        "CoreCLR Version: 10.0.1425.47011\r\n" +
+        "CoreCLR Version: 10.0.1426.52326\r\n" +
         ".NET Version: 10.0.14\r\n" +
         "Description: The process was terminated due to an unhandled exception.\r\n" +
         "Exception Info: System.Threading.Tasks.TaskCanceledException: A task was canceled.\r\n" +
-        "   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean)\r\n" +
-        "   at System.Net.Http.HttpClient.HandleFailure(System.Exception, Boolean, System.Net.Http.HttpResponseMessage, System.Threading.CancellationTokenSource, System.Threading.CancellationToken, System.Threading.CancellationTokenSource)\r\n" +
         "   at DrakiaXYZ.LiveFleaPrices.LiveFleaPricesMod.<>c__DisplayClass16_0.<<OnLoadAsync>b__0>d.MoveNext()\r\n" +
-        "   at SPTarkov.Server.Core.Utils.App.Run()\r\n";
+        "--- End of stack trace from previous location ---\r\n" +
+        "   at System.Threading.Tasks.Task.<>c.<ThrowAsync>b__124_1(Object state)\r\n" +
+        "   at System.Threading.ThreadPoolWorkQueue.Dispatch()\r\n" +
+        "   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()\r\n" +
+        "   at System.Threading.Thread.StartCallback()\r\n";
 
     private static readonly DiagnosedMod Flea = new("LiveFleaPrices", "Live Flea Prices", Path.Combine("SPT", "user", "mods", "LiveFleaPrices"), InstalledModTarget.Server, "xyz.drakia.livefleaprices");
     private static LogModLocator Mods() => LogModLocator.From([(Flea, ["LiveFleaPrices"], ["DrakiaXYZ.LiveFleaPrices"])]);
@@ -41,25 +44,25 @@ public sealed class CrashSignsTests
         Assert.Equal("SPT.Server.exe", crash.App);
         Assert.Equal("KERNELBASE.dll", crash.FaultingModule);
         Assert.Equal("0xE0434352", crash.ExceptionCode);
-        Assert.Equal(0x2a4c, crash.ProcessId);
+        Assert.Equal(22136, crash.ProcessId);
         Assert.Equal(Started, crash.ProcessStartedUtc);
 
-        Assert.True(CrashSigns.Matches(crash, 0x2a4c, Started, ServerExe));
-        Assert.False(CrashSigns.Matches(crash, 0x2a4d, Started, ServerExe));
-        Assert.False(CrashSigns.Matches(crash, 0x2a4c, Started.AddMinutes(1), ServerExe));
-        Assert.False(CrashSigns.Matches(crash, 0x2a4c, Started, @"G:\Single Player Tarkov 4.1 Server\EscapeFromTarkov.exe"));
+        Assert.True(CrashSigns.Matches(crash, 22136, Started, ServerExe));
+        Assert.False(CrashSigns.Matches(crash, 22137, Started, ServerExe));
+        Assert.False(CrashSigns.Matches(crash, 22136, Started.AddMinutes(1), ServerExe));
+        Assert.False(CrashSigns.Matches(crash, 22136, Started, @"G:\Single Player Tarkov 4.1 Server\EscapeFromTarkov.exe"));
     }
 
     [Fact]
-    public void Ids_written_without_0x_read_the_same()
+    public void Ids_written_as_0x_hex_read_the_same()
     {
-        var bare = ApplicationError.ToArray();
-        bare[8] = "2a4c";
-        bare[9] = Started.ToFileTimeUtc().ToString("x16");
+        var hex = ApplicationError.ToArray();
+        hex[8] = "0x5678";
+        hex[9] = "0x" + Started.ToFileTimeUtc().ToString("x16");
 
-        var crash = CrashSigns.FromApplicationError(bare, CrashedAt);
+        var crash = CrashSigns.FromApplicationError(hex, CrashedAt);
 
-        Assert.Equal(0x2a4c, crash?.ProcessId);
+        Assert.Equal(22136, crash?.ProcessId);
         Assert.Equal(Started, crash?.ProcessStartedUtc);
     }
 
