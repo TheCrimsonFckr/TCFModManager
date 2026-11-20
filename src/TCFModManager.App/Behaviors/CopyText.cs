@@ -88,6 +88,7 @@ public static class CopyText
     private static void KeepFocusInDialog(ContextMenu menu, UIElement dialog)
     {
         menu.Focusable = false;
+        foreach (var item in menu.Items.OfType<UIElement>()) item.Focusable = false;
 
         void OnKey(object sender, KeyEventArgs e)
         {
