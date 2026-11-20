@@ -48,11 +48,11 @@
 
         <!-- Which logs were read, and the status line. -->
         <StackPanel Grid.Row="1" Margin="0,0,0,12">
-            <TextBlock FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding StatusMessage}" Margin="0,0,0,4" />
-            <TextBlock FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding ServerLine}" Visibility="{Binding ServerLine, Converter={StaticResource NullToCollapsed}}" />
-            <TextBlock FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding GameLine}" Visibility="{Binding GameLine, Converter={StaticResource NullToCollapsed}}" />
-            <TextBlock FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding GameErrorsLine}" Visibility="{Binding GameErrorsLine, Converter={StaticResource NullToCollapsed}}" />
-            <TextBlock FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding LauncherNote}" Visibility="{Binding LauncherNote, Converter={StaticResource NullToCollapsed}}" />
+            <TextBox Style="{StaticResource SelectableText}" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding StatusMessage, Mode=OneWay}" Margin="0,0,0,4" />
+            <TextBox Style="{StaticResource SelectableText}" FontSize="12" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding ServerLine, Mode=OneWay}" Visibility="{Binding ServerLine, Converter={StaticResource NullToCollapsed}}" />
+            <TextBox Style="{StaticResource SelectableText}" FontSize="12" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding GameLine, Mode=OneWay}" Visibility="{Binding GameLine, Converter={StaticResource NullToCollapsed}}" />
+            <TextBox Style="{StaticResource SelectableText}" FontSize="12" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding GameErrorsLine, Mode=OneWay}" Visibility="{Binding GameErrorsLine, Converter={StaticResource NullToCollapsed}}" />
+            <TextBox Style="{StaticResource SelectableText}" FontSize="12" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding LauncherNote, Mode=OneWay}" Visibility="{Binding LauncherNote, Converter={StaticResource NullToCollapsed}}" />
         </StackPanel>
 
         <ScrollViewer
@@ -83,19 +83,19 @@
                                         <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding Title}" />
                                     </DockPanel>
 
-                                    <TextBlock
+                                    <TextBox
+                                        Style="{StaticResource SelectableText}"
                                         Margin="28,4,0,0"
                                         FontWeight="SemiBold"
-                                        TextWrapping="Wrap"
                                         Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                                        Text="{Binding ModText}"
+                                        Text="{Binding ModText, Mode=OneWay}"
                                         Visibility="{Binding ModText, Converter={StaticResource NullToCollapsed}}" />
 
-                                    <TextBlock
+                                    <TextBox
+                                        Style="{StaticResource SelectableText}"
                                         Margin="28,4,0,0"
-                                        TextWrapping="Wrap"
                                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                        Text="{Binding Body}" />
+                                        Text="{Binding Body, Mode=OneWay}" />
 
                                     <!-- The log line it was read from. -->
                                     <Border
@@ -104,16 +104,17 @@
                                         CornerRadius="{DynamicResource SmallCornerRadius}"
                                         Background="{DynamicResource ControlFillColorInputActiveBrush}">
                                         <StackPanel>
-                                            <TextBlock
+                                            <TextBox
+                                                Style="{StaticResource SelectableText}"
                                                 FontSize="11"
                                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                                Text="{Binding WhereText}" />
-                                            <TextBlock
+                                                Text="{Binding WhereText, Mode=OneWay}" />
+                                            <TextBox
+                                                Style="{StaticResource SelectableText}"
                                                 FontFamily="Consolas, DejaVu Sans Mono, Liberation Mono, Tahoma"
                                                 FontSize="11"
-                                                TextWrapping="Wrap"
                                                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                Text="{Binding SampleText}" />
+                                                Text="{Binding SampleText, Mode=OneWay}" />
                                         </StackPanel>
                                     </Border>
 
@@ -165,11 +166,11 @@
                                             Command="{Binding DataContext.OpenLogCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                                             CommandParameter="{Binding}" />
                                     </WrapPanel>
-                                    <TextBlock
+                                    <TextBox
+                                        Style="{StaticResource SelectableText}"
                                         Margin="0,6,0,0"
-                                        TextWrapping="Wrap"
                                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                        Text="{Binding ProfileFixNote}"
+                                        Text="{Binding ProfileFixNote, Mode=OneWay}"
                                         Visibility="{Binding ProfileFixNote, Converter={StaticResource NullToCollapsed}}" />
                                 </StackPanel>
                             </ui:Card>
@@ -188,11 +189,11 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <TextBlock
+                <TextBox
+                    Style="{StaticResource SelectableText}"
                     Margin="0,4,0,0"
-                    TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                    Text="{Binding OtherErrorsText}"
+                    Text="{Binding OtherErrorsText, Mode=OneWay}"
                     Visibility="{Binding OtherErrorsText, Converter={StaticResource NullToCollapsed}}" />
             </StackPanel>
         </ScrollViewer>
