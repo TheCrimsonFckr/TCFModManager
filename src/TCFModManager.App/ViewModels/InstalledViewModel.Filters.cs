@@ -11,6 +11,7 @@ public partial class InstalledViewModel
     [
         new(nameof(Strings.Filter_UpdateAny), UpdateFilter.All),
         new(nameof(Strings.Filter_UpdateNeeded), UpdateFilter.NeedsUpdate),
+        new(nameof(Strings.Filter_UpdateHeldBack), UpdateFilter.HeldBack),
         new(nameof(Strings.Filter_UpdateUpToDate), UpdateFilter.UpToDate),
         new(nameof(Strings.Filter_UpdateNotFound), UpdateFilter.NotFound),
     ];

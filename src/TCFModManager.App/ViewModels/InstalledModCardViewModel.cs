@@ -110,12 +110,20 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     //
     // OPEN-12 F11: sp-mod holds back the release this card would otherwise offer, because it would
-    // break another installed mod. UpdateVersion is then the newest release those mods all accept,
-    // when that is still newer than the one installed, and no update otherwise - see HeldBackUpdates.
+    // break another installed mod. UpdateVersion is then the held release when it can go together
+    // with other held-back updates (OPEN-58), else the newest release those mods all accept, when
+    // that is still newer than the one installed, and no update otherwise - see HeldBackUpdates.
     //
     public HeldBackResolution? HeldBack { get; init; }
 
     public string? HeldBackNote => HeldBack is { } held ? HeldBackUpdates.Describe(held) : null;
+
+    // OPEN-58 D4: sp-mod holds this mod's update back and nothing is offered in its place.
+    public bool IsHeldBack => HeldBack is not null && UpdateAvailable != true && SkippedVersion is null;
+
+    // OPEN-58: the other mods this one's update has to go with.
+    public IReadOnlyList<HeldBackPartner> UpdatesTogetherWith =>
+        UpdateAvailable == true && HeldBack?.Held.Together is { Count: > 0 } together ? together : [];
 
     // OPEN-52 N1: the update the user chose to skip; not an update until a newer one is out.
     public string? SkippedVersion { get; init; }

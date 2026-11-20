@@ -1440,6 +1440,9 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Filter_UpdateNotFound" xml:space="preserve">
     <value>Non trovato su sp-mod.com</value>
   </data>
+  <data name="Filter_UpdateHeldBack" xml:space="preserve">
+    <value>Trattenuto da sp-mod</value>
+  </data>
   <data name="Filter_UpdateUpToDate" xml:space="preserve">
     <value>Aggiornato</value>
   </data>
@@ -6963,6 +6966,12 @@ Vedi Dipendenze e conflitti.</value>
   </data>
   <data name="Installed_HeldBackPlainFormat" xml:space="preserve">
     <value>Aggiornamento a {0} trattenuto da sp-mod.</value>
+  </data>
+  <data name="Installed_HeldBackTogetherFormat" xml:space="preserve">
+    <value>Si aggiorna insieme a {0}.</value>
+  </data>
+  <data name="Installed_UpdateTogetherAddedFormat" xml:space="preserve">
+    <value>Aggiorno anche {0}: si possono aggiornare solo insieme.</value>
   </data>
   <data name="Downloads_FikaDeclinedFormat" xml:space="preserve">
     <value>{0} {1} escluso - sp-mod segnala che non funziona con Fika.</value>

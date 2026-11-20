@@ -2558,6 +2558,10 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="Filter_UpdateNotFound" xml:space="preserve">
     <value>Not found on sp-mod.com</value>
   </data>
+  <data name="Filter_UpdateHeldBack" xml:space="preserve">
+    <value>Held back by sp-mod</value>
+    <comment>Installed's update status dropdown (OPEN-58 D4): mods whose update sp-mod holds back because it would break another installed mod, and that are offered no update.</comment>
+  </data>
   <data name="Filter_EnabledAll" xml:space="preserve">
     <value>Enabled &amp; disabled</value>
     <comment>Neutral entry in Installed's enabled filter.</comment>
@@ -8786,6 +8790,14 @@ See Dependencies and Conflicts.</value>
   <data name="Installed_HeldBackPlainFormat" xml:space="preserve">
     <value>Update to {0} held back by sp-mod.</value>
     <comment>sp-mod holds the update back without naming a reason. {0} is the version.</comment>
+  </data>
+  <data name="Installed_HeldBackTogetherFormat" xml:space="preserve">
+    <value>Updates together with {0}.</value>
+    <comment>On a mod whose update sp-mod holds back, but which can update together with other held-back mods (OPEN-58), e.g. "Updates together with ISB Special Forces 2.0.4." {0} is each other mod with the version it goes to, joined.</comment>
+  </data>
+  <data name="Installed_UpdateTogetherAddedFormat" xml:space="preserve">
+    <value>Also updating {0}, as they only update together.</value>
+    <comment>Added to the status line after queueing an update when other mods were added to it because they can only update together (OPEN-58). {0} is those mods, joined.</comment>
   </data>
   <data name="Downloads_NotForFikaTitle" xml:space="preserve">
     <value>Not made for Fika</value>

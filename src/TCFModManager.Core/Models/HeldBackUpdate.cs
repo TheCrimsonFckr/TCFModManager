@@ -10,6 +10,14 @@ namespace TCFModManager.Core.Models;
 //
 public sealed record HeldBackUpdate(int ModId, string Version, string? Reason, IReadOnlyList<HeldBackBlocker> Blockers)
 {
+    public string? Name { get; init; }
+
+    //
+    // OPEN-58: the other held-back updates this one can go with - sp-mod confirmed each member's
+    // update is fine once the others have theirs. Empty when it can't go with anything.
+    //
+    public IReadOnlyList<HeldBackPartner> Together { get; init; } = [];
+
     // sp-mod's block_reason when the conflict is further down a dependency chain, with no blocking mod
     // of its own to name.
     public const string ChainReason = "chain_dependency_conflict";
@@ -27,9 +35,12 @@ public sealed record HeldBackUpdate(int ModId, string Version, string? Reason, I
             .Select(b => new HeldBackBlocker(b.ModId, b.ModName, b.Constraint))
             .ToList();
 
-        return new HeldBackUpdate(current.ModId, version, entry.BlockReason, blockers);
+        return new HeldBackUpdate(current.ModId, version, entry.BlockReason, blockers) { Name = current.Name };
     }
 }
 
 // An installed mod the update would break, and the version range of the held mod it needs.
 public sealed record HeldBackBlocker(int ModId, string? Name, string? Constraint);
+
+// Another held-back update to install with this one, at the release sp-mod holds back.
+public sealed record HeldBackPartner(int ModId, string? Name, string Version);

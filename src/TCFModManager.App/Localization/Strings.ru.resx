@@ -1473,6 +1473,9 @@
   <data name="Filter_UpdateNotFound" xml:space="preserve">
     <value>Не найдены на sp-mod.com</value>
   </data>
+  <data name="Filter_UpdateHeldBack" xml:space="preserve">
+    <value>Задержано sp-mod</value>
+  </data>
   <data name="Filter_UpdateUpToDate" xml:space="preserve">
     <value>Актуальные</value>
   </data>
@@ -7302,6 +7305,12 @@
   </data>
   <data name="Installed_HeldBackPlainFormat" xml:space="preserve">
     <value>Обновление до {0} задержано sp-mod.</value>
+  </data>
+  <data name="Installed_HeldBackTogetherFormat" xml:space="preserve">
+    <value>Обновляется вместе с {0}.</value>
+  </data>
+  <data name="Installed_UpdateTogetherAddedFormat" xml:space="preserve">
+    <value>Также обновляется {0}: их можно обновить только вместе.</value>
   </data>
   <data name="Downloads_FikaDeclinedFormat" xml:space="preserve">
     <value>{0} {1} пропущен - sp-mod отмечает его как несовместимый с Fika.</value>

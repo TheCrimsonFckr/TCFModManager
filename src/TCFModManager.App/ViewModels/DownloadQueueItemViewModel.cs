@@ -404,6 +404,9 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     // The item this one was pulled in for, while it has still to take its install turn.
     internal DownloadQueueItemViewModel? InstallsBefore { get; set; }
 
+    // OPEN-58: the mods queued to update together with this one.
+    internal IReadOnlySet<int> UpdatesWith { get; set; } = new HashSet<int>();
+
     // Cancels this item and every dependency queued on its behalf. A still-pending item is
     // marked Cancelled immediately; an in-flight one is signalled and settles when its worker
     // unwinds.

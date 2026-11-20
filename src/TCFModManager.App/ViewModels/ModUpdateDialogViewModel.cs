@@ -568,14 +568,17 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
             return;
         }
 
+        var partners = PartnersFor(action, selectedVersion);
+
         // Require the mod's page to be confirmed as read before installing - and the page of every
-        // addon changed with it.
-        var read = addonChanges.Count == 0
+        // addon changed with it, and of every mod updating with it.
+        var read = addonChanges.Count == 0 && partners.Count == 0
             ? ReadModPageConfirmationWindow.Confirm(_mod.DisplayTitle, ModPageUrl)
             : ReadModPageConfirmationWindow.ConfirmAll(
             [
                 new ModPageLink(_mod.DisplayTitle, ModPageUrl),
                 .. addonChanges.Select(i => new ModPageLink(i.Addon.Name, i.Addon.Listing?.DetailUrl)),
+                .. partners.Select(p => new ModPageLink(p.Mod.Name ?? p.Partner.Name ?? string.Empty, p.Mod.DetailUrl)),
             ]);
 
         if (!read)
@@ -610,12 +613,37 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
             queuedAddons.Add(Text(Strings.AddonImpact_QueuedItemFormat, change.Addon.Name, download.Version));
         }
 
+        var together = new List<DownloadQueueItemViewModel> { item };
+        foreach (var (partner, mod) in partners)
+        {
+            together.Add(AppServices.DownloadQueue.Enqueue(
+                InstallTarget.For(mod), partner.Version, installPath,
+                () => AppServices.SpModApi.FindModVersionAsync(mod.Id.ToString(System.Globalization.CultureInfo.InvariantCulture), partner.Version),
+                downloadOnly: downloadOnly));
+        }
+
+        if (together.Count > 1) DownloadQueueViewModel.MarkTogether(together);
+
         var queued = Text(Strings.ModUpdate_QueuedFormat, _mod.DisplayTitle, selectedVersion.VersionText);
-        StatusMessage = queuedAddons.Count == 0
-            ? queued
-            : queued + " " + Text(Strings.AddonImpact_QueuedFormat, TextLists.Join(queuedAddons));
+        if (queuedAddons.Count > 0) queued += " " + Text(Strings.AddonImpact_QueuedFormat, TextLists.Join(queuedAddons));
+        if (partners.Count > 0)
+            queued += " " + Text(Strings.Installed_UpdateTogetherAddedFormat, TextLists.Join([.. partners.Select(p => p.Mod.Name ?? p.Partner.Name ?? string.Empty)]));
+        StatusMessage = queued;
         MadeChanges = true;
     }
+
+    //
+    // OPEN-58: the mods the selected release has to update with - when it is the held-back release
+    // sp-mod confirmed can go together with theirs. Only the ones the catalog knows.
+    //
+    private List<(HeldBackPartner Partner, Mod Mod)> PartnersFor(ModUpdateAction action, ModVersionRowViewModel selected) =>
+        action == ModUpdateAction.Update && !_mod.IsAddon
+        && _mod.HeldBack?.Held is { Together.Count: > 0 } held && held.Holds(selected.Raw.Version)
+            ? [.. held.Together
+                .Select(p => (Partner: p, Mod: AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == p.ModId)))
+                .Where(p => p.Mod is not null)
+                .Select(p => (p.Partner, p.Mod!))]
+            : [];
 
     // Opens ModPageUrl in the OS's default browser.
     [RelayCommand]

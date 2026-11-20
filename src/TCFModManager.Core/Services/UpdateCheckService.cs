@@ -23,6 +23,9 @@ public sealed class UpdateCheckService(SpModApiClient api)
     // The catalog's page size for a filter[id] lookup.
     private const int PageSize = 50;
 
+    // OPEN-58: above this many held-back updates, none are grouped.
+    internal const int MaxGroupCandidates = 12;
+
     //
     // What /mods/updates says about <paramref name="installed"/> on <paramref name="sptVersion"/>.
     //
@@ -63,14 +66,164 @@ public sealed class UpdateCheckService(SpModApiClient api)
 
         var asked = installed.Where(m => !string.IsNullOrWhiteSpace(m.Version)).Select(m => m.ModId);
 
+        var held = await GroupHeldBackAsync(installed, [.. heldBack.DistinctBy(h => h.ModId)], sptVersion, ct).ConfigureAwait(false);
+
         return new InstalledUpdateCheck(
             [.. updated.Distinct()],
             [.. asked.Distinct().Where(id => !answered.Contains(id))])
         {
-            HeldBack = [.. heldBack.DistinctBy(h => h.ModId)],
+            HeldBack = held,
             NotForSpt = [.. notForSpt.Distinct()],
             UpToDate = [.. upToDate.Distinct()],
         };
+    }
+
+    //
+    // OPEN-58 D1: held-back updates that can go together - two mods that pin each other's exact
+    // release, say, so neither can move alone. Candidates are joined by the blockers sp-mod names
+    // and, for a chained one, by the held-back mods in its dependency tree. Each group is then
+    // confirmed by sp-mod: every member must be a plain update once the other members are at their
+    // held releases. Any failure leaves the answer as sp-mod gave it.
+    //
+    private async Task<IReadOnlyList<HeldBackUpdate>> GroupHeldBackAsync(
+        IReadOnlyList<(int ModId, string Version)> installed, IReadOnlyList<HeldBackUpdate> heldBack,
+        string sptVersion, CancellationToken ct)
+    {
+        var byId = heldBack.ToDictionary(h => h.ModId);
+        var candidates = heldBack
+            .Where(h => h.Blockers.All(b => byId.ContainsKey(b.ModId)))
+            .Select(h => h.ModId)
+            .ToList();
+
+        if (candidates.Count < 2) return heldBack;
+
+        if (candidates.Count > MaxGroupCandidates)
+        {
+            AppLog.Info("Updates", $"{candidates.Count} held-back updates - too many to try grouping");
+            return heldBack;
+        }
+
+        try
+        {
+            var links = candidates.ToDictionary(id => id, _ => new HashSet<int>());
+            void Link(int a, int b)
+            {
+                if (a == b || !links.ContainsKey(a) || !links.ContainsKey(b)) return;
+                links[a].Add(b);
+                links[b].Add(a);
+            }
+
+            foreach (var id in candidates)
+            foreach (var blocker in byId[id].Blockers)
+                Link(id, blocker.ModId);
+
+            var chained = candidates.Where(id => byId[id].Blockers.Count == 0).ToList();
+            if (chained.Count > 0)
+            {
+                var trees = await api.GetModDependenciesAsync(
+                    string.Join(',', chained.Select(id => $"{id.ToString(CultureInfo.InvariantCulture)}:{byId[id].Version.Trim()}")),
+                    sptVersion, ct).ConfigureAwait(false);
+
+                foreach (var (key, nodes) in trees)
+                {
+                    if (!int.TryParse(key.Split(':')[0], NumberStyles.None, CultureInfo.InvariantCulture, out var id)) continue;
+                    foreach (var node in Flatten(nodes)) Link(id, node.Id);
+                }
+            }
+
+            var together = new Dictionary<int, HashSet<int>>();
+
+            foreach (var component in Components(candidates, links))
+            {
+                var members = component;
+                while (members.Count >= 2)
+                {
+                    var failed = new List<int>();
+                    foreach (var id in members)
+                    {
+                        if (!await GoesWithAsync(installed, members, id, byId, sptVersion, ct).ConfigureAwait(false)) failed.Add(id);
+                    }
+
+                    if (failed.Count == 0) break;
+                    members.ExceptWith(failed);
+                }
+
+                if (members.Count < 2) continue;
+
+                foreach (var id in members) together[id] = members;
+                AppLog.Info("Updates", $"held-back updates go together: {string.Join(", ", members.Select(id => $"{id} {byId[id].Version}"))}");
+            }
+
+            if (together.Count == 0) return heldBack;
+
+            return [.. heldBack.Select(h => together.TryGetValue(h.ModId, out var group)
+                ? h with
+                {
+                    Together = [.. group.Where(id => id != h.ModId).Select(id => new HeldBackPartner(id, byId[id].Name, byId[id].Version))],
+                }
+                : h)];
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            AppLog.Warn("Updates", $"couldn't check which held-back updates go together: {ex.Message}");
+            return heldBack;
+        }
+    }
+
+    // Whether sp-mod offers this member its held release once every other member is at its own.
+    private async Task<bool> GoesWithAsync(
+        IReadOnlyList<(int ModId, string Version)> installed, IReadOnlySet<int> members, int modId,
+        IReadOnlyDictionary<int, HeldBackUpdate> byId, string sptVersion, CancellationToken ct)
+    {
+        var state = installed
+            .OrderByDescending(m => members.Contains(m.ModId))
+            .Select(m => members.Contains(m.ModId) && m.ModId != modId ? (m.ModId, byId[m.ModId].Version) : m)
+            .ToList();
+
+        foreach (var chunk in ModsQueryChunks(state))
+        {
+            var result = await api.GetModUpdatesAsync(chunk, sptVersion, ct).ConfigureAwait(false);
+            if (result.Updates.Any(u => u.CurrentVersion?.ModId == modId && byId[modId].Holds(u.RecommendedVersion?.Version)))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static List<HashSet<int>> Components(IReadOnlyList<int> ids, IReadOnlyDictionary<int, HashSet<int>> links)
+    {
+        var seen = new HashSet<int>();
+        var components = new List<HashSet<int>>();
+
+        foreach (var start in ids)
+        {
+            if (!seen.Add(start)) continue;
+
+            var component = new HashSet<int> { start };
+            var pending = new Stack<int>();
+            pending.Push(start);
+            while (pending.TryPop(out var id))
+            {
+                foreach (var next in links[id].Where(seen.Add))
+                {
+                    component.Add(next);
+                    pending.Push(next);
+                }
+            }
+
+            components.Add(component);
+        }
+
+        return components;
+    }
+
+    private static IEnumerable<DependencyNode> Flatten(IEnumerable<DependencyNode> nodes)
+    {
+        foreach (var node in nodes)
+        {
+            yield return node;
+            foreach (var child in Flatten(node.Dependencies)) yield return child;
+        }
     }
 
     // Fresh listings, with categories and versions, shaped like the catalog cache's own.
@@ -160,5 +313,5 @@ public sealed record InstalledUpdateCheck(IReadOnlyList<int> Updated, IReadOnlyL
 
     public IReadOnlyList<int> UpToDate { get; init; } = [];
 
-    public IReadOnlyList<int> ToRefetch => [.. Updated.Concat(NotRecognised).Distinct()];
+    public IReadOnlyList<int> ToRefetch => [.. Updated.Concat(NotRecognised).Concat(HeldBack.Select(h => h.ModId)).Distinct()];
 }

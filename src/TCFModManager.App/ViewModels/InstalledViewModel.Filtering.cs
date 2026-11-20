@@ -24,8 +24,9 @@ public partial class InstalledViewModel
             .Where(m => SelectedUpdateFilter.Value switch
             {
                 UpdateFilter.NeedsUpdate => m.UpdateAvailable == true,
-                UpdateFilter.UpToDate => m.UpdateAvailable == false,
+                UpdateFilter.UpToDate => m.UpdateAvailable == false && !m.IsHeldBack,
                 UpdateFilter.NotFound => m.MatchedModName is null,
+                UpdateFilter.HeldBack => m.IsHeldBack,
                 _ => true, // All - no restriction
             })
             .Where(m => SelectedEnabledFilter.Value switch

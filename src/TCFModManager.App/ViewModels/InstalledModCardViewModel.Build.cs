@@ -429,7 +429,8 @@ public sealed partial class InstalledModCardViewModel
 
         //
         // sp-mod holds that release back: it would break another installed mod (OPEN-12 F11). Not an
-        // update, unless an older release every such mod accepts is still newer than this one.
+        // update, unless it can go together with other held-back updates (OPEN-58), or an older
+        // release every such mod accepts is still newer than this one.
         //
         HeldBackResolution? heldBack = null;
         if (updateVersion is not null && AppServices.HeldBack.For(match?.Id, installedSptVersion) is { } held && held.Holds(updateVersion))
@@ -442,14 +443,17 @@ public sealed partial class InstalledModCardViewModel
                     ? ModVersionComparer.IsUpdateAvailableByNumbers(installedVersion, safe)
                     : ModVersionComparer.IsUpdateAvailable(installedVersion, safe);
 
-            if (safeIsNewer == true)
+            if (held.Together.Count == 0)
             {
-                updateVersion = heldBack.Safe;
-            }
-            else
-            {
-                updateAvailable = false;
-                updateVersion = null;
+                if (safeIsNewer == true)
+                {
+                    updateVersion = heldBack.Safe;
+                }
+                else
+                {
+                    updateAvailable = false;
+                    updateVersion = null;
+                }
             }
         }
 

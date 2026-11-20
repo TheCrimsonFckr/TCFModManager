@@ -10,11 +10,14 @@ public enum UpdateFilter
     // Only mods with a confirmed newer version on sp-mod.com show (UpdateAvailable == true).
     NeedsUpdate,
 
-    // Only mods confirmed up to date show (UpdateAvailable == false).
+    // Only mods confirmed up to date show (UpdateAvailable == false, and not held back).
     UpToDate,
 
     // Only mods with no sp-mod.com match at all show (MatchedModName == null).
     NotFound,
+
+    // OPEN-58 D4: only mods whose update sp-mod holds back show (IsHeldBack).
+    HeldBack,
 }
 
 // One entry in Installed's Update status dropdown. Overrides ToString() so the label shows instead

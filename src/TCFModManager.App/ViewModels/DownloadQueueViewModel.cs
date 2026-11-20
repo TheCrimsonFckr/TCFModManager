@@ -511,7 +511,9 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             //
             if (!item.DownloadOnly && !item.IsAddon && version.Version is { Length: > 0 } newVersion)
             {
-                var broken = await WouldBreakAsync(item, newVersion);
+                var broken = (await WouldBreakAsync(item, newVersion))
+                    .Where(b => b.Dependent.ModId is not { } id || !UpdatesWithIt(item, id))
+                    .ToList();
                 if (broken.Count > 0 && !ConfirmBreaks(item, newVersion, broken))
                 {
                     item.Status = DownloadQueueItemStatus.Cancelled;
@@ -791,6 +793,19 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             AppLog.Warn("Downloads", $"couldn't check what {item.ModName} {newVersion} would break: {ex.Message}");
             return [];
         }
+    }
+
+    // OPEN-58: a mod queued to update together with this one, and not failed or cancelled.
+    private bool UpdatesWithIt(DownloadQueueItemViewModel item, int modId) =>
+        item.UpdatesWith.Contains(modId)
+        && Items.Any(i => i is { IsAddon: false, Status: not (DownloadQueueItemStatus.Failed or DownloadQueueItemStatus.Cancelled) }
+            && i.Target.Id == modId);
+
+    // Marks each of these queued updates as going together with the others.
+    public static void MarkTogether(IReadOnlyCollection<DownloadQueueItemViewModel> items)
+    {
+        var ids = items.Where(i => !i.IsAddon).Select(i => i.Target.Id).ToHashSet();
+        foreach (var item in items.Where(i => !i.IsAddon)) item.UpdatesWith = ids.Where(id => id != item.Target.Id).ToHashSet();
     }
 
     private static bool ConfirmBreaks(DownloadQueueItemViewModel item, string newVersion, IReadOnlyList<DependencyRequirement> broken)

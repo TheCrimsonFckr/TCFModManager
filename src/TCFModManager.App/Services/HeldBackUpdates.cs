@@ -14,6 +14,8 @@ namespace TCFModManager.App.Services;
 // the Update available filter, the badge, a toast, Update selected - offers it. When an older release
 // that every one of those mods accepts is still newer than the installed one, that is offered instead
 // (HeldBackVersions). The update dialog still lets you pick the held release, with the same note.
+// OPEN-58: held-back updates sp-mod confirmed can go together (HeldBackUpdate.Together) are
+// updates again, installed together.
 //
 // Held only for this session. A failed or offline check leaves the last answer in place.
 //
@@ -126,6 +128,10 @@ public sealed class HeldBackUpdates
     {
         var held = resolved.Held;
 
+        if (held.Together.Count > 0)
+            return LocalizationService.Text(Strings.Installed_HeldBackTogetherFormat, TextLists.Join(
+                [.. held.Together.Select(p => string.Join(' ', p.Name ?? p.ModId.ToString(System.Globalization.CultureInfo.InvariantCulture), p.Version))]));
+
         var blockers = held.Blockers
             .Select((b, i) => (Blocker: b, Newest: resolved.PerBlocker.ElementAtOrDefault(i)))
             .Where(x => !string.IsNullOrWhiteSpace(x.Blocker.Name))
@@ -147,5 +153,6 @@ public sealed class HeldBackUpdates
     private static bool Same(HeldBackUpdate a, HeldBackUpdate b) =>
         a.Holds(b.Version)
         && a.Reason == b.Reason
-        && a.Blockers.SequenceEqual(b.Blockers);
+        && a.Blockers.SequenceEqual(b.Blockers)
+        && a.Together.OrderBy(p => p.ModId).SequenceEqual(b.Together.OrderBy(p => p.ModId));
 }

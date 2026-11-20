@@ -738,6 +738,7 @@ internal static class Strings
     internal static string Filter_UpdateNeeded => LocalizationService.Get("Filter_UpdateNeeded");
     internal static string Filter_UpdateUpToDate => LocalizationService.Get("Filter_UpdateUpToDate");
     internal static string Filter_UpdateNotFound => LocalizationService.Get("Filter_UpdateNotFound");
+    internal static string Filter_UpdateHeldBack => LocalizationService.Get("Filter_UpdateHeldBack");
     internal static string Filter_EnabledAll => LocalizationService.Get("Filter_EnabledAll");
     internal static string Filter_EnabledOnly => LocalizationService.Get("Filter_EnabledOnly");
     internal static string Filter_DisabledOnly => LocalizationService.Get("Filter_DisabledOnly");
@@ -2422,6 +2423,8 @@ internal static class Strings
     internal static string Installed_HeldBackNeedsFormat => LocalizationService.Get("Installed_HeldBackNeedsFormat");
     internal static string Installed_HeldBackChainFormat => LocalizationService.Get("Installed_HeldBackChainFormat");
     internal static string Installed_HeldBackPlainFormat => LocalizationService.Get("Installed_HeldBackPlainFormat");
+    internal static string Installed_HeldBackTogetherFormat => LocalizationService.Get("Installed_HeldBackTogetherFormat");
+    internal static string Installed_UpdateTogetherAddedFormat => LocalizationService.Get("Installed_UpdateTogetherAddedFormat");
     internal static string Downloads_NotForFikaTitle => LocalizationService.Get("Downloads_NotForFikaTitle");
     internal static string Downloads_FikaLeadFormat => LocalizationService.Get("Downloads_FikaLeadFormat");
     internal static string Downloads_FikaDetail => LocalizationService.Get("Downloads_FikaDetail");

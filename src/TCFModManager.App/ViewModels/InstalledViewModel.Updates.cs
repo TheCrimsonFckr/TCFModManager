@@ -62,6 +62,9 @@ public partial class InstalledViewModel
             return;
         }
 
+        var partners = PartnersOf(targets);
+        targets.AddRange(partners);
+
         // Resolved against the cached catalog before anything is asked, so a mod the catalog can no
         // longer identify is reported now rather than failing halfway through the batch.
         var resolved = new List<(InstalledModCardViewModel Card, Mod Mod, string Version)>();
@@ -280,8 +283,18 @@ public partial class InstalledViewModel
             if (!update.Target.IsAddon) queuedMods[update.Target.Id] = item;
         }
 
+        foreach (var update in updates.Where(u => !u.Target.IsAddon && u.Card.UpdatesTogetherWith.Count > 0))
+        {
+            queuedMods[update.Target.Id].UpdatesWith = update.Card.UpdatesTogetherWith
+                .Select(p => p.ModId)
+                .Where(queuedMods.ContainsKey)
+                .ToHashSet();
+        }
+
         var queued = Strings.Installed_UpdateQueued(updates.Count);
         var summary = queued + DescribeSkipped(selected, unmatched, noFit);
+        var added = partners.Where(p => p.ModId is { } id && queuedMods.ContainsKey(id)).Select(p => p.DisplayTitle).ToList();
+        if (added.Count > 0) summary = Sentences(summary, Text(Strings.Installed_UpdateTogetherAddedFormat, TextLists.Join(added)));
         StatusMessage = leftOut.Length == 0 ? summary : Sentences(summary, leftOut);
 
         AppLog.Info("Installed", $"queued {updates.Count} update(s) from a selection of {selected.Count}");
@@ -329,6 +342,23 @@ public partial class InstalledViewModel
 
         AppServices.InstallManifest.SetDisabledForFit(fitting.Select(c => c.ModId!.Value), false);
         if (answer == AskChoice.First) await ApplyDisableAsync(fitting, disable: false, confirm: false);
+    }
+
+    //
+    // OPEN-58: the other cards a held-back update has to go with, when they're not already in the
+    // batch. Only ones still offering that same release.
+    //
+    private List<InstalledModCardViewModel> PartnersOf(IReadOnlyList<InstalledModCardViewModel> targets)
+    {
+        var inBatch = targets.Where(c => !c.IsAddon && c.ModId is not null).Select(c => c.ModId!.Value).ToHashSet();
+
+        return [.. targets
+            .SelectMany(c => c.UpdatesTogetherWith)
+            .Where(p => !inBatch.Contains(p.ModId))
+            .Select(p => _all.FirstOrDefault(c => c is { IsAddon: false } && c.ModId == p.ModId
+                && IsUpdatable(c) && c.HeldBack?.Held.Holds(p.Version) == true))
+            .OfType<InstalledModCardViewModel>()
+            .Distinct()];
     }
 
     // As the addon card picks its update (BuildAddonCard), against the version its mod is going to.
