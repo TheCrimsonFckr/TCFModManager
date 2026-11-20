@@ -10602,10 +10602,10 @@
     <value>Посмотрите на странице {0} на sp-mod, что ему нужно.</value>
   </data>
   <data name="Diagnose_Title_FikaRequiredModsMissing" xml:space="preserve">
-    <value>Нет модов, которые требует сервер</value>
+    <value>Игра не смогла подключиться к серверу: нет модов</value>
   </data>
   <data name="Diagnose_Body_FikaRequiredModsMissingFormat" xml:space="preserve">
-    <value>Fika сообщает, что в этой игре нет {0} мод(ов), нужных серверу: {1}. Установите те же моды, что у хоста, и снова запустите игру.</value>
+    <value>Fika не дала этой игре загрузиться на сервер, потому что в ней нет {0} мод(ов), которые требует сервер: {1}. Установите те же моды, что у хоста, и снова запустите игру.</value>
   </data>
   <data name="Diagnose_Title_FikaModsNotVerified" xml:space="preserve">
     <value>Fika не смог сверить моды с сервером</value>
@@ -10617,13 +10617,13 @@
     <value>На сервере нет Fika</value>
   </data>
   <data name="Diagnose_Body_FikaServerModMissing" xml:space="preserve">
-    <value>В этой игре есть Fika, а на сервере, к которому она подключилась, нет. Установите серверный мод Fika на сервер той же версии, что здесь.</value>
+    <value>Fika не дала этой игре загрузиться на сервер, потому что на сервере нет Fika. Установите серверный мод Fika на сервер той же версии, что здесь.</value>
   </data>
   <data name="Diagnose_Title_FikaServerTooOld" xml:space="preserve">
     <value>Fika на сервере слишком старая</value>
   </data>
   <data name="Diagnose_Body_FikaServerTooOldFormat" xml:space="preserve">
-    <value>Fika этой игры требует на сервере версию новее {0}, а на сервере {1}. Обновите Fika на сервере.</value>
+    <value>Fika не дала этой игре загрузиться на сервер, потому что Fika на сервере слишком старая: нужна версия новее {0}, а на сервере {1}. Обновите Fika на сервере.</value>
   </data>
   <data name="Diagnose_Title_FikaVersionDiffers" xml:space="preserve">
     <value>Fika не совпадает с хостом рейда</value>

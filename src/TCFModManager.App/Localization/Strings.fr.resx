@@ -10179,10 +10179,10 @@ Les détails sont dans le journal :
     <value>Consultez la page de {0} sur sp-mod pour savoir ce qu'il lui faut.</value>
   </data>
   <data name="Diagnose_Title_FikaRequiredModsMissing" xml:space="preserve">
-    <value>Des mods exigés par le serveur manquent</value>
+    <value>Le jeu n'a pas pu rejoindre le serveur : mods manquants</value>
   </data>
   <data name="Diagnose_Body_FikaRequiredModsMissingFormat" xml:space="preserve">
-    <value>Fika indique qu'il manque à ce jeu {0} mod(s) exigé(s) par le serveur : {1}. Installez les mêmes mods que l'hôte, puis relancez le jeu.</value>
+    <value>Fika a empêché ce jeu de se charger sur le serveur car il lui manque {0} mod(s) exigé(s) par le serveur : {1}. Installez les mêmes mods que l'hôte, puis relancez le jeu.</value>
   </data>
   <data name="Diagnose_Title_FikaModsNotVerified" xml:space="preserve">
     <value>Fika n'a pas pu vérifier les mods auprès du serveur</value>
@@ -10194,13 +10194,13 @@ Les détails sont dans le journal :
     <value>Le serveur n'a pas Fika</value>
   </data>
   <data name="Diagnose_Body_FikaServerModMissing" xml:space="preserve">
-    <value>Ce jeu a Fika, mais pas le serveur auquel il s'est connecté. Installez le mod serveur de Fika sur le serveur, dans la même version qu'ici.</value>
+    <value>Fika a empêché ce jeu de se charger sur le serveur car le serveur n'a pas Fika. Installez le mod serveur de Fika sur le serveur, dans la même version qu'ici.</value>
   </data>
   <data name="Diagnose_Title_FikaServerTooOld" xml:space="preserve">
     <value>Le Fika du serveur est trop ancien</value>
   </data>
   <data name="Diagnose_Body_FikaServerTooOldFormat" xml:space="preserve">
-    <value>Le Fika de ce jeu exige sur le serveur une version plus récente que {0}, mais le serveur a {1}. Mettez Fika à jour sur le serveur.</value>
+    <value>Fika a empêché ce jeu de se charger sur le serveur car le Fika du serveur est trop ancien : il faut une version plus récente que {0}, mais le serveur a {1}. Mettez Fika à jour sur le serveur.</value>
   </data>
   <data name="Diagnose_Title_FikaVersionDiffers" xml:space="preserve">
     <value>Fika ne correspond pas à l'hôte du raid</value>

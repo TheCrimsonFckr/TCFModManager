@@ -12426,11 +12426,11 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Card text, second sentence. {0}: the mod's name</comment>
   </data>
   <data name="Diagnose_Title_FikaRequiredModsMissing" xml:space="preserve">
-    <value>Mods the server needs are missing</value>
+    <value>The game couldn't join the server: mods missing</value>
     <comment>Diagnose logs Fika card (OPEN-54 N32). Title: the server requires mods this game doesn't have</comment>
   </data>
   <data name="Diagnose_Body_FikaRequiredModsMissingFormat" xml:space="preserve">
-    <value>Fika says this game is missing {0} mod(s) the server needs: {1}. Install the same mods as the host, then start the game again.</value>
+    <value>Fika stopped this game loading into the server because it's missing {0} mod(s) the server requires: {1}. Install the same mods as the host, then start the game again.</value>
     <comment>Diagnose logs Fika card (OPEN-54 N32). {0}: how many, {1}: the mods' ids, as Fika logged them</comment>
   </data>
   <data name="Diagnose_Title_FikaModsNotVerified" xml:space="preserve">
@@ -12446,7 +12446,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Diagnose logs Fika card (OPEN-54 N32). Title: the server has no Fika server mod</comment>
   </data>
   <data name="Diagnose_Body_FikaServerModMissing" xml:space="preserve">
-    <value>This game has Fika, but the server it connected to doesn't. Install Fika's server mod on the server, the same version as this game's.</value>
+    <value>Fika stopped this game loading into the server because the server doesn't have Fika. Install Fika's server mod on the server, the same version as this game's.</value>
     <comment>Diagnose logs Fika card (OPEN-54 N32). Body</comment>
   </data>
   <data name="Diagnose_Title_FikaServerTooOld" xml:space="preserve">
@@ -12454,7 +12454,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Diagnose logs Fika card (OPEN-54 N32). Title: the server's Fika is older than the game's Fika needs</comment>
   </data>
   <data name="Diagnose_Body_FikaServerTooOldFormat" xml:space="preserve">
-    <value>This game's Fika needs the server's Fika to be newer than {0}, but the server has {1}. Update Fika on the server.</value>
+    <value>Fika stopped this game loading into the server because the server's Fika is too old: it needs newer than {0}, but the server has {1}. Update Fika on the server.</value>
     <comment>Diagnose logs Fika card (OPEN-54 N32). {0}: the oldest server version this game's Fika accepts, {1}: the server's version</comment>
   </data>
   <data name="Diagnose_Title_FikaVersionDiffers" xml:space="preserve">

@@ -10179,10 +10179,10 @@ Die Details stehen im Log:
     <value>Sieh auf der Seite von {0} auf sp-mod nach, was sie braucht.</value>
   </data>
   <data name="Diagnose_Title_FikaRequiredModsMissing" xml:space="preserve">
-    <value>Mods, die der Server braucht, fehlen</value>
+    <value>Das Spiel konnte dem Server nicht beitreten: Mods fehlen</value>
   </data>
   <data name="Diagnose_Body_FikaRequiredModsMissingFormat" xml:space="preserve">
-    <value>Fika meldet, dass diesem Spiel {0} Mod(s) fehlen, die der Server braucht: {1}. Installiere dieselben Mods wie der Host und starte das Spiel erneut.</value>
+    <value>Fika hat verhindert, dass dieses Spiel in den Server lädt, weil {0} Mod(s) fehlen, die der Server verlangt: {1}. Installiere dieselben Mods wie der Host und starte das Spiel erneut.</value>
   </data>
   <data name="Diagnose_Title_FikaModsNotVerified" xml:space="preserve">
     <value>Fika konnte die Mods nicht mit dem Server abgleichen</value>
@@ -10194,13 +10194,13 @@ Die Details stehen im Log:
     <value>Der Server hat kein Fika</value>
   </data>
   <data name="Diagnose_Body_FikaServerModMissing" xml:space="preserve">
-    <value>Dieses Spiel hat Fika, aber der verbundene Server nicht. Installiere die Server-Mod von Fika auf dem Server, in derselben Version wie hier.</value>
+    <value>Fika hat verhindert, dass dieses Spiel in den Server lädt, weil der Server kein Fika hat. Installiere die Server-Mod von Fika auf dem Server, in derselben Version wie hier.</value>
   </data>
   <data name="Diagnose_Title_FikaServerTooOld" xml:space="preserve">
     <value>Das Fika des Servers ist zu alt</value>
   </data>
   <data name="Diagnose_Body_FikaServerTooOldFormat" xml:space="preserve">
-    <value>Das Fika dieses Spiels braucht auf dem Server eine neuere Version als {0}, der Server hat aber {1}. Aktualisiere Fika auf dem Server.</value>
+    <value>Fika hat verhindert, dass dieses Spiel in den Server lädt, weil das Fika des Servers zu alt ist: Es braucht eine neuere Version als {0}, der Server hat aber {1}. Aktualisiere Fika auf dem Server.</value>
   </data>
   <data name="Diagnose_Title_FikaVersionDiffers" xml:space="preserve">
     <value>Fika passt nicht zum Raid-Host</value>
