@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
@@ -162,7 +163,7 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
         TotalBytes is > 0 and var total ? SizePair(Progress * total, total) : StatFigure.None;
 
     public StatFigure RateValue =>
-        BytesPerSecond is { } rate ? SizeFigure(rate).Within(Strings.Downloads_RateFormat) : StatFigure.None;
+        BytesPerSecond is { } rate ? LiveSizeFigure(rate).Within(Strings.Downloads_RateFormat) : StatFigure.None;
 
     public string EtaValue => BytesPerSecond is > 0 and var rate && RemainingBytes is { } left
         ? Remaining(TimeSpan.FromSeconds(left / rate))
@@ -237,16 +238,38 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     // Both halves of "x of y" scaled to the larger one's unit.
     private static StatFigure SizePair(double done, double total)
     {
-        var (scale, unit) = total switch
+        var unit = total switch
         {
-            >= 1024d * 1024 * 1024 => (1024d * 1024 * 1024, Strings.Common_UnitGb),
-            >= 1024d * 1024 => (1024d * 1024, Strings.Common_UnitMb),
-            >= 1024d => (1024d, Strings.Common_UnitKb),
-            _ => (1d, Strings.Common_UnitB),
+            >= 1024d * 1024 * 1024 => Strings.Common_UnitGb,
+            >= 1024d * 1024 => Strings.Common_UnitMb,
+            >= 1024d => Strings.Common_UnitKb,
+            _ => Strings.Common_UnitB,
         };
+        var (scale, decimals) = LiveScale(total);
 
-        return StatFigure.From(Strings.Downloads_TransferredFormat, done / scale, total / scale, unit);
+        var figure = StatFigure.From(Strings.Downloads_TransferredFormat, done / scale, total / scale, unit);
+        return figure.HasNumber
+            ? figure with { Number = Fixed(done / scale, decimals), Widest = Fixed(total / scale, decimals) }
+            : figure;
     }
+
+    // A size that changes while it is watched: decimals fine enough to see it move, and always the same count of them.
+    public static StatFigure LiveSizeFigure(double bytes)
+    {
+        var figure = SizeFigure(bytes);
+        var (scale, decimals) = LiveScale(bytes);
+        return figure.HasNumber ? figure with { Number = Fixed(bytes / scale, decimals) } : figure;
+    }
+
+    private static (double Scale, string Decimals) LiveScale(double bytes) => bytes switch
+    {
+        >= 1024d * 1024 * 1024 => (1024d * 1024 * 1024, "0.00"),
+        >= 1024d * 1024 => (1024d * 1024, "0.0"),
+        >= 1024d => (1024d, "0"),
+        _ => (1d, "0"),
+    };
+
+    private static string Fixed(double value, string decimals) => value.ToString(decimals, CultureInfo.CurrentCulture);
 
     // Shared with the Mod footprint page's own sizes, which is why the keys are Common_.
     public static string Size(double bytes) => SizeFigure(bytes).ToString();

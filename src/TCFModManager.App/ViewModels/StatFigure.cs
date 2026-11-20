@@ -5,7 +5,12 @@ namespace TCFModManager.App.ViewModels;
 // A stat box figure split into its leading number and the rest, so the number can sit in a fixed slot of its own.
 public sealed record StatFigure(string Number, string Rest)
 {
-    public static StatFigure None { get; } = new(string.Empty, "—");
+    public static StatFigure None { get; } = new(string.Empty, "\u2014");
+
+    // The widest the number can get, when known; its slot is sized to it so the rest never moves.
+    public string? Widest { get; init; }
+
+    public string Slot => Widest ?? Number;
 
     public bool HasNumber => Number.Length > 0;
 
@@ -20,7 +25,7 @@ public sealed record StatFigure(string Number, string Rest)
     // This figure as {0} of <paramref name="format"/>: "{0}/s" keeps the number and makes the rest " MB/s".
     public StatFigure Within(string format, params object?[] more) =>
         format.StartsWith("{0}", StringComparison.Ordinal)
-            ? new(Number, LocalizationService.Text(format, [Rest, .. more]))
+            ? new(Number, LocalizationService.Text(format, [Rest, .. more])) { Widest = Widest }
             : new(string.Empty, LocalizationService.Text(format, [ToString(), .. more]));
 
     public override string ToString() => Number + Rest;

@@ -262,7 +262,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         HasSummary = true;
         SummaryProgress = Text(Strings.Downloads_SummaryProgressFormat, done, Items.Count);
 
-        SummaryRemaining = remaining > 0 ? DownloadQueueItemViewModel.SizeFigure(remaining) : StatFigure.None;
+        SummaryRemaining = remaining > 0 ? DownloadQueueItemViewModel.LiveSizeFigure(remaining) : StatFigure.None;
 
         HasUnsized = unknown > 0;
         // Just the count: the caption above this box already says what they are, so there is no

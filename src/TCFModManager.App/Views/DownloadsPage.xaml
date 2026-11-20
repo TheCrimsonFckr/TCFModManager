@@ -31,16 +31,22 @@
 
         <DataTemplate DataType="{x:Type vm:StatFigure}">
             <DockPanel>
+                <Grid x:Name="Number" DockPanel.Dock="Left">
+                    <TextBlock
+                        FontSize="11"
+                        Typography.NumeralAlignment="Tabular"
+                        Visibility="Hidden"
+                        Text="{Binding Slot}" />
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        FontSize="11"
+                        Typography.NumeralAlignment="Tabular"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        Text="{Binding Number}" />
+                </Grid>
                 <TextBlock
-                    x:Name="Number"
-                    DockPanel.Dock="Left"
-                    Width="38"
                     FontSize="11"
-                    TextAlignment="Right"
-                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                    Text="{Binding Number}" />
-                <TextBlock
-                    FontSize="11"
+                    Typography.NumeralAlignment="Tabular"
                     TextTrimming="CharacterEllipsis"
                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     Text="{Binding Rest}" />
