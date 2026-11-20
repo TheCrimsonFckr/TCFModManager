@@ -152,10 +152,15 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     // Placeholder that holds a box's shape before its number exists.
     private const string NoValue = "\u2014";
 
-    // While downloading or waiting to install, once a size is known - there is nothing to put in
-    // the boxes otherwise.
-    public bool HasTransferDetails =>
-        Status == DownloadQueueItemStatus.Downloading && (TotalBytes is > 0 || UnpackedBytes is not null);
+    // While downloading or waiting to install, once a size is known; installing and installed, once the unpacked size is.
+    public bool HasTransferDetails => Status switch
+    {
+        DownloadQueueItemStatus.Downloading => TotalBytes is > 0 || UnpackedBytes is not null,
+        DownloadQueueItemStatus.Installing or DownloadQueueItemStatus.Completed => UnpackedBytes is not null,
+        _ => false,
+    };
+
+    public bool HasLiveFigures => Status == DownloadQueueItemStatus.Downloading;
 
     // "173 of 258.3 MB" - both halves in the same unit, so the pair doesn't switch units partway
     // through and jump.
@@ -505,6 +510,7 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
         OnPropertyChanged(nameof(RateValue));
         OnPropertyChanged(nameof(EtaValue));
         OnPropertyChanged(nameof(HasTransferDetails));
+        OnPropertyChanged(nameof(HasLiveFigures));
         OnPropertyChanged(nameof(IsIndeterminateProgress));
         OnPropertyChanged(nameof(StatusLabel));
         OnPropertyChanged(nameof(CanCancel));

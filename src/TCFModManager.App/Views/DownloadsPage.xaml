@@ -269,7 +269,7 @@
                                             </StackPanel>
                                         </Border>
 
-                                        <Border Style="{StaticResource StatBox}" Width="110">
+                                        <Border Style="{StaticResource StatBox}" Width="110" Visibility="{Binding HasLiveFigures, Converter={StaticResource BoolToVisibility}}">
                                             <StackPanel>
                                                 <TextBlock
                                                     FontSize="10"
@@ -279,7 +279,7 @@
                                             </StackPanel>
                                         </Border>
 
-                                        <Border Style="{StaticResource StatBox}" Width="110">
+                                        <Border Style="{StaticResource StatBox}" Width="110" Visibility="{Binding HasLiveFigures, Converter={StaticResource BoolToVisibility}}">
                                             <StackPanel>
                                                 <TextBlock
                                                     FontSize="10"
