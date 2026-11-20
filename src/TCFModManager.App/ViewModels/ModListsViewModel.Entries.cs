@@ -247,6 +247,8 @@ public partial class ModListsViewModel
         if (!_standing.TryGetValue(row.Entry, out var action)) return row;
 
         var (status, tone, icon) = StatusOf(action);
+        if (tone == "Good" && row.CallsForAttention) (status, tone) = (Strings.ModLists_StatusInstalled, "Neutral");
+
         return row with { Status = status, Tone = tone, Icon = icon, StandingKind = Label(action) };
     }
 

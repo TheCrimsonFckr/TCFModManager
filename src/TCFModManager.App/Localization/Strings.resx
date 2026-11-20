@@ -6354,6 +6354,9 @@ The details are in the log:
   <data name="ModLists_StatusAlreadyRight" xml:space="preserve">
     <value>Correct</value>
   </data>
+  <data name="ModLists_StatusInstalled" xml:space="preserve">
+    <value>Installed</value>
+  </data>
   <data name="ModLists_StatusNewerHere" xml:space="preserve">
     <value>Newer here</value>
   </data>

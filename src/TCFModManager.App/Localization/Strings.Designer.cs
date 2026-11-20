@@ -1778,6 +1778,7 @@ internal static class Strings
     internal static string ModLists_StatusPinned => LocalizationService.Get("ModLists_StatusPinned");
     internal static string ModLists_StatusGetByHand => LocalizationService.Get("ModLists_StatusGetByHand");
     internal static string ModLists_StatusAlreadyRight => LocalizationService.Get("ModLists_StatusAlreadyRight");
+    internal static string ModLists_StatusInstalled => LocalizationService.Get("ModLists_StatusInstalled");
     internal static string ModLists_StatusNewerHere => LocalizationService.Get("ModLists_StatusNewerHere");
     internal static string ModLists_StatusVersionFormat => LocalizationService.Get("ModLists_StatusVersionFormat");
     internal static string ModLists_ChipMissing(int count, params object?[] values) =>

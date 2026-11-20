@@ -5103,6 +5103,9 @@ Cela arrive légitimement si le serveur a été reconstruit ou si vous l'atteign
   <data name="ModLists_StatusAlreadyRight" xml:space="preserve">
     <value>Correct</value>
   </data>
+  <data name="ModLists_StatusInstalled" xml:space="preserve">
+    <value>Installé</value>
+  </data>
   <data name="ModLists_StatusNewerHere" xml:space="preserve">
     <value>Plus récent ici</value>
   </data>
