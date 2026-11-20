@@ -117,6 +117,44 @@
                     Icon="{ui:SymbolIcon ArrowCircleUp24}"
                     Click="AppUpdateBanner_Click" />
             </Grid>
+
+            <!-- OPEN-54 N30: the server, the game or the headless crashed. -->
+            <Grid
+                Margin="12,8,12,0"
+                DataContext="{x:Static app:AppServices.CrashBar}"
+                Visibility="{Binding IsOpen, Converter={StaticResource BoolToVis}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <ui:InfoBar
+                    Grid.Column="0"
+                    IsClosable="True"
+                    Severity="Error"
+                    Title="{Binding Title}"
+                    Message="{Binding Message}"
+                    IsOpen="{Binding IsOpen, Mode=TwoWay}" />
+
+                <ui:Button
+                    Grid.Column="1"
+                    Margin="8,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="{loc:Str Diagnose_ShowMod}"
+                    Icon="{ui:SymbolIcon Apps24}"
+                    Visibility="{Binding HasMod, Converter={StaticResource BoolToVis}}"
+                    Command="{Binding ShowModCommand}" />
+
+                <ui:Button
+                    Grid.Column="2"
+                    Margin="8,0,0,0"
+                    VerticalAlignment="Center"
+                    Appearance="Primary"
+                    Content="{loc:Str Nav_Diagnose}"
+                    Icon="{ui:SymbolIcon DocumentSearch24}"
+                    Command="{Binding DiagnoseCommand}" />
+            </Grid>
         </StackPanel>
 
         <ui:NavigationView

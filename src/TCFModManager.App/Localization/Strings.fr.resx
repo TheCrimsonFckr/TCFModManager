@@ -10220,4 +10220,28 @@ Les détails sont dans le journal :
   <data name="Diagnose_Body_FikaAltered" xml:space="preserve">
     <value>Fika.Core.dll ne correspond pas à la version officielle, donc Fika ne vous laisse pas jouer avec d'autres. Réinstallez Fika.</value>
   </data>
+  <data name="CrashBar_ServerTitle" xml:space="preserve">
+    <value>Le serveur SPT a planté</value>
+  </data>
+  <data name="CrashBar_ServerInModFormat" xml:space="preserve">
+    <value>Le serveur SPT a planté dans {0}</value>
+  </data>
+  <data name="CrashBar_GameTitle" xml:space="preserve">
+    <value>Le jeu a planté</value>
+  </data>
+  <data name="CrashBar_GameInModFormat" xml:space="preserve">
+    <value>Le jeu a planté dans {0}</value>
+  </data>
+  <data name="CrashBar_HeadlessTitle" xml:space="preserve">
+    <value>Le headless Fika a planté</value>
+  </data>
+  <data name="CrashBar_HeadlessInModFormat" xml:space="preserve">
+    <value>Le headless Fika a planté dans {0}</value>
+  </data>
+  <data name="CrashBar_ModuleFormat" xml:space="preserve">
+    <value>Windows a enregistré un plantage dans {0} ({1}).</value>
+  </data>
+  <data name="CrashBar_ExitCodeFormat" xml:space="preserve">
+    <value>Il s'est fermé avec le code de plantage {0}.</value>
+  </data>
 </root>

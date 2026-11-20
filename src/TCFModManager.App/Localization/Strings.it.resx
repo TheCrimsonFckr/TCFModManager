@@ -10220,4 +10220,28 @@ I dettagli sono nel log:
   <data name="Diagnose_Body_FikaAltered" xml:space="preserve">
     <value>Fika.Core.dll non corrisponde alla versione ufficiale, quindi Fika non ti lascia giocare con altri. Reinstalla Fika.</value>
   </data>
+  <data name="CrashBar_ServerTitle" xml:space="preserve">
+    <value>Il server SPT si è bloccato</value>
+  </data>
+  <data name="CrashBar_ServerInModFormat" xml:space="preserve">
+    <value>Il server SPT si è bloccato in {0}</value>
+  </data>
+  <data name="CrashBar_GameTitle" xml:space="preserve">
+    <value>Il gioco si è bloccato</value>
+  </data>
+  <data name="CrashBar_GameInModFormat" xml:space="preserve">
+    <value>Il gioco si è bloccato in {0}</value>
+  </data>
+  <data name="CrashBar_HeadlessTitle" xml:space="preserve">
+    <value>L'headless di Fika si è bloccato</value>
+  </data>
+  <data name="CrashBar_HeadlessInModFormat" xml:space="preserve">
+    <value>L'headless di Fika si è bloccato in {0}</value>
+  </data>
+  <data name="CrashBar_ModuleFormat" xml:space="preserve">
+    <value>Windows ha registrato un blocco in {0} ({1}).</value>
+  </data>
+  <data name="CrashBar_ExitCodeFormat" xml:space="preserve">
+    <value>Si è chiuso con il codice di blocco {0}.</value>
+  </data>
 </root>

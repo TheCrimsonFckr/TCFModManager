@@ -123,6 +123,9 @@ public partial class MainWindow : FluentWindow
             // Stops the server once the game has closed, if that is switched on (OPEN-45).
             Services.ServerStopper.Start();
 
+            // Raises the crash bar when the server, the game or the headless crashes (OPEN-54 N30).
+            Services.CrashWatcher.Start();
+
             // A server already up as the app opens - left running last time, perhaps with no window.
             _ = SayServerAlreadyRunningAsync();
         };

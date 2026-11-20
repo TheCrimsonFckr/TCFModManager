@@ -10220,4 +10220,28 @@ Die Details stehen im Log:
   <data name="Diagnose_Body_FikaAltered" xml:space="preserve">
     <value>Fika.Core.dll entspricht nicht der offiziellen Version, daher lässt Fika dich nicht mit anderen spielen. Installiere Fika neu.</value>
   </data>
+  <data name="CrashBar_ServerTitle" xml:space="preserve">
+    <value>Der SPT-Server ist abgestürzt</value>
+  </data>
+  <data name="CrashBar_ServerInModFormat" xml:space="preserve">
+    <value>Der SPT-Server ist in {0} abgestürzt</value>
+  </data>
+  <data name="CrashBar_GameTitle" xml:space="preserve">
+    <value>Das Spiel ist abgestürzt</value>
+  </data>
+  <data name="CrashBar_GameInModFormat" xml:space="preserve">
+    <value>Das Spiel ist in {0} abgestürzt</value>
+  </data>
+  <data name="CrashBar_HeadlessTitle" xml:space="preserve">
+    <value>Der Fika-Headless ist abgestürzt</value>
+  </data>
+  <data name="CrashBar_HeadlessInModFormat" xml:space="preserve">
+    <value>Der Fika-Headless ist in {0} abgestürzt</value>
+  </data>
+  <data name="CrashBar_ModuleFormat" xml:space="preserve">
+    <value>Windows hat einen Absturz in {0} aufgezeichnet ({1}).</value>
+  </data>
+  <data name="CrashBar_ExitCodeFormat" xml:space="preserve">
+    <value>Es wurde mit dem Absturzcode {0} beendet.</value>
+  </data>
 </root>

@@ -12481,4 +12481,36 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Fika.Core.dll doesn't match the official release, so Fika won't let you play with others. Reinstall Fika.</value>
     <comment>Diagnose logs Fika card (OPEN-54 N32). Body</comment>
   </data>
+  <data name="CrashBar_ServerTitle" xml:space="preserve">
+    <value>The SPT server crashed</value>
+    <comment>Crash bar at the top of the window (OPEN-54 N30). Title: the SPT server crashed, no mod named</comment>
+  </data>
+  <data name="CrashBar_ServerInModFormat" xml:space="preserve">
+    <value>The SPT server crashed in {0}</value>
+    <comment>Crash bar at the top of the window (OPEN-54 N30). Title. {0}: the mod the crash was traced to</comment>
+  </data>
+  <data name="CrashBar_GameTitle" xml:space="preserve">
+    <value>The game crashed</value>
+    <comment>Crash bar at the top of the window (OPEN-54 N30). Title: the game crashed, no mod named</comment>
+  </data>
+  <data name="CrashBar_GameInModFormat" xml:space="preserve">
+    <value>The game crashed in {0}</value>
+    <comment>Crash bar at the top of the window (OPEN-54 N30). Title. {0}: the mod the crash was traced to</comment>
+  </data>
+  <data name="CrashBar_HeadlessTitle" xml:space="preserve">
+    <value>The Fika headless crashed</value>
+    <comment>Crash bar at the top of the window (OPEN-54 N30). Title: the Fika headless client crashed, no mod named</comment>
+  </data>
+  <data name="CrashBar_HeadlessInModFormat" xml:space="preserve">
+    <value>The Fika headless crashed in {0}</value>
+    <comment>Crash bar at the top of the window (OPEN-54 N30). Title. {0}: the mod the crash was traced to</comment>
+  </data>
+  <data name="CrashBar_ModuleFormat" xml:space="preserve">
+    <value>Windows recorded a crash in {0} ({1}).</value>
+    <comment>Crash bar at the top of the window (OPEN-54 N30). Message when Windows recorded the crash but gave no error text. {0}: the file it crashed in (e.g. UnityPlayer.dll), {1}: Windows' crash code</comment>
+  </data>
+  <data name="CrashBar_ExitCodeFormat" xml:space="preserve">
+    <value>It closed with crash code {0}.</value>
+    <comment>Crash bar at the top of the window (OPEN-54 N30). Message when only the exit code says it crashed. {0}: the code, e.g. 0xC0000005</comment>
+  </data>
 </root>

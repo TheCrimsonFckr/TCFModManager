@@ -10643,4 +10643,28 @@
   <data name="Diagnose_Body_FikaAltered" xml:space="preserve">
     <value>Fika.Core.dll не совпадает с официальной версией, поэтому Fika не даст играть с другими. Переустановите Fika.</value>
   </data>
+  <data name="CrashBar_ServerTitle" xml:space="preserve">
+    <value>Сервер SPT упал</value>
+  </data>
+  <data name="CrashBar_ServerInModFormat" xml:space="preserve">
+    <value>Сервер SPT упал в {0}</value>
+  </data>
+  <data name="CrashBar_GameTitle" xml:space="preserve">
+    <value>Игра упала</value>
+  </data>
+  <data name="CrashBar_GameInModFormat" xml:space="preserve">
+    <value>Игра упала в {0}</value>
+  </data>
+  <data name="CrashBar_HeadlessTitle" xml:space="preserve">
+    <value>Headless Fika упал</value>
+  </data>
+  <data name="CrashBar_HeadlessInModFormat" xml:space="preserve">
+    <value>Headless Fika упал в {0}</value>
+  </data>
+  <data name="CrashBar_ModuleFormat" xml:space="preserve">
+    <value>Windows записала сбой в {0} ({1}).</value>
+  </data>
+  <data name="CrashBar_ExitCodeFormat" xml:space="preserve">
+    <value>Процесс завершился с кодом сбоя {0}.</value>
+  </data>
 </root>

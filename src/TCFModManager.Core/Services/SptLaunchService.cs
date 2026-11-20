@@ -287,6 +287,8 @@ public static partial class SptLaunchService
             return new SptLaunchResult { Info = info, Problem = SptLaunchProblem.NotRunning };
         }
 
+        if (target == SptLaunchTarget.Headless) MarkHeadlessGamesStoppedByApp(installPath);
+
         int stopped;
 
         try
@@ -334,6 +336,8 @@ public static partial class SptLaunchService
             return new SptLaunchResult { Info = info, Problem = SptLaunchProblem.NotRunning };
         }
 
+        if (target == SptLaunchTarget.Headless) MarkHeadlessGamesStoppedByApp(installPath);
+
         int stopped;
 
         try
@@ -379,6 +383,7 @@ public static partial class SptLaunchService
             {
                 if (process.HasExited) continue;
                 name = $"{process.ProcessName} (pid {process.Id})";
+                MarkStoppedByApp(process);
 
                 //
                 // A window to close when it has one; with none (started hidden, or hosted in Windows

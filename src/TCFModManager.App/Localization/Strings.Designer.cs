@@ -3412,4 +3412,12 @@ internal static class Strings
     internal static string Diagnose_Body_FikaEftVersionDiffersFormat => LocalizationService.Get("Diagnose_Body_FikaEftVersionDiffersFormat");
     internal static string Diagnose_Title_FikaAltered => LocalizationService.Get("Diagnose_Title_FikaAltered");
     internal static string Diagnose_Body_FikaAltered => LocalizationService.Get("Diagnose_Body_FikaAltered");
+    internal static string CrashBar_ServerTitle => LocalizationService.Get("CrashBar_ServerTitle");
+    internal static string CrashBar_ServerInModFormat => LocalizationService.Get("CrashBar_ServerInModFormat");
+    internal static string CrashBar_GameTitle => LocalizationService.Get("CrashBar_GameTitle");
+    internal static string CrashBar_GameInModFormat => LocalizationService.Get("CrashBar_GameInModFormat");
+    internal static string CrashBar_HeadlessTitle => LocalizationService.Get("CrashBar_HeadlessTitle");
+    internal static string CrashBar_HeadlessInModFormat => LocalizationService.Get("CrashBar_HeadlessInModFormat");
+    internal static string CrashBar_ModuleFormat => LocalizationService.Get("CrashBar_ModuleFormat");
+    internal static string CrashBar_ExitCodeFormat => LocalizationService.Get("CrashBar_ExitCodeFormat");
 }

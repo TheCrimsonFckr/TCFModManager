@@ -52,6 +52,12 @@ public class LocalizationLiteralTests
             "font family fallbacks for the UI font under Wine (OPEN-40)"),
         ("ConsoleLog.cs", "happy playing",
             "matched in SPT's own log line \"Server has started, happy playing\" to colour it green"),
+        ("WindowsCrashLog.cs", "Application Error",
+            "the Windows event source that records a crashed process (event 1000), queried by name (OPEN-54 N30)"),
+        ("WindowsCrashLog.cs", ".NET Runtime",
+            "the Windows event source that records a .NET crash's exception (event 1026), queried by name (OPEN-54 N30)"),
+        ("WindowsCrashLog.cs", "*[System[Provider[@Name='{provider}'] and (EventID={id}) and TimeCreated[timediff(@SystemTime) <= {withinMs}]]]",
+            "an event log XPath query"),
     ];
 
     //
