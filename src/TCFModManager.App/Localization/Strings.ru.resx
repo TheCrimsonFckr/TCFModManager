@@ -10580,4 +10580,67 @@
   <data name="Help_Diagnose_CleanProfiles_Keywords" xml:space="preserve">
     <value>очистить профиль, профиль не открывается, неизвестный навык, удалён вручную, сломанный профиль</value>
   </data>
+  <data name="Diagnose_Title_ServerStopped" xml:space="preserve">
+    <value>Сервер остановился при запуске</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedFormat" xml:space="preserve">
+    <value>SPT прекратил запуск: {0}</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedModFormat" xml:space="preserve">
+    <value>Она указывает на {0} - проверьте обновление или отключите мод и снова запустите сервер.</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedNewerSptFormat" xml:space="preserve">
+    <value>Мод сделан для более новой версии SPT, чем эта: {0}</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedNewerSptModFormat" xml:space="preserve">
+    <value>Обновите SPT или установите версию {0}, сделанную для этой SPT.</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedRequirementFormat" xml:space="preserve">
+    <value>Моду нужно то, что не установлено: {0}</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedRequirementModFormat" xml:space="preserve">
+    <value>Посмотрите на странице {0} на sp-mod, что ему нужно.</value>
+  </data>
+  <data name="Diagnose_Title_FikaRequiredModsMissing" xml:space="preserve">
+    <value>Нет модов, которые требует сервер</value>
+  </data>
+  <data name="Diagnose_Body_FikaRequiredModsMissingFormat" xml:space="preserve">
+    <value>Fika сообщает, что в этой игре нет {0} мод(ов), нужных серверу: {1}. Установите те же моды, что у хоста, и снова запустите игру.</value>
+  </data>
+  <data name="Diagnose_Title_FikaModsNotVerified" xml:space="preserve">
+    <value>Fika не смог сверить моды с сервером</value>
+  </data>
+  <data name="Diagnose_Body_FikaModsNotVerified" xml:space="preserve">
+    <value>Fika не смог узнать у сервера, какие моды разрешены. Проверьте, что сервер запущен и доступен, и снова запустите игру.</value>
+  </data>
+  <data name="Diagnose_Title_FikaServerModMissing" xml:space="preserve">
+    <value>На сервере нет Fika</value>
+  </data>
+  <data name="Diagnose_Body_FikaServerModMissing" xml:space="preserve">
+    <value>В этой игре есть Fika, а на сервере, к которому она подключилась, нет. Установите серверный мод Fika на сервер той же версии, что здесь.</value>
+  </data>
+  <data name="Diagnose_Title_FikaServerTooOld" xml:space="preserve">
+    <value>Fika на сервере слишком старая</value>
+  </data>
+  <data name="Diagnose_Body_FikaServerTooOldFormat" xml:space="preserve">
+    <value>Fika этой игры требует на сервере версию новее {0}, а на сервере {1}. Обновите Fika на сервере.</value>
+  </data>
+  <data name="Diagnose_Title_FikaVersionDiffers" xml:space="preserve">
+    <value>Fika не совпадает с хостом рейда</value>
+  </data>
+  <data name="Diagnose_Body_FikaVersionDiffersFormat" xml:space="preserve">
+    <value>Fika в этой игре не такая, как у хоста рейда (у вас: {0}, у хоста: {1}). Установите ту же версию Fika, что у хоста.</value>
+  </data>
+  <data name="Diagnose_Title_FikaEftVersionDiffers" xml:space="preserve">
+    <value>Версия игры не совпадает с хостом рейда</value>
+  </data>
+  <data name="Diagnose_Body_FikaEftVersionDiffersFormat" xml:space="preserve">
+    <value>Эта игра - EFT {0}, а у хоста рейда {1}. Вам обоим нужна одна и та же версия SPT.</value>
+  </data>
+  <data name="Diagnose_Title_FikaAltered" xml:space="preserve">
+    <value>Файлы Fika изменены</value>
+  </data>
+  <data name="Diagnose_Body_FikaAltered" xml:space="preserve">
+    <value>Fika.Core.dll не совпадает с официальной версией, поэтому Fika не даст играть с другими. Переустановите Fika.</value>
+  </data>
 </root>

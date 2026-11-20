@@ -66,6 +66,14 @@ public enum LogFindingKind
     /// profile, with the mod off). Args: the request, the type, the value, and "off" or "on" for the mod
     /// the value comes from (empty when none could be named).</summary>
     GameUnknownValue,
+
+    /// <summary>The server stopped: SPT gave up while starting. Args: why (<see cref="LogDiagnoser.StopUnexpected"/>,
+    /// <see cref="LogDiagnoser.StopNeedsNewerSpt"/> or <see cref="LogDiagnoser.StopMissingRequirement"/>), the error's first line.</summary>
+    ServerStopped,
+
+    /// <summary>Fika refused or warned in its own words (OPEN-54 N32). Args: the <see cref="Services.FikaProblem"/> name,
+    /// then the values Fika put in its message, in order.</summary>
+    FikaProblem,
 }
 
 public enum LogSeverity
@@ -106,23 +114,24 @@ public sealed record LogDiagnosis(
 //
 public static partial class LogDiagnoser
 {
-    public static LogDiagnosis Diagnose(LogFileSet files, LogModLocator mods)
+    public static LogDiagnosis Diagnose(LogFileSet files, LogModLocator mods, FikaMessages? fika = null)
     {
         var server = files.Server is { } s ? LastRun(LogEntries.Parse(LogKind.Server, s, LogEntries.ReadLines(s))) : [];
         var bepInEx = files.BepInEx is { } b ? LogEntries.Parse(LogKind.BepInEx, b, LogEntries.ReadLines(b)) : [];
         var game = files.GameErrors is { } g ? LogEntries.Parse(LogKind.GameErrors, g, LogEntries.ReadLines(g)) : [];
 
-        return Diagnose(files, server, bepInEx, game, mods);
+        return Diagnose(files, server, bepInEx, game, mods, fika);
     }
 
     public static LogDiagnosis Diagnose(
-        LogFileSet files, IReadOnlyList<LogEntry> server, IReadOnlyList<LogEntry> bepInEx, IReadOnlyList<LogEntry> game, LogModLocator mods)
+        LogFileSet files, IReadOnlyList<LogEntry> server, IReadOnlyList<LogEntry> bepInEx, IReadOnlyList<LogEntry> game, LogModLocator mods,
+        FikaMessages? fika = null)
     {
         var found = new Findings();
         var explained = new HashSet<LogEntry>();
 
         CheckServer(server, mods, found, explained);
-        CheckBepInEx(bepInEx, mods, found, explained);
+        CheckBepInEx(bepInEx, mods, found, explained, fika);
         CheckGame(game, mods, found);
 
         var other = server.Where(e => e.IsError && !explained.Contains(e) && !IsStackPart(e))
@@ -147,6 +156,17 @@ public static partial class LogDiagnoser
     }
 
     // ---- The server log ----
+
+    public const string StopUnexpected = "unexpected";
+    public const string StopNeedsNewerSpt = "newer-spt";
+    public const string StopMissingRequirement = "requirement";
+
+    // SPT source (SPTarkov.Server/Program.cs): what Main logs, as Critical, before it gives up.
+    private static string? StopReason(string message) =>
+        message.StartsWith("The server has unexpectedly stopped", StringComparison.Ordinal) ? StopUnexpected
+        : message.StartsWith("You may have installed a mod that needs a newer version", StringComparison.Ordinal) ? StopNeedsNewerSpt
+        : message.StartsWith("You may have forgotten to install a requirement", StringComparison.Ordinal) ? StopMissingRequirement
+        : null;
 
     [GeneratedRegex(@"^Mod: .+ version: \S+ \(GUID: (?<guid>[^ |)]+)")]
     private static partial Regex LoadedMod();
@@ -220,7 +240,16 @@ public static partial class LogDiagnoser
 
             if (!entry.IsError && !entry.IsWarning) continue;
 
-            if ((m = ProfileInvalid().Match(entry.Message)).Success)
+            if (entry.IsError && StopReason(entry.Message) is { } reason)
+            {
+                var detail = new List<string>(entry.More);
+                var what = FirstLine(detail);
+                var origin = Origin(detail, mods) ?? Mentioned(what, mods);
+                found.Add(LogFindingKind.ServerStopped, LogSeverity.Critical, origin, [reason, what], entry,
+                    quote: Excerpt(entry, detail, origin, mods));
+                explained.Add(entry);
+            }
+            else if ((m = ProfileInvalid().Match(entry.Message)).Success)
             {
                 found.Add(LogFindingKind.ProfileInvalid, LogSeverity.Critical, null, [m.Groups["id"].Value], entry);
                 explained.Add(entry);
@@ -365,13 +394,22 @@ public static partial class LogDiagnoser
         return true;
     }
 
-    private static void CheckBepInEx(IReadOnlyList<LogEntry> entries, LogModLocator mods, Findings found, HashSet<LogEntry> explained)
+    private static void CheckBepInEx(IReadOnlyList<LogEntry> entries, LogModLocator mods, Findings found, HashSet<LogEntry> explained,
+        FikaMessages? fika)
     {
         foreach (var entry in entries)
         {
             if (entry.Source == "BepInEx")
             {
                 if (CheckChainloader(entry.Message, entry, mods, found)) explained.Add(entry);
+                continue;
+            }
+
+            if (fika?.Match(entry.Text) is { } said)
+            {
+                found.Add(LogFindingKind.FikaProblem, said.Problem == Services.FikaProblem.ModsNotVerified ? LogSeverity.Warning : LogSeverity.Critical,
+                    mods.ByName(entry.Source), [said.Problem.ToString(), .. said.Args], entry);
+                explained.Add(entry);
                 continue;
             }
 

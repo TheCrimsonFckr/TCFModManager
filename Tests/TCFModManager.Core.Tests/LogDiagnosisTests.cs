@@ -316,6 +316,43 @@ public sealed class LogDiagnosisTests : IDisposable
         Assert.True(files.LauncherClearsGameLogs);
     }
 
+    // OPEN-54 N31. As written on 2026-11-20 by SPT 4.1.6 when ISB Special Forces' prepatch folder had gone.
+    [Fact]
+    public void A_server_that_gave_up_while_starting_is_a_card_naming_the_mod()
+    {
+        var isb = Server("ISB Special Forces", "com.samc137.isbspecialforces");
+        var findings = Find(ServerLog(
+            "[2026-11-20 16:57:19.718][Critical][SPTarkov.Server.Core] The server has unexpectedly stopped, reach out to the support channel in our Discord server. Include a screenshot of this message and the surrounding error(s) above and below",
+            "Failed to locate an enum prepatch JSON file for mod: `com.samc137.isbspecialforces`. If you did not intend to ship a prepatcher, disable `HasPrepatcher` in your IModMetadata implementation.",
+            "   at SPTarkov.Server.Modding.ModLoader.LoadEnumPrepatch(String modGuid, String path)",
+            "   at SPTarkov.Server.Program.Main(String[[]] args)",
+            "SPTarkov.Server.Exceptions.ModLoaderException: Failed to locate an enum prepatch JSON file for mod: `com.samc137.isbspecialforces`.",
+            "   at SPTarkov.Server.Program.Main(String[] args)"), Mods(isb));
+
+        var stop = Assert.Single(findings);
+        Assert.Equal(LogFindingKind.ServerStopped, stop.Kind);
+        Assert.Equal(LogSeverity.Critical, stop.Severity);
+        Assert.Equal(isb, stop.Mod);
+        Assert.Equal(LogDiagnoser.StopUnexpected, stop.Args[0]);
+        Assert.StartsWith("Failed to locate an enum prepatch JSON file for mod: `com.samc137.isbspecialforces`", stop.Args[1]);
+    }
+
+    // SPT source: Program.Main's message when a mod was built for a newer SPT.
+    [Fact]
+    public void A_mod_built_for_a_newer_SPT_is_named_from_its_stack_frame()
+    {
+        var findings = Find(ServerLog(
+            "[2026-11-20 18:00:00.000][Critical][SPTarkov.Server.Core] You may have installed a mod that needs a newer version of of SPT installed. Please try updating SPT",
+            "Could not load file or assembly 'SPTarkov.Server.Core, Version=4.1.9.0, Culture=neutral, PublicKeyToken=null'. The system cannot find the file specified.",
+            "   at Casino.Server.CasinoMod.OnLoad()",
+            "   at SPTarkov.Server.Program.Main(String[] args)"));
+
+        var stop = Assert.Single(findings);
+        Assert.Equal(Casino, stop.Mod);
+        Assert.Equal(LogDiagnoser.StopNeedsNewerSpt, stop.Args[0]);
+        Assert.StartsWith("Could not load file or assembly 'SPTarkov.Server.Core, Version=4.1.9.0", stop.Args[1]);
+    }
+
     [Fact]
     public void A_bare_at_line_under_a_failure_is_not_a_crash()
     {

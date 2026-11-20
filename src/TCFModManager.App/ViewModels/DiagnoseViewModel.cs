@@ -111,6 +111,25 @@ public sealed class LogFindingRow
                     ({ } mod, _) => T(Strings.Diagnose_Body_GameUnknownValueOnFormat, mod.DisplayName),
                     _ => T(Strings.Diagnose_Body_GameUnknownValueNoModFormat, Arg(f, 1)),
                 }),
+            LogFindingKind.FikaProblem => Enum.TryParse<FikaProblem>(Arg(f, 0), out var fika) ? fika switch
+            {
+                FikaProblem.RequiredModsMissing => (Strings.Diagnose_Title_FikaRequiredModsMissing, T(Strings.Diagnose_Body_FikaRequiredModsMissingFormat, Arg(f, 1), Arg(f, 2))),
+                FikaProblem.ModsNotVerified => (Strings.Diagnose_Title_FikaModsNotVerified, Strings.Diagnose_Body_FikaModsNotVerified),
+                FikaProblem.ServerModMissing => (Strings.Diagnose_Title_FikaServerModMissing, Strings.Diagnose_Body_FikaServerModMissing),
+                FikaProblem.ServerTooOld => (Strings.Diagnose_Title_FikaServerTooOld, T(Strings.Diagnose_Body_FikaServerTooOldFormat, Arg(f, 1), Arg(f, 2))),
+                FikaProblem.FikaVersionDiffers => (Strings.Diagnose_Title_FikaVersionDiffers, T(Strings.Diagnose_Body_FikaVersionDiffersFormat, Arg(f, 1), Arg(f, 2))),
+                FikaProblem.EftVersionDiffers => (Strings.Diagnose_Title_FikaEftVersionDiffers, T(Strings.Diagnose_Body_FikaEftVersionDiffersFormat, Arg(f, 1), Arg(f, 2))),
+                _ => (Strings.Diagnose_Title_FikaAltered, Strings.Diagnose_Body_FikaAltered),
+            } : (Strings.Diagnose_Title_ModReportedError, Arg(f, 0)),
+            LogFindingKind.ServerStopped => (Strings.Diagnose_Title_ServerStopped, Arg(f, 0) switch
+            {
+                LogDiagnoser.StopNeedsNewerSpt => T(Strings.Diagnose_Body_ServerStoppedNewerSptFormat, Arg(f, 1))
+                    + (f.Mod is { } newer ? " " + T(Strings.Diagnose_Body_ServerStoppedNewerSptModFormat, newer.DisplayName) : string.Empty),
+                LogDiagnoser.StopMissingRequirement => T(Strings.Diagnose_Body_ServerStoppedRequirementFormat, Arg(f, 1))
+                    + (f.Mod is { } needs ? " " + T(Strings.Diagnose_Body_ServerStoppedRequirementModFormat, needs.DisplayName) : string.Empty),
+                _ => T(Strings.Diagnose_Body_ServerStoppedFormat, Arg(f, 1))
+                    + (f.Mod is { } named ? " " + T(Strings.Diagnose_Body_ServerStoppedModFormat, named.DisplayName) : string.Empty),
+            }),
             _ => (Strings.Diagnose_Title_PluginLoggedErrors, Arg(f, 0)),
         };
     }
@@ -171,7 +190,7 @@ public sealed partial class DiagnoseViewModel : LocalizedViewModel
             _last = await Task.Run(() =>
             {
                 var mods = LogModLocator.Build(InstalledScan.Run(installPath), installPath);
-                return LogDiagnoser.Diagnose(LogFiles.Find(installPath), mods);
+                return LogDiagnoser.Diagnose(LogFiles.Find(installPath), mods, FikaMessages.Read(installPath));
             });
 
             AppLog.Info("Diagnose", $"{_last.Findings.Count} finding(s), {_last.OtherErrors} other error(s), in {clock.ElapsedMilliseconds}ms: "

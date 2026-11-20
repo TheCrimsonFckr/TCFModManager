@@ -3391,4 +3391,25 @@ internal static class Strings
     internal static string Help_Diagnose_CleanProfiles_Step2 => LocalizationService.Get("Help_Diagnose_CleanProfiles_Step2");
     internal static string Help_Diagnose_CleanProfiles_Note => LocalizationService.Get("Help_Diagnose_CleanProfiles_Note");
     internal static string Help_Diagnose_CleanProfiles_Keywords => LocalizationService.Get("Help_Diagnose_CleanProfiles_Keywords");
+    internal static string Diagnose_Title_ServerStopped => LocalizationService.Get("Diagnose_Title_ServerStopped");
+    internal static string Diagnose_Body_ServerStoppedFormat => LocalizationService.Get("Diagnose_Body_ServerStoppedFormat");
+    internal static string Diagnose_Body_ServerStoppedModFormat => LocalizationService.Get("Diagnose_Body_ServerStoppedModFormat");
+    internal static string Diagnose_Body_ServerStoppedNewerSptFormat => LocalizationService.Get("Diagnose_Body_ServerStoppedNewerSptFormat");
+    internal static string Diagnose_Body_ServerStoppedNewerSptModFormat => LocalizationService.Get("Diagnose_Body_ServerStoppedNewerSptModFormat");
+    internal static string Diagnose_Body_ServerStoppedRequirementFormat => LocalizationService.Get("Diagnose_Body_ServerStoppedRequirementFormat");
+    internal static string Diagnose_Body_ServerStoppedRequirementModFormat => LocalizationService.Get("Diagnose_Body_ServerStoppedRequirementModFormat");
+    internal static string Diagnose_Title_FikaRequiredModsMissing => LocalizationService.Get("Diagnose_Title_FikaRequiredModsMissing");
+    internal static string Diagnose_Body_FikaRequiredModsMissingFormat => LocalizationService.Get("Diagnose_Body_FikaRequiredModsMissingFormat");
+    internal static string Diagnose_Title_FikaModsNotVerified => LocalizationService.Get("Diagnose_Title_FikaModsNotVerified");
+    internal static string Diagnose_Body_FikaModsNotVerified => LocalizationService.Get("Diagnose_Body_FikaModsNotVerified");
+    internal static string Diagnose_Title_FikaServerModMissing => LocalizationService.Get("Diagnose_Title_FikaServerModMissing");
+    internal static string Diagnose_Body_FikaServerModMissing => LocalizationService.Get("Diagnose_Body_FikaServerModMissing");
+    internal static string Diagnose_Title_FikaServerTooOld => LocalizationService.Get("Diagnose_Title_FikaServerTooOld");
+    internal static string Diagnose_Body_FikaServerTooOldFormat => LocalizationService.Get("Diagnose_Body_FikaServerTooOldFormat");
+    internal static string Diagnose_Title_FikaVersionDiffers => LocalizationService.Get("Diagnose_Title_FikaVersionDiffers");
+    internal static string Diagnose_Body_FikaVersionDiffersFormat => LocalizationService.Get("Diagnose_Body_FikaVersionDiffersFormat");
+    internal static string Diagnose_Title_FikaEftVersionDiffers => LocalizationService.Get("Diagnose_Title_FikaEftVersionDiffers");
+    internal static string Diagnose_Body_FikaEftVersionDiffersFormat => LocalizationService.Get("Diagnose_Body_FikaEftVersionDiffersFormat");
+    internal static string Diagnose_Title_FikaAltered => LocalizationService.Get("Diagnose_Title_FikaAltered");
+    internal static string Diagnose_Body_FikaAltered => LocalizationService.Get("Diagnose_Body_FikaAltered");
 }

@@ -12397,4 +12397,88 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>clean profile, profile won't open, unknown skill, mod removed by hand, broken profile</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
+  <data name="Diagnose_Title_ServerStopped" xml:space="preserve">
+    <value>The server stopped while starting</value>
+    <comment>Diagnose logs card title: SPT gave up while the server was starting (OPEN-54 N31)</comment>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedFormat" xml:space="preserve">
+    <value>SPT gave up while starting: {0}</value>
+    <comment>Card text. {0}: the error's first line, as SPT logged it</comment>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedModFormat" xml:space="preserve">
+    <value>It points at {0} - check for an update, or turn it off and start the server again.</value>
+    <comment>Card text, second sentence, when the error names a mod. {0}: the mod's name</comment>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedNewerSptFormat" xml:space="preserve">
+    <value>A mod was made for a newer SPT than this one: {0}</value>
+    <comment>Card text when a mod was built for a newer SPT. {0}: the error's first line</comment>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedNewerSptModFormat" xml:space="preserve">
+    <value>Update SPT, or install a version of {0} made for this SPT.</value>
+    <comment>Card text, second sentence. {0}: the mod's name</comment>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedRequirementFormat" xml:space="preserve">
+    <value>A mod needs something that isn't installed: {0}</value>
+    <comment>Card text when a mod needs something that isn't installed. {0}: the error's first line</comment>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedRequirementModFormat" xml:space="preserve">
+    <value>Check {0}'s page on sp-mod for what it needs.</value>
+    <comment>Card text, second sentence. {0}: the mod's name</comment>
+  </data>
+  <data name="Diagnose_Title_FikaRequiredModsMissing" xml:space="preserve">
+    <value>Mods the server needs are missing</value>
+    <comment>Diagnose logs Fika card (OPEN-54 N32). Title: the server requires mods this game doesn't have</comment>
+  </data>
+  <data name="Diagnose_Body_FikaRequiredModsMissingFormat" xml:space="preserve">
+    <value>Fika says this game is missing {0} mod(s) the server needs: {1}. Install the same mods as the host, then start the game again.</value>
+    <comment>Diagnose logs Fika card (OPEN-54 N32). {0}: how many, {1}: the mods' ids, as Fika logged them</comment>
+  </data>
+  <data name="Diagnose_Title_FikaModsNotVerified" xml:space="preserve">
+    <value>Fika couldn't check mods with the server</value>
+    <comment>Diagnose logs Fika card (OPEN-54 N32). Title: Fika couldn't check the game's mods with the server</comment>
+  </data>
+  <data name="Diagnose_Body_FikaModsNotVerified" xml:space="preserve">
+    <value>Fika couldn't ask the server which mods it allows. Check the server is running and reachable, then start the game again.</value>
+    <comment>Diagnose logs Fika card (OPEN-54 N32). Body</comment>
+  </data>
+  <data name="Diagnose_Title_FikaServerModMissing" xml:space="preserve">
+    <value>The server doesn't have Fika</value>
+    <comment>Diagnose logs Fika card (OPEN-54 N32). Title: the server has no Fika server mod</comment>
+  </data>
+  <data name="Diagnose_Body_FikaServerModMissing" xml:space="preserve">
+    <value>This game has Fika, but the server it connected to doesn't. Install Fika's server mod on the server, the same version as this game's.</value>
+    <comment>Diagnose logs Fika card (OPEN-54 N32). Body</comment>
+  </data>
+  <data name="Diagnose_Title_FikaServerTooOld" xml:space="preserve">
+    <value>The server's Fika is too old</value>
+    <comment>Diagnose logs Fika card (OPEN-54 N32). Title: the server's Fika is older than the game's Fika needs</comment>
+  </data>
+  <data name="Diagnose_Body_FikaServerTooOldFormat" xml:space="preserve">
+    <value>This game's Fika needs the server's Fika to be newer than {0}, but the server has {1}. Update Fika on the server.</value>
+    <comment>Diagnose logs Fika card (OPEN-54 N32). {0}: the oldest server version this game's Fika accepts, {1}: the server's version</comment>
+  </data>
+  <data name="Diagnose_Title_FikaVersionDiffers" xml:space="preserve">
+    <value>Fika doesn't match the raid host</value>
+    <comment>Diagnose logs Fika card (OPEN-54 N32). Title: this game's Fika isn't the same as the raid host's</comment>
+  </data>
+  <data name="Diagnose_Body_FikaVersionDiffersFormat" xml:space="preserve">
+    <value>This game's Fika isn't the same as the raid host's (yours: {0}, host: {1}). Install the same Fika version as the host.</value>
+    <comment>Diagnose logs Fika card (OPEN-54 N32). {0}: this game's Fika (version or checksum), {1}: the host's</comment>
+  </data>
+  <data name="Diagnose_Title_FikaEftVersionDiffers" xml:space="preserve">
+    <value>The game version doesn't match the raid host</value>
+    <comment>Diagnose logs Fika card (OPEN-54 N32). Title: this game's EFT version isn't the same as the raid host's</comment>
+  </data>
+  <data name="Diagnose_Body_FikaEftVersionDiffersFormat" xml:space="preserve">
+    <value>This game is EFT {0}, but the raid host runs {1}. You both need the same SPT version.</value>
+    <comment>Diagnose logs Fika card (OPEN-54 N32). {0}: this game's EFT version, {1}: the host's</comment>
+  </data>
+  <data name="Diagnose_Title_FikaAltered" xml:space="preserve">
+    <value>Fika's files have been changed</value>
+    <comment>Diagnose logs Fika card (OPEN-54 N32). Title: Fika.Core.dll doesn't match the official release</comment>
+  </data>
+  <data name="Diagnose_Body_FikaAltered" xml:space="preserve">
+    <value>Fika.Core.dll doesn't match the official release, so Fika won't let you play with others. Reinstall Fika.</value>
+    <comment>Diagnose logs Fika card (OPEN-54 N32). Body</comment>
+  </data>
 </root>

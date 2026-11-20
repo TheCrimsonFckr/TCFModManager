@@ -10157,4 +10157,67 @@ Die Details stehen im Log:
   <data name="Help_Diagnose_CleanProfiles_Keywords" xml:space="preserve">
     <value>Profil bereinigen, Profil öffnet nicht, unbekannte Fertigkeit, von Hand entfernt, kaputtes Profil</value>
   </data>
+  <data name="Diagnose_Title_ServerStopped" xml:space="preserve">
+    <value>Der Server hat beim Starten aufgegeben</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedFormat" xml:space="preserve">
+    <value>SPT hat beim Starten aufgegeben: {0}</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedModFormat" xml:space="preserve">
+    <value>Er verweist auf {0} - sieh nach einem Update, oder schalte die Mod aus und starte den Server erneut.</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedNewerSptFormat" xml:space="preserve">
+    <value>Eine Mod wurde für ein neueres SPT als dieses gemacht: {0}</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedNewerSptModFormat" xml:space="preserve">
+    <value>Aktualisiere SPT, oder installiere eine Version von {0}, die für dieses SPT gemacht ist.</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedRequirementFormat" xml:space="preserve">
+    <value>Eine Mod braucht etwas, das nicht installiert ist: {0}</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedRequirementModFormat" xml:space="preserve">
+    <value>Sieh auf der Seite von {0} auf sp-mod nach, was sie braucht.</value>
+  </data>
+  <data name="Diagnose_Title_FikaRequiredModsMissing" xml:space="preserve">
+    <value>Mods, die der Server braucht, fehlen</value>
+  </data>
+  <data name="Diagnose_Body_FikaRequiredModsMissingFormat" xml:space="preserve">
+    <value>Fika meldet, dass diesem Spiel {0} Mod(s) fehlen, die der Server braucht: {1}. Installiere dieselben Mods wie der Host und starte das Spiel erneut.</value>
+  </data>
+  <data name="Diagnose_Title_FikaModsNotVerified" xml:space="preserve">
+    <value>Fika konnte die Mods nicht mit dem Server abgleichen</value>
+  </data>
+  <data name="Diagnose_Body_FikaModsNotVerified" xml:space="preserve">
+    <value>Fika konnte den Server nicht fragen, welche Mods er erlaubt. Prüfe, ob der Server läuft und erreichbar ist, und starte das Spiel erneut.</value>
+  </data>
+  <data name="Diagnose_Title_FikaServerModMissing" xml:space="preserve">
+    <value>Der Server hat kein Fika</value>
+  </data>
+  <data name="Diagnose_Body_FikaServerModMissing" xml:space="preserve">
+    <value>Dieses Spiel hat Fika, aber der verbundene Server nicht. Installiere die Server-Mod von Fika auf dem Server, in derselben Version wie hier.</value>
+  </data>
+  <data name="Diagnose_Title_FikaServerTooOld" xml:space="preserve">
+    <value>Das Fika des Servers ist zu alt</value>
+  </data>
+  <data name="Diagnose_Body_FikaServerTooOldFormat" xml:space="preserve">
+    <value>Das Fika dieses Spiels braucht auf dem Server eine neuere Version als {0}, der Server hat aber {1}. Aktualisiere Fika auf dem Server.</value>
+  </data>
+  <data name="Diagnose_Title_FikaVersionDiffers" xml:space="preserve">
+    <value>Fika passt nicht zum Raid-Host</value>
+  </data>
+  <data name="Diagnose_Body_FikaVersionDiffersFormat" xml:space="preserve">
+    <value>Das Fika dieses Spiels ist nicht dasselbe wie beim Raid-Host (deins: {0}, Host: {1}). Installiere dieselbe Fika-Version wie der Host.</value>
+  </data>
+  <data name="Diagnose_Title_FikaEftVersionDiffers" xml:space="preserve">
+    <value>Die Spielversion passt nicht zum Raid-Host</value>
+  </data>
+  <data name="Diagnose_Body_FikaEftVersionDiffersFormat" xml:space="preserve">
+    <value>Dieses Spiel ist EFT {0}, der Raid-Host nutzt aber {1}. Ihr braucht beide dieselbe SPT-Version.</value>
+  </data>
+  <data name="Diagnose_Title_FikaAltered" xml:space="preserve">
+    <value>Die Dateien von Fika wurden verändert</value>
+  </data>
+  <data name="Diagnose_Body_FikaAltered" xml:space="preserve">
+    <value>Fika.Core.dll entspricht nicht der offiziellen Version, daher lässt Fika dich nicht mit anderen spielen. Installiere Fika neu.</value>
+  </data>
 </root>

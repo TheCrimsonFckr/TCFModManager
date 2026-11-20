@@ -10157,4 +10157,67 @@ I dettagli sono nel log:
   <data name="Help_Diagnose_CleanProfiles_Keywords" xml:space="preserve">
     <value>pulire profilo, profilo non si apre, abilità sconosciuta, rimossa a mano, profilo rotto</value>
   </data>
+  <data name="Diagnose_Title_ServerStopped" xml:space="preserve">
+    <value>Il server si è fermato durante l'avvio</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedFormat" xml:space="preserve">
+    <value>SPT si è arreso durante l'avvio: {0}</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedModFormat" xml:space="preserve">
+    <value>Indica {0} - cerca un aggiornamento, oppure disattivala e riavvia il server.</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedNewerSptFormat" xml:space="preserve">
+    <value>Una mod è stata fatta per uno SPT più recente di questo: {0}</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedNewerSptModFormat" xml:space="preserve">
+    <value>Aggiorna SPT, oppure installa una versione di {0} fatta per questo SPT.</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedRequirementFormat" xml:space="preserve">
+    <value>Una mod ha bisogno di qualcosa che non è installato: {0}</value>
+  </data>
+  <data name="Diagnose_Body_ServerStoppedRequirementModFormat" xml:space="preserve">
+    <value>Controlla la pagina di {0} su sp-mod per vedere cosa le serve.</value>
+  </data>
+  <data name="Diagnose_Title_FikaRequiredModsMissing" xml:space="preserve">
+    <value>Mancano mod richieste dal server</value>
+  </data>
+  <data name="Diagnose_Body_FikaRequiredModsMissingFormat" xml:space="preserve">
+    <value>Fika segnala che a questo gioco mancano {0} mod richieste dal server: {1}. Installa le stesse mod dell'host, poi riavvia il gioco.</value>
+  </data>
+  <data name="Diagnose_Title_FikaModsNotVerified" xml:space="preserve">
+    <value>Fika non è riuscito a verificare le mod con il server</value>
+  </data>
+  <data name="Diagnose_Body_FikaModsNotVerified" xml:space="preserve">
+    <value>Fika non è riuscito a chiedere al server quali mod consente. Controlla che il server sia avviato e raggiungibile, poi riavvia il gioco.</value>
+  </data>
+  <data name="Diagnose_Title_FikaServerModMissing" xml:space="preserve">
+    <value>Il server non ha Fika</value>
+  </data>
+  <data name="Diagnose_Body_FikaServerModMissing" xml:space="preserve">
+    <value>Questo gioco ha Fika, ma il server a cui si è collegato no. Installa la mod server di Fika sul server, nella stessa versione di questo gioco.</value>
+  </data>
+  <data name="Diagnose_Title_FikaServerTooOld" xml:space="preserve">
+    <value>Il Fika del server è troppo vecchio</value>
+  </data>
+  <data name="Diagnose_Body_FikaServerTooOldFormat" xml:space="preserve">
+    <value>Il Fika di questo gioco richiede sul server una versione più recente di {0}, ma il server ha {1}. Aggiorna Fika sul server.</value>
+  </data>
+  <data name="Diagnose_Title_FikaVersionDiffers" xml:space="preserve">
+    <value>Fika non corrisponde all'host del raid</value>
+  </data>
+  <data name="Diagnose_Body_FikaVersionDiffersFormat" xml:space="preserve">
+    <value>Il Fika di questo gioco non è lo stesso dell'host del raid (tuo: {0}, host: {1}). Installa la stessa versione di Fika dell'host.</value>
+  </data>
+  <data name="Diagnose_Title_FikaEftVersionDiffers" xml:space="preserve">
+    <value>La versione del gioco non corrisponde all'host del raid</value>
+  </data>
+  <data name="Diagnose_Body_FikaEftVersionDiffersFormat" xml:space="preserve">
+    <value>Questo gioco è EFT {0}, ma l'host del raid usa {1}. Vi serve la stessa versione di SPT.</value>
+  </data>
+  <data name="Diagnose_Title_FikaAltered" xml:space="preserve">
+    <value>I file di Fika sono stati modificati</value>
+  </data>
+  <data name="Diagnose_Body_FikaAltered" xml:space="preserve">
+    <value>Fika.Core.dll non corrisponde alla versione ufficiale, quindi Fika non ti lascia giocare con altri. Reinstalla Fika.</value>
+  </data>
 </root>
