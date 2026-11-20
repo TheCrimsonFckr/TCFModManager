@@ -13,6 +13,7 @@
         <converters:DownloadQueueStatusToAppearanceConverter x:Key="StatusAppearance" />
         <converters:CountToVisibilityConverter x:Key="HasItems" />
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+        <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
 
         <!-- One figure in its own fixed-width slot. Run together on a single line, a transfer
@@ -253,7 +254,15 @@
                                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                         TextTrimming="CharacterEllipsis"
                                         ToolTip="{Binding StatusDetail}"
-                                        Text="{Binding StatusMessage}" />
+                                        Text="{Binding StatusMessage}"
+                                        Visibility="{Binding IsFailed, Converter={StaticResource FalseToVisible}}" />
+                                    <TextBox
+                                        Style="{StaticResource SelectableText}"
+                                        Margin="0,6,0,0"
+                                        FontSize="11"
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding FailureText, Mode=OneWay}"
+                                        Visibility="{Binding IsFailed, Converter={StaticResource BoolToVisibility}}" />
 
                                     <!-- One box per figure - see StatBox above for why they aren't
                                          a single line. Speed and time read as a dash until the

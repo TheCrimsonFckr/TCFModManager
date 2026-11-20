@@ -80,6 +80,8 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
 
     public bool CanReport => Status == DownloadQueueItemStatus.Failed;
 
+    public bool IsFailed => Status == DownloadQueueItemStatus.Failed;
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(TransferredValue))]
     [NotifyPropertyChangedFor(nameof(RateValue))]
@@ -304,12 +306,17 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     };
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(FailureText))]
     private string _statusMessage = Strings.Downloads_WaitingInQueue;
 
     // The status line in full plus anything worth naming one per line - shown as its tooltip, since the
     // line itself is trimmed to one row. Null for no tooltip.
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(FailureText))]
     private string? _statusDetail;
+
+    // OPEN-61: a failed item's status in full, selectable in place of the trimmed line.
+    public string FailureText => StatusDetail ?? StatusMessage;
 
     // True while installing, since that stage has no byte count to report fractional progress for.
     public bool IsIndeterminateProgress => Status == DownloadQueueItemStatus.Installing;
@@ -517,5 +524,6 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
         OnPropertyChanged(nameof(CanRetry));
         OnPropertyChanged(nameof(CanReport));
         OnPropertyChanged(nameof(IsFinished));
+        OnPropertyChanged(nameof(IsFailed));
     }
 }
