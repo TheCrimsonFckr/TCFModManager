@@ -586,6 +586,14 @@
                 <Setter Property="TextBlock.LineStackingStrategy" Value="BlockLineHeight" />
             </Style>
 
+            <Style x:Key="SelectableErrorText" TargetType="TextBox" BasedOn="{StaticResource SelectableText}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding HasError}" Value="True">
+                        <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
             <Style x:Key="DialogButtonBar" TargetType="WrapPanel">
                 <Setter Property="HorizontalAlignment" Value="Right" />
                 <Setter Property="VerticalAlignment" Value="Bottom" />
