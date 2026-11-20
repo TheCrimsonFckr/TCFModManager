@@ -132,6 +132,9 @@ public static partial class InstalledModScanner
             var offDir = offDirs.GetValueOrDefault(name);
             var livePlugins = liveDir is null ? [] : ReadPlugins(liveDir);
             var offPlugins = offDir is null ? [] : ReadPlugins(offDir);
+            if (liveDir is not null && !Directory.Exists(liveDir)) (liveDir, livePlugins) = (null, []);
+            if (offDir is not null && !Directory.Exists(offDir)) (offDir, offPlugins) = (null, []);
+            if (liveDir is null && offDir is null) continue;
 
             var shares = owners.IsEmpty
                 ? null
@@ -158,9 +161,8 @@ public static partial class InstalledModScanner
     private static Dictionary<string, string> DirectoriesIn(string root)
     {
         var dirs = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        if (!Directory.Exists(root)) return dirs;
 
-        foreach (var dir in Directory.EnumerateDirectories(root))
+        foreach (var dir in SubfoldersOf(root))
         {
             var name = Path.GetFileName(dir);
             if (!string.IsNullOrWhiteSpace(name)) dirs.TryAdd(name, dir);
@@ -169,12 +171,34 @@ public static partial class InstalledModScanner
         return dirs;
     }
 
-    private static IEnumerable<string> LooseDlls(string root) =>
-        Directory.Exists(root) ? Directory.EnumerateFiles(root, "*.dll", SearchOption.TopDirectoryOnly) : [];
+    private static IEnumerable<string> LooseDlls(string root) => DllsIn(root);
 
     private static List<(string Dll, DeclaredMetadata Declared)> ReadPlugins(string dir) =>
-        [.. Directory.EnumerateFiles(dir, "*.dll", SearchOption.TopDirectoryOnly)
-            .Select(d => (Dll: d, Declared: ModAssemblyMetadata.ReadPlugin(d)))];
+        [.. DllsIn(dir).Select(d => (Dll: d, Declared: ModAssemblyMetadata.ReadPlugin(d)))];
+
+    private static List<string> SubfoldersOf(string root)
+    {
+        try
+        {
+            return Directory.Exists(root) ? [.. Directory.EnumerateDirectories(root)] : [];
+        }
+        catch (DirectoryNotFoundException)
+        {
+            return [];
+        }
+    }
+
+    private static List<string> DllsIn(string dir)
+    {
+        try
+        {
+            return Directory.Exists(dir) ? [.. Directory.EnumerateFiles(dir, "*.dll", SearchOption.TopDirectoryOnly)] : [];
+        }
+        catch (DirectoryNotFoundException)
+        {
+            return [];
+        }
+    }
 
     private static InstalledMod FolderEntry(
         string dir,
@@ -262,9 +286,7 @@ public static partial class InstalledModScanner
     //
     private static void ScanServerFolder(string root, List<InstalledMod> results, bool disabled)
     {
-        if (!Directory.Exists(root)) return;
-
-        foreach (var dir in Directory.EnumerateDirectories(root))
+        foreach (var dir in SubfoldersOf(root))
         {
             var folderName = Path.GetFileName(dir);
             if (string.IsNullOrWhiteSpace(folderName)) continue;
@@ -306,7 +328,7 @@ public static partial class InstalledModScanner
                     if (root2.TryGetProperty("modDependencies", out var deps))
                         dependencies.AddRange(ReadServerDependencies(deps));
                 }
-                catch (JsonException)
+                catch (Exception ex) when (ex is JsonException or IOException)
                 {
                     // Malformed package.json - still list the mod by its folder name.
                 }
@@ -319,7 +341,7 @@ public static partial class InstalledModScanner
             {
                 // Prefer a DLL whose name matches the folder/mod name, then the rest. The one that
                 // carries the metadata record is the mod's own; the others are bundled libraries.
-                var dlls = Directory.EnumerateFiles(dir, "*.dll", SearchOption.TopDirectoryOnly)
+                var dlls = DllsIn(dir)
                     .OrderByDescending(d => string.Equals(Path.GetFileNameWithoutExtension(d), name, StringComparison.OrdinalIgnoreCase))
                     .ToList();
 
@@ -340,6 +362,8 @@ public static partial class InstalledModScanner
                 author ??= declared?.Author;
                 if (declared is not null) dependencies.AddRange(declared.Dependencies);
             }
+
+            if (!Directory.Exists(dir)) continue;
 
             results.Add(new InstalledMod
             {
