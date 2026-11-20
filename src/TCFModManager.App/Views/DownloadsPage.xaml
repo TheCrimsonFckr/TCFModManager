@@ -127,6 +127,20 @@
                         </StackPanel>
                     </Border>
 
+                    <Border Style="{StaticResource StatBox}" Width="160" Visibility="{Binding HasUnpackedSummary, Converter={StaticResource BoolToVisibility}}">
+                        <StackPanel>
+                            <TextBlock
+                                FontSize="10"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="{loc:Str Downloads_StatToUnpack}" />
+                            <TextBlock
+                                FontSize="11"
+                                TextTrimming="CharacterEllipsis"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{Binding SummaryUnpacked}" />
+                        </StackPanel>
+                    </Border>
+
                     <!-- Only when something in the queue has no size yet, so the figures above are
                          read as covering less than the whole queue. -->
                     <Border
@@ -262,6 +276,20 @@
                                                     TextTrimming="CharacterEllipsis"
                                                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                     Text="{Binding EtaValue}" />
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Border Style="{StaticResource StatBox}" Width="110">
+                                            <StackPanel>
+                                                <TextBlock
+                                                    FontSize="10"
+                                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                    Text="{loc:Str Downloads_StatUnpacked}" />
+                                                <TextBlock
+                                                    FontSize="11"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                    Text="{Binding UnpackedValue}" />
                                             </StackPanel>
                                         </Border>
                                     </WrapPanel>

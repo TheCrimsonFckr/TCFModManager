@@ -56,6 +56,47 @@ public sealed class ArchiveExtractionTests : IDisposable
         Assert.Equal(Expected.OrderBy(p => p.Key), actual.OrderBy(p => p.Key));
     }
 
+    [Theory]
+    [InlineData("solid.7z")]
+    [InlineData("nonsolid.7z")]
+    [InlineData("solid.rar")]
+    [InlineData("nonsolid.rar")]
+    [InlineData("mod.tar")]
+    public async Task UnpackedSize_is_every_file_unpacked(string fixture)
+    {
+        await ModInstallService.ExtractArchiveAsync(Fixture(fixture), _root, status: null, CancellationToken.None);
+        var expected = Directory.EnumerateFiles(_root, "*", SearchOption.AllDirectories).Sum(f => new FileInfo(f).Length);
+
+        Assert.Equal(expected, ArchiveLayout.UnpackedSize(Fixture(fixture)));
+    }
+
+    [Fact]
+    public void UnpackedSize_of_a_zip_is_its_entries_unpacked()
+    {
+        Directory.CreateDirectory(_base);
+        var zip = Path.Combine(_base, "mod.zip");
+        using (var archive = System.IO.Compression.ZipFile.Open(zip, System.IO.Compression.ZipArchiveMode.Create))
+        {
+            foreach (var (name, length) in new[] { ("BepInEx/plugins/A/A.dll", 5000), ("SPT/user/mods/A/package.json", 300) })
+            {
+                using var stream = archive.CreateEntry(name).Open();
+                stream.Write(new byte[length]);
+            }
+        }
+
+        Assert.Equal(5300, ArchiveLayout.UnpackedSize(zip));
+    }
+
+    [Fact]
+    public void UnpackedSize_of_something_that_is_not_an_archive_is_null()
+    {
+        Directory.CreateDirectory(_base);
+        var junk = Path.Combine(_base, "junk.bin");
+        File.WriteAllBytes(junk, [1, 2, 3, 4, 5, 6, 7, 8]);
+
+        Assert.Null(ArchiveLayout.UnpackedSize(junk));
+    }
+
     // ../escape.txt - on the random-access path (tar) and the stream path (tar.gz) alike.
     [Theory]
     [InlineData("escape.tar")]

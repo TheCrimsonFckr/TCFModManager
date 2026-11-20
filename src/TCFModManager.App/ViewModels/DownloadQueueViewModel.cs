@@ -57,6 +57,13 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
     [ObservableProperty]
     private string _summaryEta = NoValue;
 
+    // "612.4 MB (5 of 8)" - exact sizes of the installs already downloaded, out of how many are queued to install.
+    [ObservableProperty]
+    private bool _hasUnpackedSummary;
+
+    [ObservableProperty]
+    private string _summaryUnpacked = NoValue;
+
     private const string NoValue = "\u2014";
 
     // OPEN-52 N14: while paused nothing new starts and downloads under way stop, carrying on after Resume; an install under way finishes.
@@ -215,7 +222,8 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         if (e.PropertyName is nameof(DownloadQueueItemViewModel.Status)
             or nameof(DownloadQueueItemViewModel.Progress)
             or nameof(DownloadQueueItemViewModel.TotalBytes)
-            or nameof(DownloadQueueItemViewModel.IsTransferPaused))
+            or nameof(DownloadQueueItemViewModel.IsTransferPaused)
+            or nameof(DownloadQueueItemViewModel.UnpackedBytes))
         {
             UpdateSummary();
         }
@@ -237,7 +245,8 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         {
             HasSummary = false;
             HasUnsized = false;
-            SummaryProgress = SummaryRemaining = SummaryEta = SummaryUnsized = NoValue;
+            HasUnpackedSummary = false;
+            SummaryProgress = SummaryRemaining = SummaryEta = SummaryUnsized = SummaryUnpacked = NoValue;
 
             // Still notified on the way out: a queue that has just finished with failures in it is
             // exactly when the retry button has to appear.
@@ -263,6 +272,14 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         var rate = unfinished.Sum(i => i.BytesPerSecond ?? 0);
         SummaryEta = remaining > 0 && rate > 0
             ? DownloadQueueItemViewModel.RemainingLabel(TimeSpan.FromSeconds(remaining / rate))
+            : NoValue;
+
+        var installs = unfinished.Where(i => !i.DownloadOnly).ToList();
+        var unpacked = installs.Where(i => i.UnpackedBytes is not null).ToList();
+        HasUnpackedSummary = installs.Count > 0;
+        SummaryUnpacked = unpacked.Count > 0
+            ? Text(Strings.Downloads_SummaryUnpackedFormat,
+                DownloadQueueItemViewModel.SizeLabel(unpacked.Sum(i => i.UnpackedBytes!.Value)), unpacked.Count, installs.Count)
             : NoValue;
 
         OnPropertyChanged(nameof(HasRetryable));
@@ -597,6 +614,9 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         {
             if (slot) _downloadSlots.Release();
         }
+
+        var unpacked = await Task.Run(() => ArchiveLayout.UnpackedSize(path));
+        if (token == item.Token) item.UnpackedBytes = unpacked;
 
         // Downloaded; the install is one at a time, in the order queued.
         if (token == item.Token && !item.IsFinished)

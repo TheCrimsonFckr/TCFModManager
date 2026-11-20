@@ -1121,6 +1121,10 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Not sized yet</value>
     <comment>Shown in place of an estimate before any size is known.</comment>
   </data>
+  <data name="Downloads_StatToUnpack" xml:space="preserve">
+    <value>To unpack</value>
+    <comment>Heading on a small statistics box: the unpacked size of the queued installs. Keep it short.</comment>
+  </data>
   <data name="Downloads_Empty" xml:space="preserve">
     <value>Nothing queued yet - click Install on a Browse card, or Update in a mod's details dialog, to add something here.</value>
     <comment>Install and Update are buttons elsewhere in the app - translate them as they are translated there.</comment>
@@ -1140,6 +1144,10 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="Downloads_StatTimeLeft" xml:space="preserve">
     <value>Time left</value>
     <comment>Heading on a small statistics box. Keep it short.</comment>
+  </data>
+  <data name="Downloads_StatUnpacked" xml:space="preserve">
+    <value>Unpacked</value>
+    <comment>Heading on a small statistics box on one download's row: the size of the mod's files once unpacked. Keep it short.</comment>
   </data>
   <data name="Downloads_CancelToolTip" xml:space="preserve">
     <value>Cancel this download and any dependencies it queued.</value>
@@ -4562,6 +4570,10 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   <data name="Downloads_SummaryProgressFormat" xml:space="preserve">
     <value>{0} of {1} done</value>
     <comment>How much of the whole queue has finished. {0} is how many are done, {1} how many there are.</comment>
+  </data>
+  <data name="Downloads_SummaryUnpackedFormat" xml:space="preserve">
+    <value>{0} ({1} of {2})</value>
+    <comment>The unpacked size of the queued installs. {0} is a size such as 612.4 MB, {1} how many have downloaded so their size is known, {2} how many are queued to install.</comment>
   </data>
   <data name="Downloads_ResolvingLink" xml:space="preserve">
     <value>Resolving download link...</value>

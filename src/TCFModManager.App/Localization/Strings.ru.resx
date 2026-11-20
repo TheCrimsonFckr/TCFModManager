@@ -1302,6 +1302,9 @@
   <data name="Downloads_NotSizedYet" xml:space="preserve">
     <value>Размер пока неизвестен</value>
   </data>
+  <data name="Downloads_StatToUnpack" xml:space="preserve">
+    <value>К распаковке</value>
+  </data>
   <data name="Downloads_RateFormat" xml:space="preserve">
     <value>{0}/с</value>
   </data>
@@ -1341,6 +1344,9 @@
   <data name="Downloads_StatTimeLeft" xml:space="preserve">
     <value>Осталось</value>
   </data>
+  <data name="Downloads_StatUnpacked" xml:space="preserve">
+    <value>Без сжатия</value>
+  </data>
   <data name="Downloads_StatTimeToGo" xml:space="preserve">
     <value>Осталось времени</value>
   </data>
@@ -1367,6 +1373,9 @@
   </data>
   <data name="Downloads_SummaryProgressFormat" xml:space="preserve">
     <value>Готово {0} из {1}</value>
+  </data>
+  <data name="Downloads_SummaryUnpackedFormat" xml:space="preserve">
+    <value>{0} ({1} из {2})</value>
   </data>
   <data name="Downloads_TimeAFewSeconds" xml:space="preserve">
     <value>несколько секунд</value>

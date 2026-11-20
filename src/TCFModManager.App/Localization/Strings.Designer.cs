@@ -322,11 +322,13 @@ internal static class Strings
     internal static string Downloads_StatLeftToFetch => LocalizationService.Get("Downloads_StatLeftToFetch");
     internal static string Downloads_StatTimeToGo => LocalizationService.Get("Downloads_StatTimeToGo");
     internal static string Downloads_NotSizedYet => LocalizationService.Get("Downloads_NotSizedYet");
+    internal static string Downloads_StatToUnpack => LocalizationService.Get("Downloads_StatToUnpack");
     internal static string Downloads_Empty => LocalizationService.Get("Downloads_Empty");
     internal static string Downloads_AddonTag => LocalizationService.Get("Downloads_AddonTag");
     internal static string Downloads_StatDownloaded => LocalizationService.Get("Downloads_StatDownloaded");
     internal static string Downloads_StatSpeed => LocalizationService.Get("Downloads_StatSpeed");
     internal static string Downloads_StatTimeLeft => LocalizationService.Get("Downloads_StatTimeLeft");
+    internal static string Downloads_StatUnpacked => LocalizationService.Get("Downloads_StatUnpacked");
     internal static string Downloads_CancelToolTip => LocalizationService.Get("Downloads_CancelToolTip");
     internal static string Downloads_Retry => LocalizationService.Get("Downloads_Retry");
     internal static string Downloads_RetryToolTip => LocalizationService.Get("Downloads_RetryToolTip");
@@ -1286,6 +1288,7 @@ internal static class Strings
     internal static string Downloads_CancelledBeforeStart => LocalizationService.Get("Downloads_CancelledBeforeStart");
     internal static string Downloads_Cancelling => LocalizationService.Get("Downloads_Cancelling");
     internal static string Downloads_SummaryProgressFormat => LocalizationService.Get("Downloads_SummaryProgressFormat");
+    internal static string Downloads_SummaryUnpackedFormat => LocalizationService.Get("Downloads_SummaryUnpackedFormat");
     internal static string Downloads_ResolvingLink => LocalizationService.Get("Downloads_ResolvingLink");
     internal static string Downloads_NoLinkFormat => LocalizationService.Get("Downloads_NoLinkFormat");
     internal static string Downloads_CheckingDependencies => LocalizationService.Get("Downloads_CheckingDependencies");

@@ -200,6 +200,21 @@ public static class ArchiveLayout
         return Plan(entries, serverRoot);
     }
 
+    // Every file in the archive unpacked, in bytes; null when it can't be listed or an entry has no stored size.
+    public static long? UnpackedSize(string archivePath)
+    {
+        try
+        {
+            var entries = ReadEntries(archivePath);
+            return entries.Any(e => e.Size < 0) ? null : entries.Sum(e => e.Size);
+        }
+        catch (Exception ex) when (ex is not OutOfMemoryException)
+        {
+            AppLog.Debug("Downloads", $"couldn't size {Path.GetFileName(archivePath)} unpacked: {ex.Message}");
+            return null;
+        }
+    }
+
     // The entry-list half of Plan, separate so it can be tested without building archives.
     public static ArchivePlan Plan(IReadOnlyList<ArchiveFileEntry> entries, string serverRoot)
     {

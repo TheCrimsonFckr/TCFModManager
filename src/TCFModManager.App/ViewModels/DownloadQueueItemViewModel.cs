@@ -98,6 +98,12 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(HasTransferDetails))]
     private long? _totalBytes;
 
+    // Read from the archive once it has downloaded; sp-mod gives no unpacked size.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(UnpackedValue))]
+    [NotifyPropertyChangedFor(nameof(HasTransferDetails))]
+    private long? _unpackedBytes;
+
     // Runs for the download stage only, which is the only stage with a measurable rate.
     private readonly Stopwatch _downloading = new();
 
@@ -145,10 +151,10 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     // Placeholder that holds a box's shape before its number exists.
     private const string NoValue = "\u2014";
 
-    // Only while downloading, and only once the size is known - there is nothing to put in the
-    // boxes otherwise.
+    // While downloading or waiting to install, once a size is known - there is nothing to put in
+    // the boxes otherwise.
     public bool HasTransferDetails =>
-        Status == DownloadQueueItemStatus.Downloading && TotalBytes is > 0 && Progress < 1;
+        Status == DownloadQueueItemStatus.Downloading && (TotalBytes is > 0 || UnpackedBytes is not null);
 
     // "173 of 258.3 MB" - both halves in the same unit, so the pair doesn't switch units partway
     // through and jump.
@@ -161,6 +167,8 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     public string EtaValue => BytesPerSecond is > 0 and var rate && RemainingBytes is { } left
         ? Remaining(TimeSpan.FromSeconds(left / rate))
         : NoValue;
+
+    public string UnpackedValue => UnpackedBytes is { } bytes ? Size(bytes) : NoValue;
 
 
     // What is left to fetch for this item, or null when its size isn't known yet. A pending item
@@ -346,6 +354,7 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
         previous.Dispose();
 
         Progress = 0;
+        UnpackedBytes = null;
         SavedPath = null;
         Failure = null;
         Status = DownloadQueueItemStatus.Pending;

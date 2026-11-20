@@ -1269,6 +1269,9 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Downloads_NotSizedYet" xml:space="preserve">
     <value>Größe noch unbekannt</value>
   </data>
+  <data name="Downloads_StatToUnpack" xml:space="preserve">
+    <value>Zu entpacken</value>
+  </data>
   <data name="Downloads_RateFormat" xml:space="preserve">
     <value>{0}/s</value>
   </data>
@@ -1308,6 +1311,9 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Downloads_StatTimeLeft" xml:space="preserve">
     <value>Restzeit</value>
   </data>
+  <data name="Downloads_StatUnpacked" xml:space="preserve">
+    <value>Entpackt</value>
+  </data>
   <data name="Downloads_StatTimeToGo" xml:space="preserve">
     <value>Restzeit gesamt</value>
   </data>
@@ -1334,6 +1340,9 @@ Siehe Abhängigkeiten und Konflikte.</value>
   </data>
   <data name="Downloads_SummaryProgressFormat" xml:space="preserve">
     <value>{0} von {1} fertig</value>
+  </data>
+  <data name="Downloads_SummaryUnpackedFormat" xml:space="preserve">
+    <value>{0} ({1} von {2})</value>
   </data>
   <data name="Downloads_TimeAFewSeconds" xml:space="preserve">
     <value>ein paar Sekunden</value>
