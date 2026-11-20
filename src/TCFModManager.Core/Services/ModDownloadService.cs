@@ -42,7 +42,8 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
     // DownloadAsync, tried again under RetryPolicy. <paramref name="retrying"/> hears each wait and
     // each restart. With <paramref name="resumable"/>, later attempts carry on from where the last one
     // broke off; the caller removes ValidatorPathFor(destinationPath) if it gives up. With
-    // <paramref name="pause"/>, a pause stops the transfer and it carries on after Resume.
+    // <paramref name="pause"/>, a pause stops the transfer and it carries on after Resume. With
+    // <paramref name="resumeExisting"/>, the first attempt also carries on from a part already on disk.
     //
     public async Task<DownloadResponse> DownloadRetryingAsync(
         string downloadUrl,
@@ -51,7 +52,8 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
         IProgress<DownloadRetry>? retrying = null,
         CancellationToken ct = default,
         bool resumable = false,
-        DownloadPause? pause = null)
+        DownloadPause? pause = null,
+        bool resumeExisting = false)
     {
         var policy = RetryPolicy;
         var requestedHost = Uri.TryCreate(downloadUrl, UriKind.Absolute, out var uri) ? uri.Host : null;
@@ -69,7 +71,7 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
 
             try
             {
-                var resume = resumable && started;
+                var resume = resumable && (started || resumeExisting);
                 started = true;
                 return await DownloadAsync(downloadUrl, destinationPath, progress, transfer.Token,
                     resume: resume, resumable: resumable).ConfigureAwait(false);

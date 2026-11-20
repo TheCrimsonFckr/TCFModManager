@@ -215,6 +215,7 @@ public partial class App : Application
             return;
         }
 
+        AppServices.DownloadQueue.Remember();
         AppServices.UpdateWatcher.Stop();
         AppServices.ServerMapReporter.Stop();
         AppTray.Dispose();

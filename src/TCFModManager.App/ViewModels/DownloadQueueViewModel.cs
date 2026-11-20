@@ -84,6 +84,95 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
     private readonly DownloadPause _transfers = new();
 
+    private readonly RememberedDownloadStore _remembered = new();
+
+    // Every unfinished item but one installing, kept for the next start; the queue is paused on the way out.
+    public void Remember()
+    {
+        var kept = Items.Where(i => !i.IsFinished && i.Status != DownloadQueueItemStatus.Installing).ToList();
+        if (kept.Count == 0)
+        {
+            _remembered.Clear();
+            return;
+        }
+
+        IsPaused = true;
+
+        var index = kept.Select((item, at) => (item, at)).ToDictionary(p => p.item, p => p.at);
+        int? IndexOf(DownloadQueueItemViewModel? item) => item is not null && index.TryGetValue(item, out var at) ? at : null;
+
+        _remembered.Save([.. kept.Select(item => new RememberedDownload
+        {
+            Target = item.Target,
+            VersionLabel = item.VersionLabel,
+            VersionId = item.Version is { Id: > 0 } version ? version.Id : null,
+            InstallPath = item.InstallPath,
+            CheckDependencies = item.CheckDependencies,
+            Asked = item.Asked,
+            DownloadOnly = item.DownloadOnly,
+            DownloadSubfolder = item.DownloadSubfolder,
+            TotalBytes = item.TotalBytes,
+            ArchivePath = item.ArchivePath,
+            DependencyOf = IndexOf(kept.FirstOrDefault(parent => parent.Dependencies.Contains(item))),
+            InstallsBefore = IndexOf(item.InstallsBefore),
+            UpdatesWith = [.. item.UpdatesWith],
+        })]);
+
+        AppLog.Info("Downloads", $"kept {kept.Count} unfinished download(s) for next time");
+    }
+
+    // The downloads Remember kept, back on the queue and paused.
+    public void RestoreRemembered()
+    {
+        var remembered = _remembered.Load();
+        if (remembered.Count == 0) return;
+
+        _remembered.Clear();
+        IsPaused = true;
+
+        var restored = new List<DownloadQueueItemViewModel>(remembered.Count);
+        foreach (var entry in remembered)
+        {
+            if (entry.ArchivePath is { } path) QueueArchives.Keep(path);
+
+            var item = Enqueue(
+                entry.Target,
+                entry.VersionLabel,
+                entry.InstallPath,
+                () => RememberedVersions.ResolveAsync(AppServices.SpModApi, entry),
+                checkDependencies: entry.CheckDependencies,
+                dependencyOf: entry.DependencyOf is { } parent && parent < restored.Count ? restored[parent] : null,
+                totalBytes: entry.TotalBytes,
+                downloadOnly: entry.DownloadOnly,
+                downloadSubfolder: entry.DownloadSubfolder);
+
+            item.Asked = entry.Asked;
+            item.ArchivePath = entry.ArchivePath;
+            item.UpdatesWith = entry.UpdatesWith.ToHashSet();
+            item.Progress = RememberedProgress(entry);
+            item.StatusMessage = Strings.Downloads_PausedWaiting;
+            restored.Add(item);
+        }
+
+        for (var at = 0; at < remembered.Count; at++)
+        {
+            if (remembered[at].InstallsBefore is not { } before || before >= restored.Count) continue;
+            restored[at].InstallsBefore = restored[before];
+            restored[before].InstallsFirst.Add(restored[at]);
+        }
+
+        AppLog.Info("Downloads", $"brought back {restored.Count} unfinished download(s), paused");
+    }
+
+    private static double RememberedProgress(RememberedDownload entry)
+    {
+        if (entry.ArchivePath is not { } path || entry.TotalBytes is not { } total || total <= 0) return 0;
+        if (!entry.DownloadOnly && File.Exists(path)) return 1;
+
+        var part = entry.DownloadOnly ? path : path + ".part";
+        return File.Exists(part) ? Math.Min(1, new FileInfo(part).Length / (double)total) : 0;
+    }
+
     partial void OnIsPausedChanged(bool value)
     {
         if (value) _transfers.Pause();
@@ -507,6 +596,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             }
 
             item.TotalBytes ??= version.ContentLength;
+            item.Version = version;
 
             token.ThrowIfCancellationRequested();
 
@@ -515,7 +605,8 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             // F17): asked before anything is downloaded. Asked, never refused - the mark is the
             // author's word - and No leaves this one out, nothing else.
             //
-            if (FikaInstall.IsIncompatible(version.FikaCompatibility)
+            if (!item.Asked
+                && FikaInstall.IsIncompatible(version.FikaCompatibility)
                 && await RunsFikaAsync(item.InstallPath)
                 && !ConfirmNotForFika(item))
             {
@@ -531,7 +622,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             // for a range this version is outside. Asked, never refused, default No; No leaves this one
             // out. Only for an install, and only for mods (an addon is no one's dependency).
             //
-            if (!item.DownloadOnly && !item.IsAddon && version.Version is { Length: > 0 } newVersion)
+            if (!item.Asked && !item.DownloadOnly && !item.IsAddon && version.Version is { Length: > 0 } newVersion)
             {
                 var broken = (await WouldBreakAsync(item, newVersion))
                     .Where(b => b.Dependent.ModId is not { } id || !UpdatesWithIt(item, id))
@@ -548,7 +639,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
             // Checked before this item's own download starts; an accepted missing dependency
             // installs ahead of it.
-            if (item.CheckDependencies)
+            if (item.CheckDependencies && !item.Asked)
             {
                 item.StatusMessage = Strings.Downloads_CheckingDependencies;
                 await CheckDependenciesAsync(item, version);
@@ -562,6 +653,8 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             // turn. It takes a download slot like any other download, and runs beside this loop so
             // the items queued after it are not held up.
             //
+            item.Asked = true;
+
             if (item.DownloadOnly)
             {
                 item.StatusMessage = Strings.Downloads_WaitingToDownload;
@@ -581,25 +674,33 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
     // Stage 2: this item's archive, downloaded to a one-off file. Settles the card itself on failure.
     private async Task<string> FetchArchiveAsync(DownloadQueueItemViewModel item, ModVersion version, CancellationToken token)
     {
-        var path = QueueArchives.NewPath(item.InstallPath);
+        var path = item.ArchivePath ??= QueueArchives.NewPath(item.InstallPath);
         var part = path + ".part";
         var slot = false;
 
         try
         {
-            item.StatusMessage = Strings.Downloads_WaitingToDownload;
-            await _downloadSlots.WaitAsync(token);
-            slot = true;
-            await WaitToStartAsync(item, token);
+            if (File.Exists(path))
+            {
+                await WaitToStartAsync(item, token);
+            }
+            else
+            {
+                item.StatusMessage = Strings.Downloads_WaitingToDownload;
+                await _downloadSlots.WaitAsync(token);
+                slot = true;
+                await WaitToStartAsync(item, token);
 
-            var progress = new Progress<double>(p => item.Progress = p);
-            var downloading = ModInstallWording.Describe(
-                new ModInstallProgress(ModInstallStage.Downloading, item.ModName, version.Version));
+                var progress = new Progress<double>(p => item.Progress = p);
+                var downloading = ModInstallWording.Describe(
+                    new ModInstallProgress(ModInstallStage.Downloading, item.ModName, version.Version));
 
-            item.StatusMessage = downloading;
-            await AppServices.Downloads.DownloadRetryingAsync(version.Link!, part, progress,
-                Retrying(item, token, downloading), token, resumable: true, pause: _transfers);
-            File.Move(part, path, overwrite: true);
+                item.StatusMessage = downloading;
+                await AppServices.Downloads.DownloadRetryingAsync(version.Link!, part, progress,
+                    Retrying(item, token, downloading), token, resumable: true, pause: _transfers,
+                    resumeExisting: File.Exists(part));
+                File.Move(part, path, overwrite: true);
+            }
         }
         catch (Exception ex)
         {
@@ -915,10 +1016,11 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         item.StatusMessage = saving;
 
         var downloadProgress = new Progress<double>(p => item.Progress = p);
+        item.ArchivePath ??= ModArchiveService.NewPartPath(folder, item.DownloadSubfolder);
 
         var result = await AppServices.ModArchive.SaveArchiveAsync(
             item.Target, version, folder, item.InstallPath, item.DownloadSubfolder, downloadProgress, token,
-            Retrying(item, token, saving), pause);
+            Retrying(item, token, saving), pause, item.ArchivePath);
 
         if (token != item.Token || item.IsFinished) return;
 

@@ -35,7 +35,8 @@ public sealed class ModArchiveService(ModDownloadService downloadService, Downlo
         IProgress<double>? downloadProgress = null,
         CancellationToken ct = default,
         IProgress<DownloadRetry>? retrying = null,
-        DownloadPause? pause = null)
+        DownloadPause? pause = null,
+        string? partFile = null)
     {
         if (string.IsNullOrWhiteSpace(version.Link))
             throw new ModInstallException(ModInstallFailure.NoDownloadLink)
@@ -51,7 +52,8 @@ public sealed class ModArchiveService(ModDownloadService downloadService, Downlo
             ? folder
             : Path.Combine(folder, DownloadFolders.SafeName(subfolder));
 
-        var partPath = CreatePartFile(destinationFolder);
+        var resumeExisting = partFile is not null && File.Exists(partFile) && new FileInfo(partFile).Length > 0;
+        var partPath = resumeExisting ? partFile! : CreatePartFile(destinationFolder, partFile);
 
         AppLog.Info("Download",
             $"{target.Name} {version.Version} ({(target.IsAddon ? "addon" : "mod")} {target.Id}) -> {destinationFolder}");
@@ -61,7 +63,7 @@ public sealed class ModArchiveService(ModDownloadService downloadService, Downlo
         try
         {
             var response = await downloadService
-                .DownloadRetryingAsync(version.Link, partPath, downloadProgress, retrying, ct, resumable: true, pause: pause)
+                .DownloadRetryingAsync(version.Link, partPath, downloadProgress, retrying, ct, resumable: true, pause: pause, resumeExisting: resumeExisting)
                 .ConfigureAwait(false);
 
             var fileName = DownloadFolders.FileNameFor(
@@ -116,15 +118,21 @@ public sealed class ModArchiveService(ModDownloadService downloadService, Downlo
     // Creates the temporary file up front, so a folder that can't be written to is reported before
     // anything is fetched rather than after the whole archive has arrived.
     //
-    private static string CreatePartFile(string folder)
+    // Where a save into <paramref name="folder"/> (and <paramref name="subfolder"/>) would keep its part file; nothing is created.
+    public static string NewPartPath(string folder, string? subfolder) =>
+        Path.Combine(
+            string.IsNullOrWhiteSpace(subfolder) ? folder : Path.Combine(folder, DownloadFolders.SafeName(subfolder)),
+            Guid.NewGuid().ToString("N") + PartExtension);
+
+    private static string CreatePartFile(string folder, string? path = null)
     {
         try
         {
-            Directory.CreateDirectory(folder);
+            var target = path ?? Path.Combine(folder, Guid.NewGuid().ToString("N") + PartExtension);
+            Directory.CreateDirectory(Path.GetDirectoryName(target)!);
 
-            var path = Path.Combine(folder, Guid.NewGuid().ToString("N") + PartExtension);
-            using (new FileStream(path, FileMode.CreateNew, FileAccess.Write)) { }
-            return path;
+            using (new FileStream(target, path is null ? FileMode.CreateNew : FileMode.Create, FileAccess.Write)) { }
+            return target;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {

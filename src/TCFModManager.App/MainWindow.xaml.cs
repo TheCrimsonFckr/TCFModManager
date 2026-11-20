@@ -104,6 +104,7 @@ public partial class MainWindow : FluentWindow
             // otherwise. Attached first, so a click landing from here on navigates by itself.
             AppNavigation.Attach(RootNavigationView);
             AppServices.Play.StartQuickPolling();
+            AppServices.DownloadQueue.RestoreRemembered();
             AppTray.ShowIcon();
             RootNavigationView.Navigate(AppNavigation.StartOnInstalled ? typeof(InstalledPage) : typeof(BrowsePage));
 

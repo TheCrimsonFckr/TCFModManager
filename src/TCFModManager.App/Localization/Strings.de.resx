@@ -9708,7 +9708,7 @@ Die Details stehen im Log:
     <value>Drücke {0} auf {1} oder die Pausetaste in der Downloadleiste. Downloads halten an; eine laufende Installation wird fertig.</value>
   </data>
   <data name="Help_Downloads_Pause_Step2" xml:space="preserve">
-    <value>Drücke {0}, um weiterzumachen. Downloads machen dort weiter, wo sie aufgehört haben.</value>
+    <value>Drücke {0}, um weiterzumachen. Downloads machen dort weiter, wo sie aufgehört haben. Beim Schließen der App bleiben unfertige Downloads erhalten und kommen pausiert zurück.</value>
   </data>
   <data name="Help_Downloads_Pause_Note" xml:space="preserve">
     <value>Sieht das SPT-Laufwerk beim Start der Warteschlange zu voll aus, pausiert sie von selbst und sagt, wie viel Platz sie braucht. {0} macht trotzdem weiter.</value>

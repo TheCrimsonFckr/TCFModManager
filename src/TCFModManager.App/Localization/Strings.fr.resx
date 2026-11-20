@@ -9708,7 +9708,7 @@ Les détails sont dans le journal :
     <value>Appuyez sur {0} dans {1}, ou sur le bouton pause de la barre des téléchargements. Les téléchargements s'arrêtent ; une installation en cours se termine.</value>
   </data>
   <data name="Help_Downloads_Pause_Step2" xml:space="preserve">
-    <value>Appuyez sur {0} pour continuer. Les téléchargements repartent là où ils s'étaient arrêtés.</value>
+    <value>Appuyez sur {0} pour continuer. Les téléchargements repartent là où ils s'étaient arrêtés. Fermer l'application garde les téléchargements inachevés ; ils reviennent en pause.</value>
   </data>
   <data name="Help_Downloads_Pause_Note" xml:space="preserve">
     <value>Si le disque de SPT semble trop plein au démarrage de la file, elle se met en pause seule et indique la place nécessaire. {0} continue quand même.</value>

@@ -558,6 +558,18 @@ public class ModArchiveServiceTests : IDisposable
     private static byte[] FooZip() => ArchiveFileTests.Zip(("BepInEx/plugins/Foo/Foo.dll", "0123456789"));
 
     [Fact]
+    public async Task AGivenPartPath_IsUsedAndGoneOnceSaved()
+    {
+        var part = ModArchiveService.NewPartPath(_folder, "My: list");
+
+        var result = await Service(FooZip(), "Foo_v1.2.1.zip").SaveArchiveAsync(Target, Version(), _folder, null, subfolder: "My: list", partFile: part);
+
+        Assert.Equal(Path.Combine(_folder, "My_ list"), Path.GetDirectoryName(part));
+        Assert.Equal(Path.Combine(_folder, "My_ list", "Foo_v1.2.1.zip"), result.Record.ArchivePath);
+        Assert.False(File.Exists(part));
+    }
+
+    [Fact]
     public async Task SavesUnderTheOfferedNameAndRecordsWhatItWouldPlace()
     {
         var result = await Service(FooZip(), "Foo_v1.2.1.zip").SaveArchiveAsync(Target, Version(), _folder, null);

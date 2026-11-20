@@ -16,7 +16,20 @@ public static class QueueArchives
     private static readonly TimeSpan StaleAfter = TimeSpan.FromDays(1);
 
     private static readonly HashSet<string> Swept = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly HashSet<string> Kept = new(StringComparer.OrdinalIgnoreCase);
     private static readonly Lock Gate = new();
+
+    // An archive a remembered download will carry on with: the sweep leaves it, its .part and its validator alone.
+    public static void Keep(string archivePath)
+    {
+        lock (Gate) Kept.Add(Path.GetFileName(archivePath));
+    }
+
+    private static bool IsKept(string file)
+    {
+        var name = Path.GetFileName(file);
+        lock (Gate) return Kept.Any(kept => name.StartsWith(kept, StringComparison.OrdinalIgnoreCase));
+    }
 
     public static string NewPath(string installPath)
     {
@@ -65,7 +78,7 @@ public static class QueueArchives
             var cutoff = DateTime.UtcNow - StaleAfter;
             foreach (var file in Directory.EnumerateFiles(folder, Prefix + "*"))
             {
-                if (File.GetLastWriteTimeUtc(file) < cutoff) Delete(file);
+                if (File.GetLastWriteTimeUtc(file) < cutoff && !IsKept(file)) Delete(file);
             }
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)

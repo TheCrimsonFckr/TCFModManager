@@ -9708,7 +9708,7 @@ I dettagli sono nel log:
     <value>Premi {0} in {1}, o il pulsante pausa nella barra dei download. I download si fermano; un'installazione in corso finisce.</value>
   </data>
   <data name="Help_Downloads_Pause_Step2" xml:space="preserve">
-    <value>Premi {0} per continuare. I download ripartono da dove si erano fermati.</value>
+    <value>Premi {0} per continuare. I download ripartono da dove si erano fermati. Chiudendo l'app i download non finiti restano e tornano in pausa.</value>
   </data>
   <data name="Help_Downloads_Pause_Note" xml:space="preserve">
     <value>Se all'avvio della coda il disco di SPT sembra troppo pieno, si mette in pausa da sola e dice quanto spazio serve. {0} procede comunque.</value>

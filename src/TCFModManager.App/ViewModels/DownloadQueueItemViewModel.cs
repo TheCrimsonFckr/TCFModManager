@@ -380,6 +380,8 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
 
         Progress = 0;
         UnpackedBytes = null;
+        ArchivePath = null;
+        Asked = false;
         SavedPath = null;
         Failure = null;
         Status = DownloadQueueItemStatus.Pending;
@@ -439,6 +441,17 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     internal Task<ModVersion?> ResolveVersionAsync() => _resolveVersion();
 
     internal void AddDependency(DownloadQueueItemViewModel item) => _dependencies.Add(item);
+
+    internal IReadOnlyList<DownloadQueueItemViewModel> Dependencies => _dependencies;
+
+    // The resolved version, once the worker has it.
+    internal ModVersion? Version { get; set; }
+
+    // Past the questions asked before downloading (not for Fika, would break, missing dependencies).
+    internal bool Asked { get; set; }
+
+    // Installs: the queue archive, ".part" beside it while incomplete. Monitor mode: the part file in the download folder.
+    internal string? ArchivePath { get; set; }
 
     // Missing dependencies this item pulled in, which install ahead of it.
     internal List<DownloadQueueItemViewModel> InstallsFirst { get; } = [];

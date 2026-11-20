@@ -11798,7 +11798,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Help step. {0} Pause, {1} Downloads.</comment>
   </data>
   <data name="Help_Downloads_Pause_Step2" xml:space="preserve">
-    <value>Press {0} to carry on. Downloads pick up from where they stopped.</value>
+    <value>Press {0} to carry on. Downloads pick up from where they stopped. Closing the app keeps unfinished downloads; they come back paused.</value>
     <comment>Help step. {0} Resume.</comment>
   </data>
   <data name="Help_Downloads_Pause_Note" xml:space="preserve">
