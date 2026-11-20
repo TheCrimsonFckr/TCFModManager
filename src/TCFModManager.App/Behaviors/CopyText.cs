@@ -71,11 +71,43 @@ public static class CopyText
     {
         if (e.Handled || HasOwnMenu(e.OriginalSource) || Under(e.OriginalSource) is not { } block) return;
 
-        var menu = new ContextMenu { PlacementTarget = block, Placement = PlacementMode.MousePoint };
+        var dialog = Ancestor<Wpf.Ui.Controls.ContentDialog>(block);
+        var menu = new ContextMenu
+        {
+            PlacementTarget = (UIElement?)dialog ?? Window.GetWindow(block),
+            Placement = PlacementMode.MousePoint,
+        };
         menu.Items.Add(CopyItem(TextOf(block)));
+        if (dialog is not null) KeepFocusInDialog(menu, dialog);
+
         _rightClicked = null;
         menu.IsOpen = true;
         e.Handled = true;
+    }
+
+    private static void KeepFocusInDialog(ContextMenu menu, UIElement dialog)
+    {
+        menu.Focusable = false;
+
+        void OnKey(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Escape) return;
+            menu.IsOpen = false;
+            e.Handled = true;
+        }
+
+        dialog.PreviewKeyDown += OnKey;
+        menu.Closed += (_, _) => dialog.PreviewKeyDown -= OnKey;
+    }
+
+    private static T? Ancestor<T>(DependencyObject node) where T : DependencyObject
+    {
+        for (DependencyObject? at = node; at is not null; at = Parent(at))
+        {
+            if (at is T found) return found;
+        }
+
+        return null;
     }
 
     private static void OnKeyDown(object sender, KeyEventArgs e)
