@@ -7,6 +7,7 @@
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:vm="clr-namespace:TCFModManager.App.ViewModels"
     Title="{loc:Str Nav_Downloads}">
     <Page.Resources>
         <converters:DownloadQueueStatusToAppearanceConverter x:Key="StatusAppearance" />
@@ -27,6 +28,29 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="Margin" Value="0,6,12,0" />
         </Style>
+
+        <DataTemplate DataType="{x:Type vm:StatFigure}">
+            <DockPanel>
+                <TextBlock
+                    x:Name="Number"
+                    DockPanel.Dock="Left"
+                    Width="38"
+                    FontSize="11"
+                    TextAlignment="Right"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Text="{Binding Number}" />
+                <TextBlock
+                    FontSize="11"
+                    TextTrimming="CharacterEllipsis"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                    Text="{Binding Rest}" />
+            </DockPanel>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding HasNumber}" Value="False">
+                    <Setter TargetName="Number" Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
     </Page.Resources>
     <Grid Margin="16">
         <Grid.RowDefinitions>
@@ -105,11 +129,7 @@
                                 FontSize="10"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 Text="{loc:Str Downloads_StatLeftToFetch}" />
-                            <TextBlock
-                                FontSize="11"
-                                TextTrimming="CharacterEllipsis"
-                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                Text="{Binding SummaryRemaining}" />
+                            <ContentPresenter Content="{Binding SummaryRemaining}" />
                         </StackPanel>
                     </Border>
 
@@ -133,11 +153,7 @@
                                 FontSize="10"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 Text="{loc:Str Downloads_StatToUnpack}" />
-                            <TextBlock
-                                FontSize="11"
-                                TextTrimming="CharacterEllipsis"
-                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                Text="{Binding SummaryUnpacked}" />
+                            <ContentPresenter Content="{Binding SummaryUnpacked}" />
                         </StackPanel>
                     </Border>
 
@@ -243,11 +259,7 @@
                                                     FontSize="10"
                                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                     Text="{loc:Str Downloads_StatDownloaded}" />
-                                                <TextBlock
-                                                    FontSize="11"
-                                                    TextTrimming="CharacterEllipsis"
-                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                    Text="{Binding TransferredValue}" />
+                                                <ContentPresenter Content="{Binding TransferredValue}" />
                                             </StackPanel>
                                         </Border>
 
@@ -257,11 +269,7 @@
                                                     FontSize="10"
                                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                     Text="{loc:Str Downloads_StatSpeed}" />
-                                                <TextBlock
-                                                    FontSize="11"
-                                                    TextTrimming="CharacterEllipsis"
-                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                    Text="{Binding RateValue}" />
+                                                <ContentPresenter Content="{Binding RateValue}" />
                                             </StackPanel>
                                         </Border>
 
@@ -285,11 +293,7 @@
                                                     FontSize="10"
                                                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                     Text="{loc:Str Downloads_StatUnpacked}" />
-                                                <TextBlock
-                                                    FontSize="11"
-                                                    TextTrimming="CharacterEllipsis"
-                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                    Text="{Binding UnpackedValue}" />
+                                                <ContentPresenter Content="{Binding UnpackedValue}" />
                                             </StackPanel>
                                         </Border>
                                     </WrapPanel>

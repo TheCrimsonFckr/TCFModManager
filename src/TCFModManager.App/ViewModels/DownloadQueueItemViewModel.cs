@@ -158,17 +158,17 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
 
     // "173 of 258.3 MB" - both halves in the same unit, so the pair doesn't switch units partway
     // through and jump.
-    public string TransferredValue =>
-        TotalBytes is > 0 and var total ? SizePair(Progress * total, total) : NoValue;
+    public StatFigure TransferredValue =>
+        TotalBytes is > 0 and var total ? SizePair(Progress * total, total) : StatFigure.None;
 
-    public string RateValue =>
-        BytesPerSecond is { } rate ? Text(Strings.Downloads_RateFormat, Size(rate)) : NoValue;
+    public StatFigure RateValue =>
+        BytesPerSecond is { } rate ? SizeFigure(rate).Within(Strings.Downloads_RateFormat) : StatFigure.None;
 
     public string EtaValue => BytesPerSecond is > 0 and var rate && RemainingBytes is { } left
         ? Remaining(TimeSpan.FromSeconds(left / rate))
         : NoValue;
 
-    public string UnpackedValue => UnpackedBytes is { } bytes ? Size(bytes) : NoValue;
+    public StatFigure UnpackedValue => UnpackedBytes is { } bytes ? SizeFigure(bytes) : StatFigure.None;
 
 
     // What is left to fetch for this item, or null when its size isn't known yet. A pending item
@@ -235,7 +235,7 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     public static string RemainingLabel(TimeSpan left) => Remaining(left);
 
     // Both halves of "x of y" scaled to the larger one's unit.
-    private static string SizePair(double done, double total)
+    private static StatFigure SizePair(double done, double total)
     {
         var (scale, unit) = total switch
         {
@@ -245,11 +245,13 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
             _ => (1d, Strings.Common_UnitB),
         };
 
-        return Text(Strings.Downloads_TransferredFormat, done / scale, total / scale, unit);
+        return StatFigure.From(Strings.Downloads_TransferredFormat, done / scale, total / scale, unit);
     }
 
     // Shared with the Mod footprint page's own sizes, which is why the keys are Common_.
-    public static string Size(double bytes) => Text(
+    public static string Size(double bytes) => SizeFigure(bytes).ToString();
+
+    public static StatFigure SizeFigure(double bytes) => StatFigure.From(
         bytes switch
         {
             >= 1024d * 1024 * 1024 => Strings.Common_SizeGbFormat,

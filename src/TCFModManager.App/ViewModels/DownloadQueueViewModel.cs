@@ -42,7 +42,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
     // "85.3 MB"
     [ObservableProperty]
-    private string _summaryRemaining = NoValue;
+    private StatFigure _summaryRemaining = StatFigure.None;
 
     // How many queued items The Forge gave no size for, so the remaining figure never silently
     // under-reports. Its own box rather than a note on the remaining one, which would make that box
@@ -62,7 +62,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
     private bool _hasUnpackedSummary;
 
     [ObservableProperty]
-    private string _summaryUnpacked = NoValue;
+    private StatFigure _summaryUnpacked = StatFigure.None;
 
     private const string NoValue = "\u2014";
 
@@ -246,7 +246,8 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             HasSummary = false;
             HasUnsized = false;
             HasUnpackedSummary = false;
-            SummaryProgress = SummaryRemaining = SummaryEta = SummaryUnsized = SummaryUnpacked = NoValue;
+            SummaryProgress = SummaryEta = SummaryUnsized = NoValue;
+            SummaryRemaining = SummaryUnpacked = StatFigure.None;
 
             // Still notified on the way out: a queue that has just finished with failures in it is
             // exactly when the retry button has to appear.
@@ -261,7 +262,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         HasSummary = true;
         SummaryProgress = Text(Strings.Downloads_SummaryProgressFormat, done, Items.Count);
 
-        SummaryRemaining = remaining > 0 ? DownloadQueueItemViewModel.SizeLabel(remaining) : NoValue;
+        SummaryRemaining = remaining > 0 ? DownloadQueueItemViewModel.SizeFigure(remaining) : StatFigure.None;
 
         HasUnsized = unknown > 0;
         // Just the count: the caption above this box already says what they are, so there is no
@@ -278,9 +279,9 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         var unpacked = installs.Where(i => i.UnpackedBytes is not null).ToList();
         HasUnpackedSummary = installs.Count > 0;
         SummaryUnpacked = unpacked.Count > 0
-            ? Text(Strings.Downloads_SummaryUnpackedFormat,
-                DownloadQueueItemViewModel.SizeLabel(unpacked.Sum(i => i.UnpackedBytes!.Value)), unpacked.Count, installs.Count)
-            : NoValue;
+            ? DownloadQueueItemViewModel.SizeFigure(unpacked.Sum(i => i.UnpackedBytes!.Value))
+                .Within(Strings.Downloads_SummaryUnpackedFormat, unpacked.Count, installs.Count)
+            : StatFigure.None;
 
         OnPropertyChanged(nameof(HasRetryable));
     }
