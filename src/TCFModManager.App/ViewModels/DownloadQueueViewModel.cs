@@ -59,7 +59,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
     private const string NoValue = "\u2014";
 
-    // OPEN-52 N14: nothing new starts downloading while paused; downloads under way finish.
+    // OPEN-52 N14: while paused nothing new starts and downloads under way stop, carrying on after Resume; an install under way finishes.
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(PauseLabel))]
     [NotifyPropertyChangedFor(nameof(PauseSymbol))]
@@ -75,9 +75,15 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
     private bool _spaceChecked;
 
-    private TaskCompletionSource _resumed = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private readonly DownloadPause _transfers = new();
 
-    partial void OnIsPausedChanged(bool value) => UpdateSummary();
+    partial void OnIsPausedChanged(bool value)
+    {
+        if (value) _transfers.Pause();
+        else _transfers.Resume();
+
+        UpdateSummary();
+    }
 
     [RelayCommand]
     private void TogglePause()
@@ -101,9 +107,6 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
     {
         SpaceWarning = null;
         IsPaused = false;
-        var resumed = _resumed;
-        _resumed = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        resumed.TrySetResult();
         AppLog.Info("Downloads", "queue resumed");
     }
 
@@ -114,7 +117,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         while (IsPaused)
         {
             item.StatusMessage = Strings.Downloads_PausedWaiting;
-            await _resumed.Task.WaitAsync(token);
+            await _transfers.WaitAsync(token);
         }
     }
 
@@ -211,7 +214,8 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
     {
         if (e.PropertyName is nameof(DownloadQueueItemViewModel.Status)
             or nameof(DownloadQueueItemViewModel.Progress)
-            or nameof(DownloadQueueItemViewModel.TotalBytes))
+            or nameof(DownloadQueueItemViewModel.TotalBytes)
+            or nameof(DownloadQueueItemViewModel.IsTransferPaused))
         {
             UpdateSummary();
         }
@@ -576,7 +580,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
             item.StatusMessage = downloading;
             await AppServices.Downloads.DownloadRetryingAsync(version.Link!, part, progress,
-                Retrying(item, token, downloading), token, resumable: true);
+                Retrying(item, token, downloading), token, resumable: true, pause: _transfers);
             File.Move(part, path, overwrite: true);
         }
         catch (Exception ex)
@@ -613,6 +617,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             if (retry.State == DownloadRetryState.Retrying)
                 AppLog.Info("Downloads", $"{item.ModName} {item.VersionLabel}: attempt {retry.Attempt} failed ({retry.Cause}, {retry.Host}) - trying again in {retry.Wait.TotalSeconds:F0}s");
 
+            item.IsTransferPaused = retry.State == DownloadRetryState.Paused;
             item.StatusMessage = DownloadProblems.Waiting(retry) ?? working;
         });
 
@@ -868,7 +873,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             slot = true;
             await WaitToStartAsync(item, token);
 
-            await SaveArchiveCoreAsync(item, version, token);
+            await SaveArchiveCoreAsync(item, version, _transfers, token);
         }
         catch (Exception ex)
         {
@@ -880,7 +885,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         }
     }
 
-    private static async Task SaveArchiveCoreAsync(DownloadQueueItemViewModel item, ModVersion version, CancellationToken token)
+    private static async Task SaveArchiveCoreAsync(DownloadQueueItemViewModel item, ModVersion version, DownloadPause pause, CancellationToken token)
     {
         var folder = DownloadFolders.Resolve(new SettingsService().Load().Monitor.DownloadFolder);
 
@@ -892,7 +897,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
         var result = await AppServices.ModArchive.SaveArchiveAsync(
             item.Target, version, folder, item.InstallPath, item.DownloadSubfolder, downloadProgress, token,
-            Retrying(item, token, saving));
+            Retrying(item, token, saving), pause);
 
         if (token != item.Token || item.IsFinished) return;
 

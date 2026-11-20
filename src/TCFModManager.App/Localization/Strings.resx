@@ -11426,7 +11426,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Downloads page and bar, while paused.</comment>
   </data>
   <data name="Downloads_PauseToolTip" xml:space="preserve">
-    <value>Nothing new starts downloading until Resume. A download under way finishes.</value>
+    <value>Downloads stop until Resume, then carry on from where they stopped. An install under way finishes.</value>
     <comment>Tooltip on Pause.</comment>
   </data>
   <data name="Downloads_PausedWaiting" xml:space="preserve">
@@ -11782,11 +11782,11 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Help how-to title.</comment>
   </data>
   <data name="Help_Downloads_Pause_Step1" xml:space="preserve">
-    <value>Press {0} on {1}, or the pause button on the downloads bar. Nothing new starts downloading; a download under way finishes.</value>
+    <value>Press {0} on {1}, or the pause button on the downloads bar. Downloads stop; an install under way finishes.</value>
     <comment>Help step. {0} Pause, {1} Downloads.</comment>
   </data>
   <data name="Help_Downloads_Pause_Step2" xml:space="preserve">
-    <value>Press {0} to carry on.</value>
+    <value>Press {0} to carry on. Downloads pick up from where they stopped.</value>
     <comment>Help step. {0} Resume.</comment>
   </data>
   <data name="Help_Downloads_Pause_Note" xml:space="preserve">

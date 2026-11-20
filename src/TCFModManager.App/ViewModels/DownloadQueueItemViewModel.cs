@@ -101,6 +101,14 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     // Runs for the download stage only, which is the only stage with a measurable rate.
     private readonly Stopwatch _downloading = new();
 
+    // OPEN-52 N14: stopped by Pause part way through the transfer.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(RateValue))]
+    [NotifyPropertyChangedFor(nameof(EtaValue))]
+    private bool _isTransferPaused;
+
+    partial void OnIsTransferPausedChanged(bool value) => _samples.Clear();
+
     //
     // Recent progress, as (when, how many bytes had arrived) - the rate and the estimate are both
     // measured across this window rather than from the start of the download.
@@ -175,7 +183,7 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
         get
         {
             // Progress 1 is a download finished and waiting its turn to install (OPEN-12 F7).
-            if (Status != DownloadQueueItemStatus.Downloading || TotalBytes is not > 0 || Progress >= 1) return null;
+            if (IsTransferPaused || Status != DownloadQueueItemStatus.Downloading || TotalBytes is not > 0 || Progress >= 1) return null;
             if (_samples.Count < 2) return null;
 
             var oldest = _samples.Peek();
@@ -439,6 +447,8 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
     {
         if (value == DownloadQueueItemStatus.Downloading) _downloading.Restart();
         else _downloading.Stop();
+
+        IsTransferPaused = false;
 
         // Measurements belong to one run of one stage. A retry that kept them would read its first
         // seconds against a clock that had already been restarted underneath them.

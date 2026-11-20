@@ -41,7 +41,8 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
     //
     // DownloadAsync, tried again under RetryPolicy. <paramref name="retrying"/> hears each wait and
     // each restart. With <paramref name="resumable"/>, later attempts carry on from where the last one
-    // broke off; the caller removes ValidatorPathFor(destinationPath) if it gives up.
+    // broke off; the caller removes ValidatorPathFor(destinationPath) if it gives up. With
+    // <paramref name="pause"/>, a pause stops the transfer and it carries on after Resume.
     //
     public async Task<DownloadResponse> DownloadRetryingAsync(
         string downloadUrl,
@@ -49,22 +50,40 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
         IProgress<double>? progress = null,
         IProgress<DownloadRetry>? retrying = null,
         CancellationToken ct = default,
-        bool resumable = false)
+        bool resumable = false,
+        DownloadPause? pause = null)
     {
         var policy = RetryPolicy;
         var requestedHost = Uri.TryCreate(downloadUrl, UriKind.Absolute, out var uri) ? uri.Host : null;
         string? answeredHost = null;
         var connectionRetries = 0;
         var serverRetries = 0;
+        var started = false;
 
         for (var attempt = 1; ; attempt++)
         {
             await WaitOutCooldownAsync(requestedHost, answeredHost, retrying, attempt, ct).ConfigureAwait(false);
 
+            var paused = pause?.Token ?? CancellationToken.None;
+            using var transfer = CancellationTokenSource.CreateLinkedTokenSource(ct, paused);
+
             try
             {
-                return await DownloadAsync(downloadUrl, destinationPath, progress, ct,
-                    resume: resumable && attempt > 1, resumable: resumable).ConfigureAwait(false);
+                var resume = resumable && started;
+                started = true;
+                return await DownloadAsync(downloadUrl, destinationPath, progress, transfer.Token,
+                    resume: resume, resumable: resumable).ConfigureAwait(false);
+            }
+            catch (Exception) when (paused.IsCancellationRequested && !ct.IsCancellationRequested)
+            {
+                AppLog.Info("Downloads", $"{Path.GetFileName(destinationPath)}: paused");
+                retrying?.Report(new DownloadRetry(DownloadRetryState.Paused, DownloadRetryCause.Connection, requestedHost, TimeSpan.Zero, attempt));
+
+                await pause!.WaitAsync(ct).ConfigureAwait(false);
+
+                AppLog.Info("Downloads", $"{Path.GetFileName(destinationPath)}: resumed");
+                retrying?.Report(new DownloadRetry(DownloadRetryState.Resumed, DownloadRetryCause.Connection, requestedHost, TimeSpan.Zero, attempt));
+                attempt--;
             }
             catch (Exception ex) when (DownloadRetryPolicy.Classify(ex, ct) is { } cause)
             {

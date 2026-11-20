@@ -33,6 +33,11 @@ public class ModDownloadServiceTests : IDisposable
         // The next response sends nothing at all after its headers.
         public bool Stall { get; set; }
 
+        // The next response sends this many bytes, then nothing until it is cancelled.
+        public int? HoldAfter { get; set; }
+
+        public TaskCompletionSource Holding { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
         // Honours Range but not If-Range (joins whatever the file is now).
         public bool IgnoreIfRange { get; set; }
 
@@ -62,8 +67,11 @@ public class ModDownloadServiceTests : IDisposable
 
             var body = File.AsSpan((int)from).ToArray();
             if (partial && CapRange is { } cap) body = body[..Math.Min(cap, body.Length)];
-            Stream stream = Stall ? new StallingStream() : new BreakingStream(body, BreakAfter);
+            Stream stream = Stall ? new StallingStream()
+                : HoldAfter is { } hold ? new HoldingStream(body, hold, Holding)
+                : new BreakingStream(body, BreakAfter);
             BreakAfter = null;
+            HoldAfter = null;
             Stall = false;
 
             var response = new HttpResponseMessage(partial ? HttpStatusCode.PartialContent : HttpStatusCode.OK)
@@ -92,6 +100,20 @@ public class ModDownloadServiceTests : IDisposable
             if (breakAfter is { } limit && Position >= limit) throw new IOException("connection reset", new System.Net.Sockets.SocketException((int)System.Net.Sockets.SocketError.ConnectionReset));
             if (breakAfter is { } cap) buffer = buffer[..(int)Math.Min(buffer.Length, cap - Position)];
             return base.ReadAsync(buffer, ct);
+        }
+    }
+
+    private sealed class HoldingStream(byte[] data, int holdAfter, TaskCompletionSource holding) : MemoryStream(data)
+    {
+        public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken ct = default)
+        {
+            if (Position >= holdAfter)
+            {
+                holding.TrySetResult();
+                await Task.Delay(Timeout.Infinite, ct);
+            }
+
+            return await base.ReadAsync(buffer[..(int)Math.Min(buffer.Length, holdAfter - Position)], ct);
         }
     }
 
@@ -466,6 +488,72 @@ public class ModDownloadServiceTests : IDisposable
         await a;
 
         Assert.Empty(second.Items);
+    }
+
+    [Fact]
+    public async Task APausedDownload_StopsAndCarriesOnFromWhereItStopped()
+    {
+        var server = new Server(_file) { HoldAfter = 70_000 };
+        using var service = new ModDownloadService(new HttpClient(server));
+        var pause = new DownloadPause();
+        var paused = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var heard = new Heard<DownloadRetry> { OnReport = r => { if (r.State == DownloadRetryState.Paused) paused.TrySetResult(); } };
+
+        var download = service.DownloadRetryingAsync("http://x/mod.zip", Part, retrying: heard, resumable: true, pause: pause);
+        await server.Holding.Task;
+        pause.Pause();
+        await paused.Task;
+        await Task.Delay(100);
+
+        Assert.False(download.IsCompleted);
+        Assert.Single(server.Requests);
+        Assert.Equal(70_000, new FileInfo(Part).Length);
+
+        pause.Resume();
+        await download;
+
+        Assert.Equal(_file, File.ReadAllBytes(Part));
+        Assert.Equal(70_000, server.Requests[^1].Headers.Range!.Ranges.Single().From);
+        Assert.Equal([DownloadRetryState.Paused, DownloadRetryState.Resumed], heard.Items.Select(r => r.State));
+    }
+
+    [Fact]
+    public async Task CancellingWhilePaused_Cancels()
+    {
+        var server = new Server(_file) { HoldAfter = 70_000 };
+        using var service = new ModDownloadService(new HttpClient(server));
+        var pause = new DownloadPause();
+        using var cancel = new CancellationTokenSource();
+        var paused = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var heard = new Heard<DownloadRetry> { OnReport = r => { if (r.State == DownloadRetryState.Paused) paused.TrySetResult(); } };
+
+        var download = service.DownloadRetryingAsync("http://x/mod.zip", Part, retrying: heard, ct: cancel.Token, resumable: true, pause: pause);
+        await server.Holding.Task;
+        pause.Pause();
+        await paused.Task;
+        cancel.Cancel();
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => download);
+        Assert.Single(server.Requests);
+    }
+
+    [Fact]
+    public async Task ADownloadStartedWhilePaused_WaitsForResume()
+    {
+        var server = new Server(_file);
+        using var service = new ModDownloadService(new HttpClient(server));
+        var pause = new DownloadPause();
+        pause.Pause();
+
+        var download = service.DownloadRetryingAsync("http://x/mod.zip", Part, resumable: true, pause: pause);
+        await Task.Delay(100);
+        Assert.False(download.IsCompleted);
+
+        pause.Resume();
+        await download;
+
+        Assert.Equal(_file, File.ReadAllBytes(Part));
+        Assert.False(pause.IsPaused);
     }
 
     [Fact]

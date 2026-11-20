@@ -34,7 +34,8 @@ public sealed class ModArchiveService(ModDownloadService downloadService, Downlo
         string? subfolder = null,
         IProgress<double>? downloadProgress = null,
         CancellationToken ct = default,
-        IProgress<DownloadRetry>? retrying = null)
+        IProgress<DownloadRetry>? retrying = null,
+        DownloadPause? pause = null)
     {
         if (string.IsNullOrWhiteSpace(version.Link))
             throw new ModInstallException(ModInstallFailure.NoDownloadLink)
@@ -60,7 +61,7 @@ public sealed class ModArchiveService(ModDownloadService downloadService, Downlo
         try
         {
             var response = await downloadService
-                .DownloadRetryingAsync(version.Link, partPath, downloadProgress, retrying, ct)
+                .DownloadRetryingAsync(version.Link, partPath, downloadProgress, retrying, ct, resumable: true, pause: pause)
                 .ConfigureAwait(false);
 
             var fileName = DownloadFolders.FileNameFor(
@@ -71,6 +72,7 @@ public sealed class ModArchiveService(ModDownloadService downloadService, Downlo
         catch (Exception ex)
         {
             TryDelete(partPath);
+            TryDelete(ModDownloadService.ValidatorPathFor(partPath));
 
             if (ex is OperationCanceledException)
                 AppLog.Info("Download", $"{target.Name} {version.Version} cancelled");

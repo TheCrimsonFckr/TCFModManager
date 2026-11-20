@@ -9429,7 +9429,7 @@ Les détails sont dans le journal :
     <value>Reprendre</value>
   </data>
   <data name="Downloads_PauseToolTip" xml:space="preserve">
-    <value>Aucun nouveau téléchargement ne démarre avant Reprendre. Un téléchargement en cours se termine.</value>
+    <value>Les téléchargements s'arrêtent jusqu'à Reprendre, puis repartent là où ils s'étaient arrêtés. Une installation en cours se termine.</value>
   </data>
   <data name="Downloads_PausedWaiting" xml:space="preserve">
     <value>En pause - attend Reprendre</value>
@@ -9696,10 +9696,10 @@ Les détails sont dans le journal :
     <value>Mettre les téléchargements en pause</value>
   </data>
   <data name="Help_Downloads_Pause_Step1" xml:space="preserve">
-    <value>Appuyez sur {0} dans {1}, ou sur le bouton pause de la barre des téléchargements. Aucun nouveau téléchargement ne démarre ; un téléchargement en cours se termine.</value>
+    <value>Appuyez sur {0} dans {1}, ou sur le bouton pause de la barre des téléchargements. Les téléchargements s'arrêtent ; une installation en cours se termine.</value>
   </data>
   <data name="Help_Downloads_Pause_Step2" xml:space="preserve">
-    <value>Appuyez sur {0} pour continuer.</value>
+    <value>Appuyez sur {0} pour continuer. Les téléchargements repartent là où ils s'étaient arrêtés.</value>
   </data>
   <data name="Help_Downloads_Pause_Note" xml:space="preserve">
     <value>Si le disque de SPT semble trop plein au démarrage de la file, elle se met en pause seule et indique la place nécessaire. {0} continue quand même.</value>

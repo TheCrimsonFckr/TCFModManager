@@ -9429,7 +9429,7 @@ I dettagli sono nel log:
     <value>Riprendi</value>
   </data>
   <data name="Downloads_PauseToolTip" xml:space="preserve">
-    <value>Nessun nuovo download parte finché non premi Riprendi. Un download in corso finisce.</value>
+    <value>I download si fermano finché non premi Riprendi, poi ripartono da dove si erano fermati. Un'installazione in corso finisce.</value>
   </data>
   <data name="Downloads_PausedWaiting" xml:space="preserve">
     <value>In pausa - aspetta Riprendi</value>
@@ -9696,10 +9696,10 @@ I dettagli sono nel log:
     <value>Mettere in pausa i download</value>
   </data>
   <data name="Help_Downloads_Pause_Step1" xml:space="preserve">
-    <value>Premi {0} in {1}, o il pulsante pausa nella barra dei download. Nessun nuovo download parte; uno in corso finisce.</value>
+    <value>Premi {0} in {1}, o il pulsante pausa nella barra dei download. I download si fermano; un'installazione in corso finisce.</value>
   </data>
   <data name="Help_Downloads_Pause_Step2" xml:space="preserve">
-    <value>Premi {0} per continuare.</value>
+    <value>Premi {0} per continuare. I download ripartono da dove si erano fermati.</value>
   </data>
   <data name="Help_Downloads_Pause_Note" xml:space="preserve">
     <value>Se all'avvio della coda il disco di SPT sembra troppo pieno, si mette in pausa da sola e dice quanto spazio serve. {0} procede comunque.</value>

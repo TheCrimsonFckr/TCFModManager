@@ -21,6 +21,9 @@ public enum DownloadRetryState
 
     // The wait is over and the next attempt has started.
     Resumed,
+
+    // Stopped by DownloadPause; Resumed follows when it carries on. Cause and Wait mean nothing here.
+    Paused,
 }
 
 public sealed record DownloadRetry(DownloadRetryState State, DownloadRetryCause Cause, string? Host, TimeSpan Wait, int Attempt);

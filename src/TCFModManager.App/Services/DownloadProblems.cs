@@ -38,6 +38,7 @@ public static class DownloadProblems
     public static string? Waiting(DownloadRetry retry)
     {
         if (retry.State == DownloadRetryState.Resumed) return null;
+        if (retry.State == DownloadRetryState.Paused) return Strings.Downloads_PausedWaiting;
 
         if (retry.Cause == DownloadRetryCause.Connection)
             return Text(Strings.Downloads_RetryingFormat, retry.Wait.TotalSeconds);

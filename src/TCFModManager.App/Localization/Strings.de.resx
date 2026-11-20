@@ -9429,7 +9429,7 @@ Die Details stehen im Log:
     <value>Fortsetzen</value>
   </data>
   <data name="Downloads_PauseToolTip" xml:space="preserve">
-    <value>Bis Fortsetzen startet kein neuer Download. Ein laufender Download wird fertig.</value>
+    <value>Downloads halten bis Fortsetzen an und machen dann dort weiter, wo sie aufgehört haben. Eine laufende Installation wird fertig.</value>
   </data>
   <data name="Downloads_PausedWaiting" xml:space="preserve">
     <value>Pausiert - wartet auf Fortsetzen</value>
@@ -9696,10 +9696,10 @@ Die Details stehen im Log:
     <value>Downloads pausieren</value>
   </data>
   <data name="Help_Downloads_Pause_Step1" xml:space="preserve">
-    <value>Drücke {0} auf {1} oder die Pausetaste in der Downloadleiste. Kein neuer Download startet; ein laufender wird fertig.</value>
+    <value>Drücke {0} auf {1} oder die Pausetaste in der Downloadleiste. Downloads halten an; eine laufende Installation wird fertig.</value>
   </data>
   <data name="Help_Downloads_Pause_Step2" xml:space="preserve">
-    <value>Drücke {0}, um weiterzumachen.</value>
+    <value>Drücke {0}, um weiterzumachen. Downloads machen dort weiter, wo sie aufgehört haben.</value>
   </data>
   <data name="Help_Downloads_Pause_Note" xml:space="preserve">
     <value>Sieht das SPT-Laufwerk beim Start der Warteschlange zu voll aus, pausiert sie von selbst und sagt, wie viel Platz sie braucht. {0} macht trotzdem weiter.</value>
