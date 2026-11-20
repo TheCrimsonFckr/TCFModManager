@@ -10046,4 +10046,22 @@ Les détails sont dans le journal :
   <data name="ProfileClean_Done_other" xml:space="preserve">
     <value>{0} profils nettoyés ; une sauvegarde a été conservée.</value>
   </data>
+  <data name="ProfileClean_ReportTitle" xml:space="preserve">
+    <value>Profils nettoyés</value>
+  </data>
+  <data name="ProfileClean_ReportLead" xml:space="preserve">
+    <value>Ceci a été retiré de vos profils pour qu'ils s'ouvrent encore :</value>
+  </data>
+  <data name="ProfileClean_ReportLineFormat" xml:space="preserve">
+    <value>{0} - {1}</value>
+  </data>
+  <data name="ProfileClean_SkillFormat" xml:space="preserve">
+    <value>Compétence : {0}</value>
+  </data>
+  <data name="ProfileClean_ReportBackupFormat" xml:space="preserve">
+    <value>Une copie de chaque profil d'avant le nettoyage est conservée dans {0} &gt; {1}.</value>
+  </data>
+  <data name="ProfileClean_ReportSptFix" xml:space="preserve">
+    <value>Le nettoyage des objets de mods propre à SPT est maintenant activé.</value>
+  </data>
 </root>

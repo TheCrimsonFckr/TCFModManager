@@ -10046,4 +10046,22 @@ I dettagli sono nel log:
   <data name="ProfileClean_Done_other" xml:space="preserve">
     <value>{0} profili puliti; è stato conservato un backup.</value>
   </data>
+  <data name="ProfileClean_ReportTitle" xml:space="preserve">
+    <value>Profili puliti</value>
+  </data>
+  <data name="ProfileClean_ReportLead" xml:space="preserve">
+    <value>Questo è stato tolto dai tuoi profili, così si aprono ancora:</value>
+  </data>
+  <data name="ProfileClean_ReportLineFormat" xml:space="preserve">
+    <value>{0} - {1}</value>
+  </data>
+  <data name="ProfileClean_SkillFormat" xml:space="preserve">
+    <value>Abilità: {0}</value>
+  </data>
+  <data name="ProfileClean_ReportBackupFormat" xml:space="preserve">
+    <value>Una copia di ogni profilo di prima della pulizia è conservata in {0} &gt; {1}.</value>
+  </data>
+  <data name="ProfileClean_ReportSptFix" xml:space="preserve">
+    <value>La pulizia degli oggetti delle mod di SPT è ora attiva.</value>
+  </data>
 </root>

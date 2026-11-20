@@ -10469,4 +10469,22 @@
   <data name="ProfileClean_Done_other" xml:space="preserve">
     <value>Очищено {0} профиля; резервная копия сохранена.</value>
   </data>
+  <data name="ProfileClean_ReportTitle" xml:space="preserve">
+    <value>Профили очищены</value>
+  </data>
+  <data name="ProfileClean_ReportLead" xml:space="preserve">
+    <value>Из ваших профилей убрано следующее, чтобы они открывались:</value>
+  </data>
+  <data name="ProfileClean_ReportLineFormat" xml:space="preserve">
+    <value>{0} - {1}</value>
+  </data>
+  <data name="ProfileClean_SkillFormat" xml:space="preserve">
+    <value>Навык: {0}</value>
+  </data>
+  <data name="ProfileClean_ReportBackupFormat" xml:space="preserve">
+    <value>Копия каждого профиля до очистки хранится в разделе {0} &gt; {1}.</value>
+  </data>
+  <data name="ProfileClean_ReportSptFix" xml:space="preserve">
+    <value>Собственная очистка предметов модов в SPT теперь включена.</value>
+  </data>
 </root>

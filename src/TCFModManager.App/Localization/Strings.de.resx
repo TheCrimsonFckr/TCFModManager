@@ -10046,4 +10046,22 @@ Die Details stehen im Log:
   <data name="ProfileClean_Done_other" xml:space="preserve">
     <value>{0} Profile bereinigt; eine Sicherung wurde behalten.</value>
   </data>
+  <data name="ProfileClean_ReportTitle" xml:space="preserve">
+    <value>Profile bereinigt</value>
+  </data>
+  <data name="ProfileClean_ReportLead" xml:space="preserve">
+    <value>Das wurde aus deinen Profilen entfernt, damit sie sich weiter öffnen lassen:</value>
+  </data>
+  <data name="ProfileClean_ReportLineFormat" xml:space="preserve">
+    <value>{0} - {1}</value>
+  </data>
+  <data name="ProfileClean_SkillFormat" xml:space="preserve">
+    <value>Fertigkeit: {0}</value>
+  </data>
+  <data name="ProfileClean_ReportBackupFormat" xml:space="preserve">
+    <value>Eine Kopie jedes Profils von vor der Bereinigung liegt unter {0} &gt; {1}.</value>
+  </data>
+  <data name="ProfileClean_ReportSptFix" xml:space="preserve">
+    <value>Die eigene Bereinigung von Mod-Gegenständen in SPT ist jetzt eingeschaltet.</value>
+  </data>
 </root>

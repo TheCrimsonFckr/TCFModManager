@@ -173,11 +173,14 @@ internal sealed partial class ProfileCleanOffer
         var chosen = Picks.Where(p => p.IsChecked).Select(p => p.Tag).OfType<ProfileCleanPlan>().ToList();
         if (chosen.Count == 0 || _installPath is not { } installPath || _targets is not { } targets) return null;
 
-        var result = await Task.Run(() =>
+        var (result, turnedOn) = await Task.Run(() =>
         {
-            if (TurnsOnSptFix && SptProfileFixes.ConfigPath(installPath) is { } config) SptProfileFixes.TurnOn(config);
-            return ProfileCleaner.Clean(installPath, chosen, targets, AppServices.ProfileBackups);
+            var turnedOn = TurnsOnSptFix && SptProfileFixes.ConfigPath(installPath) is { } config
+                && SptProfileFixes.TurnOn(config) == SptProfileFixOutcome.TurnedOn;
+            return (ProfileCleaner.Clean(installPath, chosen, targets, AppServices.ProfileBackups), turnedOn);
         });
+
+        if (result.Failure is null && result.Cleaned.Count > 0) ShowReport(result.Cleaned, turnedOn);
 
         return result.Failure switch
         {
@@ -185,6 +188,52 @@ internal sealed partial class ProfileCleanOffer
             ProfileCleanFailure.BackupFailed => Strings.ProfileClean_BackupFailed,
             _ => LocalizationService.Text(Strings.ProfileClean_FailedFormat, result.FailedProfile ?? string.Empty),
         };
+    }
+
+    // What went from each profile, a line per profile opening to every skill, bot role, trader and item.
+    private void ShowReport(IReadOnlyList<ProfileCleanPlan> cleaned, bool turnedOn)
+    {
+        var names = Losses
+            .SelectMany(l => l.Things)
+            .Where(t => t.Name is not null)
+            .GroupBy(t => t.Id, StringComparer.Ordinal)
+            .ToDictionary(g => g.Key, g => g.First().Name!, StringComparer.Ordinal);
+
+        var detail = new List<string> { LocalizationService.Text(Strings.ProfileClean_ReportBackupFormat, Strings.Nav_Options, Strings.Profiles_Header) };
+        if (turnedOn) detail.Add(Strings.ProfileClean_ReportSptFix);
+
+        AskWindow.Show(new AskRequest
+        {
+            Title = Strings.ProfileClean_ReportTitle,
+            Lead = Strings.ProfileClean_ReportLead,
+            Sections = [AskSection.WithDetails(null, [.. cleaned
+                .OrderBy(p => p.ProfileName, StringComparer.CurrentCultureIgnoreCase)
+                .Select(p => new AskLine(
+                    LocalizationService.Text(Strings.ProfileClean_ReportLineFormat, p.ProfileName, Describe(p.Things)),
+                    Every(p.Things, names)))])],
+            Detail = detail,
+            First = Strings.Common_Close,
+            Cancel = null,
+        });
+    }
+
+    private static IReadOnlyList<string> Every(IReadOnlyList<ProfileCleanThing> things, IReadOnlyDictionary<string, string> names)
+    {
+        string Named(string id) => names.TryGetValue(id, out var name) ? name : LocalizationService.Text(Strings.ProfileItems_UnnamedFormat, id);
+
+        return
+        [
+            .. things.Where(t => t.Kind == ProfileCleanKind.Skill)
+                .Select(t => LocalizationService.Text(Strings.ProfileClean_SkillFormat, Spaced(t.Value))),
+            .. things.Where(t => t.Kind == ProfileCleanKind.BotRole)
+                .Select(t => LocalizationService.Text(Strings.ProfileClean_DeathCauseFormat, Spaced(t.Value))),
+            .. things.Where(t => t.Kind == ProfileCleanKind.Trader)
+                .Select(t => LocalizationService.Text(Strings.ProfileItems_TraderFormat, Named(t.Value)))
+                .Order(StringComparer.CurrentCultureIgnoreCase),
+            .. things.Where(t => t.Kind == ProfileCleanKind.Item)
+                .Select(t => t.Count > 1 ? LocalizationService.Text(Strings.ProfileItems_ItemCountFormat, Named(t.Value), t.Count) : Named(t.Value))
+                .Order(StringComparer.CurrentCultureIgnoreCase),
+        ];
     }
 
     private static string Describe(IReadOnlyList<ProfileCleanThing> things)

@@ -3354,4 +3354,10 @@ internal static class Strings
     internal static string ProfileClean_NoneTicked => LocalizationService.Get("ProfileClean_NoneTicked");
     internal static string ProfileClean_Done(int count, params object?[] values) =>
         LocalizationService.Plural("ProfileClean_Done", count, values);
+    internal static string ProfileClean_ReportTitle => LocalizationService.Get("ProfileClean_ReportTitle");
+    internal static string ProfileClean_ReportLead => LocalizationService.Get("ProfileClean_ReportLead");
+    internal static string ProfileClean_ReportLineFormat => LocalizationService.Get("ProfileClean_ReportLineFormat");
+    internal static string ProfileClean_SkillFormat => LocalizationService.Get("ProfileClean_SkillFormat");
+    internal static string ProfileClean_ReportBackupFormat => LocalizationService.Get("ProfileClean_ReportBackupFormat");
+    internal static string ProfileClean_ReportSptFix => LocalizationService.Get("ProfileClean_ReportSptFix");
 }

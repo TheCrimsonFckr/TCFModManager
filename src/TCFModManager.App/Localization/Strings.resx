@@ -12249,4 +12249,28 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Cleaned {0} profiles; a backup was kept.</value>
     <comment>Status line after cleaning profiles. {0}: how many</comment>
   </data>
+  <data name="ProfileClean_ReportTitle" xml:space="preserve">
+    <value>Profiles cleaned</value>
+    <comment>Title of the window shown after profiles were cleaned</comment>
+  </data>
+  <data name="ProfileClean_ReportLead" xml:space="preserve">
+    <value>This was taken out of your profiles, so they still open:</value>
+    <comment>Lead of the window shown after profiles were cleaned, above a line per profile</comment>
+  </data>
+  <data name="ProfileClean_ReportLineFormat" xml:space="preserve">
+    <value>{0} - {1}</value>
+    <comment>A line per cleaned profile. {0}: the profile's name. {1}: a summary of what went</comment>
+  </data>
+  <data name="ProfileClean_SkillFormat" xml:space="preserve">
+    <value>Skill: {0}</value>
+    <comment>One skill taken out of a profile. {0}: the skill's name</comment>
+  </data>
+  <data name="ProfileClean_ReportBackupFormat" xml:space="preserve">
+    <value>A copy of every profile from before the clean is kept in {0} &gt; {1}.</value>
+    <comment>Where the backup taken before a clean is. {0}: the Options page's name. {1}: the profile backups section's name</comment>
+  </data>
+  <data name="ProfileClean_ReportSptFix" xml:space="preserve">
+    <value>SPT's own clean-up of mod items is now turned on.</value>
+    <comment>After a clean, when SPT's own mod item clean-up was turned on in core.json</comment>
+  </data>
 </root>
