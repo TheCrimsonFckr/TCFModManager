@@ -3452,4 +3452,10 @@ internal static class Strings
     internal static string Copy_Name => LocalizationService.Get("Copy_Name");
     internal static string Copy_Version => LocalizationService.Get("Copy_Version");
     internal static string Copy_List => LocalizationService.Get("Copy_List");
+    internal static string Help_Start_Copy_Title => LocalizationService.Get("Help_Start_Copy_Title");
+    internal static string Help_Start_Copy_Step1 => LocalizationService.Get("Help_Start_Copy_Step1");
+    internal static string Help_Start_Copy_Step2 => LocalizationService.Get("Help_Start_Copy_Step2");
+    internal static string Help_Start_Copy_Step3 => LocalizationService.Get("Help_Start_Copy_Step3");
+    internal static string Help_Start_Copy_Step4 => LocalizationService.Get("Help_Start_Copy_Step4");
+    internal static string Help_Start_Copy_Keywords => LocalizationService.Get("Help_Start_Copy_Keywords");
 }

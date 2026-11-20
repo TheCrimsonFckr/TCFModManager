@@ -10340,4 +10340,22 @@ Les détails sont dans le journal :
   <data name="Copy_List" xml:space="preserve">
     <value>Copier la liste</value>
   </data>
+  <data name="Help_Start_Copy_Title" xml:space="preserve">
+    <value>Copier du texte</value>
+  </data>
+  <data name="Help_Start_Copy_Step1" xml:space="preserve">
+    <value>Faites un clic droit sur n'importe quel texte et choisissez Copier « ... ». Là où le texte a déjà un menu, comme la carte d'un mod, Copier est en haut de ce menu.</value>
+  </data>
+  <data name="Help_Start_Copy_Step2" xml:space="preserve">
+    <value>Ou placez le pointeur sur le texte et appuyez sur Ctrl+C.</value>
+  </data>
+  <data name="Help_Start_Copy_Step3" xml:space="preserve">
+    <value>Le texte des fenêtres d'avertissement, de {0}, des messages de {1} et d'un téléchargement échoué dans {2} peut aussi être sélectionné à la souris, une partie à la fois.</value>
+  </data>
+  <data name="Help_Start_Copy_Step4" xml:space="preserve">
+    <value>Dans Installés et Parcourir, le menu du clic droit d'un mod propose aussi {0}, {1}, le lien de sa page et son GUID. Avec plusieurs mods cochés dans Installés, {2} les copie chacun avec sa version.</value>
+  </data>
+  <data name="Help_Start_Copy_Keywords" xml:space="preserve">
+    <value>copier, copier du texte, presse-papiers, Ctrl+C, sélectionner du texte, copier le nom, copier la version, copier le GUID, copier la liste, message d'erreur</value>
+  </data>
 </root>

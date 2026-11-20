@@ -10763,4 +10763,22 @@
   <data name="Copy_List" xml:space="preserve">
     <value>Копировать список</value>
   </data>
+  <data name="Help_Start_Copy_Title" xml:space="preserve">
+    <value>Копировать текст</value>
+  </data>
+  <data name="Help_Start_Copy_Step1" xml:space="preserve">
+    <value>Щёлкните правой кнопкой мыши по любому тексту и выберите пункт Копировать «...». Если у текста уже есть меню, например у карточки мода, пункт копирования стоит в самом верху.</value>
+  </data>
+  <data name="Help_Start_Copy_Step2" xml:space="preserve">
+    <value>Или наведите указатель на текст и нажмите Ctrl+C.</value>
+  </data>
+  <data name="Help_Start_Copy_Step3" xml:space="preserve">
+    <value>Текст в окнах предупреждений, на странице {0}, в сообщениях на странице {1} и у неудавшейся загрузки в {2} можно также выделять мышью по частям.</value>
+  </data>
+  <data name="Help_Start_Copy_Step4" xml:space="preserve">
+    <value>На страницах «Установленные» и «Обзор» в меню мода по правому щелчку есть также {0}, {1}, ссылка на страницу мода и его GUID. Если на «Установленных» отмечено несколько модов, {2} копирует каждый с его версией.</value>
+  </data>
+  <data name="Help_Start_Copy_Keywords" xml:space="preserve">
+    <value>копировать, копировать текст, буфер обмена, Ctrl+C, выделить текст, копировать название, копировать версию, копировать GUID, копировать список, сообщение об ошибке</value>
+  </data>
 </root>

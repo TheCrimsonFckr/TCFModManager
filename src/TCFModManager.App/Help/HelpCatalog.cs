@@ -54,6 +54,14 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Start_BackForward_Step2),
                 Step(() => Strings.Help_Start_BackForward_Step3))
                 .WithKeywords(() => Strings.Help_Start_BackForward_Keywords),
+
+            // OPEN-61.
+            Topic("start.copy", () => Strings.Help_Start_Copy_Title,
+                Step(() => Strings.Help_Start_Copy_Step1),
+                Step(() => Strings.Help_Start_Copy_Step2),
+                Step(() => Strings.Help_Start_Copy_Step3, () => Strings.Nav_Diagnose, () => Strings.Nav_Profile, () => Strings.Nav_Downloads),
+                Step(() => Strings.Help_Start_Copy_Step4, () => Strings.Copy_Name, () => Strings.Copy_Version, () => Strings.Copy_List))
+                .WithKeywords(() => Strings.Help_Start_Copy_Keywords),
         ]),
 
         new("profile", () => Strings.Nav_Profile, SymbolRegular.Person24, typeof(ProfilePage),

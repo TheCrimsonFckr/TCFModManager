@@ -63,6 +63,7 @@
 - A crash bar when the server, the game or the Fika headless crashes, naming the mod when it can - *Completed*
 - Diagnose cards for a server that gave up while starting, and for Fika's own problems - *Completed*
 - Back and Forward through the pages you've visited - *Completed*
+- Copy any text - right-click or Ctrl+C, selectable warnings and error messages, and Copy name, version and list on the mod menus - *Completed*
 
 ## Planned
 

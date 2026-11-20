@@ -10340,4 +10340,22 @@ I dettagli sono nel log:
   <data name="Copy_List" xml:space="preserve">
     <value>Copia elenco</value>
   </data>
+  <data name="Help_Start_Copy_Title" xml:space="preserve">
+    <value>Copiare il testo</value>
+  </data>
+  <data name="Help_Start_Copy_Step1" xml:space="preserve">
+    <value>Fai clic destro su qualsiasi testo e scegli Copia "...". Dove il testo ha già un menu, come la scheda di una mod, Copia è in cima al menu.</value>
+  </data>
+  <data name="Help_Start_Copy_Step2" xml:space="preserve">
+    <value>Oppure punta il testo e premi Ctrl+C.</value>
+  </data>
+  <data name="Help_Start_Copy_Step3" xml:space="preserve">
+    <value>Il testo delle finestre di avviso, di {0}, dei messaggi in {1} e di un download non riuscito in {2} si può anche selezionare con il mouse, una parte alla volta.</value>
+  </data>
+  <data name="Help_Start_Copy_Step4" xml:space="preserve">
+    <value>In Installati e Sfoglia, il menu del clic destro di una mod ha anche {0}, {1}, il link alla sua pagina e il suo GUID. Con più mod spuntate in Installati, {2} le copia tutte con la loro versione.</value>
+  </data>
+  <data name="Help_Start_Copy_Keywords" xml:space="preserve">
+    <value>copia, copiare testo, appunti, Ctrl+C, selezionare testo, copia nome, copia versione, copia GUID, copia elenco, messaggio di errore</value>
+  </data>
 </root>

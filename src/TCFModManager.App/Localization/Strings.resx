@@ -12640,4 +12640,28 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Copy list</value>
     <comment>Installed right-click menu with several mods ticked (OPEN-61): one line per mod, name and version.</comment>
   </data>
+  <data name="Help_Start_Copy_Title" xml:space="preserve">
+    <value>Copy text</value>
+    <comment>Help how-to title (OPEN-61).</comment>
+  </data>
+  <data name="Help_Start_Copy_Step1" xml:space="preserve">
+    <value>Right-click any text and pick Copy "...". Where the text already has a menu, such as a mod's card, Copy is at the top of it.</value>
+    <comment>Help how-to step (OPEN-61).</comment>
+  </data>
+  <data name="Help_Start_Copy_Step2" xml:space="preserve">
+    <value>Or point at the text and press Ctrl+C.</value>
+    <comment>Help how-to step (OPEN-61).</comment>
+  </data>
+  <data name="Help_Start_Copy_Step3" xml:space="preserve">
+    <value>Text in warning windows, on {0}, in messages on {1} and in a failed download on {2} can also be selected with the mouse, a part at a time.</value>
+    <comment>Help how-to step (OPEN-61). {0} Diagnose logs, {1} Profile, {2} Downloads.</comment>
+  </data>
+  <data name="Help_Start_Copy_Step4" xml:space="preserve">
+    <value>On Installed and Browse, a mod's right-click menu also has {0}, {1}, its mod page link and its GUID. With several mods ticked on Installed, {2} copies each one with its version.</value>
+    <comment>Help how-to step (OPEN-61). {0} Copy name, {1} Copy version, {2} Copy list.</comment>
+  </data>
+  <data name="Help_Start_Copy_Keywords" xml:space="preserve">
+    <value>copy, copy text, clipboard, Ctrl+C, select text, copy name, copy version, copy GUID, copy list, error message</value>
+    <comment>Help search keywords (OPEN-61).</comment>
+  </data>
 </root>

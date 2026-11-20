@@ -12,6 +12,8 @@ Rather install mods yourself? **Monitor mode** has the app download each mod for
 
 **Back and Forward.** The two arrows at the top of the sidebar go back and forward through the pages you've opened, as a browser does, and right-clicking either lists the pages that way. Alt+Left and Alt+Right, or your mouse's side buttons, do the same.
 
+**Copy text.** Right-click any text and pick **Copy "..."**, or point at it and press Ctrl+C. Where the text already has a menu, such as a mod's card, Copy is at the top of it. Text in warning windows, on Diagnose logs, in Play's messages and in a failed download can also be selected with the mouse.
+
 WPF with Fluent Design and .NET 9
 
 The released build is entirely self-contained.

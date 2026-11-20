@@ -10340,4 +10340,22 @@ Die Details stehen im Log:
   <data name="Copy_List" xml:space="preserve">
     <value>Liste kopieren</value>
   </data>
+  <data name="Help_Start_Copy_Title" xml:space="preserve">
+    <value>Text kopieren</value>
+  </data>
+  <data name="Help_Start_Copy_Step1" xml:space="preserve">
+    <value>Klicken Sie mit der rechten Maustaste auf einen beliebigen Text und wählen Sie „...“ kopieren. Hat der Text schon ein Menü, etwa die Karte eines Mods, steht Kopieren ganz oben darin.</value>
+  </data>
+  <data name="Help_Start_Copy_Step2" xml:space="preserve">
+    <value>Oder zeigen Sie auf den Text und drücken Sie Strg+C.</value>
+  </data>
+  <data name="Help_Start_Copy_Step3" xml:space="preserve">
+    <value>Text in Warnfenstern, auf {0}, in Meldungen auf {1} und bei einem fehlgeschlagenen Download in {2} lässt sich auch mit der Maus markieren, Stück für Stück.</value>
+  </data>
+  <data name="Help_Start_Copy_Step4" xml:space="preserve">
+    <value>Unter Installiert und Durchsuchen hat das Rechtsklickmenü eines Mods auch {0}, {1}, den Link zur Mod-Seite und die GUID. Sind unter Installiert mehrere Mods angehakt, kopiert {2} jeden mit seiner Version.</value>
+  </data>
+  <data name="Help_Start_Copy_Keywords" xml:space="preserve">
+    <value>kopieren, Text kopieren, Zwischenablage, Strg+C, Text markieren, Namen kopieren, Version kopieren, GUID kopieren, Liste kopieren, Fehlermeldung</value>
+  </data>
 </root>
