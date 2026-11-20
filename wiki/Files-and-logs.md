@@ -28,6 +28,10 @@ Everything lives next to the exe:
 | `Data\dismissed_spt_warnings.json` | "Not for this SPT" warnings you dismissed on Installed - per mod, version and SPT |
 | `Data\mod_configs.json` | Your per-mod choice of what an update does with that mod's configs, and any unusual places it keeps them |
 | `Data\themes\` | Your own themes, one file each - see [Themes](Themes) |
+| `Data\mod_notes.json` | Your notes on mods |
+| `Data\mod-links.json` | Hand-installed mods and addons you linked to their sp-mod page |
+| `Data\profile-mod-ids.json` | Which item and trader ids each server mod's files carry, by file size and time, for the profile check |
+| `Data\download-queue.json` | Unfinished downloads kept when the app closed, read back and cleared on the next start |
 | `Data\ServerMap\` | On a server: the shared key (`servermap-key.txt`), the list it publishes, and the map's machines (`clients.json`) |
 | `.tcfmm-update\` | Hidden. Only exists while an app update is downloading, or if one failed; cleaned up on the next launch |
 

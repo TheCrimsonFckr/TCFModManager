@@ -18,6 +18,8 @@ Disabled mods stay in the list with a red **DISABLED** tag, and the enabled or d
 
 **You get a warning before you break something.** If disabling a mod would take away something another mod depends on - or if you enable a mod whose own dependencies are still switched off - the app lists what's affected and offers to carry those along. Dependencies are read from the mods themselves, so this works offline and covers mods you installed by hand that were never matched to a listing here.
 
+**Your profiles are checked first.** When a profile holds items, traders or skills from a mod you're disabling, the question names it and offers to clean it once the mod is off - see [Installed](Installed#profiles-are-checked-before-mods-go).
+
 **Undo** puts the last change back.
 
 **Updating or removing a disabled mod** doesn't need it enabled first. An update keeps it disabled. A removal takes it from where it is, and Undo puts it back disabled - see [Installed](Installed#removing-a-mod-can-be-undone). A mod with only part of it disabled comes out of an update whole and on.

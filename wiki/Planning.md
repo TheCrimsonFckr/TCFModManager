@@ -45,7 +45,26 @@
 - Quick play - the server and your last profile in one click, from the sidebar, the tray or a desktop shortcut - *Completed*
 - Addons - every installed addon gets its own card, removing or disabling a mod can take its addons with it, and mod lists offer an addon's missing mod and catch addon versions that won't fit - *Completed*
 - Linux - the Windows build running under Wine or Proton, in the same prefix as your SPT game - see [Linux](Linux) - *Completed*
+- Skip an update, notes on mods, Enabled first / Disabled first sorting, and putting mods in groups from the right-click menu - *Completed*
+- Group icons - 31 icons drawn for the app, on group headers, chips, the Group filter and the menu - *Completed*
+- Pause downloads, and a free-space check before the queue starts - *Completed*
+- Ctrl+F, F5, and pasting or dropping a sp-mod link to open it - *Completed*
+- Animations on, off or following Windows - *Completed*
+- A warning for mods that need a mod that isn't installed or is switched off, before you launch - *Completed*
+- Let SPT clean a profile it won't load, from Diagnose logs and Play - *Completed*
+- Start the Fika headless along with the server - *Completed*
+- Profiles checked before mods go - which profile holds items from a mod you're about to remove or disable, and how many - *Completed*
+- Go back to the version before an update, and link a hand-installed mod to its sp-mod page - *Completed*
+- Updates in dependency order - *Completed*
+- Pause that stops downloads under way, unfinished downloads kept when the app closes, and the unpacked size in the queue - *Completed*
+- Mods that only update together offered together, and a Held back filter - *Completed*
+- Group colours - 11 colours, as a tint on group headers and chips - *Completed*
+- Clean profiles when mods go - skills, bot roles, items and traders taken out of the profiles you tick, with a backup first - *Completed*
 
 ## Planned
 
+- Find the broken mod - start the server with halves of your server mods off until the one stopping it is found - *Planned*
+- A crash bar after the server or game crashes, and Diagnose cards for Fika's own problems - *Planned*
+- Copies of your character from a friend's Fika server, kept on your PC - *Planned*
+- Back and Forward through the pages you've visited - *Planned*
 - More ideas are welcome on the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues)

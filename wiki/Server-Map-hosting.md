@@ -132,19 +132,17 @@ enabled or disabled; no files on the game folder change.
 The list is re-read whenever its file changes, so **publishing again takes effect without
 restarting the server**.
 
-The published list gets a blue **Serving** badge on the Mod lists page, so among a dozen personal
-lists you can see which one other people are being handed.
+The published list moves under **Serving** on the Mod lists page, so among a dozen personal lists
+you can see which one other people are being handed.
 
-> [!WARNING]
-> **Do not apply your published list on the machine that hosts.** Scope decides what a machine takes
-> from a list a *server* served it; a list of your own applies whole, every entry whatever its scope.
-> So a list pruned down to what players need names none of your server's mods, and applying it on the
-> server box sets aside `fika-server`, SVM and the Server Map mod itself which is the thing serving the
-> list. Nothing is deleted and **Undo** puts it straight back, but your server stops publishing until
-> you do.
+From then on that list is **served, not applied**, on this machine. Its **Preview** shows mods newer
+here than on the list and what the machines on the Map will get that they don't now - added, removed,
+version and scope changes - and **Serve** sends it. Nothing on this install changes, so the list
+never touches the server's own mods.
 
-Keep **two lists on the server box**: the full one you apply there, and the pruned one you publish.
-A list is a manifest rather than a copy of anything, so a second one costs nothing.
+If you also play from the server's folder, **Apply as a player** takes the list's player mods the way
+someone joining would, setting aside nothing the list doesn't name. Want a list of the whole server
+box as well? Keep it as a second list of your own - a list is a manifest, so it costs nothing.
 
 ## Stop a server mod being sent to my players?
 
@@ -161,6 +159,7 @@ name gets it; what is not, does not.
 |---|---|
 | **Server + Client + Headless** | everything. A mod with both halves, by default |
 | **Server + Client** | the server and the players, but not the headless |
+| **Server + Headless** | the server and the headless, but not the players |
 | **Client + Headless** | every machine running the game. A plugin, by default |
 | **Client only** | players only. HUD tweaks, sound packs, anything drawn at a person |
 | **Headless only** | the headless box alone |
@@ -170,12 +169,13 @@ A **Server only** entry is not fetched by a player, not counted as missing, and 
 their "you are behind" list.
 
 Scope is worked out for you when you capture a list, from where the mod's files actually live. To
-change one: select the list, find the row, and pick from its **scope dropdown**. If the mod's sp-mod
-page says it doesn't belong on a headless, the row says so and offers the change - see
-[Headless advice](Mod-lists#headless-advice). Then **Save**, then **Publish to this server** again.
+change one: select the list, find the row, and use its **Server**, **Client** and **Headless**
+toggles. If the mod's sp-mod
+page says it doesn't belong on a headless, or the list says it belongs somewhere else, the row says
+so and offers the change - see [Where it goes](Mod-lists#where-it-goes). Then **Save**, **Preview**
+and **Serve**.
 
-The **scope filter** above the list matches one exactly, which is the question you have while tidying
-one: what have I already pruned, and what is still carrying the capture default?
+The same three toggles above the list show the entries that go to any machine you tick.
 
 ## Serve a Fika headless only what it needs?
 
@@ -189,9 +189,13 @@ One list still covers everybody. The machine reading it takes the entries scoped
   not need. Nothing on disk separates a bot overhaul from a HUD widget, so the guess goes the safe
   way: a headless carrying a spare mod costs nothing anyone can see, while one missing an item or bot
   mod is felt by everybody in the raid it is hosting.
-- **A headless still takes Server only entries.** It is a full SPT install, and a server-only entry
-  is a whole mod rather than half of one. **Server + Client** is how you say the server and the
-  players need this and the headless does not.
+- **A headless that also runs the server** (started from the server's own SPT folder) takes
+  everything naming the server or the headless. **One on its own machine** takes only what names the
+  headless, plus a server mod when something it runs needs it or its sp-mod page says the headless
+  does. **Server + Client** is how you say the server and the players need this and the headless
+  does not.
+- **Mods go whole.** A machine gets both halves of a mod or neither, and a mod the list keeps off a
+  machine is set aside there.
 - **The headless machine has to know what it is.** On that machine: **Options** → **What this
   machine is**. The app asks by itself when you set the install folder and it finds
   `FikaHeadlessManager.exe`; until somebody answers, the machine is treated as an ordinary player,
@@ -203,8 +207,9 @@ then is read as **Client + Headless** now.
 
 ## Update the list my server is serving?
 
-Edit the list, **Save** it, then **Publish to this server** again. That is all the server picks
-up the new file on its own.
+Edit the list, **Save** it, then **Preview** and **Serve**. That is all - the server picks up the
+new file on its own. Preview shows what the machines on the Map will get that they don't now, and
+**Serve** stays off while there is nothing new to send.
 
 **The list you publish stays yours to edit.** A copy of it coming back off your own server never
 replaces the original, so hosting and playing on one machine does not turn your own list read-only.

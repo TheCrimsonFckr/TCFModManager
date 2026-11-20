@@ -13,6 +13,8 @@ The app comes in **Light** and **Dark**, plus five built-in themes, and you can 
 
 The change happens straight away, with no restart. The built-in themes and your own stay as they are when Windows switches between light and dark. The Server page's log keeps its own colours whatever the theme.
 
+**Animations.** Under the theme, **Animations** is **Follow Windows** (the default - Windows' own Animation effects setting decides), **On** or **Off**. Off stops cards gliding into place, pages fading in and cards opening with a slide.
+
 ## Making your own
 Click **Customise** beside the dropdown.
 

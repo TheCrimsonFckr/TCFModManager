@@ -44,7 +44,7 @@ Your existing version is untouched and still works - that's by design. The new b
 You applied a list that names none of them - usually the pruned one meant for players - on the machine that hosts. Nothing was deleted: press **Undo** on the Mod lists page and everything comes straight back. Keep two lists on that machine, one to apply there and one to publish.
 
 ## The list from my server never updates
-Press **Refresh from server** on the list, on the Mod lists page. It asks again whether or not the revision has moved. If you are the operator and clients aren't seeing a change, publish again after saving - publishing is what hands the new version out.
+Press **Refresh from server** on the list, on the Mod lists page. It asks again whether or not the revision has moved. If you are the operator and clients aren't seeing a change, **Preview** and **Serve** after saving - serving is what hands the new version out.
 
 ## My headless installed a pile of mods it doesn't need
 It is reading as an ordinary player. **Options - What this machine is** says whether anybody plays there and whether it runs a headless client; a served list is only trimmed once that is answered. If the app never asked, it didn't find `FikaHeadlessManager.exe` at the top of the install folder - point **Options - Fika headless launcher** at it.

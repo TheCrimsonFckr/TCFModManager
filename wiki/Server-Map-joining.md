@@ -65,8 +65,10 @@ headless has `SPT.Server.exe`, BepInEx and a game client exactly like a player's
 manager lives somewhere else, or is named something else, point **Options** → **Fika headless
 launcher** at it - it does not have to be inside the install folder.
 
-This only ever narrows a list a server served you. Your own lists apply whole, and nothing here
-changes what you can install by hand.
+This narrows a list a server served you, and on a dedicated headless your own lists too. Anywhere
+else your own lists apply whole, and nothing here changes what you can install by hand. Both switches
+on is a setup Fika doesn't use - a headless runs from its own copy of SPT - so Options warns and the
+machine is treated as a player.
 
 ## Get the server's mod list?
 
@@ -74,7 +76,7 @@ You do not have to ask for it. Connecting fetches it, and it is fetched again on
 server's revision moves. **Fetch again** on the **Server map** page asks for it even when the
 revision has not moved, for a copy you have edited or deleted.
 
-The list is saved here as a new mod list, badged red as **From server** on the Mod lists page. It
+The list is saved here as a new mod list, under **Following** on the Mod lists page (**From server** once you stop following it). It
 stays exactly as the server wrote it you cannot edit it. If you want a version of your own, use
 **Make a copy**. **Refresh from server**, on the list itself, is the same re-ask from the page where
 the list actually lives.
@@ -86,7 +88,7 @@ your own card on the Server map page. It opens the server's list with the previe
 
 Or by hand, like any other list:
 
-1. **Mod lists** → select the list badged **From server**.
+1. **Mod lists** → select the server's list under **Following**.
 2. **Preview** to see exactly what would change.
 3. **Apply** to queue the downloads.
 
@@ -130,8 +132,9 @@ buttons still work.
 
 ## Find one mod on a long list?
 
-A served list can run to eighty mods. Above the list contents there is a **search box**, a **scope
-filter** (All scopes, then each of the six scopes) and a **sort** (A-Z / Z-A).
+A served list can run to eighty mods. Above the list contents there is a **search box**, a **sort**
+(A-Z, Z-A, Last added, Needs attention first) and **Server**, **Client** and **Headless** toggles that
+show the entries going to any machine you tick.
 
 Search matches the mod's name, the name the list stored, and the folder it installs into so you
 can find something by the folder name if that is what you know it by.
@@ -164,6 +167,7 @@ own marked *This machine*:
 - A coloured line for where it stands against the server's list - green when it has everything,
   amber or red naming what is outstanding.
 - Mods it has that are not on the list, and an expander with everything it has installed.
+- Mods it still has on that the list keeps off it - what its next apply will set aside.
 
 It refreshes every minute while the page is open. **Refresh** sends your own report first, so your
 card always shows what you see on your own screen.

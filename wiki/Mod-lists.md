@@ -1,12 +1,18 @@
 A **mod list** is a named set of mods and the versions of them you run. Capture what you have now, switch between sets, send one to a friend, or follow the one a server publishes. It records mods and versions, never files, so capturing is instant however big your install is.
 
-**New list → From what's installed…** saves whatever is enabled right now, under a name you give it; **New list → Empty list…** starts one with nothing on it, for building a list by hand. Pick a list on the left and its name, **Preview** and a **⋯** menu sit at the top. **Preview** works out what applying it would do, and nothing moves until you press **Apply** - which takes Preview's place once a plan is showing, so the button is always the next step. The preview starts with coloured counts - *1 missing* in red, *2 incorrect versions* in amber, *1 disabled* in blue, *72 correct* in green, and grey for anything you have to fetch yourself, anything it would set aside and pinned mods. Every row below reads like the list itself - name, folder, version, scope - with a badge in the same colours and the icon the Installed page uses for that state. An incorrect version shows the move, *3.0.0 → 3.1.2*, and the Apply button says what it is about to do: *Install 1 mod*, *Install 2, update 1*.
+**New list → From what's installed…** saves whatever is enabled right now, under a name you give it; **New list → Empty list…** starts one with nothing on it, for building a list by hand. Pick a list on the left and its name, **Preview** and a **⋯** menu sit at the top. **Preview** works out what applying it would do, and nothing moves until you press **Apply** - which takes Preview's place once a plan is showing, so the button is always the next step. The list you follow - your own active list, or the one a server sends you - opens straight into its plan, with **Check again** in Preview's place; when it already matches, you see its contents and a line saying so. The preview starts with coloured counts - *1 missing* in red, *2 incorrect versions* in amber, *1 disabled* in blue, *72 correct* in green, and grey for anything you have to fetch yourself, anything it would set aside and pinned mods. Every row below reads like the list itself - name, folder, version, scope - with a badge in the same colours and the icon the Installed page uses for that state. An incorrect version shows the move, *3.0.0 → 3.1.2*, and the Apply button says what it is about to do: *Install 1 mod*, *Install 2, update 1*, or *Update 1, downgrade 2* when the list names older versions than you have.
 
-**Apply** downloads what the list names and you do not have, enables what you have but had switched off, and moves anything the list does not name into the disabled folder. **Nothing is ever deleted.** Setting a mod aside is the same move the Installed page's disable button makes, and it is near-instant however large the mod is.
+Every list's contents show the same badge on each row against this install - *Missing*, the version move, *Disabled*, *Correct* - with a line above counting them, so you can see where you stand before pressing anything.
+
+**Saved lists**, on the left, sorts your lists into **Serving**, **Following**, **Your lists**, **Imported** and **From server**, newest first. Hover a list for its full detail. A yellow dot marks one that needs a look - changed since it was served, mods newer here than on it, Where it goes warnings, or this install not matching a list you follow - and its tooltip says which. A list gets its dot once you've opened it.
+
+**Apply** downloads what the list names and you do not have, enables what you have but had switched off, and moves anything the list does not name into the disabled folder. A mod is always installed, enabled or set aside whole, both halves together. **Nothing is ever deleted.** If Apply can't fetch anything at all, the plan stays up with a red **Nothing was installed** bar naming each mod and why. Setting a mod aside is the same move the Installed page's disable button makes, and it is near-instant however large the mod is. When a profile holds something from a mod the list would set aside, Apply asks first and offers to clean the profile once the list is applied - see [Installed](Installed#profiles-are-checked-before-mods-go).
 
 **Pin** the mods you want kept whatever list you apply - a HUD, a sound pack, the quality-of-life mods that don't belong on any one list. A pinned mod is never set aside: Preview lists it as **Pinned** instead, with a button to unpin it. Pin from that Preview row, or with **Pin** on the mod's opened card on the Installed page. A pinned mod shows a pin under its disable button on Installed, beside its name in any list's contents, and on its Browse card. Pins belong to your install and never travel with a list you share.
 
-**Also needed.** Preview asks sp-mod what the mods on the list need, and lists any the list doesn't name under **Also needed**, with what needs each one - to install, to enable, or to keep on when the list would otherwise set it aside. Ticked ones go with the apply; untick any you don't want. They are not added to the list itself unless you tick **Also add the ticked ones to this list** (your own lists only). One already installed at another version is left as it is - the Dependencies and Conflicts page judges versions. An addon's own mod is offered here too when the list doesn't name it, at the newest version every listed addon accepts. If sp-mod can't be reached, Preview says so and you can still apply.
+**Your own list behind your install.** Update a mod from the Installed page and your list still names the old version. On the list you follow or the one you publish, Preview doesn't roll it back: the row reads *Newer here*, Apply leaves it alone, and a bar offers **Refresh versions**, which takes only those newer versions onto the list. Then **Save** (and **Serve** it again, for the list you serve). Any other list downgrades it, and the Apply button says so.
+
+**Also needed.** Preview asks sp-mod what the mods on the list need, and lists any the list doesn't name under **Also needed**, with what needs each one - to install, to enable, or to keep on when the list would otherwise set it aside. Ticked ones go with the apply; untick any you don't want. They are not added to the list itself unless you tick **Also add the ticked ones to this list** (your own lists only). One already installed at another version is left as it is - the Dependencies and Conflicts page judges versions. An addon's own mod is offered here too when the list doesn't name it, at the newest version every listed addon accepts. On a served list, a mod the list puts on another machine reads *Needed here by …*, and one the server already runs as a server-only mod (APBS for PBT, say) is met there and not offered. If sp-mod can't be reached, Preview says so and you can still apply.
 
 **Undo last apply** (bottom left) puts the install back the way it was before the last apply. There is one undo point, kept up to date for you: applying a list replaces it, and using it clears it.
 
@@ -16,11 +22,13 @@ A **mod list** is a named set of mods and the versions of them you run. Capture 
 ## Editing a list
 The pencil next to a list's name renames it (Enter saves, Esc cancels). Everything else you do to the list as a whole - export, copy, publish, refresh, stop following, delete - is in its **⋯** menu.
 
-Each mod on a list is a card: its thumbnail, author, downloads and category, its sp-mod summary and badges, with folder, version and remove at the top right and its scope at the bottom right. **Compact**, above the list, switches to one short row per mod - easier to scan on a long list - and **Cards** switches back. The choice is remembered.
+Each mod on a list is a card: its thumbnail, author, downloads and category, its sp-mod summary and badges, with folder, version and remove at the top right and its scope toggles at the bottom right. **Compact**, above the list, switches to one short row per mod - easier to scan on a long list - and **Cards** switches back. The choice is remembered.
+
+Above the mods sit a search box, a sort - A-Z, Z-A, **Last added** (newest first; entries added before v1.29 come after, by name) and **Needs attention first** (warnings, then hints, then mods not correct here) - and the filter toggles: **Server**, **Client** and **Headless** show the entries that go to any machine you tick, and **Needs attention** only the rows the sort puts first - a warning or hint, or not correct here.
 
 Changing what's on it is three steps, and they are separate on purpose:
 
-1. **Add mods**, a row's scope dropdown and the **X** on a row change the list on screen only.
+1. **Add mods**, a row's scope toggles and the **X** on a row change the list on screen only.
 2. **Save**, on the bar that appears above the mods while there are changes, writes the list. **Discard** throws the changes away. No downloads, nothing moved - the only thing Save changes is what the list says.
 3. **Apply** is the only thing on this page that touches your game folder.
 
@@ -52,12 +60,13 @@ A list on sp-mod doesn't store versions: its page shows each mod's newest versio
 **Create list** stores it as an imported list - read-only, like any list you didn't write - and applying it only adds: it installs and enables what it names and sets nothing aside. **Refresh from sp-mod** (in **⋯**) reads the page again and shows what was added, removed or changed before updating, keeping the rows you unticked last time; importing the same list again does the same. **Open on sp-mod** opens its page. sp-mod's page doesn't say which machines a mod is for, so an imported list's entries start as **Not checked yet**. Once you apply it, each one takes the scope its installed files show, the same way a captured list's do, and a refresh keeps it.
 
 ## Who each mod is for
-Every entry names the machines it is for. It is worked out for you at capture time from where the mod's files actually live, and shown on every row. Pick a different one from the **scope dropdown** on the right of the row, and the filter above the list matches one exactly - which answers the question you have when tidying a list: what have I already pruned, and what is still carrying the capture default?
+Every entry names the machines it is for. It is worked out for you at capture time from where the mod's files actually live, and shown on every row. Change it with the **Server**, **Client** and **Headless** toggles on the right of the row - any combination, and one always stays on. The same toggles above the list show the entries that go to any machine you tick.
 
 | Scope | Who gets it |
 | --- | --- |
 | Server + Client + Headless | Everything. A mod with both halves, by default |
 | Server + Client | The server and the players; not the headless |
+| Server + Headless | The server and the headless; not the players |
 | Client + Headless | Every machine running the game. A plugin, by default |
 | Client only | Players only - HUD tweaks, sound packs, anything drawn at a person |
 | Headless only | The headless box alone |
@@ -65,7 +74,20 @@ Every entry names the machines it is for. It is worked out for you at capture ti
 
 What is in the name gets it; what is not, does not. Nothing on disk separates a bot overhaul from a HUD widget - both are a DLL in `BepInEx\plugins` - so a capture gives every plugin to the headless and you take away what it does not need. That direction is deliberate: a headless carrying a spare mod costs nothing anyone can see, while one missing an item or bot mod is felt by everybody in the raid it is hosting.
 
-### Headless advice
+### Where it goes
+Rows get a **Where it goes:** line when something about the list says a mod belongs somewhere else:
+
+- **A Fika sync addon on sp-mod** for a mod on the list, and not on the list - **Add it** puts it on at the mod's scope, without the server.
+- **An addon sent to machines its mod isn't** - widen the mod, or narrow the addon.
+- **A dependency left off a machine** where something that needs it loads. A server-only dependency is met by the server, so it never asks.
+- **Nothing that needs this goes to the headless** - a library can come off it.
+- **Nothing to load there** - a server-only mod sent to clients, or a plugin sent only to the server.
+- **Bots carry this mod's items** - an item mod taken off the headless, which spawns the bots.
+- **What another mod's page says about this one**, and **the headless needs only the sync**.
+
+The most important one shows on the row with its fix; the others are in its tooltip. Nothing changes until you press the button and save, and **Keep** hides the line on that list. Dependencies are asked of sp-mod in the background for lists you can edit, so those lines can arrive a moment later.
+
+#### Headless advice
 Many mod authors say on their sp-mod page whether a mod belongs on a Fika headless - VRAM Cleaner's install steps say *Don't install onto a fika headless client*. The page reads each mod's description and shows what it says, quoting the author:
 
 - **Keep off headless** - the page says not to put it on a headless, and this entry still sends it there. **Make it Client only** (or **Server + Client** for a mod with a server half) beside the scope does what the page says.
@@ -74,29 +96,29 @@ Many mod authors say on their sp-mod page whether a mod belongs on a Fika headle
 - **Keep** beside a Keep off headless hint hides it for that list on this PC, if you want the headless to have the mod anyway. It comes back if the mod's page changes its advice.
 - An addon uses its own sp-mod page first, and its mod's page when its own says nothing about a headless; the tooltip says which.
 
-Nothing changes until you press the button and save. The **Headless advice** entry in the scope filter shows just the rows with something to act on, and a capture tells you how many there are. Descriptions are read once and remembered, and read again when the mod's page changes. On a list you can't edit, the advice shows without the buttons.
+Nothing changes until you press the button and save. The **Needs attention** toggle above the list shows the rows with something to act on, and a capture tells you how many there are. Descriptions are read once and remembered, and read again when the mod's page changes. On a list you can't edit, the advice shows without the buttons.
 
-A **headless still takes Server only entries**. It is a full SPT install, and a server-only entry is a whole mod rather than half of one. **Server + Client** is how you say the server and the players need this and the headless does not.
+**What a headless takes.** A headless that also runs the server - the headless started from the server's own SPT folder - takes everything naming the server or the headless. A headless on its own machine takes only what names the headless, plus a **Server + Client** or **Server only** mod when something it runs needs it or its sp-mod page says the headless does. **Server + Client** is how you say the server and the players need this and the headless does not.
 
 > [!NOTE]
-> Scope only ever narrows a list a server served you. **Your own lists describe your own install and apply whole** - which matters if you host and play on the same machine, see below.
+> Scope narrows a list a server served you, and on a dedicated headless your own lists too. Anywhere else **your own lists describe your own install and apply whole** - which matters if you host and play on the same machine, see below.
 
 ## If you run the server
 Publishing needs the Server Map mod on the server - see [Server map](Server-map). The steps here are the mod list half.
 
 1. **Capture the list on the machine the server runs on**, so the server's own mods are in it and scoped `Server only` for you.
 2. **Prune it for the people receiving it.** Take the headless off anything it does not need; leave the players everything they do.
-3. **Publish to this server** (in the list's **⋯** menu) writes it where the server serves it from. The list gets a blue **Serving** badge so you can see which of a dozen personal lists is the one going out.
-4. **Edit, Save, and publish again** to hand out a new version. The revision moves only when what you published actually changed, so republishing an unchanged list is a no-op and the number still means something.
+3. **Publish to this server** (in the list's **⋯** menu) makes it the list the server serves. It moves under **Serving** in Saved lists.
+4. **Edit, Save, Preview, Serve** to hand out a new version. On the server machine the served list is served, never applied: **Preview** shows mods newer here than on the list and what the machines on the Map will get that they don't now - added, removed, version and scope changes - and **Serve** sends it. Nothing on this install changes. The revision moves only when what you serve actually changed.
 
 On the joining side, a served list is stored read-only and marked as coming from that server. **Refresh from server** (in **⋯**) asks for it again whether or not the revision has moved - for a copy you doubt - and names what came back. It installs nothing; applying is still a separate step.
 
-> [!WARNING]
-> **Do not apply your published client list on the machine that hosts.** A list of your own applies whole - every entry, whatever its scope - so one pruned down to what players need names none of your server's mods, and applying it there sets aside `fika-server`, SVM and the Server Map mod itself, which is the thing publishing the list. Nothing is deleted and **Undo** puts it straight back, but your server stops serving until you do.
+> [!NOTE]
+> The list you serve never touches the server's own mods. If you also play from the server's folder (the plays-here switch under **What this machine is** in Options), **Apply as a player** takes the list's player mods the way someone joining would - it sets aside nothing the list doesn't name.
 
-The shape that works is **two lists on the server box**: the full one you apply there, and the pruned one you publish. They are cheap - a list is a manifest, not a copy of anything.
+Want a list of the whole server box as well? Keep it as a second list of your own and apply it as usual - lists are cheap, a manifest rather than a copy of anything.
 
 ## Following a server and your own list at once
-Both can be active, and each shows a green **Following** badge. Following a server does not cost you the personal list you were already following, and applying a list of your own will not sweep away what the server requires - the mods it asks for are spared.
+Both can be active, and both sit under **Following**. Following a server does not cost you the personal list you were already following, and applying a list of your own will not sweep away what the server requires - the mods it asks for are spared.
 
-A list a server hands you **never disables anything**, whatever its author chose. An operator writing a list is describing their install; applying that verbatim on your machine would set aside mods the server has never heard of and has no opinion about.
+A list a server hands you **never disables a mod it doesn't name**, whatever its author chose. An operator writing a list is describing their install; applying that verbatim on your machine would set aside mods the server has never heard of and has no opinion about. A mod the list names and keeps off this machine is set aside, though - except a server-only mod on a player, which may be their own solo server.

@@ -1,10 +1,13 @@
-The install queue. Up to three items download at once while the ones already downloaded install one at a time, in the order they were queued; each resolves its dependencies and queues those alongside it. A download that breaks off is tried again twice, carrying on from where it stopped when the server allows it. One that gets a server error - sp-mod, or the site the file is hosted on, not answering or turning requests away - is tried three more times over about 50 seconds, or after the wait the server asks for, up to a minute. While one site is failing, other downloads from it wait instead of failing too. Monitor-mode saves and app updates are retried the same way.
+The install queue. Up to three items download at once while the ones already downloaded install one at a time, in the order they were queued; each resolves its dependencies and queues those alongside it, and a library installs before the mods that need it. A download that breaks off is tried again twice, carrying on from where it stopped when the server allows it. One that gets a server error - sp-mod, or the site the file is hosted on, not answering or turning requests away - is tried three more times over about 50 seconds, or after the wait the server asks for, up to a minute. While one site is failing, other downloads from it wait instead of failing too. Monitor-mode saves and app updates are retried the same way.
 
 While anything is downloading or installing, a bar along the bottom of the window says what and how far the whole queue has got; click it to come here. It goes a few seconds after the queue finishes.
 
 - Live progress per item
 - **Cancel** on any individual item - cancelling a mod also cancels the dependencies it dragged in
 - **Clear finished** to tidy up
+- **Pause** - downloads under way stop where they are, and **Resume** carries them on from there; an install already under way finishes. It's also on the downloads bar. Closing the app keeps any unfinished downloads, and they come back paused next time, with the questions you already answered remembered.
+- **Unpacked size** - once an archive is in, its card shows how big it is unpacked, and the queue shows the total still to unpack.
+- **Free space** - when the queue starts, it checks your SPT drive has room for about three times what it's about to download, plus 500 MB. If not, it pauses before anything starts and says how much it needs and how much is free; **Download anyway** goes ahead.
 - Plain archive downloads, for when you'd rather install something by hand
 - **Not for Fika:** on an install that runs Fika, a version sp-mod marks as not working with Fika is asked about before it downloads. **Cancel** (the default) leaves just that one out; **Install anyway** or **Download anyway** goes ahead.
 

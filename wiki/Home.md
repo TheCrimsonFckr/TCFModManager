@@ -8,6 +8,8 @@ Rather install mods yourself? **Monitor mode** has the app download each mod for
 
 **Stuck on something?** The app has its own **Help** page in the sidebar: short step-by-step answers for every page, in your language. Press **?** in the title bar or **F1** to open it at the page you're on. This wiki is the full reference.
 
+**Shortcuts.** Ctrl+F goes to the page's search box and F5 does what its Rescan or Refresh button does. With a sp-mod link copied, Ctrl+V outside a text box opens that mod or addon in the app, and a Mod List link opens the list import; dragging a link from your browser onto the window does the same.
+
 WPF with Fluent Design and .NET 9
 
 The released build is entirely self-contained.
