@@ -3331,4 +3331,27 @@ internal static class Strings
     internal static string AddonFiles_FilterPlaceholder => LocalizationService.Get("AddonFiles_FilterPlaceholder");
     internal static string AddonFiles_Chosen(int count, params object?[] values) =>
         LocalizationService.Plural("AddonFiles_Chosen", count, values);
+    internal static string ServerValues_RemoveNoteFormat => LocalizationService.Get("ServerValues_RemoveNoteFormat");
+    internal static string ProfileClean_Heading => LocalizationService.Get("ProfileClean_Heading");
+    internal static string ProfileClean_HeadingNow => LocalizationService.Get("ProfileClean_HeadingNow");
+    internal static string ProfileClean_Explain => LocalizationService.Get("ProfileClean_Explain");
+    internal static string ProfileClean_SkillsFormat => LocalizationService.Get("ProfileClean_SkillsFormat");
+    internal static string ProfileClean_DeathCauseFormat => LocalizationService.Get("ProfileClean_DeathCauseFormat");
+    internal static string ProfileClean_CantCleanFormat => LocalizationService.Get("ProfileClean_CantCleanFormat");
+    internal static string ProfileClean_SptFixNote => LocalizationService.Get("ProfileClean_SptFixNote");
+    internal static string ProfileClean_BackupFailed => LocalizationService.Get("ProfileClean_BackupFailed");
+    internal static string ProfileClean_FailedFormat => LocalizationService.Get("ProfileClean_FailedFormat");
+    internal static string Profiles_ReasonClean => LocalizationService.Get("Profiles_ReasonClean");
+    internal static string ModInstall_InUseCleanProfilesFormat => LocalizationService.Get("ModInstall_InUseCleanProfilesFormat");
+    internal static string Diagnose_CleanProfiles => LocalizationService.Get("Diagnose_CleanProfiles");
+    internal static string Diagnose_CleanProfilesToolTip => LocalizationService.Get("Diagnose_CleanProfilesToolTip");
+    internal static string ProfileClean_Title => LocalizationService.Get("ProfileClean_Title");
+    internal static string ProfileClean_FoundWarning => LocalizationService.Get("ProfileClean_FoundWarning");
+    internal static string ProfileClean_Lead => LocalizationService.Get("ProfileClean_Lead");
+    internal static string ProfileClean_Clean => LocalizationService.Get("ProfileClean_Clean");
+    internal static string ProfileClean_NothingFound => LocalizationService.Get("ProfileClean_NothingFound");
+    internal static string ProfileClean_CantCheck => LocalizationService.Get("ProfileClean_CantCheck");
+    internal static string ProfileClean_NoneTicked => LocalizationService.Get("ProfileClean_NoneTicked");
+    internal static string ProfileClean_Done(int count, params object?[] values) =>
+        LocalizationService.Plural("ProfileClean_Done", count, values);
 }

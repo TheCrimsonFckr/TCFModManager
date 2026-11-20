@@ -199,6 +199,33 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
+                <StackPanel x:Name="PickPanel" Margin="0,12,0,0">
+                    <TextBlock Style="{StaticResource AskText}" FontWeight="SemiBold" Text="{Binding Heading}" />
+                    <TextBlock
+                        Style="{StaticResource AskText}"
+                        Margin="0,4,0,0"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Text="{Binding Explain}"
+                        Visibility="{Binding HasExplain, Converter={StaticResource AskBoolToVis}}" />
+                    <ItemsControl Margin="8,4,0,0" Focusable="False" ItemsSource="{Binding Items}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type local:AskPick}">
+                                <CheckBox Margin="0,2,0,2" VerticalContentAlignment="Top" IsChecked="{Binding IsChecked, Mode=TwoWay}">
+                                    <StackPanel>
+                                        <TextBlock Style="{StaticResource AskText}" Text="{Binding Text}" />
+                                        <TextBlock
+                                            FontSize="11"
+                                            TextWrapping="Wrap"
+                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                            Text="{Binding Detail}"
+                                            Visibility="{Binding HasDetail, Converter={StaticResource AskBoolToVis}}" />
+                                    </StackPanel>
+                                </CheckBox>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
                 <ItemsControl x:Name="DetailList" Focusable="False">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>

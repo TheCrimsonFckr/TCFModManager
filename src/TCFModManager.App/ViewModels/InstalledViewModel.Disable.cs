@@ -169,19 +169,15 @@ public partial class InstalledViewModel
     // about it, moves the folders, then rescans. Returns the moves it made so a caller running two
     // passes (InvertGroupAsync) can merge them into one undo step, or null when nothing happened.
     //
-    private async Task<bool> ConfirmProfilesAsync(IReadOnlyList<InstalledModCardViewModel> targets)
+    private async Task<ProfileCleanOffer?> ConfirmProfilesAsync(IReadOnlyList<InstalledModCardViewModel> targets)
     {
         StatusMessage = Strings.ProfileItems_Checking;
         IsCheckingProfiles = true;
-        var losses = await ProfileItemsWarning.ForCardsAsync(targets);
-        var adding = await ServerValuesWarning.AddingAsync(targets);
+        var offer = await ProfileCleanOffer.ForCardsAsync(targets, removing: false);
         IsCheckingProfiles = false;
         StatusMessage = null;
 
-        if (losses.Count > 0)
-            return ProfileItemsWarning.Confirm(losses, Strings.ProfileItems_DisableAnyway, ServerValuesWarning.Note(adding) is { } note ? [note] : null);
-
-        return adding.Count == 0 || ServerValuesWarning.Confirm(adding);
+        return offer.IsEmpty || ProfileItemsWarning.Confirm(offer, Strings.ProfileItems_DisableAnyway) ? offer : null;
     }
 
     private async Task<List<ModMove>?> ApplyDisableAsync(
@@ -234,7 +230,12 @@ public partial class InstalledViewModel
             }
         }
 
-        if (disable && confirm && !await ConfirmProfilesAsync(targets)) return null;
+        var offer = ProfileCleanOffer.None;
+        if (disable && confirm)
+        {
+            if (await ConfirmProfilesAsync(targets) is not { } asked) return null;
+            offer = asked;
+        }
 
         var entries = targets.SelectMany(c => c.Entries).Where(e => e.IsDisabled != disable).ToList();
 
@@ -272,6 +273,7 @@ public partial class InstalledViewModel
             ? Strings.Installed_DisabledCount(targets.Count)
             : Strings.Installed_EnabledCount(targets.Count);
         if (outcome.Failed.Count > 0) message = Sentences(message, DescribeFailures(outcome.Failed));
+        if (outcome.Moved.Count > 0 && await offer.CleanAsync() is { } cleaned) message = Sentences(message, cleaned);
 
         await ScanAsync();
         StatusMessage = message;

@@ -12157,4 +12157,96 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>{0} files ticked</value>
     <comment>Count under the file list.</comment>
   </data>
+  <data name="ServerValues_RemoveNoteFormat" xml:space="preserve">
+    <value>{0} adds values of its own to the server, such as skills. Once it is removed, the server can't load a profile that has them.</value>
+    <comment>Note before removing a mod that adds its own values to the server (an SPT 4.1 enum prepatch). {0}: the mod's name, or several.</comment>
+  </data>
+  <data name="ProfileClean_Heading" xml:space="preserve">
+    <value>Clean these profiles once the mods have gone</value>
+    <comment>Heading over the tick list of profiles to clean, in the question before mods are disabled, removed or a mod list is applied</comment>
+  </data>
+  <data name="ProfileClean_HeadingNow" xml:space="preserve">
+    <value>Clean these profiles</value>
+    <comment>Heading over the tick list of profiles to clean, from the Diagnose page</comment>
+  </data>
+  <data name="ProfileClean_Explain" xml:space="preserve">
+    <value>Ticked profiles have these taken out, so they still open. Every profile is backed up first. Skill progress taken out doesn't come back if the mod is turned on again - the backup is the way back.</value>
+    <comment>Explains the tick list of profiles to clean</comment>
+  </data>
+  <data name="ProfileClean_SkillsFormat" xml:space="preserve">
+    <value>Skills: {0}</value>
+    <comment>Under a profile to clean: the skills taken out. {0}: skill names</comment>
+  </data>
+  <data name="ProfileClean_DeathCauseFormat" xml:space="preserve">
+    <value>Cause of death: {0}</value>
+    <comment>Under a profile to clean: the bot role taken out of its last cause of death. {0}: bot role names</comment>
+  </data>
+  <data name="ProfileClean_CantCleanFormat" xml:space="preserve">
+    <value>{0} also adds values the clean can't take out of a profile ({1}). To play a profile that has them, turn the mod back on.</value>
+    <comment>Note when a leaving mod adds values of a kind the clean can't take out. {0}: the mod's name. {1}: the values</comment>
+  </data>
+  <data name="ProfileClean_SptFixNote" xml:space="preserve">
+    <value>SPT's own clean-up of mod items will be turned on too, so it catches anything left over the next time the server starts.</value>
+    <comment>Note when cleaning profiles also turns on SPT's own clean-up switches in core.json</comment>
+  </data>
+  <data name="ProfileClean_BackupFailed" xml:space="preserve">
+    <value>The profiles couldn't be backed up, so none were cleaned.</value>
+    <comment>Status line when the profiles couldn't be backed up before a clean</comment>
+  </data>
+  <data name="ProfileClean_FailedFormat" xml:space="preserve">
+    <value>{0} couldn't be cleaned, so no profile was changed.</value>
+    <comment>Status line when a profile couldn't be read or written during a clean. {0}: the profile's name</comment>
+  </data>
+  <data name="Profiles_ReasonClean" xml:space="preserve">
+    <value>Before cleaning profiles</value>
+    <comment>Why a profile backup was taken: before cleaning profiles</comment>
+  </data>
+  <data name="ModInstall_InUseCleanProfilesFormat" xml:space="preserve">
+    <value>Close {0} before cleaning profiles - the SPT server saves the profiles when it closes, and would save over the cleaned ones.</value>
+    <comment>Status line when profiles can't be cleaned because SPT runs. {0}: what to close</comment>
+  </data>
+  <data name="Diagnose_CleanProfiles" xml:space="preserve">
+    <value>Clean profiles</value>
+    <comment>Button on a Diagnose card about a profile: clean profiles</comment>
+  </data>
+  <data name="Diagnose_CleanProfilesToolTip" xml:space="preserve">
+    <value>Take skills and bot roles from mods that are gone out of your profiles</value>
+    <comment>Tooltip on the Clean profiles button</comment>
+  </data>
+  <data name="ProfileClean_Title" xml:space="preserve">
+    <value>Clean profiles</value>
+    <comment>Title of the Clean profiles question</comment>
+  </data>
+  <data name="ProfileClean_FoundWarning" xml:space="preserve">
+    <value>Some of your profiles hold skills or bot roles from mods that are no longer installed and turned on. A profile that has them won't open.</value>
+    <comment>Warning on the Clean profiles question</comment>
+  </data>
+  <data name="ProfileClean_Lead" xml:space="preserve">
+    <value>Do you want to clean them?</value>
+    <comment>Question on the Clean profiles window</comment>
+  </data>
+  <data name="ProfileClean_Clean" xml:space="preserve">
+    <value>Clean</value>
+    <comment>Button on the Clean profiles question</comment>
+  </data>
+  <data name="ProfileClean_NothingFound" xml:space="preserve">
+    <value>No profile holds skills or bot roles from mods that are gone.</value>
+    <comment>Status line when no profile needs cleaning</comment>
+  </data>
+  <data name="ProfileClean_CantCheck" xml:space="preserve">
+    <value>SPT's own list of skills and bot roles couldn't be read, so the profiles weren't checked.</value>
+    <comment>Status line when SPT's own skill and bot role lists can't be read from its server dll</comment>
+  </data>
+  <data name="ProfileClean_NoneTicked" xml:space="preserve">
+    <value>No profile was ticked, so nothing was cleaned.</value>
+    <comment>Status line when the Clean profiles question went ahead with nothing ticked</comment>
+  </data>
+  <data name="ProfileClean_Done_one" xml:space="preserve">
+    <value>Cleaned {0} profile; a backup was kept.</value>
+    <comment>Status line after cleaning profiles. {0}: how many</comment>
+  </data>
+  <data name="ProfileClean_Done_other" xml:space="preserve">
+    <value>Cleaned {0} profiles; a backup was kept.</value>
+    <comment>Status line after cleaning profiles. {0}: how many</comment>
+  </data>
 </root>

@@ -37,7 +37,10 @@ public partial class InstalledViewModel
 
         StatusMessage = Strings.ProfileItems_Checking;
         IsCheckingProfiles = true;
-        var losses = await ProfileItemsWarning.ForCardsAsync([mod]);
+        var leaving = addons.Count > 0
+            ? [mod, .. AddonCardsOf(mod).Where(a => addons.Any(r => r.ModId == a.ModId && r.IsAddon == a.IsAddon))]
+            : new List<InstalledModCardViewModel> { mod };
+        var offer = await ProfileCleanOffer.ForCardsAsync(leaving, removing: true);
         IsCheckingProfiles = false;
         StatusMessage = null;
 
@@ -72,7 +75,7 @@ public partial class InstalledViewModel
             if (record.InstallPath is null && !InstallStamp.AppIsInside(installPath))
                 detail.Add(Text(Strings.Installed_RemoveNoInstallStampFormat, installPath));
 
-            if (ConfirmRemoval(mod, Text(Strings.Installed_RemoveAppLeadFormat, mod.Name), [], detail, configs.Count, losses)
+            if (ConfirmRemoval(mod, Text(Strings.Installed_RemoveAppLeadFormat, mod.Name), [], detail, configs.Count, offer)
                 is not { } configAction)
             {
                 return;
@@ -85,6 +88,7 @@ public partial class InstalledViewModel
                 var result = await AppServices.ModInstall.UninstallAsync(installPath, record, configAction, batch: batch);
                 StatusMessage = WithRemovedAddons(
                     DescribeRemoval(mod.Name, result.FailedFiles.Count, result.ConfigsKept, result.ConfigsFolder, result), removedAddons);
+                if (await offer.CleanAsync() is { } cleaned) StatusMessage = Sentences(StatusMessage, cleaned);
                 ModRemoved?.Invoke(this, EventArgs.Empty);
             }
             catch (ModInstallException ex)
@@ -128,7 +132,7 @@ public partial class InstalledViewModel
                     [new(null, [.. HandRemovalShown(mod, paths.Select(p => p!))])],
                     [],
                     configs.Count,
-                    losses) is not { } configAction)
+                    offer) is not { } configAction)
             {
                 return;
             }
@@ -154,6 +158,7 @@ public partial class InstalledViewModel
 
                 StatusMessage = WithRemovedAddons(
                     DescribeRemoval(mod.Name, failedFiles: 0, kept.Count, kept.Folder, held: held is not null), removedAddons);
+                if (await offer.CleanAsync() is { } cleaned) StatusMessage = Sentences(StatusMessage, cleaned);
                 ModRemoved?.Invoke(this, EventArgs.Empty);
             }
             catch (ModInstallException ex)
@@ -229,7 +234,8 @@ public partial class InstalledViewModel
 
         StatusMessage = Strings.ProfileItems_Checking;
         IsCheckingProfiles = true;
-        var losses = await ProfileItemsWarning.ForCardsAsync(targets);
+        var offer = await ProfileCleanOffer.ForCardsAsync(targets, removing: true);
+        var losses = offer.Losses;
         IsCheckingProfiles = false;
         StatusMessage = null;
 
@@ -237,21 +243,22 @@ public partial class InstalledViewModel
         var profileMods = targets.Where(t => !holding.Contains(t.DisplayTitle) && ChangesProfile(t)).Select(t => t.DisplayTitle).ToList();
 
         var sections = new List<AskSection> { new(null, [.. targets.Select(t => t.DisplayTitle)]) };
-        if (losses.Count > 0) sections.Add(ProfileItemsWarning.Section(losses));
+        sections.AddRange(offer.Sections);
         if (profileMods.Count > 0) sections.Add(new(Strings.Installed_RemoveSelectedProfileHeading, profileMods));
         if (leftTwice.Count > 0) sections.Add(new(Strings.Installed_RemoveSelectedTwiceHeading, leftTwice));
 
         var detail = new List<string>();
         if (profileMods.Count > 0 || losses.Count > 0) detail.Add(Strings.Installed_ProfileUndoMany);
+        detail.AddRange(offer.Notes);
         detail.Add(HeldSentence());
 
         var confirmed = AskWindow.Show(new AskRequest
         {
             Title = Strings.Installed_RemoveSelectedTitle,
-            Warning = losses.Count > 0 ? Strings.ProfileItems_Intro
-                : profileMods.Count > 0 ? Strings.Installed_RemoveSelectedProfileWarning : null,
+            Warning = offer.Warning ?? (profileMods.Count > 0 ? Strings.Installed_RemoveSelectedProfileWarning : null),
             Lead = Strings.Installed_RemoveSelectedLead,
             Sections = sections,
+            Picks = offer.PickList,
             Detail = detail,
             Footnote = Text(Strings.Installed_RemoveSelectedConfigsKeptFormat, AppPaths.LegacyConfigsDirectory),
             First = Strings.Installed_Remove,
@@ -303,12 +310,14 @@ public partial class InstalledViewModel
             IsBusy = false;
         }
 
+        var cleaned = removed > 0 ? await offer.CleanAsync() : null;
         if (removed > 0) ModRemoved?.Invoke(this, EventArgs.Empty);
 
         await ScanAsync();
 
         var message = Text(Strings.Installed_RemovedSelectedFormat, removed, targets.Count);
         if (failed.Count > 0) message = Sentences(message, Text(Strings.Installed_RemoveSelectedFailedFormat, TextLists.Join(failed)));
+        if (cleaned is not null) message = Sentences(message, cleaned);
         StatusMessage = message;
     }
 
@@ -516,14 +525,16 @@ public partial class InstalledViewModel
     /// them in the same window. Returns null when the user backed out.</summary>
     private static ConfigAction? ConfirmRemoval(
         InstalledModCardViewModel mod, string lead, IReadOnlyList<AskSection> sections, IReadOnlyList<string> detail, int configCount,
-        IReadOnlyList<ProfileLoss> losses)
+        ProfileCleanOffer offer)
     {
+        var losses = offer.Losses;
         var profile = losses.Count > 0 || ChangesProfile(mod);
-        if (losses.Count > 0) sections = [.. sections, ProfileItemsWarning.Section(losses)];
+        sections = [.. sections, .. offer.Sections];
         var hasConfigs = configCount > 0;
 
         var lines = new List<string>();
         if (profile) lines.Add(Strings.Installed_ProfileUndoOne);
+        lines.AddRange(offer.Notes);
         lines.AddRange(detail);
         if (hasConfigs) lines.Add(Strings.Installed_RemoveConfigCount(configCount, mod.Name, configCount));
         if (mod.IsDisabled) lines.Add(Text(Strings.Installed_RemoveDisabledNoteFormat, mod.DisplayTitle));
@@ -534,10 +545,10 @@ public partial class InstalledViewModel
         var answer = AskWindow.Show(new AskRequest
         {
             Title = Text(Strings.Installed_RemoveTitleFormat, mod.Name),
-            Warning = losses.Count > 0 ? Strings.ProfileItems_Intro
-                : profile ? Text(Strings.Installed_ProfileWarningFormat, mod.DisplayTitle) : null,
+            Warning = offer.Warning ?? (profile ? Text(Strings.Installed_ProfileWarningFormat, mod.DisplayTitle) : null),
             Lead = lead,
             Sections = sections,
+            Picks = offer.PickList,
             Detail = lines,
             Footnote = hasConfigs ? Text(Strings.Installed_RemoveConfigsGoFormat, AppPaths.LegacyConfigsDirectory) : null,
             First = hasConfigs ? Strings.Installed_RemoveKeepConfigs : Strings.Installed_Remove,

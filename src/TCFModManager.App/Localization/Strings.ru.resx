@@ -10394,4 +10394,79 @@
   <data name="AddonFiles_Chosen_other" xml:space="preserve">
     <value>Отмечено {0} файла</value>
   </data>
+  <data name="ServerValues_RemoveNoteFormat" xml:space="preserve">
+    <value>{0} добавляет на сервер собственные значения, например навыки. После удаления мода сервер не сможет загрузить профиль, в котором они есть.</value>
+  </data>
+  <data name="ProfileClean_Heading" xml:space="preserve">
+    <value>Очистить эти профили, когда моды будут убраны</value>
+  </data>
+  <data name="ProfileClean_HeadingNow" xml:space="preserve">
+    <value>Очистить эти профили</value>
+  </data>
+  <data name="ProfileClean_Explain" xml:space="preserve">
+    <value>Из отмеченных профилей это будет убрано, чтобы они открывались. Сначала создаётся резервная копия каждого профиля. Убранный прогресс навыков не вернётся, если снова включить мод, - вернуть его можно из резервной копии.</value>
+  </data>
+  <data name="ProfileClean_SkillsFormat" xml:space="preserve">
+    <value>Навыки: {0}</value>
+  </data>
+  <data name="ProfileClean_DeathCauseFormat" xml:space="preserve">
+    <value>Причина смерти: {0}</value>
+  </data>
+  <data name="ProfileClean_CantCleanFormat" xml:space="preserve">
+    <value>{0} также добавляет значения, которые очистка не может убрать из профиля ({1}). Чтобы играть профилем с ними, снова включите мод.</value>
+  </data>
+  <data name="ProfileClean_SptFixNote" xml:space="preserve">
+    <value>Собственная очистка предметов модов в SPT тоже будет включена, чтобы при следующем запуске сервера она убрала всё оставшееся.</value>
+  </data>
+  <data name="ProfileClean_BackupFailed" xml:space="preserve">
+    <value>Не удалось создать резервную копию профилей, поэтому ни один не очищен.</value>
+  </data>
+  <data name="ProfileClean_FailedFormat" xml:space="preserve">
+    <value>Не удалось очистить {0}, поэтому ни один профиль не изменён.</value>
+  </data>
+  <data name="Profiles_ReasonClean" xml:space="preserve">
+    <value>Перед очисткой профилей</value>
+  </data>
+  <data name="ModInstall_InUseCleanProfilesFormat" xml:space="preserve">
+    <value>Закройте {0}, прежде чем очищать профили: сервер SPT сохраняет профили при закрытии и перезапишет очищенные.</value>
+  </data>
+  <data name="Diagnose_CleanProfiles" xml:space="preserve">
+    <value>Очистить профили</value>
+  </data>
+  <data name="Diagnose_CleanProfilesToolTip" xml:space="preserve">
+    <value>Убрать из ваших профилей навыки и роли ботов от модов, которых больше нет</value>
+  </data>
+  <data name="ProfileClean_Title" xml:space="preserve">
+    <value>Очистка профилей</value>
+  </data>
+  <data name="ProfileClean_FoundWarning" xml:space="preserve">
+    <value>В некоторых ваших профилях есть навыки или роли ботов от модов, которые больше не установлены и не включены. Профиль с ними не откроется.</value>
+  </data>
+  <data name="ProfileClean_Lead" xml:space="preserve">
+    <value>Очистить их?</value>
+  </data>
+  <data name="ProfileClean_Clean" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
+  <data name="ProfileClean_NothingFound" xml:space="preserve">
+    <value>Ни в одном профиле нет навыков или ролей ботов от модов, которых больше нет.</value>
+  </data>
+  <data name="ProfileClean_CantCheck" xml:space="preserve">
+    <value>Не удалось прочитать список навыков и ролей ботов SPT, поэтому профили не проверены.</value>
+  </data>
+  <data name="ProfileClean_NoneTicked" xml:space="preserve">
+    <value>Ни один профиль не отмечен, поэтому ничего не очищено.</value>
+  </data>
+  <data name="ProfileClean_Done_one" xml:space="preserve">
+    <value>Очищен {0} профиль; резервная копия сохранена.</value>
+  </data>
+  <data name="ProfileClean_Done_few" xml:space="preserve">
+    <value>Очищено {0} профиля; резервная копия сохранена.</value>
+  </data>
+  <data name="ProfileClean_Done_many" xml:space="preserve">
+    <value>Очищено {0} профилей; резервная копия сохранена.</value>
+  </data>
+  <data name="ProfileClean_Done_other" xml:space="preserve">
+    <value>Очищено {0} профиля; резервная копия сохранена.</value>
+  </data>
 </root>

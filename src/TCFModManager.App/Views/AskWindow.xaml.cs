@@ -38,6 +38,24 @@ public sealed record AskSection(string? Heading, IReadOnlyList<string> Items)
     }
 }
 
+public sealed class AskPick
+{
+    public required string Text { get; init; }
+
+    public string? Detail { get; init; }
+
+    public bool HasDetail => !string.IsNullOrEmpty(Detail);
+
+    public bool IsChecked { get; set; } = true;
+
+    public object? Tag { get; init; }
+}
+
+public sealed record AskPicks(string Heading, string? Explain, IReadOnlyList<AskPick> Items)
+{
+    public bool HasExplain => !string.IsNullOrEmpty(Explain);
+}
+
 public sealed class AskRequest
 {
     public required string Title { get; init; }
@@ -47,6 +65,8 @@ public sealed class AskRequest
     public required string Lead { get; init; }
 
     public IReadOnlyList<AskSection> Sections { get; init; } = [];
+
+    public AskPicks? Picks { get; init; }
 
     public IReadOnlyList<string> Detail { get; init; } = [];
 
@@ -80,6 +100,9 @@ public partial class AskWindow : FluentWindow
         else WarningText.Text = request.Warning;
 
         SectionList.ItemsSource = request.Sections;
+
+        if (request.Picks is { Items.Count: > 0 } picks) PickPanel.DataContext = picks;
+        else PickPanel.Visibility = Visibility.Collapsed;
         DetailList.ItemsSource = request.Detail;
 
         if (string.IsNullOrEmpty(request.Footnote)) FootnoteText.Visibility = Visibility.Collapsed;

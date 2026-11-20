@@ -152,6 +152,13 @@
                                             Visibility="{Binding OfferProfileFix, Converter={StaticResource BoolToVisibility}}"
                                             Command="{Binding DataContext.TurnOnProfileFixesCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}" />
                                         <ui:Button
+                                            Margin="0,0,8,0"
+                                            Content="{loc:Str Diagnose_CleanProfiles}"
+                                            Icon="{ui:SymbolIcon Eraser24}"
+                                            ToolTip="{loc:Str Diagnose_CleanProfilesToolTip}"
+                                            Visibility="{Binding OfferProfileClean, Converter={StaticResource BoolToVisibility}}"
+                                            Command="{Binding DataContext.CleanProfilesCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}" />
+                                        <ui:Button
                                             Appearance="Transparent"
                                             Content="{loc:Str Diagnose_OpenLog}"
                                             Icon="{ui:SymbolIcon DocumentText24}"

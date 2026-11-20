@@ -60,15 +60,16 @@ public partial class ModListsViewModel
 
         RefusedNotice = null;
 
+        var offer = ProfileCleanOffer.None;
         if (preview.Plan.Disable.Any())
         {
             var shown = StatusMessage;
             StatusMessage = Strings.ProfileItems_Checking;
             IsCheckingProfiles = true;
-            var losses = await ProfileItemsWarning.ForListAsync(preview.Install.InstallPath, preview.Plan.Disable);
+            offer = await ProfileCleanOffer.ForListAsync(preview.Install.InstallPath, [.. preview.Plan.Disable]);
             IsCheckingProfiles = false;
             StatusMessage = shown;
-            if (losses.Count > 0 && !ProfileItemsWarning.Confirm(losses, Strings.ProfileItems_ApplyAnyway)) return;
+            if (!offer.IsEmpty && !ProfileItemsWarning.Confirm(offer, Strings.ProfileItems_ApplyAnyway)) return;
         }
 
         await RunAsync(async () =>
@@ -87,6 +88,7 @@ public partial class ModListsViewModel
             if (result.Completed)
             {
                 StatusMessage = Completed(result, ModListDownloadMode.For(preview.List));
+                if (await offer.CleanAsync() is { } cleaned) StatusMessage = StatusMessage + " " + cleaned;
                 ClearPlan();
                 Refresh(preview.List.Id);
                 return;

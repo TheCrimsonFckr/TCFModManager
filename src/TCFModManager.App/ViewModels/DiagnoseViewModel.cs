@@ -74,6 +74,8 @@ public sealed class LogFindingRow
 
     public string? ProfileFixNote => IsAboutProfile && ProfileFix == SptProfileFixState.On ? Strings.ProfileFix_AlreadyOn : null;
 
+    public bool OfferProfileClean => IsAboutProfile || Finding.Kind == LogFindingKind.GameUnknownValue;
+
     private static string Arg(LogFinding f, int i) => i < f.Args.Count ? f.Args[i] : string.Empty;
 
     private static (string Title, string Body) Word(LogFinding f)
@@ -249,6 +251,82 @@ public sealed partial class DiagnoseViewModel : LocalizedViewModel
         {
             Show(_last);
             StatusMessage = said;
+        }
+    }
+
+    //
+    // OPEN-60 C6: profiles holding skills or bot roles that neither SPT nor a mod still installed and
+    // turned on adds - offered to clean, each profile ticked, after a backup of all of them.
+    //
+    [RelayCommand]
+    private async Task CleanProfilesAsync()
+    {
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        if (string.IsNullOrWhiteSpace(installPath))
+        {
+            StatusMessage = AppMessages.NoSptInstallFolder;
+            return;
+        }
+
+        if (ModInstallService.RunningBlockers(installPath) is { Count: > 0 } running)
+        {
+            StatusMessage = ModInstallProblems.InstallInUse(running, ModInstallAction.CleanProfiles);
+            return;
+        }
+
+        IsBusy = true;
+        StatusMessage = Strings.ProfileItems_Checking;
+        ProfileCleanOffer? offer;
+        try
+        {
+            offer = await ProfileCleanOffer.ForWhatIsGoneAsync(installPath);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+
+        if (offer is null)
+        {
+            StatusMessage = Strings.ProfileClean_CantCheck;
+            return;
+        }
+
+        if (offer.Picks.Count == 0)
+        {
+            StatusMessage = Strings.ProfileClean_NothingFound;
+            return;
+        }
+
+        StatusMessage = null;
+        if (AskWindow.Show(new AskRequest
+            {
+                Title = Strings.ProfileClean_Title,
+                Warning = Strings.ProfileClean_FoundWarning,
+                Lead = Strings.ProfileClean_Lead,
+                Picks = offer.PickList,
+                Detail = offer.Notes,
+                First = Strings.ProfileClean_Clean,
+                Default = AskChoice.Cancel,
+            }) != AskChoice.First)
+        {
+            return;
+        }
+
+        if (ModInstallService.RunningBlockers(installPath) is { Count: > 0 } started)
+        {
+            StatusMessage = ModInstallProblems.InstallInUse(started, ModInstallAction.CleanProfiles);
+            return;
+        }
+
+        IsBusy = true;
+        try
+        {
+            StatusMessage = await offer.CleanAsync() ?? Strings.ProfileClean_NoneTicked;
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
 

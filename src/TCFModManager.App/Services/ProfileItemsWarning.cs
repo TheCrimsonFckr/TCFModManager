@@ -77,17 +77,19 @@ internal static class ProfileItemsWarning
     }
 
     // Before a disable or a list apply: true to go ahead. Cancel is the default.
-    public static bool Confirm(IReadOnlyList<ProfileLoss> losses, string goAhead, IReadOnlyList<string>? extra = null)
+    public static bool Confirm(ProfileCleanOffer offer, string goAhead)
     {
-        var detail = new List<string> { Strings.ProfileItems_Outro };
-        if (extra is not null) detail.AddRange(extra);
+        var detail = new List<string>();
+        if (offer.Losses.Count > 0) detail.Add(Strings.ProfileItems_Outro);
+        detail.AddRange(offer.Notes);
 
         return Views.AskWindow.Show(new Views.AskRequest
         {
-            Title = Strings.ProfileItems_Title,
-            Warning = Strings.ProfileItems_Intro,
+            Title = offer.Losses.Count > 0 ? Strings.ProfileItems_Title : Strings.ServerValues_Title,
+            Warning = offer.Warning,
             Lead = Strings.ProfileItems_Lead,
-            Sections = [Section(losses)],
+            Sections = offer.Sections,
+            Picks = offer.PickList,
             Detail = detail,
             First = goAhead,
             Danger = Views.AskChoice.First,

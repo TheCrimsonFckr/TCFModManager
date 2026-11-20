@@ -9977,4 +9977,73 @@ Die Details stehen im Log:
   <data name="AddonFiles_Chosen_other" xml:space="preserve">
     <value>{0} Dateien ausgewählt</value>
   </data>
+  <data name="ServerValues_RemoveNoteFormat" xml:space="preserve">
+    <value>{0} fügt dem Server eigene Werte hinzu, etwa Fertigkeiten. Nach dem Entfernen kann der Server ein Profil, das sie enthält, nicht mehr laden.</value>
+  </data>
+  <data name="ProfileClean_Heading" xml:space="preserve">
+    <value>Diese Profile bereinigen, sobald die Mods weg sind</value>
+  </data>
+  <data name="ProfileClean_HeadingNow" xml:space="preserve">
+    <value>Diese Profile bereinigen</value>
+  </data>
+  <data name="ProfileClean_Explain" xml:space="preserve">
+    <value>Aus angehakten Profilen wird das entfernt, damit sie sich weiter öffnen lassen. Vorher wird jedes Profil gesichert. Entfernter Fertigkeitsfortschritt kommt nicht zurück, wenn die Mod wieder eingeschaltet wird - dafür gibt es die Sicherung.</value>
+  </data>
+  <data name="ProfileClean_SkillsFormat" xml:space="preserve">
+    <value>Fertigkeiten: {0}</value>
+  </data>
+  <data name="ProfileClean_DeathCauseFormat" xml:space="preserve">
+    <value>Todesursache: {0}</value>
+  </data>
+  <data name="ProfileClean_CantCleanFormat" xml:space="preserve">
+    <value>{0} fügt auch Werte hinzu, die die Bereinigung nicht aus einem Profil entfernen kann ({1}). Um ein Profil mit diesen Werten zu spielen, schalte die Mod wieder ein.</value>
+  </data>
+  <data name="ProfileClean_SptFixNote" xml:space="preserve">
+    <value>Die eigene Bereinigung von Mod-Gegenständen in SPT wird ebenfalls eingeschaltet, damit sie beim nächsten Serverstart alles Übrige erfasst.</value>
+  </data>
+  <data name="ProfileClean_BackupFailed" xml:space="preserve">
+    <value>Die Profile konnten nicht gesichert werden, deshalb wurde keines bereinigt.</value>
+  </data>
+  <data name="ProfileClean_FailedFormat" xml:space="preserve">
+    <value>{0} konnte nicht bereinigt werden, deshalb wurde kein Profil geändert.</value>
+  </data>
+  <data name="Profiles_ReasonClean" xml:space="preserve">
+    <value>Vor dem Bereinigen von Profilen</value>
+  </data>
+  <data name="ModInstall_InUseCleanProfilesFormat" xml:space="preserve">
+    <value>Schließe {0}, bevor du Profile bereinigst - der SPT-Server speichert die Profile beim Beenden und würde die bereinigten überschreiben.</value>
+  </data>
+  <data name="Diagnose_CleanProfiles" xml:space="preserve">
+    <value>Profile bereinigen</value>
+  </data>
+  <data name="Diagnose_CleanProfilesToolTip" xml:space="preserve">
+    <value>Fertigkeiten und Bot-Rollen von Mods, die weg sind, aus deinen Profilen entfernen</value>
+  </data>
+  <data name="ProfileClean_Title" xml:space="preserve">
+    <value>Profile bereinigen</value>
+  </data>
+  <data name="ProfileClean_FoundWarning" xml:space="preserve">
+    <value>Einige deiner Profile enthalten Fertigkeiten oder Bot-Rollen von Mods, die nicht mehr installiert und eingeschaltet sind. Ein Profil, das sie enthält, lässt sich nicht öffnen.</value>
+  </data>
+  <data name="ProfileClean_Lead" xml:space="preserve">
+    <value>Möchtest du sie bereinigen?</value>
+  </data>
+  <data name="ProfileClean_Clean" xml:space="preserve">
+    <value>Bereinigen</value>
+  </data>
+  <data name="ProfileClean_NothingFound" xml:space="preserve">
+    <value>Kein Profil enthält Fertigkeiten oder Bot-Rollen von Mods, die weg sind.</value>
+  </data>
+  <data name="ProfileClean_CantCheck" xml:space="preserve">
+    <value>Die SPT-eigene Liste der Fertigkeiten und Bot-Rollen konnte nicht gelesen werden, deshalb wurden die Profile nicht geprüft.</value>
+  </data>
+  <data name="ProfileClean_NoneTicked" xml:space="preserve">
+    <value>Kein Profil war angehakt, deshalb wurde nichts bereinigt.</value>
+  </data>
+  <data name="ProfileClean_Done_one" xml:space="preserve">
+    <value>{0} Profil bereinigt; eine Sicherung wurde behalten.</value>
+  </data>
+  <data name="ProfileClean_Done_other" xml:space="preserve">
+    <value>{0} Profile bereinigt; eine Sicherung wurde behalten.</value>
+  </data>
 </root>

@@ -44,6 +44,7 @@ public sealed class ProfileBackups(string? root = null, int keep = 10)
     // Before a profile is wiped or deleted from the Play page (SptDirectLaunch).
     public const string BeforeWipe = "wipe";
     public const string BeforeProfileDelete = "profile-delete";
+    public const string BeforeClean = "clean";
 
     public string Root { get; } = root ?? System.IO.Path.Combine(AppPaths.DataDirectory, "ProfileBackups");
 

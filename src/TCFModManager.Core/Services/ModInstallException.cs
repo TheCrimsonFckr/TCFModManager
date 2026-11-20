@@ -23,6 +23,9 @@ public enum ModInstallAction
 
     // Putting a copy of the SPT profiles back (OPEN-12 F4) - the server saves the profiles as it closes.
     RestoreProfiles,
+
+    // OPEN-60: taking what mods left out of the SPT profiles.
+    CleanProfiles,
 }
 
 //

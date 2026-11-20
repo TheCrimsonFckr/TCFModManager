@@ -9977,4 +9977,73 @@ I dettagli sono nel log:
   <data name="AddonFiles_Chosen_other" xml:space="preserve">
     <value>{0} file spuntati</value>
   </data>
+  <data name="ServerValues_RemoveNoteFormat" xml:space="preserve">
+    <value>{0} aggiunge al server valori propri, come abilità. Una volta rimossa, il server non può caricare un profilo che li contiene.</value>
+  </data>
+  <data name="ProfileClean_Heading" xml:space="preserve">
+    <value>Pulisci questi profili una volta tolte le mod</value>
+  </data>
+  <data name="ProfileClean_HeadingNow" xml:space="preserve">
+    <value>Pulisci questi profili</value>
+  </data>
+  <data name="ProfileClean_Explain" xml:space="preserve">
+    <value>Dai profili spuntati vengono tolti questi elementi, così si aprono ancora. Prima viene fatto un backup di ogni profilo. I progressi delle abilità tolti non tornano se la mod viene riattivata - il backup è il modo per tornare indietro.</value>
+  </data>
+  <data name="ProfileClean_SkillsFormat" xml:space="preserve">
+    <value>Abilità: {0}</value>
+  </data>
+  <data name="ProfileClean_DeathCauseFormat" xml:space="preserve">
+    <value>Causa della morte: {0}</value>
+  </data>
+  <data name="ProfileClean_CantCleanFormat" xml:space="preserve">
+    <value>{0} aggiunge anche valori che la pulizia non può togliere da un profilo ({1}). Per giocare un profilo che li contiene, riattiva la mod.</value>
+  </data>
+  <data name="ProfileClean_SptFixNote" xml:space="preserve">
+    <value>Verrà attivata anche la pulizia degli oggetti delle mod di SPT, così toglie ciò che resta al prossimo avvio del server.</value>
+  </data>
+  <data name="ProfileClean_BackupFailed" xml:space="preserve">
+    <value>Non è stato possibile fare il backup dei profili, quindi nessuno è stato pulito.</value>
+  </data>
+  <data name="ProfileClean_FailedFormat" xml:space="preserve">
+    <value>Non è stato possibile pulire {0}, quindi nessun profilo è stato modificato.</value>
+  </data>
+  <data name="Profiles_ReasonClean" xml:space="preserve">
+    <value>Prima di pulire i profili</value>
+  </data>
+  <data name="ModInstall_InUseCleanProfilesFormat" xml:space="preserve">
+    <value>Chiudi {0} prima di pulire i profili - il server SPT salva i profili alla chiusura e sovrascriverebbe quelli puliti.</value>
+  </data>
+  <data name="Diagnose_CleanProfiles" xml:space="preserve">
+    <value>Pulisci profili</value>
+  </data>
+  <data name="Diagnose_CleanProfilesToolTip" xml:space="preserve">
+    <value>Togli dai tuoi profili le abilità e i ruoli dei bot di mod non più presenti</value>
+  </data>
+  <data name="ProfileClean_Title" xml:space="preserve">
+    <value>Pulisci profili</value>
+  </data>
+  <data name="ProfileClean_FoundWarning" xml:space="preserve">
+    <value>Alcuni dei tuoi profili contengono abilità o ruoli dei bot di mod non più installate e attive. Un profilo che li contiene non si aprirà.</value>
+  </data>
+  <data name="ProfileClean_Lead" xml:space="preserve">
+    <value>Vuoi pulirli?</value>
+  </data>
+  <data name="ProfileClean_Clean" xml:space="preserve">
+    <value>Pulisci</value>
+  </data>
+  <data name="ProfileClean_NothingFound" xml:space="preserve">
+    <value>Nessun profilo contiene abilità o ruoli dei bot di mod non più presenti.</value>
+  </data>
+  <data name="ProfileClean_CantCheck" xml:space="preserve">
+    <value>Non è stato possibile leggere l'elenco di abilità e ruoli dei bot di SPT, quindi i profili non sono stati controllati.</value>
+  </data>
+  <data name="ProfileClean_NoneTicked" xml:space="preserve">
+    <value>Nessun profilo era spuntato, quindi non è stato pulito nulla.</value>
+  </data>
+  <data name="ProfileClean_Done_one" xml:space="preserve">
+    <value>{0} profilo pulito; è stato conservato un backup.</value>
+  </data>
+  <data name="ProfileClean_Done_other" xml:space="preserve">
+    <value>{0} profili puliti; è stato conservato un backup.</value>
+  </data>
 </root>

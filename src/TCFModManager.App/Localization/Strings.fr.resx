@@ -9977,4 +9977,73 @@ Les détails sont dans le journal :
   <data name="AddonFiles_Chosen_other" xml:space="preserve">
     <value>{0} fichiers cochés</value>
   </data>
+  <data name="ServerValues_RemoveNoteFormat" xml:space="preserve">
+    <value>{0} ajoute ses propres valeurs au serveur, comme des compétences. Une fois le mod supprimé, le serveur ne peut plus charger un profil qui les contient.</value>
+  </data>
+  <data name="ProfileClean_Heading" xml:space="preserve">
+    <value>Nettoyer ces profils une fois les mods partis</value>
+  </data>
+  <data name="ProfileClean_HeadingNow" xml:space="preserve">
+    <value>Nettoyer ces profils</value>
+  </data>
+  <data name="ProfileClean_Explain" xml:space="preserve">
+    <value>Ces éléments sont retirés des profils cochés pour qu'ils s'ouvrent encore. Chaque profil est sauvegardé avant. La progression de compétence retirée ne revient pas si le mod est réactivé - la sauvegarde permet de revenir en arrière.</value>
+  </data>
+  <data name="ProfileClean_SkillsFormat" xml:space="preserve">
+    <value>Compétences : {0}</value>
+  </data>
+  <data name="ProfileClean_DeathCauseFormat" xml:space="preserve">
+    <value>Cause de la mort : {0}</value>
+  </data>
+  <data name="ProfileClean_CantCleanFormat" xml:space="preserve">
+    <value>{0} ajoute aussi des valeurs que le nettoyage ne peut pas retirer d'un profil ({1}). Pour jouer un profil qui les contient, réactivez le mod.</value>
+  </data>
+  <data name="ProfileClean_SptFixNote" xml:space="preserve">
+    <value>Le nettoyage des objets de mods propre à SPT sera aussi activé, pour retirer ce qui reste au prochain démarrage du serveur.</value>
+  </data>
+  <data name="ProfileClean_BackupFailed" xml:space="preserve">
+    <value>Les profils n'ont pas pu être sauvegardés, donc aucun n'a été nettoyé.</value>
+  </data>
+  <data name="ProfileClean_FailedFormat" xml:space="preserve">
+    <value>{0} n'a pas pu être nettoyé, donc aucun profil n'a été modifié.</value>
+  </data>
+  <data name="Profiles_ReasonClean" xml:space="preserve">
+    <value>Avant de nettoyer des profils</value>
+  </data>
+  <data name="ModInstall_InUseCleanProfilesFormat" xml:space="preserve">
+    <value>Fermez {0} avant de nettoyer des profils - le serveur SPT enregistre les profils en se fermant et écraserait ceux nettoyés.</value>
+  </data>
+  <data name="Diagnose_CleanProfiles" xml:space="preserve">
+    <value>Nettoyer les profils</value>
+  </data>
+  <data name="Diagnose_CleanProfilesToolTip" xml:space="preserve">
+    <value>Retirer de vos profils les compétences et rôles de bots des mods qui ne sont plus là</value>
+  </data>
+  <data name="ProfileClean_Title" xml:space="preserve">
+    <value>Nettoyer les profils</value>
+  </data>
+  <data name="ProfileClean_FoundWarning" xml:space="preserve">
+    <value>Certains de vos profils contiennent des compétences ou des rôles de bots de mods qui ne sont plus installés et activés. Un profil qui les contient ne s'ouvrira pas.</value>
+  </data>
+  <data name="ProfileClean_Lead" xml:space="preserve">
+    <value>Voulez-vous les nettoyer ?</value>
+  </data>
+  <data name="ProfileClean_Clean" xml:space="preserve">
+    <value>Nettoyer</value>
+  </data>
+  <data name="ProfileClean_NothingFound" xml:space="preserve">
+    <value>Aucun profil ne contient de compétences ou de rôles de bots de mods qui ne sont plus là.</value>
+  </data>
+  <data name="ProfileClean_CantCheck" xml:space="preserve">
+    <value>La liste des compétences et rôles de bots de SPT n'a pas pu être lue, donc les profils n'ont pas été vérifiés.</value>
+  </data>
+  <data name="ProfileClean_NoneTicked" xml:space="preserve">
+    <value>Aucun profil n'était coché, donc rien n'a été nettoyé.</value>
+  </data>
+  <data name="ProfileClean_Done_one" xml:space="preserve">
+    <value>{0} profil nettoyé ; une sauvegarde a été conservée.</value>
+  </data>
+  <data name="ProfileClean_Done_other" xml:space="preserve">
+    <value>{0} profils nettoyés ; une sauvegarde a été conservée.</value>
+  </data>
 </root>
