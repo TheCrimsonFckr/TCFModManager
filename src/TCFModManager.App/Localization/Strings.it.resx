@@ -9806,6 +9806,15 @@ I dettagli sono nel log:
   <data name="ProfileItems_Lead" xml:space="preserve">
     <value>Vuoi procedere comunque?</value>
   </data>
+  <data name="ProfileItems_TraderFormat" xml:space="preserve">
+    <value>Commerciante: {0}</value>
+  </data>
+  <data name="ProfileItems_ItemCountFormat" xml:space="preserve">
+    <value>{0} × {1}</value>
+  </data>
+  <data name="ProfileItems_UnnamedFormat" xml:space="preserve">
+    <value>Nessun nome trovato ({0})</value>
+  </data>
   <data name="Diagnose_Title_GameUnknownValue" xml:space="preserve">
     <value>Il gioco non ha potuto leggere la risposta del server</value>
   </data>

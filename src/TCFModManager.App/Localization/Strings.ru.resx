@@ -10211,6 +10211,15 @@
   <data name="ProfileItems_Lead" xml:space="preserve">
     <value>Всё равно продолжить?</value>
   </data>
+  <data name="ProfileItems_TraderFormat" xml:space="preserve">
+    <value>Торговец: {0}</value>
+  </data>
+  <data name="ProfileItems_ItemCountFormat" xml:space="preserve">
+    <value>{0} × {1}</value>
+  </data>
+  <data name="ProfileItems_UnnamedFormat" xml:space="preserve">
+    <value>Название не найдено ({0})</value>
+  </data>
   <data name="Diagnose_Title_GameUnknownValue" xml:space="preserve">
     <value>Игра не смогла прочитать ответ сервера</value>
   </data>

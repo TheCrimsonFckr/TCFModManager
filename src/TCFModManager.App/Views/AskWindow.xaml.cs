@@ -12,14 +12,30 @@ public enum AskChoice
     Cancel,
 }
 
+public sealed record AskLine(string Text, IReadOnlyList<string> Details)
+{
+    public bool CanExpand => Details.Count > 0;
+}
+
 public sealed record AskSection(string? Heading, IReadOnlyList<string> Items)
 {
     private const int MaxShown = 10;
 
-    public IReadOnlyList<string> Shown =>
-        Items.Count <= MaxShown + 1
-            ? Items
-            : [.. Items.Take(MaxShown), Strings.Ask_More(Items.Count - MaxShown, Items.Count - MaxShown)];
+    private IReadOnlyList<IReadOnlyList<string>>? _details;
+
+    public static AskSection WithDetails(string? heading, IReadOnlyList<AskLine> lines) =>
+        new(heading, [.. lines.Select(l => l.Text)]) { _details = [.. lines.Select(l => l.Details)] };
+
+    public IReadOnlyList<AskLine> Shown
+    {
+        get
+        {
+            var lines = Items.Select((text, i) => new AskLine(text, _details is { } d && i < d.Count ? d[i] : [])).ToList();
+            return lines.Count <= MaxShown + 1
+                ? lines
+                : [.. lines.Take(MaxShown), new AskLine(Strings.Ask_More(lines.Count - MaxShown, lines.Count - MaxShown), [])];
+        }
+    }
 }
 
 public sealed class AskRequest

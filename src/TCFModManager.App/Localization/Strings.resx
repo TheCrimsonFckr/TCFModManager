@@ -11929,6 +11929,18 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Do you still want to go ahead?</value>
     <comment>Question on the profile warning before disabling mods or applying a mod list</comment>
   </data>
+  <data name="ProfileItems_TraderFormat" xml:space="preserve">
+    <value>Trader: {0}</value>
+    <comment>A trader a mod adds, in the opened list under a profile warning line. {0} the trader's name</comment>
+  </data>
+  <data name="ProfileItems_ItemCountFormat" xml:space="preserve">
+    <value>{0} × {1}</value>
+    <comment>An item a mod adds and how many copies the profile holds, in the opened list under a profile warning line. {0} item name, {1} count</comment>
+  </data>
+  <data name="ProfileItems_UnnamedFormat" xml:space="preserve">
+    <value>No name found ({0})</value>
+    <comment>Stands in for an item or trader whose name the mod's files don't give. {0} its id</comment>
+  </data>
   <data name="Diagnose_Title_GameUnknownValue" xml:space="preserve">
     <value>The game couldn't read the server's answer</value>
     <comment>Diagnose logs card title: the game could not read an answer from the server, because of a value (a skill, say) it does not know.</comment>

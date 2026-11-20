@@ -84,6 +84,9 @@ public class ProfileModItemsTests : IDisposable
 
         var loss = Assert.Single(losses);
         Assert.Equal(("Trapp", "Guns", 2, 1), (loss.ProfileName, loss.ModName, loss.Items, loss.Traders));
+        Assert.Equal(
+            [new ProfileLostThing(TraderId, ProfileThingKind.Trader, 1, null), new ProfileLostThing(GunId, ProfileThingKind.Item, 2, null)],
+            loss.Things);
     }
 
     [Fact]
@@ -99,7 +102,7 @@ public class ProfileModItemsTests : IDisposable
 
         var guns = Path.Combine(server, "user", "mods", "Guns");
         Directory.CreateDirectory(Path.Combine(guns, "db"));
-        File.WriteAllText(Path.Combine(guns, "db", "items.json"), $$"""{ "{{GunId}}": {}, "{{TraderId}}": {} }""");
+        File.WriteAllText(Path.Combine(guns, "db", "items.json"), $$"""{ "{{GunId}}": { "locales": { "en": { "name": "Gun" } } }, "{{TraderId}}": {} }""");
         File.WriteAllBytes(Path.Combine(guns, "Guns.bundle"), Encoding.ASCII.GetBytes(ScopeId));
 
         var other = Path.Combine(server, "user", "mods", "Other");
@@ -113,6 +116,9 @@ public class ProfileModItemsTests : IDisposable
         var losses = ProfileModItems.Check(_install, [("Guns", [guns, client])]);
         var loss = Assert.Single(losses);
         Assert.Equal(("Trapp", "Guns", 2, 1), (loss.ProfileName, loss.ModName, loss.Items, loss.Traders));
+        Assert.Equal(
+            [new ProfileLostThing(TraderId, ProfileThingKind.Trader, 1, null), new ProfileLostThing(GunId, ProfileThingKind.Item, 2, "Gun")],
+            loss.Things);
 
         Assert.Empty(ProfileModItems.Check(_install, [("Other", [other])]));
         Assert.Empty(ProfileModItems.Check(_install, [("GunsClient", [client])]));

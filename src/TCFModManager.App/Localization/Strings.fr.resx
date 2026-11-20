@@ -9806,6 +9806,15 @@ Les détails sont dans le journal :
   <data name="ProfileItems_Lead" xml:space="preserve">
     <value>Voulez-vous quand même continuer ?</value>
   </data>
+  <data name="ProfileItems_TraderFormat" xml:space="preserve">
+    <value>Marchand : {0}</value>
+  </data>
+  <data name="ProfileItems_ItemCountFormat" xml:space="preserve">
+    <value>{0} × {1}</value>
+  </data>
+  <data name="ProfileItems_UnnamedFormat" xml:space="preserve">
+    <value>Aucun nom trouvé ({0})</value>
+  </data>
   <data name="Diagnose_Title_GameUnknownValue" xml:space="preserve">
     <value>Le jeu n'a pas pu lire la réponse du serveur</value>
   </data>

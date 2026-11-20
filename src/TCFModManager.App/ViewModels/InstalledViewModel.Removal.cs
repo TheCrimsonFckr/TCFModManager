@@ -237,7 +237,7 @@ public partial class InstalledViewModel
         var profileMods = targets.Where(t => !holding.Contains(t.DisplayTitle) && ChangesProfile(t)).Select(t => t.DisplayTitle).ToList();
 
         var sections = new List<AskSection> { new(null, [.. targets.Select(t => t.DisplayTitle)]) };
-        if (losses.Count > 0) sections.Add(new(Strings.ProfileItems_Heading, ProfileItemsWarning.Lines(losses)));
+        if (losses.Count > 0) sections.Add(ProfileItemsWarning.Section(losses));
         if (profileMods.Count > 0) sections.Add(new(Strings.Installed_RemoveSelectedProfileHeading, profileMods));
         if (leftTwice.Count > 0) sections.Add(new(Strings.Installed_RemoveSelectedTwiceHeading, leftTwice));
 
@@ -519,7 +519,7 @@ public partial class InstalledViewModel
         IReadOnlyList<ProfileLoss> losses)
     {
         var profile = losses.Count > 0 || ChangesProfile(mod);
-        if (losses.Count > 0) sections = [.. sections, new(Strings.ProfileItems_Heading, ProfileItemsWarning.Lines(losses))];
+        if (losses.Count > 0) sections = [.. sections, ProfileItemsWarning.Section(losses)];
         var hasConfigs = configCount > 0;
 
         var lines = new List<string>();

@@ -6,8 +6,20 @@ namespace TCFModManager.Core.Services;
 /// <summary>One profile's items and traders that SPT's own database doesn't have - what mods added.</summary>
 public sealed record ProfileModContent(string ProfileName, IReadOnlyDictionary<string, int> Items, IReadOnlySet<string> Traders);
 
-/// <summary>What a profile would lose with one mod gone: how many items (counting every copy) and traders.</summary>
-public sealed record ProfileLoss(string ProfileName, string ModName, int Items, int Traders);
+public enum ProfileThingKind
+{
+    Item,
+    Trader,
+}
+
+/// <summary>One item or trader a profile would lose: its id, how many copies, and its name when the mod's files give one.</summary>
+public sealed record ProfileLostThing(string Id, ProfileThingKind Kind, int Count, string? Name);
+
+/// <summary>What a profile would lose with one mod gone: how many items (counting every copy) and traders, and which.</summary>
+public sealed record ProfileLoss(string ProfileName, string ModName, int Items, int Traders)
+{
+    public IReadOnlyList<ProfileLostThing> Things { get; init; } = [];
+}
 
 //
 // OPEN-53 N7: what each profile would lose with some mods gone - read before a remove, a disable or
@@ -93,7 +105,7 @@ public static class ProfileModItems
     // name with its folders (or loose files); everything else in the install's mod folders stays.
     // Empty when the install has no profiles, or SPT's own item list can't be read.
     //
-    public static IReadOnlyList<ProfileLoss> Check(string? installPath, IReadOnlyList<(string Mod, IReadOnlyList<string> Paths)> leaving)
+    public static IReadOnlyList<ProfileLoss> Check(string? installPath, IReadOnlyList<(string Mod, IReadOnlyList<string> Paths)> leaving, string? language = null)
     {
         if (leaving.Count == 0 || string.IsNullOrWhiteSpace(installPath)) return [];
 
@@ -114,7 +126,24 @@ public static class ProfileModItems
             .Select(l => (l.Mod, Ids: (IReadOnlySet<string>)l.Paths.Select(Full).Where(OnServer).SelectMany(IdsIn).ToHashSet(StringComparer.Ordinal)))
             .ToList();
         SaveCache();
-        return Losses(profiles, mods, staying);
+        return Named(Losses(profiles, mods, staying), leaving, language);
+    }
+
+    // Each lost item and trader with the name its mod's own files give it.
+    private static IReadOnlyList<ProfileLoss> Named(IReadOnlyList<ProfileLoss> losses, IReadOnlyList<(string Mod, IReadOnlyList<string> Paths)> leaving, string? language)
+    {
+        var names = new Dictionary<string, IReadOnlyDictionary<string, string>>(StringComparer.Ordinal);
+        foreach (var mod in losses.Select(l => l.ModName).Distinct(StringComparer.Ordinal))
+        {
+            var ids = losses.Where(l => l.ModName == mod).SelectMany(l => l.Things).Select(t => t.Id).ToHashSet(StringComparer.Ordinal);
+            var paths = leaving.Where(l => l.Mod == mod).SelectMany(l => l.Paths).ToList();
+            names[mod] = ModContentNames.Find(paths, ids, language);
+        }
+
+        return [.. losses.Select(l => l with
+        {
+            Things = [.. l.Things.Select(t => names[l.ModName].TryGetValue(t.Id, out var name) ? t with { Name = name } : t)],
+        })];
     }
 
     // The arithmetic of Check, apart from the disk.
@@ -128,9 +157,16 @@ public static class ProfileModItems
         {
             foreach (var (mod, ids) in leaving)
             {
-                var items = profile.Items.Where(i => ids.Contains(i.Key) && !staying.Contains(i.Key)).Sum(i => i.Value);
-                var traders = profile.Traders.Count(t => ids.Contains(t) && !staying.Contains(t));
-                if (items > 0 || traders > 0) losses.Add(new ProfileLoss(profile.ProfileName, mod, items, traders));
+                var items = profile.Items
+                    .Where(i => ids.Contains(i.Key) && !staying.Contains(i.Key))
+                    .Select(i => new ProfileLostThing(i.Key, ProfileThingKind.Item, i.Value, null))
+                    .ToList();
+                var traders = profile.Traders
+                    .Where(t => ids.Contains(t) && !staying.Contains(t))
+                    .Select(t => new ProfileLostThing(t, ProfileThingKind.Trader, 1, null))
+                    .ToList();
+                if (items.Count > 0 || traders.Count > 0)
+                    losses.Add(new ProfileLoss(profile.ProfileName, mod, items.Sum(i => i.Count), traders.Count) { Things = [.. traders, .. items] });
             }
         }
 

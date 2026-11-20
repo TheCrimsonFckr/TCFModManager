@@ -1,6 +1,7 @@
 using System.IO;
 using TCFModManager.App.Localization;
 using TCFModManager.App.ViewModels;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.Services;
@@ -25,6 +26,7 @@ internal static class ProfileItemsWarning
     public static Task<IReadOnlyList<ProfileLoss>> ForAsync(IEnumerable<(string Mod, IReadOnlyList<string> Paths)> leaving)
     {
         var installPath = AppServices.SptEnvironment.InstallPath;
+        var language = AppLanguage.Current.TwoLetterISOLanguageName;
         var list = leaving.Where(l => l.Paths.Count > 0).ToList();
         if (list.Count == 0 || string.IsNullOrWhiteSpace(installPath)) return Task.FromResult<IReadOnlyList<ProfileLoss>>([]);
 
@@ -32,7 +34,7 @@ internal static class ProfileItemsWarning
         {
             try
             {
-                var losses = ProfileModItems.Check(installPath, list);
+                var losses = ProfileModItems.Check(installPath, list, language);
                 if (losses.Count > 0)
                     AppLog.Info("Profiles", "profiles holding items from mods about to go: " + string.Join("; ", losses.Select(l => $"{l.ProfileName} / {l.ModName}: {l.Items} items, {l.Traders} traders")));
                 return losses;
@@ -45,12 +47,26 @@ internal static class ProfileItemsWarning
         });
     }
 
-    // One line per profile and mod: "Main - Some Weapon Pack: 71 items".
-    public static IReadOnlyList<string> Lines(IReadOnlyList<ProfileLoss> losses) =>
-        [.. losses
+    // One line per profile and mod, "Main - Some Weapon Pack: 71 items", opening to what they are.
+    public static AskSection Section(IReadOnlyList<ProfileLoss> losses) =>
+        AskSection.WithDetails(Strings.ProfileItems_Heading, [.. losses
             .OrderBy(l => l.ProfileName, StringComparer.CurrentCultureIgnoreCase)
             .ThenBy(l => l.ModName, StringComparer.CurrentCultureIgnoreCase)
-            .Select(l => LocalizationService.Text(Strings.ProfileItems_LineFormat, l.ProfileName, l.ModName, Counts(l)))];
+            .Select(l => new AskLine(LocalizationService.Text(Strings.ProfileItems_LineFormat, l.ProfileName, l.ModName, Counts(l)), Things(l)))]);
+
+    private static IReadOnlyList<string> Things(ProfileLoss loss) =>
+        [.. loss.Things
+            .OrderBy(t => t.Kind == ProfileThingKind.Trader ? 0 : 1)
+            .ThenBy(t => t.Name is null ? 1 : 0)
+            .ThenBy(t => t.Name ?? t.Id, StringComparer.CurrentCultureIgnoreCase)
+            .Select(Thing)];
+
+    private static string Thing(ProfileLostThing thing)
+    {
+        var name = thing.Name ?? LocalizationService.Text(Strings.ProfileItems_UnnamedFormat, thing.Id);
+        if (thing.Kind == ProfileThingKind.Trader) return LocalizationService.Text(Strings.ProfileItems_TraderFormat, name);
+        return thing.Count > 1 ? LocalizationService.Text(Strings.ProfileItems_ItemCountFormat, name, thing.Count) : name;
+    }
 
     private static string Counts(ProfileLoss loss)
     {
@@ -71,7 +87,7 @@ internal static class ProfileItemsWarning
             Title = Strings.ProfileItems_Title,
             Warning = Strings.ProfileItems_Intro,
             Lead = Strings.ProfileItems_Lead,
-            Sections = [new(Strings.ProfileItems_Heading, Lines(losses))],
+            Sections = [Section(losses)],
             Detail = detail,
             First = goAhead,
             Danger = Views.AskChoice.First,
