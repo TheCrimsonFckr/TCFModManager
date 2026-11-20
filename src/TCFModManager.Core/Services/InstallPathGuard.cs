@@ -63,6 +63,13 @@ public static class InstallPathGuard
     //
     private static readonly string[][] ModContainers = BuildContainers();
 
+    private static readonly string[][] PrepatchContainers =
+    [
+        ["user", "patchers"],
+        ["SPT", "user", "patchers"],
+        ["SPT_Runtime", "user", "patchers"],
+    ];
+
     private static string[][] BuildContainers()
     {
         string[][] enabled =
@@ -189,8 +196,8 @@ public static class InstallPathGuard
 
     //
     // Whether an empty folder left behind by a removal may itself be removed: only a mod's own folder
-    // or something below it (D14). A container, anything above one, and every folder outside the mod
-    // containers (BepInEx\config, user\, the install root) are left even when empty.
+    // or something below it (D14), or a mod's prepatch folder in user\patchers. A container, anything
+    // above one, and every other folder (BepInEx\config, user\, the install root) are left even when empty.
     //
     public static bool MayRemoveEmptyFolder(string installPath, string directory)
     {
@@ -201,7 +208,7 @@ public static class InstallPathGuard
 
         if (ProtectedInstallPaths.Segments(Path.GetRelativePath(root, full)) is not { } segments) return false;
 
-        if (!ModContainers.Any(c => segments.Length > c.Length && StartsWith(segments, c))) return false;
+        if (!ModContainers.Concat(PrepatchContainers).Any(c => segments.Length > c.Length && StartsWith(segments, c))) return false;
 
         return !IsLink(full) && !PassesThroughLink(root, full);
     }

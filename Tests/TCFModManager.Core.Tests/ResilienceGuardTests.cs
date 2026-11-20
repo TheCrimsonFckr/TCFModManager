@@ -305,6 +305,13 @@ public class ResilienceGuardTests : IDisposable
     [InlineData("SPT/user", false)]
     [InlineData("SPT", false)]
     [InlineData("user/mods", false)]
+    [InlineData("SPT_Runtime/user/patchers/com.samc137.isbspecialforces", true)]
+    [InlineData("SPT/user/patchers/com.cj.skillsextended", true)]
+    [InlineData("user/patchers/SomeGuid", true)]
+    [InlineData("SPT_Runtime/user/patchers", false)]
+    [InlineData("SPT/user/patchers", false)]
+    [InlineData("user/patchers", false)]
+    [InlineData("SPT_Runtime/user/profiles", false)]
     [InlineData("EscapeFromTarkov_Data/StreamingAssets", false)]
     public void MayRemoveEmptyFolder_OnlyAtOrBelowAModFolder(string relative, bool expected)
     {
