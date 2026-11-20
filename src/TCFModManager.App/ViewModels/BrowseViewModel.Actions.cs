@@ -87,6 +87,12 @@ public partial class BrowseViewModel
     }
 
     [RelayCommand]
+    private void MenuCopyName(ModCardViewModel? card) => Behaviors.CopyText.Copy(card?.Name);
+
+    [RelayCommand]
+    private void MenuCopyVersion(ModCardViewModel? card) => Behaviors.CopyText.Copy(card?.DisplayReleaseVersion);
+
+    [RelayCommand]
     private void MenuCopyGuid(ModCardViewModel? card)
     {
         if (card?.Guid is { Length: > 0 } guid)

@@ -10322,4 +10322,22 @@ I dettagli sono nel log:
   <data name="Help_Diagnose_Fika_Keywords" xml:space="preserve">
     <value>Fika, non riesco a entrare, mod richieste, mod mancanti, versione diversa, host del raid, headless, multigiocatore</value>
   </data>
+  <data name="Copy_TextFormat" xml:space="preserve">
+    <value>Copia "{0}"</value>
+  </data>
+  <data name="Copy_Copied" xml:space="preserve">
+    <value>Copiato</value>
+  </data>
+  <data name="Copy_Failed" xml:space="preserve">
+    <value>Impossibile copiare - un'altra app sta usando gli appunti</value>
+  </data>
+  <data name="Copy_Name" xml:space="preserve">
+    <value>Copia nome</value>
+  </data>
+  <data name="Copy_Version" xml:space="preserve">
+    <value>Copia versione</value>
+  </data>
+  <data name="Copy_List" xml:space="preserve">
+    <value>Copia elenco</value>
+  </data>
 </root>

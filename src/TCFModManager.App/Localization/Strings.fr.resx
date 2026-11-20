@@ -10322,4 +10322,22 @@ Les détails sont dans le journal :
   <data name="Help_Diagnose_Fika_Keywords" xml:space="preserve">
     <value>Fika, impossible de rejoindre, mods requis, mods manquants, version différente, hôte du raid, headless, multijoueur</value>
   </data>
+  <data name="Copy_TextFormat" xml:space="preserve">
+    <value>Copier « {0} »</value>
+  </data>
+  <data name="Copy_Copied" xml:space="preserve">
+    <value>Copié</value>
+  </data>
+  <data name="Copy_Failed" xml:space="preserve">
+    <value>Copie impossible - une autre application utilise le presse-papiers</value>
+  </data>
+  <data name="Copy_Name" xml:space="preserve">
+    <value>Copier le nom</value>
+  </data>
+  <data name="Copy_Version" xml:space="preserve">
+    <value>Copier la version</value>
+  </data>
+  <data name="Copy_List" xml:space="preserve">
+    <value>Copier la liste</value>
+  </data>
 </root>

@@ -19,6 +19,11 @@ public partial class InstalledViewModel
 
     public string SelectedCountLabel => Text(Strings.Installed_SelectedFormat, SelectedCount);
 
+    public string SelectedListText() => string.Join(Environment.NewLine,
+        _all.Where(m => m.IsSelected)
+            .OrderBy(m => m.DisplayTitle, StringComparer.CurrentCultureIgnoreCase)
+            .Select(m => string.IsNullOrEmpty(m.InstalledVersion) ? m.DisplayTitle : m.DisplayTitle + ' ' + m.InstalledVersion));
+
     //
     // Everything the current filters match, not just the page on screen - which is why the count is
     // in the label. "Select all" over a paginated list is ambiguous otherwise, and someone who has

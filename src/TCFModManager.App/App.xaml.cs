@@ -63,6 +63,9 @@ public partial class App : Application
         // Every CardExpander grows and shrinks as it opens and closes (OPEN-26 S3).
         ExpanderMotion.Register();
 
+        // Any text can be copied: right-click it, or Ctrl+C over it (OPEN-61).
+        CopyText.Register();
+
         // Animations at the display's refresh rate rather than WPF's default 60 (OPEN-26).
         Motion.ApplyFrameRate();
 

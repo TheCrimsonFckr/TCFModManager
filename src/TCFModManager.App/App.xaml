@@ -548,6 +548,44 @@
                 <Setter Property="LineStackingStrategy" Value="BlockLineHeight" />
             </Style>
 
+            <!-- OPEN-61 S3: text that can be drag-selected, drawn like a TextBlock. -->
+            <SolidColorBrush
+                x:Key="SelectableTextSelectionBrush"
+                Color="{DynamicResource SystemAccentColor}" />
+
+            <Style x:Key="SelectableText" TargetType="TextBox">
+                <Setter Property="IsReadOnly" Value="True" />
+                <Setter Property="IsReadOnlyCaretVisible" Value="False" />
+                <Setter Property="IsTabStop" Value="False" />
+                <Setter Property="IsUndoEnabled" Value="False" />
+                <Setter Property="AllowDrop" Value="False" />
+                <Setter Property="Cursor" Value="IBeam" />
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Padding" Value="-2,0,-2,0" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+                <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                <Setter Property="SelectionBrush" Value="{StaticResource SelectableTextSelectionBrush}" />
+                <Setter Property="SelectionOpacity" Value="0.4" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TextBox">
+                            <Border
+                                x:Name="PART_ContentHost"
+                                Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="SelectableDialogText" TargetType="TextBox" BasedOn="{StaticResource SelectableText}">
+                <Setter Property="TextBlock.LineHeight" Value="21" />
+                <Setter Property="TextBlock.LineStackingStrategy" Value="BlockLineHeight" />
+            </Style>
+
             <Style x:Key="DialogButtonBar" TargetType="WrapPanel">
                 <Setter Property="HorizontalAlignment" Value="Right" />
                 <Setter Property="VerticalAlignment" Value="Bottom" />

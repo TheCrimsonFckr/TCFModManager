@@ -12616,4 +12616,28 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Fika, can't join, required mods, missing mods, version mismatch, raid host, headless, multiplayer</value>
     <comment>Help search keywords (OPEN-54 N32).</comment>
   </data>
+  <data name="Copy_TextFormat" xml:space="preserve">
+    <value>Copy "{0}"</value>
+    <comment>Right-click menu item that copies a piece of text (OPEN-61). {0} is the text under the pointer, shortened.</comment>
+  </data>
+  <data name="Copy_Copied" xml:space="preserve">
+    <value>Copied</value>
+    <comment>Shown at the pointer for a second after text is copied.</comment>
+  </data>
+  <data name="Copy_Failed" xml:space="preserve">
+    <value>Couldn't copy - another app is using the clipboard</value>
+    <comment>Shown at the pointer when the clipboard couldn't be written.</comment>
+  </data>
+  <data name="Copy_Name" xml:space="preserve">
+    <value>Copy name</value>
+    <comment>Mod right-click menu (OPEN-61).</comment>
+  </data>
+  <data name="Copy_Version" xml:space="preserve">
+    <value>Copy version</value>
+    <comment>Mod right-click menu (OPEN-61): the installed version on Installed, the version shown on Browse.</comment>
+  </data>
+  <data name="Copy_List" xml:space="preserve">
+    <value>Copy list</value>
+    <comment>Installed right-click menu with several mods ticked (OPEN-61): one line per mod, name and version.</comment>
+  </data>
 </root>

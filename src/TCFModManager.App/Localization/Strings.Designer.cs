@@ -3446,4 +3446,10 @@ internal static class Strings
     internal static string Help_Diagnose_Fika_Step2 => LocalizationService.Get("Help_Diagnose_Fika_Step2");
     internal static string Help_Diagnose_Fika_Note => LocalizationService.Get("Help_Diagnose_Fika_Note");
     internal static string Help_Diagnose_Fika_Keywords => LocalizationService.Get("Help_Diagnose_Fika_Keywords");
+    internal static string Copy_TextFormat => LocalizationService.Get("Copy_TextFormat");
+    internal static string Copy_Copied => LocalizationService.Get("Copy_Copied");
+    internal static string Copy_Failed => LocalizationService.Get("Copy_Failed");
+    internal static string Copy_Name => LocalizationService.Get("Copy_Name");
+    internal static string Copy_Version => LocalizationService.Get("Copy_Version");
+    internal static string Copy_List => LocalizationService.Get("Copy_List");
 }

@@ -571,6 +571,17 @@
                                     Visibility="{Binding Author, Converter={StaticResource NullToCollapsed}}" />
                                 <Separator />
                                 <MenuItem
+                                    Header="{loc:Str Copy_Name}"
+                                    Icon="{ui:SymbolIcon Copy24}"
+                                    Command="{Binding MenuCopyNameCommand, Source={x:Static app:AppServices.Browse}}"
+                                    CommandParameter="{Binding}" />
+                                <MenuItem
+                                    Header="{loc:Str Copy_Version}"
+                                    Icon="{ui:SymbolIcon Copy24}"
+                                    Command="{Binding MenuCopyVersionCommand, Source={x:Static app:AppServices.Browse}}"
+                                    CommandParameter="{Binding}"
+                                    Visibility="{Binding DisplayReleaseVersion, Converter={StaticResource NullToCollapsed}}" />
+                                <MenuItem
                                     Header="{loc:Str Browse_MenuCopyLink}"
                                     Icon="{ui:SymbolIcon Link24}"
                                     Command="{Binding MenuCopyLinkCommand, Source={x:Static app:AppServices.Browse}}"

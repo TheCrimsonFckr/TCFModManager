@@ -31,10 +31,10 @@
                     Margin="0,8,10,0"
                     VerticalAlignment="Top"
                     Fill="{DynamicResource TextFillColorSecondaryBrush}" />
-                <TextBlock
+                <TextBox
                     Grid.Column="1"
-                    Style="{StaticResource AskText}"
-                    Text="{Binding Text}" />
+                    Style="{StaticResource SelectableDialogText}"
+                    Text="{Binding Text, Mode=OneWay}" />
             </Grid>
         </DataTemplate>
 
@@ -103,11 +103,11 @@
                     Visibility="{Binding IsChecked, ElementName=LineToggle, Converter={StaticResource AskBoolToVis}}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock
+                            <TextBox
                                 Margin="0,1,0,1"
-                                Style="{StaticResource AskText}"
+                                Style="{StaticResource SelectableDialogText}"
                                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                Text="{Binding}" />
+                                Text="{Binding Mode=OneWay}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -147,16 +147,16 @@
                         FontSize="20"
                         Symbol="Warning24"
                         Foreground="{DynamicResource SystemFillColorCautionBrush}" />
-                    <TextBlock
+                    <TextBox
                         x:Name="WarningText"
                         Grid.Column="1"
-                        Style="{StaticResource AskText}"
+                        Style="{StaticResource SelectableDialogText}"
                         FontWeight="SemiBold" />
                 </Grid>
 
-                <TextBlock
+                <TextBox
                     x:Name="LeadText"
-                    Style="{StaticResource AskText}" />
+                    Style="{StaticResource SelectableDialogText}" />
 
                 <ItemsControl x:Name="SectionList" Focusable="False">
                     <ItemsControl.ItemTemplate>
@@ -229,19 +229,19 @@
                 <ItemsControl x:Name="DetailList" Focusable="False">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock
-                                Style="{StaticResource AskText}"
+                            <TextBox
+                                Style="{StaticResource SelectableDialogText}"
                                 Margin="0,12,0,0"
                                 Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                Text="{Binding}" />
+                                Text="{Binding Mode=OneWay}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <TextBlock
+                <TextBox
                     x:Name="FootnoteText"
+                    Style="{StaticResource SelectableText}"
                     FontSize="11"
-                    TextWrapping="Wrap"
                     Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                     Margin="0,12,0,0" />
             </StackPanel>

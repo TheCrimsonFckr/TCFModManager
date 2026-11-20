@@ -10745,4 +10745,22 @@
   <data name="Help_Diagnose_Fika_Keywords" xml:space="preserve">
     <value>Fika, не подключается, обязательные моды, нет модов, разные версии, хост рейда, headless, мультиплеер</value>
   </data>
+  <data name="Copy_TextFormat" xml:space="preserve">
+    <value>Копировать «{0}»</value>
+  </data>
+  <data name="Copy_Copied" xml:space="preserve">
+    <value>Скопировано</value>
+  </data>
+  <data name="Copy_Failed" xml:space="preserve">
+    <value>Не удалось скопировать - буфер обмена занят другим приложением</value>
+  </data>
+  <data name="Copy_Name" xml:space="preserve">
+    <value>Копировать название</value>
+  </data>
+  <data name="Copy_Version" xml:space="preserve">
+    <value>Копировать версию</value>
+  </data>
+  <data name="Copy_List" xml:space="preserve">
+    <value>Копировать список</value>
+  </data>
 </root>

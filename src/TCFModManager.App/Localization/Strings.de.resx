@@ -10322,4 +10322,22 @@ Die Details stehen im Log:
   <data name="Help_Diagnose_Fika_Keywords" xml:space="preserve">
     <value>Fika, kann nicht beitreten, verlangte Mods, fehlende Mods, Versionskonflikt, Raid-Host, Headless, Mehrspieler</value>
   </data>
+  <data name="Copy_TextFormat" xml:space="preserve">
+    <value>„{0}“ kopieren</value>
+  </data>
+  <data name="Copy_Copied" xml:space="preserve">
+    <value>Kopiert</value>
+  </data>
+  <data name="Copy_Failed" xml:space="preserve">
+    <value>Kopieren nicht möglich - eine andere App verwendet die Zwischenablage</value>
+  </data>
+  <data name="Copy_Name" xml:space="preserve">
+    <value>Namen kopieren</value>
+  </data>
+  <data name="Copy_Version" xml:space="preserve">
+    <value>Version kopieren</value>
+  </data>
+  <data name="Copy_List" xml:space="preserve">
+    <value>Liste kopieren</value>
+  </data>
 </root>

@@ -188,6 +188,17 @@ public partial class InstalledPage : Page
             });
         }
 
+        void AddCopy(string header, string text)
+        {
+            var item = new MenuItem
+            {
+                Header = header,
+                Icon = new Wpf.Ui.Controls.SymbolIcon { Symbol = Wpf.Ui.Controls.SymbolRegular.Copy24 },
+            };
+            item.Click += (_, _) => CopyText.Copy(text);
+            menu.Items.Add(item);
+        }
+
         if (mod.IsSelected && ViewModel.SelectedCount > 1)
         {
             menu.Items.Add(new MenuItem { Header = ViewModel.SelectedCountLabel, IsEnabled = false });
@@ -196,6 +207,7 @@ public partial class InstalledPage : Page
             Add(Strings.Installed_EnableSelected, "PlugConnected24", ViewModel.EnableSelectedCommand);
             Add(Strings.Installed_DisableSelected, "PlugDisconnected24", ViewModel.DisableSelectedCommand);
             menu.Items.Add(GroupMenu(mod));
+            AddCopy(Strings.Copy_List, ViewModel.SelectedListText());
             menu.Items.Add(new Separator());
             Add(Strings.Installed_RemoveSelected, "Delete24", ViewModel.RemoveSelectedCommand);
         }
@@ -221,6 +233,12 @@ public partial class InstalledPage : Page
             if (mod.ClientFolderLink is { } client) Add(Strings.Installed_ClientFolder, "FolderOpen24", ViewModel.OpenModFolderCommand, client);
             if (mod.ServerFolderLink is { } server) Add(Strings.Installed_ServerFolder, "FolderOpen24", ViewModel.OpenModFolderCommand, server);
             if (InstalledViewModel.ModPageUrl(mod) is not null) Add(Strings.Common_ViewModPage, "Open24", ViewModel.OpenModPageCommand, mod);
+
+            menu.Items.Add(new Separator());
+            AddCopy(Strings.Copy_Name, mod.DisplayTitle);
+            if (mod.InstalledVersion is { Length: > 0 } version) AddCopy(Strings.Copy_Version, version);
+            if (InstalledViewModel.ModPageUrl(mod) is { Length: > 0 } url) AddCopy(Strings.Browse_MenuCopyLink, url);
+            if (mod.Guid is { Length: > 0 } guid) AddCopy(Strings.Browse_MenuCopyGuid, guid);
 
             // OPEN-12 A4 (R23): the author's page, and following them.
             if (mod.AuthorId is { } authorId)
