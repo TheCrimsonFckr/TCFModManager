@@ -11,6 +11,9 @@ public sealed class ModGroup
 
     // OPEN-57: the key of one of the app's own group icons, or null for none.
     public string? Icon { get; set; }
+
+    // OPEN-59: the key of one of the app's group colours, or null for none.
+    public string? Color { get; set; }
 }
 
 // The full set of groups plus which installed mod belongs to which, persisted as one file.

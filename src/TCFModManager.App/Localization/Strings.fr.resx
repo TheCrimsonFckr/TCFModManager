@@ -9647,6 +9647,48 @@ Les détails sont dans le journal :
   <data name="GroupIcon_PickToolTip" xml:space="preserve">
     <value>Choisir une icône pour ce groupe</value>
   </data>
+  <data name="GroupColor_Red" xml:space="preserve">
+    <value>Rouge</value>
+  </data>
+  <data name="GroupColor_Orange" xml:space="preserve">
+    <value>Orange</value>
+  </data>
+  <data name="GroupColor_Yellow" xml:space="preserve">
+    <value>Jaune</value>
+  </data>
+  <data name="GroupColor_Green" xml:space="preserve">
+    <value>Vert</value>
+  </data>
+  <data name="GroupColor_Teal" xml:space="preserve">
+    <value>Bleu canard</value>
+  </data>
+  <data name="GroupColor_Blue" xml:space="preserve">
+    <value>Bleu</value>
+  </data>
+  <data name="GroupColor_Indigo" xml:space="preserve">
+    <value>Indigo</value>
+  </data>
+  <data name="GroupColor_Purple" xml:space="preserve">
+    <value>Violet</value>
+  </data>
+  <data name="GroupColor_Pink" xml:space="preserve">
+    <value>Rose</value>
+  </data>
+  <data name="GroupColor_Brown" xml:space="preserve">
+    <value>Marron</value>
+  </data>
+  <data name="GroupColor_Grey" xml:space="preserve">
+    <value>Gris</value>
+  </data>
+  <data name="GroupColor_TitleFormat" xml:space="preserve">
+    <value>Couleur de {0}</value>
+  </data>
+  <data name="GroupColor_None" xml:space="preserve">
+    <value>Aucune couleur</value>
+  </data>
+  <data name="GroupColor_PickToolTip" xml:space="preserve">
+    <value>Choisir une couleur pour ce groupe</value>
+  </data>
   <data name="Help_Installed_Skip_Title" xml:space="preserve">
     <value>Ignorer une mise à jour dont vous ne voulez pas</value>
   </data>

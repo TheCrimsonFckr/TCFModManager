@@ -3274,6 +3274,9 @@ internal static class Strings
     internal static string ProfileItems_DisableAnyway => LocalizationService.Get("ProfileItems_DisableAnyway");
     internal static string ProfileItems_ApplyAnyway => LocalizationService.Get("ProfileItems_ApplyAnyway");
     internal static string ProfileItems_Lead => LocalizationService.Get("ProfileItems_Lead");
+    internal static string ProfileItems_TraderFormat => LocalizationService.Get("ProfileItems_TraderFormat");
+    internal static string ProfileItems_ItemCountFormat => LocalizationService.Get("ProfileItems_ItemCountFormat");
+    internal static string ProfileItems_UnnamedFormat => LocalizationService.Get("ProfileItems_UnnamedFormat");
     internal static string Diagnose_Title_GameUnknownValue => LocalizationService.Get("Diagnose_Title_GameUnknownValue");
     internal static string Diagnose_Body_GameUnknownValueFormat => LocalizationService.Get("Diagnose_Body_GameUnknownValueFormat");
     internal static string Diagnose_Body_GameUnknownValueOffFormat => LocalizationService.Get("Diagnose_Body_GameUnknownValueOffFormat");

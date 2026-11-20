@@ -57,6 +57,7 @@ public partial class InstalledViewModel
         var data = AppServices.ModGroups.Load();
         var namesById = data.Groups.ToDictionary(g => g.Id, g => g.Name);
         var iconsById = data.Groups.ToDictionary(g => g.Id, g => Services.GroupIcons.Find(g.Icon)?.Key);
+        var colorsById = data.Groups.ToDictionary(g => g.Id, g => Services.GroupColors.Find(g.Color)?.Key);
 
         foreach (var card in _all)
         {
@@ -70,6 +71,7 @@ public partial class InstalledViewModel
             card.GroupId = assigned;
             card.GroupName = assigned is { } value ? namesById[value] : null;
             card.GroupIcon = assigned is { } withIcon ? iconsById[withIcon] : null;
+            card.GroupColor = assigned is { } withColor ? colorsById[withColor] : null;
         }
 
         // Same as the category list above: the saved default the first time, the current selection
@@ -85,7 +87,7 @@ public partial class InstalledViewModel
             GroupFilterOptions.Add(GroupFilterItem.Ungrouped);
 
             foreach (var group in data.Groups.OrderBy(g => g.Name, StringComparer.OrdinalIgnoreCase))
-                GroupFilterOptions.Add(new GroupFilterItem(group.Name, group.Id, allGroups: false, Services.GroupIcons.Find(group.Icon)?.Key));
+                GroupFilterOptions.Add(new GroupFilterItem(group.Name, group.Id, allGroups: false, Services.GroupIcons.Find(group.Icon)?.Key, Services.GroupColors.Find(group.Color)?.Key));
 
             SelectedGroupFilter = GroupFilterOptions.FirstOrDefault(o => o.SameAs(previous)) ?? GroupFilterItem.All;
         }
@@ -238,6 +240,16 @@ public partial class InstalledViewModel
         if (GroupIconPickerWindow.Pick(section.Name, section.Icon) is not { } picked) return;
 
         AppServices.ModGroups.SetIcon(section.GroupId!.Value, picked.Length == 0 ? null : picked);
+        GroupsChanged();
+    }
+
+    [RelayCommand]
+    private void PickGroupColor(ModGroupSectionViewModel? section)
+    {
+        if (section is not { IsRealGroup: true }) return;
+        if (GroupColorPickerWindow.Pick(section.Name, section.Color) is not { } picked) return;
+
+        AppServices.ModGroups.SetColor(section.GroupId!.Value, picked.Length == 0 ? null : picked);
         GroupsChanged();
     }
 

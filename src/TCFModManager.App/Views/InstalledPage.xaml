@@ -76,6 +76,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="8" Height="8" Margin="0,0,6,0" VerticalAlignment="Center" Fill="{Binding ColorBrush}" Visibility="{Binding HasColor, Converter={StaticResource BoolToVis}}" />
                             <controls:GroupIconView Width="14" Height="14" Margin="0,0,6,0" VerticalAlignment="Center" Key="{Binding Icon}" Visibility="{Binding HasIcon, Converter={StaticResource BoolToVis}}" />
                             <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Label}" />
                         </StackPanel>
@@ -106,6 +107,29 @@
              apart. Membership comes from ModListMembership, which runs the real planner, so a chip
              here and what applying that list would do can't disagree. ShowLists folds in the
              page-wide toggle as well as "is it in any list at all". -->
+        <Style x:Key="ModChip" TargetType="Border">
+            <Setter Property="Margin" Value="0,2,4,0" />
+            <Setter Property="Padding" Value="6,1" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="CornerRadius" Value="{DynamicResource SmallCornerRadius}" />
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+        </Style>
+
+        <Style x:Key="GroupChip" TargetType="Border" BasedOn="{StaticResource ModChip}">
+            <Setter Property="Margin" Value="0" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding HasGroupColor}" Value="True">
+                    <Setter Property="Background" Value="{Binding GroupChipBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ModChipText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        </Style>
+
         <DataTemplate x:Key="ModListBadges">
             <ItemsControl
                 ItemsSource="{Binding Lists}"
@@ -117,19 +141,8 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border
-                            Margin="0,2,4,0"
-                            Padding="6,1"
-                            CornerRadius="{DynamicResource SmallCornerRadius}"
-                            ToolTip="{loc:Str Installed_ListChipToolTip}"
-                            Background="{DynamicResource ControlFillColorSecondaryBrush}">
-                            <TextBlock
-                                Text="{Binding}"
-                                FontSize="10"
-                                FontWeight="SemiBold"
-                                TextTrimming="CharacterEllipsis"
-                                MaxWidth="140"
-                                Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+                        <Border Style="{StaticResource ModChip}" ToolTip="{loc:Str Installed_ListChipToolTip}">
+                            <TextBlock Style="{StaticResource ModChipText}" Text="{Binding}" MaxWidth="140" />
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -1155,12 +1168,12 @@
                                         <!-- Says what an addon is attached to; an addon's own name
                                              rarely does, and it decides which versions can be
                                              installed. Kept in the header for that reason. -->
-                                        <TextBlock
-                                            FontSize="11"
-                                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                                            TextTrimming="CharacterEllipsis"
-                                            Text="{Binding AddonSubtitle}"
-                                            Visibility="{Binding AddonSubtitle, Converter={StaticResource NullToCollapsed}}" />
+                                        <Border
+                                            Style="{StaticResource ModChip}"
+                                            ToolTip="{Binding AddonSubtitle}"
+                                            Visibility="{Binding AddonSubtitle, Converter={StaticResource NullToCollapsed}}">
+                                            <TextBlock Style="{StaticResource ModChipText}" Text="{Binding AddonSubtitle}" />
+                                        </Border>
 
                                         <ContentPresenter
                                             ContentTemplate="{StaticResource ModListBadges}"
@@ -1171,14 +1184,12 @@
                                              it: a card is far narrower than a List row. -->
                                         <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                                             <Border
-                                                Padding="8,2"
-                                                CornerRadius="{DynamicResource SmallCornerRadius}"
-                                                Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                                Style="{StaticResource GroupChip}"
                                                 Visibility="{Binding IsGrouped, Converter={StaticResource BoolToVis}}">
                                                 <StackPanel Orientation="Horizontal">
                                                     <ui:SymbolIcon Symbol="Folder24" FontSize="12" Margin="0,0,5,0" VerticalAlignment="Center" Visibility="{Binding HasGroupIcon, Converter={StaticResource FalseToVisible}}" />
                                                     <controls:GroupIconView Width="12" Height="12" Margin="0,0,5,0" VerticalAlignment="Center" Key="{Binding GroupIcon}" Visibility="{Binding HasGroupIcon, Converter={StaticResource BoolToVis}}" />
-                                                    <TextBlock FontSize="11" Text="{Binding GroupName}" VerticalAlignment="Center" />
+                                                    <TextBlock Style="{StaticResource ModChipText}" Text="{Binding GroupName}" />
                                                 </StackPanel>
                                             </Border>
 
@@ -1260,144 +1271,176 @@
                             Drop="Section_Drop">
                             <StackPanel>
                                 <!-- Section header: collapse toggle, name (or rename box), reorder/rename/delete. -->
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
+                                <Border
+                                    Margin="-4"
+                                    Padding="4"
+                                    CornerRadius="{DynamicResource ControlCornerRadius}"
+                                    Background="{Binding HeaderBrush}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
 
-                                    <ui:Button
-                                        Grid.Column="0"
-                                        Padding="4"
-                                        Margin="0,0,6,0"
-                                        Appearance="Transparent"
-                                        Visibility="{Binding IsRealGroup, Converter={StaticResource BoolToVis}}"
-                                        Command="{Binding DataContext.ToggleCollapsedCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                        CommandParameter="{Binding}"
-                                        ToolTip="{loc:Str Installed_GroupExpandToolTip}">
-                                        <ui:SymbolIcon Symbol="{Binding ChevronGlyph}" FontSize="16" />
-                                    </ui:Button>
-
-                                    <DockPanel Grid.Column="1" VerticalAlignment="Center">
-                                    <!-- OPEN-57: the group's icon, and the way to pick one. -->
-                                    <ui:Button
-                                        DockPanel.Dock="Left"
-                                        Padding="4"
-                                        Margin="0,0,6,0"
-                                        Appearance="Transparent"
-                                        Visibility="{Binding IsRealGroup, Converter={StaticResource BoolToVis}}"
-                                        Command="{Binding DataContext.PickGroupIconCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                        CommandParameter="{Binding}"
-                                        ToolTip="{loc:Str GroupIcon_PickToolTip}">
-                                        <Grid>
-                                            <controls:GroupIconView
-                                                Width="18"
-                                                Height="18"
-                                                Key="{Binding Icon}"
-                                                Visibility="{Binding HasIcon, Converter={StaticResource BoolToVis}}" />
-                                            <ui:SymbolIcon
-                                                Symbol="ImageAdd24"
-                                                FontSize="16"
-                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                                Visibility="{Binding HasIcon, Converter={StaticResource FalseToVisible}}" />
-                                        </Grid>
-                                    </ui:Button>
-
-                                    <Grid VerticalAlignment="Center">
-                                        <TextBlock
-                                            VerticalAlignment="Center"
-                                            TextTrimming="CharacterEllipsis"
-                                            Visibility="{Binding IsEditing, Converter={StaticResource FalseToVisible}}">
-                                            <Run Text="{Binding Name, Mode=OneWay}" FontWeight="SemiBold" />
-                                            <Run Text=" " />
-                                            <Run Text="{Binding CountLabel, Mode=OneWay}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                                            <Run Text=" " />
-                                            <Run Text="{Binding StateLabel, Mode=OneWay}" Foreground="{DynamicResource SystemFillColorCautionBrush}" />
-                                        </TextBlock>
-
-                                        <ui:TextBox
-                                            Visibility="{Binding IsEditing, Converter={StaticResource BoolToVis}}"
-                                            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                            KeyDown="RenameTextBox_KeyDown"
-                                            LostFocus="RenameTextBox_LostFocus" />
-                                    </Grid>
-                                    </DockPanel>
-
-                                    <StackPanel
-                                        Grid.Column="2"
-                                        Orientation="Horizontal"
-                                        Visibility="{Binding IsRealGroup, Converter={StaticResource BoolToVis}}">
-                                        <!-- Whole-group enable/disable/invert. Kept to real groups
-                                             rather than offered on Ungrouped too, where it would
-                                             usually mean "every mod that isn't sorted yet". Each
-                                             one goes through the same dependency warning a single
-                                             mod does. -->
-                                        <StackPanel
-                                            Orientation="Horizontal"
+                                        <ui:Button
+                                            Grid.Column="0"
+                                            Padding="4"
                                             Margin="0,0,6,0"
-                                            Visibility="{Binding HasItems, Converter={StaticResource BoolToVis}}">
-                                            <ui:Button
-                                                Padding="4"
-                                                Appearance="Transparent"
-                                                ToolTip="{loc:Str Installed_GroupEnableToolTip}"
-                                                Command="{Binding DataContext.EnableGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                                CommandParameter="{Binding}"
-                                                Icon="{ui:SymbolIcon PlugConnected24}" />
-                                            <ui:Button
-                                                Padding="4"
-                                                Appearance="Transparent"
-                                                ToolTip="{loc:Str Installed_GroupDisableToolTip}"
-                                                Command="{Binding DataContext.DisableGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                                CommandParameter="{Binding}"
-                                                Icon="{ui:SymbolIcon PlugDisconnected24}" />
-                                            <ui:Button
-                                                Padding="4"
-                                                Appearance="Transparent"
-                                                ToolTip="{loc:Str Installed_GroupInvertToolTip}"
-                                                Command="{Binding DataContext.InvertGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                                CommandParameter="{Binding}"
-                                                Icon="{ui:SymbolIcon ArrowSwap24}" />
-                                        </StackPanel>
+                                            Appearance="Transparent"
+                                            Visibility="{Binding IsRealGroup, Converter={StaticResource BoolToVis}}"
+                                            Command="{Binding DataContext.ToggleCollapsedCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                            CommandParameter="{Binding}"
+                                            ToolTip="{loc:Str Installed_GroupExpandToolTip}">
+                                            <ui:SymbolIcon Symbol="{Binding ChevronGlyph}" FontSize="16" />
+                                        </ui:Button>
 
-                                        <!-- Only meaningful (and only shown) while groups are in their manual
-                                             order - an alphabetical group sort would just fight these. -->
+                                        <DockPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <!-- OPEN-57: the group's icon, and the way to pick one. -->
+                                        <ui:Button
+                                            DockPanel.Dock="Left"
+                                            Padding="4"
+                                            Margin="0,0,6,0"
+                                            Appearance="Transparent"
+                                            Visibility="{Binding IsRealGroup, Converter={StaticResource BoolToVis}}"
+                                            Command="{Binding DataContext.PickGroupIconCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                            CommandParameter="{Binding}"
+                                            ToolTip="{loc:Str GroupIcon_PickToolTip}">
+                                            <Grid>
+                                                <controls:GroupIconView
+                                                    Width="18"
+                                                    Height="18"
+                                                    Key="{Binding Icon}"
+                                                    Visibility="{Binding HasIcon, Converter={StaticResource BoolToVis}}" />
+                                                <ui:SymbolIcon
+                                                    Symbol="ImageAdd24"
+                                                    FontSize="16"
+                                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                    Visibility="{Binding HasIcon, Converter={StaticResource FalseToVisible}}" />
+                                            </Grid>
+                                        </ui:Button>
+
+                                        <!-- OPEN-59: the group's colour, and the way to pick one. -->
+                                        <ui:Button
+                                            DockPanel.Dock="Left"
+                                            Padding="4"
+                                            Margin="0,0,6,0"
+                                            Appearance="Transparent"
+                                            Visibility="{Binding IsRealGroup, Converter={StaticResource BoolToVis}}"
+                                            Command="{Binding DataContext.PickGroupColorCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                            CommandParameter="{Binding}"
+                                            ToolTip="{loc:Str GroupColor_PickToolTip}">
+                                            <Grid Width="18" Height="18">
+                                                <Ellipse
+                                                    Width="14"
+                                                    Height="14"
+                                                    Fill="{Binding ColorBrush}"
+                                                    Visibility="{Binding HasColor, Converter={StaticResource BoolToVis}}" />
+                                                <Ellipse
+                                                    Width="14"
+                                                    Height="14"
+                                                    Stroke="{DynamicResource TextFillColorTertiaryBrush}"
+                                                    StrokeThickness="1.5"
+                                                    StrokeDashArray="2 1.5"
+                                                    Visibility="{Binding HasColor, Converter={StaticResource FalseToVisible}}" />
+                                            </Grid>
+                                        </ui:Button>
+
+                                        <Grid VerticalAlignment="Center">
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                TextTrimming="CharacterEllipsis"
+                                                Visibility="{Binding IsEditing, Converter={StaticResource FalseToVisible}}">
+                                                <Run Text="{Binding Name, Mode=OneWay}" FontWeight="SemiBold" />
+                                                <Run Text=" " />
+                                                <Run Text="{Binding CountLabel, Mode=OneWay}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                <Run Text=" " />
+                                                <Run Text="{Binding StateLabel, Mode=OneWay}" Foreground="{DynamicResource SystemFillColorCautionBrush}" />
+                                            </TextBlock>
+
+                                            <ui:TextBox
+                                                Visibility="{Binding IsEditing, Converter={StaticResource BoolToVis}}"
+                                                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                                KeyDown="RenameTextBox_KeyDown"
+                                                LostFocus="RenameTextBox_LostFocus" />
+                                        </Grid>
+                                        </DockPanel>
+
                                         <StackPanel
+                                            Grid.Column="2"
                                             Orientation="Horizontal"
-                                            Visibility="{Binding DataContext.CanReorderGroups, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}, Converter={StaticResource BoolToVis}}">
+                                            Visibility="{Binding IsRealGroup, Converter={StaticResource BoolToVis}}">
+                                            <!-- Whole-group enable/disable/invert. Kept to real groups
+                                                 rather than offered on Ungrouped too, where it would
+                                                 usually mean "every mod that isn't sorted yet". Each
+                                                 one goes through the same dependency warning a single
+                                                 mod does. -->
+                                            <StackPanel
+                                                Orientation="Horizontal"
+                                                Margin="0,0,6,0"
+                                                Visibility="{Binding HasItems, Converter={StaticResource BoolToVis}}">
+                                                <ui:Button
+                                                    Padding="4"
+                                                    Appearance="Transparent"
+                                                    ToolTip="{loc:Str Installed_GroupEnableToolTip}"
+                                                    Command="{Binding DataContext.EnableGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                    CommandParameter="{Binding}"
+                                                    Icon="{ui:SymbolIcon PlugConnected24}" />
+                                                <ui:Button
+                                                    Padding="4"
+                                                    Appearance="Transparent"
+                                                    ToolTip="{loc:Str Installed_GroupDisableToolTip}"
+                                                    Command="{Binding DataContext.DisableGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                    CommandParameter="{Binding}"
+                                                    Icon="{ui:SymbolIcon PlugDisconnected24}" />
+                                                <ui:Button
+                                                    Padding="4"
+                                                    Appearance="Transparent"
+                                                    ToolTip="{loc:Str Installed_GroupInvertToolTip}"
+                                                    Command="{Binding DataContext.InvertGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                    CommandParameter="{Binding}"
+                                                    Icon="{ui:SymbolIcon ArrowSwap24}" />
+                                            </StackPanel>
+
+                                            <!-- Only meaningful (and only shown) while groups are in their manual
+                                                 order - an alphabetical group sort would just fight these. -->
+                                            <StackPanel
+                                                Orientation="Horizontal"
+                                                Visibility="{Binding DataContext.CanReorderGroups, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}, Converter={StaticResource BoolToVis}}">
+                                                <ui:Button
+                                                    Padding="4"
+                                                    Appearance="Transparent"
+                                                    ToolTip="{loc:Str Installed_GroupMoveUpToolTip}"
+                                                    Command="{Binding DataContext.MoveGroupUpCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                    CommandParameter="{Binding}"
+                                                    Icon="{ui:SymbolIcon ChevronUp24}" />
+                                                <ui:Button
+                                                    Padding="4"
+                                                    Appearance="Transparent"
+                                                    ToolTip="{loc:Str Installed_GroupMoveDownToolTip}"
+                                                    Command="{Binding DataContext.MoveGroupDownCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                    CommandParameter="{Binding}"
+                                                    Icon="{ui:SymbolIcon ChevronDown24}" />
+                                            </StackPanel>
+                                            <ui:Button
+                                                Padding="4"
+                                                Margin="6,0,0,0"
+                                                Appearance="Transparent"
+                                                ToolTip="{loc:Str Installed_GroupRenameToolTip}"
+                                                Command="{Binding DataContext.BeginRenameCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                CommandParameter="{Binding}"
+                                                Icon="{ui:SymbolIcon Edit24}" />
                                             <ui:Button
                                                 Padding="4"
                                                 Appearance="Transparent"
-                                                ToolTip="{loc:Str Installed_GroupMoveUpToolTip}"
-                                                Command="{Binding DataContext.MoveGroupUpCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                                                ToolTip="{loc:Str Installed_GroupDeleteToolTip}"
+                                                Command="{Binding DataContext.DeleteGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                 CommandParameter="{Binding}"
-                                                Icon="{ui:SymbolIcon ChevronUp24}" />
-                                            <ui:Button
-                                                Padding="4"
-                                                Appearance="Transparent"
-                                                ToolTip="{loc:Str Installed_GroupMoveDownToolTip}"
-                                                Command="{Binding DataContext.MoveGroupDownCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                                CommandParameter="{Binding}"
-                                                Icon="{ui:SymbolIcon ChevronDown24}" />
+                                                Icon="{ui:SymbolIcon Delete24}" />
                                         </StackPanel>
-                                        <ui:Button
-                                            Padding="4"
-                                            Margin="6,0,0,0"
-                                            Appearance="Transparent"
-                                            ToolTip="{loc:Str Installed_GroupRenameToolTip}"
-                                            Command="{Binding DataContext.BeginRenameCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                            CommandParameter="{Binding}"
-                                            Icon="{ui:SymbolIcon Edit24}" />
-                                        <ui:Button
-                                            Padding="4"
-                                            Appearance="Transparent"
-                                            Foreground="{DynamicResource SystemFillColorCriticalBrush}"
-                                            ToolTip="{loc:Str Installed_GroupDeleteToolTip}"
-                                            Command="{Binding DataContext.DeleteGroupCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                            CommandParameter="{Binding}"
-                                            Icon="{ui:SymbolIcon Delete24}" />
-                                    </StackPanel>
-                                </Grid>
+                                    </Grid>
+                                </Border>
 
                                 <!-- Mods in this group; hidden while collapsed. Each row is a drag source. -->
                                 <Grid
@@ -1612,14 +1655,12 @@
                                         VerticalAlignment="Center"
                                         Margin="12,0,12,0">
                                         <Border
-                                            Padding="8,2"
-                                            CornerRadius="{DynamicResource SmallCornerRadius}"
-                                            Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                            Style="{StaticResource GroupChip}"
                                             Visibility="{Binding IsGrouped, Converter={StaticResource BoolToVis}}">
                                             <StackPanel Orientation="Horizontal">
                                                 <ui:SymbolIcon Symbol="Folder24" FontSize="12" Margin="0,0,5,0" VerticalAlignment="Center" Visibility="{Binding HasGroupIcon, Converter={StaticResource FalseToVisible}}" />
                                                 <controls:GroupIconView Width="12" Height="12" Margin="0,0,5,0" VerticalAlignment="Center" Key="{Binding GroupIcon}" Visibility="{Binding HasGroupIcon, Converter={StaticResource BoolToVis}}" />
-                                                <TextBlock FontSize="11" Text="{Binding GroupName}" VerticalAlignment="Center" />
+                                                <TextBlock Style="{StaticResource ModChipText}" Text="{Binding GroupName}" />
                                             </StackPanel>
                                         </Border>
 

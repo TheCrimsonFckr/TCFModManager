@@ -254,7 +254,7 @@ public partial class InstalledPage : Page
         {
             var item = new MenuItem
             {
-                Header = group.Name,
+                Header = GroupMenuHeader(group),
                 IsCheckable = false,
                 IsChecked = targets.All(t => t.GroupId == group.Id),
                 Icon = Services.GroupIcons.Find(group.Icon) is { } icon
@@ -284,6 +284,23 @@ public partial class InstalledPage : Page
         }
 
         return root;
+    }
+
+    private static object GroupMenuHeader(Core.Models.ModGroup group)
+    {
+        if (Services.GroupColors.Solid(group.Color) is not { } brush) return group.Name;
+
+        var header = new StackPanel { Orientation = Orientation.Horizontal };
+        header.Children.Add(new System.Windows.Shapes.Ellipse
+        {
+            Width = 8,
+            Height = 8,
+            Margin = new Thickness(0, 0, 6, 0),
+            VerticalAlignment = VerticalAlignment.Center,
+            Fill = brush,
+        });
+        header.Children.Add(new TextBlock { Text = group.Name, VerticalAlignment = VerticalAlignment.Center });
+        return header;
     }
 
     // Endless (OPEN-12 A8): the next cards once the list is scrolled to within a screen of its end.

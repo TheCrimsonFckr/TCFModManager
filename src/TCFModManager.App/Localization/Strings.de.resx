@@ -9647,6 +9647,48 @@ Die Details stehen im Log:
   <data name="GroupIcon_PickToolTip" xml:space="preserve">
     <value>Ein Symbol für diese Gruppe wählen</value>
   </data>
+  <data name="GroupColor_Red" xml:space="preserve">
+    <value>Rot</value>
+  </data>
+  <data name="GroupColor_Orange" xml:space="preserve">
+    <value>Orange</value>
+  </data>
+  <data name="GroupColor_Yellow" xml:space="preserve">
+    <value>Gelb</value>
+  </data>
+  <data name="GroupColor_Green" xml:space="preserve">
+    <value>Grün</value>
+  </data>
+  <data name="GroupColor_Teal" xml:space="preserve">
+    <value>Türkis</value>
+  </data>
+  <data name="GroupColor_Blue" xml:space="preserve">
+    <value>Blau</value>
+  </data>
+  <data name="GroupColor_Indigo" xml:space="preserve">
+    <value>Indigo</value>
+  </data>
+  <data name="GroupColor_Purple" xml:space="preserve">
+    <value>Lila</value>
+  </data>
+  <data name="GroupColor_Pink" xml:space="preserve">
+    <value>Rosa</value>
+  </data>
+  <data name="GroupColor_Brown" xml:space="preserve">
+    <value>Braun</value>
+  </data>
+  <data name="GroupColor_Grey" xml:space="preserve">
+    <value>Grau</value>
+  </data>
+  <data name="GroupColor_TitleFormat" xml:space="preserve">
+    <value>Farbe für {0}</value>
+  </data>
+  <data name="GroupColor_None" xml:space="preserve">
+    <value>Keine Farbe</value>
+  </data>
+  <data name="GroupColor_PickToolTip" xml:space="preserve">
+    <value>Eine Farbe für diese Gruppe wählen</value>
+  </data>
   <data name="Help_Installed_Skip_Title" xml:space="preserve">
     <value>Ein Update überspringen, das du nicht willst</value>
   </data>

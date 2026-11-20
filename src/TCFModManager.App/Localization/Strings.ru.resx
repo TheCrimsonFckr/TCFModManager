@@ -10040,6 +10040,48 @@
   <data name="GroupIcon_PickToolTip" xml:space="preserve">
     <value>Выбрать значок для этой группы</value>
   </data>
+  <data name="GroupColor_Red" xml:space="preserve">
+    <value>Красный</value>
+  </data>
+  <data name="GroupColor_Orange" xml:space="preserve">
+    <value>Оранжевый</value>
+  </data>
+  <data name="GroupColor_Yellow" xml:space="preserve">
+    <value>Жёлтый</value>
+  </data>
+  <data name="GroupColor_Green" xml:space="preserve">
+    <value>Зелёный</value>
+  </data>
+  <data name="GroupColor_Teal" xml:space="preserve">
+    <value>Бирюзовый</value>
+  </data>
+  <data name="GroupColor_Blue" xml:space="preserve">
+    <value>Синий</value>
+  </data>
+  <data name="GroupColor_Indigo" xml:space="preserve">
+    <value>Индиго</value>
+  </data>
+  <data name="GroupColor_Purple" xml:space="preserve">
+    <value>Фиолетовый</value>
+  </data>
+  <data name="GroupColor_Pink" xml:space="preserve">
+    <value>Розовый</value>
+  </data>
+  <data name="GroupColor_Brown" xml:space="preserve">
+    <value>Коричневый</value>
+  </data>
+  <data name="GroupColor_Grey" xml:space="preserve">
+    <value>Серый</value>
+  </data>
+  <data name="GroupColor_TitleFormat" xml:space="preserve">
+    <value>Цвет для {0}</value>
+  </data>
+  <data name="GroupColor_None" xml:space="preserve">
+    <value>Без цвета</value>
+  </data>
+  <data name="GroupColor_PickToolTip" xml:space="preserve">
+    <value>Выбрать цвет для этой группы</value>
+  </data>
   <data name="Help_Installed_Skip_Title" xml:space="preserve">
     <value>Пропустить ненужное обновление</value>
   </data>

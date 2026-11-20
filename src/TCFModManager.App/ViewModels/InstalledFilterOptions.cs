@@ -66,7 +66,7 @@ public sealed class EnabledFilterItem(string key, EnabledFilter value) : Localiz
 // The two fixed entries hold a key; every other entry holds a group NAME the user typed, which is
 // data and is never translated - the trap §10 describes, and the reason this one type has both.
 //
-public sealed class GroupFilterItem(string label, Guid? groupId, bool allGroups, string? icon = null) : LocalizedViewModel
+public sealed class GroupFilterItem(string label, Guid? groupId, bool allGroups, string? icon = null, string? color = null) : LocalizedViewModel
 {
     private readonly string? _key;
 
@@ -75,6 +75,12 @@ public sealed class GroupFilterItem(string label, Guid? groupId, bool allGroups,
     public string? Icon { get; } = icon;
 
     public bool HasIcon => Icon is not null;
+
+    public string? Color { get; } = color;
+
+    public bool HasColor => Color is not null;
+
+    public System.Windows.Media.Brush? ColorBrush => Services.GroupColors.Solid(Color);
 
     public Guid? GroupId { get; } = groupId;
 

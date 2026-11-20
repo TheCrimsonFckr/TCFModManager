@@ -35,6 +35,19 @@ public partial class ModGroupSectionViewModel : LocalizedViewModel
 
     public bool HasIcon => Icon is not null;
 
+    // OPEN-59: the group's colour key, or null for none.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasColor))]
+    [NotifyPropertyChangedFor(nameof(ColorBrush))]
+    [NotifyPropertyChangedFor(nameof(HeaderBrush))]
+    private string? _color;
+
+    public bool HasColor => Color is not null;
+
+    public System.Windows.Media.Brush? ColorBrush => Services.GroupColors.Solid(Color);
+
+    public System.Windows.Media.Brush? HeaderBrush => Services.GroupColors.Header(Color);
+
     // True while the header's name TextBox is shown in place of the TextBlock.
     [ObservableProperty]
     private bool _isEditing;
@@ -75,6 +88,7 @@ public partial class ModGroupSectionViewModel : LocalizedViewModel
         Name = group.Name,
         IsCollapsed = group.IsCollapsed,
         Icon = Services.GroupIcons.Find(group.Icon)?.Key,
+        Color = Services.GroupColors.Find(group.Color)?.Key,
     };
 
     public static ModGroupSectionViewModel Ungrouped() => new()

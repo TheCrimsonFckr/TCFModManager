@@ -616,6 +616,16 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     public bool HasGroupIcon => GroupIcon is not null;
 
+    // OPEN-59: the colour of the group this mod is in, or null.
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasGroupColor))]
+    [NotifyPropertyChangedFor(nameof(GroupChipBrush))]
+    private string? _groupColor;
+
+    public bool HasGroupColor => GroupColor is not null;
+
+    public System.Windows.Media.Brush? GroupChipBrush => GroupColors.Chip(GroupColor);
+
     // OPEN-52 N3: the user's own line about this mod, keyed like its group.
     [ObservableProperty]
     private string? _note;

@@ -57,6 +57,16 @@ public sealed class ModGroupStore
         Save(data);
     }
 
+    public void SetColor(Guid groupId, string? color)
+    {
+        var data = Load();
+        var group = data.Groups.FirstOrDefault(g => g.Id == groupId);
+        if (group is null) return;
+
+        group.Color = string.IsNullOrWhiteSpace(color) ? null : color;
+        Save(data);
+    }
+
     // Removes the group; any mod assigned to it falls back to Ungrouped.
     public void DeleteGroup(Guid groupId)
     {
