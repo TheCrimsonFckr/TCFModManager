@@ -10064,4 +10064,97 @@ Les détails sont dans le journal :
   <data name="ProfileClean_ReportSptFix" xml:space="preserve">
     <value>Le nettoyage des objets de mods propre à SPT est maintenant activé.</value>
   </data>
+  <data name="Help_Installed_HeldBack_Title" xml:space="preserve">
+    <value>Trouver les mises à jour retenues par sp-mod</value>
+  </data>
+  <data name="Help_Installed_HeldBack_Step1" xml:space="preserve">
+    <value>Sur {0}, ouvrez le filtre d'état des mises à jour et choisissez {1}. Chaque carte indique quel mod retient sa mise à jour.</value>
+  </data>
+  <data name="Help_Installed_HeldBack_Step2" xml:space="preserve">
+    <value>Deux mods qui ont chacun besoin d'une version précise de l'autre réapparaissent comme mises à jour, et chaque carte nomme l'autre. Mettre à jour l'un installe les deux.</value>
+  </data>
+  <data name="Help_Installed_HeldBack_Keywords" xml:space="preserve">
+    <value>retenue, mise à jour bloquée, mise à jour absente, ensemble, ISB</value>
+  </data>
+  <data name="Help_Installed_GoBack_Title" xml:space="preserve">
+    <value>Revenir à la version d'avant une mise à jour</value>
+  </data>
+  <data name="Help_Installed_GoBack_Step1" xml:space="preserve">
+    <value>Sur {0}, faites un clic droit sur un mod mis à jour et choisissez Revenir à (version). Le menu indique combien de temps l'ancienne version est gardée.</value>
+  </data>
+  <data name="Help_Installed_GoBack_Step2" xml:space="preserve">
+    <value>Appuyez sur {0}. L'ancienne version revient avec ses configs telles qu'avant la mise à jour, en gardant les réglages changés depuis. La version quittée est gardée aussi, donc le même menu peut vous ramener en avant.</value>
+  </data>
+  <data name="Help_Installed_GoBack_Note" xml:space="preserve">
+    <value>Proposé seulement tant que les mods supprimés sont gardés ({0}, {1}), et pas pendant qu'une partie du mod est désactivée ou qu'une installation est en cours.</value>
+  </data>
+  <data name="Help_Installed_GoBack_Keywords" xml:space="preserve">
+    <value>revenir, retour arrière, annuler mise à jour, version précédente</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Title" xml:space="preserve">
+    <value>Donner une couleur à un groupe</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Step1" xml:space="preserve">
+    <value>Dans la vue {0} de {1}, cliquez sur le point après l'icône d'un groupe.</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Step2" xml:space="preserve">
+    <value>Choisissez une des couleurs. Le cercle en pointillés retire la couleur.</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Step3" xml:space="preserve">
+    <value>L'en-tête du groupe et son étiquette sur les cartes et les lignes de liste prennent une teinte de la couleur, et le filtre de groupe et le menu {0} affichent un point.</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Keywords" xml:space="preserve">
+    <value>couleur de groupe, couleur, teinte, étiquette</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Title" xml:space="preserve">
+    <value>Nettoyer vos profils quand des mods partent</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Step1" xml:space="preserve">
+    <value>Désactivez ou supprimez des mods sur {0}, ou appliquez sur {1} une liste qui désactive des mods. Quand un profil contient quelque chose de ces mods - objets, marchands, ou compétences et rôles de bots qu'ils ajoutent -, la question liste ce profil.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Step2" xml:space="preserve">
+    <value>Laissez cochés les profils à nettoyer, décochez ceux à laisser tels quels, et continuez.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Step3" xml:space="preserve">
+    <value>Une fois les mods partis, les profils cochés sont nettoyés, et {0} liste ce qui a été retiré de chacun.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Note" xml:space="preserve">
+    <value>Chaque profil est sauvegardé avant, dans {0}, {1}. La progression de compétence retirée ne revient pas si le mod est réactivé - restaurez la sauvegarde pour cela.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Keywords" xml:space="preserve">
+    <value>nettoyer profil, profil ne s'ouvre pas, Skills Extended, compétences de mod, profil cassé, objets restants</value>
+  </data>
+  <data name="Help_Installed_Link_Title" xml:space="preserve">
+    <value>Lier à sp-mod un mod installé à la main</value>
+  </data>
+  <data name="Help_Installed_Link_Step1" xml:space="preserve">
+    <value>Sur {0}, faites un clic droit sur un mod que l'application n'a pas pu reconnaître et choisissez {1}.</value>
+  </data>
+  <data name="Help_Installed_Link_Step2" xml:space="preserve">
+    <value>Collez le lien de sa page de mod ou d'addon sur sp-mod et appuyez sur {0}. La carte prend le nom, la page et les mises à jour de cette page. Rien ne change sur le disque.</value>
+  </data>
+  <data name="Help_Installed_Link_Step3" xml:space="preserve">
+    <value>Pour un addon dans le dossier de son mod, faites un clic droit sur le mod, choisissez {0}, collez le lien de l'addon et cochez ses fichiers.</value>
+  </data>
+  <data name="Help_Installed_Link_Note" xml:space="preserve">
+    <value>{0} dans {1} retire le lien. Dès que l'application installe ou met à jour le mod elle-même, son propre enregistrement prend le relais.</value>
+  </data>
+  <data name="Help_Installed_Link_Keywords" xml:space="preserve">
+    <value>lier, non reconnu, mod inconnu, installé à la main, manuel, associer</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Title" xml:space="preserve">
+    <value>Nettoyer les profils des mods qui ne sont plus là</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Step1" xml:space="preserve">
+    <value>Sur {0}, une carte qui concerne un profil a {1}. Cela trouve dans vos profils les compétences et rôles de bots que ni SPT ni un mod installé et activé n'ajoute.</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Step2" xml:space="preserve">
+    <value>Décochez les profils à laisser tels quels et appuyez sur {0}. Chaque profil est sauvegardé avant, et une fenêtre liste ce qui a été retiré.</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Note" xml:space="preserve">
+    <value>Les objets et marchands des mods qui ne sont plus là sont laissés au nettoyage propre à SPT - {0}.</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Keywords" xml:space="preserve">
+    <value>nettoyer profil, profil ne s'ouvre pas, compétence inconnue, supprimé à la main, profil cassé</value>
+  </data>
 </root>

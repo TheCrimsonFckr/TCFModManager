@@ -232,6 +232,19 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Installed_Skip_Step2, () => Strings.Installed_StopSkipping, () => Strings.Installed_DetailsAndVersions))
                 .WithKeywords(() => Strings.Help_Installed_Skip_Keywords),
 
+            // OPEN-58.
+            Topic("installed.heldback", () => Strings.Help_Installed_HeldBack_Title,
+                Step(() => Strings.Help_Installed_HeldBack_Step1, () => Strings.Nav_Installed, () => Strings.Filter_UpdateHeldBack),
+                Step(() => Strings.Help_Installed_HeldBack_Step2))
+                .WithKeywords(() => Strings.Help_Installed_HeldBack_Keywords),
+
+            // OPEN-53 N2.
+            Topic("installed.goback", () => Strings.Help_Installed_GoBack_Title,
+                Step(() => Strings.Help_Installed_GoBack_Step1, () => Strings.Nav_Installed),
+                Step(() => Strings.Help_Installed_GoBack_Step2, () => Strings.Installed_GoBack))
+                .WithNote(() => Strings.Help_Installed_GoBack_Note, () => Strings.Nav_Options, () => Strings.Options_RemovedModsHeader)
+                .WithKeywords(() => Strings.Help_Installed_GoBack_Keywords),
+
             Topic("installed.views", () => Strings.Help_Installed_Views_Title,
                 Step(() => Strings.Help_Installed_Views_Step1,
                     () => Strings.Nav_Installed, () => Strings.Installed_ViewCards,
@@ -261,6 +274,13 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Installed_GroupIcons_Step2, () => Strings.GroupIcon_None),
                 Step(() => Strings.Help_Installed_GroupIcons_Step3, () => Strings.Installed_AddToGroup))
                 .WithKeywords(() => Strings.Help_Installed_GroupIcons_Keywords),
+
+            // OPEN-59.
+            Topic("installed.groupcolours", () => Strings.Help_Installed_GroupColours_Title,
+                Step(() => Strings.Help_Installed_GroupColours_Step1, () => Strings.Installed_ViewGroups, () => Strings.Nav_Installed),
+                Step(() => Strings.Help_Installed_GroupColours_Step2),
+                Step(() => Strings.Help_Installed_GroupColours_Step3, () => Strings.Installed_AddToGroup))
+                .WithKeywords(() => Strings.Help_Installed_GroupColours_Keywords),
 
             // OPEN-52 N3.
             Topic("installed.notes", () => Strings.Help_Installed_Notes_Title,
@@ -315,6 +335,22 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Installed_Remove_Step2))
                 .WithNote(() => Strings.Help_Installed_Remove_Note)
                 .WithKeywords(() => Strings.Help_Installed_Remove_Keywords),
+
+            // OPEN-60.
+            Topic("installed.cleanprofiles", () => Strings.Help_Installed_CleanProfiles_Title,
+                Step(() => Strings.Help_Installed_CleanProfiles_Step1, () => Strings.Nav_Installed, () => Strings.Nav_ModLists),
+                Step(() => Strings.Help_Installed_CleanProfiles_Step2),
+                Step(() => Strings.Help_Installed_CleanProfiles_Step3, () => Strings.ProfileClean_ReportTitle))
+                .WithNote(() => Strings.Help_Installed_CleanProfiles_Note, () => Strings.Nav_Options, () => Strings.Profiles_Header)
+                .WithKeywords(() => Strings.Help_Installed_CleanProfiles_Keywords),
+
+            // OPEN-53 N9.
+            Topic("installed.link", () => Strings.Help_Installed_Link_Title,
+                Step(() => Strings.Help_Installed_Link_Step1, () => Strings.Nav_Installed, () => Strings.ModLink_Menu),
+                Step(() => Strings.Help_Installed_Link_Step2, () => Strings.ModLink_Button),
+                Step(() => Strings.Help_Installed_Link_Step3, () => Strings.ModLink_AddonMenu))
+                .WithNote(() => Strings.Help_Installed_Link_Note, () => Strings.ModUpdate_ClearOverride, () => Strings.Installed_DetailsAndVersions)
+                .WithKeywords(() => Strings.Help_Installed_Link_Keywords),
 
             Topic("installed.downgrade", () => Strings.Help_Installed_Downgrade_Title,
                 Step(() => Strings.Help_Installed_Downgrade_Step1,
@@ -496,6 +532,13 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Diagnose_ProfileFix_Step2))
                 .WithNote(() => Strings.Help_Diagnose_ProfileFix_Note)
                 .WithKeywords(() => Strings.Help_Diagnose_ProfileFix_Keywords),
+
+            // OPEN-60 C6.
+            Topic("diagnose.cleanprofiles", () => Strings.Help_Diagnose_CleanProfiles_Title,
+                Step(() => Strings.Help_Diagnose_CleanProfiles_Step1, () => Strings.Nav_Diagnose, () => Strings.Diagnose_CleanProfiles),
+                Step(() => Strings.Help_Diagnose_CleanProfiles_Step2, () => Strings.ProfileClean_Clean))
+                .WithNote(() => Strings.Help_Diagnose_CleanProfiles_Note, () => Strings.ProfileFix_TurnOn)
+                .WithKeywords(() => Strings.Help_Diagnose_CleanProfiles_Keywords),
         ]),
 
         new("footprint", () => Strings.Nav_Footprint, SymbolRegular.Scales24, typeof(FootprintPage),

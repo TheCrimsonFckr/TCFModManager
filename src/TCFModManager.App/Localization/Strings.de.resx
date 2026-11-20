@@ -10064,4 +10064,97 @@ Die Details stehen im Log:
   <data name="ProfileClean_ReportSptFix" xml:space="preserve">
     <value>Die eigene Bereinigung von Mod-Gegenständen in SPT ist jetzt eingeschaltet.</value>
   </data>
+  <data name="Help_Installed_HeldBack_Title" xml:space="preserve">
+    <value>Von sp-mod zurückgehaltene Updates finden</value>
+  </data>
+  <data name="Help_Installed_HeldBack_Step1" xml:space="preserve">
+    <value>Öffne auf {0} den Filter für den Update-Status und wähle {1}. Jede Karte sagt, welche Mod ihr Update zurückhält.</value>
+  </data>
+  <data name="Help_Installed_HeldBack_Step2" xml:space="preserve">
+    <value>Zwei Mods, die jeweils eine genaue Version der anderen brauchen, erscheinen wieder als Updates, und jede Karte nennt die andere. Wird eine aktualisiert, werden beide installiert.</value>
+  </data>
+  <data name="Help_Installed_HeldBack_Keywords" xml:space="preserve">
+    <value>zurückgehalten, Update fehlt, blockiertes Update, zusammen aktualisieren, ISB</value>
+  </data>
+  <data name="Help_Installed_GoBack_Title" xml:space="preserve">
+    <value>Zur Version vor einem Update zurückgehen</value>
+  </data>
+  <data name="Help_Installed_GoBack_Step1" xml:space="preserve">
+    <value>Klicke auf {0} mit der rechten Maustaste auf eine aktualisierte Mod und wähle Zurück zu (Version). Das Menü sagt, wie lange die alte Version aufbewahrt wird.</value>
+  </data>
+  <data name="Help_Installed_GoBack_Step2" xml:space="preserve">
+    <value>Drücke {0}. Die alte Version kommt mit ihren Configs zurück, wie sie vor dem Update waren - Einstellungen, die du seitdem geändert hast, bleiben. Die verlassene Version wird ebenfalls aufbewahrt, sodass dich dasselbe Menü wieder nach vorn bringt.</value>
+  </data>
+  <data name="Help_Installed_GoBack_Note" xml:space="preserve">
+    <value>Nur angeboten, solange entfernte Mods aufbewahrt werden ({0}, {1}), und nicht, solange ein Teil der Mod deaktiviert ist oder eine Installation läuft.</value>
+  </data>
+  <data name="Help_Installed_GoBack_Keywords" xml:space="preserve">
+    <value>zurück, Rollback, Update rückgängig, vorherige Version, zurücksetzen</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Title" xml:space="preserve">
+    <value>Einer Gruppe eine Farbe geben</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Step1" xml:space="preserve">
+    <value>Klicke in der Ansicht {0} auf {1} auf den Punkt hinter dem Symbol einer Gruppe.</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Step2" xml:space="preserve">
+    <value>Wähle eine der Farben. Der gestrichelte Kreis nimmt die Farbe wieder weg.</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Step3" xml:space="preserve">
+    <value>Der Kopf der Gruppe und ihr Etikett auf Karten und Listenzeilen bekommen einen Hauch der Farbe, und der Gruppenfilter und das Menü {0} zeigen einen Punkt.</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Keywords" xml:space="preserve">
+    <value>Gruppenfarbe, Farbe, Farbton, Etikett</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Title" xml:space="preserve">
+    <value>Profile bereinigen, wenn Mods gehen</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Step1" xml:space="preserve">
+    <value>Deaktiviere oder entferne Mods auf {0}, oder wende auf {1} eine Liste an, die Mods ausschaltet. Enthält ein Profil etwas von diesen Mods - Gegenstände, Händler oder Fertigkeiten und Bot-Rollen, die sie hinzufügen -, nennt die Frage dieses Profil.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Step2" xml:space="preserve">
+    <value>Lass die Profile angehakt, die bereinigt werden sollen, nimm den Haken bei denen weg, die bleiben sollen, wie sie sind, und mach weiter.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Step3" xml:space="preserve">
+    <value>Sobald die Mods weg sind, werden die angehakten Profile bereinigt, und {0} listet auf, was aus jedem entfernt wurde.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Note" xml:space="preserve">
+    <value>Vorher wird jedes Profil gesichert, unter {0}, {1}. Entfernter Fertigkeitsfortschritt kommt nicht zurück, wenn die Mod wieder eingeschaltet wird - dafür spielst du die Sicherung zurück.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Keywords" xml:space="preserve">
+    <value>Profil bereinigen, Profil öffnet nicht, Skills Extended, Mod-Fertigkeiten, kaputtes Profil, übrige Gegenstände</value>
+  </data>
+  <data name="Help_Installed_Link_Title" xml:space="preserve">
+    <value>Eine von Hand installierte Mod mit sp-mod verknüpfen</value>
+  </data>
+  <data name="Help_Installed_Link_Step1" xml:space="preserve">
+    <value>Klicke auf {0} mit der rechten Maustaste auf eine Mod, die die App nicht zuordnen konnte, und wähle {1}.</value>
+  </data>
+  <data name="Help_Installed_Link_Step2" xml:space="preserve">
+    <value>Füge den Link ihrer Mod- oder Addon-Seite auf sp-mod ein und drücke {0}. Die Karte übernimmt Name, Seite und Updates dieser Seite. Auf der Festplatte ändert sich nichts.</value>
+  </data>
+  <data name="Help_Installed_Link_Step3" xml:space="preserve">
+    <value>Für ein Addon im Ordner seiner Mod klickst du mit der rechten Maustaste auf die Mod, wählst {0}, fügst den Link des Addons ein und hakst die Dateien des Addons an.</value>
+  </data>
+  <data name="Help_Installed_Link_Note" xml:space="preserve">
+    <value>{0} in {1} entfernt die Verknüpfung. Sobald die App die Mod selbst installiert oder aktualisiert, gilt ihr eigener Eintrag.</value>
+  </data>
+  <data name="Help_Installed_Link_Keywords" xml:space="preserve">
+    <value>verknüpfen, nicht erkannt, unbekannte Mod, von Hand installiert, manuell, zuordnen</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Title" xml:space="preserve">
+    <value>Profile von Mods bereinigen, die weg sind</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Step1" xml:space="preserve">
+    <value>Auf {0} hat eine Karte zu einem Profil {1}. Es findet Fertigkeiten und Bot-Rollen in deinen Profilen, die weder SPT noch eine installierte, eingeschaltete Mod hinzufügt.</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Step2" xml:space="preserve">
+    <value>Nimm den Haken bei Profilen weg, die bleiben sollen, wie sie sind, und drücke {0}. Vorher wird jedes Profil gesichert, und ein Fenster listet auf, was entfernt wurde.</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Note" xml:space="preserve">
+    <value>Gegenstände und Händler von Mods, die weg sind, überlässt es SPTs eigener Bereinigung - {0}.</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Keywords" xml:space="preserve">
+    <value>Profil bereinigen, Profil öffnet nicht, unbekannte Fertigkeit, von Hand entfernt, kaputtes Profil</value>
+  </data>
 </root>

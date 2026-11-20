@@ -12273,4 +12273,128 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>SPT's own clean-up of mod items is now turned on.</value>
     <comment>After a clean, when SPT's own mod item clean-up was turned on in core.json</comment>
   </data>
+  <data name="Help_Installed_HeldBack_Title" xml:space="preserve">
+    <value>Find updates sp-mod holds back</value>
+    <comment>Help how-to title.</comment>
+  </data>
+  <data name="Help_Installed_HeldBack_Step1" xml:space="preserve">
+    <value>On {0}, open the update status filter and pick {1}. Each card says which mod's needs hold its update back.</value>
+    <comment>Help step. {0} Installed, {1} Held back by sp-mod.</comment>
+  </data>
+  <data name="Help_Installed_HeldBack_Step2" xml:space="preserve">
+    <value>Two mods that each need an exact version of the other show as updates again, and each card names the other. Updating either one installs both.</value>
+    <comment>Help step.</comment>
+  </data>
+  <data name="Help_Installed_HeldBack_Keywords" xml:space="preserve">
+    <value>held back, update not showing, blocked update, update together, ISB</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Installed_GoBack_Title" xml:space="preserve">
+    <value>Go back to the version before an update</value>
+    <comment>Help how-to title.</comment>
+  </data>
+  <data name="Help_Installed_GoBack_Step1" xml:space="preserve">
+    <value>On {0}, right-click a mod you updated and pick Go back to (version). The menu says how long the old version is kept.</value>
+    <comment>Help step. {0} Installed. Go back to (version) is the right-click menu item.</comment>
+  </data>
+  <data name="Help_Installed_GoBack_Step2" xml:space="preserve">
+    <value>Press {0}. The old version comes back with its configs as they were before the update, keeping any setting you changed since. The version you left is kept too, so the same menu can take you forward again.</value>
+    <comment>Help step. {0} Go back.</comment>
+  </data>
+  <data name="Help_Installed_GoBack_Note" xml:space="preserve">
+    <value>Offered only while removed mods are kept ({0}, {1}), and not while part of the mod is disabled or an install is running.</value>
+    <comment>Help note. {0} Options, {1} Keep removed mods.</comment>
+  </data>
+  <data name="Help_Installed_GoBack_Keywords" xml:space="preserve">
+    <value>go back, roll back, rollback, undo update, previous version, revert</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Installed_GroupColours_Title" xml:space="preserve">
+    <value>Give a group a colour</value>
+    <comment>Help how-to title.</comment>
+  </data>
+  <data name="Help_Installed_GroupColours_Step1" xml:space="preserve">
+    <value>In {0} view on {1}, click the dot after a group's icon.</value>
+    <comment>Help step. {0} Groups, {1} Installed.</comment>
+  </data>
+  <data name="Help_Installed_GroupColours_Step2" xml:space="preserve">
+    <value>Pick one of the colours. The dashed circle takes the colour off.</value>
+    <comment>Help step.</comment>
+  </data>
+  <data name="Help_Installed_GroupColours_Step3" xml:space="preserve">
+    <value>The group's header and its chip on cards and List rows take a tint of the colour, and the Group filter and the {0} menu show a dot.</value>
+    <comment>Help step. {0} Add to group.</comment>
+  </data>
+  <data name="Help_Installed_GroupColours_Keywords" xml:space="preserve">
+    <value>group colour, group color, colour, color, tint, label colour</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Title" xml:space="preserve">
+    <value>Clean your profiles when mods go</value>
+    <comment>Help how-to title.</comment>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Step1" xml:space="preserve">
+    <value>Disable or remove mods on {0}, or apply a list on {1} that turns mods off. When a profile holds something from those mods - items, traders, or skills and bot roles they add - the question lists that profile.</value>
+    <comment>Help step. {0} Installed, {1} Mod lists.</comment>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Step2" xml:space="preserve">
+    <value>Leave ticked the profiles to clean, untick any to leave as they are, and go ahead.</value>
+    <comment>Help step.</comment>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Step3" xml:space="preserve">
+    <value>Once the mods have gone, the ticked profiles are cleaned, and {0} lists what came out of each.</value>
+    <comment>Help step. {0} Profiles cleaned.</comment>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Note" xml:space="preserve">
+    <value>Every profile is backed up first, under {0}, {1}. Skill progress taken out doesn't come back if the mod is turned on again - restore the backup for that.</value>
+    <comment>Help note. {0} Options, {1} SPT profile backups.</comment>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Keywords" xml:space="preserve">
+    <value>clean profile, profile won't open, skills extended, mod skills, remove skills, broken profile, leftover items</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Installed_Link_Title" xml:space="preserve">
+    <value>Link a mod you installed by hand to sp-mod</value>
+    <comment>Help how-to title.</comment>
+  </data>
+  <data name="Help_Installed_Link_Step1" xml:space="preserve">
+    <value>On {0}, right-click a mod the app couldn't match and pick {1}.</value>
+    <comment>Help step. {0} Installed, {1} Link to its sp-mod page...</comment>
+  </data>
+  <data name="Help_Installed_Link_Step2" xml:space="preserve">
+    <value>Paste the link of its mod or addon page on sp-mod and press {0}. The card takes that page's name, page and updates. Nothing on disk changes.</value>
+    <comment>Help step. {0} Link.</comment>
+  </data>
+  <data name="Help_Installed_Link_Step3" xml:space="preserve">
+    <value>For an addon inside its mod's folder, right-click the mod, pick {0}, paste the addon's link and tick the addon's files.</value>
+    <comment>Help step. {0} Link an addon in this folder...</comment>
+  </data>
+  <data name="Help_Installed_Link_Note" xml:space="preserve">
+    <value>{0} in {1} takes the link off. Once the app installs or updates the mod itself, its own record takes over.</value>
+    <comment>Help note. {0} Clear override, {1} Details and versions.</comment>
+  </data>
+  <data name="Help_Installed_Link_Keywords" xml:space="preserve">
+    <value>link, unmatched, unknown mod, hand installed, manual install, match mod, sp-mod page</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Title" xml:space="preserve">
+    <value>Clean profiles of mods that are gone</value>
+    <comment>Help how-to title.</comment>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Step1" xml:space="preserve">
+    <value>On {0}, a card about a profile has {1}. It finds skills and bot roles in your profiles that neither SPT nor an installed, turned-on mod adds.</value>
+    <comment>Help step. {0} Diagnose logs, {1} Clean profiles.</comment>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Step2" xml:space="preserve">
+    <value>Untick any profile to leave as it is and press {0}. Every profile is backed up first, and a window lists what came out.</value>
+    <comment>Help step. {0} Clean.</comment>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Note" xml:space="preserve">
+    <value>Items and traders from mods that are gone are left to SPT's own clean-up - {0}.</value>
+    <comment>Help note. {0} Let SPT clean the profile.</comment>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Keywords" xml:space="preserve">
+    <value>clean profile, profile won't open, unknown skill, mod removed by hand, broken profile</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
 </root>

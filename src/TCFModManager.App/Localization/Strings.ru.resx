@@ -10487,4 +10487,97 @@
   <data name="ProfileClean_ReportSptFix" xml:space="preserve">
     <value>Собственная очистка предметов модов в SPT теперь включена.</value>
   </data>
+  <data name="Help_Installed_HeldBack_Title" xml:space="preserve">
+    <value>Найти обновления, которые придерживает sp-mod</value>
+  </data>
+  <data name="Help_Installed_HeldBack_Step1" xml:space="preserve">
+    <value>На странице «{0}» откройте фильтр состояния обновлений и выберите «{1}». На каждой карточке сказано, какой мод сдерживает её обновление.</value>
+  </data>
+  <data name="Help_Installed_HeldBack_Step2" xml:space="preserve">
+    <value>Два мода, каждому из которых нужна точная версия другого, снова показываются как обновления, и на каждой карточке назван другой. Обновление любого из них устанавливает оба.</value>
+  </data>
+  <data name="Help_Installed_HeldBack_Keywords" xml:space="preserve">
+    <value>придержано, обновление не видно, заблокировано, вместе, ISB</value>
+  </data>
+  <data name="Help_Installed_GoBack_Title" xml:space="preserve">
+    <value>Вернуть версию, которая была до обновления</value>
+  </data>
+  <data name="Help_Installed_GoBack_Step1" xml:space="preserve">
+    <value>На странице «{0}» щёлкните правой кнопкой по обновлённому моду и выберите «Вернуться к (версия)». В меню сказано, сколько хранится старая версия.</value>
+  </data>
+  <data name="Help_Installed_GoBack_Step2" xml:space="preserve">
+    <value>Нажмите «{0}». Старая версия вернётся с конфигами, какими они были до обновления, а настройки, изменённые после него, сохранятся. Оставленная версия тоже хранится, так что то же меню вернёт вас вперёд.</value>
+  </data>
+  <data name="Help_Installed_GoBack_Note" xml:space="preserve">
+    <value>Доступно, только пока удалённые моды хранятся («{0}», «{1}»), и не тогда, когда часть мода отключена или идёт установка.</value>
+  </data>
+  <data name="Help_Installed_GoBack_Keywords" xml:space="preserve">
+    <value>откат, вернуть, отменить обновление, предыдущая версия</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Title" xml:space="preserve">
+    <value>Задать группе цвет</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Step1" xml:space="preserve">
+    <value>В виде «{0}» на странице «{1}» нажмите точку после значка группы.</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Step2" xml:space="preserve">
+    <value>Выберите один из цветов. Пунктирный кружок убирает цвет.</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Step3" xml:space="preserve">
+    <value>Заголовок группы и её метка на карточках и строках списка получают оттенок цвета, а фильтр групп и меню «{0}» показывают точку.</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Keywords" xml:space="preserve">
+    <value>цвет группы, цвет, оттенок, метка</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Title" xml:space="preserve">
+    <value>Очистить профили, когда моды убираются</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Step1" xml:space="preserve">
+    <value>Отключите или удалите моды на странице «{0}» или примените на странице «{1}» список, который отключает моды. Если в профиле есть что-то от этих модов - предметы, торговцы или навыки и роли ботов, которые они добавляют, - вопрос покажет этот профиль.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Step2" xml:space="preserve">
+    <value>Оставьте отмеченными профили для очистки, снимите отметку с тех, что нужно оставить как есть, и продолжайте.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Step3" xml:space="preserve">
+    <value>Когда моды убраны, отмеченные профили очищаются, а окно «{0}» показывает, что убрано из каждого.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Note" xml:space="preserve">
+    <value>Сначала создаётся резервная копия каждого профиля - «{0}», «{1}». Убранный прогресс навыков не вернётся, если снова включить мод, - для этого восстановите копию.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Keywords" xml:space="preserve">
+    <value>очистить профиль, профиль не открывается, Skills Extended, навыки модов, сломанный профиль, оставшиеся предметы</value>
+  </data>
+  <data name="Help_Installed_Link_Title" xml:space="preserve">
+    <value>Связать мод, установленный вручную, с sp-mod</value>
+  </data>
+  <data name="Help_Installed_Link_Step1" xml:space="preserve">
+    <value>На странице «{0}» щёлкните правой кнопкой по моду, который приложение не смогло сопоставить, и выберите «{1}».</value>
+  </data>
+  <data name="Help_Installed_Link_Step2" xml:space="preserve">
+    <value>Вставьте ссылку на его страницу мода или аддона на sp-mod и нажмите «{0}». Карточка получит название, страницу и обновления этой страницы. На диске ничего не меняется.</value>
+  </data>
+  <data name="Help_Installed_Link_Step3" xml:space="preserve">
+    <value>Для аддона в папке его мода щёлкните правой кнопкой по моду, выберите «{0}», вставьте ссылку на аддон и отметьте его файлы.</value>
+  </data>
+  <data name="Help_Installed_Link_Note" xml:space="preserve">
+    <value>«{0}» в «{1}» снимает связь. Как только приложение само установит или обновит мод, будет действовать его собственная запись.</value>
+  </data>
+  <data name="Help_Installed_Link_Keywords" xml:space="preserve">
+    <value>связать, не распознан, неизвестный мод, установлен вручную, сопоставить</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Title" xml:space="preserve">
+    <value>Очистить профили от модов, которых больше нет</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Step1" xml:space="preserve">
+    <value>На странице «{0}» у карточки о профиле есть кнопка «{1}». Она находит в профилях навыки и роли ботов, которые не добавляет ни SPT, ни установленный и включённый мод.</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Step2" xml:space="preserve">
+    <value>Снимите отметку с профилей, которые нужно оставить как есть, и нажмите «{0}». Сначала создаётся резервная копия каждого профиля, а окно показывает, что убрано.</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Note" xml:space="preserve">
+    <value>Предметы и торговцы от модов, которых больше нет, остаются собственной очистке SPT - «{0}».</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Keywords" xml:space="preserve">
+    <value>очистить профиль, профиль не открывается, неизвестный навык, удалён вручную, сломанный профиль</value>
+  </data>
 </root>

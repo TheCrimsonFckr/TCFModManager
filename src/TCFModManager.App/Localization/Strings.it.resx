@@ -10064,4 +10064,97 @@ I dettagli sono nel log:
   <data name="ProfileClean_ReportSptFix" xml:space="preserve">
     <value>La pulizia degli oggetti delle mod di SPT è ora attiva.</value>
   </data>
+  <data name="Help_Installed_HeldBack_Title" xml:space="preserve">
+    <value>Trovare gli aggiornamenti trattenuti da sp-mod</value>
+  </data>
+  <data name="Help_Installed_HeldBack_Step1" xml:space="preserve">
+    <value>In {0}, apri il filtro dello stato degli aggiornamenti e scegli {1}. Ogni scheda dice quale mod trattiene il suo aggiornamento.</value>
+  </data>
+  <data name="Help_Installed_HeldBack_Step2" xml:space="preserve">
+    <value>Due mod che richiedono ciascuna una versione esatta dell'altra tornano a comparire come aggiornamenti, e ogni scheda nomina l'altra. Aggiornarne una installa entrambe.</value>
+  </data>
+  <data name="Help_Installed_HeldBack_Keywords" xml:space="preserve">
+    <value>trattenuto, aggiornamento bloccato, aggiornamento mancante, insieme, ISB</value>
+  </data>
+  <data name="Help_Installed_GoBack_Title" xml:space="preserve">
+    <value>Tornare alla versione prima di un aggiornamento</value>
+  </data>
+  <data name="Help_Installed_GoBack_Step1" xml:space="preserve">
+    <value>In {0}, fai clic destro su una mod aggiornata e scegli Torna a (versione). Il menu dice per quanto tempo la versione vecchia viene conservata.</value>
+  </data>
+  <data name="Help_Installed_GoBack_Step2" xml:space="preserve">
+    <value>Premi {0}. La versione vecchia torna con le sue config com'erano prima dell'aggiornamento, mantenendo le impostazioni cambiate nel frattempo. Anche la versione lasciata viene conservata, così lo stesso menu può riportarti avanti.</value>
+  </data>
+  <data name="Help_Installed_GoBack_Note" xml:space="preserve">
+    <value>Offerto solo finché le mod rimosse vengono conservate ({0}, {1}), e non mentre una parte della mod è disattivata o un'installazione è in corso.</value>
+  </data>
+  <data name="Help_Installed_GoBack_Keywords" xml:space="preserve">
+    <value>tornare indietro, rollback, annullare aggiornamento, versione precedente</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Title" xml:space="preserve">
+    <value>Dare un colore a un gruppo</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Step1" xml:space="preserve">
+    <value>Nella vista {0} di {1}, fai clic sul punto dopo l'icona di un gruppo.</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Step2" xml:space="preserve">
+    <value>Scegli uno dei colori. Il cerchio tratteggiato toglie il colore.</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Step3" xml:space="preserve">
+    <value>L'intestazione del gruppo e la sua etichetta su schede e righe dell'elenco prendono una tinta del colore, e il filtro dei gruppi e il menu {0} mostrano un punto.</value>
+  </data>
+  <data name="Help_Installed_GroupColours_Keywords" xml:space="preserve">
+    <value>colore del gruppo, colore, tinta, etichetta</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Title" xml:space="preserve">
+    <value>Pulire i profili quando delle mod vengono tolte</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Step1" xml:space="preserve">
+    <value>Disattiva o rimuovi mod in {0}, oppure applica in {1} un elenco che disattiva delle mod. Quando un profilo contiene qualcosa di quelle mod - oggetti, commercianti, o abilità e ruoli dei bot che aggiungono - la domanda elenca quel profilo.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Step2" xml:space="preserve">
+    <value>Lascia spuntati i profili da pulire, togli la spunta a quelli da lasciare come sono, e prosegui.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Step3" xml:space="preserve">
+    <value>Tolte le mod, i profili spuntati vengono puliti, e {0} elenca cosa è stato tolto da ciascuno.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Note" xml:space="preserve">
+    <value>Prima viene fatto un backup di ogni profilo, in {0}, {1}. I progressi delle abilità tolti non tornano se la mod viene riattivata - per questo ripristina il backup.</value>
+  </data>
+  <data name="Help_Installed_CleanProfiles_Keywords" xml:space="preserve">
+    <value>pulire profilo, profilo non si apre, Skills Extended, abilità delle mod, profilo rotto, oggetti rimasti</value>
+  </data>
+  <data name="Help_Installed_Link_Title" xml:space="preserve">
+    <value>Collegare a sp-mod una mod installata a mano</value>
+  </data>
+  <data name="Help_Installed_Link_Step1" xml:space="preserve">
+    <value>In {0}, fai clic destro su una mod che l'app non ha riconosciuto e scegli {1}.</value>
+  </data>
+  <data name="Help_Installed_Link_Step2" xml:space="preserve">
+    <value>Incolla il link della sua pagina di mod o addon su sp-mod e premi {0}. La scheda prende nome, pagina e aggiornamenti di quella pagina. Sul disco non cambia nulla.</value>
+  </data>
+  <data name="Help_Installed_Link_Step3" xml:space="preserve">
+    <value>Per un addon nella cartella della sua mod, fai clic destro sulla mod, scegli {0}, incolla il link dell'addon e spunta i suoi file.</value>
+  </data>
+  <data name="Help_Installed_Link_Note" xml:space="preserve">
+    <value>{0} in {1} toglie il collegamento. Quando l'app installa o aggiorna la mod da sé, vale la sua registrazione.</value>
+  </data>
+  <data name="Help_Installed_Link_Keywords" xml:space="preserve">
+    <value>collegare, non riconosciuta, mod sconosciuta, installata a mano, manuale, associare</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Title" xml:space="preserve">
+    <value>Pulire i profili dalle mod non più presenti</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Step1" xml:space="preserve">
+    <value>In {0}, una scheda su un profilo ha {1}. Trova nei tuoi profili abilità e ruoli dei bot che né SPT né una mod installata e attiva aggiunge.</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Step2" xml:space="preserve">
+    <value>Togli la spunta ai profili da lasciare come sono e premi {0}. Prima viene fatto un backup di ogni profilo, e una finestra elenca cosa è stato tolto.</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Note" xml:space="preserve">
+    <value>Oggetti e commercianti delle mod non più presenti sono lasciati alla pulizia di SPT - {0}.</value>
+  </data>
+  <data name="Help_Diagnose_CleanProfiles_Keywords" xml:space="preserve">
+    <value>pulire profilo, profilo non si apre, abilità sconosciuta, rimossa a mano, profilo rotto</value>
+  </data>
 </root>
