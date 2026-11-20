@@ -41,8 +41,21 @@
                         ToolTip="{Binding Name}"
                         Tag="{Binding Key}"
                         Click="Color_Click">
-                        <Ellipse Width="24" Height="24" Fill="{Binding Brush}" />
+                        <Grid Width="24" Height="24">
+                            <Ellipse Fill="{Binding Brush}" />
+                            <Ellipse
+                                x:Name="NoColorRing"
+                                Stroke="{DynamicResource TextFillColorTertiaryBrush}"
+                                StrokeThickness="1.5"
+                                StrokeDashArray="2 1.5"
+                                Visibility="Collapsed" />
+                        </Grid>
                     </ui:Button>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsNone}" Value="True">
+                            <Setter TargetName="NoColorRing" Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
@@ -52,11 +65,6 @@
                 Style="{StaticResource DialogButton}"
                 IsCancel="True"
                 Content="{loc:Str Common_Cancel}" />
-
-            <ui:Button
-                Style="{StaticResource DialogButton}"
-                Content="{loc:Str GroupColor_None}"
-                Click="None_Click" />
         </WrapPanel>
     </Grid>
 </ui:FluentWindow>

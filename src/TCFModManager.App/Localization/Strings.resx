@@ -11767,7 +11767,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
   </data>
   <data name="GroupColor_None" xml:space="preserve">
     <value>No colour</value>
-    <comment>Group colour picker button: removes the group's colour.</comment>
+    <comment>Group colour picker: tooltip on the dashed no-colour swatch, which removes the group's colour.</comment>
   </data>
   <data name="GroupColor_PickToolTip" xml:space="preserve">
     <value>Pick a colour for this group</value>
