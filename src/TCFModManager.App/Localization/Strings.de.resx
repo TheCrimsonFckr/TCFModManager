@@ -9468,7 +9468,7 @@ Die Details stehen im Log:
     <value>F1 öffnet die Hilfe zur aktuellen Seite. Auf {0} wählt Strg+A alle angezeigten Mods und Esc beendet die Mehrfachauswahl.</value>
   </data>
   <data name="Help_Start_Keys_Keywords" xml:space="preserve">
-    <value>Tastatur, Tastenkürzel, Hotkey, Strg+F, F5, Link einfügen, Strg+V, Link ziehen</value>
+    <value>Tastatur, Tastenkürzel, Hotkey, Strg+F, F5, Link einfügen, Strg+V, Link ziehen, Alt+Links, Alt+Rechts, zurück, vor</value>
   </data>
   <data name="Links_NotFoundTitle" xml:space="preserve">
     <value>Nicht gefunden</value>
@@ -10258,5 +10258,65 @@ Die Details stehen im Log:
   </data>
   <data name="Nav_AuthorPlaceFormat" xml:space="preserve">
     <value>{0} (Autor)</value>
+  </data>
+  <data name="Help_Start_BackForward_Title" xml:space="preserve">
+    <value>Zwischen Seiten zurück und vor gehen</value>
+  </data>
+  <data name="Help_Start_BackForward_Step1" xml:space="preserve">
+    <value>{0} und {1} oben in der Seitenleiste gehen durch die geöffneten Seiten zurück und vor, wie ein Browser. Eine neue Seite verwirft die Seiten davor.</value>
+  </data>
+  <data name="Help_Start_BackForward_Step2" xml:space="preserve">
+    <value>Ein Rechtsklick auf einen der beiden zeigt die Seiten in diese Richtung; ein Klick springt direkt dorthin. Eine Autorenseite kommt mit demselben Autor zurück.</value>
+  </data>
+  <data name="Help_Start_BackForward_Step3" xml:space="preserve">
+    <value>Alt+Links und Alt+Rechts oder die Seitentasten der Maus tun dasselbe. Solange ein Fenster wie die Details einer Mod offen ist, tun sie nichts.</value>
+  </data>
+  <data name="Help_Start_BackForward_Keywords" xml:space="preserve">
+    <value>zurück, vor, vorherige Seite, Verlauf, Alt+Links, Maus-Zurück-Taste</value>
+  </data>
+  <data name="Help_Start_Keys_Step5" xml:space="preserve">
+    <value>Alt+Links und Alt+Rechts sind {0} und {1}, ebenso die Seitentasten der Maus.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Title" xml:space="preserve">
+    <value>Sehen, wann der Server oder das Spiel abgestürzt ist</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Step1" xml:space="preserve">
+    <value>Stürzt der Server, das Spiel oder der Fika-Headless ab, erscheint oben im Fenster ein roter Balken, mit einer Benachrichtigung, wenn die App nicht im Vordergrund ist. Er nennt die Mod, wenn Windows' Absturzbericht auf eine zeigt.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Step2" xml:space="preserve">
+    <value>{0} auf dem Balken öffnet diese Seite mit den Einzelheiten. {1} bringt dich zur Mod.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Note" xml:space="preserve">
+    <value>Etwas aus der App heraus zu stoppen oder im Task-Manager zu beenden ist kein Absturz und zeigt keinen Balken.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Keywords" xml:space="preserve">
+    <value>Absturz, abgestürzt, roter Balken, Server geschlossen, Spiel geschlossen, Headless abgestürzt, welche Mod</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Title" xml:space="preserve">
+    <value>Herausfinden, warum der Server beim Starten aufgegeben hat</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Step1" xml:space="preserve">
+    <value>Gibt SPT beim Starten auf, zeigt {0} eine Karte mit dem Fehler und der Mod, auf die er zeigt.</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Step2" xml:space="preserve">
+    <value>Eine Mod für ein neueres SPT braucht ein aktualisiertes SPT oder eine Version der Mod für deines. Fehlt einer Mod etwas, steht auf ihrer sp-mod-Seite, was sie braucht.</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Keywords" xml:space="preserve">
+    <value>Server startet nicht, unerwartet gestoppt, neueres SPT, fehlende Voraussetzung, Startfehler</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Title" xml:space="preserve">
+    <value>Herausfinden, warum Fika das Spiel nicht beitreten lässt</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Step1" xml:space="preserve">
+    <value>Fika prüft das Spiel gegen den Server und den Raid-Host aus dem Spiel heraus, daher steht seine Meldung im Log des Spiels, nicht des Servers. {0} liest beide.</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Step2" xml:space="preserve">
+    <value>Jedes Fika-Problem bekommt eine eigene Karte: Mods, die der Server verlangt, kein Fika auf dem Server, ein zu altes Fika auf dem Server, eine andere Fika- oder Spielversion als der Raid-Host, oder veränderte Fika-Dateien.</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Note" xml:space="preserve">
+    <value>Das Spiel schreibt sein Log bei jedem Start neu, also vor dem nächsten Start nachsehen.</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Keywords" xml:space="preserve">
+    <value>Fika, kann nicht beitreten, verlangte Mods, fehlende Mods, Versionskonflikt, Raid-Host, Headless, Mehrspieler</value>
   </data>
 </root>

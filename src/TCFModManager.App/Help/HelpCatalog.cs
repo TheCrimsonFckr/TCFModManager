@@ -44,8 +44,16 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Start_Keys_Step1),
                 Step(() => Strings.Help_Start_Keys_Step2, () => Strings.Common_Rescan),
                 Step(() => Strings.Help_Start_Keys_Step3),
-                Step(() => Strings.Help_Start_Keys_Step4, () => Strings.Nav_Installed))
+                Step(() => Strings.Help_Start_Keys_Step4, () => Strings.Nav_Installed),
+                Step(() => Strings.Help_Start_Keys_Step5, () => Strings.Nav_Back, () => Strings.Nav_Forward))
                 .WithKeywords(() => Strings.Help_Start_Keys_Keywords),
+
+            // OPEN-56 N18.
+            Topic("start.backforward", () => Strings.Help_Start_BackForward_Title,
+                Step(() => Strings.Help_Start_BackForward_Step1, () => Strings.Nav_Back, () => Strings.Nav_Forward),
+                Step(() => Strings.Help_Start_BackForward_Step2),
+                Step(() => Strings.Help_Start_BackForward_Step3))
+                .WithKeywords(() => Strings.Help_Start_BackForward_Keywords),
         ]),
 
         new("profile", () => Strings.Nav_Profile, SymbolRegular.Person24, typeof(ProfilePage),
@@ -525,6 +533,26 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Diagnose_Read_Step3, () => Strings.Diagnose_Refresh))
                 .WithNote(() => Strings.Help_Diagnose_Read_Note, () => Strings.Diagnose_CopyReport)
                 .WithKeywords(() => Strings.Help_Diagnose_Read_Keywords),
+
+            // OPEN-54 N30.
+            Topic("diagnose.crashbar", () => Strings.Help_Diagnose_CrashBar_Title,
+                Step(() => Strings.Help_Diagnose_CrashBar_Step1),
+                Step(() => Strings.Help_Diagnose_CrashBar_Step2, () => Strings.Nav_Diagnose, () => Strings.Diagnose_ShowMod))
+                .WithNote(() => Strings.Help_Diagnose_CrashBar_Note)
+                .WithKeywords(() => Strings.Help_Diagnose_CrashBar_Keywords),
+
+            // OPEN-54 N31.
+            Topic("diagnose.serverstopped", () => Strings.Help_Diagnose_ServerStopped_Title,
+                Step(() => Strings.Help_Diagnose_ServerStopped_Step1, () => Strings.Nav_Diagnose),
+                Step(() => Strings.Help_Diagnose_ServerStopped_Step2))
+                .WithKeywords(() => Strings.Help_Diagnose_ServerStopped_Keywords),
+
+            // OPEN-54 N32.
+            Topic("diagnose.fika", () => Strings.Help_Diagnose_Fika_Title,
+                Step(() => Strings.Help_Diagnose_Fika_Step1, () => Strings.Nav_Diagnose),
+                Step(() => Strings.Help_Diagnose_Fika_Step2))
+                .WithNote(() => Strings.Help_Diagnose_Fika_Note)
+                .WithKeywords(() => Strings.Help_Diagnose_Fika_Keywords),
 
             // OPEN-52 N29.
             Topic("diagnose.profilefix", () => Strings.Help_Diagnose_ProfileFix_Title,

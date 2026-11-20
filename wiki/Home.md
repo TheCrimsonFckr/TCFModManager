@@ -10,6 +10,8 @@ Rather install mods yourself? **Monitor mode** has the app download each mod for
 
 **Shortcuts.** Ctrl+F goes to the page's search box and F5 does what its Rescan or Refresh button does. With a sp-mod link copied, Ctrl+V outside a text box opens that mod or addon in the app, and a Mod List link opens the list import; dragging a link from your browser onto the window does the same.
 
+**Back and Forward.** The two arrows at the top of the sidebar go back and forward through the pages you've opened, as a browser does, and right-clicking either lists the pages that way. Alt+Left and Alt+Right, or your mouse's side buttons, do the same.
+
 WPF with Fluent Design and .NET 9
 
 The released build is entirely self-contained.

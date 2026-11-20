@@ -11478,7 +11478,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Help step.</comment>
   </data>
   <data name="Help_Start_Keys_Keywords" xml:space="preserve">
-    <value>keyboard, shortcut, hotkey, Ctrl+F, F5, paste link, Ctrl+V, drag link</value>
+    <value>keyboard, shortcut, hotkey, Ctrl+F, F5, paste link, Ctrl+V, drag link, Alt+Left, Alt+Right, back, forward</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
   <data name="Links_NotFoundTitle" xml:space="preserve">
@@ -12532,5 +12532,85 @@ Right-click to save the current filters to it, rename it or delete it.</value>
   <data name="Nav_AuthorPlaceFormat" xml:space="preserve">
     <value>{0} (author)</value>
     <comment>Back/Forward at the top of the sidebar (OPEN-56 N18). An author page in the right-click list. {0}: the author's name</comment>
+  </data>
+  <data name="Help_Start_BackForward_Title" xml:space="preserve">
+    <value>Go back and forward through pages</value>
+    <comment>Help how-to title (OPEN-56).</comment>
+  </data>
+  <data name="Help_Start_BackForward_Step1" xml:space="preserve">
+    <value>{0} and {1} at the top of the sidebar go back and forward through the pages you have opened, as a browser does. Opening a new page drops the ones ahead.</value>
+    <comment>Help how-to step. {0} Back, {1} Forward.</comment>
+  </data>
+  <data name="Help_Start_BackForward_Step2" xml:space="preserve">
+    <value>Right-click either one to see the pages that way, and pick one to jump straight to it. An author's page comes back as that author.</value>
+    <comment>Help how-to step.</comment>
+  </data>
+  <data name="Help_Start_BackForward_Step3" xml:space="preserve">
+    <value>Alt+Left and Alt+Right, or your mouse's side buttons, do the same. They do nothing while a window such as a mod's details is open.</value>
+    <comment>Help how-to step.</comment>
+  </data>
+  <data name="Help_Start_BackForward_Keywords" xml:space="preserve">
+    <value>back, forward, previous page, history, Alt+Left, mouse back button</value>
+    <comment>Help search keywords (OPEN-56).</comment>
+  </data>
+  <data name="Help_Start_Keys_Step5" xml:space="preserve">
+    <value>Alt+Left and Alt+Right are {0} and {1}, and so are the mouse's side buttons.</value>
+    <comment>Help how-to step (OPEN-56). {0} Back, {1} Forward.</comment>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Title" xml:space="preserve">
+    <value>See when the server or the game crashed</value>
+    <comment>Help how-to title (OPEN-54 N30).</comment>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Step1" xml:space="preserve">
+    <value>When the server, the game or the Fika headless crashes, a red bar comes up at the top of the window, with a notification if the app isn't in front. It names the mod when Windows' crash record points at one.</value>
+    <comment>Help how-to step.</comment>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Step2" xml:space="preserve">
+    <value>{0} on the bar opens this page for the details. {1} takes you to the mod.</value>
+    <comment>Help how-to step. {0} Diagnose logs, {1} Show in Installed.</comment>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Note" xml:space="preserve">
+    <value>Stopping something from the app, or ending it in Task Manager, isn't a crash and raises no bar.</value>
+    <comment>Help note (OPEN-54 N30).</comment>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Keywords" xml:space="preserve">
+    <value>crash, crashed, red bar, server closed, game closed, headless crashed, which mod</value>
+    <comment>Help search keywords (OPEN-54 N30).</comment>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Title" xml:space="preserve">
+    <value>Find out why the server stopped while starting</value>
+    <comment>Help how-to title (OPEN-54 N31).</comment>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Step1" xml:space="preserve">
+    <value>When SPT gives up during startup, {0} shows a card with the error and the mod it points at.</value>
+    <comment>Help how-to step. {0} Diagnose logs.</comment>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Step2" xml:space="preserve">
+    <value>A mod made for a newer SPT needs SPT updated, or a version of the mod made for yours. For a mod missing something it needs, its sp-mod page says what that is.</value>
+    <comment>Help how-to step.</comment>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Keywords" xml:space="preserve">
+    <value>server won't start, unexpectedly stopped, newer SPT, missing requirement, startup error</value>
+    <comment>Help search keywords (OPEN-54 N31).</comment>
+  </data>
+  <data name="Help_Diagnose_Fika_Title" xml:space="preserve">
+    <value>Find out why Fika won't let the game join</value>
+    <comment>Help how-to title (OPEN-54 N32).</comment>
+  </data>
+  <data name="Help_Diagnose_Fika_Step1" xml:space="preserve">
+    <value>Fika checks the game against the server and the raid host from inside the game, so what it says is in the game's log, not the server's. {0} reads both.</value>
+    <comment>Help how-to step. {0} Diagnose logs.</comment>
+  </data>
+  <data name="Help_Diagnose_Fika_Step2" xml:space="preserve">
+    <value>Each Fika problem gets its own card: mods the server requires, no Fika on the server, the server's Fika too old, a different Fika or game version from the raid host, or changed Fika files.</value>
+    <comment>Help how-to step.</comment>
+  </data>
+  <data name="Help_Diagnose_Fika_Note" xml:space="preserve">
+    <value>The game rewrites its log every time it starts, so look before starting it again.</value>
+    <comment>Help note (OPEN-54 N32).</comment>
+  </data>
+  <data name="Help_Diagnose_Fika_Keywords" xml:space="preserve">
+    <value>Fika, can't join, required mods, missing mods, version mismatch, raid host, headless, multiplayer</value>
+    <comment>Help search keywords (OPEN-54 N32).</comment>
   </data>
 </root>

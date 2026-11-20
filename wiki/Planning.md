@@ -60,11 +60,12 @@
 - Mods that only update together offered together, and a Held back filter - *Completed*
 - Group colours - 11 colours, as a tint on group headers and chips - *Completed*
 - Clean profiles when mods go - skills, bot roles, items and traders taken out of the profiles you tick, with a backup first - *Completed*
+- A crash bar when the server, the game or the Fika headless crashes, naming the mod when it can - *Completed*
+- Diagnose cards for a server that gave up while starting, and for Fika's own problems - *Completed*
+- Back and Forward through the pages you've visited - *Completed*
 
 ## Planned
 
 - Find the broken mod - start the server with halves of your server mods off until the one stopping it is found - *Planned*
-- A crash bar after the server or game crashes, and Diagnose cards for Fika's own problems - *Planned*
 - Copies of your character from a friend's Fika server, kept on your PC - *Planned*
-- Back and Forward through the pages you've visited - *Planned*
 - More ideas are welcome on the [Issues tab](https://sp-mod.com/mod/2945/tcf-mod-manager#issues)

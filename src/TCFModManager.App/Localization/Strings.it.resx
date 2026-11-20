@@ -9468,7 +9468,7 @@ I dettagli sono nel log:
     <value>F1 apre la guida della pagina in cui sei. In {0}, Ctrl+A seleziona tutte le mod mostrate ed Esc esce dalla selezione multipla.</value>
   </data>
   <data name="Help_Start_Keys_Keywords" xml:space="preserve">
-    <value>tastiera, scorciatoia, Ctrl+F, F5, incolla link, Ctrl+V, trascina link</value>
+    <value>tastiera, scorciatoia, Ctrl+F, F5, incolla link, Ctrl+V, trascina link, Alt+Sinistra, Alt+Destra, indietro, avanti</value>
   </data>
   <data name="Links_NotFoundTitle" xml:space="preserve">
     <value>Non trovato</value>
@@ -10258,5 +10258,65 @@ I dettagli sono nel log:
   </data>
   <data name="Nav_AuthorPlaceFormat" xml:space="preserve">
     <value>{0} (autore)</value>
+  </data>
+  <data name="Help_Start_BackForward_Title" xml:space="preserve">
+    <value>Tornare indietro e avanti tra le pagine</value>
+  </data>
+  <data name="Help_Start_BackForward_Step1" xml:space="preserve">
+    <value>{0} e {1} in cima alla barra laterale scorrono le pagine aperte, come un browser. Aprire una nuova pagina elimina quelle più avanti.</value>
+  </data>
+  <data name="Help_Start_BackForward_Step2" xml:space="preserve">
+    <value>Un clic destro su uno dei due elenca le pagine in quella direzione; sceglierne una porta subito lì. La pagina di un autore torna su quell'autore.</value>
+  </data>
+  <data name="Help_Start_BackForward_Step3" xml:space="preserve">
+    <value>Alt+Sinistra e Alt+Destra, o i tasti laterali del mouse, fanno lo stesso. Non fanno nulla mentre è aperta una finestra come i dettagli di una mod.</value>
+  </data>
+  <data name="Help_Start_BackForward_Keywords" xml:space="preserve">
+    <value>indietro, avanti, pagina precedente, cronologia, Alt+Sinistra, tasto indietro del mouse</value>
+  </data>
+  <data name="Help_Start_Keys_Step5" xml:space="preserve">
+    <value>Alt+Sinistra e Alt+Destra sono {0} e {1}, così come i tasti laterali del mouse.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Title" xml:space="preserve">
+    <value>Vedere quando il server o il gioco si è bloccato</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Step1" xml:space="preserve">
+    <value>Quando il server, il gioco o l'headless di Fika si blocca, compare una barra rossa in cima alla finestra, con una notifica se l'app non è in primo piano. Nomina la mod quando il rapporto di Windows ne indica una.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Step2" xml:space="preserve">
+    <value>{0} sulla barra apre questa pagina con i dettagli. {1} porta alla mod.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Note" xml:space="preserve">
+    <value>Fermare qualcosa dall'app, o terminarlo dal Task Manager, non è un blocco e non mostra la barra.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Keywords" xml:space="preserve">
+    <value>blocco, crash, barra rossa, server chiuso, gioco chiuso, headless bloccato, quale mod</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Title" xml:space="preserve">
+    <value>Capire perché il server si è fermato all'avvio</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Step1" xml:space="preserve">
+    <value>Quando SPT si arrende all'avvio, {0} mostra una scheda con l'errore e la mod che indica.</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Step2" xml:space="preserve">
+    <value>Una mod fatta per uno SPT più recente richiede di aggiornare SPT, o una versione della mod fatta per il tuo. Per una mod a cui manca qualcosa, la sua pagina su sp-mod dice cosa.</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Keywords" xml:space="preserve">
+    <value>il server non parte, fermato inaspettatamente, SPT più recente, requisito mancante, errore all'avvio</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Title" xml:space="preserve">
+    <value>Capire perché Fika non fa entrare il gioco</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Step1" xml:space="preserve">
+    <value>Fika controlla il gioco rispetto al server e all'host del raid dall'interno del gioco, quindi i suoi messaggi sono nel log del gioco, non del server. {0} legge entrambi.</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Step2" xml:space="preserve">
+    <value>Ogni problema di Fika ha la sua scheda: mod richieste dal server, nessun Fika sul server, Fika del server troppo vecchio, una versione di Fika o del gioco diversa dall'host del raid, o file di Fika modificati.</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Note" xml:space="preserve">
+    <value>Il gioco riscrive il suo log a ogni avvio, quindi controlla prima di riavviarlo.</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Keywords" xml:space="preserve">
+    <value>Fika, non riesco a entrare, mod richieste, mod mancanti, versione diversa, host del raid, headless, multigiocatore</value>
   </data>
 </root>

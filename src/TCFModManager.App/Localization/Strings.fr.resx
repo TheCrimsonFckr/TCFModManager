@@ -9468,7 +9468,7 @@ Les détails sont dans le journal :
     <value>F1 ouvre l'aide de la page en cours. Sur {0}, Ctrl+A sélectionne tous les mods affichés et Échap quitte la sélection multiple.</value>
   </data>
   <data name="Help_Start_Keys_Keywords" xml:space="preserve">
-    <value>clavier, raccourci, Ctrl+F, F5, coller un lien, Ctrl+V, glisser un lien</value>
+    <value>clavier, raccourci, Ctrl+F, F5, coller un lien, Ctrl+V, glisser un lien, Alt+Gauche, Alt+Droite, précédent, suivant</value>
   </data>
   <data name="Links_NotFoundTitle" xml:space="preserve">
     <value>Introuvable</value>
@@ -10258,5 +10258,65 @@ Les détails sont dans le journal :
   </data>
   <data name="Nav_AuthorPlaceFormat" xml:space="preserve">
     <value>{0} (auteur)</value>
+  </data>
+  <data name="Help_Start_BackForward_Title" xml:space="preserve">
+    <value>Revenir en arrière et en avant entre les pages</value>
+  </data>
+  <data name="Help_Start_BackForward_Step1" xml:space="preserve">
+    <value>{0} et {1} en haut de la barre latérale parcourent les pages ouvertes, comme un navigateur. Ouvrir une nouvelle page efface celles qui étaient devant.</value>
+  </data>
+  <data name="Help_Start_BackForward_Step2" xml:space="preserve">
+    <value>Un clic droit sur l'un des deux liste les pages dans ce sens ; choisissez-en une pour y aller directement. La page d'un auteur revient sur cet auteur.</value>
+  </data>
+  <data name="Help_Start_BackForward_Step3" xml:space="preserve">
+    <value>Alt+Gauche et Alt+Droite, ou les boutons latéraux de la souris, font de même. Ils ne font rien tant qu'une fenêtre comme les détails d'un mod est ouverte.</value>
+  </data>
+  <data name="Help_Start_BackForward_Keywords" xml:space="preserve">
+    <value>précédent, suivant, page précédente, historique, Alt+Gauche, bouton retour de la souris</value>
+  </data>
+  <data name="Help_Start_Keys_Step5" xml:space="preserve">
+    <value>Alt+Gauche et Alt+Droite sont {0} et {1}, tout comme les boutons latéraux de la souris.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Title" xml:space="preserve">
+    <value>Voir quand le serveur ou le jeu a planté</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Step1" xml:space="preserve">
+    <value>Quand le serveur, le jeu ou le headless Fika plante, une barre rouge apparaît en haut de la fenêtre, avec une notification si l'application n'est pas au premier plan. Elle nomme le mod quand le rapport de plantage de Windows en désigne un.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Step2" xml:space="preserve">
+    <value>{0} sur la barre ouvre cette page avec les détails. {1} vous emmène au mod.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Note" xml:space="preserve">
+    <value>Arrêter quelque chose depuis l'application, ou le terminer dans le Gestionnaire des tâches, n'est pas un plantage et n'affiche pas de barre.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Keywords" xml:space="preserve">
+    <value>plantage, planté, barre rouge, serveur fermé, jeu fermé, headless planté, quel mod</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Title" xml:space="preserve">
+    <value>Savoir pourquoi le serveur s'est arrêté au démarrage</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Step1" xml:space="preserve">
+    <value>Quand SPT abandonne au démarrage, {0} affiche une carte avec l'erreur et le mod qu'elle désigne.</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Step2" xml:space="preserve">
+    <value>Un mod fait pour un SPT plus récent demande de mettre SPT à jour, ou une version du mod faite pour le vôtre. Pour un mod à qui il manque quelque chose, sa page sp-mod dit quoi.</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Keywords" xml:space="preserve">
+    <value>le serveur ne démarre pas, arrêté de façon inattendue, SPT plus récent, prérequis manquant, erreur au démarrage</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Title" xml:space="preserve">
+    <value>Savoir pourquoi Fika empêche le jeu de rejoindre</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Step1" xml:space="preserve">
+    <value>Fika vérifie le jeu face au serveur et à l'hôte du raid depuis le jeu, donc ce qu'il dit est dans le journal du jeu, pas celui du serveur. {0} lit les deux.</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Step2" xml:space="preserve">
+    <value>Chaque problème Fika a sa carte : des mods exigés par le serveur, pas de Fika sur le serveur, un Fika trop ancien sur le serveur, une version de Fika ou du jeu différente de l'hôte du raid, ou des fichiers Fika modifiés.</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Note" xml:space="preserve">
+    <value>Le jeu réécrit son journal à chaque lancement : regardez avant de le relancer.</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Keywords" xml:space="preserve">
+    <value>Fika, impossible de rejoindre, mods requis, mods manquants, version différente, hôte du raid, headless, multijoueur</value>
   </data>
 </root>

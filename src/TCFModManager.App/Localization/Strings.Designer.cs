@@ -3425,4 +3425,24 @@ internal static class Strings
     internal static string Nav_BackToolTip => LocalizationService.Get("Nav_BackToolTip");
     internal static string Nav_ForwardToolTip => LocalizationService.Get("Nav_ForwardToolTip");
     internal static string Nav_AuthorPlaceFormat => LocalizationService.Get("Nav_AuthorPlaceFormat");
+    internal static string Help_Start_BackForward_Title => LocalizationService.Get("Help_Start_BackForward_Title");
+    internal static string Help_Start_BackForward_Step1 => LocalizationService.Get("Help_Start_BackForward_Step1");
+    internal static string Help_Start_BackForward_Step2 => LocalizationService.Get("Help_Start_BackForward_Step2");
+    internal static string Help_Start_BackForward_Step3 => LocalizationService.Get("Help_Start_BackForward_Step3");
+    internal static string Help_Start_BackForward_Keywords => LocalizationService.Get("Help_Start_BackForward_Keywords");
+    internal static string Help_Start_Keys_Step5 => LocalizationService.Get("Help_Start_Keys_Step5");
+    internal static string Help_Diagnose_CrashBar_Title => LocalizationService.Get("Help_Diagnose_CrashBar_Title");
+    internal static string Help_Diagnose_CrashBar_Step1 => LocalizationService.Get("Help_Diagnose_CrashBar_Step1");
+    internal static string Help_Diagnose_CrashBar_Step2 => LocalizationService.Get("Help_Diagnose_CrashBar_Step2");
+    internal static string Help_Diagnose_CrashBar_Note => LocalizationService.Get("Help_Diagnose_CrashBar_Note");
+    internal static string Help_Diagnose_CrashBar_Keywords => LocalizationService.Get("Help_Diagnose_CrashBar_Keywords");
+    internal static string Help_Diagnose_ServerStopped_Title => LocalizationService.Get("Help_Diagnose_ServerStopped_Title");
+    internal static string Help_Diagnose_ServerStopped_Step1 => LocalizationService.Get("Help_Diagnose_ServerStopped_Step1");
+    internal static string Help_Diagnose_ServerStopped_Step2 => LocalizationService.Get("Help_Diagnose_ServerStopped_Step2");
+    internal static string Help_Diagnose_ServerStopped_Keywords => LocalizationService.Get("Help_Diagnose_ServerStopped_Keywords");
+    internal static string Help_Diagnose_Fika_Title => LocalizationService.Get("Help_Diagnose_Fika_Title");
+    internal static string Help_Diagnose_Fika_Step1 => LocalizationService.Get("Help_Diagnose_Fika_Step1");
+    internal static string Help_Diagnose_Fika_Step2 => LocalizationService.Get("Help_Diagnose_Fika_Step2");
+    internal static string Help_Diagnose_Fika_Note => LocalizationService.Get("Help_Diagnose_Fika_Note");
+    internal static string Help_Diagnose_Fika_Keywords => LocalizationService.Get("Help_Diagnose_Fika_Keywords");
 }

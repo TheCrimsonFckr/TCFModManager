@@ -9855,7 +9855,7 @@
     <value>F1 открывает справку по текущей странице. На странице «{0}» Ctrl+A выбирает все показанные моды, а Esc выходит из множественного выбора.</value>
   </data>
   <data name="Help_Start_Keys_Keywords" xml:space="preserve">
-    <value>клавиатура, сочетание клавиш, горячие клавиши, Ctrl+F, F5, вставить ссылку, Ctrl+V, перетащить ссылку</value>
+    <value>клавиатура, сочетание клавиш, горячие клавиши, Ctrl+F, F5, вставить ссылку, Ctrl+V, перетащить ссылку, Alt+Влево, Alt+Вправо, назад, вперёд</value>
   </data>
   <data name="Links_NotFoundTitle" xml:space="preserve">
     <value>Не найдено</value>
@@ -10681,5 +10681,65 @@
   </data>
   <data name="Nav_AuthorPlaceFormat" xml:space="preserve">
     <value>{0} (автор)</value>
+  </data>
+  <data name="Help_Start_BackForward_Title" xml:space="preserve">
+    <value>Переходить назад и вперёд по страницам</value>
+  </data>
+  <data name="Help_Start_BackForward_Step1" xml:space="preserve">
+    <value>«{0}» и «{1}» вверху боковой панели переходят по открытым страницам, как в браузере. Новая страница убирает те, что были впереди.</value>
+  </data>
+  <data name="Help_Start_BackForward_Step2" xml:space="preserve">
+    <value>Правый клик по любой из них показывает страницы в эту сторону; выберите одну, чтобы сразу перейти. Страница автора открывается с тем же автором.</value>
+  </data>
+  <data name="Help_Start_BackForward_Step3" xml:space="preserve">
+    <value>Alt+Влево и Alt+Вправо или боковые кнопки мыши делают то же самое. Пока открыто окно, например сведения о моде, они ничего не делают.</value>
+  </data>
+  <data name="Help_Start_BackForward_Keywords" xml:space="preserve">
+    <value>назад, вперёд, предыдущая страница, история, Alt+Влево, кнопка мыши назад</value>
+  </data>
+  <data name="Help_Start_Keys_Step5" xml:space="preserve">
+    <value>Alt+Влево и Alt+Вправо - это «{0}» и «{1}», как и боковые кнопки мыши.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Title" xml:space="preserve">
+    <value>Узнать, что сервер или игра упали</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Step1" xml:space="preserve">
+    <value>Когда падает сервер, игра или headless Fika, вверху окна появляется красная полоса, а если приложение не на переднем плане - уведомление. Она называет мод, если отчёт Windows о сбое указывает на него.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Step2" xml:space="preserve">
+    <value>«{0}» на полосе открывает эту страницу с подробностями. «{1}» переходит к моду.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Note" xml:space="preserve">
+    <value>Остановка из приложения или через Диспетчер задач - не сбой, и полоса не появляется.</value>
+  </data>
+  <data name="Help_Diagnose_CrashBar_Keywords" xml:space="preserve">
+    <value>сбой, вылет, упал, красная полоса, сервер закрылся, игра закрылась, headless упал, какой мод</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Title" xml:space="preserve">
+    <value>Узнать, почему сервер остановился при запуске</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Step1" xml:space="preserve">
+    <value>Когда SPT прекращает запуск, «{0}» показывает карточку с ошибкой и модом, на который она указывает.</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Step2" xml:space="preserve">
+    <value>Моду для более новой SPT нужна обновлённая SPT или версия мода для вашей. Если моду чего-то не хватает, это указано на его странице на sp-mod.</value>
+  </data>
+  <data name="Help_Diagnose_ServerStopped_Keywords" xml:space="preserve">
+    <value>сервер не запускается, неожиданно остановился, более новая SPT, не хватает зависимости, ошибка запуска</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Title" xml:space="preserve">
+    <value>Узнать, почему Fika не пускает игру</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Step1" xml:space="preserve">
+    <value>Fika сверяет игру с сервером и хостом рейда изнутри игры, поэтому её сообщения - в журнале игры, а не сервера. «{0}» читает оба.</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Step2" xml:space="preserve">
+    <value>У каждой проблемы Fika своя карточка: моды, которые требует сервер, нет Fika на сервере, слишком старая Fika на сервере, другая версия Fika или игры, чем у хоста рейда, или изменённые файлы Fika.</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Note" xml:space="preserve">
+    <value>Игра перезаписывает журнал при каждом запуске, поэтому проверяйте до следующего запуска.</value>
+  </data>
+  <data name="Help_Diagnose_Fika_Keywords" xml:space="preserve">
+    <value>Fika, не подключается, обязательные моды, нет модов, разные версии, хост рейда, headless, мультиплеер</value>
   </data>
 </root>
