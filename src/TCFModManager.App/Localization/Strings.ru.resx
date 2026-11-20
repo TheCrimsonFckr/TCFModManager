@@ -10667,4 +10667,19 @@
   <data name="CrashBar_ExitCodeFormat" xml:space="preserve">
     <value>Процесс завершился с кодом сбоя {0}.</value>
   </data>
+  <data name="Nav_Back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="Nav_Forward" xml:space="preserve">
+    <value>Вперёд</value>
+  </data>
+  <data name="Nav_BackToolTip" xml:space="preserve">
+    <value>Назад на прошлую страницу (Alt+Влево или кнопка «Назад» на мыши). Правый клик - список.</value>
+  </data>
+  <data name="Nav_ForwardToolTip" xml:space="preserve">
+    <value>Снова вперёд (Alt+Вправо или кнопка «Вперёд» на мыши). Правый клик - список.</value>
+  </data>
+  <data name="Nav_AuthorPlaceFormat" xml:space="preserve">
+    <value>{0} (автор)</value>
+  </data>
 </root>

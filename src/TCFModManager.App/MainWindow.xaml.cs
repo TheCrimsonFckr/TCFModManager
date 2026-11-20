@@ -67,6 +67,29 @@ public partial class MainWindow : FluentWindow
             }
         };
 
+        // OPEN-56 N18: Alt+Left / Alt+Right and the mouse's side buttons.
+        KeyDown += (_, e) =>
+        {
+            if (e.Handled || RootContentDialogPresenter.Content is not null) return;
+            if (e.Key != Key.System || Keyboard.Modifiers != ModifierKeys.Alt) return;
+
+            if (e.SystemKey == Key.Left) AppNavigation.GoBack();
+            else if (e.SystemKey == Key.Right) AppNavigation.GoForward();
+            else return;
+
+            e.Handled = true;
+        };
+        MouseDown += (_, e) =>
+        {
+            if (e.Handled || RootContentDialogPresenter.Content is not null) return;
+
+            if (e.ChangedButton == MouseButton.XButton1) AppNavigation.GoBack();
+            else if (e.ChangedButton == MouseButton.XButton2) AppNavigation.GoForward();
+            else return;
+
+            e.Handled = true;
+        };
+
         AllowDrop = true;
         DragOver += (_, e) =>
         {
@@ -306,4 +329,44 @@ public partial class MainWindow : FluentWindow
     // rather than starting a download straight off a banner.
     private void AppUpdateBanner_Click(object sender, RoutedEventArgs e) =>
         RootNavigationView.Navigate(typeof(AppUpdatePage));
+
+    // OPEN-56 N18: right-click on Back or Forward lists the places that way, the nearest first.
+    private void HistoryItem_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+    {
+        if (sender is not FrameworkElement { ContextMenu: { } menu } item) return;
+
+        var back = ReferenceEquals(item, BackNavItem);
+        var places = back ? AppNavigation.BackPlaces : AppNavigation.ForwardPlaces;
+
+        menu.Items.Clear();
+        if (places.Count == 0)
+        {
+            e.Handled = true;
+            return;
+        }
+
+        for (var i = 0; i < places.Count; i++)
+        {
+            var steps = i + 1;
+            var entry = new System.Windows.Controls.MenuItem { Header = PlaceLabel(places[i]) };
+            entry.Click += (_, _) =>
+            {
+                if (back) AppNavigation.GoBack(steps);
+                else AppNavigation.GoForward(steps);
+            };
+            menu.Items.Add(entry);
+        }
+    }
+
+    private string PlaceLabel(NavigationPlace place)
+    {
+        if (place.Page == typeof(AuthorPage))
+            return place.AuthorName is { Length: > 0 } name ? LocalizationService.Text(Strings.Nav_AuthorPlaceFormat, name) : Strings.Author_Title;
+
+        return RootNavigationView.MenuItems.Cast<object>()
+            .Concat(RootNavigationView.FooterMenuItems.Cast<object>())
+            .OfType<NavigationViewItem>()
+            .FirstOrDefault(i => i.TargetPageType == place.Page)?.Content as string
+            ?? place.Page.Name;
+    }
 }

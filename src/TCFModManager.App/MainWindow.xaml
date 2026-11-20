@@ -160,6 +160,7 @@
         <ui:NavigationView
             x:Name="RootNavigationView"
             Grid.Row="2"
+            IsBackButtonVisible="Collapsed"
             IsPaneOpen="False">
             <!-- NavigationCacheMode is Disabled by default in WPF-UI, which builds a brand new
                  Page - fresh BAML load, fresh visual tree, fresh ViewModel - on every click of a
@@ -168,8 +169,36 @@
                  than a rebuild. Each page's Loaded handler still runs on every visit, so anything
                  that has to refresh on return still does. -->
             <ui:NavigationView.MenuItems>
-                <!-- First: the last thing you do before playing, and the one item on the list that
-                     is an action rather than a view of the install. -->
+                <!-- OPEN-56 N18: Back and Forward - buttons, not pages. Right-click lists the places
+                     that way. -->
+                <ui:NavigationViewItem
+                    x:Name="BackNavItem"
+                    Content="{loc:Str Nav_Back}"
+                    Icon="{ui:SymbolIcon ArrowLeft24}"
+                    DataContext="{x:Static app:AppServices.History}"
+                    Command="{Binding GoBackCommand}"
+                    ToolTip="{loc:Str Nav_BackToolTip}"
+                    ContextMenuOpening="HistoryItem_ContextMenuOpening">
+                    <ui:NavigationViewItem.ContextMenu>
+                        <ContextMenu />
+                    </ui:NavigationViewItem.ContextMenu>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem
+                    x:Name="ForwardNavItem"
+                    Content="{loc:Str Nav_Forward}"
+                    Icon="{ui:SymbolIcon ArrowRight24}"
+                    DataContext="{x:Static app:AppServices.History}"
+                    Command="{Binding GoForwardCommand}"
+                    ToolTip="{loc:Str Nav_ForwardToolTip}"
+                    ContextMenuOpening="HistoryItem_ContextMenuOpening">
+                    <ui:NavigationViewItem.ContextMenu>
+                        <ContextMenu />
+                    </ui:NavigationViewItem.ContextMenu>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItemSeparator />
+
+                <!-- First of the pages: the last thing you do before playing, and the one item on
+                     the list that is an action rather than a view of the install. -->
                 <ui:NavigationViewItem
                     Content="{loc:Str Nav_Profile}"
                     Icon="{ui:SymbolIcon Person24}"

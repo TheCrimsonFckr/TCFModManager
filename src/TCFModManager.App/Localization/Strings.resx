@@ -12513,4 +12513,24 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>It closed with crash code {0}.</value>
     <comment>Crash bar at the top of the window (OPEN-54 N30). Message when only the exit code says it crashed. {0}: the code, e.g. 0xC0000005</comment>
   </data>
+  <data name="Nav_Back" xml:space="preserve">
+    <value>Back</value>
+    <comment>Back/Forward at the top of the sidebar (OPEN-56 N18). Sidebar item</comment>
+  </data>
+  <data name="Nav_Forward" xml:space="preserve">
+    <value>Forward</value>
+    <comment>Back/Forward at the top of the sidebar (OPEN-56 N18). Sidebar item</comment>
+  </data>
+  <data name="Nav_BackToolTip" xml:space="preserve">
+    <value>Back to the last page (Alt+Left, or the mouse's back button). Right-click for the list.</value>
+    <comment>Back/Forward at the top of the sidebar (OPEN-56 N18). Tooltip on Back</comment>
+  </data>
+  <data name="Nav_ForwardToolTip" xml:space="preserve">
+    <value>Forward again (Alt+Right, or the mouse's forward button). Right-click for the list.</value>
+    <comment>Back/Forward at the top of the sidebar (OPEN-56 N18). Tooltip on Forward</comment>
+  </data>
+  <data name="Nav_AuthorPlaceFormat" xml:space="preserve">
+    <value>{0} (author)</value>
+    <comment>Back/Forward at the top of the sidebar (OPEN-56 N18). An author page in the right-click list. {0}: the author's name</comment>
+  </data>
 </root>

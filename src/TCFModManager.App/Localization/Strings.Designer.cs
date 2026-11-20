@@ -3420,4 +3420,9 @@ internal static class Strings
     internal static string CrashBar_HeadlessInModFormat => LocalizationService.Get("CrashBar_HeadlessInModFormat");
     internal static string CrashBar_ModuleFormat => LocalizationService.Get("CrashBar_ModuleFormat");
     internal static string CrashBar_ExitCodeFormat => LocalizationService.Get("CrashBar_ExitCodeFormat");
+    internal static string Nav_Back => LocalizationService.Get("Nav_Back");
+    internal static string Nav_Forward => LocalizationService.Get("Nav_Forward");
+    internal static string Nav_BackToolTip => LocalizationService.Get("Nav_BackToolTip");
+    internal static string Nav_ForwardToolTip => LocalizationService.Get("Nav_ForwardToolTip");
+    internal static string Nav_AuthorPlaceFormat => LocalizationService.Get("Nav_AuthorPlaceFormat");
 }

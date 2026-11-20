@@ -10244,4 +10244,19 @@ Die Details stehen im Log:
   <data name="CrashBar_ExitCodeFormat" xml:space="preserve">
     <value>Es wurde mit dem Absturzcode {0} beendet.</value>
   </data>
+  <data name="Nav_Back" xml:space="preserve">
+    <value>Zurück</value>
+  </data>
+  <data name="Nav_Forward" xml:space="preserve">
+    <value>Vor</value>
+  </data>
+  <data name="Nav_BackToolTip" xml:space="preserve">
+    <value>Zurück zur letzten Seite (Alt+Links oder die Zurück-Taste der Maus). Rechtsklick für die Liste.</value>
+  </data>
+  <data name="Nav_ForwardToolTip" xml:space="preserve">
+    <value>Wieder vor (Alt+Rechts oder die Vor-Taste der Maus). Rechtsklick für die Liste.</value>
+  </data>
+  <data name="Nav_AuthorPlaceFormat" xml:space="preserve">
+    <value>{0} (Autor)</value>
+  </data>
 </root>

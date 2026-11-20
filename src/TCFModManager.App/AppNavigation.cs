@@ -50,7 +50,7 @@ internal static class AppNavigation
     public static void Attach(NavigationView navigation)
     {
         _navigation = navigation;
-        navigation.Navigated += (_, e) => _currentPage = e.Page?.GetType();
+        navigation.Navigated += (_, e) => OnNavigated(e.Page?.GetType());
 
         _transition = navigation.Transition;
         ApplyMotion();
@@ -276,9 +276,12 @@ internal static class AppNavigation
 
     public static void ShowAuthor(int authorId, string? name)
     {
+        _lastAuthor = (authorId, name);
         _authorPending = (authorId, name);
         AuthorRequested?.Invoke(null, EventArgs.Empty);
-        _navigation?.Navigate(typeof(AuthorPage));
+
+        if (_currentPage == typeof(AuthorPage)) Visit(PlaceFor(typeof(AuthorPage)));
+        else _navigation?.Navigate(typeof(AuthorPage));
     }
 
     public static (int Id, string? Name)? TakeAuthor()
@@ -341,4 +344,76 @@ internal static class AppNavigation
         _showUpdatesPending = false;
         return pending;
     }
+
+    //
+    // OPEN-56 N18: Back and Forward. A place is a page, and for the author page which author. Going
+    // to a place from the history doesn't record it again; the page comes back as it keeps itself.
+    //
+    private const int HistorySize = 50;
+
+    private static readonly NavigationHistory<NavigationPlace> History = new(HistorySize);
+
+    private static (int Id, string? Name)? _lastAuthor;
+
+    private static bool _replaying;
+
+    // Raised on the UI thread whenever the places behind or ahead change.
+    public static event EventHandler? HistoryChanged;
+
+    public static bool CanGoBack => History.CanGoBack;
+
+    public static bool CanGoForward => History.CanGoForward;
+
+    public static IReadOnlyList<NavigationPlace> BackPlaces => History.Back;
+
+    public static IReadOnlyList<NavigationPlace> ForwardPlaces => History.Forward;
+
+    public static void GoBack(int steps = 1) => GoTo(History.GoBack(steps));
+
+    public static void GoForward(int steps = 1) => GoTo(History.GoForward(steps));
+
+    private static void OnNavigated(Type? page)
+    {
+        _currentPage = page;
+        if (page is not null && !_replaying) Visit(PlaceFor(page));
+    }
+
+    private static NavigationPlace PlaceFor(Type page) =>
+        page == typeof(AuthorPage) && _lastAuthor is { } author
+            ? new NavigationPlace(page, author.Id, author.Name)
+            : new NavigationPlace(page);
+
+    private static void Visit(NavigationPlace place)
+    {
+        if (History.Visit(place)) HistoryChanged?.Invoke(null, EventArgs.Empty);
+    }
+
+    private static void GoTo(NavigationPlace? place)
+    {
+        if (place is null) return;
+
+        if (place.AuthorId is { } id)
+        {
+            _lastAuthor = (id, place.AuthorName);
+            _authorPending = (id, place.AuthorName);
+            AuthorRequested?.Invoke(null, EventArgs.Empty);
+        }
+
+        var page = place.Page == typeof(ServerPage) && AppServices.ServerPageGate.IsServerOnProfile ? typeof(ProfilePage) : place.Page;
+
+        _replaying = true;
+        try
+        {
+            if (_currentPage != page) _navigation?.Navigate(page);
+        }
+        finally
+        {
+            _replaying = false;
+        }
+
+        HistoryChanged?.Invoke(null, EventArgs.Empty);
+    }
 }
+
+// OPEN-56 N18: one place in the Back/Forward history.
+internal sealed record NavigationPlace(Type Page, int? AuthorId = null, string? AuthorName = null);

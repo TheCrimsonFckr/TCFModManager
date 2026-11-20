@@ -10244,4 +10244,19 @@ Les détails sont dans le journal :
   <data name="CrashBar_ExitCodeFormat" xml:space="preserve">
     <value>Il s'est fermé avec le code de plantage {0}.</value>
   </data>
+  <data name="Nav_Back" xml:space="preserve">
+    <value>Précédent</value>
+  </data>
+  <data name="Nav_Forward" xml:space="preserve">
+    <value>Suivant</value>
+  </data>
+  <data name="Nav_BackToolTip" xml:space="preserve">
+    <value>Revenir à la page précédente (Alt+Gauche, ou le bouton Précédent de la souris). Clic droit pour la liste.</value>
+  </data>
+  <data name="Nav_ForwardToolTip" xml:space="preserve">
+    <value>Revenir en avant (Alt+Droite, ou le bouton Suivant de la souris). Clic droit pour la liste.</value>
+  </data>
+  <data name="Nav_AuthorPlaceFormat" xml:space="preserve">
+    <value>{0} (auteur)</value>
+  </data>
 </root>
