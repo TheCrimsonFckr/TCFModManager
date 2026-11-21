@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Net;
 using TCFModManager.App.Localization;
+using TCFModManager.App.ViewModels;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.Services;
@@ -44,6 +45,11 @@ public static class DownloadProblems
             return Text(Strings.Downloads_RetryingFormat, retry.Wait.TotalSeconds);
 
         var spMod = retry.Host is null || DownloadHttpException.IsSpModHost(retry.Host);
+
+        if (retry.Cause == DownloadRetryCause.RateLimited)
+            return Text(spMod ? Strings.Downloads_RateLimitedSpModFormat : Strings.Downloads_RateLimitedHostFormat,
+                DownloadQueueItemViewModel.RemainingLabel(retry.Wait), retry.Host);
+
         var format = retry.State == DownloadRetryState.Held
             ? (spMod ? Strings.Downloads_HeldSpModFormat : Strings.Downloads_HeldHostFormat)
             : (spMod ? Strings.Downloads_RetryingServerSpModFormat : Strings.Downloads_RetryingServerHostFormat);

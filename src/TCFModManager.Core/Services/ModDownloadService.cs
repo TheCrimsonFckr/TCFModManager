@@ -12,7 +12,7 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
     private readonly bool _ownsHttpClient = httpClient is null;
 
     // Per host: no download asks it again before this time, after one of them got a server error.
-    private readonly ConcurrentDictionary<string, DateTimeOffset> _cooldowns = new(StringComparer.OrdinalIgnoreCase);
+    private readonly ConcurrentDictionary<string, (DateTimeOffset Until, DownloadRetryCause Cause)> _cooldowns = new(StringComparer.OrdinalIgnoreCase);
 
     public DownloadRetryPolicy RetryPolicy { get; set; } = DownloadRetryPolicy.Default;
 
@@ -92,7 +92,15 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
                 var host = (ex as DownloadHttpException)?.Host ?? requestedHost;
                 TimeSpan wait;
 
-                if (cause == DownloadRetryCause.Server)
+                if (cause == DownloadRetryCause.RateLimited)
+                {
+                    wait = ex is DownloadHttpException { RetryAfter: { } limitedFor } && limitedFor > TimeSpan.Zero
+                        ? (limitedFor < policy.MaxRateLimitWait ? limitedFor : policy.MaxRateLimitWait)
+                        : policy.RateLimitDelay;
+                    answeredHost = host;
+                    if (host is not null) Hold(host, DateTimeOffset.UtcNow + wait, cause);
+                }
+                else if (cause == DownloadRetryCause.Server)
                 {
                     if (serverRetries >= policy.ServerDelays.Count) throw;
                     wait = ex is DownloadHttpException { RetryAfter: { } retryAfter }
@@ -100,7 +108,7 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
                         : policy.ServerDelays[serverRetries];
                     serverRetries++;
                     answeredHost = host;
-                    if (host is not null) Hold(host, DateTimeOffset.UtcNow + wait);
+                    if (host is not null) Hold(host, DateTimeOffset.UtcNow + wait, cause);
                 }
                 else
                 {
@@ -118,8 +126,8 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
         }
     }
 
-    private void Hold(string host, DateTimeOffset until) =>
-        _cooldowns.AddOrUpdate(host, until, (_, current) => current > until ? current : until);
+    private void Hold(string host, DateTimeOffset until, DownloadRetryCause cause) =>
+        _cooldowns.AddOrUpdate(host, (until, cause), (_, current) => current.Until > until ? current : (until, cause));
 
     private async Task WaitOutCooldownAsync(string? requestedHost, string? answeredHost, IProgress<DownloadRetry>? retrying, int attempt, CancellationToken ct)
     {
@@ -127,14 +135,14 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
 
         while (true)
         {
-            var (host, remaining) = Remaining(requestedHost, answeredHost);
+            var (host, remaining, cause) = Remaining(requestedHost, answeredHost);
             if (remaining <= TimeSpan.Zero) break;
 
             if (!held && remaining >= TimeSpan.FromSeconds(1))
             {
                 held = true;
-                AppLog.Info("Downloads", $"waiting {remaining.TotalSeconds:F0}s before asking {host} again");
-                retrying?.Report(new DownloadRetry(DownloadRetryState.Held, DownloadRetryCause.Server, host, remaining, attempt));
+                AppLog.Info("Downloads", $"waiting {remaining.TotalSeconds:F0}s before asking {host} again ({cause})");
+                retrying?.Report(new DownloadRetry(DownloadRetryState.Held, cause, host, remaining, attempt));
             }
 
             await Task.Delay(remaining, ct).ConfigureAwait(false);
@@ -143,14 +151,14 @@ public sealed class ModDownloadService(HttpClient? httpClient = null) : IDisposa
         if (held) retrying?.Report(new DownloadRetry(DownloadRetryState.Resumed, DownloadRetryCause.Server, requestedHost, TimeSpan.Zero, attempt));
     }
 
-    private (string? Host, TimeSpan Remaining) Remaining(params string?[] hosts)
+    private (string? Host, TimeSpan Remaining, DownloadRetryCause Cause) Remaining(params string?[] hosts)
     {
         var now = DateTimeOffset.UtcNow;
-        (string? Host, TimeSpan Remaining) longest = (null, TimeSpan.Zero);
+        (string? Host, TimeSpan Remaining, DownloadRetryCause Cause) longest = (null, TimeSpan.Zero, DownloadRetryCause.Server);
 
         foreach (var host in hosts)
-            if (host is not null && _cooldowns.TryGetValue(host, out var until) && until - now > longest.Remaining)
-                longest = (host, until - now);
+            if (host is not null && _cooldowns.TryGetValue(host, out var held) && held.Until - now > longest.Remaining)
+                longest = (host, held.Until - now, held.Cause);
 
         return longest;
     }

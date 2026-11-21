@@ -7,8 +7,11 @@ public enum DownloadRetryCause
     // The connection dropped, reset or timed out, or the file arrived short.
     Connection,
 
-    // The server answered with 5xx, 408 or 429.
+    // The server answered with 5xx or 408.
     Server,
+
+    // The server answered 429: too many requests for now. Waited out however many times it comes.
+    RateLimited,
 }
 
 public enum DownloadRetryState
@@ -31,6 +34,8 @@ public sealed record DownloadRetry(DownloadRetryState State, DownloadRetryCause 
 //
 // How long to wait before each retry, by cause. A download gives up once the list for the cause it
 // just hit is used up. A server's Retry-After replaces that step's wait, up to MaxRetryAfter.
+// RateLimited has no list: each 429 waits Retry-After, up to MaxRateLimitWait, or RateLimitDelay
+// when none is sent.
 //
 public sealed record DownloadRetryPolicy(
     IReadOnlyList<TimeSpan> ConnectionDelays,
@@ -44,6 +49,10 @@ public sealed record DownloadRetryPolicy(
 
     public static DownloadRetryPolicy None { get; } = new([], [], TimeSpan.Zero);
 
+    public TimeSpan RateLimitDelay { get; init; } = TimeSpan.FromSeconds(60);
+
+    public TimeSpan MaxRateLimitWait { get; init; } = TimeSpan.FromHours(1);
+
     public static bool IsServerSide(HttpStatusCode status) =>
         (int)status >= 500 || status is HttpStatusCode.RequestTimeout or HttpStatusCode.TooManyRequests;
 
@@ -52,6 +61,7 @@ public sealed record DownloadRetryPolicy(
     public static DownloadRetryCause? Classify(Exception ex, CancellationToken ct) => ex switch
     {
         _ when ct.IsCancellationRequested => null,
+        HttpRequestException { StatusCode: HttpStatusCode.TooManyRequests } => DownloadRetryCause.RateLimited,
         DownloadHttpException http => http.IsServerSide ? DownloadRetryCause.Server : null,
         HttpRequestException { StatusCode: { } code } => IsServerSide(code) ? DownloadRetryCause.Server : null,
         HttpRequestException { HttpRequestError: HttpRequestError.ConnectionError or HttpRequestError.ResponseEnded or HttpRequestError.Unknown } => DownloadRetryCause.Connection,

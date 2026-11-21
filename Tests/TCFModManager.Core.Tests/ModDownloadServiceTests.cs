@@ -192,7 +192,11 @@ public class ModDownloadServiceTests : IDisposable
     private static DownloadRetryPolicy Quick(int serverMs = 10) => new(
         [TimeSpan.FromMilliseconds(10), TimeSpan.FromMilliseconds(10)],
         [TimeSpan.FromMilliseconds(serverMs), TimeSpan.FromMilliseconds(serverMs), TimeSpan.FromMilliseconds(serverMs)],
-        TimeSpan.FromMilliseconds(50));
+        TimeSpan.FromMilliseconds(50))
+    {
+        RateLimitDelay = TimeSpan.FromMilliseconds(10),
+        MaxRateLimitWait = TimeSpan.FromMilliseconds(50),
+    };
 
     private static Dictionary<string, Queue<HttpStatusCode>> Script(string path, params HttpStatusCode[] statuses) =>
         new() { [path] = new Queue<HttpStatusCode>(statuses) };
@@ -404,6 +408,48 @@ public class ModDownloadServiceTests : IDisposable
 
         Assert.Equal(HttpStatusCode.ServiceUnavailable, failure.Status);
         Assert.Equal(4, server.Requests.Count);
+    }
+
+    [Fact]
+    public async Task ARateLimit_IsWaitedOut_HoweverOftenItComes()
+    {
+        var server = new Scripted(_file, Script("/a", Enumerable.Repeat(HttpStatusCode.TooManyRequests, 10).ToArray()));
+        using var service = new ModDownloadService(new HttpClient(server)) { RetryPolicy = Quick() };
+        var heard = new Heard<DownloadRetry>();
+
+        await service.DownloadRetryingAsync("https://sp-mod.com/a", Part, retrying: heard);
+
+        Assert.Equal(_file, File.ReadAllBytes(Part));
+        Assert.Equal(11, server.Requests.Count);
+        Assert.All(heard.Items.Where(r => r.State == DownloadRetryState.Retrying),
+            r => Assert.Equal(DownloadRetryCause.RateLimited, r.Cause));
+    }
+
+    [Fact]
+    public async Task ARateLimitOnOneDownload_HoldsTheOthersForTheSameHost_AsARateLimit()
+    {
+        var server = new Scripted(_file, Script("/a", HttpStatusCode.TooManyRequests))
+        {
+            RetryAfter = new RetryConditionHeaderValue(TimeSpan.FromSeconds(30)),
+        };
+        using var service = new ModDownloadService(new HttpClient(server))
+        {
+            RetryPolicy = Quick() with { MaxRateLimitWait = TimeSpan.FromMilliseconds(1500) },
+        };
+        var failed = new TaskCompletionSource();
+        var first = new Heard<DownloadRetry>
+        {
+            OnReport = r => { if (r.State == DownloadRetryState.Retrying) failed.TrySetResult(); },
+        };
+        var second = new Heard<DownloadRetry>();
+
+        var a = service.DownloadRetryingAsync("https://sp-mod.com/a", Path.Combine(_root, "a.part"), retrying: first);
+        await failed.Task;
+        var b = service.DownloadRetryingAsync("https://sp-mod.com/b", Path.Combine(_root, "b.part"), retrying: second);
+        await Task.WhenAll(a, b);
+
+        var held = Assert.Single(second.Items, r => r.State == DownloadRetryState.Held);
+        Assert.Equal(DownloadRetryCause.RateLimited, held.Cause);
     }
 
     [Fact]

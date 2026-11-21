@@ -8870,6 +8870,14 @@ See Dependencies and Conflicts.</value>
     <value>{1} isn't responding - waiting {0:0} s before trying</value>
     <comment>As Downloads_HeldSpModFormat, for a file host. {0} is seconds, {1} is the host name.</comment>
   </data>
+  <data name="Downloads_RateLimitedSpModFormat" xml:space="preserve">
+    <value>sp-mod's download limit reached - carrying on in {0}</value>
+    <comment>Card status while sp-mod is turning downloads away for a while (429); the download starts again by itself. {0} is a short time, as Downloads_TimeMinutesFormat (5m).</comment>
+  </data>
+  <data name="Downloads_RateLimitedHostFormat" xml:space="preserve">
+    <value>{1}'s download limit reached - carrying on in {0}</value>
+    <comment>As Downloads_RateLimitedSpModFormat, for a file host. {0} is a short time (5m), {1} is the host name.</comment>
+  </data>
   <data name="Downloads_ServerTimeoutSpModFormat" xml:space="preserve">
     <value>sp-mod didn't answer in time ({0}). That's on their side - try again in a few minutes.</value>
     <comment>A download failed: sp-mod timed out (504, 408). {0} is the HTTP status code.</comment>
