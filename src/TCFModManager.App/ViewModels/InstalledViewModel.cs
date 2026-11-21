@@ -112,6 +112,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         _selectedGroupSortOption = DefaultGroupSortOption();
         _viewMode = DefaultViewMode();
         _pageSize = DefaultPageSize();
+        InitCardLayouts();
 
         // Category and group are resolved later instead: both dropdowns are rebuilt from what is
         // actually installed, and neither list exists yet - see RebuildCategoryOptions/RefreshGroups.

@@ -138,13 +138,15 @@ public partial class InstalledViewModel
         // Also covers the first Loaded call, which can run before the list has been arranged.
         //
         if (availableWidth <= 0) return;
+        _lastLayoutWidth = availableWidth;
 
-        Columns = availableWidth switch
+        var factor = CardLayout.WidthFactor;
+        Columns = (availableWidth / factor) switch
         {
             < 700 => 1,
             < 1050 => 2,
             < 1400 => 3,
-            _ => 4,
+            _ => CardLayout.Width == Core.Models.CardWidth.Narrow ? Math.Min(6, (int)(availableWidth / factor / 350)) : 4,
         };
 
         //
@@ -157,7 +159,7 @@ public partial class InstalledViewModel
         // the available width wraps a card onto the next row, so a four-column layout would
         // silently become three.
         //
-        CardWidth = Math.Max(MinimumCardWidth, Math.Floor((availableWidth - 1) / Columns));
+        CardWidth = Math.Max(Math.Floor(MinimumCardWidth * factor), Math.Floor((availableWidth - 1) / Columns));
     }
 
     // The keys of whichever mods a view currently has open.

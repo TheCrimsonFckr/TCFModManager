@@ -51,6 +51,8 @@ public sealed class InstalledPageDefaults
     // ModAttributeFilter names for the ticked boxes only. An empty list is a real answer: it means
     // the default is no attribute filtering, which is not the same as never having saved one.
     public List<string> Attributes { get; set; } = [];
+
+    public string? CardLayout { get; set; }
 }
 
 //
@@ -90,4 +92,6 @@ public sealed class BrowsePageDefaults
 
     // SearchScope: TitleAndTeaser, TitleOnly.
     public string? SearchScope { get; set; }
+
+    public string? CardLayout { get; set; }
 }

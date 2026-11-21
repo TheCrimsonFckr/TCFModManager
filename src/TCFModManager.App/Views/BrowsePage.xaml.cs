@@ -22,6 +22,8 @@ public partial class BrowsePage : Page
         // The Filters panel down the left of the results - see Behaviors/FilterSidePanel.
         new FilterSidePanel(this, MoreFiltersToggle, FiltersHost, FiltersPanel, FiltersColumn)
             .CloseWith(FiltersCloseButton);
+
+        HookCardLayout();
     }
 
     private async void BrowsePage_Loaded(object sender, RoutedEventArgs e)

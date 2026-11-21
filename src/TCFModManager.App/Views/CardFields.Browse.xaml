@@ -1,0 +1,214 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    xmlns:viewmodels="clr-namespace:TCFModManager.App.ViewModels"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
+    xmlns:controls="clr-namespace:TCFModManager.App.Controls">
+
+    <converters:NullToVisibilityConverter x:Key="BrowseCardNullToCollapsed" />
+    <converters:UpdateAvailableToVisibilityConverter x:Key="BrowseCardTrueToVisible" />
+    <converters:PictureWhenShownConverter x:Key="BrowseCardPictureWhenShown" />
+    <BooleanToVisibilityConverter x:Key="BrowseCardBoolToVis" />
+
+    <sys:Double x:Key="CardTitleFontSize">14</sys:Double>
+    <sys:Double x:Key="CardLineFontSize">11</sys:Double>
+    <sys:Double x:Key="CardChipFontSize">11</sys:Double>
+    <Thickness x:Key="CardLineMargin">0</Thickness>
+    <Thickness x:Key="CardChipRowMargin">0,4,0,0</Thickness>
+    <sys:Double x:Key="CardSmallPictureSize">48</sys:Double>
+    <sys:Double x:Key="CardBannerHeight">90</sys:Double>
+
+    <DataTemplate x:Key="CardField.Browse.Author" DataType="{x:Type viewmodels:ModCardViewModel}">
+        <TextBlock
+            FontSize="{DynamicResource CardLineFontSize}"
+            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+            TextTrimming="CharacterEllipsis"
+            Visibility="{Binding Author, Converter={StaticResource BrowseCardNullToCollapsed}}">
+            <Hyperlink
+                Style="{StaticResource AuthorLink}"
+                ToolTip="{loc:Str Author_LinkToolTip}"
+                Command="{Binding DataContext.OpenAuthorCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                CommandParameter="{Binding}">
+                <Run Text="{Binding Author, StringFormat={loc:Str Browse_ByAuthorFormat}, Mode=OneWay}" />
+            </Hyperlink>
+        </TextBlock>
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Browse.Guid" DataType="{x:Type viewmodels:ModCardViewModel}">
+        <TextBlock
+            Text="{Binding Guid}"
+            FontSize="{DynamicResource CardLineFontSize}"
+            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+            TextTrimming="CharacterEllipsis" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Browse.Downloads" DataType="{x:Type viewmodels:ModCardViewModel}">
+        <TextBlock
+            Text="{Binding Downloads, Mode=OneWay, StringFormat={loc:Str Common_DownloadsFormat}}"
+            FontSize="{DynamicResource CardLineFontSize}"
+            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+            TextTrimming="CharacterEllipsis" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Browse.Endorsements" DataType="{x:Type viewmodels:ModCardViewModel}">
+        <TextBlock
+            Text="{Binding Endorsements, Mode=OneWay, StringFormat={loc:Str Browse_EndorsementsFormat}}"
+            FontSize="{DynamicResource CardLineFontSize}"
+            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+            TextTrimming="CharacterEllipsis"
+            Visibility="{Binding Endorsements, Converter={StaticResource BrowseCardNullToCollapsed}}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Browse.MatchedAddons" DataType="{x:Type viewmodels:ModCardViewModel}">
+        <TextBlock
+            Text="{Binding MatchedAddonsText}"
+            FontSize="{DynamicResource CardLineFontSize}"
+            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+            TextTrimming="CharacterEllipsis"
+            ToolTip="{Binding MatchedAddonsText}"
+            Visibility="{Binding MatchedAddonsText, Converter={StaticResource BrowseCardNullToCollapsed}}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Browse.SptVersion" DataType="{x:Type viewmodels:ModCardViewModel}">
+        <TextBlock
+            FontSize="{DynamicResource CardLineFontSize}"
+            TextTrimming="CharacterEllipsis"
+            ToolTip="{Binding SptVersionTooltip}">
+            <Run
+                Text="{Binding SptVersionDisplay, Mode=OneWay}"
+                Style="{StaticResource CompatibilityText}" />
+            <Run Text=" • " Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Run Text="{Binding DisplayReleaseVersion, Mode=OneWay, StringFormat='v{0}'}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+        </TextBlock>
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Browse.AlternateNote" DataType="{x:Type viewmodels:ModCardViewModel}">
+        <TextBlock
+            Text="{Binding AlternateCompatibleVersionNote}"
+            FontSize="{DynamicResource CardLineFontSize}"
+            FontStyle="Italic"
+            Foreground="{DynamicResource SystemFillColorCautionBrush}"
+            TextWrapping="Wrap"
+            ToolTip="{Binding AlternateCompatibleVersionNote}"
+            Visibility="{Binding AlternateCompatibleVersionNote, Converter={StaticResource BrowseCardNullToCollapsed}}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Browse.Badges" DataType="{x:Type viewmodels:ModCardViewModel}">
+        <Grid Margin="0,4,0,0">
+            <StackPanel IsHitTestVisible="False">
+                <ui:Badge Width="0" Margin="0,0,0,4" FontSize="{DynamicResource CardChipFontSize}" Content=" " Visibility="Hidden" />
+                <ui:Badge Width="0" Margin="0,0,0,4" FontSize="{DynamicResource CardChipFontSize}" Content=" " Visibility="Hidden" />
+                <ui:Badge Width="0" FontSize="{DynamicResource CardChipFontSize}" Content=" " Visibility="Hidden" />
+            </StackPanel>
+
+            <StackPanel VerticalAlignment="Top">
+                <WrapPanel>
+                    <ui:Badge
+                        Margin="0,0,6,4"
+                        Appearance="Info"
+                        FontSize="{DynamicResource CardChipFontSize}"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        Content="{Binding CategoryTag}"
+                        Visibility="{Binding CategoryTag, Converter={StaticResource BrowseCardNullToCollapsed}}" />
+                    <ui:Badge
+                        Margin="0,0,6,4"
+                        Appearance="Info"
+                        FontSize="{DynamicResource CardChipFontSize}"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        Content="{loc:Str Common_FlagFikaCompatible}"
+                        Visibility="{Binding IsFikaCompatible, Converter={StaticResource BrowseCardTrueToVisible}}" />
+                    <ui:Badge
+                        Margin="0,0,6,4"
+                        Appearance="Info"
+                        FontSize="{DynamicResource CardChipFontSize}"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        Content="{loc:Str Common_FlagContainsAds}"
+                        Visibility="{Binding ContainsAds, Converter={StaticResource BrowseCardTrueToVisible}}" />
+                </WrapPanel>
+
+                <WrapPanel>
+                    <ui:Badge
+                        Margin="0,0,6,4"
+                        Appearance="Caution"
+                        FontSize="{DynamicResource CardChipFontSize}"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        Content="{loc:Str Browse_BadgeHasDependencies}"
+                        Visibility="Collapsed"
+                        behaviors:DependencyBadgeLoader.Mod="{Binding Mod}" />
+                    <ui:Badge
+                        Margin="0,0,6,4"
+                        Appearance="Info"
+                        FontSize="{DynamicResource CardChipFontSize}"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        Content="{Binding AddonBadgeText}"
+                        ToolTip="{loc:Str Browse_AddonBadgeToolTip}"
+                        Visibility="{Binding HasAddons, Converter={StaticResource BrowseCardTrueToVisible}}" />
+                </WrapPanel>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="BrowseCardBody" DataType="{x:Type viewmodels:ModCardViewModel}">
+        <Grid VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Height="{DynamicResource CardBannerHeight}"
+                Margin="0,0,0,8"
+                ClipToBounds="True"
+                CornerRadius="{DynamicResource SmallCornerRadius}"
+                Background="{DynamicResource ControlFillColorDefaultBrush}"
+                Visibility="{Binding (controls:CardLayoutScope.Layout).ShowBanner, RelativeSource={RelativeSource Self}, Converter={StaticResource BrowseCardBoolToVis}}">
+                <Image Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <behaviors:ThumbnailLoader.LargeSource>
+                        <MultiBinding Converter="{StaticResource BrowseCardPictureWhenShown}">
+                            <Binding Path="(controls:CardLayoutScope.Layout).ShowBanner" RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="Thumbnail" />
+                        </MultiBinding>
+                    </behaviors:ThumbnailLoader.LargeSource>
+                </Image>
+            </Border>
+
+            <Image
+                Grid.Row="1"
+                Grid.Column="0"
+                Width="{DynamicResource CardSmallPictureSize}"
+                Height="{DynamicResource CardSmallPictureSize}"
+                Margin="0,0,10,0"
+                VerticalAlignment="Top"
+                Stretch="UniformToFill"
+                Visibility="{Binding (controls:CardLayoutScope.Layout).ShowSmallPicture, RelativeSource={RelativeSource Self}, Converter={StaticResource BrowseCardBoolToVis}}">
+                <behaviors:ThumbnailLoader.Source>
+                    <MultiBinding Converter="{StaticResource BrowseCardPictureWhenShown}">
+                        <Binding Path="(controls:CardLayoutScope.Layout).ShowSmallPicture" RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="Thumbnail" />
+                    </MultiBinding>
+                </behaviors:ThumbnailLoader.Source>
+            </Image>
+
+            <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock
+                    Text="{Binding Name}"
+                    FontSize="{DynamicResource CardTitleFontSize}"
+                    FontWeight="SemiBold"
+                    TextTrimming="CharacterEllipsis" />
+                <controls:CardFieldsPanel
+                    TemplatePrefix="CardField.Browse."
+                    Fields="{Binding (controls:CardLayoutScope.Layout).Fields, RelativeSource={RelativeSource Self}}" />
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

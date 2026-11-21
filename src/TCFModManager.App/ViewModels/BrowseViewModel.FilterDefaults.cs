@@ -182,6 +182,7 @@ public partial class BrowseViewModel
         Published = SavedRange(SelectedPublishedRange, keepCustomRanges),
         Updated = SavedRange(SelectedUpdatedRange, keepCustomRanges),
         SearchScope = SelectedSearchScope.Value.ToString(),
+        CardLayout = CardLayout.Id?.ToString() ?? "default",
 
         // Only once the options exist. Saving an empty list from a page whose version filter has not
         // been built yet would read back as "show every SPT version", which is a real setting and not
@@ -232,6 +233,7 @@ public partial class BrowseViewModel
         }
 
         FilterPins.ApplyPreset(preset.Pinned);
+        ApplySavedCardLayout(preset.Filters.CardLayout);
         return note;
     }
 }

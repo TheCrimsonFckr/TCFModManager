@@ -197,6 +197,7 @@ public partial class InstalledViewModel
         GroupSort = SelectedGroupSortOption.Value.ToString(),
         PageSize = PageSize,
         Attributes = SavedFilterDefaults.CapturedAttributes(AttributeOptions),
+        CardLayout = CardLayout.Id?.ToString() ?? "default",
     };
 
     // The page as it is now, as a filter preset called `name` (OPEN-25 R3).
@@ -240,6 +241,7 @@ public partial class InstalledViewModel
         FilterPins.ApplyPreset(preset.Pinned);
 
         // Last: switching view rebuilds that view from the filters just set.
+        ApplySavedCardLayout(preset.Filters.CardLayout);
         if (SavedFilterDefaults.Parse<InstalledViewMode>(preset.Filters.ViewMode) is { } mode) ViewMode = mode;
 
         return note;

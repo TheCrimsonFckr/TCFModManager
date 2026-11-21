@@ -10358,4 +10358,220 @@ I dettagli sono nel log:
   <data name="Help_Start_Copy_Keywords" xml:space="preserve">
     <value>copia, copiare testo, appunti, Ctrl+C, selezionare testo, copia nome, copia versione, copia GUID, copia elenco, messaggio di errore</value>
   </data>
+  <data name="CardLayout_Default" xml:space="preserve">
+    <value>Predefinito</value>
+  </data>
+  <data name="CardLayout_NewName" xml:space="preserve">
+    <value>Il mio layout</value>
+  </data>
+  <data name="CardLayout_PickerToolTip" xml:space="preserve">
+    <value>Layout delle schede: cosa mostra ogni scheda mod</value>
+  </data>
+  <data name="CardLayout_Edit" xml:space="preserve">
+    <value>Modifica layout delle schede</value>
+  </data>
+  <data name="CardLayout_EditorTitleInstalled" xml:space="preserve">
+    <value>Layout delle schede - Installate</value>
+  </data>
+  <data name="CardLayout_EditorTitleBrowse" xml:space="preserve">
+    <value>Layout delle schede - Sfoglia</value>
+  </data>
+  <data name="CardLayout_LayoutsHeader" xml:space="preserve">
+    <value>Layout</value>
+  </data>
+  <data name="CardLayout_New" xml:space="preserve">
+    <value>Nuovo</value>
+  </data>
+  <data name="CardLayout_Duplicate" xml:space="preserve">
+    <value>Duplica</value>
+  </data>
+  <data name="CardLayout_Delete" xml:space="preserve">
+    <value>Elimina</value>
+  </data>
+  <data name="CardLayout_DeleteTitle" xml:space="preserve">
+    <value>Elimina layout</value>
+  </data>
+  <data name="CardLayout_DeleteLeadFormat" xml:space="preserve">
+    <value>Eliminare il layout "{0}"? Una pagina che lo usa torna a Predefinito.</value>
+  </data>
+  <data name="CardLayout_DefaultLocked" xml:space="preserve">
+    <value>Predefinito non si può modificare. Usa Duplica per crearne uno tuo.</value>
+  </data>
+  <data name="CardLayout_NameHeader" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="CardLayout_NameEmpty" xml:space="preserve">
+    <value>Un layout ha bisogno di un nome.</value>
+  </data>
+  <data name="CardLayout_NameTaken" xml:space="preserve">
+    <value>Un altro layout di questa pagina ha già quel nome.</value>
+  </data>
+  <data name="CardLayout_SizeHeader" xml:space="preserve">
+    <value>Dimensione</value>
+  </data>
+  <data name="CardLayout_SizeCompact" xml:space="preserve">
+    <value>Compatta</value>
+  </data>
+  <data name="CardLayout_SizeNormal" xml:space="preserve">
+    <value>Normale</value>
+  </data>
+  <data name="CardLayout_SizeRoomy" xml:space="preserve">
+    <value>Ampia</value>
+  </data>
+  <data name="CardLayout_WidthHeader" xml:space="preserve">
+    <value>Larghezza schede</value>
+  </data>
+  <data name="CardLayout_WidthNarrow" xml:space="preserve">
+    <value>Stretta</value>
+  </data>
+  <data name="CardLayout_WidthNormal" xml:space="preserve">
+    <value>Normale</value>
+  </data>
+  <data name="CardLayout_WidthWide" xml:space="preserve">
+    <value>Larga</value>
+  </data>
+  <data name="CardLayout_PictureHeader" xml:space="preserve">
+    <value>Immagine</value>
+  </data>
+  <data name="CardLayout_PictureOff" xml:space="preserve">
+    <value>Nessuna</value>
+  </data>
+  <data name="CardLayout_PictureSmall" xml:space="preserve">
+    <value>Piccola, a sinistra</value>
+  </data>
+  <data name="CardLayout_PictureBanner" xml:space="preserve">
+    <value>Banner in alto</value>
+  </data>
+  <data name="CardLayout_FieldsHeader" xml:space="preserve">
+    <value>Cosa mostra ogni scheda</value>
+  </data>
+  <data name="CardLayout_FieldsHint" xml:space="preserve">
+    <value>Spunta cosa mostrare. Trascina una riga, o usa le frecce, per cambiare l'ordine. Il nome della mod e l'icona di stato si vedono sempre. Anche le righe della vista Gruppi li usano, su una riga.</value>
+  </data>
+  <data name="CardLayout_ButtonsHeader" xml:space="preserve">
+    <value>Pulsanti</value>
+  </data>
+  <data name="CardLayout_ButtonsHint" xml:space="preserve">
+    <value>I pulsanti nascosti restano nel menu del clic destro.</value>
+  </data>
+  <data name="CardLayout_ListFieldsHeader" xml:space="preserve">
+    <value>Cosa mostrano le righe della vista Elenco</value>
+  </data>
+  <data name="CardLayout_ListFieldsHint" xml:space="preserve">
+    <value>Scelto a parte dalle schede, così la vista Elenco può mostrare di più o di meno.</value>
+  </data>
+  <data name="CardLayout_MoveUp" xml:space="preserve">
+    <value>Sposta su</value>
+  </data>
+  <data name="CardLayout_MoveDown" xml:space="preserve">
+    <value>Sposta giù</value>
+  </data>
+  <data name="CardLayout_DragToolTip" xml:space="preserve">
+    <value>Trascina per cambiare l'ordine</value>
+  </data>
+  <data name="CardLayout_PreviewHeader" xml:space="preserve">
+    <value>Anteprima</value>
+  </data>
+  <data name="CardLayout_PreviewNoMod" xml:space="preserve">
+    <value>Ancora niente da mostrare. Apri la pagina una volta per caricare le sue mod.</value>
+  </data>
+  <data name="CardLayout_Use" xml:space="preserve">
+    <value>Usa questo layout</value>
+  </data>
+  <data name="CardField_Note" xml:space="preserve">
+    <value>La tua nota</value>
+  </data>
+  <data name="CardField_Version" xml:space="preserve">
+    <value>Versione installata</value>
+  </data>
+  <data name="CardField_Sides" xml:space="preserve">
+    <value>Client / server</value>
+  </data>
+  <data name="CardField_Author" xml:space="preserve">
+    <value>Autore</value>
+  </data>
+  <data name="CardField_AddonParent" xml:space="preserve">
+    <value>Mod dell'addon</value>
+  </data>
+  <data name="CardField_ModLists" xml:space="preserve">
+    <value>Elenchi mod</value>
+  </data>
+  <data name="CardField_Group" xml:space="preserve">
+    <value>Gruppo</value>
+  </data>
+  <data name="CardField_Disabled" xml:space="preserve">
+    <value>Etichetta Disattivata</value>
+  </data>
+  <data name="CardField_Pinned" xml:space="preserve">
+    <value>Fissata</value>
+  </data>
+  <data name="CardField_DisableToggle" xml:space="preserve">
+    <value>Attiva / disattiva</value>
+  </data>
+  <data name="CardField_QuickUpdate" xml:space="preserve">
+    <value>Aggiorna</value>
+  </data>
+  <data name="CardField_Category" xml:space="preserve">
+    <value>Categoria</value>
+  </data>
+  <data name="CardField_Downloads" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="CardField_Updated" xml:space="preserve">
+    <value>Ultimo aggiornamento su sp-mod</value>
+  </data>
+  <data name="CardField_InstalledOn" xml:space="preserve">
+    <value>Installata il</value>
+  </data>
+  <data name="CardField_SptFit" xml:space="preserve">
+    <value>Compatibilità SPT</value>
+  </data>
+  <data name="CardField_Teaser" xml:space="preserve">
+    <value>Descrizione breve</value>
+  </data>
+  <data name="CardField_Guid" xml:space="preserve">
+    <value>GUID</value>
+  </data>
+  <data name="CardField_Endorsements" xml:space="preserve">
+    <value>Consigli</value>
+  </data>
+  <data name="CardField_MatchedAddons" xml:space="preserve">
+    <value>Addon corrispondenti, durante la ricerca</value>
+  </data>
+  <data name="CardField_SptVersion" xml:space="preserve">
+    <value>Versione SPT e release</value>
+  </data>
+  <data name="CardField_AlternateNote" xml:space="preserve">
+    <value>Nota quando un'altra versione funziona sul tuo SPT</value>
+  </data>
+  <data name="CardField_Badges" xml:space="preserve">
+    <value>Badge</value>
+  </data>
+  <data name="Card_UpdatedFormat" xml:space="preserve">
+    <value>Aggiornata il {0}</value>
+  </data>
+  <data name="Card_InstalledOnFormat" xml:space="preserve">
+    <value>Installata il {0}</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Title" xml:space="preserve">
+    <value>Scegliere cosa mostrano le schede mod</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Step1" xml:space="preserve">
+    <value>In {0} o {1}, scegli un layout dall'elenco in cima alla pagina.</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Step2" xml:space="preserve">
+    <value>Per crearne uno tuo, fai clic sulla matita accanto all'elenco, poi su {0}. Spunta i campi che vuoi e trascinali nell'ordine.</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Step3" xml:space="preserve">
+    <value>Imposta {0}, {1} e {2}. L'anteprima mostra una vera mod della pagina.</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Step4" xml:space="preserve">
+    <value>Fai clic su {0}. Perché la pagina si apra con esso la prossima volta, usa {1} sulla pagina.</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Note" xml:space="preserve">
+    <value>{0} non si può modificare. In Installate, un layout decide anche cosa mostrano le righe delle viste Gruppi ed Elenco.</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Keywords" xml:space="preserve">
+    <value>layout schede, vista schede, layout, campi, compatta, dimensione schede, larghezza, immagine, miniatura, banner, colonne elenco, personalizzare schede</value>
+  </data>
 </root>

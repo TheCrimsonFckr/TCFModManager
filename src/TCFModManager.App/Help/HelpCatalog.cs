@@ -268,6 +268,17 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Installed_Views_Step2))
                 .WithKeywords(() => Strings.Help_Installed_Views_Keywords),
 
+            // OPEN-66.
+            Topic("installed.cardlayouts", () => Strings.Help_Installed_CardLayouts_Title,
+                Step(() => Strings.Help_Installed_CardLayouts_Step1, () => Strings.Nav_Installed, () => Strings.Nav_Browse),
+                Step(() => Strings.Help_Installed_CardLayouts_Step2, () => Strings.CardLayout_New),
+                Step(() => Strings.Help_Installed_CardLayouts_Step3,
+                    () => Strings.CardLayout_SizeHeader, () => Strings.CardLayout_WidthHeader, () => Strings.CardLayout_PictureHeader),
+                Step(() => Strings.Help_Installed_CardLayouts_Step4, () => Strings.CardLayout_Use, () => Strings.Common_SaveAsDefault))
+                .WithNote(() => Strings.Help_Installed_CardLayouts_Note, () => Strings.CardLayout_Default)
+                .WithKeywords(() => Strings.Help_Installed_CardLayouts_Keywords)
+                .WithPage(typeof(InstalledPage)),
+
             Topic("installed.groups", () => Strings.Help_Installed_Groups_Title,
                 Step(() => Strings.Help_Installed_Groups_Step1,
                     () => Strings.Nav_Installed, () => Strings.Installed_ViewGroups),

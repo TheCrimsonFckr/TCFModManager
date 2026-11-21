@@ -1,0 +1,224 @@
+<ui:FluentWindow
+    x:Class="TCFModManager.App.Views.CardLayoutEditorWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:vm="clr-namespace:TCFModManager.App.ViewModels"
+    xmlns:controls="clr-namespace:TCFModManager.App.Controls"
+    Title="{Binding WindowTitle}"
+    Width="1080"
+    Height="720"
+    MinWidth="860"
+    MinHeight="520"
+    ShowInTaskbar="False"
+    ExtendsContentIntoTitleBar="True"
+    TextOptions.TextFormattingMode="Display"
+    TextOptions.TextRenderingMode="ClearType">
+    <ui:FluentWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Views/CardFields.Installed.xaml" />
+                <ResourceDictionary Source="/Views/CardFields.Browse.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+
+            <Style x:Key="EditorHeader" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Margin" Value="0,16,0,4" />
+            </Style>
+
+            <Style x:Key="EditorHint" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+                <Setter Property="Margin" Value="0,0,0,6" />
+            </Style>
+
+            <DataTemplate x:Key="FieldRowTemplate" DataType="{x:Type vm:CardFieldRow}">
+                <Border
+                    Margin="0,0,0,2"
+                    Padding="4,2"
+                    AllowDrop="True"
+                    Background="Transparent"
+                    CornerRadius="{DynamicResource SmallCornerRadius}"
+                    DragOver="FieldRow_DragOver"
+                    Drop="FieldRow_Drop">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <ui:SymbolIcon
+                            Grid.Column="0"
+                            Margin="0,0,8,0"
+                            VerticalAlignment="Center"
+                            Cursor="SizeAll"
+                            Symbol="ReOrderDotsVertical24"
+                            ToolTip="{loc:Str CardLayout_DragToolTip}"
+                            IsEnabled="{Binding IsEditable}"
+                            PreviewMouseLeftButtonDown="Grip_PreviewMouseLeftButtonDown"
+                            PreviewMouseMove="Grip_PreviewMouseMove" />
+                        <CheckBox
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Content="{Binding Label}"
+                            IsChecked="{Binding IsShown}"
+                            IsEnabled="{Binding IsEditable}" />
+                        <ui:Button
+                            Grid.Column="2"
+                            Padding="4"
+                            Appearance="Transparent"
+                            Icon="{ui:SymbolIcon ArrowUp24}"
+                            ToolTip="{loc:Str CardLayout_MoveUp}"
+                            IsEnabled="{Binding IsEditable}"
+                            Command="{Binding DataContext.MoveUpCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            CommandParameter="{Binding}" />
+                        <ui:Button
+                            Grid.Column="3"
+                            Padding="4"
+                            Appearance="Transparent"
+                            Icon="{ui:SymbolIcon ArrowDown24}"
+                            ToolTip="{loc:Str CardLayout_MoveDown}"
+                            IsEnabled="{Binding IsEditable}"
+                            Command="{Binding DataContext.MoveDownCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            CommandParameter="{Binding}" />
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+            <DataTemplate x:Key="ButtonRowTemplate" DataType="{x:Type vm:CardFieldRow}">
+                <CheckBox
+                    Margin="0,0,0,2"
+                    Content="{Binding Label}"
+                    IsChecked="{Binding IsShown}"
+                    IsEnabled="{Binding IsEditable}" />
+            </DataTemplate>
+        </ResourceDictionary>
+    </ui:FluentWindow.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Grid.Row="0" Title="{Binding WindowTitle}" />
+
+        <Grid Grid.Row="1" Margin="24,8,24,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0" Margin="0,0,16,0">
+                <TextBlock DockPanel.Dock="Top" Style="{StaticResource EditorHeader}" Margin="0,0,0,6" Text="{loc:Str CardLayout_LayoutsHeader}" />
+                <StackPanel DockPanel.Dock="Bottom" Margin="0,8,0,0">
+                    <ui:Button HorizontalAlignment="Stretch" Icon="{ui:SymbolIcon Add24}" Content="{loc:Str CardLayout_New}" Command="{Binding NewCommand}" />
+                    <ui:Button Margin="0,6,0,0" HorizontalAlignment="Stretch" Icon="{ui:SymbolIcon Copy24}" Content="{loc:Str CardLayout_Duplicate}" Command="{Binding DuplicateCommand}" />
+                    <ui:Button Margin="0,6,0,0" HorizontalAlignment="Stretch" Icon="{ui:SymbolIcon Delete24}" Content="{loc:Str CardLayout_Delete}" Command="{Binding DeleteCommand}" />
+                </StackPanel>
+                <ListBox
+                    ItemsSource="{Binding Layouts}"
+                    SelectedItem="{Binding SelectedLayout}"
+                    DisplayMemberPath="Name" />
+            </DockPanel>
+
+            <ScrollViewer Grid.Column="1" Padding="0,0,12,0" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource EditorHeader}" Margin="0,0,0,4" Text="{loc:Str CardLayout_NameHeader}" />
+                    <ui:TextBox
+                        x:Name="NameBox"
+                        Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                        IsEnabled="{Binding IsEditable}"
+                        LostKeyboardFocus="NameBox_LostKeyboardFocus"
+                        KeyDown="NameBox_KeyDown" />
+                    <TextBlock
+                        Margin="0,6,0,0"
+                        Style="{StaticResource EditorHint}"
+                        Text="{Binding StatusMessage}"
+                        Visibility="{Binding StatusMessage, Converter={StaticResource CardNullToCollapsed}}" />
+
+                    <Grid Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Style="{StaticResource EditorHint}" Text="{loc:Str CardLayout_SizeHeader}" />
+                            <ComboBox ItemsSource="{Binding SizeOptions}" SelectedItem="{Binding SelectedSize}" DisplayMemberPath="Label" IsEnabled="{Binding IsEditable}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Style="{StaticResource EditorHint}" Text="{loc:Str CardLayout_WidthHeader}" />
+                            <ComboBox ItemsSource="{Binding WidthOptions}" SelectedItem="{Binding SelectedWidth}" DisplayMemberPath="Label" IsEnabled="{Binding IsEditable}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="4">
+                            <TextBlock Style="{StaticResource EditorHint}" Text="{loc:Str CardLayout_PictureHeader}" />
+                            <ComboBox ItemsSource="{Binding PictureOptions}" SelectedItem="{Binding SelectedPicture}" DisplayMemberPath="Label" IsEnabled="{Binding IsEditable}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <TextBlock Style="{StaticResource EditorHeader}" Text="{loc:Str CardLayout_FieldsHeader}" />
+                    <TextBlock Style="{StaticResource EditorHint}" Text="{loc:Str CardLayout_FieldsHint}" />
+                    <ItemsControl ItemsSource="{Binding FieldRows}" ItemTemplate="{StaticResource FieldRowTemplate}" Focusable="False" />
+
+                    <StackPanel Visibility="{Binding IsInstalled, Converter={StaticResource BoolToVis}}">
+                        <TextBlock Style="{StaticResource EditorHeader}" Text="{loc:Str CardLayout_ButtonsHeader}" />
+                        <TextBlock Style="{StaticResource EditorHint}" Text="{loc:Str CardLayout_ButtonsHint}" />
+                        <ItemsControl ItemsSource="{Binding ButtonRows}" ItemTemplate="{StaticResource ButtonRowTemplate}" Focusable="False" />
+
+                        <TextBlock Style="{StaticResource EditorHeader}" Text="{loc:Str CardLayout_ListFieldsHeader}" />
+                        <TextBlock Style="{StaticResource EditorHint}" Text="{loc:Str CardLayout_ListFieldsHint}" />
+                        <ItemsControl ItemsSource="{Binding ListRows}" ItemTemplate="{StaticResource FieldRowTemplate}" Focusable="False" />
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+
+            <StackPanel Grid.Column="2" Margin="16,0,0,0" MinWidth="320">
+                <TextBlock Style="{StaticResource EditorHeader}" Margin="0,0,0,6" Text="{loc:Str CardLayout_PreviewHeader}" />
+                <Border
+                    x:Name="PreviewHost"
+                    Width="{Binding PreviewWidth}"
+                    HorizontalAlignment="Left"
+                    Padding="16,12"
+                    CornerRadius="{DynamicResource SmallCornerRadius}"
+                    Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    IsHitTestVisible="False"
+                    controls:CardLayoutScope.Layout="{Binding Preview}"
+                    Visibility="{Binding HasSample, Converter={StaticResource BoolToVis}}">
+                    <ContentPresenter x:Name="PreviewCard" Content="{Binding Sample}" />
+                </Border>
+                <TextBlock
+                    MaxWidth="320"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource EditorHint}"
+                    Text="{loc:Str CardLayout_PreviewNoMod}"
+                    Visibility="{Binding HasSample, Converter={StaticResource CardFalseToVisible}}" />
+            </StackPanel>
+        </Grid>
+
+        <Border
+            Grid.Row="2"
+            Margin="0,12,0,0"
+            Padding="24,12"
+            Background="{DynamicResource ApplicationBackgroundBrush}"
+            BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+            BorderThickness="0,1,0,0">
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon Checkmark24}" Content="{loc:Str CardLayout_Use}" Click="Use_Click" />
+                <ui:Button Margin="8,0,0,0" Content="{loc:Str Common_Close}" Click="Close_Click" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</ui:FluentWindow>

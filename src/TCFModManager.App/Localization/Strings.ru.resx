@@ -10781,4 +10781,220 @@
   <data name="Help_Start_Copy_Keywords" xml:space="preserve">
     <value>копировать, копировать текст, буфер обмена, Ctrl+C, выделить текст, копировать название, копировать версию, копировать GUID, копировать список, сообщение об ошибке</value>
   </data>
+  <data name="CardLayout_Default" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="CardLayout_NewName" xml:space="preserve">
+    <value>Мой макет</value>
+  </data>
+  <data name="CardLayout_PickerToolTip" xml:space="preserve">
+    <value>Макет карточек: что показывает каждая карточка мода</value>
+  </data>
+  <data name="CardLayout_Edit" xml:space="preserve">
+    <value>Изменить макеты карточек</value>
+  </data>
+  <data name="CardLayout_EditorTitleInstalled" xml:space="preserve">
+    <value>Макеты карточек - Установленные</value>
+  </data>
+  <data name="CardLayout_EditorTitleBrowse" xml:space="preserve">
+    <value>Макеты карточек - Обзор</value>
+  </data>
+  <data name="CardLayout_LayoutsHeader" xml:space="preserve">
+    <value>Макеты</value>
+  </data>
+  <data name="CardLayout_New" xml:space="preserve">
+    <value>Новый</value>
+  </data>
+  <data name="CardLayout_Duplicate" xml:space="preserve">
+    <value>Дублировать</value>
+  </data>
+  <data name="CardLayout_Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="CardLayout_DeleteTitle" xml:space="preserve">
+    <value>Удалить макет</value>
+  </data>
+  <data name="CardLayout_DeleteLeadFormat" xml:space="preserve">
+    <value>Удалить макет «{0}»? Страница, которая его использует, вернётся к макету по умолчанию.</value>
+  </data>
+  <data name="CardLayout_DefaultLocked" xml:space="preserve">
+    <value>Макет по умолчанию нельзя изменить. Нажмите «Дублировать», чтобы сделать свой.</value>
+  </data>
+  <data name="CardLayout_NameHeader" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="CardLayout_NameEmpty" xml:space="preserve">
+    <value>У макета должно быть название.</value>
+  </data>
+  <data name="CardLayout_NameTaken" xml:space="preserve">
+    <value>На этой странице уже есть макет с таким названием.</value>
+  </data>
+  <data name="CardLayout_SizeHeader" xml:space="preserve">
+    <value>Размер</value>
+  </data>
+  <data name="CardLayout_SizeCompact" xml:space="preserve">
+    <value>Компактный</value>
+  </data>
+  <data name="CardLayout_SizeNormal" xml:space="preserve">
+    <value>Обычный</value>
+  </data>
+  <data name="CardLayout_SizeRoomy" xml:space="preserve">
+    <value>Просторный</value>
+  </data>
+  <data name="CardLayout_WidthHeader" xml:space="preserve">
+    <value>Ширина карточки</value>
+  </data>
+  <data name="CardLayout_WidthNarrow" xml:space="preserve">
+    <value>Узкая</value>
+  </data>
+  <data name="CardLayout_WidthNormal" xml:space="preserve">
+    <value>Обычная</value>
+  </data>
+  <data name="CardLayout_WidthWide" xml:space="preserve">
+    <value>Широкая</value>
+  </data>
+  <data name="CardLayout_PictureHeader" xml:space="preserve">
+    <value>Изображение</value>
+  </data>
+  <data name="CardLayout_PictureOff" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="CardLayout_PictureSmall" xml:space="preserve">
+    <value>Маленькое, слева</value>
+  </data>
+  <data name="CardLayout_PictureBanner" xml:space="preserve">
+    <value>Баннер сверху</value>
+  </data>
+  <data name="CardLayout_FieldsHeader" xml:space="preserve">
+    <value>Что показывает карточка</value>
+  </data>
+  <data name="CardLayout_FieldsHint" xml:space="preserve">
+    <value>Отметьте, что показывать. Перетащите строку или используйте стрелки, чтобы изменить порядок. Название мода и значок состояния видны всегда. Строки вида «Группы» тоже используют это, в одну строку.</value>
+  </data>
+  <data name="CardLayout_ButtonsHeader" xml:space="preserve">
+    <value>Кнопки</value>
+  </data>
+  <data name="CardLayout_ButtonsHint" xml:space="preserve">
+    <value>Скрытые кнопки остаются в меню правого клика.</value>
+  </data>
+  <data name="CardLayout_ListFieldsHeader" xml:space="preserve">
+    <value>Что показывают строки вида «Список»</value>
+  </data>
+  <data name="CardLayout_ListFieldsHint" xml:space="preserve">
+    <value>Выбирается отдельно от карточек, чтобы «Список» мог показывать больше или меньше.</value>
+  </data>
+  <data name="CardLayout_MoveUp" xml:space="preserve">
+    <value>Выше</value>
+  </data>
+  <data name="CardLayout_MoveDown" xml:space="preserve">
+    <value>Ниже</value>
+  </data>
+  <data name="CardLayout_DragToolTip" xml:space="preserve">
+    <value>Перетащите, чтобы изменить порядок</value>
+  </data>
+  <data name="CardLayout_PreviewHeader" xml:space="preserve">
+    <value>Предпросмотр</value>
+  </data>
+  <data name="CardLayout_PreviewNoMod" xml:space="preserve">
+    <value>Пока нечего показать. Откройте страницу один раз, чтобы загрузить её моды.</value>
+  </data>
+  <data name="CardLayout_Use" xml:space="preserve">
+    <value>Использовать этот макет</value>
+  </data>
+  <data name="CardField_Note" xml:space="preserve">
+    <value>Ваша заметка</value>
+  </data>
+  <data name="CardField_Version" xml:space="preserve">
+    <value>Установленная версия</value>
+  </data>
+  <data name="CardField_Sides" xml:space="preserve">
+    <value>Клиент / сервер</value>
+  </data>
+  <data name="CardField_Author" xml:space="preserve">
+    <value>Автор</value>
+  </data>
+  <data name="CardField_AddonParent" xml:space="preserve">
+    <value>Мод аддона</value>
+  </data>
+  <data name="CardField_ModLists" xml:space="preserve">
+    <value>Списки модов</value>
+  </data>
+  <data name="CardField_Group" xml:space="preserve">
+    <value>Группа</value>
+  </data>
+  <data name="CardField_Disabled" xml:space="preserve">
+    <value>Метка «Отключён»</value>
+  </data>
+  <data name="CardField_Pinned" xml:space="preserve">
+    <value>Закреплён</value>
+  </data>
+  <data name="CardField_DisableToggle" xml:space="preserve">
+    <value>Вкл. / выкл.</value>
+  </data>
+  <data name="CardField_QuickUpdate" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="CardField_Category" xml:space="preserve">
+    <value>Категория</value>
+  </data>
+  <data name="CardField_Downloads" xml:space="preserve">
+    <value>Загрузки</value>
+  </data>
+  <data name="CardField_Updated" xml:space="preserve">
+    <value>Последнее обновление на sp-mod</value>
+  </data>
+  <data name="CardField_InstalledOn" xml:space="preserve">
+    <value>Дата установки</value>
+  </data>
+  <data name="CardField_SptFit" xml:space="preserve">
+    <value>Совместимость с SPT</value>
+  </data>
+  <data name="CardField_Teaser" xml:space="preserve">
+    <value>Краткое описание</value>
+  </data>
+  <data name="CardField_Guid" xml:space="preserve">
+    <value>GUID</value>
+  </data>
+  <data name="CardField_Endorsements" xml:space="preserve">
+    <value>Одобрения</value>
+  </data>
+  <data name="CardField_MatchedAddons" xml:space="preserve">
+    <value>Подходящие аддоны при поиске</value>
+  </data>
+  <data name="CardField_SptVersion" xml:space="preserve">
+    <value>Версия SPT и выпуск</value>
+  </data>
+  <data name="CardField_AlternateNote" xml:space="preserve">
+    <value>Заметка, если на вашем SPT работает другая версия</value>
+  </data>
+  <data name="CardField_Badges" xml:space="preserve">
+    <value>Значки</value>
+  </data>
+  <data name="Card_UpdatedFormat" xml:space="preserve">
+    <value>Обновлён {0}</value>
+  </data>
+  <data name="Card_InstalledOnFormat" xml:space="preserve">
+    <value>Установлен {0}</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Title" xml:space="preserve">
+    <value>Выбрать, что показывают карточки модов</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Step1" xml:space="preserve">
+    <value>На странице {0} или {1} выберите макет в списке вверху страницы.</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Step2" xml:space="preserve">
+    <value>Чтобы сделать свой, нажмите на карандаш рядом со списком, затем {0}. Отметьте нужные поля и перетащите их в нужном порядке.</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Step3" xml:space="preserve">
+    <value>Настройте «{0}», «{1}» и «{2}». Предпросмотр показывает настоящий мод со страницы.</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Step4" xml:space="preserve">
+    <value>Нажмите «{0}». Чтобы страница открывалась с ним в следующий раз, используйте «{1}» на странице.</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Note" xml:space="preserve">
+    <value>«{0}» нельзя изменить. На странице «Установленные» макет также задаёт, что показывают строки видов «Группы» и «Список».</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Keywords" xml:space="preserve">
+    <value>макет карточек, вид карточек, макет, поля, компактный, размер карточки, ширина, изображение, миниатюра, баннер, столбцы списка, настроить карточки</value>
+  </data>
 </root>

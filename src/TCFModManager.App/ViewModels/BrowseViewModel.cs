@@ -63,6 +63,7 @@ public partial class BrowseViewModel : LocalizedViewModel
         _selectedPublishedRange = DefaultDateRange(_defaults?.Published);
         _selectedUpdatedRange = DefaultDateRange(_defaults?.Updated);
         _selectedSearchScope = DefaultSearchScope();
+        InitCardLayouts();
 
         // Category and SPT version are resolved later: both lists are built from the catalog, and
         // neither exists yet - see EnsureCategoryOptionsBuilt/EnsureSptVersionOptionsBuilt.

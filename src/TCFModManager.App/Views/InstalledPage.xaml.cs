@@ -72,6 +72,8 @@ public partial class InstalledPage : Page
         GroupsScrollViewer.AddHandler(DragOverEvent, new DragEventHandler(GroupsScrollViewer_DragOver), true);
         GroupsScrollViewer.AddHandler(DragLeaveEvent, new DragEventHandler(GroupsScrollViewer_DragLeave), true);
         GroupsScrollViewer.AddHandler(DropEvent, new DragEventHandler(GroupsScrollViewer_Drop), true);
+
+        HookCardLayout();
     }
 
     //

@@ -1,0 +1,273 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    xmlns:viewmodels="clr-namespace:TCFModManager.App.ViewModels"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
+    xmlns:controls="clr-namespace:TCFModManager.App.Controls">
+
+    <converters:NullToVisibilityConverter x:Key="CardNullToCollapsed" />
+    <converters:FalseToVisibilityConverter x:Key="CardFalseToVisible" />
+    <converters:PictureWhenShownConverter x:Key="CardPictureWhenShown" />
+    <BooleanToVisibilityConverter x:Key="CardBoolToVis" />
+
+    <sys:Double x:Key="CardTitleFontSize">14</sys:Double>
+    <sys:Double x:Key="CardLineFontSize">11</sys:Double>
+    <sys:Double x:Key="CardChipFontSize">11</sys:Double>
+    <Thickness x:Key="CardLineMargin">0</Thickness>
+    <Thickness x:Key="CardChipRowMargin">0,4,0,0</Thickness>
+    <sys:Double x:Key="CardSmallPictureSize">48</sys:Double>
+    <sys:Double x:Key="CardBannerHeight">90</sys:Double>
+
+    <Style x:Key="ModChip" TargetType="Border">
+        <Setter Property="Margin" Value="0,2,4,0" />
+        <Setter Property="Padding" Value="6,1" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="CornerRadius" Value="{DynamicResource SmallCornerRadius}" />
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+    </Style>
+
+    <Style x:Key="GroupChip" TargetType="Border" BasedOn="{StaticResource ModChip}">
+        <Setter Property="Margin" Value="0" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding HasGroupColor}" Value="True">
+                <Setter Property="Background" Value="{Binding GroupChipBrush}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ModChipText" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{DynamicResource CardChipFontSize}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+
+    <DataTemplate x:Key="ModListBadges">
+        <ItemsControl
+            ItemsSource="{Binding Lists}"
+            Visibility="{Binding ShowLists, Converter={StaticResource CardBoolToVis}}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource ModChip}" ToolTip="{loc:Str Installed_ListChipToolTip}">
+                        <TextBlock Style="{StaticResource ModChipText}" Text="{Binding}" MaxWidth="140" />
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Installed.Note" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+        <TextBlock
+            FontSize="{DynamicResource CardLineFontSize}"
+            FontStyle="Italic"
+            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+            TextTrimming="CharacterEllipsis"
+            Text="{Binding Note}"
+            ToolTip="{Binding Note}"
+            Visibility="{Binding Note, Converter={StaticResource CardNullToCollapsed}}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Installed.AddonParent" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+        <Border
+            Style="{StaticResource ModChip}"
+            ToolTip="{Binding AddonSubtitle}"
+            Visibility="{Binding AddonSubtitle, Converter={StaticResource CardNullToCollapsed}}">
+            <TextBlock Style="{StaticResource ModChipText}" Text="{Binding AddonSubtitle}" />
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Installed.ModLists" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+        <ContentPresenter ContentTemplate="{StaticResource ModListBadges}" Content="{Binding}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Installed.Group" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+        <Border
+            Margin="0,0,6,0"
+            Style="{StaticResource GroupChip}"
+            Visibility="{Binding IsGrouped, Converter={StaticResource CardBoolToVis}}">
+            <StackPanel Orientation="Horizontal">
+                <ui:SymbolIcon Symbol="Folder24" FontSize="12" Margin="0,0,5,0" VerticalAlignment="Center" Visibility="{Binding HasGroupIcon, Converter={StaticResource CardFalseToVisible}}" />
+                <controls:GroupIconView Width="12" Height="12" Margin="0,0,5,0" VerticalAlignment="Center" Key="{Binding GroupIcon}" Visibility="{Binding HasGroupIcon, Converter={StaticResource CardBoolToVis}}" />
+                <TextBlock Style="{StaticResource ModChipText}" Text="{Binding GroupName}" />
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Installed.Disabled" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+        <Border
+            Margin="0,0,6,0"
+            Style="{StaticResource DisabledBadge}"
+            Visibility="{Binding IsDisabled, Converter={StaticResource CardBoolToVis}}">
+            <TextBlock Style="{StaticResource DisabledBadgeText}" Text="{loc:Str Installed_DisabledTag}" />
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Installed.Pinned" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+        <ui:SymbolIcon
+            Symbol="Pin24"
+            FontSize="14"
+            Margin="0,0,6,0"
+            VerticalAlignment="Center"
+            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+            ToolTip="{loc:Str Common_PinnedToolTip}"
+            Visibility="{Binding IsPinned, Converter={StaticResource CardBoolToVis}}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Installed.SptFit" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+        <TextBlock
+            FontSize="{DynamicResource CardLineFontSize}"
+            Foreground="{DynamicResource SystemFillColorCautionBrush}"
+            TextWrapping="Wrap"
+            Text="{Binding SptNote}"
+            Visibility="{Binding SptNote, Converter={StaticResource CardNullToCollapsed}}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Installed.Teaser" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+        <TextBlock
+            FontSize="{DynamicResource CardLineFontSize}"
+            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+            TextTrimming="CharacterEllipsis"
+            Text="{Binding PreviewTeaser}"
+            ToolTip="{Binding PreviewTeaser}"
+            Visibility="{Binding PreviewTeaser, Converter={StaticResource CardNullToCollapsed}}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="InstalledCardHeader" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+        <Grid
+            Margin="0,0,8,0"
+            Background="Transparent"
+            ToolTip="{StaticResource ModHoverPreview}"
+            ToolTipService.InitialShowDelay="3000"
+            ToolTipService.BetweenShowDelay="0"
+            ToolTipService.ShowDuration="60000"
+            ToolTipService.Placement="Right">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border
+                Grid.Row="0"
+                Grid.ColumnSpan="4"
+                Height="{DynamicResource CardBannerHeight}"
+                Margin="0,0,0,8"
+                ClipToBounds="True"
+                CornerRadius="{DynamicResource SmallCornerRadius}"
+                Background="{DynamicResource ControlFillColorDefaultBrush}"
+                Visibility="{Binding (controls:CardLayoutScope.Layout).ShowBanner, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                <Image Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <behaviors:ThumbnailLoader.LargeSource>
+                        <MultiBinding Converter="{StaticResource CardPictureWhenShown}">
+                            <Binding Path="(controls:CardLayoutScope.Layout).ShowBanner" RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="PreviewThumbnail" />
+                        </MultiBinding>
+                    </behaviors:ThumbnailLoader.LargeSource>
+                </Image>
+            </Border>
+
+            <CheckBox
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="0,0,8,0"
+                VerticalAlignment="Center"
+                IsChecked="{Binding IsSelected}"
+                Visibility="{Binding DataContext.SelectionMode, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Converter={StaticResource CardBoolToVis}}" />
+
+            <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Top">
+                <ui:SymbolIcon
+                    Margin="0,1,10,0"
+                    HorizontalAlignment="Center"
+                    FontSize="20"
+                    Symbol="{Binding StatusGlyph}"
+                    Style="{StaticResource StatusIcon}"
+                    ToolTip="{Binding StatusTooltip}" />
+
+                <ui:Button
+                    Margin="0,4,10,0"
+                    Padding="0"
+                    MinWidth="0"
+                    MinHeight="0"
+                    Width="30"
+                    Height="30"
+                    HorizontalAlignment="Center"
+                    Appearance="Transparent"
+                    Command="{Binding DataContext.ToggleDisableCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                    CommandParameter="{Binding}"
+                    ToolTip="{Binding DisableToggleTooltip}"
+                    Visibility="{Binding (controls:CardLayoutScope.Layout).ShowDisableToggle, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                    <ui:SymbolIcon Symbol="{Binding DisableToggleGlyph}" FontSize="16" />
+                </ui:Button>
+
+                <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ShowQuickUpdate, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                    <ui:Button
+                        Margin="0,2,10,0"
+                        Padding="0"
+                        MinWidth="0"
+                        MinHeight="0"
+                        Width="30"
+                        Height="30"
+                        HorizontalAlignment="Center"
+                        Appearance="Transparent"
+                        Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                        Visibility="{Binding CanQuickUpdate, Converter={StaticResource CardBoolToVis}}"
+                        Command="{Binding DataContext.UpdateOneCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                        CommandParameter="{Binding}"
+                        ToolTip="{Binding QuickUpdateToolTip}">
+                        <ui:SymbolIcon Symbol="ArrowDownload24" FontSize="16" />
+                    </ui:Button>
+                </Border>
+            </StackPanel>
+
+            <Border
+                Grid.Row="1"
+                Grid.Column="2"
+                Width="{DynamicResource CardSmallPictureSize}"
+                Height="{DynamicResource CardSmallPictureSize}"
+                Margin="0,0,10,0"
+                VerticalAlignment="Top"
+                ClipToBounds="True"
+                CornerRadius="{DynamicResource SmallCornerRadius}"
+                Background="{DynamicResource ControlFillColorDefaultBrush}"
+                Visibility="{Binding (controls:CardLayoutScope.Layout).ShowSmallPicture, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                <Image Stretch="UniformToFill">
+                    <behaviors:ThumbnailLoader.Source>
+                        <MultiBinding Converter="{StaticResource CardPictureWhenShown}">
+                            <Binding Path="(controls:CardLayoutScope.Layout).ShowSmallPicture" RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="PreviewThumbnail" />
+                        </MultiBinding>
+                    </behaviors:ThumbnailLoader.Source>
+                </Image>
+            </Border>
+
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="3"
+                VerticalAlignment="Top"
+                MinHeight="{Binding (controls:CardLayoutScope.Layout).HeaderMinHeight, RelativeSource={RelativeSource Self}, FallbackValue=92}">
+                <TextBlock
+                    FontSize="{DynamicResource CardTitleFontSize}"
+                    FontWeight="SemiBold"
+                    TextTrimming="CharacterEllipsis"
+                    Text="{Binding DisplayTitle}"
+                    ToolTip="{Binding DisplayTitle}" />
+                <controls:CardFieldsPanel
+                    TemplatePrefix="CardField.Installed."
+                    Fields="{Binding (controls:CardLayoutScope.Layout).Fields, RelativeSource={RelativeSource Self}}" />
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

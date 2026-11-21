@@ -27,6 +27,10 @@
     Unloaded="InstalledPage_Unloaded"
     ScrollViewer.CanContentScroll="False">
     <Page.Resources>
+        <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="/Views/CardFields.Installed.xaml" />
+        </ResourceDictionary.MergedDictionaries>
         <converters:PageSizeLabelConverter x:Key="PageSizeLabel" />
         <!-- One width for every filter in the filter row, so a wrapped row lines up in columns. -->
 
@@ -103,51 +107,6 @@
             </ListBox>
         </DataTemplate>
 
-        <!-- One chip per mod list a mod belongs to, shared by all three views so they can't drift
-             apart. Membership comes from ModListMembership, which runs the real planner, so a chip
-             here and what applying that list would do can't disagree. ShowLists folds in the
-             page-wide toggle as well as "is it in any list at all". -->
-        <Style x:Key="ModChip" TargetType="Border">
-            <Setter Property="Margin" Value="0,2,4,0" />
-            <Setter Property="Padding" Value="6,1" />
-            <Setter Property="HorizontalAlignment" Value="Left" />
-            <Setter Property="CornerRadius" Value="{DynamicResource SmallCornerRadius}" />
-            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
-        </Style>
-
-        <Style x:Key="GroupChip" TargetType="Border" BasedOn="{StaticResource ModChip}">
-            <Setter Property="Margin" Value="0" />
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding HasGroupColor}" Value="True">
-                    <Setter Property="Background" Value="{Binding GroupChipBrush}" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="ModChipText" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="11" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-        </Style>
-
-        <DataTemplate x:Key="ModListBadges">
-            <ItemsControl
-                ItemsSource="{Binding Lists}"
-                Visibility="{Binding ShowLists, Converter={StaticResource BoolToVis}}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border Style="{StaticResource ModChip}" ToolTip="{loc:Str Installed_ListChipToolTip}">
-                            <TextBlock Style="{StaticResource ModChipText}" Text="{Binding}" MaxWidth="140" />
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </DataTemplate>
         <!--
              Everything the app knows about one installed mod, shown when a row or a card is
              opened. Shared by the List and Cards views so the two cannot drift apart - they
@@ -421,6 +380,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        </ResourceDictionary>
     </Page.Resources>
     <!-- Scroll-anywhere for group view is wired up in code-behind (see the constructor and
          Page_PreviewMouseWheel in InstalledPage.xaml.cs), not via a XAML MouseWheel attribute here
@@ -440,7 +400,8 @@
     <Grid
         x:Name="RootGrid"
         Margin="16"
-        Background="Transparent">
+        Background="Transparent"
+        controls:CardLayoutScope.Layout="{Binding CardLayout}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -492,6 +453,22 @@
                     Appearance="{Binding ShowList, Converter={StaticResource BoolToAppearance}}"
                     ToolTip="{loc:Str Installed_ViewListToolTip}"
                     Click="ListView_Click" />
+                <ComboBox
+                    Margin="16,0,0,0"
+                    MinWidth="150"
+                    VerticalAlignment="Center"
+                    ItemsSource="{Binding CardLayoutChoices}"
+                    SelectedItem="{Binding SelectedCardLayout}"
+                    DisplayMemberPath="Name"
+                    ToolTip="{loc:Str CardLayout_PickerToolTip}" />
+                <ui:Button
+                    Margin="4,0,0,0"
+                    Padding="8,7"
+                    VerticalAlignment="Center"
+                    Appearance="Transparent"
+                    Icon="{ui:SymbolIcon Edit24}"
+                    ToolTip="{loc:Str CardLayout_Edit}"
+                    Click="EditCardLayouts_Click" />
             </StackPanel>
 
             <WrapPanel Grid.Column="1" HorizontalAlignment="Right">
@@ -1049,168 +1026,7 @@
                             PreviewMouseLeftButtonDown="Card_PreviewMouseLeftButtonDown"
                             MouseRightButtonUp="Mod_MouseRightButtonUp">
                             <ui:CardExpander.Header>
-                                <Grid
-                                    Margin="0,0,8,0"
-                                    Background="Transparent"
-                                    ToolTip="{StaticResource ModHoverPreview}"
-                                    ToolTipService.InitialShowDelay="3000"
-                                    ToolTipService.BetweenShowDelay="0"
-                                    ToolTipService.ShowDuration="60000"
-                                    ToolTipService.Placement="Right">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <!-- Only shown in multi-select mode; a click anywhere on the
-                                         card ticks it too, rather than only this small target -
-                                         see Card_PreviewMouseLeftButtonDown. -->
-                                    <CheckBox
-                                        Grid.Column="0"
-                                        Margin="0,0,8,0"
-                                        VerticalAlignment="Center"
-                                        IsChecked="{Binding IsSelected}"
-                                        Visibility="{Binding DataContext.SelectionMode, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Converter={StaticResource BoolToVis}}" />
-
-                                    <!-- Status above the enable/disable toggle, both top-aligned
-                                         with the title block beside them so the icon reads as
-                                         belonging to the title line rather than floating against
-                                         the middle of the whole header. -->
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Top">
-                                        <ui:SymbolIcon
-                                            Margin="0,1,10,0"
-                                            HorizontalAlignment="Center"
-                                            FontSize="20"
-                                            Symbol="{Binding StatusGlyph}"
-                                            Style="{StaticResource StatusIcon}"
-                                            ToolTip="{Binding StatusTooltip}" />
-
-                                        <!-- Same toggle the List view carries, and the only action
-                                             on the collapsed card: it is the one thing you reach
-                                             for without needing to read anything else first.
-                                             Remove stays inside the card, behind the expander. -->
-                                        <!--
-                                             Sized explicitly, and MinWidth/MinHeight zeroed with
-                                             it: the theme's Button style floors the control at 32,
-                                             so trimming Padding alone would have changed nothing.
-                                             Measured against a card screenshot - the button's box
-                                             was 32px beside an 18px status icon, which is what made
-                                             it read as oversized.
-                                        -->
-                                        <ui:Button
-                                            Margin="0,4,10,0"
-                                            Padding="0"
-                                            MinWidth="0"
-                                            MinHeight="0"
-                                            Width="30"
-                                            Height="30"
-                                            HorizontalAlignment="Center"
-                                            Appearance="Transparent"
-                                            Command="{Binding DataContext.ToggleDisableCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                                            CommandParameter="{Binding}"
-                                            ToolTip="{Binding DisableToggleTooltip}">
-                                            <ui:SymbolIcon Symbol="{Binding DisableToggleGlyph}" FontSize="16" />
-                                        </ui:Button>
-
-                                        <!-- OPEN-12 A2: one click queues this mod's update. -->
-                                        <ui:Button
-                                            Margin="0,2,10,0"
-                                            Padding="0"
-                                            MinWidth="0"
-                                            MinHeight="0"
-                                            Width="30"
-                                            Height="30"
-                                            HorizontalAlignment="Center"
-                                            Appearance="Transparent"
-                                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                                            Visibility="{Binding CanQuickUpdate, Converter={StaticResource BoolToVis}}"
-                                            Command="{Binding DataContext.UpdateOneCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                                            CommandParameter="{Binding}"
-                                            ToolTip="{Binding QuickUpdateToolTip}">
-                                            <ui:SymbolIcon Symbol="ArrowDownload24" FontSize="16" />
-                                        </ui:Button>
-                                    </StackPanel>
-
-                                    <!-- MinHeight: every collapsed card the same size whichever of
-                                         the optional lines it has - addon, list chips, and the row
-                                         of group, disabled and pin. One number to tune if a
-                                         line is added or removed. It also clears the status, toggle
-                                         and update stack beside it. -->
-                                    <StackPanel Grid.Column="2" VerticalAlignment="Top" MinHeight="92">
-                                        <TextBlock
-                                            FontWeight="SemiBold"
-                                            TextTrimming="CharacterEllipsis"
-                                            Text="{Binding DisplayTitle}"
-                                            ToolTip="{Binding DisplayTitle}" />
-                                        <TextBlock
-                                            FontSize="11"
-                                            FontStyle="Italic"
-                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                            TextTrimming="CharacterEllipsis"
-                                            Text="{Binding Note}"
-                                            ToolTip="{Binding Note}"
-                                            Visibility="{Binding Note, Converter={StaticResource NullToCollapsed}}" />
-
-                                        <!-- The one line worth scanning: what you have, which
-                                             halves it installs, and who wrote it. -->
-                                        <TextBlock
-                                            FontSize="11"
-                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                            TextTrimming="CharacterEllipsis">
-                                            <Run Text="{Binding InstalledVersion, TargetNullValue='unknown', Mode=OneWay}" />
-                                            <Run Text=" • " />
-                                            <Run Text="{Binding TargetSummary, Mode=OneWay}" />
-                                            <Run Text=" • " />
-                                            <Hyperlink Style="{StaticResource AuthorLink}" ToolTip="{loc:Str Author_LinkToolTip}" Command="{Binding DataContext.OpenAuthorCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}" CommandParameter="{Binding}"><Run Text="{Binding Author, TargetNullValue='unknown author', Mode=OneWay}" /></Hyperlink>
-                                        </TextBlock>
-
-                                        <!-- Says what an addon is attached to; an addon's own name
-                                             rarely does, and it decides which versions can be
-                                             installed. Kept in the header for that reason. -->
-                                        <Border
-                                            Style="{StaticResource ModChip}"
-                                            ToolTip="{Binding AddonSubtitle}"
-                                            Visibility="{Binding AddonSubtitle, Converter={StaticResource NullToCollapsed}}">
-                                            <TextBlock Style="{StaticResource ModChipText}" Text="{Binding AddonSubtitle}" />
-                                        </Border>
-
-                                        <ContentPresenter
-                                            ContentTemplate="{StaticResource ModListBadges}"
-                                            Content="{Binding}" />
-
-                                        <!-- Group and disabled state, both readable without
-                                             opening the card. Under the summary rather than beside
-                                             it: a card is far narrower than a List row. -->
-                                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                                            <Border
-                                                Style="{StaticResource GroupChip}"
-                                                Visibility="{Binding IsGrouped, Converter={StaticResource BoolToVis}}">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <ui:SymbolIcon Symbol="Folder24" FontSize="12" Margin="0,0,5,0" VerticalAlignment="Center" Visibility="{Binding HasGroupIcon, Converter={StaticResource FalseToVisible}}" />
-                                                    <controls:GroupIconView Width="12" Height="12" Margin="0,0,5,0" VerticalAlignment="Center" Key="{Binding GroupIcon}" Visibility="{Binding HasGroupIcon, Converter={StaticResource BoolToVis}}" />
-                                                    <TextBlock Style="{StaticResource ModChipText}" Text="{Binding GroupName}" />
-                                                </StackPanel>
-                                            </Border>
-
-                                            <Border
-                                                Margin="6,0,0,0"
-                                                Style="{StaticResource DisabledBadge}"
-                                                Visibility="{Binding IsDisabled, Converter={StaticResource BoolToVis}}">
-                                                <TextBlock Style="{StaticResource DisabledBadgeText}" Text="{loc:Str Installed_DisabledTag}" />
-                                            </Border>
-
-                                            <ui:SymbolIcon
-                                                Symbol="Pin24"
-                                                FontSize="14"
-                                                Margin="4,0,0,0"
-                                                VerticalAlignment="Center"
-                                                Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                                                ToolTip="{loc:Str Common_PinnedToolTip}"
-                                                Visibility="{Binding IsPinned, Converter={StaticResource BoolToVis}}" />
-                                        </StackPanel>
-                                    </StackPanel>
-                                </Grid>
+                                <ContentPresenter ContentTemplate="{StaticResource InstalledCardHeader}" Content="{Binding}" />
                             </ui:CardExpander.Header>
 
                             <ContentPresenter
@@ -1492,41 +1308,27 @@
 
                                                         <StackPanel Grid.Column="1">
                                                             <TextBlock
+                                                                FontSize="{DynamicResource CardTitleFontSize}"
                                                                 FontWeight="SemiBold"
                                                                 TextTrimming="CharacterEllipsis"
                                                                 Text="{Binding DisplayTitle}" />
-                                                            <TextBlock
-                                                                FontSize="11"
-                                                                FontStyle="Italic"
-                                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                                TextTrimming="CharacterEllipsis"
-                                                                Text="{Binding Note}"
-                                                                ToolTip="{Binding Note}"
-                                                                Visibility="{Binding Note, Converter={StaticResource NullToCollapsed}}" />
-                                                            <TextBlock
-                                                                FontSize="11"
-                                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                                                TextTrimming="CharacterEllipsis">
-                                                                <Run Text="{Binding InstalledVersion, TargetNullValue='unknown', Mode=OneWay}" />
-                                                                <Run Text=" • " />
-                                                                <Run Text="{Binding TargetSummary, Mode=OneWay}" />
-                                                                <Run Text=" • " />
-                                                                <Run Text="{Binding Author, TargetNullValue='unknown author', Mode=OneWay}" />
-                                                            </TextBlock>
-
-                                                            <ContentPresenter
-                                                                ContentTemplate="{StaticResource ModListBadges}"
-                                                                Content="{Binding}" />
+                                                            <controls:CardFieldsPanel
+                                                                OneLine="True"
+                                                                TemplatePrefix="CardField.Installed."
+                                                                Fields="{Binding (controls:CardLayoutScope.Layout).RowFields, RelativeSource={RelativeSource Self}}" />
                                                         </StackPanel>
 
                                                         <!-- Beside the disable toggle, centred on the row, as in the List view. -->
                                                         <Border
                                                             Grid.Column="2"
+                                                            Visibility="{Binding (controls:CardLayoutScope.Layout).RowShowsDisabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVis}}">
+                                                        <Border
                                                             Margin="8,0,8,0"
                                                             VerticalAlignment="Center"
                                                             Style="{StaticResource DisabledBadge}"
                                                             Visibility="{Binding IsDisabled, Converter={StaticResource BoolToVis}}">
                                                             <TextBlock Style="{StaticResource DisabledBadgeText}" Text="{loc:Str Installed_DisabledTag}" />
+                                                        </Border>
                                                         </Border>
 
                                                         <!-- Per-row disable toggle. ModRow_PreviewMouseLeftButtonDown
@@ -1536,12 +1338,14 @@
                                                             <ui:Button
                                                                 Padding="4"
                                                                 Appearance="Transparent"
+                                                                Visibility="{Binding (controls:CardLayoutScope.Layout).ShowDisableToggle, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVis}}"
                                                                 Command="{Binding DataContext.ToggleDisableCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                                                                 CommandParameter="{Binding}"
                                                                 ToolTip="{Binding DisableToggleTooltip}">
                                                                 <ui:SymbolIcon Symbol="{Binding DisableToggleGlyph}" FontSize="16" />
                                                             </ui:Button>
 
+                                                            <Border Visibility="{Binding (controls:CardLayoutScope.Layout).RowShowsPinned, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVis}}">
                                                             <ui:SymbolIcon
                                                                 Symbol="Pin24"
                                                                 FontSize="12"
@@ -1550,6 +1354,7 @@
                                                                 Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
                                                                 ToolTip="{loc:Str Common_PinnedToolTip}"
                                                                 Visibility="{Binding IsPinned, Converter={StaticResource BoolToVis}}" />
+                                                            </Border>
                                                         </StackPanel>
                                                     </Grid>
                                                 </Border>
@@ -1620,31 +1425,13 @@
 
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                         <TextBlock
+                                            FontSize="{DynamicResource CardTitleFontSize}"
                                             FontWeight="SemiBold"
                                             TextTrimming="CharacterEllipsis"
                                             Text="{Binding DisplayTitle}" />
-                                        <TextBlock
-                                            FontSize="11"
-                                            FontStyle="Italic"
-                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                            TextTrimming="CharacterEllipsis"
-                                            Text="{Binding Note}"
-                                            ToolTip="{Binding Note}"
-                                            Visibility="{Binding Note, Converter={StaticResource NullToCollapsed}}" />
-                                        <TextBlock
-                                            FontSize="11"
-                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                            TextTrimming="CharacterEllipsis">
-                                            <Run Text="{Binding InstalledVersion, TargetNullValue='unknown', Mode=OneWay}" />
-                                            <Run Text=" • " />
-                                            <Run Text="{Binding TargetSummary, Mode=OneWay}" />
-                                            <Run Text=" • " />
-                                            <Hyperlink Style="{StaticResource AuthorLink}" ToolTip="{loc:Str Author_LinkToolTip}" Command="{Binding DataContext.OpenAuthorCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}" CommandParameter="{Binding}"><Run Text="{Binding Author, TargetNullValue='unknown author', Mode=OneWay}" /></Hyperlink>
-                                        </TextBlock>
-
-                                        <ContentPresenter
-                                            ContentTemplate="{StaticResource ModListBadges}"
-                                            Content="{Binding}" />
+                                        <controls:CardFieldsPanel
+                                            TemplatePrefix="CardField.Installed."
+                                            Fields="{Binding (controls:CardLayoutScope.Layout).ListFields, RelativeSource={RelativeSource Self}}" />
                                     </StackPanel>
 
                                     <!-- Group membership and disabled state, both readable without
@@ -1654,6 +1441,7 @@
                                         Orientation="Horizontal"
                                         VerticalAlignment="Center"
                                         Margin="12,0,12,0">
+                                        <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ListShowsGroup, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVis}}">
                                         <Border
                                             Style="{StaticResource GroupChip}"
                                             Visibility="{Binding IsGrouped, Converter={StaticResource BoolToVis}}">
@@ -1663,12 +1451,15 @@
                                                 <TextBlock Style="{StaticResource ModChipText}" Text="{Binding GroupName}" />
                                             </StackPanel>
                                         </Border>
+                                        </Border>
 
+                                        <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ListShowsDisabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVis}}">
                                         <Border
                                             Margin="6,0,0,0"
                                             Style="{StaticResource DisabledBadge}"
                                             Visibility="{Binding IsDisabled, Converter={StaticResource BoolToVis}}">
                                             <TextBlock Style="{StaticResource DisabledBadgeText}" Text="{loc:Str Installed_DisabledTag}" />
+                                        </Border>
                                         </Border>
                                     </StackPanel>
 
@@ -1676,6 +1467,7 @@
                                          and Sort out are inside the row, which has to be opened first. -->
                                     <StackPanel Grid.Column="3" VerticalAlignment="Center" Orientation="Horizontal">
                                     <!-- OPEN-12 A2: one click queues this mod's update. -->
+                                    <Border VerticalAlignment="Top" Visibility="{Binding (controls:CardLayoutScope.Layout).ListShowsQuickUpdate, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVis}}">
                                     <ui:Button
                                         Padding="6"
                                         Margin="0,0,4,0"
@@ -1688,16 +1480,19 @@
                                         ToolTip="{Binding QuickUpdateToolTip}">
                                         <ui:SymbolIcon Symbol="ArrowDownload24" FontSize="16" />
                                     </ui:Button>
+                                    </Border>
                                     <StackPanel VerticalAlignment="Center">
                                         <ui:Button
                                             Padding="6"
                                             Appearance="Transparent"
+                                            Visibility="{Binding (controls:CardLayoutScope.Layout).ListShowsDisableToggle, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVis}}"
                                             Command="{Binding DataContext.ToggleDisableCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                                             CommandParameter="{Binding}"
                                             ToolTip="{Binding DisableToggleTooltip}">
                                             <ui:SymbolIcon Symbol="{Binding DisableToggleGlyph}" FontSize="16" />
                                         </ui:Button>
 
+                                        <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ListShowsPinned, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVis}}">
                                         <ui:SymbolIcon
                                             Symbol="Pin24"
                                             FontSize="12"
@@ -1706,6 +1501,7 @@
                                             Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
                                             ToolTip="{loc:Str Common_PinnedToolTip}"
                                             Visibility="{Binding IsPinned, Converter={StaticResource BoolToVis}}" />
+                                        </Border>
                                     </StackPanel>
                                     </StackPanel>
                                 </Grid>

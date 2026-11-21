@@ -60,12 +60,13 @@ public partial class BrowseViewModel
 
     public void UpdateLayoutForWidth(double availableWidth)
     {
-        Columns = availableWidth switch
+        _lastLayoutWidth = availableWidth;
+        Columns = (availableWidth / CardLayout.WidthFactor) switch
         {
             < 700 => 1,   // small
             < 1050 => 2,  // medium
             < 1400 => 3,  // large
-            _ => 4,       // extra large
+            _ => CardLayout.Width == Core.Models.CardWidth.Narrow ? Math.Min(6, (int)(availableWidth / CardLayout.WidthFactor / 350)) : 4,
         };
     }
 

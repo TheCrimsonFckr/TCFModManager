@@ -252,6 +252,8 @@ public sealed class AppSettings
 
     public List<InstalledFilterPreset> InstalledFilterPresets { get; set; } = [];
 
+    public List<CardLayout> CardLayouts { get; set; } = [];
+
     // The sp-mod authors the user follows (OPEN-12 A4) - a Browse filter, a list in Options, and
     // notifications of their new mods alongside update notifications (R7).
     public List<FollowedAuthor> FollowedAuthors { get; set; } = [];
