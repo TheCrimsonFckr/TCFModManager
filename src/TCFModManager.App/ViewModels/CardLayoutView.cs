@@ -97,11 +97,11 @@ public sealed class CardLayoutView
             var inlineRuns = 0;
             var chipRuns = 0;
             CardFieldKind? last = null;
-            foreach (var field in Fields)
+            foreach (var spec in Fields)
             {
-                if (field.Kind != last && field.Kind == CardFieldKind.Inline) inlineRuns++;
-                if (field.Kind != last && field.Kind == CardFieldKind.Chip) chipRuns++;
-                last = field.Kind;
+                if (spec.Kind != last && spec.Kind == CardFieldKind.Inline) inlineRuns++;
+                if (spec.Kind != last && spec.Kind == CardFieldKind.Chip) chipRuns++;
+                last = spec.Kind;
             }
 
             var text = title * 1.33 + inlineRuns * (line * 1.33 + gap) + chipRuns * (chip * 1.33 + 6 + 4 + gap);
