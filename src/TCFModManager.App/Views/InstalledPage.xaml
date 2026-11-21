@@ -144,104 +144,7 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0">
-                    <TextBlock
-                        Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                        TextWrapping="Wrap"
-                        Text="{Binding AddonSubtitle}"
-                        Visibility="{Binding AddonSubtitle, Converter={StaticResource NullToCollapsed}}" />
-
-                    <TextBlock
-                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        TextWrapping="Wrap"
-                        Text="{Binding SharedFolderLine, Mode=OneWay}"
-                        Visibility="{Binding SharedFolderLine, Converter={StaticResource NullToCollapsed}}" />
-
-                    <TextBlock
-                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        TextWrapping="Wrap"
-                        Text="{Binding FolderNameIfDifferent, Mode=OneWay, StringFormat={loc:Str Installed_DetailInstalledAsFormat}}"
-                        Visibility="{Binding FolderNameIfDifferent, Converter={StaticResource NullToCollapsed}}" />
-
-                    <TextBlock
-                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        TextWrapping="Wrap"
-                        Text="{Binding Guid, Mode=OneWay, StringFormat={loc:Str Installed_DetailGuidFormat}}"
-                        Visibility="{Binding Guid, Converter={StaticResource NullToCollapsed}}" />
-
-                    <TextBlock
-                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        TextWrapping="Wrap"
-                        Text="{Binding InstalledVersion, Mode=OneWay, TargetNullValue={loc:Str Common_Unknown}, StringFormat={loc:Str Installed_DetailInstalledVersionFormat}}" />
-
-                    <TextBlock
-                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        TextWrapping="Wrap"
-                        Text="{Binding LatestPublishedText, Mode=OneWay, StringFormat={loc:Str Installed_DetailLatestPublishedFormat}}" />
-
-                    <TextBlock
-                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        Text="{Binding LatestUpdatedAt, Mode=OneWay, StringFormat={loc:Str Installed_DetailLastUpdatedFormat}}"
-                        Visibility="{Binding LatestUpdatedAt, Converter={StaticResource NullToCollapsed}}" />
-
-                    <TextBlock
-                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        Text="{Binding InstalledAt, Mode=OneWay, StringFormat={loc:Str Installed_DetailInstalledOnFormat}}"
-                        Visibility="{Binding InstalledAt, Converter={StaticResource NullToCollapsed}}" />
-
-                    <!-- What the files on disk claim, shown only when they disagree with each other or
-                         with the manifest. Sits under the dates because it qualifies the installed
-                         version rather than being a separate fact about the mod. -->
-                    <TextBlock
-                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        TextWrapping="Wrap"
-                        Text="{Binding InstalledVersionDetail}"
-                        Visibility="{Binding InstalledVersionDetail, Converter={StaticResource NullToCollapsed}}" />
-
-                    <!-- Part of what this app installed is no longer on disk. Spelled out rather
-                         than left to the status icon's tooltip: the rest of the card reads as a
-                         healthy install at the right version, which is exactly the problem. -->
-                    <TextBlock
-                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                        TextWrapping="Wrap"
-                        Text="{Binding IncompleteSummary}"
-                        Visibility="{Binding IncompleteSummary, Converter={StaticResource NullToCollapsed}}" />
-
-                    <!-- What a removal left behind because it holds files the mod didn't install. -->
-                    <TextBlock
-                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                        TextWrapping="Wrap"
-                        Text="{Binding LeftoverSummary}"
-                        Visibility="{Binding LeftoverSummary, Converter={StaticResource NullToCollapsed}}" />
-
-                    <!-- Monitor mode: a download of this mod the scan found on disk, not yet
-                         confirmed - or found only partly, which is never confirmed. -->
-                    <TextBlock
-                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                        TextWrapping="Wrap"
-                        Text="{Binding DownloadSummary}"
-                        Visibility="{Binding DownloadSummary, Converter={StaticResource NullToCollapsed}}" />
-
-                    <!-- sp-mod holds this mod's newest release back: it would break another installed
-                         mod (OPEN-12 F11). -->
-                    <TextBlock
-                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                        TextWrapping="Wrap"
-                        Text="{Binding HeldBackNote}"
-                        Visibility="{Binding HeldBackNote, Converter={StaticResource NullToCollapsed}}" />
-
-                    <TextBlock
-                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                        TextWrapping="Wrap"
-                        Text="{Binding SkippedNote}"
-                        Visibility="{Binding SkippedNote, Converter={StaticResource NullToCollapsed}}" />
-
-                    <!-- OPEN-13: the installed version isn't for this SPT, or not for Fika where Fika runs.
-                         Dismiss when it works anyway; dismissed, a quiet line with Warn again. -->
-                    <TextBlock
-                        Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                        TextWrapping="Wrap"
-                        Text="{Binding SptNote}"
-                        Visibility="{Binding SptNote, Converter={StaticResource NullToCollapsed}}" />
+                    <ContentPresenter ContentTemplate="{StaticResource ModDetailLines}" Content="{Binding}" />
                     <ui:Button
                         Margin="0,2,0,2"
                         Padding="8,2"
@@ -253,35 +156,15 @@
                         Visibility="{Binding CanDismissSptWarning, Converter={StaticResource BoolToVis}}"
                         Command="{Binding DataContext.DismissSptWarningCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                         CommandParameter="{Binding}" />
-                    <WrapPanel Visibility="{Binding SptDismissedNote, Converter={StaticResource NullToCollapsed}}">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            TextWrapping="Wrap"
-                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="{Binding SptDismissedNote}" />
-                        <ui:Button
-                            Margin="6,0,0,0"
-                            Padding="8,2"
-                            Appearance="Transparent"
-                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                            Content="{loc:Str Installed_SptUndismiss}"
-                            ToolTip="{loc:Str Installed_SptUndismissToolTip}"
-                            Command="{Binding DataContext.RestoreSptWarningCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                            CommandParameter="{Binding}" />
-                    </WrapPanel>
-
-                    <TextBlock
-                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        TextWrapping="Wrap"
-                        Text="{Binding FlagsSummary}"
-                        Visibility="{Binding FlagsSummary, Converter={StaticResource NullToCollapsed}}" />
-
-                    <TextBlock
-                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                        TextWrapping="Wrap"
-                        Margin="0,4,0,0"
-                        Text="{Binding SourceLabel}" />
-
+                    <ui:Button
+                        Visibility="{Binding SptDismissedNote, Converter={StaticResource NullToCollapsed}}"
+                        Padding="8,2"
+                        Appearance="Transparent"
+                        Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                        Content="{loc:Str Installed_SptUndismiss}"
+                        ToolTip="{loc:Str Installed_SptUndismissToolTip}"
+                        Command="{Binding DataContext.RestoreSptWarningCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                        CommandParameter="{Binding}" />
                     <!-- The folders themselves, one row, each opening in Explorer. The full path is
                          the tooltip rather than the label: a mod path is far too long to sit inside a
                          card, and what you want from it is to get there. -->
@@ -392,6 +275,55 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <DataTemplate x:Key="InstalledExpanderCard" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+            <!-- A disabled mod is marked by the red DISABLED tag and its status icon;
+                 the card itself is drawn at full strength so it stays readable. -->
+            <!-- Top, not the default stretch: a WrapPanel arranges each line at the
+                 height of its tallest item, so without this every card beside an
+                 expanded one would stretch to match it. -->
+            <!-- TickableCardExpander rather than HoverCardExpander: in Multi select
+                 mode a ticked card carries the accent edge and tint every other picked
+                 thing in the app does, so what a bulk enable, disable or remove is
+                 about to act on is readable from across the grid rather than from a
+                 checkbox at the corner of each card. Outside that mode nothing is
+                 ticked, and it behaves exactly as it did. -->
+            <ui:CardExpander
+                VerticalAlignment="Top"
+                Style="{StaticResource TickableCardExpander}"
+                Margin="0,0,6,6"
+                IsExpanded="{Binding IsCardExpanded, Mode=TwoWay}"
+                PreviewMouseLeftButtonDown="Card_PreviewMouseLeftButtonDown"
+                MouseRightButtonUp="Mod_MouseRightButtonUp">
+                <ui:CardExpander.Header>
+                    <ContentPresenter ContentTemplate="{StaticResource InstalledCardHeader}" Content="{Binding}" />
+                </ui:CardExpander.Header>
+
+                <ContentPresenter
+                    ContentTemplate="{StaticResource ModDetailBody}"
+                    Content="{Binding}" />
+            </ui:CardExpander>
+        </DataTemplate>
+
+        <DataTemplate x:Key="InstalledWindowCard" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+            <Border
+                VerticalAlignment="Top"
+                Margin="0,0,6,6"
+                Padding="16,12,12,10"
+                Style="{StaticResource TickableCardRow}"
+                PreviewMouseLeftButtonDown="WindowCard_PreviewMouseLeftButtonDown"
+                MouseLeftButtonUp="WindowCard_MouseLeftButtonUp"
+                MouseRightButtonUp="Mod_MouseRightButtonUp">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" SharedSizeGroup="InstalledCardActions" />
+                    </Grid.RowDefinitions>
+                    <ContentPresenter Grid.Row="0" ContentTemplate="{StaticResource InstalledCardHeader}" Content="{Binding}" />
+                    <ContentPresenter Grid.Row="1" Margin="0,8,0,0" ContentTemplate="{StaticResource ModCardActions}" Content="{Binding}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
         </ResourceDictionary>
     </Page.Resources>
     <!-- Scroll-anywhere for group view is wired up in code-behind (see the constructor and
@@ -972,6 +904,7 @@
                 x:Name="ResultsItems"
                 Focusable="False"
                 Grid.IsSharedSizeScope="True"
+                ItemTemplate="{StaticResource InstalledExpanderCard}"
                 ItemsSource="{Binding Results}"
                 SizeChanged="ResultsItems_SizeChanged">
                 <!-- A fresh page of cards is built a few at a time so the app never freezes (see
@@ -1013,36 +946,6 @@
                         <controls:GlideWrapPanel ItemWidth="{Binding CardWidth}" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:InstalledModCardViewModel}">
-                        <!-- A disabled mod is marked by the red DISABLED tag and its status icon;
-                             the card itself is drawn at full strength so it stays readable. -->
-                        <!-- Top, not the default stretch: a WrapPanel arranges each line at the
-                             height of its tallest item, so without this every card beside an
-                             expanded one would stretch to match it. -->
-                        <!-- TickableCardExpander rather than HoverCardExpander: in Multi select
-                             mode a ticked card carries the accent edge and tint every other picked
-                             thing in the app does, so what a bulk enable, disable or remove is
-                             about to act on is readable from across the grid rather than from a
-                             checkbox at the corner of each card. Outside that mode nothing is
-                             ticked, and it behaves exactly as it did. -->
-                        <ui:CardExpander
-                            VerticalAlignment="Top"
-                            Style="{StaticResource TickableCardExpander}"
-                            Margin="0,0,6,6"
-                            IsExpanded="{Binding IsCardExpanded, Mode=TwoWay}"
-                            PreviewMouseLeftButtonDown="Card_PreviewMouseLeftButtonDown"
-                            MouseRightButtonUp="Mod_MouseRightButtonUp">
-                            <ui:CardExpander.Header>
-                                <ContentPresenter ContentTemplate="{StaticResource InstalledCardHeader}" Content="{Binding}" />
-                            </ui:CardExpander.Header>
-
-                            <ContentPresenter
-                                ContentTemplate="{StaticResource ModDetailBody}"
-                                Content="{Binding}" />
-                        </ui:CardExpander>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
 

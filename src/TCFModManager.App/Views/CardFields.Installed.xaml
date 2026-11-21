@@ -384,4 +384,205 @@
             </StackPanel>
         </Grid>
     </DataTemplate>
+
+    <DataTemplate x:Key="ModDetailLines" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+        <StackPanel>
+            <TextBlock
+                Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding AddonSubtitle}"
+                Visibility="{Binding AddonSubtitle, Converter={StaticResource CardNullToCollapsed}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding SharedFolderLine, Mode=OneWay}"
+                Visibility="{Binding SharedFolderLine, Converter={StaticResource CardNullToCollapsed}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding FolderNameIfDifferent, Mode=OneWay, StringFormat={loc:Str Installed_DetailInstalledAsFormat}}"
+                Visibility="{Binding FolderNameIfDifferent, Converter={StaticResource CardNullToCollapsed}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding Guid, Mode=OneWay, StringFormat={loc:Str Installed_DetailGuidFormat}}"
+                Visibility="{Binding Guid, Converter={StaticResource CardNullToCollapsed}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding InstalledVersion, Mode=OneWay, TargetNullValue={loc:Str Common_Unknown}, StringFormat={loc:Str Installed_DetailInstalledVersionFormat}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding LatestPublishedText, Mode=OneWay, StringFormat={loc:Str Installed_DetailLatestPublishedFormat}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="{Binding LatestUpdatedAt, Mode=OneWay, StringFormat={loc:Str Installed_DetailLastUpdatedFormat}}"
+                Visibility="{Binding LatestUpdatedAt, Converter={StaticResource CardNullToCollapsed}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="{Binding InstalledAt, Mode=OneWay, StringFormat={loc:Str Installed_DetailInstalledOnFormat}}"
+                Visibility="{Binding InstalledAt, Converter={StaticResource CardNullToCollapsed}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding InstalledVersionDetail}"
+                Visibility="{Binding InstalledVersionDetail, Converter={StaticResource CardNullToCollapsed}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding IncompleteSummary}"
+                Visibility="{Binding IncompleteSummary, Converter={StaticResource CardNullToCollapsed}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding LeftoverSummary}"
+                Visibility="{Binding LeftoverSummary, Converter={StaticResource CardNullToCollapsed}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding DownloadSummary}"
+                Visibility="{Binding DownloadSummary, Converter={StaticResource CardNullToCollapsed}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding HeldBackNote}"
+                Visibility="{Binding HeldBackNote, Converter={StaticResource CardNullToCollapsed}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding SkippedNote}"
+                Visibility="{Binding SkippedNote, Converter={StaticResource CardNullToCollapsed}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding SptNote}"
+                Visibility="{Binding SptNote, Converter={StaticResource CardNullToCollapsed}}" />
+            <TextBlock
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding SptDismissedNote}"
+                Visibility="{Binding SptDismissedNote, Converter={StaticResource CardNullToCollapsed}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding FlagsSummary}"
+                Visibility="{Binding FlagsSummary, Converter={StaticResource CardNullToCollapsed}}" />
+
+            <TextBlock
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                TextWrapping="Wrap"
+                Margin="0,4,0,0"
+                Text="{Binding SourceLabel}" />
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ModCardActions" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+        <DockPanel LastChildFill="False">
+            <ui:Button
+                DockPanel.Dock="Right"
+                Padding="6"
+                VerticalAlignment="Top"
+                Appearance="Transparent"
+                Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                Icon="{ui:SymbolIcon Delete24}"
+                Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                CommandParameter="{Binding}"
+                ToolTip="{loc:Str Installed_RemoveToolTip}" />
+            <WrapPanel>
+                <ui:Button
+                    Margin="0,0,4,4"
+                    Padding="6,3"
+                    Appearance="Transparent"
+                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                    Icon="{ui:SymbolIcon EyeOff24}"
+                    Content="{loc:Str Installed_SptDismiss}"
+                    ToolTip="{loc:Str Installed_SptDismissToolTip}"
+                    Visibility="{Binding CanDismissSptWarning, Converter={StaticResource CardBoolToVis}}"
+                    Command="{Binding DataContext.DismissSptWarningCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                    CommandParameter="{Binding}" />
+                <ui:Button
+                    Margin="0,0,4,4"
+                    Padding="6,3"
+                    Appearance="Transparent"
+                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                    Content="{loc:Str Installed_SptUndismiss}"
+                    ToolTip="{loc:Str Installed_SptUndismissToolTip}"
+                    Visibility="{Binding SptDismissedNote, Converter={StaticResource CardNullToCollapsed}}"
+                    Command="{Binding DataContext.RestoreSptWarningCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                    CommandParameter="{Binding}" />
+                <ui:Button
+                    Margin="0,0,4,4"
+                    Padding="6,3"
+                    Appearance="Transparent"
+                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                    Icon="{ui:SymbolIcon FolderOpen24}"
+                    Content="{loc:Str Installed_ClientFolder}"
+                    Visibility="{Binding ClientFolderLink, Converter={StaticResource CardNullToCollapsed}}"
+                    Command="{Binding DataContext.OpenModFolderCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                    CommandParameter="{Binding ClientFolderLink}"
+                    ToolTip="{Binding ClientFolderLink}"
+                    ToolTipService.ShowDuration="20000" />
+                <ui:Button
+                    Margin="0,0,4,4"
+                    Padding="6,3"
+                    Appearance="Transparent"
+                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                    Icon="{ui:SymbolIcon FolderOpen24}"
+                    Content="{loc:Str Installed_ServerFolder}"
+                    Visibility="{Binding ServerFolderLink, Converter={StaticResource CardNullToCollapsed}}"
+                    Command="{Binding DataContext.OpenModFolderCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                    CommandParameter="{Binding ServerFolderLink}"
+                    ToolTip="{Binding ServerFolderLink}"
+                    ToolTipService.ShowDuration="20000" />
+                <ui:Button
+                    Margin="0,0,4,4"
+                    Padding="6,3"
+                    Appearance="Transparent"
+                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                    Icon="{ui:SymbolIcon Warning24}"
+                    Content="{loc:Str Installed_SortOut}"
+                    Visibility="{Binding HasDuplicateFolders, Converter={StaticResource CardBoolToVis}}"
+                    Command="{Binding DataContext.ResolveDuplicateCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                    CommandParameter="{Binding}"
+                    ToolTip="{loc:Str Installed_SortOutToolTip}" />
+                <ui:Button
+                    Margin="0,0,4,4"
+                    Padding="6,3"
+                    Appearance="Transparent"
+                    Icon="{ui:SymbolIcon CheckmarkCircle24}"
+                    Content="{loc:Str Installed_ConfirmDownload}"
+                    Visibility="{Binding CanConfirmDownload, Converter={StaticResource CardBoolToVis}}"
+                    Command="{Binding DataContext.ConfirmDownloadCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                    CommandParameter="{Binding}"
+                    ToolTip="{loc:Str Installed_ConfirmDownloadToolTip}" />
+                <ui:Button
+                    Margin="0,0,4,4"
+                    Padding="6"
+                    Appearance="Transparent"
+                    Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                    CommandParameter="{Binding}"
+                    ToolTip="{Binding PinTooltip}">
+                    <ui:Button.Icon>
+                        <ui:SymbolIcon Symbol="{Binding PinGlyph}" />
+                    </ui:Button.Icon>
+                </ui:Button>
+            </WrapPanel>
+        </DockPanel>
+    </DataTemplate>
 </ResourceDictionary>

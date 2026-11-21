@@ -30,7 +30,7 @@ public partial class InstalledViewModel
 
     // Cards and List are the two views made of expandable rows; group view's sections collapse on
     // their own terms and have their own controls, so expand/collapse all hides there.
-    public bool ShowExpanders => ViewMode is InstalledViewMode.Cards or InstalledViewMode.List;
+    public bool ShowExpanders => (ViewMode == InstalledViewMode.Cards && !CardLayout.DetailsInWindow) || ViewMode == InstalledViewMode.List;
 
     /// <summary>True for the two views that scroll rather than paginate - what hides the pagination
     /// controls and the per-page picker.</summary>

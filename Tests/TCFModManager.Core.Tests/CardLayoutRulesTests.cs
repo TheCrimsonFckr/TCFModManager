@@ -85,12 +85,14 @@ public class CardLayoutRulesTests
     {
         var layout = Layout("Mine", CardLayoutPage.Installed, "Note");
         layout.ListFields = ["Group"];
+        layout.DetailsInWindow = true;
 
         var copy = CardLayoutRules.Copy(layout, "Mine 2");
         copy.Fields.Add("Author");
         copy.ListFields!.Add("Version");
 
         Assert.NotEqual(layout.Id, copy.Id);
+        Assert.True(copy.DetailsInWindow);
         Assert.Equal(["Note"], layout.Fields);
         Assert.Equal(["Group"], layout.ListFields);
     }

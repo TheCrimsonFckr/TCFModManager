@@ -21,6 +21,12 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     private readonly SpModApiClient _spModApi = AppServices.SpModApi;
     private readonly InstalledModCardViewModel _mod;
 
+    public static bool OpenInstallDetails { get; set; }
+
+    public InstalledModCardViewModel Card => _mod;
+
+    public bool InstallDetailsOpen { get; set; } = OpenInstallDetails;
+
     // Looked up once in LoadAsync from the cached catalog. Exactly one of these is ever set - an
     // installed card is either a mod or an addon, never both.
     private Mod? _catalogMod;

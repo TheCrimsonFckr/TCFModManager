@@ -112,6 +112,9 @@ public sealed partial class CardLayoutEditorViewModel : LocalizedViewModel
     private CardOption<CardPicture>? _selectedPicture;
 
     [ObservableProperty]
+    private bool _detailsInWindow;
+
+    [ObservableProperty]
     private CardLayoutView _preview;
 
     [ObservableProperty]
@@ -136,6 +139,8 @@ public sealed partial class CardLayoutEditorViewModel : LocalizedViewModel
     partial void OnSelectedWidthChanged(CardOption<CardWidth>? value) => Commit();
 
     partial void OnSelectedPictureChanged(CardOption<CardPicture>? value) => Commit();
+
+    partial void OnDetailsInWindowChanged(bool value) => Commit();
 
     private void ReloadLayouts(Guid? select)
     {
@@ -170,6 +175,7 @@ public sealed partial class CardLayoutEditorViewModel : LocalizedViewModel
             SelectedSize = SizeOptions.First(o => o.Value == layout.Size);
             SelectedWidth = WidthOptions.First(o => o.Value == layout.Width);
             SelectedPicture = PictureOptions.First(o => o.Value == layout.Picture);
+            DetailsInWindow = layout.DetailsInWindow;
             Preview = view;
             StatusMessage = view.IsDefault ? Strings.CardLayout_DefaultLocked : null;
         }
@@ -231,6 +237,7 @@ public sealed partial class CardLayoutEditorViewModel : LocalizedViewModel
             Size = SelectedSize?.Value ?? CardSize.Normal,
             Width = SelectedWidth?.Value ?? CardWidth.Normal,
             Picture = SelectedPicture?.Value ?? CardPicture.Off,
+            DetailsInWindow = IsInstalled && DetailsInWindow,
         };
     }
 

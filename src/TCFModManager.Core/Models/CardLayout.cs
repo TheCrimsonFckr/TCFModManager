@@ -50,4 +50,6 @@ public sealed class CardLayout
     public CardWidth Width { get; set; } = CardWidth.Normal;
 
     public CardPicture Picture { get; set; } = CardPicture.Off;
+
+    public bool DetailsInWindow { get; set; }
 }

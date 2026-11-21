@@ -73,6 +73,9 @@ public partial class InstalledViewModel
     partial void OnCardLayoutChanged(CardLayoutView value)
     {
         if (_lastLayoutWidth > 0) UpdateLayoutForWidth(_lastLayoutWidth);
+        OnPropertyChanged(nameof(ShowExpanders));
+        ExpandAllCommand.NotifyCanExecuteChanged();
+        CollapseAllCommand.NotifyCanExecuteChanged();
         FilterPins?.RefreshLabels();
     }
 }

@@ -167,6 +167,11 @@
                         </StackPanel>
                     </Grid>
 
+                    <StackPanel Margin="0,14,0,0" Visibility="{Binding IsInstalled, Converter={StaticResource BoolToVis}}">
+                        <CheckBox Content="{loc:Str CardLayout_DetailsInWindow}" IsChecked="{Binding DetailsInWindow}" IsEnabled="{Binding IsEditable}" />
+                        <TextBlock Margin="28,2,0,0" Style="{StaticResource EditorHint}" Text="{loc:Str CardLayout_DetailsInWindowHint}" />
+                    </StackPanel>
+
                     <TextBlock Style="{StaticResource EditorHeader}" Text="{loc:Str CardLayout_FieldsHeader}" />
                     <TextBlock Style="{StaticResource EditorHint}" Text="{loc:Str CardLayout_FieldsHint}" />
                     <ItemsControl ItemsSource="{Binding FieldRows}" ItemTemplate="{StaticResource FieldRowTemplate}" Focusable="False" />
@@ -200,7 +205,14 @@
                     BorderThickness="1"
                     IsHitTestVisible="False"
                     Visibility="{Binding HasSample, Converter={StaticResource BoolToVis}}">
-                    <ContentPresenter x:Name="PreviewCard" Content="{Binding Sample}" />
+                    <StackPanel>
+                        <ContentPresenter x:Name="PreviewCard" Content="{Binding Sample}" />
+                        <ContentPresenter
+                            Margin="0,8,0,0"
+                            ContentTemplate="{StaticResource ModCardActions}"
+                            Content="{Binding Sample}"
+                            Visibility="{Binding (controls:CardLayoutScope.Layout).DetailsInWindow, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVis}}" />
+                    </StackPanel>
                 </Border>
 
                 <StackPanel Visibility="{Binding ShowsListPreview, Converter={StaticResource BoolToVis}}">

@@ -3533,4 +3533,7 @@ internal static class Strings
     internal static string CardLayout_PreviewListHeader => LocalizationService.Get("CardLayout_PreviewListHeader");
     internal static string CardLayout_SectionHeader => LocalizationService.Get("CardLayout_SectionHeader");
     internal static string Card_SptFitsFormat => LocalizationService.Get("Card_SptFitsFormat");
+    internal static string CardLayout_DetailsInWindow => LocalizationService.Get("CardLayout_DetailsInWindow");
+    internal static string CardLayout_DetailsInWindowHint => LocalizationService.Get("CardLayout_DetailsInWindowHint");
+    internal static string ModUpdate_InstallDetails => LocalizationService.Get("ModUpdate_InstallDetails");
 }

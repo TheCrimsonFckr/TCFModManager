@@ -78,6 +78,10 @@ public sealed class CardLayoutView
 
     public bool ShowBanner => Picture == CardPicture.Banner;
 
+    public bool DetailsInWindow => Page == CardLayoutPage.Installed && Layout.DetailsInWindow;
+
+    public bool DetailsInDropdown => !DetailsInWindow;
+
     public double WidthFactor => Width switch
     {
         CardWidth.Narrow => 0.75,

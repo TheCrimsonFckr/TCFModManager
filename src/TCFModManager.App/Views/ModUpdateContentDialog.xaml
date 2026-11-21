@@ -15,9 +15,14 @@
         to install or update to. DataContext is a ModUpdateDialogViewModel set in code-behind.
     -->
     <ui:ContentDialog.Resources>
-        <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
-        <converters:UpdateAvailableToVisibilityConverter x:Key="TrueToVisible" />
-        <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Views/CardFields.Installed.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
+            <converters:UpdateAvailableToVisibilityConverter x:Key="TrueToVisible" />
+            <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
+        </ResourceDictionary>
     </ui:ContentDialog.Resources>
 
     <ui:ContentDialog.TitleTemplate>
@@ -259,6 +264,13 @@
                 VerticalScrollBarVisibility="Auto"
                 Visibility="{Binding IsLoading, Converter={StaticResource FalseToVisible}}">
               <StackPanel>
+                <Expander
+                    Margin="0,0,0,10"
+                    Header="{loc:Str ModUpdate_InstallDetails}"
+                    IsExpanded="{Binding InstallDetailsOpen, Mode=TwoWay}">
+                    <ContentPresenter Margin="0,4,0,0" ContentTemplate="{StaticResource ModDetailLines}" Content="{Binding Card}" />
+                </Expander>
+
                 <!-- Says how many versions are out of sight and why, so a shortened list is never
                      mistaken for the whole history. -->
                 <DockPanel

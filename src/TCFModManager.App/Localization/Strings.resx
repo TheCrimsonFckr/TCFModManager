@@ -12916,4 +12916,14 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>For SPT {0}</value>
     <comment>Card line for a mod that runs on this SPT. {0} is an SPT version or a range of real SPT releases, such as 4.1.0 - 4.1.6.</comment>
   </data>
+  <data name="CardLayout_DetailsInWindow" xml:space="preserve">
+    <value>Open details in a window</value>
+  </data>
+  <data name="CardLayout_DetailsInWindowHint" xml:space="preserve">
+    <value>Cards have no dropdown: click a card for its details and versions. Its buttons sit on the card.</value>
+  </data>
+  <data name="ModUpdate_InstallDetails" xml:space="preserve">
+    <value>Install details</value>
+    <comment>Heading of the section in the Details and versions window that lists what the app knows about the installed copy: GUID, versions, dates, folders.</comment>
+  </data>
 </root>
