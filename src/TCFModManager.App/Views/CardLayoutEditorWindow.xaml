@@ -191,6 +191,7 @@
             <StackPanel
                 x:Name="PreviewHost"
                 Grid.Column="2"
+                TextElement.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 Margin="16,0,0,0"
                 MinWidth="320"
                 controls:CardLayoutScope.Layout="{Binding Preview}">

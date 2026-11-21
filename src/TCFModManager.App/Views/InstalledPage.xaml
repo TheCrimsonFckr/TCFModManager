@@ -311,6 +311,7 @@
                 Margin="0,0,6,6"
                 Padding="16,12,12,10"
                 Style="{StaticResource TickableCardRow}"
+                TextElement.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                 PreviewMouseLeftButtonDown="WindowCard_PreviewMouseLeftButtonDown"
                 MouseLeftButtonUp="WindowCard_MouseLeftButtonUp"
                 MouseRightButtonUp="Mod_MouseRightButtonUp">
