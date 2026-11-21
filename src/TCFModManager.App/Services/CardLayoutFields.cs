@@ -56,9 +56,9 @@ public static class CardLayoutFields
     public static IReadOnlyList<CardFieldSpec> Installed { get; } =
     [
         new(Note, CardFieldKind.Block, nameof(Strings.CardField_Note), o => I(o)?.Note),
-        new(Version, CardFieldKind.Inline, nameof(Strings.CardField_Version), o => I(o)?.InstalledVersion ?? Strings.Common_Unknown),
+        new(Version, CardFieldKind.Line, nameof(Strings.CardField_Version), o => I(o)?.InstalledVersion ?? Strings.Common_Unknown),
         new(Sides, CardFieldKind.Inline, nameof(Strings.CardField_Sides), o => I(o)?.TargetSummary),
-        new(Author, CardFieldKind.Inline, nameof(Strings.CardField_Author), o => I(o)?.Author ?? Strings.Common_Unknown, IsAuthorLink: true),
+        new(Author, CardFieldKind.Line, nameof(Strings.CardField_Author), o => I(o)?.Author ?? Strings.Common_Unknown, IsAuthorLink: true),
         new(AddonParent, CardFieldKind.Block, nameof(Strings.CardField_AddonParent), o => I(o)?.AddonSubtitle),
         new(ModLists, CardFieldKind.Block, nameof(Strings.CardField_ModLists)),
         new(Group, CardFieldKind.Chip, nameof(Strings.CardField_Group)),
@@ -66,14 +66,14 @@ public static class CardLayoutFields
         new(Pinned, CardFieldKind.Chip, nameof(Strings.CardField_Pinned)),
         new(DisableToggle, CardFieldKind.Button, nameof(Strings.CardField_DisableToggle)),
         new(QuickUpdate, CardFieldKind.Button, nameof(Strings.CardField_QuickUpdate)),
-        new(Category, CardFieldKind.Inline, nameof(Strings.CardField_Category), o => I(o)?.CategoryTag),
-        new(Downloads, CardFieldKind.Inline, nameof(Strings.CardField_Downloads),
+        new(Category, CardFieldKind.Line, nameof(Strings.CardField_Category), o => I(o)?.CategoryTag),
+        new(Downloads, CardFieldKind.Line, nameof(Strings.CardField_Downloads),
             o => I(o)?.PreviewDownloads is { } n ? LocalizationService.Text(Strings.Common_DownloadsFormat, n) : null),
         new(Updated, CardFieldKind.Line, nameof(Strings.CardField_Updated),
             o => Date(I(o)?.LatestUpdatedAt) is { } d ? LocalizationService.Text(Strings.Card_UpdatedFormat, d) : null),
         new(InstalledOn, CardFieldKind.Line, nameof(Strings.CardField_InstalledOn),
             o => Date(I(o)?.InstalledAt) is { } d ? LocalizationService.Text(Strings.Card_InstalledOnFormat, d) : null),
-        new(SptFit, CardFieldKind.Block, nameof(Strings.CardField_SptFit), o => I(o)?.SptNote),
+        new(SptFit, CardFieldKind.Block, nameof(Strings.CardField_SptFit), o => I(o)?.SptFitLine),
         new(Teaser, CardFieldKind.Block, nameof(Strings.CardField_Teaser), o => I(o)?.PreviewTeaser),
     ];
 

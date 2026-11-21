@@ -12912,4 +12912,8 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Card layout</value>
     <comment>Heading of the card layout section in the Filters and view options panel (Installed and Browse).</comment>
   </data>
+  <data name="Card_SptFitsFormat" xml:space="preserve">
+    <value>For SPT {0}</value>
+    <comment>Card line for a mod that runs on this SPT. {0} is an SPT version or a range of real SPT releases, such as 4.1.0 - 4.1.6.</comment>
+  </data>
 </root>

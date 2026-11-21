@@ -11003,4 +11003,7 @@
   <data name="CardLayout_SectionHeader" xml:space="preserve">
     <value>Макет карточек</value>
   </data>
+  <data name="Card_SptFitsFormat" xml:space="preserve">
+    <value>Для SPT {0}</value>
+  </data>
 </root>

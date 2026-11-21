@@ -10580,4 +10580,7 @@ Die Details stehen im Log:
   <data name="CardLayout_SectionHeader" xml:space="preserve">
     <value>Kartenlayout</value>
   </data>
+  <data name="Card_SptFitsFormat" xml:space="preserve">
+    <value>Für SPT {0}</value>
+  </data>
 </root>

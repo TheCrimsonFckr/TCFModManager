@@ -10580,4 +10580,7 @@ Les détails sont dans le journal :
   <data name="CardLayout_SectionHeader" xml:space="preserve">
     <value>Disposition des cartes</value>
   </data>
+  <data name="Card_SptFitsFormat" xml:space="preserve">
+    <value>Pour SPT {0}</value>
+  </data>
 </root>

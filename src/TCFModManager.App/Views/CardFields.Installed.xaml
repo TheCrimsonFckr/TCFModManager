@@ -124,10 +124,20 @@
     <DataTemplate x:Key="CardField.Installed.SptFit" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
         <TextBlock
             FontSize="{DynamicResource CardLineFontSize}"
-            Foreground="{DynamicResource SystemFillColorCautionBrush}"
             TextWrapping="Wrap"
-            Text="{Binding SptNote}"
-            Visibility="{Binding SptNote, Converter={StaticResource CardNullToCollapsed}}" />
+            Text="{Binding SptFitLine}"
+            Visibility="{Binding SptFitLine, Converter={StaticResource CardNullToCollapsed}}">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsNotForThisSpt}" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCautionBrush}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
     </DataTemplate>
 
     <DataTemplate x:Key="CardField.Installed.Teaser" DataType="{x:Type viewmodels:InstalledModCardViewModel}">

@@ -167,6 +167,10 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // The Not for this SPT filter (D5) - either reason, unless dismissed.
     public bool IsNotForThisSpt => HasSptWarning && !IsSptWarningDismissed;
 
+    public string? SptFitLine => SptNote ?? SptDismissedNote ?? (SptFit is { Fits: true } fit
+        ? Text(Strings.Card_SptFitsFormat, SptVersionRangeFormatter.Format(fit.ForConstraint) ?? InstalledSptVersion)
+        : null);
+
     //
     // The opened card's compatibility line, and the tooltip's when the version isn't for this SPT:
     // "Your version is for SPT 4.0.x, not 4.1.6. 3.0.6 runs on it." R2: sp-mod decides, and the
