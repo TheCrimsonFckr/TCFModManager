@@ -265,6 +265,26 @@ public partial class DependenciesViewModel : LocalizedViewModel
     public bool IsEmpty => HasLoaded && Trees.Count == 0;
 
     [RelayCommand]
+    private async Task RefreshFromSpModAsync()
+    {
+        if (AppServices.UpdateWatcher.CatalogIsStale)
+        {
+            IsBusy = true;
+            StatusMessage = Strings.Common_CheckingSpMod;
+            try
+            {
+                await AppServices.UpdateWatcher.RefreshForRescanAsync();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        await RefreshAsync();
+    }
+
+    [RelayCommand]
     private async Task RefreshAsync()
     {
         var installPath = AppServices.SptEnvironment.InstallPath;

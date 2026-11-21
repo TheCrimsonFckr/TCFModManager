@@ -48,7 +48,7 @@
                 Content="{loc:Str Dependencies_Refresh}"
                 behaviors:PageKeys.Role="Refresh"
                 Icon="{ui:SymbolIcon ArrowSync24}"
-                Command="{Binding RefreshCommand}"
+                Command="{Binding RefreshFromSpModCommand}"
                 IsEnabled="{Binding IsNotBusy}" />
             <TextBlock
                 VerticalAlignment="Center"

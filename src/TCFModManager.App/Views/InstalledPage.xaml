@@ -497,7 +497,7 @@
                     Margin="0,0,0,4"
                     Content="{loc:Str Common_Rescan}"
                     behaviors:PageKeys.Role="Refresh"
-                    Command="{Binding ScanCommand}" />
+                    Command="{Binding RescanCommand}" />
             </WrapPanel>
         </Grid>
         <DockPanel

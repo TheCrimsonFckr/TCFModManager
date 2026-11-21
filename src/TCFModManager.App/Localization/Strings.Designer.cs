@@ -3536,4 +3536,5 @@ internal static class Strings
     internal static string CardLayout_DetailsInWindow => LocalizationService.Get("CardLayout_DetailsInWindow");
     internal static string CardLayout_DetailsInWindowHint => LocalizationService.Get("CardLayout_DetailsInWindowHint");
     internal static string ModUpdate_InstallDetails => LocalizationService.Get("ModUpdate_InstallDetails");
+    internal static string Common_CheckingSpMod => LocalizationService.Get("Common_CheckingSpMod");
 }

@@ -87,6 +87,20 @@ internal sealed class UpdateWatcher
     //
     public Task<UpdateCheckOutcome> CheckNowAsync() => CheckAsync(_loop?.Token ?? CancellationToken.None);
 
+    public static readonly TimeSpan RescanReadsAfter = TimeSpan.FromMinutes(15);
+
+    public bool CatalogIsStale =>
+        AppServices.ModCache.LastReadAt is not { } at || DateTimeOffset.UtcNow - at > RescanReadsAfter;
+
+    public async Task<bool> RefreshForRescanAsync(CancellationToken ct = default)
+    {
+        if (!CatalogIsStale) return false;
+
+        AppLog.Info("Updates", "rescan: catalog last read over 15 minutes ago, asking sp-mod about installed mods");
+        var outcome = await CheckAsync(ct, announce: false);
+        return outcome.Result == UpdateCheckResult.Checked;
+    }
+
     private async Task RunAsync(TimeSpan interval, CancellationToken ct)
     {
         using var timer = new PeriodicTimer(interval);
@@ -102,7 +116,7 @@ internal sealed class UpdateWatcher
         }
     }
 
-    private async Task<UpdateCheckOutcome> CheckAsync(CancellationToken ct)
+    private async Task<UpdateCheckOutcome> CheckAsync(CancellationToken ct, bool announce = true)
     {
         // A tick that lands while the previous check is still going is skipped, not queued (§5).
         if (_checking) return new UpdateCheckOutcome(UpdateCheckResult.AlreadyChecking);
@@ -110,7 +124,7 @@ internal sealed class UpdateWatcher
 
         try
         {
-            return await CheckCoreAsync(ct);
+            return await CheckCoreAsync(ct, announce);
         }
         catch (OperationCanceledException) when (ct.IsCancellationRequested)
         {
@@ -140,7 +154,7 @@ internal sealed class UpdateWatcher
         }
     }
 
-    private async Task<UpdateCheckOutcome> CheckCoreAsync(CancellationToken ct)
+    private async Task<UpdateCheckOutcome> CheckCoreAsync(CancellationToken ct, bool announce)
     {
         var installPath = AppServices.SptEnvironment.InstallPath;
         var sptVersion = AppServices.SptEnvironment.InstalledVersion;
@@ -194,6 +208,13 @@ internal sealed class UpdateWatcher
         var patched = false;
         if (refetch.Count > 0) patched |= AppServices.ModCache.Patch(await _checker.FetchModsAsync(refetch, ct));
         if (addonIds.Count > 0) patched |= AppServices.Addons.Patch(await _checker.FetchAddonsAsync(addonIds, ct));
+
+        if (!announce)
+        {
+            AppLog.Info("Updates", $"rescan check: {mods.Count} mods and {addonIds.Count} addons, {answer?.Updated.Count ?? 0} moved on sp-mod, {(patched ? "catalog patched" : "nothing new")}");
+            if (patched || heldChanged) UpdatesFound?.Invoke(this, EventArgs.Empty);
+            return new UpdateCheckOutcome(UpdateCheckResult.Checked);
+        }
 
         // Rebuilt over the same scan, so the only thing that differs is what the caches now say.
         if (patched || heldChanged) cards = await BuildCardsAsync(scanned, sptVersion, records, ct);

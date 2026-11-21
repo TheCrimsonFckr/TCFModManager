@@ -10592,4 +10592,7 @@ Die Details stehen im Log:
   <data name="ModUpdate_InstallDetails" xml:space="preserve">
     <value>Installationsdetails</value>
   </data>
+  <data name="Common_CheckingSpMod" xml:space="preserve">
+    <value>Prüfe sp-mod auf neue Versionen...</value>
+  </data>
 </root>

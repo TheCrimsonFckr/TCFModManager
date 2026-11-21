@@ -165,7 +165,7 @@ public partial class InstalledViewModel : LocalizedViewModel
         //
         AppServices.UpdateWatcher.UpdatesFound += async (_, _) =>
         {
-            if (!_hasScanned || ScanCommand.IsRunning) return;
+            if (!_hasScanned || ScanCommand.IsRunning || _rescanReading) return;
             await ScanCommand.ExecuteAsync(null);
         };
 

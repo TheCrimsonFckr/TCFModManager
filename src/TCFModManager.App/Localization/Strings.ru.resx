@@ -11015,4 +11015,7 @@
   <data name="ModUpdate_InstallDetails" xml:space="preserve">
     <value>Сведения об установке</value>
   </data>
+  <data name="Common_CheckingSpMod" xml:space="preserve">
+    <value>Проверка новых версий на sp-mod...</value>
+  </data>
 </root>

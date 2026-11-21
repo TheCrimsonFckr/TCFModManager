@@ -10592,4 +10592,7 @@ Les détails sont dans le journal :
   <data name="ModUpdate_InstallDetails" xml:space="preserve">
     <value>Détails de l'installation</value>
   </data>
+  <data name="Common_CheckingSpMod" xml:space="preserve">
+    <value>Recherche de nouvelles versions sur sp-mod...</value>
+  </data>
 </root>

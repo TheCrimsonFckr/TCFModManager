@@ -142,6 +142,30 @@ public partial class InstalledViewModel
     // belongs to a *filter* change, where the list you are paging through is genuinely different,
     // and AutoApplyFilter already does exactly that.
     //
+    private bool _rescanReading;
+
+    [RelayCommand]
+    private async Task RescanAsync()
+    {
+        if (AppServices.UpdateWatcher.CatalogIsStale)
+        {
+            _rescanReading = true;
+            IsBusy = true;
+            StatusMessage = Strings.Common_CheckingSpMod;
+            try
+            {
+                await AppServices.UpdateWatcher.RefreshForRescanAsync();
+            }
+            finally
+            {
+                _rescanReading = false;
+                IsBusy = false;
+            }
+        }
+
+        await ScanCommand.ExecuteAsync(null);
+    }
+
     [RelayCommand]
     private async Task ScanAsync()
     {

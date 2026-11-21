@@ -12926,4 +12926,8 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Install details</value>
     <comment>Heading of the section in the Details and versions window that lists what the app knows about the installed copy: GUID, versions, dates, folders.</comment>
   </data>
+  <data name="Common_CheckingSpMod" xml:space="preserve">
+    <value>Checking sp-mod for new versions...</value>
+    <comment>Status line while Rescan or Refresh asks sp-mod about the installed mods.</comment>
+  </data>
 </root>
