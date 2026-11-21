@@ -78,7 +78,7 @@ public static class CardLayoutFields
     ];
 
     public static IReadOnlyList<string> InstalledDefault { get; } =
-        [Note, Version, Sides, Author, AddonParent, ModLists, Group, Disabled, Pinned, DisableToggle, QuickUpdate];
+        [Note, Version, Author, Sides, AddonParent, ModLists, Group, Disabled, Pinned, DisableToggle, QuickUpdate];
 
     public static IReadOnlyList<CardFieldSpec> Browse { get; } =
     [
