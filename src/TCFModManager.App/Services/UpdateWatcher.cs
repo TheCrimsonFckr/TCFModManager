@@ -94,9 +94,17 @@ internal sealed class UpdateWatcher
 
     public async Task<bool> RefreshForRescanAsync(CancellationToken ct = default)
     {
-        if (!CatalogIsStale) return false;
+        var lastRead = AppServices.ModCache.LastReadAt;
+        if (!CatalogIsStale)
+        {
+            var minutes = (int)(DateTimeOffset.UtcNow - lastRead!.Value).TotalMinutes;
+            AppLog.Info("Updates", $"rescan: catalog read {minutes} min ago, not checking sp-mod");
+            return false;
+        }
 
-        AppLog.Info("Updates", "rescan: catalog last read over 15 minutes ago, asking sp-mod about installed mods");
+        AppLog.Info("Updates", lastRead is null
+            ? "rescan: catalog never read this session, asking sp-mod about installed mods"
+            : $"rescan: catalog read {(int)(DateTimeOffset.UtcNow - lastRead.Value).TotalMinutes} min ago, asking sp-mod about installed mods");
         var outcome = await CheckAsync(ct, announce: false);
         return outcome.Result == UpdateCheckResult.Checked;
     }
