@@ -1101,6 +1101,14 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="Downloads_RetryFailedToolTip" xml:space="preserve">
     <value>Put every failed or cancelled download back on the queue.</value>
   </data>
+  <data name="Downloads_RetryCancelled" xml:space="preserve">
+    <value>Retry cancelled</value>
+    <comment>Button label - puts every cancelled download back on the queue.</comment>
+  </data>
+  <data name="Downloads_RetryFailedAndCancelled" xml:space="preserve">
+    <value>Retry failed and cancelled</value>
+    <comment>Button label - puts every failed and cancelled download back on the queue.</comment>
+  </data>
   <data name="Downloads_Description" xml:space="preserve">
     <value>Downloads install strictly one at a time, in the order you queued them - queue as many as you like from Browse or an update dialog and check back here for progress.</value>
     <comment>Browse is the page name, as in the sidebar.</comment>

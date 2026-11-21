@@ -1287,6 +1287,12 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Downloads_RetryFailedToolTip" xml:space="preserve">
     <value>Stellt jeden fehlgeschlagenen oder abgebrochenen Download wieder in die Warteschlange.</value>
   </data>
+  <data name="Downloads_RetryCancelled" xml:space="preserve">
+    <value>Abgebrochene erneut versuchen</value>
+  </data>
+  <data name="Downloads_RetryFailedAndCancelled" xml:space="preserve">
+    <value>Fehlgeschlagene und abgebrochene erneut versuchen</value>
+  </data>
   <data name="Downloads_RetryToolTip" xml:space="preserve">
     <value>Stellt das hier wieder ans Ende der Warteschlange und versucht es erneut. Sonst wird nichts neu heruntergeladen.</value>
   </data>

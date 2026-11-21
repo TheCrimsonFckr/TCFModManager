@@ -79,14 +79,14 @@
                 ToolTip="{loc:Str Downloads_PauseToolTip}"
                 Command="{Binding TogglePauseCommand}" />
 
-            <!-- Only there when something failed. A mod list apply queues dozens at once, so one
+            <!-- Only there when something failed or was cancelled. A mod list apply queues dozens at once, so one
                  bad spell on The Forge leaves a run of them to put back. -->
             <ui:Button
                 DockPanel.Dock="Right"
                 Margin="0,0,8,0"
                 Appearance="Primary"
                 Icon="{ui:SymbolIcon ArrowClockwise24}"
-                Content="{loc:Str Downloads_RetryFailed}"
+                Content="{Binding RetryLabel}"
                 ToolTip="{loc:Str Downloads_RetryFailedToolTip}"
                 Visibility="{Binding HasRetryable, Converter={StaticResource BoolToVisibility}}"
                 Click="RetryFailedButton_Click" />

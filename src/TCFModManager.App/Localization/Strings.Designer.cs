@@ -317,6 +317,8 @@ internal static class Strings
     internal static string Downloads_ClearFinished => LocalizationService.Get("Downloads_ClearFinished");
     internal static string Downloads_RetryFailed => LocalizationService.Get("Downloads_RetryFailed");
     internal static string Downloads_RetryFailedToolTip => LocalizationService.Get("Downloads_RetryFailedToolTip");
+    internal static string Downloads_RetryCancelled => LocalizationService.Get("Downloads_RetryCancelled");
+    internal static string Downloads_RetryFailedAndCancelled => LocalizationService.Get("Downloads_RetryFailedAndCancelled");
     internal static string Downloads_Description => LocalizationService.Get("Downloads_Description");
     internal static string Downloads_StatQueue => LocalizationService.Get("Downloads_StatQueue");
     internal static string Downloads_StatLeftToFetch => LocalizationService.Get("Downloads_StatLeftToFetch");

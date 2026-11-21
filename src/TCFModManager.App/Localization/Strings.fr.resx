@@ -1287,6 +1287,12 @@ Voir Dépendances et conflits.</value>
   <data name="Downloads_RetryFailedToolTip" xml:space="preserve">
     <value>Remettre dans la file tous les téléchargements échoués ou annulés.</value>
   </data>
+  <data name="Downloads_RetryCancelled" xml:space="preserve">
+    <value>Réessayer les annulés</value>
+  </data>
+  <data name="Downloads_RetryFailedAndCancelled" xml:space="preserve">
+    <value>Réessayer les échecs et les annulés</value>
+  </data>
   <data name="Downloads_RetryToolTip" xml:space="preserve">
     <value>Remettre celui-ci en fin de file et réessayer. Rien d'autre n'est retéléchargé.</value>
   </data>

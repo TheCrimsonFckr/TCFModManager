@@ -1287,6 +1287,12 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Downloads_RetryFailedToolTip" xml:space="preserve">
     <value>Rimetti in coda ogni download fallito o annullato.</value>
   </data>
+  <data name="Downloads_RetryCancelled" xml:space="preserve">
+    <value>Riprova gli annullati</value>
+  </data>
+  <data name="Downloads_RetryFailedAndCancelled" xml:space="preserve">
+    <value>Riprova i falliti e gli annullati</value>
+  </data>
   <data name="Downloads_RetryToolTip" xml:space="preserve">
     <value>Rimettilo in fondo alla coda e riprova. Nient'altro viene riscaricato.</value>
   </data>

@@ -1320,6 +1320,12 @@
   <data name="Downloads_RetryFailedToolTip" xml:space="preserve">
     <value>Вернуть в очередь все неудачные и отменённые загрузки.</value>
   </data>
+  <data name="Downloads_RetryCancelled" xml:space="preserve">
+    <value>Повторить отменённые</value>
+  </data>
+  <data name="Downloads_RetryFailedAndCancelled" xml:space="preserve">
+    <value>Повторить неудачные и отменённые</value>
+  </data>
   <data name="Downloads_RetryToolTip" xml:space="preserve">
     <value>Вернуть это в конец очереди и попробовать снова. Ничего другого заново не скачивается.</value>
   </data>

@@ -341,6 +341,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             // Still notified on the way out: a queue that has just finished with failures in it is
             // exactly when the retry button has to appear.
             OnPropertyChanged(nameof(HasRetryable));
+            OnPropertyChanged(nameof(RetryLabel));
             return;
         }
 
@@ -373,6 +374,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             : StatFigure.None;
 
         OnPropertyChanged(nameof(HasRetryable));
+        OnPropertyChanged(nameof(RetryLabel));
     }
 
     // The bar's text is set as the queue moves, so a language change has it written again.
@@ -449,6 +451,18 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
     // Whether anything is sitting there retryable, so the button can stay out of the way otherwise.
     public bool HasRetryable => Items.Any(i => i.CanRetry);
+
+    public string RetryLabel
+    {
+        get
+        {
+            var failed = Items.Any(i => i.CanRetry && i.Status == DownloadQueueItemStatus.Failed);
+            var cancelled = Items.Any(i => i.CanRetry && i.Status == DownloadQueueItemStatus.Cancelled);
+            return failed && cancelled ? Strings.Downloads_RetryFailedAndCancelled
+                : cancelled ? Strings.Downloads_RetryCancelled
+                : Strings.Downloads_RetryFailed;
+        }
+    }
 
     // Removes every Completed/Failed/Cancelled card from the list; queued/in-progress items are left alone.
     public void ClearFinished()
