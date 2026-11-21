@@ -147,7 +147,7 @@ public partial class InstalledViewModel
     [RelayCommand]
     private async Task RescanAsync()
     {
-        if (AppServices.UpdateWatcher.CatalogIsStale)
+        if (AppServices.UpdateWatcher.ShouldReadForRescan())
         {
             _rescanReading = true;
             IsBusy = true;

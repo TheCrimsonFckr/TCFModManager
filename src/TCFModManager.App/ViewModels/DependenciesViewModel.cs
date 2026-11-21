@@ -267,7 +267,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
     [RelayCommand]
     private async Task RefreshFromSpModAsync()
     {
-        if (AppServices.UpdateWatcher.CatalogIsStale)
+        if (AppServices.UpdateWatcher.ShouldReadForRescan())
         {
             IsBusy = true;
             StatusMessage = Strings.Common_CheckingSpMod;

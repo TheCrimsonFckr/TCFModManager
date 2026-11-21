@@ -92,15 +92,19 @@ internal sealed class UpdateWatcher
     public bool CatalogIsStale =>
         AppServices.ModCache.LastReadAt is not { } at || DateTimeOffset.UtcNow - at > RescanReadsAfter;
 
+    public bool ShouldReadForRescan()
+    {
+        if (CatalogIsStale) return true;
+
+        var minutes = (int)(DateTimeOffset.UtcNow - AppServices.ModCache.LastReadAt!.Value).TotalMinutes;
+        AppLog.Info("Updates", $"rescan: catalog read {minutes} min ago, not checking sp-mod");
+        return false;
+    }
+
     public async Task<bool> RefreshForRescanAsync(CancellationToken ct = default)
     {
         var lastRead = AppServices.ModCache.LastReadAt;
-        if (!CatalogIsStale)
-        {
-            var minutes = (int)(DateTimeOffset.UtcNow - lastRead!.Value).TotalMinutes;
-            AppLog.Info("Updates", $"rescan: catalog read {minutes} min ago, not checking sp-mod");
-            return false;
-        }
+        if (!CatalogIsStale) return false;
 
         AppLog.Info("Updates", lastRead is null
             ? "rescan: catalog never read this session, asking sp-mod about installed mods"
