@@ -73,7 +73,12 @@ public sealed class CardFieldsPanel : StackPanel
                     break;
                 case CardFieldKind.Chip:
                     var row = new WrapPanel();
-                    foreach (var chip in run) row.Children.Add(Presenter(chip));
+                    foreach (var chip in run)
+                    {
+                        var presenter = Presenter(chip);
+                        presenter.Margin = new Thickness(0, 0, 0, 3);
+                        row.Children.Add(presenter);
+                    }
                     Add(row, CardDensity.ChipRowMarginKey);
                     break;
                 case CardFieldKind.Line:
@@ -118,7 +123,7 @@ public sealed class CardFieldsPanel : StackPanel
 
     private ContentPresenter Presenter(CardFieldSpec field)
     {
-        var presenter = new ContentPresenter();
+        var presenter = new ContentPresenter { VerticalAlignment = VerticalAlignment.Center };
         presenter.SetBinding(ContentPresenter.ContentProperty, new Binding());
         presenter.SetResourceReference(ContentPresenter.ContentTemplateProperty, TemplatePrefix + field.Key);
         return presenter;

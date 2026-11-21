@@ -971,6 +971,7 @@
             <ItemsControl
                 x:Name="ResultsItems"
                 Focusable="False"
+                Grid.IsSharedSizeScope="True"
                 ItemsSource="{Binding Results}"
                 SizeChanged="ResultsItems_SizeChanged">
                 <!-- A fresh page of cards is built a few at a time so the app never freezes (see

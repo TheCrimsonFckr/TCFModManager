@@ -77,6 +77,7 @@
 
     <DataTemplate x:Key="CardField.Installed.AddonParent" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
         <Border
+            Margin="0,0,6,0"
             Style="{StaticResource ModChip}"
             ToolTip="{Binding AddonSubtitle}"
             Visibility="{Binding AddonSubtitle, Converter={StaticResource CardNullToCollapsed}}">
@@ -161,7 +162,7 @@
             ToolTipService.Placement="Right">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" SharedSizeGroup="InstalledCardBody" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
