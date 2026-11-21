@@ -10557,10 +10557,10 @@ Die Details stehen im Log:
     <value>Festlegen, was Mod-Karten zeigen</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step1" xml:space="preserve">
-    <value>Wähle auf {0} oder {1} ein Layout aus der Layoutliste oben auf der Seite.</value>
+    <value>Öffne auf {0} oder {1} {2} und wähle unter {3} ein Layout.</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step2" xml:space="preserve">
-    <value>Für ein eigenes klicke auf den Stift neben der Liste und dann auf {0}. Hake die gewünschten Felder an und ziehe sie in die Reihenfolge.</value>
+    <value>Für ein eigenes klicke dort auf {0} und dann auf {1}. Hake die gewünschten Felder an und ziehe sie in die Reihenfolge.</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step3" xml:space="preserve">
     <value>Stelle {0}, {1} und {2} ein. Die Vorschau zeigt eine echte Mod von der Seite.</value>
@@ -10573,5 +10573,11 @@ Die Details stehen im Log:
   </data>
   <data name="Help_Installed_CardLayouts_Keywords" xml:space="preserve">
     <value>Kartenlayout, Kartenansicht, Layout, Felder, kompakt, Kartengröße, Kartenbreite, Bild, Vorschaubild, Banner, Listenspalten, Karten anpassen</value>
+  </data>
+  <data name="CardLayout_PreviewListHeader" xml:space="preserve">
+    <value>Zeile der Listenansicht</value>
+  </data>
+  <data name="CardLayout_SectionHeader" xml:space="preserve">
+    <value>Kartenlayout</value>
   </data>
 </root>

@@ -7,6 +7,7 @@ namespace TCFModManager.App.Services;
 public enum CardFieldKind
 {
     Inline,
+    Line,
     Chip,
     Block,
     Button,
@@ -68,9 +69,9 @@ public static class CardLayoutFields
         new(Category, CardFieldKind.Inline, nameof(Strings.CardField_Category), o => I(o)?.CategoryTag),
         new(Downloads, CardFieldKind.Inline, nameof(Strings.CardField_Downloads),
             o => I(o)?.PreviewDownloads is { } n ? LocalizationService.Text(Strings.Common_DownloadsFormat, n) : null),
-        new(Updated, CardFieldKind.Inline, nameof(Strings.CardField_Updated),
+        new(Updated, CardFieldKind.Line, nameof(Strings.CardField_Updated),
             o => Date(I(o)?.LatestUpdatedAt) is { } d ? LocalizationService.Text(Strings.Card_UpdatedFormat, d) : null),
-        new(InstalledOn, CardFieldKind.Inline, nameof(Strings.CardField_InstalledOn),
+        new(InstalledOn, CardFieldKind.Line, nameof(Strings.CardField_InstalledOn),
             o => Date(I(o)?.InstalledAt) is { } d ? LocalizationService.Text(Strings.Card_InstalledOnFormat, d) : null),
         new(SptFit, CardFieldKind.Block, nameof(Strings.CardField_SptFit), o => I(o)?.SptNote),
         new(Teaser, CardFieldKind.Block, nameof(Strings.CardField_Teaser), o => I(o)?.PreviewTeaser),

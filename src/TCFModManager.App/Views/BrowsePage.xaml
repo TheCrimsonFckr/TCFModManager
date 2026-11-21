@@ -117,6 +117,18 @@
             <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSortOption}" />
         </DataTemplate>
 
+        <DataTemplate x:Key="FilterBody.CardLayout">
+            <StackPanel>
+                <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding CardLayoutChoices}" SelectedItem="{Binding SelectedCardLayout}" DisplayMemberPath="Name" />
+                <ui:Button
+                    Margin="0,6,0,0"
+                    HorizontalAlignment="Stretch"
+                    Icon="{ui:SymbolIcon Edit24}"
+                    Content="{loc:Str CardLayout_Edit}"
+                    Command="{Binding EditCardLayoutsCommand}" />
+            </StackPanel>
+        </DataTemplate>
+
         <DataTemplate x:Key="FilterBody.PageSize">
             <ListBox Style="{StaticResource FilterOptionList}" ItemsSource="{Binding PageSizeOptions}" SelectedItem="{Binding PageSize}">
                 <ListBox.ItemTemplate>
@@ -149,24 +161,6 @@
         -->
         <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,8">
             <DockPanel>
-                <ui:Button
-                    DockPanel.Dock="Right"
-                    Margin="8,0,0,0"
-                    Padding="8,7"
-                    VerticalAlignment="Top"
-                    Appearance="Transparent"
-                    Icon="{ui:SymbolIcon Edit24}"
-                    ToolTip="{loc:Str CardLayout_Edit}"
-                    Click="EditCardLayouts_Click" />
-                <ComboBox
-                    DockPanel.Dock="Right"
-                    Margin="8,0,0,0"
-                    MinWidth="150"
-                    VerticalAlignment="Top"
-                    ItemsSource="{Binding CardLayoutChoices}"
-                    SelectedItem="{Binding SelectedCardLayout}"
-                    DisplayMemberPath="Name"
-                    ToolTip="{loc:Str CardLayout_PickerToolTip}" />
                 <ui:Button
                     DockPanel.Dock="Right"
                     VerticalAlignment="Top"
@@ -353,6 +347,17 @@
                             ContentTemplate="{StaticResource FilterBody.PageSize}">
                             <Expander.Header>
                                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str Filter_SectionPageSize}" TextWrapping="Wrap" />
+                            </Expander.Header>
+                        </Expander>
+
+                        <Expander
+                            Style="{StaticResource FilterSection}"
+                            behaviors:FilterPin.Section="CardLayout"
+                            ToolTip="{loc:Str CardLayout_PickerToolTip}"
+                            Content="{Binding}"
+                            ContentTemplate="{StaticResource FilterBody.CardLayout}">
+                            <Expander.Header>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{loc:Str CardLayout_SectionHeader}" TextWrapping="Wrap" />
                             </Expander.Header>
                         </Expander>
 

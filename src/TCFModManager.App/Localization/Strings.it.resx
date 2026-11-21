@@ -10557,10 +10557,10 @@ I dettagli sono nel log:
     <value>Scegliere cosa mostrano le schede mod</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step1" xml:space="preserve">
-    <value>In {0} o {1}, scegli un layout dall'elenco in cima alla pagina.</value>
+    <value>In {0} o {1}, apri {2} e scegli un layout in {3}.</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step2" xml:space="preserve">
-    <value>Per crearne uno tuo, fai clic sulla matita accanto all'elenco, poi su {0}. Spunta i campi che vuoi e trascinali nell'ordine.</value>
+    <value>Per crearne uno tuo, fai clic su {0}, poi su {1}. Spunta i campi che vuoi e trascinali nell'ordine.</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step3" xml:space="preserve">
     <value>Imposta {0}, {1} e {2}. L'anteprima mostra una vera mod della pagina.</value>
@@ -10573,5 +10573,11 @@ I dettagli sono nel log:
   </data>
   <data name="Help_Installed_CardLayouts_Keywords" xml:space="preserve">
     <value>layout schede, vista schede, layout, campi, compatta, dimensione schede, larghezza, immagine, miniatura, banner, colonne elenco, personalizzare schede</value>
+  </data>
+  <data name="CardLayout_PreviewListHeader" xml:space="preserve">
+    <value>Riga della vista Elenco</value>
+  </data>
+  <data name="CardLayout_SectionHeader" xml:space="preserve">
+    <value>Layout delle schede</value>
   </data>
 </root>

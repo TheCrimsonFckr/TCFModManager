@@ -247,6 +247,7 @@ public partial class BrowseViewModel
             BrowseFilterSection.Updated => Pill(Strings.Filter_SectionUpdated, DateLabel(SelectedUpdatedRange, UpdatedFrom, UpdatedUntil)),
             BrowseFilterSection.Sort => Pill(Strings.Filter_SectionSort, SelectedSortOption),
             BrowseFilterSection.PageSize => Converters.PageSizeLabelConverter.Label(PageSize),
+            BrowseFilterSection.CardLayout => Pill(Strings.CardLayout_SectionHeader, CardLayout.Name),
             _ => null,
         };
     }

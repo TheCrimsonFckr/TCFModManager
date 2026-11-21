@@ -270,4 +270,107 @@
             </StackPanel>
         </Grid>
     </DataTemplate>
+
+    <DataTemplate x:Key="InstalledListRowHeader" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+        <Grid Margin="0,0,8,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+            <CheckBox
+                Margin="0,0,8,0"
+                VerticalAlignment="Center"
+                IsChecked="{Binding IsSelected}"
+                Visibility="{Binding DataContext.SelectionMode, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Converter={StaticResource CardBoolToVis}}" />
+            <ui:SymbolIcon
+                Margin="0,0,12,0"
+                VerticalAlignment="Center"
+                FontSize="20"
+                Symbol="{Binding StatusGlyph}"
+                Style="{StaticResource StatusIcon}"
+                ToolTip="{Binding StatusTooltip}" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock
+                    FontSize="{DynamicResource CardTitleFontSize}"
+                    FontWeight="SemiBold"
+                    TextTrimming="CharacterEllipsis"
+                    Text="{Binding DisplayTitle}" />
+                <controls:CardFieldsPanel
+                    TemplatePrefix="CardField.Installed."
+                    Fields="{Binding (controls:CardLayoutScope.Layout).ListFields, RelativeSource={RelativeSource Self}}" />
+            </StackPanel>
+
+            <StackPanel
+                Grid.Column="2"
+                Orientation="Horizontal"
+                VerticalAlignment="Center"
+                Margin="12,0,12,0">
+                <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ListShowsGroup, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                <Border
+                    Style="{StaticResource GroupChip}"
+                    Visibility="{Binding IsGrouped, Converter={StaticResource CardBoolToVis}}">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Symbol="Folder24" FontSize="12" Margin="0,0,5,0" VerticalAlignment="Center" Visibility="{Binding HasGroupIcon, Converter={StaticResource CardFalseToVisible}}" />
+                        <controls:GroupIconView Width="12" Height="12" Margin="0,0,5,0" VerticalAlignment="Center" Key="{Binding GroupIcon}" Visibility="{Binding HasGroupIcon, Converter={StaticResource CardBoolToVis}}" />
+                        <TextBlock Style="{StaticResource ModChipText}" Text="{Binding GroupName}" />
+                    </StackPanel>
+                </Border>
+                </Border>
+
+                <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ListShowsDisabled, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                <Border
+                    Margin="6,0,0,0"
+                    Style="{StaticResource DisabledBadge}"
+                    Visibility="{Binding IsDisabled, Converter={StaticResource CardBoolToVis}}">
+                    <TextBlock Style="{StaticResource DisabledBadgeText}" Text="{loc:Str Installed_DisabledTag}" />
+                </Border>
+                </Border>
+            </StackPanel>
+
+            <StackPanel Grid.Column="3" VerticalAlignment="Center" Orientation="Horizontal">
+            <Border VerticalAlignment="Top" Visibility="{Binding (controls:CardLayoutScope.Layout).ListShowsQuickUpdate, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+            <ui:Button
+                Padding="6"
+                Margin="0,0,4,0"
+                VerticalAlignment="Top"
+                Appearance="Transparent"
+                Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                Visibility="{Binding CanQuickUpdate, Converter={StaticResource CardBoolToVis}}"
+                Command="{Binding DataContext.UpdateOneCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                CommandParameter="{Binding}"
+                ToolTip="{Binding QuickUpdateToolTip}">
+                <ui:SymbolIcon Symbol="ArrowDownload24" FontSize="16" />
+            </ui:Button>
+            </Border>
+            <StackPanel VerticalAlignment="Center">
+                <ui:Button
+                    Padding="6"
+                    Appearance="Transparent"
+                    Visibility="{Binding (controls:CardLayoutScope.Layout).ListShowsDisableToggle, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}"
+                    Command="{Binding DataContext.ToggleDisableCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                    CommandParameter="{Binding}"
+                    ToolTip="{Binding DisableToggleTooltip}">
+                    <ui:SymbolIcon Symbol="{Binding DisableToggleGlyph}" FontSize="16" />
+                </ui:Button>
+
+                <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ListShowsPinned, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                <ui:SymbolIcon
+                    Symbol="Pin24"
+                    FontSize="12"
+                    Margin="0,1,0,0"
+                    HorizontalAlignment="Center"
+                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                    ToolTip="{loc:Str Common_PinnedToolTip}"
+                    Visibility="{Binding IsPinned, Converter={StaticResource CardBoolToVis}}" />
+                </Border>
+            </StackPanel>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
 </ResourceDictionary>

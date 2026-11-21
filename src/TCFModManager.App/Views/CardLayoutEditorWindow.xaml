@@ -7,7 +7,7 @@
     xmlns:vm="clr-namespace:TCFModManager.App.ViewModels"
     xmlns:controls="clr-namespace:TCFModManager.App.Controls"
     Title="{Binding WindowTitle}"
-    Width="1080"
+    Width="1240"
     Height="720"
     MinWidth="860"
     MinHeight="520"
@@ -183,10 +183,14 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <StackPanel Grid.Column="2" Margin="16,0,0,0" MinWidth="320">
+            <StackPanel
+                x:Name="PreviewHost"
+                Grid.Column="2"
+                Margin="16,0,0,0"
+                MinWidth="320"
+                controls:CardLayoutScope.Layout="{Binding Preview}">
                 <TextBlock Style="{StaticResource EditorHeader}" Margin="0,0,0,6" Text="{loc:Str CardLayout_PreviewHeader}" />
                 <Border
-                    x:Name="PreviewHost"
                     Width="{Binding PreviewWidth}"
                     HorizontalAlignment="Left"
                     Padding="16,12"
@@ -195,10 +199,25 @@
                     BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                     BorderThickness="1"
                     IsHitTestVisible="False"
-                    controls:CardLayoutScope.Layout="{Binding Preview}"
                     Visibility="{Binding HasSample, Converter={StaticResource BoolToVis}}">
                     <ContentPresenter x:Name="PreviewCard" Content="{Binding Sample}" />
                 </Border>
+
+                <StackPanel Visibility="{Binding ShowsListPreview, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Style="{StaticResource EditorHeader}" Margin="0,16,0,6" Text="{loc:Str CardLayout_PreviewListHeader}" />
+                    <Border
+                        Width="460"
+                        HorizontalAlignment="Left"
+                        Padding="16,10"
+                        CornerRadius="{DynamicResource SmallCornerRadius}"
+                        Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        IsHitTestVisible="False">
+                        <ContentPresenter ContentTemplate="{StaticResource InstalledListRowHeader}" Content="{Binding Sample}" />
+                    </Border>
+                </StackPanel>
+
                 <TextBlock
                     MaxWidth="320"
                     HorizontalAlignment="Left"

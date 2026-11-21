@@ -10980,10 +10980,10 @@
     <value>Выбрать, что показывают карточки модов</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step1" xml:space="preserve">
-    <value>На странице {0} или {1} выберите макет в списке вверху страницы.</value>
+    <value>На странице {0} или {1} откройте «{2}» и выберите макет в разделе «{3}».</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step2" xml:space="preserve">
-    <value>Чтобы сделать свой, нажмите на карандаш рядом со списком, затем {0}. Отметьте нужные поля и перетащите их в нужном порядке.</value>
+    <value>Чтобы сделать свой, нажмите там «{0}», затем «{1}». Отметьте нужные поля и перетащите их в нужном порядке.</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step3" xml:space="preserve">
     <value>Настройте «{0}», «{1}» и «{2}». Предпросмотр показывает настоящий мод со страницы.</value>
@@ -10996,5 +10996,11 @@
   </data>
   <data name="Help_Installed_CardLayouts_Keywords" xml:space="preserve">
     <value>макет карточек, вид карточек, макет, поля, компактный, размер карточки, ширина, изображение, миниатюра, баннер, столбцы списка, настроить карточки</value>
+  </data>
+  <data name="CardLayout_PreviewListHeader" xml:space="preserve">
+    <value>Строка вида «Список»</value>
+  </data>
+  <data name="CardLayout_SectionHeader" xml:space="preserve">
+    <value>Макет карточек</value>
   </data>
 </root>

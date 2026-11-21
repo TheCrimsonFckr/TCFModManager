@@ -77,6 +77,8 @@ public sealed partial class CardLayoutEditorViewModel : LocalizedViewModel
 
     public bool HasSample => Sample is not null;
 
+    public bool ShowsListPreview => IsInstalled && HasSample;
+
     public ObservableCollection<CardLayoutView> Layouts { get; } = [];
 
     public ObservableCollection<CardFieldRow> FieldRows { get; } = [];

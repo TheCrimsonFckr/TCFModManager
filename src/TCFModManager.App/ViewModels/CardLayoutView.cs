@@ -94,7 +94,7 @@ public sealed class CardLayoutView
 
             var buttons = 26 + (ShowDisableToggle ? 34 : 0) + (ShowQuickUpdate ? 32 : 0);
 
-            var inlineRuns = 0;
+            var inlineRuns = Fields.Count(f => f.Kind == CardFieldKind.Line);
             var chipRuns = 0;
             CardFieldKind? last = null;
             foreach (var spec in Fields)

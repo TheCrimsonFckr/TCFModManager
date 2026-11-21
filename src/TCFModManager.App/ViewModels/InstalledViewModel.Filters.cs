@@ -161,6 +161,7 @@ public partial class InstalledViewModel
             InstalledFilterSection.Sort => Pill(Strings.Filter_SectionSort, SelectedSortOption),
             InstalledFilterSection.GroupSort => Pill(Strings.Filter_SectionGroupSort, SelectedGroupSortOption),
             InstalledFilterSection.PageSize => Converters.PageSizeLabelConverter.Label(PageSize),
+            InstalledFilterSection.CardLayout => Pill(Strings.CardLayout_SectionHeader, CardLayout.Name),
             _ => null,
         };
     }

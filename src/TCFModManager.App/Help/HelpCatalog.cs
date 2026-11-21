@@ -270,8 +270,9 @@ internal static class HelpCatalog
 
             // OPEN-66.
             Topic("installed.cardlayouts", () => Strings.Help_Installed_CardLayouts_Title,
-                Step(() => Strings.Help_Installed_CardLayouts_Step1, () => Strings.Nav_Installed, () => Strings.Nav_Browse),
-                Step(() => Strings.Help_Installed_CardLayouts_Step2, () => Strings.CardLayout_New),
+                Step(() => Strings.Help_Installed_CardLayouts_Step1,
+                    () => Strings.Nav_Installed, () => Strings.Nav_Browse, () => Strings.Filter_More, () => Strings.CardLayout_SectionHeader),
+                Step(() => Strings.Help_Installed_CardLayouts_Step2, () => Strings.CardLayout_Edit, () => Strings.CardLayout_New),
                 Step(() => Strings.Help_Installed_CardLayouts_Step3,
                     () => Strings.CardLayout_SizeHeader, () => Strings.CardLayout_WidthHeader, () => Strings.CardLayout_PictureHeader),
                 Step(() => Strings.Help_Installed_CardLayouts_Step4, () => Strings.CardLayout_Use, () => Strings.Common_SaveAsDefault))

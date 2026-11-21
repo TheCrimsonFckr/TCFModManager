@@ -3530,4 +3530,6 @@ internal static class Strings
     internal static string Help_Installed_CardLayouts_Step4 => LocalizationService.Get("Help_Installed_CardLayouts_Step4");
     internal static string Help_Installed_CardLayouts_Note => LocalizationService.Get("Help_Installed_CardLayouts_Note");
     internal static string Help_Installed_CardLayouts_Keywords => LocalizationService.Get("Help_Installed_CardLayouts_Keywords");
+    internal static string CardLayout_PreviewListHeader => LocalizationService.Get("CardLayout_PreviewListHeader");
+    internal static string CardLayout_SectionHeader => LocalizationService.Get("CardLayout_SectionHeader");
 }

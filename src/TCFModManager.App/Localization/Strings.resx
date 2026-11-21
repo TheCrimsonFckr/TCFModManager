@@ -12883,12 +12883,12 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Choose what mod cards show</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step1" xml:space="preserve">
-    <value>On {0} or {1}, pick a layout from the layout list at the top of the page.</value>
-    <comment>Help step. {0} Installed, {1} Browse.</comment>
+    <value>On {0} or {1}, open {2} and pick a layout under {3}.</value>
+    <comment>Help step. {0} Installed, {1} Browse, {2} Filters and view options, {3} Card layout.</comment>
   </data>
   <data name="Help_Installed_CardLayouts_Step2" xml:space="preserve">
-    <value>To make your own, click the pencil beside the list, then {0}. Tick the fields you want and drag them into order.</value>
-    <comment>Help step. {0} New.</comment>
+    <value>To make your own, click {0} there, then {1}. Tick the fields you want and drag them into order.</value>
+    <comment>Help step. {0} Edit card layouts, {1} New.</comment>
   </data>
   <data name="Help_Installed_CardLayouts_Step3" xml:space="preserve">
     <value>Set {0}, {1} and {2}. The preview shows a real mod from the page.</value>
@@ -12904,5 +12904,12 @@ Right-click to save the current filters to it, rename it or delete it.</value>
   </data>
   <data name="Help_Installed_CardLayouts_Keywords" xml:space="preserve">
     <value>card layout, card view, layout, fields, compact, card size, card width, picture, thumbnail, banner, list columns, customise cards, customize cards</value>
+  </data>
+  <data name="CardLayout_PreviewListHeader" xml:space="preserve">
+    <value>List view row</value>
+  </data>
+  <data name="CardLayout_SectionHeader" xml:space="preserve">
+    <value>Card layout</value>
+    <comment>Heading of the card layout section in the Filters and view options panel (Installed and Browse).</comment>
   </data>
 </root>

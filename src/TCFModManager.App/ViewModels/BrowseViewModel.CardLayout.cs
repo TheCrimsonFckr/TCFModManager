@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
 
 namespace TCFModManager.App.ViewModels;
@@ -25,6 +27,12 @@ public partial class BrowseViewModel
     }
 
     public void UseCardLayout(Guid? id) => RefreshCardLayoutChoices(id);
+
+    [RelayCommand]
+    private void EditCardLayouts()
+    {
+        if (CardLayoutEditorWindow.Edit(CardLayoutPage.Browse, CardLayout.Id, SampleCardForLayouts()) is { } picked) UseCardLayout(picked.Id);
+    }
 
     public ModCardViewModel? SampleCardForLayouts() =>
         Results.OrderByDescending(c => (c.Thumbnail is null ? 0 : 2) + (c.Endorsements is null ? 0 : 1)).FirstOrDefault();
@@ -62,5 +70,6 @@ public partial class BrowseViewModel
     partial void OnCardLayoutChanged(CardLayoutView value)
     {
         if (_lastLayoutWidth > 0) UpdateLayoutForWidth(_lastLayoutWidth);
+        FilterPins?.RefreshLabels();
     }
 }

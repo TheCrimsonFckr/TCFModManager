@@ -76,6 +76,9 @@ public sealed class CardFieldsPanel : StackPanel
                     foreach (var chip in run) row.Children.Add(Presenter(chip));
                     Add(row, CardDensity.ChipRowMarginKey);
                     break;
+                case CardFieldKind.Line:
+                    Add(new InlineFieldLine { Fields = [fields[i++]] }, CardDensity.LineMarginKey);
+                    break;
                 case CardFieldKind.Block:
                     Add(Presenter(fields[i++]), CardDensity.LineMarginKey);
                     break;

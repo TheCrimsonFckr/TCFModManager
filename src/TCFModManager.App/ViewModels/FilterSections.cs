@@ -18,6 +18,7 @@ public enum BrowseFilterSection
     Updated,
     Sort,
     PageSize,
+    CardLayout,
 }
 
 public enum InstalledFilterSection
@@ -32,4 +33,5 @@ public enum InstalledFilterSection
     Sort,
     GroupSort,
     PageSize,
+    CardLayout,
 }
