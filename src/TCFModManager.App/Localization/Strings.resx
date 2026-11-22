@@ -7121,7 +7121,7 @@ The details are in the log:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Downloads_Watch_Note" xml:space="preserve">
-    <value>Once the files are being put in place the install finishes, so a mod is never left half installed.</value>
+    <value>Once the files are being put in place the install finishes, so a mod is never left half installed. If SPT is running from the install, a downloaded mod waits and installs once it closes.</value>
   </data>
   <data name="Help_Downloads_Where_Title" xml:space="preserve">
     <value>Find a mod I downloaded to install myself</value>

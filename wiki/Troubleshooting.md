@@ -32,7 +32,7 @@ Check it isn't installed twice. If the same mod sits in both the normal folder a
 Open **Dependencies and Conflicts**. The usual reason is under **Conflicts**: the same mod installed twice - SPT loads neither copy of a server mod it finds twice - or two mods shipping different copies of one file. **Keep this one** clears a mod installed twice. With no conflicts, check **Version conflicts** and **Dependencies** for what it needs, then that it's turned on and made for your SPT version.
 
 ## "Close T***** / SPT.Server before installing a mod"
-Exactly what it says: those hold open the files being replaced. Close the game and the server window, then try again.
+Those hold open the files being replaced. A queued install waits for them on its own and carries on once they close; this only shows if SPT was started at the moment something else was already changing the install. Close the game and the server window, then try again.
 
 ## An install failed halfway
 The files placed before it failed are recorded, so they stay under the app's control - install the mod again to complete it, or remove it to clear them out. The scratch folder `.tcfmm-work\` inside your SPT install is swept on the next run. The usual cause is SPT being started mid-install.

@@ -19,7 +19,7 @@ SPT's, BepInEx's and the game's own files are never replaced. When a mod replace
 When you're updating, the previous version is only removed **after** the new one has downloaded and extracted successfully - a failed or cancelled download can't leave you with neither. Once files start being placed, the operation runs to completion rather than tearing out a half-installed mod.
 
 > [!WARNING]
-> Installing and removing both refuse to start while **T***** or the SPT server is running** - those hold the very files being replaced. Close them first. The check runs again after the download finishes, in case SPT was launched while it was in progress.
+> Nothing is placed while **T***** or the SPT server is running** from the install - those hold the very files being replaced. A queued install still downloads, then waits with its card saying what it's waiting for, and installs as soon as they close. Removing, disabling, enabling, going back and the profile actions ask first instead: with only the server running they offer to stop it and carry on; the game you close yourself.
 
 > [!NOTE]
 > Before anything is queued, the app asks you to open the mod's page on sp-mod first - same as installing manually, and it keeps mod authors' page views and instructions in the loop.
