@@ -287,11 +287,7 @@ public sealed partial class DiagnoseViewModel : LocalizedViewModel
             return;
         }
 
-        if (ModInstallService.RunningBlockers(installPath) is { Count: > 0 } running)
-        {
-            StatusMessage = ModInstallProblems.InstallInUse(running, ModInstallAction.CleanProfiles);
-            return;
-        }
+        if (!await SptInUsePrompt.ClearAsync(installPath, ModInstallAction.CleanProfiles)) return;
 
         IsBusy = true;
         StatusMessage = Strings.ProfileItems_Checking;
