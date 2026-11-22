@@ -2438,6 +2438,7 @@ internal static class Strings
     internal static string Downloads_FikaDeclinedFormat => LocalizationService.Get("Downloads_FikaDeclinedFormat");
     internal static string Downloads_WaitingToDownload => LocalizationService.Get("Downloads_WaitingToDownload");
     internal static string Downloads_WaitingToInstall => LocalizationService.Get("Downloads_WaitingToInstall");
+    internal static string Downloads_WaitingForSptFormat => LocalizationService.Get("Downloads_WaitingForSptFormat");
     internal static string Downloads_RetryingFormat => LocalizationService.Get("Downloads_RetryingFormat");
     internal static string Downloads_RetryingServerSpModFormat => LocalizationService.Get("Downloads_RetryingServerSpModFormat");
     internal static string Downloads_RetryingServerHostFormat => LocalizationService.Get("Downloads_RetryingServerHostFormat");
@@ -3159,6 +3160,7 @@ internal static class Strings
     internal static string Downloads_PauseToolTip => LocalizationService.Get("Downloads_PauseToolTip");
     internal static string Downloads_PausedWaiting => LocalizationService.Get("Downloads_PausedWaiting");
     internal static string Downloads_BarPaused => LocalizationService.Get("Downloads_BarPaused");
+    internal static string Downloads_BarWaitingForSpt => LocalizationService.Get("Downloads_BarWaitingForSpt");
     internal static string Downloads_SpaceWarningFormat => LocalizationService.Get("Downloads_SpaceWarningFormat");
     internal static string Downloads_SpaceDownloadAnyway => LocalizationService.Get("Downloads_SpaceDownloadAnyway");
     internal static string Help_Start_Keys_Title => LocalizationService.Get("Help_Start_Keys_Title");

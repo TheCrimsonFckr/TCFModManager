@@ -8850,6 +8850,10 @@ See Dependencies and Conflicts.</value>
     <value>Downloaded - waiting its turn to install</value>
     <comment>Card status once the archive is downloaded; installs run one at a time in the order queued (OPEN-12 F7).</comment>
   </data>
+  <data name="Downloads_WaitingForSptFormat" xml:space="preserve">
+    <value>Downloaded - waiting for {0} to close</value>
+    <comment>OPEN-67: card status while the downloaded archive waits for SPT to stop running from the install. {0} is the list of running executables.</comment>
+  </data>
   <data name="Downloads_RetryingFormat" xml:space="preserve">
     <value>The connection dropped - trying again in {0:0} s</value>
     <comment>Card status between download attempts; the next one carries on where this one stopped when it can. {0} is seconds.</comment>
@@ -11467,6 +11471,10 @@ Right-click to save the current filters to it, rename it or delete it.</value>
   <data name="Downloads_BarPaused" xml:space="preserve">
     <value>Paused</value>
     <comment>Downloads bar title while the queue is paused.</comment>
+  </data>
+  <data name="Downloads_BarWaitingForSpt" xml:space="preserve">
+    <value>Waiting for SPT to close</value>
+    <comment>OPEN-67: Downloads bar title while installs wait for SPT to close and nothing is downloading.</comment>
   </data>
   <data name="Downloads_SpaceWarningFormat" xml:space="preserve">
     <value>Paused: {0} may not have room. The queue needs about {1} and {2} is free.</value>

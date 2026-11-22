@@ -7339,6 +7339,9 @@
   <data name="Downloads_WaitingToInstall" xml:space="preserve">
     <value>Загружено - ждёт своей очереди на установку</value>
   </data>
+  <data name="Downloads_WaitingForSptFormat" xml:space="preserve">
+    <value>Загружено - ждёт, пока {0} закроется</value>
+  </data>
   <data name="Downloads_RetryingFormat" xml:space="preserve">
     <value>Соединение прервано - повтор через {0:0} с</value>
   </data>
@@ -9841,6 +9844,9 @@
   </data>
   <data name="Downloads_BarPaused" xml:space="preserve">
     <value>Пауза</value>
+  </data>
+  <data name="Downloads_BarWaitingForSpt" xml:space="preserve">
+    <value>Ждёт, пока SPT закроется</value>
   </data>
   <data name="Downloads_SpaceWarningFormat" xml:space="preserve">
     <value>Пауза: на {0} может не хватить места. Очереди нужно около {1}, свободно {2}.</value>

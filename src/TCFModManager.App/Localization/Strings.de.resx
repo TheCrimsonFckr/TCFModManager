@@ -7000,6 +7000,9 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Downloads_WaitingToInstall" xml:space="preserve">
     <value>Heruntergeladen - wartet, bis es mit Installieren dran ist</value>
   </data>
+  <data name="Downloads_WaitingForSptFormat" xml:space="preserve">
+    <value>Heruntergeladen - wartet, bis {0} geschlossen ist</value>
+  </data>
   <data name="Downloads_RetryingFormat" xml:space="preserve">
     <value>Verbindung abgebrochen - neuer Versuch in {0:0} s</value>
   </data>
@@ -9454,6 +9457,9 @@ Die Details stehen im Log:
   </data>
   <data name="Downloads_BarPaused" xml:space="preserve">
     <value>Pausiert</value>
+  </data>
+  <data name="Downloads_BarWaitingForSpt" xml:space="preserve">
+    <value>Wartet, bis SPT geschlossen ist</value>
   </data>
   <data name="Downloads_SpaceWarningFormat" xml:space="preserve">
     <value>Pausiert: Auf {0} ist vielleicht nicht genug Platz. Die Warteschlange braucht etwa {1}, frei sind {2}.</value>

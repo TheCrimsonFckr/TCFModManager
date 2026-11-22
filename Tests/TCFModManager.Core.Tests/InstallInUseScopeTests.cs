@@ -20,6 +20,48 @@ public class InstallInUseScopeTests
         Path.Combine([Path.DirectorySeparatorChar + "installs", .. parts]);
 
     [Fact]
+    public async Task WaitUntilNotInUse_NothingRunning_ReturnsWithoutWaiting()
+    {
+        var install = Directory.CreateTempSubdirectory("tcfmm-inuse-").FullName;
+        try
+        {
+            var heard = 0;
+            var waited = await ModInstallService.WaitUntilNotInUseAsync(
+                install, new SyncProgress<IReadOnlyList<string>>(_ => heard++));
+
+            Assert.False(waited);
+            Assert.Equal(0, heard);
+        }
+        finally
+        {
+            Directory.Delete(install, recursive: true);
+        }
+    }
+
+    [Fact]
+    public async Task WaitUntilNotInUse_Cancelled_Throws()
+    {
+        var install = Directory.CreateTempSubdirectory("tcfmm-inuse-").FullName;
+        try
+        {
+            using var cancelled = new CancellationTokenSource();
+            cancelled.Cancel();
+
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(
+                () => ModInstallService.WaitUntilNotInUseAsync(install, ct: cancelled.Token));
+        }
+        finally
+        {
+            Directory.Delete(install, recursive: true);
+        }
+    }
+
+    private sealed class SyncProgress<T>(Action<T> report) : IProgress<T>
+    {
+        public void Report(T value) => report(value);
+    }
+
+    [Fact]
     public void ExecutableAtTheInstallRoot_IsInside()
     {
         Assert.True(ModInstallService.IsInside(

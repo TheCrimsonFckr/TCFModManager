@@ -312,6 +312,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
             or nameof(DownloadQueueItemViewModel.Progress)
             or nameof(DownloadQueueItemViewModel.TotalBytes)
             or nameof(DownloadQueueItemViewModel.IsTransferPaused)
+            or nameof(DownloadQueueItemViewModel.IsWaitingForSpt)
             or nameof(DownloadQueueItemViewModel.UnpackedBytes))
         {
             UpdateSummary();
@@ -400,9 +401,15 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
                 ?? unfinished.FirstOrDefault(i => i.Status == DownloadQueueItemStatus.Downloading && i.Progress < 1)
                 ?? unfinished[0];
 
+            var waitingForSpt = installing is null
+                && unfinished.Any(i => i.IsWaitingForSpt)
+                && !unfinished.Any(i => i.Status == DownloadQueueItemStatus.Downloading && i.Progress < 1);
+
             BarTitle = IsPaused && installing is null
                 ? Strings.Downloads_BarPaused
-                : installing is not null ? Strings.Downloads_BarInstalling : Strings.Downloads_BarDownloading;
+                : installing is not null ? Strings.Downloads_BarInstalling
+                : waitingForSpt ? Strings.Downloads_BarWaitingForSpt
+                : Strings.Downloads_BarDownloading;
             BarDetail = Text(Strings.Downloads_BarDetailFormat, current.ModName, current.VersionLabel, done, total);
 
             // A download is most of an item's time; installing it is the rest.
@@ -784,18 +791,36 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
 
             // Core reports which stage it is in; every phase past the download (removing the previous
             // version, extracting, copying files) is bucketed under Installing.
+            var placing = false;
             var status = new Progress<ModInstallProgress>(p =>
             {
+                if (!placing) return;
                 item.StatusMessage = ModInstallWording.Describe(p);
                 item.Status = DownloadQueueItemStatus.Installing;
             });
 
-            item.Status = DownloadQueueItemStatus.Installing;
+            while (true)
+            {
+                await WaitForSptAsync(item, turn.Token);
 
-            var result = await AppServices.ModInstall.InstallAsync(
-                item.Target, turn.Version, item.InstallPath, status, null, turn.Token, downloadedArchive: archive);
+                item.Status = DownloadQueueItemStatus.Installing;
+                placing = true;
 
-            Installed(item, result);
+                try
+                {
+                    var result = await AppServices.ModInstall.InstallAsync(
+                        item.Target, turn.Version, item.InstallPath, status, null, turn.Token, downloadedArchive: archive);
+
+                    Installed(item, result);
+                    break;
+                }
+                catch (ModInstallException { Reason: ModInstallFailure.InstallInUse }) when (!turn.Token.IsCancellationRequested && turn.Token == item.Token)
+                {
+                    placing = false;
+                    AppLog.Info("Downloads", $"{item.ModName} {item.VersionLabel}: SPT started before the install placed anything; waiting again");
+                    item.Status = DownloadQueueItemStatus.Downloading;
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -805,6 +830,29 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
         {
             QueueArchives.Delete(archive);
         }
+    }
+
+    //
+    // OPEN-67: the archive is kept while SPT runs from the install, and installed once it has gone.
+    //
+    private static async Task WaitForSptAsync(DownloadQueueItemViewModel item, CancellationToken token)
+    {
+        var waiting = new Progress<IReadOnlyList<string>>(running =>
+        {
+            if (token != item.Token || item.IsFinished) return;
+
+            if (!item.IsWaitingForSpt)
+                AppLog.Info("Downloads", $"{item.ModName} {item.VersionLabel}: waiting for {string.Join(", ", running)} to close before installing");
+
+            item.IsWaitingForSpt = true;
+            item.Progress = 1.0;
+            item.StatusMessage = Text(Strings.Downloads_WaitingForSptFormat, TextLists.Join(running));
+        });
+
+        if (!await ModInstallService.WaitUntilNotInUseAsync(item.InstallPath, waiting, token)) return;
+
+        AppLog.Info("Downloads", $"{item.ModName} {item.VersionLabel}: SPT has closed, installing");
+        item.IsWaitingForSpt = false;
     }
 
     private void Installed(DownloadQueueItemViewModel item, ModInstallResult result)

@@ -118,6 +118,10 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
 
     partial void OnIsTransferPausedChanged(bool value) => _samples.Clear();
 
+    // OPEN-67: downloaded, the install held until SPT stops running from the install.
+    [ObservableProperty]
+    private bool _isWaitingForSpt;
+
     //
     // Recent progress, as (when, how many bytes had arrived) - the rate and the estimate are both
     // measured across this window rather than from the start of the download.
@@ -508,6 +512,7 @@ public sealed partial class DownloadQueueItemViewModel : LocalizedViewModel
         else _downloading.Stop();
 
         IsTransferPaused = false;
+        if (value != DownloadQueueItemStatus.Downloading) IsWaitingForSpt = false;
 
         // Measurements belong to one run of one stage. A retry that kept them would read its first
         // seconds against a clock that had already been restarted underneath them.

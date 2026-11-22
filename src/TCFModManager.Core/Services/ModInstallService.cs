@@ -150,6 +150,34 @@ public sealed partial class ModInstallService(
             Action = action,
         };
     }
+
+    private static readonly TimeSpan InUsePollInterval = TimeSpan.FromSeconds(2);
+
+    //
+    // Returns once nothing blocks the install, true when it had to wait. <paramref name="waiting"/>
+    // hears what is running each time that changes.
+    //
+    public static async Task<bool> WaitUntilNotInUseAsync(
+        string installPath,
+        IProgress<IReadOnlyList<string>>? waiting = null,
+        CancellationToken ct = default)
+    {
+        IReadOnlyList<string>? last = null;
+
+        while (true)
+        {
+            var running = await Task.Run(() => RunningBlockers(installPath), ct);
+            if (running.Count == 0) return last is not null;
+
+            if (last is null || !last.SequenceEqual(running, StringComparer.OrdinalIgnoreCase))
+            {
+                waiting?.Report(running);
+                last = running;
+            }
+
+            await Task.Delay(InUsePollInterval, ct);
+        }
+    }
 }
 
 //
