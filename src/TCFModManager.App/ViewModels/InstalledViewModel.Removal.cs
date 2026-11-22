@@ -32,6 +32,8 @@ public partial class InstalledViewModel
             return;
         }
 
+        if (!await SptInUsePrompt.ClearAsync(installPath, ModInstallAction.Remove)) return;
+
         if (AskRemoveAddons(mod) is not { } addons) return;
         var batch = addons.Count > 0 ? RemovalBatch.For(mod.Name) : null;
 
@@ -205,6 +207,8 @@ public partial class InstalledViewModel
             StatusMessage = Text(Strings.Installed_RemoveSelectedAllTwiceFormat, TextLists.Join(leftTwice));
             return;
         }
+
+        if (!await SptInUsePrompt.ClearAsync(installPath, ModInstallAction.Remove)) return;
 
         var unselectedAddons = targets
             .SelectMany(AddonCardsOf)
