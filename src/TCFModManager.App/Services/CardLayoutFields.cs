@@ -13,7 +13,7 @@ public enum CardFieldKind
     Button,
 }
 
-public sealed record CardFieldSpec(string Key, CardFieldKind Kind, string LabelKey, Func<object, string?>? Text = null, bool IsAuthorLink = false)
+public sealed record CardFieldSpec(string Key, CardFieldKind Kind, string LabelKey, Func<object, string?>? Text = null, bool IsAuthorLink = false, bool OwnRow = false)
 {
     public string Label => LocalizationService.Get(LabelKey);
 
@@ -60,7 +60,7 @@ public static class CardLayoutFields
     [
         new(Note, CardFieldKind.Block, nameof(Strings.CardField_Note), o => I(o)?.Note),
         new(Version, CardFieldKind.Line, nameof(Strings.CardField_Version), o => I(o)?.InstalledVersion ?? Strings.Common_Unknown),
-        new(Sides, CardFieldKind.Chip, nameof(Strings.CardField_Sides)),
+        new(Sides, CardFieldKind.Chip, nameof(Strings.CardField_Sides), OwnRow: true),
         new(Author, CardFieldKind.Line, nameof(Strings.CardField_Author), o => I(o)?.Author ?? Strings.Common_Unknown, IsAuthorLink: true),
         new(AddonParent, CardFieldKind.Block, nameof(Strings.CardField_AddonParent), o => I(o)?.AddonSubtitle),
         new(ModLists, CardFieldKind.Block, nameof(Strings.CardField_ModLists)),

@@ -63,7 +63,8 @@ public sealed class CardFieldsPanel : StackPanel
         {
             var kind = fields[i].Kind;
             var run = new List<CardFieldSpec>();
-            while (i < fields.Count && fields[i].Kind == kind && kind is CardFieldKind.Inline or CardFieldKind.Chip)
+            while (i < fields.Count && fields[i].Kind == kind && kind is CardFieldKind.Inline or CardFieldKind.Chip
+                   && (run.Count == 0 || !(run[0].OwnRow || fields[i].OwnRow)))
                 run.Add(fields[i++]);
 
             switch (kind)

@@ -106,12 +106,12 @@ public sealed class CardLayoutView
 
             var inlineRuns = Fields.Count(f => f.Kind == CardFieldKind.Line);
             var chipRuns = 0;
-            CardFieldKind? last = null;
+            CardFieldSpec? last = null;
             foreach (var spec in Fields)
             {
-                if (spec.Kind != last && spec.Kind == CardFieldKind.Inline) inlineRuns++;
-                if (spec.Kind != last && spec.Kind == CardFieldKind.Chip) chipRuns++;
-                last = spec.Kind;
+                if (spec.Kind != last?.Kind && spec.Kind == CardFieldKind.Inline) inlineRuns++;
+                if (spec.Kind == CardFieldKind.Chip && (last?.Kind != CardFieldKind.Chip || spec.OwnRow || last.OwnRow)) chipRuns++;
+                last = spec;
             }
 
             var text = title * 1.33 + inlineRuns * (line * 1.33 + gap) + chipRuns * (chip * 1.33 + 6 + 4 + gap);
