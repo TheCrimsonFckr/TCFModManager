@@ -2443,6 +2443,8 @@ internal static class Strings
     internal static string Downloads_RetryingServerHostFormat => LocalizationService.Get("Downloads_RetryingServerHostFormat");
     internal static string Downloads_HeldSpModFormat => LocalizationService.Get("Downloads_HeldSpModFormat");
     internal static string Downloads_HeldHostFormat => LocalizationService.Get("Downloads_HeldHostFormat");
+    internal static string Downloads_RateLimitedSpModFormat => LocalizationService.Get("Downloads_RateLimitedSpModFormat");
+    internal static string Downloads_RateLimitedHostFormat => LocalizationService.Get("Downloads_RateLimitedHostFormat");
     internal static string Downloads_ServerTimeoutSpModFormat => LocalizationService.Get("Downloads_ServerTimeoutSpModFormat");
     internal static string Downloads_ServerTimeoutHostFormat => LocalizationService.Get("Downloads_ServerTimeoutHostFormat");
     internal static string Downloads_ServerBusySpModFormat => LocalizationService.Get("Downloads_ServerBusySpModFormat");
