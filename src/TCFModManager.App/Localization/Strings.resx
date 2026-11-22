@@ -12834,7 +12834,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Buttons</value>
   </data>
   <data name="CardLayout_ButtonsHint" xml:space="preserve">
-    <value>Hidden buttons are still on the right-click menu.</value>
+    <value>Buttons turned off here are still on the right-click menu. Folders, Pin and Remove also move into Details and versions.</value>
   </data>
   <data name="CardLayout_ListFieldsHeader" xml:space="preserve">
     <value>What List view rows show</value>
@@ -12897,6 +12897,15 @@ Right-click to save the current filters to it, rename it or delete it.</value>
   <data name="CardField_QuickUpdate" xml:space="preserve">
     <value>Update</value>
     <comment>The button that updates the mod.</comment>
+  </data>
+  <data name="CardField_PinButton" xml:space="preserve">
+    <value>Pin</value>
+  </data>
+  <data name="CardField_RemoveButton" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="CardField_FolderButtons" xml:space="preserve">
+    <value>Folders</value>
   </data>
   <data name="CardField_Category" xml:space="preserve">
     <value>Category</value>

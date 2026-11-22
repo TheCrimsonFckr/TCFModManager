@@ -271,6 +271,39 @@
                         <ui:SymbolIcon Symbol="ArrowDownload24" FontSize="16" />
                     </ui:Button>
                 </Border>
+
+                <ui:Button
+                    Margin="0,2,10,0"
+                    Padding="0"
+                    MinWidth="0"
+                    MinHeight="0"
+                    Width="30"
+                    Height="30"
+                    HorizontalAlignment="Center"
+                    Appearance="Transparent"
+                    Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                    CommandParameter="{Binding}"
+                    ToolTip="{Binding PinTooltip}"
+                    Visibility="{Binding (controls:CardLayoutScope.Layout).ShowPinButton, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                    <ui:SymbolIcon Symbol="{Binding PinGlyph}" FontSize="16" />
+                </ui:Button>
+
+                <ui:Button
+                    Margin="0,2,10,0"
+                    Padding="0"
+                    MinWidth="0"
+                    MinHeight="0"
+                    Width="30"
+                    Height="30"
+                    HorizontalAlignment="Center"
+                    Appearance="Transparent"
+                    Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                    Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                    CommandParameter="{Binding}"
+                    ToolTip="{loc:Str Installed_RemoveToolTip}"
+                    Visibility="{Binding (controls:CardLayoutScope.Layout).ShowRemoveButton, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                    <ui:SymbolIcon Symbol="Delete24" FontSize="16" />
+                </ui:Button>
             </StackPanel>
 
             <Border
@@ -523,39 +556,29 @@
     </DataTemplate>
 
     <DataTemplate x:Key="ModCardActions" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
-        <DockPanel LastChildFill="False">
+        <WrapPanel>
             <ui:Button
-                DockPanel.Dock="Right"
-                Padding="6"
-                VerticalAlignment="Top"
+                Margin="0,0,4,4"
+                Padding="6,3"
                 Appearance="Transparent"
-                Foreground="{DynamicResource SystemFillColorCriticalBrush}"
-                Icon="{ui:SymbolIcon Delete24}"
-                Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                CommandParameter="{Binding}"
-                ToolTip="{loc:Str Installed_RemoveToolTip}" />
-            <WrapPanel>
-                <ui:Button
-                    Margin="0,0,4,4"
-                    Padding="6,3"
-                    Appearance="Transparent"
-                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                    Icon="{ui:SymbolIcon EyeOff24}"
-                    Content="{loc:Str Installed_SptDismiss}"
-                    ToolTip="{loc:Str Installed_SptDismissToolTip}"
-                    Visibility="{Binding CanDismissSptWarning, Converter={StaticResource CardBoolToVis}}"
-                    Command="{Binding DataContext.DismissSptWarningCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                    CommandParameter="{Binding}" />
-                <ui:Button
-                    Margin="0,0,4,4"
-                    Padding="6,3"
-                    Appearance="Transparent"
-                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                    Content="{loc:Str Installed_SptUndismiss}"
-                    ToolTip="{loc:Str Installed_SptUndismissToolTip}"
-                    Visibility="{Binding SptDismissedNote, Converter={StaticResource CardNullToCollapsed}}"
-                    Command="{Binding DataContext.RestoreSptWarningCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                    CommandParameter="{Binding}" />
+                Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                Icon="{ui:SymbolIcon EyeOff24}"
+                Content="{loc:Str Installed_SptDismiss}"
+                ToolTip="{loc:Str Installed_SptDismissToolTip}"
+                Visibility="{Binding CanDismissSptWarning, Converter={StaticResource CardBoolToVis}}"
+                Command="{Binding DataContext.DismissSptWarningCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                CommandParameter="{Binding}" />
+            <ui:Button
+                Margin="0,0,4,4"
+                Padding="6,3"
+                Appearance="Transparent"
+                Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                Content="{loc:Str Installed_SptUndismiss}"
+                ToolTip="{loc:Str Installed_SptUndismissToolTip}"
+                Visibility="{Binding SptDismissedNote, Converter={StaticResource CardNullToCollapsed}}"
+                Command="{Binding DataContext.RestoreSptWarningCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                CommandParameter="{Binding}" />
+            <StackPanel Orientation="Horizontal" Visibility="{Binding (controls:CardLayoutScope.Layout).ShowFolderButtons, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
                 <ui:Button
                     Margin="0,0,4,4"
                     Padding="6,3"
@@ -580,39 +603,28 @@
                     CommandParameter="{Binding ServerFolderLink}"
                     ToolTip="{Binding ServerFolderLink}"
                     ToolTipService.ShowDuration="20000" />
-                <ui:Button
-                    Margin="0,0,4,4"
-                    Padding="6,3"
-                    Appearance="Transparent"
-                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
-                    Icon="{ui:SymbolIcon Warning24}"
-                    Content="{loc:Str Installed_SortOut}"
-                    Visibility="{Binding HasDuplicateFolders, Converter={StaticResource CardBoolToVis}}"
-                    Command="{Binding DataContext.ResolveDuplicateCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                    CommandParameter="{Binding}"
-                    ToolTip="{loc:Str Installed_SortOutToolTip}" />
-                <ui:Button
-                    Margin="0,0,4,4"
-                    Padding="6,3"
-                    Appearance="Transparent"
-                    Icon="{ui:SymbolIcon CheckmarkCircle24}"
-                    Content="{loc:Str Installed_ConfirmDownload}"
-                    Visibility="{Binding CanConfirmDownload, Converter={StaticResource CardBoolToVis}}"
-                    Command="{Binding DataContext.ConfirmDownloadCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                    CommandParameter="{Binding}"
-                    ToolTip="{loc:Str Installed_ConfirmDownloadToolTip}" />
-                <ui:Button
-                    Margin="0,0,4,4"
-                    Padding="6"
-                    Appearance="Transparent"
-                    Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                    CommandParameter="{Binding}"
-                    ToolTip="{Binding PinTooltip}">
-                    <ui:Button.Icon>
-                        <ui:SymbolIcon Symbol="{Binding PinGlyph}" />
-                    </ui:Button.Icon>
-                </ui:Button>
-            </WrapPanel>
-        </DockPanel>
+            </StackPanel>
+            <ui:Button
+                Margin="0,0,4,4"
+                Padding="6,3"
+                Appearance="Transparent"
+                Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                Icon="{ui:SymbolIcon Warning24}"
+                Content="{loc:Str Installed_SortOut}"
+                Visibility="{Binding HasDuplicateFolders, Converter={StaticResource CardBoolToVis}}"
+                Command="{Binding DataContext.ResolveDuplicateCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                CommandParameter="{Binding}"
+                ToolTip="{loc:Str Installed_SortOutToolTip}" />
+            <ui:Button
+                Margin="0,0,4,4"
+                Padding="6,3"
+                Appearance="Transparent"
+                Icon="{ui:SymbolIcon CheckmarkCircle24}"
+                Content="{loc:Str Installed_ConfirmDownload}"
+                Visibility="{Binding CanConfirmDownload, Converter={StaticResource CardBoolToVis}}"
+                Command="{Binding DataContext.ConfirmDownloadCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                CommandParameter="{Binding}"
+                ToolTip="{loc:Str Installed_ConfirmDownloadToolTip}" />
+        </WrapPanel>
     </DataTemplate>
 </ResourceDictionary>

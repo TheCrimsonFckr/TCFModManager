@@ -10923,7 +10923,7 @@
     <value>Кнопки</value>
   </data>
   <data name="CardLayout_ButtonsHint" xml:space="preserve">
-    <value>Скрытые кнопки остаются в меню правого клика.</value>
+    <value>Отключённые здесь кнопки остаются в меню правого клика. Папки, «Закрепить» и «Удалить» также переносятся в окно «Сведения и версии».</value>
   </data>
   <data name="CardLayout_ListFieldsHeader" xml:space="preserve">
     <value>Что показывают строки вида «Список»</value>
@@ -10981,6 +10981,15 @@
   </data>
   <data name="CardField_QuickUpdate" xml:space="preserve">
     <value>Обновить</value>
+  </data>
+  <data name="CardField_PinButton" xml:space="preserve">
+    <value>Закрепить</value>
+  </data>
+  <data name="CardField_RemoveButton" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="CardField_FolderButtons" xml:space="preserve">
+    <value>Папки</value>
   </data>
   <data name="CardField_Category" xml:space="preserve">
     <value>Категория</value>

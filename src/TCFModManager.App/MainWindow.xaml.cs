@@ -192,9 +192,9 @@ public partial class MainWindow : FluentWindow
             await new AddonDetailsContentDialog(RootContentDialogPresenter, request).ShowAsync();
 
         // Constructs and shows the mod update dialog, awaitable so callers know when it closes.
-        AppServices.ModUpdateOverlay.ShowAsync = async (mod, addonCards) =>
+        AppServices.ModUpdateOverlay.ShowAsync = async (mod, addonCards, buttons) =>
         {
-            var dialog = new ModUpdateContentDialog(RootContentDialogPresenter, mod, addonCards);
+            var dialog = new ModUpdateContentDialog(RootContentDialogPresenter, mod, addonCards, buttons);
             await dialog.ShowAsync();
             return dialog.ViewModel.MadeChanges;
         };

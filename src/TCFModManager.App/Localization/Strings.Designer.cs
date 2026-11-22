@@ -3527,6 +3527,9 @@ internal static class Strings
     internal static string CardField_Pinned => LocalizationService.Get("CardField_Pinned");
     internal static string CardField_DisableToggle => LocalizationService.Get("CardField_DisableToggle");
     internal static string CardField_QuickUpdate => LocalizationService.Get("CardField_QuickUpdate");
+    internal static string CardField_PinButton => LocalizationService.Get("CardField_PinButton");
+    internal static string CardField_RemoveButton => LocalizationService.Get("CardField_RemoveButton");
+    internal static string CardField_FolderButtons => LocalizationService.Get("CardField_FolderButtons");
     internal static string CardField_Category => LocalizationService.Get("CardField_Category");
     internal static string CardField_Downloads => LocalizationService.Get("CardField_Downloads");
     internal static string CardField_Updated => LocalizationService.Get("CardField_Updated");

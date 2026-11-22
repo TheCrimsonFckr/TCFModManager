@@ -10500,7 +10500,7 @@ I dettagli sono nel log:
     <value>Pulsanti</value>
   </data>
   <data name="CardLayout_ButtonsHint" xml:space="preserve">
-    <value>I pulsanti nascosti restano nel menu del clic destro.</value>
+    <value>I pulsanti disattivati qui restano nel menu del clic destro. Cartelle, Fissa e Rimuovi passano anche in "Dettagli e versioni".</value>
   </data>
   <data name="CardLayout_ListFieldsHeader" xml:space="preserve">
     <value>Cosa mostrano le righe della vista Elenco</value>
@@ -10558,6 +10558,15 @@ I dettagli sono nel log:
   </data>
   <data name="CardField_QuickUpdate" xml:space="preserve">
     <value>Aggiorna</value>
+  </data>
+  <data name="CardField_PinButton" xml:space="preserve">
+    <value>Fissa</value>
+  </data>
+  <data name="CardField_RemoveButton" xml:space="preserve">
+    <value>Rimuovi</value>
+  </data>
+  <data name="CardField_FolderButtons" xml:space="preserve">
+    <value>Cartelle</value>
   </data>
   <data name="CardField_Category" xml:space="preserve">
     <value>Categoria</value>

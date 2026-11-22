@@ -35,6 +35,7 @@
         <!-- One width for every filter in the filter row, so a wrapped row lines up in columns. -->
 
         <converters:NullToVisibilityConverter x:Key="NullToCollapsed" />
+        <converters:CardButtonVisibilityConverter x:Key="CardButtonVisibility" />
         <converters:UpdateAvailableToVisibilityConverter x:Key="UpdateAvailableToVisible" />
         <converters:FalseToVisibilityConverter x:Key="FalseToVisible" />
         <converters:CountToVisibilityConverter x:Key="HasItems" />
@@ -177,6 +178,12 @@
                          the tooltip rather than the label: a mod path is far too long to sit inside a
                          card, and what you want from it is to get there. -->
                     <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                        <StackPanel.Visibility>
+                            <MultiBinding Converter="{StaticResource CardButtonVisibility}" ConverterParameter="FolderButtons">
+                                <Binding Path="(controls:CardLayoutScope.Layout)" RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="(controls:CardLayoutScope.InList)" RelativeSource="{RelativeSource Self}" />
+                            </MultiBinding>
+                        </StackPanel.Visibility>
                         <ui:Button
                             Padding="8,4"
                             Appearance="Transparent"
@@ -244,6 +251,12 @@
                         Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                         CommandParameter="{Binding}"
                         ToolTip="{Binding PinTooltip}">
+                        <ui:Button.Visibility>
+                            <MultiBinding Converter="{StaticResource CardButtonVisibility}" ConverterParameter="PinButton|list">
+                                <Binding Path="(controls:CardLayoutScope.Layout)" RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="(controls:CardLayoutScope.InList)" RelativeSource="{RelativeSource Self}" />
+                            </MultiBinding>
+                        </ui:Button.Visibility>
                         <ui:Button.Icon>
                             <ui:SymbolIcon Symbol="{Binding PinGlyph}" />
                         </ui:Button.Icon>
@@ -256,7 +269,14 @@
                         Icon="{ui:SymbolIcon Delete24}"
                         Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                         CommandParameter="{Binding}"
-                        ToolTip="{loc:Str Installed_RemoveToolTip}" />
+                        ToolTip="{loc:Str Installed_RemoveToolTip}">
+                        <ui:Button.Visibility>
+                            <MultiBinding Converter="{StaticResource CardButtonVisibility}" ConverterParameter="RemoveButton|list">
+                                <Binding Path="(controls:CardLayoutScope.Layout)" RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="(controls:CardLayoutScope.InList)" RelativeSource="{RelativeSource Self}" />
+                            </MultiBinding>
+                        </ui:Button.Visibility>
+                    </ui:Button>
                 </DockPanel>
             </Grid>
         </DataTemplate>
@@ -1303,7 +1323,7 @@
             VerticalScrollBarVisibility="Auto"
             Visibility="{Binding ShowList, Converter={StaticResource BoolToVis}}">
             <!-- Right margin keeps the overlay scrollbar off the rows' right-hand buttons and chevrons. -->
-            <ItemsControl Margin="0,0,6,0" Focusable="False" ItemsSource="{Binding ListItems}">
+            <ItemsControl Margin="0,0,6,0" Focusable="False" ItemsSource="{Binding ListItems}" controls:CardLayoutScope.InList="True">
                 <!-- Rows slide to a new position, and new ones fade in, as a filter or sort changes them (OPEN-26). -->
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

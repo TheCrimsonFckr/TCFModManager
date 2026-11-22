@@ -86,6 +86,7 @@ public class CardLayoutRulesTests
         var layout = Layout("Mine", CardLayoutPage.Installed, "Note");
         layout.ListFields = ["Group"];
         layout.DetailsInWindow = true;
+        layout.FieldsRevision = 1;
 
         var copy = CardLayoutRules.Copy(layout, "Mine 2");
         copy.Fields.Add("Author");
@@ -93,8 +94,17 @@ public class CardLayoutRulesTests
 
         Assert.NotEqual(layout.Id, copy.Id);
         Assert.True(copy.DetailsInWindow);
+        Assert.Equal(1, copy.FieldsRevision);
         Assert.Equal(["Note"], layout.Fields);
         Assert.Equal(["Group"], layout.ListFields);
+    }
+
+    [Fact]
+    public void Settings_LayoutSavedBeforeRevisionsReadsAsNoRevision()
+    {
+        var back = JsonSerializer.Deserialize<CardLayout>("{\"Name\":\"Old\",\"Fields\":[\"Note\"]}")!;
+
+        Assert.Null(back.FieldsRevision);
     }
 
     [Fact]

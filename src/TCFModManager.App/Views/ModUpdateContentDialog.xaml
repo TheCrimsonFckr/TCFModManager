@@ -264,6 +264,57 @@
                 VerticalScrollBarVisibility="Auto"
                 Visibility="{Binding IsLoading, Converter={StaticResource FalseToVisible}}">
               <StackPanel>
+                <DockPanel
+                    Margin="0,0,0,10"
+                    LastChildFill="False"
+                    Visibility="{Binding ShowCardButtons, Converter={StaticResource TrueToVisible}}">
+                    <ui:Button
+                        DockPanel.Dock="Right"
+                        Margin="8,0,0,0"
+                        Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                        Icon="{ui:SymbolIcon Delete24}"
+                        Content="{loc:Str Installed_Remove}"
+                        ToolTip="{loc:Str Installed_RemoveToolTip}"
+                        Command="{Binding RemoveCardCommand}"
+                        Visibility="{Binding ShowRemoveButton, Converter={StaticResource TrueToVisible}}" />
+                    <StackPanel
+                        DockPanel.Dock="Left"
+                        Orientation="Horizontal"
+                        Visibility="{Binding ShowFolderButtons, Converter={StaticResource TrueToVisible}}">
+                        <ui:Button
+                            Margin="0,0,8,0"
+                            Appearance="Transparent"
+                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                            Icon="{ui:SymbolIcon FolderOpen24}"
+                            Content="{loc:Str Installed_ClientFolder}"
+                            Command="{Binding OpenCardFolderCommand}"
+                            CommandParameter="{Binding Card.ClientFolderLink}"
+                            ToolTip="{Binding Card.ClientFolderLink}"
+                            ToolTipService.ShowDuration="20000"
+                            Visibility="{Binding Card.ClientFolderLink, Converter={StaticResource NullToCollapsed}}" />
+                        <ui:Button
+                            Margin="0,0,8,0"
+                            Appearance="Transparent"
+                            Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                            Icon="{ui:SymbolIcon FolderOpen24}"
+                            Content="{loc:Str Installed_ServerFolder}"
+                            Command="{Binding OpenCardFolderCommand}"
+                            CommandParameter="{Binding Card.ServerFolderLink}"
+                            ToolTip="{Binding Card.ServerFolderLink}"
+                            ToolTipService.ShowDuration="20000"
+                            Visibility="{Binding Card.ServerFolderLink, Converter={StaticResource NullToCollapsed}}" />
+                    </StackPanel>
+                    <ui:Button
+                        DockPanel.Dock="Left"
+                        Command="{Binding TogglePinCardCommand}"
+                        ToolTip="{Binding Card.PinTooltip}"
+                        Visibility="{Binding ShowPinButton, Converter={StaticResource TrueToVisible}}">
+                        <ui:Button.Icon>
+                            <ui:SymbolIcon Symbol="{Binding Card.PinGlyph}" />
+                        </ui:Button.Icon>
+                    </ui:Button>
+                </DockPanel>
+
                 <Expander
                     Margin="0,0,0,10"
                     Header="{loc:Str ModUpdate_InstallDetails}"

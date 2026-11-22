@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.IO;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
+using TCFModManager.App.Services;
 using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
@@ -17,10 +18,31 @@ public partial class InstalledViewModel
         if (mod is null) return;
         if (AppServices.ModUpdateOverlay.ShowAsync is not { } show) return;
 
+        var inList = ViewMode == InstalledViewMode.List;
+        bool OnCard(string key) => inList ? CardLayout.ListHas(key) : CardLayout.Has(key);
+
+        var buttons = new DetailsCardButtons
+        {
+            Folders = !OnCard(CardLayoutFields.FolderButtons),
+            Pin = !OnCard(CardLayoutFields.PinButton),
+            Remove = !OnCard(CardLayoutFields.RemoveButton),
+            OpenFolder = OpenModFolder,
+            TogglePin = TogglePin,
+        };
+
         // Only when the dialog actually did something. A rescan re-reads the whole install and
         // replaces every card, which visibly rebuilds the page - not something opening a mod to
         // read its changelog should cause.
-        if (await show(mod, AddonCardsOf(mod))) await ScanAsync();
+        var changed = await show(mod, AddonCardsOf(mod), buttons);
+
+        if (buttons.RemoveRequested)
+        {
+            await RemoveAsync(mod);
+            if (changed) await ScanAsync();
+            return;
+        }
+
+        if (changed) await ScanAsync();
     }
 
     //

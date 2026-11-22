@@ -51,9 +51,10 @@ public partial class ModUpdateContentDialog : ContentDialog
 
     // Uses WPF-UI's legacy ContentPresenter-based ContentDialog constructor.
 #pragma warning disable CS0618 // Type or member is obsolete
-    public ModUpdateContentDialog(ContentPresenter host, InstalledModCardViewModel mod, IReadOnlyList<InstalledModCardViewModel> addonCards) : base(host)
+    public ModUpdateContentDialog(ContentPresenter host, InstalledModCardViewModel mod, IReadOnlyList<InstalledModCardViewModel> addonCards, DetailsCardButtons? buttons = null) : base(host)
     {
-        ViewModel = new ModUpdateDialogViewModel(mod, addonCards);
+        ViewModel = new ModUpdateDialogViewModel(mod, addonCards, buttons);
+        ViewModel.CloseRequested += (_, _) => Hide(ContentDialogResult.None);
         InitializeComponent();
         DataContext = ViewModel;
         Title = mod.DisplayTitle;

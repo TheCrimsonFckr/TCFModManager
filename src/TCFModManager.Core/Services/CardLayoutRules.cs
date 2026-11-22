@@ -73,5 +73,6 @@ public static class CardLayoutRules
         Width = layout.Width,
         Picture = layout.Picture,
         DetailsInWindow = layout.DetailsInWindow,
+        FieldsRevision = layout.FieldsRevision,
     };
 }

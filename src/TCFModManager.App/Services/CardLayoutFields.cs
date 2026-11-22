@@ -33,6 +33,9 @@ public static class CardLayoutFields
     public const string Pinned = "Pinned";
     public const string DisableToggle = "DisableToggle";
     public const string QuickUpdate = "QuickUpdate";
+    public const string PinButton = "PinButton";
+    public const string RemoveButton = "RemoveButton";
+    public const string FolderButtons = "FolderButtons";
     public const string Category = "Category";
     public const string Downloads = "Downloads";
     public const string Updated = "Updated";
@@ -66,6 +69,9 @@ public static class CardLayoutFields
         new(Pinned, CardFieldKind.Chip, nameof(Strings.CardField_Pinned)),
         new(DisableToggle, CardFieldKind.Button, nameof(Strings.CardField_DisableToggle)),
         new(QuickUpdate, CardFieldKind.Button, nameof(Strings.CardField_QuickUpdate)),
+        new(PinButton, CardFieldKind.Button, nameof(Strings.CardField_PinButton)),
+        new(RemoveButton, CardFieldKind.Button, nameof(Strings.CardField_RemoveButton)),
+        new(FolderButtons, CardFieldKind.Button, nameof(Strings.CardField_FolderButtons)),
         new(Category, CardFieldKind.Line, nameof(Strings.CardField_Category), o => I(o)?.CategoryTag),
         new(Downloads, CardFieldKind.Line, nameof(Strings.CardField_Downloads),
             o => I(o)?.PreviewDownloads is { } n ? LocalizationService.Text(Strings.Common_DownloadsFormat, n) : null),
@@ -78,7 +84,11 @@ public static class CardLayoutFields
     ];
 
     public static IReadOnlyList<string> InstalledDefault { get; } =
-        [Note, Version, Author, Sides, AddonParent, ModLists, Group, Disabled, Pinned, DisableToggle, QuickUpdate];
+        [Note, Version, Author, Sides, AddonParent, ModLists, Group, Disabled, Pinned, DisableToggle, QuickUpdate, PinButton, RemoveButton, FolderButtons];
+
+    public const int Revision = 1;
+
+    public static IReadOnlyList<string> AddedInRevision1 { get; } = [PinButton, RemoveButton, FolderButtons];
 
     public static IReadOnlyList<CardFieldSpec> Browse { get; } =
     [
@@ -111,5 +121,6 @@ public static class CardLayoutFields
         Fields = [.. DefaultFor(page)],
         ListFields = page == CardLayoutPage.Installed ? [.. InstalledDefault.Where(f => f != AddonParent)] : null,
         Picture = DefaultPicture(page),
+        FieldsRevision = Revision,
     };
 }

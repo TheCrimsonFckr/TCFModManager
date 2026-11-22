@@ -32,10 +32,38 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     private Mod? _catalogMod;
     private Addon? _catalogAddon;
 
-    public ModUpdateDialogViewModel(InstalledModCardViewModel mod, IReadOnlyList<InstalledModCardViewModel> addonCards)
+    public ModUpdateDialogViewModel(InstalledModCardViewModel mod, IReadOnlyList<InstalledModCardViewModel> addonCards, DetailsCardButtons? buttons = null)
     {
         _mod = mod;
         _addonCards = addonCards;
+        _buttons = buttons;
+    }
+
+    private readonly DetailsCardButtons? _buttons;
+
+    public event EventHandler? CloseRequested;
+
+    public bool ShowFolderButtons => _buttons?.Folders == true;
+
+    public bool ShowPinButton => _buttons?.Pin == true;
+
+    public bool ShowRemoveButton => _buttons?.Remove == true;
+
+    public bool ShowCardButtons => ShowFolderButtons || ShowPinButton || ShowRemoveButton;
+
+    [RelayCommand]
+    private void OpenCardFolder(string? path) => _buttons?.OpenFolder(path);
+
+    [RelayCommand]
+    private void TogglePinCard() => _buttons?.TogglePin(_mod);
+
+    [RelayCommand]
+    private void RemoveCard()
+    {
+        if (_buttons is null) return;
+
+        _buttons.RemoveRequested = true;
+        CloseRequested?.Invoke(this, EventArgs.Empty);
     }
 
     private readonly IReadOnlyList<InstalledModCardViewModel> _addonCards;

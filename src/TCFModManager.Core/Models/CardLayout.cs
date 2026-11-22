@@ -52,4 +52,6 @@ public sealed class CardLayout
     public CardPicture Picture { get; set; } = CardPicture.Off;
 
     public bool DetailsInWindow { get; set; }
+
+    public int? FieldsRevision { get; set; }
 }

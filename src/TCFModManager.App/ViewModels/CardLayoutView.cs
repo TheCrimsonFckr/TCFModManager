@@ -54,6 +54,12 @@ public sealed class CardLayoutView
 
     public bool ShowQuickUpdate => Has(F.QuickUpdate);
 
+    public bool ShowPinButton => Has(F.PinButton);
+
+    public bool ShowRemoveButton => Has(F.RemoveButton);
+
+    public bool ShowFolderButtons => Has(F.FolderButtons);
+
     public bool RowShowsDisabled => Has(F.Disabled);
 
     public bool RowShowsPinned => Has(F.Pinned);
@@ -96,7 +102,7 @@ public sealed class CardLayoutView
             var (title, line, chip) = Behaviors.CardDensity.FontSizes(Size);
             var gap = Behaviors.CardDensity.LineGap(Size);
 
-            var buttons = 26 + (ShowDisableToggle ? 34 : 0) + (ShowQuickUpdate ? 32 : 0);
+            var buttons = 26 + (ShowDisableToggle ? 34 : 0) + (ShowQuickUpdate ? 32 : 0) + (ShowPinButton ? 32 : 0) + (ShowRemoveButton ? 32 : 0);
 
             var inlineRuns = Fields.Count(f => f.Kind == CardFieldKind.Line);
             var chipRuns = 0;

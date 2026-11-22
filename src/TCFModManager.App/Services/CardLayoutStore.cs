@@ -34,6 +34,7 @@ public sealed class CardLayoutStore
         var copy = CardLayoutRules.Copy(layout, layout.Name);
         copy.Id = layout.Id;
         CardLayoutRules.Normalise(copy, CardLayoutFields.KnownFor(copy.Page), _all, Strings.CardLayout_NewName);
+        copy.FieldsRevision = CardLayoutFields.Revision;
 
         var next = _all.Where(l => l.Id != copy.Id).ToList();
         var at = _all.FindIndex(l => l.Id == copy.Id);
@@ -70,6 +71,7 @@ public sealed class CardLayoutStore
         foreach (var layout in loaded.Where(l => l is not null && Enum.IsDefined(l.Page)))
         {
             if (layout.Id == Guid.Empty || kept.Any(k => k.Id == layout.Id)) layout.Id = Guid.NewGuid();
+            if (layout.FieldsRevision is null) Upgrade(layout);
             CardLayoutRules.Normalise(layout, CardLayoutFields.KnownFor(layout.Page), kept, Strings.CardLayout_NewName);
             if (CardLayoutRules.CheckName(kept, layout.Page, layout.Name) == PresetNameProblem.Taken)
                 layout.Name = CardLayoutRules.UniqueName(kept, layout.Page, layout.Name);
@@ -78,5 +80,16 @@ public sealed class CardLayoutStore
 
         if (kept.Count > 0) AppLog.Info("CardLayouts", $"loaded {kept.Count} layout(s)");
         return kept;
+    }
+
+    private static void Upgrade(CardLayout layout)
+    {
+        if (layout.Page == CardLayoutPage.Installed)
+        {
+            layout.Fields = [.. layout.Fields ?? [], .. CardLayoutFields.AddedInRevision1];
+            if (layout.ListFields is not null) layout.ListFields = [.. layout.ListFields, .. CardLayoutFields.AddedInRevision1];
+        }
+
+        layout.FieldsRevision = CardLayoutFields.Revision;
     }
 }
