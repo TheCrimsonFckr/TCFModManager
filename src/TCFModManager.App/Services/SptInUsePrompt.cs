@@ -10,7 +10,7 @@ namespace TCFModManager.App.Services;
 //
 public static class SptInUsePrompt
 {
-    public static async Task<bool> ClearAsync(string installPath, ModInstallAction action)
+    public static async Task<bool> ClearAsync(string? installPath, ModInstallAction action)
     {
         var running = await Task.Run(() => ModInstallService.RunningBlockers(installPath));
         if (running.Count == 0) return true;

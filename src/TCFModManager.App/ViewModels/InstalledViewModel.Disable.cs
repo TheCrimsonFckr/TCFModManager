@@ -66,11 +66,7 @@ public partial class InstalledViewModel
             return;
         }
 
-        if (ModInstallService.RunningBlockers(installPath) is { Count: > 0 } blockers)
-        {
-            StatusMessage = ModInstallProblems.InstallInUse(blockers, ModInstallAction.SortOutDuplicate);
-            return;
-        }
+        if (!await SptInUsePrompt.ClearAsync(installPath, ModInstallAction.SortOutDuplicate)) return;
 
         var pairs = mod.DuplicateFolders;
         var answer = AskWindow.Show(new AskRequest
@@ -139,6 +135,8 @@ public partial class InstalledViewModel
     {
         if (_lastMoves.Count == 0) return;
 
+        if (!await SptInUsePrompt.ClearAsync(AppServices.SptEnvironment.InstallPath, ModInstallAction.Undo)) return;
+
         IsBusy = true;
         string message;
         try
@@ -196,13 +194,10 @@ public partial class InstalledViewModel
             return carryOver ?? [];
         }
 
-        // Checked before anything is asked or moved, so a locked install is reported up front
-        // rather than after the user has answered a dialog. ModDisableService guards again itself.
-        if (ModInstallService.RunningBlockers(AppServices.SptEnvironment.InstallPath) is { Count: > 0 } blockers)
+        if (!await SptInUsePrompt.ClearAsync(
+                AppServices.SptEnvironment.InstallPath,
+                disable ? ModInstallAction.Disable : ModInstallAction.Enable))
         {
-            StatusMessage = ModInstallProblems.InstallInUse(
-                blockers,
-                disable ? ModInstallAction.Disable : ModInstallAction.Enable);
             return null;
         }
 
