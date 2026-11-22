@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -37,6 +39,26 @@ public partial class BrowseViewModel
     public ModCardViewModel? SampleCardForLayouts() =>
         Results.OrderByDescending(c => (c.Thumbnail is null ? 0 : 2) + (c.Endorsements is null ? 0 : 1)).FirstOrDefault();
 
+    private bool CardLayoutIsNotDefault() =>
+        AppServices.CardLayouts.Resolve(CardLayoutPage.Browse, _defaults?.CardLayout).Id != CardLayout.Id;
+
+    [RelayCommand(CanExecute = nameof(CardLayoutIsNotDefault))]
+    private void MakeCardLayoutDefault()
+    {
+        var service = new SettingsService();
+        var settings = service.Load();
+
+        settings.BrowseDefaults ??= new BrowsePageDefaults();
+        settings.BrowseDefaults.CardLayout = CardLayout.Id?.ToString() ?? "default";
+        _defaults = settings.BrowseDefaults;
+
+        service.Save(settings);
+        MakeCardLayoutDefaultCommand.NotifyCanExecuteChanged();
+
+        StatusMessage = LocalizationService.Text(Strings.CardLayout_MadeDefaultFormat, CardLayout.Name);
+        AppLog.Info("Browse", $"made card layout \"{CardLayout.Name}\" the page default");
+    }
+
     private void RefreshCardLayoutChoices(Guid? keep)
     {
         _syncingCardLayouts = true;
@@ -70,6 +92,7 @@ public partial class BrowseViewModel
     partial void OnCardLayoutChanged(CardLayoutView value)
     {
         if (_lastLayoutWidth > 0) UpdateLayoutForWidth(_lastLayoutWidth);
+        MakeCardLayoutDefaultCommand.NotifyCanExecuteChanged();
         FilterPins?.RefreshLabels();
     }
 }

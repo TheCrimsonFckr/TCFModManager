@@ -101,6 +101,7 @@ public partial class BrowseViewModel
     {
         _defaults = new SettingsService().Load().BrowseDefaults;
         ResetFilters(toSaved: true);
+        MakeCardLayoutDefaultCommand.NotifyCanExecuteChanged();
         AppLog.Info("Browse", _defaults is null
             ? "restore defaults: none saved, cleared to the app's own"
             : "restored the saved filters");
@@ -162,6 +163,7 @@ public partial class BrowseViewModel
         settings.BrowseDefaults = _defaults = CaptureFilters(keepCustomRanges: false);
 
         service.Save(settings);
+        MakeCardLayoutDefaultCommand.NotifyCanExecuteChanged();
 
         StatusMessage = Strings.Browse_SavedAsDefault;
         AppLog.Info("Browse", "saved the current filters as this page's default");

@@ -595,7 +595,10 @@ public partial class ModListsViewModel : LocalizedViewModel
 
     public bool SelectionIsFollowed => Selected?.IsFollowed == true;
 
-    public string PreviewLabel => SelectionIsFollowed ? Strings.ModLists_CheckAgain : Strings.ModLists_Preview;
+    public string PreviewLabel =>
+        SelectionIsFollowed ? Strings.ModLists_CheckAgain
+        : SelectionIsServedHere ? Strings.ModLists_Preview
+        : Strings.ModLists_PreviewToApply;
 
     public string PreviewToolTip => SelectionIsServedHere ? Strings.ModLists_ServePreviewToolTip
         : SelectionIsFollowed ? Strings.ModLists_CheckAgainToolTip : Strings.ModLists_PreviewToolTip;

@@ -72,6 +72,8 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
 
     public bool HasServer { get; init; }
 
+    public bool HasNoSide => !HasPlugin && !HasPatcher && !HasServer;
+
     //
     // Which halves of the install this mod occupies. A patcher is called out rather than folded
     // into "Client", since on its own it's the difference between a card that reads as a mod whose

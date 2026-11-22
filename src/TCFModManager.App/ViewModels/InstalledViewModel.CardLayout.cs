@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TCFModManager.App.Localization;
 using TCFModManager.App.Views;
 using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -32,6 +34,26 @@ public partial class InstalledViewModel
     private void EditCardLayouts()
     {
         if (CardLayoutEditorWindow.Edit(CardLayoutPage.Installed, CardLayout.Id, SampleCardForLayouts()) is { } picked) UseCardLayout(picked.Id);
+    }
+
+    private bool CardLayoutIsNotDefault() =>
+        AppServices.CardLayouts.Resolve(CardLayoutPage.Installed, _defaults?.CardLayout).Id != CardLayout.Id;
+
+    [RelayCommand(CanExecute = nameof(CardLayoutIsNotDefault))]
+    private void MakeCardLayoutDefault()
+    {
+        var service = new SettingsService();
+        var settings = service.Load();
+
+        settings.InstalledDefaults ??= new InstalledPageDefaults();
+        settings.InstalledDefaults.CardLayout = CardLayout.Id?.ToString() ?? "default";
+        _defaults = settings.InstalledDefaults;
+
+        service.Save(settings);
+        MakeCardLayoutDefaultCommand.NotifyCanExecuteChanged();
+
+        StatusMessage = LocalizationService.Text(Strings.CardLayout_MadeDefaultFormat, CardLayout.Name);
+        AppLog.Info("Installed", $"made card layout \"{CardLayout.Name}\" the page default");
     }
 
     private void RefreshCardLayoutChoices(Guid? keep)
@@ -76,6 +98,7 @@ public partial class InstalledViewModel
         OnPropertyChanged(nameof(ShowExpanders));
         ExpandAllCommand.NotifyCanExecuteChanged();
         CollapseAllCommand.NotifyCanExecuteChanged();
+        MakeCardLayoutDefaultCommand.NotifyCanExecuteChanged();
         FilterPins?.RefreshLabels();
     }
 }

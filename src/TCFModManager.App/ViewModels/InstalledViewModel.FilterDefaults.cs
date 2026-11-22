@@ -120,6 +120,7 @@ public partial class InstalledViewModel
     {
         _defaults = new SettingsService().Load().InstalledDefaults;
         ResetFilters(toSaved: true);
+        MakeCardLayoutDefaultCommand.NotifyCanExecuteChanged();
         AppLog.Info("Installed", _defaults is null
             ? "restore defaults: none saved, cleared to the app's own"
             : "restored the saved filters");
@@ -177,6 +178,7 @@ public partial class InstalledViewModel
         settings.InstalledDefaults = _defaults = CaptureFilters();
 
         service.Save(settings);
+        MakeCardLayoutDefaultCommand.NotifyCanExecuteChanged();
 
         StatusMessage = Strings.Installed_SavedAsDefault;
         AppLog.Info("Installed", "saved the current filters as this page's default");
