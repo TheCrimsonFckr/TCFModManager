@@ -196,6 +196,8 @@ public partial class DependenciesViewModel : LocalizedViewModel
         var others = keep.Removals;
         if (others.Count == 0) return;
 
+        if (!await SptInUsePrompt.ClearAsync(installPath, ModInstallAction.Remove)) return;
+
         var lines = others.SelectMany(o =>
             (o.Card.IsAppManaged ? o.Card.Entries : o.Entries).Select(e =>
                 Text(Strings.Conflicts_KeepItemFormat, o.Card.DisplayTitle, Path.GetRelativePath(installPath, e.FolderPath))));
@@ -604,11 +606,7 @@ public partial class DependenciesViewModel : LocalizedViewModel
             return;
         }
 
-        if (ModInstallService.RunningBlockers(installPath) is { Count: > 0 } blockers)
-        {
-            StatusMessage = ModInstallProblems.InstallInUse(blockers, ModInstallAction.Disable);
-            return;
-        }
+        if (!await SptInUsePrompt.ClearAsync(installPath, ModInstallAction.Disable)) return;
 
         var cards = _upgradeCards;
         var cardByEntry = new Dictionary<InstalledMod, InstalledModCardViewModel>(ReferenceEqualityComparer.Instance);
