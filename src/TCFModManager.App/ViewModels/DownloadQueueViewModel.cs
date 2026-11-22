@@ -814,7 +814,7 @@ public sealed partial class DownloadQueueViewModel : LocalizedViewModel
                     Installed(item, result);
                     break;
                 }
-                catch (ModInstallException { Reason: ModInstallFailure.InstallInUse }) when (!turn.Token.IsCancellationRequested && turn.Token == item.Token)
+                catch (ModInstallException ex) when (ex.Reason == ModInstallFailure.InstallInUse && !turn.Token.IsCancellationRequested && turn.Token == item.Token)
                 {
                     placing = false;
                     AppLog.Info("Downloads", $"{item.ModName} {item.VersionLabel}: SPT started before the install placed anything; waiting again");
