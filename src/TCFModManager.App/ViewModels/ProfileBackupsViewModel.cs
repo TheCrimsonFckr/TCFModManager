@@ -130,12 +130,7 @@ public sealed partial class ProfileBackupsViewModel : LocalizedViewModel
             return;
         }
 
-        var running = ModInstallService.RunningBlockers(install);
-        if (running.Count > 0)
-        {
-            StatusMessage = ModInstallProblems.InstallInUse(running, ModInstallAction.RestoreProfiles);
-            return;
-        }
+        if (!await SptInUsePrompt.ClearAsync(install, ModInstallAction.RestoreProfiles)) return;
 
         if (AskWindow.Show(new AskRequest
             {
