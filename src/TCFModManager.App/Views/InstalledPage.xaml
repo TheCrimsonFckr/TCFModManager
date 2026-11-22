@@ -106,6 +106,14 @@
                     Icon="{ui:SymbolIcon Edit24}"
                     Content="{loc:Str CardLayout_Edit}"
                     Command="{Binding EditCardLayoutsCommand}" />
+                <ui:Button
+                    Margin="0,6,0,0"
+                    HorizontalAlignment="Stretch"
+                    Icon="{ui:SymbolIcon Star24}"
+                    Content="{loc:Str CardLayout_MakeDefault}"
+                    ToolTip="{loc:Str CardLayout_MakeDefaultToolTip}"
+                    ToolTipService.ShowOnDisabled="True"
+                    Command="{Binding MakeCardLayoutDefaultCommand}" />
             </StackPanel>
         </DataTemplate>
 

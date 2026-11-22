@@ -1078,6 +1078,15 @@
                         Command="{Binding ClosePlanCommand}" />
 
                     <ui:Button
+                        Margin="0,0,8,0"
+                        Appearance="Secondary"
+                        Icon="{ui:SymbolIcon ArrowSync24}"
+                        Content="{loc:Str ModLists_RefreshFromServer}"
+                        ToolTip="{loc:Str ModLists_RefreshFromServerToolTip}"
+                        Visibility="{Binding SelectionIsFromServer, Converter={StaticResource BoolToVis}}"
+                        Command="{Binding RefreshFromServerCommand}" />
+
+                    <ui:Button
                         MinWidth="140"
                         HorizontalContentAlignment="Center"
                         Appearance="Primary"
@@ -1142,12 +1151,6 @@
                                     ToolTip="{loc:Str ModLists_PublishToolTip}"
                                     Visibility="{Binding SelectionIsEditable, Converter={StaticResource BoolToVis}}"
                                     Command="{Binding PublishCommand}" />
-                                <MenuItem
-                                    Header="{loc:Str ModLists_RefreshFromServer}"
-                                    Icon="{ui:SymbolIcon ArrowSync24}"
-                                    ToolTip="{loc:Str ModLists_RefreshFromServerToolTip}"
-                                    Visibility="{Binding SelectionIsFromServer, Converter={StaticResource BoolToVis}}"
-                                    Command="{Binding RefreshFromServerCommand}" />
                                 <MenuItem
                                     Header="{loc:Str ModLists_RefreshFromSpMod}"
                                     Icon="{ui:SymbolIcon ArrowSync24}"

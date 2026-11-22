@@ -148,6 +148,7 @@ internal static class Strings
     internal static string ModLists_CheckAgain => LocalizationService.Get("ModLists_CheckAgain");
     internal static string ModLists_CheckAgainToolTip => LocalizationService.Get("ModLists_CheckAgainToolTip");
     internal static string ModLists_Preview => LocalizationService.Get("ModLists_Preview");
+    internal static string ModLists_PreviewToApply => LocalizationService.Get("ModLists_PreviewToApply");
     internal static string ModLists_PreviewToolTip => LocalizationService.Get("ModLists_PreviewToolTip");
     internal static string ModLists_Apply => LocalizationService.Get("ModLists_Apply");
     internal static string ModLists_ApplyToolTip => LocalizationService.Get("ModLists_ApplyToolTip");
@@ -1115,6 +1116,9 @@ internal static class Strings
     internal static string Installed_TargetClientServer => LocalizationService.Get("Installed_TargetClientServer");
     internal static string Installed_TargetPatcherServer => LocalizationService.Get("Installed_TargetPatcherServer");
     internal static string Installed_TargetClientPatcherServer => LocalizationService.Get("Installed_TargetClientPatcherServer");
+    internal static string Installed_SideServer => LocalizationService.Get("Installed_SideServer");
+    internal static string Installed_SideClient => LocalizationService.Get("Installed_SideClient");
+    internal static string Installed_SidePatcher => LocalizationService.Get("Installed_SidePatcher");
     internal static string Installed_LatestAddonUnlisted => LocalizationService.Get("Installed_LatestAddonUnlisted");
     internal static string Installed_LatestPatcherNotListed => LocalizationService.Get("Installed_LatestPatcherNotListed");
     internal static string Installed_LatestNotFound => LocalizationService.Get("Installed_LatestNotFound");
@@ -3473,6 +3477,9 @@ internal static class Strings
     internal static string CardLayout_NewName => LocalizationService.Get("CardLayout_NewName");
     internal static string CardLayout_PickerToolTip => LocalizationService.Get("CardLayout_PickerToolTip");
     internal static string CardLayout_Edit => LocalizationService.Get("CardLayout_Edit");
+    internal static string CardLayout_MakeDefault => LocalizationService.Get("CardLayout_MakeDefault");
+    internal static string CardLayout_MakeDefaultToolTip => LocalizationService.Get("CardLayout_MakeDefaultToolTip");
+    internal static string CardLayout_MadeDefaultFormat => LocalizationService.Get("CardLayout_MadeDefaultFormat");
     internal static string CardLayout_EditorTitleInstalled => LocalizationService.Get("CardLayout_EditorTitleInstalled");
     internal static string CardLayout_EditorTitleBrowse => LocalizationService.Get("CardLayout_EditorTitleBrowse");
     internal static string CardLayout_LayoutsHeader => LocalizationService.Get("CardLayout_LayoutsHeader");

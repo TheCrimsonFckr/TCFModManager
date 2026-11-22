@@ -554,6 +554,9 @@ A mod list records which mods to install and enable. Applying one downloads what
   <data name="ModLists_Preview" xml:space="preserve">
     <value>Preview</value>
   </data>
+  <data name="ModLists_PreviewToApply" xml:space="preserve">
+    <value>Preview to apply</value>
+  </data>
   <data name="ModLists_PreviewToolTip" xml:space="preserve">
     <value>Work out what applying this list would do. Nothing moves and nothing downloads.</value>
   </data>
@@ -606,7 +609,7 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Put mods on this list - ones you have installed, or ones from sp-mod.com you haven't. Nothing is downloaded.</value>
   </data>
   <data name="ModLists_RefreshVersions" xml:space="preserve">
-    <value>Refresh versions</value>
+    <value>Refresh this list</value>
   </data>
   <data name="ModLists_RefreshVersionsToolTip" xml:space="preserve">
     <value>Reads the version of every mod on this list that is installed here, and updates the list to match. Scope is left alone, and mods you don't have are left as written. Nothing is downloaded or installed - Save keeps the changes.</value>
@@ -615,16 +618,16 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Puts the version installed here on the list, for the mods that are newer here only. Mods the list wants updated stay as written. Nothing is downloaded - Save keeps the changes.</value>
   </data>
   <data name="ModLists_ListBehind_one" xml:space="preserve">
-    <value>1 mod is newer here than on this list, so the list is behind. Apply leaves it as it is. Refresh versions puts the newer version on the list - then Save.</value>
+    <value>1 mod is newer here than on this list, so the list is behind. Apply leaves it as it is. Refresh this list puts the newer version on the list - then Save.</value>
   </data>
   <data name="ModLists_ListBehind_other" xml:space="preserve">
-    <value>{0} mods are newer here than on this list, so the list is behind. Apply leaves them as they are. Refresh versions puts the newer versions on the list - then Save.</value>
+    <value>{0} mods are newer here than on this list, so the list is behind. Apply leaves them as they are. Refresh this list puts the newer versions on the list - then Save.</value>
   </data>
   <data name="ModLists_ListBehindPublished_one" xml:space="preserve">
-    <value>1 mod is newer here than on this list, so the list is behind. Apply leaves it as it is. Refresh versions puts the newer version on the list - then Save and publish again.</value>
+    <value>1 mod is newer here than on this list, so the list is behind. Apply leaves it as it is. Refresh this list puts the newer version on the list - then Save and publish again.</value>
   </data>
   <data name="ModLists_ListBehindPublished_other" xml:space="preserve">
-    <value>{0} mods are newer here than on this list, so the list is behind. Apply leaves them as they are. Refresh versions puts the newer versions on the list - then Save and publish again.</value>
+    <value>{0} mods are newer here than on this list, so the list is behind. Apply leaves them as they are. Refresh this list puts the newer versions on the list - then Save and publish again.</value>
   </data>
   <data name="ModLists_SaveToolTip" xml:space="preserve">
     <value>Write these changes to the list. Nothing is installed, enabled or disabled - Apply does that.</value>
@@ -3897,6 +3900,15 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
   </data>
   <data name="Installed_TargetClientPatcherServer" xml:space="preserve">
     <value>Client + Patcher + Server</value>
+  </data>
+  <data name="Installed_SideServer" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="Installed_SideClient" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="Installed_SidePatcher" xml:space="preserve">
+    <value>Patcher</value>
   </data>
   <data name="Installed_LatestAddonUnlisted" xml:space="preserve">
     <value>unknown - this addon is no longer listed on sp-mod.com</value>
@@ -12721,6 +12733,16 @@ Right-click to save the current filters to it, rename it or delete it.</value>
   </data>
   <data name="CardLayout_Edit" xml:space="preserve">
     <value>Edit card layouts</value>
+  </data>
+  <data name="CardLayout_MakeDefault" xml:space="preserve">
+    <value>Make this my default</value>
+  </data>
+  <data name="CardLayout_MakeDefaultToolTip" xml:space="preserve">
+    <value>Opens this page with the chosen layout from now on. Your other saved filters stay as they are.</value>
+  </data>
+  <data name="CardLayout_MadeDefaultFormat" xml:space="preserve">
+    <value>Saved. This page will open with the "{0}" layout from now on.</value>
+    <comment>{0} is the layout's name.</comment>
   </data>
   <data name="CardLayout_EditorTitleInstalled" xml:space="preserve">
     <value>Card layouts - Installed</value>

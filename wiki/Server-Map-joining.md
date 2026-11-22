@@ -89,7 +89,7 @@ your own card on the Server map page. It opens the server's list with the previe
 Or by hand, like any other list:
 
 1. **Mod lists** → select the server's list under **Following**.
-2. **Preview** to see exactly what would change.
+2. **Preview to apply** (**Check again** on a list you follow) to see exactly what would change.
 3. **Apply** to queue the downloads.
 
 The preview shows coloured counts at the top - *1 missing*, *2 incorrect versions*, *1 disabled*,

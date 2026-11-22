@@ -2109,6 +2109,15 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="Installed_TargetClientPatcherServer" xml:space="preserve">
     <value>Client + Patcher + Server</value>
   </data>
+  <data name="Installed_SideServer" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="Installed_SideClient" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="Installed_SidePatcher" xml:space="preserve">
+    <value>Patcher</value>
+  </data>
   <data name="Installed_TargetClientServer" xml:space="preserve">
     <value>Client + Server</value>
   </data>
@@ -2921,6 +2930,9 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="ModLists_Preview" xml:space="preserve">
     <value>Vorschau</value>
   </data>
+  <data name="ModLists_PreviewToApply" xml:space="preserve">
+    <value>Vorschau zum Anwenden</value>
+  </data>
   <data name="ModLists_PreviewedFormat" xml:space="preserve">
     <value>Vorschau für "{0}".</value>
   </data>
@@ -2997,7 +3009,7 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
     <value>Fragt diese Liste erneut beim Server ab, auch wenn sich ihre Revision nicht bewegt hat - genau so sieht es von hier aus, wenn ein Betreiber die Liste, die er bereitstellt, bearbeitet und neu veröffentlicht. Es wird nichts installiert oder aktiviert; das Anwenden bleibt ein eigener Schritt.</value>
   </data>
   <data name="ModLists_RefreshVersions" xml:space="preserve">
-    <value>Versionen neu laden</value>
+    <value>Diese Liste neu laden</value>
   </data>
   <data name="ModLists_RefreshVersionsToolTip" xml:space="preserve">
     <value>Liest von jedem Mod auf dieser Liste, der hier installiert ist, die Version und passt die Liste daran an. Der Geltungsbereich bleibt unangetastet, und Mods, die du nicht hast, bleiben so stehen, wie sie geschrieben sind. Es wird nichts heruntergeladen oder installiert - Speichern behält die Änderungen.</value>
@@ -3006,16 +3018,16 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
     <value>Übernimmt die hier installierte Version in die Liste, nur für die Mods, die hier neuer sind. Mods, die die Liste aktualisiert haben will, bleiben wie geschrieben. Es wird nichts heruntergeladen - Speichern behält die Änderungen.</value>
   </data>
   <data name="ModLists_ListBehind_one" xml:space="preserve">
-    <value>1 Mod ist hier neuer als auf dieser Liste, die Liste ist also veraltet. Anwenden lässt ihn, wie er ist. Versionen neu laden übernimmt die neuere Version in die Liste - dann Speichern.</value>
+    <value>1 Mod ist hier neuer als auf dieser Liste, die Liste ist also veraltet. Anwenden lässt ihn, wie er ist. Diese Liste neu laden übernimmt die neuere Version in die Liste - dann Speichern.</value>
   </data>
   <data name="ModLists_ListBehind_other" xml:space="preserve">
-    <value>{0} Mods sind hier neuer als auf dieser Liste, die Liste ist also veraltet. Anwenden lässt sie, wie sie sind. Versionen neu laden übernimmt die neueren Versionen in die Liste - dann Speichern.</value>
+    <value>{0} Mods sind hier neuer als auf dieser Liste, die Liste ist also veraltet. Anwenden lässt sie, wie sie sind. Diese Liste neu laden übernimmt die neueren Versionen in die Liste - dann Speichern.</value>
   </data>
   <data name="ModLists_ListBehindPublished_one" xml:space="preserve">
-    <value>1 Mod ist hier neuer als auf dieser Liste, die Liste ist also veraltet. Anwenden lässt ihn, wie er ist. Versionen neu laden übernimmt die neuere Version in die Liste - dann Speichern und erneut veröffentlichen.</value>
+    <value>1 Mod ist hier neuer als auf dieser Liste, die Liste ist also veraltet. Anwenden lässt ihn, wie er ist. Diese Liste neu laden übernimmt die neuere Version in die Liste - dann Speichern und erneut veröffentlichen.</value>
   </data>
   <data name="ModLists_ListBehindPublished_other" xml:space="preserve">
-    <value>{0} Mods sind hier neuer als auf dieser Liste, die Liste ist also veraltet. Anwenden lässt sie, wie sie sind. Versionen neu laden übernimmt die neueren Versionen in die Liste - dann Speichern und erneut veröffentlichen.</value>
+    <value>{0} Mods sind hier neuer als auf dieser Liste, die Liste ist also veraltet. Anwenden lässt sie, wie sie sind. Diese Liste neu laden übernimmt die neueren Versionen in die Liste - dann Speichern und erneut veröffentlichen.</value>
   </data>
   <data name="ModLists_RemovedEntryFormat" xml:space="preserve">
     <value>"{0}" von "{1}" heruntergenommen. Speichern schreibt das in die Liste - der Mod bleibt so oder so installiert und aktiviert.</value>
@@ -10396,6 +10408,15 @@ Die Details stehen im Log:
   </data>
   <data name="CardLayout_Edit" xml:space="preserve">
     <value>Kartenlayouts bearbeiten</value>
+  </data>
+  <data name="CardLayout_MakeDefault" xml:space="preserve">
+    <value>Als meinen Standard festlegen</value>
+  </data>
+  <data name="CardLayout_MakeDefaultToolTip" xml:space="preserve">
+    <value>Diese Seite öffnet ab jetzt mit dem gewählten Layout. Deine anderen gespeicherten Filter bleiben, wie sie sind.</value>
+  </data>
+  <data name="CardLayout_MadeDefaultFormat" xml:space="preserve">
+    <value>Gespeichert. Diese Seite öffnet ab jetzt mit dem Layout „{0}“.</value>
   </data>
   <data name="CardLayout_EditorTitleInstalled" xml:space="preserve">
     <value>Kartenlayouts - Installiert</value>

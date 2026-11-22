@@ -275,7 +275,7 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Installed_CardLayouts_Step2, () => Strings.CardLayout_Edit, () => Strings.CardLayout_New),
                 Step(() => Strings.Help_Installed_CardLayouts_Step3,
                     () => Strings.CardLayout_SizeHeader, () => Strings.CardLayout_WidthHeader, () => Strings.CardLayout_PictureHeader),
-                Step(() => Strings.Help_Installed_CardLayouts_Step4, () => Strings.CardLayout_Use, () => Strings.Common_SaveAsDefault))
+                Step(() => Strings.Help_Installed_CardLayouts_Step4, () => Strings.CardLayout_Use, () => Strings.CardLayout_MakeDefault))
                 .WithNote(() => Strings.Help_Installed_CardLayouts_Note, () => Strings.CardLayout_Default)
                 .WithKeywords(() => Strings.Help_Installed_CardLayouts_Keywords)
                 .WithPage(typeof(InstalledPage)),
@@ -407,7 +407,7 @@ internal static class HelpCatalog
             Topic("modlists.apply", () => Strings.Help_ModLists_Apply_Title,
                 Step(() => Strings.Help_ModLists_Apply_Step1,
                     () => Strings.Nav_ModLists, () => Strings.ModLists_SavedHeader),
-                Step(() => Strings.Help_ModLists_Apply_Step2, () => Strings.ModLists_Preview),
+                Step(() => Strings.Help_ModLists_Apply_Step2, () => Strings.ModLists_PreviewToApply),
                 Step(() => Strings.Help_ModLists_Apply_Step3, () => Strings.ModLists_Apply))
                 .WithNote(ByMode(() => Strings.Help_ModLists_Apply_Note, () => Strings.Help_ModLists_Apply_Note_Monitor))
                 .WithKeywords(() => Strings.Help_ModLists_Apply_Keywords),
@@ -433,7 +433,7 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_ModLists_Share_Step2,
                     () => Strings.ModLists_ImportFile, () => Strings.Nav_ModLists),
                 Step(() => Strings.Help_ModLists_Share_Step3,
-                    () => Strings.ModLists_Preview, () => Strings.ModLists_Apply))
+                    () => Strings.ModLists_PreviewToApply, () => Strings.ModLists_Apply))
                 .WithNote(() => Strings.Help_ModLists_Share_Note)
                 .WithKeywords(() => Strings.Help_ModLists_Share_Keywords),
 
@@ -444,7 +444,7 @@ internal static class HelpCatalog
                     () => Strings.SpModImport_Read, () => Strings.SpModImport_FindLists),
                 Step(() => Strings.Help_ModLists_SpMod_Step3, () => Strings.SpModImport_Create),
                 Step(() => Strings.Help_ModLists_SpMod_Step4,
-                    () => Strings.ModLists_Preview, () => Strings.ModLists_Apply))
+                    () => Strings.ModLists_PreviewToApply, () => Strings.ModLists_Apply))
                 .WithNote(() => Strings.Help_ModLists_SpMod_Note,
                     () => LocalizationService.Text(Strings.SpModImport_UseVersionsForFormat, "…"),
                     () => Strings.ModLists_RefreshFromSpMod)

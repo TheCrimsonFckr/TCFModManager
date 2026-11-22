@@ -57,7 +57,7 @@ public static class CardLayoutFields
     [
         new(Note, CardFieldKind.Block, nameof(Strings.CardField_Note), o => I(o)?.Note),
         new(Version, CardFieldKind.Line, nameof(Strings.CardField_Version), o => I(o)?.InstalledVersion ?? Strings.Common_Unknown),
-        new(Sides, CardFieldKind.Inline, nameof(Strings.CardField_Sides), o => I(o)?.TargetSummary),
+        new(Sides, CardFieldKind.Chip, nameof(Strings.CardField_Sides)),
         new(Author, CardFieldKind.Line, nameof(Strings.CardField_Author), o => I(o)?.Author ?? Strings.Common_Unknown, IsAuthorLink: true),
         new(AddonParent, CardFieldKind.Block, nameof(Strings.CardField_AddonParent), o => I(o)?.AddonSubtitle),
         new(ModLists, CardFieldKind.Block, nameof(Strings.CardField_ModLists)),

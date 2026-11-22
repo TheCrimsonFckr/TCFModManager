@@ -2109,6 +2109,15 @@ Voir Dépendances et conflits.</value>
   <data name="Installed_TargetClientPatcherServer" xml:space="preserve">
     <value>Client + Patcher + Serveur</value>
   </data>
+  <data name="Installed_SideServer" xml:space="preserve">
+    <value>Serveur</value>
+  </data>
+  <data name="Installed_SideClient" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="Installed_SidePatcher" xml:space="preserve">
+    <value>Patcher</value>
+  </data>
   <data name="Installed_TargetClientServer" xml:space="preserve">
     <value>Client + Serveur</value>
   </data>
@@ -2921,6 +2930,9 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   <data name="ModLists_Preview" xml:space="preserve">
     <value>Aperçu</value>
   </data>
+  <data name="ModLists_PreviewToApply" xml:space="preserve">
+    <value>Aperçu avant d'appliquer</value>
+  </data>
   <data name="ModLists_PreviewedFormat" xml:space="preserve">
     <value>Aperçu de « {0} ».</value>
   </data>
@@ -2997,7 +3009,7 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
     <value>Redemande cette liste au serveur, même si sa révision n'a pas bougé - ce à quoi ressemble, vu d'ici, un opérateur qui modifie et republie la liste qu'il diffuse. Rien n'est installé ni activé ; l'appliquer reste une étape distincte.</value>
   </data>
   <data name="ModLists_RefreshVersions" xml:space="preserve">
-    <value>Actualiser les versions</value>
+    <value>Actualiser cette liste</value>
   </data>
   <data name="ModLists_RefreshVersionsToolTip" xml:space="preserve">
     <value>Lit la version de chaque mod de cette liste installé ici, et met la liste à jour en conséquence. La portée n'est pas touchée, et les mods que vous n'avez pas restent tels quels. Rien n'est téléchargé ni installé - Enregistrer conserve les modifications.</value>
@@ -3006,16 +3018,16 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
     <value>Met sur la liste la version installée ici, uniquement pour les mods plus récents ici. Les mods que la liste veut mettre à jour restent tels quels. Rien n'est téléchargé - Enregistrer conserve les modifications.</value>
   </data>
   <data name="ModLists_ListBehind_one" xml:space="preserve">
-    <value>{0} mod est plus récent ici que sur cette liste : la liste est en retard. Appliquer le laisse tel quel. Actualiser les versions met la version plus récente sur la liste - puis Enregistrer.</value>
+    <value>{0} mod est plus récent ici que sur cette liste : la liste est en retard. Appliquer le laisse tel quel. Actualiser cette liste met la version plus récente sur la liste - puis Enregistrer.</value>
   </data>
   <data name="ModLists_ListBehind_other" xml:space="preserve">
-    <value>{0} mods sont plus récents ici que sur cette liste : la liste est en retard. Appliquer les laisse tels quels. Actualiser les versions met les versions plus récentes sur la liste - puis Enregistrer.</value>
+    <value>{0} mods sont plus récents ici que sur cette liste : la liste est en retard. Appliquer les laisse tels quels. Actualiser cette liste met les versions plus récentes sur la liste - puis Enregistrer.</value>
   </data>
   <data name="ModLists_ListBehindPublished_one" xml:space="preserve">
-    <value>{0} mod est plus récent ici que sur cette liste : la liste est en retard. Appliquer le laisse tel quel. Actualiser les versions met la version plus récente sur la liste - puis Enregistrer et publier à nouveau.</value>
+    <value>{0} mod est plus récent ici que sur cette liste : la liste est en retard. Appliquer le laisse tel quel. Actualiser cette liste met la version plus récente sur la liste - puis Enregistrer et publier à nouveau.</value>
   </data>
   <data name="ModLists_ListBehindPublished_other" xml:space="preserve">
-    <value>{0} mods sont plus récents ici que sur cette liste : la liste est en retard. Appliquer les laisse tels quels. Actualiser les versions met les versions plus récentes sur la liste - puis Enregistrer et publier à nouveau.</value>
+    <value>{0} mods sont plus récents ici que sur cette liste : la liste est en retard. Appliquer les laisse tels quels. Actualiser cette liste met les versions plus récentes sur la liste - puis Enregistrer et publier à nouveau.</value>
   </data>
   <data name="ModLists_RemovedEntryFormat" xml:space="preserve">
     <value>« {0} » retiré de « {1} ». Cliquez sur Enregistrer pour l'inscrire dans la liste - dans tous les cas, le mod reste installé et activé.</value>
@@ -10396,6 +10408,15 @@ Les détails sont dans le journal :
   </data>
   <data name="CardLayout_Edit" xml:space="preserve">
     <value>Modifier les dispositions des cartes</value>
+  </data>
+  <data name="CardLayout_MakeDefault" xml:space="preserve">
+    <value>Utiliser par défaut</value>
+  </data>
+  <data name="CardLayout_MakeDefaultToolTip" xml:space="preserve">
+    <value>Cette page s'ouvrira désormais avec la disposition choisie. Vos autres filtres enregistrés restent tels quels.</value>
+  </data>
+  <data name="CardLayout_MadeDefaultFormat" xml:space="preserve">
+    <value>Enregistré. Cette page s'ouvrira désormais avec la disposition « {0} ».</value>
   </data>
   <data name="CardLayout_EditorTitleInstalled" xml:space="preserve">
     <value>Dispositions des cartes - Installés</value>

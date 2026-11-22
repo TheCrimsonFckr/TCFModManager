@@ -39,7 +39,7 @@ To see your addons together: **Show only - Has installed addons** lists every mo
 > [!NOTE]
 > Installing an addon from its mod's dialog won't drag the mod in behind it - install the mod first, then its addon. Anything else the addon needs is offered the usual way, on the Downloads page.
 >
-> A mod list is different: **Preview** offers the mod of any addon on the list that the list doesn't name, under **Also needed**, at the newest version every listed addon accepts. And if a list pins an addon at a version that won't fit the version of its mod the list leaves you with, applying asks whether to take the newest one that does instead.
+> A mod list is different: **Preview to apply** offers the mod of any addon on the list that the list doesn't name, under **Also needed**, at the newest version every listed addon accepts. And if a list pins an addon at a version that won't fit the version of its mod the list leaves you with, applying asks whether to take the newest one that does instead.
 
 > [!WARNING]
 > A mod list containing an addon needs this version of the app or newer to open. Sharing one with someone on an older build will tell them the file is too new - send them a list without addons, or ask them to update. Lists with no addons in them are unaffected.

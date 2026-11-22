@@ -2109,6 +2109,15 @@ Vedi Dipendenze e conflitti.</value>
   <data name="Installed_TargetClientPatcherServer" xml:space="preserve">
     <value>Client + patcher + server</value>
   </data>
+  <data name="Installed_SideServer" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="Installed_SideClient" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="Installed_SidePatcher" xml:space="preserve">
+    <value>Patcher</value>
+  </data>
   <data name="Installed_TargetClientServer" xml:space="preserve">
     <value>Client + server</value>
   </data>
@@ -2921,6 +2930,9 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
   <data name="ModLists_Preview" xml:space="preserve">
     <value>Anteprima</value>
   </data>
+  <data name="ModLists_PreviewToApply" xml:space="preserve">
+    <value>Anteprima per applicare</value>
+  </data>
   <data name="ModLists_PreviewedFormat" xml:space="preserve">
     <value>Anteprima di "{0}".</value>
   </data>
@@ -2997,7 +3009,7 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
     <value>Richiede di nuovo questa lista al server, anche se la sua revisione non è cambiata - da qui è così che appare un operatore che modifica e ripubblica la lista che distribuisce. Niente viene installato o attivato; applicarla resta un passaggio a parte.</value>
   </data>
   <data name="ModLists_RefreshVersions" xml:space="preserve">
-    <value>Ricarica versioni</value>
+    <value>Ricarica questa lista</value>
   </data>
   <data name="ModLists_RefreshVersionsToolTip" xml:space="preserve">
     <value>Legge la versione di ogni mod di questa lista che è installato qui e aggiorna la lista di conseguenza. L'ambito resta invariato e i mod che non hai restano come sono scritti. Niente viene scaricato o installato - Salva conserva le modifiche.</value>
@@ -3006,16 +3018,16 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
     <value>Mette nella lista la versione installata qui, solo per i mod più recenti qui. I mod che la lista vuole aggiornare restano come sono scritti. Niente viene scaricato - Salva conserva le modifiche.</value>
   </data>
   <data name="ModLists_ListBehind_one" xml:space="preserve">
-    <value>Un mod è più recente qui che in questa lista, quindi la lista è indietro. Applica lo lascia com'è. Ricarica versioni mette la versione più recente nella lista - poi Salva.</value>
+    <value>Un mod è più recente qui che in questa lista, quindi la lista è indietro. Applica lo lascia com'è. Ricarica questa lista mette la versione più recente nella lista - poi Salva.</value>
   </data>
   <data name="ModLists_ListBehind_other" xml:space="preserve">
-    <value>{0} mod sono più recenti qui che in questa lista, quindi la lista è indietro. Applica li lascia come sono. Ricarica versioni mette le versioni più recenti nella lista - poi Salva.</value>
+    <value>{0} mod sono più recenti qui che in questa lista, quindi la lista è indietro. Applica li lascia come sono. Ricarica questa lista mette le versioni più recenti nella lista - poi Salva.</value>
   </data>
   <data name="ModLists_ListBehindPublished_one" xml:space="preserve">
-    <value>Un mod è più recente qui che in questa lista, quindi la lista è indietro. Applica lo lascia com'è. Ricarica versioni mette la versione più recente nella lista - poi Salva e pubblica di nuovo.</value>
+    <value>Un mod è più recente qui che in questa lista, quindi la lista è indietro. Applica lo lascia com'è. Ricarica questa lista mette la versione più recente nella lista - poi Salva e pubblica di nuovo.</value>
   </data>
   <data name="ModLists_ListBehindPublished_other" xml:space="preserve">
-    <value>{0} mod sono più recenti qui che in questa lista, quindi la lista è indietro. Applica li lascia come sono. Ricarica versioni mette le versioni più recenti nella lista - poi Salva e pubblica di nuovo.</value>
+    <value>{0} mod sono più recenti qui che in questa lista, quindi la lista è indietro. Applica li lascia come sono. Ricarica questa lista mette le versioni più recenti nella lista - poi Salva e pubblica di nuovo.</value>
   </data>
   <data name="ModLists_RemovedEntryFormat" xml:space="preserve">
     <value>"{0}" tolto da "{1}". Salva per scriverlo nella lista - in ogni caso il mod resta installato e attivo.</value>
@@ -10396,6 +10408,15 @@ I dettagli sono nel log:
   </data>
   <data name="CardLayout_Edit" xml:space="preserve">
     <value>Modifica layout delle schede</value>
+  </data>
+  <data name="CardLayout_MakeDefault" xml:space="preserve">
+    <value>Imposta come predefinito</value>
+  </data>
+  <data name="CardLayout_MakeDefaultToolTip" xml:space="preserve">
+    <value>D'ora in poi questa pagina si apre con il layout scelto. Gli altri filtri salvati restano come sono.</value>
+  </data>
+  <data name="CardLayout_MadeDefaultFormat" xml:space="preserve">
+    <value>Salvato. D'ora in poi questa pagina si aprirà con il layout "{0}".</value>
   </data>
   <data name="CardLayout_EditorTitleInstalled" xml:space="preserve">
     <value>Layout delle schede - Installate</value>

@@ -75,6 +75,36 @@
             Visibility="{Binding Note, Converter={StaticResource CardNullToCollapsed}}" />
     </DataTemplate>
 
+    <Style x:Key="SideChip" TargetType="Border">
+        <Setter Property="Margin" Value="0,0,4,0" />
+        <Setter Property="Padding" Value="8,2" />
+        <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+        <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundChecked}" />
+    </Style>
+
+    <Style x:Key="SideChipText" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{DynamicResource CardChipFontSize}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+
+    <DataTemplate x:Key="CardField.Installed.Sides" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+        <StackPanel Margin="0,0,2,0" Orientation="Horizontal" Background="Transparent" ToolTip="{Binding TargetSummary}">
+            <Border Style="{StaticResource SideChip}" Visibility="{Binding HasServer, Converter={StaticResource CardBoolToVis}}">
+                <TextBlock Style="{StaticResource SideChipText}" Text="{loc:Str Installed_SideServer}" />
+            </Border>
+            <Border Style="{StaticResource SideChip}" Visibility="{Binding HasPlugin, Converter={StaticResource CardBoolToVis}}">
+                <TextBlock Style="{StaticResource SideChipText}" Text="{loc:Str Installed_SideClient}" />
+            </Border>
+            <Border Style="{StaticResource SideChip}" Visibility="{Binding HasPatcher, Converter={StaticResource CardBoolToVis}}">
+                <TextBlock Style="{StaticResource SideChipText}" Text="{loc:Str Installed_SidePatcher}" />
+            </Border>
+            <Border Margin="0,0,4,0" Style="{StaticResource ModChip}" Visibility="{Binding HasNoSide, Converter={StaticResource CardBoolToVis}}">
+                <TextBlock Style="{StaticResource ModChipText}" Text="{Binding TargetSummary}" />
+            </Border>
+        </StackPanel>
+    </DataTemplate>
+
     <DataTemplate x:Key="CardField.Installed.AddonParent" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
         <Border
             Margin="0,0,6,0"

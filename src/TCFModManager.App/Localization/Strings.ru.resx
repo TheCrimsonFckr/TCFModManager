@@ -2220,6 +2220,15 @@
   <data name="Installed_TargetClientPatcherServer" xml:space="preserve">
     <value>Клиент, патчер и сервер</value>
   </data>
+  <data name="Installed_SideServer" xml:space="preserve">
+    <value>Сервер</value>
+  </data>
+  <data name="Installed_SideClient" xml:space="preserve">
+    <value>Клиент</value>
+  </data>
+  <data name="Installed_SidePatcher" xml:space="preserve">
+    <value>Патчер</value>
+  </data>
   <data name="Installed_TargetClientServer" xml:space="preserve">
     <value>Клиент и сервер</value>
   </data>
@@ -3068,6 +3077,9 @@
   <data name="ModLists_Preview" xml:space="preserve">
     <value>Предпросмотр</value>
   </data>
+  <data name="ModLists_PreviewToApply" xml:space="preserve">
+    <value>Предпросмотр перед применением</value>
+  </data>
   <data name="ModLists_PreviewedFormat" xml:space="preserve">
     <value>Предпросмотр «{0}».</value>
   </data>
@@ -3147,7 +3159,7 @@
     <value>Запрашивает этот список у сервера заново, даже если его ревизия не изменилась, - именно так отсюда выглядит правка и повторная публикация списка на стороне оператора. Ничего не устанавливается и не включается; применение остаётся отдельным шагом.</value>
   </data>
   <data name="ModLists_RefreshVersions" xml:space="preserve">
-    <value>Перезагрузить версии</value>
+    <value>Перезагрузить этот список</value>
   </data>
   <data name="ModLists_RefreshVersionsToolTip" xml:space="preserve">
     <value>Считывает версию каждого мода из этого списка, установленного здесь, и приводит список в соответствие. Область применения не трогается, а моды, которых у вас нет, остаются как записаны. Ничего не скачивается и не устанавливается - изменения сохраняет Сохранить.</value>
@@ -3156,22 +3168,22 @@
     <value>Записывает в список версию, установленную здесь, только для модов, которые здесь новее. Моды, которые список хочет обновить, остаются как записаны. Ничего не скачивается - изменения сохраняет Сохранить.</value>
   </data>
   <data name="ModLists_ListBehind_one" xml:space="preserve">
-    <value>{0} мод здесь новее, чем в этом списке, - список отстаёт. Применить оставит его как есть. Перезагрузить версии запишет новую версию в список - затем Сохранить.</value>
+    <value>{0} мод здесь новее, чем в этом списке, - список отстаёт. Применить оставит его как есть. Перезагрузить этот список запишет новую версию в список - затем Сохранить.</value>
   </data>
   <data name="ModLists_ListBehind_few" xml:space="preserve">
-    <value>{0} мода здесь новее, чем в этом списке, - список отстаёт. Применить оставит их как есть. Перезагрузить версии запишет новые версии в список - затем Сохранить.</value>
+    <value>{0} мода здесь новее, чем в этом списке, - список отстаёт. Применить оставит их как есть. Перезагрузить этот список запишет новые версии в список - затем Сохранить.</value>
   </data>
   <data name="ModLists_ListBehind_many" xml:space="preserve">
-    <value>{0} модов здесь новее, чем в этом списке, - список отстаёт. Применить оставит их как есть. Перезагрузить версии запишет новые версии в список - затем Сохранить.</value>
+    <value>{0} модов здесь новее, чем в этом списке, - список отстаёт. Применить оставит их как есть. Перезагрузить этот список запишет новые версии в список - затем Сохранить.</value>
   </data>
   <data name="ModLists_ListBehindPublished_one" xml:space="preserve">
-    <value>{0} мод здесь новее, чем в этом списке, - список отстаёт. Применить оставит его как есть. Перезагрузить версии запишет новую версию в список - затем Сохранить и опубликовать снова.</value>
+    <value>{0} мод здесь новее, чем в этом списке, - список отстаёт. Применить оставит его как есть. Перезагрузить этот список запишет новую версию в список - затем Сохранить и опубликовать снова.</value>
   </data>
   <data name="ModLists_ListBehindPublished_few" xml:space="preserve">
-    <value>{0} мода здесь новее, чем в этом списке, - список отстаёт. Применить оставит их как есть. Перезагрузить версии запишет новые версии в список - затем Сохранить и опубликовать снова.</value>
+    <value>{0} мода здесь новее, чем в этом списке, - список отстаёт. Применить оставит их как есть. Перезагрузить этот список запишет новые версии в список - затем Сохранить и опубликовать снова.</value>
   </data>
   <data name="ModLists_ListBehindPublished_many" xml:space="preserve">
-    <value>{0} модов здесь новее, чем в этом списке, - список отстаёт. Применить оставит их как есть. Перезагрузить версии запишет новые версии в список - затем Сохранить и опубликовать снова.</value>
+    <value>{0} модов здесь новее, чем в этом списке, - список отстаёт. Применить оставит их как есть. Перезагрузить этот список запишет новые версии в список - затем Сохранить и опубликовать снова.</value>
   </data>
   <data name="ModLists_RemovedEntryFormat" xml:space="preserve">
     <value>«{0}» убран из «{1}». Сохраните, чтобы записать это в список - мод в любом случае остаётся установленным и включённым.</value>
@@ -10819,6 +10831,15 @@
   </data>
   <data name="CardLayout_Edit" xml:space="preserve">
     <value>Изменить макеты карточек</value>
+  </data>
+  <data name="CardLayout_MakeDefault" xml:space="preserve">
+    <value>Сделать по умолчанию</value>
+  </data>
+  <data name="CardLayout_MakeDefaultToolTip" xml:space="preserve">
+    <value>Теперь эта страница будет открываться с выбранным макетом. Остальные сохранённые фильтры не меняются.</value>
+  </data>
+  <data name="CardLayout_MadeDefaultFormat" xml:space="preserve">
+    <value>Сохранено. Теперь эта страница будет открываться с макетом «{0}».</value>
   </data>
   <data name="CardLayout_EditorTitleInstalled" xml:space="preserve">
     <value>Макеты карточек - Установленные</value>
