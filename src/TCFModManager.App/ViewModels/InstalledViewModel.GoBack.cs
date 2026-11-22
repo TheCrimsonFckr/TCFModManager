@@ -55,6 +55,8 @@ public partial class InstalledViewModel
             return;
         }
 
+        if (!await SptInUsePrompt.ClearAsync(installPath, ModInstallAction.Undo)) return;
+
         var title = mod.DisplayTitle;
         if (AskWindow.Show(new AskRequest
             {
