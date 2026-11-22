@@ -4132,6 +4132,18 @@ Une liste de mods enregistre les mods à installer et à activer. En appliquer u
   <data name="Play_StopServerConfirm" xml:space="preserve">
     <value>Arrêter le serveur</value>
   </data>
+  <data name="SptInUse_StopTitle" xml:space="preserve">
+    <value>Arrêter d'abord le serveur ?</value>
+  </data>
+  <data name="SptInUse_StopButton" xml:space="preserve">
+    <value>Arrêter le serveur et continuer</value>
+  </data>
+  <data name="SptInUse_GameTitle" xml:space="preserve">
+    <value>Fermez d'abord le jeu</value>
+  </data>
+  <data name="SptInUse_NotStoppedTitle" xml:space="preserve">
+    <value>Le serveur tourne toujours</value>
+  </data>
   <data name="Play_RoleHeadless" xml:space="preserve">
     <value>Configuré comme headless dédié : une liste de mods servie par un serveur arrive sans les mods utiles au seul joueur.</value>
   </data>
@@ -6897,6 +6909,9 @@ Voir Dépendances et conflits.</value>
   </data>
   <data name="ModLists_ApplyBlockedServer" xml:space="preserve">
     <value>Arrêtez le serveur SPT pour appliquer cette liste - avec Arrêter sur la page Serveur ou en fermant sa fenêtre de console. Les mods ne peuvent pas être modifiés tant que le serveur tourne - Appliquer redevient disponible dès qu'il est arrêté.</value>
+  </data>
+  <data name="ModLists_InstallsWaitForSpt" xml:space="preserve">
+    <value>SPT est en cours d'exécution depuis cette installation, les installations attendent donc sur la page Téléchargements qu'il soit fermé.</value>
   </data>
   <data name="ModLists_ApplyBlockedBoth" xml:space="preserve">
     <value>Fermez le jeu et arrêtez le serveur SPT pour appliquer cette liste. Les mods ne peuvent pas être modifiés tant que l'un des deux tourne - Appliquer redevient disponible dès que les deux sont fermés.</value>

@@ -72,6 +72,8 @@ public partial class ModListsViewModel
             if (!offer.IsEmpty && !ProfileItemsWarning.Confirm(offer, Strings.ProfileItems_ApplyAnyway)) return;
         }
 
+        if (await Task.Run(() => InstallsWaitForSpt(preview))) StatusMessage = Strings.ModLists_InstallsWaitForSpt;
+
         await RunAsync(async () =>
         {
             var result = await _service.ApplyAsync(preview, ModListPrompts.Default);

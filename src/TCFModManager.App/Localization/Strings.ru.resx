@@ -4303,6 +4303,18 @@
   <data name="Play_StopServerConfirm" xml:space="preserve">
     <value>Остановить сервер</value>
   </data>
+  <data name="SptInUse_StopTitle" xml:space="preserve">
+    <value>Сначала остановить сервер?</value>
+  </data>
+  <data name="SptInUse_StopButton" xml:space="preserve">
+    <value>Остановить сервер и продолжить</value>
+  </data>
+  <data name="SptInUse_GameTitle" xml:space="preserve">
+    <value>Сначала закройте игру</value>
+  </data>
+  <data name="SptInUse_NotStoppedTitle" xml:space="preserve">
+    <value>Сервер всё ещё работает</value>
+  </data>
   <data name="Play_RoleHeadless" xml:space="preserve">
     <value>Настроено как выделенный headless: список модов с сервера приходит без модов, которые нужны только игроку.</value>
   </data>
@@ -7236,6 +7248,9 @@
   </data>
   <data name="ModLists_ApplyBlockedServer" xml:space="preserve">
     <value>Остановите сервер SPT, чтобы применить этот список - кнопкой «Остановить» на странице «Сервер» или закрыв окно его консоли. Пока сервер работает, моды изменить нельзя - кнопка «Применить» станет доступна, как только он будет остановлен.</value>
+  </data>
+  <data name="ModLists_InstallsWaitForSpt" xml:space="preserve">
+    <value>SPT запущен из этой установки, поэтому установки ждут на странице загрузок, пока он не закроется.</value>
   </data>
   <data name="ModLists_ApplyBlockedBoth" xml:space="preserve">
     <value>Закройте игру и остановите сервер SPT, чтобы применить этот список. Пока хоть что-то из них запущено, моды изменить нельзя - кнопка «Применить» станет доступна, как только оба будут закрыты.</value>

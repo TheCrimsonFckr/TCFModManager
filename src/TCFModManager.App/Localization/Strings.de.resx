@@ -4132,6 +4132,18 @@ Eine Modliste hält fest, welche Mods installiert und aktiviert werden sollen. W
   <data name="Play_StopServerConfirm" xml:space="preserve">
     <value>Server stoppen</value>
   </data>
+  <data name="SptInUse_StopTitle" xml:space="preserve">
+    <value>Zuerst den Server stoppen?</value>
+  </data>
+  <data name="SptInUse_StopButton" xml:space="preserve">
+    <value>Server stoppen und fortfahren</value>
+  </data>
+  <data name="SptInUse_GameTitle" xml:space="preserve">
+    <value>Zuerst das Spiel schließen</value>
+  </data>
+  <data name="SptInUse_NotStoppedTitle" xml:space="preserve">
+    <value>Der Server läuft noch</value>
+  </data>
   <data name="Play_RoleHeadless" xml:space="preserve">
     <value>Als dediziertes Headless eingerichtet: Eine Modliste vom Server kommt ohne die Mods an, die nur ein Spieler braucht.</value>
   </data>
@@ -6897,6 +6909,9 @@ Siehe Abhängigkeiten und Konflikte.</value>
   </data>
   <data name="ModLists_ApplyBlockedServer" xml:space="preserve">
     <value>Stoppe den SPT-Server, um diese Liste anzuwenden - mit Stoppen auf der Seite Server oder indem du sein Konsolenfenster schließt. Solange der Server läuft, können keine Mods geändert werden - Anwenden ist wieder verfügbar, sobald er gestoppt ist.</value>
+  </data>
+  <data name="ModLists_InstallsWaitForSpt" xml:space="preserve">
+    <value>SPT läuft aus dieser Installation, daher warten die Installationen auf der Downloads-Seite, bis es geschlossen ist.</value>
   </data>
   <data name="ModLists_ApplyBlockedBoth" xml:space="preserve">
     <value>Schließe das Spiel und stoppe den SPT-Server, um diese Liste anzuwenden. Solange eines davon läuft, können keine Mods geändert werden - Anwenden ist wieder verfügbar, sobald beide geschlossen sind.</value>

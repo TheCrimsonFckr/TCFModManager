@@ -284,6 +284,10 @@ internal static class Strings
     internal static string Play_StopServerToolTip => LocalizationService.Get("Play_StopServerToolTip");
     internal static string Play_StopServerWarning => LocalizationService.Get("Play_StopServerWarning");
     internal static string Play_StopServerConfirm => LocalizationService.Get("Play_StopServerConfirm");
+    internal static string SptInUse_StopTitle => LocalizationService.Get("SptInUse_StopTitle");
+    internal static string SptInUse_StopButton => LocalizationService.Get("SptInUse_StopButton");
+    internal static string SptInUse_GameTitle => LocalizationService.Get("SptInUse_GameTitle");
+    internal static string SptInUse_NotStoppedTitle => LocalizationService.Get("SptInUse_NotStoppedTitle");
     internal static string Play_RestartServerConfirm => LocalizationService.Get("Play_RestartServerConfirm");
     internal static string Play_LauncherHeader => LocalizationService.Get("Play_LauncherHeader");
     internal static string Play_LauncherDescription => LocalizationService.Get("Play_LauncherDescription");
@@ -2397,6 +2401,7 @@ internal static class Strings
     internal static string ModLists_StepHintApply => LocalizationService.Get("ModLists_StepHintApply");
     internal static string ModLists_ApplyBlockedGame => LocalizationService.Get("ModLists_ApplyBlockedGame");
     internal static string ModLists_ApplyBlockedServer => LocalizationService.Get("ModLists_ApplyBlockedServer");
+    internal static string ModLists_InstallsWaitForSpt => LocalizationService.Get("ModLists_InstallsWaitForSpt");
     internal static string ModLists_ApplyBlockedBoth => LocalizationService.Get("ModLists_ApplyBlockedBoth");
     internal static string ModLists_EntrySptBadgeFormat => LocalizationService.Get("ModLists_EntrySptBadgeFormat");
     internal static string ModLists_OpenEntryPageToolTip => LocalizationService.Get("ModLists_OpenEntryPageToolTip");

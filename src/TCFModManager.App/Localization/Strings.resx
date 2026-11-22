@@ -991,6 +991,22 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Stop the server</value>
     <comment>Confirms the warning above it.</comment>
   </data>
+  <data name="SptInUse_StopTitle" xml:space="preserve">
+    <value>Stop the server first?</value>
+    <comment>OPEN-67 Q8: title of the pop-up offering to stop the SPT server before an action that changes the install.</comment>
+  </data>
+  <data name="SptInUse_StopButton" xml:space="preserve">
+    <value>Stop the server and carry on</value>
+    <comment>OPEN-67 Q8: button that stops the SPT server and then carries on with the action.</comment>
+  </data>
+  <data name="SptInUse_GameTitle" xml:space="preserve">
+    <value>Close the game first</value>
+    <comment>OPEN-67 Q8: title of the pop-up when the game is running from the install; the app never closes the game itself.</comment>
+  </data>
+  <data name="SptInUse_NotStoppedTitle" xml:space="preserve">
+    <value>The server is still running</value>
+    <comment>OPEN-67 Q8: title when stopping the server for an action didn't work.</comment>
+  </data>
   <data name="Play_RestartServerConfirm" xml:space="preserve">
     <value>Restart the server</value>
     <comment>Confirms the warning above it.</comment>
@@ -8685,6 +8701,10 @@ See Dependencies and Conflicts.</value>
   <data name="ModLists_ApplyBlockedServer" xml:space="preserve">
     <value>Stop the SPT server to apply this list - use Stop on the Server page or close its console window. Mods can't be changed while the server is running - Apply comes back as soon as it's stopped.</value>
     <comment>Mod lists page, warning while a previewed plan can't be applied because the SPT server is running.</comment>
+  </data>
+  <data name="ModLists_InstallsWaitForSpt" xml:space="preserve">
+    <value>SPT is running from this install, so the installs wait on the Downloads page until it closes.</value>
+    <comment>OPEN-67 Q4: Mod lists status line when a list that installs or updates is applied while SPT runs from the install.</comment>
   </data>
   <data name="ModLists_ApplyBlockedBoth" xml:space="preserve">
     <value>Close the game and stop the SPT server to apply this list. Mods can't be changed while either is running - Apply comes back as soon as both are closed.</value>

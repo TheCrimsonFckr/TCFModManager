@@ -289,18 +289,22 @@ public partial class ModListsViewModel
     }
 
     //
-    // What the apply would be refused over right now: a plan that enables, disables, installs or
-    // updates a mod in the install, while SPT is running from it. A download-only list never touches
-    // the install, so only its moves count.
+    // What the apply would be refused over right now: a plan that enables or disables a mod while
+    // SPT is running from the install. Installs and updates wait for it on the Downloads page
+    // instead (OPEN-67 Q4).
     //
     private static IReadOnlyList<string> ApplyBlockers(ModListPreview preview)
     {
         var plan = preview.Plan;
-        var touchesInstall = plan.Enable.Any() || plan.Disable.Any()
-            || (!ModListDownloadMode.For(preview.List).DownloadOnly && (plan.Install.Any() || plan.Update.Any()));
+        var moves = plan.Enable.Any() || plan.Disable.Any();
 
-        return touchesInstall ? ModInstallService.RunningBlockers(preview.Install.InstallPath) : [];
+        return moves ? ModInstallService.RunningBlockers(preview.Install.InstallPath) : [];
     }
+
+    private static bool InstallsWaitForSpt(ModListPreview preview) =>
+        !ModListDownloadMode.For(preview.List).DownloadOnly
+        && (preview.Plan.Install.Any() || preview.Plan.Update.Any())
+        && ModInstallService.RunningBlockers(preview.Install.InstallPath).Count > 0;
 
     private static string PlanStatus(ModListPreview preview) => Text(Strings.ModLists_PreviewedFormat, preview.List.Name);
 
