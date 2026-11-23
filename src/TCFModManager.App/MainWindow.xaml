@@ -175,7 +175,7 @@
                 <ui:NavigationViewItem
                     x:Name="BackNavItem"
                     Content="{loc:Str Nav_Back}"
-                    Icon="{ui:SymbolIcon ArrowLeft24}"
+                    Icon="{ui:SymbolIcon ArrowLeft20}"
                     DataContext="{x:Static app:AppServices.History}"
                     Command="{Binding GoBackCommand}"
                     ToolTip="{loc:Str Nav_BackToolTip}"
@@ -187,7 +187,7 @@
                 <ui:NavigationViewItem
                     x:Name="ForwardNavItem"
                     Content="{loc:Str Nav_Forward}"
-                    Icon="{ui:SymbolIcon ArrowRight24}"
+                    Icon="{ui:SymbolIcon ArrowRight20}"
                     DataContext="{x:Static app:AppServices.History}"
                     Command="{Binding GoForwardCommand}"
                     ToolTip="{loc:Str Nav_ForwardToolTip}"
